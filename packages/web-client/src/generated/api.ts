@@ -13,14 +13,55 @@
  */
 
 
-import { Configuration } from './configuration';
-import globalAxios, { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
+import type { Configuration } from './configuration';
+import type { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+import type { RequestArgs } from './base';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
 
+/**
+ * 
+ * @export
+ * @interface ClassMemberReference
+ */
+export interface ClassMemberReference {
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassMemberReference
+     */
+    '@odata.id'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ClassReference
+ */
+export interface ClassReference {
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassReference
+     */
+    '@odata.id'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CollectionOfClass
+ */
+export interface CollectionOfClass {
+    /**
+     * 
+     * @type {Array<EducationClass>}
+     * @memberof CollectionOfClass
+     */
+    'value'?: Array<EducationClass>;
+}
 /**
  * 
  * @export
@@ -62,6 +103,19 @@ export interface CollectionOfDrives {
 /**
  * 
  * @export
+ * @interface CollectionOfEducationUser
+ */
+export interface CollectionOfEducationUser {
+    /**
+     * 
+     * @type {Array<EducationUser>}
+     * @memberof CollectionOfEducationUser
+     */
+    'value'?: Array<EducationUser>;
+}
+/**
+ * 
+ * @export
  * @interface CollectionOfGroup
  */
 export interface CollectionOfGroup {
@@ -77,6 +131,32 @@ export interface CollectionOfGroup {
      * @memberof CollectionOfGroup
      */
     '@odata.nextLink'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CollectionOfSchools
+ */
+export interface CollectionOfSchools {
+    /**
+     * 
+     * @type {Array<EducationSchool>}
+     * @memberof CollectionOfSchools
+     */
+    'value'?: Array<EducationSchool>;
+}
+/**
+ * 
+ * @export
+ * @interface CollectionOfTags
+ */
+export interface CollectionOfTags {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CollectionOfTags
+     */
+    'value'?: Array<string>;
 }
 /**
  * 
@@ -420,6 +500,230 @@ export interface DriveItem {
     'permissions'?: Array<Permission>;
 }
 /**
+ * And extension of group representing a class or course
+ * @export
+ * @interface EducationClass
+ */
+export interface EducationClass {
+    /**
+     * Read-only.
+     * @type {string}
+     * @memberof EducationClass
+     */
+    'id'?: string;
+    /**
+     * An optional description for the group. Returned by default. Supports $filter (eq, ne, not, ge, le, startsWith) and $search.
+     * @type {string}
+     * @memberof EducationClass
+     */
+    'description'?: string;
+    /**
+     * The display name for the group. This property is required when a group is created and cannot be cleared during updates. Returned by default. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values), $search, and $orderBy.
+     * @type {string}
+     * @memberof EducationClass
+     */
+    'displayName': string;
+    /**
+     * Users and groups that are members of this group. HTTP Methods: GET (supported for all groups), Nullable. Supports $expand.
+     * @type {Array<User>}
+     * @memberof EducationClass
+     */
+    'members'?: Array<User>;
+    /**
+     * Contains the on-premises domainFQDN, also called dnsDomainName synchronized from the on-premises directory. The property is only populated for customers who are synchronizing their on-premises directory to Azure Active Directory via Azure AD Connect. Read-only. Returned only on $select.
+     * @type {string}
+     * @memberof EducationClass
+     */
+    'onPremisesDomainName'?: string;
+    /**
+     * Contains the on-premises SAM account name synchronized from the on-premises directory. Read-only.
+     * @type {string}
+     * @memberof EducationClass
+     */
+    'onPremisesSamAccountName'?: string;
+    /**
+     * A list of member references to the members to be added. Up to 20 members can be added with a single request
+     * @type {Set<string>}
+     * @memberof EducationClass
+     */
+    'members@odata.bind'?: Set<string>;
+    /**
+     * Classification of the group, i.e. \"class\" or \"course\"
+     * @type {string}
+     * @memberof EducationClass
+     */
+    'classification': EducationClassClassificationEnum;
+    /**
+     * An external unique ID for the class
+     * @type {string}
+     * @memberof EducationClass
+     */
+    'externalId'?: string;
+}
+
+export const EducationClassClassificationEnum = {
+    Class: 'class',
+    Course: 'course'
+} as const;
+
+export type EducationClassClassificationEnum = typeof EducationClassClassificationEnum[keyof typeof EducationClassClassificationEnum];
+
+/**
+ * Abstract. Represents an organization in educational context
+ * @export
+ * @interface EducationOrganization
+ */
+export interface EducationOrganization {
+    /**
+     * The unique idenfier for an entity. Read-only.
+     * @type {string}
+     * @memberof EducationOrganization
+     */
+    'id'?: string;
+    /**
+     * The organization name
+     * @type {string}
+     * @memberof EducationOrganization
+     */
+    'displayName'?: string;
+}
+/**
+ * Represents a school
+ * @export
+ * @interface EducationSchool
+ */
+export interface EducationSchool {
+    /**
+     * The unique idenfier for an entity. Read-only.
+     * @type {string}
+     * @memberof EducationSchool
+     */
+    'id'?: string;
+    /**
+     * The organization name
+     * @type {string}
+     * @memberof EducationSchool
+     */
+    'displayName'?: string;
+    /**
+     * School number
+     * @type {string}
+     * @memberof EducationSchool
+     */
+    'schoolNumber'?: string;
+}
+/**
+ * And extension of user with education specific attributes
+ * @export
+ * @interface EducationUser
+ */
+export interface EducationUser {
+    /**
+     * Read-only.
+     * @type {string}
+     * @memberof EducationUser
+     */
+    'id'?: string;
+    /**
+     * Set to \"true\" when the account is enabled.
+     * @type {boolean}
+     * @memberof EducationUser
+     */
+    'accountEnabled'?: boolean;
+    /**
+     * The name displayed in the address book for the user. This value is usually the combination of the user\'s first name, middle initial, and last name. This property is required when a user is created and it cannot be cleared during updates. Returned by default. Supports $filter and $orderby.
+     * @type {string}
+     * @memberof EducationUser
+     */
+    'displayName'?: string;
+    /**
+     * A collection of drives available for this user. Read-only.
+     * @type {Array<Drive>}
+     * @memberof EducationUser
+     */
+    'drives'?: Array<Drive>;
+    /**
+     * 
+     * @type {Drive}
+     * @memberof EducationUser
+     */
+    'drive'?: Drive;
+    /**
+     * Identities associated with this account.
+     * @type {Array<ObjectIdentity>}
+     * @memberof EducationUser
+     */
+    'identities'?: Array<ObjectIdentity>;
+    /**
+     * The SMTP address for the user, for example, \'jeff@contoso.onowncloud.com\'. Returned by default. Supports $filter and endsWith.
+     * @type {string}
+     * @memberof EducationUser
+     */
+    'mail'?: string;
+    /**
+     * Groups that this user is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable. Supports $expand.
+     * @type {Array<Group>}
+     * @memberof EducationUser
+     */
+    'memberOf'?: Array<Group>;
+    /**
+     * Contains the on-premises SAM account name synchronized from the on-premises directory. Read-only.
+     * @type {string}
+     * @memberof EducationUser
+     */
+    'onPremisesSamAccountName'?: string;
+    /**
+     * 
+     * @type {PasswordProfile}
+     * @memberof EducationUser
+     */
+    'passwordProfile'?: PasswordProfile;
+    /**
+     * The user\'s surname (family name or last name). Returned by default. Supports $filter.
+     * @type {string}
+     * @memberof EducationUser
+     */
+    'surname'?: string;
+    /**
+     * The user\'s givenName. Returned by default. Supports $filter.
+     * @type {string}
+     * @memberof EducationUser
+     */
+    'givenName'?: string;
+    /**
+     * The user`s default role. Such as \"student\" or \"teacher\"
+     * @type {string}
+     * @memberof EducationUser
+     */
+    'primaryRole'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface EducationUserReference
+ */
+export interface EducationUserReference {
+    /**
+     * 
+     * @type {string}
+     * @memberof EducationUserReference
+     */
+    '@odata.id'?: string;
+}
+/**
+ * Represents an entity.
+ * @export
+ * @interface Entity
+ */
+export interface Entity {
+    /**
+     * The unique idenfier for an entity. Read-only.
+     * @type {string}
+     * @memberof Entity
+     */
+    'id'?: string;
+}
+/**
  * File system information on client. Read-write.
  * @export
  * @interface FileSystemInfo
@@ -686,6 +990,25 @@ export interface MemberReference {
      * @memberof MemberReference
      */
     '@odata.id'?: string;
+}
+/**
+ * Represents an identity used to sign in to a user account
+ * @export
+ * @interface ObjectIdentity
+ */
+export interface ObjectIdentity {
+    /**
+     * domain of the Provider issuing the identity
+     * @type {string}
+     * @memberof ObjectIdentity
+     */
+    'issuer'?: string;
+    /**
+     * The unique id assigned by the issuer to the account
+     * @type {string}
+     * @memberof ObjectIdentity
+     */
+    'issuerAssignedId'?: string;
 }
 /**
  * 
@@ -1041,6 +1364,44 @@ export interface SpecialFolder {
     'name'?: string;
 }
 /**
+ * 
+ * @export
+ * @interface TagAssignment
+ */
+export interface TagAssignment {
+    /**
+     * 
+     * @type {string}
+     * @memberof TagAssignment
+     */
+    'resourceId': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof TagAssignment
+     */
+    'tags': Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface TagUnassignment
+ */
+export interface TagUnassignment {
+    /**
+     * 
+     * @type {string}
+     * @memberof TagUnassignment
+     */
+    'resourceId': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof TagUnassignment
+     */
+    'tags': Array<string>;
+}
+/**
  * Metadata for trashed drive Items
  * @export
  * @interface Trash
@@ -1072,6 +1433,12 @@ export interface User {
      */
     'id'?: string;
     /**
+     * Set to \"true\" when the account is enabled.
+     * @type {boolean}
+     * @memberof User
+     */
+    'accountEnabled'?: boolean;
+    /**
      * The name displayed in the address book for the user. This value is usually the combination of the user\'s first name, middle initial, and last name. This property is required when a user is created and it cannot be cleared during updates. Returned by default. Supports $filter and $orderby.
      * @type {string}
      * @memberof User
@@ -1089,6 +1456,12 @@ export interface User {
      * @memberof User
      */
     'drive'?: Drive;
+    /**
+     * Identities associated with this account.
+     * @type {Array<ObjectIdentity>}
+     * @memberof User
+     */
+    'identities'?: Array<ObjectIdentity>;
     /**
      * The SMTP address for the user, for example, \'jeff@contoso.onowncloud.com\'. Returned by default. Supports $filter and endsWith.
      * @type {string}
@@ -1119,6 +1492,12 @@ export interface User {
      * @memberof User
      */
     'surname'?: string;
+    /**
+     * The user\'s givenName. Returned by default. Supports $filter.
+     * @type {string}
+     * @memberof User
+     */
+    'givenName'?: string;
 }
 
 /**
@@ -1187,7 +1566,7 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (ifMatch !== undefined && ifMatch !== null) {
+            if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
             }
 
@@ -1625,11 +2004,15 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
         /**
          * 
          * @summary Get root from arbitrary space
+         * @param {string} driveId key: id of drive
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRoot: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/drives/{drive-id}/root`;
+        getRoot: async (driveId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'driveId' is not null or undefined
+            assertParamExists('getRoot', 'driveId', driveId)
+            const localVarPath = `/drives/{drive-id}/root`
+                .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1665,11 +2048,12 @@ export const DrivesRootApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get root from arbitrary space
+         * @param {string} driveId key: id of drive
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getRoot(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DriveItem>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getRoot(options);
+        async getRoot(driveId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DriveItem>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRoot(driveId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1685,11 +2069,12 @@ export const DrivesRootApiFactory = function (configuration?: Configuration, bas
         /**
          * 
          * @summary Get root from arbitrary space
+         * @param {string} driveId key: id of drive
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRoot(options?: any): AxiosPromise<DriveItem> {
-            return localVarFp.getRoot(options).then((request) => request(axios, basePath));
+        getRoot(driveId: string, options?: any): AxiosPromise<DriveItem> {
+            return localVarFp.getRoot(driveId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1704,12 +2089,1618 @@ export class DrivesRootApi extends BaseAPI {
     /**
      * 
      * @summary Get root from arbitrary space
+     * @param {string} driveId key: id of drive
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DrivesRootApi
      */
-    public getRoot(options?: AxiosRequestConfig) {
-        return DrivesRootApiFp(this.configuration).getRoot(options).then((request) => request(this.axios, this.basePath));
+    public getRoot(driveId: string, options?: AxiosRequestConfig) {
+        return DrivesRootApiFp(this.configuration).getRoot(driveId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * EducationClassApi - axios parameter creator
+ * @export
+ */
+export const EducationClassApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Assign a user to a class
+         * @param {string} classId key: id of class
+         * @param {ClassMemberReference} classMemberReference educationUser to be added as member
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addUserToClass: async (classId: string, classMemberReference: ClassMemberReference, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'classId' is not null or undefined
+            assertParamExists('addUserToClass', 'classId', classId)
+            // verify required parameter 'classMemberReference' is not null or undefined
+            assertParamExists('addUserToClass', 'classMemberReference', classMemberReference)
+            const localVarPath = `/education/classes/{class-id}/members/$ref`
+                .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(classMemberReference, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Add new education class
+         * @param {EducationClass} educationClass New entity
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createClass: async (educationClass: EducationClass, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'educationClass' is not null or undefined
+            assertParamExists('createClass', 'educationClass', educationClass)
+            const localVarPath = `/education/classes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(educationClass, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete education class
+         * @param {string} classId key: id of class
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteClass: async (classId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'classId' is not null or undefined
+            assertParamExists('deleteClass', 'classId', classId)
+            const localVarPath = `/education/classes/{class-id}`
+                .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Unassign user from a class
+         * @param {string} classId key: id of class
+         * @param {string} userId key: id of the user to unassign from class
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUserFromClass: async (classId: string, userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'classId' is not null or undefined
+            assertParamExists('deleteUserFromClass', 'classId', classId)
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('deleteUserFromClass', 'userId', userId)
+            const localVarPath = `/education/classes/{class-id}/members/{user-id}/$ref`
+                .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)))
+                .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get class by key
+         * @param {string} classId key: id of class
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getClass: async (classId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'classId' is not null or undefined
+            assertParamExists('getClass', 'classId', classId)
+            const localVarPath = `/education/classes/{class-id}`
+                .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary list education classes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listClasses: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/education/classes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update properties of a education class
+         * @param {string} classId key: id of class
+         * @param {EducationClass} educationClass New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateClass: async (classId: string, educationClass: EducationClass, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'classId' is not null or undefined
+            assertParamExists('updateClass', 'classId', classId)
+            // verify required parameter 'educationClass' is not null or undefined
+            assertParamExists('updateClass', 'educationClass', educationClass)
+            const localVarPath = `/education/classes/{class-id}`
+                .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(educationClass, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * EducationClassApi - functional programming interface
+ * @export
+ */
+export const EducationClassApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = EducationClassApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Assign a user to a class
+         * @param {string} classId key: id of class
+         * @param {ClassMemberReference} classMemberReference educationUser to be added as member
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async addUserToClass(classId: string, classMemberReference: ClassMemberReference, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addUserToClass(classId, classMemberReference, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Add new education class
+         * @param {EducationClass} educationClass New entity
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createClass(educationClass: EducationClass, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationClass>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createClass(educationClass, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Delete education class
+         * @param {string} classId key: id of class
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteClass(classId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteClass(classId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Unassign user from a class
+         * @param {string} classId key: id of class
+         * @param {string} userId key: id of the user to unassign from class
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteUserFromClass(classId: string, userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUserFromClass(classId, userId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get class by key
+         * @param {string} classId key: id of class
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getClass(classId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationClass>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getClass(classId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary list education classes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listClasses(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfClass>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listClasses(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Update properties of a education class
+         * @param {string} classId key: id of class
+         * @param {EducationClass} educationClass New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateClass(classId: string, educationClass: EducationClass, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationClass>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateClass(classId, educationClass, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * EducationClassApi - factory interface
+ * @export
+ */
+export const EducationClassApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = EducationClassApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Assign a user to a class
+         * @param {string} classId key: id of class
+         * @param {ClassMemberReference} classMemberReference educationUser to be added as member
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addUserToClass(classId: string, classMemberReference: ClassMemberReference, options?: any): AxiosPromise<void> {
+            return localVarFp.addUserToClass(classId, classMemberReference, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Add new education class
+         * @param {EducationClass} educationClass New entity
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createClass(educationClass: EducationClass, options?: any): AxiosPromise<EducationClass> {
+            return localVarFp.createClass(educationClass, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete education class
+         * @param {string} classId key: id of class
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteClass(classId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteClass(classId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Unassign user from a class
+         * @param {string} classId key: id of class
+         * @param {string} userId key: id of the user to unassign from class
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUserFromClass(classId: string, userId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteUserFromClass(classId, userId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get class by key
+         * @param {string} classId key: id of class
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getClass(classId: string, options?: any): AxiosPromise<EducationClass> {
+            return localVarFp.getClass(classId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary list education classes
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listClasses(options?: any): AxiosPromise<CollectionOfClass> {
+            return localVarFp.listClasses(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update properties of a education class
+         * @param {string} classId key: id of class
+         * @param {EducationClass} educationClass New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateClass(classId: string, educationClass: EducationClass, options?: any): AxiosPromise<EducationClass> {
+            return localVarFp.updateClass(classId, educationClass, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * EducationClassApi - object-oriented interface
+ * @export
+ * @class EducationClassApi
+ * @extends {BaseAPI}
+ */
+export class EducationClassApi extends BaseAPI {
+    /**
+     * 
+     * @summary Assign a user to a class
+     * @param {string} classId key: id of class
+     * @param {ClassMemberReference} classMemberReference educationUser to be added as member
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationClassApi
+     */
+    public addUserToClass(classId: string, classMemberReference: ClassMemberReference, options?: AxiosRequestConfig) {
+        return EducationClassApiFp(this.configuration).addUserToClass(classId, classMemberReference, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Add new education class
+     * @param {EducationClass} educationClass New entity
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationClassApi
+     */
+    public createClass(educationClass: EducationClass, options?: AxiosRequestConfig) {
+        return EducationClassApiFp(this.configuration).createClass(educationClass, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete education class
+     * @param {string} classId key: id of class
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationClassApi
+     */
+    public deleteClass(classId: string, options?: AxiosRequestConfig) {
+        return EducationClassApiFp(this.configuration).deleteClass(classId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Unassign user from a class
+     * @param {string} classId key: id of class
+     * @param {string} userId key: id of the user to unassign from class
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationClassApi
+     */
+    public deleteUserFromClass(classId: string, userId: string, options?: AxiosRequestConfig) {
+        return EducationClassApiFp(this.configuration).deleteUserFromClass(classId, userId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get class by key
+     * @param {string} classId key: id of class
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationClassApi
+     */
+    public getClass(classId: string, options?: AxiosRequestConfig) {
+        return EducationClassApiFp(this.configuration).getClass(classId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary list education classes
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationClassApi
+     */
+    public listClasses(options?: AxiosRequestConfig) {
+        return EducationClassApiFp(this.configuration).listClasses(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update properties of a education class
+     * @param {string} classId key: id of class
+     * @param {EducationClass} educationClass New property values
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationClassApi
+     */
+    public updateClass(classId: string, educationClass: EducationClass, options?: AxiosRequestConfig) {
+        return EducationClassApiFp(this.configuration).updateClass(classId, educationClass, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * EducationSchoolApi - axios parameter creator
+ * @export
+ */
+export const EducationSchoolApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Assign a class to a school
+         * @param {string} schoolId key: id of school
+         * @param {ClassReference} classReference educationClass to be added as member
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addClassToSchool: async (schoolId: string, classReference: ClassReference, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('addClassToSchool', 'schoolId', schoolId)
+            // verify required parameter 'classReference' is not null or undefined
+            assertParamExists('addClassToSchool', 'classReference', classReference)
+            const localVarPath = `/education/schools/{school-id}/classes/$ref`
+                .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(classReference, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Assign a user to a school
+         * @param {string} schoolId key: id of school
+         * @param {EducationUserReference} educationUserReference educationUser to be added as member
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addUserToSchool: async (schoolId: string, educationUserReference: EducationUserReference, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('addUserToSchool', 'schoolId', schoolId)
+            // verify required parameter 'educationUserReference' is not null or undefined
+            assertParamExists('addUserToSchool', 'educationUserReference', educationUserReference)
+            const localVarPath = `/education/schools/{school-id}/users/$ref`
+                .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(educationUserReference, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Add new school
+         * @param {EducationSchool} educationSchool New school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSchool: async (educationSchool: EducationSchool, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'educationSchool' is not null or undefined
+            assertParamExists('createSchool', 'educationSchool', educationSchool)
+            const localVarPath = `/education/schools`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(educationSchool, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Unassign class from a school
+         * @param {string} schoolId key: id of school
+         * @param {string} classId key: id of the class to unassign from school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteClassFromSchool: async (schoolId: string, classId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('deleteClassFromSchool', 'schoolId', schoolId)
+            // verify required parameter 'classId' is not null or undefined
+            assertParamExists('deleteClassFromSchool', 'classId', classId)
+            const localVarPath = `/education/schools/{school-id}/classes/{class-id}/$ref`
+                .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)))
+                .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete school
+         * @param {string} schoolId key: id of school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSchool: async (schoolId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('deleteSchool', 'schoolId', schoolId)
+            const localVarPath = `/education/schools/{school-id}`
+                .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Unassign user from a school
+         * @param {string} schoolId key: id of school
+         * @param {string} userId key: id of the user to unassign from school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUserFromSchool: async (schoolId: string, userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('deleteUserFromSchool', 'schoolId', schoolId)
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('deleteUserFromSchool', 'userId', userId)
+            const localVarPath = `/education/schools/{school-id}/users/{user-id}/$ref`
+                .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)))
+                .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get the properties of a specific school
+         * @param {string} schoolId key: id of school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSchool: async (schoolId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('getSchool', 'schoolId', schoolId)
+            const localVarPath = `/education/schools/{school-id}`
+                .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a list of schools and their properties
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSchools: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/education/schools`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update properties of a school
+         * @param {string} schoolId key: id of school
+         * @param {EducationSchool} educationSchool New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSchool: async (schoolId: string, educationSchool: EducationSchool, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('updateSchool', 'schoolId', schoolId)
+            // verify required parameter 'educationSchool' is not null or undefined
+            assertParamExists('updateSchool', 'educationSchool', educationSchool)
+            const localVarPath = `/education/schools/{school-id}`
+                .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(educationSchool, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * EducationSchoolApi - functional programming interface
+ * @export
+ */
+export const EducationSchoolApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = EducationSchoolApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Assign a class to a school
+         * @param {string} schoolId key: id of school
+         * @param {ClassReference} classReference educationClass to be added as member
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async addClassToSchool(schoolId: string, classReference: ClassReference, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addClassToSchool(schoolId, classReference, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Assign a user to a school
+         * @param {string} schoolId key: id of school
+         * @param {EducationUserReference} educationUserReference educationUser to be added as member
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async addUserToSchool(schoolId: string, educationUserReference: EducationUserReference, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addUserToSchool(schoolId, educationUserReference, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Add new school
+         * @param {EducationSchool} educationSchool New school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSchool(educationSchool: EducationSchool, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationSchool>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSchool(educationSchool, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Unassign class from a school
+         * @param {string} schoolId key: id of school
+         * @param {string} classId key: id of the class to unassign from school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteClassFromSchool(schoolId: string, classId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteClassFromSchool(schoolId, classId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Delete school
+         * @param {string} schoolId key: id of school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteSchool(schoolId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSchool(schoolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Unassign user from a school
+         * @param {string} schoolId key: id of school
+         * @param {string} userId key: id of the user to unassign from school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteUserFromSchool(schoolId: string, userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUserFromSchool(schoolId, userId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get the properties of a specific school
+         * @param {string} schoolId key: id of school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSchool(schoolId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationSchool>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSchool(schoolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a list of schools and their properties
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listSchools(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfSchools>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listSchools(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Update properties of a school
+         * @param {string} schoolId key: id of school
+         * @param {EducationSchool} educationSchool New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateSchool(schoolId: string, educationSchool: EducationSchool, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationSchool>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateSchool(schoolId, educationSchool, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * EducationSchoolApi - factory interface
+ * @export
+ */
+export const EducationSchoolApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = EducationSchoolApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Assign a class to a school
+         * @param {string} schoolId key: id of school
+         * @param {ClassReference} classReference educationClass to be added as member
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addClassToSchool(schoolId: string, classReference: ClassReference, options?: any): AxiosPromise<void> {
+            return localVarFp.addClassToSchool(schoolId, classReference, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Assign a user to a school
+         * @param {string} schoolId key: id of school
+         * @param {EducationUserReference} educationUserReference educationUser to be added as member
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addUserToSchool(schoolId: string, educationUserReference: EducationUserReference, options?: any): AxiosPromise<void> {
+            return localVarFp.addUserToSchool(schoolId, educationUserReference, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Add new school
+         * @param {EducationSchool} educationSchool New school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSchool(educationSchool: EducationSchool, options?: any): AxiosPromise<EducationSchool> {
+            return localVarFp.createSchool(educationSchool, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Unassign class from a school
+         * @param {string} schoolId key: id of school
+         * @param {string} classId key: id of the class to unassign from school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteClassFromSchool(schoolId: string, classId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteClassFromSchool(schoolId, classId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete school
+         * @param {string} schoolId key: id of school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSchool(schoolId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteSchool(schoolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Unassign user from a school
+         * @param {string} schoolId key: id of school
+         * @param {string} userId key: id of the user to unassign from school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUserFromSchool(schoolId: string, userId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteUserFromSchool(schoolId, userId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get the properties of a specific school
+         * @param {string} schoolId key: id of school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSchool(schoolId: string, options?: any): AxiosPromise<EducationSchool> {
+            return localVarFp.getSchool(schoolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a list of schools and their properties
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSchools(options?: any): AxiosPromise<CollectionOfSchools> {
+            return localVarFp.listSchools(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update properties of a school
+         * @param {string} schoolId key: id of school
+         * @param {EducationSchool} educationSchool New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSchool(schoolId: string, educationSchool: EducationSchool, options?: any): AxiosPromise<EducationSchool> {
+            return localVarFp.updateSchool(schoolId, educationSchool, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * EducationSchoolApi - object-oriented interface
+ * @export
+ * @class EducationSchoolApi
+ * @extends {BaseAPI}
+ */
+export class EducationSchoolApi extends BaseAPI {
+    /**
+     * 
+     * @summary Assign a class to a school
+     * @param {string} schoolId key: id of school
+     * @param {ClassReference} classReference educationClass to be added as member
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationSchoolApi
+     */
+    public addClassToSchool(schoolId: string, classReference: ClassReference, options?: AxiosRequestConfig) {
+        return EducationSchoolApiFp(this.configuration).addClassToSchool(schoolId, classReference, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Assign a user to a school
+     * @param {string} schoolId key: id of school
+     * @param {EducationUserReference} educationUserReference educationUser to be added as member
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationSchoolApi
+     */
+    public addUserToSchool(schoolId: string, educationUserReference: EducationUserReference, options?: AxiosRequestConfig) {
+        return EducationSchoolApiFp(this.configuration).addUserToSchool(schoolId, educationUserReference, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Add new school
+     * @param {EducationSchool} educationSchool New school
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationSchoolApi
+     */
+    public createSchool(educationSchool: EducationSchool, options?: AxiosRequestConfig) {
+        return EducationSchoolApiFp(this.configuration).createSchool(educationSchool, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Unassign class from a school
+     * @param {string} schoolId key: id of school
+     * @param {string} classId key: id of the class to unassign from school
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationSchoolApi
+     */
+    public deleteClassFromSchool(schoolId: string, classId: string, options?: AxiosRequestConfig) {
+        return EducationSchoolApiFp(this.configuration).deleteClassFromSchool(schoolId, classId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete school
+     * @param {string} schoolId key: id of school
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationSchoolApi
+     */
+    public deleteSchool(schoolId: string, options?: AxiosRequestConfig) {
+        return EducationSchoolApiFp(this.configuration).deleteSchool(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Unassign user from a school
+     * @param {string} schoolId key: id of school
+     * @param {string} userId key: id of the user to unassign from school
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationSchoolApi
+     */
+    public deleteUserFromSchool(schoolId: string, userId: string, options?: AxiosRequestConfig) {
+        return EducationSchoolApiFp(this.configuration).deleteUserFromSchool(schoolId, userId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get the properties of a specific school
+     * @param {string} schoolId key: id of school
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationSchoolApi
+     */
+    public getSchool(schoolId: string, options?: AxiosRequestConfig) {
+        return EducationSchoolApiFp(this.configuration).getSchool(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a list of schools and their properties
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationSchoolApi
+     */
+    public listSchools(options?: AxiosRequestConfig) {
+        return EducationSchoolApiFp(this.configuration).listSchools(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update properties of a school
+     * @param {string} schoolId key: id of school
+     * @param {EducationSchool} educationSchool New property values
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationSchoolApi
+     */
+    public updateSchool(schoolId: string, educationSchool: EducationSchool, options?: AxiosRequestConfig) {
+        return EducationSchoolApiFp(this.configuration).updateSchool(schoolId, educationSchool, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * EducationUserApi - axios parameter creator
+ * @export
+ */
+export const EducationUserApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Add new education user
+         * @param {EducationUser} educationUser New entity
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEducationUser: async (educationUser: EducationUser, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'educationUser' is not null or undefined
+            assertParamExists('createEducationUser', 'educationUser', educationUser)
+            const localVarPath = `/education/users`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(educationUser, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete educationUser
+         * @param {string} userId key: id of user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteEducationUser: async (userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('deleteEducationUser', 'userId', userId)
+            const localVarPath = `/education/users/{user-id}`
+                .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get properties of educationUser
+         * @param {string} userId key: id or username of user
+         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getEducationUser: async (userId: string, $expand?: Set<'memberOf'>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('getEducationUser', 'userId', userId)
+            const localVarPath = `/education/users/{user-id}`
+                .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if ($expand) {
+                localVarQueryParameter['$expand'] = Array.from($expand).join(COLLECTION_FORMATS.csv);
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get entities from education users
+         * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
+         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listEducationUsers: async ($orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $expand?: Set<'memberOf'>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/education/users`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if ($orderby) {
+                localVarQueryParameter['$orderby'] = Array.from($orderby).join(COLLECTION_FORMATS.csv);
+            }
+
+            if ($expand) {
+                localVarQueryParameter['$expand'] = Array.from($expand).join(COLLECTION_FORMATS.csv);
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update properties of educationUser
+         * @param {string} userId key: id of user
+         * @param {EducationUser} educationUser New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateEducationUser: async (userId: string, educationUser: EducationUser, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('updateEducationUser', 'userId', userId)
+            // verify required parameter 'educationUser' is not null or undefined
+            assertParamExists('updateEducationUser', 'educationUser', educationUser)
+            const localVarPath = `/education/users/{user-id}`
+                .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(educationUser, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * EducationUserApi - functional programming interface
+ * @export
+ */
+export const EducationUserApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = EducationUserApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Add new education user
+         * @param {EducationUser} educationUser New entity
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createEducationUser(educationUser: EducationUser, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationUser>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createEducationUser(educationUser, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Delete educationUser
+         * @param {string} userId key: id of user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteEducationUser(userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteEducationUser(userId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get properties of educationUser
+         * @param {string} userId key: id or username of user
+         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getEducationUser(userId: string, $expand?: Set<'memberOf'>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationUser>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getEducationUser(userId, $expand, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get entities from education users
+         * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
+         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listEducationUsers($orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $expand?: Set<'memberOf'>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfEducationUser>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listEducationUsers($orderby, $expand, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Update properties of educationUser
+         * @param {string} userId key: id of user
+         * @param {EducationUser} educationUser New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateEducationUser(userId: string, educationUser: EducationUser, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationUser>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateEducationUser(userId, educationUser, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * EducationUserApi - factory interface
+ * @export
+ */
+export const EducationUserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = EducationUserApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Add new education user
+         * @param {EducationUser} educationUser New entity
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createEducationUser(educationUser: EducationUser, options?: any): AxiosPromise<EducationUser> {
+            return localVarFp.createEducationUser(educationUser, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete educationUser
+         * @param {string} userId key: id of user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteEducationUser(userId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteEducationUser(userId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get properties of educationUser
+         * @param {string} userId key: id or username of user
+         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getEducationUser(userId: string, $expand?: Set<'memberOf'>, options?: any): AxiosPromise<EducationUser> {
+            return localVarFp.getEducationUser(userId, $expand, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get entities from education users
+         * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
+         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listEducationUsers($orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $expand?: Set<'memberOf'>, options?: any): AxiosPromise<CollectionOfEducationUser> {
+            return localVarFp.listEducationUsers($orderby, $expand, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update properties of educationUser
+         * @param {string} userId key: id of user
+         * @param {EducationUser} educationUser New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateEducationUser(userId: string, educationUser: EducationUser, options?: any): AxiosPromise<EducationUser> {
+            return localVarFp.updateEducationUser(userId, educationUser, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * EducationUserApi - object-oriented interface
+ * @export
+ * @class EducationUserApi
+ * @extends {BaseAPI}
+ */
+export class EducationUserApi extends BaseAPI {
+    /**
+     * 
+     * @summary Add new education user
+     * @param {EducationUser} educationUser New entity
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationUserApi
+     */
+    public createEducationUser(educationUser: EducationUser, options?: AxiosRequestConfig) {
+        return EducationUserApiFp(this.configuration).createEducationUser(educationUser, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete educationUser
+     * @param {string} userId key: id of user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationUserApi
+     */
+    public deleteEducationUser(userId: string, options?: AxiosRequestConfig) {
+        return EducationUserApiFp(this.configuration).deleteEducationUser(userId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get properties of educationUser
+     * @param {string} userId key: id or username of user
+     * @param {Set<'memberOf'>} [$expand] Expand related entities
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationUserApi
+     */
+    public getEducationUser(userId: string, $expand?: Set<'memberOf'>, options?: AxiosRequestConfig) {
+        return EducationUserApiFp(this.configuration).getEducationUser(userId, $expand, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get entities from education users
+     * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
+     * @param {Set<'memberOf'>} [$expand] Expand related entities
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationUserApi
+     */
+    public listEducationUsers($orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $expand?: Set<'memberOf'>, options?: AxiosRequestConfig) {
+        return EducationUserApiFp(this.configuration).listEducationUsers($orderby, $expand, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update properties of educationUser
+     * @param {string} userId key: id of user
+     * @param {EducationUser} educationUser New property values
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EducationUserApi
+     */
+    public updateEducationUser(userId: string, educationUser: EducationUser, options?: AxiosRequestConfig) {
+        return EducationUserApiFp(this.configuration).updateEducationUser(userId, educationUser, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1724,7 +3715,7 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * 
          * @summary Add a member to a group
          * @param {string} groupId key: id of group
-         * @param {MemberReference} memberReference 
+         * @param {MemberReference} memberReference Object to be added as member
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1784,7 +3775,7 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (ifMatch !== undefined && ifMatch !== null) {
+            if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
             }
 
@@ -1827,7 +3818,7 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (ifMatch !== undefined && ifMatch !== null) {
+            if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
             }
 
@@ -1940,7 +3931,7 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * 
          * @summary Add a member to a group
          * @param {string} groupId key: id of group
-         * @param {MemberReference} memberReference 
+         * @param {MemberReference} memberReference Object to be added as member
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2012,7 +4003,7 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * 
          * @summary Add a member to a group
          * @param {string} groupId key: id of group
-         * @param {MemberReference} memberReference 
+         * @param {MemberReference} memberReference Object to be added as member
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2079,7 +4070,7 @@ export class GroupApi extends BaseAPI {
      * 
      * @summary Add a member to a group
      * @param {string} groupId key: id of group
-     * @param {MemberReference} memberReference 
+     * @param {MemberReference} memberReference Object to be added as member
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApi
@@ -2384,7 +4375,7 @@ export const MeChangepasswordApiAxiosParamCreator = function (configuration?: Co
         /**
          * 
          * @summary Chanage your own password
-         * @param {PasswordChange} passwordChange 
+         * @param {PasswordChange} passwordChange Password change request
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2430,7 +4421,7 @@ export const MeChangepasswordApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Chanage your own password
-         * @param {PasswordChange} passwordChange 
+         * @param {PasswordChange} passwordChange Password change request
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2451,7 +4442,7 @@ export const MeChangepasswordApiFactory = function (configuration?: Configuratio
         /**
          * 
          * @summary Chanage your own password
-         * @param {PasswordChange} passwordChange 
+         * @param {PasswordChange} passwordChange Password change request
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2471,7 +4462,7 @@ export class MeChangepasswordApi extends BaseAPI {
     /**
      * 
      * @summary Chanage your own password
-     * @param {PasswordChange} passwordChange 
+     * @param {PasswordChange} passwordChange Password change request
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MeChangepasswordApi
@@ -3037,6 +5028,238 @@ export class MeUserApi extends BaseAPI {
 
 
 /**
+ * TagsApi - axios parameter creator
+ * @export
+ */
+export const TagsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Assign tags to a resource
+         * @param {TagAssignment} [tagAssignment] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        assignTags: async (tagAssignment?: TagAssignment, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/extensions/org.libregraph/tags`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(tagAssignment, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get all known tags
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTags: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/extensions/org.libregraph/tags`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Unassign tags from a resource
+         * @param {TagUnassignment} [tagUnassignment] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unassignTags: async (tagUnassignment?: TagUnassignment, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/extensions/org.libregraph/tags`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(tagUnassignment, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TagsApi - functional programming interface
+ * @export
+ */
+export const TagsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TagsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Assign tags to a resource
+         * @param {TagAssignment} [tagAssignment] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async assignTags(tagAssignment?: TagAssignment, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.assignTags(tagAssignment, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get all known tags
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTags(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfTags>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTags(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Unassign tags from a resource
+         * @param {TagUnassignment} [tagUnassignment] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async unassignTags(tagUnassignment?: TagUnassignment, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.unassignTags(tagUnassignment, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * TagsApi - factory interface
+ * @export
+ */
+export const TagsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TagsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Assign tags to a resource
+         * @param {TagAssignment} [tagAssignment] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        assignTags(tagAssignment?: TagAssignment, options?: any): AxiosPromise<void> {
+            return localVarFp.assignTags(tagAssignment, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get all known tags
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTags(options?: any): AxiosPromise<CollectionOfTags> {
+            return localVarFp.getTags(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Unassign tags from a resource
+         * @param {TagUnassignment} [tagUnassignment] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unassignTags(tagUnassignment?: TagUnassignment, options?: any): AxiosPromise<void> {
+            return localVarFp.unassignTags(tagUnassignment, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TagsApi - object-oriented interface
+ * @export
+ * @class TagsApi
+ * @extends {BaseAPI}
+ */
+export class TagsApi extends BaseAPI {
+    /**
+     * 
+     * @summary Assign tags to a resource
+     * @param {TagAssignment} [tagAssignment] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public assignTags(tagAssignment?: TagAssignment, options?: AxiosRequestConfig) {
+        return TagsApiFp(this.configuration).assignTags(tagAssignment, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get all known tags
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public getTags(options?: AxiosRequestConfig) {
+        return TagsApiFp(this.configuration).getTags(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Unassign tags from a resource
+     * @param {TagUnassignment} [tagUnassignment] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public unassignTags(tagUnassignment?: TagUnassignment, options?: AxiosRequestConfig) {
+        return TagsApiFp(this.configuration).unassignTags(tagUnassignment, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * UserApi - axios parameter creator
  * @export
  */
@@ -3066,7 +5289,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (ifMatch !== undefined && ifMatch !== null) {
+            if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
             }
 
