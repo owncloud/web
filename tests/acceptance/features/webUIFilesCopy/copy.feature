@@ -85,7 +85,7 @@ Feature: copy files and folders
     And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist in the server
     And as "Alice" file "simple-folder/data.zip" should exist in the server
 
-  @issue-6892
+  @issue-6892 @issue-6896 @notToImplementOnOCIS
   Scenario: copy a file into another folder with no change permission
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
@@ -97,7 +97,7 @@ Feature: copy files and folders
     Then as "Alice" file "Shares/simple-folder/lorem.txt" should not exist in the server
 
 
-  @issue-6892 @issue-ocis-1328
+  @issue-6892 @issue-ocis-1328 @issue-6896 @notToImplementOnOCIS
   Scenario: copy a folder into another folder with no change permission
     Given user "Alice" has created folder "simple-empty-folder" in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
