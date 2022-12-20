@@ -5,7 +5,7 @@
     <div class="oc-p oc-height-1-1">
       <div v-if="loading" key="loading-drop" class="oc-flex oc-flex-column oc-flex-middle">
         <h2 class="oc-login-card-title">
-          <translate>Loading public link…</translate>
+          <span v-text="$gettext('Loading public link…')" />
         </h2>
         <oc-spinner :aria-hidden="true" />
       </div>
@@ -22,7 +22,7 @@
         </div>
         <div v-if="errorMessage" class="oc-text-center">
           <h2>
-            <translate>An error occurred while loading the public link</translate>
+            <span v-text="$gettext('An error occurred while loading the public link')" />
           </h2>
           <p class="oc-m-rm" v-text="errorMessage" />
         </div>

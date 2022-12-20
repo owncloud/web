@@ -2,7 +2,7 @@
   <div id="web">
     <oc-hidden-announcer :announcement="announcement" level="polite" />
     <skip-to target="web-content-main">
-      <translate>Skip to main</translate>
+      <span v-text="$gettext('Skip to main')" />
     </skip-to>
     <component :is="layout"></component>
     <portal-target name="app.runtime.modal" multiple></portal-target>

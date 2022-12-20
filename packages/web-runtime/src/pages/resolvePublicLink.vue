@@ -6,7 +6,7 @@
       <template v-if="isLoading">
         <div class="oc-card-header">
           <h2 key="public-link-loading">
-            <translate>Loading public link…</translate>
+            <span v-text="$gettext('Loading public link…')" />
           </h2>
         </div>
         <div class="oc-card-body">
@@ -16,7 +16,7 @@
       <template v-else-if="errorMessage">
         <div class="oc-card-header oc-link-resolve-error-title">
           <h2 key="public-link-error">
-            <translate>An error occurred while loading the public link</translate>
+            <span v-text="$gettext('An error occurred while loading the public link')" />
           </h2>
         </div>
         <div class="oc-card-body oc-link-resolve-error-message">
@@ -27,7 +27,7 @@
         <form @submit.prevent="resolvePublicLinkTask.perform(true)">
           <div class="oc-card-header">
             <h2>
-              <translate>This resource is password-protected</translate>
+              <span v-text="$gettext('This resource is password-protected')" />
             </h2>
           </div>
           <div class="oc-card-body">
@@ -46,7 +46,7 @@
               :disabled="!password"
               submit="submit"
             >
-              <translate>Continue</translate>
+              <span v-text="$gettext('Continue')" />
             </oc-button>
           </div>
         </form>

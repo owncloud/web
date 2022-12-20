@@ -6,7 +6,9 @@
         <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
         <div class="oc-login-card-body oc-width-medium">
           <h2 class="oc-login-card-title">
-            <translate :translate-params="{ productName }">Welcome to %{productName}</translate>
+            <span
+              v-text="$gettextInterpolate($gettext('Welcome to %{productName}'), { productName })"
+            />
           </h2>
           <p v-translate>
             Please click the button below to authenticate and get access to your data.
@@ -24,7 +26,7 @@
         class="oc-mt-m oc-width-medium oc-login-authorize-button"
         @click="performLogin"
       >
-        <translate>Login</translate>
+        <span v-text="$gettext('Login')" />
       </oc-button>
     </div>
   </div>

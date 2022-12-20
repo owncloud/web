@@ -20,8 +20,8 @@
         <autocomplete-item :item="option" />
       </template>
       <template #no-options>
-        <translate v-if="resourceIsSpace"> No users found. </translate>
-        <translate v-else> No users or groups found. </translate>
+        <span v-if="resourceIsSpace" v-text="$gettext(' No users found. ')" />
+        <span v-else v-text="$gettext(' No users or groups found. ')" />
       </template>
       <template #selected-option-container="{ option, deselect }">
         <recipient-container

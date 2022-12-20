@@ -9,7 +9,7 @@
     @click="showCreateSpaceModal"
   >
     <oc-icon name="add" />
-    <translate>New Space</translate>
+    <span v-translate>New Space</span>
   </oc-button>
 </template>
 

@@ -42,7 +42,7 @@
             @click.stop="$_acceptShare_trigger({ resources: [resource] })"
           >
             <oc-icon size="small" name="check" />
-            <translate>Accept</translate>
+            <span v-translate>Accept</span>
           </oc-button>
           <oc-button
             v-if="getShowDeclineButton(resource)"
@@ -51,7 +51,7 @@
             @click.stop="$_declineShare_trigger({ resources: [resource] })"
           >
             <oc-icon size="small" name="spam-3" fill-type="line" />
-            <translate>Decline</translate>
+            <span v-translate>Decline</span>
           </oc-button>
         </div>
       </template>
