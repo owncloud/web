@@ -20,8 +20,7 @@
         <autocomplete-item :item="option" />
       </template>
       <template #no-options>
-        <span v-if="resourceIsSpace" v-text="$gettext(' No users found. ')" />
-        <span v-else v-text="$gettext(' No users or groups found. ')" />
+        <translate> No users or groups found. </translate>
       </template>
       <template #selected-option-container="{ option, deselect }">
         <recipient-container
@@ -210,10 +209,7 @@ export default defineComponent({
             }
           })
 
-        let groups = []
-        if (!this.resourceIsSpace) {
-          groups = recipients.exact.groups.concat(recipients.groups)
-        }
+        let groups = recipients.exact.groups.concat(recipients.groups)
 
         const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
