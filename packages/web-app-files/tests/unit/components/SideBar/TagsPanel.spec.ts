@@ -1,10 +1,13 @@
-import { createLocalVue, mount } from '@vue/test-utils'
-import Vuex from 'vuex'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultStoreMockOptions,
+  defaultStubs,
+  mount,
+  defaultPlugins
+} from 'web-test-helpers'
 import TagsPanel from 'web-app-files/src/components/SideBar/TagsPanel.vue'
 import { useRequest } from 'web-pkg/src/composables'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { ClientService, eventBus } from 'web-pkg'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
@@ -12,27 +15,24 @@ import { OwnCloudSdk } from 'web-client/src/types'
 
 jest.mock('web-pkg/src/composables/authContext')
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-
 describe('Tags Panel', () => {
   const allTags = ['moon', 'mars', 'sun']
   const resource = mockDeep<Resource>({ tags: ['moon', 'mars'] })
   const clientService = mockDeep<ClientService>()
 
   it('show tags input form if loaded successfully', () => {
-    const wrapper = createWrapper(resource)
+    const { wrapper } = createWrapper(resource)
     expect(wrapper.find('#tags-form').exists()).toBeTruthy()
   })
   it('all available tags are selectable', async () => {
-    const wrapper = createWrapper(resource, allTags)
+    const { wrapper } = createWrapper(resource, allTags)
     await wrapper.vm.loadAllTagsTask.last
     expect(wrapper.find('oc-select-stub').attributes().options).toEqual(allTags.join(','))
   })
   describe('save method', () => {
     it('publishes the "save"-event', async () => {
       const eventStub = jest.spyOn(eventBus, 'publish')
-      const wrapper = createWrapper(resource, allTags)
+      const { wrapper } = createWrapper(resource, allTags)
       await wrapper.vm.save()
       expect(eventStub).toHaveBeenCalled()
     })
@@ -41,7 +41,7 @@ describe('Tags Panel', () => {
       clientService.owncloudSdk = mockDeep<OwnCloudSdk>({
         tags: { addResourceTag: addResourceTagStub }
       })
-      const wrapper = createWrapper(resource, allTags, clientService)
+      const { wrapper } = createWrapper(resource, allTags, clientService)
       resource.tags = []
       await wrapper.vm.save()
       expect(addResourceTagStub).toHaveBeenCalled()
@@ -51,7 +51,7 @@ describe('Tags Panel', () => {
       clientService.owncloudSdk = mockDeep<OwnCloudSdk>({
         tags: { removeResourceTag: removeResourceTagStub }
       })
-      const wrapper = createWrapper(resource, allTags, clientService)
+      const { wrapper } = createWrapper(resource, allTags, clientService)
       resource.tags.push('new tag')
       await wrapper.vm.save()
       expect(removeResourceTagStub).toHaveBeenCalled()
@@ -63,7 +63,7 @@ describe('Tags Panel', () => {
         tags: { removeResourceTag: removeResourceTagStub }
       })
       const eventStub = jest.spyOn(eventBus, 'publish')
-      const wrapper = createWrapper(resource, allTags, clientService)
+      const { wrapper } = createWrapper(resource, allTags, clientService)
       resource.tags.push('sun')
       await wrapper.vm.save()
       expect(eventStub).not.toHaveBeenCalled()
@@ -75,13 +75,18 @@ function createWrapper(testResource, allTags = [], clientService = mockDeep<Clie
   jest.mocked(useRequest).mockImplementation(() => ({
     makeRequest: jest.fn().mockResolvedValue({ data: { tags: allTags } })
   }))
-  return mount(TagsPanel, {
-    store: new Vuex.Store(defaultStoreMockOptions),
-    localVue,
-    mocks: { ...defaultComponentMocks(), $clientService: clientService },
-    stubs: defaultStubs,
-    provide: {
-      displayedItem: testResource
-    }
-  })
+
+  const store = createStore(defaultStoreMockOptions)
+  return {
+    wrapper: mount(TagsPanel, {
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: { ...defaultComponentMocks(), $clientService: clientService },
+        stubs: defaultStubs,
+        provide: {
+          displayedItem: testResource
+        }
+      }
+    })
+  }
 }

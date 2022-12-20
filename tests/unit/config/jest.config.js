@@ -2,9 +2,7 @@ const path = require('path')
 const rootDir = path.resolve(__dirname, '../../../')
 
 // We need to transpile these modules as they are using esm syntax
-const esmModules = ['lodash-es'].map((m) =>
-  process.env.npm_config_user_agent?.startsWith('pnpm') ? `.pnpm/${m}@.*` : m
-)
+const esmModules = ['lodash-es'].map((m) => `.pnpm/${m}@.*`)
 process.env.TZ = 'GMT'
 module.exports = {
   rootDir,
