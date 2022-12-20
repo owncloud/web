@@ -4,7 +4,8 @@ export const filesModuleMockOptions = {
     state: {
       highlightedFile: undefined,
       currentFolder: undefined,
-      sharesTree: {}
+      sharesTree: {},
+      latestSelectedId: undefined
     },
     getters: {
       currentFolder: jest.fn(),
@@ -22,6 +23,7 @@ export const filesModuleMockOptions = {
     },
     mutations: {
       SET_FILE_SELECTION: jest.fn(),
+      ADD_FILE_SELECTION: jest.fn(),
       SET_SELECTED_IDS: jest.fn(),
       RENAME_FILE: jest.fn(),
       SET_HIDDEN_FILES_VISIBILITY: jest.fn(),
@@ -34,6 +36,7 @@ export const filesModuleMockOptions = {
       REMOVE_FILE: jest.fn(),
       REMOVE_FILES: jest.fn(),
       RESET_SELECTION: jest.fn(),
+      SET_LATEST_SELECTED_FILE_ID: jest.fn(),
       CLEAR_FILES_SEARCHED: jest.fn()
     },
     actions: {
@@ -48,7 +51,11 @@ export const filesModuleMockOptions = {
       removeFilesFromTrashbin: jest.fn(),
       changeShare: jest.fn(),
       addLink: jest.fn(),
-      addShare: jest.fn()
+      addShare: jest.fn(),
+      copySelectedFiles: jest.fn(),
+      cutSelectedFiles: jest.fn(),
+      resetFileSelection: jest.fn(),
+      toggleFileSelection: jest.fn()
     }
   }
 }

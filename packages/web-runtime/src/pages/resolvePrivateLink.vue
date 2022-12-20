@@ -6,7 +6,7 @@
       <template v-if="loading">
         <div class="oc-card-header">
           <h2 key="private-link-loading">
-            <translate>Resolving private link…</translate>
+            <span v-text="$gettext('Resolving private link…')" />
           </h2>
         </div>
         <div class="oc-card-body">
@@ -19,7 +19,7 @@
             {{ resource.name }}
           </h2>
           <h2 v-else key="private-link-error">
-            <translate>An error occurred while resolving the private link</translate>
+            <span v-text="$gettext('An error occurred while resolving the private link')" />
           </h2>
         </div>
         <div class="oc-card-body oc-link-resolve-error-message">

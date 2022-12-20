@@ -17,16 +17,16 @@
           gap-size="none"
           @click="togglePopover"
         >
-          <translate v-if="!dateCurrent" key="no-expiration-date-label"
-            >Set expiration date</translate
-          >
-          <translate
+          <span
+            v-if="!dateCurrent"
+            key="no-expiration-date-label"
+            v-text="$gettext('Set expiration date')"
+          />
+          <span
             v-else
             key="set-expiration-date-label"
-            :translate-params="{ expires: dateExpire }"
-          >
-            Expires %{expires}
-          </translate>
+            v-text="$gettextInterpolate($gettext('Expires %{expires}'), { expires: dateExpire })"
+          />
           <oc-icon v-if="!dateCurrent" name="arrow-down-s" />
         </oc-button>
       </template>

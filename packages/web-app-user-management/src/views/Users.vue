@@ -27,13 +27,13 @@
             </oc-button>
             <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteUserModal">
               <oc-icon name="delete-bin" />
-              <translate>Delete</translate>
+              <span v-text="$gettext('Delete')" />
             </oc-button>
           </div>
           <div v-else>
             <oc-button variation="primary" appearance="filled" @click="toggleCreateUserModal">
               <oc-icon name="add" />
-              <translate>New user</translate>
+              <span v-text="$gettext('New user')" />
             </oc-button>
           </div>
         </div>

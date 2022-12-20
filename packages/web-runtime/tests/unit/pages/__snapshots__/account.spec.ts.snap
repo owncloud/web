@@ -30,14 +30,12 @@ exports[`account page account information group membership displays group names 
 
 exports[`account page header section edit buttons edit route button should be displayed if running with ocis and has navItems 1`] = `
 <oc-button-stub type="router-link" size="medium" to="some-route" submit="button" variation="primary" appearance="outline" justifycontent="center" gapsize="medium" data-testid="account-page-edit-route-btn">
-  <oc-icon-stub name="edit" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
-  <translate-stub tag="span">Edit</translate-stub>
+  <oc-icon-stub name="edit" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>Edit</span>
 </oc-button-stub>
 `;
 
 exports[`account page header section edit buttons edit url button should be displayed if not running with ocis 1`] = `
 <oc-button-stub type="a" size="medium" href="/index.php/settings/personal" submit="button" variation="primary" appearance="outline" justifycontent="center" gapsize="medium" data-testid="account-page-edit-url-btn">
-  <oc-icon-stub name="edit" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
-  <translate-stub tag="span">Edit</translate-stub>
+  <oc-icon-stub name="edit" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>Edit</span>
 </oc-button-stub>
 `;

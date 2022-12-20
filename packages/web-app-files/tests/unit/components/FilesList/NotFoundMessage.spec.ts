@@ -27,8 +27,8 @@ describe('NotFoundMessage', () => {
       const homeButton = wrapper.find(selectors.homeButton)
 
       expect(homeButton.exists()).toBeTruthy()
-      expect(homeButton.find('translate-stub')).toBeTruthy()
-      expect(homeButton.find('translate-stub').text()).toBe('Go to »Personal« page')
+      expect(homeButton.find('span')).toBeTruthy()
+      expect(homeButton.find('span').text()).toBe('Go to »Personal« page')
     })
 
     it('should not show reload public link button', () => {
@@ -63,8 +63,8 @@ describe('NotFoundMessage', () => {
       const reloadLinkButton = wrapper.find(selectors.reloadLinkButton)
 
       expect(reloadLinkButton.exists()).toBeTruthy()
-      expect(reloadLinkButton.find('translate-stub')).toBeTruthy()
-      expect(reloadLinkButton.find('translate-stub').text()).toBe('Reload public link')
+      expect(reloadLinkButton.find('span')).toBeTruthy()
+      expect(reloadLinkButton.find('span').text()).toBe('Reload public link')
     })
 
     it('should not show home button', () => {
