@@ -7,7 +7,7 @@
     <span v-else class="state-indicator">{{ unsavedChangesText }}</span>
     <div>
       <oc-button :disabled="!unsavedChanges" @click="$emit('revert')">
-        <translate>Revert</translate>
+        <span v-text="$gettext('Revert')" />
       </oc-button>
       <oc-button
         appearance="filled"
@@ -15,7 +15,7 @@
         :disabled="!unsavedChanges || confirmButtonDisabled"
         @click="$emit('confirm')"
       >
-        <translate>Save</translate>
+        <span v-text="$gettext('Save')" />
       </oc-button>
     </div>
   </div>

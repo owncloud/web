@@ -27,7 +27,7 @@
           <li class="create-list-folder oc-menu-item-hover">
             <oc-button id="new-folder-btn" appearance="raw" @click="showCreateResourceModal">
               <oc-resource-icon :resource="{ isFolder: true, extension: '' }" size="medium" />
-              <translate>Folder</translate>
+              <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
           <li
@@ -61,7 +61,7 @@
                   :resource="{ type: 'file', extension: mimetype.ext }"
                   size="medium"
                 />
-                <translate :translate-params="{ name: mimetype.name }">%{name}</translate>
+                <span v-text="$gettextInterpolate($gettext('%{name}'), { name: mimetype.name })" />
               </oc-button>
             </li>
           </template>
