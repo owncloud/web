@@ -10,33 +10,23 @@ exports[`resolvePublicLink when the view is not loading anymore and when "passwo
 
 exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the password input should have a computed label 1`] = `<oc-text-input-stub id="oc-textinput-4" type="password" value="" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>`;
 
-exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the submit button should be set as disabled if "password" is empty 1`] = `
-<oc-button-stub type="button" disabled="true" size="medium" submit="submit" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-login-authorize-button">
-  <translate-stub tag="span">Continue</translate-stub>
-</oc-button-stub>
-`;
+exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the submit button should be set as disabled if "password" is empty 1`] = `<oc-button-stub type="button" disabled="true" size="medium" submit="submit" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-login-authorize-button"><span>Continue</span></oc-button-stub>`;
 
 exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true should display the password required form 1`] = `
 <form>
   <div class="oc-card-header">
-    <h2>
-      <translate-stub tag="span">This resource is password-protected</translate-stub>
-    </h2>
+    <h2><span>This resource is password-protected</span></h2>
   </div>
   <div class="oc-card-body">
     <oc-text-input-stub id="oc-textinput-4" type="password" value="" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>
-    <oc-button-stub type="button" disabled="true" size="medium" submit="submit" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-login-authorize-button">
-      <translate-stub tag="span">Continue</translate-stub>
-    </oc-button-stub>
+    <oc-button-stub type="button" disabled="true" size="medium" submit="submit" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-login-authorize-button"><span>Continue</span></oc-button-stub>
   </div>
 </form>
 `;
 
 exports[`resolvePublicLink when the view is not loading anymore should display the error message if "errorMessage" is not empty 1`] = `
 <div class="oc-card-header oc-link-resolve-error-title">
-  <h2>
-    <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
-  </h2>
+  <h2><span>An error occurred while loading the public link</span></h2>
 </div>
 `;
 

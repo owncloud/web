@@ -16,14 +16,12 @@ exports[`User Menu component when no quota and email is set the user menu does n
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Settings</translate-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Settings</span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Log out</translate-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Log out</span>
         </oc-button-stub>
       </li>
       <!---->
@@ -48,14 +46,12 @@ exports[`User Menu component when no quota and no email is set the user menu doe
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Settings</translate-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Settings</span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Log out</translate-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Log out</span>
         </oc-button-stub>
       </li>
       <!---->
@@ -80,14 +76,12 @@ exports[`User Menu component when quota and no email is set renders a navigation
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Settings</translate-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Settings</span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Log out</translate-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Log out</span>
         </oc-button-stub>
       </li>
       <li class="storage-wrapper oc-pl-s">
@@ -118,14 +112,12 @@ exports[`User Menu component when quota is above 80% and below 90% renders a war
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Settings</translate-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Settings</span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Log out</translate-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Log out</span>
         </oc-button-stub>
       </li>
       <li class="storage-wrapper oc-pl-s">
@@ -156,14 +148,12 @@ exports[`User Menu component when quota is above 90% renders a danger quota prog
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Settings</translate-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Settings</span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Log out</translate-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Log out</span>
         </oc-button-stub>
       </li>
       <li class="storage-wrapper oc-pl-s">
@@ -194,14 +184,12 @@ exports[`User Menu component when quota is below 80% renders a primary quota pro
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Settings</translate-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Settings</span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Log out</translate-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Log out</span>
         </oc-button-stub>
       </li>
       <li class="storage-wrapper oc-pl-s">
@@ -232,14 +220,12 @@ exports[`User Menu component when quota is not defined renders no percentag of t
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Settings</translate-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Settings</span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Log out</translate-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Log out</span>
         </oc-button-stub>
       </li>
       <li class="storage-wrapper oc-pl-s">
@@ -270,14 +256,12 @@ exports[`User Menu component when quota is unlimited renders no percentag of tot
       </li>
       <li>
         <oc-button-stub type="router-link" size="medium" to="[object Object]" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Settings</translate-stub>
+          <oc-icon-stub name="application" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Settings</span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="oc-topbar-account-logout">
-          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
-          <translate-stub tag="span">Log out</translate-stub>
+          <oc-icon-stub name="logout-box-r" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub> <span>Log out</span>
         </oc-button-stub>
       </li>
       <li class="storage-wrapper oc-pl-s">

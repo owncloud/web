@@ -5,12 +5,12 @@
   >
     <oc-icon name="cloud" type="div" size="xxlarge" />
     <div class="oc-text-muted oc-text-xlarge">
-      <translate>Resource not found</translate>
+      <span v-translate>Resource not found</span>
     </div>
     <div class="oc-text-muted">
-      <translate>
+      <span v-translate>
         We went looking everywhere, but were unable to find the selected resource.
-      </translate>
+      </span>
     </div>
     <div class="oc-mt-s">
       <oc-button
@@ -20,7 +20,7 @@
         appearance="raw"
         :to="spacesRoute"
       >
-        <translate>Go to »Spaces Overview«</translate>
+        <span v-translate>Go to »Spaces Overview«</span>
       </oc-button>
       <oc-button
         v-if="showHomeButton"
@@ -29,7 +29,7 @@
         appearance="raw"
         :to="homeRoute"
       >
-        <translate>Go to »Personal« page</translate>
+        <span v-translate>Go to »Personal« page</span>
       </oc-button>
       <oc-button
         v-if="showPublicLinkButton"
@@ -38,7 +38,7 @@
         appearance="raw"
         :to="publicLinkRoute"
       >
-        <translate>Reload public link</translate>
+        <span v-translate>Reload public link</span>
       </oc-button>
     </div>
   </div>

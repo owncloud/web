@@ -41,17 +41,17 @@
         <li v-for="(app, index) in applicationsList" :key="`user-menu-${index}`">
           <oc-button v-if="app.url" type="a" appearance="raw" :target="app.target" :href="app.url">
             <oc-icon :name="app.icon" class="oc-p-xs" />
-            <translate>{{ app.title }}</translate>
+            <span v-text="$gettext(app.title)" />
           </oc-button>
           <oc-button v-else type="router-link" appearance="raw" :to="{ path: app.path }">
             <oc-icon :name="app.icon" class="oc-p-xs" />
-            <translate>{{ app.title }}</translate>
+            <span v-text="$gettext(app.title)" />
           </oc-button>
         </li>
         <li>
           <oc-button id="oc-topbar-account-logout" appearance="raw" @click="logout">
             <oc-icon name="logout-box-r" fill-type="line" class="oc-p-xs" />
-            <translate>Log out</translate>
+            <span v-text="$gettext('Log out')" />
           </oc-button>
         </li>
         <li v-if="quotaEnabled" class="storage-wrapper oc-pl-s">

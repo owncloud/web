@@ -15,7 +15,7 @@
           @click="showEditPasswordModal"
         >
           <oc-icon name="lock" />
-          <translate>Change Password</translate>
+          <span v-text="$gettext('Change Password')" />
         </oc-button>
         <oc-button
           v-if="editUrl"
@@ -25,7 +25,7 @@
           data-testid="account-page-edit-url-btn"
         >
           <oc-icon name="edit" />
-          <translate>Edit</translate>
+          <span v-text="$gettext('Edit')" />
         </oc-button>
         <oc-button
           v-else-if="editRoute"
@@ -35,7 +35,7 @@
           data-testid="account-page-edit-route-btn"
         >
           <oc-icon name="edit" />
-          <translate>Edit</translate>
+          <span v-text="$gettext('Edit')" />
         </oc-button>
       </div>
     </div>

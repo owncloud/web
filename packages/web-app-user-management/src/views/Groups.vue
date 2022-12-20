@@ -27,13 +27,13 @@
             </oc-button>
             <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteGroupModal">
               <oc-icon name="delete-bin" />
-              <translate>Delete</translate>
+              <span v-text="$gettext('Delete')" />
             </oc-button>
           </div>
           <div v-else>
             <oc-button variation="primary" appearance="filled" @click="toggleCreateGroupModal">
               <oc-icon name="add" />
-              <translate>New group</translate>
+              <span v-text="$gettext('New group')" />
             </oc-button>
           </div>
         </div>

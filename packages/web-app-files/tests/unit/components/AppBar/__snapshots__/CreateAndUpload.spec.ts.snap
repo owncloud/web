@@ -25,8 +25,7 @@ exports[`CreateAndUpload component file handlers should show additional handlers
     <oc-list-stub id="create-list">
       <li class="create-list-folder oc-menu-item-hover">
         <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="new-folder-btn">
-          <oc-resource-icon-stub resource="[object Object]" size="medium"></oc-resource-icon-stub>
-          <translate-stub tag="span">Folder</translate-stub>
+          <oc-resource-icon-stub resource="[object Object]" size="medium"></oc-resource-icon-stub> <span>Folder</span>
         </oc-button-stub>
       </li>
       <li class="create-list-file oc-menu-item-hover">
