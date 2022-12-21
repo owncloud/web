@@ -58,7 +58,7 @@ import { computed, defineComponent, inject, onMounted, ref, unref, watch } from 
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
-import { useClientService, useRequest, useStore } from 'web-pkg/src/composables'
+import { useClientService, useStore, useGraphClient } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 
 const tagsMaxCount = 100
@@ -71,12 +71,12 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const clientService = useClientService()
+    const { graphClient } = useGraphClient()
     const allTags = ref([])
-    const { makeRequest } = useRequest()
     const loadAllTagsTask = useTask(function* (signal) {
       const {
-        data: { tags = [] }
-      } = yield makeRequest('GET', `${store.getters.configuration.server}experimental/tags`, {})
+        data: { value: tags = [] }
+      } = yield unref(graphClient).tags.getTags()
       allTags.value = tags
     })
 
@@ -101,11 +101,11 @@ export default defineComponent({
         const tagsToRemove = tags.filter((tag) => !unref(editAssignedTags).includes(tag))
 
         if (tagsToAdd.length) {
-          await unref(clientService).owncloudSdk.tags.addResourceTag(fileId, tagsToAdd)
+          await unref(graphClient).tags.assignTags({ resourceId: fileId, tags: tagsToAdd })
         }
 
         if (tagsToRemove.length) {
-          await unref(clientService).owncloudSdk.tags.removeResourceTag(fileId, tagsToRemove)
+          await unref(graphClient).tags.unassignTags({ resourceId: fileId, tags: tagsToRemove })
         }
 
         store.commit('Files/UPDATE_RESOURCE_FIELD', {

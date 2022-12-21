@@ -14,10 +14,19 @@ import {
   MeUserApiFactory,
   User,
   UserApiFactory,
-  UsersApiFactory
+  UsersApiFactory,
+  TagsApiFactory,
+  CollectionOfTags,
+  TagAssignment,
+  TagUnassignment
 } from './generated'
 
 export interface Graph {
+  tags: {
+    getTags: () => AxiosPromise<CollectionOfTags>
+    assignTags: (tagAssignment?: TagAssignment) => AxiosPromise<void>
+    unassignTags: (tagUnassignment?: TagUnassignment) => AxiosPromise<void>
+  }
   drives: {
     listMyDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
     getDrive: (id: string) => AxiosPromise<Drive>
@@ -63,8 +72,15 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const groupApiFactory = GroupApiFactory(config, config.basePath, axiosClient)
   const groupsApiFactory = GroupsApiFactory(config, config.basePath, axiosClient)
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
+  const tagsApiFactory = TagsApiFactory(config, config.basePath, axiosClient)
 
   return <Graph>{
+    tags: {
+      getTags: () => tagsApiFactory.getTags(),
+      assignTags: (tagAssignment: TagAssignment) => tagsApiFactory.assignTags(tagAssignment),
+      unassignTags: (tagUnassignment: TagUnassignment) =>
+        tagsApiFactory.unassignTags(tagUnassignment)
+    },
     drives: {
       listMyDrives: (orderBy?: string, filter?: string) =>
         meDrivesApi.listMyDrives(0, 0, orderBy, filter),
