@@ -79,7 +79,7 @@ push:
 			export OUT_DIR=$$app/l10n; \
 		fi; \
 		cd $$OUT_DIR; \
-		tx -d push -s --no-interactive; \
+		tx push -s; \
 	done; \
 
 .PHONY: pull
@@ -92,5 +92,5 @@ pull:
 			export OUT_DIR=$$app/l10n; \
 		fi; \
 		cd $$OUT_DIR; \
-		tx -d pull -a; \
+		tx pull -a; \
 	done; \
