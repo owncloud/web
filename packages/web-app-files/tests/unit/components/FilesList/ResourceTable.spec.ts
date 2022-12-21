@@ -288,12 +288,15 @@ describe('ResourceTable', () => {
         const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
         const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
         expect(resourceRow.find('.resource-table-tag-wrapper').element.tagName).toEqual(
-            'ROUTER-LINK-STUB'
+          'ROUTER-LINK-STUB'
         )
       })
       it('do not render router link if user is not authenticated', () => {
         const resource = mockDeep<Resource>({ id: '1', tags: ['1'] })
-        const { wrapper } = getMountedWrapper({ props: { resources: [resource] }, isUserContextReady: false})
+        const { wrapper } = getMountedWrapper({
+          props: { resources: [resource] },
+          isUserContextReady: false
+        })
         const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
         expect(resourceRow.find('.resource-table-tag-wrapper').element.tagName).toEqual('SPAN')
       })
