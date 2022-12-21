@@ -58,8 +58,9 @@ import { computed, defineComponent, inject, onMounted, ref, unref, watch } from 
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
-import { useClientService, useStore, useGraphClient } from 'web-pkg/src/composables'
+import { useStore, useGraphClient } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
+import diff from 'lodash-es/difference'
 
 const tagsMaxCount = 100
 
@@ -70,14 +71,13 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const clientService = useClientService()
     const { graphClient } = useGraphClient()
     const allTags = ref([])
-    const loadAllTagsTask = useTask(function* (signal) {
+    const loadAllTagsTask = useTask(function* () {
       const {
         data: { value: tags = [] }
       } = yield unref(graphClient).tags.getTags()
-      allTags.value = tags
+      allTags.value = [...tags]
     })
 
     const displayedItem = inject<Resource>('displayedItem')
@@ -97,8 +97,9 @@ export default defineComponent({
     const save = async () => {
       try {
         const { id, tags, fileId } = unref(resource)
-        const tagsToAdd = unref(editAssignedTags).filter((tag) => !tags.includes(tag))
-        const tagsToRemove = tags.filter((tag) => !unref(editAssignedTags).includes(tag))
+
+        const tagsToAdd = diff(tags, editAssignedTags.value)
+        const tagsToRemove = diff(editAssignedTags.value, tags)
 
         if (tagsToAdd.length) {
           await unref(graphClient).tags.assignTags({ resourceId: fileId, tags: tagsToAdd })
