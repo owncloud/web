@@ -1,19 +1,19 @@
 <template>
   <div id="tags-panel">
     <div id="tags-form" class="oc-background-highlight oc-p-m">
-      <oc-loader v-if="loadAllTagsTask.isRunning" />
+      <oc-loader v-if="loadAvailableTagsTask.isRunning" />
       <oc-select
         v-else
         ref="tagSelect"
-        v-model="editAssignedTags"
+        v-model="selectedTags"
         class="oc-mb-s"
         multiple
-        :options="allTags"
+        :options="availableTags"
         taggable
         push-tags
         :label="$gettext('Add or edit tags')"
         :create-option="createOption"
-        :selectable="() => editAssignedTags.length <= tagsMaxCount"
+        :selectable="() => selectedTags.length <= tagsMaxCount"
         :fix-message-line="true"
       >
         <template #selected-option="{ label }">
@@ -45,7 +45,7 @@
       <compare-save-dialog
         class="edit-compare-save-dialog oc-mb-l"
         :original-object="{ tags: resource.tags }"
-        :compare-object="{ tags: editAssignedTags }"
+        :compare-object="{ tags: selectedTags }"
         @revert="revertChanges"
         @confirm="save"
       ></compare-save-dialog>
@@ -72,20 +72,22 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { graphClient } = useGraphClient()
-    const allTags = ref([])
-    const loadAllTagsTask = useTask(function* () {
-      const {
-        data: { value: tags = [] }
-      } = yield unref(graphClient).tags.getTags()
-      allTags.value = [...tags]
-    })
 
     const displayedItem = inject<Resource>('displayedItem')
     const resource = computed(() => unref(displayedItem))
-    const editAssignedTags = ref([])
+    const selectedTags = ref([])
+    const availableTags = ref([])
     const tagSelect = ref(null)
+
+    const loadAvailableTagsTask = useTask(function* () {
+      const {
+        data: { value: tags = [] }
+      } = yield unref(graphClient).tags.getTags()
+      availableTags.value = [...tags]
+    })
+
     const revertChanges = () => {
-      editAssignedTags.value = [...unref(resource).tags]
+      selectedTags.value = [...unref(resource).tags]
     }
     const createOption = (option) => {
       return option.toLowerCase()
@@ -97,9 +99,8 @@ export default defineComponent({
     const save = async () => {
       try {
         const { id, tags, fileId } = unref(resource)
-
-        const tagsToAdd = diff(tags, editAssignedTags.value)
-        const tagsToRemove = diff(editAssignedTags.value, tags)
+        const tagsToAdd = diff(selectedTags.value, tags)
+        const tagsToRemove = diff(tags, selectedTags.value)
 
         if (tagsToAdd.length) {
           await unref(graphClient).tags.assignTags({ resourceId: fileId, tags: tagsToAdd })
@@ -112,10 +113,10 @@ export default defineComponent({
         store.commit('Files/UPDATE_RESOURCE_FIELD', {
           id: id,
           field: 'tags',
-          value: [...unref(editAssignedTags)]
+          value: [...unref(selectedTags)]
         })
 
-        unref(resource).tags = [...unref(editAssignedTags)]
+        unref(resource).tags = [...unref(selectedTags)]
         eventBus.publish('sidebar.entity.saved')
       } catch (e) {
         console.error(e)
@@ -127,15 +128,15 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      editAssignedTags.value = [...unref(resource).tags]
-      loadAllTagsTask.perform()
+      selectedTags.value = [...unref(resource).tags]
+      loadAvailableTagsTask.perform()
     })
 
     return {
-      loadAllTagsTask,
-      allTags,
+      loadAvailableTagsTask,
+      availableTags,
       tagsMaxCount,
-      editAssignedTags,
+      selectedTags,
       resource,
       tagSelect,
       revertChanges,

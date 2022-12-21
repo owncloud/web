@@ -28,7 +28,7 @@ describe('Tags Panel', () => {
     graphMock.tags.getTags.mockResolvedValueOnce(mockAxiosResolve({ value: tags.split(',') }))
 
     const { wrapper } = createWrapper(resource, graphMock)
-    await wrapper.vm.loadAllTagsTask.last
+    await wrapper.vm.loadAvailableTagsTask.last
     expect(wrapper.find('oc-select-stub').attributes().options).toEqual(tags)
   })
 
@@ -42,21 +42,23 @@ describe('Tags Panel', () => {
     })
   })
 
-  test.each<[string[], string[] | undefined, (r: Resource) => void]>([
-    [['a', 'b'], ['c'], (r) => r.tags.push('c')],
-    [['a', 'b'], ['c'], (r) => (r.tags = ['c'])],
-    [['a', 'b'], [], (r) => r.tags.push('a')],
-    [['a', 'b'], ['c'], (r) => (r.tags = ['a', 'b', 'c'])]
+  test.each<[string[], string[], string[]]>([
+    [['a', 'b'], ['c'], ['c']],
+    [['a', 'b'], ['a', 'b', 'c'], ['c']],
+    [
+      ['a', 'b'],
+      ['a', 'a', 'c', 'd'],
+      ['c', 'd']
+    ]
   ])(
-    'calls the client to add %s to the existing resource tags %s',
-    async (tags, expected, modifier) => {
-      const resource = mockDeep<Resource>({ tags: tags })
+    'resource with the initial tags %s and selected tags %s adds %s',
+    async (resourceTags, selectedTags, expected) => {
+      const resource = mockDeep<Resource>({ tags: resourceTags })
       const graphMock = mockDeep<Graph>()
       const stub = graphMock.tags.assignTags.mockImplementation()
-
       const { wrapper } = createWrapper(resource, graphMock)
 
-      modifier(resource)
+      wrapper.vm.selectedTags = selectedTags
 
       await wrapper.vm.save()
 
@@ -73,23 +75,20 @@ describe('Tags Panel', () => {
     }
   )
 
-  test.each<[string[], string[] | undefined, (r: Resource) => void]>([
-    [['a', 'b'], ['b'], (r) => r.tags.pop()],
-    [['a', 'b'], [], (r) => r.tags.push('c')],
-    [['a', 'b'], [], (r) => (r.tags = ['a', 'b', 'c'])],
-    [['a', 'b'], ['a', 'b'], (r) => (r.tags = [])],
-    [['a', 'b'], ['b'], (r) => (r.tags = ['a'])],
-    [['a', 'b'], ['a'], (r) => (r.tags = ['b'])]
+  test.each<[string[], string[], string[]]>([
+    [['a', 'b'], ['a'], ['b']],
+    [['a', 'b'], ['a', 'b', 'c'], []],
+    [['a', 'b'], [], ['a', 'b']]
   ])(
-    'calls the client to remove %s from the existing resource tags %s',
-    async (tags, expected, modifier) => {
-      const resource = mockDeep<Resource>({ tags: tags })
+    'resource with the initial tags %s and selected tags %s removes %s',
+    async (resourceTags, selectedTags, expected) => {
+      const resource = mockDeep<Resource>({ tags: resourceTags })
       const graphMock = mockDeep<Graph>()
       const stub = graphMock.tags.unassignTags.mockImplementation()
 
       const { wrapper } = createWrapper(resource, graphMock)
 
-      modifier(resource)
+      wrapper.vm.selectedTags = selectedTags
 
       await wrapper.vm.save()
 
@@ -115,7 +114,7 @@ describe('Tags Panel', () => {
     const resource = mockDeep<Resource>({ tags: ['a'] })
     const eventStub = jest.spyOn(eventBus, 'publish')
     const { wrapper } = createWrapper(resource, graphMock)
-    resource.tags.push('b')
+    wrapper.vm.selectedTags.push('b')
     await wrapper.vm.save()
     expect(assignTagsStub).toHaveBeenCalled()
     expect(eventStub).not.toHaveBeenCalled()
