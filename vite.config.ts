@@ -14,6 +14,7 @@ import { existsSync, readdirSync, readFileSync } from 'fs'
 // build config
 import packageJson from './package.json'
 import { getUserAgentRegExp } from 'browserslist-useragent-regexp'
+import browserslistToEsbuild from 'browserslist-to-esbuild'
 
 const buildConfig = {
   requirejs: {},
@@ -108,7 +109,8 @@ export default defineConfig(({ mode, command }) => {
               }
             }
           }
-        }
+        },
+        target: browserslistToEsbuild()
       },
       server: {
         host: 'host.docker.internal',
