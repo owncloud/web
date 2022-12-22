@@ -29,7 +29,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   transformIgnorePatterns: [`<rootDir>/node_modules/(?!${esmModules.join('|')})`],
   setupFiles: ['<rootDir>/tests/unit/config/jest.init.js', 'core-js'],
-  snapshotSerializers: ['jest-serializer-vue'],
+  snapshotSerializers: ['jest-serializer-vue-tjw'],
   coverageDirectory: '<rootDir>/coverage',
   coverageReporters: ['lcov'],
   collectCoverageFrom: [
