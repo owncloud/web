@@ -1,30 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Collaborator ListItem component share inheritance indicators show when sharedParentRoute is given 1`] = `
-<div data-testid="collaborator-user-item-brian" class="files-collaborators-collaborator oc-py-xs">
+<div class="files-collaborators-collaborator oc-py-xs">
   <div class="oc-width-1-1 oc-flex oc-flex-middle files-collaborators-collaborator-details">
     <div class="oc-width-2-3 oc-flex oc-flex-middle">
       <div>
-        <avatar-image-stub userid="brian" user-name="Brian Murphy" width="36" class="files-collaborators-collaborator-indicator"></avatar-image-stub>
+        <avatar-image-stub class="files-collaborators-collaborator-indicator" user-name="Brian Murphy" userid="brian" width="36"></avatar-image-stub>
       </div>
       <div class="oc-pl-s oc-text-truncate">
-        <div class="oc-text-truncate"><span aria-hidden="true" class="files-collaborators-collaborator-name">Brian Murphy</span> <span class="oc-invisible-sr">Share receiver name: %{ displayName } (%{ additionalInfo })</span></div>
+        <div class="oc-text-truncate">
+          <span aria-hidden="true" class="files-collaborators-collaborator-name">Brian Murphy</span>
+          <span class="oc-invisible-sr">Share receiver name: %{ displayName } (%{ additionalInfo })</span>
+        </div>
         <div>
           <div class="oc-flex oc-flex-nowrap oc-flex-middle">
-            <role-dropdown-stub resource="[object Object]" existingrole="[object Object]" existingpermissions="" domselector="asdf" allowsharepermission="true" class="files-collaborators-collaborator-role"></role-dropdown-stub>
+            <role-dropdown-stub allowsharepermission="true" class="files-collaborators-collaborator-role" domselector="asdf" existingpermissions="" existingrole="[object Object]" resource="[object Object]"></role-dropdown-stub>
           </div>
         </div>
       </div>
     </div>
     <div class="oc-flex flex-en oc-flex-middle oc-width-1-3" style="justify-content: end;">
       <div class="oc-resource-indicators oc-text-truncate">
-        <router-link-stub tag="a" to="[object Object]" class="parent-folder oc-text-truncate"><span class="text">via</span>
-          <oc-icon-stub name="folder-2" filltype="line" accessiblelabel="" type="span" size="small" variation="passive" color="" class="oc-px-xs"></oc-icon-stub> <span class="text oc-text-truncate">folder</span>
+        <router-link-stub class="parent-folder oc-text-truncate" tag="a" to="[object Object]">
+          <span class="text">via</span>
+          <oc-icon-stub accessiblelabel="" class="oc-px-xs" color="" filltype="line" name="folder-2" size="small" type="span" variation="passive"></oc-icon-stub>
+          <span class="text oc-text-truncate">folder</span>
         </router-link-stub>
       </div>
       <!---->
-      <edit-dropdown-stub sharecategory="user" caneditordelete="true" id="edit-drop-down-00000000-0000-0000-0000-000000000000" data-testid="collaborator-edit" class="files-collaborators-collaborator-edit"></edit-dropdown-stub>
-      <oc-info-drop-stub dropid="oc-info-drop-12" toggle="" mode="manual" target="#edit-drop-down-00000000-0000-0000-0000-000000000000" title="Access details" text="" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" endtext="" readmorelink="" class="share-access-details-drop"></oc-info-drop-stub>
+      <edit-dropdown-stub caneditordelete="true" class="files-collaborators-collaborator-edit" id="edit-drop-down-00000000-0000-0000-0000-000000000000" sharecategory="user"></edit-dropdown-stub>
+      <oc-info-drop-stub class="share-access-details-drop" dropid="oc-info-drop-12" endtext="" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" mode="manual" readmorelink="" target="#edit-drop-down-00000000-0000-0000-0000-000000000000" text="" title="Access details" toggle=""></oc-info-drop-stub>
     </div>
   </div>
 </div>
