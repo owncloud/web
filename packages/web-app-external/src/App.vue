@@ -117,10 +117,19 @@ export default defineComponent({
       })
 
       if (response.status !== 200) {
-        this.errorMessage = response.message
+        switch (response.status) {
+          case 425:
+            this.errorMessage = this.$gettext(
+              'This file is currently being processed and is not yet available for use. Please try again shortly.'
+            )
+            break
+          default:
+            this.errorMessage = response.data?.message
+        }
+
         this.loading = false
         this.loadingError = true
-        console.error('Error fetching app information', response.status, this.errorMessage)
+        console.error('Error fetching app information', response.status, response.data.message)
         return
       }
 

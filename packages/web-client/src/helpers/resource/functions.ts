@@ -99,6 +99,7 @@ export function buildResource(resource): Resource {
     webDavPath: resource.name,
     type: isFolder ? 'folder' : resource.type,
     isFolder,
+    processing: resource.processing || false,
     mdate: resource.fileInfo[DavProperty.LastModifiedDate],
     size: isFolder
       ? resource.fileInfo[DavProperty.ContentSize]

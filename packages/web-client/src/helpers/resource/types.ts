@@ -13,6 +13,7 @@ export interface Resource {
   downloadURL?: string
   type?: string
   status?: number
+  processing?: boolean
   spaceRoles?: {
     [k: string]: any[]
   }
