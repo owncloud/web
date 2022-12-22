@@ -1,5 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Resource Upload Component file upload should render component 1`] = `<div><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span> <span id="files-file-upload-button">Files</span></button> <input id="files-file-upload-input" type="file" aria-labelledby="files-file-upload-button" name="folder" tabindex="-1" multiple="multiple" class="upload-input-target"></div>`;
+exports[`Resource Upload Component file upload should render component 1`] = `
+<div>
+  <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+    <span class="oc-icon oc-icon-m oc-icon-passive oc-resource-icon oc-resource-icon-file">
+      <!---->
+    </span>
+    <span id="files-file-upload-button">Files</span>
+  </button>
+  <input aria-labelledby="files-file-upload-button" class="upload-input-target" id="files-file-upload-input" multiple="multiple" name="folder" tabindex="-1" type="file">
+</div>
+`;
 
-exports[`Resource Upload Component folder upload should render component 1`] = `<div><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive oc-resource-icon oc-resource-icon-folder"><!----></span> <span id="files-folder-upload-button">Folder</span></button> <input id="files-folder-upload-input" type="file" aria-labelledby="files-folder-upload-button" name="file" tabindex="-1" webkitdirectory="true" mozdirectory="true" allowdirs="true" class="upload-input-target"></div>`;
+exports[`Resource Upload Component folder upload should render component 1`] = `
+<div>
+  <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+    <span class="oc-icon oc-icon-m oc-icon-passive oc-resource-icon oc-resource-icon-folder">
+      <!---->
+    </span>
+    <span id="files-folder-upload-button">Folder</span>
+  </button>
+  <input allowdirs="true" aria-labelledby="files-folder-upload-button" class="upload-input-target" id="files-folder-upload-input" mozdirectory="true" name="file" tabindex="-1" type="file" webkitdirectory="true">
+</div>
+`;
