@@ -35,6 +35,7 @@ Summary
 * Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
 * Enhancement - Retry failed uploads on re-upload: [#8055](https://github.com/owncloud/web/pull/8055)
 * Enhancement - Show text file icon for empty text files: [#8057](https://github.com/owncloud/web/pull/8057)
+* Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Update libre-graph-api to v1.0: [#8132](https://github.com/owncloud/web/pull/8132)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
 
@@ -243,6 +244,18 @@ Details
    We've changed the thumbnail of almost empty text files to the regular text icon.
 
    https://github.com/owncloud/web/pull/8057
+
+* Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
+
+   Web now supports tags on resources to enhance the way of organizing and working. Tags are
+   visible in the files list and can also be searched to quickly filter tagged files.
+
+   https://github.com/owncloud/web/issues/7134
+   https://github.com/owncloud/web/pull/7388
+   https://github.com/owncloud/web/pull/7385
+   https://github.com/owncloud/web/pull/7442
+   https://github.com/owncloud/web/pull/7754
+   https://github.com/owncloud/web/pull/8067
 
 * Enhancement - Update libre-graph-api to v1.0: [#8132](https://github.com/owncloud/web/pull/8132)
 
