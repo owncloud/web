@@ -10,20 +10,28 @@ Feature: share
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
-      | resource         | type   |
-      | folder_to_shared | folder |
+      | resource              | type   |
+      | folder_to_shared      | folder |
+      | decline_shared_folder | folder |
     And "Alice" uploads the following resource
       | resource  | to               |
       | lorem.txt | folder_to_shared |
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role   |
-      | folder_to_shared | Brian     | user | editor |
+      | resource              | recipient | type | role   |
+      | folder_to_shared      | Brian     | user | editor |
+      | decline_shared_folder | Brian     | user | editor |
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" accepts the following share
       | name             |
       | folder_to_shared |
+    And "Brian" declines the following share
+      | name                  |
+      | decline_shared_folder |
+    When "Brian" accepts the following share using the sidebar panel
+      | name                  |
+      | decline_shared_folder |
     And "Brian" renames the following resource
       | resource                   | as            |
       | folder_to_shared/lorem.txt | lorem_new.txt |
@@ -52,20 +60,22 @@ Feature: share
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
-      | resource            | type       | content   |
-      | shareToBrian.txt    | txtFile    | some text |
-      | shareToBrian.md     | mdFile     | readme    |
-      | shareToBrian.drawio | drawioFile |           |
+      | resource                | type       | content   |
+      | shareToBrian.txt        | txtFile    | some text |
+      | shareToBrian.md         | mdFile     | readme    |
+      | shareToBrian.drawio     | drawioFile |           |
+      | decline_shared_file.txt | txtFile    | some text |
     And "Alice" uploads the following resource
       | resource        |
       | testavatar.jpeg |
       | simple.pdf      |
     And "Alice" shares the following resource using the sidebar panel
-      | resource            | recipient | type | role   |
-      | shareToBrian.txt    | Brian     | user | editor |
-      | shareToBrian.md     | Brian     | user | editor |
-      | testavatar.jpeg     | Brian     | user | viewer |
-      | simple.pdf          | Brian     | user | viewer |
+      | resource                | recipient | type | role   |
+      | shareToBrian.txt        | Brian     | user | editor |
+      | shareToBrian.md         | Brian     | user | editor |
+      | testavatar.jpeg         | Brian     | user | viewer |
+      | simple.pdf              | Brian     | user | viewer |
+      | decline_shared_file.txt | Brian     | user | viewer |
     And "Alice" logs out
 
     When "Brian" logs in
@@ -77,6 +87,12 @@ Feature: share
       | shareToBrian.md  |
       | testavatar.jpeg  |
       | simple.pdf       |
+    And "Brian" declines the following share
+      | name                    |
+      | decline_shared_file.txt |
+    When "Brian" accepts the following share using the sidebar panel
+      | name                    |
+      | decline_shared_file.txt |
     And "Brian" edits the following resources
       | resource         | content            |
       | shareToBrian.txt | new content        |
