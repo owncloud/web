@@ -87,7 +87,7 @@
     "jest-fetch-mock": "3.0.3",
     "jest-mock-axios": "4.6.2",
     "jest-mock-extended": "3.0.1",
-    "jest-serializer-vue": "2.0.2",
+    "jest-serializer-vue-tjw": "^3.19.0",
     "join-path": "1.1.1",
     "jsdom": "^20.0.2",
     "license-checker-rseidelsohn": "3.1.0",
@@ -129,11 +129,20 @@
           "d3-hsluv": "^0.1.2",
           "d3-hsv": "^0.1.0"
         }
+      },
+      "jest-serializer-vue-tjw": {
+        "dependencies": {
+          "@vue/compiler-sfc": "2.7.14"
+        }
       }
     },
     "patchedDependencies": {
       "@adobe/leonardo-contrast-colors@1.0.0-alpha.16": "patches/@adobe__leonardo-contrast-colors@1.0.0-alpha.16.patch",
+      "jest-serializer-vue-tjw@3.19.0": "patches/jest-serializer-vue-tjw@3.19.0.patch",
       "v-calendar@2.3.4": "patches/v-calendar@2.3.4.patch"
     }
+  },
+  "jestSerializer": {
+    "sortAttributes": true
   }
 }

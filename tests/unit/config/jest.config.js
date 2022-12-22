@@ -33,7 +33,7 @@ module.exports = {
     '<rootDir>/tests/unit/config/jest.overrides.js',
     'core-js'
   ],
-  snapshotSerializers: ['jest-serializer-vue'],
+  snapshotSerializers: ['jest-serializer-vue-tjw'],
   coverageDirectory: '<rootDir>/coverage',
   coverageReporters: ['lcov'],
   collectCoverageFrom: [
