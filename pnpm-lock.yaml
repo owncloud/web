@@ -1,5 +1,12 @@
 lockfileVersion: 5.4
 
+packageExtensionsChecksum: bd4899ae04f57d31f73bd01c13e06663
+
+patchedDependencies:
+  jest-serializer-vue-tjw@3.19.0:
+    hash: n3ezndisi6xx2kbxcsk5pv4dxy
+    path: patches/jest-serializer-vue-tjw@3.19.0.patch
+
 importers:
 
   .:
@@ -51,7 +58,7 @@ importers:
       jest-fetch-mock: 3.0.3
       jest-mock-axios: 4.6.1
       jest-mock-extended: 3.0.1
-      jest-serializer-vue: 2.0.2
+      jest-serializer-vue-tjw: ^3.19.0
       join-path: 1.1.1
       keycode: ^2.2.1
       license-checker-rseidelsohn: 3.1.0
@@ -139,7 +146,7 @@ importers:
       jest-fetch-mock: 3.0.3
       jest-mock-axios: 4.6.1_ts-node@10.9.1
       jest-mock-extended: 3.0.1_7yfpbkrrkkmtlepb2un4d37cti
-      jest-serializer-vue: 2.0.2
+      jest-serializer-vue-tjw: 3.19.0_n3ezndisi6xx2kbxcsk5pv4dxy
       join-path: 1.1.1
       license-checker-rseidelsohn: 3.1.0
       lodash: 4.17.21
@@ -4360,6 +4367,14 @@ packages:
       '@vue/compiler-core': 3.2.40
       '@vue/shared': 3.2.40
 
+  /@vue/compiler-sfc/2.7.14:
+    resolution: {integrity: sha512-aNmNHyLPsw+sVvlQFQ2/8sjNuLtK54TC6cuKnVzAY93ks4ZBrvwQSnkkIh7bsbNhum5hJBS00wSDipQ937f5DA==}
+    dependencies:
+      '@babel/parser': 7.19.6
+      postcss: 8.4.18
+      source-map: 0.6.1
+    dev: true
+
   /@vue/compiler-sfc/3.2.40:
     resolution: {integrity: sha512-tzqwniIN1fu1PDHC3CpqY/dPCfN/RN1thpBC+g69kJcrl7mbGiHKNwbA6kJ3XKKy8R6JLKqcpVugqN4HkeBFFg==}
     dependencies:
@@ -5880,9 +5895,8 @@ packages:
       css-select: 4.1.3
       css-what: 5.0.1
       domelementtype: 2.2.0
-      domhandler: 4.2.0
-      domutils: 2.7.0
-    dev: false
+      domhandler: 4.3.1
+      domutils: 2.8.0
 
   /cheerio/1.0.0-rc.10:
     resolution: {integrity: sha512-g0J0q/O6mW8z5zxQ3A8E8J1hUgp4SMOvEoW/x84OwyHKe/Zccz83PVT4y5Crcr530FV6NgmKI1qvGTKVl9XXVw==}
@@ -5890,12 +5904,11 @@ packages:
     dependencies:
       cheerio-select: 1.5.0
       dom-serializer: 1.3.2
-      domhandler: 4.2.0
+      domhandler: 4.3.1
       htmlparser2: 6.1.0
       parse5: 6.0.1
       parse5-htmlparser2-tree-adapter: 6.0.1
       tslib: 2.4.0
-    dev: false
 
   /chokidar/3.5.2:
     resolution: {integrity: sha512-ekGhOnNVPgT77r4K/U3GDhu+FQ2S8TnK/s2KbIGXi0SZWuwkZ2QNyfWdZW+TVfn84DpEP7rLeCt2UI6bJ8GwbQ==}
@@ -6960,8 +6973,8 @@ packages:
     dependencies:
       boolbase: 1.0.0
       css-what: 5.0.1
-      domhandler: 4.2.0
-      domutils: 2.7.0
+      domhandler: 4.3.1
+      domutils: 2.8.0
       nth-check: 2.1.1
 
   /css-selector-tokenizer/0.7.3:
@@ -7449,7 +7462,7 @@ packages:
     resolution: {integrity: sha512-5c54Bk5Dw4qAxNOI1pFEizPSjVsx5+bpJKmL2kPn8JhBUq2q09tTCa3mjijun2NfK78NMouDYNMBkOrPZiS+ig==}
     dependencies:
       domelementtype: 2.2.0
-      domhandler: 4.2.0
+      domhandler: 4.3.1
       entities: 2.2.0
 
   /domelementtype/2.2.0:
@@ -7469,18 +7482,18 @@ packages:
       webidl-conversions: 7.0.0
     dev: true
 
-  /domhandler/4.2.0:
-    resolution: {integrity: sha512-zk7sgt970kzPks2Bf+dwT/PLzghLnsivb9CcxkvR8Mzr66Olr0Ofd8neSbglHJHaHa2MadfoSdNlKYAaafmWfA==}
+  /domhandler/4.3.1:
+    resolution: {integrity: sha512-GrwoxYN+uWlzO8uhUXRl0P+kHE4GtVPfYzVLcUxPL7KNdHKj66vvlhiweIHqYYXWlw+T8iLMp42Lm67ghw4WMQ==}
     engines: {node: '>= 4'}
     dependencies:
       domelementtype: 2.2.0
 
-  /domutils/2.7.0:
-    resolution: {integrity: sha512-8eaHa17IwJUPAiB+SoTYBo5mCdeMgdcAoXJ59m6DT1vw+5iLS3gNoqYaRowaBKtGVrOF1Jz4yDTgYKLK2kvfJg==}
+  /domutils/2.8.0:
+    resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}
     dependencies:
       dom-serializer: 1.3.2
       domelementtype: 2.2.0
-      domhandler: 4.2.0
+      domhandler: 4.3.1
 
   /dotenv/7.0.0:
     resolution: {integrity: sha512-M3NhsLbV1i6HuGzBUH8vXrtxOk+tWmzWKDMbAVSUp3Zsjm7ywFeuwrUXhmhQyRK1q5B5GGy7hcXPbj3bnfZg2g==}
@@ -7589,6 +7602,11 @@ packages:
 
   /entities/2.2.0:
     resolution: {integrity: sha512-p92if5Nz619I0w+akJrLZH0MX0Pb5DX39XOwQTtXSdQQOaYH03S1uIQp4mhOZtAXrxq4ViO67YTiLBo2638o9A==}
+
+  /entities/3.0.1:
+    resolution: {integrity: sha512-WiyBqoomrwMdFG1e0kqvASYfnlb0lp8M5o5Fw2OFq1hNZxxcNk8Ik0Xm7LxzBhuidnZB/UtBqVCgUz3kBOP51Q==}
+    engines: {node: '>=0.12'}
+    dev: true
 
   /entities/4.4.0:
     resolution: {integrity: sha512-oYp7156SP8LkeGD0GF85ad1X9Ai79WtRsZ2gxJqtBuzH+98YUV6jkHEKlZkMbcrjJjIVJNIDP/3WL9wQkoPbWA==}
@@ -8886,10 +8904,18 @@ packages:
     resolution: {integrity: sha512-gyyPk6rgonLFEDGoeRgQNaEUvdJ4ktTmmUh/h2t7s+M8oPpIPxgNACWa+6ESR57kXstwqPiCut0V8NRpcwgU7A==}
     dependencies:
       domelementtype: 2.2.0
-      domhandler: 4.2.0
-      domutils: 2.7.0
+      domhandler: 4.3.1
+      domutils: 2.8.0
       entities: 2.2.0
-    dev: false
+
+  /htmlparser2/7.2.0:
+    resolution: {integrity: sha512-H7MImA4MS6cw7nbyURtLPO1Tms7C5H602LRETv95z1MxO/7CP7rDVROehUYeYBUYEON94NXXDEPmZuq+hX4sog==}
+    dependencies:
+      domelementtype: 2.2.0
+      domhandler: 4.3.1
+      domutils: 2.8.0
+      entities: 3.0.1
+    dev: true
 
   /http-errors/2.0.0:
     resolution: {integrity: sha512-FtwrG/euBzaEjYeRqOgly7G0qviiXoJWnvEH2Z1plBdXgbyjv34pHTSb9zoeHMyDy33+DWy5Wt9Wo+TURtOYSQ==}
@@ -10204,11 +10230,17 @@ packages:
       - supports-color
     dev: true
 
-  /jest-serializer-vue/2.0.2:
-    resolution: {integrity: sha512-nK/YIFo6qe3i9Ge+hr3h4PpRehuPPGZFt8LDBdTHYldMb7ZWlkanZS8Ls7D8h6qmQP2lBQVDLP0DKn5bJ9QApQ==}
+  /jest-serializer-vue-tjw/3.19.0_n3ezndisi6xx2kbxcsk5pv4dxy:
+    resolution: {integrity: sha512-KOxa8ldMTJXIo7Akq4f+j/IWVdlhpVBKX2Ny3AnRfBNCpuUtnsqSF4OobKIEbhbnx5A2P3dxY5HYiMUT5j2Y/w==}
+    engines: {node: '>=8.3.0', npm: '>=5.0.0'}
     dependencies:
-      pretty: 2.0.0
+      '@vue/compiler-sfc': 2.7.14
+      cheerio: 1.0.0-rc.10
+      htmlparser2: 7.2.0
+      js-beautify: 1.14.0
+      lodash.clonedeep: 4.5.0
     dev: true
+    patched: true
 
   /jest-serializer/27.5.1:
     resolution: {integrity: sha512-jZCyo6iIxO1aqUxpuBlwTDMkzOAJS4a3eYz3YzgxxVQFwLeSA7Jfq5cbqCY+JLvTDrWirgusI/0KwxKMgrdf7w==}
@@ -11927,7 +11959,6 @@ packages:
     resolution: {integrity: sha512-qPuWvbLgvDGilKc5BoicRovlT4MtYT6JfJyBOMDsKoiT+GiuP5qyrPCnR9HcPECIJJmZh5jRndyNThnhhb/vlA==}
     dependencies:
       parse5: 6.0.1
-    dev: false
 
   /parse5/6.0.1:
     resolution: {integrity: sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==}

@@ -78,7 +78,7 @@
     "jest-fetch-mock": "3.0.3",
     "jest-mock-axios": "4.6.1",
     "jest-mock-extended": "3.0.1",
-    "jest-serializer-vue": "2.0.2",
+    "jest-serializer-vue-tjw": "^3.19.0",
     "join-path": "1.1.1",
     "license-checker-rseidelsohn": "3.1.0",
     "lodash": "4.17.21",
@@ -131,5 +131,20 @@
   },
   "volta": {
     "node": "16.18.0"
+  },
+  "pnpm": {
+    "packageExtensions": {
+      "jest-serializer-vue-tjw": {
+        "dependencies": {
+          "@vue/compiler-sfc": "2.7.14"
+        }
+      }
+    },
+    "patchedDependencies": {
+      "jest-serializer-vue-tjw@3.19.0": "patches/jest-serializer-vue-tjw@3.19.0.patch"
+    }
+  },
+  "jestSerializer": {
+    "sortAttributes": true
   }
 }

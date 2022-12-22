@@ -2,19 +2,19 @@
 
 exports[`ViewOptions component sets the correct initial files page limit 1`] = `
 <div>
-  <oc-button-stub type="button" size="medium" arialabel="Display customization options of the files list" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="files-view-options-btn" data-testid="files-view-options-btn" class="oc-my-s oc-p-xs">
-    <oc-icon-stub name="settings-3" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+  <oc-button-stub appearance="raw" arialabel="Display customization options of the files list" class="oc-my-s oc-p-xs" gapsize="medium" id="files-view-options-btn" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+    <oc-icon-stub accessiblelabel="" color="" filltype="line" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
-  <oc-drop-stub dropid="files-view-options-drop" toggle="#files-view-options-btn" position="bottom-start" mode="click" paddingsize="medium" class="oc-width-auto">
+  <oc-drop-stub class="oc-width-auto" dropid="files-view-options-drop" mode="click" paddingsize="medium" position="bottom-start" toggle="#files-view-options-btn">
     <oc-list-stub>
       <li class="files-view-options-list-item oc-mb-m">
-        <oc-switch-stub label="Show hidden files" labelid="oc-switch-label-1" data-testid="files-switch-hidden-files"></oc-switch-stub>
+        <oc-switch-stub label="Show hidden files" labelid="oc-switch-label-1"></oc-switch-stub>
       </li>
       <li class="files-view-options-list-item oc-my-m">
-        <oc-switch-stub label="Show file extensions" labelid="oc-switch-label-1" data-testid="files-switch-files-extensions-files"></oc-switch-stub>
+        <oc-switch-stub label="Show file extensions" labelid="oc-switch-label-1"></oc-switch-stub>
       </li>
       <li class="files-view-options-list-item oc-mt-m">
-        <oc-page-size-stub options="100,500" label="Items per page" selected="100" selectid="oc-page-size-3" data-testid="files-pagination-size" class="files-pagination-size"></oc-page-size-stub>
+        <oc-page-size-stub class="files-pagination-size" label="Items per page" options="100,500" selected="100" selectid="oc-page-size-3"></oc-page-size-stub>
       </li>
     </oc-list-stub>
   </oc-drop-stub>

@@ -1,347 +1,555 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`RoleDropdown for file shares custom permissions inherits the parents share's permissions: 17 1`] = `
-<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
-</oc-button-stub>
-<oc-drop-stub dropid="oc-drop-16" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
-  <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-editor" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-custom" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="settings-3" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-  </oc-list-stub>
-</oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-17" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
-  <oc-list-stub>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-delete" value="[object Object],[object Object]" option="[object Object]" label="Delete" size="large" data-testid="files-collaborators-permission-delete" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-  </oc-list-stub>
-  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
-    <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
-    <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
-  </div>
-</oc-drop-stub>
+<span class="oc-flex oc-flex-middle">
+  <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+    <span>Viewer</span>
+    <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-16" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+    <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+    </oc-list-stub>
+  </oc-drop-stub>
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" dropid="oc-drop-17" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+    <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+    <oc-list-stub>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+    </oc-list-stub>
+    <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
+      <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+      <oc-button-stub appearance="filled" class="oc-ml-s" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
+    </div>
+  </oc-drop-stub>
 </span>
 `;
 
 exports[`RoleDropdown for file shares custom permissions inherits the parents share's permissions: 23 1`] = `
-<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
-</oc-button-stub>
-<oc-drop-stub dropid="oc-drop-18" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
-  <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-editor" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-custom" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="settings-3" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-  </oc-list-stub>
-</oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-19" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
-  <oc-list-stub>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-delete" value="[object Object],[object Object]" option="[object Object]" label="Delete" size="large" data-testid="files-collaborators-permission-delete" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-  </oc-list-stub>
-  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
-    <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
-    <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
-  </div>
-</oc-drop-stub>
+<span class="oc-flex oc-flex-middle">
+  <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+    <span>Viewer</span>
+    <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-18" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+    <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+    </oc-list-stub>
+  </oc-drop-stub>
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" dropid="oc-drop-19" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+    <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+    <oc-list-stub>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+    </oc-list-stub>
+    <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
+      <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+      <oc-button-stub appearance="filled" class="oc-ml-s" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
+    </div>
+  </oc-drop-stub>
 </span>
 `;
 
 exports[`RoleDropdown for file shares custom permissions inherits the parents share's permissions: 25 1`] = `
-<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
-</oc-button-stub>
-<oc-drop-stub dropid="oc-drop-20" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
-  <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-editor" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-custom" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="settings-3" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-  </oc-list-stub>
-</oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-21" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
-  <oc-list-stub>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-delete" value="[object Object],[object Object]" option="[object Object]" label="Delete" size="large" data-testid="files-collaborators-permission-delete" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-  </oc-list-stub>
-  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
-    <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
-    <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
-  </div>
-</oc-drop-stub>
+<span class="oc-flex oc-flex-middle">
+  <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+    <span>Viewer</span>
+    <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-20" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+    <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+    </oc-list-stub>
+  </oc-drop-stub>
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" dropid="oc-drop-21" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+    <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+    <oc-list-stub>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+    </oc-list-stub>
+    <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
+      <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+      <oc-button-stub appearance="filled" class="oc-ml-s" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
+    </div>
+  </oc-drop-stub>
 </span>
 `;
 
 exports[`RoleDropdown for file shares when an existing role is present does not render a button if only one role is available 1`] = `
-<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
-</oc-button-stub>
-<oc-drop-stub dropid="oc-drop-26" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
-  <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-editor" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-custom" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="settings-3" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-  </oc-list-stub>
-</oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-27" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
-  <oc-list-stub>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-delete" value="[object Object],[object Object]" option="[object Object]" label="Delete" size="large" data-testid="files-collaborators-permission-delete" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-  </oc-list-stub>
-  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
-    <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
-    <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
-  </div>
-</oc-drop-stub>
+<span class="oc-flex oc-flex-middle">
+  <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+    <span>Viewer</span>
+    <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-26" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+    <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+    </oc-list-stub>
+  </oc-drop-stub>
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" dropid="oc-drop-27" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+    <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+    <oc-list-stub>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+    </oc-list-stub>
+    <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
+      <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+      <oc-button-stub appearance="filled" class="oc-ml-s" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
+    </div>
+  </oc-drop-stub>
 </span>
 `;
 
 exports[`RoleDropdown for file shares when an existing role is present renders a button with existing role if given for resource type file 1`] = `
-<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
-</oc-button-stub>
-<oc-drop-stub dropid="oc-drop-24" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
-  <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-editor" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-custom" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="settings-3" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-  </oc-list-stub>
-</oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-25" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
-  <oc-list-stub>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-delete" value="[object Object],[object Object]" option="[object Object]" label="Delete" size="large" data-testid="files-collaborators-permission-delete" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-  </oc-list-stub>
-  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
-    <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
-    <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
-  </div>
-</oc-drop-stub>
+<span class="oc-flex oc-flex-middle">
+  <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+    <span>Viewer</span>
+    <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-24" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+    <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+    </oc-list-stub>
+  </oc-drop-stub>
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" dropid="oc-drop-25" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+    <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+    <oc-list-stub>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+    </oc-list-stub>
+    <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
+      <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+      <oc-button-stub appearance="filled" class="oc-ml-s" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
+    </div>
+  </oc-drop-stub>
 </span>
 `;
 
 exports[`RoleDropdown for file shares when an existing role is present renders a button with existing role if given for resource type folder 1`] = `
-<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
-</oc-button-stub>
-<oc-drop-stub dropid="oc-drop-22" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
-  <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-editor" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-custom" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="settings-3" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-  </oc-list-stub>
-</oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-23" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
-  <oc-list-stub>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-delete" value="[object Object],[object Object]" option="[object Object]" label="Delete" size="large" data-testid="files-collaborators-permission-delete" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-  </oc-list-stub>
-  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
-    <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
-    <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
-  </div>
-</oc-drop-stub>
+<span class="oc-flex oc-flex-middle">
+  <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+    <span>Viewer</span>
+    <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-22" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+    <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+    </oc-list-stub>
+  </oc-drop-stub>
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" dropid="oc-drop-23" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+    <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+    <oc-list-stub>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+    </oc-list-stub>
+    <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
+      <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+      <oc-button-stub appearance="filled" class="oc-ml-s" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
+    </div>
+  </oc-drop-stub>
 </span>
 `;
 
 exports[`RoleDropdown for file shares when no existing role is present renders a button with invite text if no existing role given for resource type file 1`] = `
-<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Invite as viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
-</oc-button-stub>
-<oc-drop-stub dropid="oc-drop-6" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
-  <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-editor" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-custom" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="settings-3" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-  </oc-list-stub>
-</oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-7" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
-  <oc-list-stub>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-  </oc-list-stub>
-  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
-    <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
-    <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
-  </div>
-</oc-drop-stub>
+<span class="oc-flex oc-flex-middle">
+  <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+    <span>Invite as viewer</span>
+    <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-6" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+    <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+    </oc-list-stub>
+  </oc-drop-stub>
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" dropid="oc-drop-7" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+    <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+    <oc-list-stub>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+    </oc-list-stub>
+    <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
+      <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+      <oc-button-stub appearance="filled" class="oc-ml-s" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
+    </div>
+  </oc-drop-stub>
 </span>
 `;
 
 exports[`RoleDropdown for file shares when no existing role is present renders a button with invite text if no existing role given for resource type folder 1`] = `
-<span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Invite as viewer</span>
-<oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
-</oc-button-stub>
-<oc-drop-stub dropid="oc-drop-4" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
-  <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-editor" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-    <li>
-      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-custom" class="files-recipient-role-drop-btn oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="settings-3" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><!----></span></oc-button-stub>
-    </li>
-  </oc-list-stub>
-</oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-5" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
-  <oc-list-stub>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-delete" value="[object Object],[object Object]" option="[object Object]" label="Delete" size="large" data-testid="files-collaborators-permission-delete" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-    <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
-    </li>
-  </oc-list-stub>
-  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
-    <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
-    <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
-  </div>
-</oc-drop-stub>
+<span class="oc-flex oc-flex-middle">
+  <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+    <span>Invite as viewer</span>
+    <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-4" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+    <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
+          </span>
+          <span class="oc-flex">
+            <!---->
+          </span>
+        </oc-button-stub>
+      </li>
+    </oc-list-stub>
+  </oc-drop-stub>
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" dropid="oc-drop-5" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+    <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+    <oc-list-stub>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+      <li class="oc-my-s oc-px-m">
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+      </li>
+    </oc-list-stub>
+    <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
+      <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+      <oc-button-stub appearance="filled" class="oc-ml-s" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
+    </div>
+  </oc-drop-stub>
 </span>
 `;

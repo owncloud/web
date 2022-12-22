@@ -8,44 +8,102 @@ exports[`Projects view different files view states lists all available project s
       <div class="spaces-list oc-px-m oc-mt-l">
         <ul class="oc-list oc-my-rm oc-mx-rm oc-flex">
           <li class="spaces-list-item oc-mb-m oc-mr-m">
-            <div data-space-id="2" class="spaces-list-card oc-card oc-card-default oc-rounded state-trashed">
-              <div class="oc-card-media-top oc-border-b"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-position-absolute space-disabled-indicator oc-tag oc-tag-m oc-tag-span"><span>Disabled</span></span> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span></button></div>
+            <div class="spaces-list-card oc-card oc-card-default oc-rounded state-trashed" data-space-id="2">
+              <div class="oc-card-media-top oc-border-b">
+                <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+                  <span class="oc-position-absolute space-disabled-indicator oc-tag oc-tag-m oc-tag-span">
+                    <span>Disabled</span>
+                  </span>
+                  <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive">
+                    <!---->
+                  </span>
+                </button>
+              </div>
               <div class="oc-card-body oc-p-s">
                 <div class="oc-flex oc-flex-between oc-flex-middle">
-                  <div class="oc-flex oc-flex-middle oc-text-truncate"><span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive"><!----></span> <button type="button" class="space-name oc-text-left oc-text-truncate oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span>Some other space</span></button></div>
+                  <div class="oc-flex oc-flex-middle oc-text-truncate">
+                    <span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive">
+                      <!---->
+                    </span>
+                    <button class="space-name oc-text-left oc-text-truncate oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+                      <span>Some other space</span>
+                    </button>
+                  </div>
                   <div class="oc-flex oc-flex-middle">
-                    <div><button aria-label="Show members" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button></div>
-                    <div><button aria-label="Show context menu" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn-undefined"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
-                      <div id="space-context-drop-undefined" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
+                    <div>
+                      <button aria-label="Show members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+                        <span class="oc-icon oc-icon-m oc-icon-passive">
+                          <!---->
+                        </span>
+                      </button>
+                    </div>
+                    <div>
+                      <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn-undefined" type="button">
+                        <span class="oc-icon oc-icon-m oc-icon-passive">
+                          <!---->
+                        </span>
+                      </button>
+                      <div class="oc-drop oc-box-shadow-medium oc-rounded" id="space-context-drop-undefined" options="[object Object]">
                         <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
-                          <space-context-actions-stub space="undefined" items="undefined"></space-context-actions-stub>
+                          <space-context-actions-stub items="undefined" space="undefined"></space-context-actions-stub>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <p class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate"><small>desc</small></p>
+                <p class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate">
+                  <small>desc</small>
+                </p>
               </div>
             </div>
           </li>
           <li class="spaces-list-item oc-mb-m oc-mr-m">
-            <div data-space-id="1" class="spaces-list-card oc-card oc-card-default oc-rounded state-trashed">
-              <div class="oc-card-media-top oc-border-b"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-position-absolute space-disabled-indicator oc-tag oc-tag-m oc-tag-span"><span>Disabled</span></span> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span></button></div>
+            <div class="spaces-list-card oc-card oc-card-default oc-rounded state-trashed" data-space-id="1">
+              <div class="oc-card-media-top oc-border-b">
+                <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+                  <span class="oc-position-absolute space-disabled-indicator oc-tag oc-tag-m oc-tag-span">
+                    <span>Disabled</span>
+                  </span>
+                  <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive">
+                    <!---->
+                  </span>
+                </button>
+              </div>
               <div class="oc-card-body oc-p-s">
                 <div class="oc-flex oc-flex-between oc-flex-middle">
-                  <div class="oc-flex oc-flex-middle oc-text-truncate"><span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive"><!----></span> <button type="button" class="space-name oc-text-left oc-text-truncate oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span>Some space</span></button></div>
+                  <div class="oc-flex oc-flex-middle oc-text-truncate">
+                    <span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive">
+                      <!---->
+                    </span>
+                    <button class="space-name oc-text-left oc-text-truncate oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+                      <span>Some space</span>
+                    </button>
+                  </div>
                   <div class="oc-flex oc-flex-middle">
-                    <div><button aria-label="Show members" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button></div>
-                    <div><button aria-label="Show context menu" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn-undefined"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
-                      <div id="space-context-drop-undefined" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
+                    <div>
+                      <button aria-label="Show members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+                        <span class="oc-icon oc-icon-m oc-icon-passive">
+                          <!---->
+                        </span>
+                      </button>
+                    </div>
+                    <div>
+                      <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn-undefined" type="button">
+                        <span class="oc-icon oc-icon-m oc-icon-passive">
+                          <!---->
+                        </span>
+                      </button>
+                      <div class="oc-drop oc-box-shadow-medium oc-rounded" id="space-context-drop-undefined" options="[object Object]">
                         <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
-                          <space-context-actions-stub space="undefined" items="undefined"></space-context-actions-stub>
+                          <space-context-actions-stub items="undefined" space="undefined"></space-context-actions-stub>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <p class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate"><small>desc</small></p>
+                <p class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate">
+                  <small>desc</small>
+                </p>
               </div>
             </div>
           </li>
