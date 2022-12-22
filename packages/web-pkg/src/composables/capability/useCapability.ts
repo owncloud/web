@@ -52,6 +52,7 @@ export const useCapabilityFilesTusExtension = createCapabilityComposable<string>
   'files.tus_support.extension',
   ''
 )
+export const useCapabilityFilesTags = createCapabilityComposable('files.tags', false)
 export const useCapabilityFilesSharingCanDenyAccess = createCapabilityComposable(
   'files_sharing.deny_access',
   false

@@ -1,7 +1,10 @@
 import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
-import { extractDomSelector } from 'web-client/src/helpers'
+import { extractDomSelector, Resource } from 'web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
+import { eventBus } from 'web-pkg/src'
+import { SideBarEventTopics } from 'web-app-files/src/composables/sideBar'
+import { mockDeep } from 'jest-mock-extended'
 
 const router = {
   push: jest.fn(),
@@ -80,6 +83,7 @@ const resourcesWithAllFields = [
     indicators,
     isFolder: false,
     type: 'file',
+    tags: ['space', 'tag', 'moon'],
     size: '111000234',
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
@@ -98,6 +102,7 @@ const resourcesWithAllFields = [
     isFolder: false,
     type: 'file',
     size: 'big',
+    tags: ['space', 'tag'],
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
@@ -114,6 +119,7 @@ const resourcesWithAllFields = [
     isFolder: true,
     type: 'folder',
     size: '-1',
+    tags: [],
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
@@ -134,6 +140,7 @@ const resourcesWithAllFields = [
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
     sharedWith,
+    tags: [],
     owner,
     canRename: jest.fn,
     getDomSelector: () => extractDomSelector('another-one==')
@@ -260,10 +267,78 @@ describe('ResourceTable', () => {
       expect(wrapper.classes()).toContain('oc-table-hover')
     })
   })
+
+  describe('tags', () => {
+    describe('inline', () => {
+      it.each([
+        { tags: [], tagCount: 0 },
+        { tags: ['1'], tagCount: 1 },
+        { tags: ['1', '2'], tagCount: 2 },
+        { tags: ['1', '2', '3'], tagCount: 2 },
+        { tags: ['1', '2', '3', '4'], tagCount: 2 }
+      ])('render 2 tags max', (data) => {
+        const { tags, tagCount } = data
+        const resource = mockDeep<Resource>({ id: '1', tags })
+        const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
+        const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
+        expect(resourceRow.findAll('.resource-table-tag').length).toBe(tagCount)
+      })
+      it('render router link if user is authenticated', () => {
+        const resource = mockDeep<Resource>({ id: '1', tags: ['1'] })
+        const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
+        const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
+        expect(resourceRow.find('.resource-table-tag-wrapper').element.tagName).toEqual(
+          'ROUTER-LINK-STUB'
+        )
+      })
+      it('do not render router link if user is not authenticated', () => {
+        const resource = mockDeep<Resource>({ id: '1', tags: ['1'] })
+        const { wrapper } = getMountedWrapper({
+          props: { resources: [resource] },
+          isUserContextReady: false
+        })
+        const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
+        expect(resourceRow.find('.resource-table-tag-wrapper').element.tagName).toEqual('SPAN')
+      })
+    })
+    describe('"more"-button', () => {
+      it.each([
+        { tags: [], renderButton: false },
+        { tags: ['1'], renderButton: false },
+        { tags: ['1', '2'], renderButton: false },
+        { tags: ['1', '2', '3'], renderButton: true },
+        { tags: ['1', '2', '3', '4'], renderButton: true }
+      ])('does only render when the resource has 3 tags or more', (data) => {
+        const { tags, renderButton } = data
+        const resource = mockDeep<Resource>({ id: '1', tags })
+        const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
+        const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
+        expect(resourceRow.find('.resource-table-tag-more').exists()).toBe(renderButton)
+      })
+      it('opens sidebar on click', async () => {
+        const spyBus = jest.spyOn(eventBus, 'publish')
+        const resource = mockDeep<Resource>({ id: '1', tags: ['1', '2', '3'] })
+        const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
+        const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
+        await resourceRow.find('.resource-table-tag-more').trigger('click')
+        expect(spyBus).toHaveBeenCalledWith(SideBarEventTopics.open)
+      })
+    })
+  })
 })
 
-function getMountedWrapper({ props = {} } = {}) {
-  const store = createStore(defaultStoreMockOptions)
+function getMountedWrapper({ props = {}, isUserContextReady = true } = {}) {
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
+    isUserContextReady
+  )
+  storeOptions.getters.capabilities.mockImplementation(() => ({
+    files: {
+      tags: true
+    }
+  }))
+
+  const store = createStore(storeOptions)
 
   return {
     wrapper: mount(ResourceTable, {

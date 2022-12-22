@@ -140,6 +140,20 @@
             </div>
           </td>
         </tr>
+        <tr v-if="showTags" data-testid="tags">
+          <th scope="col" class="oc-pr-s" v-text="tagsLabel" />
+          <td>
+            <span v-for="(tag, index) in file.tags" :key="tag">
+              <component
+                :is="isUserContext ? 'router-link' : 'span'"
+                v-bind="getTagComponentAttrs(tag)"
+              >
+                <span v-if="index + 1 < file.tags.length">{{ tag }}</span>
+                <span v-else v-text="tag" /></component
+              ><span v-if="index + 1 < file.tags.length" class="oc-mr-xs">,</span>
+            </span>
+          </td>
+        </tr>
       </table>
     </div>
     <p v-else data-testid="noContentText" v-text="noContentText" />
@@ -152,9 +166,15 @@ import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
 import { basename, dirname } from 'path'
-import { createLocationSpaces } from '../../../router'
+import { createLocationSpaces, createLocationCommon } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { useAccessToken, usePublicLinkContext, useStore } from 'web-pkg/src/composables'
+import {
+  useAccessToken,
+  useCapabilityFilesTags,
+  usePublicLinkContext,
+  useStore,
+  useUserContext
+} from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
@@ -172,10 +192,12 @@ export default defineComponent({
     const store = useStore()
 
     return {
+      isUserContext: useUserContext({ store }),
       isPublicLinkContext: usePublicLinkContext({ store }),
       accessToken: useAccessToken({ store }),
       space: inject<ComputedRef<Resource>>('displayedSpace'),
-      file: inject<ComputedRef<Resource>>('displayedItem')
+      file: inject<ComputedRef<Resource>>('displayedItem'),
+      hasTags: useCapabilityFilesTags()
     }
   },
 
@@ -338,6 +360,12 @@ export default defineComponent({
       const displayDate = formatDateFromHTTP(this.file.mdate, this.$language.current)
       return upperFirst(displayDate)
     },
+    showTags() {
+      return this.hasTags && this.file.tags?.length
+    },
+    tagsLabel() {
+      return this.$gettext('Tags')
+    },
     hasAnyShares() {
       return (
         this.file.shareTypes?.length > 0 ||
@@ -464,6 +492,20 @@ export default defineComponent({
         this.copiedDirect = false
         this.copiedEos = false
       }, 550)
+    },
+    getTagLink(tag) {
+      return createLocationCommon('files-common-search', {
+        query: { term: `Tags:${tag}`, provider: 'files.sdk' }
+      })
+    },
+    getTagComponentAttrs(tag) {
+      if (!this.isUserContext) {
+        return {}
+      }
+
+      return {
+        to: this.getTagLink(tag)
+      }
     }
   }
 })
@@ -478,6 +520,7 @@ export default defineComponent({
     td {
       max-width: 0;
       width: 100%;
+      overflow-wrap: break-word;
 
       div {
         min-width: 0;

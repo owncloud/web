@@ -12,6 +12,7 @@ Feature: User can see the file or folder actions menu options
     And the user has browsed to the personal page
 
 
+  @skipOnOCIS
   Scenario: observe different actions menu options on selecting different file types
     Given user "Alice" has uploaded file with content "pdf file" to "lorem.pdf" in the server
     And the user has reloaded the current page of the webUI
@@ -34,7 +35,7 @@ Feature: User can see the file or folder actions menu options
       | preview  |
       | download |
 
-
+  @skipOnOCIS
   Scenario: observe different actions menu options on selecting a folder
     When the user opens the actions sidebar panel of folder "simple-folder" on the webUI
     Then the app-sidebar for folder "simple-folder" should be visible on the webUI

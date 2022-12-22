@@ -49,6 +49,14 @@ const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//
 const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
 const drawioSaveButton = '.geBigButton >> text=Save'
 const drawioIframe = '#drawio-editor'
+const tagTableCell =
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]'
+const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//ancestor::a'
+const tagInDetailsPanel = '//*[@data-testid="tags"]/td//span[text()="%s"]'
+const tagInInputForm =
+  '//span[contains(@class, "vs__selected")]//span[text()="%s"]//ancestor::span/button[contains(@class, "vs__deselect")]'
+const tagFormInput = '#tags-form input'
+const compareDialogConfirmBtn = '.compare-save-dialog-confirm-btn'
 
 export const clickResource = async ({
   page,
@@ -364,6 +372,12 @@ export interface renameResourceArgs {
   newName: string
 }
 
+export interface resourceTagsArgs {
+  page: Page
+  resource: string
+  tags: string[]
+}
+
 export const renameResource = async (args: renameResourceArgs): Promise<void> => {
   const { page, resource, newName } = args
   const { dir: resourceDir, base: resourceBase } = path.parse(resource)
@@ -527,6 +541,12 @@ export interface restoreResourceTrashbinArgs {
   page: Page
 }
 
+export interface clickTagArgs {
+  resource: string
+  tag: string
+  page: Page
+}
+
 export const restoreResourceTrashbin = async (
   args: restoreResourceTrashbinArgs
 ): Promise<string> => {
@@ -562,6 +582,80 @@ export const getRestoreResourceButtonVisibility = async (
   return await page.locator(restoreResourceButton).isVisible()
 }
 
+export const getTagsForResourceVisibilityInFilesTable = async (
+  args: resourceTagsArgs
+): Promise<boolean> => {
+  const { page, resource, tags } = args
+  const { dir: resourceDir } = path.parse(resource)
+
+  const folderPaths = resource.split('/')
+  const resourceName = folderPaths.pop()
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  const tagCellSelector = util.format(tagTableCell, resourceName)
+  await page.waitForSelector(tagCellSelector)
+  const resourceTagCell = page.locator(tagCellSelector)
+
+  for (const tag of tags) {
+    const tagSpan = resourceTagCell.locator(util.format(tagInFilesTable, tag))
+    const isVisible = await tagSpan.isVisible()
+    if (!isVisible) {
+      return false
+    }
+  }
+
+  return true
+}
+
+export const clickResourceTag = async (args: clickTagArgs): Promise<void> => {
+  const { page, resource, tag } = args
+  const { dir: resourceDir } = path.parse(resource)
+
+  const folderPaths = resource.split('/')
+  const resourceName = folderPaths.pop()
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  const tagCellSelector = util.format(tagTableCell, resourceName)
+  await page.waitForSelector(tagCellSelector)
+  const resourceTagCell = page.locator(tagCellSelector)
+  const tagSpan = resourceTagCell.locator(util.format(tagInFilesTable, tag))
+  return tagSpan.click()
+}
+
+export const getTagsForResourceVisibilityInDetailsPanel = async (
+  args: resourceTagsArgs
+): Promise<boolean> => {
+  const { page, resource, tags } = args
+  const { dir: resourceDir } = path.parse(resource)
+
+  const folderPaths = resource.split('/')
+  const resourceName = folderPaths.pop()
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  await sidebar.open({ page: page, resource: resourceName })
+
+  for (const tag of tags) {
+    const tagSelector = util.format(tagInDetailsPanel, tag)
+    await page.waitForSelector(tagSelector)
+    const tagSpan = page.locator(tagSelector)
+    const isVisible = await tagSpan.isVisible()
+    if (!isVisible) {
+      return false
+    }
+  }
+
+  return true
+}
+
 export interface searchResourceGlobalSearchArgs {
   keyword: string
   page: Page
@@ -583,10 +677,29 @@ export const searchResourceGlobalSearch = async (
   await expect(page.locator(loadingSpinner)).not.toBeVisible()
 }
 
+export type displayedResourceType = 'search list' | 'files list'
+
+export interface getDisplayedResourcesArgs {
+  keyword: displayedResourceType
+  page: Page
+}
+
 export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> => {
   const result = await page.locator(searchList).allInnerTexts()
   // the result has values like `test\n.txt` so remove new line
   return result.map((result) => result.replace('\n', ''))
+}
+
+export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]> => {
+  const files = []
+  const result = page.locator(resourceNameSelector)
+
+  const count = await result.count()
+  for (let i = 0; i < count; i++) {
+    files.push(await result.nth(i).getAttribute('data-test-resource-name'))
+  }
+
+  return files
 }
 
 export const showHiddenResources = async (page): Promise<void> => {
@@ -604,6 +717,53 @@ export const editResources = async (args: editResourcesArgs): Promise<void> => {
   const { page, name, content } = args
   await page.locator(util.format(resourceNameSelector, name)).click()
   await editTextDocument({ page, content: content })
+}
+
+export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> => {
+  const { page, resource, tags } = args
+  const { dir: resourceDir } = path.parse(resource)
+
+  const folderPaths = resource.split('/')
+  const resourceName = folderPaths.pop()
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.openPanel({ page: page, name: 'tags' })
+
+  const inputForm = page.locator(tagFormInput)
+
+  for (const tag of tags) {
+    await inputForm.fill(tag)
+    await page.locator('.vs__dropdown-option').first().click()
+  }
+
+  await page.locator(compareDialogConfirmBtn).click()
+  await sidebar.close({ page })
+}
+
+export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<void> => {
+  const { page, resource, tags } = args
+  const { dir: resourceDir } = path.parse(resource)
+
+  const folderPaths = resource.split('/')
+  const resourceName = folderPaths.pop()
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.openPanel({ page: page, name: 'tags' })
+
+  for (const tag of tags) {
+    await page.locator(util.format(tagInInputForm, tag)).click()
+  }
+
+  await page.locator(compareDialogConfirmBtn).click()
+  await sidebar.close({ page })
 }
 
 export interface openFileInViewerArgs {

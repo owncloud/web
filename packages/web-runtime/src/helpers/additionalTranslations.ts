@@ -9,6 +9,5 @@ export const additionalTranslations = {
   virusDetectedActivity: $gettext(
     'Virus "%{description}" detected. Please contact your administrator for more information.'
   ),
-  tagsUpsert: $gettext('Add or edit tags'),
   virusScan: $gettext('Scan for viruses')
 }

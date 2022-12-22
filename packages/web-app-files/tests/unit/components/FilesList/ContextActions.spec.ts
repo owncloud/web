@@ -33,7 +33,8 @@ const mixins = [
   '$_navigate_space_items',
   '$_navigate_items',
   '$_favorite_items',
-  '$_showDetails_items'
+  '$_showDetails_items',
+  '$_showEditTags_items'
 ]
 
 const Component = {

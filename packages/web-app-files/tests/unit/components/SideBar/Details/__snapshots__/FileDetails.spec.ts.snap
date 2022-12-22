@@ -46,6 +46,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
       </tr>
       <!---->
       <!---->
+      <!---->
     </table>
   </div>
 </div>
@@ -95,6 +96,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
       </tr>
       <!---->
       <!---->
+      <!---->
     </table>
   </div>
 </div>
@@ -136,6 +138,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
           <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">1</oc-button-stub>
         </td>
       </tr>
+      <!---->
       <!---->
       <!---->
     </table>
@@ -182,6 +185,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
           <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">1</oc-button-stub>
         </td>
       </tr>
+      <!---->
       <!---->
       <!---->
     </table>
@@ -250,6 +254,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
           </div>
         </td>
       </tr>
+      <!---->
     </table>
   </div>
 </div>
@@ -294,6 +299,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
           <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">1</oc-button-stub>
         </td>
       </tr>
+      <!---->
       <!---->
       <!---->
     </table>
@@ -362,6 +368,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
           </div>
         </td>
       </tr>
+      <!---->
     </table>
   </div>
 </div>
@@ -398,6 +405,12 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
       <!---->
       <!---->
       <!---->
+      <tr data-testid="tags">
+        <th scope="col" class="oc-pr-s">Tags</th>
+        <td><span><router-link-stub tag="a" to="[object Object]"><span>moon</span></router-link-stub><span class="oc-mr-xs">,</span></span><span><router-link-stub tag="a" to="[object Object]"><span>mars</span></router-link-stub>
+          <!----></span>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
@@ -434,6 +447,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
+      <!---->
       <!---->
       <!---->
       <!---->
@@ -496,6 +510,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
           </div>
         </td>
       </tr>
+      <!---->
     </table>
   </div>
 </div>
@@ -532,6 +547,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
+      <!---->
       <!---->
       <!---->
       <!---->
@@ -594,6 +610,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
           </div>
         </td>
       </tr>
+      <!---->
     </table>
   </div>
 </div>

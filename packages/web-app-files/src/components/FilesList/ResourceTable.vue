@@ -84,6 +84,28 @@
     <template #size="{ item }">
       <oc-resource-size :size="item.size || Number.NaN" />
     </template>
+    <template #tags="{ item }">
+      <component
+        :is="isUserContext ? 'router-link' : 'span'"
+        v-for="tag in item.tags.slice(0, 2)"
+        :key="tag"
+        v-bind="getTagComponentAttrs(tag)"
+        class="resource-table-tag-wrapper"
+      >
+        <oc-tag class="resource-table-tag oc-ml-xs" :rounded="true" size="small">
+          <oc-icon name="price-tag-3" size="small" />
+          <span class="oc-text-truncate">{{ tag }}</span>
+        </oc-tag>
+      </component>
+      <oc-tag
+        v-if="item.tags.length > 2"
+        size="small"
+        class="resource-table-tag-more"
+        @click="openTagsSidebar"
+      >
+        + {{ item.tags.length - 2 }}
+      </oc-tag>
+    </template>
     <template #mdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.mdate)"
@@ -181,18 +203,21 @@ import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import {
+  useCapabilityFilesTags,
   useCapabilityProjectSpacesEnabled,
-  useCapabilityShareJailEnabled
+  useCapabilityShareJailEnabled,
+  useStore,
+  useUserContext
 } from 'web-pkg/src/composables'
 import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
 
 import Rename from '../../mixins/actions/rename'
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, computed } from 'vue'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { createLocationSpaces, createLocationShares } from '../../router'
+import { createLocationSpaces, createLocationShares, createLocationCommon } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
@@ -200,6 +225,9 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { basename, dirname } from 'path'
+import { useWindowSize } from '@vueuse/core'
+
+const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
   mixins: [Rename],
@@ -376,8 +404,16 @@ export default defineComponent({
     }
   },
   setup() {
+    const store = useStore()
+    const { width } = useWindowSize()
+    const hasTags = computed(
+      () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
+    )
+
     return {
       ViewModeConstants,
+      hasTags,
+      isUserContext: useUserContext({ store }),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled()
     }
@@ -462,6 +498,15 @@ export default defineComponent({
             alignH: 'right',
             wrap: 'nowrap'
           },
+          this.hasTags
+            ? {
+                name: 'tags',
+                title: this.$gettext('Tags'),
+                type: 'slot',
+                alignH: 'right',
+                wrap: 'nowrap'
+              }
+            : {},
           {
             name: 'owner',
             title: this.$gettext('Shared by'),
@@ -555,6 +600,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['toggleFileSelection']),
+
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
@@ -567,6 +613,20 @@ export default defineComponent({
     shouldDisplayThumbnails(item) {
       return this.areThumbnailsDisplayed && !isResourceTxtFileAlmostEmpty(item)
     },
+    getTagLink(tag) {
+      return createLocationCommon('files-common-search', {
+        query: { term: `Tags:${tag}`, provider: 'files.sdk' }
+      })
+    },
+    getTagComponentAttrs(tag) {
+      if (!this.isUserContext) {
+        return {}
+      }
+
+      return {
+        to: this.getTagLink(tag)
+      }
+    },
     isLatestSelectedItem(item) {
       return item.id === this.latestSelectedId
     },
@@ -576,6 +636,9 @@ export default defineComponent({
     },
     openRenameDialog(item) {
       this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item))
+    },
+    openTagsSidebar() {
+      eventBus.publish(SideBarEventTopics.open)
     },
     openSharingSidebar(file) {
       let panelToOpen
@@ -867,6 +930,14 @@ export default defineComponent({
         fill: var(--oc-color-text-default);
       }
     }
+  }
+  &-tag {
+    max-width: 80px;
+  }
+  &-tag-more {
+    cursor: pointer;
+    border: 0 !important;
+    vertical-align: text-bottom;
   }
   &-edit-name {
     display: inline-flex;

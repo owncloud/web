@@ -1,0 +1,10 @@
+Enhancement: Add tag support
+
+Web now supports tags on resources to enhance the way of organizing and working. Tags are visible in the files list and can also be searched to quickly filter tagged files.
+
+https://github.com/owncloud/web/pull/7388
+https://github.com/owncloud/web/pull/7385
+https://github.com/owncloud/web/pull/7442
+https://github.com/owncloud/web/pull/7754
+https://github.com/owncloud/web/pull/8067
+https://github.com/owncloud/web/issues/7134

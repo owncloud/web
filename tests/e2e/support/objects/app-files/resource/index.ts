@@ -30,7 +30,16 @@ import {
   openFileInViewer,
   openFileInViewerArgs,
   getDeleteResourceButtonVisibility,
-  getRestoreResourceButtonVisibility
+  getRestoreResourceButtonVisibility,
+  addTagsToResource,
+  removeTagsFromResource,
+  getTagsForResourceVisibilityInFilesTable,
+  getTagsForResourceVisibilityInDetailsPanel,
+  clickTagArgs,
+  clickResourceTag,
+  getDisplayedResourcesArgs,
+  getDisplayedResourcesFromFilesList,
+  resourceTagsArgs
 } from './actions'
 
 export class Resource {
@@ -134,12 +143,30 @@ export class Resource {
     return await getRestoreResourceButtonVisibility({ ...args, page: this.#page })
   }
 
+  async areTagsVisibleForResourceInFilesTable(
+    args: Omit<resourceTagsArgs, 'page'>
+  ): Promise<boolean> {
+    return await getTagsForResourceVisibilityInFilesTable({ ...args, page: this.#page })
+  }
+
+  async areTagsVisibleForResourceInDetailsPanel(
+    args: Omit<resourceTagsArgs, 'page'>
+  ): Promise<boolean> {
+    return await getTagsForResourceVisibilityInDetailsPanel({ ...args, page: this.#page })
+  }
+
   async searchResource(args: Omit<searchResourceGlobalSearchArgs, 'page'>): Promise<void> {
     await searchResourceGlobalSearch({ ...args, page: this.#page })
   }
 
-  getDisplayedResources(): Promise<string[]> {
-    return getDisplayedResourcesFromSearch(this.#page)
+  getDisplayedResources(args: Omit<getDisplayedResourcesArgs, 'page'>): Promise<string[]> {
+    if (args.keyword === 'files list') {
+      return getDisplayedResourcesFromFilesList(this.#page)
+    } else if (args.keyword === 'search list') {
+      return getDisplayedResourcesFromSearch(this.#page)
+    } else {
+      throw new Error('Unknown keyword')
+    }
   }
 
   async openFolder(resource): Promise<void> {
@@ -156,5 +183,21 @@ export class Resource {
 
   async openFileInViewer(args: Omit<openFileInViewerArgs, 'page'>): Promise<void> {
     await openFileInViewer({ ...args, page: this.#page })
+  }
+
+  async addTags(args: Omit<resourceTagsArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await addTagsToResource({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+  }
+
+  async removeTags(args: Omit<resourceTagsArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await removeTagsFromResource({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+  }
+
+  async clickTag(args: Omit<clickTagArgs, 'page'>): Promise<void> {
+    return await clickResourceTag({ ...args, page: this.#page })
   }
 }

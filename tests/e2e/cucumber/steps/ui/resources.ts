@@ -4,6 +4,7 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 import { config } from '../../../config'
+import { displayedResourceType } from '../../../support/objects/app-files/resource/actions'
 
 When(
   '{string} creates the following resource(s)',
@@ -218,16 +219,19 @@ When(
 )
 
 Then(
-  /^following resources (should|should not) be displayed in the search list for user "([^"]*)"?$/,
+  /^following resources (should|should not) be displayed in the (search list|files list) for user "([^"]*)"?$/,
   async function (
     this: World,
     actionType: string,
+    listType: string,
     stepUser: string,
     stepTable: DataTable
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const actualList = await resourceObject.getDisplayedResources()
+    const actualList = await resourceObject.getDisplayedResources({
+      keyword: listType as displayedResourceType
+    })
     for (const info of stepTable.hashes()) {
       const found = actualList.includes(info.resource)
       if (actionType === 'should') {
@@ -327,6 +331,20 @@ When(
 )
 
 When(
+  '{string} clicks the tag {string} on the resource {string}',
+  async function (
+    this: World,
+    stepUser: string,
+    tagName: string,
+    resourceName: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.clickTag({ resource: resourceName, tag: tagName.toLowerCase() })
+  }
+)
+
+When(
   /^"([^"]*)" opens the following file(s)? in (mediaviewer|pdfviewer)$/,
   async function (
     this: World,
@@ -342,6 +360,66 @@ When(
       await resourceObject.openFileInViewer({
         name: info.resource,
         actionType: actionType === 'mediaviewer' ? 'mediaviewer' : 'pdfviewer'
+      })
+    }
+  }
+)
+
+Then(
+  'the following resource(s) should contain the following tag(s) in the files list for user {string}',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    console.log('stepUser', stepUser)
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const { resource, tags } of stepTable.hashes()) {
+      const isVisible = await resourceObject.areTagsVisibleForResourceInFilesTable({
+        resource,
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+      })
+      expect(isVisible).toBe(true)
+    }
+  }
+)
+
+Then(
+  'the following resource(s) should contain the following tag(s) in the details panel for user {string}',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    console.log('stepUser', stepUser)
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const { resource, tags } of stepTable.hashes()) {
+      const isVisible = await resourceObject.areTagsVisibleForResourceInDetailsPanel({
+        resource,
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+      })
+      expect(isVisible).toBe(true)
+    }
+  }
+)
+
+When(
+  '{string} adds the following tag(s) for the following resource(s) using the sidebar panel',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const { resource, tags } of stepTable.hashes()) {
+      await resourceObject.addTags({
+        resource,
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+      })
+    }
+  }
+)
+
+When(
+  '{string} removes the following tag(s) for the following resource(s) using the sidebar panel',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const { resource, tags } of stepTable.hashes()) {
+      await resourceObject.removeTags({
+        resource,
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
       })
     }
   }

@@ -8,6 +8,7 @@ export interface Resource {
   storageId?: string
   readonly nodeId?: string
   name?: string
+  tags?: string[]
   path: string
   webDavPath?: string
   downloadURL?: string
@@ -52,6 +53,7 @@ export interface Resource {
   canEditImage?(): boolean
   canEditReadme?(): boolean
   canEditSpaceQuota?(): boolean
+  canEditTags?(): boolean
 
   isReceivedShare?(): boolean
   isMounted?(): boolean
