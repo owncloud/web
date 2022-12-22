@@ -4,23 +4,23 @@ exports[`CreateAndUpload component action buttons should show and be enabled if 
 <div class="create-and-upload-actions oc-flex-inline oc-width-1-1">
   <span>
     <oc-button-stub appearance="filled" arialabel="Create a new folder" gapsize="medium" id="new-folder-btn" justifycontent="center" size="medium" submit="button" type="button" variation="primary">
-      <oc-icon-stub accessiblelabel color filltype="fill" name="resource-type-folder" size="medium" type="span" variation="passive"></oc-icon-stub>
+      <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="resource-type-folder" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>New Folder</span>
     </oc-button-stub>
   </span>
   <span>
     <oc-button-stub appearance="outline" arialabel="Upload files or folders" gapsize="medium" id="upload-menu-btn" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-      <oc-icon-stub accessiblelabel color filltype="line" name="upload" size="medium" type="span" variation="passive"></oc-icon-stub>
+      <oc-icon-stub accessiblelabel="" color="" filltype="line" name="upload" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>Upload</span>
     </oc-button-stub>
   </span>
   <oc-drop-stub class="oc-width-auto" closeonclick="true" dropid="upload-menu-drop" mode="click" paddingsize="small" position="bottom-start" toggle="#upload-menu-btn">
     <oc-list-stub id="upload-list">
       <li class="oc-menu-item-hover">
-        <resource-upload-stub btnclass="oc-width-1-1" btnlabel></resource-upload-stub>
+        <resource-upload-stub btnclass="oc-width-1-1" btnlabel=""></resource-upload-stub>
       </li>
       <li class="oc-menu-item-hover">
-        <resource-upload-stub btnclass="oc-width-1-1" btnlabel isfolder="true"></resource-upload-stub>
+        <resource-upload-stub btnclass="oc-width-1-1" btnlabel="" isfolder="true"></resource-upload-stub>
       </li>
     </oc-list-stub>
   </oc-drop-stub>
@@ -35,7 +35,7 @@ exports[`CreateAndUpload component file handlers should show additional handlers
 <div class="create-and-upload-actions oc-flex-inline oc-width-1-1">
   <span>
     <oc-button-stub appearance="filled" arialabel="Create new files or folders" gapsize="medium" id="new-file-menu-btn" justifycontent="center" size="medium" submit="button" type="button" variation="primary">
-      <oc-icon-stub accessiblelabel color filltype="fill" name="add" size="medium" type="span" variation="passive"></oc-icon-stub>
+      <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="add" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>New</span>
     </oc-button-stub>
   </span>
@@ -69,17 +69,17 @@ exports[`CreateAndUpload component file handlers should show additional handlers
   </oc-drop-stub>
   <span>
     <oc-button-stub appearance="outline" arialabel="Upload files or folders" gapsize="medium" id="upload-menu-btn" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-      <oc-icon-stub accessiblelabel color filltype="line" name="upload" size="medium" type="span" variation="passive"></oc-icon-stub>
+      <oc-icon-stub accessiblelabel="" color="" filltype="line" name="upload" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>Upload</span>
     </oc-button-stub>
   </span>
   <oc-drop-stub class="oc-width-auto" closeonclick="true" dropid="upload-menu-drop" mode="click" paddingsize="small" position="bottom-start" toggle="#upload-menu-btn">
     <oc-list-stub id="upload-list">
       <li class="oc-menu-item-hover">
-        <resource-upload-stub btnclass="oc-width-1-1" btnlabel></resource-upload-stub>
+        <resource-upload-stub btnclass="oc-width-1-1" btnlabel=""></resource-upload-stub>
       </li>
       <li class="oc-menu-item-hover">
-        <resource-upload-stub btnclass="oc-width-1-1" btnlabel isfolder="true"></resource-upload-stub>
+        <resource-upload-stub btnclass="oc-width-1-1" btnlabel="" isfolder="true"></resource-upload-stub>
       </li>
     </oc-list-stub>
   </oc-drop-stub>

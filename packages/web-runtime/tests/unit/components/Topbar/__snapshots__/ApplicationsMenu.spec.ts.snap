@@ -3,23 +3,23 @@
 exports[`ApplicationsMenu component should render navigation with button and menu items in dropdown 1`] = `
 <nav aria-label="Main navigation" class="oc-flex oc-flex-middle" id="applications-menu">
   <oc-button-stub appearance="raw" arialabel="Application Switcher" class="oc-topbar-menu-burger" gapsize="medium" id="_appSwitcherButton" justifycontent="center" size="medium" submit="button" type="button" variation="inverse">
-    <oc-icon-stub accessiblelabel class="oc-flex" color filltype="fill" name="grid" size="large" type="span" variation="passive"></oc-icon-stub>
+    <oc-icon-stub accessiblelabel="" class="oc-flex" color="" filltype="fill" name="grid" size="large" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
   <oc-drop-stub closeonclick="true" dropid="app-switcher-dropdown" mode="click" paddingsize="small" position="bottom-start" toggle="#_appSwitcherButton">
     <oc-list-stub class="applications-list">
       <li>
-        <oc-button-stub appearance="raw" class gapsize="medium" justifycontent="center" size="medium" submit="button" to="/files" type="router-link" variation="passive">
+        <oc-button-stub appearance="raw" class="" gapsize="medium" justifycontent="center" size="medium" submit="button" to="/files" type="router-link" variation="passive">
           <span class="icon-box">
-            <oc-icon-stub accessiblelabel color filltype="fill" name="folder" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="folder" size="medium" type="span" variation="passive"></oc-icon-stub>
           </span>
           <span>Files</span>
           <!---->
         </oc-button-stub>
       </li>
       <li>
-        <oc-button-stub appearance="raw" class gapsize="medium" href="http://some.org" justifycontent="center" size="medium" submit="button" target="_blank" type="a" variation="passive">
+        <oc-button-stub appearance="raw" class="" gapsize="medium" href="http://some.org" justifycontent="center" size="medium" submit="button" target="_blank" type="a" variation="passive">
           <span class="icon-box">
-            <oc-icon-stub accessiblelabel color filltype="fill" name="some-icon" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="some-icon" size="medium" type="span" variation="passive"></oc-icon-stub>
           </span>
           <span>External</span>
           <!---->

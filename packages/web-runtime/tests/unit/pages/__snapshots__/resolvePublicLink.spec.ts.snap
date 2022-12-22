@@ -6,9 +6,9 @@ exports[`resolvePublicLink theming options should display the configuration them
 </div>
 `;
 
-exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the password input should display the error message if "inputErrorMessage" is not empty 1`] = `<oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel id="oc-textinput-4" label="Enter password for public link" type="password" value></oc-text-input-stub>`;
+exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the password input should display the error message if "inputErrorMessage" is not empty 1`] = `<oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" id="oc-textinput-4" label="Enter password for public link" type="password" value=""></oc-text-input-stub>`;
 
-exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the password input should have a computed label 1`] = `<oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel id="oc-textinput-4" label="Enter password for public link" type="password" value></oc-text-input-stub>`;
+exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the password input should have a computed label 1`] = `<oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" id="oc-textinput-4" label="Enter password for public link" type="password" value=""></oc-text-input-stub>`;
 
 exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the submit button should be set as disabled if "password" is empty 1`] = `
 <oc-button-stub appearance="filled" class="oc-login-authorize-button" disabled="true" gapsize="medium" justifycontent="center" size="medium" submit="submit" type="button" variation="primary">
@@ -24,7 +24,7 @@ exports[`resolvePublicLink when the view is not loading anymore and when "passwo
     </h2>
   </div>
   <div class="oc-card-body">
-    <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel id="oc-textinput-4" label="Enter password for public link" type="password" value></oc-text-input-stub>
+    <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" id="oc-textinput-4" label="Enter password for public link" type="password" value=""></oc-text-input-stub>
     <oc-button-stub appearance="filled" class="oc-login-authorize-button" disabled="true" gapsize="medium" justifycontent="center" size="medium" submit="submit" type="button" variation="primary">
       <span>Continue</span>
     </oc-button-stub>
@@ -42,6 +42,6 @@ exports[`resolvePublicLink when the view is not loading anymore should display t
 
 exports[`resolvePublicLink when the view is still loading should display the loading text with the spinner 1`] = `
 <div class="oc-card-body">
-  <oc-spinner-stub aria-hidden="true" arialabel size="medium"></oc-spinner-stub>
+  <oc-spinner-stub aria-hidden="true" arialabel="" size="medium"></oc-spinner-stub>
 </div>
 `;

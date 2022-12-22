@@ -7,57 +7,57 @@ exports[`InviteCollaborator RecipientContainer displays an avatar image if capab
   </span>
   <p class="oc-recipient-name">Albert Einstein</p>
   <button aria-label="Deselect Albert Einstein" class="files-share-invite-recipient-btn-remove oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
-    <ocicon-stub accessiblelabel color filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
+    <ocicon-stub accessiblelabel="" color="" filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
   </button>
 </span>
 `;
 
 exports[`InviteCollaborator RecipientContainer renders a recipient with a deselect button different recipients for different shareTypes 1`] = `
 <span class="oc-recipient files-share-invite-recipient">
-  <ocicon-stub accessiblelabel="User" class="oc-recipient-icon" color filltype="fill" name="user" size="small" type="span" variation="passive"></ocicon-stub>
+  <ocicon-stub accessiblelabel="User" class="oc-recipient-icon" color="" filltype="fill" name="user" size="small" type="span" variation="passive"></ocicon-stub>
   <p class="oc-recipient-name">Albert Einstein</p>
   <button aria-label="Deselect Albert Einstein" class="files-share-invite-recipient-btn-remove oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
-    <ocicon-stub accessiblelabel color filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
+    <ocicon-stub accessiblelabel="" color="" filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
   </button>
 </span>
 `;
 
 exports[`InviteCollaborator RecipientContainer renders a recipient with a deselect button different recipients for different shareTypes 2`] = `
 <span class="oc-recipient files-share-invite-recipient">
-  <ocicon-stub accessiblelabel="User" class="oc-recipient-icon" color filltype="fill" name="user" size="small" type="span" variation="passive"></ocicon-stub>
+  <ocicon-stub accessiblelabel="User" class="oc-recipient-icon" color="" filltype="fill" name="user" size="small" type="span" variation="passive"></ocicon-stub>
   <p class="oc-recipient-name">Albert Einstein</p>
   <button aria-label="Deselect Albert Einstein" class="files-share-invite-recipient-btn-remove oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
-    <ocicon-stub accessiblelabel color filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
+    <ocicon-stub accessiblelabel="" color="" filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
   </button>
 </span>
 `;
 
 exports[`InviteCollaborator RecipientContainer renders a recipient with a deselect button different recipients for different shareTypes 3`] = `
 <span class="oc-recipient files-share-invite-recipient">
-  <ocicon-stub accessiblelabel="User" class="oc-recipient-icon" color filltype="fill" name="user" size="small" type="span" variation="passive"></ocicon-stub>
+  <ocicon-stub accessiblelabel="User" class="oc-recipient-icon" color="" filltype="fill" name="user" size="small" type="span" variation="passive"></ocicon-stub>
   <p class="oc-recipient-name">Albert Einstein</p>
   <button aria-label="Deselect Albert Einstein" class="files-share-invite-recipient-btn-remove oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
-    <ocicon-stub accessiblelabel color filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
+    <ocicon-stub accessiblelabel="" color="" filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
   </button>
 </span>
 `;
 
 exports[`InviteCollaborator RecipientContainer renders a recipient with a deselect button different recipients for different shareTypes 4`] = `
 <span class="oc-recipient files-share-invite-recipient">
-  <ocicon-stub accessiblelabel="User" class="oc-recipient-icon" color filltype="fill" name="user" size="small" type="span" variation="passive"></ocicon-stub>
+  <ocicon-stub accessiblelabel="User" class="oc-recipient-icon" color="" filltype="fill" name="user" size="small" type="span" variation="passive"></ocicon-stub>
   <p class="oc-recipient-name">Albert Einstein</p>
   <button aria-label="Deselect Albert Einstein" class="files-share-invite-recipient-btn-remove oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
-    <ocicon-stub accessiblelabel color filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
+    <ocicon-stub accessiblelabel="" color="" filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
   </button>
 </span>
 `;
 
 exports[`InviteCollaborator RecipientContainer renders a recipient with a deselect button different recipients for different shareTypes 5`] = `
 <span class="oc-recipient files-share-invite-recipient">
-  <ocicon-stub accessiblelabel="User" class="oc-recipient-icon" color filltype="fill" name="user" size="small" type="span" variation="passive"></ocicon-stub>
+  <ocicon-stub accessiblelabel="User" class="oc-recipient-icon" color="" filltype="fill" name="user" size="small" type="span" variation="passive"></ocicon-stub>
   <p class="oc-recipient-name">Albert Einstein</p>
   <button aria-label="Deselect Albert Einstein" class="files-share-invite-recipient-btn-remove oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
-    <ocicon-stub accessiblelabel color filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
+    <ocicon-stub accessiblelabel="" color="" filltype="fill" name="close" size="small" type="span" variation="passive"></ocicon-stub>
   </button>
 </span>
 `;

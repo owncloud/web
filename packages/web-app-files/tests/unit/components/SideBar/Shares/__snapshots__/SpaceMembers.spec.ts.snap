@@ -5,11 +5,11 @@ exports[`SpaceMembers existing members can edit when current user is manager of 
   <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
     <div class="oc-flex oc-py-s">
       <h3 class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
-      <oc-contextual-helper-stub class="oc-pl-xs" endtext list="[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" text="Enter a name to add people or groups as members to this Space." title="Add members to this Space"></oc-contextual-helper-stub>
+      <oc-contextual-helper-stub class="oc-pl-xs" endtext="" list="[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" text="Enter a name to add people or groups as members to this Space." title="Add members to this Space"></oc-contextual-helper-stub>
     </div>
     <div class="oc-flex">
       <oc-button-stub appearance="raw" arialabel="Filter members" class="open-filter-btn" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-        <oc-icon-stub accessiblelabel color filltype="line" name="search" size="small" type="span" variation="passive"></oc-icon-stub>
+        <oc-icon-stub accessiblelabel="" color="" filltype="line" name="search" size="small" type="span" variation="passive"></oc-icon-stub>
       </oc-button-stub>
     </div>
   </div>
@@ -35,7 +35,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
       <h3 class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
       <div class="oc-contextual-helper oc-pl-xs">
         <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="oc-contextual-helper-4-button" type="button">
-          <oc-icon-stub accessiblelabel color filltype="line" name="question" size="small" type="span" variation="passive"></oc-icon-stub>
+          <oc-icon-stub accessiblelabel="" color="" filltype="line" name="question" size="small" type="span" variation="passive"></oc-icon-stub>
         </button>
         <div class="oc-drop oc-box-shadow-medium oc-rounded oc-width-1-1 oc-info-drop" id="oc-contextual-helper-4">
           <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
@@ -43,7 +43,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
               <div class="oc-flex oc-flex-between info-header oc-border-b oc-pb-s">
                 <span class="oc-m-rm info-title">Add members to this Space</span>
                 <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
-                  <oc-icon-stub accessiblelabel color filltype="line" name="close" size="medium" type="span" variation="passive"></oc-icon-stub>
+                  <oc-icon-stub accessiblelabel="" color="" filltype="line" name="close" size="medium" type="span" variation="passive"></oc-icon-stub>
                 </button>
               </div>
               <p class="info-text">Enter a name to add people or groups as members to this Space.</p>
@@ -71,7 +71,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
           <!---->
         </div>
         <button aria-label="Close filter" class="close-filter-btn oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
-          <oc-icon-stub accessiblelabel color filltype="line" name="close" size="small" type="span" variation="passive"></oc-icon-stub>
+          <oc-icon-stub accessiblelabel="" color="" filltype="line" name="close" size="small" type="span" variation="passive"></oc-icon-stub>
         </button>
       </div>
     </div>
@@ -96,11 +96,11 @@ exports[`SpaceMembers invite collaborator form renders the form when the current
   <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
     <div class="oc-flex oc-py-s">
       <h3 class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
-      <oc-contextual-helper-stub class="oc-pl-xs" endtext list="[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" text="Enter a name to add people or groups as members to this Space." title="Add members to this Space"></oc-contextual-helper-stub>
+      <oc-contextual-helper-stub class="oc-pl-xs" endtext="" list="[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" text="Enter a name to add people or groups as members to this Space." title="Add members to this Space"></oc-contextual-helper-stub>
     </div>
     <div class="oc-flex">
       <oc-button-stub appearance="raw" arialabel="Filter members" class="open-filter-btn" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-        <oc-icon-stub accessiblelabel color filltype="line" name="search" size="small" type="span" variation="passive"></oc-icon-stub>
+        <oc-icon-stub accessiblelabel="" color="" filltype="line" name="search" size="small" type="span" variation="passive"></oc-icon-stub>
       </oc-button-stub>
     </div>
   </div>

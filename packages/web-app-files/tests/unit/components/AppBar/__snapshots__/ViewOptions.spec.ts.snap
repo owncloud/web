@@ -3,7 +3,7 @@
 exports[`ViewOptions component sets the correct initial files page limit 1`] = `
 <div>
   <oc-button-stub appearance="raw" arialabel="Display customization options of the files list" class="oc-my-s oc-p-xs" gapsize="medium" id="files-view-options-btn" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-    <oc-icon-stub accessiblelabel color filltype="line" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+    <oc-icon-stub accessiblelabel="" color="" filltype="line" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
   <oc-drop-stub class="oc-width-auto" dropid="files-view-options-drop" mode="click" paddingsize="medium" position="bottom-start" toggle="#files-view-options-btn">
     <oc-list-stub>

@@ -9,7 +9,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
     </router-link-stub>
   </div>
   <div class="portal-wrapper">
-    <portal-target-stub multiple name="app.runtime.header"></portal-target-stub>
+    <portal-target-stub multiple="" name="app.runtime.header"></portal-target-stub>
   </div>
   <div class="oc-topbar-right oc-flex oc-flex-middle oc-flex-between">
     <theme-switcher-stub></theme-switcher-stub>
