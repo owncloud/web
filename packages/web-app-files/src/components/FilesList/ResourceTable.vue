@@ -212,7 +212,7 @@ import {
 import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
 
 import Rename from '../../mixins/actions/rename'
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, computed } from 'vue'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
@@ -225,6 +225,9 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { basename, dirname } from 'path'
+import { useWindowSize } from '@vueuse/core'
+
+const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
   mixins: [Rename],
@@ -402,13 +405,17 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { width } = useWindowSize()
+    const hasTags = computed(
+      () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
+    )
 
     return {
       ViewModeConstants,
+      hasTags,
       isUserContext: useUserContext({ store }),
       hasShareJail: useCapabilityShareJailEnabled(),
-      hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
-      hasTags: useCapabilityFilesTags()
+      hasProjectSpaces: useCapabilityProjectSpacesEnabled()
     }
   },
   data() {
