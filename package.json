@@ -139,6 +139,9 @@
           "@vue/compiler-sfc": "2.7.14"
         }
       }
+    },
+    "patchedDependencies": {
+      "jest-serializer-vue-tjw@3.19.0": "patches/jest-serializer-vue-tjw@3.19.0.patch"
     }
   },
   "jestSerializer": {
