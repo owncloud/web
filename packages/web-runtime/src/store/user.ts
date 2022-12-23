@@ -1,6 +1,6 @@
 import { setUser as sentrySetUser } from '@sentry/browser'
 
-const state = {
+const getInitialState = () => ({
   id: '',
   uuid: '',
   displayname: '',
@@ -12,7 +12,8 @@ const state = {
   language: null,
   role: null,
   roles: []
-}
+})
+const state = getInitialState()
 
 const getters = {
   /**
@@ -68,6 +69,9 @@ const mutations = {
   },
   SET_ROLES(state, roles) {
     state.roles = roles
+  },
+  RESET_USER(state) {
+    Object.assign(state, getInitialState())
   }
 }
 
@@ -77,7 +81,7 @@ const actions = {
       return
     }
     // reset user
-    this.reset({ self: false, nested: false, modules: { user: { self: true } } })
+    context.commit('RESET_USER')
   }
 }
 
