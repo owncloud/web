@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { Share } from 'web-client/src/helpers/share'
 import { Store } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
-import copyToClipboard from 'copy-to-clipboard'
+import { useClipboard } from '@vueuse/core'
 
 interface CreateQuicklink {
   store: Store<any>
@@ -45,7 +45,8 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
     storageId: resource.fileId || resource.id
   })
 
-  copyToClipboard(link.url)
+  const { copy } = useClipboard({ legacy: true })
+  copy(link.url)
 
   await store.dispatch('showMessage', {
     title: $gettext('The quicklink has been copied to your clipboard.')

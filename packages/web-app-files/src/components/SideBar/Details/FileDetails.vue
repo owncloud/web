@@ -95,6 +95,7 @@
                 v-text="file.path"
               />
               <oc-button
+                v-if="isSupported"
                 v-oc-tooltip="copyEosPathLabel"
                 :aria-label="copyEosPathLabel"
                 appearance="raw"
@@ -123,6 +124,7 @@
                 v-text="directLink"
               />
               <oc-button
+                v-if="isSupported"
                 v-oc-tooltip="copyDirectLinkLabel"
                 :aria-label="copyDirectLinkLabel"
                 appearance="raw"
@@ -160,7 +162,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ComputedRef, defineComponent, inject } from 'vue'
+import { ComputedRef, defineComponent, inject, ref } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
@@ -173,10 +175,11 @@ import {
   useCapabilityFilesTags,
   usePublicLinkContext,
   useStore,
+  useTranslations,
   useUserContext
 } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
-import copyToClipboard from 'copy-to-clipboard'
+import { useClipboard } from '@vueuse/core'
 import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { eventBus } from 'web-pkg/src/services/eventBus'
@@ -190,8 +193,40 @@ export default defineComponent({
   name: 'FileDetails',
   setup() {
     const store = useStore()
+    const { $gettext } = useTranslations()
+
+    const copiedDirect = ref(false)
+    const copiedEos = ref(false)
+    const { copy, copied, isSupported } = useClipboard({ legacy: true, copiedDuring: 550 })
+
+    const copyEosPathToClipboard = () => {
+      copy(inject<ComputedRef<Resource>>('displayedItem').value.path)
+      copiedEos.value = copied.value
+      store.dispatch('showMessage', {
+        title: $gettext('EOS path copied'),
+        desc: $gettext('The EOS path has been copied to your clipboard.')
+      })
+    }
+
+    const copyDirectLinkToClipboard = () => {
+      copy(
+        `${store.getters.configuration.server}files/spaces/personal/home${
+          inject<ComputedRef<Resource>>('displayedItem').value.path
+        }`
+      )
+      copiedDirect.value = copied.value
+      store.dispatch('showMessage', {
+        title: $gettext('Direct link copied'),
+        desc: $gettext('The direct link has been copied to your clipboard.')
+      })
+    }
 
     return {
+      copiedEos,
+      copyEosPathToClipboard,
+      copiedDirect,
+      copyDirectLinkToClipboard,
+      isSupported,
       isUserContext: useUserContext({ store }),
       isPublicLinkContext: usePublicLinkContext({ store }),
       accessToken: useAccessToken({ store }),
@@ -200,12 +235,8 @@ export default defineComponent({
       hasTags: useCapabilityFilesTags()
     }
   },
-
   data: () => ({
-    loading: false,
-    copiedDirect: false,
-    copiedEos: false,
-    timeout: null
+    loading: false
   }),
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
@@ -467,31 +498,6 @@ export default defineComponent({
       }
       await Promise.all(calls.map((p) => p.catch((e) => e)))
       this.loading = false
-    },
-    copyEosPathToClipboard() {
-      copyToClipboard(this.file.path)
-      this.copiedEos = true
-      this.clipboardSuccessHandler()
-      this.showMessage({
-        title: this.$gettext('EOS path copied'),
-        desc: this.$gettext('The EOS path has been copied to your clipboard.')
-      })
-    },
-    copyDirectLinkToClipboard() {
-      copyToClipboard(this.directLink)
-      this.copiedDirect = true
-      this.clipboardSuccessHandler()
-      this.showMessage({
-        title: this.$gettext('Direct link copied'),
-        desc: this.$gettext('The direct link has been copied to your clipboard.')
-      })
-    },
-    clipboardSuccessHandler() {
-      clearTimeout(this.timeout)
-      this.timeout = setTimeout(() => {
-        this.copiedDirect = false
-        this.copiedEos = false
-      }, 550)
     },
     getTagLink(tag) {
       return createLocationCommon('files-common-search', {

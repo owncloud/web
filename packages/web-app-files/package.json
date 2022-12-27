@@ -5,7 +5,6 @@
   "description": "ownCloud web files",
   "license": "AGPL-3.0",
   "dependencies": {
-    "copy-to-clipboard": "^3.3.1",
     "mark.js": "^8.11.1"
   },
   "devDependencies": {
