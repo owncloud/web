@@ -352,12 +352,13 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
   await page.locator(util.format(filesAction, action)).first().click()
   await page.locator(breadcrumbRoot).click()
 
-  if (newLocation !== 'Personal') {
-    await clickResource({ page, path: newLocation })
+  const newLocationPath = newLocation.split('/')
+  for (const path of newLocationPath){
+    if (path !== 'Personal') {
+      await clickResource({ page, path: path })
+    }
   }
-
   await page.locator(clipboardBtns).first().click()
-
   await waitForResources({
     page,
     names: [resourceBase]
