@@ -251,11 +251,13 @@ Details
    visible in the files list and can also be searched to quickly filter tagged files.
 
    https://github.com/owncloud/web/issues/7134
+   https://github.com/owncloud/web/issues/8149
    https://github.com/owncloud/web/pull/7388
    https://github.com/owncloud/web/pull/7385
    https://github.com/owncloud/web/pull/7442
    https://github.com/owncloud/web/pull/7754
    https://github.com/owncloud/web/pull/8067
+   https://github.com/owncloud/web/pull/8157
 
 * Enhancement - Update libre-graph-api to v1.0: [#8132](https://github.com/owncloud/web/pull/8132)
 
