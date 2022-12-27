@@ -100,6 +100,26 @@ When(
         }
     }
 )
+When(
+    /^"([^"]*)" (copies|moves) the following (resource|resources) using the keyboard$/,
+    async function (
+        this: World,
+        stepUser: string,
+        actionType: string,
+        _: string,
+        stepTable: DataTable
+    ): Promise<void> {
+        const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+        const resourceObject = new objects.applicationFiles.Resource({ page })
+
+        for (const { resource, to } of stepTable.hashes()) {
+            await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
+                resource,
+                newLocation: to
+            })
+        }
+    }
+)
 
 When(
   '{string} restores following resource(s)',

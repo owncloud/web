@@ -10,13 +10,16 @@ Feature: Upload
     And "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
-      | resource                 | type    | content      |
-      | PARENTCopy/ba            | folder  |              |
-      | PARENTCopy2              | folder  |              |
-      | PARENT/apple/example.txt | txtFile | example text |
-#      | example.txt        | txtFile | example text |
-#    When the user copy the following resources using the sidebar panel
-#      | resource | destination |
-    And "Alice" copies the following resource using the sidebar panel
-      | resource                 | to                     |
-      | PARENT/apple/example.txt | Personal/PARENTCopy/ba |
+      | resource                 | type    | content                        |
+      | PARENTCopy/ba            | folder  |                                |
+      | PARENTCopy2              | folder  |                                |
+#      | PARENT/apple/example.txt | txtFile | example text                   |
+      | KeyboardExample.txt      | txtFile | copy with the help of keyboard |
+#    When "Alice" copies the following resource using the sidebar panel
+#      | resource                 | to                     |
+#      | PARENT/apple/example.txt | Personal/PARENTCopy/ba |
+    # currently copy/paste feature not available in playwright
+    # https://github.com/microsoft/playwright/issues/8114#issuecomment-1191977124
+    And "Alice" copies the following resource using the keyboard
+      | resource            | to                     |
+      | KeyboardExample.txt | Personal/PARENTCopy/ba |

@@ -339,16 +339,9 @@ export interface moveOrCopyResourceArgs {
   newLocation: string
   action: 'copy' | 'move'
 }
-
-export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<void> => {
+export const moveOrCopyResourceUsingMenu = async (args: moveOrCopyResourceArgs): Promise<void> => {
   const { page, resource, newLocation, action } = args
-  const { dir: resourceDir, base: resourceBase } = path.parse(resource)
-
-  if (resourceDir) {
-    await clickResource({ page, path: resourceDir })
-  }
-
-  await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
+  await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
   await page.locator(util.format(filesAction, action)).first().click()
   await page.locator(breadcrumbRoot).click()
 
@@ -361,8 +354,42 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
   await page.locator(clipboardBtns).first().click()
   await waitForResources({
     page,
-    names: [resourceBase]
+    names: [resource]
   })
+}
+export const moveOrCopyResource = async (args: moveOrCopyResourceArgs, type:string="Keyboard"): Promise<void> => {
+  const { page, resource, newLocation, action } = args
+  const { dir: resourceDir, base: resourceBase } = path.parse(resource)
+  console.log(resourceDir);
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+  switch (type) {
+    case 'Menu': {
+      await moveOrCopyResourceUsingMenu({page, resource: resourceBase, newLocation, action})
+      break
+    }
+    case 'Keyboard': {
+      const resourceCheckbox = page.locator(util.format(checkBox, resource))
+      await resourceCheckbox.check()
+      await page.keyboard.press('Control+C')
+
+      const newLocationPath = newLocation.split('/')
+      for (const path of newLocationPath){
+        if (path !== 'Personal') {
+          await clickResource({ page, path: path })
+        }
+      }
+      await page.keyboard.press('Control+V')
+
+      await waitForResources({
+        page,
+        names: [resource]
+      })
+      break
+    }
+  }
+
 }
 
 /**/
