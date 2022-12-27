@@ -338,6 +338,7 @@ export interface moveOrCopyResourceArgs {
   resource: string
   newLocation: string
   action: 'copy' | 'move'
+  method: string
 }
 export const moveOrCopyResourceUsingMenu = async (args: moveOrCopyResourceArgs): Promise<void> => {
   const { page, resource, newLocation, action } = args
@@ -357,19 +358,20 @@ export const moveOrCopyResourceUsingMenu = async (args: moveOrCopyResourceArgs):
     names: [resource]
   })
 }
-export const moveOrCopyResource = async (args: moveOrCopyResourceArgs, type:string="Keyboard"): Promise<void> => {
-  const { page, resource, newLocation, action } = args
+export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<void> => {
+  const { page, resource, newLocation, action,method } = args
   const { dir: resourceDir, base: resourceBase } = path.parse(resource)
-  console.log(resourceDir);
+
   if (resourceDir) {
     await clickResource({ page, path: resourceDir })
   }
-  switch (type) {
+  switch (method) {
     case 'Menu': {
-      await moveOrCopyResourceUsingMenu({page, resource: resourceBase, newLocation, action})
+      await moveOrCopyResourceUsingMenu({page, resource: resourceBase, newLocation, action,method})
       break
     }
     case 'Keyboard': {
+      // for multiple folder
       const resourceCheckbox = page.locator(util.format(checkBox, resource))
       await resourceCheckbox.check()
       await page.keyboard.press('Control+C')
@@ -382,6 +384,18 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs, type:stri
       }
       await page.keyboard.press('Control+V')
 
+      await waitForResources({
+        page,
+        names: [resource]
+      })
+      break
+    }
+    case 'drag-drop': {
+
+      const source = page.locator(util.format(resourceNameSelector, resource))
+      const target = page.locator(util.format(resourceNameSelector, newLocation))
+
+      await source.dragTo(target);
       await waitForResources({
         page,
         names: [resource]

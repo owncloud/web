@@ -74,7 +74,8 @@ When(
     for (const { resource, to } of stepTable.hashes()) {
       await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
         resource,
-        newLocation: to
+        newLocation: to,
+        method:"Menu"
       })
     }
   }
@@ -95,18 +96,20 @@ When(
         for (const { resource, to } of stepTable.hashes()) {
             await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
                 resource,
-                newLocation: to
+                newLocation: to,
+                method:"Menu"
             })
         }
     }
 )
 When(
-    /^"([^"]*)" (copies|moves) the following (resource|resources) using the keyboard$/,
+    /^"([^"]*)" (copies|moves) the following (resource|resources) using the (keyboard|drag-drop)$/,
     async function (
         this: World,
         stepUser: string,
         actionType: string,
         _: string,
+        method: string,
         stepTable: DataTable
     ): Promise<void> {
         const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -115,7 +118,8 @@ When(
         for (const { resource, to } of stepTable.hashes()) {
             await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
                 resource,
-                newLocation: to
+                newLocation: to,
+                method
             })
         }
     }
