@@ -91,8 +91,10 @@ config = {
                     "webUICreateFilesFolders",
                     "webUIDeleteFilesFolders",
                 ],
-                "oC10RenameFileFolder": [
+                "oC10RenameFolder": [
                     "webUIRenameFolders",
+                ],
+                "oC10RenameFile": [
                     "webUIRenameFiles",
                 ],
                 "oC10MoveFileFolder": [
