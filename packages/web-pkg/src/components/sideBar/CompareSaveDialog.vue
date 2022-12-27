@@ -6,12 +6,17 @@
     </span>
     <span v-else class="state-indicator">{{ unsavedChangesText }}</span>
     <div>
-      <oc-button :disabled="!unsavedChanges" @click="$emit('revert')">
+      <oc-button
+        :disabled="!unsavedChanges"
+        class="compare-save-dialog-revert-btn"
+        @click="$emit('revert')"
+      >
         <span v-text="$gettext('Revert')" />
       </oc-button>
       <oc-button
         appearance="filled"
         variation="primary"
+        class="compare-save-dialog-confirm-btn"
         :disabled="!unsavedChanges || confirmButtonDisabled"
         @click="$emit('confirm')"
       >
