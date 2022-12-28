@@ -78,15 +78,15 @@ export class Resource {
     await this.#page.goto(startUrl)
   }
 
-  async copy(args: Omit<moveOrCopyResourceArgs, 'page' | 'action'>): Promise<void> {
+  async copy(args: Omit<moveOrCopyResourceArgs, 'page' | 'action'>, method:string): Promise<void> {
     const startUrl = this.#page.url()
-    await moveOrCopyResource({ ...args, page: this.#page, action: 'copy' })
+    await moveOrCopyResource({ ...args, page: this.#page, action: 'copy' },method)
     await this.#page.goto(startUrl)
   }
 
   async move(args: Omit<moveOrCopyResourceArgs, 'page' | 'action'>): Promise<void> {
     const startUrl = this.#page.url()
-    await moveOrCopyResource({ ...args, page: this.#page, action: 'move' })
+    await moveOrCopyResource({ ...args, page: this.#page, action: 'move' },"method")
     await this.#page.goto(startUrl)
   }
 

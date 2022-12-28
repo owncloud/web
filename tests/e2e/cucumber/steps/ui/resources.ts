@@ -60,69 +60,25 @@ When(
 )
 
 When(
-  /^"([^"]*)" (copies|moves) the following (resource|resources)$/,
+  /^"([^"]*)" (copies|moves) the following resource(?:s)? using the ([^"]*)(?: panel)?$/,
   async function (
     this: World,
     stepUser: string,
     actionType: string,
-    _: string,
+    method: string,
     stepTable: DataTable
   ): Promise<void> {
+      console.log(stepUser, actionType,method)
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const { resource, to } of stepTable.hashes()) {
       await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
         resource,
-        newLocation: to,
-        method:"Menu"
-      })
+        newLocation: to
+      },method)
     }
   }
-)
-
-When(
-    /^"([^"]*)" (copies|moves) the following (resource|resources) using the sidebar panel$/,
-    async function (
-        this: World,
-        stepUser: string,
-        actionType: string,
-        _: string,
-        stepTable: DataTable
-    ): Promise<void> {
-        const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-        const resourceObject = new objects.applicationFiles.Resource({ page })
-
-        for (const { resource, to } of stepTable.hashes()) {
-            await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
-                resource,
-                newLocation: to,
-                method:"Menu"
-            })
-        }
-    }
-)
-When(
-    /^"([^"]*)" (copies|moves) the following (resource|resources) using the (keyboard|drag-drop)$/,
-    async function (
-        this: World,
-        stepUser: string,
-        actionType: string,
-        _: string,
-        method: string,
-        stepTable: DataTable
-    ): Promise<void> {
-        const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-        const resourceObject = new objects.applicationFiles.Resource({ page })
-
-        for (const { resource, to } of stepTable.hashes()) {
-            await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
-                resource,
-                newLocation: to,
-                method
-            })
-        }
-    }
 )
 
 When(

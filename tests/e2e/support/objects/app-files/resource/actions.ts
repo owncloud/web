@@ -27,7 +27,7 @@ const fileUploadInput = '#files-file-upload-input'
 const uploadInfoCloseButton = '#close-upload-info-btn'
 const filesAction = `.oc-files-actions-%s-trigger`
 const clipboardBtns = '#clipboard-btns'
-const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a'
+const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]'
 const fileRenameInput = '.oc-text-input'
 const deleteButtonSidebar = '#oc-files-actions-sidebar .oc-files-actions-delete-trigger'
 const actionConfirmationButton =
@@ -338,7 +338,6 @@ export interface moveOrCopyResourceArgs {
   resource: string
   newLocation: string
   action: 'copy' | 'move'
-  method: string
 }
 export const moveOrCopyResourceUsingMenu = async (args: moveOrCopyResourceArgs): Promise<void> => {
   const { page, resource, newLocation, action } = args
@@ -358,24 +357,29 @@ export const moveOrCopyResourceUsingMenu = async (args: moveOrCopyResourceArgs):
     names: [resource]
   })
 }
-export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<void> => {
-  const { page, resource, newLocation, action,method } = args
+export const moveOrCopyResource = async (args: moveOrCopyResourceArgs, method:string): Promise<void> => {
+  const { page, resource, newLocation, action } = args
   const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
   if (resourceDir) {
     await clickResource({ page, path: resourceDir })
   }
   switch (method) {
-    case 'Menu': {
-      await moveOrCopyResourceUsingMenu({page, resource: resourceBase, newLocation, action,method})
+    case 'menu': {
+      await moveOrCopyResourceUsingMenu({page, resource: resourceBase, newLocation, action})
       break
     }
-    case 'Keyboard': {
-      // for multiple folder
-      const resourceCheckbox = page.locator(util.format(checkBox, resource))
+    case 'menu': {
+      await moveOrCopyResourceUsingMenu({page, resource: resourceBase, newLocation, action})
+      break
+    }
+    case 'keyboard': {
+      console.log(resourceBase)
+      const resourceCheckbox = page.locator(util.format(checkBox, resourceBase))
       await resourceCheckbox.check()
-      await page.keyboard.press('Control+C')
 
+      await page.keyboard.press('Control+C')
+      await page.locator(breadcrumbRoot).click()
       const newLocationPath = newLocation.split('/')
       for (const path of newLocationPath){
         if (path !== 'Personal') {
@@ -383,22 +387,21 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
         }
       }
       await page.keyboard.press('Control+V')
-
+      await page.pause()
       await waitForResources({
         page,
-        names: [resource]
+        names: [resourceBase]
       })
       break
     }
     case 'drag-drop': {
-
-      const source = page.locator(util.format(resourceNameSelector, resource))
+      const source = page.locator(util.format(resourceNameSelector, resourceBase))
       const target = page.locator(util.format(resourceNameSelector, newLocation))
 
       await source.dragTo(target);
       await waitForResources({
         page,
-        names: [resource]
+        names: [resourceBase]
       })
       break
     }
