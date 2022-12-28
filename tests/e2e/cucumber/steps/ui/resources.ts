@@ -60,7 +60,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" (copies|moves) the following resource(?:s)? using the ([^"]*)(?: panel)?$/,
+  /^"([^"]*)" (copies|moves) the following resource(?:s)? using the ([^"]*) ?(?:panel)?$/,
   async function (
     this: World,
     stepUser: string,
@@ -68,7 +68,7 @@ When(
     method: string,
     stepTable: DataTable
   ): Promise<void> {
-      console.log(stepUser, actionType,method)
+
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
@@ -385,7 +385,7 @@ Then(
 Then(
   'the following resource(s) should contain the following tag(s) in the details panel for user {string}',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    console.log('stepUser', stepUser)
+
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const { resource, tags } of stepTable.hashes()) {

@@ -35,6 +35,7 @@ const actionConfirmationButton =
 const actionSkipButton = '.oc-modal-body-actions-cancel'
 const actionSecondaryConfirmationButton = '.oc-modal-body-actions-secondary'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
+const actionCopy = '//*[contains(@data-testid, "action-handler")]/span[text()="Copy"]'
 const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
 const notificationMessageDialog = '.oc-notification-message-title'
 const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
@@ -341,8 +342,8 @@ export interface moveOrCopyResourceArgs {
 }
 export const moveOrCopyResourceUsingMenu = async (args: moveOrCopyResourceArgs): Promise<void> => {
   const { page, resource, newLocation, action } = args
-  await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
-  await page.locator(util.format(filesAction, action)).first().click()
+  // await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
+  // await page.locator(util.format(filesAction, action)).first().click()
   await page.locator(breadcrumbRoot).click()
 
   const newLocationPath = newLocation.split('/')
@@ -364,17 +365,37 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs, method:st
   if (resourceDir) {
     await clickResource({ page, path: resourceDir })
   }
+
   switch (method) {
     case 'menu': {
+      const { page, resource, newLocation, action } = args
+      await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
+      await page.locator(util.format(filesAction, action)).first().click()
       await moveOrCopyResourceUsingMenu({page, resource: resourceBase, newLocation, action})
       break
     }
-    case 'menu': {
-      await moveOrCopyResourceUsingMenu({page, resource: resourceBase, newLocation, action})
+    case 'sidebar': {
+      await sidebar.open({ page: page, resource: resourceBase })
+      await sidebar.openPanel({ page: page, name: 'actions' })
+      await page.locator(actionCopy).click()
+      await page.locator(breadcrumbRoot).click()
+
+      const newLocationPath = newLocation.split('/')
+      for (const path of newLocationPath){
+        if (path !== 'Personal') {
+          await clickResource({ page, path: path })
+        }
+      }
+      await page.locator(clipboardBtns).first().click()
+
+      await waitForResources({
+        page,
+        names: [resource]
+      })
       break
     }
     case 'keyboard': {
-      console.log(resourceBase)
+
       const resourceCheckbox = page.locator(util.format(checkBox, resourceBase))
       await resourceCheckbox.check()
 
@@ -387,7 +408,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs, method:st
         }
       }
       await page.keyboard.press('Control+V')
-      await page.pause()
+
       await waitForResources({
         page,
         names: [resourceBase]
