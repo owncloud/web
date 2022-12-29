@@ -64,8 +64,8 @@ export default {
 
             if (
               isProjectSpaceResource(this.space) &&
-              !this.space.isEditor(this.user.uuid) &&
-              !this.space.isManager(this.user.uuid)
+              !this.space.isEditor(this.user) &&
+              !this.space.isManager(this.user)
             ) {
               return false
             }

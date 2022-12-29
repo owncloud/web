@@ -1,5 +1,11 @@
 import { User } from '../user'
 
+export interface SpaceRole {
+  id: string
+  kind: 'user' | 'group'
+  isMember(u: User): boolean
+}
+
 // TODO: add more fields to the resource interface. Extend into different resource types: FileResource, FolderResource, ShareResource, IncomingShareResource, OutgoingShareResource, ...
 export interface Resource {
   id: number | string
@@ -16,7 +22,7 @@ export interface Resource {
   status?: number
   processing?: boolean
   spaceRoles?: {
-    [k: string]: any[]
+    [k: string]: SpaceRole[]
   }
   spaceQuota?: any
   spaceImageData?: any

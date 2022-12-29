@@ -4,7 +4,8 @@ import {
   buildWebDavSpacesTrashPath,
   extractDomSelector,
   extractNodeId,
-  Resource
+  Resource,
+  SpaceRole
 } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
 import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID } from './types'
@@ -86,9 +87,36 @@ export function buildSpace(data): SpaceResource {
     for (const permission of data.root.permissions) {
       for (const role of SpacePeopleShareRoles.list()) {
         if (permission.roles.includes(role.name)) {
-          spaceRoles[role.name].push(
-            ...permission.grantedToIdentities.filter((el) => !!el.user).map((el) => el.user.id)
-          )
+          spaceRoles[role.name] = permission.grantedToIdentities.reduce((acc, info) => {
+            const spaceRole: SpaceRole = {
+              kind: 'user',
+              id: '',
+              isMember(u?: any): boolean {
+                if (!u) {
+                  return false
+                }
+
+                switch (this.kind) {
+                  case 'user':
+                    return this.id == u.uuid
+                    break
+                  case 'group':
+                    return u.groups.map((g) => g.id).includes(this.id)
+                    break
+                  default:
+                    return false
+                }
+              }
+            }
+
+            if (info.hasOwnProperty('group')) {
+              spaceRole.kind = 'group'
+            }
+
+            spaceRole.id = info[spaceRole.kind].id
+
+            return [...acc, spaceRole]
+          }, [])
         }
       }
     }
@@ -143,53 +171,53 @@ export function buildSpace(data): SpaceResource {
     spaceRoles,
     spaceImageData,
     spaceReadmeData,
-    canUpload: function ({ user }: { user?: User } = {}) {
+    canUpload: function ({ user }: { user?: User } = {}): boolean {
       const allowedRoles = [
         ...this.spaceRoles[spaceRoleManager.name],
         ...this.spaceRoles[spaceRoleEditor.name]
       ]
-      return user && allowedRoles.includes(user.uuid)
+      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
     },
     canDownload: function () {
       return true
     },
     canBeDeleted: function ({ user }: { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return this.disabled && user && allowedRoles.includes(user.uuid)
+      return this.disabled && user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
     },
     canRename: function ({ user }: { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return user && allowedRoles.includes(user.uuid)
+      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
     },
     canEditDescription: function ({ user }: { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return user && allowedRoles.includes(user.uuid)
+      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
     },
     canRestore: function ({ user }: { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return this.disabled && user && allowedRoles.includes(user.uuid)
+      return this.disabled && user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
     },
     canDisable: function ({ user }: { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return !this.disabled && user && allowedRoles.includes(user.uuid)
+      return !this.disabled && user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
     },
     canShare: function ({ user }: { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return user && allowedRoles.includes(user.uuid)
+      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
     },
     canEditImage: function ({ user }: { user?: User } = {}) {
       const allowedRoles = [
         ...this.spaceRoles[spaceRoleManager.name],
         ...this.spaceRoles[spaceRoleEditor.name]
       ]
-      return user && allowedRoles.includes(user.uuid)
+      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
     },
     canEditReadme: function ({ user }: { user?: User } = {}) {
       const allowedRoles = [
         ...this.spaceRoles[spaceRoleManager.name],
         ...this.spaceRoles[spaceRoleEditor.name]
       ]
-      return user && allowedRoles.includes(user.uuid)
+      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
     },
     canCreate: function () {
       return true
@@ -213,14 +241,17 @@ export function buildSpace(data): SpaceResource {
     getWebDavTrashUrl({ path }: { path: string }): string {
       return urlJoin(webDavTrashUrl, path)
     },
-    isViewer(uuid: string): boolean {
-      return this.spaceRoles[spaceRoleViewer.name].includes(uuid)
+    isViewer(user: User): boolean {
+      return this.spaceRoles[spaceRoleViewer.name].map((r) => r.isAllowed(user)).some(Boolean)
     },
-    isEditor(uuid: string): boolean {
-      return this.spaceRoles[spaceRoleEditor.name].includes(uuid)
+    isEditor(user: User): boolean {
+      return this.spaceRoles[spaceRoleEditor.name].map((r) => r.isAllowed(user)).some(Boolean)
     },
-    isManager(uuid: string): boolean {
-      return this.spaceRoles[spaceRoleManager.name].includes(uuid)
+    isManager(user: User): boolean {
+      return this.spaceRoles[spaceRoleManager.name].map((r) => r.isAllowed(user)).some(Boolean)
+    },
+    isMember(user: User): boolean {
+      return this.isViewer(user) || this.isEditor(user) || this.isManager(user)
     }
   }
   Object.defineProperty(s, 'nodeId', {

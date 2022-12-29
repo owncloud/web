@@ -83,7 +83,7 @@ import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
-import { computed, defineComponent, PropType } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
@@ -103,19 +103,9 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
-    const currentUserIsMemberOfSpace = computed(() => {
-      const userId = store.getters.user?.id
-      if (!userId) {
-        return false
-      }
-      return store.getters['runtime/spaces/spaceMembers'].some(
-        (member) => member.collaborator?.name === userId
-      )
-    })
 
     return {
       sharesListCollapsed,
-      currentUserIsMemberOfSpace,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing()
@@ -234,7 +224,7 @@ export default defineComponent({
       return (
         this.space?.driveType === 'project' &&
         this.highlightedFile.type !== 'space' &&
-        this.currentUserIsMemberOfSpace
+        this.space?.isMember(this.user)
       )
     }
   },
@@ -347,16 +337,21 @@ export default defineComponent({
     },
 
     isShareModifiable(collaborator) {
-      if (
-        this.space &&
-        isProjectSpaceResource(this.space) &&
-        this.currentUserIsMemberOfSpace &&
-        !this.space?.spaceRoles.manager.includes(this.user.uuid)
-      ) {
+      const isSharableResource = this.space && isProjectSpaceResource(this.space)
+
+      if (!isSharableResource) {
         return false
       }
 
-      return !collaborator.indirect
+      if (this.space?.isManager(this.user)) {
+        return true
+      }
+
+      if (collaborator.indirect) {
+        return true
+      }
+
+      return false
     }
   }
 })

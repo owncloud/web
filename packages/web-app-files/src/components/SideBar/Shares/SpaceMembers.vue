@@ -120,11 +120,7 @@ export default defineComponent({
       return this.currentUserIsManager
     },
     currentUserIsManager() {
-      const currentUserCollaborator = this.spaceMembers.find(
-        (collaborator) => collaborator.collaborator.name === this.user.id
-      )
-
-      return currentUserCollaborator?.role?.name === spaceRoleManager.name
+      return this.space.isManager(this.user)
     }
   },
   watch: {

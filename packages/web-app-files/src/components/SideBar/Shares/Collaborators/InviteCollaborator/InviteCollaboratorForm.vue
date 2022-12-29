@@ -209,8 +209,7 @@ export default defineComponent({
             }
           })
 
-        let groups = recipients.exact.groups.concat(recipients.groups)
-
+        const groups = recipients.exact.groups.concat(recipients.groups)
         const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
         this.autocompleteResults = users.concat(groups, remotes).filter((collaborator) => {
