@@ -68,15 +68,17 @@ When(
     method: string,
     stepTable: DataTable
   ): Promise<void> {
-
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const { resource, to } of stepTable.hashes()) {
-      await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
-        resource,
-        newLocation: to
-      },method)
+      await resourceObject[actionType === 'copies' ? 'copy' : 'move'](
+        {
+          resource,
+          newLocation: to
+        },
+        method
+      )
     }
   }
 )
@@ -385,7 +387,6 @@ Then(
 Then(
   'the following resource(s) should contain the following tag(s) in the details panel for user {string}',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const { resource, tags } of stepTable.hashes()) {
@@ -425,4 +426,3 @@ When(
     }
   }
 )
-

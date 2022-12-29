@@ -340,25 +340,31 @@ export interface moveOrCopyResourceArgs {
   newLocation: string
   action: 'copy' | 'move'
 }
-export const moveOrCopyResourceUsingMenu = async (args: moveOrCopyResourceArgs): Promise<void> => {
-  const { page, resource, newLocation, action } = args
-  // await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
-  // await page.locator(util.format(filesAction, action)).first().click()
-  await page.locator(breadcrumbRoot).click()
+export const pasteResource = async (
+  args: Omit<moveOrCopyResourceArgs, 'action'>
+): Promise<void> => {
+  const { page, resource, newLocation } = args
 
+  await page.locator(breadcrumbRoot).click()
   const newLocationPath = newLocation.split('/')
-  for (const path of newLocationPath){
+
+  for (const path of newLocationPath) {
     if (path !== 'Personal') {
       await clickResource({ page, path: path })
     }
   }
+
   await page.locator(clipboardBtns).first().click()
   await waitForResources({
     page,
     names: [resource]
   })
 }
-export const moveOrCopyResource = async (args: moveOrCopyResourceArgs, method:string): Promise<void> => {
+
+export const moveOrCopyResource = async (
+  args: moveOrCopyResourceArgs,
+  method: string
+): Promise<void> => {
   const { page, resource, newLocation, action } = args
   const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
@@ -368,41 +374,27 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs, method:st
 
   switch (method) {
     case 'menu': {
-      const { page, resource, newLocation, action } = args
-      await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
+      await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
       await page.locator(util.format(filesAction, action)).first().click()
-      await moveOrCopyResourceUsingMenu({page, resource: resourceBase, newLocation, action})
+      await pasteResource({ page, resource: resourceBase, newLocation })
       break
     }
     case 'sidebar': {
       await sidebar.open({ page: page, resource: resourceBase })
       await sidebar.openPanel({ page: page, name: 'actions' })
+
       await page.locator(actionCopy).click()
-      await page.locator(breadcrumbRoot).click()
-
-      const newLocationPath = newLocation.split('/')
-      for (const path of newLocationPath){
-        if (path !== 'Personal') {
-          await clickResource({ page, path: path })
-        }
-      }
-      await page.locator(clipboardBtns).first().click()
-
-      await waitForResources({
-        page,
-        names: [resource]
-      })
+      await pasteResource({ page, resource: resourceBase, newLocation })
       break
     }
     case 'keyboard': {
-
       const resourceCheckbox = page.locator(util.format(checkBox, resourceBase))
       await resourceCheckbox.check()
 
       await page.keyboard.press('Control+C')
       await page.locator(breadcrumbRoot).click()
       const newLocationPath = newLocation.split('/')
-      for (const path of newLocationPath){
+      for (const path of newLocationPath) {
         if (path !== 'Personal') {
           await clickResource({ page, path: path })
         }
@@ -419,7 +411,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs, method:st
       const source = page.locator(util.format(resourceNameSelector, resourceBase))
       const target = page.locator(util.format(resourceNameSelector, newLocation))
 
-      await source.dragTo(target);
+      await source.dragTo(target)
       await waitForResources({
         page,
         names: [resourceBase]
@@ -427,7 +419,6 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs, method:st
       break
     }
   }
-
 }
 
 /**/

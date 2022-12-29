@@ -1,7 +1,7 @@
-Feature: Upload
+Feature: Copy
   As a user
-  I want to upload resources
-  So that I can store them in owncloud
+  I want to copy resources
+  So that I can work safely on a copy without changing the original
 
   Scenario: Copy resources in personal space
     Given "Admin" creates following users
@@ -10,9 +10,11 @@ Feature: Upload
     And "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
+      | resource           | type   |
+      | PARENTCopy/sidebar | folder |
+      | PARENTCopy2        | folder |
+    And "Alice" creates the following resources
       | resource                    | type    | content                             |
-      | PARENTCopy/sidebar          | folder  |                                     |
-      | PARENTCopy2                 | folder  |                                     |
       | PARENT/menuCopy/example.txt | txtFile | example text                        |
       | KeyboardExample.txt         | txtFile | copy with the help of keyboard      |
       | DragDrop.txt                | txtFile | copy with the help of drag-drop     |
