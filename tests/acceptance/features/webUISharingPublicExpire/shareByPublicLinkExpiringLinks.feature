@@ -13,11 +13,15 @@ Feature: Share by public link
     And user "Alice" has created a public link with following settings in the server
       | path       | lorem.txt   |
       | name       | Public link |
-      | expireDate | 2038-10-14  |
+      | expireDate | +10         |
     And user "Alice" has logged in using the webUI
-    When the user edits the public link named "Public link" of file "lorem.txt" changing expireDate to "2038 July 21"
-    Then the last public link share response of user "Alice" should include the following fields in the server
-      | expireDate | 2038-07-21 |
+    When the user edits the public link named "Public link" of file "lorem.txt" changing expireDate to "+5"
+    Then user "Alice" should have a share with these details in the server:
+      | field       | value       |
+      | share_type  | public_link |
+      | name        | Public link |
+      | uid_owner   | Alice       |
+      | expiration  | +5          |
 
   @issue-ocis-1328 @skipOnOCIS
   Scenario Outline: auto set expiration date on public link (with default amount of expiry days)
