@@ -60,7 +60,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" (copies|moves) the following resource(?:s)? using the ([^"]*) ?(?:panel)?$/,
+  /^"([^"]*)" (copies|moves) the following resource(?:s)?( using (keyboard|drag-drop|sidebar))?(?: panel)?$/,
   async function (
     this: World,
     stepUser: string,
@@ -72,13 +72,11 @@ When(
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const { resource, to } of stepTable.hashes()) {
-      await resourceObject[actionType === 'copies' ? 'copy' : 'move'](
-        {
-          resource,
-          newLocation: to
-        },
-        method
-      )
+      await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
+        resource,
+        newLocation: to,
+        method: method === null ? 'menu' : method
+      })
     }
   }
 )

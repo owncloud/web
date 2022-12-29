@@ -35,7 +35,7 @@ const actionConfirmationButton =
 const actionSkipButton = '.oc-modal-body-actions-cancel'
 const actionSecondaryConfirmationButton = '.oc-modal-body-actions-secondary'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
-const actionCopy = '//*[contains(@data-testid, "action-handler")]/span[text()="Copy"]'
+const actionButton = '//*[contains(@data-testid, "action-handler")]/span[text()="%s"]'
 const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
 const notificationMessageDialog = '.oc-notification-message-title'
 const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
@@ -339,9 +339,10 @@ export interface moveOrCopyResourceArgs {
   resource: string
   newLocation: string
   action: 'copy' | 'move'
+  method: string
 }
 export const pasteResource = async (
-  args: Omit<moveOrCopyResourceArgs, 'action'>
+  args: Omit<moveOrCopyResourceArgs, 'action' | 'method'>
 ): Promise<void> => {
   const { page, resource, newLocation } = args
 
@@ -361,11 +362,8 @@ export const pasteResource = async (
   })
 }
 
-export const moveOrCopyResource = async (
-  args: moveOrCopyResourceArgs,
-  method: string
-): Promise<void> => {
-  const { page, resource, newLocation, action } = args
+export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<void> => {
+  const { page, resource, newLocation, action, method } = args
   const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
   if (resourceDir) {
@@ -383,15 +381,16 @@ export const moveOrCopyResource = async (
       await sidebar.open({ page: page, resource: resourceBase })
       await sidebar.openPanel({ page: page, name: 'actions' })
 
-      await page.locator(actionCopy).click()
+      const actionButtonType = action === 'copy' ? 'Copy' : 'Cut'
+      await page.locator(util.format(actionButton, actionButtonType)).click()
       await pasteResource({ page, resource: resourceBase, newLocation })
       break
     }
     case 'keyboard': {
       const resourceCheckbox = page.locator(util.format(checkBox, resourceBase))
       await resourceCheckbox.check()
-
-      await page.keyboard.press('Control+C')
+      const keyValue = action === 'copy' ? 'C' : 'X'
+      await page.keyboard.press(`Control+${keyValue}`)
       await page.locator(breadcrumbRoot).click()
       const newLocationPath = newLocation.split('/')
       for (const path of newLocationPath) {
