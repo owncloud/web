@@ -139,3 +139,40 @@ Given(
     }
   }
 )
+
+Given(
+  '{string} creates the following file(s) into personal space using API',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (const info of stepTable.hashes()) {
+      await api.dav.uploadFileInPersonalSpace({
+        user,
+        pathToFile: info.pathToFile,
+        content: info.content
+      })
+    }
+  }
+)
+
+Given(
+  '{string} uploads the following local file(s) into personal space using API',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (const info of stepTable.hashes()) {
+      const fileInfo = this.filesEnvironment.getFile({ name: info.localFile.split('/').pop() })
+      const content = fs.readFileSync(fileInfo.path)
+      await api.dav.uploadFileInPersonalSpace({
+        user,
+        pathToFile: info.to,
+        content: content.toString()
+      })
+    }
+  }
+)
+
+Given('{string} creates the following project spaces using API', async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const spaceAdmin = this.usersEnvironment.getUser({ key: stepUser })
+    await api.graph.createSpace({spaceAdmin})
+});
+
+
