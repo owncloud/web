@@ -56,19 +56,19 @@ export default {
         message,
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_restore_restoreSpace(resources[0].id)
+        onConfirm: () => this.$_restore_restoreSpace(resources[0].id, resources[0].name)
       }
 
       this.createModal(modal)
     },
 
-    $_restore_restoreSpace(id) {
+    $_restore_restoreSpace(id, name) {
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       return graphClient.drives
         .updateDrive(
           id,
-          {},
+          { name },
           {
             headers: {
               Restore: true

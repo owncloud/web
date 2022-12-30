@@ -34,7 +34,7 @@ describe('setImage', () => {
         id: '1',
         quota: {},
         root: {
-          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
         },
         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
       }
@@ -46,7 +46,7 @@ describe('setImage', () => {
         id: '1',
         quota: {},
         root: {
-          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
         },
         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
       }
@@ -62,7 +62,7 @@ describe('setImage', () => {
         id: '1',
         quota: {},
         root: {
-          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
         },
         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
       }
@@ -78,7 +78,7 @@ describe('setImage', () => {
         id: '1',
         quota: {},
         root: {
-          permissions: [{ roles: ['viewer'], grantedTo: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }]
         },
         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
       }

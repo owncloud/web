@@ -20,7 +20,7 @@ describe('editQuota', () => {
         id: '1',
         quota: {},
         root: {
-          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
         }
       }
       const { wrapper } = getWrapper({ canEditSpaceQuota: true })
@@ -33,7 +33,7 @@ describe('editQuota', () => {
         id: '1',
         quota: {},
         root: {
-          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
         }
       }
       const { wrapper } = getWrapper({ canEditSpaceQuota: false })

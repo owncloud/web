@@ -86,7 +86,9 @@ export function buildSpace(data): SpaceResource {
     for (const permission of data.root.permissions) {
       for (const role of SpacePeopleShareRoles.list()) {
         if (permission.roles.includes(role.name)) {
-          spaceRoles[role.name].push(...permission.grantedTo.map((el) => el.user.id))
+          spaceRoles[role.name].push(
+            ...permission.grantedToIdentities.filter((el) => !!el.user).map((el) => el.user.id)
+          )
         }
       }
     }

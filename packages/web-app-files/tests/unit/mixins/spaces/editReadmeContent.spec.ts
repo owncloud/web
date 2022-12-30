@@ -13,7 +13,7 @@ describe('editReadmeContent', () => {
     it('should be true for space managers', () => {
       const spaceMock = {
         id: '1',
-        root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] },
+        root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }] },
         special: [{ specialFolder: { name: 'readme' } }]
       }
 
@@ -31,7 +31,7 @@ describe('editReadmeContent', () => {
     it('should be false when spaceReadmeData does not exist', () => {
       const spaceMock = {
         id: '1',
-        root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] }
+        root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }] }
       }
 
       const { wrapper } = getWrapper()
@@ -44,7 +44,7 @@ describe('editReadmeContent', () => {
     it('should be false when the current user is a viewer', () => {
       const spaceMock = {
         id: '1',
-        root: { permissions: [{ roles: ['viewer'], grantedTo: [{ user: { id: 1 } }] }] }
+        root: { permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }] }
       }
 
       const { wrapper } = getWrapper()

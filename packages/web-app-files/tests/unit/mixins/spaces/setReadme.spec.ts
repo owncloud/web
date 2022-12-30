@@ -25,7 +25,7 @@ describe('setReadme', () => {
     it('should be false when mimeType is not text', () => {
       const spaceMock = {
         id: '1',
-        root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] },
+        root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }] },
         special: [{ specialFolder: { name: 'readme' } }]
       }
       const { wrapper } = getWrapper(true, buildSpace(spaceMock))
@@ -38,7 +38,7 @@ describe('setReadme', () => {
     it('should be true when the mimeType is "text/plain"', () => {
       const spaceMock = {
         id: '1',
-        root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] },
+        root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }] },
         special: [{ specialFolder: { name: 'readme' } }]
       }
       const { wrapper } = getWrapper(true, buildSpace(spaceMock))
@@ -51,7 +51,7 @@ describe('setReadme', () => {
     it('should be true when when mimeType is text', () => {
       const spaceMock = {
         id: '1',
-        root: { permissions: [{ roles: ['viewer'], grantedTo: [{ user: { id: 1 } }] }] },
+        root: { permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }] },
         special: [{ specialFolder: { name: 'readme' } }]
       }
       const { wrapper } = getWrapper(true, buildSpace(spaceMock))

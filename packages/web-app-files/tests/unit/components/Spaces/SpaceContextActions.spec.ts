@@ -10,7 +10,7 @@ import {
 
 const spaceMock = {
   id: '1',
-  root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] }
+  root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }] }
 }
 
 describe('SpaceContextActions', () => {

@@ -12,7 +12,7 @@ describe('buildSpace', () => {
     ])('returns true for a viewer of the space', (data) => {
       const space = buildSpace({
         root: {
-          permissions: [{ roles: data.role, grantedTo: [{ user: { id: uuid } }] }]
+          permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
         }
       }) as ProjectSpaceResource
       expect(space.isViewer(uuid)).toBe(data.expectedResult)
@@ -27,7 +27,7 @@ describe('buildSpace', () => {
     ])('returns true for a editor of the space', (data) => {
       const space = buildSpace({
         root: {
-          permissions: [{ roles: data.role, grantedTo: [{ user: { id: uuid } }] }]
+          permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
         }
       }) as ProjectSpaceResource
       expect(space.isEditor(uuid)).toBe(data.expectedResult)
@@ -42,7 +42,7 @@ describe('buildSpace', () => {
     ])('returns true for a manager of the space', (data) => {
       const space = buildSpace({
         root: {
-          permissions: [{ roles: data.role, grantedTo: [{ user: { id: uuid } }] }]
+          permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
         }
       }) as ProjectSpaceResource
       expect(space.isManager(uuid)).toBe(data.expectedResult)
