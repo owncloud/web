@@ -264,6 +264,7 @@ Details
    Libre-graph-api has been updated to v1.0
 
    https://github.com/owncloud/web/pull/8132
+   https://github.com/owncloud/web/pull/8171
 
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
 
