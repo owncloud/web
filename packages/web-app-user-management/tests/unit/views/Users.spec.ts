@@ -17,7 +17,9 @@ const defaultGraphMock = () => {
   const defaultUser = {
     id: '1',
     memberOf: [],
-    drive: {}
+    drive: {
+      name: 'any'
+    }
   }
 
   const graph = mockDeep<Graph>()
@@ -85,7 +87,7 @@ describe('Users view', () => {
           roleId: '1'
         })
       )
-      graph.drives.updateDrive.mockImplementation(() => mockAxiosResolve({}))
+      graph.drives.updateDrive.mockImplementation(() => mockAxiosResolve({ name: 'any' }))
       const wrapper = getMountedWrapper({ graph })
       const busStub = jest.spyOn(eventBus, 'publish')
       const setStub = jest.spyOn(wrapper.vm, '$set').mockImplementation(() => undefined)

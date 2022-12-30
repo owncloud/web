@@ -21,6 +21,7 @@ describe('QuotaModal', () => {
       graphMock.drives.updateDrive.mockImplementation(() =>
         mockAxiosResolve({
           id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
+          name: 'any',
           quota: {
             remaining: 9999999836,
             state: 'normal',

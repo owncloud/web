@@ -29,7 +29,7 @@ describe('disable', () => {
       const spaceMock = {
         id: '1',
         root: {
-          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
         }
       }
       const { wrapper } = getWrapper()
@@ -41,7 +41,7 @@ describe('disable', () => {
       const spaceMock = {
         id: '1',
         root: {
-          permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }],
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }],
           deleted: { state: 'trashed' }
         }
       }
@@ -54,7 +54,7 @@ describe('disable', () => {
       const spaceMock = {
         id: '1',
         root: {
-          permissions: [{ roles: ['viewer'], grantedTo: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }]
         }
       }
       const { wrapper } = getWrapper()

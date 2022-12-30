@@ -83,7 +83,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     },
     drives: {
       listMyDrives: (orderBy?: string, filter?: string) =>
-        meDrivesApi.listMyDrives(0, 0, orderBy, filter),
+        meDrivesApi.listMyDrives(orderBy, filter),
       getDrive: (id: string) => drivesApiFactory.getDrive(id),
       createDrive: (drive: Drive, options: any): AxiosPromise<Drive> =>
         drivesApiFactory.createDrive(drive, options),

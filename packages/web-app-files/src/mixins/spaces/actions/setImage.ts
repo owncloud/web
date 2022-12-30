@@ -68,6 +68,7 @@ export default {
         const { data } = await graphClient.drives.updateDrive(
           storageId,
           {
+            name: this.space.name,
             special: [
               {
                 specialFolder: {
