@@ -121,10 +121,7 @@ describe('FileShares', () => {
     it('loads space members if a space is given and the current user is member', () => {
       const user = { id: '1' }
       const space = mockDeep<SpaceResource>({ driveType: 'project' })
-      const spaceMembers = [
-        { collaborator: { name: user.id } },
-        { collaborator: { name: 2 } }
-      ]
+      const spaceMembers = [{ collaborator: { name: user.id } }, { collaborator: { name: 2 } }]
       const collaborator = getCollaborator()
       collaborator.collaborator = { ...collaborator.collaborator, name: user.id }
       const { wrapper } = getWrapper({ space, collaborators: [collaborator], user, spaceMembers })

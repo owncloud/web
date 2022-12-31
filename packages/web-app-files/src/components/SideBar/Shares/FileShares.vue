@@ -83,7 +83,7 @@ import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
@@ -103,9 +103,19 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    const currentUserIsMemberOfSpace = computed(() => {
+      const userId = store.getters.user?.id
+      if (!userId) {
+        return false
+      }
+      return store.getters['runtime/spaces/spaceMembers'].some(
+        (member) => member.collaborator?.name === userId
+      )
+    })
 
     return {
       sharesListCollapsed,
+      currentUserIsMemberOfSpace,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing()
@@ -224,7 +234,7 @@ export default defineComponent({
       return (
         this.space?.driveType === 'project' &&
         this.highlightedFile.type !== 'space' &&
-        this.space?.isMember(this.user)
+        this.currentUserIsMemberOfSpace
       )
     }
   },
@@ -336,18 +346,23 @@ export default defineComponent({
       return null
     },
 
+    // fixMe: head-breaking logic
     isShareModifiable(collaborator) {
-      const isSharableResource = this.space && isProjectSpaceResource(this.space)
+      const isPersonalSpaceShare = !isProjectSpaceResource(this.space)
+      const isPersonalMember = this.currentUserIsMemberOfSpace
+      const isIndirectPersonalCollaborator = collaborator.indirect
+      const isProjectSpaceShare = !isPersonalSpaceShare
+      const isManager = this.space?.isManager(this.user)
 
-      if (!isSharableResource) {
-        return false
-      }
-
-      if (this.space?.isManager(this.user)) {
+      if (isPersonalSpaceShare && isPersonalMember && isManager) {
         return true
       }
 
-      if (collaborator.indirect) {
+      if (isPersonalSpaceShare && !isIndirectPersonalCollaborator) {
+        return true
+      }
+
+      if (isProjectSpaceShare && isManager) {
         return true
       }
 

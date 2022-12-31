@@ -65,7 +65,6 @@ export interface Resource {
   isMounted?(): boolean
 
   getDomSelector?(): string
-
   matchingSpace?: any
 
   resourceOwner?: User
