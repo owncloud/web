@@ -5,7 +5,7 @@ import GetTextPlugin from 'vue-gettext'
 import { ClientService } from 'web-pkg/src'
 import { mockDeep } from 'jest-mock-extended'
 import { createStore } from 'vuex-extensions'
-import { getActions } from 'web-app-files/tests/__fixtures__/fileActions'
+import Vue from 'vue'
 
 const localVue = createLocalVue()
 
@@ -74,7 +74,7 @@ const filteredFiles = [
   }
 ]
 
-const driveAliasAndItem = filteredFiles[5].path
+const driveAliasAndItem = filteredFiles[0].path
 const route = {
   params: {
     driveAliasAndItem: driveAliasAndItem,
@@ -92,8 +92,16 @@ describe('Preview app', () => {
   })
 
   describe('Method "preloadImages"', () => {
-    it('should preload images', () => {
+    it('should preload images if active file changes', async () => {
       const wrapper = createShallowMountWrapper()
+      await Vue.nextTick()
+
+      wrapper.vm.toPreloadImageIds = []
+      wrapper.vm.setActiveFile('personal/admin/sleeping_dog.jpg')
+
+      await new Promise(process.nextTick)
+
+      expect(wrapper.vm.toPreloadImageIds).toEqual(['8', '9', '1', '6', '4'])
     })
   })
 })
@@ -134,6 +142,11 @@ function createShallowMountWrapper(options = {}) {
       'oc-icon': true,
       'oc-spinner': true
     },
+    data: function () {
+      return {
+        preloadImageCount: 3
+      }
+    },
     mocks: {
       $route: route,
       $clientService: mockDeep<ClientService>(),
@@ -142,7 +155,8 @@ function createShallowMountWrapper(options = {}) {
       isFullScreenModeActivated: false,
       toggleFullscreenMode: jest.fn(),
       loadFolderForFileContext: jest.fn(),
-      currentFileContext: route.params
+      currentFileContext: route.params,
+      preloadImageCount: 3
     },
     computed: {
       filteredFiles: () => filteredFiles

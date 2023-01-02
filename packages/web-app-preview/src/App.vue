@@ -210,8 +210,6 @@ export const mimeTypes = () => {
   ]
 }
 
-const PRELOAD_IMAGE_COUNT = 10
-
 export default defineComponent({
   name: 'Preview',
   components: {
@@ -259,7 +257,9 @@ export default defineComponent({
       toPreloadImageIds: [],
 
       currentImageZoom: 1,
-      currentImageRotation: 0
+      currentImageRotation: 0,
+
+      preloadImageCount: 10
     }
   },
 
@@ -383,7 +383,6 @@ export default defineComponent({
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     document.addEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
-
     await this.loadFolderForFileContext(this.currentFileContext)
     this.setActiveFile(this.currentFileContext.driveAliasAndItem)
     this.$refs.preview.focus()
@@ -589,7 +588,7 @@ export default defineComponent({
 
       for (
         let followingFileIndex = 1;
-        followingFileIndex <= PRELOAD_IMAGE_COUNT;
+        followingFileIndex <= this.preloadImageCount;
         followingFileIndex++
       ) {
         preloadFile(followingFileIndex)
@@ -597,7 +596,7 @@ export default defineComponent({
 
       for (
         let previousFileIndex = -1;
-        previousFileIndex >= PRELOAD_IMAGE_COUNT * -1;
+        previousFileIndex >= this.preloadImageCount * -1;
         previousFileIndex--
       ) {
         preloadFile(previousFileIndex)
