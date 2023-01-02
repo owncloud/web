@@ -222,13 +222,13 @@ export function buildSpace(data): SpaceResource {
       return urlJoin(webDavTrashUrl, path)
     },
     isViewer(user: User): boolean {
-      return this.spaceRoles[spaceRoleViewer.name].map((r) => r.isMember(user)).some(Boolean)
+      return this.spaceRoles[spaceRoleViewer.name].map((r) => r.id === user).some(Boolean)
     },
     isEditor(user: User): boolean {
-      return this.spaceRoles[spaceRoleEditor.name].map((r) => r.isMember(user)).some(Boolean)
+      return this.spaceRoles[spaceRoleEditor.name].map((r) => r.id === user).some(Boolean)
     },
     isManager(user: User): boolean {
-      return this.spaceRoles[spaceRoleManager.name].map((r) => r.isMember(user)).some(Boolean)
+      return this.spaceRoles[spaceRoleManager.name].map((r) => r.id === user).some(Boolean)
     },
     isMember(user: User): boolean {
       return this.isViewer(user) || this.isEditor(user) || this.isManager(user)

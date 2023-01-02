@@ -120,7 +120,7 @@ const panelGenerators: (({
       return [
         ...highlightedFile.spaceRoles[spaceRoleManager.name],
         ...highlightedFile.spaceRoles[spaceRoleEditor.name]
-      ].includes(user.uuid)
+      ].find((role) => role.id === user.uuid)
     }
   }),
   ({ capabilities, router, multipleSelection, rootFolder, highlightedFile }) => ({
