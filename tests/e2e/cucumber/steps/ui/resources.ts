@@ -60,7 +60,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" (copies|moves) the following resource(?:s)?( using (keyboard|drag-drop|sidebar))?(?: panel)?$/,
+  /^"([^"]*)" (copies|moves) the following resource(?:s)?( using (keyboard|drag-drop|sidebar)(?: panel)?)?$/,
   async function (
     this: World,
     stepUser: string,

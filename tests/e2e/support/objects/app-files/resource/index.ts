@@ -83,6 +83,8 @@ export class Resource {
     const startUrl = this.#page.url()
     await moveOrCopyResource({ ...args, page: this.#page, action: 'copy' })
     await this.#page.goto(startUrl)
+    // Sidebar remain open after we navigate to startUrl
+    // This is the issue: https://github.com/owncloud/web/issues/8172
     if (!config.ocis) {
       await this.#page.reload()
     }
@@ -92,6 +94,8 @@ export class Resource {
     const startUrl = this.#page.url()
     await moveOrCopyResource({ ...args, page: this.#page, action: 'move' })
     await this.#page.goto(startUrl)
+    // Sidebar remain open after we navigate to startUrl
+    // This is the issue: https://github.com/owncloud/web/issues/8172
     if (!config.ocis) {
       await this.#page.reload()
     }
