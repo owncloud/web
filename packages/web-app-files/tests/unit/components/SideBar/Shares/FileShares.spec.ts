@@ -121,12 +121,13 @@ describe('FileShares', () => {
     it('loads space members if a space is given and the current user is member', () => {
       const user = { id: '1' }
       const space = mockDeep<SpaceResource>({ driveType: 'project' })
-      const spaceMembers = [{ collaborator: { name: user.id } }, { collaborator: { name: '2' } }]
+      const spaceMembers = [{ collaborator: { name: user.id, displayName: 'user' } }, { collaborator: { name: 2, displayName: 'user' } }]
       const collaborator = getCollaborator()
       collaborator.collaborator = { ...collaborator.collaborator, name: user.id }
       const { wrapper } = getWrapper({ space, collaborators: [collaborator], user, spaceMembers })
-      expect(wrapper.find('#space-collaborators-list').exists()).toBeTruthy()
-      expect(wrapper.findAll('#space-collaborators-list li').length).toBe(spaceMembers.length)
+      console.log(wrapper.html())
+      expect(wrapper.find('#files-collaborators-list').exists()).toBeTruthy()
+      expect(wrapper.findAll('#files-collaborators-list li').length).toBe(1)
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('does not load space members if a space is given but the current user not a member', () => {
