@@ -22,13 +22,13 @@ Feature: spaces.personal
     Then "Admin" assigns following roles to the users
       | id    | role       |
       | Alice | SpaceAdmin |
-    When "Alice" logs in
-    And "Alice" opens the "files" app
-    And "Alice" navigates to the projects space page
-    And "Alice" creates the following project spaces
+    And "Alice" creates the following project spaces using API
       | name  | id     |
       | team  | team.1 |
       | team2 | team.2 |
+    When "Alice" logs in
+    And "Alice" opens the "files" app
+    And "Alice" navigates to the projects space page
 
     # team.1
     And "Alice" navigates to the project space "team.1"

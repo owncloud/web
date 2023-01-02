@@ -8,6 +8,4 @@ export {
 } from './userManagement'
 export { getPersonalSpaceId } from './spaces'
 
-export {
-  createSpace
-} from './space'
+export { createSpace } from './space'
