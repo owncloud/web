@@ -1,6 +1,6 @@
 <template>
   <oc-button
-    v-if="isSupported"
+    v-if="isClipboardCopySupported"
     v-oc-tooltip="buttonLabel"
     appearance="raw"
     :aria-label="buttonLabel"
@@ -33,7 +33,11 @@ export default defineComponent({
     const displayedItem = inject<Resource>('displayedItem')
     const privateLink = computed(() => unref(displayedItem))
 
-    const { copy, copied, isSupported } = useClipboard({ legacy: true, copiedDuring: 550 })
+    const {
+      copy,
+      copied,
+      isSupported: isClipboardCopySupported
+    } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const copyLinkToClipboard = () => {
       copy(privateLink.value.privateLink)
@@ -46,7 +50,7 @@ export default defineComponent({
     return {
       copied,
       copyLinkToClipboard,
-      isSupported
+      isClipboardCopySupported
     }
   },
   computed: {
