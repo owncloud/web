@@ -15,7 +15,7 @@
         />
       </div>
       <oc-button
-        v-if="isSupported"
+        v-if="isClipboardCopySupported"
         v-oc-tooltip="copyBtnHint"
         appearance="raw"
         :aria-label="copyBtnHint"
@@ -44,7 +44,11 @@ export default defineComponent({
     const { $gettext, $gettextInterpolate } = useTranslations()
     const store = useStore<any>()
 
-    const { copy, copied, isSupported } = useClipboard({ legacy: true, copiedDuring: 550 })
+    const {
+      copy,
+      copied,
+      isSupported: isClipboardCopySupported
+    } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const copyLinkToClipboard = () => {
       copy(props.link.url)
@@ -64,7 +68,7 @@ export default defineComponent({
     return {
       copied,
       copyLinkToClipboard,
-      isSupported
+      isClipboardCopySupported
     }
   },
   computed: {
