@@ -15,7 +15,7 @@ describe('buildSpace', () => {
           permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
         }
       }) as ProjectSpaceResource
-      expect(space.isViewer(uuid)).toBe(data.expectedResult)
+      expect(space.isViewer({uuid} as any)).toBe(data.expectedResult)
     })
   })
 
@@ -30,7 +30,7 @@ describe('buildSpace', () => {
           permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
         }
       }) as ProjectSpaceResource
-      expect(space.isEditor(uuid)).toBe(data.expectedResult)
+      expect(space.isEditor({uuid} as any)).toBe(data.expectedResult)
     })
   })
 
@@ -45,7 +45,7 @@ describe('buildSpace', () => {
           permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
         }
       }) as ProjectSpaceResource
-      expect(space.isManager(uuid)).toBe(data.expectedResult)
+      expect(space.isManager({uuid} as any)).toBe(data.expectedResult)
     })
   })
 })
