@@ -1,3 +1,6 @@
-Enhancement: Group shares
+Enhancement: Space group shares
+
+We've added the possibility to share a space with a group.
 
 https://github.com/owncloud/web/pull/8160
+https://github.com/owncloud/web/issues/8160
