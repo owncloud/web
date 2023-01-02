@@ -1,23 +1,26 @@
 import App from '../../../App.vue'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
-import GetTextPlugin from 'vue-gettext'
-import { ClientService } from 'web-pkg/src'
-import { mockDeep } from 'jest-mock-extended'
-import { createStore } from 'vuex-extensions'
-import Vue from 'vue'
+import Vue, { ref } from 'vue'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
+import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
+import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults'
+import { mock } from 'jest-mock-extended'
 
-const localVue = createLocalVue()
-
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
+jest.mock('web-pkg/src/composables/appDefaults', () => {
+  const { queryItemAsString } = jest.requireActual('web-pkg/src/composables/appDefaults')
+  return {
+    useAppDefaults: jest.fn(),
+    useAppFileHandling: jest.fn(),
+    queryItemAsString
+  }
 })
-localVue.use(Vuex)
-localVue.prototype.$gettextInterpolate = jest.fn()
-localVue.prototype.$ngettext = jest.fn()
 
-const filteredFiles = [
+const activeFiles = [
   {
     id: '1',
     name: 'bear.png',
@@ -32,15 +35,15 @@ const filteredFiles = [
   },
   {
     id: '3',
-    name: 'wale_sounds.mp3',
-    mimeType: 'audio/mp3',
-    path: 'personal/admin/wale_sounds.mp3'
+    name: 'wale_sounds.flac',
+    mimeType: 'audio/flac',
+    path: 'personal/admin/wale_sounds.flac'
   },
   {
     id: '4',
-    name: 'lonely_sloth_very_sad.jpg',
-    mimeType: 'image/jpg',
-    path: 'personal/admin/lonely_sloth_very_sad.jpg'
+    name: 'lonely_sloth_very_sad.gif',
+    mimeType: 'image/gif',
+    path: 'personal/admin/lonely_sloth_very_sad.gif'
   },
   {
     id: '5',
@@ -50,41 +53,29 @@ const filteredFiles = [
   },
   {
     id: '6',
-    name: 'happy_hippo.jpg',
-    mimeType: 'image/jpg',
-    path: 'personal/admin/happy_hippo.jpg'
+    name: 'happy_hippo.gif',
+    mimeType: 'image/gif',
+    path: 'personal/admin/happy_hippo.gif'
   },
   {
     id: '7',
-    name: 'sleeping_dog.jpg',
-    mimeType: 'image/jpg',
-    path: 'personal/admin/sleeping_dog.jpg'
+    name: 'sleeping_dog.gif',
+    mimeType: 'image/gif',
+    path: 'personal/admin/sleeping_dog.gif'
   },
   {
     id: '8',
-    name: 'cat_murr_murr.jpg',
-    mimeType: 'image/jpg',
-    path: 'personal/admin/cat_murr_murr.jpg'
+    name: 'cat_murr_murr.gif',
+    mimeType: 'image/gif',
+    path: 'personal/admin/cat_murr_murr.gif'
   },
   {
     id: '9',
-    name: 'labrador.jpg',
-    mimeType: 'image/jpg',
-    path: 'personal/admin/labrador.jpg'
+    name: 'labrador.gif',
+    mimeType: 'image/gif',
+    path: 'personal/admin/labrador.gif'
   }
 ]
-
-const driveAliasAndItem = filteredFiles[0].path
-const route = {
-  params: {
-    driveAliasAndItem: driveAliasAndItem,
-    space: {
-      getDriveAliasAndItem: jest.fn().mockImplementation((file) => {
-        return filteredFiles.find((filteredFile) => filteredFile.id == file.id)?.path
-      })
-    }
-  }
-}
 
 describe('Preview app', () => {
   afterEach(() => {
@@ -93,11 +84,11 @@ describe('Preview app', () => {
 
   describe('Method "preloadImages"', () => {
     it('should preload images if active file changes', async () => {
-      const wrapper = createShallowMountWrapper()
+      const { wrapper } = createShallowMountWrapper()
       await Vue.nextTick()
 
       wrapper.vm.toPreloadImageIds = []
-      wrapper.vm.setActiveFile('personal/admin/sleeping_dog.jpg')
+      wrapper.vm.setActiveFile('personal/admin/sleeping_dog.gif')
 
       await new Promise(process.nextTick)
 
@@ -106,62 +97,38 @@ describe('Preview app', () => {
   })
 })
 
-function createShallowMountWrapper(options = {}) {
-  return shallowMount(App, {
-    localVue,
-    setup: () => ({}),
-    store: createStore(Vuex.Store, {
-      actions: {
-        createModal: jest.fn(),
-        hideModal: jest.fn(),
-        showMessage: jest.fn()
-      },
-      getters: {
-        user: () => ({ id: 1 }),
-        configuration: () => ({
-          server: 'https://example.com'
-        }),
-        activeFiles: () => ['3']
-      },
-      modules: {
-        runtime: {
-          namespaced: true,
-          modules: {
-            auth: {
-              namespaced: true,
-              getters: {
-                accessToken: () => ''
-              }
-            }
+const storeOptions = defaultStoreMockOptions
+storeOptions.modules.Files.getters.activeFiles.mockImplementation(() => ['3'])
+const store = createStore(storeOptions)
+
+function createShallowMountWrapper() {
+  jest.mocked(useAppDefaults).mockImplementation(() =>
+    useAppDefaultsMock({
+      currentFileContext: ref(
+        mock<FileContext>({
+          path: 'personal/admin/bear.png',
+          space: {
+            getDriveAliasAndItem: jest.fn().mockImplementation((file) => {
+              return activeFiles.find((filteredFile) => filteredFile.id == file.id)?.path
+            })
           }
+        })
+      ),
+      activeFiles: ref(activeFiles)
+    })
+  )
+
+  return {
+    wrapper: shallowMount(App, {
+      data: function () {
+        return {
+          preloadImageCount: 3
         }
+      },
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: { ...defaultComponentMocks() }
       }
-    }),
-    stubs: {
-      'oc-button': true,
-      'oc-icon': true,
-      'oc-spinner': true
-    },
-    data: function () {
-      return {
-        preloadImageCount: 3
-      }
-    },
-    mocks: {
-      $route: route,
-      $clientService: mockDeep<ClientService>(),
-      closeApp: jest.fn(),
-      isFolderLoading: jest.fn().mockImplementation(() => false),
-      isFullScreenModeActivated: false,
-      toggleFullscreenMode: jest.fn(),
-      loadFolderForFileContext: jest.fn(),
-      currentFileContext: route.params,
-      preloadImageCount: 3
-    },
-    computed: {
-      filteredFiles: () => filteredFiles
-    },
-    methods: {},
-    ...options
-  })
+    })
+  }
 }
