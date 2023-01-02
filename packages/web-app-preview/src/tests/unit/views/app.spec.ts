@@ -78,10 +78,6 @@ const activeFiles = [
 ]
 
 describe('Preview app', () => {
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
   describe('Method "preloadImages"', () => {
     it('should preload images if active file changes', async () => {
       const { wrapper } = createShallowMountWrapper()
