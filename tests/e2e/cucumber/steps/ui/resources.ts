@@ -75,7 +75,7 @@ When(
       await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
         resource,
         newLocation: to,
-        method: method === null ? 'menu' : method
+        method: method ?? 'menu'
       })
     }
   }

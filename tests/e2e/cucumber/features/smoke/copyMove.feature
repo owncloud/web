@@ -1,9 +1,9 @@
 Feature: Copy
   As a user
-  I want to copy resources
-  So that I can work safely on a copy without changing the original
+  I want to copy/move
+  So that I can work safely on a copy or move resource to different location
 
-  Scenario: Copy resources in personal space
+  Scenario: Copy and move resources in personal space
     Given "Admin" creates following users
       | id    |
       | Alice |
