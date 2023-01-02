@@ -122,8 +122,8 @@ describe('FileShares', () => {
       const user = { id: '1' }
       const space = mockDeep<SpaceResource>({ driveType: 'project' })
       const spaceMembers = [
-        { collaborator: { name: user.id, displayName: 'user' } },
-        { collaborator: { name: 2, displayName: 'user' } }
+        { collaborator: { name: user.id } },
+        { collaborator: { name: 2 } }
       ]
       const collaborator = getCollaborator()
       collaborator.collaborator = { ...collaborator.collaborator, name: user.id }
