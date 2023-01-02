@@ -95,7 +95,7 @@
                 v-text="file.path"
               />
               <oc-button
-                v-if="isSupported"
+                v-if="isClipboardCopySupported"
                 v-oc-tooltip="copyEosPathLabel"
                 :aria-label="copyEosPathLabel"
                 appearance="raw"
@@ -124,7 +124,7 @@
                 v-text="directLink"
               />
               <oc-button
-                v-if="isSupported"
+                v-if="isClipboardCopySupported"
                 v-oc-tooltip="copyDirectLinkLabel"
                 :aria-label="copyDirectLinkLabel"
                 appearance="raw"
@@ -197,7 +197,11 @@ export default defineComponent({
 
     const copiedDirect = ref(false)
     const copiedEos = ref(false)
-    const { copy, copied, isSupported } = useClipboard({ legacy: true, copiedDuring: 550 })
+    const {
+      copy,
+      copied,
+      isSupported: isClipboardCopySupported
+    } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const copyEosPathToClipboard = () => {
       copy(inject<ComputedRef<Resource>>('displayedItem').value.path)
@@ -226,7 +230,7 @@ export default defineComponent({
       copyEosPathToClipboard,
       copiedDirect,
       copyDirectLinkToClipboard,
-      isSupported,
+      isClipboardCopySupported,
       isUserContext: useUserContext({ store }),
       isPublicLinkContext: usePublicLinkContext({ store }),
       accessToken: useAccessToken({ store }),
