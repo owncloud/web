@@ -6,7 +6,7 @@
     :aria-label="buttonLabel"
     class="oc-files-private-link-copy-url"
     :variation="copied ? 'success' : 'passive'"
-    @click="copyPrivateLinkToClipboard"
+    @click="copyLinkToClipboard"
   >
     <span v-text="buttonText" />
     <oc-icon

@@ -27,14 +27,13 @@ describe('PrivateLinkItem', () => {
       }
     })
 
-    const { wrapper } = getWrapper()
-    const spyShowMessage = jest.spyOn(wrapper.vm, 'showMessage')
-    expect(spyShowMessage).not.toHaveBeenCalled()
+    const { wrapper, storeOptions } = getWrapper()
+    expect(storeOptions.actions.showMessage).not.toHaveBeenCalled()
 
     await wrapper.trigger('click')
     expect(wrapper.html()).toMatchSnapshot()
     expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(folder.privateLink)
-    expect(spyShowMessage).toHaveBeenCalledTimes(1)
+    expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
 
     jest.advanceTimersByTime(550)
 
@@ -50,6 +49,7 @@ function getWrapper() {
   storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => folder)
   const store = createStore(storeOptions)
   return {
+    storeOptions,
     wrapper: mount(PrivateLinkItem, {
       global: {
         plugins: [...defaultPlugins(), store],

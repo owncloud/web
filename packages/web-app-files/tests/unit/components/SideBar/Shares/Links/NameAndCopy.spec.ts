@@ -22,14 +22,13 @@ describe('NameAndCopy', () => {
       }
     })
 
-    const { wrapper } = getWrapper()
-    const spyShowMessage = jest.spyOn(wrapper.vm, 'showMessage')
-    expect(spyShowMessage).not.toHaveBeenCalled()
+    const { wrapper, storeOptions } = getWrapper()
+    expect(storeOptions.actions.showMessage).not.toHaveBeenCalled()
 
     await wrapper.find('.oc-files-public-link-copy-url').trigger('click')
     expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(exampleLink.url)
     expect(wrapper.html()).toMatchSnapshot()
-    expect(spyShowMessage).toHaveBeenCalledTimes(1)
+    expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
 
     jest.advanceTimersByTime(550)
 
@@ -44,6 +43,7 @@ function getWrapper() {
   storeOptions.getters.capabilities.mockImplementation(() => ({ files: { privateLinks: true } }))
   const store = createStore(storeOptions)
   return {
+    storeOptions,
     wrapper: mount(NameAndCopy, {
       props: {
         link: exampleLink
