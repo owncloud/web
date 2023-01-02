@@ -117,12 +117,7 @@
           <th scope="col" class="oc-pr-s" v-text="directLinkLabel" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-              <p
-                ref="directLink"
-                v-oc-tooltip="directLink"
-                class="oc-my-rm oc-text-truncate"
-                v-text="directLink"
-              />
+              <p v-oc-tooltip="directLink" class="oc-my-rm oc-text-truncate" v-text="directLink" />
               <oc-button
                 v-if="isClipboardCopySupported"
                 v-oc-tooltip="copyDirectLinkLabel"
@@ -162,7 +157,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ComputedRef, defineComponent, inject, ref } from 'vue'
+import { computed, ComputedRef, defineComponent, inject, ref, unref } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
@@ -203,9 +198,17 @@ export default defineComponent({
       isSupported: isClipboardCopySupported
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
+    const file = inject<ComputedRef<Resource>>('displayedItem')
+
+    const directLink = computed(() => {
+      return `${store.getters.configuration.server}files/spaces/personal/home${encodePath(
+        unref(file).path
+      )}`
+    })
+
     const copyEosPathToClipboard = () => {
-      copy(inject<ComputedRef<Resource>>('displayedItem').value.path)
-      copiedEos.value = copied.value
+      copy(unref(file).path)
+      copiedEos.value = unref(copied)
       store.dispatch('showMessage', {
         title: $gettext('EOS path copied'),
         desc: $gettext('The EOS path has been copied to your clipboard.')
@@ -213,12 +216,8 @@ export default defineComponent({
     }
 
     const copyDirectLinkToClipboard = () => {
-      copy(
-        `${store.getters.configuration.server}files/spaces/personal/home${
-          inject<ComputedRef<Resource>>('displayedItem').value.path
-        }`
-      )
-      copiedDirect.value = copied.value
+      copy(unref(directLink))
+      copiedDirect.value = unref(copied)
       store.dispatch('showMessage', {
         title: $gettext('Direct link copied'),
         desc: $gettext('The direct link has been copied to your clipboard.')
@@ -235,7 +234,8 @@ export default defineComponent({
       isPublicLinkContext: usePublicLinkContext({ store }),
       accessToken: useAccessToken({ store }),
       space: inject<ComputedRef<Resource>>('displayedSpace'),
-      file: inject<ComputedRef<Resource>>('displayedItem'),
+      directLink,
+      file,
       hasTags: useCapabilityFilesTags()
     }
   },
@@ -354,9 +354,6 @@ export default defineComponent({
     },
     ownerAdditionalInfo() {
       return this.file.owner?.[0].additionalInfo
-    },
-    directLink() {
-      return `${this.configuration.server}files/spaces/personal/home${encodePath(this.file.path)}`
     },
     directLinkLabel() {
       return this.$gettext('Direct link')

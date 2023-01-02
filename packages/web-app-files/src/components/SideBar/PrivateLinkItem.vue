@@ -40,7 +40,7 @@ export default defineComponent({
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const copyLinkToClipboard = () => {
-      copy(privateLink.value.privateLink)
+      copy(unref(privateLink).privateLink)
       store.dispatch('showMessage', {
         title: $gettext('Private link copied'),
         desc: $gettext('The private link has been copied to your clipboard.')
