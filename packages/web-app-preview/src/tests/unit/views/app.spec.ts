@@ -90,7 +90,7 @@ describe('Preview app', () => {
       wrapper.vm.toPreloadImageIds = []
       wrapper.vm.setActiveFile('personal/admin/sleeping_dog.gif')
 
-      await new Promise(process.nextTick)
+      await Vue.nextTick()
 
       expect(wrapper.vm.toPreloadImageIds).toEqual(['8', '9', '1', '6', '4'])
     })
