@@ -7,7 +7,7 @@ import {
   Share
 } from 'web-client/src/helpers/share'
 import { mockDeep } from 'jest-mock-extended'
-import { SpaceResource, User } from 'web-client/src/helpers'
+import { ProjectSpaceResource, SpaceResource, User } from 'web-client/src/helpers'
 import {
   createStore,
   defaultPlugins,
@@ -56,38 +56,30 @@ const memberMocks = {
 describe('SpaceMembers', () => {
   describe('invite collaborator form', () => {
     it('renders the form when the current user is a manager of the space', () => {
-      const user = mockDeep<User>({ id: memberMocks.manager.collaborator.name })
-      const wrapper = getWrapper({ user })
+      const space = mockDeep<ProjectSpaceResource>({ isManager: () => true })
+      const wrapper = getWrapper({ space })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
       expect(wrapper.html()).toMatchSnapshot()
     })
-    it.each([spaceRoleViewer.name, spaceRoleEditor.name])(
-      'does not render the form when the current user is no manager of the space',
-      (role) => {
-        const user = mockDeep<User>({ id: memberMocks[role].collaborator.name })
-        const wrapper = getWrapper({ user })
-        expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
-      }
-    )
+    it('does not render the form when the current user is no manager of the space', () => {
+      const space = mockDeep<ProjectSpaceResource>({ isManager: () => false })
+      const wrapper = getWrapper({ space })
+      expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
+    })
   })
 
   describe('existing members', () => {
     it('can edit when current user is manager of the space', () => {
-      const user = mockDeep<User>({ id: memberMocks.manager.collaborator.name })
-      const wrapper = getWrapper({ user })
+      const space = mockDeep<ProjectSpaceResource>({ isManager: () => true })
+      const wrapper = getWrapper({ space })
       expect(wrapper.findAll('collaborator-list-item-stub').at(1).props().modifiable).toEqual(true)
       expect(wrapper.html()).toMatchSnapshot()
     })
-    it.each([spaceRoleViewer.name, spaceRoleEditor.name])(
-      'can not edit when current user is not a manager of the space',
-      (role) => {
-        const user = mockDeep<User>({ id: memberMocks[role].collaborator.name })
-        const wrapper = getWrapper({ user })
-        expect(wrapper.findAll('collaborator-list-item-stub').at(1).props().modifiable).toEqual(
-          false
-        )
-      }
-    )
+    it('can not edit when current user is not a manager of the space', () => {
+      const space = mockDeep<ProjectSpaceResource>({ isManager: () => false })
+      const wrapper = getWrapper({ space })
+      expect(wrapper.findAll('collaborator-list-item-stub').at(1).props().modifiable).toEqual(false)
+    })
   })
 
   describe('deleting members', () => {
@@ -137,8 +129,8 @@ describe('SpaceMembers', () => {
 
   describe('filter', () => {
     it('toggles the filter on click', async () => {
-      const user = mockDeep<User>({ id: memberMocks.manager.collaborator.name })
-      const wrapper = getWrapper({ mountType: mount, user })
+      const space = mockDeep<ProjectSpaceResource>({ isManager: () => true })
+      const wrapper = getWrapper({ mountType: mount, space })
       expect(wrapper.vm.isFilterOpen).toBeFalsy()
       await wrapper.find('.open-filter-btn').trigger('click')
       expect(wrapper.vm.isFilterOpen).toBeTruthy()
@@ -171,6 +163,9 @@ function getWrapper({
   storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => space)
   const store = createStore(storeOptions)
   return mountType(SpaceMembers, {
+    props: {
+      space
+    },
     global: {
       plugins: [...defaultPlugins(), store],
       mocks: defaultComponentMocks({ currentRoute: { name: currentRouteName } }),

@@ -99,10 +99,8 @@ export function buildSpace(data): SpaceResource {
                 switch (this.kind) {
                   case 'user':
                     return this.id == u.uuid
-                    break
                   case 'group':
                     return u.groups.map((g) => g.id).includes(this.id)
-                    break
                   default:
                     return false
                 }
@@ -172,52 +170,34 @@ export function buildSpace(data): SpaceResource {
     spaceImageData,
     spaceReadmeData,
     canUpload: function ({ user }: { user?: User } = {}): boolean {
-      const allowedRoles = [
-        ...this.spaceRoles[spaceRoleManager.name],
-        ...this.spaceRoles[spaceRoleEditor.name]
-      ]
-      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
+      return this.isManager(user) || this.isEditor(user)
     },
     canDownload: function () {
       return true
     },
     canBeDeleted: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return this.disabled && user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
+      return this.disabled && this.isManager(user)
     },
     canRename: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
+      return this.isManager(user)
     },
     canEditDescription: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
+      return this.isManager(user)
     },
     canRestore: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return this.disabled && user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
+      return this.disabled && this.isManager(user)
     },
     canDisable: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return !this.disabled && user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
+      return !this.disabled && this.isManager(user)
     },
     canShare: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
+      return this.isManager(user)
     },
     canEditImage: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [
-        ...this.spaceRoles[spaceRoleManager.name],
-        ...this.spaceRoles[spaceRoleEditor.name]
-      ]
-      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
+      return this.isManager(user) || this.isEditor(user)
     },
     canEditReadme: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [
-        ...this.spaceRoles[spaceRoleManager.name],
-        ...this.spaceRoles[spaceRoleEditor.name]
-      ]
-      return user && allowedRoles.map((r) => r.isAllowed(user)).some(Boolean)
+      return this.isManager(user) || this.isEditor(user)
     },
     canCreate: function () {
       return true
@@ -242,13 +222,13 @@ export function buildSpace(data): SpaceResource {
       return urlJoin(webDavTrashUrl, path)
     },
     isViewer(user: User): boolean {
-      return this.spaceRoles[spaceRoleViewer.name].map((r) => r.isAllowed(user)).some(Boolean)
+      return this.spaceRoles[spaceRoleViewer.name].map((r) => r.isMember(user)).some(Boolean)
     },
     isEditor(user: User): boolean {
-      return this.spaceRoles[spaceRoleEditor.name].map((r) => r.isAllowed(user)).some(Boolean)
+      return this.spaceRoles[spaceRoleEditor.name].map((r) => r.isMember(user)).some(Boolean)
     },
     isManager(user: User): boolean {
-      return this.spaceRoles[spaceRoleManager.name].map((r) => r.isAllowed(user)).some(Boolean)
+      return this.spaceRoles[spaceRoleManager.name].map((r) => r.isMember(user)).some(Boolean)
     },
     isMember(user: User): boolean {
       return this.isViewer(user) || this.isEditor(user) || this.isManager(user)

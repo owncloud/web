@@ -107,7 +107,7 @@ const mutations = {
 }
 
 const actions = {
-  async loadSpaces(context, { graphClient }) {
+  async loadSpaces(context, { graphClient }: { graphClient: Graph }) {
     context.commit('SET_SPACES_LOADING', true)
     try {
       const graphResponse = await graphClient.drives.listMyDrives()
@@ -142,7 +142,6 @@ const actions = {
     for (const role of Object.keys(space.spaceRoles)) {
       for (const { kind, id } of space.spaceRoles[role]) {
         const client = unref(graphClient)
-
         let prom: Promise<AxiosResponse>
         switch (kind) {
           case 'user':
