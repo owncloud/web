@@ -1,5 +1,5 @@
 import FileShares from 'web-app-files/src/components/SideBar/Shares/FileShares.vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import { v4 as uuidV4 } from 'uuid'
@@ -42,22 +42,22 @@ const getCollaborator = () => ({
 describe('FileShares', () => {
   describe('invite collaborator form', () => {
     it('renders the form when the resource can be shared', () => {
-      const resource = mockDeep<Resource>({ isReceivedShare: () => false, canShare: () => true })
+      const resource = mock<Resource>({ isReceivedShare: () => false, canShare: () => true })
       const { wrapper } = getWrapper({ resource })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
     })
     it('does not render the form when the resource can not be shared', () => {
-      const resource = mockDeep<Resource>({ isReceivedShare: () => false, canShare: () => false })
+      const resource = mock<Resource>({ isReceivedShare: () => false, canShare: () => false })
       const { wrapper } = getWrapper({ resource })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
     })
     it('does render the form when the resource is a received share and re-sharing is enabled', () => {
-      const resource = mockDeep<Resource>({ isReceivedShare: () => true, canShare: () => true })
+      const resource = mock<Resource>({ isReceivedShare: () => true, canShare: () => true })
       const { wrapper } = getWrapper({ resource })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
     })
     it('does not render the form when the resource is a received share and re-sharing is disabled', () => {
-      const resource = mockDeep<Resource>({ isReceivedShare: () => true, canShare: () => true })
+      const resource = mock<Resource>({ isReceivedShare: () => true, canShare: () => true })
       const { wrapper } = getWrapper({ resource, hasReSharing: false })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
     })
@@ -114,23 +114,23 @@ describe('FileShares', () => {
       expect(wrapper.vm.sharesListCollapsed).toBe(showAllOnLoad)
     })
     it('share should be modifiable if its personal space share', async () => {
-      const space = mockDeep<SpaceResource>({ driveType: 'personal' })
+      const space = mock<SpaceResource>({ driveType: 'personal' })
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(true)
     })
     it('share should not be modifiable if its not personal space share', async () => {
-      const space = mockDeep<SpaceResource>({ driveType: 'project' })
+      const space = mock<SpaceResource>({ driveType: 'project' })
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
     })
     it('share should not be modifiable if collaborator is indirect', async () => {
-      const space = mockDeep<SpaceResource>({ driveType: 'personal' })
+      const space = mock<SpaceResource>({ driveType: 'personal' })
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
       collaborators[0]['indirect'] = true
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
     })
     it('share should not be modifiable if user is not manager', async () => {
-      const space = mockDeep<SpaceResource>({ driveType: 'personal' }) as any
+      const space = mock<SpaceResource>({ driveType: 'personal' }) as any
       ;(space as any).isManager = jest.fn(() => false)
       collaborators[0]['indirect'] = true
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
@@ -141,7 +141,7 @@ describe('FileShares', () => {
   describe('current space', () => {
     it('loads space members if a space is given and the current user is member', () => {
       const user = { id: '1' }
-      const space = mockDeep<SpaceResource>({ driveType: 'project' })
+      const space = mock<SpaceResource>({ driveType: 'project' })
       const spaceMembers = [{ collaborator: { name: user.id } }, { collaborator: { name: 2 } }]
       const collaborator = getCollaborator()
       collaborator.collaborator = { ...collaborator.collaborator, name: user.id }
@@ -152,7 +152,7 @@ describe('FileShares', () => {
     })
     it('does not load space members if a space is given but the current user not a member', () => {
       const user = { id: '1' }
-      const space = mockDeep<SpaceResource>({ driveType: 'project' })
+      const space = mock<SpaceResource>({ driveType: 'project' })
       const spaceMembers = [{ collaborator: { name: `${user}-2` } }]
       const collaborator = getCollaborator()
       collaborator.collaborator = { ...collaborator.collaborator, name: user.id }
@@ -165,7 +165,7 @@ describe('FileShares', () => {
     it('calls "deleteShare" when successful', async () => {
       const { wrapper } = getWrapper()
       const deleteShareSpy = jest.spyOn(wrapper.vm, 'deleteShare')
-      const share = mockDeep<Share>()
+      const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
       expect(deleteShareSpy).toHaveBeenCalled()
     })
@@ -174,7 +174,7 @@ describe('FileShares', () => {
       const { wrapper } = getWrapper()
       jest.spyOn(wrapper.vm, 'deleteShare').mockRejectedValue(new Error())
       const showMessageSpy = jest.spyOn(wrapper.vm, 'showMessage')
-      const share = mockDeep<Share>()
+      const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
       expect(showMessageSpy).toHaveBeenCalled()
     })
@@ -185,7 +185,7 @@ describe('FileShares', () => {
       })
       const deleteShareSpy = jest.spyOn(wrapper.vm, 'deleteShare')
       const removeFilesSpy = jest.spyOn(wrapper.vm, 'REMOVE_FILES')
-      const share = mockDeep<Share>()
+      const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
       expect(deleteShareSpy).toHaveBeenCalled()
       expect(removeFilesSpy).toHaveBeenCalled()
@@ -195,9 +195,9 @@ describe('FileShares', () => {
 
 function getWrapper({
   mountType = shallowMount,
-  resource = mockDeep<Resource>({ isReceivedShare: () => false, canShare: () => true }),
+  resource = mock<Resource>({ isReceivedShare: () => false, canShare: () => true }),
   hasReSharing = true,
-  space = mockDeep<SpaceResource>(),
+  space = mock<SpaceResource>(),
   collaborators = [],
   sharesTree = {},
   spaceMembers = [],
