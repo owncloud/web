@@ -100,3 +100,14 @@ Given(
     }
   }
 )
+
+Given(
+  '{string} creates the following folder(s) in the personal space using API',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (const info of stepTable.hashes()) {
+      console.log(info.name, 'info.name')
+      await api.dav.createFolder({ user, folder: info.name })
+    }
+  }
+)

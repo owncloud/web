@@ -6,3 +6,6 @@ export {
   deleteGroup,
   addUserToGroup
 } from './userManagement'
+export {
+  getPersonalSpaceId
+} from './spaces'

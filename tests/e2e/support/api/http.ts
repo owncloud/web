@@ -10,13 +10,13 @@ export const request = async ({
   body,
   user
 }: {
-  method: 'POST' | 'DELETE' | 'PUT' | 'GET'
+  method: 'POST' | 'DELETE' | 'PUT' | 'GET' | 'MKCOL'
   path: string
   body?: BodyInit
   user?: User
 }): Promise<Response> => {
   return await fetch(
-    join(config.backendUrl, path + (path.includes('?') ? '&' : '?') + 'format=json'),
+    join(config.backendUrl, path + (path.includes('?') ? '&' : '?')),
     {
       method,
       body,
