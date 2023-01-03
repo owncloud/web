@@ -7,9 +7,9 @@ function $gettext(msg) {
 }
 
 const appInfo = {
-  name: $gettext('User management'),
-  id: 'user-management',
-  icon: 'user-settings',
+  name: $gettext('Administration Settings'),
+  id: 'admin-settings',
+  icon: 'settings-4',
   isFileEditor: false
 }
 
@@ -17,12 +17,12 @@ const routes = [
   {
     path: '/',
     redirect: () => {
-      return { name: 'user-management-users' }
+      return { name: 'admin-settings-users' }
     }
   },
   {
     path: '/users',
-    name: 'user-management-users',
+    name: 'admin-settings-users',
     component: Users,
     meta: {
       authContext: 'user',
@@ -31,7 +31,7 @@ const routes = [
   },
   {
     path: '/groups',
-    name: 'user-management-groups',
+    name: 'admin-settings-groups',
     component: Groups,
     meta: {
       authContext: 'user',

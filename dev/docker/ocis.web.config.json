@@ -30,7 +30,7 @@
     "pdf-viewer",
     "search",
     "external",
-    "user-management"
+    "admin-settings"
   ],
   "external_apps": [
     {

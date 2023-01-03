@@ -1,8 +1,8 @@
 {
-  "name": "user-management",
+  "name": "admin-settings",
   "version": "0.0.0",
   "private": true,
-  "description": "ownCloud user management",
+  "description": "ownCloud admin settings",
   "license": "AGPL-3.0",
   "dependencies": {
     "email-validator": "^2.0.4",

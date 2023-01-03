@@ -8,7 +8,7 @@ const stubSelectors = {
 }
 
 const elSelectors = {
-  userManagementWrapper: '#user-management-wrapper'
+  adminSettingsWrapper: '#admin-settings-wrapper'
 }
 
 afterEach(() => jest.clearAllMocks())
@@ -23,9 +23,9 @@ describe('AppTemplate', () => {
       const { wrapper } = getWrapper({ propsData: { loading: true } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
-    it('should not show user management wrapper', () => {
+    it('should not show admin settings wrapper', () => {
       const { wrapper } = getWrapper({ propsData: { loading: true } })
-      expect(wrapper.find(elSelectors.userManagementWrapper).exists()).toBeFalsy()
+      expect(wrapper.find(elSelectors.adminSettingsWrapper).exists()).toBeFalsy()
     })
   })
   describe('loading is false', () => {
@@ -37,9 +37,9 @@ describe('AppTemplate', () => {
       const { wrapper } = getWrapper({ propsData: { loading: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeTruthy()
     })
-    it('should show user management wrapper', () => {
+    it('should show admin settings wrapper', () => {
       const { wrapper } = getWrapper({ propsData: { loading: false } })
-      expect(wrapper.find(elSelectors.userManagementWrapper).exists()).toBeTruthy()
+      expect(wrapper.find(elSelectors.adminSettingsWrapper).exists()).toBeTruthy()
     })
   })
   describe('sideBarOpen is true', () => {
@@ -58,10 +58,10 @@ describe('AppTemplate', () => {
     describe('oc breadcrumb component', () => {
       it('receives correct props', () => {
         const { wrapper } = getWrapper({
-          propsData: { breadcrumbs: [{ text: 'User management' }, { text: 'Users' }] }
+          propsData: { breadcrumbs: [{ text: 'Administration Settings' }, { text: 'Users' }] }
         })
         expect(wrapper.find(stubSelectors.ocBreadcrumb).props().items).toEqual([
-          { text: 'User management' },
+          { text: 'Administration Settings' },
           { text: 'Users' }
         ])
       })

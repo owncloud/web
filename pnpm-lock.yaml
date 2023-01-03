@@ -394,6 +394,28 @@ importers:
   packages/tsconfig:
     specifiers: {}
 
+  packages/web-app-admin-settings:
+    specifiers:
+      axios: ^0.27.2
+      email-validator: ^2.0.4
+      fuse.js: ^6.5.3
+      lodash-es: 4.17.21
+      mark.js: ^8.11.1
+      uuid: ^9.0.0
+      vue-concurrency: 4.0.0
+      vuex: ^3.6.2
+      web-pkg: npm:@ownclouders/web-pkg
+    dependencies:
+      axios: 0.27.2
+      email-validator: 2.0.4
+      fuse.js: 6.5.3
+      lodash-es: 4.17.21
+      mark.js: 8.11.1
+      uuid: 9.0.0
+      vue-concurrency: 4.0.0_vue@2.7.14
+      vuex: 3.6.2_vue@2.7.14
+      web-pkg: link:../web-pkg
+
   packages/web-app-draw-io:
     specifiers:
       luxon: ^2.4.0
@@ -541,28 +563,6 @@ importers:
       vue-gettext: 2.1.12
       vuex: 3.6.2_vue@2.7.14
       web-client: link:../web-client
-      web-pkg: link:../web-pkg
-
-  packages/web-app-user-management:
-    specifiers:
-      axios: ^0.27.2
-      email-validator: ^2.0.4
-      fuse.js: ^6.5.3
-      lodash-es: 4.17.21
-      mark.js: ^8.11.1
-      uuid: ^9.0.0
-      vue-concurrency: 4.0.0
-      vuex: ^3.6.2
-      web-pkg: npm:@ownclouders/web-pkg
-    dependencies:
-      axios: 0.27.2
-      email-validator: 2.0.4
-      fuse.js: 6.5.3
-      lodash-es: 4.17.21
-      mark.js: 8.11.1
-      uuid: 9.0.0
-      vue-concurrency: 4.0.0_vue@2.7.14
-      vuex: 3.6.2_vue@2.7.14
       web-pkg: link:../web-pkg
 
   packages/web-client:
@@ -8285,7 +8285,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -8938,7 +8938,7 @@ packages:
     resolution: {integrity: sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==}
     engines: {node: '>= 0.6'}
     dependencies:
-      mime-db: 1.48.0
+      mime-db: 1.52.0
     dev: true
 
   /compression-webpack-plugin/6.1.1_webpack@4.46.0:
@@ -12450,7 +12450,7 @@ packages:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
-      mime-types: 2.1.31
+      mime-types: 2.1.35
     dev: true
 
   /form-data/3.0.1:
@@ -12459,7 +12459,7 @@ packages:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
-      mime-types: 2.1.31
+      mime-types: 2.1.35
     dev: true
 
   /form-data/4.0.0:
@@ -12468,7 +12468,7 @@ packages:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
-      mime-types: 2.1.31
+      mime-types: 2.1.35
 
   /forwarded/0.2.0:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
@@ -16591,11 +16591,11 @@ packages:
   /mime-db/1.48.0:
     resolution: {integrity: sha512-FM3QwxV+TnZYQ2aRqhlKBMHxk10lTbMt3bBkMAp54ddrNeVSfcQYOOKuGuy3Ddrm38I04If834fOUSq1yzslJQ==}
     engines: {node: '>= 0.6'}
+    dev: true
 
   /mime-db/1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
-    dev: true
 
   /mime-match/1.0.2:
     resolution: {integrity: sha512-VXp/ugGDVh3eCLOBCiHZMYWQaTNUHv2IJrut+yXA6+JbLPXHglHwfS/5A5L0ll+jkCY7fIzRJcH6OIunF+c6Cg==}
@@ -16608,13 +16608,13 @@ packages:
     engines: {node: '>= 0.6'}
     dependencies:
       mime-db: 1.48.0
+    dev: true
 
   /mime-types/2.1.35:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
     dependencies:
       mime-db: 1.52.0
-    dev: true
 
   /mime/1.6.0:
     resolution: {integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==}
@@ -18732,15 +18732,6 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /promise-inflight/1.0.1:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dev: true
-
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -19721,7 +19712,7 @@ packages:
       is-typedarray: 1.0.0
       isstream: 0.1.2
       json-stringify-safe: 5.0.1
-      mime-types: 2.1.31
+      mime-types: 2.1.35
       oauth-sign: 0.9.0
       performance-now: 2.1.0
       qs: 6.5.3
@@ -20282,7 +20273,7 @@ packages:
       debug: 2.6.9_supports-color@6.1.0
       escape-html: 1.0.3
       http-errors: 1.6.3
-      mime-types: 2.1.31
+      mime-types: 2.1.35
       parseurl: 1.3.3
     transitivePeerDependencies:
       - supports-color
