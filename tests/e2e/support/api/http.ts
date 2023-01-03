@@ -15,19 +15,16 @@ export const request = async ({
   body?: BodyInit
   user?: User
 }): Promise<Response> => {
-  return await fetch(
-    join(config.backendUrl, path + (path.includes('?') ? '&' : '?')),
-    {
-      method,
-      body,
-      headers: {
-        'OCS-APIREQUEST': true as any,
-        ...(user && {
-          Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
-        })
-      }
+  return await fetch(join(config.backendUrl, path + (path.includes('?') ? '&' : '?')), {
+    method,
+    body,
+    headers: {
+      'OCS-APIREQUEST': true as any,
+      ...(user && {
+        Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
+      })
     }
-  )
+  })
 }
 
 export const checkResponseStatus = (response: Response, message = ''): void => {
