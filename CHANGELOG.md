@@ -35,6 +35,7 @@ Summary
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 * Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
 * Enhancement - Retry failed uploads on re-upload: [#8055](https://github.com/owncloud/web/pull/8055)
+* Enhancement - Space group shares: [#8161](https://github.com/owncloud/web/pull/8161)
 * Enhancement - Show text file icon for empty text files: [#8057](https://github.com/owncloud/web/pull/8057)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Update libre-graph-api to v1.0: [#8132](https://github.com/owncloud/web/pull/8132)
@@ -250,6 +251,13 @@ Details
 
    https://github.com/owncloud/web/issues/7944
    https://github.com/owncloud/web/pull/8055
+
+* Enhancement - Space group shares: [#8161](https://github.com/owncloud/web/pull/8161)
+
+   We've added the possibility to share a space with a group.
+
+   https://github.com/owncloud/web/issues/8160
+   https://github.com/owncloud/web/pull/8161
 
 * Enhancement - Show text file icon for empty text files: [#8057](https://github.com/owncloud/web/pull/8057)
 
