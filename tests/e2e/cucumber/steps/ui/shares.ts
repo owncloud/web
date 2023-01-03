@@ -142,3 +142,12 @@ When(
     await pageObject.navigate()
   }
 )
+
+When('{string} declines the following share(s)', async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const {page} = this.actorsEnvironment.getActor({key: stepUser})
+    const shareObject = new objects.applicationFiles.Share({page})
+
+    for (const resource of stepTable.hashes()) {
+        await shareObject.declineShare({resource: resource.name})
+    }
+});
