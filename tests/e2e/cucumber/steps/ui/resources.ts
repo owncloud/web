@@ -60,7 +60,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" (copies|moves) the following resource(?:s)?( using (keyboard|drag-drop|sidebar)(?: panel)?)?$/,
+  /^"([^"]*)" (copies|moves) the following resource(?:s)? using (keyboard|drag-drop|sidebar-panel|dropdown-menu)$/,
   async function (
     this: World,
     stepUser: string,
@@ -75,7 +75,7 @@ When(
       await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
         resource,
         newLocation: to,
-        method: method ?? 'menu'
+        method
       })
     }
   }

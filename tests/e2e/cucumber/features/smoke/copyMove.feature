@@ -18,10 +18,10 @@ Feature: Copy
       | KeyboardExample.txt     | txtFile | copy with the help of keyboard      |
       | dragDrop.txt            | txtFile | copy with the help of drag-drop     |
       | sidebar.txt             | txtFile | copy with the help of sidebar panel |
-    And "Alice" copies the following resource using sidebar panel
+    When "Alice" copies the following resource using sidebar-panel
       | resource    | to          |
       | sidebar.txt | PARENTCopy2 |
-    When "Alice" copies the following resource
+    And "Alice" copies the following resource using dropdown-menu
       | resource                | to          |
       | PARENTCopy3/example.txt | PARENTCopy1 |
     And "Alice" copies the following resource using keyboard
@@ -30,13 +30,13 @@ Feature: Copy
     And "Alice" moves the following resource using drag-drop
       | resource     | to          |
       | dragDrop.txt | PARENTCopy2 |
-    And "Alice" moves the following resource
+    And "Alice" moves the following resource using dropdown-menu
       | resource                | to         |
       | PARENTCopy1/example.txt | PARENTMove |
     And "Alice" moves the following resource using keyboard
       | resource    | to         |
       | PARENTCopy2 | PARENTMove |
-    And "Alice" moves the following resource using sidebar panel
+    And "Alice" moves the following resource using sidebar-panel
       | resource    | to         |
       | PARENTCopy3 | PARENTMove |
     And "Alice" logs out

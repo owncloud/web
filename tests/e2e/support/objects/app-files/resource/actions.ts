@@ -26,7 +26,7 @@ const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
 const uploadInfoCloseButton = '#close-upload-info-btn'
 const filesAction = `.oc-files-actions-%s-trigger`
-const clipboardBtns = '#clipboard-btns'
+const pasteButton = '.paste-files-btn'
 const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]'
 const fileRenameInput = '.oc-text-input'
 const deleteButtonSidebar = '#oc-files-actions-sidebar .oc-files-actions-delete-trigger'
@@ -355,7 +355,7 @@ export const pasteResource = async (
     }
   }
 
-  await page.locator(clipboardBtns).first().click()
+  await page.locator(pasteButton).click()
   await waitForResources({
     page,
     names: [resource]
@@ -371,13 +371,13 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
   }
 
   switch (method) {
-    case 'menu': {
+    case 'dropdown-menu': {
       await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
       await page.locator(util.format(filesAction, action)).first().click()
       await pasteResource({ page, resource: resourceBase, newLocation })
       break
     }
-    case 'sidebar': {
+    case 'sidebar-panel': {
       await sidebar.open({ page: page, resource: resourceBase })
       await sidebar.openPanel({ page: page, name: 'actions' })
 
