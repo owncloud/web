@@ -1,0 +1,9 @@
+Enhancement: Make clipboard copy available to more browsers
+
+We have added more functionality for copying (e.g. links) to the user's clipboard.
+By switching libraries we now use the standard browser API (if available) with a
+fallback and only offer copy-to-clipboard buttons if the browser supports it.
+
+https://github.com/owncloud/web/pull/8136
+https://github.com/owncloud/web/pull/8173
+https://github.com/owncloud/web/issues/8134

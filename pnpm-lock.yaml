@@ -424,7 +424,6 @@ importers:
     specifiers:
       '@jest/globals': 29.3.1
       '@vueuse/core': ^9.8.2
-      copy-to-clipboard: ^3.3.1
       filesize: ^9.0.11
       fuse.js: ^6.5.3
       lodash-es: 4.17.21
@@ -449,7 +448,6 @@ importers:
       web-pkg: npm:@ownclouders/web-pkg
       web-runtime: workspace:*
     dependencies:
-      copy-to-clipboard: 3.3.1
       filesize: 9.0.11
       fuse.js: 6.5.3
       lodash-es: 4.17.21
@@ -9762,12 +9760,6 @@ packages:
     resolution: {integrity: sha512-XgZ0pFcakEUlbwQEVNg3+QAis1FyTL3Qel9FYy8pSkQqoG3PNoT0bOCQtOXcOkur21r2Eq2kI+IE+gsmAEVlYw==}
     engines: {node: '>=0.10.0'}
     dev: true
-
-  /copy-to-clipboard/3.3.1:
-    resolution: {integrity: sha512-i13qo6kIHTTpCm8/Wup+0b1mVWETvu2kIMzKoK8FpkLkFxlt0znUAHcMzox+T8sPlqtZXq3CulEjQHsYiGFJUw==}
-    dependencies:
-      toggle-selection: 1.0.6
-    dev: false
 
   /copy-webpack-plugin/5.1.2_webpack@4.46.0:
     resolution: {integrity: sha512-Uh7crJAco3AjBvgAy9Z75CjK8IG+gxaErro71THQ+vv/bl4HaQcpkexAY8KVW/T6D2W2IRr+couF/knIRkZMIQ==}
@@ -21512,10 +21504,6 @@ packages:
       regex-not: 1.0.2
       safe-regex: 1.1.0
     dev: true
-
-  /toggle-selection/1.0.6:
-    resolution: {integrity: sha512-BiZS+C1OS8g/q2RRbJmy59xpyghNBqrr6k5L/uKBGRsTfxmu3ffiRnd8mlGPUVayg8pvfi5urfnu8TU7DVOkLQ==}
-    dev: false
 
   /toidentifier/1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}

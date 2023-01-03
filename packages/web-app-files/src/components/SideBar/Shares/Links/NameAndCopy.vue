@@ -15,6 +15,7 @@
         />
       </div>
       <oc-button
+        v-if="isClipboardCopySupported"
         v-oc-tooltip="copyBtnHint"
         appearance="raw"
         :aria-label="copyBtnHint"
@@ -26,10 +27,10 @@
   </div>
 </template>
 
-<script>
-import { mapActions } from 'vuex'
+<script lang="ts">
 import { defineComponent } from 'vue'
-import copyToClipboard from 'copy-to-clipboard'
+import { useStore, useTranslations } from 'web-pkg/src/composables'
+import { useClipboard } from '@vueuse/core'
 
 export default defineComponent({
   name: 'NameAndCopy',
@@ -39,10 +40,37 @@ export default defineComponent({
       required: true
     }
   },
-  data: () => ({
-    copied: false,
-    timeout: null
-  }),
+  setup(props) {
+    const { $gettext, $gettextInterpolate } = useTranslations()
+    const store = useStore<any>()
+
+    const {
+      copy,
+      copied,
+      isSupported: isClipboardCopySupported
+    } = useClipboard({ legacy: true, copiedDuring: 550 })
+
+    const copyLinkToClipboard = () => {
+      copy(props.link.url)
+      store.dispatch('showMessage', {
+        title: props.link.quicklink
+          ? $gettext('The quicklink has been copied to your clipboard.')
+          : $gettextInterpolate(
+              $gettext('The link "%{linkName}" has been copied to your clipboard.'),
+              {
+                linkName: props.link.linkName
+              },
+              true
+            )
+      })
+    }
+
+    return {
+      copied,
+      copyLinkToClipboard,
+      isClipboardCopySupported
+    }
+  },
   computed: {
     linkName() {
       return this.link.name
@@ -55,31 +83,6 @@ export default defineComponent({
     },
     copiedLabel() {
       return this.$gettext('Copied')
-    }
-  },
-  methods: {
-    ...mapActions(['showMessage']),
-    copyLinkToClipboard() {
-      copyToClipboard(this.link.url)
-      this.clipboardSuccessHandler()
-      this.showMessage({
-        title: this.link.quicklink
-          ? this.$gettext('The quicklink has been copied to your clipboard.')
-          : this.$gettextInterpolate(
-              this.$gettext('The link "%{linkName}" has been copied to your clipboard.'),
-              {
-                linkName: this.linkName
-              },
-              true
-            )
-      })
-    },
-    clipboardSuccessHandler() {
-      this.copied = true
-      clearTimeout(this.timeout)
-      this.timeout = setTimeout(() => {
-        this.copied = false
-      }, 550)
     }
   }
 })

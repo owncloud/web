@@ -1,11 +1,12 @@
 <template>
   <oc-button
+    v-if="isClipboardCopySupported"
     v-oc-tooltip="buttonLabel"
     appearance="raw"
     :aria-label="buttonLabel"
     class="oc-files-private-link-copy-url"
     :variation="copied ? 'success' : 'passive'"
-    @click="copyPrivateLinkToClipboard"
+    @click="copyLinkToClipboard"
   >
     <span v-text="buttonText" />
     <oc-icon
@@ -18,18 +19,40 @@
   </oc-button>
 </template>
 
-<script>
-import { mapActions } from 'vuex'
-import copyToClipboard from 'copy-to-clipboard'
-import { unref } from 'vue'
+<script lang="ts">
+import { computed, defineComponent, inject, unref } from 'vue'
+import { useClipboard } from '@vueuse/core'
+import { Resource } from 'web-client'
+import { useStore, useTranslations } from 'web-pkg/src'
 
-export default {
+export default defineComponent({
   name: 'PrivateLinkItem',
-  inject: ['displayedItem'],
-  data: () => ({
-    copied: false,
-    timeout: null
-  }),
+  setup() {
+    const { $gettext } = useTranslations()
+    const store = useStore<any>()
+    const displayedItem = inject<Resource>('displayedItem')
+    const privateLink = computed(() => unref(displayedItem))
+
+    const {
+      copy,
+      copied,
+      isSupported: isClipboardCopySupported
+    } = useClipboard({ legacy: true, copiedDuring: 550 })
+
+    const copyLinkToClipboard = () => {
+      copy(unref(privateLink).privateLink)
+      store.dispatch('showMessage', {
+        title: $gettext('Private link copied'),
+        desc: $gettext('The private link has been copied to your clipboard.')
+      })
+    }
+
+    return {
+      copied,
+      copyLinkToClipboard,
+      isClipboardCopySupported
+    }
+  },
   computed: {
     buttonText() {
       return this.$gettext('Private link')
@@ -37,24 +60,6 @@ export default {
     buttonLabel() {
       return this.$gettext('Copy private link to clipboard')
     }
-  },
-  methods: {
-    ...mapActions(['showMessage']),
-    copyPrivateLinkToClipboard() {
-      copyToClipboard(unref(this.displayedItem).privateLink)
-      this.clipboardSuccessHandler()
-      this.showMessage({
-        title: this.$gettext('Private link copied'),
-        desc: this.$gettext('The private link has been copied to your clipboard.')
-      })
-    },
-    clipboardSuccessHandler() {
-      this.copied = true
-      clearTimeout(this.timeout)
-      this.timeout = setTimeout(() => {
-        this.copied = false
-      }, 550)
-    }
   }
-}
+})
 </script>
