@@ -23,21 +23,21 @@ Feature: share
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
-    And "Brian" should not be able to open the folder "folder_to_shared"
-    And "Brian" accepts the following share
+    Then "Brian" should not be able to open the folder "folder_to_shared"
+    When "Brian" accepts the following share
       | name             |
       | folder_to_shared |
     And "Brian" declines the following share
       | name                  |
       | decline_shared_folder |
-    And "Brian" should not be able to open the folder "decline_shared_folder"
-    And "Brian" accepts the following share using the sidebar panel
+    Then "Brian" should not be able to open the folder "decline_shared_folder"
+    When "Brian" accepts the following share using the quick action
       | name                  |
       | decline_shared_folder |
-    And "Brian" creates quick link of the following resource using the sidebar panel
+    And "Brian" creates quick link of the following resource using the quick action
       | resource              |
       | decline_shared_folder |
-    And "Brian" declines the following share using the sidebar panel
+    And "Brian" declines the following share using the quick action
       | name                  |
       | decline_shared_folder |
     And "Brian" renames the following resource
@@ -89,10 +89,10 @@ Feature: share
     When "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
-    And "Brian" should not be able to edit the following resources
+    Then "Brian" should not be able to edit the following resources
       | resource         | content     |
       | shareToBrian.txt | new content |
-    And "Brian" accepts the following share
+    When "Brian" accepts the following share
       | name             |
       | shareToBrian.txt |
       | shareToBrian.md  |
@@ -101,7 +101,7 @@ Feature: share
     And "Brian" declines the following share
       | name                    |
       | decline_shared_file.txt |
-    And "Brian" should not be able to edit the following resources
+    Then "Brian" should not be able to edit the following resources
       | resource                | content     |
       | decline_shared_file.txt | new content |
     When "Brian" accepts the following share using the sidebar panel
