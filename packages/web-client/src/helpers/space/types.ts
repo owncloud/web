@@ -7,6 +7,7 @@
 // because in the else block resource gets the type never. If this is changed in a later TypeScript version
 // or all types get different members, the underscored props can be removed.
 import { Resource } from '../resource'
+import { User } from '../user'
 
 export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 
@@ -39,9 +40,9 @@ export const isPersonalSpaceResource = (resource: Resource): resource is Persona
 
 export interface ProjectSpaceResource extends SpaceResource {
   __projectSpaceResource?: any
-  isViewer(uuid: string): boolean
-  isEditor(uuid: string): boolean
-  isManager(uuid: string): boolean
+  isViewer(uuid: User): boolean
+  isEditor(uuid: User): boolean
+  isManager(uuid: User): boolean
 }
 export const isProjectSpaceResource = (resource: Resource): resource is ProjectSpaceResource => {
   return resource.driveType === 'project'

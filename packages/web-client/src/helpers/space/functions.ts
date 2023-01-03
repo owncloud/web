@@ -88,9 +88,10 @@ export function buildSpace(data): SpaceResource {
       for (const role of SpacePeopleShareRoles.list()) {
         if (permission.roles.includes(role.name)) {
           spaceRoles[role.name] = permission.grantedToIdentities.reduce((acc, info) => {
+            const kind = info.hasOwnProperty('group') ? 'group' : 'user'
             const spaceRole: SpaceRole = {
-              kind: 'user',
-              id: '',
+              kind,
+              id: info[kind].id,
               isMember(u?: any): boolean {
                 if (!u) {
                   return false
@@ -106,13 +107,6 @@ export function buildSpace(data): SpaceResource {
                 }
               }
             }
-
-            if (info.hasOwnProperty('group')) {
-              spaceRole.kind = 'group'
-            }
-
-            spaceRole.id = info[spaceRole.kind].id
-
             return [...acc, spaceRole]
           }, [])
         }

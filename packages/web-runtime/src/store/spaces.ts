@@ -1,4 +1,4 @@
-import { buildSpace, isProjectSpaceResource } from 'web-client/src/helpers'
+import { buildSpace, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import Vue, { Ref } from 'vue'
 import { set, has } from 'lodash-es'
 import { unref } from 'vue'
@@ -134,7 +134,10 @@ const actions = {
     context.commit('CLEAR_PROJECT_SPACES')
     context.commit('ADD_SPACES', spaces)
   },
-  loadSpaceMembers(context, { graphClient, space }: { graphClient: Ref<Graph>; space: any }) {
+  loadSpaceMembers(
+    context,
+    { graphClient, space }: { graphClient: Ref<Graph>; space: SpaceResource }
+  ) {
     context.commit('CLEAR_SPACE_MEMBERS')
     const promises = []
     const spaceShares = []
@@ -207,7 +210,6 @@ const actions = {
     const additionalParams = {
       shareWith: share.collaborator.name || share.collaborator.displayName
     } as any
-    console.log(additionalParams)
     await client.shares.deleteShare(share.id, additionalParams)
 
     if (reloadSpace) {

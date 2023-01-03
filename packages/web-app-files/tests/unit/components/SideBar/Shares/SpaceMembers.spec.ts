@@ -6,7 +6,7 @@ import {
   spaceRoleEditor,
   Share
 } from 'web-client/src/helpers/share'
-import { mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { ProjectSpaceResource, SpaceResource, User } from 'web-client/src/helpers'
 import {
   createStore,
@@ -56,13 +56,13 @@ const memberMocks = {
 describe('SpaceMembers', () => {
   describe('invite collaborator form', () => {
     it('renders the form when the current user is a manager of the space', () => {
-      const space = mockDeep<ProjectSpaceResource>({ isManager: () => true })
+      const space = mock<ProjectSpaceResource>({ isManager: () => true })
       const wrapper = getWrapper({ space })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('does not render the form when the current user is no manager of the space', () => {
-      const space = mockDeep<ProjectSpaceResource>({ isManager: () => false })
+      const space = mock<ProjectSpaceResource>({ isManager: () => false })
       const wrapper = getWrapper({ space })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
     })
@@ -70,13 +70,13 @@ describe('SpaceMembers', () => {
 
   describe('existing members', () => {
     it('can edit when current user is manager of the space', () => {
-      const space = mockDeep<ProjectSpaceResource>({ isManager: () => true })
+      const space = mock<ProjectSpaceResource>({ isManager: () => true })
       const wrapper = getWrapper({ space })
       expect(wrapper.findAll('collaborator-list-item-stub').at(1).props().modifiable).toEqual(true)
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('can not edit when current user is not a manager of the space', () => {
-      const space = mockDeep<ProjectSpaceResource>({ isManager: () => false })
+      const space = mock<ProjectSpaceResource>({ isManager: () => false })
       const wrapper = getWrapper({ space })
       expect(wrapper.findAll('collaborator-list-item-stub').at(1).props().modifiable).toEqual(false)
     })
@@ -89,7 +89,7 @@ describe('SpaceMembers', () => {
         '$_ocCollaborators_deleteShare_trigger'
       )
 
-      const user = mockDeep<User>({ id: memberMocks.manager.collaborator.name })
+      const user = mock<User>({ id: memberMocks.manager.collaborator.name })
       const wrapper = getWrapper({ user })
       wrapper.find('collaborator-list-item-stub').vm.$emit('onDelete')
       await wrapper.vm.$nextTick()
@@ -98,7 +98,7 @@ describe('SpaceMembers', () => {
     it('calls "deleteSpaceMember" when successful', async () => {
       const wrapper = getWrapper()
       const deleteSpaceMemberSpy = jest.spyOn(wrapper.vm, 'deleteSpaceMember')
-      const share = mockDeep<Share>()
+      const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
       expect(deleteSpaceMemberSpy).toHaveBeenCalled()
     })
@@ -107,19 +107,19 @@ describe('SpaceMembers', () => {
       const wrapper = getWrapper()
       jest.spyOn(wrapper.vm, 'deleteSpaceMember').mockRejectedValue(new Error())
       const showMessageSpy = jest.spyOn(wrapper.vm, 'showMessage')
-      const share = mockDeep<Share>()
+      const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
       expect(showMessageSpy).toHaveBeenCalled()
     })
     it('redirects to the "files-spaces-projects"-page when the current user has been removed', async () => {
-      const user = mockDeep<User>({ id: memberMocks.manager.collaborator.name })
+      const user = mock<User>({ id: memberMocks.manager.collaborator.name })
       const wrapper = getWrapper({ user })
       jest.spyOn(wrapper.vm, 'deleteSpaceMember')
       await wrapper.vm.$_ocCollaborators_deleteShare(memberMocks.manager)
       expect(wrapper.vm.$router.push).toHaveBeenCalled()
     })
     it('refreshes the page when the current user has been removed on the "files-spaces-projects"-page', async () => {
-      const user = mockDeep<User>({ id: memberMocks.manager.collaborator.name })
+      const user = mock<User>({ id: memberMocks.manager.collaborator.name })
       const wrapper = getWrapper({ user, currentRouteName: 'files-spaces-projects' })
       jest.spyOn(wrapper.vm, 'deleteSpaceMember')
       await wrapper.vm.$_ocCollaborators_deleteShare(memberMocks.manager)
@@ -129,7 +129,7 @@ describe('SpaceMembers', () => {
 
   describe('filter', () => {
     it('toggles the filter on click', async () => {
-      const space = mockDeep<ProjectSpaceResource>({ isManager: () => true })
+      const space = mock<ProjectSpaceResource>({ isManager: () => true })
       const wrapper = getWrapper({ mountType: mount, space })
       expect(wrapper.vm.isFilterOpen).toBeFalsy()
       await wrapper.find('.open-filter-btn').trigger('click')
@@ -141,9 +141,9 @@ describe('SpaceMembers', () => {
 
 function getWrapper({
   mountType = shallowMount,
-  space = mockDeep<SpaceResource>(),
+  space = mock<SpaceResource>(),
   spaceMembers = [memberMocks.manager, memberMocks.editor, memberMocks.viewer],
-  user = mockDeep<User>(),
+  user = mock<User>(),
   currentRouteName = 'files-spaces-generic'
 } = {}) {
   const storeOptions = {

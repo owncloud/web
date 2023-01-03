@@ -20,7 +20,7 @@
         <autocomplete-item :item="option" />
       </template>
       <template #no-options>
-        <translate> No users or groups found. </translate>
+        <span v-text="$gettext('No users or groups found.')" />
       </template>
       <template #selected-option-container="{ option, deselect }">
         <recipient-container
