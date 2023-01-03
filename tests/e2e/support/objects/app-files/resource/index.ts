@@ -1,3 +1,4 @@
+import { config } from '../../../../config'
 import { Download, Page } from 'playwright'
 import {
   createResources,
@@ -82,12 +83,22 @@ export class Resource {
     const startUrl = this.#page.url()
     await moveOrCopyResource({ ...args, page: this.#page, action: 'copy' })
     await this.#page.goto(startUrl)
+    // Sidebar remain open after we navigate to startUrl
+    // This is the issue: https://github.com/owncloud/web/issues/8172
+    if (!config.ocis) {
+      await this.#page.reload()
+    }
   }
 
   async move(args: Omit<moveOrCopyResourceArgs, 'page' | 'action'>): Promise<void> {
     const startUrl = this.#page.url()
     await moveOrCopyResource({ ...args, page: this.#page, action: 'move' })
     await this.#page.goto(startUrl)
+    // Sidebar remain open after we navigate to startUrl
+    // This is the issue: https://github.com/owncloud/web/issues/8172
+    if (!config.ocis) {
+      await this.#page.reload()
+    }
   }
 
   async delete(args: Omit<deleteResourceArgs, 'page'>): Promise<void> {

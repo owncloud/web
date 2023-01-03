@@ -26,8 +26,8 @@ const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
 const uploadInfoCloseButton = '#close-upload-info-btn'
 const filesAction = `.oc-files-actions-%s-trigger`
-const clipboardBtns = '#clipboard-btns'
-const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a'
+const pasteButton = '.paste-files-btn'
+const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]'
 const fileRenameInput = '.oc-text-input'
 const deleteButtonSidebar = '#oc-files-actions-sidebar .oc-files-actions-delete-trigger'
 const actionConfirmationButton =
@@ -35,6 +35,7 @@ const actionConfirmationButton =
 const actionSkipButton = '.oc-modal-body-actions-cancel'
 const actionSecondaryConfirmationButton = '.oc-modal-body-actions-secondary'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
+const actionButton = '//*[contains(@data-testid, "action-handler")]/span[text()="%s"]'
 const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
 const notificationMessageDialog = '.oc-notification-message-title'
 const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
@@ -338,30 +339,85 @@ export interface moveOrCopyResourceArgs {
   resource: string
   newLocation: string
   action: 'copy' | 'move'
+  method: string
+}
+export const pasteResource = async (
+  args: Omit<moveOrCopyResourceArgs, 'action' | 'method'>
+): Promise<void> => {
+  const { page, resource, newLocation } = args
+
+  await page.locator(breadcrumbRoot).click()
+  const newLocationPath = newLocation.split('/')
+
+  for (const path of newLocationPath) {
+    if (path !== 'Personal') {
+      await clickResource({ page, path: path })
+    }
+  }
+
+  await page.locator(pasteButton).click()
+  await waitForResources({
+    page,
+    names: [resource]
+  })
 }
 
 export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<void> => {
-  const { page, resource, newLocation, action } = args
+  const { page, resource, newLocation, action, method } = args
   const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
   if (resourceDir) {
     await clickResource({ page, path: resourceDir })
   }
 
-  await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
-  await page.locator(util.format(filesAction, action)).first().click()
-  await page.locator(breadcrumbRoot).click()
+  switch (method) {
+    case 'dropdown-menu': {
+      await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
+      await page.locator(util.format(filesAction, action)).first().click()
+      await pasteResource({ page, resource: resourceBase, newLocation })
+      break
+    }
+    case 'sidebar-panel': {
+      await sidebar.open({ page: page, resource: resourceBase })
+      await sidebar.openPanel({ page: page, name: 'actions' })
 
-  if (newLocation !== 'Personal') {
-    await clickResource({ page, path: newLocation })
+      const actionButtonType = action === 'copy' ? 'Copy' : 'Cut'
+      await page.locator(util.format(actionButton, actionButtonType)).click()
+      await pasteResource({ page, resource: resourceBase, newLocation })
+      break
+    }
+    case 'keyboard': {
+      const resourceCheckbox = page.locator(util.format(checkBox, resourceBase))
+      await resourceCheckbox.check()
+      const keyValue = action === 'copy' ? 'C' : 'X'
+      await page.keyboard.press(`Control+${keyValue}`)
+      await page.locator(breadcrumbRoot).click()
+      const newLocationPath = newLocation.split('/')
+      for (const path of newLocationPath) {
+        if (path !== 'Personal') {
+          await clickResource({ page, path: path })
+        }
+      }
+      await page.keyboard.press('Control+V')
+
+      await waitForResources({
+        page,
+        names: [resourceBase]
+      })
+      break
+    }
+    case 'drag-drop': {
+      const source = page.locator(util.format(resourceNameSelector, resourceBase))
+      const target = page.locator(util.format(resourceNameSelector, newLocation))
+
+      await source.dragTo(target)
+      await waitForResources({
+        page,
+        names: [resourceBase]
+      })
+      break
+    }
   }
-
-  await page.locator(clipboardBtns).first().click()
-
-  await waitForResources({
-    page,
-    names: [resourceBase]
-  })
 }
 
 /**/
