@@ -202,3 +202,21 @@ When(
     expect(await shareObject.resourceIsNotOpenable(resource)).toBe(true)
   }
 )
+
+Then(
+  /"([^"]*)" should( not | )be able to see the following shares$/,
+  async function (
+    this: World,
+    stepUser: string,
+    condition: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const shouldExist = condition.trim() !== 'not'
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    for (const { resource, owner } of stepTable.hashes()) {
+      const hasAcceptedShareExist = await shareObject.checkShareContext(resource, owner)
+      expect(hasAcceptedShareExist).toBe(shouldExist)
+    }
+  }
+)

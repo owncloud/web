@@ -1,6 +1,7 @@
 import { Page } from 'playwright'
 import util from 'util'
 import Collaborator, { ICollaborator } from './collaborator'
+import { acceptedShareExists } from './utils'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 import { copyLinkArgs, waitForPopupNotPresent } from '../link/actions'
@@ -174,6 +175,14 @@ export const checkSharee = async (args: ShareArgs): Promise<void> => {
   for (const collaborator of recipients) {
     await Collaborator.checkCollaborator({ page, collaborator })
   }
+}
+
+export const checkShareContext = async (
+  page: Page,
+  resource: string,
+  owner: string
+): Promise<boolean> => {
+  return await acceptedShareExists({ page, resource, owner })
 }
 
 export const hasPermissionToShare = async (

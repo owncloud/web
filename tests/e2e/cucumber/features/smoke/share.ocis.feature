@@ -115,4 +115,13 @@ Feature: share
     And "Brian" opens the following file in pdfviewer
       | resource   |
       | simple.pdf |
+    And "Alice" removes following sharee
+      | resource         | recipient |
+      | shareToBrian.txt | Brian     |
+      | shareToBrian.md  | Brian     |
+    And "Alice" logs out
+    And "Brian" should not be able to see the following shares
+      | resource         | owner        |
+      | shareToBrian.txt | Alice Hansen |
+      | shareToBrian.md  | Alice Hansen |
     And "Brian" logs out
