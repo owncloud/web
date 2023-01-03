@@ -64,12 +64,10 @@ describe('FileShares', () => {
   })
 
   describe('collaborators list', () => {
-    const collaborators = [
-      getCollaborator(),
-      getCollaborator(),
-      getCollaborator(),
-      getCollaborator()
-    ]
+    let collaborators
+    beforeEach(() => {
+      collaborators = [getCollaborator(), getCollaborator(), getCollaborator(), getCollaborator()]
+    })
 
     it('renders sharedWithLabel and sharee list', () => {
       const { wrapper } = getWrapper({ collaborators })
@@ -114,6 +112,29 @@ describe('FileShares', () => {
       expect(wrapper.vm.sharesListCollapsed).toBe(!showAllOnLoad)
       await wrapper.find('.toggle-shares-list-btn').trigger('click')
       expect(wrapper.vm.sharesListCollapsed).toBe(showAllOnLoad)
+    })
+    it('share should be modifiable if its personal space share', async () => {
+      const space = mockDeep<SpaceResource>({ driveType: 'personal' })
+      const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
+      expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(true)
+    })
+    it('share should not be modifiable if its not personal space share', async () => {
+      const space = mockDeep<SpaceResource>({ driveType: 'project' })
+      const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
+      expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
+    })
+    it('share should not be modifiable if collaborator is indirect', async () => {
+      const space = mockDeep<SpaceResource>({ driveType: 'personal' })
+      const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
+      collaborators[0]['indirect'] = true
+      expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
+    })
+    it('share should not be modifiable if user is not manager', async () => {
+      const space = mockDeep<SpaceResource>({ driveType: 'personal' }) as any
+      ;(space as any).isManager = jest.fn(() => false)
+      collaborators[0]['indirect'] = true
+      const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
+      expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
     })
   })
 
