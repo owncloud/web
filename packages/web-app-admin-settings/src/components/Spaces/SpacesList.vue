@@ -49,7 +49,11 @@
       <template #usedQuota="{ item }"> {{ getUsedQuota(item) }} </template>
       <template #remainingQuota="{ item }"> {{ getRemainingQuota(item) }} </template>
       <template #mdate="{ item }">
-        {{ getSpaceMdate(item) }}
+        <span
+          v-oc-tooltip="formatDate(item.mdate)"
+          tabindex="0"
+          v-text="formatDateRelative(item.mdate)"
+        />
       </template>
       <template #status="{ item }">
         <span v-if="item.disabled" class="oc-flex oc-flex-middle">
@@ -73,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { formatDateFromISO } from 'web-pkg/src/helpers'
+import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { computed, defineComponent, getCurrentInstance, PropType, ref, unref } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 import { useTranslations } from 'web-pkg'
@@ -96,7 +100,7 @@ export default defineComponent({
   },
   emits: ['toggleSelectSpace', 'toggleSelectAllSpaces', 'toggleUnSelectAllSpaces'],
   setup: function (props) {
-    const vm = getCurrentInstance().proxy
+    const instance = getCurrentInstance().proxy
     const { $gettext, $gettextInterpolate } = useTranslations()
     const sortBy = ref('name')
     const sortDir = ref('asc')
@@ -219,8 +223,11 @@ export default defineComponent({
       // TODO: get all manager names of a space?! Oh boy
       return 'managers'
     }
-    const getSpaceMdate = (space: SpaceResource) => {
-      return formatDateFromISO(space.mdate, vm.$language.current)
+    const formatDate = (date) => {
+      return formatDateFromJSDate(new Date(date), instance.$language.current)
+    }
+    const formatDateRelative = (date) => {
+      return formatRelativeDateFromJSDate(new Date(date), instance.$language.current)
     }
     const getAvailableQuota = (space: SpaceResource) => {
       return `${space.spaceQuota.total * Math.pow(10, -9)} GB`
@@ -251,8 +258,8 @@ export default defineComponent({
 
     const fileClicked = (data) => {
       const space = data[0]
-      vm.$emit('toggleUnSelectAllSpaces')
-      vm.$emit('toggleSelectSpace', space)
+      instance.$emit('toggleUnSelectAllSpaces')
+      instance.$emit('toggleSelectSpace', space)
     }
 
     return {
@@ -263,7 +270,8 @@ export default defineComponent({
       fields,
       highlighted,
       getManagers,
-      getSpaceMdate,
+      formatDate,
+      formatDateRelative,
       getAvailableQuota,
       getUsedQuota,
       getRemainingQuota,
