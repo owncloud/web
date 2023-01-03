@@ -194,6 +194,7 @@ export default defineComponent({
           this.configuration?.options?.sharingRecipientsPerPage
         )
 
+        // fixMe: head-breaking logic
         const users = recipients.exact.users
           .concat(recipients.users)
           .filter((user) => user.value.shareWith !== this.user.id)
@@ -224,11 +225,21 @@ export default defineComponent({
           const existingShares = this.resourceIsSpace
             ? this.spaceMembers
             : this.currentFileOutgoingCollaborators
-          const exists = existingShares.find((existingCollaborator) => {
-            return (
-              collaborator.value.shareWith === existingCollaborator.collaborator.name &&
-              parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType
-            )
+          const exists = existingShares.find((share) => {
+            const shareCollaboratorIdentifier =
+              share.collaborator.name || share.collaborator.displayName
+            const isSameByIdentifier = collaborator.value.shareWith === shareCollaboratorIdentifier
+            const isSameByType = parseInt(collaborator.value.shareType, 10) === share.shareType
+            const isGroupShareCollaborator =
+              parseInt(collaborator.value.shareType, 10) == ShareTypes.group.value
+
+            // we cannot differentiate by isSameByType for spaces group collaborators, collaborators shareType and group shareType is not the same
+            // should be part of head-breaking fixMe above..
+            if (this.resourceIsSpace && isGroupShareCollaborator && isSameByIdentifier) {
+              return true
+            }
+
+            return isSameByIdentifier && isSameByType
           })
 
           if (selected || exists) {
