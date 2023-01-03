@@ -1,11 +1,13 @@
-import { buildSpace, isProjectSpaceResource } from 'web-client/src/helpers'
-import Vue from 'vue'
+import { buildSpace, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import Vue, { Ref } from 'vue'
 import { set, has } from 'lodash-es'
 import { unref } from 'vue'
 import { buildSpaceShare } from 'web-client/src/helpers/share'
 import { sortSpaceMembers } from '../helpers/space/sortMembers'
 
 import { configurationManager } from 'web-pkg/src/configuration'
+import { Graph } from 'web-client'
+import { AxiosResponse } from 'axios'
 
 const state = {
   spaces: [],
@@ -105,7 +107,7 @@ const mutations = {
 }
 
 const actions = {
-  async loadSpaces(context, { graphClient }) {
+  async loadSpaces(context, { graphClient }: { graphClient: Graph }) {
     context.commit('SET_SPACES_LOADING', true)
     try {
       const graphResponse = await graphClient.drives.listMyDrives()
@@ -132,20 +134,34 @@ const actions = {
     context.commit('CLEAR_PROJECT_SPACES')
     context.commit('ADD_SPACES', spaces)
   },
-  loadSpaceMembers(context, { graphClient, space }) {
+  loadSpaceMembers(
+    context,
+    { graphClient, space }: { graphClient: Ref<Graph>; space: SpaceResource }
+  ) {
     context.commit('CLEAR_SPACE_MEMBERS')
     const promises = []
     const spaceShares = []
 
     for (const role of Object.keys(space.spaceRoles)) {
-      for (const userId of space.spaceRoles[role]) {
-        promises.push(
-          unref(graphClient)
-            .users.getUser(userId)
-            .then((resolved) => {
-              spaceShares.push(buildSpaceShare({ ...resolved.data, role }, space.id))
-            })
-        )
+      for (const { kind, id } of space.spaceRoles[role]) {
+        const client = unref(graphClient)
+        let prom: Promise<AxiosResponse>
+        switch (kind) {
+          case 'user':
+            prom = client.users.getUser(id)
+            break
+          case 'group':
+            prom = client.groups.getGroup(id)
+            break
+          default:
+            continue
+        }
+
+        prom.then((resolved) => {
+          spaceShares.push(buildSpaceShare({ ...resolved.data, role }, space.id))
+        })
+
+        promises.push(prom)
       }
     }
 
@@ -167,10 +183,15 @@ const actions = {
     context.commit('UPSERT_SPACE_MEMBERS', buildSpaceShare(shareObj, storageId))
   },
   async changeSpaceMember(context, { client, graphClient, share, permissions, role }) {
-    await client.shares.shareSpaceWithUser('', share.collaborator.name, share.id, {
-      permissions,
-      role: role.name
-    })
+    await client.shares.shareSpaceWithUser(
+      '',
+      share.collaborator.name || share.collaborator.displayName,
+      share.id,
+      {
+        permissions,
+        role: role.name
+      }
+    )
 
     const graphResponse = await graphClient.drives.getDrive(share.id)
     context.commit('UPSERT_SPACE', buildSpace(graphResponse.data))
@@ -186,7 +207,9 @@ const actions = {
     context.commit('UPSERT_SPACE_MEMBERS', spaceShare)
   },
   async deleteSpaceMember(context, { client, graphClient, share, reloadSpace = true }) {
-    const additionalParams = { shareWith: share.collaborator.name } as any
+    const additionalParams = {
+      shareWith: share.collaborator.name || share.collaborator.displayName
+    } as any
     await client.shares.deleteShare(share.id, additionalParams)
 
     if (reloadSpace) {

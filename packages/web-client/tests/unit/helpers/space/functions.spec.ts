@@ -1,5 +1,7 @@
 import { buildSpace, ProjectSpaceResource } from '../../../../src/helpers/space'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../../../../src/helpers/share'
+import { mock } from 'jest-mock-extended'
+import { User } from 'web-client/src'
 
 describe('buildSpace', () => {
   const uuid = '1'
@@ -15,7 +17,7 @@ describe('buildSpace', () => {
           permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
         }
       }) as ProjectSpaceResource
-      expect(space.isViewer(uuid)).toBe(data.expectedResult)
+      expect(space.isViewer(mock<User>({ uuid }))).toBe(data.expectedResult)
     })
   })
 
@@ -30,7 +32,7 @@ describe('buildSpace', () => {
           permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
         }
       }) as ProjectSpaceResource
-      expect(space.isEditor(uuid)).toBe(data.expectedResult)
+      expect(space.isEditor(mock<User>({ uuid }))).toBe(data.expectedResult)
     })
   })
 
@@ -45,7 +47,7 @@ describe('buildSpace', () => {
           permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
         }
       }) as ProjectSpaceResource
-      expect(space.isManager(uuid)).toBe(data.expectedResult)
+      expect(space.isManager(mock<User>({ uuid }))).toBe(data.expectedResult)
     })
   })
 })

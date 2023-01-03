@@ -346,17 +346,27 @@ export default defineComponent({
       return null
     },
 
+    // fixMe: head-breaking logic
     isShareModifiable(collaborator) {
-      if (
-        this.space &&
-        isProjectSpaceResource(this.space) &&
-        this.currentUserIsMemberOfSpace &&
-        !this.space?.spaceRoles.manager.includes(this.user.uuid)
-      ) {
-        return false
+      const isPersonalSpaceShare = !isProjectSpaceResource(this.space)
+      const isPersonalMember = this.currentUserIsMemberOfSpace
+      const isIndirectPersonalCollaborator = collaborator.indirect
+      const isProjectSpaceShare = !isPersonalSpaceShare
+      const isManager = this.space?.isManager(this.user)
+
+      if (isPersonalSpaceShare && isPersonalMember && isManager) {
+        return true
       }
 
-      return !collaborator.indirect
+      if (isPersonalSpaceShare && !isIndirectPersonalCollaborator) {
+        return true
+      }
+
+      if (isProjectSpaceShare && isManager) {
+        return true
+      }
+
+      return false
     }
   }
 })
