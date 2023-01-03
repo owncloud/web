@@ -18,7 +18,8 @@ import {
   TagsApiFactory,
   CollectionOfTags,
   TagAssignment,
-  TagUnassignment
+  TagUnassignment,
+  DrivesGetDrivesApi
 } from './generated'
 
 export interface Graph {
@@ -29,6 +30,7 @@ export interface Graph {
   }
   drives: {
     listMyDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
+    listAllDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
     getDrive: (id: string) => AxiosPromise<Drive>
     createDrive: (drive: Drive, options: any) => AxiosPromise<Drive>
     updateDrive: (id: string, drive: Drive, options: any) => AxiosPromise<Drive>
@@ -62,6 +64,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   })
 
   const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
+  const allDrivesApi = new DrivesGetDrivesApi(config, config.basePath, axiosClient)
   const meUserApiFactory = MeUserApiFactory(config, config.basePath, axiosClient)
   const meChangepasswordApiFactory = MeChangepasswordApiFactory(
     config,
@@ -85,6 +88,8 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     drives: {
       listMyDrives: (orderBy?: string, filter?: string) =>
         meDrivesApi.listMyDrives(orderBy, filter),
+      listAllDrives: (orderBy?: string, filter?: string) =>
+        allDrivesApi.listAllDrives(orderBy, filter),
       getDrive: (id: string) => drivesApiFactory.getDrive(id),
       createDrive: (drive: Drive, options: any): AxiosPromise<Drive> =>
         drivesApiFactory.createDrive(drive, options),
