@@ -16,13 +16,12 @@ Feature: reshare
     And "Admin" adds user to the group
       | user  | group |
       | Carol | sales |
+    And "Alice" creates the following folder in the personal space using API
+      | name             |
+      | folder_to_shared |
 
     And "Alice" logs in
     And "Alice" opens the "files" app
-    And "Alice" navigates to the personal space page
-    And "Alice" creates the following resources
-      | resource         | type   |
-      | folder_to_shared | folder |
     When "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type | role   |
       | folder_to_shared | Brian     | user | editor |
