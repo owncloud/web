@@ -24,6 +24,7 @@ Summary
 * Bugfix - UI fixes for sorting and quickactions: [#7966](https://github.com/owncloud/web/pull/7966)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 * Enhancement - Access right sidebar panels via URL: [#8021](https://github.com/owncloud/web/pull/8021)
+* Enhancement - Make clipboard copy available to more browsers: [#8136](https://github.com/owncloud/web/pull/8136)
 * Enhancement - Add switch to enable condensed resource table: [#7976](https://github.com/owncloud/web/pull/7976)
 * Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
@@ -168,6 +169,16 @@ Details
 
    https://github.com/owncloud/web/issues/7927
    https://github.com/owncloud/web/pull/8021
+
+* Enhancement - Make clipboard copy available to more browsers: [#8136](https://github.com/owncloud/web/pull/8136)
+
+   We have added more functionality for copying (e.g. links) to the user's clipboard. By
+   switching libraries we now use the standard browser API (if available) with a fallback and only
+   offer copy-to-clipboard buttons if the browser supports it.
+
+   https://github.com/owncloud/web/issues/8134
+   https://github.com/owncloud/web/pull/8136
+   https://github.com/owncloud/web/pull/8173
 
 * Enhancement - Add switch to enable condensed resource table: [#7976](https://github.com/owncloud/web/pull/7976)
 
