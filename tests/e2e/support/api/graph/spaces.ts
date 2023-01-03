@@ -1,5 +1,5 @@
 import { checkResponseStatus, request } from '../http'
-import { Space, User } from '../../types'
+import { User } from '../../types'
 import join from 'join-path'
 
 export const getPersonalSpaceId = async ({ user }: { user: User }): Promise<string> => {
@@ -10,7 +10,7 @@ export const getPersonalSpaceId = async ({ user }: { user: User }): Promise<stri
   })
 
   checkResponseStatus(response, 'Failed while geting personal space')
-  
+
   const result = await response.json()
   return result.value[0].id
 }

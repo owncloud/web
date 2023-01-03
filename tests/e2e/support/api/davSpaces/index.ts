@@ -1,3 +1,1 @@
-export {
-  createFolder
-} from './spaces'
+export { createFolder } from './spaces'
