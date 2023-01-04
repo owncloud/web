@@ -14,21 +14,13 @@ export const createFolderInsideSpace = async ({
   spaceId: string
   folderName: string
 }): Promise<void> => {
-
   const paths = folderName.split('/')
 
   let subFolder = ''
   for (const resource of paths) {
     const response = await request({
       method: 'MKCOL',
-      path: join(
-          'remote.php',
-          'dav',
-          'spaces',
-          spaceId,
-          subFolder,
-          resource
-      ),
+      path: join('remote.php', 'dav', 'spaces', spaceId, subFolder, resource),
       user: spaceAdmin
     })
 
