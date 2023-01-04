@@ -91,10 +91,10 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           1 Some space
         </td>
         <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-manager">
-          managers
+          user1, user2... +1
         </td>
         <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-members">
-          1
+          3
         </td>
         <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-availableQuota"> 1 GB </td>
         <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-usedQuota"> 0.00 GB </td>

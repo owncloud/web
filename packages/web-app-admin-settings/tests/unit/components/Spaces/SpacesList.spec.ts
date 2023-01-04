@@ -7,7 +7,11 @@ const spaceMocks = [
     name: '1 Some space',
     disabled: false,
     spaceRoles: {
-      manager: ['user1'],
+      manager: [
+        { id: 'user1', displayName: 'user1' },
+        { id: 'user2', displayName: 'user2' },
+        { id: 'user3', displayName: 'user3' }
+      ],
       editor: [],
       viewer: []
     },
@@ -22,9 +26,13 @@ const spaceMocks = [
     name: '2 Another space',
     disabled: true,
     spaceRoles: {
-      manager: ['user1'],
-      editor: ['user2'],
-      viewer: ['user3']
+      manager: [
+        { id: 'user1', displayName: 'user1' },
+        { id: 'user2', displayName: 'user2' },
+        { id: 'user3', displayName: 'user3' }
+      ],
+      editor: [{ id: 'user4', displayName: 'user4' }],
+      viewer: [{ id: 'user5', displayName: 'user5' }]
     },
     spaceQuota: {
       total: 2000000000,

@@ -92,6 +92,7 @@ export function buildSpace(data): SpaceResource {
             const spaceRole: SpaceRole = {
               kind,
               id: info[kind].id,
+              displayName: info[kind].displayName,
               isMember(u?: any): boolean {
                 if (!u) {
                   return false

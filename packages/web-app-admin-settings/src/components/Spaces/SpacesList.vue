@@ -40,7 +40,7 @@
         <oc-icon name="layout-grid" />
       </template>
       <template #manager="{ item }">
-        {{ getManagers(item) }}
+        {{ getManagerNames(item) }}
       </template>
       <template #members="{ item }">
         {{ getMemberCount(item) }}
@@ -81,6 +81,7 @@ import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/
 import { computed, defineComponent, getCurrentInstance, PropType, ref, unref } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 import { useTranslations } from 'web-pkg/src/composables'
+import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -219,9 +220,14 @@ export default defineComponent({
       }
     ])
 
-    const getManagers = (space: SpaceResource) => {
-      // TODO: get all manager names of a space?! Oh boy
-      return 'managers'
+    const getManagerNames = (space: SpaceResource) => {
+      const allManagers = space.spaceRoles[spaceRoleManager.name]
+      const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers
+      let managerStr = managers.map((m) => m.displayName).join(', ')
+      if (allManagers.length > 2) {
+        managerStr += `... +${allManagers.length - 2}`
+      }
+      return managerStr
     }
     const formatDate = (date) => {
       return formatDateFromJSDate(new Date(date), instance.$language.current)
@@ -246,9 +252,9 @@ export default defineComponent({
     }
     const getMemberCount = (space: SpaceResource) => {
       return (
-        space.spaceRoles.manager.length +
-        space.spaceRoles.editor.length +
-        space.spaceRoles.viewer.length
+        space.spaceRoles[spaceRoleManager.name].length +
+        space.spaceRoles[spaceRoleEditor.name].length +
+        space.spaceRoles[spaceRoleViewer.name].length
       )
     }
     const getSelectSpaceLabel = (space: SpaceResource) => {
@@ -269,7 +275,7 @@ export default defineComponent({
       footerTextTotal,
       fields,
       highlighted,
-      getManagers,
+      getManagerNames,
       formatDate,
       formatDateRelative,
       getAvailableQuota,
