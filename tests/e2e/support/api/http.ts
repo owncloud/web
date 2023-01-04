@@ -11,7 +11,7 @@ export const request = async ({
   user,
   formatJson = true
 }: {
-  method: 'POST' | 'DELETE' | 'PUT' | 'GET' | 'MKCOL'
+  method: 'POST' | 'DELETE' | 'PUT' | 'GET' | 'MKCOL' | 'PROPFIND' | 'PATCH'
   path: string
   body?: BodyInit
   user?: User
