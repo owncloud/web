@@ -15,10 +15,12 @@ export interface Resource {
   readonly nodeId?: string
   name?: string
   tags?: string[]
+  disabled?: boolean
   path: string
   webDavPath?: string
   downloadURL?: string
   type?: string
+  thumbnail?: string
   status?: number
   processing?: boolean
   spaceRoles?: {

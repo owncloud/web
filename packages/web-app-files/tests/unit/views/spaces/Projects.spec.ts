@@ -52,7 +52,7 @@ describe('Projects view', () => {
       expect(wrapper.html()).toMatchSnapshot()
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('.spaces-list').exists()).toBeTruthy()
-      expect(wrapper.findAll('.spaces-list-item').length).toEqual(spaces.length)
+      expect(wrapper.findAll('.oc-tiles-item').length).toEqual(spaces.length)
     })
   })
 })

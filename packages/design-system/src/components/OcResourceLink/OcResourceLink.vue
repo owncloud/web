@@ -17,7 +17,7 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
 import uniqueId from '../../utils/uniqueId'
 
 /**
@@ -53,14 +53,14 @@ export default {
     }
   },
   computed: {
-    isFolder() {
-      return this.resource.isFolder
+    isNavigatable() {
+      return this.resource.isFolder && !this.resource.disabled
     },
     componentType() {
-      return this.isFolder ? 'router-link' : 'oc-button'
+      return this.isNavigatable ? 'router-link' : 'oc-button'
     },
     componentProps() {
-      if (!this.isRouterLink) {
+      if (!this.isNavigatable) {
         return {
           appearance: 'raw',
           gapSize: 'none',
@@ -79,11 +79,8 @@ export default {
 
       return null
     },
-    isRouterLink() {
-      return this.isResourceClickable && this.isFolder
-    },
     linkTargetBlank() {
-      if (this.isRouterLink && this.resource.opensInNewWindow) {
+      if (this.isNavigatable && this.resource.opensInNewWindow) {
         return '_blank'
       }
 
@@ -92,7 +89,7 @@ export default {
   },
   methods: {
     emitClick() {
-      if (this.isFolder) {
+      if (this.isNavigatable) {
         return
       }
 
