@@ -162,3 +162,12 @@ When('{string} accepts the following share(s) using the quick action', async fun
         await shareObject.accept({resource: resource.name, via: 'ACTIONS'})
     }
 });
+
+When('{string} declines the following share using the quick action', async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const {page} = this.actorsEnvironment.getActor({key: stepUser})
+    const shareObject = new objects.applicationFiles.Share({page})
+
+    for (const resource of stepTable.hashes()) {
+        await shareObject.declineShare({resource: resource.name, via: 'ACTIONS'})
+    }
+});
