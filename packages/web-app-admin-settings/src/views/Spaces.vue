@@ -51,11 +51,10 @@
 
 <script lang="ts">
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { useAccessToken, useStore, useTranslations } from 'web-pkg/src/composables'
+import { useAccessToken, useGraphClient, useStore, useTranslations } from 'web-pkg/src/composables'
 import { computed, defineComponent, getCurrentInstance, onMounted, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { useGraphClient } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 import { buildSpace } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg'
@@ -108,7 +107,8 @@ export default defineComponent({
     }
     const toggleSelectAllSpaces = () => {
       if (unref(allSpacesSelected)) {
-        return (selectedSpaces.value = [])
+        selectedSpaces.value = []
+        return
       }
       selectedSpaces.value = [...unref(spaces)]
     }
