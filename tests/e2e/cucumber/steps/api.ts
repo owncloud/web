@@ -172,8 +172,9 @@ Given(
 
 Given('{string} creates the following project space using API', async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const spaceAdmin = this.usersEnvironment.getUser({ key: stepUser })
+    const user = this.usersEnvironment.getUser({ key: stepUser })
     for (const space of stepTable.hashes()) {
-      const spaceId = await api.graph.createSpace({ spaceAdmin, space })
+      const spaceId = await api.graph.createSpace({ user, space })
       this.spacesEnvironment.createSpace({
         key: space.id || space.name,
         space: { name: space.name, id: spaceId }

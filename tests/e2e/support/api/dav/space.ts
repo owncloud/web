@@ -6,11 +6,11 @@ import convert from 'xml-js'
 import _ from 'lodash/object'
 
 export const createFolderInsideSpace = async ({
-  spaceAdmin,
+  user,
   spaceId,
   folderName
 }: {
-  spaceAdmin: User
+  user: User
   spaceId: string
   folderName: string
 }): Promise<void> => {
@@ -21,7 +21,7 @@ export const createFolderInsideSpace = async ({
     const response = await request({
       method: 'MKCOL',
       path: join('remote.php', 'dav', 'spaces', spaceId, subFolder, resource),
-      user: spaceAdmin
+      user: user
     })
 
     checkResponseStatus(response, `Failed while creating a ${folderName} inside space project`)
@@ -30,28 +30,28 @@ export const createFolderInsideSpace = async ({
 }
 
 export const uploadFileInsideSpace = async ({
-  spaceAdmin,
+  user,
   spaceId,
   fileName
 }: {
-  spaceAdmin: User
+  user: User
   spaceId: string
   fileName: string
 }): Promise<void> => {
   const response = await request({
     method: 'PUT',
     path: join('remote.php', 'dav', 'spaces', spaceId, fileName),
-    user: spaceAdmin
+    user: user
   })
   checkResponseStatus(response, `Failed while creating a ${fileName} inside space project`)
 }
 
 export const getDataOfFileInsideSpace = async ({
-  spaceAdmin,
+  user,
   spaceId,
   fileName
 }: {
-  spaceAdmin: User
+  user: User
   spaceId: string
   fileName: string
 }): Promise<Response> => {
@@ -83,7 +83,7 @@ export const getDataOfFileInsideSpace = async ({
     method: 'PROPFIND',
     path: join('remote.php', 'dav', 'spaces', spaceId, fileName),
     body: body,
-    user: spaceAdmin
+    user: user
   })
   checkResponseStatus(response, `Failed while getting information of file ${fileName}`)
   const fileData = JSON.parse(convert.xml2json(await response.text(), { compact: true }))
@@ -91,16 +91,16 @@ export const getDataOfFileInsideSpace = async ({
 }
 
 export const getFileId = async ({
-  spaceAdmin,
+  user,
   spaceId,
   fileName
 }: {
-  spaceAdmin: User
+  user: User
   spaceId: string
   fileName: string
 }): Promise<string> => {
   const fileDataResponse = await getDataOfFileInsideSpace({
-    spaceAdmin,
+    user,
     spaceId: spaceId,
     fileName: fileName
   })
