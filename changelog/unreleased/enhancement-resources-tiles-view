@@ -1,0 +1,7 @@
+Enhancement: Add tiles view for resource display
+
+We've added a switch to change from the known resource table to a tiles view.
+The change gets saved to the route and persisted across resource navigation.
+
+https://github.com/owncloud/web/pull/7991
+https://github.com/owncloud/web/issues/6378

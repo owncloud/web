@@ -1,5 +1,6 @@
 <template>
-  <oc-table
+  <component
+    :is="displayMode"
     :class="[
       hoverableQuickActions && 'hoverable-quick-actions',
       { condensed: viewMode === ViewModeConstants.condensedTable.name }
@@ -178,7 +179,7 @@
       <!-- @slot Footer of the files table -->
       <slot name="footer" />
     </template>
-  </oc-table>
+  </component>
 </template>
 
 <script lang="ts">
@@ -217,10 +218,11 @@ import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
+import ResourceTiles from './ResourceTiles.vue'
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
-  components: { ContextMenuQuickAction },
+  components: { ContextMenuQuickAction, ResourceTiles },
   mixins: [Rename],
   props: {
     /**
