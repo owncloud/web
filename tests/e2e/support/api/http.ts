@@ -8,14 +8,18 @@ export const request = async ({
   method,
   path,
   body,
-  user
+  user,
+  formatJson = true
 }: {
   method: 'POST' | 'DELETE' | 'PUT' | 'GET' | 'MKCOL'
   path: string
   body?: BodyInit
   user?: User
+  formatJson?: boolean
 }): Promise<Response> => {
-  return await fetch(join(config.backendUrl, path + (path.includes('?') ? '&' : '?')), {
+  const format = config.ocis || !formatJson ? '' : 'format=json'
+
+  return await fetch(join(config.backendUrl, path + (path.includes('?') ? '&' : '?') + format), {
     method,
     body,
     headers: {
