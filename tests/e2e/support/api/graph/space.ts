@@ -3,6 +3,31 @@ import { Space, User } from '../../types'
 import join from 'join-path'
 import { createFolderInsideSpace, getFileId, uploadFileInsideSpace } from '../dav/space'
 
+export const getSpaceIdBySpaceName = async ({
+  user,
+  spaceType,
+  spaceName
+}: {
+  user: User
+  spaceType: string
+  spaceName: string
+}): Promise<string> => {
+  const response = await request({
+    method: 'GET',
+    path: join('graph', 'v1.0', 'me', 'drives', `?$filter=driveType eq '${spaceType}'`),
+    user: user
+  })
+  checkResponseStatus(response, 'Failed while fetching spaces')
+  // search for the space with the space name
+  const result = await response.json()
+  for (const spaceProject of result.value) {
+    if (spaceProject.name === spaceName) {
+      return spaceProject.id
+    }
+  }
+  throw new Error(`Space id for the space name ${spaceName} could not be found`)
+}
+
 export const createSpace = async ({
   spaceAdmin,
   space
@@ -29,12 +54,18 @@ export const createSpace = async ({
   checkResponseStatus(response, 'Failed while creating a space project')
 
   const result = await response.json()
+  const spaceName = result.name
+  const spaceId = await getSpaceIdBySpaceName({
+    user: spaceAdmin,
+    spaceType: 'project',
+    spaceName: spaceName
+  })
   // api call to make a hidden file when the space creation in successful
-  await createFolderInsideSpace({ spaceAdmin, spaceId: result.id, folderName: '.space' })
+  await createFolderInsideSpace({ spaceAdmin, spaceId: spaceId, folderName: '.space' })
   // again make an api call to create a readme.md file so that the edit description is shown in the web UI
-  await uploadFileInsideSpace({ spaceAdmin, spaceId: result.id, fileName: '.space/readme.md' })
+  await uploadFileInsideSpace({ spaceAdmin, spaceId: spaceId, fileName: '.space/readme.md' })
   // again make an api call to get file id of the uploaded file `readme.md`
-  const fileId = await getFileId({ spaceAdmin, spaceId: result.id, fileName: '.space/readme.md' })
+  const fileId = await getFileId({ spaceAdmin, spaceId: spaceId, fileName: '.space/readme.md' })
   // after getting file id make a patch request to update space special section
   await updateSpaceSpecialSection({
     spaceAdmin,
@@ -81,6 +112,6 @@ export const updateSpaceSpecialSection = async ({
   })
   checkResponseStatus(
     response,
-    `Failed while creating special section ${type} inside space project`
+    `Failed while creating special section "${type}" inside space project`
   )
 }
