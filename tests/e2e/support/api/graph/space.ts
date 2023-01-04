@@ -1,8 +1,7 @@
 import { checkResponseStatus, request } from '../http'
 import { Space, User } from '../../types'
 import join from 'join-path'
-import {createFolderInsideSpace, getDataOfFileInsideSpace, getFileId, uploadFileInsideSpace} from "../dav/space";
-const _ = require('lodash/object')
+import { createFolderInsideSpace, getFileId, uploadFileInsideSpace } from '../dav/space'
 
 export const createSpace = async ({
   spaceAdmin,
@@ -27,45 +26,49 @@ export const createSpace = async ({
   // to make api request work consistently with UI we need to create a hidden folder '.space'
   // inside .space it consist of files that may be required to update the space (e.g. change description of space (stored by readme.md), change image of space)
 
-    checkResponseStatus(response, 'Failed while creating a space project')
+  checkResponseStatus(response, 'Failed while creating a space project')
 
-    const result = await response.json()
-    // api call to make a hidden file when the space creation in successful
-    await createFolderInsideSpace({spaceAdmin, spaceId: result.id, folderName: '.space/'})
-    // again make an api call to create a readme.md file so that the edit description is shown in the web UI
-    await uploadFileInsideSpace({spaceAdmin, spaceId: result.id, fileName: '.space/readme.md'})
-    // again make an api call to get file id of the uploaded file `readme.md`
-    const fileId = await getFileId({spaceAdmin, spaceId: result.id, fileName: '.space/readme.md'})
-    // after getting file id make a patch request to update space special section
-    await updateSpaceSpecialSection({spaceAdmin, spaceId: result.id, type: 'description' , fileId: fileId})
+  const result = await response.json()
+  // api call to make a hidden file when the space creation in successful
+  await createFolderInsideSpace({ spaceAdmin, spaceId: result.id, folderName: '.space/' })
+  // again make an api call to create a readme.md file so that the edit description is shown in the web UI
+  await uploadFileInsideSpace({ spaceAdmin, spaceId: result.id, fileName: '.space/readme.md' })
+  // again make an api call to get file id of the uploaded file `readme.md`
+  const fileId = await getFileId({ spaceAdmin, spaceId: result.id, fileName: '.space/readme.md' })
+  // after getting file id make a patch request to update space special section
+  await updateSpaceSpecialSection({
+    spaceAdmin,
+    spaceId: result.id,
+    type: 'description',
+    fileId: fileId
+  })
 
-    return result.id
+  return result.id
 }
 
 export const updateSpaceSpecialSection = async ({
-                                              spaceAdmin,
-                                              spaceId,
-                                              type,
-                                              fileId
-                                            }: {
+  spaceAdmin,
+  spaceId,
+  type,
+  fileId
+}: {
   spaceAdmin: User
   spaceId: string
   type: string
   fileId: string
 }): Promise<void> => {
-
-  if (type === "description") {
-    type = "readme";
+  if (type === 'description') {
+    type = 'readme'
   } else {
-    type = "image";
+    type = 'image'
   }
   const body = JSON.stringify({
-    "special": [
+    special: [
       {
-        "specialFolder": {
-          "name": type
+        specialFolder: {
+          name: type
         },
-        "id": fileId
+        id: fileId
       }
     ]
   })
@@ -76,5 +79,8 @@ export const updateSpaceSpecialSection = async ({
     body: body,
     user: spaceAdmin
   })
-  checkResponseStatus(response, `Failed while creating special section ${type} inside space project`)
+  checkResponseStatus(
+    response,
+    `Failed while creating special section ${type} inside space project`
+  )
 }

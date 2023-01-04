@@ -1,6 +1,6 @@
 services:
   ocis:
-    image: ${OCIS_IMAGE:-owncloud/ocis:dev}
+    image: ${OCIS_IMAGE:-owncloud/ocis:latest}
     container_name: web_ocis
     ports:
       - 9200:9200
