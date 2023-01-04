@@ -43,7 +43,7 @@
         {{ getManagers(item) }}
       </template>
       <template #members="{ item }">
-        {{ getSpaceMemberCount(item) }}
+        {{ getMemberCount(item) }}
       </template>
       <template #availableQuota="{ item }"> {{ getAvailableQuota(item) }} </template>
       <template #usedQuota="{ item }"> {{ getUsedQuota(item) }} </template>
@@ -80,7 +80,7 @@
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { computed, defineComponent, getCurrentInstance, PropType, ref, unref } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
-import { useTranslations } from 'web-pkg'
+import { useTranslations } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -118,8 +118,8 @@ export default defineComponent({
 
         switch (prop) {
           case 'members':
-            a = getSpaceMemberCount(s1).toString() || ''
-            b = getSpaceMemberCount(s2).toString() || ''
+            a = getMemberCount(s1).toString() || ''
+            b = getMemberCount(s2).toString() || ''
             break
           case 'availableQuota':
             a = getAvailableQuota(s1).toString() || ''
@@ -244,7 +244,7 @@ export default defineComponent({
       }
       return `${(space.spaceQuota.remaining * Math.pow(10, -9)).toFixed(0)} GB`
     }
-    const getSpaceMemberCount = (space: SpaceResource) => {
+    const getMemberCount = (space: SpaceResource) => {
       return (
         space.spaceRoles.manager.length +
         space.spaceRoles.editor.length +
@@ -275,7 +275,7 @@ export default defineComponent({
       getAvailableQuota,
       getUsedQuota,
       getRemainingQuota,
-      getSpaceMemberCount,
+      getMemberCount,
       getSelectSpaceLabel,
       handleSort,
       orderedSpaces,
