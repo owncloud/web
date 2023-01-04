@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SpacesList should render all spaces in a table 1`] = `
+<div>
+  <table class="spaces-table oc-table oc-table-hover oc-table-sticky">
+    <thead class="oc-thead">
+      <tr class="oc-table-header-row" tabindex="-1">
+        <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-table-header-cell oc-table-header-cell-select oc-pl-s " style="top: 0px;">
+          <span class="oc-table-thead-content">
+            <occheckbox-stub class="oc-ml-s" hidelabel="true" id="oc-checkbox-1" label="Select all spaces" size="large"></occheckbox-stub>
+          </span>
+          <!---->
+        </th>
+        <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-table-header-cell oc-table-header-cell-icon" style="top: 0px;">
+          <span class="oc-table-thead-content header-text"></span>
+          <!---->
+        </th>
+        <th aria-sort="ascending" class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-name" style="top: 0px;">
+          <span class="oc-table-thead-content header-text">Name</span>
+          <button aria-label="Sort by name" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+            <span class="oc-icon oc-icon-s oc-icon-passive">
+              <!---->
+            </span>
+          </button>
+        </th>
+        <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-manager" style="top: 0px;">
+          <span class="oc-table-thead-content header-text">Manager</span>
+          <!---->
+        </th>
+        <th aria-sort="none" class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-members" style="top: 0px;">
+          <span class="oc-table-thead-content header-text">Members</span>
+          <button aria-label="Sort by members" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible" type="button">
+            <span class="oc-icon oc-icon-s oc-icon-passive">
+              <!---->
+            </span>
+          </button>
+        </th>
+        <th aria-sort="none" class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-availableQuota" style="top: 0px;">
+          <span class="oc-table-thead-content header-text">Available Quota</span>
+          <button aria-label="Sort by availableQuota" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible" type="button">
+            <span class="oc-icon oc-icon-s oc-icon-passive">
+              <!---->
+            </span>
+          </button>
+        </th>
+        <th aria-sort="none" class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-usedQuota" style="top: 0px;">
+          <span class="oc-table-thead-content header-text">Used Quota</span>
+          <button aria-label="Sort by usedQuota" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible" type="button">
+            <span class="oc-icon oc-icon-s oc-icon-passive">
+              <!---->
+            </span>
+          </button>
+        </th>
+        <th aria-sort="none" class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-remainingQuota" style="top: 0px;">
+          <span class="oc-table-thead-content header-text">Remaining Quota</span>
+          <button aria-label="Sort by remainingQuota" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible" type="button">
+            <span class="oc-icon oc-icon-s oc-icon-passive">
+              <!---->
+            </span>
+          </button>
+        </th>
+        <th aria-sort="none" class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-mdate" style="top: 0px;">
+          <span class="oc-table-thead-content header-text">Modified</span>
+          <button aria-label="Sort by mdate" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible" type="button">
+            <span class="oc-icon oc-icon-s oc-icon-passive">
+              <!---->
+            </span>
+          </button>
+        </th>
+        <th aria-sort="none" class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-status oc-pr-s" style="top: 0px;">
+          <span class="oc-table-thead-content header-text">Status</span>
+          <button aria-label="Sort by status" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible" type="button">
+            <span class="oc-icon oc-icon-s oc-icon-passive">
+              <!---->
+            </span>
+          </button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="oc-tbody-tr oc-tbody-tr-1" data-item-id="1" draggable="false" tabindex="-1">
+        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-s ">
+          <occheckbox-stub class="oc-ml-s" hidelabel="true" id="oc-checkbox-2" label="Select 1 Some space" option="[object Object]" size="large"></occheckbox-stub>
+        </td>
+        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-icon">
+          <span class="oc-icon oc-icon-m oc-icon-passive">
+            <!---->
+          </span>
+        </td>
+        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-name">
+          1 Some space
+        </td>
+        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-manager">
+          managers
+        </td>
+        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-members">
+          1
+        </td>
+        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-availableQuota"> 1 GB </td>
+        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-usedQuota"> 0.00 GB </td>
+        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-remainingQuota"> 1 GB </td>
+        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-mdate">
+          <span tabindex="0"></span>
+        </td>
+        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-status oc-pr-s">
+          <span class="oc-flex oc-flex-middle">
+            <span class="oc-mr-s oc-icon oc-icon-m oc-icon-success">
+              <!---->
+            </span>
+            <span>Enabled</span>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot class="oc-table-footer">
+      <tr class="oc-table-footer-row">
+        <td class="oc-table-footer-cell" colspan="10">
+          <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+            <p class="oc-text-muted">1 spaces in total</p>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+`;

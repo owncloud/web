@@ -118,24 +118,24 @@ export default defineComponent({
 
         switch (prop) {
           case 'members':
-            a = getMemberCount(s1).toString() || ''
-            b = getMemberCount(s2).toString() || ''
+            a = getMemberCount(s1).toString()
+            b = getMemberCount(s2).toString()
             break
           case 'availableQuota':
-            a = getAvailableQuota(s1).toString() || ''
-            b = getAvailableQuota(s2).toString() || ''
+            a = getAvailableQuota(s1).toString()
+            b = getAvailableQuota(s2).toString()
             break
           case 'usedQuota':
-            a = getUsedQuota(s1).toString() || ''
-            b = getUsedQuota(s2).toString() || ''
+            a = getUsedQuota(s1).toString()
+            b = getUsedQuota(s2).toString()
             break
           case 'remainingQuota':
-            a = getRemainingQuota(s1).toString() || ''
-            b = getRemainingQuota(s2).toString() || ''
+            a = getRemainingQuota(s1).toString()
+            b = getRemainingQuota(s2).toString()
             break
           case 'status':
-            a = s1.disabled.toString() || ''
-            b = s2.disabled.toString() || ''
+            a = s1.disabled.toString()
+            b = s2.disabled.toString()
             break
           default:
             a = s1[prop] || ''
