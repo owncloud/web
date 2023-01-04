@@ -12,6 +12,13 @@ export interface createLinkArgs {
   space?: boolean
 }
 
+export interface copyLinkArgs {
+  page: Page
+  resource?: string
+  name?: string
+  via?: string
+}
+
 export type changeNameArgs = {
   page: Page
   resource?: string

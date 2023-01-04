@@ -34,9 +34,7 @@ Feature: share
     When "Brian" accepts the following share using the quick action
       | name                  |
       | decline_shared_folder |
-    And "Brian" creates quick link of the following resource using the quick action
-      | resource              |
-      | decline_shared_folder |
+    And "Brian" copies quick link of the resource "decline_shared_folder" using the quick action
     And "Brian" declines the following share using the quick action
       | name                  |
       | decline_shared_folder |
@@ -68,22 +66,22 @@ Feature: share
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
-      | resource                | type       | content   |
-      | shareToBrian.txt        | txtFile    | some text |
-      | shareToBrian.md         | mdFile     | readme    |
-      | shareToBrian.drawio     | drawioFile |           |
-      | decline_shared_file.txt | txtFile    | some text |
+      | resource              | type       | content   |
+      | shareToBrian.txt      | txtFile    | some text |
+      | shareToBrian.md       | mdFile     | readme    |
+      | shareToBrian.drawio   | drawioFile |           |
+      | declineSharedFile.txt | txtFile    | some text |
     And "Alice" uploads the following resource
       | resource        |
       | testavatar.jpeg |
       | simple.pdf      |
     And "Alice" shares the following resource using the sidebar panel
-      | resource                | recipient | type | role   |
-      | shareToBrian.txt        | Brian     | user | editor |
-      | shareToBrian.md         | Brian     | user | editor |
-      | testavatar.jpeg         | Brian     | user | viewer |
-      | simple.pdf              | Brian     | user | viewer |
-      | decline_shared_file.txt | Brian     | user | viewer |
+      | resource              | recipient | type | role   |
+      | shareToBrian.txt      | Brian     | user | editor |
+      | shareToBrian.md       | Brian     | user | editor |
+      | testavatar.jpeg       | Brian     | user | viewer |
+      | simple.pdf            | Brian     | user | viewer |
+      | declineSharedFile.txt | Brian     | user | editor |
     And "Alice" logs out
 
     When "Brian" logs in
@@ -99,20 +97,18 @@ Feature: share
       | testavatar.jpeg  |
       | simple.pdf       |
     And "Brian" declines the following share
-      | name                    |
-      | decline_shared_file.txt |
+      | name                  |
+      | declineSharedFile.txt |
     Then "Brian" should not be able to edit the following resources
       | resource                | content     |
-      | decline_shared_file.txt | new content |
-    When "Brian" accepts the following share using the sidebar panel
-      | name                    |
-      | decline_shared_file.txt |
-    And "Brian" creates quick link of the following resource using the sidebar panel
-      | resource                |
-      | decline_shared_file.txt |
-    And "Brian" declines the following share using the sidebar panel
-      | name                    |
-      | decline_shared_file.txt |
+      | declineSharedFile.txt | new content |
+    When "Brian" accepts the following share using the quick action
+      | name                  |
+      | declineSharedFile.txt |
+    And "Brian" copies quick link of the resource "declineSharedFile.txt" using the quick action
+    And "Brian" declines the following share using the quick action
+      | name                  |
+      | declineSharedFile.txt |
     And "Brian" edits the following resources
       | resource         | content            |
       | shareToBrian.txt | new content        |

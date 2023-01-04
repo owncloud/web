@@ -3,6 +3,7 @@ import util from 'util'
 import Collaborator, { ICollaborator } from './collaborator'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
+import { copyLinkArgs, waitForPopupNotPresent } from '../link/actions'
 
 const filesSharedWithMeAccepted =
   '#files-shared-with-me-accepted-section [data-test-resource-name="%s"]'
@@ -12,9 +13,12 @@ const quickShareButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]'
 const noPermissionToShareLabel =
   '//*[@data-testid="files-collaborators-no-reshare-permissions-message"]'
-const actionMenuDropdownButton = '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "resource-table-btn-action-dropdown")]'
-const actionsTriggerButton = '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "oc-files-actions-%s-trigger")]'
-const filesSharedWithMeDeclined = '#files-shared-with-me-declined-section [data-test-resource-name="%s"]'
+const actionMenuDropdownButton =
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "resource-table-btn-action-dropdown")]'
+const actionsTriggerButton =
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "oc-files-actions-%s-trigger")]'
+const filesSharedWithMeDeclined =
+  '#files-shared-with-me-declined-section [data-test-resource-name="%s"]'
 export interface ShareArgs {
   page: Page
   resource: string
@@ -63,7 +67,7 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
 /**/
 
 export interface acceptShareArgs extends ShareArgs {
-    via?: 'STATUS' | 'ACTIONS'
+  via?: 'STATUS' | 'ACTIONS'
 }
 export type ShareStatusArgs = Omit<acceptShareArgs, 'recipients'>
 
@@ -154,4 +158,17 @@ export const hasPermissionToShare = async (
   await openSharingPanel(page, resource)
   await Collaborator.waitForInvitePanel(page)
   return !(await page.isVisible(noPermissionToShareLabel))
+}
+
+export const copyQuickLink = async (args: copyLinkArgs): Promise<void> => {
+  const { page, resource, via } = args
+  if (via === 'ACTIONS') {
+    await Promise.all([
+      page.locator(util.format(actionMenuDropdownButton, resource)).click(),
+      page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200),
+      page.locator(util.format(actionsTriggerButton, resource, 'create-quicklink')).click(),
+      page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200),
+      waitForPopupNotPresent(page)
+    ])
+  }
 }
