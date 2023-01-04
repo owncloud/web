@@ -14,12 +14,27 @@ export const createFolderInsideSpace = async ({
   spaceId: string
   folderName: string
 }): Promise<void> => {
-  const response = await request({
-    method: 'MKCOL',
-    path: join('remote.php', 'dav', 'spaces', spaceId, folderName),
-    user: spaceAdmin
-  })
-  checkResponseStatus(response, `Failed while creating a ${folderName} inside space project`)
+
+  const paths = folderName.split('/')
+
+  let subFolder = ''
+  for (const resource of paths) {
+    const response = await request({
+      method: 'MKCOL',
+      path: join(
+          'remote.php',
+          'dav',
+          'spaces',
+          spaceId,
+          subFolder,
+          resource
+      ),
+      user: spaceAdmin
+    })
+
+    checkResponseStatus(response, `Failed while creating a ${folderName} inside space project`)
+    subFolder += resource
+  }
 }
 
 export const uploadFileInsideSpace = async ({

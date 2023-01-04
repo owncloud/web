@@ -30,7 +30,7 @@ export const createSpace = async ({
 
   const result = await response.json()
   // api call to make a hidden file when the space creation in successful
-  await createFolderInsideSpace({ spaceAdmin, spaceId: result.id, folderName: '.space/' })
+  await createFolderInsideSpace({ spaceAdmin, spaceId: result.id, folderName: '.space' })
   // again make an api call to create a readme.md file so that the edit description is shown in the web UI
   await uploadFileInsideSpace({ spaceAdmin, spaceId: result.id, fileName: '.space/readme.md' })
   // again make an api call to get file id of the uploaded file `readme.md`
