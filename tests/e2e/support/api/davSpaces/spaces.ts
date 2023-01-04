@@ -15,12 +15,20 @@ export const createFolder = async ({
 
   let subFolder = ''
   for (const resource of paths) {
-
     const oc10Path = join('remote.php', 'dav', 'files', user.id, subFolder, resource)
-    
+
     const response = await request({
       method: 'MKCOL',
-      path: config.ocis ? join('remote.php', 'dav', 'spaces', await getPersonalSpaceId({ user }), subFolder, resource) : oc10Path,
+      path: config.ocis
+        ? join(
+            'remote.php',
+            'dav',
+            'spaces',
+            await getPersonalSpaceId({ user }),
+            subFolder,
+            resource
+          )
+        : oc10Path,
       user: user,
       formatJson: false
     })
