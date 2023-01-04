@@ -23,7 +23,7 @@ Feature: spaces public link
             | spaceFolder | folder |
         And "Alice" creates a public link for the resource "spaceFolder" using the sidebar panel
         And "Alice" renames the most recently created public link of resource "spaceFolder" to "folderLink"
-        And "Alice" adds following users to the project space
+        And "Alice" adds following members to the project space
             | user  | role    |
             | Brian | editor  |
             | Carol | viewer  |

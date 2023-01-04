@@ -82,7 +82,22 @@ When(
 )
 
 When(
-  '{string} adds following users to the project space',
+  '{string} adds following members to the project space',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    for (const { user, role, kind } of stepTable.hashes()) {
+      const collaborator = kind === 'user' ? this.usersEnvironment.getUser({ key: user }) : this.usersEnvironment.getGroup({ key: user })
+      const member = {
+        collaborator,
+        role
+      }
+      await spacesObject.addMembers({ users: [member] })
+    }
+  }
+)
+When(
+  '{string} adds following groups to the project space',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })

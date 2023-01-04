@@ -6,6 +6,13 @@ Feature: spaces participant management
       | Alice |
       | Brian |
       | Carol |
+      | Marie |
+    And "Admin" creates following group
+      | id     |
+      | sales   |
+    And "Admin" adds user to the group
+      | user  | group |
+      | Marie | sales |
     And "Admin" assigns following roles to the users
       | id    | role       |
       | Alice | SpaceAdmin |
@@ -16,10 +23,13 @@ Feature: spaces participant management
       | name | id     |
       | team | team.1 |
     And "Alice" navigates to the project space "team.1"
-    And "Alice" adds following users to the project space
-      | user  | role   |
-      | Brian | editor |
-      | Carol | viewer |
+    And "Alice" adds following members to the project space
+      | user  | role   | kind  |
+      | Brian | editor | user  |
+      | Carol | viewer | user  |
+      | sales | viewer | group |
+    When "Marie" logs in
+    Then "Marie" should not be able to see space "team.1"
     When "Brian" logs in
     And "Brian" navigates to the projects space page
     And "Brian" navigates to the project space "team.1"
