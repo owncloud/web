@@ -3,7 +3,7 @@
     <div
       class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top"
     >
-      <p class="oc-my-xs" v-text="uploadInfoTitle" />
+      <p class="oc-my-xs" v-oc-tooltip="uploadDetails" v-text="uploadInfoTitle" />
       <oc-button
         v-if="!filesInProgressCount"
         id="close-upload-info-btn"
@@ -138,13 +138,16 @@
 </template>
 
 <script lang="ts">
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
-import { mapGetters } from 'vuex'
 import { defineComponent } from 'vue'
-import { UppyResource } from '../composables/upload'
-import { urlJoin } from 'web-client/src/utils'
+import { mapGetters } from 'vuex'
 import { isUndefined } from 'lodash-es'
+import getSpeed from '@uppy/utils/lib/getSpeed'
+import filesize from 'filesize'
+
+import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { UppyResource } from '../composables/upload'
 
 export default defineComponent({
   setup() {
@@ -167,6 +170,7 @@ export default defineComponent({
     runningUploads: 0, // all uploads (not files!) that are in progress currently
     bytesTotal: 0,
     bytesUploaded: 0,
+    uploadSpeed: 0,
     filesInEstimation: {},
     timeStarted: null,
     remainingTime: undefined
@@ -174,6 +178,16 @@ export default defineComponent({
   computed: {
     ...mapGetters(['configuration']),
 
+    uploadDetails() {
+      if (this.uploadSpeed === 0) {
+        return ''
+      }
+      const todo = filesize(this.bytesUploaded)
+      const done = filesize(this.bytesTotal)
+      const currentUploadSpeed = filesize(this.uploadSpeed)
+      // needs $gettext interpolation
+      return `${todo} of ${done} (${currentUploadSpeed}/s)`
+    },
     uploadInfoTitle() {
       if (this.inFinalization) {
         return this.$gettext('Finalizing upload...')
@@ -295,6 +309,14 @@ export default defineComponent({
       this.filesInEstimation[file.meta.uploadId] = progress.bytesUploaded
 
       const timeElapsed = +new Date() - this.timeStarted
+
+      // "bytesTotal" is a wrong type documentation,
+      // fix in progress via https://github.com/transloadit/uppy/pull/4263
+      this.uploadSpeed = getSpeed({
+        bytesTotal: this.timeStarted,
+        bytesUploaded: this.bytesUploaded
+      })
+
       const progressPercent = (100 * this.bytesUploaded) / this.bytesTotal
       if (progressPercent === 0) {
         return
