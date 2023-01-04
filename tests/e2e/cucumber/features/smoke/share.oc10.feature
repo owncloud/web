@@ -36,7 +36,7 @@ Feature: share
     And "Brian" uploads the following resource
       | resource   | to                      |
       | simple.pdf | Shares/folder_to_shared |
-    And "Brian" copies the following resource
+    And "Brian" copies the following resource using dropdown-menu
       | resource                | to       |
       | Shares/folder_to_shared | Personal |
     When "Alice" opens the "files" app
@@ -87,7 +87,7 @@ Feature: share
       | name            |
       | testavatar.jpeg |
     And "Brian" navigates to the personal space page
-    And "Brian" copies the following resource
+    And "Brian" copies the following resource using dropdown-menu
       | resource               | to       |
       | Shares/testavatar.jpeg | Personal |
     And "Brian" downloads the following resource using the sidebar panel
