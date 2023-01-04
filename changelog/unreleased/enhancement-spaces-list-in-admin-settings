@@ -1,0 +1,5 @@
+Enhancement: Spaces list in admin settings
+
+The admin settings now have a view to list all spaces for the current instance. This makes it possible for space admins to manage all spaces in one place.
+
+https://github.com/owncloud/web/pull/8178
