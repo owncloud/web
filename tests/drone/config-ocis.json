@@ -26,6 +26,7 @@
     "draw-io",
     "text-editor",
     "pdf-viewer",
-    "search"
+    "search",
+    "admin-settings"
   ]
 }
