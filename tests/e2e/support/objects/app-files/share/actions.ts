@@ -12,7 +12,11 @@ const quickShareButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]'
 const noPermissionToShareLabel =
   '//*[@data-testid="files-collaborators-no-reshare-permissions-message"]'
-
+const showContextMenuButton = '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "resource-table-btn-action-dropdown")]'
+const shareAcceptDeclineDetailsButtonInContextMenu = '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "oc-files-actions-%s-trigger")]'
+// oc-files-actions-show-details-trigger
+// oc-files-actions-show-accept-share-trigger
+// oc-files-actions-show-decline-share-trigger
 export interface ShareArgs {
   page: Page
   resource: string
@@ -60,15 +64,28 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
 
 /**/
 
-export type ShareStatusArgs = Omit<ShareArgs, 'recipients'>
+export interface acceptShareArgs extends ShareArgs {
+    via?: 'STATUS' | 'ACTIONS'
+}
+export type ShareStatusArgs = Omit<acceptShareArgs, 'recipients'>
 
 export const acceptShare = async (args: ShareStatusArgs): Promise<void> => {
-  const { resource, page } = args
-  await Promise.all([
-    page.locator(util.format(shareAcceptDeclineButton, resource, 'status-accept')).click(),
-    page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200),
-    page.locator(util.format(filesSharedWithMeAccepted, resource)).waitFor()
-  ])
+  const { resource, via, page } = args
+  if (via === 'ACTIONS') {
+    await Promise.all([
+      page.locator(util.format(showContextMenuButton, resource)).click(),
+      page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200),
+      page.locator(util.format(shareAcceptDeclineDetailsButtonInContextMenu, resource, 'accept-share')).click(),
+      page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200),
+      page.locator(util.format(filesSharedWithMeAccepted, resource)).waitFor()
+    ])
+  } else {
+    await Promise.all([
+      page.locator(util.format(shareAcceptDeclineButton, resource, 'status-accept')).click(),
+      page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200),
+      page.locator(util.format(filesSharedWithMeAccepted, resource)).waitFor()
+    ])
+  }
 }
 
 export const declineShare = async (args: ShareStatusArgs): Promise<void> => {
