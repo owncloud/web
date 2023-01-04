@@ -96,20 +96,6 @@ When(
     }
   }
 )
-When(
-  '{string} adds following groups to the project space',
-  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const spacesObject = new objects.applicationFiles.Spaces({ page })
-    for (const { user, role } of stepTable.hashes()) {
-      const member = {
-        collaborator: this.usersEnvironment.getUser({ key: user }),
-        role
-      }
-      await spacesObject.addMembers({ users: [member] })
-    }
-  }
-)
 
 When(
   '{string} removes access to following users from the project space',
