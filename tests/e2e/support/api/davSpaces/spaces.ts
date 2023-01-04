@@ -2,6 +2,7 @@ import { checkResponseStatus, request } from '../http'
 import { User } from '../../types'
 import join from 'join-path'
 import { getPersonalSpaceId } from '../graph'
+import { config } from '../../../config'
 
 export const createFolder = async ({
   user,
@@ -14,17 +15,14 @@ export const createFolder = async ({
 
   let subFolder = ''
   for (const resource of paths) {
+
+    const oc10Path = join('remote.php', 'dav', 'files', user.id, subFolder, resource)
+    
     const response = await request({
       method: 'MKCOL',
-      path: join(
-        'remote.php',
-        'dav',
-        'spaces',
-        await getPersonalSpaceId({ user }),
-        subFolder,
-        resource
-      ),
-      user: user
+      path: config.ocis ? join('remote.php', 'dav', 'spaces', await getPersonalSpaceId({ user }), subFolder, resource) : oc10Path,
+      user: user,
+      formatJson: false
     })
 
     checkResponseStatus(response, 'Failed while creating folder')
