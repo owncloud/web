@@ -16,7 +16,7 @@ Feature: reshare
     And "Admin" adds user to the group
       | user  | group |
       | Carol | sales |
-    And "Alice" creates the following folder in the personal space using API
+    And "Alice" creates the following folder in personal space using API
       | name             |
       | folder_to_shared |
 
