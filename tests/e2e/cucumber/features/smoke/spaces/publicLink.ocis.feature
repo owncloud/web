@@ -24,10 +24,10 @@ Feature: spaces public link
         And "Alice" creates a public link for the resource "spaceFolder" using the sidebar panel
         And "Alice" renames the most recently created public link of resource "spaceFolder" to "folderLink"
         And "Alice" adds following members to the project space
-            | user  | role    |
-            | Brian | editor  |
-            | Carol | viewer  |
-            | Marie | manager |
+            | member | role    |
+            | Brian  | editor  |
+            | Carol  | viewer  |
+            | Marie  | manager |
         And "Alice" logs out
         When "Brian" logs in
         And "Brian" navigates to the projects space page

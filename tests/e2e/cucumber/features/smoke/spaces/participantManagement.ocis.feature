@@ -27,7 +27,7 @@ Feature: spaces participant management
       | team | team.1 |
     And "Alice" navigates to the project space "team.1"
     And "Alice" adds following members to the project space
-      | user     | role   | kind  |
+      | member   | role   | kind  |
       | Brian    | editor | user  |
       | Carol    | viewer | user  |
       | sales    | viewer | group |
