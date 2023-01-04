@@ -1,5 +1,6 @@
 export const EVENT_TROW_MOUNTED = 'rowMounted'
 export const EVENT_FILE_DROPPED = 'fileDropped'
+export const EVENT_TROW_CONTEXTMENU = 'contextmenuClicked'
 
 export abstract class ImageDimension {
   static readonly Thumbnail: [number, number] = [36, 36]

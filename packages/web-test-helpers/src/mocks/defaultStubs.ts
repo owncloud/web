@@ -10,6 +10,8 @@ export const defaultStubs = {
   'oc-select': true,
   'oc-spinner': true,
   'oc-textarea': true,
+  'oc-tiles': false,
+  'oc-tile': true,
   'resource-table': true,
   'resource-upload': true,
   'router-link': true,

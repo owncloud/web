@@ -7,7 +7,7 @@ export type { OCS } from './ocs'
 
 export * as helpers from './helpers'
 
-export type { Resource, User } from './helpers'
+export type { Resource, SpaceResource, User } from './helpers'
 
 interface Client {
   graph: Graph

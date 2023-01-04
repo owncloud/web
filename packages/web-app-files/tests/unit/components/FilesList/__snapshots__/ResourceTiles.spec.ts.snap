@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OcTileGrid component renders a footer slot 1`] = `
+<div>
+  <oc-list-stub class="oc-tiles oc-flex"></oc-list-stub> Hello, OcTileGrid footer!
+</div>
+`;
+
+exports[`OcTileGrid component renders an array of spaces correctly 1`] = `
+<div>
+  <oc-list-stub class="oc-tiles oc-flex">
+    <li class="oc-tiles-item">
+      <oc-tile-stub resource="[object Object]" resource-route="[object Object]"></oc-tile-stub>
+    </li>
+    <li class="oc-tiles-item">
+      <oc-tile-stub resource="[object Object]" resource-route="[object Object]"></oc-tile-stub>
+    </li>
+  </oc-list-stub>
+</div>
+`;

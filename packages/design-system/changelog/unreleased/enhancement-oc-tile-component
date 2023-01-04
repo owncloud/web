@@ -1,0 +1,5 @@
+Enhancement: Add tile component
+
+We have added a new component to display a resource as a tile.
+
+https://github.com/owncloud/web/pull/8137
