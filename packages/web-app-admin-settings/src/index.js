@@ -18,7 +18,11 @@ const routes = [
   {
     path: '/',
     redirect: () => {
-      return { name: 'admin-settings-users' }
+      const permissionManager = window.Vue.$permissionManager
+      if (permissionManager.hasUserManagement()) {
+        return { name: 'admin-settings-users' }
+      }
+      return { name: 'admin-settings-spaces' }
     }
   },
   {

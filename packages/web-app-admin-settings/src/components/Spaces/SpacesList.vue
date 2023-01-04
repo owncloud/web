@@ -39,6 +39,13 @@
       <template #icon>
         <oc-icon name="layout-grid" />
       </template>
+      <template #name="{ item }">
+        <span
+          class="spaces-table-space-name"
+          :data-test-space-name="item.name"
+          v-text="item.name"
+        />
+      </template>
       <template #manager="{ item }">
         {{ getManagerNames(item) }}
       </template>
@@ -175,6 +182,7 @@ export default defineComponent({
       {
         name: 'name',
         title: $gettext('Name'),
+        type: 'slot',
         sortable: true
       },
       {
