@@ -29,10 +29,10 @@ export const getSpaceIdBySpaceName = async ({
 }
 
 export const createSpace = async ({
-  spaceAdmin,
+  user,
   space
 }: {
-  spaceAdmin: User
+  user: User
   space: Space
 }): Promise<string> => {
   // create a space with this function
@@ -45,7 +45,7 @@ export const createSpace = async ({
     method: 'POST',
     path: join('graph', 'v1.0', 'drives'),
     body,
-    user: spaceAdmin
+    user: user
   })
 
   // to make api request work consistently with UI we need to create a hidden folder '.space'
@@ -56,19 +56,19 @@ export const createSpace = async ({
   const result = await response.json()
   const spaceName = result.name
   const spaceId = await getSpaceIdBySpaceName({
-    user: spaceAdmin,
+    user: user,
     spaceType: 'project',
     spaceName: spaceName
   })
   // api call to make a hidden file when the space creation in successful
-  await createFolderInsideSpace({ spaceAdmin, spaceId: spaceId, folderName: '.space' })
+  await createFolderInsideSpace({ user, spaceId: spaceId, folderName: '.space' })
   // again make an api call to create a readme.md file so that the edit description is shown in the web UI
-  await uploadFileInsideSpace({ spaceAdmin, spaceId: spaceId, fileName: '.space/readme.md' })
+  await uploadFileInsideSpace({ user, spaceId: spaceId, fileName: '.space/readme.md' })
   // again make an api call to get file id of the uploaded file `readme.md`
-  const fileId = await getFileId({ spaceAdmin, spaceId: spaceId, fileName: '.space/readme.md' })
+  const fileId = await getFileId({ user, spaceId: spaceId, fileName: '.space/readme.md' })
   // after getting file id make a patch request to update space special section
   await updateSpaceSpecialSection({
-    spaceAdmin,
+    user,
     spaceId: result.id,
     type: 'description',
     fileId: fileId
@@ -78,12 +78,12 @@ export const createSpace = async ({
 }
 
 export const updateSpaceSpecialSection = async ({
-  spaceAdmin,
+  user,
   spaceId,
   type,
   fileId
 }: {
-  spaceAdmin: User
+  user: User
   spaceId: string
   type: string
   fileId: string
@@ -108,7 +108,7 @@ export const updateSpaceSpecialSection = async ({
     method: 'PATCH',
     path: join('graph', 'v1.0', 'drives', spaceId),
     body: body,
-    user: spaceAdmin
+    user: user
   })
   checkResponseStatus(
     response,
