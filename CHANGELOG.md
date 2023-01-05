@@ -34,6 +34,7 @@ Summary
 * Enhancement - Introduce image preloading to the preview app: [#8051](https://github.com/owncloud/web/pull/8051)
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 * Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
+* Enhancement - Rename "user management" app: [#8175](https://github.com/owncloud/web/pull/8175)
 * Enhancement - Retry failed uploads on re-upload: [#8055](https://github.com/owncloud/web/pull/8055)
 * Enhancement - Space group members: [#8161](https://github.com/owncloud/web/pull/8161)
 * Enhancement - Space group shares: [#8161](https://github.com/owncloud/web/pull/8161)
@@ -243,6 +244,13 @@ Details
 
    https://github.com/owncloud/web/issues/7160
    https://github.com/owncloud/web/pull/7977
+
+* Enhancement - Rename "user management" app: [#8175](https://github.com/owncloud/web/pull/8175)
+
+   The "user management" app has been renamed to "admin settings" because the app will contain a
+   variety of general settings in the future.
+
+   https://github.com/owncloud/web/pull/8175
 
 * Enhancement - Retry failed uploads on re-upload: [#8055](https://github.com/owncloud/web/pull/8055)
 
