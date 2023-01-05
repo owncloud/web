@@ -1,6 +1,7 @@
 import translations from '../l10n/translations'
 import Users from './views/Users.vue'
 import Groups from './views/Groups.vue'
+import Spaces from './views/Spaces.vue'
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
   return msg
@@ -17,7 +18,11 @@ const routes = [
   {
     path: '/',
     redirect: () => {
-      return { name: 'admin-settings-users' }
+      const permissionManager = window.Vue.$permissionManager
+      if (permissionManager.hasUserManagement()) {
+        return { name: 'admin-settings-users' }
+      }
+      return { name: 'admin-settings-spaces' }
     }
   },
   {
@@ -36,6 +41,15 @@ const routes = [
     meta: {
       authContext: 'user',
       title: $gettext('Groups')
+    }
+  },
+  {
+    path: '/spaces',
+    name: 'admin-settings-spaces',
+    component: Spaces,
+    meta: {
+      authContext: 'user',
+      title: $gettext('Spaces')
     }
   }
 ]
@@ -61,6 +75,17 @@ const navItems = [
     enabled: () => {
       const permissionManager = window.Vue.$permissionManager
       return permissionManager.hasUserManagement()
+    }
+  },
+  {
+    name: $gettext('Spaces'),
+    icon: 'layout-grid',
+    route: {
+      path: `/${appInfo.id}/spaces?`
+    },
+    enabled: () => {
+      const permissionManager = window.Vue.$permissionManager
+      return permissionManager.hasSpaceManagement()
     }
   }
 ]
