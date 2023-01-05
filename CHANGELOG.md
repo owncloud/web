@@ -35,7 +35,7 @@ Summary
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 * Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
 * Enhancement - Retry failed uploads on re-upload: [#8055](https://github.com/owncloud/web/pull/8055)
-* Enhancement - Space group shares: [#8161](https://github.com/owncloud/web/pull/8161)
+* Enhancement - Space group members: [#8161](https://github.com/owncloud/web/pull/8161)
 * Enhancement - Show text file icon for empty text files: [#8057](https://github.com/owncloud/web/pull/8057)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Update libre-graph-api to v1.0: [#8132](https://github.com/owncloud/web/pull/8132)
@@ -252,11 +252,20 @@ Details
    https://github.com/owncloud/web/issues/7944
    https://github.com/owncloud/web/pull/8055
 
-* Enhancement - Space group shares: [#8161](https://github.com/owncloud/web/pull/8161)
+* Enhancement - Space group members: [#8161](https://github.com/owncloud/web/pull/8161)
 
-   We've added the possibility to share a space with a group.
+   We've added the option to manage and work with space group members.
+
+   In detail it contains: * Permission management for space group members * Inherit space group
+   permissions to child resources * Groups appear in the autocomplete list when inviting space
+   members * Selected groups appear in to be invited list * Selected groups are part of the share
+   creation request payload * All group type members of a space are listed in the members section of
+   the space * All users / groups with the "listGrants" permission can see groups which are invited
+   to a space * All users / groups who only have access on a share level inside a sub-resource of a
+   space can not see all groups which are regular members of the space
 
    https://github.com/owncloud/web/issues/8160
+   https://github.com/owncloud/web/issues/8177
    https://github.com/owncloud/web/pull/8161
 
 * Enhancement - Show text file icon for empty text files: [#8057](https://github.com/owncloud/web/pull/8057)
