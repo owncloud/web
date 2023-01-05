@@ -2,10 +2,20 @@ Feature: spaces participant management
 
   Scenario: participant management
     Given "Admin" creates following users
-      | id    |
-      | Alice |
-      | Brian |
-      | Carol |
+      | id      |
+      | Alice   |
+      | Brian   |
+      | Carol   |
+      | Marie   |
+      | Richard |
+    And "Admin" creates following group
+      | id       |
+      | sales    |
+      | security |
+    And "Admin" adds user to the group
+      | user    | group |
+      | Marie   | sales |
+      | Richard | security |
     And "Admin" assigns following roles to the users
       | id    | role       |
       | Alice | SpaceAdmin |
@@ -16,10 +26,12 @@ Feature: spaces participant management
       | name | id     |
       | team | team.1 |
     And "Alice" navigates to the project space "team.1"
-    And "Alice" adds following users to the project space
-      | user  | role   |
-      | Brian | editor |
-      | Carol | viewer |
+    And "Alice" adds following members to the project space
+      | member   | role   | kind  |
+      | Brian    | editor | user  |
+      | Carol    | viewer | user  |
+      | sales    | viewer | group |
+      | security | editor | group |
     When "Brian" logs in
     And "Brian" navigates to the projects space page
     And "Brian" navigates to the project space "team.1"
@@ -29,6 +41,21 @@ Feature: spaces participant management
     And "Brian" uploads the following resources
       | resource  | to     |
       | lorem.txt | parent |
+    When "Marie" logs in
+    And "Marie" navigates to the projects space page
+    And "Marie" navigates to the project space "team.1"
+    Then "Marie" should see folder "parent" but should not be able to edit
+    And "Marie" logs out
+    When "Richard" logs in
+    And "Richard" navigates to the projects space page
+    And "Richard" navigates to the project space "team.1"
+    And "Richard" creates the following resources
+      | resource | type   |
+      | richard   | folder |
+    And "Richard" uploads the following resources
+      | resource  | to     |
+      | lorem.txt | richard |
+    And "Richard" logs out
     When "Carol" logs in
     And "Carol" navigates to the projects space page
     And "Carol" navigates to the project space "team.1"
