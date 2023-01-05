@@ -82,7 +82,7 @@ When(
 )
 
 When(
-  '{string} adds following members(s) to the project space',
+  '{string} adds following member(s) to the project space',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
