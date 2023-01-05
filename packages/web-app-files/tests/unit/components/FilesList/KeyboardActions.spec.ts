@@ -3,6 +3,7 @@ import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { eventBus } from 'web-pkg'
 import keycode from 'keycode'
+
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 import { useScrollToMock } from 'web-app-files/tests/mocks/useScrollToMock'

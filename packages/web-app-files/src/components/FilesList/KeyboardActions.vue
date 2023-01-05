@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import * as keycode from 'keycode'
+import keycode from 'keycode'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
 import { defineComponent, PropType } from 'vue'

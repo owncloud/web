@@ -12,6 +12,9 @@ patchedDependencies:
   vue-gettext@2.1.12:
     hash: 6c2crj3kpnhb2sofrku4e7jhce
     path: patches/vue-gettext@2.1.12.patch
+  keycode@2.2.1:
+    hash: nmisee7m676ph5sqah5fka5ueu
+    path: patches/keycode@2.2.1.patch
 
 importers:
 
@@ -104,7 +107,7 @@ importers:
       '@vue/compiler-sfc': 3.2.45
       '@vue/runtime-dom': 3.2.45
       caf: 13.1.1
-      keycode: 2.2.1
+      keycode: 2.2.1_nmisee7m676ph5sqah5fka5ueu
       portal-vue: 2.1.7_vue@3.2.45
       rollup-plugin-gzip: 3.1.0_rollup@3.9.1
       uuid: 9.0.0
@@ -15614,9 +15617,10 @@ packages:
     resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
     dev: false
 
-  /keycode/2.2.1:
+  /keycode/2.2.1_nmisee7m676ph5sqah5fka5ueu:
     resolution: {integrity: sha512-Rdgz9Hl9Iv4QKi8b0OlCRQEzp4AgVxyCtz5S/+VIHezDmrDhkp2N2TqBWOLz0/gbeREXOOiI9/4b8BY9uw2vFg==}
     dev: false
+    patched: true
 
   /killable/1.0.1:
     resolution: {integrity: sha512-LzqtLKlUwirEUyl/nicirVmNiPvYs7l5n8wOPP7fyJVpUPkvCnW/vuiXGpylGUlnPDnB7311rARzAt3Mhswpjg==}
@@ -22603,6 +22607,7 @@ packages:
 
   /wcwidth/1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
+    requiresBuild: true
     dependencies:
       defaults: 1.0.4
     dev: true
