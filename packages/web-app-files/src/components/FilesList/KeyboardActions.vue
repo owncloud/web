@@ -281,7 +281,7 @@ export default defineComponent({
       let nextRow
       try {
         nextRow = (
-          previous ? latestSelectedRow.previousSibling : latestSelectedRow.nextSibling
+          previous ? latestSelectedRow.previousElementSibling : latestSelectedRow.nextElementSibling
         ) as HTMLElement
       } catch {
         return -1
