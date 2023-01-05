@@ -14,7 +14,7 @@ export interface createLinkArgs {
 
 export interface copyLinkArgs {
   page: Page
-  resource?: string
+  resource: string
   name?: string
   via?: string
 }
