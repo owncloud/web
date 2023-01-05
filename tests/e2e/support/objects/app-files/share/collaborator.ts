@@ -7,6 +7,7 @@ export interface ICollaborator {
   collaborator: User | Group
   role: string
   type?: CollaboratorType
+  resourceType?: string
 }
 
 export interface InviteCollaboratorsArgs {
@@ -52,11 +53,17 @@ export default class Collaborator {
   private static readonly customPermissionApplyButton =
     '//*[contains(@class, "files-recipient-custom-permissions-drop-cancel-confirm-btns")]//button[text()="Apply"]'
 
-  static CUSTOM_PERMISSIONS: readonly CustomPermissionType[] = [
+  static readonly FOLDER_CUSTOM_PERMISSIONS: readonly CustomPermissionType[] = [
     'read',
     'update',
     'create',
     'delete',
+    'share'
+  ]
+
+  static readonly FILE_CUSTOM_PERMISSIONS: Omit<CustomPermissionType[], 'create' | 'delete'> = [
+    'read',
+    'update',
     'share'
   ]
 
@@ -93,31 +100,40 @@ export default class Collaborator {
     // When adding multiple users/groups at once
     // the role of the first collaborator is used as the collaborators role
     const role = collaborators[0].role
+    const resourceType = collaborators[0].resourceType
 
     for (const collaborator of collaborators) {
       await Collaborator.addCollaborator({ page, collaborator })
     }
-    await Collaborator.setCollaboratorRole(page, role)
+    await Collaborator.setCollaboratorRole(page, role, resourceType)
     await Collaborator.sendInvitation(page)
   }
 
   static async setCustomPermissions(
     page: Page,
-    permissions: CustomPermissionType[]
+    permissions: CustomPermissionType[],
+    resourceType: string
   ): Promise<void> {
+    const CUSTOM_PERMISSIONS: readonly CustomPermissionType[] =
+      resourceType === 'folder'
+        ? Collaborator.FOLDER_CUSTOM_PERMISSIONS
+        : Collaborator.FILE_CUSTOM_PERMISSIONS
     for (const permission of permissions) {
-      if (!Collaborator.CUSTOM_PERMISSIONS.includes(permission)) {
+      if (!CUSTOM_PERMISSIONS.includes(permission)) {
         throw new Error(
           'Invalid custom permission: ' +
             permission +
             '\nAvailable permissions: ' +
-            Collaborator.CUSTOM_PERMISSIONS
+            CUSTOM_PERMISSIONS
         )
       }
+
       await page.check(util.format(Collaborator.customPermissionCheckbox, permission))
     }
+
     // uncheck others
-    const removePermissions = difference(Collaborator.CUSTOM_PERMISSIONS, permissions)
+    const removePermissions = difference(CUSTOM_PERMISSIONS, permissions)
+
     for (const permission of removePermissions) {
       await page.uncheck(util.format(Collaborator.customPermissionCheckbox, permission))
     }
@@ -126,6 +142,7 @@ export default class Collaborator {
   static async setCollaboratorRole(
     page: Page,
     role: string,
+    resourceType: string,
     dropdownSelector?: string,
     itemSelector?: string
   ): Promise<void> {
@@ -146,7 +163,11 @@ export default class Collaborator {
       }
 
       const permissions = custom_permissions.split(',')
-      await Collaborator.setCustomPermissions(page, permissions as CustomPermissionType[])
+      await Collaborator.setCustomPermissions(
+        page,
+        permissions as CustomPermissionType[],
+        resourceType
+      )
 
       return await page.click(Collaborator.customPermissionApplyButton)
     }
@@ -156,7 +177,7 @@ export default class Collaborator {
   static async changeCollaboratorRole(args: CollaboratorArgs): Promise<void> {
     const {
       page,
-      collaborator: { collaborator, type, role }
+      collaborator: { collaborator, type, role, resourceType }
     } = args
 
     const collaboratorRow = Collaborator.getCollaboratorUserOrGroupSelector(collaborator, type)
@@ -165,7 +186,13 @@ export default class Collaborator {
       collaboratorRow
     )
     const roleItemSelector = util.format(Collaborator.collaboratorRoleItemSelector, collaboratorRow)
-    await Collaborator.setCollaboratorRole(page, role, roleDropdownSelector, roleItemSelector)
+    await Collaborator.setCollaboratorRole(
+      page,
+      role,
+      resourceType,
+      roleDropdownSelector,
+      roleItemSelector
+    )
   }
 
   static async removeCollaborator(args: RemoveCollaboratorArgs): Promise<void> {
