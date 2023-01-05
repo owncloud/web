@@ -1,0 +1,17 @@
+Enhancement: Space group members
+
+We've added the option to manage and work with space group members.
+
+In detail it contains:
+* Permission management for space group members
+* Inherit space group permissions to child resources
+* Groups appear in the autocomplete list when inviting space members
+* Selected groups appear in to be invited list
+* Selected groups are part of the share creation request payload
+* All group type members of a space are listed in the members section of the space
+* All users / groups with the "listGrants" permission can see groups which are invited to a space
+* All users / groups who only have access on a share level inside a sub-resource of a space can not see all groups which are regular members of the space
+
+https://github.com/owncloud/web/pull/8161
+https://github.com/owncloud/web/issues/8160
+https://github.com/owncloud/web/issues/8177
