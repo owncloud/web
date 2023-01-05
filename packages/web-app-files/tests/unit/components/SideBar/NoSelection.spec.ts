@@ -4,7 +4,7 @@ import { defaultPlugins, shallowMount } from 'web-test-helpers'
 describe('NoSelection', () => {
   it('should render the component', () => {
     const { wrapper } = getWrapper()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 

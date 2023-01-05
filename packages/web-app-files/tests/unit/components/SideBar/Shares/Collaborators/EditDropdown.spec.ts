@@ -22,7 +22,7 @@ describe('EditDropdown', () => {
     it('render "remove share" and "access details" as default', () => {
       const { wrapper } = createWrapper()
       expect(wrapper.findAll(selectors.actionMenuItem).length).toBe(2)
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     it('call the "showAccessDetails"-action on click', async () => {
       const { wrapper } = createWrapper()

@@ -6,7 +6,7 @@ import { defaultPlugins, mount } from 'web-test-helpers'
 describe('RoleItem', () => {
   it('renders the role information', () => {
     const { wrapper } = createWrapper()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 

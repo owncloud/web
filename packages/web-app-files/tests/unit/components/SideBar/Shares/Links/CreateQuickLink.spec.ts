@@ -7,7 +7,7 @@ describe('CreateQuickLink', () => {
   it('renders the quick link button', () => {
     const { wrapper } = createWrapper()
     expect(wrapper.find(selectors.createBtn).exists()).toBeTruthy()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('emits the "createPublicLink"-action', async () => {
     const { wrapper } = createWrapper()
