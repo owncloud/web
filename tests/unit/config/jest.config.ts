@@ -30,11 +30,7 @@ module.exports = {
     '@uppy/xhr-upload': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/drop-target': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/tus': '<rootDir>tests/unit/stubs/uppy',
-    '@uppy/utils': '<rootDir>tests/unit/stubs/uppy',
-
-    // FIXME: can be removed when is https://github.com/owncloud/web/pull/8136
-    // remove function.ts as well
-    'copy-to-clipboard': '<rootDir>tests/unit/stubs/function'
+    '@uppy/utils': '<rootDir>tests/unit/stubs/uppy'
   },
   modulePathIgnorePatterns: ['packages/design-system/docs/'],
   testEnvironment: 'jsdom',
