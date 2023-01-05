@@ -1,0 +1,5 @@
+Enhancement: Rename "user management" app
+
+The "user management" app has been renamed to "admin settings" because the app will contain a variety of general settings in the future.
+
+https://github.com/owncloud/web/pull/8175

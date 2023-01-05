@@ -16,7 +16,7 @@
     "text-editor",
     "draw-io",
     "external",
-    "user-management"
+    "admin-settings"
   ],
   "external_apps": [
     {

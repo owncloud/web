@@ -12,7 +12,7 @@
       @toggleSideBar="toggleSideBar"
     >
       <template #topbarActions>
-        <div class="user-management-app-bar-actions oc-mt-xs">
+        <div class="admin-settings-app-bar-actions oc-mt-xs">
           <div v-if="selectedGroups.length" class="oc-flex oc-flex-middle">
             <span v-text="selectedGroupsText" />
             <oc-button
@@ -41,7 +41,7 @@
       <template #mainContent>
         <no-content-message
           v-if="!groups.length"
-          id="user-management-groups-empty"
+          id="admin-settings-groups-empty"
           class="files-empty"
           icon="user"
         >
@@ -134,10 +134,10 @@ export default defineComponent({
     },
     breadcrumbs() {
       return [
-        { text: this.$gettext('User management'), to: { path: '/user-management' } },
+        { text: this.$gettext('Administration Settings'), to: { path: '/admin-settings' } },
         {
           text: this.$gettext('Groups'),
-          onClick: () => eventBus.publish('app.user-management.list.load')
+          onClick: () => eventBus.publish('app.admin-settings.list.load')
         }
       ]
     },
@@ -193,7 +193,7 @@ export default defineComponent({
   async mounted() {
     await this.loadResourcesTask.perform(this)
 
-    const loadResourcesEventToken = eventBus.subscribe('app.user-management.list.load', () => {
+    const loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
       this.loadResourcesTask.perform(this)
     })
 
@@ -202,7 +202,7 @@ export default defineComponent({
     window.addEventListener('resize', this.calculateListHeaderPosition)
 
     this.$on('beforeDestroy', () => {
-      eventBus.unsubscribe('app.user-management.list.load', loadResourcesEventToken)
+      eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
     })
   },
 

@@ -183,7 +183,8 @@ const rewriteDeprecatedAppNames = (
 ): RuntimeConfiguration => {
   const appAliases = [
     { name: 'preview', oldName: 'media-viewer' },
-    { name: 'text-editor', oldName: 'markdown-editor' }
+    { name: 'text-editor', oldName: 'markdown-editor' },
+    { name: 'admin-settings', oldName: 'user-management' }
   ]
   return {
     ...runtimeConfiguration,

@@ -2,8 +2,8 @@
   <main class="oc-flex oc-height-1-1 app-content oc-width-1-1">
     <app-loading-spinner v-if="loading" />
     <template v-else>
-      <div id="user-management-wrapper" class="oc-width-expand">
-        <div id="user-management-app-bar" ref="appBar" class="oc-app-bar oc-py-s">
+      <div id="admin-settings-wrapper" class="oc-width-expand">
+        <div id="admin-settings-app-bar" ref="appBar" class="oc-app-bar oc-py-s">
           <div class="oc-flex oc-flex-between">
             <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
             <div>
@@ -83,7 +83,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#user-management-app-bar {
+#admin-settings-app-bar {
   background-color: var(--oc-color-background-default);
   border-top-right-radius: 15px;
   box-sizing: border-box;
@@ -102,13 +102,13 @@ export default defineComponent({
   }
 }
 
-.user-management-app-bar-actions {
+.admin-settings-app-bar-actions {
   align-items: center;
   display: flex;
   min-height: 3rem;
 }
 
-#user-management-wrapper {
+#admin-settings-wrapper {
   overflow-y: auto;
 }
 </style>
