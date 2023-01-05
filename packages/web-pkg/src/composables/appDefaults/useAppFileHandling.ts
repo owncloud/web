@@ -58,7 +58,7 @@ export function useAppFileHandling({
     )
   }
 
-  const getFileInfo = async (
+  const getFileInfo = (
     fileContext: MaybeRef<FileContext>,
     options: ListFilesOptions = {}
   ): Promise<Resource> => {

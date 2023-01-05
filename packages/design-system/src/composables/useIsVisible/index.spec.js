@@ -96,7 +96,7 @@ describe('useIsVisible', () => {
     const wrapper = createWrapper()
 
     expect(observerMock.disconnect).toHaveBeenCalledTimes(0)
-    wrapper.vm.$destroy()
+    wrapper.unmount()
     expect(observerMock.disconnect).toHaveBeenCalledTimes(1)
   })
 })

@@ -51,11 +51,12 @@
         </li>
         <li class="files-view-options-list-item oc-mt-m">
           <oc-page-size
-            v-model="itemsPerPage"
+            :selected="itemsPerPage"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
             :options="[100, 500]"
             class="files-pagination-size"
+            @change="itemsPerPage = $event"
           />
         </li>
       </oc-list>

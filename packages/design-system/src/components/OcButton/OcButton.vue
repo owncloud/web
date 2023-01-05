@@ -139,6 +139,7 @@ export default {
       }
     }
   },
+  emits: ['click'],
   computed: {
     $_ocButton_buttonClass() {
       return [

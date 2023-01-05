@@ -3,7 +3,7 @@ import { queryItemAsString } from 'web-pkg/src/composables/appDefaults'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables/router'
 import { ViewModeConstants } from './constants'
 
-export function useViewMode<T>(options: ComputedRef<string>): ComputedRef<string> {
+export function useViewMode(options: ComputedRef<string>): ComputedRef<string> {
   if (options) {
     return computed(() => unref(options))
   }

@@ -38,7 +38,9 @@ exports[`OcDrop tippy renders tippy 1`] = `
           <div
             class="oc-card oc-card-body oc-background-secondary oc-p-m"
           >
+            
             show
+            
           </div>
         </div>
       </div>
@@ -84,7 +86,9 @@ exports[`OcDrop tippy renders tippy 2`] = `
           <div
             class="oc-card oc-card-body oc-background-secondary oc-p-m"
           >
+            
             show
+            
           </div>
         </div>
       </div>
@@ -131,7 +135,9 @@ exports[`OcDrop tippy renders tippy 3`] = `
           <div
             class="oc-card oc-card-body oc-background-secondary oc-p-m"
           >
+            
             show
+            
           </div>
         </div>
       </div>

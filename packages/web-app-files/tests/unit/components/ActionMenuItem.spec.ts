@@ -65,6 +65,7 @@ function getWrapper(action, items = [], appearance = null, mountType = shallowMo
         ...(appearance && { appearance })
       },
       global: {
+        renderStubDefaultSlot: true,
         stubs: {
           'router-link': true
         },

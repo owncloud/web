@@ -14,8 +14,8 @@ import { Resource } from 'web-client'
 
 import OcIcon from '../OcIcon/OcIcon.vue'
 import { AVAILABLE_SIZES } from '../../helpers'
-import iconColorMap from '../../helpers/resourceIconColorExtensionMapping.json'
-import iconNameMap from '../../helpers/resourceIconExtensionMapping.json'
+import * as iconColorMap from '../../helpers/resourceIconColorExtensionMapping.json'
+import * as iconNameMap from '../../helpers/resourceIconExtensionMapping.json'
 
 const defaultFolderColor = 'var(--oc-color-icon-folder)'
 const defaultFolderIcon = 'resource-type-folder'

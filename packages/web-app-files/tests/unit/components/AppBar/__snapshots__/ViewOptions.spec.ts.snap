@@ -2,33 +2,38 @@
 
 exports[`ViewOptions component sets the correct initial files page limit 1`] = `
 <div class="oc-flex oc-flex-middle">
-  <!---->
-  <oc-button-stub appearance="raw" arialabel="Display customization options of the files list" class="oc-my-s oc-p-xs" gapsize="medium" id="files-view-options-btn" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-    <oc-icon-stub accessiblelabel="" color="" filltype="line" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
-  </oc-button-stub>
-  <oc-drop-stub class="oc-width-auto" dropid="files-view-options-drop" mode="click" paddingsize="medium" position="bottom-start" toggle="#files-view-options-btn">
-    <oc-list-stub>
-      <li class="files-view-options-list-item oc-mb-m">
-        <oc-switch-stub label="Show hidden files" labelid="oc-switch-label-1"></oc-switch-stub>
-      </li>
-      <li class="files-view-options-list-item oc-my-m">
-        <oc-switch-stub label="Show file extensions" labelid="oc-switch-label-2"></oc-switch-stub>
-      </li>
-      <li class="files-view-options-list-item oc-mt-m">
-        <oc-page-size-stub class="files-pagination-size" label="Items per page" options="100,500" selected="100" selectid="oc-page-size-3"></oc-page-size-stub>
-      </li>
-    </oc-list-stub>
-  </oc-drop-stub>
+  <!--v-if-->
+  <oc-button-stub appearance="raw" arialabel="Display customization options of the files list" class="oc-my-s oc-p-xs" gapsize="medium" id="files-view-options-btn" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+  <div class="oc-drop oc-box-shadow-medium oc-rounded oc-width-auto" id="files-view-options-drop">
+    <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
+      <ul class="oc-list oc-my-rm oc-mx-rm">
+        <li class="files-view-options-list-item oc-mb-m">
+          <span class="oc-switch">
+            <span id="oc-switch-label-1">Show hidden files</span>
+            <button aria-checked="false" aria-labelledby="oc-switch-label-1" class="oc-switch-btn" role="switch"></button>
+          </span>
+        </li>
+        <li class="files-view-options-list-item oc-my-m">
+          <span class="oc-switch">
+            <span id="oc-switch-label-2">Show file extensions</span>
+            <button aria-checked="false" aria-labelledby="oc-switch-label-2" class="oc-switch-btn" role="switch"></button>
+          </span>
+        </li>
+        <li class="files-view-options-list-item oc-mt-m">
+          <div class="oc-page-size files-pagination-size">
+            <label class="oc-page-size-label" for="oc-page-size-3">Items per page</label>
+            <oc-select-stub class="oc-page-size-select" filter="[Function]" id="oc-select-4" input-id="oc-page-size-3" model-value="100" options="100,500"></oc-select-stub>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
 `;
 
 exports[`ViewOptions component shows a viewmode switcher if more than one viewModes are passed 1`] = `
 <div class="oc-button-group oc-visible@s oc-mr-s">
-  <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" label="Switch to condensed table view" size="medium" submit="button" type="button" variation="passive">
-    <oc-icon-stub accessiblelabel="" color="" filltype="none" name="menu-line-condensed" size="small" type="span" variation="passive"></oc-icon-stub>
-  </oc-button-stub>
-  <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" label="Switch to default table view" size="medium" submit="button" type="button" variation="passive">
-    <oc-icon-stub accessiblelabel="" color="" filltype="none" name="menu-line" size="small" type="span" variation="passive"></oc-icon-stub>
-  </oc-button-stub>
+  <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" label="Switch to condensed table view" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+  <oc-button-stub appearance="outline" gapsize="medium" justifycontent="center" label="Switch to default table view" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
 </div>
 `;

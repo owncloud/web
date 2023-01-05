@@ -3,6 +3,7 @@
 exports[`FeedbackLink component has no accessibility violations 1`] = `
 <div class="oc-flex">
   <a aria-describedby="oc-feedback-link-description" aria-label="ownCloud feedback survey" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw" href="https://owncloud.com/web-design-feedback" target="_blank">
+    <!-- @slot Content of the button -->
     <span class="oc-icon oc-icon-m oc-icon-passive">
       <!---->
     </span>

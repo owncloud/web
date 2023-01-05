@@ -1,27 +1,44 @@
 <template>
-  <date-picker class="oc-datepicker" v-bind="$attrs" v-on="$listeners">
-    <template #default="{ inputValue, togglePopover, hidePopover }">
+  <date-picker ref="datePicker" class="oc-datepicker" v-bind="$attrs">
+    <template #default="args">
       <!-- @slot Default slot to use as the popover anchor for datepicker -->
-      <slot :input-value="inputValue" :toggle-popover="togglePopover" :hide-popover="hidePopover" />
+      <!-- args is undefined during initial render, hence we check it here -->
+      <slot
+        v-if="args"
+        :input-value="args.inputValue"
+        :toggle-popover="args.togglePopover"
+        :hide-popover="args.hidePopover"
+      />
     </template>
   </date-picker>
 </template>
 
-<script>
-import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+import { DatePicker } from 'v-calendar'
+import 'v-calendar/dist/style.css'
 
 /**
- * Datepicker component based on [v-calendar](https://vcalendar.io/). For detailed documentation (props, slots, events, etc.), please visit https://vcalendar.io/api/v2.0/calendar.html
+ * Datepicker component based on [v-calendar](https://vcalendar.io/). For detailed documentation, please visit https://vcalendar.io/vue-3.html
  */
-export default {
+export default defineComponent({
+  compatConfig: {
+    MODE: 3
+  },
+
   name: 'OcDatepicker',
   status: 'ready',
   release: '1.0.0',
 
   components: { DatePicker },
 
-  inheritAttrs: true
-}
+  inheritAttrs: true,
+
+  mounted() {
+    this.$el.__datePicker = this.$refs.datePicker
+  }
+})
 </script>
 
 <style lang="scss">

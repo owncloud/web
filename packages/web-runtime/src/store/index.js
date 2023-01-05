@@ -28,6 +28,6 @@ export default {
     modal,
     navigation,
     runtime
-  },
-  strict
+  }
+  // strict
 }

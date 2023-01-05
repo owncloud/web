@@ -1,4 +1,4 @@
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 import Recipient from './OcRecipient.vue'
 
@@ -20,7 +20,8 @@ describe('OcRecipient', () => {
           ...props
         }
       },
-      slots
+      slots,
+      global: { plugins: [...defaultPlugins()] }
     })
   }
 

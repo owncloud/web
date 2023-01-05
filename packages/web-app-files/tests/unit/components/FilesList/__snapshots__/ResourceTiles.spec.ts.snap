@@ -2,19 +2,19 @@
 
 exports[`OcTileGrid component renders a footer slot 1`] = `
 <div>
-  <oc-list-stub class="oc-tiles oc-flex"></oc-list-stub> Hello, OcTileGrid footer!
+  <oc-list class="oc-tiles oc-flex"></oc-list> <!-- @slot Footer of the tiles list --> Hello, OcTileGrid footer!
 </div>
 `;
 
 exports[`OcTileGrid component renders an array of spaces correctly 1`] = `
 <div>
-  <oc-list-stub class="oc-tiles oc-flex">
+  <oc-list class="oc-tiles oc-flex">
     <li class="oc-tiles-item">
-      <oc-tile-stub resource="[object Object]" resource-route="[object Object]"></oc-tile-stub>
+      <oc-tile resource="[object Object]" resource-route="[object Object]"></oc-tile>
     </li>
     <li class="oc-tiles-item">
-      <oc-tile-stub resource="[object Object]" resource-route="[object Object]"></oc-tile-stub>
+      <oc-tile resource="[object Object]" resource-route="[object Object]"></oc-tile>
     </li>
-  </oc-list-stub>
+  </oc-list> <!-- @slot Footer of the tiles list -->
 </div>
 `;

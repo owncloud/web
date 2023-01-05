@@ -8,7 +8,6 @@ import { MaybeRef } from '../../utils'
 
 interface AppDocumentTitleOptions {
   store: Store<any>
-  document: Document
   applicationId: string
   applicationName?: MaybeRef<string>
   currentFileContext: Ref<FileContext>
@@ -16,7 +15,6 @@ interface AppDocumentTitleOptions {
 
 export function useAppDocumentTitle({
   store,
-  document,
   applicationId,
   applicationName,
   currentFileContext

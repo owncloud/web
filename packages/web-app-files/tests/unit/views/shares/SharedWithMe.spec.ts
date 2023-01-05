@@ -62,9 +62,9 @@ describe('SharedWithMe view', () => {
           files: [mockDeep<Resource>({ status: ShareStatus.accepted })]
         })
         expect(wrapper.find('#files-shared-with-me-accepted-section').exists()).toBeTruthy()
-        expect(wrapper.find('#files-shared-with-me-accepted-section').props().items.length).toEqual(
-          1
-        )
+        expect(
+          wrapper.findComponent<any>('#files-shared-with-me-accepted-section').props().items.length
+        ).toEqual(1)
       })
     })
     describe('declined', () => {
@@ -74,9 +74,9 @@ describe('SharedWithMe view', () => {
         })
         await wrapper.vm.loadResourcesTask.last
         expect(wrapper.find('#files-shared-with-me-declined-section').exists()).toBeTruthy()
-        expect(wrapper.find('#files-shared-with-me-declined-section').props().items.length).toEqual(
-          1
-        )
+        expect(
+          wrapper.findComponent<any>('#files-shared-with-me-declined-section').props().items.length
+        ).toEqual(1)
       })
     })
   })

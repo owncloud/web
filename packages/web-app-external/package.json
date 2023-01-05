@@ -7,7 +7,7 @@
   "peerDependencies": {
     "uuid": "^9.0.0",
     "vue-gettext": "2.1.12",
-    "vuex": "^3.6.2",
+    "vuex": "4.1.0",
     "web-client": "npm:@ownclouders/web-client",
     "web-pkg": "npm:@ownclouders/web-pkg"
   }

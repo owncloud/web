@@ -54,7 +54,7 @@ export type publicLinkAndItsEditButtonVisibilityArgs = {
   space?: boolean
 }
 const publicLinkSetRoleButton = `#files-role-%s`
-const linkExpiryDatepicker = '.link-expiry-picker'
+const linkExpiryDatepicker = '.link-expiry-picker:not(.vc-container)'
 const publicLinkEditRoleButton =
   `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/` +
   `div/button[contains(@class, "edit-public-link-role-dropdown-toggle")]`
@@ -178,7 +178,7 @@ export const addExpiration = async (args: addExpirationArgs): Promise<void> => {
 
   await page.locator(linkExpiryDatepicker).evaluate(
     (datePicker: any, { newExpiryDate }): any => {
-      datePicker.__vue__.updateValue(newExpiryDate)
+      datePicker?.__vueParentComponent?.refs?.calendar.move(newExpiryDate)
     },
     { newExpiryDate }
   )

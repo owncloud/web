@@ -39,7 +39,7 @@ describe('SharedViaLink view', () => {
       const { wrapper } = getMountedWrapper({ files: mockedFiles })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
-      expect(wrapper.find('resource-table-stub').props().resources.length).toEqual(
+      expect(wrapper.findComponent<any>('resource-table-stub').props().resources.length).toEqual(
         mockedFiles.length
       )
     })

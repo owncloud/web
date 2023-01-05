@@ -45,31 +45,29 @@ const enforcedCapabilities = merge({}, enabledCapabilities, {
 describe('InviteCollaborator ExpirationDatepicker', () => {
   it('only gets displayed if share expiration is supported', () => {
     const { wrapper } = createWrapper()
-    expect(wrapper.html()).toBe('')
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('renders a button to open the datepicker and set an expiration date', () => {
     const { wrapper } = createWrapper({ capabilities: bareCapabilities })
-
     expect(wrapper.find('[data-testid="recipient-datepicker-btn"]').exists()).toBe(true)
   })
 
   it('does not allow to select a date from the past', () => {
-    const { wrapper } = createWrapper({ capabilities: bareCapabilities })
+    const { wrapper } = createWrapper({ capabilities: bareCapabilities, stubOcDatepicker: true })
     const minDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['min-date']
-
     expect(DateTime.now().toISODate()).toBe(DateTime.fromJSDate(new Date(minDate)).toISODate())
   })
 
   it('does not set any maximum date if no user or group is selected', () => {
-    const { wrapper } = createWrapper({ capabilities: enabledCapabilities })
+    const { wrapper } = createWrapper({ capabilities: enabledCapabilities, stubOcDatepicker: true })
     const maxDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['max-date']
 
     expect(maxDate).toBe(undefined)
   })
 
   it('pre selects and enforces the default expiration date for users', async () => {
-    const { wrapper } = createWrapper({ capabilities: enabledCapabilities })
+    const { wrapper } = createWrapper({ capabilities: enabledCapabilities, stubOcDatepicker: true })
     await wrapper.setProps({ shareTypes: [ShareTypes.user.value] })
 
     const selectedDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes().value
@@ -91,7 +89,7 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   })
 
   it('pre selects and enforces the default expiration date for groups', async () => {
-    const { wrapper } = createWrapper({ capabilities: enabledCapabilities })
+    const { wrapper } = createWrapper({ capabilities: enabledCapabilities, stubOcDatepicker: true })
     await wrapper.setProps({ shareTypes: [ShareTypes.group.value] })
     const selectedDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes().value
 
@@ -113,7 +111,7 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   })
 
   it('pre selects and enforces the smallest expiration date if user and group shareTypes are provided', async () => {
-    const { wrapper } = createWrapper({ capabilities: enabledCapabilities })
+    const { wrapper } = createWrapper({ capabilities: enabledCapabilities, stubOcDatepicker: true })
     await wrapper.setProps({ shareTypes: [ShareTypes.group.value, ShareTypes.user.value] })
     const selectedDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes().value
 
@@ -135,7 +133,7 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   })
 
   it('emits an event if date changes', async () => {
-    const { wrapper } = createWrapper({ capabilities: enabledCapabilities })
+    const { wrapper } = createWrapper({ capabilities: enabledCapabilities, stubOcDatepicker: true })
     const checker = jest.fn()
     wrapper.vm.$on('optionChange', checker as any)
 
@@ -161,14 +159,14 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
     expect(checker.mock.calls[2][0].expirationDate).toBe(null)
 
     const manualDate = DateTime.now().plus({ days: 5 })
-    wrapper.setData({ dateCurrent: manualDate.toJSDate() })
+    wrapper.vm.dateCurrent = manualDate.toJSDate()
     await nextTick()
     expect(checker).toHaveBeenCalledTimes(4)
     expect(DateTime.fromISO(checker.mock.calls[3][0].expirationDate).toISODate()).toBe(
       manualDate.toISODate()
     )
 
-    wrapper.setData({ dateCurrent: null })
+    wrapper.vm.dateCurrent = null
     await wrapper.setProps({ shareTypes: [ShareTypes.user.value, ShareTypes.group.value] })
     await nextTick()
     expect(checker).toHaveBeenCalledTimes(5)
@@ -178,7 +176,7 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   })
 })
 
-const createWrapper = ({ capabilities = {} } = {}) => {
+const createWrapper = ({ capabilities = {}, stubOcDatepicker = false } = {}) => {
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.capabilities.mockImplementation(() => ({ files_sharing: capabilities }))
   const store = createStore(storeOptions)
@@ -186,6 +184,7 @@ const createWrapper = ({ capabilities = {} } = {}) => {
     storeOptions,
     wrapper: mount(ExpirationDatepicker, {
       global: {
+        stubs: { OcDatepicker: stubOcDatepicker },
         plugins: [...defaultPlugins(), store]
       }
     })

@@ -19,7 +19,8 @@ describe('OcModal', () => {
       props: {
         ...defaultProps,
         variation: 'danger'
-      }
+      },
+      global: { renderStubDefaultSlot: true }
     })
 
     expect(wrapper.findAll('.oc-modal-danger').length).toBe(1)
@@ -27,17 +28,19 @@ describe('OcModal', () => {
 
   it('hides icon if not specified', () => {
     const wrapper = shallowMount(Modal, {
+      global: { renderStubDefaultSlot: true },
       props: {
         ...defaultProps
       }
     })
 
     expect(wrapper.findAll('.oc-icon').length).toBe(0)
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('overrides props message with slot', () => {
     const wrapper = shallowMount(Modal, {
+      global: { renderStubDefaultSlot: true },
       props: {
         ...defaultProps
       },
@@ -47,26 +50,28 @@ describe('OcModal', () => {
     })
 
     expect(wrapper.find('.oc-modal-body-message > p').text()).toMatch('Slot message')
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('matches snapshot', () => {
     const wrapper = shallowMount(Modal, {
+      global: { renderStubDefaultSlot: true },
       props: {
         ...defaultProps,
         icon: 'info'
       }
     })
 
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('displays input', () => {
     const wrapper = shallowMount(Modal, {
+      global: { renderStubDefaultSlot: true },
       props: inputProps
     })
 
     expect(wrapper.findAll('.oc-modal-body-input').length).toBe(1)
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

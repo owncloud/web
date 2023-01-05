@@ -1,7 +1,7 @@
 import FileActions from 'web-app-files/src/components/SideBar/Actions/FileActions.vue'
 import { getActions, fileActions } from 'web-app-files/tests/__fixtures__/fileActions.js'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import {
   createStore,
   defaultPlugins,
@@ -51,18 +51,18 @@ describe('FileActions', () => {
 function getWrapper(actions = []) {
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.Files.state.currentFolder = { path: '' }
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => mockDeep<Resource>())
+  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => mock<Resource>())
   const store = createStore(storeOptions)
   return {
     wrapper: mount(Component, {
       global: {
         plugins: [...defaultPlugins(), store],
-        stubs: { ...defaultStubs, 'oc-button': false },
+        stubs: { ...defaultStubs, OcButton: false },
         mocks: {
           $_fileActions_getAllAvailableActions: jest.fn(() => getActions(actions))
         },
         provide: {
-          displayedSpace: mockDeep<SpaceResource>()
+          displayedSpace: mock<SpaceResource>()
         }
       }
     })

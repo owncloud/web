@@ -1,9 +1,9 @@
-import { getCurrentInstance } from 'vue'
+import { useService } from '../service'
 
 export interface AuthServiceInterface {
   handleAuthError(route: any): any
 }
 
 export const useAuthService = (): AuthServiceInterface => {
-  return (getCurrentInstance().proxy as any).$authService
+  return useService('$authService')
 }

@@ -3,7 +3,7 @@
     <oc-select
       id="files-share-invite-input"
       ref="ocSharingAutocomplete"
-      v-model="selectedCollaborators"
+      :model-value="selectedCollaborators"
       :options="autocompleteResults"
       :loading="searchInProgress"
       :multiple="true"
@@ -14,7 +14,7 @@
         ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
       "
       @search:input="onSearch"
-      @input="resetFocusOnInvite"
+      @update:modelValue="resetFocusOnInvite"
     >
       <template #option="option">
         <autocomplete-item :item="option" />
@@ -46,7 +46,7 @@
       />
       <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
         <oc-spinner :aria-label="$gettext('Creating share')" size="small" />
-        <span v-translate :aria-hidden="true" v-text="saveButtonLabel" />
+        <span :aria-hidden="true" v-text="$gettext(saveButtonLabel)" />
       </oc-button>
       <oc-button
         v-else
@@ -343,7 +343,8 @@ export default defineComponent({
       this.saving = false
     },
 
-    resetFocusOnInvite() {
+    resetFocusOnInvite(event) {
+      this.selectedCollaborators = event
       this.autocompleteResults = []
       this.$nextTick(() => {
         const inviteInput = document.getElementById('files-share-invite-input')

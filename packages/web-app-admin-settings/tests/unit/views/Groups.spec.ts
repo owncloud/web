@@ -8,7 +8,6 @@ import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
 const defaultGraphMock = () => {
   const graph = mockDeep<Graph>()
   graph.groups.listGroups.mockImplementation(() => mockAxiosResolve({ value: [{ id: '1' }] }))
-
   return graph
 }
 
@@ -132,14 +131,7 @@ describe('Groups view', () => {
   })
 })
 
-function getMountedWrapper({
-  graph = defaultGraphMock(),
-  data = {},
-  mocks = {},
-  resolveCreateGroup = true,
-  resolveEditGroup = true,
-  resolveDeleteGroup = true
-} = {}) {
+function getMountedWrapper({ graph = defaultGraphMock(), data = {}, mocks = {} } = {}) {
   const $clientService = mockDeep<ClientService>()
   $clientService.graphAuthenticated.mockImplementation(() => graph)
 

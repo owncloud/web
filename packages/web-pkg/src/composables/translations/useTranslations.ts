@@ -1,11 +1,10 @@
-import { getCurrentInstance } from 'vue'
+import { useService } from '../service'
 
 export const useTranslations = () => {
-  const p = getCurrentInstance().proxy as any
   return {
-    $gettext: p.$gettext,
-    $pgettext: p.$pgettext,
-    $ngettext: p.$ngettext,
-    $gettextInterpolate: p.$gettextInterpolate
+    $gettext: useService('$gettext'),
+    $pgettext: useService('$pgettext'),
+    $ngettext: useService('$ngettext'),
+    $gettextInterpolate: useService('$gettextInterpolate')
   }
 }

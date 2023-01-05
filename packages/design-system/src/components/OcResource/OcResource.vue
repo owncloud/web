@@ -48,9 +48,7 @@
           :to="parentFolderLink"
           :style="parentFolderStyle"
           class="parent-folder"
-          @click.native="$emit('parentFolderClicked')"
-          @click.stop
-          @click.native.stop
+          @click.stop="$emit('parentFolderClicked')"
         >
           <oc-icon name="folder-2" size="small" fill-type="line" />
           <span class="text" v-text="parentFolder" />
@@ -148,6 +146,7 @@ export default {
       default: true
     }
   },
+  emits: ['click', 'parentFolderClicked'],
   computed: {
     parentFolderComponentType() {
       return this.parentFolderLink !== null ? 'router-link' : 'span'

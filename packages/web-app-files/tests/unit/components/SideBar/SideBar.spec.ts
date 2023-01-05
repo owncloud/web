@@ -13,7 +13,6 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   defaultStoreMockOptions,
-  defaultStubs,
   shallowMount
 } from 'web-test-helpers'
 
@@ -27,7 +26,7 @@ jest.mock('web-app-files/src/helpers/resources', () => {
 })
 
 const selectors = {
-  noSelectionInfoPanel: 'noselection-stub',
+  noSelectionInfoPanel: 'no-selection-stub',
   tagsPanel: '#sidebar-panel-tags'
 }
 
@@ -149,8 +148,8 @@ function createWrapper({
       },
       global: {
         plugins: [...defaultPlugins(), store],
+        renderStubDefaultSlot: true,
         stubs: {
-          ...defaultStubs,
           SideBar: InnerSideBar
         },
         directives: {

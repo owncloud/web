@@ -31,6 +31,7 @@ function getWrapper(applicationsList = []) {
         applicationsList
       },
       global: {
+        renderStubDefaultSlot: true,
         mocks: defaultComponentMocks(),
         plugins: [...defaultPlugins()]
       }

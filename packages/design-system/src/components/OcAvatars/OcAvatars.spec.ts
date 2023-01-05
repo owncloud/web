@@ -56,7 +56,7 @@ describe('OcAvatars', () => {
     })
 
     expect(OcTooltip.mock.calls[0][1].value).toMatch('Bob, Marie +3')
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('prefers avatars over links when maxDisplayed is exceeded', () => {
@@ -78,7 +78,7 @@ describe('OcAvatars', () => {
     expect(OcTooltip.mock.calls[0][1].value).toMatch(
       'Bob, Marie, John Richards Emperor of long names +2'
     )
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('shows avatars first and links last', () => {
@@ -99,6 +99,6 @@ describe('OcAvatars', () => {
     expect(OcTooltip.mock.calls[0][1].value).toMatch(
       'Bob, Marie, John Richards Emperor of long names, link 0, link 1'
     )
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

@@ -40,7 +40,7 @@ describe('NotFoundMessage', () => {
 
     it('should have property route to personal space', () => {
       const { wrapper } = getWrapper(space, spacesLocation)
-      const homeButton = wrapper.find(selectors.homeButton)
+      const homeButton = wrapper.findComponent<any>(selectors.homeButton)
 
       expect(homeButton.props().to.name).toBe(spacesLocation.name)
       expect(homeButton.props().to.params.driveAliasAndItem).toBe('personal')
@@ -76,7 +76,7 @@ describe('NotFoundMessage', () => {
 
     it('should have property route to files public list', () => {
       const { wrapper } = getWrapper(space, publicLocation)
-      const reloadLinkButton = wrapper.find(selectors.reloadLinkButton)
+      const reloadLinkButton = wrapper.findComponent<any>(selectors.reloadLinkButton)
 
       expect(reloadLinkButton.props().to.name).toBe(publicLocation.name)
       expect(reloadLinkButton.props().to.params.driveAliasAndItem).toBe(
@@ -91,6 +91,7 @@ function getWrapper(space, route) {
     wrapper: shallowMount(NotFoundMessage, {
       props: { space },
       global: {
+        renderStubDefaultSlot: true,
         mocks: defaultComponentMocks({ currentRoute: route }),
         plugins: [...defaultPlugins()]
       }

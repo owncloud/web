@@ -1,7 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PrivateLinkItem should render a button 1`] = `
-<button aria-label="Copy private link to clipboard" class="oc-files-private-link-copy-url oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+<button aria-label="Copy private link to clipboard" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-private-link-copy-url" type="button">
+  <!-- @slot Content of the button -->
   <span>Private link</span>
   <span class="oc-icon oc-icon-m oc-icon-passive">
     <!---->
@@ -10,16 +11,18 @@ exports[`PrivateLinkItem should render a button 1`] = `
 `;
 
 exports[`PrivateLinkItem upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second 1`] = `
-<button aria-label="Copy private link to clipboard" class="oc-files-private-link-copy-url oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-success oc-button-success-raw" type="button">
+<button aria-label="Copy private link to clipboard" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-success oc-button-success-raw oc-files-private-link-copy-url" type="button">
+  <!-- @slot Content of the button -->
   <span>Private link</span>
-  <span class="_clipboard-success-animation oc-icon oc-icon-m oc-icon-passive">
+  <span class="oc-icon oc-icon-m oc-icon-passive _clipboard-success-animation">
     <!---->
   </span>
 </button>
 `;
 
 exports[`PrivateLinkItem upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second 2`] = `
-<button aria-label="Copy private link to clipboard" class="oc-files-private-link-copy-url oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+<button aria-label="Copy private link to clipboard" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-private-link-copy-url" type="button">
+  <!-- @slot Content of the button -->
   <span>Private link</span>
   <span class="oc-icon oc-icon-m oc-icon-passive">
     <!---->

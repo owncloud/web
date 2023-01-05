@@ -5,7 +5,7 @@ exports[`OcResourceName does not show the name as HTML title if the path is bein
   <span class="oc-text-truncate">
     <span class="oc-resource-basename">folder</span>
   </span>
-  <!---->
+  <!--v-if-->
 </span>
 `;
 
@@ -21,7 +21,7 @@ exports[`OcResourceName doesn't add extension to hidden folder 1`] = `
   <span class="oc-text-truncate">
     <span class="oc-resource-basename">.hidden</span>
   </span>
-  <!---->
+  <!--v-if-->
 </span>
 `;
 
@@ -30,7 +30,7 @@ exports[`OcResourceName renders folder names with dots completely in the basenam
   <span class="oc-text-truncate">
     <span class="oc-resource-basename">folder.with.dots</span>
   </span>
-  <!---->
+  <!--v-if-->
 </span>
 `;
 
@@ -39,7 +39,7 @@ exports[`OcResourceName shows the name as HTML title if the path is not displaye
   <span class="oc-text-truncate">
     <span class="oc-resource-basename">folder</span>
   </span>
-  <!---->
+  <!--v-if-->
 </span>
 `;
 

@@ -191,8 +191,6 @@ describe('Notification component', () => {
       const subject = wrapper.findAll(selectors.subject)
       const message = wrapper.findAll(selectors.message)
 
-      expect(subject.exists()).toBeTruthy()
-      expect(message.exists()).toBeTruthy()
       expect(subject).toHaveLength(2)
       expect(message).toHaveLength(2)
       expect(subject.at(0).text()).toBe('First Notification')
@@ -205,8 +203,12 @@ describe('Notification component', () => {
 
 function getWrapper({ mountType = mount, mocks = {}, activeNotifications = [] } = {}) {
   const localMocks = { ...defaultComponentMocks(), ...mocks }
-  const jsonResponse = { json: jest.fn().mockImplementation(async () => ({ ocs: { data: [] } })) }
-  localMocks.$client.requests.ocs.mockImplementation(async () => mockDeep<Response>(jsonResponse))
+  const jsonResponse = {
+    json: jest.fn().mockImplementation(() => Promise.resolve({ ocs: { data: [] } }))
+  }
+  localMocks.$client.requests.ocs.mockImplementation(() =>
+    Promise.resolve(mockDeep<Response>(jsonResponse))
+  )
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.getters.activeNotifications.mockImplementation(() => activeNotifications)
   const store = createStore(storeOptions)
@@ -215,6 +217,7 @@ function getWrapper({ mountType = mount, mocks = {}, activeNotifications = [] } 
     storeOptions,
     wrapper: mountType(Notifications, {
       global: {
+        renderStubDefaultSlot: true,
         plugins: [...defaultPlugins(), store],
         mocks: localMocks,
         stubs: { 'oc-icon': true }

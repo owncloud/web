@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import FileVersions from 'web-app-files/src/components/SideBar/Versions/FileVersions.vue'
 import { defaultStubs } from 'web-test-helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import { ShareSpaceResource } from 'web-client/src/helpers'
 import { DavPermission } from 'web-client/src/webdav/constants'
@@ -208,7 +208,7 @@ function getMountedWrapper({
   space = undefined,
   loading = false,
   versions = defaultVersions,
-  highlightedFile = mockDeep<Resource>()
+  highlightedFile = mock<Resource>()
 } = {}) {
   const storeOptions = defaultStoreMockOptions
   storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => highlightedFile)
@@ -222,6 +222,7 @@ function getMountedWrapper({
         }
       },
       global: {
+        renderStubDefaultSlot: true,
         provide: {
           displayedSpace: space
         },
@@ -235,7 +236,7 @@ function getMountedWrapper({
           'oc-tbody': true,
           'oc-table-simple': true,
           'oc-resource-icon': true,
-          'oc-button': false
+          OcButton: false
         },
         plugins: [...defaultPlugins(), store]
       }

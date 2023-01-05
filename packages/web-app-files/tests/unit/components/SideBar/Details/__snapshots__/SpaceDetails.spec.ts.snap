@@ -6,14 +6,10 @@ exports[`Details SideBar Panel displays the details side panel 1`] = `
     <oc-icon-stub accessiblelabel="" class="space-default-image oc-px-m oc-py-m" color="" filltype="fill" name="layout-grid" size="xxlarge" type="span" variation="passive"></oc-icon-stub>
   </div>
   <div class="oc-flex oc-flex-middle oc-mb-m oc-text-small" style="gap: 15px;">
-    <oc-button-stub appearance="raw" arialabel="Open member list in share panel" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-      <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="group" size="medium" type="span" variation="passive"></oc-icon-stub>
-    </oc-button-stub>
-    <!---->
+    <oc-button-stub appearance="raw" arialabel="Open member list in share panel" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+    <!--v-if-->
     <p>This space has 1 member.</p>
-    <oc-button-stub appearance="raw" arialabel="Open share panel" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="passive">
-      <span class="oc-text-small">Show</span>
-    </oc-button-stub>
+    <oc-button-stub appearance="raw" arialabel="Open share panel" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="passive"></oc-button-stub>
   </div>
   <table aria-label="Overview of the information about the selected space" class="details-table">
     <tbody>
@@ -21,7 +17,7 @@ exports[`Details SideBar Panel displays the details side panel 1`] = `
         <th class="oc-pr-s" scope="col">Last activity</th>
         <td>Invalid DateTime</td>
       </tr>
-      <!---->
+      <!--v-if-->
       <tr>
         <th class="oc-pr-s" scope="col">Manager</th>
         <td>

@@ -6,7 +6,7 @@
           v-for="(field, index) in fields"
           :key="`oc-thead-${field.name}`"
           v-bind="extractThProps(field, index)"
-          @click.native="$emit(constants.EVENT_THEAD_CLICKED, field)"
+          @click="$emit(constants.EVENT_THEAD_CLICKED, field)"
         >
           <span
             v-if="field.headerType === 'slot'"
@@ -49,17 +49,17 @@
         v-bind="extractTbodyTrProps(item, trIndex)"
         :data-item-id="item[idKey]"
         :draggable="dragDrop"
-        @click.native="$emit(constants.EVENT_TROW_CLICKED, [item, $event])"
-        @contextmenu.native="
+        @click="$emit(constants.EVENT_TROW_CLICKED, [item, $event])"
+        @contextmenu="
           $emit(constants.EVENT_TROW_CONTEXTMENU, $refs[`row-${trIndex}`][0], $event, item)
         "
         @hook:mounted="$emit(constants.EVENT_TROW_MOUNTED, item, $refs[`row-${trIndex}`][0])"
-        @dragstart.native="dragStart(item, $event)"
-        @drop.native="dropRowEvent(itemDomSelector(item), $event)"
-        @dragenter.native.prevent="dropRowStyling(itemDomSelector(item), false, $event)"
-        @dragleave.native.prevent="dropRowStyling(itemDomSelector(item), true, $event)"
+        @dragstart="dragStart(item, $event)"
+        @drop="dropRowEvent(itemDomSelector(item), $event)"
+        @dragenter.prevent="dropRowStyling(itemDomSelector(item), false, $event)"
+        @dragleave.prevent="dropRowStyling(itemDomSelector(item), true, $event)"
         @mouseleave="dropRowStyling(itemDomSelector(item), true, $event)"
-        @dragover.native="dragOver($event)"
+        @dragover="dragOver($event)"
       >
         <oc-td
           v-for="(field, tdIndex) in fields"
@@ -86,7 +86,7 @@
     </tfoot>
   </table>
 </template>
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import OcThead from '../_OcTableHeader/_OcTableHeader.vue'
 import OcTbody from '../_OcTableBody/_OcTableBody.vue'
@@ -97,6 +97,7 @@ import OcGhostElement from '../_OcGhostElement/_OcGhostElement.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import SortMixin from '../../mixins/sort'
 import { getSizeClass } from '../../utils/sizeClasses'
+import { defineComponent } from 'vue'
 
 import {
   EVENT_THEAD_CLICKED,
@@ -110,7 +111,7 @@ import {
 /**
  * A table component with dynamic layout and data.
  */
-export default {
+export default defineComponent({
   name: 'OcTable',
   status: 'ready',
   release: '2.1.0',
@@ -250,6 +251,7 @@ export default {
       default: false
     }
   },
+  emits: [EVENT_THEAD_CLICKED, EVENT_TROW_CLICKED, EVENT_TROW_MOUNTED, EVENT_TROW_CONTEXTMENU],
   data() {
     return {
       constants: {
@@ -322,7 +324,7 @@ export default {
       this.$emit(EVENT_ITEM_DROPPED, dropItemId)
     },
     dropRowStyling(selector, leaving, event) {
-      const hasFilePayload = (event.dataTransfer.types || []).some((e) => e === 'Files')
+      const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
       if (hasFilePayload) return
       if (event.currentTarget?.contains(event.relatedTarget)) {
         return
@@ -463,7 +465,7 @@ export default {
       return this.$gettextInterpolate(label, { name })
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .oc-table {

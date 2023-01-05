@@ -19,12 +19,12 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
               </span>
             </span>
             <span class="oc-flex">
-              <!---->
+              <!--v-if-->
             </span>
           </oc-button-stub>
         </li>
         <li>
-          <oc-button-stub appearance="raw" class="oc-p-s selected oc-background-primary-gradient" gapsize="medium" id="files-role-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+          <oc-button-stub appearance="raw" class="selected oc-background-primary-gradient oc-p-s" gapsize="medium" id="files-role-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
             <span class="oc-flex oc-flex-middle">
               <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
               <span>
@@ -47,7 +47,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
               </span>
             </span>
             <span class="oc-flex">
-              <!---->
+              <!--v-if-->
             </span>
           </oc-button-stub>
         </li>
@@ -55,9 +55,9 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
     </oc-drop-stub>
   </div>
   <div class="details-buttons">
-    <!---->
-    <!---->
-    <!---->
+    <!--v-if-->
+    <!--v-if-->
+    <!--v-if-->
     <div>
       <oc-button-stub appearance="raw" class="edit-drop-trigger" gapsize="medium" id="edit-public-link-dropdown-toggl-undefined" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
         <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="more-2" size="medium" type="span" variation="passive"></oc-icon-stub>
@@ -71,7 +71,11 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
             </oc-button-stub>
           </li>
           <li class="oc-rounded oc-menu-item-hover">
-            <oc-datepicker-stub class="link-expiry-picker" locale="en" min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)"></oc-datepicker-stub>
+            <date-picker-stub class="link-expiry-picker oc-datepicker link-expiry-picker" inputdebounce="1000" locale="en" min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" mode="date" modelconfig="[object Object]" popover="[object Object]" updateoninput="true">
+              <!-- @slot Default slot to use as the popover anchor for datepicker -->
+              <!-- args is undefined during initial render, hence we check it here -->
+              <!--v-if-->
+            </date-picker-stub>
           </li>
           <li class="oc-rounded oc-menu-item-hover">
             <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
@@ -99,11 +103,11 @@ exports[`DetailsAndEdit component if user can not edit does not render dropdown 
   <p class="oc-my-rm">
     <span class="link-current-role">Viewer</span>
   </p>
-  <div class="details-buttons oc-pr-s">
-    <!---->
-    <!---->
-    <!---->
-    <!---->
+  <div class="oc-pr-s details-buttons">
+    <!--v-if-->
+    <!--v-if-->
+    <!--v-if-->
+    <!--v-if-->
   </div>
 </div>
 `;

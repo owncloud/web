@@ -20,7 +20,7 @@ describe('OcResourceName', () => {
 
     expect(wrapper.find('.oc-resource-basename').text()).toMatch('.hidden')
     expect(wrapper.find('.oc-resource-extension').exists()).toBeFalsy()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('renders folder names with dots completely in the basename', () => {
@@ -35,7 +35,7 @@ describe('OcResourceName', () => {
 
     expect(wrapper.find('.oc-resource-basename').text()).toMatch('folder.with.dots')
     expect(wrapper.find('.oc-resource-extension').exists()).toBeFalsy()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('has properties for resource path, name and type', () => {
@@ -65,7 +65,7 @@ describe('OcResourceName', () => {
       }
     })
 
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('does not truncate a very long name when disabled', () => {
@@ -80,7 +80,7 @@ describe('OcResourceName', () => {
       }
     })
 
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('shows the name as HTML title if the path is not displayed', () => {
@@ -94,7 +94,7 @@ describe('OcResourceName', () => {
       }
     })
 
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('does not show the name as HTML title if the path is being displayed', () => {
@@ -108,6 +108,6 @@ describe('OcResourceName', () => {
       }
     })
 
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

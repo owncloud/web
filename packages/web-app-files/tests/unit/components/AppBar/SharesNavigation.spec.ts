@@ -44,6 +44,7 @@ function getWrapper({ currentRouteName = locationSharesWithMe.name } = {}) {
     wrapper: shallowMount(SharesNavigation as any, {
       global: {
         stubs: defaultStubs,
+        renderStubDefaultSlot: true,
         mocks,
         plugins: [...defaultPlugins(), store]
       }

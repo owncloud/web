@@ -60,7 +60,7 @@ describe('AppTemplate', () => {
         const { wrapper } = getWrapper({
           propsData: { breadcrumbs: [{ text: 'Administration Settings' }, { text: 'Users' }] }
         })
-        expect(wrapper.find(stubSelectors.ocBreadcrumb).props().items).toEqual([
+        expect(wrapper.findComponent<any>(stubSelectors.ocBreadcrumb).props().items).toEqual([
           { text: 'Administration Settings' },
           { text: 'Users' }
         ])
@@ -74,8 +74,10 @@ describe('AppTemplate', () => {
             sideBarAvailablePanels: [{ app: 'DetailsPanel' }]
           }
         })
-        expect(wrapper.find(stubSelectors.sideBar).props().activePanel).toEqual('DetailsPanel')
-        expect(wrapper.find(stubSelectors.sideBar).props().availablePanels).toEqual([
+        expect(wrapper.findComponent<any>(stubSelectors.sideBar).props().activePanel).toEqual(
+          'DetailsPanel'
+        )
+        expect(wrapper.findComponent<any>(stubSelectors.sideBar).props().availablePanels).toEqual([
           { app: 'DetailsPanel' }
         ])
       })

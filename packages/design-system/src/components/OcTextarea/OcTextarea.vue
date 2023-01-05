@@ -113,6 +113,7 @@ export default {
       default: true
     }
   },
+  emits: ['input', 'focus', 'change', 'keydown'],
   computed: {
     showMessageLine() {
       return (
@@ -168,7 +169,7 @@ export default {
       this.$emit('focus', value)
     },
     onKeyDown(e) {
-      const enterKey = e.key === 'Enter'
+      const enterKey = e.key?.toLowerCase() === 'enter'
       if (this.submitOnEnter && enterKey && !e.ctrlKey && !e.shiftKey) {
         /**
          * Change event - emitted as soon as the user hits enter (without ctrl or shift)

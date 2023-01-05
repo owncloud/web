@@ -100,7 +100,7 @@ describe('Collaborator ListItem component', () => {
   describe('remove share', () => {
     it('emits the "removeShare" event', () => {
       const { wrapper } = createWrapper()
-      wrapper.find('edit-dropdown-stub').vm.$emit('removeShare')
+      ;(wrapper.findComponent<any>('edit-dropdown-stub').vm as any).$emit('removeShare')
       expect(wrapper.emitted().onDelete).toBeTruthy()
     })
   })
@@ -108,7 +108,7 @@ describe('Collaborator ListItem component', () => {
     it('calls "changeShare" for regular resources', () => {
       const { wrapper } = createWrapper()
       const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
-      wrapper.find('role-dropdown-stub').vm.$emit('optionChange', {
+      ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
         role: peopleRoleViewerFile,
         permissions: [SharePermissions.read]
       })
@@ -117,7 +117,7 @@ describe('Collaborator ListItem component', () => {
     it('calls "changeSpaceMember" for space resources', () => {
       const { wrapper } = createWrapper({ shareType: ShareTypes.space.value })
       const changeShareStub = jest.spyOn(wrapper.vm, 'changeSpaceMember')
-      wrapper.find('role-dropdown-stub').vm.$emit('optionChange', {
+      ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
         role: peopleRoleViewerFile,
         permissions: [SharePermissions.read]
       })
@@ -131,7 +131,7 @@ describe('Collaborator ListItem component', () => {
       })
       const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      wrapper.find('role-dropdown-stub').vm.$emit('optionChange', {
+      ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
         role: peopleRoleViewerFile,
         permissions: [SharePermissions.read]
       })
@@ -143,9 +143,9 @@ describe('Collaborator ListItem component', () => {
     it('calls "changeShare" for regular resources', () => {
       const { wrapper } = createWrapper()
       const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
-      wrapper
-        .find('edit-dropdown-stub')
-        .vm.$emit('expirationDateChanged', { shareExpirationChanged: new Date() })
+      ;(wrapper.findComponent<any>('edit-dropdown-stub').vm as any).$emit('expirationDateChanged', {
+        shareExpirationChanged: new Date()
+      })
       expect(changeShareStub).toHaveBeenCalled()
     })
     it('shows a message on error', () => {
@@ -156,9 +156,9 @@ describe('Collaborator ListItem component', () => {
       })
       const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      wrapper
-        .find('edit-dropdown-stub')
-        .vm.$emit('expirationDateChanged', { shareExpirationChanged: new Date() })
+      ;(wrapper.findComponent<any>('edit-dropdown-stub').vm as any).$emit('expirationDateChanged', {
+        shareExpirationChanged: new Date()
+      })
       expect(changeShareStub).not.toHaveBeenCalled()
       expect(showMessageStub).toHaveBeenCalled()
     })
@@ -209,6 +209,7 @@ function createWrapper({
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: defaultComponentMocks(),
+        renderStubDefaultSlot: true,
         stubs: {
           ...defaultStubs,
           'oc-icon': true,
@@ -224,9 +225,6 @@ function createWrapper({
           'role-dropdown': true,
           'edit-dropdown': true,
           translate: false
-        },
-        directives: {
-          'oc-tooltip': jest.fn()
         }
       }
     })

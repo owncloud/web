@@ -4,8 +4,8 @@ import {
   createStore,
   defaultComponentMocks,
   defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions
+  defaultStoreMockOptions,
+  shallowMount
 } from 'web-test-helpers'
 
 const folderMock = {
@@ -43,12 +43,12 @@ describe('InviteCollaboratorForm', () => {
       const selectedCollaborators = [
         { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
       ]
-      const { wrapper } = getWrapper({ selectedCollaborators } as any)
-      const spyTriggerUpload = jest.spyOn(wrapper.vm, 'share')
+      const { wrapper } = getWrapper({ selectedCollaborators })
+      const spyTriggerUpload = jest.spyOn(wrapper.vm as any, 'share')
       const shareBtn = wrapper.find('#new-collaborators-form-create-button')
       expect(shareBtn.exists()).toBeTruthy()
 
-      await shareBtn.vm.$emit('click')
+      await shareBtn.trigger('click')
       expect(spyTriggerUpload).toHaveBeenCalledTimes(0)
     })
     it.each([
@@ -64,8 +64,8 @@ describe('InviteCollaboratorForm', () => {
         storageId: dataSet.storageId,
         highlightedFile: dataSet.highlightedFile as any
       })
-      const addShareSpy = jest.spyOn(wrapper.vm, dataSet.addMethod)
-      await wrapper.vm.share()
+      const addShareSpy = jest.spyOn(wrapper.vm as any, dataSet.addMethod)
+      await (wrapper.vm as any).share()
       expect(addShareSpy).toHaveBeenCalled()
     })
     it.todo('resets focus upon selecting an invitee')

@@ -1,4 +1,4 @@
-import { mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 import Table from './OcTable.vue'
 
 const ASC = 'ascending'
@@ -56,6 +56,7 @@ describe('OcTable.sort', () => {
         data
       },
       global: {
+        plugins: [...defaultPlugins()],
         stubs: {
           'oc-icon': true
         }

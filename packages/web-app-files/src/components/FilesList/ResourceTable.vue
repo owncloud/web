@@ -46,7 +46,7 @@
         :value="isResourceSelected(item)"
         :outline="isLatestSelectedItem(item)"
         @input="setSelection($event, item)"
-        @click.native.stop
+        @click.stop
       />
     </template>
     <template #name="{ item }">
@@ -181,7 +181,6 @@
           mode="click"
           close-on-click
           padding-size="small"
-          @click.native.stop.prevent
         >
           <!-- @slot Add context actions that open in a dropdown when clicking on the "three dots" button -->
           <slot name="contextMenu" :resource="item" />
@@ -403,6 +402,7 @@ export default defineComponent({
       default: null
     }
   },
+  emits: ['fileClick', 'select', 'sort', 'rowMounted', EVENT_FILE_DROPPED],
   setup() {
     const store = useStore()
     const { width } = useWindowSize()

@@ -1,11 +1,13 @@
 import OcInfoDrop from './OcInfoDrop.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('OcInfoDrop', () => {
   function getWrapperWithProps(props) {
     return shallowMount(OcInfoDrop, {
       props,
       global: {
+        plugins: [...defaultPlugins()],
+        renderStubDefaultSlot: true,
         stubs: {
           OcDrop: true
         }
@@ -21,7 +23,7 @@ describe('OcInfoDrop', () => {
       const wrapper = getWrapperWithProps({ text: 'test-my-text' })
       expect(wrapper.find('.info-text').text()).toBe('test-my-text')
     })
-    it('should set list prop', async () => {
+    it('should set list prop', () => {
       const listValues = [
         { text: 'a-list-value' },
         { text: 'b-list-value' },
@@ -33,13 +35,13 @@ describe('OcInfoDrop', () => {
         expect(result).toContain(value.text)
       })
     })
-    it('should set a readMore link', async () => {
+    it('should set a readMore link', () => {
       const wrapper = getWrapperWithProps({ readMoreLink: 'owncloud.design' })
       const attributes = wrapper.find('.info-more-link').attributes()
       expect(attributes['href']).toBe('owncloud.design')
       expect(attributes['target']).toBe('_blank')
     })
-    it('should set end-text prop', async () => {
+    it('should set end-text prop', () => {
       const wrapper = getWrapperWithProps({ endText: 'test-my-text' })
       expect(wrapper.find('.info-text-end').text()).toBe('test-my-text')
     })

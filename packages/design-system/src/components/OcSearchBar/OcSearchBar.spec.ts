@@ -1,18 +1,7 @@
+import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import OcSearchBar from './OcSearchBar.vue'
-import { shallowMount, mount } from 'web-test-helpers'
 
 describe('OcSearchBar', () => {
-  function getWrapper(props = {}) {
-    return shallowMount(OcSearchBar, {
-      props: {
-        ...props,
-        label: 'Test search label'
-      }
-    })
-  }
-  function getMountedWrapper() {
-    return mount(OcSearchBar, { props: { label: 'abc' } })
-  }
   const selectors = {
     searchButton: '.oc-search-button',
     searchInput: '.oc-search-input',
@@ -83,7 +72,7 @@ describe('OcSearchBar', () => {
       })
       it('should set search input as disabled', () => {
         const searchInput = wrapper.find(selectors.searchInput)
-        expect(searchInput.attributes('disabled')).toBe('disabled')
+        expect(searchInput.attributes('disabled')).toBe('')
       })
       it('should set search button as disabled', () => {
         const wrapper = getWrapper({ icon: 'mdi-icon', loading: true, value: 'kiran' })
@@ -225,3 +214,19 @@ describe('OcSearchBar', () => {
     })
   })
 })
+
+function getWrapper(props = {}) {
+  return shallowMount(OcSearchBar, {
+    props: {
+      ...props,
+      label: 'Test search label'
+    },
+    global: {
+      renderStubDefaultSlot: true,
+      plugins: [...defaultPlugins()]
+    }
+  })
+}
+function getMountedWrapper() {
+  return mount(OcSearchBar, { props: { label: 'abc' } })
+}

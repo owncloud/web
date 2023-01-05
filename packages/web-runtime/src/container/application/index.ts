@@ -30,7 +30,7 @@ const loadScriptDynamicImport = async <T>(moduleUri: string) => {
   return ((await import(/* @vite-ignore */ moduleUri)) as any).default as T
 }
 
-const loadScriptRequireJS = async <T>(moduleUri: string) => {
+const loadScriptRequireJS = <T>(moduleUri: string) => {
   return new Promise<T>((resolve, reject) =>
     requirejs(
       [moduleUri],

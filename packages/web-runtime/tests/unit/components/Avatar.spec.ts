@@ -6,7 +6,7 @@ import {
   shallowMount,
   defaultStoreMockOptions
 } from 'web-test-helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { HttpClient } from 'web-pkg'
 import { AxiosResponse } from 'axios'
 import { nextTick } from 'vue'
@@ -58,16 +58,16 @@ describe('Avatar component', () => {
     })
     it('should set props on oc-avatar component', () => {
       const { wrapper } = getShallowWrapper()
-      const avatar = wrapper.find(ocAvatar)
+      const avatar = wrapper.findComponent<any>(ocAvatar)
 
       expect(avatar.props().width).toEqual(propsData.width)
       expect(avatar.props().userName).toEqual(propsData.userName)
     })
 
     describe('when an avatar is not found', () => {
-      it('should set empty string to src prop on oc-avatar component', async () => {
+      it('should set empty string to src prop on oc-avatar component', () => {
         const { wrapper } = getShallowWrapper()
-        const avatar = wrapper.find(ocAvatar)
+        const avatar = wrapper.findComponent<any>(ocAvatar)
         expect(avatar.props().src).toEqual('')
       })
     })
@@ -77,8 +77,8 @@ describe('Avatar component', () => {
       it('should set blob as src prop on oc-avatar component', async () => {
         global.URL.createObjectURL = jest.fn(() => blob)
         const clientMock = mockDeep<HttpClient>()
-        clientMock.get.mockImplementation(async () =>
-          mockDeep<AxiosResponse>({
+        clientMock.get.mockResolvedValue(
+          mock<AxiosResponse>({
             status: 200,
             data: blob
           })
@@ -86,7 +86,8 @@ describe('Avatar component', () => {
         const { wrapper } = getShallowWrapper(false, clientMock)
         await nextTick()
         await nextTick()
-        const avatar = wrapper.find(ocAvatar)
+        await nextTick()
+        const avatar = wrapper.findComponent<any>(ocAvatar)
         expect(avatar.props().src).toEqual(blob)
       })
     })
@@ -97,7 +98,7 @@ function getShallowWrapper(loading = false, clientMock = undefined) {
   const mocks = { ...defaultComponentMocks() }
   if (!clientMock) {
     clientMock = mockDeep<HttpClient>()
-    clientMock.get.mockImplementation(async () => ({ status: 200 }))
+    clientMock.get.mockResolvedValue(mock<AxiosResponse>({ status: 200 }))
   }
   mocks.$clientService.httpAuthenticated.mockImplementation(() => clientMock)
   const storeOptions = defaultStoreMockOptions

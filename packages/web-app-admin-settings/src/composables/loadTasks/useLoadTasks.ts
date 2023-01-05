@@ -17,7 +17,7 @@ export const useLoadTasks = ({
      * Setting api calls are just temporary and will be replaced with the graph api,
      * as the backend supports it.
      */
-    loadRolesTask: useTask(function* (signal) {
+    loadRolesTask: useTask(function* () {
       const rolesResponse = yield axios.post(
         '/api/v0/settings/roles-list',
         {},

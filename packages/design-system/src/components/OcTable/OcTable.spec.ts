@@ -118,7 +118,8 @@ describe('OcTable', () => {
             name: 'Documents'
           }
         ]
-      }
+      },
+      global: { renderStubDefaultSlot: true }
     })
 
     expect(wrapper.html().indexOf('resource-name')).toBeGreaterThan(-1)
@@ -147,7 +148,8 @@ describe('OcTable', () => {
             description: 'Size of the resource'
           }
         ]
-      }
+      },
+      global: { renderStubDefaultSlot: true }
     })
 
     expect(wrapper.html().indexOf('alignh="right"')).toBeGreaterThan(-1)
@@ -173,7 +175,8 @@ describe('OcTable', () => {
         fields,
         data,
         highlighted: '4b136c0a-5057-11eb-ac70-eba264112003'
-      }
+      },
+      global: { renderStubDefaultSlot: true }
     })
 
     expect(wrapper.findAll('.oc-table-highlighted').length).toEqual(1)
@@ -188,7 +191,8 @@ describe('OcTable', () => {
           '4b136c0a-5057-11eb-ac70-eba264112003',
           '8468c9f0-5057-11eb-924b-934c6fd827a2'
         ]
-      }
+      },
+      global: { renderStubDefaultSlot: true }
     })
 
     expect(wrapper.findAll('.oc-table-highlighted').length).toEqual(2)
@@ -200,7 +204,8 @@ describe('OcTable', () => {
         fields,
         data,
         highlighted: []
-      }
+      },
+      global: { renderStubDefaultSlot: true }
     })
     expect(wrapper.html().indexOf('data-item-id')).toBeGreaterThan(-1)
   })
@@ -212,7 +217,8 @@ describe('OcTable', () => {
         data,
         highlighted: [],
         itemDomSelector: (item) => ['custom', item.id].join('-')
-      }
+      },
+      global: { renderStubDefaultSlot: true }
     })
     data.forEach((item) => {
       expect(wrapper.find(['.oc-tbody-tr-custom', item.id].join('-')).exists()).toBeTruthy()
@@ -225,7 +231,8 @@ describe('OcTable', () => {
         fields,
         data,
         highlighted: []
-      }
+      },
+      global: { renderStubDefaultSlot: true, stubs: { OcTr: false } }
     })
     await wrapper.find('.oc-tbody-tr').trigger('contextmenu')
     expect(wrapper.emitted().contextmenuClicked.length).toBe(1)
@@ -238,7 +245,8 @@ describe('OcTable', () => {
         data,
         highlighted: [],
         dragDrop: true
-      }
+      },
+      global: { renderStubDefaultSlot: true }
     })
     expect(wrapper.html().indexOf('draggable')).toBeGreaterThan(-1)
   })

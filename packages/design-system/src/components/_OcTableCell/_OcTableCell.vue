@@ -1,10 +1,12 @@
 <template>
-  <component :is="type" :class="cellClasses">
+  <component :is="type" :class="cellClasses" @click="$emit('click', $event)">
     <slot />
   </component>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'OcTableCell',
   status: 'ready',
   release: '2.1.0',
@@ -36,6 +38,7 @@ export default {
       validator: (wrap) => (wrap ? /(break|nowrap|truncate)/.test(wrap) : true)
     }
   },
+  emits: ['click'],
   computed: {
     cellClasses() {
       const classes = [
@@ -50,7 +53,7 @@ export default {
       return classes
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .oc-table-cell {

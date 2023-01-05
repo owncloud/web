@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import { config } from '@vue/test-utils'
 import fetchMock from 'jest-fetch-mock'
-import GetTextPlugin from 'vue-gettext'
 
 import * as directives from '@ownclouders/design-system/src/directives'
 
@@ -16,7 +15,8 @@ fetchMock.enableMocks()
 config.mocks = {
   $language: {
     current: 'en'
-  }
+  },
+  language: 'en'
 }
 
 Vue.component('RouterLink', {
@@ -44,8 +44,3 @@ Vue.component('RouterLink', {
 })
 
 Object.values(directives).forEach((d) => Vue.directive(d.name, d))
-
-Vue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})

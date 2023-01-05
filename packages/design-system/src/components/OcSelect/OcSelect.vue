@@ -8,12 +8,12 @@
       class="oc-select"
       style="background: transparent"
       v-bind="additionalAttributes"
-      v-on="$listeners"
+      @update:modelValue="$emit('update:modelValue', $event)"
     >
       <template #search="{ attributes, events }">
         <input class="vs__search" v-bind="attributes" @input="userInput" v-on="events" />
       </template>
-      <template v-for="(index, name) in $scopedSlots" #[name]="data">
+      <template v-for="(index, name) in $slots" #[name]="data">
         <slot v-if="name !== 'search'" :name="name" v-bind="data" />
       </template>
       <div slot="no-options" v-translate>No options available.</div>
@@ -24,20 +24,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Fuse from 'fuse.js'
 import uniqueId from '../../utils/uniqueId'
 import VueSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
+import { defineComponent } from 'vue'
 
 /**
  * Select component with a trigger and dropdown based on [Vue Select](https://vue-select.org/)
  */
-export default {
+export default defineComponent({
   name: 'OcSelect',
   status: 'ready',
   release: '4.3.0',
 
+  compatConfig: { COMPONENT_V_MODEL: false },
   components: { VueSelect },
 
   inheritAttrs: true,
@@ -100,6 +102,7 @@ export default {
       default: null
     }
   },
+  emits: ['update:modelValue'],
 
   computed: {
     additionalAttributes() {
@@ -130,7 +133,7 @@ export default {
       this.$emit('search:input', event.target.value)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

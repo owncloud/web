@@ -7,9 +7,7 @@
           :resource="resource"
           :resource-route="getRoute(resource)"
           @click="tileResourceClicked(resource, $event)"
-          @contextmenu.native="
-            $emit(EVENT_TROW_CONTEXTMENU, $refs[`row-${index}`][0], $event, resource)
-          "
+          @contextmenu="$emit(EVENT_TROW_CONTEXTMENU, $refs[`row-${index}`][0], $event, resource)"
         >
           <template #imageField="{ item }">
             <slot name="image" :item="item" />

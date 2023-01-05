@@ -46,6 +46,8 @@ import * as uuid from 'uuid'
 import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
+import { useService } from 'web-pkg/src/composables/service'
+import { UppyService } from 'web-runtime/src/services/uppyService'
 
 export default defineComponent({
   components: {
@@ -53,7 +55,7 @@ export default defineComponent({
   },
   setup() {
     const instance = getCurrentInstance().proxy
-    const uppyService = instance.$uppyService
+    const uppyService = useService<UppyService>('$uppyService')
     const store = useStore()
 
     onMounted(() => {

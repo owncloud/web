@@ -2,6 +2,9 @@ import Vuex from 'vuex'
 import DesignSystem from '@ownclouders/design-system'
 import GetTextPlugin from 'vue-gettext'
 import AsyncComputed from 'vue-async-computed'
+import Vue from 'vue'
+
+window.Vue = Vue
 
 export interface DefaultPluginsOptions {
   designSystem?: boolean
@@ -23,13 +26,29 @@ export const defaultPlugins = ({
   }
 
   if (gettext) {
-    plugins.push([
-      GetTextPlugin,
-      {
-        translations: 'does-not-matter.json',
-        silent: true
+    plugins.push({
+      install(app) {
+        Vue.use(GetTextPlugin as any, {
+          translations: 'does-not-matter.json',
+          silent: true
+        })
+        ;(Vue.config as any).language = 'en'
+        app.config.globalProperties.$language = { current: 'en' }
+        app.config.globalProperties.$gettext = Vue.prototype.$gettext
+        app.config.globalProperties.$gettextInterpolate = Vue.prototype.$gettextInterpolate
+        app.config.globalProperties.$ngettext = Vue.prototype.$ngettext
+        app.config.globalProperties.$pgettext = Vue.prototype.$pgettext
       }
-    ])
+    })
+  } else {
+    plugins.push({
+      install(app) {
+        // mock `v-translate` directive
+        app.directive('translate', {
+          inserted: () => undefined
+        })
+      }
+    })
   }
 
   if (vuex) {
@@ -39,15 +58,6 @@ export const defaultPlugins = ({
   if (asyncComputed) {
     plugins.push(AsyncComputed)
   }
-
-  plugins.push({
-    install(app) {
-      // mock `v-translate` directive
-      app.directive('translate', {
-        inserted: () => undefined
-      })
-    }
-  })
 
   return plugins
 }

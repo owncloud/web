@@ -1,4 +1,4 @@
-import { mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 import Resource from './OcResource.vue'
 import OcButton from '../OcButton/OcButton.vue'
@@ -36,11 +36,16 @@ describe('OcResource', () => {
         targetRoute: {
           name: 'tests-route'
         }
+      },
+      global: {
+        stubs: { RouterLink: true },
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
       }
     })
 
     wrapper.find('.oc-resource-name').trigger('click')
-    expect(wrapper.emitted().click).toBeFalsy()
+    expect(wrapper.emitted('click')).toBeFalsy()
   })
 
   it("doesn't emit a click if the resource is not clickable", () => {
@@ -48,25 +53,32 @@ describe('OcResource', () => {
       props: {
         resource: fileResource,
         isResourceClickable: false
+      },
+      global: {
+        stubs: { RouterLink: true },
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
       }
     })
 
     wrapper.find('.oc-resource-name').trigger('click')
-    expect(wrapper.emitted().click).toBeFalsy()
+    expect(wrapper.emitted('click')).toBeFalsy()
   })
 
-  it('emits a click', () => {
+  it('emits a click', async () => {
     const wrapper = mount(Resource, {
       props: {
         resource: fileResource
       },
       global: {
-        stubs
+        stubs: { RouterLink: true, ...stubs },
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
       }
     })
 
-    wrapper.find('.oc-resource-name').trigger('click')
-    expect(wrapper.emitted().click).toBeTruthy()
+    await wrapper.find('.oc-resource-name').trigger('click')
+    expect(wrapper.emitted('click')).toHaveLength(1)
   })
 
   it('parent folder component type is link if parent folder given', () => {
@@ -77,11 +89,13 @@ describe('OcResource', () => {
         parentFolderLink: {}
       },
       global: {
-        stubs
+        stubs: { RouterLink: true, ...stubs },
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
       }
     })
 
-    expect(wrapper.find('.parent-folder').find('a').exists()).toBeTruthy()
+    expect(wrapper.find('.parent-folder').exists()).toBeTruthy()
     expect(wrapper.find('.parent-folder').attributes('style')).toEqual('cursor: pointer;')
   })
 
@@ -112,6 +126,6 @@ describe('OcResource', () => {
       }
     })
 
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

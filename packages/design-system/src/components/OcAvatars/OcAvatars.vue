@@ -37,11 +37,12 @@ import OcAvatarLink from '../OcAvatarLink/OcAvatarLink.vue'
 import OcAvatarGroup from '../OcAvatarGroup/OcAvatarGroup.vue'
 import OcAvatarFederated from '../OcAvatarFederated/OcAvatarFederated.vue'
 import OcAvatarGuest from '../OcAvatarGuest/OcAvatarGuest.vue'
+import { defineComponent } from 'vue'
 
 /**
  * Display a group of avatars
  */
-export default {
+export default defineComponent({
   name: 'OcAvatars',
   status: 'ready',
   release: '2.1.0',
@@ -156,7 +157,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

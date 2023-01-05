@@ -4,10 +4,7 @@ import { WebDavOptions } from './types'
 
 export const DeleteFileFactory = ({ sdk }: WebDavOptions) => {
   return {
-    async deleteFile(
-      space: SpaceResource,
-      { path, ...options }: { path?: string; content?: string; previousEntityTag?: string }
-    ): Promise<FileResource> {
+    deleteFile(space: SpaceResource, { path }: { path: string }): Promise<FileResource> {
       if (isPublicSpaceResource(space)) {
         return sdk.publicFiles.delete(
           urlJoin(space.webDavPath.replace(/^\/public-files/, ''), path),

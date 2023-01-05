@@ -1,11 +1,10 @@
 import { useRouteQuery } from 'web-pkg/src/composables'
-import VueRouter from 'vue-router'
 import { Ref, nextTick, computed, ComputedRef } from 'vue'
-import { getComposableWrapper } from 'web-test-helpers'
+import { getComposableWrapper, createRouter } from 'web-test-helpers'
 
 describe('useRouteQuery', () => {
   it('is reactive', async () => {
-    const router = new VueRouter()
+    const router = createRouter()
     let fooQuery: Ref
     let fooValue: ComputedRef
 
@@ -50,7 +49,7 @@ describe('useRouteQuery', () => {
   })
 
   it('has a default value if route query is not set', () => {
-    const router = new VueRouter()
+    const router = createRouter()
 
     const mocks = { $router: router }
     getComposableWrapper(
@@ -70,7 +69,7 @@ describe('useRouteQuery', () => {
   })
 
   it('should update on route query change', () => {
-    const router = new VueRouter()
+    const router = createRouter()
 
     const mocks = { $router: router }
     getComposableWrapper(
@@ -95,7 +94,7 @@ describe('useRouteQuery', () => {
   })
 
   it('should be undefined if route changes and query is not present', () => {
-    const router = new VueRouter()
+    const router = createRouter()
 
     const mocks = { $router: router }
     getComposableWrapper(
@@ -113,7 +112,7 @@ describe('useRouteQuery', () => {
   })
 
   it('should update route query', () => {
-    const router = new VueRouter()
+    const router = createRouter()
 
     const mocks = { $router: router }
     getComposableWrapper(

@@ -5,10 +5,9 @@
     v-if="isResourceClickable"
     :target="linkTargetBlank"
     :aria-describedby="opensInNewWindowDescriptionId"
-    draggable="false"
-    @dragstart.native.prevent.stop
+    :draggable="false"
+    @dragstart.prevent.stop
     @click.stop="emitClick"
-    @click.native.stop
   >
     <slot :opens-in-new-window-description-id="opensInNewWindowDescriptionId" />
   </component>
@@ -52,6 +51,7 @@ export default {
       default: true
     }
   },
+  emits: ['click'],
   computed: {
     isNavigatable() {
       return this.resource.isFolder && !this.resource.disabled

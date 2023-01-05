@@ -1,4 +1,4 @@
-import { mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { ref } from 'vue'
 import { Resource } from 'web-client/src'
 import { FileResource } from 'web-client/src/helpers'
@@ -10,17 +10,17 @@ export const useAppDefaultsMock = (
 ): ReturnType<typeof useAppDefaults> => {
   return {
     isPublicLinkContext: ref(false),
-    currentFileContext: ref(mockDeep<FileContext>()),
-    applicationConfig: ref(mockDeep<AppConfigObject>()),
+    currentFileContext: ref(mock<FileContext>()),
+    applicationConfig: ref(mock<AppConfigObject>()),
     closeApp: jest.fn(),
     replaceInvalidFileRoute: jest.fn(),
     getUrlForResource: jest.fn(),
     revokeUrl: jest.fn(),
-    getFileInfo: jest.fn().mockImplementation(() => mockDeep<Resource>()),
+    getFileInfo: jest.fn().mockImplementation(() => mock<Resource>()),
     getFileContents: jest
       .fn()
-      .mockImplementation(() => mockDeep<GetFileContentsResponse>({ body: '' })),
-    putFileContents: jest.fn().mockImplementation(() => mockDeep<FileResource>()),
+      .mockImplementation(() => mock<GetFileContentsResponse>({ body: '' })),
+    putFileContents: jest.fn().mockImplementation(() => mock<FileResource>()),
     isFolderLoading: ref(false),
     activeFiles: ref([]),
     loadFolderForFileContext: jest.fn(),

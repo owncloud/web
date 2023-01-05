@@ -72,13 +72,17 @@ describe('SpaceMembers', () => {
     it('can edit when current user is manager of the space', () => {
       const space = mock<ProjectSpaceResource>({ isManager: () => true })
       const wrapper = getWrapper({ space })
-      expect(wrapper.findAll('collaborator-list-item-stub').at(1).props().modifiable).toEqual(true)
+      expect(
+        wrapper.findAllComponents<any>('collaborator-list-item-stub').at(1).props().modifiable
+      ).toEqual(true)
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('can not edit when current user is not a manager of the space', () => {
       const space = mock<ProjectSpaceResource>({ isManager: () => false })
       const wrapper = getWrapper({ space })
-      expect(wrapper.findAll('collaborator-list-item-stub').at(1).props().modifiable).toEqual(false)
+      expect(
+        wrapper.findAllComponents<any>('collaborator-list-item-stub').at(1).props().modifiable
+      ).toEqual(false)
     })
   })
 
@@ -91,7 +95,7 @@ describe('SpaceMembers', () => {
 
       const user = mock<User>({ id: memberMocks.manager.collaborator.name })
       const wrapper = getWrapper({ user })
-      wrapper.find('collaborator-list-item-stub').vm.$emit('onDelete')
+      ;(wrapper.findComponent<any>('collaborator-list-item-stub').vm as any).$emit('onDelete')
       await wrapper.vm.$nextTick()
       expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
     })
@@ -173,7 +177,7 @@ function getWrapper({
         displayedItem: space
       },
       stubs: {
-        'oc-button': false,
+        OcButton: false,
         'oc-icon': true,
         'oc-spinner': true,
         'avatar-image': true,

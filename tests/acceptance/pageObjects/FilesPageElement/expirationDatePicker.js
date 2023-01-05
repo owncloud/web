@@ -150,9 +150,10 @@ module.exports = {
      * USAGE: client.executeAsync(moveCalendarYearScript, ['.calendar-id', '2040'])
      */
     moveCalendarYearScript: function (selector, dateRange, done) {
-      document
+      return document
         .querySelector(selector)
-        .__vue__.$refs.calendar.move(new Date(Date.parse(dateRange)))
+        .__datePicker.$refs.calendar.move(new Date(Date.parse(dateRange)))
+
         .then(function () {
           done(true)
         })
@@ -177,7 +178,10 @@ module.exports = {
       }
       const dateToSet = new Date(Date.parse(value))
       if (shareType === 'link') {
-        await client.executeAsync(this.moveCalendarYearScript, ['.link-expiry-picker', value])
+        await client.executeAsync(this.moveCalendarYearScript, [
+          '.link-expiry-picker:not(.vc-container)',
+          value
+        ])
       } else if (editCollaborator) {
         await client.executeAsync(this.moveCalendarYearScript, [
           '.collaborator-edit-dropdown-options-list .files-recipient-expiration-datepicker',

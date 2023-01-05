@@ -1,5 +1,6 @@
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import Breadcrumb from './OcBreadcrumb.vue'
+import { defineComponent } from 'vue'
 
 const items = [
   { text: 'First folder', to: { path: 'folder' } },
@@ -14,22 +15,24 @@ describe('OcBreadcrumb', () => {
       props: {
         variation: 'lead',
         items
-      }
+      },
+      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
     })
 
     expect(wrapper.props().variation).toMatch('lead')
     expect(wrapper.classes()).toContain('oc-breadcrumb-lead')
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('displays all items', () => {
     const wrapper = shallowMount(Breadcrumb, {
       props: {
         items
-      }
+      },
+      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
     })
 
     expect(wrapper.findAll('.oc-breadcrumb-list-item').length).toBe(items.length)
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('displays context menu trigger when a slot is given', () => {
     const wrapper = shallowMount(Breadcrumb, {
@@ -37,8 +40,9 @@ describe('OcBreadcrumb', () => {
         items
       },
       slots: {
-        contextMenu: 'Example item'
-      }
+        contextMenu: defineComponent({})
+      },
+      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
     })
 
     expect(wrapper.find('#oc-breadcrumb-contextmenu-trigger').exists()).toBe(true)
@@ -47,7 +51,8 @@ describe('OcBreadcrumb', () => {
     const wrapper = shallowMount(Breadcrumb, {
       props: {
         items
-      }
+      },
+      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
     })
 
     expect(wrapper.find('#oc-breadcrumb-contextmenu-trigger').exists()).toBe(false)

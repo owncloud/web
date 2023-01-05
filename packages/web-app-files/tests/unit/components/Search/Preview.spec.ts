@@ -10,7 +10,7 @@ import {
 describe('Preview component', () => {
   it('should set correct props on oc-resource component', () => {
     const { wrapper } = getWrapper()
-    const ocResource = wrapper.find('oc-resource-stub')
+    const ocResource = wrapper.findComponent<any>('oc-resource-stub')
 
     expect(ocResource.exists()).toBeTruthy()
     expect(ocResource.props().resource).toMatchObject(wrapper.vm.searchResult.data)
@@ -135,6 +135,7 @@ function getWrapper({
         searchResult
       },
       global: {
+        renderStubDefaultSlot: true,
         mocks: defaultComponentMocks({ currentRoute: route }),
         plugins: [...defaultPlugins(), store]
       }

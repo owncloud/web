@@ -3,7 +3,7 @@ import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import VueRouter from 'vue-router'
-import { VueConstructor } from 'vue'
+import Vue from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { sync as routerSync } from 'vuex-router-sync'
@@ -22,6 +22,8 @@ import { Vue as SentryVueIntegration } from '@sentry/integrations'
 import { configurationManager, RawConfig, ConfigurationManager } from 'web-pkg/src/configuration'
 import { webdav } from 'web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
+
+type VueConstructor = typeof Vue
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -248,7 +250,7 @@ export const announceTranslations = ({
   supportedLanguages: unknown
   translations: unknown
 }): void => {
-  vue.use(getTextPlugin, {
+  vue.use(getTextPlugin as any, {
     availableLanguages: supportedLanguages,
     defaultLanguage: navigator.language.substring(0, 2),
     translations,
@@ -395,7 +397,9 @@ export const startSentry = (
     SentryInit({
       dsn,
       environment,
-      integrations: [new SentryVueIntegration({ Vue, attachProps: true, logErrors: true })],
+      integrations: [
+        new SentryVueIntegration({ Vue: Vue as any, attachProps: true, logErrors: true })
+      ],
       ...moreSentryOptions
     })
   }

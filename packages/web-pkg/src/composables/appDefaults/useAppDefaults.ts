@@ -78,7 +78,6 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
 
   useAppDocumentTitle({
     store,
-    document,
     applicationId,
     applicationName: options.applicationName,
     currentFileContext

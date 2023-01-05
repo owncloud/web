@@ -41,7 +41,7 @@ describe('subscribeMutation', () => {
       { store: defaultStore }
     )
 
-    const { store } = wrapper.vm
+    const { store } = wrapper.vm as any
 
     store.commit('UPDATE', 5)
     expect(callCount).toBe(1)
@@ -58,6 +58,6 @@ describe('subscribeMutation', () => {
     expect(mutation.payload).toBe(0)
     expect(mutation.type).toBe('UPDATE')
 
-    wrapper.destroy()
+    wrapper.unmount()
   })
 })
