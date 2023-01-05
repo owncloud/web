@@ -772,8 +772,17 @@ export interface editResourcesArgs {
 
 export const editResources = async (args: editResourcesArgs): Promise<void> => {
   const { page, name, content } = args
-  await page.locator(util.format(resourceNameSelector, name)).click()
-  await editTextDocument({ page, content: content, name })
+  const { dir: resourceDir } = path.parse(name)
+
+  const folderPaths = name.split('/')
+  const resourceName = folderPaths.pop()
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  await page.locator(util.format(resourceNameSelector, resourceName)).click()
+  await editTextDocument({ page, content: content, name: resourceName })
 }
 
 export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> => {

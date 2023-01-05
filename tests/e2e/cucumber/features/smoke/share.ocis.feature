@@ -19,10 +19,10 @@ Feature: share
       | lorem.txt     | folder_to_shared       |
       | lorem-big.txt | folder_to_customShared |
     When "Alice" shares the following resource using the sidebar panel
-      | resource               | recipient | type | role   |
-      | folder_to_shared       | Brian     | user | editor |
-      | shared_folder          | Brian     | user | editor |
-      | folder_to_customShared | Brian     | user | editor |
+      | resource               | recipient | type | role                                  | resourceType |
+      | folder_to_shared       | Brian     | user | editor                                | folder       |
+      | shared_folder          | Brian     | user | editor                                | folder       |
+      | folder_to_customShared | Brian     | user | custom_permissions:read,create,delete | folder       |
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
@@ -49,8 +49,12 @@ Feature: share
       | resource                   | as            |
       | folder_to_shared/lorem.txt | lorem_new.txt |
     And "Brian" uploads the following resource
-      | resource   | to               |
-      | simple.pdf | folder_to_shared |
+      | resource        | to                     |
+      | simple.pdf      | folder_to_shared       |
+      | testavatar.jpeg | folder_to_customShared |
+    And "Brian" deletes the following resources
+      | resource                             |
+      | folder_to_customShared/lorem-big.txt |
     And "Alice" opens the "files" app
     And "Alice" uploads the following resource
       | resource          | to               | option  |
@@ -90,12 +94,12 @@ Feature: share
       | testavatar.jpeg |
       | simple.pdf      |
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role   |
-      | shareToBrian.txt | Brian     | user | editor |
-      | shareToBrian.md  | Brian     | user | editor |
-      | testavatar.jpeg  | Brian     | user | viewer |
-      | simple.pdf       | Brian     | user | viewer |
-      | sharedFile.txt   | Brian     | user | editor |
+      | resource         | recipient | type | role                                 | resourceType |
+      | shareToBrian.txt | Brian     | user | editor                               | file         |
+      | shareToBrian.md  | Brian     | user | editor                               | file         |
+      | testavatar.jpeg  | Brian     | user | viewer                               | file         |
+      | simple.pdf       | Brian     | user | custom_permissions:read,update,share | file         |
+      | sharedFile.txt   | Brian     | user | editor                               | file         |
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
