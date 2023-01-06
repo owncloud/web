@@ -215,8 +215,8 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     for (const { resource, owner } of stepTable.hashes()) {
-      const hasAcceptedShareExist = await shareObject.checkShareContext(resource, owner)
-      expect(hasAcceptedShareExist).toBe(shouldExist)
+      const isAcceptedSharePresent = await shareObject.isAcceptedSharePresent(resource, owner)
+      expect(isAcceptedSharePresent).toBe(shouldExist)
     }
   }
 )

@@ -5,7 +5,7 @@ import {
   acceptShare,
   changeShareeRole,
   removeShareeArgs,
-  checkShareContext,
+  isAcceptedSharePresent,
   removeSharee,
   ShareArgs,
   ShareStatusArgs,
@@ -58,9 +58,9 @@ export class Share {
     await this.#page.goto(startUrl)
   }
 
-  async checkShareContext(resource: string, owner: string): Promise<boolean> {
+  async isAcceptedSharePresent(resource: string, owner: string): Promise<boolean> {
     await this.#page.reload()
-    return await checkShareContext(this.#page, resource, owner)
+    return await isAcceptedSharePresent(this.#page, resource, owner)
   }
 
   async hasPermissionToShare(resource: string): Promise<boolean> {

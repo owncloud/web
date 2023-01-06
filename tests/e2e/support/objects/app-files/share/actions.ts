@@ -177,7 +177,7 @@ export const checkSharee = async (args: ShareArgs): Promise<void> => {
   }
 }
 
-export const checkShareContext = async (
+export const isAcceptedSharePresent = async (
   page: Page,
   resource: string,
   owner: string

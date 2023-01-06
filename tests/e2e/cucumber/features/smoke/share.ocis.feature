@@ -7,22 +7,31 @@ Feature: share
       | Brian |
 
   Scenario: folder
-    When "Alice" logs in
+    Given "Alice" creates the following folder in personal space using API
+      | name                   |
+      | folder_to_shared       |
+      | folder_to_customShared |
+    And "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
       | resource         | type   |
       | folder_to_shared | folder |
-      | shared_folder    | folder |
     And "Alice" uploads the following resource
-      | resource  | to               |
-      | lorem.txt | folder_to_shared |
+      | resource      | to                     |
+      | lorem.txt     | folder_to_shared       |
+      | lorem-big.txt | folder_to_customShared |
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role   |
-      | folder_to_shared | Brian     | user | editor |
-      | shared_folder    | Brian     | user | editor |
+      | resource               | recipient | type | role   |
+      | folder_to_shared       | Brian     | user | editor |
+      | shared_folder          | Brian     | user | editor |
+      | folder_to_customShared | Brian     | user | editor |
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
+    And "Brian" accepts the following share
+      | name                   |
+      | folder_to_shared       |
+      | folder_to_customShared |
     Then "Brian" should not be able to open the folder "shared_folder"
     When "Brian" accepts the following share
       | name             |
@@ -44,17 +53,23 @@ Feature: share
     And "Brian" uploads the following resource
       | resource   | to               |
       | simple.pdf | folder_to_shared |
-    When "Alice" opens the "files" app
+    And "Alice" opens the "files" app
     And "Alice" uploads the following resource
       | resource          | to               | option  |
       | PARENT/simple.pdf | folder_to_shared | replace |
     And "Brian" downloads old version of the following resource
       | resource   | to               |
       | simple.pdf | folder_to_shared |
-    When "Brian" restores following resources
+    And "Brian" restores following resources
       | resource   | to               | version |
       | simple.pdf | folder_to_shared | 1       |
-    When "Alice" deletes the following resources
+    And "Alice" removes following sharee
+      | resource               | recipient |
+      | folder_to_customShared | Brian     |
+    Then "Brian" should not be able to see the following shares
+      | resource               | owner        |
+      | folder_to_customShared | Alice Hansen |
+    And "Alice" deletes the following resources
       | resource                       |
       | folder_to_shared/lorem_new.txt |
       | folder_to_shared               |
@@ -63,7 +78,7 @@ Feature: share
 
 
   Scenario: file
-    When "Alice" logs in
+    Given "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
       | resource            | type       | content   |
@@ -75,15 +90,13 @@ Feature: share
       | resource        |
       | testavatar.jpeg |
       | simple.pdf      |
-    And "Alice" shares the following resource using the sidebar panel
+    When "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type | role   |
       | shareToBrian.txt | Brian     | user | editor |
       | shareToBrian.md  | Brian     | user | editor |
       | testavatar.jpeg  | Brian     | user | viewer |
       | simple.pdf       | Brian     | user | viewer |
       | sharedFile.txt   | Brian     | user | editor |
-    And "Alice" logs out
-
     When "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
@@ -120,7 +133,7 @@ Feature: share
       | shareToBrian.txt | Brian     |
       | shareToBrian.md  | Brian     |
     And "Alice" logs out
-    And "Brian" should not be able to see the following shares
+    Then "Brian" should not be able to see the following shares
       | resource         | owner        |
       | shareToBrian.txt | Alice Hansen |
       | shareToBrian.md  | Alice Hansen |
