@@ -3,8 +3,8 @@ import { User } from '../../types'
 import join from 'join-path'
 import { getPersonalSpaceId } from '../graph'
 import { config } from '../../../config'
-import {Response} from "node-fetch";
-import convert from "xml-js";
+import { Response } from 'node-fetch'
+import convert from 'xml-js'
 import _ from 'lodash/object'
 
 
@@ -96,10 +96,10 @@ export const uploadFileInPersonalSpace = async ({
 }
 
 export const createFolderInsideSpace = async ({
-                                                user,
-                                                spaceId,
-                                                folderName
-                                              }: {
+  user,
+  spaceId,
+  folderName
+}: {
   user: User
   spaceId: string
   folderName: string
@@ -120,10 +120,10 @@ export const createFolderInsideSpace = async ({
 }
 
 export const uploadFileInsideSpace = async ({
-                                              user,
-                                              spaceId,
-                                              fileName
-                                            }: {
+  user,
+  spaceId,
+  fileName
+}: {
   user: User
   spaceId: string
   fileName: string
@@ -137,38 +137,38 @@ export const uploadFileInsideSpace = async ({
 }
 
 export const getDataOfFileInsideSpace = async ({
-                                                 user,
-                                                 spaceId,
-                                                 fileName
-                                               }: {
+  user,
+  spaceId,
+  fileName
+}: {
   user: User
   spaceId: string
   fileName: string
 }): Promise<Response> => {
   const body =
-      '<?xml version="1.0"?>\n' +
-      '<d:propfind  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">\n' +
-      '  <d:prop>\n' +
-      '    <oc:permissions />\n' +
-      '    <oc:favorite />\n' +
-      '    <oc:fileid />\n' +
-      '    <oc:file-parent />\n' +
-      '    <oc:name />\n' +
-      '    <oc:owner-id />\n' +
-      '    <oc:owner-display-name />\n' +
-      '    <oc:shareid />\n' +
-      '    <oc:shareroot />\n' +
-      '    <oc:share-types />\n' +
-      '    <oc:privatelink />\n' +
-      '    <d:getcontentlength />\n' +
-      '    <oc:size />\n' +
-      '    <d:getlastmodified />\n' +
-      '    <d:getetag />\n' +
-      '    <d:getcontenttype />\n' +
-      '    <d:resourcetype />\n' +
-      '    <oc:downloadURL />\n' +
-      '  </d:prop>\n' +
-      '</d:propfind>'
+    '<?xml version="1.0"?>\n' +
+    '<d:propfind  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">\n' +
+    '  <d:prop>\n' +
+    '    <oc:permissions />\n' +
+    '    <oc:favorite />\n' +
+    '    <oc:fileid />\n' +
+    '    <oc:file-parent />\n' +
+    '    <oc:name />\n' +
+    '    <oc:owner-id />\n' +
+    '    <oc:owner-display-name />\n' +
+    '    <oc:shareid />\n' +
+    '    <oc:shareroot />\n' +
+    '    <oc:share-types />\n' +
+    '    <oc:privatelink />\n' +
+    '    <d:getcontentlength />\n' +
+    '    <oc:size />\n' +
+    '    <d:getlastmodified />\n' +
+    '    <d:getetag />\n' +
+    '    <d:getcontenttype />\n' +
+    '    <d:resourcetype />\n' +
+    '    <oc:downloadURL />\n' +
+    '  </d:prop>\n' +
+    '</d:propfind>'
   const response = await request({
     method: 'PROPFIND',
     path: join('remote.php', 'dav', 'spaces', spaceId, fileName),
@@ -181,10 +181,10 @@ export const getDataOfFileInsideSpace = async ({
 }
 
 export const getFileId = async ({
-                                  user,
-                                  spaceId,
-                                  fileName
-                                }: {
+  user,
+  spaceId,
+  fileName
+}: {
   user: User
   spaceId: string
   fileName: string

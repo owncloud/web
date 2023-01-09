@@ -1,7 +1,7 @@
 import { checkResponseStatus, request } from '../http'
-import {Space, User} from '../../types'
+import { Space, User } from '../../types'
 import join from 'join-path'
-import {createFolderInsideSpace, getFileId, uploadFileInsideSpace} from "../davSpaces";
+import { createFolderInsideSpace, getFileId, uploadFileInsideSpace } from '../davSpaces'
 
 export const getPersonalSpaceId = async ({ user }: { user: User }): Promise<string> => {
   const response = await request({
@@ -18,10 +18,10 @@ export const getPersonalSpaceId = async ({ user }: { user: User }): Promise<stri
 }
 
 export const getSpaceIdBySpaceName = async ({
-                                              user,
-                                              spaceType,
-                                              spaceName
-                                            }: {
+  user,
+  spaceType,
+  spaceName
+}: {
   user: User
   spaceType: string
   spaceName: string
@@ -43,9 +43,9 @@ export const getSpaceIdBySpaceName = async ({
 }
 
 export const createSpace = async ({
-                                    user,
-                                    space
-                                  }: {
+  user,
+  space
+}: {
   user: User
   space: Space
 }): Promise<string> => {
@@ -92,11 +92,11 @@ export const createSpace = async ({
 }
 
 export const updateSpaceSpecialSection = async ({
-                                                  user,
-                                                  spaceId,
-                                                  type,
-                                                  fileId
-                                                }: {
+  user,
+  spaceId,
+  type,
+  fileId
+}: {
   user: User
   spaceId: string
   type: string
@@ -125,7 +125,7 @@ export const updateSpaceSpecialSection = async ({
     user: user
   })
   checkResponseStatus(
-      response,
-      `Failed while creating special section "${type}" inside space project`
+    response,
+    `Failed while creating special section "${type}" inside space project`
   )
 }
