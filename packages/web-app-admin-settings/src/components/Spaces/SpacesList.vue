@@ -71,12 +71,12 @@
       </template>
       <template #status="{ item }">
         <span v-if="item.disabled" class="oc-flex oc-flex-middle">
-          <oc-icon name="stop-circle" variation="danger" class="oc-mr-s" /><span
+          <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
             v-text="$gettext('Disabled')"
           />
         </span>
         <span v-else class="oc-flex oc-flex-middle">
-          <oc-icon name="play-circle" variation="success" class="oc-mr-s" /><span
+          <oc-icon name="play-circle" fill-type="line" class="oc-mr-s" /><span
             v-text="$gettext('Enabled')"
           />
         </span>
