@@ -9,14 +9,12 @@ window.Vue = Vue
 export interface DefaultPluginsOptions {
   designSystem?: boolean
   gettext?: boolean
-  vuex?: boolean
   asyncComputed?: boolean
 }
 
 export const defaultPlugins = ({
   designSystem = true,
   gettext = true,
-  vuex = true,
   asyncComputed = true
 }: DefaultPluginsOptions = {}) => {
   const plugins = []
@@ -49,10 +47,6 @@ export const defaultPlugins = ({
         })
       }
     })
-  }
-
-  if (vuex) {
-    plugins.push(Vuex)
   }
 
   if (asyncComputed) {
