@@ -162,7 +162,7 @@ export default defineComponent({
       }
     )
   },
-  destroyed() {
+  unmounted() {
     if (this.$_notificationsInterval) {
       clearInterval(this.$_notificationsInterval)
     }

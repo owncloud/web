@@ -2,7 +2,8 @@
   <component :is="tag">
     <template v-for="(fragments, lineIndex) in lines">
       <template v-for="(fragment, fragmentIndex) in fragments">
-        <span
+        <!-- eslint-disable vue/no-v-for-template-key-on-child -->
+        <component
           :is="fragment.tag"
           :key="'line-' + lineIndex + '-fragment-' + fragmentIndex"
           :style="{
@@ -14,7 +15,7 @@
           :class="{ 'highlighted-fragment': fragment.highlighted }"
         >
           {{ fragment.value }}
-        </span>
+        </component>
       </template>
       <br v-if="lineIndex < lines.length - 1" :key="'line-' + lineIndex + '-br'" />
     </template>

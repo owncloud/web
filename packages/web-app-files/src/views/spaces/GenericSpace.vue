@@ -340,7 +340,7 @@ export default defineComponent({
     )
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     visibilityObserver.disconnect()
   },
 

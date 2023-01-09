@@ -40,7 +40,7 @@
           :label="getSelectSpaceLabel(item)"
           hide-label
           @input="$emit('toggleSelectSpace', item)"
-          @click.native.stop
+          @click.stop
         />
       </template>
       <template #icon>

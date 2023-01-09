@@ -72,7 +72,7 @@ export default {
   mounted() {
     this.$uppyService.registerUploadInput(this.$refs.input)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$uppyService.removeUploadInput(this.$refs.input)
   },
   methods: {

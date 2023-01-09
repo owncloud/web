@@ -209,7 +209,7 @@ export default defineComponent({
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.isSearchBarEnabled) {
       this.resizeObserver.unobserve(this.$refs.searchBar)
     }

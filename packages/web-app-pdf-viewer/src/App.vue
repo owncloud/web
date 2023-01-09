@@ -44,7 +44,7 @@ export default defineComponent({
       immediate: true
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.unloadPdf()
   },
   methods: {

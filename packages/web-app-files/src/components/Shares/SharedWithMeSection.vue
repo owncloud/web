@@ -254,7 +254,7 @@ export default defineComponent({
       return this.items.slice(0, this.showMoreToggleCount)
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     visibilityObserver.disconnect()
   },
   methods: {

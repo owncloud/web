@@ -144,7 +144,7 @@ export default defineComponent({
       this.tippy.setProps({ trigger: this.triggerMapping })
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     destroy(this.tippy)
   },
   mounted() {

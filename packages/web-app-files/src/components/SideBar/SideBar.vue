@@ -18,7 +18,6 @@
     @fileChanged="focusSideBar"
     @selectPanel="setActiveSideBarPanel"
     @close="closeSideBar"
-    v-on="$listeners"
   >
     <template #header>
       <file-info
@@ -136,7 +135,6 @@ export default defineComponent({
       webdav
     }
   },
-
   data() {
     return {
       focused: undefined,
