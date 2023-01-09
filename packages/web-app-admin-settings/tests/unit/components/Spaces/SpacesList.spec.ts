@@ -52,7 +52,7 @@ describe('SpacesList', () => {
     const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
     expect(wrapper.html()).toMatchSnapshot()
   })
-  it.each(['name', 'members', 'availableQuota', 'usedQuota', 'remainingQuota', 'status'])(
+  it.each(['name', 'members', 'totalQuota', 'usedQuota', 'remainingQuota', 'status'])(
     'sorts by property "%s"',
     async (prop) => {
       const { wrapper } = getWrapper({ mountType: shallowMount, spaces: spaceMocks })
