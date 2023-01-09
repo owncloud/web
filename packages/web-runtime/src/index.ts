@@ -71,7 +71,9 @@ export const renderSuccess = (): void => {
     el: '#owncloud',
     store,
     router,
-    render() { return h(pages.success) }
+    render() {
+      return h(pages.success)
+    }
   })
 
   instance.$once('mounted', () => {
@@ -199,7 +201,9 @@ export const renderFailure = async (err: Error): Promise<void> => {
   new Vue({
     el: '#owncloud',
     store,
-    render() { return  h(pages.failure) }
+    render() {
+      return h(pages.failure)
+    }
   })
 }
 ;(window as any).runtimeLoaded({

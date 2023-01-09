@@ -2,7 +2,7 @@ import { configureCompat } from 'vue'
 
 type CompatConfig = Parameters<typeof configureCompat>[0]
 export const compatConfig: CompatConfig = {
-  MODE: 2,
+  MODE: 2
   // ATTR_ENUMERATED_COERCION: false,
   // ATTR_FALSE_VALUE: false,
   // COMPONENT_ASYNC: false,

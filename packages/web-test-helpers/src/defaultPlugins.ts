@@ -1,4 +1,3 @@
-import Vuex from 'vuex'
 import DesignSystem from '@ownclouders/design-system'
 import GetTextPlugin from 'vue-gettext'
 import AsyncComputed from 'vue-async-computed'
