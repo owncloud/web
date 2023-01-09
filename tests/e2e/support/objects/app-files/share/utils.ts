@@ -1,8 +1,8 @@
-import {errors, Page} from 'playwright'
+import { errors, Page } from 'playwright'
 import util from 'util'
 import { resourceNameSelector, fileRow } from '../resource/actions'
 
-const acceptedShareList =
+const acceptedShareItem =
     '//*[@data-test-resource-name="%s"]/ancestor::tr//span[@data-test-user-name="%s"]'
 
 export const resourceIsNotOpenable = async ({
@@ -43,7 +43,7 @@ export const acceptedShareExists = async ({
 }): Promise<boolean> => {
   let exist = true
   await page
-    .waitForSelector(util.format(acceptedShareList, resource, owner), { timeout })
+    .waitForSelector(util.format(acceptedShareItem, resource, owner), { timeout })
     .catch((e) => {
       if (!(e instanceof errors.TimeoutError)) {
         throw e

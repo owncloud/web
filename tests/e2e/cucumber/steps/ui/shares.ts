@@ -216,7 +216,9 @@ Then(
     const shareObject = new objects.applicationFiles.Share({ page })
     for (const { resource, owner } of stepTable.hashes()) {
       const isAcceptedSharePresent = await shareObject.isAcceptedSharePresent(resource, owner)
-      expect(isAcceptedSharePresent).toBe(shouldExist)
+      expect(isAcceptedSharePresent, '${resource} does not exist in accepted share').toBe(
+        shouldExist
+      )
     }
   }
 )
