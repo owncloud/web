@@ -1,4 +1,5 @@
 export default {
+  emits: ['beforeDestroy', 'mounted', 'updated'],
   mounted() {
     this.$nextTick(() => this.$emit('mounted', this, 'mounted'))
   },
