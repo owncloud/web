@@ -387,7 +387,18 @@ export default defineComponent({
   .oc-table-data-cell-remainingQuota {
     display: none;
 
-    @media only screen and (min-width: 1400px) {
+    @media only screen and (min-width: 1200px) {
+      display: table-cell;
+    }
+  }
+
+  .oc-table-header-cell-availableQuota,
+  .oc-table-data-cell-availableQuota,
+  .oc-table-header-cell-usedQuota,
+  .oc-table-data-cell-usedQuota {
+    display: none;
+
+    @media only screen and (min-width: 1700px) {
       display: table-cell;
     }
   }
