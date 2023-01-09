@@ -1,8 +1,12 @@
 <template>
   <div class="oc-mt-xl">
-    <div class="oc-flex space-info">
+    <div v-if="noSpaces" class="oc-flex space-info">
       <oc-icon name="layout-grid" size="xxlarge" />
       <p v-translate>Select a group to view details</p>
+    </div>
+    <div v-if="multipleUsers" class="oc-flex group-info">
+      <oc-icon name="layout-grid" size="xxlarge" />
+      <p>{{ multipleSpacesSelectedText }}</p>
     </div>
   </div>
 </template>
@@ -18,18 +22,18 @@ export default {
   computed: {
     /*group() {
       return this.groups.length === 1 ? this.groups[0] : null
-    },
-    noGroups() {
-      return !this.groups.length
-    },
+    },*/
+    noSpaces() {
+      return !this.spaces.length
+    },/*
     multipleGroups() {
       return this.groups.length > 1
-    },
-    multipleGroupsSelectedText() {
-      return this.$gettextInterpolate('%{count} groups selected', {
-        count: this.groups.length
+    },*/
+    multipleSpacesSelectedText() {
+      return this.$gettextInterpolate('%{count} spaces selected', {
+        count: this.spaces.length
       })
-    }*/
+    }
   }
 }
 </script>
