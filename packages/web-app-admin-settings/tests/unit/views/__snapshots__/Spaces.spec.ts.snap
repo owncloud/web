@@ -6,36 +6,10 @@ exports[`Spaces view loading states should render spaces list after loading has 
     <div class="oc-width-expand" id="admin-settings-wrapper">
       <div class="oc-app-bar oc-py-s" id="admin-settings-app-bar">
         <div class="oc-flex oc-flex-between">
-          <nav class="oc-flex oc-flex-middle oc-breadcrumb oc-breadcrumb-default">
-            <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
-              <li class="oc-breadcrumb-list-item oc-flex oc-flex-middle">
-                <a href="/admin-settings">
-                  <span>Administration Settings</span>
-                </a>
-                <span class="oc-mx-xs oc-icon oc-icon-m oc-icon-passive">
-                  <!---->
-                </span>
-                <!---->
-              </li>
-              <li class="oc-breadcrumb-list-item oc-flex oc-flex-middle">
-                <!---->
-                <button aria-current="page" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
-                  <span>Spaces</span>
-                </button>
-                <!---->
-              </li>
-            </ol>
-            <div class="oc-breadcrumb-drop">
-              <label aria-expanded="false" class="oc-breadcrumb-drop-label oc-flex oc-flex-middle oc-flex-between" tabindex="0">
-                <span aria-current="page" class="oc-breadcrumb-drop-label-text oc-text-truncate">Spaces</span>
-                <span class="oc-breadcrumb-drop-label-icon oc-icon oc-icon-m oc-icon-passive">
-                  <!---->
-                </span>
-              </label>
-            </div>
-          </nav>
+          <oc-breadcrumb-stub class="oc-flex oc-flex-middle" contextmenupadding="medium" items="[object Object],[object Object]" variation="default"></oc-breadcrumb-stub>
           <div>
-            <button aria-label="Open sidebar to view details" class="oc-my-s oc-p-xs oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="files-toggle-sidebar" type="button">
+            <button aria-label="Open sidebar to view details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-my-s oc-p-xs" id="files-toggle-sidebar" type="button">
+              <!-- @slot Content of the button -->
               <span class="oc-icon oc-icon-m oc-icon-passive">
                 <!---->
               </span>
@@ -43,14 +17,14 @@ exports[`Spaces view loading states should render spaces list after loading has 
           </div>
         </div>
         <div class="admin-settings-app-bar-actions oc-mt-xs">
-          <!---->
+          <!--v-if-->
         </div>
       </div>
       <div>
-        <spaceslist-stub headerposition="0" selectedspaces="" spaces="[object Object]"></spaceslist-stub>
+        <spaces-list-stub headerposition="0" selectedspaces="" spaces="[object Object]"></spaces-list-stub>
       </div>
     </div>
-    <!---->
+    <!--v-if-->
   </main>
 </div>
 `;
