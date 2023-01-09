@@ -251,7 +251,13 @@ export default defineComponent({
       default: false
     }
   },
-  emits: [EVENT_THEAD_CLICKED, EVENT_TROW_CLICKED, EVENT_TROW_MOUNTED, EVENT_TROW_CONTEXTMENU],
+  emits: [
+    EVENT_ITEM_DROPPED,
+    EVENT_THEAD_CLICKED,
+    EVENT_TROW_CLICKED,
+    EVENT_TROW_MOUNTED,
+    EVENT_TROW_CONTEXTMENU
+  ],
   data() {
     return {
       constants: {
