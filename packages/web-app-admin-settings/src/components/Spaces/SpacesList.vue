@@ -1,7 +1,14 @@
 <template>
   <div>
+    <oc-text-input
+      id="spaces-filter"
+      v-model="filterTerm"
+      class="oc-ml-m oc-my-s"
+      :label="$gettext('Filter spaces')"
+      autocomplete="off"
+    />
     <oc-table
-      ref="table"
+      ref="tableRef"
       class="spaces-table"
       :sort-by="sortBy"
       :sort-dir="sortDir"
@@ -52,7 +59,7 @@
       <template #members="{ item }">
         {{ getMemberCount(item) }}
       </template>
-      <template #availableQuota="{ item }"> {{ getAvailableQuota(item) }} </template>
+      <template #totalQuota="{ item }"> {{ getTotalQuota(item) }} </template>
       <template #usedQuota="{ item }"> {{ getUsedQuota(item) }} </template>
       <template #remainingQuota="{ item }"> {{ getRemainingQuota(item) }} </template>
       <template #mdate="{ item }">
@@ -64,12 +71,12 @@
       </template>
       <template #status="{ item }">
         <span v-if="item.disabled" class="oc-flex oc-flex-middle">
-          <oc-icon name="stop-circle" variation="danger" class="oc-mr-s" /><span
+          <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
             v-text="$gettext('Disabled')"
           />
         </span>
         <span v-else class="oc-flex oc-flex-middle">
-          <oc-icon name="play-circle" variation="success" class="oc-mr-s" /><span
+          <oc-icon name="play-circle" fill-type="line" class="oc-mr-s" /><span
             v-text="$gettext('Enabled')"
           />
         </span>
@@ -77,6 +84,7 @@
       <template #footer>
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
+          <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
         </div>
       </template>
     </oc-table>
@@ -85,10 +93,22 @@
 
 <script lang="ts">
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
-import { computed, defineComponent, getCurrentInstance, PropType, ref, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  nextTick,
+  onMounted,
+  PropType,
+  ref,
+  unref,
+  watch
+} from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 import { useTranslations } from 'web-pkg/src/composables'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
+import Mark from 'mark.js'
+import Fuse from 'fuse.js'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -112,12 +132,19 @@ export default defineComponent({
     const { $gettext, $gettextInterpolate } = useTranslations()
     const sortBy = ref('name')
     const sortDir = ref('asc')
+    const filterTerm = ref('')
+    const markInstance = ref(undefined)
+    const tableRef = ref(undefined)
 
     const allSpacesSelected = computed(() => props.spaces.length === props.selectedSpaces.length)
     const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
     const footerTextTotal = computed(() => {
       const translated = $gettext('%{spaceCount} spaces in total')
       return $gettextInterpolate(translated, { spaceCount: props.spaces.length })
+    })
+    const footerTextFilter = computed(() => {
+      const translated = $gettext('%{spaceCount} matching spaces')
+      return $gettextInterpolate(translated, { spaceCount: unref(orderedSpaces).length })
     })
 
     const orderBy = (list, prop, desc) => {
@@ -129,9 +156,9 @@ export default defineComponent({
             a = getMemberCount(s1).toString()
             b = getMemberCount(s2).toString()
             break
-          case 'availableQuota':
-            a = getAvailableQuota(s1).toString()
-            b = getAvailableQuota(s2).toString()
+          case 'totalQuota':
+            a = getTotalQuota(s1).toString()
+            b = getTotalQuota(s2).toString()
             break
           case 'usedQuota':
             a = getUsedQuota(s1).toString()
@@ -154,13 +181,25 @@ export default defineComponent({
       })
     }
     const orderedSpaces = computed(() =>
-      orderBy(props.spaces, unref(sortBy), unref(sortDir) === 'desc')
+      filter(orderBy(props.spaces, unref(sortBy), unref(sortDir) === 'desc'), unref(filterTerm))
     )
     const handleSort = (event) => {
       sortBy.value = event.sortBy
       sortDir.value = event.sortDir
     }
+    const filter = (spaces, filterTerm) => {
+      if (!(filterTerm || '').trim()) {
+        return spaces
+      }
+      const searchEngine = new Fuse(spaces, {
+        includeScore: true,
+        useExtendedSearch: true,
+        threshold: 0.3,
+        keys: ['name']
+      })
 
+      return searchEngine.search(filterTerm).map((r) => r.item)
+    }
     const isSpaceSelected = (space: SpaceResource) => {
       return props.selectedSpaces.some((s) => s.id === space.id)
     }
@@ -197,20 +236,20 @@ export default defineComponent({
         sortable: true
       },
       {
-        name: 'availableQuota',
-        title: $gettext('Available Quota'),
+        name: 'totalQuota',
+        title: $gettext('Total quota'),
         type: 'slot',
         sortable: true
       },
       {
         name: 'usedQuota',
-        title: $gettext('Used Quota'),
+        title: $gettext('Used quota'),
         type: 'slot',
         sortable: true
       },
       {
         name: 'remainingQuota',
-        title: $gettext('Remaining Quota'),
+        title: $gettext('Remaining quota'),
         type: 'slot',
         sortable: true
       },
@@ -243,7 +282,7 @@ export default defineComponent({
     const formatDateRelative = (date) => {
       return formatRelativeDateFromJSDate(new Date(date), instance.$language.current)
     }
-    const getAvailableQuota = (space: SpaceResource) => {
+    const getTotalQuota = (space: SpaceResource) => {
       return `${space.spaceQuota.total * Math.pow(10, -9)} GB`
     }
     const getUsedQuota = (space: SpaceResource) => {
@@ -276,17 +315,40 @@ export default defineComponent({
       instance.$emit('toggleSelectSpace', space)
     }
 
+    onMounted(() => {
+      nextTick(() => {
+        markInstance.value = new Mark(unref(tableRef).$el)
+      })
+    })
+
+    watch(filterTerm, () => {
+      const instance = unref(markInstance)
+      if (!instance) {
+        return
+      }
+      instance.unmark()
+      instance.mark(unref(filterTerm), {
+        element: 'span',
+        className: 'highlight-mark',
+        exclude: ['th *', 'tfoot *']
+      })
+    })
+
     return {
       allSpacesSelected,
       sortBy,
       sortDir,
+      filterTerm,
       footerTextTotal,
+      footerTextFilter,
       fields,
       highlighted,
+      tableRef,
+      filter,
       getManagerNames,
       formatDate,
       formatDateRelative,
-      getAvailableQuota,
+      getTotalQuota,
       getUsedQuota,
       getRemainingQuota,
       getMemberCount,
@@ -301,6 +363,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+#spaces-filter {
+  width: 16rem;
+}
+
+.highlight-mark {
+  font-weight: 600;
+}
+
 .spaces-table {
   .oc-table-header-cell-actions,
   .oc-table-data-cell-actions {
@@ -309,8 +379,8 @@ export default defineComponent({
 
   .oc-table-header-cell-manager,
   .oc-table-data-cell-manager,
-  .oc-table-header-cell-availableQuota,
-  .oc-table-data-cell-availableQuota,
+  .oc-table-header-cell-totalQuota,
+  .oc-table-data-cell-totalQuota,
   .oc-table-header-cell-usedQuota,
   .oc-table-data-cell-usedQuota,
   .oc-table-header-cell-remainingQuota,

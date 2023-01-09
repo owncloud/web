@@ -1,5 +1,6 @@
 import SpacesList from '../../../../src/components/Spaces/SpacesList.vue'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import Vue from 'vue'
 
 const spaceMocks = [
   {
@@ -51,7 +52,7 @@ describe('SpacesList', () => {
     const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
     expect(wrapper.html()).toMatchSnapshot()
   })
-  it.each(['name', 'members', 'availableQuota', 'usedQuota', 'remainingQuota', 'status'])(
+  it.each(['name', 'members', 'totalQuota', 'usedQuota', 'remainingQuota', 'status'])(
     'sorts by property "%s"',
     async (prop) => {
       const { wrapper } = getWrapper({ mountType: shallowMount, spaces: spaceMocks })
@@ -76,6 +77,12 @@ describe('SpacesList', () => {
     wrapper.vm.fileClicked(spaceMocks[0])
     expect(wrapper.emitted().toggleUnSelectAllSpaces.length).toBeTruthy()
     expect(wrapper.emitted().toggleSelectSpace).toBeTruthy()
+  })
+  it('shows only filtered spaces if filter applied', async () => {
+    const { wrapper } = getWrapper({ spaces: spaceMocks })
+    wrapper.vm.filterTerm = 'Another'
+    await Vue.nextTick()
+    expect(wrapper.vm.orderedSpaces).toEqual([spaceMocks[1]])
   })
 })
 

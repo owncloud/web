@@ -2,6 +2,14 @@
 
 exports[`SpacesList should render all spaces in a table 1`] = `
 <div>
+  <div class="oc-ml-m oc-my-s">
+    <label class="oc-label" for="spaces-filter">Filter spaces</label>
+    <div class="oc-position-relative">
+      <input aria-invalid="false" autocomplete="off" class="oc-text-input oc-input oc-rounded" id="spaces-filter" type="text">
+      <!---->
+    </div>
+    <!---->
+  </div>
   <table class="spaces-table oc-table oc-table-hover oc-table-sticky">
     <thead class="oc-thead">
       <tr class="oc-table-header-row" tabindex="-1">
@@ -35,16 +43,16 @@ exports[`SpacesList should render all spaces in a table 1`] = `
             </span>
           </button>
         </th>
-        <th aria-sort="none" class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-availableQuota" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Available Quota</span>
-          <button aria-label="Sort by availableQuota" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible" type="button">
+        <th aria-sort="none" class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-totalQuota" style="top: 0px;">
+          <span class="oc-table-thead-content header-text">Total quota</span>
+          <button aria-label="Sort by totalQuota" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible" type="button">
             <span class="oc-icon oc-icon-s oc-icon-passive">
               <!---->
             </span>
           </button>
         </th>
         <th aria-sort="none" class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-usedQuota" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Used Quota</span>
+          <span class="oc-table-thead-content header-text">Used quota</span>
           <button aria-label="Sort by usedQuota" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible" type="button">
             <span class="oc-icon oc-icon-s oc-icon-passive">
               <!---->
@@ -52,7 +60,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           </button>
         </th>
         <th aria-sort="none" class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-remainingQuota" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Remaining Quota</span>
+          <span class="oc-table-thead-content header-text">Remaining quota</span>
           <button aria-label="Sort by remainingQuota" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible" type="button">
             <span class="oc-icon oc-icon-s oc-icon-passive">
               <!---->
@@ -96,7 +104,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
         <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-members">
           3
         </td>
-        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-availableQuota"> 1 GB </td>
+        <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-totalQuota"> 1 GB </td>
         <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-usedQuota"> 0.00 GB </td>
         <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-remainingQuota"> 1 GB </td>
         <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-mdate">
@@ -104,7 +112,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
         </td>
         <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-table-data-cell oc-table-data-cell-status oc-pr-s">
           <span class="oc-flex oc-flex-middle">
-            <span class="oc-mr-s oc-icon oc-icon-m oc-icon-success">
+            <span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive">
               <!---->
             </span>
             <span>Enabled</span>
@@ -117,6 +125,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
         <td class="oc-table-footer-cell" colspan="10">
           <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
             <p class="oc-text-muted">1 spaces in total</p>
+            <!---->
           </div>
         </td>
       </tr>
