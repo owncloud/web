@@ -335,7 +335,7 @@ export default defineComponent({
         this.performLoaderTask(true, path, fileId)
       }
     )
-    this.$on('beforeDestroy', () =>
+    this.$on('beforeUnmount', () =>
       eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     )
   },

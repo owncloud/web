@@ -95,7 +95,7 @@ export default {
     })
     resizeObserver.observe(navBar)
 
-    this.$on('beforeDestroy', () => {
+    this.$on('beforeUnmount', () => {
       resizeObserver.disconnect()
     })
   },

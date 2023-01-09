@@ -198,7 +198,7 @@ export default defineComponent({
       this.$refs.optionsDrop.hide()
     })
 
-    this.$on('beforeDestroy', () => {
+    this.$on('beforeUnmount', () => {
       eventBus.unsubscribe('app.search.options-drop.hide', hideOptionsDropEvent)
     })
   },

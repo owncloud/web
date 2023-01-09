@@ -13,7 +13,7 @@
     :is-header-compact="isSingleResource"
     v-bind="$attrs"
     data-custom-key-bindings="true"
-    @beforeDestroy="destroySideBar"
+    @beforeUnmount="destroySideBar"
     @mounted="focusSideBar"
     @fileChanged="focusSideBar"
     @selectPanel="setActiveSideBarPanel"
@@ -103,7 +103,7 @@ export default defineComponent({
       component.focus({
         from: document.activeElement,
         to: component.sidebar?.$el,
-        revert: event === 'beforeDestroy'
+        revert: event === 'beforeUnmount'
       })
     }
 

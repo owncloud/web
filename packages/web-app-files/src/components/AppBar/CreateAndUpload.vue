@@ -212,7 +212,7 @@ export default defineComponent({
         uppyService
       })
 
-      instance.$on('beforeDestroy', () => {
+      instance.$on('beforeUnmount', () => {
         uppyService.unsubscribe('filesSelected', filesSelectedSub)
         uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
         uppyService.removeDropTarget()

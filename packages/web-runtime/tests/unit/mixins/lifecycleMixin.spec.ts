@@ -36,11 +36,11 @@ describe('livecycleMixin', () => {
     expect(emittedEvent).toBe(event)
   })
 
-  it('handles beforeDestroy', async () => {
+  it('handles beforeUnmount', async () => {
     const { wrapper } = getWrapper()
     const wrapperComponent = wrapper.findComponent({ name: 'DummyComponent' })
 
-    const event = 'beforeDestroy'
+    const event = 'beforeUnmount'
     wrapper.unmount()
     await wrapper.vm.$nextTick()
     const [emittedComponent, emittedEvent] = wrapper.emitted(event)[0]

@@ -75,7 +75,7 @@ export default defineComponent({
       this.saved = true
     })
 
-    this.$on('beforeDestroy', () => eventBus.unsubscribe('sidebar.entity.saved', savedEventToken))
+    this.$on('beforeUnmount', () => eventBus.unsubscribe('sidebar.entity.saved', savedEventToken))
   }
 })
 </script>
