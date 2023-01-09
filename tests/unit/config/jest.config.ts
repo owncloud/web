@@ -3,7 +3,7 @@ import { compilerOptions } from '../../../vite.config'
 const rootDir = path.resolve(__dirname, '../../../')
 
 // We need to transpile these modules as they are using esm syntax
-const esmModules = ['lodash-es'].map((m) => `.pnpm/${m}@.*`)
+const esmModules = ['lodash-es', 'mark.js', 'fuse.js'].map((m) => `.pnpm/${m}@.*`)
 process.env.TZ = 'GMT'
 module.exports = {
   globals: {
@@ -24,6 +24,8 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/$1',
     'core-js': '<rootDir>/node_modules/core-js',
     '^vue$': '@vue/compat',
+    'mark.js': '<rootDir>/node_modules/mark.js/src/vanilla.js',
+    'fuse.js': '<rootDir>/node_modules/fuse.js/dist/fuse.esm.js',
 
     // HACK: workaround for https://github.com/transloadit/uppy/issues/4127
     '@uppy/core': '<rootDir>tests/unit/stubs/uppy',
