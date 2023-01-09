@@ -37,6 +37,8 @@
         <div class="oc-flex oc-flex-middle">
           <!-- Slot for individual actions -->
           <slot name="actions" :item="resource" />
+          <!-- Slot for contextmenu -->
+          <slot name="contextMenu" :item="resource" />
         </div>
       </div>
       <p

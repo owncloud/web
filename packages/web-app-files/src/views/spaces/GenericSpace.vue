@@ -95,13 +95,16 @@
           class="oc-px-m oc-pt-l"
           @fileClick="$_fileActions_triggerDefaultAction"
         >
-          <template #actions="{ item }">
+          <template #actions="{ resource }">
             <quick-actions
-              :class="item.preview"
+              :class="resource.preview"
               class="oc-visible@s"
-              :item="item"
+              :item="resource"
               :actions="app.quickActions"
             />
+          </template>
+          <template #contextMenuActions="{ resource }">
+            <context-actions :space="space" :items="[resource]" />
           </template>
           <template #footer>
             <pagination :pages="paginationPages" :current-page="paginationPage" />

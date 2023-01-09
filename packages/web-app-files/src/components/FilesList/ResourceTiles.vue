@@ -3,17 +3,53 @@
     <oc-list class="oc-tiles oc-flex">
       <li v-for="(resource, index) in data" :key="resource.id" class="oc-tiles-item">
         <oc-tile
-          :ref="`row-${index}`"
+          :ref="
+            (el) => {
+              tileRefs.tiles[index] = el
+            }
+          "
           :resource="resource"
           :resource-route="getRoute(resource)"
-          @contextmenu="$emit('contextmenuClicked', $refs[`row-${index}`][0], $event, resource)"
+          @contextmenu="showContextMenu($event, index, tileRefs.tiles[index])"
           @click="emitTileClick(resource)"
         >
-          <template #imageField="{ item }">
-            <slot name="image" :item="item" />
+          <template #imageField>
+            <slot name="image" :resource="resource" />
           </template>
-          <template #actions="{ item }">
-            <slot name="actions" :item="item" />
+          <template #actions>
+            <slot name="actions" :resource="resource" />
+          </template>
+          <template #contextMenu>
+            <div>
+              <oc-button
+                :id="`space-context-btn-${resource.getDomSelector()}`"
+                :ref="
+                  (el) => {
+                    tileRefs.dropBtns[index] = el
+                  }
+                "
+                v-oc-tooltip="contextMenuLabel"
+                :aria-label="contextMenuLabel"
+                appearance="raw"
+                @click="resetDropPosition($event, index, tileRefs.tiles[index])"
+              >
+                <oc-icon name="more-2" />
+              </oc-button>
+              <oc-drop
+                :ref="
+                  (el) => {
+                    tileRefs.dropEls[index] = el
+                  }
+                "
+                :drop-id="`space-context-drop-${resource.getDomSelector()}`"
+                close-on-click
+                mode="manual"
+                :options="{ delayHide: 0 }"
+                padding-size="small"
+              >
+                <slot name="contextMenuActions" :resource="resource" />
+              </oc-drop>
+            </div>
           </template>
         </oc-tile>
       </li>
@@ -24,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from 'vue'
+import { onBeforeUpdate, defineComponent, PropType, computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { createLocationSpaces } from 'web-app-files/src/router'
 import { Resource, SpaceResource } from 'web-client'
@@ -48,10 +84,16 @@ export default defineComponent({
       default: () => []
     }
   },
-  emits: ['contextmenuClicked', 'fileClick'],
+  emits: ['fileClick', 'rowMounted'],
   setup(props, context) {
     const store = useStore()
     const { $gettext } = useGettext()
+
+    const tileRefs = ref({
+      tiles: [],
+      dropBtns: [],
+      dropEls: []
+    })
 
     const spaces = computed(() => {
       return store.getters['runtime/spaces/spaces']
@@ -94,9 +136,62 @@ export default defineComponent({
       }
     }
 
+    const contextMenuLabel = computed(() => {
+      return $gettext('Show context menu')
+    })
+
+    const displayPositionedDropdown = (dropdown, event, reference) => {
+      const contextMenuButtonPos = reference.$el.getBoundingClientRect()
+
+      if (!dropdown || !contextMenuButtonPos) {
+        return
+      }
+
+      dropdown.tippy.setProps({
+        getReferenceClientRect: () => ({
+          width: 0,
+          height: 0,
+          top: event.clientY,
+          bottom: event.clientY,
+          left: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x,
+          right: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x
+        })
+      })
+      dropdown.show()
+    }
+
+    const resetDropPosition = (event, index, reference) => {
+      const drop = tileRefs.value.dropEls[index]
+
+      // Doesn't seem to work properly, second click on three dots doesn't close the menu anymore
+      if (drop === undefined) {
+        return
+      }
+      displayPositionedDropdown(drop, event, reference)
+    }
+
+    const showContextMenu = (event, index, reference) => {
+      event.preventDefault()
+      const drop = tileRefs.value.dropEls[index]
+
+      displayPositionedDropdown(drop, event, reference)
+    }
+
+    onBeforeUpdate(() => {
+      tileRefs.value = {
+        tiles: [],
+        dropBtns: [],
+        dropEls: []
+      }
+    })
+
     return {
+      contextMenuLabel,
+      emitTileClick,
       getRoute,
-      emitTileClick
+      resetDropPosition,
+      showContextMenu,
+      tileRefs
     }
   }
 })
