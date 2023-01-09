@@ -45,7 +45,7 @@
           </template>
         </no-content-message>
         <resource-table
-          v-else
+          v-else-if="viewMode !== 'resource-tiles'"
           id="files-space-table"
           v-model:selectedIds="selectedResourcesIds"
           class="files-table"
@@ -53,7 +53,6 @@
           :view-mode="viewMode"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
-          :target-route-callback="resourceTargetRouteCallback"
           :header-position="fileListHeaderY"
           :drag-drop="true"
           :sort-by="sortBy"
@@ -90,6 +89,31 @@
             />
           </template>
         </resource-table>
+        <resource-tiles
+          v-else
+          :data="paginatedResources"
+          class="oc-px-m oc-pt-l"
+          @fileClick="$_fileActions_triggerDefaultAction"
+        >
+          <template #actions="{ item }">
+            <quick-actions
+              :class="item.preview"
+              class="oc-visible@s"
+              :item="item"
+              :actions="app.quickActions"
+            />
+          </template>
+          <template #footer>
+            <pagination :pages="paginationPages" :current-page="paginationPage" />
+            <list-info
+              v-if="paginatedResources.length > 0"
+              class="oc-width-1-1 oc-my-s"
+              :files="totalFilesCount.files"
+              :folders="totalFilesCount.folders"
+              :size="totalFilesSize"
+            />
+          </template>
+        </resource-tiles>
       </template>
     </files-view-wrapper>
     <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
@@ -113,6 +137,7 @@ import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
@@ -170,6 +195,7 @@ export default defineComponent({
     Pagination,
     QuickActions,
     ResourceTable,
+    ResourceTiles,
     SideBar,
     SpaceHeader
   },

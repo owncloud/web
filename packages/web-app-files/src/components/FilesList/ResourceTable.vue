@@ -1,6 +1,5 @@
 <template>
-  <component
-    :is="displayMode"
+  <oc-table
     :class="[
       hoverableQuickActions && 'hoverable-quick-actions',
       { condensed: viewMode === ViewModeConstants.condensedTable.name }
@@ -179,15 +178,16 @@
       <!-- @slot Footer of the files table -->
       <slot name="footer" />
     </template>
-  </component>
+  </oc-table>
 </template>
 
 <script lang="ts">
-import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from 'web-pkg/src/constants'
-import { SortDir } from '../../composables'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
+import { basename, dirname } from 'path'
+import { defineComponent, PropType, computed } from 'vue'
+import { useWindowSize } from '@vueuse/core'
+import { EVENT_FILE_DROPPED, EVENT_TROW_MOUNTED } from 'web-pkg/src/constants'
 import {
   useCapabilityFilesTags,
   useCapabilityProjectSpacesEnabled,
@@ -195,30 +195,28 @@ import {
   useStore,
   useUserContext
 } from 'web-pkg/src/composables'
-import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 
 import Rename from '../../mixins/actions/rename'
-import { defineComponent, PropType, computed } from 'vue'
 import { Resource } from 'web-client'
-import { ClipboardActions } from '../../helpers/clipboardActions'
-import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { createLocationSpaces, createLocationShares, createLocationCommon } from '../../router'
 import {
   displayPositionedDropdown,
   formatDateFromJSDate,
   formatRelativeDateFromJSDate
 } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { CreateTargetRouteOptions } from '../../helpers/folderLink'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { basename, dirname } from 'path'
-import { useWindowSize } from '@vueuse/core'
+import { extractDomSelector, SpaceResource } from 'web-client/src/helpers'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
 import ResourceTiles from './ResourceTiles.vue'
+
+import { createLocationShares, createLocationCommon } from '../../router'
+import { SortDir } from '../../composables'
+import { ViewModeConstants } from '../../composables/viewMode'
+import { ClipboardActions } from '../../helpers/clipboardActions'
+import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
+
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
@@ -282,14 +280,6 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: true
-    },
-    /**
-     * Accepts a `path` and a `resource` param and returns a corresponding route object.
-     */
-    targetRouteCallback: {
-      type: Function,
-      required: false,
-      default: undefined
     },
     /**
      * Asserts whether clicking on the resource name triggers any action
@@ -400,19 +390,24 @@ export default defineComponent({
     'update:selectedIds',
     'update:modelValue'
   ],
-  setup() {
+  setup(props, context) {
     const store = useStore()
+
+    const spaces = computed(() => {
+      return store.getters['runtime/spaces/spaces']
+    })
+
     const { width } = useWindowSize()
     const hasTags = computed(
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
     )
 
     return {
-      ViewModeConstants,
       hasTags,
-      isUserContext: useUserContext({ store }),
       hasShareJail: useCapabilityShareJailEnabled(),
-      hasProjectSpaces: useCapabilityProjectSpacesEnabled()
+      hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
+      isUserContext: useUserContext({ store }),
+      spaces
     }
   },
   data() {
@@ -644,36 +639,6 @@ export default defineComponent({
         resource: file
       })
     },
-    createFolderLink(options: CreateTargetRouteOptions) {
-      if (this.targetRouteCallback) {
-        return this.targetRouteCallback(options)
-      }
-
-      const { path, fileId, resource } = options
-      let space
-      if (resource.shareId) {
-        space = buildShareSpaceResource({
-          shareId: resource.shareId,
-          shareName: basename(resource.shareRoot),
-          serverUrl: configurationManager.serverUrl
-        })
-      } else if (!resource.shareId && !this.getInternalSpace(resource.storageId)) {
-        if (path === '/') {
-          return createLocationShares('files-shares-with-me')
-        }
-        // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
-        return { name: 'resolvePrivateLink', params: { fileId } }
-      } else {
-        space = this.getMatchingSpace(resource)
-      }
-      if (!space) {
-        return {}
-      }
-      return createLocationSpaces(
-        'files-spaces-generic',
-        createFileRouteOptions(space, { path, fileId })
-      )
-    },
     fileDragged(file) {
       this.addSelectedResource(file)
     },
@@ -717,7 +682,7 @@ export default defineComponent({
        * @property {object} resource The resource which was mounted as table row
        * @property {object} component The table row component
        */
-      this.$emit('rowMounted', resource, component)
+      this.$emit(this.constants.EVENT_TROW_MOUNTED, resource, component)
     },
     fileClicked(data) {
       /**
@@ -758,20 +723,7 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
-      let space = this.getMatchingSpace(resource)
-      if (!space) {
-        space = buildShareSpaceResource({
-          shareId: resource.shareId,
-          shareName: resource.name,
-          serverUrl: configurationManager.serverUrl
-        })
-      }
-
-      /**
-       * Triggered when a default action is triggered on a file
-       * @property {object} resource resource for which the event is triggered
-       */
-      this.$emit('fileClick', { space, resources: [resource] })
+      this.createFileAction(resource)
     },
     isResourceClickable(resourceId) {
       if (!this.areResourcesClickable) {
@@ -823,19 +775,6 @@ export default defineComponent({
         resourceType,
         ownerName: resource.owner[0].displayName
       })
-    },
-    getInternalSpace(storageId) {
-      return this.space || this.spaces.find((space) => space.id === storageId)
-    },
-    getMatchingSpace(resource: Resource): SpaceResource {
-      return (
-        this.getInternalSpace(resource.storageId) ||
-        buildShareSpaceResource({
-          shareId: resource.shareId,
-          shareName: resource.name,
-          serverUrl: configurationManager.serverUrl
-        })
-      )
     },
     getDefaultParentFolderName(resource) {
       if (this.hasProjectSpaces) {

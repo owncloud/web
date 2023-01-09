@@ -9,7 +9,7 @@
       class="oc-card-media-top oc-border-b oc-flex oc-flex-center oc-flex-middle"
       :resource="resource"
       :folder-link="resourceRoute"
-      @click="$emit('click', $event)"
+      @click="$emit('click')"
     >
       <oc-tag
         v-if="resource.disabled"
@@ -31,12 +31,8 @@
     </oc-resource-link>
     <div class="oc-card-body oc-p-s">
       <div class="oc-flex oc-flex-between oc-flex-middle">
-        <div class="oc-flex oc-flex-middle oc-text-truncate">
-          <oc-resource
-            :resource="resource"
-            :folder-link="resourceRoute"
-            @click="$emit('click', $event)"
-          />
+        <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
+          <oc-resource :resource="resource" :folder-link="resourceRoute" @click="$emit('click')" />
         </div>
         <div class="oc-flex oc-flex-middle">
           <!-- Slot for individual actions -->
@@ -128,9 +124,10 @@ export default defineComponent({
     }
   }
 
-  .resource-name {
-    overflow: hidden;
+  .resource-name-wrapper {
     color: var(--oc-color-text-default);
+    max-width: 60%;
+    overflow: hidden;
   }
 }
 </style>

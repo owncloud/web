@@ -6,8 +6,8 @@
           :ref="`row-${index}`"
           :resource="resource"
           :resource-route="getRoute(resource)"
-          @click="tileResourceClicked(resource, $event)"
-          @contextmenu="$emit(EVENT_TROW_CONTEXTMENU, $refs[`row-${index}`][0], $event, resource)"
+          @contextmenu="$emit('contextmenuClicked', $refs[`row-${index}`][0], $event, resource)"
+          @click="emitTileClick(resource)"
         >
           <template #imageField="{ item }">
             <slot name="image" :item="item" />
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { createLocationSpaces } from 'web-app-files/src/router'
 import { Resource, SpaceResource } from 'web-client'
@@ -35,6 +35,7 @@ import { useStore } from 'web-pkg/src/composables'
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
 import { EVENT_TROW_CONTEXTMENU } from 'web-pkg/src/constants'
+import { useResourceRouteResolver } from '../../composables/filesList'
 
 export default defineComponent({
   name: 'ResourceTiles',
@@ -47,9 +48,16 @@ export default defineComponent({
       default: () => []
     }
   },
-  setup() {
+  emits: ['contextmenuClicked', 'fileClick'],
+  setup(props, context) {
     const store = useStore()
     const { $gettext } = useGettext()
+
+    const spaces = computed(() => {
+      return store.getters['runtime/spaces/spaces']
+    })
+
+    const resourceRouteResolver = useResourceRouteResolver({ spaces }, context)
 
     const getRoute = (resource) => {
       if (resource.type === 'space') {
@@ -63,10 +71,17 @@ export default defineComponent({
               })
             )
       }
-      return { path: '#' }
+      if (resource.type === 'folder') {
+        return resourceRouteResolver.createFolderLink({
+          path: resource.path,
+          fileId: resource.fileId,
+          resource: resource
+        })
+      }
+      return { path: '' }
     }
 
-    const tileResourceClicked = (resource, event) => {
+    const emitTileClick = (resource) => {
       // Needs to handle file actions and potentially disabled folders also
       if (resource.disabled && resource.type === 'space') {
         store.dispatch('showMessage', {
@@ -74,12 +89,14 @@ export default defineComponent({
           status: 'warning'
         })
       }
+      if (resource.type !== 'space' && resource.type !== 'folder') {
+        resourceRouteResolver.createFileAction(resource)
+      }
     }
 
     return {
-      EVENT_TROW_CONTEXTMENU,
       getRoute,
-      tileResourceClicked
+      emitTileClick
     }
   }
 })
