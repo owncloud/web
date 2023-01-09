@@ -36,6 +36,10 @@ import {
 } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
+import { configureCompat, h } from 'vue'
+import { compatConfig } from './compatConfig'
+
+configureCompat(compatConfig)
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
@@ -67,7 +71,7 @@ export const renderSuccess = (): void => {
     el: '#owncloud',
     store,
     router,
-    render: (h) => h(pages.success)
+    render() { return h(pages.success) }
   })
 
   instance.$once('mounted', () => {
@@ -195,7 +199,7 @@ export const renderFailure = async (err: Error): Promise<void> => {
   new Vue({
     el: '#owncloud',
     store,
-    render: (h) => h(pages.failure)
+    render() { return  h(pages.failure) }
   })
 }
 ;(window as any).runtimeLoaded({

@@ -1,8 +1,11 @@
-import Vue from 'vue'
+import Vue, { configureCompat } from 'vue'
 import { config } from '@vue/test-utils'
 import fetchMock from 'jest-fetch-mock'
 
 import * as directives from '@ownclouders/design-system/src/directives'
+import { compatConfig } from '../../../packages/web-runtime/src/compatConfig'
+
+configureCompat(compatConfig)
 
 window.define = jest.fn()
 
