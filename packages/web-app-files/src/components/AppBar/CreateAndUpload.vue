@@ -169,6 +169,8 @@ import { WebDAV } from 'web-client/src/webdav'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { urlJoin } from 'web-client/src/utils'
 import { stringify } from 'qs'
+import { useService } from 'web-pkg/src/composables/service'
+import { UppyService } from 'web-runtime/src/services/uppyService'
 
 export default defineComponent({
   components: {
@@ -197,9 +199,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const instance = getCurrentInstance().proxy
-    const uppyService =
-      getCurrentInstance().proxy.$uppyService || getCurrentInstance().parent.proxy.$uppyService
+    const instance = getCurrentInstance().proxy as any
+    const uppyService = useService<UppyService>('$uppyService')
     const store = useStore()
 
     onMounted(() => {
