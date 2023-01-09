@@ -53,7 +53,7 @@
         @contextmenu="
           $emit(constants.EVENT_TROW_CONTEXTMENU, $refs[`row-${trIndex}`][0], $event, item)
         "
-        @hook:mounted="$emit(constants.EVENT_TROW_MOUNTED, item, $refs[`row-${trIndex}`][0])"
+        @vue:mounted="$emit(constants.EVENT_TROW_MOUNTED, item, $refs[`row-${trIndex}`][0])"
         @dragstart="dragStart(item, $event)"
         @drop="dropRowEvent(itemDomSelector(item), $event)"
         @dragenter.prevent="dropRowStyling(itemDomSelector(item), false, $event)"
