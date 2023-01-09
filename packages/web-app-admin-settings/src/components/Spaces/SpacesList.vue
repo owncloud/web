@@ -1,5 +1,12 @@
 <template>
   <div>
+    <oc-text-input
+      id="spaces-filter"
+      v-model="filterTerm"
+      class="oc-ml-m oc-my-s"
+      :label="$gettext('Filter spaces')"
+      autocomplete="off"
+    />
     <oc-table
       ref="table"
       class="spaces-table"
@@ -52,7 +59,7 @@
       <template #members="{ item }">
         {{ getMemberCount(item) }}
       </template>
-      <template #availableQuota="{ item }"> {{ getAvailableQuota(item) }} </template>
+      <template #totalQuota="{ item }"> {{ getTotalQuota(item) }} </template>
       <template #usedQuota="{ item }"> {{ getUsedQuota(item) }} </template>
       <template #remainingQuota="{ item }"> {{ getRemainingQuota(item) }} </template>
       <template #mdate="{ item }">
@@ -89,6 +96,8 @@ import { computed, defineComponent, getCurrentInstance, PropType, ref, unref } f
 import { SpaceResource } from 'web-client/src/helpers'
 import { useTranslations } from 'web-pkg/src/composables'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
+import Mark from 'mark.js'
+import Fuse from 'fuse.js'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -112,6 +121,7 @@ export default defineComponent({
     const { $gettext, $gettextInterpolate } = useTranslations()
     const sortBy = ref('name')
     const sortDir = ref('asc')
+    const filterTerm = ref('')
 
     const allSpacesSelected = computed(() => props.spaces.length === props.selectedSpaces.length)
     const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
@@ -129,9 +139,9 @@ export default defineComponent({
             a = getMemberCount(s1).toString()
             b = getMemberCount(s2).toString()
             break
-          case 'availableQuota':
-            a = getAvailableQuota(s1).toString()
-            b = getAvailableQuota(s2).toString()
+          case 'totalQuota':
+            a = getTotalQuota(s1).toString()
+            b = getTotalQuota(s2).toString()
             break
           case 'usedQuota':
             a = getUsedQuota(s1).toString()
@@ -154,13 +164,25 @@ export default defineComponent({
       })
     }
     const orderedSpaces = computed(() =>
-      orderBy(props.spaces, unref(sortBy), unref(sortDir) === 'desc')
+      filter(orderBy(props.spaces, unref(sortBy), unref(sortDir) === 'desc'), unref(filterTerm))
     )
     const handleSort = (event) => {
       sortBy.value = event.sortBy
       sortDir.value = event.sortDir
     }
+    const filter = (spaces, filterTerm) => {
+      if (!(filterTerm || '').trim()) {
+        return spaces
+      }
+      const searchEngine = new Fuse(spaces, {
+        includeScore: true,
+        useExtendedSearch: true,
+        threshold: 0.3,
+        keys: ['name']
+      })
 
+      return searchEngine.search(filterTerm).map((r) => r.item)
+    }
     const isSpaceSelected = (space: SpaceResource) => {
       return props.selectedSpaces.some((s) => s.id === space.id)
     }
@@ -197,20 +219,20 @@ export default defineComponent({
         sortable: true
       },
       {
-        name: 'availableQuota',
-        title: $gettext('Available Quota'),
+        name: 'totalQuota',
+        title: $gettext('Total quota'),
         type: 'slot',
         sortable: true
       },
       {
         name: 'usedQuota',
-        title: $gettext('Used Quota'),
+        title: $gettext('Used quota'),
         type: 'slot',
         sortable: true
       },
       {
         name: 'remainingQuota',
-        title: $gettext('Remaining Quota'),
+        title: $gettext('Remaining quota'),
         type: 'slot',
         sortable: true
       },
@@ -243,7 +265,7 @@ export default defineComponent({
     const formatDateRelative = (date) => {
       return formatRelativeDateFromJSDate(new Date(date), instance.$language.current)
     }
-    const getAvailableQuota = (space: SpaceResource) => {
+    const getTotalQuota = (space: SpaceResource) => {
       return `${space.spaceQuota.total * Math.pow(10, -9)} GB`
     }
     const getUsedQuota = (space: SpaceResource) => {
@@ -280,13 +302,15 @@ export default defineComponent({
       allSpacesSelected,
       sortBy,
       sortDir,
+      filterTerm,
       footerTextTotal,
       fields,
       highlighted,
+      filter,
       getManagerNames,
       formatDate,
       formatDateRelative,
-      getAvailableQuota,
+      getTotalQuota,
       getUsedQuota,
       getRemainingQuota,
       getMemberCount,
@@ -296,11 +320,37 @@ export default defineComponent({
       fileClicked,
       isSpaceSelected
     }
+  },
+  watch: {
+    filterTerm() {
+      if (!this.markInstance) {
+        return
+      }
+      this.markInstance.unmark()
+      this.markInstance.mark(this.filterTerm, {
+        element: 'span',
+        className: 'highlight-mark',
+        exclude: ['th *', 'tfoot *']
+      })
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.markInstance = new Mark(this.$refs.table.$el)
+    })
   }
 })
 </script>
 
 <style lang="scss">
+#spaces-filter {
+  width: 16rem;
+}
+
+.highlight-mark {
+  font-weight: 600;
+}
+
 .spaces-table {
   .oc-table-header-cell-actions,
   .oc-table-data-cell-actions {
@@ -309,8 +359,8 @@ export default defineComponent({
 
   .oc-table-header-cell-manager,
   .oc-table-data-cell-manager,
-  .oc-table-header-cell-availableQuota,
-  .oc-table-data-cell-availableQuota,
+  .oc-table-header-cell-totalQuota,
+  .oc-table-data-cell-totalQuota,
   .oc-table-header-cell-usedQuota,
   .oc-table-data-cell-usedQuota,
   .oc-table-header-cell-remainingQuota,
