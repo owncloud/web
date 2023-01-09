@@ -2,7 +2,6 @@ import Vue, { configureCompat } from 'vue'
 import { config } from '@vue/test-utils'
 import fetchMock from 'jest-fetch-mock'
 
-import * as directives from '@ownclouders/design-system/src/directives'
 import { compatConfig } from '../../../packages/web-runtime/src/compatConfig'
 
 configureCompat(compatConfig)
@@ -45,5 +44,3 @@ Vue.component('RouterLink', {
     return createElement(this.tag, { attrs: { href: path } }, this.$slots.default)
   }
 })
-
-Object.values(directives).forEach((d) => Vue.directive(d.name, d))
