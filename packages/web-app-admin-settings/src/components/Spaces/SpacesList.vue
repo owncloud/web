@@ -8,7 +8,7 @@
       autocomplete="off"
     />
     <oc-table
-      ref="table"
+      ref="tableRef"
       class="spaces-table"
       :sort-by="sortBy"
       :sort-dir="sortDir"
@@ -84,6 +84,7 @@
       <template #footer>
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
+          <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
         </div>
       </template>
     </oc-table>
@@ -92,7 +93,17 @@
 
 <script lang="ts">
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
-import { computed, defineComponent, getCurrentInstance, PropType, ref, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  nextTick,
+  onMounted,
+  PropType,
+  ref,
+  unref,
+  watch
+} from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 import { useTranslations } from 'web-pkg/src/composables'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
@@ -122,12 +133,18 @@ export default defineComponent({
     const sortBy = ref('name')
     const sortDir = ref('asc')
     const filterTerm = ref('')
+    const markInstance = ref(undefined)
+    const tableRef = ref(undefined)
 
     const allSpacesSelected = computed(() => props.spaces.length === props.selectedSpaces.length)
     const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
     const footerTextTotal = computed(() => {
       const translated = $gettext('%{spaceCount} spaces in total')
       return $gettextInterpolate(translated, { spaceCount: props.spaces.length })
+    })
+    const footerTextFilter = computed(() => {
+      const translated = $gettext('%{spaceCount} matching spaces')
+      return $gettextInterpolate(translated, { spaceCount: unref(orderedSpaces).length })
     })
 
     const orderBy = (list, prop, desc) => {
@@ -298,14 +315,35 @@ export default defineComponent({
       instance.$emit('toggleSelectSpace', space)
     }
 
+    onMounted(() => {
+      nextTick(() => {
+        markInstance.value = new Mark(unref(tableRef).$el)
+      })
+    })
+
+    watch(filterTerm, () => {
+      const instance = unref(markInstance)
+      if (!instance) {
+        return
+      }
+      instance.unmark()
+      instance.mark(unref(filterTerm), {
+        element: 'span',
+        className: 'highlight-mark',
+        exclude: ['th *', 'tfoot *']
+      })
+    })
+
     return {
       allSpacesSelected,
       sortBy,
       sortDir,
       filterTerm,
       footerTextTotal,
+      footerTextFilter,
       fields,
       highlighted,
+      tableRef,
       filter,
       getManagerNames,
       formatDate,
@@ -320,24 +358,6 @@ export default defineComponent({
       fileClicked,
       isSpaceSelected
     }
-  },
-  watch: {
-    filterTerm() {
-      if (!this.markInstance) {
-        return
-      }
-      this.markInstance.unmark()
-      this.markInstance.mark(this.filterTerm, {
-        element: 'span',
-        className: 'highlight-mark',
-        exclude: ['th *', 'tfoot *']
-      })
-    }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.markInstance = new Mark(this.$refs.table.$el)
-    })
   }
 })
 </script>
