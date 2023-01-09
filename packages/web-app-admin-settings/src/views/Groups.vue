@@ -170,16 +170,6 @@ export default defineComponent({
         }
       ]
     },
-
-    toggleSidebarButtonLabel() {
-      return this.$gettext(
-        this.sideBarOpen ? 'Close sidebar to hide details' : 'Open sidebar to view details'
-      )
-    },
-
-    toggleSidebarButtonIconFillType() {
-      return this.sideBarOpen ? 'fill' : 'line'
-    }
   },
 
   watch: {

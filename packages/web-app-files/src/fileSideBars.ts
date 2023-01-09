@@ -85,6 +85,25 @@ const panelGenerators: (({
       return multipleSelection && (!rootFolder || highlightedFile?.type === 'space')
     }
   }),
+  ({ multipleSelection, rootFolder, highlightedFile, router }) => ({
+    app: 'space-details-multiple',
+    icon: 'questionnaire-line',
+    title: $gettext('Space Details'),
+    component: FileDetailsMultiple,
+    componentAttrs: {
+      get showSpaceCount() {
+        return (
+          !isLocationSpacesActive(router, 'files-spaces-generic') &&
+          !isLocationSharesActive(router, 'files-shares-with-me') &&
+          !isLocationTrashActive(router, 'files-trash-generic')
+        )
+      }
+    },
+    default: () => true,
+    get enabled() {
+      return multipleSelection && (!rootFolder || highlightedFile?.type === 'space')
+    }
+  }),
   ({ multipleSelection, highlightedFile }) => ({
     app: 'details-space',
     icon: 'questionnaire-line',

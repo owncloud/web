@@ -7,6 +7,9 @@
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
+      @selectPanel="selectPanel"
+      @closeSideBar="closeSideBar"
+      @toggleSideBar="toggleSideBar"
     >
       <template #topbarActions>
         <div class="admin-settings-app-bar-actions oc-mt-xs">
@@ -59,6 +62,8 @@ import AppTemplate from '../components/AppTemplate.vue'
 import { buildSpace } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg'
 import SpacesList from '../components/Spaces/SpacesList.vue'
+import DetailsPanel from '../components/Spaces/SideBar/DetailsPanel.vue'
+import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
 
 export default defineComponent({
   name: 'SpacesView',
@@ -99,7 +104,30 @@ export default defineComponent({
       }
     ])
 
-    const sideBarAvailablePanels = computed(() => [])
+    const sideBarAvailablePanels = computed(() => [
+        {
+          app: 'DetailsPanel',
+          icon: 'layout-grid',
+          title: $gettext('Space details'),
+          component: DetailsPanel,
+          default: true,
+          enabled: true,
+          componentAttrs: {  }
+        },
+        {
+          app: 'EditPanel',
+          icon: 'pencil',
+          title: $gettext('Edit space'),
+          component: EditPanel,
+          default: false,
+          enabled: false // this.selectedGroups.length === 1
+          /**
+           * Editing groups is currently not supported by backend
+           */
+        }
+      ]
+    )
+
     const allSpacesSelected = computed(() => unref(spaces).length === unref(selectedSpaces).length)
 
     const calculateListHeaderPosition = () => {
@@ -153,7 +181,18 @@ export default defineComponent({
       template,
       toggleSelectAllSpaces,
       toggleSelectSpace,
-      unselectAllSpaces
+      unselectAllSpaces,
+    }
+  },
+  methods: {
+    selectPanel(panel) {
+      this.sideBarActivePanel = panel || 'DetailsPanel'
+    },
+    closeSideBar() {
+      this.sideBarOpen = false
+    },
+    toggleSideBar() {
+      this.sideBarOpen = !this.sideBarOpen
     }
   }
 })
