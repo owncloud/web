@@ -143,7 +143,7 @@
 
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import pathUtil from 'path'
+import { join } from 'path'
 
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
@@ -168,7 +168,9 @@ import { resolveFileNameDuplicate, ResourcesUpload } from '../../helpers/resourc
 import { WebDAV } from 'web-client/src/webdav'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { urlJoin } from 'web-client/src/utils'
-import qs from 'qs'
+import { stringify } from 'qs'
+import { useService } from 'web-pkg/src/composables/service'
+import { UppyService } from 'web-runtime/src/services/uppyService'
 
 export default defineComponent({
   components: {
@@ -197,8 +199,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const instance = getCurrentInstance().proxy
-    const uppyService = instance.$uppyService
+    const instance = getCurrentInstance().proxy as any
+    const uppyService = useService<UppyService>('$uppyService')
     const store = useStore()
 
     onMounted(() => {
@@ -438,7 +440,7 @@ export default defineComponent({
       }
 
       try {
-        const path = pathUtil.join(this.item, folderName)
+        const path = join(this.item, folderName)
         const resource = await (this.$clientService.webdav as WebDAV).createFolder(this.space, {
           path
         })
@@ -506,7 +508,7 @@ export default defineComponent({
       }
 
       try {
-        const path = pathUtil.join(this.item, fileName)
+        const path = join(this.item, fileName)
         const resource = await (this.$clientService.webdav as WebDAV).putFileContents(this.space, {
           path
         })
@@ -558,7 +560,7 @@ export default defineComponent({
           configurationManager.serverUrl,
           this.capabilities.files.app_providers[0].new_url
         )
-        const query = qs.stringify({
+        const query = stringify({
           parent_container_id: this.currentFolder.fileId,
           filename: fileName
         })
@@ -569,7 +571,7 @@ export default defineComponent({
           throw new Error(`An error has occurred: ${response.status}`)
         }
 
-        const path = pathUtil.join(this.item, fileName) || ''
+        const path = join(this.item, fileName) || ''
         const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(this.space, {
           path
         })

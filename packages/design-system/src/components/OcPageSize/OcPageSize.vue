@@ -10,11 +10,11 @@
       :input-id="selectId"
       class="oc-page-size-select"
       data-testid="oc-page-size-select"
-      :value="selected"
+      :model-value="selected"
       :options="options"
       :clearable="false"
       :searchable="false"
-      @input="emitChange"
+      @update:modelValue="emitChange"
     />
   </div>
 </template>
@@ -32,12 +32,6 @@ export default {
   release: '8.0.0',
 
   components: { OcSelect },
-
-  model: {
-    prop: 'selected',
-    event: 'change'
-  },
-
   props: {
     /**
      * All possible sizes that the user can pick from
@@ -74,6 +68,7 @@ export default {
       default: () => uniqueId('oc-page-size-')
     }
   },
+  emits: ['change'],
 
   methods: {
     emitChange(value) {

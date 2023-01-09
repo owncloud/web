@@ -99,7 +99,7 @@ describe('AppBar component', () => {
           {},
           { displayViewModeSwitch: true, hasViewOptions: true }
         )
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
     it('if given, with content in the actions slot', () => {

@@ -41,10 +41,9 @@ describe('OcAccordionItem', () => {
 
   describe('icon prop', () => {
     describe('when icon is not given', () => {
-      let wrapper
-      wrapper = getWrapper({})
+      const wrapper = getWrapper({})
       it('should not render any icon', () => {
-        const titleHeadingSpan = wrapper.find('.oc-accordion-title > oc-button-stub > span')
+        const titleHeadingSpan = wrapper.find('.oc-accordion-title > .oc-button > span')
         expect(titleHeadingSpan.findAll('.oc-mr-s').length).toBe(0)
       })
     })
@@ -53,7 +52,7 @@ describe('OcAccordionItem', () => {
         const wrapper = getWrapper({
           icon: 'mdi-icon'
         })
-        const titleHeadingSpan = wrapper.find('.oc-accordion-title > oc-button-stub > span')
+        const titleHeadingSpan = wrapper.find('.oc-accordion-title > .oc-button > span')
         expect(titleHeadingSpan.findAll('.oc-mr-s').length).toBe(1)
       })
     })
@@ -65,8 +64,8 @@ describe('OcAccordionItem', () => {
     it('when title button is clicked', async () => {
       const toggleExpandedSpy = jest.spyOn((OcAccordionItem as any).methods, 'toggleExpanded')
       const wrapper = getWrapper()
-      const titleButton = wrapper.find('.oc-accordion-title oc-button-stub')
-      await titleButton.vm.$emit('click')
+      const titleButton = wrapper.findComponent('.oc-accordion-title .oc-button')
+      await titleButton.trigger('click')
       expect(toggleExpandedSpy).toHaveBeenCalledTimes(1)
     })
   })
@@ -77,6 +76,11 @@ function getWrapper(props = {}) {
     props: {
       title: 'Test title',
       ...props
+    },
+    global: {
+      stubs: {
+        OcButton: false
+      }
     }
   })
 }

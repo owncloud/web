@@ -11,9 +11,10 @@ const defaultProps = {
 describe('OcPageSize', () => {
   it('emits change event when value is selected', () => {
     const wrapper = shallowMount(PageSize, { props: defaultProps })
-
-    wrapper.find('[data-testid="oc-page-size-select"]').vm.$emit('input', 500)
-
+    ;(wrapper.findComponent<any>('[data-testid="oc-page-size-select"]').vm as any).$emit(
+      'update:modelValue',
+      500
+    )
     expect(wrapper.emitted().change[0][0]).toEqual(500)
   })
 

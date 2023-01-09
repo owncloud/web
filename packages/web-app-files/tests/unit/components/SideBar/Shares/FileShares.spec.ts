@@ -1,5 +1,5 @@
 import FileShares from 'web-app-files/src/components/SideBar/Shares/FileShares.vue'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import { v4 as uuidV4 } from 'uuid'
@@ -80,7 +80,7 @@ describe('FileShares', () => {
         .spyOn((FileShares as any).methods, '$_ocCollaborators_deleteShare_trigger')
         .mockImplementation()
       const { wrapper } = getWrapper({ collaborators })
-      wrapper.find('collaborator-list-item-stub').vm.$emit('onDelete')
+      ;(wrapper.findComponent<any>('collaborator-list-item-stub').vm as any).$emit('onDelete')
       await wrapper.vm.$nextTick()
       expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
     })
@@ -88,15 +88,17 @@ describe('FileShares', () => {
       const indirectCollaborator = { ...getCollaborator(), indirect: true }
       const sharesTree = { [indirectCollaborator.path]: {} }
       const { wrapper } = getWrapper({ collaborators: [indirectCollaborator], sharesTree })
-      expect(wrapper.find('collaborator-list-item-stub').props().sharedParentRoute).toBeDefined()
+      expect(
+        wrapper.findComponent<any>('collaborator-list-item-stub').props().sharedParentRoute
+      ).toBeDefined()
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('lists indirect outgoing shares', () => {
       const parentPath = '/parent'
-      const resource = mockDeep<Resource>({ path: `${parentPath}/child` })
+      const resource = mock<Resource>({ path: `${parentPath}/child` })
       const sharesTree = {
         [parentPath]: [
-          mockDeep<Share>({
+          mock<Share>({
             outgoing: true,
             shareType: ShareTypes.user.value,
             ...getCollaborator()
@@ -104,7 +106,9 @@ describe('FileShares', () => {
         ]
       }
       const { wrapper } = getWrapper({ sharesTree, resource })
-      expect(wrapper.find('collaborator-list-item-stub').props().sharedParentRoute).toBeDefined()
+      expect(
+        wrapper.findComponent<any>('collaborator-list-item-stub').props().sharedParentRoute
+      ).toBeDefined()
     })
     it('toggles the share list', async () => {
       const showAllOnLoad = true
@@ -239,7 +243,7 @@ function getWrapper({
         },
         stubs: {
           ...defaultStubs,
-          'oc-button': false,
+          OcButton: false,
           'invite-collaborator-form': true,
           'collaborator-list-item': true
         }

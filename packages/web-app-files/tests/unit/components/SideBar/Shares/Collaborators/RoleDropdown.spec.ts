@@ -7,7 +7,7 @@ import {
   shallowMount,
   defaultStoreMockOptions
 } from 'web-test-helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 
 const selectors = {
@@ -56,9 +56,11 @@ describe('RoleDropdown', () => {
           async (type) => {
             const isFolder = type === 'folder'
             const { wrapper } = getMountedWrapper({ resourceType: type })
-            const customPermissionsDrop = wrapper.find(selectors.customPermissionsDrop)
+            const customPermissionsDrop = wrapper.findComponent<any>(
+              selectors.customPermissionsDrop
+            )
             const showHideMock = jest.fn()
-            customPermissionsDrop.vm.show = showHideMock
+            ;(customPermissionsDrop.vm as any).show = showHideMock
             ;(wrapper.vm.$refs.rolesDrop as any).tippy = { hide: showHideMock }
 
             await wrapper
@@ -236,7 +238,7 @@ function getMountedWrapper({
   return {
     wrapper: mountType(RoleDropdown, {
       props: {
-        resource: mockDeep<Resource>({
+        resource: mock<Resource>({
           name: resourceType === 'folder' ? 'testfolder' : 'testfile',
           extension: resourceType === 'folder' ? '' : 'jpg',
           type: resourceType,
@@ -249,6 +251,7 @@ function getMountedWrapper({
       },
       global: {
         plugins: [...defaultPlugins(), store],
+        renderStubDefaultSlot: true,
         stubs: { 'oc-button': true, 'oc-icon': true },
         provide: {
           incomingParentShare: {}

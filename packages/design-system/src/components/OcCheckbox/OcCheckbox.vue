@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span @click="$emit('click', $event)">
     <input
       :id="id"
       v-model="model"
@@ -98,6 +98,7 @@ export default {
       default: false
     }
   },
+  emits: ['click'],
   computed: {
     model: {
       get() {

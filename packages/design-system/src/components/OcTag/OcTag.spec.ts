@@ -10,7 +10,7 @@ describe('OcTag', () => {
     })
 
     expect(wrapper.element.tagName.toLowerCase()).toMatch('button')
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('emits a click event', async () => {

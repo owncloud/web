@@ -20,18 +20,19 @@ const disabledSpace = {
 describe('OcTile component', () => {
   it('renders default space correctly', () => {
     const wrapper = getWrapper({ resource: defaultSpace })
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('renders disabled space correctly', () => {
     const wrapper = getWrapper({ resource: disabledSpace })
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   function getWrapper(props = {}, slots = {}) {
     return shallowMount(OcTile, {
       props: {
         ...props
-      }
+      },
+      global: { renderStubDefaultSlot: true }
     })
   }
 })

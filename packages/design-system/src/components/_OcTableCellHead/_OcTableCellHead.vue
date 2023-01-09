@@ -6,6 +6,7 @@
     :width="width"
     :wrap="wrap"
     class="oc-th"
+    @click="$emit('click', $event)"
   >
     <slot />
   </oc-table-cell>
@@ -39,7 +40,8 @@ export default {
       default: 'nowrap',
       validator: (wrap) => /(break|nowrap|truncate)/.test(wrap)
     }
-  }
+  },
+  emits: ['click']
 }
 </script>
 <style lang="scss">

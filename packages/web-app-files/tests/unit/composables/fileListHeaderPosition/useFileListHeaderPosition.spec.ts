@@ -7,10 +7,10 @@ describe('useFileListHeaderPosition', () => {
     const wrapper = createWrapper()
 
     expect(useFileListHeaderPosition).toBeDefined()
-    expect(wrapper.vm.y).toBe(0)
-    expect(wrapper.vm.refresh).toBeInstanceOf(Function)
+    expect((wrapper.vm as any).y).toBe(0)
+    expect((wrapper.vm as any).refresh).toBeInstanceOf(Function)
 
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('should calculate y on window resize', async () => {
@@ -23,10 +23,10 @@ describe('useFileListHeaderPosition', () => {
       appBar.resize(height)
       window.dispatchEvent(new Event('resize'))
       await nextTick()
-      expect(wrapper.vm.y).toBe(height)
+      expect((wrapper.vm as any).y).toBe(height)
     }
 
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('should calculate y on manual refresh', async () => {
@@ -37,11 +37,11 @@ describe('useFileListHeaderPosition', () => {
 
     for (const height of [50, 100, 150, 200, 201]) {
       appBar.resize(height)
-      wrapper.vm.refresh()
+      ;(wrapper.vm as any).refresh()
       await nextTick()
-      expect(wrapper.vm.y).toBe(height)
+      expect((wrapper.vm as any).y).toBe(height)
     }
 
-    wrapper.destroy()
+    wrapper.unmount()
   })
 })

@@ -40,7 +40,6 @@
             mode="click"
             close-on-click
             :padding-size="contextMenuPadding"
-            @click.native.stop.prevent
           >
             <!-- @slot Add context actions that open in a dropdown when clicking on the "three dots" button -->
             <slot name="contextMenu" />
@@ -163,7 +162,12 @@ export default {
       return this.$gettext('Show actions for current folder')
     },
     showContextMenu() {
-      return !!this.$slots.contextMenu
+      const contextMenuSlot = this.$slots.contextMenu
+      if (!contextMenuSlot) {
+        return false
+      }
+      const slotContent = contextMenuSlot()[0] ?? null
+      return !!slotContent?.type?.name
     }
   },
   methods: {

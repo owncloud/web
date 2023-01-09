@@ -42,7 +42,7 @@ describe('FileLinks', () => {
       const { wrapper } = getWrapper()
 
       it('should render a list of links', () => {
-        const linkListItems = wrapper.findAll(linkListItemNameAndCopy)
+        const linkListItems = wrapper.findAllComponents<any>(linkListItemNameAndCopy)
         const linkListItemsDetails = wrapper.findAll(linkListItemDetailsAndEdit)
 
         expect(linkListItems.length).toBe(2)
@@ -83,7 +83,7 @@ describe('FileLinks', () => {
         const spyAddNewLink = jest.spyOn((FileLinks as any).methods, 'addNewLink')
         const { wrapper } = getWrapper()
         expect(spyAddNewLink).toHaveBeenCalledTimes(0)
-        await wrapper.find(selectors.linkAddButton).vm.$emit('click')
+        await wrapper.find(selectors.linkAddButton).trigger('click')
         expect(spyAddNewLink).toHaveBeenCalledTimes(1)
       })
     })
@@ -148,6 +148,8 @@ function getWrapper({
     wrapper: shallowMount(FileLinks, {
       global: {
         plugins: [...defaultPlugins(), store],
+        renderStubDefaultSlot: true,
+        stubs: { OcButton: false },
         provide: {
           incomingParentShare: {},
           displayedItem: mockDeep<Resource>()

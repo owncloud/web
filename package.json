@@ -5,18 +5,18 @@
   "license": "AGPL-3.0",
   "author": "ownCloud GmbH <devops@owncloud.com>",
   "scripts": {
-    "build": "pnpm build:tokens && pnpm vite build",
+    "build": "vue-demi-fix && pnpm build:tokens && pnpm vite build",
     "build:w": "pnpm build --watch",
     "build:tokens": "pnpm --filter @ownclouders/design-system tokens",
     "depcheck": "depcheck",
     "lint": "eslint vite.config.ts '{packages,tests}/**/*.{js,ts,vue}' --color",
     "serve": "SERVER=true pnpm build:w",
     "test:e2e:cucumber": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=e2e -f json:tests/e2e/cucumber/report/cucumber_report.json",
-    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw jest --config ./tests/unit/config/jest.config.js",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw jest --config ./tests/unit/config/jest.config.ts",
     "licenses:check": "license-checker-rseidelsohn --summary --relativeLicensePath --onlyAllow 'Python-2.0;Apache*;Apache License, Version 2.0;Apache-2.0;Apache 2.0;Artistic-2.0;BSD;BSD-3-Clause;CC-BY-3.0;CC-BY-4.0;CC0-1.0;ISC;MIT;MPL-2.0;Public Domain;Unicode-TOU;Unlicense;WTFPL' --excludePackages '@ownclouders/babel-preset;@ownclouders/eslint-config;@ownclouders/prettier-config;@ownclouders/tsconfig;@ownclouders/web-client;@ownclouders/web-pkg,draw-io;external;web-app-files;text-editor;preview;@ownclouders/design-system;pdf-viewer;web-app-search;admin-settings;web-runtime'",
     "licenses:csv": "license-checker-rseidelsohn --relativeLicensePath --csv --out ./third-party-licenses/third-party-licenses.csv",
     "licenses:save": "license-checker-rseidelsohn --relativeLicensePath --out /dev/null --files ./third-party-licenses/third-party-licenses",
-    "vite": "pnpm vite:ocis",
+    "vite": "vue-demi-fix && pnpm vite:ocis",
     "vite:ocis": "vite",
     "vite:oc10": "OCIS=false vite"
   },
@@ -31,16 +31,21 @@
     "not OperaMobile > 0"
   ],
   "dependencies": {
+    "@vue/compat": "3.2.45",
+    "@vue/compiler-dom": "^3.2.45",
+    "@vue/compiler-sfc": "3.2.45",
+    "@vue/runtime-dom": "^3.2.45",
     "keycode": "^2.2.1",
     "rollup-plugin-gzip": "^3.1.0",
     "vite-plugin-static-copy": "^0.12.0",
     "vite-plugin-treat-umd-as-commonjs": "0.1.3",
-    "vue": "2.7.14"
+    "vue": "3.2.45"
   },
   "peerDependencies": {
     "caf": "*",
     "portal-vue": "*",
-    "uuid": "*"
+    "uuid": "*",
+    "vue-demi": "*"
   },
   "devDependencies": {
     "@babel/core": "7.20.12",
@@ -63,9 +68,9 @@
     "@types/lodash-es": "4.17.6",
     "@types/node": "16.18.11",
     "@types/node-fetch": "2.6.2",
-    "@vitejs/plugin-vue2": "2.2.0",
-    "@vue/test-utils": "1.3.3",
-    "@vue/vue2-jest": "29.2.2",
+    "@vitejs/plugin-vue": "4.0.0",
+    "@vue/test-utils": "2.2.2",
+    "@vue/vue3-jest": "29.0.0",
     "autoprefixer": "10.4.13",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "29.3.1",
@@ -139,7 +144,8 @@
     "patchedDependencies": {
       "@adobe/leonardo-contrast-colors@1.0.0-alpha.16": "patches/@adobe__leonardo-contrast-colors@1.0.0-alpha.16.patch",
       "jest-serializer-vue-tjw@3.19.0": "patches/jest-serializer-vue-tjw@3.19.0.patch",
-      "v-calendar@2.3.4": "patches/v-calendar@2.3.4.patch"
+      "vue-gettext@2.1.12": "patches/vue-gettext@2.1.12.patch",
+      "keycode@2.2.1": "patches/keycode@2.2.1.patch"
     }
   },
   "jestSerializer": {

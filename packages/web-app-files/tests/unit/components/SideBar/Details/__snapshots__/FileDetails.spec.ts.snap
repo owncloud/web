@@ -3,8 +3,8 @@
 exports[`Details SideBar Panel displays a resource of type file on a private page updates when the shareTree updates 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <div class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
-      <oc-spinner-stub arialabel="" size="medium"></oc-spinner-stub>
+    <div class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: url(null);">
+      <!--v-if-->
     </div>
     <div class="oc-flex oc-flex-middle oc-my-m">
       <oc-status-indicators-stub indicators="[object Object]" resource="[object Object]" target=""></oc-status-indicators-stub>
@@ -21,19 +21,16 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Shared via</th>
           <td>
-            <router-link-stub tag="a" to="[object Object]">
-              <span>/Shares</span>
-            </router-link-stub>
+            <router-link-stub to="[object Object]"></router-link-stub>
           </td>
         </tr>
-        <!---->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Einstein
-              <!---->
-              <!---->
+            <p class="oc-m-rm">Einstein
+              <!--v-if-->
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -47,9 +44,9 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
             <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
-        <!---->
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
+        <!--v-if-->
       </tbody>
     </table>
   </div>
@@ -59,8 +56,8 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
 exports[`Details SideBar Panel displays a resource of type file on a private page updates when the shareTree updates 2`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <div class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
-      <oc-spinner-stub arialabel="" size="medium"></oc-spinner-stub>
+    <div class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: url(null);">
+      <!--v-if-->
     </div>
     <div class="oc-flex oc-flex-middle oc-my-m">
       <oc-status-indicators-stub indicators="[object Object]" resource="[object Object]" target=""></oc-status-indicators-stub>
@@ -74,7 +71,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
             <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
           </td>
         </tr>
-        <!---->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Shared by</th>
           <td>
@@ -84,10 +81,9 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Einstein
-              <!---->
-              <!---->
+            <p class="oc-m-rm">Einstein
+              <!--v-if-->
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -101,9 +97,9 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
             <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
-        <!---->
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
+        <!--v-if-->
       </tbody>
     </table>
   </div>
@@ -116,7 +112,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
       <oc-resource-icon-stub class="details-icon" resource="[object Object]" size="xxxlarge"></oc-resource-icon-stub>
     </div>
-    <!---->
+    <!--v-if-->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tbody>
         <tr>
@@ -125,15 +121,13 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
             <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 21, 2015, 7:28 AM</oc-button-stub>
           </td>
         </tr>
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Marie
-              <span>(me)</span>
-              <!---->
+            <p class="oc-m-rm">Marie <span data-current-language="en" data-msgid="(me)">(me)</span>
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -147,9 +141,9 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
             <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
-        <!---->
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
+        <!--v-if-->
       </tbody>
     </table>
   </div>
@@ -174,15 +168,14 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
             <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
           </td>
         </tr>
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Einstein
-              <!---->
-              <!---->
+            <p class="oc-m-rm">Einstein
+              <!--v-if-->
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -196,9 +189,9 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
             <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
-        <!---->
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
+        <!--v-if-->
       </tbody>
     </table>
   </div>
@@ -223,15 +216,14 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
             <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
           </td>
         </tr>
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Einstein
-              <!---->
-              <!---->
+            <p class="oc-m-rm">Einstein
+              <!--v-if-->
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -250,9 +242,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
-              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-                <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="clipboard" size="medium" type="span" variation="passive"></oc-icon-stub>
-              </oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
@@ -261,13 +251,11 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
-              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-                <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="clipboard" size="medium" type="span" variation="passive"></oc-icon-stub>
-              </oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
-        <!---->
+        <!--v-if-->
       </tbody>
     </table>
   </div>
@@ -292,15 +280,14 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
             <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
           </td>
         </tr>
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Einstein
-              <!---->
-              <!---->
+            <p class="oc-m-rm">Einstein
+              <!--v-if-->
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -314,9 +301,9 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
             <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
-        <!---->
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
+        <!--v-if-->
       </tbody>
     </table>
   </div>
@@ -341,15 +328,14 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
             <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
           </td>
         </tr>
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Einstein
-              <!---->
-              <!---->
+            <p class="oc-m-rm">Einstein
+              <!--v-if-->
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -368,9 +354,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
-              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-                <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="clipboard" size="medium" type="span" variation="passive"></oc-icon-stub>
-              </oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
@@ -379,13 +363,11 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
-              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-                <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="clipboard" size="medium" type="span" variation="passive"></oc-icon-stub>
-              </oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
-        <!---->
+        <!--v-if-->
       </tbody>
     </table>
   </div>
@@ -398,7 +380,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
       <oc-resource-icon-stub class="details-icon" resource="[object Object]" size="xxxlarge"></oc-resource-icon-stub>
     </div>
-    <!---->
+    <!--v-if-->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tbody>
         <tr>
@@ -407,15 +389,13 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
             <span>Oct 21, 2015, 7:28 AM</span>
           </td>
         </tr>
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Marie
-              <span>(me)</span>
-              <!---->
+            <p class="oc-m-rm">Marie <span data-current-language="en" data-msgid="(me)">(me)</span>
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -423,23 +403,19 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
           <th class="oc-pr-s" scope="col">Size</th>
           <td>740 B</td>
         </tr>
-        <!---->
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Tags</th>
           <td>
             <span>
-              <router-link-stub tag="a" to="[object Object]">
-                <span>moon</span>
-              </router-link-stub>
+              <router-link-stub to="[object Object]"></router-link-stub>
               <span class="oc-mr-xs">,</span>
             </span>
             <span>
-              <router-link-stub tag="a" to="[object Object]">
-                <span>mars</span>
-              </router-link-stub>
-              <!---->
+              <router-link-stub to="[object Object]"></router-link-stub>
+              <!--v-if-->
             </span>
           </td>
         </tr>
@@ -467,15 +443,14 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
             <span>Oct 21, 2015, 7:28 AM</span>
           </td>
         </tr>
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Einstein
-              <!---->
-              <!---->
+            <p class="oc-m-rm">Einstein
+              <!--v-if-->
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -483,10 +458,10 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
           <th class="oc-pr-s" scope="col">Size</th>
           <td>740 B</td>
         </tr>
-        <!---->
-        <!---->
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
+        <!--v-if-->
+        <!--v-if-->
       </tbody>
     </table>
   </div>
@@ -511,15 +486,14 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
             <span>Oct 21, 2015, 7:28 AM</span>
           </td>
         </tr>
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Einstein
-              <!---->
-              <!---->
+            <p class="oc-m-rm">Einstein
+              <!--v-if-->
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -527,15 +501,13 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
           <th class="oc-pr-s" scope="col">Size</th>
           <td>740 B</td>
         </tr>
-        <!---->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">EOS Path</th>
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate"></p>
-              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-                <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="clipboard" size="medium" type="span" variation="passive"></oc-icon-stub>
-              </oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
@@ -544,13 +516,11 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
-              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-                <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="clipboard" size="medium" type="span" variation="passive"></oc-icon-stub>
-              </oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
-        <!---->
+        <!--v-if-->
       </tbody>
     </table>
   </div>
@@ -575,15 +545,14 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
             <span>Oct 21, 2015, 7:28 AM</span>
           </td>
         </tr>
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Einstein
-              <!---->
-              <!---->
+            <p class="oc-m-rm">Einstein
+              <!--v-if-->
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -591,10 +560,10 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
           <th class="oc-pr-s" scope="col">Size</th>
           <td>740 B</td>
         </tr>
-        <!---->
-        <!---->
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
+        <!--v-if-->
+        <!--v-if-->
       </tbody>
     </table>
   </div>
@@ -619,15 +588,14 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
             <span>Oct 21, 2015, 7:28 AM</span>
           </td>
         </tr>
-        <!---->
-        <!---->
+        <!--v-if-->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">Owner</th>
           <td>
-            <p class="oc-m-rm">
-              Einstein
-              <!---->
-              <!---->
+            <p class="oc-m-rm">Einstein
+              <!--v-if-->
+              <!--v-if-->
             </p>
           </td>
         </tr>
@@ -635,15 +603,13 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
           <th class="oc-pr-s" scope="col">Size</th>
           <td>740 B</td>
         </tr>
-        <!---->
+        <!--v-if-->
         <tr>
           <th class="oc-pr-s" scope="col">EOS Path</th>
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate"></p>
-              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-                <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="clipboard" size="medium" type="span" variation="passive"></oc-icon-stub>
-              </oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
@@ -652,13 +618,11 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
-              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-                <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="clipboard" size="medium" type="span" variation="passive"></oc-icon-stub>
-              </oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
-        <!---->
+        <!--v-if-->
       </tbody>
     </table>
   </div>

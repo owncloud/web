@@ -1,16 +1,13 @@
-<template functional>
-  <ul
-    v-bind="data.attrs"
-    :ref="data.ref"
-    class="oc-list oc-my-rm oc-mx-rm"
-    :class="[data.staticClass, data.class, { 'oc-list-raw': props.raw }]"
-  >
+<template>
+  <ul :ref="ref" class="oc-list oc-my-rm oc-mx-rm" :class="{ 'oc-list-raw': raw }">
     <slot />
   </ul>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'OcList',
   status: 'ready',
   release: '12.0.0',
@@ -21,7 +18,7 @@ export default {
       required: false
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

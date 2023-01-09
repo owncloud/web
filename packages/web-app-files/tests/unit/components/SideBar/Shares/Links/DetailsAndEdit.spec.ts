@@ -55,10 +55,9 @@ function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable
         file: mockDeep<Resource>()
       },
       global: {
-        plugins: [...defaultPlugins(), store],
-        directives: {
-          'oc-tooltip': jest.fn()
-        }
+        renderStubDefaultSlot: true,
+        stubs: { OcDatepicker: false, 'date-picker': true },
+        plugins: [...defaultPlugins(), store]
       }
     })
   }

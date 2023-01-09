@@ -6,7 +6,7 @@ import {
   shallowMount,
   defaultStoreMockOptions
 } from 'web-test-helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 
 const selectors = {
@@ -22,7 +22,7 @@ describe('FileInfo', () => {
 })
 
 function createWrapper() {
-  const file = mockDeep<Resource>({
+  const file = mock<Resource>({
     name: 'someFolder',
     webDavPath: '',
     type: 'folder',

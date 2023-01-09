@@ -2,7 +2,7 @@
   <div>
     <oc-select
       ref="select"
-      v-model="selectedOption"
+      :model-value="selectedOption"
       :selectable="optionSelectable"
       taggable
       push-tags
@@ -11,7 +11,7 @@
       :create-option="createOption"
       option-label="displayValue"
       :label="title"
-      @option:selected="$emit('selectedOptionChange', selectedOption)"
+      @update:modelValue="onUpdate"
     >
       <template #selected-option="{ displayValue, displayUnit }">
         <span>{{ displayValue }}</span>
@@ -35,7 +35,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: 'QuotaSelect',
   props: {
@@ -117,6 +117,10 @@ export default {
     this.selectedOption = this.options.find((o) => o.value === this.totalQuota)
   },
   methods: {
+    onUpdate(event) {
+      this.selectedOption = event
+      this.$emit('selectedOptionChange', this.selectedOption)
+    },
     optionSelectable(option) {
       return option.selectable !== false
     },

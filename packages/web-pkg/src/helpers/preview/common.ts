@@ -1,4 +1,4 @@
-import qs from 'qs'
+import { stringify } from 'qs'
 
 interface BuildQueryStringOptions {
   preview?: number
@@ -9,7 +9,7 @@ interface BuildQueryStringOptions {
 }
 
 export const buildQueryString = (options: BuildQueryStringOptions): string => {
-  return qs.stringify({
+  return stringify({
     scalingup: options.scalingup || 0,
     preview: Object.hasOwnProperty.call(options, 'preview') ? options.preview : 1,
     a: Object.hasOwnProperty.call(options, 'a') ? options.a : 1,

@@ -12,9 +12,9 @@ import {
 import Spaces from '../../../src/views/Spaces.vue'
 
 const selectors = {
-  loadingSpinnerStub: 'apploadingspinner-stub',
-  spacesListStub: 'spaceslist-stub',
-  noContentMessageStub: 'nocontentmessage-stub'
+  loadingSpinnerStub: 'app-loading-spinner-stub',
+  spacesListStub: 'spaces-list-stub',
+  noContentMessageStub: 'no-content-message-stub'
 }
 
 describe('Spaces view', () => {
@@ -107,7 +107,8 @@ function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
         stubs: {
           AppLoadingSpinner: true,
           NoContentMessage: true,
-          SpacesList: true
+          SpacesList: true,
+          OcBreadcrumb: true
         }
       }
     })

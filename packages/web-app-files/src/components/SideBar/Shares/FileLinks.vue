@@ -113,7 +113,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, unref } from 'vue'
+import { ComputedRef, defineComponent, inject, PropType } from 'vue'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import {
@@ -134,7 +134,7 @@ import NameAndCopy from './Links/NameAndCopy.vue'
 import { useGraphClient } from 'web-pkg/src/composables'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
-import { SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { isLocationSharesActive } from '../../../router'
 
 export default defineComponent({
@@ -144,7 +144,6 @@ export default defineComponent({
     DetailsAndEdit,
     NameAndCopy
   },
-  inject: ['displayedItem', 'incomingParentShare'],
   props: {
     space: {
       type: Object as PropType<SpaceResource>,
@@ -161,6 +160,8 @@ export default defineComponent({
 
     return {
       ...useGraphClient(),
+      file: inject<ComputedRef<Resource>>('displayedItem'),
+      incomingParentShare: inject<ComputedRef<Resource>>('incomingParentShare'),
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
@@ -175,10 +176,6 @@ export default defineComponent({
     ...mapGetters(['capabilities', 'configuration']),
     ...mapState(['user']),
     ...mapState('Files', ['sharesTree']),
-
-    file() {
-      return unref(this.displayedItem)
-    },
 
     addButtonLabel() {
       return this.$gettext('Add link')

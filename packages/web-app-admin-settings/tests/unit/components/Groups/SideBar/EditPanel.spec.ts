@@ -1,5 +1,5 @@
 import EditPanel from '../../../../../src/components/Groups/SideBar/EditPanel.vue'
-import { mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 describe('EditPanel', () => {
   describe('method "revertChanges"', () => {
@@ -64,6 +64,7 @@ function getWrapper({ propsData = {} } = {}) {
         ...propsData
       },
       global: {
+        plugins: [...defaultPlugins()],
         stubs: {
           'oc-text-input': true,
           'avatar-image': true,

@@ -6,7 +6,7 @@ import {
   defaultStubs,
   mount
 } from 'web-test-helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import ContextActions from 'web-app-files/src/components/FilesList/ContextActions.vue'
 
@@ -75,12 +75,12 @@ function getWrapper({ enabledActions = [] } = {}) {
     mocks,
     wrapper: mount(Component, {
       props: {
-        space: mockDeep<SpaceResource>(),
-        items: [mockDeep<Resource>()]
+        space: mock<SpaceResource>(),
+        items: [mock<Resource>()]
       },
       global: {
         mocks,
-        provide: { currentSpace: mockDeep<SpaceResource>() },
+        provide: { currentSpace: mock<SpaceResource>() },
         stubs: { ...defaultStubs, 'action-menu-item': true },
         plugins: [...defaultPlugins(), store]
       }

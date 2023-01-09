@@ -4,6 +4,17 @@ import flushPromises from 'flush-promises'
 import { defineComponent } from 'vue'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 
+const component = defineComponent({
+  emits: ['click', 'keyup'],
+  setup(props, ctx) {
+    const onClick = (event) => {
+      ctx.emit('click', event)
+    }
+    return { onClick }
+  },
+  template: '<div @click="onClick"></div>'
+})
+
 const providerFiles = {
   id: 'files',
   displayName: 'Files',
@@ -11,11 +22,7 @@ const providerFiles = {
   previewSearch: {
     available: true,
     search: jest.fn(),
-    component: defineComponent({
-      render(createElement) {
-        return createElement('div')
-      }
-    })
+    component
   }
 }
 
@@ -27,11 +34,7 @@ const providerContacts = {
     available: true,
     search: jest.fn()
   },
-  component: defineComponent({
-    render(createElement) {
-      return createElement('div')
-    }
-  })
+  component
 }
 
 const selectors = {
@@ -77,18 +80,18 @@ beforeEach(() => {
 
 let wrapper
 afterEach(() => {
-  wrapper.destroy()
+  wrapper.unmount()
 })
 
 describe('Search Bar portal component', () => {
   jest.spyOn(console, 'warn').mockImplementation(undefined)
   test('does not render a search field if no availableProviders given', () => {
     wrapper = getMountedWrapper({ data: { providerStore: { availableProviders: [] } } }).wrapper
-    expect(wrapper.element.innerHTML).toBeFalsy()
+    expect(wrapper.element.innerText).toBeFalsy()
   })
   test('does not render a search field if no user given', () => {
     wrapper = getMountedWrapper({ isUserContextReady: false }).wrapper
-    expect(wrapper.element.innerHTML).toBeFalsy()
+    expect(wrapper.element.innerText).toBeFalsy()
   })
   test('updates the search term on input', () => {
     wrapper = getMountedWrapper().wrapper

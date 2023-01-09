@@ -1,10 +1,5 @@
-import { shallowMount } from 'web-test-helpers'
+import { mount } from 'web-test-helpers'
 import ResourceTiles from '../../../../src/components/FilesList/ResourceTiles.vue'
-
-const stubs = {
-  'oc-list': true,
-  'oc-tile': true
-}
 
 const spacesResources = [
   {
@@ -36,20 +31,17 @@ describe('OcTileGrid component', () => {
 
   it('emits context menu event upon right click on tile', async () => {
     const wrapper = getWrapper({ data: spacesResources })
-    await wrapper.find('oc-tile-stub').trigger('contextmenu')
+    await wrapper.find('oc-tile').trigger('contextmenu')
     expect(wrapper.emitted().contextmenuClicked.length).toBe(1)
   })
 
   function getWrapper(props = {}, slots = {}) {
-    return shallowMount(ResourceTiles, {
+    return mount(ResourceTiles, {
       props: {
         ...props
       },
       slots: {
         ...slots
-      },
-      global: {
-        stubs
       }
     })
   }

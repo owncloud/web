@@ -23,6 +23,7 @@
         :placeholder="placeholder"
         @input="onType($event.target.value)"
         @keydown.enter="onSearch"
+        @keyup="$emit('keyup', $event)"
       />
       <oc-button
         v-if="query.length"
@@ -212,6 +213,7 @@ export default {
       default: () => {}
     }
   },
+  emits: ['clear', 'input', 'keyup', 'search'],
   data: () => ({
     query: ''
   }),

@@ -3,6 +3,7 @@
     class="oc-tile-card oc-card oc-card-default oc-rounded"
     :data-item-id="resource.id"
     :class="resource.disabled ? 'state-trashed' : ''"
+    @contextmenu="$emit('contextmenu', $event)"
   >
     <oc-resource-link
       class="oc-card-media-top oc-border-b oc-flex oc-flex-center oc-flex-middle"
@@ -86,7 +87,7 @@ export default defineComponent({
       default: () => {}
     }
   },
-  emits: ['click']
+  emits: ['click', 'contextmenu']
 })
 </script>
 

@@ -71,9 +71,16 @@ describe('CreateSpace component', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper, mocks, storeOptions } = getWrapper()
       const graphMock = mockDeep<Graph>()
-      graphMock.drives.createDrive.mockRejectedValue(new Error())
+      graphMock.drives.createDrive.mockRejectedValue({})
+      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
       await wrapper.vm.addNewSpace('New space')
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          status: 'danger',
+          title: 'Creating space failed…'
+        })
+      )
     })
   })
 })

@@ -191,8 +191,8 @@ describe('ResourceTable', () => {
   describe('resource selection', () => {
     it('adds resources to selection model via checkboxes', () => {
       const { wrapper } = getMountedWrapper()
-      wrapper.find('.resource-table-select-all .oc-checkbox').setChecked()
-      wrapper.find('.oc-tbody-tr-documents .oc-checkbox').setChecked()
+      wrapper.find('.resource-table-select-all .oc-checkbox').setValue(true)
+      wrapper.find('.oc-tbody-tr-documents .oc-checkbox').setValue(true)
       expect(wrapper.emitted().select.length).toBe(2)
     })
 
@@ -204,7 +204,7 @@ describe('ResourceTable', () => {
           }
         })
 
-        await wrapper.find('.resource-table-select-all .oc-checkbox').setChecked(false)
+        await wrapper.find('.resource-table-select-all .oc-checkbox').setValue(false)
         expect(wrapper.emitted().select[0][0].length).toBe(0)
       })
     })
@@ -352,8 +352,10 @@ function getMountedWrapper({ props = {}, isUserContextReady = true } = {}) {
         ...props
       },
       global: {
+        renderStubDefaultSlot: true,
         plugins: [...defaultPlugins(), store],
         stubs: {
+          OcButton: false,
           'router-link': true
         },
         mocks: {

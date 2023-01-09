@@ -58,10 +58,14 @@ describe('SpacesList', () => {
       const { wrapper } = getWrapper({ mountType: shallowMount, spaces: spaceMocks })
       wrapper.vm.sortBy = prop
       await wrapper.vm.$nextTick()
-      expect(wrapper.find(selectors.ocTableStub).props().data[0].id).toBe(spaceMocks[0].id)
+      expect(wrapper.findComponent<any>(selectors.ocTableStub).props().data[0].id).toBe(
+        spaceMocks[0].id
+      )
       wrapper.vm.sortDir = 'desc'
       await wrapper.vm.$nextTick()
-      expect(wrapper.find(selectors.ocTableStub).props().data[0].id).toBe(spaceMocks[1].id)
+      expect(wrapper.findComponent<any>(selectors.ocTableStub).props().data[0].id).toBe(
+        spaceMocks[1].id
+      )
     }
   )
   it('should set the sort parameters accordingly when calling "handleSort"', () => {

@@ -39,7 +39,7 @@ describe('Pagination', () => {
     it('should use provided route to render pages', () => {
       const { wrapper } = getWrapper({}, mount)
       const currentRoute = wrapper.vm.$route
-      const links = wrapper.findAllComponents(RouterLinkStub)
+      const links = wrapper.findAllComponents<any>(RouterLinkStub)
 
       // three links (route to prev, next and last page)
       expect(links.length).toBe(3)

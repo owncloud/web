@@ -1,8 +1,8 @@
-import { mockDeep } from 'jest-mock-extended'
 import { AxiosPromise, AxiosResponse } from 'axios'
+import { mock } from 'jest-mock-extended'
 
 export const mockAxiosResolve = <T>(data: T = {} as any): AxiosPromise<T> => {
-  const response = mockDeep<AxiosResponse>({ data })
+  const response = mock<AxiosResponse>({ data })
   return Promise.resolve(response)
 }
 

@@ -1,6 +1,6 @@
-import { getCurrentInstance } from 'vue'
 import { ClientService } from '../../services'
+import { useService } from '../service'
 
 export const useClientService = (): ClientService => {
-  return (getCurrentInstance().proxy as any).$clientService
+  return useService('$clientService')
 }

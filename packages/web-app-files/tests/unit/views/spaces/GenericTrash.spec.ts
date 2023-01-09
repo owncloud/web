@@ -27,12 +27,16 @@ describe('GenericTrash view', () => {
   })
   it('shows the personal space breadcrumb', () => {
     const { wrapper } = getMountedWrapper()
-    expect(wrapper.find('app-bar-stub').props().breadcrumbs[1].text).toEqual('Personal space')
+    expect(wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs[1].text).toEqual(
+      'Personal space'
+    )
   })
   it('shows the project space breadcrumb', () => {
     const space = mockDeep<SpaceResource>({ driveType: 'project' })
     const { wrapper } = getMountedWrapper({ props: { space } })
-    expect(wrapper.find('app-bar-stub').props().breadcrumbs[1].text).toEqual(space.name)
+    expect(wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs[1].text).toEqual(
+      space.name
+    )
   })
   describe('different files view states', () => {
     it('shows the loading spinner during loading', () => {

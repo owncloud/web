@@ -7,6 +7,8 @@ import { Store } from 'vuex'
 import VueRouter from 'vue-router'
 import { RuntimeError } from '../error'
 
+type VueConstructor = typeof Vue
+
 /**
  * this wraps a classic application structure into a next application format.
  * it is fully backward compatible and will stay around as a fallback.
@@ -37,13 +39,13 @@ class ClassicApplication extends NextApplication {
     return Promise.resolve(undefined)
   }
 
-  mounted(instance: Vue): Promise<void> {
+  mounted(instance: VueConstructor): Promise<void> {
     const { mounted: mountedHook } = this.applicationScript
     this.attachPublicApi(mountedHook, instance)
     return Promise.resolve(undefined)
   }
 
-  private attachPublicApi(hook: unknown, instance?: Vue) {
+  private attachPublicApi(hook: unknown, instance?: VueConstructor) {
     isFunction(hook) &&
       hook({
         ...(instance && {

@@ -1,5 +1,16 @@
 <template>
-  <tr ref="observerTarget" tabindex="-1">
+  <tr
+    ref="observerTarget"
+    tabindex="-1"
+    @click="$emit('click', $event)"
+    @contextmenu="$emit('contextmenu', $event)"
+    @dragstart="$emit('dragstart', $event)"
+    @drop="$emit('drop', $event)"
+    @dragenter="$emit('dragenter', $event)"
+    @dragleave="$emit('dragleave', $event)"
+    @dragover="$emit('dragover', $event)"
+    @mouseleave="$emit('mouseleave', $event)"
+  >
     <oc-td v-if="isHidden" :colspan="lazyColspan">
       <span class="shimmer" />
     </oc-td>
@@ -23,7 +34,17 @@ export default {
       default: null
     }
   },
-  setup(props) {
+  emits: [
+    'contextmenu',
+    'click',
+    'dragstart',
+    'drop',
+    'dragenter',
+    'dragleave',
+    'dragover',
+    'mouseleave'
+  ],
+  setup(props, ctx) {
     const observerTarget = customRef((track, trigger) => {
       let $el
       return {

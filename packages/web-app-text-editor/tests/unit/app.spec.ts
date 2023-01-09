@@ -1,7 +1,7 @@
 import App from '../../src/App.vue'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults'
-import { mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { ref } from 'vue'
 import {
   createStore,
@@ -11,6 +11,7 @@ import {
   defaultComponentMocks,
   defaultStubs
 } from 'web-test-helpers'
+import { Resource } from 'web-client'
 
 jest.mock('web-pkg/src/composables/appDefaults')
 
@@ -50,7 +51,8 @@ describe('Text editor app', () => {
 function getWrapper({ fileName = 'someFile.txt' }: { fileName?: string } = {}) {
   jest.mocked(useAppDefaults).mockImplementation(() =>
     useAppDefaultsMock({
-      currentFileContext: ref(mockDeep<FileContext>({ path: fileName }))
+      currentFileContext: ref(mock<FileContext>({ path: fileName })),
+      getFileInfo: jest.fn().mockImplementation(() => mock<Resource>({ permissions: '' }))
     })
   )
   const defaultMocks = { ...defaultComponentMocks() }

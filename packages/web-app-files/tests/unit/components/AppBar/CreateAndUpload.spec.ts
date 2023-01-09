@@ -1,5 +1,5 @@
 import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { UppyResource } from 'web-runtime/src/composables/upload'
 import { Graph } from 'web-client'
@@ -61,15 +61,15 @@ describe('CreateAndUpload component', () => {
   describe('action buttons', () => {
     it('should show and be enabled if file creation is possible', () => {
       const { wrapper } = getWrapper()
-      expect(wrapper.find(elSelector.uploadBtn).props().disabled).toBeFalsy()
-      expect(wrapper.find(elSelector.newFolderBtn).props().disabled).toBeFalsy()
+      expect(wrapper.findComponent<any>(elSelector.uploadBtn).props().disabled).toBeFalsy()
+      expect(wrapper.findComponent<any>(elSelector.newFolderBtn).props().disabled).toBeFalsy()
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('should be disabled if file creation is not possible', () => {
       const currentFolder = mockDeep<Resource>({ canUpload: () => false })
       const { wrapper } = getWrapper({ currentFolder })
-      expect(wrapper.find(elSelector.uploadBtn).props().disabled).toBeTruthy()
-      expect(wrapper.find(elSelector.newFolderBtn).props().disabled).toBeTruthy()
+      expect(wrapper.findComponent<any>(elSelector.uploadBtn).props().disabled).toBeTruthy()
+      expect(wrapper.findComponent<any>(elSelector.newFolderBtn).props().disabled).toBeTruthy()
     })
     it('should not be visible if file creation is not possible on a public page', () => {
       const currentFolder = mockDeep<Resource>({ canUpload: () => false })
@@ -90,37 +90,39 @@ describe('CreateAndUpload component', () => {
   describe('clipboard buttons', () => {
     it('should show if clipboard is empty', () => {
       const { wrapper } = getWrapper()
-      expect(wrapper.findAll(`${elSelector.clipboardBtns} oc-button-stub`).exists()).toBeFalsy()
+      expect(
+        wrapper.findComponent<any>(`${elSelector.clipboardBtns} oc-button-stub`).exists()
+      ).toBeFalsy()
     })
     it('should show if clipboard is not empty', () => {
       const { wrapper } = getWrapper({ clipboardResources: [mockDeep<Resource>()] })
-      expect(wrapper.findAll(`${elSelector.clipboardBtns} oc-button-stub`).length).toBe(2)
+      expect(wrapper.findAll(`${elSelector.clipboardBtns} .oc-button`).length).toBe(2)
     })
-    it('call the "paste files"-action', () => {
+    it('call the "paste files"-action', async () => {
       const { wrapper, storeOptions } = getWrapper({ clipboardResources: [mockDeep<Resource>()] })
-      wrapper.find(elSelector.pasteFilesBtn).vm.$emit('click')
+      await wrapper.find(elSelector.pasteFilesBtn).trigger('click')
       expect(storeOptions.modules.Files.actions.pasteSelectedFiles).toHaveBeenCalled()
     })
-    it('call "clear clipboard"-action', () => {
+    it('call "clear clipboard"-action', async () => {
       const { wrapper, storeOptions } = getWrapper({ clipboardResources: [mockDeep<Resource>()] })
-      wrapper.find(elSelector.clearClipboardBtn).vm.$emit('click')
+      await wrapper.find(elSelector.clearClipboardBtn).trigger('click')
       expect(storeOptions.modules.Files.actions.clearClipboardFiles).toHaveBeenCalled()
     })
   })
   describe('button triggers', () => {
-    it('should create a modal if "New folder" button is clicked', () => {
+    it('should create a modal if "New folder" button is clicked', async () => {
       const { wrapper } = getWrapper()
       const createModalSpy = jest.spyOn(wrapper.vm, 'createModal')
-      wrapper.find(elSelector.newFolderBtn).vm.$emit('click')
+      await wrapper.find(elSelector.newFolderBtn).trigger('click')
       expect(createModalSpy).toHaveBeenCalled()
     })
     it.each(fileHandlerMocks)(
       'should create a modal if "New file" button is clicked',
-      (fileHandler) => {
+      async (fileHandler) => {
         const { wrapper } = getWrapper({ newFileHandlers: fileHandlerMocks })
         const createModalSpy = jest.spyOn(wrapper.vm, 'createModal')
         const showCreateResourceModal = jest.spyOn(wrapper.vm, 'showCreateResourceModal')
-        wrapper.find(`.new-file-btn-${fileHandler.ext}`).vm.$emit('click')
+        await wrapper.find(`.new-file-btn-${fileHandler.ext}`).trigger('click')
         expect(createModalSpy).toHaveBeenCalled()
         expect(showCreateResourceModal).toHaveBeenCalledWith(
           false,
@@ -151,7 +153,7 @@ describe('CreateAndUpload component', () => {
     it('reloads the file list if files were uploaded to the current path', async () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
       const itemId = 'itemId'
-      const space = mockDeep<SpaceResource>({ id: '1' })
+      const space = mock<SpaceResource>({ id: '1' })
       const { wrapper, mocks } = getWrapper({ itemId, space })
       const file = mockDeep<UppyResource>({
         meta: { driveType: 'project', spaceId: space.id, currentFolderId: itemId }
@@ -225,7 +227,9 @@ describe('CreateAndUpload component', () => {
   describe('method "addAppProviderFile"', () => {
     it('triggers the default file action', async () => {
       const { wrapper, mocks } = getWrapper({ item: '/' })
-      const defaultActionSpy = jest.spyOn(wrapper.vm, '$_fileActions_triggerDefaultAction')
+      const defaultActionSpy = jest
+        .spyOn(wrapper.vm, '$_fileActions_triggerDefaultAction')
+        .mockImplementation(() => undefined)
       mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
       await wrapper.vm.addAppProviderFile('someFile.txt')
       expect(defaultActionSpy).toHaveBeenCalled()
@@ -246,7 +250,7 @@ function getWrapper({
   files = [],
   currentFolder = mockDeep<Resource>({ canUpload: () => true }),
   currentRouteName = 'files-spaces-generic',
-  space = mockDeep<SpaceResource>(),
+  space = mock<SpaceResource>(),
   item = undefined,
   itemId = undefined,
   newFileAction = false
@@ -266,6 +270,9 @@ function getWrapper({
       })
     }
   }
+  storeOptions.getters.apps.mockImplementation(() => ({
+    fileEditors: []
+  }))
   storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => currentFolder)
   storeOptions.modules.Files.getters.clipboardResources.mockImplementation(() => clipboardResources)
   storeOptions.modules.Files.getters.files.mockImplementation(() => files)
@@ -278,6 +285,8 @@ function getWrapper({
       data: () => ({ newFileAction }),
       props: { space: space as any, item, itemId },
       global: {
+        stubs: { OcButton: false },
+        renderStubDefaultSlot: true,
         mocks,
         plugins: [...defaultPlugins(), store]
       }

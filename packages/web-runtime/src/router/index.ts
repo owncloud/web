@@ -1,5 +1,4 @@
 import qs from 'qs'
-import Router from 'vue-router'
 import AccessDeniedPage from '../pages/accessDenied.vue'
 import Account from '../pages/account.vue'
 import LoginPage from '../pages/login.vue'
@@ -9,6 +8,7 @@ import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
 import ResolvePrivateLinkPage from '../pages/resolvePrivateLink.vue'
 import { setupAuthGuard } from './setupAuthGuard'
 import { patchRouter } from './patchCleanPath'
+import VueRouter from 'vue-router'
 
 export * from './helpers'
 
@@ -17,9 +17,14 @@ function $gettext(msg) {
   return msg
 }
 
+export const createRouter = (options?: any) => {
+  ;(window as any).__HACK__router = new VueRouter(options)
+  return (window as any).__HACK__router
+}
+
 export const base = document.querySelector('base')
 export const router = patchRouter(
-  new Router({
+  createRouter({
     parseQuery(query) {
       return qs.parse(query, {
         allowDots: true

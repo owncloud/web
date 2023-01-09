@@ -18,7 +18,6 @@ describe('AutocompleteItem component', () => {
       expect(wrapper.find('avatar-image-stub').exists()).toBeFalsy()
       expect(wrapper.find('oc-icon-stub').exists()).toBeTruthy()
       expect(wrapper.find('oc-icon-stub').attributes().name).toEqual('group')
-      expect((wrapper.find('oc-icon-stub') as any).rootNode.key).toEqual('avatar-group')
     })
     it('should display a guest icon for guest shares', () => {
       const { wrapper } = createWrapper({ shareType: ShareTypes.guest.value })
@@ -33,7 +32,6 @@ describe('AutocompleteItem component', () => {
         expect(wrapper.find('avatar-image-stub').exists()).toBeFalsy()
         expect(wrapper.find('oc-icon-stub').exists()).toBeTruthy()
         expect(wrapper.find('oc-icon-stub').attributes().name).toEqual('person')
-        expect((wrapper.find('oc-icon-stub') as any).rootNode.key).toEqual('avatar-generic-person')
       }
     )
   })
@@ -96,6 +94,7 @@ function createWrapper({
         }
       },
       global: {
+        renderStubDefaultSlot: true,
         plugins: [...defaultPlugins()],
         stubs: { 'avatar-image': true }
       }

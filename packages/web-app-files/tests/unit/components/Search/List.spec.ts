@@ -79,7 +79,7 @@ describe('List component', () => {
   //
   //       expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(0)
   //
-  //       await filesTable.vm.$emit('fileClick')
+  //       await filesTable.trigger('fileClick')
   //
   //       expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(1)
   //     })

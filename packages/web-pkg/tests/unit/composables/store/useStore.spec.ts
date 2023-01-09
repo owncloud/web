@@ -51,6 +51,6 @@ describe('useStore', () => {
         expect(store.state.value).toBe(0)
       },
       { store }
-    ).destroy()
+    ).unmount()
   })
 })

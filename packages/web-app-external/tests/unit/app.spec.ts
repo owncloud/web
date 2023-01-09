@@ -9,7 +9,7 @@ import {
 import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 import { ref } from 'vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 
 jest.mock('web-pkg/src/composables/appDefaults', () => {
   const { queryItemAsString } = jest.requireActual('web-pkg/src/composables/appDefaults')
@@ -118,7 +118,7 @@ describe('The app provider extension', () => {
 function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ status: 200 })) {
   jest.mocked(useAppDefaults).mockImplementation(() =>
     useAppDefaultsMock({
-      currentFileContext: ref(mockDeep<FileContext>({ path: 'someFile.md' })),
+      currentFileContext: ref(mock<FileContext>({ path: 'someFile.md' })),
       makeRequest
     })
   )

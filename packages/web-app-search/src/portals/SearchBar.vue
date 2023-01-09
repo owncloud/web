@@ -18,11 +18,11 @@
       :cancel-handler="cancelSearch"
       @input="updateTerm"
       @clear="onClear"
-      @click.native="showPreview"
-      @keyup.native.esc="$refs.optionsDrop.hide()"
-      @keyup.native.up="onKeyUpUp"
-      @keyup.native.down="onKeyUpDown"
-      @keyup.native.enter="onKeyUpEnter"
+      @click="showPreview"
+      @keyup.esc="$refs.optionsDrop.hide()"
+      @keyup.up="onKeyUpUp"
+      @keyup.down="onKeyUpDown"
+      @keyup.enter="onKeyUpEnter"
     />
     <oc-button
       v-oc-tooltip="$gettext('Display search bar')"
@@ -60,7 +60,7 @@
                   <router-link
                     class="more-results"
                     :to="getMoreResultsLinkForProvider(provider)"
-                    @click.native="$refs.optionsDrop.hide()"
+                    @click="$refs.optionsDrop.hide()"
                   >
                     <span>{{ getMoreResultsDetailsTextForProvider(provider) }}</span>
                   </router-link>
@@ -80,7 +80,7 @@
                   class="preview-component"
                   :provider="provider"
                   :search-result="providerSearchResultValue"
-                  @click.native="$refs.optionsDrop.hide()"
+                  @click="$refs.optionsDrop.hide()"
                 />
               </li>
             </oc-list>

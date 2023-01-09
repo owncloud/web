@@ -1,8 +1,9 @@
 import KeyboardActions from '../../../../src/components/FilesList/KeyboardActions.vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { eventBus } from 'web-pkg'
 import keycode from 'keycode'
+
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 import { useScrollToMock } from 'web-app-files/tests/mocks/useScrollToMock'
@@ -146,7 +147,7 @@ describe('KeyboardActions', () => {
 
     it('adds the clicked file to the current selection', () => {
       const { wrapper, storeOptions } = getWrapper()
-      wrapper.vm.handleShiftClickAction(mockDeep<Resource>({ id: resourceId }))
+      wrapper.vm.handleShiftClickAction(mock<Resource>({ id: resourceId }))
       expect(storeOptions.modules.Files.mutations.ADD_FILE_SELECTION).toHaveBeenCalled()
       expect(storeOptions.modules.Files.mutations.SET_LATEST_SELECTED_FILE_ID).toHaveBeenCalled()
     })
@@ -154,7 +155,7 @@ describe('KeyboardActions', () => {
   describe('ctrl + click action', () => {
     it('toggles the file selection', () => {
       const { wrapper, storeOptions } = getWrapper()
-      wrapper.vm.handleCtrlClickAction(mockDeep<Resource>())
+      wrapper.vm.handleCtrlClickAction(mock<Resource>())
       expect(storeOptions.modules.Files.actions.toggleFileSelection).toHaveBeenCalled()
     })
   })
@@ -177,7 +178,7 @@ const getWrapper = ({ props = {}, latestSelectedId = undefined } = {}) => {
   return {
     storeOptions,
     wrapper: mount(KeyboardActions, {
-      props: { paginatedResources: [], space: mockDeep<SpaceResource>(), ...props },
+      props: { paginatedResources: [], space: mock<SpaceResource>(), ...props },
       global: {
         plugins: [...defaultPlugins(), store]
       }

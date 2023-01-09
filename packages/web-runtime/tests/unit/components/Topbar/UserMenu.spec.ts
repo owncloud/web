@@ -132,6 +132,7 @@ const getMountedWrapper = (quota, userEmail) => {
       ]
     },
     global: {
+      renderStubDefaultSlot: true,
       plugins: [...defaultPlugins(), store],
       stubs: {
         ...defaultStubs,

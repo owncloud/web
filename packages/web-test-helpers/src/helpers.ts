@@ -1,75 +1,24 @@
-import { createLocalVue } from '@vue/test-utils'
-import Vuex, { StoreOptions } from 'vuex'
-import { mount as _mount } from '@vue/test-utils'
-import { Component, Data, defineComponent, SetupFunction } from 'vue'
+import { createStore as _createStore, StoreOptions } from 'vuex'
+import { mount as _mount, MountingOptions } from '@vue/test-utils'
+import { defineComponent } from 'vue'
 import { defaultPlugins } from 'web-test-helpers'
-export { RouterLinkStub } from '@vue/test-utils'
+
+jest.spyOn(console, 'warn').mockImplementation(() => undefined)
 
 export const createStore = <T>(storeOptions: StoreOptions<T>) => {
-  return {
-    install(app) {
-      app.prototype.$store = new Vuex.Store(storeOptions)
-    }
-  }
+  const store = _createStore(storeOptions)
+  // return {
+  //   install(app) {
+  //     app.prototype.$store = new Vuex.Store(storeOptions)
+  //   }
+  // }
+  return store
+}
+export const mount = <T>(component: any, options?: MountingOptions<T>) => {
+  return _mount<any>(component, options)
 }
 
-type ComponentType = any
-
-type CompatPlugin = any
-
-type CompatGlobalMountOptions = {
-  mocks?: object | false
-  stubs?:
-    | {
-        [key: string]: Component | string | boolean
-      }
-    | string[]
-  attrs?: Record<string, unknown>
-  plugins?: (CompatPlugin | [CompatPlugin, ...any[]])[]
-  directives?: { [key: string]: any }
-  provide?: Record<any, any>
-  components?: Record<string, ComponentType>
-}
-
-type CompatMountOptions = {
-  props?: any
-  data?: any
-  attachTo?: HTMLElement | string
-  global?: CompatGlobalMountOptions
-  shallow?: boolean
-  slots?: any
-}
-
-export const mount = (component: ComponentType, options?: CompatMountOptions) => {
-  const localVue = createLocalVue()
-
-  options?.global?.plugins?.filter(Boolean).forEach((plugin) => {
-    if (Array.isArray(plugin)) {
-      localVue.use(plugin[0], plugin[1])
-    } else {
-      localVue.use(plugin)
-    }
-  })
-
-  for (const [name, component] of Object.entries(options?.global?.components || {})) {
-    localVue.component(name, component)
-  }
-
-  return _mount(component, {
-    localVue,
-    ...(options?.shallow && { shouldProxy: options.shallow }),
-    ...(options?.props && { propsData: options.props }),
-    ...(options?.data && { data: options.data }),
-    ...(options?.attachTo && { attachTo: options.attachTo }),
-    ...(options?.slots && { slots: options.slots }),
-    ...(options?.global?.directives && { directives: options.global.directives }),
-    ...(options?.global?.provide && { provide: options.global.provide }),
-    ...(options?.global?.mocks && { mocks: options.global.mocks }),
-    ...(options?.global?.stubs && { stubs: options.global.stubs })
-  })
-}
-
-export const shallowMount = (component: ComponentType, options?: CompatMountOptions) => {
+export const shallowMount = <T>(component: any, options?: MountingOptions<T>) => {
   options = options || {}
   options.shallow = true
 
@@ -77,7 +26,7 @@ export const shallowMount = (component: ComponentType, options?: CompatMountOpti
 }
 
 export const getComposableWrapper = (
-  setup: SetupFunction<Data, Data>,
+  setup: any,
   { mocks = undefined, store = undefined, template = undefined } = {}
 ) => {
   return mount(
@@ -95,7 +44,8 @@ export const getComposableWrapper = (
 }
 
 export const getStoreInstance = <T>(storeOptions: StoreOptions<T>) => {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
-  return new Vuex.Store(storeOptions)
+  return _createStore(storeOptions)
 }
+
+export { createRouter } from 'web-runtime/src/router'
+export { RouterLinkStub } from '@vue/test-utils'

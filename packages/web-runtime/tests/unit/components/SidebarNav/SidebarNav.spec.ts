@@ -65,11 +65,12 @@ function getWrapper() {
         navItems: sidebarNavItemFixtures
       },
       global: {
+        renderStubDefaultSlot: true,
         plugins: [...defaultPlugins(), store],
         stubs: {
           ...defaultStubs,
           'sidebar-nav-item': true,
-          'oc-button': false,
+          OcButton: false,
           'oc-icon': true,
           'oc-list': true
         }

@@ -4,7 +4,7 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
 <div class="space-header oc-p-m oc-flex space-header-squashed">
   <div class="space-header-image">
     <div class="space-header-image-default oc-flex oc-flex-middle oc-flex-center">
-      <span class="oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive">
+      <span class="oc-icon oc-icon-xxl oc-icon-passive oc-px-m oc-py-m">
         <!---->
       </span>
     </div>
@@ -13,7 +13,8 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
         <h1 class="space-header-name"></h1>
-        <button aria-label="Show context menu" class="oc-ml-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn" type="button">
+        <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
+          <!-- @slot Content of the button -->
           <span class="oc-icon oc-icon-m oc-icon-passive">
             <!---->
           </span>
@@ -25,41 +26,44 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border" id="oc-files-context-actions-members">
                   <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" type="button">
+                      <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">
                         <!---->
                       </span>
                       <span class="oc-files-context-action-label">Members</span>
-                      <!---->
-                      <!---->
+                      <!--v-if-->
+                      <!--v-if-->
                     </button>
                   </li>
                 </ul>
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s" id="oc-files-context-actions-trashBin">
                   <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" type="button">
+                      <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">
                         <!---->
                       </span>
                       <span class="oc-files-context-action-label">Deleted files</span>
-                      <!---->
-                      <!---->
+                      <!--v-if-->
+                      <!--v-if-->
                     </button>
                   </li>
                 </ul>
               </div>
-              <!---->
-              <!---->
-              <input accept="image/*" id="space-image-upload-input" multiple="multiple" name="file" tabindex="-1" type="file">
+              <!--v-if-->
+              <!--v-if-->
+              <input accept="image/*" id="space-image-upload-input" multiple="" name="file" tabindex="-1" type="file">
             </div>
           </div>
         </div>
       </div>
-      <!---->
+      <!--v-if-->
     </div>
-    <!---->
+    <!--v-if-->
     <div>
-      <div class="markdown-container"></div>
-      <!---->
+      <!-- eslint-disable vue/no-v-html -->
+      <div class="markdown-container"></div> <!-- eslint-enable -->
+      <!--v-if-->
     </div>
   </div>
 </div>
@@ -69,7 +73,7 @@ exports[`SpaceHeader space image should show the default image if no other image
 <div class="space-header oc-p-m oc-flex">
   <div class="space-header-image">
     <div class="space-header-image-default oc-flex oc-flex-middle oc-flex-center">
-      <span class="oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive">
+      <span class="oc-icon oc-icon-xxl oc-icon-passive oc-px-m oc-py-m">
         <!---->
       </span>
     </div>
@@ -78,7 +82,8 @@ exports[`SpaceHeader space image should show the default image if no other image
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
         <h1 class="space-header-name"></h1>
-        <button aria-label="Show context menu" class="oc-ml-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn" type="button">
+        <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
+          <!-- @slot Content of the button -->
           <span class="oc-icon oc-icon-m oc-icon-passive">
             <!---->
           </span>
@@ -90,41 +95,44 @@ exports[`SpaceHeader space image should show the default image if no other image
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border" id="oc-files-context-actions-members">
                   <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" type="button">
+                      <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">
                         <!---->
                       </span>
                       <span class="oc-files-context-action-label">Members</span>
-                      <!---->
-                      <!---->
+                      <!--v-if-->
+                      <!--v-if-->
                     </button>
                   </li>
                 </ul>
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s" id="oc-files-context-actions-trashBin">
                   <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" type="button">
+                      <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">
                         <!---->
                       </span>
                       <span class="oc-files-context-action-label">Deleted files</span>
-                      <!---->
-                      <!---->
+                      <!--v-if-->
+                      <!--v-if-->
                     </button>
                   </li>
                 </ul>
               </div>
-              <!---->
-              <!---->
-              <input accept="image/*" id="space-image-upload-input" multiple="multiple" name="file" tabindex="-1" type="file">
+              <!--v-if-->
+              <!--v-if-->
+              <input accept="image/*" id="space-image-upload-input" multiple="" name="file" tabindex="-1" type="file">
             </div>
           </div>
         </div>
       </div>
-      <!---->
+      <!--v-if-->
     </div>
-    <!---->
+    <!--v-if-->
     <div>
-      <div class="markdown-container"></div>
-      <!---->
+      <!-- eslint-disable vue/no-v-html -->
+      <div class="markdown-container"></div> <!-- eslint-enable -->
+      <!--v-if-->
     </div>
   </div>
 </div>
@@ -139,7 +147,8 @@ exports[`SpaceHeader space image should show the set image 1`] = `
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
         <h1 class="space-header-name"></h1>
-        <button aria-label="Show context menu" class="oc-ml-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn" type="button">
+        <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
+          <!-- @slot Content of the button -->
           <span class="oc-icon oc-icon-m oc-icon-passive">
             <!---->
           </span>
@@ -151,41 +160,44 @@ exports[`SpaceHeader space image should show the set image 1`] = `
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border" id="oc-files-context-actions-members">
                   <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" type="button">
+                      <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">
                         <!---->
                       </span>
                       <span class="oc-files-context-action-label">Members</span>
-                      <!---->
-                      <!---->
+                      <!--v-if-->
+                      <!--v-if-->
                     </button>
                   </li>
                 </ul>
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s" id="oc-files-context-actions-trashBin">
                   <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" type="button">
+                      <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">
                         <!---->
                       </span>
                       <span class="oc-files-context-action-label">Deleted files</span>
-                      <!---->
-                      <!---->
+                      <!--v-if-->
+                      <!--v-if-->
                     </button>
                   </li>
                 </ul>
               </div>
-              <!---->
-              <!---->
-              <input accept="image/*" id="space-image-upload-input" multiple="multiple" name="file" tabindex="-1" type="file">
+              <!--v-if-->
+              <!--v-if-->
+              <input accept="image/*" id="space-image-upload-input" multiple="" name="file" tabindex="-1" type="file">
             </div>
           </div>
         </div>
       </div>
-      <!---->
+      <!--v-if-->
     </div>
-    <!---->
+    <!--v-if-->
     <div>
-      <div class="markdown-container"></div>
-      <!---->
+      <!-- eslint-disable vue/no-v-html -->
+      <div class="markdown-container"></div> <!-- eslint-enable -->
+      <!--v-if-->
     </div>
   </div>
 </div>

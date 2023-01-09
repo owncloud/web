@@ -1,11 +1,5 @@
-<template functional>
-  <oc-img
-    :ref="data.ref"
-    class="oc-logo"
-    :class="[data.staticClass, data.class]"
-    :src="props.src"
-    :alt="props.alt"
-  />
+<template>
+  <oc-img :ref="ref" class="oc-logo" :src="src" :alt="alt" />
 </template>
 
 <script>

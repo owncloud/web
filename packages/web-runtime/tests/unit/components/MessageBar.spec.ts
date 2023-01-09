@@ -59,7 +59,7 @@ describe('MessageBar component', () => {
 
   describe('when there is an active message', () => {
     const { wrapper } = getShallowWrapper([messages[0]])
-    const notificationMessage = wrapper.find(selectors.notificationMessage)
+    const notificationMessage = wrapper.findComponent<any>(selectors.notificationMessage)
 
     it('should set props in oc-notification-message component', () => {
       expect(notificationMessage.attributes().title).toEqual(messages[0].title)
@@ -68,8 +68,7 @@ describe('MessageBar component', () => {
     })
     it('should call "deleteMessage" method on close event', () => {
       expect(spyDeleteMessage).toHaveBeenCalledTimes(0)
-
-      notificationMessage.vm.$emit('close')
+      ;(notificationMessage.vm as any).$emit('close')
 
       expect(spyDeleteMessage).toHaveBeenCalledTimes(1)
       expect(spyDeleteMessage).toHaveBeenCalledWith(messages[0])
@@ -102,6 +101,7 @@ function getShallowWrapper(activeMessages = []) {
         activeMessages
       },
       global: {
+        renderStubDefaultSlot: true,
         plugins: [...defaultPlugins(), store]
       }
     })

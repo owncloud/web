@@ -33,7 +33,7 @@ describe('QuickActions', () => {
     const { wrapper } = getWrapper()
 
     it('should display all action buttons where "displayed" is set to true', () => {
-      const actionButtons = wrapper.findAll('oc-button-stub')
+      const actionButtons = wrapper.findAll('.oc-button')
       // there are two items provided as actions, with only one item set to display
       expect(actionButtons.length).toBe(1)
 
@@ -44,7 +44,7 @@ describe('QuickActions', () => {
       expect(actionButton.attributes().class).toContain('files-quick-action-collaborators')
       expect(iconEl.exists()).toBeTruthy()
       expect(iconEl.attributes().name).toBe('group-add')
-      expect(actionButton.attributes('arialabel')).toBe('Add people')
+      expect(actionButton.attributes('aria-label')).toBe('Add people')
     })
 
     it('should not display action buttons where "displayed" is set to false', () => {
@@ -59,8 +59,8 @@ describe('QuickActions', () => {
       const { wrapper } = getWrapper()
       const handlerAction = collaboratorAction.handler.mockImplementation()
 
-      const actionButton = wrapper.find('oc-button-stub')
-      await actionButton.vm.$emit('click')
+      const actionButton = wrapper.find('.oc-button')
+      await actionButton.trigger('click')
       expect(handlerAction).toHaveBeenCalledTimes(1)
       Object.keys(testItem).forEach((key) => {
         expect(handlerAction.mock.calls[0][0].item[key]).toBe(testItem[key])
@@ -80,10 +80,8 @@ function getWrapper() {
         item: testItem
       },
       global: {
-        directives: {
-          'oc-tooltip': jest.fn()
-        },
-        mocks: { ...defaultComponentMocks(), $store: null },
+        stubs: { OcButton: false },
+        mocks: { ...defaultComponentMocks() },
         plugins: [...defaultPlugins()]
       }
     })

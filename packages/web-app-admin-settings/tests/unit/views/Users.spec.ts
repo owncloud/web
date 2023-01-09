@@ -1,6 +1,6 @@
 import Users from '../../../src/views/Users.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Graph } from 'web-client/src'
 import { useLoadTasks } from '../../../src/composables/loadTasks/useLoadTasks'
 import { Task } from 'vue-concurrency'
@@ -12,6 +12,7 @@ import {
   defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
+import { AxiosResponse } from 'axios'
 
 const defaultGraphMock = () => {
   const defaultUser = {
@@ -23,10 +24,9 @@ const defaultGraphMock = () => {
   }
 
   const graph = mockDeep<Graph>()
-  graph.users.listUsers.mockImplementation(() => mockAxiosResolve({ value: [defaultUser] }))
-  graph.users.getUser.mockImplementation(() => mockAxiosResolve(defaultUser))
-
-  graph.groups.listGroups.mockImplementation(() => mockAxiosResolve({ value: [] }))
+  graph.users.listUsers.mockResolvedValue(mock<AxiosResponse>({ data: { value: [defaultUser] } }))
+  graph.users.getUser.mockResolvedValue(mock<AxiosResponse>({ data: defaultUser }))
+  graph.groups.listGroups.mockResolvedValue(mock<AxiosResponse>({ data: { value: [] } }))
 
   return graph
 }
@@ -46,7 +46,7 @@ jest.mocked(useLoadTasks).mockImplementation(({ roles, userAssignments }) => {
 describe('Users view', () => {
   describe('method "createUser"', () => {
     it('should hide the modal and show message on success', async () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getMountedWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleCreateUserModalStub = jest.spyOn(wrapper.vm, 'toggleCreateUserModal')
       await wrapper.vm.createUser({ displayName: 'jan' })
@@ -59,7 +59,7 @@ describe('Users view', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const graph = defaultGraphMock()
       graph.users.createUser.mockImplementation(() => mockAxiosReject())
-      const wrapper = getMountedWrapper({ graph })
+      const { wrapper } = getMountedWrapper({ graph })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleCreateUserModalStub = jest.spyOn(wrapper.vm, 'toggleCreateUserModal')
       await wrapper.vm.createUser({ displayName: 'jana' })
@@ -88,9 +88,8 @@ describe('Users view', () => {
         })
       )
       graph.drives.updateDrive.mockImplementation(() => mockAxiosResolve({ name: 'any' }))
-      const wrapper = getMountedWrapper({ graph })
+      const { wrapper } = getMountedWrapper({ graph })
       const busStub = jest.spyOn(eventBus, 'publish')
-      const setStub = jest.spyOn(wrapper.vm, '$set').mockImplementation(() => undefined)
       const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
 
       await wrapper.vm.loadResourcesTask.last
@@ -98,7 +97,6 @@ describe('Users view', () => {
 
       expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
       expect(busStub).toHaveBeenCalledWith('sidebar.entity.saved')
-      expect(setStub).toHaveBeenCalled()
       expect(updateSpaceFieldStub).toHaveBeenCalled()
     })
 
@@ -106,7 +104,7 @@ describe('Users view', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const graph = defaultGraphMock()
       graph.users.editUser.mockImplementation(() => mockAxiosReject())
-      const wrapper = getMountedWrapper({ graph })
+      const { wrapper } = getMountedWrapper({ graph })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
 
       await wrapper.vm.loadResourcesTask.last
@@ -129,16 +127,13 @@ describe('Users view', () => {
       ]
     }
     it('should emit event on success2', async () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getMountedWrapper()
       const busStub = jest.spyOn(eventBus, 'publish')
-      const setStub = jest.spyOn(wrapper.vm, '$set')
-      setStub.mockImplementation(() => undefined)
       await wrapper.vm.loadResourcesTask.last
       await wrapper.vm.editUserGroupAssignments(editUser)
 
       expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
       expect(busStub).toHaveBeenCalledWith('sidebar.entity.saved')
-      expect(setStub).toHaveBeenCalled()
     })
 
     it('should show message on error', async () => {
@@ -146,7 +141,7 @@ describe('Users view', () => {
 
       const graph = defaultGraphMock()
       graph.groups.addMember.mockImplementation(() => mockAxiosReject())
-      const wrapper = getMountedWrapper({ graph })
+      const { wrapper } = getMountedWrapper({ graph })
       const showMessageStub = jest
         .spyOn(wrapper.vm, 'showMessage')
         .mockImplementation(() => undefined)
@@ -160,7 +155,7 @@ describe('Users view', () => {
 
   describe('method "deleteUsers"', () => {
     it('should hide the modal and show message on success', async () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getMountedWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleDeleteUserModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteUserModal')
       await wrapper.vm.deleteUsers([{ id: '1' }])
@@ -172,7 +167,7 @@ describe('Users view', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const graph = defaultGraphMock()
       graph.users.deleteUser.mockImplementation(() => mockAxiosReject())
-      const wrapper = getMountedWrapper({ graph })
+      const { wrapper } = getMountedWrapper({ graph })
       const graphDeleteUserStub = jest.spyOn(graph.users, 'deleteUser')
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleDeleteUserModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteUserModal')
@@ -183,7 +178,7 @@ describe('Users view', () => {
       expect(toggleDeleteUserModalStub).toHaveBeenCalledTimes(0)
     })
     it('should show message while user tries to delete own account', async () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getMountedWrapper()
       const graph = defaultGraphMock()
       const graphDeleteUserStub = jest.spyOn(graph.users, 'deleteUser')
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
@@ -198,19 +193,19 @@ describe('Users view', () => {
 
   describe('computed method "sideBarAvailablePanels"', () => {
     it('should contain EditPanel with property enabled set true when one user is selected', () => {
-      const wrapper = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }] } })
+      const { wrapper } = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }] } })
       expect(
         wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeTruthy()
     })
     it('should contain EditPanel with property enabled set false when no user is selected', () => {
-      const wrapper = getMountedWrapper({ data: { selectedUsers: [] } })
+      const { wrapper } = getMountedWrapper({ data: { selectedUsers: [] } })
       expect(
         wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeFalsy()
     })
     it('should contain EditPanel with property enabled set false when multiple users are selected', () => {
-      const wrapper = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }, { id: '2' }] } })
+      const { wrapper } = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }, { id: '2' }] } })
       expect(
         wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeFalsy()
@@ -219,7 +214,7 @@ describe('Users view', () => {
 
   describe('computed method "allUsersSelected"', () => {
     it('should be true if every user is selected', async () => {
-      const wrapper = getMountedWrapper({
+      const { wrapper } = getMountedWrapper({
         data: { selectedUsers: [{ id: '1' }] }
       })
       await wrapper.vm.loadResourcesTask.last
@@ -230,7 +225,7 @@ describe('Users view', () => {
       graph.users.listUsers.mockImplementation(() =>
         mockAxiosResolve({ value: [{ id: '1' }, { id: '2' }] })
       )
-      const wrapper = getMountedWrapper({
+      const { wrapper } = getMountedWrapper({
         graph,
         data: { selectedUsers: [{ id: '1' }] }
       })
@@ -241,13 +236,13 @@ describe('Users view', () => {
 
   describe('method toggleSideBar', () => {
     it('should set sideBarOpen to true if current value is false', () => {
-      const wrapper = getMountedWrapper({})
+      const { wrapper } = getMountedWrapper({})
       wrapper.vm.sideBarOpen = false
       wrapper.vm.toggleSideBar()
       expect(wrapper.vm.sideBarOpen).toBeTruthy()
     })
     it('should set sideBarOpen to false if current value is true', () => {
-      const wrapper = getMountedWrapper({})
+      const { wrapper } = getMountedWrapper({})
       wrapper.vm.sideBarOpen = true
       wrapper.vm.toggleSideBar()
       expect(wrapper.vm.sideBarOpen).toBeFalsy()
@@ -270,21 +265,24 @@ function getMountedWrapper({ data = {}, graph = defaultGraphMock() } = {}) {
 
   const store = createStore(storeOptions)
 
-  return shallowMount(Users, {
-    data: () => {
-      return {
-        selectedUsers: [
-          {
-            id: '1',
-            memberOf: []
-          }
-        ],
-        ...data
+  return {
+    mocks,
+    wrapper: shallowMount(Users, {
+      data: () => {
+        return {
+          selectedUsers: [
+            {
+              id: '1',
+              memberOf: []
+            }
+          ],
+          ...data
+        }
+      },
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks
       }
-    },
-    global: {
-      plugins: [...defaultPlugins(), store],
-      mocks
-    }
-  })
+    })
+  }
 }

@@ -60,6 +60,8 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
 }
 
 export const renderSuccess = (): void => {
+  Vue.prototype.$store = store
+
   const applications = Array.from(applicationStore.values())
   const instance = new Vue({
     el: '#owncloud',

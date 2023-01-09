@@ -1,6 +1,6 @@
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { readonly, ref } from 'vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Task } from 'vue-concurrency'
 import { SpaceResource } from 'web-client/src/helpers'
 
@@ -24,7 +24,7 @@ export const useResourcesViewDefaultsMock = (
     sortDir: undefined,
     selectedResources: ref([]),
     selectedResourcesIds: ref([]),
-    selectedResourceSpace: mockDeep<SpaceResource>(),
+    selectedResourceSpace: ref(mock<SpaceResource>()),
     isResourceInSelection: jest.fn(() => false),
     sideBarOpen: ref(false),
     sideBarActivePanel: ref(''),
