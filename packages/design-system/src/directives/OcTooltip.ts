@@ -47,7 +47,7 @@ export const destroy = (_tippy) => {
   }
 }
 
-const initOrUpdate = (el, { value = {} }, { elm }) => {
+const initOrUpdate = (el, { value = {} }: any, { elm }) => {
   if (Object.prototype.toString.call(value) !== '[object Object]') {
     value = { content: value }
   }
