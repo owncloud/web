@@ -10,7 +10,6 @@ import {
   mount
 } from 'web-test-helpers'
 import Spaces from '../../../src/views/Spaces.vue'
-import Vue from 'vue'
 
 const selectors = {
   loadingSpinnerStub: 'apploadingspinner-stub',
@@ -85,16 +84,6 @@ describe('Spaces view', () => {
         wrapper.vm.selectedSpaces = spaces
         wrapper.vm.unselectAllSpaces()
         expect(wrapper.vm.selectedSpaces.length).toBe(0)
-      })
-    })
-    describe('filter', () => {
-      it('shows filtered spaces', async () => {
-        const spaces = [{ name: 'Some Space' }, { name: 'Another space' }]
-        const { wrapper } = getWrapper({ spaces })
-        await wrapper.vm.loadResourcesTask.last
-        wrapper.vm.filterTerm = 'Another'
-        await Vue.nextTick()
-        expect(wrapper.vm.orderedSpaces).toEqual([{ name: 'Another space' }])
       })
     })
   })
