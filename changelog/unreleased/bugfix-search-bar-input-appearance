@@ -1,0 +1,6 @@
+Bugfix: Search bar input appearance
+
+The broken appearance of the search bar input field has been fixed.
+
+https://github.com/owncloud/web/issues/8158
+https://github.com/owncloud/web/pull/8203
