@@ -10,6 +10,7 @@
           "
           :resource="resource"
           :resource-route="getRoute(resource)"
+          @hook:mounted="$emit('rowMounted', resource, tileRefs.tiles[index], ImageDimension.Tile)"
           @contextmenu="showContextMenu($event, index, tileRefs.tiles[index])"
           @click="emitTileClick(resource)"
         >
@@ -72,6 +73,7 @@ import { useStore } from 'web-pkg/src/composables'
 // Be done at a later point in time?
 import { EVENT_TROW_CONTEXTMENU } from 'web-pkg/src/constants'
 import { useResourceRouteResolver } from '../../composables/filesList'
+import { ImageDimension } from 'web-app-files/src/constants'
 
 export default defineComponent({
   name: 'ResourceTiles',
@@ -192,6 +194,11 @@ export default defineComponent({
       resetDropPosition,
       showContextMenu,
       tileRefs
+    }
+  },
+  data() {
+    return {
+      ImageDimension
     }
   }
 })

@@ -187,7 +187,7 @@ import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { basename, dirname } from 'path'
 import { defineComponent, PropType, computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
-import { EVENT_FILE_DROPPED, EVENT_TROW_MOUNTED } from 'web-pkg/src/constants'
+import { EVENT_FILE_DROPPED, EVENT_TROW_MOUNTED, ImageDimension } from 'web-pkg/src/constants'
 import {
   useCapabilityFilesTags,
   useCapabilityProjectSpacesEnabled,
@@ -413,6 +413,7 @@ export default defineComponent({
   data() {
     return {
       constants: {
+        ImageDimension,
         EVENT_TROW_MOUNTED
       }
     }
@@ -682,7 +683,12 @@ export default defineComponent({
        * @property {object} resource The resource which was mounted as table row
        * @property {object} component The table row component
        */
-      this.$emit(this.constants.EVENT_TROW_MOUNTED, resource, component)
+      this.$emit(
+        this.constants.EVENT_TROW_MOUNTED,
+        resource,
+        component,
+        this.constants.ImageDimension.Thumbnail
+      )
     },
     fileClicked(data) {
       /**

@@ -93,6 +93,7 @@
           v-else
           :data="paginatedResources"
           class="oc-px-m oc-pt-l"
+          @rowMounted="rowMounted"
           @fileClick="$_fileActions_triggerDefaultAction"
         >
           <template #actions="{ resource }">
@@ -451,7 +452,7 @@ export default defineComponent({
       }
     },
 
-    rowMounted(resource, component) {
+    rowMounted(resource, component, dimensions) {
       if (!this.displayThumbnails) {
         return
       }
@@ -461,7 +462,7 @@ export default defineComponent({
         this.loadPreview({
           resource,
           isPublic: false,
-          dimensions: ImageDimension.Thumbnail,
+          dimensions,
           type: ImageType.Thumbnail
         })
       }, 250)
