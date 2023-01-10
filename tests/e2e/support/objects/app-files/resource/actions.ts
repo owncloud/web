@@ -114,7 +114,7 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
         page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
         page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
-      await editTextDocument({ page, content })
+      await editTextDocument({ page, content, name })
       break
     }
     case 'mdFile': {
@@ -124,7 +124,7 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
         page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
         page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
-      await editTextDocument({ page, content })
+      await editTextDocument({ page, content, name })
       break
     }
     case 'drawioFile': {
@@ -167,18 +167,21 @@ export const createResources = async (args: createResourceArgs): Promise<void> =
 
 export const editTextDocument = async ({
   page,
+  name,
   content
 }: {
   page: Page
+  name: string
   content: string
 }): Promise<void> => {
+  await page.locator(textEditorInput).fill(content)
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'PUT'),
-    page.locator(textEditorInput).fill(content),
+    page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
     page.locator(saveTextFileInEditorButton).click()
   ])
-
   await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
+  await page.waitForSelector(util.format(resourceNameSelector, name))
 }
 
 /**/
@@ -656,7 +659,7 @@ export interface editResourcesArgs {
 export const editResources = async (args: editResourcesArgs): Promise<void> => {
   const { page, name, content } = args
   await page.locator(util.format(resourceNameSelector, name)).click()
-  await editTextDocument({ page, content: content })
+  await editTextDocument({ page, content: content, name })
 }
 
 export interface openFileInViewerArgs {
