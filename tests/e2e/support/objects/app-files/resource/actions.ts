@@ -115,7 +115,7 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
         page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
       await editTextDocument({ page, content })
-      await page.waitForSelector(util.format(resourceNameSelector, name));
+      await page.waitForSelector(util.format(resourceNameSelector, name))
       break
     }
     case 'mdFile': {
@@ -126,7 +126,7 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
         page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
       await editTextDocument({ page, content })
-      await page.waitForSelector(util.format(resourceNameSelector, name));
+      await page.waitForSelector(util.format(resourceNameSelector, name))
       break
     }
     case 'drawioFile': {
@@ -142,7 +142,7 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
       await drawioTab.frameLocator(drawioIframe).locator(drawioSaveButton).click()
       await drawioTab.waitForURL('**/draw-io/personal/**')
       await drawioTab.close()
-      await page.waitForSelector(util.format(resourceNameSelector, name));
+      await page.waitForSelector(util.format(resourceNameSelector, name))
       break
     }
   }
