@@ -254,7 +254,7 @@ export default defineComponent({
         token: unref(accessToken)
       })
       preview.value = previewBlob
-    })
+    }).restartable()
 
     watch(
       file,
