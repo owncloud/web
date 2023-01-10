@@ -43,7 +43,7 @@
     "vue-concurrency": "4.0.0",
     "vue-events": "^3.1.0",
     "vue-gettext": "2.1.12",
-    "vue-inline-svg": "^2.0.0",
+    "vue-inline-svg": "3.1.0",
     "vue-meta": "^2.2.2",
     "vue-resize": "^1.0.1",
     "vue-router": "3.6.5",
