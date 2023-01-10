@@ -311,9 +311,9 @@ export default {
   }
 
   &-input {
-    border-radius: 25px;
-    border: 1px solid var(--oc-color-input-border);
-    color: var(--oc-color-input-text-muted);
+    border-radius: 25px !important;
+    border: 1px solid var(--oc-color-input-border) !important;
+    color: var(--oc-color-input-text-muted) !important;
 
     &:focus {
       background-color: var(--oc-color-input-bg);
@@ -328,7 +328,7 @@ export default {
   }
 
   &-input-icon {
-    padding: 0 var(--oc-space-xlarge);
+    padding: 0 var(--oc-space-xlarge) !important;
   }
 
   &-input-button {
