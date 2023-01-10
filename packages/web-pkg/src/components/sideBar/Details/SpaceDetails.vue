@@ -81,6 +81,12 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 export default defineComponent({
   name: 'SpaceDetails',
   components: { SpaceQuota },
+  props: {
+    spaceResource: {
+      type: Object,
+      required: false
+    }
+  },
   setup() {
     const store = useStore()
     const accessToken = useAccessToken({ store })
@@ -123,7 +129,7 @@ export default defineComponent({
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['user']),
     space() {
-      return this.highlightedFile
+      return this.spaceResource || this.highlightedFile
     },
     hasShares() {
       return this.hasMemberShares || this.hasLinkShares

@@ -1,10 +1,10 @@
 <template>
   <div class="oc-mt-xl">
-    <div v-if="noSpaces" class="oc-flex space-info">
+    <div v-if="spaceCount === 0" class="oc-flex space-info">
       <oc-icon name="layout-grid" size="xxlarge" />
       <p v-translate>Select a group to view details</p>
     </div>
-    <div v-if="multipleUsers" class="oc-flex group-info">
+    <div v-if="spaceCount > 1" class="oc-flex group-info">
       <oc-icon name="layout-grid" size="xxlarge" />
       <p>{{ multipleSpacesSelectedText }}</p>
     </div>
@@ -14,25 +14,10 @@
 export default {
   name: 'DetailsPanel',
   props: {
-    spaces: {
-      type: Array,
-      required: true
-    }
-  },
-  computed: {
-    /*group() {
-      return this.groups.length === 1 ? this.groups[0] : null
-    },*/
-    noSpaces() {
-      return !this.spaces.length
-    },/*
-    multipleGroups() {
-      return this.groups.length > 1
-    },*/
-    multipleSpacesSelectedText() {
-      return this.$gettextInterpolate('%{count} spaces selected', {
-        count: this.spaces.length
-      })
+    spaceCount: {
+      type: Number,
+      required: true,
+      default: 0
     }
   }
 }

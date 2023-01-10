@@ -63,6 +63,7 @@ import { buildSpace } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg'
 import SpacesList from '../components/Spaces/SpacesList.vue'
 import DetailsPanel from '../components/Spaces/SideBar/DetailsPanel.vue'
+import SpaceDetails from 'web-pkg/src/components/sideBar/Details/SpaceDetails.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
 
 export default defineComponent({
@@ -103,30 +104,6 @@ export default defineComponent({
         onClick: () => eventBus.publish('app.admin-settings.list.load')
       }
     ])
-
-    const sideBarAvailablePanels = computed(() => [
-        {
-          app: 'DetailsPanel',
-          icon: 'layout-grid',
-          title: $gettext('Space details'),
-          component: DetailsPanel,
-          default: true,
-          enabled: true,
-          componentAttrs: {  }
-        },
-        {
-          app: 'EditPanel',
-          icon: 'pencil',
-          title: $gettext('Edit space'),
-          component: EditPanel,
-          default: false,
-          enabled: false // this.selectedGroups.length === 1
-          /**
-           * Editing groups is currently not supported by backend
-           */
-        }
-      ]
-    )
 
     const allSpacesSelected = computed(() => unref(spaces).length === unref(selectedSpaces).length)
 
@@ -173,7 +150,6 @@ export default defineComponent({
       graphClient,
       accessToken,
       breadcrumbs,
-      sideBarAvailablePanels,
       listHeaderPosition,
       selectedSpaces,
       sideBarOpen,
@@ -181,7 +157,42 @@ export default defineComponent({
       template,
       toggleSelectAllSpaces,
       toggleSelectSpace,
-      unselectAllSpaces,
+      unselectAllSpaces
+    }
+  },
+  computed: {
+    sidebarSpacePanelComponent() {
+      if (this.selectedSpaces.length > 1 || this.selectedSpaces.length === 0) {
+        return DetailsPanel
+      }
+      return SpaceDetails
+    },
+    sideBarAvailablePanels() {
+      return [
+        {
+          app: 'SpaceDetails',
+          icon: 'layout-grid',
+          title: this.$gettext('Space details'),
+          component: this.sidebarSpacePanelComponent,
+          default: true,
+          enabled: true,
+          componentAttrs: {
+            spaceResource: this.selectedSpaces[0],
+            spaceCount: this.selectedSpaces.length
+          }
+        },
+        {
+          app: 'EditPanel',
+          icon: 'pencil',
+          title: this.$gettext('Edit space'),
+          component: EditPanel,
+          default: false,
+          enabled: false // this.selectedGroups.length === 1
+          /**
+           * Editing groups is currently not supported by backend
+           */
+        }
+      ]
     }
   },
   methods: {
