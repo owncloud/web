@@ -13,12 +13,11 @@
     :is-header-compact="isSingleResource"
     v-bind="$attrs"
     data-custom-key-bindings="true"
-    @beforeDestroy="destroySideBar"
+    @beforeUnmount="destroySideBar"
     @mounted="focusSideBar"
     @fileChanged="focusSideBar"
     @selectPanel="setActiveSideBarPanel"
     @close="closeSideBar"
-    v-on="$listeners"
   >
     <template #header>
       <file-info
@@ -104,7 +103,7 @@ export default defineComponent({
       component.focus({
         from: document.activeElement,
         to: component.sidebar?.$el,
-        revert: event === 'beforeDestroy'
+        revert: event === 'beforeUnmount'
       })
     }
 
@@ -136,7 +135,6 @@ export default defineComponent({
       webdav
     }
   },
-
   data() {
     return {
       focused: undefined,

@@ -178,7 +178,7 @@ export default defineComponent({
       this.onResize()
     })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.onResize)
   },
   methods: {

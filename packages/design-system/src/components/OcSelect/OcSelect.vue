@@ -16,7 +16,7 @@
       <template v-for="(index, name) in $slots" #[name]="data">
         <slot v-if="name !== 'search'" :name="name" v-bind="data" />
       </template>
-      <div slot="no-options" v-translate>No options available.</div>
+      <template #no-options><div v-translate>No options available.</div></template>
       <template #spinner="{ loading }">
         <oc-spinner v-if="loading" />
       </template>

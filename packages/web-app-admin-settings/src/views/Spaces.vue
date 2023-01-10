@@ -134,7 +134,7 @@ export default defineComponent({
 
       calculateListHeaderPosition()
       window.addEventListener('resize', calculateListHeaderPosition)
-      instance.$on('beforeDestroy', () => {
+      instance.$on('beforeUnmount', () => {
         eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
       })
     })

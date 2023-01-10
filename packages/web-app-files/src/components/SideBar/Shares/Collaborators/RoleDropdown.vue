@@ -224,7 +224,7 @@ export default defineComponent({
     this.applyRoleAndPermissions()
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('keydown', this.cycleRoles)
   },
 

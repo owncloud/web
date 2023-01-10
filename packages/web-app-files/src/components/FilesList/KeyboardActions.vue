@@ -60,7 +60,7 @@ export default defineComponent({
       this.handleShiftClickAction
     )
 
-    this.$on('beforeDestroy', () => {
+    this.$on('beforeUnmount', () => {
       eventBus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
       eventBus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
       eventBus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)

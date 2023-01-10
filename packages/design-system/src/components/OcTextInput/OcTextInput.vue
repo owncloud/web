@@ -15,7 +15,6 @@
         :type="type"
         :value="displayValue"
         :disabled="disabled"
-        v-on="listeners"
         @change="onChange($event.target.value)"
         @input="onInput($event.target.value)"
         @focus="onFocus($event.target)"
@@ -185,12 +184,6 @@ export default {
         !!this.descriptionMessage
       )
     },
-    listeners() {
-      // Exclude listeners for events which are handled via methods in this component
-      // eslint-disable-next-line no-unused-vars
-      const { change, input, focus, ...listeners } = this.$listeners
-      return listeners
-    },
     messageId() {
       return `${this.id}-message`
     },
@@ -203,7 +196,11 @@ export default {
       if (this.defaultValue) {
         additionalAttrs['placeholder'] = this.defaultValue
       }
-      return { ...this.$attrs, ...additionalAttrs }
+      // Exclude listeners for events which are handled via methods in this component
+      // eslint-disable-next-line no-unused-vars
+      const { change, input, focus, ...attrs } = this.$attrs
+
+      return { ...attrs, ...additionalAttrs }
     },
     ariaInvalid() {
       return (!!this.errorMessage).toString()

@@ -148,7 +148,7 @@ export default defineComponent({
   mounted() {
     this.resizeObserver.observe(this.$refs.filesAppBar)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.resizeObserver.unobserve(this.$refs.filesAppBar)
   },
 

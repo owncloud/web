@@ -6,13 +6,7 @@ import { defaultPlugins } from 'web-test-helpers'
 jest.spyOn(console, 'warn').mockImplementation(() => undefined)
 
 export const createStore = <T>(storeOptions: StoreOptions<T>) => {
-  const store = _createStore(storeOptions)
-  // return {
-  //   install(app) {
-  //     app.prototype.$store = new Vuex.Store(storeOptions)
-  //   }
-  // }
-  return store
+  return _createStore(storeOptions)
 }
 export const mount = <T>(component: any, options?: MountingOptions<T>) => {
   return _mount<any>(component, options)

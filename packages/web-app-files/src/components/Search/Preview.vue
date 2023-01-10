@@ -155,7 +155,7 @@ export default defineComponent({
 
     visibilityObserver.observe(this.$el, { onEnter: debounced, onExit: debounced.cancel })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     visibilityObserver.disconnect()
   },
   methods: {

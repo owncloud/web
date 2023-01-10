@@ -388,7 +388,7 @@ export default defineComponent({
     this.$refs.preview.focus()
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
     document.removeEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
 

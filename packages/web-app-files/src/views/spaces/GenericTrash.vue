@@ -183,7 +183,7 @@ export default defineComponent({
     const loadResourcesEventToken = eventBus.subscribe('app.files.list.load', () => {
       this.performLoaderTask()
     })
-    this.$on('beforeDestroy', () => {
+    this.$on('beforeUnmount', () => {
       eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     })
   },

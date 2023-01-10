@@ -24,7 +24,7 @@ export default defineComponent({
     const dragOut = eventBus.subscribe('drag-out', this.hideDropzone)
     const drop = eventBus.subscribe('drop', this.hideDropzone)
 
-    this.$on('beforeDestroy', () => {
+    this.$on('beforeUnmount', () => {
       eventBus.unsubscribe('drag-over', dragOver)
       eventBus.unsubscribe('drag-out', dragOut)
       eventBus.unsubscribe('drop', drop)

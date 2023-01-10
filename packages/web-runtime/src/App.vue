@@ -33,7 +33,7 @@
       @checkbox-changed="modal.onCheckboxValueChanged"
       @confirm-secondary="modal.onConfirmSecondary"
       @mounted="focusModal"
-      @beforeDestroy="focusModal"
+      @beforeUnmount="focusModal"
     >
       <template v-if="modal.customContent" #content>
         <div v-html="modal.customContent"></div>
@@ -162,7 +162,7 @@ export default defineComponent({
       }
     )
   },
-  destroyed() {
+  unmounted() {
     if (this.$_notificationsInterval) {
       clearInterval(this.$_notificationsInterval)
     }
@@ -188,7 +188,7 @@ export default defineComponent({
 
     focusModal(component, event) {
       this.focus({
-        revert: event === 'beforeDestroy'
+        revert: event === 'beforeUnmount'
       })
     },
 

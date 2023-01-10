@@ -198,7 +198,7 @@ export default defineComponent({
       this.$refs.optionsDrop.hide()
     })
 
-    this.$on('beforeDestroy', () => {
+    this.$on('beforeUnmount', () => {
       eventBus.unsubscribe('app.search.options-drop.hide', hideOptionsDropEvent)
     })
   },
@@ -209,7 +209,7 @@ export default defineComponent({
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.isSearchBarEnabled) {
       this.resizeObserver.unobserve(this.$refs.searchBar)
     }

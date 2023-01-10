@@ -151,7 +151,7 @@ export default defineComponent({
     this.scrollToResourceFromRoute(this.paginatedResources)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     visibilityObserver.disconnect()
   },
 

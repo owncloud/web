@@ -4,7 +4,11 @@ module.exports = {
     es6: true,
     amd: true
   },
-  extends: ['plugin:vue/recommended', 'plugin:prettier-vue/recommended', 'plugin:jest/recommended'],
+  extends: [
+    'plugin:vue/vue3-recommended',
+    'plugin:prettier-vue/recommended',
+    'plugin:jest/recommended'
+  ],
   parser: 'vue-eslint-parser',
   parserOptions: {
     parser: {
@@ -25,7 +29,10 @@ module.exports = {
     'node/no-callback-literal': 'off',
     'unused-imports/no-unused-imports': 'error',
     'nonblock-statement-body-position': ['error', 'below'],
-    curly: 'error'
+    curly: 'error',
+
+    // Vue 3 rules: (need to be fixed, but can be done incrementally)
+    'vue/no-deprecated-events-api': 'warn'
   },
   globals: {
     require: false,

@@ -1,10 +1,10 @@
 export default {
-  emits: ['beforeDestroy', 'mounted', 'updated'],
+  emits: ['beforeUnmount', 'mounted', 'updated'],
   mounted() {
     this.$nextTick(() => this.$emit('mounted', this, 'mounted'))
   },
-  beforeDestroy() {
-    this.$emit('beforeDestroy', this, 'beforeDestroy')
+  beforeUnmount() {
+    this.$emit('beforeUnmount', this, 'beforeUnmount')
   },
   updated() {
     this.$nextTick(() => this.$emit('updated', this, 'updated'))
