@@ -22,15 +22,14 @@ export function useAppDocumentTitle({
   currentFileContext,
   currentRoute
 }: AppDocumentTitleOptions): void {
-  console.log(unref(currentRoute))
   const appMeta = useAppMeta({ applicationId, store })
 
   const titleSegments = computed(() => {
-    const title =
+    const baseTitle =
       basename(unref(unref(currentFileContext).fileName)) || unref(currentRoute)?.meta?.title
     const meta = unref(unref(appMeta).applicationMeta)
 
-    return [title, unref(applicationName) || meta.name || meta.id].filter(Boolean)
+    return [baseTitle, unref(applicationName) || meta.name || meta.id].filter(Boolean)
   })
 
   useDocumentTitle({
