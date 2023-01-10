@@ -1,7 +1,7 @@
 import { checkResponseStatus, request } from '../http'
 import { User } from '../../types'
 import join from 'join-path'
-import { getPersonalSpaceId } from '../graph'
+import { getPersonalSpaceId, getSpaceIdBySpaceName } from '../graph'
 import { config } from '../../../config'
 import { Response } from 'node-fetch'
 import convert from 'xml-js'
@@ -97,12 +97,12 @@ export const uploadFileInPersonalSpace = async ({
 
 export const createFolderInsideSpace = async ({
   user,
-  spaceId,
-  folderName
+  folderName,
+  spaceName
 }: {
   user: User
-  spaceId: string
   folderName: string
+  spaceName: string
 }): Promise<void> => {
   const paths = folderName.split('/')
 
@@ -110,7 +110,14 @@ export const createFolderInsideSpace = async ({
   for (const resource of paths) {
     const response = await request({
       method: 'MKCOL',
-      path: join('remote.php', 'dav', 'spaces', spaceId, subFolder, resource),
+      path: join(
+        'remote.php',
+        'dav',
+        'spaces',
+        await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }),
+        subFolder,
+        resource
+      ),
       user: user
     })
 
@@ -121,29 +128,35 @@ export const createFolderInsideSpace = async ({
 
 export const uploadFileInsideSpace = async ({
   user,
-  spaceId,
-  fileName
+  pathToFile,
+  spaceName
 }: {
   user: User
-  spaceId: string
-  fileName: string
+  pathToFile: string
+  spaceName: string
 }): Promise<void> => {
   const response = await request({
     method: 'PUT',
-    path: join('remote.php', 'dav', 'spaces', spaceId, fileName),
+    path: join(
+      'remote.php',
+      'dav',
+      'spaces',
+      await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }),
+      pathToFile
+    ),
     user: user
   })
-  checkResponseStatus(response, `Failed while creating a ${fileName} inside space project`)
+  checkResponseStatus(response, `Failed while creating a ${pathToFile} inside space project`)
 }
 
 export const getDataOfFileInsideSpace = async ({
   user,
-  spaceId,
-  fileName
+  pathToFileName,
+  spaceName
 }: {
   user: User
-  spaceId: string
-  fileName: string
+  pathToFileName: string
+  spaceName: string
 }): Promise<Response> => {
   const body =
     '<?xml version="1.0"?>\n' +
@@ -171,28 +184,34 @@ export const getDataOfFileInsideSpace = async ({
     '</d:propfind>'
   const response = await request({
     method: 'PROPFIND',
-    path: join('remote.php', 'dav', 'spaces', spaceId, fileName),
+    path: join(
+      '' + 'remote.php',
+      'dav',
+      'spaces',
+      await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }),
+      pathToFileName
+    ),
     body: body,
     user: user
   })
-  checkResponseStatus(response, `Failed while getting information of file ${fileName}`)
+  checkResponseStatus(response, `Failed while getting information of file ${pathToFileName}`)
   const fileData = JSON.parse(convert.xml2json(await response.text(), { compact: true }))
   return _.get(fileData, '[d:multistatus][d:response][d:propstat]')
 }
 
-export const getFileId = async ({
+export const getIdOfFileInsideSpace = async ({
   user,
-  spaceId,
-  fileName
+  pathToFileName,
+  spaceName
 }: {
   user: User
-  spaceId: string
-  fileName: string
+  pathToFileName: string
+  spaceName: string
 }): Promise<string> => {
   const fileDataResponse = await getDataOfFileInsideSpace({
     user,
-    spaceId: spaceId,
-    fileName: fileName
+    pathToFileName,
+    spaceName
   })
   // extract file id form the response
   return _.get(fileDataResponse, '[0][d:prop][oc:fileid]')._text

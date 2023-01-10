@@ -1,7 +1,11 @@
 import { checkResponseStatus, request } from '../http'
 import { Space, User } from '../../types'
 import join from 'join-path'
-import { createFolderInsideSpace, getFileId, uploadFileInsideSpace } from '../davSpaces'
+import {
+  createFolderInsideSpace,
+  getIdOfFileInsideSpace,
+  uploadFileInsideSpace
+} from '../davSpaces'
 
 export const getPersonalSpaceId = async ({ user }: { user: User }): Promise<string> => {
   const response = await request({
@@ -39,7 +43,7 @@ export const getSpaceIdBySpaceName = async ({
       return spaceProject.id
     }
   }
-  throw new Error(`Space id for the space name ${spaceName} could not be found`)
+  throw new Error(`Space name ${spaceName} could not be found`)
 }
 
 export const createSpace = async ({
@@ -62,8 +66,8 @@ export const createSpace = async ({
     user: user
   })
 
-  // to make api request work consistently with UI we need to create a hidden folder '.space'
-  // inside .space it consist of files that may be required to update the space (e.g. change description of space (stored by readme.md), change image of space)
+  // To make api request work consistently with UI we need to create a hidden folder '.space'
+  // Inside .space it consist of files that may be required to update the space (e.g. change description of space (stored by readme.md), change image of space)
 
   checkResponseStatus(response, 'Failed while creating a space project')
 
@@ -74,13 +78,17 @@ export const createSpace = async ({
     spaceType: 'project',
     spaceName: spaceName
   })
-  // api call to make a hidden file when the space creation in successful
-  await createFolderInsideSpace({ user, spaceId: spaceId, folderName: '.space' })
-  // again make an api call to create a readme.md file so that the edit description is shown in the web UI
-  await uploadFileInsideSpace({ user, spaceId: spaceId, fileName: '.space/readme.md' })
-  // again make an api call to get file id of the uploaded file `readme.md`
-  const fileId = await getFileId({ user, spaceId: spaceId, fileName: '.space/readme.md' })
-  // after getting file id make a patch request to update space special section
+  // API call to make a hidden file when the space creation in successful
+  await createFolderInsideSpace({ user, folderName: '.space', spaceName })
+  // Again make an api call to create a readme.md file so that the edit description is shown in the web UI
+  await uploadFileInsideSpace({ user, pathToFile: '.space/readme.md', spaceName })
+  // Again make an api call to get file id of the uploaded file `readme.md`
+  const fileId = await getIdOfFileInsideSpace({
+    user,
+    pathToFileName: '.space/readme.md',
+    spaceName
+  })
+  // After getting file id make a patch request to update space special section
   await updateSpaceSpecialSection({
     user,
     spaceId: result.id,
