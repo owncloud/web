@@ -3,8 +3,8 @@
 exports[`Details SideBar Panel displays a resource of type file on a private page updates when the shareTree updates 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <div class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: url(null);">
-      <!--v-if-->
+    <div class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
+      <oc-spinner-stub arialabel="" size="medium"></oc-spinner-stub>
     </div>
     <div class="oc-flex oc-flex-middle oc-my-m">
       <oc-status-indicators-stub indicators="[object Object]" resource="[object Object]" target=""></oc-status-indicators-stub>
@@ -56,8 +56,8 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
 exports[`Details SideBar Panel displays a resource of type file on a private page updates when the shareTree updates 2`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <div class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: url(null);">
-      <!--v-if-->
+    <div class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
+      <oc-spinner-stub arialabel="" size="medium"></oc-spinner-stub>
     </div>
     <div class="oc-flex oc-flex-middle oc-my-m">
       <oc-status-indicators-stub indicators="[object Object]" resource="[object Object]" target=""></oc-status-indicators-stub>

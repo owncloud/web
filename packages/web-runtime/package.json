@@ -39,7 +39,6 @@
     "utf8": "^3.0.0",
     "uuid": "^9.0.0",
     "vue": "3.2.45",
-    "vue-async-computed": "^3.9.0",
     "vue-concurrency": "4.0.0",
     "vue-gettext": "2.1.12",
     "vue-inline-svg": "3.1.0",

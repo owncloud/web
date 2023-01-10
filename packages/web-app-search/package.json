@@ -9,7 +9,6 @@
   },
   "peerDependencies": {
     "lodash-es": "^4.17.21",
-    "vue-async-computed": "^3.9.0",
     "vue-gettext": "2.1.12",
     "web-app-files": "workspace:*",
     "web-pkg": "npm:@ownclouders/web-pkg"
