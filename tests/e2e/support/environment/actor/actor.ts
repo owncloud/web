@@ -28,6 +28,12 @@ export class ActorEnvironment extends EventEmitter implements Actor {
     this.page = await this.context.newPage()
   }
 
+  public async updatePage(newPage: Page): Promise<Page> {
+    await this.page.close()
+    this.page = newPage
+    return this.page
+  }
+
   async close(): Promise<void> {
     if (this.options.context.reportTracing) {
       await this.context?.tracing.stop({

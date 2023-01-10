@@ -15,6 +15,7 @@ export interface Actor {
   context: BrowserContext
   page: Page
   close(): Promise<void>
+  updatePage(page: Page): Promise<Page>
 }
 
 export interface User {

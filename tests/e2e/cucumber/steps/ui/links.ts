@@ -1,4 +1,4 @@
-import { Then, When } from '@cucumber/cucumber'
+import { DataTable, Then, When } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
@@ -141,5 +141,16 @@ When(
     const linkObject = new objects.applicationFiles.Link({ page })
     const newPermission = await linkObject.changeRole({ linkName, role, space: true })
     expect(role).toBe(newPermission.toLowerCase())
+  }
+)
+
+When(
+  '{string} creates a public link using sidebar panel',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    for (const info of stepTable.hashes()) {
+      await linkObject.createPublicLink(info)
+    }
   }
 )

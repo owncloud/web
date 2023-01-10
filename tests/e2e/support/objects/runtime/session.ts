@@ -15,7 +15,6 @@ class Ocis implements LoginAdapter {
 
   async login({ user }: { user: User }): Promise<void> {
     const { id, password } = user
-
     await this.#page.locator('#oc-login-username').fill(id)
     await this.#page.locator('#oc-login-password').fill(password)
     await this.#page.locator('button[type="submit"]').click()
@@ -61,5 +60,10 @@ export class Session {
   async logout(): Promise<void> {
     await this.#page.locator('#_userMenuButton').click()
     await this.#page.locator('#oc-topbar-account-logout').click()
+  }
+
+  async internalLinkLogin({ user }: { user: User }): Promise<void> {
+    await this.#adapter.login({ user })
+    await this.#page.waitForSelector('#web-content-main')
   }
 }

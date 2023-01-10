@@ -8,7 +8,9 @@ import {
   changeNameArgs,
   changeRole,
   changeRoleArgs,
+  createLinkWithArgs,
   createLink,
+  createLinkAllArgs,
   createLinkArgs,
   deleteLink,
   deleteLinkArgs,
@@ -25,6 +27,17 @@ export class Link {
   constructor({ page }: { page: Page }) {
     this.#page = page
     this.#linksEnvironment = new LinksEnvironment()
+  }
+
+  async createPublicLink(args: Omit<createLinkAllArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    const linkArgs = await createLinkWithArgs({ ...args, page: this.#page })
+    const [url, name] = linkArgs
+    this.#linksEnvironment.createLink({
+      key: name,
+      link: { name, url }
+    })
+    await this.#page.goto(startUrl)
   }
 
   async create(args: Omit<createLinkArgs, 'page'>): Promise<void> {
