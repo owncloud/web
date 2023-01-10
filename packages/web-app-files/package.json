@@ -27,7 +27,6 @@
     "vue-async-computed": "^3.9.0",
     "vue-concurrency": "4.0.0",
     "vue-gettext": "2.1.12",
-    "vue-resize": "^1.0.1",
     "vue-router": "3.6.5",
     "vuex": "4.1.0",
     "web-app-files": "workspace:*",
