@@ -20,7 +20,11 @@
       </oc-tag>
       <!-- Slot for resource image, renders resource type icon by default -->
       <slot name="imageField" :item="resource">
-        <oc-img v-if="resource.thumbnail" class="tile-preview" :src="resource.thumbnail" />
+        <oc-img
+          v-if="resource.thumbnail"
+          class="tile-preview oc-rounded-top"
+          :src="resource.thumbnail"
+        />
         <oc-resource-icon
           v-else
           :resource="resource"

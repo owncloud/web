@@ -365,6 +365,7 @@ export default defineComponent({
     return {
       ...resourcesViewDefaults,
       resourceTargetRouteCallback,
+      ...useResourcesViewDefaults<Resource, any, any[]>(),
       breadcrumbs,
       hasSpaceHeader,
       performLoaderTask
