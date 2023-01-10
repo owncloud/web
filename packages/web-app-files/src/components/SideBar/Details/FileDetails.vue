@@ -5,12 +5,12 @@
         v-if="file.thumbnail"
         key="file-thumbnail"
         :style="{
-          'background-image': $asyncComputed.preview.updating ? 'none' : `url(${preview})`
+          'background-image': loadPreviewTask.isRunning ? 'none' : `url(${preview})`
         }"
         class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb"
         data-testid="preview"
       >
-        <oc-spinner v-if="$asyncComputed.preview.updating" />
+        <oc-spinner v-if="loadPreviewTask.isRunning" />
       </div>
       <div
         v-else
@@ -157,8 +157,8 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, inject, ref, unref } from 'vue'
-import { mapActions, mapGetters } from 'vuex'
+import { computed, ComputedRef, defineComponent, inject, ref, unref, watch } from 'vue'
+import { mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
@@ -168,6 +168,7 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import {
   useAccessToken,
   useCapabilityFilesTags,
+  useClientService,
   usePublicLinkContext,
   useStore,
   useTranslations,
@@ -183,6 +184,7 @@ import { Resource } from 'web-client'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { useTask } from 'vue-concurrency'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -199,6 +201,10 @@ export default defineComponent({
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const file = inject<ComputedRef<Resource>>('displayedItem')
+    const isPublicLinkContext = usePublicLinkContext({ store })
+    const accessToken = useAccessToken({ store })
+    const clientService = useClientService()
+    const preview = ref(undefined)
 
     const directLink = computed(() => {
       return `${store.getters.configuration.server}files/spaces/personal/home${encodePath(
@@ -224,24 +230,58 @@ export default defineComponent({
       })
     }
 
+    const loadData = async () => {
+      const calls = []
+      if (unref(file).type === 'file' && !unref(isPublicLinkContext)) {
+        calls.push(
+          store.dispatch('Files/loadVersions', {
+            client: unref(clientService).owncloudSdk,
+            fileId: unref(file).id
+          })
+        )
+      }
+      await Promise.all(calls.map((p) => p.catch((e) => e)))
+    }
+
+    const loadPreviewTask = useTask(function* (signal, file) {
+      yield new Promise((resolve) => setTimeout(resolve, 500))
+      const previewBlob = yield loadPreview({
+        resource: file,
+        isPublic: unref(isPublicLinkContext),
+        dimensions: ImageDimension.Preview,
+        server: store.getters.configuration.server,
+        userId: store.getters.user.id,
+        token: unref(accessToken)
+      })
+      preview.value = previewBlob
+    })
+
+    watch(
+      file,
+      () => {
+        loadData()
+        loadPreviewTask.perform(unref(file))
+      },
+      { immediate: true }
+    )
+
     return {
       copiedEos,
+      preview,
       copyEosPathToClipboard,
       copiedDirect,
       copyDirectLinkToClipboard,
       isClipboardCopySupported,
       isUserContext: useUserContext({ store }),
-      isPublicLinkContext: usePublicLinkContext({ store }),
-      accessToken: useAccessToken({ store }),
+      isPublicLinkContext,
+      accessToken,
       space: inject<ComputedRef<Resource>>('displayedSpace'),
       directLink,
       file,
-      hasTags: useCapabilityFilesTags()
+      hasTags: useCapabilityFilesTags(),
+      loadPreviewTask
     }
   },
-  data: () => ({
-    loading: false
-  }),
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading', 'highlightedFile']),
@@ -446,35 +486,7 @@ export default defineComponent({
       return this.sharedItem?.file?.source
     }
   },
-  watch: {
-    file: {
-      handler: function () {
-        this.loadData()
-      },
-      immediate: true
-    }
-  },
-  asyncComputed: {
-    preview: {
-      async get() {
-        // TODO: this timeout resolves flickering of the preview because it's rendered multiple times. Needs a better solution.
-        await new Promise((resolve) => setTimeout(resolve, 500))
-        return loadPreview({
-          resource: this.file,
-          isPublic: this.isPublicLinkContext,
-          dimensions: ImageDimension.Preview,
-          server: this.configuration.server,
-          userId: this.user.id,
-          token: this.accessToken
-        })
-      },
-      lazy: true,
-      watch: ['file.id']
-    }
-  },
   methods: {
-    ...mapActions('Files', ['loadPreview', 'loadVersions']),
-
     getParentSharePath(childPath, shares) {
       let currentPath = childPath
       if (!currentPath) {
@@ -491,14 +503,6 @@ export default defineComponent({
     },
     expandVersionsPanel() {
       eventBus.publish(SideBarEventTopics.setActivePanel, 'versions')
-    },
-    async loadData() {
-      const calls = []
-      if (this.file.type === 'file' && !this.isPublicLinkContext) {
-        calls.push(this.loadVersions({ client: this.$client, fileId: this.file.id }))
-      }
-      await Promise.all(calls.map((p) => p.catch((e) => e)))
-      this.loading = false
     },
     getTagLink(tag) {
       return createLocationCommon('files-common-search', {

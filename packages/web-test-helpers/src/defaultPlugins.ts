@@ -1,6 +1,5 @@
 import DesignSystem from '@ownclouders/design-system'
 import GetTextPlugin from 'vue-gettext'
-import AsyncComputed from 'vue-async-computed'
 import Vue from 'vue'
 
 window.Vue = Vue
@@ -8,13 +7,11 @@ window.Vue = Vue
 export interface DefaultPluginsOptions {
   designSystem?: boolean
   gettext?: boolean
-  asyncComputed?: boolean
 }
 
 export const defaultPlugins = ({
   designSystem = true,
-  gettext = true,
-  asyncComputed = true
+  gettext = true
 }: DefaultPluginsOptions = {}) => {
   const plugins = []
 
@@ -46,10 +43,6 @@ export const defaultPlugins = ({
         })
       }
     })
-  }
-
-  if (asyncComputed) {
-    plugins.push(AsyncComputed)
   }
 
   return plugins

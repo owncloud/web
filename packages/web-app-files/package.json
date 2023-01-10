@@ -24,7 +24,6 @@
     "sanitize-html": "^2.7.0",
     "semver": "^7.3.8",
     "uuid": "^9.0.0",
-    "vue-async-computed": "^3.9.0",
     "vue-concurrency": "4.0.0",
     "vue-gettext": "2.1.12",
     "vue-resize": "^1.0.1",
