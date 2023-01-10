@@ -64,7 +64,7 @@ import { configurationManager } from 'web-pkg'
 import SpacesList from '../components/Spaces/SpacesList.vue'
 import DetailsPanel from '../components/Spaces/SideBar/DetailsPanel.vue'
 import SpaceDetails from 'web-pkg/src/components/sideBar/Details/SpaceDetails.vue'
-import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
+import EditSpace from '../components/Spaces/SideBar/EditSpace.vue'
 
 export default defineComponent({
   name: 'SpacesView',
@@ -85,7 +85,7 @@ export default defineComponent({
     const listHeaderPosition = ref(0)
     const selectedSpaces = ref([])
     const sideBarOpen = ref(false)
-    const sideBarActivePanel = ref('DetailsPanel')
+    const sideBarActivePanel = ref('EditSpace')
 
     const loadResourcesTask = useTask(function* (signal) {
       const {
@@ -182,12 +182,12 @@ export default defineComponent({
           }
         },
         {
-          app: 'EditPanel',
+          app: 'EditSpace',
           icon: 'pencil',
           title: this.$gettext('Edit space'),
-          component: EditPanel,
-          default: false,
-          enabled: false // this.selectedGroups.length === 1
+          component: EditSpace,
+          default: true,
+          enabled: true // this.selectedGroups.length === 1
           /**
            * Editing groups is currently not supported by backend
            */
