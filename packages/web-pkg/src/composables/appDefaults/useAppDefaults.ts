@@ -80,7 +80,8 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     store,
     applicationId,
     applicationName: options.applicationName,
-    currentFileContext
+    currentFileContext,
+    currentRoute
   })
 
   return {
