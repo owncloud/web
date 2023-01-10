@@ -244,8 +244,7 @@ export default defineComponent({
     }
 
     const loadPreviewTask = useTask(function* (signal, file) {
-      yield new Promise((resolve) => setTimeout(resolve, 500))
-      const previewBlob = yield loadPreview({
+      preview.value = yield loadPreview({
         resource: file,
         isPublic: unref(isPublicLinkContext),
         dimensions: ImageDimension.Preview,
@@ -253,7 +252,6 @@ export default defineComponent({
         userId: store.getters.user.id,
         token: unref(accessToken)
       })
-      preview.value = previewBlob
     }).restartable()
 
     watch(
