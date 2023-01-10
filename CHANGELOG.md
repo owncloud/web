@@ -17,6 +17,7 @@ Summary
 * Bugfix - Re-using space images: [#8083](https://github.com/owncloud/web/issues/8083)
 * Bugfix - Resolving drives in search: [#8045](https://github.com/owncloud/web/pull/8045)
 * Bugfix - Reverting versions for read-only shares: [#8040](https://github.com/owncloud/web/pull/8040)
+* Bugfix - Search bar input appearance: [#8158](https://github.com/owncloud/web/issues/8158)
 * Bugfix - Search repeating no results message: [#8054](https://github.com/owncloud/web/issues/8054)
 * Bugfix - Space member disappearing: [#8081](https://github.com/owncloud/web/issues/8081)
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
@@ -112,6 +113,13 @@ Details
 
    https://github.com/owncloud/web/issues/8037
    https://github.com/owncloud/web/pull/8040
+
+* Bugfix - Search bar input appearance: [#8158](https://github.com/owncloud/web/issues/8158)
+
+   The broken appearance of the search bar input field has been fixed.
+
+   https://github.com/owncloud/web/issues/8158
+   https://github.com/owncloud/web/pull/8203
 
 * Bugfix - Search repeating no results message: [#8054](https://github.com/owncloud/web/issues/8054)
 
