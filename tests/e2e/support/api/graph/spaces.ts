@@ -43,7 +43,7 @@ export const getSpaceIdBySpaceName = async ({
       return spaceProject.id
     }
   }
-  throw new Error(`Space name ${spaceName} could not be found`)
+  throw new Error(`Could not find space ${spaceName}`)
 }
 
 export const createSpace = async ({
@@ -53,7 +53,6 @@ export const createSpace = async ({
   user: User
   space: Space
 }): Promise<string> => {
-  // create a space with this function
   const body = JSON.stringify({
     id: space.id,
     name: space.name
@@ -73,11 +72,6 @@ export const createSpace = async ({
 
   const result = await response.json()
   const spaceName = result.name
-  const spaceId = await getSpaceIdBySpaceName({
-    user: user,
-    spaceType: 'project',
-    spaceName: spaceName
-  })
   // API call to make a hidden file when the space creation in successful
   await createFolderInsideSpace({ user, folderName: '.space', spaceName })
   // Again make an api call to create a readme.md file so that the edit description is shown in the web UI
