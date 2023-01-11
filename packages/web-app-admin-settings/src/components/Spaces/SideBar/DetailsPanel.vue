@@ -4,7 +4,7 @@
       <oc-icon name="layout-grid" size="xxlarge" />
       <p v-translate>Select a space to view details</p>
     </div>
-    <div v-if="spaceCount > 1" class="oc-flex group-info">
+    <div v-if="spaceCount > 1" class="oc-flex space-info">
       <oc-icon name="layout-grid" size="xxlarge" />
       <p v-translate>Multiple spaces selected</p>
     </div>
@@ -26,19 +26,5 @@ export default {
 .space-info {
   align-items: center;
   flex-direction: column;
-}
-.group-info-display-name {
-  font-size: 1.5rem;
-}
-.details-table {
-  text-align: left;
-
-  tr {
-    height: 1.5rem;
-  }
-
-  th {
-    font-weight: 600;
-  }
 }
 </style>
