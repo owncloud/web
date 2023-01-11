@@ -66,14 +66,15 @@ Feature: share
     And "Alice" removes following sharee
       | resource               | recipient |
       | folder_to_customShared | Brian     |
-    Then "Brian" should not be able to see the following shares
-      | resource               | owner        |
-      | folder_to_customShared | Alice Hansen |
     And "Alice" deletes the following resources
       | resource                       |
       | folder_to_shared/lorem_new.txt |
       | folder_to_shared               |
     And "Alice" logs out
+    Then "Brian" should not be able to see the following shares
+      | resource               | owner        |
+      | folder_to_customShared | Alice Hansen |
+      | folder_to_shared       | Alice Hansen |
     And "Brian" logs out
 
 
