@@ -187,7 +187,10 @@ export default defineComponent({
           title: this.$gettext('Edit space'),
           component: EditSpace,
           default: true,
-          enabled: true // this.selectedGroups.length === 1
+          enabled: true,
+          componentAttrs: {
+            space: this.selectedSpaces[0],
+          }
           /**
            * Editing groups is currently not supported by backend
            */
