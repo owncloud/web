@@ -12,7 +12,7 @@ interface AppDocumentTitleOptions {
   applicationId: string
   applicationName?: MaybeRef<string>
   currentFileContext: Ref<FileContext>
-  currentRoute: Ref<Route>
+  currentRoute?: Ref<Route>
 }
 
 export function useAppDocumentTitle({
