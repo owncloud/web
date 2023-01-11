@@ -17,11 +17,7 @@ const elSelectors = {
   adminSettingsWrapper: '#admin-settings-wrapper'
 }
 
-jest.mock('web-pkg/src/composables/appDefaults', () => {
-  return {
-    useAppDefaults: jest.fn()
-  }
-})
+jest.mock('web-pkg/src/composables/appDefaults')
 
 afterEach(() => jest.clearAllMocks())
 
