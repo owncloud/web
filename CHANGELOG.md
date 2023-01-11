@@ -23,7 +23,7 @@ Summary
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 * Bugfix - Text editor appearance: [#8026](https://github.com/owncloud/web/pull/8026)
 * Bugfix - UI fixes for sorting and quickactions: [#7966](https://github.com/owncloud/web/pull/7966)
-* Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
+* Change - Update Vue to v3.2.45 (via compat mode): [#7948](https://github.com/owncloud/web/issues/7948)
 * Enhancement - Access right sidebar panels via URL: [#8021](https://github.com/owncloud/web/pull/8021)
 * Enhancement - Make clipboard copy available to more browsers: [#8136](https://github.com/owncloud/web/pull/8136)
 * Enhancement - Add switch to enable condensed resource table: [#7976](https://github.com/owncloud/web/pull/7976)
@@ -157,14 +157,23 @@ Details
 
    https://github.com/owncloud/web/pull/7966
 
-* Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
+* Change - Update Vue to v3.2.45 (via compat mode): [#7948](https://github.com/owncloud/web/issues/7948)
 
-   Vue has been updated to 2.7.14
+   Vue has been updated to v3.2.45. It is currently running in the so-called "compat mode", which
+   guarantees compatibility with Vue 2.7. More detailed information can be found in the
+   referenced issues and PRs down below.
 
    BREAKING CHANGE for developers: The `vue/composition-api` plugin is not available anymore
    as the composition-api now comes with Vue.
 
+   https://github.com/owncloud/web/issues/7948
+   https://github.com/owncloud/web/issues/5269
+   https://github.com/owncloud/web/pull/8128
    https://github.com/owncloud/web/pull/7877
+   https://github.com/owncloud/web/pull/8207
+   https://github.com/owncloud/web/pull/8201
+   https://github.com/owncloud/web/pull/8202
+   https://github.com/owncloud/web/pull/8198
 
 * Enhancement - Access right sidebar panels via URL: [#8021](https://github.com/owncloud/web/pull/8021)
 
