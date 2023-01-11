@@ -1,5 +1,5 @@
 import AppTemplate from '../../../src/components/AppTemplate.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const stubSelectors = {
   ocBreadcrumb: 'oc-breadcrumb-stub',
@@ -97,7 +97,13 @@ function getWrapper({ propsData = {} } = {}) {
         ...propsData
       },
       global: {
-        plugins: [...defaultPlugins()]
+        plugins: [...defaultPlugins()],
+        mocks: {
+          ...defaultComponentMocks({
+            gettext: false,
+            currentRoute: { query: { app: 'admin-settings' } }
+          })
+        }
       }
     })
   }
