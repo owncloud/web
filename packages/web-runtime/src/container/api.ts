@@ -179,7 +179,7 @@ const openPortal = (
     to: ['app', toApp, toPortal].filter(Boolean).join('.'),
     from: ['app', applicationId, toPortal, order].filter(Boolean).join('.'),
     order: order,
-    content: () => components.map(h)
+    content: () => components.map((c) => h(c))
   })
 }
 
