@@ -183,7 +183,7 @@ export default defineComponent({
 
     handleShiftClickAction(resource) {
       const parent = document.querySelectorAll(`[data-item-id='${resource.id}']`)[0]
-      const resourceNodes = Object.values(parent.parentNode.childNodes) as HTMLElement[]
+      const resourceNodes = Object.values(parent.parentNode.children)
       const latestNode = resourceNodes.find(
         (r) => r.getAttribute('data-item-id') === this.latestSelectedId
       )

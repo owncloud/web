@@ -1,0 +1,6 @@
+Bugfix: "Shift + click"-selection
+
+"Shift + click"-selection in the files table has been fixed.
+
+https://github.com/owncloud/web/pull/8207
+https://github.com/owncloud/web/issues/8206
