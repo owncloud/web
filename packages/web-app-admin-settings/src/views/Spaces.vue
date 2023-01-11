@@ -64,7 +64,6 @@ import { configurationManager } from 'web-pkg'
 import SpacesList from '../components/Spaces/SpacesList.vue'
 import DetailsPanel from '../components/Spaces/SideBar/DetailsPanel.vue'
 import SpaceDetails from 'web-pkg/src/components/sideBar/Details/SpaceDetails.vue'
-import EditSpace from '../components/Spaces/SideBar/EditSpace.vue'
 
 export default defineComponent({
   name: 'SpacesView',
@@ -180,20 +179,6 @@ export default defineComponent({
             spaceResource: this.selectedSpaces[0],
             spaceCount: this.selectedSpaces.length
           }
-        },
-        {
-          app: 'EditSpace',
-          icon: 'pencil',
-          title: this.$gettext('Edit space'),
-          component: EditSpace,
-          default: true,
-          enabled: true,
-          componentAttrs: {
-            space: this.selectedSpaces[0],
-          }
-          /**
-           * Editing groups is currently not supported by backend
-           */
         }
       ]
     }

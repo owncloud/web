@@ -381,8 +381,6 @@ export default defineComponent({
   .oc-table-data-cell-manager,
   .oc-table-header-cell-totalQuota,
   .oc-table-data-cell-totalQuota,
-  .oc-table-header-cell-usedQuota,
-  .oc-table-data-cell-usedQuota,
   .oc-table-header-cell-remainingQuota,
   .oc-table-data-cell-remainingQuota {
     display: none;
