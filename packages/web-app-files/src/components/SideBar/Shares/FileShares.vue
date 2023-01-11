@@ -163,7 +163,8 @@ export default defineComponent({
     collaborators() {
       return [...this.currentFileOutgoingCollaborators, ...this.indirectOutgoingShares]
         .sort(this.collaboratorsComparator)
-        .map((collaborator) => {
+        .map((c) => {
+          const collaborator = { ...c }
           collaborator.key = 'collaborator-' + collaborator.id
           if (
             collaborator.owner.name !== collaborator.fileOwner.name &&
