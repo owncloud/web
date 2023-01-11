@@ -5,11 +5,11 @@ import { getPersonalSpaceId } from '../graph'
 import { config } from '../../../config'
 
 export const doesFolderExists = async ({
-                                     user,
-                                     parentFolder,
-                                     subFolder,
-                                     oc10Path
-                                   }: {
+  user,
+  parentFolder,
+  subFolder,
+  oc10Path
+}: {
   user: User
   parentFolder: string
   subFolder: string
@@ -18,22 +18,21 @@ export const doesFolderExists = async ({
   const getResponse = await request({
     method: 'GET',
     path: config.ocis
-        ? join(
-            'remote.php',
-            'dav',
-            'spaces',
-            await getPersonalSpaceId({ user }),
-            parentFolder,
-            subFolder
+      ? join(
+          'remote.php',
+          'dav',
+          'spaces',
+          await getPersonalSpaceId({ user }),
+          parentFolder,
+          subFolder
         )
-        : oc10Path,
+      : oc10Path,
     user: user,
     formatJson: false
   })
 
-  return getResponse.status !== 404;
+  return getResponse.status !== 404
 }
-
 
 export const createFolder = async ({
   user,
@@ -48,26 +47,30 @@ export const createFolder = async ({
   for (const resource of paths) {
     const oc10Path = join('remote.php', 'dav', 'files', user.id, parentFolder, resource)
     // check if the folder exists already or not
-    const folderExists = await  doesFolderExists({user, parentFolder, subFolder: resource, oc10Path})
+    const folderExists = await doesFolderExists({
+      user,
+      parentFolder,
+      subFolder: resource,
+      oc10Path
+    })
     if (folderExists === false) {
       const response = await request({
         method: 'MKCOL',
         path: config.ocis
-            ? join(
-                'remote.php',
-                'dav',
-                'spaces',
-                await getPersonalSpaceId({user}),
-                parentFolder,
-                resource
+          ? join(
+              'remote.php',
+              'dav',
+              'spaces',
+              await getPersonalSpaceId({ user }),
+              parentFolder,
+              resource
             )
-            : oc10Path,
+          : oc10Path,
         user: user,
         formatJson: false
       })
       checkResponseStatus(response, 'Failed while creating folder')
-    }
-    else {
+    } else {
       parentFolder = join(parentFolder, resource)
       continue
     }
