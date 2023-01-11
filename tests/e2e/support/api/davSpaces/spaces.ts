@@ -185,7 +185,7 @@ export const getDataOfFileInsideSpace = async ({
   const response = await request({
     method: 'PROPFIND',
     path: join(
-      '' + 'remote.php',
+      'remote.php',
       'dav',
       'spaces',
       await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }),
