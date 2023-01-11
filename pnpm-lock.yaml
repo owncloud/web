@@ -506,7 +506,7 @@ importers:
       web-runtime: link:../web-runtime
     devDependencies:
       '@jest/globals': 29.3.1
-      '@vueuse/core': 9.8.2_vue@3.2.45
+      '@vueuse/core': 9.8.2
 
   packages/web-app-pdf-viewer:
     specifiers:
@@ -634,7 +634,7 @@ importers:
       owncloud-sdk: ~3.1.0-alpha.1
       p-queue: ^6.6.2
       popper-max-size-modifier: ^0.2.0
-      portal-vue: ^2.1.7
+      portal-vue: 3.0.0-beta.0
       postcss-import: ^12.0.1
       postcss-url: ^9.0.0
       promise: ^8.1.0
@@ -683,7 +683,7 @@ importers:
       owncloud-sdk: 3.1.0-alpha.1_qgpf6seimtkgc6dfu7oqfstxh4
       p-queue: 6.6.2
       popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
-      portal-vue: 2.1.7_vue@3.2.45
+      portal-vue: 3.0.0-beta.0_vue@3.2.45
       postcss-import: 12.0.1
       postcss-url: 9.0.0
       promise: 8.1.0
@@ -6541,13 +6541,13 @@ packages:
       - supports-color
     dev: true
 
-  /@vueuse/core/9.8.2_vue@3.2.45:
+  /@vueuse/core/9.8.2:
     resolution: {integrity: sha512-aWiCmcYIpPt7xjuqYiceODEMHchDYthrJ4AqI+FXPZrR23PZOqdiktbUVyQl2kGlR3H4i9UJ/uimQrwhz9UouQ==}
     dependencies:
       '@types/web-bluetooth': 0.0.16
       '@vueuse/metadata': 9.8.2
-      '@vueuse/shared': 9.8.2_vue@3.2.45
-      vue-demi: 0.13.11_vue@3.2.45
+      '@vueuse/shared': 9.8.2
+      vue-demi: 0.13.11
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -6557,10 +6557,10 @@ packages:
     resolution: {integrity: sha512-N4E/BKS+9VsUeD4WLVRU1J2kCOLh+iikBcMtipFcTyL204132vDYHs27zLAVabJYGnhC0dIVGdhg9pbOZiY2TQ==}
     dev: true
 
-  /@vueuse/shared/9.8.2_vue@3.2.45:
+  /@vueuse/shared/9.8.2:
     resolution: {integrity: sha512-ACjrPQzowd5dnabNJt9EoGVobco9/ENiA5qP53vjiuxndlJYuc/UegwhXC7KdQbPX4F45a50+45K3g1wNqOzmA==}
     dependencies:
-      vue-demi: 0.13.11_vue@3.2.45
+      vue-demi: 0.13.11
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -17868,6 +17868,15 @@ packages:
       vue: 3.2.45
     dev: false
 
+  /portal-vue/3.0.0-beta.0_vue@3.2.45:
+    resolution: {integrity: sha512-ktV+Q0fwlsjeF+2xGebMxrN6xH8yMdmbLzYbd2OfcgU4OmzSmkj6iP3kBQRGa+7A5WZlqCHWaFfecNs9Igsv9w==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      vue: ^3.0.4
+    dependencies:
+      vue: 3.2.45
+    dev: false
+
   /portfinder/1.0.32_supports-color@6.1.0:
     resolution: {integrity: sha512-on2ZJVVDXRADWE6jnQaX0ioEylzgBpQk8r55NE4wjXW1ZxO+BgDlY6DXwj20i0V8eB4SenDQ00WEaxfiIQPcxg==}
     engines: {node: '>= 0.12.0'}
@@ -22050,6 +22059,19 @@ packages:
       vue: 3.2.45
     dev: false
 
+  /vue-demi/0.13.11:
+    resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dev: true
+
   /vue-demi/0.13.11_vue@3.2.45:
     resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
     engines: {node: '>=12'}
@@ -22063,6 +22085,7 @@ packages:
         optional: true
     dependencies:
       vue: 3.2.45
+    dev: false
 
   /vue-docgen-api/4.56.0_vue@3.2.45:
     resolution: {integrity: sha512-ab/Scb0DCjm4YVLf+AFa/R7XMFl8TVwUsvh26fFT5iaURih1m2hdd5Y8NveA7NQDcycpWavkFZj9eVbQdp2VGQ==}

@@ -1,8 +1,7 @@
 import DesignSystem from '@ownclouders/design-system'
 import GetTextPlugin from 'vue-gettext'
 import Vue from 'vue'
-
-window.Vue = Vue
+;(window as any).Vue = Vue
 
 export interface DefaultPluginsOptions {
   designSystem?: boolean

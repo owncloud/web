@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue, { App } from 'vue'
 import { RuntimeApi } from '../types'
 
 type VueConstructor = typeof Vue
@@ -13,5 +13,5 @@ export abstract class NextApplication {
 
   abstract ready(): Promise<void>
 
-  abstract mounted(instance: VueConstructor): Promise<void>
+  abstract mounted(instance: App): Promise<void>
 }
