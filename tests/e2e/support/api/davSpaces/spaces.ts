@@ -4,34 +4,20 @@ import join from 'join-path'
 import { getPersonalSpaceId } from '../graph'
 import { config } from '../../../config'
 
-export const doesFolderExists = async ({
+export const folderExists = async ({
   user,
-  parentFolder,
-  subFolder,
-  oc10Path
+  path
 }: {
   user: User
-  parentFolder: string
-  subFolder: string
-  oc10Path: string
+  path: string
 }): Promise<boolean> => {
   const getResponse = await request({
     method: 'GET',
-    path: config.ocis
-      ? join(
-          'remote.php',
-          'dav',
-          'spaces',
-          await getPersonalSpaceId({ user }),
-          parentFolder,
-          subFolder
-        )
-      : oc10Path,
-    user: user,
-    formatJson: false
+    path,
+    user: user
   })
 
-  return getResponse.status !== 404
+  return getResponse.status === 200
 }
 
 export const createFolder = async ({
@@ -45,36 +31,23 @@ export const createFolder = async ({
 
   let parentFolder = ''
   for (const resource of paths) {
-    const oc10Path = join('remote.php', 'dav', 'files', user.id, parentFolder, resource)
-    // check if the folder exists already or not
-    const folderExists = await doesFolderExists({
-      user,
+    const path = join(
+      'remote.php',
+      'dav',
+      config.ocis ? 'spaces/' + (await getPersonalSpaceId({ user })) : 'files/' + user.id,
       parentFolder,
-      subFolder: resource,
-      oc10Path
-    })
-    if (folderExists === false) {
+      resource
+    )
+    // check if the folder exists already or not
+    const folderExist = await folderExists({ user, path })
+    if (folderExist === false) {
       const response = await request({
         method: 'MKCOL',
-        path: config.ocis
-          ? join(
-              'remote.php',
-              'dav',
-              'spaces',
-              await getPersonalSpaceId({ user }),
-              parentFolder,
-              resource
-            )
-          : oc10Path,
-        user: user,
-        formatJson: false
+        path,
+        user: user
       })
       checkResponseStatus(response, 'Failed while creating folder')
-    } else {
-      parentFolder = join(parentFolder, resource)
-      continue
     }
-
     parentFolder = join(parentFolder, resource)
   }
 }
