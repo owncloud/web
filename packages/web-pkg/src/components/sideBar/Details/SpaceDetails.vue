@@ -192,13 +192,16 @@ export default defineComponent({
          Why: Currently we use a different logic for the admin-panel and we need a solution that works for both
       */
       if (this.spaceResource) {
-        const allManagers = this.space.spaceRoles[spaceRoleManager.name]
-        const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers
-        let managerStr = managers.map((m) => m.displayName).join(', ')
-        if (allManagers.length > 2) {
-          managerStr += `... +${allManagers.length - 2}`
-        }
-        return managerStr
+        return this.space.spaceRoles[spaceRoleManager.name]
+          .map((share) => {
+            if (share.displayName === this.user?.displayName) {
+              return this.$gettextInterpolate(this.$gettext('%{displayName} (me)'), {
+                displayName: share.displayName
+              })
+            }
+            return share.displayName
+          })
+          .join(', ')
       }
       const userId = this.user?.id
       return this.spaceMembers
