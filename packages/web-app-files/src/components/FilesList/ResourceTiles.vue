@@ -32,7 +32,7 @@
                 v-oc-tooltip="contextMenuLabel"
                 :aria-label="contextMenuLabel"
                 appearance="raw"
-                @click="resetDropPosition($event, index, tileRefs.tiles[index])"
+                @click="resetDropPosition($event, index, tileRefs.dropBtns[index])"
               >
                 <oc-icon name="more-2" />
               </oc-button>
@@ -63,17 +63,17 @@
 <script lang="ts">
 import { onBeforeUpdate, defineComponent, PropType, computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { createLocationSpaces } from 'web-app-files/src/router'
 import { Resource, SpaceResource } from 'web-client'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useStore } from 'web-pkg/src/composables'
+import { ImageDimension } from 'web-pkg/src/constants'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { displayPositionedDropdown } from 'web-pkg/src/helpers/contextMenuDropdown'
+import { createLocationSpaces } from 'web-app-files/src/router'
 
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
-import { EVENT_TROW_CONTEXTMENU } from 'web-pkg/src/constants'
 import { useResourceRouteResolver } from '../../composables/filesList'
-import { ImageDimension } from 'web-app-files/src/constants'
 
 export default defineComponent({
   name: 'ResourceTiles',
@@ -142,30 +142,9 @@ export default defineComponent({
       return $gettext('Show context menu')
     })
 
-    const displayPositionedDropdown = (dropdown, event, reference) => {
-      const contextMenuButtonPos = reference.$el.getBoundingClientRect()
-
-      if (!dropdown || !contextMenuButtonPos) {
-        return
-      }
-
-      dropdown.tippy.setProps({
-        getReferenceClientRect: () => ({
-          width: 0,
-          height: 0,
-          top: event.clientY,
-          bottom: event.clientY,
-          left: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x,
-          right: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x
-        })
-      })
-      dropdown.show()
-    }
-
     const resetDropPosition = (event, index, reference) => {
-      const drop = tileRefs.value.dropEls[index]
+      const drop = tileRefs.value.dropEls[index].tippy
 
-      // Doesn't seem to work properly, second click on three dots doesn't close the menu anymore
       if (drop === undefined) {
         return
       }
@@ -176,7 +155,10 @@ export default defineComponent({
       event.preventDefault()
       const drop = tileRefs.value.dropEls[index]
 
-      displayPositionedDropdown(drop, event, reference)
+      if (drop === undefined) {
+        return
+      }
+      displayPositionedDropdown(drop.tippy, event, reference)
     }
 
     onBeforeUpdate(() => {

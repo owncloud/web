@@ -44,8 +44,38 @@
             </span>
           </template>
         </no-content-message>
+        <resource-tiles
+          v-else-if="viewMode === ViewModeConstants.tilesView.name"
+          :data="paginatedResources"
+          class="oc-px-m oc-pt-l"
+          @rowMounted="rowMounted"
+          @fileClick="$_fileActions_triggerDefaultAction"
+        >
+          <!-- Share quickactions targets current folder, not resource... -->
+          <!-- <template #actions="{ resource }">
+            <quick-actions
+              :class="resource.preview"
+              class="oc-visible@s"
+              :item="resource"
+              :actions="app.quickActions"
+            />
+          </template> -->
+          <template #contextMenuActions="{ resource }">
+            <context-actions :space="space" :items="[resource]" />
+          </template>
+          <template #footer>
+            <pagination :pages="paginationPages" :current-page="paginationPage" />
+            <list-info
+              v-if="paginatedResources.length > 0"
+              class="oc-width-1-1 oc-my-s"
+              :files="totalFilesCount.files"
+              :folders="totalFilesCount.folders"
+              :size="totalFilesSize"
+            />
+          </template>
+        </resource-tiles>
         <resource-table
-          v-else-if="viewMode !== 'resource-tiles'"
+          v-else
           id="files-space-table"
           v-model:selectedIds="selectedResourcesIds"
           class="files-table"
@@ -89,35 +119,7 @@
             />
           </template>
         </resource-table>
-        <resource-tiles
-          v-else
-          :data="paginatedResources"
-          class="oc-px-m oc-pt-l"
-          @rowMounted="rowMounted"
-          @fileClick="$_fileActions_triggerDefaultAction"
-        >
-          <template #actions="{ resource }">
-            <quick-actions
-              :class="resource.preview"
-              class="oc-visible@s"
-              :item="resource"
-              :actions="app.quickActions"
-            />
-          </template>
-          <template #contextMenuActions="{ resource }">
-            <context-actions :space="space" :items="[resource]" />
-          </template>
-          <template #footer>
-            <pagination :pages="paginationPages" :current-page="paginationPage" />
-            <list-info
-              v-if="paginatedResources.length > 0"
-              class="oc-width-1-1 oc-my-s"
-              :files="totalFilesCount.files"
-              :folders="totalFilesCount.folders"
-              :size="totalFilesSize"
-            />
-          </template>
-        </resource-tiles>
+
       </template>
     </files-view-wrapper>
     <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
@@ -125,8 +127,28 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
 import { debounce } from 'lodash-es'
+import omit from 'lodash-es/omit'
+import { basename } from 'path'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  PropType,
+  onBeforeUnmount,
+  onMounted,
+  unref
+} from 'vue'
+import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
+import { useGettext } from 'vue3-gettext'
+import { Resource } from 'web-client'
+import {
+  isPersonalSpaceResource,
+  isProjectSpaceResource,
+  isPublicSpaceResource,
+  isShareSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
 
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../../mixins/fileActions'
@@ -147,39 +169,17 @@ import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from 'web-pkg/src/constants'
+import { ImageType } from 'web-pkg/src/constants'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
-import { useResourcesViewDefaults } from '../../composables'
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  PropType,
-  onBeforeUnmount,
-  onMounted,
-  unref
-} from 'vue'
+import { useResourcesViewDefaults, ViewModeConstants } from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
-import { Resource } from 'web-client'
 import { useRoute } from 'web-pkg/src/composables'
-import { Location } from 'vue-router'
-import {
-  isPersonalSpaceResource,
-  isProjectSpaceResource,
-  isPublicSpaceResource,
-  isShareSpaceResource,
-  SpaceResource
-} from 'web-client/src/helpers'
-import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 import { FolderLoaderOptions } from '../../services/folder'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import omit from 'lodash-es/omit'
-import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
-import { basename } from 'path'
-import { useGettext } from 'vue3-gettext'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -368,7 +368,8 @@ export default defineComponent({
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       breadcrumbs,
       hasSpaceHeader,
-      performLoaderTask
+      performLoaderTask,
+      ViewModeConstants
     }
   },
 
