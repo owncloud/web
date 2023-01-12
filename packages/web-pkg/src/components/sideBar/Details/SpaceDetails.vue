@@ -188,6 +188,16 @@ export default defineComponent({
       return formatDateFromISO(this.space.mdate, this.$language.current)
     },
     ownerUsernames() {
+      // TODO: Find a better solution for reactiveness
+      if (this.spaceResource) {
+        const allManagers = this.space.spaceRoles[spaceRoleManager.name]
+        const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers
+        let managerStr = managers.map((m) => m.displayName).join(', ')
+        if (allManagers.length > 2) {
+          managerStr += `... +${allManagers.length - 2}`
+        }
+        return managerStr
+      }
       const userId = this.user?.id
       return this.spaceMembers
         .filter((share) => share.role.name === spaceRoleManager.name)

@@ -203,7 +203,6 @@ export default defineComponent({
       toggleSelectSpace,
       unselectAllSpaces
     }
-  },
-  methods: {}
+  }
 })
 </script>
