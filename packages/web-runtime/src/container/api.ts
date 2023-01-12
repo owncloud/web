@@ -9,8 +9,7 @@ import {
 import { ApiError } from './error'
 import { get, isEqual, isObject, isArray } from 'lodash-es'
 import { Store } from 'vuex'
-import Vue, { Component } from 'vue'
-import { Wormhole } from 'portal-vue'
+import { App, Component, h } from 'vue'
 
 /**
  * inject application specific routes into runtime
@@ -170,17 +169,17 @@ const announceStore = (
  */
 const openPortal = (
   applicationId: string,
-  instance: typeof Vue.prototype,
+  instance: App,
   toApp: string,
   toPortal: string,
   order: number,
   components: Component[]
 ): void => {
-  Wormhole.open({
+  instance.config.globalProperties.$wormhole.open({
     to: ['app', toApp, toPortal].filter(Boolean).join('.'),
     from: ['app', applicationId, toPortal, order].filter(Boolean).join('.'),
     order: order,
-    passengers: components.map(instance.$createElement)
+    content: () => components.map((c) => h(c))
   })
 }
 
@@ -265,7 +264,7 @@ export const buildRuntimeApi = ({
     requestStore: (): Store<unknown> => requestStore(store),
     requestRouter: (): VueRouter => requestRouter(router),
     openPortal: (
-      instance: typeof Vue.prototype,
+      instance: App,
       toApp: string,
       toPortal: string,
       order: number,

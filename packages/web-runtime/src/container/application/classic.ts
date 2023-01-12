@@ -1,6 +1,6 @@
 import { ClassicApplicationScript, RuntimeApi } from '../types'
 import { buildRuntimeApi } from '../api'
-import Vue from 'vue'
+import Vue, { App } from 'vue'
 import { isFunction, isObject } from 'lodash-es'
 import { NextApplication } from './next'
 import { Store } from 'vuex'
@@ -39,13 +39,13 @@ class ClassicApplication extends NextApplication {
     return Promise.resolve(undefined)
   }
 
-  mounted(instance: VueConstructor): Promise<void> {
+  mounted(instance: App): Promise<void> {
     const { mounted: mountedHook } = this.applicationScript
     this.attachPublicApi(mountedHook, instance)
     return Promise.resolve(undefined)
   }
 
-  private attachPublicApi(hook: unknown, instance?: VueConstructor) {
+  private attachPublicApi(hook: unknown, instance?: App) {
     isFunction(hook) &&
       hook({
         ...(instance && {

@@ -1,6 +1,6 @@
 import { Store } from 'vuex'
 import VueRouter, { RouteConfig } from 'vue-router'
-import Vue, { Component } from 'vue'
+import { App, Component } from 'vue'
 
 /** shim configuration for now, should be typed in a later step */
 export type RuntimeConfiguration = any
@@ -85,7 +85,7 @@ export interface RuntimeApi {
   requestStore: () => Store<unknown>
   requestRouter: () => VueRouter
   openPortal: (
-    instance: typeof Vue.prototype,
+    instance: App,
     toApp: string,
     toPortal: string,
     order: number,

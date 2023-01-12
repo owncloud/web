@@ -22,7 +22,7 @@
   </header>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import NavigationMixin from '../../mixins/navigationMixin'
 

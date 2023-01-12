@@ -36,8 +36,9 @@ import {
 } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
-import { configureCompat, h } from 'vue'
+import { configureCompat, createApp, h } from 'vue'
 import { compatConfig } from './compatConfig'
+import PortalVue, { createWormhole } from 'portal-vue'
 
 configureCompat(compatConfig)
 
@@ -67,8 +68,7 @@ export const renderSuccess = (): void => {
   Vue.prototype.$store = store
 
   const applications = Array.from(applicationStore.values())
-  const instance = new Vue({
-    el: '#owncloud',
+  const instance = createApp({
     store,
     router,
     render() {
@@ -76,9 +76,15 @@ export const renderSuccess = (): void => {
     }
   })
 
-  instance.$once('mounted', () => {
-    applications.forEach((application) => application.mounted(instance))
+  // create wormhole
+  instance.config.globalProperties.$wormhole = createWormhole()
+  instance.use(PortalVue, {
+    wormhole: instance.config.globalProperties.$wormhole
   })
+
+  // mount App
+  instance.mount('#owncloud')
+  applications.forEach((application) => application.mounted(instance))
 
   store.watch(
     (state, getters) =>
@@ -104,7 +110,7 @@ export const renderSuccess = (): void => {
       if (!userContextReady) {
         return
       }
-      const clientService = instance.$clientService
+      const clientService = instance.config.globalProperties.$clientService
 
       // Load spaces to make them available across the application
       if (store.getters.capabilities?.spaces?.enabled) {
@@ -119,7 +125,7 @@ export const renderSuccess = (): void => {
         store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
           id: personalSpace.id,
           field: 'name',
-          value: instance.$gettext('Personal')
+          value: instance.config.globalProperties.$gettext('Personal')
         })
         return
       }
@@ -130,7 +136,7 @@ export const renderSuccess = (): void => {
         id: user.id,
         driveAlias: `personal/${user.id}`,
         driveType: 'personal',
-        name: instance.$gettext('All files'),
+        name: instance.config.globalProperties.$gettext('All files'),
         webDavPath: `/files/${user.id}`,
         webDavTrashPath: `/trash-bin/${user.id}`,
         serverUrl: configurationManager.serverUrl
@@ -163,7 +169,7 @@ export const renderSuccess = (): void => {
       const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
-        name: instance.$gettext('Public files'),
+        name: instance.config.globalProperties.$gettext('Public files'),
         ...(publicLinkPassword && { publicLinkPassword }),
         serverUrl: configurationManager.serverUrl
       })
@@ -198,13 +204,12 @@ export const renderFailure = async (err: Error): Promise<void> => {
   await announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem })
   console.error(err)
-  new Vue({
-    el: '#owncloud',
+  createApp({
     store,
     render() {
       return h(pages.failure)
     }
-  })
+  }).mount('#owncloud')
 }
 ;(window as any).runtimeLoaded({
   bootstrap,
