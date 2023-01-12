@@ -21,7 +21,6 @@
 </template>
 
 <script lang="ts">
-import { getBackendVersion, getWebVersion } from '../container/versions'
 import { computed, defineComponent } from 'vue'
 import { useStore } from 'web-pkg'
 import { useHead } from '../composables/head'
