@@ -1,4 +1,3 @@
-import { createLocationTrash } from '../../../router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
@@ -23,12 +22,10 @@ export default {
   },
   methods: {
     $_deletedFiles_trigger() {
-      return this.$router.push(
-        createLocationTrash(
-          'files-trash-generic',
-          createFileRouteOptions(this.space, { fileId: this.space.fileId })
-        )
-      )
+      return this.$router.push({
+        name: 'files-trash-generic',
+        ...createFileRouteOptions(this.space, { fileId: this.space.fileId })
+      })
     }
   }
 }

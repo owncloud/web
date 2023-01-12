@@ -19,6 +19,7 @@
       :header-position="headerPosition"
       :hover="true"
       @sort="handleSort"
+      @contextmenuClicked="showContextMenuOnRightClick"
       @highlight="fileClicked"
     >
       <template #selectHeader>
@@ -81,6 +82,40 @@
           />
         </span>
       </template>
+      <template #actions="{ item }">
+        <div class="spaces-list-actions">
+          <oc-button
+            :id="`context-menu-trigger-${resourceDomSelector(item)}`"
+            ref="contextMenuButton"
+            v-oc-tooltip="contextMenuLabel"
+            :aria-label="contextMenuLabel"
+            class="spaces-table-btn-action-dropdown"
+            appearance="raw"
+            @click.stop.prevent="
+              showContextMenuOnBtnClick(
+                `context-menu-drop-ref-${resourceDomSelector(item)}`,
+                $event,
+                item
+              )
+            "
+          >
+            <oc-icon name="more-2" />
+          </oc-button>
+          <oc-drop
+            :ref="`context-menu-drop-ref-${resourceDomSelector(item)}`"
+            :drop-id="`context-menu-drop-${resourceDomSelector(item)}`"
+            :toggle="`#context-menu-trigger-${resourceDomSelector(item)}`"
+            :popper-options="popperOptions"
+            mode="click"
+            close-on-click
+            padding-size="small"
+            @click.stop.prevent
+          >
+            <!-- @slot Add context actions that open in a dropdown when clicking on the "three dots" button -->
+            <slot name="contextMenu" :space="item" />
+          </oc-drop>
+        </div>
+      </template>
       <template #footer>
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
@@ -92,19 +127,14 @@
 </template>
 
 <script lang="ts">
-import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  nextTick,
-  onMounted,
-  PropType,
-  ref,
-  unref,
-  watch
-} from 'vue'
-import { SpaceResource } from 'web-client/src/helpers'
+  formatDateFromJSDate,
+  formatRelativeDateFromJSDate,
+  displayPositionedDropdown,
+  popperOptions as defaultPopperOptions
+} from 'web-pkg/src/helpers'
+import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
+import { extractDomSelector, SpaceResource } from 'web-client/src/helpers'
 import { useTranslations } from 'web-pkg/src/composables'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 import Mark from 'mark.js'
@@ -127,14 +157,20 @@ export default defineComponent({
     }
   },
   emits: ['toggleSelectSpace', 'toggleSelectAllSpaces', 'toggleUnSelectAllSpaces'],
-  setup: function (props) {
-    const instance = getCurrentInstance().proxy
-    const { $gettext, $gettextInterpolate } = useTranslations()
+  setup: function (props, { emit }) {
+    const { $gettext, $gettextInterpolate, $language } = useTranslations()
+    const contextMenuButton = ref(undefined)
     const sortBy = ref('name')
     const sortDir = ref('asc')
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
+
+    const resourceDomSelector = (space) => extractDomSelector(space.id)
+    const spaceRefs = {}
+    for (const space of props.spaces) {
+      spaceRefs[`context-menu-drop-ref-${resourceDomSelector(space)}`] = ref(undefined)
+    }
 
     const allSpacesSelected = computed(() => props.spaces.length === props.selectedSpaces.length)
     const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
@@ -264,6 +300,13 @@ export default defineComponent({
         title: $gettext('Status'),
         type: 'slot',
         sortable: true
+      },
+      {
+        name: 'actions',
+        title: $gettext('Actions'),
+        sortable: false,
+        type: 'slot',
+        alignH: 'right'
       }
     ])
 
@@ -277,10 +320,10 @@ export default defineComponent({
       return managerStr
     }
     const formatDate = (date) => {
-      return formatDateFromJSDate(new Date(date), instance.$language.current)
+      return formatDateFromJSDate(new Date(date), $language.current)
     }
     const formatDateRelative = (date) => {
-      return formatRelativeDateFromJSDate(new Date(date), instance.$language.current)
+      return formatRelativeDateFromJSDate(new Date(date), $language.current)
     }
     const getTotalQuota = (space: SpaceResource) => {
       return `${space.spaceQuota.total * Math.pow(10, -9)} GB`
@@ -304,15 +347,16 @@ export default defineComponent({
         space.spaceRoles[spaceRoleViewer.name].length
       )
     }
+
+    const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const getSelectSpaceLabel = (space: SpaceResource) => {
       const translated = $gettext('Select %{ space }')
       return $gettextInterpolate(translated, { space: space.name }, true)
     }
 
-    const fileClicked = (data) => {
-      const space = data[0]
-      instance.$emit('toggleUnSelectAllSpaces')
-      instance.$emit('toggleSelectSpace', space)
+    const selectSpace = (space) => {
+      emit('toggleUnSelectAllSpaces')
+      emit('toggleSelectSpace', space)
     }
 
     onMounted(() => {
@@ -333,6 +377,34 @@ export default defineComponent({
         exclude: ['th *', 'tfoot *']
       })
     })
+
+    const fileClicked = (data) => {
+      const space = data[0]
+      selectSpace(space)
+    }
+
+    const popperOptions = computed(() => defaultPopperOptions)
+    const showContextMenuOnBtnClick = (id, event, space) => {
+      const dropdown = unref(unref(spaceRefs)[id]).tippy
+      if (dropdown === undefined) {
+        return
+      }
+      if (!isSpaceSelected(space)) {
+        selectSpace(space)
+      }
+      displayPositionedDropdown(dropdown, event, unref(contextMenuButton))
+    }
+    const showContextMenuOnRightClick = (row, event, space) => {
+      event.preventDefault()
+      const dropdown = row.$el.getElementsByClassName('spaces-table-btn-action-dropdown')[0]
+      if (dropdown === undefined) {
+        return
+      }
+      if (!isSpaceSelected(space)) {
+        selectSpace(space)
+      }
+      displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButton))
+    }
 
     return {
       allSpacesSelected,
@@ -356,7 +428,14 @@ export default defineComponent({
       handleSort,
       orderedSpaces,
       fileClicked,
-      isSpaceSelected
+      isSpaceSelected,
+      contextMenuLabel,
+      resourceDomSelector,
+      contextMenuButton,
+      popperOptions,
+      showContextMenuOnBtnClick,
+      showContextMenuOnRightClick,
+      ...spaceRefs
     }
   }
 })

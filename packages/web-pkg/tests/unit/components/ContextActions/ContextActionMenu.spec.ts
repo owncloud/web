@@ -1,4 +1,4 @@
-import ContextActionMenu from 'web-app-files/src/components/ContextActionMenu.vue'
+import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'

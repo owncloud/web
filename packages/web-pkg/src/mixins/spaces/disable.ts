@@ -1,6 +1,5 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
-import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 
 export default {
   computed: {
@@ -59,32 +58,35 @@ export default {
         message,
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_disable_disableSpace(resources[0].id)
+        onConfirm: () => this.$_disable_disableSpace(resources[0])
       }
 
       this.createModal(modal)
     },
 
-    $_disable_disableSpace(id) {
+    $_disable_disableSpace(space) {
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       return graphClient.drives
-        .deleteDrive(id)
+        .deleteDrive(space.id)
         .then(() => {
           this.hideModal()
+          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+            space.disabled = true
+          }
           this.UPDATE_SPACE_FIELD({
-            id,
+            id: space.id,
             field: 'disabled',
             value: true
           })
           this.showMessage({
             title: this.$gettext('Space was disabled successfully')
           })
-          if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
+          if (this.$router.currentRoute.name === 'files-spaces-projects') {
             return
           }
-          if (isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
-            return this.$router.push(createLocationSpaces('files-spaces-projects'))
+          if (this.$router.currentRoute.name === 'files-spaces-generic') {
+            return this.$router.push({ name: 'files-spaces-projects' })
           }
         })
         .catch((error) => {

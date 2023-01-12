@@ -1,5 +1,5 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { clientService } from 'web-pkg/src/services'
+import { clientService, eventBus } from 'web-pkg/src/services'
 
 export default {
   computed: {
@@ -53,25 +53,28 @@ export default {
         message: this.$gettext('Are you sure you want to delete this space?'),
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_delete_deleteSpace(resources[0].id)
+        onConfirm: () => this.$_delete_deleteSpace(resources[0])
       }
 
       this.createModal(modal)
     },
 
-    $_delete_deleteSpace(id) {
+    $_delete_deleteSpace(space) {
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       return graphClient.drives
-        .deleteDrive(id, '', {
+        .deleteDrive(space.id, '', {
           headers: {
             Purge: 'T'
           }
         })
         .then(() => {
           this.hideModal()
-          this.REMOVE_FILES([{ id }])
-          this.REMOVE_SPACE({ id })
+          this.REMOVE_FILES([{ id: space.id }])
+          this.REMOVE_SPACE({ id: space.id })
+          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+            eventBus.publish('app.admin-settings.list.load')
+          }
           this.showMessage({
             title: this.$gettext('Space was deleted successfully')
           })

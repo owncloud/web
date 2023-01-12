@@ -1,4 +1,4 @@
-import disable from 'web-app-files/src/mixins/spaces/actions/disable.js'
+import Delete from 'web-pkg/src/mixins/spaces/delete'
 import { buildSpace } from 'web-client/src/helpers'
 import {
   createStore,
@@ -9,23 +9,23 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
-import { Graph } from 'web-client'
 import { clientService } from 'web-pkg'
+import { Graph } from 'web-client'
 
 const Component = {
   template: '<div></div>',
-  mixins: [disable]
+  mixins: [Delete]
 }
 
-describe('disable', () => {
+describe('delete', () => {
   afterEach(() => jest.clearAllMocks())
 
   describe('isEnabled property', () => {
-    it('should be false when no resource given', () => {
+    it('should be false when not resource given', () => {
       const { wrapper } = getWrapper()
-      expect(wrapper.vm.$_disable_items[0].isEnabled({ resources: [] })).toBe(false)
+      expect(wrapper.vm.$_delete_items[0].isEnabled({ resources: [] })).toBe(false)
     })
-    it('should be true when the space is not disabled', () => {
+    it('should be false when the space is not disabled', () => {
       const spaceMock = {
         id: '1',
         root: {
@@ -33,11 +33,11 @@ describe('disable', () => {
         }
       }
       const { wrapper } = getWrapper()
-      expect(wrapper.vm.$_disable_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
-        true
+      expect(wrapper.vm.$_delete_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
+        false
       )
     })
-    it('should be false when the space is disabled', () => {
+    it('should be true when the space is disabled', () => {
       const spaceMock = {
         id: '1',
         root: {
@@ -46,50 +46,53 @@ describe('disable', () => {
         }
       }
       const { wrapper } = getWrapper()
-      expect(wrapper.vm.$_disable_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
-        false
+      expect(wrapper.vm.$_delete_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
+        true
       )
     })
-    it('should be false when current user is a viewer', () => {
+    it('should be false when the current user is a viewer', () => {
       const spaceMock = {
         id: '1',
         root: {
-          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }],
+          deleted: { state: 'trashed' }
         }
       }
       const { wrapper } = getWrapper()
-      expect(wrapper.vm.$_disable_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
+      expect(wrapper.vm.$_delete_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
         false
       )
     })
   })
 
-  describe('method "$_disable_trigger"', () => {
-    it('should trigger the disable modal window', async () => {
+  describe('method "$_delete_trigger"', () => {
+    it('should trigger the delete modal window', async () => {
       const { wrapper } = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_disable_trigger({ resources: [{ id: 1 }] })
+      await wrapper.vm.$_delete_trigger({ resources: [{ id: 1 }] })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
     })
-    it('should not trigger the disable modal window without any resource', async () => {
+    it('should not trigger the delete modal window without any resource', async () => {
       const { wrapper } = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_disable_trigger({ resources: [] })
+      await wrapper.vm.$_delete_trigger({ resources: [] })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(0)
     })
   })
 
-  describe('method "$_disable_disableSpace"', () => {
-    it('should hide the modal on success', async () => {
+  describe('method "$_delete_deleteSpace"', () => {
+    it('should hide the modal and show message on success', async () => {
       const graphMock = mockDeep<Graph>()
       graphMock.drives.deleteDrive.mockResolvedValue(mockAxiosResolve())
       const { wrapper } = getWrapper(graphMock)
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
-      await wrapper.vm.$_disable_disableSpace(1)
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      await wrapper.vm.$_delete_deleteSpace(1)
 
       expect(hideModalStub).toHaveBeenCalledTimes(1)
+      expect(showMessageStub).toHaveBeenCalledTimes(1)
     })
 
     it('should show message on error', async () => {
@@ -98,7 +101,7 @@ describe('disable', () => {
       graphMock.drives.deleteDrive.mockRejectedValue(new Error())
       const { wrapper } = getWrapper(graphMock)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.$_disable_disableSpace(1)
+      await wrapper.vm.$_delete_deleteSpace(1)
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
     })

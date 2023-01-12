@@ -8,17 +8,11 @@
           v-bind="extractThProps(field, index)"
           @click="$emit(constants.EVENT_THEAD_CLICKED, field)"
         >
-          <span
-            v-if="field.headerType === 'slot'"
-            :key="field.name + 'Header'"
-            class="oc-table-thead-content"
-          >
+          <span v-if="field.headerType === 'slot'" class="oc-table-thead-content">
             <slot :name="field.name + 'Header'" />
           </span>
-          <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
           <span
             v-else
-            :key="field.name + 'Header'"
             class="oc-table-thead-content header-text"
             v-text="extractFieldTitle(field)"
           />

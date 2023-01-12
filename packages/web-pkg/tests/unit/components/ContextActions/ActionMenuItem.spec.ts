@@ -1,5 +1,4 @@
-import ActionMenuItem from 'web-app-files/src/components/ActionMenuItem.vue'
-import { fileActions } from '../../__fixtures__/fileActions'
+import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 
 const selectors = {
@@ -8,6 +7,27 @@ const selectors = {
   img: '[data-testid="action-img"]',
   label: '[data-testid="action-label"]',
   srHint: '[data-testid="action-sr-hint"]'
+}
+
+const fileActions = {
+  download: {
+    name: 'download-file',
+    icon: 'file-download',
+    handler: jest.fn(),
+    label: () => 'Download',
+    componentType: 'button',
+    class: 'oc-files-actions-download-file-trigger',
+    selector: '.oc-files-actions-download-file-trigger'
+  },
+  navigate: {
+    name: 'navigate',
+    icon: 'folder-open',
+    route: () => ({ name: 'files-personal' }),
+    label: () => 'Open Folder',
+    componentType: 'router-link',
+    class: 'oc-files-actions-navigate-trigger',
+    selector: '.oc-files-actions-navigate-trigger'
+  }
 }
 
 describe('ActionMenuItem component', () => {

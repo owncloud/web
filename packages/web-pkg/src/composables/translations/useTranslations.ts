@@ -5,11 +5,13 @@ export const useTranslations = (): {
   $pgettext: (context: string, msgid: string) => string
   $ngettext: (msgid: string, plural: string, n: number) => string
   $gettextInterpolate: (msgid: string, context: object, disableHtmlEscaping?: boolean) => string
+  $language: any
 } => {
   return {
     $gettext: useService('$gettext'),
     $pgettext: useService('$pgettext'),
     $ngettext: useService('$ngettext'),
-    $gettextInterpolate: useService('$gettextInterpolate')
+    $gettextInterpolate: useService('$gettextInterpolate'),
+    $language: useService('$language')
   }
 }

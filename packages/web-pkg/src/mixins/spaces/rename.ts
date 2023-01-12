@@ -51,7 +51,7 @@ export default {
         inputLabel: this.$gettext('Space name'),
         inputValue: resources[0].name,
         onCancel: this.hideModal,
-        onConfirm: (name) => this.$_rename_renameSpace(resources[0].id, name),
+        onConfirm: (name) => this.$_rename_renameSpace(resources[0], name),
         onInput: this.$_rename_checkName
       }
 
@@ -75,15 +75,18 @@ export default {
       return this.setModalInputErrorMessage(null)
     },
 
-    $_rename_renameSpace(id, name) {
+    $_rename_renameSpace(space, name) {
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       return graphClient.drives
-        .updateDrive(id, { name }, {})
+        .updateDrive(space.id, { name }, {})
         .then(() => {
           this.hideModal()
+          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+            space.name = name
+          }
           this.UPDATE_SPACE_FIELD({
-            id,
+            id: space.id,
             field: 'name',
             value: name
           })

@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import ContextActionMenu from '../ContextActionMenu.vue'
+import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 
 import FileActions from '../../mixins/fileActions'
 import AcceptShare from '../../mixins/actions/acceptShare'
@@ -25,8 +25,8 @@ import ShowDetails from '../../mixins/actions/showDetails'
 import ShowEditTags from '../../mixins/actions/showEditTags'
 import ShowShares from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
-import SetSpaceReadme from '../../mixins/spaces/actions/setReadme'
-import SpaceNavigate from '../../mixins/spaces/actions/navigate'
+import SetSpaceReadme from 'web-pkg/src/mixins/spaces/setReadme'
+import SpaceNavigate from 'web-pkg/src/mixins/spaces/navigate'
 import { PropType } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'

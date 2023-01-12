@@ -1,4 +1,4 @@
-import editReadmeContent from 'web-app-files/src/mixins/spaces/actions/editReadmeContent.js'
+import editReadmeContent from 'web-pkg/src/mixins/spaces/editReadmeContent'
 import { buildSpace } from 'web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 

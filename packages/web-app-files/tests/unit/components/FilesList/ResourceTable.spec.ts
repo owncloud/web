@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
 import { extractDomSelector, Resource } from 'web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
-import { eventBus } from 'web-pkg/src'
+import { displayPositionedDropdown, eventBus } from 'web-pkg/src'
 import { SideBarEventTopics } from 'web-app-files/src/composables/sideBar'
 import { mockDeep } from 'jest-mock-extended'
 
@@ -147,15 +147,9 @@ const resourcesWithAllFields = [
   }
 ]
 
+jest.mock('web-pkg/src/helpers')
+
 describe('ResourceTable', () => {
-  const spyDisplayPositionedDropdown = jest
-    .spyOn((ResourceTable as any).methods, 'displayPositionedDropdown')
-    .mockImplementation()
-
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
   it('displays all known fields of the resources', () => {
     const { wrapper } = getMountedWrapper()
     for (const field of fields) {
@@ -230,6 +224,7 @@ describe('ResourceTable', () => {
 
   describe('context menu', () => {
     it('emits select event on contextmenu click', async () => {
+      const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
       const { wrapper } = getMountedWrapper()
       await wrapper.find('.oc-tbody-tr').trigger('contextmenu')
       expect(wrapper.emitted().select.length).toBe(1)
@@ -237,6 +232,7 @@ describe('ResourceTable', () => {
     })
 
     it('emits select event on clicking the three-dot icon in table row', async () => {
+      const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
       const { wrapper } = getMountedWrapper()
       await wrapper
         .find('.oc-table-data-cell-actions .resource-table-btn-action-dropdown')

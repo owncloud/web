@@ -20,12 +20,10 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           <!--v-if-->
         </th>
         <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-icon" style="top: 0px;">
-          <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
           <span class="oc-table-thead-content header-text"></span>
           <!--v-if-->
         </th>
         <th aria-sort="ascending" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-name" style="top: 0px;">
-          <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
           <span class="oc-table-thead-content header-text">Name</span>
           <button aria-label="Sort by name" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-button-sort" type="button">
             <!-- @slot Content of the button -->
@@ -35,12 +33,10 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           </button>
         </th>
         <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-manager" style="top: 0px;">
-          <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
           <span class="oc-table-thead-content header-text">Manager</span>
           <!--v-if-->
         </th>
         <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-members" style="top: 0px;">
-          <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
           <span class="oc-table-thead-content header-text">Members</span>
           <button aria-label="Sort by members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible oc-button-sort" type="button">
             <!-- @slot Content of the button -->
@@ -50,7 +46,6 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           </button>
         </th>
         <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-totalQuota" style="top: 0px;">
-          <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
           <span class="oc-table-thead-content header-text">Total quota</span>
           <button aria-label="Sort by totalQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible oc-button-sort" type="button">
             <!-- @slot Content of the button -->
@@ -60,7 +55,6 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           </button>
         </th>
         <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-usedQuota" style="top: 0px;">
-          <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
           <span class="oc-table-thead-content header-text">Used quota</span>
           <button aria-label="Sort by usedQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible oc-button-sort" type="button">
             <!-- @slot Content of the button -->
@@ -70,7 +64,6 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           </button>
         </th>
         <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-remainingQuota" style="top: 0px;">
-          <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
           <span class="oc-table-thead-content header-text">Remaining quota</span>
           <button aria-label="Sort by remainingQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible oc-button-sort" type="button">
             <!-- @slot Content of the button -->
@@ -80,7 +73,6 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           </button>
         </th>
         <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-mdate" style="top: 0px;">
-          <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
           <span class="oc-table-thead-content header-text">Modified</span>
           <button aria-label="Sort by mdate" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible oc-button-sort" type="button">
             <!-- @slot Content of the button -->
@@ -89,8 +81,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
             </span>
           </button>
         </th>
-        <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-status oc-pr-s" style="top: 0px;">
-          <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
+        <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-status" style="top: 0px;">
           <span class="oc-table-thead-content header-text">Status</span>
           <button aria-label="Sort by status" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible oc-button-sort" type="button">
             <!-- @slot Content of the button -->
@@ -98,6 +89,10 @@ exports[`SpacesList should render all spaces in a table 1`] = `
               <!---->
             </span>
           </button>
+        </th>
+        <th class="oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-actions oc-pr-s" style="top: 0px;">
+          <span class="oc-table-thead-content header-text">Actions</span>
+          <!--v-if-->
         </th>
       </tr>
     </thead>
@@ -122,7 +117,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-mdate">
           <span tabindex="0"></span>
         </td>
-        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-status oc-pr-s">
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-status">
           <span class="oc-flex oc-flex-middle">
             <span class="oc-icon oc-icon-m oc-icon-passive oc-mr-s">
               <!---->
@@ -130,11 +125,26 @@ exports[`SpacesList should render all spaces in a table 1`] = `
             <span>Enabled</span>
           </span>
         </td>
+        <td class="oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-actions oc-pr-s">
+          <div class="spaces-list-actions">
+            <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-action-dropdown" id="context-menu-trigger-1" type="button">
+              <!-- @slot Content of the button -->
+              <span class="oc-icon oc-icon-m oc-icon-passive">
+                <!---->
+              </span>
+            </button>
+            <div class="oc-drop oc-box-shadow-medium oc-rounded" id="context-menu-drop-1">
+              <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
+                <!-- @slot Add context actions that open in a dropdown when clicking on the "three dots" button -->
+              </div>
+            </div>
+          </div>
+        </td>
       </tr>
     </tbody>
     <tfoot class="oc-table-footer">
       <tr class="oc-table-footer-row">
-        <td class="oc-table-footer-cell" colspan="10">
+        <td class="oc-table-footer-cell" colspan="11">
           <!-- @slot Footer of the table -->
           <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
             <p class="oc-text-muted">1 spaces in total</p>

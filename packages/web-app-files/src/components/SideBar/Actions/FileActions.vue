@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
-import ActionMenuItem from '../../ActionMenuItem.vue'
+import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 
 import FileActions from '../../../mixins/fileActions'
 import { ComputedRef, defineComponent, inject } from 'vue'
