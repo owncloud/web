@@ -320,6 +320,7 @@ Details
    https://github.com/owncloud/web/issues/8219
    https://github.com/owncloud/web/pull/8178
    https://github.com/owncloud/web/pull/8195
+   https://github.com/owncloud/web/pull/8190
    https://github.com/owncloud/web/pull/8192
    https://github.com/owncloud/web/pull/8199
    https://github.com/owncloud/web/pull/8224
