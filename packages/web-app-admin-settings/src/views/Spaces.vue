@@ -9,6 +9,7 @@
       :side-bar-open="sideBarOpen"
       @closeSideBar="closeSideBar"
       @toggleSideBar="toggleSideBar"
+      @selectPanel="selectPanel"
     >
       <template #topbarActions>
         <div class="admin-settings-app-bar-actions oc-mt-xs">
@@ -85,6 +86,7 @@ export default defineComponent({
     const listHeaderPosition = ref(0)
     const selectedSpaces = ref([])
     const sideBarOpen = ref(false)
+    const selectedPanel = ref(undefined)
 
     const loadResourcesTask = useTask(function* (signal) {
       const {
@@ -165,15 +167,18 @@ export default defineComponent({
           title: $gettext('Space members'),
           component: MembersPanel,
           default: false,
-          enabled: true,
+          enabled: unref(selectedSpaces).length === 1,
           componentAttrs: {
             spaceResource: unref(selectedSpaces)[0]
           }
-        },
+        }
       ]
     })
 
     const sideBarActivePanel = computed(() => {
+      if (unref(selectedPanel)) {
+        return unref(selectedPanel)
+      }
       return unref(sideBarAvailablePanels).find((e) => e.enabled).app
     })
 
@@ -182,6 +187,9 @@ export default defineComponent({
     }
     const toggleSideBar = () => {
       sideBarOpen.value = !unref(sideBarOpen)
+    }
+    const selectPanel = (panel) => {
+      selectedPanel.value = panel
     }
 
     onMounted(async () => {
@@ -211,6 +219,7 @@ export default defineComponent({
       closeSideBar,
       toggleSideBar,
       template,
+      selectPanel,
       toggleSelectAllSpaces,
       toggleSelectSpace,
       unselectAllSpaces

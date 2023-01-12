@@ -29,7 +29,7 @@
         :available-panels="sideBarAvailablePanels"
         :loading="false"
         :open="sideBarOpen"
-        @selectPanel="(panel) => $emit('selectPanel', panel)"
+        @selectPanel="selectPanel"
         @close="$emit('closeSideBar')"
       >
       </side-bar>
@@ -70,6 +70,17 @@ export default defineComponent({
       type: String
     }
   },
+  setup(props, { emit }) {
+    const selectPanel = (panel) => {
+      emit('selectPanel', panel)
+    }
+    return {
+      selectPanel,
+      ...useAppDefaults({
+        applicationId: 'admin-settings'
+      })
+    }
+  },
   computed: {
     toggleSidebarButtonLabel() {
       return this.sideBarOpen
@@ -78,13 +89,6 @@ export default defineComponent({
     },
     toggleSidebarButtonIconFillType() {
       return this.sideBarOpen ? 'fill' : 'line'
-    }
-  },
-  setup() {
-    return {
-      ...useAppDefaults({
-        applicationId: 'admin-settings'
-      })
     }
   }
 })
