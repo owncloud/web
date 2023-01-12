@@ -1,5 +1,11 @@
 import AppTemplate from '../../../src/components/AppTemplate.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStoreMockOptions,
+  shallowMount
+} from 'web-test-helpers'
 
 const stubSelectors = {
   ocBreadcrumb: 'oc-breadcrumb-stub',
@@ -10,6 +16,8 @@ const stubSelectors = {
 const elSelectors = {
   adminSettingsWrapper: '#admin-settings-wrapper'
 }
+
+jest.mock('web-pkg/src/composables/appDefaults')
 
 afterEach(() => jest.clearAllMocks())
 
@@ -85,6 +93,9 @@ describe('AppTemplate', () => {
   })
 })
 
+const storeOptions = { ...defaultStoreMockOptions }
+const store = createStore(storeOptions)
+
 function getWrapper({ propsData = {} } = {}) {
   return {
     wrapper: shallowMount(AppTemplate, {
@@ -97,7 +108,13 @@ function getWrapper({ propsData = {} } = {}) {
         ...propsData
       },
       global: {
-        plugins: [...defaultPlugins()]
+        plugins: [...defaultPlugins(), store],
+        mocks: {
+          ...defaultComponentMocks({
+            gettext: false,
+            currentRoute: { query: { app: 'admin-settings' } }
+          })
+        }
       }
     })
   }

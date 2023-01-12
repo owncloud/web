@@ -41,6 +41,7 @@
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import SideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import { defineComponent } from 'vue'
+import { useAppDefaults } from 'web-pkg'
 
 export default defineComponent({
   components: {
@@ -77,6 +78,13 @@ export default defineComponent({
     },
     toggleSidebarButtonIconFillType() {
       return this.sideBarOpen ? 'fill' : 'line'
+    }
+  },
+  setup() {
+    return {
+      ...useAppDefaults({
+        applicationId: 'admin-settings'
+      })
     }
   }
 })

@@ -17,6 +17,8 @@ const selectors = {
   noContentMessageStub: 'no-content-message-stub'
 }
 
+jest.mock('web-pkg/src/composables/appDefaults')
+
 describe('Spaces view', () => {
   describe('loading states', () => {
     it('should show loading spinner if loading', () => {
