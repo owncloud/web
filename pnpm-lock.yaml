@@ -634,7 +634,7 @@ importers:
       owncloud-sdk: ~3.1.0-alpha.1
       p-queue: ^6.6.2
       popper-max-size-modifier: ^0.2.0
-      portal-vue: 3.0.0-beta.0
+      portal-vue: 3.0.0
       postcss-import: ^12.0.1
       postcss-url: ^9.0.0
       promise: ^8.1.0
@@ -683,7 +683,7 @@ importers:
       owncloud-sdk: 3.1.0-alpha.1_qgpf6seimtkgc6dfu7oqfstxh4
       p-queue: 6.6.2
       popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
-      portal-vue: 3.0.0-beta.0_vue@3.2.45
+      portal-vue: 3.0.0_vue@3.2.45
       postcss-import: 12.0.1
       postcss-url: 9.0.0
       promise: 8.1.0
@@ -17868,11 +17868,14 @@ packages:
       vue: 3.2.45
     dev: false
 
-  /portal-vue/3.0.0-beta.0_vue@3.2.45:
-    resolution: {integrity: sha512-ktV+Q0fwlsjeF+2xGebMxrN6xH8yMdmbLzYbd2OfcgU4OmzSmkj6iP3kBQRGa+7A5WZlqCHWaFfecNs9Igsv9w==}
-    engines: {node: '>=14'}
+  /portal-vue/3.0.0_vue@3.2.45:
+    resolution: {integrity: sha512-9eprMxNURLx6ijbcgkWjYNcTWJYu/H8QF8nyAeBzOmk9lKCea01BW1hYBeLkgz+AestmPOvznAEOFmNuO4Adjw==}
+    engines: {node: '>=14.19'}
     peerDependencies:
       vue: ^3.0.4
+    peerDependenciesMeta:
+      vue:
+        optional: true
     dependencies:
       vue: 3.2.45
     dev: false
