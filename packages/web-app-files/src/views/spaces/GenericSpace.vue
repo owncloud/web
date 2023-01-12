@@ -119,7 +119,6 @@
             />
           </template>
         </resource-table>
-
       </template>
     </files-view-wrapper>
     <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />

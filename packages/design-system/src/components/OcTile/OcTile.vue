@@ -95,8 +95,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .oc-tile-card {
-  box-shadow: none !important;
   background-color: var(--oc-color-background-highlight) !important;
+  box-shadow: 3px 0 10px rgb(0 0 0 / 15%);
   height: 100%;
 
   &.state-trashed {
