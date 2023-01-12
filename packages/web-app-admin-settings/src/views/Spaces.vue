@@ -130,8 +130,6 @@ export default defineComponent({
       selectedSpaces.value = []
     }
 
-    const bt = computed(() => [])
-
     const sideBarAvailablePanels = computed(() => {
       return [
         {
