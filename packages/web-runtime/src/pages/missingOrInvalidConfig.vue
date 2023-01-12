@@ -37,16 +37,12 @@ export default defineComponent({
     const footerSlogan = computed(() => {
       return store.getters.configuration?.currentTheme?.general?.slogan
     })
-    const favicon = computed(() => {
-      return store.getters.configuration?.currentTheme?.logo?.favicon
-    })
 
     useHead({ store })
 
     return {
       logoImg,
-      footerSlogan,
-      favicon
+      footerSlogan
     }
   }
 })
