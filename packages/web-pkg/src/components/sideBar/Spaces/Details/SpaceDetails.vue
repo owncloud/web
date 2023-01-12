@@ -64,24 +64,29 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, unref } from 'vue'
+import { defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
-import { buildResource } from 'web-client/src/helpers'
+import { buildResource, SpaceResource } from 'web-client/src/helpers'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
-import { ImageDimension } from '../../../constants'
+import { ImageDimension } from 'web-pkg/src/constants'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
-import SpaceQuota from '../../SpaceQuota.vue'
+import SpaceQuota from '../../../SpaceQuota.vue'
 import { formatDateFromISO } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from '../../../composables/sideBar'
 
 export default defineComponent({
   name: 'SpaceDetails',
   components: { SpaceQuota },
+  props: {
+    spaceResource: {
+      type: Object as PropType<SpaceResource>,
+      required: false
+    }
+  },
   setup() {
     const store = useStore()
     const accessToken = useAccessToken({ store })
@@ -124,7 +129,7 @@ export default defineComponent({
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['user']),
     space() {
-      return this.highlightedFile
+      return this.spaceResource || this.highlightedFile
     },
     hasShares() {
       return this.hasMemberShares || this.hasLinkShares
@@ -183,6 +188,21 @@ export default defineComponent({
       return formatDateFromISO(this.space.mdate, this.$language.current)
     },
     ownerUsernames() {
+      /* TODO: Find a better solution for reactiveness
+         Why: Currently we use a different logic for the admin-panel and we need a solution that works for both
+      */
+      if (this.spaceResource) {
+        return this.space.spaceRoles[spaceRoleManager.name]
+          .map((share) => {
+            if (share.displayName === this.user?.displayName) {
+              return this.$gettextInterpolate(this.$gettext('%{displayName} (me)'), {
+                displayName: share.displayName
+              })
+            }
+            return share.displayName
+          })
+          .join(', ')
+      }
       const userId = this.user?.id
       return this.spaceMembers
         .filter((share) => share.role.name === spaceRoleManager.name)
@@ -246,7 +266,7 @@ export default defineComponent({
   },
   methods: {
     expandSharesPanel() {
-      eventBus.publish(SideBarEventTopics.setActivePanel, 'space-share')
+      eventBus.publish('app.files.sidebar.setActivePanel', 'space-share')
     }
   }
 })

@@ -379,15 +379,23 @@ export default defineComponent({
 
   .oc-table-header-cell-manager,
   .oc-table-data-cell-manager,
-  .oc-table-header-cell-totalQuota,
-  .oc-table-data-cell-totalQuota,
-  .oc-table-header-cell-usedQuota,
-  .oc-table-data-cell-usedQuota,
   .oc-table-header-cell-remainingQuota,
   .oc-table-data-cell-remainingQuota {
     display: none;
 
-    @media only screen and (min-width: 1400px) {
+    @media only screen and (min-width: 1200px) {
+      display: table-cell;
+    }
+  }
+  .oc-table-header-cell-totalQuota,
+  .oc-table-data-cell-totalQuota,
+  .oc-table-header-cell-availableQuota,
+  .oc-table-data-cell-availableQuota,
+  .oc-table-header-cell-usedQuota,
+  .oc-table-data-cell-usedQuota {
+    display: none;
+
+    @media only screen and (min-width: 1700px) {
       display: table-cell;
     }
   }

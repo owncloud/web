@@ -119,7 +119,7 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from '../../constants'
+import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'

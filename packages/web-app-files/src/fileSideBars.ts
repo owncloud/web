@@ -6,7 +6,7 @@ import SharesPanel from './components/SideBar/Shares/SharesPanel.vue'
 import TagsPanel from './components/SideBar/TagsPanel.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
-import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
+import SpaceDetails from 'web-pkg/src/components/sideBar/Spaces/Details/SpaceDetails.vue'
 import {
   isLocationTrashActive,
   isLocationPublicActive,

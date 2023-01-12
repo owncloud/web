@@ -85,7 +85,7 @@ import {
   useStore,
   useTranslations
 } from 'web-pkg/src/composables'
-import { ImageDimension } from '../../constants'
+import { ImageDimension } from 'web-pkg/src/constants'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { marked } from 'marked'

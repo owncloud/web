@@ -590,6 +590,7 @@ importers:
       luxon: ^2.4.0
       qs: ^6.10.3
       uuid: ^9.0.0
+      vue-concurrency: 4.0.0
       vue-router: 3.6.5
       vuex: 4.1.0
       web-client: npm:@ownclouders/web-client
@@ -601,6 +602,7 @@ importers:
       luxon: 2.4.0
       qs: 6.10.3
       uuid: 9.0.0
+      vue-concurrency: 4.0.0
       vue-router: 3.6.5
       vuex: 4.1.0
       web-client: link:../web-client

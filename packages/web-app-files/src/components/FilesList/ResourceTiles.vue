@@ -33,7 +33,7 @@ import { useStore, useTranslations } from 'web-pkg/src/composables'
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
-import { EVENT_TROW_CONTEXTMENU } from '../../constants'
+import { EVENT_TROW_CONTEXTMENU } from 'web-pkg/src/constants'
 
 export default defineComponent({
   name: 'ResourceTiles',
