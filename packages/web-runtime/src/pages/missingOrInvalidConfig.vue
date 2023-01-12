@@ -48,21 +48,6 @@ export default defineComponent({
       footerSlogan,
       favicon
     }
-  },
-
-  metaInfo() {
-    const metaInfo: any = {}
-    if (this.favicon) {
-      metaInfo.link = [{ rel: 'icon', href: this.favicon }]
-    }
-    const metaGenerator = {
-      name: 'generator',
-      content: [getWebVersion(), getBackendVersion({ store: this.$store })]
-        .filter(Boolean)
-        .join(', ')
-    }
-    metaInfo.meta = [metaGenerator]
-    return metaInfo
   }
 })
 </script>
