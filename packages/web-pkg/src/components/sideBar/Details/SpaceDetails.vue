@@ -64,10 +64,10 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, unref } from 'vue'
+import { defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
-import { buildResource } from 'web-client/src/helpers'
+import { buildResource, SpaceResource } from 'web-client/src/helpers'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
@@ -83,7 +83,7 @@ export default defineComponent({
   components: { SpaceQuota },
   props: {
     spaceResource: {
-      type: Object,
+      type: Object as PropType<SpaceResource>,
       required: false
     }
   },
@@ -188,7 +188,9 @@ export default defineComponent({
       return formatDateFromISO(this.space.mdate, this.$language.current)
     },
     ownerUsernames() {
-      // TODO: Find a better solution for reactiveness
+      /* TODO: Find a better solution for reactiveness
+         Why: Currently we use a different logic for the admin-panel and we need a solution that works for both
+      */
       if (this.spaceResource) {
         const allManagers = this.space.spaceRoles[spaceRoleManager.name]
         const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers

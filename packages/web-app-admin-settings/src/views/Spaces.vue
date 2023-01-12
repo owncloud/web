@@ -144,7 +144,7 @@ export default defineComponent({
           icon: 'layout-grid',
           title: $gettext('Space details'),
           component: SpaceDetails,
-          default: false,
+          default: true,
           enabled: unref(selectedSpaces).length === 1,
           componentAttrs: {
             spaceResource: unref(selectedSpaces)[0]
@@ -155,7 +155,7 @@ export default defineComponent({
           icon: 'layout-grid',
           title: $gettext('Space details'),
           component: SpaceDetailsMultiple,
-          default: false,
+          default: true,
           enabled: unref(selectedSpaces).length > 1
         }
       ]
