@@ -204,6 +204,8 @@ export const renderSuccess = (): void => {
 }
 
 export const renderFailure = async (err: Error): Promise<void> => {
+  Vue.prototype.$store = store
+
   announceVersions({ store })
   await announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem })
