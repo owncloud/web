@@ -70,7 +70,7 @@
 import { useResourcesViewDefaults } from '../../composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageType, ImageDimension } from '../../constants'
+import { ImageType, ImageDimension } from 'web-pkg/src/constants'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ResourceTable from '../FilesList/ResourceTable.vue'
 import ContextActions from '../FilesList/ContextActions.vue'

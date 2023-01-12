@@ -91,7 +91,7 @@
 import ResourceTable from '../FilesList/ResourceTable.vue'
 import { computed, defineComponent, unref } from 'vue'
 import debounce from 'lodash-es/debounce'
-import { ImageDimension, ImageType } from '../../constants'
+import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import FileActions from '../../mixins/fileActions'

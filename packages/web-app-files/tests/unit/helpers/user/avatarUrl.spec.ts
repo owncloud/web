@@ -1,5 +1,5 @@
 import { avatarUrl } from '../../../../src/helpers/user'
-import { ImageDimension } from '../../../../src/constants'
+import { ImageDimension } from 'web-pkg/src/constants'
 import mockAxios from 'jest-mock-axios'
 import { ClientService } from 'web-pkg/src/services'
 

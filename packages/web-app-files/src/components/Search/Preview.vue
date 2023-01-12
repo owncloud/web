@@ -22,7 +22,7 @@
 <script lang="ts">
 import MixinFileActions from '../../mixins/fileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from '../../constants'
+import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { loadPreview } from 'web-pkg/src/helpers'
 import debounce from 'lodash-es/debounce'

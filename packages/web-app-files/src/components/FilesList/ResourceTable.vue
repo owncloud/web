@@ -198,7 +198,7 @@
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
+import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from 'web-pkg/src/constants'
 import { SortDir } from '../../composables'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import {

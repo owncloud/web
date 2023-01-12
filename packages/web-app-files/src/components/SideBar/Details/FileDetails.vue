@@ -159,7 +159,7 @@
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, inject, ref, unref, watch } from 'vue'
 import { mapGetters } from 'vuex'
-import { ImageDimension } from '../../../constants'
+import { ImageDimension } from 'web-pkg/src/constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
 import { basename, dirname } from 'path'
