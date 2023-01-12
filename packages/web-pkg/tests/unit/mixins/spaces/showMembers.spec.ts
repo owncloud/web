@@ -1,4 +1,4 @@
-import ShowMembers from 'web-app-files/src/mixins/spaces/actions/showMembers.js'
+import ShowMembers from 'web-pkg/src/mixins/spaces/showMembers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 
 const Component = {

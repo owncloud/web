@@ -56,19 +56,19 @@ export default {
         message,
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_restore_restoreSpace(resources[0].id, resources[0].name)
+        onConfirm: () => this.$_restore_restoreSpace(resources[0])
       }
 
       this.createModal(modal)
     },
 
-    $_restore_restoreSpace(id, name) {
+    $_restore_restoreSpace(space) {
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       return graphClient.drives
         .updateDrive(
-          id,
-          { name },
+          space.id,
+          { name: space.name },
           {
             headers: {
               Restore: true
@@ -77,8 +77,11 @@ export default {
         )
         .then(() => {
           this.hideModal()
+          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+            space.disabled = false
+          }
           this.UPDATE_SPACE_FIELD({
-            id,
+            id: space.id,
             field: 'disabled',
             value: false
           })

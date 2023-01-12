@@ -1,4 +1,4 @@
-import QuotaModal from 'web-app-files/src/components/Spaces/QuotaModal.vue'
+import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import {
   createStore,
   defaultComponentMocks,

@@ -9,6 +9,7 @@
     "filesize": "^9.0.11",
     "lodash-es": "^4.17.21",
     "luxon": "^2.4.0",
+    "popper-max-size-modifier": "^0.2.0",
     "qs": "^6.10.3",
     "uuid": "^9.0.0",
     "vue-router": "3.6.5",

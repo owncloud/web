@@ -10,6 +10,7 @@ export const useTranslations = (): {
     $gettext: useService('$gettext'),
     $pgettext: useService('$pgettext'),
     $ngettext: useService('$ngettext'),
-    $gettextInterpolate: useService('$gettextInterpolate')
+    $gettextInterpolate: useService('$gettextInterpolate'),
+    $language: useService('$language')
   }
 }

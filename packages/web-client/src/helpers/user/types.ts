@@ -7,4 +7,6 @@ export interface User {
   avatar?: string
   shareType?: number
   additionalInfo?: any
+  role?: any
+  roles?: any[]
 }

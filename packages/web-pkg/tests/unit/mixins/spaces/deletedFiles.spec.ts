@@ -1,5 +1,4 @@
-import DeletedFiles from 'web-app-files/src/mixins/spaces/actions/deletedFiles.js'
-import { createLocationTrash } from '../../../../src/router'
+import DeletedFiles from 'web-pkg/src/mixins/spaces/deletedFiles'
 import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import { mockDeep } from 'jest-mock-extended'
 import {
@@ -42,14 +41,13 @@ describe('delete', () => {
       mocks.space.getDriveAliasAndItem.mockReturnValueOnce(driveAliasAndItem)
       await wrapper.vm.$_deletedFiles_trigger()
 
-      expect(wrapper.vm.$router.push).toHaveBeenCalledWith(
-        createLocationTrash('files-trash-generic', {
-          params: {
-            driveAliasAndItem
-          },
-          query: {}
-        })
-      )
+      expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
+        name: 'files-trash-generic',
+        params: {
+          driveAliasAndItem
+        },
+        query: {}
+      })
     })
   })
 })

@@ -45,7 +45,11 @@
             @toggleSelectSpace="toggleSelectSpace"
             @toggleSelectAllSpaces="toggleSelectAllSpaces"
             @toggleUnSelectAllSpaces="unselectAllSpaces"
-          />
+          >
+            <template #contextMenu>
+              <context-actions :items="selectedSpaces" />
+            </template>
+          </SpacesList>
         </div>
       </template>
     </app-template>
@@ -55,7 +59,7 @@
 <script lang="ts">
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useAccessToken, useGraphClient, useStore, useTranslations } from 'web-pkg/src/composables'
-import { computed, defineComponent, getCurrentInstance, onMounted, ref, unref } from 'vue'
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import AppTemplate from '../components/AppTemplate.vue'
@@ -65,6 +69,7 @@ import SpacesList from '../components/Spaces/SpacesList.vue'
 import SpaceDetails from 'web-pkg/src/components/sideBar/Spaces/Details/SpaceDetails.vue'
 import SpaceDetailsMultiple from 'web-pkg/src/components/sideBar/Spaces/Details/SpaceDetailsMultiple.vue'
 import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelection.vue'
+import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 
 export default defineComponent({
@@ -72,16 +77,17 @@ export default defineComponent({
   components: {
     SpacesList,
     AppTemplate,
-    NoContentMessage
+    NoContentMessage,
+    ContextActions
   },
   setup() {
     const store = useStore()
-    const instance = getCurrentInstance().proxy
     const accessToken = useAccessToken({ store })
     const spaces = ref([])
     const { graphClient } = useGraphClient()
     const { $gettext } = useTranslations()
 
+    const loadResourcesEventToken = ref(null)
     const template = ref(null)
     const listHeaderPosition = ref(0)
     const selectedSpaces = ref([])
@@ -194,15 +200,16 @@ export default defineComponent({
 
     onMounted(async () => {
       await loadResourcesTask.perform()
-      const loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
+      loadResourcesEventToken.value = eventBus.subscribe('app.admin-settings.list.load', () => {
         loadResourcesTask.perform()
       })
 
       calculateListHeaderPosition()
       window.addEventListener('resize', calculateListHeaderPosition)
-      instance.$on('beforeUnmount', () => {
-        eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
-      })
+    })
+
+    onBeforeUnmount(() => {
+      eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
     })
 
     return {

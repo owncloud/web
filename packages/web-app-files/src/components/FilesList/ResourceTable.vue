@@ -196,7 +196,6 @@
 
 <script lang="ts">
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from 'web-pkg/src/constants'
 import { SortDir } from '../../composables'
@@ -217,7 +216,12 @@ import { ClipboardActions } from '../../helpers/clipboardActions'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces, createLocationShares, createLocationCommon } from '../../router'
-import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
+import {
+  displayPositionedDropdown,
+  popperOptions as defaultPopperOptions,
+  formatDateFromJSDate,
+  formatRelativeDateFromJSDate
+} from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
@@ -409,13 +413,15 @@ export default defineComponent({
     const hasTags = computed(
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
     )
+    const popperOptions = computed(() => defaultPopperOptions)
 
     return {
       ViewModeConstants,
       hasTags,
       isUserContext: useUserContext({ store }),
       hasShareJail: useCapabilityShareJailEnabled(),
-      hasProjectSpaces: useCapabilityProjectSpacesEnabled()
+      hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
+      popperOptions
     }
   },
   data() {
@@ -434,24 +440,6 @@ export default defineComponent({
       'clipboardAction'
     ]),
     ...mapState('runtime/spaces', ['spaces']),
-    popperOptions() {
-      return {
-        modifiers: [
-          maxSize,
-          {
-            name: 'applyMaxSize',
-            enabled: true,
-            phase: 'beforeWrite',
-            requires: ['maxSize'],
-            fn({ state }) {
-              const { height } = state.modifiersData.maxSize
-              state.styles.popper.overflowY = `auto`
-              state.styles.popper.maxHeight = `${height - 5}px`
-            }
-          }
-        ]
-      }
-    },
     fields() {
       if (this.resources.length === 0) {
         return []
@@ -719,7 +707,7 @@ export default defineComponent({
       if (!this.isResourceSelected(item)) {
         this.emitSelect([item.id])
       }
-      this.displayPositionedDropdown(instance, event)
+      displayPositionedDropdown(instance, event, this.$refs.contextMenuButton)
     },
     showContextMenu(row, event, item) {
       event.preventDefault()
@@ -730,28 +718,7 @@ export default defineComponent({
       if (!this.isResourceSelected(item)) {
         this.emitSelect([item.id])
       }
-      this.displayPositionedDropdown(instance._tippy, event)
-    },
-    displayPositionedDropdown(dropdown, event) {
-      const contextMenuButtonPos = this.$refs.contextMenuButton.$el.getBoundingClientRect()
-
-      dropdown.setProps({
-        getReferenceClientRect: () => ({
-          width: 0,
-          height: 0,
-          top: event.clientY,
-          bottom: event.clientY,
-          /**
-           * If event type is 'contextmenu' the trigger was a right click on the table row,
-           * so we render the dropdown at the position of the mouse pointer.
-           * Otherwise we render the dropdown at the position of the three-dot-menu
-           */
-          left: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x,
-          right: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x
-        })
-      })
-
-      dropdown.show()
+      displayPositionedDropdown(instance._tippy, event, this.$refs.contextMenuButton)
     },
     rowMounted(resource, component) {
       /**

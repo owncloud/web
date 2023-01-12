@@ -468,7 +468,6 @@ importers:
       mark.js: ^8.11.1
       marked: ^4.0.12
       p-queue: ^6.6.2
-      popper-max-size-modifier: ^0.2.0
       qs: ^6.10.3
       sanitize-html: ^2.7.0
       semver: ^7.3.8
@@ -490,7 +489,6 @@ importers:
       mark.js: 8.11.1
       marked: 4.0.12
       p-queue: 6.6.2
-      popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
       qs: 6.10.3
       sanitize-html: 2.7.0
       semver: 7.3.8
@@ -588,6 +586,7 @@ importers:
       filesize: ^9.0.11
       lodash-es: ^4.17.21
       luxon: ^2.4.0
+      popper-max-size-modifier: ^0.2.0
       qs: ^6.10.3
       uuid: ^9.0.0
       vue-concurrency: 4.0.0
@@ -600,6 +599,7 @@ importers:
       filesize: 9.0.11
       lodash-es: 4.17.21
       luxon: 2.4.0
+      popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
       qs: 6.10.3
       uuid: 9.0.0
       vue-concurrency: 4.0.0

@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
-import ActionMenuItem from '../../ActionMenuItem.vue'
+import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 import AcceptShare from '../../../mixins/actions/acceptShare'
 import Copy from '../../../mixins/actions/copy'
 import DeclineShare from '../../../mixins/actions/declineShare'

@@ -1,5 +1,6 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
+import { Drive } from 'web-client/src/generated'
 
 export default {
   computed: {
@@ -53,24 +54,27 @@ export default {
         inputValue: resources[0].description,
         onCancel: this.hideModal,
         onConfirm: (description) =>
-          this.$_editDescription_editDescriptionSpace(resources[0].id, description)
+          this.$_editDescription_editDescriptionSpace(resources[0], description)
       }
 
       this.createModal(modal)
     },
 
-    $_editDescription_editDescriptionSpace(id, description) {
+    $_editDescription_editDescriptionSpace(space, description) {
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       return graphClient.drives
-        .updateDrive(id, { description }, {})
+        .updateDrive(space.id, { description } as Drive, {})
         .then(() => {
           this.hideModal()
           this.UPDATE_SPACE_FIELD({
-            id,
+            id: space.id,
             field: 'description',
             value: description
           })
+          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+            space.description = description
+          }
           this.showMessage({
             title: this.$gettext('Space subtitle was changed successfully')
           })

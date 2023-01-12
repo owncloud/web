@@ -34,7 +34,7 @@ export interface Graph {
     getDrive: (id: string) => AxiosPromise<Drive>
     createDrive: (drive: Drive, options: any) => AxiosPromise<Drive>
     updateDrive: (id: string, drive: Drive, options: any) => AxiosPromise<Drive>
-    deleteDrive: (id: string, ifMatch: string, options: any) => AxiosPromise<void>
+    deleteDrive: (id: string, ifMatch?: string, options?: any) => AxiosPromise<void>
   }
   users: {
     getUser: (userId: string) => AxiosPromise<User>

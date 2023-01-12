@@ -1,4 +1,4 @@
-import setReadme from 'web-app-files/src/mixins/spaces/actions/setReadme.js'
+import setReadme from 'web-pkg/src/mixins/spaces/setReadme'
 import { buildSpace } from 'web-client/src/helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'

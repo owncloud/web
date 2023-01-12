@@ -1,5 +1,4 @@
-import Navigate from 'web-app-files/src/mixins/spaces/actions/navigate.js'
-import { createLocationSpaces } from '../../../../src/router'
+import Navigate from 'web-pkg/src/mixins/spaces/navigate'
 import {
   createStore,
   defaultComponentMocks,
@@ -34,17 +33,14 @@ describe('navigate', () => {
   describe('method "$_navigate_space_trigger"', () => {
     it('should trigger route change', async () => {
       const { wrapper } = getWrapper()
-      const resource = { driveAlias: 'project/mars' }
-      await wrapper.vm.$_navigate_space_trigger({ resources: [resource] })
+      await wrapper.vm.$_navigate_space_trigger()
 
-      expect(wrapper.vm.$router.push).toHaveBeenCalledWith(
-        createLocationSpaces('files-spaces-generic', {
-          params: {
-            driveAliasAndItem: resource.driveAlias
-          },
-          query: {}
-        })
-      )
+      expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
+        name: 'files-spaces-generic',
+        params: {
+          driveAliasAndItem: 'project/mars'
+        }
+      })
     })
   })
 })
@@ -61,6 +57,7 @@ function getWrapper({ invalidLocation = false } = {}) {
     ...defaultComponentMocks({ currentRoute }),
     space: {
       driveType: 'project',
+      driveAlias: 'project/mars',
       getDriveAliasAndItem: () => 'project/mars'
     }
   }

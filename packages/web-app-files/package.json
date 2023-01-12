@@ -19,7 +19,6 @@
     "luxon": "^2.4.0",
     "marked": "^4.0.12",
     "p-queue": "^6.6.2",
-    "popper-max-size-modifier": "^0.2.0",
     "qs": "^6.10.3",
     "sanitize-html": "^2.7.0",
     "semver": "^7.3.8",

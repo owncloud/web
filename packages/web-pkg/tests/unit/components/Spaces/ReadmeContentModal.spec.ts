@@ -1,4 +1,4 @@
-import ReadmeContentModal from 'web-app-files/src/components/Spaces/ReadmeContentModal.vue'
+import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
 import { mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
 import {

@@ -1,6 +1,5 @@
 import { mapMutations } from 'vuex'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from '../../../composables/sideBar'
 import { useGraphClient } from 'web-pkg/src/composables'
 
 export default {
@@ -27,7 +26,8 @@ export default {
 
     $_showMembers_trigger({ resources }) {
       this.SET_FILE_SELECTION(resources)
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share')
+      // FIXME: Use SideBarEventTopics from files-app. Maybe make it global?
+      eventBus.publish('app.files.sidebar.openWithPanel', 'space-share')
     }
   }
 }

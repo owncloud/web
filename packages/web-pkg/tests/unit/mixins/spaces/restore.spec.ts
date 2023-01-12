@@ -1,4 +1,4 @@
-import restore from 'web-app-files/src/mixins/spaces/actions/restore'
+import restore from 'web-pkg/src/mixins/spaces/restore'
 import { buildSpace } from 'web-client/src/helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { Graph } from 'web-client'

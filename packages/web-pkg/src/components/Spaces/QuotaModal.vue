@@ -40,6 +40,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['spaceQuotaUpdated'],
   setup() {
     return {
       ...useGraphClient()
@@ -76,6 +77,9 @@ export default defineComponent({
         .updateDrive(this.space.id, { quota: { total: this.selectedOption } }, {})
         .then(({ data }) => {
           this.cancel()
+          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+            this.$emit('spaceQuotaUpdated', data.quota)
+          }
           this.UPDATE_SPACE_FIELD({
             id: this.space.id,
             field: 'spaceQuota',

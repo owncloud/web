@@ -1,4 +1,4 @@
-import rename from 'web-app-files/src/mixins/spaces/actions/rename.js'
+import rename from 'web-pkg/src/mixins/spaces/rename'
 import { mockDeep } from 'jest-mock-extended'
 import { Graph } from 'web-client'
 import { clientService } from 'web-pkg'

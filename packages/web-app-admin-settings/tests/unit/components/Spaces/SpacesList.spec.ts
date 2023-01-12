@@ -1,6 +1,7 @@
 import SpacesList from '../../../../src/components/Spaces/SpacesList.vue'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import Vue from 'vue'
+import { displayPositionedDropdown } from 'web-pkg'
 
 const spaceMocks = [
   {
@@ -47,6 +48,8 @@ const selectors = {
   ocTableStub: 'oc-table-stub'
 }
 
+jest.mock('web-pkg/src/helpers')
+
 describe('SpacesList', () => {
   it('should render all spaces in a table', () => {
     const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
@@ -87,6 +90,18 @@ describe('SpacesList', () => {
     wrapper.vm.filterTerm = 'Another'
     await Vue.nextTick()
     expect(wrapper.vm.orderedSpaces).toEqual([spaceMocks[1]])
+  })
+  it('should show the context menu on right click', async () => {
+    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const { wrapper } = getWrapper({ spaces: spaceMocks })
+    await wrapper.find(`[data-item-id="${spaceMocks[0].id}"]`).trigger('contextmenu')
+    expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
+  })
+  it('should show the context menu on context menu button click', async () => {
+    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const { wrapper } = getWrapper({ spaces: spaceMocks })
+    await wrapper.find('.spaces-table-btn-action-dropdown').trigger('click')
+    expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
   })
 })
 

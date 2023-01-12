@@ -1,4 +1,4 @@
-import EditDescription from 'web-app-files/src/mixins/spaces/actions/editDescription.js'
+import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
 import {
   createStore,
   defaultComponentMocks,

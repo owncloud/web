@@ -1,4 +1,4 @@
-import EditQuota from 'web-app-files/src/mixins/spaces/actions/editQuota.js'
+import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import { buildSpace } from 'web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 
