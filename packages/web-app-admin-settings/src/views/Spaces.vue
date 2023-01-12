@@ -7,7 +7,6 @@
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
-      @selectPanel="selectPanel"
       @closeSideBar="closeSideBar"
       @toggleSideBar="toggleSideBar"
     >
@@ -163,10 +162,15 @@ export default defineComponent({
     })
 
     const sideBarActivePanel = computed(() => {
-      const t = unref(sideBarAvailablePanels).find((e) => e.enabled).app
-      console.log(t)
-      return t
+      return unref(sideBarAvailablePanels).find((e) => e.enabled).app
     })
+
+    const closeSideBar = () => {
+      sideBarOpen.value = false
+    }
+    const toggleSideBar = () => {
+      sideBarOpen.value = !unref(sideBarOpen)
+    }
 
     onMounted(async () => {
       await loadResourcesTask.perform()
@@ -192,22 +196,14 @@ export default defineComponent({
       sideBarOpen,
       sideBarAvailablePanels,
       sideBarActivePanel,
+      closeSideBar,
+      toggleSideBar,
       template,
       toggleSelectAllSpaces,
       toggleSelectSpace,
       unselectAllSpaces
     }
   },
-  methods: {
-    selectPanel(panel) {
-      this.sideBarActivePanel = panel || 'DetailsPanel'
-    },
-    closeSideBar() {
-      this.sideBarOpen = false
-    },
-    toggleSideBar() {
-      this.sideBarOpen = !this.sideBarOpen
-    }
-  }
+  methods: {}
 })
 </script>
