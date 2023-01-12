@@ -576,9 +576,11 @@ importers:
     specifiers:
       axios: ^0.27.2
       lodash-es: ^4.17.21
+      web-pkg: npm:@ownclouders/web-pkg
     dependencies:
       axios: 0.27.2
       lodash-es: 4.17.21
+      web-pkg: link:../web-pkg
 
   packages/web-pkg:
     specifiers:
