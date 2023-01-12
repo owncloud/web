@@ -61,9 +61,9 @@ import AppTemplate from '../components/AppTemplate.vue'
 import { buildSpace } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg'
 import SpacesList from '../components/Spaces/SpacesList.vue'
-import SpaceDetails from 'web-pkg/src/components/sideBar/Details/SpaceDetails.vue'
-import SpaceDetailsMultiple from 'web-pkg/src/components/sideBar/Details/SpaceDetailsMultiple.vue'
-import SpaceNoSelection from 'web-pkg/src/components/sideBar/Details/SpaceNoSelection.vue'
+import SpaceDetails from 'web-pkg/src/components/sideBar/Spaces/Details/SpaceDetails.vue'
+import SpaceDetailsMultiple from 'web-pkg/src/components/sideBar/Spaces/Details/SpaceDetailsMultiple.vue'
+import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelection.vue'
 
 export default defineComponent({
   name: 'SpacesView',
