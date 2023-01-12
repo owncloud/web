@@ -13,7 +13,6 @@ import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID }
 import { DavProperty } from '../../webdav/constants'
 import { buildWebDavPublicPath } from '../publicLink'
 import { urlJoin } from '../../utils'
-import { RoleName } from 'web-pkg'
 
 export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword
@@ -173,26 +172,24 @@ export function buildSpace(data): SpaceResource {
     },
     canBeDeleted: function ({ user }: { user?: User } = {}) {
       return (
-        this.disabled &&
-        (user?.roles?.find((r) => r.name === RoleName.SpaceAdmin) || this.isManager(user))
+        this.disabled && (user?.roles?.find((r) => r.name === 'spaceadmin') || this.isManager(user))
       )
     },
     canRename: function ({ user }: { user?: User } = {}) {
-      return user?.roles?.find((r) => r.name === RoleName.SpaceAdmin) || this.isManager(user)
+      return user?.roles?.find((r) => r.name === 'spaceadmin') || this.isManager(user)
     },
     canEditDescription: function ({ user }: { user?: User } = {}) {
-      return user?.roles?.find((r) => r.name === RoleName.SpaceAdmin) || this.isManager(user)
+      return user?.roles?.find((r) => r.name === 'spaceadmin') || this.isManager(user)
     },
     canRestore: function ({ user }: { user?: User } = {}) {
       return (
-        this.disabled &&
-        (user?.roles?.find((r) => r.name === RoleName.SpaceAdmin) || this.isManager(user))
+        this.disabled && (user?.roles?.find((r) => r.name === 'spaceadmin') || this.isManager(user))
       )
     },
     canDisable: function ({ user }: { user?: User } = {}) {
       return (
         !this.disabled &&
-        (user?.roles?.find((r) => r.name === RoleName.SpaceAdmin) || this.isManager(user))
+        (user?.roles?.find((r) => r.name === 'spaceadmin') || this.isManager(user))
       )
     },
     canShare: function ({ user }: { user?: User } = {}) {

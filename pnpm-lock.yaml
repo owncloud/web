@@ -504,7 +504,7 @@ importers:
       web-runtime: link:../web-runtime
     devDependencies:
       '@jest/globals': 29.3.1
-      '@vueuse/core': 9.8.2_vue@3.2.45
+      '@vueuse/core': 9.8.2
 
   packages/web-app-pdf-viewer:
     specifiers:
@@ -576,11 +576,9 @@ importers:
     specifiers:
       axios: ^0.27.2
       lodash-es: ^4.17.21
-      web-pkg: npm:@ownclouders/web-pkg
     dependencies:
       axios: 0.27.2
       lodash-es: 4.17.21
-      web-pkg: link:../web-pkg
 
   packages/web-pkg:
     specifiers:
@@ -6574,13 +6572,13 @@ packages:
       - supports-color
     dev: true
 
-  /@vueuse/core/9.8.2_vue@3.2.45:
+  /@vueuse/core/9.8.2:
     resolution: {integrity: sha512-aWiCmcYIpPt7xjuqYiceODEMHchDYthrJ4AqI+FXPZrR23PZOqdiktbUVyQl2kGlR3H4i9UJ/uimQrwhz9UouQ==}
     dependencies:
       '@types/web-bluetooth': 0.0.16
       '@vueuse/metadata': 9.8.2
-      '@vueuse/shared': 9.8.2_vue@3.2.45
-      vue-demi: 0.13.11_vue@3.2.45
+      '@vueuse/shared': 9.8.2
+      vue-demi: 0.13.11
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -6602,10 +6600,10 @@ packages:
     resolution: {integrity: sha512-N4E/BKS+9VsUeD4WLVRU1J2kCOLh+iikBcMtipFcTyL204132vDYHs27zLAVabJYGnhC0dIVGdhg9pbOZiY2TQ==}
     dev: true
 
-  /@vueuse/shared/9.8.2_vue@3.2.45:
+  /@vueuse/shared/9.8.2:
     resolution: {integrity: sha512-ACjrPQzowd5dnabNJt9EoGVobco9/ENiA5qP53vjiuxndlJYuc/UegwhXC7KdQbPX4F45a50+45K3g1wNqOzmA==}
     dependencies:
-      vue-demi: 0.13.11_vue@3.2.45
+      vue-demi: 0.13.11
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -22115,6 +22113,19 @@ packages:
       vue: 3.2.45
     dev: false
 
+  /vue-demi/0.13.11:
+    resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dev: true
+
   /vue-demi/0.13.11_vue@3.2.45:
     resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
     engines: {node: '>=12'}
@@ -22128,6 +22139,7 @@ packages:
         optional: true
     dependencies:
       vue: 3.2.45
+    dev: false
 
   /vue-docgen-api/4.56.0_vue@3.2.45:
     resolution: {integrity: sha512-ab/Scb0DCjm4YVLf+AFa/R7XMFl8TVwUsvh26fFT5iaURih1m2hdd5Y8NveA7NQDcycpWavkFZj9eVbQdp2VGQ==}
