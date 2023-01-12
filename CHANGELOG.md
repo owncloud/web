@@ -175,6 +175,7 @@ Details
    https://github.com/owncloud/web/pull/8202
    https://github.com/owncloud/web/pull/8198
    https://github.com/owncloud/web/pull/8213
+   https://github.com/owncloud/web/pull/8214
 
 * Enhancement - Access right sidebar panels via URL: [#8021](https://github.com/owncloud/web/pull/8021)
 
