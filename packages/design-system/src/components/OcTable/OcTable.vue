@@ -8,10 +8,7 @@
           v-bind="extractThProps(field, index)"
           @click="$emit(constants.EVENT_THEAD_CLICKED, field)"
         >
-          <span
-            v-if="field.headerType === 'slot'"
-            class="oc-table-thead-content"
-          >
+          <span v-if="field.headerType === 'slot'" class="oc-table-thead-content">
             <slot :name="field.name + 'Header'" />
           </span>
           <span
