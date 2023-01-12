@@ -64,6 +64,7 @@ import SpacesList from '../components/Spaces/SpacesList.vue'
 import SpaceDetails from 'web-pkg/src/components/sideBar/Spaces/Details/SpaceDetails.vue'
 import SpaceDetailsMultiple from 'web-pkg/src/components/sideBar/Spaces/Details/SpaceDetailsMultiple.vue'
 import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelection.vue'
+import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 
 export default defineComponent({
   name: 'SpacesView',
@@ -143,7 +144,7 @@ export default defineComponent({
           app: 'SpaceDetails',
           icon: 'layout-grid',
           title: $gettext('Space details'),
-          component: SpaceDetails,
+          component: MembersPanel,
           default: true,
           enabled: unref(selectedSpaces).length === 1,
           componentAttrs: {
