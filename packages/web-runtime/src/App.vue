@@ -47,15 +47,20 @@ import SkipTo from './components/SkipTo.vue'
 import LayoutApplication from './layouts/Application.vue'
 import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
-import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from 'vue'
 import { isPublicLinkContext, isUserContext } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
 import { eventBus } from 'web-pkg/src/services'
+import { useHead } from './composables/head'
+import { useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   components: {
     SkipTo
+  },
+  setup() {
+    const store = useStore()
+    useHead({ store })
   },
   data() {
     return {
@@ -88,9 +93,6 @@ export default defineComponent({
         return this.isUserContextReady ? LayoutApplication : LayoutLoading
       }
       return LayoutApplication
-    },
-    favicon() {
-      return this.configuration.currentTheme.logo.favicon
     },
 
     selectedLanguage() {
@@ -166,21 +168,6 @@ export default defineComponent({
     if (this.$_notificationsInterval) {
       clearInterval(this.$_notificationsInterval)
     }
-  },
-
-  metaInfo() {
-    const metaInfo: any = {}
-    if (this.favicon) {
-      metaInfo.link = [{ rel: 'icon', href: this.favicon }]
-    }
-    const metaGenerator = {
-      name: 'generator',
-      content: [getWebVersion(), getBackendVersion({ store: this.$store })]
-        .filter(Boolean)
-        .join(', ')
-    }
-    metaInfo.meta = [metaGenerator]
-    return metaInfo
   },
 
   methods: {

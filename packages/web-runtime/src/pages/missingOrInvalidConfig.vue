@@ -21,9 +21,9 @@
 </template>
 
 <script lang="ts">
-import { getBackendVersion, getWebVersion } from '../container/versions'
 import { computed, defineComponent } from 'vue'
 import { useStore } from 'web-pkg'
+import { useHead } from '../composables/head'
 
 export default defineComponent({
   name: 'MissingConfigPage',
@@ -36,30 +36,13 @@ export default defineComponent({
     const footerSlogan = computed(() => {
       return store.getters.configuration?.currentTheme?.general?.slogan
     })
-    const favicon = computed(() => {
-      return store.getters.configuration?.currentTheme?.logo?.favicon
-    })
+
+    useHead({ store })
 
     return {
       logoImg,
-      footerSlogan,
-      favicon
+      footerSlogan
     }
-  },
-
-  metaInfo() {
-    const metaInfo: any = {}
-    if (this.favicon) {
-      metaInfo.link = [{ rel: 'icon', href: this.favicon }]
-    }
-    const metaGenerator = {
-      name: 'generator',
-      content: [getWebVersion(), getBackendVersion({ store: this.$store })]
-        .filter(Boolean)
-        .join(', ')
-    }
-    metaInfo.meta = [metaGenerator]
-    return metaInfo
   }
 })
 </script>
