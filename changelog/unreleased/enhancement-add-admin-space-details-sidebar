@@ -1,0 +1,6 @@
+Enhancement: Add space details for admins
+
+We've added the sidebar to display space details in the admin view.
+
+https://github.com/owncloud/web/pull/8192
+https://github.com/owncloud/web/issues/8219

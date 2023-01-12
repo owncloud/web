@@ -62,8 +62,9 @@ import AppTemplate from '../components/AppTemplate.vue'
 import { buildSpace } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg'
 import SpacesList from '../components/Spaces/SpacesList.vue'
-import DetailsPanel from '../components/Spaces/SideBar/DetailsPanel.vue'
 import SpaceDetails from 'web-pkg/src/components/sideBar/Details/SpaceDetails.vue'
+import SpaceDetailsMultiple from 'web-pkg/src/components/sideBar/Details/SpaceDetailsMultiple.vue'
+import SpaceNoSelection from 'web-pkg/src/components/sideBar/Details/SpaceNoSelection.vue'
 
 export default defineComponent({
   name: 'SpacesView',
@@ -84,7 +85,6 @@ export default defineComponent({
     const listHeaderPosition = ref(0)
     const selectedSpaces = ref([])
     const sideBarOpen = ref(false)
-    const sideBarActivePanel = ref('EditSpace')
 
     const loadResourcesTask = useTask(function* (signal) {
       const {
@@ -130,6 +130,46 @@ export default defineComponent({
       selectedSpaces.value = []
     }
 
+    const bt = computed(() => [])
+
+    const sideBarAvailablePanels = computed(() => {
+      return [
+        {
+          app: 'SpaceNoSelection',
+          icon: 'layout-grid',
+          title: $gettext('Space details'),
+          component: SpaceNoSelection,
+          default: true,
+          enabled: unref(selectedSpaces).length === 0
+        },
+        {
+          app: 'SpaceDetails',
+          icon: 'layout-grid',
+          title: $gettext('Space details'),
+          component: SpaceDetails,
+          default: false,
+          enabled: unref(selectedSpaces).length === 1,
+          componentAttrs: {
+            spaceResource: unref(selectedSpaces)[0]
+          }
+        },
+        {
+          app: 'SpaceDetailsMultiple',
+          icon: 'layout-grid',
+          title: $gettext('Space details'),
+          component: SpaceDetailsMultiple,
+          default: false,
+          enabled: unref(selectedSpaces).length > 1
+        }
+      ]
+    })
+
+    const sideBarActivePanel = computed(() => {
+      const t = unref(sideBarAvailablePanels).find((e) => e.enabled).app
+      console.log(t)
+      return t
+    })
+
     onMounted(async () => {
       await loadResourcesTask.perform()
       const loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
@@ -152,35 +192,12 @@ export default defineComponent({
       listHeaderPosition,
       selectedSpaces,
       sideBarOpen,
+      sideBarAvailablePanels,
       sideBarActivePanel,
       template,
       toggleSelectAllSpaces,
       toggleSelectSpace,
       unselectAllSpaces
-    }
-  },
-  computed: {
-    sidebarSpacePanelComponent() {
-      if (this.selectedSpaces.length > 1 || this.selectedSpaces.length === 0) {
-        return DetailsPanel
-      }
-      return SpaceDetails
-    },
-    sideBarAvailablePanels() {
-      return [
-        {
-          app: 'SpaceDetails',
-          icon: 'layout-grid',
-          title: this.$gettext('Space details'),
-          component: this.sidebarSpacePanelComponent,
-          default: true,
-          enabled: true,
-          componentAttrs: {
-            spaceResource: this.selectedSpaces[0],
-            spaceCount: this.selectedSpaces.length
-          }
-        }
-      ]
     }
   },
   methods: {
