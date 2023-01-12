@@ -144,7 +144,7 @@ export default defineComponent({
           app: 'SpaceDetails',
           icon: 'layout-grid',
           title: $gettext('Space details'),
-          component: MembersPanel,
+          component: SpaceDetails,
           default: true,
           enabled: unref(selectedSpaces).length === 1,
           componentAttrs: {
@@ -158,7 +158,18 @@ export default defineComponent({
           component: SpaceDetailsMultiple,
           default: true,
           enabled: unref(selectedSpaces).length > 1
-        }
+        },
+        {
+          app: 'SpaceMembers',
+          icon: 'group',
+          title: $gettext('Space members'),
+          component: MembersPanel,
+          default: false,
+          enabled: true,
+          componentAttrs: {
+            spaceResource: unref(selectedSpaces)[0]
+          }
+        },
       ]
     })
 
