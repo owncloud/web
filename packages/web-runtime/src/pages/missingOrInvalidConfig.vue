@@ -24,6 +24,7 @@
 import { getBackendVersion, getWebVersion } from '../container/versions'
 import { computed, defineComponent } from 'vue'
 import { useStore } from 'web-pkg'
+import { useHead } from '../composables/head'
 
 export default defineComponent({
   name: 'MissingConfigPage',
@@ -39,6 +40,8 @@ export default defineComponent({
     const favicon = computed(() => {
       return store.getters.configuration?.currentTheme?.logo?.favicon
     })
+
+    useHead({ store })
 
     return {
       logoImg,

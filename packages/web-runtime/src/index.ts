@@ -9,6 +9,7 @@ import {
 
 import { router } from './router'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { createHead } from '@vueuse/head'
 
 import {
   announceConfiguration,
@@ -81,6 +82,9 @@ export const renderSuccess = (): void => {
   instance.use(PortalVue, {
     wormhole: instance.config.globalProperties.$wormhole
   })
+
+  // @vueuse/head
+  instance.use(createHead())
 
   // mount App
   instance.mount('#owncloud')
