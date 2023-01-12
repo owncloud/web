@@ -4,8 +4,8 @@ import { FileContext } from './types'
 import { useAppMeta } from './useAppMeta'
 import { useDocumentTitle } from './useDocumentTitle'
 import { Store } from 'vuex'
-import { MaybeRef } from '../../utils'
 import { Route } from 'vue-router'
+import { MaybeRef, useTranslations } from 'web-pkg'
 
 interface AppDocumentTitleOptions {
   store: Store<any>
@@ -23,10 +23,12 @@ export function useAppDocumentTitle({
   currentRoute
 }: AppDocumentTitleOptions): void {
   const appMeta = useAppMeta({ applicationId, store })
+  const { $gettext } = useTranslations()
 
   const titleSegments = computed(() => {
     const baseTitle =
-      basename(unref(unref(currentFileContext).fileName)) || unref(currentRoute)?.meta?.title
+      basename(unref(unref(currentFileContext).fileName)) ||
+      $gettext(unref(currentRoute)?.meta?.title)
     const meta = unref(unref(appMeta).applicationMeta)
 
     return [baseTitle, unref(applicationName) || meta.name || meta.id].filter(Boolean)
