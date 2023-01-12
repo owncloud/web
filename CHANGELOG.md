@@ -316,8 +316,10 @@ Details
    The admin settings now have a view to list all spaces for the current instance. This makes it
    possible for space admins to manage all spaces in one place.
 
+   https://github.com/owncloud/web/issues/8219
    https://github.com/owncloud/web/pull/8178
    https://github.com/owncloud/web/pull/8195
+   https://github.com/owncloud/web/pull/8192
 
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 
