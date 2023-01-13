@@ -13,18 +13,18 @@ interface Permission {
     type: string
   }
 }
-export enum RoleName {
+export enum UserRoleName {
   Admin = 'admin',
   SpaceAdmin = 'spaceadmin',
   User = 'user',
   Guest = 'guest'
 }
-interface Role {
-  name: RoleName
+interface UserRole {
+  name: UserRoleName
   settings: Array<Permission>
 }
 interface User {
-  role: Role
+  role: UserRole
 }
 
 export class PermissionManager {
@@ -35,11 +35,11 @@ export class PermissionManager {
   }
 
   public hasUserManagement() {
-    return this.user.role?.name === RoleName.Admin
+    return this.user.role?.name === UserRoleName.Admin
   }
 
   public hasSpaceManagement() {
-    return [RoleName.Admin, RoleName.SpaceAdmin].includes(this.user.role?.name)
+    return [UserRoleName.Admin, UserRoleName.SpaceAdmin].includes(this.user.role?.name)
   }
 
   public canEditSpaceQuota() {
