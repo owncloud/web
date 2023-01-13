@@ -19,11 +19,11 @@ const selectors = {
 }
 
 describe('MembersPanel', () => {
-  it('should render all members accordingly', () => {
+  it('should render all members accordingly to their role assignments', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.html()).toMatchSnapshot()
   })
-  it('should filter members accordingly', async () => {
+  it('should filter members accordingly to the entered search term', async () => {
     const userToFilterFor = spaceMock.spaceRoles.editor[0]
     const { wrapper } = getWrapper()
     wrapper.vm.filterTerm = 'ein'
@@ -32,6 +32,13 @@ describe('MembersPanel', () => {
     expect(
       wrapper.findComponent<any>(selectors.membersRolePanelStub).props().members[0].displayName
     ).toEqual(userToFilterFor.displayName)
+  })
+  it('should display an empty result if no matching members found', async () => {
+    const { wrapper } = getWrapper()
+    wrapper.vm.filterTerm = 'no-match'
+    await wrapper.vm.$nextTick
+    expect(wrapper.findAll(selectors.membersRolePanelStub).length).toBe(0)
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 

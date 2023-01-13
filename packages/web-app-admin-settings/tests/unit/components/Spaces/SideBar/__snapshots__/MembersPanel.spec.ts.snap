@@ -1,6 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MembersPanel should render all members accordingly 1`] = `
+exports[`MembersPanel should display an empty result if no matching members found 1`] = `
+<div class="oc-ml-s">
+  <oc-text-input-stub class="oc-text-truncate oc-mr-s oc-mt-m" clearbuttonaccessiblelabel="" id="oc-textinput-3" label="" placeholder="Filter members" type="text" value="no-match"></oc-text-input-stub>
+  <div>
+    <div>
+      <h4>No members found</h4>
+    </div>
+    <!--v-if-->
+    <!--v-if-->
+    <!--v-if-->
+  </div>
+</div>
+`;
+
+exports[`MembersPanel should render all members accordingly to their role assignments 1`] = `
 <div class="oc-ml-s">
   <oc-text-input-stub class="oc-text-truncate oc-mr-s oc-mt-m" clearbuttonaccessiblelabel="" id="oc-textinput-1" label="" placeholder="Filter members" type="text" value=""></oc-text-input-stub>
   <div>
