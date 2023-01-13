@@ -1,7 +1,7 @@
 import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from '../../composables/sideBar'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export default {
   mixins: [isFilesAppActive],

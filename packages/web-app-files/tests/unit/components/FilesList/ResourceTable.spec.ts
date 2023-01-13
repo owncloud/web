@@ -3,7 +3,7 @@ import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vu
 import { extractDomSelector, Resource } from 'web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 import { displayPositionedDropdown, eventBus } from 'web-pkg/src'
-import { SideBarEventTopics } from 'web-app-files/src/composables/sideBar'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { mockDeep } from 'jest-mock-extended'
 
 const router = {

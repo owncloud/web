@@ -14,7 +14,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from '../../composables/sideBar'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export default defineComponent({
   props: {

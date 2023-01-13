@@ -2,7 +2,7 @@ import { mapGetters } from 'vuex'
 import { eventBus } from 'web-pkg'
 import { isLocationTrashActive, isLocationPublicActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
-import { SideBarEventTopics } from '../../composables/sideBar'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export default {
   mixins: [isFilesAppActive],

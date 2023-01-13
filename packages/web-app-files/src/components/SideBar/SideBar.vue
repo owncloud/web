@@ -55,7 +55,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from '../../composables/sideBar'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
 import { useActiveLocation } from '../../composables'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'

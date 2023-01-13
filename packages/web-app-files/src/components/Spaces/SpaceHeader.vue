@@ -92,7 +92,7 @@ import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import SpaceContextActions from './SpaceContextActions.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from '../../composables/sideBar'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 const visibilityObserver = new VisibilityObserver()
 const markdownContainerCollapsedClass = 'collapsed'

@@ -96,7 +96,7 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics, useSideBar } from '../../composables/sideBar'
+import { SideBarEventTopics, useSideBar } from 'web-pkg/src/composables/sideBar'
 import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 
