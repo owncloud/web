@@ -19,13 +19,9 @@ Feature: reshare
     And "Alice" creates the following folder in personal space using API
       | name             |
       | folder_to_shared |
-
-    And "Alice" logs in
-    And "Alice" opens the "files" app
-    When "Alice" shares the following resource using the sidebar panel
+    And "Alice" shares the following resource using API
       | resource         | recipient | type | role   |
       | folder_to_shared | Brian     | user | editor |
-    And "Alice" logs out
 
     And "Brian" logs in
     And "Brian" opens the "files" app
