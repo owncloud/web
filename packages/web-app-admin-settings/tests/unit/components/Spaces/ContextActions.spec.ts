@@ -16,7 +16,8 @@ const mixins = [
   '$_editQuota_items',
   '$_disable_items',
   '$_restore_items',
-  '$_delete_items'
+  '$_delete_items',
+  '$_showDetails_items'
 ]
 
 const Component = {

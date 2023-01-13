@@ -3,7 +3,7 @@ import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
 import { usePagination, useFileListHeaderPosition, SortField } from '../'
 import { useSort, SortDir } from '../sort/'
-import { useSideBar } from '../sideBar'
+import { useSideBar } from 'web-pkg/src/composables/sideBar'
 
 import {
   queryItemAsString,

@@ -1,7 +1,7 @@
 import { $gettext } from './gettext'
 import { createQuicklink } from './helpers/share'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from './composables/sideBar'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export function canShare(item, store) {
   const { capabilities } = store.state.user

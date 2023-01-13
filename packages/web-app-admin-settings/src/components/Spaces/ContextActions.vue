@@ -17,6 +17,7 @@ import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import Rename from 'web-pkg/src/mixins/spaces/rename'
 import Restore from 'web-pkg/src/mixins/spaces/restore'
+import ShowDetails from '../../mixins/showDetails'
 import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
 import { Resource } from 'web-client'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
@@ -25,15 +26,13 @@ import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 export default defineComponent({
   name: 'ContextActions',
   components: { ContextActionMenu, QuotaModal },
-  mixins: [Delete, Disable, EditDescription, EditQuota, Rename, Restore],
-
+  mixins: [Delete, Disable, EditDescription, EditQuota, Rename, Restore, ShowDetails],
   props: {
     items: {
       type: Array as PropType<Resource[]>,
       required: true
     }
   },
-
   setup(props) {
     const instance = getCurrentInstance().proxy
 
@@ -51,6 +50,10 @@ export default defineComponent({
         ...instance.$_delete_items
       ].filter((item) => item.isEnabled(unref(filterParams)))
     )
+    const menuItemsSidebar = computed(() =>
+      [...instance.$_showDetails_items].filter((item) => item.isEnabled(unref(filterParams)))
+    )
+
     const menuSections = computed(() => {
       const sections = []
 
@@ -66,7 +69,12 @@ export default defineComponent({
           items: unref(menuItemsSecondaryActions)
         })
       }
-
+      if (unref(menuItemsSidebar).length) {
+        sections.push({
+          name: 'sidebar',
+          items: unref(menuItemsSidebar)
+        })
+      }
       return sections
     })
 
@@ -78,7 +86,6 @@ export default defineComponent({
     const spaceQuotaUpdated = (quota) => {
       instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
     }
-
     return {
       menuSections,
       quotaModalSelectedSpace,

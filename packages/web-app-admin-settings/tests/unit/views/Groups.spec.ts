@@ -88,22 +88,22 @@ describe('Groups view', () => {
      * As soon as edit panel will be available in group management, please un-skip it.
      */
     // eslint-disable-next-line jest/no-disabled-tests
-    it.skip('should contain EditPanel with property enabled set true when one group is selected', () => {
+    it.skip('should contain EditPanel when one group is selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }] } })
       expect(
         wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeTruthy()
     })
-    it('should contain EditPanel with property enabled set false when no group is selected', () => {
+    it('should contain DetailsPanel when no group is selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedGroups: [] } })
       expect(
-        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
-      ).toBeFalsy()
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'DetailsPanel').enabled
+      ).toBeTruthy()
     })
-    it('should contain EditPanel with property enabled set false when multiple groups are selected', () => {
+    it('should not contain EditPanel multiple groups are selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }, { id: '2' }] } })
       expect(
-        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel')
       ).toBeFalsy()
     })
   })

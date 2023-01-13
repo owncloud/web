@@ -6,11 +6,14 @@ import {
   defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
+import { eventBus } from 'web-pkg'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 const stubSelectors = {
   ocBreadcrumb: 'oc-breadcrumb-stub',
   appLoadingSpinner: 'app-loading-spinner-stub',
-  sideBar: 'side-bar-stub'
+  sideBar: 'side-bar-stub',
+  sideBarToggleButton: '#files-toggle-sidebar'
 }
 
 const elSelectors = {
@@ -50,16 +53,33 @@ describe('AppTemplate', () => {
       expect(wrapper.find(elSelectors.adminSettingsWrapper).exists()).toBeTruthy()
     })
   })
-  describe('sideBarOpen is true', () => {
-    it('should show side bar component', () => {
+  describe('sideBar', () => {
+    it('should show when opened', () => {
       const { wrapper } = getWrapper({ propsData: { sideBarOpen: true } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeTruthy()
     })
-  })
-  describe('sideBarOpen is false', () => {
-    it('should not show side bar component', () => {
+    it('should not show when closed', () => {
       const { wrapper } = getWrapper({ propsData: { sideBarOpen: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
+    })
+    it('can be toggled', async () => {
+      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const { wrapper } = getWrapper()
+      await wrapper.find(stubSelectors.sideBarToggleButton).trigger('click')
+      expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.toggle)
+    })
+    it('can be closed', async () => {
+      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const { wrapper } = getWrapper()
+      ;(wrapper.findComponent<any>(stubSelectors.sideBar).vm as any).$emit('close')
+      expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.close)
+    })
+    it('panel can be selected', async () => {
+      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const panelName = 'SomePanel'
+      const { wrapper } = getWrapper()
+      ;(wrapper.findComponent<any>(stubSelectors.sideBar).vm as any).$emit('selectPanel', panelName)
+      expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.setActivePanel, panelName)
     })
   })
   describe('property propagation', () => {
@@ -109,6 +129,9 @@ function getWrapper({ propsData = {} } = {}) {
       },
       global: {
         plugins: [...defaultPlugins(), store],
+        stubs: {
+          OcButton: false
+        },
         mocks: {
           ...defaultComponentMocks({
             gettext: false,

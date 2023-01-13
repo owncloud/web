@@ -222,7 +222,7 @@ import {
   formatDateFromJSDate,
   formatRelativeDateFromJSDate
 } from 'web-pkg/src/helpers'
-import { SideBarEventTopics } from '../../composables/sideBar'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'

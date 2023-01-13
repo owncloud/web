@@ -1,6 +1,6 @@
 import showDetails from 'web-app-files/src/mixins/actions/showDetails'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from '../../../../src/composables/sideBar'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import {
   createStore,
   defaultPlugins,

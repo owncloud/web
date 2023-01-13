@@ -3,7 +3,7 @@ import { Resource } from 'web-client/src'
 import { eventBus, useStore } from 'web-pkg/src'
 import { queryItemAsString } from 'web-pkg/src/composables/appDefaults'
 import { useRouteQuery } from 'web-pkg/src/composables'
-import { SideBarEventTopics } from '../sideBar'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export interface ScrollToResult {
   scrollToResource(resource: Resource): void

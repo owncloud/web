@@ -7,9 +7,6 @@
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
-      @closeSideBar="closeSideBar"
-      @toggleSideBar="toggleSideBar"
-      @selectPanel="selectPanel"
     >
       <template #topbarActions>
         <div class="admin-settings-app-bar-actions oc-mt-xs">
@@ -71,6 +68,7 @@ import SpaceDetailsMultiple from 'web-pkg/src/components/sideBar/Spaces/Details/
 import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelection.vue'
 import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
+import { useSideBar } from 'web-pkg/src/composables/sideBar'
 
 export default defineComponent({
   name: 'SpacesView',
@@ -91,8 +89,6 @@ export default defineComponent({
     const template = ref(null)
     const listHeaderPosition = ref(0)
     const selectedSpaces = ref([])
-    const sideBarOpen = ref(false)
-    const selectedPanel = ref(undefined)
 
     const loadResourcesTask = useTask(function* (signal) {
       const {
@@ -178,26 +174,8 @@ export default defineComponent({
             spaceResource: unref(selectedSpaces)[0]
           }
         }
-      ]
+      ].filter((p) => p.enabled)
     })
-
-    const sideBarActivePanel = computed(() => {
-      if (unref(selectedPanel)) {
-        return unref(selectedPanel)
-      }
-      return unref(sideBarAvailablePanels).find((e) => e.enabled).app
-    })
-
-    const closeSideBar = () => {
-      sideBarOpen.value = false
-      selectedPanel.value = false
-    }
-    const toggleSideBar = () => {
-      sideBarOpen.value = !unref(sideBarOpen)
-    }
-    const selectPanel = (panel) => {
-      selectedPanel.value = panel
-    }
 
     onMounted(async () => {
       await loadResourcesTask.perform()
@@ -214,6 +192,7 @@ export default defineComponent({
     })
 
     return {
+      ...useSideBar(),
       spaces,
       loadResourcesTask,
       graphClient,
@@ -221,13 +200,8 @@ export default defineComponent({
       breadcrumbs,
       listHeaderPosition,
       selectedSpaces,
-      sideBarOpen,
       sideBarAvailablePanels,
-      sideBarActivePanel,
-      closeSideBar,
-      toggleSideBar,
       template,
-      selectPanel,
       toggleSelectAllSpaces,
       toggleSelectSpace,
       unselectAllSpaces
