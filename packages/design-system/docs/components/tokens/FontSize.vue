@@ -12,7 +12,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import designTokens from '../../../src/assets/tokens/ods.json'
 
 /**
@@ -21,7 +22,7 @@ import designTokens from '../../../src/assets/tokens/ods.json'
  * sizes to a minimum. To edit font-sizes, see
  * [/src/tokens/font-size.yml](https://github.com/owncloud/web/blob/master/packages/design-system/src/tokens/font-size.yml).
  */
-export default {
+export default defineComponent({
   name: 'FontSize',
 
   computed: {
@@ -29,7 +30,7 @@ export default {
       return Object.values(designTokens).filter((token) => token.name.startsWith('oc-font-size-'))
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
@@ -63,7 +64,7 @@ export default {
 </style>
 
 <docs>
-  ```jsx
+  ```
   <FontSize/>
   ```
 </docs>
