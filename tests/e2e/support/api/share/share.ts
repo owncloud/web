@@ -1,6 +1,7 @@
 import { checkResponseStatus, request } from '../http'
 import { User } from '../../types'
 import join from 'join-path'
+
 export const shareTypes: Readonly<{
   user: string
   group: string
@@ -12,6 +13,7 @@ export const shareTypes: Readonly<{
   public: '3',
   federated: '6'
 }
+
 export const createShare = async ({
   user,
   path,
