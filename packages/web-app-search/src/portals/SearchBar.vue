@@ -105,7 +105,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'SearchBar',
   setup() {
-   const store = useStore()
+    const store = useStore()
     return {
       isUserContext: useUserContext({ store })
     }
@@ -215,7 +215,7 @@ export default defineComponent({
   },
 
   methods: {
-    async showPreview(){
+    async showPreview() {
       if (!this.term) {
         return
       }
