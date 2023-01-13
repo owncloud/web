@@ -82,7 +82,7 @@ export const getShareIdFromShareWithMePage = async ({
   let elements = _.get(fileData, 'ocs.data.element')
   elements = elements instanceof Array ? elements : [elements]
   for (const element of elements) {
-    const elementPath = element.path._text.replace(/^\/|\/$/g, '')
+    const elementPath = element.path._text.split('/').pop()
     if (elementPath === path) {
       return element.id._text
     }
