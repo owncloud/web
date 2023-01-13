@@ -276,7 +276,7 @@ export default defineComponent({
       padding: var(--oc-space-small);
     }
   }
-})
+}
 </style>
 
 <docs>

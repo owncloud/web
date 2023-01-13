@@ -13,9 +13,10 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
 import { getSizeClass } from '../../utils/sizeClasses'
 
-export default {
+export default defineComponent({
   name: 'OcButton',
   status: 'ready',
   release: '1.0.0',
@@ -173,7 +174,7 @@ export default {
       this.$emit('click', event)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">
@@ -578,10 +579,8 @@ Every button has to have an accessible name. It cannot be provided by a text bet
   </oc-table-simple>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent{
+<script>
+export default {
   computed: {
     variations() {
       return [
