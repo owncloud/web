@@ -88,7 +88,7 @@ describe('restore', () => {
       graphMock.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
       const { wrapper } = getWrapper(graphMock)
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
-      await wrapper.vm.$_restore_restoreSpace(1, 'renamed space')
+      await wrapper.vm.$_restore_restoreSpace({ id: 1 }, 'renamed space')
 
       expect(hideModalStub).toHaveBeenCalledTimes(1)
     })
@@ -99,7 +99,7 @@ describe('restore', () => {
       graphMock.drives.updateDrive.mockRejectedValue(new Error())
       const { wrapper } = getWrapper(graphMock)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.$_restore_restoreSpace(1)
+      await wrapper.vm.$_restore_restoreSpace({ id: 1 })
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
     })
