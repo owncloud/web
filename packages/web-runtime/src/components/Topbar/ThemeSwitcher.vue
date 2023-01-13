@@ -11,13 +11,13 @@
     <oc-icon :name="switchIcon" fill-type="line" />
   </oc-button>
 </template>
-<script>
-import { computed, unref, watch } from 'vue'
+<script lang="ts">
+import { computed, unref, watch, defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import { useStore, useLocalStorage } from 'web-pkg/src/composables'
 import { themeNameDark, themeNameLight, useDefaultThemeName } from '../../composables'
 
-export default {
+export default defineComponent({
   setup() {
     const store = useStore()
     const currentThemeName = useLocalStorage('oc_currentThemeName', useDefaultThemeName())
@@ -57,5 +57,5 @@ export default {
       this.currentThemeName = this.isLightTheme ? themeNameDark : themeNameLight
     }
   }
-}
+})
 </script>

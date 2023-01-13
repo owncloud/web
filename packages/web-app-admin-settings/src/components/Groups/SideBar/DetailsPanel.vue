@@ -30,8 +30,10 @@
     </div>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'DetailsPanel',
   props: {
     groups: {
@@ -55,7 +57,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .group-info {

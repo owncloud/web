@@ -72,7 +72,7 @@ import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import FileActions from '../mixins/fileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
-import debounce from 'lodash-es/debounce'
+import { debounce } from 'lodash-es'
 
 import AppBar from '../components/AppBar/AppBar.vue'
 import QuickActions from '../components/FilesList/QuickActions.vue'

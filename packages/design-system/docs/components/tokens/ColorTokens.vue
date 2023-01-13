@@ -19,7 +19,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import designTokens from '../../../src/assets/tokens/ods.json'
 
 /**
@@ -29,7 +30,7 @@ import designTokens from '../../../src/assets/tokens/ods.json'
  * like destructive actions and error messages. To edit the colors, see
  * [/src/tokens/color.yml](https://github.com/owncloud/owncloud-design-system/blob/master/src/tokens/color.yml).
  */
-export default {
+export default defineComponent({
   name: 'ColorTokens',
 
   computed: {
@@ -37,7 +38,7 @@ export default {
       return Object.values(designTokens).filter((token) => token.name.startsWith('oc-color-'))
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

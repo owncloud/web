@@ -12,8 +12,10 @@
   </oc-modal>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'DeleteUserModal',
   props: {
     users: {
@@ -43,5 +45,5 @@ export default {
       )
     }
   }
-}
+})
 </script>

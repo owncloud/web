@@ -17,12 +17,12 @@
     <slot v-else />
   </tr>
 </template>
-<script>
-import { customRef, computed, ref, unref } from 'vue'
+<script lang="ts">
+import { customRef, computed, ref, unref, defineComponent } from 'vue'
 import { useIsVisible } from '../../composables'
 import OcTd from '../_OcTableCellData/_OcTableCellData.vue'
 
-export default {
+export default defineComponent({
   name: 'OcTr',
   status: 'ready',
   release: '1.0.0',
@@ -78,7 +78,7 @@ export default {
       lazyColspan
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .shimmer {

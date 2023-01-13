@@ -89,7 +89,9 @@
   </nav>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import { AVAILABLE_SIZES } from '../../helpers/constants'
 
 import OcButton from '../OcButton/OcButton.vue'
@@ -102,7 +104,7 @@ import OcIcon from '../OcIcon/OcIcon.vue'
  *  - text: mandatory element, holds the text which is to be displayed in the breadcrumb
  *  - to: optional element, the vue router link
  */
-export default {
+export default defineComponent({
   name: 'OcBreadcrumb',
   status: 'ready',
   release: '1.0.0',
@@ -175,7 +177,7 @@ export default {
       return this.items.length - 1 === index ? 'page' : null
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

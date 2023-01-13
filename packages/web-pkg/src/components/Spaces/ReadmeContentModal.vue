@@ -21,9 +21,11 @@
   </portal>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import { mapActions, mapMutations } from 'vuex'
-export default {
+export default defineComponent({
   name: 'SpaceReadmeContentModal',
   props: {
     space: {
@@ -93,5 +95,5 @@ export default {
         })
     }
   }
-}
+})
 </script>

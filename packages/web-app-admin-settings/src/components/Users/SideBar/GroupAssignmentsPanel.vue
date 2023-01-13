@@ -46,11 +46,12 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import UserInfoBox from './UserInfoBox.vue'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 
-export default {
+export default defineComponent({
   name: 'GroupAssignmentsPanel',
   components: {
     UserInfoBox,
@@ -85,7 +86,7 @@ export default {
       this.editUser = { ...this.user }
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

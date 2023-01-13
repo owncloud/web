@@ -98,7 +98,7 @@
 
 <script lang="ts">
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import debounce from 'lodash-es/debounce'
+import { debounce } from 'lodash-es'
 
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../../mixins/fileActions'

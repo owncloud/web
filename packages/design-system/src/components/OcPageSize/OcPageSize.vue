@@ -19,14 +19,15 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import uniqueId from '../../utils/uniqueId'
 import OcSelect from '../OcSelect/OcSelect.vue'
 
 /**
  * Select how many items will be displayed per page
  */
-export default {
+export default defineComponent({
   name: 'OcPageSize',
   status: 'ready',
   release: '8.0.0',
@@ -81,7 +82,7 @@ export default {
       this.$emit('change', value)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

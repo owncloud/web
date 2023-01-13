@@ -25,8 +25,10 @@
   </oc-modal>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'CreateGroupModal',
   props: {
     existingGroups: {
@@ -89,5 +91,5 @@ export default {
       this.$emit('confirm', this.group)
     }
   }
-}
+})
 </script>

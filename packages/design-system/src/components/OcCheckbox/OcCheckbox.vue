@@ -13,13 +13,14 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { getSizeClass } from '../../utils/sizeClasses'
 import uniqueId from '../../utils/uniqueId'
 /**
  * A checkbox input element. The checkbox is either checked or unchecked.
  */
-export default {
+export default defineComponent({
   name: 'OcCheckbox',
   status: 'ready',
   release: '1.0.0',
@@ -136,7 +137,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

@@ -47,13 +47,14 @@
   </nav>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { clientService } from 'web-pkg/src/services'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { mapGetters } from 'vuex'
 import { urlJoin } from 'web-client/src/utils'
 
-export default {
+export default defineComponent({
   props: {
     applicationsList: {
       type: Array,
@@ -87,7 +88,7 @@ export default {
       return httpClient.post(url, { isDefault: false })
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

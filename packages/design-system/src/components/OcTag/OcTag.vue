@@ -5,10 +5,12 @@
   </component>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import { getSizeClass } from '../../utils/sizeClasses'
 
-export default {
+export default defineComponent({
   name: 'OcTag',
   status: 'ready',
   release: '2.0.0',
@@ -81,7 +83,7 @@ export default {
       this.$emit('click', event)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

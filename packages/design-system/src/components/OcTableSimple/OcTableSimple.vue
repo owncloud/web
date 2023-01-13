@@ -3,11 +3,13 @@
     <slot />
   </table>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * A table component with manually built layout.
  */
-export default {
+export default defineComponent({
   name: 'OcTableSimple',
   status: 'ready',
   release: '2.1.0',
@@ -29,7 +31,7 @@ export default {
       return result
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .oc-table-simple {

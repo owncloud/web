@@ -29,7 +29,7 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
 import { shareType } from '../../utils/shareType.js'
 import OcAvatar from '../OcAvatar/OcAvatar.vue'
 import OcAvatarCount from '../OcAvatarCount/OcAvatarCount.vue'

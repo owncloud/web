@@ -52,12 +52,13 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
 import { formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 
-export default {
+export default defineComponent({
   name: 'EditDropdown',
   props: {
     expirationDate: {
@@ -255,7 +256,7 @@ export default {
       this.$emit('showAccessDetails')
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .collaborator-edit-dropdown-options-list .action-menu-item {

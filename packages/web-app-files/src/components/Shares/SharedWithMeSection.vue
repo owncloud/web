@@ -90,7 +90,7 @@
 <script lang="ts">
 import ResourceTable from '../FilesList/ResourceTable.vue'
 import { computed, defineComponent, unref } from 'vue'
-import debounce from 'lodash-es/debounce'
+import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { mapActions, mapGetters, mapMutations } from 'vuex'

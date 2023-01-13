@@ -2,11 +2,13 @@
   <component :is="listSearch.component" :search-result="searchResult" :loading="loading" />
 </template>
 
-<script>
-import { providerStore } from '../service'
-import debounce from 'lodash-es/debounce'
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-export default {
+import { providerStore } from '../service'
+import { debounce } from 'lodash-es'
+
+export default defineComponent({
   data() {
     const { provider: providerId } = this.$route.query
     const { listSearch } = providerStore.availableProviders.find(
@@ -47,5 +49,5 @@ export default {
       this.loading = false
     }
   }
-}
+})
 </script>

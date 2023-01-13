@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import debounce from 'lodash-es/debounce'
+import { debounce } from 'lodash-es'
 import PQueue from 'p-queue'
 
 import { mapActions, mapGetters } from 'vuex'

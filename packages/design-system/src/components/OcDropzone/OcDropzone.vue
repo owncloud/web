@@ -5,12 +5,14 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'OcDropzone',
   status: 'ready',
   release: '0.0.1'
-}
+})
 </script>
 
 <style lang="scss">

@@ -14,13 +14,15 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import { getSizeClass } from '../../utils/sizeClasses'
 import uniqueId from '../../utils/uniqueId'
 /**
  * The radio element. Can be grouped to give the user to choose between different options.
  */
-export default {
+export default defineComponent({
   name: 'OcRadio',
   status: 'ready',
   release: '1.0.0',
@@ -111,7 +113,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

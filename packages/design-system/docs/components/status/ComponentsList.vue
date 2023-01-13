@@ -63,10 +63,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import orderBy from '../../utils/orderBy'
 
-export default {
+export default defineComponent({
   name: 'ComponentsList',
   data() {
     return {
@@ -90,7 +91,7 @@ export default {
       return orderBy(data, 'name', 'asc')
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -2,11 +2,13 @@
   <div :class="['oc-loader', { 'oc-loader-flat': flat }]" :aria-label="ariaLabel" />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * Remote actions can take an undefined portion of time. The spinner gives feedback to the users about an actions being processed.
  */
-export default {
+export default defineComponent({
   name: 'OcLoader',
   status: 'ready',
   release: '1.0.0',
@@ -26,7 +28,7 @@ export default {
       default: false
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

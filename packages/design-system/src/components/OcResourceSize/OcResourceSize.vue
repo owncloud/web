@@ -2,13 +2,14 @@
   <span class="oc-resource-size" v-text="formattedSize" />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import filesize from 'filesize'
 
 /**
  * Displays a formatted resource size
  */
-export default {
+export default defineComponent({
   name: 'OcResourceSize',
   status: 'ready',
   release: '2.1.0',
@@ -41,7 +42,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <docs>

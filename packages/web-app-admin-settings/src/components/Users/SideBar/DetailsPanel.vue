@@ -38,9 +38,10 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import UserInfoBox from './UserInfoBox.vue'
-export default {
+export default defineComponent({
   name: 'DetailsPanel',
   components: {
     UserInfoBox
@@ -67,7 +68,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .details-table {

@@ -1,5 +1,5 @@
 import { customRef, Ref, ref } from 'vue'
-import debounce, { DebounceSettings } from 'lodash-es/debounce'
+import { debounce, DebounceSettings } from 'lodash-es'
 
 export const useDebouncedRef = <T>(
   initialValue: T,

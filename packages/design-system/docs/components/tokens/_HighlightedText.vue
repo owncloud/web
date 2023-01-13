@@ -22,8 +22,8 @@
   </component>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'HighlightedText',
   props: {
     tag: {
@@ -83,7 +83,7 @@ export default {
       ]
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

@@ -12,10 +12,11 @@
   </component>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { getSizeClass } from '../../utils/sizeClasses'
 
-export default {
+export default defineComponent({
   name: 'OcButton',
   status: 'ready',
   release: '1.0.0',
@@ -173,7 +174,7 @@ export default {
       this.$emit('click', event)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

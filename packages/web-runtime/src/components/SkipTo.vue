@@ -2,8 +2,9 @@
   <button class="skip-button" @click="skipToTarget"><slot /></button>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
     /*
      * The element to focus and to skip to
@@ -25,7 +26,7 @@ export default {
       this.targetElement.scrollIntoView()
     }
   }
-}
+})
 </script>
 
 <style scoped>

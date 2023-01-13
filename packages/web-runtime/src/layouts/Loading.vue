@@ -8,15 +8,16 @@
     <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" />
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 
-export default {
+export default defineComponent({
   name: 'LoadingLayout',
   computed: {
     ...mapGetters(['configuration'])
   }
-}
+})
 </script>
 <style lang="scss">
 .loading-overlay {

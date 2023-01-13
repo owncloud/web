@@ -32,12 +32,14 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import OcAvatar from '../OcAvatar/OcAvatar.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcSpinner from '../OcSpinner/OcSpinner.vue'
 
-export default {
+export default defineComponent({
   name: 'OcRecipient',
   status: 'ready',
   release: '8.2.0',
@@ -94,7 +96,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

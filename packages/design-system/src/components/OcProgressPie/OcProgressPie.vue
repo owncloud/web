@@ -4,11 +4,13 @@
     <label v-if="showLabel" class="oc-progress-pie-label oc-text-muted" v-text="_label" />
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * Show progress to the users in a pie shape.
  */
-export default {
+export default defineComponent({
   name: 'OcProgressPie',
   status: 'ready',
   release: '1.0.0',
@@ -51,7 +53,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 <style lang="scss">
 $default-size: 64px;

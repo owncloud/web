@@ -5,6 +5,7 @@
   "license": "AGPL-3.0",
   "author": "ownCloud GmbH <devops@owncloud.com>",
   "scripts": {
+    "check-types": "tsc --noEmit",
     "build": "vue-demi-fix && pnpm build:tokens && pnpm vite build",
     "build:w": "pnpm build --watch",
     "build:tokens": "pnpm --filter @ownclouders/design-system tokens",
@@ -145,7 +146,8 @@
       "@adobe/leonardo-contrast-colors@1.0.0-alpha.16": "patches/@adobe__leonardo-contrast-colors@1.0.0-alpha.16.patch",
       "jest-serializer-vue-tjw@3.19.0": "patches/jest-serializer-vue-tjw@3.19.0.patch",
       "vue-gettext@2.1.12": "patches/vue-gettext@2.1.12.patch",
-      "keycode@2.2.1": "patches/keycode@2.2.1.patch"
+      "keycode@2.2.1": "patches/keycode@2.2.1.patch",
+      "vue-inline-svg@3.1.0": "patches/vue-inline-svg@3.1.0.patch"
     }
   },
   "jestSerializer": {

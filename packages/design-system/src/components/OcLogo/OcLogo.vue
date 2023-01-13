@@ -2,10 +2,11 @@
   <oc-img :ref="ref" class="oc-logo" :src="src" :alt="alt" />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import OcImg from '../OcImage/OcImage.vue'
 
-export default {
+export default defineComponent({
   name: 'OcLogo',
   status: 'ready',
   release: '7.3.0',
@@ -27,7 +28,7 @@ export default {
       required: true
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

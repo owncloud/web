@@ -10,10 +10,11 @@
   />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import OcAvatarItem from '../OcAvatarItem/OcAvatarItem.vue'
 
-export default {
+export default defineComponent({
   name: 'OcAvatarFederated',
   status: 'ready',
   release: '10.0.0',
@@ -55,7 +56,7 @@ export default {
       default: 'small'
     }
   }
-}
+})
 </script>
 
 <docs>

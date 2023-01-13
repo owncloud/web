@@ -7,19 +7,19 @@ import Vue, { ComponentOptions } from 'vue'
  * into js files which then again get imported by other vue files...
  */
 export interface RouteComponents {
-  App: ComponentOptions<Vue>
-  Favorites: ComponentOptions<Vue>
-  FilesDrop: ComponentOptions<Vue>
-  PrivateLink: ComponentOptions<Vue>
-  SearchResults: ComponentOptions<Vue>
-  PublicLink: ComponentOptions<Vue>
+  App: ComponentOptions<typeof Vue>
+  Favorites: ComponentOptions<typeof Vue>
+  FilesDrop: ComponentOptions<typeof Vue>
+  PrivateLink: ComponentOptions<typeof Vue>
+  SearchResults: ComponentOptions<typeof Vue>
+  PublicLink: ComponentOptions<typeof Vue>
   Shares: {
-    SharedWithMe: ComponentOptions<Vue>
-    SharedWithOthers: ComponentOptions<Vue>
-    SharedViaLink: ComponentOptions<Vue>
+    SharedWithMe: ComponentOptions<typeof Vue>
+    SharedWithOthers: ComponentOptions<typeof Vue>
+    SharedViaLink: ComponentOptions<typeof Vue>
   }
   Spaces: {
-    DriveResolver: ComponentOptions<Vue>
-    Projects: ComponentOptions<Vue>
+    DriveResolver: ComponentOptions<typeof Vue>
+    Projects: ComponentOptions<typeof Vue>
   }
 }

@@ -5,9 +5,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import OcAccordionItem from '../OcAccordionItem/OcAccordionItem.vue'
-export default {
+export default defineComponent({
   name: 'OcAccordion',
   // eslint-disable-next-line vue/no-unused-components
   components: { OcAccordionItem },
@@ -144,7 +145,7 @@ export default {
       this.expandedIdsInternal = this.expandedIdsInternal.filter((expandedId) => expandedId !== id)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

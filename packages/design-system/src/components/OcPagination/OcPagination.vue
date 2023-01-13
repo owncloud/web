@@ -31,13 +31,14 @@
   </nav>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 
 /**
  * A list of links used for switching to different pages
  */
-export default {
+export default defineComponent({
   name: 'OcPagination',
   status: 'ready',
   release: '7.2.0',
@@ -197,7 +198,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

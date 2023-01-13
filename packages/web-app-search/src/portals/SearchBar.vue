@@ -92,13 +92,12 @@
   <div v-else><!-- no search provider available --></div>
 </template>
 
-<!-- This is a `js` component because TypeScript and jest currently fail to import lodash-es/debounce and mark.js -->
-<script lang="js">
+<script lang="ts">
 import { providerStore } from '../service'
 
 import { createLocationCommon } from 'web-app-files/src/router'
 import Mark from 'mark.js'
-import debounce from 'lodash-es/debounce'
+import { debounce } from 'lodash-es'
 import { useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { defineComponent } from 'vue'
@@ -106,7 +105,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'SearchBar',
   setup() {
-   const store = useStore()
+    const store = useStore()
     return {
       isUserContext: useUserContext({ store })
     }
@@ -216,7 +215,7 @@ export default defineComponent({
   },
 
   methods: {
-    async showPreview(){
+    async showPreview() {
       if (!this.term) {
         return
       }

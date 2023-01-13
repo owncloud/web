@@ -12,7 +12,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import designTokens from '../../../src/assets/tokens/ods.json'
 
 /**
@@ -22,14 +24,14 @@ import designTokens from '../../../src/assets/tokens/ods.json'
  * To edit spacing, see
  * [/src/tokens/spacing.yml](https://github.com/owncloud/web/blob/master/packages/design-system/src/tokens/spacing.yml).
  */
-export default {
+export default defineComponent({
   name: 'SpacingTokens',
   computed: {
     tokens() {
       return Object.values(designTokens).filter((token) => token.name.startsWith('oc-space'))
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

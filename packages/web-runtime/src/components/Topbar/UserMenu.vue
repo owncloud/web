@@ -76,14 +76,15 @@
   </nav>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
 import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 
-export default {
+export default defineComponent({
   props: {
     applicationsList: {
       type: Array,
@@ -169,7 +170,7 @@ export default {
       authService.logoutUser()
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

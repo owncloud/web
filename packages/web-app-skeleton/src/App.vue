@@ -2,8 +2,9 @@
   <div @click="hello">CLICK ME TO TALK TO FOO --> {{ foo }}</div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   data: () => ({
     foo: 'bar'
   }),
@@ -12,5 +13,5 @@ export default {
       alert(this.foo)
     }
   }
-}
+})
 </script>
