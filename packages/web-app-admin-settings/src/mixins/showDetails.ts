@@ -14,7 +14,7 @@ export default {
             return resources.length > 0
           },
           componentType: 'button',
-          class: 'oc-spaces-actions-show-details-trigger'
+          class: 'oc-admin-settings-show-details-trigger'
         }
       ]
     }

@@ -1,7 +1,7 @@
-export abstract class SideBarEventTopics {
-  public static readonly open = 'sidebar.open'
-  public static readonly close = 'sidebar.close'
-  public static readonly toggle = 'sidebar.toggle'
-  public static readonly openWithPanel = 'sidebar.openWithPanel'
-  public static readonly setActivePanel = 'sidebar.setActivePanel'
+export enum SideBarEventTopics {
+  open = 'sidebar.open',
+  close = 'sidebar.close',
+  toggle = 'sidebar.toggle',
+  openWithPanel = 'sidebar.openWithPanel',
+  setActivePanel = 'sidebar.setActivePanel'
 }
