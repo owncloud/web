@@ -6,7 +6,7 @@
 import { defineComponent } from 'vue'
 
 import { providerStore } from '../service'
-import debounce from 'lodash-es/debounce'
+import { debounce } from 'lodash-es'
 
 export default defineComponent({
   data() {

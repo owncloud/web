@@ -66,7 +66,7 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import FileActions from '../../mixins/fileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
-import debounce from 'lodash-es/debounce'
+import { debounce } from 'lodash-es'
 
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
