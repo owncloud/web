@@ -78,6 +78,7 @@ import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelec
 import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
+import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import { useGettext } from 'vue3-gettext'
 
@@ -188,6 +189,17 @@ export default defineComponent({
           enabled: unref(selectedSpaces).length === 1,
           componentAttrs: {
             spaceResource: unref(selectedSpaces)[0]
+          }
+        },
+        {
+          app: 'SpaceActions',
+          icon: 'slideshow-3',
+          title: $gettext('Space actions'),
+          component: ActionsPanel,
+          default: false,
+          enabled: unref(selectedSpaces).length === 1,
+          componentAttrs: {
+            selectedSpaces: unref(selectedSpaces)
           }
         }
       ].filter((p) => p.enabled)
