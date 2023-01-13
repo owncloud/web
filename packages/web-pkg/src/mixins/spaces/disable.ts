@@ -1,5 +1,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
+import { SpaceResource } from 'web-client'
 
 export default {
   computed: {
@@ -64,15 +65,16 @@ export default {
       this.createModal(modal)
     },
 
-    $_disable_disableSpace(space) {
+    $_disable_disableSpace(space: SpaceResource) {
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       return graphClient.drives
-        .deleteDrive(space.id)
+        .deleteDrive(space.id.toString())
         .then(() => {
           this.hideModal()
           if (this.$router.currentRoute.name === 'admin-settings-spaces') {
             space.disabled = true
+            space.spaceQuota = { total: space.spaceQuota.total }
           }
           this.UPDATE_SPACE_FIELD({
             id: space.id,

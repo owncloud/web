@@ -54,7 +54,7 @@
           <span v-text="ownerUsernames" />
         </td>
       </tr>
-      <tr>
+      <tr v-if="!space.disabled">
         <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
         <td>
           <space-quota :space-quota="space.spaceQuota" />

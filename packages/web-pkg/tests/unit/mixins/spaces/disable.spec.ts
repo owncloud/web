@@ -87,7 +87,7 @@ describe('disable', () => {
       graphMock.drives.deleteDrive.mockResolvedValue(mockAxiosResolve())
       const { wrapper } = getWrapper(graphMock)
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
-      await wrapper.vm.$_disable_disableSpace(1)
+      await wrapper.vm.$_disable_disableSpace({ id: 1 })
 
       expect(hideModalStub).toHaveBeenCalledTimes(1)
     })
@@ -98,7 +98,7 @@ describe('disable', () => {
       graphMock.drives.deleteDrive.mockRejectedValue(new Error())
       const { wrapper } = getWrapper(graphMock)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.$_disable_disableSpace(1)
+      await wrapper.vm.$_disable_disableSpace({ id: 1 })
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
     })
