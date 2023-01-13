@@ -139,6 +139,7 @@ import { useTranslations } from 'web-pkg/src/composables'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
+import filesize from 'filesize'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -326,19 +327,19 @@ export default defineComponent({
       return formatRelativeDateFromJSDate(new Date(date), $language.current)
     }
     const getTotalQuota = (space: SpaceResource) => {
-      return `${space.spaceQuota.total * Math.pow(10, -9)} GB`
+      return filesize(space.spaceQuota.total)
     }
     const getUsedQuota = (space: SpaceResource) => {
       if (space.spaceQuota.used === undefined) {
         return '-'
       }
-      return `${(space.spaceQuota.used * Math.pow(10, -9)).toFixed(2)} GB`
+      return filesize(space.spaceQuota.used)
     }
     const getRemainingQuota = (space: SpaceResource) => {
       if (space.spaceQuota.remaining === undefined) {
         return '-'
       }
-      return `${(space.spaceQuota.remaining * Math.pow(10, -9)).toFixed(0)} GB`
+      return filesize(space.spaceQuota.remaining)
     }
     const getMemberCount = (space: SpaceResource) => {
       return (
