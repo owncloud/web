@@ -4,7 +4,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * Notifications are used to inform users about errors, warnings and as confirmations for their actions. They will automatically disappear after a certain amount of time.
  *
@@ -15,7 +17,7 @@
  * ### Notifications for screen reader users
  * This component uses so called live regions in order to announce its content to screen readers once the notification appeared (this is not the normal modus operandi for screen readers, since their reading order is usually the DOM order – when the user does not take shortcuts). There are two types of live regions: `aria-live="polite"` (equivalent to `role="status"`) and `aria-live="assertive"` (equivalent to `role="alert"`). The latter directly interrupts the current output of the screen reader, the former waits until the current output is finished and reads the announcement afterwards. Since 'assertive' should be used sparingly, only `<oc-notfication-message>`'s "danger" status prop value uses `aria-live="assertive"` (and `role="alert"`). Using `aria-live` and `role="assertive|status"` simultaneously is for compatibility reasons regarding different browser and assistive technology pairings.
  */
-export default {
+export default defineComponent({
   name: 'OcNotifications',
   status: 'ready',
   release: '1.0.0',
@@ -38,7 +40,7 @@ export default {
       return `oc-notification-${this.position}`
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

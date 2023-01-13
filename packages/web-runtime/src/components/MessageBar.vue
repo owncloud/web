@@ -11,10 +11,11 @@
   </oc-notifications>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 
-export default {
+export default defineComponent({
   props: {
     activeMessages: {
       type: Array,
@@ -39,5 +40,5 @@ export default {
       this.$emit('deleteMessage', item)
     }
   }
-}
+})
 </script>

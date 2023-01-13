@@ -43,7 +43,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import uniqueId from '../../utils/uniqueId'
@@ -51,7 +52,7 @@ import uniqueId from '../../utils/uniqueId'
 /**
  * Status indicators which can be attatched to a resource
  */
-export default {
+export default defineComponent({
   name: 'OcStatusIndicators',
   status: 'ready',
   release: '2.0.1',
@@ -111,7 +112,7 @@ export default {
       return this.accessibleDescriptionIds[indicator.id]
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

@@ -57,7 +57,9 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import OcButton from '../OcButton/OcButton.vue'
 import OcImg from '../OcImage/OcImage.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
@@ -69,7 +71,7 @@ import * as path from 'path'
 /**
  * Displays a resource together with the resource type icon or thumbnail
  */
-export default {
+export default defineComponent({
   name: 'OcResource',
   status: 'ready',
   release: '2.1.0',
@@ -184,7 +186,7 @@ export default {
       this.$emit('click')
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

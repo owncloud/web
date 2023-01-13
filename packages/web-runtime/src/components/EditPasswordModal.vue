@@ -33,8 +33,10 @@
   </oc-modal>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'EditPasswordModal',
   data: function () {
     return {
@@ -74,5 +76,5 @@ export default {
       return true
     }
   }
-}
+})
 </script>

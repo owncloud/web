@@ -6,11 +6,13 @@
   />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * Count of avatars which weren't displayed.
  */
-export default {
+export default defineComponent({
   name: 'OcAvatarCount',
   status: 'ready',
   release: '2.1.0',
@@ -37,7 +39,7 @@ export default {
       return Math.floor(this.size / 2.5) + 'px'
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

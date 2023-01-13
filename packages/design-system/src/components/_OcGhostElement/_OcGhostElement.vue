@@ -9,11 +9,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * Please head to the ownCloud web ResourceTable component (https://github.com/owncloud/web/blob/master/packages/web-app-files/src/components/FilesList/ResourceTable.vue) for a demo of the Ghost Element.
  */
-export default {
+export default defineComponent({
   name: 'OcGhostElement',
   status: 'ready',
   release: '11.2.0',
@@ -37,7 +39,7 @@ export default {
       return this.previewItems.length
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

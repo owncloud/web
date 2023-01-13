@@ -43,7 +43,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import uniqueId from '../../utils/uniqueId'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
@@ -61,7 +63,7 @@ import OcIcon from '../OcIcon/OcIcon.vue'
  * An error or warning will replace the description as well as the `aria-describedby` property until the error
  * or warning is fixed.
  */
-export default {
+export default defineComponent({
   name: 'OcTextInput',
   components: { OcIcon, OcButton },
   status: 'ready',
@@ -266,7 +268,7 @@ export default {
       this.$emit('focus', target.value)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

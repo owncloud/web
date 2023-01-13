@@ -2,7 +2,8 @@
   <span :class="$_ocSpinner_class" :aria-label="ariaLabel" tabindex="-1" role="img" />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { getSizeClass } from '../../utils/sizeClasses'
 
 /**
@@ -18,7 +19,7 @@ import { getSizeClass } from '../../utils/sizeClasses'
  *
  *
  */
-export default {
+export default defineComponent({
   name: 'OcSpinner',
   status: 'ready',
   release: '1.0.0',
@@ -48,7 +49,7 @@ export default {
       return ['oc-spinner', `oc-spinner-${getSizeClass(this.size)}`]
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

@@ -66,7 +66,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import OcIcon from '../../../src/components/OcIcon/OcIcon.vue'
 import OcTable from '../../../src/components/OcTable/OcTable.vue'
 import OcSearchBar from '../../../src/components/OcSearchBar/OcSearchBar'
@@ -79,7 +81,7 @@ const req = require.context('../../../src/assets/icons/', true, /^\.\/.*\.svg$/)
  *  Icons made by <a href="https://remixicon.com/">Remixicon</a> and, in the case of the `resource-type-*` icons, <a href="https://fontawesome.com/">Font Awesome</a> (available under the [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/) license).
  * </p>
  */
-export default {
+export default defineComponent({
   name: 'IconList',
   components: { HighlightedText, OcSearchBar, OcIcon, OcTable },
   data() {
@@ -147,7 +149,7 @@ export default {
       return filename.split('.').slice(0, -1).join('.').substring(2)
     })
   }
-}
+})
 </script>
 
 <docs>

@@ -70,11 +70,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 
-export default {
+export default defineComponent({
   name: 'GroupsList',
   props: {
     groups: {
@@ -201,7 +202,7 @@ export default {
       return this.$gettextInterpolate(translated, { group: group.displayName }, true)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

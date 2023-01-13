@@ -4,11 +4,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * The Grid system allows you to arrange block elements in columns.
  */
-export default {
+export default defineComponent({
   name: 'OcGrid',
   status: 'ready',
   release: '1.0.0',
@@ -45,7 +47,7 @@ export default {
       return c
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

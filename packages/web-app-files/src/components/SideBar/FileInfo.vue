@@ -25,11 +25,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import { mapGetters, mapState } from 'vuex'
 import PrivateLinkItem from './PrivateLinkItem.vue'
 
-export default {
+export default defineComponent({
   name: 'FileInfo',
   components: {
     PrivateLinkItem
@@ -58,7 +60,7 @@ export default {
       return this.highlightedFile
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

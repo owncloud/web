@@ -16,10 +16,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import { mapGetters } from 'vuex'
 
-export default {
+export default defineComponent({
   name: 'SpaceInfo',
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
@@ -28,7 +30,7 @@ export default {
       return this.highlightedFile
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

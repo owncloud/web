@@ -1,12 +1,14 @@
 <template>
   <img :src="src" :alt="alt" :aria-hidden="!alt" :title="title" :loading="loadingType" />
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * Images can be displayed using this component.
  *
  */
-export default {
+export default defineComponent({
   name: 'OcImg',
   status: 'ready',
   release: '1.0.0',
@@ -53,7 +55,7 @@ export default {
       return this.alt.length === 0
     }
   }
-}
+})
 </script>
 
 <docs>

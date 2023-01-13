@@ -33,7 +33,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import designTokens from '../../../src/assets/tokens/ods.json'
 
 /**
@@ -42,14 +43,14 @@ import designTokens from '../../../src/assets/tokens/ods.json'
  * To edit these tokens and add more, see
  * [/src/tokens/](https://github.com/owncloud/owncloud-design-system/blob/master/src/tokens).
  */
-export default {
+export default defineComponent({
   name: 'AllTokens',
   data() {
     return {
       tokens: Object.values(designTokens)
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -5,8 +5,9 @@
     <span class="oc-text-muted user-info-display-name" v-text="user.displayName"></span>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'UserInfoBox',
   props: {
     user: {
@@ -14,7 +15,7 @@ export default {
       required: true
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .user-info {

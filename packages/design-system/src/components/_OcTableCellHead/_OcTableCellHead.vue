@@ -11,10 +11,11 @@
     <slot />
   </oc-table-cell>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import OcTableCell from '../_OcTableCell/_OcTableCell.vue'
 
-export default {
+export default defineComponent({
   name: 'OcTh',
   status: 'ready',
   release: '2.1.0',
@@ -42,7 +43,7 @@ export default {
     }
   },
   emits: ['click']
-}
+})
 </script>
 <style lang="scss">
 .oc-th {

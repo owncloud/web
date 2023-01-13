@@ -10,10 +10,11 @@
     <slot />
   </oc-table-cell>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import OcTableCell from '../_OcTableCell/_OcTableCell.vue'
 
-export default {
+export default defineComponent({
   name: 'OcTd',
   status: 'ready',
   release: '2.1.0',
@@ -40,5 +41,5 @@ export default {
       validator: (wrap) => (wrap ? /(break|nowrap|truncate)/.test(wrap) : true)
     }
   }
-}
+})
 </script>

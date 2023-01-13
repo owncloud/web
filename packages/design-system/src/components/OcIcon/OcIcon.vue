@@ -19,11 +19,13 @@
   </component>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import InlineSvg from 'vue-inline-svg'
 import { AVAILABLE_SIZES } from '../../helpers/constants'
 import { getSizeClass } from '../../utils/sizeClasses'
 import uniqueId from '../../utils/uniqueId'
+
 /**
  * Icons are used to visually communicate core parts of the product and
  * available actions. They can act as wayfinding tools to help users more
@@ -77,7 +79,7 @@ InlineSvg.name = 'inline-svg'
   )
 }*/
 
-export default {
+export default defineComponent({
   name: 'OcIcon',
   status: 'ready',
   release: '1.0.0',
@@ -185,7 +187,7 @@ export default {
       return svg
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

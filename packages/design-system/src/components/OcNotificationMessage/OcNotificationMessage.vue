@@ -19,13 +19,14 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 
 /**
  * Notifications are used to inform users about errors, warnings and as confirmations for their actions.
  */
-export default {
+export default defineComponent({
   name: 'OcNotificationMessage',
   status: 'ready',
   release: '1.0.0',
@@ -106,7 +107,7 @@ export default {
       this.$emit('close')
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

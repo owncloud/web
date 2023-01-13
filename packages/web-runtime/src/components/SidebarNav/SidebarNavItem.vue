@@ -22,10 +22,12 @@
     </oc-button>
   </li>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import get from 'lodash-es/get'
 
-export default {
+export default defineComponent({
   props: {
     name: {
       type: String,
@@ -109,7 +111,7 @@ export default {
       style.setProperty('transform', `translateY(${offset}px)`)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

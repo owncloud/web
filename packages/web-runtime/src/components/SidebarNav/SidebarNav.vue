@@ -44,12 +44,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { mapState, mapActions } from 'vuex'
 import SidebarNavItem from './SidebarNavItem.vue'
 import * as uuid from 'uuid'
 
-export default {
+export default defineComponent({
   components: {
     SidebarNavItem
   },
@@ -110,7 +111,7 @@ export default {
       return uuid.v4().replaceAll('-', '')
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

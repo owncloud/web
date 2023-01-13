@@ -59,7 +59,9 @@
   </oc-grid>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import OcButton from '../OcButton/OcButton.vue'
 import OcGrid from '../OcGrid/OcGrid.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
@@ -79,7 +81,7 @@ import OcSpinner from '../OcSpinner/OcSpinner.vue'
  *
  * The `aria-label` of the loading spinner can be set via `customLoadingAccessibleLabel`. If not set, it will default to "Loading results".
  */
-export default {
+export default defineComponent({
   name: 'OcSearchBar',
   status: 'ready',
   release: '1.0.0',
@@ -282,7 +284,7 @@ export default {
       this.cancelHandler()
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

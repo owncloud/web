@@ -29,7 +29,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import uniqueId from '../../utils/uniqueId'
 
 /**
@@ -45,7 +46,7 @@ import uniqueId from '../../utils/uniqueId'
  * An error or warning will replace the description as well as the `aria-describedby` property until the error
  * or warning is fixed.
  */
-export default {
+export default defineComponent({
   name: 'OcTextarea',
   status: 'ready',
   release: '1.0.0',
@@ -186,7 +187,7 @@ export default {
       this.$emit('keydown', e)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

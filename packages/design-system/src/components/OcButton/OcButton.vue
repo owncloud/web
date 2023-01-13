@@ -12,7 +12,7 @@
   </component>
 </template>
 
-<script>
+<script lang="ts">
 import { getSizeClass } from '../../utils/sizeClasses'
 
 export default {
@@ -578,8 +578,10 @@ Every button has to have an accessible name. It cannot be provided by a text bet
   </oc-table-simple>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent{
   computed: {
     variations() {
       return [

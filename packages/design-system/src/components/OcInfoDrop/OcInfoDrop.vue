@@ -39,13 +39,15 @@
   </oc-drop>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
 import uniqueId from '../../utils/uniqueId'
 
-export default {
+export default defineComponent({
   name: 'OcInfoDrop',
   status: 'unreleased',
   components: { OcButton, OcIcon, OcDrop },
@@ -128,7 +130,7 @@ export default {
       default: ''
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

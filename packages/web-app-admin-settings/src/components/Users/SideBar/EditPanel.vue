@@ -61,14 +61,15 @@
     </form>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
 
-export default {
+export default defineComponent({
   name: 'EditPanel',
   components: {
     UserInfoBox,
@@ -158,7 +159,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

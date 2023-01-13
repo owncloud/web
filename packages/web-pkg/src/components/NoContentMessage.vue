@@ -12,8 +12,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'NoContentMessage',
 
   props: {
@@ -26,7 +28,7 @@ export default {
       default: 'fill'
     }
   }
-}
+})
 </script>
 <style>
 .no-content-message {

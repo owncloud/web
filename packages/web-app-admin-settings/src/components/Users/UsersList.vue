@@ -80,11 +80,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 
-export default {
+export default defineComponent({
   name: 'UsersList',
   props: {
     users: {
@@ -230,7 +232,7 @@ export default {
       return this.$gettextInterpolate(translated, { user: user.displayName }, true)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

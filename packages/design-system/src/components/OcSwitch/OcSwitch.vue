@@ -12,13 +12,15 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import uniqueId from '../../utils/uniqueId'
 
 /**
  * The switch has two states between users can choose.
  */
-export default {
+export default defineComponent({
   name: 'OcSwitch',
   status: 'ready',
   release: '1.0.0',
@@ -66,7 +68,7 @@ export default {
       this.$emit('change', !this.checked)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

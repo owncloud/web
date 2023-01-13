@@ -8,7 +8,8 @@
   />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 /**
  * Live regions for screen reader announcements
  *
@@ -22,7 +23,7 @@
  *
  * Debug live regions without starting a screen reader using [NerdeRegion](https://chrome.google.com/webstore/detail/nerderegion/lkcampbojgmgobcfinlkgkodlnlpjieb).
  */
-export default {
+export default defineComponent({
   name: 'OcHiddenAnnouncer',
   status: 'ready',
   release: '1.0.0',
@@ -52,7 +53,7 @@ export default {
       id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
     }
   }
-}
+})
 </script>
 
 <docs>

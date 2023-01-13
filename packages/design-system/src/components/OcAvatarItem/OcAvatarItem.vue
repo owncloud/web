@@ -19,10 +19,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 
-export default {
+export default defineComponent({
   name: 'OcAvatarItem',
   status: 'ready',
   release: '10.0.0',
@@ -130,7 +131,7 @@ export default {
       return backgroundColors[Math.floor(Math.random() * backgroundColors.length)]
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

@@ -52,10 +52,11 @@
   </oc-modal>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import * as EmailValidator from 'email-validator'
 
-export default {
+export default defineComponent({
   name: 'CreateUserModal',
   props: {
     existingUsers: {
@@ -193,5 +194,5 @@ export default {
       this.$emit('confirm', this.user)
     }
   }
-}
+})
 </script>

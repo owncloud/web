@@ -77,7 +77,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcCheckbox from '../OcCheckbox/OcCheckbox.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
@@ -99,7 +100,7 @@ import { FocusTrap } from 'focus-trap-vue'
  * variations and appearances can be targeted individually (see examples and API docs below).
  *
  */
-export default {
+export default defineComponent({
   name: 'OcModal',
   status: 'ready',
   release: '1.3.0',
@@ -398,7 +399,7 @@ export default {
       this.$emit('checkbox-changed', value)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

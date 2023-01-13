@@ -7,13 +7,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import uniqueId from '../../utils/uniqueId'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcInfoDrop from '../OcInfoDrop/OcInfoDrop.vue'
 
-export default {
+export default defineComponent({
   name: 'OcContextualHelper',
   status: 'unreleased',
   components: { OcButton, OcIcon, OcInfoDrop },
@@ -70,7 +71,7 @@ export default {
       return `#${this.buttonId}`
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

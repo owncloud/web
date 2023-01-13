@@ -14,10 +14,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { formatFileSize } from 'web-pkg/src/helpers'
 
-export default {
+export default defineComponent({
   props: {
     files: {
       type: Number,
@@ -108,5 +109,5 @@ export default {
       })
     }
   }
-}
+})
 </script>

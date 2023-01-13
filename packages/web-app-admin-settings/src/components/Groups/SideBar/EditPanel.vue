@@ -24,10 +24,11 @@
     </form>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 
-export default {
+export default defineComponent({
   name: 'EditPanel',
   components: {
     CompareSaveDialog
@@ -89,7 +90,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 <style lang="scss">
 #group-edit-panel {

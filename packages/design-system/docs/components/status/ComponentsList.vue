@@ -63,7 +63,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import orderBy from '../../utils/orderBy'
 
 export default {
