@@ -32,6 +32,7 @@ import MembersRoleSection from './MembersRoleSection.vue'
 import { ref, unref } from 'vue-demi'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
+import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 
 export default defineComponent({
   name: 'MembersPanel',
@@ -63,9 +64,18 @@ export default defineComponent({
 
     const spaceMembers = computed(() => {
       return [
-        ...props.spaceResource.spaceRoles.manager.map((r) => ({ ...r, roleType: 'manager' })),
-        ...props.spaceResource.spaceRoles.editor.map((r) => ({ ...r, roleType: 'editor' })),
-        ...props.spaceResource.spaceRoles.viewer.map((r) => ({ ...r, roleType: 'viewer' }))
+        ...props.spaceResource.spaceRoles.manager.map((r) => ({
+          ...r,
+          roleType: spaceRoleManager.name
+        })),
+        ...props.spaceResource.spaceRoles.editor.map((r) => ({
+          ...r,
+          roleType: spaceRoleEditor.name
+        })),
+        ...props.spaceResource.spaceRoles.viewer.map((r) => ({
+          ...r,
+          roleType: spaceRoleViewer.name
+        }))
       ].sort((a, b) => a.displayName.localeCompare(b.displayName))
     })
 
@@ -73,13 +83,13 @@ export default defineComponent({
       return filterMembers(unref(spaceMembers), unref(filterTerm))
     })
     const filteredSpaceManagers = computed(() => {
-      return unref(filteredSpaceMembers).filter((m) => m.roleType === 'manager')
+      return unref(filteredSpaceMembers).filter((m) => m.roleType === spaceRoleManager.name)
     })
     const filteredSpaceEditors = computed(() => {
-      return unref(filteredSpaceMembers).filter((m) => m.roleType === 'editor')
+      return unref(filteredSpaceMembers).filter((m) => m.roleType === spaceRoleEditor.name)
     })
     const filteredSpaceViewers = computed(() => {
-      return unref(filteredSpaceMembers).filter((m) => m.roleType === 'viewer')
+      return unref(filteredSpaceMembers).filter((m) => m.roleType === spaceRoleViewer.name)
     })
 
     watch(filterTerm, () => {
