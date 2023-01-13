@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-for="(member, index) in members" :key="index" class="oc-flex oc-flex-middle oc-mb-s">
+  <ul class="oc-list">
+    <li v-for="(member, index) in members" :key="index" class="oc-flex oc-flex-middle oc-mb-s">
       <oc-avatar
         v-if="member.kind === 'user'"
         :user-name="member.displayName"
@@ -15,8 +15,8 @@
         class="oc-mr-s"
       />
       {{ member.displayName }}
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'

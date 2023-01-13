@@ -3,23 +3,22 @@
     <oc-text-input
       v-model="filterTerm"
       class="oc-text-truncate oc-mr-s oc-mt-m"
-      label=""
-      :placeholder="$gettext('Filter members')"
+      :label="$gettext('Filter members')"
     />
     <div ref="membersListRef">
       <div v-if="!filteredSpaceMembers.length">
-        <h4 v-text="$gettext('No members found')" />
+        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('No members found')" />
       </div>
       <div v-if="filteredSpaceManagers.length" class="oc-mb-m">
-        <h4 v-translate>Managers</h4>
+        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Managers')" />
         <members-role-section :members="filteredSpaceManagers" />
       </div>
       <div v-if="filteredSpaceEditors.length" class="oc-mb-m">
-        <h4 v-translate>Editors</h4>
+        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Editors')" />
         <members-role-section :members="filteredSpaceEditors" />
       </div>
       <div v-if="filteredSpaceViewers.length" class="oc-mb-m">
-        <h4 v-translate>Viewers</h4>
+        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Viewers')" />
         <members-role-section :members="filteredSpaceViewers" />
       </div>
     </div>
