@@ -190,6 +190,7 @@ export default defineComponent({
 
     const closeSideBar = () => {
       sideBarOpen.value = false
+      selectedPanel.value = false
     }
     const toggleSideBar = () => {
       sideBarOpen.value = !unref(sideBarOpen)
