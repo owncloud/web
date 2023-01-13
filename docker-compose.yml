@@ -18,6 +18,7 @@ services:
       OCIS_MACHINE_AUTH_API_KEY: "${OCIS_MACHINE_AUTH_API_KEY:-some-ocis-machine-auth-api-key}"
       STORAGE_USERS_MOUNT_ID: "1284d238-aa92-42ce-bdc4-0b0000009157"
       GATEWAY_STORAGE_USERS_MOUNT_ID: "1284d238-aa92-42ce-bdc4-0b0000009157"
+      GRAPH_APPLICATION_ID: "1284d238-aa92-42ce-bdc4-0b0000009157"
 
       # WEB
       WEB_UI_CONFIG: ${WEB_UI_CONFIG:-/web/config.json}

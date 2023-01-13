@@ -1,4 +1,4 @@
-import SpaceInfo from 'web-app-files/src/components/SideBar/SpaceInfo.vue'
+import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
 import {
   createStore,
   defaultPlugins,
