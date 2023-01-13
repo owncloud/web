@@ -31,7 +31,7 @@ import { computed, defineComponent, getCurrentInstance, PropType } from 'vue'
 import { SpaceResource } from 'web-client'
 
 export default defineComponent({
-  name: 'SpaceActions',
+  name: 'ActionsPanel',
   components: { ActionMenuItem, QuotaModal },
   mixins: [Rename, Delete, EditDescription, Disable, Restore, EditQuota],
   props: {
@@ -65,11 +65,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#space-image-upload-input {
-  position: absolute;
-  left: -99999px;
-}
-
 #oc-spaces-actions-sidebar {
   > li a,
   > li a:hover {
