@@ -15,6 +15,9 @@ patchedDependencies:
   keycode@2.2.1:
     hash: nmisee7m676ph5sqah5fka5ueu
     path: patches/keycode@2.2.1.patch
+  vue-inline-svg@2.1.1:
+    hash: nh46h6vcl5bo5utrghvvpm2kue
+    path: patches/vue-inline-svg@2.1.1.patch
 
 importers:
 
