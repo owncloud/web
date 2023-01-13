@@ -7,9 +7,6 @@
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
-      @selectPanel="selectPanel"
-      @closeSideBar="closeSideBar"
-      @toggleSideBar="toggleSideBar"
     >
       <template #topbarActions>
         <div class="admin-settings-app-bar-actions oc-mt-xs">
@@ -89,6 +86,7 @@ import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
 import { useGraphClient } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
+import { useSideBar } from 'web-pkg/src/composables/sideBar'
 
 export default defineComponent({
   components: {
@@ -111,6 +109,7 @@ export default defineComponent({
     })
 
     return {
+      ...useSideBar(),
       groups,
       loadResourcesTask,
       graphClient
@@ -121,9 +120,7 @@ export default defineComponent({
       listHeaderPosition: 0,
       selectedGroups: [],
       createGroupModalOpen: false,
-      deleteGroupModalOpen: false,
-      sideBarOpen: false,
-      sideBarActivePanel: 'DetailsPanel'
+      deleteGroupModalOpen: false
     }
   },
   computed: {
@@ -168,15 +165,7 @@ export default defineComponent({
            * Editing groups is currently not supported by backend
            */
         }
-      ]
-    }
-  },
-
-  watch: {
-    selectedGroups() {
-      if (!this.selectedGroups.length || this.selectedGroups.length > 1) {
-        this.sideBarActivePanel = 'DetailsPanel'
-      }
+      ].filter((p) => p.enabled)
     }
   },
 
@@ -223,15 +212,6 @@ export default defineComponent({
     },
     toggleDeleteGroupModal() {
       this.deleteGroupModalOpen = !this.deleteGroupModalOpen
-    },
-    selectPanel(panel) {
-      this.sideBarActivePanel = panel || 'DetailsPanel'
-    },
-    toggleSideBar() {
-      this.sideBarOpen = !this.sideBarOpen
-    },
-    closeSideBar() {
-      this.sideBarOpen = false
     },
     showPanel({ group, panel }) {
       this.selectedGroups = [group]

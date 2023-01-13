@@ -7,9 +7,6 @@
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
-      @selectPanel="selectPanel"
-      @closeSideBar="closeSideBar"
-      @toggleSideBar="toggleSideBar"
     >
       <template #topbarActions>
         <div class="admin-settings-app-bar-actions oc-mt-xs">
@@ -95,6 +92,7 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { useGraphClient } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useLoadTasks } from '../composables/loadTasks/useLoadTasks'
+import { useSideBar } from 'web-pkg/src/composables/sideBar'
 
 export default defineComponent({
   name: 'UsersView',
@@ -159,6 +157,7 @@ export default defineComponent({
     })
 
     return {
+      ...useSideBar(),
       addRoleAssignment,
       users,
       roles,
@@ -174,9 +173,7 @@ export default defineComponent({
       listHeaderPosition: 0,
       selectedUsers: [],
       createUserModalOpen: false,
-      deleteUserModalOpen: false,
-      sideBarOpen: false,
-      sideBarActivePanel: 'DetailsPanel'
+      deleteUserModalOpen: false
     }
   },
   computed: {
@@ -233,15 +230,7 @@ export default defineComponent({
           componentAttrs: { user: this.selectedUsers[0], groups: this.groups },
           componentListeners: { confirm: this.editUserGroupAssignments }
         }
-      ]
-    }
-  },
-
-  watch: {
-    selectedUsers() {
-      if (!this.selectedUsers.length || this.selectedUsers.length > 1) {
-        this.sideBarActivePanel = 'DetailsPanel'
-      }
+      ].filter((p) => p.enabled)
     }
   },
 
@@ -291,15 +280,6 @@ export default defineComponent({
     },
     toggleDeleteUserModal() {
       this.deleteUserModalOpen = !this.deleteUserModalOpen
-    },
-    selectPanel(panel) {
-      this.sideBarActivePanel = panel || 'DetailsPanel'
-    },
-    toggleSideBar() {
-      this.sideBarOpen = !this.sideBarOpen
-    },
-    closeSideBar() {
-      this.sideBarOpen = false
     },
     async showPanel({ user, panel }) {
       await this.loadAdditionalUserDataTask.perform(this, user)

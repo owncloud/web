@@ -192,22 +192,22 @@ describe('Users view', () => {
   })
 
   describe('computed method "sideBarAvailablePanels"', () => {
-    it('should contain EditPanel with property enabled set true when one user is selected', () => {
+    it('should contain EditPanel when one user is selected', () => {
       const { wrapper } = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }] } })
       expect(
         wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeTruthy()
     })
-    it('should contain EditPanel with property enabled set false when no user is selected', () => {
+    it('should contain DetailsPanel no user is selected', () => {
       const { wrapper } = getMountedWrapper({ data: { selectedUsers: [] } })
       expect(
-        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
-      ).toBeFalsy()
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'DetailsPanel').enabled
+      ).toBeTruthy()
     })
-    it('should contain EditPanel with property enabled set false when multiple users are selected', () => {
+    it('should not contain EditPanel when multiple users are selected', () => {
       const { wrapper } = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }, { id: '2' }] } })
       expect(
-        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel')
       ).toBeFalsy()
     })
   })
@@ -231,21 +231,6 @@ describe('Users view', () => {
       })
       await wrapper.vm.loadResourcesTask.last
       expect(wrapper.vm.allUsersSelected).toBeFalsy()
-    })
-  })
-
-  describe('method toggleSideBar', () => {
-    it('should set sideBarOpen to true if current value is false', () => {
-      const { wrapper } = getMountedWrapper({})
-      wrapper.vm.sideBarOpen = false
-      wrapper.vm.toggleSideBar()
-      expect(wrapper.vm.sideBarOpen).toBeTruthy()
-    })
-    it('should set sideBarOpen to false if current value is true', () => {
-      const { wrapper } = getMountedWrapper({})
-      wrapper.vm.sideBarOpen = true
-      wrapper.vm.toggleSideBar()
-      expect(wrapper.vm.sideBarOpen).toBeFalsy()
     })
   })
 })

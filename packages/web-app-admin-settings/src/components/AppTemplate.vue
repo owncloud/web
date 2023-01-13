@@ -13,7 +13,7 @@
                 :aria-label="toggleSidebarButtonLabel"
                 appearance="raw"
                 class="oc-my-s oc-p-xs"
-                @click.stop="$emit('toggleSideBar')"
+                @click.stop="toggleSideBar"
               >
                 <oc-icon name="side-bar-right" :fill-type="toggleSidebarButtonIconFillType" />
               </oc-button>
@@ -30,7 +30,7 @@
         :loading="false"
         :open="sideBarOpen"
         @selectPanel="selectPanel"
-        @close="$emit('closeSideBar')"
+        @close="closeSideBar"
       >
       </side-bar>
     </template>
@@ -41,7 +41,8 @@
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import SideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import { defineComponent } from 'vue'
-import { useAppDefaults } from 'web-pkg'
+import { eventBus, useAppDefaults } from 'web-pkg'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export default defineComponent({
   components: {
@@ -70,11 +71,19 @@ export default defineComponent({
       type: String
     }
   },
-  setup(props, { emit }) {
+  setup() {
+    const closeSideBar = () => {
+      eventBus.publish(SideBarEventTopics.close)
+    }
+    const toggleSideBar = () => {
+      eventBus.publish(SideBarEventTopics.toggle)
+    }
     const selectPanel = (panel) => {
-      emit('selectPanel', panel)
+      eventBus.publish(SideBarEventTopics.setActivePanel, panel)
     }
     return {
+      closeSideBar,
+      toggleSideBar,
       selectPanel,
       ...useAppDefaults({
         applicationId: 'admin-settings'
