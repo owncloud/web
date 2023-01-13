@@ -1,13 +1,26 @@
 <template>
-  <div class="oc-mt-xl">
-    <div class="oc-flex space-info">
-      <oc-icon name="layout-grid" size="xxlarge" />
-      <p>{{ selectedSpacesString }}</p> 
-        <p v-translate>
-          Total: {{ totalSelectedSpaceQuotaTotal }},
-          Remaining: {{ totalSelectedSpaceQuotaRemaining }},
-          Used: {{ totalSelectedSpaceQuotaUsed }}
-        </p>
+  <div id="oc-spaces-details-multiple-sidebar">
+    <div class="spaces-preview oc-mb">
+      <div class="spaces-preview-body">
+        <oc-icon class="preview-icon" size="xxlarge" variation="passive" name="layout-grid" />
+        <p class="preview-text" data-testid="selectedFilesText" v-text="selectedSpacesString" />
+      </div>
+    </div>
+    <div>
+      <table class="details-table" :aria-label="detailsTableLabel">
+        <tr data-testid="filesCount">
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Total:')" />
+          <td v-text="totalSelectedSpaceQuotaTotal" />
+        </tr>
+        <tr data-testid="foldersCount">
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Remaining:')" />
+          <td v-text="totalSelectedSpaceQuotaRemaining" />
+        </tr>
+        <tr data-testid="spacesCount">
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Used:')" />
+          <td v-text="totalSelectedSpaceQuotaUsed" />
+        </tr>
+      </table>
     </div>
   </div>
 </template>
@@ -27,7 +40,6 @@ export default defineComponent({
   },
   setup(props) {
     const { $ngettext, $gettextInterpolate } = useTranslations()
-    console.log(props.selectedSpaces)
     const totalSelectedSpaceQuotaTotal = computed(() => {
       let total = 0
       props.selectedSpaces.forEach((space) => {
@@ -49,7 +61,7 @@ export default defineComponent({
       })
       return filesize(used)
     })
-    const selectedSpacesString = computed(() =>{
+    const selectedSpacesString = computed(() => {
       return $gettextInterpolate(
         $ngettext(
           '%{ itemCount } space selected',
@@ -71,8 +83,39 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-.space-info {
-  align-items: center;
-  flex-direction: column;
+.spaces-preview {
+  position: relative;
+  background-color: var(--oc-color-background-muted);
+  border: 10px solid var(--oc-color-background-muted);
+  height: 230px;
+  text-align: center;
+  color: var(--oc-color-swatch-passive-muted);
+
+  &-body {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+    .preview-icon {
+      display: inline-block;
+    }
+    .preview-text {
+      display: block;
+    }
+  }
+}
+.details-table {
+  text-align: left;
+
+  tr {
+    height: 1.5rem;
+  }
+
+  th {
+    font-weight: 600;
+  }
 }
 </style>
