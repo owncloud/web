@@ -15,9 +15,9 @@ patchedDependencies:
   keycode@2.2.1:
     hash: nmisee7m676ph5sqah5fka5ueu
     path: patches/keycode@2.2.1.patch
-  vue-inline-svg@2.1.1:
-    hash: nh46h6vcl5bo5utrghvvpm2kue
-    path: patches/vue-inline-svg@2.1.1.patch
+  vue-inline-svg@3.1.0:
+    hash: agvlx64p3fh52dmj7mriww4tnm
+    path: patches/vue-inline-svg@3.1.0.patch
 
 importers:
 
@@ -352,7 +352,7 @@ importers:
       v-calendar: github.com/dschmidt/v-calendar/3ce6e3b8afd5491cb53ee811281d5fa8a45b044d_vue@3.2.45
       vue: 3.2.45
       vue-gettext: 2.1.12_6c2crj3kpnhb2sofrku4e7jhce
-      vue-inline-svg: 3.1.0_vue@3.2.45
+      vue-inline-svg: 3.1.0_agvlx64p3fh52dmj7mriww4tnm_vue@3.2.45
       vue-jest: 3.0.7_qsqxdmxdesuuf5j66ce4k53gda
       vue-loader: 15.10.1_gbcg65oxpbb7ilgade5wkoys5m
       vue-select: 4.0.0-beta.6_vue@3.2.45
@@ -702,7 +702,7 @@ importers:
       vue: 3.2.45
       vue-concurrency: 4.0.0_vue@3.2.45
       vue-gettext: 2.1.12_6c2crj3kpnhb2sofrku4e7jhce
-      vue-inline-svg: 3.1.0_vue@3.2.45
+      vue-inline-svg: 3.1.0_agvlx64p3fh52dmj7mriww4tnm_vue@3.2.45
       vue-router: 3.6.5_vue@3.2.45
       vue-select: 4.0.0-beta.6_vue@3.2.45
       vuex: 4.1.0_vue@3.2.45
@@ -22246,12 +22246,13 @@ packages:
       - vue-template-compiler
     dev: true
 
-  /vue-inline-svg/3.1.0_vue@3.2.45:
+  /vue-inline-svg/3.1.0_agvlx64p3fh52dmj7mriww4tnm_vue@3.2.45:
     resolution: {integrity: sha512-4FUu6q7l6jSL0sc8bs0lzV7MgWMsuSSQAJiQdKsxhGP9sNJfepCWiPfWxU1IPY1mf4LZjTtX93DAiEegWt6cTg==}
     peerDependencies:
       vue: ^3
     dependencies:
       vue: 3.2.45
+    patched: true
 
   /vue-jest/3.0.7_qsqxdmxdesuuf5j66ce4k53gda:
     resolution: {integrity: sha512-PIOxFM+wsBMry26ZpfBvUQ/DGH2hvp5khDQ1n51g3bN0TwFwTy4J85XVfxTRMukqHji/GnAoGUnlZ5Ao73K62w==}
