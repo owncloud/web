@@ -34,6 +34,7 @@ build: build-web copy-config
 .PHONY: build-web
 build-web:
 	$(PNPM) install
+	$(PNPM) check-types
 	$(PNPM) build
 
 .PHONY: copy-config
