@@ -12,6 +12,11 @@ const spaceMock = {
   name: ' space',
   id: '1',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
+  spaceRoles: {
+    manager: [],
+    editor: [],
+    viewer: []
+  },
   spaceQuota: {
     used: 100,
     total: 1000
@@ -30,14 +35,27 @@ const spaceShare = {
   }
 }
 
+const selectors = {
+  spaceImage: '.oc-space-details-sidebar-image',
+  spaceMembers: '.oc-space-details-sidebar-members'
+}
+
 describe('Details SideBar Panel', () => {
   it('displays the details side panel', () => {
-    const { wrapper } = createWrapper(spaceMock)
+    const { wrapper } = createWrapper()
     expect(wrapper.html()).toMatchSnapshot()
+  })
+  it('does not render the space image if disabled via property', () => {
+    const { wrapper } = createWrapper({ props: { showSpaceImage: false } })
+    expect(wrapper.find(selectors.spaceImage).exists()).toBeFalsy()
+  })
+  it('does not render the space members count if spaceResource is given', () => {
+    const { wrapper } = createWrapper({ props: { spaceResource: spaceMock } })
+    expect(wrapper.find(selectors.spaceMembers).exists()).toBeFalsy()
   })
 })
 
-function createWrapper(spaceResource) {
+function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.user.mockImplementation(() => ({ id: 'marie' }))
   storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(() => [
@@ -50,6 +68,7 @@ function createWrapper(spaceResource) {
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(SpaceDetails, {
+      props: { ...props },
       global: {
         plugins: [...defaultPlugins(), store],
         directives: {

@@ -1,6 +1,6 @@
 <template>
   <div id="oc-space-details-sidebar">
-    <div class="oc-space-details-sidebar-image oc-text-center">
+    <div v-if="showSpaceImage" class="oc-space-details-sidebar-image oc-text-center">
       <oc-spinner v-if="loadImageTask.isRunning" />
       <div v-else-if="spaceImage" class="oc-position-relative">
         <img :src="spaceImage" alt="" class="oc-mb-m" />
@@ -12,7 +12,11 @@
         class="space-default-image oc-px-m oc-py-m"
       />
     </div>
-    <div v-if="hasShares" class="oc-flex oc-flex-middle oc-mb-m oc-text-small" style="gap: 15px">
+    <div
+      v-if="!spaceResource && hasShares"
+      class="oc-flex oc-flex-middle oc-space-details-sidebar-members oc-mb-m oc-text-small"
+      style="gap: 15px"
+    >
       <oc-button
         v-if="hasMemberShares"
         appearance="raw"
@@ -86,6 +90,11 @@ export default defineComponent({
     spaceResource: {
       type: Object as PropType<SpaceResource>,
       required: false
+    },
+    showSpaceImage: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   setup() {

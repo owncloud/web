@@ -162,7 +162,8 @@ export default defineComponent({
           default: true,
           enabled: unref(selectedSpaces).length === 1,
           componentAttrs: {
-            spaceResource: unref(selectedSpaces)[0]
+            spaceResource: unref(selectedSpaces)[0],
+            showSpaceImage: false
           }
         },
         {
