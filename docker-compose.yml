@@ -45,7 +45,7 @@ services:
       USERS_LDAP_BIND_PASSWORD: "${USERS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
       AUTH_BASIC_LDAP_BIND_PASSWORD: "${AUTH_BASIC_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
       GRAPH_APPLICATION_ID: "${GRAPH_APPLICATION_ID:-some-graph-app-id}"
-      GRAPH_LDAP_BIND_PASSWORD: "${GRAPH_LDAP_BIND_PASSWORD:-some-graph-ldap-password}"
+      GRAPH_LDAP_BIND_PASSWORD: "${GRAPH_LDAP_BIND_PASSWORD:-some-ldap-idm-password}"
       LDAP_GROUP_SUBSTRING_FILTER_TYPE: "any"
       LDAP_USER_SUBSTRING_FILTER_TYPE: "any"
 
