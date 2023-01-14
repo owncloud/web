@@ -7,25 +7,32 @@ import get from 'lodash-es/get'
 // should immediately go away and be removed after finalizing the update
 // to apply the patch to a route add meta.patchCleanPath = true to it
 // to patch needs to be enabled on a route level, to do so add meta.patchCleanPath = true property to the route
+// c.f. https://github.com/vuejs/router/issues/ 1638
 export const patchRouter = (router: Router) => {
-  const bindMatcher = router.match.bind(router)
+  const bindResolver = router.resolve.bind(router)
   const cleanPath = (route) =>
     [
       ['%2F', '/'],
       ['//', '/']
     ].reduce((path, rule) => path.replaceAll(rule[0], rule[1]), route || '')
 
-  router.match = (raw, current, redirectFrom) => {
-    const bindMatch = bindMatcher(raw, current, redirectFrom)
+  router.resolve = (
+    raw: RouteLocationRaw,
+    currentLocation?: RouteLocationNormalizedLoaded
+  ): RouteLocation & {
+    href: string
+  } => {
+    const bindResolve = bindResolver(raw, currentLocation)
 
-    if (!get(bindMatch, 'meta.patchCleanPath', false)) {
-      return bindMatch
+    if (!get(bindResolve, 'meta.patchCleanPath', false)) {
+      return bindResolve
     }
 
     return {
-      ...bindMatch,
-      path: cleanPath(bindMatch.path),
-      fullPath: cleanPath(bindMatch.fullPath)
+      ...bindResolve,
+      href: cleanPath(bindResolve.href),
+      path: cleanPath(bindResolve.path),
+      fullPath: cleanPath(bindResolve.fullPath)
     }
   }
 
