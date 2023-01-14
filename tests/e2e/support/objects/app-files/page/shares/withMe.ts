@@ -1,6 +1,6 @@
 import { Page } from 'playwright'
 
-const sharesNavSelector = '//a[@data-nav-name="files-shares-with-me"]'
+const sharesNavSelector = '//a[@data-nav-name="files-shares"]'
 
 export class WithMe {
   #page: Page

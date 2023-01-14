@@ -66,7 +66,7 @@ export default defineComponent({
               console.warn(
                 `named components are deprecated, use "default" instead of "${keys.join(
                   ', '
-                )}" on route ${route.name}`
+                )}" on route ${String(route.name)}`
               )
             }
           })
