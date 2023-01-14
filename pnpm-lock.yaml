@@ -103,6 +103,7 @@ importers:
       vue: 3.2.45
       vue-demi: '*'
       vue-gettext: 2.1.12
+      vue-router: '*'
       vue-tsc: 1.0.20
       wait-for-expect: 3.0.2
     dependencies:
@@ -119,6 +120,7 @@ importers:
       vite-plugin-treat-umd-as-commonjs: 0.1.3_vite@4.0.4
       vue: 3.2.45
       vue-demi: 0.13.11_vue@3.2.45
+      vue-router: 4.1.6_vue@3.2.45
     devDependencies:
       '@babel/core': 7.20.12
       '@babel/polyfill': 7.12.1

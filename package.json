@@ -46,7 +46,8 @@
     "caf": "*",
     "portal-vue": "*",
     "uuid": "*",
-    "vue-demi": "*"
+    "vue-demi": "*",
+    "vue-router": "*"
   },
   "devDependencies": {
     "@babel/core": "7.20.12",
