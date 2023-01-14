@@ -21,9 +21,6 @@ export const defaultComponentMocks = ({
   const $route = mockDeep<RouteLocationNormalizedLoaded>()
   $route.path = currentRoute?.path || '/'
 
-  // FIXME: this is bad ... we can't override $router like this ....
-  ;(window as any).__HACK__router = $router
-
   return {
     $router,
     $route,
