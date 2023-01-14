@@ -18,6 +18,8 @@ export const isLocationActive = (
   router: Router,
   ...comparatives: [Location, ...Location[]]
 ): boolean => {
+  // FIXME: router.resolve cleans the path, we don't need it, if we can rely on
+  // router.currentRoute to not have slashs encoded for paths
   const { href: currentHref } = router.resolve(unref(router.currentRoute))
   return comparatives
     .map((comparative) => {
