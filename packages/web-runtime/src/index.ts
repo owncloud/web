@@ -65,13 +65,12 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   announceDefaults({ store, router })
 }
 
-export const renderSuccess = (): void => {
+export const renderSuccess = async (): Promise<void> => {
   Vue.prototype.$store = store
 
   const applications = Array.from(applicationStore.values())
   const instance = createApp({
     store,
-    router,
     render() {
       return h(pages.success)
     }
@@ -85,6 +84,9 @@ export const renderSuccess = (): void => {
 
   // @vueuse/head
   instance.use(createHead())
+
+  // install router
+  instance.use(router)
 
   // mount App
   instance.mount('#owncloud')

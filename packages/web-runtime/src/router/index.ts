@@ -8,7 +8,7 @@ import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
 import ResolvePrivateLinkPage from '../pages/resolvePrivateLink.vue'
 import { setupAuthGuard } from './setupAuthGuard'
 import { patchRouter } from './patchCleanPath'
-import VueRouter from 'vue-router'
+import { createRouter as _createRouter, createWebHashHistory, createWebHistory, RouterOptions } from 'vue-router'
 
 export * from './helpers'
 
@@ -17,8 +17,8 @@ function $gettext(msg) {
   return msg
 }
 
-export const createRouter = (options?: any) => {
-  ;(window as any).__HACK__router = new VueRouter(options)
+export const createRouter = (options?: RouterOptions) => {
+  ;(window as any).__HACK__router = _createRouter(options)
   return (window as any).__HACK__router
 }
 
@@ -36,10 +36,7 @@ export const router = patchRouter(
         addQueryPrefix: true
       })
     },
-    ...(base && {
-      mode: 'history',
-      base: new URL(base.href).pathname
-    }),
+    history: base && createWebHistory(new URL(base.href).pathname) || createWebHashHistory(),
     routes: [
       {
         path: '/login',

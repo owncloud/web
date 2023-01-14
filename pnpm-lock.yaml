@@ -6,12 +6,12 @@ patchedDependencies:
   '@adobe/leonardo-contrast-colors@1.0.0-alpha.16':
     hash: uknaqjiop66j4kgrr7nmysu5gi
     path: patches/@adobe__leonardo-contrast-colors@1.0.0-alpha.16.patch
-  jest-serializer-vue-tjw@3.19.0:
-    hash: n3ezndisi6xx2kbxcsk5pv4dxy
-    path: patches/jest-serializer-vue-tjw@3.19.0.patch
   vue-gettext@2.1.12:
     hash: 6c2crj3kpnhb2sofrku4e7jhce
     path: patches/vue-gettext@2.1.12.patch
+  jest-serializer-vue-tjw@3.19.0:
+    hash: n3ezndisi6xx2kbxcsk5pv4dxy
+    path: patches/jest-serializer-vue-tjw@3.19.0.patch
   keycode@2.2.1:
     hash: nmisee7m676ph5sqah5fka5ueu
     path: patches/keycode@2.2.1.patch
@@ -477,7 +477,7 @@ importers:
       uuid: ^9.0.0
       vue-concurrency: 4.0.0
       vue-gettext: 2.1.12
-      vue-router: 3.6.5
+      vue-router: 4.1.6
       vuex: 4.1.0
       web-app-files: workspace:*
       web-app-search: workspace:*
@@ -496,10 +496,10 @@ importers:
       sanitize-html: 2.7.0
       semver: 7.3.8
       uuid: 9.0.0
-      vue-concurrency: 4.0.0
+      vue-concurrency: 4.0.0_vue@3.2.45
       vue-gettext: 2.1.12_6c2crj3kpnhb2sofrku4e7jhce
-      vue-router: 3.6.5
-      vuex: 4.1.0
+      vue-router: 4.1.6_vue@3.2.45
+      vuex: 4.1.0_vue@3.2.45
       web-app-files: 'link:'
       web-app-search: link:../web-app-search
       web-client: link:../web-client
@@ -507,7 +507,7 @@ importers:
       web-runtime: link:../web-runtime
     devDependencies:
       '@jest/globals': 29.3.1
-      '@vueuse/core': 9.8.2
+      '@vueuse/core': 9.8.2_vue@3.2.45
 
   packages/web-app-pdf-viewer:
     specifiers:
@@ -593,7 +593,7 @@ importers:
       qs: ^6.10.3
       uuid: ^9.0.0
       vue-concurrency: 4.0.0
-      vue-router: 3.6.5
+      vue-router: 4.1.6
       vuex: 4.1.0
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
@@ -605,9 +605,9 @@ importers:
       popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
       qs: 6.10.3
       uuid: 9.0.0
-      vue-concurrency: 4.0.0
-      vue-router: 3.6.5
-      vuex: 4.1.0
+      vue-concurrency: 4.0.0_vue@3.2.45
+      vue-router: 4.1.6_vue@3.2.45
+      vuex: 4.1.0_vue@3.2.45
       web-client: link:../web-client
       web-pkg: 'link:'
 
@@ -654,7 +654,7 @@ importers:
       vue-concurrency: 4.0.0
       vue-gettext: 2.1.12
       vue-inline-svg: 3.1.0
-      vue-router: 3.6.5
+      vue-router: 4.1.6
       vue-select: 4.0.0-beta.6
       vuex: 4.1.0
       vuex-router-sync: ^5.0.0
@@ -703,10 +703,10 @@ importers:
       vue-concurrency: 4.0.0_vue@3.2.45
       vue-gettext: 2.1.12_6c2crj3kpnhb2sofrku4e7jhce
       vue-inline-svg: 3.1.0_agvlx64p3fh52dmj7mriww4tnm_vue@3.2.45
-      vue-router: 3.6.5_vue@3.2.45
+      vue-router: 4.1.6_vue@3.2.45
       vue-select: 4.0.0-beta.6_vue@3.2.45
       vuex: 4.1.0_vue@3.2.45
-      vuex-router-sync: 5.0.0_6x7cybbl2jmitybnyifyjha3eu
+      vuex-router-sync: 5.0.0_mhkwdqbz43jpnlolybzfmh5sqi
       web-client: link:../web-client
       web-pkg: link:../web-pkg
       web-runtime: 'link:'
@@ -722,13 +722,13 @@ importers:
     specifiers:
       axios: 0.27.2
       vue-gettext: 2.1.12
-      vue-router: 3.6.5
+      vue-router: 4.1.6
       vuex: 4.1.0
     dependencies:
       axios: 0.27.2
       vue-gettext: 2.1.12_6c2crj3kpnhb2sofrku4e7jhce
-      vue-router: 3.6.5
-      vuex: 4.1.0
+      vue-router: 4.1.6_vue@3.2.45
+      vuex: 4.1.0_vue@3.2.45
 
   tests/acceptance:
     specifiers:
@@ -6575,13 +6575,13 @@ packages:
       - supports-color
     dev: true
 
-  /@vueuse/core/9.8.2:
+  /@vueuse/core/9.8.2_vue@3.2.45:
     resolution: {integrity: sha512-aWiCmcYIpPt7xjuqYiceODEMHchDYthrJ4AqI+FXPZrR23PZOqdiktbUVyQl2kGlR3H4i9UJ/uimQrwhz9UouQ==}
     dependencies:
       '@types/web-bluetooth': 0.0.16
       '@vueuse/metadata': 9.8.2
-      '@vueuse/shared': 9.8.2
-      vue-demi: 0.13.11
+      '@vueuse/shared': 9.8.2_vue@3.2.45
+      vue-demi: 0.13.11_vue@3.2.45
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -6603,10 +6603,10 @@ packages:
     resolution: {integrity: sha512-N4E/BKS+9VsUeD4WLVRU1J2kCOLh+iikBcMtipFcTyL204132vDYHs27zLAVabJYGnhC0dIVGdhg9pbOZiY2TQ==}
     dev: true
 
-  /@vueuse/shared/9.8.2:
+  /@vueuse/shared/9.8.2_vue@3.2.45:
     resolution: {integrity: sha512-ACjrPQzowd5dnabNJt9EoGVobco9/ENiA5qP53vjiuxndlJYuc/UegwhXC7KdQbPX4F45a50+45K3g1wNqOzmA==}
     dependencies:
-      vue-demi: 0.13.11
+      vue-demi: 0.13.11_vue@3.2.45
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -22099,14 +22099,6 @@ packages:
     resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
     engines: {node: '>=0.10.0'}
 
-  /vue-concurrency/4.0.0:
-    resolution: {integrity: sha512-YOLrHang8w15bMOpftw6iPsoqlZT/u5zsblnT+CrVvc2HZ0eP76hjj77sgepHxB6FRcN3dlFXDNBMQ6iZzpiNw==}
-    peerDependencies:
-      vue: ^3.2.20 || ^2.7.0
-    dependencies:
-      caf: 15.0.1
-    dev: false
-
   /vue-concurrency/4.0.0_vue@3.2.45:
     resolution: {integrity: sha512-YOLrHang8w15bMOpftw6iPsoqlZT/u5zsblnT+CrVvc2HZ0eP76hjj77sgepHxB6FRcN3dlFXDNBMQ6iZzpiNw==}
     peerDependencies:
@@ -22115,19 +22107,6 @@ packages:
       caf: 15.0.1
       vue: 3.2.45
     dev: false
-
-  /vue-demi/0.13.11:
-    resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
-    engines: {node: '>=12'}
-    hasBin: true
-    requiresBuild: true
-    peerDependencies:
-      '@vue/composition-api': ^1.0.0-rc.1
-      vue: ^3.0.0-0 || ^2.6.0
-    peerDependenciesMeta:
-      '@vue/composition-api':
-        optional: true
-    dev: true
 
   /vue-demi/0.13.11_vue@3.2.45:
     resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
@@ -22142,7 +22121,6 @@ packages:
         optional: true
     dependencies:
       vue: 3.2.45
-    dev: false
 
   /vue-docgen-api/4.56.0_vue@3.2.45:
     resolution: {integrity: sha512-ab/Scb0DCjm4YVLf+AFa/R7XMFl8TVwUsvh26fFT5iaURih1m2hdd5Y8NveA7NQDcycpWavkFZj9eVbQdp2VGQ==}
@@ -22359,17 +22337,12 @@ packages:
       - whiskers
     dev: true
 
-  /vue-router/3.6.5:
-    resolution: {integrity: sha512-VYXZQLtjuvKxxcshuRAwjHnciqZVoXAjTjcqBTz4rKc8qih9g9pI3hbDjmqXaHdgL3v8pV6P8Z335XvHzESxLQ==}
+  /vue-router/4.1.6_vue@3.2.45:
+    resolution: {integrity: sha512-DYWYwsG6xNPmLq/FmZn8Ip+qrhFEzA14EI12MsMgVxvHFDYvlr4NXpVF5hrRH1wVcDP8fGi5F4rxuJSl8/r+EQ==}
     peerDependencies:
-      vue: ^2
-    dev: false
-
-  /vue-router/3.6.5_vue@3.2.45:
-    resolution: {integrity: sha512-VYXZQLtjuvKxxcshuRAwjHnciqZVoXAjTjcqBTz4rKc8qih9g9pI3hbDjmqXaHdgL3v8pV6P8Z335XvHzESxLQ==}
-    peerDependencies:
-      vue: ^2
+      vue: ^3.2.0
     dependencies:
+      '@vue/devtools-api': 6.4.5
       vue: 3.2.45
     dev: false
 
@@ -22519,22 +22492,14 @@ packages:
       '@vue/server-renderer': 3.2.45_vue@3.2.45
       '@vue/shared': 3.2.45
 
-  /vuex-router-sync/5.0.0_6x7cybbl2jmitybnyifyjha3eu:
+  /vuex-router-sync/5.0.0_mhkwdqbz43jpnlolybzfmh5sqi:
     resolution: {integrity: sha512-Mry2sO4kiAG64714X1CFpTA/shUH1DmkZ26DFDtwoM/yyx6OtMrc+MxrU+7vvbNLO9LSpgwkiJ8W+rlmRtsM+w==}
     peerDependencies:
       vue-router: ^3.0.0
       vuex: ^3.0.0
     dependencies:
-      vue-router: 3.6.5_vue@3.2.45
+      vue-router: 4.1.6_vue@3.2.45
       vuex: 4.1.0_vue@3.2.45
-    dev: false
-
-  /vuex/4.1.0:
-    resolution: {integrity: sha512-hmV6UerDrPcgbSy9ORAtNXDr9M4wlNP4pEFKye4ujJF8oqgFFuxDCdOLS3eNoRTtq5O3hoBDh9Doj1bQMYHRbQ==}
-    peerDependencies:
-      vue: ^3.2.0
-    dependencies:
-      '@vue/devtools-api': 6.4.5
     dev: false
 
   /vuex/4.1.0_vue@3.2.45:
