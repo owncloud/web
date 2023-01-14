@@ -57,7 +57,7 @@ export default {
     ...mapGetters(['configuration', 'user']),
 
     activeRoutePath() {
-      return this.$router.resolve(this.$route).location.path
+      return this.$router.resolve(this.$route).path
     },
 
     appMenuItems() {
