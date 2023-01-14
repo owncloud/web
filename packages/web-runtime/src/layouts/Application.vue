@@ -129,10 +129,7 @@ export default defineComponent({
       return items.map((item) => {
         const active = [item.route, ...(item.activeFor || [])]
           .filter(Boolean)
-          .reduce((result, currentItem) => {
-            if (result) {
-              return true
-            }
+          .some((currentItem) => {
             try {
               const comparativeHref = this.$router.resolve(currentItem).href
               return currentHref.startsWith(comparativeHref)
@@ -140,7 +137,8 @@ export default defineComponent({
               console.error(e)
               return false
             }
-          }, false)
+          })
+
         const name = typeof item.name === 'function' ? item.name(this.capabilities) : item.name
 
         return {
