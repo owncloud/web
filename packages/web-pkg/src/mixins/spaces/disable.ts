@@ -1,6 +1,7 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import { SpaceResource } from 'web-client'
+import { unref } from 'vue'
 
 export default {
   computed: {
@@ -72,7 +73,8 @@ export default {
         .deleteDrive(space.id.toString())
         .then(() => {
           this.hideModal()
-          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+          const currentRoute = unref(this.$router.currentRoute)
+          if (currentRoute.name === 'admin-settings-spaces') {
             space.disabled = true
             space.spaceQuota = { total: space.spaceQuota.total }
           }
@@ -84,10 +86,10 @@ export default {
           this.showMessage({
             title: this.$gettext('Space was disabled successfully')
           })
-          if (this.$router.currentRoute.name === 'files-spaces-projects') {
+          if (currentRoute.name === 'files-spaces-projects') {
             return
           }
-          if (this.$router.currentRoute.name === 'files-spaces-generic') {
+          if (currentRoute.name === 'files-spaces-generic') {
             return this.$router.push({ name: 'files-spaces-projects' })
           }
         })

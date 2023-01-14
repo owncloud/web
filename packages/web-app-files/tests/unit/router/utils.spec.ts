@@ -3,15 +3,16 @@ import {
   isLocationActiveDirector,
   createLocation
 } from '../../../src/router/utils'
-import { Router } from 'vue-router'
+import { RouteLocation, Router } from 'vue-router'
 import { mock } from 'jest-mock-extended'
+import { ref } from 'vue'
 
 describe('utils', () => {
   describe('isLocationActive', () => {
     it('returns true if one location is active', () => {
       const fakeRouter = mock<Router>({
-        currentRoute: { name: 'foo' },
-        resolve: (r) => ({ href: r.name })
+        currentRoute: ref({ name: 'foo' }),
+        resolve: (r: any) => mock<RouteLocation & { href: string }>({ href: r.name })
       })
 
       expect(isLocationActive(fakeRouter, { name: 'foo' })).toBe(true)
@@ -19,10 +20,10 @@ describe('utils', () => {
     })
 
     it('returns false if all locations inactive', () => {
-      const fakeRouter = {
-        currentRoute: { name: 'foo' },
-        resolve: (r) => ({ href: r.name })
-      }
+      const fakeRouter = mock<Router>({
+        currentRoute: ref({ name: 'foo' }),
+        resolve: (r: any) => mock<RouteLocation & { href: string }>({ href: r.name })
+      })
 
       expect(isLocationActive(fakeRouter, { name: 'bar' })).toBe(false)
       expect(isLocationActive(fakeRouter, { name: 'bar' }, { name: 'baz' })).toBe(false)
@@ -32,8 +33,8 @@ describe('utils', () => {
   describe('isLocationActiveDirector', () => {
     test('director can be created and be used to check active locations', () => {
       const fakeRouter = mock<Router>({
-        currentRoute: { name: 'unknown' },
-        resolve: (r) => ({ href: r.name })
+        currentRoute: ref({ name: 'unknown' }),
+        resolve: (r: any) => mock<RouteLocation & { href: string }>({ href: r.name })
       })
 
       const isFilesLocationActive = isLocationActiveDirector(
@@ -43,7 +44,7 @@ describe('utils', () => {
       )
       expect(isFilesLocationActive(fakeRouter)).toBe(false)
 
-      fakeRouter.currentRoute.name = 'bar'
+      fakeRouter.currentRoute.value.name = 'bar'
 
       expect(isFilesLocationActive(fakeRouter)).toBe(true)
       expect(isFilesLocationActive(fakeRouter, 'foo', 'bar')).toBe(true)
@@ -51,8 +52,8 @@ describe('utils', () => {
 
     test('director closure only allows to check known locations and throws if unknown', () => {
       const fakeRouter = mock<Router>({
-        currentRoute: { name: 'baz' },
-        resolve: (r) => ({ href: r.name })
+        currentRoute: ref({ name: 'baz' }),
+        resolve: (r: any) => mock<RouteLocation & { href: string }>({ href: r.name })
       })
 
       const isFilesLocationActive = isLocationActiveDirector({ name: 'foo' }, { name: 'bar' })

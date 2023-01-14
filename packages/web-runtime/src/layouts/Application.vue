@@ -59,8 +59,8 @@ export default defineComponent({
     watch(
       useRoute(),
       (route) => {
-        if (route.matched.length) {
-          route.matched.forEach((match) => {
+        if (unref(route).matched.length) {
+          unref(route).matched.forEach((match) => {
             const keys = Object.keys(match.components).filter((key) => key !== 'default')
             if (keys.length) {
               console.warn(

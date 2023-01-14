@@ -1,5 +1,5 @@
 import { useRouteQuery } from 'web-pkg/src/composables'
-import { Ref, nextTick, computed, ComputedRef } from 'vue'
+import { Ref, nextTick, computed, ComputedRef, unref } from 'vue'
 import { getComposableWrapper, createRouter } from 'web-test-helpers'
 
 describe('useRouteQuery', () => {
@@ -123,7 +123,7 @@ describe('useRouteQuery', () => {
         expect(fooQuery.value).toBeUndefined()
 
         fooQuery.value = 'changedThroughRef'
-        expect(router.currentRoute.query.foo).toBe('changedThroughRef')
+        expect(unref(router.currentRoute).query.foo).toBe('changedThroughRef')
       },
       { mocks }
     )

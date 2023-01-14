@@ -1,3 +1,5 @@
+import { unref } from 'vue'
+
 export default {
   computed: {
     $_navigate_space_items() {
@@ -13,7 +15,7 @@ export default {
             if (resources.length) {
               return false
             }
-            if (this.$router.currentRoute.name !== 'files-trash-generic') {
+            if (unref(this.$router.currentRoute).name !== 'files-trash-generic') {
               return false
             }
             return this.space?.driveType !== 'personal'

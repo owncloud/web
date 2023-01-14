@@ -3,7 +3,7 @@ import PreviewComponent from '../../components/Search/Preview.vue'
 import { clientService } from 'web-pkg/src/services'
 import { buildResource } from 'web-client/src/helpers'
 import { Cache } from 'web-pkg/src/helpers/cache'
-import { Component } from 'vue'
+import { Component, unref } from 'vue'
 import { Router } from 'vue-router'
 import { DavProperties } from 'web-client/src/webdav/constants'
 import { Store } from 'vuex'
@@ -63,6 +63,6 @@ export default class Preview implements SearchPreview {
   }
 
   public get available(): boolean {
-    return this.router.currentRoute.name !== 'search-provider-list'
+    return unref(this.router.currentRoute).name !== 'search-provider-list'
   }
 }

@@ -1,6 +1,7 @@
 import { Location } from 'vue-router'
 import { Router } from 'web-pkg/src/types/router'
 import merge from 'lodash-es/merge'
+import { unref } from 'vue'
 
 export interface ActiveRouteDirectorFunc<T extends string> {
   (router: Router, ...comparatives: T[]): boolean
@@ -17,13 +18,14 @@ export const isLocationActive = (
   router: Router,
   ...comparatives: [Location, ...Location[]]
 ): boolean => {
-  const { href: currentHref } = router.resolve(router.currentRoute)
+  const { href: currentHref } = router.resolve(unref(router.currentRoute))
   return comparatives
     .map((comparative) => {
       const { href: comparativeHref } = router.resolve({
         ...comparative
         // ...(comparative.name && { name: resolveRouteName(comparative.name) })
       })
+
       /**
        * Href might be '/' or '#/' if router is not able to resolve the proper path.
        * This happens if the we don't pass a param which is defined in the route configuration, for example:

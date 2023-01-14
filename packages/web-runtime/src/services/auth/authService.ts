@@ -5,6 +5,7 @@ import { ClientService } from 'web-pkg/src/services'
 import { ConfigurationManager } from 'web-pkg/src/configuration'
 import { Route, Router } from 'vue-router'
 import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from '../../router'
+import { unref } from 'vue'
 
 export class AuthService {
   private clientService: ClientService
@@ -63,7 +64,7 @@ export class AuthService {
       this.userManager.events.addAccessTokenExpired((...args): void => {
         const handleExpirationError = () => {
           console.error('AccessToken Expired：', ...args)
-          this.handleAuthError(this.router.currentRoute)
+          this.handleAuthError(unref(this.router.currentRoute))
         }
 
         /**
@@ -99,7 +100,7 @@ export class AuthService {
           await this.userManager.updateContext(user.access_token)
         } catch (e) {
           console.error(e)
-          await this.handleAuthError(this.router.currentRoute)
+          await this.handleAuthError(unref(this.router.currentRoute))
         }
       })
 
@@ -123,7 +124,7 @@ export class AuthService {
       })
       this.userManager.events.addSilentRenewError(async (error) => {
         console.error('Silent Renew Error：', error)
-        await this.handleAuthError(this.router.currentRoute)
+        await this.handleAuthError(unref(this.router.currentRoute))
       })
     }
 
@@ -135,7 +136,7 @@ export class AuthService {
         await this.userManager.updateContext(accessToken)
       } catch (e) {
         console.error(e)
-        await this.handleAuthError(this.router.currentRoute)
+        await this.handleAuthError(unref(this.router.currentRoute))
       }
     }
   }
@@ -152,7 +153,9 @@ export class AuthService {
     // craft a url that the parser in oidc-client-ts can handle… this is required for oauth2 logins
     const url =
       '/?' +
-      new URLSearchParams(this.router.currentRoute.query as Record<string, string>).toString()
+      new URLSearchParams(
+        unref(this.router.currentRoute).query as Record<string, string>
+      ).toString()
 
     try {
       await this.userManager.signinRedirectCallback(url)
@@ -161,7 +164,7 @@ export class AuthService {
       return this.router.replace({ path: redirectUrl })
     } catch (e) {
       console.warn('error during authentication:', e)
-      return this.handleAuthError(this.router.currentRoute)
+      return this.handleAuthError(unref(this.router.currentRoute))
     }
   }
 
