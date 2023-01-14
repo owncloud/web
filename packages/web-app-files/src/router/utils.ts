@@ -1,8 +1,9 @@
-import VueRouter, { Location } from 'vue-router'
+import { Location } from 'vue-router'
+import { Router } from 'web-pkg/src/types/router'
 import merge from 'lodash-es/merge'
 
 export interface ActiveRouteDirectorFunc<T extends string> {
-  (router: VueRouter, ...comparatives: T[]): boolean
+  (router: Router, ...comparatives: T[]): boolean
 }
 
 /**
@@ -13,7 +14,7 @@ export interface ActiveRouteDirectorFunc<T extends string> {
  * @param comparatives
  */
 export const isLocationActive = (
-  router: VueRouter,
+  router: Router,
   ...comparatives: [Location, ...Location[]]
 ): boolean => {
   const { href: currentHref } = router.resolve(router.currentRoute)
@@ -47,7 +48,7 @@ export const isLocationActive = (
 export const isLocationActiveDirector = <T extends string>(
   ...defaultComparatives: [Location, ...Location[]]
 ): ActiveRouteDirectorFunc<T> => {
-  return (router: VueRouter, ...comparatives: T[]): boolean => {
+  return (router: Router, ...comparatives: T[]): boolean => {
     if (!comparatives.length) {
       return isLocationActive(router, ...defaultComparatives)
     }

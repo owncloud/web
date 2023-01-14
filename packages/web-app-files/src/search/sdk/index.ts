@@ -3,7 +3,7 @@ import Preview from './preview'
 import List from './list'
 import { EventBus } from 'web-pkg/src/services/eventBus'
 import { Store } from 'vuex'
-import VueRouter from 'vue-router'
+import { Router } from 'vue-router'
 
 function $gettext(msg) {
   return msg
@@ -14,9 +14,9 @@ export default class Provider extends EventBus implements SearchProvider {
   public readonly previewSearch: SearchPreview
   public readonly listSearch: SearchList
   private readonly store: Store<any>
-  private readonly router: VueRouter
+  private readonly router: Router
 
-  constructor(store: Store<any>, router: VueRouter) {
+  constructor(store: Store<any>, router: Router) {
     super()
 
     this.id = 'files.sdk'

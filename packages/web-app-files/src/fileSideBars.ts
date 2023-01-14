@@ -18,7 +18,7 @@ import { spaceRoleEditor, spaceRoleManager } from 'web-client/src/helpers/share'
 import { Panel } from '../../web-pkg/src/components/sideBar'
 
 import { Resource, User } from 'web-client'
-import Router from 'vue-router'
+import { Router } from 'vue-router'
 
 function $gettext(msg: string): string {
   return msg

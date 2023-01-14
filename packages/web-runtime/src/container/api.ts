@@ -1,4 +1,4 @@
-import VueRouter, { RouteConfig } from 'vue-router'
+import { RouteConfig, Router } from 'vue-router'
 import clone from 'lodash-es/clone'
 import {
   RuntimeApi,
@@ -18,7 +18,7 @@ import { App, Component, h } from 'vue'
  * @param router
  * @param routes
  */
-const announceRoutes = (applicationId: string, router: VueRouter, routes: RouteConfig[]): void => {
+const announceRoutes = (applicationId: string, router: Router, routes: RouteConfig[]): void => {
   if (!isArray(routes)) {
     throw new ApiError("routes can't be blank")
   }
@@ -205,7 +205,7 @@ const requestStore = (store: Store<unknown>): Store<unknown> => {
  *
  * @param router
  */
-const requestRouter = (router: VueRouter): VueRouter => {
+const requestRouter = (router: Router): Router => {
   if (isEqual(process.env.NODE_ENV, 'development')) {
     console.warn('requestRouter // router api is deprecated, use with caution')
   }
@@ -238,7 +238,7 @@ export const buildRuntimeApi = ({
   applicationId: string
   store: Store<unknown>
   translations: unknown
-  router: VueRouter
+  router: Router
   supportedLanguages: { [key: string]: string }
 }): RuntimeApi => {
   if (!applicationName) {
@@ -262,7 +262,7 @@ export const buildRuntimeApi = ({
     announceExtension: (extension: { [key: string]: unknown }): void =>
       announceExtension(applicationId, store, extension),
     requestStore: (): Store<unknown> => requestStore(store),
-    requestRouter: (): VueRouter => requestRouter(router),
+    requestRouter: (): Router => requestRouter(router),
     openPortal: (
       instance: App,
       toApp: string,

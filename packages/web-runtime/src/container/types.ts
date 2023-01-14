@@ -1,5 +1,5 @@
 import { Store } from 'vuex'
-import VueRouter, { RouteConfig } from 'vue-router'
+import { RouteConfig, Router } from 'vue-router'
 import { App, Component } from 'vue'
 
 /** shim configuration for now, should be typed in a later step */
@@ -83,7 +83,7 @@ export interface RuntimeApi {
   announceStore: (applicationStore: Store<unknown>) => void
   announceExtension: (extension: { [key: string]: unknown }) => void
   requestStore: () => Store<unknown>
-  requestRouter: () => VueRouter
+  requestRouter: () => Router
   openPortal: (
     instance: App,
     toApp: string,

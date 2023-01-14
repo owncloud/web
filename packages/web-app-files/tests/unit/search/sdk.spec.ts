@@ -1,8 +1,8 @@
 import { SDKSearch } from '../../../src/search'
 import { clientService } from 'web-pkg/src/services'
 import { Store } from 'vuex'
-import VueRouter from 'vue-router'
-import { mockDeep } from 'jest-mock-extended'
+import { Router } from 'vue-router'
+import { mock, mockDeep } from 'jest-mock-extended'
 
 const searchMock = jest.fn()
 jest.spyOn(clientService, 'owncloudSdk', 'get').mockImplementation(
@@ -35,7 +35,7 @@ const storeWithoutFileSearch = mockDeep<Store<any>>({
 
 describe('SDKProvider', () => {
   it('is only available if announced via capabilities', () => {
-    const search = new SDKSearch(storeWithoutFileSearch, {} as unknown as VueRouter)
+    const search = new SDKSearch(storeWithoutFileSearch, mock<Router>())
     expect(search.available).toBe(false)
   })
 
@@ -46,16 +46,19 @@ describe('SDKProvider', () => {
         { route: 'search-provider-list' },
         { route: 'bar', available: true }
       ].forEach((v) => {
-        const search = new SDKSearch(store, {
-          currentRoute: { name: v.route }
-        } as unknown as VueRouter)
+        const search = new SDKSearch(
+          store,
+          mock<Router>({
+            currentRoute: { name: v.route }
+          })
+        )
 
         expect(!!search.previewSearch.available).toBe(!!v.available)
       })
     })
 
     it('can search', async () => {
-      const search = new SDKSearch(store, jest.fn() as unknown as VueRouter)
+      const search = new SDKSearch(store, mock<Router>())
       const files = [
         { id: 'foo', name: 'foo' },
         { id: 'bar', name: 'bar' },
@@ -75,7 +78,7 @@ describe('SDKProvider', () => {
   })
   describe('SDKProvider listSearch', () => {
     it('can search', async () => {
-      const search = new SDKSearch(store, jest.fn() as unknown as VueRouter)
+      const search = new SDKSearch(store, mock<Router>())
       const files = [
         { id: 'foo', name: 'foo' },
         { id: 'bar', name: 'bar' },

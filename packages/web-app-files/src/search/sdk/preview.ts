@@ -4,7 +4,7 @@ import { clientService } from 'web-pkg/src/services'
 import { buildResource } from 'web-client/src/helpers'
 import { Cache } from 'web-pkg/src/helpers/cache'
 import { Component } from 'vue'
-import VueRouter from 'vue-router'
+import { Router } from 'vue-router'
 import { DavProperties } from 'web-client/src/webdav/constants'
 import { Store } from 'vuex'
 
@@ -13,10 +13,10 @@ export const previewSearchLimit = 8
 export default class Preview implements SearchPreview {
   public readonly component: Component
   private readonly cache: Cache<string, SearchResult>
-  private readonly router: VueRouter
+  private readonly router: Router
   private readonly store: Store<any>
 
-  constructor(store: Store<any>, router: VueRouter) {
+  constructor(store: Store<any>, router: Router) {
     this.component = PreviewComponent
     this.router = router
     this.store = store

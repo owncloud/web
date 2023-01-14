@@ -3,14 +3,14 @@ import { PublicLinkManager } from './publicLinkManager'
 import { Store } from 'vuex'
 import { ClientService } from 'web-pkg/src/services'
 import { ConfigurationManager } from 'web-pkg/src/configuration'
-import VueRouter, { Route } from 'vue-router'
+import { Route, Router } from 'vue-router'
 import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from '../../router'
 
 export class AuthService {
   private clientService: ClientService
   private configurationManager: ConfigurationManager
   private store: Store<any>
-  private router: VueRouter
+  private router: Router
   private userManager: UserManager
   private publicLinkManager: PublicLinkManager
 
@@ -18,7 +18,7 @@ export class AuthService {
     configurationManager: ConfigurationManager,
     clientService: ClientService,
     store: Store<any>,
-    router: VueRouter
+    router: Router
   ): void {
     this.configurationManager = configurationManager
     this.clientService = clientService

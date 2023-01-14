@@ -1,4 +1,4 @@
-import VueRouter, { RouteConfig, Route, Location, RouteMeta } from 'vue-router'
+import { RouteConfig, Route, Location, RouteMeta, Router } from 'vue-router'
 import { createLocationSpaces } from './spaces'
 import { createLocationShares } from './shares'
 import { createLocationCommon } from './common'
@@ -100,7 +100,7 @@ export const buildRoutes = (): RouteConfig[] =>
  * @param comparatives
  */
 export const isLocationActive = (
-  router: VueRouter,
+  router: Router,
   ...comparatives: [Location, ...Location[]]
 ): boolean => {
   const [first, ...rest] = comparatives.map((c) => {

@@ -1,5 +1,5 @@
 import { unref } from 'vue'
-import VueRouter, { Location } from 'vue-router'
+import { Location, Router } from 'vue-router'
 
 import { MaybeRef } from '../../utils'
 import { FileContext } from './types'
@@ -8,7 +8,7 @@ import { Resource } from 'web-client'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
 
 interface AppNavigationOptions {
-  router: VueRouter
+  router: Router
   currentFileContext: MaybeRef<FileContext>
 }
 

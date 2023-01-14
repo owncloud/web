@@ -1,4 +1,4 @@
-import Router from 'vue-router'
+import { RouteLocation, RouteLocationNormalizedLoaded, RouteLocationRaw, Router } from 'vue-router'
 import get from 'lodash-es/get'
 
 // type: patch

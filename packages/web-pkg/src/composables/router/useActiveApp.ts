@@ -1,6 +1,5 @@
 import { computed, ComputedRef, unref } from 'vue'
-import { useRoute } from './useRoute'
-import { Route } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 export const activeApp = (route: Route): string => {
   return route.path.split('/')[1]

@@ -8,7 +8,12 @@ import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
 import ResolvePrivateLinkPage from '../pages/resolvePrivateLink.vue'
 import { setupAuthGuard } from './setupAuthGuard'
 import { patchRouter } from './patchCleanPath'
-import { createRouter as _createRouter, createWebHashHistory, createWebHistory, RouterOptions } from 'vue-router'
+import {
+  createRouter as _createRouter,
+  createWebHashHistory,
+  createWebHistory,
+  RouterOptions
+} from 'vue-router'
 
 export * from './helpers'
 
@@ -36,7 +41,7 @@ export const router = patchRouter(
         addQueryPrefix: true
       })
     },
-    history: base && createWebHistory(new URL(base.href).pathname) || createWebHashHistory(),
+    history: (base && createWebHistory(new URL(base.href).pathname)) || createWebHashHistory(),
     routes: [
       {
         path: '/login',

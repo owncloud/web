@@ -1,5 +1,5 @@
 import { base, router } from './index'
-import Router, { Route, RouteRecordPublic } from 'vue-router'
+import { Route, Router, RouteRecordPublic } from 'vue-router'
 import {
   authContextValues,
   contextQueryToFileContextProps,
