@@ -22,7 +22,7 @@ function $gettext(msg) {
   return msg
 }
 
-export const createRouter = (options?: RouterOptions) => {
+export const createRouter = (options: RouterOptions) => {
   ;(window as any).__HACK__router = _createRouter(options)
   return (window as any).__HACK__router
 }

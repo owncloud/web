@@ -30,6 +30,8 @@ describe('buildUrl', () => {
     const { buildUrl } = await import('../../../src/router')
     jest.resetModules()
 
+    // hide warnings for non-existent routes
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined)
     expect(buildUrl(path)).toBe(expected)
   })
 })

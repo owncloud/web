@@ -4,7 +4,8 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   shallowMount,
-  defaultStoreMockOptions
+  defaultStoreMockOptions,
+  RouteLocation
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client'
@@ -43,7 +44,7 @@ function createWrapper() {
           displayedItem: file
         },
         mocks: {
-          ...defaultComponentMocks({ currentRoute: { path: '/files' } })
+          ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) })
         }
       }
     })

@@ -3,7 +3,7 @@ import { PublicLinkManager } from './publicLinkManager'
 import { Store } from 'vuex'
 import { ClientService } from 'web-pkg/src/services'
 import { ConfigurationManager } from 'web-pkg/src/configuration'
-import { Route, Router } from 'vue-router'
+import { RouteLocation, Router } from 'vue-router'
 import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from '../../router'
 import { unref } from 'vue'
 
@@ -38,7 +38,7 @@ export class AuthService {
    *
    * @param to {Route}
    */
-  public async initializeContext(to: Route) {
+  public async initializeContext(to: RouteLocation) {
     if (!this.publicLinkManager) {
       this.publicLinkManager = new PublicLinkManager({
         clientService: this.clientService,
@@ -179,7 +179,7 @@ export class AuthService {
     await this.userManager.signinSilentCallback()
   }
 
-  public async handleAuthError(route: Route) {
+  public async handleAuthError(route: RouteLocation) {
     if (isPublicLinkContext(this.router, route)) {
       const token = extractPublicLinkToken(route)
       this.publicLinkManager.clear(token)

@@ -1,7 +1,7 @@
 import setImage from 'web-app-files/src/mixins/spaces/actions/setImage'
 import { thumbnailService } from '../../../../src/services'
 import { buildSpace, Resource } from 'web-client/src/helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService, clientService } from 'web-pkg'
 import { Graph } from 'web-client'
 import {
@@ -9,7 +9,8 @@ import {
   defaultPlugins,
   mount,
   defaultStoreMockOptions,
-  defaultComponentMocks
+  defaultComponentMocks,
+  RouteLocation
 } from 'web-test-helpers'
 
 const Component = {
@@ -156,7 +157,9 @@ describe('setImage', () => {
 function getWrapper(space) {
   const clientMock = mockDeep<ClientService>()
   clientMock.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
-  const defaultMocks = defaultComponentMocks({ currentRoute: { name: 'files-spaces-generic' } })
+  const defaultMocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
+  })
   const storeOptions = {
     ...defaultStoreMockOptions,
     modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }

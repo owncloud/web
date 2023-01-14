@@ -1,8 +1,9 @@
 import { SDKSearch } from '../../../src/search'
 import { clientService } from 'web-pkg/src/services'
 import { Store } from 'vuex'
-import { Router } from 'vue-router'
+import { RouteLocation, Router } from 'vue-router'
 import { mock, mockDeep } from 'jest-mock-extended'
+import { ref } from 'vue'
 
 const searchMock = jest.fn()
 jest.spyOn(clientService, 'owncloudSdk', 'get').mockImplementation(
@@ -49,7 +50,7 @@ describe('SDKProvider', () => {
         const search = new SDKSearch(
           store,
           mock<Router>({
-            currentRoute: { name: v.route }
+            currentRoute: ref(mock<RouteLocation>({ name: v.route }))
           })
         )
 

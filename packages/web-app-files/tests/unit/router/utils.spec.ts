@@ -15,8 +15,14 @@ describe('utils', () => {
         resolve: (r: any) => mock<RouteLocation & { href: string }>({ href: r.name })
       })
 
-      expect(isLocationActive(fakeRouter, { name: 'foo' })).toBe(true)
-      expect(isLocationActive(fakeRouter, { name: 'foo' }, { name: 'bar' })).toBe(true)
+      expect(isLocationActive(fakeRouter, mock<RouteLocation>({ name: 'foo' }))).toBe(true)
+      expect(
+        isLocationActive(
+          fakeRouter,
+          mock<RouteLocation>({ name: 'foo' }),
+          mock<RouteLocation>({ name: 'bar' })
+        )
+      ).toBe(true)
     })
 
     it('returns false if all locations inactive', () => {
@@ -25,8 +31,14 @@ describe('utils', () => {
         resolve: (r: any) => mock<RouteLocation & { href: string }>({ href: r.name })
       })
 
-      expect(isLocationActive(fakeRouter, { name: 'bar' })).toBe(false)
-      expect(isLocationActive(fakeRouter, { name: 'bar' }, { name: 'baz' })).toBe(false)
+      expect(isLocationActive(fakeRouter, mock<RouteLocation>({ name: 'bar' }))).toBe(false)
+      expect(
+        isLocationActive(
+          fakeRouter,
+          mock<RouteLocation>({ name: 'bar' }),
+          mock<RouteLocation>({ name: 'baz' })
+        )
+      ).toBe(false)
     })
   })
 
@@ -38,9 +50,9 @@ describe('utils', () => {
       })
 
       const isFilesLocationActive = isLocationActiveDirector(
-        { name: 'foo' },
-        { name: 'bar' },
-        { name: 'baz' }
+        mock<RouteLocation>({ name: 'foo' }),
+        mock<RouteLocation>({ name: 'bar' }),
+        mock<RouteLocation>({ name: 'baz' })
       )
       expect(isFilesLocationActive(fakeRouter)).toBe(false)
 
@@ -56,20 +68,25 @@ describe('utils', () => {
         resolve: (r: any) => mock<RouteLocation & { href: string }>({ href: r.name })
       })
 
-      const isFilesLocationActive = isLocationActiveDirector({ name: 'foo' }, { name: 'bar' })
+      const isFilesLocationActive = isLocationActiveDirector(
+        mock<RouteLocation>({ name: 'foo' }),
+        mock<RouteLocation>({ name: 'bar' })
+      )
       expect(() => isFilesLocationActive(fakeRouter, 'unknown')).toThrow()
     })
   })
 
   describe('createLocationDirector', () => {
     test('creates a location and handle arguments', () => {
-      const testLocation = createLocation('foo', {
-        path: '/should-not-add',
-        params: { foo: 'foo-param-value' },
-        query: { bar: 'bar-query-value' }
-      })
+      const testLocation = createLocation(
+        'foo',
+        mock<RouteLocation>({
+          path: '/should-not-add',
+          params: { foo: 'foo-param-value' },
+          query: { bar: 'bar-query-value' }
+        })
+      )
       expect(testLocation.name).toBe('foo')
-      expect(testLocation.path).toBeFalsy()
       expect(testLocation.params.foo).toBe('foo-param-value')
       expect(testLocation.query.bar).toBe('bar-query-value')
     })

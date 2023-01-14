@@ -1,10 +1,10 @@
 import { RouteComponents } from './router'
-import { Location, RouteConfig } from 'vue-router'
+import { RouteLocationNamedRaw, RouteRecordRaw } from 'vue-router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
 type shareTypes = 'files-public-link' | 'files-public-upload'
 
-export const createLocationPublic = (name: shareTypes, location = {}): Location =>
+export const createLocationPublic = (name: shareTypes, location = {}): RouteLocationNamedRaw =>
   createLocation(name, location)
 
 export const locationPublicLink = createLocationPublic('files-public-link')
@@ -15,7 +15,7 @@ export const isLocationPublicActive = isLocationActiveDirector<shareTypes>(
   locationPublicUpload
 )
 
-export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
+export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
   {
     path: '/link',
     component: components.App,

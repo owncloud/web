@@ -1,13 +1,14 @@
 import setReadme from 'web-pkg/src/mixins/spaces/setReadme'
 import { buildSpace } from 'web-client/src/helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
 import {
   createStore,
   defaultPlugins,
   mount,
   defaultStoreMockOptions,
-  defaultComponentMocks
+  defaultComponentMocks,
+  RouteLocation
 } from 'web-test-helpers'
 
 const Component = {
@@ -98,7 +99,9 @@ describe('setReadme', () => {
 
 function getWrapper(resolveGetFileContents = true, space = undefined) {
   const clientMock = mockDeep<OwnCloudSdk>()
-  const defaultMocks = defaultComponentMocks({ currentRoute: { name: 'files-spaces-generic' } })
+  const defaultMocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
+  })
   const mocks = {
     ...defaultMocks,
     $client: {

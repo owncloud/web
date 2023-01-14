@@ -1,12 +1,13 @@
 import { useCapabilitySpacesEnabled, useDriveResolver } from 'web-pkg/src'
 import { computed, ref, unref } from 'vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { isShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import {
   createStore,
   getComposableWrapper,
   defaultStoreMockOptions,
-  defaultComponentMocks
+  defaultComponentMocks,
+  RouteLocation
 } from 'web-test-helpers'
 
 jest.unmock('web-app-files/src/composables')
@@ -79,7 +80,11 @@ describe('useDriveResolver', () => {
       },
       {
         mocks: defaultComponentMocks({
-          currentRoute: { name: 'files-spaces-generic', path: '/', query: { fileId } }
+          currentRoute: mock<RouteLocation>({
+            name: 'files-spaces-generic',
+            path: '/',
+            query: { fileId }
+          })
         }),
         store
       }
@@ -106,7 +111,11 @@ describe('useDriveResolver', () => {
       },
       {
         mocks: defaultComponentMocks({
-          currentRoute: { name: 'files-spaces-generic', path: '/', query: { fileId: undefined } }
+          currentRoute: mock<RouteLocation>({
+            name: 'files-spaces-generic',
+            path: '/',
+            query: { fileId: undefined }
+          })
         }),
         store
       }
@@ -133,7 +142,11 @@ describe('useDriveResolver', () => {
       },
       {
         mocks: defaultComponentMocks({
-          currentRoute: { name: 'files-spaces-generic', path: '/', query: { fileId: undefined } }
+          currentRoute: mock<RouteLocation>({
+            name: 'files-spaces-generic',
+            path: '/',
+            query: { fileId: undefined }
+          })
         }),
         store
       }

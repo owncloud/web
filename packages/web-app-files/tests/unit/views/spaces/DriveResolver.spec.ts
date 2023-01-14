@@ -1,7 +1,7 @@
 import DriveResolver from '../../../../src/views/spaces/DriveResolver.vue'
 import { useDriveResolver } from 'web-pkg/src/composables'
 import { computed, ref } from 'vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg/src'
 import { locationPublicUpload } from 'web-app-files/src/router/public'
 import { PublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
@@ -12,7 +12,8 @@ import {
   mount,
   defaultStoreMockOptions,
   defaultComponentMocks,
-  defaultStubs
+  defaultStubs,
+  RouteLocation
 } from 'web-test-helpers'
 
 jest.mock('web-pkg/src/composables/driveResolver')
@@ -67,7 +68,10 @@ function getMountedWrapper({
   }))
   const defaultMocks = {
     ...defaultComponentMocks({
-      currentRoute: { name: currentRouteName, params: { driveAliasAndItem: '/' } }
+      currentRoute: mock<RouteLocation>({
+        name: currentRouteName,
+        params: { driveAliasAndItem: '/' }
+      })
     }),
     ...(mocks && mocks)
   }

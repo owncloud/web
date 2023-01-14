@@ -1,4 +1,4 @@
-import Router from 'vue-router'
+import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { useRouter, useClientService, useStore } from 'web-pkg/src/composables'
 import { unref } from 'vue'

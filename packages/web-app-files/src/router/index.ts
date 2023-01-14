@@ -1,4 +1,4 @@
-import { RouteConfig } from 'vue-router'
+import { RouteLocationNamedRaw } from 'vue-router'
 
 import {
   buildRoutes as buildCommonRoutes,
@@ -30,11 +30,12 @@ import {
 import type { ActiveRouteDirectorFunc } from './utils'
 
 const ROOT_ROUTE = {
+  name: 'root',
   path: '/',
   redirect: (to) => createLocationSpaces('files-spaces-generic', to)
 }
 
-const buildRoutes = (components: RouteComponents): RouteConfig[] => [
+const buildRoutes = (components: RouteComponents): RouteLocationNamedRaw[] => [
   ROOT_ROUTE,
   ...buildCommonRoutes(components),
   ...buildSharesRoutes(components),

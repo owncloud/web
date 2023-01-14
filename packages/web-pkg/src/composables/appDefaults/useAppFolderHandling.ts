@@ -4,14 +4,14 @@ import { dirname } from 'path'
 import { ClientService, MaybeRef, useAppFileHandling } from 'web-pkg'
 import { Resource } from 'web-client'
 import { FileContext } from './types'
-import { Route } from 'vue-router'
+import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { useAuthService } from '../authContext/useAuthService'
 
 interface AppFolderHandlingOptions {
   store: Store<any>
-  currentRoute: Ref<Route>
+  currentRoute: Ref<RouteLocationNormalizedLoaded>
   clientService?: ClientService
 }
 

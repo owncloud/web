@@ -12,6 +12,7 @@ import {
   defaultStoreMockOptions,
   defaultComponentMocks
 } from 'web-test-helpers'
+import { RouteLocation } from 'vue-router'
 
 jest.mock('web-pkg/src/composables/authContext')
 
@@ -277,7 +278,9 @@ function getWrapper({
   storeOptions.modules.Files.getters.clipboardResources.mockImplementation(() => clipboardResources)
   storeOptions.modules.Files.getters.files.mockImplementation(() => files)
   const store = createStore(storeOptions)
-  const mocks = { ...defaultComponentMocks({ currentRoute: { name: currentRouteName } }) }
+  const mocks = {
+    ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: currentRouteName }) })
+  }
   return {
     storeOptions,
     mocks,

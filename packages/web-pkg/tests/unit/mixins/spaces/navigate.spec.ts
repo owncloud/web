@@ -1,10 +1,12 @@
+import { mock } from 'jest-mock-extended'
 import Navigate from 'web-pkg/src/mixins/spaces/navigate'
 import {
   createStore,
   defaultComponentMocks,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions
+  defaultStoreMockOptions,
+  RouteLocation
 } from 'web-test-helpers'
 
 const Component = {
@@ -46,7 +48,7 @@ describe('navigate', () => {
 })
 
 function getWrapper({ invalidLocation = false } = {}) {
-  const currentRoute = { name: '', params: { driveAliasAndItem: '' } }
+  const currentRoute = mock<RouteLocation>({ name: '', params: { driveAliasAndItem: '' } })
   if (invalidLocation) {
     currentRoute.name = 'files-spaces-generic'
   } else {

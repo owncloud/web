@@ -14,6 +14,7 @@ export const useRouteQuery = (name: string, defaultValue?: QueryValue): Ref<Quer
         return
       }
       await router.replace({
+        ...unref(router.currentRoute),
         query: {
           ...unref(router.currentRoute).query,
           [name]: v

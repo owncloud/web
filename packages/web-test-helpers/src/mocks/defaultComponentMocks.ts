@@ -1,28 +1,24 @@
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg/src/services'
-import Router, { RawLocation, Route } from 'vue-router'
+import { Router, RouteLocationNormalizedLoaded, RouteLocationRaw, RouteLocation } from 'vue-router'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { OwnCloudSdk } from 'web-client/src/types'
+import { ref } from 'vue'
 
 export interface ComponentMocksOptions {
   gettext?: boolean
-  currentRoute?: {
-    name?: string
-    path?: string
-    query?: { [key: string]: string }
-    params?: { [key: string]: any }
-  }
+  currentRoute?: RouteLocation
 }
 
 export const defaultComponentMocks = ({
   gettext = true,
   currentRoute = undefined
 }: ComponentMocksOptions = {}) => {
-  const $router = mockDeep<Router>({ ...(currentRoute && { currentRoute }) })
+  const $router = mockDeep<Router>({ ...(currentRoute && { currentRoute: ref(currentRoute) }) })
   $router.resolve.mockImplementation(
-    (to: RawLocation) => ({ href: (to as any).name, location: { path: '' } } as any)
+    (to: RouteLocationRaw) => ({ href: (to as any).name, location: { path: '' } } as any)
   )
-  const $route = mockDeep<Route>()
+  const $route = mockDeep<RouteLocationNormalizedLoaded>()
   $route.path = currentRoute?.path || '/'
 
   // FIXME: this is bad ... we can't override $router like this ....

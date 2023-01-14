@@ -3,9 +3,9 @@ import { useResourcesViewDefaults, useSort } from 'web-app-files/src/composables
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { ref } from 'vue'
-import { defaultStubs } from 'web-test-helpers'
+import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import {
   createStore,
@@ -92,7 +92,7 @@ function getMountedWrapper({ mocks = {}, loading = false, files = [] } = {}) {
   jest.mocked(useSort).mockImplementation((options) => useSortMock({ items: options.items }))
   const defaultMocks = {
     ...defaultComponentMocks({
-      currentRoute: { name: 'files-shares-with-me' }
+      currentRoute: mock<RouteLocation>({ name: 'files-shares-with-me' })
     }),
     ...(mocks && mocks)
   }

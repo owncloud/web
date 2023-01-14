@@ -1,4 +1,4 @@
-import { RouteConfig, Router } from 'vue-router'
+import { RouteRecordRaw, Router } from 'vue-router'
 import clone from 'lodash-es/clone'
 import {
   RuntimeApi,
@@ -18,7 +18,7 @@ import { App, Component, h } from 'vue'
  * @param router
  * @param routes
  */
-const announceRoutes = (applicationId: string, router: Router, routes: RouteConfig[]): void => {
+const announceRoutes = (applicationId: string, router: Router, routes: RouteRecordRaw[]): void => {
   if (!isArray(routes)) {
     throw new ApiError("routes can't be blank")
   }
@@ -33,7 +33,8 @@ const announceRoutes = (applicationId: string, router: Router, routes: RouteConf
 
       const route = clone(applicationRoute)
       if (route.name) {
-        route.name = applicationId === route.name ? route.name : namespaceRouteName(route.name)
+        route.name =
+          applicationId === route.name ? route.name : namespaceRouteName(String(route.name))
       }
 
       route.path = `/${encodeURI(applicationId)}${route.path}`
@@ -46,7 +47,7 @@ const announceRoutes = (applicationId: string, router: Router, routes: RouteConf
 
           const r = clone(childRoute)
           if (childRoute.name) {
-            r.name = namespaceRouteName(childRoute.name)
+            r.name = namespaceRouteName(String(childRoute.name))
           }
           return r
         })
@@ -250,7 +251,8 @@ export const buildRuntimeApi = ({
   }
 
   return {
-    announceRoutes: (routes: RouteConfig[]): void => announceRoutes(applicationId, router, routes),
+    announceRoutes: (routes: RouteRecordRaw[]): void =>
+      announceRoutes(applicationId, router, routes),
     announceNavigationItems: (navigationItems: ApplicationNavigationItem[]): void =>
       announceNavigationItems(applicationId, store, navigationItems),
     announceTranslations: (appTranslations: ApplicationTranslations): void =>

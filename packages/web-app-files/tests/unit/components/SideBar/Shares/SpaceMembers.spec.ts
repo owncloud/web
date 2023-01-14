@@ -14,7 +14,8 @@ import {
   mount,
   shallowMount,
   defaultStoreMockOptions,
-  defaultComponentMocks
+  defaultComponentMocks,
+  RouteLocation
 } from 'web-test-helpers'
 
 const memberMocks = {
@@ -172,7 +173,9 @@ function getWrapper({
     },
     global: {
       plugins: [...defaultPlugins(), store],
-      mocks: defaultComponentMocks({ currentRoute: { name: currentRouteName } }),
+      mocks: defaultComponentMocks({
+        currentRoute: mock<RouteLocation>({ name: currentRouteName })
+      }),
       provide: {
         displayedItem: space
       },

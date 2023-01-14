@@ -1,5 +1,5 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
-import Router from 'vue-router'
+import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '../../router'
 import { aggregateResourceShares } from '../../helpers/resources'

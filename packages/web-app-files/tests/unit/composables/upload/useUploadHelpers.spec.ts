@@ -1,5 +1,5 @@
 import { useUploadHelpers } from '../../../../src/composables/upload'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
 import {
   createStore,
@@ -9,6 +9,7 @@ import {
 } from 'web-test-helpers'
 import { ComputedRef, computed } from 'vue'
 import { UppyService } from 'web-runtime/src/services/uppyService'
+import { RouteLocation } from 'vue-router'
 
 describe('useUploadHelpers', () => {
   const currentPathMock = 'path'
@@ -39,12 +40,12 @@ describe('useUploadHelpers', () => {
 
   it('converts normal files to uppy resources', () => {
     const mocks = defaultComponentMocks({
-      currentRoute: {
+      currentRoute: mock<RouteLocation>({
         name: 'some-route',
         params: {
           item: currentPathMock
         }
-      }
+      })
     })
     mocks.$clientService.owncloudSdk.files.getFileUrl.mockResolvedValue(uploadPathMock)
     mocks.$clientService.owncloudSdk.files.fileInfo.mockResolvedValue(mockFile)

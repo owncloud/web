@@ -1,8 +1,8 @@
 import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager, ConfigurationManager } from '../../configuration'
-import { LocationParams, LocationQuery } from '../../composables'
+import { LocationQuery } from '../../composables'
 import { isUndefined } from 'lodash-es'
-import { Route } from 'vue-router'
+import { RouteLocation, RouteParams } from 'vue-router'
 
 /**
  * Creates route options for routing into a file location:
@@ -20,7 +20,7 @@ export const createFileRouteOptions = (
   space: SpaceResource,
   target: { path?: string; fileId?: string | number },
   options?: { configurationManager?: ConfigurationManager }
-): { params: LocationParams; query: LocationQuery } => {
+): { params: RouteParams; query: LocationQuery } => {
   const config = options?.configurationManager || configurationManager
   return {
     params: {
@@ -35,9 +35,9 @@ export const createFileRouteOptions = (
 }
 
 export const mergeFileRouteOptions = (
-  originalRoute: Route,
-  routeOptions: { params: LocationParams; query: LocationQuery }
-): Route => {
+  originalRoute: RouteLocation,
+  routeOptions: { params: RouteParams; query: LocationQuery }
+): RouteLocation => {
   return Object.assign({}, originalRoute, {
     params: {
       ...originalRoute.params,

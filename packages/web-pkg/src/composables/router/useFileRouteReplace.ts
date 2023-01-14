@@ -2,7 +2,7 @@ import { useRouter } from './useRouter'
 import { useConfigurationManager } from '../configuration'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions, mergeFileRouteOptions } from '../../helpers/router'
-import Router from 'vue-router'
+import { Router } from 'vue-router'
 import { ConfigurationManager } from '../../configuration'
 import { unref } from 'vue'
 

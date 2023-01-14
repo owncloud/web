@@ -1,9 +1,9 @@
 import { unref } from 'vue'
-import { Location, Router } from 'vue-router'
+import { RouteLocation, Router, RouteParams } from 'vue-router'
 
 import { MaybeRef } from '../../utils'
 import { FileContext } from './types'
-import { LocationQuery, LocationParams } from '../router'
+import { LocationQuery } from '../router'
 import { Resource } from 'web-client'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
 
@@ -29,7 +29,7 @@ const contextRouteQueryKey = 'contextRouteQuery'
   and break them here once on purpose in encapsulated
   functions
 */
-export const routeToContextQuery = (location: Location): LocationQuery => {
+export const routeToContextQuery = (location: RouteLocation): LocationQuery => {
   const { params, query } = location
 
   const contextQuery = {}
@@ -48,7 +48,7 @@ export const routeToContextQuery = (location: Location): LocationQuery => {
 }
 export const contextQueryToFileContextProps = (
   query: LocationQuery
-): { routeName: string; routeParams: LocationParams; routeQuery: LocationQuery } => {
+): { routeName: string; routeParams: RouteParams; routeQuery: LocationQuery } => {
   return {
     routeName: queryItemAsString(query[contextRouteNameKey]),
     routeParams: query[contextRouteParamsKey] as any,

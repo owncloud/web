@@ -4,7 +4,12 @@ import { getComposableWrapper, createRouter } from 'web-test-helpers'
 
 describe('useRouteQuery', () => {
   it('is reactive', async () => {
-    const router = createRouter()
+    const router = createRouter({
+      routes: [{ path: '/', redirect: null }]
+    })
+    router.push('/')
+    await router.isReady()
+
     let fooQuery: Ref
     let fooValue: ComputedRef
 
@@ -33,16 +38,22 @@ describe('useRouteQuery', () => {
     expect(fooValue.value).toBe(1)
 
     fooQuery.value = '2'
-    await nextTick()
+
+    // FIXME: why do we have to wait for so many ticks?
+    // Why don't we have to do that for any other expectation in the whole file?!
+    for (let i = 0; i < 32; i++) {
+      await nextTick()
+    }
+
     expect(wrapper.find('#fooQuery').element.innerHTML).toBe('2')
     expect(wrapper.find('#fooValue').element.innerHTML).toBe('2')
 
-    await router.push({ query: { foo: '3' } })
+    await router.push({ path: '/', query: { foo: '3' } })
     await nextTick()
     expect(wrapper.find('#fooQuery').element.innerHTML).toBe('3')
     expect(wrapper.find('#fooValue').element.innerHTML).toBe('3')
 
-    await router.push({})
+    await router.push({ path: '/', query: {} })
     await nextTick()
     expect(wrapper.find('#fooQuery').element.innerHTML).toBe('1')
     expect(wrapper.find('#fooValue').element.innerHTML).toBe('1')
@@ -53,12 +64,13 @@ describe('useRouteQuery', () => {
 
     const mocks = { $router: router }
     getComposableWrapper(
-      () => {
+      async () => {
         const fooQuery = useRouteQuery('foo', 'defaultValue')
 
         expect(fooQuery.value).toBe('defaultValue')
 
-        router.push({ query: { foo: 'foo-1' } })
+        router.push({ path: '/', query: { foo: 'foo-1' } })
+        await nextTick()
         expect(fooQuery.value).toBe('foo-1')
 
         router.push({})
@@ -73,11 +85,12 @@ describe('useRouteQuery', () => {
 
     const mocks = { $router: router }
     getComposableWrapper(
-      () => {
+      async () => {
         const fooQuery = useRouteQuery('foo')
         const barQuery = useRouteQuery('bar')
 
-        router.push({ query: { foo: 'foo-1' } })
+        router.push({ path: '/', query: { foo: 'foo-1' } })
+        await nextTick()
         expect(fooQuery.value).toBe('foo-1')
         expect(barQuery.value).toBeFalsy()
 
@@ -98,10 +111,11 @@ describe('useRouteQuery', () => {
 
     const mocks = { $router: router }
     getComposableWrapper(
-      () => {
+      async () => {
         const fooQuery = useRouteQuery('foo')
 
         router.push({ path: '/home', query: { foo: 'bar' } })
+        await nextTick()
         expect(fooQuery.value).toBe('bar')
 
         router.push({ path: '/sub' })
@@ -116,13 +130,14 @@ describe('useRouteQuery', () => {
 
     const mocks = { $router: router }
     getComposableWrapper(
-      () => {
+      async () => {
         const fooQuery = useRouteQuery('foo')
 
         router.push({ path: '/home' })
         expect(fooQuery.value).toBeUndefined()
 
         fooQuery.value = 'changedThroughRef'
+        await nextTick()
         expect(unref(router.currentRoute).query.foo).toBe('changedThroughRef')
       },
       { mocks }

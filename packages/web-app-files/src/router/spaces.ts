@@ -1,10 +1,10 @@
-import { Location, RouteConfig } from 'vue-router'
+import { RouteLocationNamedRaw, RouteRecordRaw } from 'vue-router'
 import { RouteComponents } from './router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
 type spaceTypes = 'files-spaces-projects' | 'files-spaces-generic'
 
-export const createLocationSpaces = (name: spaceTypes, location = {}): Location =>
+export const createLocationSpaces = (name: spaceTypes, location = {}): RouteLocationNamedRaw =>
   createLocation(name, location)
 
 export const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
@@ -17,7 +17,7 @@ export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
   locationSpacesGeneric
 )
 
-export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
+export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
   {
     path: '/spaces',
     component: components.App,

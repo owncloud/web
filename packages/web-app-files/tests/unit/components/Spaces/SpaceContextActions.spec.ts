@@ -5,8 +5,10 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions
+  defaultStoreMockOptions,
+  RouteLocation
 } from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
 
 const spaceMock = {
   id: '1',
@@ -32,7 +34,7 @@ function getWrapper(space) {
       },
       global: {
         mocks: {
-          ...defaultComponentMocks({ currentRoute: { path: '/files' } })
+          ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) })
         },
         plugins: [...defaultPlugins(), store]
       }

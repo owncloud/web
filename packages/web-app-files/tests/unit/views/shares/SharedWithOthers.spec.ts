@@ -2,8 +2,8 @@ import SharedWithOthers from '../../../../src/views/shares/SharedWithOthers.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
-import { defaultStubs } from 'web-test-helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { defaultStubs, RouteLocation } from 'web-test-helpers'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import {
   createStore,
@@ -55,7 +55,7 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
   )
   const defaultMocks = {
     ...defaultComponentMocks({
-      currentRoute: { name: 'files-shares-with-others' }
+      currentRoute: mock<RouteLocation>({ name: 'files-shares-with-others' })
     }),
     ...(mocks && mocks)
   }

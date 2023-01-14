@@ -1,5 +1,5 @@
 import { Store } from 'vuex'
-import { RouteConfig, Router } from 'vue-router'
+import { RouteRecordRaw, Router } from 'vue-router'
 import { App, Component } from 'vue'
 
 /** shim configuration for now, should be typed in a later step */
@@ -65,7 +65,7 @@ export interface ApplicationTranslations {
 export interface ClassicApplicationScript {
   appInfo?: ApplicationInformation
   store?: Store<any>
-  routes?: RouteConfig[]
+  routes?: RouteRecordRaw[]
   navItems?: ApplicationNavigationItem[]
   quickActions?: ApplicationQuickActions
   translations?: ApplicationTranslations
@@ -76,7 +76,7 @@ export interface ClassicApplicationScript {
 
 /** RuntimeApi defines the publicly available runtime api */
 export interface RuntimeApi {
-  announceRoutes: (routes: RouteConfig[]) => void
+  announceRoutes: (routes: RouteRecordRaw[]) => void
   announceNavigationItems: (navigationItems: ApplicationNavigationItem[]) => void
   announceTranslations: (appTranslations: ApplicationTranslations) => void
   announceQuickActions: (quickActions: ApplicationQuickActions) => void

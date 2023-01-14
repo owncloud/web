@@ -1,5 +1,5 @@
 import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from './index'
-import Router, { Route } from 'vue-router'
+import { Router, RouteLocation } from 'vue-router'
 import Vue from 'vue'
 import { contextRouteNameKey, queryItemAsString } from 'web-pkg/src/composables'
 
@@ -35,7 +35,7 @@ export const setupAuthGuard = (router: Router) => {
   })
 }
 
-export const hasContextRouteNameChanged = (to: Route, from: Route): boolean => {
+export const hasContextRouteNameChanged = (to: RouteLocation, from: RouteLocation): boolean => {
   if (!to.query[contextRouteNameKey] && !from.query[contextRouteNameKey]) {
     return false
   }

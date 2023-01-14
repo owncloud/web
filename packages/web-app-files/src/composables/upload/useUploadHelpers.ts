@@ -1,4 +1,4 @@
-import { Route } from 'vue-router'
+import { RouteLocation } from 'vue-router'
 import { UppyResource } from 'web-runtime/src/composables/upload'
 import { useRoute } from 'web-pkg/src/composables'
 import { ComputedRef, Ref, unref } from 'vue'
@@ -20,7 +20,7 @@ interface UploadHelpersResult {
 
 interface inputFileOptions {
   uppyService: UppyService
-  route: Ref<Route>
+  route: Ref<RouteLocation>
   space: Ref<SpaceResource>
   currentFolder: Ref<string>
   currentFolderId?: Ref<string | number>
@@ -108,7 +108,7 @@ const inputFilesToUppyFiles = ({
           uploadId: uuid.v4(),
           topLevelFolderId,
           // route data
-          routeName: name,
+          routeName: name as string,
           routeDriveAliasAndItem: (params as any)?.driveAliasAndItem || '',
           routeShareId: (query as any)?.shareId || ''
         }

@@ -11,7 +11,8 @@ import {
   shallowMount,
   defaultStoreMockOptions,
   defaultComponentMocks,
-  defaultStubs
+  defaultStubs,
+  RouteLocation
 } from 'web-test-helpers'
 
 const getCollaborator = () => ({
@@ -237,7 +238,9 @@ function getWrapper({
       props: { space },
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks: defaultComponentMocks({ currentRoute: { name: currentRouteName } }),
+        mocks: defaultComponentMocks({
+          currentRoute: mock<RouteLocation>({ name: currentRouteName })
+        }),
         provide: {
           incomingParentShare: {}
         },
