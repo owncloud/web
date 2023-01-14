@@ -32,7 +32,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         }
       },
       {
-        path: ':driveAliasAndItem*',
+        path: ':driveAliasAndItem(.*)?',
         name: locationSpacesGeneric.name,
         component: components.Spaces.DriveResolver,
         meta: {

@@ -18,7 +18,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
     children: [
       {
         name: locationTrashGeneric.name,
-        path: ':driveAliasAndItem*',
+        path: ':driveAliasAndItem(.*)?',
         component: components.Spaces.DriveResolver,
         meta: {
           authContext: 'user',

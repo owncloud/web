@@ -10,7 +10,7 @@ const appInfo = {
 const routes = [
   {
     name: 'apps',
-    path: '/:driveAliasAndItem*',
+    path: '/:driveAliasAndItem(.*)?',
     component: App,
     meta: {
       authContext: 'hybrid',

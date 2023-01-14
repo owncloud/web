@@ -25,7 +25,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
     children: [
       {
         name: locationPublicLink.name,
-        path: ':driveAliasAndItem*',
+        path: ':driveAliasAndItem(.*)?',
         component: components.Spaces.DriveResolver,
         meta: {
           authContext: 'publicLink',

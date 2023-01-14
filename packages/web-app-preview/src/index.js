@@ -8,7 +8,7 @@ function $gettext(msg) {
 
 const routes = [
   {
-    path: '/:driveAliasAndItem*',
+    path: '/:driveAliasAndItem(.*)?',
     component: App,
     name: 'media',
     meta: {
