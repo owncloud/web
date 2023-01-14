@@ -37,8 +37,7 @@ export const router = patchRouter(
     },
     stringifyQuery(obj) {
       return qs.stringify(obj, {
-        allowDots: true,
-        addQueryPrefix: true
+        allowDots: true
       })
     },
     history: (base && createWebHistory(new URL(base.href).pathname)) || createWebHashHistory(),
