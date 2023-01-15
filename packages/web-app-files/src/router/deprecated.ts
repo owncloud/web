@@ -57,7 +57,7 @@ export const buildRoutes = (): RouteLocationNamedRaw[] =>
         })
     },
     {
-      path: '/list/all/:item*',
+      path: '/list/all/:item(.*)',
       redirect: (to) =>
         createLocationSpaces('files-spaces-generic', {
           ...to,
@@ -88,7 +88,7 @@ export const buildRoutes = (): RouteLocationNamedRaw[] =>
       redirect: (to) => createLocationTrash('files-trash-generic', to)
     },
     {
-      path: '/public/list/:item*',
+      path: '/public/list/:item(.*)',
       redirect: (to) => createLocationPublic('files-public-link', to)
     },
     {
