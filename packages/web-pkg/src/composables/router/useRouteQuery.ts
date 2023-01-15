@@ -13,8 +13,10 @@ export const useRouteQuery = (name: string, defaultValue?: QueryValue): Ref<Quer
       if (unref(router.currentRoute).query[name] === v) {
         return
       }
+
       await router.replace({
-        ...unref(router.currentRoute),
+        // FIXME: passing the path does not seem to be required at runtime, but somehow is required in tests
+        path: unref(router.currentRoute).path,
         query: {
           ...unref(router.currentRoute).query,
           [name]: v
