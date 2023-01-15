@@ -15,6 +15,8 @@ export class AuthService {
   private userManager: UserManager
   private publicLinkManager: PublicLinkManager
 
+  public hasAuthErrorOccured: boolean
+
   public initialize(
     configurationManager: ConfigurationManager,
     clientService: ClientService,
@@ -25,6 +27,7 @@ export class AuthService {
     this.clientService = clientService
     this.store = store
     this.router = router
+    this.hasAuthErrorOccured = false
   }
 
   /**
@@ -109,6 +112,7 @@ export class AuthService {
         await this.resetStateAfterUserLogout()
 
         if (this.userManager.unloadReason === 'authError') {
+          this.hasAuthErrorOccured = true
           return this.router.push({ name: 'accessDenied' })
         }
 
