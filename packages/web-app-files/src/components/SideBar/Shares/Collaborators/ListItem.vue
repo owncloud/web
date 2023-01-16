@@ -316,7 +316,7 @@ export default defineComponent({
     },
     showAvatar() {
       if (this.isSpace) {
-        return this.share.collaborator.name
+        return !!this.share.collaborator.name
       }
       return this.isUser
     }
