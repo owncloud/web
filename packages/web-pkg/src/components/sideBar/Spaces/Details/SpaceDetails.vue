@@ -12,7 +12,11 @@
         class="space-default-image oc-px-m oc-py-m"
       />
     </div>
-    <div v-if="hasShares" class="oc-flex oc-flex-middle oc-mb-m oc-text-small" style="gap: 15px">
+    <div
+      v-if="!spaceResource && hasShares"
+      class="oc-flex oc-flex-middle oc-space-details-sidebar-members oc-mb-m oc-text-small"
+      style="gap: 15px"
+    >
       <oc-button
         v-if="hasMemberShares"
         appearance="raw"
@@ -86,15 +90,20 @@ export default defineComponent({
     spaceResource: {
       type: Object as PropType<SpaceResource>,
       required: false
+    },
+    showSpaceImage: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
-  setup() {
+  setup(props) {
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const spaceImage = ref('')
 
     const loadImageTask = useTask(function* (signal, ref) {
-      if (!ref.space?.spaceImageData) {
+      if (!ref.space?.spaceImageData || !props.showSpaceImage) {
         spaceImage.value = undefined
         return
       }
