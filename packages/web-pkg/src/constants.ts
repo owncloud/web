@@ -4,7 +4,7 @@ export const EVENT_TROW_CONTEXTMENU = 'contextmenuClicked'
 
 export abstract class ImageDimension {
   static readonly Thumbnail: [number, number] = [36, 36]
-  static readonly Tile: [number, number] = [256, 256]
+  static readonly Tile: [number, number] = [180, 180]
   static readonly Preview: [number, number] = [1200, 1200]
   static readonly Avatar: number = 64
 }

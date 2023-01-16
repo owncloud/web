@@ -179,7 +179,7 @@ export default defineComponent({
           loadPreview({
             resource,
             isPublic: false,
-            dimensions: ImageDimension.Preview,
+            dimensions: ImageDimension.Tile,
             server: configurationManager.serverUrl,
             userId: this.user.id,
             token: this.accessToken
