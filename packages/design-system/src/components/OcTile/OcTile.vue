@@ -29,14 +29,19 @@
           v-else
           :resource="resource"
           size="xxlarge"
-          class="tile-default-image oc-p-m"
+          class="tile-default-image oc-pt-s"
         />
       </slot>
     </oc-resource-link>
     <div class="oc-card-body oc-p-s">
       <div class="oc-flex oc-flex-between oc-flex-middle">
         <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
-          <oc-resource :resource="resource" :folder-link="resourceRoute" @click="$emit('click')" />
+          <oc-resource
+            :resource="resource"
+            :is-icon-displayed="false"
+            :folder-link="resourceRoute"
+            @click="$emit('click')"
+          />
         </div>
         <div class="oc-flex oc-flex-middle">
           <!-- Slot for individual actions -->
@@ -96,8 +101,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 .oc-tile-card {
   background-color: var(--oc-color-background-highlight) !important;
-  box-shadow: 3px 0 10px rgb(0 0 0 / 15%);
+  box-shadow: none !important;
   height: 100%;
+  outline: 1px solid var(--oc-color-border);
 
   &.state-trashed {
     cursor: pointer;
@@ -123,16 +129,16 @@ export default defineComponent({
     }
 
     .tile-preview {
-      min-width: 252px;
-      height: auto;
       aspect-ratio: 16/9;
+      height: auto;
       object-fit: cover;
+      width: 100%;
     }
   }
 
   .resource-name-wrapper {
     color: var(--oc-color-text-default);
-    max-width: 60%;
+    max-width: 70%;
     overflow: hidden;
   }
 }
