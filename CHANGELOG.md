@@ -327,6 +327,7 @@ Details
    https://github.com/owncloud/web/pull/8228
    https://github.com/owncloud/web/pull/8229
    https://github.com/owncloud/web/pull/8231
+   https://github.com/owncloud/web/pull/8238
    https://github.com/owncloud/web/pull/8234
 
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
