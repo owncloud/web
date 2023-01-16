@@ -20,14 +20,22 @@
 import { defineComponent } from 'vue'
 
 import { mapGetters } from 'vuex'
+import { PropType } from 'vue'
+import { SpaceResource } from 'web-client'
 
 export default defineComponent({
   name: 'SpaceInfo',
+  props: {
+    spaceResource: {
+      type: Object as PropType<SpaceResource>,
+      required: false
+    }
+  },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
 
     space() {
-      return this.highlightedFile
+      return this.spaceResource || this.highlightedFile
     }
   }
 })
@@ -39,6 +47,8 @@ export default defineComponent({
   grid-template-columns: auto 1fr auto;
   align-items: center;
   grid-gap: 5px;
+  background-color: var(--oc-color-background-default);
+  padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
 
   &__body {
     text-align: left;

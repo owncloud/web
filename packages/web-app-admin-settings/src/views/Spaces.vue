@@ -7,7 +7,15 @@
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
+      :is-side-bar-header-compact="selectedSpaces.length === 1"
     >
+      <template #sideBarHeader>
+        <space-info
+          v-if="selectedSpaces.length === 1"
+          :space-resource="selectedSpaces[0]"
+          class="sidebar-panel__space_info"
+        />
+      </template>
       <template #topbarActions>
         <div class="admin-settings-app-bar-actions oc-mt-xs">
           <div v-if="selectedSpaces.length > 1" class="oc-flex oc-flex-middle">
@@ -68,6 +76,7 @@ import SpaceDetailsMultiple from 'web-pkg/src/components/sideBar/Spaces/Details/
 import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelection.vue'
 import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
+import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 
 export default defineComponent({
@@ -76,7 +85,8 @@ export default defineComponent({
     SpacesList,
     AppTemplate,
     NoContentMessage,
-    ContextActions
+    ContextActions,
+    SpaceInfo
   },
   setup() {
     const store = useStore()

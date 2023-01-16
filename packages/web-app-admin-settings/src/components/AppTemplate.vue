@@ -29,9 +29,13 @@
         :available-panels="sideBarAvailablePanels"
         :loading="false"
         :open="sideBarOpen"
+        :is-header-compact="isSideBarHeaderCompact"
         @selectPanel="selectPanel"
         @close="closeSideBar"
       >
+        <template #header>
+          <slot name="sideBarHeader" />
+        </template>
       </side-bar>
     </template>
   </main>
@@ -69,6 +73,11 @@ export default defineComponent({
     sideBarActivePanel: {
       required: true,
       type: String
+    },
+    isSideBarHeaderCompact: {
+      required: false,
+      type: Boolean,
+      default: false
     }
   },
   setup() {

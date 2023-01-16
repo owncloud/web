@@ -37,7 +37,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import SideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import FileInfo from './FileInfo.vue'
-import SpaceInfo from './SpaceInfo.vue'
+import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
 import { Panel } from 'web-pkg/src/components/sideBar/'
 
 import {
@@ -298,8 +298,7 @@ export default defineComponent({
   z-index: 3;
 
   .sidebar-panel {
-    &__file_info,
-    &__space_info {
+    &__file_info {
       background-color: var(--oc-color-background-default);
       padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
     }
