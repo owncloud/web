@@ -20,6 +20,14 @@
           <th scope="col" class="oc-pr-s" v-text="$gettext('Used quota:')" />
           <td v-text="totalSelectedSpaceQuotaUsed" />
         </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Enabled:')" />
+          <td v-text="totalEnabledSpaces" />
+        </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Disabled:')" />
+          <td v-text="totalDisabledSpaces" />
+        </tr>
       </table>
     </div>
   </div>
@@ -41,25 +49,49 @@ export default defineComponent({
   setup(props) {
     const { $gettext, $ngettext, $gettextInterpolate, $language } = useTranslations()
     const totalSelectedSpaceQuotaTotal = computed(() => {
-      let total = 10
+      let total = 0
       props.selectedSpaces.forEach((space) => {
         total += space.spaceQuota.total
       })
       return formatFileSize(total, $language.current)
     })
     const totalSelectedSpaceQuotaRemaining = computed(() => {
-      let remaining = 10
+      let remaining = 0
       props.selectedSpaces.forEach((space) => {
+        if (space.disabled) {
+          return
+        }
         remaining += space.spaceQuota.remaining
       })
       return formatFileSize(remaining, $language.current)
     })
     const totalSelectedSpaceQuotaUsed = computed(() => {
-      let used = 10
+      let used = 0
       props.selectedSpaces.forEach((space) => {
+        if (space.disabled) {
+          return
+        }
         used += space.spaceQuota.used
       })
       return formatFileSize(used, $language.current)
+    })
+    const totalEnabledSpaces = computed(() => {
+      let enabled = 0
+      props.selectedSpaces.forEach((space) => {
+        if (!space.disabled) {
+          enabled++
+        }
+      })
+      return enabled
+    })
+    const totalDisabledSpaces = computed(() => {
+      let disabled = 0
+      props.selectedSpaces.forEach((space) => {
+        if (space.disabled) {
+          disabled++
+        }
+      })
+      return disabled
     })
     const detailsTableLabel = computed(() => {
       return $gettext('Overview of the information about the selected spaces')
@@ -81,7 +113,9 @@ export default defineComponent({
       selectedSpacesString,
       totalSelectedSpaceQuotaTotal,
       totalSelectedSpaceQuotaRemaining,
-      totalSelectedSpaceQuotaUsed
+      totalSelectedSpaceQuotaUsed,
+      totalEnabledSpaces,
+      totalDisabledSpaces
     }
   }
 })
