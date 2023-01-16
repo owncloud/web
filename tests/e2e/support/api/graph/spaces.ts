@@ -2,7 +2,7 @@ import { checkResponseStatus, request } from '../http'
 import { Space, User } from '../../types'
 import join from 'join-path'
 import {
-  createFolderInsideSpace,
+  createFolderInsideSpaceBySpaceName,
   getIdOfFileInsideSpace,
   uploadFileInsideSpace
 } from '../davSpaces'
@@ -72,9 +72,9 @@ export const createSpace = async ({
 
   const result = await response.json()
   const spaceName = result.name
-  // API call to make a hidden file when the space creation in successful
-  await createFolderInsideSpace({ user, folderName: '.space', spaceName })
-  // Again make an api call to create a readme.md file so that the edit description is shown in the web UI
+  // API call to make a hidden file when the space creation is successful
+  await createFolderInsideSpaceBySpaceName({ user, folder: '.space', spaceName })
+  // Again make an api call to create a readme.md file so that the description is shown in the web UI
   await uploadFileInsideSpace({ user, pathToFile: '.space/readme.md', spaceName })
   // Again make an api call to get file id of the uploaded file `readme.md`
   const fileId = await getIdOfFileInsideSpace({
@@ -128,6 +128,6 @@ export const updateSpaceSpecialSection = async ({
   })
   checkResponseStatus(
     response,
-    `Failed while creating special section "${type}" inside space project`
+    `Failed while creating special section "${type}" inside project space`
   )
 }
