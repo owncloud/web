@@ -135,7 +135,6 @@ export default defineComponent({
     }
 
     const emitTileClick = (resource) => {
-      // Needs to handle file actions and potentially disabled folders also
       if (resource.disabled && resource.type === 'space') {
         store.dispatch('showMessage', {
           title: $gettext('Disabled spaces cannot be entered'),
