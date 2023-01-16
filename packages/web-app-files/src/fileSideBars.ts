@@ -7,6 +7,7 @@ import TagsPanel from './components/SideBar/TagsPanel.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from 'web-pkg/src/components/sideBar/Spaces/Details/SpaceDetails.vue'
+import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelection.vue'
 import {
   isLocationTrashActive,
   isLocationPublicActive,
@@ -41,14 +42,30 @@ const panelGenerators: (({
 }) => Panel)[] = [
   // We don't have file details in the trashbin, yet.
   // Only allow `actions` panel on trashbin route for now.
-  ({ rootFolder, highlightedFile }): Panel => ({
+  ({ router, rootFolder, highlightedFile }): Panel => ({
     app: 'no-selection',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: NoSelection,
     default: () => true,
     get enabled() {
-      return !highlightedFile || (rootFolder && highlightedFile?.type !== 'space')
+      return (
+        !isLocationSpacesActive(router, 'files-spaces-projects') &&
+        (!highlightedFile || (rootFolder && highlightedFile?.type !== 'space'))
+      )
+    }
+  }),
+  ({ router, rootFolder, highlightedFile }): Panel => ({
+    app: 'no-selection',
+    icon: 'questionnaire-line',
+    title: $gettext('Details'),
+    component: SpaceNoSelection,
+    default: () => true,
+    get enabled() {
+      return (
+        isLocationSpacesActive(router, 'files-spaces-projects') &&
+        (!highlightedFile || (rootFolder && highlightedFile?.type !== 'space'))
+      )
     }
   }),
   ({ router, multipleSelection, rootFolder, highlightedFile }) => ({
