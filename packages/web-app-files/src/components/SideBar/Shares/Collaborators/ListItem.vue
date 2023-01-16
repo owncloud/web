@@ -9,7 +9,7 @@
       <div class="oc-width-2-3 oc-flex oc-flex-middle">
         <div>
           <avatar-image
-            v-if="isUser || isSpace"
+            v-if="showAvatar"
             :userid="share.collaborator.name"
             :user-name="share.collaborator.displayName"
             :width="36"
@@ -313,6 +313,12 @@ export default defineComponent({
         title: this.$gettext('Access details'),
         list
       }
+    },
+    showAvatar() {
+      if (this.isSpace) {
+        return this.share.collaborator.name
+      }
+      return this.isUser
     }
   },
   methods: {

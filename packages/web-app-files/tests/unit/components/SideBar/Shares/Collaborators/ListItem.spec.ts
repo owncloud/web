@@ -62,6 +62,14 @@ describe('Collaborator ListItem component', () => {
         expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
         expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual(shareType.key)
       })
+      it('should display an oc-avatar-item for space group shares', () => {
+        const { wrapper } = createWrapper({
+          shareType: ShareTypes.space.value,
+          collaborator: { name: undefined, displayName: 'someGroup', additionalInfo: undefined }
+        })
+        expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
+        expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
+      })
     })
   })
   describe('share info', () => {
