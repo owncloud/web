@@ -1,0 +1,5 @@
+Enhancement: Add option to hide icon/thumbnail OcResource
+
+We added a property to the OcResource component so it can be displayed without icon/thumbnail.
+
+https://github.com/owncloud/web/pull/7991

@@ -1,6 +1,7 @@
 <template>
   <div class="oc-resource oc-text-overflow">
     <oc-resource-link
+      v-if="isIconDisplayed"
       :resource="resource"
       :is-resource-clickable="isResourceClickable"
       :folder-link="folderLink"
@@ -16,7 +17,7 @@
       />
       <oc-resource-icon v-else :resource="resource" />
     </oc-resource-link>
-    <div class="oc-resource-details oc-text-overflow">
+    <div class="oc-resource-details oc-text-overflow" :class="'oc-pl-s' ? isIconDisplayed : ''">
       <oc-resource-link
         v-slot="{ opensInNewWindowDescriptionId }"
         :resource="resource"
@@ -140,6 +141,14 @@ export default defineComponent({
       default: true
     },
     /**
+     * Asserts whether the resource thumbnail should be displayed
+     */
+    isIconDisplayed: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    /**
      * Asserts whether clicking on the resource name triggers any action
      */
     isResourceClickable: {
@@ -206,7 +215,6 @@ export default defineComponent({
 
   &-details {
     display: block;
-    padding-left: var(--oc-space-small);
 
     a {
       text-decoration: none;

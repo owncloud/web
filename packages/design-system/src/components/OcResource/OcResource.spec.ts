@@ -128,4 +128,19 @@ describe('OcResource', () => {
 
     expect(wrapper.html()).toMatchSnapshot()
   })
+
+  it('can be used without icon/thumbnail', () => {
+    const wrapper = mount(Resource, {
+      props: {
+        resource: fileResourceWithoutParentFoldername,
+        isIconDisplayed: false,
+        parentFolderNameDefault: 'Example parent folder name'
+      },
+      global: {
+        stubs
+      }
+    })
+
+    expect(wrapper.html()).toMatchSnapshot()
+  })
 })
