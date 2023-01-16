@@ -9,7 +9,7 @@ Feature: spaces participant management
     And "Admin" assigns following roles to the users
       | id    | role       |
       | Alice | SpaceAdmin |
-    And "Alice" creates the following project spaces using API
+    And "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
     When "Alice" logs in

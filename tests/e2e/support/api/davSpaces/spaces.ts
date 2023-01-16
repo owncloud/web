@@ -7,7 +7,6 @@ import { Response } from 'node-fetch'
 import convert from 'xml-js'
 import _ from 'lodash/object'
 
-
 export const folderExists = async ({
   user,
   path
@@ -24,24 +23,20 @@ export const folderExists = async ({
   return getResponse.status === 200
 }
 
-export const createFolder = async ({
+const createFolder = async ({
   user,
-  folder
+  folder,
+  endPath
 }: {
   user: User
   folder: string
+  endPath: string
 }): Promise<void> => {
   const paths = folder.split('/')
 
   let parentFolder = ''
   for (const resource of paths) {
-    const path = join(
-      'remote.php',
-      'dav',
-      config.ocis ? 'spaces/' + (await getPersonalSpaceId({ user })) : 'files/' + user.id,
-      parentFolder,
-      resource
-    )
+    const path = join('remote.php', 'dav', endPath, parentFolder, resource)
     // check if the folder exists already or not
     const folderExist = await folderExists({ user, path })
     if (folderExist === false) {
@@ -55,13 +50,12 @@ export const createFolder = async ({
     parentFolder = join(parentFolder, resource)
   }
 }
-
 const createFile = async ({
-  user,
-  pathToFile,
-  content,
-  webDavEndPathToRoot // the root of the WebDAV path. This is `spaces/<space-id>` for ocis or `files/<user>` for oC10
-}: {
+                            user,
+                            pathToFile,
+                            content,
+                            webDavEndPathToRoot // the root of the WebDAV path. This is `spaces/<space-id>` for ocis or `files/<user>` for oC10
+                          }: {
   user: User
   pathToFile: string
   content: string
@@ -79,10 +73,10 @@ const createFile = async ({
 }
 
 export const uploadFileInPersonalSpace = async ({
-  user,
-  pathToFile,
-  content
-}: {
+                                                  user,
+                                                  pathToFile,
+                                                  content
+                                                }: {
   user: User
   pathToFile: string
   content: string
@@ -90,40 +84,38 @@ export const uploadFileInPersonalSpace = async ({
   // upload a file step is same for oc10 and ocis
   // so first need to determine the end path to make request
   const webDavEndPathToRoot = config.ocis
-    ? 'spaces/' + (await getPersonalSpaceId({ user }))
-    : 'files/' + user.id
+      ? 'spaces/' + (await getPersonalSpaceId({ user }))
+      : 'files/' + user.id
   await createFile({ user, pathToFile, content, webDavEndPathToRoot })
 }
 
-export const createFolderInsideSpace = async ({
+export const createFolderInsideSpaceBySpaceName = async ({
   user,
-  folderName,
+  folder,
   spaceName
 }: {
   user: User
-  folderName: string
+  folder: string
   spaceName: string
 }): Promise<void> => {
-  const paths = folderName.split('/')
+  const endPath =
+    'spaces/' + (await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }))
+  await createFolder({ user, folder, endPath })
+}
 
-  let subFolder = ''
-  for (const resource of paths) {
-    const response = await request({
-      method: 'MKCOL',
-      path: join(
-        'remote.php',
-        'dav',
-        'spaces',
-        await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }),
-        subFolder,
-        resource
-      ),
-      user: user
-    })
-
-    checkResponseStatus(response, `Failed while creating a ${folderName} inside space project`)
-    subFolder += resource
-  }
+export const createFolderInsidePersonalSpace = async ({
+  user,
+  folder
+}: {
+  user: User
+  folder: string
+}): Promise<void> => {
+  // creation of folder step is same for oc10 and ocis
+  // so first need to determine the end path to make request
+  const endPath = config.ocis
+    ? 'spaces/' + (await getPersonalSpaceId({ user }))
+    : 'files/' + user.id
+  await createFolder({ user, folder, endPath })
 }
 
 export const uploadFileInsideSpace = async ({
@@ -146,7 +138,10 @@ export const uploadFileInsideSpace = async ({
     ),
     user: user
   })
-  checkResponseStatus(response, `Failed while creating a ${pathToFile} inside space project`)
+  checkResponseStatus(
+    response,
+    `Failed while creating a ${pathToFile} inside project space ${spaceName}`
+  )
 }
 
 export const getDataOfFileInsideSpace = async ({
