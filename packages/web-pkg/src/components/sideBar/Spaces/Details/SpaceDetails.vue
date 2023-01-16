@@ -1,6 +1,6 @@
 <template>
   <div id="oc-space-details-sidebar">
-    <div v-if="showSpaceImage" class="oc-space-details-sidebar-image oc-text-center">
+    <div class="oc-space-details-sidebar-image oc-text-center">
       <oc-spinner v-if="loadImageTask.isRunning" />
       <div v-else-if="spaceImage" class="oc-position-relative">
         <img :src="spaceImage" alt="" class="oc-mb-m" />
@@ -97,13 +97,13 @@ export default defineComponent({
       default: true
     }
   },
-  setup() {
+  setup(props) {
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const spaceImage = ref('')
 
     const loadImageTask = useTask(function* (signal, ref) {
-      if (!ref.space?.spaceImageData) {
+      if (!ref.space?.spaceImageData || !props.showSpaceImage) {
         spaceImage.value = undefined
         return
       }

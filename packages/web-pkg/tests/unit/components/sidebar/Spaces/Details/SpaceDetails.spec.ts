@@ -36,7 +36,7 @@ const spaceShare = {
 }
 
 const selectors = {
-  spaceImage: '.oc-space-details-sidebar-image',
+  spaceDefaultImage: '.space-default-image',
   spaceMembers: '.oc-space-details-sidebar-members'
 }
 
@@ -45,9 +45,9 @@ describe('Details SideBar Panel', () => {
     const { wrapper } = createWrapper()
     expect(wrapper.html()).toMatchSnapshot()
   })
-  it('does not render the space image if disabled via property', () => {
+  it('does render the space default image if "showSpaceImage" is false', () => {
     const { wrapper } = createWrapper({ props: { showSpaceImage: false } })
-    expect(wrapper.find(selectors.spaceImage).exists()).toBeFalsy()
+    expect(wrapper.find(selectors.spaceDefaultImage).exists()).toBeTruthy()
   })
   it('does not render the space members count if spaceResource is given', () => {
     const { wrapper } = createWrapper({ props: { spaceResource: spaceMock } })
