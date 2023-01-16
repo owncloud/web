@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Multiple Details SideBar Panel displays the details side panel 1`] = `
+<div id="oc-spaces-details-multiple-sidebar">
+  <div class="spaces-preview oc-mb">
+    <div class="spaces-preview-body">
+      <oc-icon-stub accessiblelabel="" class="preview-icon" color="" filltype="fill" name="layout-grid" size="xxlarge" type="span" variation="passive"></oc-icon-stub>
+      <p class="preview-text">1 space selected</p>
+    </div>
+  </div>
+  <div>
+    <table class="details-table">
+      <tbody>
+        <tr>
+          <th class="oc-pr-s" scope="col">Total:</th>
+          <td>1.01 kB</td>
+        </tr>
+        <tr>
+          <th class="oc-pr-s" scope="col">Remaining:</th>
+          <td>910 B</td>
+        </tr>
+        <tr>
+          <th class="oc-pr-s" scope="col">Used:</th>
+          <td>110 B</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;

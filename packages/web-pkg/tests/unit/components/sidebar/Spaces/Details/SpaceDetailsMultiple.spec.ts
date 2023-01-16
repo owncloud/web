@@ -14,7 +14,8 @@ const spaceMock = {
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   spaceQuota: {
     used: 100,
-    total: 1000
+    total: 1000,
+    remaining: 900
   }
 }
 
@@ -59,9 +60,9 @@ function createWrapper(spaceResource) {
           displayedItem: spaceResource
         }
       },
-			props: {
-				selectedSpaces: [spaceResource]
-			}
+      props: {
+        selectedSpaces: [spaceResource]
+      }
     })
   }
 }
