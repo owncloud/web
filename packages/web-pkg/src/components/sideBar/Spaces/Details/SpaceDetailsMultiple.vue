@@ -3,21 +3,21 @@
     <div class="spaces-preview oc-mb">
       <div class="spaces-preview-body">
         <oc-icon class="preview-icon" size="xxlarge" variation="passive" name="layout-grid" />
-        <p class="preview-text" data-testid="selectedFilesText" v-text="selectedSpacesString" />
+        <p class="preview-text" v-text="selectedSpacesString" />
       </div>
     </div>
     <div>
       <table class="details-table" :aria-label="detailsTableLabel">
-        <tr data-testid="filesCount">
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Total:')" />
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Total quota:')" />
           <td v-text="totalSelectedSpaceQuotaTotal" />
         </tr>
-        <tr data-testid="foldersCount">
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Remaining:')" />
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Remaining quota:')" />
           <td v-text="totalSelectedSpaceQuotaRemaining" />
         </tr>
-        <tr data-testid="spacesCount">
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Used:')" />
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Used quota:')" />
           <td v-text="totalSelectedSpaceQuotaUsed" />
         </tr>
       </table>
@@ -25,7 +25,7 @@
   </div>
 </template>
 <script lang="ts">
-import filesize from 'filesize'
+import { formatFileSize } from 'web-pkg/src/helpers'
 import { computed, defineComponent, PropType } from 'vue'
 import { SpaceResource } from 'web-client/src'
 import { useTranslations } from 'web-pkg/src'
@@ -39,27 +39,30 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $ngettext, $gettextInterpolate } = useTranslations()
+    const { $gettext, $ngettext, $gettextInterpolate, $language } = useTranslations()
     const totalSelectedSpaceQuotaTotal = computed(() => {
       let total = 10
       props.selectedSpaces.forEach((space) => {
         total += space.spaceQuota.total
       })
-      return filesize(total)
+      return formatFileSize(total, $language.current)
     })
     const totalSelectedSpaceQuotaRemaining = computed(() => {
       let remaining = 10
       props.selectedSpaces.forEach((space) => {
         remaining += space.spaceQuota.remaining
       })
-      return filesize(remaining)
+      return formatFileSize(remaining, $language.current)
     })
     const totalSelectedSpaceQuotaUsed = computed(() => {
       let used = 10
       props.selectedSpaces.forEach((space) => {
         used += space.spaceQuota.used
       })
-      return filesize(used)
+      return formatFileSize(used, $language.current)
+    })
+    const detailsTableLabel = computed(() => {
+      return $gettext('Overview of the information about the selected spaces')
     })
     const selectedSpacesString = computed(() => {
       return $gettextInterpolate(
@@ -74,6 +77,7 @@ export default defineComponent({
       )
     })
     return {
+      detailsTableLabel,
       selectedSpacesString,
       totalSelectedSpaceQuotaTotal,
       totalSelectedSpaceQuotaRemaining,

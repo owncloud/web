@@ -13,7 +13,7 @@ exports[`Multiple Details SideBar Panel displays the details side panel 1`] = `
       <tbody>
         <tr>
           <th class="oc-pr-s" scope="col">Total:</th>
-          <td>1.01 kB</td>
+          <td>1 kB</td>
         </tr>
         <tr>
           <th class="oc-pr-s" scope="col">Remaining:</th>
