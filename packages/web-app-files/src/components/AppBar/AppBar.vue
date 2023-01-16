@@ -143,9 +143,9 @@ export default defineComponent({
         return []
       }
       return [
-        ViewModeConstants.tilesView,
         ViewModeConstants.condensedTable,
-        ViewModeConstants.default
+        ViewModeConstants.default,
+        ViewModeConstants.tilesView
       ]
     }
   },
