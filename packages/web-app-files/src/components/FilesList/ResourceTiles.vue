@@ -1,7 +1,12 @@
 <template>
   <div>
     <oc-list class="oc-tiles oc-flex">
-      <li v-for="(resource, index) in data" :key="resource.id" class="oc-tiles-item">
+      <li
+        v-for="(resource, index) in data"
+        :key="resource.id"
+        class="oc-tiles-item"
+        :class="tileWidth === 'small' ? 'small-tiles' : ''"
+      >
         <oc-tile
           :ref="
             (el) => {
@@ -84,6 +89,10 @@ export default defineComponent({
     data: {
       type: Array as PropType<Resource[]>,
       default: () => []
+    },
+    tileWidth: {
+      type: String,
+      default: ''
     }
   },
   emits: ['fileClick', 'rowMounted'],
@@ -188,12 +197,18 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .oc-tiles {
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: flex-start;
+  column-gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 160px);
+  justify-content: space-between;
+  row-gap: 32px;
 
   .oc-tiles-item {
-    width: 252px;
+    width: 18rem;
+
+    &.small-tiles {
+      width: 12rem;
+    }
 
     @media (max-width: $oc-breakpoint-xsmall-max) {
       width: 100%;

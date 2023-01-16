@@ -48,6 +48,7 @@
           v-else-if="viewMode === ViewModeConstants.tilesView.name"
           :data="paginatedResources"
           class="oc-px-m oc-pt-l"
+          tile-width="small"
           @rowMounted="rowMounted"
           @fileClick="$_fileActions_triggerDefaultAction"
         >
