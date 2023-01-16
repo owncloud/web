@@ -131,7 +131,8 @@ import {
   formatDateFromJSDate,
   formatRelativeDateFromJSDate,
   displayPositionedDropdown,
-  popperOptions as defaultPopperOptions
+  popperOptions as defaultPopperOptions,
+  formatFileSize
 } from 'web-pkg/src/helpers'
 import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
 import { extractDomSelector, SpaceResource } from 'web-client/src/helpers'
@@ -139,7 +140,6 @@ import { useTranslations } from 'web-pkg/src/composables'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
-import filesize from 'filesize'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -327,19 +327,19 @@ export default defineComponent({
       return formatRelativeDateFromJSDate(new Date(date), $language.current)
     }
     const getTotalQuota = (space: SpaceResource) => {
-      return filesize(space.spaceQuota.total)
+      return formatFileSize(space.spaceQuota.total, $language.current)
     }
     const getUsedQuota = (space: SpaceResource) => {
       if (space.spaceQuota.used === undefined) {
         return '-'
       }
-      return filesize(space.spaceQuota.used)
+      return formatFileSize(space.spaceQuota.used, $language.current)
     }
     const getRemainingQuota = (space: SpaceResource) => {
       if (space.spaceQuota.remaining === undefined) {
         return '-'
       }
-      return filesize(space.spaceQuota.remaining)
+      return formatFileSize(space.spaceQuota.remaining, $language.current)
     }
     const getMemberCount = (space: SpaceResource) => {
       return (
