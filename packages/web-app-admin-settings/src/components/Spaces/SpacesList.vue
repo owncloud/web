@@ -131,7 +131,8 @@ import {
   formatDateFromJSDate,
   formatRelativeDateFromJSDate,
   displayPositionedDropdown,
-  popperOptions as defaultPopperOptions
+  popperOptions as defaultPopperOptions,
+  formatFileSize
 } from 'web-pkg/src/helpers'
 import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
 import { extractDomSelector, SpaceResource } from 'web-client/src/helpers'
@@ -326,19 +327,19 @@ export default defineComponent({
       return formatRelativeDateFromJSDate(new Date(date), $language.current)
     }
     const getTotalQuota = (space: SpaceResource) => {
-      return `${space.spaceQuota.total * Math.pow(10, -9)} GB`
+      return formatFileSize(space.spaceQuota.total, $language.current)
     }
     const getUsedQuota = (space: SpaceResource) => {
       if (space.spaceQuota.used === undefined) {
         return '-'
       }
-      return `${(space.spaceQuota.used * Math.pow(10, -9)).toFixed(2)} GB`
+      return formatFileSize(space.spaceQuota.used, $language.current)
     }
     const getRemainingQuota = (space: SpaceResource) => {
       if (space.spaceQuota.remaining === undefined) {
         return '-'
       }
-      return `${(space.spaceQuota.remaining * Math.pow(10, -9)).toFixed(0)} GB`
+      return formatFileSize(space.spaceQuota.remaining, $language.current)
     }
     const getMemberCount = (space: SpaceResource) => {
       return (

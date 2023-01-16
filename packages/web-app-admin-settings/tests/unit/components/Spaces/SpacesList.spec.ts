@@ -48,7 +48,10 @@ const selectors = {
   ocTableStub: 'oc-table-stub'
 }
 
-jest.mock('web-pkg/src/helpers')
+jest.mock('web-pkg/src/helpers', () => ({
+  ...jest.requireActual('web-pkg/src/helpers'),
+  displayPositionedDropdown: jest.fn()
+}))
 
 describe('SpacesList', () => {
   it('should render all spaces in a table', () => {
