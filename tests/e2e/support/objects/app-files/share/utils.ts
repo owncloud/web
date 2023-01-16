@@ -1,0 +1,28 @@
+import { Page } from 'playwright'
+import util from 'util'
+import { resourceNameSelector, fileRow } from '../resource/actions'
+
+export const resourceIsNotOpenable = async ({
+  page,
+  resource
+}: {
+  page: Page
+  resource: string
+}): Promise<boolean> => {
+  const resourceLocator = await page.locator(util.format(resourceNameSelector, resource))
+  const itemId = await resourceLocator.locator(fileRow).getAttribute('data-item-id')
+  await Promise.all([
+    page.waitForResponse((resp) => {
+      return (
+        (resp.url().endsWith(encodeURIComponent(resource)) ||
+          resp.url().endsWith(encodeURIComponent(itemId))) &&
+        resp.status() === 404 &&
+        resp.request().method() === 'PROPFIND'
+      )
+    }),
+    resourceLocator.click()
+  ]).catch(() => {
+    return false
+  })
+  return true
+}

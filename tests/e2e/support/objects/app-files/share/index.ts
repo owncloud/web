@@ -10,8 +10,11 @@ import {
   ShareStatusArgs,
   declineShare,
   checkSharee,
-  hasPermissionToShare
+  hasPermissionToShare,
+  copyQuickLink
 } from './actions'
+import { resourceIsNotOpenable } from './utils'
+import { copyLinkArgs } from '../link/actions'
 
 export class Share {
   #page: Page
@@ -56,5 +59,13 @@ export class Share {
 
   async hasPermissionToShare(resource: string): Promise<boolean> {
     return await hasPermissionToShare({ page: this.#page, resource })
+  }
+
+  async copyQuickLink(args: Omit<copyLinkArgs, 'page'>): Promise<void> {
+    await copyQuickLink({ ...args, page: this.#page })
+  }
+
+  async resourceIsNotOpenable(resource): Promise<boolean> {
+    return await resourceIsNotOpenable({ page: this.#page, resource })
   }
 }

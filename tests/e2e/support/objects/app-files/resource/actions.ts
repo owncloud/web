@@ -11,8 +11,8 @@ const downloadButtonBatchActionSingleFile = '.oc-files-actions-download-file-tri
 const downloadButtonBatchActionMultiple = '.oc-files-actions-download-archive-trigger'
 const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
 const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//input`
-const fileRow = '//ancestor::tr'
-const resourceNameSelector = `[data-test-resource-name="%s"]`
+export const fileRow = '//ancestor::tr'
+export const resourceNameSelector = `[data-test-resource-name="%s"]`
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'

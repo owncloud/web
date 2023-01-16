@@ -145,3 +145,60 @@ When(
     await pageObject.navigate()
   }
 )
+
+When(
+  '{string} declines the following share(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+
+    for (const resource of stepTable.hashes()) {
+      await shareObject.declineShare({ resource: resource.name })
+    }
+  }
+)
+
+When(
+  '{string} accepts the following share(s) from the context menu',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+
+    for (const resource of stepTable.hashes()) {
+      await shareObject.accept({ resource: resource.name, via: 'CONTEXT_MENU' })
+    }
+  }
+)
+
+When(
+  '{string} declines the following share from the context menu',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+
+    for (const resource of stepTable.hashes()) {
+      await shareObject.declineShare({ resource: resource.name, via: 'CONTEXT_MENU' })
+    }
+  }
+)
+
+When(
+  '{string} copies quick link of the resource {string} from the context menu',
+  async function (this: World, stepUser: string, resource: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    await shareObject.copyQuickLink({
+      resource,
+      via: 'CONTEXT_MENU'
+    })
+  }
+)
+
+When(
+  '{string} should not be able to open the folder/file {string}',
+  async function (this: World, stepUser: string, resource: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    expect(await shareObject.resourceIsNotOpenable(resource)).toBe(true)
+  }
+)
