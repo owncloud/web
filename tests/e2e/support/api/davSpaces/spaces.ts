@@ -4,6 +4,22 @@ import join from 'join-path'
 import { getPersonalSpaceId } from '../graph'
 import { config } from '../../../config'
 
+export const folderExists = async ({
+  user,
+  path
+}: {
+  user: User
+  path: string
+}): Promise<boolean> => {
+  const getResponse = await request({
+    method: 'GET',
+    path,
+    user: user
+  })
+
+  return getResponse.status === 200
+}
+
 export const createFolder = async ({
   user,
   folder
@@ -13,27 +29,25 @@ export const createFolder = async ({
 }): Promise<void> => {
   const paths = folder.split('/')
 
-  let subFolder = ''
+  let parentFolder = ''
   for (const resource of paths) {
-    const oc10Path = join('remote.php', 'dav', 'files', user.id, subFolder, resource)
-
-    const response = await request({
-      method: 'MKCOL',
-      path: config.ocis
-        ? join(
-            'remote.php',
-            'dav',
-            'spaces',
-            await getPersonalSpaceId({ user }),
-            subFolder,
-            resource
-          )
-        : oc10Path,
-      user: user,
-      formatJson: false
-    })
-
-    checkResponseStatus(response, 'Failed while creating folder')
-    subFolder += resource
+    const path = join(
+      'remote.php',
+      'dav',
+      config.ocis ? 'spaces/' + (await getPersonalSpaceId({ user })) : 'files/' + user.id,
+      parentFolder,
+      resource
+    )
+    // check if the folder exists already or not
+    const folderExist = await folderExists({ user, path })
+    if (folderExist === false) {
+      const response = await request({
+        method: 'MKCOL',
+        path,
+        user: user
+      })
+      checkResponseStatus(response, 'Failed while creating folder')
+    }
+    parentFolder = join(parentFolder, resource)
   }
 }
