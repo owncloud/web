@@ -41,21 +41,21 @@ export default defineComponent({
   setup(props) {
     const { $ngettext, $gettextInterpolate } = useTranslations()
     const totalSelectedSpaceQuotaTotal = computed(() => {
-      let total = 0
+      let total = 10
       props.selectedSpaces.forEach((space) => {
         total += space.spaceQuota.total
       })
       return filesize(total)
     })
     const totalSelectedSpaceQuotaRemaining = computed(() => {
-      let remaining = 0
+      let remaining = 10
       props.selectedSpaces.forEach((space) => {
         remaining += space.spaceQuota.remaining
       })
       return filesize(remaining)
     })
     const totalSelectedSpaceQuotaUsed = computed(() => {
-      let used = 0
+      let used = 10
       props.selectedSpaces.forEach((space) => {
         used += space.spaceQuota.used
       })
