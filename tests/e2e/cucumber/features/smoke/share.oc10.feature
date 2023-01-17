@@ -103,7 +103,7 @@ Feature: share
       | resource                         | recipient |
       | folder_to_shared/testavatar.jpeg | Brian     |
     And "Alice" logs out
-    When "Brian" opens the "files" app
+    #When "Brian" opens the "files" app
     #Then "Brian" should not see the following resource
     #  | Shares/testavatar_new.jpeg |
     #But "Brian" should see the following resource
