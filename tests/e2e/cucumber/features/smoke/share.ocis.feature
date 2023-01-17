@@ -11,11 +11,9 @@ Feature: share
       | name                   |
       | folder_to_shared       |
       | folder_to_customShared |
+      | shared_folder          |
     And "Alice" logs in
     And "Alice" opens the "files" app
-    And "Alice" creates the following resources
-      | resource         | type   |
-      | folder_to_shared | folder |
     And "Alice" uploads the following resource
       | resource      | to                     |
       | lorem.txt     | folder_to_shared       |
@@ -33,9 +31,9 @@ Feature: share
       | folder_to_shared       |
       | folder_to_customShared |
     Then "Brian" should not be able to open the folder "shared_folder"
-    When "Brian" accepts the following share
-      | name             |
-      | folder_to_shared |
+    When "Brian" accepts the following share from the context menu
+      | name          |
+      | shared_folder |
     And "Brian" declines the following share
       | name          |
       | shared_folder |
@@ -98,7 +96,7 @@ Feature: share
       | testavatar.jpeg  | Brian     | user | viewer |
       | simple.pdf       | Brian     | user | viewer |
       | sharedFile.txt   | Brian     | user | editor |
-    When "Brian" logs in
+    And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     Then "Brian" should not be able to open the file "shareToBrian.txt"

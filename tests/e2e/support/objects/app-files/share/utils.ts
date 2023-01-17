@@ -3,7 +3,7 @@ import util from 'util'
 import { resourceNameSelector, fileRow } from '../resource/actions'
 
 const acceptedShareItem =
-    '//*[@data-test-resource-name="%s"]/ancestor::tr//span[@data-test-user-name="%s"]'
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//span[@data-test-user-name="%s"]'
 
 export const resourceIsNotOpenable = async ({
   page,
@@ -17,10 +17,10 @@ export const resourceIsNotOpenable = async ({
   await Promise.all([
     page.waitForResponse((resp) => {
       return (
-          (resp.url().endsWith(encodeURIComponent(resource)) ||
-              resp.url().endsWith(encodeURIComponent(itemId))) &&
-          resp.status() === 404 &&
-          resp.request().method() === 'PROPFIND'
+        (resp.url().endsWith(encodeURIComponent(resource)) ||
+          resp.url().endsWith(encodeURIComponent(itemId))) &&
+        resp.status() === 404 &&
+        resp.request().method() === 'PROPFIND'
       )
     }),
     resourceLocator.click()
@@ -30,7 +30,7 @@ export const resourceIsNotOpenable = async ({
   return true
 }
 
-export const acceptedShareExists = async ({
+export const isAcceptedSharePresent = async ({
   page,
   resource,
   owner,

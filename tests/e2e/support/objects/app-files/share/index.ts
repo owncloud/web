@@ -5,7 +5,6 @@ import {
   acceptShare,
   changeShareeRole,
   removeShareeArgs,
-  isAcceptedSharePresent,
   removeSharee,
   ShareArgs,
   ShareStatusArgs,
@@ -14,7 +13,7 @@ import {
   hasPermissionToShare,
   copyQuickLink
 } from './actions'
-import { resourceIsNotOpenable } from './utils'
+import { resourceIsNotOpenable, isAcceptedSharePresent } from './utils'
 import { copyLinkArgs } from '../link/actions'
 
 export class Share {
@@ -60,7 +59,7 @@ export class Share {
 
   async isAcceptedSharePresent(resource: string, owner: string): Promise<boolean> {
     await this.#page.reload()
-    return await isAcceptedSharePresent(this.#page, resource, owner)
+    return await isAcceptedSharePresent({ page: this.#page, resource, owner })
   }
 
   async hasPermissionToShare(resource: string): Promise<boolean> {
