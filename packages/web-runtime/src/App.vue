@@ -71,7 +71,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(['route', 'user', 'modal', 'sidebar']),
+    ...mapState(['user', 'modal', 'sidebar']),
     ...mapGetters(['configuration', 'capabilities', 'getSettingsValue']),
     ...mapGetters('runtime/auth', ['isUserContextReady', 'isPublicLinkContextReady']),
     layout() {
