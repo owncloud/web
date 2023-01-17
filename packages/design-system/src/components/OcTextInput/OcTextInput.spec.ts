@@ -17,7 +17,12 @@ describe('OcTextInput', () => {
   }
 
   function getMountedWrapper(options = {}) {
-    return mount(OcTextInput, options)
+    return mount(OcTextInput, {
+      ...options,
+      global: {
+        plugins: [...defaultPlugins()]
+      }
+    })
   }
 
   const selectors = {

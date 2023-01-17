@@ -1,5 +1,5 @@
 import StatusIndicators from './OcStatusIndicators.vue'
-import { mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 const fileResource = {
   name: 'forest.jpg',
@@ -24,6 +24,9 @@ describe('OcStatusIndicators', () => {
         resource: fileResource,
         indicators: [indicator],
         target: 'test'
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
     wrapper.find('.oc-status-indicators-indicator').trigger('click')
@@ -35,6 +38,9 @@ describe('OcStatusIndicators', () => {
         resource: fileResource,
         indicators: [indicator],
         target: 'test'
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
     expect(wrapper.find(`#${indicator.id}`).exists()).toBeTruthy()

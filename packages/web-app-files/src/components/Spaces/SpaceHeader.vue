@@ -110,7 +110,7 @@ export default defineComponent({
     sideBarOpen: { type: Boolean, default: false }
   },
   setup(props) {
-    const { $gettext, $ngettext, $gettextInterpolate } = useTranslations()
+    const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useTranslations()
     const { getFileContents, getFileInfo } = useClientService().webdav
     const store = useStore()
     const userId = computed(() => store.getters.user?.id)

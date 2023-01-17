@@ -20,7 +20,7 @@ export default defineComponent({
     const title = useRouteMeta('title')
 
     const pageTitle = computed(() => {
-      return $gettext(unref(title))
+      return $gettext(unref(title) || '')
     })
     const backgroundImg = computed(() => {
       return store.getters.configuration?.currentTheme?.loginPage?.backgroundImg

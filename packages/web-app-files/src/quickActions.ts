@@ -1,4 +1,3 @@
-import { $gettext } from './gettext'
 import { createQuicklink } from './helpers/share'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
@@ -14,7 +13,7 @@ export function canShare(item, store) {
   return item.canShare()
 }
 
-export function showQuickLinkPasswordModal(ctx, onConfirm) {
+export function showQuickLinkPasswordModal({ $gettext, store }, onConfirm) {
   const modal = {
     variation: 'passive',
     title: $gettext('Set password'),
@@ -24,27 +23,27 @@ export function showQuickLinkPasswordModal(ctx, onConfirm) {
     inputDescription: $gettext('Passwords for links are required.'),
     inputLabel: $gettext('Password'),
     inputType: 'password',
-    onCancel: () => ctx.store.dispatch('hideModal'),
+    onCancel: () => store.dispatch('hideModal'),
     onConfirm: async (password) => {
       if (!password || password.trim() === '') {
-        ctx.store.dispatch('showMessage', {
+        store.dispatch('showMessage', {
           title: $gettext('Password cannot be empty'),
           status: 'danger'
         })
       } else {
-        await ctx.store.dispatch('hideModal')
+        await store.dispatch('hideModal')
         onConfirm(password)
       }
     },
     onInput: (password) => {
       if (password.trim() === '') {
-        return ctx.store.dispatch('setModalInputErrorMessage', $gettext('Password cannot be empty'))
+        return store.dispatch('setModalInputErrorMessage', $gettext('Password cannot be empty'))
       }
-      return ctx.store.dispatch('setModalInputErrorMessage', null)
+      return store.dispatch('setModalInputErrorMessage', null)
     }
   }
 
-  return ctx.store.dispatch('createModal', modal)
+  return store.dispatch('createModal', modal)
 }
 
 export default {
@@ -52,6 +51,7 @@ export default {
     id: 'collaborators',
     label: ($gettext) => $gettext('Add people'),
     icon: 'user-add',
+    iconFillType: undefined,
     handler: () => eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#peopleShares'),
     displayed: canShare
   },
@@ -59,6 +59,7 @@ export default {
     id: 'quicklink',
     label: ($gettext) => $gettext('Copy quicklink'),
     icon: 'link',
+    iconFillType: undefined,
     handler: async (ctx) => {
       const passwordEnforced =
         ctx.store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only ===

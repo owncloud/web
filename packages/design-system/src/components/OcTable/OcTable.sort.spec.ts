@@ -128,6 +128,7 @@ describe('OcTable.sort', () => {
           data
         },
         global: {
+          plugins: [...defaultPlugins()],
           stubs: {
             'oc-icon': true
           }
@@ -175,6 +176,7 @@ describe('OcTable.sort', () => {
             sortDir: sortDirOld
           },
           global: {
+            plugins: [...defaultPlugins()],
             stubs: {
               'oc-icon': true
             }

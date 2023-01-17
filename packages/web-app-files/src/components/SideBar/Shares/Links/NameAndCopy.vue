@@ -41,7 +41,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext, $gettextInterpolate } = useTranslations()
+    const { $gettext, interpolate: $gettextInterpolate } = useTranslations()
     const store = useStore<any>()
 
     const {

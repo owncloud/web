@@ -1,4 +1,4 @@
-import { mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 import ResourceTiles from '../../../../src/components/FilesList/ResourceTiles.vue'
 
 const spacesResources = [
@@ -42,6 +42,9 @@ describe('OcTileGrid component', () => {
       },
       slots: {
         ...slots
+      },
+      global: {
+        plugins: [...defaultPlugins({ designSystem: false })]
       }
     })
   }

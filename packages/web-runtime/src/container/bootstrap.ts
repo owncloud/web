@@ -3,10 +3,10 @@ import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import Vue from 'vue'
+import Vue, { App } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
-import getTextPlugin from 'vue-gettext'
+import { createGettext, GetTextOptions } from 'vue3-gettext'
 import set from 'lodash-es/set'
 import { getBackendVersion, getWebVersion } from './versions'
 import { useLocalStorage } from 'web-pkg/src/composables'
@@ -15,7 +15,7 @@ import { useDefaultThemeName } from '../composables'
 import { authService } from '../services/auth'
 import { clientService, PermissionManager } from 'web-pkg/src/services'
 import { UppyService } from '../services/uppyService'
-
+import { default as storeOptions } from '../store'
 import { init as SentryInit } from '@sentry/browser'
 import { Vue as SentryVueIntegration } from '@sentry/integrations'
 import { configurationManager, RawConfig, ConfigurationManager } from 'web-pkg/src/configuration'
@@ -52,17 +52,16 @@ export const announceConfiguration = async (path: string): Promise<RuntimeConfig
  *
  * @param vue
  * @param runtimeConfiguration
- * @param store
+ * @param language
  */
 export const announceStore = async ({
   vue,
-  runtimeConfiguration,
-  store
+  runtimeConfiguration
 }: {
   vue: VueConstructor
   runtimeConfiguration: RuntimeConfiguration
-  store: Store<any>
-}): Promise<void> => {
+}): Promise<any> => {
+  const store = new Store({ ...storeOptions })
   await store.dispatch('loadConfig', runtimeConfiguration)
 
   /**
@@ -76,6 +75,7 @@ export const announceStore = async ({
    * the apis for retrieving it.
    */
   set(vue, '$store', store)
+  return store
 }
 
 /**
@@ -237,24 +237,21 @@ export const announceTheme = async ({
  * announce runtime translations by injecting them into the getTextPlugin
  *
  * @param vue
- * @param supportedLanguages
- * @param translations
+ * @param options
  */
 export const announceTranslations = ({
   vue,
-  supportedLanguages,
-  translations
+  ...options
 }: {
-  vue: VueConstructor
-  supportedLanguages: unknown
-  translations: unknown
-}): void => {
-  vue.use(getTextPlugin as any, {
-    availableLanguages: supportedLanguages,
-    defaultLanguage: navigator.language.substring(0, 2),
-    translations,
-    silent: true
-  })
+  vue: App
+} & Partial<GetTextOptions>): void => {
+  vue.use(
+    createGettext({
+      defaultLanguage: navigator.language.substring(0, 2),
+      silent: true,
+      ...options
+    })
+  )
 }
 
 /**

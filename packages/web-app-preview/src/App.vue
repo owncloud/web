@@ -267,7 +267,7 @@ export default defineComponent({
     ...mapGetters(['capabilities', 'user']),
 
     pageTitle() {
-      const translated = this.$gettext('Preview for %{currentMediumName}')
+      const translated = this.$gettext('Preview for %{currentMediumName}') || ''
       return this.$gettextInterpolate(translated, {
         currentMediumName: this.activeFilteredFile?.name
       })

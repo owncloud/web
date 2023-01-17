@@ -100,7 +100,7 @@ export default defineComponent({
     const isReadOnly = ref(true)
     const resource: Ref<Resource> = ref()
     const store = useStore()
-    const { $gettext, $gettextInterpolate } = useTranslations()
+    const { $gettext, interpolate: $gettextInterpolate } = useTranslations()
 
     const errorPopup = (error) => {
       store.dispatch('showMessage', {

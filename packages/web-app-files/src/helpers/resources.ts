@@ -39,10 +39,6 @@ export function buildWebDavFilesTrashPath(userId, path = '') {
   return '/' + `trash-bin/${userId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
-export function attachIndicators(resource, sharesTree) {
-  return (resource.indicators = getIndicators(resource, sharesTree))
-}
-
 export function isResourceTxtFileAlmostEmpty(resource: Resource): boolean {
   const mimeType = resource.mimeType || ''
   return mimeType.startsWith('text/') && (resource.size as number) < 30

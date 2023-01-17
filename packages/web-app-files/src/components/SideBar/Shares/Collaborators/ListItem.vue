@@ -360,6 +360,7 @@ export default defineComponent({
         : SharePermissions.permissionsToBitmask(role.permissions(this.hasResharing || this.isSpace))
       const changeMethod = this.isSpace ? this.changeSpaceMember : this.changeShare
       changeMethod({
+        ...this.$language,
         client: this.$client,
         graphClient: this.graphClient,
         share: this.share,

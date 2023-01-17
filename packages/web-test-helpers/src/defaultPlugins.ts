@@ -1,6 +1,6 @@
 import DesignSystem from '@ownclouders/design-system'
-import GetTextPlugin from 'vue-gettext'
 import Vue from 'vue'
+import { createGettext } from 'vue3-gettext'
 ;(window as any).Vue = Vue
 
 export interface DefaultPluginsOptions {
@@ -19,20 +19,7 @@ export const defaultPlugins = ({
   }
 
   if (gettext) {
-    plugins.push({
-      install(app) {
-        Vue.use(GetTextPlugin as any, {
-          translations: 'does-not-matter.json',
-          silent: true
-        })
-        ;(Vue.config as any).language = 'en'
-        app.config.globalProperties.$language = { current: 'en' }
-        app.config.globalProperties.$gettext = Vue.prototype.$gettext
-        app.config.globalProperties.$gettextInterpolate = Vue.prototype.$gettextInterpolate
-        app.config.globalProperties.$ngettext = Vue.prototype.$ngettext
-        app.config.globalProperties.$pgettext = Vue.prototype.$pgettext
-      }
-    })
+    plugins.push(createGettext({ translations: {}, silent: true }))
   } else {
     plugins.push({
       install(app) {
