@@ -46,7 +46,6 @@
     "vue-router": "4.1.6",
     "vue-select": "4.0.0-beta.6",
     "vuex": "4.1.0",
-    "vuex-router-sync": "^5.0.0",
     "web-client": "npm:@ownclouders/web-client",
     "web-pkg": "npm:@ownclouders/web-pkg",
     "web-runtime": "workspace:*",

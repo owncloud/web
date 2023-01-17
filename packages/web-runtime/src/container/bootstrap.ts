@@ -6,7 +6,6 @@ import { Router } from 'vue-router'
 import Vue from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
-import { sync as routerSync } from 'vuex-router-sync'
 import getTextPlugin from 'vue-gettext'
 import set from 'lodash-es/set'
 import { getBackendVersion, getWebVersion } from './versions'
@@ -360,8 +359,6 @@ export const announceDefaults = ({
       redirect: () => route
     })
   }
-
-  routerSync(store, router)
 }
 
 /**

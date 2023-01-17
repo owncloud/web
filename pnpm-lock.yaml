@@ -659,7 +659,6 @@ importers:
       vue-router: 4.1.6
       vue-select: 4.0.0-beta.6
       vuex: 4.1.0
-      vuex-router-sync: ^5.0.0
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
       web-runtime: workspace:*
@@ -708,7 +707,6 @@ importers:
       vue-router: 4.1.6_vue@3.2.45
       vue-select: 4.0.0-beta.6_vue@3.2.45
       vuex: 4.1.0_vue@3.2.45
-      vuex-router-sync: 5.0.0_mhkwdqbz43jpnlolybzfmh5sqi
       web-client: link:../web-client
       web-pkg: link:../web-pkg
       web-runtime: 'link:'
@@ -22493,16 +22491,6 @@ packages:
       '@vue/runtime-dom': 3.2.45
       '@vue/server-renderer': 3.2.45_vue@3.2.45
       '@vue/shared': 3.2.45
-
-  /vuex-router-sync/5.0.0_mhkwdqbz43jpnlolybzfmh5sqi:
-    resolution: {integrity: sha512-Mry2sO4kiAG64714X1CFpTA/shUH1DmkZ26DFDtwoM/yyx6OtMrc+MxrU+7vvbNLO9LSpgwkiJ8W+rlmRtsM+w==}
-    peerDependencies:
-      vue-router: ^3.0.0
-      vuex: ^3.0.0
-    dependencies:
-      vue-router: 4.1.6_vue@3.2.45
-      vuex: 4.1.0_vue@3.2.45
-    dev: false
 
   /vuex/4.1.0_vue@3.2.45:
     resolution: {integrity: sha512-hmV6UerDrPcgbSy9ORAtNXDr9M4wlNP4pEFKye4ujJF8oqgFFuxDCdOLS3eNoRTtq5O3hoBDh9Doj1bQMYHRbQ==}
