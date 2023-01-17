@@ -1,5 +1,5 @@
 <template>
-  <ul :ref="ref" class="oc-list oc-my-rm oc-mx-rm" :class="{ 'oc-list-raw': raw }">
+  <ul class="oc-list oc-my-rm oc-mx-rm" :class="{ 'oc-list-raw': raw }">
     <slot />
   </ul>
 </template>

@@ -120,11 +120,6 @@ export default defineComponent({
       return ''
     }
   },
-  mounted() {
-    if (!this.isImage) {
-      this.$emit('avatar-initials', this.userName, this.userInitial)
-    }
-  },
   methods: {
     onImgError() {
       this.imgError = true
