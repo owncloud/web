@@ -42,6 +42,9 @@ Feature: reshare
     And "Carol" reshares the following resource
       | resource         | recipient | type | role   |
       | folder_to_shared | Alice     | user | viewer |
+
+    And "Alice" logs in
+    And "Alice" opens the "files" app
     Then "Alice" should see the following recipients
       | resource         | recipient | type  | role   |
       | folder_to_shared | Brian     | user  | editor |
