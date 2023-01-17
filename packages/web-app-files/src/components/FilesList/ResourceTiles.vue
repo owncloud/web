@@ -1,12 +1,7 @@
 <template>
   <div>
-    <oc-list class="oc-tiles oc-flex">
-      <li
-        v-for="(resource, index) in data"
-        :key="resource.id"
-        class="oc-tiles-item"
-        :class="tileWidth === 'small' ? 'small-tiles' : ''"
-      >
+    <oc-list class="oc-tiles oc-flex" :class="tileWidth === 'small' ? 'small-tiles' : ''">
+      <li v-for="(resource, index) in data" :key="resource.id" class="oc-tiles-item">
         <oc-tile
           :ref="
             (el) => {
@@ -196,22 +191,14 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .oc-tiles {
-  column-gap: 8px;
+  column-gap: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 160px);
-  justify-content: space-between;
-  row-gap: 32px;
+  grid-template-columns: repeat(auto-fill, 14rem);
+  justify-content: flex-start;
+  row-gap: 1rem;
 
-  .oc-tiles-item {
-    width: 18rem;
-
-    &.small-tiles {
-      width: 12rem;
-    }
-
-    @media (max-width: $oc-breakpoint-xsmall-max) {
-      width: 100%;
-    }
+  &.small-tiles {
+    grid-template-columns: repeat(auto-fill, 12rem);
   }
 }
 </style>

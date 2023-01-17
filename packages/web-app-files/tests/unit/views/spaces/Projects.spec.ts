@@ -1,6 +1,6 @@
 import Projects from '../../../../src/views/spaces/Projects.vue'
-import { mock, mockDeep } from 'jest-mock-extended'
-import { SpaceResource } from 'web-client/src/helpers'
+import { mock } from 'jest-mock-extended'
+
 import {
   createStore,
   defaultPlugins,
