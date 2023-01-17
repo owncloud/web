@@ -76,22 +76,10 @@ export default defineComponent({
       return formatFileSize(used, $language.current)
     })
     const totalEnabledSpaces = computed(() => {
-      let enabled = 0
-      props.selectedSpaces.forEach((space) => {
-        if (!space.disabled) {
-          enabled++
-        }
-      })
-      return enabled
+      return props.selectedSpaces.filter((s) => !s.disabled).length
     })
     const totalDisabledSpaces = computed(() => {
-      let disabled = 0
-      props.selectedSpaces.forEach((space) => {
-        if (space.disabled) {
-          disabled++
-        }
-      })
-      return disabled
+      return props.selectedSpaces.filter((s) => s.disabled).length
     })
     const detailsTableLabel = computed(() => {
       return $gettext('Overview of the information about the selected spaces')
