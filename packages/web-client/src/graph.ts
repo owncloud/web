@@ -19,10 +19,15 @@ import {
   CollectionOfTags,
   TagAssignment,
   TagUnassignment,
-  DrivesGetDrivesApi
+  DrivesGetDrivesApi,
+  CollectionOfApplications,
+  ApplicationsApiFactory
 } from './generated'
 
 export interface Graph {
+  applications: {
+    listApplications: () => AxiosPromise<CollectionOfApplications>
+  }
   tags: {
     getTags: () => AxiosPromise<CollectionOfTags>
     assignTags: (tagAssignment?: TagAssignment) => AxiosPromise<void>
@@ -71,6 +76,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     config.basePath,
     axiosClient
   )
+  const applicationsApiFactory = ApplicationsApiFactory(config, config.basePath, axiosClient)
   const userApiFactory = UserApiFactory(config, config.basePath, axiosClient)
   const usersApiFactory = UsersApiFactory(config, config.basePath, axiosClient)
   const groupApiFactory = GroupApiFactory(config, config.basePath, axiosClient)
@@ -79,6 +85,9 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const tagsApiFactory = TagsApiFactory(config, config.basePath, axiosClient)
 
   return <Graph>{
+    applications: {
+      listApplications: () => applicationsApiFactory.listApplications()
+    },
     tags: {
       getTags: () => tagsApiFactory.getTags(),
       assignTags: (tagAssignment: TagAssignment) => tagsApiFactory.assignTags(tagAssignment),
