@@ -5,7 +5,8 @@ import { useAppMeta } from './useAppMeta'
 import { useDocumentTitle } from './useDocumentTitle'
 import { Store } from 'vuex'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
-import { MaybeRef, useTranslations } from 'web-pkg'
+import { MaybeRef } from 'web-pkg'
+import { useGettext } from 'vue3-gettext'
 
 interface AppDocumentTitleOptions {
   store: Store<any>
@@ -23,7 +24,7 @@ export function useAppDocumentTitle({
   currentRoute
 }: AppDocumentTitleOptions): void {
   const appMeta = useAppMeta({ applicationId, store })
-  const { $gettext } = useTranslations()
+  const { $gettext } = useGettext()
 
   const titleSegments = computed(() => {
     const baseTitle =

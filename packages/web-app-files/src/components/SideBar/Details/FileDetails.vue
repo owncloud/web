@@ -171,7 +171,6 @@ import {
   useClientService,
   usePublicLinkContext,
   useStore,
-  useTranslations,
   useUserContext
 } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
@@ -185,12 +184,13 @@ import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useTask } from 'vue-concurrency'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'FileDetails',
   setup() {
     const store = useStore()
-    const { $gettext } = useTranslations()
+    const { $gettext } = useGettext()
 
     const copiedDirect = ref(false)
     const copiedEos = ref(false)

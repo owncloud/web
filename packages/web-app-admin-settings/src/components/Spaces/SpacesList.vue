@@ -136,10 +136,10 @@ import {
 } from 'web-pkg/src/helpers'
 import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
 import { extractDomSelector, SpaceResource } from 'web-client/src/helpers'
-import { useTranslations } from 'web-pkg/src/composables'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -159,11 +159,7 @@ export default defineComponent({
   },
   emits: ['toggleSelectSpace', 'toggleSelectAllSpaces', 'toggleUnSelectAllSpaces'],
   setup: function (props, { emit }) {
-    const {
-      $gettext,
-      interpolate: $gettextInterpolate,
-      current: currentLanguage
-    } = useTranslations()
+    const { $gettext, interpolate: $gettextInterpolate, current: currentLanguage } = useGettext()
     const contextMenuButton = ref(undefined)
     const sortBy = ref('name')
     const sortDir = ref('asc')

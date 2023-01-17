@@ -79,12 +79,7 @@ import {
 } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 import { loadPreview } from 'web-pkg/src/helpers'
-import {
-  useAccessToken,
-  useClientService,
-  useStore,
-  useTranslations
-} from 'web-pkg/src/composables'
+import { useAccessToken, useClientService, useStore } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -93,6 +88,7 @@ import sanitizeHtml from 'sanitize-html'
 import SpaceContextActions from './SpaceContextActions.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { useGettext } from 'vue3-gettext'
 
 const visibilityObserver = new VisibilityObserver()
 const markdownContainerCollapsedClass = 'collapsed'
@@ -110,7 +106,7 @@ export default defineComponent({
     sideBarOpen: { type: Boolean, default: false }
   },
   setup(props) {
-    const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useTranslations()
+    const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
     const { getFileContents, getFileInfo } = useClientService().webdav
     const store = useStore()
     const userId = computed(() => store.getters.user?.id)

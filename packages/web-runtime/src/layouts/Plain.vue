@@ -10,13 +10,14 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue'
-import { useRouteMeta, useStore, useTranslations } from 'web-pkg'
+import { useRouteMeta, useStore } from 'web-pkg'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'PlainLayout',
   setup() {
     const store = useStore()
-    const { $gettext } = useTranslations()
+    const { $gettext } = useGettext()
     const title = useRouteMeta('title')
 
     const pageTitle = computed(() => {

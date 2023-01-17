@@ -23,12 +23,13 @@
 import { computed, defineComponent, inject, unref } from 'vue'
 import { useClipboard } from '@vueuse/core'
 import { Resource } from 'web-client'
-import { useStore, useTranslations } from 'web-pkg/src'
+import { useStore } from 'web-pkg/src'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'PrivateLinkItem',
   setup() {
-    const { $gettext } = useTranslations()
+    const { $gettext } = useGettext()
     const store = useStore<any>()
     const displayedItem = inject<Resource>('displayedItem')
     const privateLink = computed(() => unref(displayedItem))

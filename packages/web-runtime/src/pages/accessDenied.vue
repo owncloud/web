@@ -27,13 +27,14 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { useStore, useTranslations } from 'web-pkg'
+import { useStore } from 'web-pkg'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'AccessDeniedPage',
   setup() {
     const store = useStore()
-    const { $gettext } = useTranslations()
+    const { $gettext } = useGettext()
 
     const logoImg = computed(() => {
       return store.getters.configuration.currentTheme.logo.login

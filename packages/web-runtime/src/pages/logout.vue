@@ -14,15 +14,16 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { useRouter, useStore, useTranslations } from 'web-pkg'
+import { useRouter, useStore } from 'web-pkg'
 import { authService } from 'web-runtime/src/services/auth'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'LogoutPage',
   setup() {
     const router = useRouter()
     const store = useStore()
-    const { $gettext } = useTranslations()
+    const { $gettext } = useGettext()
 
     authService.logoutUser().then(() => {
       router.push({ name: 'login' })

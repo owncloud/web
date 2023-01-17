@@ -29,8 +29,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useStore, useTranslations } from 'web-pkg/src/composables'
+import { useStore } from 'web-pkg/src/composables'
 import { useClipboard } from '@vueuse/core'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'NameAndCopy',
@@ -41,7 +42,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext, interpolate: $gettextInterpolate } = useTranslations()
+    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
     const store = useStore<any>()
 
     const {

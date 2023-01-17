@@ -63,7 +63,7 @@
 
 <script lang="ts">
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { useAccessToken, useGraphClient, useStore, useTranslations } from 'web-pkg/src/composables'
+import { useAccessToken, useGraphClient, useStore } from 'web-pkg/src/composables'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
@@ -78,6 +78,7 @@ import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'SpacesView',
@@ -93,7 +94,7 @@ export default defineComponent({
     const accessToken = useAccessToken({ store })
     const spaces = ref([])
     const { graphClient } = useGraphClient()
-    const { $gettext } = useTranslations()
+    const { $gettext } = useGettext()
 
     const loadResourcesEventToken = ref(null)
     const template = ref(null)

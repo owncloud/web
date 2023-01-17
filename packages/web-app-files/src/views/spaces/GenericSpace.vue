@@ -127,7 +127,7 @@ import { useResourcesViewDefaults } from '../../composables'
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { Resource } from 'web-client'
-import { useRoute, useTranslations } from 'web-pkg/src/composables'
+import { useRoute } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
 import {
   isPersonalSpaceResource,
@@ -142,6 +142,7 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import omit from 'lodash-es/omit'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { basename } from 'path'
+import { useGettext } from 'vue3-gettext'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -208,7 +209,7 @@ export default defineComponent({
     })
     useDocumentTitle({ titleSegments })
 
-    const { $gettext } = useTranslations()
+    const { $gettext } = useGettext()
     const route = useRoute()
     const breadcrumbs = computed(() => {
       const space = props.space
