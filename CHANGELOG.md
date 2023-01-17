@@ -303,6 +303,7 @@ Details
 
    https://github.com/owncloud/web/pull/8132
    https://github.com/owncloud/web/pull/8171
+   https://github.com/owncloud/web/pull/8250
 
 * Enhancement - Make clipboard copy available to more browsers: [#8136](https://github.com/owncloud/web/pull/8136)
 
