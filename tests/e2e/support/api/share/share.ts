@@ -45,7 +45,12 @@ export const createShare = async ({
 }
 
 export const acceptShare = async ({ user, path }: { user: User; path: string }): Promise<void> => {
-  const shareId = await getShareId({ user, path }, 'Shared with me')
+  const params = new URLSearchParams({
+    include_tags: 'false',
+    state: 'all',
+    shared_with_me: 'true'
+  })
+  const shareId = await getShareId({ user, path, params: params.toString() })
   const response = await request({
     method: 'POST',
     path: join('ocs', 'v2.php', 'apps', 'files_sharing', 'api', 'v1', 'shares', 'pending', shareId),
@@ -54,32 +59,18 @@ export const acceptShare = async ({ user, path }: { user: User; path: string }):
   checkResponseStatus(response, 'Failed while accepting share')
 }
 
-export const getShareId = async (
-  {
-    user,
-    path
-  }: {
-    user: User
-    path: string
-  },
-  sharePage: string
-): Promise<string> => {
-  let queryParams = ''
-  switch (sharePage) {
-    case 'Shared with me':
-      queryParams = '?include_tags=false&state=all&shared_with_me=true'
-      break
-    case 'Shared with others':
-      queryParams = '?reshares=true&include_tags=false&share_types=0%2C1%2C4%2C6'
-      break
-    case 'Shared via link':
-      queryParams = '?include_tags=false&share_types=3'
-      break
-  }
-
+const getShareId = async ({
+  user,
+  path,
+  params = 'include_tags=false&state=all&shared_with_me=true'
+}: {
+  user: User
+  path: string
+  params?: string
+}): Promise<string> => {
   const response = await request({
     method: 'GET',
-    path: join('ocs', 'v2.php', 'apps', 'files_sharing', 'api', 'v1', 'shares', queryParams),
+    path: join('ocs', 'v2.php', 'apps', 'files_sharing', 'api', 'v1', 'shares', `?${params}`),
     user: user,
     formatJson: false
   })
