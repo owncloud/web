@@ -11,6 +11,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     Portal: typeof import('portal-vue')['Portal']
     PortalTarget: typeof import('portal-vue')['PortalTarget']
+
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
   }
 }
 declare module '*.vue' {

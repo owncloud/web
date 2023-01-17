@@ -1,6 +1,6 @@
 import restore from 'web-pkg/src/mixins/spaces/restore'
 import { buildSpace } from 'web-client/src/helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Graph } from 'web-client'
 import { clientService } from 'web-pkg'
 import {
@@ -9,7 +9,8 @@ import {
   defaultPlugins,
   mockAxiosResolve,
   mount,
-  defaultStoreMockOptions
+  defaultStoreMockOptions,
+  RouteLocation
 } from 'web-test-helpers'
 
 const Component = {
@@ -117,7 +118,9 @@ function getWrapper(graphMock = mockDeep<Graph>()) {
     wrapper: mount(Component, {
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks: defaultComponentMocks({ currentRoute: { name: 'files-spaces-projects' } })
+        mocks: defaultComponentMocks({
+          currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
+        })
       }
     })
   }

@@ -43,7 +43,7 @@
     "vue-concurrency": "4.0.0",
     "vue-gettext": "2.1.12",
     "vue-inline-svg": "3.1.0",
-    "vue-router": "3.6.5",
+    "vue-router": "4.1.6",
     "vue-select": "4.0.0-beta.6",
     "vuex": "4.1.0",
     "vuex-router-sync": "^5.0.0",

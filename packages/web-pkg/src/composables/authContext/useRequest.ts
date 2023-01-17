@@ -1,18 +1,17 @@
 import { unref } from 'vue'
 import { useClientService } from '../clientService'
 import type { Store } from 'vuex'
-import type { Route } from 'vue-router'
+import type { Router, RouteLocationNormalizedLoaded } from 'vue-router'
 import type { Method, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ClientService } from '../../services'
 import { useAccessToken, usePublicLinkPassword, usePublicLinkToken, usePublicLinkContext } from './'
 import { useStore } from '../store'
-import Router from 'vue-router'
 
 interface RequestOptions {
   router?: Router
   store?: Store<any>
   clientService?: ClientService
-  currentRoute?: Route
+  currentRoute?: RouteLocationNormalizedLoaded
 }
 
 export interface RequestResult {

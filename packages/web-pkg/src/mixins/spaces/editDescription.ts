@@ -1,6 +1,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import { Drive } from 'web-client/src/generated'
+import { unref } from 'vue'
 
 export default {
   computed: {
@@ -72,7 +73,7 @@ export default {
             field: 'description',
             value: description
           })
-          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+          if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
             space.description = description
           }
           this.showMessage({

@@ -1,4 +1,4 @@
-import Vue, { configureCompat } from 'vue'
+import Vue, { configureCompat, h } from 'vue'
 import { config } from '@vue/test-utils'
 import fetchMock from 'jest-fetch-mock'
 
@@ -22,11 +22,12 @@ config.mocks = {
 }
 
 Vue.component('RouterLink', {
+  name: 'RouterLink',
   props: {
     tag: { type: String, default: 'a' },
     to: { type: [String, Object], default: '' }
   },
-  render(createElement) {
+  render() {
     let path = this.$props.to
 
     if (!!path && typeof path !== 'string') {
@@ -41,6 +42,6 @@ Vue.component('RouterLink', {
       }
     }
 
-    return createElement(this.tag, { attrs: { href: path } }, this.$slots.default)
+    return h(this.tag, { attrs: { href: path } }, this.$slots.default)
   }
 })

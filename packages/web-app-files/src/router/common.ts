@@ -1,10 +1,10 @@
 import { RouteComponents } from './router'
-import { Location, RouteConfig } from 'vue-router'
+import { RouteLocationNamedRaw, RouteRecordRaw } from 'vue-router'
 import { createLocation, $gettext, isLocationActiveDirector } from './utils'
 
 type commonTypes = 'files-common-favorites' | 'files-common-search'
 
-export const createLocationCommon = (name: commonTypes, location = {}): Location =>
+export const createLocationCommon = (name: commonTypes, location = {}): RouteLocationNamedRaw =>
   createLocation(name, location)
 
 export const locationFavorites = createLocationCommon('files-common-favorites')
@@ -15,7 +15,7 @@ export const isLocationCommonActive = isLocationActiveDirector<commonTypes>(
   locationSearch
 )
 
-export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
+export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
   {
     path: '/search',
     component: components.App,

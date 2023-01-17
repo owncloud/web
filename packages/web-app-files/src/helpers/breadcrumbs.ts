@@ -1,16 +1,16 @@
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { Location } from 'vue-router'
+import { RouteLocation } from 'vue-router'
 import omit from 'lodash-es/omit'
 
 export interface BreadcrumbItem {
   text: string
-  to?: Location
+  to?: RouteLocation
   allowContextActions?: boolean
   onClick?: () => void
 }
 
 export const breadcrumbsFromPath = (
-  currentRoute: Location,
+  currentRoute: RouteLocation,
   resourcePath: string
 ): BreadcrumbItem[] => {
   const pathSplit = (p = '') => p.split('/').filter(Boolean)

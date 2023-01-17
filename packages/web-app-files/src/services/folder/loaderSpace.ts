@@ -1,5 +1,5 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
-import Router from 'vue-router'
+import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import {
@@ -97,7 +97,7 @@ export class FolderLoaderSpace implements FolderLoader {
         console.error(error)
 
         if (error.statusCode === 401) {
-          return authService.handleAuthError(router.currentRoute)
+          return authService.handleAuthError(unref(router.currentRoute))
         }
       }
     }).restartable()

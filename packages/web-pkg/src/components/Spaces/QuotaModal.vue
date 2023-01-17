@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, unref } from 'vue'
 import { mapActions, mapMutations } from 'vuex'
 import { useGraphClient } from 'web-pkg/src/composables'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
@@ -77,7 +77,7 @@ export default defineComponent({
         .updateDrive(this.space.id, { quota: { total: this.selectedOption } }, {})
         .then(({ data }) => {
           this.cancel()
-          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+          if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
             this.$emit('spaceQuotaUpdated', data.quota)
           }
           this.UPDATE_SPACE_FIELD({

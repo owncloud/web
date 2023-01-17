@@ -3,27 +3,31 @@ import { PublicLinkManager } from './publicLinkManager'
 import { Store } from 'vuex'
 import { ClientService } from 'web-pkg/src/services'
 import { ConfigurationManager } from 'web-pkg/src/configuration'
-import VueRouter, { Route } from 'vue-router'
+import { RouteLocation, Router } from 'vue-router'
 import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from '../../router'
+import { unref } from 'vue'
 
 export class AuthService {
   private clientService: ClientService
   private configurationManager: ConfigurationManager
   private store: Store<any>
-  private router: VueRouter
+  private router: Router
   private userManager: UserManager
   private publicLinkManager: PublicLinkManager
+
+  public hasAuthErrorOccured: boolean
 
   public initialize(
     configurationManager: ConfigurationManager,
     clientService: ClientService,
     store: Store<any>,
-    router: VueRouter
+    router: Router
   ): void {
     this.configurationManager = configurationManager
     this.clientService = clientService
     this.store = store
     this.router = router
+    this.hasAuthErrorOccured = false
   }
 
   /**
@@ -37,7 +41,7 @@ export class AuthService {
    *
    * @param to {Route}
    */
-  public async initializeContext(to: Route) {
+  public async initializeContext(to: RouteLocation) {
     if (!this.publicLinkManager) {
       this.publicLinkManager = new PublicLinkManager({
         clientService: this.clientService,
@@ -63,7 +67,7 @@ export class AuthService {
       this.userManager.events.addAccessTokenExpired((...args): void => {
         const handleExpirationError = () => {
           console.error('AccessToken Expired：', ...args)
-          this.handleAuthError(this.router.currentRoute)
+          this.handleAuthError(unref(this.router.currentRoute))
         }
 
         /**
@@ -99,7 +103,7 @@ export class AuthService {
           await this.userManager.updateContext(user.access_token)
         } catch (e) {
           console.error(e)
-          await this.handleAuthError(this.router.currentRoute)
+          await this.handleAuthError(unref(this.router.currentRoute))
         }
       })
 
@@ -108,6 +112,7 @@ export class AuthService {
         await this.resetStateAfterUserLogout()
 
         if (this.userManager.unloadReason === 'authError') {
+          this.hasAuthErrorOccured = true
           return this.router.push({ name: 'accessDenied' })
         }
 
@@ -123,7 +128,7 @@ export class AuthService {
       })
       this.userManager.events.addSilentRenewError(async (error) => {
         console.error('Silent Renew Error：', error)
-        await this.handleAuthError(this.router.currentRoute)
+        await this.handleAuthError(unref(this.router.currentRoute))
       })
     }
 
@@ -135,7 +140,7 @@ export class AuthService {
         await this.userManager.updateContext(accessToken)
       } catch (e) {
         console.error(e)
-        await this.handleAuthError(this.router.currentRoute)
+        await this.handleAuthError(unref(this.router.currentRoute))
       }
     }
   }
@@ -152,7 +157,9 @@ export class AuthService {
     // craft a url that the parser in oidc-client-ts can handle… this is required for oauth2 logins
     const url =
       '/?' +
-      new URLSearchParams(this.router.currentRoute.query as Record<string, string>).toString()
+      new URLSearchParams(
+        unref(this.router.currentRoute).query as Record<string, string>
+      ).toString()
 
     try {
       await this.userManager.signinRedirectCallback(url)
@@ -161,7 +168,7 @@ export class AuthService {
       return this.router.replace({ path: redirectUrl })
     } catch (e) {
       console.warn('error during authentication:', e)
-      return this.handleAuthError(this.router.currentRoute)
+      return this.handleAuthError(unref(this.router.currentRoute))
     }
   }
 
@@ -176,7 +183,7 @@ export class AuthService {
     await this.userManager.signinSilentCallback()
   }
 
-  public async handleAuthError(route: Route) {
+  public async handleAuthError(route: RouteLocation) {
     if (isPublicLinkContext(this.router, route)) {
       const token = extractPublicLinkToken(route)
       this.publicLinkManager.clear(token)

@@ -2,7 +2,7 @@ import Favorites from '../../../src/views/Favorites.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mockDeep, mock } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import {
   createStore,
@@ -12,6 +12,7 @@ import {
   defaultStoreMockOptions,
   defaultComponentMocks
 } from 'web-test-helpers'
+import { RouteLocation } from 'vue-router'
 
 jest.mock('web-app-files/src/composables')
 
@@ -51,7 +52,7 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
   )
   const defaultMocks = {
     ...defaultComponentMocks({
-      currentRoute: { name: 'files-common-favorites' }
+      currentRoute: mock<RouteLocation>({ name: 'files-common-favorites' })
     }),
     ...(mocks && mocks)
   }

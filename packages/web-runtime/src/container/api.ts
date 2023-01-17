@@ -1,4 +1,4 @@
-import VueRouter, { RouteConfig } from 'vue-router'
+import { RouteRecordRaw, Router } from 'vue-router'
 import clone from 'lodash-es/clone'
 import {
   RuntimeApi,
@@ -18,7 +18,7 @@ import { App, Component, h } from 'vue'
  * @param router
  * @param routes
  */
-const announceRoutes = (applicationId: string, router: VueRouter, routes: RouteConfig[]): void => {
+const announceRoutes = (applicationId: string, router: Router, routes: RouteRecordRaw[]): void => {
   if (!isArray(routes)) {
     throw new ApiError("routes can't be blank")
   }
@@ -33,7 +33,8 @@ const announceRoutes = (applicationId: string, router: VueRouter, routes: RouteC
 
       const route = clone(applicationRoute)
       if (route.name) {
-        route.name = applicationId === route.name ? route.name : namespaceRouteName(route.name)
+        route.name =
+          applicationId === route.name ? route.name : namespaceRouteName(String(route.name))
       }
 
       route.path = `/${encodeURI(applicationId)}${route.path}`
@@ -46,7 +47,7 @@ const announceRoutes = (applicationId: string, router: VueRouter, routes: RouteC
 
           const r = clone(childRoute)
           if (childRoute.name) {
-            r.name = namespaceRouteName(childRoute.name)
+            r.name = namespaceRouteName(String(childRoute.name))
           }
           return r
         })
@@ -205,7 +206,7 @@ const requestStore = (store: Store<unknown>): Store<unknown> => {
  *
  * @param router
  */
-const requestRouter = (router: VueRouter): VueRouter => {
+const requestRouter = (router: Router): Router => {
   if (isEqual(process.env.NODE_ENV, 'development')) {
     console.warn('requestRouter // router api is deprecated, use with caution')
   }
@@ -238,7 +239,7 @@ export const buildRuntimeApi = ({
   applicationId: string
   store: Store<unknown>
   translations: unknown
-  router: VueRouter
+  router: Router
   supportedLanguages: { [key: string]: string }
 }): RuntimeApi => {
   if (!applicationName) {
@@ -250,7 +251,8 @@ export const buildRuntimeApi = ({
   }
 
   return {
-    announceRoutes: (routes: RouteConfig[]): void => announceRoutes(applicationId, router, routes),
+    announceRoutes: (routes: RouteRecordRaw[]): void =>
+      announceRoutes(applicationId, router, routes),
     announceNavigationItems: (navigationItems: ApplicationNavigationItem[]): void =>
       announceNavigationItems(applicationId, store, navigationItems),
     announceTranslations: (appTranslations: ApplicationTranslations): void =>
@@ -262,7 +264,7 @@ export const buildRuntimeApi = ({
     announceExtension: (extension: { [key: string]: unknown }): void =>
       announceExtension(applicationId, store, extension),
     requestStore: (): Store<unknown> => requestStore(store),
-    requestRouter: (): VueRouter => requestRouter(router),
+    requestRouter: (): Router => requestRouter(router),
     openPortal: (
       instance: App,
       toApp: string,

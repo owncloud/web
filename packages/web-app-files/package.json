@@ -25,7 +25,7 @@
     "uuid": "^9.0.0",
     "vue-concurrency": "4.0.0",
     "vue-gettext": "2.1.12",
-    "vue-router": "3.6.5",
+    "vue-router": "4.1.6",
     "vuex": "4.1.0",
     "web-app-files": "workspace:*",
     "web-app-search": "workspace:*",

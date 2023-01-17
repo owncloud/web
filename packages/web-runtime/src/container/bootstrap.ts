@@ -2,7 +2,7 @@ import { registerClient } from '../services/clientRegistration'
 import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
-import VueRouter from 'vue-router'
+import { Router } from 'vue-router'
 import Vue from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
@@ -121,7 +121,7 @@ export const initializeApplications = async ({
   runtimeConfiguration: RuntimeConfiguration
   configurationManager: ConfigurationManager
   store: Store<unknown>
-  router: VueRouter
+  router: Router
   translations: unknown
   supportedLanguages: { [key: string]: string }
 }): Promise<NextApplication[]> => {
@@ -325,7 +325,7 @@ export const announceAuthService = ({
   vue: VueConstructor
   configurationManager: ConfigurationManager
   store: Store<any>
-  router: VueRouter
+  router: Router
 }): void => {
   authService.initialize(configurationManager, clientService, store, router)
   vue.prototype.$authService = authService
@@ -344,7 +344,7 @@ export const announceDefaults = ({
   router
 }: {
   store: Store<unknown>
-  router: VueRouter
+  router: Router
 }): void => {
   // set home route
   const appIds = store.getters.appIds

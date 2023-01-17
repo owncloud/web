@@ -59,14 +59,14 @@ export default defineComponent({
     watch(
       useRoute(),
       (route) => {
-        if (route.matched.length) {
-          route.matched.forEach((match) => {
+        if (unref(route).matched.length) {
+          unref(route).matched.forEach((match) => {
             const keys = Object.keys(match.components).filter((key) => key !== 'default')
             if (keys.length) {
               console.warn(
                 `named components are deprecated, use "default" instead of "${keys.join(
                   ', '
-                )}" on route ${route.name}`
+                )}" on route ${String(route.name)}`
               )
             }
           })
@@ -129,10 +129,7 @@ export default defineComponent({
       return items.map((item) => {
         const active = [item.route, ...(item.activeFor || [])]
           .filter(Boolean)
-          .reduce((result, currentItem) => {
-            if (result) {
-              return true
-            }
+          .some((currentItem) => {
             try {
               const comparativeHref = this.$router.resolve(currentItem).href
               return currentHref.startsWith(comparativeHref)
@@ -140,7 +137,8 @@ export default defineComponent({
               console.error(e)
               return false
             }
-          }, false)
+          })
+
         const name = typeof item.name === 'function' ? item.name(this.capabilities) : item.name
 
         return {

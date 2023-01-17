@@ -4,7 +4,7 @@ import Vue, { App } from 'vue'
 import { isFunction, isObject } from 'lodash-es'
 import { NextApplication } from './next'
 import { Store } from 'vuex'
-import VueRouter from 'vue-router'
+import { Router } from 'vue-router'
 import { RuntimeError } from '../error'
 
 type VueConstructor = typeof Vue
@@ -78,7 +78,7 @@ export const convertClassicApplication = async ({
 }: {
   applicationScript: ClassicApplicationScript
   store: Store<unknown>
-  router: VueRouter
+  router: Router
   translations: unknown
   supportedLanguages: { [key: string]: string }
 }): Promise<NextApplication> => {

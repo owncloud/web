@@ -1,6 +1,6 @@
 import uploadImage from 'web-app-files/src/mixins/spaces/actions/uploadImage.js'
 import { thumbnailService } from '../../../../src/services'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
 import { Graph } from 'web-client'
 import { clientService } from 'web-pkg'
@@ -9,7 +9,8 @@ import {
   defaultPlugins,
   mount,
   defaultStoreMockOptions,
-  defaultComponentMocks
+  defaultComponentMocks,
+  RouteLocation
 } from 'web-test-helpers'
 
 const Component = {
@@ -64,7 +65,9 @@ describe('uploadImage', () => {
 
 function getWrapper(resolvePutFileContents = true) {
   const clientMock = mockDeep<OwnCloudSdk>()
-  const defaultMocks = defaultComponentMocks({ currentRoute: { name: 'files-spaces-generic' } })
+  const defaultMocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
+  })
   const mocks = {
     ...defaultMocks,
     $client: {

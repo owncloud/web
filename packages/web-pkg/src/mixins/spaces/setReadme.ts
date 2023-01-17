@@ -1,3 +1,4 @@
+import { unref } from 'vue'
 import { mapMutations, mapState, mapActions } from 'vuex'
 
 export default {
@@ -21,7 +22,7 @@ export default {
             if (!resources[0].mimeType?.startsWith('text/')) {
               return false
             }
-            if (this.$router.currentRoute.name !== 'files-spaces-generic') {
+            if (unref(this.$router.currentRoute).name !== 'files-spaces-generic') {
               return false
             }
 

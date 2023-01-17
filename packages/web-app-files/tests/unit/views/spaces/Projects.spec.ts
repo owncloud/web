@@ -1,5 +1,5 @@
 import Projects from '../../../../src/views/spaces/Projects.vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
 import {
   createStore,
@@ -7,7 +7,8 @@ import {
   mount,
   defaultStoreMockOptions,
   defaultComponentMocks,
-  defaultStubs
+  defaultStubs,
+  RouteLocation
 } from 'web-test-helpers'
 
 describe('Projects view', () => {
@@ -60,7 +61,7 @@ describe('Projects view', () => {
 function getMountedWrapper({ mocks = {}, spaces = [] } = {}) {
   const defaultMocks = {
     ...defaultComponentMocks({
-      currentRoute: { name: 'files-spaces-projects' }
+      currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
     }),
     ...(mocks && mocks)
   }

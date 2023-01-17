@@ -1,3 +1,4 @@
+import { unref } from 'vue'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { clientService, eventBus } from 'web-pkg/src/services'
 
@@ -72,7 +73,7 @@ export default {
           this.hideModal()
           this.REMOVE_FILES([{ id: space.id }])
           this.REMOVE_SPACE({ id: space.id })
-          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+          if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
             eventBus.publish('app.admin-settings.list.load')
           }
           this.showMessage({

@@ -1,10 +1,10 @@
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { Resource } from 'web-client/src'
 import { eventBus } from 'web-pkg/src'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { getComposableWrapper } from 'web-test-helpers'
+import { getComposableWrapper, RouteLocation } from 'web-test-helpers'
 
 describe('useScrollTo', () => {
   it('should be valid', () => {
@@ -92,7 +92,9 @@ describe('useScrollTo', () => {
         },
         {
           mocks: {
-            ...defaultComponentMocks({ currentRoute: { query: { scrollTo: resourceId } } })
+            ...defaultComponentMocks({
+              currentRoute: mock<RouteLocation>({ query: { scrollTo: resourceId } })
+            })
           },
           store: defaultStoreMockOptions
         }
@@ -110,7 +112,7 @@ describe('useScrollTo', () => {
         {
           mocks: {
             ...defaultComponentMocks({
-              currentRoute: { query: { scrollTo: resourceId } }
+              currentRoute: mock<RouteLocation>({ query: { scrollTo: resourceId } })
             }),
             $store: { commit: jest.fn() }
           },
@@ -130,7 +132,9 @@ describe('useScrollTo', () => {
         {
           mocks: {
             ...defaultComponentMocks({
-              currentRoute: { query: { scrollTo: resourceId, details: 'details' } }
+              currentRoute: mock<RouteLocation>({
+                query: { scrollTo: resourceId, details: 'details' }
+              })
             }),
             $store: { commit: jest.fn() }
           },

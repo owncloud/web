@@ -24,8 +24,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-
-import get from 'lodash-es/get'
+import { Router } from 'vue-router'
 
 export default defineComponent({
   props: {
@@ -69,7 +68,7 @@ export default defineComponent({
   },
   computed: {
     navName() {
-      return get(this.$router?.resolve(this.target), 'route.name')
+      return (this.$router as Router)?.resolve(this.target, this.$route)?.name || 'route.name'
     },
     toolTip() {
       const value = this.collapsed

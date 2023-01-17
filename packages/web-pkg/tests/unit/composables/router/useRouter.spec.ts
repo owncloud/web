@@ -1,8 +1,7 @@
 import { useRouter } from 'web-pkg/src/composables'
-import VueRouter from 'vue-router'
 import { createRouter, getComposableWrapper } from 'web-test-helpers'
 
-describe('useRouter', () => {
+describe.skip('useRouter', () => {
   // FIXME
   it.skip('should be valid', () => {
     expect(useRouter).toBeDefined()
@@ -10,7 +9,9 @@ describe('useRouter', () => {
     const mocks = { $router: router }
     getComposableWrapper(
       () => {
-        expect(useRouter()).toBeInstanceOf(VueRouter)
+        // FIXME: Router is just a type, so we can't do a runtime check
+        // hopefully we can just get rid of our own useRouter composable
+        // expect(useRouter()).toBeInstanceOf(Router)
       },
       { mocks }
     )

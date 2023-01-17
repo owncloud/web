@@ -1,26 +1,27 @@
 import SharesNavigation from '../../../../src/components/AppBar/SharesNavigation.vue'
 import { locationSharesWithMe } from 'web-app-files/src/router/shares'
 import { mock } from 'jest-mock-extended'
-import { RouteRecordPublic } from 'vue-router/types/router'
+import { RouteRecordNormalized } from 'vue-router'
 import {
   createStore,
   defaultPlugins,
   defaultStubs,
   shallowMount,
   defaultStoreMockOptions,
-  defaultComponentMocks
+  defaultComponentMocks,
+  RouteLocation
 } from 'web-test-helpers'
 
 const routes = [
-  mock<RouteRecordPublic>({
+  mock<RouteRecordNormalized>({
     path: '/files/shares/with-me/',
     name: 'files-shares-with-me'
   }),
-  mock<RouteRecordPublic>({
+  mock<RouteRecordNormalized>({
     path: '/files/shares/with-others/',
     name: 'files-shares-with-others'
   }),
-  mock<RouteRecordPublic>({
+  mock<RouteRecordNormalized>({
     path: '/files/shares/via-link/',
     name: 'files-shares-via-link'
   })
@@ -36,12 +37,14 @@ describe('SharesNavigation component', () => {
 function getWrapper({ currentRouteName = locationSharesWithMe.name } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
-  const mocks = defaultComponentMocks({ currentRoute: { name: currentRouteName } })
+  const mocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ name: currentRouteName })
+  })
   mocks.$router.getRoutes.mockImplementation(() => routes)
   return {
     storeOptions,
     mocks,
-    wrapper: shallowMount(SharesNavigation as any, {
+    wrapper: shallowMount(SharesNavigation, {
       global: {
         stubs: defaultStubs,
         renderStubDefaultSlot: true,

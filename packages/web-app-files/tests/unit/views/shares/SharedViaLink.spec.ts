@@ -2,7 +2,7 @@ import SharedViaLink from '../../../../src/views/shares/SharedViaLink.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import {
   createStore,
@@ -10,7 +10,8 @@ import {
   mount,
   defaultStoreMockOptions,
   defaultComponentMocks,
-  defaultStubs
+  defaultStubs,
+  RouteLocation
 } from 'web-test-helpers'
 
 jest.mock('web-app-files/src/composables')
@@ -55,7 +56,7 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
   )
   const defaultMocks = {
     ...defaultComponentMocks({
-      currentRoute: { name: 'files-shares-via-link' }
+      currentRoute: mock<RouteLocation>({ name: 'files-shares-via-link' })
     }),
     ...(mocks && mocks)
   }

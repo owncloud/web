@@ -189,7 +189,7 @@ import {
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { createFileRouteOptions, mergeFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export const appId = 'preview'
 
@@ -424,9 +424,9 @@ export default defineComponent({
     },
     // update route and url
     updateLocalHistory() {
-      const routeOptions = mergeFileRouteOptions(
-        this.$route,
-        createFileRouteOptions(unref(this.currentFileContext.space), this.activeFilteredFile)
+      const routeOptions = createFileRouteOptions(
+        unref(this.currentFileContext.space),
+        this.activeFilteredFile
       )
       history.pushState({}, document.title, this.$router.resolve(routeOptions).href)
     },

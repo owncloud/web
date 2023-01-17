@@ -1,12 +1,13 @@
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import {
   createStore,
   defaultComponentMocks,
   defaultPlugins,
   shallowMount,
-  defaultStoreMockOptions
+  defaultStoreMockOptions,
+  RouteLocation
 } from 'web-test-helpers'
 
 const selectedFiles = [mockDeep<Resource>(), mockDeep<Resource>()]
@@ -127,7 +128,7 @@ function getShallowWrapper(
 ) {
   const mocks = defaultComponentMocks({
     gettext: false,
-    currentRoute: { name: 'files-trash-generic' }
+    currentRoute: mock<RouteLocation>({ name: 'files-trash-generic' })
   })
   mocks.$route.meta.title = 'ExampleTitle'
   const storeOptions = defaultStoreMockOptions

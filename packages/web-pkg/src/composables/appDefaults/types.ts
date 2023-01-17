@@ -1,6 +1,7 @@
 import { MaybeRef } from '../../utils'
-import { LocationParams, LocationQuery } from '../router'
+import { LocationQuery } from '../router'
 import { SpaceResource } from 'web-client/src/helpers'
+import { RouteParams } from 'vue-router'
 export interface FileContext {
   path: MaybeRef<string>
   driveAliasAndItem: MaybeRef<string>
@@ -9,7 +10,7 @@ export interface FileContext {
   itemId: MaybeRef<string>
   fileName: MaybeRef<string>
   routeName: MaybeRef<string>
-  routeParams: MaybeRef<LocationParams>
+  routeParams: MaybeRef<RouteParams>
   routeQuery: MaybeRef<LocationQuery>
 }
 

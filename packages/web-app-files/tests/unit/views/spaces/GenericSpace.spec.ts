@@ -10,7 +10,8 @@ import {
   mount,
   defaultStoreMockOptions,
   defaultComponentMocks,
-  defaultStubs
+  defaultStubs,
+  RouteLocation
 } from 'web-test-helpers'
 
 jest.mock('web-app-files/src/composables')
@@ -134,7 +135,7 @@ function getMountedWrapper({
     })
   )
   const defaultMocks = {
-    ...defaultComponentMocks({ currentRoute }),
+    ...defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute) }),
     ...(mocks && mocks)
   }
   const storeOptions = { ...defaultStoreMockOptions }

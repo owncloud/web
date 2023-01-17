@@ -1,9 +1,9 @@
 import { base, router } from './index'
-import Router, { Route, RouteRecordPublic } from 'vue-router'
+import { RouteLocation, RouteParams, Router, RouteRecordNormalized } from 'vue-router'
 import {
+  AuthContext,
   authContextValues,
   contextQueryToFileContextProps,
-  LocationParams,
   WebRouteMeta
 } from 'web-pkg/src/composables'
 
@@ -44,7 +44,7 @@ export const buildUrl = (pathname) => {
  * @param to {Route}
  * @returns {boolean}
  */
-export const isUserContext = (router: Router, to: Route): boolean => {
+export const isUserContext = (router: Router, to: RouteLocation): boolean => {
   const meta = getRouteMeta(to)
   if (meta.authContext === 'user') {
     return true
@@ -54,7 +54,10 @@ export const isUserContext = (router: Router, to: Route): boolean => {
   }
 
   const contextRoute = getContextRoute(router, to)
-  return !contextRoute || getRouteMeta({ meta: contextRoute.meta } as Route).authContext === 'user'
+  return (
+    !contextRoute ||
+    getRouteMeta({ meta: contextRoute.meta } as RouteLocation).authContext === 'user'
+  )
 }
 
 /**
@@ -64,8 +67,8 @@ export const isUserContext = (router: Router, to: Route): boolean => {
  * @param to {Route}
  * @returns {boolean}
  */
-export const isPublicLinkContext = (router: Router, to: Route): boolean => {
-  if (to.params.driveAliasAndItem?.startsWith('public/')) {
+export const isPublicLinkContext = (router: Router, to: RouteLocation): boolean => {
+  if ((to.params.driveAliasAndItem as string)?.startsWith('public/')) {
     return true
   }
 
@@ -79,7 +82,8 @@ export const isPublicLinkContext = (router: Router, to: Route): boolean => {
 
   const contextRoute = getContextRoute(router, to)
   return (
-    contextRoute && getRouteMeta({ meta: contextRoute.meta } as Route).authContext === 'publicLink'
+    contextRoute &&
+    getRouteMeta({ meta: contextRoute.meta } as RouteLocation).authContext === 'publicLink'
   )
 }
 
@@ -89,7 +93,7 @@ export const isPublicLinkContext = (router: Router, to: Route): boolean => {
  * @param to {Route}
  * @returns {string}
  */
-export const extractPublicLinkToken = (to: Route): string => {
+export const extractPublicLinkToken = (to: RouteLocation): string => {
   const contextRouteParams = contextQueryToFileContextProps(to.query)?.routeParams
   if (contextRouteParams) {
     return extractPublicLinkTokenFromRouteParams(contextRouteParams)
@@ -102,14 +106,14 @@ export const extractPublicLinkToken = (to: Route): string => {
  *
  * @param params {LocationParams}
  */
-const extractPublicLinkTokenFromRouteParams = (params: LocationParams): string => {
+const extractPublicLinkTokenFromRouteParams = (params: RouteParams): string => {
   if (Object.prototype.hasOwnProperty.call(params, 'driveAliasAndItem')) {
-    if (!params.driveAliasAndItem.startsWith('public/')) {
+    if (!(params.driveAliasAndItem as string).startsWith('public/')) {
       return ''
     }
-    return params.driveAliasAndItem.split('/')[1]
+    return (params.driveAliasAndItem as string).split('/')[1]
   }
-  return (params.item || params.filePath || params.token || '').split('/')[0]
+  return ((params.item || params.filePath || params.token || '') as string).split('/')[0]
 }
 
 /**
@@ -119,7 +123,7 @@ const extractPublicLinkTokenFromRouteParams = (params: LocationParams): string =
  * @param to {Route}
  * @returns {boolean}
  */
-export const isAnonymousContext = (router: Router, to: Route): boolean => {
+export const isAnonymousContext = (router: Router, to: RouteLocation): boolean => {
   return getRouteMeta(to).authContext === 'anonymous'
 }
 
@@ -133,7 +137,7 @@ export const isAnonymousContext = (router: Router, to: Route): boolean => {
  * the preview app is supposed to load files from is transported via the contextRouteName, contextRouteParams and contextRouteQuery
  * in the URL (provided by the context that opens the preview app in the first place).
  */
-const getContextRoute = (router: Router, to: Route): RouteRecordPublic | null => {
+const getContextRoute = (router: Router, to: RouteLocation): RouteRecordNormalized | null => {
   const contextRouteNameKey = 'contextRouteName'
   if (!to.query || !to.query[contextRouteNameKey]) {
     return null
@@ -142,7 +146,7 @@ const getContextRoute = (router: Router, to: Route): RouteRecordPublic | null =>
   return router.getRoutes().find((r) => r.name === to.query[contextRouteNameKey])
 }
 
-const getRouteMeta = (to: Route): WebRouteMeta => {
+const getRouteMeta = (to: RouteLocation): WebRouteMeta => {
   if (!to.meta) {
     return {
       authContext: 'user'
@@ -153,18 +157,20 @@ const getRouteMeta = (to: Route): WebRouteMeta => {
   if (!to.meta.authContext && Object.prototype.hasOwnProperty.call(to.meta, 'auth')) {
     to.meta.authContext = to.meta.auth ? 'user' : 'hybrid'
     console.warn(
-      `route key meta.auth is deprecated. Please switch to meta.authContext="${to.meta.authContext}" in route "${to.name}".`
+      `route key meta.auth is deprecated. Please switch to meta.authContext="${
+        to.meta.authContext
+      }" in route "${String(to.name)}".`
     )
   }
 
   if (to?.meta?.authContext) {
-    if (authContextValues.includes(to.meta.authContext)) {
+    if (authContextValues.includes(to.meta.authContext as AuthContext)) {
       return to.meta
     }
     console.warn(
-      `invalid authContext "${to.meta.authContext}" in route "${
+      `invalid authContext "${to.meta.authContext}" in route "${String(
         to.name
-      }". must be one of [${authContextValues.join(', ')}].`
+      )}". must be one of [${authContextValues.join(', ')}].`
     )
   }
   if (to?.meta) {

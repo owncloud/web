@@ -5,8 +5,10 @@ import {
   mount,
   defaultStoreMockOptions,
   defaultComponentMocks,
-  defaultStubs
+  defaultStubs,
+  RouteLocation
 } from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
 
 describe('FilesDrop view', () => {
   it('drop container always present', () => {
@@ -29,7 +31,7 @@ describe('FilesDrop view', () => {
 function getMountedWrapper({ mocks = {}, loading = false } = {}) {
   const defaultMocks = {
     ...defaultComponentMocks({
-      currentRoute: { name: 'files-common-favorites' }
+      currentRoute: mock<RouteLocation>({ name: 'files-common-favorites' })
     }),
     $client: {
       publicFiles: { list: jest.fn(() => Promise.resolve([{ getProperty: jest.fn() }])) }

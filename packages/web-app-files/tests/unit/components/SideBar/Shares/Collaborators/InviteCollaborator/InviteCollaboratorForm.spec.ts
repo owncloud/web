@@ -1,3 +1,4 @@
+import { mock } from 'jest-mock-extended'
 import InviteCollaboratorForm from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import {
@@ -5,6 +6,7 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   defaultStoreMockOptions,
+  RouteLocation,
   shallowMount
 } from 'web-test-helpers'
 
@@ -92,7 +94,9 @@ function getWrapper({
       },
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks: defaultComponentMocks({ currentRoute: { params: { storageId } } })
+        mocks: defaultComponentMocks({
+          currentRoute: mock<RouteLocation>({ params: { storageId } })
+        })
       }
     })
   }

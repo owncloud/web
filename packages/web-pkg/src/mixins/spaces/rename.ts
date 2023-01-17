@@ -1,3 +1,4 @@
+import { unref } from 'vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 
@@ -82,7 +83,7 @@ export default {
         .updateDrive(space.id, { name }, {})
         .then(() => {
           this.hideModal()
-          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+          if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
             space.name = name
           }
           this.UPDATE_SPACE_FIELD({

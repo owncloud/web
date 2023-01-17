@@ -1,4 +1,11 @@
-import VueRouter, { RouteConfig, Route, Location, RouteMeta } from 'vue-router'
+import {
+  RouteRecordRaw,
+  RouteLocationNamedRaw,
+  RouteMeta,
+  Router,
+  RouteLocationPathRaw,
+  RouteLocationRaw
+} from 'vue-router'
 import { createLocationSpaces } from './spaces'
 import { createLocationShares } from './shares'
 import { createLocationCommon } from './common'
@@ -16,8 +23,8 @@ import { urlJoin } from 'web-client/src/utils'
 const deprecatedRedirect = (routeConfig: {
   path: string
   meta?: RouteMeta
-  redirect: (to: Route) => Location
-}): RouteConfig => {
+  redirect: (to: RouteLocationRaw) => Partial<RouteLocationPathRaw & RouteLocationNamedRaw>
+}): RouteRecordRaw => {
   return {
     meta: { ...routeConfig.meta, authContext: 'anonymous' }, // authContext belongs to the redirect target, not to the redirect itself.
     path: routeConfig.path,
@@ -26,7 +33,7 @@ const deprecatedRedirect = (routeConfig: {
 
       console.warn(
         `route "${routeConfig.path}" is deprecated, use "${
-          location.path || location.name
+          String(location.path) || String(location.name)
         }" instead.`
       )
 
@@ -39,7 +46,7 @@ const deprecatedRedirect = (routeConfig: {
  * listed routes only exist to keep backwards compatibility intact,
  * all routes written in  a flat syntax to keep them readable.
  */
-export const buildRoutes = (): RouteConfig[] =>
+export const buildRoutes = (): RouteLocationNamedRaw[] =>
   [
     {
       path: '/list',
@@ -50,7 +57,7 @@ export const buildRoutes = (): RouteConfig[] =>
         })
     },
     {
-      path: '/list/all/:item*',
+      path: '/list/all/:item(.*)',
       redirect: (to) =>
         createLocationSpaces('files-spaces-generic', {
           ...to,
@@ -81,7 +88,7 @@ export const buildRoutes = (): RouteConfig[] =>
       redirect: (to) => createLocationTrash('files-trash-generic', to)
     },
     {
-      path: '/public/list/:item*',
+      path: '/public/list/:item(.*)',
       redirect: (to) => createLocationPublic('files-public-link', to)
     },
     {
@@ -100,8 +107,8 @@ export const buildRoutes = (): RouteConfig[] =>
  * @param comparatives
  */
 export const isLocationActive = (
-  router: VueRouter,
-  ...comparatives: [Location, ...Location[]]
+  router: Router,
+  ...comparatives: [RouteLocationNamedRaw, ...RouteLocationNamedRaw[]]
 ): boolean => {
   const [first, ...rest] = comparatives.map((c) => {
     const newName = {

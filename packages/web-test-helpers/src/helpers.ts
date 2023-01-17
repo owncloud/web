@@ -2,6 +2,8 @@ import { createStore as _createStore, StoreOptions } from 'vuex'
 import { mount as _mount, MountingOptions } from '@vue/test-utils'
 import { defineComponent } from 'vue'
 import { defaultPlugins } from 'web-test-helpers'
+import { createRouter as _createRouter } from 'web-runtime/src/router'
+import { createMemoryHistory, RouterOptions } from 'vue-router'
 
 jest.spyOn(console, 'warn').mockImplementation(() => undefined)
 
@@ -41,5 +43,12 @@ export const getStoreInstance = <T>(storeOptions: StoreOptions<T>) => {
   return _createStore(storeOptions)
 }
 
-export { createRouter } from 'web-runtime/src/router'
+export type { RouteLocation } from 'vue-router'
 export { RouterLinkStub } from '@vue/test-utils'
+export const createRouter = (options?: Partial<RouterOptions>) =>
+  _createRouter({
+    history: createMemoryHistory(),
+    routes: [],
+    strict: false,
+    ...options
+  })

@@ -1,5 +1,4 @@
 import { describe } from '@jest/globals'
-// import VueRouter from 'vue-router'
 // import List from 'web-app-files/src/components/Search/List.vue'
 //
 // const stubs = {
@@ -98,7 +97,6 @@ describe('List component', () => {
 //       }
 //     },
 //     store: createStore(files),
-//     router: new VueRouter(),
 //     stubs,
 //     mock: {
 //       webdav: {

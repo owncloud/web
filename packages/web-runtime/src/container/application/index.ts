@@ -1,5 +1,5 @@
 import { Store } from 'vuex'
-import VueRouter from 'vue-router'
+import { Router } from 'vue-router'
 import { NextApplication } from './next'
 import { convertClassicApplication } from './classic'
 import { ClassicApplicationScript } from '../types'
@@ -54,7 +54,7 @@ export const buildApplication = async ({
 }: {
   applicationPath: string
   store: Store<unknown>
-  router: VueRouter
+  router: Router
   translations: unknown
   supportedLanguages: { [key: string]: string }
   configurationManager: ConfigurationManager

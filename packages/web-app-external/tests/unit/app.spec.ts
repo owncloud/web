@@ -10,6 +10,7 @@ import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 import { ref } from 'vue'
 import { mock } from 'jest-mock-extended'
+import { RouteLocation } from 'web-test-helpers'
 
 jest.mock('web-pkg/src/composables/appDefaults', () => {
   const { queryItemAsString } = jest.requireActual('web-pkg/src/composables/appDefaults')
@@ -145,7 +146,7 @@ function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ s
         mocks: {
           ...defaultComponentMocks({
             gettext: false,
-            currentRoute: { query: { app: 'exampleApp' } }
+            currentRoute: mock<RouteLocation>({ query: { app: 'exampleApp' } })
           })
         }
       }

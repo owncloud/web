@@ -1,6 +1,7 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import { SpaceResource } from 'web-client'
+import { unref } from 'vue'
 
 export default {
   computed: {
@@ -78,7 +79,7 @@ export default {
         )
         .then((updatedSpace) => {
           this.hideModal()
-          if (this.$router.currentRoute.name === 'admin-settings-spaces') {
+          if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
             space.disabled = false
             space.spaceQuota = updatedSpace.data.quota
           }

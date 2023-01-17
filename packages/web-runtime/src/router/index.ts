@@ -8,18 +8,14 @@ import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
 import ResolvePrivateLinkPage from '../pages/resolvePrivateLink.vue'
 import { setupAuthGuard } from './setupAuthGuard'
 import { patchRouter } from './patchCleanPath'
-import VueRouter from 'vue-router'
+import { createWebHashHistory, createWebHistory, createRouter } from 'vue-router'
 
 export * from './helpers'
+export { createRouter } from 'vue-router'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
   return msg
-}
-
-export const createRouter = (options?: any) => {
-  ;(window as any).__HACK__router = new VueRouter(options)
-  return (window as any).__HACK__router
 }
 
 export const base = document.querySelector('base')
@@ -32,14 +28,10 @@ export const router = patchRouter(
     },
     stringifyQuery(obj) {
       return qs.stringify(obj, {
-        allowDots: true,
-        addQueryPrefix: true
+        allowDots: true
       })
     },
-    ...(base && {
-      mode: 'history',
-      base: new URL(base.href).pathname
-    }),
+    history: (base && createWebHistory(new URL(base.href).pathname)) || createWebHashHistory(),
     routes: [
       {
         path: '/login',

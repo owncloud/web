@@ -1,41 +1,57 @@
 import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from './index'
-import Router, { Route } from 'vue-router'
+import { Router, RouteLocation } from 'vue-router'
 import Vue from 'vue'
 import { contextRouteNameKey, queryItemAsString } from 'web-pkg/src/composables'
+import { AuthService } from '../services/auth/authService'
 
 export const setupAuthGuard = (router: Router) => {
-  router.beforeEach(async (to, from, next) => {
+  router.beforeEach(async (to, from) => {
     if (from && to.path === from.path && !hasContextRouteNameChanged(to, from)) {
       // note: except for the context route, query changes can never trigger re-init of the auth context
-      return next()
+      return true
     }
 
     const store = (Vue as any).$store
-    const authService = (Vue as any).$authService
+    const authService = (Vue as any).$authService as AuthService
     await authService.initializeContext(to)
+
+    // vue-router currently (4.1.6) does not cancel navigations when a new one is triggered
+    // we need to guard this case to be able to show the access denied page
+    // and not be redirected to the login page
+    if (authService.hasAuthErrorOccured) {
+      return to.name === 'accessDenied' || { name: 'accessDenied' }
+    }
 
     if (isPublicLinkContext(router, to)) {
       if (!store.getters['runtime/auth/isPublicLinkContextReady']) {
         const publicLinkToken = extractPublicLinkToken(to)
-        return next({
+        return {
           name: 'resolvePublicLink',
           params: { token: publicLinkToken },
           query: { redirectUrl: to.fullPath }
-        })
+        }
       }
-      return next()
+      return true
     }
+
     if (isUserContext(router, to)) {
       if (!store.getters['runtime/auth/isUserContextReady']) {
-        return next({ path: '/login', query: { redirectUrl: to.fullPath } })
+        return { path: '/login', query: { redirectUrl: to.fullPath } }
       }
-      return next()
+      return true
     }
-    return next()
+    return true
+  })
+  router.afterEach((to) => {
+    if (to.name !== 'accessDenied') {
+      return
+    }
+    const authService = (Vue as any).$authService as AuthService
+    authService.hasAuthErrorOccured = false
   })
 }
 
-export const hasContextRouteNameChanged = (to: Route, from: Route): boolean => {
+export const hasContextRouteNameChanged = (to: RouteLocation, from: RouteLocation): boolean => {
   if (!to.query[contextRouteNameKey] && !from.query[contextRouteNameKey]) {
     return false
   }

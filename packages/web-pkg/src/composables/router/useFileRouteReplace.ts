@@ -1,8 +1,8 @@
 import { useRouter } from './useRouter'
 import { useConfigurationManager } from '../configuration'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
-import { createFileRouteOptions, mergeFileRouteOptions } from '../../helpers/router'
-import Router from 'vue-router'
+import { createFileRouteOptions } from '../../helpers/router'
+import { Router } from 'vue-router'
 import { ConfigurationManager } from '../../configuration'
 
 export interface FileRouteReplaceOptions {
@@ -32,12 +32,9 @@ export const useFileRouteReplace = (options: FileRouteReplaceOptions = {}) => {
       return false
     }
 
-    const routeOptions = mergeFileRouteOptions(
-      router.currentRoute,
-      createFileRouteOptions(space, resource, {
-        configurationManager
-      })
-    )
+    const routeOptions = createFileRouteOptions(space, resource, {
+      configurationManager
+    })
     router.replace(routeOptions)
     return true
   }

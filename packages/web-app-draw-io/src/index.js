@@ -4,7 +4,7 @@ import App from './App.vue'
 const routes = [
   {
     name: 'draw-io',
-    path: '/:driveAliasAndItem*',
+    path: '/:driveAliasAndItem(.*)?',
     component: App,
     meta: {
       authContext: 'hybrid',

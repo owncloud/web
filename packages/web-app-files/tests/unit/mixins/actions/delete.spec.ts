@@ -1,3 +1,4 @@
+import { mock } from 'jest-mock-extended'
 import Delete from 'web-app-files/src/mixins/actions/delete.js'
 
 import {
@@ -5,7 +6,8 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   shallowMount,
-  defaultStoreMockOptions
+  defaultStoreMockOptions,
+  RouteLocation
 } from 'web-test-helpers'
 
 const Component = {
@@ -59,7 +61,7 @@ function getWrapper({ deletePermanent = false, invalidLocation = false } = {}) {
     ? 'files-trash-generic'
     : 'files-spaces-generic'
   const mocks = {
-    ...defaultComponentMocks({ currentRoute: { name: routeName } }),
+    ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),
     space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
   }
   const storeOptions = defaultStoreMockOptions

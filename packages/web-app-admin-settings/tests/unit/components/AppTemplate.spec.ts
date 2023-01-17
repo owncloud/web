@@ -4,10 +4,12 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   defaultStoreMockOptions,
+  RouteLocation,
   shallowMount
 } from 'web-test-helpers'
 import { eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { mock } from 'jest-mock-extended'
 
 const stubSelectors = {
   ocBreadcrumb: 'oc-breadcrumb-stub',
@@ -135,7 +137,7 @@ function getWrapper({ propsData = {} } = {}) {
         mocks: {
           ...defaultComponentMocks({
             gettext: false,
-            currentRoute: { query: { app: 'admin-settings' } }
+            currentRoute: mock<RouteLocation>({ query: { app: 'admin-settings' } })
           })
         }
       }

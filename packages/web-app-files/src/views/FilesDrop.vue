@@ -40,7 +40,7 @@ import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
 import { createLocationPublic } from '../router'
 
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
-import { defineComponent, getCurrentInstance, onMounted } from 'vue'
+import { defineComponent, getCurrentInstance, onMounted, unref } from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import * as uuid from 'uuid'
 import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
@@ -152,7 +152,7 @@ export default defineComponent({
         .catch((error) => {
           // likely missing password, redirect to public link password prompt
           if (error.statusCode === 401) {
-            return this.$authService.handleAuthError(this.$router.currentRoute)
+            return this.$authService.handleAuthError(unref(this.$router.currentRoute))
           }
           console.error(error)
           this.errorMessage = error

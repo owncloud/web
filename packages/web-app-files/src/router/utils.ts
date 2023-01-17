@@ -1,8 +1,9 @@
-import VueRouter, { Location } from 'vue-router'
+import { Router, RouteLocationNamedRaw } from 'vue-router'
 import merge from 'lodash-es/merge'
+import { unref } from 'vue'
 
 export interface ActiveRouteDirectorFunc<T extends string> {
-  (router: VueRouter, ...comparatives: T[]): boolean
+  (router: Router, ...comparatives: T[]): boolean
 }
 
 /**
@@ -13,16 +14,19 @@ export interface ActiveRouteDirectorFunc<T extends string> {
  * @param comparatives
  */
 export const isLocationActive = (
-  router: VueRouter,
-  ...comparatives: [Location, ...Location[]]
+  router: Router,
+  ...comparatives: [RouteLocationNamedRaw, ...RouteLocationNamedRaw[]]
 ): boolean => {
-  const { href: currentHref } = router.resolve(router.currentRoute)
+  // FIXME: router.resolve cleans the path. we don't need it, if we can rely on
+  // router.currentRoute to not have slashs encoded for paths
+  const { href: currentHref } = router.resolve(unref(router.currentRoute))
   return comparatives
     .map((comparative) => {
       const { href: comparativeHref } = router.resolve({
         ...comparative
         // ...(comparative.name && { name: resolveRouteName(comparative.name) })
       })
+
       /**
        * Href might be '/' or '#/' if router is not able to resolve the proper path.
        * This happens if the we don't pass a param which is defined in the route configuration, for example:
@@ -45,9 +49,9 @@ export const isLocationActive = (
  * @param defaultComparatives
  */
 export const isLocationActiveDirector = <T extends string>(
-  ...defaultComparatives: [Location, ...Location[]]
+  ...defaultComparatives: [RouteLocationNamedRaw, ...RouteLocationNamedRaw[]]
 ): ActiveRouteDirectorFunc<T> => {
-  return (router: VueRouter, ...comparatives: T[]): boolean => {
+  return (router: Router, ...comparatives: T[]): boolean => {
     if (!comparatives.length) {
       return isLocationActive(router, ...defaultComparatives)
     }
@@ -81,7 +85,10 @@ export function $gettext(msg: string): string {
  * @param name
  * @param locations
  */
-export const createLocation = (name: string, ...locations: Location[]): Location =>
+export const createLocation = (
+  name: string,
+  ...locations: RouteLocationNamedRaw[]
+): RouteLocationNamedRaw =>
   merge(
     {},
     {

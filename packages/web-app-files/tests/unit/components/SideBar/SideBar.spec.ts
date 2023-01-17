@@ -7,12 +7,13 @@ import {
 import InnerSideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import SideBar from 'web-app-files/src/components/SideBar/SideBar.vue'
 import { Resource } from 'web-client/src/helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import {
   createStore,
   defaultComponentMocks,
   defaultPlugins,
   defaultStoreMockOptions,
+  RouteLocation,
   shallowMount
 } from 'web-test-helpers'
 
@@ -156,7 +157,7 @@ function createWrapper({
           'click-outside': jest.fn()
         },
         mocks: {
-          ...defaultComponentMocks({ currentRoute: currentRoute as unknown })
+          ...defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute as any) })
         }
       }
     })
