@@ -79,9 +79,14 @@
       </tr>
     </tfoot>
   </table>
+  <Teleport v-if="dragItem" to="body">
+    <oc-ghost-element
+      ref="ghostElement"
+      :preview-items="[dragItem, ...dragSelection]"
+    ></oc-ghost-element>
+  </Teleport>
 </template>
 <script lang="ts">
-import Vue from 'vue'
 import OcThead from '../_OcTableHeader/_OcTableHeader.vue'
 import OcTbody from '../_OcTableBody/_OcTableBody.vue'
 import OcTr from '../_OcTableRow/_OcTableRow.vue'
@@ -91,7 +96,7 @@ import OcGhostElement from '../_OcGhostElement/_OcGhostElement.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import SortMixin from '../../mixins/sort'
 import { getSizeClass } from '../../utils/sizeClasses'
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 import {
   EVENT_THEAD_CLICKED,
@@ -115,7 +120,8 @@ export default defineComponent({
     OcTr,
     OcTh,
     OcTd,
-    OcButton
+    OcButton,
+    OcGhostElement
   },
   mixins: [SortMixin],
   props: {
@@ -252,16 +258,16 @@ export default defineComponent({
     EVENT_TROW_MOUNTED,
     EVENT_TROW_CONTEXTMENU
   ],
-  data() {
-    return {
-      constants: {
-        EVENT_THEAD_CLICKED,
-        EVENT_TROW_CLICKED,
-        EVENT_TROW_MOUNTED,
-        EVENT_TROW_CONTEXTMENU
-      },
-      ghostElement: null
+  setup() {
+    const ghostElement = ref()
+    const dragItem = ref()
+    const constants = {
+      EVENT_THEAD_CLICKED,
+      EVENT_TROW_CLICKED,
+      EVENT_TROW_MOUNTED,
+      EVENT_TROW_CONTEXTMENU
     }
+    return { ghostElement, dragItem, constants }
   },
   computed: {
     tableClasses() {
@@ -280,43 +286,40 @@ export default defineComponent({
 
     fullColspan() {
       return this.fields.length
+    },
+    dragSelection() {
+      const selection = [...this.selection]
+      selection.splice(
+        selection.findIndex((i) => i.id === this.dragItem.id),
+        1
+      )
+      return selection
     }
   },
   methods: {
     dragOver(event) {
       event.preventDefault()
     },
-    setGhostElement(item, event) {
-      const selection = [...this.selection]
-      selection.splice(
-        selection.findIndex((i) => i.id === item.id),
-        1
-      )
-      const GhostElementComponent = Vue.extend(OcGhostElement)
-      const ghostInstances = new GhostElementComponent({
-        propsData: {
-          previewItems: [item, ...selection]
-        }
-      })
-      ghostInstances.$mount()
-      this.ghostElement = document.body.appendChild(ghostInstances.$el)
-      this.ghostElement.ariaHidden = 'true'
-      this.ghostElement.style.left = '-99999px'
-      this.ghostElement.style.top = '-99999px'
-      event.dataTransfer.setDragImage(this.ghostElement, 0, 0)
+    async setDragItem(item, event) {
+      this.dragItem = item
+      await this.$nextTick()
+      this.ghostElement.$el.ariaHidden = 'true'
+      this.ghostElement.$el.style.left = '-99999px'
+      this.ghostElement.$el.style.top = '-99999px'
+      event.dataTransfer.setDragImage(this.ghostElement.$el, 0, 0)
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.effectAllowed = 'move'
     },
-    dragStart(item, event) {
+    async dragStart(item, event) {
       if (!this.dragDrop) return
-      this.setGhostElement(item, event)
+      await this.setDragItem(item, event)
       this.$emit(EVENT_ITEM_DRAGGED, item)
     },
     dropRowEvent(selector, event) {
       if (!this.dragDrop) return
       const hasFilePayload = (event.dataTransfer.types || []).some((e) => e === 'Files')
       if (hasFilePayload) return
-      this.ghostElement.remove()
+      this.dragItem = null
       const dropTarget = event.target
       const dropTargetTr = dropTarget.closest('tr')
       const dropItemId = dropTargetTr.dataset.itemId

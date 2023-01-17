@@ -46,6 +46,7 @@ module.exports = {
       extends: ['plugin:vue/recommended', 'plugin:prettier-vue/recommended'],
       rules: {
         'vue/multi-word-component-names': 'warn',
+        'vue/no-multiple-template-root': 'off',
         'vue/no-v-text-v-html-on-component': 'warn'
       }
     },
