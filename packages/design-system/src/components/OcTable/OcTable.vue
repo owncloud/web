@@ -78,13 +78,13 @@
         </td>
       </tr>
     </tfoot>
+    <Teleport v-if="dragItem" to="body">
+      <oc-ghost-element
+        ref="ghostElement"
+        :preview-items="[dragItem, ...dragSelection]"
+      ></oc-ghost-element>
+    </Teleport>
   </table>
-  <Teleport v-if="dragItem" to="body">
-    <oc-ghost-element
-      ref="ghostElement"
-      :preview-items="[dragItem, ...dragSelection]"
-    ></oc-ghost-element>
-  </Teleport>
 </template>
 <script lang="ts">
 import OcThead from '../_OcTableHeader/_OcTableHeader.vue'
