@@ -51,3 +51,42 @@ export const createFolder = async ({
     parentFolder = join(parentFolder, resource)
   }
 }
+
+const createFile = async ({
+  user,
+  pathToFile,
+  content,
+  endPath
+}: {
+  user: User
+  pathToFile: string
+  content: string
+  endPath: string
+}): Promise<void> => {
+  const response = await request({
+    method: 'PUT',
+    path: join('remote.php', 'dav', endPath, pathToFile),
+    body: content,
+    user: user,
+    formatJson: false
+  })
+
+  checkResponseStatus(response, `Failed while uploading file '${pathToFile}' in personal space`)
+}
+
+export const uploadFileInPersonalSpace = async ({
+  user,
+  pathToFile,
+  content
+}: {
+  user: User
+  pathToFile: string
+  content: string
+}): Promise<void> => {
+  // upload a file step is same for oc10 and ocis
+  // so first need to determine the end path to make request
+  const endPath = config.ocis
+    ? 'spaces/' + (await getPersonalSpaceId({ user }))
+    : 'files/' + user.id
+  await createFile({ user, pathToFile, content, endPath })
+}

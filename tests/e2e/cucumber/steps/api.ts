@@ -2,6 +2,8 @@ import { Given, DataTable } from '@cucumber/cucumber'
 import { World } from '../environment'
 import { config } from '../../config'
 import { api } from '../../support'
+import fs from 'fs'
+import path from 'path'
 
 Given(
   '{string} creates following users',
@@ -135,6 +137,38 @@ Given(
       await api.share.acceptShare({
         user,
         path: info.name
+      })
+    }
+  }
+)
+
+Given(
+  '{string} creates the following file(s) in personal space using API',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (const info of stepTable.hashes()) {
+      await api.dav.uploadFileInPersonalSpace({
+        user,
+        pathToFile: info.pathToFile,
+        content: info.content
+      })
+    }
+  }
+)
+
+Given(
+  '{string} uploads following local file in personal space using API',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    const lastIndex = config.assets.lastIndexOf('/')
+    const requiredBasePathToLocalfile = config.assets.slice(0, lastIndex + 1)
+    for (const info of stepTable.hashes()) {
+      const pathToLocalFile = path.join(requiredBasePathToLocalfile, info.localFile)
+      const content = fs.readFileSync(pathToLocalFile)
+      await api.dav.uploadFileInPersonalSpace({
+        user,
+        pathToFile: info.to,
+        content: content.toString()
       })
     }
   }

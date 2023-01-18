@@ -1,1 +1,1 @@
-export { createFolder } from './spaces'
+export { createFolder, uploadFileInPersonalSpace } from './spaces'

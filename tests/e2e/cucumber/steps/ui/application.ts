@@ -7,7 +7,6 @@ When(
   async function (this: World, stepUser: string, stepApp: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const applicationObject = new objects.runtime.Application({ page })
-
     await applicationObject.open({ name: stepApp })
   }
 )
