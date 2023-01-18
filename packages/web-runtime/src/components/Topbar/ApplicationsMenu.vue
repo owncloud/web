@@ -32,7 +32,7 @@
             :href="n.url"
             :to="n.path"
             appearance="raw"
-            :class="{ 'oc-background-primary-gradient': n.active }"
+            :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
             :variation="n.active ? 'inverse' : 'passive'"
           >
             <span class="icon-box">
