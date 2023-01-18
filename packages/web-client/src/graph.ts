@@ -21,7 +21,9 @@ import {
   TagUnassignment,
   DrivesGetDrivesApi,
   CollectionOfApplications,
-  ApplicationsApiFactory
+  ApplicationsApiFactory,
+  UserAppRoleAssignmentApiFactory,
+  AppRoleAssignment
 } from './generated'
 
 export interface Graph {
@@ -49,6 +51,10 @@ export interface Graph {
     editUser: (userId: string, user: User) => AxiosPromise<User>
     deleteUser: (userId: string) => AxiosPromise<void>
     listUsers: (orderBy?: string) => AxiosPromise<CollectionOfUser>
+    createUserAppRoleAssignment: (
+      userId: string,
+      appRoleAssignment: AppRoleAssignment
+    ) => AxiosPromise<AppRoleAssignment>
   }
   groups: {
     listGroups: (orderBy?: string) => AxiosPromise<CollectionOfGroup>
@@ -79,6 +85,11 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const applicationsApiFactory = ApplicationsApiFactory(config, config.basePath, axiosClient)
   const userApiFactory = UserApiFactory(config, config.basePath, axiosClient)
   const usersApiFactory = UsersApiFactory(config, config.basePath, axiosClient)
+  const userAppRoleAssignmentApiFactory = UserAppRoleAssignmentApiFactory(
+    config,
+    config.basePath,
+    axiosClient
+  )
   const groupApiFactory = GroupApiFactory(config, config.basePath, axiosClient)
   const groupsApiFactory = GroupsApiFactory(config, config.basePath, axiosClient)
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
@@ -109,7 +120,11 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     },
     users: {
       getUser: (userId: string) =>
-        userApiFactory.getUser(userId, new Set<any>([]), new Set<any>(['drive'])),
+        userApiFactory.getUser(
+          userId,
+          new Set<any>([]),
+          new Set<any>(['drive', 'memberOf', 'appRoleAssignments'])
+        ),
       createUser: (user: User) => usersApiFactory.createUser(user),
       getMe: () => meUserApiFactory.getOwnUser(new Set<any>(['memberOf'])),
       changeOwnPassword: (currentPassword, newPassword) =>
@@ -125,8 +140,10 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
           false,
           new Set<any>([orderBy]),
           new Set<any>([]),
-          new Set<any>(['memberOf'])
-        )
+          new Set<any>(['memberOf', 'appRoleAssignments'])
+        ),
+      createUserAppRoleAssignment: (userId: string, appRoleAssignment: AppRoleAssignment) =>
+        userAppRoleAssignmentApiFactory.userCreateAppRoleAssignments(userId, appRoleAssignment)
     },
     groups: {
       createGroup: (group: Group) => groupsApiFactory.createGroup(group),

@@ -1,0 +1,6 @@
+Enhancement: Admin settings, users make usage of graph api for role assignments
+
+We've changed the api for the role assignments in the admin settings app to graph api,
+which leads to better performance.
+
+https://github.com/owncloud/web/pull/8261

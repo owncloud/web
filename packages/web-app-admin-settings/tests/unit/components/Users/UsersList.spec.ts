@@ -48,22 +48,34 @@ describe('UsersList', () => {
 
       expect(
         wrapper.vm.orderBy(
-          [{ role: { displayName: 'user' } }, { role: { displayName: 'admin' } }],
+          [
+            { appRoleAssignments: [{ appRoleId: '1' }] },
+            { appRoleAssignments: [{ appRoleId: '2' }] }
+          ],
           'role',
           false
         )
-      ).toEqual([{ role: { displayName: 'admin' } }, { role: { displayName: 'user' } }])
+      ).toEqual([
+        { appRoleAssignments: [{ appRoleId: '1' }] },
+        { appRoleAssignments: [{ appRoleId: '2' }] }
+      ])
     })
     it('should return an role based descending ordered list while desc is set to true', () => {
       const { wrapper } = getWrapper()
 
       expect(
         wrapper.vm.orderBy(
-          [{ role: { displayName: 'admin' } }, { role: { displayName: 'user' } }],
+          [
+            { appRoleAssignments: [{ appRoleId: '1' }] },
+            { appRoleAssignments: [{ appRoleId: '2' }] }
+          ],
           'role',
           true
         )
-      ).toEqual([{ role: { displayName: 'user' } }, { role: { displayName: 'admin' } }])
+      ).toEqual([
+        { appRoleAssignments: [{ appRoleId: '2' }] },
+        { appRoleAssignments: [{ appRoleId: '1' }] }
+      ])
     })
   })
 
@@ -91,6 +103,24 @@ function getWrapper({ propsData = {} } = {}) {
       props: {
         users: [],
         selectedUsers: [],
+        roles: [
+          {
+            displayName: 'Admin',
+            id: '1'
+          },
+          {
+            displayName: 'Guest',
+            id: '2'
+          },
+          {
+            displayName: 'Space Admin',
+            id: '3'
+          },
+          {
+            displayName: 'User',
+            id: '4'
+          }
+        ],
         headerPosition: 0,
         ...propsData
       },

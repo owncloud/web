@@ -2,8 +2,6 @@ import Users from '../../../src/views/Users.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Graph } from 'web-client/src'
-import { useLoadTasks } from '../../../src/composables/loadTasks/useLoadTasks'
-import { Task } from 'vue-concurrency'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import {
   createStore,
@@ -14,39 +12,108 @@ import {
 } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
 
-const defaultGraphMock = () => {
-  const defaultUser = {
+const getDefaultUser = () => {
+  return {
     id: '1',
+    displayName: 'Admin',
+    givenName: 'Admin',
+    surname: 'Admin',
     memberOf: [],
+    mail: 'admin@example.org',
     drive: {
-      name: 'any'
-    }
+      id: '1',
+      name: 'admin',
+      quota: { remaining: 5000000000, state: 'normal', total: 5000000000, used: 0 }
+    },
+    appRoleAssignments: [
+      {
+        appRoleId: '1',
+        id: '1',
+        principalId: '1',
+        principalType: 'User',
+        resourceDisplayName: 'ownCloud Infinite Scale',
+        resourceId: 'some-graph-app-id'
+      }
+    ]
   }
 
+const getDefaultApplications = () => {
+  return [
+    {
+      appRoles: [
+        {
+          displayName: 'Admin',
+          id: '1'
+        },
+        {
+          displayName: 'Guest',
+          id: '2'
+        },
+        {
+          displayName: 'Space Admin',
+          id: '3'
+        },
+        {
+          displayName: 'User',
+          id: '4'
+        }
+      ],
+      displayName: 'ownCloud Infinite Scale',
+      id: 'some-graph-app-id'
+    }
+  ]
+}
+
+const getDefaultGraphMock = () => {
   const graph = mockDeep<Graph>()
-  graph.users.listUsers.mockResolvedValue(mock<AxiosResponse>({ data: { value: [defaultUser] } }))
-  graph.users.getUser.mockResolvedValue(mock<AxiosResponse>({ data: defaultUser }))
+  graph.users.listUsers.mockResolvedValue(
+    mock<AxiosResponse>({ data: { value: [getDefaultUser()] } })
+  )
+  graph.users.getUser.mockResolvedValue(mock<AxiosResponse>({ data: getDefaultUser() }))
   graph.groups.listGroups.mockResolvedValue(mock<AxiosResponse>({ data: { value: [] } }))
+  graph.applications.listApplications.mockResolvedValue(
+    mock<AxiosResponse>({ data: { value: getDefaultApplications() } })
+  )
 
   return graph
 }
 
-jest.mock('../../../src/composables/loadTasks/useLoadTasks')
-jest.mocked(useLoadTasks).mockImplementation(({ roles, userAssignments }) => {
-  roles.value = []
-  userAssignments.value = []
-
-  return {
-    loadRolesTask: mockDeep<Task<void, []>>(),
-    loadUserRoleTask: mockDeep<Task<void, []>>(),
-    addRoleAssignment: jest.fn()
-  }
-})
-
 describe('Users view', () => {
   describe('method "createUser"', () => {
     it('should hide the modal and show message on success', async () => {
-      const { wrapper } = getMountedWrapper()
+      const graph = getDefaultGraphMock()
+      graph.users.createUser.mockImplementation(() =>
+        mockAxiosResolve({
+          displayName: 'benedikt coolman',
+          givenName: '',
+          id: '2',
+          mail: 'benedikt@example.org',
+          onPremisesSamAccountName: 'bene',
+          surname: 'bene'
+        })
+      )
+      graph.users.getUser.mockImplementation(() =>
+        mockAxiosResolve({
+          appRoleAssignments: [
+            {
+              appRoleId: '1',
+              id: '1',
+              principalId: '2',
+              principalType: 'User',
+              resourceDisplayName: 'ownCloud Infinite Scale',
+              resourceId: 'some-graph-app-id'
+            }
+          ],
+          displayName: 'benedikt coolman',
+          givenName: '',
+          id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5',
+          mail: 'benedikt@example.org',
+          memberOf: [],
+          onPremisesSamAccountName: 'bene',
+          surname: 'bene'
+        })
+      )
+      const { wrapper } = getMountedWrapper({ graph })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleCreateUserModalStub = jest.spyOn(wrapper.vm, 'toggleCreateUserModal')
       await wrapper.vm.createUser({ displayName: 'jan' })
@@ -57,7 +124,7 @@ describe('Users view', () => {
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graph = defaultGraphMock()
+      const graph = getDefaultGraphMock()
       graph.users.createUser.mockImplementation(() => mockAxiosReject())
       const { wrapper } = getMountedWrapper({ graph })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
@@ -72,37 +139,107 @@ describe('Users view', () => {
   describe('method "editUser"', () => {
     it('should emit event on success', async () => {
       const editUser = {
+        appRoleAssignments: [
+          {
+            appRoleId: '2',
+            resourceId: 'some-graph-app-id',
+            principalId: '1'
+          }
+        ],
+        displayName: 'administrator',
         id: '1',
-        displayName: 'jan',
-        role: { id: '1', displayName: 'admin' },
-        drive: { id: '1', quota: { total: 10000 } },
-        passwordProfile: { password: 'newpassword' }
+        mail: 'administrator@example.org',
+        drive: {
+          id: '1',
+          name: 'admin',
+          quota: {
+            total: 1000000000
+          }
+        },
+        passwordProfile: {
+          password: 'administrator'
+        }
       }
 
-      const graph = defaultGraphMock()
-      graph.users.editUser.mockImplementation(() =>
+      const graph = getDefaultGraphMock()
+      graph.users.editUser.mockImplementation(() => mockAxiosResolve())
+      graph.users.createUserAppRoleAssignment.mockImplementation(() => mockAxiosResolve())
+      graph.drives.updateDrive.mockImplementation(() =>
         mockAxiosResolve({
-          accountUuid: '1',
           id: '1',
-          roleId: '1'
+          name: 'admin',
+          quota: { remaining: 1000000000, state: 'normal', total: 1000000000, used: 0 }
         })
       )
-      graph.drives.updateDrive.mockImplementation(() => mockAxiosResolve({ name: 'any' }))
-      const { wrapper } = getMountedWrapper({ graph })
+      graph.users.getUser.mockImplementation(() =>
+        mockAxiosResolve({
+          appRoleAssignments: [
+            {
+              appRoleId: '2',
+              id: '1',
+              principalId: '1',
+              principalType: 'User',
+              resourceDisplayName: 'ownCloud Infinite Scale',
+              resourceId: 'some-graph-app-id'
+            }
+          ],
+          displayName: 'administrator',
+          drive: {
+            id: '1',
+            name: 'admin',
+            quota: { remaining: 1000000000, state: 'normal', total: 1000000000, used: 0 }
+          },
+          id: '1',
+          mail: 'administrator@example.org',
+          memberOf: [],
+          onPremisesSamAccountName: 'admin',
+          surname: 'Admin'
+        })
+      )
+
+      const { wrapper } = getMountedWrapper({
+        graph,
+        data: {
+          selectedUsers: [
+            {
+              ...getDefaultUser(),
+              quota: {
+                remaining: 1000000000,
+                state: 'normal',
+                total: 1000000000,
+                used: 0
+              }
+            }
+          ]
+        }
+      })
       const busStub = jest.spyOn(eventBus, 'publish')
       const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
+      const graphUpdateDriveStub = jest.spyOn(wrapper.vm.graphClient.drives, 'updateDrive')
+      const graphUpdateCreateUserAppRoleAssignmentStub = jest.spyOn(
+        wrapper.vm.graphClient.users,
+        'createUserAppRoleAssignment'
+      )
 
       await wrapper.vm.loadResourcesTask.last
-      await wrapper.vm.editUser(editUser)
+      await wrapper.vm.editUser({ user: wrapper.vm.selectedUsers[0], editUser })
+      await wrapper.vm.$nextTick()
 
-      expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
-      expect(busStub).toHaveBeenCalledWith('sidebar.entity.saved')
+      const updatedUser = wrapper.vm.users.find((user) => user.id === editUser.id)
+
+      expect(updatedUser.displayName).toEqual('administrator')
+      expect(updatedUser.mail).toEqual('administrator@example.org')
+      expect(updatedUser.appRoleAssignments[0].appRoleId).toEqual('2')
+      expect(updatedUser.drive.quota.total).toEqual(1000000000)
+      expect(busStub).toHaveBeenCalledTimes(2)
+      expect(graphUpdateDriveStub).toHaveBeenCalled()
       expect(updateSpaceFieldStub).toHaveBeenCalled()
+      expect(graphUpdateCreateUserAppRoleAssignmentStub).toHaveBeenCalled()
     })
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graph = defaultGraphMock()
+      const graph = getDefaultGraphMock()
       graph.users.editUser.mockImplementation(() => mockAxiosReject())
       const { wrapper } = getMountedWrapper({ graph })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
@@ -126,7 +263,7 @@ describe('Users view', () => {
         }
       ]
     }
-    it('should emit event on success2', async () => {
+    it('should emit event on success', async () => {
       const { wrapper } = getMountedWrapper()
       const busStub = jest.spyOn(eventBus, 'publish')
       await wrapper.vm.loadResourcesTask.last
@@ -139,7 +276,7 @@ describe('Users view', () => {
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
-      const graph = defaultGraphMock()
+      const graph = getDefaultGraphMock()
       graph.groups.addMember.mockImplementation(() => mockAxiosReject())
       const { wrapper } = getMountedWrapper({ graph })
       const showMessageStub = jest
@@ -165,7 +302,7 @@ describe('Users view', () => {
     })
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graph = defaultGraphMock()
+      const graph = getDefaultGraphMock()
       graph.users.deleteUser.mockImplementation(() => mockAxiosReject())
       const { wrapper } = getMountedWrapper({ graph })
       const graphDeleteUserStub = jest.spyOn(graph.users, 'deleteUser')
@@ -179,7 +316,7 @@ describe('Users view', () => {
     })
     it('should show message while user tries to delete own account', async () => {
       const { wrapper } = getMountedWrapper()
-      const graph = defaultGraphMock()
+      const graph = getDefaultGraphMock()
       const graphDeleteUserStub = jest.spyOn(graph.users, 'deleteUser')
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleDeleteUserModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteUserModal')
@@ -223,7 +360,7 @@ describe('Users view', () => {
       expect(wrapper.vm.allUsersSelected).toBeTruthy()
     })
     it('should be false if not every user is selected', async () => {
-      const graph = defaultGraphMock()
+      const graph = getDefaultGraphMock()
       graph.users.listUsers.mockImplementation(() =>
         mockAxiosResolve({ value: [{ id: '1' }, { id: '2' }] })
       )
@@ -235,7 +372,7 @@ describe('Users view', () => {
   })
 })
 
-function getMountedWrapper({ graph = defaultGraphMock() } = {}) {
+function getMountedWrapper({ data = {}, graph = getDefaultGraphMock() } = {}) {
   const mocks = {
     ...defaultComponentMocks()
   }
@@ -253,6 +390,9 @@ function getMountedWrapper({ graph = defaultGraphMock() } = {}) {
   return {
     mocks,
     wrapper: shallowMount(Users, {
+      data: () => {
+      return { ...data }
+      },
       global: {
         plugins: [...defaultPlugins(), store],
         mocks
