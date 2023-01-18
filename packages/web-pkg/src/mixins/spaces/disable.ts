@@ -14,15 +14,15 @@ export default {
           name: 'disable',
           icon: 'stop-circle',
           label: ({ resources }) => {
-            if(resources.length === 1) {
+            if (resources.length === 1) {
               return this.$gettext('Disable')
             }
-            const allowedCount = resources.filter(r => r.canDisable({ user: this.user })).length
-            return this.$gettext('Disable (%{count})', { count: allowedCount})
+            const allowedCount = resources.filter((r) => r.canDisable({ user: this.user })).length
+            return this.$gettext('Disable (%{count})', { count: allowedCount })
           },
           handler: this.$_disable_trigger,
           isEnabled: ({ resources }) => {
-            return resources.some(r => r.canDisable({ user: this.user }))
+            return resources.some((r) => r.canDisable({ user: this.user }))
           },
           componentType: 'button',
           class: 'oc-files-actions-disable-trigger'
@@ -41,13 +41,17 @@ export default {
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     $_disable_trigger({ resources }) {
-      const allowedResources = resources.filter(r => r.canDisable({ user: this.user }))
+      const allowedResources = resources.filter((r) => r.canDisable({ user: this.user }))
       const message = this.$ngettext(
-        'If you disable this space, it can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.',
-        'If you disable these spaces, they can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.',
-        allowedResources.length
+        'If you disable the selected space, it can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.',
+        'If you disable the %{count} selected spaces, they can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.',
+        allowedResources.length,
+        { count: allowedResources.length }
       )
-      const confirmText = resources.length === 1 ? this.$gettext('Disable') : this.$gettext('Disable (%{count})', { count: allowedResources.length })
+      const confirmText =
+        resources.length === 1
+          ? this.$gettext('Disable')
+          : this.$gettext('Disable (%{count})', { count: allowedResources.length })
       const modal = {
         variation: 'danger',
         icon: 'alarm-warning',
@@ -67,12 +71,12 @@ export default {
       const requests = []
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
+      const currentRoute = unref(this.$router.currentRoute)
       spaces.forEach((space) => {
         const request = graphClient.drives
           .deleteDrive(space.id.toString())
           .then(() => {
             this.hideModal()
-            const currentRoute = unref(this.$router.currentRoute)
             if (currentRoute.name === 'admin-settings-spaces') {
               space.disabled = true
               space.spaceQuota = { total: space.spaceQuota.total }
@@ -82,26 +86,30 @@ export default {
               field: 'disabled',
               value: true
             })
-            this.showMessage({
-              title: this.$gettext('Space was disabled successfully')
-            })
-            if (currentRoute.name === 'files-spaces-projects') {
-              return
-            }
-            if (currentRoute.name === 'files-spaces-generic') {
-              return this.$router.push({ name: 'files-spaces-projects' })
-            }
           })
           .catch((error) => {
             console.error(error)
             this.showMessage({
-              title: this.$gettext('Failed to disable space'),
+              title: this.$gettext('Failed to disable space %{spaceName}', {
+                spaceName: space.name
+              }),
               status: 'danger'
             })
           })
         requests.push(request)
       })
-      return Promise.all(requests)
+      return Promise.all(requests).then(() => {
+        this.showMessage({
+          title: this.$ngettext(
+            'Space was disabled successfully',
+            'Spaces were disabled successfully',
+            spaces.length
+          )
+        })
+        if (currentRoute.name === 'files-spaces-generic') {
+          return this.$router.push({ name: 'files-spaces-projects' })
+        }
+      })
     }
   }
 }

@@ -14,15 +14,15 @@ export default {
           name: 'restore',
           icon: 'play-circle',
           label: ({ resources }) => {
-            if(resources.length === 1) {
+            if (resources.length === 1) {
               return this.$gettext('Enable')
             }
-            const allowedCount = resources.filter(r => r.canRestore({ user: this.user })).length
-            return this.$gettext('Enable (%{count})', { count: allowedCount})
+            const allowedCount = resources.filter((r) => r.canRestore({ user: this.user })).length
+            return this.$gettext('Enable (%{count})', { count: allowedCount })
           },
           handler: this.$_restore_trigger,
           isEnabled: ({ resources }) => {
-            return resources.some(r => r.canRestore({ user: this.user }))
+            return resources.some((r) => r.canRestore({ user: this.user }))
           },
           componentType: 'button',
           class: 'oc-files-actions-restore-trigger'
@@ -41,15 +41,17 @@ export default {
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     $_restore_trigger({ resources }) {
-      const allowedResources = resources.filter(r => r.canRestore({ user: this.user }))
-
+      const allowedResources = resources.filter((r) => r.canRestore({ user: this.user }))
       const message = this.$ngettext(
-        'If you enable this space, it can be accessed again.',
-        'If you disable these spaces, they can be accessed again.',
-        allowedResources.length
+        'If you enable the selected space, it can be accessed again.',
+        'If you disable the %{count} selected spaces, they can be accessed again.',
+        allowedResources.length,
+        { count: allowedResources.length }
       )
-      
-      const confirmText = resources.length === 1 ? this.$gettext('Enable') : this.$gettext('Enable (%{count})', { count: allowedResources.length })
+      const confirmText =
+        resources.length === 1
+          ? this.$gettext('Enable')
+          : this.$gettext('Enable (%{count})', { count: allowedResources.length })
 
       const modal = {
         variation: 'passive',
@@ -92,20 +94,27 @@ export default {
               field: 'disabled',
               value: false
             })
-            this.showMessage({
-              title: this.$gettext('Space was restored successfully')
-            })
           })
           .catch((error) => {
             console.error(error)
             this.showMessage({
-              title: this.$gettext('Failed to restore space'),
+              title: this.$gettext('Failed to restore space %{spaceName}', {
+                spaceName: space.name
+              }),
               status: 'danger'
             })
           })
-          requests.push(request)
+        requests.push(request)
       })
-      return Promise.all(requests)
+      return Promise.all(requests).then(() => {
+        this.showMessage({
+          title: this.$ngettext(
+            'Space was restored successfully',
+            'Spaces were restored successfully',
+            spaces.length
+          )
+        })
+      })
     }
   }
 }

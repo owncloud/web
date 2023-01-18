@@ -13,16 +13,16 @@ export default {
         {
           name: 'delete',
           icon: 'delete-bin',
-          label: ({resources}) => {
-            if(resources.length === 1) {
+          label: ({ resources }) => {
+            if (resources.length === 1) {
               return this.$gettext('Delete')
             }
-            const allowedCount = resources.filter(r => r.canBeDeleted({ user: this.user })).length
-            return this.$gettext('Delete (%{count})', { count: allowedCount})
+            const allowedCount = resources.filter((r) => r.canBeDeleted({ user: this.user })).length
+            return this.$gettext('Delete (%{count})', { count: allowedCount })
           },
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {
-            return resources.some(r => r.canBeDeleted({ user: this.user }))
+            return resources.some((r) => r.canBeDeleted({ user: this.user }))
           },
           componentType: 'button',
           class: 'oc-files-actions-delete-trigger'
@@ -42,13 +42,17 @@ export default {
     ...mapMutations('runtime/spaces', ['REMOVE_SPACE']),
 
     $_delete_trigger({ resources }) {
-      const allowedResources = resources.filter(r => r.canBeDeleted({ user: this.user }))
+      const allowedResources = resources.filter((r) => r.canBeDeleted({ user: this.user }))
       const message = this.$ngettext(
-        'Are you sure you want to delete this space?',
-        'Are you sure you want to delete these spaces?',
-        allowedResources.length
+        'Are you sure you want to delete the selected space?',
+        'Are you sure you want to delete %{count} selected spaces?',
+        allowedResources.length,
+        { count: allowedResources.length }
       )
-      const confirmText = resources.length === 1 ? this.$gettext('Delete') : this.$gettext('Delete (%{count})', { count: allowedResources.length })
+      const confirmText =
+        resources.length === 1
+          ? this.$gettext('Delete')
+          : this.$gettext('Delete (%{count})', { count: allowedResources.length })
       const modal = {
         variation: 'danger',
         icon: 'alarm-warning',
@@ -79,20 +83,27 @@ export default {
             this.hideModal()
             this.REMOVE_FILES([{ id: space.id }])
             this.REMOVE_SPACE({ id: space.id })
-            this.showMessage({
-              title: this.$gettext('Space was deleted successfully')
-            })
           })
           .catch((error) => {
             console.error(error)
             this.showMessage({
-              title: this.$gettext('Failed to delete space'),
+              title: this.$gettext('Failed to delete space %{spaceName}', {
+                spaceName: space.name
+              }),
               status: 'danger'
             })
           })
         requests.push(request)
       })
       return Promise.all(requests).then(() => {
+        this.showMessage({
+          title: this.$ngettext(
+            'Space was deleted successfully',
+            'Spaces were deleted successfully',
+            spaces.length
+          )
+        })
+
         if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
           eventBus.publish('app.admin-settings.list.load')
         }
