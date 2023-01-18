@@ -5,9 +5,9 @@
         v-if="hasHandler(indicator)"
         :id="indicator.id"
         :key="indicator.id"
-        v-oc-tooltip="indicator.label"
+        v-oc-tooltip="$gettext(indicator.label)"
         class="oc-status-indicators-indicator oc-background-primary-gradient oc-p-xs oc-ml-xs"
-        :aria-label="indicator.label"
+        :aria-label="$gettext(indicator.label)"
         :aria-describedby="getIndicatorDescriptionId(indicator)"
         appearance="raw"
         variation="inverse"
@@ -21,13 +21,13 @@
         v-else
         :id="indicator.id"
         :key="indicator.id"
-        v-oc-tooltip="indicator.label"
+        v-oc-tooltip="$gettext(indicator.label)"
         tabindex="-1"
         size="small"
         class="oc-status-indicators-indicator"
         :name="indicator.icon"
         :fill-type="indicator.fillType"
-        :accessible-label="indicator.label"
+        :accessible-label="$gettext(indicator.label)"
         :aria-describedby="getIndicatorDescriptionId(indicator)"
         :data-testid="indicator.id"
         :data-test-indicator-type="indicator.type"
@@ -37,7 +37,7 @@
         :id="getIndicatorDescriptionId(indicator)"
         :key="getIndicatorDescriptionId(indicator)"
         class="oc-invisible-sr"
-        v-text="indicator.accessibleDescription"
+        v-text="$gettext(indicator.accessibleDescription)"
       />
     </template>
   </div>

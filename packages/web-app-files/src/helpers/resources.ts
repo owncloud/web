@@ -1,7 +1,6 @@
 import orderBy from 'lodash-es/orderBy'
 import path, { basename, join } from 'path'
 import { DateTime } from 'luxon'
-import { getIndicators } from './statusIndicators'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import {
   LinkShareRoles,
@@ -37,10 +36,6 @@ export function buildWebDavFilesPath(userId, path) {
 
 export function buildWebDavFilesTrashPath(userId, path = '') {
   return '/' + `trash-bin/${userId}/${path}`.split('/').filter(Boolean).join('/')
-}
-
-export function attachIndicators(resource, sharesTree) {
-  return (resource.indicators = getIndicators(resource, sharesTree))
 }
 
 export function isResourceTxtFileAlmostEmpty(resource: Resource): boolean {

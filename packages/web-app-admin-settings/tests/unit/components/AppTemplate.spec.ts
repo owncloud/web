@@ -136,7 +136,6 @@ function getWrapper({ propsData = {} } = {}) {
         },
         mocks: {
           ...defaultComponentMocks({
-            gettext: false,
             currentRoute: mock<RouteLocation>({ query: { app: 'admin-settings' } })
           })
         }

@@ -3,7 +3,6 @@ import { dirname } from 'path'
 
 import { getParentPaths } from '../helpers/path'
 import { buildShare, buildCollaboratorShare } from '../helpers/resources'
-import { $gettext, $gettextInterpolate } from '../gettext'
 import { ResourceTransfer, TransferType } from '../helpers/resource'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { avatarUrl } from '../helpers/user'
@@ -20,6 +19,7 @@ import {
 } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 import { ClientService } from 'web-pkg/src/services'
+import { Language } from 'vue3-gettext'
 
 const allowSharePermissions = (getters) => {
   return get(getters, `capabilities.files_sharing.resharing`, true)
@@ -40,7 +40,8 @@ export default {
       context.commit('ADD_FILE_SELECTION', file)
     }
   },
-  copySelectedFiles(context, options: { space: SpaceResource; resources: Resource[] }) {
+  copySelectedFiles(context, options: { space: SpaceResource; resources: Resource[] } & Language) {
+    const { $gettext } = options
     context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
     context.dispatch(
@@ -52,7 +53,8 @@ export default {
       { root: true }
     )
   },
-  cutSelectedFiles(context, options: { space: SpaceResource; resources: Resource[] }) {
+  cutSelectedFiles(context, options: { space: SpaceResource; resources: Resource[] } & Language) {
+    const { $gettext } = options
     context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Cut)
     context.dispatch(
@@ -138,13 +140,21 @@ export default {
   },
   deleteFiles(
     context,
-    {
+    options: {
+      space: SpaceResource
+      files: Resource[]
+      clientService: ClientService
+      firstRun: boolean
+    } & Language
+  ) {
+    const {
+      $gettext,
+      interpolate: $gettextInterpolate,
       space,
       files,
       clientService,
       firstRun = true
-    }: { space: SpaceResource; files: Resource[]; clientService: ClientService; firstRun: boolean }
-  ) {
+    } = options
     const promises = []
     const removedFiles = []
     for (const file of files) {
@@ -158,6 +168,7 @@ export default {
           if (error.statusCode === 423) {
             if (firstRun) {
               return context.dispatch('deleteFiles', {
+                ...options,
                 space,
                 files: [file],
                 clientService,
@@ -208,7 +219,7 @@ export default {
   },
   async changeShare(
     { commit, dispatch, getters, rootGetters },
-    { client, share, permissions, expirationDate, role }
+    { $gettext, client, share, permissions, expirationDate, role }
   ) {
     if (!permissions && !role) {
       throw new Error('Nothing changed')
@@ -239,7 +250,7 @@ export default {
   },
   addShare(
     context,
-    { client, path, shareWith, shareType, permissions, role, expirationDate, storageId }
+    { $gettext, client, path, shareWith, shareType, permissions, role, expirationDate, storageId }
   ) {
     const isGroupShare = shareType === ShareTypes.group.value
     const options = {

@@ -135,13 +135,21 @@ export default defineComponent({
       }
 
       if (key === keycode('c') && ctrl) {
-        return this.copySelectedFiles({ space: this.space, resources: this.selectedFiles })
+        return this.copySelectedFiles({
+          ...this.$language,
+          space: this.space,
+          resources: this.selectedFiles
+        })
       }
       if (key === keycode('v') && ctrl) {
         return this.handlePasteAction()
       }
       if (key === keycode('x') && ctrl) {
-        return this.cutSelectedFiles({ space: this.space, resources: this.selectedFiles })
+        return this.cutSelectedFiles({
+          ...this.$language,
+          space: this.space,
+          resources: this.selectedFiles
+        })
       }
       if (key === keycode('down') && !shift) {
         return this.handleNavigateAction(event)

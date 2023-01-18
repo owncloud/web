@@ -77,14 +77,11 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useResourcesViewDefaults } from '../../composables'
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { Resource } from 'web-client'
-import {
-  useCapabilityShareJailEnabled,
-  useCapabilitySpacesEnabled,
-  useTranslations
-} from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { createLocationTrash } from '../../router'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'GenericTrash',
@@ -115,7 +112,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { $gettext } = useTranslations()
+    const { $gettext } = useGettext()
     const noContentMessage = computed(() => {
       return props.space.driveType === 'personal'
         ? $gettext('You have no deleted files')

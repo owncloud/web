@@ -3,7 +3,6 @@ import {
   pages,
   translations,
   supportedLanguages,
-  store,
   Vue
 } from './defaults'
 
@@ -41,12 +40,13 @@ import { configureCompat, createApp, h } from 'vue'
 import { compatConfig } from './compatConfig'
 import PortalVue, { createWormhole } from 'portal-vue'
 
+let store
 configureCompat(compatConfig)
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
   startSentry(runtimeConfiguration, Vue)
-  await announceStore({ vue: Vue, store, runtimeConfiguration })
+  store = await announceStore({ vue: Vue, runtimeConfiguration })
   await initializeApplications({
     runtimeConfiguration,
     configurationManager,
@@ -60,7 +60,6 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   announcePermissionManager({ vue: Vue, store })
   await announceClient(runtimeConfiguration)
   await announceAuthService({ vue: Vue, configurationManager, store, router })
-  announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
   announceDefaults({ store, router })
 }
@@ -75,6 +74,9 @@ export const renderSuccess = async (): Promise<void> => {
       return h(pages.success)
     }
   })
+
+  // language
+  announceTranslations({ vue: instance, availableLanguages: supportedLanguages, translations })
 
   // create wormhole
   instance.config.globalProperties.$wormhole = createWormhole()
@@ -209,15 +211,20 @@ export const renderFailure = async (err: Error): Promise<void> => {
   Vue.prototype.$store = store
 
   announceVersions({ store })
-  await announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem })
   console.error(err)
-  createApp({
+  const instance = createApp({
     store,
     render() {
       return h(pages.failure)
     }
-  }).mount('#owncloud')
+  })
+  await announceTranslations({
+    vue: instance,
+    availableLanguages: supportedLanguages,
+    translations
+  })
+  instance.mount('#owncloud')
 }
 ;(window as any).runtimeLoaded({
   bootstrap,

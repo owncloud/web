@@ -49,7 +49,6 @@
 import {
   useRouteParam,
   useStore,
-  useTranslations,
   useRouter,
   queryItemAsString,
   useCapabilitySpacesEnabled,
@@ -70,8 +69,9 @@ import {
 } from 'web-client/src/helpers'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { RawLocation } from 'vue-router'
+import { RouteLocationRaw } from 'vue-router'
 import { useLoadFileInfoById } from '../composables/fileInfo'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'ResolvePrivateLink',
@@ -79,7 +79,7 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const id = useRouteParam('fileId')
-    const { $gettext, $gettextInterpolate } = useTranslations()
+    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
     const hasSpaces = useCapabilitySpacesEnabled(store)
     const resource: Ref<Resource> = ref()
     const sharedParentResource: Ref<Resource> = ref()
@@ -142,7 +142,7 @@ export default defineComponent({
       const { params, query } = createFileRouteOptions(matchingSpace, { fileId, path })
       // FIXME: we should not hardcode the name here, but we should not depend on
       // createLocationSpaces('files-spaces-generic') in web-app-files either
-      const location: RawLocation = {
+      const location: RouteLocationRaw = {
         name: 'files-spaces-generic',
         params,
         query: {

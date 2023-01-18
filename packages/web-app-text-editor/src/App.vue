@@ -48,10 +48,11 @@ import { useTask } from 'vue-concurrency'
 import { computed, defineComponent, onMounted, onBeforeUnmount, ref, unref, Ref, watch } from 'vue'
 import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
-import { useAppDefaults, useStore, useTranslations } from 'web-pkg/src/composables'
+import { useAppDefaults, useStore } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { Resource } from 'web-client'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'TextEditor',
@@ -100,7 +101,7 @@ export default defineComponent({
     const isReadOnly = ref(true)
     const resource: Ref<Resource> = ref()
     const store = useStore()
-    const { $gettext, $gettextInterpolate } = useTranslations()
+    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
 
     const errorPopup = (error) => {
       store.dispatch('showMessage', {

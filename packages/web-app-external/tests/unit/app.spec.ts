@@ -145,7 +145,6 @@ function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ s
         stubs: componentStubs,
         mocks: {
           ...defaultComponentMocks({
-            gettext: false,
             currentRoute: mock<RouteLocation>({ query: { app: 'exampleApp' } })
           })
         }

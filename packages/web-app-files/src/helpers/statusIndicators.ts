@@ -1,8 +1,12 @@
 import { getParentPaths } from './path'
-import { $gettext } from '../gettext'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+
+// dummy to trick gettext string extraction into recognizing strings
+const $gettext = (str) => {
+  return str
+}
 
 const $shareTypes = (resource) => {
   if (typeof resource.shareTypes !== 'undefined') {
@@ -91,7 +95,7 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
   const indicators = [
     {
       id: `files-sharing-${resource.getDomSelector()}`,
-      accessibleDescription: shareUserIconDescribedBy(resource, sharesTree),
+      accessibleDescription: shareUserIconDescribedBy(resource),
       label: $gettext('Show invited people'),
       visible: isUserShare(resource, sharesTree, hasShareJail),
       icon: 'group',
@@ -103,7 +107,7 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
     },
     {
       id: `file-link-${resource.getDomSelector()}`,
-      accessibleDescription: shareLinkDescribedBy(resource, sharesTree),
+      accessibleDescription: shareLinkDescribedBy(resource),
       label: $gettext('Show links'),
       visible: isLinkShare(resource, sharesTree),
       icon: 'link',

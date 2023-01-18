@@ -25,10 +25,11 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
+import { useGettext } from 'vue3-gettext'
 import { createLocationSpaces } from 'web-app-files/src/router'
 import { Resource, SpaceResource } from 'web-client'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { useStore, useTranslations } from 'web-pkg/src/composables'
+import { useStore } from 'web-pkg/src/composables'
 
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
@@ -48,7 +49,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const { $gettext } = useTranslations()
+    const { $gettext } = useGettext()
 
     const getRoute = (resource) => {
       if (resource.type === 'space') {

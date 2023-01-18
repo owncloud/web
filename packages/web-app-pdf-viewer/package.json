@@ -5,7 +5,7 @@
   "description": "ownCloud web PDF viewer",
   "license": "AGPL-3.0",
   "peerDependencies": {
-    "vue-gettext": "2.1.12",
+    "vue3-gettext": "^2.3.3",
     "vuex": "4.1.0",
     "web-pkg": "npm:@ownclouders/web-pkg"
   }

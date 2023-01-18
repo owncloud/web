@@ -69,7 +69,6 @@ import {
   useRouteQuery,
   useRouter,
   useStore,
-  useTranslations,
   useUserContext
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
@@ -82,6 +81,7 @@ import {
 } from 'web-client/src/helpers'
 import isEmpty from 'lodash-es/isEmpty'
 import { useLoadTokenInfo } from '../composables/tokenInfo'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'ResolvePublicLink',
@@ -224,7 +224,7 @@ export default defineComponent({
       }
     })
 
-    const { $gettext } = useTranslations()
+    const { $gettext } = useGettext()
     const footerSlogan = computed(() => store.getters.configuration.currentTheme.general.slogan)
     const passwordFieldLabel = computed(() => {
       return $gettext('Enter password for public link')

@@ -152,11 +152,10 @@ export default {
 
     $_deleteResources_filesList_delete() {
       this.deleteFiles({
+        ...this.$language,
         space: this.space,
         files: this.$_deleteResources_resources,
-        clientService: this.$clientService,
-        $gettext: this.$gettext,
-        $gettextInterpolate: this.$gettextInterpolate
+        clientService: this.$clientService
       }).then(async () => {
         this.hideModal()
         this.toggleModalConfirmButton()

@@ -237,7 +237,7 @@ function getShallowWrapper({
   inFinalization = false
 } = {}) {
   const mocks = {
-    ...defaultComponentMocks({ gettext: false })
+    ...defaultComponentMocks()
   }
   const storeOptions = {
     ...defaultStoreMockOptions

@@ -136,10 +136,10 @@ import {
 } from 'web-pkg/src/helpers'
 import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
 import { extractDomSelector, SpaceResource } from 'web-client/src/helpers'
-import { useTranslations } from 'web-pkg/src/composables'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -159,7 +159,7 @@ export default defineComponent({
   },
   emits: ['toggleSelectSpace', 'toggleSelectAllSpaces', 'toggleUnSelectAllSpaces'],
   setup: function (props, { emit }) {
-    const { $gettext, $gettextInterpolate, $language } = useTranslations()
+    const { $gettext, interpolate: $gettextInterpolate, current: currentLanguage } = useGettext()
     const contextMenuButton = ref(undefined)
     const sortBy = ref('name')
     const sortDir = ref('asc')
@@ -321,25 +321,25 @@ export default defineComponent({
       return managerStr
     }
     const formatDate = (date) => {
-      return formatDateFromJSDate(new Date(date), $language.current)
+      return formatDateFromJSDate(new Date(date), currentLanguage)
     }
     const formatDateRelative = (date) => {
-      return formatRelativeDateFromJSDate(new Date(date), $language.current)
+      return formatRelativeDateFromJSDate(new Date(date), currentLanguage)
     }
     const getTotalQuota = (space: SpaceResource) => {
-      return formatFileSize(space.spaceQuota.total, $language.current)
+      return formatFileSize(space.spaceQuota.total, currentLanguage)
     }
     const getUsedQuota = (space: SpaceResource) => {
       if (space.spaceQuota.used === undefined) {
         return '-'
       }
-      return formatFileSize(space.spaceQuota.used, $language.current)
+      return formatFileSize(space.spaceQuota.used, currentLanguage)
     }
     const getRemainingQuota = (space: SpaceResource) => {
       if (space.spaceQuota.remaining === undefined) {
         return '-'
       }
-      return formatFileSize(space.spaceQuota.remaining, $language.current)
+      return formatFileSize(space.spaceQuota.remaining, currentLanguage)
     }
     const getMemberCount = (space: SpaceResource) => {
       return (

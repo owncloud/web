@@ -228,5 +228,10 @@ function getWrapper(props = {}) {
   })
 }
 function getMountedWrapper() {
-  return mount(OcSearchBar, { props: { label: 'abc' } })
+  return mount(OcSearchBar, {
+    props: { label: 'abc' },
+    global: {
+      plugins: [...defaultPlugins()]
+    }
+  })
 }

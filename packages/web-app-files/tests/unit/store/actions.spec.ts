@@ -1,12 +1,12 @@
 import actions from '../../../src/store/actions'
 import { spaceRoleManager, ShareTypes, Share } from 'web-client/src/helpers/share'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
+import { Language } from 'vue3-gettext'
 
 jest.mock('../../../src/helpers/resources')
-jest.mock('../../../src/gettext')
 
 const stateMock = {
   commit: jest.fn(),
@@ -14,6 +14,8 @@ const stateMock = {
   getters: {},
   rootGetters: {}
 }
+// we need to define $gettext explicitly to make it enumerable on the mock
+const languageMock = mock<Language>({ $gettext: jest.fn() })
 
 describe('vuex store actions', () => {
   describe('changeShare', () => {
@@ -21,6 +23,7 @@ describe('vuex store actions', () => {
       const clientMock = mockDeep<OwnCloudSdk>()
       clientMock.shares.updateShare.mockResolvedValue({})
       await actions.changeShare(stateMock, {
+        ...languageMock,
         client: clientMock,
         share: mockDeep<Share>({ shareType: ShareTypes.user.value }),
         permissions: spaceRoleManager.bitmask(false),
@@ -34,6 +37,7 @@ describe('vuex store actions', () => {
       const clientMock = mockDeep<OwnCloudSdk>()
       clientMock.shares.updateShare.mockRejectedValue(new Error())
       await actions.changeShare(stateMock, {
+        ...languageMock,
         client: clientMock,
         share: mockDeep<Share>({ shareType: ShareTypes.user.value }),
         permissions: spaceRoleManager.bitmask(false),
@@ -54,6 +58,7 @@ describe('vuex store actions', () => {
       const clientMock = mockDeep<OwnCloudSdk>()
       clientMock.shares[data.shareMethod].mockResolvedValue({})
       await actions.addShare(stateMock, {
+        ...languageMock,
         client: clientMock,
         path: '/someFile.txt',
         shareWith: 'user',
@@ -71,6 +76,7 @@ describe('vuex store actions', () => {
       const clientMock = mockDeep<OwnCloudSdk>()
       clientMock.shares.shareFileWithUser.mockRejectedValue(new Error())
       await actions.addShare(stateMock, {
+        ...languageMock,
         client: clientMock,
         path: '/someFile.txt',
         shareWith: 'user',

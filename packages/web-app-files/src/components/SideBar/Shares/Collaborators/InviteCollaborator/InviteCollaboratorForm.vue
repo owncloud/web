@@ -322,10 +322,10 @@ export default defineComponent({
 
             const addMethod = this.resourceIsSpace ? this.addSpaceMember : this.addShare
             addMethod({
+              ...this.$language,
               client: this.$client,
               graphClient: this.graphClient,
               path,
-              $gettext: this.$gettext,
               shareWith: collaborator.value.shareWith,
               displayName: collaborator.label,
               shareType: collaborator.value.shareType,

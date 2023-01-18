@@ -1,5 +1,4 @@
 import Vue, { configureCompat, h } from 'vue'
-import { config } from '@vue/test-utils'
 import fetchMock from 'jest-fetch-mock'
 
 import { compatConfig } from '../../../packages/web-runtime/src/compatConfig'
@@ -13,13 +12,6 @@ window.IntersectionObserver = jest.fn(() => ({
   unobserve: jest.fn()
 }))
 fetchMock.enableMocks()
-
-config.mocks = {
-  $language: {
-    current: 'en'
-  },
-  language: 'en'
-}
 
 Vue.component('RouterLink', {
   name: 'RouterLink',

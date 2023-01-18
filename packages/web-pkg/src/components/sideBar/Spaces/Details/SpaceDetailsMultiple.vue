@@ -36,7 +36,7 @@
 import { formatFileSize } from 'web-pkg/src/helpers'
 import { computed, defineComponent, PropType } from 'vue'
 import { SpaceResource } from 'web-client/src'
-import { useTranslations } from 'web-pkg/src'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'SpaceDetailsMultiple',
@@ -47,13 +47,18 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext, $ngettext, $gettextInterpolate, $language } = useTranslations()
+    const {
+      $gettext,
+      $ngettext,
+      interpolate: $gettextInterpolate,
+      current: currentLanguage
+    } = useGettext()
     const totalSelectedSpaceQuotaTotal = computed(() => {
       let total = 0
       props.selectedSpaces.forEach((space) => {
         total += space.spaceQuota.total
       })
-      return formatFileSize(total, $language.current)
+      return formatFileSize(total, currentLanguage)
     })
     const totalSelectedSpaceQuotaRemaining = computed(() => {
       let remaining = 0
@@ -63,7 +68,7 @@ export default defineComponent({
         }
         remaining += space.spaceQuota.remaining
       })
-      return formatFileSize(remaining, $language.current)
+      return formatFileSize(remaining, currentLanguage)
     })
     const totalSelectedSpaceQuotaUsed = computed(() => {
       let used = 0
@@ -73,7 +78,7 @@ export default defineComponent({
         }
         used += space.spaceQuota.used
       })
-      return formatFileSize(used, $language.current)
+      return formatFileSize(used, currentLanguage)
     })
     const totalEnabledSpaces = computed(() => {
       return props.selectedSpaces.filter((s) => !s.disabled).length
