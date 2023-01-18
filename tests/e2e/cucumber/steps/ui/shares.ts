@@ -1,6 +1,28 @@
-import { DataTable, When } from '@cucumber/cucumber'
+import { DataTable, Then, When } from '@cucumber/cucumber'
+import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
+
+const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
+  return stepTable.hashes().reduce((acc, stepRow) => {
+    const { resource, recipient, type, role } = stepRow
+
+    if (!acc[resource]) {
+      acc[resource] = []
+    }
+
+    acc[resource].push({
+      collaborator:
+        type === 'group'
+          ? usersEnvironment.getGroup({ key: recipient })
+          : usersEnvironment.getUser({ key: recipient }),
+      role,
+      type
+    })
+
+    return acc
+  }, {})
+}
 
 When(
   /^"([^"]*)" shares the following (resource|resources) using the (sidebar panel|quick action)$/,
@@ -13,28 +35,12 @@ When(
   ) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
-    const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { resource, recipient, type, role } = stepRow
+    const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
 
-      if (!acc[resource]) {
-        acc[resource] = { recipients: [], role: '', type: '' }
-      }
-
-      acc[resource].recipients.push(
-        type === 'group'
-          ? this.usersEnvironment.getGroup({ key: recipient })
-          : this.usersEnvironment.getUser({ key: recipient })
-      )
-      acc[resource].role = role
-
-      return acc
-    }, {})
-
-    for (const folder of Object.keys(shareInfo)) {
+    for (const resource of Object.keys(shareInfo)) {
       await shareObject.create({
-        folder,
-        recipients: shareInfo[folder].recipients,
-        role: shareInfo[folder].role,
+        resource,
+        recipients: shareInfo[resource],
         via: actionType === 'quick action' ? 'QUICK_ACTION' : 'SIDEBAR_PANEL'
       })
     }
@@ -46,28 +52,12 @@ When(
   async function (this: World, stepUser: string, _: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
-    const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { recipient, type, resource, role } = stepRow
+    const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
 
-      if (!acc[resource]) {
-        acc[resource] = { recipients: [], role: '', type: '' }
-      }
-
-      acc[resource].recipients.push(
-        type === 'group'
-          ? this.usersEnvironment.getGroup({ key: recipient })
-          : this.usersEnvironment.getUser({ key: recipient })
-      )
-      acc[resource].role = role
-
-      return acc
-    }, {})
-
-    for (const folder of Object.keys(shareInfo)) {
-      await shareObject.createReshare({
-        folder,
-        recipients: shareInfo[folder].recipients,
-        role: shareInfo[folder].role
+    for (const resource of Object.keys(shareInfo)) {
+      await shareObject.create({
+        resource,
+        recipients: shareInfo[resource]
       })
     }
   }
@@ -80,7 +70,7 @@ When(
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const info of stepTable.hashes()) {
-      await shareObject.accept({ name: info.name })
+      await shareObject.accept({ resource: info.name })
     }
   }
 )
@@ -90,24 +80,12 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
-    const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { user, resource, role } = stepRow
+    const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
 
-      if (!acc[resource]) {
-        acc[resource] = { users: [], role: '' }
-      }
-
-      acc[resource].users.push(this.usersEnvironment.getUser({ key: user }))
-      acc[resource].role = role
-
-      return acc
-    }, {})
-
-    for (const folder of Object.keys(shareInfo)) {
+    for (const resource of Object.keys(shareInfo)) {
       await shareObject.changeShareeRole({
-        folder,
-        users: shareInfo[folder].users,
-        role: shareInfo[folder].role
+        resource,
+        recipients: shareInfo[resource]
       })
     }
   }
@@ -118,18 +96,43 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
-    const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { user, resource } = stepRow
+    const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
 
-      acc[resource] = []
+    for (const resource of Object.keys(shareInfo)) {
+      await shareObject.removeSharee({ resource, recipients: shareInfo[resource] })
+    }
+  }
+)
 
-      acc[resource].push(this.usersEnvironment.getUser({ key: user }))
+Then(
+  '{string} should see the following recipient(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
 
-      return acc
-    }, {})
+    for (const resource of Object.keys(shareInfo)) {
+      await shareObject.checkSharee({ resource, recipients: shareInfo[resource] })
+    }
+  }
+)
 
-    for (const folder of Object.keys(shareInfo)) {
-      await shareObject.removeSharee({ folder, users: shareInfo[folder] })
+Then(
+  /"([^"]*)" should( not | )be able to reshare the following resource(s)?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    condition: string,
+    _: string,
+    stepTable: DataTable
+  ) {
+    const ableToShare = condition.trim() !== 'not'
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+
+    for (const { resource } of stepTable.hashes()) {
+      const hasSharePermission = await shareObject.hasPermissionToShare(resource)
+      expect(hasSharePermission).toBe(ableToShare)
     }
   }
 )

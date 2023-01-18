@@ -86,11 +86,12 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-    for (const info of stepTable.hashes()) {
-      await spacesObject.addMembers({
-        recipients: [this.usersEnvironment.getUser({ key: info.user })],
-        role: info.role
-      })
+    for (const { user, role } of stepTable.hashes()) {
+      const member = {
+        collaborator: this.usersEnvironment.getUser({ key: user }),
+        role
+      }
+      await spacesObject.addMembers({ users: [member] })
     }
   }
 )
@@ -100,10 +101,12 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-    for (const info of stepTable.hashes()) {
-      await spacesObject.removeAccessToMember({
-        users: [this.usersEnvironment.getUser({ key: info.user })]
-      })
+    for (const { user, role } of stepTable.hashes()) {
+      const member = {
+        collaborator: this.usersEnvironment.getUser({ key: user }),
+        role
+      }
+      await spacesObject.removeAccessToMember({ users: [member] })
     }
   }
 )
@@ -154,11 +157,12 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-    for (const info of stepTable.hashes()) {
-      await spacesObject.changeRoles({
-        users: [this.usersEnvironment.getUser({ key: info.user })],
-        role: info.role
-      })
+    for (const { user, role } of stepTable.hashes()) {
+      const member = {
+        collaborator: this.usersEnvironment.getUser({ key: user }),
+        role
+      }
+      await spacesObject.changeRoles({ users: [member] })
     }
   }
 )
@@ -169,7 +173,11 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     await spacesObject.removeAccessToMember({
-      users: [this.usersEnvironment.getUser({ key: stepUser })],
+      users: [
+        {
+          collaborator: this.usersEnvironment.getUser({ key: stepUser })
+        }
+      ],
       removeOwnSpaceAccess: true
     })
   }
