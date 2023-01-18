@@ -22,13 +22,13 @@ Feature: reshare
     And "Alice" shares the following resource using API
       | resource         | recipient | type | role   |
       | folder_to_shared | Brian     | user | editor |
+    And "Brian" accepts the following share using API
+      | name             |
+      | folder_to_shared |
 
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
-    And "Brian" accepts the following share
-      | name             |
-      | folder_to_shared |
     And "Brian" reshares the following resource
       | resource         | recipient | type  | role   |
       | folder_to_shared | sales     | group | viewer |
