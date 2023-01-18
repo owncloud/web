@@ -478,12 +478,16 @@ export default defineComponent({
     }
   }
   &-squashed {
+    .oc-table-header-cell-manager,
+    .oc-table-data-cell-manager,
     .oc-table-header-cell-totalQuota,
     .oc-table-data-cell-totalQuota,
     .oc-table-header-cell-usedQuota,
     .oc-table-data-cell-usedQuota,
     .oc-table-header-cell-remainingQuota,
-    .oc-table-data-cell-remainingQuota {
+    .oc-table-data-cell-remainingQuota,
+    .oc-table-header-cell-mdate,
+    .oc-table-data-cell-mdate {
       display: none;
     }
   }
