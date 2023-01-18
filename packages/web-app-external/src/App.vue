@@ -75,7 +75,7 @@ export default defineComponent({
     ...mapGetters(['capabilities']),
 
     pageTitle() {
-      const translated = this.$gettext('"%{appName}" app page') || ''
+      const translated = this.$gettext('"%{appName}" app page')
       return this.$gettextInterpolate(translated, {
         appName: this.applicationName
       })
