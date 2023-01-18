@@ -7,7 +7,7 @@
         :action="action"
         :items="selectedSpaces"
         appearance="outline"
-      	class="oc-mr-s"
+        class="oc-mr-s"
       />
     </oc-list>
   </div>
@@ -20,10 +20,11 @@ import Disable from 'web-pkg/src/mixins/spaces/disable'
 import Restore from 'web-pkg/src/mixins/spaces/restore'
 import { computed, defineComponent, getCurrentInstance, PropType } from 'vue'
 import { SpaceResource } from 'web-client'
+
 export default defineComponent({
   name: 'ActionsPanel',
   components: { ActionMenuItem },
-  mixins: [Delete, Disable, Restore ],
+  mixins: [Delete, Disable, Restore],
   props: {
     selectedSpaces: {
       type: Array as PropType<Array<SpaceResource>>,

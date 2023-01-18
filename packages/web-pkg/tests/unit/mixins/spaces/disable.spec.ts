@@ -1,5 +1,5 @@
 import disable from 'web-pkg/src/mixins/spaces/disable'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import {
   createStore,
   defaultComponentMocks,
@@ -69,14 +69,18 @@ describe('disable', () => {
     it('should trigger the disable modal window', async () => {
       const { wrapper } = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_disable_trigger({ resources: [{ id: 1 }] })
+      await wrapper.vm.$_disable_trigger({
+        resources: [mock<SpaceResource>({ id: 1, canDisable: () => true })]
+      })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
     })
     it('should not trigger the disable modal window without any resource', async () => {
       const { wrapper } = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_disable_trigger({ resources: [] })
+      await wrapper.vm.$_disable_trigger({
+        resources: [mock<SpaceResource>({ id: 1, canDisable: () => false })]
+      })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(0)
     })
@@ -88,7 +92,9 @@ describe('disable', () => {
       graphMock.drives.deleteDrive.mockResolvedValue(mockAxiosResolve())
       const { wrapper } = getWrapper(graphMock)
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
-      await wrapper.vm.$_disable_disableSpace({ id: 1 })
+      await wrapper.vm.$_disable_disableSpaces([
+        mock<SpaceResource>({ id: 1, canDisable: () => true })
+      ])
 
       expect(hideModalStub).toHaveBeenCalledTimes(1)
     })
@@ -99,7 +105,9 @@ describe('disable', () => {
       graphMock.drives.deleteDrive.mockRejectedValue(new Error())
       const { wrapper } = getWrapper(graphMock)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.$_disable_disableSpace({ id: 1 })
+      await wrapper.vm.$_disable_disableSpaces([
+        mock<SpaceResource>({ id: 1, canDisable: () => true })
+      ])
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
     })

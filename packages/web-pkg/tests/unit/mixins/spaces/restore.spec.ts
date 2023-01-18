@@ -1,5 +1,5 @@
 import restore from 'web-pkg/src/mixins/spaces/restore'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Graph } from 'web-client'
 import { clientService } from 'web-pkg'
@@ -70,14 +70,18 @@ describe('restore', () => {
     it('should trigger the restore modal window', async () => {
       const { wrapper } = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_restore_trigger({ resources: [{ id: 1 }] })
+      await wrapper.vm.$_restore_trigger({
+        resources: [mock<SpaceResource>({ id: 1, canRestore: () => true })]
+      })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
     })
     it('should not trigger the restore modal window without any resource', async () => {
       const { wrapper } = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_restore_trigger({ resources: [] })
+      await wrapper.vm.$_restore_trigger({
+        resources: [mock<SpaceResource>({ id: 1, canRestore: () => false })]
+      })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(0)
     })
@@ -89,7 +93,9 @@ describe('restore', () => {
       graphMock.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
       const { wrapper } = getWrapper(graphMock)
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
-      await wrapper.vm.$_restore_restoreSpace({ id: 1 }, 'renamed space')
+      await wrapper.vm.$_restore_restoreSpaces([
+        mock<SpaceResource>({ id: 1, canRestore: () => true })
+      ])
 
       expect(hideModalStub).toHaveBeenCalledTimes(1)
     })
@@ -100,7 +106,9 @@ describe('restore', () => {
       graphMock.drives.updateDrive.mockRejectedValue(new Error())
       const { wrapper } = getWrapper(graphMock)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.$_restore_restoreSpace({ id: 1 })
+      await wrapper.vm.$_restore_restoreSpaces([
+        mock<SpaceResource>({ id: 1, canRestore: () => true })
+      ])
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
     })

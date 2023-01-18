@@ -1,5 +1,5 @@
 import Delete from 'web-pkg/src/mixins/spaces/delete'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import {
   createStore,
   defaultComponentMocks,
@@ -70,14 +70,18 @@ describe('delete', () => {
     it('should trigger the delete modal window', async () => {
       const { wrapper } = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_delete_trigger({ resources: [{ id: 1 }] })
+      await wrapper.vm.$_delete_trigger({
+        resources: [mock<SpaceResource>({ id: 1, canBeDeleted: () => true })]
+      })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
     })
-    it('should not trigger the delete modal window without any resource', async () => {
+    it('should not trigger the delete modal window without any resource to delete', async () => {
       const { wrapper } = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_delete_trigger({ resources: [] })
+      await wrapper.vm.$_delete_trigger({
+        resources: [mock<SpaceResource>({ id: 1, canBeDeleted: () => false })]
+      })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(0)
     })
@@ -90,7 +94,9 @@ describe('delete', () => {
       const { wrapper } = getWrapper(graphMock)
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.$_delete_deleteSpace(1)
+      await wrapper.vm.$_delete_deleteSpaces([
+        mock<SpaceResource>({ id: 1, canBeDeleted: () => true })
+      ])
 
       expect(hideModalStub).toHaveBeenCalledTimes(1)
       expect(showMessageStub).toHaveBeenCalledTimes(1)
@@ -102,7 +108,9 @@ describe('delete', () => {
       graphMock.drives.deleteDrive.mockRejectedValue(new Error())
       const { wrapper } = getWrapper(graphMock)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.$_delete_deleteSpace(1)
+      await wrapper.vm.$_delete_deleteSpaces([
+        mock<SpaceResource>({ id: 1, canBeDeleted: () => true })
+      ])
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
     })

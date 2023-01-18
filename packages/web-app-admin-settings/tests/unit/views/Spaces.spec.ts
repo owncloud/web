@@ -110,7 +110,8 @@ function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
           AppLoadingSpinner: true,
           NoContentMessage: true,
           SpacesList: true,
-          OcBreadcrumb: true
+          OcBreadcrumb: true,
+          BatchActions: true
         }
       }
     })

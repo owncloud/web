@@ -45,6 +45,9 @@ export default {
     },
     $_restore_trigger({ resources }) {
       const allowedResources = this.filterResourcesToRestore(resources)
+      if (!allowedResources.length) {
+        return
+      }
       const message = this.$ngettext(
         'If you enable the selected space, it can be accessed again.',
         'If you disable the %{count} selected spaces, they can be accessed again.',
@@ -97,6 +100,7 @@ export default {
               field: 'disabled',
               value: false
             })
+            return true
           })
           .catch((error) => {
             console.error(error)
@@ -109,14 +113,16 @@ export default {
           })
         requests.push(request)
       })
-      return Promise.all(requests).then(() => {
-        this.showMessage({
-          title: this.$ngettext(
-            'Space was restored successfully',
-            'Spaces were restored successfully',
-            spaces.length
-          )
-        })
+      return Promise.all(requests).then((result: boolean[]) => {
+        if (result.filter(Boolean).length) {
+          this.showMessage({
+            title: this.$ngettext(
+              'Space was restored successfully',
+              'Spaces were restored successfully',
+              result.filter(Boolean).length
+            )
+          })
+        }
       })
     }
   }

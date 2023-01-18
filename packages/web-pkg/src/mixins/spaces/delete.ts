@@ -46,6 +46,9 @@ export default {
     },
     $_delete_trigger({ resources }) {
       const allowedResources = this.filterResourcesToDelete(resources)
+      if (!allowedResources.length) {
+        return
+      }
       const message = this.$ngettext(
         'Are you sure you want to delete the selected space?',
         'Are you sure you want to delete %{count} selected spaces?',
@@ -86,6 +89,7 @@ export default {
             this.hideModal()
             this.REMOVE_FILES([{ id: space.id }])
             this.REMOVE_SPACE({ id: space.id })
+            return true
           })
           .catch((error) => {
             console.error(error)
@@ -98,14 +102,16 @@ export default {
           })
         requests.push(request)
       })
-      return Promise.all(requests).then(() => {
-        this.showMessage({
-          title: this.$ngettext(
-            'Space was deleted successfully',
-            'Spaces were deleted successfully',
-            spaces.length
-          )
-        })
+      return Promise.all(requests).then((result: boolean[]) => {
+        if (result.filter(Boolean).length) {
+          this.showMessage({
+            title: this.$ngettext(
+              'Space was deleted successfully',
+              'Spaces were deleted successfully',
+              result.filter(Boolean).length
+            )
+          })
+        }
 
         if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
           eventBus.publish('app.admin-settings.list.load')

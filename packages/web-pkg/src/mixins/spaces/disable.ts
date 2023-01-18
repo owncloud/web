@@ -45,6 +45,9 @@ export default {
     },
     $_disable_trigger({ resources }) {
       const allowedResources = this.filterResourcesToDisable(resources)
+      if (!allowedResources.length) {
+        return
+      }
       const message = this.$ngettext(
         'If you disable the selected space, it can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.',
         'If you disable the %{count} selected spaces, they can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.',
@@ -89,6 +92,7 @@ export default {
               field: 'disabled',
               value: true
             })
+            return true
           })
           .catch((error) => {
             console.error(error)
@@ -101,14 +105,17 @@ export default {
           })
         requests.push(request)
       })
-      return Promise.all(requests).then(() => {
-        this.showMessage({
-          title: this.$ngettext(
-            'Space was disabled successfully',
-            'Spaces were disabled successfully',
-            spaces.length
-          )
-        })
+      return Promise.all(requests).then((result: boolean[]) => {
+        if (result.filter(Boolean).length) {
+          this.showMessage({
+            title: this.$ngettext(
+              'Space was disabled successfully',
+              'Spaces were disabled successfully',
+              result.filter(Boolean).length
+            )
+          })
+        }
+
         if (currentRoute.name === 'files-spaces-generic') {
           return this.$router.push({ name: 'files-spaces-projects' })
         }
