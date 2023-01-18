@@ -152,7 +152,7 @@ export default defineComponent({
         {
           app: 'SpaceNoSelection',
           icon: 'layout-grid',
-          title: $gettext('Space details'),
+          title: $gettext('Details'),
           component: SpaceNoSelection,
           default: true,
           enabled: unref(selectedSpaces).length === 0
@@ -160,7 +160,7 @@ export default defineComponent({
         {
           app: 'SpaceDetails',
           icon: 'layout-grid',
-          title: $gettext('Space details'),
+          title: $gettext('Details'),
           component: SpaceDetails,
           default: true,
           enabled: unref(selectedSpaces).length === 1,
@@ -172,7 +172,7 @@ export default defineComponent({
         {
           app: 'SpaceDetailsMultiple',
           icon: 'layout-grid',
-          title: $gettext('Space details'),
+          title: $gettext('Details'),
           component: SpaceDetailsMultiple,
           default: true,
           enabled: unref(selectedSpaces).length > 1,
@@ -183,7 +183,7 @@ export default defineComponent({
         {
           app: 'SpaceMembers',
           icon: 'group',
-          title: $gettext('Space members'),
+          title: $gettext('Members'),
           component: MembersPanel,
           default: false,
           enabled: unref(selectedSpaces).length === 1,
@@ -194,7 +194,7 @@ export default defineComponent({
         {
           app: 'SpaceActions',
           icon: 'slideshow-3',
-          title: $gettext('Space actions'),
+          title: $gettext('Actions'),
           component: ActionsPanel,
           default: false,
           enabled: unref(selectedSpaces).length === 1,
