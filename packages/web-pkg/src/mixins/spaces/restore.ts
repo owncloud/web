@@ -13,16 +13,16 @@ export default {
         {
           name: 'restore',
           icon: 'play-circle',
-          label: () => {
-            return this.$gettext('Enable')
+          label: ({ resources }) => {
+            if(resources.length === 1) {
+              return this.$gettext('Enable')
+            }
+            const allowedCount = resources.filter(r => r.canRestore({ user: this.user })).length
+            return this.$gettext('Enable (%{count})', { count: allowedCount})
           },
           handler: this.$_restore_trigger,
           isEnabled: ({ resources }) => {
-            if (resources.length !== 1) {
-              return false
-            }
-
-            return resources[0].canRestore({ user: this.user })
+            return resources.some(r => r.canRestore({ user: this.user }))
           },
           componentType: 'button',
           class: 'oc-files-actions-restore-trigger'
@@ -41,64 +41,69 @@ export default {
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     $_restore_trigger({ resources }) {
-      if (resources.length !== 1) {
-        return
-      }
+      const allowedResources = resources.filter(r => r.canRestore({ user: this.user }))
 
-      const message = this.$gettextInterpolate(
-        this.$gettext('If you enable the space "%{spaceName}", it can be accessed again.'),
-        { spaceName: resources[0].name }
+      const message = this.$ngettext(
+        'If you enable this space, it can be accessed again.',
+        'If you disable these spaces, they can be accessed again.',
+        allowedResources.length
       )
+
       const modal = {
         variation: 'passive',
-        title: this.$gettext('Enable Space?'),
+        title: this.$ngettext('Enable Space?', 'Enable Spaces?', allowedResources.length),
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Enable'),
         icon: 'alarm-warning',
         message,
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_restore_restoreSpace(resources[0])
+        onConfirm: () => this.$_restore_restoreSpaces(allowedResources)
       }
 
       this.createModal(modal)
     },
 
-    $_restore_restoreSpace(space: SpaceResource) {
+    $_restore_restoreSpaces(spaces: SpaceResource[]) {
+      const requests = []
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
-      return graphClient.drives
-        .updateDrive(
-          space.id.toString(),
-          { name: space.name },
-          {
-            headers: {
-              Restore: true
+      spaces.forEach((space) => {
+        const request = graphClient.drives
+          .updateDrive(
+            space.id.toString(),
+            { name: space.name },
+            {
+              headers: {
+                Restore: true
+              }
             }
-          }
-        )
-        .then((updatedSpace) => {
-          this.hideModal()
-          if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
-            space.disabled = false
-            space.spaceQuota = updatedSpace.data.quota
-          }
-          this.UPDATE_SPACE_FIELD({
-            id: space.id,
-            field: 'disabled',
-            value: false
+          )
+          .then((updatedSpace) => {
+            this.hideModal()
+            if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
+              space.disabled = false
+              space.spaceQuota = updatedSpace.data.quota
+            }
+            this.UPDATE_SPACE_FIELD({
+              id: space.id,
+              field: 'disabled',
+              value: false
+            })
+            this.showMessage({
+              title: this.$gettext('Space was restored successfully')
+            })
           })
-          this.showMessage({
-            title: this.$gettext('Space was restored successfully')
+          .catch((error) => {
+            console.error(error)
+            this.showMessage({
+              title: this.$gettext('Failed to restore space'),
+              status: 'danger'
+            })
           })
-        })
-        .catch((error) => {
-          console.error(error)
-          this.showMessage({
-            title: this.$gettext('Failed to restore space'),
-            status: 'danger'
-          })
-        })
+          requests.push(request)
+      })
+      return Promise.all(requests)
     }
   }
 }

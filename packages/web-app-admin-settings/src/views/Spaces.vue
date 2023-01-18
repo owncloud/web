@@ -18,7 +18,7 @@
       </template>
       <template #topbarActions>
         <div class="admin-settings-app-bar-actions oc-mt-xs">
-          <div v-if="selectedSpaces.length > 1" class="oc-flex oc-flex-middle">
+          <div v-if="selectedSpaces.length >= 1" class="oc-flex oc-flex-middle">
             <oc-button
               id="files-clear-selection"
               v-oc-tooltip="$gettext('Clear selection')"
@@ -28,6 +28,7 @@
             >
               <oc-icon name="close" />
             </oc-button>
+            <batch-actions class="oc-ml-s" :selected-spaces="selectedSpaces" />
           </div>
         </div>
       </template>
@@ -78,6 +79,7 @@ import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelec
 import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
+import BatchActions from '../components/Spaces/BatchActions.vue'
 import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import { useGettext } from 'vue3-gettext'
@@ -89,7 +91,8 @@ export default defineComponent({
     AppTemplate,
     NoContentMessage,
     ContextActions,
-    SpaceInfo
+    SpaceInfo,
+    BatchActions
   },
   setup() {
     const store = useStore()
