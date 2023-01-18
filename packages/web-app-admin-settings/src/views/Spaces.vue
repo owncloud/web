@@ -45,6 +45,7 @@
         <div v-else>
           <SpacesList
             :spaces="spaces"
+            :class="{ 'spaces-table-squashed': sideBarOpen }"
             :selected-spaces="selectedSpaces"
             :header-position="listHeaderPosition"
             @toggleSelectSpace="toggleSelectSpace"

@@ -475,8 +475,20 @@ export default defineComponent({
   .oc-table-data-cell-usedQuota {
     display: none;
 
-    @media only screen and (min-width: 1700px) {
+    @media only screen and (min-width: 1600px) {
       display: table-cell;
+    }
+  }
+  &-squashed {
+    .oc-table-header-cell-totalQuota,
+    .oc-table-data-cell-totalQuota,
+    .oc-table-header-cell-availableQuota,
+    .oc-table-data-cell-availableQuota,
+    .oc-table-header-cell-usedQuota,
+    .oc-table-data-cell-usedQuota,
+    .oc-table-header-cell-remainingQuota,
+    .oc-table-data-cell-remainingQuota {
+      display: none;
     }
   }
 }
