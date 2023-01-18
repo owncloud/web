@@ -17,12 +17,12 @@ export default {
             if (resources.length === 1) {
               return this.$gettext('Enable')
             }
-            const allowedCount = resources.filter((r) => r.canRestore({ user: this.user })).length
+            const allowedCount = this.filterResourcesToRestore(resources).length
             return this.$gettext('Enable (%{count})', { count: allowedCount })
           },
           handler: this.$_restore_trigger,
           isEnabled: ({ resources }) => {
-            return resources.some((r) => r.canRestore({ user: this.user }))
+            return !!this.filterResourcesToRestore(resources).length
           },
           componentType: 'button',
           class: 'oc-files-actions-restore-trigger'
@@ -40,8 +40,11 @@ export default {
     ]),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
+    filterResourcesToRestore(resources): SpaceResource[] {
+      return resources.filter((r) => r.canRestore({ user: this.user }))
+    },
     $_restore_trigger({ resources }) {
-      const allowedResources = resources.filter((r) => r.canRestore({ user: this.user }))
+      const allowedResources = this.filterResourcesToRestore(resources)
       const message = this.$ngettext(
         'If you enable the selected space, it can be accessed again.',
         'If you disable the %{count} selected spaces, they can be accessed again.',

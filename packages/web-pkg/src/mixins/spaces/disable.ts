@@ -17,12 +17,12 @@ export default {
             if (resources.length === 1) {
               return this.$gettext('Disable')
             }
-            const allowedCount = resources.filter((r) => r.canDisable({ user: this.user })).length
+            const allowedCount = this.filterResourcesToDisable(resources).length
             return this.$gettext('Disable (%{count})', { count: allowedCount })
           },
           handler: this.$_disable_trigger,
           isEnabled: ({ resources }) => {
-            return resources.some((r) => r.canDisable({ user: this.user }))
+            return !!this.filterResourcesToDisable(resources).length
           },
           componentType: 'button',
           class: 'oc-files-actions-disable-trigger'
@@ -40,8 +40,11 @@ export default {
     ]),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
+    filterResourcesToDisable(resources): SpaceResource[] {
+      return resources.filter((r) => r.canDisable({ user: this.user }))
+    },
     $_disable_trigger({ resources }) {
-      const allowedResources = resources.filter((r) => r.canDisable({ user: this.user }))
+      const allowedResources = this.filterResourcesToDisable(resources)
       const message = this.$ngettext(
         'If you disable the selected space, it can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.',
         'If you disable the %{count} selected spaces, they can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.',

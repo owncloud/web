@@ -17,12 +17,12 @@ export default {
             if (resources.length === 1) {
               return this.$gettext('Delete')
             }
-            const allowedCount = resources.filter((r) => r.canBeDeleted({ user: this.user })).length
+            const allowedCount = this.filterResourcesToDelete(resources).length
             return this.$gettext('Delete (%{count})', { count: allowedCount })
           },
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {
-            return resources.some((r) => r.canBeDeleted({ user: this.user }))
+            return !!this.filterResourcesToDelete(resources).length
           },
           componentType: 'button',
           class: 'oc-files-actions-delete-trigger'
@@ -41,8 +41,11 @@ export default {
     ...mapMutations('Files', ['REMOVE_FILES']),
     ...mapMutations('runtime/spaces', ['REMOVE_SPACE']),
 
+    filterResourcesToDelete(resources) {
+      return resources.filter((r) => r.canBeDeleted({ user: this.user }))
+    },
     $_delete_trigger({ resources }) {
-      const allowedResources = resources.filter((r) => r.canBeDeleted({ user: this.user }))
+      const allowedResources = this.filterResourcesToDelete(resources)
       const message = this.$ngettext(
         'Are you sure you want to delete the selected space?',
         'Are you sure you want to delete %{count} selected spaces?',
