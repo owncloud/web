@@ -6,14 +6,10 @@ import { OwnCloudSdk } from 'web-client/src/types'
 import { ref } from 'vue'
 
 export interface ComponentMocksOptions {
-  gettext?: boolean
   currentRoute?: RouteLocation
 }
 
-export const defaultComponentMocks = ({
-  gettext = true,
-  currentRoute = undefined
-}: ComponentMocksOptions = {}) => {
+export const defaultComponentMocks = ({ currentRoute = undefined }: ComponentMocksOptions = {}) => {
   const $router = mockDeep<Router>({ ...(currentRoute && { currentRoute: ref(currentRoute) }) })
   $router.resolve.mockImplementation(
     (to: RouteLocationRaw) => ({ href: (to as any).name, location: { path: '' } } as any)
@@ -26,12 +22,6 @@ export const defaultComponentMocks = ({
     $route,
     $clientService: mockDeep<ClientService>(),
     $client: mockDeep<OwnCloudSdk>(),
-    $uppyService: mockDeep<UppyService>(),
-    ...(gettext && {
-      $gettextInterpolate: jest.fn((text) => text),
-      $ngettext: jest.fn((text) => text),
-      $pgettext: jest.fn((text) => text),
-      $gettext: jest.fn((text) => text)
-    })
+    $uppyService: mockDeep<UppyService>()
   }
 }

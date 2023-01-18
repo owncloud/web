@@ -80,22 +80,23 @@ describe('rename', () => {
       {
         currentName: 'currentName',
         newName: 'file1',
-        message: 'The name "%{name}" is already taken'
+        message: 'The name "file1" is already taken'
       },
       {
         currentName: 'currentName',
         newName: 'newname',
         parentResources: [{ name: 'newname', path: '/newname' }],
-        message: 'The name "%{name}" is already taken'
+        message: 'The name "newname" is already taken'
       }
     ])('should detect name errors and display error messages accordingly', (inputData) => {
-      const { mocks, wrapper } = getWrapper()
+      const { wrapper } = getWrapper()
+      const errorModalSpy = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
       wrapper.vm.$_rename_checkNewName(
         { name: inputData.currentName, path: `/${inputData.currentName}` },
         inputData.newName,
         inputData.parentResources
       )
-      expect(mocks.$gettext).toHaveBeenCalledWith(inputData.message)
+      expect(errorModalSpy).toHaveBeenCalledWith(inputData.message)
     })
   })
 

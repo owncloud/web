@@ -127,7 +127,6 @@ function getShallowWrapper(
   }
 ) {
   const mocks = defaultComponentMocks({
-    gettext: false,
     currentRoute: mock<RouteLocation>({ name: 'files-trash-generic' })
   })
   mocks.$route.meta.title = 'ExampleTitle'
