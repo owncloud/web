@@ -172,7 +172,10 @@ export default defineComponent({
           title: $gettext('Space details'),
           component: SpaceDetailsMultiple,
           default: true,
-          enabled: unref(selectedSpaces).length > 1
+          enabled: unref(selectedSpaces).length > 1,
+          componentAttrs: {
+            selectedSpaces: unref(selectedSpaces)
+          }
         },
         {
           app: 'SpaceMembers',
