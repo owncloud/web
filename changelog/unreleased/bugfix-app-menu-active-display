@@ -1,0 +1,5 @@
+Bugfix: Application menu active display on hover
+
+The text color of the active application menu item on hover as been fixed.
+
+https://github.com/owncloud/web/pull/8265
