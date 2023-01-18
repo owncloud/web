@@ -3,7 +3,6 @@ import { World } from '../environment'
 import { config } from '../../config'
 import { api } from '../../support'
 import fs from 'fs'
-import path from 'path'
 
 Given(
   '{string} creates following users',
@@ -160,11 +159,9 @@ Given(
   '{string} uploads following local file(s) in personal space using API',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
-    const lastIndex = config.assets.lastIndexOf('/')
-    const requiredBasePathToLocalfile = config.assets.slice(0, lastIndex + 1)
     for (const info of stepTable.hashes()) {
-      const pathToLocalFile = path.join(requiredBasePathToLocalfile, info.localFile)
-      const content = fs.readFileSync(pathToLocalFile)
+      const fileInfo = this.filesEnvironment.getFile({ name: info.localFile.split('/').pop() })
+      const content = fs.readFileSync(fileInfo.path)
       await api.dav.uploadFileInPersonalSpace({
         user,
         pathToFile: info.to,
