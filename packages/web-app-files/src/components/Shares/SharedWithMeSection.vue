@@ -91,7 +91,7 @@
 
 <script lang="ts">
 import ResourceTable from '../FilesList/ResourceTable.vue'
-import { computed, defineComponent, unref } from 'vue'
+import { computed, defineComponent, unref, ref } from 'vue'
 import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -193,7 +193,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const hasShareJail = useCapabilityShareJailEnabled()
+    const hasShareJail = ref(false)
     const resourceTargetRouteCallback = ({
       path,
       fileId,

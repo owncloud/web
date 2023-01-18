@@ -25,6 +25,7 @@
           :are-paths-displayed="true"
           :resources="paginatedResources"
           :header-position="fileListHeaderY"
+          :target-route-callback="resourceTargetRouteCallback"
           :sort-by="sortBy"
           :sort-dir="sortDir"
           @file-click="$_fileActions_triggerDefaultAction"
@@ -79,11 +80,15 @@ import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent } from 'vue'
+import { defineComponent, unref  } from 'vue'
 import { Resource } from 'web-client'
-import { useCapabilityProjectSpacesEnabled, useStore } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useCapabilityProjectSpacesEnabled, useStore } from 'web-pkg/src/composables'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink'
+import { createLocationSpaces } from 'web-app-files/src/router'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { Location } from 'vue-router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -104,6 +109,7 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
+    const hasShareJail = useCapabilityShareJailEnabled()
     const getSpace = (resource: Resource): SpaceResource => {
       const storageId = resource.storageId
       // FIXME: Once we have the shareId in the OCS response, we can check for that and early return the share
@@ -119,7 +125,33 @@ export default defineComponent({
       })
     }
 
+    const resourceTargetRouteCallback = ({
+      path,
+      fileId,
+      resource
+    }: CreateTargetRouteOptions): Location => {
+      if (unref(hasShareJail)) {
+        const space = buildShareSpaceResource({
+          shareId: resource.id,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
+        })
+        return createLocationSpaces(
+          'files-spaces-generic',
+          createFileRouteOptions(space, { path, fileId })
+        )
+      }
+      const personalSpace = store.getters['runtime/spaces/spaces'].find(
+        (space) => space.driveType === 'personal'
+      )
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(personalSpace, { path, fileId })
+      )
+    }
+
     return {
+      resourceTargetRouteCallback,
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       getSpace,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled()

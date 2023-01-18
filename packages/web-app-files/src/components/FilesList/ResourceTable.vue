@@ -776,10 +776,10 @@ export default defineComponent({
         space = buildShareSpaceResource({
           shareId: resource.shareId,
           shareName: resource.name,
-          serverUrl: configurationManager.serverUrl
+          serverUrl: configurationManager.serverUrl,
+          webDavPath: resource.webDavPath
         })
       }
-
       /**
        * Triggered when a default action is triggered on a file
        * @property {object} resource resource for which the event is triggered

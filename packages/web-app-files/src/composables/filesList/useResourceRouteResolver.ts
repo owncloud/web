@@ -29,7 +29,8 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
       buildShareSpaceResource({
         shareId: resource.shareId,
         shareName: resource.name,
-        serverUrl: configurationManager.serverUrl
+        serverUrl: configurationManager.serverUrl,
+        webDavPath: resource.webDavPath
       })
     )
   }
