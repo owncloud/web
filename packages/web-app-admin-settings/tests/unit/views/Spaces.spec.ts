@@ -11,10 +11,19 @@ import {
 } from 'web-test-helpers'
 import Spaces from '../../../src/views/Spaces.vue'
 
+window.ResizeObserver =
+  window.ResizeObserver ||
+  jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn()
+  }))
+
 const selectors = {
   loadingSpinnerStub: 'app-loading-spinner-stub',
   spacesListStub: 'spaces-list-stub',
-  noContentMessageStub: 'no-content-message-stub'
+  noContentMessageStub: 'no-content-message-stub',
+  batchActionsStub: 'batch-actions-stub'
 }
 
 jest.mock('web-pkg/src/composables/appDefaults')
@@ -87,6 +96,29 @@ describe('Spaces view', () => {
         wrapper.vm.unselectAllSpaces()
         expect(wrapper.vm.selectedSpaces.length).toBe(0)
       })
+    })
+  })
+  describe('batch actions', () => {
+    it('do not display when no space selected', async () => {
+      const { wrapper } = getWrapper()
+      await wrapper.vm.loadResourcesTask.last
+      expect(wrapper.find(selectors.batchActionsStub).exists()).toBeFalsy()
+    })
+    it('display when one space selected', async () => {
+      const spaces = [{ name: 'Some Space' }]
+      const { wrapper } = getWrapper({ spaces })
+      await wrapper.vm.loadResourcesTask.last
+      wrapper.vm.toggleSelectSpace(spaces[0])
+      await wrapper.vm.$nextTick()
+      expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
+    })
+    it('display when more than one spaces selected', async () => {
+      const spaces = [{ name: 'Some Space' }, { name: 'Some other Space' }]
+      const { wrapper } = getWrapper({ spaces })
+      await wrapper.vm.loadResourcesTask.last
+      wrapper.vm.toggleSelectAllSpaces()
+      await wrapper.vm.$nextTick()
+      expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
     })
   })
 })

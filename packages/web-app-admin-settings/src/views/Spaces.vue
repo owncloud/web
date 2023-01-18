@@ -17,7 +17,7 @@
         />
       </template>
       <template #topbarActions>
-        <div class="admin-settings-app-bar-actions oc-mt-xs">
+        <div ref="appBarActionsRef" class="admin-settings-app-bar-actions oc-mt-xs">
           <div v-if="selectedSpaces.length >= 1" class="oc-flex oc-flex-middle">
             <oc-button
               id="files-clear-selection"
@@ -28,7 +28,11 @@
             >
               <oc-icon name="close" />
             </oc-button>
-            <batch-actions class="oc-ml-s" :selected-spaces="selectedSpaces" />
+            <batch-actions
+              class="oc-ml-s"
+              :selected-spaces="selectedSpaces"
+              :limited-screen-space="limitedScreenSpace"
+            />
           </div>
         </div>
       </template>
@@ -100,6 +104,7 @@ export default defineComponent({
     const spaces = ref([])
     const { graphClient } = useGraphClient()
     const { $gettext } = useGettext()
+    const { sideBarOpen, sideBarActivePanel } = useSideBar()
 
     const loadResourcesEventToken = ref(null)
     const template = ref(null)
@@ -208,6 +213,15 @@ export default defineComponent({
       ].filter((p) => p.enabled)
     })
 
+    const limitedScreenSpace = ref(false)
+    const appBarActionsRef = ref()
+    const onResize = () => {
+      limitedScreenSpace.value = unref(sideBarOpen)
+        ? window.innerWidth <= 1280
+        : window.innerWidth <= 1000
+    }
+    const resizeObserver = ref(new ResizeObserver(onResize))
+
     onMounted(async () => {
       await loadResourcesTask.perform()
       loadResourcesEventToken.value = eventBus.subscribe('app.admin-settings.list.load', () => {
@@ -216,14 +230,17 @@ export default defineComponent({
 
       calculateListHeaderPosition()
       window.addEventListener('resize', calculateListHeaderPosition)
+      unref(resizeObserver).observe(unref(appBarActionsRef))
     })
 
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
+      unref(resizeObserver).unobserve(unref(appBarActionsRef))
     })
 
     return {
-      ...useSideBar(),
+      sideBarOpen,
+      sideBarActivePanel,
       spaces,
       loadResourcesTask,
       graphClient,
@@ -235,7 +252,10 @@ export default defineComponent({
       template,
       toggleSelectAllSpaces,
       toggleSelectSpace,
-      unselectAllSpaces
+      unselectAllSpaces,
+      limitedScreenSpace,
+      appBarActionsRef,
+      onResize
     }
   }
 })

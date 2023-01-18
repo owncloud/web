@@ -1,6 +1,9 @@
 <template>
   <div>
-    <oc-list id="oc-spaces-appbar-batch-actions">
+    <oc-list
+      id="oc-spaces-appbar-batch-actions"
+      :class="{ 'oc-spaces-appbar-batch-actions-squashed': limitedScreenSpace }"
+    >
       <action-menu-item
         v-for="(action, index) in actions"
         :key="`action-${index}`"
@@ -8,6 +11,7 @@
         :items="selectedSpaces"
         appearance="outline"
         class="oc-mr-s"
+        :show-tooltip="limitedScreenSpace"
       />
     </oc-list>
   </div>
@@ -29,6 +33,11 @@ export default defineComponent({
     selectedSpaces: {
       type: Array as PropType<Array<SpaceResource>>,
       required: true
+    },
+    limitedScreenSpace: {
+      type: Boolean,
+      default: false,
+      required: false
     }
   },
   setup(props) {
@@ -61,12 +70,8 @@ export default defineComponent({
     align-items: center;
     display: flex;
   }
-
-  .oc-files-context-action-label {
-    display: none;
-    @media only screen and (min-width: 1000px) {
-      display: inherit;
-    }
-  }
+}
+.oc-spaces-appbar-batch-actions-squashed .oc-files-context-action-label {
+  display: none;
 }
 </style>

@@ -17,6 +17,11 @@ const Component = {
   mixins
 }
 
+const selectors = {
+  actionMenuItemStub: 'action-menu-item-stub',
+  batchActionsSquashed: '.oc-spaces-appbar-batch-actions-squashed'
+}
+
 describe('BatchActions', () => {
   describe('menu sections', () => {
     it('do not render when no action enabled', () => {
@@ -30,9 +35,22 @@ describe('BatchActions', () => {
       expect(wrapper.findAll('action-menu-item-stub').length).toBe(enabledActions.length)
     })
   })
+  describe('limited screen space', () => {
+    it('adds the squashed-class when limited screen space is available', () => {
+      const { wrapper } = getWrapper({ props: { limitedScreenSpace: true } })
+      expect(wrapper.find(selectors.batchActionsSquashed).exists()).toBeTruthy()
+    })
+    it('correctly tells the action item component to show tooltips when limited screen space is available', () => {
+      const enabledActions = ['$_disable_items']
+      const { wrapper } = getWrapper({ enabledActions, props: { limitedScreenSpace: true } })
+      expect(
+        wrapper.findComponent<any>(selectors.actionMenuItemStub).props().showTooltip
+      ).toBeTruthy()
+    })
+  })
 })
 
-function getWrapper({ enabledActions = [] } = {}) {
+function getWrapper({ enabledActions = [], props = {} } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
   const mocks = {
@@ -44,7 +62,8 @@ function getWrapper({ enabledActions = [] } = {}) {
     mocks,
     wrapper: mount(Component, {
       props: {
-        items: [mock<Resource>()]
+        items: [mock<Resource>()],
+        ...props
       },
       global: {
         mocks,
