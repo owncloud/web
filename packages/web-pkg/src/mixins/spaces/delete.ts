@@ -1,5 +1,6 @@
 import { unref } from 'vue'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { SpaceResource } from 'web-client/src'
 import { clientService, eventBus } from 'web-pkg/src/services'
 
 export default {
@@ -12,16 +13,16 @@ export default {
         {
           name: 'delete',
           icon: 'delete-bin',
-          label: () => {
-            return this.$gettext('Delete')
+          label: ({resources}) => {
+            if(resources.length === 1) {
+              return this.$gettext('Delete')
+            }
+            const allowedCount = resources.filter(r => r.canBeDeleted({ user: this.user })).length
+            return this.$gettext('Delete (%{count})', { count: allowedCount})
           },
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {
-            if (resources.length !== 1) {
-              return false
-            }
-
-            return resources[0].canBeDeleted({ user: this.user })
+            return resources.some(r => r.canBeDeleted({ user: this.user }))
           },
           componentType: 'button',
           class: 'oc-files-actions-delete-trigger'
@@ -41,52 +42,61 @@ export default {
     ...mapMutations('runtime/spaces', ['REMOVE_SPACE']),
 
     $_delete_trigger({ resources }) {
-      if (resources.length !== 1) {
-        return
-      }
-
+      const allowedResources = resources.filter(r => r.canBeDeleted({ user: this.user }))
+      const message = this.$ngettext(
+        'Are you sure you want to delete this space?',
+        'Are you sure you want to delete these spaces?',
+        allowedResources.length
+      )
+      const confirmText = resources.length === 1 ? this.$gettext('Delete') : this.$gettext('Delete (%{count})', { count: allowedResources.length })
       const modal = {
         variation: 'danger',
         icon: 'alarm-warning',
-        title: this.$gettext('Delete space') + ' ' + resources[0].name,
+        title: this.$ngettext('Delete Space?', 'Delete Spaces?', allowedResources.length),
         cancelText: this.$gettext('Cancel'),
-        confirmText: this.$gettext('Delete'),
-        message: this.$gettext('Are you sure you want to delete this space?'),
+        confirmText,
+        message: message,
         hasInput: false,
         onCancel: this.hideModal,
-        onConfirm: () => this.$_delete_deleteSpace(resources[0])
+        onConfirm: () => this.$_delete_deleteSpaces(allowedResources)
       }
 
       this.createModal(modal)
     },
 
-    $_delete_deleteSpace(space) {
+    $_delete_deleteSpaces(spaces: SpaceResource[]) {
+      const requests = []
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
-      return graphClient.drives
-        .deleteDrive(space.id, '', {
-          headers: {
-            Purge: 'T'
-          }
-        })
-        .then(() => {
-          this.hideModal()
-          this.REMOVE_FILES([{ id: space.id }])
-          this.REMOVE_SPACE({ id: space.id })
-          if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
-            eventBus.publish('app.admin-settings.list.load')
-          }
-          this.showMessage({
-            title: this.$gettext('Space was deleted successfully')
+      spaces.forEach((space) => {
+        const request = graphClient.drives
+          .deleteDrive(space.id.toString(), '', {
+            headers: {
+              Purge: 'T'
+            }
           })
-        })
-        .catch((error) => {
-          console.error(error)
-          this.showMessage({
-            title: this.$gettext('Failed to delete space'),
-            status: 'danger'
+          .then(() => {
+            this.hideModal()
+            this.REMOVE_FILES([{ id: space.id }])
+            this.REMOVE_SPACE({ id: space.id })
+            this.showMessage({
+              title: this.$gettext('Space was deleted successfully')
+            })
           })
-        })
+          .catch((error) => {
+            console.error(error)
+            this.showMessage({
+              title: this.$gettext('Failed to delete space'),
+              status: 'danger'
+            })
+          })
+        requests.push(request)
+      })
+      return Promise.all(requests).then(() => {
+        if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
+          eventBus.publish('app.admin-settings.list.load')
+        }
+      })
     }
   }
 }

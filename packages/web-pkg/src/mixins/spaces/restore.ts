@@ -48,12 +48,14 @@ export default {
         'If you disable these spaces, they can be accessed again.',
         allowedResources.length
       )
+      
+      const confirmText = resources.length === 1 ? this.$gettext('Enable') : this.$gettext('Enable (%{count})', { count: allowedResources.length })
 
       const modal = {
         variation: 'passive',
         title: this.$ngettext('Enable Space?', 'Enable Spaces?', allowedResources.length),
         cancelText: this.$gettext('Cancel'),
-        confirmText: this.$gettext('Enable'),
+        confirmText,
         icon: 'alarm-warning',
         message,
         hasInput: false,

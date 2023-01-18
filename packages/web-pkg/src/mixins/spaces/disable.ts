@@ -47,13 +47,13 @@ export default {
         'If you disable these spaces, they can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.',
         allowedResources.length
       )
-      
+      const confirmText = resources.length === 1 ? this.$gettext('Disable') : this.$gettext('Disable (%{count})', { count: allowedResources.length })
       const modal = {
         variation: 'danger',
         icon: 'alarm-warning',
         title: this.$ngettext('Disable Space?', 'Disable Spaces?', allowedResources.length),
         cancelText: this.$gettext('Cancel'),
-        confirmText: this.$gettext('Disable'),
+        confirmText,
         message,
         hasInput: false,
         onCancel: this.hideModal,
