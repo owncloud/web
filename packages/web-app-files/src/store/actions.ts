@@ -140,20 +140,21 @@ export default {
   },
   deleteFiles(
     context,
-    {
-      $gettext,
-      interpolate: $gettextInterpolate,
-      space,
-      files,
-      clientService,
-      firstRun = true
-    }: {
+    options: {
       space: SpaceResource
       files: Resource[]
       clientService: ClientService
       firstRun: boolean
     } & Language
   ) {
+    const {
+      $gettext,
+      interpolate: $gettextInterpolate,
+      space,
+      files,
+      clientService,
+      firstRun = true
+    } = options
     const promises = []
     const removedFiles = []
     for (const file of files) {
@@ -167,6 +168,7 @@ export default {
           if (error.statusCode === 423) {
             if (firstRun) {
               return context.dispatch('deleteFiles', {
+                ...options,
                 space,
                 files: [file],
                 clientService,
