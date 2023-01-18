@@ -469,8 +469,6 @@ export default defineComponent({
   }
   .oc-table-header-cell-totalQuota,
   .oc-table-data-cell-totalQuota,
-  .oc-table-header-cell-availableQuota,
-  .oc-table-data-cell-availableQuota,
   .oc-table-header-cell-usedQuota,
   .oc-table-data-cell-usedQuota {
     display: none;
@@ -482,8 +480,6 @@ export default defineComponent({
   &-squashed {
     .oc-table-header-cell-totalQuota,
     .oc-table-data-cell-totalQuota,
-    .oc-table-header-cell-availableQuota,
-    .oc-table-data-cell-availableQuota,
     .oc-table-header-cell-usedQuota,
     .oc-table-data-cell-usedQuota,
     .oc-table-header-cell-remainingQuota,
