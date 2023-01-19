@@ -78,7 +78,7 @@ import GroupsList from '../components/Groups/GroupsList.vue'
 import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import DeleteGroupModal from '../components/Groups/DeleteGroupModal.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { defineComponent, ref, unref } from 'vue'
+import { defineComponent, ref, unref, onBeforeUnmount, onMounted } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions } from 'vuex'
@@ -98,9 +98,12 @@ export default defineComponent({
   },
   setup() {
     const groups = ref([])
+    const loadResourcesEventToken = ref()
+    const template = ref()
+    const listHeaderPosition = ref(0)
     const { graphClient } = useGraphClient()
 
-    const loadResourcesTask = useTask(function* (signal, ref) {
+    const loadResourcesTask = useTask(function* (signal) {
       const response = yield unref(graphClient).groups.listGroups('displayName')
       groups.value = response.data.value || []
       groups.value.forEach((group) => {
@@ -108,16 +111,34 @@ export default defineComponent({
       })
     })
 
+    const calculateListHeaderPosition = () => {
+      listHeaderPosition.value = unref(template)?.$refs?.appBar?.getBoundingClientRect()?.height
+    }
+
+    onMounted(async () => {
+      await loadResourcesTask.perform()
+      loadResourcesEventToken.value = eventBus.subscribe('app.admin-settings.list.load', () => {
+        loadResourcesTask.perform()
+      })
+      calculateListHeaderPosition()
+      window.addEventListener('resize', calculateListHeaderPosition)
+    })
+
+    onBeforeUnmount(() => {
+      eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
+    })
+
     return {
       ...useSideBar(),
       groups,
+      template,
       loadResourcesTask,
-      graphClient
+      graphClient,
+      listHeaderPosition
     }
   },
   data: function () {
     return {
-      listHeaderPosition: 0,
       selectedGroups: [],
       createGroupModalOpen: false,
       deleteGroupModalOpen: false
@@ -169,28 +190,9 @@ export default defineComponent({
     }
   },
 
-  async mounted() {
-    await this.loadResourcesTask.perform(this)
-
-    const loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
-      this.loadResourcesTask.perform(this)
-    })
-
-    this.calculateListHeaderPosition()
-
-    window.addEventListener('resize', this.calculateListHeaderPosition)
-
-    this.$on('beforeUnmount', () => {
-      eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
-    })
-  },
-
   methods: {
     ...mapActions(['showMessage']),
 
-    calculateListHeaderPosition() {
-      this.listHeaderPosition = this.$refs?.template?.$refs?.appBar?.getBoundingClientRect()?.height
-    },
     toggleSelectAllGroups() {
       if (this.allGroupsSelected) {
         return (this.selectedGroups = [])

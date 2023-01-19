@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
 import { debounce } from 'lodash-es'
 
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
@@ -124,7 +124,16 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent, PropType, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  PropType,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  unref
+} from 'vue'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { useRoute } from 'web-pkg/src/composables'
@@ -187,6 +196,10 @@ export default defineComponent({
   },
 
   setup(props) {
+    const instance = getCurrentInstance().proxy as any
+    const store = useStore()
+    const loadResourcesEventToken = ref()
+
     const resourceTargetRouteCallback = ({ path, fileId }: CreateTargetRouteOptions): Location => {
       const { params, query } = createFileRouteOptions(props.space, { path, fileId })
       if (isPublicSpaceResource(props.space)) {
@@ -279,11 +292,53 @@ export default defineComponent({
       )
     })
 
+    const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
+    const performLoaderTask = async (
+      sameRoute: boolean,
+      path?: string,
+      fileId?: string | number
+    ) => {
+      if (resourcesViewDefaults.loadResourcesTask.isRunning) {
+        return
+      }
+
+      const options: FolderLoaderOptions = { loadShares: !isPublicSpaceResource(props.space) }
+      await resourcesViewDefaults.loadResourcesTask.perform(
+        props.space,
+        path || props.item,
+        fileId || props.itemId,
+        options
+      )
+
+      resourcesViewDefaults.scrollToResourceFromRoute([
+        store.getters['Files/currentFolder'],
+        ...unref(resourcesViewDefaults.paginatedResources)
+      ])
+      resourcesViewDefaults.refreshFileListHeaderPosition()
+      instance.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
+    }
+
+    onMounted(() => {
+      performLoaderTask(false)
+      loadResourcesEventToken.value = eventBus.subscribe(
+        'app.files.list.load',
+        (path?: string, fileId?: string | number) => {
+          performLoaderTask(true, path, fileId)
+        }
+      )
+    })
+
+    onBeforeUnmount(() => {
+      visibilityObserver.disconnect()
+      eventBus.unsubscribe('app.files.list.load', unref(loadResourcesEventToken))
+    })
+
     return {
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
+      ...resourcesViewDefaults,
       resourceTargetRouteCallback,
       breadcrumbs,
-      hasSpaceHeader
+      hasSpaceHeader,
+      performLoaderTask
     }
   },
 
@@ -328,23 +383,6 @@ export default defineComponent({
     }
   },
 
-  mounted() {
-    this.performLoaderTask(false)
-    const loadResourcesEventToken = eventBus.subscribe(
-      'app.files.list.load',
-      (path?: string, fileId?: string | number) => {
-        this.performLoaderTask(true, path, fileId)
-      }
-    )
-    this.$on('beforeUnmount', () =>
-      eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
-    )
-  },
-
-  beforeUnmount() {
-    visibilityObserver.disconnect()
-  },
-
   methods: {
     ...mapActions('Files', ['loadPreview']),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
@@ -353,23 +391,6 @@ export default defineComponent({
       'REMOVE_FILES_FROM_SEARCHED',
       'REMOVE_FILE_SELECTION'
     ]),
-
-    async performLoaderTask(sameRoute: boolean, path?: string, fileId?: string | number) {
-      if (this.loadResourcesTask.isRunning) {
-        return
-      }
-
-      const options: FolderLoaderOptions = { loadShares: !isPublicSpaceResource(this.space) }
-      await this.loadResourcesTask.perform(
-        this.space,
-        path || this.item,
-        fileId || this.itemId,
-        options
-      )
-      this.scrollToResourceFromRoute([this.currentFolder, ...this.paginatedResources])
-      this.refreshFileListHeaderPosition()
-      this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
-    },
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]

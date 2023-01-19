@@ -91,8 +91,9 @@ export default defineComponent({
   mounted() {
     this.$_ocAccordion_init()
     if (this.mode === 'click') {
-      this.$on('expand', (id) => this.$_ocAccordion_expandItem(id))
-      this.$on('collapse', (id) => this.$_ocAccordion_collapseItem(id))
+      // TODO I have no idea how to solve this, the events come from oc-accordion-item which is not directly referenced here
+      // this.$on('expand', (id) => this.$_ocAccordion_expandItem(id))
+      // this.$on('collapse', (id) => this.$_ocAccordion_collapseItem(id))
     }
   },
 

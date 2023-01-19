@@ -5,39 +5,35 @@
   </main>
 </template>
 <script lang="ts">
-import { defineComponent, watch } from 'vue'
+import { defineComponent, onBeforeUnmount, watch, ref, unref } from 'vue'
 import { useRoute, useStore } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 
 export default defineComponent({
   setup() {
     const store = useStore<any>()
+    const dragareaEnabled = ref(false)
     watch(useRoute(), () => {
       store.dispatch('Files/resetFileSelection')
     })
-  },
-  data: () => ({
-    dragareaEnabled: false
-  }),
-  created() {
-    const dragOver = eventBus.subscribe('drag-over', this.onDragOver)
-    const dragOut = eventBus.subscribe('drag-out', this.hideDropzone)
-    const drop = eventBus.subscribe('drop', this.hideDropzone)
 
-    this.$on('beforeUnmount', () => {
-      eventBus.unsubscribe('drag-over', dragOver)
-      eventBus.unsubscribe('drag-out', dragOut)
-      eventBus.unsubscribe('drop', drop)
-    })
-  },
-
-  methods: {
-    hideDropzone() {
-      this.dragareaEnabled = false
-    },
-    onDragOver(event) {
-      this.dragareaEnabled = (event.dataTransfer.types || []).some((e) => e === 'Files')
+    const hideDropzone = () => {
+      dragareaEnabled.value = false
     }
+    const onDragOver = (event) => {
+      dragareaEnabled.value = (event.dataTransfer.types || []).some((e) => e === 'Files')
+    }
+
+    const dragOver = eventBus.subscribe('drag-over', onDragOver)
+    const dragOut = eventBus.subscribe('drag-out', hideDropzone)
+    const drop = eventBus.subscribe('drop', hideDropzone)
+
+    onBeforeUnmount(() => {
+      eventBus.unsubscribe('drag-over', unref(dragOver))
+      eventBus.unsubscribe('drag-out', unref(dragOut))
+      eventBus.unsubscribe('drop', unref(drop))
+    })
+    return { dragareaEnabled }
   }
 })
 </script>

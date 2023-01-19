@@ -35,55 +35,114 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
 import { createLocationPublic } from '../router'
 
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
-import { defineComponent, getCurrentInstance, onMounted, unref } from 'vue'
+import { defineComponent, getCurrentInstance, onMounted, onBeforeUnmount, ref, unref } from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import * as uuid from 'uuid'
-import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
+import {
+  useClientService,
+  usePublicLinkPassword,
+  usePublicLinkToken,
+  useStore
+} from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
+import { useAuthService } from 'web-pkg/src/composables/authContext/useAuthService'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
     ResourceUpload
   },
   setup() {
-    const instance = getCurrentInstance().proxy
+    const instance = getCurrentInstance().proxy as any
     const uppyService = useService<UppyService>('$uppyService')
     const store = useStore()
+    const router = useRouter()
+    const authService = useAuthService()
+    const { owncloudSdk } = useClientService()
+    const publicToken = usePublicLinkToken({ store })
+    const publicLinkPassword = usePublicLinkPassword({ store })
+
+    const filesSelectedSub = ref()
+    const dragOver = ref()
+    const dragOut = ref()
+    const drop = ref()
+    const dragareaEnabled = ref(false)
+    const loading = ref(true)
+    const errorMessage = ref(null)
+
+    const hideDropzone = () => {
+      dragareaEnabled.value = false
+    }
+    const onDragOver = (event) => {
+      dragareaEnabled.value = (event.dataTransfer.types || []).some((e) => e === 'Files')
+    }
+
+    const resolvePublicLink = () => {
+      loading.value = true
+      owncloudSdk.publicFiles
+        .list(unref(publicToken), unref(publicLinkPassword), DavProperties.PublicLink, '0')
+        .then((files) => {
+          // Redirect to files list if the link doesn't have role "uploader"
+          const sharePermissions = parseInt(files[0].getProperty(DavProperty.PublicLinkPermission))
+          if (linkRoleUploaderFolder.bitmask(false) !== sharePermissions) {
+            router.replace(
+              createLocationPublic('files-public-link', {
+                params: { driveAliasAndItem: `public/${unref(publicToken)}` }
+              })
+            )
+            return
+          }
+          // TODO: There is not this.share?!
+          // this.share = files[0]
+        })
+        .catch((error) => {
+          // likely missing password, redirect to public link password prompt
+          if (error.statusCode === 401) {
+            return authService.handleAuthError(unref(router.currentRoute))
+          }
+          console.error(error)
+          errorMessage.value = error
+        })
+        .finally(() => {
+          loading.value = false
+        })
+    }
 
     onMounted(() => {
-      const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
-
+      dragOver.value = eventBus.subscribe('drag-over', onDragOver)
+      dragOut.value = eventBus.subscribe('drag-out', hideDropzone)
+      drop.value = eventBus.subscribe('drop', hideDropzone)
+      filesSelectedSub.value = uppyService.subscribe('filesSelected', instance.onFilesSelected) // FIXME
       uppyService.useDropTarget({
         targetSelector: '#files-drop-container',
         uppyService
       })
+      resolvePublicLink()
+    })
 
-      instance.$on('beforeUnmount', () => {
-        uppyService.unsubscribe('filesSelected', filesSelectedSub)
-        uppyService.removeDropTarget()
-      })
+    onBeforeUnmount(() => {
+      eventBus.unsubscribe('drag-over', unref(dragOver))
+      eventBus.unsubscribe('drag-out', unref(dragOut))
+      eventBus.unsubscribe('drop', unref(drop))
+      uppyService.unsubscribe('filesSelected', unref(filesSelectedSub))
+      uppyService.removeDropTarget()
     })
 
     return {
       ...useUpload({
         uppyService
       }),
-      publicLinkPassword: usePublicLinkPassword({ store })
-    }
-  },
-  data() {
-    return {
-      loading: true,
-      errorMessage: null,
-      dragareaEnabled: false
+      dragareaEnabled,
+      loading,
+      errorMessage
     }
   },
   computed: {
@@ -110,58 +169,7 @@ export default defineComponent({
       return this.$client.publicFiles.getFileUrl(this.publicLinkToken) + '/'
     }
   },
-  mounted() {
-    const dragOver = eventBus.subscribe('drag-over', this.onDragOver)
-    const dragOut = eventBus.subscribe('drag-out', this.hideDropzone)
-    const drop = eventBus.subscribe('drop', this.hideDropzone)
-
-    this.$on('beforeUnmount', () => {
-      eventBus.unsubscribe('drag-over', dragOver)
-      eventBus.unsubscribe('drag-out', dragOut)
-      eventBus.unsubscribe('drop', drop)
-    })
-    this.resolvePublicLink()
-  },
   methods: {
-    ...mapActions(['showMessage']),
-
-    hideDropzone() {
-      this.dragareaEnabled = false
-    },
-    onDragOver(event) {
-      this.dragareaEnabled = (event.dataTransfer.types || []).some((e) => e === 'Files')
-    },
-
-    resolvePublicLink() {
-      this.loading = true
-      this.$client.publicFiles
-        .list(this.publicLinkToken, this.publicLinkPassword, DavProperties.PublicLink, '0')
-        .then((files) => {
-          // Redirect to files list if the link doesn't have role "uploader"
-          const sharePermissions = parseInt(files[0].getProperty(DavProperty.PublicLinkPermission))
-          if (linkRoleUploaderFolder.bitmask(false) !== sharePermissions) {
-            this.$router.replace(
-              createLocationPublic('files-public-link', {
-                params: { driveAliasAndItem: `public/${this.publicLinkToken}` }
-              })
-            )
-            return
-          }
-          this.share = files[0]
-        })
-        .catch((error) => {
-          // likely missing password, redirect to public link password prompt
-          if (error.statusCode === 401) {
-            return this.$authService.handleAuthError(unref(this.$router.currentRoute))
-          }
-          console.error(error)
-          this.errorMessage = error
-        })
-        .finally(() => {
-          this.loading = false
-        })
-    },
-
     onFilesSelected(files) {
       this.$uppyService.publish('uploadStarted')
 

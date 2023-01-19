@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import isEqual from 'lodash-es/isEqual'
 import { eventBus } from '../../services/eventBus'
 
@@ -49,9 +49,22 @@ export default defineComponent({
       }
     }
   },
-  data: () => ({
-    saved: false
-  }),
+  setup() {
+    const saved = ref(false)
+    const savedEventToken = ref()
+
+    onMounted(() => {
+      savedEventToken.value = eventBus.subscribe('sidebar.entity.saved', () => {
+        saved.value = true
+      })
+    })
+
+    onBeforeUnmount(() => {
+      eventBus.unsubscribe('sidebar.entity.saved', unref(savedEventToken))
+    })
+
+    return { saved }
+  },
   computed: {
     unsavedChanges() {
       return !isEqual(this.originalObject, this.compareObject)
@@ -69,13 +82,6 @@ export default defineComponent({
     'originalObject.id': function () {
       this.saved = false
     }
-  },
-  mounted() {
-    const savedEventToken = eventBus.subscribe('sidebar.entity.saved', () => {
-      this.saved = true
-    })
-
-    this.$on('beforeUnmount', () => eventBus.unsubscribe('sidebar.entity.saved', savedEventToken))
   }
 })
 </script>

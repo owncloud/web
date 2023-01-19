@@ -123,7 +123,8 @@ export default defineComponent({
       debouncedSearch: undefined,
       providerStore,
       loading: false,
-      searchResults: []
+      searchResults: [],
+      hideOptionsDropEvent: null
     }
   },
   computed: {
@@ -193,12 +194,8 @@ export default defineComponent({
   created() {
     this.debouncedSearch = debounce(this.search, 500)
 
-    const hideOptionsDropEvent = eventBus.subscribe('app.search.options-drop.hide', () => {
+    this.hideOptionsDropEvent = eventBus.subscribe('app.search.options-drop.hide', () => {
       this.$refs.optionsDrop.hide()
-    })
-
-    this.$on('beforeUnmount', () => {
-      eventBus.unsubscribe('app.search.options-drop.hide', hideOptionsDropEvent)
     })
   },
 
@@ -212,6 +209,7 @@ export default defineComponent({
     if (this.isSearchBarEnabled) {
       this.resizeObserver.unobserve(this.$refs.searchBar)
     }
+    eventBus.unsubscribe('app.search.options-drop.hide', this.hideOptionsDropEvent)
   },
 
   methods: {

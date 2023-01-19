@@ -86,7 +86,7 @@ import EditPanel from '../components/Users/SideBar/EditPanel.vue'
 import GroupAssignmentsPanel from '../components/Users/SideBar/GroupAssignmentsPanel.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
-import { defineComponent, ref, unref, watch } from 'vue'
+import { defineComponent, ref, onBeforeUnmount, onMounted, unref, watch } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
@@ -113,6 +113,9 @@ export default defineComponent({
     const selectedUsers = ref([])
     const loadedUser = ref(null)
     const sideBarLoading = ref(false)
+    const loadResourcesEventToken = ref()
+    const listHeaderPosition = ref(0)
+    const template = ref()
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
 
@@ -176,8 +179,25 @@ export default defineComponent({
       sideBarLoading.value = false
     })
 
+    const calculateListHeaderPosition = () => {
+      listHeaderPosition.value = unref(template)?.$refs?.appBar?.getBoundingClientRect()?.height
+    }
+    onMounted(async () => {
+      await loadResourcesTask.perform()
+      loadResourcesEventToken.value = eventBus.subscribe('app.admin-settings.list.load', () => {
+        loadResourcesTask.perform()
+      })
+      calculateListHeaderPosition()
+      window.addEventListener('resize', calculateListHeaderPosition)
+    })
+
+    onBeforeUnmount(() => {
+      eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
+    })
+
     return {
       ...useSideBar(),
+      template,
       addRoleAssignment,
       selectedUsers,
       loadedUser,
@@ -193,7 +213,6 @@ export default defineComponent({
   },
   data: function () {
     return {
-      listHeaderPosition: 0,
       createUserModalOpen: false,
       deleteUserModalOpen: false
     }
@@ -255,30 +274,10 @@ export default defineComponent({
       ].filter((p) => p.enabled)
     }
   },
-
-  async mounted() {
-    await this.loadResourcesTask.perform(this)
-
-    const loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
-      this.loadResourcesTask.perform(this)
-    })
-
-    this.calculateListHeaderPosition()
-
-    window.addEventListener('resize', this.calculateListHeaderPosition)
-
-    this.$on('beforeUnmount', () => {
-      eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
-    })
-  },
-
   methods: {
     ...mapActions(['showMessage']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
-    calculateListHeaderPosition() {
-      this.listHeaderPosition = this.$refs?.template?.$refs?.appBar?.getBoundingClientRect()?.height
-    },
     toggleSelectAllUsers() {
       if (this.allUsersSelected) {
         return (this.selectedUsers = [])
