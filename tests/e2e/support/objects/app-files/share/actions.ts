@@ -3,6 +3,7 @@ import util from 'util'
 import Collaborator, { ICollaborator } from './collaborator'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
+import { copyLinkArgs, waitForPopupNotPresent } from '../link/actions'
 
 const filesSharedWithMeAccepted =
   '#files-shared-with-me-accepted-section [data-test-resource-name="%s"]'
@@ -12,7 +13,12 @@ const quickShareButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]'
 const noPermissionToShareLabel =
   '//*[@data-testid="files-collaborators-no-reshare-permissions-message"]'
-
+const actionMenuDropdownButton =
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "resource-table-btn-action-dropdown")]'
+const actionsTriggerButton =
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "oc-files-actions-%s-trigger")]'
+const filesSharedWithMeDeclined =
+  '#files-shared-with-me-declined-section [data-test-resource-name="%s"]'
 export interface ShareArgs {
   page: Page
   resource: string
@@ -60,21 +66,71 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
 
 /**/
 
-export type ShareStatusArgs = Omit<ShareArgs, 'recipients'>
+export interface ShareStatusArgs extends Omit<ShareArgs, 'recipients'> {
+  via?: 'STATUS' | 'CONTEXT_MENU'
+}
 
 export const acceptShare = async (args: ShareStatusArgs): Promise<void> => {
-  const { resource, page } = args
-  await Promise.all([
-    page.locator(util.format(shareAcceptDeclineButton, resource, 'status-accept')).click(),
-    page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200),
-    page.locator(util.format(filesSharedWithMeAccepted, resource)).waitFor()
-  ])
+  const { resource, via, page } = args
+  if (via === 'CONTEXT_MENU') {
+    await clickActionInContextMenu({ page, resource }, 'accept-share')
+  } else {
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().includes('shares') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'POST'
+      ),
+      page.locator(util.format(shareAcceptDeclineButton, resource, 'status-accept')).click()
+    ])
+  }
+  await page.locator(util.format(filesSharedWithMeAccepted, resource)).waitFor()
 }
 
 export const declineShare = async (args: ShareStatusArgs): Promise<void> => {
+  const { page, resource, via } = args
+  if (via === 'CONTEXT_MENU') {
+    await clickActionInContextMenu({ page, resource }, 'decline-share')
+  } else {
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().includes('shares') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'DELETE'
+      ),
+      page.locator(util.format(shareAcceptDeclineButton, resource, 'decline')).click()
+    ])
+  }
+  await page.locator(util.format(filesSharedWithMeDeclined, resource)).waitFor()
+}
+
+export const clickActionInContextMenu = async (
+  args: ShareStatusArgs,
+  action: string
+): Promise<void> => {
   const { page, resource } = args
-  await page.locator(util.format(shareAcceptDeclineButton, resource, 'decline')).click()
-  await page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200)
+  let method = 'GET'
+  switch (action) {
+    case 'accept-share':
+    case 'create-quicklink':
+      method = 'POST'
+      break
+    case 'decline-share':
+      method = 'DELETE'
+      break
+  }
+
+  await page.locator(util.format(actionMenuDropdownButton, resource)).click()
+
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().includes('shares') && resp.status() === 200 && resp.request().method() === method
+    ),
+    page.locator(util.format(actionsTriggerButton, resource, action)).click()
+  ])
 }
 
 export const changeShareeRole = async (args: ShareArgs): Promise<void> => {
@@ -129,4 +185,12 @@ export const hasPermissionToShare = async (
   await openSharingPanel(page, resource)
   await Collaborator.waitForInvitePanel(page)
   return !(await page.isVisible(noPermissionToShareLabel))
+}
+
+export const copyQuickLink = async (args: copyLinkArgs): Promise<void> => {
+  const { page, resource, via } = args
+  if (via === 'CONTEXT_MENU') {
+    await clickActionInContextMenu({ page, resource }, 'create-quicklink')
+    await waitForPopupNotPresent(page)
+  }
 }
