@@ -267,15 +267,21 @@ export const processDownload = async (
   pageObject: any,
   actionType: string
 ) => {
-  let downloads, files, parentFolder
+  let downloads,
+    files,
+    parentFolder,
+    downloadedResources = []
   const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
-    const { resource, from } = stepRow
-
+    const { resource, from, type } = stepRow
+    const resourceInfo = {
+      name: resource,
+      type: type
+    }
     if (!acc[from]) {
       acc[from] = []
     }
 
-    acc[from].push(resource)
+    acc[from].push(resourceInfo)
 
     return acc
   }, {})
@@ -285,37 +291,41 @@ export const processDownload = async (
     parentFolder = folder !== 'undefined' ? folder : null
     downloads = await pageObject.download({
       folder: parentFolder,
-      names: files,
+      resources: files,
       via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
     })
+
+    downloads.forEach((download) => {
+      downloadedResources.push(download.suggestedFilename())
+    })
+
     if (actionType === 'sidebar panel') {
       expect(files.length).toBe(downloads.length)
-      downloads.forEach((download) => {
-        expect(files).toContain(download.suggestedFilename())
-      })
+      for (const resource of files) {
+        if (resource.type === 'file') {
+          expect(downloadedResources).toContain(resource.name)
+        } else {
+           // downloading folders in oc10 downloads with name of resource but in ocis it is downloaded as 'download.tar'
+            (config.ocis) ? expect(downloadedResources).toContain('download.tar') : expect(downloadedResources).toContain(`${resource.name}.zip`)
+        }
+      }
     }
   }
+
   if (actionType === 'batch action') {
-    if (files.length === 1) {
-      expect(files.length).toBe(downloads.length)
-      downloads.forEach((download) => {
-        expect(files[0]).toBe(download.suggestedFilename())
-      })
-    } else {
-      expect(downloads.length).toBe(1)
-      downloads.forEach((download) => {
-        const { name } = path.parse(download.suggestedFilename())
-        if (config.ocis) {
-          expect(name).toBe('download')
+    expect(downloads.length).toBe(1)
+    downloads.forEach((download) => {
+      const { name } = path.parse(download.suggestedFilename())
+      if (config.ocis) {
+        expect(name).toBe('download')
+      } else {
+        if (parentFolder) {
+          expect(name).toBe(parentFolder)
         } else {
-          if (parentFolder) {
-            expect(name).toBe(parentFolder)
-          } else {
-            expect(name).toBe('download')
-          }
+          expect(name).toBe('download')
         }
-      })
-    }
+      }
+    })
   }
 }
 

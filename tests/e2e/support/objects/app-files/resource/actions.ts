@@ -6,9 +6,11 @@ import path from 'path'
 import { File } from '../../../types'
 import { sidebar } from '../utils'
 
-const downloadButtonSideBar = '#oc-files-actions-sidebar .oc-files-actions-download-file-trigger'
-const downloadButtonBatchActionSingleFile = '.oc-files-actions-download-file-trigger'
-const downloadButtonBatchActionMultiple = '.oc-files-actions-download-archive-trigger'
+const downloadFileButtonSideBar =
+  '#oc-files-actions-sidebar .oc-files-actions-download-file-trigger'
+const downloadFolderButtonSidedBar =
+  '#oc-files-actions-sidebar .oc-files-actions-download-archive-trigger'
+const downloadButtonBatchAction = '.oc-files-actions-download-archive-trigger'
 const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
 const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//input`
 export const fileRow = '//ancestor::tr'
@@ -253,13 +255,13 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
 
 export interface downloadResourcesArgs {
   page: Page
-  names: string[]
+  resources: [Object: any]
   folder?: string
   via: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
 }
 
 export const downloadResources = async (args: downloadResourcesArgs): Promise<Download[]> => {
-  const { page, names, folder, via } = args
+  const { page, resources, folder, via } = args
   const downloads = []
 
   switch (via) {
@@ -267,13 +269,14 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
       if (folder) {
         await clickResource({ page, path: folder })
       }
-      for (const name of names) {
-        await sidebar.open({ page, resource: name })
+      for (const resource of resources) {
+        await sidebar.open({ page, resource: resource.name })
         await sidebar.openPanel({ page, name: 'actions' })
-
+        const downloadResourceSelector =
+          resource.type === 'file' ? downloadFileButtonSideBar : downloadFolderButtonSidedBar
         const [download] = await Promise.all([
           page.waitForEvent('download'),
-          page.locator(downloadButtonSideBar).click()
+          page.locator(downloadResourceSelector).click()
         ])
 
         await sidebar.close({ page })
@@ -284,14 +287,13 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
     }
 
     case 'BATCH_ACTION': {
-      await selectOrDeselectResources({ page, names, folder, select: true })
-      let downloadSelector = downloadButtonBatchActionMultiple
-      if (names.length === 1) {
-        downloadSelector = downloadButtonBatchActionSingleFile
+      await selectOrDeselectResources({ page, resources, folder, select: true })
+      if (resources.length === 1) {
+        throw new Error('Single resource cannot be downloaded with batch action')
       }
       const [download] = await Promise.all([
         page.waitForEvent('download'),
-        page.locator(downloadSelector).click()
+        page.locator(downloadButtonBatchAction).click()
       ])
       downloads.push(download)
       break
@@ -303,24 +305,24 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
 
 export type selectResourcesArgs = {
   page: Page
-  names: string[]
+  resources: [Object: any]
   folder?: string
   select: boolean
 }
 
 export const selectOrDeselectResources = async (args: selectResourcesArgs): Promise<void> => {
-  const { page, folder, names, select } = args
+  const { page, folder, resources, select } = args
   if (folder) {
     await clickResource({ page, path: folder })
   }
 
-  for (const resource of names) {
+  for (const resource of resources) {
     const exists = await resourceExists({
       page,
-      name: resource
+      name: resource.name
     })
     if (exists) {
-      const resourceCheckbox = page.locator(util.format(checkBox, resource))
+      const resourceCheckbox = page.locator(util.format(checkBox, resource.name))
 
       if (!(await resourceCheckbox.isChecked()) && select) {
         await resourceCheckbox.check()
@@ -328,7 +330,7 @@ export const selectOrDeselectResources = async (args: selectResourcesArgs): Prom
         await resourceCheckbox.uncheck()
       }
     } else {
-      throw new Error(`The resource ${resource} you are trying to select does not exist`)
+      throw new Error(`The resource ${resource.name} you are trying to select does not exist`)
     }
   }
 }
