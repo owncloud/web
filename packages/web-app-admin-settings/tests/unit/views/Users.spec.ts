@@ -193,19 +193,22 @@ describe('Users view', () => {
 
   describe('computed method "sideBarAvailablePanels"', () => {
     it('should contain EditPanel when one user is selected', () => {
-      const { wrapper } = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }] } })
+      const { wrapper } = getMountedWrapper()
+      wrapper.vm.selectedUsers = [{ id: '1' }]
       expect(
         wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeTruthy()
     })
     it('should contain DetailsPanel no user is selected', () => {
-      const { wrapper } = getMountedWrapper({ data: { selectedUsers: [] } })
+      const { wrapper } = getMountedWrapper()
+      wrapper.vm.selectedUsers = []
       expect(
         wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'DetailsPanel').enabled
       ).toBeTruthy()
     })
     it('should not contain EditPanel when multiple users are selected', () => {
-      const { wrapper } = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }, { id: '2' }] } })
+      const { wrapper } = getMountedWrapper()
+      wrapper.vm.selectedUsers = [{ id: '1' }, { id: '2' }]
       expect(
         wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel')
       ).toBeFalsy()
@@ -214,9 +217,8 @@ describe('Users view', () => {
 
   describe('computed method "allUsersSelected"', () => {
     it('should be true if every user is selected', async () => {
-      const { wrapper } = getMountedWrapper({
-        data: { selectedUsers: [{ id: '1' }] }
-      })
+      const { wrapper } = getMountedWrapper()
+      wrapper.vm.selectedUsers = [{ id: '1' }]
       await wrapper.vm.loadResourcesTask.last
       expect(wrapper.vm.allUsersSelected).toBeTruthy()
     })
@@ -225,17 +227,15 @@ describe('Users view', () => {
       graph.users.listUsers.mockImplementation(() =>
         mockAxiosResolve({ value: [{ id: '1' }, { id: '2' }] })
       )
-      const { wrapper } = getMountedWrapper({
-        graph,
-        data: { selectedUsers: [{ id: '1' }] }
-      })
+      const { wrapper } = getMountedWrapper({ graph })
+      wrapper.vm.selectedUsers = [{ id: '1' }]
       await wrapper.vm.loadResourcesTask.last
       expect(wrapper.vm.allUsersSelected).toBeFalsy()
     })
   })
 })
 
-function getMountedWrapper({ data = {}, graph = defaultGraphMock() } = {}) {
+function getMountedWrapper({ graph = defaultGraphMock() } = {}) {
   const mocks = {
     ...defaultComponentMocks()
   }
@@ -253,17 +253,6 @@ function getMountedWrapper({ data = {}, graph = defaultGraphMock() } = {}) {
   return {
     mocks,
     wrapper: shallowMount(Users, {
-      data: () => {
-        return {
-          selectedUsers: [
-            {
-              id: '1',
-              memberOf: []
-            }
-          ],
-          ...data
-        }
-      },
       global: {
         plugins: [...defaultPlugins(), store],
         mocks
