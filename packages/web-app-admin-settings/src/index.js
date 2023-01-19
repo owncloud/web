@@ -14,12 +14,14 @@ const appInfo = {
   isFileEditor: false
 }
 
+// FIXME: a better way to access this is needed
+const permissionManager = () => window.__$permissionManager
+
 const routes = [
   {
     path: '/',
     redirect: () => {
-      const permissionManager = window.Vue.$permissionManager
-      if (permissionManager.hasUserManagement()) {
+      if (permissionManager().hasUserManagement()) {
         return { name: 'admin-settings-users' }
       }
       return { name: 'admin-settings-spaces' }
@@ -62,8 +64,7 @@ const navItems = [
       path: `/${appInfo.id}/users?`
     },
     enabled: () => {
-      const permissionManager = window.Vue.$permissionManager
-      return permissionManager.hasUserManagement()
+      return permissionManager().hasUserManagement()
     }
   },
   {
@@ -73,8 +74,7 @@ const navItems = [
       path: `/${appInfo.id}/groups?`
     },
     enabled: () => {
-      const permissionManager = window.Vue.$permissionManager
-      return permissionManager.hasUserManagement()
+      return permissionManager().hasUserManagement()
     }
   },
   {
@@ -84,8 +84,7 @@ const navItems = [
       path: `/${appInfo.id}/spaces?`
     },
     enabled: () => {
-      const permissionManager = window.Vue.$permissionManager
-      return permissionManager.hasSpaceManagement()
+      return permissionManager().hasSpaceManagement()
     }
   }
 ]

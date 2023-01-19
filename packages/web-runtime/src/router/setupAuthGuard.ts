@@ -1,8 +1,7 @@
 import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from './index'
 import { Router, RouteLocation } from 'vue-router'
-import Vue from 'vue'
 import { contextRouteNameKey, queryItemAsString } from 'web-pkg/src/composables'
-import { AuthService } from '../services/auth/authService'
+import { authService } from '../services/auth/authService'
 
 export const setupAuthGuard = (router: Router) => {
   router.beforeEach(async (to, from) => {
@@ -11,8 +10,7 @@ export const setupAuthGuard = (router: Router) => {
       return true
     }
 
-    const store = (Vue as any).$store
-    const authService = (Vue as any).$authService as AuthService
+    const store = (window as any).__$store
     await authService.initializeContext(to)
 
     // vue-router currently (4.1.6) does not cancel navigations when a new one is triggered
@@ -46,7 +44,6 @@ export const setupAuthGuard = (router: Router) => {
     if (to.name !== 'accessDenied') {
       return
     }
-    const authService = (Vue as any).$authService as AuthService
     authService.hasAuthErrorOccured = false
   })
 }

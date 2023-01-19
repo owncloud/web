@@ -132,7 +132,7 @@
         window.runtimeLoaded = function(runtime) {
           clearTimeout(loaderTimer)
           document.getElementById('splash-loading').classList.add('splash-hide')
-          runtime.bootstrap('config.json').then(runtime.renderSuccess).catch(runtime.renderFailure)
+          runtime.bootstrapApp('config.json').catch(runtime.bootstrapErrorApp)
         }
       }
     }

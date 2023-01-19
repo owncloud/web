@@ -3,11 +3,10 @@ import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import Vue, { App } from 'vue'
+import { App } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions } from 'vue3-gettext'
-import set from 'lodash-es/set'
 import { getBackendVersion, getWebVersion } from './versions'
 import { useLocalStorage } from 'web-pkg/src/composables'
 import { unref } from 'vue'
@@ -16,13 +15,10 @@ import { authService } from '../services/auth'
 import { clientService, PermissionManager } from 'web-pkg/src/services'
 import { UppyService } from '../services/uppyService'
 import { default as storeOptions } from '../store'
-import { init as SentryInit } from '@sentry/browser'
-import { Vue as SentryVueIntegration } from '@sentry/integrations'
+import { init as sentryInit } from '@sentry/vue'
 import { configurationManager, RawConfig, ConfigurationManager } from 'web-pkg/src/configuration'
 import { webdav } from 'web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
-
-type VueConstructor = typeof Vue
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -55,10 +51,8 @@ export const announceConfiguration = async (path: string): Promise<RuntimeConfig
  * @param language
  */
 export const announceStore = async ({
-  vue,
   runtimeConfiguration
 }: {
-  vue: VueConstructor
   runtimeConfiguration: RuntimeConfiguration
 }): Promise<any> => {
   const store = new Store({ ...storeOptions })
@@ -74,7 +68,7 @@ export const announceStore = async ({
    * we need to decide if we extend the api more or just expose the store and de deprecate
    * the apis for retrieving it.
    */
-  set(vue, '$store', store)
+  ;(window as any).__$store = store
   return store
 }
 
@@ -211,12 +205,12 @@ const rewriteDeprecatedAppNames = (
  */
 export const announceTheme = async ({
   store,
-  vue,
+  app,
   designSystem,
   runtimeConfiguration
 }: {
   store: Store<unknown>
-  vue: VueConstructor
+  app: App
   designSystem: any
   runtimeConfiguration?: RuntimeConfiguration
 }): Promise<void> => {
@@ -228,7 +222,7 @@ export const announceTheme = async ({
   }
   await store.dispatch('loadTheme', { theme: theme[unref(currentThemeName)] || theme.default })
 
-  vue.use(designSystem, {
+  app.use(designSystem, {
     tokens: store.getters.theme.designTokens
   })
 }
@@ -240,12 +234,12 @@ export const announceTheme = async ({
  * @param options
  */
 export const announceTranslations = ({
-  vue,
+  app,
   ...options
 }: {
-  vue: App
+  app: App
 } & Partial<GetTextOptions>): void => {
-  vue.use(
+  app.use(
     createGettext({
       defaultLanguage: navigator.language.substring(0, 2),
       silent: true,
@@ -261,18 +255,18 @@ export const announceTranslations = ({
  * @param runtimeConfiguration
  */
 export const announceClientService = ({
-  vue,
+  app,
   runtimeConfiguration
 }: {
-  vue: VueConstructor
+  app: App
   runtimeConfiguration: RuntimeConfiguration
 }): void => {
   const sdk = new OwnCloud()
   sdk.init({ baseUrl: runtimeConfiguration.server || window.location.origin })
-  vue.prototype.$client = sdk
-  vue.prototype.$clientService = clientService
-  vue.prototype.$clientService.owncloudSdk = sdk
-  vue.prototype.$clientService.webdav = webdav({
+  app.config.globalProperties.$client = sdk
+  app.config.globalProperties.$clientService = clientService
+  app.config.globalProperties.$clientService.owncloudSdk = sdk
+  app.config.globalProperties.$clientService.webdav = webdav({
     sdk
   })
 }
@@ -284,15 +278,17 @@ export const announceClientService = ({
  * @param store
  */
 export const announcePermissionManager = ({
-  vue,
+  app,
   store
 }: {
-  vue: VueConstructor
+  app: App
   store: Store<any>
 }): void => {
   const permissionManager = new PermissionManager(store)
-  vue.prototype.$permissionManager = permissionManager
-  set(vue, '$permissionManager', permissionManager)
+  app.config.globalProperties.$permissionManager = permissionManager
+
+  // FIXME: make properly available to redirect() in routes definitions of apps
+  ;(window as any).__$permissionManager = permissionManager
 }
 
 /**
@@ -300,8 +296,8 @@ export const announcePermissionManager = ({
  *
  * @param vue
  */
-export const announceUppyService = ({ vue }: { vue: VueConstructor }): void => {
-  vue.prototype.$uppyService = new UppyService()
+export const announceUppyService = ({ app }: { app: App }): void => {
+  app.config.globalProperties.$uppyService = new UppyService()
 }
 
 /**
@@ -313,19 +309,18 @@ export const announceUppyService = ({ vue }: { vue: VueConstructor }): void => {
  * @param router
  */
 export const announceAuthService = ({
-  vue,
+  app,
   configurationManager,
   store,
   router
 }: {
-  vue: VueConstructor
+  app: App
   configurationManager: ConfigurationManager
   store: Store<any>
   router: Router
 }): void => {
   authService.initialize(configurationManager, clientService, store, router)
-  vue.prototype.$authService = authService
-  set(vue, '$authService', authService)
+  app.config.globalProperties.$authService = authService
 }
 
 /**
@@ -381,19 +376,16 @@ export const announceVersions = ({ store }: { store: Store<unknown> }): void => 
  *
  * @param runtimeConfiguration
  */
-export const startSentry = (
-  runtimeConfiguration: RuntimeConfiguration,
-  Vue: VueConstructor
-): void => {
+export const startSentry = (runtimeConfiguration: RuntimeConfiguration, app: App): void => {
   if (runtimeConfiguration.sentry?.dsn) {
     const { dsn, environment = 'production', ...moreSentryOptions } = runtimeConfiguration.sentry
 
-    SentryInit({
+    sentryInit({
+      app,
       dsn,
       environment,
-      integrations: [
-        new SentryVueIntegration({ Vue: Vue as any, attachProps: true, logErrors: true })
-      ],
+      attachProps: true,
+      logErrors: true,
       ...moreSentryOptions
     })
   }

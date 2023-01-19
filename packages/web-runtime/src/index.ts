@@ -36,17 +36,21 @@ import {
 } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
-import { configureCompat, createApp, h } from 'vue'
+import { configureCompat, createApp } from 'vue'
 import { compatConfig } from './compatConfig'
 import PortalVue, { createWormhole } from 'portal-vue'
 
-let store
 configureCompat(compatConfig)
 
-export const bootstrap = async (configurationPath: string): Promise<void> => {
+export const bootstrapApp = async (configurationPath: string): Promise<void> => {
+  const app = createApp(pages.success)
+
   const runtimeConfiguration = await announceConfiguration(configurationPath)
   startSentry(runtimeConfiguration, Vue)
-  store = await announceStore({ vue: Vue, runtimeConfiguration })
+
+  const store = await announceStore({ runtimeConfiguration })
+  announcePermissionManager({ app, store })
+
   await initializeApplications({
     runtimeConfiguration,
     configurationManager,
@@ -55,44 +59,27 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
     router,
     translations
   })
-  announceClientService({ vue: Vue, runtimeConfiguration })
-  announceUppyService({ vue: Vue })
-  announcePermissionManager({ vue: Vue, store })
-  await announceClient(runtimeConfiguration)
-  await announceAuthService({ vue: Vue, configurationManager, store, router })
-  await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
-  announceDefaults({ store, router })
-}
 
-export const renderSuccess = async (): Promise<void> => {
-  Vue.prototype.$store = store
+  announceTranslations({ app, availableLanguages: supportedLanguages, translations })
+  announceClientService({ app, runtimeConfiguration })
+  announceUppyService({ app })
+  await announceClient(runtimeConfiguration)
+  await announceAuthService({ app, configurationManager, store, router })
+  await announceTheme({ store, app, designSystem, runtimeConfiguration })
+  announceDefaults({ store, router })
+
+  app.use(router)
+  app.use(store)
+  app.use(createHead())
+  app.config.globalProperties.$wormhole = createWormhole()
+  app.use(PortalVue, {
+    wormhole: app.config.globalProperties.$wormhole
+  })
+
+  app.mount('#owncloud')
 
   const applications = Array.from(applicationStore.values())
-  const instance = createApp({
-    store,
-    render() {
-      return h(pages.success)
-    }
-  })
-
-  // language
-  announceTranslations({ vue: instance, availableLanguages: supportedLanguages, translations })
-
-  // create wormhole
-  instance.config.globalProperties.$wormhole = createWormhole()
-  instance.use(PortalVue, {
-    wormhole: instance.config.globalProperties.$wormhole
-  })
-
-  // @vueuse/head
-  instance.use(createHead())
-
-  // install router
-  instance.use(router)
-
-  // mount App
-  instance.mount('#owncloud')
-  applications.forEach((application) => application.mounted(instance))
+  applications.forEach((application) => application.mounted(app))
 
   store.watch(
     (state, getters) =>
@@ -118,7 +105,7 @@ export const renderSuccess = async (): Promise<void> => {
       if (!userContextReady) {
         return
       }
-      const clientService = instance.config.globalProperties.$clientService
+      const clientService = app.config.globalProperties.$clientService
 
       // Load spaces to make them available across the application
       if (store.getters.capabilities?.spaces?.enabled) {
@@ -133,7 +120,7 @@ export const renderSuccess = async (): Promise<void> => {
         store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
           id: personalSpace.id,
           field: 'name',
-          value: instance.config.globalProperties.$gettext('Personal')
+          value: app.config.globalProperties.$gettext('Personal')
         })
         return
       }
@@ -144,7 +131,7 @@ export const renderSuccess = async (): Promise<void> => {
         id: user.id,
         driveAlias: `personal/${user.id}`,
         driveType: 'personal',
-        name: instance.config.globalProperties.$gettext('All files'),
+        name: app.config.globalProperties.$gettext('All files'),
         webDavPath: `/files/${user.id}`,
         webDavTrashPath: `/trash-bin/${user.id}`,
         serverUrl: configurationManager.serverUrl
@@ -177,7 +164,7 @@ export const renderSuccess = async (): Promise<void> => {
       const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
-        name: instance.config.globalProperties.$gettext('Public files'),
+        name: app.config.globalProperties.$gettext('Public files'),
         ...(publicLinkPassword && { publicLinkPassword }),
         serverUrl: configurationManager.serverUrl
       })
@@ -207,27 +194,21 @@ export const renderSuccess = async (): Promise<void> => {
   )
 }
 
-export const renderFailure = async (err: Error): Promise<void> => {
-  Vue.prototype.$store = store
-
+export const bootstrapErrorApp = async (err: Error): Promise<void> => {
+  const store = await announceStore({ runtimeConfiguration: {} })
   announceVersions({ store })
-  await announceTheme({ store, vue: Vue, designSystem })
+  const app = createApp(pages.failure)
+  await announceTheme({ store, app, designSystem })
   console.error(err)
-  const instance = createApp({
-    store,
-    render() {
-      return h(pages.failure)
-    }
-  })
+  app.use(store)
   await announceTranslations({
-    vue: instance,
+    app,
     availableLanguages: supportedLanguages,
     translations
   })
-  instance.mount('#owncloud')
+  app.mount('#owncloud')
 }
 ;(window as any).runtimeLoaded({
-  bootstrap,
-  renderSuccess,
-  renderFailure
+  bootstrapApp,
+  bootstrapErrorApp
 })
