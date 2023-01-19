@@ -24,6 +24,7 @@ Summary
 * Bugfix - Re-using space images: [#8083](https://github.com/owncloud/web/issues/8083)
 * Bugfix - Search bar input appearance: [#8158](https://github.com/owncloud/web/issues/8158)
 * Bugfix - Application menu active display on hover: [#8265](https://github.com/owncloud/web/pull/8265)
+* Bugfix - Loading additional user data: [#8276](https://github.com/owncloud/web/pull/8276)
 * Change - Update Vue to v3.2.45 (via compat mode): [#7948](https://github.com/owncloud/web/issues/7948)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
@@ -163,6 +164,14 @@ Details
    The text color of the active application menu item on hover as been fixed.
 
    https://github.com/owncloud/web/pull/8265
+
+* Bugfix - Loading additional user data: [#8276](https://github.com/owncloud/web/pull/8276)
+
+   Loading additional user data in the admin settings when opening the sidebar via select-toggle
+   has been fixed.
+
+   https://github.com/owncloud/web/issues/8275
+   https://github.com/owncloud/web/pull/8276
 
 * Change - Update Vue to v3.2.45 (via compat mode): [#7948](https://github.com/owncloud/web/issues/7948)
 
