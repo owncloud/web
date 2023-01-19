@@ -7,6 +7,7 @@
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
+      :side-bar-loading="sideBarLoading"
     >
       <template #topbarActions>
         <div class="admin-settings-app-bar-actions oc-mt-xs">
@@ -54,7 +55,7 @@
             :header-position="listHeaderPosition"
             @toggleSelectUser="toggleSelectUser"
             @toggleSelectAllUsers="toggleSelectAllUsers"
-            @showPanel="showPanel"
+            @unSelectAllUsers="unselectAllUsers"
           />
         </div>
       </template>
@@ -85,7 +86,7 @@ import EditPanel from '../components/Users/SideBar/EditPanel.vue'
 import GroupAssignmentsPanel from '../components/Users/SideBar/GroupAssignmentsPanel.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
-import { defineComponent, ref, unref } from 'vue'
+import { defineComponent, ref, unref, watch } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
@@ -109,6 +110,9 @@ export default defineComponent({
     const groups = ref([])
     const roles = ref([])
     const userAssignments = ref({})
+    const selectedUsers = ref([])
+    const loadedUser = ref(null)
+    const sideBarLoading = ref(false)
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
 
@@ -143,22 +147,41 @@ export default defineComponent({
       }
     })
 
-    const loadAdditionalUserDataTask = useTask(function* (signal, ref, user) {
+    const loadAdditionalUserDataTask = useTask(function* (signal, user) {
       const { data } = yield unref(graphClient).users.getUser(user.id)
       if (!data.drive) {
+        return { ...user }
+      }
+      if (!data.drive.quota) {
+        data.drive.quota = { total: 0 }
+      }
+      return { ...user, ...data }
+    })
+
+    watch(selectedUsers, async () => {
+      const loadAdditionalData = unref(selectedUsers).length === 1
+      if (loadAdditionalData && unref(loadedUser)?.id === unref(selectedUsers)[0].id) {
+        // current user is already loaded
         return
       }
 
-      user.drive = data.drive
-
-      if (!user.drive.quota) {
-        user.drive.quota = { total: 0 }
+      sideBarLoading.value = true
+      if (loadAdditionalData) {
+        loadedUser.value = await loadAdditionalUserDataTask.perform(unref(selectedUsers)[0])
+        sideBarLoading.value = false
+        return
       }
+
+      loadedUser.value = null
+      sideBarLoading.value = false
     })
 
     return {
       ...useSideBar(),
       addRoleAssignment,
+      selectedUsers,
+      loadedUser,
+      sideBarLoading,
       users,
       roles,
       groups,
@@ -171,7 +194,6 @@ export default defineComponent({
   data: function () {
     return {
       listHeaderPosition: 0,
-      selectedUsers: [],
       createUserModalOpen: false,
       deleteUserModalOpen: false
     }
@@ -208,7 +230,7 @@ export default defineComponent({
           component: DetailsPanel,
           default: true,
           enabled: true,
-          componentAttrs: { users: this.selectedUsers }
+          componentAttrs: { user: this.loadedUser, users: this.selectedUsers }
         },
         {
           app: 'EditPanel',
@@ -217,7 +239,7 @@ export default defineComponent({
           component: EditPanel,
           default: false,
           enabled: this.selectedUsers.length === 1,
-          componentAttrs: { user: this.selectedUsers[0], roles: this.roles },
+          componentAttrs: { user: this.loadedUser, roles: this.roles },
           componentListeners: { confirm: this.editUser }
         },
         {
@@ -227,7 +249,7 @@ export default defineComponent({
           component: GroupAssignmentsPanel,
           default: false,
           enabled: this.selectedUsers.length === 1,
-          componentAttrs: { user: this.selectedUsers[0], groups: this.groups },
+          componentAttrs: { user: this.loadedUser, groups: this.groups },
           componentListeners: { confirm: this.editUserGroupAssignments }
         }
       ].filter((p) => p.enabled)
@@ -280,12 +302,6 @@ export default defineComponent({
     },
     toggleDeleteUserModal() {
       this.deleteUserModalOpen = !this.deleteUserModalOpen
-    },
-    async showPanel({ user, panel }) {
-      await this.loadAdditionalUserDataTask.perform(this, user)
-      this.selectedUsers = [user]
-      this.sideBarActivePanel = panel
-      this.sideBarOpen = true
     },
     async deleteUsers(usersToDelete) {
       if (usersToDelete.some((user) => user.id === this.currentUser.uuid)) {

@@ -51,21 +51,21 @@
           v-oc-tooltip="$gettext('Details')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs"
-          @click="$emit('showPanel', { user: item, panel: 'DetailsPanel' })"
+          @click="showDetails(item)"
         >
           <oc-icon name="information" fill-type="line" /></oc-button
         ><oc-button
           v-oc-tooltip="$gettext('Group assignments')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs"
-          @click="$emit('showPanel', { user: item, panel: 'GroupAssignmentsPanel' })"
+          @click="showGroupAssigmentPanel(item)"
         >
           <oc-icon name="group-2" fill-type="line" /></oc-button
         ><oc-button
           v-oc-tooltip="$gettext('Edit')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs"
-          @click="$emit('showPanel', { user: item, panel: 'EditPanel' })"
+          @click="showEditPanel(item)"
         >
           <oc-icon name="pencil" fill-type="line" />
         </oc-button>
@@ -85,6 +85,8 @@ import { defineComponent } from 'vue'
 
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
+import { eventBus } from 'web-pkg'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export default defineComponent({
   name: 'UsersList',
@@ -101,6 +103,27 @@ export default defineComponent({
       type: Number,
       required: true
     }
+  },
+  setup(props, { emit }) {
+    const showDetails = (user) => {
+      emit('unSelectAllUsers')
+      emit('toggleSelectUser', user)
+      eventBus.publish(SideBarEventTopics.open)
+    }
+
+    const showEditPanel = (user) => {
+      emit('unSelectAllUsers')
+      emit('toggleSelectUser', user)
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'EditPanel')
+    }
+
+    const showGroupAssigmentPanel = (user) => {
+      emit('unSelectAllUsers')
+      emit('toggleSelectUser', user)
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'GroupAssignmentsPanel')
+    }
+
+    return { showDetails, showEditPanel, showGroupAssigmentPanel }
   },
   data() {
     return {

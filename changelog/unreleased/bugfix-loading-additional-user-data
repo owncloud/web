@@ -1,0 +1,6 @@
+Bugfix: Loading additional user data
+
+Loading additional user data in the admin settings when opening the sidebar via select-toggle has been fixed.
+
+https://github.com/owncloud/web/pull/8276
+https://github.com/owncloud/web/issues/8275

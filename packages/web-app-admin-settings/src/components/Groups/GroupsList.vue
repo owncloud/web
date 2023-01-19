@@ -50,7 +50,7 @@
           v-oc-tooltip="$gettext('Details')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs"
-          @click="$emit('showPanel', { group: item, panel: 'DetailsPanel' })"
+          @click="showDetails(item)"
         >
           <oc-icon name="information" fill-type="line" />
         </oc-button>
@@ -74,6 +74,8 @@
 import { defineComponent } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
+import { eventBus } from 'web-pkg'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export default defineComponent({
   name: 'GroupsList',
@@ -90,6 +92,15 @@ export default defineComponent({
       type: Number,
       required: true
     }
+  },
+  setup(props, { emit }) {
+    const showDetails = (group) => {
+      emit('unSelectAllGroups')
+      emit('toggleSelectGroup', group)
+      eventBus.publish(SideBarEventTopics.open)
+    }
+
+    return { showDetails }
   },
   data() {
     return {
