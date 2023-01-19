@@ -57,7 +57,7 @@ const fileExtensions = () => {
     }
   ]
 
-  let primaryExtensions = window.Vue.$store.getters.extensionConfigByAppId(appId)
+  let primaryExtensions = window.__$store.getters.extensionConfigByAppId(appId)
     .primaryExtensions || ['txt', 'md']
   if (typeof primaryExtensions === 'string') {
     primaryExtensions = [primaryExtensions]

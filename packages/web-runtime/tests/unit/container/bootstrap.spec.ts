@@ -1,4 +1,5 @@
 import { mockDeep } from 'jest-mock-extended'
+import { createApp, defineComponent } from 'vue'
 import { ConfigurationManager } from 'web-pkg/src'
 import {
   initializeApplications,
@@ -6,7 +7,6 @@ import {
   announcePermissionManager
 } from '../../../src/container'
 import { buildApplication } from '../../../src/container/application'
-import { Vue } from './../../../src/defaults'
 
 jest.mock('../../../src/container/application')
 
@@ -53,9 +53,9 @@ describe('initialize applications', () => {
 
 describe('announcePermissionManager', () => {
   it('should inject vue object contains permissionManager instance', () => {
-    const vue = Vue
-    announcePermissionManager({ vue: Vue, store: {} as any })
-    expect(vue.prototype.$permissionManager).toBeDefined()
-    expect(vue.$permissionManager).toBeDefined()
+    const app = createApp(defineComponent({}))
+    announcePermissionManager({ app, store: {} as any })
+    expect(app.config.globalProperties.$permissionManager).toBeDefined()
+    expect((window as any).__$permissionManager).toBeDefined()
   })
 })

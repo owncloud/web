@@ -1,4 +1,4 @@
-import { setUser as sentrySetUser } from '@sentry/browser'
+import { setUser as sentrySetUser } from '@sentry/vue'
 
 const getInitialState = () => ({
   id: '',
