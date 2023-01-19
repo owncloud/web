@@ -1,7 +1,8 @@
 import SpacesList from '../../../../src/components/Spaces/SpacesList.vue'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import Vue from 'vue'
-import { displayPositionedDropdown } from 'web-pkg'
+import { displayPositionedDropdown, eventBus } from 'web-pkg'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 const spaceMocks = [
   {
@@ -105,6 +106,12 @@ describe('SpacesList', () => {
     const { wrapper } = getWrapper({ spaces: spaceMocks })
     await wrapper.find('.spaces-table-btn-action-dropdown').trigger('click')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
+  })
+  it('should show the space details on details button click', async () => {
+    const eventBusSpy = jest.spyOn(eventBus, 'publish')
+    const { wrapper } = getWrapper({ spaces: spaceMocks })
+    await wrapper.find(`#space-details-trigger-${spaceMocks[0].id}`).trigger('click')
+    expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.open)
   })
 })
 

@@ -85,6 +85,14 @@
       <template #actions="{ item }">
         <div class="spaces-list-actions">
           <oc-button
+            :id="`space-details-trigger-${resourceDomSelector(item)}`"
+            v-oc-tooltip="spaceDetailsLabel"
+            :aria-label="spaceDetailsLabel"
+            appearance="raw"
+            @click.stop.prevent="showDetailsForSpace(item)"
+            ><oc-icon name="information" fill-type="line" />
+          </oc-button>
+          <oc-button
             :id="`context-menu-trigger-${resourceDomSelector(item)}`"
             ref="contextMenuButton"
             v-oc-tooltip="contextMenuLabel"
@@ -140,6 +148,8 @@ import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/s
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
+import { eventBus } from 'web-pkg'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -407,6 +417,14 @@ export default defineComponent({
       displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButton))
     }
 
+    const spaceDetailsLabel = computed(() => {
+      return $gettext('Show details')
+    })
+    const showDetailsForSpace = (space: SpaceResource) => {
+      selectSpace(space)
+      eventBus.publish(SideBarEventTopics.open)
+    }
+
     return {
       allSpacesSelected,
       sortBy,
@@ -436,6 +454,8 @@ export default defineComponent({
       popperOptions,
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
+      spaceDetailsLabel,
+      showDetailsForSpace,
       ...spaceRefs
     }
   }
