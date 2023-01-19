@@ -83,7 +83,6 @@ import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import DeleteUserModal from '../components/Users/DeleteUserModal.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
-import GroupAssignmentsPanel from '../components/Users/SideBar/GroupAssignmentsPanel.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import { defineComponent, ref, onBeforeUnmount, onMounted, unref, watch } from 'vue'
@@ -265,19 +264,6 @@ export default defineComponent({
           default: false,
           enabled: this.selectedUsers.length === 1,
           componentAttrs: { user: this.loadedUser, roles: this.roles, confirm: this.editUser }
-        },
-        {
-          app: 'GroupAssignmentsPanel',
-          icon: 'group-2',
-          title: this.$gettext('Group assignments'),
-          component: GroupAssignmentsPanel,
-          default: false,
-          enabled: this.selectedUsers.length === 1,
-          componentAttrs: {
-            user: this.loadedUser,
-            groups: this.groups,
-            confirm: this.editUserGroupAssignments
-          }
         }
       ].filter((p) => p.enabled)
     }
@@ -425,6 +411,10 @@ export default defineComponent({
           }
         }
 
+        if (!isEqual(actualUser.memberOf, editUser.memberOf)) {
+          await this.editUserGroupAssignments(editUser)
+        }
+
         if (!isEqual(actualUser.role, editUser.role)) {
           /**
            * Setting api calls are just temporary and will be replaced with the graph api,
@@ -454,10 +444,11 @@ export default defineComponent({
         const user = this.users.find((user) => user.id === editUser.id)
 
         const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
-          return !user.memberOf.includes(editUserGroup)
+          return !user.memberOf.some((g) => g.id === editUserGroup.id)
         })
+
         const groupsToDelete = user.memberOf.filter((editUserGroup) => {
-          return !editUser.memberOf.includes(editUserGroup)
+          return !editUser.memberOf.some((g) => g.id === editUserGroup.id)
         })
 
         for (const groupToAdd of groupsToAdd) {

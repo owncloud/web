@@ -2,9 +2,13 @@ import EditPanel from '../../../../../src/components/Users/SideBar/EditPanel.vue
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('EditPanel', () => {
+  it('renders all available inputs', () => {
+    const { wrapper } = getWrapper()
+    expect(wrapper.html()).toMatchSnapshot()
+  })
   describe('method "revertChanges"', () => {
     it('should revert changes on property editUser', () => {
-      const { wrapper } = getWrapper({})
+      const { wrapper } = getWrapper()
       wrapper.vm.editUser.displayName = 'jana'
       wrapper.vm.editUser.mail = 'jana@owncloud.com'
       wrapper.vm.revertChanges()
@@ -12,7 +16,7 @@ describe('EditPanel', () => {
       expect(wrapper.vm.editUser.mail).toEqual('jan@owncloud.com')
     })
     it('should revert changes on property formData', () => {
-      const { wrapper } = getWrapper({})
+      const { wrapper } = getWrapper()
       wrapper.vm.formData.displayName.valid = false
       wrapper.vm.formData.displayName.errorMessage = 'error'
       wrapper.vm.revertChanges()
@@ -65,7 +69,7 @@ describe('EditPanel', () => {
   })
 })
 
-function getWrapper({ propsData = {} } = {}) {
+function getWrapper() {
   return {
     wrapper: shallowMount(EditPanel, {
       props: {
@@ -76,8 +80,7 @@ function getWrapper({ propsData = {} } = {}) {
           passwordProfile: { password: '' },
           drive: { quota: {} }
         },
-        roles: [{ id: '1', displayName: 'admin' }],
-        ...propsData
+        roles: [{ id: '1', displayName: 'admin' }]
       },
       global: {
         plugins: [...defaultPlugins()]

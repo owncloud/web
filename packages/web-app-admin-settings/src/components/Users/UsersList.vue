@@ -55,13 +55,6 @@
         >
           <oc-icon name="information" fill-type="line" /></oc-button
         ><oc-button
-          v-oc-tooltip="$gettext('Group assignments')"
-          appearance="raw"
-          class="oc-mr-xs quick-action-button oc-p-xs"
-          @click="showGroupAssigmentPanel(item)"
-        >
-          <oc-icon name="group-2" fill-type="line" /></oc-button
-        ><oc-button
           v-oc-tooltip="$gettext('Edit')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs"
@@ -139,12 +132,10 @@ export default defineComponent({
       return this.users.length === this.selectedUsers.length
     },
     footerTextTotal() {
-      const translated = this.$gettext('%{userCount} users in total')
-      return this.$gettextInterpolate(translated, { userCount: this.users.length })
+      return this.$gettext('%{userCount} users in total', { userCount: this.users.length })
     },
     footerTextFilter() {
-      const translated = this.$gettext('%{userCount} matching users')
-      return this.$gettextInterpolate(translated, { userCount: this.data.length })
+      return this.$gettext('%{userCount} matching users', { userCount: this.data.length })
     },
     fields() {
       return [
@@ -251,9 +242,7 @@ export default defineComponent({
       this.sortDir = event.sortDir
     },
     getSelectUserLabel(user) {
-      const translated = this.$gettext('Select %{ user }')
-
-      return this.$gettextInterpolate(translated, { user: user.displayName }, true)
+      return this.$gettext('Select %{ user }', { user: user.displayName }, true)
     }
   }
 })

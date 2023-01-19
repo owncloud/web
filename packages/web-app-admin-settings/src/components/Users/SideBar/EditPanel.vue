@@ -46,9 +46,17 @@
           :total-quota="editUser.drive.quota.total || 0"
           @selectedOptionChange="changeSelectedQuotaOption"
         />
-        <p v-else v-translate class="oc-mb-s oc-mt-rm oc-text-meta">
-          To set an individual quota, the user needs to have logged in once.
-        </p>
+        <p
+          v-else
+          class="oc-mb-m oc-mt-rm oc-text-meta"
+          v-text="$gettext('To set an individual quota, the user needs to have logged in once.')"
+        />
+        <group-select
+          class="oc-mb-s"
+          :selected-groups="editUser.memberOf"
+          :available-groups="groups"
+          @selectedOptionChange="changeSelectedGroupOption"
+        />
       </div>
       <compare-save-dialog
         class="edit-compare-save-dialog oc-mb-l"
@@ -62,20 +70,23 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, ref } from 'vue'
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
+import GroupSelect from './GroupSelect.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
-import { User } from 'web-client/src/generated'
+import { Group, User } from 'web-client/src/generated'
+import { MaybeRef } from 'web-pkg'
 
 export default defineComponent({
   name: 'EditPanel',
   components: {
     UserInfoBox,
     CompareSaveDialog,
-    QuotaSelect
+    QuotaSelect,
+    GroupSelect
   },
   props: {
     user: {
@@ -85,22 +96,25 @@ export default defineComponent({
     roles: {
       type: Array,
       required: true
+    },
+    groups: {
+      type: Array as PropType<Group[]>,
+      required: true
     }
   },
-  data() {
-    return {
-      editUser: {},
-      formData: {
-        displayName: {
-          errorMessage: '',
-          valid: true
-        },
-        email: {
-          errorMessage: '',
-          valid: true
-        }
+  setup() {
+    const editUser: MaybeRef<User> = ref({})
+    const formData = ref({
+      displayName: {
+        errorMessage: '',
+        valid: true
+      },
+      email: {
+        errorMessage: '',
+        valid: true
       }
-    }
+    })
+    return { editUser, formData }
   },
   computed: {
     invalidFormData() {
@@ -127,6 +141,9 @@ export default defineComponent({
   methods: {
     changeSelectedQuotaOption(option) {
       this.editUser.drive.quota.total = option.value
+    },
+    changeSelectedGroupOption(option: Group) {
+      this.editUser.memberOf = option
     },
     validateDisplayName() {
       this.formData.displayName.valid = false
