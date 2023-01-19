@@ -4,7 +4,6 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 import { config } from '../../../config'
-import {ocs} from "web-client/src/ocs";
 
 When(
   '{string} creates the following resource(s)',
@@ -302,8 +301,10 @@ export const processDownload = async (
         if (resource.type === 'file') {
           expect(downloadedResources).toContain(resource.name)
         } else {
-           // downloading folders in oc10 downloads with name of resource but in ocis it is downloaded as 'download.tar'
-            (config.ocis) ? expect(downloadedResources).toContain('download.tar') : expect(downloadedResources).toContain(`${resource.name}.zip`)
+          // downloading folders in oc10 downloads with name of resource but in ocis it is downloaded as 'download.tar'
+          config.ocis
+            ? expect(downloadedResources).toContain('download.tar')
+            : expect(downloadedResources).toContain(`${resource.name}.zip`)
         }
       }
     }
