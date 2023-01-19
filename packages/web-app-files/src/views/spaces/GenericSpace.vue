@@ -442,6 +442,19 @@ export default defineComponent({
     paginatedResources: function () {
       if (this.isSingleFile) {
         this.SET_FILE_SELECTION(this.paginatedResources)
+
+        const defaultAction = this.$_fileActions_getDefaultAction({
+            space: this.space,
+            resources: this.paginatedResources
+          }).label()
+
+        if (!this.$route.query.scrollTo && defaultAction !== 'Download') {
+          this.$_fileActions_triggerDefaultAction({
+            space: this.space,
+            resources: this.paginatedResources,
+            sameTab: true
+          })
+        }
       }
     }
   },
