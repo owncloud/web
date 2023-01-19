@@ -35,24 +35,26 @@ You can use the snippet below as a base for writing your own theme by replacing 
 
 ```json
 {
-  "default": {
-    "general": {
-      "name": "ownCloud",
-      "slogan": "ownCloud – A safe home for all your data"
+  "web": {
+    "default": {
+      "general": {
+        "name": "ownCloud",
+        "slogan": "ownCloud – A safe home for all your data"
+      },
+      "logo": {
+        "topbar": "https://externalurl.example.com/url/for/remote/theme/assets/logo.svg",
+        "favicon": "https://externalurl.example.com/url/for/remote/theme/assets/favicon.jpg",
+        "login": "relative/path/for/local/theme/logo.svg"
+      },
+      "loginPage": {
+        "autoRedirect": true,
+        "backgroundImg": "relative/path/for/local/theme/background.jpg"
+      },
+      "designTokens": {}
     },
-    "logo": {
-      "topbar": "https://externalurl.example.com/url/for/remote/theme/assets/logo.svg",
-      "favicon": "https://externalurl.example.com/url/for/remote/theme/assets/favicon.jpg",
-      "login": "relative/path/for/local/theme/logo.svg"
-    },
-    "loginPage": {
-      "autoRedirect": true,
-      "backgroundImg": "relative/path/for/local/theme/background.jpg"
-    },
-    "designTokens": {}
-  },
-  "alternative": {},
-  "dark": {}
+    "alternative": {},
+    "dark": {}
+  }
 }
 ```
 
@@ -81,14 +83,16 @@ In general, the theme loader looks for a `designTokens` key inside your theme co
 
 ```json
 {
-  "default": {
-    "general": {},
-    "designTokens": {
-      "breakpoints": {},
-      "colorPalette": {},
-      "fontSizes": {},
-      "sizes": {},
-      "spacing": {}
+  "web": {
+    "default": {
+      "general": {},
+      "designTokens": {
+        "breakpoints": {},
+        "colorPalette": {},
+        "fontSizes": {},
+        "sizes": {},
+        "spacing": {}
+      }
     }
   }
 }
@@ -232,88 +236,90 @@ An empty template for your custom theme is provided below, and you can use the i
 
 ```json
 {
-  "default": {
-    "general": {
-      "name": "",
-      "slogan": ""
-    },
-    "logo": {
-      "topbar": "",
-      "favicon": "",
-      "login": "",
-      "notFound": ""
-    },
-    "loginPage": {
-      "autoRedirect": true,
-      "backgroundImg": ""
-    },
-    "designTokens": {
-      "breakpoints": {
-        "xsmall-max": "",
-        "small-default": "",
-        "small-max": "",
-        "medium-default": "",
-        "medium-max": "",
-        "large-default": "",
-        "large-max": "",
-        "xlarge": ""
+  "web": {
+    "default": {
+      "general": {
+        "name": "",
+        "slogan": ""
       },
-      "colorPalette": {
-        "background-accentuate": "",
-        "background-default": "",
-        "background-highlight": "",
-        "background-muted": "",
-        "border": "",
-        "input-bg": "",
-        "input-border": "",
-        "input-text-default": "",
-        "input-text-muted": "",
-        "swatch-brand-default": "",
-        "swatch-brand-hover": "",
-        "swatch-danger-default": "",
-        "swatch-danger-hover": "",
-        "swatch-danger-muted": "",
-        "swatch-inverse-default": "",
-        "swatch-inverse-hover": "",
-        "swatch-inverse-muted": "",
-        "swatch-passive-default": "",
-        "swatch-passive-hover": "",
-        "swatch-passive-muted": "",
-        "swatch-primary-default": "",
-        "swatch-primary-hover": "",
-        "swatch-primary-muted": "",
-        "swatch-primary-gradient": "",
-        "swatch-success-default": "",
-        "swatch-success-hover": "",
-        "swatch-success-muted": "",
-        "swatch-warning-default": "",
-        "swatch-warning-hover": "",
-        "swatch-warning-muted": "",
-        "text-default": "",
-        "text-inverse": "",
-        "text-muted": ""
+      "logo": {
+        "topbar": "",
+        "favicon": "",
+        "login": "",
+        "notFound": ""
       },
-      "fontSizes": {
-        "default": "",
-        "large": "",
-        "medium": ""
+      "loginPage": {
+        "autoRedirect": true,
+        "backgroundImg": ""
       },
-      "sizes": {
-        "form-check-default": "",
-        "height-small": "",
-        "height-table-row": "",
-        "icon-default": "",
-        "max-height-logo": "",
-        "max-width-logo": "",
-        "width-medium": ""
-      },
-      "spacing": {
-        "xsmall": "",
-        "small": "",
-        "medium": "",
-        "large": "",
-        "xlarge": "",
-        "xxlarge": ""
+      "designTokens": {
+        "breakpoints": {
+          "xsmall-max": "",
+          "small-default": "",
+          "small-max": "",
+          "medium-default": "",
+          "medium-max": "",
+          "large-default": "",
+          "large-max": "",
+          "xlarge": ""
+        },
+        "colorPalette": {
+          "background-accentuate": "",
+          "background-default": "",
+          "background-highlight": "",
+          "background-muted": "",
+          "border": "",
+          "input-bg": "",
+          "input-border": "",
+          "input-text-default": "",
+          "input-text-muted": "",
+          "swatch-brand-default": "",
+          "swatch-brand-hover": "",
+          "swatch-danger-default": "",
+          "swatch-danger-hover": "",
+          "swatch-danger-muted": "",
+          "swatch-inverse-default": "",
+          "swatch-inverse-hover": "",
+          "swatch-inverse-muted": "",
+          "swatch-passive-default": "",
+          "swatch-passive-hover": "",
+          "swatch-passive-muted": "",
+          "swatch-primary-default": "",
+          "swatch-primary-hover": "",
+          "swatch-primary-muted": "",
+          "swatch-primary-gradient": "",
+          "swatch-success-default": "",
+          "swatch-success-hover": "",
+          "swatch-success-muted": "",
+          "swatch-warning-default": "",
+          "swatch-warning-hover": "",
+          "swatch-warning-muted": "",
+          "text-default": "",
+          "text-inverse": "",
+          "text-muted": ""
+        },
+        "fontSizes": {
+          "default": "",
+          "large": "",
+          "medium": ""
+        },
+        "sizes": {
+          "form-check-default": "",
+          "height-small": "",
+          "height-table-row": "",
+          "icon-default": "",
+          "max-height-logo": "",
+          "max-width-logo": "",
+          "width-medium": ""
+        },
+        "spacing": {
+          "xsmall": "",
+          "small": "",
+          "medium": "",
+          "large": "",
+          "xlarge": "",
+          "xxlarge": ""
+        }
       }
     }
   }
