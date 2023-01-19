@@ -47,14 +47,14 @@ import {
   useClientService,
   usePublicLinkPassword,
   usePublicLinkToken,
-  useStore
+  useStore,
+  useRouter
 } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { useAuthService } from 'web-pkg/src/composables/authContext/useAuthService'
-import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {

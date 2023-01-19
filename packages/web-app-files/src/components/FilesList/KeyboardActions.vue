@@ -292,6 +292,14 @@ export default defineComponent({
       }
       document.removeEventListener('keydown', handleGlobalShortcuts)
     })
+
+    return {
+      areCustomKeyBindingsEnabled,
+      handleGlobalShortcuts,
+      handelLocalShortcuts,
+      handleShiftClickAction,
+      handleCtrlClickAction
+    }
   }
 })
 </script>
