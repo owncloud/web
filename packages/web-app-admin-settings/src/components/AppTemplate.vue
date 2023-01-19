@@ -27,7 +27,7 @@
         v-if="sideBarOpen"
         :active-panel="sideBarActivePanel"
         :available-panels="sideBarAvailablePanels"
-        :loading="false"
+        :loading="sideBarLoading"
         :open="sideBarOpen"
         :is-header-compact="isSideBarHeaderCompact"
         @selectPanel="selectPanel"
@@ -73,6 +73,11 @@ export default defineComponent({
     sideBarActivePanel: {
       required: true,
       type: String
+    },
+    sideBarLoading: {
+      required: false,
+      type: Boolean,
+      default: false
     },
     isSideBarHeaderCompact: {
       required: false,

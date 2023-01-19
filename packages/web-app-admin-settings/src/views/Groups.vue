@@ -53,7 +53,7 @@
             :header-position="listHeaderPosition"
             @toggleSelectGroup="toggleSelectGroup"
             @toggleSelectAllGroups="toggleSelectAllGroups"
-            @showPanel="showPanel"
+            @unSelectAllGroups="unselectAllGroups"
           />
         </div>
       </template>
@@ -212,11 +212,6 @@ export default defineComponent({
     },
     toggleDeleteGroupModal() {
       this.deleteGroupModalOpen = !this.deleteGroupModalOpen
-    },
-    showPanel({ group, panel }) {
-      this.selectedGroups = [group]
-      this.sideBarActivePanel = panel
-      this.sideBarOpen = true
     },
     async deleteGroups(groups) {
       const promises = groups.map((group) => this.graphClient.groups.deleteGroup(group.id))

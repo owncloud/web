@@ -47,15 +47,16 @@ export default defineComponent({
     UserInfoBox
   },
   props: {
+    user: {
+      type: Object,
+      required: true
+    },
     users: {
       type: Array,
       required: true
     }
   },
   computed: {
-    user() {
-      return this.users.length === 1 ? this.users[0] : null
-    },
     noUsers() {
       return !this.users.length
     },
