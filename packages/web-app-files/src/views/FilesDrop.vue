@@ -74,6 +74,7 @@ export default defineComponent({
     const dragOver = ref()
     const dragOut = ref()
     const drop = ref()
+    const share = ref()
     const dragareaEnabled = ref(false)
     const loading = ref(true)
     const errorMessage = ref(null)
@@ -100,8 +101,7 @@ export default defineComponent({
             )
             return
           }
-          // TODO: There is not this.share?!
-          // this.share = files[0]
+          share.value = files[0]
         })
         .catch((error) => {
           // likely missing password, redirect to public link password prompt
@@ -142,7 +142,8 @@ export default defineComponent({
       }),
       dragareaEnabled,
       loading,
-      errorMessage
+      errorMessage,
+      share
     }
   },
   computed: {
