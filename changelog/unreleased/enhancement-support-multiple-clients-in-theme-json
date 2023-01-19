@@ -1,0 +1,6 @@
+Enhancement: Add support for multiple clients in `theme.json`
+
+The `theme.json` file now supports multiple clients which are defined via the top-level property. Therefore both web themes have been moved down one level into the new property "web". The change is backwards compatible though, meaning it still works when the web themes are defined top-level in `theme.json`.
+
+https://github.com/owncloud/web/pull/8280
+https://github.com/owncloud/enterprise/issues/5502
