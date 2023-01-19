@@ -43,6 +43,7 @@ export const EDITOR_MODE_CREATE = 'create'
 export type FileActionOptions = {
   space: SpaceResource
   resources: Resource[]
+  sameTab?: Boolean
 }
 
 export default {
@@ -99,7 +100,8 @@ export default {
                 options.resources[0].webDavPath,
                 options.resources[0].fileId,
                 EDITOR_MODE_EDIT,
-                options.space.shareId
+                options.space.shareId,
+                options.sameTab
               ),
             isEnabled: ({ resources }) => {
               if (resources.length !== 1) {
@@ -147,7 +149,7 @@ export default {
   },
 
   methods: {
-    $_fileActions_openEditor(editor, driveAliasAndItem: string, filePath, fileId, mode, shareId) {
+    $_fileActions_openEditor(editor, driveAliasAndItem: string, filePath, fileId, mode, shareId, sameTab) {
       if (editor.handler) {
         return editor.handler({
           config: this.configuration,
@@ -169,7 +171,7 @@ export default {
         shareId
       )
 
-      if (this.configuration.options.openAppsInTab) {
+      if (this.configuration.options.openAppsInTab  && !sameTab) {
         const path = this.$router.resolve(routeOpts).href
         const target = `${editor.routeName}-${filePath}`
         const win = window.open(path, target)
@@ -292,14 +294,15 @@ export default {
               driveAliasAndItem,
               webDavPath,
               fileId,
-              options.space.shareId
+              options.space.shareId,
+              options.sameTab
             ),
           label: () => this.$gettextInterpolate(label, { appName: app.name })
         }
       })
     },
 
-    $_fileActions_openExternalApp(app, driveAliasAndItem: string, filePath, fileId, shareId) {
+    $_fileActions_openExternalApp(app, driveAliasAndItem: string, filePath, fileId, shareId, sameTab=false) {
       const routeOpts = this.$_fileActions__routeOpts(
         {
           routeName: 'external-apps'
@@ -318,7 +321,7 @@ export default {
       }
 
       // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
-      window.open(this.$router.resolve(routeOpts).href, '_blank')
+      window.open(this.$router.resolve(routeOpts).href, sameTab ? '_self' : '_blank')
     }
   }
 }
