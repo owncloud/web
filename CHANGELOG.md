@@ -387,6 +387,7 @@ Details
    https://github.com/owncloud/web/pull/8230
    https://github.com/owncloud/web/pull/8262
    https://github.com/owncloud/web/pull/8247
+   https://github.com/owncloud/web/pull/8273
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
