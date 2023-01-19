@@ -47,20 +47,50 @@ When(
 )
 
 When(
-  /^"([^"]*)" (disables|deletes) the space "([^"]*)"$/,
+  /^"([^"]*)" (disables|deletes) the space "([^"]*)" using the context-menu$/,
   async function (this: World, stepUser: string, action: string, key: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
 
     switch (action) {
       case 'disables':
-        await spacesObject.disable({ key })
+        await spacesObject.disable({ key, context: 'context-menu' })
         break
       case 'deletes':
-        await spacesObject.delete({ key })
+        await spacesObject.delete({ key, context: 'context-menu' })
         break
       default:
         throw new Error(`${action} not implemented`)
     }
+  }
+)
+
+When(
+  /^"([^"]*)" (disables|deletes) the space "([^"]*)" using the batch-actions$/,
+  async function (this: World, stepUser: string, action: string, key: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+
+    switch (action) {
+      case 'disables':
+        await spacesObject.disable({ key, context: 'batch-actions' })
+        break
+      case 'deletes':
+        await spacesObject.delete({ key, context: 'batch-actions' })
+        break
+      default:
+        throw new Error(`${action} not implemented`)
+    }
+  }
+)
+When(
+  /^"([^"]*)" selects the following space(s)?$/,
+  async function (this: World, stepUser: string, _: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+    for (const info of stepTable.hashes()) {
+      spacesObject.select({ key: info.name })
+    }
+    await page.waitForTimeout(100000);
   }
 )

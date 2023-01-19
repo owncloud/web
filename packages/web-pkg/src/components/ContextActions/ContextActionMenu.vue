@@ -13,7 +13,7 @@
         :action="action"
         :items="items"
         :space="space"
-        class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"
+        class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"
       />
     </oc-list>
   </div>

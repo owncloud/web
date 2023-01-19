@@ -1,5 +1,5 @@
 import { Page } from 'playwright'
-import { changeSpaceQuota, deleteSpace, disableSpace, getDisplayedSpaces } from './actions'
+import { changeSpaceQuota, deleteSpace, disableSpace, getDisplayedSpaces, selectSpace } from './actions'
 import { SpacesEnvironment } from '../../../environment'
 import { Space } from '../../../types'
 
@@ -25,13 +25,18 @@ export class Spaces {
     await changeSpaceQuota({ id, value, page: this.#page })
   }
 
-  async disable({ key }: { key: string }): Promise<void> {
+  async disable({ key, context }: { key: string, context:string }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
-    await disableSpace({ id, page: this.#page })
+    await disableSpace({ id, page: this.#page, context })
   }
 
-  async delete({ key }: { key: string }): Promise<void> {
+  async delete({ key, context }: { key: string, context:string }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
-    await deleteSpace({ id, page: this.#page })
+    await deleteSpace({ id, page: this.#page, context })
+  }
+
+  async select({key}: {key: string}): Promise<void> {
+    const { id } = this.#spacesEnvironment.getSpace({ key })
+    await selectSpace({ id, page: this.#page })
   }
 }

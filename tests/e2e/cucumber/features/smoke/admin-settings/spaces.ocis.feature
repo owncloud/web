@@ -22,12 +22,34 @@ Feature: spaces management
       | id     |
       | team.a |
     And "Alice" updates the quota for space "team.a" to "50"
-    And "Alice" disables the space "team.a"
-    And "Alice" deletes the space "team.a"
+    And "Alice" disables the space "team.a" using the context-menu
+    And "Alice" deletes the space "team.a" using the context-menu
     Then "Alice" should not see the following spaces
       | id     |
       | team.a |
     And "Alice" logs out
+  Scenario: multiple spaces can be managed at once in the admin settings
+    Given "Admin" creates following users
+      | id    |
+      | Alice |
+      | Brian |
+    And "Admin" assigns following roles to the users
+      | id    | role       |
+      | Alice | SpaceAdmin |
+      | Brian | SpaceAdmin |
+    When "Alice" logs in
+    And "Alice" opens the "files" app
+    And "Alice" navigates to the projects space page
+    And "Alice" creates the following project spaces
+      | name   | id     |
+      | team A | team.a |
+      | team B | team.b |
+    And "Alice" opens the "admin-settings" app
+    And "Alice" navigates to the project spaces management page
+    And "Alice" selects the following spaces
+      | name   |
+      | team.a |
+      | team.b |
 # TODO: Comment in as soon as https://github.com/owncloud/ocis/issues/5414 is resolved
 #    Then "Brian" logs in
 #    And "Brian" opens the "admin-settings" app

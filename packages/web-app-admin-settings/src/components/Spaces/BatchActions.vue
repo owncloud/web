@@ -10,7 +10,7 @@
         :action="action"
         :items="selectedSpaces"
         appearance="outline"
-        class="oc-mr-s"
+        class="batch-actions oc-mr-s"
         :show-tooltip="limitedScreenSpace"
       />
     </oc-list>
