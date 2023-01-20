@@ -62,12 +62,13 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
+import { User } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'EditPanel',
@@ -78,8 +79,8 @@ export default defineComponent({
   },
   props: {
     user: {
-      type: Object,
-      required: true
+      type: Object as PropType<User>,
+      required: false
     },
     roles: {
       type: Array,

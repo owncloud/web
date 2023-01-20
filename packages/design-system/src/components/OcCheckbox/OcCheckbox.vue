@@ -6,7 +6,7 @@
       type="checkbox"
       name="checkbox"
       :class="classes"
-      :modelValue="option"
+      :value="option"
       :disabled="disabled"
     />
     <label :for="id" :class="labelClasses" v-text="label" />

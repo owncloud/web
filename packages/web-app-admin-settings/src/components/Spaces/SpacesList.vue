@@ -27,20 +27,20 @@
           size="large"
           class="oc-ml-s"
           :label="$gettext('Select all spaces')"
-          :value="allSpacesSelected"
+          :model-value="allSpacesSelected"
           hide-label
-          @input="$emit('toggleSelectAllSpaces')"
+          @update:modelValue="$emit('toggleSelectAllSpaces')"
         />
       </template>
       <template #select="{ item }">
         <oc-checkbox
           class="oc-ml-s"
           size="large"
-          :value="isSpaceSelected(item)"
+          :model-value="isSpaceSelected(item)"
           :option="item"
           :label="getSelectSpaceLabel(item)"
           hide-label
-          @input="$emit('toggleSelectSpace', item)"
+          @update:modelValue="$emit('toggleSelectSpace', item)"
           @click.stop
         />
       </template>

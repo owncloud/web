@@ -41,6 +41,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import UserInfoBox from './UserInfoBox.vue'
+import { PropType } from 'vue'
+import { User } from 'web-client/src/generated'
+
 export default defineComponent({
   name: 'DetailsPanel',
   components: {
@@ -48,8 +51,8 @@ export default defineComponent({
   },
   props: {
     user: {
-      type: Object,
-      required: true
+      type: Object as PropType<User>,
+      required: false
     },
     users: {
       type: Array,

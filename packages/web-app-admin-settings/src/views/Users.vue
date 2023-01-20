@@ -213,7 +213,8 @@ export default defineComponent({
       loadResourcesTask,
       loadAdditionalUserDataTask,
       graphClient,
-      accessToken
+      accessToken,
+      listHeaderPosition
     }
   },
   data: function () {

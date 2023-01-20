@@ -24,20 +24,20 @@
           size="large"
           class="oc-ml-s"
           :label="$gettext('Select all users')"
-          :value="allUsersSelected"
+          :model-value="allUsersSelected"
           hide-label
-          @input="$emit('toggleSelectAllUsers')"
+          @update:modelValue="$emit('toggleSelectAllUsers')"
         />
       </template>
       <template #select="{ item }">
         <oc-checkbox
           class="oc-ml-s"
           size="large"
-          :value="selectedUsers"
+          :model-value="selectedUsers"
           :option="item"
           :label="getSelectUserLabel(item)"
           hide-label
-          @input="$emit('toggleSelectUser', item)"
+          @update:modelValue="$emit('toggleSelectUser', item)"
         />
       </template>
       <template #avatar="{ item }">
@@ -104,6 +104,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['unSelectAllUsers', 'toggleSelectAllUsers', 'toggleSelectUser'],
   setup(props, { emit }) {
     const showDetails = (user) => {
       emit('unSelectAllUsers')

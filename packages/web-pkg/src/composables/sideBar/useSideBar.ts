@@ -14,7 +14,7 @@ interface SideBarOptions {
 export const useSideBar = (options?: SideBarOptions): SideBarResult => {
   const eventBus = options?.bus || defaultEventBus
   const sideBarOpen = ref(false)
-  const sideBarActivePanel = ref(null)
+  const sideBarActivePanel = ref('')
   const toggleSideBarToken = eventBus.subscribe(SideBarEventTopics.toggle, () => {
     sideBarOpen.value = !unref(sideBarOpen)
   })
@@ -28,14 +28,14 @@ export const useSideBar = (options?: SideBarOptions): SideBarResult => {
   })
   const openSideBarWithPanelToken = eventBus.subscribe(
     SideBarEventTopics.openWithPanel,
-    (panelName) => {
+    (panelName: string) => {
       sideBarOpen.value = true
       sideBarActivePanel.value = panelName
     }
   )
   const setActiveSideBarPanelToken = eventBus.subscribe(
     SideBarEventTopics.setActivePanel,
-    (panelName) => {
+    (panelName: string) => {
       sideBarActivePanel.value = panelName
     }
   )
