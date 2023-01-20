@@ -30,7 +30,7 @@
             :disabled="inputDisabled"
             :fix-message-line="true"
             :selection-range="inputSelectionRange"
-            @input="inputOnInput"
+            @update:modelValue="inputOnInput"
             @keydown.enter.prevent="confirm"
           />
           <p v-else key="modal-message" class="oc-modal-body-message" v-text="message" />
@@ -334,6 +334,7 @@ export default defineComponent({
       default: null
     }
   },
+  emits: ['cancel', 'confirm', 'confirm-secondary', 'input', 'checkbox-changed'],
   data() {
     return {
       userInputValue: null,

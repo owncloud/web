@@ -6,7 +6,7 @@
       type="checkbox"
       name="checkbox"
       :class="classes"
-      :value="option"
+      :modelValue="option"
       :disabled="disabled"
     />
     <label :for="id" :class="labelClasses" v-text="label" />
@@ -24,6 +24,7 @@ export default defineComponent({
   name: 'OcCheckbox',
   status: 'ready',
   release: '1.0.0',
+  compatConfig: { MODE: 3 },
   props: {
     /**
      * Id for the checkbox. If it's empty, a generated one will be used.
@@ -47,7 +48,7 @@ export default defineComponent({
      * Can be any type, but most common is boolean for singular checkbox use, or array when used in a group of checkboxes.
      **/
     // eslint-disable-next-line vue/require-prop-types
-    value: {
+    modelValue: {
       required: false,
       default: false
     },
@@ -99,14 +100,14 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['click'],
+  emits: ['click', 'update:modelValue'],
   computed: {
     model: {
       get() {
-        return this.value
+        return this.modelValue
       },
       set: function (value) {
-        this.$emit('input', value)
+        this.$emit('update:modelValue', value)
         this.setChecked(value)
       }
     },

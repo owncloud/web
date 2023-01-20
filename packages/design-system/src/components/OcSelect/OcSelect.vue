@@ -38,8 +38,7 @@ export default defineComponent({
   name: 'OcSelect',
   status: 'ready',
   release: '4.3.0',
-
-  compatConfig: { COMPONENT_V_MODEL: false },
+  compatConfig: { MODE: 3 },
   components: { VueSelect },
 
   inheritAttrs: true,
@@ -102,7 +101,7 @@ export default defineComponent({
       default: null
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['search:input', 'update:modelValue'],
 
   computed: {
     additionalAttributes() {

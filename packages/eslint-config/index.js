@@ -47,6 +47,7 @@ module.exports = {
       rules: {
         'vue/multi-word-component-names': 'warn',
         'vue/no-multiple-template-root': 'off',
+        'vue/no-v-model-argument': 'off',
         'vue/no-v-text-v-html-on-component': 'warn'
       }
     },

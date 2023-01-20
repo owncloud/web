@@ -49,6 +49,7 @@ export default defineComponent({
       }
     }
   },
+  emits: ['confirm', 'revert'],
   setup() {
     const saved = ref(false)
     let savedEventToken

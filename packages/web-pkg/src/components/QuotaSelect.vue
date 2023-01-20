@@ -52,6 +52,7 @@ export default {
       default: 0
     }
   },
+  emits: ['selectedOptionChange'],
   data: function () {
     return {
       selectedOption: undefined,

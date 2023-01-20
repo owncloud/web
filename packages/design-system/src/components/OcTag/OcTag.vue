@@ -58,6 +58,8 @@ export default defineComponent({
     }
   },
 
+  emits: ['click'],
+
   computed: {
     $_ocTag_class() {
       const classes = ['oc-tag', `oc-tag-${getSizeClass(this.size)}`]
@@ -73,7 +75,6 @@ export default defineComponent({
       return classes
     }
   },
-
   methods: {
     $_ocTag_click(event) {
       /**

@@ -28,6 +28,6 @@ export function useDocumentTitle({ titleSegments, store, eventBus }: DocumentTit
 
       eventBus.publish('runtime.documentTitle.changed', payload)
     },
-    { immediate: true }
+    { immediate: true, deep: true }
   )
 }

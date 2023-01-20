@@ -73,6 +73,7 @@ export default defineComponent({
       validator: (value) => value > 0
     }
   },
+  emits: ['close'],
   computed: {
     classes() {
       return `oc-notification-message-${this.status}`

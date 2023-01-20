@@ -29,6 +29,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['createPublicLink'],
   computed: {
     heading() {
       return this.$gettext('Quick link')

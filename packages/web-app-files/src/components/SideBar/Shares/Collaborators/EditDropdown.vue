@@ -56,7 +56,6 @@
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
-import { formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'EditDropdown',
@@ -222,13 +221,6 @@ export default defineComponent({
       const date = new Date()
       date.setDate(new Date().getDate() + 1)
       return date
-    },
-
-    relativeExpirationDate() {
-      return formatRelativeDateFromDateTime(
-        DateTime.fromJSDate(this.enteredExpirationDate).endOf('day'),
-        this.$language.current
-      )
     }
   },
   watch: {
@@ -236,6 +228,7 @@ export default defineComponent({
       handler: 'updateExpirationDate'
     }
   },
+  emits: ['expirationDateChanged', 'removeShare', 'showAccessDetails'],
   methods: {
     updateExpirationDate() {
       this.$emit('expirationDateChanged', {

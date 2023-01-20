@@ -314,6 +314,7 @@ export default defineComponent({
       }
     }
   },
+  emits: ['onDelete'],
   methods: {
     ...mapActions(['showMessage']),
     ...mapActions('Files', ['changeShare']),

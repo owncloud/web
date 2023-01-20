@@ -51,7 +51,7 @@ export default defineComponent({
      * Can be any type.
      **/
     // eslint-disable-next-line vue/require-prop-types
-    value: {
+    modelValue: {
       required: false,
       default: false
     },
@@ -94,13 +94,14 @@ export default defineComponent({
       validator: (size) => /(small|medium|large)/.test(size)
     }
   },
+  emits: ['update:modelValue'],
   computed: {
     model: {
       get() {
-        return this.value
+        return this.modelValue
       },
       set(value) {
-        this.$emit('input', value)
+        this.$emit('update:modelValue', value)
       }
     },
     classes() {

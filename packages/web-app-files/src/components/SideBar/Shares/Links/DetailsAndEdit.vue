@@ -403,7 +403,7 @@ export default defineComponent({
       })
     }
   },
-
+  emits: ['removePublicLink', 'updateLink'],
   methods: {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
 

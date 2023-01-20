@@ -12,7 +12,7 @@
     </no-content-message>
     <resource-table
       v-else
-      v-model="selectedResourcesIds"
+      v-model:selectedIds="selectedResourcesIds"
       :data-test-share-status="shareStatus"
       class="files-table"
       :class="{ 'files-table-squashed': sideBarOpen }"
@@ -28,6 +28,7 @@
       @fileClick="$_fileActions_triggerDefaultAction"
       @rowMounted="rowMounted"
       @sort="sortHandler"
+      @update:selectedIds="selectedResourcesIds = $event"
     >
       <template #status="{ resource }">
         <div

@@ -47,7 +47,7 @@
         <resource-table
           v-else
           id="files-space-table"
-          v-model="selectedResourcesIds"
+          v-model:selectedIds="selectedResourcesIds"
           class="files-table"
           :class="{ 'files-table-squashed': sideBarOpen }"
           :view-mode="viewMode"
@@ -63,6 +63,7 @@
           @fileClick="$_fileActions_triggerDefaultAction"
           @rowMounted="rowMounted"
           @sort="handleSort"
+          @update:selectedIds="selectedResourcesIds = $event"
         >
           <template #quickActions="{ resource }">
             <quick-actions

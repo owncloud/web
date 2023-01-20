@@ -59,7 +59,7 @@ export default defineComponent({
       default: () => []
     }
   },
-
+  emits: ['optionChange'],
   setup(props, { emit }) {
     const vm = getCurrentInstance().proxy
     const language = computed(() => vm.$language)

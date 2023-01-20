@@ -37,16 +37,18 @@
       <oc-list>
         <li class="files-view-options-list-item oc-mb-m">
           <oc-switch
-            v-model="hiddenFilesShownModel"
+            v-model:checked="hiddenFilesShownModel"
             data-testid="files-switch-hidden-files"
             :label="$gettext('Show hidden files')"
+            @update:checked="updateHiddenFilesShownModel"
           />
         </li>
         <li class="files-view-options-list-item oc-my-m">
           <oc-switch
-            v-model="fileExtensionsShownModel"
+            v-model:checked="fileExtensionsShownModel"
             data-testid="files-switch-files-extensions-files"
             :label="$gettext('Show file extensions')"
+            @update:checked="updateFileExtensionsShownModel"
           />
         </li>
         <li class="files-view-options-list-item oc-mt-m">
@@ -125,6 +127,12 @@ export default defineComponent({
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
     setViewMode(mode) {
       this.viewModeCurrent = mode.name
+    },
+    updateHiddenFilesShownModel(event) {
+      this.hiddenFilesShownModel = event
+    },
+    updateFileExtensionsShownModel(event) {
+      this.fileExtensionsShownModel = event
     }
   }
 })

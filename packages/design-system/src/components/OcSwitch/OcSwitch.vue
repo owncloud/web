@@ -24,10 +24,6 @@ export default defineComponent({
   name: 'OcSwitch',
   status: 'ready',
   release: '1.0.0',
-  model: {
-    prop: 'checked',
-    event: 'change'
-  },
   props: {
     /**
      * Value of the switch
@@ -57,15 +53,15 @@ export default defineComponent({
       default: () => uniqueId('oc-switch-label-')
     }
   },
-
+  emits: ['update:checked'],
   methods: {
     toggle() {
       /**
        * Change event
-       * @event change
+       * @event update:checked
        * @type {boolean}
        */
-      this.$emit('change', !this.checked)
+      this.$emit('update:checked', !this.checked)
     }
   }
 })

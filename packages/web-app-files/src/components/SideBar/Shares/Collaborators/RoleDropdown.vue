@@ -220,6 +220,7 @@ export default defineComponent({
     }
   },
 
+  emits: ['optionChange'],
   created() {
     this.applyRoleAndPermissions()
   },

@@ -31,7 +31,8 @@ export default defineComponent({
       type: Object,
       default: null
     }
-  }
+  },
+  emits: ['close']
 })
 </script>
 

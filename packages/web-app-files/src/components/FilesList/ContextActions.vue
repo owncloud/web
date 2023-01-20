@@ -6,23 +6,11 @@
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 
 import FileActions from '../../mixins/fileActions'
-import AcceptShare from '../../mixins/actions/acceptShare'
-import Copy from '../../mixins/actions/copy'
 import CreateQuicklink from '../../mixins/actions/createQuicklink'
-import DeclineShare from '../../mixins/actions/declineShare'
-import Delete from '../../mixins/actions/delete'
-import DownloadArchive from '../../mixins/actions/downloadArchive'
-import DownloadFile from '../../mixins/actions/downloadFile'
 import EmptyTrashBin from '../../mixins/actions/emptyTrashBin'
-import Favorite from '../../mixins/actions/favorite'
-import Move from '../../mixins/actions/move'
 import Paste from '../../mixins/actions/paste'
-import Navigate from '../../mixins/actions/navigate'
-import Rename from '../../mixins/actions/rename'
-import Restore from '../../mixins/actions/restore'
 import ShowActions from '../../mixins/actions/showActions'
 import ShowDetails from '../../mixins/actions/showDetails'
-import ShowEditTags from '../../mixins/actions/showEditTags'
 import ShowShares from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
 import SetSpaceReadme from 'web-pkg/src/mixins/spaces/setReadme'
@@ -36,23 +24,11 @@ export default {
   components: { ContextActionMenu },
   mixins: [
     FileActions,
-    AcceptShare,
-    Copy,
     CreateQuicklink,
-    DeclineShare,
-    Delete,
-    DownloadArchive,
-    DownloadFile,
     EmptyTrashBin,
-    Favorite,
-    Move,
     Paste,
-    Navigate,
-    Rename,
-    Restore,
     ShowActions,
     ShowDetails,
-    ShowEditTags,
     ShowShares,
     SetSpaceImage,
     SetSpaceReadme,

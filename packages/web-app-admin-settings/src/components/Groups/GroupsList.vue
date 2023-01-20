@@ -93,6 +93,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['toggleSelectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
   setup(props, { emit }) {
     const showDetails = (group) => {
       emit('unSelectAllGroups')

@@ -23,6 +23,7 @@ export default {
       }
     }
   },
+  emits: ['sort'],
   computed: {
     isSortable() {
       return this.fields.some((f) => f.sortable)
