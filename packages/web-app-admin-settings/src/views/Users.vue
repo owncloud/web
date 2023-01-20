@@ -430,11 +430,8 @@ export default defineComponent({
           await this.addRoleAssignment(editUser)
         }
 
-        this.$set(
-          this.users,
-          this.users.findIndex((user) => user.id === editUser.id),
-          editUser
-        )
+        const userIndex = this.users.findIndex((user) => user.id === editUser.id)
+        this.users[userIndex] = editUser
         /**
          * The user object gets actually exchanged, therefore we update the selected users
          */
@@ -468,11 +465,8 @@ export default defineComponent({
           await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
         }
 
-        this.$set(
-          this.users,
-          this.users.findIndex((user) => user.id === editUser.id),
-          editUser
-        )
+        const userIndex = this.users.findIndex((user) => user.id === editUser.id)
+        this.users[userIndex] = editUser
         /**
          * The user object gets actually exchanged, therefore we update the selected users
          */

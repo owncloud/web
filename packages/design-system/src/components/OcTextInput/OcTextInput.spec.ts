@@ -141,8 +141,8 @@ describe('OcTextInput', () => {
       const wrapper = getShallowWrapper()
       expect(wrapper.emitted().input).toBeFalsy()
       await wrapper.find('input').setValue('a')
-      expect(wrapper.emitted().input).toBeTruthy()
-      expect(wrapper.emitted().input[0][0]).toBe('a')
+      expect(wrapper.emitted('update:modelValue')).toBeTruthy()
+      expect(wrapper.emitted('update:modelValue')[0][0]).toBe('a')
     })
   })
 
@@ -150,7 +150,7 @@ describe('OcTextInput', () => {
     it('should set the aria label attribute if provided', () => {
       const wrapper = getShallowWrapper({
         clearButtonEnabled: true,
-        value: 'non-empty-value',
+        modelValue: 'non-empty-value',
         clearButtonAccessibleLabel: 'test label'
       })
       expect(wrapper.find(selectors.clearInputButton).attributes().arialabel).toBe('test label')
@@ -160,7 +160,7 @@ describe('OcTextInput', () => {
   describe('clear input', () => {
     it('has no clear button when it is disabled', () => {
       const wrapper = getShallowWrapper({
-        value: 'non-empty-value',
+        modelValue: 'non-empty-value',
         clearButtonEnabled: true,
         disabled: true
       })
@@ -170,7 +170,7 @@ describe('OcTextInput', () => {
     it('has clear button when it is enabled but the input is an empty string but not null', () => {
       const wrapper = getShallowWrapper({
         clearButtonEnabled: true,
-        value: ''
+        modelValue: ''
       })
 
       expect(wrapper.find(selectors.clearInputButton).exists()).toBeTruthy()
@@ -179,7 +179,7 @@ describe('OcTextInput', () => {
     it('has no clear button when it is enabled but the input is null', () => {
       const wrapper = getShallowWrapper({
         clearButtonEnabled: true,
-        value: null
+        modelValue: null
       })
 
       expect(wrapper.find(selectors.clearInputButton).exists()).toBeFalsy()
@@ -188,7 +188,7 @@ describe('OcTextInput', () => {
     it('has a clear button when it is enabled and the input contains content', () => {
       const wrapper = getShallowWrapper({
         clearButtonEnabled: true,
-        value: 'non-empty-value'
+        modelValue: 'non-empty-value'
       })
 
       const btn = wrapper.find(selectors.clearInputButton)
@@ -200,7 +200,7 @@ describe('OcTextInput', () => {
         props: {
           ...defaultProps,
           clearButtonEnabled: true,
-          value: 'non-empty-value'
+          modelValue: 'non-empty-value'
         },
         attachTo: document.body
       })
@@ -211,7 +211,7 @@ describe('OcTextInput', () => {
       await btn.trigger('click')
 
       // value as data is supposed to be `null`
-      expect(wrapper.emitted().input[0][0]).toEqual(null)
+      expect(wrapper.emitted('update:modelValue')[0][0]).toEqual(null)
       // value in DOM would be the empty string if two way binding was used
       // by just passing in the value it should remain unchanged
       expect((input.element as HTMLInputElement).value).toEqual('non-empty-value')

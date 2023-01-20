@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$attrs.class">
     <label class="oc-label" :for="id" v-text="label" />
     <div class="oc-position-relative">
       <input

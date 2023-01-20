@@ -2,7 +2,7 @@
 
 exports[`OcModal displays input 1`] = `
 <div aria-labelledby="oc-modal-title" class="oc-modal-background">
-  <focus-trap-stub active="true" allowoutsideclick="true" escapedeactivates="true" initialfocus="[Function]" returnfocusondeactivate="true">
+  <focus-trap-stub active="true" allowoutsideclick="true" delayinitialfocus="true" escapedeactivates="true" initialfocus="[Function]" returnfocusondeactivate="true">
     <div aria-modal="true" class="oc-modal oc-modal-passive" role="dialog" tabindex="0">
       <div class="oc-modal-title">
         <!--v-if-->
@@ -25,7 +25,7 @@ exports[`OcModal displays input 1`] = `
 
 exports[`OcModal hides icon if not specified 1`] = `
 <div aria-labelledby="oc-modal-title" class="oc-modal-background">
-  <focus-trap-stub active="true" allowoutsideclick="true" escapedeactivates="true" initialfocus="[Function]" returnfocusondeactivate="true">
+  <focus-trap-stub active="true" allowoutsideclick="true" delayinitialfocus="true" escapedeactivates="true" initialfocus="[Function]" returnfocusondeactivate="true">
     <div aria-modal="true" class="oc-modal oc-modal-passive" role="dialog" tabindex="0">
       <div class="oc-modal-title">
         <!--v-if-->
@@ -48,7 +48,7 @@ exports[`OcModal hides icon if not specified 1`] = `
 
 exports[`OcModal matches snapshot 1`] = `
 <div aria-labelledby="oc-modal-title" class="oc-modal-background">
-  <focus-trap-stub active="true" allowoutsideclick="true" escapedeactivates="true" initialfocus="[Function]" returnfocusondeactivate="true">
+  <focus-trap-stub active="true" allowoutsideclick="true" delayinitialfocus="true" escapedeactivates="true" initialfocus="[Function]" returnfocusondeactivate="true">
     <div aria-modal="true" class="oc-modal oc-modal-passive" role="dialog" tabindex="0">
       <div class="oc-modal-title">
         <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="info" size="medium" type="span" variation="passive"></oc-icon-stub>
@@ -71,7 +71,7 @@ exports[`OcModal matches snapshot 1`] = `
 
 exports[`OcModal overrides props message with slot 1`] = `
 <div aria-labelledby="oc-modal-title" class="oc-modal-background">
-  <focus-trap-stub active="true" allowoutsideclick="true" escapedeactivates="true" initialfocus="[Function]" returnfocusondeactivate="true">
+  <focus-trap-stub active="true" allowoutsideclick="true" delayinitialfocus="true" escapedeactivates="true" initialfocus="[Function]" returnfocusondeactivate="true">
     <div aria-modal="true" class="oc-modal oc-modal-passive" role="dialog" tabindex="0">
       <div class="oc-modal-title">
         <!--v-if-->

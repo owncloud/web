@@ -53,6 +53,7 @@
         </li>
         <li class="files-view-options-list-item oc-mt-m">
           <oc-page-size
+            v-if="!queryParamsLoading"
             :selected="itemsPerPage"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
@@ -67,12 +68,11 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue'
+import { defineComponent, PropType, ref, watch } from 'vue'
 import { mapMutations, mapState } from 'vuex'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { ViewMode } from 'web-pkg/src/ui/types'
 import { PaginationConstants, ViewModeConstants } from '../../composables'
-import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
@@ -82,6 +82,7 @@ export default defineComponent({
     }
   },
   setup() {
+    const queryParamsLoading = ref(false)
     const perPageQuery = useRouteQueryPersisted({
       name: PaginationConstants.perPageQueryName,
       defaultValue: PaginationConstants.perPageDefault
@@ -90,11 +91,19 @@ export default defineComponent({
       name: ViewModeConstants.queryName,
       defaultValue: ViewModeConstants.defaultModeName
     })
+    watch(
+      [perPageQuery, viewModeQuery],
+      (params) => {
+        queryParamsLoading.value = params.some((p) => !p)
+      },
+      { immediate: true, deep: true }
+    )
 
     return {
       ViewModeConstants,
       viewModeCurrent: viewModeQuery,
-      itemsPerPage: perPageQuery
+      itemsPerPage: perPageQuery,
+      queryParamsLoading
     }
   },
   computed: {

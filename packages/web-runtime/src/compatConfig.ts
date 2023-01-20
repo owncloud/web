@@ -24,7 +24,7 @@ export const compatConfig: CompatConfig = {
   // GLOBAL_OBSERVABLE: false,
   // GLOBAL_PRIVATE_UTIL: false,
   GLOBAL_PROTOTYPE: false,
-  // GLOBAL_SET: false,
+  GLOBAL_SET: false,
   INSTANCE_ATTRS_CLASS_STYLE: false,
   INSTANCE_CHILDREN: false,
   INSTANCE_DELETE: false,

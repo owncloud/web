@@ -6,7 +6,7 @@
       type="radio"
       name="radio"
       :class="classes"
-      :aria-checked="(option === value).toString()"
+      :aria-checked="(option === modelValue).toString()"
       :value="option"
       :disabled="disabled"
     />
@@ -26,6 +26,7 @@ export default defineComponent({
   name: 'OcRadio',
   status: 'ready',
   release: '1.0.0',
+  compatConfig: { MODE: 3 },
   props: {
     /**
      * Id for the radio. If it's empty, a generated one will be used.

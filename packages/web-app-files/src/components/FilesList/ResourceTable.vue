@@ -33,7 +33,7 @@
           size="large"
           :label="allResourcesCheckboxLabel"
           :hide-label="true"
-          :value="areAllResourcesSelected"
+          :model-value="areAllResourcesSelected"
           @update:modelValue="toggleSelectionAll"
         />
       </div>

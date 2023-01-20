@@ -187,7 +187,7 @@ describe('ResourceTable', () => {
       const { wrapper } = getMountedWrapper()
       wrapper.find('.resource-table-select-all .oc-checkbox').setValue(true)
       wrapper.find('.oc-tbody-tr-documents .oc-checkbox').setValue(true)
-      expect(wrapper.emitted().select.length).toBe(2)
+      expect(wrapper.emitted('update:selectedIds').length).toBe(2)
     })
 
     describe('all rows already selected', () => {
@@ -199,7 +199,7 @@ describe('ResourceTable', () => {
         })
 
         await wrapper.find('.resource-table-select-all .oc-checkbox').setValue(false)
-        expect(wrapper.emitted().select[0][0].length).toBe(0)
+        expect((wrapper.emitted('update:selectedIds')[0][0] as any).length).toBe(0)
       })
     })
   })
@@ -218,7 +218,7 @@ describe('ResourceTable', () => {
       const { wrapper } = getMountedWrapper()
       const tableRow = await wrapper.find('.oc-tbody-tr .oc-table-data-cell-size')
       await tableRow.trigger('click')
-      expect(wrapper.emitted().select).toBeTruthy()
+      expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
     })
   })
 
@@ -227,7 +227,7 @@ describe('ResourceTable', () => {
       const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
       const { wrapper } = getMountedWrapper()
       await wrapper.find('.oc-tbody-tr').trigger('contextmenu')
-      expect(wrapper.emitted().select.length).toBe(1)
+      expect(wrapper.emitted('update:selectedIds').length).toBe(1)
       expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
     })
 
@@ -237,7 +237,7 @@ describe('ResourceTable', () => {
       await wrapper
         .find('.oc-table-data-cell-actions .resource-table-btn-action-dropdown')
         .trigger('click')
-      expect(wrapper.emitted().select.length).toBe(1)
+      expect(wrapper.emitted('update:selectedIds').length).toBe(1)
       expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
     })
 
