@@ -1,0 +1,1 @@
+export { createShare } from './share'

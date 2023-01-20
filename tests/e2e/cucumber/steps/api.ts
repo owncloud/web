@@ -110,3 +110,19 @@ Given(
     }
   }
 )
+
+Given(
+  '{string} shares the following resource using API',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (const info of stepTable.hashes()) {
+      await api.share.createShare({
+        user,
+        path: info.resource,
+        shareWith: info.recipient,
+        shareType: info.type,
+        role: info.role
+      })
+    }
+  }
+)
