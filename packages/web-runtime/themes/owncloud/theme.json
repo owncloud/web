@@ -1,161 +1,169 @@
 {
-  "default": {
-    "general": {
+  "common": {
       "name": "ownCloud",
-      "slogan": "ownCloud – A safe home for all your data"
-    },
-    "logo": {
-      "topbar": "themes/owncloud/assets/logo.svg",
-      "favicon": "themes/owncloud/assets/favicon.jpg",
-      "login": "themes/owncloud/assets/logo.svg",
-      "notFound": "themes/owncloud/assets/cloud.svg"
-    },
-    "loginPage": {
-      "autoRedirect": true,
-      "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
-    },
-    "designTokens": {
-      "colorPalette": {
-        "background-accentuate": "rgba(255, 255, 5, 0.1)",
-        "background-default": "#ffffff",
-        "background-highlight": "#edf3fa",
-        "background-muted": "#f8f8f8",
-        "background-secondary": "#ffffff",
-        "background-hover": "rgb(236, 236, 236)",
-        "border": "#ecebee",
-        "input-bg": "#ffffff",
-        "input-border": "#ceddee",
-        "input-text-default": "#041e42",
-        "input-text-muted": "#4c5f79",
-        "swatch-brand-default": "#041e42",
-        "swatch-brand-hover": "#223959",
-        "swatch-danger-default": "#e00000",
-        "swatch-danger-hover": "#e96464",
-        "swatch-danger-muted": "#b50000",
-        "swatch-inverse-default": "#ffffff",
-        "swatch-inverse-hover": "#ffffff",
-        "swatch-inverse-muted": "#bfbfbf",
-        "swatch-passive-default": "#4c5f79",
-        "swatch-passive-hover": "#97a2b1",
-        "swatch-passive-muted": "#283e5d",
-        "swatch-primary-default": "#4a76ac",
-        "swatch-primary-hover": "#80a7d7",
-        "swatch-primary-muted": "#2c588e",
-        "swatch-primary-gradient": "#4e85c8",
-        "swatch-success-default": "#4f822f",
-        "swatch-success-hover": "#93e054",
-        "swatch-success-muted": "#53960a",
-        "swatch-warning-default": "#c6501b",
-        "swatch-warning-hover": "#fda94b",
-        "swatch-warning-muted": "#b35100",
-        "text-default": "#041e42",
-        "text-inverse": "#ffffff",
-        "text-muted": "#4c5f79",
-        "icon-folder": "#4d7eaf",
-        "icon-archive": "#fbbe54",
-        "icon-image": "#ee6b3b",
-        "icon-spreadsheet": "#15c286",
-        "icon-document": "#3b44a6",
-        "icon-video": "#045459",
-        "icon-audio": "#700460",
-        "icon-presentation": "#ee6b3b",
-        "icon-pdf": "#ec0d47"
-      }
-    }
+      "slogan": "ownCloud – A safe home for all your data",
+      "logo": "themes/owncloud/assets/logo.svg"
   },
-  "default-dark": {
-    "general": {
-      "name": "ownCloud",
-      "slogan": "ownCloud – A safe home for all your data"
+  "ios": {},
+  "web": {
+    "default": {
+      "general": {
+        "name": "ownCloud",
+        "slogan": "ownCloud – A safe home for all your data"
+      },
+      "logo": {
+        "topbar": "themes/owncloud/assets/logo.svg",
+        "favicon": "themes/owncloud/assets/favicon.jpg",
+        "login": "themes/owncloud/assets/logo.svg",
+        "notFound": "themes/owncloud/assets/cloud.svg"
+      },
+      "loginPage": {
+        "autoRedirect": true,
+        "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
+      },
+      "designTokens": {
+        "colorPalette": {
+          "background-accentuate": "rgba(255, 255, 5, 0.1)",
+          "background-default": "#ffffff",
+          "background-highlight": "#edf3fa",
+          "background-muted": "#f8f8f8",
+          "background-secondary": "#ffffff",
+          "background-hover": "rgb(236, 236, 236)",
+          "border": "#ecebee",
+          "input-bg": "#ffffff",
+          "input-border": "#ceddee",
+          "input-text-default": "#041e42",
+          "input-text-muted": "#4c5f79",
+          "swatch-brand-default": "#041e42",
+          "swatch-brand-hover": "#223959",
+          "swatch-danger-default": "#e00000",
+          "swatch-danger-hover": "#e96464",
+          "swatch-danger-muted": "#b50000",
+          "swatch-inverse-default": "#ffffff",
+          "swatch-inverse-hover": "#ffffff",
+          "swatch-inverse-muted": "#bfbfbf",
+          "swatch-passive-default": "#4c5f79",
+          "swatch-passive-hover": "#97a2b1",
+          "swatch-passive-muted": "#283e5d",
+          "swatch-primary-default": "#4a76ac",
+          "swatch-primary-hover": "#80a7d7",
+          "swatch-primary-muted": "#2c588e",
+          "swatch-primary-gradient": "#4e85c8",
+          "swatch-success-default": "#4f822f",
+          "swatch-success-hover": "#93e054",
+          "swatch-success-muted": "#53960a",
+          "swatch-warning-default": "#c6501b",
+          "swatch-warning-hover": "#fda94b",
+          "swatch-warning-muted": "#b35100",
+          "text-default": "#041e42",
+          "text-inverse": "#ffffff",
+          "text-muted": "#4c5f79",
+          "icon-folder": "#4d7eaf",
+          "icon-archive": "#fbbe54",
+          "icon-image": "#ee6b3b",
+          "icon-spreadsheet": "#15c286",
+          "icon-document": "#3b44a6",
+          "icon-video": "#045459",
+          "icon-audio": "#700460",
+          "icon-presentation": "#ee6b3b",
+          "icon-pdf": "#ec0d47"
+        }
+      }
     },
-    "logo": {
-      "topbar": "themes/owncloud/assets/logo.svg",
-      "favicon": "themes/owncloud/assets/favicon.jpg",
-      "login": "themes/owncloud/assets/logo.svg",
-      "notFound": "themes/owncloud/assets/cloud.svg"
-    },
-    "loginPage": {
-      "autoRedirect": true,
-      "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
-    },
-    "designTokens": {
-      "breakpoints": {
-        "xsmall-max": "",
-        "small-default": "",
-        "small-max": "",
-        "medium-default": "",
-        "medium-max": "",
-        "large-default": "",
-        "large-max": "",
-        "xlarge": ""
+    "default-dark": {
+      "general": {
+        "name": "ownCloud",
+        "slogan": "ownCloud – A safe home for all your data"
       },
-      "colorPalette": {
-        "background-accentuate": "#696969",
-        "background-default": "#292929",
-        "background-highlight": "#383838",
-        "background-muted": "#383838",
-        "background-secondary": "#4f4f4f",
-        "background-hover": "#383838",
-        "border": "#383838",
-        "input-bg": "#4f4f4f",
-        "input-border": "#4f4f4f",
-        "input-text-default": "#dadcdf",
-        "input-text-muted": "#bdbfc3",
-        "swatch-brand-default": "#212121",
-        "swatch-brand-hover": "#ffffff",
-        "swatch-danger-default": "#d11d1c",
-        "swatch-danger-hover": "",
-        "swatch-danger-muted": "",
-        "swatch-inverse-default": "",
-        "swatch-inverse-hover": "",
-        "swatch-inverse-muted": "#696969",
-        "swatch-passive-default": "#c2c2c2",
-        "swatch-passive-hover": "",
-        "swatch-passive-muted": "#bdbfc3",
-        "swatch-primary-default": "#73b0f2",
-        "swatch-primary-hover": "#7bafef",
-        "swatch-primary-muted": "",
-        "swatch-primary-gradient": "#4e85c8",
-        "swatch-success-default": "#04b253",
-        "swatch-success-hover": "",
-        "swatch-success-muted": "",
-        "swatch-warning-default": "",
-        "swatch-warning-hover": "",
-        "swatch-warning-muted": "",
-        "text-default": "#DADCDF",
-        "text-inverse": "#000000",
-        "text-muted": "#c2c2c2",
-        "icon-folder": "rgb(44, 101, 255)",
-        "icon-archive": "rgb(255, 207, 1)",
-        "icon-image": "rgb(255, 111, 0)",
-        "icon-spreadsheet": "rgb(0, 182, 87)",
-        "icon-document": "rgb(44, 101, 255)",
-        "icon-video": "rgb(0, 187, 219)",
-        "icon-audio": "rgb(208, 67, 236)",
-        "icon-presentation": "rgb(255, 64, 6)",
-        "icon-pdf": "rgb(225, 5, 14)"
+      "logo": {
+        "topbar": "themes/owncloud/assets/logo.svg",
+        "favicon": "themes/owncloud/assets/favicon.jpg",
+        "login": "themes/owncloud/assets/logo.svg",
+        "notFound": "themes/owncloud/assets/cloud.svg"
       },
-      "fontSizes": {
-        "default": "",
-        "large": "",
-        "medium": ""
+      "loginPage": {
+        "autoRedirect": true,
+        "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
       },
-      "sizes": {
-        "form-check-default": "",
-        "height-small": "",
-        "height-table-row": "",
-        "icon-default": "",
-        "max-height-logo": "",
-        "max-width-logo": "",
-        "width-medium": ""
-      },
-      "spacing": {
-        "xsmall": "",
-        "small": "",
-        "medium": "",
-        "large": "",
-        "xlarge": "",
-        "xxlarge": ""
+      "designTokens": {
+        "breakpoints": {
+          "xsmall-max": "",
+          "small-default": "",
+          "small-max": "",
+          "medium-default": "",
+          "medium-max": "",
+          "large-default": "",
+          "large-max": "",
+          "xlarge": ""
+        },
+        "colorPalette": {
+          "background-accentuate": "#696969",
+          "background-default": "#292929",
+          "background-highlight": "#383838",
+          "background-muted": "#383838",
+          "background-secondary": "#4f4f4f",
+          "background-hover": "#383838",
+          "border": "#383838",
+          "input-bg": "#4f4f4f",
+          "input-border": "#4f4f4f",
+          "input-text-default": "#dadcdf",
+          "input-text-muted": "#bdbfc3",
+          "swatch-brand-default": "#212121",
+          "swatch-brand-hover": "#ffffff",
+          "swatch-danger-default": "#d11d1c",
+          "swatch-danger-hover": "",
+          "swatch-danger-muted": "",
+          "swatch-inverse-default": "",
+          "swatch-inverse-hover": "",
+          "swatch-inverse-muted": "#696969",
+          "swatch-passive-default": "#c2c2c2",
+          "swatch-passive-hover": "",
+          "swatch-passive-muted": "#bdbfc3",
+          "swatch-primary-default": "#73b0f2",
+          "swatch-primary-hover": "#7bafef",
+          "swatch-primary-muted": "",
+          "swatch-primary-gradient": "#4e85c8",
+          "swatch-success-default": "#04b253",
+          "swatch-success-hover": "",
+          "swatch-success-muted": "",
+          "swatch-warning-default": "",
+          "swatch-warning-hover": "",
+          "swatch-warning-muted": "",
+          "text-default": "#DADCDF",
+          "text-inverse": "#000000",
+          "text-muted": "#c2c2c2",
+          "icon-folder": "rgb(44, 101, 255)",
+          "icon-archive": "rgb(255, 207, 1)",
+          "icon-image": "rgb(255, 111, 0)",
+          "icon-spreadsheet": "rgb(0, 182, 87)",
+          "icon-document": "rgb(44, 101, 255)",
+          "icon-video": "rgb(0, 187, 219)",
+          "icon-audio": "rgb(208, 67, 236)",
+          "icon-presentation": "rgb(255, 64, 6)",
+          "icon-pdf": "rgb(225, 5, 14)"
+        },
+        "fontSizes": {
+          "default": "",
+          "large": "",
+          "medium": ""
+        },
+        "sizes": {
+          "form-check-default": "",
+          "height-small": "",
+          "height-table-row": "",
+          "icon-default": "",
+          "max-height-logo": "",
+          "max-width-logo": "",
+          "width-medium": ""
+        },
+        "spacing": {
+          "xsmall": "",
+          "small": "",
+          "medium": "",
+          "large": "",
+          "xlarge": "",
+          "xxlarge": ""
+        }
       }
     }
   }
