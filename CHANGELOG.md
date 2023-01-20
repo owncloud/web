@@ -46,6 +46,7 @@ Summary
 * Enhancement - Space group shares: [#8161](https://github.com/owncloud/web/pull/8161)
 * Enhancement - Rename "user management" app: [#8175](https://github.com/owncloud/web/pull/8175)
 * Enhancement - Spaces list in admin settings: [#8178](https://github.com/owncloud/web/pull/8178)
+* Enhancement - Add support for multiple clients in `theme.json`: [#8280](https://github.com/owncloud/web/pull/8280)
 
 Details
 -------
@@ -389,6 +390,16 @@ Details
    https://github.com/owncloud/web/pull/8262
    https://github.com/owncloud/web/pull/8247
    https://github.com/owncloud/web/pull/8273
+
+* Enhancement - Add support for multiple clients in `theme.json`: [#8280](https://github.com/owncloud/web/pull/8280)
+
+   The `theme.json` file now supports multiple clients which are defined via the top-level
+   property. Therefore both web themes have been moved down one level into the new property "web".
+   The change is backwards compatible though, meaning it still works when the web themes are
+   defined top-level in `theme.json`.
+
+   https://github.com/owncloud/enterprise/issues/5502
+   https://github.com/owncloud/web/pull/8280
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
