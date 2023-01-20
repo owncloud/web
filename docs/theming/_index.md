@@ -35,6 +35,12 @@ You can use the snippet below as a base for writing your own theme by replacing 
 
 ```json
 {
+  "common": {
+    "name": "ownCloud",
+    "slogan": "ownCloud – A safe home for all your data",
+    "logo": "themes/owncloud/assets/logo.svg"
+  },
+  "ios": {},
   "web": {
     "default": {
       "general": {
@@ -83,6 +89,8 @@ In general, the theme loader looks for a `designTokens` key inside your theme co
 
 ```json
 {
+  "common": {},
+  "ios": {},
   "web": {
     "default": {
       "general": {},
@@ -236,6 +244,12 @@ An empty template for your custom theme is provided below, and you can use the i
 
 ```json
 {
+   "common": {
+    "name": "",
+    "slogan": "",
+    "logo": ""
+  },
+  "ios": {},
   "web": {
     "default": {
       "general": {
