@@ -6,7 +6,7 @@
           v-for="(field, index) in fields"
           :key="`oc-thead-${field.name}`"
           v-bind="extractThProps(field, index)"
-          @click="$emit(constants.EVENT_THEAD_CLICKED, field)"
+          @click="handleTrClick(field)"
         >
           <span v-if="field.headerType === 'slot'" class="oc-table-thead-content">
             <slot :name="field.name + 'Header'" />
@@ -23,7 +23,7 @@
             class="oc-button-sort"
             variation="passive"
             appearance="raw"
-            @click.stop="$emit(constants.EVENT_THEAD_CLICKED, field)"
+            @click.stop="handleTrClick(field)"
           >
             <oc-icon
               :name="sortDir === 'asc' ? 'arrow-down' : 'arrow-up'"
@@ -466,6 +466,12 @@ export default defineComponent({
       const label = this.$gettext('Sort by %{ name }')
 
       return this.$gettextInterpolate(label, { name })
+    },
+
+    handleTrClick(field) {
+      if (this.isSortable) {
+        this.handleSort(field)
+      }
     }
   }
 })

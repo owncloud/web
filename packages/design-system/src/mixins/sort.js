@@ -1,5 +1,3 @@
-import { EVENT_THEAD_CLICKED } from '../helpers/constants'
-
 const SORT_DIRECTION_ASC = 'asc'
 const SORT_DIRECTION_DESC = 'desc'
 
@@ -23,11 +21,6 @@ export default {
       validator: (value) => {
         return value === undefined || [SORT_DIRECTION_ASC, SORT_DIRECTION_DESC].includes(value)
       }
-    }
-  },
-  created() {
-    if (this.isSortable) {
-      this.$on(EVENT_THEAD_CLICKED, this.handleSort)
     }
   },
   computed: {

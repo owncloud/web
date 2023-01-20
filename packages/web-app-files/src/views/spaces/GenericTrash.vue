@@ -75,7 +75,7 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { computed, defineComponent, PropType, onMounted, onBeforeUnmount, unref } from 'vue'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { createLocationTrash } from '../../router'
@@ -113,6 +113,7 @@ export default defineComponent({
 
   setup(props) {
     const { $gettext } = useGettext()
+    let loadResourcesEventToken
     const noContentMessage = computed(() => {
       return props.space.driveType === 'personal'
         ? $gettext('You have no deleted files')
@@ -129,8 +130,28 @@ export default defineComponent({
     })
     useDocumentTitle({ titleSegments })
 
+    const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
+    const performLoaderTask = async () => {
+      await resourcesViewDefaults.loadResourcesTask.perform(props.space)
+      resourcesViewDefaults.refreshFileListHeaderPosition()
+      resourcesViewDefaults.scrollToResourceFromRoute(
+        unref(resourcesViewDefaults.paginatedResources)
+      )
+    }
+
+    onMounted(() => {
+      performLoaderTask()
+      loadResourcesEventToken = eventBus.subscribe('app.files.list.load', () => {
+        performLoaderTask()
+      })
+    })
+
+    onBeforeUnmount(() => {
+      eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
+    })
+
     return {
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
+      ...resourcesViewDefaults,
       hasShareJail: useCapabilityShareJailEnabled(),
       noContentMessage
     }
@@ -171,25 +192,6 @@ export default defineComponent({
         this.space.isEditor(this.user) ||
         this.space.isManager(this.user)
       )
-    }
-  },
-
-  created() {
-    this.performLoaderTask()
-
-    const loadResourcesEventToken = eventBus.subscribe('app.files.list.load', () => {
-      this.performLoaderTask()
-    })
-    this.$on('beforeUnmount', () => {
-      eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
-    })
-  },
-
-  methods: {
-    async performLoaderTask() {
-      await this.loadResourcesTask.perform(this.space)
-      this.refreshFileListHeaderPosition()
-      this.scrollToResourceFromRoute(this.paginatedResources)
     }
   }
 })

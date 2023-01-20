@@ -101,22 +101,20 @@ describe('GenericSpace view', () => {
   })
   describe('loader task', () => {
     it('re-loads the resources on item change', async () => {
-      const loaderSpy = jest.spyOn((GenericSpace as any).methods, 'performLoaderTask')
-      const { wrapper } = getMountedWrapper()
+      const { wrapper, mocks } = getMountedWrapper()
       await wrapper.vm.loadResourcesTask.last
-      expect(loaderSpy).toHaveBeenCalledTimes(1)
-      wrapper.setProps({ item: 'newItem' })
+      expect(mocks.refreshFileListHeaderPosition).toHaveBeenCalledTimes(1)
+      await wrapper.setProps({ item: 'newItem' })
       await wrapper.vm.loadResourcesTask.last
-      expect(loaderSpy).toHaveBeenCalledTimes(2)
+      expect(mocks.refreshFileListHeaderPosition).toHaveBeenCalledTimes(2)
     })
     it('re-loads the resources on space change', async () => {
-      const loaderSpy = jest.spyOn((GenericSpace as any).methods, 'performLoaderTask')
-      const { wrapper } = getMountedWrapper()
+      const { wrapper, mocks } = getMountedWrapper()
       await wrapper.vm.loadResourcesTask.last
-      expect(loaderSpy).toHaveBeenCalledTimes(1)
-      wrapper.setProps({ space: mockDeep<SpaceResource>() })
+      expect(mocks.refreshFileListHeaderPosition).toHaveBeenCalledTimes(1)
+      await wrapper.setProps({ space: mockDeep<SpaceResource>() })
       await wrapper.vm.loadResourcesTask.last
-      expect(loaderSpy).toHaveBeenCalledTimes(2)
+      expect(mocks.refreshFileListHeaderPosition).toHaveBeenCalledTimes(2)
     })
   })
 })
@@ -128,12 +126,11 @@ function getMountedWrapper({
   loading = false,
   currentRoute = { name: 'files-spaces-generic', path: '/' }
 } = {}) {
-  jest.mocked(useResourcesViewDefaults).mockImplementation(() =>
-    useResourcesViewDefaultsMock({
-      paginatedResources: ref(files),
-      areResourcesLoading: ref(loading)
-    })
-  )
+  const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
+    paginatedResources: ref(files),
+    areResourcesLoading: ref(loading)
+  })
+  jest.mocked(useResourcesViewDefaults).mockImplementation(() => resourcesViewDetailsMock)
   const defaultMocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute) }),
     ...(mocks && mocks)
@@ -146,7 +143,7 @@ function getMountedWrapper({
   }
   const store = createStore(storeOptions)
   return {
-    mocks: defaultMocks,
+    mocks: { ...defaultMocks, ...resourcesViewDetailsMock },
     storeOptions,
     wrapper: mount(GenericSpace, {
       props: propsData,

@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onBeforeUnmount, onMounted } from 'vue'
 import { mapState, mapActions } from 'vuex'
 import SidebarNavItem from './SidebarNavItem.vue'
 import * as uuid from 'uuid'
@@ -59,6 +59,33 @@ export default defineComponent({
       type: Array,
       required: true
     }
+  },
+  setup() {
+    let resizeObserver
+
+    onMounted(() => {
+      const navBar = document.getElementById('web-nav-sidebar')
+      const highlighter = document.getElementById('nav-highlighter')
+
+      if (!highlighter || !navBar) {
+        return
+      }
+
+      resizeObserver = new ResizeObserver(() => {
+        const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
+        if (!navItem) {
+          return
+        }
+        highlighter.style.setProperty('transition-duration', `0.05s`)
+        highlighter.style.setProperty('width', `${navItem.clientWidth}px`)
+        highlighter.style.setProperty('height', `${navItem.clientHeight}px`)
+      })
+      resizeObserver.observe(navBar)
+    })
+
+    onBeforeUnmount(() => {
+      resizeObserver.disconnect()
+    })
   },
   computed: {
     ...mapState(['navigation']),
@@ -76,29 +103,6 @@ export default defineComponent({
     isAnyNavItemActive() {
       return this.navItems.some((i) => i.active === true)
     }
-  },
-  mounted() {
-    const navBar = document.getElementById('web-nav-sidebar')
-    const highlighter = document.getElementById('nav-highlighter')
-
-    if (!highlighter || !navBar) {
-      return
-    }
-
-    const resizeObserver = new ResizeObserver(() => {
-      const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
-      if (!navItem) {
-        return
-      }
-      highlighter.style.setProperty('transition-duration', `0.05s`)
-      highlighter.style.setProperty('width', `${navItem.clientWidth}px`)
-      highlighter.style.setProperty('height', `${navItem.clientHeight}px`)
-    })
-    resizeObserver.observe(navBar)
-
-    this.$on('beforeUnmount', () => {
-      resizeObserver.disconnect()
-    })
   },
   methods: {
     ...mapActions(['openNavigation', 'closeNavigation']),
