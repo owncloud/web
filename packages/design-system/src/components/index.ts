@@ -1,5 +1,3 @@
-export { default as OcAccordion } from './OcAccordion/OcAccordion.vue'
-export { default as OcAccordionItem } from './OcAccordionItem/OcAccordionItem.vue'
 export { default as OcAvatar } from './OcAvatar/OcAvatar.vue'
 export { default as OcAvatarCount } from './OcAvatarCount/OcAvatarCount.vue'
 export { default as OcAvatarFederated } from './OcAvatarFederated/OcAvatarFederated.vue'
