@@ -1,7 +1,5 @@
-import Vue, { App } from 'vue'
+import { App } from 'vue'
 import { RuntimeApi } from '../types'
-
-type VueConstructor = typeof Vue
 export abstract class NextApplication {
   protected readonly runtimeApi: RuntimeApi
 

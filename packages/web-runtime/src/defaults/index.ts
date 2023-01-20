@@ -6,7 +6,6 @@ import { coreTranslations, clientTranslations, pkgTranslations, odsTranslations 
 // fontawesome-free attributions console message
 import '@fortawesome/fontawesome-free/attribution'
 
-export { default as Vue } from './vue'
 export { default as DesignSystem } from '@ownclouders/design-system'
 
 export const pages = { success: App, failure: missingOrInvalidConfigPage }

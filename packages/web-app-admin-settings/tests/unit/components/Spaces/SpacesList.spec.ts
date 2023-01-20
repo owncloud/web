@@ -1,8 +1,8 @@
 import SpacesList from '../../../../src/components/Spaces/SpacesList.vue'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import Vue from 'vue'
 import { displayPositionedDropdown, eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { nextTick } from 'vue'
 
 const spaceMocks = [
   {
@@ -92,7 +92,7 @@ describe('SpacesList', () => {
   it('shows only filtered spaces if filter applied', async () => {
     const { wrapper } = getWrapper({ spaces: spaceMocks })
     wrapper.vm.filterTerm = 'Another'
-    await Vue.nextTick()
+    await nextTick()
     expect(wrapper.vm.orderedSpaces).toEqual([spaceMocks[1]])
   })
   it('should show the context menu on right click', async () => {
