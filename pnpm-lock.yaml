@@ -772,8 +772,11 @@ importers:
   tests/e2e:
     specifiers:
       luxon: ^2.4.0
+      xml-js: ^1.6.11
     dependencies:
       luxon: 2.4.0
+    devDependencies:
+      xml-js: 1.6.11
 
 packages:
 
