@@ -99,6 +99,30 @@ export default defineComponent({
     optionLabel: {
       type: String,
       default: null
+    },
+    /**
+     * Determines if the select field is searchable
+     */
+    searchable: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    /**
+     * Determines if the select field is clearable
+     */
+    clearable: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    /**
+     * Determines if the select field loading
+     */
+    loading: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   emits: ['search:input', 'update:modelValue'],

@@ -4,7 +4,6 @@
     v-bind="additionalAttributes"
     :aria-label="ariaLabel"
     :class="$_ocButton_buttonClass"
-    :disabled="disabled"
     v-on="handlers"
   >
     <!-- @slot Content of the button -->
@@ -159,7 +158,8 @@ export default defineComponent({
         ...(this.href && { href: this.href }),
         ...(this.target && { target: this.target }),
         ...(this.to && { to: this.to }),
-        ...(this.type === 'button' && { type: this.submit })
+        ...(this.type === 'button' && { type: this.submit }),
+        ...(this.type === 'button' && { disabled: this.disabled })
       }
     },
 
