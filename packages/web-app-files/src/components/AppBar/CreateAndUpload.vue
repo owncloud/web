@@ -165,9 +165,7 @@ import {
   getCurrentInstance,
   onMounted,
   onBeforeUnmount,
-  PropType,
-  ref,
-  unref
+  PropType
 } from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
@@ -211,12 +209,12 @@ export default defineComponent({
     const instance = getCurrentInstance().proxy as any
     const uppyService = useService<UppyService>('$uppyService')
     const store = useStore()
-    const filesSelectedSub = ref()
-    const uploadCompletedSub = ref()
+    let filesSelectedSub
+    let uploadCompletedSub
 
     onMounted(() => {
-      filesSelectedSub.value = uppyService.subscribe('filesSelected', instance.onFilesSelected)
-      uploadCompletedSub.value = uppyService.subscribe('uploadCompleted', instance.onUploadComplete)
+      filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
+      uploadCompletedSub = uppyService.subscribe('uploadCompleted', instance.onUploadComplete)
 
       uppyService.useDropTarget({
         targetSelector: '#files-view',
@@ -225,8 +223,8 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
-      uppyService.unsubscribe('filesSelected', unref(filesSelectedSub))
-      uppyService.unsubscribe('uploadCompleted', unref(uploadCompletedSub))
+      uppyService.unsubscribe('filesSelected', filesSelectedSub)
+      uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
       uppyService.removeDropTarget()
     })
 

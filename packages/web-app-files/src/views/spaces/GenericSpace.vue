@@ -131,7 +131,6 @@ import {
   PropType,
   onBeforeUnmount,
   onMounted,
-  ref,
   unref
 } from 'vue'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
@@ -198,7 +197,7 @@ export default defineComponent({
   setup(props) {
     const instance = getCurrentInstance().proxy as any
     const store = useStore()
-    const loadResourcesEventToken = ref()
+    let loadResourcesEventToken
 
     const resourceTargetRouteCallback = ({ path, fileId }: CreateTargetRouteOptions): Location => {
       const { params, query } = createFileRouteOptions(props.space, { path, fileId })
@@ -320,7 +319,7 @@ export default defineComponent({
 
     onMounted(() => {
       performLoaderTask(false)
-      loadResourcesEventToken.value = eventBus.subscribe(
+      loadResourcesEventToken = eventBus.subscribe(
         'app.files.list.load',
         (path?: string, fileId?: string | number) => {
           performLoaderTask(true, path, fileId)
@@ -330,7 +329,7 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       visibilityObserver.disconnect()
-      eventBus.unsubscribe('app.files.list.load', unref(loadResourcesEventToken))
+      eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     })
 
     return {

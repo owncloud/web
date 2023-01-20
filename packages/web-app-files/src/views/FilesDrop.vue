@@ -70,14 +70,14 @@ export default defineComponent({
     const publicToken = usePublicLinkToken({ store })
     const publicLinkPassword = usePublicLinkPassword({ store })
 
-    const filesSelectedSub = ref()
-    const dragOver = ref()
-    const dragOut = ref()
-    const drop = ref()
     const share = ref()
     const dragareaEnabled = ref(false)
     const loading = ref(true)
     const errorMessage = ref(null)
+    let filesSelectedSub
+    let dragOver
+    let dragOut
+    let drop
 
     const hideDropzone = () => {
       dragareaEnabled.value = false
@@ -117,10 +117,10 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      dragOver.value = eventBus.subscribe('drag-over', onDragOver)
-      dragOut.value = eventBus.subscribe('drag-out', hideDropzone)
-      drop.value = eventBus.subscribe('drop', hideDropzone)
-      filesSelectedSub.value = uppyService.subscribe('filesSelected', instance.onFilesSelected) // FIXME
+      dragOver = eventBus.subscribe('drag-over', onDragOver)
+      dragOut = eventBus.subscribe('drag-out', hideDropzone)
+      drop = eventBus.subscribe('drop', hideDropzone)
+      filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected) // FIXME
       uppyService.useDropTarget({
         targetSelector: '#files-drop-container',
         uppyService
@@ -129,10 +129,10 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
-      eventBus.unsubscribe('drag-over', unref(dragOver))
-      eventBus.unsubscribe('drag-out', unref(dragOut))
-      eventBus.unsubscribe('drop', unref(drop))
-      uppyService.unsubscribe('filesSelected', unref(filesSelectedSub))
+      eventBus.unsubscribe('drag-over', dragOver)
+      eventBus.unsubscribe('drag-out', dragOut)
+      eventBus.unsubscribe('drop', drop)
+      uppyService.unsubscribe('filesSelected', filesSelectedSub)
       uppyService.removeDropTarget()
     })
 

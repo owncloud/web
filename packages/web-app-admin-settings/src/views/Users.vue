@@ -106,6 +106,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const accessToken = useAccessToken({ store })
+    const { graphClient } = useGraphClient()
+
     const users = ref([])
     const groups = ref([])
     const roles = ref([])
@@ -113,11 +116,9 @@ export default defineComponent({
     const selectedUsers = ref([])
     const loadedUser = ref(null)
     const sideBarLoading = ref(false)
-    const loadResourcesEventToken = ref()
     const listHeaderPosition = ref(0)
     const template = ref()
-    const accessToken = useAccessToken({ store })
-    const { graphClient } = useGraphClient()
+    let loadResourcesEventToken
 
     const { loadRolesTask, loadUserRoleTask, addRoleAssignment } = useLoadTasks({
       accessToken,
@@ -184,7 +185,7 @@ export default defineComponent({
     }
     onMounted(async () => {
       await loadResourcesTask.perform()
-      loadResourcesEventToken.value = eventBus.subscribe('app.admin-settings.list.load', () => {
+      loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
         loadResourcesTask.perform()
       })
       calculateListHeaderPosition()
@@ -192,7 +193,7 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
-      eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
+      eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
     })
 
     return {

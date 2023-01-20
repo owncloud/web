@@ -5,7 +5,7 @@
   </main>
 </template>
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, watch, ref, unref } from 'vue'
+import { defineComponent, onBeforeUnmount, watch, ref } from 'vue'
 import { useRoute, useStore } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 
@@ -29,9 +29,9 @@ export default defineComponent({
     const drop = eventBus.subscribe('drop', hideDropzone)
 
     onBeforeUnmount(() => {
-      eventBus.unsubscribe('drag-over', unref(dragOver))
-      eventBus.unsubscribe('drag-out', unref(dragOut))
-      eventBus.unsubscribe('drop', unref(drop))
+      eventBus.unsubscribe('drag-over', dragOver)
+      eventBus.unsubscribe('drag-out', dragOut)
+      eventBus.unsubscribe('drop', drop)
     })
     return { dragareaEnabled }
   }

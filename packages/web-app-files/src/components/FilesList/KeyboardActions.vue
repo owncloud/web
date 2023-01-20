@@ -44,9 +44,9 @@ export default defineComponent({
     const { scrollToResource } = useScrollTo()
 
     const selectionCursor = ref(0)
-    const fileListClickedEvent = ref()
-    const fileListClickedMetaEvent = ref()
-    const fileListClickedShiftEvent = ref()
+    let fileListClickedEvent
+    let fileListClickedMetaEvent
+    let fileListClickedShiftEvent
 
     const latestSelectedId = computed(() => {
       return store.state.Files.latestSelectedId
@@ -113,13 +113,13 @@ export default defineComponent({
     const handlePasteAction = () => {
       store.dispatch('Files/pasteSelectedFiles', {
         targetSpace: props.space,
-        clientService: unref(clientService),
+        clientService: clientService,
         createModal: instance.createModal, // FIXME
         hideModal: instance.hideModal, // FIXME
         showMessage: instance.showMessage, // FIXME
-        $gettext: unref(language).$gettext,
-        $gettextInterpolate: unref(language).interpolate,
-        $ngettext: unref(language).$ngettext
+        $gettext: language.$gettext,
+        $gettextInterpolate: language.interpolate,
+        $ngettext: language.$ngettext
       })
     }
     const handleNavigateAction = (event, up = false) => {
@@ -225,7 +225,7 @@ export default defineComponent({
 
       if (key === keycode('c') && ctrl) {
         return store.dispatch('Files/copySelectedFiles', {
-          ...unref(language),
+          ...language,
           space: props.space,
           resources: store.getters['Files/selectedFiles']
         })
@@ -235,7 +235,7 @@ export default defineComponent({
       }
       if (key === keycode('x') && ctrl) {
         return store.dispatch('Files/cutSelectedFiles', {
-          ...unref(language),
+          ...language,
           space: props.space,
           resources: store.getters['Files/selectedFiles']
         })
@@ -268,24 +268,21 @@ export default defineComponent({
       }
       document.addEventListener('keydown', handleGlobalShortcuts)
 
-      fileListClickedEvent.value = eventBus.subscribe(
-        'app.files.list.clicked',
-        resetSelectionCursor
-      )
-      fileListClickedMetaEvent.value = eventBus.subscribe(
+      fileListClickedEvent = eventBus.subscribe('app.files.list.clicked', resetSelectionCursor)
+      fileListClickedMetaEvent = eventBus.subscribe(
         'app.files.list.clicked.meta',
         handleCtrlClickAction
       )
-      fileListClickedShiftEvent.value = eventBus.subscribe(
+      fileListClickedShiftEvent = eventBus.subscribe(
         'app.files.list.clicked.shift',
         handleShiftClickAction
       )
     })
 
     onBeforeUnmount(() => {
-      eventBus.unsubscribe('app.files.list.clicked', unref(fileListClickedEvent))
-      eventBus.unsubscribe('app.files.list.clicked.meta', unref(fileListClickedMetaEvent))
-      eventBus.unsubscribe('app.files.list.clicked.shift', unref(fileListClickedShiftEvent))
+      eventBus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
+      eventBus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
+      eventBus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
       const element = document.getElementById(props.keybindOnElementId)
       if (element) {
         element.removeEventListener('keydown', handelLocalShortcuts)

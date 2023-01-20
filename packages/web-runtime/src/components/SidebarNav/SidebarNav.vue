@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
+import { defineComponent, onBeforeUnmount, onMounted } from 'vue'
 import { mapState, mapActions } from 'vuex'
 import SidebarNavItem from './SidebarNavItem.vue'
 import * as uuid from 'uuid'
@@ -61,7 +61,7 @@ export default defineComponent({
     }
   },
   setup() {
-    const resizeObserver = ref()
+    let resizeObserver
 
     onMounted(() => {
       const navBar = document.getElementById('web-nav-sidebar')
@@ -71,7 +71,7 @@ export default defineComponent({
         return
       }
 
-      resizeObserver.value = new ResizeObserver(() => {
+      resizeObserver = new ResizeObserver(() => {
         const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
         if (!navItem) {
           return
@@ -80,11 +80,11 @@ export default defineComponent({
         highlighter.style.setProperty('width', `${navItem.clientWidth}px`)
         highlighter.style.setProperty('height', `${navItem.clientHeight}px`)
       })
-      unref(resizeObserver).observe(navBar)
+      resizeObserver.observe(navBar)
     })
 
     onBeforeUnmount(() => {
-      unref(resizeObserver).disconnect()
+      resizeObserver.disconnect()
     })
   },
   computed: {

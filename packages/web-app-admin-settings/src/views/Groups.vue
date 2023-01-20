@@ -98,7 +98,7 @@ export default defineComponent({
   },
   setup() {
     const groups = ref([])
-    const loadResourcesEventToken = ref()
+    let loadResourcesEventToken
     const template = ref()
     const listHeaderPosition = ref(0)
     const { graphClient } = useGraphClient()
@@ -117,7 +117,7 @@ export default defineComponent({
 
     onMounted(async () => {
       await loadResourcesTask.perform()
-      loadResourcesEventToken.value = eventBus.subscribe('app.admin-settings.list.load', () => {
+      loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
         loadResourcesTask.perform()
       })
       calculateListHeaderPosition()
@@ -125,7 +125,7 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
-      eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
+      eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
     })
 
     return {

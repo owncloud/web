@@ -75,7 +75,7 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent, PropType, onMounted, onBeforeUnmount, ref, unref } from 'vue'
+import { computed, defineComponent, PropType, onMounted, onBeforeUnmount, unref } from 'vue'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { createLocationTrash } from '../../router'
@@ -113,7 +113,7 @@ export default defineComponent({
 
   setup(props) {
     const { $gettext } = useGettext()
-    const loadResourcesEventToken = ref()
+    let loadResourcesEventToken
     const noContentMessage = computed(() => {
       return props.space.driveType === 'personal'
         ? $gettext('You have no deleted files')
@@ -141,13 +141,13 @@ export default defineComponent({
 
     onMounted(() => {
       performLoaderTask()
-      loadResourcesEventToken.value = eventBus.subscribe('app.files.list.load', () => {
+      loadResourcesEventToken = eventBus.subscribe('app.files.list.load', () => {
         performLoaderTask()
       })
     })
 
     onBeforeUnmount(() => {
-      eventBus.unsubscribe('app.files.list.load', unref(loadResourcesEventToken))
+      eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     })
 
     return {
