@@ -15,7 +15,7 @@ const appInfo = {
 }
 
 // FIXME: a better way to access this is needed
-const permissionManager = () => window.__$permissionManager
+const permissionManager = () => (window as any).__$permissionManager
 
 const routes = [
   {

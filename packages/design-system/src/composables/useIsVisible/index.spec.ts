@@ -17,7 +17,7 @@ const mockIntersectionObserver = () => {
     return {
       mock,
       callback: (args, fastForward = 0) => {
-        window.IntersectionObserver.mock.calls[0][0](args)
+        ;(window.IntersectionObserver as any).mock.calls[0][0](args)
         jest.advanceTimersByTime(fastForward)
       }
     }
