@@ -23,7 +23,6 @@ module.exports = {
     '\\.(css|less|scss)$': '<rootDir>/tests/unit/stubs/empty.js',
     '^@/(.*)$': '<rootDir>/$1',
     '^core-js$': '<rootDir>/node_modules/core-js',
-    '^vue$': '@vue/compat',
     '^mark.js$': '<rootDir>/node_modules/mark.js/src/vanilla.js',
     '^fuse.js$': '<rootDir>/node_modules/fuse.js/dist/fuse.esm.js',
     '^filesize$': '<rootDir>/node_modules/filesize/lib/filesize.esm.js',

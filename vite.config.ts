@@ -18,11 +18,7 @@ import browserslistToEsbuild from 'browserslist-to-esbuild'
 import { CompilerOptions } from '@vue/compiler-sfc'
 
 export const compilerOptions: CompilerOptions = {
-  whitespace: 'preserve',
-  compatConfig: {
-    MODE: 2,
-    COMPILER_V_ON_NATIVE: false
-  }
+  whitespace: 'preserve'
 }
 
 const buildConfig = {
@@ -134,8 +130,6 @@ export default defineConfig(({ mode, command }) => {
       },
       resolve: {
         alias: {
-          vue: '@vue/compat',
-
           crypto: join(projectRootDir, 'polyfills/crypto.js'),
           buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
           path: 'rollup-plugin-node-polyfills/polyfills/path',
