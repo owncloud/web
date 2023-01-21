@@ -4,10 +4,8 @@ import fetchMock from 'jest-fetch-mock'
 import { compatConfig } from '../../../packages/web-runtime/src/compatConfig'
 
 configureCompat(compatConfig)
-
-window.define = jest.fn()
-
-window.IntersectionObserver = jest.fn(() => ({
+;(window as any).define = jest.fn()
+;(window as any).IntersectionObserver = jest.fn(() => ({
   observe: jest.fn(),
   unobserve: jest.fn()
 }))
