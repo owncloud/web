@@ -42,8 +42,8 @@ module.exports = {
   },
   transformIgnorePatterns: [`<rootDir>/node_modules/(?!${esmModules.join('|')})`],
   setupFiles: [
-    '<rootDir>/tests/unit/config/jest.init.js',
-    '<rootDir>/tests/unit/config/jest.overrides.js',
+    '<rootDir>/tests/unit/config/jest.init.ts',
+    '<rootDir>/tests/unit/config/jest.overrides.ts',
     'core-js'
   ],
   snapshotSerializers: ['jest-serializer-vue-tjw'],
