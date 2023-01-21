@@ -1,3 +1,5 @@
+import { describe, it } from '@jest/globals'
+
 describe('textUtils', () => {
   // textUtils compares two strings to provide a natural sort
 
