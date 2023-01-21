@@ -1,5 +1,5 @@
 import App from './App.vue'
-import translations from '../l10n/translations'
+import translations from '../l10n/translations.json'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {

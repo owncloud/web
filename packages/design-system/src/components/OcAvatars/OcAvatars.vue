@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { shareType } from '../../utils/shareType.js'
+import { shareType } from '../../utils/shareType'
 import OcAvatar from '../OcAvatar/OcAvatar.vue'
 import OcAvatarCount from '../OcAvatarCount/OcAvatarCount.vue'
 import OcAvatarLink from '../OcAvatarLink/OcAvatarLink.vue'

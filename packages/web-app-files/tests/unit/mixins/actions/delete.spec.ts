@@ -1,5 +1,5 @@
 import { mock } from 'jest-mock-extended'
-import Delete from 'web-app-files/src/mixins/actions/delete.js'
+import Delete from 'web-app-files/src/mixins/actions/delete'
 
 import {
   createStore,

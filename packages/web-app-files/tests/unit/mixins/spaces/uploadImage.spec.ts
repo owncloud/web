@@ -1,4 +1,4 @@
-import uploadImage from 'web-app-files/src/mixins/spaces/actions/uploadImage.js'
+import uploadImage from 'web-app-files/src/mixins/spaces/actions/uploadImage'
 import { thumbnailService } from '../../../../src/services'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'

@@ -1,4 +1,4 @@
-import translations from '../l10n/translations'
+import translations from '../l10n/translations.json'
 import App from './App.vue'
 import store from './store'
 

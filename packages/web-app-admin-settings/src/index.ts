@@ -1,4 +1,4 @@
-import translations from '../l10n/translations'
+import translations from '../l10n/translations.json'
 import Users from './views/Users.vue'
 import Groups from './views/Groups.vue'
 import Spaces from './views/Spaces.vue'
