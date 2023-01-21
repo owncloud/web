@@ -84,7 +84,7 @@ export const apps = {
   meta
 }
 
-const fileActions = {
+export const fileActions = {
   download: {
     name: 'download-file',
     icon: 'file-download',
@@ -165,9 +165,7 @@ const fileActions = {
   }
 }
 
-exports.fileActions = fileActions
-
-exports.getActions = function (actions = []) {
+export const getActions = function (actions = []) {
   const defaultActions = ['download', 'text-editor', 'draw-io', 'preview', 'navigate']
 
   const res = []
@@ -190,4 +188,4 @@ exports.getActions = function (actions = []) {
   return res
 }
 
-exports.filesPersonalRoute = { name: 'files-personal' }
+export const filesPersonalRoute = { name: 'files-personal' }
