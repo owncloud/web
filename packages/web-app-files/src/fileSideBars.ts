@@ -75,7 +75,7 @@ const panelGenerators: (({
     component: FileDetails,
     default: !isLocationTrashActive(router, 'files-trash-generic'),
     get enabled() {
-      return (
+      return !!(
         !isLocationTrashActive(router, 'files-trash-generic') &&
         !multipleSelection &&
         !rootFolder &&
@@ -119,7 +119,7 @@ const panelGenerators: (({
     component: FileActions,
     default: isLocationTrashActive(router, 'files-trash-generic'),
     get enabled() {
-      return !multipleSelection && !rootFolder && highlightedFile
+      return !!(!multipleSelection && !rootFolder && highlightedFile)
     }
   }),
   ({ multipleSelection, highlightedFile, user }) => ({
@@ -134,7 +134,7 @@ const panelGenerators: (({
       if (highlightedFile?.type !== 'space') {
         return false
       }
-      return [
+      return !![
         ...highlightedFile.spaceRoles[spaceRoleManager.name],
         ...highlightedFile.spaceRoles[spaceRoleEditor.name]
       ].find((role) => role.id === user.uuid)

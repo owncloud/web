@@ -1,15 +1,11 @@
 import { loadTheme } from 'web-runtime/src/helpers/theme'
 import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
 import merge from 'lodash-es/merge'
+import { FetchMock } from 'jest-fetch-mock'
+
+jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
 describe('theme loading and error reporting', () => {
-  beforeEach(() => {
-    global.console = { error: jest.fn() }
-  })
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
   it('should load the default theme if location is empty', async () => {
     const { theme } = await loadTheme()
     expect(theme).toMatchObject(defaultTheme.web)
@@ -21,20 +17,20 @@ describe('theme loading and error reporting', () => {
   })
 
   it('should load the default theme if location is not found', async () => {
-    fetch.mockResponse(new Error(), { status: 404 })
+    ;(fetch as FetchMock).mockResponse(new Error() as any, { status: 404 })
     const { theme } = await loadTheme('http://www.owncloud.com/unknown.json')
     expect(theme).toMatchObject(defaultTheme.web)
   })
 
   it('should load the default theme if location is not a valid json file', async () => {
     const customTheme = merge({}, defaultTheme, { default: { logo: { login: 'custom.svg' } } })
-    fetch.mockResponse(JSON.stringify(customTheme) + '-invalid')
+    ;(fetch as FetchMock).mockResponse(JSON.stringify(customTheme) + '-invalid')
     const { theme } = await loadTheme('http://www.owncloud.com/invalid.json')
     expect(theme).toMatchObject(defaultTheme.web)
   })
 
   it('should load the default theme if server errors', async () => {
-    fetch.mockReject(new Error())
+    ;(fetch as FetchMock).mockReject(new Error())
     const { theme } = await loadTheme('http://www.owncloud.com')
     expect(theme).toMatchObject(defaultTheme.web)
   })
@@ -42,7 +38,7 @@ describe('theme loading and error reporting', () => {
   it('should load the custom theme if a custom location is given', async () => {
     const customTheme = merge({}, defaultTheme.web, { default: { logo: { login: 'custom.svg' } } })
 
-    fetch.mockResponse(JSON.stringify(customTheme))
+    ;(fetch as FetchMock).mockResponse(JSON.stringify(customTheme))
 
     const { theme: theme1 } = await loadTheme('http://www.owncloud.com/custom.json')
     const { theme: theme2 } = await loadTheme('/custom.json')

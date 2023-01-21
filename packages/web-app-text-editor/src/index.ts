@@ -22,7 +22,12 @@ const routes = [
 ]
 
 const fileExtensions = () => {
-  const extensions = [
+  const extensions: {
+    extension: string
+    label: string
+    canBeDefault?: boolean
+    newFileMenu?: any
+  }[] = [
     {
       extension: 'txt',
       label: $gettext('Plain text file')
@@ -57,7 +62,7 @@ const fileExtensions = () => {
     }
   ]
 
-  let primaryExtensions = window.__$store.getters.extensionConfigByAppId(appId)
+  let primaryExtensions = (window as any).__$store.getters.extensionConfigByAppId(appId)
     .primaryExtensions || ['txt', 'md']
   if (typeof primaryExtensions === 'string') {
     primaryExtensions = [primaryExtensions]

@@ -1,4 +1,5 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { Drive } from 'web-client/src/generated'
 import { clientService } from 'web-pkg/src/services'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { thumbnailService } from '../../../services'
@@ -90,7 +91,7 @@ export default {
                     id: image['OC-FileId']
                   }
                 ]
-              },
+              } as Drive,
               {}
             )
             .then(({ data }) => {

@@ -1,5 +1,6 @@
 import translations from '../l10n/translations.json'
-import App, { mimeTypes, appId } from './App.vue'
+import * as app from './App.vue'
+const { default: App, mimeTypes, appId } = app as any
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {

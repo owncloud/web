@@ -8,7 +8,7 @@ import isFilesAppActive from './helpers/isFilesAppActive'
 import path from 'path'
 import first from 'lodash-es/first'
 import { archiverService } from '../../services'
-import { isPublicSpaceResource } from 'web-client/src/helpers'
+import { isPublicSpaceResource, Resource } from 'web-client/src/helpers'
 
 export default {
   mixins: [isFilesAppActive],
@@ -69,7 +69,7 @@ export default {
             fileIds: resources.map((resource) => resource.fileId)
           }
         : {
-            dir: path.dirname(first(resources).path) || '/',
+            dir: path.dirname(first<Resource>(resources).path) || '/',
             files: resources.map((resource) => resource.name)
           }
       await archiverService

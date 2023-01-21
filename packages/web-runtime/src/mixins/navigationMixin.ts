@@ -48,7 +48,7 @@ export default {
             iconUrl = item.icon
           }
 
-          const app = {
+          const app: any = {
             icon: icon,
             iconUrl: iconUrl,
             title: title

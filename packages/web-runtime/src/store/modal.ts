@@ -1,4 +1,4 @@
-const emptyReturn = () => {}
+const emptyReturn = () => undefined
 
 const state = {
   displayed: false,

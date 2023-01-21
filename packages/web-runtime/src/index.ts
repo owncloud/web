@@ -1,10 +1,4 @@
-import {
-  DesignSystem as designSystem,
-  pages,
-  translations,
-  supportedLanguages,
-  Vue
-} from './defaults'
+import { DesignSystem as designSystem, pages, translations, supportedLanguages } from './defaults'
 
 import { router } from './router'
 import { configurationManager } from 'web-pkg/src/configuration'
@@ -46,7 +40,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const app = createApp(pages.success)
 
   const runtimeConfiguration = await announceConfiguration(configurationPath)
-  startSentry(runtimeConfiguration, Vue)
+  startSentry(runtimeConfiguration, app)
 
   const store = await announceStore({ runtimeConfiguration })
   announcePermissionManager({ app, store })

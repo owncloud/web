@@ -1,4 +1,4 @@
-import Vue, { ComponentOptions } from 'vue'
+import { defineComponent } from 'vue'
 
 /**
  * we need to inject the vue files into the route builders,
@@ -6,20 +6,21 @@ import Vue, { ComponentOptions } from 'vue'
  * like mixins, rollup seems to have a problem to import files which contain vue file imports
  * into js files which then again get imported by other vue files...
  */
+
+type Component = ReturnType<typeof defineComponent>
+
 export interface RouteComponents {
-  App: ComponentOptions<typeof Vue>
-  Favorites: ComponentOptions<typeof Vue>
-  FilesDrop: ComponentOptions<typeof Vue>
-  PrivateLink: ComponentOptions<typeof Vue>
-  SearchResults: ComponentOptions<typeof Vue>
-  PublicLink: ComponentOptions<typeof Vue>
+  App: Component
+  Favorites: Component
+  FilesDrop: Component
+  SearchResults: Component
   Shares: {
-    SharedWithMe: ComponentOptions<typeof Vue>
-    SharedWithOthers: ComponentOptions<typeof Vue>
-    SharedViaLink: ComponentOptions<typeof Vue>
+    SharedWithMe: Component
+    SharedWithOthers: Component
+    SharedViaLink: Component
   }
   Spaces: {
-    DriveResolver: ComponentOptions<typeof Vue>
-    Projects: ComponentOptions<typeof Vue>
+    DriveResolver: Component
+    Projects: Component
   }
 }
