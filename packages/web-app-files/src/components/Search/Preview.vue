@@ -32,7 +32,7 @@ import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
 import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { defineComponent } from 'vue'
-import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { buildShareSpaceResource, Resource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -58,12 +58,13 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const previewData = ref()
-    const resource = computed(() => {
+    const resource = computed((): Resource => {
       return {
-        ...props.searchResult.data,
-        ...(unref(previewData) && {
-          thumbnail: unref(previewData)
-        })
+        ...(props.searchResult.data as Resource),
+        ...(unref(previewData) &&
+          ({
+            thumbnail: unref(previewData)
+          } as Resource))
       }
     })
     return {
