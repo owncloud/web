@@ -33,12 +33,12 @@ describe('OcImage', () => {
     it('should set the provided alt for image', () => {
       expect(wrapper.attributes('alt')).toBe('test alt text')
     })
-    it('should disable aria hidden property', () => {
-      expect(wrapper.attributes('aria-hidden')).toBe(undefined)
+    it('should set aria hidden property to "false"', () => {
+      expect(wrapper.attributes('aria-hidden')).toBe('false')
     })
   })
   describe('when alt is not set', () => {
-    it('should disable aria hidden property', () => {
+    it('should set aria hidden property to "true"', () => {
       const wrapper = getWrapper()
       expect(wrapper.attributes('aria-hidden')).toBe('true')
     })

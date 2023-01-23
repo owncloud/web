@@ -70,7 +70,9 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
     const { wrapper } = createWrapper({ capabilities: enabledCapabilities, stubOcDatepicker: true })
     await wrapper.setProps({ shareTypes: [ShareTypes.user.value] })
 
-    const selectedDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes().value
+    const selectedDate = wrapper
+      .find('[data-testid="recipient-datepicker"]')
+      .attributes().modelvalue
     expect(
       DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
     ).toBe(DateTime.fromJSDate(new Date(selectedDate)).toISODate())
@@ -91,7 +93,9 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   it('pre selects and enforces the default expiration date for groups', async () => {
     const { wrapper } = createWrapper({ capabilities: enabledCapabilities, stubOcDatepicker: true })
     await wrapper.setProps({ shareTypes: [ShareTypes.group.value] })
-    const selectedDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes().value
+    const selectedDate = wrapper
+      .find('[data-testid="recipient-datepicker"]')
+      .attributes().modelvalue
 
     expect(
       DateTime.now().plus({ days: enabledCapabilities.group.expire_date.days }).toISODate()
@@ -113,7 +117,9 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   it('pre selects and enforces the smallest expiration date if user and group shareTypes are provided', async () => {
     const { wrapper } = createWrapper({ capabilities: enabledCapabilities, stubOcDatepicker: true })
     await wrapper.setProps({ shareTypes: [ShareTypes.group.value, ShareTypes.user.value] })
-    const selectedDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes().value
+    const selectedDate = wrapper
+      .find('[data-testid="recipient-datepicker"]')
+      .attributes().modelvalue
 
     expect(
       DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()

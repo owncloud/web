@@ -9,7 +9,7 @@ exports[`OcModal displays input 1`] = `
         <h2 id="oc-modal-title">Create new folder</h2>
       </div>
       <div class="oc-modal-body">
-        <oc-text-input-stub class="oc-modal-body-input" clearbuttonaccessiblelabel="" fixmessageline="true" id="oc-textinput-1" label="Folder name" type="text" value="New folder"></oc-text-input-stub>
+        <oc-text-input-stub class="oc-modal-body-input" clearbuttonaccessiblelabel="" fixmessageline="true" id="oc-textinput-1" label="Folder name" modelvalue="New folder" type="text"></oc-text-input-stub>
         <!--v-if-->
         <!--v-if-->
         <div class="oc-modal-body-actions oc-flex oc-flex-right">

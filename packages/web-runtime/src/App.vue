@@ -107,7 +107,7 @@ export default defineComponent({
   },
   watch: {
     $route: {
-      deep: true,
+      immediate: true,
       handler: function (to) {
         const extracted = this.extractPageTitleFromRoute(to)
         if (!extracted) {
@@ -136,6 +136,7 @@ export default defineComponent({
       }
     },
     selectedLanguage: {
+      immediate: true,
       handler(language) {
         let languageCode = this.$language.defaultLanguage
         if (language) {

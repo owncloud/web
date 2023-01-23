@@ -47,19 +47,19 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
     </oc-list-stub>
     <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
@@ -117,19 +117,19 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
     </oc-list-stub>
     <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
@@ -187,19 +187,19 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
     </oc-list-stub>
     <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
@@ -257,19 +257,19 @@ exports[`RoleDropdown for file shares when an existing role is present does not 
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
     </oc-list-stub>
     <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
@@ -327,19 +327,19 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
     </oc-list-stub>
     <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
@@ -397,19 +397,19 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
     </oc-list-stub>
     <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
@@ -467,13 +467,13 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
     </oc-list-stub>
     <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
@@ -531,19 +531,19 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" id="files-collaborators-permission-read" label="Read" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-update" label="Edit" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-create" label="Create" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-delete" label="Delete" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" option="[object Object]" size="large" value="[object Object],[object Object]"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" id="files-collaborators-permission-share" label="Share" modelvalue="[object Object],[object Object]" option="[object Object]" size="large"></oc-checkbox-stub>
       </li>
     </oc-list-stub>
     <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">

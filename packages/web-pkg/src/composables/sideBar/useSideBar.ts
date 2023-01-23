@@ -14,7 +14,7 @@ interface SideBarOptions {
 export const useSideBar = (options?: SideBarOptions): SideBarResult => {
   const eventBus = options?.bus || defaultEventBus
   const sideBarOpen = ref(false)
-  const sideBarActivePanel = ref('')
+  const sideBarActivePanel = ref(null)
   const toggleSideBarToken = eventBus.subscribe(SideBarEventTopics.toggle, () => {
     sideBarOpen.value = !unref(sideBarOpen)
   })
