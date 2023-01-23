@@ -21,7 +21,6 @@ const selectors = {
   pageTitle: '.oc-page-title',
   loaderStub: 'oc-spinner-stub',
   editUrlButton: '[data-testid="account-page-edit-url-btn"]',
-  editRouteButton: '[data-testid="account-page-edit-route-btn"]',
   accountPageInfo: '.account-page-info',
   groupNames: '[data-testid="group-names"]',
   groupNamesEmpty: '[data-testid="group-names-empty"]'
@@ -36,37 +35,21 @@ describe('account page', () => {
       expect(pageTitle.text()).toBe($route.meta.title)
     })
 
-    describe('edit buttons', () => {
-      describe('edit url button', () => {
-        it('should be displayed if not running with ocis', () => {
-          const { wrapper } = getWrapper({
-            isAccountEditingEnabled: true,
-            data: { loadingGroups: false }
-          })
-          const editUrlButton = wrapper.find(selectors.editUrlButton)
-          const editRouteButton = wrapper.find(selectors.editRouteButton)
-          expect(editUrlButton.html()).toMatchSnapshot()
-          expect(editRouteButton.exists()).toBeFalsy()
+    describe('edit url button', () => {
+      it('should be displayed if defined via config', () => {
+        const { wrapper } = getWrapper({
+          accountEditLink: { href: '/' },
+          data: { loadingGroups: false }
         })
-        it('should not be displayed if running with ocis', () => {
-          const { wrapper } = getWrapper({
-            isAccountEditingEnabled: false,
-            data: { loadingGroups: false }
-          })
-          const editUrlButton = wrapper.find(selectors.editUrlButton)
-          expect(editUrlButton.exists()).toBeFalsy()
-        })
+        const editUrlButton = wrapper.find(selectors.editUrlButton)
+        expect(editUrlButton.html()).toMatchSnapshot()
       })
-      describe('edit route button', () => {
-        it('should be displayed if running with ocis and has navItems', () => {
-          const { wrapper } = getWrapper({
-            isAccountEditingEnabled: false,
-            getNavItemsByExtension: jest.fn(() => [{ route: 'some-route' }]),
-            data: { loadingGroups: false }
-          })
-          const editRouteButton = wrapper.find(selectors.editRouteButton)
-          expect(editRouteButton.html()).toMatchSnapshot()
+      it('should not be displayed if not defined via config', () => {
+        const { wrapper } = getWrapper({
+          data: { loadingGroups: false }
         })
+        const editUrlButton = wrapper.find(selectors.editUrlButton)
+        expect(editUrlButton.exists()).toBeFalsy()
       })
     })
   })
@@ -139,21 +122,18 @@ function getWrapper({
   data = {},
   user = {},
   capabilities = {},
-  getNavItemsByExtension = jest.fn(() => []),
-  isAccountEditingEnabled = false,
+  accountEditLink = undefined,
   graphMock = mockDeep<Graph>()
 } = {}) {
   const $clientService = mockDeep<ClientService>({ graphAuthenticated: () => graphMock })
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.getters.user.mockReturnValue({ groups: [], ...user })
   storeOptions.getters.capabilities.mockReturnValue(capabilities)
-  storeOptions.getters.configuration.mockReturnValue({ server: 'http://server/address/' })
-  storeOptions.getters.getNavItemsByExtension.mockReturnValue(getNavItemsByExtension)
-  if (!isAccountEditingEnabled) {
-    storeOptions.getters.apps.mockReturnValue({ settings: {} })
-  } else {
-    storeOptions.getters.apps.mockReturnValue({})
-  }
+  storeOptions.getters.configuration.mockReturnValue({
+    server: 'http://server/address/',
+    options: { ...(accountEditLink && { accountEditLink }) }
+  })
+
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(account, {

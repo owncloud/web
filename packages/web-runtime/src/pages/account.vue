@@ -18,21 +18,12 @@
           <span v-text="$gettext('Change Password')" />
         </oc-button>
         <oc-button
-          v-if="editUrl"
+          v-if="accountEditLink"
           variation="primary"
           type="a"
-          :href="editUrl"
+          :href="accountEditLink.href"
+          target="_blank"
           data-testid="account-page-edit-url-btn"
-        >
-          <oc-icon name="edit" />
-          <span v-text="$gettext('Edit')" />
-        </oc-button>
-        <oc-button
-          v-else-if="editRoute"
-          variation="primary"
-          type="router-link"
-          :to="editRoute"
-          data-testid="account-page-edit-route-btn"
         >
           <oc-icon name="edit" />
           <span v-text="$gettext('Edit')" />
@@ -75,7 +66,7 @@
           >
         </dd>
       </div>
-      <div class="account-page-info-language oc-mb oc-width-1-2@s">
+      <div v-if="isLanguageSupported" class="account-page-info-language oc-mb oc-width-1-2@s">
         <dt v-translate class="oc-text-normal oc-text-muted">Language</dt>
         <dd data-testid="language">
           <oc-select
@@ -92,12 +83,15 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { computed, defineComponent, onMounted, unref } from 'vue'
-import { useAccessToken, useGraphClient, useStore } from 'web-pkg/src/composables'
-import { urlJoin } from 'web-client/src/utils'
-import { configurationManager } from 'web-pkg/src/configuration'
+import {
+  useAccessToken,
+  useCapabilitySpacesEnabled,
+  useGraphClient,
+  useStore
+} from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import axios from 'axios'
 import { v4 as uuidV4 } from 'uuid'
@@ -110,6 +104,14 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const accessToken = useAccessToken({ store })
+
+    // FIXME: Use graph capability when we have it
+    const isLanguageSupported = useCapabilitySpacesEnabled()
+    const isChangePasswordEnabled = useCapabilitySpacesEnabled()
+    const user = computed(() => {
+      return store.getters.user
+    })
+
     const loadAccountBundleTask = useTask(function* () {
       try {
         const {
@@ -182,14 +184,36 @@ export default defineComponent({
         value
       })
     }
-    onMounted(() => {
-      loadAccountBundleTask.perform()
+    const accountEditLink = computed(() => {
+      return store.getters.configuration?.options?.accountEditLink
     })
+
+    const groupNames = computed(() => {
+      if (unref(useCapabilitySpacesEnabled())) {
+        return unref(user)
+          .groups.map((group) => group.displayName)
+          .join(', ')
+      }
+
+      return unref(user).groups.join(', ')
+    })
+
+    onMounted(() => {
+      if (unref(isLanguageSupported)) {
+        loadAccountBundleTask.perform()
+      }
+    })
+
     return {
       ...useGraphClient(),
       languageOptions,
       selectedLanguageOption,
-      updateSelectedLanguage
+      updateSelectedLanguage,
+      accountEditLink,
+      isChangePasswordEnabled,
+      isLanguageSupported,
+      groupNames,
+      user
     }
   },
   data() {
@@ -198,36 +222,8 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['user', 'getNavItemsByExtension', 'apps', 'capabilities']),
-    isAccountEditingEnabled() {
-      return !this.apps.settings
-    },
-    isChangePasswordEnabled() {
-      // FIXME: spaces capability is not correct here, we need to retrieve an appropriate capability
-      return this.capabilities.spaces?.enabled
-    },
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
-    },
-    editUrl() {
-      if (!this.isAccountEditingEnabled) {
-        return null
-      }
-      return urlJoin(configurationManager.serverUrl, '/index.php/settings/personal')
-    },
-    editRoute() {
-      const navItems = this.getNavItemsByExtension('settings')
-      if (navItems.length > 0) {
-        return navItems[0].route || {}
-      }
-      return null
-    },
-    groupNames() {
-      if (this.capabilities.spaces?.enabled) {
-        return this.user.groups.map((group) => group.displayName).join(', ')
-      }
-
-      return this.user.groups.join(', ')
     }
   },
   methods: {
