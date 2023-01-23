@@ -67,6 +67,7 @@ export default defineComponent({
       }
     }
   },
+  emits: ['cancel', 'confirm'],
   data: function () {
     return {
       formData: {
