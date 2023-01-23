@@ -23,6 +23,12 @@ exports[`account page account information displays basic user information 1`] = 
       <span data-current-language="en" data-msgid="You are not part of any group">You are not part of any group</span>
     </dd>
   </div>
+  <div class="account-page-info-language oc-mb oc-width-1-2@s">
+    <dt class="oc-text-normal oc-text-muted" data-current-language="en" data-msgid="Language">Language</dt>
+    <dd>
+      <!--v-if-->
+    </dd>
+  </div>
 </dl>
 `;
 
