@@ -56,16 +56,16 @@ const createFile = async ({
   user,
   pathToFile,
   content,
-  endPath
+  webDavEndPathToRoot // the root of the WebDAV path. This is `spaces/<space-id>` for ocis or `files/<user>` for oC10
 }: {
   user: User
   pathToFile: string
   content: string
-  endPath: string
+  webDavEndPathToRoot: string
 }): Promise<void> => {
   const response = await request({
     method: 'PUT',
-    path: join('remote.php', 'dav', endPath, pathToFile),
+    path: join('remote.php', 'dav', webDavEndPathToRoot, pathToFile),
     body: content,
     user: user,
     formatJson: false
@@ -85,8 +85,8 @@ export const uploadFileInPersonalSpace = async ({
 }): Promise<void> => {
   // upload a file step is same for oc10 and ocis
   // so first need to determine the end path to make request
-  const endPath = config.ocis
+  const webDavEndPathToRoot = config.ocis
     ? 'spaces/' + (await getPersonalSpaceId({ user }))
     : 'files/' + user.id
-  await createFile({ user, pathToFile, content, endPath })
+  await createFile({ user, pathToFile, content, webDavEndPathToRoot })
 }

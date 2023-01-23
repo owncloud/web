@@ -7,13 +7,13 @@ Feature: Copy
     Given "Admin" creates following users
       | id    |
       | Alice |
-    And "Alice" creates the following folder in personal space using API
+    And "Alice" creates the following folders in personal space using API
       | name        |
       | PARENTCopy1 |
       | PARENTCopy2 |
       | PARENTMove  |
       | PARENTCopy3 |
-    And "Alice" creates the following files in personal space using API
+    And "Alice" creates the following files into personal space using API
       | pathToFile              | content                             |
       | PARENTCopy3/example.txt | example text                        |
       | KeyboardExample.txt     | copy with the help of keyboard      |
