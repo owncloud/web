@@ -61,9 +61,4 @@ export class Session {
     await this.#page.locator('#_userMenuButton').click()
     await this.#page.locator('#oc-topbar-account-logout').click()
   }
-
-  async internalLinkLogin({ user }: { user: User }): Promise<void> {
-    await this.#adapter.login({ user })
-    await this.#page.waitForSelector('#web-content-main')
-  }
 }

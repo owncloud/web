@@ -1,7 +1,9 @@
-import { DataTable, Then, When } from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
+import { kebabCase } from 'lodash'
+import { DateTime } from 'luxon'
 
 When(
   '{string} creates a public link for the resource {string} using the sidebar panel',
@@ -145,12 +147,10 @@ When(
 )
 
 When(
-  '{string} creates a public link using sidebar panel',
-  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const linkObject = new objects.applicationFiles.Link({ page })
-    for (const info of stepTable.hashes()) {
-      await linkObject.createPublicLink(info)
-    }
+  '{string} opens shared-with-me page from the internal link',
+  async function (this: World, stepUser: string): Promise<void> {
+    const actor = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.shares.WithMe({ page: actor.page })
+    await pageObject.openShareWithMeFromInternalLink(actor)
   }
 )

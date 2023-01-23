@@ -21,6 +21,6 @@ export class WithMe {
       this.#page.locator(shareWithMeNavButton).click()
     ])
     await newTab.waitForSelector('#shares-navigation')
-    await actor.updatePage(newTab)
+    await actor.newPage(newTab)
   }
 }

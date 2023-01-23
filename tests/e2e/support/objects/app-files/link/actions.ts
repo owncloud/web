@@ -5,14 +5,6 @@ import { sidebar } from '../utils'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { clickResource } from '../resource/actions'
 
-export interface createLinkAllArgs {
-  page: Page
-  resource: string
-  name?: string
-  expireDate?: string
-  role?: string
-  password?: string
-}
 export interface createLinkArgs {
   page: Page
   resource?: string
@@ -94,65 +86,6 @@ const deleteLinkButton =
   `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
   `//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Delete link"]`
 const confirmDeleteButton = `//button[contains(@class,"oc-modal-body-actions-confirm") and text()="Delete"]`
-
-export const createLinkWithArgs = async (args: createLinkAllArgs): Promise<any> => {
-  const { page, resource, name, expireDate, role, password } = args
-  let linkName, createdLink
-  const resourcePaths = resource.split('/')
-  const resourceName = resourcePaths.pop()
-  if (resourcePaths.length) {
-    await clickResource({ page: page, path: resourcePaths.join('/') })
-  }
-  await sidebar.open({ page: page, resource: resourceName })
-  await sidebar.openPanel({ page: page, name: 'sharing' })
-
-  await page.locator(addPublicLinkButton).click()
-  await waitForPopupNotPresent(page)
-  createdLink = await page.locator(util.format(publicLink, 'Link')).textContent()
-
-  if (name) {
-    await page.locator(util.format(editPublicLinkButton, 'Link')).click()
-    await page.locator(editPublicLinkRenameButton).click()
-    await page.locator(editPublicLinkInput).fill(name)
-    await page.locator(editPublicLinkRenameConfirm).click()
-    const message = await page.locator(linkUpdateDialog).textContent()
-    expect(message.trim()).toBe('Link was updated successfully')
-    linkName = await page.locator(getMostRecentLink + '//h4').textContent()
-  }
-  if (role) {
-    await page.waitForSelector(linkUpdateDialog, { state: 'detached', strict: false })
-    await page.locator(util.format(publicLinkEditRoleButton, linkName)).click()
-    await page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
-    const message = await page.locator(linkUpdateDialog).textContent()
-    expect(message.trim()).toBe('Link was updated successfully')
-  }
-  if (expireDate) {
-    await page.locator(util.format(editPublicLinkButton, linkName)).click()
-    await page.locator(editPublicLinkSetExpirationButton).click()
-
-    const newExpiryDate = getActualExpiryDate(
-      expireDate.toLowerCase().match(/[dayrmonthwek]+/)[0] as any,
-      expireDate
-    )
-
-    await page.locator(linkExpiryDatepicker).evaluate(
-      (datePicker: any, { newExpiryDate }): any => {
-        datePicker?.__vueParentComponent?.refs?.calendar.move(newExpiryDate)
-      },
-      { newExpiryDate }
-    )
-    await page.locator(linkExpiryDatepicker).click()
-  }
-  if (password) {
-    await page.waitForSelector(linkUpdateDialog, { state: 'detached', strict: false })
-    await page.locator(editPublicLinkAddPasswordButton).click()
-    await page.locator(editPublicLinkInput).fill(password)
-    await page.locator(editPublicLinkRenameConfirm).click()
-    const message = await page.locator(linkUpdateDialog).textContent()
-    expect(message.trim()).toBe('Link was updated successfully')
-  }
-  return [createdLink, linkName]
-}
 
 export const createLink = async (args: createLinkArgs): Promise<string> => {
   const { space, page, resource } = args

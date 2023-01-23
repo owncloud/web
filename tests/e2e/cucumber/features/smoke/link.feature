@@ -4,17 +4,17 @@ Feature: link
     Given "Admin" creates following users
       | id    |
       | Alice |
-    And "Alice" creates the following folder in personal space using API
-      | name         |
-      | folderPublic |
-    And "Alice" logs in
+    When "Alice" logs in
     And "Alice" opens the "files" app
+    And "Alice" creates the following resources
+      | resource     | type   |
+      | folderPublic | folder |
     And "Alice" uploads the following resources
       | resource  | to           |
       | lorem.txt | folderPublic |
     #Then "Alice" should see the following resource
     #  | folderPublic/lorem.txt |
-    When "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
+    And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
     And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "uploader"
     And "Alice" sets the expiration date of the public link named "myPublicLink" of resource "folderPublic" to "+5 days"

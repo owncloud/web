@@ -137,21 +137,3 @@ When(
     }
   }
 )
-
-When(
-  '{string} logs in the internal link',
-  async function (this: World, stepUser: string): Promise<void> {
-    let user
-    try {
-      user = this.usersEnvironment.getUser({ key: stepUser })
-    } catch (e) {}
-    const { page } = await this.actorsEnvironment.createActor({
-      key: stepUser,
-      namespace: kebabCase(
-        [this.feature.name, stepUser, DateTime.now().toFormat('yyyy-M-d-hh-mm-ss')].join('-')
-      )
-    })
-    const sessionObject = new objects.runtime.Session({ page })
-    await sessionObject.internalLinkLogin({ user })
-  }
-)

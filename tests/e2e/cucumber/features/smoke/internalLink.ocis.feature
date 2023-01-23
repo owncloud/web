@@ -1,6 +1,6 @@
-Feature: internal link
+Feature: internal link share
 
-  Scenario: link with internal permission
+  Scenario: link share as an internal role
     Given "Admin" creates following users
       | id    |
       | Alice |
@@ -13,15 +13,14 @@ Feature: internal link
     And "Alice" uploads the following resources
       | resource  | to           |
       | lorem.txt | folderPublic |
-    When "Alice" shares the following resource using the sidebar panel
+    And "Alice" shares the following resource using the sidebar panel
       | resource     | recipient | type | role   |
       | folderPublic | Brian     | user | editor |
-    And "Alice" creates a public link using sidebar panel
-      | resource     | name         | role     | expireDate |
-      | folderPublic | myPublicLink | internal | +5 days    |
-    And "Brian" opens the public link "myPublicLink"
-    And "Brian" logs in the internal link
-    And "Brian" opens shared-with-me page
+    And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
+    When "Alice" edits the public link named "Link" of resource "folderPublic" changing role to "internal"
+    And "Brian" opens the public link "Link"
+    And "Brian" logs in from the internal link
+    And "Brian" opens shared-with-me page from the internal link
     And "Brian" accepts the following share
       | name         |
       | folderPublic |

@@ -223,12 +223,3 @@ Then(
     }
   }
 )
-
-When(
-  '{string} opens shared-with-me page',
-  async function (this: World, stepUser: string): Promise<void> {
-    const actor = this.actorsEnvironment.getActor({ key: stepUser })
-    const pageObject = new objects.applicationFiles.page.shares.WithMe({ page: actor.page })
-    await pageObject.openShareWithMeFromInternalLink(actor)
-  }
-)
