@@ -181,17 +181,6 @@ export default defineComponent({
           }
         },
         {
-          app: 'SpaceMembers',
-          icon: 'group',
-          title: $gettext('Members'),
-          component: MembersPanel,
-          default: false,
-          enabled: unref(selectedSpaces).length === 1,
-          componentAttrs: {
-            spaceResource: unref(selectedSpaces)[0]
-          }
-        },
-        {
           app: 'SpaceActions',
           icon: 'slideshow-3',
           title: $gettext('Actions'),
@@ -200,6 +189,17 @@ export default defineComponent({
           enabled: unref(selectedSpaces).length === 1,
           componentAttrs: {
             selectedSpaces: unref(selectedSpaces)
+          }
+        },
+        {
+          app: 'SpaceMembers',
+          icon: 'group',
+          title: $gettext('Members'),
+          component: MembersPanel,
+          default: false,
+          enabled: unref(selectedSpaces).length === 1,
+          componentAttrs: {
+            spaceResource: unref(selectedSpaces)[0]
           }
         }
       ].filter((p) => p.enabled)
