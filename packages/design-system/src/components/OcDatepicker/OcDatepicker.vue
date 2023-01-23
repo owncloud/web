@@ -23,10 +23,6 @@ import 'v-calendar/dist/style.css'
  * Datepicker component based on [v-calendar](https://vcalendar.io/). For detailed documentation, please visit https://vcalendar.io/vue-3.html
  */
 export default defineComponent({
-  compatConfig: {
-    MODE: 3
-  },
-
   name: 'OcDatepicker',
   status: 'ready',
   release: '1.0.0',

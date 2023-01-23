@@ -24,7 +24,6 @@ export default defineComponent({
   name: 'OcCheckbox',
   status: 'ready',
   release: '1.0.0',
-  compatConfig: { MODE: 3 },
   props: {
     /**
      * Id for the checkbox. If it's empty, a generated one will be used.
