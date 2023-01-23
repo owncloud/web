@@ -23,10 +23,6 @@
       "config": {
         "mimeTypes": ["image/tiff","image/bmp","image/x-ms-bmp"]
       }
-    },
-    {
-      "id": "settings",
-      "path": "/settings.js"
     }
   ]
 }

@@ -1,0 +1,6 @@
+Enhancement: Move language selection to user account page
+
+The language selection has been moved from the settings app to the personal account page.
+The settings app has been removed from the default configs because we don't need it currently.
+
+https://github.com/owncloud/web/pull/8294

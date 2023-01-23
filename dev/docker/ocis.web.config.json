@@ -41,10 +41,6 @@
       }
     },
     {
-      "id": "settings",
-      "path": "/settings.js"
-    },
-    {
       "id": "draw-io",
       "path": "web-app-draw-io",
       "config": {

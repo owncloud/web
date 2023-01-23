@@ -75,6 +75,18 @@
           >
         </dd>
       </div>
+      <div class="account-page-info-language oc-mb oc-width-1-2@s">
+        <dt v-translate class="oc-text-normal oc-text-muted">Language</dt>
+        <dd data-testid="language">
+          <oc-select
+            v-if="languageOptions"
+            :model-value="selectedLanguageOption"
+            :clearable="false"
+            :options="languageOptions"
+            @update:modelValue="updateSelectedLanguage"
+          />
+        </dd>
+      </div>
     </dl>
   </main>
 </template>
@@ -82,10 +94,15 @@
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
-import { defineComponent } from 'vue'
-import { useGraphClient } from 'web-pkg/src/composables'
+import { defineComponent, unref } from 'vue'
+import { useAccessToken, useGraphClient, useStore } from 'web-pkg/src/composables'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { useTask } from 'vue-concurrency'
+import axios from 'axios'
+import { v4 as uuidV4 } from 'uuid'
+import { onMounted } from 'vue-demi'
+import { computed } from 'vue'
 
 export default defineComponent({
   name: 'Personal',
@@ -93,8 +110,83 @@ export default defineComponent({
     EditPasswordModal
   },
   setup() {
+    const store = useStore()
+    const accessToken = useAccessToken({ store })
+    const loadLanguagesTask = useTask(function* () {
+      try {
+        const {
+          data: { bundles }
+        } = yield axios.post(
+          '/api/v0/settings/bundles-list',
+          {},
+          {
+            headers: {
+              authorization: `Bearer ${unref(accessToken)}`,
+              'X-Request-ID': uuidV4()
+            }
+          }
+        )
+
+        const accountBundle = bundles.find((b) => b.extension === 'ocis-accounts')
+        return accountBundle.settings.find((s) => s.name === 'language')?.singleChoiceValue.options
+      } catch (e) {
+        console.error(e)
+        return []
+      }
+    }).restartable()
+
+    const accountSettingIdentifier = {
+      extension: 'ocis-accounts',
+      bundle: 'profile',
+      setting: 'language'
+    }
+    const languageSetting = computed(() => {
+      return store.getters.getSettingsValue(accountSettingIdentifier)
+    })
+    const languageOptions = computed(() => {
+      return loadLanguagesTask.last?.value?.map((l) => ({
+        label: l.displayValue,
+        value: l.value.stringValue
+      }))
+    })
+    const selectedLanguageOption = computed(() => {
+      const current = unref(languageSetting).listValue.values[0].stringValue
+      return unref(languageOptions).find((o) => o.value === current)
+    })
+    const updateSelectedLanguage = (option) => {
+      axios.post(
+        '/api/v0/settings/values-save',
+        {
+          value: {
+            ...unref(languageSetting),
+            listValue: { values: [{ stringValue: option.value }] },
+            accountUuid: 'me'
+          }
+        },
+        {
+          headers: {
+            authorization: `Bearer ${unref(accessToken)}`,
+            'X-Request-ID': uuidV4()
+          }
+        }
+      )
+
+      store.commit('SET_SETTINGS_VALUE', {
+        identifier: accountSettingIdentifier,
+        value: {
+          ...unref(languageSetting),
+          listValue: { values: [{ stringValue: option.value }] }
+        }
+      })
+    }
+    onMounted(() => {
+      loadLanguagesTask.perform()
+    })
     return {
-      ...useGraphClient()
+      ...useGraphClient(),
+      languageOptions,
+      selectedLanguageOption,
+      updateSelectedLanguage
     }
   },
   data() {
