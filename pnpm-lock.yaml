@@ -452,6 +452,7 @@ importers:
   packages/web-app-files:
     specifiers:
       '@jest/globals': 29.3.1
+      '@ownclouders/design-system': workspace:*
       '@vueuse/core': ^9.8.2
       filesize: ^9.0.11
       fuse.js: ^6.5.3
@@ -474,6 +475,7 @@ importers:
       web-pkg: npm:@ownclouders/web-pkg
       web-runtime: workspace:*
     dependencies:
+      '@ownclouders/design-system': link:../design-system
       filesize: 9.0.11
       fuse.js: 6.5.3
       lodash-es: 4.17.21

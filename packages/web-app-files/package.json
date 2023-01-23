@@ -12,6 +12,7 @@
     "@vueuse/core": "^9.8.2"
   },
   "peerDependencies": {
+    "@ownclouders/design-system": "workspace:*",
     "@vueuse/core": "^9.8.2",
     "filesize": "^9.0.11",
     "fuse.js": "^6.5.3",
