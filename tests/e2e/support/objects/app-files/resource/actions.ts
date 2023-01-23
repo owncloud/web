@@ -253,9 +253,14 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
 
 /**/
 
+interface resourceArgs {
+  name: string
+  type: string
+}
+
 export interface downloadResourcesArgs {
   page: Page
-  resources: [Object: any]
+  resources: resourceArgs[]
   folder?: string
   via: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
 }
@@ -305,7 +310,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
 
 export type selectResourcesArgs = {
   page: Page
-  resources: [Object: any]
+  resources: resourceArgs[]
   folder?: string
   select: boolean
 }
