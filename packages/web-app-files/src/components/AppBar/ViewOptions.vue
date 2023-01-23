@@ -37,20 +37,23 @@
       <oc-list>
         <li class="files-view-options-list-item oc-mb-m">
           <oc-switch
-            v-model="hiddenFilesShownModel"
+            v-model:checked="hiddenFilesShownModel"
             data-testid="files-switch-hidden-files"
             :label="$gettext('Show hidden files')"
+            @update:checked="updateHiddenFilesShownModel"
           />
         </li>
         <li class="files-view-options-list-item oc-my-m">
           <oc-switch
-            v-model="fileExtensionsShownModel"
+            v-model:checked="fileExtensionsShownModel"
             data-testid="files-switch-files-extensions-files"
             :label="$gettext('Show file extensions')"
+            @update:checked="updateFileExtensionsShownModel"
           />
         </li>
         <li class="files-view-options-list-item oc-mt-m">
           <oc-page-size
+            v-if="!queryParamsLoading"
             :selected="itemsPerPage"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
@@ -65,12 +68,11 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue'
+import { defineComponent, PropType, ref, watch } from 'vue'
 import { mapMutations, mapState } from 'vuex'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { ViewMode } from 'web-pkg/src/ui/types'
 import { PaginationConstants, ViewModeConstants } from '../../composables'
-import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
@@ -80,6 +82,7 @@ export default defineComponent({
     }
   },
   setup() {
+    const queryParamsLoading = ref(false)
     const perPageQuery = useRouteQueryPersisted({
       name: PaginationConstants.perPageQueryName,
       defaultValue: PaginationConstants.perPageDefault
@@ -88,11 +91,19 @@ export default defineComponent({
       name: ViewModeConstants.queryName,
       defaultValue: ViewModeConstants.defaultModeName
     })
+    watch(
+      [perPageQuery, viewModeQuery],
+      (params) => {
+        queryParamsLoading.value = params.some((p) => !p)
+      },
+      { immediate: true, deep: true }
+    )
 
     return {
       ViewModeConstants,
       viewModeCurrent: viewModeQuery,
-      itemsPerPage: perPageQuery
+      itemsPerPage: perPageQuery,
+      queryParamsLoading
     }
   },
   computed: {
@@ -125,6 +136,12 @@ export default defineComponent({
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
     setViewMode(mode) {
       this.viewModeCurrent = mode.name
+    },
+    updateHiddenFilesShownModel(event) {
+      this.hiddenFilesShownModel = event
+    },
+    updateFileExtensionsShownModel(event) {
+      this.fileExtensionsShownModel = event
     }
   }
 })

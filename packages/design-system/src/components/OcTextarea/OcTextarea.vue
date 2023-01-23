@@ -9,7 +9,7 @@
         'oc-textarea-warning': !!warningMessage,
         'oc-textarea-danger': !!errorMessage
       }"
-      :value="value"
+      :value="modelValue"
       :aria-invalid="ariaInvalid"
       @input="onInput($event.target.value)"
       @focus="onFocus($event.target.value)"
@@ -62,7 +62,7 @@ export default defineComponent({
     /**
      * Text value of the form textarea.
      */
-    value: {
+    modelValue: {
       type: String,
       default: null
     },
@@ -114,7 +114,7 @@ export default defineComponent({
       default: true
     }
   },
-  emits: ['input', 'focus', 'change', 'keydown'],
+  emits: ['update:modelValue', 'focus', 'change', 'keydown'],
   computed: {
     showMessageLine() {
       return (
@@ -160,7 +160,7 @@ export default defineComponent({
        * Input event
        * @type {event}
        **/
-      this.$emit('input', value)
+      this.$emit('update:modelValue', value)
     },
     onFocus(value) {
       /**

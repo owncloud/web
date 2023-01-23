@@ -155,23 +155,26 @@ export default defineComponent({
     term() {
       this.debouncedSearch(this)
     },
-    searchResults() {
-      this.activePreviewIndex = null
+    searchResults: {
+      handler() {
+        this.activePreviewIndex = null
 
-      this.$nextTick(() => {
-        if (this.showNoResults) {
-          return
-        }
-        if (this.$refs.optionsDrop) {
-          this.markInstance = new Mark(this.$refs.optionsDrop.$refs.drop)
-          this.markInstance.unmark()
-          this.markInstance.mark(this.term, {
-            element: 'span',
-            className: 'highlight-mark',
-            exclude: ['.provider-details *']
-          })
-        }
-      })
+        this.$nextTick(() => {
+          if (this.showNoResults) {
+            return
+          }
+          if (this.$refs.optionsDrop) {
+            this.markInstance = new Mark(this.$refs.optionsDrop.$refs.drop)
+            this.markInstance.unmark()
+            this.markInstance.mark(this.term, {
+              element: 'span',
+              className: 'highlight-mark',
+              exclude: ['.provider-details *']
+            })
+          }
+        })
+      },
+      deep: true
     },
     $route: {
       handler(r) {

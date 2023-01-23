@@ -206,10 +206,10 @@ export default defineComponent({
             userId: this.user.id,
             token: this.accessToken
           }).then((imageBlob) => {
-            this.$set(this.imageContentObject, space.id, {
+            this.imageContentObject[space.id] = {
               fileId: space.spaceImageData.id,
               data: imageBlob
-            })
+            }
           })
         }
       },

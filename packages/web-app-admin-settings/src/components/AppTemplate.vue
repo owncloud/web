@@ -72,7 +72,7 @@ export default defineComponent({
     },
     sideBarActivePanel: {
       required: true,
-      type: String
+      type: [String, null]
     },
     sideBarLoading: {
       required: false,

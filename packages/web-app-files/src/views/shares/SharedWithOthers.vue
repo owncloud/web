@@ -19,7 +19,7 @@
         <resource-table
           v-else
           id="files-shared-with-others-table"
-          v-model="selectedResourcesIds"
+          v-model:selectedIds="selectedResourcesIds"
           class="files-table"
           :class="{ 'files-table-squashed': sideBarOpen }"
           :fields-displayed="['name', 'sharedWith', 'sdate']"
@@ -32,6 +32,7 @@
           @fileClick="$_fileActions_triggerDefaultAction"
           @rowMounted="rowMounted"
           @sort="handleSort"
+          @update:selectedIds="selectedResourcesIds = $event"
         >
           <template #contextMenu="{ resource }">
             <context-actions

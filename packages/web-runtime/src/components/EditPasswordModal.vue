@@ -38,6 +38,7 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'EditPasswordModal',
+  emits: ['cancel', 'confirm'],
   data: function () {
     return {
       currentPassword: '',

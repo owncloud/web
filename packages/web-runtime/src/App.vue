@@ -120,6 +120,7 @@ export default defineComponent({
     },
     capabilities: {
       immediate: true,
+      deep: true,
       handler: function (caps) {
         if (!caps?.notifications) {
           return

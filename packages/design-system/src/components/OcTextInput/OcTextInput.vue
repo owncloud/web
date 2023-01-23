@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$attrs.class">
     <label class="oc-label" :for="id" v-text="label" />
     <div class="oc-position-relative">
       <input
@@ -69,6 +69,9 @@ export default defineComponent({
   status: 'ready',
   release: '1.0.0',
   inheritAttrs: false,
+  compatConfig: {
+    COMPONENT_V_MODEL: false
+  },
   props: {
     /**
      * The ID of the element.
@@ -93,7 +96,7 @@ export default defineComponent({
      * Text value of the form input field.
      * @model
      */
-    value: {
+    modelValue: {
       type: String,
       required: false,
       default: null
@@ -177,6 +180,7 @@ export default defineComponent({
       default: null
     }
   },
+  emits: ['change', 'update:modelValue', 'focus'],
   computed: {
     showMessageLine() {
       return (
@@ -200,7 +204,7 @@ export default defineComponent({
       }
       // Exclude listeners for events which are handled via methods in this component
       // eslint-disable-next-line no-unused-vars
-      const { change, input, focus, ...attrs } = this.$attrs
+      const { change, input, focus, class: classes, ...attrs } = this.$attrs
 
       return { ...attrs, ...additionalAttrs }
     },
@@ -219,13 +223,13 @@ export default defineComponent({
       return this.descriptionMessage
     },
     showClearButton() {
-      return !this.disabled && this.clearButtonEnabled && this.value !== null
+      return !this.disabled && this.clearButtonEnabled && this.modelValue !== null
     },
     clearButtonAccessibleLabelValue() {
       return this.clearButtonAccessibleLabel || this.$gettext('Clear input')
     },
     displayValue() {
-      return this.value || ''
+      return this.modelValue || ''
     }
   },
   methods: {
@@ -254,7 +258,7 @@ export default defineComponent({
        * Input event
        * @type {event}
        **/
-      this.$emit('input', value)
+      this.$emit('update:modelValue', value)
     },
     onFocus(target) {
       target.select()

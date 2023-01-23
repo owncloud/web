@@ -59,7 +59,7 @@ describe('OcCheckbox', () => {
       const checkbox = wrapper.find(checkboxSelector)
       expect((checkbox.element as any).checked).toBeFalsy()
       await checkbox.setValue(true)
-      expect(wrapper.emitted('input')).toBeTruthy()
+      expect(wrapper.emitted('update:modelValue')).toBeTruthy()
       expect((checkbox.element as any).checked).toBeTruthy()
     })
   })

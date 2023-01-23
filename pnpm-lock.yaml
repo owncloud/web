@@ -60,8 +60,6 @@ importers:
       ejs: 3.1.8
       eslint: 8.31.0
       flush-promises: 1.0.2
-      focus-trap: 6.9.4
-      focus-trap-vue: 1.1.1
       git-repo-info: 2.1.1
       jest: 29.3.1
       jest-axe: 5.0.1
@@ -154,8 +152,6 @@ importers:
       ejs: 3.1.8
       eslint: 8.31.0
       flush-promises: 1.0.2
-      focus-trap: 6.9.4
-      focus-trap-vue: 1.1.1_kdeyb7xlqs3c3yfjn6vdsdsiza
       git-repo-info: 2.1.1
       jest: 29.3.1_35bb52e3ngsl3trrvg3csiponq
       jest-axe: 5.0.1
@@ -221,8 +217,8 @@ importers:
       depcheck: ^1.3.1
       file-loader: ^6.2.0
       filesize: ^9.0.11
-      focus-trap: ^6.4.0
-      focus-trap-vue: ^1.1.1
+      focus-trap: ^7.2.0
+      focus-trap-vue: ^4.0.1
       fuse.js: ^6.4.6
       glob: ^8.0.3
       html-loader: ^1.3.2
@@ -306,8 +302,8 @@ importers:
       depcheck: 1.4.3
       file-loader: 6.2.0_webpack@4.46.0
       filesize: 9.0.11
-      focus-trap: 6.9.4
-      focus-trap-vue: 1.1.1_kdeyb7xlqs3c3yfjn6vdsdsiza
+      focus-trap: 7.2.0
+      focus-trap-vue: 4.0.1_nn2zg2o47bujavotzgw5cgkzcu
       fuse.js: 6.5.3
       glob: 8.0.3
       html-loader: 1.3.2_webpack@4.46.0
@@ -626,8 +622,8 @@ importers:
       axios: ^0.27.2
       easygettext: https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz
       filesize: ^9.0.11
-      focus-trap: ^6.4.0
-      focus-trap-vue: ^1.1.1
+      focus-trap: ^7.2.0
+      focus-trap-vue: ^4.0.1
       fuse.js: ^6.5.3
       lodash-es: ^4.17.21
       luxon: ^2.4.0
@@ -673,8 +669,8 @@ importers:
       axios: 0.27.2
       easygettext: '@github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz'
       filesize: 9.0.11
-      focus-trap: 6.9.0
-      focus-trap-vue: 1.1.1_py3sdzkm4m37vgnfmkoyooqlle
+      focus-trap: 7.2.0
+      focus-trap-vue: 4.0.1_nn2zg2o47bujavotzgw5cgkzcu
       fuse.js: 6.5.3
       lodash-es: 4.17.21
       luxon: 2.4.0
@@ -8194,7 +8190,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -12069,37 +12065,19 @@ packages:
       readable-stream: 2.3.7
     dev: true
 
-  /focus-trap-vue/1.1.1_kdeyb7xlqs3c3yfjn6vdsdsiza:
-    resolution: {integrity: sha512-N+M4d4uYymCogct417gUL7wWSMIW/oUcCicfg3eRdo+gz7jlQnIGwUwViFxPkKV7iyzpc81g6JeSxRWiYWU3eQ==}
+  /focus-trap-vue/4.0.1_nn2zg2o47bujavotzgw5cgkzcu:
+    resolution: {integrity: sha512-2iqOeoSvgq7Um6aL+255a/wXPskj6waLq2oKCa4gOnMORPo15JX7wN6J5bl1SMhMlTlkHXGSrQ9uJPJLPZDl5w==}
     peerDependencies:
-      focus-trap: ^6.0.1
-      vue: ^2.6.0
+      focus-trap: ^7.0.0
+      vue: ^3.0.0
     dependencies:
-      focus-trap: 6.9.4
+      focus-trap: 7.2.0
       vue: 3.2.45
-    dev: true
 
-  /focus-trap-vue/1.1.1_py3sdzkm4m37vgnfmkoyooqlle:
-    resolution: {integrity: sha512-N+M4d4uYymCogct417gUL7wWSMIW/oUcCicfg3eRdo+gz7jlQnIGwUwViFxPkKV7iyzpc81g6JeSxRWiYWU3eQ==}
-    peerDependencies:
-      focus-trap: ^6.0.1
-      vue: ^2.6.0
+  /focus-trap/7.2.0:
+    resolution: {integrity: sha512-v4wY6HDDYvzkBy4735kW5BUEuw6Yz9ABqMYLuTNbzAFPcBOGiGHwwcNVMvUz4G0kgSYh13wa/7TG3XwTeT4O/A==}
     dependencies:
-      focus-trap: 6.9.0
-      vue: 3.2.45
-    dev: false
-
-  /focus-trap/6.9.0:
-    resolution: {integrity: sha512-Yv3ieSeAPbfjzjU6xIuF1yAGw0kIKO5EkEJL9o/8MYfBcr99cV7dE6rJM4slk1itDHHeEhoNorQVzvEIT1rNsw==}
-    dependencies:
-      tabbable: 5.3.1
-    dev: false
-
-  /focus-trap/6.9.4:
-    resolution: {integrity: sha512-v2NTsZe2FF59Y+sDykKY+XjqZ0cPfhq/hikWVL88BqLivnNiEffAsac6rP6H45ff9wG9LL5ToiDqrLEP9GX9mw==}
-    dependencies:
-      tabbable: 5.3.3
-    dev: true
+      tabbable: 6.0.1
 
   /follow-redirects/1.15.1:
     resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
@@ -18455,6 +18433,15 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
+  /promise-inflight/1.0.1:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
+    dev: true
+
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -20968,13 +20955,8 @@ packages:
     resolution: {integrity: sha512-k8uzYIkIVwmT+TcglpdN50pS2y1BDcUnBPK9iJeGu0Pl1lOI8pD6wtzgw91Pjpe+RxtTncw32tLxs/R0yNL2Mg==}
     dev: true
 
-  /tabbable/5.3.1:
-    resolution: {integrity: sha512-NtO7I7eoAHR+JwwcNsi/PipamtAEebYDnur/k9wM6n238HHy/+1O4+7Zx7e/JaDAbKJPlIFYsfsV/6tPqTOQvg==}
-    dev: false
-
-  /tabbable/5.3.3:
-    resolution: {integrity: sha512-QD9qKY3StfbZqWOPLp0++pOrAVb/HbUi5xCc8cUo4XjP19808oaMiDzn0leBY5mCespIBM0CIZePzZjgzR83kA==}
-    dev: true
+  /tabbable/6.0.1:
+    resolution: {integrity: sha512-SYJSIgeyXW7EuX1ytdneO5e8jip42oHWg9xl/o3oTYhmXusZVgiA+VlPvjIN+kHii9v90AmzTZEBcsEvuAY+TA==}
 
   /table/6.8.1:
     resolution: {integrity: sha512-Y4X9zqrCftUhMeH2EptSSERdVKt/nEdijTOacGD/97EKjhQ/Qs8RTlEGABSJNNN8lac9kheH+af7yAkEWlgneA==}

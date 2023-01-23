@@ -44,6 +44,7 @@ export default defineComponent({
     showSpaceMembers: { type: Boolean, default: false },
     showLinks: { type: Boolean, default: false }
   },
+  emits: ['scrollToElement'],
   setup() {
     const store = useStore()
     const sharesLoading = computed(() => store.getters['Files/sharesTreeLoading'])

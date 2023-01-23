@@ -22,7 +22,7 @@
         <resource-table
           v-else
           id="files-trashbin-table"
-          v-model="selectedResourcesIds"
+          v-model:selectedIds="selectedResourcesIds"
           class="files-table"
           :class="{ 'files-table-squashed': sideBarOpen }"
           :fields-displayed="['name', 'ddate']"
@@ -36,6 +36,7 @@
           :space="space"
           :has-actions="showActions"
           @sort="handleSort"
+          @update:selectedIds="selectedResourcesIds = $event"
         >
           <template #contextMenu="{ resource }">
             <context-actions

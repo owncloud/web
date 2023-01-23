@@ -17,7 +17,7 @@
         <resource-table
           v-else
           id="files-favorites-table"
-          v-model="selectedResourcesIds"
+          v-model:selectedIds="selectedResourcesIds"
           class="files-table"
           :class="{ 'files-table-squashed': sideBarOpen }"
           :are-paths-displayed="true"
@@ -29,6 +29,7 @@
           @fileClick="$_fileActions_triggerDefaultAction"
           @rowMounted="rowMounted"
           @sort="handleSort"
+          @update:selectedIds="selectedResourcesIds = $event"
         >
           <template #quickActions="props">
             <quick-actions

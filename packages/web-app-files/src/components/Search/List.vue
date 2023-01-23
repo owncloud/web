@@ -19,7 +19,7 @@
         </no-content-message>
         <resource-table
           v-else
-          v-model="selectedResourcesIds"
+          v-model:selectedIds="selectedResourcesIds"
           class="files-table"
           :class="{ 'files-table-squashed': false }"
           :resources="paginatedResources"
@@ -32,6 +32,7 @@
           @fileClick="$_fileActions_triggerDefaultAction"
           @rowMounted="rowMounted"
           @sort="handleSort"
+          @update:selectedIds="selectedResourcesIds = $event"
         >
           <template #contextMenu="{ resource }">
             <context-actions

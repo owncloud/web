@@ -14,10 +14,10 @@ describe('OcSwitch', () => {
 
     await wrapper.find('[data-testid="oc-switch-btn"]').trigger('click')
 
-    expect(wrapper.emitted().change[0][0]).toEqual(true)
+    expect(wrapper.emitted('update:checked')[0][0]).toEqual(true)
 
     await wrapper.find('[data-testid="oc-switch-btn"]').trigger('click')
 
-    expect(wrapper.emitted().change[0][0]).toEqual(true)
+    expect(wrapper.emitted('update:checked')[0][0]).toEqual(true)
   })
 })

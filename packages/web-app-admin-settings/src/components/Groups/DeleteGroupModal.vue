@@ -23,6 +23,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['cancel', 'confirm'],
   computed: {
     title() {
       return this.$gettextInterpolate(

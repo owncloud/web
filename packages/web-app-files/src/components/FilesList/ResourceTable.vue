@@ -24,6 +24,7 @@
     @itemDropped="fileDropped"
     @itemDragged="fileDragged"
     @sort="sort"
+    @update:modelValue="$emit('update:modelValue', $event)"
   >
     <template #selectHeader>
       <div class="resource-table-select-all">
@@ -32,8 +33,8 @@
           size="large"
           :label="allResourcesCheckboxLabel"
           :hide-label="true"
-          :value="areAllResourcesSelected"
-          @input="toggleSelectionAll"
+          :model-value="areAllResourcesSelected"
+          @update:modelValue="toggleSelectionAll"
         />
       </div>
     </template>
@@ -43,9 +44,9 @@
         :label="getResourceCheckboxLabel(item)"
         :hide-label="true"
         size="large"
-        :value="isResourceSelected(item)"
+        :model-value="isResourceSelected(item)"
         :outline="isLatestSelectedItem(item)"
-        @input="setSelection($event, item)"
+        @update:modelValue="setSelection($event, item)"
         @click.stop
       />
     </template>
@@ -234,10 +235,6 @@ const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
   mixins: [Rename],
-  model: {
-    prop: 'selectedIds',
-    event: 'select'
-  },
   props: {
     /**
      * Resources to be displayed in the table.
@@ -406,7 +403,14 @@ export default defineComponent({
       default: null
     }
   },
-  emits: ['fileClick', 'select', 'sort', 'rowMounted', EVENT_FILE_DROPPED],
+  emits: [
+    'fileClick',
+    'sort',
+    'rowMounted',
+    EVENT_FILE_DROPPED,
+    'update:selectedIds',
+    'update:modelValue'
+  ],
   setup() {
     const store = useStore()
     const { width } = useWindowSize()
@@ -758,7 +762,7 @@ export default defineComponent({
     },
     emitSelect(selectedIds) {
       eventBus.publish('app.files.list.clicked')
-      this.$emit('select', selectedIds)
+      this.$emit('update:selectedIds', selectedIds)
     },
     toggleSelectionAll() {
       if (this.areAllResourcesSelected) {

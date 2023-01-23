@@ -162,23 +162,27 @@ export default defineComponent({
       return { ...user, ...data }
     })
 
-    watch(selectedUsers, async () => {
-      const loadAdditionalData = unref(selectedUsers).length === 1
-      if (loadAdditionalData && unref(loadedUser)?.id === unref(selectedUsers)[0].id) {
-        // current user is already loaded
-        return
-      }
+    watch(
+      selectedUsers,
+      async () => {
+        const loadAdditionalData = unref(selectedUsers).length === 1
+        if (loadAdditionalData && unref(loadedUser)?.id === unref(selectedUsers)[0].id) {
+          // current user is already loaded
+          return
+        }
 
-      sideBarLoading.value = true
-      if (loadAdditionalData) {
-        loadedUser.value = await loadAdditionalUserDataTask.perform(unref(selectedUsers)[0])
+        sideBarLoading.value = true
+        if (loadAdditionalData) {
+          loadedUser.value = await loadAdditionalUserDataTask.perform(unref(selectedUsers)[0])
+          sideBarLoading.value = false
+          return
+        }
+
+        loadedUser.value = null
         sideBarLoading.value = false
-        return
-      }
-
-      loadedUser.value = null
-      sideBarLoading.value = false
-    })
+      },
+      { deep: true }
+    )
 
     const calculateListHeaderPosition = () => {
       listHeaderPosition.value = unref(template)?.$refs?.appBar?.getBoundingClientRect()?.height
@@ -209,7 +213,8 @@ export default defineComponent({
       loadResourcesTask,
       loadAdditionalUserDataTask,
       graphClient,
-      accessToken
+      accessToken,
+      listHeaderPosition
     }
   },
   data: function () {
@@ -426,11 +431,8 @@ export default defineComponent({
           await this.addRoleAssignment(editUser)
         }
 
-        this.$set(
-          this.users,
-          this.users.findIndex((user) => user.id === editUser.id),
-          editUser
-        )
+        const userIndex = this.users.findIndex((user) => user.id === editUser.id)
+        this.users[userIndex] = editUser
         /**
          * The user object gets actually exchanged, therefore we update the selected users
          */
@@ -464,11 +466,8 @@ export default defineComponent({
           await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
         }
 
-        this.$set(
-          this.users,
-          this.users.findIndex((user) => user.id === editUser.id),
-          editUser
-        )
+        const userIndex = this.users.findIndex((user) => user.id === editUser.id)
+        this.users[userIndex] = editUser
         /**
          * The user object gets actually exchanged, therefore we update the selected users
          */

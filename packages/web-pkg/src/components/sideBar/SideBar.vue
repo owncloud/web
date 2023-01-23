@@ -62,7 +62,7 @@
                   <component
                     :is="panel.component"
                     v-bind="panel.componentAttrs"
-                    v-on="panel.componentListeners"
+                    v-on="panel.componentListeners || {}"
                     @scrollToElement="scrollToElement"
                   />
                 </slot>
@@ -139,6 +139,7 @@ export default defineComponent({
       default: false
     }
   },
+  emits: ['close', 'selectPanel'],
 
   data() {
     return {
@@ -193,7 +194,6 @@ export default defineComponent({
       immediate: true
     }
   },
-
   beforeUnmount() {
     visibilityObserver.disconnect()
     hiddenObserver.disconnect()

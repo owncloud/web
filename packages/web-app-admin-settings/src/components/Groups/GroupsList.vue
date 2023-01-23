@@ -23,20 +23,20 @@
           size="large"
           class="oc-ml-s"
           :label="$gettext('Select all groups')"
-          :value="allGroupsSelected"
+          :model-value="allGroupsSelected"
           hide-label
-          @input="$emit('toggleSelectAllGroups')"
+          @update:modelValue="$emit('toggleSelectAllGroups')"
         />
       </template>
       <template #select="rowData">
         <oc-checkbox
           class="oc-ml-s"
           size="large"
-          :value="selectedGroups"
+          :model-value="selectedGroups"
           :option="rowData.item"
           :label="getSelectGroupLabel(rowData.item)"
           hide-label
-          @input="$emit('toggleSelectGroup', rowData.item)"
+          @update:modelValue="$emit('toggleSelectGroup', rowData.item)"
         />
       </template>
       <template #avatar="rowData">
@@ -93,6 +93,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['toggleSelectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
   setup(props, { emit }) {
     const showDetails = (group) => {
       emit('unSelectAllGroups')

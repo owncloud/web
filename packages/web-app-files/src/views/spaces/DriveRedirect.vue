@@ -57,19 +57,17 @@ export default defineComponent({
       path: unref(itemPath)
     })
 
-    return (
-      router
-        .replace({
-          ...unref(route),
-          params: {
-            ...unref(route).params,
-            ...params
-          },
-          query
-        })
-        // avoid NavigationDuplicated error in console
-        .catch(() => {})
-    )
+    router
+      .replace({
+        ...unref(route),
+        params: {
+          ...unref(route).params,
+          ...params
+        },
+        query
+      })
+      // avoid NavigationDuplicated error in console
+      .catch(() => {})
   }
 })
 </script>

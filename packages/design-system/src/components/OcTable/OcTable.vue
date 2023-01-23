@@ -253,6 +253,7 @@ export default defineComponent({
   },
   emits: [
     EVENT_ITEM_DROPPED,
+    EVENT_ITEM_DRAGGED,
     EVENT_THEAD_CLICKED,
     EVENT_TROW_CLICKED,
     EVENT_TROW_MOUNTED,

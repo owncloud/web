@@ -27,12 +27,18 @@ describe('ViewOptions component', () => {
   })
   it('toggles the setting to show/hide hidden files', () => {
     const { wrapper, storeOptions } = getWrapper()
-    ;(wrapper.findComponent<any>(selectors.hiddenFilesSwitch).vm as any).$emit('change', false)
+    ;(wrapper.findComponent<any>(selectors.hiddenFilesSwitch).vm as any).$emit(
+      'update:checked',
+      false
+    )
     expect(storeOptions.modules.Files.mutations.SET_HIDDEN_FILES_VISIBILITY).toHaveBeenCalled()
   })
   it('toggles the setting to show/hide file extensions', () => {
     const { wrapper, storeOptions } = getWrapper()
-    ;(wrapper.findComponent<any>(selectors.fileExtensionsSwitch).vm as any).$emit('change', false)
+    ;(wrapper.findComponent<any>(selectors.fileExtensionsSwitch).vm as any).$emit(
+      'update:checked',
+      false
+    )
     expect(storeOptions.modules.Files.mutations.SET_FILE_EXTENSIONS_VISIBILITY).toHaveBeenCalled()
   })
   it('initially does not show a viewmode switcher', () => {

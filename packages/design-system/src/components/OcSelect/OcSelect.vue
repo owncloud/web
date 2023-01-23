@@ -5,6 +5,9 @@
       ref="select"
       :disabled="disabled"
       :filter="filter"
+      :loading="loading"
+      :searchable="searchable"
+      :clearable="clearable"
       class="oc-select"
       style="background: transparent"
       v-bind="additionalAttributes"
@@ -38,8 +41,7 @@ export default defineComponent({
   name: 'OcSelect',
   status: 'ready',
   release: '4.3.0',
-
-  compatConfig: { COMPONENT_V_MODEL: false },
+  compatConfig: { MODE: 3 },
   components: { VueSelect },
 
   inheritAttrs: true,
@@ -100,9 +102,33 @@ export default defineComponent({
     optionLabel: {
       type: String,
       default: null
+    },
+    /**
+     * Determines if the select field is searchable
+     */
+    searchable: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    /**
+     * Determines if the select field is clearable
+     */
+    clearable: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    /**
+     * Determines if the select field loading
+     */
+    loading: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['search:input', 'update:modelValue'],
 
   computed: {
     additionalAttributes() {

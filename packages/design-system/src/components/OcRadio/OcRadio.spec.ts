@@ -75,18 +75,18 @@ describe('OcRadio', () => {
     it('should emit input event if checked', async () => {
       const wrapper = getWrapper()
       const radioInput = wrapper.find(radioElementSelector)
-      expect(wrapper.emitted('input')).toBeFalsy()
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy()
       await radioInput.setValue(true)
       expect((radioInput.element as any).checked).toBeTruthy()
-      expect(wrapper.emitted('input')).toBeTruthy()
+      expect(wrapper.emitted('update:modelValue')).toBeTruthy()
     })
     it('should not emit input event if disabled', async () => {
       const wrapper = getWrapper({ disabled: true })
       const radioInput = wrapper.find(radioElementSelector)
-      expect(wrapper.emitted('input')).toBeFalsy()
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy()
       await radioInput.trigger('click')
       expect((radioInput.element as any).checked).toBeFalsy()
-      expect(wrapper.emitted('input')).toBeFalsy()
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy()
     })
   })
   describe('input options', () => {

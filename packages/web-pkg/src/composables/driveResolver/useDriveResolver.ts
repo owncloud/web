@@ -102,7 +102,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         leadingSlash: true
       })
     },
-    { immediate: true }
+    { immediate: true, deep: true }
   )
   watch(
     space,

@@ -110,10 +110,10 @@ describe('OcTextarea', () => {
   describe('input events', () => {
     it('should emit an input event on typing', async () => {
       const wrapper = getShallowWrapper()
-      expect(wrapper.emitted().input).toBeFalsy()
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy()
       await wrapper.find('textarea').setValue('a')
-      expect(wrapper.emitted().input).toBeTruthy()
-      expect(wrapper.emitted().input[0][0]).toBe('a')
+      expect(wrapper.emitted('update:modelValue')).toBeTruthy()
+      expect(wrapper.emitted('update:modelValue')[0][0]).toBe('a')
     })
   })
   describe('change events', () => {
