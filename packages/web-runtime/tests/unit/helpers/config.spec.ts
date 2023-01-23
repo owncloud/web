@@ -46,9 +46,7 @@ describe('config file loading and error reporting', () => {
   })
   describe('config with an trailing comma', () => {
     it('should throw an exception', function () {
-      fetchMock.mockResponseOnce(
-        '"title": { "en": "Classic Design", "de": "Dateien", },'
-      )
+      fetchMock.mockResponseOnce('"title": { "en": "Classic Design", "de": "Dateien", },')
       return expect(loadConfig).rejects.toThrow(
         'config could not be parsed. ' +
           'FetchError: invalid json response body at  ' +
