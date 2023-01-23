@@ -81,9 +81,13 @@ export class ArchiverService {
       url =
         downloadUrl +
         '&access_token=' +
-        (window.Vue as any).$store.getters['runtime/auth/accessToken']
+        (window as any).__$store.getters['runtime/auth/accessToken']
     }
+    const publicLinkPassword = (window as any).__$store.getters['runtime/auth/publicLinkPassword']
+    if (publicLinkPassword) document.cookie = `password=${publicLinkPassword}; max-age=10; path=/`
     window.location = url
+    if (publicLinkPassword) document.cookie = 'password=;max-age=0'
+
     return url
   }
 

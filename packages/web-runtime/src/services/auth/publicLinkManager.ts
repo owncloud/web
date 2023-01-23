@@ -122,13 +122,13 @@ export class PublicLinkManager {
     // FIXME: ocis at the moment is not able to create archives for public links that are password protected
     // until this is supported by the backend remove it hard as a workaround
     // https://github.com/owncloud/web/issues/6423
-    if (password) {
-      this.store.commit('SET_CAPABILITIES', {
-        capabilities: omit(response.capabilities, ['files.archivers']),
-        version: response.version
-      })
-      return
-    }
+    // if (password) {
+    //   this.store.commit('SET_CAPABILITIES', {
+    //     capabilities: omit(response.capabilities, ['files.archivers']),
+    //     version: response.version
+    //   })
+    //   return
+    // }
 
     this.store.commit('SET_CAPABILITIES', response)
   }
