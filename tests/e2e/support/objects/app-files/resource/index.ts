@@ -188,7 +188,7 @@ export class Resource {
     await showHiddenResources(this.#page)
   }
 
-  async editResourse(args: Omit<editResourcesArgs, 'page'>): Promise<void> {
+  async editResource(args: Omit<editResourcesArgs, 'page'>): Promise<void> {
     await editResources({ ...args, page: this.#page })
   }
 

@@ -5,7 +5,7 @@ import { objects } from '../../../support'
 
 const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
   return stepTable.hashes().reduce((acc, stepRow) => {
-    const { resource, recipient, type, role } = stepRow
+    const { resource, recipient, type, role, resourceType } = stepRow
 
     if (!acc[resource]) {
       acc[resource] = []
@@ -17,7 +17,8 @@ const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
           ? usersEnvironment.getGroup({ key: recipient })
           : usersEnvironment.getUser({ key: recipient }),
       role,
-      type
+      type,
+      resourceType
     })
 
     return acc

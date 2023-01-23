@@ -326,7 +326,7 @@ When(
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const info of stepTable.hashes()) {
-      await resourceObject.editResourse({ name: info.resource, content: info.content })
+      await resourceObject.editResource({ name: info.resource, content: info.content })
     }
   }
 )
