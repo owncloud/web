@@ -3,9 +3,7 @@ import WebPlugin from '../plugins/web'
 import Avatar from '../components/Avatar.vue'
 import focusMixin from '../mixins/focusMixin'
 import lifecycleMixin from '../mixins/lifecycleMixin'
-import Vuex from 'vuex'
 
-Vue.use(Vuex)
 Vue.use(WebPlugin)
 
 Vue.component('AvatarImage', Avatar)

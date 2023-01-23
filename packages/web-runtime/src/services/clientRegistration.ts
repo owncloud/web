@@ -29,7 +29,7 @@ async function post(url, data) {
 }
 
 export async function registerClient(openIdConfig) {
-  const clientData = sessionStorage.getItem('dynamicClientData')
+  const clientData = JSON.parse(sessionStorage.getItem('dynamicClientData'))
   if (clientData !== null) {
     // eslint-disable-next-line camelcase
     const client_secret_expires_at = clientData.client_secret_expires_at || 0

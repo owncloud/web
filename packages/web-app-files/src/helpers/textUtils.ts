@@ -3,7 +3,7 @@ function _chunkify(t) {
   const tz = []
   let x = 0
   let y = -1
-  let n = 0
+  let n: number | boolean = 0
   let c
 
   while (x < t.length) {

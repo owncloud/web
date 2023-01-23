@@ -1,5 +1,5 @@
-import { getSizeClass } from './utils/sizeClasses.js'
-import './utils/webFontLoader.js'
+import { getSizeClass } from './utils/sizeClasses'
+import './utils/webFontLoader'
 
 import * as components from './components'
 import * as directives from './directives'

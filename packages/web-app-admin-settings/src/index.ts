@@ -1,4 +1,4 @@
-import translations from '../l10n/translations'
+import translations from '../l10n/translations.json'
 import Users from './views/Users.vue'
 import Groups from './views/Groups.vue'
 import Spaces from './views/Spaces.vue'
@@ -15,7 +15,7 @@ const appInfo = {
 }
 
 // FIXME: a better way to access this is needed
-const permissionManager = () => window.__$permissionManager
+const permissionManager = () => (window as any).__$permissionManager
 
 const routes = [
   {

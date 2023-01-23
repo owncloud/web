@@ -1,4 +1,4 @@
-import { canBeMoved } from 'web-app-files/src/helpers/permissions.js'
+import { canBeMoved } from 'web-app-files/src/helpers/permissions'
 
 describe('permissions helper', () => {
   describe('canBeMoved function', () => {

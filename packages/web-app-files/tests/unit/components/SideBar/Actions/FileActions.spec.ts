@@ -1,5 +1,5 @@
 import FileActions from 'web-app-files/src/components/SideBar/Actions/FileActions.vue'
-import { getActions, fileActions } from 'web-app-files/tests/__fixtures__/fileActions.js'
+import { getActions, fileActions } from 'web-app-files/tests/__fixtures__/fileActions'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {

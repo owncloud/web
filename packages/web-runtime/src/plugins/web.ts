@@ -22,7 +22,7 @@ export default {
 
           // construct the url and headers
           let url = null
-          let headers = { 'X-Request-ID': uuidV4() }
+          let headers: Record<string, string> = { 'X-Request-ID': uuidV4() }
           if (isPublicLinkContext) {
             url = file.downloadURL
           } else {
