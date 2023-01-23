@@ -1,4 +1,4 @@
-import { FetchMock } from 'jest-fetch-mock/types'
+import fetchMock from 'jest-fetch-mock'
 import { loadConfig } from 'web-runtime/src/helpers/config'
 
 const validConfig = `{
@@ -29,14 +29,14 @@ const validConfig = `{
 
 describe('config file loading and error reporting', () => {
   it('should load and parse a valid config', function () {
-    ;(fetch as FetchMock).mockResponseOnce(validConfig)
+    fetchMock.mockResponseOnce(validConfig)
     return loadConfig().then(async (result) => {
       expect(await result).toMatchObject(JSON.parse(validConfig))
     })
   })
   describe('empty config', () => {
     it('should throw an exception', function () {
-      ;(fetch as FetchMock).mockResponseOnce('')
+      fetchMock.mockResponseOnce('')
       return expect(loadConfig).rejects.toThrow(
         'config could not be parsed. ' +
           'FetchError: invalid json response body at  ' +
@@ -46,7 +46,7 @@ describe('config file loading and error reporting', () => {
   })
   describe('config with an trailing comma', () => {
     it('should throw an exception', function () {
-      ;(fetch as FetchMock).mockResponseOnce(
+      fetchMock.mockResponseOnce(
         '"title": { "en": "Classic Design", "de": "Dateien", },'
       )
       return expect(loadConfig).rejects.toThrow(
@@ -59,7 +59,7 @@ describe('config file loading and error reporting', () => {
 })
 describe('missing config', () => {
   it('should throw an exception', function () {
-    ;(fetch as FetchMock).mockResponseOnce(
+    fetchMock.mockResponseOnce(
       '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">\n' +
         '<html><head>\n' +
         '<title>404 Not Found</title>\n' +
