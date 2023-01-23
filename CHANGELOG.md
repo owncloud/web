@@ -394,6 +394,7 @@ Details
    https://github.com/owncloud/web/pull/8262
    https://github.com/owncloud/web/pull/8247
    https://github.com/owncloud/web/pull/8273
+   https://github.com/owncloud/web/pull/8233
 
 * Enhancement - Add support for multiple clients in `theme.json`: [#8280](https://github.com/owncloud/web/pull/8280)
 
