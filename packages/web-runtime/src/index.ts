@@ -134,9 +134,9 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       const user = store.getters.user
       const space = buildSpace({
         id: user.id,
-        driveAlias: `personal/${user.id}`,
+        driveAlias: `/`,
         driveType: 'personal',
-        name: app.config.globalProperties.$gettext('All files'),
+        name: app.config.globalProperties.$gettext('CERNBox'),
         webDavPath: `/files/${user.id}`,
         webDavTrashPath: `/trash-bin/${user.id}`,
         serverUrl: configurationManager.serverUrl

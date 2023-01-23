@@ -2,14 +2,14 @@
   <oc-button
     id="new-space-menu-btn"
     key="new-space-menu-btn-enabled"
-    v-oc-tooltip="$gettext('Create a new space')"
-    :aria-label="$gettext('Create a new space')"
+    v-oc-tooltip="$gettext('Request new Project')"
+    :aria-label="$gettext('Request new Project')"
     appearance="filled"
     variation="primary"
-    @click="showCreateSpaceModal"
+    @click="onNewProjectButtonClick"
   >
     <oc-icon name="add" />
-    <span v-translate>New Space</span>
+    <span v-translate>New Project</span>
   </oc-button>
 </template>
 
@@ -33,6 +33,12 @@ export default defineComponent({
     ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
     ...mapMutations('Files', ['UPSERT_RESOURCE', 'UPDATE_RESOURCE_FIELD']),
 
+    onNewProjectButtonClick() {
+      window.open(
+        'https://cern.service-now.com/service-portal?id=sc_cat_item&name=EOS-projet-space&se=CERNBox-Service',
+        '_blank'
+      )
+    },
     showCreateSpaceModal() {
       const modal = {
         variation: 'passive',

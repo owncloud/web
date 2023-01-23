@@ -18,12 +18,14 @@ import SpaceNavigate from 'web-pkg/src/mixins/spaces/navigate'
 import { PropType } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
+import DeletedFiles from 'web-pkg/src/mixins/spaces/deletedFiles'
 
 export default {
   name: 'ContextActions',
   components: { ContextActionMenu },
   mixins: [
     FileActions,
+    DeletedFiles,
     CreateQuicklink,
     EmptyTrashBin,
     Paste,
@@ -155,6 +157,7 @@ export default {
           return action
         }),
         ...fileHandlers,
+        ...this.$_deletedFiles_items_generic,
         ...this.$_showDetails_items
       ].filter((item) => item.isEnabled(this.filterParams))
     }

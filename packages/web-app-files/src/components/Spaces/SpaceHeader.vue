@@ -18,7 +18,7 @@
     <div class="space-header-infos">
       <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
         <div class="oc-flex oc-flex-middle space-header-infos-heading">
-          <h1 class="space-header-name">{{ space.name }}</h1>
+          <h1 class="space-header-name">{{ spaceName }}</h1>
           <oc-button
             :id="`space-context-btn`"
             v-oc-tooltip="$gettext('Show context menu')"
@@ -89,6 +89,7 @@ import SpaceContextActions from './SpaceContextActions.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { useGettext } from 'vue3-gettext'
+import { basename } from 'path'
 
 const visibilityObserver = new VisibilityObserver()
 const markdownContainerCollapsedClass = 'collapsed'
@@ -265,6 +266,21 @@ export default defineComponent({
       memberCountString,
       openSideBarSharePanel
     }
+  },
+  data(){
+    return {
+      name: null
+    }
+  },
+  computed: {
+    spaceName() {
+      return this.name || this.space.name
+    }
+  },
+  mounted(){
+    if (this.$route?.params?.driveAliasAndItem.includes("eos/project"))
+    this.name = basename(this.$route.params.driveAliasAndItem)
+
   }
 })
 </script>

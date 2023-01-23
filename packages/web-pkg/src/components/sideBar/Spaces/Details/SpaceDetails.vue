@@ -44,15 +44,15 @@
       </oc-button>
     </div>
     <table class="details-table" :aria-label="detailsTableLabel">
-      <tr>
+      <!--<tr>
         <th scope="col" class="oc-pr-s" v-text="$gettext('Last activity')" />
         <td v-text="lastModifiedDate" />
-      </tr>
+      </tr>-->
       <tr v-if="resource.description">
         <th scope="col" class="oc-pr-s" v-text="$gettext('Subtitle')" />
         <td v-text="resource.description" />
       </tr>
-      <tr>
+      <!--<tr>
         <th scope="col" class="oc-pr-s" v-text="$gettext('Manager')" />
         <td>
           <span v-text="ownerUsernames" />
@@ -63,7 +63,7 @@
         <td>
           <space-quota :space-quota="resource.spaceQuota" />
         </td>
-      </tr>
+      </tr>-->
     </table>
   </div>
 </template>
