@@ -26,17 +26,17 @@ export const folderExists = async ({
 const createFolder = async ({
   user,
   folder,
-  endPath
+  webDavEndPathToRoot // the root of the WebDAV path. This is `spaces/<space-id>` for ocis or `files/<user>` for oC10
 }: {
   user: User
   folder: string
-  endPath: string
+  webDavEndPathToRoot: string
 }): Promise<void> => {
   const paths = folder.split('/')
 
   let parentFolder = ''
   for (const resource of paths) {
-    const path = join('remote.php', 'dav', endPath, parentFolder, resource)
+    const path = join('remote.php', 'dav', webDavEndPathToRoot, parentFolder, resource)
     // check if the folder exists already or not
     const folderExist = await folderExists({ user, path })
     if (folderExist === false) {
@@ -98,9 +98,9 @@ export const createFolderInsideSpaceBySpaceName = async ({
   folder: string
   spaceName: string
 }): Promise<void> => {
-  const endPath =
+  const webDavEndPathToRoot =
     'spaces/' + (await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }))
-  await createFolder({ user, folder, endPath })
+  await createFolder({ user, folder, webDavEndPathToRoot })
 }
 
 export const createFolderInsidePersonalSpace = async ({
@@ -111,11 +111,11 @@ export const createFolderInsidePersonalSpace = async ({
   folder: string
 }): Promise<void> => {
   // creation of folder step is same for oc10 and ocis
-  // so first need to determine the end path to make request
-  const endPath = config.ocis
+  // so first need to determine the end point to make request
+  const webDavEndPathToRoot = config.ocis
     ? 'spaces/' + (await getPersonalSpaceId({ user }))
     : 'files/' + user.id
-  await createFolder({ user, folder, endPath })
+  await createFolder({ user, folder, webDavEndPathToRoot })
 }
 
 export const uploadFileInsideSpace = async ({
