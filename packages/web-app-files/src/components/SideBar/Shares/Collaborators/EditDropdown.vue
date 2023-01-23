@@ -56,6 +56,7 @@
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
+import uniqueId from '@ownclouders/design-system/src/utils/uniqueId'
 
 export default defineComponent({
   name: 'EditDropdown',
@@ -123,7 +124,7 @@ export default defineComponent({
     },
 
     editShareBtnId() {
-      return 'files-collaborators-edit-button-' + this._uid
+      return uniqueId('files-collaborators-edit-button-')
     },
     shareEditOptions() {
       return this.$gettext('Context menu of the share')

@@ -264,8 +264,7 @@ export default defineComponent({
           component: EditPanel,
           default: false,
           enabled: this.selectedUsers.length === 1,
-          componentAttrs: { user: this.loadedUser, roles: this.roles },
-          componentListeners: { confirm: this.editUser }
+          componentAttrs: { user: this.loadedUser, roles: this.roles, confirm: this.editUser }
         },
         {
           app: 'GroupAssignmentsPanel',
@@ -274,8 +273,11 @@ export default defineComponent({
           component: GroupAssignmentsPanel,
           default: false,
           enabled: this.selectedUsers.length === 1,
-          componentAttrs: { user: this.loadedUser, groups: this.groups },
-          componentListeners: { confirm: this.editUserGroupAssignments }
+          componentAttrs: {
+            user: this.loadedUser,
+            groups: this.groups,
+            confirm: this.editUserGroupAssignments
+          }
         }
       ].filter((p) => p.enabled)
     }

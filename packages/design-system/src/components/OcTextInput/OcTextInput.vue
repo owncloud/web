@@ -69,9 +69,6 @@ export default defineComponent({
   status: 'ready',
   release: '1.0.0',
   inheritAttrs: false,
-  compatConfig: {
-    COMPONENT_V_MODEL: false
-  },
   props: {
     /**
      * The ID of the element.

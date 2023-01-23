@@ -41,7 +41,6 @@ importers:
       '@types/node': 16.18.11
       '@types/node-fetch': 2.6.2
       '@vitejs/plugin-vue': 4.0.0
-      '@vue/compat': 3.2.45
       '@vue/compiler-dom': ^3.2.45
       '@vue/compiler-sfc': 3.2.45
       '@vue/runtime-dom': ^3.2.45
@@ -102,7 +101,6 @@ importers:
       vue3-gettext: ^2.3.3
       wait-for-expect: 3.0.2
     dependencies:
-      '@vue/compat': 3.2.45_vue@3.2.45
       '@vue/compiler-dom': 3.2.45
       '@vue/compiler-sfc': 3.2.45
       '@vue/runtime-dom': 3.2.45
@@ -202,7 +200,6 @@ importers:
       '@babel/preset-env': ^7.14.8
       '@babel/runtime': ^7.19.4
       '@popperjs/core': ^2.4.0
-      '@vue/compat': 3.2.45
       autoprefixer: ^10.0.0
       babel-core: ^7.0.0-bridge.0
       babel-jest: ^29.0.2
@@ -287,7 +284,6 @@ importers:
       '@babel/preset-env': 7.19.4_@babel+core@7.19.6
       '@babel/runtime': 7.20.1
       '@popperjs/core': 2.11.5
-      '@vue/compat': 3.2.45_vue@3.2.45
       autoprefixer: 10.4.12_postcss@8.4.20
       babel-core: 7.0.0-bridge.0_@babel+core@7.19.6
       babel-jest: 29.2.2_@babel+core@7.19.6
@@ -456,6 +452,7 @@ importers:
   packages/web-app-files:
     specifiers:
       '@jest/globals': 29.3.1
+      '@ownclouders/design-system': workspace:*
       '@vueuse/core': ^9.8.2
       filesize: ^9.0.11
       fuse.js: ^6.5.3
@@ -478,6 +475,7 @@ importers:
       web-pkg: npm:@ownclouders/web-pkg
       web-runtime: workspace:*
     dependencies:
+      '@ownclouders/design-system': link:../design-system
       filesize: 9.0.11
       fuse.js: 6.5.3
       lodash-es: 4.17.21
@@ -6101,16 +6099,6 @@ packages:
       '@volar/vue-language-core': 1.0.20
     dev: true
 
-  /@vue/compat/3.2.45_vue@3.2.45:
-    resolution: {integrity: sha512-TOGT42fEE1hA4Oz2PyCmURJkrXHbe6G+gI8gVOqsEy624oeexDHFrVsFTfzveaPxxqJHyE2+qjKaA1F4KX84aA==}
-    peerDependencies:
-      vue: 3.2.45
-    dependencies:
-      '@babel/parser': 7.20.7
-      estree-walker: 2.0.2
-      source-map: 0.6.1
-      vue: 3.2.45
-
   /@vue/compiler-core/3.2.40:
     resolution: {integrity: sha512-2Dc3Stk0J/VyQ4OUr2yEC53kU28614lZS+bnrCbFSAIftBJ40g/2yQzf4mPBiFuqguMB7hyHaujdgZAQ67kZYA==}
     dependencies:
@@ -8190,7 +8178,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -18431,15 +18419,6 @@ packages:
   /progress/2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
-    dev: true
-
-  /promise-inflight/1.0.1:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
     dev: true
 
   /promise-inflight/1.0.1_bluebird@3.7.2:

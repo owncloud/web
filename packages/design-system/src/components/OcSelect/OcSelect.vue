@@ -41,7 +41,6 @@ export default defineComponent({
   name: 'OcSelect',
   status: 'ready',
   release: '4.3.0',
-  compatConfig: { MODE: 3 },
   components: { VueSelect },
 
   inheritAttrs: true,

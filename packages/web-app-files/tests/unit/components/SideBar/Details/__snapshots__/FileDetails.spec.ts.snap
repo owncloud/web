@@ -15,7 +15,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Last modified</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
           </td>
         </tr>
         <tr>
@@ -41,7 +41,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Versions</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
         <!--v-if-->
@@ -68,7 +68,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Last modified</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
           </td>
         </tr>
         <!--v-if-->
@@ -94,7 +94,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Versions</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
         <!--v-if-->
@@ -118,7 +118,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Last modified</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 21, 2015, 7:28 AM</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 21, 2015, 7:28 AM</oc-button-stub>
           </td>
         </tr>
         <!--v-if-->
@@ -138,7 +138,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Versions</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
         <!--v-if-->
@@ -165,7 +165,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Last modified</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
           </td>
         </tr>
         <!--v-if-->
@@ -186,7 +186,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Versions</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
         <!--v-if-->
@@ -213,7 +213,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Last modified</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
           </td>
         </tr>
         <!--v-if-->
@@ -234,7 +234,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <tr>
           <th class="oc-pr-s" scope="col">Versions</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
         <tr>
@@ -242,7 +242,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
-              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy EOS path" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
@@ -251,7 +251,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
-              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy direct link" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
@@ -277,7 +277,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         <tr>
           <th class="oc-pr-s" scope="col">Last modified</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
           </td>
         </tr>
         <!--v-if-->
@@ -298,7 +298,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         <tr>
           <th class="oc-pr-s" scope="col">Versions</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
         <!--v-if-->
@@ -325,7 +325,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         <tr>
           <th class="oc-pr-s" scope="col">Last modified</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Oct 20, 2015, 6:15 AM</oc-button-stub>
           </td>
         </tr>
         <!--v-if-->
@@ -346,7 +346,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         <tr>
           <th class="oc-pr-s" scope="col">Versions</th>
           <td>
-            <oc-button-stub appearance="raw" arialabel="See all versions" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
+            <oc-button-stub appearance="raw" arialabel="See all versions" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">1</oc-button-stub>
           </td>
         </tr>
         <tr>
@@ -354,7 +354,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
-              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy EOS path" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
@@ -363,7 +363,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
-              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy direct link" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
@@ -507,7 +507,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate"></p>
-              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy EOS path" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
@@ -516,7 +516,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
-              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy direct link" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
@@ -609,7 +609,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate"></p>
-              <oc-button-stub appearance="raw" arialabel="Copy EOS path" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy EOS path" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>
@@ -618,7 +618,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
-              <oc-button-stub appearance="raw" arialabel="Copy direct link" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+              <oc-button-stub appearance="raw" arialabel="Copy direct link" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
             </div>
           </td>
         </tr>

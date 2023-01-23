@@ -17,7 +17,7 @@ exports[`SpaceMembers existing members can edit when current user is manager of 
   <invite-collaborator-form-stub class="oc-my-s" invitelabel="Add members" savebuttonlabel="Add"></invite-collaborator-form-stub>
   <ul aria-label="Space members" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="files-collaborators-list">
     <li>
-      <collaborator-list-item-stub share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub modifiable="false" share="[object Object]"></collaborator-list-item-stub>
     </li>
     <li>
       <collaborator-list-item-stub modifiable="true" share="[object Object]"></collaborator-list-item-stub>
@@ -85,7 +85,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
   <invite-collaborator-form-stub class="oc-my-s" invitelabel="Add members" savebuttonlabel="Add"></invite-collaborator-form-stub>
   <ul aria-label="Space members" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="files-collaborators-list">
     <li>
-      <collaborator-list-item-stub share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub modifiable="false" share="[object Object]"></collaborator-list-item-stub>
     </li>
     <li>
       <collaborator-list-item-stub modifiable="true" share="[object Object]"></collaborator-list-item-stub>
@@ -114,7 +114,7 @@ exports[`SpaceMembers invite collaborator form renders the form when the current
   <invite-collaborator-form-stub class="oc-my-s" invitelabel="Add members" savebuttonlabel="Add"></invite-collaborator-form-stub>
   <ul aria-label="Space members" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="files-collaborators-list">
     <li>
-      <collaborator-list-item-stub share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub modifiable="false" share="[object Object]"></collaborator-list-item-stub>
     </li>
     <li>
       <collaborator-list-item-stub modifiable="true" share="[object Object]"></collaborator-list-item-stub>

@@ -30,16 +30,13 @@ import {
 } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
-import { configureCompat, createApp } from 'vue'
-import { compatConfig } from './compatConfig'
+import { createApp } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
 
 import WebPlugin from './plugins/web'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import lifecycleMixin from './mixins/lifecycleMixin'
-
-configureCompat(compatConfig)
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const app = createApp(pages.success)

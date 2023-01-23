@@ -93,7 +93,7 @@ describe('OcSearchBar', () => {
       })
       it('should enable search button', async () => {
         await wrapper.find(selectors.searchInput).setValue('a') // search query should also be not null
-        expect(wrapper.find(selectors.searchButton).attributes('disabled')).toBe(undefined)
+        expect(wrapper.find(selectors.searchButton).attributes('disabled')).toBe('false')
       })
     })
   })

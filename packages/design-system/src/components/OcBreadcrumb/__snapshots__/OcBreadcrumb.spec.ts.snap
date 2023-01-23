@@ -12,7 +12,7 @@ exports[`OcBreadcrumb displays all items 1`] = `
     </li>
     <li class="oc-breadcrumb-list-item oc-flex oc-flex-middle">
       <!--v-if-->
-      <oc-button-stub appearance="raw" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+      <oc-button-stub appearance="raw" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
         <span>Subfolder</span>
       </oc-button-stub>
       <!--v-if-->
@@ -35,13 +35,13 @@ exports[`OcBreadcrumb displays all items 1`] = `
       <span aria-current="page" class="oc-breadcrumb-drop-label-text oc-text-truncate">Deeper ellipsize in responsive mode</span>
       <oc-icon-stub accessiblelabel="Expand more" class="oc-breadcrumb-drop-label-icon" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
     </label>
-    <oc-drop-stub dropid="oc-drop-2" mode="click" paddingsize="medium" position="bottom-start" toggle="">
+    <oc-drop-stub closeonclick="false" dropid="oc-drop-2" isnested="false" mode="click" paddingsize="medium" position="bottom-start" toggle="">
       <ol>
         <li>
           <router-link-stub tag="a" to="[object Object]">Deep</router-link-stub>
         </li>
         <li>
-          <oc-button-stub appearance="raw" gapsize="medium" justifycontent="left" size="medium" submit="button" type="button" variation="passive">Subfolder</oc-button-stub>
+          <oc-button-stub appearance="raw" disabled="false" gapsize="medium" justifycontent="left" size="medium" submit="button" type="button" variation="passive">Subfolder</oc-button-stub>
         </li>
         <li>
           <router-link-stub tag="a" to="[object Object]">First folder</router-link-stub>
@@ -64,7 +64,7 @@ exports[`OcBreadcrumb sets correct variation 1`] = `
     </li>
     <li class="oc-breadcrumb-list-item oc-flex oc-flex-middle">
       <!--v-if-->
-      <oc-button-stub appearance="raw" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+      <oc-button-stub appearance="raw" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
         <span>Subfolder</span>
       </oc-button-stub>
       <!--v-if-->
@@ -87,13 +87,13 @@ exports[`OcBreadcrumb sets correct variation 1`] = `
       <span aria-current="page" class="oc-breadcrumb-drop-label-text oc-text-truncate">Deeper ellipsize in responsive mode</span>
       <oc-icon-stub accessiblelabel="Expand more" class="oc-breadcrumb-drop-label-icon" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
     </label>
-    <oc-drop-stub dropid="oc-drop-1" mode="click" paddingsize="medium" position="bottom-start" toggle="">
+    <oc-drop-stub closeonclick="false" dropid="oc-drop-1" isnested="false" mode="click" paddingsize="medium" position="bottom-start" toggle="">
       <ol>
         <li>
           <router-link-stub tag="a" to="[object Object]">Deep</router-link-stub>
         </li>
         <li>
-          <oc-button-stub appearance="raw" gapsize="medium" justifycontent="left" size="medium" submit="button" type="button" variation="passive">Subfolder</oc-button-stub>
+          <oc-button-stub appearance="raw" disabled="false" gapsize="medium" justifycontent="left" size="medium" submit="button" type="button" variation="passive">Subfolder</oc-button-stub>
         </li>
         <li>
           <router-link-stub tag="a" to="[object Object]">First folder</router-link-stub>
