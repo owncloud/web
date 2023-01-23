@@ -5,6 +5,9 @@
       ref="select"
       :disabled="disabled"
       :filter="filter"
+      :loading="loading"
+      :searchable="searchable"
+      :clearable="clearable"
       class="oc-select"
       style="background: transparent"
       v-bind="additionalAttributes"
@@ -106,7 +109,7 @@ export default defineComponent({
     searchable: {
       type: Boolean,
       required: false,
-      default: false
+      default: true
     },
     /**
      * Determines if the select field is clearable
