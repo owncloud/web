@@ -15,7 +15,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
       <tr class="oc-table-header-row" tabindex="-1">
         <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-select oc-pl-s" style="top: 0px;">
           <span class="oc-table-thead-content">
-            <oc-checkbox-stub class="oc-ml-s" hidelabel="true" id="oc-checkbox-1" label="Select all spaces" size="large"></oc-checkbox-stub>
+            <oc-checkbox-stub class="oc-ml-s" disabled="false" hidelabel="true" id="oc-checkbox-1" label="Select all spaces" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
           </span>
           <!--v-if-->
         </th>
@@ -99,7 +99,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
     <tbody>
       <tr class="oc-tbody-tr oc-tbody-tr-1" data-item-id="1" draggable="false" tabindex="-1">
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-select oc-pl-s">
-          <oc-checkbox-stub class="oc-ml-s" hidelabel="true" id="oc-checkbox-2" label="Select 1 Some space" option="[object Object]" size="large"></oc-checkbox-stub>
+          <oc-checkbox-stub class="oc-ml-s" disabled="false" hidelabel="true" id="oc-checkbox-2" label="Select 1 Some space" modelvalue="false" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
         </td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon">
           <span class="oc-icon oc-icon-m oc-icon-passive">
