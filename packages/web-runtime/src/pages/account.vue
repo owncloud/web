@@ -110,7 +110,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const accessToken = useAccessToken({ store })
-    const loadLanguagesTask = useTask(function* () {
+    const loadAccountBundleTask = useTask(function* () {
       try {
         const {
           data: { bundles }
@@ -124,9 +124,7 @@ export default defineComponent({
             }
           }
         )
-
-        const accountBundle = bundles.find((b) => b.extension === 'ocis-accounts')
-        return accountBundle.settings.find((s) => s.name === 'language')?.singleChoiceValue.options
+        return bundles.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
         console.error(e)
         return []
@@ -142,25 +140,35 @@ export default defineComponent({
       return store.getters.getSettingsValue(accountSettingIdentifier)
     })
     const languageOptions = computed(() => {
-      return loadLanguagesTask.last?.value?.map((l) => ({
+      const languageOptions = loadAccountBundleTask.last?.value?.settings.find(
+        (s) => s.name === 'language'
+      )?.singleChoiceValue.options
+      return languageOptions?.map((l) => ({
         label: l.displayValue,
-        value: l.value.stringValue
+        value: l.value.stringValue,
+        default: l.default
       }))
     })
     const selectedLanguageOption = computed(() => {
-      const current = unref(languageSetting).listValue.values[0].stringValue
+      const current = unref(languageSetting)?.listValue.values[0].stringValue
+      if (!current) {
+        return unref(languageOptions).find((o) => o.default)
+      }
       return unref(languageOptions).find((o) => o.value === current)
     })
     const updateSelectedLanguage = (option) => {
+      const bundle = loadAccountBundleTask.last?.value
+      const value = {
+        bundleId: bundle?.id,
+        settingId: bundle?.settings.find((s) => s.name === 'language')?.id,
+        resource: { type: 'TYPE_USER' },
+        listValue: { values: [{ stringValue: option.value }] },
+        ...(unref(languageSetting) && { id: unref(languageSetting).id })
+      }
+
       axios.post(
         '/api/v0/settings/values-save',
-        {
-          value: {
-            ...unref(languageSetting),
-            listValue: { values: [{ stringValue: option.value }] },
-            accountUuid: 'me'
-          }
-        },
+        { value: { ...value, accountUuid: 'me' } },
         {
           headers: {
             authorization: `Bearer ${unref(accessToken)}`,
@@ -171,14 +179,11 @@ export default defineComponent({
 
       store.commit('SET_SETTINGS_VALUE', {
         identifier: accountSettingIdentifier,
-        value: {
-          ...unref(languageSetting),
-          listValue: { values: [{ stringValue: option.value }] }
-        }
+        value
       })
     }
     onMounted(() => {
-      loadLanguagesTask.perform()
+      loadAccountBundleTask.perform()
     })
     return {
       ...useGraphClient(),
