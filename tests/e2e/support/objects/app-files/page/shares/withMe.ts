@@ -1,8 +1,9 @@
 import { Page } from 'playwright'
 import { Actor } from '../../../../../support/types'
 
-const sharesNavSelector = '//a[@data-nav-name="files-shares"]'
-const shareWithMeNavButton = `//a/span[text()='Open "Shared with me"']`
+const sharesNavSelector = '//a[@data-nav-name="files-shares-with-me"]'
+const openShareWithMeButton = `//a/span[text()='Open "Shared with me"']`
+const shareWithMeNavSelector = '//a/span[text()="Shared with me"]'
 
 export class WithMe {
   #page: Page
@@ -18,9 +19,9 @@ export class WithMe {
   async openShareWithMeFromInternalLink(actor: Actor): Promise<void> {
     const [newTab] = await Promise.all([
       this.#page.waitForEvent('popup'),
-      this.#page.locator(shareWithMeNavButton).click()
+      this.#page.locator(openShareWithMeButton).click()
     ])
-    await newTab.waitForSelector('#shares-navigation')
+    await newTab.waitForSelector(shareWithMeNavSelector)
     await actor.newPage(newTab)
   }
 }

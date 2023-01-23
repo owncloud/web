@@ -15,6 +15,7 @@ class Ocis implements LoginAdapter {
 
   async login({ user }: { user: User }): Promise<void> {
     const { id, password } = user
+
     await this.#page.locator('#oc-login-username').fill(id)
     await this.#page.locator('#oc-login-password').fill(password)
     await this.#page.locator('button[type="submit"]').click()

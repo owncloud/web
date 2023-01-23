@@ -2,8 +2,6 @@ import { Then, When } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
-import { kebabCase } from 'lodash'
-import { DateTime } from 'luxon'
 
 When(
   '{string} creates a public link for the resource {string} using the sidebar panel',

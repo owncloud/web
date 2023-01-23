@@ -120,9 +120,10 @@ Given(
       await api.share.createShare({
         user,
         path: info.resource,
-        shareWith: info.recipient,
         shareType: info.type,
-        role: info.role
+        shareWith: info.recipient,
+        role: info.role,
+        name: info.name
       })
     }
   }
