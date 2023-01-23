@@ -94,15 +94,13 @@
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
-import { defineComponent, unref } from 'vue'
+import { computed, defineComponent, onMounted, unref } from 'vue'
 import { useAccessToken, useGraphClient, useStore } from 'web-pkg/src/composables'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { useTask } from 'vue-concurrency'
 import axios from 'axios'
 import { v4 as uuidV4 } from 'uuid'
-import { onMounted } from 'vue-demi'
-import { computed } from 'vue'
 
 export default defineComponent({
   name: 'Personal',
