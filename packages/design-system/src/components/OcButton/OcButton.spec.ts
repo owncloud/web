@@ -1,4 +1,4 @@
-import { shallowMount } from 'web-test-helpers/src'
+import { defaultPlugins, shallowMount } from 'web-test-helpers/src'
 import OcButton from './OcButton.vue'
 
 describe('OcButton', () => {
@@ -143,9 +143,9 @@ describe('OcButton', () => {
 })
 
 function getWrapperWithProps(props) {
-  return shallowMount(OcButton, { props })
+  return shallowMount(OcButton, { props, global: { plugins: [...defaultPlugins()] } })
 }
 function getWrapperWithTestSlot() {
   const testSlots = { default: '<p class="text">Test button</p>' }
-  return shallowMount(OcButton, { slots: testSlots })
+  return shallowMount(OcButton, { slots: testSlots, global: { plugins: [...defaultPlugins()] } })
 }

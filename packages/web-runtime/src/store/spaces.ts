@@ -1,5 +1,5 @@
 import { buildSpace, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import Vue, { Ref } from 'vue'
+import { Ref } from 'vue'
 import { set, has } from 'lodash-es'
 import { unref } from 'vue'
 import { buildSpaceShare } from 'web-client/src/helpers/share'
@@ -58,7 +58,7 @@ const mutations = {
       return
     }
 
-    Vue.set(spaceSource, index, newResource)
+    spaceSource[index] = newResource
   },
   UPSERT_SPACE(state, space) {
     const spaces = [...state.spaces]
@@ -88,12 +88,12 @@ const mutations = {
     state.spaceMembers = members
   },
   UPSERT_SPACE_MEMBERS(state, member) {
-    const fileIndex = state.spaceMembers.findIndex((s) => {
+    const memberIndex = state.spaceMembers.findIndex((s) => {
       return member.id === s.id && member.collaborator.name === s.collaborator.name
     })
 
-    if (fileIndex >= 0) {
-      Vue.set(state.spaceMembers, fileIndex, member)
+    if (memberIndex >= 0) {
+      state.spaceMembers[memberIndex] = member
     } else {
       // share was not present in the list while updating, add it instead
       state.spaceMembers.push(member)

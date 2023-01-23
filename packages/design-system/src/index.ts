@@ -14,7 +14,7 @@ const initializeCustomProps = (tokens = [], prefix) => {
 }
 
 export default {
-  install(Vue, options: any = {}) {
+  install(app, options: any = {}) {
     const themeOptions = options.tokens
     initializeCustomProps(themeOptions?.breakpoints, 'breakpoint-')
     initializeCustomProps(themeOptions?.colorPalette, 'color-')
@@ -22,8 +22,8 @@ export default {
     initializeCustomProps(themeOptions?.sizes, 'size-')
     initializeCustomProps(themeOptions?.spacing, 'space-')
 
-    Object.values(components).forEach((c) => Vue.component(c.name, c))
-    Object.values(directives).forEach((d) => Vue.directive(d.name, d))
+    Object.values(components).forEach((c) => app.component(c.name, c))
+    Object.values(directives).forEach((d) => app.directive(d.name, d))
   }
 }
 

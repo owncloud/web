@@ -4,8 +4,8 @@ import { encodePath } from 'web-pkg/src/utils'
 import { v4 as uuidV4 } from 'uuid'
 
 export default {
-  install(Vue) {
-    Vue.mixin({
+  install(app) {
+    app.mixin({
       computed: {
         ...mapGetters(['capabilities']),
 

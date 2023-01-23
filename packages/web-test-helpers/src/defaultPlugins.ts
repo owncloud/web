@@ -1,8 +1,6 @@
 import DesignSystem from '@ownclouders/design-system'
-import Vue from 'vue'
 import { createGettext } from 'vue3-gettext'
-;(window as any).Vue = Vue
-
+import { h } from 'vue'
 export interface DefaultPluginsOptions {
   designSystem?: boolean
   gettext?: boolean
@@ -30,6 +28,35 @@ export const defaultPlugins = ({
       }
     })
   }
+
+  plugins.push({
+    install(app) {
+      app.component('RouterLink', {
+        name: 'RouterLink',
+        props: {
+          tag: { type: String, default: 'a' },
+          to: { type: [String, Object], default: '' }
+        },
+        render() {
+          let path = this.$props.to
+
+          if (!!path && typeof path !== 'string') {
+            path = this.$props.to.path || this.$props.to.name
+
+            if (this.$props.to.params) {
+              path += '/' + Object.values(this.$props.to.params).join('/')
+            }
+
+            if (this.$props.to.query) {
+              path += '?' + Object.values(this.$props.to.query).join('&')
+            }
+          }
+
+          return h(this.tag, { attrs: { href: path } }, this.$slots.default)
+        }
+      })
+    }
+  })
 
   return plugins
 }

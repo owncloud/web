@@ -1,5 +1,5 @@
 import App from '../../../App.vue'
-import Vue, { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import {
   createStore,
   defaultComponentMocks,
@@ -81,12 +81,12 @@ describe('Preview app', () => {
   describe('Method "preloadImages"', () => {
     it('should preload images if active file changes', async () => {
       const { wrapper } = createShallowMountWrapper()
-      await Vue.nextTick()
+      await nextTick()
 
       wrapper.vm.toPreloadImageIds = []
       wrapper.vm.setActiveFile('personal/admin/sleeping_dog.gif')
 
-      await Vue.nextTick()
+      await nextTick()
 
       expect(wrapper.vm.toPreloadImageIds).toEqual(['8', '9', '1', '6', '4'])
     })

@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { createApp, defineComponent } from 'vue'
 import DesignSystem from './index'
 
 const options = {
@@ -22,10 +22,17 @@ const options = {
   }
 }
 
-Vue.use(DesignSystem, options)
-
 describe('Depending on what gets passed into the theming options', () => {
   it('Sets correct custom CSS props from theming options', () => {
+    const app = createApp(
+      defineComponent({
+        template: '<div/>'
+      })
+    )
+    app.config.compilerOptions.whitespace = 'preserve'
+    app.use(DesignSystem, options)
+    app.mount('body')
+
     expect(document.documentElement.style.getPropertyValue('--oc-breakpoint-xsmall-max')).toMatch(
       '50px'
     )

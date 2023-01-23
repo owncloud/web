@@ -1,13 +1,11 @@
 import { ClassicApplicationScript, RuntimeApi } from '../types'
 import { buildRuntimeApi } from '../api'
-import Vue, { App } from 'vue'
+import { App } from 'vue'
 import { isFunction, isObject } from 'lodash-es'
 import { NextApplication } from './next'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { RuntimeError } from '../error'
-
-type VueConstructor = typeof Vue
 
 /**
  * this wraps a classic application structure into a next application format.

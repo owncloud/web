@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
@@ -97,7 +96,7 @@ export default {
     })
 
     if (fileIndex >= 0) {
-      Vue.set(state.currentFileOutgoingShares, fileIndex, share)
+      state.currentFileOutgoingShares[fileIndex] = share
     } else {
       // share was not present in the list while updating, add it instead
       state.currentFileOutgoingShares.push(share)
@@ -224,7 +223,7 @@ export default {
       return
     }
 
-    Vue.set(fileSource, index, newResource)
+    fileSource[index] = newResource
   },
 
   SET_HIDDEN_FILES_VISIBILITY(state, value) {
@@ -256,7 +255,7 @@ function $_upsertResource(state, resource, allowInsert) {
   }
 
   if (found) {
-    files.splice(index, 1, resource)
+    files[index] = resource
   } else {
     files.push(resource)
   }

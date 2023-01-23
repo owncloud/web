@@ -22,17 +22,17 @@
 <script lang="ts">
 import MixinFileActions from '../../mixins/fileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from 'web-pkg/src/constants'
+import { ImageDimension } from 'web-pkg/src/constants'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { debounce } from 'lodash-es'
-import Vue from 'vue'
+import { computed, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
 import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { defineComponent } from 'vue'
-import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { buildShareSpaceResource, Resource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -55,11 +55,23 @@ export default defineComponent({
       }
     }
   },
-  setup() {
+  setup(props) {
     const store = useStore()
+    const previewData = ref()
+    const resource = computed((): Resource => {
+      return {
+        ...(props.searchResult.data as Resource),
+        ...(unref(previewData) &&
+          ({
+            thumbnail: unref(previewData)
+          } as Resource))
+      }
+    })
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
-      accessToken: useAccessToken({ store })
+      accessToken: useAccessToken({ store }),
+      previewData,
+      resource
     }
   },
   computed: {
@@ -83,9 +95,6 @@ export default defineComponent({
                 resources: [this.resource]
               })
           }
-    },
-    resource() {
-      return this.searchResult.data
     },
     matchingSpace() {
       const space = this.spaces.find((space) => space.id === this.resource.storageId)
@@ -150,7 +159,7 @@ export default defineComponent({
         },
         true
       )
-      preview && Vue.set(this.resource, ImageType.Thumbnail, preview)
+      preview && (this.previewData = preview)
     }, 250)
 
     visibilityObserver.observe(this.$el, { onEnter: debounced, onExit: debounced.cancel })
