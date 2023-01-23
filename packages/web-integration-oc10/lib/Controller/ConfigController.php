@@ -134,6 +134,9 @@ class ConfigController extends Controller {
      */
     private function addAccountEditLinkToConfig(array $config): array {
         $options = $config['options'] ?? [];
+        if (isset($options['accountEditLink'])) {
+            return $config;
+        }
         $serverUrl = $this->request->getServerProtocol() . '://' . $this->request->getServerHost();
         $options['accountEditLink'] = [
             'href' => $serverUrl . '/index.php/settings/personal'
