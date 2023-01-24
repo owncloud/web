@@ -17,7 +17,7 @@
           :label="$gettext('User name') + '*'"
           :error-message="formData.userName.errorMessage"
           :fix-message-line="true"
-          @input="validateUserName"
+          @update:modelValue="validateUserName"
         />
         <oc-text-input
           v-model="user.displayName"
@@ -25,7 +25,7 @@
           :label="$gettext('First and last name') + '*'"
           :error-message="formData.displayName.errorMessage"
           :fix-message-line="true"
-          @input="validateDisplayName"
+          @update:modelValue="validateDisplayName"
         />
         <oc-text-input
           v-model="user.mail"
@@ -34,7 +34,7 @@
           :error-message="formData.email.errorMessage"
           type="email"
           :fix-message-line="true"
-          @input="onInputEmail"
+          @update:modelValue="onInputEmail"
           @change="validateEmail"
         />
         <oc-text-input
@@ -44,7 +44,7 @@
           :error-message="formData.password.errorMessage"
           type="password"
           :fix-message-line="true"
-          @input="validatePassword"
+          @update:modelValue="validatePassword"
         />
         <input type="submit" class="oc-hidden" />
       </form>

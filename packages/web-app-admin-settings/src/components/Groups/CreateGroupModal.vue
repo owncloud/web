@@ -17,7 +17,7 @@
           :label="$gettext('Group name') + '*'"
           :error-message="formData.displayName.errorMessage"
           :fix-message-line="true"
-          @input="validateDisplayName"
+          @update:modelValue="validateDisplayName"
         />
         <input type="submit" class="oc-hidden" />
       </form>

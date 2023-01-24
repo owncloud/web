@@ -11,7 +11,7 @@
         :label="$gettext('Group name')"
         :error-message="formData.displayName.errorMessage"
         :fix-message-line="true"
-        @input="validateDisplayName"
+        @update:modelValue="validateDisplayName"
       />
       <compare-save-dialog
         class="edit-compare-save-dialog oc-mb-l"
