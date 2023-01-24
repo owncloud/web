@@ -116,7 +116,9 @@ export default defineComponent({
     })
     const groupOptions = computed(() => {
       const { memberOf: selectedGroups } = unref(editUser)
-      return props.groups.filter((g) => !selectedGroups.some((s) => s.id === g.id))
+      return props.groups
+        .filter((g) => !selectedGroups.some((s) => s.id === g.id))
+        .sort((a, b) => a.displayName.localeCompare(b.displayName))
     })
 
     return { editUser, formData, groupOptions }

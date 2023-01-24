@@ -3,7 +3,10 @@ import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Group } from 'web-client/src/generated'
 
-const availableGroupOptions = [mock<Group>({ id: '1' }), mock<Group>({ id: '2' })]
+const availableGroupOptions = [
+  mock<Group>({ id: '1', displayName: 'group1' }),
+  mock<Group>({ id: '2', displayName: 'group2' })
+]
 const selectors = {
   groupSelectStub: 'group-select-stub'
 }
