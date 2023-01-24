@@ -113,7 +113,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ComputedRef, defineComponent, inject, PropType } from 'vue'
+import { ComputedRef, defineComponent, inject, PropType, ref } from 'vue'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import {
@@ -155,8 +155,7 @@ export default defineComponent({
     const store = useStore()
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
-    const indirectLinkListCollapsed =
-      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    const indirectLinkListCollapsed = ref(linkListCollapsed)
 
     return {
       ...useGraphClient(),
@@ -288,8 +287,7 @@ export default defineComponent({
       return this.currentFileOutgoingLinks
         .filter((link) => !link.quicklink)
         .map((share) => {
-          share.key = 'direct-link-' + share.id
-          return share
+          return { ...share, key: 'direct-link-' + share.id }
         })
         .sort((a, b) => {
           return b.stime - a.stime
