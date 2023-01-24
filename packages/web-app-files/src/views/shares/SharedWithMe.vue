@@ -8,6 +8,20 @@
       />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
+        <h2 class="oc-px-m oc-py-s" style="margin-top: 0">
+          {{ showHiddenShares ? declinedTitle : acceptedTitle }}
+          <span class="oc-text-medium"
+            >({{ showHiddenShares ? declinedItems.length : acceptedItems.length }})</span
+          >
+          <oc-button
+            id="files-shared-with-me-toggle-view-mode"
+            class="oc-ml-m"
+            @click.stop="switchHiddenShares"
+          >
+            {{ switchHiddenSharesLabel }}
+          </oc-button>
+        </h2>
+        <!--
         <shared-with-me-section
           v-if="pendingItems.length > 0"
           id="files-shared-with-me-pending-section"
@@ -23,8 +37,9 @@
           :sort-handler="pendingHandleSort"
           :title="pendingTitle"
         />
-
+        -->
         <shared-with-me-section
+          v-if="!showHiddenShares"
           id="files-shared-with-me-accepted-section"
           :display-thumbnails="displayThumbnails"
           :empty-message="acceptedEmptyMessage"
@@ -41,6 +56,7 @@
         />
 
         <shared-with-me-section
+          v-else
           id="files-shared-with-me-declined-section"
           :display-thumbnails="false"
           :empty-message="declinedEmptyMessage"
@@ -102,9 +118,7 @@ export default defineComponent({
     } = useResourcesViewDefaults<Resource, any, any[]>()
 
     // pending shares
-    const pending = computed(() =>
-      unref(storeItems).filter((item) => item.status === ShareStatus.pending)
-    )
+    const pending = computed(() => [])
     const {
       sortBy: pendingSortBy,
       sortDir: pendingSortDir,
@@ -119,7 +133,9 @@ export default defineComponent({
 
     // accepted shares
     const accepted = computed(() =>
-      unref(storeItems).filter((item) => item.status === ShareStatus.accepted)
+      unref(storeItems).filter(
+        (item) => item.status === ShareStatus.accepted || item.status === ShareStatus.pending
+      )
     )
     const {
       sortBy: acceptedSortBy,
@@ -200,7 +216,8 @@ export default defineComponent({
   },
 
   data: () => ({
-    ShareStatus
+    ShareStatus,
+    showHiddenShares: false
   }),
 
   computed: {
@@ -284,19 +301,24 @@ export default defineComponent({
       }
     },
 
+    switchHiddenSharesLabel() {
+      return this.showHiddenShares
+        ? this.$gettext('Show shares')
+        : this.$gettext('Show hidden shares')
+    },
     pendingTitle() {
       return this.$gettext('Pending shares')
     },
 
     acceptedTitle() {
-      return this.$gettext('Accepted shares')
+      return this.$gettext('Shared with me')
     },
     acceptedEmptyMessage() {
       return this.$gettext("You are not collaborating on other people's resources.")
     },
 
     declinedTitle() {
-      return this.$gettext('Declined shares')
+      return this.$gettext('Hidden shares')
     },
     declinedEmptyMessage() {
       return this.$gettext("You don't have any previously declined shares.")
@@ -309,6 +331,12 @@ export default defineComponent({
   async created() {
     await this.loadResourcesTask.perform()
     this.scrollToResourceFromRoute(this.acceptedItems)
+  },
+
+  methods: {
+    switchHiddenShares() {
+      this.showHiddenShares = !this.showHiddenShares
+    }
   }
 })
 </script>

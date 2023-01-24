@@ -11,6 +11,7 @@
       appearance="raw"
       gap-size="none"
     >
+      <oc-icon v-if="!existingRole" :name="selectedRole.icon" class="oc-pl-s oc-pr-m" />
       <span v-if="!existingRole" v-text="inviteLabel" />
       <span v-else>{{ $gettext(selectedRole.label) }}</span>
       <oc-icon name="arrow-down-s" />

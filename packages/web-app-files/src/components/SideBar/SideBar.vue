@@ -134,7 +134,7 @@ export default defineComponent({
     }
 
     const isShareAccepted = computed(() => {
-      return unref(highlightedFile)?.status === 0
+      return unref(highlightedFile)?.status === 0 || unref(highlightedFile)?.status === 1
     })
     const isContentDisplayed = computed(() => {
       return unref(isSharedWithMeLocation) ? unref(isShareAccepted) : true
