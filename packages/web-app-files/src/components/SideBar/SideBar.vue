@@ -27,6 +27,7 @@
       />
       <space-info
         v-if="isSingleResource && highlightedFileIsSpace"
+        :space-resource="spaceResource"
         class="sidebar-panel__space_info"
       />
     </template>
@@ -219,6 +220,9 @@ export default defineComponent({
         this.isSharedWithOthersLocation ||
         this.isSharedViaLinkLocation
       )
+    },
+    spaceResource() {
+      return this.spaces.find((s) => s.id === this.highlightedFile.id)
     }
   },
   watch: {
@@ -238,7 +242,7 @@ export default defineComponent({
         }
 
         if (isProjectSpaceResource(this.highlightedFile)) {
-          this.loadSpaceMembers({ graphClient: this.graphClient, space: this.highlightedFile })
+          this.loadSpaceMembers({ graphClient: this.graphClient, space: this.spaceResource })
         }
 
         if (this.isShareLocation || !noChanges) {

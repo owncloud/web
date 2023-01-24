@@ -4,13 +4,13 @@
       <div class="oc-mr-s">
         <oc-icon
           name="layout-grid"
-          :size="space.description ? 'large' : 'medium'"
+          :size="spaceResource.description ? 'large' : 'medium'"
           class="oc-display-block"
         />
       </div>
       <div>
-        <h3 data-testid="space-info-name" v-text="space.name" />
-        <span data-testid="space-info-subtitle" v-text="space.description" />
+        <h3 data-testid="space-info-name" v-text="spaceResource.name" />
+        <span data-testid="space-info-subtitle" v-text="spaceResource.description" />
       </div>
     </div>
   </div>
@@ -19,7 +19,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import { mapGetters } from 'vuex'
 import { PropType } from 'vue'
 import { SpaceResource } from 'web-client'
 
@@ -29,13 +28,6 @@ export default defineComponent({
     spaceResource: {
       type: Object as PropType<SpaceResource>,
       required: false
-    }
-  },
-  computed: {
-    ...mapGetters('Files', ['highlightedFile']),
-
-    space() {
-      return this.spaceResource || this.highlightedFile
     }
   }
 })
