@@ -2,6 +2,7 @@ import { Given, DataTable } from '@cucumber/cucumber'
 import { World } from '../environment'
 import { config } from '../../config'
 import { api } from '../../support'
+import fs from 'fs'
 
 Given(
   '{string} creates following users',
