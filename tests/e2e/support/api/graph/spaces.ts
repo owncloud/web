@@ -4,7 +4,7 @@ import join from 'join-path'
 import {
   createFolderInsideSpaceBySpaceName,
   getIdOfFileInsideSpace,
-  uploadFileInsideSpace
+  uploadFileInsideSpaceBySpaceName
 } from '../davSpaces'
 
 export const getPersonalSpaceId = async ({ user }: { user: User }): Promise<string> => {
@@ -75,7 +75,7 @@ export const createSpace = async ({
   // API call to make a hidden file when the space creation is successful
   await createFolderInsideSpaceBySpaceName({ user, folder: '.space', spaceName })
   // Again make an api call to create a readme.md file so that the description is shown in the web UI
-  await uploadFileInsideSpace({ user, pathToFile: '.space/readme.md', spaceName })
+  await uploadFileInsideSpaceBySpaceName({ user, pathToFile: '.space/readme.md', spaceName })
   // Again make an api call to get file id of the uploaded file `readme.md`
   const fileId = await getIdOfFileInsideSpace({
     user,
