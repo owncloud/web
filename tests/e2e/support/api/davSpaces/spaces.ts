@@ -51,14 +51,14 @@ const createFolder = async ({
   }
 }
 const createFile = async ({
-                            user,
-                            pathToFile,
-                            content,
-                            webDavEndPathToRoot // the root of the WebDAV path. This is `spaces/<space-id>` for ocis or `files/<user>` for oC10
-                          }: {
+  user,
+  pathToFile,
+  content,
+  webDavEndPathToRoot // the root of the WebDAV path. This is `spaces/<space-id>` for ocis or `files/<user>` for oC10
+}: {
   user: User
   pathToFile: string
-  content: string
+  content?: string
   webDavEndPathToRoot: string
 }): Promise<void> => {
   const response = await request({
@@ -73,10 +73,10 @@ const createFile = async ({
 }
 
 export const uploadFileInPersonalSpace = async ({
-                                                  user,
-                                                  pathToFile,
-                                                  content
-                                                }: {
+  user,
+  pathToFile,
+  content
+}: {
   user: User
   pathToFile: string
   content: string
@@ -84,8 +84,8 @@ export const uploadFileInPersonalSpace = async ({
   // upload a file step is same for oc10 and ocis
   // so first need to determine the end path to make request
   const webDavEndPathToRoot = config.ocis
-      ? 'spaces/' + (await getPersonalSpaceId({ user }))
-      : 'files/' + user.id
+    ? 'spaces/' + (await getPersonalSpaceId({ user }))
+    : 'files/' + user.id
   await createFile({ user, pathToFile, content, webDavEndPathToRoot })
 }
 
@@ -118,7 +118,7 @@ export const createFolderInsidePersonalSpace = async ({
   await createFolder({ user, folder, webDavEndPathToRoot })
 }
 
-export const uploadFileInsideSpace = async ({
+export const uploadFileInsideSpaceBySpaceName = async ({
   user,
   pathToFile,
   spaceName
@@ -127,21 +127,9 @@ export const uploadFileInsideSpace = async ({
   pathToFile: string
   spaceName: string
 }): Promise<void> => {
-  const response = await request({
-    method: 'PUT',
-    path: join(
-      'remote.php',
-      'dav',
-      'spaces',
-      await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }),
-      pathToFile
-    ),
-    user: user
-  })
-  checkResponseStatus(
-    response,
-    `Failed while creating a ${pathToFile} inside project space ${spaceName}`
-  )
+  const webDavEndPathToRoot =
+    'spaces/' + (await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }))
+  await createFile({ user, pathToFile, webDavEndPathToRoot })
 }
 
 export const getDataOfFileInsideSpace = async ({
