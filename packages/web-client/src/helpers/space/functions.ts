@@ -204,6 +204,9 @@ export function buildSpace(data): SpaceResource {
     canCreate: function () {
       return true
     },
+    canEditTags: function () {
+      return false
+    },
     isMounted: function () {
       return true
     },

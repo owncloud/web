@@ -124,7 +124,9 @@ export default defineComponent({
     }
 
     watch(resource, () => {
-      revertChanges()
+      if (unref(resource).canEditTags()) {
+        revertChanges()
+      }
     })
 
     onMounted(() => {
