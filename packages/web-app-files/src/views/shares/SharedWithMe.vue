@@ -75,6 +75,7 @@ import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 
 export default defineComponent({
   components: {
@@ -84,7 +85,8 @@ export default defineComponent({
     SharedWithMeSection,
     SideBar
   },
-
+  // FIXME: remove mixin on master
+  mixins: [MixinFilesListScrolling],
   setup() {
     const {
       areResourcesLoading,
@@ -224,8 +226,28 @@ export default defineComponent({
     }
   },
 
-  created() {
-    this.loadResourcesTask.perform()
+  async created() {
+    await this.loadResourcesTask.perform()
+    this.scrollToResourceFromRoute()
+  },
+  methods: {
+    // FIXME: remove this on master, use scrollToResourceFromRoute from useResourcesViewDefaults instead
+    scrollToResourceFromRoute() {
+      const resourceName = this.$route.query.scrollTo
+      const paginatedResources = [
+        ...this.acceptedItems,
+        ...this.pendingItems,
+        ...this.declinedItems
+      ]
+      if (resourceName && paginatedResources.length > 0) {
+        const resource = paginatedResources.find((r) => r.name === resourceName)
+
+        if (resource) {
+          this.selectedResources = [resource]
+          this.scrollToResource(resource)
+        }
+      }
+    }
   }
 })
 </script>

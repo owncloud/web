@@ -1,0 +1,6 @@
+Bugfix: Resolving internal file links
+
+Resolving internal file links when the original file is a shared resource has been fixed.
+
+https://github.com/owncloud/web/pull/8310
+https://github.com/owncloud/web/issues/8284
