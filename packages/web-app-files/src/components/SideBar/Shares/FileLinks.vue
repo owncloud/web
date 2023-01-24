@@ -155,9 +155,7 @@ export default defineComponent({
     const store = useStore()
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
-    const indirectLinkListCollapsed = ref(
-      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
-    )
+    const indirectLinkListCollapsed = ref(linkListCollapsed)
 
     return {
       ...useGraphClient(),
