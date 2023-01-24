@@ -47,6 +47,7 @@ Summary
 * Enhancement - Rename "user management" app: [#8175](https://github.com/owncloud/web/pull/8175)
 * Enhancement - Spaces list in admin settings: [#8178](https://github.com/owncloud/web/pull/8178)
 * Enhancement - Add support for multiple clients in `theme.json`: [#8280](https://github.com/owncloud/web/pull/8280)
+* Enhancement - Move language selection to user account page: [#8294](https://github.com/owncloud/web/pull/8294)
 
 Details
 -------
@@ -405,6 +406,13 @@ Details
 
    https://github.com/owncloud/enterprise/issues/5502
    https://github.com/owncloud/web/pull/8280
+
+* Enhancement - Move language selection to user account page: [#8294](https://github.com/owncloud/web/pull/8294)
+
+   The language selection has been moved from the settings app to the personal account page. The
+   settings app has been removed from the default configs because we don't need it currently.
+
+   https://github.com/owncloud/web/pull/8294
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
