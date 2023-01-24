@@ -50,6 +50,7 @@ Summary
 * Enhancement - Move user group select to edit panel: [#8279](https://github.com/owncloud/web/pull/8279)
 * Enhancement - Add support for multiple clients in `theme.json`: [#8280](https://github.com/owncloud/web/pull/8280)
 * Enhancement - Move language selection to user account page: [#8294](https://github.com/owncloud/web/pull/8294)
+* Enhancement - Show selectable groups only: [#8306](https://github.com/owncloud/web/pull/8306)
 
 Details
 -------
@@ -432,6 +433,14 @@ Details
    settings app has been removed from the default configs because we don't need it currently.
 
    https://github.com/owncloud/web/pull/8294
+
+* Enhancement - Show selectable groups only: [#8306](https://github.com/owncloud/web/pull/8306)
+
+   When managing user group assignments, we now show selectable groups only, meaning groups that
+   have been selected already will not show up as available options.
+
+   https://github.com/owncloud/web/issues/8305
+   https://github.com/owncloud/web/pull/8306
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
