@@ -263,7 +263,12 @@ export default defineComponent({
           component: EditPanel,
           default: false,
           enabled: this.selectedUsers.length === 1,
-          componentAttrs: { user: this.loadedUser, roles: this.roles, confirm: this.editUser }
+          componentAttrs: {
+            user: this.loadedUser,
+            roles: this.roles,
+            groups: this.groups,
+            onConfirm: this.editUser
+          }
         }
       ].filter((p) => p.enabled)
     }
