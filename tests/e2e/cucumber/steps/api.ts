@@ -107,7 +107,7 @@ Given(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
     for (const info of stepTable.hashes()) {
-      await api.dav.createFolder({ user, folder: info.name })
+      await api.dav.createFolderInsidePersonalSpace({ user, folder: info.name })
     }
   }
 )
@@ -166,6 +166,20 @@ Given(
         user,
         pathToFile: info.to,
         content: content.toString()
+      })
+    }
+  }
+)
+
+Given(
+  '{string} creates the following project space(s) using API',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (const space of stepTable.hashes()) {
+      const spaceId = await api.graph.createSpace({ user, space })
+      this.spacesEnvironment.createSpace({
+        key: space.id || space.name,
+        space: { name: space.name, id: spaceId }
       })
     }
   }

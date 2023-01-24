@@ -1,1 +1,7 @@
-export { createFolder, uploadFileInPersonalSpace } from './spaces'
+export {
+  uploadFileInPersonalSpace,
+  createFolderInsideSpaceBySpaceName,
+  createFolderInsidePersonalSpace,
+  getIdOfFileInsideSpace,
+  uploadFileInsideSpaceBySpaceName
+} from './spaces'
