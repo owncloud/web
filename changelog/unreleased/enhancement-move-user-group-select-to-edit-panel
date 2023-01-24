@@ -1,0 +1,6 @@
+Enhancement: Move user group select to edit panel
+
+The user group select input has been moved to the user edit panel for better editing.
+
+https://github.com/owncloud/web/pull/8279
+https://github.com/owncloud/web/issues/8278

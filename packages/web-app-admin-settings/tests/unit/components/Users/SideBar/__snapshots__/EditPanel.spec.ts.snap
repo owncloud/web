@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditPanel renders all available inputs 1`] = `
+<div class="oc-mt-xl" id="user-edit-panel">
+  <user-info-box-stub user="[object Object]"></user-info-box-stub>
+  <form autocomplete="off" class="oc-background-highlight oc-p-m" id="user-edit-form">
+    <div>
+      <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" errormessage="" fixmessageline="true" id="oc-textinput-1" label="First and last name" modelvalue="jan" type="text"></oc-text-input-stub>
+      <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" errormessage="" fixmessageline="true" id="oc-textinput-2" label="Email" modelvalue="jan@owncloud.com" type="email"></oc-text-input-stub>
+      <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" defaultvalue="●●●●●●●●" disabled="false" fixmessageline="true" id="oc-textinput-3" label="Password" modelvalue="" type="password"></oc-text-input-stub>
+      <div class="oc-mb-s">
+        <oc-select-stub clearable="false" disabled="false" filter="[Function]" id="oc-select-4" label="Role" loading="false" optionlabel="displayName" options="[object Object]" searchable="true"></oc-select-stub>
+        <div class="oc-text-input-message"></div>
+      </div>
+      <quota-select-stub class="oc-mb-s" maxquota="0" title="Personal quota" totalquota="0"></quota-select-stub>
+      <group-select-stub class="oc-mb-s"></group-select-stub>
+    </div>
+    <compare-save-dialog-stub class="edit-compare-save-dialog oc-mb-l" compareobject="[object Object]" confirmbuttondisabled="false" originalobject="[object Object]"></compare-save-dialog-stub>
+  </form>
+</div>
+`;
