@@ -1,11 +1,13 @@
-Change: Update Vue to v3.2.45 (via compat mode)
+Change: Update Vue to v3.2
 
-Vue has been updated to v3.2.45. It is currently running in the so-called "compat mode", which guarantees compatibility with Vue 2.7. More detailed information can be found in the referenced issues and PRs down below.
+Vue has been updated to v3.2. More detailed information can be found in the referenced issues and PRs down below.
 
 BREAKING CHANGE for developers: The `vue/composition-api` plugin is not available anymore as the composition-api now comes with Vue.
 
 https://github.com/owncloud/web/issues/7948
 https://github.com/owncloud/web/issues/5269
+https://github.com/owncloud/web/issues/8283
+https://github.com/owncloud/web/issues/8307
 https://github.com/owncloud/web/pull/8128
 https://github.com/owncloud/web/pull/7877
 https://github.com/owncloud/web/pull/8207
@@ -23,3 +25,4 @@ https://github.com/owncloud/web/pull/8289
 https://github.com/owncloud/web/pull/8287
 https://github.com/owncloud/web/pull/8285
 https://github.com/owncloud/web/pull/8288
+https://github.com/owncloud/web/pull/8308
