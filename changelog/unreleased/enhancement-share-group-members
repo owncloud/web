@@ -13,5 +13,7 @@ In detail it contains:
 * All users / groups who only have access on a share level inside a sub-resource of a space can not see all groups which are regular members of the space
 
 https://github.com/owncloud/web/pull/8161
+https://github.com/owncloud/web/pull/8300
 https://github.com/owncloud/web/issues/8160
 https://github.com/owncloud/web/issues/8177
+https://github.com/owncloud/web/issues/8299

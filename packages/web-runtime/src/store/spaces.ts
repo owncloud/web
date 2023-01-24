@@ -88,8 +88,10 @@ const mutations = {
     state.spaceMembers = members
   },
   UPSERT_SPACE_MEMBERS(state, member) {
+    // group shares don't have the name prop... distinguish by shareType
+    const checkAttr = member.collaborator.name ? 'name' : 'displayName'
     const memberIndex = state.spaceMembers.findIndex((s) => {
-      return member.id === s.id && member.collaborator.name === s.collaborator.name
+      return member.id === s.id && member.collaborator[checkAttr] === s.collaborator[checkAttr]
     })
 
     if (memberIndex >= 0) {
@@ -100,8 +102,10 @@ const mutations = {
     }
   },
   REMOVE_SPACE_MEMBER(state, member) {
+    // group shares don't have the name prop... distinguish by shareType
+    const checkAttr = member.collaborator.name ? 'name' : 'displayName'
     state.spaceMembers = state.spaceMembers.filter(
-      (s) => member.id === s.id && member.collaborator.name !== s.collaborator.name
+      (s) => member.id === s.id && member.collaborator[checkAttr] !== s.collaborator[checkAttr]
     )
   }
 }
