@@ -54,7 +54,7 @@
         <group-select
           class="oc-mb-s"
           :selected-groups="editUser.memberOf"
-          :available-groups="groups"
+          :group-options="groupOptions"
           @selectedOptionChange="changeSelectedGroupOption"
         />
       </div>
@@ -70,7 +70,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
+import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
@@ -102,7 +102,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup(props) {
     const editUser: MaybeRef<User> = ref({})
     const formData = ref({
       displayName: {
@@ -114,7 +114,14 @@ export default defineComponent({
         valid: true
       }
     })
-    return { editUser, formData }
+    const groupOptions = computed(() => {
+      const { memberOf: selectedGroups } = unref(editUser)
+      return props.groups
+        .filter((g) => !selectedGroups.some((s) => s.id === g.id))
+        .sort((a, b) => a.displayName.localeCompare(b.displayName))
+    })
+
+    return { editUser, formData, groupOptions }
   },
   computed: {
     invalidFormData() {
