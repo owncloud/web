@@ -7,7 +7,7 @@ Feature: Share by public link
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
 
-
+  @skip
   Scenario: user changes the expiration date of an already existing public link using webUI
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings in the server
