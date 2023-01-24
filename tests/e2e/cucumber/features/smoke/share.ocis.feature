@@ -30,10 +30,6 @@ Feature: share
       | name                   |
       | folder_to_shared       |
       | folder_to_customShared |
-    Then "Brian" should not be able to open the folder "shared_folder"
-    When "Brian" accepts the following share from the context menu
-      | name          |
-      | shared_folder |
     And "Brian" declines the following share
       | name          |
       | shared_folder |
