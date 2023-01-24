@@ -21,9 +21,9 @@ Feature: Search
     When "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" shares the following resource using the sidebar panel
-      | resource             | recipient | type | role   |
-      | new_share_from_brian | Alice     | user | viewer |
-      | new-lorem-big.txt    | Alice     | user | viewer |
+      | resource             | recipient | type | role   | resourceType |
+      | new_share_from_brian | Alice     | user | viewer | folder       |
+      | new-lorem-big.txt    | Alice     | user | viewer | file         |
     And "Brian" logs out
 
     When "Alice" logs in
