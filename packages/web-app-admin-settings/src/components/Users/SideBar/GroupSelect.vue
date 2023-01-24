@@ -4,7 +4,7 @@
       :model-value="selectedOption"
       class="oc-mb-s"
       multiple
-      :options="availableGroups"
+      :options="groupOptions"
       option-label="displayName"
       :label="$gettext('Groups')"
       :fix-message-line="true"
@@ -49,7 +49,7 @@ export default defineComponent({
       type: Array as PropType<Group[]>,
       required: true
     },
-    availableGroups: {
+    groupOptions: {
       type: Array as PropType<Group[]>,
       required: true
     }

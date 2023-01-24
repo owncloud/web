@@ -1,10 +1,28 @@
 import EditPanel from '../../../../../src/components/Users/SideBar/EditPanel.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
+import { Group } from 'web-client/src/generated'
+
+const availableGroupOptions = [mock<Group>({ id: '1' }), mock<Group>({ id: '2' })]
+const selectors = {
+  groupSelectStub: 'group-select-stub'
+}
 
 describe('EditPanel', () => {
   it('renders all available inputs', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.html()).toMatchSnapshot()
+  })
+  it('filters selected groups when passing the options to the GroupSelect component', () => {
+    const { wrapper } = getWrapper({ selectedGroups: [availableGroupOptions[0]] })
+    const selectedGroups = wrapper
+      .findComponent<any>(selectors.groupSelectStub)
+      .props('selectedGroups')
+    const groupOptions = wrapper.findComponent<any>(selectors.groupSelectStub).props('groupOptions')
+    expect(selectedGroups.length).toBe(1)
+    expect(selectedGroups[0].id).toEqual(availableGroupOptions[0].id)
+    expect(groupOptions.length).toBe(1)
+    expect(groupOptions[0].id).toEqual(availableGroupOptions[1].id)
   })
   describe('method "revertChanges"', () => {
     it('should revert changes on property editUser', () => {
@@ -69,7 +87,7 @@ describe('EditPanel', () => {
   })
 })
 
-function getWrapper() {
+function getWrapper({ selectedGroups = [] } = {}) {
   return {
     wrapper: shallowMount(EditPanel, {
       props: {
@@ -78,9 +96,11 @@ function getWrapper() {
           displayName: 'jan',
           mail: 'jan@owncloud.com',
           passwordProfile: { password: '' },
-          drive: { quota: {} }
+          drive: { quota: {} },
+          memberOf: selectedGroups
         },
-        roles: [{ id: '1', displayName: 'admin' }]
+        roles: [{ id: '1', displayName: 'admin' }],
+        groups: availableGroupOptions
       },
       global: {
         plugins: [...defaultPlugins()]

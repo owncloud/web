@@ -24,7 +24,7 @@ function getWrapper() {
     wrapper: shallowMount(GroupSelect, {
       props: {
         selectedGroups: [groupMock],
-        availableGroups: [groupMock]
+        groupOptions: [groupMock]
       },
       global: {
         plugins: [...defaultPlugins()]

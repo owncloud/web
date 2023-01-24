@@ -1,0 +1,6 @@
+Enhancement: Show selectable groups only
+
+When managing user group assignments, we now show selectable groups only, meaning groups that have been selected already will not show up as available options.
+
+https://github.com/owncloud/web/pull/8306
+https://github.com/owncloud/web/issues/8305
