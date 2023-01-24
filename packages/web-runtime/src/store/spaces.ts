@@ -1,7 +1,6 @@
 import { buildSpace, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { Ref } from 'vue'
+import { Ref, unref } from 'vue'
 import { set, has } from 'lodash-es'
-import { unref } from 'vue'
 import { buildSpaceShare } from 'web-client/src/helpers/share'
 import { sortSpaceMembers } from '../helpers/space/sortMembers'
 
