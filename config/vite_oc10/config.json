@@ -8,6 +8,11 @@
     "authUrl": "http://host.docker.internal:8080/index.php/apps/oauth2/authorize",
     "logoutUrl": "http://host.docker.internal:8080/index.php/logout"
   },
+  "options": {
+    "accountEditLink": {
+      "href": "http://host.docker.internal:8080/index.php/settings/personal"
+    }
+  },
   "apps": [
     "files",
     "text-editor",

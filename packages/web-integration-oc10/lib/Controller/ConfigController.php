@@ -73,6 +73,7 @@ class ConfigController extends Controller {
             $configContent = \file_get_contents($configFile);
             $configAssoc = \json_decode($configContent, true);
             $extendedConfig = $this->addOC10AppsToConfig($configAssoc);
+            $extendedConfig = $this->addAccountEditLinkToConfig($extendedConfig);
             $response = new JSONResponse($extendedConfig);
 			$response->addHeader('Cache-Control', 'max-age=0, no-cache, no-store, must-revalidate');
 			$response->addHeader('Pragma', 'no-cache');
@@ -122,6 +123,25 @@ class ConfigController extends Controller {
         }
 
         $config['applications'] = $apps;
+        return $config;
+    }
+
+    /**
+     * Add an account edit link to the config.
+     *
+     * @param array $config
+     * @return array
+     */
+    private function addAccountEditLinkToConfig(array $config): array {
+        $options = $config['options'] ?? [];
+        if (isset($options['accountEditLink'])) {
+            return $config;
+        }
+        $serverUrl = $this->request->getServerProtocol() . '://' . $this->request->getServerHost();
+        $options['accountEditLink'] = [
+            'href' => $serverUrl . '/index.php/settings/personal'
+        ];
+        $config['options'] = $options;
         return $config;
     }
 }

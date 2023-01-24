@@ -34,16 +34,6 @@
       },
       "icon": "swap-box",
       "url": "http://host.docker.internal:8080/index.php/apps/files"
-    },
-    {
-      "icon": "settings-4",
-      "menu": "user",
-      "target": "_self",
-      "title": {
-        "de": "Einstellungen",
-        "en": "Settings"
-      },
-      "url": "http://host.docker.internal:8080/index.php/settings/personal"
     }
   ]
 }

@@ -18,12 +18,6 @@
     "external",
     "admin-settings"
   ],
-  "external_apps": [
-    {
-      "id": "settings",
-      "path": "https://localhost:9200/settings.js"
-    }
-  ],
   "options" : {
     "previewFileMimeTypes" : [
       "image/gif",

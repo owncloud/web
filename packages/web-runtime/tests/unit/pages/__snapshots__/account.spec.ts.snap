@@ -23,6 +23,7 @@ exports[`account page account information displays basic user information 1`] = 
       <span data-current-language="en" data-msgid="You are not part of any group">You are not part of any group</span>
     </dd>
   </div>
+  <!--v-if-->
 </dl>
 `;
 
@@ -32,6 +33,4 @@ exports[`account page account information group membership displays group names 
 </dd>
 `;
 
-exports[`account page header section edit buttons edit route button should be displayed if running with ocis and has navItems 1`] = `<oc-button-stub to="some-route" type="router-link" variation="primary"></oc-button-stub>`;
-
-exports[`account page header section edit buttons edit url button should be displayed if not running with ocis 1`] = `<oc-button-stub href="/index.php/settings/personal" type="a" variation="primary"></oc-button-stub>`;
+exports[`account page header section edit url button should be displayed if defined via config 1`] = `<oc-button-stub href="/" target="_blank" type="a" variation="primary"></oc-button-stub>`;

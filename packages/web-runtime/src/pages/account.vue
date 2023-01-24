@@ -18,21 +18,12 @@
           <span v-text="$gettext('Change Password')" />
         </oc-button>
         <oc-button
-          v-if="editUrl"
+          v-if="accountEditLink"
           variation="primary"
           type="a"
-          :href="editUrl"
+          :href="accountEditLink.href"
+          target="_blank"
           data-testid="account-page-edit-url-btn"
-        >
-          <oc-icon name="edit" />
-          <span v-text="$gettext('Edit')" />
-        </oc-button>
-        <oc-button
-          v-else-if="editRoute"
-          variation="primary"
-          type="router-link"
-          :to="editRoute"
-          data-testid="account-page-edit-route-btn"
         >
           <oc-icon name="edit" />
           <span v-text="$gettext('Edit')" />
@@ -75,17 +66,35 @@
           >
         </dd>
       </div>
+      <div v-if="isLanguageSupported" class="account-page-info-language oc-mb oc-width-1-2@s">
+        <dt v-translate class="oc-text-normal oc-text-muted">Language</dt>
+        <dd data-testid="language">
+          <oc-select
+            v-if="languageOptions"
+            :model-value="selectedLanguageOption"
+            :clearable="false"
+            :options="languageOptions"
+            @update:modelValue="updateSelectedLanguage"
+          />
+        </dd>
+      </div>
     </dl>
   </main>
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
-import { defineComponent } from 'vue'
-import { useGraphClient } from 'web-pkg/src/composables'
-import { urlJoin } from 'web-client/src/utils'
-import { configurationManager } from 'web-pkg/src/configuration'
+import { computed, defineComponent, onMounted, unref } from 'vue'
+import {
+  useAccessToken,
+  useCapabilitySpacesEnabled,
+  useGraphClient,
+  useStore
+} from 'web-pkg/src/composables'
+import { useTask } from 'vue-concurrency'
+import axios from 'axios'
+import { v4 as uuidV4 } from 'uuid'
 
 export default defineComponent({
   name: 'Personal',
@@ -93,8 +102,118 @@ export default defineComponent({
     EditPasswordModal
   },
   setup() {
+    const store = useStore()
+    const accessToken = useAccessToken({ store })
+
+    // FIXME: Use graph capability when we have it
+    const isLanguageSupported = useCapabilitySpacesEnabled()
+    const isChangePasswordEnabled = useCapabilitySpacesEnabled()
+    const user = computed(() => {
+      return store.getters.user
+    })
+
+    const loadAccountBundleTask = useTask(function* () {
+      try {
+        const {
+          data: { bundles }
+        } = yield axios.post(
+          '/api/v0/settings/bundles-list',
+          {},
+          {
+            headers: {
+              authorization: `Bearer ${unref(accessToken)}`,
+              'X-Request-ID': uuidV4()
+            }
+          }
+        )
+        return bundles.find((b) => b.extension === 'ocis-accounts')
+      } catch (e) {
+        console.error(e)
+        return []
+      }
+    }).restartable()
+
+    const accountSettingIdentifier = {
+      extension: 'ocis-accounts',
+      bundle: 'profile',
+      setting: 'language'
+    }
+    const languageSetting = computed(() => {
+      return store.getters.getSettingsValue(accountSettingIdentifier)
+    })
+    const languageOptions = computed(() => {
+      const languageOptions = loadAccountBundleTask.last?.value?.settings.find(
+        (s) => s.name === 'language'
+      )?.singleChoiceValue.options
+      return languageOptions?.map((l) => ({
+        label: l.displayValue,
+        value: l.value.stringValue,
+        default: l.default
+      }))
+    })
+    const selectedLanguageOption = computed(() => {
+      const current = unref(languageSetting)?.listValue.values[0].stringValue
+      if (!current) {
+        return unref(languageOptions).find((o) => o.default)
+      }
+      return unref(languageOptions).find((o) => o.value === current)
+    })
+    const updateSelectedLanguage = (option) => {
+      const bundle = loadAccountBundleTask.last?.value
+      const value = {
+        bundleId: bundle?.id,
+        settingId: bundle?.settings.find((s) => s.name === 'language')?.id,
+        resource: { type: 'TYPE_USER' },
+        listValue: { values: [{ stringValue: option.value }] },
+        ...(unref(languageSetting) && { id: unref(languageSetting).id })
+      }
+
+      axios.post(
+        '/api/v0/settings/values-save',
+        { value: { ...value, accountUuid: 'me' } },
+        {
+          headers: {
+            authorization: `Bearer ${unref(accessToken)}`,
+            'X-Request-ID': uuidV4()
+          }
+        }
+      )
+
+      store.commit('SET_SETTINGS_VALUE', {
+        identifier: accountSettingIdentifier,
+        value
+      })
+    }
+    const accountEditLink = computed(() => {
+      return store.getters.configuration?.options?.accountEditLink
+    })
+
+    const groupNames = computed(() => {
+      if (unref(useCapabilitySpacesEnabled())) {
+        return unref(user)
+          .groups.map((group) => group.displayName)
+          .join(', ')
+      }
+
+      return unref(user).groups.join(', ')
+    })
+
+    onMounted(() => {
+      if (unref(isLanguageSupported)) {
+        loadAccountBundleTask.perform()
+      }
+    })
+
     return {
-      ...useGraphClient()
+      ...useGraphClient(),
+      languageOptions,
+      selectedLanguageOption,
+      updateSelectedLanguage,
+      accountEditLink,
+      isChangePasswordEnabled,
+      isLanguageSupported,
+      groupNames,
+      user
     }
   },
   data() {
@@ -103,36 +222,8 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['user', 'getNavItemsByExtension', 'apps', 'capabilities']),
-    isAccountEditingEnabled() {
-      return !this.apps.settings
-    },
-    isChangePasswordEnabled() {
-      // FIXME: spaces capability is not correct here, we need to retrieve an appropriate capability
-      return this.capabilities.spaces?.enabled
-    },
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
-    },
-    editUrl() {
-      if (!this.isAccountEditingEnabled) {
-        return null
-      }
-      return urlJoin(configurationManager.serverUrl, '/index.php/settings/personal')
-    },
-    editRoute() {
-      const navItems = this.getNavItemsByExtension('settings')
-      if (navItems.length > 0) {
-        return navItems[0].route || {}
-      }
-      return null
-    },
-    groupNames() {
-      if (this.capabilities.spaces?.enabled) {
-        return this.user.groups.map((group) => group.displayName).join(', ')
-      }
-
-      return this.user.groups.join(', ')
     }
   },
   methods: {
