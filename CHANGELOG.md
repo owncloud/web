@@ -26,7 +26,7 @@ Summary
 * Bugfix - Application menu active display on hover: [#8265](https://github.com/owncloud/web/pull/8265)
 * Bugfix - Loading additional user data: [#8276](https://github.com/owncloud/web/pull/8276)
 * Bugfix - Re-loading space members panel: [#8300](https://github.com/owncloud/web/pull/8300)
-* Change - Update Vue to v3.2.45 (via compat mode): [#7948](https://github.com/owncloud/web/issues/7948)
+* Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
@@ -186,17 +186,18 @@ Details
    https://github.com/owncloud/web/issues/8298
    https://github.com/owncloud/web/pull/8300
 
-* Change - Update Vue to v3.2.45 (via compat mode): [#7948](https://github.com/owncloud/web/issues/7948)
+* Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 
-   Vue has been updated to v3.2.45. It is currently running in the so-called "compat mode", which
-   guarantees compatibility with Vue 2.7. More detailed information can be found in the
-   referenced issues and PRs down below.
+   Vue has been updated to v3.2. More detailed information can be found in the referenced issues
+   and PRs down below.
 
    BREAKING CHANGE for developers: The `vue/composition-api` plugin is not available anymore
    as the composition-api now comes with Vue.
 
    https://github.com/owncloud/web/issues/7948
    https://github.com/owncloud/web/issues/5269
+   https://github.com/owncloud/web/issues/8283
+   https://github.com/owncloud/web/issues/8307
    https://github.com/owncloud/web/pull/8128
    https://github.com/owncloud/web/pull/7877
    https://github.com/owncloud/web/pull/8207
@@ -214,6 +215,7 @@ Details
    https://github.com/owncloud/web/pull/8287
    https://github.com/owncloud/web/pull/8285
    https://github.com/owncloud/web/pull/8288
+   https://github.com/owncloud/web/pull/8308
 
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 
