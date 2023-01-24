@@ -25,6 +25,7 @@ Summary
 * Bugfix - Search bar input appearance: [#8158](https://github.com/owncloud/web/issues/8158)
 * Bugfix - Application menu active display on hover: [#8265](https://github.com/owncloud/web/pull/8265)
 * Bugfix - Loading additional user data: [#8276](https://github.com/owncloud/web/pull/8276)
+* Bugfix - Re-loading space members panel: [#8300](https://github.com/owncloud/web/pull/8300)
 * Change - Update Vue to v3.2.45 (via compat mode): [#7948](https://github.com/owncloud/web/issues/7948)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
@@ -175,6 +176,14 @@ Details
 
    https://github.com/owncloud/web/issues/8275
    https://github.com/owncloud/web/pull/8276
+
+* Bugfix - Re-loading space members panel: [#8300](https://github.com/owncloud/web/pull/8300)
+
+   We've fixed a bug where re-loading the members panel for a space would remove recently added
+   members in the UI.
+
+   https://github.com/owncloud/web/issues/8298
+   https://github.com/owncloud/web/pull/8300
 
 * Change - Update Vue to v3.2.45 (via compat mode): [#7948](https://github.com/owncloud/web/issues/7948)
 
@@ -356,7 +365,9 @@ Details
 
    https://github.com/owncloud/web/issues/8160
    https://github.com/owncloud/web/issues/8177
+   https://github.com/owncloud/web/issues/8299
    https://github.com/owncloud/web/pull/8161
+   https://github.com/owncloud/web/pull/8300
 
 * Enhancement - Space group shares: [#8161](https://github.com/owncloud/web/pull/8161)
 
