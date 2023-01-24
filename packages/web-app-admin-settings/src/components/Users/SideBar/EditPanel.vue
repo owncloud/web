@@ -9,7 +9,7 @@
           :label="$gettext('First and last name')"
           :error-message="formData.displayName.errorMessage"
           :fix-message-line="true"
-          @input="validateDisplayName"
+          @update:modelValue="validateDisplayName"
         />
         <oc-text-input
           v-model="editUser.mail"
