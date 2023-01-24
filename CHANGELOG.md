@@ -222,12 +222,16 @@ Details
 
    https://github.com/owncloud/web/issues/7134
    https://github.com/owncloud/web/issues/8149
+   https://github.com/owncloud/web/issues/8220
+   https://github.com/owncloud/web/issues/8253
+   https://github.com/owncloud/web/issues/8254
    https://github.com/owncloud/web/pull/7388
    https://github.com/owncloud/web/pull/7385
    https://github.com/owncloud/web/pull/7442
    https://github.com/owncloud/web/pull/7754
    https://github.com/owncloud/web/pull/8067
    https://github.com/owncloud/web/pull/8157
+   https://github.com/owncloud/web/pull/8309
 
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
 
