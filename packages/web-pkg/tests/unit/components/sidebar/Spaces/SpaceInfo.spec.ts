@@ -1,10 +1,5 @@
 import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
-import {
-  createStore,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const spaceMock = {
   type: 'space',
@@ -31,14 +26,11 @@ describe('SpaceInfo', () => {
 })
 
 function createWrapper(spaceResource) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => spaceResource)
-  const store = createStore(storeOptions)
-
   return {
     wrapper: shallowMount(SpaceInfo, {
+      props: { spaceResource },
       global: {
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins()]
       }
     })
   }

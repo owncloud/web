@@ -1,0 +1,6 @@
+Bugfix: Re-loading space members panel
+
+We've fixed a bug where re-loading the members panel for a space would remove recently added members in the UI.
+
+https://github.com/owncloud/web/pull/8300
+https://github.com/owncloud/web/issues/8298
