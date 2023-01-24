@@ -46,6 +46,7 @@ Summary
 * Enhancement - Space group shares: [#8161](https://github.com/owncloud/web/pull/8161)
 * Enhancement - Rename "user management" app: [#8175](https://github.com/owncloud/web/pull/8175)
 * Enhancement - Spaces list in admin settings: [#8178](https://github.com/owncloud/web/pull/8178)
+* Enhancement - Move user group select to edit panel: [#8279](https://github.com/owncloud/web/pull/8279)
 * Enhancement - Add support for multiple clients in `theme.json`: [#8280](https://github.com/owncloud/web/pull/8280)
 * Enhancement - Move language selection to user account page: [#8294](https://github.com/owncloud/web/pull/8294)
 
@@ -396,6 +397,13 @@ Details
    https://github.com/owncloud/web/pull/8247
    https://github.com/owncloud/web/pull/8273
    https://github.com/owncloud/web/pull/8233
+
+* Enhancement - Move user group select to edit panel: [#8279](https://github.com/owncloud/web/pull/8279)
+
+   The user group select input has been moved to the user edit panel for better editing.
+
+   https://github.com/owncloud/web/issues/8278
+   https://github.com/owncloud/web/pull/8279
 
 * Enhancement - Add support for multiple clients in `theme.json`: [#8280](https://github.com/owncloud/web/pull/8280)
 
