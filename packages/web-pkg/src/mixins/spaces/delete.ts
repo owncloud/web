@@ -11,7 +11,7 @@ export default {
       return [
         {
           name: 'delete',
-          icon: 'close-circle',
+          icon: 'delete-bin',
           label: () => {
             return this.$gettext('Delete')
           },
