@@ -85,43 +85,23 @@
       <template #actions="{ item }">
         <div class="spaces-list-actions">
           <oc-button
-            :id="`space-details-trigger-${resourceDomSelector(item)}`"
             v-oc-tooltip="spaceDetailsLabel"
             :aria-label="spaceDetailsLabel"
             appearance="raw"
+            class="spaces-table-btn-details"
             @click.stop.prevent="showDetailsForSpace(item)"
             ><oc-icon name="information" fill-type="line" />
           </oc-button>
-          <oc-button
-            :id="`context-menu-trigger-${resourceDomSelector(item)}`"
-            ref="contextMenuButton"
-            v-oc-tooltip="contextMenuLabel"
-            :aria-label="contextMenuLabel"
+          <context-menu-quick-action
+            ref="contextMenuButtonRef"
+            :item="item"
             class="spaces-table-btn-action-dropdown"
-            appearance="raw"
-            @click.stop.prevent="
-              showContextMenuOnBtnClick(
-                `context-menu-drop-ref-${resourceDomSelector(item)}`,
-                $event,
-                item
-              )
-            "
+            @quickActionClicked="showContextMenuOnBtnClick($event, item)"
           >
-            <oc-icon name="more-2" />
-          </oc-button>
-          <oc-drop
-            :ref="`context-menu-drop-ref-${resourceDomSelector(item)}`"
-            :drop-id="`context-menu-drop-${resourceDomSelector(item)}`"
-            :toggle="`#context-menu-trigger-${resourceDomSelector(item)}`"
-            :popper-options="popperOptions"
-            mode="click"
-            close-on-click
-            padding-size="small"
-            @click.stop.prevent
-          >
-            <!-- @slot Add context actions that open in a dropdown when clicking on the "three dots" button -->
-            <slot name="contextMenu" :space="item" />
-          </oc-drop>
+            <template #contextMenu>
+              <slot name="contextMenu" :space="item" />
+            </template>
+          </context-menu-quick-action>
         </div>
       </template>
       <template #footer>
@@ -139,20 +119,21 @@ import {
   formatDateFromJSDate,
   formatRelativeDateFromJSDate,
   displayPositionedDropdown,
-  popperOptions as defaultPopperOptions,
   formatFileSize
 } from 'web-pkg/src/helpers'
 import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
-import { extractDomSelector, SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
 import { eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
 export default defineComponent({
   name: 'SpacesList',
+  components: { ContextMenuQuickAction },
   props: {
     spaces: {
       type: Array as PropType<SpaceResource[]>,
@@ -170,18 +151,12 @@ export default defineComponent({
   emits: ['toggleSelectSpace', 'toggleSelectAllSpaces', 'toggleUnSelectAllSpaces'],
   setup: function (props, { emit }) {
     const { $gettext, interpolate: $gettextInterpolate, current: currentLanguage } = useGettext()
-    const contextMenuButton = ref(undefined)
+    const contextMenuButtonRef = ref(undefined)
     const sortBy = ref('name')
     const sortDir = ref('asc')
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
-
-    const resourceDomSelector = (space) => extractDomSelector(space.id)
-    const spaceRefs = {}
-    for (const space of props.spaces) {
-      spaceRefs[`context-menu-drop-ref-${resourceDomSelector(space)}`] = ref(undefined)
-    }
 
     const allSpacesSelected = computed(() => props.spaces.length === props.selectedSpaces.length)
     const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
@@ -359,7 +334,6 @@ export default defineComponent({
       )
     }
 
-    const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const getSelectSpaceLabel = (space: SpaceResource) => {
       const translated = $gettext('Select %{ space }')
       return $gettextInterpolate(translated, { space: space.name }, true)
@@ -394,16 +368,15 @@ export default defineComponent({
       selectSpace(space)
     }
 
-    const popperOptions = computed(() => defaultPopperOptions)
-    const showContextMenuOnBtnClick = (id, event, space) => {
-      const dropdown = unref(unref(spaceRefs)[id]).tippy
-      if (dropdown === undefined) {
+    const showContextMenuOnBtnClick = (data, space) => {
+      const { dropdown, event } = data
+      if (dropdown?.tippy === undefined) {
         return
       }
       if (!isSpaceSelected(space)) {
         selectSpace(space)
       }
-      displayPositionedDropdown(dropdown, event, unref(contextMenuButton))
+      displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
     const showContextMenuOnRightClick = (row, event, space) => {
       event.preventDefault()
@@ -414,7 +387,7 @@ export default defineComponent({
       if (!isSpaceSelected(space)) {
         selectSpace(space)
       }
-      displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButton))
+      displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
     }
 
     const spaceDetailsLabel = computed(() => {
@@ -448,15 +421,11 @@ export default defineComponent({
       orderedSpaces,
       fileClicked,
       isSpaceSelected,
-      contextMenuLabel,
-      resourceDomSelector,
-      contextMenuButton,
-      popperOptions,
+      contextMenuButtonRef,
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
       spaceDetailsLabel,
-      showDetailsForSpace,
-      ...spaceRefs
+      showDetailsForSpace
     }
   }
 })

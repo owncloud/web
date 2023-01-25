@@ -127,7 +127,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
         </td>
         <td class="oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-actions oc-pr-s">
           <div class="spaces-list-actions">
-            <button aria-label="Show details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-details-trigger-1" type="button">
+            <button aria-label="Show details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-details" type="button">
               <!-- @slot Content of the button -->
               <span class="oc-icon oc-icon-m oc-icon-passive">
                 <!---->
@@ -138,12 +138,10 @@ exports[`SpacesList should render all spaces in a table 1`] = `
               <span class="oc-icon oc-icon-m oc-icon-passive">
                 <!---->
               </span>
-            </button>
-            <div class="oc-drop oc-box-shadow-medium oc-rounded" id="context-menu-drop-1">
-              <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
-                <!-- @slot Add context actions that open in a dropdown when clicking on the "three dots" button -->
+              <div class="oc-drop oc-box-shadow-medium oc-rounded" id="context-menu-drop-1">
+                <div class="oc-card oc-card-body oc-background-secondary oc-p-s"></div>
               </div>
-            </div>
+            </button>
           </div>
         </td>
       </tr>

@@ -110,7 +110,7 @@ describe('SpacesList', () => {
   it('should show the space details on details button click', async () => {
     const eventBusSpy = jest.spyOn(eventBus, 'publish')
     const { wrapper } = getWrapper({ spaces: spaceMocks })
-    await wrapper.find(`#space-details-trigger-${spaceMocks[0].id}`).trigger('click')
+    await wrapper.find('.spaces-table-btn-details').trigger('click')
     expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.open)
   })
 })
