@@ -4,7 +4,9 @@ import {
   deleteSpace,
   disableSpace,
   getDisplayedSpaces,
-  selectSpace
+  selectSpace,
+  clearSelection,
+  disableSpaceButtonShouldBeGone
 } from './actions'
 import { SpacesEnvironment } from '../../../environment'
 import { Space } from '../../../types'
@@ -44,5 +46,11 @@ export class Spaces {
   async select({ key }: { key: string }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
     await selectSpace({ id, page: this.#page })
+  }
+  async clearSelection(): Promise<void> {
+    await clearSelection({ page: this.#page })
+  }
+  async disableSpaceButtonShouldBeGone(): Promise<void> {
+    await disableSpaceButtonShouldBeGone({ page: this.#page })
   }
 }

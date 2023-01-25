@@ -24,6 +24,8 @@ Feature: spaces management
     And "Alice" updates the quota for space "team.a" to "50"
     And "Alice" disables the space "team.a" using the context-menu
     And "Alice" deletes the space "team.a" using the context-menu
+    And "Alice" disables the space "team.b" using the context-menu
+    And "Alice" deletes the space "team.b" using the context-menu
     Then "Alice" should not see the following spaces
       | id     |
       | team.a |
@@ -82,3 +84,29 @@ Feature: spaces management
       | team.f |
       | team.g |
       | team.h |
+    Then "Alice" should still have selected the spaces and the batch-action disable gone
+    #Cleanup spaces
+    And "Alice" disables the following spaces using the batch-actions
+      | name   |
+      | team.a |
+      | team.b |
+      | team.c |
+      | team.d |
+      | team.e |
+      | team.f |
+      | team.g |
+      | team.h |
+      | team.i |
+      | team.j |
+    And "Alice" deletes the following spaces using the batch-actions
+      | name   |
+      | team.a |
+      | team.b |
+      | team.c |
+      | team.d |
+      | team.e |
+      | team.f |
+      | team.g |
+      | team.h |
+      | team.i |
+      | team.j |

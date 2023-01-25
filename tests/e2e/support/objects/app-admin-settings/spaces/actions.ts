@@ -1,4 +1,5 @@
 import { Page } from 'playwright'
+import { expect } from '@playwright/test'
 import util from 'util'
 
 const spaceTrSelector = 'tr'
@@ -12,6 +13,7 @@ const modalConfirmBtn = `.oc-modal-body-actions-confirm`
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const selectedQuotaValueField = '.vs__dropdown-toggle'
 const spacesQuotaSearchField = '.oc-modal .vs__search'
+const clearSelectionBtn = '#files-clear-selection'
 
 export const getDisplayedSpaces = async (page): Promise<string[]> => {
   const spaces = []
@@ -50,7 +52,16 @@ export const changeSpaceQuota = async (args: {
     page.locator(actionConfirmButton).click()
   ])
 }
-
+export const clearSelection = async (args: { page: Page }): Promise<void> => {
+  const { page } = args
+  try {
+    await page.locator(clearSelectionBtn).click({ timeout: 500 })
+  } catch (ex) {}
+}
+export const disableSpaceButtonShouldBeGone = async (args: { page: Page }): Promise<void> => {
+  const { page } = args
+  expect(await page.locator(disableActionBtn).count()).toEqual(0)
+}
 export const disableSpace = async (args: {
   page: Page
   id: string
@@ -58,6 +69,7 @@ export const disableSpace = async (args: {
 }): Promise<void> => {
   const { page, id, context } = args
   const isBatchActions = context === 'batch-actions'
+
   if (!isBatchActions) {
     await page.locator(util.format(spaceIdSelector, id)).click()
   }
@@ -68,7 +80,7 @@ export const disableSpace = async (args: {
   await Promise.all([
     page.waitForResponse(
       (resp) =>
-        (isBatchActions || (resp.url().endsWith(encodeURIComponent(id)))) &&
+        (isBatchActions || resp.url().endsWith(encodeURIComponent(id))) &&
         resp.status() === 204 &&
         resp.request().method() === 'DELETE'
     ),
@@ -82,7 +94,10 @@ export const deleteSpace = async (args: {
   context: string
 }): Promise<void> => {
   const { page, id, context } = args
-  await page.locator(util.format(spaceIdSelector, id)).click()
+  const isBatchActions = context === 'batch-actions'
+  if (!isBatchActions) {
+    await page.locator(util.format(spaceIdSelector, id)).click()
+  }
   await page.waitForSelector(deleteActionBtn)
   await page.locator(`.${context}`).locator(deleteActionBtn).click()
   await page.waitForSelector(modalConfirmBtn)
@@ -90,7 +105,7 @@ export const deleteSpace = async (args: {
   await Promise.all([
     page.waitForResponse(
       (resp) =>
-        resp.url().endsWith(encodeURIComponent(id)) &&
+        (isBatchActions || resp.url().endsWith(encodeURIComponent(id))) &&
         resp.status() === 204 &&
         resp.request().method() === 'DELETE'
     ),
