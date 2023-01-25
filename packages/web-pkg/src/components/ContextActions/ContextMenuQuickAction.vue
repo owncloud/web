@@ -41,6 +41,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['quickActionClicked'],
   setup() {
     const { $gettext } = useGettext()
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
