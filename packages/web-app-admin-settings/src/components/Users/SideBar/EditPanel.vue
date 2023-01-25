@@ -21,12 +21,13 @@
           @change="validateEmail"
         />
         <oc-text-input
-          v-model="editUser.passwordProfile.password"
+          :model-value="editUser"
           class="oc-mb-s"
           :label="$gettext('Password')"
           type="password"
           :fix-message-line="true"
           default-value="●●●●●●●●"
+          @update:modelValue="onUpdatePassword"
         />
         <div class="oc-mb-s">
           <oc-select
@@ -153,7 +154,7 @@ export default defineComponent({
   watch: {
     user: {
       handler: function () {
-        this.editUser = cloneDeep({ ...this.user, passwordProfile: { password: '' } })
+        this.editUser = cloneDeep(this.user)
       },
       deep: true,
       immediate: true
@@ -199,6 +200,12 @@ export default defineComponent({
     },
     onUpdateRole(role) {
       this.editUser.appRoleAssignments[0].appRoleId = role.id
+    },
+    onUpdatePassword(password){
+      console.log("TEST")
+      this.editUser.passwordProfile = {
+        password
+      }
     }
   }
 })

@@ -181,7 +181,7 @@ export default defineComponent({
       userUpdatedEventToken = eventBus.subscribe(
         'app.admin-settings.users.user.updated',
         (updatedUser) => {
-          this.selectedUsers = [updatedUser]
+          selectedUsers.value = [updatedUser]
         }
       )
       calculateListHeaderPosition()
@@ -196,7 +196,6 @@ export default defineComponent({
     return {
       ...useSideBar(),
       template,
-      addRoleAssignment,
       selectedUsers,
       loadedUser,
       sideBarLoading,
@@ -248,7 +247,7 @@ export default defineComponent({
           component: DetailsPanel,
           default: true,
           enabled: true,
-          componentAttrs: { user: this.loadedUser, users: this.selectedUsers,  roles: this.roles }
+          componentAttrs: { user: this.loadedUser, users: this.selectedUsers, roles: this.roles }
         },
         {
           app: 'EditPanel',
@@ -371,20 +370,16 @@ export default defineComponent({
     },
     async editUser({ user, editUser }) {
       try {
-        const actualUser = {
-          ...(user && user),
-          passwordProfile: { password: '' }
-        }
-
         const graphEditUserRawObjectExtractor = (user) => {
           return omit(user, ['drive', 'appRoleAssignments', 'memberOf'])
         }
 
+        console.log((graphEditUserRawObjectExtractor(editUser)))
+        console.log(graphEditUserRawObjectExtractor(user))
+
+
         if (
-          !isEqual(
-            graphEditUserRawObjectExtractor(actualUser),
-            graphEditUserRawObjectExtractor(editUser)
-          )
+          !isEqual(graphEditUserRawObjectExtractor(user), graphEditUserRawObjectExtractor(editUser))
         ) {
           await this.graphClient.users.editUser(
             editUser.id,
@@ -392,7 +387,7 @@ export default defineComponent({
           )
         }
 
-        if (!isEqual(actualUser.drive?.quota?.total, editUser.drive?.quota?.total)) {
+        if (!isEqual(user.drive?.quota?.total, editUser.drive?.quota?.total)) {
           const updateDriveResponse = await this.graphClient.drives.updateDrive(
             editUser.drive.id,
             { quota: { total: editUser.drive.quota.total } },
@@ -408,11 +403,11 @@ export default defineComponent({
           }
         }
 
-        if (!isEqual(actualUser.memberOf, editUser.memberOf)) {
-          await this.editUserGroupAssignments(editUser)
+        if (!isEqual(user.memberOf, editUser.memberOf)) {
+          await this.editUserGroupAssignments({ user, editUser })
         }
 
-        if (!isEqual(actualUser.appRoleAssignments, editUser.appRoleAssignments)) {
+        if (!isEqual(user.appRoleAssignments, editUser.appRoleAssignments)) {
           await this.graphClient.users.createUserAppRoleAssignment(user.id, {
             appRoleId: editUser.appRoleAssignments[0].appRoleId,
             resourceId: editUser.appRoleAssignments[0].resourceId,
@@ -435,10 +430,8 @@ export default defineComponent({
         })
       }
     },
-    async editUserGroupAssignments(editUser) {
+    async editUserGroupAssignments({ user, editUser }) {
       try {
-        const user = this.users.find((user) => user.id === editUser.id)
-
         const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
           return !user.memberOf.some((g) => g.id === editUserGroup.id)
         })
