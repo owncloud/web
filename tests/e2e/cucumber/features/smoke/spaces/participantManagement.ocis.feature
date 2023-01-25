@@ -26,9 +26,9 @@ Feature: spaces participant management
     And "Alice" opens the "files" app
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
-    And "Alice" adds following members to the project space
-      | member   | role   | kind  |
-      | Brian    | editor | user  |
+    And "Alice" adds following users to the project space
+      | user     | role   | kind  |
+      | Brian    | editor | user  |
       | Carol    | viewer | user  |
       | sales    | viewer | group |
       | security | editor | group |
