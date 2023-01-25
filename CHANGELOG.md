@@ -51,6 +51,7 @@ Summary
 * Enhancement - Add support for multiple clients in `theme.json`: [#8280](https://github.com/owncloud/web/pull/8280)
 * Enhancement - Move language selection to user account page: [#8294](https://github.com/owncloud/web/pull/8294)
 * Enhancement - Show selectable groups only: [#8306](https://github.com/owncloud/web/pull/8306)
+* Enhancement - Add context menu to groups: [#8317](https://github.com/owncloud/web/pull/8317)
 
 Details
 -------
@@ -449,6 +450,14 @@ Details
 
    https://github.com/owncloud/web/issues/8305
    https://github.com/owncloud/web/pull/8306
+
+* Enhancement - Add context menu to groups: [#8317](https://github.com/owncloud/web/pull/8317)
+
+   A context menu has been added to the groups management page in the admin settings. It can be
+   toggled via right-click and quick-action.
+
+   https://github.com/owncloud/web/issues/8316
+   https://github.com/owncloud/web/pull/8317
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
