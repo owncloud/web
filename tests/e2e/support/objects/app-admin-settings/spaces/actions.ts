@@ -51,9 +51,15 @@ export const changeSpaceQuota = async (args: {
   ])
 }
 
-export const disableSpace = async (args: { page: Page; id: string, context: string }): Promise<void> => {
+export const disableSpace = async (args: {
+  page: Page
+  id: string
+  context: string
+}): Promise<void> => {
   const { page, id, context } = args
-  await page.locator(util.format(spaceIdSelector, id)).click()
+  if (context !== 'batch-actions') {
+    await page.locator(util.format(spaceIdSelector, id)).click()
+  }
   await page.waitForSelector(disableActionBtn)
   await page.locator(`.${context}`).locator(disableActionBtn).click()
   await page.waitForSelector(modalConfirmBtn)
@@ -69,7 +75,11 @@ export const disableSpace = async (args: { page: Page; id: string, context: stri
   ])
 }
 
-export const deleteSpace = async (args: { page: Page; id: string, context: string }): Promise<void> => {
+export const deleteSpace = async (args: {
+  page: Page
+  id: string
+  context: string
+}): Promise<void> => {
   const { page, id, context } = args
   await page.locator(util.format(spaceIdSelector, id)).click()
   await page.waitForSelector(deleteActionBtn)
@@ -87,7 +97,7 @@ export const deleteSpace = async (args: { page: Page; id: string, context: strin
   ])
 }
 
-export const selectSpace = async (args: { page: Page; id: string}): Promise<void> => {
-  const {page, id} = args
+export const selectSpace = async (args: { page: Page; id: string }): Promise<void> => {
+  const { page, id } = args
   await page.locator(util.format(spaceCheckboxSelector, id)).click()
 }

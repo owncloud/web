@@ -28,6 +28,20 @@ Feature: spaces management
       | id     |
       | team.a |
     And "Alice" logs out
+# TODO: Comment in as soon as https://github.com/owncloud/ocis/issues/5414 is resolved
+#    Then "Brian" logs in
+#    And "Brian" opens the "admin-settings" app
+#    And "Brian" navigates to the project spaces management page
+#    Then "Brian" should see the following spaces
+#      | id     |
+#      | team.b |
+#    And "Brian" updates the quota for space "team.b" to "50"
+#    And "Brian" disables the space "team.b"
+#    And "Brian" deletes the space "team.b"
+#    Then "Brian" should not see the following spaces
+#      | id     |
+#      | team.b |
+#    And "Brian" logs out
   Scenario: multiple spaces can be managed at once in the admin settings
     Given "Admin" creates following users
       | id    |
@@ -46,21 +60,7 @@ Feature: spaces management
       | team B | team.b |
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
-    And "Alice" selects the following spaces
+    And "Alice" disables the following spaces using the batch-actions
       | name   |
       | team.a |
       | team.b |
-# TODO: Comment in as soon as https://github.com/owncloud/ocis/issues/5414 is resolved
-#    Then "Brian" logs in
-#    And "Brian" opens the "admin-settings" app
-#    And "Brian" navigates to the project spaces management page
-#    Then "Brian" should see the following spaces
-#      | id     |
-#      | team.b |
-#    And "Brian" updates the quota for space "team.b" to "50"
-#    And "Brian" disables the space "team.b"
-#    And "Brian" deletes the space "team.b"
-#    Then "Brian" should not see the following spaces
-#      | id     |
-#      | team.b |
-#    And "Brian" logs out
