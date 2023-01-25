@@ -7,17 +7,21 @@ Feature: Copy
     Given "Admin" creates following users
       | id    |
       | Alice |
+    And "Alice" creates the following folders in personal space using API
+      | name        |
+      | PARENTCopy1 |
+      | PARENTCopy2 |
+      | PARENTMove  |
+      | PARENTCopy3 |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile              | content                             |
+      | PARENTCopy3/example.txt | example text                        |
+      | KeyboardExample.txt     | copy with the help of keyboard      |
+      | dragDrop.txt            | copy with the help of drag-drop     |
+      | sidebar.txt             | copy with the help of sidebar panel |
     And "Alice" logs in
     And "Alice" opens the "files" app
-    And "Alice" creates the following resources
-      | resource                | type    | content                             |
-      | PARENTCopy1             | folder  |                                     |
-      | PARENTCopy2             | folder  |                                     |
-      | PARENTMove              | folder  |                                     |
-      | PARENTCopy3/example.txt | txtFile | example text                        |
-      | KeyboardExample.txt     | txtFile | copy with the help of keyboard      |
-      | dragDrop.txt            | txtFile | copy with the help of drag-drop     |
-      | sidebar.txt             | txtFile | copy with the help of sidebar panel |
+
     When "Alice" copies the following resource using sidebar-panel
       | resource    | to          |
       | sidebar.txt | PARENTCopy2 |
