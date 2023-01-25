@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditDropdown default actions render "remove share" and "access details" as default 1`] = `
+<span class="oc-flex oc-flex-middle">
+  <button class="collaborator-edit-dropdown-options-btn oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="files-collaborators-edit-button-5" type="button">
+    <span class="oc-icon oc-icon-m oc-icon-passive">
+      <!---->
+    </span>
+  </button>
+  <div class="oc-drop oc-box-shadow-medium oc-rounded" id="oc-drop-4">
+    <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
+      <ul aria-label="Context menu of the share" class="oc-list oc-my-rm oc-mx-rm collaborator-edit-dropdown-options-list">
+        <!---->
+        <li class="oc-rounded oc-menu-item-hover">
+          <button class="oc-p-s action-menu-item oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw remove-share" type="button">
+            <span class="oc-icon oc-icon-m oc-icon-passive">
+              <!---->
+            </span>
+            <span>Remove share</span>
+          </button>
+        </li>
+        <li class="oc-rounded oc-menu-item-hover">
+          <button class="oc-p-s action-menu-item oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw show-access-details" type="button">
+            <span class="oc-icon oc-icon-m oc-icon-passive">
+              <!---->
+            </span>
+            <span>Access details</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</span>
+`;

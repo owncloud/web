@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateQuickLink renders the quick link button 1`] = `
+<div class="oc-mb-s oc-width-1-1 oc-mb-l">
+  <h4 class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-my-rm">Quick link</h4>
+  <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-s link-name-container">
+    <div class="oc-flex oc-flex-middle oc-text-truncate">
+      <span class="oc-icon oc-icon-m oc-icon-passive">
+        <!---->
+      </span>
+      <p class="oc-files-file-link-url oc-ml-s oc-text-truncate oc-my-rm">No link</p>
+    </div>
+    <button aria-label="Create quick link" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">Create link</button>
+  </div>
+</div>
+`;

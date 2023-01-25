@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NoSelection should render the component 1`] = `
+<div class="oc-text-center oc-mt-xl" id="oc-no-selection">
+  <oc-icon-stub accessiblelabel="" color="" filltype="line" name="drag-drop" size="xxlarge" type="span" variation="passive"></oc-icon-stub>
+  <p>Select a file or folder to view details.</p>
+</div>
+`;
