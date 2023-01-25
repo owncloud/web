@@ -127,8 +127,7 @@
 </template>
 
 <script lang="ts">
-import { debounce } from 'lodash-es'
-import omit from 'lodash-es/omit'
+import { debounce, omit } from 'lodash-es'
 import { basename } from 'path'
 import {
   computed,
@@ -168,17 +167,16 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { useRoute } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
-import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageType } from 'web-pkg/src/constants'
+import { VisibilityObserver } from 'web-pkg/src/observer'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults, ViewModeConstants } from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
-import { useRoute } from 'web-pkg/src/composables'
 import { FolderLoaderOptions } from '../../services/folder'
 
 const visibilityObserver = new VisibilityObserver()
@@ -229,13 +227,6 @@ export default defineComponent({
     const store = useStore()
     let loadResourcesEventToken
 
-    const resourceTargetRouteCallback = ({ path, fileId }: CreateTargetRouteOptions): Location => {
-      const { params, query } = createFileRouteOptions(props.space, { path, fileId })
-      if (isPublicSpaceResource(props.space)) {
-        return createLocationPublic('files-public-link', { params, query })
-      }
-      return createLocationSpaces('files-spaces-generic', { params, query })
-    }
     const hasSpaceHeader = computed(() => {
       // for now the space header is only available in the root of a project space.
       return props.space.driveType === 'project' && props.item === '/'
@@ -364,8 +355,6 @@ export default defineComponent({
 
     return {
       ...resourcesViewDefaults,
-      resourceTargetRouteCallback,
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
       breadcrumbs,
       hasSpaceHeader,
       performLoaderTask,

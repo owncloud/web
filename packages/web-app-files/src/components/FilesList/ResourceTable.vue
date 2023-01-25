@@ -182,12 +182,14 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions, mapState } from 'vuex'
-import { determineSortFields } from '../../helpers/ui/resourceTable'
-import { basename, dirname } from 'path'
 import { defineComponent, PropType, computed } from 'vue'
+import { mapGetters, mapActions, mapState } from 'vuex'
+import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
-import { EVENT_FILE_DROPPED, EVENT_TROW_MOUNTED, ImageDimension } from 'web-pkg/src/constants'
+import { Resource } from 'web-client'
+import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
+import { ShareTypes } from 'web-client/src/helpers/share'
+
 import {
   useCapabilityFilesTags,
   useCapabilityProjectSpacesEnabled,
@@ -195,32 +197,30 @@ import {
   useStore,
   useUserContext
 } from 'web-pkg/src/composables'
+import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from 'web-pkg/src/constants'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-
-import Rename from '../../mixins/actions/rename'
-import { Resource } from 'web-client'
-import { ShareTypes } from 'web-client/src/helpers/share'
 import {
   displayPositionedDropdown,
   formatDateFromJSDate,
   formatRelativeDateFromJSDate
 } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import { extractDomSelector, SpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
-import ResourceTiles from './ResourceTiles.vue'
-
-import { createLocationShares, createLocationCommon } from '../../router'
-import { SortDir } from '../../composables'
-import { ViewModeConstants } from '../../composables/viewMode'
-import { ClipboardActions } from '../../helpers/clipboardActions'
-import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
+import { SortDir } from 'web-app-files/src/composables'
+import { useResourceRouteResolver } from 'web-app-files/src/composables/filesList/useResourceRouteResolver'
+import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
+import { ClipboardActions } from 'web-app-files/src/helpers/clipboardActions'
+import { isResourceTxtFileAlmostEmpty } from 'web-app-files/src/helpers/resources'
+import { determineSortFields } from 'web-app-files/src/helpers/ui/resourceTable'
+import Rename from 'web-app-files/src/mixins/actions/rename'
+import { createLocationShares, createLocationCommon } from 'web-app-files/src/router'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
-  components: { ContextMenuQuickAction, ResourceTiles },
+  components: { ContextMenuQuickAction },
   mixins: [Rename],
   props: {
     /**
@@ -392,22 +392,23 @@ export default defineComponent({
   ],
   setup(props, context) {
     const store = useStore()
-
     const spaces = computed(() => {
       return store.getters['runtime/spaces/spaces']
     })
-
     const { width } = useWindowSize()
     const hasTags = computed(
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
     )
 
+    const resourceRouteResolver = useResourceRouteResolver({ spaces }, context)
+
     return {
+      resourceRouteResolver,
+      ViewModeConstants,
       hasTags,
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
-      isUserContext: useUserContext({ store }),
-      spaces
+      isUserContext: useUserContext({ store })
     }
   },
   data() {
@@ -627,14 +628,18 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
     folderLink(file) {
-      return this.createFolderLink({ path: file.path, fileId: file.fileId, resource: file })
+      return this.resourceRouteResolver.createFolderLink({
+        path: file.path,
+        fileId: file.fileId,
+        resource: file
+      })
     },
     parentFolderLink(file) {
       if (file.shareId && file.path === '/') {
         return createLocationShares('files-shares-with-me')
       }
 
-      return this.createFolderLink({
+      return this.resourceRouteResolver.createFolderLink({
         path: dirname(file.path),
         ...(file.parentFolderId && { fileId: file.parentFolderId }),
         resource: file
@@ -683,12 +688,7 @@ export default defineComponent({
        * @property {object} resource The resource which was mounted as table row
        * @property {object} component The table row component
        */
-      this.$emit(
-        this.constants.EVENT_TROW_MOUNTED,
-        resource,
-        component,
-        this.constants.ImageDimension.Thumbnail
-      )
+      this.$emit('rowMounted', resource, component, this.constants.ImageDimension.Thumbnail)
     },
     fileClicked(data) {
       /**
@@ -729,7 +729,20 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
-      this.createFileAction(resource)
+      let space = this.getMatchingSpace(resource)
+      if (!space) {
+        space = buildShareSpaceResource({
+          shareId: resource.shareId,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
+        })
+      }
+
+      /**
+       * Triggered when a default action is triggered on a file
+       * @property {object} resource resource for which the event is triggered
+       */
+      this.$emit('fileClick', { space, resources: [resource] })
     },
     isResourceClickable(resourceId) {
       if (!this.areResourcesClickable) {
@@ -781,6 +794,19 @@ export default defineComponent({
         resourceType,
         ownerName: resource.owner[0].displayName
       })
+    },
+    getInternalSpace(storageId) {
+      return this.space || this.spaces.find((space) => space.id === storageId)
+    },
+    getMatchingSpace(resource: Resource): SpaceResource {
+      return (
+        this.getInternalSpace(resource.storageId) ||
+        buildShareSpaceResource({
+          shareId: resource.shareId,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
+        })
+      )
     },
     getDefaultParentFolderName(resource) {
       if (this.hasProjectSpaces) {
