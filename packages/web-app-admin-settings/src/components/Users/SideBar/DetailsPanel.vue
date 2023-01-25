@@ -78,10 +78,6 @@ export default defineComponent({
     roleDisplayName() {
       const assignedRole = this.user.appRoleAssignments[0]
 
-      if (!assignedRole) {
-        return ''
-      }
-
       return this.$gettext(
         this.roles.find((role) => role.id === assignedRole.appRoleId)?.displayName || ''
       )
