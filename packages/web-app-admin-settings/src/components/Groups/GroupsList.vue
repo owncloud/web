@@ -51,44 +51,23 @@
       </template>
       <template #actions="{ item }">
         <oc-button
-          :id="`group-details-trigger-${resourceDomSelector(item)}`"
           v-oc-tooltip="$gettext('Details')"
           appearance="raw"
-          class="oc-mr-xs quick-action-button oc-p-xs"
+          class="oc-mr-xs groups-table-btn-details oc-p-xs"
           @click="showDetails(item)"
         >
           <oc-icon name="information" fill-type="line" />
         </oc-button>
-        <oc-button
-          :id="`context-menu-trigger-${resourceDomSelector(item)}`"
+        <context-menu-quick-action
           ref="contextMenuButtonRef"
-          v-oc-tooltip="contextMenuLabel"
-          :aria-label="contextMenuLabel"
+          :item="item"
           class="groups-table-btn-action-dropdown"
-          appearance="raw"
-          @click.stop.prevent="
-            showContextMenuOnBtnClick(
-              `context-menu-drop-ref-${resourceDomSelector(item)}`,
-              $event,
-              item
-            )
-          "
+          @quickActionClicked="showContextMenuOnBtnClick($event, item)"
         >
-          <oc-icon name="more-2" />
-        </oc-button>
-        <oc-drop
-          :ref="`context-menu-drop-ref-${resourceDomSelector(item)}`"
-          :drop-id="`context-menu-drop-${resourceDomSelector(item)}`"
-          :toggle="`#context-menu-trigger-${resourceDomSelector(item)}`"
-          :popper-options="popperOptions"
-          mode="click"
-          close-on-click
-          padding-size="small"
-          @click.stop.prevent
-        >
-          <!-- @slot Add context actions that open in a dropdown when clicking on the "three dots" button -->
-          <slot name="contextMenu" :group="item" />
-        </oc-drop>
+          <template #contextMenu>
+            <slot name="contextMenu" :group="item" />
+          </template>
+        </context-menu-quick-action>
         <!-- Editing groups is currently not supported by backend
       <oc-button v-oc-tooltip="$gettext('Edit')" class="oc-ml-s" @click="$emit('clickEdit', item)">
         <oc-icon size="small" name="pencil" />
@@ -106,17 +85,17 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, unref } from 'vue'
+import { defineComponent, PropType, ref, unref } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { displayPositionedDropdown, eventBus, popperOptions as defaultPopperOptions } from 'web-pkg'
+import { displayPositionedDropdown, eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import { extractDomSelector } from 'web-client/src/helpers'
 import { Group } from 'web-client/src/generated'
-import { useGettext } from 'vue3-gettext'
+import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
 export default defineComponent({
   name: 'GroupsList',
+  components: { ContextMenuQuickAction },
   props: {
     groups: {
       type: Array as PropType<Group[]>,
@@ -133,15 +112,7 @@ export default defineComponent({
   },
   emits: ['toggleSelectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
   setup(props, { emit }) {
-    const { $gettext } = useGettext()
-    const resourceDomSelector = (group) => extractDomSelector(group.id)
-    const groupRefs = {}
-    for (const group of props.groups) {
-      groupRefs[`context-menu-drop-ref-${resourceDomSelector(group)}`] = ref(undefined)
-    }
-
     const contextMenuButtonRef = ref(undefined)
-    const contextMenuLabel = computed(() => $gettext('Show context menu'))
 
     const isGroupSelected = (group) => {
       return props.selectedGroups.some((s) => s.id === group.id)
@@ -158,16 +129,15 @@ export default defineComponent({
       const group = data[0]
       selectGroup(group)
     }
-    const popperOptions = computed(() => defaultPopperOptions)
-    const showContextMenuOnBtnClick = (id, event, group) => {
-      const dropdown = unref(unref(groupRefs)[id]).tippy
-      if (dropdown === undefined) {
+    const showContextMenuOnBtnClick = (data, group) => {
+      const { dropdown, event } = data
+      if (dropdown?.tippy === undefined) {
         return
       }
       if (!isGroupSelected(group)) {
         selectGroup(group)
       }
-      displayPositionedDropdown(dropdown, event, unref(contextMenuButtonRef))
+      displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
     const showContextMenuOnRightClick = (row, event, group) => {
       event.preventDefault()
@@ -182,16 +152,12 @@ export default defineComponent({
     }
 
     return {
-      ...groupRefs,
-      resourceDomSelector,
       showDetails,
       rowClicked,
       isGroupSelected,
-      popperOptions,
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
-      contextMenuButtonRef,
-      contextMenuLabel
+      contextMenuButtonRef
     }
   },
   data() {

@@ -161,31 +161,16 @@
       <div class="resource-table-actions">
         <!-- @slot Add quick actions before the `context-menu / three dot` button in the actions column -->
         <slot name="quickActions" :resource="item" />
-        <oc-button
-          :id="`context-menu-trigger-${resourceDomSelector(item)}`"
+        <context-menu-quick-action
           ref="contextMenuButton"
-          v-oc-tooltip="contextMenuLabel"
-          :aria-label="contextMenuLabel"
+          :item="item"
           class="resource-table-btn-action-dropdown"
-          appearance="raw"
-          @click.stop.prevent="
-            resetDropPosition(`context-menu-drop-ref-${resourceDomSelector(item)}`, $event, item)
-          "
+          @quickActionClicked="showContextMenuOnBtnClick($event, item)"
         >
-          <oc-icon name="more-2" />
-        </oc-button>
-        <oc-drop
-          :ref="`context-menu-drop-ref-${resourceDomSelector(item)}`"
-          :drop-id="`context-menu-drop-${resourceDomSelector(item)}`"
-          :toggle="`#context-menu-trigger-${resourceDomSelector(item)}`"
-          :popper-options="popperOptions"
-          mode="click"
-          close-on-click
-          padding-size="small"
-        >
-          <!-- @slot Add context actions that open in a dropdown when clicking on the "three dots" button -->
-          <slot name="contextMenu" :resource="item" />
-        </oc-drop>
+          <template #contextMenu>
+            <slot name="contextMenu" :resource="item" />
+          </template>
+        </context-menu-quick-action>
       </div>
     </template>
     <template v-if="$slots.footer" #footer>
@@ -219,7 +204,6 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces, createLocationShares, createLocationCommon } from '../../router'
 import {
   displayPositionedDropdown,
-  popperOptions as defaultPopperOptions,
   formatDateFromJSDate,
   formatRelativeDateFromJSDate
 } from 'web-pkg/src/helpers'
@@ -230,10 +214,12 @@ import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
+import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
+  components: { ContextMenuQuickAction },
   mixins: [Rename],
   props: {
     /**
@@ -417,15 +403,13 @@ export default defineComponent({
     const hasTags = computed(
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
     )
-    const popperOptions = computed(() => defaultPopperOptions)
 
     return {
       ViewModeConstants,
       hasTags,
       isUserContext: useUserContext({ store }),
       hasShareJail: useCapabilityShareJailEnabled(),
-      hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
-      popperOptions
+      hasProjectSpaces: useCapabilityProjectSpacesEnabled()
     }
   },
   data() {
@@ -703,15 +687,15 @@ export default defineComponent({
       }
       this.toggleFileSelection(file)
     },
-    resetDropPosition(id, event, item) {
-      const instance = this.$refs[id].tippy
-      if (instance === undefined) {
+    showContextMenuOnBtnClick(data, item) {
+      const { dropdown, event } = data
+      if (dropdown?.tippy === undefined) {
         return
       }
       if (!this.isResourceSelected(item)) {
         this.emitSelect([item.id])
       }
-      displayPositionedDropdown(instance, event, this.$refs.contextMenuButton)
+      displayPositionedDropdown(dropdown.tippy, event, this.$refs.contextMenuButton)
     },
     showContextMenu(row, event, item) {
       event.preventDefault()
