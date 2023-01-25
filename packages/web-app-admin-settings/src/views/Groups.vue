@@ -22,10 +22,7 @@
             >
               <oc-icon name="close" />
             </oc-button>
-            <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteGroupModal">
-              <oc-icon name="delete-bin" />
-              <span v-text="$gettext('Delete')" />
-            </oc-button>
+            <batch-actions class="oc-ml-s" :selected-groups="selectedGroups" />
           </div>
           <div v-else>
             <oc-button variation="primary" appearance="filled" @click="toggleCreateGroupModal">
@@ -54,7 +51,11 @@
             @toggleSelectGroup="toggleSelectGroup"
             @toggleSelectAllGroups="toggleSelectAllGroups"
             @unSelectAllGroups="unselectAllGroups"
-          />
+          >
+            <template #contextMenu>
+              <context-actions :items="selectedGroups" />
+            </template>
+          </GroupsList>
         </div>
       </template>
     </app-template>
@@ -64,19 +65,14 @@
       @cancel="toggleCreateGroupModal"
       @confirm="createGroup"
     />
-    <delete-group-modal
-      v-if="deleteGroupModalOpen"
-      :groups="selectedGroups"
-      @cancel="toggleDeleteGroupModal"
-      @confirm="deleteGroups"
-    />
   </div>
 </template>
 
 <script lang="ts">
 import GroupsList from '../components/Groups/GroupsList.vue'
 import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
-import DeleteGroupModal from '../components/Groups/DeleteGroupModal.vue'
+import ContextActions from '../components/Groups/ContextActions.vue'
+import BatchActions from '../components/Groups/BatchActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { defineComponent, ref, unref, onBeforeUnmount, onMounted } from 'vue'
 import { useTask } from 'vue-concurrency'
@@ -94,12 +90,15 @@ export default defineComponent({
     GroupsList,
     NoContentMessage,
     CreateGroupModal,
-    DeleteGroupModal
+    BatchActions,
+    ContextActions
   },
   setup() {
     const groups = ref([])
     let loadResourcesEventToken
     const template = ref()
+    const selectedGroups = ref([])
+    const createGroupModalOpen = ref(false)
     const listHeaderPosition = ref(0)
     const { graphClient } = useGraphClient()
 
@@ -119,6 +118,7 @@ export default defineComponent({
       await loadResourcesTask.perform()
       loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
         loadResourcesTask.perform()
+        selectedGroups.value = []
       })
       calculateListHeaderPosition()
       window.addEventListener('resize', calculateListHeaderPosition)
@@ -131,17 +131,12 @@ export default defineComponent({
     return {
       ...useSideBar(),
       groups,
+      selectedGroups,
+      createGroupModalOpen,
       template,
       loadResourcesTask,
       graphClient,
       listHeaderPosition
-    }
-  },
-  data: function () {
-    return {
-      selectedGroups: [],
-      createGroupModalOpen: false,
-      deleteGroupModalOpen: false
     }
   },
   computed: {
@@ -211,52 +206,6 @@ export default defineComponent({
     },
     toggleCreateGroupModal() {
       this.createGroupModalOpen = !this.createGroupModalOpen
-    },
-    toggleDeleteGroupModal() {
-      this.deleteGroupModalOpen = !this.deleteGroupModalOpen
-    },
-    async deleteGroups(groups) {
-      const promises = groups.map((group) => this.graphClient.groups.deleteGroup(group.id))
-
-      try {
-        await Promise.all(promises)
-        this.showMessage({
-          title: this.$gettextInterpolate(
-            this.$ngettext(
-              'Group "%{group}" was deleted successfully',
-              '%{groupCount} groups were deleted successfully',
-              this.selectedGroups.length
-            ),
-            {
-              groupCount: this.selectedGroups.length,
-              group: this.selectedGroups[0].displayName
-            },
-            true
-          )
-        })
-        this.groups = this.groups.filter((group) => {
-          return !groups.find((deletedGroup) => group.id === deletedGroup.id)
-        })
-        this.selectedGroups = []
-        this.toggleDeleteGroupModal()
-      } catch (error) {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettextInterpolate(
-            this.$ngettext(
-              'Failed to delete group "%{group}"',
-              'Failed to delete %{groupCount} groups',
-              this.selectedGroups.length
-            ),
-            {
-              groupCount: this.selectedGroups.length,
-              group: this.selectedGroups[0].displayName
-            },
-            true
-          ),
-          status: 'danger'
-        })
-      }
     },
     async createGroup(group) {
       try {
