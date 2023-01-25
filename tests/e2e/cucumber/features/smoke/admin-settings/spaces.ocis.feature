@@ -58,9 +58,27 @@ Feature: spaces management
       | name   | id     |
       | team A | team.a |
       | team B | team.b |
+      | team C | team.c |
+      | team D | team.d |
+      | team E | team.e |
+      | team F | team.f |
+      | team G | team.g |
+      | team H | team.h |
+      | team I | team.i |
+      | team J | team.j |
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     And "Alice" disables the following spaces using the batch-actions
       | name   |
       | team.a |
       | team.b |
+    And "Alice" disables the following spaces using the batch-actions
+      | name   |
+      | team.a |
+      | team.b |
+      | team.c |
+      | team.d |
+      | team.e |
+      | team.f |
+      | team.g |
+      | team.h |

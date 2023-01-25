@@ -57,7 +57,8 @@ export const disableSpace = async (args: {
   context: string
 }): Promise<void> => {
   const { page, id, context } = args
-  if (context !== 'batch-actions') {
+  const isBatchActions = context === 'batch-actions'
+  if (!isBatchActions) {
     await page.locator(util.format(spaceIdSelector, id)).click()
   }
   await page.waitForSelector(disableActionBtn)
@@ -67,7 +68,7 @@ export const disableSpace = async (args: {
   await Promise.all([
     page.waitForResponse(
       (resp) =>
-        resp.url().endsWith(encodeURIComponent(id)) &&
+        (isBatchActions || (resp.url().endsWith(encodeURIComponent(id)))) &&
         resp.status() === 204 &&
         resp.request().method() === 'DELETE'
     ),
