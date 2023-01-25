@@ -94,7 +94,7 @@ export default defineComponent({
     const resolvePrivateLinkTask = useTask(function* (signal, id) {
       let path
       let matchingSpace = getMatchingSpace(id)
-      let resourceIsInsideShare = false
+      let resourceIsNestedInShare = false
       if (matchingSpace) {
         path = yield clientService.owncloudSdk.files.getPathForFileId(id)
         resource.value = yield clientService.webdav.getFileInfo(matchingSpace, { path })
@@ -102,11 +102,11 @@ export default defineComponent({
         // no matching space found => the file doesn't lie in own spaces => it's a share.
         // do PROPFINDs on parents until root of accepted share is found in `mountpoint` spaces
         let mountPoint = findMatchingMountPoint(id)
+        resourceIsNestedInShare = !mountPoint
         resource.value = yield loadFileInfoByIdTask.perform(id)
         const sharePathSegments = mountPoint ? [] : [unref(resource).name]
         let tmpResource = unref(resource)
         while (!mountPoint) {
-          resourceIsInsideShare = true
           try {
             tmpResource = yield loadFileInfoByIdTask.perform(tmpResource.parentFolderId)
           } catch (e) {
@@ -140,7 +140,7 @@ export default defineComponent({
         // FIXME: we should not hardcode the name here, but we should not depend on
         // createLocationSpaces('files-spaces-generic') in web-app-files either
         targetLocation =
-          matchingSpace.driveType === 'share' && !resourceIsInsideShare
+          matchingSpace.driveType === 'share' && !resourceIsNestedInShare
             ? 'files-shares-with-me'
             : 'files-spaces-generic'
       }
