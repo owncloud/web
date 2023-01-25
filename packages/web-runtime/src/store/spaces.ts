@@ -174,25 +174,40 @@ const actions = {
   },
   async addSpaceMember(
     context,
-    { client, graphClient, path, shareWith, permissions, role, storageId, displayName }
+    {
+      client,
+      graphClient,
+      path,
+      shareWith,
+      permissions,
+      role,
+      storageId,
+      displayName,
+      expirationDate
+    }
   ) {
     await client.shares.shareSpaceWithUser(path, shareWith, storageId, {
       permissions,
-      role: role.name
+      role: role.name,
+      expirationDate
     })
     const graphResponse = await graphClient.drives.getDrive(storageId)
     context.commit('UPSERT_SPACE', buildSpace(graphResponse.data))
     const shareObj = { role: role.name, onPremisesSamAccountName: shareWith, displayName }
     context.commit('UPSERT_SPACE_MEMBERS', buildSpaceShare(shareObj, storageId))
   },
-  async changeSpaceMember(context, { client, graphClient, share, permissions, role }) {
+  async changeSpaceMember(
+    context,
+    { client, graphClient, share, permissions, expirationDate, role }
+  ) {
     await client.shares.shareSpaceWithUser(
       '',
       share.collaborator.name || share.collaborator.displayName,
       share.id,
       {
         permissions,
-        role: role.name
+        role: role.name,
+        expirationDate
       }
     )
 
