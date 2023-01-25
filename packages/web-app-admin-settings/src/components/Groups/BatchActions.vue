@@ -21,7 +21,7 @@
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 import Delete from '../../mixins/groups/delete'
 import { computed, defineComponent, getCurrentInstance, PropType } from 'vue'
-import { SpaceResource } from 'web-client'
+import { Group } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'ActionsPanel',
@@ -29,7 +29,7 @@ export default defineComponent({
   mixins: [Delete],
   props: {
     selectedGroups: {
-      type: Array as PropType<Array<SpaceResource>>,
+      type: Array as PropType<Group[]>,
       required: true
     },
     limitedScreenSpace: {

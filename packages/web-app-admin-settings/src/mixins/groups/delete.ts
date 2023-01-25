@@ -1,11 +1,8 @@
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import {clientService, eventBus} from "web-pkg";
+import { mapActions } from 'vuex'
+import { clientService, configurationManager, eventBus } from 'web-pkg'
 
 export default {
   computed: {
-    ...mapGetters(['configuration']),
-    ...mapState(['user']),
-
     $_delete_items() {
       return [
         {
@@ -25,15 +22,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'createModal',
-      'hideModal',
-      'setModalInputErrorMessage',
-      'showMessage',
-      'toggleModalConfirmButton'
-    ]),
-    ...mapMutations('Files', ['REMOVE_FILES']),
-    ...mapMutations('runtime/spaces', ['REMOVE_SPACE']),
+    ...mapActions(['createModal', 'hideModal', 'showMessage']),
 
     $_delete_trigger({ resources }) {
       if (!resources.length) {
@@ -68,9 +57,11 @@ export default {
     },
 
     async $_delete_deleteGroups(groups) {
-      console.log('groups', groups)
       const accessToken = this.$store.getters['runtime/auth/accessToken']
-      const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
+      const graphClient = clientService.graphAuthenticated(
+        configurationManager.serverUrl,
+        accessToken
+      )
       const promises = groups.map((group) => graphClient.groups.deleteGroup(group.id))
 
       try {
@@ -81,10 +72,7 @@ export default {
             'Group "%{group}" was deleted successfully',
             '%{groupCount} groups were deleted successfully',
             groups.length,
-            {
-              groupCount: groups.length,
-              group: groups[0].displayName
-            },
+            { groupCount: groups.length, group: groups[0].displayName },
             true
           )
         })
@@ -97,10 +85,7 @@ export default {
             'Failed to delete group "%{group}"',
             'Failed to delete %{groupCount} groups',
             groups.length,
-            {
-              groupCount: groups.length,
-              group: groups[0].displayName
-            },
+            { groupCount: groups.length, group: groups[0].displayName },
             true
           ),
           status: 'danger'
