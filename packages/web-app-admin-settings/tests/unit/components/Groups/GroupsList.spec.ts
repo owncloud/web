@@ -1,10 +1,22 @@
 import UsersList from '../../../../src/components/Groups/GroupsList.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import { displayPositionedDropdown, eventBus } from 'web-pkg'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+
+const getGroupMocks = () => [
+  { id: '1', members: [] },
+  { id: '2', members: [] }
+]
+
+jest.mock('web-pkg/src/helpers', () => ({
+  ...jest.requireActual('web-pkg/src/helpers'),
+  displayPositionedDropdown: jest.fn()
+}))
 
 describe('GroupsList', () => {
   describe('method "orderBy"', () => {
     it('should return an ascending ordered list while desc is set to false', () => {
-      const { wrapper } = getMountedWrapper()
+      const { wrapper } = getWrapper()
 
       expect(
         wrapper.vm.orderBy(
@@ -15,7 +27,7 @@ describe('GroupsList', () => {
       ).toEqual([{ displayName: 'admins' }, { displayName: 'users' }])
     })
     it('should return an descending ordered list while desc is set to true', () => {
-      const { wrapper } = getMountedWrapper()
+      const { wrapper } = getWrapper()
 
       expect(
         wrapper.vm.orderBy(
@@ -29,33 +41,64 @@ describe('GroupsList', () => {
 
   describe('method "filter"', () => {
     it('should return a list containing record admins if search term is "ad"', () => {
-      const { wrapper } = getMountedWrapper()
+      const { wrapper } = getWrapper()
 
       expect(
         wrapper.vm.filter([{ displayName: 'users' }, { displayName: 'admins' }], 'ad')
       ).toEqual([{ displayName: 'admins' }])
     })
     it('should return an an empty list if search term does not match any entry', () => {
-      const { wrapper } = getMountedWrapper()
+      const { wrapper } = getWrapper()
 
       expect(
         wrapper.vm.filter([{ displayName: 'admins' }, { displayName: 'users' }], 'ownClouders')
       ).toEqual([])
     })
   })
+  it('emits events on row click', () => {
+    const groups = getGroupMocks()
+    const { wrapper } = getWrapper({ props: { groups } })
+    wrapper.vm.rowClicked(groups[0])
+    expect(wrapper.emitted('unSelectAllGroups').length).toBeTruthy()
+    expect(wrapper.emitted('toggleSelectGroup')).toBeTruthy()
+  })
+  it('should show the context menu on right click', async () => {
+    const groups = getGroupMocks()
+    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const { wrapper } = getWrapper({ mountType: mount, props: { groups } })
+    await wrapper.find(`[data-item-id="${groups[0].id}"]`).trigger('contextmenu')
+    expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
+  })
+  it('should show the context menu on context menu button click', async () => {
+    const groups = getGroupMocks()
+    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const { wrapper } = getWrapper({ mountType: mount, props: { groups } })
+    await wrapper.find('.groups-table-btn-action-dropdown').trigger('click')
+    expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
+  })
+  it('should show the group details on details button click', async () => {
+    const groups = getGroupMocks()
+    const eventBusSpy = jest.spyOn(eventBus, 'publish')
+    const { wrapper } = getWrapper({ mountType: mount, props: { groups } })
+    await wrapper.find(`#group-details-trigger-${groups[0].id}`).trigger('click')
+    expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.open)
+  })
 })
 
-function getMountedWrapper({ propsData = {} } = {}) {
+function getWrapper({ mountType = shallowMount, props = {} } = {}) {
   return {
-    wrapper: shallowMount(UsersList, {
+    wrapper: mountType(UsersList, {
       props: {
         groups: [],
         selectedGroups: [],
         headerPosition: 0,
-        ...propsData
+        ...props
       },
       global: {
-        plugins: [...defaultPlugins()]
+        plugins: [...defaultPlugins()],
+        stubs: {
+          OcCheckbox: true
+        }
       }
     })
   }

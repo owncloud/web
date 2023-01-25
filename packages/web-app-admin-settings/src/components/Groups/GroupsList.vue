@@ -8,7 +8,7 @@
       autocomplete="off"
     />
     <oc-table
-      ref="table"
+      ref="tableRef"
       :sort-by="sortBy"
       :sort-dir="sortDir"
       :fields="fields"
@@ -16,7 +16,10 @@
       :highlighted="highlighted"
       :sticky="true"
       :header-position="headerPosition"
+      :hover="true"
       @sort="handleSort"
+      @contextmenuClicked="showContextMenuOnRightClick"
+      @highlight="rowClicked"
     >
       <template #selectHeader>
         <oc-checkbox
@@ -32,11 +35,12 @@
         <oc-checkbox
           class="oc-ml-s"
           size="large"
-          :model-value="selectedGroups"
+          :model-value="isGroupSelected(rowData.item)"
           :option="rowData.item"
           :label="getSelectGroupLabel(rowData.item)"
           hide-label
           @update:modelValue="$emit('toggleSelectGroup', rowData.item)"
+          @click.stop
         />
       </template>
       <template #avatar="rowData">
@@ -47,6 +51,7 @@
       </template>
       <template #actions="{ item }">
         <oc-button
+          :id="`group-details-trigger-${resourceDomSelector(item)}`"
           v-oc-tooltip="$gettext('Details')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs"
@@ -54,6 +59,36 @@
         >
           <oc-icon name="information" fill-type="line" />
         </oc-button>
+        <oc-button
+          :id="`context-menu-trigger-${resourceDomSelector(item)}`"
+          ref="contextMenuButtonRef"
+          v-oc-tooltip="contextMenuLabel"
+          :aria-label="contextMenuLabel"
+          class="groups-table-btn-action-dropdown"
+          appearance="raw"
+          @click.stop.prevent="
+            showContextMenuOnBtnClick(
+              `context-menu-drop-ref-${resourceDomSelector(item)}`,
+              $event,
+              item
+            )
+          "
+        >
+          <oc-icon name="more-2" />
+        </oc-button>
+        <oc-drop
+          :ref="`context-menu-drop-ref-${resourceDomSelector(item)}`"
+          :drop-id="`context-menu-drop-${resourceDomSelector(item)}`"
+          :toggle="`#context-menu-trigger-${resourceDomSelector(item)}`"
+          :popper-options="popperOptions"
+          mode="click"
+          close-on-click
+          padding-size="small"
+          @click.stop.prevent
+        >
+          <!-- @slot Add context actions that open in a dropdown when clicking on the "three dots" button -->
+          <slot name="contextMenu" :group="item" />
+        </oc-drop>
         <!-- Editing groups is currently not supported by backend
       <oc-button v-oc-tooltip="$gettext('Edit')" class="oc-ml-s" @click="$emit('clickEdit', item)">
         <oc-icon size="small" name="pencil" />
@@ -71,21 +106,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { eventBus } from 'web-pkg'
+import { displayPositionedDropdown, eventBus, popperOptions as defaultPopperOptions } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { extractDomSelector } from 'web-client/src/helpers'
+import { Group } from 'web-client/src/generated'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'GroupsList',
   props: {
     groups: {
-      type: Array,
+      type: Array as PropType<Group[]>,
       required: true
     },
     selectedGroups: {
-      type: Array,
+      type: Array as PropType<Group[]>,
       required: true
     },
     headerPosition: {
@@ -95,13 +133,66 @@ export default defineComponent({
   },
   emits: ['toggleSelectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
   setup(props, { emit }) {
-    const showDetails = (group) => {
-      emit('unSelectAllGroups')
-      emit('toggleSelectGroup', group)
-      eventBus.publish(SideBarEventTopics.open)
+    const { $gettext } = useGettext()
+    const resourceDomSelector = (group) => extractDomSelector(group.id)
+    const groupRefs = {}
+    for (const group of props.groups) {
+      groupRefs[`context-menu-drop-ref-${resourceDomSelector(group)}`] = ref(undefined)
     }
 
-    return { showDetails }
+    const contextMenuButtonRef = ref(undefined)
+    const contextMenuLabel = computed(() => $gettext('Show context menu'))
+
+    const isGroupSelected = (group) => {
+      return props.selectedGroups.some((s) => s.id === group.id)
+    }
+    const selectGroup = (group) => {
+      emit('unSelectAllGroups')
+      emit('toggleSelectGroup', group)
+    }
+    const showDetails = (group) => {
+      selectGroup(group)
+      eventBus.publish(SideBarEventTopics.open)
+    }
+    const rowClicked = (data) => {
+      const group = data[0]
+      selectGroup(group)
+    }
+    const popperOptions = computed(() => defaultPopperOptions)
+    const showContextMenuOnBtnClick = (id, event, group) => {
+      const dropdown = unref(unref(groupRefs)[id]).tippy
+      if (dropdown === undefined) {
+        return
+      }
+      if (!isGroupSelected(group)) {
+        selectGroup(group)
+      }
+      displayPositionedDropdown(dropdown, event, unref(contextMenuButtonRef))
+    }
+    const showContextMenuOnRightClick = (row, event, group) => {
+      event.preventDefault()
+      const dropdown = row.$el.getElementsByClassName('groups-table-btn-action-dropdown')[0]
+      if (dropdown === undefined) {
+        return
+      }
+      if (!isGroupSelected(group)) {
+        selectGroup(group)
+      }
+      displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
+    }
+
+    return {
+      ...groupRefs,
+      resourceDomSelector,
+      showDetails,
+      rowClicked,
+      isGroupSelected,
+      popperOptions,
+      showContextMenuOnBtnClick,
+      showContextMenuOnRightClick,
+      contextMenuButtonRef,
+      contextMenuLabel
+    }
   },
   data() {
     return {
@@ -181,7 +272,7 @@ export default defineComponent({
   },
   mounted() {
     this.$nextTick(() => {
-      this.markInstance = new Mark(this.$refs.table.$el)
+      this.markInstance = new Mark(this.$refs.tableRef.$el)
     })
   },
   methods: {
