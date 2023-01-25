@@ -80,7 +80,7 @@ describe('GroupsList', () => {
     const groups = getGroupMocks()
     const eventBusSpy = jest.spyOn(eventBus, 'publish')
     const { wrapper } = getWrapper({ mountType: mount, props: { groups } })
-    await wrapper.find(`#group-details-trigger-${groups[0].id}`).trigger('click')
+    await wrapper.find('.groups-table-btn-details').trigger('click')
     expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.open)
   })
 })

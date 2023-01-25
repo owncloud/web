@@ -164,6 +164,7 @@
         <context-menu-quick-action
           ref="contextMenuButton"
           :item="item"
+          :resource-dom-selector="resourceDomSelector"
           class="resource-table-btn-action-dropdown"
           @quickActionClicked="showContextMenuOnBtnClick($event, item)"
         >

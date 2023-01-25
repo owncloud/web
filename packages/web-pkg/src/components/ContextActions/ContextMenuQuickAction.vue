@@ -39,6 +39,11 @@ export default defineComponent({
     item: {
       type: Object,
       required: true
+    },
+    resourceDomSelector: {
+      type: Function,
+      required: false,
+      default: (resource) => extractDomSelector(resource.id)
     }
   },
   emits: ['quickActionClicked'],
@@ -46,9 +51,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const popperOptions = computed(() => defaultPopperOptions)
-    const resourceDomSelector = (item) => extractDomSelector(item.id)
-
-    return { resourceDomSelector, contextMenuLabel, popperOptions }
+    return { contextMenuLabel, popperOptions }
   }
 })
 </script>
