@@ -195,31 +195,29 @@ export default defineComponent({
           this.configuration?.options?.sharingRecipientsPerPage
         )
 
-        // fixMe: head-breaking logic
         const users = recipients.exact.users
           .concat(recipients.users)
           .filter((user) => user.value.shareWith !== this.user.id)
           .map((result) => {
-            // Inject the correct share type here if space
-            const shareType = this.resourceIsSpace ? ShareTypes.space.value : result.value.shareType
-            return {
-              ...result,
-              value: {
-                ...result.value,
-                shareType
-              }
+            if (this.resourceIsSpace) {
+              result.value.shareType = ShareTypes.spaceUser.value
             }
+            return result
           })
-
-        const groups = recipients.exact.groups.concat(recipients.groups)
+        const groups = recipients.exact.groups.concat(recipients.groups).map((result) => {
+          if (this.resourceIsSpace) {
+            result.value.shareType = ShareTypes.spaceGroup.value
+          }
+          return result
+        })
         const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
-        this.autocompleteResults = users.concat(groups, remotes).filter((collaborator) => {
+        this.autocompleteResults = [...users, ...groups, ...remotes].filter((collaborator) => {
           const selected = this.selectedCollaborators.find((selectedCollaborator) => {
             return (
               collaborator.value.shareWith === selectedCollaborator.value.shareWith &&
-              parseInt(collaborator.value.shareType, 10) ===
-                parseInt(selectedCollaborator.value.shareType, 10)
+              parseInt(collaborator.value.shareType) ===
+                parseInt(selectedCollaborator.value.shareType)
             )
           })
 
@@ -230,16 +228,7 @@ export default defineComponent({
             const shareCollaboratorIdentifier =
               share.collaborator.name || share.collaborator.displayName
             const isSameByIdentifier = collaborator.value.shareWith === shareCollaboratorIdentifier
-            const isSameByType = parseInt(collaborator.value.shareType, 10) === share.shareType
-            const isGroupShareCollaborator =
-              parseInt(collaborator.value.shareType, 10) == ShareTypes.group.value
-
-            // we cannot differentiate by isSameByType for spaces group collaborators, collaborators shareType and group shareType is not the same
-            // should be part of head-breaking fixMe above..
-            if (this.resourceIsSpace && isGroupShareCollaborator && isSameByIdentifier) {
-              return true
-            }
-
+            const isSameByType = parseInt(collaborator.value.shareType) === share.shareType
             return isSameByIdentifier && isSameByType
           })
 

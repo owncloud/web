@@ -21,7 +21,7 @@ import {
 const memberMocks = {
   [spaceRoleManager.name]: {
     id: '1',
-    shareType: ShareTypes.space.value,
+    shareType: ShareTypes.spaceUser.value,
     collaborator: {
       name: 'alice',
       displayName: 'alice'
@@ -32,7 +32,7 @@ const memberMocks = {
   },
   [spaceRoleEditor.name]: {
     id: '2',
-    shareType: ShareTypes.space.value,
+    shareType: ShareTypes.spaceUser.value,
     collaborator: {
       onPremisesSamAccountName: 'Einstein',
       displayName: 'einstein'
@@ -43,7 +43,7 @@ const memberMocks = {
   },
   [spaceRoleViewer.name]: {
     id: '3',
-    shareType: ShareTypes.space.value,
+    shareType: ShareTypes.spaceUser.value,
     collaborator: {
       onPremisesSamAccountName: 'Marie',
       displayName: 'marie'

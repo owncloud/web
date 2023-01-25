@@ -35,7 +35,9 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
       const shareTypes = ShareTypes.authenticated
-        .filter((type) => type.value !== ShareTypes.space.value)
+        .filter(
+          (type) => ![ShareTypes.spaceUser.value, ShareTypes.spaceGroup.value].includes(type.value)
+        )
         .map((share) => share.value)
         .join(',')
 

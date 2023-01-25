@@ -105,7 +105,7 @@ describe('vuex store mutations', () => {
     it('removes an outgoing space share', () => {
       const shareToRemove = {
         id: 1,
-        shareType: ShareTypes.space.value,
+        shareType: ShareTypes.spaceUser.value,
         collaborator: { name: 'admin' }
       }
       const state = { currentFileOutgoingShares: [shareToRemove] }
@@ -127,7 +127,7 @@ describe('vuex store mutations', () => {
     it('updates an outgoing space share', () => {
       const share = {
         id: 1,
-        shareType: ShareTypes.space.value,
+        shareType: ShareTypes.spaceUser.value,
         permissions: 1,
         collaborator: { name: 'admin' }
       }

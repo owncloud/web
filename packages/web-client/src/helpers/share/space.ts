@@ -20,8 +20,26 @@ export function buildSpaceShare(s, storageId): Share {
       break
   }
 
+  let shareType
+  if (Object.prototype.hasOwnProperty.call(s, 'share_type')) {
+    shareType = parseInt(s.share_type)
+  } else if (Object.prototype.hasOwnProperty.call(s, 'kind')) {
+    switch (s.kind) {
+      case 'user': {
+        shareType = ShareTypes.spaceUser.value
+        break
+      }
+      case 'group': {
+        shareType = ShareTypes.spaceGroup.value
+        break
+      }
+      default:
+        break
+    }
+  }
+
   return {
-    shareType: ShareTypes.space.value,
+    shareType,
     id: storageId,
     collaborator: {
       name: s.onPremisesSamAccountName,
