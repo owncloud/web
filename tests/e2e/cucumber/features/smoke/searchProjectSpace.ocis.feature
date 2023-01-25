@@ -7,12 +7,12 @@ Feature: Search in the project space
     And "Admin" assigns following roles to the users
       | id    | role       |
       | Alice | SpaceAdmin |
+    And "Alice" creates the following project space using API
+      | name | id     |
+      | team | team.1 |
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" navigates to the projects space page
-    And "Alice" creates the following project spaces
-      | name | id     |
-      | team | team.1 |
     And "Alice" navigates to the project space "team.1"
     And "Alice" creates the following resources
       | resource                   | type   |

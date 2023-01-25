@@ -137,7 +137,6 @@ export const changeSpaceDescription = async (args: {
         resp.status() === 200 &&
         resp.request().method() === 'GET'
     )
-
   await Promise.all([waitForUpdate(), page.locator(editSpacesDescription).click()])
   await page.locator(spacesDescriptionInputArea).fill(value)
   await Promise.all([waitForUpdate(), page.locator(actionConfirmButton).click()])
