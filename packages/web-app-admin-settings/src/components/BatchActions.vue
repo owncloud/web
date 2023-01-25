@@ -1,14 +1,14 @@
 <template>
   <div>
     <oc-list
-      id="oc-groups-appbar-batch-actions"
-      :class="{ 'oc-groups-appbar-batch-actions-squashed': limitedScreenSpace }"
+      id="oc-appbar-batch-actions"
+      :class="{ 'oc-appbar-batch-actions-squashed': limitedScreenSpace }"
     >
       <action-menu-item
         v-for="(action, index) in actions"
         :key="`action-${index}`"
         :action="action"
-        :items="selectedGroups"
+        :items="selectedItems"
         appearance="outline"
         class="batch-actions oc-mr-s"
         :show-tooltip="limitedScreenSpace"
@@ -19,17 +19,18 @@
 
 <script lang="ts">
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
-import Delete from '../../mixins/groups/delete'
-import { computed, defineComponent, getCurrentInstance, PropType } from 'vue'
-import { Group } from 'web-client/src/generated'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'ActionsPanel',
+  name: 'BatchActions',
   components: { ActionMenuItem },
-  mixins: [Delete],
   props: {
-    selectedGroups: {
-      type: Array as PropType<Group[]>,
+    selectedItems: {
+      type: Array,
+      required: true
+    },
+    actions: {
+      type: Array,
       required: true
     },
     limitedScreenSpace: {
@@ -37,21 +38,12 @@ export default defineComponent({
       default: false,
       required: false
     }
-  },
-  setup(props) {
-    const instance = getCurrentInstance().proxy as any
-    const actions = computed(() => {
-      return [...instance.$_delete_items].filter((item) =>
-        item.isEnabled({ resources: props.selectedGroups })
-      )
-    })
-    return { actions }
   }
 })
 </script>
 
 <style lang="scss">
-#oc-groups-appbar-batch-actions {
+#oc-appbar-batch-actions {
   display: block;
   li {
     float: left !important;
@@ -65,7 +57,7 @@ export default defineComponent({
     display: flex;
   }
 }
-.oc-groups-appbar-batch-actions-squashed .oc-files-context-action-label {
+.oc-appbar-batch-actions-squashed .oc-files-context-action-label {
   display: none;
 }
 </style>

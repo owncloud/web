@@ -22,7 +22,11 @@
             >
               <oc-icon name="close" />
             </oc-button>
-            <batch-actions class="oc-ml-s" :selected-groups="selectedGroups" />
+            <batch-actions
+              class="oc-ml-s"
+              :selected-items="selectedGroups"
+              :actions="batchActions"
+            />
           </div>
           <div v-else>
             <oc-button variation="primary" appearance="filled" @click="toggleCreateGroupModal">
@@ -72,9 +76,17 @@
 import GroupsList from '../components/Groups/GroupsList.vue'
 import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import ContextActions from '../components/Groups/ContextActions.vue'
-import BatchActions from '../components/Groups/BatchActions.vue'
+import BatchActions from '../components/BatchActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { defineComponent, ref, unref, onBeforeUnmount, onMounted } from 'vue'
+import {
+  computed,
+  defineComponent,
+  ref,
+  getCurrentInstance,
+  unref,
+  onBeforeUnmount,
+  onMounted
+} from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions } from 'vuex'
@@ -83,6 +95,7 @@ import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
 import { useGraphClient } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
+import Delete from '../mixins/groups/delete'
 
 export default defineComponent({
   components: {
@@ -93,7 +106,9 @@ export default defineComponent({
     BatchActions,
     ContextActions
   },
+  mixins: [Delete],
   setup() {
+    const instance = getCurrentInstance().proxy as any
     const groups = ref([])
     let loadResourcesEventToken
     const template = ref()
@@ -113,6 +128,12 @@ export default defineComponent({
     const calculateListHeaderPosition = () => {
       listHeaderPosition.value = unref(template)?.$refs?.appBar?.getBoundingClientRect()?.height
     }
+
+    const batchActions = computed(() => {
+      return [...instance.$_delete_items].filter((item) =>
+        item.isEnabled({ resources: unref(selectedGroups) })
+      )
+    })
 
     onMounted(async () => {
       await loadResourcesTask.perform()
@@ -136,7 +157,8 @@ export default defineComponent({
       template,
       loadResourcesTask,
       graphClient,
-      listHeaderPosition
+      listHeaderPosition,
+      batchActions
     }
   },
   computed: {
