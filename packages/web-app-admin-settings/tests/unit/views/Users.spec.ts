@@ -211,21 +211,9 @@ describe('Users view', () => {
       )
 
       const { wrapper } = getMountedWrapper({
-        graph,
-        data: {
-          selectedUsers: [
-            {
-              ...getDefaultUser(),
-              quota: {
-                remaining: 1000000000,
-                state: 'normal',
-                total: 1000000000,
-                used: 0
-              }
-            }
-          ]
-        }
+        graph
       })
+
       const busStub = jest.spyOn(eventBus, 'publish')
       const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
       const updateUserDriveStub = jest.spyOn(wrapper.vm, 'updateUserDrive')

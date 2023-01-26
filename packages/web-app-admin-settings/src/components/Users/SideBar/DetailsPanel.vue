@@ -82,7 +82,7 @@ export default defineComponent({
         this.roles.find((role) => role.id === assignedRole.appRoleId)?.displayName || ''
       )
     }
-  },
+  }
 })
 </script>
 <style lang="scss">
