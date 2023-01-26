@@ -41,6 +41,7 @@
         @optionChange="collaboratorRoleChanged"
       />
       <expiration-datepicker
+        v-if="!saving"
         :share-types="selectedCollaborators.map((c) => c.value.shareType)"
         @optionChange="collaboratorExpiryChanged"
       />
