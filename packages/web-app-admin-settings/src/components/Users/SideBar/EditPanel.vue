@@ -124,6 +124,7 @@ export default defineComponent({
       const { memberOf: selectedGroups } = unref(editUser)
       return props.groups
         .filter((g) => !selectedGroups.some((s) => s.id === g.id))
+        .filter((g) => !selectedGroups.some((s) => s.id === g.id))
         .sort((a, b) => a.displayName.localeCompare(b.displayName))
     })
 
@@ -147,8 +148,10 @@ export default defineComponent({
       return cloneDeep({ ...this.user, passwordProfile: { password: '' } })
     },
     selectedRoleName() {
-      return this.roles.find((role) => role.id === this.editUser.appRoleAssignments[0].appRoleId)
-        .displayName
+      return this.$gettext(
+        this.roles.find((role) => role.id === this.editUser.appRoleAssignments[0].appRoleId)
+          .displayName
+      )
     }
   },
   watch: {
@@ -201,8 +204,7 @@ export default defineComponent({
     onUpdateRole(role) {
       this.editUser.appRoleAssignments[0].appRoleId = role.id
     },
-    onUpdatePassword(password){
-      console.log("TEST")
+    onUpdatePassword(password) {
       this.editUser.passwordProfile = {
         password
       }

@@ -44,7 +44,7 @@
         <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
       </template>
       <template #role="{ item }">
-        <template v-if="item.appRoleAssignments">{{ getRoleDisplayName(item) }}</template>
+        <template v-if="item.appRoleAssignments">{{ getRoleDisplayNameByUser(item) }}</template>
       </template>
       <template #actions="{ item }">
         <oc-button
@@ -231,13 +231,8 @@ export default defineComponent({
         let a, b
 
         if (prop === 'role') {
-          a = this.$gettext(
-            this.roles.find((role) => role.id === user1.appRoleAssignments[0].appRoleId).displayName
-          )
-
-          b = this.$gettext(
-            this.roles.find((role) => role.id === user2.appRoleAssignments[0].appRoleId).displayName
-          )
+          a = this.getRoleDisplayNameByUser(user1)
+          b = this.getRoleDisplayNameByUser(user2)
         } else {
           a = user1[prop] || ''
           b = user2[prop] || ''
@@ -253,7 +248,7 @@ export default defineComponent({
     getSelectUserLabel(user) {
       return this.$gettext('Select %{ user }', { user: user.displayName }, true)
     },
-    getRoleDisplayName(user) {
+    getRoleDisplayNameByUser(user) {
       const assignedRole = user.appRoleAssignments[0]
 
       return this.$gettext(

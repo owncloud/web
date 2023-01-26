@@ -374,10 +374,6 @@ export default defineComponent({
           return omit(user, ['drive', 'appRoleAssignments', 'memberOf'])
         }
 
-        console.log((graphEditUserRawObjectExtractor(editUser)))
-        console.log(graphEditUserRawObjectExtractor(user))
-
-
         if (
           !isEqual(graphEditUserRawObjectExtractor(user), graphEditUserRawObjectExtractor(editUser))
         ) {
