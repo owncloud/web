@@ -124,7 +124,6 @@ export default defineComponent({
       const { memberOf: selectedGroups } = unref(editUser)
       return props.groups
         .filter((g) => !selectedGroups.some((s) => s.id === g.id))
-        .filter((g) => !selectedGroups.some((s) => s.id === g.id))
         .sort((a, b) => a.displayName.localeCompare(b.displayName))
     })
 
