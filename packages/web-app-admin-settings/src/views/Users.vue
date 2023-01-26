@@ -437,13 +437,15 @@ export default defineComponent({
       }
     },
     async updateUserGroupAssignments(user, editUser) {
-      const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
-        return !user.memberOf.some((g) => g.id === editUserGroup.id)
-      })
+      const groupsToAdd =
+        editUser.memberOf?.filter((editUserGroup) => {
+          return !user.memberOf?.some((g) => g.id === editUserGroup.id)
+        }) || []
 
-      const groupsToDelete = user.memberOf.filter((editUserGroup) => {
-        return !editUser.memberOf.some((g) => g.id === editUserGroup.id)
-      })
+      const groupsToDelete =
+        user.memberOf?.filter((editUserGroup) => {
+          return !editUser.memberOf?.some((g) => g.id === editUserGroup.id)
+        }) || []
 
       for (const groupToAdd of groupsToAdd) {
         await this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
