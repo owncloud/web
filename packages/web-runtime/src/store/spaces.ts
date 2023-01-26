@@ -146,7 +146,7 @@ const actions = {
     const spaceShares = []
 
     for (const role of Object.keys(space.spaceRoles)) {
-      for (const { kind, id } of space.spaceRoles[role]) {
+      for (const { kind, id, expirationDate } of space.spaceRoles[role]) {
         const client = unref(graphClient)
         let prom: Promise<AxiosResponse>
         switch (kind) {
@@ -161,7 +161,7 @@ const actions = {
         }
 
         prom.then((resolved) => {
-          spaceShares.push(buildSpaceShare({ ...resolved.data, role }, space.id))
+          spaceShares.push(buildSpaceShare({ ...resolved.data, role, expirationDate }, space.id))
         })
 
         promises.push(prom)

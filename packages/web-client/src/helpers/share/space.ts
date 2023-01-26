@@ -29,6 +29,8 @@ export function buildSpaceShare(s, storageId): Share {
       additionalInfo: null
     },
     permissions,
-    role
+    role,
+    expiration: s.expirationDate,
+    expires: s.expirationDate
   }
 }
