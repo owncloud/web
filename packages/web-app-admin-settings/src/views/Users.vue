@@ -403,6 +403,8 @@ export default defineComponent({
 
         eventBus.publish('sidebar.entity.saved')
         eventBus.publish('app.admin-settings.users.user.updated', updatedUser)
+
+        return updatedUser
       } catch (error) {
         console.error(error)
         this.showMessage({

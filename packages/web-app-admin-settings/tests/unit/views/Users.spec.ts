@@ -36,6 +36,7 @@ const getDefaultUser = () => {
       }
     ]
   }
+}
 
 const getDefaultApplications = () => {
   return [
@@ -149,6 +150,12 @@ describe('Users view', () => {
         displayName: 'administrator',
         id: '1',
         mail: 'administrator@example.org',
+        memberOf: [
+          {
+            displayName: 'admins',
+            id: '1'
+          }
+        ],
         drive: {
           id: '1',
           name: 'admin',
@@ -164,6 +171,7 @@ describe('Users view', () => {
       const graph = getDefaultGraphMock()
       graph.users.editUser.mockImplementation(() => mockAxiosResolve())
       graph.users.createUserAppRoleAssignment.mockImplementation(() => mockAxiosResolve())
+      graph.groups.addMember.mockImplementation(() => mockAxiosResolve())
       graph.drives.updateDrive.mockImplementation(() =>
         mockAxiosResolve({
           id: '1',
@@ -191,7 +199,12 @@ describe('Users view', () => {
           },
           id: '1',
           mail: 'administrator@example.org',
-          memberOf: [],
+          memberOf: [
+            {
+              displayName: 'admins',
+              id: '1'
+            }
+          ],
           onPremisesSamAccountName: 'admin',
           surname: 'Admin'
         })
@@ -215,26 +228,30 @@ describe('Users view', () => {
       })
       const busStub = jest.spyOn(eventBus, 'publish')
       const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
-      const graphUpdateDriveStub = jest.spyOn(wrapper.vm.graphClient.drives, 'updateDrive')
-      const graphUpdateCreateUserAppRoleAssignmentStub = jest.spyOn(
-        wrapper.vm.graphClient.users,
-        'createUserAppRoleAssignment'
+      const updateUserDriveStub = jest.spyOn(wrapper.vm, 'updateUserDrive')
+      const updateUserGroupAssignmentsStub = jest.spyOn(wrapper.vm, 'updateUserGroupAssignments')
+      const updateUserAppRoleAssignmentsStub = jest.spyOn(
+        wrapper.vm,
+        'updateUserAppRoleAssignments'
       )
 
       await wrapper.vm.loadResourcesTask.last
-      await wrapper.vm.editUser({ user: wrapper.vm.selectedUsers[0], editUser })
-      await wrapper.vm.$nextTick()
 
-      const updatedUser = wrapper.vm.users.find((user) => user.id === editUser.id)
+      const userToUpDate = wrapper.vm.users.find((user) => user.id === '1')
+      const updatedUser = await wrapper.vm.editUser({ user: userToUpDate, editUser })
 
+      expect(updatedUser.id).toEqual('1')
       expect(updatedUser.displayName).toEqual('administrator')
       expect(updatedUser.mail).toEqual('administrator@example.org')
       expect(updatedUser.appRoleAssignments[0].appRoleId).toEqual('2')
       expect(updatedUser.drive.quota.total).toEqual(1000000000)
+      expect(updatedUser.memberOf[0].id).toEqual('1')
+
       expect(busStub).toHaveBeenCalledTimes(2)
-      expect(graphUpdateDriveStub).toHaveBeenCalled()
+      expect(updateUserDriveStub).toHaveBeenCalled()
       expect(updateSpaceFieldStub).toHaveBeenCalled()
-      expect(graphUpdateCreateUserAppRoleAssignmentStub).toHaveBeenCalled()
+      expect(updateUserGroupAssignmentsStub).toHaveBeenCalled()
+      expect(updateUserAppRoleAssignmentsStub).toHaveBeenCalled()
     })
 
     it('should show message on error', async () => {
@@ -248,43 +265,6 @@ describe('Users view', () => {
       await wrapper.vm.editUser({
         editUser: {}
       })
-
-      expect(showMessageStub).toHaveBeenCalled()
-    })
-  })
-
-  describe('method "editUserGroupAssignments"', () => {
-    const editUser = {
-      id: '1',
-      memberOf: [
-        {
-          displayName: 'group',
-          id: '04114ac6-f050-41d2-98db-6f016abccf2c'
-        }
-      ]
-    }
-    it('should emit event on success', async () => {
-      const { wrapper } = getMountedWrapper()
-      const busStub = jest.spyOn(eventBus, 'publish')
-      await wrapper.vm.loadResourcesTask.last
-      await wrapper.vm.editUserGroupAssignments(editUser)
-
-      expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
-      expect(busStub).toHaveBeenCalledWith('sidebar.entity.saved')
-    })
-
-    it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
-
-      const graph = getDefaultGraphMock()
-      graph.groups.addMember.mockImplementation(() => mockAxiosReject())
-      const { wrapper } = getMountedWrapper({ graph })
-      const showMessageStub = jest
-        .spyOn(wrapper.vm, 'showMessage')
-        .mockImplementation(() => undefined)
-
-      await wrapper.vm.loadResourcesTask.last
-      await wrapper.vm.editUserGroupAssignments(editUser)
 
       expect(showMessageStub).toHaveBeenCalled()
     })
@@ -391,7 +371,7 @@ function getMountedWrapper({ data = {}, graph = getDefaultGraphMock() } = {}) {
     mocks,
     wrapper: shallowMount(Users, {
       data: () => {
-      return { ...data }
+        return { ...data }
       },
       global: {
         plugins: [...defaultPlugins(), store],
