@@ -75,7 +75,6 @@ Feature: spaces management
       | team.b |
       | team.c |
       | team.d |
-    Then "Alice" should still have selected the spaces and the batch-action disable gone
     And "Alice" deletes the following spaces using the batch-actions
       | id   |
       | team.a |

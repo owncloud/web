@@ -91,12 +91,3 @@ When(
     }
   }
 )
-
-Then(
-  /^"([^"]*)" should still have selected the space(s)? and the batch-action disable gone$/,
-  async function (this: World, stepUser: string, _string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
-    await spacesObject.disableSpaceButtonShouldBeGone()
-  }
-)

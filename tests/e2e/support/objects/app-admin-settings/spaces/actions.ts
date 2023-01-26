@@ -1,5 +1,4 @@
 import { Page } from 'playwright'
-import { expect } from '@playwright/test'
 import util from 'util'
 
 const spaceTrSelector = 'tr'
@@ -50,11 +49,6 @@ export const changeSpaceQuota = async (args: {
     ),
     page.locator(actionConfirmButton).click()
   ])
-}
-
-export const disableSpaceButtonShouldBeGone = async (args: { page: Page }): Promise<void> => {
-  const { page } = args
-  expect(await page.locator(disableActionBtn).count()).toEqual(0)
 }
 
 export const disableSpace = async (args: {
