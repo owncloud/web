@@ -23,10 +23,11 @@
             >
               <oc-icon name="close" />
             </oc-button>
-            <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteUserModal">
-              <oc-icon name="delete-bin" />
-              <span v-text="$gettext('Delete')" />
-            </oc-button>
+            <batch-actions
+              class="oc-ml-s"
+              :selected-items="selectedUsers"
+              :actions="batchActions"
+            />
           </div>
           <div v-else>
             <oc-button variation="primary" appearance="filled" @click="toggleCreateUserModal">
@@ -57,7 +58,11 @@
             @toggleSelectUser="toggleSelectUser"
             @toggleSelectAllUsers="toggleSelectAllUsers"
             @unSelectAllUsers="unselectAllUsers"
-          />
+          >
+            <template #contextMenu>
+              <context-actions :items="selectedUsers" />
+            </template>
+          </UsersList>
         </div>
       </template>
     </app-template>
@@ -67,12 +72,6 @@
       @cancel="toggleCreateUserModal"
       @confirm="createUser"
     />
-    <delete-user-modal
-      v-if="deleteUserModalOpen"
-      :users="selectedUsers"
-      @cancel="toggleDeleteUserModal"
-      @confirm="deleteUsers"
-    />
   </div>
 </template>
 
@@ -81,9 +80,11 @@ import isEqual from 'lodash-es/isEqual'
 import omit from 'lodash-es/omit'
 import UsersList from '../components/Users/UsersList.vue'
 import CreateUserModal from '../components/Users/CreateUserModal.vue'
-import DeleteUserModal from '../components/Users/DeleteUserModal.vue'
+import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
+import BatchActions from '../components/BatchActions.vue'
+import Delete from '../mixins/users/delete'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import { defineComponent, ref, onBeforeUnmount, onMounted, unref, watch } from 'vue'
@@ -93,6 +94,8 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { useGraphClient } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
+import { computed } from 'vue'
+import { getCurrentInstance } from 'vue-demi'
 
 export default defineComponent({
   name: 'UsersView',
@@ -101,9 +104,12 @@ export default defineComponent({
     UsersList,
     NoContentMessage,
     CreateUserModal,
-    DeleteUserModal
+    BatchActions,
+    ContextActions
   },
+  mixins: [Delete],
   setup() {
+    const instance = getCurrentInstance().proxy as any
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
@@ -114,6 +120,7 @@ export default defineComponent({
     const selectedUsers = ref([])
     const loadedUser = ref(null)
     const sideBarLoading = ref(false)
+    const createUserModalOpen = ref(false)
     const listHeaderPosition = ref(0)
     const template = ref()
     let loadResourcesEventToken
@@ -172,10 +179,18 @@ export default defineComponent({
     const calculateListHeaderPosition = () => {
       listHeaderPosition.value = unref(template)?.$refs?.appBar?.getBoundingClientRect()?.height
     }
+
+    const batchActions = computed(() => {
+      return [...instance.$_delete_items].filter((item) =>
+        item.isEnabled({ resources: unref(selectedUsers) })
+      )
+    })
+
     onMounted(async () => {
       await loadResourcesTask.perform()
       loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
         loadResourcesTask.perform()
+        selectedUsers.value = []
       })
       userUpdatedEventToken = eventBus.subscribe(
         'app.admin-settings.users.user.updated',
@@ -205,13 +220,9 @@ export default defineComponent({
       loadAdditionalUserDataTask,
       graphClient,
       accessToken,
-      listHeaderPosition
-    }
-  },
-  data: function () {
-    return {
-      createUserModalOpen: false,
-      deleteUserModalOpen: false
+      listHeaderPosition,
+      createUserModalOpen,
+      batchActions
     }
   },
   computed: {
@@ -289,65 +300,6 @@ export default defineComponent({
     },
     toggleCreateUserModal() {
       this.createUserModalOpen = !this.createUserModalOpen
-    },
-    toggleDeleteUserModal() {
-      this.deleteUserModalOpen = !this.deleteUserModalOpen
-    },
-    async deleteUsers(usersToDelete) {
-      if (usersToDelete.some((user) => user.id === this.currentUser.uuid)) {
-        this.showMessage({
-          title: this.$gettext('Self deletion is not allowed'),
-          status: 'danger'
-        })
-      }
-
-      usersToDelete = usersToDelete.filter((user) => user.id !== this.currentUser.uuid)
-
-      const promises = usersToDelete.map((user) => this.graphClient.users.deleteUser(user.id))
-
-      if (!promises.length) {
-        return this.toggleDeleteUserModal()
-      }
-
-      try {
-        await Promise.all(promises)
-        this.showMessage({
-          title: this.$gettextInterpolate(
-            this.$ngettext(
-              'User "%{user}" was deleted successfully',
-              '%{userCount} users were deleted successfully',
-              usersToDelete.length
-            ),
-            {
-              userCount: usersToDelete.length,
-              user: usersToDelete[0].onPremisesSamAccountName
-            },
-            true
-          )
-        })
-        this.users = this.users.filter((user) => {
-          return !usersToDelete.find((deletedUser) => user.id === deletedUser.id)
-        })
-        this.selectedUsers = []
-        this.toggleDeleteUserModal()
-      } catch (error) {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettextInterpolate(
-            this.$ngettext(
-              'Failed to delete user "%{user}"',
-              'Failed to delete %{userCount} users',
-              usersToDelete.length
-            ),
-            {
-              userCount: usersToDelete.length,
-              user: usersToDelete.onPremisesSamAccountName
-            },
-            true
-          ),
-          status: 'danger'
-        })
-      }
     },
     async createUser(user) {
       try {

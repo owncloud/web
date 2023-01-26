@@ -1,0 +1,6 @@
+Enhancement: Add context menu to users
+
+A context menu has been added to the users management page in the admin settings. It can be toggled via right-click and quick-action.
+
+https://github.com/owncloud/web/pull/8324
+https://github.com/owncloud/web/issues/8323
