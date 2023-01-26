@@ -1,21 +1,29 @@
 import UsersList from '../../../../src/components/Users/UsersList.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import { displayPositionedDropdown, eventBus } from 'web-pkg'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+
+const getUserMocks = () => [{ id: '1', displayName: 'jan' }]
+jest.mock('web-pkg/src/helpers', () => ({
+  ...jest.requireActual('web-pkg/src/helpers'),
+  displayPositionedDropdown: jest.fn()
+}))
 
 describe('UsersList', () => {
   describe('computed method "allUsersSelected"', () => {
     it('should be true if all users are selected', () => {
       const { wrapper } = getWrapper({
-        propsData: {
-          users: [{ id: '1', displayName: 'jan' }],
-          selectedUsers: [{ id: '1', displayName: 'jan' }]
+        props: {
+          users: getUserMocks(),
+          selectedUsers: getUserMocks()
         }
       })
       expect(wrapper.vm.allUsersSelected).toBeTruthy()
     })
     it('should be false if not every user is selected', () => {
       const { wrapper } = getWrapper({
-        propsData: {
-          users: [{ id: '1', displayName: 'jan' }],
+        props: {
+          users: getUserMocks(),
           selectedUsers: []
         }
       })
@@ -95,11 +103,47 @@ describe('UsersList', () => {
       ).toEqual([])
     })
   })
+
+  it('emits events on row click', () => {
+    const users = getUserMocks()
+    const { wrapper } = getWrapper({ props: { users } })
+    wrapper.vm.rowClicked(users[0])
+    expect(wrapper.emitted('unSelectAllUsers').length).toBeTruthy()
+    expect(wrapper.emitted('toggleSelectUser')).toBeTruthy()
+  })
+  it('should show the context menu on right click', async () => {
+    const users = getUserMocks()
+    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const { wrapper } = getWrapper({ mountType: mount, props: { users } })
+    await wrapper.find(`[data-item-id="${users[0].id}"]`).trigger('contextmenu')
+    expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
+  })
+  it('should show the context menu on context menu button click', async () => {
+    const users = getUserMocks()
+    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const { wrapper } = getWrapper({ mountType: mount, props: { users } })
+    await wrapper.find('.users-table-btn-action-dropdown').trigger('click')
+    expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
+  })
+  it('should show the user details on details button click', async () => {
+    const users = getUserMocks()
+    const eventBusSpy = jest.spyOn(eventBus, 'publish')
+    const { wrapper } = getWrapper({ mountType: mount, props: { users } })
+    await wrapper.find('.users-table-btn-details').trigger('click')
+    expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.open)
+  })
+  it('should show the user edit panel on edit button click', async () => {
+    const users = getUserMocks()
+    const eventBusSpy = jest.spyOn(eventBus, 'publish')
+    const { wrapper } = getWrapper({ mountType: mount, props: { users } })
+    await wrapper.find('.users-table-btn-edit').trigger('click')
+    expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.openWithPanel, 'EditPanel')
+  })
 })
 
-function getWrapper({ propsData = {} } = {}) {
+function getWrapper({ mountType = shallowMount, props = {} } = {}) {
   return {
-    wrapper: shallowMount(UsersList, {
+    wrapper: mountType(UsersList, {
       props: {
         users: [],
         selectedUsers: [],
@@ -122,10 +166,13 @@ function getWrapper({ propsData = {} } = {}) {
           }
         ],
         headerPosition: 0,
-        ...propsData
+        ...props
       },
       global: {
-        plugins: [...defaultPlugins()]
+        plugins: [...defaultPlugins()],
+        stubs: {
+          OcCheckbox: true
+        }
       }
     })
   }

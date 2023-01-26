@@ -8,7 +8,7 @@
       autocomplete="off"
     />
     <oc-table
-      ref="table"
+      ref="tableRef"
       class="users-table"
       :sort-by="sortBy"
       :sort-dir="sortDir"
@@ -17,7 +17,10 @@
       :highlighted="highlighted"
       :sticky="true"
       :header-position="headerPosition"
+      :hover="true"
       @sort="handleSort"
+      @contextmenuClicked="showContextMenuOnRightClick"
+      @highlight="rowClicked"
     >
       <template #selectHeader>
         <oc-checkbox
@@ -33,11 +36,12 @@
         <oc-checkbox
           class="oc-ml-s"
           size="large"
-          :model-value="selectedUsers"
+          :model-value="isUserSelected(item)"
           :option="item"
           :label="getSelectUserLabel(item)"
           hide-label
           @update:modelValue="$emit('toggleSelectUser', item)"
+          @click.stop
         />
       </template>
       <template #avatar="{ item }">
@@ -50,18 +54,28 @@
         <oc-button
           v-oc-tooltip="$gettext('Details')"
           appearance="raw"
-          class="oc-mr-xs quick-action-button oc-p-xs"
+          class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-details"
           @click="showDetails(item)"
         >
           <oc-icon name="information" fill-type="line" /></oc-button
         ><oc-button
           v-oc-tooltip="$gettext('Edit')"
           appearance="raw"
-          class="oc-mr-xs quick-action-button oc-p-xs"
+          class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-edit"
           @click="showEditPanel(item)"
         >
           <oc-icon name="pencil" fill-type="line" />
         </oc-button>
+        <context-menu-quick-action
+          ref="contextMenuButtonRef"
+          :item="item"
+          class="users-table-btn-action-dropdown"
+          @quickActionClicked="showContextMenuOnBtnClick($event, item)"
+        >
+          <template #contextMenu>
+            <slot name="contextMenu" :user="item" />
+          </template>
+        </context-menu-quick-action>
       </template>
       <template #footer>
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
@@ -74,18 +88,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
+import { defineComponent, PropType, ref, unref } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { eventBus } from 'web-pkg'
+import { displayPositionedDropdown, eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { User } from 'web-client/src/generated'
+import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
 export default defineComponent({
   name: 'UsersList',
+  components: { ContextMenuQuickAction },
   props: {
     users: {
-      type: Array,
+      type: Array as PropType<User[]>,
       required: true
     },
     roles: {
@@ -93,7 +109,7 @@ export default defineComponent({
       required: true
     },
     selectedUsers: {
-      type: Array,
+      type: Array as PropType<User[]>,
       required: true
     },
     headerPosition: {
@@ -103,25 +119,66 @@ export default defineComponent({
   },
   emits: ['unSelectAllUsers', 'toggleSelectAllUsers', 'toggleSelectUser'],
   setup(props, { emit }) {
-    const showDetails = (user) => {
+    const contextMenuButtonRef = ref(undefined)
+    const isUserSelected = (user) => {
+      return props.selectedUsers.some((s) => s.id === user.id)
+    }
+    const selectUser = (user) => {
       emit('unSelectAllUsers')
       emit('toggleSelectUser', user)
+    }
+
+    const showDetails = (user) => {
+      selectUser(user)
       eventBus.publish(SideBarEventTopics.open)
     }
 
     const showEditPanel = (user) => {
-      emit('unSelectAllUsers')
-      emit('toggleSelectUser', user)
+      selectUser(user)
       eventBus.publish(SideBarEventTopics.openWithPanel, 'EditPanel')
     }
 
     const showGroupAssigmentPanel = (user) => {
-      emit('unSelectAllUsers')
-      emit('toggleSelectUser', user)
+      selectUser(user)
       eventBus.publish(SideBarEventTopics.openWithPanel, 'GroupAssignmentsPanel')
     }
 
-    return { showDetails, showEditPanel, showGroupAssigmentPanel }
+    const rowClicked = (data) => {
+      const user = data[0]
+      selectUser(user)
+    }
+    const showContextMenuOnBtnClick = (data, user) => {
+      const { dropdown, event } = data
+      if (dropdown?.tippy === undefined) {
+        return
+      }
+      if (!isUserSelected(user)) {
+        selectUser(user)
+      }
+      displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
+    }
+    const showContextMenuOnRightClick = (row, event, user) => {
+      event.preventDefault()
+      const dropdown = row.$el.getElementsByClassName('users-table-btn-action-dropdown')[0]
+      if (dropdown === undefined) {
+        return
+      }
+      if (!isUserSelected(user)) {
+        selectUser(user)
+      }
+      displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
+    }
+
+    return {
+      showDetails,
+      showEditPanel,
+      showGroupAssigmentPanel,
+      isUserSelected,
+      rowClicked,
+      contextMenuButtonRef,
+      showContextMenuOnBtnClick,
+      showContextMenuOnRightClick
+    }
   },
   data() {
     return {
@@ -209,7 +266,7 @@ export default defineComponent({
   },
   mounted() {
     this.$nextTick(() => {
-      this.markInstance = new Mark(this.$refs.table.$el)
+      this.markInstance = new Mark(this.$refs.tableRef.$el)
     })
   },
   methods: {
