@@ -54,14 +54,14 @@
         <oc-button
           v-oc-tooltip="$gettext('Details')"
           appearance="raw"
-          class="oc-mr-xs quick-action-button oc-p-xs"
+          class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-details"
           @click="showDetails(item)"
         >
           <oc-icon name="information" fill-type="line" /></oc-button
         ><oc-button
           v-oc-tooltip="$gettext('Edit')"
           appearance="raw"
-          class="oc-mr-xs quick-action-button oc-p-xs"
+          class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-edit"
           @click="showEditPanel(item)"
         >
           <oc-icon name="pencil" fill-type="line" />

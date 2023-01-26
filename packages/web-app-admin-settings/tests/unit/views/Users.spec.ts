@@ -8,9 +8,12 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   defaultStoreMockOptions,
+  mount,
   shallowMount
 } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
+
+jest.mock('web-pkg/src/composables/appDefaults')
 
 const getDefaultUser = () => {
   return {
@@ -258,44 +261,6 @@ describe('Users view', () => {
     })
   })
 
-  describe('method "deleteUsers"', () => {
-    it('should hide the modal and show message on success', async () => {
-      const { wrapper } = getMountedWrapper()
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      const toggleDeleteUserModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteUserModal')
-      await wrapper.vm.deleteUsers([{ id: '1' }])
-
-      expect(showMessageStub).toHaveBeenCalled()
-      expect(toggleDeleteUserModalStub).toHaveBeenCalledTimes(1)
-    })
-    it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graph = getDefaultGraphMock()
-      graph.users.deleteUser.mockImplementation(() => mockAxiosReject())
-      const { wrapper } = getMountedWrapper({ graph })
-      const graphDeleteUserStub = jest.spyOn(graph.users, 'deleteUser')
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      const toggleDeleteUserModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteUserModal')
-      await wrapper.vm.deleteUsers([{ id: '2' }])
-
-      expect(graphDeleteUserStub).toHaveBeenCalledTimes(1)
-      expect(showMessageStub).toHaveBeenCalled()
-      expect(toggleDeleteUserModalStub).toHaveBeenCalledTimes(0)
-    })
-    it('should show message while user tries to delete own account', async () => {
-      const { wrapper } = getMountedWrapper()
-      const graph = getDefaultGraphMock()
-      const graphDeleteUserStub = jest.spyOn(graph.users, 'deleteUser')
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      const toggleDeleteUserModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteUserModal')
-      await wrapper.vm.deleteUsers([{ id: '1' }])
-
-      expect(graphDeleteUserStub).toHaveBeenCalledTimes(0)
-      expect(showMessageStub).toHaveBeenCalled()
-      expect(toggleDeleteUserModalStub).toHaveBeenCalled()
-    })
-  })
-
   describe('computed method "sideBarAvailablePanels"', () => {
     it('should contain EditPanel when one user is selected', () => {
       const { wrapper } = getMountedWrapper()
@@ -338,9 +303,31 @@ describe('Users view', () => {
       expect(wrapper.vm.allUsersSelected).toBeFalsy()
     })
   })
+
+  describe('batch actions', () => {
+    it('do not display when no user selected', async () => {
+      const { wrapper } = getMountedWrapper({ mountType: mount })
+      await wrapper.vm.loadResourcesTask.last
+      expect(wrapper.find('batch-actions-stub').exists()).toBeFalsy()
+    })
+    it('display when one user selected', async () => {
+      const { wrapper } = getMountedWrapper({ mountType: mount })
+      await wrapper.vm.loadResourcesTask.last
+      wrapper.vm.toggleSelectUser(getDefaultUser())
+      await wrapper.vm.$nextTick()
+      expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
+    })
+    it('display when more than one users selected', async () => {
+      const { wrapper } = getMountedWrapper({ mountType: mount })
+      await wrapper.vm.loadResourcesTask.last
+      wrapper.vm.toggleSelectAllUsers()
+      await wrapper.vm.$nextTick()
+      expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
+    })
+  })
 })
 
-function getMountedWrapper({ data = {}, graph = getDefaultGraphMock() } = {}) {
+function getMountedWrapper({ mountType = shallowMount, graph = getDefaultGraphMock() } = {}) {
   const mocks = {
     ...defaultComponentMocks()
   }
@@ -357,13 +344,18 @@ function getMountedWrapper({ data = {}, graph = getDefaultGraphMock() } = {}) {
 
   return {
     mocks,
-    wrapper: shallowMount(Users, {
-      data: () => {
-        return { ...data }
-      },
+    wrapper: mountType(Users, {
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks
+        mocks,
+        stubs: {
+          CreateUserModal: true,
+          AppLoadingSpinner: true,
+          NoContentMessage: true,
+          UsersList: true,
+          OcBreadcrumb: true,
+          BatchActions: true
+        }
       }
     })
   }
