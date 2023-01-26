@@ -86,16 +86,22 @@ import EditPanel from '../components/Users/SideBar/EditPanel.vue'
 import BatchActions from '../components/BatchActions.vue'
 import Delete from '../mixins/users/delete'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { useAccessToken, useStore } from 'web-pkg/src/composables'
-import { defineComponent, ref, onBeforeUnmount, onMounted, unref, watch } from 'vue'
+import { useAccessToken, useGraphClient, useStore } from 'web-pkg/src/composables'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  ref,
+  onBeforeUnmount,
+  onMounted,
+  unref,
+  watch
+} from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { useGraphClient } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
-import { computed } from 'vue'
-import { getCurrentInstance } from 'vue-demi'
 
 export default defineComponent({
   name: 'UsersView',
