@@ -13,7 +13,6 @@ const modalConfirmBtn = `.oc-modal-body-actions-confirm`
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const selectedQuotaValueField = '.vs__dropdown-toggle'
 const spacesQuotaSearchField = '.oc-modal .vs__search'
-const clearSelectionBtn = '#files-clear-selection'
 
 export const getDisplayedSpaces = async (page): Promise<string[]> => {
   const spaces = []
@@ -52,16 +51,12 @@ export const changeSpaceQuota = async (args: {
     page.locator(actionConfirmButton).click()
   ])
 }
-export const clearSelection = async (args: { page: Page }): Promise<void> => {
-  const { page } = args
-  try {
-    await page.locator(clearSelectionBtn).click({ timeout: 500 })
-  } catch (ex) {}
-}
+
 export const disableSpaceButtonShouldBeGone = async (args: { page: Page }): Promise<void> => {
   const { page } = args
   expect(await page.locator(disableActionBtn).count()).toEqual(0)
 }
+
 export const disableSpace = async (args: {
   page: Page
   id: string

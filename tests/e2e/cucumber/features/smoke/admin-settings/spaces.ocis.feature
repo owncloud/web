@@ -24,6 +24,7 @@ Feature: spaces management
     And "Alice" updates the quota for space "team.a" to "50"
     And "Alice" disables the space "team.a" using the context-menu
     And "Alice" deletes the space "team.a" using the context-menu
+    # Remove the following two steps when the steps below get commented in
     And "Alice" disables the space "team.b" using the context-menu
     And "Alice" deletes the space "team.b" using the context-menu
     Then "Alice" should not see the following spaces
@@ -44,15 +45,15 @@ Feature: spaces management
 #      | id     |
 #      | team.b |
 #    And "Brian" logs out
-  Scenario: multiple spaces can be managed at once in the admin settings
+
+
+  Scenario: multiple spaces can be managed at once in the admin settings via the batch actions
     Given "Admin" creates following users
       | id    |
       | Alice |
-      | Brian |
     And "Admin" assigns following roles to the users
       | id    | role       |
       | Alice | SpaceAdmin |
-      | Brian | SpaceAdmin |
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" navigates to the projects space page
@@ -62,51 +63,23 @@ Feature: spaces management
       | team B | team.b |
       | team C | team.c |
       | team D | team.d |
-      | team E | team.e |
-      | team F | team.f |
-      | team G | team.g |
-      | team H | team.h |
-      | team I | team.i |
-      | team J | team.j |
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     And "Alice" disables the following spaces using the batch-actions
-      | name   |
+      | id   |
       | team.a |
       | team.b |
     And "Alice" disables the following spaces using the batch-actions
-      | name   |
+      | id   |
       | team.a |
       | team.b |
       | team.c |
       | team.d |
-      | team.e |
-      | team.f |
-      | team.g |
-      | team.h |
     Then "Alice" should still have selected the spaces and the batch-action disable gone
-    #Cleanup spaces
-    And "Alice" disables the following spaces using the batch-actions
-      | name   |
-      | team.a |
-      | team.b |
-      | team.c |
-      | team.d |
-      | team.e |
-      | team.f |
-      | team.g |
-      | team.h |
-      | team.i |
-      | team.j |
     And "Alice" deletes the following spaces using the batch-actions
-      | name   |
+      | id   |
       | team.a |
       | team.b |
       | team.c |
       | team.d |
-      | team.e |
-      | team.f |
-      | team.g |
-      | team.h |
-      | team.i |
-      | team.j |
+    And "Alice" logs out

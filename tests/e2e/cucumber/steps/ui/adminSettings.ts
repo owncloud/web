@@ -76,16 +76,15 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
-    await spacesObject.clearSelection()
     for (const info of stepTable.hashes()) {
-      await spacesObject.select({ key: info.name })
+      await spacesObject.select({ key: info.id })
     }
     switch (action) {
       case 'disables':
-        await spacesObject.disable({ key: stepTable.hashes()[0].name, context: 'batch-actions' })
+        await spacesObject.disable({ key: stepTable.hashes()[0].id, context: 'batch-actions' })
         break
       case 'deletes':
-        await spacesObject.delete({ key: stepTable.hashes()[0].name, context: 'batch-actions' })
+        await spacesObject.delete({ key: stepTable.hashes()[0].id, context: 'batch-actions' })
         break
       default:
         throw new Error(`${action} not implemented`)
