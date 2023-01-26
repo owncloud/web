@@ -64,6 +64,7 @@ config = {
     },
     "branches": [
         "master",
+        "stable-6.0",
     ],
     "pnpmlint": True,
     "e2e": {
@@ -891,8 +892,6 @@ def pnpmlint(ctx):
                  lint(),
         "trigger": {
             "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
                 "refs/tags/**",
                 "refs/pull/**",
             ],
@@ -954,12 +953,13 @@ def build(ctx):
                  buildDockerImage(),
         "trigger": {
             "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
                 "refs/tags/**",
             ],
         },
     }
+
+    for branch in config["branches"]:
+        result["trigger"]["ref"].append("refs/heads/%s" % branch)
 
     pipelines.append(result)
 
@@ -1049,12 +1049,13 @@ def changelog(ctx):
         ],
         "trigger": {
             "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
                 "refs/pull/**",
             ],
         },
     }
+
+    for branch in config["branches"]:
+        result["trigger"]["ref"].append("refs/heads/%s" % branch)
 
     pipelines.append(result)
 
@@ -1191,12 +1192,13 @@ def e2eTests(ctx):
 
     e2e_trigger = {
         "ref": [
-            "refs/heads/master",
-            "refs/heads/stable-*",
             "refs/tags/**",
             "refs/pull/**",
         ],
     }
+
+    for branch in config["branches"]:
+        e2e_trigger["ref"].append("refs/heads/%s" % branch)
 
     pipelines = []
     params = {}
