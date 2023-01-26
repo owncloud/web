@@ -24,7 +24,7 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
             <div>
               <div id="oc-files-context-menu">
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border" id="oc-files-context-actions-members">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
+                  <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" type="button">
                       <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">
@@ -37,7 +37,7 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
                   </li>
                 </ul>
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s" id="oc-files-context-actions-trashBin">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
+                  <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" type="button">
                       <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">
@@ -93,7 +93,7 @@ exports[`SpaceHeader space image should show the default image if no other image
             <div>
               <div id="oc-files-context-menu">
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border" id="oc-files-context-actions-members">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
+                  <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" type="button">
                       <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">
@@ -106,7 +106,7 @@ exports[`SpaceHeader space image should show the default image if no other image
                   </li>
                 </ul>
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s" id="oc-files-context-actions-trashBin">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
+                  <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" type="button">
                       <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">
@@ -158,7 +158,7 @@ exports[`SpaceHeader space image should show the set image 1`] = `
             <div>
               <div id="oc-files-context-menu">
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border" id="oc-files-context-actions-members">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
+                  <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" type="button">
                       <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">
@@ -171,7 +171,7 @@ exports[`SpaceHeader space image should show the set image 1`] = `
                   </li>
                 </ul>
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s" id="oc-files-context-actions-trashBin">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
+                  <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" type="button">
                       <!-- @slot Content of the button -->
                       <span class="oc-icon oc-icon-m oc-icon-passive">

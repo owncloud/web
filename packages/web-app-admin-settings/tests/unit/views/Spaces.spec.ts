@@ -26,6 +26,7 @@ const selectors = {
   batchActionsStub: 'batch-actions-stub'
 }
 
+const mixins = ['$_disable_items', '$_restore_items', '$_delete_items']
 jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('Spaces view', () => {
@@ -128,24 +129,36 @@ function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
   graph.drives.listAllDrives.mockImplementation(() => mockAxiosResolve({ value: spaces }))
   const $clientService = mockDeep<ClientService>()
   $clientService.graphAuthenticated.mockImplementation(() => graph)
-  const mocks = { ...defaultComponentMocks(), $clientService }
+  const mocks = { ...defaultComponentMocks(), $clientService, ...getMixinMocks(mixins) }
 
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
 
   return {
-    wrapper: mount(Spaces, {
-      global: {
-        plugins: [...defaultPlugins(), store],
-        mocks,
-        stubs: {
-          AppLoadingSpinner: true,
-          NoContentMessage: true,
-          SpacesList: true,
-          OcBreadcrumb: true,
-          BatchActions: true
+    wrapper: mount(
+      { ...Spaces, mixins },
+      {
+        global: {
+          plugins: [...defaultPlugins(), store],
+          mocks,
+          stubs: {
+            AppLoadingSpinner: true,
+            NoContentMessage: true,
+            SpacesList: true,
+            OcBreadcrumb: true,
+            BatchActions: true
+          }
         }
       }
-    })
+    )
   }
+}
+
+const getMixinMocks = (enabledActions) => {
+  const mixinMocks = {}
+  for (const mixin of mixins) {
+    const isEnabled = !!enabledActions.includes(mixin)
+    mixinMocks[mixin] = [{ isEnabled: () => isEnabled, name: '', items: [] }]
+  }
+  return mixinMocks
 }
