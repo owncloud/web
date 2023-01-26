@@ -47,6 +47,7 @@ Summary
 * Enhancement - Space group shares: [#8161](https://github.com/owncloud/web/pull/8161)
 * Enhancement - Rename "user management" app: [#8175](https://github.com/owncloud/web/pull/8175)
 * Enhancement - Spaces list in admin settings: [#8178](https://github.com/owncloud/web/pull/8178)
+* Enhancement - Admin settings users section uses graph api for role assignments: [#8261](https://github.com/owncloud/web/pull/8261)
 * Enhancement - Move user group select to edit panel: [#8279](https://github.com/owncloud/web/pull/8279)
 * Enhancement - Add support for multiple clients in `theme.json`: [#8280](https://github.com/owncloud/web/pull/8280)
 * Enhancement - Move language selection to user account page: [#8294](https://github.com/owncloud/web/pull/8294)
@@ -418,6 +419,13 @@ Details
    https://github.com/owncloud/web/pull/8247
    https://github.com/owncloud/web/pull/8273
    https://github.com/owncloud/web/pull/8233
+
+* Enhancement - Admin settings users section uses graph api for role assignments: [#8261](https://github.com/owncloud/web/pull/8261)
+
+   We've switched over to utilizing user role assignments data from the graph api instead of the
+   custom settings api. Especially for the list view this leads to improved performance.
+
+   https://github.com/owncloud/web/pull/8261
 
 * Enhancement - Move user group select to edit panel: [#8279](https://github.com/owncloud/web/pull/8279)
 
