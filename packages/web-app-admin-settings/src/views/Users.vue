@@ -384,31 +384,17 @@ export default defineComponent({
         }
 
         if (!isEqual(user.drive?.quota?.total, editUser.drive?.quota?.total)) {
-          const updateDriveResponse = await this.graphClient.drives.updateDrive(
-            editUser.drive.id,
-            { quota: { total: editUser.drive.quota.total } },
-            {}
-          )
-          if (editUser.id === this.currentUser.uuid) {
-            // Load current user quota
-            this.UPDATE_SPACE_FIELD({
-              id: editUser.drive.id,
-              field: 'spaceQuota',
-              value: updateDriveResponse.data.quota
-            })
-          }
+          await this.updateUserDrive(editUser)
         }
 
         if (!isEqual(user.memberOf, editUser.memberOf)) {
-          await this.editUserGroupAssignments({ user, editUser })
+          await this.updateUserGroupAssignments(user, editUser)
         }
 
-        if (!isEqual(user.appRoleAssignments, editUser.appRoleAssignments)) {
-          await this.graphClient.users.createUserAppRoleAssignment(user.id, {
-            appRoleId: editUser.appRoleAssignments[0].appRoleId,
-            resourceId: editUser.appRoleAssignments[0].resourceId,
-            principalId: editUser.id
-          })
+        if (
+          !isEqual(user.appRoleAssignments[0].appRoleId, editUser.appRoleAssignments[0].appRoleId)
+        ) {
+          await this.updateUserAppRoleAssignments(user, editUser)
         }
 
         const { data: updatedUser } = await this.graphClient.users.getUser(user.id)
@@ -426,40 +412,44 @@ export default defineComponent({
         })
       }
     },
-    async editUserGroupAssignments({ user, editUser }) {
-      try {
-        const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
-          return !user.memberOf.some((g) => g.id === editUserGroup.id)
+    async updateUserAppRoleAssignments(user, editUser) {
+      await this.graphClient.users.createUserAppRoleAssignment(user.id, {
+        appRoleId: editUser.appRoleAssignments[0].appRoleId,
+        resourceId: editUser.appRoleAssignments[0].resourceId,
+        principalId: editUser.id
+      })
+    },
+    async updateUserDrive(editUser) {
+      const updateDriveResponse = await this.graphClient.drives.updateDrive(
+        editUser.drive.id,
+        { quota: { total: editUser.drive.quota.total } },
+        {}
+      )
+
+      if (editUser.id === this.currentUser.uuid) {
+        // Load current user quota
+        this.UPDATE_SPACE_FIELD({
+          id: editUser.drive.id,
+          field: 'spaceQuota',
+          value: updateDriveResponse.data.quota
         })
+      }
+    },
+    async updateUserGroupAssignments(user, editUser) {
+      const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
+        return !user.memberOf.some((g) => g.id === editUserGroup.id)
+      })
 
-        const groupsToDelete = user.memberOf.filter((editUserGroup) => {
-          return !editUser.memberOf.some((g) => g.id === editUserGroup.id)
-        })
+      const groupsToDelete = user.memberOf.filter((editUserGroup) => {
+        return !editUser.memberOf.some((g) => g.id === editUserGroup.id)
+      })
 
-        for (const groupToAdd of groupsToAdd) {
-          await this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
-        }
+      for (const groupToAdd of groupsToAdd) {
+        await this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
+      }
 
-        for (const groupToDelete of groupsToDelete) {
-          await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
-        }
-
-        const { data: updatedUser } = await this.graphClient.users.getUser(user.id)
-
-        const userIndex = this.users.findIndex((user) => user.id === updatedUser.id)
-        this.users[userIndex] = updatedUser
-        /**
-         * The user object gets actually exchanged, therefore we update the selected users
-         */
-        this.selectedUsers = [updatedUser]
-
-        eventBus.publish('sidebar.entity.saved')
-      } catch (error) {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettext('Failed to edit group assignments'),
-          status: 'danger'
-        })
+      for (const groupToDelete of groupsToDelete) {
+        await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
       }
     }
   }
