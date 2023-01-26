@@ -193,7 +193,12 @@ const actions = {
     })
     const graphResponse = await graphClient.drives.getDrive(storageId)
     context.commit('UPSERT_SPACE', buildSpace(graphResponse.data))
-    const shareObj = { role: role.name, onPremisesSamAccountName: shareWith, displayName }
+    const shareObj = {
+      role: role.name,
+      onPremisesSamAccountName: shareWith,
+      displayName,
+      expirationDate
+    }
     context.commit('UPSERT_SPACE_MEMBERS', buildSpaceShare(shareObj, storageId))
   },
   async changeSpaceMember(
@@ -217,7 +222,8 @@ const actions = {
       {
         role: role.name,
         onPremisesSamAccountName: share.collaborator.name,
-        displayName: share.collaborator.displayName
+        displayName: share.collaborator.displayName,
+        expirationDate
       },
       share.id
     )
