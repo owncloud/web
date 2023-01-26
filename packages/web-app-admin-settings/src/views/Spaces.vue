@@ -30,7 +30,8 @@
             </oc-button>
             <batch-actions
               class="oc-ml-s"
-              :selected-spaces="selectedSpaces"
+              :selected-items="selectedSpaces"
+              :actions="batchActions"
               :limited-screen-space="limitedScreenSpace"
             />
           </div>
@@ -70,7 +71,15 @@
 <script lang="ts">
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useAccessToken, useGraphClient, useStore } from 'web-pkg/src/composables'
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  unref
+} from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import AppTemplate from '../components/AppTemplate.vue'
@@ -83,8 +92,11 @@ import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelec
 import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
-import BatchActions from '../components/Spaces/BatchActions.vue'
+import BatchActions from '../components/BatchActions.vue'
 import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
+import Delete from 'web-pkg/src/mixins/spaces/delete'
+import Disable from 'web-pkg/src/mixins/spaces/disable'
+import Restore from 'web-pkg/src/mixins/spaces/restore'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import { useGettext } from 'vue3-gettext'
 
@@ -98,7 +110,9 @@ export default defineComponent({
     SpaceInfo,
     BatchActions
   },
+  mixins: [Delete, Disable, Restore],
   setup() {
+    const instance = getCurrentInstance().proxy as any
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const spaces = ref([])
@@ -154,6 +168,14 @@ export default defineComponent({
     const unselectAllSpaces = () => {
       selectedSpaces.value = []
     }
+
+    const batchActions = computed(() => {
+      return [
+        ...instance.$_restore_items,
+        ...instance.$_delete_items,
+        ...instance.$_disable_items
+      ].filter((item) => item.isEnabled({ resources: unref(selectedSpaces) }))
+    })
 
     const sideBarAvailablePanels = computed(() => {
       return [
@@ -246,6 +268,7 @@ export default defineComponent({
       graphClient,
       accessToken,
       breadcrumbs,
+      batchActions,
       listHeaderPosition,
       selectedSpaces,
       sideBarAvailablePanels,
