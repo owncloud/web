@@ -137,15 +137,14 @@ export default defineComponent({
       yield loadAppRolesTask.perform()
     })
 
+    /**
+     * This function reloads the user with expanded attributes,
+     * this is necessary as we don't load all the data while listing the users
+     * for performance reasons
+     */
     const loadAdditionalUserDataTask = useTask(function* (signal, user) {
       const { data } = yield unref(graphClient).users.getUser(user.id)
-      if (!data.drive) {
-        return { ...user }
-      }
-      if (!data.drive.quota) {
-        data.drive.quota = { total: 0 }
-      }
-      return { ...user, ...data }
+      return data
     })
 
     watch(
