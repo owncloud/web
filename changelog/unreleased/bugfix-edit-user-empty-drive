@@ -1,0 +1,5 @@
+Bugfix: Editing users who never logged in
+
+We've fixed a bug where the Edit panel for users who never logged in failed to load (happened due to a recent backend change).
+
+https://github.com/owncloud/web/pull/8326
