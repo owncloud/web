@@ -4,6 +4,10 @@ function $gettext(msg: string): string {
 }
 
 export const additionalTranslations = {
+  admin: $gettext('Admin'),
+  spaceAdmin: $gettext('Space Admin'),
+  user: $gettext('User'),
+  guest: $gettext('Guest'),
   activities: $gettext('Activities'),
   noActivities: $gettext('No activities'),
   virusDetectedActivity: $gettext(

@@ -21,21 +21,27 @@
           @change="validateEmail"
         />
         <oc-text-input
-          v-model="editUser.passwordProfile.password"
+          :model-value="editUser"
           class="oc-mb-s"
           :label="$gettext('Password')"
           type="password"
           :fix-message-line="true"
           default-value="●●●●●●●●"
+          @update:modelValue="onUpdatePassword"
         />
         <div class="oc-mb-s">
           <oc-select
-            v-model="editUser.role"
+            :model-value="editUser"
             :label="$gettext('Role')"
             option-label="displayName"
-            :options="roles"
+            :options="translatedRoleOptions"
             :clearable="false"
-          />
+            @update:modelValue="onUpdateRole"
+          >
+            <template #selected-option>
+              {{ selectedRoleName }}
+            </template>
+          </oc-select>
           <div class="oc-text-input-message"></div>
         </div>
         <quota-select
@@ -64,7 +70,7 @@
         :compare-object="editUser"
         :confirm-button-disabled="invalidFormData"
         @revert="revertChanges"
-        @confirm="$emit('confirm', editUser)"
+        @confirm="$emit('confirm', { user, editUser })"
       ></compare-save-dialog>
     </form>
   </div>
@@ -124,6 +130,11 @@ export default defineComponent({
     return { editUser, formData, groupOptions }
   },
   computed: {
+    translatedRoleOptions() {
+      return this.roles.map((role) => {
+        return { ...role, displayName: this.$gettext(role.displayName) }
+      })
+    },
     invalidFormData() {
       return Object.values(this.formData)
         .map((v) => !!v.valid)
@@ -134,12 +145,18 @@ export default defineComponent({
     },
     compareSaveDialogOriginalObject() {
       return cloneDeep({ ...this.user, passwordProfile: { password: '' } })
+    },
+    selectedRoleName() {
+      return this.$gettext(
+        this.roles.find((role) => role.id === this.editUser.appRoleAssignments[0].appRoleId)
+          .displayName
+      )
     }
   },
   watch: {
     user: {
       handler: function () {
-        this.editUser = cloneDeep({ ...this.user, passwordProfile: { password: '' } })
+        this.editUser = cloneDeep(this.user)
       },
       deep: true,
       immediate: true
@@ -182,6 +199,14 @@ export default defineComponent({
         formDataValue.valid = true
         formDataValue.errorMessage = ''
       })
+    },
+    onUpdateRole(role) {
+      this.editUser.appRoleAssignments[0].appRoleId = role.id
+    },
+    onUpdatePassword(password) {
+      this.editUser.passwordProfile = {
+        password
+      }
     }
   }
 })

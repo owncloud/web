@@ -31,7 +31,7 @@
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Role')" />
           <td>
-            <span v-if="user.role" v-text="user.role.displayName" />
+            <span v-if="user.appRoleAssignments" v-text="roleDisplayName" />
           </td>
         </tr>
       </table>
@@ -57,6 +57,10 @@ export default defineComponent({
     users: {
       type: Array,
       required: true
+    },
+    roles: {
+      type: Array,
+      required: true
     }
   },
   computed: {
@@ -70,6 +74,13 @@ export default defineComponent({
       return this.$gettextInterpolate('%{count} users selected', {
         count: this.users.length
       })
+    },
+    roleDisplayName() {
+      const assignedRole = this.user.appRoleAssignments[0]
+
+      return this.$gettext(
+        this.roles.find((role) => role.id === assignedRole.appRoleId)?.displayName || ''
+      )
     }
   }
 })

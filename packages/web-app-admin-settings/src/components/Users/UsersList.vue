@@ -44,7 +44,7 @@
         <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
       </template>
       <template #role="{ item }">
-        <template v-if="item.role">{{ item.role.displayName }}</template>
+        <template v-if="item.appRoleAssignments">{{ getRoleDisplayNameByUser(item) }}</template>
       </template>
       <template #actions="{ item }">
         <oc-button
@@ -85,6 +85,10 @@ export default defineComponent({
   name: 'UsersList',
   props: {
     users: {
+      type: Array,
+      required: true
+    },
+    roles: {
       type: Array,
       required: true
     },
@@ -227,8 +231,8 @@ export default defineComponent({
         let a, b
 
         if (prop === 'role') {
-          a = user1.role?.displayName || ''
-          b = user2.role?.displayName || ''
+          a = this.getRoleDisplayNameByUser(user1)
+          b = this.getRoleDisplayNameByUser(user2)
         } else {
           a = user1[prop] || ''
           b = user2[prop] || ''
@@ -243,6 +247,13 @@ export default defineComponent({
     },
     getSelectUserLabel(user) {
       return this.$gettext('Select %{ user }', { user: user.displayName }, true)
+    },
+    getRoleDisplayNameByUser(user) {
+      const assignedRole = user.appRoleAssignments[0]
+
+      return this.$gettext(
+        this.roles.find((role) => role.id === assignedRole.appRoleId)?.displayName || ''
+      )
     }
   }
 })

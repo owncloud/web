@@ -50,6 +50,7 @@
         <div v-else>
           <UsersList
             :users="users"
+            :roles="roles"
             :class="{ 'users-table-squashed': sideBarOpen }"
             :selected-users="selectedUsers"
             :header-position="listHeaderPosition"
@@ -91,7 +92,6 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { useGraphClient } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
-import { useLoadTasks } from '../composables/loadTasks/useLoadTasks'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 
 export default defineComponent({
@@ -111,54 +111,40 @@ export default defineComponent({
     const users = ref([])
     const groups = ref([])
     const roles = ref([])
-    const userAssignments = ref({})
     const selectedUsers = ref([])
     const loadedUser = ref(null)
     const sideBarLoading = ref(false)
     const listHeaderPosition = ref(0)
     const template = ref()
     let loadResourcesEventToken
-
-    const { loadRolesTask, loadUserRoleTask, addRoleAssignment } = useLoadTasks({
-      accessToken,
-      roles,
-      userAssignments
-    })
+    let userUpdatedEventToken
 
     const loadGroupsTask = useTask(function* (signal) {
       const groupsResponse = yield unref(graphClient).groups.listGroups()
       groups.value = groupsResponse.data.value
     })
 
+    const loadAppRolesTask = useTask(function* (signal) {
+      const applicationsResponse = yield unref(graphClient).applications.listApplications()
+      roles.value = applicationsResponse.data.value[0].appRoles
+    })
+
     const loadResourcesTask = useTask(function* (signal) {
       const usersResponse = yield unref(graphClient).users.listUsers('displayName')
       users.value = usersResponse.data.value || []
 
-      users.value.forEach((user) => {
-        user.memberOf = user.memberOf || []
-      })
-
       yield loadGroupsTask.perform()
-      yield loadRolesTask.perform()
-
-      for (const user of users.value) {
-        try {
-          yield loadUserRoleTask.perform({ user })
-        } catch (e) {
-          console.error(`Failed to load role for user '${user.displayName}'`)
-        }
-      }
+      yield loadAppRolesTask.perform()
     })
 
+    /**
+     * This function reloads the user with expanded attributes,
+     * this is necessary as we don't load all the data while listing the users
+     * for performance reasons
+     */
     const loadAdditionalUserDataTask = useTask(function* (signal, user) {
       const { data } = yield unref(graphClient).users.getUser(user.id)
-      if (!data.drive) {
-        return { ...user }
-      }
-      if (!data.drive.quota) {
-        data.drive.quota = { total: 0 }
-      }
-      return { ...user, ...data }
+      return data
     })
 
     watch(
@@ -191,18 +177,24 @@ export default defineComponent({
       loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
         loadResourcesTask.perform()
       })
+      userUpdatedEventToken = eventBus.subscribe(
+        'app.admin-settings.users.user.updated',
+        (updatedUser) => {
+          selectedUsers.value = [updatedUser]
+        }
+      )
       calculateListHeaderPosition()
       window.addEventListener('resize', calculateListHeaderPosition)
     })
 
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
+      eventBus.unsubscribe('app.admin-settings.users.user.updated', userUpdatedEventToken)
     })
 
     return {
       ...useSideBar(),
       template,
-      addRoleAssignment,
       selectedUsers,
       loadedUser,
       sideBarLoading,
@@ -254,7 +246,7 @@ export default defineComponent({
           component: DetailsPanel,
           default: true,
           enabled: true,
-          componentAttrs: { user: this.loadedUser, users: this.selectedUsers }
+          componentAttrs: { user: this.loadedUser, users: this.selectedUsers, roles: this.roles }
         },
         {
           app: 'EditPanel',
@@ -359,14 +351,13 @@ export default defineComponent({
     },
     async createUser(user) {
       try {
-        const response = await this.graphClient.users.createUser(user)
+        const { id: createdUserId } = (await this.graphClient.users.createUser(user))?.data
+        const { data: createdUser } = await this.graphClient.users.getUser(createdUserId)
+        this.users.push(createdUser)
+
         this.toggleCreateUserModal()
         this.showMessage({
           title: this.$gettext('User was created successfully')
-        })
-        this.users.push({
-          ...response?.data,
-          ...{ memberOf: [], role: this.roles.find((role) => role.name === 'user') }
         })
       } catch (error) {
         console.error(error)
@@ -376,23 +367,14 @@ export default defineComponent({
         })
       }
     },
-    async editUser(editUser) {
+    async editUser({ user, editUser }) {
       try {
-        const user = this.users.find((user) => user.id === editUser.id)
-        const actualUser = {
-          ...(user && user),
-          passwordProfile: { password: '' }
-        }
-
         const graphEditUserRawObjectExtractor = (user) => {
-          return omit(user, ['drive', 'role'])
+          return omit(user, ['drive', 'appRoleAssignments', 'memberOf'])
         }
 
         if (
-          !isEqual(
-            graphEditUserRawObjectExtractor(actualUser),
-            graphEditUserRawObjectExtractor(editUser)
-          )
+          !isEqual(graphEditUserRawObjectExtractor(user), graphEditUserRawObjectExtractor(editUser))
         ) {
           await this.graphClient.users.editUser(
             editUser.id,
@@ -400,42 +382,29 @@ export default defineComponent({
           )
         }
 
-        if (!isEqual(actualUser.drive, editUser.drive)) {
-          const updateDriveResponse = await this.graphClient.drives.updateDrive(
-            editUser.drive.id,
-            { quota: { total: editUser.drive.quota.total } },
-            {}
-          )
-          if (editUser.id === this.currentUser.uuid) {
-            // Load current user quota
-            this.UPDATE_SPACE_FIELD({
-              id: editUser.drive.id,
-              field: 'spaceQuota',
-              value: updateDriveResponse.data.quota
-            })
-          }
+        if (!isEqual(user.drive?.quota?.total, editUser.drive?.quota?.total)) {
+          await this.updateUserDrive(editUser)
         }
 
-        if (!isEqual(actualUser.memberOf, editUser.memberOf)) {
-          await this.editUserGroupAssignments(editUser)
+        if (!isEqual(user.memberOf, editUser.memberOf)) {
+          await this.updateUserGroupAssignments(user, editUser)
         }
 
-        if (!isEqual(actualUser.role, editUser.role)) {
-          /**
-           * Setting api calls are just temporary and will be replaced with the graph api,
-           * as the backend supports it.
-           */
-          await this.addRoleAssignment(editUser)
+        if (
+          !isEqual(user.appRoleAssignments[0].appRoleId, editUser.appRoleAssignments[0].appRoleId)
+        ) {
+          await this.updateUserAppRoleAssignments(user, editUser)
         }
 
-        const userIndex = this.users.findIndex((user) => user.id === editUser.id)
-        this.users[userIndex] = editUser
-        /**
-         * The user object gets actually exchanged, therefore we update the selected users
-         */
-        this.selectedUsers = [editUser]
+        const { data: updatedUser } = await this.graphClient.users.getUser(user.id)
+
+        const userIndex = this.users.findIndex((user) => user.id === updatedUser.id)
+        this.users[userIndex] = updatedUser
 
         eventBus.publish('sidebar.entity.saved')
+        eventBus.publish('app.admin-settings.users.user.updated', updatedUser)
+
+        return updatedUser
       } catch (error) {
         console.error(error)
         this.showMessage({
@@ -444,40 +413,44 @@ export default defineComponent({
         })
       }
     },
-    async editUserGroupAssignments(editUser) {
-      try {
-        const user = this.users.find((user) => user.id === editUser.id)
+    async updateUserAppRoleAssignments(user, editUser) {
+      await this.graphClient.users.createUserAppRoleAssignment(user.id, {
+        appRoleId: editUser.appRoleAssignments[0].appRoleId,
+        resourceId: editUser.appRoleAssignments[0].resourceId,
+        principalId: editUser.id
+      })
+    },
+    async updateUserDrive(editUser) {
+      const updateDriveResponse = await this.graphClient.drives.updateDrive(
+        editUser.drive.id,
+        { quota: { total: editUser.drive.quota.total } },
+        {}
+      )
 
-        const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
-          return !user.memberOf.some((g) => g.id === editUserGroup.id)
+      if (editUser.id === this.currentUser.uuid) {
+        // Load current user quota
+        this.UPDATE_SPACE_FIELD({
+          id: editUser.drive.id,
+          field: 'spaceQuota',
+          value: updateDriveResponse.data.quota
         })
+      }
+    },
+    async updateUserGroupAssignments(user, editUser) {
+      const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
+        return !user.memberOf.some((g) => g.id === editUserGroup.id)
+      })
 
-        const groupsToDelete = user.memberOf.filter((editUserGroup) => {
-          return !editUser.memberOf.some((g) => g.id === editUserGroup.id)
-        })
+      const groupsToDelete = user.memberOf.filter((editUserGroup) => {
+        return !editUser.memberOf.some((g) => g.id === editUserGroup.id)
+      })
 
-        for (const groupToAdd of groupsToAdd) {
-          await this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
-        }
+      for (const groupToAdd of groupsToAdd) {
+        await this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
+      }
 
-        for (const groupToDelete of groupsToDelete) {
-          await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
-        }
-
-        const userIndex = this.users.findIndex((user) => user.id === editUser.id)
-        this.users[userIndex] = editUser
-        /**
-         * The user object gets actually exchanged, therefore we update the selected users
-         */
-        this.selectedUsers = [editUser]
-
-        eventBus.publish('sidebar.entity.saved')
-      } catch (error) {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettext('Failed to edit group assignments'),
-          status: 'danger'
-        })
+      for (const groupToDelete of groupsToDelete) {
+        await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
       }
     }
   }
