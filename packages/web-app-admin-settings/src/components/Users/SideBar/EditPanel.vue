@@ -141,7 +141,7 @@ export default defineComponent({
         .includes(false)
     },
     showQuota() {
-      return this.editUser.drive
+      return this.editUser.drive?.quota
     },
     compareSaveDialogOriginalObject() {
       return cloneDeep({ ...this.user, passwordProfile: { password: '' } })
