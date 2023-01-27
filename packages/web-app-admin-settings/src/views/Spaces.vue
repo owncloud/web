@@ -253,12 +253,12 @@ export default defineComponent({
 
       calculateListHeaderPosition()
       window.addEventListener('resize', calculateListHeaderPosition)
-      unref(resizeObserver).observe(unref(appBarActionsRef))
+      resizeObserver.observe(unref(appBarActionsRef))
     })
 
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
-      unref(resizeObserver).unobserve(unref(appBarActionsRef))
+      resizeObserver.unobserve(unref(appBarActionsRef))
     })
 
     return {
