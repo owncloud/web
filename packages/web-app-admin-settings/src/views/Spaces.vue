@@ -17,8 +17,8 @@
         />
       </template>
       <template #topbarActions>
-        <div class="admin-settings-app-bar-actions oc-mt-xs">
-          <div v-if="selectedSpaces.length > 1" class="oc-flex oc-flex-middle">
+        <div ref="appBarActionsRef" class="admin-settings-app-bar-actions oc-mt-xs">
+          <div v-if="selectedSpaces.length >= 1" class="oc-flex oc-flex-middle">
             <oc-button
               id="files-clear-selection"
               v-oc-tooltip="$gettext('Clear selection')"
@@ -28,6 +28,12 @@
             >
               <oc-icon name="close" />
             </oc-button>
+            <batch-actions
+              class="oc-ml-s"
+              :selected-items="selectedSpaces"
+              :actions="batchActions"
+              :limited-screen-space="limitedScreenSpace"
+            />
           </div>
         </div>
       </template>
@@ -65,7 +71,15 @@
 <script lang="ts">
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useAccessToken, useGraphClient, useStore } from 'web-pkg/src/composables'
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  unref
+} from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import AppTemplate from '../components/AppTemplate.vue'
@@ -78,7 +92,11 @@ import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelec
 import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
+import BatchActions from '../components/BatchActions.vue'
 import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
+import Delete from 'web-pkg/src/mixins/spaces/delete'
+import Disable from 'web-pkg/src/mixins/spaces/disable'
+import Restore from 'web-pkg/src/mixins/spaces/restore'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import { useGettext } from 'vue3-gettext'
 
@@ -89,14 +107,18 @@ export default defineComponent({
     AppTemplate,
     NoContentMessage,
     ContextActions,
-    SpaceInfo
+    SpaceInfo,
+    BatchActions
   },
+  mixins: [Delete, Disable, Restore],
   setup() {
+    const instance = getCurrentInstance().proxy as any
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const spaces = ref([])
     const { graphClient } = useGraphClient()
     const { $gettext } = useGettext()
+    const { sideBarOpen, sideBarActivePanel } = useSideBar()
 
     const loadResourcesEventToken = ref(null)
     const template = ref(null)
@@ -146,6 +168,14 @@ export default defineComponent({
     const unselectAllSpaces = () => {
       selectedSpaces.value = []
     }
+
+    const batchActions = computed(() => {
+      return [
+        ...instance.$_restore_items,
+        ...instance.$_delete_items,
+        ...instance.$_disable_items
+      ].filter((item) => item.isEnabled({ resources: unref(selectedSpaces) }))
+    })
 
     const sideBarAvailablePanels = computed(() => {
       return [
@@ -205,34 +235,51 @@ export default defineComponent({
       ].filter((p) => p.enabled)
     })
 
+    const limitedScreenSpace = ref(false)
+    const appBarActionsRef = ref()
+    const onResize = () => {
+      limitedScreenSpace.value = unref(sideBarOpen)
+        ? window.innerWidth <= 1280
+        : window.innerWidth <= 1000
+    }
+    const resizeObserver = new ResizeObserver(onResize)
+
     onMounted(async () => {
       await loadResourcesTask.perform()
       loadResourcesEventToken.value = eventBus.subscribe('app.admin-settings.list.load', () => {
         loadResourcesTask.perform()
+        selectedSpaces.value = []
       })
 
       calculateListHeaderPosition()
       window.addEventListener('resize', calculateListHeaderPosition)
+      resizeObserver.observe(unref(appBarActionsRef))
     })
 
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
+      resizeObserver.unobserve(unref(appBarActionsRef))
     })
 
     return {
-      ...useSideBar(),
+      sideBarOpen,
+      sideBarActivePanel,
       spaces,
       loadResourcesTask,
       graphClient,
       accessToken,
       breadcrumbs,
+      batchActions,
       listHeaderPosition,
       selectedSpaces,
       sideBarAvailablePanels,
       template,
       toggleSelectAllSpaces,
       toggleSelectSpace,
-      unselectAllSpaces
+      unselectAllSpaces,
+      limitedScreenSpace,
+      appBarActionsRef,
+      onResize
     }
   }
 })

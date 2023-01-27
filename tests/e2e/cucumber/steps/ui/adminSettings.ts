@@ -47,17 +47,44 @@ When(
 )
 
 When(
-  /^"([^"]*)" (disables|deletes) the space "([^"]*)"$/,
+  /^"([^"]*)" (disables|deletes) the space "([^"]*)" using the context-menu$/,
   async function (this: World, stepUser: string, action: string, key: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
 
     switch (action) {
       case 'disables':
-        await spacesObject.disable({ key })
+        await spacesObject.disable({ key, context: 'context-menu' })
         break
       case 'deletes':
-        await spacesObject.delete({ key })
+        await spacesObject.delete({ key, context: 'context-menu' })
+        break
+      default:
+        throw new Error(`${action} not implemented`)
+    }
+  }
+)
+
+When(
+  /^"([^"]*)" (disables|deletes) the following space(s)? using the batch-actions$/,
+  async function (
+    this: World,
+    stepUser: string,
+    action: string,
+    _: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+    for (const info of stepTable.hashes()) {
+      await spacesObject.select({ key: info.id })
+    }
+    switch (action) {
+      case 'disables':
+        await spacesObject.disable({ key: stepTable.hashes()[0].id, context: 'batch-actions' })
+        break
+      case 'deletes':
+        await spacesObject.delete({ key: stepTable.hashes()[0].id, context: 'batch-actions' })
         break
       default:
         throw new Error(`${action} not implemented`)

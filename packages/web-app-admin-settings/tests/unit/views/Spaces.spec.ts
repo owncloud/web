@@ -11,12 +11,22 @@ import {
 } from 'web-test-helpers'
 import Spaces from '../../../src/views/Spaces.vue'
 
+window.ResizeObserver =
+  window.ResizeObserver ||
+  jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn()
+  }))
+
 const selectors = {
   loadingSpinnerStub: 'app-loading-spinner-stub',
   spacesListStub: 'spaces-list-stub',
-  noContentMessageStub: 'no-content-message-stub'
+  noContentMessageStub: 'no-content-message-stub',
+  batchActionsStub: 'batch-actions-stub'
 }
 
+const mixins = ['$_disable_items', '$_restore_items', '$_delete_items']
 jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('Spaces view', () => {
@@ -89,6 +99,29 @@ describe('Spaces view', () => {
       })
     })
   })
+  describe('batch actions', () => {
+    it('do not display when no space selected', async () => {
+      const { wrapper } = getWrapper()
+      await wrapper.vm.loadResourcesTask.last
+      expect(wrapper.find(selectors.batchActionsStub).exists()).toBeFalsy()
+    })
+    it('display when one space selected', async () => {
+      const spaces = [{ name: 'Some Space' }]
+      const { wrapper } = getWrapper({ spaces })
+      await wrapper.vm.loadResourcesTask.last
+      wrapper.vm.toggleSelectSpace(spaces[0])
+      await wrapper.vm.$nextTick()
+      expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
+    })
+    it('display when more than one space selected', async () => {
+      const spaces = [{ name: 'Some Space' }, { name: 'Some other Space' }]
+      const { wrapper } = getWrapper({ spaces })
+      await wrapper.vm.loadResourcesTask.last
+      wrapper.vm.toggleSelectAllSpaces()
+      await wrapper.vm.$nextTick()
+      expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
+    })
+  })
 })
 
 function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
@@ -96,23 +129,36 @@ function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
   graph.drives.listAllDrives.mockImplementation(() => mockAxiosResolve({ value: spaces }))
   const $clientService = mockDeep<ClientService>()
   $clientService.graphAuthenticated.mockImplementation(() => graph)
-  const mocks = { ...defaultComponentMocks(), $clientService }
+  const mocks = { ...defaultComponentMocks(), $clientService, ...getMixinMocks(mixins) }
 
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
 
   return {
-    wrapper: mount(Spaces, {
-      global: {
-        plugins: [...defaultPlugins(), store],
-        mocks,
-        stubs: {
-          AppLoadingSpinner: true,
-          NoContentMessage: true,
-          SpacesList: true,
-          OcBreadcrumb: true
+    wrapper: mount(
+      { ...Spaces, mixins },
+      {
+        global: {
+          plugins: [...defaultPlugins(), store],
+          mocks,
+          stubs: {
+            AppLoadingSpinner: true,
+            NoContentMessage: true,
+            SpacesList: true,
+            OcBreadcrumb: true,
+            BatchActions: true
+          }
         }
       }
-    })
+    )
   }
+}
+
+const getMixinMocks = (enabledActions) => {
+  const mixinMocks = {}
+  for (const mixin of mixins) {
+    const isEnabled = !!enabledActions.includes(mixin)
+    mixinMocks[mixin] = [{ isEnabled: () => isEnabled, name: '', items: [] }]
+  }
+  return mixinMocks
 }
