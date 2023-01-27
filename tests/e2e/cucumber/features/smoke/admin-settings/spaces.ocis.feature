@@ -9,13 +9,11 @@ Feature: spaces management
       | id    | role       |
       | Alice | SpaceAdmin |
       | Brian | SpaceAdmin |
-    When "Alice" logs in
-    And "Alice" opens the "files" app
-    And "Alice" navigates to the projects space page
-    And "Alice" creates the following project spaces
+    And "Alice" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
       | team B | team.b |
+    When "Alice" logs in
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     Then "Alice" should see the following spaces
@@ -54,29 +52,27 @@ Feature: spaces management
     And "Admin" assigns following roles to the users
       | id    | role       |
       | Alice | SpaceAdmin |
-    When "Alice" logs in
-    And "Alice" opens the "files" app
-    And "Alice" navigates to the projects space page
-    And "Alice" creates the following project spaces
+    And "Alice" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
       | team B | team.b |
       | team C | team.c |
       | team D | team.d |
+    When "Alice" logs in
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     And "Alice" disables the following spaces using the batch-actions
-      | id   |
+      | id     |
       | team.a |
       | team.b |
     And "Alice" disables the following spaces using the batch-actions
-      | id   |
+      | id     |
       | team.a |
       | team.b |
       | team.c |
       | team.d |
     And "Alice" deletes the following spaces using the batch-actions
-      | id   |
+      | id     |
       | team.a |
       | team.b |
       | team.c |

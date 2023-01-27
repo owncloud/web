@@ -242,12 +242,13 @@ export default defineComponent({
         ? window.innerWidth <= 1280
         : window.innerWidth <= 1000
     }
-    const resizeObserver = ref(new ResizeObserver(onResize))
+    const resizeObserver = new ResizeObserver(onResize)
 
     onMounted(async () => {
       await loadResourcesTask.perform()
       loadResourcesEventToken.value = eventBus.subscribe('app.admin-settings.list.load', () => {
         loadResourcesTask.perform()
+        selectedSpaces.value = []
       })
 
       calculateListHeaderPosition()

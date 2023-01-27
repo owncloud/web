@@ -4,7 +4,7 @@ import util from 'util'
 const spaceTrSelector = 'tr'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
 const spaceIdSelector = `[data-item-id="%s"] .spaces-table-btn-action-dropdown`
-const spaceCheckboxSelector = `[data-item-id="%s"] input[type=checkbox]`
+const spaceCheckboxSelector = `[data-item-id="%s"]:not(.oc-table-highlighted) input[type=checkbox]`
 const quotaActionBtn = `.oc-files-actions-edit-quota-trigger`
 const disableActionBtn = `.oc-files-actions-disable-trigger`
 const deleteActionBtn = `.oc-files-actions-delete-trigger`
@@ -104,5 +104,10 @@ export const deleteSpace = async (args: {
 
 export const selectSpace = async (args: { page: Page; id: string }): Promise<void> => {
   const { page, id } = args
-  await page.locator(util.format(spaceCheckboxSelector, id)).click()
+  const checkbox = await page.locator(util.format(spaceCheckboxSelector, id))
+  const checkBoxAlreadySelected = !(await checkbox.isVisible())
+  if (checkBoxAlreadySelected) {
+    return
+  }
+  await checkbox.click()
 }

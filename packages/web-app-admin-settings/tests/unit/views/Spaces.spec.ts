@@ -113,7 +113,7 @@ describe('Spaces view', () => {
       await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
     })
-    it('display when more than one spaces selected', async () => {
+    it('display when more than one space selected', async () => {
       const spaces = [{ name: 'Some Space' }, { name: 'Some other Space' }]
       const { wrapper } = getWrapper({ spaces })
       await wrapper.vm.loadResourcesTask.last
