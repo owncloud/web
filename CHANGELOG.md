@@ -26,6 +26,7 @@ Summary
 * Bugfix - Application menu active display on hover: [#8265](https://github.com/owncloud/web/pull/8265)
 * Bugfix - Loading additional user data: [#8276](https://github.com/owncloud/web/pull/8276)
 * Bugfix - Re-loading space members panel: [#8300](https://github.com/owncloud/web/pull/8300)
+* Bugfix - Editing users who never logged in: [#8326](https://github.com/owncloud/web/pull/8326)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
@@ -188,6 +189,13 @@ Details
 
    https://github.com/owncloud/web/issues/8298
    https://github.com/owncloud/web/pull/8300
+
+* Bugfix - Editing users who never logged in: [#8326](https://github.com/owncloud/web/pull/8326)
+
+   We've fixed a bug where the Edit panel for users who never logged in failed to load (happened due
+   to a recent backend change).
+
+   https://github.com/owncloud/web/pull/8326
 
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 
