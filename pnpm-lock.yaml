@@ -627,7 +627,7 @@ importers:
       luxon: ^2.4.0
       marked: ^4.0.12
       oidc-client-ts: ^2.1.0
-      owncloud-sdk: ~3.1.0-alpha.1
+      owncloud-sdk: ~3.1.0-alpha.2
       p-queue: ^6.6.2
       popper-max-size-modifier: ^0.2.0
       portal-vue: 3.0.0
@@ -674,7 +674,7 @@ importers:
       luxon: 2.4.0
       marked: 4.0.12
       oidc-client-ts: 2.1.0
-      owncloud-sdk: 3.1.0-alpha.1_qgpf6seimtkgc6dfu7oqfstxh4
+      owncloud-sdk: 3.1.0-alpha.2_qgpf6seimtkgc6dfu7oqfstxh4
       p-queue: 6.6.2
       popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
       portal-vue: 3.0.0_vue@3.2.45
@@ -17271,8 +17271,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /owncloud-sdk/3.1.0-alpha.1_qgpf6seimtkgc6dfu7oqfstxh4:
-    resolution: {integrity: sha512-iurt3QNIdWBxYCzx4j6Ihyy13vYfjY6UgU9qCrXFG9NiIpMlMLDFhwRLZdlVZlpeuAzCboi8hHmHooUpYFI6zQ==}
+  /owncloud-sdk/3.1.0-alpha.2_qgpf6seimtkgc6dfu7oqfstxh4:
+    resolution: {integrity: sha512-G3hHbGx9hD1XXuQpBqClgBkLCe3G6FyN7DuaU1e1K55CoB2bp4+8gPTDxT4cP1BOEx0BIEvwAkeyWfJ4OhyYvw==}
     peerDependencies:
       axios: ^0.27.2
       cross-fetch: ^3.0.6
