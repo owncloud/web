@@ -410,6 +410,7 @@ Details
    possible for space admins to manage all spaces in one place.
 
    https://github.com/owncloud/web/issues/8219
+   https://github.com/owncloud/web/issues/8267
    https://github.com/owncloud/web/pull/8178
    https://github.com/owncloud/web/pull/8195
    https://github.com/owncloud/web/pull/8190
@@ -427,6 +428,7 @@ Details
    https://github.com/owncloud/web/pull/8262
    https://github.com/owncloud/web/pull/8247
    https://github.com/owncloud/web/pull/8273
+   https://github.com/owncloud/web/pull/8268
    https://github.com/owncloud/web/pull/8233
 
 * Enhancement - Admin settings users section uses graph api for role assignments: [#8261](https://github.com/owncloud/web/pull/8261)
