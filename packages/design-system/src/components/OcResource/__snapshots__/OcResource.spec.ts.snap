@@ -1,26 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`OcResource can be used without icon/thumbnail 1`] = `
-<div class="oc-resource oc-text-overflow">
-  <!--v-if-->
-  <div class="oc-resource-details oc-text-overflow">
-    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw oc-text-overflow" draggable="false" type="button">
-      <!-- @slot Content of the button -->
-      <!--v-if-->
-      <span class="oc-resource-name" data-test-resource-name="example.pdf" data-test-resource-path="example.pdf" data-test-resource-type="file" title="example.pdf">
-        <span class="oc-text-truncate">
-          <span class="oc-resource-basename">example</span>
-        </span>
-        <span class="oc-resource-extension">.pdf</span>
-      </span>
-    </button>
-    <div class="oc-resource-indicators">
-      <!--v-if-->
-    </div>
-  </div>
-</div>
-`;
-
 exports[`OcResource displays parent folder name default if calculated name is empty 1`] = `
 <div class="oc-resource oc-text-overflow">
   <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw" draggable="false" type="button">
@@ -29,7 +8,7 @@ exports[`OcResource displays parent folder name default if calculated name is em
       <!---->
     </span>
   </button>
-  <div class="oc-resource-details oc-text-overflow">
+  <div class="oc-resource-details oc-text-overflow oc-pl-s">
     <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw oc-text-overflow" draggable="false" type="button">
       <!-- @slot Content of the button -->
       <!--v-if-->

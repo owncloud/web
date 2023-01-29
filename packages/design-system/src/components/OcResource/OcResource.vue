@@ -17,7 +17,7 @@
       />
       <oc-resource-icon v-else :resource="resource" />
     </oc-resource-link>
-    <div class="oc-resource-details oc-text-overflow" :class="'oc-pl-s' ? isIconDisplayed : ''">
+    <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
       <oc-resource-link
         v-slot="{ opensInNewWindowDescriptionId }"
         :resource="resource"

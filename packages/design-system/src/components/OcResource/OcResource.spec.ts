@@ -141,6 +141,7 @@ describe('OcResource', () => {
       }
     })
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.find('oc-resource-thumbnail').exists()).toBeFalsy()
+    expect(wrapper.find('oc-resource-icon').exists()).toBeFalsy()
   })
 })
