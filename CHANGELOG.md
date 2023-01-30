@@ -439,6 +439,7 @@ Details
    custom settings api. Especially for the list view this leads to improved performance.
 
    https://github.com/owncloud/web/pull/8261
+   https://github.com/owncloud/web/pull/8330
 
 * Enhancement - Move user group select to edit panel: [#8279](https://github.com/owncloud/web/pull/8279)
 
