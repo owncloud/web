@@ -56,8 +56,8 @@ Feature: share
       | PARENT/simple.pdf | folder_to_shared | replace |
     #Then "Alice" should see that the resource "folder_to_shared/simple.pdf" has 1 version
     And "Brian" downloads old version of the following resource
-      | resource   | to                      |
-      | simple.pdf | Shares/folder_to_shared |
+      | resource   | to                      | type |
+      | simple.pdf | Shares/folder_to_shared | file |
     When "Brian" restores following resources
       | resource   | to                      | version |
       | simple.pdf | Shares/folder_to_shared | 1       |
@@ -102,8 +102,8 @@ Feature: share
       | resource               | to       |
       | Shares/testavatar.jpeg | Personal |
     And "Brian" downloads the following resource using the sidebar panel
-      | resource        | from   |
-      | testavatar.jpeg | Shares |
+      | resource        | from   | type |
+      | testavatar.jpeg | Shares | file |
     And "Alice" updates following sharee role
       | resource                         | recipient | role   | resourceType |
       | folder_to_shared/testavatar.jpeg | Brian     | editor | file         |
