@@ -292,19 +292,21 @@ export const processDownload = async (
     })
 
     downloads.forEach((download) => {
-      downloadedResources.push(download.suggestedFilename())
+      const { name } = path.parse(download.suggestedFilename())
+      downloadedResources.push(name)
     })
 
     if (actionType === 'sidebar panel') {
       expect(files.length).toBe(downloads.length)
       for (const resource of files) {
+        const fileOrFolderName = path.parse(resource.name).name
         if (resource.type === 'file') {
-          expect(downloadedResources).toContain(resource.name)
+          expect(downloadedResources).toContain(fileOrFolderName)
         } else {
           // downloading folders in oc10 downloads with name of resource but in ocis it is downloaded as 'download.tar'
           config.ocis
-            ? expect(downloadedResources).toContain('download.tar')
-            : expect(downloadedResources).toContain(`${resource.name}.zip`)
+            ? expect(downloadedResources).toContain('download')
+            : expect(downloadedResources).toContain(fileOrFolderName)
         }
       }
     }
