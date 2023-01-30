@@ -19,7 +19,7 @@
           <td v-text="user.onPremisesSamAccountName" />
         </tr>
         <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Display name')" />
+          <th scope="col" class="oc-pr-s" v-text="$gettext('First and last name')" />
           <td v-text="user.displayName" />
         </tr>
         <tr>
@@ -32,6 +32,12 @@
           <th scope="col" class="oc-pr-s" v-text="$gettext('Role')" />
           <td>
             <span v-if="user.appRoleAssignments" v-text="roleDisplayName" />
+          </td>
+        </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Groups')" />
+          <td>
+            <span v-if="user.appRoleAssignments" v-text="groupsDisplayValue" />
           </td>
         </tr>
       </table>
@@ -81,6 +87,9 @@ export default defineComponent({
       return this.$gettext(
         this.roles.find((role) => role.id === assignedRole.appRoleId)?.displayName || ''
       )
+    },
+    groupsDisplayValue() {
+      return this.user.memberOf.map((group) => group.displayName).sort().join(', ')
     }
   }
 })
