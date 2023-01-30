@@ -144,7 +144,7 @@ export default defineComponent({
       return this.editUser.drive?.quota
     },
     compareSaveDialogOriginalObject() {
-      return cloneDeep({ ...this.user, passwordProfile: { password: '' } })
+      return cloneDeep(this.user)
     },
     selectedRoleName() {
       return this.$gettext(
@@ -194,7 +194,7 @@ export default defineComponent({
       return true
     },
     revertChanges() {
-      this.editUser = cloneDeep({ ...this.user, passwordProfile: { password: '' } })
+      this.editUser = cloneDeep(this.user)
       Object.values(this.formData).forEach((formDataValue) => {
         formDataValue.valid = true
         formDataValue.errorMessage = ''
