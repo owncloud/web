@@ -50,4 +50,217 @@ describe('buildSpace', () => {
       expect(space.isManager(mock<User>({ uuid }))).toBe(data.expectedResult)
     })
   })
+
+  it.each([
+    { role: spaceRoleViewer.name, expectedResult: false },
+    { role: spaceRoleEditor.name, expectedResult: true },
+    { role: spaceRoleManager.name, expectedResult: true }
+  ])('canUpload', (data) => {
+    const space = buildSpace({
+      root: {
+        permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
+      }
+    }) as ProjectSpaceResource
+    expect(space.canUpload({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
+  })
+
+  it.each([
+    {
+      userRole: 'user',
+      spaceRole: spaceRoleManager.name,
+      spaceDisabled: true,
+      expectedResult: true
+    },
+    {
+      userRole: 'user',
+      spaceRole: spaceRoleEditor.name,
+      spaceDisabled: true,
+      expectedResult: false
+    },
+    {
+      userRole: 'user',
+      spaceRole: spaceRoleViewer.name,
+      spaceDisabled: true,
+      expectedResult: false
+    },
+    {
+      userRole: 'spaceadmin',
+      spaceRole: spaceRoleViewer.name,
+      spaceDisabled: true,
+      expectedResult: true
+    },
+    {
+      userRole: 'spaceadmin',
+      spaceRole: spaceRoleViewer.name,
+      spaceDisabled: false,
+      expectedResult: false
+    }
+  ])('canBeDeleted', (data) => {
+    const space = buildSpace({
+      root: {
+        permissions: [{ roles: data.spaceRole, grantedToIdentities: [{ user: { id: uuid } }] }],
+        ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
+      }
+    }) as ProjectSpaceResource
+    expect(space.canBeDeleted({ user: mock<User>({ uuid, role: { name: data.userRole } }) })).toBe(
+      data.expectedResult
+    )
+  })
+
+  it.each([
+    { userRole: 'user', spaceRole: spaceRoleManager.name, expectedResult: true },
+    { userRole: 'user', spaceRole: spaceRoleEditor.name, expectedResult: false },
+    { userRole: 'user', spaceRole: spaceRoleViewer.name, expectedResult: false },
+    { userRole: 'spaceadmin', spaceRole: spaceRoleViewer.name, expectedResult: true }
+  ])('canRename', (data) => {
+    const space = buildSpace({
+      root: {
+        permissions: [{ roles: data.spaceRole, grantedToIdentities: [{ user: { id: uuid } }] }]
+      }
+    }) as ProjectSpaceResource
+    expect(space.canRename({ user: mock<User>({ uuid, role: { name: data.userRole } }) })).toBe(
+      data.expectedResult
+    )
+  })
+
+  it.each([
+    { userRole: 'user', spaceRole: spaceRoleManager.name, expectedResult: true },
+    { userRole: 'user', spaceRole: spaceRoleEditor.name, expectedResult: false },
+    { userRole: 'user', spaceRole: spaceRoleViewer.name, expectedResult: false },
+    { userRole: 'spaceadmin', spaceRole: spaceRoleViewer.name, expectedResult: true }
+  ])('canEditDescription', (data) => {
+    const space = buildSpace({
+      root: {
+        permissions: [{ roles: data.spaceRole, grantedToIdentities: [{ user: { id: uuid } }] }]
+      }
+    }) as ProjectSpaceResource
+    expect(
+      space.canEditDescription({ user: mock<User>({ uuid, role: { name: data.userRole } }) })
+    ).toBe(data.expectedResult)
+  })
+
+  it.each([
+    {
+      userRole: 'user',
+      spaceRole: spaceRoleManager.name,
+      spaceDisabled: true,
+      expectedResult: true
+    },
+    {
+      userRole: 'user',
+      spaceRole: spaceRoleEditor.name,
+      spaceDisabled: true,
+      expectedResult: false
+    },
+    {
+      userRole: 'user',
+      spaceRole: spaceRoleViewer.name,
+      spaceDisabled: true,
+      expectedResult: false
+    },
+    {
+      userRole: 'spaceadmin',
+      spaceRole: spaceRoleViewer.name,
+      spaceDisabled: true,
+      expectedResult: true
+    },
+    {
+      userRole: 'spaceadmin',
+      spaceRole: spaceRoleViewer.name,
+      spaceDisabled: false,
+      expectedResult: false
+    }
+  ])('canRestore', (data) => {
+    const space = buildSpace({
+      root: {
+        permissions: [{ roles: data.spaceRole, grantedToIdentities: [{ user: { id: uuid } }] }],
+        ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
+      }
+    }) as ProjectSpaceResource
+    expect(space.canRestore({ user: mock<User>({ uuid, role: { name: data.userRole } }) })).toBe(
+      data.expectedResult
+    )
+  })
+
+  it.each([
+    {
+      userRole: 'user',
+      spaceRole: spaceRoleManager.name,
+      spaceDisabled: false,
+      expectedResult: true
+    },
+    {
+      userRole: 'user',
+      spaceRole: spaceRoleEditor.name,
+      spaceDisabled: false,
+      expectedResult: false
+    },
+    {
+      userRole: 'user',
+      spaceRole: spaceRoleViewer.name,
+      spaceDisabled: false,
+      expectedResult: false
+    },
+    {
+      userRole: 'spaceadmin',
+      spaceRole: spaceRoleViewer.name,
+      spaceDisabled: false,
+      expectedResult: true
+    },
+    {
+      userRole: 'spaceadmin',
+      spaceRole: spaceRoleViewer.name,
+      spaceDisabled: true,
+      expectedResult: false
+    }
+  ])('canDisable', (data) => {
+    const space = buildSpace({
+      root: {
+        permissions: [{ roles: data.spaceRole, grantedToIdentities: [{ user: { id: uuid } }] }],
+        ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
+      }
+    }) as ProjectSpaceResource
+    expect(space.canDisable({ user: mock<User>({ uuid, role: { name: data.userRole } }) })).toBe(
+      data.expectedResult
+    )
+  })
+
+  it.each([
+    { role: spaceRoleManager.name, expectedResult: true },
+    { role: spaceRoleEditor.name, expectedResult: false },
+    { role: spaceRoleViewer.name, expectedResult: false }
+  ])('canShare', (data) => {
+    const space = buildSpace({
+      root: {
+        permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
+      }
+    }) as ProjectSpaceResource
+    expect(space.canShare({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
+  })
+
+  it.each([
+    { role: spaceRoleManager.name, expectedResult: true },
+    { role: spaceRoleEditor.name, expectedResult: true },
+    { role: spaceRoleViewer.name, expectedResult: false }
+  ])('canEditImage', (data) => {
+    const space = buildSpace({
+      root: {
+        permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
+      }
+    }) as ProjectSpaceResource
+    expect(space.canEditImage({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
+  })
+
+  it.each([
+    { role: spaceRoleManager.name, expectedResult: true },
+    { role: spaceRoleEditor.name, expectedResult: true },
+    { role: spaceRoleViewer.name, expectedResult: false }
+  ])('canEditReadme', (data) => {
+    const space = buildSpace({
+      root: {
+        permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
+      }
+    }) as ProjectSpaceResource
+    expect(space.canEditReadme({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
+  })
 })
