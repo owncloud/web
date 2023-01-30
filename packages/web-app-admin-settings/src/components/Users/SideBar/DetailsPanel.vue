@@ -37,7 +37,10 @@
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
           <td>
-            <span v-text="quotaDisplayValue" />
+            <span v-if="showUserQuota" v-text="quotaDisplayValue" />
+            <span v-else class="oc-text-meta" v-translate>
+              To see an individual quota, the user needs to have logged in once.
+            </span>
           </td>
         </tr>
         <tr>
@@ -110,11 +113,10 @@ export default defineComponent({
         .sort()
         .join(', ')
     },
+    showUserQuota() {
+      return 'total' in (this.user.drive?.quota || {})
+    },
     quotaDisplayValue() {
-      if (!('total' in (this.user.drive?.quota || {}))) {
-        return this.$gettext('Not set')
-      }
-
       return this.user.drive.quota.total === 0
         ? this.$gettext('No restriction')
         : formatFileSize(this.user.drive.quota.total, this.currentLanguage)
