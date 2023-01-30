@@ -35,6 +35,12 @@
           </td>
         </tr>
         <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
+          <td>
+            <span v-text="quotaDisplayValue" />
+          </td>
+        </tr>
+        <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Groups')" />
           <td>
             <span v-if="user.appRoleAssignments" v-text="groupsDisplayValue" />
@@ -49,6 +55,7 @@ import { defineComponent } from 'vue'
 import UserInfoBox from './UserInfoBox.vue'
 import { PropType } from 'vue'
 import { User } from 'web-client/src/generated'
+import filesize from 'filesize'
 
 export default defineComponent({
   name: 'DetailsPanel',
@@ -89,7 +96,19 @@ export default defineComponent({
       )
     },
     groupsDisplayValue() {
-      return this.user.memberOf.map((group) => group.displayName).sort().join(', ')
+      return this.user.memberOf
+        .map((group) => group.displayName)
+        .sort()
+        .join(', ')
+    },
+    quotaDisplayValue() {
+      if (!('total' in (this.user.drive?.quota || {}))) {
+        return this.$gettext('Not set')
+      }
+
+      return this.user.drive.quota.total === 0
+        ? this.$gettext('No restriction')
+        : filesize(this.user.drive.quota.total)
     }
   }
 })
