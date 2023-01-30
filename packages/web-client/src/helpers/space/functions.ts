@@ -171,26 +171,19 @@ export function buildSpace(data): SpaceResource {
       return true
     },
     canBeDeleted: function ({ user }: { user?: User } = {}) {
-      return (
-        this.disabled && (user?.roles?.find((r) => r.name === 'spaceadmin') || this.isManager(user))
-      )
+      return this.disabled && (user?.role?.name === 'spaceadmin' || this.isManager(user))
     },
     canRename: function ({ user }: { user?: User } = {}) {
-      return user?.roles?.find((r) => r.name === 'spaceadmin') || this.isManager(user)
+      return user?.role?.name === 'spaceadmin' || this.isManager(user)
     },
     canEditDescription: function ({ user }: { user?: User } = {}) {
-      return user?.roles?.find((r) => r.name === 'spaceadmin') || this.isManager(user)
+      return user?.role?.name === 'spaceadmin' || this.isManager(user)
     },
     canRestore: function ({ user }: { user?: User } = {}) {
-      return (
-        this.disabled && (user?.roles?.find((r) => r.name === 'spaceadmin') || this.isManager(user))
-      )
+      return this.disabled && (user?.role?.name === 'spaceadmin' || this.isManager(user))
     },
     canDisable: function ({ user }: { user?: User } = {}) {
-      return (
-        !this.disabled &&
-        (user?.roles?.find((r) => r.name === 'spaceadmin') || this.isManager(user))
-      )
+      return !this.disabled && (user?.role?.name === 'spaceadmin' || this.isManager(user))
     },
     canShare: function ({ user }: { user?: User } = {}) {
       return this.isManager(user)

@@ -49,18 +49,18 @@ export interface Resource {
   driveAlias?: string
 
   canCreate?(): boolean
-  canUpload?(): boolean
+  canUpload?({ user }: { user?: User }): boolean
   canDownload?(): boolean
-  canShare?(): boolean
-  canRename?(): boolean
-  canBeDeleted?(): boolean
+  canShare?({ user }: { user?: User }): boolean
+  canRename?({ user }: { user?: User }): boolean
+  canBeDeleted?({ user }: { user?: User }): boolean
   canBeRestored?(): boolean
   canDeny?(): boolean
-  canEditDescription?(): boolean
-  canRestore?(): boolean
-  canDisable?(): boolean
-  canEditImage?(): boolean
-  canEditReadme?(): boolean
+  canEditDescription?({ user }: { user?: User }): boolean
+  canRestore?({ user }: { user?: User }): boolean
+  canDisable?({ user }: { user?: User }): boolean
+  canEditImage?({ user }: { user?: User }): boolean
+  canEditReadme?({ user }: { user?: User }): boolean
   canEditSpaceQuota?(): boolean
   canEditTags?(): boolean
 
