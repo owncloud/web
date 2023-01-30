@@ -19,9 +19,12 @@ import {
   removeAccessSpaceMembers,
   SpaceMembersArgs,
   changeSpaceRole,
-  createPublicLinkForSpace
+  createPublicLinkForSpace,
+  addExpirationDateToMember,
+  removeExpirationDateFromMember
 } from './actions'
 import { spaceWithSpaceIDExist } from './utils'
+import { ICollaborator } from '../share/collaborator'
 
 export class Spaces {
   #page: Page
@@ -117,5 +120,19 @@ export class Spaces {
       key: 'Link',
       link: { name: 'Link', url }
     })
+  }
+
+  async addExpirationDate({
+    member,
+    expirationDate
+  }: {
+    member: Omit<ICollaborator, 'role'>
+    expirationDate: string
+  }): Promise<void> {
+    await addExpirationDateToMember({ member, expirationDate, page: this.#page })
+  }
+
+  async removeExpirationDate({ member }: { member: Omit<ICollaborator, 'role'> }): Promise<void> {
+    await removeExpirationDateFromMember({ member, page: this.#page })
   }
 }

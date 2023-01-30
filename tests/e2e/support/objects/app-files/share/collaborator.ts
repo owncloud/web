@@ -2,6 +2,7 @@ import { Page } from 'playwright'
 import { startCase, difference } from 'lodash'
 import util from 'util'
 import { Group, User } from '../../../types'
+import { getActualExpiryDate } from '../../../utils/datePicker'
 
 export interface ICollaborator {
   collaborator: User | Group
@@ -23,6 +24,17 @@ export interface CollaboratorArgs {
 export interface RemoveCollaboratorArgs extends Omit<CollaboratorArgs, 'collaborator'> {
   collaborator: Omit<ICollaborator, 'role'>
   removeOwnSpaceAccess?: boolean
+}
+
+export interface SetExpirationDateForCollaboratorArgs
+  extends Omit<CollaboratorArgs, 'collaborator'> {
+  collaborator: Omit<ICollaborator, 'role'>
+  expirationDate: any
+}
+
+export interface RemoveExpirationDateFromCollaboratorArgs
+  extends Omit<CollaboratorArgs, 'collaborator'> {
+  collaborator: Omit<ICollaborator, 'role'>
 }
 
 export type CollaboratorType = 'user' | 'group'
@@ -48,10 +60,17 @@ export default class Collaborator {
     '%s//button[contains(@class,"files-recipient-role-select-btn")]/span[text()="%s"]'
   private static readonly removeCollaboratorButton =
     '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-share")]'
+  private static readonly setExpirationDateCollaboratorButton =
+    '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"files-collaborators-expiration-button")]'
+  private static readonly removeExpirationDateCollaboratorButton =
+    '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-expiration-date")]'
   private static readonly removeCollaboratorConfirmationButton = '.oc-modal-body-actions-confirm'
   private static readonly customPermissionCheckbox = '//*[@id="files-collaborators-permission-%s"]'
   private static readonly customPermissionApplyButton =
     '//*[contains(@class, "files-recipient-custom-permissions-drop-cancel-confirm-btns")]//button[text()="Apply"]'
+  private static readonly collaboratorExpirationDatepicker =
+    '.collaborator-edit-dropdown-options-list .files-recipient-expiration-datepicker:not(.vc-container)'
+  private static readonly expirationDatepickerDaySelect = '.vc-day.id-%s'
 
   static readonly FOLDER_CUSTOM_PERMISSIONS: readonly CustomPermissionType[] = [
     'read',
@@ -241,6 +260,72 @@ export default class Collaborator {
       )
       await page.locator(roleSelector).waitFor()
     }
+  }
+
+  static async setExpirationDateForCollaborator(
+    args: SetExpirationDateForCollaboratorArgs
+  ): Promise<void> {
+    const {
+      page,
+      collaborator: { collaborator, type },
+      expirationDate
+    } = args
+    const collaboratorRow = Collaborator.getCollaboratorUserOrGroupSelector(collaborator, type)
+    await page.locator(collaboratorRow).waitFor()
+
+    await page
+      .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
+      .click()
+    await page
+      .locator(util.format(Collaborator.setExpirationDateCollaboratorButton, collaboratorRow))
+      .click()
+
+    const newExpiryDate = getActualExpiryDate(
+      expirationDate.toLowerCase().match(/[dayrmonthwek]+/)[0] as any,
+      expirationDate
+    )
+    await page.locator(Collaborator.collaboratorExpirationDatepicker).evaluate(
+      (datePicker: any, { newExpiryDate }): any => {
+        datePicker.__datePicker.$refs.calendar.move(newExpiryDate)
+      },
+      { newExpiryDate }
+    )
+    await page
+      .locator(
+        util.format(
+          Collaborator.expirationDatepickerDaySelect,
+          newExpiryDate.toISOString().split('T')[0]
+        )
+      )
+      .first()
+      .click()
+  }
+
+  static async removeExpirationDateFromCollaborator(
+    args: RemoveExpirationDateFromCollaboratorArgs
+  ): Promise<void> {
+    const {
+      page,
+      collaborator: { collaborator, type }
+    } = args
+    const collaboratorRow = Collaborator.getCollaboratorUserOrGroupSelector(collaborator, type)
+    await page.locator(collaboratorRow).waitFor()
+
+    await page
+      .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
+      .click()
+    await page
+      .locator(util.format(Collaborator.removeExpirationDateCollaboratorButton, collaboratorRow))
+      .click()
+
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().includes('shares') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'POST'
+      )
+    ])
   }
 
   static waitForInvitePanel(page: Page): Promise<void> {

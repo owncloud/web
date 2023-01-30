@@ -288,3 +288,22 @@ export const createPublicLinkForSpace = async (args: { page: Page }): Promise<st
   await openSharingPanel(page)
   return createLink({ page: page, space: true })
 }
+
+export const addExpirationDateToMember = async (args: {
+  page: Page
+  member: Omit<ICollaborator, 'role'>
+  expirationDate: string
+}): Promise<void> => {
+  const { page, member: collaborator, expirationDate } = args
+  await openSharingPanel(page)
+  await Collaborator.setExpirationDateForCollaborator({ page, collaborator, expirationDate })
+}
+
+export const removeExpirationDateFromMember = async (args: {
+  page: Page
+  member: Omit<ICollaborator, 'role'>
+}): Promise<void> => {
+  const { page, member: collaborator } = args
+  await openSharingPanel(page)
+  await Collaborator.removeExpirationDateFromCollaborator({ page, collaborator })
+}
