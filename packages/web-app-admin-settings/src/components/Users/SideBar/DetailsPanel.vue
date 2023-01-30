@@ -55,7 +55,9 @@ import { defineComponent } from 'vue'
 import UserInfoBox from './UserInfoBox.vue'
 import { PropType } from 'vue'
 import { User } from 'web-client/src/generated'
-import filesize from 'filesize'
+import { formatFileSize } from 'web-pkg/src/helpers'
+import user from 'web-runtime/src/store/user'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'DetailsPanel',
@@ -74,6 +76,13 @@ export default defineComponent({
     roles: {
       type: Array,
       required: true
+    }
+  },
+  setup() {
+    const { current: currentLanguage } = useGettext()
+
+    return {
+      currentLanguage
     }
   },
   computed: {
@@ -108,7 +117,7 @@ export default defineComponent({
 
       return this.user.drive.quota.total === 0
         ? this.$gettext('No restriction')
-        : filesize(this.user.drive.quota.total)
+        : formatFileSize(this.user.drive.quota.total, this.currentLanguage)
     }
   }
 })
