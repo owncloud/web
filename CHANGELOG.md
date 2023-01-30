@@ -431,6 +431,7 @@ Details
    https://github.com/owncloud/web/pull/8268
    https://github.com/owncloud/web/pull/8233
    https://github.com/owncloud/web/pull/8333
+   https://github.com/owncloud/web/pull/8334
 
 * Enhancement - Admin settings users section uses graph api for role assignments: [#8261](https://github.com/owncloud/web/pull/8261)
 
