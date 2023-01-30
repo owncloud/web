@@ -137,7 +137,7 @@ const actions = {
     context.commit('CLEAR_PROJECT_SPACES')
     context.commit('ADD_SPACES', spaces)
   },
-  loadSpaceMembers(
+  async loadSpaceMembers(
     context,
     { graphClient, space }: { graphClient: Ref<Graph>; space: SpaceResource }
   ) {
@@ -168,9 +168,8 @@ const actions = {
       }
     }
 
-    return Promise.all(promises).then(() => {
-      context.commit('SET_SPACE_MEMBERS', sortSpaceMembers(spaceShares))
-    })
+    await Promise.allSettled(promises)
+    context.commit('SET_SPACE_MEMBERS', sortSpaceMembers(spaceShares))
   },
   async addSpaceMember(
     context,

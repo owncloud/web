@@ -1,0 +1,6 @@
+Bugfix: Show space members despite deleted entries
+
+The space members panel in the right sidebar was not showing any members anymore if one of the members was deleted. This has been fixed and now shows the remaining members.
+
+https://github.com/owncloud/web/issues/8148
+https://github.com/owncloud/web/pull/8336
