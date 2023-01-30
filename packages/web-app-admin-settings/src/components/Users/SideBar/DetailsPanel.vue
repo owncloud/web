@@ -59,7 +59,6 @@ import UserInfoBox from './UserInfoBox.vue'
 import { PropType } from 'vue'
 import { User } from 'web-client/src/generated'
 import { formatFileSize } from 'web-pkg/src/helpers'
-import user from 'web-runtime/src/store/user'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
