@@ -282,6 +282,14 @@ export default defineComponent({
       default: true
     },
     /**
+     * Accepts a `path` and a `resource` param and returns a corresponding route object.
+     */
+    targetRouteCallback: {
+      type: Function,
+      required: false,
+      default: undefined
+    },
+    /**
      * Asserts whether clicking on the resource name triggers any action
      */
     areResourcesClickable: {
@@ -400,7 +408,10 @@ export default defineComponent({
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
     )
 
-    const resourceRouteResolver = useResourceRouteResolver({ spaces }, context)
+    const resourceRouteResolver = useResourceRouteResolver(
+      { spaces, targetRouteCallback: computed(() => props.targetRouteCallback) },
+      context
+    )
 
     return {
       resourceRouteResolver,

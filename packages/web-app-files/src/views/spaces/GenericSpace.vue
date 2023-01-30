@@ -49,6 +49,7 @@
           :data="paginatedResources"
           class="oc-px-m oc-pt-l"
           tile-width="small"
+          :target-route-callback="resourceTargetRouteCallback"
           @rowMounted="rowMounted"
           @fileClick="$_fileActions_triggerDefaultAction"
         >
@@ -84,6 +85,7 @@
           :view-mode="viewMode"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
+          :target-route-callback="resourceTargetRouteCallback"
           :header-position="fileListHeaderY"
           :drag-drop="true"
           :sort-by="sortBy"
@@ -138,6 +140,7 @@ import {
   onMounted,
   unref
 } from 'vue'
+import { Location } from 'vue-router'
 import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { Resource } from 'web-client'
@@ -178,6 +181,7 @@ import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults, ViewModeConstants } from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
+import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -226,6 +230,14 @@ export default defineComponent({
     const instance = getCurrentInstance().proxy as any
     const store = useStore()
     let loadResourcesEventToken
+
+    const resourceTargetRouteCallback = ({ path, fileId }: CreateTargetRouteOptions): Location => {
+      const { params, query } = createFileRouteOptions(props.space, { path, fileId })
+      if (isPublicSpaceResource(props.space)) {
+        return createLocationPublic('files-public-link', { params, query })
+      }
+      return createLocationSpaces('files-spaces-generic', { params, query })
+    }
 
     const hasSpaceHeader = computed(() => {
       // for now the space header is only available in the root of a project space.
@@ -357,6 +369,7 @@ export default defineComponent({
       ...resourcesViewDefaults,
       breadcrumbs,
       hasSpaceHeader,
+      resourceTargetRouteCallback,
       performLoaderTask,
       ViewModeConstants
     }

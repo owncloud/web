@@ -88,6 +88,11 @@ export default defineComponent({
     tileWidth: {
       type: String,
       default: ''
+    },
+    targetRouteCallback: {
+      type: Function,
+      required: false,
+      default: undefined
     }
   },
   emits: ['fileClick', 'rowMounted'],
@@ -105,7 +110,10 @@ export default defineComponent({
       return store.getters['runtime/spaces/spaces']
     })
 
-    const resourceRouteResolver = useResourceRouteResolver({ spaces }, context)
+    const resourceRouteResolver = useResourceRouteResolver(
+      { spaces, targetRouteCallback: computed(() => props.targetRouteCallback) },
+      context
+    )
 
     const getRoute = (resource) => {
       if (resource.type === 'space') {
