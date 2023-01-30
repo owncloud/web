@@ -10,7 +10,7 @@
           "
           :resource="resource"
           :resource-route="getRoute(resource)"
-          @hook:mounted="$emit('rowMounted', resource, tileRefs.tiles[index], ImageDimension.Tile)"
+          @vue:mounted="$emit('rowMounted', resource, tileRefs.tiles[index], ImageDimension.Tile)"
           @contextmenu="showContextMenu($event, index, tileRefs.tiles[index])"
           @click="emitTileClick(resource)"
         >
