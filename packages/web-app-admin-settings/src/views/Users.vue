@@ -202,6 +202,7 @@ export default defineComponent({
         'app.admin-settings.users.user.updated',
         (updatedUser) => {
           selectedUsers.value = [updatedUser]
+          loadedUser.value = updatedUser
         }
       )
       calculateListHeaderPosition()
