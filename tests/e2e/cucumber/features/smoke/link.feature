@@ -32,15 +32,15 @@ Feature: link
     #Then the public should not see the following files on the files-drop page
     #  | textfile.txt |
     When "Alice" downloads the following resources using the batch action
-      | resource     | from         |
-      | lorem.txt    | folderPublic |
-      | textfile.txt | folderPublic |
+      | resource     | from         | type |
+      | lorem.txt    | folderPublic | file |
+      | textfile.txt | folderPublic | file |
     And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "editor"
     And "Anonymous" refreshes the old link
     And "Anonymous" downloads the following public link resources using the sidebar panel
-      | resource     |
-      | lorem.txt    |
-      | textfile.txt |
+      | resource     | type |
+      | lorem.txt    | file |
+      | textfile.txt | file |
     And "Anonymous" uploads the following resources in public link page
       | resource      |
       | new-lorem.txt |

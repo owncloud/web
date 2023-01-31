@@ -48,8 +48,8 @@ Feature: Kindergarten can use web to organize a day
       | meal plan |
     And "Brian" navigates to the personal space page
     And "Brian" downloads the following resources using the sidebar panel
-      | resource | from             |
-      | data.zip | Shares/meal plan |
+      | resource | from             | type |
+      | data.zip | Shares/meal plan | file |
     # Then what do we check for to be confident that the above things done by Brian have worked?
     # Then the downloaded zip should contain... ?
     When "Carol" logs in
@@ -60,31 +60,40 @@ Feature: Kindergarten can use web to organize a day
       | meal plan |
     And "Carol" navigates to the personal space page
     And "Carol" downloads the following resources using the sidebar panel
-      | resource      | from             |
-      | data.zip      | Shares/meal plan |
-      | lorem.txt     | Shares/meal plan |
-      | lorem-big.txt | Shares/meal plan |
+      | resource      | from             | type   |
+      | data.zip      | Shares/meal plan | file   |
+      | lorem.txt     | Shares/meal plan | file   |
+      | lorem-big.txt | Shares/meal plan | file   |
+      | meal plan     | Shares           | folder |
     # Then what do we check for to be confident that the above things done by Carol have worked?
     # Then the downloaded files should have content "abc..."
     And "Carol" logs out
     When "Brian" downloads the following resources using the sidebar panel
-      | resource      | from             |
-      | lorem.txt     | Shares/meal plan |
-      | lorem-big.txt | Shares/meal plan |
+      | resource      | from             | type   |
+      | lorem.txt     | Shares/meal plan | file   |
+      | lorem-big.txt | Shares/meal plan | file   |
+      | meal plan     | Shares           | folder |
     # Then what do we check for to be confident that the above things done by Brian have worked?
     # Then the downloaded files should have content "abc..."
     And "Brian" logs out
     And "Alice" downloads the following resources using the sidebar panel
-      | resource      | from                                 |
-      | parent.txt    | groups/Kindergarten Koalas/meal plan |
-      | lorem.txt     | groups/Kindergarten Koalas/meal plan |
-      | lorem-big.txt | groups/Kindergarten Koalas/meal plan |
-      | data.zip      | groups/Pre-Schools Pirates/meal plan |
-      | lorem.txt     | groups/Pre-Schools Pirates/meal plan |
-      | lorem-big.txt | groups/Pre-Schools Pirates/meal plan |
-      | data.zip      | groups/Teddy Bear Daycare/meal plan  |
-      | lorem.txt     | groups/Teddy Bear Daycare/meal plan  |
-      | lorem-big.txt | groups/Teddy Bear Daycare/meal plan  |
+      | resource            | from                                 | type   |
+      | parent.txt          | groups/Kindergarten Koalas/meal plan | file   |
+      | lorem.txt           | groups/Kindergarten Koalas/meal plan | file   |
+      | lorem-big.txt       | groups/Kindergarten Koalas/meal plan | file   |
+      | data.zip            | groups/Pre-Schools Pirates/meal plan | file   |
+      | lorem.txt           | groups/Pre-Schools Pirates/meal plan | file   |
+      | lorem-big.txt       | groups/Pre-Schools Pirates/meal plan | file   |
+      | data.zip            | groups/Teddy Bear Daycare/meal plan  | file   |
+      | lorem.txt           | groups/Teddy Bear Daycare/meal plan  | file   |
+      | lorem-big.txt       | groups/Teddy Bear Daycare/meal plan  | file   |
+      | meal plan           | groups/Kindergarten Koalas           | folder |
+      | meal plan           | groups/Pre-Schools Pirates           | folder |
+      | meal plan           | groups/Teddy Bear Daycare            | folder |
+      | Kindergarten Koalas | groups                               | folder |
+      | Pre-Schools Pirates | groups                               | folder |
+      | Teddy Bear Daycare  | groups                               | folder |
+      | groups              |                                      | folder |
     # Then what do we check for to be confident that the above things done by Alice have worked?
     # Then the downloaded files should have content "abc..."
     And "Alice" logs out

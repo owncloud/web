@@ -46,8 +46,8 @@ Feature: Kindergarten can use web to organize a day
       | name      |
       | meal plan |
     And "Brian" downloads the following resources using the sidebar panel
-      | resource | from      |
-      | data.zip | meal plan |
+      | resource | from      | type |
+      | data.zip | meal plan | file |
     # Then what do we check for to be confident that the above things done by Brian have worked?
     # Then the downloaded zip should contain... ?
     When "Carol" logs in
@@ -57,31 +57,40 @@ Feature: Kindergarten can use web to organize a day
       | name      |
       | meal plan |
     And "Carol" downloads the following resources using the sidebar panel
-      | resource      | from      |
-      | data.zip      | meal plan |
-      | lorem.txt     | meal plan |
-      | lorem-big.txt | meal plan |
+      | resource      | from      | type   |
+      | data.zip      | meal plan | file   |
+      | lorem.txt     | meal plan | file   |
+      | lorem-big.txt | meal plan | file   |
+      | meal plan     |           | folder |
     # Then what do we check for to be confident that the above things done by Carol have worked?
     # Then the downloaded files should have content "abc..."
     And "Carol" logs out
     When "Brian" downloads the following resources using the sidebar panel
-      | resource      | from      |
-      | lorem.txt     | meal plan |
-      | lorem-big.txt | meal plan |
+      | resource      | from      | type   |
+      | lorem.txt     | meal plan | file   |
+      | lorem-big.txt | meal plan | file   |
+      | meal plan     |           | folder |
     # Then what do we check for to be confident that the above things done by Brian have worked?
     # Then the downloaded files should have content "abc..."
     And "Brian" logs out
     And "Alice" downloads the following resources using the sidebar panel
-      | resource      | from                                 |
-      | parent.txt    | groups/Kindergarten Koalas/meal plan |
-      | lorem.txt     | groups/Kindergarten Koalas/meal plan |
-      | lorem-big.txt | groups/Kindergarten Koalas/meal plan |
-      | data.zip      | groups/Pre-Schools Pirates/meal plan |
-      | lorem.txt     | groups/Pre-Schools Pirates/meal plan |
-      | lorem-big.txt | groups/Pre-Schools Pirates/meal plan |
-      | data.zip      | groups/Teddy Bear Daycare/meal plan  |
-      | lorem.txt     | groups/Teddy Bear Daycare/meal plan  |
-      | lorem-big.txt | groups/Teddy Bear Daycare/meal plan  |
+      | resource            | from                                 | type   |
+      | parent.txt          | groups/Kindergarten Koalas/meal plan | file   |
+      | lorem.txt           | groups/Kindergarten Koalas/meal plan | file   |
+      | lorem-big.txt       | groups/Kindergarten Koalas/meal plan | file   |
+      | data.zip            | groups/Pre-Schools Pirates/meal plan | file   |
+      | lorem.txt           | groups/Pre-Schools Pirates/meal plan | file   |
+      | lorem-big.txt       | groups/Pre-Schools Pirates/meal plan | file   |
+      | data.zip            | groups/Teddy Bear Daycare/meal plan  | file   |
+      | lorem.txt           | groups/Teddy Bear Daycare/meal plan  | file   |
+      | lorem-big.txt       | groups/Teddy Bear Daycare/meal plan  | file   |
+      | meal plan           | groups/Kindergarten Koalas           | folder |
+      | meal plan           | groups/Pre-Schools Pirates           | folder |
+      | meal plan           | groups/Teddy Bear Daycare            | folder |
+      | Kindergarten Koalas | groups                               | folder |
+      | Pre-Schools Pirates | groups                               | folder |
+      | Teddy Bear Daycare  | groups                               | folder |
+      | groups              |                                      | folder |
     # Then what do we check for to be confident that the above things done by Alice have worked?
     # Then the downloaded files should have content "abc..."
     And "Alice" logs out
