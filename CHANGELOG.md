@@ -22,6 +22,7 @@ Summary
 * Bugfix - Left sidebar navigation item text flickers on transition: [#8080](https://github.com/owncloud/web/pull/8080)
 * Bugfix - Space member disappearing: [#8081](https://github.com/owncloud/web/issues/8081)
 * Bugfix - Re-using space images: [#8083](https://github.com/owncloud/web/issues/8083)
+* Bugfix - Show space members despite deleted entries: [#8148](https://github.com/owncloud/web/issues/8148)
 * Bugfix - Search bar input appearance: [#8158](https://github.com/owncloud/web/issues/8158)
 * Bugfix - Application menu active display on hover: [#8265](https://github.com/owncloud/web/pull/8265)
 * Bugfix - Loading additional user data: [#8276](https://github.com/owncloud/web/pull/8276)
@@ -160,6 +161,14 @@ Details
 
    https://github.com/owncloud/web/issues/8083
    https://github.com/owncloud/web/pull/8084
+
+* Bugfix - Show space members despite deleted entries: [#8148](https://github.com/owncloud/web/issues/8148)
+
+   The space members panel in the right sidebar was not showing any members anymore if one of the
+   members was deleted. This has been fixed and now shows the remaining members.
+
+   https://github.com/owncloud/web/issues/8148
+   https://github.com/owncloud/web/pull/8336
 
 * Bugfix - Search bar input appearance: [#8158](https://github.com/owncloud/web/issues/8158)
 
