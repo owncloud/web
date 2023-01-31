@@ -3,3 +3,4 @@ Enhancement: Admin settings users section details improvement
 We've improved the details panel in the user's section to show the assigned groups and total quota
 
 https://github.com/owncloud/web/pull/8331
+https://github.com/owncloud/web/pull/8342
