@@ -58,7 +58,7 @@ describe('buildSpace', () => {
   ])('canUpload', (data) => {
     const space = buildSpace({
       root: {
-        permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
+        permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id: uuid } }] }]
       }
     }) as ProjectSpaceResource
     expect(space.canUpload({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
@@ -98,7 +98,7 @@ describe('buildSpace', () => {
   ])('canBeDeleted', (data) => {
     const space = buildSpace({
       root: {
-        permissions: [{ roles: data.spaceRole, grantedToIdentities: [{ user: { id: uuid } }] }],
+        permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }],
         ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
       }
     }) as ProjectSpaceResource
@@ -115,7 +115,7 @@ describe('buildSpace', () => {
   ])('canRename', (data) => {
     const space = buildSpace({
       root: {
-        permissions: [{ roles: data.spaceRole, grantedToIdentities: [{ user: { id: uuid } }] }]
+        permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }]
       }
     }) as ProjectSpaceResource
     expect(space.canRename({ user: mock<User>({ uuid, role: { name: data.userRole } }) })).toBe(
@@ -131,7 +131,7 @@ describe('buildSpace', () => {
   ])('canEditDescription', (data) => {
     const space = buildSpace({
       root: {
-        permissions: [{ roles: data.spaceRole, grantedToIdentities: [{ user: { id: uuid } }] }]
+        permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }]
       }
     }) as ProjectSpaceResource
     expect(
@@ -173,7 +173,7 @@ describe('buildSpace', () => {
   ])('canRestore', (data) => {
     const space = buildSpace({
       root: {
-        permissions: [{ roles: data.spaceRole, grantedToIdentities: [{ user: { id: uuid } }] }],
+        permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }],
         ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
       }
     }) as ProjectSpaceResource
@@ -216,7 +216,7 @@ describe('buildSpace', () => {
   ])('canDisable', (data) => {
     const space = buildSpace({
       root: {
-        permissions: [{ roles: data.spaceRole, grantedToIdentities: [{ user: { id: uuid } }] }],
+        permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }],
         ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
       }
     }) as ProjectSpaceResource
@@ -232,7 +232,7 @@ describe('buildSpace', () => {
   ])('canShare', (data) => {
     const space = buildSpace({
       root: {
-        permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
+        permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id: uuid } }] }]
       }
     }) as ProjectSpaceResource
     expect(space.canShare({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
@@ -245,7 +245,7 @@ describe('buildSpace', () => {
   ])('canEditImage', (data) => {
     const space = buildSpace({
       root: {
-        permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
+        permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id: uuid } }] }]
       }
     }) as ProjectSpaceResource
     expect(space.canEditImage({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
@@ -258,7 +258,7 @@ describe('buildSpace', () => {
   ])('canEditReadme', (data) => {
     const space = buildSpace({
       root: {
-        permissions: [{ roles: data.role, grantedToIdentities: [{ user: { id: uuid } }] }]
+        permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id: uuid } }] }]
       }
     }) as ProjectSpaceResource
     expect(space.canEditReadme({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
