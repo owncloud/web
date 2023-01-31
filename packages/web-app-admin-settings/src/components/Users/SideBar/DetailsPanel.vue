@@ -38,19 +38,24 @@
           <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
           <td>
             <span v-if="showUserQuota" v-text="quotaDisplayValue" />
-            <span
-              v-else
-              class="oc-text-meta"
-              v-text="
-                $gettext('To see an individual quota, the user needs to have logged in once.')
-              "
-            />
+            <span>
+              <span class="oc-mr-xs">-</span>
+              <oc-contextual-helper
+                :text="
+                  $gettext('To see an individual quota, the user needs to have logged in once.')
+                "
+              />
+            </span>
           </td>
         </tr>
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Groups')" />
           <td>
-            <span v-if="user.appRoleAssignments" v-text="groupsDisplayValue" />
+            <span v-if="user.memberOf.length" v-text="groupsDisplayValue" />
+            <span v-else>
+              <span class="oc-mr-xs">-</span>
+              <oc-contextual-helper :text="$gettext('No groups assigned.')" />
+            </span>
           </td>
         </tr>
       </table>
