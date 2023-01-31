@@ -53,7 +53,7 @@
           <collaborator-list-item
             :share="collaborator"
             :modifiable="isModifiable(collaborator)"
-            @onDelete="$_ocCollaborators_deleteShare_trigger(collaborator)"
+            @on-delete="$_ocCollaborators_deleteShare_trigger(collaborator)"
           />
         </li>
       </ul>

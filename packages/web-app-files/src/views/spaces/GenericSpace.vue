@@ -59,11 +59,10 @@
           :sort-by="sortBy"
           :sort-dir="sortDir"
           :space="space"
-          @fileDropped="fileDropped"
-          @fileClick="$_fileActions_triggerDefaultAction"
-          @rowMounted="rowMounted"
+          @file-dropped="fileDropped"
+          @file-click="$_fileActions_triggerDefaultAction"
+          @row-mounted="rowMounted"
           @sort="handleSort"
-          @update:selectedIds="selectedResourcesIds = $event"
         >
           <template #quickActions="{ resource }">
             <quick-actions

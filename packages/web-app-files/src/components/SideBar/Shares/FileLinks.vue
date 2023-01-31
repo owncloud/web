@@ -15,7 +15,7 @@
       <create-quick-link
         v-else-if="canCreatePublicLinks"
         :expiration-date="expirationDate"
-        @createPublicLink="checkLinkToCreate"
+        @create-public-link="checkLinkToCreate"
       />
       <details-and-edit
         v-if="quicklink"
@@ -28,8 +28,8 @@
         :link="quicklink"
         :file="file"
         :space="space"
-        @updateLink="checkLinkToUpdate"
-        @removePublicLink="deleteLinkConfirmation"
+        @update-link="checkLinkToUpdate"
+        @remove-public-link="deleteLinkConfirmation"
       />
       <hr class="oc-my-m" />
       <oc-button
@@ -61,8 +61,8 @@
           :link="link"
           :file="file"
           :space="space"
-          @updateLink="checkLinkToUpdate"
-          @removePublicLink="deleteLinkConfirmation"
+          @update-link="checkLinkToUpdate"
+          @remove-public-link="deleteLinkConfirmation"
         />
       </li>
     </oc-list>

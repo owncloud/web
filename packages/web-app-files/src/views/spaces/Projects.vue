@@ -25,7 +25,7 @@
           </template>
         </no-content-message>
         <div v-else class="spaces-list oc-px-m oc-mt-l">
-          <resource-tiles :data="spaces" @contextmenuClicked="showContextMenu">
+          <resource-tiles :data="spaces" @contextmenu-clicked="showContextMenu">
             <template #image="{ item }">
               <img
                 v-if="imageContentObject[item.id]"

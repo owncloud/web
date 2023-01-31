@@ -33,7 +33,7 @@
       @checkbox-changed="modal.onCheckboxValueChanged"
       @confirm-secondary="modal.onConfirmSecondary"
       @mounted="focusModal"
-      @beforeUnmount="focusModal"
+      @before-unmount="focusModal"
     >
       <template v-if="modal.customContent" #content>
         <div v-html="modal.customContent"></div>

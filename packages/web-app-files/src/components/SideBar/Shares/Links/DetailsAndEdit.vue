@@ -229,6 +229,7 @@ export default defineComponent({
       default: null
     }
   },
+  emits: ['removePublicLink', 'updateLink'],
   data() {
     return {
       newExpiration: this.link.expiration
@@ -403,7 +404,6 @@ export default defineComponent({
       })
     }
   },
-  emits: ['removePublicLink', 'updateLink'],
   methods: {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
 

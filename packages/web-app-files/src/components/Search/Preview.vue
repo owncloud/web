@@ -14,7 +14,7 @@
       :parent-folder-link="parentFolderLink"
       :parent-folder-name-default="defaultParentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
-      @parentFolderClicked="parentFolderClicked"
+      @parent-folder-clicked="parentFolderClicked"
     />
   </oc-button>
 </template>

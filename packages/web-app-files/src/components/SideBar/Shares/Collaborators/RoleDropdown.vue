@@ -149,6 +149,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['optionChange'],
   setup() {
     const store = useStore()
     return {
@@ -220,7 +221,6 @@ export default defineComponent({
     }
   },
 
-  emits: ['optionChange'],
   created() {
     this.applyRoleAndPermissions()
   },

@@ -14,7 +14,7 @@
       :options="options"
       :clearable="false"
       :searchable="false"
-      @update:modelValue="emitChange"
+      @update:model-value="emitChange"
     />
   </div>
 </template>

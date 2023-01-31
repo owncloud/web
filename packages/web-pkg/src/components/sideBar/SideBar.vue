@@ -62,7 +62,7 @@
                   <component
                     :is="panel.component"
                     v-bind="panel.componentAttrs"
-                    @scrollToElement="scrollToElement"
+                    @scroll-to-element="scrollToElement"
                   />
                 </slot>
               </div>

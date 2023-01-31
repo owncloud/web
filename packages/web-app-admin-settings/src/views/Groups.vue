@@ -52,9 +52,9 @@
             :groups="groups"
             :selected-groups="selectedGroups"
             :header-position="listHeaderPosition"
-            @toggleSelectGroup="toggleSelectGroup"
-            @toggleSelectAllGroups="toggleSelectAllGroups"
-            @unSelectAllGroups="unselectAllGroups"
+            @toggle-select-group="toggleSelectGroup"
+            @toggle-select-all-groups="toggleSelectAllGroups"
+            @un-select-all-groups="unselectAllGroups"
           >
             <template #contextMenu>
               <context-actions :items="selectedGroups" />

@@ -11,7 +11,7 @@
         :label="$gettext('Group name')"
         :error-message="formData.displayName.errorMessage"
         :fix-message-line="true"
-        @update:modelValue="validateDisplayName"
+        @update:model-value="validateDisplayName"
       />
       <compare-save-dialog
         class="edit-compare-save-dialog oc-mb-l"
@@ -39,6 +39,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['confirm'],
   data() {
     return {
       editGroup: {},

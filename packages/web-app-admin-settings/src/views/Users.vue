@@ -55,9 +55,9 @@
             :class="{ 'users-table-squashed': sideBarOpen }"
             :selected-users="selectedUsers"
             :header-position="listHeaderPosition"
-            @toggleSelectUser="toggleSelectUser"
-            @toggleSelectAllUsers="toggleSelectAllUsers"
-            @unSelectAllUsers="unselectAllUsers"
+            @toggle-select-user="toggleSelectUser"
+            @toggle-select-all-users="toggleSelectAllUsers"
+            @un-select-all-users="unselectAllUsers"
           >
             <template #contextMenu>
               <context-actions :items="selectedUsers" />

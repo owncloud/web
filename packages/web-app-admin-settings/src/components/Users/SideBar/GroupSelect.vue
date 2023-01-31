@@ -8,7 +8,7 @@
       option-label="displayName"
       :label="$gettext('Groups')"
       :fix-message-line="true"
-      @update:modelValue="onUpdate"
+      @update:model-value="onUpdate"
     >
       <template #selected-option="{ displayName, id }">
         <span class="oc-flex oc-flex-center">
@@ -54,6 +54,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['selectedOptionChange'],
   setup(props, { emit }) {
     const selectedOption = ref(props.selectedGroups)
     const onUpdate = (event) => {

@@ -13,10 +13,10 @@
     :is-header-compact="isSingleResource"
     v-bind="$attrs"
     data-custom-key-bindings="true"
-    @beforeUnmount="destroySideBar"
+    @before-unmount="destroySideBar"
     @mounted="focusSideBar"
-    @fileChanged="focusSideBar"
-    @selectPanel="setActiveSideBarPanel"
+    @file-changed="focusSideBar"
+    @select-panel="setActiveSideBarPanel"
     @close="closeSideBar"
   >
     <template #header>

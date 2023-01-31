@@ -25,10 +25,9 @@
       :header-position="fileListHeaderY"
       :sort-by="sortBy"
       :sort-dir="sortDir"
-      @fileClick="$_fileActions_triggerDefaultAction"
-      @rowMounted="rowMounted"
+      @file-click="$_fileActions_triggerDefaultAction"
+      @row-mounted="rowMounted"
       @sort="sortHandler"
-      @update:selectedIds="selectedResourcesIds = $event"
     >
       <template #status="{ resource }">
         <div

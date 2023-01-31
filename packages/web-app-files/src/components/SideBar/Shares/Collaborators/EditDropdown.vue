@@ -79,6 +79,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['expirationDateChanged', 'removeShare', 'showAccessDetails'],
   data: function () {
     return {
       enteredExpirationDate: null
@@ -229,7 +230,6 @@ export default defineComponent({
       handler: 'updateExpirationDate'
     }
   },
-  emits: ['expirationDateChanged', 'removeShare', 'showAccessDetails'],
   methods: {
     updateExpirationDate() {
       this.$emit('expirationDateChanged', {

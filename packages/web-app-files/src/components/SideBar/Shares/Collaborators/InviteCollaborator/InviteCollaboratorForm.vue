@@ -14,7 +14,7 @@
         ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
       "
       @search:input="onSearch"
-      @update:modelValue="resetFocusOnInvite"
+      @update:model-value="resetFocusOnInvite"
     >
       <template #option="option">
         <autocomplete-item :item="option" />
@@ -38,11 +38,11 @@
       <role-dropdown
         :resource="highlightedFile"
         :allow-share-permission="hasResharing || resourceIsSpace"
-        @optionChange="collaboratorRoleChanged"
+        @option-change="collaboratorRoleChanged"
       />
       <expiration-datepicker
         :share-types="selectedCollaborators.map((c) => c.value.shareType)"
-        @optionChange="collaboratorExpiryChanged"
+        @option-change="collaboratorExpiryChanged"
       />
       <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
         <oc-spinner :aria-label="$gettext('Creating share')" size="small" />

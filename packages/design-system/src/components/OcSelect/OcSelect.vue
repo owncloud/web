@@ -11,7 +11,7 @@
       class="oc-select"
       style="background: transparent"
       v-bind="additionalAttributes"
-      @update:modelValue="$emit('update:modelValue', $event)"
+      @update:model-value="$emit('update:modelValue', $event)"
     >
       <template #search="{ attributes, events }">
         <input class="vs__search" v-bind="attributes" @input="userInput" v-on="events" />

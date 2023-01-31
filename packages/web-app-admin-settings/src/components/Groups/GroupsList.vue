@@ -18,7 +18,7 @@
       :header-position="headerPosition"
       :hover="true"
       @sort="handleSort"
-      @contextmenuClicked="showContextMenuOnRightClick"
+      @contextmenu-clicked="showContextMenuOnRightClick"
       @highlight="rowClicked"
     >
       <template #selectHeader>
@@ -28,7 +28,7 @@
           :label="$gettext('Select all groups')"
           :model-value="allGroupsSelected"
           hide-label
-          @update:modelValue="$emit('toggleSelectAllGroups')"
+          @update:model-value="$emit('toggleSelectAllGroups')"
         />
       </template>
       <template #select="rowData">
@@ -39,7 +39,7 @@
           :option="rowData.item"
           :label="getSelectGroupLabel(rowData.item)"
           hide-label
-          @update:modelValue="$emit('toggleSelectGroup', rowData.item)"
+          @update:model-value="$emit('toggleSelectGroup', rowData.item)"
           @click.stop
         />
       </template>
@@ -62,7 +62,7 @@
           ref="contextMenuButtonRef"
           :item="item"
           class="groups-table-btn-action-dropdown"
-          @quickActionClicked="showContextMenuOnBtnClick($event, item)"
+          @quick-action-clicked="showContextMenuOnBtnClick($event, item)"
         >
           <template #contextMenu>
             <slot name="contextMenu" :group="item" />

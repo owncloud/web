@@ -4,7 +4,7 @@
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
       :space="selectedSpaces[0]"
-      @spaceQuotaUpdated="spaceQuotaUpdated"
+      @space-quota-updated="spaceQuotaUpdated"
     />
     <oc-list id="oc-spaces-actions-sidebar" class-name="oc-mt-s">
       <action-menu-item

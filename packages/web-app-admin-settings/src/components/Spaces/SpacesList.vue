@@ -19,7 +19,7 @@
       :header-position="headerPosition"
       :hover="true"
       @sort="handleSort"
-      @contextmenuClicked="showContextMenuOnRightClick"
+      @contextmenu-clicked="showContextMenuOnRightClick"
       @highlight="fileClicked"
     >
       <template #selectHeader>
@@ -29,7 +29,7 @@
           :label="$gettext('Select all spaces')"
           :model-value="allSpacesSelected"
           hide-label
-          @update:modelValue="$emit('toggleSelectAllSpaces')"
+          @update:model-value="$emit('toggleSelectAllSpaces')"
         />
       </template>
       <template #select="{ item }">
@@ -40,7 +40,7 @@
           :option="item"
           :label="getSelectSpaceLabel(item)"
           hide-label
-          @update:modelValue="$emit('toggleSelectSpace', item)"
+          @update:model-value="$emit('toggleSelectSpace', item)"
           @click.stop
         />
       </template>
@@ -96,7 +96,7 @@
             ref="contextMenuButtonRef"
             :item="item"
             class="spaces-table-btn-action-dropdown"
-            @quickActionClicked="showContextMenuOnBtnClick($event, item)"
+            @quick-action-clicked="showContextMenuOnBtnClick($event, item)"
           >
             <template #contextMenu>
               <slot name="contextMenu" :space="item" />
@@ -148,7 +148,7 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['toggleSelectSpace', 'toggleSelectAllSpaces', 'toggleUnSelectAllSpaces'],
+  emits: ['toggleSelectSpace', 'toggleSelectAllSpaces', 'unSelectAllSpaces'],
   setup: function (props, { emit }) {
     const { $gettext, interpolate: $gettextInterpolate, current: currentLanguage } = useGettext()
     const contextMenuButtonRef = ref(undefined)
@@ -340,7 +340,7 @@ export default defineComponent({
     }
 
     const selectSpace = (space) => {
-      emit('toggleUnSelectAllSpaces')
+      emit('unSelectAllSpaces')
       emit('toggleSelectSpace', space)
     }
 
