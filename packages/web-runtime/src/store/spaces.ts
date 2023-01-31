@@ -146,7 +146,7 @@ const actions = {
     const spaceShares = []
 
     for (const role of Object.keys(space.spaceRoles)) {
-      for (const { kind, id } of space.spaceRoles[role]) {
+      for (const { kind, id, expirationDate } of space.spaceRoles[role]) {
         const client = unref(graphClient)
         let prom: Promise<AxiosResponse>
         switch (kind) {
@@ -161,7 +161,7 @@ const actions = {
         }
 
         prom.then((resolved) => {
-          spaceShares.push(buildSpaceShare({ ...resolved.data, role }, space.id))
+          spaceShares.push(buildSpaceShare({ ...resolved.data, role, expirationDate }, space.id))
         })
 
         promises.push(prom)
@@ -173,25 +173,45 @@ const actions = {
   },
   async addSpaceMember(
     context,
-    { client, graphClient, path, shareWith, permissions, role, storageId, displayName }
+    {
+      client,
+      graphClient,
+      path,
+      shareWith,
+      permissions,
+      role,
+      storageId,
+      displayName,
+      expirationDate
+    }
   ) {
     await client.shares.shareSpaceWithUser(path, shareWith, storageId, {
       permissions,
-      role: role.name
+      role: role.name,
+      expirationDate
     })
     const graphResponse = await graphClient.drives.getDrive(storageId)
     context.commit('UPSERT_SPACE', buildSpace(graphResponse.data))
-    const shareObj = { role: role.name, onPremisesSamAccountName: shareWith, displayName }
+    const shareObj = {
+      role: role.name,
+      onPremisesSamAccountName: shareWith,
+      displayName,
+      expirationDate
+    }
     context.commit('UPSERT_SPACE_MEMBERS', buildSpaceShare(shareObj, storageId))
   },
-  async changeSpaceMember(context, { client, graphClient, share, permissions, role }) {
+  async changeSpaceMember(
+    context,
+    { client, graphClient, share, permissions, expirationDate, role }
+  ) {
     await client.shares.shareSpaceWithUser(
       '',
       share.collaborator.name || share.collaborator.displayName,
       share.id,
       {
         permissions,
-        role: role.name
+        role: role.name,
+        expirationDate
       }
     )
 
@@ -201,7 +221,8 @@ const actions = {
       {
         role: role.name,
         onPremisesSamAccountName: share.collaborator.name,
-        displayName: share.collaborator.displayName
+        displayName: share.collaborator.displayName,
+        expirationDate
       },
       share.id
     )

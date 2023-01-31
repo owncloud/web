@@ -3,6 +3,7 @@ import { User } from '../user'
 export interface SpaceRole {
   id: string
   displayName: string
+  expirationDate: string
   kind: 'user' | 'group'
   isMember(u: User): boolean
 }

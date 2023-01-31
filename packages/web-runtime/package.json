@@ -25,7 +25,7 @@
     "luxon": "^2.4.0",
     "marked": "^4.0.12",
     "oidc-client-ts": "^2.1.0",
-    "owncloud-sdk": "~3.1.0-alpha.1",
+    "owncloud-sdk": "~3.1.0-alpha.2",
     "p-queue": "^6.6.2",
     "popper-max-size-modifier": "^0.2.0",
     "portal-vue": "3.0.0",

@@ -186,3 +186,28 @@ When(
     })
   }
 )
+
+When(
+  '{string} sets the expiration date of the member {string} of the project space to {string}',
+  async function (
+    this: World,
+    stepUser: string,
+    memberName: string,
+    expirationDate: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    const member = { collaborator: this.usersEnvironment.getUser({ key: memberName }) }
+    await spacesObject.addExpirationDate({ member, expirationDate })
+  }
+)
+
+When(
+  '{string} removes the expiration date of the member {string} of the project space',
+  async function (this: World, stepUser: string, memberName: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    const member = { collaborator: this.usersEnvironment.getUser({ key: memberName }) }
+    await spacesObject.removeExpirationDate({ member })
+  }
+)

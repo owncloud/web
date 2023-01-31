@@ -85,33 +85,32 @@ export function buildSpace(data): SpaceResource {
 
   if (data.root?.permissions) {
     for (const permission of data.root.permissions) {
-      for (const role of SpacePeopleShareRoles.list()) {
-        if (permission.roles.includes(role.name)) {
-          spaceRoles[role.name] = permission.grantedToIdentities.reduce((acc, info) => {
-            const kind = info.hasOwnProperty('group') ? 'group' : 'user'
-            const spaceRole: SpaceRole = {
-              kind,
-              id: info[kind].id,
-              displayName: info[kind].displayName,
-              isMember(u?: any): boolean {
-                if (!u) {
-                  return false
-                }
+      spaceRoles[permission.roles[0]].push(
+        ...permission.grantedToIdentities.reduce((acc, info) => {
+          const kind = info.hasOwnProperty('group') ? 'group' : 'user'
+          const spaceRole: SpaceRole = {
+            kind,
+            id: info[kind].id,
+            displayName: info[kind].displayName,
+            expirationDate: permission.expirationDateTime,
+            isMember(u?: any): boolean {
+              if (!u) {
+                return false
+              }
 
-                switch (this.kind) {
-                  case 'user':
-                    return this.id == u.uuid
-                  case 'group':
-                    return u.groups.map((g) => g.id).includes(this.id)
-                  default:
-                    return false
-                }
+              switch (this.kind) {
+                case 'user':
+                  return this.id == u.uuid
+                case 'group':
+                  return u.groups.map((g) => g.id).includes(this.id)
+                default:
+                  return false
               }
             }
-            return [...acc, spaceRole]
-          }, [])
-        }
-      }
+          }
+          return [...acc, spaceRole]
+        }, [])
+      )
     }
 
     if (data.root?.deleted) {
