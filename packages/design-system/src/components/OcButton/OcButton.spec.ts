@@ -71,7 +71,6 @@ describe('OcButton', () => {
     )
   })
   describe('default prop values', () => {
-    /* eslint-disable no-unused-vars */
     it.each`
       name                 | expected
       ${'size'}            | ${'oc-button-m'}
@@ -83,7 +82,6 @@ describe('OcButton', () => {
       const wrapper = getWrapperWithProps({})
       expect(wrapper.attributes('class')).toContain(expected)
     })
-    /* eslint-disable no-unused-vars */
   })
   describe('invalid prop value', () => {
     it.each(['appearance', 'size', 'submit', 'justifyContent', 'variation', 'gapSize', 'type'])(
