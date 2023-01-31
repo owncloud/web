@@ -82,7 +82,7 @@ exports[`AppBar component renders bulkActions if enabled 1`] = `
     <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!--v-if-->
-        <batch-actions-stub showtooltips="false"></batch-actions-stub>
+        <batch-actions-stub actions="" items="undefined,undefined" limitedscreenspace="false"></batch-actions-stub>
       </div>
     </div>
   </div>
@@ -105,7 +105,7 @@ exports[`AppBar component renders bulkActions not if 1 file selected 1`] = `
     <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!--v-if-->
-        <batch-actions-stub showtooltips="false"></batch-actions-stub>
+        <batch-actions-stub actions="" items="undefined" limitedscreenspace="false"></batch-actions-stub>
       </div>
     </div>
   </div>

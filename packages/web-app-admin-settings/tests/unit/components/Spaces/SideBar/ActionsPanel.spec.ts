@@ -4,6 +4,7 @@ import {
   defaultPlugins,
   defaultStoreMockOptions,
   defaultStubs,
+  getActionMixinMocks,
   mount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
@@ -49,7 +50,7 @@ function getWrapper({ enabledActions = [] } = {}) {
   const store = createStore(storeOptions)
   const mocks = {
     ...defaultComponentMocks(),
-    ...getMixinMocks(enabledActions)
+    ...getActionMixinMocks({ actions: mixins, enabledActions })
   }
   return {
     storeOptions,
@@ -65,13 +66,4 @@ function getWrapper({ enabledActions = [] } = {}) {
       }
     })
   }
-}
-
-const getMixinMocks = (enabledActions) => {
-  const mixinMocks = {}
-  for (const mixin of mixins) {
-    const isEnabled = !!enabledActions.includes(mixin)
-    mixinMocks[mixin] = [{ isEnabled: () => isEnabled, name: '', items: [] }]
-  }
-  return mixinMocks
 }

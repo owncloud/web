@@ -22,11 +22,7 @@
             >
               <oc-icon name="close" />
             </oc-button>
-            <batch-actions
-              class="oc-ml-s"
-              :selected-items="selectedGroups"
-              :actions="batchActions"
-            />
+            <batch-actions class="oc-ml-s" :items="selectedGroups" :actions="batchActions" />
           </div>
           <div v-else>
             <oc-button variation="primary" appearance="filled" @click="toggleCreateGroupModal">
@@ -76,7 +72,7 @@
 import GroupsList from '../components/Groups/GroupsList.vue'
 import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import ContextActions from '../components/Groups/ContextActions.vue'
-import BatchActions from '../components/BatchActions.vue'
+import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import {
   computed,

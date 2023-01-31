@@ -30,7 +30,7 @@
             </oc-button>
             <batch-actions
               class="oc-ml-s"
-              :selected-items="selectedSpaces"
+              :items="selectedSpaces"
               :actions="batchActions"
               :limited-screen-space="limitedScreenSpace"
             />
@@ -92,7 +92,7 @@ import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelec
 import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
-import BatchActions from '../components/BatchActions.vue'
+import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
 import Delete from 'web-pkg/src/mixins/spaces/delete'
 import Disable from 'web-pkg/src/mixins/spaces/disable'
