@@ -622,7 +622,10 @@ export default defineComponent({
         .length
     },
     openRenameDialog(item) {
-      this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item))
+      this.$_rename_trigger(
+        { resources: [item] },
+        this.resourceRouteResolver.getMatchingSpace(item)
+      )
     },
     openTagsSidebar() {
       eventBus.publish(SideBarEventTopics.open)
@@ -740,7 +743,7 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
-      let space = this.getMatchingSpace(resource)
+      let space = this.resourceRouteResolver.getMatchingSpace(resource)
       if (!space) {
         space = buildShareSpaceResource({
           shareId: resource.shareId,
@@ -806,22 +809,9 @@ export default defineComponent({
         ownerName: resource.owner[0].displayName
       })
     },
-    getInternalSpace(storageId) {
-      return this.space || this.spaces.find((space) => space.id === storageId)
-    },
-    getMatchingSpace(resource: Resource): SpaceResource {
-      return (
-        this.getInternalSpace(resource.storageId) ||
-        buildShareSpaceResource({
-          shareId: resource.shareId,
-          shareName: resource.name,
-          serverUrl: configurationManager.serverUrl
-        })
-      )
-    },
     getDefaultParentFolderName(resource) {
       if (this.hasProjectSpaces) {
-        const matchingSpace = this.getMatchingSpace(resource)
+        const matchingSpace = this.resourceRouteResolver.getMatchingSpace(resource)
         if (matchingSpace?.driveType === 'project') {
           return matchingSpace.name
         }
@@ -837,7 +827,7 @@ export default defineComponent({
           : basename(resource.shareRoot)
       }
 
-      if (!this.getInternalSpace(resource.storageId)) {
+      if (!this.resourceRouteResolver.getInternalSpace(resource.storageId)) {
         return this.$gettext('Shared with me')
       }
 
