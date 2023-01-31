@@ -121,11 +121,8 @@ describe('OcTextInput', () => {
   })
 
   describe('type prop', () => {
-    // FIXME: validation does not work
-    it.skip('should only allow text, number, email and password as type', () => {
-      expect(() => {
-        getShallowWrapper({ type: 'binary' })
-      }).toThrow('[Vue warn]: Invalid prop: custom validator check failed for prop "type".')
+    it('should only allow text, number, email and password as type', () => {
+      expect((OcTextInput as any).props.type.validator('binary')).toBeFalsy()
     })
     it.each(['text', 'number', 'email', 'password'])(
       'should set the provided type for the input',

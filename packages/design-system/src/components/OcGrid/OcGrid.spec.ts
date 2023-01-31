@@ -17,13 +17,8 @@ describe('OcGrid', () => {
         expect(wrapper.attributes('class')).toBe('oc-grid-' + gutter)
       }
     )
-    // FIXME: validation does not work
-    it.skip('should not accept invalid values', () => {
-      expect(() => {
-        getWrapper({
-          gutter: 'invalid'
-        })
-      }).toThrow(`[Vue warn]: Invalid prop: custom validator check failed for prop "gutter".`)
+    it('should not accept invalid values', () => {
+      expect((OcGrid as any).props.gutter.validator('invalid')).toBeFalsy()
     })
   })
   describe('when flex prop is true', () => {

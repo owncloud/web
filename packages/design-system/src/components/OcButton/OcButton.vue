@@ -27,8 +27,8 @@ export default defineComponent({
     type: {
       type: String,
       default: 'button',
-      validator: (value) => {
-        return value.match(/(button|a|router-link)/)
+      validator: (value: any) => {
+        return ['button', 'a', 'router-link'].includes(value)
       }
     },
     /**

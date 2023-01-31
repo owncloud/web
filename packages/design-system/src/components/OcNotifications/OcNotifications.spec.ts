@@ -6,13 +6,8 @@ describe('OcNotifications', () => {
     return shallowMount(OcNotifications, options)
   }
   describe('position prop', () => {
-    // invalid prop
-    it.skip('should not allow values other than top-left, top-center, top-right', () => {
-      expect(() => {
-        getWrapper({
-          props: { position: 'not-valid' }
-        })
-      }).toThrow('[Vue warn]: Invalid prop: custom validator check failed for prop "position".')
+    it('should not allow values other than top-left, top-center, top-right', () => {
+      expect((OcNotifications as any).props.position.validator('invalid')).toBeFalsy()
     })
     it.each(['top-left', 'top-center', 'top-right'])(
       'should set provided position as class for wrapper',

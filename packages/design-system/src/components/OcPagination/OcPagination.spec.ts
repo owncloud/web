@@ -94,14 +94,9 @@ describe('OcPagination', () => {
     expect(wrapper.findAll(selectors.listItemCurrent).length).toBe(1)
   })
 
-  // FIXME: validation does not work
-  it.skip('logs error if maxDisplayed prop is not an even number', () => {
+  it('logs error if maxDisplayed prop is not an even number', () => {
     console.error = jest.fn()
-
-    getWrapper({ maxDisplayed: 2 })
-
-    // Error is called twice because of a default Vue validator error and our custom message
-    expect(console.error).toHaveBeenCalledTimes(2)
+    expect((Pagination as any).props.maxDisplayed.validator(2)).toBeFalsy()
   })
 
   it('builds correct prev and next links', () => {
