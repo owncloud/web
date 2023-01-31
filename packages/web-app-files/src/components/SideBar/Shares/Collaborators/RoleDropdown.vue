@@ -87,13 +87,14 @@
       >
         <oc-button
           size="small"
+          class="files-recipient-custom-permissions-drop-cancel"
           @click="cancelCustomPermissions"
           v-text="$gettext('Cancel')"
         /><oc-button
           size="small"
           variation="primary"
           appearance="filled"
-          class="oc-ml-s"
+          class="files-recipient-custom-permissions-drop-confirm oc-ml-s"
           @click="confirmCustomPermissions"
           v-text="$gettext('Apply')"
         />
@@ -103,7 +104,6 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'vuex'
 import get from 'lodash-es/get'
 import RoleItem from '../Shared/RoleItem.vue'
 import {
@@ -149,6 +149,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['optionChange'],
   setup() {
     const store = useStore()
     return {
@@ -164,8 +165,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState('Files', ['sharesTree']),
-
     roleButtonId() {
       if (this.domSelector) {
         return `files-collaborators-role-button-${this.domSelector}-${uuid.v4()}`
@@ -181,9 +180,8 @@ export default defineComponent({
       } else if (this.selectedRole.permissions().includes(SharePermissions.denied)) {
         return this.$gettext('Deny access')
       } else {
-        return this.$gettextInterpolate(this.$gettext('Invite as %{ name }'), {
-          name: this.$gettext(this.selectedRole.inlineLabel) || ''
-        })
+        const name = this.$gettext(this.selectedRole.inlineLabel) || ''
+        return this.$gettext('Invite as %{ name }', { name })
       }
     },
     customPermissionsRole() {
@@ -217,10 +215,12 @@ export default defineComponent({
     },
     resourceIsSpace() {
       return this.resource.type === 'space'
+    },
+    defaultCustomPermissions() {
+      return [...this.selectedRole.permissions(this.allowSharePermission)]
     }
   },
 
-  emits: ['optionChange'],
   created() {
     this.applyRoleAndPermissions()
   },
@@ -230,7 +230,6 @@ export default defineComponent({
   },
 
   mounted() {
-    this.applyRoleAndPermissions()
     window.addEventListener('keydown', this.cycleRoles)
   },
 
@@ -249,11 +248,9 @@ export default defineComponent({
         )[0]
       }
 
-      if (this.selectedRole.hasCustomPermissions) {
-        this.customPermissions = this.existingPermissions
-      } else {
-        this.customPermissions = [...this.selectedRole.permissions(this.allowSharePermission)]
-      }
+      this.customPermissions = this.selectedRole.hasCustomPermissions
+        ? this.existingPermissions
+        : this.defaultCustomPermissions
     },
 
     publishChange() {
@@ -293,7 +290,9 @@ export default defineComponent({
     },
 
     cancelCustomPermissions() {
-      this.customPermissions = this.existingPermissions
+      this.customPermissions = this.existingPermissions.length
+        ? this.existingPermissions
+        : this.defaultCustomPermissions
       this.$refs.customPermissionsDrop.hide()
       this.$refs.rolesDrop.show()
     },

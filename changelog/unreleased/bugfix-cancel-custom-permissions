@@ -1,0 +1,6 @@
+Bugfix: Cancel custom permissions
+
+We've fixed a bug where cancelling the custom permissions on a share would remove all permissions.
+
+https://github.com/owncloud/web/pull/8340
+https://github.com/owncloud/web/issues/8335

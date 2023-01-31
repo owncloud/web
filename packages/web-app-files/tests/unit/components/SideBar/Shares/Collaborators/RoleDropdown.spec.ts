@@ -1,5 +1,5 @@
 import RoleDropdown from 'web-app-files/src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
-import { PeopleShareRoles, SharePermissions, ShareTypes } from 'web-client/src/helpers/share'
+import { PeopleShareRoles, SharePermissions } from 'web-client/src/helpers/share'
 import {
   createStore,
   defaultPlugins,
@@ -11,230 +11,121 @@ import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 
 const selectors = {
-  button: '.files-recipient-role-select-btn',
-  roles: '.files-recipient-role-drop-list',
+  recipientRoleBtn: '.files-recipient-role-select-btn',
+  roleButton: '.files-recipient-role-drop-btn',
   roleButtonPrefix: '#files-recipient-role-drop-btn-',
-  customPermissionsDrop: '.files-recipient-custom-permissions-drop'
+  collaboratorsPermissionPrefix: '#files-collaborators-permission-',
+  customPermissionsDrop: '.files-recipient-custom-permissions-drop',
+  cancelCustomPermissionsBtn: '.files-recipient-custom-permissions-drop-cancel',
+  confirmCustomPermissionsBtn: '.files-recipient-custom-permissions-drop-confirm'
 }
 
-// needs differentiation between file and folder type?
 describe('RoleDropdown', () => {
-  describe('for file shares', () => {
-    afterEach(() => {
-      jest.clearAllMocks()
+  it.each(['folder', 'file'])(
+    'renders a button with invite text if no existing role given for resource type %s',
+    (type) => {
+      const { wrapper } = getWrapper({ mountType: shallowMount, resourceType: type })
+      expect(wrapper.html()).toMatchSnapshot()
+    }
+  )
+  it.each(['folder', 'file'])(
+    'renders a button with existing role if given for resource type %s',
+    (type) => {
+      const { wrapper } = getWrapper({
+        mountType: shallowMount,
+        existingRole: PeopleShareRoles.list(type === 'folder')[0]
+      })
+      expect(wrapper.html()).toMatchSnapshot()
+    }
+  )
+  it('does not render a button if only one role is available', () => {
+    const { wrapper } = getWrapper({
+      mountType: shallowMount,
+      canShare: true,
+      incomingParentShare: {}
     })
+    expect(wrapper.find(selectors.recipientRoleBtn).exists()).toBeFalsy()
+  })
+  it('emits "optionChange"-event on role click', async () => {
+    const { wrapper } = getWrapper()
+    ;(wrapper.vm.$refs.rolesDrop as any).tippy = { hide: jest.fn() }
+    await wrapper.find(selectors.roleButton).trigger('click')
+    expect(wrapper.emitted('optionChange')).toBeTruthy()
+  })
+  describe('custom permissions', () => {
+    it.each(['folder', 'file'])(
+      'opens custom permissions drop when custom permissions item in the roles gets selected for resource type %s',
+      async (type) => {
+        const isFolder = type === 'folder'
+        const { wrapper } = getWrapper({ resourceType: type })
+        const customPermissionsDrop = wrapper.findComponent<any>(selectors.customPermissionsDrop)
+        const showHideMock = jest.fn()
+        ;(customPermissionsDrop.vm as any).show = showHideMock
+        ;(wrapper.vm.$refs.rolesDrop as any).tippy = { hide: showHideMock }
 
-    describe('when no existing role is present', () => {
-      it.each(['folder', 'file'])(
-        'renders a button with invite text if no existing role given for resource type %s',
-        (type) => {
-          const { wrapper } = getMountedWrapper({
-            mountType: shallowMount,
-            existingRole: undefined,
-            resourceType: type
-          })
-          expect(wrapper.html()).toMatchSnapshot()
-        }
-      )
-      it.each(['folder', 'file'])(
-        'displays a dropdown with all available roles on button click for resource type %s',
-        async (type) => {
-          const isFolder = type === 'folder'
-          const { wrapper } = getMountedWrapper({ resourceType: type })
-          const button = wrapper.find(selectors.button)
-          await button.trigger('click')
+        await wrapper
+          .find(selectors.roleButtonPrefix + PeopleShareRoles.custom(isFolder).name)
+          .trigger('click')
 
-          expect(wrapper.find(selectors.roles).isVisible()).toBeTruthy()
-          for (const role of PeopleShareRoles.list(isFolder)) {
-            expect(wrapper.find(selectors.roleButtonPrefix + role.name).exists()).toBeTruthy()
-          }
-        }
-      )
-      describe('custom permissions', () => {
-        it.each(['folder', 'file'])(
-          'opens custom permissions drop when custom permissions item in the roles gets selected for resource type %s',
-          async (type) => {
-            const isFolder = type === 'folder'
-            const { wrapper } = getMountedWrapper({ resourceType: type })
-            const customPermissionsDrop = wrapper.findComponent<any>(
-              selectors.customPermissionsDrop
-            )
-            const showHideMock = jest.fn()
-            ;(customPermissionsDrop.vm as any).show = showHideMock
-            ;(wrapper.vm.$refs.rolesDrop as any).tippy = { hide: showHideMock }
+        expect(showHideMock).toHaveBeenCalled()
+      }
+    )
+    it('can be cancelled and restored', async () => {
+      const { wrapper } = getWrapper()
+      const showRoleDropMock = jest.fn()
+      const hideCustomPermissionsDropMock = jest.fn()
+      ;(wrapper.vm.$refs.rolesDrop as any).show = showRoleDropMock
+      ;(wrapper.vm.$refs.customPermissionsDrop as any).hide = hideCustomPermissionsDropMock
+      await wrapper.find(selectors.cancelCustomPermissionsBtn).trigger('click')
 
-            await wrapper
-              .find(selectors.roleButtonPrefix + PeopleShareRoles.custom(isFolder).name)
-              .trigger('click')
+      expect(showRoleDropMock).toHaveBeenCalled()
+      expect(hideCustomPermissionsDropMock).toHaveBeenCalled()
+      expect(wrapper.vm.customPermissions).toEqual(wrapper.vm.defaultCustomPermissions)
+    })
+    it('can be confirmed', async () => {
+      const { wrapper } = getWrapper()
+      const hideCustomPermissionsDropMock = jest.fn()
+      ;(wrapper.vm.$refs.customPermissionsDrop as any).hide = hideCustomPermissionsDropMock
+      await wrapper.find(selectors.confirmCustomPermissionsBtn).trigger('click')
 
-            expect(showHideMock).toHaveBeenCalled()
-          }
-        )
+      expect(hideCustomPermissionsDropMock).toHaveBeenCalled()
+      expect(wrapper.emitted('optionChange')).toBeTruthy()
+    })
+    it.each([
+      { permissions: [SharePermissions.read, SharePermissions.share] },
+      { permissions: [SharePermissions.read, SharePermissions.share, SharePermissions.delete] },
+      {
+        permissions: [
+          SharePermissions.read,
+          SharePermissions.update,
+          SharePermissions.share,
+          SharePermissions.delete
+        ]
+      }
+    ])("inherits the parents share's permissions: %s", ({ permissions }) => {
+      const { wrapper } = getWrapper({
+        mountType: shallowMount,
+        canShare: true,
+        incomingParentShare: { permissions: permissions.reduce((a, b) => a + b.bit, 0) }
       })
 
-      //   it.each(['update', 'create', 'delete', 'share'])(
-      //     'displays custom permission %s in the custom permissions drop',
-      //     (permission) => {
-      //       const {wrapper} = getWrapper()
-      //       expect(
-      //         wrapper.find(`[data-testid="files-collaborators-permission-${permission}"]`).exists()
-      //       ).toBeTruthy()
-      //     }
-      //   )
-      //   it('closes custom permissions drop when they are confirmed', async () => {
-      //     const {wrapper} = getWrapper()
-      //     const permissionsDrop = wrapper.find('[data-testid="files-recipient-custom-permissions-drop"]')
-
-      //     permissionsDrop.vm.hide = jest.fn()
-
-      //     await wrapper
-      //       .find('[data-testid="files-recipient-custom-permissions-drop-confirm"]')
-      //       .trigger('click')
-
-      //     expect(permissionsDrop.vm.hide).toHaveBeenCalled()
-      //   })
-
-      //   it('opens role drop when custom permissions drop is cancelled', async () => {
-      //     const {wrapper} = getWrapper()
-      //     const rolesDrop = wrapper.find('[data-testid="files-recipient-roles-drop"]')
-      //     const permissionsDrop = wrapper.find('[data-testid="files-recipient-custom-permissions-drop"]')
-
-      //     rolesDrop.vm.show = jest.fn()
-      //     permissionsDrop.vm.hide = jest.fn()
-
-      //     await wrapper
-      //       .find('[data-testid="files-recipient-custom-permissions-drop-cancel"]')
-      //       .trigger('click')
-
-      //     expect(permissionsDrop.vm.hide).toHaveBeenCalled()
-      //     expect(rolesDrop.vm.show).toHaveBeenCalled()
-      //   })
-      it.todo('emits an event upon role selection')
-    })
-    describe('custom permissions', () => {
-      it.each([
-        SharePermissions.read.bit + SharePermissions.share.bit,
-        SharePermissions.read.bit +
-          SharePermissions.share.bit +
-          SharePermissions.update.bit +
-          SharePermissions.create.bit,
-        SharePermissions.read.bit + SharePermissions.share.bit + SharePermissions.delete.bit
-      ])("inherits the parents share's permissions: %s", (sharePermissions) => {
-        const { wrapper } = getMountedWrapper({
-          mountType: shallowMount,
-          existingRole: PeopleShareRoles.list(true)[0],
-          isReceivedShare: true,
-          sharesTree: {
-            '/testfolder': [
-              {
-                permissions: sharePermissions,
-                shareType: ShareTypes.user.value
-              }
-            ]
-          }
-        })
-        expect(wrapper.html()).toMatchSnapshot()
-      })
-    })
-    describe('when an existing role is present', () => {
-      it.each(['folder', 'file'])(
-        'renders a button with existing role if given for resource type %s',
-        (type) => {
-          const { wrapper } = getMountedWrapper({
-            mountType: shallowMount,
-            existingRole: PeopleShareRoles.list(type === 'folder')[0]
-          })
-          expect(wrapper.html()).toMatchSnapshot()
-        }
-      )
-      it('does not render a button if only one role is available', () => {
-        const { wrapper } = getMountedWrapper({
-          mountType: shallowMount,
-          existingRole: PeopleShareRoles.list(true)[0],
-          isReceivedShare: true,
-          sharesTree: {
-            '/testfolder': [
-              {
-                permissions: SharePermissions.read.bit,
-                shareType: ShareTypes.user.value
-              }
-            ]
-          }
-        })
-        expect(wrapper.html()).toMatchSnapshot()
-      })
-      it.todo(
-        'displays a dropdown with viewer, editor and custom permissions if no custom permissions had been selected'
-      )
-      it.todo('displays a dropdown with custom permissions if they already were selected')
-      //   it('opens custom permissions drop when custom permissions item in the roles is selected', async () => {
-      //     const {wrapper} = getWrapper()
-      //     const advancedPermissionsDrop = wrapper.find(
-      //       '[data-testid="files-recipient-custom-permissions-drop"]'
-      //     )
-      //     const showHideMock = jest.fn()
-      //     advancedPermissionsDrop.vm.show = showHideMock
-      //     wrapper.vm.$refs.rolesDrop.tippy = { hide: showHideMock }
-
-      //     await wrapper
-      //       .find('[data-testid="files-recipient-role-drop-btn-advancedRole"]')
-      //       .trigger('click')
-
-      //     expect(showHideMock).toHaveBeenCalledTimes(2)
-      //   })
-      //   it.each(['update', 'create', 'delete', 'share'])(
-      //     'displays custom permission %s in the custom permissions drop',
-      //     (permission) => {
-      //       const {wrapper} = getWrapper()
-      //       expect(
-      //         wrapper.find(`[data-testid="files-collaborators-permission-${permission}"]`).exists()
-      //       ).toBeTruthy()
-      //     }
-      //   )
-      //   it('closes custom permissions drop when they are confirmed', async () => {
-      //     const {wrapper} = getWrapper()
-      //     const permissionsDrop = wrapper.find('[data-testid="files-recipient-custom-permissions-drop"]')
-
-      //     permissionsDrop.vm.hide = jest.fn()
-
-      //     await wrapper
-      //       .find('[data-testid="files-recipient-custom-permissions-drop-confirm"]')
-      //       .trigger('click')
-
-      //     expect(permissionsDrop.vm.hide).toHaveBeenCalled()
-      //   })
-
-      //   it('opens role drop when custom permissions drop is cancelled', async () => {
-      //     const {wrapper} = getWrapper()
-      //     const rolesDrop = wrapper.find('[data-testid="files-recipient-roles-drop"]')
-      //     const permissionsDrop = wrapper.find('[data-testid="files-recipient-custom-permissions-drop"]')
-
-      //     rolesDrop.vm.show = jest.fn()
-      //     permissionsDrop.vm.hide = jest.fn()
-
-      //     await wrapper
-      //       .find('[data-testid="files-recipient-custom-permissions-drop-cancel"]')
-      //       .trigger('click')
-
-      //     expect(permissionsDrop.vm.hide).toHaveBeenCalled()
-      //     expect(rolesDrop.vm.show).toHaveBeenCalled()
-      //   })
-      it.todo('emits an event upon role selection')
+      for (const permission of permissions) {
+        expect(
+          wrapper.find(`${selectors.collaboratorsPermissionPrefix}${permission.key}`).exists()
+        ).toBeTruthy()
+      }
     })
   })
 })
 
-function getMountedWrapper({
+function getWrapper({
   mountType = mount,
   existingRole = null,
-  shareId = null,
   resourceType = 'folder',
-  sharesTree = {},
-  isReceivedShare = false
+  canShare = false,
+  incomingParentShare = null
 } = {}) {
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.Files.state.sharesTree = sharesTree
-  const store = createStore(storeOptions)
+  const store = createStore(defaultStoreMockOptions)
   return {
     wrapper: mountType(RoleDropdown, {
       props: {
@@ -243,18 +134,16 @@ function getMountedWrapper({
           extension: resourceType === 'folder' ? '' : 'jpg',
           type: resourceType,
           isFolder: resourceType === 'folder',
-          isReceivedShare: () => isReceivedShare
+          canShare: () => canShare
         }),
         existingRole,
-        shareId,
         allowSharePermission: true
       },
       global: {
         plugins: [...defaultPlugins(), store],
         renderStubDefaultSlot: true,
-        stubs: { 'oc-button': true, 'oc-icon': true },
         provide: {
-          incomingParentShare: {}
+          incomingParentShare
         }
       }
     })
