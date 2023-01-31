@@ -22,11 +22,8 @@ describe('OcImage', () => {
     const wrapper = getWrapper({ loadingType: loadingType })
     expect(wrapper.attributes('loading')).toBe(loadingType)
   })
-  // FIXME: validation does not work
-  it.skip('should not accept value other than (lazy & eager) for prop loading type', () => {
-    expect(() => {
-      getWrapper({ loadingType: 'invalid' })
-    }).toThrow(`[Vue warn]: Invalid prop: custom validator check failed for prop "loadingType".`)
+  it('should not accept value other than (lazy & eager) for prop loading type', () => {
+    expect((OcImage as any).props.loadingType.validator('invalid')).toBeFalsy()
   })
   describe('when alt is set', () => {
     const wrapper = getWrapper({ alt: 'test alt text' })

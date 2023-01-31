@@ -85,32 +85,13 @@ describe('OcButton', () => {
     })
     /* eslint-disable no-unused-vars */
   })
-  describe.skip('invalid prop value', () => {
-    it.each`
-      prop
-      ${'appearance'}
-      ${'size'}
-      ${'submit'}
-      ${'justifyContent'}
-      ${'variation'}
-      ${'gapSize'}
-    `('when prop "$prop" is set to an invalid value"', ({ prop }) => {
-      const props = {}
-      props[prop] = 'not-valid'
-      expect(() => {
-        getWrapperWithProps(props)
-      }).toThrow(`[Vue warn]: Invalid prop: custom validator check failed for prop "${prop}".`)
-    })
-    it('when invalid value is set for prop "type"', () => {
-      expect(() => {
-        getWrapperWithProps({
-          type: 'not-valid'
-        })
-      }).toThrow(
-        '[Vue warn]: Unknown custom element: <not-valid> - did you register the' +
-          ' component correctly? For recursive components, make sure to provide the "name" option.'
-      )
-    })
+  describe('invalid prop value', () => {
+    it.each(['appearance', 'size', 'submit', 'justifyContent', 'variation', 'gapSize', 'type'])(
+      'when prop "%s" is set to an invalid value"',
+      (prop) => {
+        expect((OcButton as any).props[prop].validator('not-valid')).toBeFalsy()
+      }
+    )
   })
   describe('oc button appearance', () => {
     // appearance prop is combined with variation prop

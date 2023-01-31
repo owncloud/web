@@ -28,13 +28,8 @@ describe('OcNotificationMessage', () => {
   })
 
   describe('status prop', () => {
-    // FIXME: validation does not work
-    it.skip('should not allow values other than passive, primary, success, warning, danger', () => {
-      expect(() => {
-        getWrapper({
-          status: 'not-valid'
-        })
-      }).toThrow('[Vue warn]: Invalid prop: custom validator check failed for prop "status".')
+    it('should not allow values other than passive, primary, success, warning, danger', () => {
+      expect((OcNotificationMessage as any).props.status.validator('invalid')).toBeFalsy()
     })
 
     it.each(['passive', 'primary', 'success', 'warning', 'danger'])(
