@@ -64,11 +64,9 @@ import { PropType } from 'vue'
 import { User } from 'web-client/src/generated'
 import { formatFileSize } from 'web-pkg/src/helpers'
 import { useGettext } from 'vue3-gettext'
-import { $gettext } from 'web-app-files/src/router/utils'
 
 export default defineComponent({
   name: 'DetailsPanel',
-  methods: { $gettext },
   components: {
     UserInfoBox
   },
@@ -87,9 +85,10 @@ export default defineComponent({
     }
   },
   setup() {
-    const { current: currentLanguage } = useGettext()
+    const { $gettext, current: currentLanguage } = useGettext()
 
     return {
+      $gettext,
       currentLanguage
     }
   },
