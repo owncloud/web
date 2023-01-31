@@ -19,7 +19,7 @@
           <td v-text="user.onPremisesSamAccountName" />
         </tr>
         <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Display name')" />
+          <th scope="col" class="oc-pr-s" v-text="$gettext('First and last name')" />
           <td v-text="user.displayName" />
         </tr>
         <tr>
@@ -34,6 +34,25 @@
             <span v-if="user.appRoleAssignments" v-text="roleDisplayName" />
           </td>
         </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
+          <td>
+            <span v-if="showUserQuota" v-text="quotaDisplayValue" />
+            <span
+              v-else
+              class="oc-text-meta"
+              v-text="
+                $gettext('To see an individual quota, the user needs to have logged in once.')
+              "
+            />
+          </td>
+        </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Groups')" />
+          <td>
+            <span v-if="user.appRoleAssignments" v-text="groupsDisplayValue" />
+          </td>
+        </tr>
       </table>
     </div>
   </div>
@@ -43,6 +62,8 @@ import { defineComponent } from 'vue'
 import UserInfoBox from './UserInfoBox.vue'
 import { PropType } from 'vue'
 import { User } from 'web-client/src/generated'
+import { formatFileSize } from 'web-pkg/src/helpers'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'DetailsPanel',
@@ -63,6 +84,14 @@ export default defineComponent({
       required: true
     }
   },
+  setup() {
+    const { $gettext, current: currentLanguage } = useGettext()
+
+    return {
+      $gettext,
+      currentLanguage
+    }
+  },
   computed: {
     noUsers() {
       return !this.users.length
@@ -81,6 +110,20 @@ export default defineComponent({
       return this.$gettext(
         this.roles.find((role) => role.id === assignedRole.appRoleId)?.displayName || ''
       )
+    },
+    groupsDisplayValue() {
+      return this.user.memberOf
+        .map((group) => group.displayName)
+        .sort()
+        .join(', ')
+    },
+    showUserQuota() {
+      return 'total' in (this.user.drive?.quota || {})
+    },
+    quotaDisplayValue() {
+      return this.user.drive.quota.total === 0
+        ? this.$gettext('No restriction')
+        : formatFileSize(this.user.drive.quota.total, this.currentLanguage)
     }
   }
 })
