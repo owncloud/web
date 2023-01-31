@@ -246,7 +246,9 @@ export default defineComponent({
       isLoading,
       errorMessage,
       footerSlogan,
-      resolvePublicLinkTask
+      loadTokenInfoTask,
+      resolvePublicLinkTask,
+      isPasswordRequiredTask
     }
   }
 })
