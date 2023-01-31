@@ -535,6 +535,7 @@ Details
    quota
 
    https://github.com/owncloud/web/pull/8331
+   https://github.com/owncloud/web/pull/8342
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
