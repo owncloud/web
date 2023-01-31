@@ -56,6 +56,7 @@ Summary
 * Enhancement - Show selectable groups only: [#8306](https://github.com/owncloud/web/pull/8306)
 * Enhancement - Add context menu to groups: [#8317](https://github.com/owncloud/web/pull/8317)
 * Enhancement - Add context menu to users: [#8324](https://github.com/owncloud/web/pull/8324)
+* Enhancement - Admin settings users section details improvement: [#8331](https://github.com/owncloud/web/pull/8331)
 
 Details
 -------
@@ -497,6 +498,13 @@ Details
 
    https://github.com/owncloud/web/issues/8323
    https://github.com/owncloud/web/pull/8324
+
+* Enhancement - Admin settings users section details improvement: [#8331](https://github.com/owncloud/web/pull/8331)
+
+   We've improved the details panel in the user's section to show the assigned groups and total
+   quota
+
+   https://github.com/owncloud/web/pull/8331
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
