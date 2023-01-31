@@ -23,13 +23,13 @@ describe('livecycleMixin', () => {
     expect(emittedEvent).toBe(event)
   })
 
-  // FIXME
-  it.skip('handles updated', async () => {
+  it('handles updated', async () => {
     const { wrapper } = getWrapper()
     const wrapperComponent = wrapper.findComponent({ name: 'DummyComponent' })
 
     const event = 'updated'
     wrapperComponent.vm.$data.id = event
+    await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     const [emittedComponent, emittedEvent] = wrapper.emitted(event)[0]
     expect((emittedComponent as any).$el.outerHTML).toBe(wrapperComponent.html())
