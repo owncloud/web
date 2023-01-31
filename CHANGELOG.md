@@ -28,6 +28,7 @@ Summary
 * Bugfix - Loading additional user data: [#8276](https://github.com/owncloud/web/pull/8276)
 * Bugfix - Re-loading space members panel: [#8300](https://github.com/owncloud/web/pull/8300)
 * Bugfix - Editing users who never logged in: [#8326](https://github.com/owncloud/web/pull/8326)
+* Bugfix - Cancel custom permissions: [#8340](https://github.com/owncloud/web/pull/8340)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
@@ -206,6 +207,14 @@ Details
    to a recent backend change).
 
    https://github.com/owncloud/web/pull/8326
+
+* Bugfix - Cancel custom permissions: [#8340](https://github.com/owncloud/web/pull/8340)
+
+   We've fixed a bug where cancelling the custom permissions on a share would remove all
+   permissions.
+
+   https://github.com/owncloud/web/issues/8335
+   https://github.com/owncloud/web/pull/8340
 
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 
