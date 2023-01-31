@@ -38,9 +38,13 @@
           <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
           <td>
             <span v-if="showUserQuota" v-text="quotaDisplayValue" />
-            <span v-else class="oc-text-meta" v-translate>
-              To see an individual quota, the user needs to have logged in once.
-            </span>
+            <span
+              v-else
+              class="oc-text-meta"
+              v-text="
+                $gettext('To see an individual quota, the user needs to have logged in once.')
+              "
+            />
           </td>
         </tr>
         <tr>
@@ -60,9 +64,11 @@ import { PropType } from 'vue'
 import { User } from 'web-client/src/generated'
 import { formatFileSize } from 'web-pkg/src/helpers'
 import { useGettext } from 'vue3-gettext'
+import { $gettext } from 'web-app-files/src/router/utils'
 
 export default defineComponent({
   name: 'DetailsPanel',
+  methods: { $gettext },
   components: {
     UserInfoBox
   },
