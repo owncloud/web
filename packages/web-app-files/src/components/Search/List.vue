@@ -29,10 +29,9 @@
           :is-selectable="false"
           :sort-by="sortBy"
           :sort-dir="sortDir"
-          @fileClick="$_fileActions_triggerDefaultAction"
-          @rowMounted="rowMounted"
+          @file-click="$_fileActions_triggerDefaultAction"
+          @row-mounted="rowMounted"
           @sort="handleSort"
-          @update:selectedIds="selectedResourcesIds = $event"
         >
           <template #contextMenu="{ resource }">
             <context-actions

@@ -23,6 +23,7 @@ export default defineComponent({
       default: () => []
     }
   },
+  emits: ['deleteMessage'],
   computed: {
     ...mapGetters(['configuration']),
     notificationPosition() {
@@ -35,7 +36,6 @@ export default defineComponent({
       return this.activeMessages ? this.activeMessages.slice(0, 5) : []
     }
   },
-  emits: ['deleteMessage'],
   methods: {
     deleteMessage(item) {
       this.$emit('deleteMessage', item)

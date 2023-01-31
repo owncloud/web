@@ -86,7 +86,7 @@ describe('SpacesList', () => {
   it('emits events on file click', () => {
     const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
     wrapper.vm.fileClicked(spaceMocks[0])
-    expect(wrapper.emitted().toggleUnSelectAllSpaces.length).toBeTruthy()
+    expect(wrapper.emitted().unSelectAllSpaces.length).toBeTruthy()
     expect(wrapper.emitted().toggleSelectSpace).toBeTruthy()
   })
   it('shows only filtered spaces if filter applied', async () => {

@@ -42,7 +42,7 @@
                 :existing-role="share.role"
                 :allow-share-permission="hasResharing || isSpace"
                 class="files-collaborators-collaborator-role"
-                @optionChange="shareRoleChanged"
+                @option-change="shareRoleChanged"
               />
             </div>
             <div v-else-if="share.role">
@@ -85,9 +85,9 @@
           :expiration-date="share.expires ? share.expires : null"
           :share-category="shareCategory"
           :can-edit-or-delete="canEditOrDelete"
-          @expirationDateChanged="shareExpirationChanged"
-          @removeShare="removeShare"
-          @showAccessDetails="showAccessDetails"
+          @expiration-date-changed="shareExpirationChanged"
+          @remove-share="removeShare"
+          @show-access-details="showAccessDetails"
         />
         <oc-info-drop
           ref="accessDetailsDrop"
@@ -135,6 +135,7 @@ export default defineComponent({
       default: null
     }
   },
+  emits: ['onDelete'],
   setup() {
     return {
       hasResharing: useCapabilityFilesSharingResharing(),
@@ -314,7 +315,6 @@ export default defineComponent({
       }
     }
   },
-  emits: ['onDelete'],
   methods: {
     ...mapActions(['showMessage']),
     ...mapActions('Files', ['changeShare']),

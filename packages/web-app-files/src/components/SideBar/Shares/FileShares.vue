@@ -30,7 +30,7 @@
             :share="collaborator"
             :modifiable="isShareModifiable(collaborator)"
             :shared-parent-route="getSharedParentRoute(collaborator)"
-            @onDelete="$_ocCollaborators_deleteShare_trigger"
+            @on-delete="$_ocCollaborators_deleteShare_trigger"
           />
         </li>
       </ul>

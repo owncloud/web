@@ -5,7 +5,7 @@
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
       :space="quotaModalSelectedSpace"
-      @spaceQuotaUpdated="spaceQuotaUpdated"
+      @space-quota-updated="spaceQuotaUpdated"
     />
   </div>
 </template>

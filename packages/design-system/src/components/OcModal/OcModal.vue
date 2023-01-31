@@ -30,7 +30,7 @@
             :disabled="inputDisabled"
             :fix-message-line="true"
             :selection-range="inputSelectionRange"
-            @update:modelValue="inputOnInput"
+            @update:model-value="inputOnInput"
             @keydown.enter.prevent="confirm"
           />
           <p v-else key="modal-message" class="oc-modal-body-message" v-text="message" />

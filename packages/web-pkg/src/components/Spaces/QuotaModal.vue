@@ -12,7 +12,7 @@
         <quota-select
           :title="$gettext('Space quota')"
           :total-quota="selectedOption"
-          @selectedOptionChange="changeSelectedQuotaOption"
+          @selected-option-change="changeSelectedQuotaOption"
         />
       </template>
     </oc-modal>

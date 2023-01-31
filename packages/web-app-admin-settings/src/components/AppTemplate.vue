@@ -30,7 +30,7 @@
         :loading="sideBarLoading"
         :open="sideBarOpen"
         :is-header-compact="isSideBarHeaderCompact"
-        @selectPanel="selectPanel"
+        @select-panel="selectPanel"
         @close="closeSideBar"
       >
         <template #header>

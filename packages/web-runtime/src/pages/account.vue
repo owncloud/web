@@ -74,7 +74,7 @@
             :model-value="selectedLanguageOption"
             :clearable="false"
             :options="languageOptions"
-            @update:modelValue="updateSelectedLanguage"
+            @update:model-value="updateSelectedLanguage"
           />
         </dd>
       </div>

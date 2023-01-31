@@ -9,7 +9,7 @@
           :label="$gettext('First and last name')"
           :error-message="formData.displayName.errorMessage"
           :fix-message-line="true"
-          @update:modelValue="validateDisplayName"
+          @update:model-value="validateDisplayName"
         />
         <oc-text-input
           v-model="editUser.mail"
@@ -27,7 +27,7 @@
           type="password"
           :fix-message-line="true"
           default-value="●●●●●●●●"
-          @update:modelValue="onUpdatePassword"
+          @update:model-value="onUpdatePassword"
         />
         <div class="oc-mb-s">
           <oc-select
@@ -36,7 +36,7 @@
             option-label="displayName"
             :options="translatedRoleOptions"
             :clearable="false"
-            @update:modelValue="onUpdateRole"
+            @update:model-value="onUpdateRole"
           >
             <template #selected-option>
               {{ selectedRoleName }}
@@ -50,7 +50,7 @@
           class="oc-mb-s"
           :title="$gettext('Personal quota')"
           :total-quota="editUser.drive.quota.total || 0"
-          @selectedOptionChange="changeSelectedQuotaOption"
+          @selected-option-change="changeSelectedQuotaOption"
         />
         <p
           v-else
@@ -61,7 +61,7 @@
           class="oc-mb-s"
           :selected-groups="editUser.memberOf"
           :group-options="groupOptions"
-          @selectedOptionChange="changeSelectedGroupOption"
+          @selected-option-change="changeSelectedGroupOption"
         />
       </div>
       <compare-save-dialog
@@ -108,6 +108,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['confirm'],
   setup(props) {
     const editUser: MaybeRef<User> = ref({})
     const formData = ref({

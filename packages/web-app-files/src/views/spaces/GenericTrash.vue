@@ -36,7 +36,6 @@
           :space="space"
           :has-actions="showActions"
           @sort="handleSort"
-          @update:selectedIds="selectedResourcesIds = $event"
         >
           <template #contextMenu="{ resource }">
             <context-actions

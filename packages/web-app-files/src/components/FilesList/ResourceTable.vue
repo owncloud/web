@@ -19,12 +19,12 @@
     :lazy="lazyLoading"
     padding-x="medium"
     @highlight="fileClicked"
-    @rowMounted="rowMounted"
-    @contextmenuClicked="showContextMenu"
-    @itemDropped="fileDropped"
-    @itemDragged="fileDragged"
+    @row-mounted="rowMounted"
+    @contextmenu-clicked="showContextMenu"
+    @item-dropped="fileDropped"
+    @item-dragged="fileDragged"
     @sort="sort"
-    @update:modelValue="$emit('update:modelValue', $event)"
+    @update:model-value="$emit('update:modelValue', $event)"
   >
     <template #selectHeader>
       <div class="resource-table-select-all">
@@ -34,7 +34,7 @@
           :label="allResourcesCheckboxLabel"
           :hide-label="true"
           :model-value="areAllResourcesSelected"
-          @update:modelValue="toggleSelectionAll"
+          @update:model-value="toggleSelectionAll"
         />
       </div>
     </template>
@@ -46,7 +46,7 @@
         size="large"
         :model-value="isResourceSelected(item)"
         :outline="isLatestSelectedItem(item)"
-        @update:modelValue="setSelection($event, item)"
+        @update:model-value="setSelection($event, item)"
         @click.stop
       />
     </template>
@@ -166,7 +166,7 @@
           :item="item"
           :resource-dom-selector="resourceDomSelector"
           class="resource-table-btn-action-dropdown"
-          @quickActionClicked="showContextMenuOnBtnClick($event, item)"
+          @quick-action-clicked="showContextMenuOnBtnClick($event, item)"
         >
           <template #contextMenu>
             <slot name="contextMenu" :resource="item" />

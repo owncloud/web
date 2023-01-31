@@ -19,7 +19,7 @@
       :header-position="headerPosition"
       :hover="true"
       @sort="handleSort"
-      @contextmenuClicked="showContextMenuOnRightClick"
+      @contextmenu-clicked="showContextMenuOnRightClick"
       @highlight="rowClicked"
     >
       <template #selectHeader>
@@ -29,7 +29,7 @@
           :label="$gettext('Select all users')"
           :model-value="allUsersSelected"
           hide-label
-          @update:modelValue="$emit('toggleSelectAllUsers')"
+          @update:model-value="$emit('toggleSelectAllUsers')"
         />
       </template>
       <template #select="{ item }">
@@ -40,7 +40,7 @@
           :option="item"
           :label="getSelectUserLabel(item)"
           hide-label
-          @update:modelValue="$emit('toggleSelectUser', item)"
+          @update:model-value="$emit('toggleSelectUser', item)"
           @click.stop
         />
       </template>
@@ -70,7 +70,7 @@
           ref="contextMenuButtonRef"
           :item="item"
           class="users-table-btn-action-dropdown"
-          @quickActionClicked="showContextMenuOnBtnClick($event, item)"
+          @quick-action-clicked="showContextMenuOnBtnClick($event, item)"
         >
           <template #contextMenu>
             <slot name="contextMenu" :user="item" />

@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="snackbars">
-      <message-bar :active-messages="activeMessages" @deleteMessage="deleteMessage" />
+      <message-bar :active-messages="activeMessages" @delete-message="deleteMessage" />
       <upload-info />
     </div>
   </div>

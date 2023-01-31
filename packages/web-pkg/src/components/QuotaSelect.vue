@@ -11,7 +11,7 @@
       :create-option="createOption"
       option-label="displayValue"
       :label="title"
-      @update:modelValue="onUpdate"
+      @update:model-value="onUpdate"
     >
       <template #selected-option="{ displayValue, displayUnit }">
         <span>{{ displayValue }}</span>
