@@ -38,7 +38,7 @@
           <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
           <td>
             <span v-if="showUserQuota" v-text="quotaDisplayValue" />
-            <span>
+            <span v-else>
               <span class="oc-mr-xs">-</span>
               <oc-contextual-helper
                 :text="
