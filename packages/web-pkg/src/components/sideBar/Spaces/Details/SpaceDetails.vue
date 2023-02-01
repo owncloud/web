@@ -13,7 +13,7 @@
       />
     </div>
     <div
-      v-if="!spaceResource && hasShares"
+      v-if="showShareIndicators && hasShares"
       class="oc-flex oc-flex-middle oc-space-details-sidebar-members oc-mb-m oc-text-small"
       style="gap: 15px"
     >
@@ -48,9 +48,9 @@
         <th scope="col" class="oc-pr-s" v-text="$gettext('Last activity')" />
         <td v-text="lastModifiedDate" />
       </tr>
-      <tr v-if="space.description">
+      <tr v-if="resource.description">
         <th scope="col" class="oc-pr-s" v-text="$gettext('Subtitle')" />
-        <td v-text="space.description" />
+        <td v-text="resource.description" />
       </tr>
       <tr>
         <th scope="col" class="oc-pr-s" v-text="$gettext('Manager')" />
@@ -58,20 +58,20 @@
           <span v-text="ownerUsernames" />
         </td>
       </tr>
-      <tr v-if="!space.disabled">
+      <tr v-if="!resource.disabled">
         <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
         <td>
-          <space-quota :space-quota="space.spaceQuota" />
+          <space-quota :space-quota="resource.spaceQuota" />
         </td>
       </tr>
     </table>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, ref, unref } from 'vue'
+import { defineComponent, inject, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
-import { buildResource, SpaceResource } from 'web-client/src/helpers'
+import { buildResource, Resource } from 'web-client/src/helpers'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
@@ -87,11 +87,12 @@ export default defineComponent({
   name: 'SpaceDetails',
   components: { SpaceQuota },
   props: {
-    spaceResource: {
-      type: Object as PropType<SpaceResource>,
-      required: false
-    },
     showSpaceImage: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    showShareIndicators: {
       type: Boolean,
       required: false,
       default: true
@@ -100,16 +101,17 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const accessToken = useAccessToken({ store })
+    const resource = inject<Resource>('resource')
     const spaceImage = ref('')
 
     const loadImageTask = useTask(function* (signal, ref) {
-      if (!ref.space?.spaceImageData || !props.showSpaceImage) {
+      if (!ref.resource?.spaceImageData || !props.showSpaceImage) {
         spaceImage.value = undefined
         return
       }
 
-      const webDavPathComponents = decodeURI(ref.space.spaceImageData.webDavUrl).split('/')
-      const idComponent = webDavPathComponents.find((c) => c.startsWith(ref.space.id))
+      const webDavPathComponents = decodeURI(ref.resource.spaceImageData.webDavUrl).split('/')
+      const idComponent = webDavPathComponents.find((c) => c.startsWith(ref.resource.id))
       if (!idComponent) {
         return
       }
@@ -132,15 +134,12 @@ export default defineComponent({
       })
     })
 
-    return { loadImageTask, spaceImage }
+    return { loadImageTask, spaceImage, resource }
   },
   computed: {
-    ...mapGetters('Files', ['currentFileOutgoingLinks', 'highlightedFile']),
+    ...mapGetters('Files', ['currentFileOutgoingLinks']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['user']),
-    space() {
-      return this.spaceResource || this.highlightedFile
-    },
     hasShares() {
       return this.hasMemberShares || this.hasLinkShares
     },
@@ -195,14 +194,14 @@ export default defineComponent({
       return this.$gettext('Overview of the information about the selected space')
     },
     lastModifiedDate() {
-      return formatDateFromISO(this.space.mdate, this.$language.current)
+      return formatDateFromISO(this.resource.mdate, this.$language.current)
     },
     ownerUsernames() {
       /* TODO: Find a better solution for reactiveness
          Why: Currently we use a different logic for the admin-panel and we need a solution that works for both
       */
       if (this.spaceResource) {
-        return this.space.spaceRoles[spaceRoleManager.name]
+        return this.resource.spaceRoles[spaceRoleManager.name]
           .map((share) => {
             if (share.displayName === this.user?.displayName) {
               return this.$gettextInterpolate(this.$gettext('%{displayName} (me)'), {
@@ -264,7 +263,7 @@ export default defineComponent({
     }
   },
   watch: {
-    'space.spaceImageData': {
+    'resource.spaceImageData': {
       handler() {
         this.loadImageTask.perform(this)
       },

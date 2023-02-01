@@ -36,7 +36,6 @@
     </oc-select>
     <div class="oc-flex oc-flex-middle oc-flex-between oc-mb-l oc-mt-s">
       <role-dropdown
-        :resource="highlightedFile"
         :allow-share-permission="hasResharing || resourceIsSpace"
         @option-change="collaboratorRoleChanged"
       />
@@ -91,7 +90,8 @@ import {
 } from 'web-pkg/src/composables'
 
 import { useGraphClient } from 'web-pkg/src/composables'
-import { defineComponent } from 'vue'
+import { defineComponent, inject } from 'vue'
+import { Resource } from 'web-client'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -122,6 +122,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     return {
+      resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
       hasShareJail: useCapabilityShareJailEnabled(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
@@ -144,7 +145,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
+    ...mapGetters('Files', ['currentFileOutgoingCollaborators']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['configuration', 'user', 'capabilities']),
 
@@ -164,7 +165,7 @@ export default defineComponent({
     },
 
     resourceIsSpace() {
-      return this.highlightedFile.type === 'space'
+      return this.resource.type === 'space'
     }
   },
   mounted() {
@@ -173,9 +174,9 @@ export default defineComponent({
     if (this.resourceIsSpace) {
       this.selectedRole = SpacePeopleShareRoles.list()[0]
     } else {
-      const canDeny = this.highlightedFile.canDeny() && this.hasRoleDenyAccess
+      const canDeny = this.resource.canDeny() && this.hasRoleDenyAccess
       this.selectedRole = PeopleShareRoles.list(
-        this.highlightedFile.isFolder,
+        this.resource.isFolder,
         this.hasRoleCustomPermissions,
         canDeny
       )[0]
@@ -315,10 +316,10 @@ export default defineComponent({
                   this.selectedRole.permissions(this.hasResharing || this.resourceIsSpace)
                 )
 
-            let path = this.highlightedFile.path
+            let path = this.resource.path
             // sharing a share root from the share jail -> use resource name as path
             if (this.hasShareJail && path === '/') {
-              path = `/${this.highlightedFile.name}`
+              path = `/${this.resource.name}`
             }
 
             const addMethod = this.resourceIsSpace ? this.addSpaceMember : this.addShare
@@ -333,7 +334,7 @@ export default defineComponent({
               permissions: bitmask,
               role: this.selectedRole,
               expirationDate: this.expirationDate,
-              storageId: this.highlightedFile.fileId || this.highlightedFile.id
+              storageId: this.resource.fileId || this.resource.id
             })
           })
         )

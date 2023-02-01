@@ -63,7 +63,7 @@ export default {
   ],
   computed: {
     ...mapState(['apps']),
-    ...mapGetters('Files', ['highlightedFile', 'currentFolder']),
+    ...mapGetters('Files', ['currentFolder']),
     ...mapGetters(['capabilities', 'configuration']),
 
     $_fileActions_systemActions() {

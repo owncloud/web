@@ -54,9 +54,9 @@ describe('InviteCollaboratorForm', () => {
       expect(spyTriggerUpload).toHaveBeenCalledTimes(0)
     })
     it.each([
-      { storageId: undefined, highlightedFile: folderMock, addMethod: 'addShare' },
-      { storageId: undefined, highlightedFile: spaceMock, addMethod: 'addSpaceMember' },
-      { storageId: 1, highlightedFile: folderMock, addMethod: 'addShare' }
+      { storageId: undefined, resource: folderMock, addMethod: 'addShare' },
+      { storageId: undefined, resource: spaceMock, addMethod: 'addSpaceMember' },
+      { storageId: 1, resource: folderMock, addMethod: 'addShare' }
     ])('calls the "addShare" action', async (dataSet) => {
       const selectedCollaborators = [
         { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
@@ -64,7 +64,7 @@ describe('InviteCollaboratorForm', () => {
       const { wrapper } = getWrapper({
         selectedCollaborators,
         storageId: dataSet.storageId,
-        highlightedFile: dataSet.highlightedFile as any
+        resource: dataSet.resource as any
       })
       const addShareSpy = jest.spyOn(wrapper.vm as any, dataSet.addMethod)
       await (wrapper.vm as any).share()
@@ -77,13 +77,12 @@ describe('InviteCollaboratorForm', () => {
 function getWrapper({
   selectedCollaborators = [],
   storageId = 'fake-storage-id',
-  highlightedFile = folderMock
+  resource = folderMock
 } = {}) {
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.capabilities.mockImplementation(() => ({
     files_sharing: { federation: { incoming: true, outgoing: true } }
   }))
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => highlightedFile)
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(InviteCollaboratorForm, {
@@ -94,6 +93,7 @@ function getWrapper({
       },
       global: {
         plugins: [...defaultPlugins(), store],
+        provide: { resource },
         mocks: defaultComponentMocks({
           currentRoute: mock<RouteLocation>({ params: { storageId } })
         })

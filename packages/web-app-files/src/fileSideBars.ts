@@ -27,14 +27,14 @@ function $gettext(msg: string): string {
 
 const panelGenerators: (({
   rootFolder,
-  highlightedFile,
+  resource,
   router,
   multipleSelection,
   user,
   capabilities
 }: {
   rootFolder: boolean
-  highlightedFile: Resource
+  resource: Resource
   router: Router
   multipleSelection: boolean
   user: User
@@ -42,7 +42,7 @@ const panelGenerators: (({
 }) => Panel)[] = [
   // We don't have file details in the trashbin, yet.
   // Only allow `actions` panel on trashbin route for now.
-  ({ router, rootFolder, highlightedFile }): Panel => ({
+  ({ router, multipleSelection, rootFolder, resource }): Panel => ({
     app: 'no-selection',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
@@ -50,12 +50,13 @@ const panelGenerators: (({
     default: () => true,
     get enabled() {
       return (
+        !multipleSelection &&
         !isLocationSpacesActive(router, 'files-spaces-projects') &&
-        (!highlightedFile || (rootFolder && highlightedFile?.type !== 'space'))
+        (!resource || (rootFolder && resource?.type !== 'space'))
       )
     }
   }),
-  ({ router, rootFolder, highlightedFile }): Panel => ({
+  ({ router, rootFolder, resource }): Panel => ({
     app: 'no-selection',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
@@ -64,11 +65,11 @@ const panelGenerators: (({
     get enabled() {
       return (
         isLocationSpacesActive(router, 'files-spaces-projects') &&
-        (!highlightedFile || (rootFolder && highlightedFile?.type !== 'space'))
+        (!resource || (rootFolder && resource?.type !== 'space'))
       )
     }
   }),
-  ({ router, multipleSelection, rootFolder, highlightedFile }) => ({
+  ({ router, multipleSelection, rootFolder, resource }) => ({
     app: 'details',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
@@ -79,11 +80,12 @@ const panelGenerators: (({
         !isLocationTrashActive(router, 'files-trash-generic') &&
         !multipleSelection &&
         !rootFolder &&
-        highlightedFile
+        resource &&
+        resource.type !== 'space'
       )
     }
   }),
-  ({ multipleSelection, rootFolder, highlightedFile, router }) => ({
+  ({ multipleSelection, rootFolder, resource, router }) => ({
     app: 'details-multiple',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
@@ -99,30 +101,30 @@ const panelGenerators: (({
     },
     default: () => true,
     get enabled() {
-      return multipleSelection && (!rootFolder || highlightedFile?.type === 'space')
+      return multipleSelection && (!rootFolder || resource?.type === 'space')
     }
   }),
-  ({ multipleSelection, highlightedFile }) => ({
+  ({ multipleSelection, resource }) => ({
     app: 'details-space',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: SpaceDetails,
     default: () => true,
     get enabled() {
-      return highlightedFile?.type === 'space' && !multipleSelection
+      return resource?.type === 'space' && !multipleSelection
     }
   }),
-  ({ router, multipleSelection, rootFolder, highlightedFile }) => ({
+  ({ router, multipleSelection, rootFolder, resource }) => ({
     app: 'actions',
     icon: 'slideshow-3',
     title: $gettext('Actions'),
     component: FileActions,
     default: isLocationTrashActive(router, 'files-trash-generic'),
     get enabled() {
-      return !!(!multipleSelection && !rootFolder && highlightedFile)
+      return !!(!multipleSelection && !rootFolder && resource && resource.type !== 'space')
     }
   }),
-  ({ multipleSelection, highlightedFile, user }) => ({
+  ({ multipleSelection, resource, user }) => ({
     app: 'space-actions',
     icon: 'slideshow-3',
     title: $gettext('Actions'),
@@ -131,16 +133,16 @@ const panelGenerators: (({
       if (multipleSelection) {
         return false
       }
-      if (highlightedFile?.type !== 'space') {
+      if (resource?.type !== 'space') {
         return false
       }
       return !![
-        ...highlightedFile.spaceRoles[spaceRoleManager.name],
-        ...highlightedFile.spaceRoles[spaceRoleEditor.name]
+        ...resource.spaceRoles[spaceRoleManager.name],
+        ...resource.spaceRoles[spaceRoleEditor.name]
       ].find((role) => role.id === user.uuid)
     }
   }),
-  ({ capabilities, router, multipleSelection, rootFolder, highlightedFile }) => ({
+  ({ capabilities, router, multipleSelection, rootFolder, resource }) => ({
     app: 'sharing',
     icon: 'user-add',
     iconFillType: 'line',
@@ -156,7 +158,7 @@ const panelGenerators: (({
       }
     },
     get enabled() {
-      if (multipleSelection || rootFolder || !highlightedFile) {
+      if (multipleSelection || rootFolder || !resource || resource.type === 'space') {
         return false
       }
       if (
@@ -172,7 +174,7 @@ const panelGenerators: (({
       return false
     }
   }),
-  ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({
+  ({ capabilities, resource, router, multipleSelection, rootFolder }) => ({
     app: 'tags',
     icon: 'price-tag-3',
     iconFillType: 'line',
@@ -180,10 +182,16 @@ const panelGenerators: (({
     component: TagsPanel,
     componentAttrs: {},
     get enabled() {
-      if (!capabilities?.files?.tags || multipleSelection || rootFolder) {
+      if (
+        !capabilities?.files?.tags ||
+        multipleSelection ||
+        rootFolder ||
+        !resource ||
+        resource.type === 'space'
+      ) {
         return false
       }
-      if (typeof highlightedFile.canEditTags !== 'function' || !highlightedFile.canEditTags()) {
+      if (typeof resource.canEditTags !== 'function' || !resource.canEditTags()) {
         return false
       }
       return !(
@@ -192,7 +200,7 @@ const panelGenerators: (({
       )
     }
   }),
-  ({ multipleSelection, highlightedFile, capabilities }) => ({
+  ({ multipleSelection, resource, capabilities }) => ({
     app: 'space-share',
     icon: 'group',
     title: $gettext('Members'),
@@ -207,10 +215,10 @@ const panelGenerators: (({
       }
     },
     get enabled() {
-      return highlightedFile?.type === 'space' && !multipleSelection
+      return resource?.type === 'space' && !multipleSelection
     }
   }),
-  ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({
+  ({ capabilities, resource, router, multipleSelection, rootFolder }) => ({
     app: 'versions',
     icon: 'git-branch',
     title: $gettext('Versions'),
@@ -225,7 +233,9 @@ const panelGenerators: (({
       ) {
         return false
       }
-      return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
+      return (
+        !!capabilities.core && resource && resource.type !== 'folder' && resource.type !== 'space'
+      )
     }
   })
 ]

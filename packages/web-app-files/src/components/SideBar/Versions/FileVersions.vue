@@ -5,7 +5,7 @@
       <oc-tbody>
         <oc-tr v-for="(item, index) in versions" :key="index" class="file-row">
           <oc-td width="shrink" data-testid="file-versions-file-icon">
-            <oc-resource-icon :resource="highlightedFile" size="medium" />
+            <oc-resource-icon :resource="resource" size="medium" />
           </oc-td>
           <oc-td
             width="shrink"
@@ -52,37 +52,34 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { defineComponent, inject } from 'vue'
-import { isShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { defineComponent, inject, ref } from 'vue'
+import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissions } from 'web-client/src/helpers/share'
 
 export default defineComponent({
   name: 'FileVersions',
   setup() {
+    const loading = ref(false)
+
     return {
-      space: inject<SpaceResource>('displayedSpace')
+      space: inject<SpaceResource>('space'),
+      resource: inject<Resource>('resource'),
+      loading
     }
   },
-  data: () => ({
-    loading: false,
-    DavProperty
-  }),
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'versions']),
+    ...mapGetters('Files', ['versions']),
     hasVersion() {
       return this.versions.length > 0
     },
     isRevertable() {
-      if (
-        (this.space && isShareSpaceResource(this.space)) ||
-        this.highlightedFile.isReceivedShare()
-      ) {
-        if (this.highlightedFile.permissions !== undefined) {
-          return this.highlightedFile.permissions.includes(DavPermission.Updateable)
+      if ((this.space && isShareSpaceResource(this.space)) || this.resource.isReceivedShare()) {
+        if (this.resource.permissions !== undefined) {
+          return this.resource.permissions.includes(DavPermission.Updateable)
         }
 
-        if (this.highlightedFile.share?.role) {
-          return this.highlightedFile.share.role.hasPermission(SharePermissions.update)
+        if (this.resource.share?.role) {
+          return this.resource.share.role.hasPermission(SharePermissions.update)
         }
       }
 
@@ -90,7 +87,7 @@ export default defineComponent({
     }
   },
   watch: {
-    highlightedFile() {
+    resource() {
       this.fetchFileVersions()
     }
   },
@@ -106,20 +103,20 @@ export default defineComponent({
     },
     async fetchFileVersions() {
       this.loading = true
-      await this.loadVersions({ client: this.$client, fileId: this.highlightedFile.fileId })
+      await this.loadVersions({ client: this.$client, fileId: this.resource.fileId })
       this.loading = false
     },
     async revertVersion(file) {
-      const { fileId, id, path } = this.highlightedFile
+      const { fileId, id, path } = this.resource
       await this.$client.fileVersions.restoreFileVersion(fileId, this.currentVersionId(file), path)
       const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(
         this.space,
-        this.highlightedFile
+        this.resource
       )
 
       const fieldsToUpdate = ['size', 'mdate']
       for (const field of fieldsToUpdate) {
-        if (this.highlightedFile[field]) {
+        if (this.resource[field]) {
           this.UPDATE_RESOURCE_FIELD({ id, field, value: resource[field] })
         }
       }
@@ -128,7 +125,7 @@ export default defineComponent({
     },
     downloadVersion(file) {
       const version = this.currentVersionId(file)
-      return this.downloadFile(this.highlightedFile, version)
+      return this.downloadFile(this.resource, version)
     },
     formatVersionDate(file) {
       return formatRelativeDateFromHTTP(

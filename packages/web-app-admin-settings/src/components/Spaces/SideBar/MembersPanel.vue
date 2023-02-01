@@ -25,8 +25,8 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, PropType, watch } from 'vue'
-import { SpaceResource } from 'web-client/src'
+import { computed, defineComponent, inject, watch } from 'vue'
+import { Resource } from 'web-client/src'
 import MembersRoleSection from './MembersRoleSection.vue'
 import { ref, unref } from 'vue-demi'
 import Fuse from 'fuse.js'
@@ -36,13 +36,8 @@ import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/s
 export default defineComponent({
   name: 'MembersPanel',
   components: { MembersRoleSection },
-  props: {
-    spaceResource: {
-      type: Object as PropType<SpaceResource>,
-      required: true
-    }
-  },
-  setup(props) {
+  setup() {
+    const resource = inject<Resource>('resource')
     const filterTerm = ref('')
     const markInstance = ref(null)
     const membersListRef = ref(null)
@@ -63,15 +58,15 @@ export default defineComponent({
 
     const spaceMembers = computed(() => {
       return [
-        ...props.spaceResource.spaceRoles.manager.map((r) => ({
+        ...unref(resource).spaceRoles.manager.map((r) => ({
           ...r,
           roleType: spaceRoleManager.name
         })),
-        ...props.spaceResource.spaceRoles.editor.map((r) => ({
+        ...unref(resource).spaceRoles.editor.map((r) => ({
           ...r,
           roleType: spaceRoleEditor.name
         })),
-        ...props.spaceResource.spaceRoles.viewer.map((r) => ({
+        ...unref(resource).spaceRoles.viewer.map((r) => ({
           ...r,
           roleType: spaceRoleViewer.name
         }))
@@ -113,4 +108,3 @@ export default defineComponent({
   }
 })
 </script>
-

@@ -4,28 +4,27 @@
       <div class="oc-mr-s">
         <oc-icon
           name="layout-grid"
-          :size="spaceResource.description ? 'large' : 'medium'"
+          :size="resource.description ? 'large' : 'medium'"
           class="oc-display-block"
         />
       </div>
       <div>
-        <h3 data-testid="space-info-name" v-text="spaceResource.name" />
-        <span data-testid="space-info-subtitle" v-text="spaceResource.description" />
+        <h3 data-testid="space-info-name" v-text="resource.name" />
+        <span data-testid="space-info-subtitle" v-text="resource.description" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import { SpaceResource } from 'web-client'
+import { defineComponent, inject } from 'vue'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   name: 'SpaceInfo',
-  props: {
-    spaceResource: {
-      type: Object as PropType<SpaceResource>,
-      required: false
+  setup() {
+    return {
+      resource: inject<Resource>('resource')
     }
   }
 })

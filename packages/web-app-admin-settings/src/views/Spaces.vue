@@ -111,6 +111,11 @@ export default defineComponent({
     BatchActions
   },
   mixins: [Delete, Disable, Restore],
+  provide() {
+    return {
+      resource: computed(() => this.selectedSpaces[0])
+    }
+  },
   setup() {
     const instance = getCurrentInstance().proxy as any
     const store = useStore()
@@ -195,8 +200,8 @@ export default defineComponent({
           default: true,
           enabled: unref(selectedSpaces).length === 1,
           componentAttrs: {
-            spaceResource: unref(selectedSpaces)[0],
-            showSpaceImage: false
+            showSpaceImage: false,
+            showShareIndicators: false
           }
         },
         {
@@ -216,10 +221,7 @@ export default defineComponent({
           title: $gettext('Actions'),
           component: ActionsPanel,
           default: false,
-          enabled: unref(selectedSpaces).length === 1,
-          componentAttrs: {
-            selectedSpaces: unref(selectedSpaces)
-          }
+          enabled: unref(selectedSpaces).length === 1
         },
         {
           app: 'SpaceMembers',
@@ -227,10 +229,7 @@ export default defineComponent({
           title: $gettext('Members'),
           component: MembersPanel,
           default: false,
-          enabled: unref(selectedSpaces).length === 1,
-          componentAttrs: {
-            spaceResource: unref(selectedSpaces)[0]
-          }
+          enabled: unref(selectedSpaces).length === 1
         }
       ].filter((p) => p.enabled)
     })

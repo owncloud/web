@@ -29,7 +29,6 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 import Rename from 'web-pkg/src/mixins/spaces/rename'
 import Delete from 'web-pkg/src/mixins/spaces/delete'
@@ -43,7 +42,7 @@ import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
 import { thumbnailService } from '../../../services'
-import { ComputedRef, defineComponent, inject } from 'vue'
+import { computed, ComputedRef, defineComponent, inject, unref } from 'vue'
 import { Resource } from 'web-client'
 
 export default defineComponent({
@@ -61,15 +60,17 @@ export default defineComponent({
     EditQuota
   ],
   setup() {
+    const resource = inject<Resource>('resource')
+    const resources = computed(() => {
+      return [unref(resource)]
+    })
+
     return {
-      space: inject<ComputedRef<Resource>>('displayedSpace')
+      space: inject<ComputedRef<Resource>>('space'),
+      resources
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile']),
-    resources() {
-      return [this.highlightedFile]
-    },
     actions() {
       return [
         ...this.$_rename_items,

@@ -1,5 +1,5 @@
 <template>
-  <SideBar
+  <InnerSideBar
     v-if="open"
     ref="sidebar"
     class="files-side-bar"
@@ -10,7 +10,7 @@
     :warning-message="warningMessage"
     :is-content-displayed="isContentDisplayed"
     :loading="loading"
-    :is-header-compact="isSingleResource"
+    :is-header-compact="!!loadedResource"
     v-bind="$attrs"
     data-custom-key-bindings="true"
     @before-unmount="destroySideBar"
@@ -21,58 +21,47 @@
   >
     <template #header>
       <file-info
-        v-if="highlightedFile && isSingleResource && !highlightedFileIsSpace"
+        v-if="loadedResource && !highlightedFileIsSpace"
         class="sidebar-panel__file_info"
         :is-sub-panel-active="!!activePanel"
       />
       <space-info
-        v-if="isSingleResource && highlightedFileIsSpace"
-        :space-resource="spaceResource"
+        v-if="loadedResource && highlightedFileIsSpace"
         class="sidebar-panel__space_info"
       />
     </template>
-  </SideBar>
+  </InnerSideBar>
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters, mapState } from 'vuex'
-import SideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
+import { computed, defineComponent, PropType, provide, ref, unref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useActiveLocation } from '../../composables'
 import FileInfo from './FileInfo.vue'
+import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { WebDAV } from 'web-client/src/webdav'
+import { default as InnerSideBar } from 'web-pkg/src/components/sideBar/SideBar.vue'
 import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
-import { Panel } from 'web-pkg/src/components/sideBar/'
-
+import { Panel } from 'web-pkg/src/components/sideBar'
+import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import {
   isLocationCommonActive,
   isLocationPublicActive,
   isLocationSharesActive,
+  isLocationSpacesActive,
   isLocationTrashActive
 } from '../../router'
-import { computed, defineComponent, PropType } from 'vue'
 import {
   useCapabilityShareJailEnabled,
   useClientService,
   useGraphClient,
-  usePublicLinkPassword,
-  useStore
+  useStore,
+  useRouter
 } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import isEqual from 'lodash-es/isEqual'
-import { useActiveLocation } from '../../composables'
-import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { WebDAV } from 'web-client/src/webdav'
 
 export default defineComponent({
-  components: { FileInfo, SpaceInfo, SideBar },
-
-  provide() {
-    return {
-      displayedItem: computed(() => this.selectedFile),
-      activePanel: computed(() => this.activePanel),
-      displayedSpace: computed(() => this.space)
-    }
-  },
-
+  components: { FileInfo, SpaceInfo, InnerSideBar },
   props: {
     open: {
       type: Boolean,
@@ -89,9 +78,42 @@ export default defineComponent({
       default: null
     }
   },
-
-  setup() {
+  setup(props) {
     const store = useStore()
+    const router = useRouter()
+    const { $gettext } = useGettext()
+    const { owncloudSdk } = useClientService()
+    const { graphClient } = useGraphClient()
+    const { webdav } = useClientService()
+
+    const loadedResource = ref()
+    const loading = ref(false)
+
+    const highlightedFile = computed(() => {
+      return store.getters['Files/highlightedFile']
+    })
+    const selectedFiles = computed(() => {
+      return store.getters['Files/selectedFiles']
+    })
+    const currentFolder = computed(() => {
+      return store.getters['Files/currentFolder']
+    })
+
+    const isSharedWithMeLocation = useActiveLocation(isLocationSharesActive, 'files-shares-with-me')
+    const isSharedWithOthersLocation = useActiveLocation(
+      isLocationSharesActive,
+      'files-shares-with-others'
+    )
+    const isSharedViaLinkLocation = useActiveLocation(
+      isLocationSharesActive,
+      'files-shares-via-link'
+    )
+    const isProjectsLocation = isLocationSpacesActive(router, 'files-spaces-projects')
+    const isFavoritesLocation = useActiveLocation(isLocationCommonActive, 'files-common-favorites')
+    const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
+    const isPublicFilesLocation = useActiveLocation(isLocationPublicActive, 'files-public-link')
+    const isTrashLocation = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
+    const hasShareJail = useCapabilityShareJailEnabled()
 
     const closeSideBar = () => {
       eventBus.publish(SideBarEventTopics.close)
@@ -99,7 +121,6 @@ export default defineComponent({
     const setActiveSideBarPanel = (panelName) => {
       eventBus.publish(SideBarEventTopics.setActivePanel, panelName)
     }
-
     const focusSideBar = (component, event) => {
       component.focus({
         from: document.activeElement,
@@ -107,191 +128,196 @@ export default defineComponent({
         revert: event === 'beforeUnmount'
       })
     }
-
     const destroySideBar = (component, event) => {
       focusSideBar(component, event)
       eventBus.publish(SideBarEventTopics.close)
     }
 
-    const { webdav } = useClientService()
+    const isShareAccepted = computed(() => {
+      return unref(highlightedFile)?.status === 0
+    })
+    const isContentDisplayed = computed(() => {
+      return unref(isSharedWithMeLocation) ? unref(isShareAccepted) : true
+    })
+    const warningMessage = computed(() => {
+      if (!unref(isShareAccepted)) {
+        return $gettext('Please, accept this share first to display available actions')
+      }
 
-    return {
-      ...useGraphClient(),
-      isSharedWithMeLocation: useActiveLocation(isLocationSharesActive, 'files-shares-with-me'),
-      isSharedWithOthersLocation: useActiveLocation(
-        isLocationSharesActive,
-        'files-shares-with-others'
-      ),
-      isSharedViaLinkLocation: useActiveLocation(isLocationSharesActive, 'files-shares-via-link'),
-      isFavoritesLocation: useActiveLocation(isLocationCommonActive, 'files-common-favorites'),
-      isSearchLocation: useActiveLocation(isLocationCommonActive, 'files-common-search'),
-      isPublicFilesLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
-      isTrashLocation: useActiveLocation(isLocationTrashActive, 'files-trash-generic'),
-      hasShareJail: useCapabilityShareJailEnabled(),
-      publicLinkPassword: usePublicLinkPassword({ store }),
-      setActiveSideBarPanel,
-      closeSideBar,
-      destroySideBar,
-      focusSideBar,
-      webdav
-    }
-  },
-  data() {
-    return {
-      focused: undefined,
-      oldPanelName: null,
-      selectedFile: {},
-      loading: false
-    }
-  },
+      return null
+    })
+    const areMultipleSelected = computed(() => {
+      return unref(selectedFiles)?.length > 1
+    })
+    const isRootFolder = computed(() => {
+      const pathSegments = unref(highlightedFile)?.path?.split('/').filter(Boolean) || []
+      if (unref(isSharedWithMeLocation) || unref(isSearchLocation)) {
+        return !unref(highlightedFile)
+      }
+      if (unref(hasShareJail) && props.space?.driveType === 'share') {
+        return false
+      }
+      if (unref(isTrashLocation) && !unref(highlightedFile)?.id) {
+        return true
+      }
+      if (props.space?.driveType === 'project') {
+        return false
+      }
+      return !pathSegments.length
+    })
+    const highlightedFileIsSpace = computed(() => {
+      return isProjectSpaceResource(unref(highlightedFile) || {})
+    })
+    const sharesLoadingDisabledOnCurrentRoute = computed(() => {
+      return unref(isPublicFilesLocation) || unref(isTrashLocation)
+    })
+    const isShareLocation = computed(() => {
+      return (
+        unref(isSharedWithMeLocation) ||
+        unref(isSharedWithOthersLocation) ||
+        unref(isSharedViaLinkLocation)
+      )
+    })
 
-  computed: {
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
-    ...mapGetters(['fileSideBars', 'capabilities']),
-    ...mapGetters('runtime/spaces', ['spaces']),
-    ...mapState(['user']),
-    availablePanels(): Panel[] {
-      const { panels } = this.fileSideBars.reduce(
+    const availablePanels = computed((): Panel[] => {
+      const { panels } = store.getters.fileSideBars.reduce(
         (result, panelGenerator) => {
           const panel = panelGenerator({
-            capabilities: this.capabilities,
-            highlightedFile: this.highlightedFile,
-            route: this.$route,
-            router: this.$router,
-            multipleSelection: this.areMultipleSelected,
-            rootFolder: this.isRootFolder,
-            user: this.user
+            capabilities: store.getters.capabilities,
+            resource: unref(loadedResource),
+            router,
+            multipleSelection: unref(areMultipleSelected),
+            rootFolder: unref(isRootFolder),
+            user: store.getters.user
           })
 
           if (panel.enabled) {
             result.panels.push(panel)
           }
-
           return result
         },
         { panels: [] }
       )
 
       return panels
-    },
-    isShareAccepted() {
-      return this.highlightedFile?.status === 0
-    },
-    isContentDisplayed() {
-      return isLocationSharesActive(this.$router, 'files-shares-with-me')
-        ? this.isShareAccepted
-        : true
-    },
-    warningMessage() {
-      if (!this.isShareAccepted) {
-        return this.$gettext('Please, accept this share first to display available actions')
-      }
+    })
 
+    const getSelectedResource = () => {
+      if (unref(highlightedFileIsSpace) && unref(selectedFiles).length) {
+        return store.getters['runtime/spaces/spaces'].find(
+          (s) => s.id === unref(highlightedFile).id
+        )
+      }
+      if (unref(selectedFiles).length === 1) {
+        return unref(selectedFiles)[0]
+      }
+      if (unref(currentFolder)?.id && !unref(isRootFolder) && !unref(areMultipleSelected)) {
+        return unref(currentFolder)
+      }
       return null
-    },
-    isSingleResource() {
-      return !this.areMultipleSelected && (!this.isRootFolder || this.highlightedFileIsSpace)
-    },
-    areMultipleSelected() {
-      return this.selectedFiles && this.selectedFiles.length > 1
-    },
-    isRootFolder() {
-      const pathSegments = this.highlightedFile?.path?.split('/').filter(Boolean) || []
-      if (this.isSharedWithMeLocation || this.isSearchLocation) {
-        return !this.highlightedFile
-      }
-      if (this.hasShareJail && this.space?.driveType === 'share') {
-        return false
-      }
-      if (this.isTrashLocation && !this.highlightedFile?.id) {
-        return true
-      }
-      return !pathSegments.length
-    },
-    highlightedFileIsSpace() {
-      return this.highlightedFile?.type === 'space'
-    },
-    sharesLoadingDisabledOnCurrentRoute() {
-      return this.isPublicFilesLocation || this.isTrashLocation
-    },
-    isShareLocation() {
-      return (
-        this.isSharedWithMeLocation ||
-        this.isSharedWithOthersLocation ||
-        this.isSharedViaLinkLocation
-      )
-    },
-    spaceResource() {
-      return this.spaces.find((s) => s.id === this.highlightedFile.id)
     }
-  },
-  watch: {
-    highlightedFile: {
-      handler(newFile, oldFile) {
-        if (!this.isSingleResource || !this.highlightedFile) {
-          return
-        }
-
-        const noChanges = oldFile && isEqual(newFile, oldFile)
-        const loadShares =
-          !noChanges &&
-          !this.sharesLoadingDisabledOnCurrentRoute &&
-          (!!oldFile || !this.currentFolder)
-        if (loadShares) {
-          this.loadShares()
-        }
-
-        if (isProjectSpaceResource(this.highlightedFile)) {
-          this.loadSpaceMembers({ graphClient: this.graphClient, space: this.spaceResource })
-        }
-
-        if (this.isShareLocation || !noChanges) {
-          this.fetchFileInfo()
-        }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    ...mapActions('Files', ['loadSharesTree']),
-    ...mapActions('runtime/spaces', ['loadSpaceMembers']),
-
-    async fetchFileInfo() {
-      this.loading = true
-
-      if (!this.isShareLocation) {
-        this.selectedFile = { ...this.highlightedFile }
-        this.loading = false
+    const setLoadedResource = async (resource) => {
+      if (!unref(isShareLocation)) {
+        loadedResource.value = resource
         return
       }
 
       // shared resources look different, hence we need to fetch the actual resource here
       try {
-        this.selectedFile = await (this.webdav as WebDAV).getFileInfo(this.space, {
-          path: this.highlightedFile.path
+        const shareResource = await (unref(webdav) as WebDAV).getFileInfo(props.space, {
+          path: unref(highlightedFile).path
         })
+        shareResource.share = unref(highlightedFile).share
+        shareResource.status = unref(highlightedFile).status
+        loadedResource.value = shareResource
       } catch (error) {
-        this.selectedFile = { ...this.highlightedFile }
+        loadedResource.value = resource
         console.error(error)
       }
-      this.loading = false
-    },
+    }
 
-    loadShares() {
-      this.loadSharesTree({
-        client: this.$client,
-        path: this.highlightedFile.path,
-        storageId: this.highlightedFile.fileId,
+    const loadShares = () => {
+      store.dispatch('Files/loadSharesTree', {
+        client: owncloudSdk,
+        path: unref(highlightedFile).path,
+        storageId: unref(highlightedFile).fileId,
         includeRoot: true,
         // cache must not be used on flat file lists that gather resources form various locations
         useCached: !(
-          this.isSharedWithMeLocation ||
-          this.isSharedWithOthersLocation ||
-          this.isSharedViaLinkLocation ||
-          this.isSearchLocation ||
-          this.isFavoritesLocation
+          unref(isSharedWithMeLocation) ||
+          unref(isSharedWithOthersLocation) ||
+          unref(isSharedViaLinkLocation) ||
+          unref(isSearchLocation) ||
+          unref(isFavoritesLocation)
         )
       })
+    }
+
+    watch(
+      selectedFiles,
+      (newResource, oldResource) => {
+        if (
+          unref(selectedFiles).length === 1 &&
+          unref(loadedResource)?.id === unref(selectedFiles)[0].id
+        ) {
+          // current resource is already loaded
+          return
+        }
+
+        loading.value = true
+        let selectedResource = getSelectedResource()
+        if (selectedResource) {
+          const shouldLoadShares =
+            !unref(sharesLoadingDisabledOnCurrentRoute) && (!!oldResource || !unref(currentFolder))
+          if (shouldLoadShares) {
+            loadShares()
+          }
+
+          if (unref(highlightedFileIsSpace)) {
+            store.dispatch('runtime/spaces/loadSpaceMembers', {
+              graphClient: unref(graphClient),
+              space: selectedResource
+            })
+          }
+
+          setLoadedResource(selectedResource)
+          loading.value = false
+          return
+        }
+
+        const currentFolderRequired = !unref(isShareLocation) && !unref(isProjectsLocation)
+        if (!currentFolderRequired || unref(currentFolder)) {
+          loadedResource.value = null
+          loading.value = false
+        }
+      },
+      { deep: true }
+    )
+
+    provide(
+      'resource',
+      computed(() => unref(loadedResource))
+    )
+    provide(
+      'space',
+      computed(() => props.space)
+    )
+    provide(
+      'activePanel',
+      computed(() => props.activePanel)
+    )
+
+    return {
+      loadedResource,
+      setActiveSideBarPanel,
+      closeSideBar,
+      destroySideBar,
+      focusSideBar,
+      availablePanels,
+      loading,
+      warningMessage,
+      isContentDisplayed,
+      highlightedFileIsSpace
     }
   }
 })

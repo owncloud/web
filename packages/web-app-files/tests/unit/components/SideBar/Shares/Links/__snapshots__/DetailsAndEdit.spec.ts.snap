@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DetailsAndEdit component if user can edit renders dropdown and edit button 1`] = `
-<div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
+<div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s" file="undefined">
   <div>
     <oc-button-stub appearance="raw" class="edit-public-link-role-dropdown-toggle oc-text-left" disabled="false" gapsize="none" id="edit-public-link-role-dropdown-toggle-undefined" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
       <span class="link-current-role">Viewer</span>
@@ -99,7 +99,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
 `;
 
 exports[`DetailsAndEdit component if user can not edit does not render dropdown or edit button 1`] = `
-<div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
+<div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s" file="undefined">
   <p class="oc-my-rm">
     <span class="link-current-role">Viewer</span>
   </p>

@@ -49,8 +49,11 @@ describe('Details SideBar Panel', () => {
     const { wrapper } = createWrapper({ props: { showSpaceImage: false } })
     expect(wrapper.find(selectors.spaceDefaultImage).exists()).toBeTruthy()
   })
-  it('does not render the space members count if spaceResource is given', () => {
-    const { wrapper } = createWrapper({ props: { spaceResource: spaceMock } })
+  it('does not render share indicators if "showShareIndicators" is false', () => {
+    const { wrapper } = createWrapper({
+      spaceResource: spaceMock,
+      props: { showShareIndicators: false }
+    })
     expect(wrapper.find(selectors.spaceMembers).exists()).toBeFalsy()
   })
 })
@@ -61,7 +64,6 @@ function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
   storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(() => [
     spaceShare
   ])
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => spaceResource)
   storeOptions.modules.Files.getters.currentFileOutgoingCollaborators.mockImplementation(() => [
     spaceShare
   ])
@@ -71,12 +73,7 @@ function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
       props: { ...props },
       global: {
         plugins: [...defaultPlugins(), store],
-        directives: {
-          OcTooltip: jest.fn()
-        },
-        provide: {
-          displayedItem: spaceResource
-        }
+        provide: { resource: spaceResource }
       }
     })
   }

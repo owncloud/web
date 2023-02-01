@@ -344,12 +344,7 @@ export default defineComponent({
   computed: {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
-    ...mapGetters('Files', [
-      'highlightedFile',
-      'currentFolder',
-      'totalFilesCount',
-      'totalFilesSize'
-    ]),
+    ...mapGetters('Files', ['currentFolder', 'totalFilesCount', 'totalFilesSize']),
     ...mapGetters(['user', 'configuration']),
 
     isEmpty() {
