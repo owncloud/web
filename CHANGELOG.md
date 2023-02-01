@@ -36,6 +36,7 @@ Summary
 * Enhancement - Add switch to enable condensed resource table: [#7976](https://github.com/owncloud/web/pull/7976)
 * Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
 * Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
+* Enhancement - Add tiles view for resource display: [#7991](https://github.com/owncloud/web/pull/7991)
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 * Enhancement - Enable autoplay in the preview app: [#7995](https://github.com/owncloud/web/pull/7995)
 * Enhancement - Don't open sidebar when copying quicklink: [#8008](https://github.com/owncloud/web/issues/8008)
@@ -290,8 +291,8 @@ Details
 
 * Enhancement - Add switch to enable condensed resource table: [#7976](https://github.com/owncloud/web/pull/7976)
 
-   We've added a switch to have a more condensed resource table. The change gets saved to the route
-   and persisted across folder navigation in all files, spaces and favorites views.
+   We've added a switch to have a more condensed resource table. The change gets saved to the url and
+   persisted across folder navigation in all files, spaces and favorites views.
 
    https://github.com/owncloud/web/issues/6380
    https://github.com/owncloud/web/pull/7976
@@ -312,6 +313,16 @@ Details
 
    https://github.com/owncloud/web/issues/7682
    https://github.com/owncloud/web/pull/7983
+
+* Enhancement - Add tiles view for resource display: [#7991](https://github.com/owncloud/web/pull/7991)
+
+   We've added a switch to change from the known resource table to a tiles view. The change gets
+   saved to the url and persisted across resource navigation.
+
+   https://github.com/owncloud/web/issues/6378
+   https://github.com/owncloud/web/issues/6379
+   https://github.com/owncloud/web/issues/6380
+   https://github.com/owncloud/web/pull/7991
 
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 
