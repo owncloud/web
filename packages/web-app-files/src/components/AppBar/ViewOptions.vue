@@ -6,9 +6,9 @@
     >
       <oc-button
         v-for="viewMode in viewModes"
-        :class="viewMode.name"
         :key="viewMode.name"
         v-oc-tooltip="$gettext(viewMode.label)"
+        :class="viewMode.name"
         :appearance="viewModeCurrent === viewMode.name ? 'filled' : 'outline'"
         :aria-label="$gettext(viewMode.label)"
         @click="setViewMode(viewMode)"

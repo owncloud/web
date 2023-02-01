@@ -465,7 +465,7 @@ export default defineComponent({
         unobserve()
         this.loadPreview({
           resource,
-          isPublic: false,
+          isPublic: isPublicSpaceResource(this.space),
           dimensions,
           type: ImageType.Thumbnail
         })
