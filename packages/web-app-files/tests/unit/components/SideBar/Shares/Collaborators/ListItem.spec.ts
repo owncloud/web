@@ -34,8 +34,8 @@ const selectors = {
 
 describe('Collaborator ListItem component', () => {
   describe('displays the correct image/icon according to the shareType', () => {
-    describe('user and space share type', () => {
-      it.each([ShareTypes.user.value, ShareTypes.space.value])(
+    describe('user and spaceUser share type', () => {
+      it.each([ShareTypes.user.value, ShareTypes.spaceUser.value])(
         'should display a users avatar',
         (shareType) => {
           const { wrapper } = createWrapper({ shareType })
@@ -54,13 +54,21 @@ describe('Collaborator ListItem component', () => {
     describe('non-user share types', () => {
       it.each(
         ShareTypes.all.filter(
-          (shareType) => ![ShareTypes.user, ShareTypes.space].includes(shareType)
+          (shareType) => ![ShareTypes.user, ShareTypes.spaceUser].includes(shareType)
         )
       )('should display an oc-avatar-item for any non-user share types', (shareType) => {
         const { wrapper } = createWrapper({ shareType: shareType.value })
         expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
         expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
         expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual(shareType.key)
+      })
+      it('should display an oc-avatar-item for space group shares', () => {
+        const { wrapper } = createWrapper({
+          shareType: ShareTypes.spaceGroup.value,
+          collaborator: { name: undefined, displayName: 'someGroup', additionalInfo: undefined }
+        })
+        expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
+        expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
       })
     })
   })
@@ -115,7 +123,7 @@ describe('Collaborator ListItem component', () => {
       expect(changeShareStub).toHaveBeenCalled()
     })
     it('calls "changeSpaceMember" for space resources', () => {
-      const { wrapper } = createWrapper({ shareType: ShareTypes.space.value })
+      const { wrapper } = createWrapper({ shareType: ShareTypes.spaceUser.value })
       const changeShareStub = jest.spyOn(wrapper.vm, 'changeSpaceMember')
       ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
         role: peopleRoleViewerFile,

@@ -1,9 +1,12 @@
-Enhancement: Update SDK to v3.1.0-alpha.2
+Enhancement: Update SDK to v3.1.0-alpha.3
 
-We updated the ownCloud SDK to version v3.1.0-alpha.2. Please refer to the full changelog in the SDK release (linked) for more details. Summary:
+We updated the ownCloud SDK to version v3.1.0-alpha.3. Please refer to the full changelog in the SDK release (linked) for more details. Summary:
 
-* Bugfix - Allow removing expiration dates from space shares: [#1204](https://github.com/owncloud/owncloud-sdk/pull/1204)
-* Enhancement - Resource processing: [#1109](https://github.com/owncloud/owncloud-sdk/pull/1109)
+* Bugfix - Allow removing expiration dates from space shares: [owncloud/owncloud-sdk#1204](https://github.com/owncloud/owncloud-sdk/pull/1204)
+* Enhancement - Resource processing: [owncloud/owncloud-sdk#1109](https://github.com/owncloud/owncloud-sdk/pull/1109)
+* Enhancement - Share space with group: [owncloud/owncloud-sdk#1207](https://github.com/owncloud/owncloud-sdk/pull/1207)
+
 
 https://github.com/owncloud/web/pull/8320
-https://github.com/owncloud/owncloud-sdk/releases/tag/v3.1.0-alpha.2
+https://github.com/owncloud/web/pull/8248
+https://github.com/owncloud/owncloud-sdk/releases/tag/v3.1.0-alpha.3

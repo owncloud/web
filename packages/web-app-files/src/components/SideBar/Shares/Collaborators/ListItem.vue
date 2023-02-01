@@ -1,6 +1,6 @@
 <template>
   <div
-    :data-testid="`collaborator-${isUser || isSpace ? 'user' : 'group'}-item-${
+    :data-testid="`collaborator-${isAnyUserShareType ? 'user' : 'group'}-item-${
       share.collaborator.name
     }`"
     class="files-collaborators-collaborator oc-py-xs"
@@ -9,7 +9,7 @@
       <div class="oc-width-2-3 oc-flex oc-flex-middle">
         <div>
           <avatar-image
-            v-if="isUser || isSpace"
+            v-if="isAnyUserShareType"
             :userid="share.collaborator.name"
             :user-name="share.collaborator.displayName"
             :width="36"
@@ -40,7 +40,7 @@
                 :dom-selector="shareDomSelector"
                 :existing-permissions="share.customPermissions"
                 :existing-role="share.role"
-                :allow-share-permission="hasResharing || isSpace"
+                :allow-share-permission="hasResharing || isAnySpaceShareType"
                 class="files-collaborators-collaborator-role"
                 @option-change="shareRoleChanged"
               />
@@ -92,7 +92,7 @@
         <oc-info-drop
           ref="accessDetailsDrop"
           class="share-access-details-drop"
-          v-bind="isSpace ? accessDetailsPropsSpace : accessDetailsProps"
+          v-bind="isAnySpaceShareType ? accessDetailsPropsSpace : accessDetailsProps"
           mode="manual"
           :target="`#edit-drop-down-${editDropDownToggleId}`"
         />
@@ -165,12 +165,12 @@ export default defineComponent({
       return extractDomSelector(this.share.id)
     },
 
-    isUser() {
-      return this.shareType === ShareTypes.user
+    isAnyUserShareType() {
+      return [ShareTypes.user, ShareTypes.spaceUser].includes(this.shareType)
     },
 
-    isSpace() {
-      return this.shareType === ShareTypes.space
+    isAnySpaceShareType() {
+      return [ShareTypes.spaceUser, ShareTypes.spaceGroup].includes(this.shareType)
     },
 
     shareTypeText() {
@@ -358,8 +358,10 @@ export default defineComponent({
     saveShareChanges({ role, permissions, expirationDate }) {
       const bitmask = role.hasCustomPermissions
         ? SharePermissions.permissionsToBitmask(permissions)
-        : SharePermissions.permissionsToBitmask(role.permissions(this.hasResharing || this.isSpace))
-      const changeMethod = this.isSpace ? this.changeSpaceMember : this.changeShare
+        : SharePermissions.permissionsToBitmask(
+            role.permissions(this.hasResharing || this.isAnySpaceShareType)
+          )
+      const changeMethod = this.isAnySpaceShareType ? this.changeSpaceMember : this.changeShare
       changeMethod({
         ...this.$language,
         client: this.$client,

@@ -5,7 +5,7 @@
     :class="collaboratorClass"
   >
     <avatar-image
-      v-if="isUser || isSpace"
+      v-if="isUser || isSpaceUser"
       class="oc-mr-s"
       :width="36"
       :userid="item.value.shareWith"
@@ -21,7 +21,7 @@
     >
     </oc-icon>
     <oc-icon
-      v-else-if="isGroup"
+      v-else-if="isGroup || isSpaceGroup"
       key="avatar-group"
       class="oc-mr-s files-recipient-suggestion-avatar"
       name="group"
@@ -76,8 +76,8 @@ export default {
       return this.shareType === ShareTypes.user
     },
 
-    isSpace() {
-      return this.shareType === ShareTypes.space
+    isSpaceUser() {
+      return this.shareType === ShareTypes.spaceUser
     },
 
     isGuest() {
@@ -86,6 +86,10 @@ export default {
 
     isGroup() {
       return this.shareType === ShareTypes.group
+    },
+
+    isSpaceGroup() {
+      return this.shareType === ShareTypes.spaceGroup
     },
 
     collaboratorClass() {

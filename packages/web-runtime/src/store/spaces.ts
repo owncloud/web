@@ -161,7 +161,9 @@ const actions = {
         }
 
         prom.then((resolved) => {
-          spaceShares.push(buildSpaceShare({ ...resolved.data, role, expirationDate }, space.id))
+          spaceShares.push(
+            buildSpaceShare({ ...resolved.data, role, kind, expirationDate }, space.id)
+          )
         })
 
         promises.push(prom)
@@ -182,10 +184,11 @@ const actions = {
       role,
       storageId,
       displayName,
+      shareType,
       expirationDate
     }
   ) {
-    await client.shares.shareSpaceWithUser(path, shareWith, storageId, {
+    await client.shares.shareSpace(path, shareWith, shareType, storageId, {
       permissions,
       role: role.name,
       expirationDate
@@ -196,7 +199,8 @@ const actions = {
       role: role.name,
       onPremisesSamAccountName: shareWith,
       displayName,
-      expirationDate
+      expirationDate,
+      share_type: shareType
     }
     context.commit('UPSERT_SPACE_MEMBERS', buildSpaceShare(shareObj, storageId))
   },
@@ -204,9 +208,10 @@ const actions = {
     context,
     { client, graphClient, share, permissions, expirationDate, role }
   ) {
-    await client.shares.shareSpaceWithUser(
+    await client.shares.shareSpace(
       '',
       share.collaborator.name || share.collaborator.displayName,
+      share.shareType,
       share.id,
       {
         permissions,
@@ -222,7 +227,8 @@ const actions = {
         role: role.name,
         onPremisesSamAccountName: share.collaborator.name,
         displayName: share.collaborator.displayName,
-        expirationDate
+        expirationDate,
+        share_type: share.shareType
       },
       share.id
     )

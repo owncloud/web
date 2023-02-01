@@ -9,9 +9,7 @@ import {
   Share,
   ShareStatus,
   ShareTypes,
-  spaceRoleEditor,
-  spaceRoleManager,
-  spaceRoleViewer
+  buildSpaceShare
 } from 'web-client/src/helpers/share'
 import {
   buildWebDavSpacesPath,
@@ -236,42 +234,11 @@ export function buildShare(s, file, allowSharePermission): Share {
   if (parseInt(s.share_type) === ShareTypes.link.value) {
     return _buildLink(s)
   }
-  if (parseInt(s.share_type) === ShareTypes.space.value) {
+  if ([ShareTypes.spaceUser.value, ShareTypes.spaceGroup.value].includes(parseInt(s.share_type))) {
     return buildSpaceShare(s, file)
   }
 
   return buildCollaboratorShare(s, file, allowSharePermission)
-}
-
-export function buildSpaceShare(s, storageId): Share {
-  let permissions, role
-
-  switch (s.role) {
-    case spaceRoleManager.name:
-      permissions = spaceRoleManager.bitmask(true)
-      role = spaceRoleManager
-      break
-    case spaceRoleEditor.name:
-      permissions = spaceRoleEditor.bitmask(true)
-      role = spaceRoleEditor
-      break
-    case spaceRoleViewer.name:
-      permissions = spaceRoleViewer.bitmask(true)
-      role = spaceRoleViewer
-      break
-  }
-
-  return {
-    shareType: ShareTypes.space.value,
-    id: storageId,
-    collaborator: {
-      name: s.onPremisesSamAccountName,
-      displayName: s.displayName,
-      additionalInfo: null
-    },
-    permissions,
-    role
-  }
 }
 
 function _buildLink(link): Share {

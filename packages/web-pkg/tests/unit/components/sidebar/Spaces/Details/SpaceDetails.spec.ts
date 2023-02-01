@@ -25,7 +25,7 @@ const spaceMock = {
 
 const spaceShare = {
   id: '1',
-  shareType: ShareTypes.space.value,
+  shareType: ShareTypes.spaceUser.value,
   collaborator: {
     onPremisesSamAccountName: 'Alice',
     displayName: 'alice'

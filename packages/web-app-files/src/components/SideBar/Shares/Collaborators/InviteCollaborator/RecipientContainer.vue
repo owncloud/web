@@ -49,7 +49,7 @@ export default {
       formattedRecipient: {
         name: this.recipient.label,
         icon: this.getRecipientIcon(),
-        hasAvatar: [ShareTypes.user.value, ShareTypes.space.value].includes(
+        hasAvatar: [ShareTypes.user.value, ShareTypes.spaceUser.value].includes(
           this.recipient.value.shareType
         ),
         isLoadingAvatar: true
