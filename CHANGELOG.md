@@ -57,7 +57,7 @@ Summary
 * Enhancement - Show selectable groups only: [#8306](https://github.com/owncloud/web/pull/8306)
 * Enhancement - Add context menu to groups: [#8317](https://github.com/owncloud/web/pull/8317)
 * Enhancement - Space member expiration: [#8320](https://github.com/owncloud/web/pull/8320)
-* Enhancement - Update SDK to v3.1.0-alpha.2: [#8320](https://github.com/owncloud/web/pull/8320)
+* Enhancement - Update SDK to v3.1.0-alpha.3: [#8320](https://github.com/owncloud/web/pull/8320)
 * Enhancement - Add context menu to users: [#8324](https://github.com/owncloud/web/pull/8324)
 * Enhancement - Admin settings users section details improvement: [#8331](https://github.com/owncloud/web/pull/8331)
 
@@ -417,6 +417,7 @@ Details
    https://github.com/owncloud/web/issues/8160
    https://github.com/owncloud/web/pull/8161
    https://github.com/owncloud/web/pull/8185
+   https://github.com/owncloud/web/pull/8248
 
 * Enhancement - Rename "user management" app: [#8175](https://github.com/owncloud/web/pull/8175)
 
@@ -509,17 +510,21 @@ Details
    https://github.com/owncloud/web/issues/8328
    https://github.com/owncloud/web/pull/8320
 
-* Enhancement - Update SDK to v3.1.0-alpha.2: [#8320](https://github.com/owncloud/web/pull/8320)
+* Enhancement - Update SDK to v3.1.0-alpha.3: [#8320](https://github.com/owncloud/web/pull/8320)
 
-   We updated the ownCloud SDK to version v3.1.0-alpha.2. Please refer to the full changelog in
+   We updated the ownCloud SDK to version v3.1.0-alpha.3. Please refer to the full changelog in
    the SDK release (linked) for more details. Summary:
 
    * Bugfix - Allow removing expiration dates from space shares:
-   [#1204](https://github.com/owncloud/owncloud-sdk/pull/1204) * Enhancement - Resource
-   processing: [#1109](https://github.com/owncloud/owncloud-sdk/pull/1109)
+   [owncloud/owncloud-sdk#1204](https://github.com/owncloud/owncloud-sdk/pull/1204)
+   * Enhancement - Resource processing:
+   [owncloud/owncloud-sdk#1109](https://github.com/owncloud/owncloud-sdk/pull/1109)
+   * Enhancement - Share space with group:
+   [owncloud/owncloud-sdk#1207](https://github.com/owncloud/owncloud-sdk/pull/1207)
 
    https://github.com/owncloud/web/pull/8320
-   https://github.com/owncloud/owncloud-sdk/releases/tag/v3.1.0-alpha.2
+   https://github.com/owncloud/web/pull/8248
+   https://github.com/owncloud/owncloud-sdk/releases/tag/v3.1.0-alpha.3
 
 * Enhancement - Add context menu to users: [#8324](https://github.com/owncloud/web/pull/8324)
 
