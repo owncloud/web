@@ -42,7 +42,10 @@ import {
   getDisplayedResourcesFromFilesList,
   resourceTagsArgs,
   clickViewModeToggle,
-  getTilesVisibility
+  getTilesVisibility,
+  getRestoreResourceButtonVisibility,
+  deleteResourceWithOption,
+  deleteResourceWithOptionArgs
 } from './actions'
 
 export class Resource {
@@ -106,6 +109,12 @@ export class Resource {
   async delete(args: Omit<deleteResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await deleteResource({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+  }
+
+  async deleteWithOption(args: Omit<deleteResourceWithOptionArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await deleteResourceWithOption({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
