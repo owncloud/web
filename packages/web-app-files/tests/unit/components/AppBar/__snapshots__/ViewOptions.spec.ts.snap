@@ -32,8 +32,8 @@ exports[`ViewOptions component sets the correct initial files page limit 1`] = `
 `;
 
 exports[`ViewOptions component shows a viewmode switcher if more than one viewModes are passed 1`] = `
-<div class="oc-button-group oc-visible@s oc-mr-s">
-  <oc-button-stub appearance="outline" disabled="false" gapsize="medium" justifycontent="center" label="Switch to condensed table view" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
-  <oc-button-stub appearance="outline" disabled="false" gapsize="medium" justifycontent="center" label="Switch to default table view" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+<div class="viewmode-switch-buttons oc-button-group oc-visible@s oc-mr-s">
+  <oc-button-stub appearance="outline" arialabel="Switch to condensed table view" class="resource-table-condensed" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+  <oc-button-stub appearance="outline" arialabel="Switch to default table view" class="resource-table" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
 </div>
 `;

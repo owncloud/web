@@ -43,7 +43,7 @@ describe('ViewOptions component', () => {
   })
   it('initially does not show a viewmode switcher', () => {
     const { wrapper } = getWrapper()
-    expect(wrapper.find('[data-testid="viewmode-switch-buttons"]').exists()).toBeFalsy()
+    expect(wrapper.find('.viewmode-switch-buttons').exists()).toBeFalsy()
   })
   it('shows a viewmode switcher if more than one viewModes are passed', () => {
     const { wrapper } = getWrapper(
@@ -52,7 +52,7 @@ describe('ViewOptions component', () => {
         viewModes: [ViewModeConstants.condensedTable, ViewModeConstants.default]
       }
     )
-    const viewModeSwitchButtons = wrapper.find('[data-testid="viewmode-switch-buttons"]')
+    const viewModeSwitchButtons = wrapper.find('.viewmode-switch-buttons')
     expect(viewModeSwitchButtons.html()).toMatchSnapshot()
   })
 })

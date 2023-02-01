@@ -44,6 +44,39 @@
             </span>
           </template>
         </no-content-message>
+        <resource-tiles
+          v-else-if="viewMode === ViewModeConstants.tilesView.name"
+          :data="paginatedResources"
+          class="oc-px-m oc-pt-l"
+          tile-width="small"
+          :target-route-callback="resourceTargetRouteCallback"
+          :space="space"
+          @rowMounted="rowMounted"
+          @fileClick="$_fileActions_triggerDefaultAction"
+        >
+          <!-- Share quickactions targets current folder, not resource... -->
+          <!-- <template #actions="{ resource }">
+            <quick-actions
+              :class="resource.preview"
+              class="oc-visible@s"
+              :item="resource"
+              :actions="app.quickActions"
+            />
+          </template> -->
+          <template #contextMenuActions="{ resource }">
+            <context-actions :space="space" :items="[resource]" />
+          </template>
+          <template #footer>
+            <pagination :pages="paginationPages" :current-page="paginationPage" />
+            <list-info
+              v-if="paginatedResources.length > 0"
+              class="oc-width-1-1 oc-my-s"
+              :files="totalFilesCount.files"
+              :folders="totalFilesCount.folders"
+              :size="totalFilesSize"
+            />
+          </template>
+        </resource-tiles>
         <resource-table
           v-else
           id="files-space-table"
@@ -97,8 +130,28 @@
 </template>
 
 <script lang="ts">
+import { debounce, omit } from 'lodash-es'
+import { basename } from 'path'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  PropType,
+  onBeforeUnmount,
+  onMounted,
+  unref
+} from 'vue'
+import { RouteLocationNamedRaw } from 'vue-router'
 import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
-import { debounce } from 'lodash-es'
+import { useGettext } from 'vue3-gettext'
+import { Resource } from 'web-client'
+import {
+  isPersonalSpaceResource,
+  isProjectSpaceResource,
+  isPublicSpaceResource,
+  isShareSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
 
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../../mixins/fileActions'
@@ -113,44 +166,23 @@ import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-
+import { useRoute } from 'web-pkg/src/composables'
+import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
+import { ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from 'web-pkg/src/constants'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
-import { useResourcesViewDefaults } from '../../composables'
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  PropType,
-  onBeforeUnmount,
-  onMounted,
-  unref
-} from 'vue'
+import { useResourcesViewDefaults, ViewModeConstants } from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
-import { Resource } from 'web-client'
-import { useRoute } from 'web-pkg/src/composables'
-import { Location } from 'vue-router'
-import {
-  isPersonalSpaceResource,
-  isProjectSpaceResource,
-  isPublicSpaceResource,
-  isShareSpaceResource,
-  SpaceResource
-} from 'web-client/src/helpers'
-import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 import { FolderLoaderOptions } from '../../services/folder'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import omit from 'lodash-es/omit'
-import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
-import { basename } from 'path'
-import { useGettext } from 'vue3-gettext'
+import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -170,6 +202,7 @@ export default defineComponent({
     Pagination,
     QuickActions,
     ResourceTable,
+    ResourceTiles,
     SideBar,
     SpaceHeader
   },
@@ -199,13 +232,17 @@ export default defineComponent({
     const store = useStore()
     let loadResourcesEventToken
 
-    const resourceTargetRouteCallback = ({ path, fileId }: CreateTargetRouteOptions): Location => {
+    const resourceTargetRouteCallback = ({
+      path,
+      fileId
+    }: CreateTargetRouteOptions): RouteLocationNamedRaw => {
       const { params, query } = createFileRouteOptions(props.space, { path, fileId })
       if (isPublicSpaceResource(props.space)) {
         return createLocationPublic('files-public-link', { params, query })
       }
       return createLocationSpaces('files-spaces-generic', { params, query })
     }
+
     const hasSpaceHeader = computed(() => {
       // for now the space header is only available in the root of a project space.
       return props.space.driveType === 'project' && props.item === '/'
@@ -334,10 +371,11 @@ export default defineComponent({
 
     return {
       ...resourcesViewDefaults,
-      resourceTargetRouteCallback,
       breadcrumbs,
       hasSpaceHeader,
-      performLoaderTask
+      resourceTargetRouteCallback,
+      performLoaderTask,
+      ViewModeConstants
     }
   },
 
@@ -422,7 +460,7 @@ export default defineComponent({
       }
     },
 
-    rowMounted(resource, component) {
+    rowMounted(resource, component, dimensions) {
       if (!this.displayThumbnails) {
         return
       }
@@ -431,8 +469,8 @@ export default defineComponent({
         unobserve()
         this.loadPreview({
           resource,
-          isPublic: false,
-          dimensions: ImageDimension.Thumbnail,
+          isPublic: isPublicSpaceResource(this.space),
+          dimensions,
           type: ImageType.Thumbnail
         })
       }, 250)

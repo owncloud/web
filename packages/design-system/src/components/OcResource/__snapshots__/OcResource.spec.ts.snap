@@ -8,7 +8,7 @@ exports[`OcResource displays parent folder name default if calculated name is em
       <!---->
     </span>
   </button>
-  <div class="oc-resource-details oc-text-overflow">
+  <div class="oc-resource-details oc-text-overflow oc-pl-s">
     <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw oc-text-overflow" draggable="false" type="button">
       <!-- @slot Content of the button -->
       <!--v-if-->

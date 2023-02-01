@@ -274,7 +274,7 @@ exports[`AppBar component renders viewoptions and sidebartoggle passes viewModes
       <!--v-if-->
       <!--v-if-->
       <div class="oc-flex">
-        <view-options-stub viewmodes="[object Object],[object Object]"></view-options-stub>
+        <view-options-stub viewmodes="[object Object],[object Object],[object Object]"></view-options-stub>
         <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
       </div>
     </div>

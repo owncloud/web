@@ -25,48 +25,29 @@
           </template>
         </no-content-message>
         <div v-else class="spaces-list oc-px-m oc-mt-l">
-          <resource-tiles :data="spaces" @contextmenu-clicked="showContextMenu">
-            <template #image="{ item }">
+          <resource-tiles :data="spaces">
+            <template #image="{ resource }">
               <img
-                v-if="imageContentObject[item.id]"
+                v-if="imageContentObject[resource.id]"
                 class="space-image tile-image oc-rounded-top"
-                :src="imageContentObject[item.id]['data']"
+                :src="imageContentObject[resource.id]['data']"
                 alt=""
               />
             </template>
-            <template #actions="{ item }">
+            <template #actions="{ resource }">
               <div>
                 <oc-button
                   v-oc-tooltip="showSpaceMemberLabel"
                   :aria-label="showSpaceMemberLabel"
                   appearance="raw"
-                  @click="openSidebarSharePanel(item)"
+                  @click="openSidebarSharePanel(resource)"
                 >
                   <oc-icon name="group" fill-type="line" />
                 </oc-button>
               </div>
-              <div>
-                <oc-button
-                  :id="`space-context-btn-${item.getDomSelector()}`"
-                  :ref="`spaceContextBtn-${item.getDomSelector()}`"
-                  v-oc-tooltip="contextMenuLabel"
-                  :aria-label="contextMenuLabel"
-                  appearance="raw"
-                  @click.stop.prevent="resetDropPosition($event, item)"
-                >
-                  <oc-icon name="more-2" />
-                </oc-button>
-                <oc-drop
-                  :ref="`spaceContextDrop-${item.getDomSelector()}`"
-                  :drop-id="`space-context-drop-${item.getDomSelector()}`"
-                  close-on-click
-                  mode="manual"
-                  :options="{ delayHide: 0 }"
-                  padding-size="small"
-                >
-                  <space-context-actions :space="item" :items="[item]" />
-                </oc-drop>
-              </div>
+            </template>
+            <template #contextMenuActions="{ resource }">
+              <space-context-actions :space="resource" :items="[resource]" />
             </template>
           </resource-tiles>
         </div>
@@ -102,13 +83,13 @@ import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 
 export default defineComponent({
   components: {
-    ResourceTiles,
-    FilesViewWrapper,
-    SideBar,
     AppBar,
     AppLoadingSpinner,
     CreateSpace,
+    FilesViewWrapper,
     NoContentMessage,
+    ResourceTiles,
+    SideBar,
     SpaceContextActions
   },
   setup() {
@@ -164,9 +145,6 @@ export default defineComponent({
     showSpaceMemberLabel() {
       return this.$gettext('Show members')
     },
-    contextMenuLabel() {
-      return this.$gettext('Show context menu')
-    },
     hasCreatePermission() {
       return this.$permissionManager.hasSpaceManagement()
     }
@@ -201,7 +179,7 @@ export default defineComponent({
           loadPreview({
             resource,
             isPublic: false,
-            dimensions: ImageDimension.Preview,
+            dimensions: ImageDimension.Tile,
             server: configurationManager.serverUrl,
             userId: this.user.id,
             token: this.accessToken
@@ -223,41 +201,6 @@ export default defineComponent({
   },
   methods: {
     ...mapMutations('Files', ['SET_FILE_SELECTION']),
-
-    resetDropPosition(event, item) {
-      const drop = this.$refs[`spaceContextDrop-${item.getDomSelector()}`]
-
-      if (drop === undefined) {
-        return
-      }
-      this.displayPositionedDropdown(drop, event, item)
-    },
-    showContextMenu(_row, event, item) {
-      event.preventDefault()
-      const drop = this.$refs[`spaceContextDrop-${item.getDomSelector()}`]
-
-      this.displayPositionedDropdown(drop, event, item)
-    },
-    displayPositionedDropdown(dropdown, event, item) {
-      const contextMenuButtonPos =
-        this.$refs[`spaceContextBtn-${item.getDomSelector()}`].$el.getBoundingClientRect()
-
-      if (!dropdown || !contextMenuButtonPos) {
-        return
-      }
-
-      dropdown.tippy.setProps({
-        getReferenceClientRect: () => ({
-          width: 0,
-          height: 0,
-          top: event.clientY,
-          bottom: event.clientY,
-          left: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x,
-          right: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x
-        })
-      })
-      dropdown.show()
-    },
     openSidebarSharePanel(space: SpaceResource) {
       this.SET_FILE_SELECTION([space])
       eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share')

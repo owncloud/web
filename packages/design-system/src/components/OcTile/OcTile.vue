@@ -9,7 +9,7 @@
       class="oc-card-media-top oc-border-b oc-flex oc-flex-center oc-flex-middle"
       :resource="resource"
       :folder-link="resourceRoute"
-      @click="$emit('click', $event)"
+      @click="$emit('click')"
     >
       <oc-tag
         v-if="resource.disabled"
@@ -20,27 +20,34 @@
       </oc-tag>
       <!-- Slot for resource image, renders resource type icon by default -->
       <slot name="imageField" :item="resource">
-        <oc-img v-if="resource.thumbnail" class="tile-preview" :src="resource.thumbnail" />
+        <oc-img
+          v-if="resource.thumbnail"
+          class="tile-preview oc-rounded-top"
+          :src="resource.thumbnail"
+        />
         <oc-resource-icon
           v-else
           :resource="resource"
           size="xxlarge"
-          class="tile-default-image oc-p-m"
+          class="tile-default-image oc-pt-s"
         />
       </slot>
     </oc-resource-link>
     <div class="oc-card-body oc-p-s">
       <div class="oc-flex oc-flex-between oc-flex-middle">
-        <div class="oc-flex oc-flex-middle oc-text-truncate">
+        <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
           <oc-resource
             :resource="resource"
+            :is-icon-displayed="false"
             :folder-link="resourceRoute"
-            @click="$emit('click', $event)"
+            @click="$emit('click')"
           />
         </div>
         <div class="oc-flex oc-flex-middle">
           <!-- Slot for individual actions -->
           <slot name="actions" :item="resource" />
+          <!-- Slot for contextmenu -->
+          <slot name="contextMenu" :item="resource" />
         </div>
       </div>
       <p
@@ -93,9 +100,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .oc-tile-card {
-  box-shadow: none !important;
   background-color: var(--oc-color-background-highlight) !important;
+  box-shadow: none !important;
   height: 100%;
+  outline: 1px solid var(--oc-color-border);
 
   &.state-trashed {
     cursor: pointer;
@@ -121,16 +129,17 @@ export default defineComponent({
     }
 
     .tile-preview {
-      min-width: 252px;
-      height: auto;
       aspect-ratio: 16/9;
+      height: auto;
       object-fit: cover;
+      width: 100%;
     }
   }
 
-  .resource-name {
-    overflow: hidden;
+  .resource-name-wrapper {
     color: var(--oc-color-text-default);
+    max-width: 70%;
+    overflow: hidden;
   }
 }
 </style>

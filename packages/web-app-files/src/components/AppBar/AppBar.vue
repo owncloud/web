@@ -142,7 +142,11 @@ export default defineComponent({
       if (!this.displayViewModeSwitch) {
         return []
       }
-      return [ViewModeConstants.condensedTable, ViewModeConstants.default]
+      return [
+        ViewModeConstants.condensedTable,
+        ViewModeConstants.default,
+        ViewModeConstants.tilesView
+      ]
     }
   },
   mounted() {

@@ -40,7 +40,9 @@ import {
   clickResourceTag,
   getDisplayedResourcesArgs,
   getDisplayedResourcesFromFilesList,
-  resourceTagsArgs
+  resourceTagsArgs,
+  clickViewModeToggle,
+  getTilesVisibility
 } from './actions'
 
 export class Resource {
@@ -54,7 +56,7 @@ export class Resource {
     const startUrl = this.#page.url()
     await createResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
-    await this.#page.waitForSelector('.files-table')
+    await this.#page.waitForSelector('#files-view')
   }
 
   async upload(args: Omit<uploadResourceArgs, 'page'>): Promise<void> {
@@ -182,6 +184,14 @@ export class Resource {
 
   async openFolder(resource): Promise<void> {
     await clickResource({ page: this.#page, path: resource })
+  }
+
+  async switchToTilesViewMode(): Promise<void> {
+    await clickViewModeToggle({ page: this.#page, target: 'resource-tiles' })
+  }
+
+  async areResourcesShownAsTiles(): Promise<boolean> {
+    return await getTilesVisibility({ page: this.#page })
   }
 
   async showHiddenFiles(): Promise<void> {

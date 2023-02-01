@@ -22,5 +22,13 @@ export abstract class ViewModeConstants {
       fillType: 'none'
     }
   }
+  static readonly tilesView: ViewMode = {
+    name: 'resource-tiles',
+    label: $gettext('Switch to tiles view'),
+    icon: {
+      name: 'apps-2',
+      fillType: 'line'
+    }
+  }
   static readonly queryName: string = 'view-mode'
 }

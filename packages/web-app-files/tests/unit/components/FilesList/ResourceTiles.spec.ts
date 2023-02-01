@@ -18,21 +18,21 @@ const spacesResources = [
   }
 ]
 
-describe('OcTileGrid component', () => {
+describe('ResourceTiles component', () => {
   it('renders an array of spaces correctly', () => {
     const wrapper = getWrapper({ data: spacesResources })
     expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('renders a footer slot', () => {
-    const wrapper = getWrapper({}, { footer: 'Hello, OcTileGrid footer!' })
+    const wrapper = getWrapper({}, { footer: 'Hello, ResourceTiles footer!' })
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('emits context menu event upon right click on tile', async () => {
+  it('emits fileClick event upon click on tile', async () => {
     const wrapper = getWrapper({ data: spacesResources })
-    await wrapper.find('oc-tile').trigger('contextmenu')
-    expect(wrapper.emitted().contextmenuClicked.length).toBe(1)
+    await wrapper.find('oc-tile').trigger('click')
+    expect(wrapper.emitted().click).toBeTruthy()
   })
 
   function getWrapper(props = {}, slots = {}) {

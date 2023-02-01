@@ -2,15 +2,15 @@
   <div class="oc-flex oc-flex-middle">
     <div
       v-if="viewModes.length"
-      data-testid="viewmode-switch-buttons"
-      class="oc-button-group oc-visible@s oc-mr-s"
+      class="viewmode-switch-buttons oc-button-group oc-visible@s oc-mr-s"
     >
       <oc-button
         v-for="viewMode in viewModes"
         :key="viewMode.name"
         v-oc-tooltip="$gettext(viewMode.label)"
+        :class="viewMode.name"
         :appearance="viewModeCurrent === viewMode.name ? 'filled' : 'outline'"
-        :label="$gettext(viewMode.label)"
+        :aria-label="$gettext(viewMode.label)"
         @click="setViewMode(viewMode)"
       >
         <oc-icon :name="viewMode.icon.name" :fill-type="viewMode.icon.fillType" size="small" />
@@ -148,6 +148,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.viewmode-switch-buttons {
+  flex-flow: initial;
+}
+
 #files-view-options-btn {
   vertical-align: middle;
   border: 3px solid transparent;

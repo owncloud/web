@@ -1,6 +1,6 @@
 import Projects from '../../../../src/views/spaces/Projects.vue'
-import { mock, mockDeep } from 'jest-mock-extended'
-import { SpaceResource } from 'web-client/src/helpers'
+import { mock } from 'jest-mock-extended'
+
 import {
   createStore,
   defaultPlugins,
@@ -10,6 +10,29 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+
+const spacesResources = [
+  {
+    id: '1',
+    name: 'Some space',
+    driveType: 'project',
+    description: 'desc',
+    path: '',
+    type: 'space',
+    isFolder: true,
+    getDriveAliasAndItem: () => '1'
+  },
+  {
+    id: '2',
+    name: 'Some other space',
+    driveType: 'project',
+    description: 'desc',
+    path: '',
+    type: 'space',
+    isFolder: true,
+    getDriveAliasAndItem: () => '2'
+  }
+]
 
 describe('Projects view', () => {
   it('appBar always present', () => {
@@ -32,20 +55,7 @@ describe('Projects view', () => {
       expect(wrapper.find('.no-content-message').exists()).toBeTruthy()
     })
     it('lists all available project spaces', async () => {
-      const spaces = [
-        mockDeep<SpaceResource>({
-          id: '1',
-          name: 'Some space',
-          driveType: 'project',
-          description: 'desc'
-        }),
-        mockDeep<SpaceResource>({
-          id: '2',
-          name: 'Some other space',
-          driveType: 'project',
-          description: 'desc'
-        })
-      ]
+      const spaces = spacesResources
       const { wrapper } = getMountedWrapper({ spaces })
       await wrapper.vm.loadResourcesTask.last
       // "space" is undefined for "space-context-actions", seems to be a bug because it's definitely not

@@ -1,7 +1,7 @@
 Enhancement: Add switch to enable condensed resource table
 
 We've added a switch to have a more condensed resource table. 
-The change gets saved to the route and persisted across folder 
+The change gets saved to the url and persisted across folder 
 navigation in all files, spaces and favorites views.
 
 https://github.com/owncloud/web/pull/7976

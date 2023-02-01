@@ -13,7 +13,8 @@ const downloadFolderButtonSidedBar =
 const downloadButtonBatchAction = '.oc-files-actions-download-archive-trigger'
 const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
 const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//input`
-export const fileRow = '//ancestor::tr'
+export const fileRow =
+  '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
 export const resourceNameSelector = `[data-test-resource-name="%s"]`
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
@@ -60,6 +61,7 @@ const tagInInputForm =
   '//span[contains(@class, "vs__selected")]//span[text()="%s"]//ancestor::span/button[contains(@class, "vs__deselect")]'
 const tagFormInput = '#tags-form input'
 const compareDialogConfirmBtn = '.compare-save-dialog-confirm-btn'
+const resourcesAsTiles = '#files-view .oc-tiles'
 
 export const clickResource = async ({
   page,
@@ -79,8 +81,7 @@ export const clickResource = async ({
       )
     ])
 
-    // toDo: remove me
-    // @jannik: please have a look here what we can wait for to be sure that it's there
+    // TODO: Refactor so the line below becomes unnecessary
     await new Promise((resolve) => setTimeout(resolve, 250))
   }
 }
@@ -764,6 +765,21 @@ export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]
   }
 
   return files
+}
+
+export interface switchViewModeArgs {
+  page: Page
+  target: 'resource-table' | 'resource-tiles'
+}
+
+export const clickViewModeToggle = async (args: switchViewModeArgs): Promise<void> => {
+  const { page, target } = args
+  await page.locator(`.viewmode-switch-buttons .${target}`).click()
+}
+
+export const getTilesVisibility = async (args): Promise<boolean> => {
+  const { page } = args
+  return await page.locator(resourcesAsTiles).isVisible()
 }
 
 export const showHiddenResources = async (page): Promise<void> => {

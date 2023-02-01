@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`OcTileGrid component renders a footer slot 1`] = `
+exports[`ResourceTiles component renders a footer slot 1`] = `
 <div>
-  <oc-list class="oc-tiles oc-flex"></oc-list> <!-- @slot Footer of the tiles list --> Hello, OcTileGrid footer!
+  <oc-list class="oc-tiles oc-flex"></oc-list> <!-- @slot Footer of the tiles list --> Hello, ResourceTiles footer!
 </div>
 `;
 
-exports[`OcTileGrid component renders an array of spaces correctly 1`] = `
+exports[`ResourceTiles component renders an array of spaces correctly 1`] = `
 <div>
   <oc-list class="oc-tiles oc-flex">
     <li class="oc-tiles-item">
