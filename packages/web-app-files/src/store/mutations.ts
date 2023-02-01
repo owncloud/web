@@ -255,7 +255,7 @@ function $_upsertResource(state, resource, allowInsert) {
   }
 
   if (found) {
-    files[index] = resource
+    Object.assign(files[index], resource)
   } else {
     files.push(resource)
   }

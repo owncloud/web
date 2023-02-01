@@ -182,9 +182,9 @@ import {
   linkRoleInternalFolder,
   LinkShareRoles
 } from 'web-client/src/helpers/share'
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, inject } from 'vue'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
-import { SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
@@ -218,18 +218,12 @@ export default defineComponent({
     link: {
       type: Object,
       required: true
-    },
-    file: {
-      type: Object,
-      required: true
-    },
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
     }
   },
   emits: ['removePublicLink', 'updateLink'],
+  setup() {
+    return { space: inject<Resource>('space'), resource: inject<Resource>('resource') }
+  },
   data() {
     return {
       newExpiration: this.link.expiration
@@ -339,7 +333,7 @@ export default defineComponent({
 
     viaRouterParams() {
       const matchingSpace = (this.space ||
-        this.spaces.find((space) => space.id === this.file.storageId)) as SpaceResource
+        this.spaces.find((space) => space.id === this.resource.storageId)) as SpaceResource
       if (!matchingSpace) {
         return {}
       }

@@ -3,17 +3,17 @@
     <div class="oc-flex oc-flex-middle">
       <oc-resource-icon
         v-if="isSubPanelActive"
-        :resource="file"
+        :resource="resource"
         size="large"
         class="file_info__icon oc-mr-s"
       />
       <div class="file_info__body oc-text-overflow">
         <h3 data-testid="files-info-name">
           <oc-resource-name
-            :name="file.name"
-            :extension="file.extension"
-            :type="file.type"
-            :full-path="file.webDavPath"
+            :name="resource.name"
+            :extension="resource.extension"
+            :type="resource.type"
+            :full-path="resource.webDavPath"
             :is-extension-displayed="areFileExtensionsShown"
             :is-path-displayed="false"
             :truncate-name="false"
@@ -26,10 +26,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
-import { mapGetters, mapState } from 'vuex'
+import { computed, defineComponent, inject, unref } from 'vue'
 import PrivateLinkItem from './PrivateLinkItem.vue'
+import { Resource } from 'web-client'
+import { useCapabilityFilesSharingPublicAlias, useCapabilityPrivateLinks, useStore } from 'web-pkg'
 
 export default defineComponent({
   name: 'FileInfo',
@@ -42,23 +42,23 @@ export default defineComponent({
       default: true
     }
   },
-  computed: {
-    ...mapGetters(['capabilities']),
-    ...mapGetters('Files', ['highlightedFile']),
-    ...mapState('Files', ['areFileExtensionsShown']),
+  setup() {
+    const store = useStore()
+    const resource = inject<Resource>('resource')
+    const hasPublicLinkAliasSupport = useCapabilityFilesSharingPublicAlias()
+    const hasPrivateLinkSupport = useCapabilityPrivateLinks()
+    const areFileExtensionsShown = store.state.Files.areFileExtensionsShown
 
-    privateLinkEnabled() {
-      if (this.capabilities.files_sharing?.public?.alias) {
+    const privateLinkEnabled = computed(() => {
+      if (unref(hasPublicLinkAliasSupport)) {
         // alias links are the next UI concept iteration for "file pointers"
         // i.e. ignore private link capability if alias links are supported
         return false
       }
-      return this.capabilities.files.privateLinks && this.file.privateLink
-    },
+      return unref(hasPrivateLinkSupport) && unref(resource).privateLink
+    })
 
-    file() {
-      return this.highlightedFile
-    }
+    return { resource, areFileExtensionsShown, privateLinkEnabled }
   }
 })
 </script>

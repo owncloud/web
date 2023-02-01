@@ -121,7 +121,7 @@ describe('Tags Panel', () => {
   })
 })
 
-function createWrapper(testResource, graphMock = mockDeep<Graph>()) {
+function createWrapper(resource, graphMock = mockDeep<Graph>()) {
   jest.spyOn(clientService, 'graphAuthenticated').mockImplementation(() => graphMock)
   return {
     wrapper: mount(TagsPanel, {
@@ -129,9 +129,7 @@ function createWrapper(testResource, graphMock = mockDeep<Graph>()) {
         plugins: [...defaultPlugins(), createStore(defaultStoreMockOptions)],
         mocks: { ...defaultComponentMocks(), $clientService: clientService },
         stubs: defaultStubs,
-        provide: {
-          displayedItem: testResource
-        }
+        provide: { resource }
       }
     })
   }

@@ -194,10 +194,6 @@ function createWrapper({
     ...defaultStoreMockOptions,
     state: { user: { id: '1' } }
   }
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => ({
-    type: 'folder',
-    isFolder: true
-  }))
   storeOptions.modules.Files.actions.changeShare = jest.fn()
   const store = createStore(storeOptions)
   return {

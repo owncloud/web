@@ -83,8 +83,8 @@ import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
-import { computed, defineComponent, PropType } from 'vue'
-import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { computed, defineComponent, inject } from 'vue'
+import { isProjectSpaceResource, Resource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
@@ -92,13 +92,6 @@ export default defineComponent({
   components: {
     InviteCollaboratorForm,
     CollaboratorListItem
-  },
-  props: {
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
-    }
   },
   setup() {
     const store = useStore()
@@ -114,6 +107,8 @@ export default defineComponent({
     })
 
     return {
+      resource: inject<Resource>('resource'),
+      space: inject<Resource>('space'),
       sharesListCollapsed,
       currentUserIsMemberOfSpace,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
@@ -122,10 +117,9 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingCollaborators']),
+    ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'sharesTree']),
     ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
-    ...mapState('Files', ['incomingShares', 'sharesTree']),
     ...mapState(['user']),
 
     inviteCollaboratorHelp() {
@@ -196,7 +190,7 @@ export default defineComponent({
 
     indirectOutgoingShares() {
       const allShares = []
-      const parentPaths = getParentPaths(this.highlightedFile.path, false)
+      const parentPaths = getParentPaths(this.resource.path, false)
       if (parentPaths.length === 0) {
         return []
       }
@@ -216,7 +210,7 @@ export default defineComponent({
     },
 
     currentUserCanShare() {
-      if (this.highlightedFile.isReceivedShare() && !this.hasResharing) {
+      if (this.resource.isReceivedShare() && !this.hasResharing) {
         return false
       }
       const isShareJail = this.space?.driveType === 'share'
@@ -224,17 +218,17 @@ export default defineComponent({
         return false
       }
 
-      return this.highlightedFile.canShare({ user: this.user })
+      return this.resource.canShare({ user: this.user })
     },
     noResharePermsMessage() {
       const translatedFile = this.$gettext("You don't have permission to share this file.")
       const translatedFolder = this.$gettext("You don't have permission to share this folder.")
-      return this.highlightedFile.type === 'file' ? translatedFile : translatedFolder
+      return this.resource.type === 'file' ? translatedFile : translatedFolder
     },
     showSpaceMembers() {
       return (
         this.space?.driveType === 'project' &&
-        this.highlightedFile.type !== 'space' &&
+        this.resource.type !== 'space' &&
         this.currentUserIsMemberOfSpace
       )
     }
@@ -293,10 +287,10 @@ export default defineComponent({
     },
 
     async $_ocCollaborators_deleteShare(share) {
-      let path = this.highlightedFile.path
+      let path = this.resource.path
       // sharing a share root from the share jail -> use resource name as path
       if (this.hasShareJail && path === '/') {
-        path = `/${this.highlightedFile.name}`
+        path = `/${this.resource.name}`
       }
 
       const lastShareId =
@@ -309,7 +303,7 @@ export default defineComponent({
           client: this.$client,
           share: share,
           path,
-          storageId: this.highlightedFile.fileId,
+          storageId: this.resource.fileId,
           loadIndicators: !!lastShareId
         })
 

@@ -1,6 +1,6 @@
 import FileActions from 'web-app-files/src/components/SideBar/Actions/FileActions.vue'
 import { getActions, fileActions } from 'web-app-files/tests/__fixtures__/fileActions'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -51,7 +51,6 @@ describe('FileActions', () => {
 function getWrapper(actions = []) {
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.Files.state.currentFolder = { path: '' }
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => mock<Resource>())
   const store = createStore(storeOptions)
   return {
     wrapper: mount(Component, {

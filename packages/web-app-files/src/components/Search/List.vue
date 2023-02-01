@@ -136,7 +136,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['highlightedFile', 'totalFilesCount', 'totalFilesSize']),
+    ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
     },

@@ -22,12 +22,10 @@
         :available-role-options="getAvailableRoleOptions(quicklink)"
         :can-rename="false"
         :expiration-date="expirationDate"
-        :is-folder-share="highlightedFile.isFolder"
+        :is-folder-share="resource.isFolder"
         :is-modifiable="canEdit"
         :is-password-enforced="isPasswordEnforcedFor(quicklink)"
         :link="quicklink"
-        :file="file"
-        :space="space"
         @update-link="checkLinkToUpdate"
         @remove-public-link="deleteLinkConfirmation"
       />
@@ -55,12 +53,10 @@
           :available-role-options="getAvailableRoleOptions(link)"
           :can-rename="true"
           :expiration-date="expirationDate"
-          :is-folder-share="highlightedFile.isFolder"
+          :is-folder-share="resource.isFolder"
           :is-modifiable="canEdit"
           :is-password-enforced="isPasswordEnforcedFor(link)"
           :link="link"
-          :file="file"
-          :space="space"
           @update-link="checkLinkToUpdate"
           @remove-public-link="deleteLinkConfirmation"
         />
@@ -94,8 +90,6 @@
             :is-folder-share="true"
             :is-modifiable="false"
             :link="link"
-            :file="file"
-            :space="space"
           />
         </li>
       </oc-list>
@@ -113,7 +107,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ComputedRef, defineComponent, inject, PropType, ref } from 'vue'
+import { defineComponent, inject, ref } from 'vue'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import {
@@ -134,7 +128,7 @@ import NameAndCopy from './Links/NameAndCopy.vue'
 import { useGraphClient } from 'web-pkg/src/composables'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource } from 'web-client/src/helpers'
 import { isLocationSharesActive } from '../../../router'
 
 export default defineComponent({
@@ -144,13 +138,6 @@ export default defineComponent({
     DetailsAndEdit,
     NameAndCopy
   },
-  props: {
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
-    }
-  },
   setup() {
     const store = useStore()
 
@@ -159,8 +146,9 @@ export default defineComponent({
 
     return {
       ...useGraphClient(),
-      file: inject<ComputedRef<Resource>>('displayedItem'),
-      incomingParentShare: inject<ComputedRef<Resource>>('incomingParentShare'),
+      space: inject<Resource>('space'),
+      resource: inject<Resource>('resource'),
+      incomingParentShare: inject<Resource>('incomingParentShare'),
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
@@ -171,7 +159,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingLinks']),
+    ...mapGetters('Files', ['currentFileOutgoingLinks']),
     ...mapGetters(['capabilities', 'configuration']),
     ...mapState(['user']),
     ...mapState('Files', ['sharesTree']),
@@ -249,7 +237,7 @@ export default defineComponent({
     },
 
     canCreatePublicLinks() {
-      if (this.highlightedFile.isReceivedShare() && !this.hasResharing) {
+      if (this.resource.isReceivedShare() && !this.hasResharing) {
         return false
       }
 
@@ -258,7 +246,7 @@ export default defineComponent({
         return false
       }
 
-      return this.highlightedFile.canShare({ user: this.user })
+      return this.resource.canShare({ user: this.user })
     },
 
     canEdit() {
@@ -268,7 +256,7 @@ export default defineComponent({
     noResharePermsMessage() {
       const translatedFile = this.$gettext("You don't have permission to share this file.")
       const translatedFolder = this.$gettext("You don't have permission to share this folder.")
-      return this.highlightedFile.type === 'file' ? translatedFile : translatedFolder
+      return this.resource.type === 'file' ? translatedFile : translatedFolder
     },
 
     linksHeading() {
@@ -310,7 +298,7 @@ export default defineComponent({
 
     indirectLinks() {
       const allShares = []
-      const parentPaths = getParentPaths(this.highlightedFile.path, false)
+      const parentPaths = getParentPaths(this.resource.path, false)
       if (parentPaths.length === 0) {
         return []
       }
@@ -332,12 +320,12 @@ export default defineComponent({
     },
 
     resourceIsSpace() {
-      return this.highlightedFile.type === 'space'
+      return this.resource.type === 'space'
     },
 
     currentStorageId() {
       if (this.resourceIsSpace) {
-        return this.highlightedFile.id
+        return this.resource.id
       }
 
       if (this.space) {
@@ -363,7 +351,7 @@ export default defineComponent({
     isPasswordEnforcedFor(link) {
       const currentRole = LinkShareRoles.getByBitmask(
         link.permissions,
-        link.indirect || this.highlightedFile.isFolder
+        link.indirect || this.resource.isFolder
       )
 
       const canRead = currentRole.hasPermission(SharePermissions.read)
@@ -463,7 +451,7 @@ export default defineComponent({
         permissions: link.permissions.toString(),
         quicklink: link.quicklink,
         name: link.name,
-        spaceRef: this.highlightedFile.fileId,
+        spaceRef: this.resource.fileId,
         ...(this.currentStorageId && {
           storageId: this.currentStorageId
         })
@@ -471,16 +459,16 @@ export default defineComponent({
     },
 
     async createLink({ params, onError = (e) => {} }) {
-      let path = this.highlightedFile.path
+      let path = this.resource.path
       // sharing a share root from the share jail -> use resource name as path
       if (this.hasShareJail && path === '/') {
-        path = `/${this.highlightedFile.name}`
+        path = `/${this.resource.name}`
       }
       await this.addLink({
         path,
         client: this.$client,
         $gettext: this.$gettext,
-        storageId: this.highlightedFile.fileId || this.highlightedFile.id,
+        storageId: this.resource.fileId || this.resource.id,
         params
       }).catch((e) => {
         onError(e)
@@ -532,7 +520,7 @@ export default defineComponent({
           this.deleteLink({
             client: this.$client,
             share: link,
-            resource: this.highlightedFile
+            resource: this.resource
           })
       }
       this.createModal(modal)
@@ -577,7 +565,7 @@ export default defineComponent({
       if (this.incomingParentShare && this.canCreatePublicLinks) {
         return LinkShareRoles.filterByBitmask(
           this.incomingParentShare.permissions,
-          this.highlightedFile.isFolder,
+          this.resource.isFolder,
           this.hasPublicLinkEditing,
           this.hasPublicLinkAliasSupport,
           !!link.password
@@ -585,7 +573,7 @@ export default defineComponent({
       }
 
       return LinkShareRoles.list(
-        this.highlightedFile.isFolder,
+        this.resource.isFolder,
         this.hasPublicLinkEditing,
         this.hasPublicLinkAliasSupport,
         !!link.password

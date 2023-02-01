@@ -129,7 +129,7 @@ export default defineComponent({
   computed: {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
-    ...mapGetters('Files', ['highlightedFile', 'totalFilesCount']),
+    ...mapGetters('Files', ['totalFilesCount']),
     ...mapGetters(['configuration']),
 
     helpersEnabled() {

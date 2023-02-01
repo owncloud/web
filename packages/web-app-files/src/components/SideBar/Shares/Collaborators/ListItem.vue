@@ -36,7 +36,6 @@
           <div>
             <div v-if="canEditOrDelete" class="oc-flex oc-flex-nowrap oc-flex-middle">
               <role-dropdown
-                :resource="highlightedFile"
                 :dom-selector="shareDomSelector"
                 :existing-permissions="share.customPermissions"
                 :existing-role="share.role"
@@ -102,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
@@ -143,7 +142,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile']),
     ...mapState(['user']),
 
     shareType() {

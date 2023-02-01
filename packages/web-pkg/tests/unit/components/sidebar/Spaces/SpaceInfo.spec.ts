@@ -28,9 +28,9 @@ describe('SpaceInfo', () => {
 function createWrapper(spaceResource) {
   return {
     wrapper: shallowMount(SpaceInfo, {
-      props: { spaceResource },
       global: {
-        plugins: [...defaultPlugins()]
+        plugins: [...defaultPlugins()],
+        provide: { resource: spaceResource }
       }
     })
   }

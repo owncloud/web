@@ -90,21 +90,21 @@ describe('FileLinks', () => {
   })
   describe('when canCreatePublicLinks is set to false', () => {
     it('should show the "no reshare permissions" message', () => {
-      const highlightedFile = mockDeep<Resource>({
+      const resource = mockDeep<Resource>({
         path: '/lorem.txt',
         type: 'file',
         canShare: jest.fn(() => false),
         isFolder: false,
         isReceivedShare: jest.fn()
       })
-      const { wrapper } = getWrapper({ highlightedFile })
+      const { wrapper } = getWrapper({ resource })
       expect(wrapper.find(selectors.noResharePermissions).exists()).toBeTruthy()
     })
   })
 })
 
 function getWrapper({
-  highlightedFile = mockDeep<Resource>({ isFolder: false, canShare: () => true }),
+  resource = mockDeep<Resource>({ isFolder: false, canShare: () => true }),
   links = defaultLinksList,
   sharesTreeLoading = false
 } = {}) {
@@ -134,9 +134,6 @@ function getWrapper({
       })
     }
   }
-  defaultStoreMockOptions.modules.Files.getters.highlightedFile.mockImplementation(
-    () => highlightedFile
-  )
   defaultStoreMockOptions.modules.Files.getters.currentFileOutgoingLinks.mockImplementation(
     () => links
   )
@@ -152,7 +149,7 @@ function getWrapper({
         stubs: { OcButton: false },
         provide: {
           incomingParentShare: {},
-          displayedItem: mockDeep<Resource>()
+          resource
         }
       }
     })

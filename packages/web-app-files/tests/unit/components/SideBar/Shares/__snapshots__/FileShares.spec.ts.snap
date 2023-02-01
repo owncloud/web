@@ -12,7 +12,7 @@ exports[`FileShares collaborators list correctly passes the shared parent route 
   </div>
   <ul aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="files-collaborators-list">
     <li>
-      <collaborator-list-item-stub modifiable="false" share="[object Object]" sharedparentroute="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub modifiable="false" share="[object Object]"></collaborator-list-item-stub>
     </li>
   </ul>
   <!--v-if-->

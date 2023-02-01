@@ -184,7 +184,6 @@ function createWrapper(
     }
   }
 
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => testResource)
   storeOptions.modules.Files.getters.versions.mockImplementation(() => ['2'])
   storeOptions.modules.Files.getters.sharesTree.mockImplementation((state) => state.sharesTree)
   storeOptions.modules.Files.state.sharesTree = {}
@@ -200,22 +199,11 @@ function createWrapper(
       global: {
         stubs: { 'router-link': true, 'oc-resource-icon': true },
         provide: {
-          displayedItem: testResource,
-          displayedSpace: mockDeep<SpaceResource>()
-        },
-        directives: {
-          OcTooltip: jest.fn()
+          resource: testResource,
+          space: mockDeep<SpaceResource>()
         },
         plugins: [...defaultPlugins(), store],
-        mocks: {
-          ...defaultComponentMocks(),
-          $route: {
-            meta: {
-              auth: !publicLinkContext
-            }
-          },
-          $router: jest.fn()
-        }
+        mocks: { ...defaultComponentMocks() }
       }
     })
   }

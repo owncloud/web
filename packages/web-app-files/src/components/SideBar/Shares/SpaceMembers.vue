@@ -67,9 +67,9 @@ import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, inject } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
-import { SpaceResource } from 'web-client/src/helpers'
+import { Resource } from 'web-client/src/helpers'
 import { useGraphClient } from 'web-pkg/src/composables'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
@@ -80,16 +80,10 @@ export default defineComponent({
     CollaboratorListItem,
     InviteCollaboratorForm
   },
-  props: {
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
-    }
-  },
   setup() {
     return {
-      ...useGraphClient()
+      ...useGraphClient(),
+      resource: inject<Resource>('resource')
     }
   },
   data: () => {
@@ -120,7 +114,7 @@ export default defineComponent({
       return this.currentUserIsManager
     },
     currentUserIsManager() {
-      return this.space.isManager(this.user)
+      return this.resource.isManager(this.user)
     }
   },
   watch: {

@@ -3,7 +3,7 @@
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
-      :space="selectedSpaces[0]"
+      :space="resources[0]"
       @space-quota-updated="spaceQuotaUpdated"
     />
     <oc-list id="oc-spaces-actions-sidebar" class-name="oc-mt-s">
@@ -11,7 +11,7 @@
         v-for="(action, index) in actions"
         :key="`action-${index}`"
         :action="action"
-        :items="selectedSpaces"
+        :items="resources"
         class="oc-py-xs"
       />
     </oc-list>
@@ -27,21 +27,20 @@ import Restore from 'web-pkg/src/mixins/spaces/restore'
 import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
-import { computed, defineComponent, getCurrentInstance, PropType } from 'vue'
-import { SpaceResource } from 'web-client'
+import { computed, defineComponent, getCurrentInstance, inject, unref } from 'vue'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   name: 'ActionsPanel',
   components: { ActionMenuItem, QuotaModal },
   mixins: [Rename, Delete, EditDescription, Disable, Restore, EditQuota],
-  props: {
-    selectedSpaces: {
-      type: Array as PropType<Array<SpaceResource>>,
-      required: true
-    }
-  },
-  setup(props) {
+  setup() {
     const instance = getCurrentInstance().proxy as any
+    const resource = inject<Resource>('resource')
+    const resources = computed(() => {
+      return [unref(resource)]
+    })
+
     const actions = computed(() => {
       return [
         ...instance.$_rename_items,
@@ -50,7 +49,7 @@ export default defineComponent({
         ...instance.$_restore_items,
         ...instance.$_delete_items,
         ...instance.$_disable_items
-      ].filter((item) => item.isEnabled({ resources: props.selectedSpaces }))
+      ].filter((item) => item.isEnabled({ resources: unref(resources) }))
     })
     const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
     const closeQuotaModal = () => {
@@ -59,7 +58,7 @@ export default defineComponent({
     const spaceQuotaUpdated = (quota) => {
       instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
     }
-    return { actions, quotaModalIsOpen, closeQuotaModal, spaceQuotaUpdated }
+    return { actions, quotaModalIsOpen, closeQuotaModal, spaceQuotaUpdated, resources }
   }
 })
 </script>

@@ -45,11 +45,9 @@ describe('MembersPanel', () => {
 function getWrapper({ spaceResource = spaceMock } = {}) {
   return {
     wrapper: shallowMount(MembersPanel, {
-      props: {
-        spaceResource
-      },
       global: {
-        plugins: [...defaultPlugins()]
+        plugins: [...defaultPlugins()],
+        provide: { resource: spaceResource }
       }
     })
   }

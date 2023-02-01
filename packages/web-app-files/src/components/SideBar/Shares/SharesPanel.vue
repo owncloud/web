@@ -6,26 +6,15 @@
         v-if="showSpaceMembers"
         ref="peopleShares"
         class="oc-background-highlight oc-p-m oc-mb-s"
-        :space="space"
       />
-      <file-shares
-        v-else
-        ref="peopleShares"
-        class="oc-background-highlight oc-p-m oc-mb-s"
-        :space="space"
-      />
-      <file-links
-        v-if="showLinks"
-        ref="linkShares"
-        class="oc-background-highlight oc-p-m"
-        :space="space"
-      />
+      <file-shares v-else ref="peopleShares" class="oc-background-highlight oc-p-m oc-mb-s" />
+      <file-links v-if="showLinks" ref="linkShares" class="oc-background-highlight oc-p-m" />
     </template>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, inject, provide } from 'vue'
+import { computed, defineComponent, inject, provide } from 'vue'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
@@ -56,16 +45,15 @@ export default defineComponent({
       incomingParentShare,
       ...rest,
       sharesLoading,
-      space: inject<ComputedRef<Resource>>('displayedSpace'),
-      file: inject<ComputedRef<Resource>>('displayedItem'),
-      activePanel: inject<ComputedRef<String>>('activePanel')
+      resource: inject<Resource>('resource'),
+      activePanel: inject<String>('activePanel')
     }
   },
   watch: {
     sharesLoading: {
       handler: function (sharesLoading, old) {
         if (!sharesLoading) {
-          this.loadIncomingParentShare.perform(this.file)
+          this.loadIncomingParentShare.perform(this.resource)
         }
         // FIXME: !old can be removed as soon as https://github.com/owncloud/web/issues/7621 has been fixed
         if (this.loading || !this.activePanel || !old) {

@@ -46,7 +46,6 @@ describe('PrivateLinkItem', () => {
 function getWrapper() {
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.getters.capabilities.mockImplementation(() => ({ files: { privateLinks: true } }))
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => folder)
   const store = createStore(storeOptions)
   return {
     storeOptions,
@@ -54,7 +53,7 @@ function getWrapper() {
       global: {
         plugins: [...defaultPlugins(), store],
         provide: {
-          displayedItem: folder
+          resource: folder
         }
       }
     })

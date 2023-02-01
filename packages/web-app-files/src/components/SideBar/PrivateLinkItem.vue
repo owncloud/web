@@ -31,8 +31,8 @@ export default defineComponent({
   setup() {
     const { $gettext } = useGettext()
     const store = useStore<any>()
-    const displayedItem = inject<Resource>('displayedItem')
-    const privateLink = computed(() => unref(displayedItem))
+    const resource = inject<Resource>('resource')
+    const privateLink = computed(() => unref(resource))
 
     const {
       copy,

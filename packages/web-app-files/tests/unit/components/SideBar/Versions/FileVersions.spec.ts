@@ -59,7 +59,8 @@ describe('FileVersions', () => {
     // fetchFileVersion is fired up when the wrapper is mounted and it sets loading to false
     // so the function needs to be mocked to get a loading wrapper
     jest.spyOn((FileVersions as any).methods, 'fetchFileVersions').mockImplementation()
-    const { wrapper } = getMountedWrapper({ loading: true, mountType: shallowMount })
+    const { wrapper } = getMountedWrapper({ mountType: shallowMount })
+    wrapper.vm.loading = true
 
     it('should show oc loader component', () => {
       expect(wrapper.find(loadingStubSelector).exists()).toBeTruthy()
@@ -113,13 +114,13 @@ describe('FileVersions', () => {
               type: 'file'
             }
           ]
-          const highlightedFile = mockDeep<Resource>({
+          const resource = mockDeep<Resource>({
             name: 'lorem.png',
             extension: 'png',
             type: 'file'
           })
 
-          const { wrapper } = getMountedWrapper({ versions, highlightedFile })
+          const { wrapper } = getMountedWrapper({ versions, resource })
           const iconElements = wrapper.findAll(selectors.fileTypeIcon)
 
           expect(iconElements.length).toBe(1)
@@ -155,19 +156,19 @@ describe('FileVersions', () => {
               expect(revertVersionButton.length).toBe(2)
             })
             it('should be possible for a share with write permissions', () => {
-              const highlightedFile = mockDeep<Resource>({
+              const resource = mockDeep<Resource>({
                 permissions: DavPermission.Updateable,
                 share: undefined
               })
               const space = mockDeep<ShareSpaceResource>({ driveType: 'share' })
-              const { wrapper } = getMountedWrapper({ highlightedFile, space })
+              const { wrapper } = getMountedWrapper({ resource, space })
               const revertVersionButton = wrapper.findAll(selectors.revertVersionButton)
               expect(revertVersionButton.length).toBe(2)
             })
             it('should not be possible for a share with read-only permissions', () => {
-              const highlightedFile = mockDeep<Resource>({ permissions: '', share: undefined })
+              const resource = mockDeep<Resource>({ permissions: '', share: undefined })
               const space = mockDeep<ShareSpaceResource>({ driveType: 'share' })
-              const { wrapper } = getMountedWrapper({ highlightedFile, space })
+              const { wrapper } = getMountedWrapper({ resource, space })
               const revertVersionButton = wrapper.findAll(selectors.revertVersionButton)
               expect(revertVersionButton.length).toBe(0)
             })
@@ -206,29 +207,17 @@ describe('FileVersions', () => {
 function getMountedWrapper({
   mountType = mount,
   space = undefined,
-  loading = false,
   versions = defaultVersions,
-  highlightedFile = mock<Resource>()
+  resource = mock<Resource>()
 } = {}) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => highlightedFile)
   storeOptions.modules.Files.getters.versions.mockImplementation(() => versions)
   const store = createStore(storeOptions)
   return {
     wrapper: mountType(FileVersions, {
-      data() {
-        return {
-          loading
-        }
-      },
       global: {
         renderStubDefaultSlot: true,
-        provide: {
-          displayedSpace: space
-        },
-        directives: {
-          'oc-tooltip': jest.fn()
-        },
+        provide: { space, resource },
         stubs: {
           ...defaultStubs,
           'oc-td': true,

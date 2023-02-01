@@ -73,8 +73,8 @@ export default defineComponent({
     const store = useStore()
     const { graphClient } = useGraphClient()
 
-    const displayedItem = inject<Resource>('displayedItem')
-    const resource = computed(() => unref(displayedItem))
+    const injectedResource = inject<Resource>('resource')
+    const resource = computed(() => unref(injectedResource))
     const selectedTags = ref([])
     const availableTags = ref([])
     const tagSelect = ref(null)
@@ -116,7 +116,6 @@ export default defineComponent({
           value: [...unref(selectedTags)]
         })
 
-        unref(resource).tags = [...unref(selectedTags)]
         eventBus.publish('sidebar.entity.saved')
       } catch (e) {
         console.error(e)
@@ -124,7 +123,7 @@ export default defineComponent({
     }
 
     watch(resource, () => {
-      if (unref(resource).canEditTags()) {
+      if (unref(resource)?.canEditTags()) {
         revertChanges()
       }
     })

@@ -96,7 +96,7 @@ describe('FileShares', () => {
     })
     it('lists indirect outgoing shares', () => {
       const parentPath = '/parent'
-      const resource = mock<Resource>({ path: `${parentPath}/child` })
+      const resource = mock<Resource>({ path: `${parentPath}/child`, canShare: () => true })
       const sharesTree = {
         [parentPath]: [
           mock<Share>({
@@ -106,7 +106,7 @@ describe('FileShares', () => {
           })
         ]
       }
-      const { wrapper } = getWrapper({ sharesTree, resource })
+      const { wrapper } = getWrapper({ sharesTree, resource, collaborators })
       expect(
         wrapper.findComponent<any>('collaborator-list-item-stub').props().sharedParentRoute
       ).toBeDefined()
@@ -228,20 +228,20 @@ function getWrapper({
   storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(
     () => spaceMembers
   )
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => resource)
   storeOptions.modules.Files.getters.currentFileOutgoingCollaborators.mockImplementation(
     () => collaborators
   )
   const store = createStore(storeOptions)
   return {
     wrapper: mountType(FileShares, {
-      props: { space },
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: defaultComponentMocks({
           currentRoute: mock<RouteLocation>({ name: currentRouteName })
         }),
         provide: {
+          resource,
+          space,
           incomingParentShare: {}
         },
         stubs: {

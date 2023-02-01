@@ -17,7 +17,6 @@ const selectors = {
 describe('FileInfo', () => {
   it('shows file info', () => {
     const { wrapper } = createWrapper()
-    // FIXME check for highlightedFile
     expect(wrapper.find(selectors.name).exists()).toBeTruthy()
   })
 })
@@ -31,17 +30,13 @@ function createWrapper() {
   })
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.getters.capabilities.mockImplementation(() => ({ files: { privateLinks: true } }))
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => file)
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(FileInfo, {
       global: {
         plugins: [...defaultPlugins(), store],
-        directives: {
-          OcTooltip: jest.fn()
-        },
         provide: {
-          displayedItem: file
+          resource: file
         },
         mocks: {
           ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) })

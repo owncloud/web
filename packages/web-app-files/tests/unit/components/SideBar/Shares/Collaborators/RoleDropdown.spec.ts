@@ -129,13 +129,6 @@ function getWrapper({
   return {
     wrapper: mountType(RoleDropdown, {
       props: {
-        resource: mock<Resource>({
-          name: resourceType === 'folder' ? 'testfolder' : 'testfile',
-          extension: resourceType === 'folder' ? '' : 'jpg',
-          type: resourceType,
-          isFolder: resourceType === 'folder',
-          canShare: () => canShare
-        }),
         existingRole,
         allowSharePermission: true
       },
@@ -143,6 +136,13 @@ function getWrapper({
         plugins: [...defaultPlugins(), store],
         renderStubDefaultSlot: true,
         provide: {
+          resource: mock<Resource>({
+            name: resourceType === 'folder' ? 'testfolder' : 'testfile',
+            extension: resourceType === 'folder' ? '' : 'jpg',
+            type: resourceType,
+            isFolder: resourceType === 'folder',
+            canShare: () => canShare
+          }),
           incomingParentShare
         }
       }

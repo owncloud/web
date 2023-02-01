@@ -2,7 +2,7 @@
   <div id="oc-file-details-sidebar">
     <div v-if="hasContent">
       <div
-        v-if="file.thumbnail"
+        v-if="resource.thumbnail"
         key="file-thumbnail"
         :style="{
           'background-image': loadPreviewTask.isRunning ? 'none' : `url(${preview})`
@@ -16,7 +16,7 @@
         v-else
         class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb"
       >
-        <oc-resource-icon class="details-icon" :resource="file" size="xxxlarge" />
+        <oc-resource-icon class="details-icon" :resource="resource" size="xxxlarge" />
       </div>
       <div
         v-if="!isPublicLinkContext && shareIndicators.length"
@@ -24,7 +24,7 @@
         data-testid="sharingInfo"
         class="oc-flex oc-flex-middle oc-my-m"
       >
-        <oc-status-indicators :resource="file" :indicators="shareIndicators" />
+        <oc-status-indicators :resource="resource" :indicators="shareIndicators" />
         <p class="oc-my-rm oc-mx-s" v-text="detailSharingInformation" />
       </div>
       <table class="details-table" :aria-label="detailsTableLabel">
@@ -90,9 +90,9 @@
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p
                 ref="filePath"
-                v-oc-tooltip="file.path"
+                v-oc-tooltip="resource.path"
                 class="oc-my-rm oc-text-truncate"
-                v-text="file.path"
+                v-text="resource.path"
               />
               <oc-button
                 v-if="isClipboardCopySupported"
@@ -140,14 +140,14 @@
         <tr v-if="showTags" data-testid="tags">
           <th scope="col" class="oc-pr-s" v-text="tagsLabel" />
           <td>
-            <span v-for="(tag, index) in file.tags" :key="tag">
+            <span v-for="(tag, index) in resource.tags" :key="tag">
               <component
                 :is="isUserContext ? 'router-link' : 'span'"
                 v-bind="getTagComponentAttrs(tag)"
               >
-                <span v-if="index + 1 < file.tags.length">{{ tag }}</span>
+                <span v-if="index + 1 < resource.tags.length">{{ tag }}</span>
                 <span v-else v-text="tag" /></component
-              ><span v-if="index + 1 < file.tags.length" class="oc-mr-xs">,</span>
+              ><span v-if="index + 1 < resource.tags.length" class="oc-mr-xs">,</span>
             </span>
           </td>
         </tr>
@@ -200,7 +200,7 @@ export default defineComponent({
       isSupported: isClipboardCopySupported
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
-    const file = inject<ComputedRef<Resource>>('displayedItem')
+    const resource = inject<Resource>('resource')
     const isPublicLinkContext = usePublicLinkContext({ store })
     const accessToken = useAccessToken({ store })
     const clientService = useClientService()
@@ -208,12 +208,12 @@ export default defineComponent({
 
     const directLink = computed(() => {
       return `${store.getters.configuration.server}files/spaces/personal/home${encodePath(
-        unref(file).path
+        unref(resource).path
       )}`
     })
 
     const copyEosPathToClipboard = () => {
-      copy(unref(file).path)
+      copy(unref(resource).path)
       copiedEos.value = unref(copied)
       store.dispatch('showMessage', {
         title: $gettext('EOS path copied'),
@@ -232,20 +232,20 @@ export default defineComponent({
 
     const loadData = async () => {
       const calls = []
-      if (unref(file).type === 'file' && !unref(isPublicLinkContext)) {
+      if (unref(resource).type === 'file' && !unref(isPublicLinkContext)) {
         calls.push(
           store.dispatch('Files/loadVersions', {
             client: unref(clientService).owncloudSdk,
-            fileId: unref(file).id
+            fileId: unref(resource).id
           })
         )
       }
       await Promise.all(calls.map((p) => p.catch((e) => e)))
     }
 
-    const loadPreviewTask = useTask(function* (signal, file) {
+    const loadPreviewTask = useTask(function* (signal, resource) {
       preview.value = yield loadPreview({
-        resource: file,
+        resource,
         isPublic: unref(isPublicLinkContext),
         dimensions: ImageDimension.Preview,
         server: store.getters.configuration.server,
@@ -255,10 +255,12 @@ export default defineComponent({
     }).restartable()
 
     watch(
-      file,
+      resource,
       () => {
-        loadData()
-        loadPreviewTask.perform(unref(file))
+        if (unref(resource)) {
+          loadData()
+          loadPreviewTask.perform(unref(resource))
+        }
       },
       { immediate: true }
     )
@@ -273,20 +275,20 @@ export default defineComponent({
       isUserContext: useUserContext({ store }),
       isPublicLinkContext,
       accessToken,
-      space: inject<ComputedRef<Resource>>('displayedSpace'),
+      space: inject<ComputedRef<Resource>>('space'),
       directLink,
-      file,
+      resource,
       hasTags: useCapabilityFilesTags(),
       loadPreviewTask
     }
   },
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
-    ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading', 'highlightedFile']),
+    ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading']),
     ...mapGetters(['user', 'configuration']),
 
     matchingSpace() {
-      return this.space || this.spaces.find((space) => space.id === this.file.storageId)
+      return this.space || this.spaces.find((space) => space.id === this.resource.storageId)
     },
     runningOnEos() {
       return !!this.configuration?.options?.runningOnEos
@@ -322,30 +324,30 @@ export default defineComponent({
         !this.ownedByCurrentUser &&
         !this.sharesTreeLoading &&
         this.sharedByDisplayName &&
-        this.sharedByName !== this.file.ownerId
+        this.sharedByName !== this.resource.ownerId
       )
     },
     showSharedVia() {
       return (
         this.showShares &&
         !this.sharesTreeLoading &&
-        this.file.path !== this.sharedParentDir &&
+        this.resource.path !== this.sharedParentDir &&
         this.sharedParentDir
       )
     },
     sharedParentRoute() {
-      if (this.file.shareId) {
-        if (this.file.path === '') {
+      if (this.resource.shareId) {
+        if (this.resource.path === '') {
           return {}
         }
         const space = buildShareSpaceResource({
-          shareId: this.file.shareId,
-          shareName: basename(this.file.shareRoot),
+          shareId: this.resource.shareId,
+          shareName: basename(this.resource.shareRoot),
           serverUrl: configurationManager.serverUrl
         })
         return createLocationSpaces(
           'files-spaces-generic',
-          createFileRouteOptions(space, { path: this.file.path, fileId: this.file.fileId })
+          createFileRouteOptions(space, { path: this.resource.path, fileId: this.resource.fileId })
         )
       }
       if (!this.matchingSpace) {
@@ -366,7 +368,7 @@ export default defineComponent({
       return this.hasAnyShares
     },
     detailSharingInformation() {
-      if (this.file.type === 'folder') {
+      if (this.resource.type === 'folder') {
         return this.$gettext('This folder has been shared.')
       }
       return this.$gettext('This file has been shared.')
@@ -375,7 +377,7 @@ export default defineComponent({
       return this.$gettext('Shared by')
     },
     hasTimestamp() {
-      return this.file.mdate?.length > 0
+      return this.resource.mdate?.length > 0
     },
     timestampLabel() {
       return this.$gettext('Last modified')
@@ -385,13 +387,13 @@ export default defineComponent({
     },
     ownerDisplayName() {
       return (
-        this.file.ownerDisplayName ||
-        this.file.shareOwnerDisplayname ||
-        this.file.owner?.[0].displayName
+        this.resource.ownerDisplayName ||
+        this.resource.shareOwnerDisplayname ||
+        this.resource.owner?.[0].displayName
       )
     },
     ownerAdditionalInfo() {
-      return this.file.owner?.[0].additionalInfo
+      return this.resource.owner?.[0].additionalInfo
     },
     directLinkLabel() {
       return this.$gettext('Direct link')
@@ -406,7 +408,7 @@ export default defineComponent({
       return this.$gettext('Copy EOS path')
     },
     resourceSize() {
-      return formatFileSize(this.file.size, this.$language.current)
+      return formatFileSize(this.resource.size, this.$language.current)
     },
     showSize() {
       return this.resourceSize !== '?'
@@ -415,7 +417,7 @@ export default defineComponent({
       return this.$gettext('Size')
     },
     showVersions() {
-      if (this.file.type === 'folder' || this.isPublicLinkContext) {
+      if (this.resource.type === 'folder' || this.isPublicLinkContext) {
         return
       }
       return this.versions.length > 0
@@ -427,31 +429,31 @@ export default defineComponent({
       return this.$gettext('See all versions')
     },
     capitalizedTimestamp() {
-      const displayDate = formatDateFromHTTP(this.file.mdate, this.$language.current)
+      const displayDate = formatDateFromHTTP(this.resource.mdate, this.$language.current)
       return upperFirst(displayDate)
     },
     showTags() {
-      return this.hasTags && this.file.tags?.length
+      return this.hasTags && this.resource.tags?.length
     },
     tagsLabel() {
       return this.$gettext('Tags')
     },
     hasAnyShares() {
       return (
-        this.file.shareTypes?.length > 0 ||
-        this.file.indicators?.length > 0 ||
+        this.resource.shareTypes?.length > 0 ||
+        this.resource.indicators?.length > 0 ||
         this.sharedItem !== null
       )
     },
     ownedByCurrentUser() {
       return (
-        this.file.ownerId === this.user.id ||
-        this.file.owner?.[0].username === this.user.id ||
-        this.file.shareOwner === this.user.id
+        this.resource.ownerId === this.user.id ||
+        this.resource.owner?.[0].username === this.user.id ||
+        this.resource.shareOwner === this.user.id
       )
     },
     shareIndicators() {
-      return getIndicators(this.file, this.sharesTree)
+      return getIndicators(this.resource, this.sharesTree)
     },
     shares() {
       if (this.sharedParentDir === null) {
@@ -478,7 +480,7 @@ export default defineComponent({
       return sharedByDisplayName
     },
     sharedParentDir() {
-      return this.getParentSharePath(this.file.path, this.sharesTree)
+      return this.getParentSharePath(this.resource.path, this.sharesTree)
     },
     sharedParentFileId() {
       return this.sharedItem?.file?.source

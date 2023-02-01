@@ -12,11 +12,9 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
-
 import FileActions from '../../../mixins/fileActions'
-import { ComputedRef, defineComponent, inject } from 'vue'
+import { computed, defineComponent, getCurrentInstance, inject, unref } from 'vue'
 import { Resource } from 'web-client'
 
 export default defineComponent({
@@ -24,22 +22,23 @@ export default defineComponent({
   components: { ActionMenuItem },
   mixins: [FileActions],
   setup() {
-    return {
-      space: inject<ComputedRef<Resource>>('displayedSpace')
-    }
-  },
-  computed: {
-    ...mapGetters('Files', ['highlightedFile']),
-
-    resources() {
-      return [this.highlightedFile]
-    },
-
-    actions() {
-      return this.$_fileActions_getAllAvailableActions({
-        space: this.space,
-        resources: this.resources
+    const instance = getCurrentInstance().proxy as any
+    const resource = inject<Resource>('resource')
+    const space = inject<Resource>('space')
+    const resources = computed(() => {
+      return [unref(resource)]
+    })
+    const actions = computed(() => {
+      return instance.$_fileActions_getAllAvailableActions({
+        space: unref(space),
+        resources: unref(resources)
       })
+    })
+
+    return {
+      space,
+      resources,
+      actions
     }
   }
 })

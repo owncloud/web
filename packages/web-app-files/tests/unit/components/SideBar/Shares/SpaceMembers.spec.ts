@@ -165,19 +165,16 @@ function getWrapper({
   storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(
     () => spaceMembers
   )
-  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => space)
   const store = createStore(storeOptions)
   return mountType(SpaceMembers, {
-    props: {
-      space
-    },
     global: {
       plugins: [...defaultPlugins(), store],
       mocks: defaultComponentMocks({
         currentRoute: mock<RouteLocation>({ name: currentRouteName })
       }),
       provide: {
-        displayedItem: space
+        space,
+        resource: space
       },
       stubs: {
         OcButton: false,

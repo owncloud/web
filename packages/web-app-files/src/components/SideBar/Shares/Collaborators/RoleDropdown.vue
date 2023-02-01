@@ -113,7 +113,7 @@ import {
   SpacePeopleShareRoles
 } from 'web-client/src/helpers/share'
 import * as uuid from 'uuid'
-import { ComputedRef, defineComponent, inject, PropType } from 'vue'
+import { defineComponent, inject, PropType } from 'vue'
 import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingCanDenyAccess,
@@ -125,10 +125,6 @@ export default defineComponent({
   name: 'RoleDropdown',
   components: { RoleItem },
   props: {
-    resource: {
-      type: Object,
-      required: true
-    },
     existingRole: {
       type: Object as PropType<ShareRole>,
       required: false,
@@ -153,7 +149,8 @@ export default defineComponent({
   setup() {
     const store = useStore()
     return {
-      incomingParentShare: inject<ComputedRef<Resource>>('incomingParentShare'),
+      resource: inject<Resource>('resource'),
+      incomingParentShare: inject<Resource>('incomingParentShare'),
       hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store)
     }
