@@ -5,7 +5,7 @@ import { resourceExists, waitForResources } from './utils'
 import path from 'path'
 import { File } from '../../../types'
 import { sidebar } from '../utils'
-import {config} from "../../../../config";
+import { config } from '../../../../config'
 
 const downloadFileButtonSideBar =
   '#oc-files-actions-sidebar .oc-files-actions-download-file-trigger'
@@ -528,7 +528,6 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
   await sidebar.close({ page })
 }
 
-
 export interface deleteResourceWithOptionArgs {
   page: Page
   resources: resourceArgs[]
@@ -537,7 +536,7 @@ export interface deleteResourceWithOptionArgs {
 }
 
 export const deleteResourceWithOption = async (
-    args: deleteResourceWithOptionArgs
+  args: deleteResourceWithOptionArgs
 ): Promise<void> => {
   const { page, resources, folder, via } = args
   switch (via) {
@@ -551,10 +550,10 @@ export const deleteResourceWithOption = async (
         await page.locator(deleteButtonSidebar).first().click()
         await Promise.all([
           page.waitForResponse(
-              (resp) =>
-                  resp.url().includes(encodeURIComponent(resource.name)) &&
-                  resp.status() === 204 &&
-                  resp.request().method() === 'DELETE'
+            (resp) =>
+              resp.url().includes(encodeURIComponent(resource.name)) &&
+              resp.status() === 204 &&
+              resp.request().method() === 'DELETE'
           ),
           page.locator(util.format(actionConfirmationButton, 'Delete')).click()
         ])
@@ -572,15 +571,15 @@ export const deleteResourceWithOption = async (
       await page.locator(deleteButtonBatchAction).click()
       const deletetedResources = []
       await Promise.all([
-          page.waitForResponse((resp) => {
+        page.waitForResponse((resp) => {
           if (resp.status() === 204 && resp.request().method() === 'DELETE') {
             deletetedResources.push(decodeURIComponent(resp.url().split('/').pop()))
           }
           // waiting for GET response after all the resource are deleted with batch action
           return (
-              resp.url().includes(config.ocis ? 'graph/v1.0/drives' : 'ocs/v1.php/cloud/users') &&
-              resp.status() === 200 &&
-              resp.request().method() === 'GET'
+            resp.url().includes(config.ocis ? 'graph/v1.0/drives' : 'ocs/v1.php/cloud/users') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'GET'
           )
         }),
         page.locator(util.format(actionConfirmationButton, 'Delete')).click()
@@ -594,7 +593,6 @@ export const deleteResourceWithOption = async (
     }
   }
 }
-
 
 export interface downloadResourceVersionArgs {
   page: Page

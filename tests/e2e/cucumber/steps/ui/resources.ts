@@ -49,39 +49,39 @@ When(
 )
 
 When(
-    /^"([^"]*)" deletes the following resource(s)? using the (sidebar panel|batch action)$/,
-    async function (
-        this: World,
-        stepUser: string,
-        _: string,
-        actionType: string,
-        stepTable: DataTable
-    ) {
-        let files, parentFolder
-        const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-        const resourceObject = new objects.applicationFiles.Resource({ page })
-        const deleteInfo = stepTable.hashes().reduce((acc, stepRow) => {
-            const { resource, from } = stepRow
-            const resourceInfo = {
-                name: resource
-            }
-            if (!acc[from]) {
-                acc[from] = []
-            }
-            acc[from].push(resourceInfo)
-            return acc
-        }, {})
+  /^"([^"]*)" deletes the following resource(s)? using the (sidebar panel|batch action)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: string,
+    actionType: string,
+    stepTable: DataTable
+  ) {
+    let files, parentFolder
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const deleteInfo = stepTable.hashes().reduce((acc, stepRow) => {
+      const { resource, from } = stepRow
+      const resourceInfo = {
+        name: resource
+      }
+      if (!acc[from]) {
+        acc[from] = []
+      }
+      acc[from].push(resourceInfo)
+      return acc
+    }, {})
 
-        for (const folder of Object.keys(deleteInfo)) {
-            files = deleteInfo[folder]
-            parentFolder = folder !== 'undefined' ? folder : null
-            await resourceObject.deleteWithOption({
-                folder: parentFolder,
-                resources: files,
-                via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
-            })
-        }
+    for (const folder of Object.keys(deleteInfo)) {
+      files = deleteInfo[folder]
+      parentFolder = folder !== 'undefined' ? folder : null
+      await resourceObject.deleteWithOption({
+        folder: parentFolder,
+        resources: files,
+        via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+      })
     }
+  }
 )
 
 When(
