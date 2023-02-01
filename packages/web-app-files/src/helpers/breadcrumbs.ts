@@ -1,10 +1,10 @@
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { RouteLocation } from 'vue-router'
+import { RouteLocation, RouteLocationRaw } from 'vue-router'
 import omit from 'lodash-es/omit'
 
 export interface BreadcrumbItem {
   text: string
-  to?: RouteLocation
+  to?: RouteLocationRaw
   allowContextActions?: boolean
   onClick?: () => void
 }

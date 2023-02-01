@@ -93,6 +93,11 @@ export default defineComponent({
       type: Function,
       required: false,
       default: undefined
+    },
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
     }
   },
   emits: ['fileClick', 'rowMounted'],
@@ -111,7 +116,11 @@ export default defineComponent({
     })
 
     const resourceRouteResolver = useResourceRouteResolver(
-      { spaces, targetRouteCallback: computed(() => props.targetRouteCallback) },
+      {
+        space: ref(props.space),
+        spaces,
+        targetRouteCallback: computed(() => props.targetRouteCallback)
+      },
       context
     )
 

@@ -50,6 +50,7 @@
           class="oc-px-m oc-pt-l"
           tile-width="small"
           :target-route-callback="resourceTargetRouteCallback"
+          :space="space"
           @rowMounted="rowMounted"
           @fileClick="$_fileActions_triggerDefaultAction"
         >
@@ -140,7 +141,7 @@ import {
   onMounted,
   unref
 } from 'vue'
-import { Location } from 'vue-router'
+import { RouteLocationNamedRaw } from 'vue-router'
 import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { Resource } from 'web-client'
@@ -231,7 +232,10 @@ export default defineComponent({
     const store = useStore()
     let loadResourcesEventToken
 
-    const resourceTargetRouteCallback = ({ path, fileId }: CreateTargetRouteOptions): Location => {
+    const resourceTargetRouteCallback = ({
+      path,
+      fileId
+    }: CreateTargetRouteOptions): RouteLocationNamedRaw => {
       const { params, query } = createFileRouteOptions(props.space, { path, fileId })
       if (isPublicSpaceResource(props.space)) {
         return createLocationPublic('files-public-link', { params, query })

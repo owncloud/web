@@ -216,6 +216,7 @@ import { isResourceTxtFileAlmostEmpty } from 'web-app-files/src/helpers/resource
 import { determineSortFields } from 'web-app-files/src/helpers/ui/resourceTable'
 import Rename from 'web-app-files/src/mixins/actions/rename'
 import { createLocationShares, createLocationCommon } from 'web-app-files/src/router'
+import { ref } from 'vue'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -409,7 +410,11 @@ export default defineComponent({
     )
 
     const resourceRouteResolver = useResourceRouteResolver(
-      { spaces, targetRouteCallback: computed(() => props.targetRouteCallback) },
+      {
+        space: ref(props.space),
+        spaces,
+        targetRouteCallback: computed(() => props.targetRouteCallback)
+      },
       context
     )
 

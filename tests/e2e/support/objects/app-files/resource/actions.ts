@@ -72,8 +72,6 @@ export const clickResource = async ({
 }): Promise<void> => {
   const paths = path.split('/')
   for (const name of paths) {
-    // const isTiles = await getTilesVisibility(page)
-    // console.log(isTiles)
     const resource = await page.locator(util.format(resourceNameSelector, name))
     const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
     await Promise.all([
@@ -83,8 +81,7 @@ export const clickResource = async ({
       )
     ])
 
-    // toDo: remove me
-    // @jannik: please have a look here what we can wait for to be sure that it's there
+    // TODO: Refactor so the line below becomes unnecessary
     await new Promise((resolve) => setTimeout(resolve, 250))
   }
 }
