@@ -2665,21 +2665,23 @@ def githubComment(alternateSuiteName, server_type = ""):
     }]
 
 def example_deploys(ctx):
-    latest_configs = [
+    on_merge_deploy = [
         "ocis_web/latest.yml",
     ]
-    released_configs = []
+    nightly_deploy = [
+        "ocis_web/daily.yml",
+    ]
 
     # if on master branch:
-    configs = latest_configs
+    configs = on_merge_deploy
     rebuild = "false"
 
     if ctx.build.event == "tag":
-        configs = released_configs
+        configs = nightly_deploy
         rebuild = "false"
 
     if ctx.build.event == "cron":
-        configs = latest_configs + released_configs
+        configs = on_merge_deploy + nightly_deploy
         rebuild = "true"
 
     deploys = []

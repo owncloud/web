@@ -1,5 +1,5 @@
 ---
-- name: continuous-deployment-ocis-web-latest
+- name: continuous-deployment-ocis-web-daily
   server:
     server_type: cx21
     image: ubuntu-20.04
@@ -14,7 +14,7 @@
       - /var/lib/docker/volumes/web_certs
 
   domains:
-    - "*.ocis-web.latest.owncloud.works"
+    - "*.ocis-web.daily.owncloud.works"
 
   vars:
     ssh_authorized_keys:
@@ -34,10 +34,10 @@
           TRAEFIK_ACME_MAIL: wkloucek@owncloud.com
           OCIS_DOCKER_TAG: latest
           WEB_DOCKER_TAG: latest
-          OCIS_DOMAIN: ocis.ocis-web.latest.owncloud.works
-          WOPISERVER_DOMAIN: wopiserver.ocis-web.latest.owncloud.works
-          COLLABORA_DOMAIN: collabora.ocis-web.latest.owncloud.works
-          ONLYOFFICE_DOMAIN: onlyoffice.ocis-web.latest.owncloud.works
+          OCIS_DOMAIN: ocis.ocis-web.daily.owncloud.works
+          WOPISERVER_DOMAIN: wopiserver.ocis-web.daily.owncloud.works
+          COLLABORA_DOMAIN: collabora.ocis-web.daily.owncloud.works
+          ONLYOFFICE_DOMAIN: onlyoffice.ocis-web.daily.owncloud.works
           DEMO_USERS: true
           COMPOSE_FILE: docker-compose.yml:monitoring_tracing/docker-compose-additions.yml
       - name: monitoring
@@ -45,8 +45,8 @@
         ref: master
         env:
           NETWORK_NAME: ocis-net
-          TELEMETRY_SERVE_DOMAIN: telemetry.ocis-web.latest.owncloud.works
+          TELEMETRY_SERVE_DOMAIN: telemetry.ocis-web.daily.owncloud.works
           JAEGER_COLLECTOR: jaeger-collector.infra.owncloud.works:443
           TELEGRAF_SPECIFIC_CONFIG: ocis_single_container
-          OCIS_URL: ocis.ocis-web.latest.owncloud.works
-          OCIS_DEPLOYMENT_ID: continuous-deployment-ocis-web-latest
+          OCIS_URL: ocis.ocis-web.daily.owncloud.works
+          OCIS_DEPLOYMENT_ID: continuous-deployment-ocis-web-daily
