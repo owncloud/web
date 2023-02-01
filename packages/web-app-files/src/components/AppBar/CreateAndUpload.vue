@@ -178,6 +178,7 @@ import { urlJoin } from 'web-client/src/utils'
 import { stringify } from 'qs'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
+import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 
 export default defineComponent({
   components: {
@@ -317,15 +318,18 @@ export default defineComponent({
         return false
       }
       return this.currentFolder.canUpload({ user: this.user })
+    },
+
+    loadIndicatorsForNewFile() {
+      return (
+        this.isSpacesGenericLocation &&
+        this.space.driveType !== 'share' &&
+        !!this.currentFolder?.shareTypes?.length
+      )
     }
   },
   methods: {
-    ...mapActions('Files', [
-      'loadPreview',
-      'loadIndicators',
-      'clearClipboardFiles',
-      'pasteSelectedFiles'
-    ]),
+    ...mapActions('Files', ['clearClipboardFiles', 'pasteSelectedFiles']),
     ...mapActions(['showMessage', 'createModal', 'setModalInputErrorMessage', 'hideModal']),
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
@@ -450,18 +454,16 @@ export default defineComponent({
 
       try {
         const path = join(this.item, folderName)
-        const resource = await (this.$clientService.webdav as WebDAV).createFolder(this.space, {
+        let resource = await (this.$clientService.webdav as WebDAV).createFolder(this.space, {
           path
         })
+
+        if (this.loadIndicatorsForNewFile) {
+          resource.indicators = getIndicators({ resource })
+        }
+
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
-
-        if (this.isSpacesGenericLocation && this.space.driveType !== 'share') {
-          this.loadIndicators({
-            client: this.$client,
-            currentFolder: this.currentFolder.path
-          })
-        }
 
         this.showMessage({
           title: this.$gettextInterpolate(
@@ -522,6 +524,10 @@ export default defineComponent({
           path
         })
 
+        if (this.loadIndicatorsForNewFile) {
+          resource.indicators = getIndicators({ resource })
+        }
+
         this.UPSERT_RESOURCE(resource)
 
         if (this.newFileAction) {
@@ -538,14 +544,6 @@ export default defineComponent({
         }
 
         this.hideModal()
-
-        if (this.isSpacesGenericLocation && this.space.driveType !== 'share') {
-          this.loadIndicators({
-            client: this.$client,
-            currentFolder: this.currentFolder.path
-          })
-        }
-
         this.showMessage({
           title: this.$gettextInterpolate(this.$gettext('"%{fileName}" was created successfully'), {
             fileName
@@ -584,16 +582,14 @@ export default defineComponent({
         const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(this.space, {
           path
         })
+
+        if (this.loadIndicatorsForNewFile) {
+          resource.indicators = getIndicators({ resource })
+        }
+
         this.$_fileActions_triggerDefaultAction({ space: this.space, resources: [resource] })
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
-
-        if (this.isSpacesGenericLocation && this.space.driveType !== 'share') {
-          this.loadIndicators({
-            client: this.$client,
-            currentFolder: this.currentFolder.path
-          })
-        }
         this.showMessage({
           title: this.$gettextInterpolate(this.$gettext('"%{fileName}" was created successfully'), {
             fileName

@@ -84,7 +84,7 @@ export class FolderLoaderSpace implements FolderLoader {
           })
 
           for (const file of resources) {
-            file.indicators = getIndicators(file, store.state.Files.sharesTree, unref(hasShareJail))
+            file.indicators = getIndicators({ resource: file, currentFolder })
           }
         }
 

@@ -93,7 +93,7 @@ import { computed, defineComponent, unref } from 'vue'
 import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import FileActions from '../../mixins/fileActions'
 import MixinAcceptShare from '../../mixins/actions/acceptShare'
 import MixinDeclineShare from '../../mixins/actions/declineShare'
@@ -258,8 +258,7 @@ export default defineComponent({
     visibilityObserver.disconnect()
   },
   methods: {
-    ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadAvatars']),
-    ...mapMutations('Files', ['LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapActions('Files', ['loadPreview', 'loadAvatars']),
 
     rowMounted(resource, component) {
       const debounced = debounce(({ unobserve }) => {

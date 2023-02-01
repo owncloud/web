@@ -1,6 +1,6 @@
 import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
-import { getIndicators } from '../helpers/statusIndicators'
+import { getLinkIndicator, getUserIndicator } from '../helpers/statusIndicators'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 
 export default {
@@ -132,6 +132,18 @@ export default {
   SHARESTREE_ADD(state, sharesTree) {
     state.sharesTree = Object.assign({}, state.sharesTree, sharesTree)
   },
+  SHARESTREE_UPSERT(state, { path, share }) {
+    if (!state.sharesTree[path]) {
+      state.sharesTree[path] = []
+    }
+    state.sharesTree[path].push(share)
+  },
+  SHARESTREE_REMOVE(state, { path, id }) {
+    if (!state.sharesTree[path]) {
+      return
+    }
+    state.sharesTree[path] = state.sharesTree[path].filter((s) => s.id !== id)
+  },
   SHARESTREE_ERROR(state, error) {
     state.sharesTreeError = error
   },
@@ -155,19 +167,48 @@ export default {
     state.versions = versions
   },
 
-  LOAD_INDICATORS(state, path) {
+  ADD_INDICATOR(state, { path, type }) {
     const files = state.files.filter((f) => f.path.startsWith(path))
-    for (const resource of files) {
-      const indicators = getIndicators(resource, state.sharesTree)
+    const indicatorMethod = type === 'user' ? getUserIndicator : getLinkIndicator
 
-      if (!indicators.length && !resource.indicators.length) {
-        continue
+    for (const resource of files) {
+      let updatedIndicators
+
+      if (!resource.indicators?.length) {
+        updatedIndicators = [indicatorMethod({ resource })]
+      } else {
+        let indicator = resource.indicators.find((i) => i.type.startsWith(type))
+        if (indicator?.visible) {
+          continue
+        }
+        if (!indicator) {
+          indicator = indicatorMethod({ resource })
+        }
+        updatedIndicators = [
+          ...resource.indicators.filter((i) => !i.type.startsWith(type)),
+          { ...indicator, visible: true }
+        ]
       }
 
       this.commit('Files/UPDATE_RESOURCE_FIELD', {
         id: resource.id,
         field: 'indicators',
-        value: indicators
+        value: updatedIndicators
+      })
+    }
+  },
+
+  REMOVE_INDICATOR(state, { path, type }) {
+    const files = state.files.filter((f) => f.path.startsWith(path) && !!f.indicators?.length)
+    for (const resource of files) {
+      const existingIndicator = resource.indicators.find((i) => i.type.startsWith(type))
+      if (!existingIndicator?.visible) {
+        continue
+      }
+      this.commit('Files/UPDATE_RESOURCE_FIELD', {
+        id: resource.id,
+        field: 'indicators',
+        value: resource.indicators.filter((i) => !i.type.startsWith(type))
       })
     }
   },

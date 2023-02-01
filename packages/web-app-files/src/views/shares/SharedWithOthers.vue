@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 
 import FileActions from '../../mixins/fileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -150,8 +150,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadAvatars']),
-    ...mapMutations('Files', ['LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapActions('Files', ['loadPreview', 'loadAvatars']),
 
     rowMounted(resource, component) {
       const debounced = debounce(({ unobserve }) => {
