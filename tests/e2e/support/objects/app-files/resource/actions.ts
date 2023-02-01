@@ -60,6 +60,7 @@ const tagInInputForm =
   '//span[contains(@class, "vs__selected")]//span[text()="%s"]//ancestor::span/button[contains(@class, "vs__deselect")]'
 const tagFormInput = '#tags-form input'
 const compareDialogConfirmBtn = '.compare-save-dialog-confirm-btn'
+const resourcesAsTiles = '#files-view .oc-tiles'
 
 export const clickResource = async ({
   page,
@@ -764,6 +765,21 @@ export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]
   }
 
   return files
+}
+
+export interface switchViewModeArgs {
+  page: Page
+  target: 'resource-table' | 'resource-tiles'
+}
+
+export const clickViewModeToggle = async (args: switchViewModeArgs): Promise<void> => {
+  const { page, target } = args
+  await page.locator(`.viewmode-switch-buttons .${target}`).click()
+}
+
+export const getTilesVisibility = async (args): Promise<boolean> => {
+  const { page } = args
+  return await page.locator(resourcesAsTiles).isVisible()
 }
 
 export const showHiddenResources = async (page): Promise<void> => {

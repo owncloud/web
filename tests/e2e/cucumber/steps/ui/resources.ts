@@ -262,6 +262,25 @@ When(
   }
 )
 
+When(
+  '{string} switches to the tiles-view',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.switchToTilesViewMode()
+  }
+)
+
+When(
+  '{string} sees the resources displayed as tiles',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const isVisible = await resourceObject.areResourcesShownAsTiles()
+    expect(isVisible).toBe(true)
+  }
+)
+
 export const processDownload = async (
   stepTable: DataTable,
   pageObject: any,
