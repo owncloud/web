@@ -13,7 +13,8 @@ const downloadFolderButtonSidedBar =
 const downloadButtonBatchAction = '.oc-files-actions-download-archive-trigger'
 const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
 const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//input`
-export const fileRow = '//ancestor::tr'
+export const fileRow =
+  '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
 export const resourceNameSelector = `[data-test-resource-name="%s"]`
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
@@ -71,6 +72,8 @@ export const clickResource = async ({
 }): Promise<void> => {
   const paths = path.split('/')
   for (const name of paths) {
+    // const isTiles = await getTilesVisibility(page)
+    // console.log(isTiles)
     const resource = await page.locator(util.format(resourceNameSelector, name))
     const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
     await Promise.all([
