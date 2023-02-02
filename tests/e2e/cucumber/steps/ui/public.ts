@@ -4,7 +4,7 @@ import { kebabCase } from 'lodash'
 import { DateTime } from 'luxon'
 import { World } from '../../environment'
 import { objects } from '../../../support'
-import { processDownload } from './resources'
+import { processDelete, processDownload } from './resources'
 import { linkStore } from '../../../support/store'
 
 When(
@@ -128,12 +128,15 @@ Then(
 )
 
 When(
-  '{string} deletes the following resources from public link',
-  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+  /^"([^"]*)" deletes the following resources from public link using (sidebar panel| batch action)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    stepTable: DataTable
+  ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.Public({ page })
-    for (const info of stepTable.hashes()) {
-      await pageObject.delete({ resource: info.resource })
-    }
+    await processDelete(stepTable, pageObject, actionType)
   }
 )
