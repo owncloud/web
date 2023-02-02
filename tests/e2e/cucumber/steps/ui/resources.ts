@@ -144,18 +144,6 @@ When(
 )
 
 When(
-  '{string} deletes the following resource(s)',
-  async function (this: World, stepUser: string, stepTable: DataTable) {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const resourceObject = new objects.applicationFiles.Resource({ page })
-
-    for (const info of stepTable.hashes()) {
-      await resourceObject.delete({ resource: info.resource })
-    }
-  }
-)
-
-When(
   '{string} downloads old version of the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })

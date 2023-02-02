@@ -487,31 +487,6 @@ export interface deleteResourceArgs {
   resource: string
 }
 
-export const deleteResource = async (args: deleteResourceArgs): Promise<void> => {
-  const { page, resource } = args
-  const folderPaths = resource.split('/')
-  const resourceName = folderPaths.pop()
-
-  if (folderPaths.length) {
-    await clickResource({ page, path: folderPaths.join('/') })
-  }
-
-  await sidebar.open({ page, resource: resourceName })
-  await sidebar.openPanel({ page, name: 'actions' })
-
-  await page.locator(deleteButtonSidebar).first().click()
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().includes(encodeURIComponent(resourceName)) &&
-        resp.status() === 204 &&
-        resp.request().method() === 'DELETE'
-    ),
-    page.locator(util.format(actionConfirmationButton, 'Delete')).click()
-  ])
-  await sidebar.close({ page })
-}
-
 export interface deleteResourceWithOptionArgs {
   page: Page
   resources: resourceArgs[]
