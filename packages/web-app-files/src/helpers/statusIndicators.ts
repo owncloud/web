@@ -55,20 +55,19 @@ export const getLinkIndicator = ({ resource }) => {
   }
 }
 
-export const getIndicators = ({ resource, parentFolders = null }) => {
+export const getIndicators = ({ resource, parentFolders = [] }) => {
   const indicators = []
   let isIndirectUserShare = false
   let isIndirectLinkShare = false
 
-  if (parentFolders) {
-    for (const folder of parentFolders) {
-      isIndirectUserShare = isIndirectUserShare ? true : isDirectUserShare(folder)
-      isIndirectLinkShare = isIndirectLinkShare ? true : isDirectLinkShare(folder)
-      if (isIndirectUserShare && isIndirectLinkShare) {
-        break
-      }
+  for (const folder of parentFolders) {
+    isIndirectUserShare = isIndirectUserShare ? true : isDirectUserShare(folder)
+    isIndirectLinkShare = isIndirectLinkShare ? true : isDirectLinkShare(folder)
+    if (isIndirectUserShare && isIndirectLinkShare) {
+      break
     }
   }
+
   if (isDirectUserShare(resource) || isIndirectUserShare) {
     indicators.push(getUserIndicator({ resource }))
   }

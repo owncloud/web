@@ -254,8 +254,11 @@ export default defineComponent({
     }
 
     watch(
-      selectedFiles,
+      () => [...unref(selectedFiles), props.open],
       (newResource, oldResource) => {
+        if (!props.open) {
+          return
+        }
         if (
           unref(selectedFiles).length === 1 &&
           unref(loadedResource)?.id === unref(selectedFiles)[0].id
