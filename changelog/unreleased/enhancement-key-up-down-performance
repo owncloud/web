@@ -1,0 +1,5 @@
+Enhancement: Slight improvement of key up/down performance
+
+The render performance of the key up/down events in file lists has been improved slightly.
+
+https://github.com/owncloud/web/pull/8356
