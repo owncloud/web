@@ -8,6 +8,7 @@
     >
       <oc-icon v-if="filterActive" name="check" size="small" color="var(--oc-color-text-inverse)" />
       <span class="oc-text-truncate" v-text="displayedText" />
+      <span v-if="itemCount > 1" v-text="` +${itemCount - 1}`" />
       <oc-icon v-if="!filterActive" name="arrow-down-s" size="small" />
     </oc-button>
     <oc-drop
@@ -49,6 +50,11 @@ export default defineComponent({
       type: String,
       required: true
     },
+    itemCount: {
+      type: Number,
+      required: false,
+      default: 0
+    },
     filterActive: {
       type: Boolean,
       required: false,
@@ -73,7 +79,7 @@ export default defineComponent({
     text-decoration: none;
     font-size: 0.75rem;
     line-height: 16px;
-    max-width: 100px;
+    max-width: 120px;
     padding: var(--oc-space-xsmall) var(--oc-space-small);
 
     &-selected,

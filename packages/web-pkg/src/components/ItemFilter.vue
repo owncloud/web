@@ -3,6 +3,7 @@
     <oc-filter-chip
       :displayed-text="selectedItemString"
       :filter-active="!!selectedItems.length"
+      :item-count="selectedItems.length"
       @clear-filter="clearFilter"
       @show-drop="setDisplayedItems(items)"
     >
@@ -88,12 +89,7 @@ export default defineComponent({
       if (!unref(selectedItems).length) {
         return props.filterName
       }
-      if (unref(selectedItems).length === 1) {
-        return unref(selectedItems)[0][props.displayNameAttribute]
-      }
-      return `${unref(selectedItems)[0][props.displayNameAttribute]}, +${
-        unref(selectedItems).length - 1
-      }`
+      return unref(selectedItems)[0][props.displayNameAttribute]
     })
 
     const isItemSelected = (item) => {
