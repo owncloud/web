@@ -1,11 +1,10 @@
 <template>
   <div class="item-filter oc-flex">
     <oc-filter-chip
-      :displayed-text="selectedItemString"
-      :filter-active="!!selectedItems.length"
-      :item-count="selectedItems.length"
+      :filter-name="filterName"
+      :selected-item-names="selectedItems.map((i) => i[displayNameAttribute])"
       @clear-filter="clearFilter"
-      @show-drop="showDrop()"
+      @show-drop="showDrop"
     >
       <template #default>
         <oc-text-input
@@ -52,8 +51,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, ref, unref, watch } from 'vue'
+import { computed, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
 import Fuse from 'fuse.js'
+import omit from 'lodash-es/omit'
+import { queryItemAsString, useRoute, useRouteQuery, useRouter } from 'web-pkg'
 
 export default defineComponent({
   name: 'ItemFilter',
@@ -89,9 +90,29 @@ export default defineComponent({
   },
   emits: ['selectionChange'],
   setup: function (props, { emit }) {
+    const router = useRouter()
+    const currentRoute = useRoute()
     const filterInputRef = ref()
     const selectedItems = ref([])
     const displayedItems = ref(props.items)
+
+    const queryParam = `q_${props.filterName.toLowerCase()}`
+    const currentRouteQuery = useRouteQuery(queryParam)
+    const getQueryStr = () => {
+      let queryStr = ''
+      for (const item of unref(selectedItems)) {
+        queryStr += `${item[props.displayNameAttribute].toLowerCase()}+`
+      }
+      return queryStr.slice(0, -1)
+    }
+    const setRouteQuery = () => {
+      router.push({
+        query: {
+          ...omit(unref(currentRoute).query, [queryParam]),
+          ...(!!unref(selectedItems).length && { [queryParam]: getQueryStr() })
+        }
+      })
+    }
 
     const selectedItemString = computed(() => {
       if (!unref(selectedItems).length) {
@@ -112,11 +133,11 @@ export default defineComponent({
       }
       if (isItemSelected(item)) {
         selectedItems.value = unref(selectedItems).filter((s) => s.id !== item.id)
-        emit('selectionChange', unref(selectedItems))
-        return
+      } else {
+        selectedItems.value.push(item)
       }
-      selectedItems.value.push(item)
       emit('selectionChange', unref(selectedItems))
+      setRouteQuery()
     }
 
     const sortItems = (items) => {
@@ -145,6 +166,7 @@ export default defineComponent({
     const clearFilter = () => {
       selectedItems.value = []
       emit('selectionChange', unref(selectedItems))
+      setRouteQuery()
     }
 
     const setDisplayedItems = (items) => {
@@ -159,6 +181,16 @@ export default defineComponent({
 
     watch(filterTerm, () => {
       setDisplayedItems(filter(props.items, unref(filterTerm)))
+    })
+
+    onMounted(() => {
+      const queryStr = queryItemAsString(unref(currentRouteQuery))
+      if (queryStr) {
+        const names = queryStr.split('+')
+        selectedItems.value = props.items.filter((s) =>
+          names.includes(s[props.displayNameAttribute].toLowerCase())
+        )
+      }
     })
 
     return {

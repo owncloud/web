@@ -7,8 +7,11 @@
       appearance="raw"
     >
       <oc-icon v-if="filterActive" name="check" size="small" color="var(--oc-color-text-inverse)" />
-      <span class="oc-text-truncate" v-text="displayedText" />
-      <span v-if="itemCount > 1" v-text="` +${itemCount - 1}`" />
+      <span
+        class="oc-text-truncate"
+        v-text="!!selectedItemNames.length ? selectedItemNames[0] : filterName"
+      />
+      <span v-if="selectedItemNames.length > 1" v-text="` +${selectedItemNames.length - 1}`" />
       <oc-icon v-if="!filterActive" name="arrow-down-s" size="small" />
     </oc-button>
     <oc-drop
@@ -33,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import uniqueId from '../../utils/uniqueId'
 
 export default defineComponent({
@@ -46,22 +49,23 @@ export default defineComponent({
       required: false,
       default: () => uniqueId('oc-filter-chip-')
     },
-    displayedText: {
+    filterName: {
       type: String,
       required: true
     },
-    itemCount: {
-      type: Number,
+    selectedItemNames: {
+      type: Array,
       required: false,
-      default: 0
-    },
-    filterActive: {
-      type: Boolean,
-      required: false,
-      default: false
+      default: () => []
     }
   },
-  emits: ['clearFilter', 'hideDrop', 'showDrop']
+  emits: ['clearFilter', 'hideDrop', 'showDrop'],
+  setup(props) {
+    const filterActive = computed(() => {
+      return !!props.selectedItemNames.length
+    })
+    return { filterActive }
+  }
 })
 </script>
 
