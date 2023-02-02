@@ -20,6 +20,7 @@
         :show-filter="true"
         :allow-multiple="true"
         display-name-attribute="displayName"
+        :filterable-attributes="['displayName']"
       >
         <template #image="{ item }">
           <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />

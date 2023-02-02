@@ -5,11 +5,12 @@
       :filter-active="!!selectedItems.length"
       :item-count="selectedItems.length"
       @clear-filter="clearFilter"
-      @show-drop="setDisplayedItems(items)"
+      @show-drop="showDrop()"
     >
       <template #default>
         <oc-text-input
-          v-if="showFilter"
+          v-if="showFilter && filterableAttributes.length"
+          ref="filterInputRef"
           v-model="filterTerm"
           class="item-filter-input oc-mb-m"
           autocomplete="off"
@@ -51,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, unref, watch } from 'vue'
+import { computed, defineComponent, nextTick, ref, unref, watch } from 'vue'
 import Fuse from 'fuse.js'
 
 export default defineComponent({
@@ -79,9 +80,16 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'name'
+    },
+    filterableAttributes: {
+      type: Array,
+      required: false,
+      default: () => []
     }
   },
-  setup: function (props) {
+  emits: ['selectionChange'],
+  setup: function (props, { emit }) {
+    const filterInputRef = ref()
     const selectedItems = ref([])
     const displayedItems = ref(props.items)
 
@@ -104,9 +112,11 @@ export default defineComponent({
       }
       if (isItemSelected(item)) {
         selectedItems.value = unref(selectedItems).filter((s) => s.id !== item.id)
+        emit('selectionChange', unref(selectedItems))
         return
       }
       selectedItems.value.push(item)
+      emit('selectionChange', unref(selectedItems))
     }
 
     const sortItems = (items) => {
@@ -127,18 +137,24 @@ export default defineComponent({
         includeScore: true,
         useExtendedSearch: true,
         threshold: 0.3,
-        keys: [props.displayNameAttribute]
+        keys: props.filterableAttributes as any
       })
 
       return usersSearchEngine.search(filterTerm).map((r) => r.item)
     }
-
     const clearFilter = () => {
       selectedItems.value = []
+      emit('selectionChange', unref(selectedItems))
     }
 
     const setDisplayedItems = (items) => {
       displayedItems.value = sortItems(items)
+    }
+
+    const showDrop = async () => {
+      setDisplayedItems(props.items)
+      await nextTick()
+      unref(filterInputRef).focus()
     }
 
     watch(filterTerm, () => {
@@ -146,6 +162,7 @@ export default defineComponent({
     })
 
     return {
+      filterInputRef,
       selectedItems,
       selectedItemString,
       clearFilter,
@@ -154,7 +171,8 @@ export default defineComponent({
       displayedItems,
       filterTerm,
       isSelectionAllowed,
-      setDisplayedItems
+      setDisplayedItems,
+      showDrop
     }
   }
 })
