@@ -13,6 +13,7 @@ export function useLoadTokenInfo(options: LoadTokenInfoOptions) {
   const isUserContext = options.isUserContext || useUserContext({ store: useStore() })
 
   const loadTokenInfoTask = useTask(function* (signal, token: string) {
+    return {} // CERNBox reva doesn't implement it yet
     let tokenInfo
     try {
       if (unref(isUserContext)) {
