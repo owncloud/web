@@ -15,12 +15,15 @@ import {
 } from './actions'
 import { resourceIsNotOpenable, isAcceptedSharePresent } from './utils'
 import { copyLinkArgs } from '../link/actions'
+import { LinksEnvironment } from '../../../environment'
 
 export class Share {
   #page: Page
+  #linksEnvironment: LinksEnvironment
 
   constructor({ page }: { page: Page }) {
     this.#page = page
+    this.#linksEnvironment = new LinksEnvironment()
   }
 
   async create(args: Omit<createShareArgs, 'page'>): Promise<void> {
@@ -68,6 +71,11 @@ export class Share {
 
   async copyQuickLink(args: Omit<copyLinkArgs, 'page'>): Promise<void> {
     await copyQuickLink({ ...args, page: this.#page })
+    const quickLink = await this.#page.evaluate(() => navigator.clipboard.readText())
+    this.#linksEnvironment.createLink({
+      key: 'Quicklink',
+      link: { name: 'Quicklink', url: quickLink }
+    })
   }
 
   async resourceIsNotOpenable(resource): Promise<boolean> {
