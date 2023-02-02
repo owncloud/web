@@ -3,7 +3,6 @@ import { Download, Page } from 'playwright'
 import {
   createResources,
   createResourceArgs,
-  deleteResource,
   deleteResourceArgs,
   deleteResourceTrashbin,
   downloadResources,
@@ -104,12 +103,6 @@ export class Resource {
     if (!config.ocis) {
       await this.#page.reload()
     }
-  }
-
-  async delete(args: Omit<deleteResourceArgs, 'page'>): Promise<void> {
-    const startUrl = this.#page.url()
-    await deleteResource({ ...args, page: this.#page })
-    await this.#page.goto(startUrl)
   }
 
   async deleteWithOption(args: Omit<deleteResourceWithOptionArgs, 'page'>): Promise<void> {
