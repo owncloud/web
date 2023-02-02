@@ -147,7 +147,7 @@ import { join } from 'path'
 
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
-import { useActiveLocation } from '../../composables'
+import { useActiveLocation, useIndicators } from '../../composables'
 
 import {
   useRequest,
@@ -178,7 +178,6 @@ import { urlJoin } from 'web-client/src/utils'
 import { stringify } from 'qs'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
-import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 
 export default defineComponent({
   components: {
@@ -241,6 +240,7 @@ export default defineComponent({
       }),
       ...useRequest(),
       ...useGraphClient(),
+      ...useIndicators({ space: props.space }),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
       hasShareJail: useCapabilityShareJailEnabled(),
@@ -321,11 +321,7 @@ export default defineComponent({
     },
 
     loadIndicatorsForNewFile() {
-      return (
-        this.isSpacesGenericLocation &&
-        this.space.driveType !== 'share' &&
-        !!this.currentFolder?.shareTypes?.length
-      )
+      return this.isSpacesGenericLocation && this.space.driveType !== 'share'
     }
   },
   methods: {
@@ -459,7 +455,8 @@ export default defineComponent({
         })
 
         if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource, parentFolders: this.getParentFolders() })
+          const parentFolders = await this.getParentFolders({ path: this.currentFolder.path })
+          resource.indicators = this.getIndicators({ resource, parentFolders })
         }
 
         this.UPSERT_RESOURCE(resource)
@@ -525,7 +522,8 @@ export default defineComponent({
         })
 
         if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource, parentFolders: this.getParentFolders() })
+          const parentFolders = await this.getParentFolders({ path: this.currentFolder.path })
+          resource.indicators = this.getIndicators({ resource, parentFolders })
         }
 
         this.UPSERT_RESOURCE(resource)
@@ -584,7 +582,8 @@ export default defineComponent({
         })
 
         if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource, parentFolders: this.getParentFolders() })
+          const parentFolders = await this.getParentFolders({ path: this.currentFolder.path })
+          resource.indicators = this.getIndicators({ resource, parentFolders })
         }
 
         this.$_fileActions_triggerDefaultAction({ space: this.space, resources: [resource] })
@@ -655,16 +654,6 @@ export default defineComponent({
       )
       uploader.perform()
     }
-  },
-  async getParentFolders() {
-    const rootFolderPath = this.currentFolder.path.split('/').filter(Boolean)[0]
-    const response = await (this.$clientService.webdav as WebDAV).listFiles(this.space, {
-      path: rootFolderPath
-    })
-    return [
-      response.resource,
-      ...response.children.filter((f) => this.currentFolder.path.startsWith(f.path))
-    ]
   }
 })
 </script>

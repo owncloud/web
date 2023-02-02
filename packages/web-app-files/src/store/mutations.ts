@@ -1,7 +1,7 @@
 import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
-import { getLinkIndicator, getUserIndicator } from '../helpers/statusIndicators'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { getLinkIndicator, getUserIndicator } from '../composables/indicators'
 
 export default {
   LOAD_FILES(state, { currentFolder, files }) {
@@ -176,8 +176,7 @@ export default {
       if (!resource.indicators?.length) {
         updatedIndicators = [indicatorMethod({ resource })]
       } else {
-        let indicator = resource.indicators.find((i) => i.type.startsWith(type))
-        if (indicator) {
+        if (resource.indicators.some((i) => i.type.startsWith(type))) {
           continue
         }
         updatedIndicators = [

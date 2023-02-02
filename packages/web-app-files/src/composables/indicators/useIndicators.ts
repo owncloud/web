@@ -1,6 +1,9 @@
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { ClientService, eventBus, useClientService } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { getParentPaths } from 'web-app-files/src/helpers/path'
+import { DavProperty } from 'web-client/src/webdav/constants'
+import { SpaceResource } from 'web-client'
 
 // dummy to trick gettext string extraction into recognizing strings
 const $gettext = (str) => {
@@ -55,25 +58,57 @@ export const getLinkIndicator = ({ resource }) => {
   }
 }
 
-export const getIndicators = ({ resource, parentFolders = [] }) => {
-  const indicators = []
-  let isIndirectUserShare = false
-  let isIndirectLinkShare = false
+interface IndicatorsOptions {
+  clientService?: ClientService
+  space: SpaceResource
+}
 
-  for (const folder of parentFolders) {
-    isIndirectUserShare = isIndirectUserShare ? true : isDirectUserShare(folder)
-    isIndirectLinkShare = isIndirectLinkShare ? true : isDirectLinkShare(folder)
-    if (isIndirectUserShare && isIndirectLinkShare) {
-      break
+export function useIndicators(options: IndicatorsOptions) {
+  const clientService = options.clientService || useClientService()
+  const { webdav } = clientService
+  const { space } = options
+
+  // FIXME: separate composable? save in store?
+  const getParentFolders = async ({ path }) => {
+    const parentFolders = []
+    const promises = []
+    const parentPaths = getParentPaths(path, true)
+    for (const path of parentPaths) {
+      promises.push(
+        webdav
+          .listFiles(
+            space,
+            { path },
+            { depth: 0, davProperties: [DavProperty.FileId, DavProperty.ShareTypes] }
+          )
+          .then(({ resource }) => parentFolders.push(resource))
+      )
     }
+    await Promise.all(promises)
+    return parentFolders
   }
 
-  if (isDirectUserShare(resource) || isIndirectUserShare) {
-    indicators.push(getUserIndicator({ resource }))
-  }
-  if (isDirectLinkShare(resource) || isIndirectLinkShare) {
-    indicators.push(getLinkIndicator({ resource }))
-  }
+  const getIndicators = ({ resource, parentFolders = [] }) => {
+    const indicators = []
+    let isIndirectUserShare = false
+    let isIndirectLinkShare = false
 
-  return indicators
+    for (const folder of parentFolders) {
+      isIndirectUserShare = isIndirectUserShare ? true : isDirectUserShare(folder)
+      isIndirectLinkShare = isIndirectLinkShare ? true : isDirectLinkShare(folder)
+      if (isIndirectUserShare && isIndirectLinkShare) {
+        break
+      }
+    }
+
+    if (isDirectUserShare(resource) || isIndirectUserShare) {
+      indicators.push(getUserIndicator({ resource }))
+    }
+    if (isDirectLinkShare(resource) || isIndirectLinkShare) {
+      indicators.push(getLinkIndicator({ resource }))
+    }
+
+    return indicators
+  }
+  return { getIndicators, getParentFolders }
 }

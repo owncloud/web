@@ -2,18 +2,14 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
-import {
-  useCapabilityFilesSharingResharing,
-  useCapabilityShareJailEnabled,
-  useCapabilitySpacesEnabled
-} from 'web-pkg/src/composables'
-import { getIndicators } from '../../helpers/statusIndicators'
+import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { SpaceResource } from 'web-client/src/helpers'
 import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from 'web-pkg/src/composables/router/useFileRouteReplace'
 import { aggregateResourceShares } from '../../helpers/resources'
+import { useIndicators } from 'web-app-files/src/composables'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {
@@ -32,15 +28,10 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const {
-      store,
-      router,
-      clientService: { owncloudSdk: client, webdav }
-    } = context
+    const { store, router, clientService } = context
+    const { owncloudSdk: client, webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
-    const hasShareJail = useCapabilityShareJailEnabled(store)
     const hasResharing = useCapabilityFilesSharingResharing(store)
-    const hasSpaces = useCapabilitySpacesEnabled(store)
 
     return useTask(function* (
       signal1,
@@ -76,13 +67,8 @@ export class FolderLoaderSpace implements FolderLoader {
         }
 
         if (options.loadShares) {
-          const rootFolderPath = currentFolder.path.split('/').filter(Boolean)[0]
-          // FIXME: Add depth: 0, but it doesn't work yet?!
-          const response = yield webdav.listFiles(space, { path: rootFolderPath })
-          const parentFolders = [
-            response.resource,
-            ...response.children.filter((f) => currentFolder.path.startsWith(f.path))
-          ]
+          const { getIndicators, getParentFolders } = useIndicators({ clientService, space })
+          const parentFolders = yield getParentFolders({ path: currentFolder.path })
           for (const file of resources) {
             file.indicators = getIndicators({ resource: file, parentFolders })
           }

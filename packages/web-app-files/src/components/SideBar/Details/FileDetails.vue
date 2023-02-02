@@ -173,19 +173,18 @@ import {
   useStore,
   useUserContext
 } from 'web-pkg/src/composables'
-import { getIndicators } from '../../../helpers/statusIndicators'
 import { useClipboard } from '@vueuse/core'
 import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import { Resource } from 'web-client'
+import { Resource, SpaceResource } from 'web-client'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { WebDAV } from 'web-client/src/webdav'
+import { useIndicators } from '../../../composables/indicators'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -195,16 +194,22 @@ export default defineComponent({
 
     const copiedDirect = ref(false)
     const copiedEos = ref(false)
+    const parentFolders = ref([])
     const {
       copy,
       copied,
       isSupported: isClipboardCopySupported
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
+    const space = inject<ComputedRef<SpaceResource>>('space')
     const resource = inject<Resource>('resource')
     const isPublicLinkContext = usePublicLinkContext({ store })
     const accessToken = useAccessToken({ store })
     const clientService = useClientService()
+    const { getIndicators, getParentFolders } = useIndicators({
+      space: unref(space),
+      clientService
+    })
     const preview = ref(undefined)
 
     const directLink = computed(() => {
@@ -233,6 +238,11 @@ export default defineComponent({
 
     const loadData = async () => {
       const calls = []
+      if (store.getters['Files/currentFolder']) {
+        parentFolders.value = await getParentFolders({
+          path: store.getters['Files/currentFolder'].path
+        })
+      }
       if (unref(resource).type === 'file' && !unref(isPublicLinkContext)) {
         calls.push(
           store.dispatch('Files/loadVersions', {
@@ -276,11 +286,13 @@ export default defineComponent({
       isUserContext: useUserContext({ store }),
       isPublicLinkContext,
       accessToken,
-      space: inject<ComputedRef<Resource>>('space'),
+      space,
       directLink,
       resource,
       hasTags: useCapabilityFilesTags(),
-      loadPreviewTask
+      loadPreviewTask,
+      parentFolders,
+      getIndicators
     }
   },
   computed: {
@@ -454,7 +466,7 @@ export default defineComponent({
       )
     },
     shareIndicators() {
-      return getIndicators({ resource: this.resource, parentFolders: this.getParentFolders() })
+      return this.getIndicators({ resource: this.resource, parentFolders: this.parentFolders })
     },
     shares() {
       if (this.sharedParentDir === null) {
@@ -488,16 +500,6 @@ export default defineComponent({
     }
   },
   methods: {
-    async getParentFolders() {
-      const rootFolderPath = this.currentFolder.path.split('/').filter(Boolean)[0]
-      const response = await (this.$clientService.webdav as WebDAV).listFiles(this.space, {
-        path: rootFolderPath
-      })
-      return [
-        response.resource,
-        ...response.children.filter((f) => this.currentFolder.path.startsWith(f.path))
-      ]
-    },
     getParentSharePath(childPath, shares) {
       let currentPath = childPath
       if (!currentPath) {
