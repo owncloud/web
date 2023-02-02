@@ -5,16 +5,20 @@ import { DateTime } from 'luxon'
 import { kebabCase } from 'lodash'
 import { objects } from '../../../support'
 
-async function LogInUser(this: World, stepUser: string): Promise<void> {
-  const user = this.usersEnvironment.getUser({ key: stepUser })
-  const { page } = await this.actorsEnvironment.createActor({
+async function createNewSession(world: World, stepUser: string) {
+  const { page } = await world.actorsEnvironment.createActor({
     key: stepUser,
     namespace: kebabCase(
-      [this.feature.name, stepUser, DateTime.now().toFormat('yyyy-M-d-hh-mm-ss')].join('-')
+      [world.feature.name, stepUser, DateTime.now().toFormat('yyyy-M-d-hh-mm-ss')].join('-')
     )
   })
-  const sessionObject = new objects.runtime.Session({ page })
+  return new objects.runtime.Session({ page })
+}
 
+async function LogInUser(this: World, stepUser: string): Promise<void> {
+  const sessionObject = await createNewSession(this, stepUser)
+  const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+  const user = this.usersEnvironment.getUser({ key: stepUser })
   await page.goto(config.frontendUrl)
   await sessionObject.login({ user })
 }
@@ -35,3 +39,12 @@ async function LogOutUser(this: World, stepUser: string): Promise<void> {
 Given('{string} has logged out', LogOutUser)
 
 When('{string} logs out', LogOutUser)
+
+When(
+  '{string} logs in from the internal link',
+  async function (this: World, stepUser: string): Promise<void> {
+    const sessionObject = await createNewSession(this, stepUser)
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    await sessionObject.login({ user })
+  }
+)
