@@ -68,9 +68,9 @@ Feature: spaces participant management
     And "Anonymous" uploads the following resources in public link page
       | resource     |
       | textfile.txt |
-    And "Anonymous" deletes the following resources from public link
-      | resource  |
-      | lorem.txt |
+    And "Anonymous" deletes the following resources from public link using sidebar panel
+      | resource  | from |
+      | lorem.txt |      |
     When "Brian" deletes the following resources using the sidebar panel
       | resource     | from   |
       | textfile.txt | parent |

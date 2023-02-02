@@ -104,7 +104,7 @@ export class Resource {
     }
   }
 
-  async deleteWithOption(args: Omit<deleteResourceViaOptionArgs, 'page'>): Promise<void> {
+  async delete(args: Omit<deleteResourceViaOptionArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await deleteResourceViaOption({ ...args, page: this.#page })
     await this.#page.goto(startUrl)

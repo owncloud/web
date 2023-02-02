@@ -57,30 +57,9 @@ When(
     actionType: string,
     stepTable: DataTable
   ) {
-    let files, parentFolder
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const deleteInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { resource, from } = stepRow
-      const resourceInfo = {
-        name: resource
-      }
-      if (!acc[from]) {
-        acc[from] = []
-      }
-      acc[from].push(resourceInfo)
-      return acc
-    }, {})
-
-    for (const folder of Object.keys(deleteInfo)) {
-      files = deleteInfo[folder]
-      parentFolder = folder !== 'undefined' ? folder : null
-      await resourceObject.deleteWithOption({
-        folder: parentFolder,
-        resources: files,
-        via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
-      })
-    }
+    await processDelete(stepTable, resourceObject, actionType)
   }
 )
 
@@ -304,6 +283,31 @@ When(
     expect(isVisible).toBe(true)
   }
 )
+
+export const processDelete = async (stepTable: DataTable, pageObject: any, actionType: string) => {
+  let files, parentFolder
+  const deleteInfo = stepTable.hashes().reduce((acc, stepRow) => {
+    const { resource, from } = stepRow
+    const resourceInfo = {
+      name: resource
+    }
+    if (!acc[from]) {
+      acc[from] = []
+    }
+    acc[from].push(resourceInfo)
+    return acc
+  }, {})
+
+  for (const folder of Object.keys(deleteInfo)) {
+    files = deleteInfo[folder]
+    parentFolder = folder !== 'undefined' ? folder : null
+    await pageObject.delete({
+      folder: parentFolder,
+      resources: files,
+      via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+    })
+  }
+}
 
 export const processDownload = async (
   stepTable: DataTable,
