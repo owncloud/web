@@ -564,12 +564,12 @@ export const deleteResourceWithOption = async (
 
     case 'BATCH_ACTION': {
       await selectOrDeselectResources({ page, resources, folder, select: true })
+      const deletetedResources = []
       if (resources.length <= 1) {
         throw new Error('Single resource or objects cannot be deleted with batch action')
       }
 
       await page.locator(deleteButtonBatchAction).click()
-      const deletetedResources = []
       await Promise.all([
         page.waitForResponse((resp) => {
           if (resp.status() === 204 && resp.request().method() === 'DELETE') {
