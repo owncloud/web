@@ -13,6 +13,7 @@ export { default as OcContextualHelper } from './OcContextualHelper/OcContextual
 export { default as OcDatepicker } from './OcDatepicker/OcDatepicker.vue'
 export { default as OcDrop } from './OcDrop/OcDrop.vue'
 export { default as OcDropzone } from './OcDropzone/OcDropzone.vue'
+export { default as OcFilterChip } from './OcFilterChip/OcFilterChip.vue'
 export { default as OcGhostElement } from './_OcGhostElement/_OcGhostElement.vue'
 export { default as OcGrid } from './OcGrid/OcGrid.vue'
 export { default as OcHiddenAnnouncer } from './OcHiddenAnnouncer/OcHiddenAnnouncer.vue'
