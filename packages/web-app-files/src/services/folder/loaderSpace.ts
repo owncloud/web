@@ -76,15 +76,15 @@ export class FolderLoaderSpace implements FolderLoader {
         }
 
         if (options.loadShares) {
-          yield store.dispatch('Files/loadSharesTree', {
-            client,
-            path: currentFolder.path,
-            ...(unref(hasSpaces) && { storageId: currentFolder.fileId }),
-            includeRoot: currentFolder.path === '/' && space.driveType !== 'personal'
-          })
-
+          const rootFolderPath = currentFolder.path.split('/').filter(Boolean)[0]
+          // FIXME: Add depth: 0, but it doesn't work yet?!
+          const response = yield webdav.listFiles(space, { path: rootFolderPath })
+          const parentFolders = [
+            response.resource,
+            ...response.children.filter((f) => currentFolder.path.startsWith(f.path))
+          ]
           for (const file of resources) {
-            file.indicators = getIndicators({ resource: file, currentFolder })
+            file.indicators = getIndicators({ resource: file, parentFolders })
           }
         }
 

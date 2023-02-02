@@ -185,6 +185,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
+import { WebDAV } from 'web-client/src/webdav'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -453,7 +454,7 @@ export default defineComponent({
       )
     },
     shareIndicators() {
-      return getIndicators({ resource: this.resource, currentFolder: this.currentFolder })
+      return getIndicators({ resource: this.resource, parentFolders: this.getParentFolders() })
     },
     shares() {
       if (this.sharedParentDir === null) {
@@ -487,6 +488,16 @@ export default defineComponent({
     }
   },
   methods: {
+    async getParentFolders() {
+      const rootFolderPath = this.currentFolder.path.split('/').filter(Boolean)[0]
+      const response = await (this.$clientService.webdav as WebDAV).listFiles(this.space, {
+        path: rootFolderPath
+      })
+      return [
+        response.resource,
+        ...response.children.filter((f) => this.currentFolder.path.startsWith(f.path))
+      ]
+    },
     getParentSharePath(childPath, shares) {
       let currentPath = childPath
       if (!currentPath) {

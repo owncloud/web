@@ -459,7 +459,7 @@ export default defineComponent({
         })
 
         if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource, currentFolder: this.currentFolder })
+          resource.indicators = getIndicators({ resource, parentFolders: this.getParentFolders() })
         }
 
         this.UPSERT_RESOURCE(resource)
@@ -525,7 +525,7 @@ export default defineComponent({
         })
 
         if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource, currentFolder: this.currentFolder })
+          resource.indicators = getIndicators({ resource, parentFolders: this.getParentFolders() })
         }
 
         this.UPSERT_RESOURCE(resource)
@@ -584,7 +584,7 @@ export default defineComponent({
         })
 
         if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource, currentFolder: this.currentFolder })
+          resource.indicators = getIndicators({ resource, parentFolders: this.getParentFolders() })
         }
 
         this.$_fileActions_triggerDefaultAction({ space: this.space, resources: [resource] })
@@ -655,6 +655,16 @@ export default defineComponent({
       )
       uploader.perform()
     }
+  },
+  async getParentFolders() {
+    const rootFolderPath = this.currentFolder.path.split('/').filter(Boolean)[0]
+    const response = await (this.$clientService.webdav as WebDAV).listFiles(this.space, {
+      path: rootFolderPath
+    })
+    return [
+      response.resource,
+      ...response.children.filter((f) => this.currentFolder.path.startsWith(f.path))
+    ]
   }
 })
 </script>

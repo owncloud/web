@@ -173,23 +173,18 @@ export default {
 
     for (const resource of files) {
       let updatedIndicators
-
       if (!resource.indicators?.length) {
         updatedIndicators = [indicatorMethod({ resource })]
       } else {
         let indicator = resource.indicators.find((i) => i.type.startsWith(type))
-        if (indicator?.visible) {
+        if (indicator) {
           continue
-        }
-        if (!indicator) {
-          indicator = indicatorMethod({ resource })
         }
         updatedIndicators = [
           ...resource.indicators.filter((i) => !i.type.startsWith(type)),
-          { ...indicator, visible: true }
+          indicatorMethod({ resource })
         ]
       }
-
       this.commit('Files/UPDATE_RESOURCE_FIELD', {
         id: resource.id,
         field: 'indicators',
@@ -202,7 +197,7 @@ export default {
     const files = state.files.filter((f) => f.path.startsWith(path) && !!f.indicators?.length)
     for (const resource of files) {
       const existingIndicator = resource.indicators.find((i) => i.type.startsWith(type))
-      if (!existingIndicator?.visible) {
+      if (!existingIndicator) {
         continue
       }
       this.commit('Files/UPDATE_RESOURCE_FIELD', {
