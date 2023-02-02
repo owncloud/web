@@ -28,7 +28,8 @@ const getters = {
   getToken: (state, getters, rootState, rootGetters) => rootGetters['runtime/auth/accessToken'],
   capabilities: (state) => state.capabilities,
   quota: (state) => state.quota,
-  user: (state) => state
+  user: (state) => state, 
+  language: (state) => state.language
 }
 
 const mutations = {
@@ -74,6 +75,9 @@ const mutations = {
   },
   RESET_USER(state) {
     Object.assign(state, getInitialState())
+  },
+  SET_LANGUAGE(state, language) {
+    state.language = language
   }
 }
 
