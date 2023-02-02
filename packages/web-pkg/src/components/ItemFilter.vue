@@ -21,7 +21,7 @@
               class="item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1"
               justify-content="left"
               appearance="raw"
-              @click="toggleItem(item)"
+              @click="toggleItemSelection(item)"
             >
               <div>
                 <oc-checkbox
@@ -31,7 +31,7 @@
                   :model-value="isItemSelected(item)"
                   :disabled="!isSelectionAllowed(item)"
                   hide-label
-                  @update:model-value="toggleItem(item)"
+                  @update:model-value="toggleItemSelection(item)"
                   @click.stop
                 />
               </div>
@@ -82,6 +82,7 @@ export default defineComponent({
   },
   setup: function (props) {
     const selectedItems = ref([])
+    const displayedItems = ref(props.items)
 
     const selectedItemString = computed(() => {
       if (!unref(selectedItems).length) {
@@ -95,16 +96,13 @@ export default defineComponent({
       }`
     })
 
-    const clearFilter = () => {
-      selectedItems.value = []
-    }
     const isItemSelected = (item) => {
       return !!unref(selectedItems).find((s) => s.id === item.id)
     }
     const isSelectionAllowed = (item) => {
       return props.allowMultiple || !unref(selectedItems).length || isItemSelected(item)
     }
-    const toggleItem = (item) => {
+    const toggleItemSelection = (item) => {
       if (!isSelectionAllowed(item)) {
         return
       }
@@ -124,14 +122,12 @@ export default defineComponent({
       )
     }
 
-    const displayedItems = ref(props.items)
     const filterTerm = ref()
-
-    const filter = (users, filterTerm) => {
+    const filter = (items, filterTerm) => {
       if (!(filterTerm || '').trim()) {
-        return users
+        return items
       }
-      const usersSearchEngine = new Fuse(users, {
+      const usersSearchEngine = new Fuse(items, {
         includeScore: true,
         useExtendedSearch: true,
         threshold: 0.3,
@@ -140,6 +136,11 @@ export default defineComponent({
 
       return usersSearchEngine.search(filterTerm).map((r) => r.item)
     }
+
+    const clearFilter = () => {
+      selectedItems.value = []
+    }
+
     const setDisplayedItems = (items) => {
       displayedItems.value = sortItems(items)
     }
@@ -152,7 +153,7 @@ export default defineComponent({
       selectedItems,
       selectedItemString,
       clearFilter,
-      toggleItem,
+      toggleItemSelection,
       isItemSelected,
       displayedItems,
       filterTerm,
