@@ -41,8 +41,10 @@
           />
           <batch-actions
             v-if="showBatchActions"
-            :show-tooltips="limitedScreenSpace"
+            :items="selectedFiles"
+            :actions="batchActions"
             :space="space"
+            :limited-screen-space="limitedScreenSpace"
           />
         </div>
       </div>
@@ -57,13 +59,13 @@ import { defineComponent, PropType } from 'vue'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
-
+import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import { ViewModeConstants } from '../../composables/viewMode/constants'
 import { BreadcrumbItem } from '../../helpers/breadcrumbs'
 import MixinFileActions from '../../mixins/fileActions'
+import EmptyTrashBin from '../../mixins/actions/emptyTrashBin'
+import ClearSelection from '../../mixins/actions/clearSelection'
 import { isLocationTrashActive } from '../../router'
-
-import BatchActions from './SelectedResources/BatchActions.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
@@ -77,7 +79,7 @@ export default defineComponent({
     SidebarToggle,
     ViewOptions
   },
-  mixins: [MixinFileActions],
+  mixins: [ClearSelection, EmptyTrashBin, MixinFileActions],
   props: {
     breadcrumbs: {
       type: Array as PropType<BreadcrumbItem[]>,
@@ -147,6 +149,20 @@ export default defineComponent({
         ViewModeConstants.default,
         ViewModeConstants.tilesView
       ]
+    },
+    batchActions() {
+      return [
+        ...this.$_clearSelection_items,
+        ...this.$_acceptShare_items,
+        ...this.$_declineShare_items,
+        ...this.$_downloadArchive_items,
+        ...this.$_downloadFile_items,
+        ...this.$_move_items,
+        ...this.$_copy_items,
+        ...this.$_emptyTrashBin_items,
+        ...this.$_delete_items,
+        ...this.$_restore_items
+      ].filter((item) => item.isEnabled({ resources: this.selectedFiles }))
     }
   },
   mounted() {

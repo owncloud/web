@@ -23,11 +23,7 @@
             >
               <oc-icon name="close" />
             </oc-button>
-            <batch-actions
-              class="oc-ml-s"
-              :selected-items="selectedUsers"
-              :actions="batchActions"
-            />
+            <batch-actions class="oc-ml-s" :items="selectedUsers" :actions="batchActions" />
           </div>
           <div v-else>
             <oc-button variation="primary" appearance="filled" @click="toggleCreateUserModal">
@@ -83,7 +79,7 @@ import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
-import BatchActions from '../components/BatchActions.vue'
+import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import Delete from '../mixins/users/delete'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useAccessToken, useGraphClient, useStore } from 'web-pkg/src/composables'

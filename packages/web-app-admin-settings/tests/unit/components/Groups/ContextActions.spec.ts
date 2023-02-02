@@ -1,4 +1,9 @@
-import { defaultPlugins, defaultStoreMockOptions, mount } from 'web-test-helpers'
+import {
+  defaultPlugins,
+  defaultStoreMockOptions,
+  getActionMixinMocks,
+  mount
+} from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client/src/helpers'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
@@ -25,7 +30,7 @@ describe('ContextActions', () => {
 
 function getWrapper({ enabledActions = [] } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
-  const mocks = getMixinMocks(enabledActions)
+  const mocks = getActionMixinMocks({ actions: mixins, enabledActions })
   return {
     storeOptions,
     mocks,
@@ -43,13 +48,4 @@ function getWrapper({ enabledActions = [] } = {}) {
       }
     )
   }
-}
-
-const getMixinMocks = (enabledActions) => {
-  const mixinMocks = {}
-  for (const mixin of mixins) {
-    const isEnabled = !!enabledActions.includes(mixin)
-    mixinMocks[mixin] = [{ isEnabled: () => isEnabled, name: '', items: [] }]
-  }
-  return mixinMocks
 }
