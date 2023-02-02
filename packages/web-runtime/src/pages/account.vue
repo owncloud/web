@@ -57,7 +57,7 @@
           <span v-else v-translate>No email has been set up</span>
         </dd>
       </div>
-      <div class="account-page-info-groups oc-mb oc-width-1-2@s">
+      <!--<div class="account-page-info-groups oc-mb oc-width-1-2@s">
         <dt v-translate class="oc-text-normal oc-text-muted">Group memberships</dt>
         <dd data-testid="group-names">
           <span v-if="groupNames">{{ groupNames }}</span>
@@ -65,8 +65,8 @@
             >You are not part of any group</span
           >
         </dd>
-      </div>
-      <div v-if="isLanguageSupported" class="account-page-info-language oc-mb oc-width-1-2@s">
+      </div>-->
+      <div class="account-page-info-language oc-mb oc-width-1-2@s">
         <dt v-translate class="oc-text-normal oc-text-muted">Language</dt>
         <dd data-testid="language">
           <oc-select
@@ -85,7 +85,7 @@
 <script lang="ts">
 import { mapActions } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
-import { computed, defineComponent, onMounted, unref } from 'vue'
+import { computed, defineComponent, getCurrentInstance, onMounted, unref } from 'vue'
 import {
   useAccessToken,
   useCapabilitySpacesEnabled,
@@ -142,6 +142,16 @@ export default defineComponent({
       return store.getters.getSettingsValue(accountSettingIdentifier)
     })
     const languageOptions = computed(() => {
+      const lang = getCurrentInstance()?.proxy?.$language.available
+      if (lang) {
+        return Object.entries(lang).map(([l,n]) => ({
+          label: n,
+          value: l,
+          default: l === 'en'
+        }))
+      }
+      return []
+
       const languageOptions = loadAccountBundleTask.last?.value?.settings.find(
         (s) => s.name === 'language'
       )?.singleChoiceValue.options
@@ -152,13 +162,38 @@ export default defineComponent({
       }))
     })
     const selectedLanguageOption = computed(() => {
-      const current = unref(languageSetting)?.listValue.values[0].stringValue
+      const current = user.value.language
       if (!current) {
         return unref(languageOptions).find((o) => o.default)
       }
       return unref(languageOptions).find((o) => o.value === current)
     })
     const updateSelectedLanguage = (option) => {
+      const headers = new Headers()
+      headers.append('Authorization', `Bearer ${unref(accessToken)}`)
+      headers.append('X-Requested-With', 'XMLHttpRequest')
+
+      fetch('/ocs/v1.php/cloud/user', {
+        method: 'PATCH',
+        headers,
+        body: JSON.stringify({ language: option.value })
+      })
+        .then((response) => {
+          if (response.ok) {
+            store.commit('SET_LANGUAGE', option.value)
+          } else {
+            throw new Error('Language could not be changed')
+          }
+        })
+        .catch((err) => {
+          store.dispatch('showMessage', {
+            title: 'An error occurred',
+            desc: err || 'Language could not be changed',
+            status: 'danger'
+          })
+        })
+      return
+
       const bundle = loadAccountBundleTask.last?.value
       const value = {
         bundleId: bundle?.id,
