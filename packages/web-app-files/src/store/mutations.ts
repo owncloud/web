@@ -176,7 +176,8 @@ export default {
       if (!resource.indicators?.length) {
         updatedIndicators = [indicatorMethod({ resource })]
       } else {
-        if (resource.indicators.some((i) => i.type.startsWith(type))) {
+        const indicator = resource.indicators.find((i) => i.type.startsWith(type))
+        if (indicator && path !== resource.path) {
           continue
         }
         updatedIndicators = [
