@@ -21,19 +21,22 @@ export const createShare = async ({
   path,
   shareWith,
   shareType,
-  role
+  role,
+  name
 }: {
   user: User
   path: string
-  shareWith: string
   shareType: string
-  role: string
+  shareWith?: string
+  role?: string
+  name?: string
 }): Promise<void> => {
   const body = new URLSearchParams()
   body.append('path', path)
   body.append('shareWith', shareWith)
   body.append('shareType', shareTypes[shareType])
   body.append('role', role)
+  body.append('name', name)
 
   const response = await request({
     method: 'POST',
