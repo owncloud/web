@@ -459,7 +459,7 @@ export default defineComponent({
         })
 
         if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource })
+          resource.indicators = getIndicators({ resource, currentFolder: this.currentFolder })
         }
 
         this.UPSERT_RESOURCE(resource)
@@ -525,7 +525,7 @@ export default defineComponent({
         })
 
         if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource })
+          resource.indicators = getIndicators({ resource, currentFolder: this.currentFolder })
         }
 
         this.UPSERT_RESOURCE(resource)
@@ -584,7 +584,7 @@ export default defineComponent({
         })
 
         if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource })
+          resource.indicators = getIndicators({ resource, currentFolder: this.currentFolder })
         }
 
         this.$_fileActions_triggerDefaultAction({ space: this.space, resources: [resource] })
