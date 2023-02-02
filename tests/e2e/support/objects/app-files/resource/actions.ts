@@ -487,16 +487,14 @@ export interface deleteResourceArgs {
   resource: string
 }
 
-export interface deleteResourceWithOptionArgs {
+export interface deleteResourceViaOptionArgs {
   page: Page
   resources: resourceArgs[]
   folder?: string
   via: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
 }
 
-export const deleteResourceWithOption = async (
-  args: deleteResourceWithOptionArgs
-): Promise<void> => {
+export const deleteResourceViaOption = async (args: deleteResourceViaOptionArgs): Promise<void> => {
   const { page, resources, folder, via } = args
   switch (via) {
     case 'SIDEBAR_PANEL': {

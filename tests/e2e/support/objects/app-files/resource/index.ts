@@ -31,8 +31,8 @@ import {
   openFileInViewerArgs,
   getDeleteResourceButtonVisibility,
   getRestoreResourceButtonVisibility,
-  deleteResourceWithOption,
-  deleteResourceWithOptionArgs
+  deleteResourceViaOption,
+  deleteResourceViaOptionArgs
 } from './actions'
 
 export class Resource {
@@ -93,9 +93,9 @@ export class Resource {
     }
   }
 
-  async deleteWithOption(args: Omit<deleteResourceWithOptionArgs, 'page'>): Promise<void> {
+  async deleteWithOption(args: Omit<deleteResourceViaOptionArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await deleteResourceWithOption({ ...args, page: this.#page })
+    await deleteResourceViaOption({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
