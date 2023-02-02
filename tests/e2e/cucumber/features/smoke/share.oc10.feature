@@ -44,9 +44,9 @@ Feature: share
     And "Brian" copies the following resource using dropdown-menu
       | resource                | to       |
       | Shares/folder_to_shared | Personal |
-    When "Brian" deletes the following resources
-      | resource                                    |
-      | Shares/folder_to_customShared/lorem-big.txt |
+    When "Brian" deletes the following resources using the sidebar panel
+      | resource      | from                          |
+      | lorem-big.txt | Shares/folder_to_customShared |
     When "Alice" opens the "files" app
     #Then "Alice" should see the following resources
     #  | folder_to_shared/lorem_new.txt |
@@ -62,10 +62,10 @@ Feature: share
       | resource   | to                      | version |
       | simple.pdf | Shares/folder_to_shared | 1       |
     #Then "Brian" should see that the version of resource "simple.pdf" has been restored
-    When "Alice" deletes the following resources
-      | resource                       |
-      | folder_to_shared/lorem_new.txt |
-      | folder_to_shared               |
+    When "Alice" deletes the following resources using the sidebar panel
+      | resource         | from             |
+      | lorem_new.txt    | folder_to_shared |
+      | folder_to_shared |                  |
     And "Alice" logs out
     #And "Brian" opens the "files" app
     #Then "Brian" should not see the following resource
