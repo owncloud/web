@@ -224,7 +224,7 @@ volumes:
   certs:
   ocis-config:
   ocis-data:
-  wopi-data:
+  wopi-recovery:
 
 
 networks:
