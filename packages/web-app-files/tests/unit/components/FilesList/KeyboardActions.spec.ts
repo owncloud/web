@@ -70,14 +70,6 @@ describe('KeyboardActions', () => {
     })
   })
   describe('global shortcuts', () => {
-    // beforeEach(() => {
-    //   document.body.innerHTML =
-    //     '<table>' +
-    //     '<tr class="oc-tbody-tr" data-item-id="0"><td></td></tr>' +
-    //     '<tr class="oc-tbody-tr" data-item-id="1"><td></td></tr>' +
-    //     '<tr class="oc-tbody-tr" data-item-id="2"><td></td></tr>' +
-    //     '</table>'
-    // })
 
     it('copy selected files', () => {
       const event = new KeyboardEvent('keyDown', {
