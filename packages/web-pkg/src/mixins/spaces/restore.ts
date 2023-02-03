@@ -50,7 +50,7 @@ export default {
       }
       const message = this.$ngettext(
         'If you enable the selected space, it can be accessed again.',
-        'If you disable the %{count} selected spaces, they can be accessed again.',
+        'If you enable the %{count} selected spaces, they can be accessed again.',
         allowedResources.length,
         { count: allowedResources.length }
       )
