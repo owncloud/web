@@ -61,6 +61,7 @@ Summary
 * Enhancement - Update SDK to v3.1.0-alpha.3: [#8320](https://github.com/owncloud/web/pull/8320)
 * Enhancement - Add context menu to users: [#8324](https://github.com/owncloud/web/pull/8324)
 * Enhancement - Admin settings users section details improvement: [#8331](https://github.com/owncloud/web/pull/8331)
+* Enhancement - Add `ItemFilter` component: [#8354](https://github.com/owncloud/web/issues/8354)
 * Enhancement - Admin settings general section: [#8363](https://github.com/owncloud/web/issues/8363)
 
 Details
@@ -553,6 +554,16 @@ Details
 
    https://github.com/owncloud/web/pull/8331
    https://github.com/owncloud/web/pull/8342
+
+* Enhancement - Add `ItemFilter` component: [#8354](https://github.com/owncloud/web/issues/8354)
+
+   The `ItemFilter` component has been introduced to filter data. It fills the dropdown of
+   `OcFilterChip` with content and can be fed with items, which then can be selected and filtered.
+   The component also supports multi-selection and persists the current selection as route
+   query.
+
+   https://github.com/owncloud/web/issues/8354
+   https://github.com/owncloud/web/pull/8355
 
 * Enhancement - Admin settings general section: [#8363](https://github.com/owncloud/web/issues/8363)
 
