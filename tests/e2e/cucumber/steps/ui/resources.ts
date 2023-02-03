@@ -303,7 +303,7 @@ export const processDelete = async (stepTable: DataTable, pageObject: any, actio
     parentFolder = folder !== 'undefined' ? folder : null
     await pageObject.delete({
       folder: parentFolder,
-      resources: files,
+      resourcesWithInfo: files,
       via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
     })
   }

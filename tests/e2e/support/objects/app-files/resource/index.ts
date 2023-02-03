@@ -3,6 +3,7 @@ import { Download, Page } from 'playwright'
 import {
   createResources,
   createResourceArgs,
+  deleteResource,
   deleteResourceArgs,
   deleteResourceTrashbin,
   downloadResources,
@@ -31,8 +32,6 @@ import {
   openFileInViewerArgs,
   getDeleteResourceButtonVisibility,
   getRestoreResourceButtonVisibility,
-  deleteResourceViaOption,
-  deleteResourceViaOptionArgs,
   addTagsToResource,
   removeTagsFromResource,
   getTagsForResourceVisibilityInFilesTable,
@@ -104,9 +103,9 @@ export class Resource {
     }
   }
 
-  async delete(args: Omit<deleteResourceViaOptionArgs, 'page'>): Promise<void> {
+  async delete(args: Omit<deleteResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await deleteResourceViaOption({ ...args, page: this.#page })
+    await deleteResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 

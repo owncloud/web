@@ -3,8 +3,8 @@ import { File } from '../../../types'
 import util from 'util'
 import path from 'path'
 import {
-  deleteResourceViaOption,
-  deleteResourceViaOptionArgs,
+  deleteResource,
+  deleteResourceArgs,
   downloadResources,
   downloadResourcesArgs,
   renameResource,
@@ -72,9 +72,9 @@ export class Public {
     await this.#page.locator('body').click()
   }
 
-  async delete(args: Omit<deleteResourceViaOptionArgs, 'page'>): Promise<void> {
+  async delete(args: Omit<deleteResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await deleteResourceViaOption({ ...args, page: this.#page })
+    await deleteResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 }
