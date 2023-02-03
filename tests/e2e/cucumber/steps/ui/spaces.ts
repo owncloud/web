@@ -126,6 +126,16 @@ Then(
 )
 
 Then(
+  '{string} should see file {string} but should not be able to edit',
+  async function (this: World, stepUser: string, resource: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    const userCanEdit = await spacesObject.canUserEditResource({ resource })
+    expect(userCanEdit).toBe(false)
+  }
+)
+
+Then(
   '{string} should not be able to see space {string}',
   async function (this: World, stepUser: string, space: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
