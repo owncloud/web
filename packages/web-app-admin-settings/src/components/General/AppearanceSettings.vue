@@ -5,9 +5,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, unref } from 'vue'
+import { useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
-  name: 'Appearance Settings'
+  name: 'Appearance Settings',
+  setup() {
+    const store = useStore()
+    const currentTheme = computed(() => store.getters.configuration.currentTheme)
+    console.log(unref(currentTheme))
+  }
 })
 </script>
