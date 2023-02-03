@@ -7,31 +7,6 @@
       :label="$gettext('Filter users')"
       autocomplete="off"
     />
-    <div class="oc-flex oc-flex-middle oc-ml-m oc-mb-m oc-mt-m">
-      <div class="oc-mr-m oc-flex oc-flex-middle">
-        <oc-icon name="filter-2" fill-type="line" />
-        <span v-text="$gettext('Filter:')" />
-      </div>
-
-      <!-- TODO: just for demo purposes, remove later -->
-      <item-filter
-        filter-name="users"
-        :filter-label="$gettext('Users')"
-        :items="users"
-        :show-filter="true"
-        :allow-multiple="true"
-        display-name-attribute="displayName"
-        :filterable-attributes="['displayName']"
-      >
-        <template #image="{ item }">
-          <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
-        </template>
-        <template #item="{ item }">
-          <div v-text="item.displayName" />
-          <div class="oc-text-muted oc-text-small" v-text="$gettext('User')" />
-        </template>
-      </item-filter>
-    </div>
     <oc-table
       ref="tableRef"
       class="users-table"
@@ -120,11 +95,10 @@ import { displayPositionedDropdown, eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { User } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
-import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
 
 export default defineComponent({
   name: 'UsersList',
-  components: { ContextMenuQuickAction, ItemFilter },
+  components: { ContextMenuQuickAction },
   props: {
     users: {
       type: Array as PropType<User[]>,
