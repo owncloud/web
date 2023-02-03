@@ -28,7 +28,7 @@ import { defineComponent } from 'vue'
 import { useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
-  name: 'Info',
+  name: 'InfoSection',
   setup() {
     const store = useStore()
     let backendProductName = ''
