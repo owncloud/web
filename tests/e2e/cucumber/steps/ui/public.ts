@@ -120,6 +120,28 @@ When(
   }
 )
 
+When(
+  '{string} uploads the following resource(s) in internal link named {string}',
+  async function (
+    this: World,
+    stepUser: string,
+    link: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    const { url } = this.linksEnvironment.getLink({ name: link })
+    for (const info of stepTable.hashes()) {
+      await pageObject.uploadInternal({
+        to: info.to,
+        resources: [this.filesEnvironment.getFile({ name: info.resource })],
+        option: info.option,
+        link: url
+      })
+    }
+  }
+)
+
 Then(
   '{string} should not be able to open the old link {string}',
   function (this: World, stepUser: string, name: string): void {
