@@ -61,6 +61,7 @@ Summary
 * Enhancement - Update SDK to v3.1.0-alpha.3: [#8320](https://github.com/owncloud/web/pull/8320)
 * Enhancement - Add context menu to users: [#8324](https://github.com/owncloud/web/pull/8324)
 * Enhancement - Admin settings users section details improvement: [#8331](https://github.com/owncloud/web/pull/8331)
+* Enhancement - Admin settings general section: [#8363](https://github.com/owncloud/web/issues/8363)
 
 Details
 -------
@@ -552,6 +553,14 @@ Details
 
    https://github.com/owncloud/web/pull/8331
    https://github.com/owncloud/web/pull/8342
+
+* Enhancement - Admin settings general section: [#8363](https://github.com/owncloud/web/issues/8363)
+
+   We've introduced the general section in the admin settings app, which displays information
+   about the running front- and backend.
+
+   https://github.com/owncloud/web/issues/8363
+   https://github.com/owncloud/web/pull/8360
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
