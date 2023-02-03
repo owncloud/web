@@ -66,7 +66,7 @@ describe('AppTemplate', () => {
     })
     it('can be toggled', async () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
-      const { wrapper } = getWrapper()
+      const { wrapper } = getWrapper({ propsData: { sideBarAvailablePanels: [jest.fn()] } })
       await wrapper.find(stubSelectors.sideBarToggleButton).trigger('click')
       expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.toggle)
     })

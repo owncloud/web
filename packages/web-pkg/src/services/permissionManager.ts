@@ -34,6 +34,10 @@ export class PermissionManager {
     this.store = store
   }
 
+  public hasSystemManagement() {
+    return this.user.role?.name === UserRoleName.Admin
+  }
+
   public hasUserManagement() {
     return this.user.role?.name === UserRoleName.Admin
   }

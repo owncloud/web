@@ -1,4 +1,5 @@
 import translations from '../l10n/translations.json'
+import General from './views/General.vue'
 import Users from './views/Users.vue'
 import Groups from './views/Groups.vue'
 import Spaces from './views/Spaces.vue'
@@ -21,10 +22,19 @@ const routes = [
   {
     path: '/',
     redirect: () => {
-      if (permissionManager().hasUserManagement()) {
-        return { name: 'admin-settings-users' }
+      if (permissionManager().hasSystemManagement()) {
+        return { name: 'admin-settings-general' }
       }
       return { name: 'admin-settings-spaces' }
+    }
+  },
+  {
+    path: '/general',
+    name: 'admin-settings-general',
+    component: General,
+    meta: {
+      authContext: 'user',
+      title: $gettext('General')
     }
   },
   {
@@ -57,6 +67,16 @@ const routes = [
 ]
 
 const navItems = [
+  {
+    name: $gettext('General'),
+    icon: 'settings',
+    route: {
+      path: `/${appInfo.id}/general?`
+    },
+    enabled: () => {
+      return permissionManager().hasSystemManagement()
+    }
+  },
   {
     name: $gettext('Users'),
     icon: 'user',

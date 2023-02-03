@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`General view renders component 1`] = `
+<div>
+  <app-template-stub breadcrumbs="[object Object],[object Object]" issidebarheadercompact="false" loading="false" sidebaravailablepanels="" sidebarloading="false" sidebaropen="false"></app-template-stub>
+</div>
+`;
