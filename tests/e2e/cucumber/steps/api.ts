@@ -185,3 +185,42 @@ Given(
     }
   }
 )
+
+Given(
+  '{string} creates the following file(s) in space {string} using API',
+  async function (
+    this: World,
+    stepUser: string,
+    space: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (const info of stepTable.hashes()) {
+      await api.dav.uploadFileInsideSpaceBySpaceName({
+        user,
+        pathToFile: info.name,
+        spaceName: space,
+        content: info.content
+      })
+    }
+  }
+)
+
+Given(
+  '{string} creates the following folder(s) in space {string} using API',
+  async function (
+    this: World,
+    stepUser: string,
+    space: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (const info of stepTable.hashes()) {
+      await api.dav.createFolderInsideSpaceBySpaceName({
+        user,
+        folder: info.name,
+        spaceName: space
+      })
+    }
+  }
+)

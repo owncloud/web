@@ -11,9 +11,12 @@ Feature: internal link share in project space
     And "Alice" creates the following project space using API
       | name | id        |
       | team | marketing |
-    And "Alice" creates the following folder in personal space using API
+    And "Alice" creates the following folder in space "marketing" using API
       | name     |
-      | myfolder |
+      | Strategy |
+    And "Alice" creates the following file in space "marketing" using API
+      | name              | content     |
+      | Strategy/plan.txt | secret plan |
     And "Alice" shares the following resource using API
       | resource | recipient | type | role   |
       | myfolder | Brian     | user | editor |
