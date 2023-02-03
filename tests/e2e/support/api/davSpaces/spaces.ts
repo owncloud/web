@@ -121,15 +121,17 @@ export const createFolderInsidePersonalSpace = async ({
 export const uploadFileInsideSpaceBySpaceName = async ({
   user,
   pathToFile,
-  spaceName
+  spaceName,
+  content = ''
 }: {
   user: User
   pathToFile: string
   spaceName: string
+  content?: string
 }): Promise<void> => {
   const webDavEndPathToRoot =
     'spaces/' + (await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }))
-  await createFile({ user, pathToFile, webDavEndPathToRoot })
+  await createFile({ user, pathToFile, content, webDavEndPathToRoot })
 }
 
 export const getDataOfFileInsideSpace = async ({
