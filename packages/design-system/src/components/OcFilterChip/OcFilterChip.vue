@@ -18,6 +18,7 @@
       :toggle="'#' + id"
       class="oc-filter-chip-drop"
       mode="click"
+      padding-size="small"
       @hide-drop="$emit('hideDrop')"
       @show-drop="$emit('showDrop')"
     >

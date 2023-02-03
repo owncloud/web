@@ -11,15 +11,15 @@
           v-if="showFilter && filterableAttributes.length"
           ref="filterInputRef"
           v-model="filterTerm"
-          class="item-filter-input oc-mb-m"
+          class="item-filter-input oc-mb-m oc-mt-s"
           autocomplete="off"
           :placeholder="$gettext('Filter')"
         />
         <oc-list class="item-filter-list">
-          <li v-for="item in displayedItems" :key="item.key" class="oc-mt-s">
+          <li v-for="item in displayedItems" :key="item.key" class="oc-my-xs">
             <component
               :is="isSelectionAllowed(item) ? 'oc-button' : 'div'"
-              class="item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1"
+              class="item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs"
               justify-content="left"
               appearance="raw"
               @click="toggleItemSelection(item)"
