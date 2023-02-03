@@ -2,6 +2,14 @@ import index from '../../src/index'
 
 describe('admin settings index', () => {
   describe('navItems', () => {
+    describe('general', () => {
+      it.each([true, false])('should be enabled according to the permissions', (enabled) => {
+        ;(window as any).__$permissionManager = {
+          hasSystemManagement: () => enabled
+        }
+        expect(index.navItems.find((n) => n.name === 'General').enabled()).toBe(enabled)
+      })
+    })
     describe('user management', () => {
       it.each([true, false])('should be enabled according to the permissions', (enabled) => {
         ;(window as any).__$permissionManager = {
@@ -29,17 +37,17 @@ describe('admin settings index', () => {
   })
   describe('routes', () => {
     describe('default-route "/"', () => {
-      it('should redirect to user management if permission given', () => {
+      it('should redirect to general if permission given', () => {
         ;(window as any).__$permissionManager = {
-          hasUserManagement: () => true
+          hasSystemManagement: () => true
         }
         expect(index.routes.find((n) => n.path === '/').redirect().name).toEqual(
-          'admin-settings-users'
+          'admin-settings-general'
         )
       })
-      it('should redirect to space management if no user management permission given', () => {
+      it('should redirect to space management if no system management permission given', () => {
         ;(window as any).__$permissionManager = {
-          hasUserManagement: () => false
+          hasSystemManagement: () => false
         }
         expect(index.routes.find((n) => n.path === '/').redirect().name).toEqual(
           'admin-settings-spaces'

@@ -4,7 +4,6 @@
       <template #mainContent>
         <div class="oc-px-m">
           <Info />
-          <AppearanceSettings />
         </div>
       </template>
     </app-template>
@@ -15,12 +14,10 @@
 import { defineComponent, ref } from 'vue'
 import AppTemplate from '../components/AppTemplate.vue'
 import Info from '../components/General/Info.vue'
-import AppearanceSettings from '../components/General/AppearanceSettings.vue'
 
 export default defineComponent({
   components: {
     Info,
-    AppearanceSettings,
     AppTemplate
   },
   setup() {

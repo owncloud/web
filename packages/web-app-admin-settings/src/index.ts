@@ -74,7 +74,7 @@ const navItems = [
       path: `/${appInfo.id}/general?`
     },
     enabled: () => {
-      return permissionManager().hasUserManagement()
+      return permissionManager().hasSystemManagement()
     }
   },
   {
