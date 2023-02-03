@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="oc-px-m oc-py-s" v-text="$gettext('Apperance')" />
+    <h2 class="oc-py-s" v-text="$gettext('Apperance')" />
   </div>
 </template>
 
