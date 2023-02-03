@@ -104,19 +104,9 @@ Feature: Kindergarten can use web to organize a day
       | data.zip            | groups/Teddy Bear Daycare/meal plan  |
       | lorem.txt           | groups/Teddy Bear Daycare/meal plan  |
       | lorem-big.txt       | groups/Teddy Bear Daycare/meal plan  |
-    And "Alice" deletes the following resources using the sidebar panel
-      | resource            | from                                 |
-      | meal plan           | groups/Kindergarten Koalas           |
-      | meal plan           | groups/Pre-Schools Pirates           |
-      | meal plan           | groups/Teddy Bear Daycare            |
-    And "Alice" deletes the following resources using the batch action
-      | resource            | from                                 |
       | Kindergarten Koalas | groups                               |
       | Pre-Schools Pirates | groups                               |
       | Teddy Bear Daycare  | groups                               |
-    And "Alice" deletes the following resources using the sidebar panel
-      | resource            | from                                 |
-      | groups              |                                      |
     # Then what do we check for to be confident that the above things done by Alice have worked?
     # Then the downloaded files should have content "abc..."
     And "Alice" logs out

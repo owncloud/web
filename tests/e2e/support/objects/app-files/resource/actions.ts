@@ -481,27 +481,22 @@ export const restoreResourceVersion = async (args: restoreResourceVersionArgs) =
 }
 
 /**/
-
 export interface deleteResourceArgs {
   page: Page
-  resource: string
-}
-
-export interface deleteResourceViaOptionArgs {
-  page: Page
-  resources: resourceArgs[]
+  resource?: string
+  resourcesWithInfo?: resourceArgs[]
   folder?: string
-  via: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
+  via?: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
 }
 
-export const deleteResourceViaOption = async (args: deleteResourceViaOptionArgs): Promise<void> => {
-  const { page, resources, folder, via } = args
+export const deleteResource = async (args: deleteResourceArgs): Promise<void> => {
+  const { page, resourcesWithInfo, folder, via } = args
   switch (via) {
     case 'SIDEBAR_PANEL': {
       if (folder) {
         await clickResource({ page, path: folder })
       }
-      for (const resource of resources) {
+      for (const resource of resourcesWithInfo) {
         await sidebar.open({ page, resource: resource.name })
         await sidebar.openPanel({ page, name: 'actions' })
         await page.locator(deleteButtonSidebar).first().click()
@@ -520,9 +515,9 @@ export const deleteResourceViaOption = async (args: deleteResourceViaOptionArgs)
     }
 
     case 'BATCH_ACTION': {
-      await selectOrDeselectResources({ page, resources, folder, select: true })
+      await selectOrDeselectResources({ page, resources: resourcesWithInfo, folder, select: true })
       const deletetedResources = []
-      if (resources.length <= 1) {
+      if (resourcesWithInfo.length <= 1) {
         throw new Error('Single resource or objects cannot be deleted with batch action')
       }
 
@@ -542,8 +537,8 @@ export const deleteResourceViaOption = async (args: deleteResourceViaOptionArgs)
         page.locator(util.format(actionConfirmationButton, 'Delete')).click()
       ])
       // assertion that the resources actually got deleted
-      expect(resources.length).toBe(deletetedResources.length)
-      for (const resource of resources) {
+      expect(resourcesWithInfo.length).toBe(deletetedResources.length)
+      for (const resource of resourcesWithInfo) {
         expect(deletetedResources).toContain(resource.name)
       }
       break
