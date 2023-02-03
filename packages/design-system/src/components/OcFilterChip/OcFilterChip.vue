@@ -8,8 +8,8 @@
     >
       <oc-icon v-if="filterActive" name="check" size="small" color="var(--oc-color-text-inverse)" />
       <span
-        class="oc-text-truncate"
-        v-text="!!selectedItemNames.length ? selectedItemNames[0] : filterName"
+        class="oc-text-truncate oc-filter-chip-label"
+        v-text="!!selectedItemNames.length ? selectedItemNames[0] : filterLabel"
       />
       <span v-if="selectedItemNames.length > 1" v-text="` +${selectedItemNames.length - 1}`" />
       <oc-icon v-if="!filterActive" name="arrow-down-s" size="small" />
@@ -50,7 +50,7 @@ export default defineComponent({
       required: false,
       default: () => uniqueId('oc-filter-chip-')
     },
-    filterName: {
+    filterLabel: {
       type: String,
       required: true
     },
@@ -82,8 +82,8 @@ export default defineComponent({
     display: inline-flex;
     gap: var(--oc-space-xsmall);
     text-decoration: none;
-    font-size: 0.75rem;
-    line-height: 16px;
+    font-size: var(--oc-font-size-xsmall);
+    line-height: 1rem;
     max-width: 120px;
     padding: var(--oc-space-xsmall) var(--oc-space-small) !important;
 

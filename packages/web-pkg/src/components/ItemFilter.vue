@@ -1,7 +1,7 @@
 <template>
   <div class="item-filter oc-flex">
     <oc-filter-chip
-      :filter-name="filterName"
+      :filter-label="filterName"
       :selected-item-names="selectedItems.map((i) => i[displayNameAttribute])"
       @clear-filter="clearFilter"
       @show-drop="showDrop"
