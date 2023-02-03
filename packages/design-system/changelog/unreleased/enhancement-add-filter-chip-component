@@ -1,0 +1,6 @@
+Enhancement: Add `OcFilterChip` component
+
+The `OcFilterChip` component has been added. It provides an (in-)active state and a button to clear the current filter.
+
+https://github.com/owncloud/web/issues/8354
+https://github.com/owncloud/web/pull/8355

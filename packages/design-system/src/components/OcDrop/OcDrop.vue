@@ -120,6 +120,7 @@ export default defineComponent({
       default: undefined
     }
   },
+  emits: ['hideDrop', 'showDrop'],
   data() {
     return { tippy: null }
   },
@@ -173,8 +174,12 @@ export default defineComponent({
         content: 'describedby'
       },
       ...(!this.isNested && {
-        onShow(instance) {
+        onShow: (instance) => {
+          this.$emit('showDrop')
           hideAll({ exclude: instance })
+        },
+        onHide: () => {
+          this.$emit('hideDrop')
         }
       }),
       popperOptions: this.popperOptions,
