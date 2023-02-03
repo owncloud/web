@@ -3,5 +3,5 @@ Enhancement: Admin settings general section
 We've introduced the general section in the admin settings app, which displays information about the running
 front- and backend.
 
-https://github.com/owncloud/web/pull/8360
 https://github.com/owncloud/web/issues/8363
+https://github.com/owncloud/web/pull/8360
