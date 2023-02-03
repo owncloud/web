@@ -5,9 +5,14 @@
       <div id="admin-settings-wrapper" class="oc-width-expand">
         <div id="admin-settings-app-bar" ref="appBar" class="oc-app-bar oc-py-s">
           <div class="oc-flex oc-flex-between">
-            <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
+            <oc-breadcrumb
+              id="admin-settings-breadcrumb"
+              class="oc-flex oc-flex-middle"
+              :items="breadcrumbs"
+            />
             <div>
               <oc-button
+                v-if="sideBarAvailablePanels.length"
                 id="files-toggle-sidebar"
                 v-oc-tooltip="toggleSidebarButtonLabel"
                 :aria-label="toggleSidebarButtonLabel"
@@ -54,25 +59,29 @@ export default defineComponent({
     AppLoadingSpinner
   },
   props: {
-    loading: {
-      required: true,
-      type: Boolean
-    },
     breadcrumbs: {
       required: true,
       type: Array
     },
     sideBarOpen: {
-      required: true,
-      type: Boolean
+      required: false,
+      type: Boolean,
+      default: false
     },
     sideBarAvailablePanels: {
-      required: true,
-      type: Array
+      required: false,
+      type: Array,
+      default: () => []
     },
     sideBarActivePanel: {
-      required: true,
-      type: [String, null]
+      required: false,
+      type: [String, null],
+      default: null
+    },
+    loading: {
+      required: false,
+      type: Boolean,
+      default: false
     },
     sideBarLoading: {
       required: false,
@@ -118,6 +127,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+#admin-settings-breadcrumb {
+  height: 52px;
+}
+
 #admin-settings-app-bar {
   background-color: var(--oc-color-background-default);
   border-top-right-radius: 15px;
