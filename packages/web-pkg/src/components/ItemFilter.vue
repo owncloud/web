@@ -54,7 +54,8 @@
 import { computed, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
 import Fuse from 'fuse.js'
 import omit from 'lodash-es/omit'
-import { queryItemAsString, useRoute, useRouteQuery, useRouter } from 'web-pkg'
+import { useRoute, useRouteQuery, useRouter } from 'web-pkg'
+import { queryItemAsString } from 'web-pkg/src/composables/appDefaults'
 
 export default defineComponent({
   name: 'ItemFilter',
@@ -194,6 +195,7 @@ export default defineComponent({
     })
 
     return {
+      queryParam,
       filterInputRef,
       selectedItems,
       selectedItemString,

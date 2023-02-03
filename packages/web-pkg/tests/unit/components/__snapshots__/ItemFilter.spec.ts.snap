@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ItemFilter can use a custom attribute as display name 1`] = `
+<div class="item-filter oc-flex">
+  <div class="oc-filter-chip oc-flex">
+    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button" id="oc-filter-chip-5" type="button">
+      <!-- @slot Content of the button -->
+      <!--v-if-->
+      <span class="oc-text-truncate">Users</span>
+      <!--v-if-->
+      <span class="oc-icon oc-icon-s oc-icon-passive">
+        <!---->
+      </span>
+    </button>
+    <div class="oc-drop oc-box-shadow-medium oc-rounded oc-filter-chip-drop" id="oc-drop-6">
+      <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
+        <!--v-if-->
+        <ul class="oc-list oc-my-rm oc-mx-rm item-filter-list">
+          <li class="oc-mt-s">
+            <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1" type="button">
+              <!-- @slot Content of the button -->
+              <div>
+                <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-7" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
+              </div>
+              <div></div>
+              <div>Albert Einstein</div>
+            </button>
+          </li>
+          <li class="oc-mt-s">
+            <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1" type="button">
+              <!-- @slot Content of the button -->
+              <div>
+                <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-8" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
+              </div>
+              <div></div>
+              <div>Marie Curie</div>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!--v-if-->
+  </div>
+</div>
+`;
+
+exports[`ItemFilter renders all items 1`] = `
+<div class="item-filter oc-flex">
+  <div class="oc-filter-chip oc-flex">
+    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button" id="oc-filter-chip-1" type="button">
+      <!-- @slot Content of the button -->
+      <!--v-if-->
+      <span class="oc-text-truncate">Users</span>
+      <!--v-if-->
+      <span class="oc-icon oc-icon-s oc-icon-passive">
+        <!---->
+      </span>
+    </button>
+    <div class="oc-drop oc-box-shadow-medium oc-rounded oc-filter-chip-drop" id="oc-drop-2">
+      <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
+        <!--v-if-->
+        <ul class="oc-list oc-my-rm oc-mx-rm item-filter-list">
+          <li class="oc-mt-s">
+            <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1" type="button">
+              <!-- @slot Content of the button -->
+              <div>
+                <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-3" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
+              </div>
+              <div></div>
+              <div>Albert Einstein</div>
+            </button>
+          </li>
+          <li class="oc-mt-s">
+            <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1" type="button">
+              <!-- @slot Content of the button -->
+              <div>
+                <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-4" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
+              </div>
+              <div></div>
+              <div>Marie Curie</div>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!--v-if-->
+  </div>
+</div>
+`;
