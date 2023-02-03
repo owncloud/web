@@ -77,7 +77,7 @@ export default defineComponent({
     background-color: var(--oc-color-background-default) !important;
     color: var(--oc-color-text-muted) !important;
     border: 1px solid var(--oc-color-text-muted);
-    border-radius: 99px;
+    border-radius: 99px !important;
     box-sizing: border-box;
     display: inline-flex;
     gap: var(--oc-space-xsmall);
@@ -85,16 +85,16 @@ export default defineComponent({
     font-size: 0.75rem;
     line-height: 16px;
     max-width: 120px;
-    padding: var(--oc-space-xsmall) var(--oc-space-small);
+    padding: var(--oc-space-xsmall) var(--oc-space-small) !important;
 
     &-selected,
     &-selected:hover {
       background-color: var(--oc-color-swatch-primary-default) !important;
       color: var(--oc-color-text-inverse) !important;
-      border-top-left-radius: 99px;
-      border-bottom-left-radius: 99px;
-      border-top-right-radius: 0px;
-      border-bottom-right-radius: 0px;
+      border-top-left-radius: 99px !important;
+      border-bottom-left-radius: 99px !important;
+      border-top-right-radius: 0px !important;
+      border-bottom-right-radius: 0px !important;
     }
   }
   &-clear,
@@ -102,10 +102,10 @@ export default defineComponent({
     margin-left: 1px;
     background-color: var(--oc-color-swatch-primary-default) !important;
     color: var(--oc-color-text-inverse) !important;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    border-top-right-radius: 99px;
-    border-bottom-right-radius: 99px;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    border-top-right-radius: 99px !important;
+    border-bottom-right-radius: 99px !important;
   }
 }
 </style>
