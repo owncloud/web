@@ -1,7 +1,7 @@
 <template>
   <div class="item-filter oc-flex">
     <oc-filter-chip
-      :filter-label="filterName"
+      :filter-label="filterLabel"
       :selected-item-names="selectedItems.map((i) => i[displayNameAttribute])"
       @clear-filter="clearFilter"
       @show-drop="showDrop"
@@ -15,44 +15,47 @@
           autocomplete="off"
           :placeholder="$gettext('Filter')"
         />
-        <oc-list class="item-filter-list">
-          <li v-for="item in displayedItems" :key="item.key" class="oc-my-xs">
-            <component
-              :is="isSelectionAllowed(item) ? 'oc-button' : 'div'"
-              class="item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs"
-              justify-content="left"
-              appearance="raw"
-              @click="toggleItemSelection(item)"
-            >
-              <div>
-                <oc-checkbox
-                  size="large"
-                  class="item-filter-checkbox"
-                  :label="$gettext('Toggle selection')"
-                  :model-value="isItemSelected(item)"
-                  :disabled="!isSelectionAllowed(item)"
-                  hide-label
-                  @update:model-value="toggleItemSelection(item)"
-                  @click.stop
-                />
-              </div>
-              <div>
-                <slot name="image" :item="item" />
-              </div>
-              <div>
-                <slot name="item" :item="item" />
-              </div>
-            </component>
-          </li>
-        </oc-list>
+        <div ref="itemFilterListRef">
+          <oc-list class="item-filter-list">
+            <li v-for="item in displayedItems" :key="item.key" class="oc-my-xs">
+              <component
+                :is="isSelectionAllowed(item) ? 'oc-button' : 'div'"
+                class="item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs"
+                justify-content="left"
+                appearance="raw"
+                @click="toggleItemSelection(item)"
+              >
+                <div>
+                  <oc-checkbox
+                    size="large"
+                    class="item-filter-checkbox"
+                    :label="$gettext('Toggle selection')"
+                    :model-value="isItemSelected(item)"
+                    :disabled="!isSelectionAllowed(item)"
+                    hide-label
+                    @update:model-value="toggleItemSelection(item)"
+                    @click.stop
+                  />
+                </div>
+                <div>
+                  <slot name="image" :item="item" />
+                </div>
+                <div>
+                  <slot name="item" :item="item" />
+                </div>
+              </component>
+            </li>
+          </oc-list>
+        </div>
       </template>
     </oc-filter-chip>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
+import { defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
 import Fuse from 'fuse.js'
+import Mark from 'mark.js'
 import omit from 'lodash-es/omit'
 import { useRoute, useRouteQuery, useRouter } from 'web-pkg'
 import { queryItemAsString } from 'web-pkg/src/composables/appDefaults'
@@ -60,6 +63,10 @@ import { queryItemAsString } from 'web-pkg/src/composables/appDefaults'
 export default defineComponent({
   name: 'ItemFilter',
   props: {
+    filterLabel: {
+      type: String,
+      required: true
+    },
     filterName: {
       type: String,
       required: true
@@ -96,31 +103,26 @@ export default defineComponent({
     const filterInputRef = ref()
     const selectedItems = ref([])
     const displayedItems = ref(props.items)
+    const markInstance = ref(null)
+    const itemFilterListRef = ref(null)
 
-    const queryParam = `q_${props.filterName.toLowerCase()}`
+    const queryParam = `q_${props.filterName}`
     const currentRouteQuery = useRouteQuery(queryParam)
-    const getQueryStr = () => {
-      let queryStr = ''
-      for (const item of unref(selectedItems)) {
-        queryStr += `${item[props.displayNameAttribute].toLowerCase()}+`
-      }
-      return queryStr.slice(0, -1)
-    }
     const setRouteQuery = () => {
       router.push({
         query: {
           ...omit(unref(currentRoute).query, [queryParam]),
-          ...(!!unref(selectedItems).length && { [queryParam]: getQueryStr() })
+          ...(!!unref(selectedItems).length && {
+            [queryParam]: unref(selectedItems)
+              .reduce((acc, item) => {
+                acc += `${item.id}+`
+                return acc
+              }, '')
+              .slice(0, -1)
+          })
         }
       })
     }
-
-    const selectedItemString = computed(() => {
-      if (!unref(selectedItems).length) {
-        return props.filterName
-      }
-      return unref(selectedItems)[0][props.displayNameAttribute]
-    })
 
     const isItemSelected = (item) => {
       return !!unref(selectedItems).find((s) => s.id === item.id)
@@ -182,23 +184,29 @@ export default defineComponent({
 
     watch(filterTerm, () => {
       setDisplayedItems(filter(props.items, unref(filterTerm)))
+      if (unref(itemFilterListRef)) {
+        markInstance.value = new Mark(unref(itemFilterListRef))
+        unref(markInstance).unmark()
+        unref(markInstance).mark(unref(filterTerm), {
+          element: 'span',
+          className: 'highlight-mark'
+        })
+      }
     })
 
     onMounted(() => {
       const queryStr = queryItemAsString(unref(currentRouteQuery))
       if (queryStr) {
-        const names = queryStr.split('+')
-        selectedItems.value = props.items.filter((s) =>
-          names.includes(s[props.displayNameAttribute].toLowerCase())
-        )
+        const ids = queryStr.split('+')
+        selectedItems.value = props.items.filter((s: any) => ids.includes(s.id))
       }
     })
 
     return {
       queryParam,
       filterInputRef,
+      itemFilterListRef,
       selectedItems,
-      selectedItemString,
       clearFilter,
       toggleItemSelection,
       isItemSelected,

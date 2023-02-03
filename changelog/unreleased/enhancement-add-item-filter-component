@@ -1,0 +1,6 @@
+Enhancement: Add `ItemFilter` component
+
+The `ItemFilter` component has been introduced to filter data. It fills the dropdown of `OcFilterChip` with content and can be fed with items, which then can be selected and filtered. The component also supports multi-selection and persists the current selection as route query.
+
+https://github.com/owncloud/web/issues/8354
+https://github.com/owncloud/web/pull/8355

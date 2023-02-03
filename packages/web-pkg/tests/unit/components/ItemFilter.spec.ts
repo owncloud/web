@@ -108,7 +108,7 @@ describe('ItemFilter', () => {
       expect(mocks.$router.push).toHaveBeenCalled()
     })
     it('sets the selected items initially when given via query param', () => {
-      const { wrapper } = getWrapper({ initialQuery: 'albert einstein' })
+      const { wrapper } = getWrapper({ initialQuery: '1' })
       expect(wrapper.vm.selectedItems).toEqual([filterItems[0]])
     })
   })
@@ -121,7 +121,8 @@ function getWrapper({ props = {}, initialQuery = '' }: any = {}) {
     mocks,
     wrapper: mount(ItemFilter, {
       props: {
-        filterName: 'Users',
+        filterLabel: 'Users',
+        filterName: 'users',
         items: filterItems,
         ...props
       },

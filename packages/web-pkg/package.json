@@ -10,6 +10,7 @@
     "fuse.js": "^6.5.3",
     "lodash-es": "^4.17.21",
     "luxon": "^2.4.0",
+    "mark.js": "^8.11.1",
     "popper-max-size-modifier": "^0.2.0",
     "qs": "^6.10.3",
     "uuid": "^9.0.0",

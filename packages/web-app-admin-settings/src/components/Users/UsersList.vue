@@ -15,7 +15,8 @@
 
       <!-- TODO: just for demo purposes, remove later -->
       <item-filter
-        filter-name="Users"
+        filter-name="users"
+        :filter-label="$gettext('Users')"
         :items="users"
         :show-filter="true"
         :allow-multiple="true"

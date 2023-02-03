@@ -1,9 +1,0 @@
-Enhancement: Add filter components
-
-Two components for filtering data have been added:
-
-* `OcFilterChip` - This component lies in the ODS and holds the basic design of the filter chip.
-* `ItemFilter` - This component lies in `web-pkg` and holds the basic implementation of the filter. It fills the dropdown of `OcFilterChip` with content and can be fed with items, which then can be selected and filtered. The component also supports multi-selection and persists the current selection as route query.
-
-https://github.com/owncloud/web/issues/8354
-https://github.com/owncloud/web/pull/8355
