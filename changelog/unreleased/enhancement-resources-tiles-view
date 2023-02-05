@@ -4,6 +4,8 @@ We've added a switch to change from the known resource table to a tiles view.
 The change gets saved to the url and persisted across resource navigation.
 
 https://github.com/owncloud/web/pull/7991
+https://github.com/owncloud/web/pull/8372
 https://github.com/owncloud/web/issues/6378
 https://github.com/owncloud/web/issues/6379
 https://github.com/owncloud/web/issues/6380
+https://github.com/owncloud/web/issues/8367

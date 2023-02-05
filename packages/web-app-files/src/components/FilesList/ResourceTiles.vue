@@ -217,5 +217,15 @@ export default defineComponent({
   &.small-tiles {
     grid-template-columns: repeat(auto-fill, 12rem);
   }
+
+  @media only screen and (max-width: 640px) {
+    grid-template-columns: 80%;
+    justify-content: center;
+    padding: var(--oc-space-medium) 0;
+
+    &.small-tiles {
+      grid-template-columns: 80%;
+    }
+  }
 }
 </style>
