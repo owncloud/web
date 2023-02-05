@@ -1,6 +1,6 @@
 <template>
   <div>
-    <oc-list class="oc-tiles oc-flex" :class="tileWidth === 'small' ? 'small-tiles' : ''">
+    <oc-list class="oc-tiles oc-flex" :class="resizable ? 'resizeableTiles' : ''">
       <li v-for="(resource, index) in data" :key="resource.id" class="oc-tiles-item">
         <oc-tile
           :ref="
@@ -85,9 +85,9 @@ export default defineComponent({
       type: Array as PropType<Resource[]>,
       default: () => []
     },
-    tileWidth: {
-      type: String,
-      default: ''
+    resizable: {
+      type: Boolean,
+      default: false
     },
     targetRouteCallback: {
       type: Function,
@@ -214,8 +214,8 @@ export default defineComponent({
   justify-content: flex-start;
   row-gap: 1rem;
 
-  &.small-tiles {
-    grid-template-columns: repeat(auto-fill, 12rem);
+  &.resizeableTiles {
+    grid-template-columns: repeat(auto-fill, var(--oc-size-tiles-resizeable));
   }
 
   @media only screen and (max-width: 640px) {
@@ -223,7 +223,7 @@ export default defineComponent({
     justify-content: center;
     padding: var(--oc-space-medium) 0;
 
-    &.small-tiles {
+    &.resizeableTiles {
       grid-template-columns: 80%;
     }
   }

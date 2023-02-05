@@ -31,4 +31,6 @@ export abstract class ViewModeConstants {
     }
   }
   static readonly queryName: string = 'view-mode'
+  static readonly tilesSizeDefault: string = '12rem'
+  static readonly tilesSizeQueryName: string = 'tiles-size'
 }

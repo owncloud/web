@@ -55,19 +55,32 @@ describe('ViewOptions component', () => {
     const viewModeSwitchButtons = wrapper.find('.viewmode-switch-buttons')
     expect(viewModeSwitchButtons.html()).toMatchSnapshot()
   })
+  it('displays a tile-resize range slider in dropdown if currentViewMode is resource-tiles', async () => {
+    const { wrapper } = getWrapper(
+      {},
+      {
+        viewModes: [ViewModeConstants.condensedTable, ViewModeConstants.default]
+      },
+      'resource-tiles'
+    )
+
+    const filesViewOptions = wrapper.find('#files-view-options-drop')
+    expect(filesViewOptions.html()).toMatchSnapshot()
+  })
 })
 
 function getWrapper(
   { perPage = '100' } = {},
   props?: {
     viewModes: ViewMode[]
-  }
+  },
+  currentViewMode = ''
 ) {
   jest.mocked(useRouteQueryPersisted).mockImplementation(() => ref(perPage))
 
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
-  const mocks = defaultComponentMocks()
+  const mocks = { ...defaultComponentMocks(), viewModeCurrent: currentViewMode }
   return {
     storeOptions,
     mocks,
