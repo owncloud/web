@@ -88,6 +88,12 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
+        yield store.dispatch('Files/loadAncestorMetaData', {
+          path: currentFolder.path,
+          space,
+          client: webdav
+        })
+
         store.commit('Files/LOAD_FILES', {
           currentFolder,
           files: resources

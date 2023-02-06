@@ -8,6 +8,7 @@ export default {
   clipboardResources: [],
   clipboardAction: null,
   versions: [],
+  ancestorMetaData: {},
 
   /**
    * Outgoing shares and links from currently highlighted element
