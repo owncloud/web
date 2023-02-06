@@ -108,7 +108,7 @@ export default defineComponent({
     })
     const viewSizeQuery = useRouteQueryPersisted({
       name: ViewModeConstants.tilesSizeQueryName,
-      defaultValue: ViewModeConstants.tilesSizeDefault
+      defaultValue: ViewModeConstants.tilesSizeDefault.toString()
     })
     watch(
       [perPageQuery, viewModeQuery],
@@ -163,7 +163,7 @@ export default defineComponent({
     setTilesViewSize() {
       document
         .querySelector(':root')
-        .style.setProperty(`--oc-size-tiles-resizeable`, `${this.viewSizeCurrent * 12}rem`)
+        .style.setProperty(`--oc-size-tiles-resize-step`, `${this.viewSizeCurrent * 12}rem`)
     },
     updateHiddenFilesShownModel(event) {
       this.hiddenFilesShownModel = event

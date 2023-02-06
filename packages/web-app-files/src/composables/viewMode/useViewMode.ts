@@ -22,7 +22,7 @@ export function useViewSize<T>(options: ComputedRef<string>): ComputedRef<string
 
   const viewModeSize = useRouteQueryPersisted({
     name: ViewModeConstants.tilesSizeQueryName,
-    defaultValue: ViewModeConstants.tilesSizeDefault
+    defaultValue: ViewModeConstants.tilesSizeDefault.toString()
   })
   return computed(() => String(unref(viewModeSize)))
 }

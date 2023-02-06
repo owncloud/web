@@ -215,7 +215,7 @@ export default defineComponent({
   row-gap: 1rem;
 
   &.resizeableTiles {
-    grid-template-columns: repeat(auto-fill, var(--oc-size-tiles-resizeable));
+    grid-template-columns: repeat(auto-fill, var(--oc-size-tiles-resize-step));
   }
 
   @media only screen and (max-width: 640px) {

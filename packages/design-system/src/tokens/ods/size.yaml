@@ -23,7 +23,7 @@ size:
   form-check-default:
     value: 14px
   tiles:
-    resizeable:
+    resize-step:
       value: 12rem
     default:
       value: 14rem
