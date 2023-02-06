@@ -1864,7 +1864,7 @@ def buildDockerImage():
         },
     }]
 
-web_publish_npm_packages = ["babel-preset", "eslint-config", "prettier-config", "tsconfig"]
+web_publish_npm_packages = ["babel-preset", "eslint-config", "prettier-config", "tsconfig", "web-client", "web-pkg"]
 web_publish_npm_organization = "@ownclouders"
 
 def determineReleasePackage(ctx):
