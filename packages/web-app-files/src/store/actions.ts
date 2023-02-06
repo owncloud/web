@@ -525,36 +525,35 @@ export default {
     }
   },
 
-  loadAncestorMetaData({ commit, state }, { path, space, client }) {
-    const ancestorMetaData = {}
+  loadAncestorMetaData({ commit, state }, { folder, space, client }) {
+    const ancestorMetaData = {
+      [folder.path]: {
+        id: folder.fileId,
+        shareTypes: folder.shareTypes,
+        parentFolderId: folder.parentFolderId,
+        spaceId: space.id
+      }
+    }
     const promises = []
-    const parentPaths = getParentPaths(path, true)
+    const davProperties = [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
+    const parentPaths = getParentPaths(folder.path)
 
-    for (const parentPath of parentPaths) {
-      const cachedData = state.ancestorMetaData[parentPath] ?? null
+    for (const path of parentPaths) {
+      const cachedData = state.ancestorMetaData[path] ?? null
       if (cachedData?.spaceId === space.id) {
-        ancestorMetaData[parentPath] = cachedData
+        ancestorMetaData[path] = cachedData
         continue
       }
 
       promises.push(
-        client
-          .listFiles(
-            space,
-            { path: parentPath },
-            {
-              depth: 0,
-              davProperties: [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
-            }
-          )
-          .then(({ resource }) => {
-            ancestorMetaData[parentPath] = {
-              id: resource.fileId,
-              shareTypes: resource.shareTypes,
-              parentFolderId: resource.parentFolderId,
-              spaceId: space.id
-            }
-          })
+        client.listFiles(space, { path }, { depth: 0, davProperties }).then(({ resource }) => {
+          ancestorMetaData[path] = {
+            id: resource.fileId,
+            shareTypes: resource.shareTypes,
+            parentFolderId: resource.parentFolderId,
+            spaceId: space.id
+          }
+        })
       )
     }
 
