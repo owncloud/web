@@ -182,11 +182,11 @@ export default defineComponent({
       if (this.uploadSpeed === 0) {
         return ''
       }
-      const todo = filesize(this.bytesUploaded)
-      const done = filesize(this.bytesTotal)
+      const uploadedBytes = filesize(this.bytesUploaded)
+      const totalBytes = filesize(this.bytesTotal)
       const currentUploadSpeed = filesize(this.uploadSpeed)
       // needs $gettext interpolation
-      return `${todo} of ${done} (${currentUploadSpeed}/s)`
+      return `${uploadedBytes} of ${totalBytes} (${currentUploadSpeed}/s)`
     },
     uploadInfoTitle() {
       if (this.inFinalization) {
@@ -310,11 +310,9 @@ export default defineComponent({
 
       const timeElapsed = +new Date() - this.timeStarted
 
-      // "bytesTotal" is a wrong type documentation,
-      // fix in progress via https://github.com/transloadit/uppy/pull/4263
       this.uploadSpeed = getSpeed({
-        bytesTotal: this.timeStarted,
-        bytesUploaded: this.bytesUploaded
+        bytesUploaded: this.bytesUploaded,
+        uploadStarted: this.timeStarted
       })
 
       const progressPercent = (100 * this.bytesUploaded) / this.bytesTotal
