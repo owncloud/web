@@ -942,6 +942,13 @@ def build(ctx):
         if not config["build"]:
             return pipelines
 
+    steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
+        installPnpm() +
+        buildRelease(ctx)
+
+    if determineReleasePackage(ctx) == None:
+        steps += buildDockerImage()
+
     result = {
         "kind": "pipeline",
         "type": "docker",
@@ -950,9 +957,7 @@ def build(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
-                 installPnpm() +
-                 buildRelease(ctx),
+        "steps": steps,
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -1908,31 +1913,30 @@ def buildRelease(ctx):
                     ],
                 },
             },
-            # DO NOT RUN FOR PACKAGES
-            # {
-            #     "name": "publish",
-            #     "image": PLUGINS_GITHUB_RELEASE,
-            #     "settings": {
-            #         "api_key": {
-            #             "from_secret": "github_token",
-            #         },
-            #         "files": [
-            #             "release/*",
-            #         ],
-            #         "checksum": [
-            #             "md5",
-            #             "sha256",
-            #         ],
-            #         "title": ctx.build.ref.replace("refs/tags/v", ""),
-            #         "note": "dist/CHANGELOG.md",
-            #         "overwrite": True,
-            #     },
-            #     "when": {
-            #         "ref": [
-            #             "refs/tags/**",
-            #         ],
-            #     },
-            # },
+            {
+                "name": "publish",
+                "image": PLUGINS_GITHUB_RELEASE,
+                "settings": {
+                    "api_key": {
+                        "from_secret": "github_token",
+                    },
+                    "files": [
+                        "release/*",
+                    ],
+                    "checksum": [
+                        "md5",
+                        "sha256",
+                    ],
+                    "title": ctx.build.ref.replace("refs/tags/v", ""),
+                    "note": "dist/CHANGELOG.md",
+                    "overwrite": True,
+                },
+                "when": {
+                    "ref": [
+                        "refs/tags/**",
+                    ],
+                },
+            },
         ]
     else:
         steps += [
