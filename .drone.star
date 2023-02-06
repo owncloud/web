@@ -942,9 +942,7 @@ def build(ctx):
         if not config["build"]:
             return pipelines
 
-    steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
-        installPnpm() +
-        buildRelease(ctx)
+    steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + installPnpm() + buildRelease(ctx)
 
     if determineReleasePackage(ctx) == None:
         steps += buildDockerImage()
@@ -1866,7 +1864,7 @@ def buildDockerImage():
         },
     }]
 
-web_publish_npm_packages = ["tsconfig"]
+web_publish_npm_packages = ["babel-preset", "eslint-config", "prettier-config", "tsconfig"]
 web_publish_npm_organization = "@ownclouders"
 
 def determineReleasePackage(ctx):
