@@ -26,6 +26,7 @@
     "vuex": "4.1.0",
     "web-client": "npm:@ownclouders/web-client",
     "web-pkg": "npm:@ownclouders/web-pkg",
-    "vue-concurrency": "4.0.0"
+    "vue-concurrency": "4.0.0",
+    "vue3-gettext": "2.5.0-alpha.1"
   }
 }
