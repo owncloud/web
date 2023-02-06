@@ -10,7 +10,7 @@ export default {
           label: () => {
             return this.$gettext('Upload logo')
           },
-          handler: this.$_resetLogo_trigger,
+          handler: this.$_uploadLogo_trigger,
           componentType: 'button',
           class: 'oc-general-actions-upload-logo-trigger'
         }
@@ -21,7 +21,13 @@ export default {
     ...mapActions(['showMessage']),
 
     $_uploadLogo_trigger({ resources }) {
-      this.showMessage('Logo upload')
+      this.showMessage({
+        title: this.$gettext('Logo was uploaded successfully')
+      })
+
+      setTimeout(() => {
+        this.$router.go(this.$router.currentRoute)
+      }, 1000)
     }
   }
 }

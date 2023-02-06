@@ -21,7 +21,13 @@ export default {
     ...mapActions(['showMessage']),
 
     $_resetLogo_trigger({ resources }) {
-      this.showMessage('Logo reset')
+      this.showMessage({
+        title: this.$gettext('Logo was reset successfully')
+      })
+
+      setTimeout(() => {
+        this.$router.go(this.$router.currentRoute)
+      }, 1000)
     }
   }
 }
