@@ -542,12 +542,16 @@ export default {
           .listFiles(
             space,
             { path: parentPath },
-            { depth: 0, davProperties: [DavProperty.FileId, DavProperty.ShareTypes] }
+            {
+              depth: 0,
+              davProperties: [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
+            }
           )
           .then(({ resource }) => {
             ancestorMetaData[parentPath] = {
               id: resource.fileId,
               shareTypes: resource.shareTypes,
+              parentFolderId: resource.parentFolderId,
               spaceId: space.id
             }
           })
