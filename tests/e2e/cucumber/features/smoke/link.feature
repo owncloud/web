@@ -53,3 +53,24 @@ Feature: link
     And "Anonymous" should not be able to open the old link "myPublicLink"
     And "Anonymous" logs out
     And "Alice" logs out
+
+
+  Scenario: Quick link
+    Given "Admin" creates following users
+      | id    |
+      | Alice |
+    When "Alice" logs in
+    And "Alice" opens the "files" app
+    And "Alice" creates the following resources
+      | resource     | type   |
+      | folderPublic | folder |
+    And "Alice" uploads the following resources
+      | resource  | to           |
+      | lorem.txt | folderPublic |
+    And "Alice" copies quick link of the resource "folderPublic" from the context menu
+    When "Anonymous" opens the public link "Quicklink"
+    And "Anonymous" downloads the following public link resources using the sidebar panel
+      | resource     | type |
+      | lorem.txt    | file |
+    And "Anonymous" logs out
+    And "Alice" logs out
