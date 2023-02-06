@@ -16,6 +16,7 @@ import {
 import { resourceIsNotOpenable, isAcceptedSharePresent } from './utils'
 import { copyLinkArgs } from '../link/actions'
 import { LinksEnvironment } from '../../../environment'
+import { linkStore } from '../../../store'
 
 export class Share {
   #page: Page
@@ -23,7 +24,6 @@ export class Share {
 
   constructor({ page }: { page: Page }) {
     this.#page = page
-    this.#linksEnvironment = new LinksEnvironment()
   }
 
   async create(args: Omit<createShareArgs, 'page'>): Promise<void> {
@@ -70,12 +70,15 @@ export class Share {
   }
 
   async copyQuickLink(args: Omit<copyLinkArgs, 'page'>): Promise<void> {
-    await copyQuickLink({ ...args, page: this.#page })
-    const quickLink = await this.#page.evaluate(() => navigator.clipboard.readText())
-    this.#linksEnvironment.createLink({
-      key: 'Quicklink',
-      link: { name: 'Quicklink', url: quickLink }
-    })
+    this.#linksEnvironment = new LinksEnvironment()
+    const url = await copyQuickLink({ ...args, page: this.#page })
+    const key = 'Quicklink'
+    if (!linkStore.has(key)) {
+      this.#linksEnvironment.createLink({
+        key: key,
+        link: { name: key, url: url }
+      })
+    }
   }
 
   async resourceIsNotOpenable(resource): Promise<boolean> {
