@@ -1884,30 +1884,31 @@ def buildRelease(ctx):
                 ],
             },
         },
-        {
-            "name": "publish",
-            "image": PLUGINS_GITHUB_RELEASE,
-            "settings": {
-                "api_key": {
-                    "from_secret": "github_token",
-                },
-                "files": [
-                    "release/*",
-                ],
-                "checksum": [
-                    "md5",
-                    "sha256",
-                ],
-                "title": ctx.build.ref.replace("refs/tags/v", ""),
-                "note": "dist/CHANGELOG.md",
-                "overwrite": True,
-            },
-            "when": {
-                "ref": [
-                    "refs/tags/**",
-                ],
-            },
-        },
+        # DO NOT RUN FOR PACKAGES
+        # {
+        #     "name": "publish",
+        #     "image": PLUGINS_GITHUB_RELEASE,
+        #     "settings": {
+        #         "api_key": {
+        #             "from_secret": "github_token",
+        #         },
+        #         "files": [
+        #             "release/*",
+        #         ],
+        #         "checksum": [
+        #             "md5",
+        #             "sha256",
+        #         ],
+        #         "title": ctx.build.ref.replace("refs/tags/v", ""),
+        #         "note": "dist/CHANGELOG.md",
+        #         "overwrite": True,
+        #     },
+        #     "when": {
+        #         "ref": [
+        #             "refs/tags/**",
+        #         ],
+        #     },
+        # },
     ]
 
 def documentation(ctx):
