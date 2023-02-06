@@ -439,6 +439,28 @@ importers:
       web-client: link:../web-client
       web-pkg: link:../web-pkg
 
+  packages/web-app-backups:
+    specifiers:
+      axios: ^0.27.2
+      fuse.js: ^6.5.3
+      lodash-es: 4.17.21
+      uuid: ^9.0.0
+      vue-concurrency: 4.0.0
+      vuex: 4.1.0
+      web-app-files: 0.0.0
+      web-client: npm:@ownclouders/web-client
+      web-pkg: npm:@ownclouders/web-pkg
+    dependencies:
+      axios: 0.27.2
+      fuse.js: 6.5.3
+      lodash-es: 4.17.21
+      uuid: 9.0.0
+      vue-concurrency: 4.0.0_vue@3.2.45
+      vuex: 4.1.0_vue@3.2.45
+      web-app-files: link:../web-app-files
+      web-client: link:../web-client
+      web-pkg: link:../web-pkg
+
   packages/web-app-draw-io:
     specifiers:
       luxon: ^2.4.0
@@ -8443,7 +8465,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -18688,6 +18710,15 @@ packages:
   /progress/2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
+    dev: true
+
+  /promise-inflight/1.0.1:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
     dev: true
 
   /promise-inflight/1.0.1_bluebird@3.7.2:
