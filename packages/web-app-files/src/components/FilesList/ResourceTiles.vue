@@ -1,6 +1,6 @@
 <template>
   <div>
-    <oc-list class="oc-tiles oc-flex" :class="resizable ? 'resizeableTiles' : ''">
+    <oc-list class="oc-tiles oc-flex" :class="resizable ? 'resizableTiles' : ''">
       <li v-for="(resource, index) in data" :key="resource.id" class="oc-tiles-item">
         <oc-tile
           :ref="
@@ -214,7 +214,7 @@ export default defineComponent({
   justify-content: flex-start;
   row-gap: 1rem;
 
-  &.resizeableTiles {
+  &.resizableTiles {
     grid-template-columns: repeat(auto-fill, var(--oc-size-tiles-resize-step));
   }
 
@@ -223,7 +223,7 @@ export default defineComponent({
     justify-content: center;
     padding: var(--oc-space-medium) 0;
 
-    &.resizeableTiles {
+    &.resizableTiles {
       grid-template-columns: 80%;
     }
   }
