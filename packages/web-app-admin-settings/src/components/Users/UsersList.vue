@@ -4,9 +4,10 @@
       id="users-filter"
       v-model="filterTerm"
       class="oc-ml-m oc-my-s"
-      :label="$gettext('Filter users')"
+      :label="$gettext('Search')"
       autocomplete="off"
     />
+    <slot name="filter" />
     <oc-table
       ref="tableRef"
       class="users-table"

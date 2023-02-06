@@ -2,7 +2,6 @@
   <div>
     <app-template
       ref="template"
-      :loading="loadResourcesTask.isRunning || !loadResourcesTask.last"
       :breadcrumbs="breadcrumbs"
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
@@ -34,31 +33,59 @@
         </div>
       </template>
       <template #mainContent>
-        <no-content-message
-          v-if="!users.length"
-          id="admin-settings-users-empty"
-          class="files-empty"
-          icon="user"
-        >
-          <template #message>
-            <span v-translate>No users in here</span>
-          </template>
-        </no-content-message>
+        <app-loading-spinner v-if="loadResourcesTask.isRunning || !loadResourcesTask.last" />
         <div v-else>
-          <UsersList
-            :users="users"
-            :roles="roles"
-            :class="{ 'users-table-squashed': sideBarOpen }"
-            :selected-users="selectedUsers"
-            :header-position="listHeaderPosition"
-            @toggle-select-user="toggleSelectUser"
-            @toggle-select-all-users="toggleSelectAllUsers"
-            @un-select-all-users="unselectAllUsers"
+          <no-content-message
+            v-if="!users.length"
+            id="admin-settings-users-empty"
+            class="files-empty"
+            icon="user"
           >
-            <template #contextMenu>
-              <context-actions :items="selectedUsers" />
+            <template #message>
+              <span v-translate>No users in here</span>
             </template>
-          </UsersList>
+          </no-content-message>
+          <div v-else>
+            <UsersList
+              :users="users"
+              :roles="roles"
+              :class="{ 'users-table-squashed': sideBarOpen }"
+              :selected-users="selectedUsers"
+              :header-position="listHeaderPosition"
+              @toggle-select-user="toggleSelectUser"
+              @toggle-select-all-users="toggleSelectAllUsers"
+              @un-select-all-users="unselectAllUsers"
+            >
+              <template #contextMenu>
+                <context-actions :items="selectedUsers" />
+              </template>
+              <template #filter>
+                <div class="oc-flex oc-flex-middle oc-ml-m oc-mb-m oc-mt-m">
+                  <div class="oc-mr-m oc-flex oc-flex-middle">
+                    <oc-icon name="filter-2" class="oc-mr-xs" />
+                    <span v-text="$gettext('Filter:')" />
+                  </div>
+                  <item-filter
+                    filter-name="groups"
+                    :filter-label="$gettext('Groups')"
+                    :items="groups"
+                    :show-filter="true"
+                    :allow-multiple="true"
+                    display-name-attribute="displayName"
+                    :filterable-attributes="['displayName']"
+                    @selection-change="filterGroups"
+                  >
+                    <template #image="{ item }">
+                      <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
+                    </template>
+                    <template #item="{ item }">
+                      <div v-text="item.displayName" />
+                    </template>
+                  </item-filter>
+                </div>
+              </template>
+            </UsersList>
+          </div>
         </div>
       </template>
     </app-template>
@@ -82,7 +109,13 @@ import EditPanel from '../components/Users/SideBar/EditPanel.vue'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import Delete from '../mixins/users/delete'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { useAccessToken, useGraphClient, useStore } from 'web-pkg/src/composables'
+import {
+  queryItemAsString,
+  useAccessToken,
+  useGraphClient,
+  useRouteQuery,
+  useStore
+} from 'web-pkg/src/composables'
 import {
   computed,
   defineComponent,
@@ -98,16 +131,20 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
+import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 export default defineComponent({
   name: 'UsersView',
   components: {
+    AppLoadingSpinner,
     AppTemplate,
     UsersList,
     NoContentMessage,
     CreateUserModal,
     BatchActions,
-    ContextActions
+    ContextActions,
+    ItemFilter
   },
   mixins: [Delete],
   setup() {
@@ -128,6 +165,8 @@ export default defineComponent({
     let loadResourcesEventToken
     let userUpdatedEventToken
 
+    const groupFilterParam = useRouteQuery('q_groups')
+
     const loadGroupsTask = useTask(function* (signal) {
       const groupsResponse = yield unref(graphClient).groups.listGroups()
       groups.value = groupsResponse.data.value
@@ -138,11 +177,15 @@ export default defineComponent({
       roles.value = applicationsResponse.data.value[0].appRoles
     })
 
-    const loadResourcesTask = useTask(function* (signal) {
+    const loadResourcesTask = useTask(function* (signal, loadGroups = true, groupIds = null) {
+      // TODO: filter group ids
       const usersResponse = yield unref(graphClient).users.listUsers('displayName')
       users.value = usersResponse.data.value || []
 
-      yield loadGroupsTask.perform()
+      if (loadGroups) {
+        yield loadGroupsTask.perform()
+      }
+
       yield loadAppRolesTask.perform()
     })
 
@@ -155,6 +198,11 @@ export default defineComponent({
       const { data } = yield unref(graphClient).users.getUser(user.id)
       return data
     })
+
+    const filterGroups = (groups) => {
+      const groupIds = groups.map((g) => g.id)
+      loadResourcesTask.perform(false, groupIds)
+    }
 
     watch(
       selectedUsers,
@@ -189,7 +237,8 @@ export default defineComponent({
     })
 
     onMounted(async () => {
-      await loadResourcesTask.perform()
+      const groupFilterIds = queryItemAsString(unref(groupFilterParam))?.split('+')
+      await loadResourcesTask.perform(true, groupFilterIds)
       loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
         loadResourcesTask.perform()
         selectedUsers.value = []
@@ -225,7 +274,8 @@ export default defineComponent({
       accessToken,
       listHeaderPosition,
       createUserModalOpen,
-      batchActions
+      batchActions,
+      filterGroups
     }
   },
   computed: {

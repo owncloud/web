@@ -1,5 +1,5 @@
 <template>
-  <div class="item-filter oc-flex">
+  <div class="item-filter oc-flex" :class="`item-filter-${filterName}`">
     <oc-filter-chip
       :filter-label="filterLabel"
       :selected-item-names="selectedItems.map((i) => i[displayNameAttribute])"
