@@ -1861,54 +1861,107 @@ def buildDockerImage():
         },
     }]
 
+web_publish_npm_packages = ["tsconfig"]
+web_publish_npm_organization = "@ownclouders"
+
+def determineReleasePackage(ctx):
+    if ctx.build.event != "tag":
+        return None
+
+    matches = [p for p in web_publish_npm_packages if ctx.build.ref.startswith("refs/tags/" + p)]
+    if len(matches) > 0:
+        return matches[0]
+
+    return None
+
+def determineReleaseVersion(ctx):
+    package = determineReleasePackage(ctx)
+    if package == None:
+        return ctx.build.ref.replace("refs/tags/v", "")
+
+    return ctx.build.ref.replace("refs/tags/" + package + "-v", "")
+
 def buildRelease(ctx):
-    return [
-        {
-            "name": "make",
-            "image": OC_CI_NODEJS,
-            "commands": [
-                "cd %s" % dir["web"],
-                "make -f Makefile.release",
-            ],
-        },
-        {
-            "name": "changelog",
-            "image": TOOLHIPPIE_CALENS,
-            "commands": [
-                # "calens --version %s -o dist/CHANGELOG.md -t changelog/CHANGELOG-Release.tmpl" % ctx.build.ref.replace("refs/tags/v", "").split("-")[0],
-            ],
-            "when": {
-                "ref": [
-                    "refs/tags/**",
+    steps = []
+    package = determineReleasePackage(ctx)
+    version = determineReleaseVersion(ctx)
+
+    if package == None:
+        steps += [
+            {
+                "name": "make",
+                "image": OC_CI_NODEJS,
+                "commands": [
+                    "cd %s" % dir["web"],
+                    "make -f Makefile.release",
                 ],
             },
-        },
-        # DO NOT RUN FOR PACKAGES
-        # {
-        #     "name": "publish",
-        #     "image": PLUGINS_GITHUB_RELEASE,
-        #     "settings": {
-        #         "api_key": {
-        #             "from_secret": "github_token",
-        #         },
-        #         "files": [
-        #             "release/*",
-        #         ],
-        #         "checksum": [
-        #             "md5",
-        #             "sha256",
-        #         ],
-        #         "title": ctx.build.ref.replace("refs/tags/v", ""),
-        #         "note": "dist/CHANGELOG.md",
-        #         "overwrite": True,
-        #     },
-        #     "when": {
-        #         "ref": [
-        #             "refs/tags/**",
-        #         ],
-        #     },
-        # },
-    ]
+            {
+                "name": "changelog",
+                "image": TOOLHIPPIE_CALENS,
+                "commands": [
+                    "calens --version %s -o dist/CHANGELOG.md -t changelog/CHANGELOG-Release.tmpl" % version.split("-")[0],
+                ],
+                "when": {
+                    "ref": [
+                        "refs/tags/**",
+                    ],
+                },
+            },
+            # DO NOT RUN FOR PACKAGES
+            # {
+            #     "name": "publish",
+            #     "image": PLUGINS_GITHUB_RELEASE,
+            #     "settings": {
+            #         "api_key": {
+            #             "from_secret": "github_token",
+            #         },
+            #         "files": [
+            #             "release/*",
+            #         ],
+            #         "checksum": [
+            #             "md5",
+            #             "sha256",
+            #         ],
+            #         "title": ctx.build.ref.replace("refs/tags/v", ""),
+            #         "note": "dist/CHANGELOG.md",
+            #         "overwrite": True,
+            #     },
+            #     "when": {
+            #         "ref": [
+            #             "refs/tags/**",
+            #         ],
+            #     },
+            # },
+        ]
+    else:
+        steps += [
+            {
+                "name": "publish",
+                "image": OC_CI_NODEJS,
+                "environment": {
+                    "NODE_AUTH_TOKEN": {
+                        "from_secret": "npm_token",
+                    },
+                },
+                "commands": [
+                    "echo " + determineReleasePackage(ctx) + " " + determineReleaseVersion(ctx),
+                    "git checkout .",  # setting the pnpm store dir modifies the .npmrc
+                    "git clean -fd",
+                    "git diff",
+                    "git status",
+                    "pnpm config set '//registry.npmjs.org/:_authToken' \"$${NODE_AUTH_TOKEN}\"",
+                    "pnpm publish --no-git-checks --filter %s --access public --tag latest" % ("%s/%s" % (web_publish_npm_organization, package)),
+                ],
+                "when": {
+                    "ref": [
+                        "refs/tags/**",
+                    ],
+                },
+            },
+        ]
+
+    return steps
 
 def documentation(ctx):
     return [
