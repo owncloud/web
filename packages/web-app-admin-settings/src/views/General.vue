@@ -4,6 +4,7 @@
       <template #mainContent>
         <div class="oc-px-m">
           <InfoSection />
+          <AppearanceSection />
         </div>
       </template>
     </app-template>
@@ -14,9 +15,11 @@
 import { defineComponent, ref } from 'vue'
 import AppTemplate from '../components/AppTemplate.vue'
 import InfoSection from '../components/General/InfoSection.vue'
+import AppearanceSection from '../components/General/AppearanceSection.vue'
 
 export default defineComponent({
   components: {
+    AppearanceSection,
     AppTemplate,
     InfoSection
   },
