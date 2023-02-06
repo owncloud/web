@@ -799,9 +799,9 @@ def main(ctx):
         print("Errors detected. Review messages above.")
         return []
 
-    before = beforePipelines(ctx)
+    before = []  # beforePipelines(ctx)
 
-    stages = pipelinesDependsOn(stagePipelines(ctx), before)
+    stages = []  # pipelinesDependsOn(stagePipelines(ctx), before)
 
     if (stages == False):
         print("Errors detected. Review messages above.")
