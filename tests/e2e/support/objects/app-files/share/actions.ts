@@ -187,10 +187,12 @@ export const hasPermissionToShare = async (
   return !(await page.isVisible(noPermissionToShareLabel))
 }
 
-export const copyQuickLink = async (args: copyLinkArgs): Promise<void> => {
+export const copyQuickLink = async (args: copyLinkArgs): Promise<string> => {
   const { page, resource, via } = args
   if (via === 'CONTEXT_MENU') {
     await clickActionInContextMenu({ page, resource }, 'create-quicklink')
+    const url = await page.evaluate(() => navigator.clipboard.readText())
     await waitForPopupNotPresent(page)
+    return url
   }
 }
