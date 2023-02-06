@@ -952,8 +952,7 @@ def build(ctx):
         },
         "steps": restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  installPnpm() +
-                 buildRelease(ctx) +
-                 buildDockerImage(),
+                 buildRelease(ctx),
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -1876,7 +1875,7 @@ def buildRelease(ctx):
             "name": "changelog",
             "image": TOOLHIPPIE_CALENS,
             "commands": [
-                "calens --version %s -o dist/CHANGELOG.md -t changelog/CHANGELOG-Release.tmpl" % ctx.build.ref.replace("refs/tags/v", "").split("-")[0],
+                # "calens --version %s -o dist/CHANGELOG.md -t changelog/CHANGELOG-Release.tmpl" % ctx.build.ref.replace("refs/tags/v", "").split("-")[0],
             ],
             "when": {
                 "ref": [
@@ -2813,7 +2812,7 @@ def licenseCheck(ctx):
             "ref": [
                 "refs/heads/master",
                 "refs/heads/stable-*",
-                "refs/tags/v*",
+                "refs/tags/**",
                 "refs/pull/**",
             ],
         },
@@ -3017,7 +3016,7 @@ def genericCachePurge(flush_path):
             "ref": [
                 "refs/heads/master",
                 "refs/heads/stable-*",
-                "refs/tags/v*",
+                "refs/tags/**",
                 "refs/pull/**",
             ],
             "status": [
