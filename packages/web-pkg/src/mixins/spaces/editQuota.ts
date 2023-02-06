@@ -21,11 +21,7 @@ export default {
           },
           handler: this.$_editQuota_trigger,
           isEnabled: ({ resources }) => {
-            if (resources.length !== 1) {
-              return false
-            }
-
-            if (!resources[0].spaceQuota) {
+            if (resources.some(r => r.spaceQuota === false)) {
               return false
             }
 
