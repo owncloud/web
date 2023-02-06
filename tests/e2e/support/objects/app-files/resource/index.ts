@@ -32,6 +32,7 @@ import {
   openFileInViewerArgs,
   getDeleteResourceButtonVisibility,
   getRestoreResourceButtonVisibility,
+  deleteResourceTrashbinArgs,
   addTagsToResource,
   removeTagsFromResource,
   getTagsForResourceVisibilityInFilesTable,
@@ -132,14 +133,16 @@ export class Resource {
     return await emptyTrashBinResources(this.#page)
   }
 
-  async deleteTrashBin(args: Omit<deleteResourceArgs, 'page'>): Promise<string> {
+  async deleteTrashBin(args: Omit<deleteResourceTrashbinArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
     const message = await deleteResourceTrashbin({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     return message
   }
 
-  async isDeleteTrashBinButtonVisible(args: Omit<deleteResourceArgs, 'page'>): Promise<boolean> {
+  async isDeleteTrashBinButtonVisible(
+    args: Omit<deleteResourceTrashbinArgs, 'page'>
+  ): Promise<boolean> {
     return await getDeleteResourceButtonVisibility({ ...args, page: this.#page })
   }
 

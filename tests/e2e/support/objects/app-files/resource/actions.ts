@@ -499,10 +499,9 @@ export const restoreResourceVersion = async (args: restoreResourceVersionArgs) =
 /**/
 export interface deleteResourceArgs {
   page: Page
-  resource?: string
-  resourcesWithInfo?: resourceArgs[]
+  resourcesWithInfo: resourceArgs[]
   folder?: string
-  via?: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
+  via: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
 }
 
 export const deleteResource = async (args: deleteResourceArgs): Promise<void> => {
@@ -603,7 +602,12 @@ export const emptyTrashBinResources = async (page): Promise<string> => {
   return message.trim().toLowerCase()
 }
 
-export const deleteResourceTrashbin = async (args: deleteResourceArgs): Promise<string> => {
+export interface deleteResourceTrashbinArgs {
+  page: Page
+  resource: string
+}
+
+export const deleteResourceTrashbin = async (args: deleteResourceTrashbinArgs): Promise<string> => {
   const { page, resource } = args
   const resourceCheckbox = page.locator(
     util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
@@ -625,7 +629,7 @@ export const deleteResourceTrashbin = async (args: deleteResourceArgs): Promise<
 }
 
 export const getDeleteResourceButtonVisibility = async (
-  args: deleteResourceArgs
+  args: deleteResourceTrashbinArgs
 ): Promise<boolean> => {
   const { page, resource } = args
   const resourceCheckbox = page.locator(
