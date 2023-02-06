@@ -8,7 +8,6 @@ import {
 
 const ocLoaderStubSelector = 'oc-loader-stub'
 
-jest.mock('web-pkg/src/composables/reactivity')
 describe('SharesPanel', () => {
   describe('when loading is set to true', () => {
     it('should show the oc loader', () => {
