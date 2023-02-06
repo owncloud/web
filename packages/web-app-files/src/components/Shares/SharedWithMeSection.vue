@@ -105,7 +105,7 @@ import ContextActions from '../../components/FilesList/ContextActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useSelectedResources } from '../../composables/selection'
 import { SortDir } from '../../composables'
-import { Location } from 'vue-router'
+import { RouteLocationNamedRaw } from 'vue-router'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'
@@ -191,7 +191,7 @@ export default defineComponent({
       path,
       fileId,
       resource
-    }: CreateTargetRouteOptions): Location => {
+    }: CreateTargetRouteOptions): RouteLocationNamedRaw => {
       if (unref(hasShareJail)) {
         const space = buildShareSpaceResource({
           shareId: resource.id,

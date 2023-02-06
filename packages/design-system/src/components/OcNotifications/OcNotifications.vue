@@ -30,8 +30,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'top-center',
-      validator: (value) => {
-        return value.match(/(default|top-left|top-center|top-right)/)
+      validator: (value: string) => {
+        return ['default', 'top-left', 'top-center', 'top-right'].includes(value)
       }
     }
   },

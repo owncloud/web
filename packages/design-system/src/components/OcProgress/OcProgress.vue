@@ -50,8 +50,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'default',
-      validator: (value) => {
-        return value.match(/(default|small)/)
+      validator: (value: string) => {
+        return ['default', 'small'].includes(value)
       }
     },
     /**
@@ -63,8 +63,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'primary',
-      validator: (value) => {
-        return value.match(/(primary|passive|success|warning|danger)/)
+      validator: (value: string) => {
+        return ['primary', 'passive', 'success', 'warning', 'danger'].includes(value)
       }
     },
     /**

@@ -24,12 +24,17 @@ import { defineComponent, PropType } from 'vue'
 import ActionMenuItem from './ActionMenuItem.vue'
 import { SpaceResource } from 'web-client/src/helpers'
 
+type MenuSection = {
+  name: string
+  items: any[]
+}
+
 export default defineComponent({
   name: 'ContextActionMenu',
   components: { ActionMenuItem },
   props: {
     menuSections: {
-      type: Array,
+      type: Array as PropType<MenuSection[]>,
       required: true
     },
     // items can e.g. be currentFolder (breadcrumbs) or selectedResources (resourceTable)

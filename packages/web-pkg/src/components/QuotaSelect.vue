@@ -135,8 +135,8 @@ export default {
           selectable: false
         }
       }
-      const value = parseFloat(option).toFixed(2) * Math.pow(10, 9)
-      const displayValue = parseFloat(option).toFixed(2).toString().replace('.00', '')
+      const value = parseFloat(option) * Math.pow(10, 9)
+      const displayValue = parseFloat(option).toFixed(2).replace('.00', '')
       if (this.maxQuota && value > this.maxQuota) {
         return {
           value,

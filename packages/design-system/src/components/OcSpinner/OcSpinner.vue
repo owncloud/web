@@ -39,8 +39,10 @@ export default defineComponent({
     size: {
       type: String,
       default: 'medium',
-      validator: (value) => {
-        return value.match(/(xsmall|small|medium|large|xlarge|xxlarge|xxxlarge)/)
+      validator: (value: string) => {
+        return ['xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge', 'xxxlarge'].includes(
+          value
+        )
       }
     }
   },

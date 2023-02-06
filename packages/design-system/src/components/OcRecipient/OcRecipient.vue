@@ -33,11 +33,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import OcAvatar from '../OcAvatar/OcAvatar.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcSpinner from '../OcSpinner/OcSpinner.vue'
+
+export type Recipient = {
+  name: string
+  icon?: {
+    name: string
+    label: string
+  }
+  isLoadingAvatar?: boolean
+  hasAvatar?: boolean
+  avatar?: string
+}
 
 export default defineComponent({
   name: 'OcRecipient',
@@ -51,9 +62,9 @@ export default defineComponent({
      * Recipient object containing name (required), icon and avatar
      */
     recipient: {
-      type: Object,
+      type: Object as PropType<Recipient>,
       required: true,
-      validator: (recipient) => {
+      validator: (recipient: Recipient) => {
         if (!Object.prototype.hasOwnProperty.call(recipient, 'name')) {
           throw new Error('Recipient name is not defined')
         }

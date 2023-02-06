@@ -62,15 +62,15 @@ export default defineComponent({
     },
     /**
      * Number of pages to be displayed. It is required to use an odd number.
-     * Pages will be equaly split into two parts around the current page and remaining pages will be displayed as ellipsis
+     * Pages will be equally split into two parts around the current page and remaining pages will be displayed as ellipsis
      */
     maxDisplayed: {
       type: Number,
       required: false,
       default: null,
-      validator: (value) => {
+      validator: (value: number) => {
         if (value % 2 === 0) {
-          // Since Vue doens't support custom validator error message, log the error manually
+          // Since Vue doesn't support custom validator error message, log the error manually
           console.error('maxDisplayed needs to be an odd number')
 
           return false

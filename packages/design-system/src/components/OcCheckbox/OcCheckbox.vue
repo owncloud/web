@@ -88,7 +88,7 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'medium',
-      validator: (size) => /(small|medium|large)/.test(size)
+      validator: (size: string) => ['small', 'medium', 'large'].includes(size)
     },
     /**
      * Show outline of checkbox

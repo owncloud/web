@@ -52,7 +52,7 @@
         ref="mobileDropdown"
         tabindex="0"
         class="oc-breadcrumb-drop-label oc-flex oc-flex-middle oc-flex-between"
-        @keydown.enter="$refs.mobileDropdown.click()"
+        @keydown.enter="clickMobileDropdown"
       >
         <span
           v-if="currentFolder"
@@ -90,13 +90,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import { AVAILABLE_SIZES } from '../../helpers/constants'
 
 import OcButton from '../OcButton/OcButton.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
+import { BreadcrumbItem } from 'web-app-files/src/helpers/breadcrumbs'
 
 /**
  * Displays a breadcrumb. Each item in the items property has the following elements:
@@ -120,7 +121,7 @@ export default defineComponent({
      * Array of breadcrumb items
      */
     items: {
-      type: Array,
+      type: Array as PropType<BreadcrumbItem[]>,
       required: true
     },
     /**
@@ -175,6 +176,9 @@ export default defineComponent({
   methods: {
     getAriaCurrent(index) {
       return this.items.length - 1 === index ? 'page' : null
+    },
+    clickMobileDropdown() {
+      this.$refs.mobileDropdown.click()
     }
   }
 })

@@ -96,7 +96,7 @@ import OcGhostElement from '../_OcGhostElement/_OcGhostElement.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import SortMixin from '../../mixins/sort'
 import { getSizeClass } from '../../utils/sizeClasses'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, PropType, ref } from 'vue'
 
 import {
   EVENT_THEAD_CLICKED,
@@ -106,6 +106,21 @@ import {
   EVENT_ITEM_DROPPED,
   EVENT_ITEM_DRAGGED
 } from '../../helpers/constants'
+
+export type FieldType = {
+  name: string
+  title: string
+  headerType: string
+  type: string
+  callback: any
+  alignH: string
+  alignV: string
+  width: string
+  wrap: string
+  thClass: string
+  tdClass: string
+  sortable: string
+}
 
 /**
  * A table component with dynamic layout and data.
@@ -170,7 +185,7 @@ export default defineComponent({
      * - **sortable**: defines if the column is sortable, can be `true` or `false`.
      */
     fields: {
-      type: Array,
+      type: Array as PropType<FieldType[]>,
       required: true
     },
     /**
@@ -225,7 +240,7 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'small',
-      validator: (size) => /(xsmall|small|medium|large|xlarge)/.test(size)
+      validator: (size: string) => ['xsmall', 'small', 'medium', 'large', 'xlarge'].includes(size)
     },
     /**
      * Enable Drag & Drop events
@@ -413,18 +428,11 @@ export default defineComponent({
       return props
     },
     extractCellProps(field) {
-      const result = {}
-      if (Object.prototype.hasOwnProperty.call(field, 'alignH')) {
-        result.alignH = field.alignH
+      return {
+        ...(field?.alignH && { alignH: field.alignH }),
+        ...(field?.alignV && { alignV: field.alignV }),
+        ...(field?.width && { width: field.width })
       }
-      if (Object.prototype.hasOwnProperty.call(field, 'alignV')) {
-        result.alignV = field.alignV
-      }
-      if (Object.prototype.hasOwnProperty.call(field, 'width')) {
-        result.width = field.width
-      }
-
-      return result
     },
     isHighlighted(item) {
       if (!this.highlighted) {

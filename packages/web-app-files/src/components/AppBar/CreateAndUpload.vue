@@ -130,13 +130,8 @@
         <oc-icon fill-type="line" name="clipboard" />
         <span v-translate>Paste here</span>
       </oc-button>
-      <oc-button
-        :disabled="uploadOrFileCreationBlocked"
-        class="clear-clipboard-btn"
-        @click="clearClipboardFiles"
-      >
+
         <oc-icon fill-type="line" name="close" />
-      </oc-button>
     </div>
   </div>
 </template>

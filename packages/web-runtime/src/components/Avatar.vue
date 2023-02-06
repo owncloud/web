@@ -29,8 +29,8 @@ export default defineComponent({
     type: {
       type: String,
       default: 'div',
-      validator: (value) => {
-        return value.match(/(div|span)/)
+      validator: (value: string) => {
+        return ['div', 'span'].includes(value)
       }
     },
     userName: {

@@ -43,7 +43,7 @@ import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
 import { thumbnailService } from '../../../services'
 import { computed, ComputedRef, defineComponent, inject, unref } from 'vue'
-import { Resource } from 'web-client'
+import { Resource, SpaceResource } from 'web-client'
 
 export default defineComponent({
   name: 'SpaceActions',
@@ -66,7 +66,7 @@ export default defineComponent({
     })
 
     return {
-      space: inject<ComputedRef<Resource>>('space'),
+      space: inject<ComputedRef<SpaceResource>>('space'),
       resources
     }
   },

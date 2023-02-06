@@ -24,7 +24,7 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'span',
-      validator: (type) => type.match(/(span|button|router-link|a)/)
+      validator: (type: string) => ['span', 'button', 'router-link', 'a'].includes(type)
     },
 
     /**
@@ -43,8 +43,8 @@ export default defineComponent({
     size: {
       type: String,
       default: 'medium',
-      validator: (value) => {
-        return value.match(/(small|medium|large)/)
+      validator: (value: string) => {
+        return ['small', 'medium', 'large'].includes(value)
       }
     },
 

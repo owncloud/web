@@ -1,5 +1,5 @@
 <template>
-  <oc-img :ref="ref" class="oc-logo" :src="src" :alt="alt" />
+  <oc-img class="oc-logo" :src="src" :alt="alt" />
 </template>
 
 <script lang="ts">

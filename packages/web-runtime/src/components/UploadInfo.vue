@@ -155,7 +155,7 @@ export default defineComponent({
   data: () => ({
     showInfo: false, // show the overlay?
     infoExpanded: false, // show the info including all uploads?
-    uploads: {}, // uploads that are being displayed via "infoExpanded"
+    uploads: {} as Record<any, any>, // uploads that are being displayed via "infoExpanded"
     errors: {}, // all failed files
     successful: [], // all successful files
     filesInProgressCount: 0, // files (not folders!) that are being processed currently

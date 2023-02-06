@@ -40,12 +40,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
 import uniqueId from '../../utils/uniqueId'
+
+export type ListElement = {
+  text: string
+  headline?: string
+}
 
 export default defineComponent({
   name: 'OcInfoDrop',
@@ -77,8 +82,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'click',
-      validator: (value) => {
-        return value.match(/(click|hover|manual)/)
+      validator: (value: string) => {
+        return ['click', 'hover', 'manual'].includes(value)
       }
     },
     /**
@@ -109,7 +114,7 @@ export default defineComponent({
      * List element
      */
     list: {
-      type: Array,
+      type: Array as PropType<ListElement[]>,
       required: false,
       default: () => []
     },

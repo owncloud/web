@@ -57,7 +57,7 @@ export default defineComponent({
     },
     invalidFormData() {
       return Object.values(this.formData)
-        .map((v) => !!v.valid)
+        .map((v: any) => !!v.valid)
         .includes(false)
     }
   },
@@ -85,7 +85,7 @@ export default defineComponent({
     },
     revertChanges() {
       this.editGroup = { ...this.group }
-      Object.values(this.formData).forEach((formDataValue) => {
+      Object.values(this.formData).forEach((formDataValue: any) => {
         formDataValue.valid = true
         formDataValue.errorMessage = ''
       })

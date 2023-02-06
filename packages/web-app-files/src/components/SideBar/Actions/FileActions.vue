@@ -15,7 +15,7 @@
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 import FileActions from '../../../mixins/fileActions'
 import { computed, defineComponent, getCurrentInstance, inject, unref } from 'vue'
-import { Resource } from 'web-client'
+import { Resource, SpaceResource } from 'web-client'
 
 export default defineComponent({
   name: 'FileActions',
@@ -24,7 +24,7 @@ export default defineComponent({
   setup() {
     const instance = getCurrentInstance().proxy as any
     const resource = inject<Resource>('resource')
-    const space = inject<Resource>('space')
+    const space = inject<SpaceResource>('space')
     const resources = computed(() => {
       return [unref(resource)]
     })
