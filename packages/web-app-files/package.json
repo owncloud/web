@@ -30,7 +30,7 @@
     "vuex": "4.1.0",
     "web-app-files": "workspace:*",
     "web-app-search": "workspace:*",
-    "web-client": "npm:@ownclouders/web-client",
+    "web-client": "workspace:@ownclouders/web-client@*",
     "web-pkg": "npm:@ownclouders/web-pkg",
     "web-runtime": "workspace:*"
   }

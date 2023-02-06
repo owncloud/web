@@ -136,7 +136,7 @@
     "vue": "3.2.45",
     "vue-inline-svg": "^3.1.0",
     "vue-select": "^3.12.0",
-    "web-client": "npm:@ownclouders/web-client",
+    "web-client": "workspace:@ownclouders/web-client@*",
     "webfontloader": "^1.6.28"
   },
   "engines": {
