@@ -284,13 +284,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
-    ...mapGetters('Files', [
-      'ancestorMetaData',
-      'currentFolder',
-      'versions',
-      'sharesTree',
-      'sharesTreeLoading'
-    ]),
+    ...mapGetters('Files', ['ancestorMetaData', 'versions', 'sharesTree', 'sharesTreeLoading']),
     ...mapGetters(['user', 'configuration']),
 
     matchingSpace() {

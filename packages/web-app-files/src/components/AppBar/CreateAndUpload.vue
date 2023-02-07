@@ -456,7 +456,7 @@ export default defineComponent({
 
       try {
         const path = join(this.item, folderName)
-        let resource = await (this.$clientService.webdav as WebDAV).createFolder(this.space, {
+        const resource = await (this.$clientService.webdav as WebDAV).createFolder(this.space, {
           path
         })
 

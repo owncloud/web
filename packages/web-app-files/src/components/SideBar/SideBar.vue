@@ -256,7 +256,7 @@ export default defineComponent({
 
     watch(
       () => [...unref(selectedFiles), props.open],
-      (newResource, oldResource) => {
+      () => {
         if (!props.open) {
           return
         }
@@ -271,9 +271,7 @@ export default defineComponent({
         loading.value = true
         let selectedResource = getSelectedResource()
         if (selectedResource) {
-          const shouldLoadShares =
-            !unref(sharesLoadingDisabledOnCurrentRoute) && (!!oldResource || !unref(currentFolder))
-          if (shouldLoadShares) {
+          if (!unref(sharesLoadingDisabledOnCurrentRoute)) {
             loadShares()
           }
 
