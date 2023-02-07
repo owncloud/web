@@ -1,0 +1,6 @@
+Enhancement: Add appearance section in general settings
+
+We've added a appearance section in general settings,
+which includes uploading a logo selected by the admin for the web ui.
+
+https://github.com/owncloud/web/pull/8375
