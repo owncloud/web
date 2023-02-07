@@ -153,7 +153,7 @@ export const assignRole = async ({
     body: JSON.stringify({
       principalId: id,
       appRoleId: role,
-      resourceId: 'some-graph-app-id'
+      resourceId: role
     })
   })
   checkResponseStatus(response, 'Failed while assigning role to the user')
