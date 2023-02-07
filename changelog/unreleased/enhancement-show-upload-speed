@@ -1,4 +1,4 @@
-# Show upload speed
+Enhancement: Show upload speed
 
 We have added a tooltip that shows the current upload speed and 
 absolute vs processed filesize for the current upload.

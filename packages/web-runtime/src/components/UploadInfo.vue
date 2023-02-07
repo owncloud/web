@@ -3,7 +3,7 @@
     <div
       class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top"
     >
-      <p class="oc-my-xs" v-oc-tooltip="uploadDetails" v-text="uploadInfoTitle" />
+      <p v-oc-tooltip="uploadDetails" class="oc-my-xs" v-text="uploadInfoTitle" />
       <oc-button
         v-if="!filesInProgressCount"
         id="close-upload-info-btn"
@@ -142,11 +142,11 @@ import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import { isUndefined } from 'lodash-es'
 import getSpeed from '@uppy/utils/lib/getSpeed'
-import filesize from 'filesize'
 
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { formatFileSize } from 'web-pkg/src/helpers'
 import { UppyResource } from '../composables/upload'
 
 export default defineComponent({
@@ -179,14 +179,18 @@ export default defineComponent({
     ...mapGetters(['configuration']),
 
     uploadDetails() {
-      if (this.uploadSpeed === 0) {
+      if (!this.uploadSpeed || !this.runningUploads) {
         return ''
       }
-      const uploadedBytes = filesize(this.bytesUploaded)
-      const totalBytes = filesize(this.bytesTotal)
-      const currentUploadSpeed = filesize(this.uploadSpeed)
-      // needs $gettext interpolation
-      return `${uploadedBytes} of ${totalBytes} (${currentUploadSpeed}/s)`
+      const uploadedBytes = formatFileSize(this.bytesUploaded, this.$language.current)
+      const totalBytes = formatFileSize(this.bytesTotal, this.$language.current)
+      const currentUploadSpeed = formatFileSize(this.uploadSpeed, this.$language.current)
+
+      return this.$gettext('%{uploadedBytes} of %{totalBytes} (%{currentUploadSpeed}/s)', {
+        uploadedBytes,
+        totalBytes,
+        currentUploadSpeed
+      })
     },
     uploadInfoTitle() {
       if (this.inFinalization) {
