@@ -3,6 +3,13 @@ import { Group, Me, User } from '../../types'
 import join from 'join-path'
 import { config } from '../../../config'
 
+export enum Roles {
+  SpaceAdmin = '2aadd357-682c-406b-8874-293091995fdd',
+  Admin = '71881883-1768-46bd-a24d-a356a2afdf7f',
+  Guest = '38071a68-456a-4553-846a-fa67bf5596cc',
+  User = 'd7beeea8-8ff4-406b-8fb6-ab2dd81e6b11'
+}
+
 export const me = async ({ user }: { user: User }): Promise<Me> => {
   const response = await request({
     method: 'GET',
@@ -128,4 +135,26 @@ export const addUserToGroup = async ({
     user: admin
   })
   checkResponseStatus(response, 'Failed while adding an user to the group')
+}
+
+export const assignRole = async ({
+  admin,
+  id,
+  role
+}: {
+  admin: User
+  id: string
+  role: Roles
+}): Promise<void> => {
+  const response = await request({
+    method: 'POST',
+    path: join('graph', 'v1.0', 'users', id, 'appRoleAssignments'),
+    user: admin,
+    body: JSON.stringify({
+      principalId: id,
+      appRoleId: role,
+      resourceId: 'some-graph-app-id'
+    })
+  })
+  checkResponseStatus(response, 'Failed while assigning role to the user')
 }

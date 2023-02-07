@@ -29,13 +29,13 @@ Given(
     for await (const info of stepTable.hashes()) {
       const user = this.usersEnvironment.getUser({ key: info.id })
       const { id } = await api.graph.me({ user })
-      const role = api.settings.Roles[info.role]
+      const role = api.graph.Roles[info.role]
 
       if (!role) {
         throw new Error(`unknown role "${info.role}"`)
       }
 
-      await api.settings.assignRole({ admin, id, role })
+      await api.graph.assignRole({ admin, id, role })
     }
   }
 )
