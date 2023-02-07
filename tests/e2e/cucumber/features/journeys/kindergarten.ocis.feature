@@ -91,6 +91,19 @@ Feature: Kindergarten can use web to organize a day
       | Pre-Schools Pirates | groups                               | folder |
       | Teddy Bear Daycare  | groups                               | folder |
       | groups              |                                      | folder |
+    And "Alice" deletes the following resources using the batch action
+      | resource            | from                                 |
+      | lorem.txt           | groups/Kindergarten Koalas/meal plan |
+      | lorem-big.txt       | groups/Kindergarten Koalas/meal plan |
+      | data.zip            | groups/Pre-Schools Pirates/meal plan |
+      | lorem.txt           | groups/Pre-Schools Pirates/meal plan |
+      | lorem-big.txt       | groups/Pre-Schools Pirates/meal plan |
+      | data.zip            | groups/Teddy Bear Daycare/meal plan  |
+      | lorem.txt           | groups/Teddy Bear Daycare/meal plan  |
+      | lorem-big.txt       | groups/Teddy Bear Daycare/meal plan  |
+      | Kindergarten Koalas | groups                               |
+      | Pre-Schools Pirates | groups                               |
+      | Teddy Bear Daycare  | groups                               |
     # Then what do we check for to be confident that the above things done by Alice have worked?
     # Then the downloaded files should have content "abc..."
     And "Alice" logs out
