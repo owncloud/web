@@ -236,6 +236,10 @@ export default {
     state.areFileExtensionsShown = value
 
     window.localStorage.setItem('oc_fileExtensionsShown', value)
+  },
+
+  SET_ANCESTOR_META_DATA(state, value) {
+    state.ancestorMetaData = value
   }
 }
 

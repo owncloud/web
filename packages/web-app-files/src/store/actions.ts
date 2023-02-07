@@ -20,6 +20,7 @@ import {
 import { WebDAV } from 'web-client/src/webdav'
 import { ClientService } from 'web-pkg/src/services'
 import { Language } from 'vue3-gettext'
+import { DavProperty } from 'web-client/src/webdav/constants'
 
 const allowSharePermissions = (getters) => {
   return get(getters, `capabilities.files_sharing.resharing`, true)
@@ -522,6 +523,43 @@ export default {
     if (preview) {
       commit('UPDATE_RESOURCE_FIELD', { id: resource.id, field: type, value: preview })
     }
+  },
+
+  loadAncestorMetaData({ commit, state }, { folder, space, client }) {
+    const ancestorMetaData = {
+      [folder.path]: {
+        id: folder.fileId,
+        shareTypes: folder.shareTypes,
+        parentFolderId: folder.parentFolderId,
+        spaceId: space.id
+      }
+    }
+    const promises = []
+    const davProperties = [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
+    const parentPaths = getParentPaths(folder.path)
+
+    for (const path of parentPaths) {
+      const cachedData = state.ancestorMetaData[path] ?? null
+      if (cachedData?.spaceId === space.id) {
+        ancestorMetaData[path] = cachedData
+        continue
+      }
+
+      promises.push(
+        client.listFiles(space, { path }, { depth: 0, davProperties }).then(({ resource }) => {
+          ancestorMetaData[path] = {
+            id: resource.fileId,
+            shareTypes: resource.shareTypes,
+            parentFolderId: resource.parentFolderId,
+            spaceId: space.id
+          }
+        })
+      )
+    }
+
+    return Promise.all(promises).then(() => {
+      commit('SET_ANCESTOR_META_DATA', ancestorMetaData)
+    })
   }
 }
 
