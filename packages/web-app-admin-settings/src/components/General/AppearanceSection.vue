@@ -25,7 +25,7 @@
       </div>
       <div>
         <div class="logo-wrapper">
-          <img :src="logo" />
+          <img :src="logo" class="oc-p-s" />
         </div>
         <input
           id="logo-upload-input"
@@ -98,7 +98,7 @@ export default defineComponent({
     width: 100%;
     max-height: 100%;
     object-fit: cover;
-    background: var(--oc-color-background-highlight);
+    background: var(--oc-color-swatch-brand-default);
   }
 }
 </style>
