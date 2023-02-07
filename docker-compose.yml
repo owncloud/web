@@ -34,6 +34,7 @@ services:
 
       # IDP
       IDP_LDAP_BIND_PASSWORD: "${IDP_LDAP_BIND_PASSWORD:-some-ldap-idp-password}"
+      IDP_ACCESS_TOKEN_EXPIRATION: 1000000
 
       # STORAGE
       STORAGE_HOME_DRIVER: ${STORAGE_HOME_DRIVER:-ocis}
