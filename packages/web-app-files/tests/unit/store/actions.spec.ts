@@ -50,8 +50,7 @@ describe('vuex store actions', () => {
     })
   })
 
-  // FIXME
-  describe.skip('addShare', () => {
+  describe('addShare', () => {
     it.each([
       { shareType: ShareTypes.user.value, shareMethod: 'shareFileWithUser' },
       { shareType: ShareTypes.group.value, shareMethod: 'shareFileWithGroup' }
@@ -71,7 +70,7 @@ describe('vuex store actions', () => {
       })
 
       expect(clientMock.shares[data.shareMethod]).toHaveBeenCalledTimes(1)
-      expect(stateMock.commit).toHaveBeenCalledTimes(1)
+      expect(stateMock.commit).toHaveBeenCalledTimes(3)
     })
     it('fails on error', async () => {
       const clientMock = mockDeep<OwnCloudSdk>()
