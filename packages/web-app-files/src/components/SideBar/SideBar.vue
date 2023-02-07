@@ -168,6 +168,9 @@ export default defineComponent({
     const highlightedFileIsSpace = computed(() => {
       return isProjectSpaceResource(unref(highlightedFile) || {})
     })
+    const highlightedSpace = computed(() => {
+      return store.getters['runtime/spaces/spaces'].find((s) => s.id === unref(highlightedFile).id)
+    })
     const sharesLoadingDisabledOnCurrentRoute = computed(() => {
       return unref(isPublicFilesLocation) || unref(isTrashLocation)
     })
@@ -204,9 +207,7 @@ export default defineComponent({
 
     const getSelectedResource = () => {
       if (unref(highlightedFileIsSpace) && unref(selectedFiles).length) {
-        return store.getters['runtime/spaces/spaces'].find(
-          (s) => s.id === unref(highlightedFile).id
-        )
+        return unref(highlightedSpace)
       }
       if (unref(selectedFiles).length === 1) {
         return unref(selectedFiles)[0]
@@ -279,7 +280,7 @@ export default defineComponent({
           if (unref(highlightedFileIsSpace)) {
             store.dispatch('runtime/spaces/loadSpaceMembers', {
               graphClient: unref(graphClient),
-              space: selectedResource
+              space: unref(highlightedSpace)
             })
           }
 
