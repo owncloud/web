@@ -1,5 +1,4 @@
 import { mapActions } from 'vuex'
-import {thumbnailService} from "web-app-files/src/services";
 
 export default {
   computed: {

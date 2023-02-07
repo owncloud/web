@@ -71,7 +71,7 @@ export default defineComponent({
       }
     ])
 
-    const supportedLogoMimeTypes = ['image/jpg', 'image/png', 'image/gif']
+    const supportedLogoMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
 
     return {
       logo,
