@@ -16,6 +16,14 @@
     "external",
     "admin-settings"
   ],
+  "options" : {
+    "previewFileMimeTypes": [
+      "image/gif",
+      "image/png",
+      "image/jpeg",
+      "text/plain"
+    ]
+  },
   "external_apps": [
     {
       "id": "preview",
