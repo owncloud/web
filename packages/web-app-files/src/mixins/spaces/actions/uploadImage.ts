@@ -20,7 +20,13 @@ export default {
           icon: 'image-add',
           handler: this.$_uploadImage_trigger,
           label: () => {
-            return this.$gettext('Edit image')
+            const allowedMimeTypesDisplayValue = thumbnailService
+              .getSupportedMimeTypes('image/')
+              .map((mimeType) => mimeType.split('/').pop())
+              .sort()
+              .join(', ')
+
+            return `${this.$gettext('Edit image')} (${allowedMimeTypesDisplayValue})`
           },
           isEnabled: ({ resources }) => {
             if (resources.length !== 1) {

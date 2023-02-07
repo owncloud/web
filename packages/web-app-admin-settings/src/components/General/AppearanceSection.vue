@@ -57,9 +57,10 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const instance = getCurrentInstance().proxy as any
-    const supportedLogoMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
+    const supportedLogoMimeTypes = ['image/jpg', 'image/png', 'image/gif']
     const supportedLogoMimeTypesDisplayValue = supportedLogoMimeTypes
       .map((mimeType) => mimeType.split('/').pop())
+      .sort()
       .join(', ')
     const menuItems = computed(() => [
       ...instance.$_uploadLogo_items,
