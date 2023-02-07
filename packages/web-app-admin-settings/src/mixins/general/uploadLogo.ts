@@ -8,7 +8,7 @@ export default {
           name: 'upload-logo',
           icon: 'image-add',
           label: () => {
-            return this.$gettext('Upload logo (jpg, png, gif)')
+            return `${this.$gettext('Upload logo')} (${this.supportedLogoMimeTypesDisplayValue})`
           },
           handler: this.$_uploadLogo_trigger,
           componentType: 'button',
