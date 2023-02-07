@@ -279,7 +279,7 @@ export default {
           share: { ...builtShare, indirect: false, outgoing: true }
         })
         context.dispatch('updateCurrentFileShareTypes')
-        context.commit('ADD_INDICATOR', { path, type: 'user' })
+        context.commit('LOAD_INDICATORS', path)
       })
       .catch((e) => {
         context.dispatch(
@@ -299,7 +299,7 @@ export default {
       context.dispatch('updateCurrentFileShareTypes')
       context.commit('SHARESTREE_REMOVE', { path, id: share.id })
       if (loadIndicators) {
-        context.commit('REMOVE_INDICATOR', { path, type: 'user' })
+        context.commit('LOAD_INDICATORS', path)
       }
     })
   },
@@ -425,7 +425,7 @@ export default {
           const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
           context.commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', link)
           context.dispatch('updateCurrentFileShareTypes')
-          context.commit('ADD_INDICATOR', { path, type: 'link' })
+          context.commit('LOAD_INDICATORS', path)
           context.commit('SHARESTREE_UPSERT', {
             path,
             share: { ...link, indirect: false, outgoing: true }
@@ -457,7 +457,7 @@ export default {
       context.dispatch('updateCurrentFileShareTypes')
       context.commit('SHARESTREE_REMOVE', { path, id: share.id })
       if (loadIndicators) {
-        context.commit('REMOVE_INDICATOR', { path, type: 'link' })
+        context.commit('LOAD_INDICATORS', path)
       }
     })
   },

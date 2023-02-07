@@ -9,7 +9,7 @@ import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from 'web-pkg/src/composables/router/useFileRouteReplace'
 import { aggregateResourceShares } from '../../helpers/resources'
-import { useIndicators } from 'web-app-files/src/composables'
+import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {
@@ -66,19 +66,18 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
-        if (options.loadShares) {
-          const { getIndicators, getParentFolders } = useIndicators({ clientService, space })
-          const parentFolders = yield getParentFolders({ path: currentFolder.path })
-          for (const file of resources) {
-            file.indicators = getIndicators({ resource: file, parentFolders })
-          }
-        }
-
         yield store.dispatch('Files/loadAncestorMetaData', {
           folder: currentFolder,
           space,
           client: webdav
         })
+
+        if (options.loadShares) {
+          const ancestorMetaData = store.getters['Files/ancestorMetaData']
+          for (const file of resources) {
+            file.indicators = getIndicators({ resource: file, ancestorMetaData })
+          }
+        }
 
         store.commit('Files/LOAD_FILES', {
           currentFolder,

@@ -1,5 +1,4 @@
 export * from './fileListHeaderPosition'
-export * from './indicators'
 export * from './pagination'
 export * from './resourcesViewDefaults'
 export * from './router'

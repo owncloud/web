@@ -184,7 +184,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { useIndicators } from '../../../composables/indicators'
+import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -194,7 +194,6 @@ export default defineComponent({
 
     const copiedDirect = ref(false)
     const copiedEos = ref(false)
-    const parentFolders = ref([])
     const {
       copy,
       copied,
@@ -206,10 +205,6 @@ export default defineComponent({
     const isPublicLinkContext = usePublicLinkContext({ store })
     const accessToken = useAccessToken({ store })
     const clientService = useClientService()
-    const { getIndicators, getParentFolders } = useIndicators({
-      space: unref(space),
-      clientService
-    })
     const preview = ref(undefined)
 
     const directLink = computed(() => {
@@ -238,11 +233,6 @@ export default defineComponent({
 
     const loadData = async () => {
       const calls = []
-      if (store.getters['Files/currentFolder']) {
-        parentFolders.value = await getParentFolders({
-          path: store.getters['Files/currentFolder'].path
-        })
-      }
       if (unref(resource).type === 'file' && !unref(isPublicLinkContext)) {
         calls.push(
           store.dispatch('Files/loadVersions', {
@@ -290,14 +280,18 @@ export default defineComponent({
       directLink,
       resource,
       hasTags: useCapabilityFilesTags(),
-      loadPreviewTask,
-      parentFolders,
-      getIndicators
+      loadPreviewTask
     }
   },
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
-    ...mapGetters('Files', ['currentFolder', 'versions', 'sharesTree', 'sharesTreeLoading']),
+    ...mapGetters('Files', [
+      'ancestorMetaData',
+      'currentFolder',
+      'versions',
+      'sharesTree',
+      'sharesTreeLoading'
+    ]),
     ...mapGetters(['user', 'configuration']),
 
     matchingSpace() {
@@ -466,7 +460,7 @@ export default defineComponent({
       )
     },
     shareIndicators() {
-      return this.getIndicators({ resource: this.resource, parentFolders: this.parentFolders })
+      return getIndicators({ resource: this.resource, ancestorMetaData: this.ancestorMetaData })
     },
     shares() {
       if (this.sharedParentDir === null) {

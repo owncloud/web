@@ -1,7 +1,7 @@
 import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
+import { getIndicators } from '../helpers/statusIndicators'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
-import { getLinkIndicator, getUserIndicator } from '../composables/indicators'
 
 export default {
   LOAD_FILES(state, { currentFolder, files }) {
@@ -167,43 +167,18 @@ export default {
     state.versions = versions
   },
 
-  ADD_INDICATOR(state, { path, type }) {
+  LOAD_INDICATORS(state, path) {
     const files = state.files.filter((f) => f.path.startsWith(path))
-    const indicatorMethod = type === 'user' ? getUserIndicator : getLinkIndicator
-
     for (const resource of files) {
-      let updatedIndicators
-      if (!resource.indicators?.length) {
-        updatedIndicators = [indicatorMethod({ resource })]
-      } else {
-        const indicator = resource.indicators.find((i) => i.type.startsWith(type))
-        if (indicator && path !== resource.path) {
-          continue
-        }
-        updatedIndicators = [
-          ...resource.indicators.filter((i) => !i.type.startsWith(type)),
-          indicatorMethod({ resource })
-        ]
-      }
-      this.commit('Files/UPDATE_RESOURCE_FIELD', {
-        id: resource.id,
-        field: 'indicators',
-        value: updatedIndicators
-      })
-    }
-  },
-
-  REMOVE_INDICATOR(state, { path, type }) {
-    const files = state.files.filter((f) => f.path.startsWith(path) && !!f.indicators?.length)
-    for (const resource of files) {
-      const existingIndicator = resource.indicators.find((i) => i.type.startsWith(type))
-      if (!existingIndicator) {
+      const indicators = getIndicators({ resource, ancestorMetaData: state.ancestorMetaData })
+      if (!indicators.length && !resource.indicators.length) {
         continue
       }
+
       this.commit('Files/UPDATE_RESOURCE_FIELD', {
         id: resource.id,
         field: 'indicators',
-        value: resource.indicators.filter((i) => !i.type.startsWith(type))
+        value: indicators
       })
     }
   },
