@@ -173,18 +173,18 @@ import {
   useStore,
   useUserContext
 } from 'web-pkg/src/composables'
+import { getIndicators } from '../../../helpers/statusIndicators'
 import { useClipboard } from '@vueuse/core'
 import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import { Resource, SpaceResource } from 'web-client'
+import { Resource } from 'web-client'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -200,7 +200,6 @@ export default defineComponent({
       isSupported: isClipboardCopySupported
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
-    const space = inject<ComputedRef<SpaceResource>>('space')
     const resource = inject<Resource>('resource')
     const isPublicLinkContext = usePublicLinkContext({ store })
     const accessToken = useAccessToken({ store })
@@ -276,7 +275,7 @@ export default defineComponent({
       isUserContext: useUserContext({ store }),
       isPublicLinkContext,
       accessToken,
-      space,
+      space: inject<ComputedRef<Resource>>('space'),
       directLink,
       resource,
       hasTags: useCapabilityFilesTags(),
