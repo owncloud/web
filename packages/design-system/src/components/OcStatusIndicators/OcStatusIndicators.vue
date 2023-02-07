@@ -13,7 +13,7 @@
         variation="inverse"
         :data-testid="indicator.id"
         :data-test-indicator-type="indicator.type"
-        @click="indicator.handler(resource, indicator.target)"
+        @click="indicator.handler(resource, indicator.target, $router)"
       >
         <oc-icon :name="indicator.icon" size="small" fill-type="line" />
       </oc-button>

@@ -1,6 +1,7 @@
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { createLocationShares } from 'web-app-files/src/router'
 
 // dummy to trick gettext string extraction into recognizing strings
 const $gettext = (str) => {
@@ -27,15 +28,19 @@ const shareLinkDescribedBy = ({ isDirect }) => {
     : $gettext('This item is shared via links through one of the parent folders.')
 }
 
-const getUserIndicator = ({ resource, isDirect }) => {
+const getUserIndicator = ({ resource, isDirect, isIncoming = false }) => {
   return {
     id: `files-sharing-${resource.getDomSelector()}`,
     accessibleDescription: shareUserIconDescribedBy({ isDirect }),
-    label: $gettext('Show invited people'),
+    label: isIncoming ? $gettext('Shared with you') : $gettext('Show invited people'),
     icon: 'group',
     target: 'sharing',
     type: isDirect ? 'user-direct' : 'user-indirect',
-    handler: (resource, panel) => {
+    handler: (resource, panel, $router) => {
+      if (isIncoming) {
+        $router.push(createLocationShares('files-shares-with-me'))
+        return
+      }
       eventBus.publish(SideBarEventTopics.openWithPanel, `${panel}#peopleShares`)
     }
   }
@@ -64,6 +69,8 @@ export const getIndicators = ({ resource, ancestorMetaData }) => {
   const isDirectUserShare = isUserShare(resource.shareTypes)
   if (isDirectUserShare || isUserShare(parentShareTypes)) {
     indicators.push(getUserIndicator({ resource, isDirect: isDirectUserShare }))
+  } else if (resource.isReceivedShare()) {
+    indicators.push(getUserIndicator({ resource, isDirect: false, isIncoming: true }))
   }
   const isDirectLinkShare = isLinkShare(resource.shareTypes)
   if (isDirectLinkShare || isLinkShare(parentShareTypes)) {
