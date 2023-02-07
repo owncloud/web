@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Loading shares in deep nested folders: [#7655](https://github.com/owncloud/web/issues/7655)
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
 * Bugfix - Prevent deletion of own account: [#7958](https://github.com/owncloud/web/pull/7958)
@@ -31,6 +32,7 @@ Summary
 * Bugfix - Cancel custom permissions: [#8340](https://github.com/owncloud/web/pull/8340)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
+* Enhancement - Improve performance when loading folders and share indicators: [#7721](https://github.com/owncloud/web/issues/7721)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
 * Enhancement - Add switch to enable condensed resource table: [#7976](https://github.com/owncloud/web/pull/7976)
@@ -66,6 +68,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Loading shares in deep nested folders: [#7655](https://github.com/owncloud/web/issues/7655)
+
+   Loading shares and share indicators on page reloads in deep nested folders was not possible and
+   has been fixed.
+
+   https://github.com/owncloud/web/issues/7655
+   https://github.com/owncloud/web/pull/8349
 
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 
@@ -271,6 +281,14 @@ Details
    https://github.com/owncloud/web/pull/8067
    https://github.com/owncloud/web/pull/8157
    https://github.com/owncloud/web/pull/8309
+
+* Enhancement - Improve performance when loading folders and share indicators: [#7721](https://github.com/owncloud/web/issues/7721)
+
+   The performance when loading folders and share indicators has been improved by optimizing the
+   way how shares are being loaded.
+
+   https://github.com/owncloud/web/issues/7721
+   https://github.com/owncloud/web/pull/8349
 
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
 
