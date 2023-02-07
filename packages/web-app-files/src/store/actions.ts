@@ -370,9 +370,9 @@ export default {
     }
 
     parentPaths.forEach((queryPath) => {
+      const ancestorMetaData = context.state.ancestorMetaData[queryPath] ?? null
       const indirect = path !== queryPath
-      // FIXME: We need the storageId of each parent resource here
-      const spaceRef = indirect ? null : storageId
+      const spaceRef = indirect ? ancestorMetaData?.id : storageId
       // no need to fetch cached paths again, only adjust the "indirect" state
       if (context.getters.sharesTree[queryPath] && useCached) {
         sharesTree[queryPath] = context.getters.sharesTree[queryPath].map((s) => {
