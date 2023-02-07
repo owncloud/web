@@ -52,7 +52,7 @@ Login as administrator in the ownCloud Server web interface and go to the "User 
 
 ### Setting up Web
 
-In the local Web checkout, copy the `config/config.json.sample-oc10` file to `config/config.json` and adjust it accordingly:
+In the ownCloud server directory, copy the `apps/web/config/config.json.sample-oc10` file to `config/config.json` and adjust it accordingly:
 
 - Set the "server" key to the URL of the ownCloud server including path. If the URL contains a path, please also add a **trailing slash** there.
 - Set the "clientId" key to the **client identifier** as copied from the "User Authentication" section before.
