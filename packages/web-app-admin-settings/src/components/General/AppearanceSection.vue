@@ -57,21 +57,18 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const instance = getCurrentInstance().proxy as any
+    const supportedLogoMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
     const menuItems = computed(() => [
       ...instance.$_uploadLogo_items,
       ...instance.$_resetLogo_items
     ])
-
     const logo = computed(() => store.getters.configuration.currentTheme.logo.topbar)
-    console.log(logo)
     const menuSections = computed(() => [
       {
         name: 'primaryActions',
         items: unref(menuItems)
       }
     ])
-
-    const supportedLogoMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
 
     return {
       logo,
