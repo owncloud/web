@@ -41,7 +41,7 @@
         <quota-modal
           v-if="quotaModalIsOpen"
           :cancel="closeQuotaModal"
-          :space="quotaModalSelectedSpace"
+          :spaces="selectedSpaces"
           @space-quota-updated="spaceQuotaUpdated"
         />
         <no-content-message
@@ -116,7 +116,7 @@ export default defineComponent({
     NoContentMessage,
     ContextActions,
     SpaceInfo,
-    BatchActions, 
+    BatchActions,
     QuotaModal
   },
   mixins: [Delete, Disable, Restore, EditQuota],
@@ -270,7 +270,6 @@ export default defineComponent({
       resizeObserver.unobserve(unref(appBarActionsRef))
     })
 
-    const quotaModalSelectedSpace = computed(() => instance.$data.$_editQuota_selectedSpace)
     const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
     const closeQuotaModal = () => {
       instance.$_editQuota_closeModal()
@@ -298,7 +297,6 @@ export default defineComponent({
       limitedScreenSpace,
       appBarActionsRef,
       onResize,
-      quotaModalSelectedSpace,
       quotaModalIsOpen,
       closeQuotaModal,
       spaceQuotaUpdated

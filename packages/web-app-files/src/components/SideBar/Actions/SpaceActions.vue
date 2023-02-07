@@ -5,7 +5,7 @@
       :cancel="closeReadmeContentModal"
       :space="resources[0]"
     ></readme-content-modal>
-    <quota-modal v-if="quotaModalIsOpen" :cancel="closeQuotaModal" :space="resources[0]" />
+    <quota-modal v-if="quotaModalIsOpen" :cancel="closeQuotaModal" :spaces="[resources[0]]" />
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"

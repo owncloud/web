@@ -4,7 +4,7 @@
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
-      :space="quotaModalSelectedSpace"
+      :spaces="items"
       @space-quota-updated="spaceQuotaUpdated"
     />
   </div>
@@ -77,8 +77,6 @@ export default defineComponent({
       }
       return sections
     })
-
-    const quotaModalSelectedSpace = computed(() => instance.$data.$_editQuota_selectedSpace)
     const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
     const closeQuotaModal = () => {
       instance.$_editQuota_closeModal()
@@ -88,7 +86,6 @@ export default defineComponent({
     }
     return {
       menuSections,
-      quotaModalSelectedSpace,
       quotaModalIsOpen,
       closeQuotaModal,
       spaceQuotaUpdated
