@@ -23,7 +23,20 @@
           <context-action-menu :menu-sections="menuSections" :items="menuItems" />
         </oc-drop>
       </div>
-      <div>{placeHolderLogo}</div>
+      <div>
+        <div class="logo-wrapper">
+          <img :src="logo" />
+        </div>
+        <input
+          id="logo-upload-input"
+          ref="logoInput"
+          type="file"
+          name="file"
+          tabindex="-1"
+          :accept="supportedLogoMimeTypes"
+          @change="$_uploadLogo_upload"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -33,6 +46,7 @@ import { defineComponent, getCurrentInstance, computed, unref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import UploadLogo from '../../mixins/general/uploadLogo'
 import ResetLogo from '../../mixins/general/resetLogo'
+import { useStore } from 'web-pkg'
 
 export default defineComponent({
   name: 'AppearanceSection',
@@ -41,12 +55,15 @@ export default defineComponent({
     ContextActionMenu
   },
   setup() {
+    const store = useStore()
     const instance = getCurrentInstance().proxy as any
     const menuItems = computed(() => [
       ...instance.$_uploadLogo_items,
       ...instance.$_resetLogo_items
     ])
 
+    const logo = computed(() => store.getters.configuration.currentTheme.logo.topbar)
+    console.log(logo)
     const menuSections = computed(() => [
       {
         name: 'primaryActions',
@@ -54,10 +71,34 @@ export default defineComponent({
       }
     ])
 
+    const supportedLogoMimeTypes = ['image/jpg', 'image/png', 'image/gif']
+
     return {
+      logo,
       menuItems,
-      menuSections
+      menuSections,
+      supportedLogoMimeTypes
     }
   }
 })
 </script>
+
+<style lang="scss" scoped>
+#logo-upload-input {
+  display: none;
+}
+.logo-wrapper {
+  width: 280px;
+  min-width: 280px;
+  aspect-ratio: 16/9;
+  max-height: 158px;
+
+  img {
+    border-radius: 10px;
+    width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    background: var(--oc-color-background-highlight);
+  }
+}
+</style>
