@@ -48,6 +48,21 @@ When(
 )
 
 When(
+  /^"([^"]*)" deletes the following resource(s)? using the (sidebar panel|batch action)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: string,
+    actionType: string,
+    stepTable: DataTable
+  ) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await processDelete(stepTable, resourceObject, actionType)
+  }
+)
+
+When(
   '{string} renames the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -103,18 +118,6 @@ When(
 
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.restoreVersion({ folder, files: fileInfo[folder] })
-    }
-  }
-)
-
-When(
-  '{string} deletes the following resource(s)',
-  async function (this: World, stepUser: string, stepTable: DataTable) {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const resourceObject = new objects.applicationFiles.Resource({ page })
-
-    for (const info of stepTable.hashes()) {
-      await resourceObject.delete({ resource: info.resource })
     }
   }
 )
@@ -257,6 +260,31 @@ When(
     await resourceObject.showHiddenFiles()
   }
 )
+
+export const processDelete = async (stepTable: DataTable, pageObject: any, actionType: string) => {
+  let files, parentFolder
+  const deleteInfo = stepTable.hashes().reduce((acc, stepRow) => {
+    const { resource, from } = stepRow
+    const resourceInfo = {
+      name: resource
+    }
+    if (!acc[from]) {
+      acc[from] = []
+    }
+    acc[from].push(resourceInfo)
+    return acc
+  }, {})
+
+  for (const folder of Object.keys(deleteInfo)) {
+    files = deleteInfo[folder]
+    parentFolder = folder !== 'undefined' ? folder : null
+    await pageObject.delete({
+      folder: parentFolder,
+      resourcesWithInfo: files,
+      via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+    })
+  }
+}
 
 export const processDownload = async (
   stepTable: DataTable,

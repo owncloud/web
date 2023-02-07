@@ -48,9 +48,9 @@ Feature: share
       | resource        | to                     |
       | simple.pdf      | folder_to_shared       |
       | testavatar.jpeg | folder_to_customShared |
-    And "Brian" deletes the following resources
-      | resource                             |
-      | folder_to_customShared/lorem-big.txt |
+    When "Brian" deletes the following resources using the sidebar panel
+      | resource      | from                   |
+      | lorem-big.txt | folder_to_customShared |
     And "Alice" opens the "files" app
     And "Alice" uploads the following resource
       | resource          | to               | option  |
@@ -64,10 +64,10 @@ Feature: share
     And "Alice" removes following sharee
       | resource               | recipient |
       | folder_to_customShared | Brian     |
-    And "Alice" deletes the following resources
-      | resource                       |
-      | folder_to_shared/lorem_new.txt |
-      | folder_to_shared               |
+    When "Alice" deletes the following resources using the sidebar panel
+      | resource         | from             |
+      | lorem_new.txt    | folder_to_shared |
+      | folder_to_shared |                  |
     And "Alice" logs out
     Then "Brian" should not be able to see the following shares
       | resource               | owner        |

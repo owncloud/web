@@ -110,10 +110,10 @@ Feature: spaces.personal
     When "Brian" restores following resources
       | resource   | to               | version |
       | simple.pdf | folder_to_shared | 1       |
-    When "Alice" deletes the following resources
-      | resource                       |
-      | folder_to_shared/lorem_new.txt |
-      | folder_to_shared               |
+    When "Alice" deletes the following resources using the sidebar panel
+      | resource         | from             |
+      | lorem_new.txt    | folder_to_shared |
+      | folder_to_shared |                  |
     And "Brian" logs out
 
     # alice is done
