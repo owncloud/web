@@ -137,6 +137,16 @@ export const addUserToGroup = async ({
   checkResponseStatus(response, 'Failed while adding an user to the group')
 }
 
+export const getAppRoleAssignmentsParameters = async (admin: User, id: string) => {
+  const response = await request({
+    method: 'GET',
+    path: join('graph', 'v1.0', 'users', id, '?$select&$expand=drive,memberOf,appRoleAssignments'),
+    user: admin
+  })
+  const res = await response.json()
+  return res.appRoleAssignments
+}
+
 export const assignRole = async ({
   admin,
   id,
@@ -146,6 +156,7 @@ export const assignRole = async ({
   id: string
   role: Roles
 }): Promise<void> => {
+  const appRoleAssignmentsParameters = await getAppRoleAssignmentsParameters(admin, id)
   const response = await request({
     method: 'POST',
     path: join('graph', 'v1.0', 'users', id, 'appRoleAssignments'),
@@ -153,7 +164,7 @@ export const assignRole = async ({
     body: JSON.stringify({
       principalId: id,
       appRoleId: role,
-      resourceId: role
+      resourceId: appRoleAssignmentsParameters[0].resourceId
     })
   })
   checkResponseStatus(response, 'Failed while assigning role to the user')
