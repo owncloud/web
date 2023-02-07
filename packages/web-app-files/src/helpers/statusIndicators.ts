@@ -58,7 +58,7 @@ const getLinkIndicator = ({ resource, isDirect }) => {
 export const getIndicators = ({ resource, ancestorMetaData }) => {
   const indicators = []
   const parentShareTypes = Object.values(ancestorMetaData).reduce((acc: any, data: any) => {
-    acc.push(...data.shareTypes)
+    acc.push(...(data.shareTypes || []))
     return acc
   }, [])
   const isDirectUserShare = isUserShare(resource.shareTypes)

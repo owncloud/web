@@ -93,8 +93,7 @@ describe('vuex store actions', () => {
     })
   })
 
-  // FIXME
-  describe.skip('deleteShare', () => {
+  describe('deleteShare', () => {
     it('succeeds when resolved sucessfully', async () => {
       const clientMock = mockDeep<OwnCloudSdk>()
       clientMock.shares.deleteShare.mockResolvedValue({})
@@ -104,7 +103,7 @@ describe('vuex store actions', () => {
         path: '/someFile.txt'
       })
 
-      expect(stateMock.commit).toHaveBeenCalledTimes(1)
+      expect(stateMock.commit).toHaveBeenCalledTimes(2)
     })
   })
 
