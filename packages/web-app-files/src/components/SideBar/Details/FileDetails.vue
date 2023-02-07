@@ -284,7 +284,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
-    ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading']),
+    ...mapGetters('Files', ['ancestorMetaData', 'versions', 'sharesTree', 'sharesTreeLoading']),
     ...mapGetters(['user', 'configuration']),
 
     matchingSpace() {
@@ -453,7 +453,7 @@ export default defineComponent({
       )
     },
     shareIndicators() {
-      return getIndicators(this.resource, this.sharesTree)
+      return getIndicators({ resource: this.resource, ancestorMetaData: this.ancestorMetaData })
     },
     shares() {
       if (this.sharedParentDir === null) {

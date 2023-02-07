@@ -168,6 +168,9 @@ export default defineComponent({
     const highlightedFileIsSpace = computed(() => {
       return isProjectSpaceResource(unref(highlightedFile) || {})
     })
+    const highlightedSpace = computed(() => {
+      return store.getters['runtime/spaces/spaces'].find((s) => s.id === unref(highlightedFile).id)
+    })
     const sharesLoadingDisabledOnCurrentRoute = computed(() => {
       return unref(isPublicFilesLocation) || unref(isTrashLocation)
     })
@@ -204,9 +207,7 @@ export default defineComponent({
 
     const getSelectedResource = () => {
       if (unref(highlightedFileIsSpace) && unref(selectedFiles).length) {
-        return store.getters['runtime/spaces/spaces'].find(
-          (s) => s.id === unref(highlightedFile).id
-        )
+        return unref(highlightedSpace)
       }
       if (unref(selectedFiles).length === 1) {
         return unref(selectedFiles)[0]
@@ -254,8 +255,11 @@ export default defineComponent({
     }
 
     watch(
-      selectedFiles,
-      (newResource, oldResource) => {
+      () => [...unref(selectedFiles), props.open],
+      () => {
+        if (!props.open) {
+          return
+        }
         if (
           unref(selectedFiles).length === 1 &&
           unref(loadedResource)?.id === unref(selectedFiles)[0].id
@@ -267,16 +271,14 @@ export default defineComponent({
         loading.value = true
         let selectedResource = getSelectedResource()
         if (selectedResource) {
-          const shouldLoadShares =
-            !unref(sharesLoadingDisabledOnCurrentRoute) && (!!oldResource || !unref(currentFolder))
-          if (shouldLoadShares) {
+          if (!unref(sharesLoadingDisabledOnCurrentRoute)) {
             loadShares()
           }
 
           if (unref(highlightedFileIsSpace)) {
             store.dispatch('runtime/spaces/loadSpaceMembers', {
               graphClient: unref(graphClient),
-              space: selectedResource
+              space: unref(highlightedSpace)
             })
           }
 

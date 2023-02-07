@@ -303,7 +303,6 @@ export default defineComponent({
           client: this.$client,
           share: share,
           path,
-          storageId: this.resource.fileId,
           loadIndicators: !!lastShareId
         })
 

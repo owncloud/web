@@ -132,6 +132,18 @@ export default {
   SHARESTREE_ADD(state, sharesTree) {
     state.sharesTree = Object.assign({}, state.sharesTree, sharesTree)
   },
+  SHARESTREE_UPSERT(state, { path, share }) {
+    if (!state.sharesTree[path]) {
+      state.sharesTree[path] = []
+    }
+    state.sharesTree[path].push(share)
+  },
+  SHARESTREE_REMOVE(state, { path, id }) {
+    if (!state.sharesTree[path]) {
+      return
+    }
+    state.sharesTree[path] = state.sharesTree[path].filter((s) => s.id !== id)
+  },
   SHARESTREE_ERROR(state, error) {
     state.sharesTreeError = error
   },
@@ -158,8 +170,7 @@ export default {
   LOAD_INDICATORS(state, path) {
     const files = state.files.filter((f) => f.path.startsWith(path))
     for (const resource of files) {
-      const indicators = getIndicators(resource, state.sharesTree)
-
+      const indicators = getIndicators({ resource, ancestorMetaData: state.ancestorMetaData })
       if (!indicators.length && !resource.indicators.length) {
         continue
       }

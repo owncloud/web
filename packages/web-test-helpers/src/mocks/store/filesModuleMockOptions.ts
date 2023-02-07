@@ -19,7 +19,8 @@ export const filesModuleMockOptions = {
       versions: jest.fn(() => []),
       currentFileOutgoingLinks: jest.fn(() => []),
       sharesTreeLoading: jest.fn(() => false),
-      sharesTree: jest.fn((state) => ({}))
+      sharesTree: jest.fn((state) => ({})),
+      ancestorMetaData: jest.fn(() => ({}))
     },
     mutations: {
       SET_FILE_SELECTION: jest.fn(),

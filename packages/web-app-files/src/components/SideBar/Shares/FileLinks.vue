@@ -538,13 +538,7 @@ export default defineComponent({
         this.currentFileOutgoingLinks.length === 1 ? this.currentFileOutgoingLinks[0].id : undefined
 
       try {
-        await this.removeLink({
-          client,
-          share,
-          path,
-          storageId: resource.fileId,
-          loadIndicators: !!lastLinkId
-        })
+        await this.removeLink({ client, share, path, loadIndicators: !!lastLinkId })
         this.showMessage({
           title: this.$gettext('Link was deleted successfully')
         })

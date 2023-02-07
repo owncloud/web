@@ -2,18 +2,14 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
-import {
-  useCapabilityFilesSharingResharing,
-  useCapabilityShareJailEnabled,
-  useCapabilitySpacesEnabled
-} from 'web-pkg/src/composables'
-import { getIndicators } from '../../helpers/statusIndicators'
+import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { SpaceResource } from 'web-client/src/helpers'
 import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from 'web-pkg/src/composables/router/useFileRouteReplace'
 import { aggregateResourceShares } from '../../helpers/resources'
+import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {
@@ -32,15 +28,10 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const {
-      store,
-      router,
-      clientService: { owncloudSdk: client, webdav }
-    } = context
+    const { store, router, clientService } = context
+    const { owncloudSdk: client, webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
-    const hasShareJail = useCapabilityShareJailEnabled(store)
     const hasResharing = useCapabilityFilesSharingResharing(store)
-    const hasSpaces = useCapabilitySpacesEnabled(store)
 
     return useTask(function* (
       signal1,
@@ -75,24 +66,18 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
-        if (options.loadShares) {
-          yield store.dispatch('Files/loadSharesTree', {
-            client,
-            path: currentFolder.path,
-            ...(unref(hasSpaces) && { storageId: currentFolder.fileId }),
-            includeRoot: currentFolder.path === '/' && space.driveType !== 'personal'
-          })
-
-          for (const file of resources) {
-            file.indicators = getIndicators(file, store.state.Files.sharesTree, unref(hasShareJail))
-          }
-        }
-
         yield store.dispatch('Files/loadAncestorMetaData', {
           folder: currentFolder,
           space,
           client: webdav
         })
+
+        if (options.loadShares) {
+          const ancestorMetaData = store.getters['Files/ancestorMetaData']
+          for (const file of resources) {
+            file.indicators = getIndicators({ resource: file, ancestorMetaData })
+          }
+        }
 
         store.commit('Files/LOAD_FILES', {
           currentFolder,

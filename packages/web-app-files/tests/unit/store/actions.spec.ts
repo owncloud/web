@@ -70,7 +70,7 @@ describe('vuex store actions', () => {
       })
 
       expect(clientMock.shares[data.shareMethod]).toHaveBeenCalledTimes(1)
-      expect(stateMock.commit).toHaveBeenCalledTimes(1)
+      expect(stateMock.commit).toHaveBeenCalledTimes(3)
     })
     it('fails on error', async () => {
       const clientMock = mockDeep<OwnCloudSdk>()
@@ -99,11 +99,10 @@ describe('vuex store actions', () => {
       await actions.deleteShare(stateMock, {
         client: clientMock,
         share: mockDeep<Share>({ shareType: ShareTypes.user.value }),
-        path: '/someFile.txt',
-        storageId: undefined
+        path: '/someFile.txt'
       })
 
-      expect(stateMock.commit).toHaveBeenCalledTimes(1)
+      expect(stateMock.commit).toHaveBeenCalledTimes(2)
     })
   })
 

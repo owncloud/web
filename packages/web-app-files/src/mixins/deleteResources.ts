@@ -95,7 +95,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['pushResourcesToDeleteList', 'removeFilesFromTrashbin', 'deleteFiles']),
+    ...mapActions('Files', ['removeFilesFromTrashbin', 'deleteFiles']),
     ...mapActions(['showMessage', 'toggleModalConfirmButton', 'hideModal', 'createModal']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
