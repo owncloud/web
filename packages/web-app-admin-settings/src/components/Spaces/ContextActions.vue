@@ -34,7 +34,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const instance = getCurrentInstance().proxy
+    const instance = getCurrentInstance().proxy as any
 
     const filterParams = computed(() => ({ resources: props.items }))
     const menuItemsPrimaryActions = computed(() =>

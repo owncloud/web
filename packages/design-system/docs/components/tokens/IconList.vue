@@ -71,9 +71,9 @@ import { defineComponent } from 'vue'
 
 import OcIcon from '../../../src/components/OcIcon/OcIcon.vue'
 import OcTable from '../../../src/components/OcTable/OcTable.vue'
-import OcSearchBar from '../../../src/components/OcSearchBar/OcSearchBar'
-import HighlightedText from './_HighlightedText'
-const req = require.context('../../../src/assets/icons/', true, /^\.\/.*\.svg$/)
+import OcSearchBar from '../../../src/components/OcSearchBar/OcSearchBar.vue'
+import HighlightedText from './_HighlightedText.vue'
+const req = (require as any).context('../../../src/assets/icons/', true, /^\.\/.*\.svg$/)
 
 /**
  * All known icons in the ownCloud Design System

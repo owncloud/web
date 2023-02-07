@@ -64,14 +64,17 @@ export default defineComponent({
       routes[route.name] = router.getRoutes().find((r) => r.name === route.name)
       return routes
     }, {})
-    const sharesWithMeActive = useActiveLocation(isLocationSharesActive, locationSharesWithMe.name)
+    const sharesWithMeActive = useActiveLocation(
+      isLocationSharesActive,
+      locationSharesWithMe.name as string
+    )
     const sharesWithOthersActive = useActiveLocation(
       isLocationSharesActive,
-      locationSharesWithOthers.name
+      locationSharesWithOthers.name as string
     )
     const sharesViaLinkActive = useActiveLocation(
       isLocationSharesActive,
-      locationSharesViaLink.name
+      locationSharesViaLink.name as string
     )
     const navItems = computed(() => [
       {

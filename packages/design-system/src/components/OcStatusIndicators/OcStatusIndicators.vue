@@ -44,10 +44,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import uniqueId from '../../utils/uniqueId'
+
+export type Indicator = {
+  id: string
+  icon: string
+  label: string
+  handler?: any
+  accessibleDescription?: string
+  visible?: boolean
+  target?: string
+  type?: string
+}
 
 /**
  * Status indicators which can be attatched to a resource
@@ -80,7 +91,7 @@ export default defineComponent({
      * accessibleDescription: A string to be used as a accessible description for the indicator. It renders an element only visible for screenreaders to provide additional context
      */
     indicators: {
-      type: Array,
+      type: Array as PropType<Indicator[]>,
       required: true
     },
     target: {

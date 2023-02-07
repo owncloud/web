@@ -104,7 +104,7 @@ export default defineComponent({
      * The icon to be displayed
      */
     icon: {
-      type: [String, Boolean],
+      type: String,
       required: false,
       default: 'search'
     },
@@ -202,8 +202,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'primary',
-      validator: (value) => {
-        return value.match(/(passive|primary|danger|success|warning|inverse)/)
+      validator: (value: string) => {
+        return ['passive', 'primary', 'danger', 'success', 'warning', 'inverse'].includes(value)
       }
     },
     /**

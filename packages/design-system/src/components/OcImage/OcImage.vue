@@ -45,8 +45,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'eager',
-      validator: (value) => {
-        return value.match(/(eager|lazy)/)
+      validator: (value: string) => {
+        return ['eager', 'lazy'].includes(value)
       }
     }
   },

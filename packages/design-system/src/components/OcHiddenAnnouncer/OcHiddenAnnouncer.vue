@@ -35,8 +35,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'polite',
-      validator: (value) => {
-        return value.match(/(polite|assertive|off)/)
+      validator: (value: string) => {
+        return ['polite', 'assertive', 'off'].includes(value)
       }
     },
     /**

@@ -19,7 +19,7 @@
       @input="updateTerm"
       @clear="onClear"
       @click="showPreview"
-      @keyup.esc="$refs.optionsDrop.hide()"
+      @keyup.esc="hideOptionsDrop"
       @keyup.up="onKeyUpUp"
       @keyup.down="onKeyUpDown"
       @keyup.enter="onKeyUpEnter"
@@ -60,7 +60,7 @@
                   <router-link
                     class="more-results"
                     :to="getMoreResultsLinkForProvider(provider)"
-                    @click="$refs.optionsDrop.hide()"
+                    @click="hideOptionsDrop"
                   >
                     <span>{{ getMoreResultsDetailsTextForProvider(provider) }}</span>
                   </router-link>
@@ -80,7 +80,7 @@
                   class="preview-component"
                   :provider="provider"
                   :search-result="providerSearchResultValue"
-                  @click="$refs.optionsDrop.hide()"
+                  @click="hideOptionsDrop"
                 />
               </li>
             </oc-list>
@@ -113,7 +113,7 @@ export default defineComponent({
 
   data() {
     return {
-      resizeObserver: new ResizeObserver(this.onResize),
+      resizeObserver: new ResizeObserver(this.onResize as ResizeObserverCallback),
       showCancelButton: false,
       term: '',
       activeProvider: undefined,
@@ -349,7 +349,7 @@ export default defineComponent({
     },
     showSearchBar() {
       document.getElementById('files-global-search-bar').style.visibility = 'visible'
-      const inputElement = document.getElementsByClassName('oc-search-input')[0] // FIXME: add when TypeScript is enabled: as HTMLElement
+      const inputElement = document.getElementsByClassName('oc-search-input')[0] as HTMLElement
       inputElement.focus()
 
       this.showCancelButton = true
@@ -374,6 +374,9 @@ export default defineComponent({
           this.showCancelButton = false
         }
       }
+    },
+    hideOptionsDrop() {
+      this.$refs.optionsDrop.hide()
     }
   }
 })

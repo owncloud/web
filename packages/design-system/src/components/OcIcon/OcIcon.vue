@@ -101,8 +101,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'fill',
-      validator: (value) => {
-        return value.match(/(fill|line|none)/)
+      validator: (value: string) => {
+        return ['fill', 'line', 'none'].includes(value)
       }
     },
     /**
@@ -139,8 +139,8 @@ export default defineComponent({
     variation: {
       type: String,
       default: 'passive',
-      validator: (value) => {
-        return value.match(/(passive|primary|danger|success|warning|inverse)/)
+      validator: (value: string) => {
+        return ['passive', 'primary', 'danger', 'success', 'warning', 'inverse'].includes(value)
       }
     },
     /**

@@ -44,8 +44,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'passive',
-      validator: (value) => {
-        return value.match(/(passive|primary|success|warning|danger)/)
+      validator: (value: string) => {
+        return ['passive', 'primary', 'success', 'warning', 'danger'].includes(value)
       }
     },
     /**

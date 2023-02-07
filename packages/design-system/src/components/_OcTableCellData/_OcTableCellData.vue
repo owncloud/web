@@ -23,22 +23,22 @@ export default defineComponent({
     alignH: {
       type: String,
       default: 'left',
-      validator: (alignment) => /(left|center|right)/.test(alignment)
+      validator: (alignment: string) => ['left', 'center', 'right'].includes(alignment)
     },
     alignV: {
       type: String,
       default: 'middle',
-      validator: (alignment) => /(top|middle|bottom)/.test(alignment)
+      validator: (alignment: string) => ['top', 'middle', 'bottom'].includes(alignment)
     },
     width: {
       type: String,
       default: 'auto',
-      validator: (width) => /(auto|shrink|expand)/.test(width)
+      validator: (width: string) => ['auto', 'shrink', 'expand'].includes(width)
     },
     wrap: {
       type: String,
       default: null,
-      validator: (wrap) => (wrap ? /(break|nowrap|truncate)/.test(wrap) : true)
+      validator: (wrap: string) => ['break', 'nowrap', 'truncate'].includes(wrap) || !wrap
     }
   }
 })

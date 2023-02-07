@@ -23,6 +23,8 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
+
 export default defineComponent({
   name: 'HighlightedText',
   props: {
@@ -33,7 +35,7 @@ export default defineComponent({
     fragmentTag: {
       type: String,
       default: 'span',
-      validator: function (value) {
+      validator: function (value: string) {
         return ['span', 'i', 'em', 'b', 'strong'].includes(value)
       }
     },

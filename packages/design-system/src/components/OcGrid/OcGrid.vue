@@ -21,8 +21,8 @@ export default defineComponent({
     gutter: {
       type: String,
       default: 'collapse',
-      validator: (value) => {
-        return value.match(/(small|medium|large|collapse)/)
+      validator: (value: string) => {
+        return ['small', 'medium', 'large', 'collapse'].includes(value)
       }
     },
     /**

@@ -85,8 +85,8 @@ export default defineComponent({
     type: {
       type: String,
       default: 'text',
-      validator: (value) => {
-        return value.match(/(text|number|email|password)/)
+      validator: (value: string) => {
+        return ['text', 'number', 'email', 'password'].includes(value)
       }
     },
     /**

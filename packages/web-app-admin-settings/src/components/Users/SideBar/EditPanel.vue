@@ -138,7 +138,7 @@ export default defineComponent({
     },
     invalidFormData() {
       return Object.values(this.formData)
-        .map((v) => !!v.valid)
+        .map((v: any) => !!v.valid)
         .includes(false)
     },
     showQuota() {
@@ -196,7 +196,7 @@ export default defineComponent({
     },
     revertChanges() {
       this.editUser = cloneDeep(this.user)
-      Object.values(this.formData).forEach((formDataValue) => {
+      Object.values(this.formData).forEach((formDataValue: any) => {
         formDataValue.valid = true
         formDataValue.errorMessage = ''
       })

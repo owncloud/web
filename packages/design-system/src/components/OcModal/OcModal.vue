@@ -123,8 +123,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'passive',
-      validator: (value) => {
-        return value.match(/(passive|primary|danger|success|warning)/)
+      validator: (value: string) => {
+        return ['passive', 'primary', 'danger', 'success', 'warning'].includes(value)
       }
     },
     /**
@@ -189,8 +189,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'passive',
-      validator: (value) => {
-        return value.match(/(passive|primary|danger|success|warning)/)
+      validator: (value: string) => {
+        return ['passive', 'primary', 'danger', 'success', 'warning'].includes(value)
       }
     },
     /**
@@ -200,8 +200,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'outline',
-      validator: (value) => {
-        return value.match(/(outline|filled|raw)/)
+      validator: (value: string) => {
+        return ['outline', 'filled', 'raw'].includes(value)
       }
     },
     /**
@@ -219,8 +219,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'passive',
-      validator: (value) => {
-        return value.match(/(passive|primary|danger|success|warning)/)
+      validator: (value: string) => {
+        return ['passive', 'primary', 'danger', 'success', 'warning'].includes(value)
       }
     },
     /**
@@ -230,8 +230,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'outline',
-      validator: (value) => {
-        return value.match(/(outline|filled|raw)/)
+      validator: (value: string) => {
+        return ['outline', 'filled', 'raw'].includes(value)
       }
     },
     /**
@@ -249,8 +249,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'filled',
-      validator: (value) => {
-        return value.match(/(outline|filled|raw)/)
+      validator: (value: string) => {
+        return ['outline', 'filled', 'raw'].includes(value)
       }
     },
     /**

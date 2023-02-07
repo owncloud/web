@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
@@ -87,7 +87,7 @@ import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 export default defineComponent({
   props: {
     applicationsList: {
-      type: Array,
+      type: Array as PropType<any>,
       required: false,
       default: () => []
     }

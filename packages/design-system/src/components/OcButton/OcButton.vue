@@ -45,8 +45,8 @@ export default defineComponent({
     size: {
       type: String,
       default: 'medium',
-      validator: (value) => {
-        return value.match(/(small|medium|large)/)
+      validator: (value: string) => {
+        return ['small', 'medium', 'large'].includes(value)
       }
     },
     /**
@@ -63,8 +63,8 @@ export default defineComponent({
     target: {
       type: String,
       default: null,
-      validator: (value) => {
-        return value.match(/(_blank|_self|_parent|_top)/)
+      validator: (value: string) => {
+        return ['_blank', '_self', '_parent', '_top'].includes(value)
       }
     },
     /**
@@ -88,8 +88,8 @@ export default defineComponent({
     submit: {
       type: String,
       default: 'button',
-      validator: (value) => {
-        return value.match(/(null|button|submit|reset)/)
+      validator: (value: string) => {
+        return ['null', 'button', 'submit', 'reset'].includes(value)
       }
     },
     /**
@@ -100,8 +100,8 @@ export default defineComponent({
     variation: {
       type: String,
       default: 'passive',
-      validator: (value) => {
-        return value.match(/(passive|primary|success|danger|warning|inverse)/)
+      validator: (value: string) => {
+        return ['passive', 'primary', 'danger', 'success', 'warning', 'inverse'].includes(value)
       }
     },
     /**
@@ -112,8 +112,8 @@ export default defineComponent({
     appearance: {
       type: String,
       default: 'outline',
-      validator: (value) => {
-        return value.match(/(filled|outline|raw)/)
+      validator: (value: string) => {
+        return ['filled', 'outline', 'raw'].includes(value)
       }
     },
     /**
@@ -123,8 +123,15 @@ export default defineComponent({
     justifyContent: {
       type: String,
       default: 'center',
-      validator: (value) => {
-        return value.match(/(left|center|right|space-around|space-between|space-evenly)/)
+      validator: (value: string) => {
+        return [
+          'left',
+          'center',
+          'right',
+          'space-around',
+          'space-between',
+          'space-evenly'
+        ].includes(value)
       }
     },
     /**
@@ -134,8 +141,8 @@ export default defineComponent({
     gapSize: {
       type: String,
       default: 'medium',
-      validator: (value) => {
-        return value.match(/(none|xsmall|small|medium|large|xlarge)/)
+      validator: (value: string) => {
+        return ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'].includes(value)
       }
     }
   },

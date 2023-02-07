@@ -107,7 +107,7 @@ export default defineComponent({
   },
   data: function () {
     return {
-      resizeObserver: new ResizeObserver(this.onResize),
+      resizeObserver: new ResizeObserver(this.onResize as ResizeObserverCallback),
       limitedScreenSpace: false
     }
   },

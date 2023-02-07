@@ -5,7 +5,7 @@
       data-testid="oc-switch-btn"
       class="oc-switch-btn"
       role="switch"
-      :aria-checked="checked.toString()"
+      :aria-checked="checked"
       :aria-labelledby="labelId"
       @click="toggle"
     />

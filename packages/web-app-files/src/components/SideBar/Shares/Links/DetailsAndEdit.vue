@@ -51,7 +51,7 @@
                     class="oc-text-bold oc-display-block oc-width-1-1"
                     v-text="$gettext(roleOption.label)"
                   />
-                  <span class="oc-text-small">{{ $gettext(roleOption.description()) }}</span>
+                  <span class="oc-text-small">{{ $gettext(roleOption.description(false)) }}</span>
                 </span>
               </span>
               <span class="oc-flex">
@@ -180,9 +180,10 @@ import { createLocationSpaces } from '../../../../router'
 import {
   linkRoleInternalFile,
   linkRoleInternalFolder,
-  LinkShareRoles
+  LinkShareRoles,
+  ShareRole
 } from 'web-client/src/helpers/share'
-import { defineComponent, inject } from 'vue'
+import { defineComponent, inject, PropType } from 'vue'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -191,7 +192,7 @@ export default defineComponent({
   name: 'DetailsAndEdit',
   props: {
     availableRoleOptions: {
-      type: Array,
+      type: Array as PropType<ShareRole[]>,
       required: true
     },
     canRename: {

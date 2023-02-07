@@ -27,7 +27,7 @@ export default defineComponent({
   name: 'MembersRoleSection',
   props: {
     members: {
-      type: Object as PropType<SpaceRole>,
+      type: Array as PropType<SpaceRole[]>,
       required: true
     }
   },

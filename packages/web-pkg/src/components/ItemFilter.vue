@@ -17,7 +17,7 @@
         />
         <div ref="itemFilterListRef">
           <oc-list class="item-filter-list">
-            <li v-for="item in displayedItems" :key="item.key" class="oc-my-xs">
+            <li v-for="(item, index) in displayedItems" :key="index" class="oc-my-xs">
               <component
                 :is="isSelectionAllowed(item) ? 'oc-button' : 'div'"
                 class="item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs"

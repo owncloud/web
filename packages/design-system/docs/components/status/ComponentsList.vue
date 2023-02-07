@@ -77,7 +77,7 @@ export default defineComponent({
   methods: {
     getComponents: function () {
       const components = []
-      const contexts = [require.context('@/components/', true, /\.vue$/)]
+      const contexts = [(require as any).context('@/components/', true, /\.vue$/)]
 
       contexts.forEach((context) => {
         context.keys().forEach((key) => components.push(context(key).default))

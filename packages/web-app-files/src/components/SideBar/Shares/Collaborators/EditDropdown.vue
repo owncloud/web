@@ -70,7 +70,7 @@ export default defineComponent({
       type: String,
       required: false,
       default: null,
-      validator: function (value) {
+      validator: function (value: string) {
         return ['user', 'group'].includes(value) || !value
       }
     },
