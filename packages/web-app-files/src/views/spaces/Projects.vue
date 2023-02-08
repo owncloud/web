@@ -25,26 +25,24 @@
           </template>
         </no-content-message>
         <div v-else class="spaces-list oc-px-m oc-mt-l">
-          <resource-tiles :data="spaces">
+          <resource-tiles v-model:selectedIds="selectedResourcesIds" :data="spaces">
             <template #image="{ resource }">
               <img
                 v-if="imageContentObject[resource.id]"
-                class="space-image tile-image oc-rounded-top"
+                class="tile-preview"
                 :src="imageContentObject[resource.id]['data']"
                 alt=""
               />
             </template>
             <template #actions="{ resource }">
-              <div>
-                <oc-button
-                  v-oc-tooltip="showSpaceMemberLabel"
-                  :aria-label="showSpaceMemberLabel"
-                  appearance="raw"
-                  @click="openSidebarSharePanel(resource)"
-                >
-                  <oc-icon name="group" fill-type="line" />
-                </oc-button>
-              </div>
+              <oc-button
+                v-oc-tooltip="showSpaceMemberLabel"
+                :aria-label="showSpaceMemberLabel"
+                appearance="raw"
+                @click="openSidebarSharePanel(resource)"
+              >
+                <oc-icon name="group" fill-type="line" />
+              </oc-button>
             </template>
             <template #contextMenuActions="{ resource }">
               <space-context-actions :space="resource" :items="[resource]" />
@@ -80,6 +78,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from 'web-pkg/src/composables/sideBar'
 import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
+import { useSelectedResources } from 'web-app-files/src/composables'
 
 export default defineComponent({
   components: {
@@ -94,6 +93,8 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { selectedResourcesIds } = useSelectedResources({ store })
+
     const spaces = computed(
       () =>
         store.getters['runtime/spaces/spaces']
@@ -123,7 +124,8 @@ export default defineComponent({
       graphClient,
       loadResourcesTask,
       areResourcesLoading,
-      accessToken
+      accessToken,
+      selectedResourcesIds
     }
   },
   data: function () {
@@ -215,16 +217,10 @@ export default defineComponent({
 }
 
 .state-trashed {
-  .tile-image,
+  .tile-preview,
   .tile-default-image > svg {
     filter: grayscale(100%);
     opacity: 80%;
   }
-}
-
-.space-image {
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
 }
 </style>

@@ -10,10 +10,10 @@ exports[`ResourceTiles component renders an array of spaces correctly 1`] = `
 <div>
   <oc-list class="oc-tiles oc-flex">
     <li class="oc-tiles-item">
-      <oc-tile resource="[object Object]" resource-route="[object Object]"></oc-tile>
+      <oc-tile resource="[object Object]" resource-route="[object Object]" selected-ids=""></oc-tile>
     </li>
     <li class="oc-tiles-item">
-      <oc-tile resource="[object Object]" resource-route="[object Object]"></oc-tile>
+      <oc-tile resource="[object Object]" resource-route="[object Object]" selected-ids=""></oc-tile>
     </li>
   </oc-list> <!-- @slot Footer of the tiles list -->
 </div>

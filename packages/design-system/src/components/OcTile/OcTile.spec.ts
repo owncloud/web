@@ -1,4 +1,4 @@
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import OcTile from './OcTile.vue'
 
 const defaultSpace = {
@@ -32,7 +32,7 @@ describe('OcTile component', () => {
       props: {
         ...props
       },
-      global: { renderStubDefaultSlot: true }
+      global: { plugins: [...defaultPlugins()], renderStubDefaultSlot: true }
     })
   }
 })
