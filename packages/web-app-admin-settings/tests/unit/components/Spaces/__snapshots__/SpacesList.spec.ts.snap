@@ -138,7 +138,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
               <span class="oc-icon oc-icon-m oc-icon-passive">
                 <!---->
               </span>
-              <div class="oc-drop oc-box-shadow-medium oc-rounded" id="context-menu-drop-1">
+              <div class="oc-drop oc-box-shadow-medium oc-rounded oc-overflow-hidden" id="context-menu-drop-1">
                 <div class="oc-card oc-card-body oc-background-secondary oc-p-s"></div>
               </div>
             </button>

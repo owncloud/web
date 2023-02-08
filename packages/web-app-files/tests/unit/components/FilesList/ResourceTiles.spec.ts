@@ -3,6 +3,7 @@ import ResourceTiles from '../../../../src/components/FilesList/ResourceTiles.vu
 
 const spacesResources = [
   {
+    id: '1',
     name: 'Space 1',
     path: '',
     type: 'space',
@@ -10,6 +11,7 @@ const spacesResources = [
     getDriveAliasAndItem: () => '1'
   },
   {
+    id: '2',
     name: 'Space 2',
     path: '',
     type: 'space',
@@ -32,7 +34,14 @@ describe('ResourceTiles component', () => {
   it('emits fileClick event upon click on tile', async () => {
     const wrapper = getWrapper({ data: spacesResources })
     await wrapper.find('oc-tile').trigger('click')
-    expect(wrapper.emitted().click).toBeTruthy()
+    expect(wrapper.emitted('click')).toBeTruthy()
+  })
+
+  it('emits update:selectedIds event on resource selection and sets the selection', () => {
+    const wrapper = getWrapper({ data: spacesResources, selectedIds: [spacesResources[0].id] })
+    wrapper.vm.setSelection(spacesResources[0])
+    expect(wrapper.find('oc-tile').attributes()['is-resource-selected']).toEqual('true')
+    expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
   })
 
   function getWrapper(props = {}, slots = {}) {
