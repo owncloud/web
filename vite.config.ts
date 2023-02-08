@@ -129,6 +129,7 @@ export default defineConfig(({ mode, command }) => {
         }
       },
       resolve: {
+        dedupe: ['vue3-gettext'],
         alias: {
           crypto: join(projectRootDir, 'polyfills/crypto.js'),
           buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
