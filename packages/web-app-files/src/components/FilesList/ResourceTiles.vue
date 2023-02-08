@@ -210,7 +210,7 @@ export default defineComponent({
 .oc-tiles {
   column-gap: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 14rem);
+  grid-template-columns: repeat(auto-fill, var(--oc-size-tiles-default));
   justify-content: flex-start;
   row-gap: 1rem;
 
