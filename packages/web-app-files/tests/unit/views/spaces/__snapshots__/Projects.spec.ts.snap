@@ -9,12 +9,13 @@ exports[`Projects view different files view states lists all available project s
         <div>
           <ul class="oc-list oc-my-rm oc-mx-rm oc-tiles oc-flex">
             <li class="oc-tiles-item">
-              <oc-tile-stub resource="[object Object]" resource-route="[object Object]" selected-ids=""></oc-tile-stub>
+              <oc-tile-stub is-resource-selected="false" resource="[object Object]" resource-route="[object Object]"></oc-tile-stub>
             </li>
             <li class="oc-tiles-item">
-              <oc-tile-stub resource="[object Object]" resource-route="[object Object]" selected-ids=""></oc-tile-stub>
+              <oc-tile-stub is-resource-selected="false" resource="[object Object]" resource-route="[object Object]"></oc-tile-stub>
             </li>
-          </ul> <!-- @slot Footer of the tiles list -->
+          </ul>
+          <div class="oc-tiles-footer"></div>
         </div>
       </div>
     </div>

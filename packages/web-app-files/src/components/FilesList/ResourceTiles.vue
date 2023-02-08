@@ -6,7 +6,7 @@
           :ref="(el) => (tileRefs.tiles[resource.id] = el)"
           :resource="resource"
           :resource-route="getRoute(resource)"
-          :selected-ids="selectedIds"
+          :is-resource-selected="isResourceSelected(resource)"
           @vue:mounted="
             $emit('rowMounted', resource, tileRefs.tiles[resource.id], ImageDimension.Tile)
           "

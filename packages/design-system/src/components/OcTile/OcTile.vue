@@ -2,7 +2,10 @@
   <div
     class="oc-tile-card oc-card oc-card-default oc-rounded"
     :data-item-id="resource.id"
-    :class="resource.disabled ? 'state-trashed' : ''"
+    :class="{
+      'oc-tile-card-selected': isResourceSelected,
+      'state-trashed': resource.disabled
+    }"
     @contextmenu="$emit('contextmenu', $event)"
   >
     <oc-resource-link
@@ -21,10 +24,7 @@
       >
         <span v-text="$gettext('Disabled')" />
       </oc-tag>
-      <div
-        class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center"
-        :class="{ 'oc-tile-card-preview-selected': selectedIds.includes(resource.id) }"
-      >
+      <div class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center">
         <div class="oc-tile-card-hover"></div>
         <slot name="imageField" :item="resource">
           <oc-img v-if="resource.thumbnail" class="tile-preview" :src="resource.thumbnail" />
@@ -94,9 +94,10 @@ export default defineComponent({
       type: Object,
       default: () => {}
     },
-    selectedIds: {
-      type: Array,
-      default: () => []
+    isResourceSelected: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   emits: ['click', 'contextmenu']
@@ -106,7 +107,7 @@ export default defineComponent({
 <style lang="scss">
 .oc-tile-card {
   background-color: var(--oc-color-background-highlight) !important;
-  box-shadow: none !important;
+  box-shadow: none;
   height: 100%;
   display: flex;
   flex-flow: column;
@@ -147,6 +148,23 @@ export default defineComponent({
 
     &:hover {
       .oc-tile-card-hover {
+        opacity: 15%;
+      }
+    }
+  }
+
+  &-selected {
+    outline: 2px solid var(--oc-color-swatch-primary-hover);
+
+    .oc-tile-card-preview {
+      width: calc(100% - var(--oc-space-medium));
+      height: calc(100% - var(--oc-space-medium));
+
+      .tile-preview,
+      .oc-tile-card-hover {
+        border-radius: 5px !important;
+      }
+      .oc-tile-card-hover {
         opacity: 10%;
       }
     }
@@ -171,20 +189,6 @@ export default defineComponent({
     height: 100%;
     width: 100%;
     text-align: center;
-
-    &-selected {
-      width: calc(100% - var(--oc-space-medium));
-      height: calc(100% - var(--oc-space-medium));
-
-      .tile-preview,
-      .oc-tile-card-hover {
-        border-radius: 5px !important;
-      }
-
-      .oc-tile-card-hover {
-        opacity: 8%;
-      }
-    }
   }
 
   &-hover {
