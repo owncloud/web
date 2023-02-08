@@ -1,0 +1,7 @@
+Enhancement: Optional Contributor role and configurable resharing permissions
+
+We've added 2 new capabilities that modify the sharing Roles:
+- `files_sharing.resharing_default` (default true): wether the resharing bit should be added to the normal roles (viewer, editor, etc)  by default when re-sharing is enabled systemwise. If default is set false, users can still set resharing in the custom permissions role.
+- `files_sharing.public.can_contribute` (default true): enables or disables the Contributor role for public links
+
+https://github.com/owncloud/web/pull/7965
