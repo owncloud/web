@@ -48,7 +48,7 @@
           v-else-if="viewMode === ViewModeConstants.tilesView.name"
           :data="paginatedResources"
           class="oc-px-m oc-pt-l"
-          tile-width="small"
+          :resizable="true"
           :target-route-callback="resourceTargetRouteCallback"
           :space="space"
           @rowMounted="rowMounted"

@@ -62,6 +62,21 @@
             @change="itemsPerPage = $event"
           />
         </li>
+        <li
+          v-if="viewModeCurrent === ViewModeConstants.tilesView.name"
+          class="files-view-options-list-item oc-mt-m oc-visible@s oc-flex oc-flex-between"
+        >
+          <label for="tiles-size-slider" v-text="resizeTilesLabel" />
+          <input
+            v-model="viewSizeCurrent"
+            type="range"
+            min="1"
+            max="6"
+            name="tiles-size-slider"
+            class="oc-range"
+            @input="setTilesViewSize"
+          />
+        </li>
       </oc-list>
     </oc-drop>
   </div>
@@ -91,6 +106,10 @@ export default defineComponent({
       name: ViewModeConstants.queryName,
       defaultValue: ViewModeConstants.defaultModeName
     })
+    const viewSizeQuery = useRouteQueryPersisted({
+      name: ViewModeConstants.tilesSizeQueryName,
+      defaultValue: ViewModeConstants.tilesSizeDefault.toString()
+    })
     watch(
       [perPageQuery, viewModeQuery],
       (params) => {
@@ -102,6 +121,7 @@ export default defineComponent({
     return {
       ViewModeConstants,
       viewModeCurrent: viewModeQuery,
+      viewSizeCurrent: viewSizeQuery,
       itemsPerPage: perPageQuery,
       queryParamsLoading
     }
@@ -111,6 +131,9 @@ export default defineComponent({
 
     viewOptionsButtonLabel() {
       return this.$gettext('Display customization options of the files list')
+    },
+    resizeTilesLabel() {
+      return this.$gettext('Tile size')
     },
 
     hiddenFilesShownModel: {
@@ -136,6 +159,11 @@ export default defineComponent({
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
     setViewMode(mode) {
       this.viewModeCurrent = mode.name
+    },
+    setTilesViewSize() {
+      document
+        .querySelector(':root')
+        .style.setProperty(`--oc-size-tiles-resize-step`, `${this.viewSizeCurrent * 12}rem`)
     },
     updateHiddenFilesShownModel(event) {
       this.hiddenFilesShownModel = event
@@ -168,6 +196,41 @@ export default defineComponent({
 
   & + & {
     margin-top: var(--oc-space-small);
+  }
+}
+
+.oc-range {
+  -webkit-appearance: none;
+  -webkit-transition: 0.2s;
+  border-radius: 0.3rem;
+  background: var(--oc-color-input-border);
+  height: 0.5rem;
+  opacity: 0.7;
+  outline: none;
+  transition: opacity 0.2s;
+  width: 100%;
+  max-width: 50%;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--oc-color-swatch-primary-default);
+    border-radius: 50%;
+    cursor: pointer;
+    height: 1rem;
+    width: 1rem;
+  }
+
+  &::-moz-range-thumb {
+    background: var(--oc-color-swatch-primary-default);
+    border-radius: 50%;
+    cursor: pointer;
+    height: 1rem;
+    width: 1rem;
   }
 }
 </style>

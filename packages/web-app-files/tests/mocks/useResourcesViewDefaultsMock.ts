@@ -31,6 +31,7 @@ export const useResourcesViewDefaultsMock = (
     scrollToResource: jest.fn(),
     scrollToResourceFromRoute: jest.fn(),
     viewMode: ref('resource-table'),
+    viewSize: ref('1'),
     ...options
   }
 }
