@@ -243,7 +243,7 @@ module.exports = {
         .click('@dialogConfirmBtnSecondaryEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
-        .waitForElementVisible('@fileUploadStatus')
+        .waitForElementVisible('@uploadSuccess')
         .closeFileFolderUploadProgress()
       return this
     },
@@ -414,6 +414,9 @@ module.exports = {
     },
     dialogBoxInputTextInRed: {
       selector: '.oc-text-input-danger'
+    },
+    uploadSuccess: {
+      selector: '.upload-info-status .upload-info-success'
     }
   }
 }
