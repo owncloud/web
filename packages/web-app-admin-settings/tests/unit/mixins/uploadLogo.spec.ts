@@ -62,7 +62,7 @@ describe('uploadImage', () => {
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_uploadLogo_upload({
         currentTarget: {
-          files: [{ name: 'image.png', type: 'text/plain' }]
+          files: [{ name: 'text.txt', type: 'text/plain' }]
         }
       })
       expect(clientService.httpAuthenticated).toHaveBeenCalledTimes(0)
