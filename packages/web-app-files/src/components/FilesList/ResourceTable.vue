@@ -41,7 +41,7 @@
     <template #select="{ item }">
       <oc-checkbox
         :id="`resource-table-select-${resourceDomSelector(item)}`"
-        :label="$gettext('Select %{ type }', { type: item.type })"
+        :label="getResourceCheckboxLabel(item)"
         :hide-label="true"
         size="large"
         :model-value="isResourceSelected(item)"
@@ -770,6 +770,12 @@ export default defineComponent({
       return Array.isArray(this.disabled)
         ? !this.disabled.includes(resourceId)
         : this.disabled !== resourceId
+    },
+    getResourceCheckboxLabel(resource) {
+      if (resource.type === 'folder') {
+        return this.$gettext('Select folder')
+      }
+      return this.$gettext('Select file')
     },
     getSharedWithAvatarDescription(resource) {
       const resourceType =

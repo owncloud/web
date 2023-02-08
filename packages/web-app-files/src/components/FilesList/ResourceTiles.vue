@@ -15,7 +15,7 @@
         >
           <template #selection>
             <oc-checkbox
-              :label="$gettext('Select %{ type }', { type: resource.type })"
+              :label="getResourceCheckboxLabel(resource)"
               :hide-label="true"
               size="large"
               class="oc-flex-inline oc-p-s"
@@ -184,6 +184,17 @@ export default defineComponent({
       context.emit('update:selectedIds', selectedIds)
     }
 
+    const getResourceCheckboxLabel = (resource) => {
+      switch (resource.type) {
+        case 'folder':
+          return $gettext('Select folder')
+        case 'space':
+          return $gettext('Select space')
+        default:
+          return $gettext('Select file')
+      }
+    }
+
     onBeforeUpdate(() => {
       tileRefs.value = {
         tiles: [],
@@ -198,7 +209,8 @@ export default defineComponent({
       showContextMenu,
       tileRefs,
       isResourceSelected,
-      setSelection
+      setSelection,
+      getResourceCheckboxLabel
     }
   },
   data() {
