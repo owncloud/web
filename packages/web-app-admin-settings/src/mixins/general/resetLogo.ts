@@ -20,14 +20,22 @@ export default {
   methods: {
     ...mapActions(['showMessage']),
 
-    $_resetLogo_trigger({ resources }) {
-      this.showMessage({
-        title: this.$gettext('Logo was reset successfully')
-      })
-
-      setTimeout(() => {
-        this.$router.go(this.$router.currentRoute)
-      }, 1000)
+    $_resetLogo_trigger() {
+      try {
+        this.httpClient.delete('/branding/logo')
+        this.showMessage({
+          title: this.$gettext('Logo was reset successfully')
+        })
+        setTimeout(() => {
+          this.$router.go(this.$router.currentRoute)
+        }, 1000)
+      } catch (e) {
+        console.error(e)
+        this.showMessage({
+          title: this.$gettext('Failed to reset logo'),
+          status: 'danger'
+        })
+      }
     }
   }
 }

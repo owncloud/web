@@ -25,7 +25,7 @@
       </div>
       <div>
         <div class="logo-wrapper">
-          <img :src="logo" class="oc-p-s" />
+          <img :src="logo" />
         </div>
         <input
           id="logo-upload-input"
@@ -46,7 +46,7 @@ import { defineComponent, getCurrentInstance, computed, unref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import UploadLogo from '../../mixins/general/uploadLogo'
 import ResetLogo from '../../mixins/general/resetLogo'
-import { useStore } from 'web-pkg'
+import { clientService, useAccessToken, useStore } from 'web-pkg'
 
 export default defineComponent({
   name: 'AppearanceSection',
@@ -56,6 +56,8 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const accessToken = useAccessToken({ store })
+    const httpClient = clientService.httpAuthenticated(unref(accessToken))
     const instance = getCurrentInstance().proxy as any
     const supportedLogoMimeTypes = ['image/jpg', 'image/png', 'image/gif']
     const supportedLogoMimeTypesDisplayValue = supportedLogoMimeTypes
@@ -76,6 +78,7 @@ export default defineComponent({
 
     return {
       logo,
+      httpClient,
       menuItems,
       menuSections,
       supportedLogoMimeTypes,

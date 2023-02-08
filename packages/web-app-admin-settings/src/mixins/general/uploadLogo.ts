@@ -37,14 +37,28 @@ export default {
         })
       }
 
-      this.showMessage({
-        title: this.$gettext('Logo was uploaded successfully')
-      })
+      try {
+        const formData = new FormData()
+        formData.append('logo', file)
 
-      return
-      setTimeout(() => {
-        this.$router.go(this.$router.currentRoute)
-      }, 1000)
+        this.httpClient.post('/branding/logo', formData as any, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        this.showMessage({
+          title: this.$gettext('Logo was uploaded successfully')
+        })
+        setTimeout(() => {
+          this.$router.go(this.$router.currentRoute)
+        }, 1000)
+      } catch (e) {
+        console.error(e)
+        this.showMessage({
+          title: this.$gettext('Failed to upload logo'),
+          status: 'danger'
+        })
+      }
     }
   }
 }
