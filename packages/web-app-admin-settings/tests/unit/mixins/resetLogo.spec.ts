@@ -37,12 +37,13 @@ describe('resetLogo', () => {
     it('should show message on request error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const httpClientMock = mockDeep<any>({
-        delete: jest.fn().mockResolvedValue(() => mockAxiosReject())
+        delete: jest.fn().mockRejectedValue(() => mockAxiosReject())
       })
       jest.spyOn(clientService, 'httpAuthenticated').mockImplementation(() => httpClientMock)
       const { wrapper } = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_resetLogo_reset()
+      jest.runAllTimers()
       expect(wrapper.vm.$router.go).toHaveBeenCalledTimes(0)
       expect(showMessageStub).toHaveBeenCalledTimes(1)
     })

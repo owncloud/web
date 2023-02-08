@@ -25,11 +25,11 @@ export default {
       this.$_resetLogo_reset()
     },
 
-    $_resetLogo_reset() {
+    async $_resetLogo_reset() {
       try {
         const accessToken = this.$store.getters['runtime/auth/accessToken']
         const httpClient = clientService.httpAuthenticated(accessToken)
-        httpClient.delete('/branding/logo')
+        await httpClient.delete('/branding/logo')
         this.showMessage({
           title: this.$gettext('Logo was reset successfully')
         })

@@ -25,7 +25,7 @@ export default {
     $_uploadLogo_trigger() {
       this.$refs.logoInput.click()
     },
-    $_uploadLogo_upload(ev) {
+    async $_uploadLogo_upload(ev) {
       const file = ev.currentTarget.files[0]
 
       if (!file) {
@@ -44,7 +44,7 @@ export default {
         const httpClient = clientService.httpAuthenticated(accessToken)
         const formData = new FormData()
         formData.append('logo', file)
-        httpClient.post('/branding/logo', formData as never, {
+        await httpClient.post('/branding/logo', formData as never, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

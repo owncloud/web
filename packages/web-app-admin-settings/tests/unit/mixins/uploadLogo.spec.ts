@@ -41,7 +41,7 @@ describe('uploadImage', () => {
     it('should show message on request error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const httpClientMock = mockDeep<any>({
-        post: jest.fn().mockResolvedValue(() => mockAxiosReject())
+        post: jest.fn().mockRejectedValue(() => mockAxiosReject())
       })
       jest.spyOn(clientService, 'httpAuthenticated').mockImplementation(() => httpClientMock)
       const { wrapper } = getWrapper()
@@ -51,6 +51,7 @@ describe('uploadImage', () => {
           files: [{ name: 'image.png', type: 'image/png' }]
         }
       })
+      jest.runAllTimers()
       expect(wrapper.vm.$router.go).toHaveBeenCalledTimes(0)
       expect(showMessageStub).toHaveBeenCalledTimes(1)
     })
