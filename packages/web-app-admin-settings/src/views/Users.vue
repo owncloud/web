@@ -179,7 +179,10 @@ export default defineComponent({
 
     const loadResourcesTask = useTask(function* (signal, loadGroups = true, groupIds = null) {
       // TODO: filter group ids
-      const usersResponse = yield unref(graphClient).users.listUsers('displayName')
+      const usersResponse = yield unref(graphClient).users.listUsers(
+        'displayName'
+        // "memberOf/any(m:m/id eq '13bc6d10-00fd-4091-a978-923e1528be60')"
+      )
       users.value = usersResponse.data.value || []
 
       if (loadGroups) {

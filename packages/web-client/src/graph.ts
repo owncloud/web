@@ -50,7 +50,7 @@ export interface Graph {
     changeOwnPassword: (currentPassword: string, newPassword: string) => AxiosPromise<void>
     editUser: (userId: string, user: User) => AxiosPromise<User>
     deleteUser: (userId: string) => AxiosPromise<void>
-    listUsers: (orderBy?: string) => AxiosPromise<CollectionOfUser>
+    listUsers: (orderBy?: string, filter?: string) => AxiosPromise<CollectionOfUser>
     createUserAppRoleAssignment: (
       userId: string,
       appRoleAssignment: AppRoleAssignment
@@ -131,12 +131,12 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         meChangepasswordApiFactory.changeOwnPassword({ currentPassword, newPassword }),
       editUser: (userId: string, user: User) => userApiFactory.updateUser(userId, user),
       deleteUser: (userId: string) => userApiFactory.deleteUser(userId),
-      listUsers: (orderBy?: any) =>
+      listUsers: (orderBy?: any, filter?: string) =>
         usersApiFactory.listUsers(
           0,
           0,
           '',
-          '',
+          filter,
           false,
           new Set<any>([orderBy]),
           new Set<any>([]),
