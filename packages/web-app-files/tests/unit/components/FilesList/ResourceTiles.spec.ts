@@ -39,7 +39,7 @@ describe('ResourceTiles component', () => {
 
   it('emits update:selectedIds event on resource selection and sets the selection', () => {
     const wrapper = getWrapper({ data: spacesResources, selectedIds: [spacesResources[0].id] })
-    wrapper.vm.setSelection(spacesResources[0])
+    wrapper.vm.toggleSelection(spacesResources[0])
     expect(wrapper.find('oc-tile').attributes()['is-resource-selected']).toEqual('true')
     expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
   })

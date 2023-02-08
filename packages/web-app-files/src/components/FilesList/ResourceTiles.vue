@@ -20,7 +20,7 @@
               size="large"
               class="oc-flex-inline oc-p-s"
               :model-value="isResourceSelected(resource)"
-              @click.stop.prevent="setSelection(resource)"
+              @click.stop.prevent="toggleSelection(resource)"
             />
           </template>
           <template #imageField>
@@ -177,7 +177,7 @@ export default defineComponent({
       return props.selectedIds.includes(resource.id)
     }
 
-    const setSelection = (resource) => {
+    const toggleSelection = (resource) => {
       const selectedIds = !isResourceSelected(resource)
         ? [...props.selectedIds, resource.id]
         : props.selectedIds.filter((id) => id !== resource.id)
@@ -209,7 +209,7 @@ export default defineComponent({
       showContextMenu,
       tileRefs,
       isResourceSelected,
-      setSelection,
+      toggleSelection,
       getResourceCheckboxLabel
     }
   },
