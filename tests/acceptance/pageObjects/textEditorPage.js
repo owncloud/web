@@ -50,7 +50,9 @@ module.exports = {
       return this.elements.previewPanel.selector
     },
     saveFileEdit: function () {
-      return this.waitForElementVisible('@saveButton').click('@saveButton')
+      return this.waitForElementVisible('@saveButton')
+        .click('@saveButton')
+        .waitForElementVisible('@saveButtonDisabled')
     },
     closeTextEditor: function () {
       return this.waitForElementVisible('@closeButton').click('@closeButton')
@@ -99,6 +101,9 @@ module.exports = {
     },
     previewPanel: {
       selector: '#text-editor-preview'
+    },
+    saveButtonDisabled: {
+      selector: '#text-editor-controls-save:disabled'
     }
   }
 }
