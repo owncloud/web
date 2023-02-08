@@ -8,8 +8,8 @@
       id="_appSwitcherButton"
       ref="menubutton"
       v-oc-tooltip="applicationSwitcherLabel"
-      appearance="raw"
-      variation="inverse"
+      appearance="raw-inverse"
+      variation="brand"
       class="oc-topbar-menu-burger"
       :aria-label="applicationSwitcherLabel"
     >
@@ -31,9 +31,9 @@
             :target="n.target"
             :href="n.url"
             :to="n.path"
-            appearance="raw"
+            :appearance="n.active ? 'raw-inverse' : 'raw'"
+            :variation="n.active ? 'primary' : 'passive'"
             :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
-            :variation="n.active ? 'inverse' : 'passive'"
           >
             <span class="icon-box">
               <oc-icon :name="n.icon" />
@@ -121,7 +121,7 @@ export default defineComponent({
   button.router-link-active {
     &:focus,
     &:hover {
-      color: var(--oc-color-swatch-inverse-default);
+      color: var(--oc-color-swatch-passive-contrast);
     }
   }
 }

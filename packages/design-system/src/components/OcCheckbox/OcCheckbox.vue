@@ -179,7 +179,7 @@ export default defineComponent({
   &-checked,
   :checked,
   &:indeterminate {
-    background-color: var(--oc-color-swatch-inverse-default);
+    background-color: var(--oc-color-swatch-passive-contrast);
   }
 
   &-checked,

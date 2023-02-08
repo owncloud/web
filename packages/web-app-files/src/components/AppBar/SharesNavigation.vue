@@ -24,10 +24,9 @@
             <oc-button
               type="router-link"
               class="oc-my-xs shares-nav-mobile"
-              appearance="raw"
               :to="navItem.to"
               :class="{ 'oc-background-primary-gradient': navItem.active }"
-              :variation="navItem.active ? 'inverse' : 'passive'"
+              :appearance="navItem.active ? 'raw-inverse' : 'raw'"
             >
               <span class="icon-box" :class="{ 'icon-box-active': navItem.active }">
                 <oc-icon :name="navItem.icon" />

@@ -231,12 +231,6 @@ export default defineComponent({
       background-color: var(--oc-color-background-hover) !important;
     }
   }
-  &-input input {
-    border: 1px solid var(--oc-color-swatch-inverse-muted);
-  }
-  &-checkbox input {
-    border: 2px solid var(--oc-color-swatch-inverse-muted);
-  }
 }
 </style>
 

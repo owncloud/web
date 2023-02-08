@@ -5,8 +5,8 @@
       type="a"
       :href="hrefOrFallback"
       target="_blank"
-      appearance="raw"
-      variation="inverse"
+      appearance="raw-inverse"
+      variation="brand"
       :aria-label="ariaLabelOrFallback"
       aria-describedby="oc-feedback-link-description"
     >

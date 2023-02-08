@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ThemeSwitcher component restores dark theme if dark theme is saved in localstorage 1`] = `
-<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw themeswitcher-btn" type="button">
+<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
   <oc-icon-stub fill-type="line" name="moon-clear"></oc-icon-stub>
@@ -9,7 +9,7 @@ exports[`ThemeSwitcher component restores dark theme if dark theme is saved in l
 `;
 
 exports[`ThemeSwitcher component restores light theme if light theme is saved in localstorage 1`] = `
-<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw themeswitcher-btn" type="button">
+<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
   <oc-icon-stub fill-type="line" name="sun"></oc-icon-stub>
@@ -17,7 +17,7 @@ exports[`ThemeSwitcher component restores light theme if light theme is saved in
 `;
 
 exports[`ThemeSwitcher component visually renders a button, initially in dark mode if user prefers dark color scheme 1`] = `
-<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw themeswitcher-btn" type="button">
+<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
   <oc-icon-stub fill-type="line" name="moon-clear"></oc-icon-stub>
@@ -25,7 +25,7 @@ exports[`ThemeSwitcher component visually renders a button, initially in dark mo
 `;
 
 exports[`ThemeSwitcher component visually renders a button, initially in light mode per default 1`] = `
-<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw themeswitcher-btn" type="button">
+<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
   <oc-icon-stub fill-type="line" name="sun"></oc-icon-stub>
@@ -33,7 +33,7 @@ exports[`ThemeSwitcher component visually renders a button, initially in light m
 `;
 
 exports[`ThemeSwitcher component visually toggles between themes upon click 1`] = `
-<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw themeswitcher-btn" type="button">
+<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
   <oc-icon-stub fill-type="line" name="moon-clear"></oc-icon-stub>
@@ -41,7 +41,7 @@ exports[`ThemeSwitcher component visually toggles between themes upon click 1`] 
 `;
 
 exports[`ThemeSwitcher component visually toggles between themes upon click 2`] = `
-<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw themeswitcher-btn" type="button">
+<button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
   <oc-icon-stub fill-type="line" name="sun"></oc-icon-stub>

@@ -464,7 +464,7 @@ export default defineComponent({
     }
 
     > h2 {
-      color: var(--oc-color-swatch-inverse-default);
+      color: var(--oc-color-swatch-brand-contrast);
       font-size: 1rem;
       font-weight: bold;
       margin: 0;

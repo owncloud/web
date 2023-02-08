@@ -393,10 +393,10 @@ export default defineComponent({
       }
 
       &.selected {
-        color: var(--oc-color-swatch-inverse-default) !important;
+        color: var(--oc-color-swatch-passive-contrast) !important;
 
         ::v-deep .oc-icon > svg {
-          fill: var(--oc-color-swatch-inverse-default) !important;
+          fill: var(--oc-color-swatch-passive-contrast) !important;
         }
       }
     }

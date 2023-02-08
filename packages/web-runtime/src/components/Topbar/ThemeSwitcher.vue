@@ -3,8 +3,8 @@
     v-oc-tooltip="buttonLabel"
     class="themeswitcher-btn"
     :aria-label="buttonLabel"
-    appearance="raw"
-    variation="inverse"
+    appearance="raw-inverse"
+    variation="brand"
     @click="toggleTheme"
   >
     <span class="oc-visible@s" :aria-label="switchLabel" />

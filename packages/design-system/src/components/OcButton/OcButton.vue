@@ -95,25 +95,29 @@ export default defineComponent({
     /**
      * Style variation to give additional meaning.
      * Defaults to `primary`.
-     * Can be `passive, primary, danger, success, warning`.
+     * Can be `passive, primary, danger, success, warning, brand`.
      */
     variation: {
       type: String,
       default: 'passive',
       validator: (value: string) => {
-        return ['passive', 'primary', 'danger', 'success', 'warning', 'inverse'].includes(value)
+        return ['passive', 'primary', 'danger', 'success', 'warning', 'brand'].includes(value)
       }
     },
     /**
      * Style variation to give additional meaning.
      * Defaults to `outline`.
-     * Can be `outline, filled, raw`.
+     * Can be `outline, filled, raw, raw-inverse` with following characteristics:
+     * - outline: transparent button with text- and border-color according to variation default-color
+     * - filled: button filled in variation default-color, text in variation contrast-color
+     * - raw: text-only button with text in variation default-color
+     * - raw-inverse: text-only button with text in variation contrast-color
      */
     appearance: {
       type: String,
       default: 'outline',
       validator: (value: string) => {
-        return ['filled', 'outline', 'raw'].includes(value)
+        return ['filled', 'outline', 'raw', 'raw-inverse'].includes(value)
       }
     },
     /**
@@ -193,9 +197,7 @@ export default defineComponent({
   line-height: $oc-size-icon-default * $factor;
 }
 
-@mixin oc-button-variation($color, $hover-color, $muted-color) {
-  background-color: $color;
-
+@mixin oc-button-variation($color, $hover-color, $muted-color, $contrast-color) {
   &:disabled {
     background-color: $muted-color;
   }
@@ -205,23 +207,14 @@ export default defineComponent({
     background-color: $hover-color;
   }
 
-  &-raw {
+  &-raw,
+  &-raw-inverse {
     background-color: transparent;
     border-style: none;
-    color: $color;
     font-size: var(--oc-font-size-medium);
     font-weight: normal;
     min-height: 0;
     padding: 0;
-
-    .oc-icon > svg {
-      fill: $color;
-    }
-
-    &:disabled {
-      background-color: transparent;
-      color: $muted-color;
-    }
 
     &:focus:not([disabled]),
     &:hover:not([disabled]) {
@@ -231,6 +224,34 @@ export default defineComponent({
     &:focus:not([disabled]):not(button),
     &:hover:not([disabled]):not(button) {
       text-decoration: underline;
+    }
+
+    &:disabled {
+      background-color: transparent;
+      color: $muted-color;
+    }
+  }
+  &-raw {
+    color: $color;
+
+    .oc-icon > svg {
+      fill: $color;
+    }
+  }
+  &-raw-inverse {
+    color: $contrast-color;
+
+    .oc-icon > svg {
+      fill: $contrast-color;
+    }
+  }
+
+  &-filled {
+    background-color: $color;
+    color: $contrast-color;
+
+    .oc-icon > svg {
+      fill: $contrast-color;
     }
   }
 
@@ -268,7 +289,6 @@ export default defineComponent({
   align-items: center;
   border: 0;
   box-sizing: border-box;
-  color: var(--oc-color-text-inverse);
   display: inline-flex;
   font-weight: 400;
   padding: 0.5rem 0.8rem;
@@ -348,15 +368,21 @@ export default defineComponent({
     min-height: 2rem;
   }
 
-  .oc-icon > svg {
-    fill: var(--oc-color-text-inverse);
-  }
-
   &-passive {
     @include oc-button-variation(
       var(--oc-color-swatch-passive-default),
       var(--oc-color-swatch-passive-hover),
-      var(--oc-color-swatch-passive-muted)
+      var(--oc-color-swatch-passive-muted),
+      var(--oc-color-swatch-passive-contrast)
+    );
+  }
+
+  &-brand {
+    @include oc-button-variation(
+      var(--oc-color-swatch-brand-default),
+      var(--oc-color-swatch-brand-hover),
+      var(--oc-color-swatch-brand-muted),
+      var(--oc-color-swatch-brand-contrast)
     );
   }
 
@@ -364,14 +390,15 @@ export default defineComponent({
     @include oc-button-variation(
       var(--oc-color-swatch-primary-default),
       var(--oc-color-swatch-primary-hover),
-      var(--oc-color-swatch-primary-muted)
+      var(--oc-color-swatch-primary-muted),
+      var(--oc-color-swatch-primary-contrast)
     );
     &-filled {
       @include oc-background-primary-gradient;
-      color: var(--oc-color-swatch-inverse-default) !important;
+      color: var(--oc-color-swatch-primary-contrast) !important;
 
       span > svg {
-        fill: var(--oc-color-swatch-inverse-default) !important;
+        fill: var(--oc-color-swatch-primary-contrast) !important;
       }
     }
   }
@@ -380,7 +407,8 @@ export default defineComponent({
     @include oc-button-variation(
       var(--oc-color-swatch-success-default),
       var(--oc-color-swatch-success-hover),
-      var(--oc-color-swatch-success-muted)
+      var(--oc-color-swatch-success-muted),
+      var(--oc-color-swatch-success-contrast)
     );
   }
 
@@ -388,7 +416,8 @@ export default defineComponent({
     @include oc-button-variation(
       var(--oc-color-swatch-warning-default),
       var(--oc-color-swatch-warning-hover),
-      var(--oc-color-swatch-warning-muted)
+      var(--oc-color-swatch-warning-muted),
+      var(--oc-color-swatch-warning-contrast)
     );
   }
 
@@ -396,39 +425,9 @@ export default defineComponent({
     @include oc-button-variation(
       var(--oc-color-swatch-danger-default),
       var(--oc-color-swatch-danger-hover),
-      var(--oc-color-swatch-danger-muted)
+      var(--oc-color-swatch-danger-muted),
+      var(--oc-color-swatch-danger-contrast)
     );
-  }
-
-  &-inverse {
-    @include oc-button-variation(
-      var(--oc-color-swatch-inverse-default),
-      var(--oc-color-swatch-inverse-hover),
-      var(--oc-color-swatch-inverse-muted)
-    );
-
-    &:not([disabled]) {
-      color: var(--oc-color-swatch-brand-default);
-      .oc-icon-passive > svg {
-        fill: var(--oc-color-swatch-brand-default);
-      }
-    }
-
-    &-outline:not([disabled]),
-    &-raw:not([disabled]) {
-      color: var(--oc-color-swatch-inverse-default);
-      .oc-icon-passive > svg {
-        fill: var(--oc-color-swatch-inverse-default);
-      }
-    }
-
-    &-outline:hover:not([disabled]),
-    &-outline:focus:not([disabled]) {
-      color: var(--oc-color-swatch-brand-default);
-      .oc-icon-passive > svg {
-        fill: var(--oc-color-swatch-brand-default);
-      }
-    }
   }
 
   &:disabled {
@@ -611,10 +610,6 @@ export default {
         {
           title: "danger",
           description: "Use for triggering possible destructive and non-reversible actions, like permanently deleting a file"
-        },
-        {
-          title: "inverse",
-          description: "Use on a dark background"
         }
       ]
     },
@@ -622,7 +617,8 @@ export default {
       return [
         "outline",
         "filled",
-        "raw"
+        "raw",
+        "raw-inverse"
       ]
     },
   },

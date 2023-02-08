@@ -133,14 +133,13 @@ export default defineComponent({
     /**
      * Style variation to give additional meaning.
      * Defaults to `passive`.
-     * Can be `passive, primary, danger, success, warning or inverse`.
-     * Inverse is meant to be used for icons on a colorful background.
+     * Can be `passive, primary, danger, success, warning or brand`.
      */
     variation: {
       type: String,
       default: 'passive',
       validator: (value: string) => {
-        return ['passive', 'primary', 'danger', 'success', 'warning', 'inverse'].includes(value)
+        return ['passive', 'primary', 'danger', 'success', 'warning', 'brand'].includes(value)
       }
     },
     /**
@@ -205,7 +204,6 @@ export default defineComponent({
 
   svg {
     display: block;
-    fill: var(--oc-color-swatch-passive-default);
   }
 
   &,
@@ -282,8 +280,8 @@ export default defineComponent({
     fill: var(--oc-color-swatch-danger-default);
   }
 
-  &-inverse > svg {
-    fill: var(--oc-color-text-inverse) !important;
+  &-brand > svg {
+    fill: var(--oc-color-swatch-brand-default);
   }
 }
 </style>
@@ -318,7 +316,7 @@ export default defineComponent({
       <oc-tbody>
         <oc-tr v-for="variation in variations" :key="'variation-' + variation.id">
           <oc-td>{{ variation.name }}</oc-td>
-          <oc-td v-bind:class="{'oc-background-brand': variation.name == 'inverse'}">
+          <oc-td>
             <oc-icon :variation="variation.name" name="close"/>
             <oc-icon :variation="variation.name" name="delete-bin-5"/>
             <oc-icon :variation="variation.name" name="information"/>
@@ -379,7 +377,7 @@ export default defineComponent({
           name: "warning",
         }, {
           id: "2324-8956-9042",
-          name: "inverse",
+          name: "brand",
         }]
       },
       sizes() {

@@ -2,7 +2,7 @@
 
 exports[`ApplicationsMenu component should render navigation with button and menu items in dropdown 1`] = `
 <nav aria-label="Main navigation" class="oc-flex oc-flex-middle" id="applications-menu">
-  <oc-button-stub appearance="raw" arialabel="Application Switcher" class="oc-topbar-menu-burger" disabled="false" gapsize="medium" id="_appSwitcherButton" justifycontent="center" size="medium" submit="button" type="button" variation="inverse">
+  <oc-button-stub appearance="raw-inverse" arialabel="Application Switcher" class="oc-topbar-menu-burger" disabled="false" gapsize="medium" id="_appSwitcherButton" justifycontent="center" size="medium" submit="button" type="button" variation="brand">
     <oc-icon-stub accessiblelabel="" class="oc-flex" color="" filltype="fill" name="grid" size="large" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
   <oc-drop-stub closeonclick="true" dropid="app-switcher-dropdown" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#_appSwitcherButton">

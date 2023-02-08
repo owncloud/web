@@ -161,7 +161,7 @@ export default defineComponent({
   .oc-sidebar-nav li a.active {
     &:focus,
     &:hover {
-      color: var(--oc-color-swatch-inverse-default);
+      color: var(--oc-color-swatch-passive-contrast);
     }
   }
 }

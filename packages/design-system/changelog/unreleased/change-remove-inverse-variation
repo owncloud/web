@@ -1,0 +1,6 @@
+Change: "inverse" variation removed from buttons and icons
+
+The "inverse" variation has been removed from the `OcButton` and `OcIcon` components respectively. They are unused in the ownCloud affiliated code bases, hence the clean up.
+For `OcButton` there is a new `raw-inverse` variation which utilizes the new `contrast` color swatch token of the chosen variation.
+
+https://github.com/owncloud/web/pull/8563

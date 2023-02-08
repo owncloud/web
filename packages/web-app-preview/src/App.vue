@@ -77,8 +77,7 @@
         <oc-button
           v-oc-tooltip="previousDescription"
           class="preview-controls-previous"
-          appearance="raw"
-          variation="inverse"
+          appearance="raw-inverse"
           :aria-label="previousDescription"
           @click="prev"
         >
@@ -91,8 +90,7 @@
         <oc-button
           v-oc-tooltip="nextDescription"
           class="preview-controls-next"
-          appearance="raw"
-          variation="inverse"
+          appearance="raw-inverse"
           :aria-label="nextDescription"
           @click="next"
         >
@@ -104,8 +102,7 @@
               isFullScreenModeActivated ? exitFullScreenDescription : enterFullScreenDescription
             "
             class="preview-controls-fullscreen"
-            appearance="raw"
-            variation="inverse"
+            appearance="raw-inverse"
             :aria-label="
               isFullScreenModeActivated ? exitFullScreenDescription : enterFullScreenDescription
             "
@@ -122,8 +119,7 @@
             <oc-button
               v-oc-tooltip="imageShrinkDescription"
               class="preview-controls-image-shrink"
-              appearance="raw"
-              variation="inverse"
+              appearance="raw-inverse"
               :aria-label="imageShrinkDescription"
               @click="imageShrink"
             >
@@ -132,8 +128,7 @@
             <oc-button
               v-oc-tooltip="imageOriginalSizeDescription"
               class="preview-controls-image-original-size oc-ml-s oc-mr-s"
-              appearance="raw"
-              variation="inverse"
+              appearance="raw-inverse"
               :aria-label="imageOriginalSizeDescription"
               @click="currentImageZoom = 1"
             >
@@ -142,8 +137,7 @@
             <oc-button
               v-oc-tooltip="imageZoomDescription"
               class="preview-controls-image-zoom"
-              appearance="raw"
-              variation="inverse"
+              appearance="raw-inverse"
               :aria-label="imageZoomDescription"
               @click="imageZoom"
             >
@@ -154,8 +148,7 @@
             <oc-button
               v-oc-tooltip="imageRotateLeftDescription"
               class="preview-controls-rotate-left"
-              appearance="raw"
-              variation="inverse"
+              appearance="raw-inverse"
               :aria-label="imageRotateLeftDescription"
               @click="imageRotateLeft"
             >
@@ -164,8 +157,7 @@
             <oc-button
               v-oc-tooltip="imageRotateRightDescription"
               class="preview-rotate-right"
-              appearance="raw"
-              variation="inverse"
+              appearance="raw-inverse"
               :aria-label="imageRotateRightDescription"
               @click="imageRotateRight"
             >
@@ -652,7 +644,7 @@ export default defineComponent({
 }
 
 .preview-controls-action-count {
-  color: var(--oc-color-swatch-inverse-default);
+  color: var(--oc-color-swatch-passive-contrast);
 }
 
 .preview-controls-image-original-size {
