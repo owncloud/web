@@ -22,6 +22,10 @@ export default {
     ...mapActions(['showMessage']),
 
     $_resetLogo_trigger() {
+      this.$_resetLogo_reset()
+    },
+
+    $_resetLogo_reset() {
       try {
         const accessToken = this.$store.getters['runtime/auth/accessToken']
         const httpClient = clientService.httpAuthenticated(accessToken)
