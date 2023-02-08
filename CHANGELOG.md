@@ -337,12 +337,16 @@ Details
 * Enhancement - Add tiles view for resource display: [#7991](https://github.com/owncloud/web/pull/7991)
 
    We've added a switch to change from the known resource table to a tiles view. The change gets
-   saved to the url and persisted across resource navigation.
+   saved to the url and persisted across resource navigation. Tiles can be dynamically resized on
+   screens bigger than mobile, using the "display customization options" dropdown.
 
    https://github.com/owncloud/web/issues/6378
    https://github.com/owncloud/web/issues/6379
    https://github.com/owncloud/web/issues/6380
+   https://github.com/owncloud/web/issues/8367
+   https://github.com/owncloud/web/issues/8368
    https://github.com/owncloud/web/pull/7991
+   https://github.com/owncloud/web/pull/8372
 
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 
