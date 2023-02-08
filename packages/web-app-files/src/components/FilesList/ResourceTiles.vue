@@ -1,17 +1,15 @@
 <template>
   <div>
     <oc-list class="oc-tiles oc-flex" :class="resizable ? 'resizableTiles' : ''">
-      <li v-for="(resource, index) in data" :key="resource.id" class="oc-tiles-item">
+      <li v-for="resource in data" :key="resource.id" class="oc-tiles-item">
         <oc-tile
-          :ref="
-            (el) => {
-              tileRefs.tiles[index] = el
-            }
-          "
+          :ref="(el) => (tileRefs.tiles[resource.id] = el)"
           :resource="resource"
           :resource-route="getRoute(resource)"
-          @vue:mounted="$emit('rowMounted', resource, tileRefs.tiles[index], ImageDimension.Tile)"
-          @contextmenu="showContextMenu($event, index, tileRefs.tiles[index])"
+          @vue:mounted="
+            $emit('rowMounted', resource, tileRefs.tiles[resource.id], ImageDimension.Tile)
+          "
+          @contextmenu="showContextMenu($event, resource.id, tileRefs.tiles[resource.id])"
           @click="emitTileClick(resource)"
         >
           <template #imageField>
@@ -26,20 +24,20 @@
                 :id="`space-context-btn-${resource.getDomSelector()}`"
                 :ref="
                   (el) => {
-                    tileRefs.dropBtns[index] = el
+                    tileRefs.dropBtns[resource.id] = el
                   }
                 "
                 v-oc-tooltip="contextMenuLabel"
                 :aria-label="contextMenuLabel"
                 appearance="raw"
-                @click="resetDropPosition($event, index, tileRefs.dropBtns[index])"
+                @click="resetDropPosition($event, resource.id, tileRefs.dropBtns[resource.id])"
               >
                 <oc-icon name="more-2" />
               </oc-button>
               <oc-drop
                 :ref="
                   (el) => {
-                    tileRefs.dropEls[index] = el
+                    tileRefs.dropEls[resource.id] = el
                   }
                 "
                 :drop-id="`space-context-drop-${resource.getDomSelector()}`"
