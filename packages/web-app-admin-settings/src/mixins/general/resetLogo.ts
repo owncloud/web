@@ -1,4 +1,5 @@
 import { mapActions } from 'vuex'
+import { clientService } from 'web-pkg'
 
 export default {
   computed: {
@@ -22,7 +23,9 @@ export default {
 
     $_resetLogo_trigger() {
       try {
-        this.httpClient.delete('/branding/logo')
+        const accessToken = this.$store.getters['runtime/auth/accessToken']
+        const httpClient = clientService.httpAuthenticated(accessToken)
+        httpClient.delete('/branding/logo')
         this.showMessage({
           title: this.$gettext('Logo was reset successfully')
         })

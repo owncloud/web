@@ -2,7 +2,7 @@
   <div>
     <app-template ref="template" :breadcrumbs="breadcrumbs">
       <template #mainContent>
-        <div class="oc-px-m">
+        <div class="oc-px-m oc-">
           <InfoSection />
           <AppearanceSection />
         </div>

@@ -1,4 +1,6 @@
 import { mapActions } from 'vuex'
+import { clientService } from 'web-pkg'
+import { supportedLogoMimeTypes } from '../../defaults'
 
 export default {
   computed: {
@@ -30,7 +32,7 @@ export default {
         return
       }
 
-      if (!this.supportedLogoMimeTypes.includes(file.type)) {
+      if (!supportedLogoMimeTypes.includes(file.type)) {
         return this.showMessage({
           title: this.$gettext('The file type is unsupported'),
           status: 'danger'
@@ -38,10 +40,11 @@ export default {
       }
 
       try {
+        const accessToken = this.$store.getters['runtime/auth/accessToken']
+        const httpClient = clientService.httpAuthenticated(accessToken)
         const formData = new FormData()
         formData.append('logo', file)
-
-        this.httpClient.post('/branding/logo', formData as any, {
+        httpClient.post('/branding/logo', formData as never, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

@@ -46,7 +46,8 @@ import { defineComponent, getCurrentInstance, computed, unref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import UploadLogo from '../../mixins/general/uploadLogo'
 import ResetLogo from '../../mixins/general/resetLogo'
-import { clientService, useAccessToken, useStore } from 'web-pkg'
+import { supportedLogoMimeTypes } from '../../defaults'
+import { useStore } from 'web-pkg'
 
 export default defineComponent({
   name: 'AppearanceSection',
@@ -56,10 +57,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const accessToken = useAccessToken({ store })
-    const httpClient = clientService.httpAuthenticated(unref(accessToken))
     const instance = getCurrentInstance().proxy as any
-    const supportedLogoMimeTypes = ['image/jpg', 'image/png', 'image/gif']
     const supportedLogoMimeTypesDisplayValue = supportedLogoMimeTypes
       .map((mimeType) => mimeType.split('/').pop())
       .sort()
@@ -78,7 +76,6 @@ export default defineComponent({
 
     return {
       logo,
-      httpClient,
       menuItems,
       menuSections,
       supportedLogoMimeTypes,
