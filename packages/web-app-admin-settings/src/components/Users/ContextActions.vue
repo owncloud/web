@@ -1,6 +1,12 @@
 <template>
   <div>
     <context-action-menu :menu-sections="menuSections" :items="items" />
+    <quota-modal
+      v-if="quotaModalIsOpen"
+      :cancel="closeQuotaModal"
+      :spaces="drives"
+      @space-quota-updated="spaceQuotaUpdated"
+    />
   </div>
 </template>
 
@@ -11,15 +17,22 @@ import Edit from '../../mixins/users/edit'
 import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import { User } from 'web-client/src/generated'
+import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
+import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 
 export default defineComponent({
   name: 'ContextActions',
-  components: { ContextActionMenu },
-  mixins: [Delete, Edit, ShowDetails],
+  components: { ContextActionMenu, QuotaModal },
+  mixins: [Delete, Edit, ShowDetails, EditQuota],
   props: {
     items: {
       type: Array as PropType<User[]>,
       required: true
+    }
+  },
+  watch: {
+    items() {
+      console.log(1337, this.items)
     }
   },
   setup(props) {
@@ -54,8 +67,26 @@ export default defineComponent({
       return sections
     })
 
+    const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
+    const closeQuotaModal = () => {
+      instance.$_editQuota_closeModal()
+    }
+    const spaceQuotaUpdated = (quota) => {
+      instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
+    }
+
+    const drives = () => {
+      const list = []
+      props.items.forEach(u => list.push(u.drive))
+      return list
+    }
+
     return {
-      menuSections
+      menuSections,
+      quotaModalIsOpen,
+      closeQuotaModal,
+      spaceQuotaUpdated,
+      drives
     }
   }
 })
