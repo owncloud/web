@@ -167,9 +167,10 @@ export default defineComponent({
       this.viewModeCurrent = mode.name
     },
     setTilesViewSize() {
-      document
-        .querySelector(':root')
-        .style.setProperty(`--oc-size-tiles-resize-step`, `${this.viewSizeCurrent * 12}rem`)
+      ;(document.querySelector(':root') as HTMLElement).style.setProperty(
+        `--oc-size-tiles-resize-step`,
+        `${this.viewSizeCurrent * 12}rem`
+      )
     },
     updateHiddenFilesShownModel(event) {
       this.hiddenFilesShownModel = event
@@ -209,7 +210,7 @@ export default defineComponent({
   -webkit-appearance: none;
   -webkit-transition: 0.2s;
   border-radius: 0.3rem;
-  background: var(--oc-color-input-border);
+  background: var(--oc-color-border);
   height: 0.5rem;
   opacity: 0.7;
   outline: none;
