@@ -59,7 +59,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import OcButton from '../OcButton/OcButton.vue'
 import OcImg from '../OcImage/OcImage.vue'
@@ -105,7 +105,7 @@ export default defineComponent({
      * The resource to be displayed
      */
     resource: {
-      type: Object,
+      type: Object as PropType<any>,
       required: true
     },
     /**

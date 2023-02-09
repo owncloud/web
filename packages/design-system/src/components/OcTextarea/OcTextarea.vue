@@ -11,8 +11,8 @@
       }"
       :value="modelValue"
       :aria-invalid="ariaInvalid"
-      @input="onInput($event.target.value)"
-      @focus="onFocus($event.target.value)"
+      @input="onInput(($event.target as HTMLInputElement).value)"
+      @focus="onFocus(($event.target as HTMLInputElement).value)"
       @keydown="onKeyDown($event)"
     />
     <div v-if="showMessageLine" class="oc-textarea-message">

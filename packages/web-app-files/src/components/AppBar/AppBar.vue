@@ -86,6 +86,7 @@ import {
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
 import { useStore } from 'web-pkg/src'
+import * as ODSComponents from '@ownclouders/design-system/src/components'
 
 export default defineComponent({
   components: {
@@ -93,7 +94,9 @@ export default defineComponent({
     ContextActions,
     SharesNavigation,
     SidebarToggle,
-    ViewOptions
+    ViewOptions,
+    // Remove when mixins are replaced
+    ...ODSComponents
   },
   props: {
     breadcrumbs: {

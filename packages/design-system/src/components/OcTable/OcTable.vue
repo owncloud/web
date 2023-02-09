@@ -264,6 +264,25 @@ export default defineComponent({
     lazy: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Show that the table is sorted ascendingly/descendingly (no actual sorting takes place)
+     */
+    sortDir: {
+      type: String,
+      required: false,
+      default: undefined,
+      validator: (value: string) => {
+        return value === undefined || ['asc', 'desc'].includes(value)
+      }
+    },
+    /**
+     * Show that the table is sorted by this column (no actual sorting takes place)
+     */
+    sortBy: {
+      type: String,
+      required: false,
+      default: undefined
     }
   },
   emits: [

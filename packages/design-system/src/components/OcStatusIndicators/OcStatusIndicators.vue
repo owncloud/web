@@ -49,7 +49,7 @@ import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import uniqueId from '../../utils/uniqueId'
 
-export type Indicator = {
+type Indicator = {
   id: string
   icon: string
   label: string
@@ -58,6 +58,7 @@ export type Indicator = {
   visible?: boolean
   target?: string
   type?: string
+  fillType?: string
 }
 
 /**

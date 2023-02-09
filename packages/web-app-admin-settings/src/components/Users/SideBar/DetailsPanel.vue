@@ -57,7 +57,7 @@
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Groups')" />
           <td>
-            <span v-if="user.memberOf.length" v-text="groupsDisplayValue" />
+            <span v-if="userGroupLength" v-text="groupsDisplayValue" />
             <span v-else>
               <span class="oc-mr-xs">-</span>
               <oc-contextual-helper :text="$gettext('No groups assigned.')" />
@@ -129,6 +129,9 @@ export default defineComponent({
         .map((group) => group.displayName)
         .sort()
         .join(', ')
+    },
+    userGroupLength() {
+      return this.user.memberOf.length
     },
     showUserQuota() {
       return 'total' in (this.user.drive?.quota || {})

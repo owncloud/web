@@ -76,7 +76,7 @@
         <quota-select
           v-if="showQuota"
           id="quota-select-form"
-          :key="'quota-select-' + user.id"
+          :key="'quota-select-' + userId"
           class="oc-mb-s"
           :title="$gettext('Personal quota')"
           :total-quota="editUser.drive.quota.total || 0"
@@ -214,6 +214,9 @@ export default defineComponent({
       return this.$gettext(
         this.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
       )
+    },
+    userId() {
+      return this.user.id
     }
   },
   watch: {

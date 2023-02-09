@@ -4,13 +4,12 @@ import { useStore } from 'web-pkg/src/composables'
 import { Store } from 'vuex'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { MaybeReadonlyRef } from 'web-pkg/src'
 
 export interface SelectedResourcesResult {
   selectedResources: Ref<Resource[]>
   selectedResourcesIds: Ref<(string | number)[]>
   isResourceInSelection(resource: Resource): boolean
-  selectedResourceSpace?: MaybeReadonlyRef<SpaceResource>
+  selectedResourceSpace?: Ref<SpaceResource>
 }
 
 interface SelectedResourcesOptions {

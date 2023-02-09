@@ -15,8 +15,8 @@
         :type="type"
         :value="displayValue"
         :disabled="disabled"
-        @change="onChange($event.target.value)"
-        @input="onInput($event.target.value)"
+        @change="onChange(($event.target as any).value)"
+        @input="onInput(($event.target as any).value)"
         @focus="onFocus($event.target)"
       />
       <oc-button

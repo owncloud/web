@@ -12,7 +12,7 @@
         >
           <template #message>
             <p class="oc-text-muted">
-              <span v-if="!!$route.query.term" v-translate>No results found</span>
+              <span v-if="!!routeQueryTerm" v-translate>No results found</span>
               <span v-else v-translate>No search term entered</span>
             </p>
           </template>
@@ -168,6 +168,9 @@ export default defineComponent({
         itemCount: this.itemCount,
         totalResults: this.searchResult.totalResults
       })
+    },
+    routeQueryTerm() {
+      return this.$route.query.term
     }
   },
   watch: {

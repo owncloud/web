@@ -90,6 +90,7 @@
 import { onMounted, onUnmounted, ref, unref } from 'vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { ShareStatus } from 'web-client/src/helpers/share'
+<<<<<<< HEAD
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
 import { formatDateFromISO, formatRelativeDateFromISO, useClientService, useStore } from 'web-pkg'
@@ -102,6 +103,21 @@ const POLLING_INTERVAL = 30000
 export default {
   components: {
     NotificationBell
+=======
+import { useClientService } from 'web-pkg'
+
+export default {
+  setup() {
+    const { owncloudSdk: client } = useClientService()
+    return { client }
+  },
+  computed: {
+    ...mapGetters(['activeNotifications', 'configuration']),
+
+    notificationsLabel() {
+      return this.$gettext('Notifications')
+    }
+>>>>>>> f8e9dd126 ('Fix' more ts type errors in vue files)
   },
   setup() {
     const store = useStore()

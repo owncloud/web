@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, onMounted } from 'vue'
+import { defineComponent, onBeforeUnmount, onMounted, PropType } from 'vue'
 import { mapState, mapActions } from 'vuex'
 import SidebarNavItem from './SidebarNavItem.vue'
 import * as uuid from 'uuid'
@@ -56,7 +56,7 @@ export default defineComponent({
   },
   props: {
     navItems: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true
     }
   },

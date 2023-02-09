@@ -16,10 +16,15 @@ import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem
 import { useFileActions } from '../../../composables/actions/files/useFileActions'
 import { computed, defineComponent, inject, unref } from 'vue'
 import { Resource, SpaceResource } from 'web-client'
+import * as ODSComponents from '@ownclouders/design-system/src/components'
 
 export default defineComponent({
   name: 'FileActions',
-  components: { ActionMenuItem },
+  components: {
+    ActionMenuItem,
+    // Remove when mixins are replaced
+    ...ODSComponents
+  },
   setup() {
     const resource = inject<Resource>('resource')
     const space = inject<SpaceResource>('space')
