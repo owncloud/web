@@ -8,8 +8,11 @@ import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
 
 // import modules to provide them to applications
+import * as vue from 'vue' // eslint-disable-line
 import * as vuex from 'vuex' // eslint-disable-line
 import * as luxon from 'luxon' // eslint-disable-line
+import * as vueGettext from 'vue3-gettext' // eslint-disable-line
+
 import { urlJoin } from 'web-client/src/utils'
 import { ConfigurationManager } from 'web-pkg'
 
@@ -19,12 +22,16 @@ export { NextApplication } from './next'
 const { requirejs, define } = window as any
 
 // register modules with requirejs to provide them to applications
-define('vuex', () => {
-  return vuex
-})
-define('luxon', () => {
-  return luxon
-})
+const injectionMap = {
+  luxon,
+  vue,
+  'vue3-gettext': vueGettext,
+  vuex
+}
+
+for (const [key, value] of Object.entries(injectionMap)) {
+  define(key, () => value)
+}
 
 const loadScriptDynamicImport = async <T>(moduleUri: string) => {
   return ((await import(/* @vite-ignore */ moduleUri)) as any).default as T

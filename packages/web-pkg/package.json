@@ -1,9 +1,17 @@
 {
   "name": "@ownclouders/web-pkg",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "ownCloud web pkg",
   "license": "AGPL-3.0",
   "main": "src/index.ts",
+  "private": false,
+  "author": "ownCloud GmbH <devops@owncloud.com>",
+  "homepage": "https://github.com/owncloud/web/tree/master/packages/web-pkg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/owncloud/web",
+    "directory": "packages/web-pkg"
+  },
   "peerDependencies": {
     "axios": "^0.27.2",
     "filesize": "^9.0.11",
@@ -16,8 +24,9 @@
     "uuid": "^9.0.0",
     "vue-router": "4.1.6",
     "vuex": "4.1.0",
-    "web-client": "npm:@ownclouders/web-client",
-    "web-pkg": "npm:@ownclouders/web-pkg",
-    "vue-concurrency": "4.0.0"
+    "web-client": "workspace:@ownclouders/web-client@*",
+    "web-pkg": "workspace:@ownclouders/web-pkg@*",
+    "vue-concurrency": "4.0.0",
+    "vue3-gettext": "2.5.0-alpha.1"
   }
 }

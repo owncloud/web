@@ -27,6 +27,9 @@ module.exports = {
     '^fuse.js$': '<rootDir>/node_modules/fuse.js/dist/fuse.esm.js',
     '^filesize$': '<rootDir>/node_modules/filesize/lib/filesize.esm.js',
 
+    // dedupe ...
+    '^vue3-gettext$': '<rootDir>/node_modules/vue3-gettext/dist/cjs/index.js',
+
     // HACK: workaround for https://github.com/transloadit/uppy/issues/4127
     '@uppy/core': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/xhr-upload': '<rootDir>tests/unit/stubs/uppy',

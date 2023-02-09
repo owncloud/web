@@ -15,7 +15,7 @@
     "uuid": "^9.0.0",
     "vue-concurrency": "4.0.0",
     "vuex": "4.1.0",
-    "web-pkg": "npm:@ownclouders/web-pkg",
-    "web-client": "npm:@ownclouders/web-client"
+    "web-pkg": "workspace:@ownclouders/web-pkg@*",
+    "web-client": "workspace:@ownclouders/web-client@*"
   }
 }
