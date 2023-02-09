@@ -245,7 +245,7 @@ export default defineComponent({
 
   &-footer {
     color: var(--oc-color-text-muted);
-    font-size: 0.875rem;
+    font-size: var(--oc-font-size-default);
     line-height: 1.4;
     padding: var(--oc-space-xsmall);
   }
