@@ -1,4 +1,4 @@
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { eventBus } from 'web-pkg'
 import { isLocationTrashActive, isLocationPublicActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
@@ -37,7 +37,10 @@ export default {
     }
   },
   methods: {
-    $_showEditTags_trigger() {
+    ...mapMutations('Files', ['SET_FILE_SELECTION']),
+
+    $_showEditTags_trigger({ resources }) {
+      this.SET_FILE_SELECTION(resources)
       eventBus.publish(SideBarEventTopics.openWithPanel, 'tags')
     }
   }
