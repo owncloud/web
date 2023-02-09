@@ -18,12 +18,15 @@
     "external",
     "admin-settings"
   ],
-  "options" : {
-    "previewFileMimeTypes" : [
+  "options": {
+    "previewFileMimeTypes": [
       "image/gif",
       "image/png",
       "image/jpeg",
-      "text/plain"
+      "text/plain",
+      "image/tiff",
+      "image/bmp",
+      "image/x-ms-bmp"
     ],
     "upload": {
       "xhr": {

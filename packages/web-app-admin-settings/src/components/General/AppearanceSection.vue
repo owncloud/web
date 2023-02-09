@@ -3,7 +3,7 @@
     <h2 class="oc-py-s" v-text="$gettext('Appearance')" />
     <div>
       <div class="oc-flex oc-flex-middle">
-        <h3>Logo</h3>
+        <h3 v-text="$gettext('Logo')" />
         <oc-button
           :id="`logo-context-btn`"
           v-oc-tooltip="$gettext('Show context menu')"

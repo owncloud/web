@@ -8,20 +8,16 @@
     "response_type": "code",
     "scope": "openid profile email"
   },
-  "apps": [
-    "files",
-    "text-editor",
-    "pdf-viewer",
-    "search",
-    "external",
-    "admin-settings"
-  ],
-  "options" : {
+  "apps": ["files", "text-editor", "pdf-viewer", "search", "external", "admin-settings"],
+  "options": {
     "previewFileMimeTypes": [
       "image/gif",
       "image/png",
       "image/jpeg",
-      "text/plain"
+      "text/plain",
+      "image/tiff",
+      "image/bmp",
+      "image/x-ms-bmp"
     ]
   },
   "external_apps": [
@@ -29,7 +25,7 @@
       "id": "preview",
       "path": "web-app-preview",
       "config": {
-        "mimeTypes": ["image/tiff","image/bmp","image/x-ms-bmp"]
+        "mimeTypes": ["image/tiff", "image/bmp", "image/x-ms-bmp"]
       }
     }
   ]

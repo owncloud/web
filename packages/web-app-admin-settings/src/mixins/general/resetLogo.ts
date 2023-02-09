@@ -31,7 +31,7 @@ export default {
         const httpClient = clientService.httpAuthenticated(accessToken)
         await httpClient.delete('/branding/logo')
         this.showMessage({
-          title: this.$gettext('Logo was reset successfully')
+          title: this.$gettext('Logo was reset successfully. Reloading page...')
         })
         setTimeout(() => {
           this.$router.go(this.$router.currentRoute)
