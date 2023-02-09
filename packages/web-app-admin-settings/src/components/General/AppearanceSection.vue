@@ -33,7 +33,7 @@
           type="file"
           name="file"
           tabindex="-1"
-          :accept="supportedLogoMimeTypes"
+          :accept="supportedLogoMimeTypesAcceptValue"
           @change="$_uploadLogo_upload"
         />
       </div>
@@ -58,10 +58,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const instance = getCurrentInstance().proxy as any
-    const supportedLogoMimeTypesDisplayValue = supportedLogoMimeTypes
-      .map((mimeType) => mimeType.split('/').pop())
-      .sort()
-      .join(', ')
+
     const menuItems = computed(() => [
       ...instance.$_uploadLogo_items,
       ...instance.$_resetLogo_items
@@ -74,12 +71,13 @@ export default defineComponent({
       }
     ])
 
+    const supportedLogoMimeTypesAcceptValue = supportedLogoMimeTypes.join(',')
+
     return {
       logo,
       menuItems,
       menuSections,
-      supportedLogoMimeTypes,
-      supportedLogoMimeTypesDisplayValue
+      supportedLogoMimeTypesAcceptValue
     }
   }
 })
