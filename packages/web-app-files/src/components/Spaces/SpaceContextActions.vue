@@ -43,7 +43,7 @@ import EditReadmeContent from 'web-pkg/src/mixins/spaces/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
 import { defineComponent, PropType } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
-import {thumbnailService} from "web-app-files/src/services";
+import { thumbnailService } from 'web-app-files/src/services'
 
 export default defineComponent({
   name: 'SpaceContextActions',
