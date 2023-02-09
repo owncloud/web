@@ -1,0 +1,8 @@
+Enhancement: Show upload speed
+
+We have added a tooltip that shows the current upload speed and 
+absolute vs processed filesize for the current upload.
+
+https://github.com/owncloud/web/issues/8166
+https://github.com/owncloud/web/pull/8187
+https://github.com/owncloud/ocis/issues/5511
