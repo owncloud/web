@@ -36,6 +36,9 @@ TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 
 OC10_VERSION = "latest"
 
+WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "eslint-config", "prettier-config", "tsconfig", "web-client", "web-pkg"]
+WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
+
 dir = {
     "base": "/var/www/owncloud",
     "federated": "/var/www/owncloud/federated",
@@ -1864,14 +1867,11 @@ def buildDockerImage():
         },
     }]
 
-web_publish_npm_packages = ["babel-preset", "eslint-config", "prettier-config", "tsconfig", "web-client", "web-pkg"]
-web_publish_npm_organization = "@ownclouders"
-
 def determineReleasePackage(ctx):
     if ctx.build.event != "tag":
         return None
 
-    matches = [p for p in web_publish_npm_packages if ctx.build.ref.startswith("refs/tags/%s-v" % p)]
+    matches = [p for p in WEB_PUBLISH_NPM_PACKAGES if ctx.build.ref.startswith("refs/tags/%s-v" % p)]
     if len(matches) > 0:
         return matches[0]
 
@@ -1954,7 +1954,7 @@ def buildRelease(ctx):
                     "git diff",
                     "git status",
                     "pnpm config set '//registry.npmjs.org/:_authToken' \"$${NODE_AUTH_TOKEN}\"",
-                    "pnpm publish --no-git-checks --filter %s --access public --tag latest" % ("%s/%s" % (web_publish_npm_organization, package)),
+                    "pnpm publish --no-git-checks --filter %s --access public --tag latest" % ("%s/%s" % (WEB_PUBLISH_NPM_ORGANIZATION, package)),
                 ],
                 "when": {
                     "ref": [
