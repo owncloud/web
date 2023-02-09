@@ -42,7 +42,7 @@
           >
           <span
             v-if="action.meta"
-            class="oc-files-context-action-meta oc-text-meta oc-mt-xs"
+            class="oc-files-context-action-meta oc-text-xsmall oc-mt-xs"
             data-testid="action-meta"
             v-text="action.meta()"
           />

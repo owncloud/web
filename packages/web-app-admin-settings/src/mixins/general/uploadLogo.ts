@@ -8,7 +8,6 @@ export default {
       return [
         {
           name: 'upload-logo',
-          meta: () => this.supportedLogoMimeTypesDisplayValue,
           icon: 'image-add',
           label: () => {
             return this.$gettext('Upload logo')

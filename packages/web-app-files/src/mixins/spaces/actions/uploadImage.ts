@@ -19,13 +19,6 @@ export default {
           name: 'upload-space-image',
           icon: 'image-add',
           handler: this.$_uploadImage_trigger,
-          meta: () => {
-            return thumbnailService
-              .getSupportedMimeTypes('image/')
-              .map((mimeType) => mimeType.split('/').pop())
-              .sort()
-              .join(', ')
-          },
           label: () => {
             return this.$gettext('Edit image')
           },
