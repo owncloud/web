@@ -409,8 +409,8 @@ importers:
       uuid: ^9.0.0
       vue-concurrency: 4.0.0
       vuex: 4.1.0
-      web-client: npm:@ownclouders/web-client
-      web-pkg: npm:@ownclouders/web-pkg
+      web-client: workspace:@ownclouders/web-client@*
+      web-pkg: workspace:@ownclouders/web-pkg@*
     dependencies:
       axios: 0.27.2
       email-validator: 2.0.4
@@ -428,7 +428,7 @@ importers:
       luxon: ^2.4.0
       vuex: 4.1.0
       web-client: workspace:@ownclouders/web-client@*
-      web-pkg: npm:@ownclouders/web-pkg
+      web-pkg: workspace:@ownclouders/web-pkg@*
     dependencies:
       luxon: 2.4.0
       vuex: 4.1.0_vue@3.2.45
@@ -441,7 +441,7 @@ importers:
       vue3-gettext: ^2.3.3
       vuex: 4.1.0
       web-client: workspace:@ownclouders/web-client@*
-      web-pkg: npm:@ownclouders/web-pkg
+      web-pkg: workspace:@ownclouders/web-pkg@*
     dependencies:
       uuid: 9.0.0
       vue3-gettext: 2.3.4_tfvhctuaqmmqnirfl65c47tqwu
@@ -472,7 +472,7 @@ importers:
       web-app-files: workspace:*
       web-app-search: workspace:*
       web-client: workspace:@ownclouders/web-client@*
-      web-pkg: npm:@ownclouders/web-pkg
+      web-pkg: workspace:@ownclouders/web-pkg@*
       web-runtime: workspace:*
     dependencies:
       '@ownclouders/design-system': link:../design-system
@@ -504,7 +504,7 @@ importers:
     specifiers:
       vue3-gettext: ^2.3.3
       vuex: 4.1.0
-      web-pkg: npm:@ownclouders/web-pkg
+      web-pkg: workspace:@ownclouders/web-pkg@*
     dependencies:
       vue3-gettext: 2.3.4_tfvhctuaqmmqnirfl65c47tqwu
       vuex: 4.1.0_vue@3.2.45
@@ -515,7 +515,7 @@ importers:
       vue3-gettext: ^2.3.3
       vuex: 4.1.0
       web-client: workspace:@ownclouders/web-client@*
-      web-pkg: npm:@ownclouders/web-pkg
+      web-pkg: workspace:@ownclouders/web-pkg@*
     dependencies:
       vue3-gettext: 2.3.4_tfvhctuaqmmqnirfl65c47tqwu
       vuex: 4.1.0_vue@3.2.45
@@ -528,7 +528,7 @@ importers:
       mark.js: ^8.11.1
       vue3-gettext: ^2.3.3
       web-app-files: workspace:*
-      web-pkg: npm:@ownclouders/web-pkg
+      web-pkg: workspace:@ownclouders/web-pkg@*
     dependencies:
       lodash-es: 4.17.21
       mark.js: 8.11.1
@@ -556,7 +556,7 @@ importers:
       vue3-gettext: ^2.3.3
       vuex: 4.1.0
       web-client: workspace:@ownclouders/web-client@*
-      web-pkg: npm:@ownclouders/web-pkg
+      web-pkg: workspace:@ownclouders/web-pkg@*
     dependencies:
       marked: 4.0.12
       sanitize-html: 2.7.0
@@ -654,7 +654,7 @@ importers:
       vue3-gettext: ^2.3.3
       vuex: 4.1.0
       web-client: workspace:@ownclouders/web-client@*
-      web-pkg: npm:@ownclouders/web-pkg
+      web-pkg: workspace:@ownclouders/web-pkg@*
       web-runtime: workspace:*
       webdav: ^4.10.0
       webfontloader: ^1.6.28

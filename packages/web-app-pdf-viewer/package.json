@@ -7,6 +7,6 @@
   "peerDependencies": {
     "vue3-gettext": "^2.3.3",
     "vuex": "4.1.0",
-    "web-pkg": "npm:@ownclouders/web-pkg"
+    "web-pkg": "workspace:@ownclouders/web-pkg@*"
   }
 }

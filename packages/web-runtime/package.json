@@ -46,7 +46,7 @@
     "vue-select": "4.0.0-beta.6",
     "vuex": "4.1.0",
     "web-client": "workspace:@ownclouders/web-client@*",
-    "web-pkg": "npm:@ownclouders/web-pkg",
+    "web-pkg": "workspace:@ownclouders/web-pkg@*",
     "web-runtime": "workspace:*",
     "webdav": "^4.10.0",
     "webfontloader": "^1.6.28",
