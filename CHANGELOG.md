@@ -51,6 +51,7 @@ Summary
 * Enhancement - Make clipboard copy available to more browsers: [#8136](https://github.com/owncloud/web/pull/8136)
 * Enhancement - Space group members: [#8161](https://github.com/owncloud/web/pull/8161)
 * Enhancement - Space group shares: [#8161](https://github.com/owncloud/web/pull/8161)
+* Enhancement - Show upload speed: [#8166](https://github.com/owncloud/web/issues/8166)
 * Enhancement - Rename "user management" app: [#8175](https://github.com/owncloud/web/pull/8175)
 * Enhancement - Spaces list in admin settings: [#8178](https://github.com/owncloud/web/pull/8178)
 * Enhancement - Admin settings users section uses graph api for role assignments: [#8261](https://github.com/owncloud/web/pull/8261)
@@ -456,6 +457,15 @@ Details
    https://github.com/owncloud/web/pull/8161
    https://github.com/owncloud/web/pull/8185
    https://github.com/owncloud/web/pull/8248
+
+* Enhancement - Show upload speed: [#8166](https://github.com/owncloud/web/issues/8166)
+
+   We have added a tooltip that shows the current upload speed and absolute vs processed filesize
+   for the current upload.
+
+   https://github.com/owncloud/web/issues/8166
+   https://github.com/owncloud/ocis/issues/5511
+   https://github.com/owncloud/web/pull/8187
 
 * Enhancement - Rename "user management" app: [#8175](https://github.com/owncloud/web/pull/8175)
 
