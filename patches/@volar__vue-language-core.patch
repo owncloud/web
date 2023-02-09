@@ -1,0 +1,14 @@
+diff --git a/out/utils/ts.js b/out/utils/ts.js
+index 8cff47e1e3a6b176a1d1f987fd84543b81beacea..3a65927a530357ff1f5180c5bd4e1a727ba04aaa 100644
+--- a/out/utils/ts.js
++++ b/out/utils/ts.js
+@@ -35,7 +35,8 @@ function createParsedCommandLineBase(ts, parseConfigHost, content, tsConfigPath,
+     extendsSet.add(tsConfigPath);
+     if (content.raw.extends) {
+         try {
+-            const extendsPath = require.resolve(content.raw.extends, { paths: [folder] });
++            // Workaround: https://github.com/pnpm/pnpm/issues/5237
++            const extendsPath = require.resolve(`./node_modules/${content.raw.extends}/package.json`, { paths: [folder] });
+             if (!extendsSet.has(extendsPath)) {
+                 extendsVueOptions = createParsedCommandLine(ts, parseConfigHost, extendsPath, extraFileExtensions, extendsSet).vueOptions;
+             }
