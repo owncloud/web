@@ -25,7 +25,7 @@
       </div>
       <div>
         <div class="logo-wrapper">
-          <img alt="" :src="logo" />
+          <img alt="" :src="logo" class="oc-p-xs" />
         </div>
         <input
           id="logo-upload-input"
