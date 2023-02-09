@@ -106,12 +106,13 @@ export default defineComponent({
       name: ViewModeConstants.queryName,
       defaultValue: ViewModeConstants.defaultModeName
     })
+
     const viewSizeQuery = useRouteQueryPersisted({
       name: ViewModeConstants.tilesSizeQueryName,
       defaultValue: ViewModeConstants.tilesSizeDefault.toString()
     })
     watch(
-      [perPageQuery, viewModeQuery],
+      [perPageQuery, viewModeQuery, viewSizeQuery],
       (params) => {
         queryParamsLoading.value = params.some((p) => !p)
       },
@@ -124,6 +125,11 @@ export default defineComponent({
       viewSizeCurrent: viewSizeQuery,
       itemsPerPage: perPageQuery,
       queryParamsLoading
+    }
+  },
+  mounted() {
+    if (!this.queryParamsLoading) {
+      this.setTilesViewSize()
     }
   },
   computed: {
