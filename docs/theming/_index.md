@@ -259,8 +259,7 @@ An empty template for your custom theme is provided below, and you can use the i
       "logo": {
         "topbar": "",
         "favicon": "",
-        "login": "",
-        "notFound": ""
+        "login": ""
       },
       "loginPage": {
         "autoRedirect": true,

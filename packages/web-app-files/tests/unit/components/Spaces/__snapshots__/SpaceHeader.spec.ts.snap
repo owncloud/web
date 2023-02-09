@@ -52,7 +52,7 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
               </div>
               <!--v-if-->
               <!--v-if-->
-              <input accept="image/*" id="space-image-upload-input" multiple="" name="file" tabindex="-1" type="file">
+              <input accept="" id="space-image-upload-input" multiple="" name="file" tabindex="-1" type="file">
             </div>
           </div>
         </div>
@@ -121,7 +121,7 @@ exports[`SpaceHeader space image should show the default image if no other image
               </div>
               <!--v-if-->
               <!--v-if-->
-              <input accept="image/*" id="space-image-upload-input" multiple="" name="file" tabindex="-1" type="file">
+              <input accept="" id="space-image-upload-input" multiple="" name="file" tabindex="-1" type="file">
             </div>
           </div>
         </div>
@@ -186,7 +186,7 @@ exports[`SpaceHeader space image should show the set image 1`] = `
               </div>
               <!--v-if-->
               <!--v-if-->
-              <input accept="image/*" id="space-image-upload-input" multiple="" name="file" tabindex="-1" type="file">
+              <input accept="" id="space-image-upload-input" multiple="" name="file" tabindex="-1" type="file">
             </div>
           </div>
         </div>

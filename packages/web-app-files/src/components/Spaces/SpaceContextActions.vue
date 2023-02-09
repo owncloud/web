@@ -18,7 +18,7 @@
       name="file"
       multiple
       tabindex="-1"
-      accept="image/*"
+      :accept="supportedSpaceImageMimeTypes"
       @change="$_uploadImage_uploadImageSpace"
     />
   </div>
@@ -43,6 +43,7 @@ import EditReadmeContent from 'web-pkg/src/mixins/spaces/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
 import { defineComponent, PropType } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
+import { thumbnailService } from 'web-app-files/src/services'
 
 export default defineComponent({
   name: 'SpaceContextActions',
@@ -118,13 +119,11 @@ export default defineComponent({
 
       return sections
     },
-
     filterParams() {
       return {
         resources: this.items
       }
     },
-
     menuItemsMembers() {
       const fileHandlers = [...this.$_showMembers_items]
       return [...fileHandlers].filter((item) => item.isEnabled(this.filterParams))
@@ -158,6 +157,9 @@ export default defineComponent({
     menuItemsSidebar() {
       const fileHandlers = [...this.$_showDetails_items]
       return [...fileHandlers].filter((item) => item.isEnabled(this.filterParams))
+    },
+    supportedSpaceImageMimeTypes() {
+      return thumbnailService.getSupportedMimeTypes('image/').join(',')
     }
   },
   methods: {
