@@ -66,6 +66,7 @@ Summary
 * Enhancement - Admin settings users section details improvement: [#8331](https://github.com/owncloud/web/pull/8331)
 * Enhancement - Add `ItemFilter` component: [#8354](https://github.com/owncloud/web/issues/8354)
 * Enhancement - Admin settings general section: [#8363](https://github.com/owncloud/web/issues/8363)
+* Enhancement - Add appearance section in general settings: [#8375](https://github.com/owncloud/web/pull/8375)
 
 Details
 -------
@@ -609,6 +610,13 @@ Details
 
    https://github.com/owncloud/web/issues/8363
    https://github.com/owncloud/web/pull/8360
+
+* Enhancement - Add appearance section in general settings: [#8375](https://github.com/owncloud/web/pull/8375)
+
+   We've added a appearance section in general settings, which includes uploading a logo
+   selected by the admin for the web ui.
+
+   https://github.com/owncloud/web/pull/8375
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
