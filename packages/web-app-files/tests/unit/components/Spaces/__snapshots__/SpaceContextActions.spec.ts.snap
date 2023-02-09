@@ -7,12 +7,19 @@ exports[`SpaceContextActions action handlers renders actions that are always ava
       <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
         <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" type="button">
           <!-- @slot Content of the button -->
-          <span class="oc-icon oc-icon-m oc-icon-passive">
-            <!---->
-          </span>
-          <span class="oc-files-context-action-label">Members</span>
-          <!--v-if-->
-          <!--v-if-->
+          <div class="oc-flex oc-flex-middle oc-width-1-1">
+            <div class="oc-flex oc-mr-s">
+              <span class="oc-icon oc-icon-m oc-icon-passive">
+                <!---->
+              </span>
+            </div>
+            <div class="oc-flex oc-flex-column">
+              <span class="oc-files-context-action-label">Members</span>
+              <!--v-if-->
+            </div>
+            <!--v-if-->
+            <!--v-if-->
+          </div>
         </button>
       </li>
     </ul>
@@ -20,12 +27,19 @@ exports[`SpaceContextActions action handlers renders actions that are always ava
       <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
         <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" type="button">
           <!-- @slot Content of the button -->
-          <span class="oc-icon oc-icon-m oc-icon-passive">
-            <!---->
-          </span>
-          <span class="oc-files-context-action-label">Deleted files</span>
-          <!--v-if-->
-          <!--v-if-->
+          <div class="oc-flex oc-flex-middle oc-width-1-1">
+            <div class="oc-flex oc-mr-s">
+              <span class="oc-icon oc-icon-m oc-icon-passive">
+                <!---->
+              </span>
+            </div>
+            <div class="oc-flex oc-flex-column">
+              <span class="oc-files-context-action-label">Deleted files</span>
+              <!--v-if-->
+            </div>
+            <!--v-if-->
+            <!--v-if-->
+          </div>
         </button>
       </li>
     </ul>
@@ -33,12 +47,19 @@ exports[`SpaceContextActions action handlers renders actions that are always ava
       <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
         <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" type="button">
           <!-- @slot Content of the button -->
-          <span class="oc-icon oc-icon-m oc-icon-passive">
-            <!---->
-          </span>
-          <span class="oc-files-context-action-label">Details</span>
-          <!--v-if-->
-          <!--v-if-->
+          <div class="oc-flex oc-flex-middle oc-width-1-1">
+            <div class="oc-flex oc-mr-s">
+              <span class="oc-icon oc-icon-m oc-icon-passive">
+                <!---->
+              </span>
+            </div>
+            <div class="oc-flex oc-flex-column">
+              <span class="oc-files-context-action-label">Details</span>
+              <!--v-if-->
+            </div>
+            <!--v-if-->
+            <!--v-if-->
+          </div>
         </button>
       </li>
     </ul>
