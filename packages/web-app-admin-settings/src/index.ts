@@ -69,7 +69,7 @@ const routes = [
 const navItems = [
   {
     name: $gettext('General'),
-    icon: 'settings',
+    icon: 'settings-4',
     route: {
       path: `/${appInfo.id}/general?`
     },
