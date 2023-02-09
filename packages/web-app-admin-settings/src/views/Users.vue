@@ -182,6 +182,7 @@ export default defineComponent({
      */
     const loadAdditionalUserDataTask = useTask(function* (signal, user) {
       const { data } = yield unref(graphClient).users.getUser(user.id)
+      console.log("Hi im called", data)
       return data
     })
 
@@ -190,26 +191,28 @@ export default defineComponent({
       loadUsersTask.perform(groupIds)
     }
 
+    
     watch(
-      selectedUsers,
+      () => unref(selectedUsers).length,
       async () => {
-        const loadAdditionalData = unref(selectedUsers).length === 1
-        if (loadAdditionalData && unref(loadedUser)?.id === unref(selectedUsers)[0].id) {
-          // current user is already loaded
-          return
-        }
-
         sideBarLoading.value = true
-        if (loadAdditionalData) {
-          loadedUser.value = await loadAdditionalUserDataTask.perform(unref(selectedUsers)[0])
-          sideBarLoading.value = false
-          return
-        }
+        const requests = []
+        unref(selectedUsers).forEach((user) => {
+          requests.push(loadAdditionalUserDataTask.perform(user))
+        })
 
-        loadedUser.value = null
+        const loadedUsers = await Promise.all(requests)
+        unref(selectedUsers).forEach((user) => {
+          const additionalUserData = loadedUsers.find((loadedUser) => loadedUser.id === user.id)
+          Object.assign(user, additionalUserData)
+          if(unref(selectedUsers).length === 1) {
+            loadedUser.value = additionalUserData
+            return
+          }
+          loadedUser.value = null
+        })
         sideBarLoading.value = false
-      },
-      { deep: true }
+      }
     )
 
     const calculateListHeaderPosition = () => {
