@@ -6,6 +6,7 @@
         :has-view-options="false"
         :has-sidebar-toggle="true"
         :show-actions-on-selection="true"
+        :has-bulk-actions="true"
         :side-bar-open="sideBarOpen"
       >
         <template #actions>

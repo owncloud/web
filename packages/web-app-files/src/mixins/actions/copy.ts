@@ -33,6 +33,9 @@ export default {
             ) {
               return false
             }
+            if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
+              return false
+            }
             if (resources.length === 0) {
               return false
             }
