@@ -20,8 +20,8 @@ Feature: spaces.personal
       | Alice |
       | Brian |
     Then "Admin" assigns following roles to the users
-      | id    | role       |
-      | Alice | SpaceAdmin |
+      | id    | role        |
+      | Alice | Space Admin |
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" navigates to the projects space page

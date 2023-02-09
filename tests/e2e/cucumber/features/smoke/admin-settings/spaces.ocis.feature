@@ -6,9 +6,9 @@ Feature: spaces management
       | Alice |
       | Brian |
     And "Admin" assigns following roles to the users
-      | id    | role       |
-      | Alice | SpaceAdmin |
-      | Brian | SpaceAdmin |
+      | id    | role        |
+      | Alice | Space Admin |
+      | Brian | Space Admin |
     And "Alice" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
@@ -46,8 +46,8 @@ Feature: spaces management
       | id    |
       | Alice |
     And "Admin" assigns following roles to the users
-      | id    | role       |
-      | Alice | SpaceAdmin |
+      | id    | role        |
+      | Alice | Space Admin |
     And "Alice" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |

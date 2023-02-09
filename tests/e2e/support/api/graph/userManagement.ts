@@ -3,13 +3,7 @@ import { Group, Me, User } from '../../types'
 import join from 'join-path'
 import { config } from '../../../config'
 import { getApplicationEntity } from './utils'
-
-enum Roles {
-  SpaceAdmin = '2aadd357-682c-406b-8874-293091995fdd',
-  Admin = '71881883-1768-46bd-a24d-a356a2afdf7f',
-  Guest = '38071a68-456a-4553-846a-fa67bf5596cc',
-  User = 'd7beeea8-8ff4-406b-8fb6-ab2dd81e6b11'
-}
+import { userRoleStore } from '../../store'
 
 export const me = async ({ user }: { user: User }): Promise<Me> => {
   const response = await request({
@@ -139,19 +133,23 @@ export const addUserToGroup = async ({
 }
 
 export const assignRole = async (admin: User, id: string, role: string): Promise<void> => {
-  const roleId = Roles[role]
-  if (!roleId) {
+  const applicationEntity = await getApplicationEntity(admin)
+
+  if (!userRoleStore.has(role)) {
+    applicationEntity.appRoles.forEach((role) => {
+      userRoleStore.set(role.displayName, role.id)
+    })
+  }
+  if (userRoleStore.get(role) === undefined) {
     throw new Error(`unknown role "${role}"`)
   }
-
-  const applicationEntity = await getApplicationEntity(admin)
   const response = await request({
     method: 'POST',
     path: join('graph', 'v1.0', 'users', id, 'appRoleAssignments'),
     user: admin,
     body: JSON.stringify({
       principalId: id,
-      appRoleId: roleId,
+      appRoleId: userRoleStore.get(role),
       resourceId: applicationEntity.id
     })
   })

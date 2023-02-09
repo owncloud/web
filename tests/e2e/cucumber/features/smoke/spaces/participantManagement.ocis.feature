@@ -17,8 +17,8 @@ Feature: spaces participant management
       | Marie   | sales |
       | Richard | security |
     And "Admin" assigns following roles to the users
-      | id    | role       |
-      | Alice | SpaceAdmin |
+      | id    | role        |
+      | Alice | Space Admin |
     And "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
