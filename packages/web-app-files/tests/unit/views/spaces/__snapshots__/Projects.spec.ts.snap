@@ -4,7 +4,7 @@ exports[`Projects view different files view states lists all available project s
 <div class="oc-flex">
   <div class="files-view-wrapper oc-width-expand">
     <div id="files-view">
-      <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" displayviewmodeswitch="false" hasbulkactions="false" hassharesnavigation="false" hassidebartoggle="true" hasviewoptions="false" showactionsonselection="true" sidebaropen="false"></app-bar-stub>
+      <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" displayviewmodeswitch="false" hasbulkactions="true" hassharesnavigation="false" hassidebartoggle="true" hasviewoptions="false" showactionsonselection="true" sidebaropen="false"></app-bar-stub>
       <div class="spaces-list oc-px-m oc-mt-l">
         <div>
           <ul class="oc-list oc-my-rm oc-mx-rm oc-tiles oc-flex">

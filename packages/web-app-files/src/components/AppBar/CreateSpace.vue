@@ -31,14 +31,7 @@ export default defineComponent({
   methods: {
     ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
     ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
-    ...mapMutations('Files', [
-      'SET_CURRENT_FOLDER',
-      'LOAD_FILES',
-      'CLEAR_CURRENT_FILES_LIST',
-      'SET_FILE_SELECTION',
-      'UPSERT_RESOURCE',
-      'UPDATE_RESOURCE_FIELD'
-    ]),
+    ...mapMutations('Files', ['UPSERT_RESOURCE', 'UPDATE_RESOURCE_FIELD']),
 
     showCreateSpaceModal() {
       const modal = {

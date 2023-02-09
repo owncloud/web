@@ -20,6 +20,7 @@ import { Panel } from '../../web-pkg/src/components/sideBar'
 
 import { Resource, User } from 'web-client'
 import { Router } from 'vue-router'
+import SpaceDetailsMultiple from 'web-pkg/src/components/sideBar/Spaces/Details/SpaceDetailsMultiple.vue'
 
 function $gettext(msg: string): string {
   return msg
@@ -28,6 +29,7 @@ function $gettext(msg: string): string {
 const panelGenerators: (({
   rootFolder,
   resource,
+  selectedFiles,
   router,
   multipleSelection,
   user,
@@ -35,6 +37,7 @@ const panelGenerators: (({
 }: {
   rootFolder: boolean
   resource: Resource
+  selectedFiles: Resource[]
   router: Router
   multipleSelection: boolean
   user: User
@@ -56,7 +59,7 @@ const panelGenerators: (({
       )
     }
   }),
-  ({ router, rootFolder, resource }): Panel => ({
+  ({ router, resource, multipleSelection }): Panel => ({
     app: 'no-selection',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
@@ -64,8 +67,7 @@ const panelGenerators: (({
     default: () => true,
     get enabled() {
       return (
-        isLocationSpacesActive(router, 'files-spaces-projects') &&
-        (!resource || (rootFolder && resource?.type !== 'space'))
+        isLocationSpacesActive(router, 'files-spaces-projects') && !multipleSelection && !resource
       )
     }
   }),
@@ -85,7 +87,7 @@ const panelGenerators: (({
       )
     }
   }),
-  ({ multipleSelection, rootFolder, resource, router }) => ({
+  ({ multipleSelection, router }) => ({
     app: 'details-multiple',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
@@ -101,7 +103,20 @@ const panelGenerators: (({
     },
     default: () => true,
     get enabled() {
-      return multipleSelection && (!rootFolder || resource?.type === 'space')
+      return multipleSelection && !isLocationSpacesActive(router, 'files-spaces-projects')
+    }
+  }),
+  ({ multipleSelection, selectedFiles, router }) => ({
+    app: 'details-space-multiple',
+    icon: 'questionnaire-line',
+    title: $gettext('Details'),
+    component: SpaceDetailsMultiple,
+    componentAttrs: {
+      selectedSpaces: selectedFiles
+    },
+    default: () => true,
+    get enabled() {
+      return multipleSelection && isLocationSpacesActive(router, 'files-spaces-projects')
     }
   }),
   ({ multipleSelection, resource }) => ({

@@ -188,6 +188,7 @@ export default defineComponent({
           const panel = panelGenerator({
             capabilities: store.getters.capabilities,
             resource: unref(loadedResource),
+            selectedFiles: unref(selectedFiles),
             router,
             multipleSelection: unref(areMultipleSelected),
             rootFolder: unref(isRootFolder),
@@ -206,7 +207,7 @@ export default defineComponent({
     })
 
     const getSelectedResource = () => {
-      if (unref(highlightedFileIsSpace) && unref(selectedFiles).length) {
+      if (unref(highlightedFileIsSpace) && unref(selectedFiles).length === 1) {
         return unref(highlightedSpace)
       }
       if (unref(selectedFiles).length === 1) {
