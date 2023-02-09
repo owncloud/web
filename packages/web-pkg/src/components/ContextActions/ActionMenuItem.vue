@@ -9,44 +9,56 @@
       size="small"
       v-on="componentListeners"
     >
-      <oc-img
-        v-if="action.img"
-        data-testid="action-img"
-        :src="action.img"
-        alt=""
-        class="oc-icon oc-icon-m"
-      />
-      <oc-img
-        v-else-if="hasExternalImageIcon"
-        data-testid="action-img"
-        :src="action.icon"
-        alt=""
-        class="oc-icon oc-icon-m"
-      />
-      <oc-icon
-        v-else-if="action.icon"
-        data-testid="action-icon"
-        :name="action.icon"
-        :fill-type="action.iconFillType || 'line'"
-        size="medium"
-      />
-      <span
-        v-if="!action.hideLabel"
-        class="oc-files-context-action-label"
-        data-testid="action-label"
-        >{{ action.label(filterParams) }}</span
-      >
-      <span
-        v-if="action.shortcut && shortcutHint"
-        class="oc-files-context-action-shortcut"
-        v-text="action.shortcut"
-      />
-      <span
-        v-if="action.opensInNewWindow"
-        data-testid="action-sr-hint"
-        class="oc-invisible-sr"
-        v-text="$gettext('(Opens in new window)')"
-      />
+      <div class="oc-flex oc-flex-middle oc-width-1-1">
+        <div class="oc-flex oc-mr-s">
+          <oc-img
+            v-if="action.img"
+            data-testid="action-img"
+            :src="action.img"
+            alt=""
+            class="oc-icon oc-icon-m"
+          />
+          <oc-img
+            v-else-if="hasExternalImageIcon"
+            data-testid="action-img"
+            :src="action.icon"
+            alt=""
+            class="oc-icon oc-icon-m"
+          />
+          <oc-icon
+            v-else-if="action.icon"
+            data-testid="action-icon"
+            :name="action.icon"
+            :fill-type="action.iconFillType || 'line'"
+            size="medium"
+          />
+        </div>
+        <div class="oc-flex oc-flex-column">
+          <span
+            v-if="!action.hideLabel"
+            class="oc-files-context-action-label"
+            data-testid="action-label"
+            >{{ action.label(filterParams) }}</span
+          >
+          <span
+            v-if="action.meta"
+            class="oc-files-context-action-meta oc-text-meta oc-mt-xs"
+            data-testid="action-meta"
+            v-text="action.meta()"
+          />
+        </div>
+        <span
+          v-if="action.shortcut && shortcutHint"
+          class="oc-files-context-action-shortcut"
+          v-text="action.shortcut"
+        />
+        <span
+          v-if="action.opensInNewWindow"
+          data-testid="action-sr-hint"
+          class="oc-invisible-sr"
+          v-text="$gettext('(Opens in new window)')"
+        />
+      </div>
     </oc-button>
   </li>
 </template>

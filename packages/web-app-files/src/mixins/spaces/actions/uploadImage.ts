@@ -19,14 +19,15 @@ export default {
           name: 'upload-space-image',
           icon: 'image-add',
           handler: this.$_uploadImage_trigger,
-          label: () => {
-            const allowedMimeTypesDisplayValue = thumbnailService
+          meta: () => {
+            return thumbnailService
               .getSupportedMimeTypes('image/')
               .map((mimeType) => mimeType.split('/').pop())
               .sort()
               .join(', ')
-
-            return `${this.$gettext('Edit image')} (${allowedMimeTypesDisplayValue})`
+          },
+          label: () => {
+            return this.$gettext('Edit image')
           },
           isEnabled: ({ resources }) => {
             if (resources.length !== 1) {

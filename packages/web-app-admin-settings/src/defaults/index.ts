@@ -1,1 +1,1 @@
-export const supportedLogoMimeTypes = ['image/gif', 'image/jpg', 'image/png']
+export const supportedLogoMimeTypes = ['image/gif', 'image/jpeg', 'image/png']

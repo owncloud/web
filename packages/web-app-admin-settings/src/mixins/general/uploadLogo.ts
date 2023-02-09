@@ -8,9 +8,10 @@ export default {
       return [
         {
           name: 'upload-logo',
+          meta: () => this.supportedLogoMimeTypesDisplayValue,
           icon: 'image-add',
           label: () => {
-            return `${this.$gettext('Upload logo')} (${this.supportedLogoMimeTypesDisplayValue})`
+            return this.$gettext('Upload logo')
           },
           handler: this.$_uploadLogo_trigger,
           componentType: 'button',
