@@ -115,7 +115,8 @@ export default defineComponent({
         'oc-checkbox',
         'oc-rounded',
         'oc-checkbox-' + getSizeClass(this.size),
-        { 'oc-checkbox-outline': this.outline }
+        { 'oc-checkbox-outline': this.outline },
+        { 'oc-checkbox-checked': this.modelValue }
       ]
     },
     labelClasses() {
@@ -180,12 +181,14 @@ export default defineComponent({
     cursor: pointer;
   }
 
-  &:checked,
+  &-checked,
+  :checked,
   &:indeterminate {
     background-color: var(--oc-color-swatch-inverse-default);
   }
 
-  &:checked {
+  &-checked,
+  :checked {
     @include svg-fill($internal-form-checkbox-image, '#000', $form-radio-checked-icon-color);
   }
 

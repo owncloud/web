@@ -6,12 +6,23 @@
           :ref="(el) => (tileRefs.tiles[resource.id] = el)"
           :resource="resource"
           :resource-route="getRoute(resource)"
+          :is-resource-selected="isResourceSelected(resource)"
           @vue:mounted="
             $emit('rowMounted', resource, tileRefs.tiles[resource.id], ImageDimension.Tile)
           "
           @contextmenu="showContextMenu($event, resource.id, tileRefs.tiles[resource.id])"
           @click="emitTileClick(resource)"
         >
+          <template #selection>
+            <oc-checkbox
+              :label="getResourceCheckboxLabel(resource)"
+              :hide-label="true"
+              size="large"
+              class="oc-flex-inline oc-p-s"
+              :model-value="isResourceSelected(resource)"
+              @click.stop.prevent="toggleSelection(resource)"
+            />
+          </template>
           <template #imageField>
             <slot name="image" :resource="resource" />
           </template>
@@ -19,47 +30,28 @@
             <slot name="actions" :resource="resource" />
           </template>
           <template #contextMenu>
-            <div>
-              <oc-button
-                :id="`space-context-btn-${resource.getDomSelector()}`"
-                :ref="
-                  (el) => {
-                    tileRefs.dropBtns[resource.id] = el
-                  }
-                "
-                v-oc-tooltip="contextMenuLabel"
-                :aria-label="contextMenuLabel"
-                appearance="raw"
-                @click="resetDropPosition($event, resource.id, tileRefs.dropBtns[resource.id])"
-              >
-                <oc-icon name="more-2" />
-              </oc-button>
-              <oc-drop
-                :ref="
-                  (el) => {
-                    tileRefs.dropEls[resource.id] = el
-                  }
-                "
-                :drop-id="`space-context-drop-${resource.getDomSelector()}`"
-                close-on-click
-                mode="manual"
-                :options="{ delayHide: 0 }"
-                padding-size="small"
-              >
+            <context-menu-quick-action
+              :ref="(el) => (tileRefs.dropBtns[resource.id] = el)"
+              :item="resource"
+              class="resource-tiles-btn-action-dropdown"
+              @quick-action-clicked="showContextMenuOnBtnClick($event, resource, resource.id)"
+            >
+              <template #contextMenu>
                 <slot name="contextMenuActions" :resource="resource" />
-              </oc-drop>
-            </div>
+              </template>
+            </context-menu-quick-action>
           </template>
         </oc-tile>
       </li>
     </oc-list>
-    <!-- @slot Footer of the tiles list -->
-    <slot name="footer" />
+    <div class="oc-tiles-footer">
+      <slot name="footer" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { onBeforeUpdate, defineComponent, PropType, computed, ref } from 'vue'
+import { onBeforeUpdate, defineComponent, PropType, computed, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Resource, SpaceResource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
@@ -67,6 +59,7 @@ import { ImageDimension } from 'web-pkg/src/constants'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { displayPositionedDropdown } from 'web-pkg/src/helpers/contextMenuDropdown'
 import { createLocationSpaces } from 'web-app-files/src/router'
+import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
@@ -75,6 +68,7 @@ import { useResourceRouteResolver } from '../../composables/filesList'
 
 export default defineComponent({
   name: 'ResourceTiles',
+  components: { ContextMenuQuickAction },
   props: {
     /**
      * Array of resources (spaces, folders, files) to be displayed as tiles
@@ -87,6 +81,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    selectedIds: {
+      type: Array,
+      default: () => []
+    },
     targetRouteCallback: {
       type: Function,
       required: false,
@@ -98,15 +96,14 @@ export default defineComponent({
       default: null
     }
   },
-  emits: ['fileClick', 'rowMounted'],
+  emits: ['fileClick', 'rowMounted', 'update:selectedIds'],
   setup(props, context) {
     const store = useStore()
     const { $gettext } = useGettext()
 
     const tileRefs = ref({
       tiles: [],
-      dropBtns: [],
-      dropEls: []
+      dropBtns: []
     })
 
     const spaces = computed(() => {
@@ -156,44 +153,64 @@ export default defineComponent({
       }
     }
 
-    const contextMenuLabel = computed(() => {
-      return $gettext('Show context menu')
-    })
-
-    const resetDropPosition = (event, index, reference) => {
-      const drop = tileRefs.value.dropEls[index].tippy
-
-      if (drop === undefined) {
+    const showContextMenuOnBtnClick = (data, item, index) => {
+      const { dropdown, event } = data
+      if (dropdown?.tippy === undefined) {
         return
       }
-      displayPositionedDropdown(drop, event, reference)
+      displayPositionedDropdown(dropdown.tippy, event, unref(tileRefs).dropBtns[index])
     }
 
     const showContextMenu = (event, index, reference) => {
       event.preventDefault()
-      const drop = tileRefs.value.dropEls[index]
+      const drop = unref(tileRefs).tiles[index]?.$el.getElementsByClassName(
+        'resource-tiles-btn-action-dropdown'
+      )[0]
 
       if (drop === undefined) {
         return
       }
-      displayPositionedDropdown(drop.tippy, event, reference)
+      displayPositionedDropdown(drop._tippy, event, reference)
+    }
+
+    const isResourceSelected = (resource) => {
+      return props.selectedIds.includes(resource.id)
+    }
+
+    const toggleSelection = (resource) => {
+      const selectedIds = !isResourceSelected(resource)
+        ? [...props.selectedIds, resource.id]
+        : props.selectedIds.filter((id) => id !== resource.id)
+      context.emit('update:selectedIds', selectedIds)
+    }
+
+    const getResourceCheckboxLabel = (resource) => {
+      switch (resource.type) {
+        case 'folder':
+          return $gettext('Select folder')
+        case 'space':
+          return $gettext('Select space')
+        default:
+          return $gettext('Select file')
+      }
     }
 
     onBeforeUpdate(() => {
       tileRefs.value = {
         tiles: [],
-        dropBtns: [],
-        dropEls: []
+        dropBtns: []
       }
     })
 
     return {
-      contextMenuLabel,
       emitTileClick,
       getRoute,
-      resetDropPosition,
+      showContextMenuOnBtnClick,
       showContextMenu,
-      tileRefs
+      tileRefs,
+      isResourceSelected,
+      toggleSelection,
+      getResourceCheckboxLabel
     }
   },
   data() {
@@ -224,6 +241,13 @@ export default defineComponent({
     &.resizableTiles {
       grid-template-columns: 80%;
     }
+  }
+
+  &-footer {
+    color: var(--oc-color-text-muted);
+    font-size: var(--oc-font-size-default);
+    line-height: 1.4;
+    padding: var(--oc-space-xsmall);
   }
 }
 </style>

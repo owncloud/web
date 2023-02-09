@@ -46,13 +46,14 @@
         </no-content-message>
         <resource-tiles
           v-else-if="viewMode === ViewModeConstants.tilesView.name"
+          v-model:selectedIds="selectedResourcesIds"
           :data="paginatedResources"
           class="oc-px-m oc-pt-l"
           :resizable="true"
           :target-route-callback="resourceTargetRouteCallback"
           :space="space"
-          @rowMounted="rowMounted"
-          @fileClick="$_fileActions_triggerDefaultAction"
+          @row-mounted="rowMounted"
+          @file-click="$_fileActions_triggerDefaultAction"
         >
           <!-- Share quickactions targets current folder, not resource... -->
           <!-- <template #actions="{ resource }">

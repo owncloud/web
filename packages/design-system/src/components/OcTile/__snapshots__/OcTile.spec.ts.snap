@@ -2,10 +2,13 @@
 
 exports[`OcTile component renders default space correctly 1`] = `
 <div class="oc-tile-card oc-card oc-card-default oc-rounded">
-  <oc-resource-link-stub class="oc-card-media-top oc-border-b oc-flex oc-flex-center oc-flex-middle" isresourceclickable="true" resource="[object Object]">
+  <oc-resource-link-stub class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" isresourceclickable="true" resource="[object Object]">
+    <div class="oc-tile-card-selection"></div>
     <!--v-if-->
-    <!-- Slot for resource image, renders resource type icon by default -->
-    <oc-resource-icon-stub class="tile-default-image oc-pt-s" resource="[object Object]" size="xxlarge"></oc-resource-icon-stub>
+    <div class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center">
+      <div class="oc-tile-card-hover"></div>
+      <oc-resource-icon-stub class="tile-default-image oc-pt-xs" resource="[object Object]" size="xlarge"></oc-resource-icon-stub>
+    </div>
   </oc-resource-link-stub>
   <div class="oc-card-body oc-p-s">
     <div class="oc-flex oc-flex-between oc-flex-middle">
@@ -24,11 +27,15 @@ exports[`OcTile component renders default space correctly 1`] = `
 
 exports[`OcTile component renders disabled space correctly 1`] = `
 <div class="oc-tile-card oc-card oc-card-default oc-rounded state-trashed">
-  <oc-resource-link-stub class="oc-card-media-top oc-border-b oc-flex oc-flex-center oc-flex-middle" isresourceclickable="true" resource="[object Object]">
+  <oc-resource-link-stub class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" isresourceclickable="true" resource="[object Object]">
+    <div class="oc-tile-card-selection"></div>
     <oc-tag-stub class="resource-disabled-indicator oc-position-absolute" rounded="false" size="medium" type="span">
       <span>Disabled</span>
-    </oc-tag-stub> <!-- Slot for resource image, renders resource type icon by default -->
-    <oc-resource-icon-stub class="tile-default-image oc-pt-s" resource="[object Object]" size="xxlarge"></oc-resource-icon-stub>
+    </oc-tag-stub>
+    <div class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center">
+      <div class="oc-tile-card-hover"></div>
+      <oc-resource-icon-stub class="tile-default-image oc-pt-xs" resource="[object Object]" size="xlarge"></oc-resource-icon-stub>
+    </div>
   </oc-resource-link-stub>
   <div class="oc-card-body oc-p-s">
     <div class="oc-flex oc-flex-between oc-flex-middle">
