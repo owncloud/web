@@ -24,7 +24,6 @@ export default {
             if (resources.some((r) => r.spaceQuota === false)) {
               return false
             }
-
             return this.$permissionManager.canEditSpaceQuota()
           },
           componentType: 'button',

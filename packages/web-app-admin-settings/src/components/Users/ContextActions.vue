@@ -4,7 +4,7 @@
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
-      :spaces="drives"
+      :spaces="selectedPersonalDrives"
       @space-quota-updated="spaceQuotaUpdated"
     />
   </div>
@@ -19,6 +19,9 @@ import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActi
 import { User } from 'web-client/src/generated'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
+import { watch, toRaw } from 'vue'
+import { SpaceResource } from 'web-client/src'
+import { reactive } from 'vue'
 
 export default defineComponent({
   name: 'ContextActions',
@@ -30,19 +33,34 @@ export default defineComponent({
       required: true
     }
   },
-  watch: {
-    items() {
-      console.log(1337, this.items)
-    }
-  },
   setup(props) {
     const instance = getCurrentInstance().proxy as any
 
     const filterParams = computed(() => ({ resources: props.items }))
+    const selectedPersonalDrives = reactive([])
+    watch(
+      () => props.items,
+      async () => {
+        selectedPersonalDrives.splice(0, selectedPersonalDrives.length)
+        props.items.forEach((user) => {
+          const drive = toRaw(user.drive)
+          const spaceResource = {
+            id: drive.id,
+            name: 'Personal Drive of ' + user.displayName,
+            spaceQuota: drive.quota
+          } as SpaceResource
+          selectedPersonalDrives.push(spaceResource)
+        })
+      },
+      { deep: true, immediate: true }
+    )
     const menuItemsPrimaryActions = computed(() =>
       [...instance.$_edit_items, ...instance.$_delete_items].filter((item) =>
         item.isEnabled(unref(filterParams))
       )
+    )
+    const menuItemsSecondaryActions = computed(() =>
+      [...instance.$_editQuota_items].filter((item) => item.isEnabled(unref(filterParams)))
     )
 
     const menuItemsSidebar = computed(() =>
@@ -56,6 +74,12 @@ export default defineComponent({
         sections.push({
           name: 'primaryActions',
           items: unref(menuItemsPrimaryActions)
+        })
+      }
+      if (unref(menuItemsSecondaryActions).length) {
+        sections.push({
+          name: 'secondaryActions',
+          items: unref(menuItemsSecondaryActions)
         })
       }
       if (unref(menuItemsSidebar).length) {
@@ -75,18 +99,12 @@ export default defineComponent({
       instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
     }
 
-    const drives = () => {
-      const list = []
-      props.items.forEach(u => list.push(u.drive))
-      return list
-    }
-
     return {
       menuSections,
       quotaModalIsOpen,
       closeQuotaModal,
       spaceQuotaUpdated,
-      drives
+      selectedPersonalDrives
     }
   }
 })

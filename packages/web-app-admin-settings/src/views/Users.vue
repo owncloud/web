@@ -182,7 +182,6 @@ export default defineComponent({
      */
     const loadAdditionalUserDataTask = useTask(function* (signal, user) {
       const { data } = yield unref(graphClient).users.getUser(user.id)
-      console.log("Hi im called", data)
       return data
     })
 
@@ -191,7 +190,6 @@ export default defineComponent({
       loadUsersTask.perform(groupIds)
     }
 
-    
     watch(
       () => unref(selectedUsers).length,
       async () => {
@@ -205,7 +203,7 @@ export default defineComponent({
         unref(selectedUsers).forEach((user) => {
           const additionalUserData = loadedUsers.find((loadedUser) => loadedUser.id === user.id)
           Object.assign(user, additionalUserData)
-          if(unref(selectedUsers).length === 1) {
+          if (unref(selectedUsers).length === 1) {
             loadedUser.value = additionalUserData
             return
           }
