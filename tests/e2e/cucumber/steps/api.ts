@@ -23,19 +23,13 @@ Given(
 )
 
 Given(
-  '{string} assigns following roles to the users',
+  '{string} assigns following roles to the users using API',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const admin = this.usersEnvironment.getUser({ key: stepUser })
     for await (const info of stepTable.hashes()) {
       const user = this.usersEnvironment.getUser({ key: info.id })
       const { id } = await api.graph.me({ user })
-      const role = api.settings.Roles[info.role]
-
-      if (!role) {
-        throw new Error(`unknown role "${info.role}"`)
-      }
-
-      await api.settings.assignRole({ admin, id, role })
+      await api.graph.assignRole(admin, id, info.role)
     }
   }
 )

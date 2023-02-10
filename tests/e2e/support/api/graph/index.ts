@@ -4,6 +4,7 @@ export {
   deleteUser,
   createGroup,
   deleteGroup,
-  addUserToGroup
+  addUserToGroup,
+  assignRole
 } from './userManagement'
 export { getPersonalSpaceId, createSpace, getSpaceIdBySpaceName } from './spaces'

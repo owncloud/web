@@ -2,6 +2,8 @@ import { checkResponseStatus, request } from '../http'
 import { Group, Me, User } from '../../types'
 import join from 'join-path'
 import { config } from '../../../config'
+import { getApplicationEntity } from './utils'
+import { userRoleStore } from '../../store'
 
 export const me = async ({ user }: { user: User }): Promise<Me> => {
   const response = await request({
@@ -128,4 +130,28 @@ export const addUserToGroup = async ({
     user: admin
   })
   checkResponseStatus(response, 'Failed while adding an user to the group')
+}
+
+export const assignRole = async (admin: User, id: string, role: string): Promise<void> => {
+  const applicationEntity = await getApplicationEntity(admin)
+
+  if (!userRoleStore.has(role)) {
+    applicationEntity.appRoles.forEach((role) => {
+      userRoleStore.set(role.displayName, role.id)
+    })
+  }
+  if (userRoleStore.get(role) === undefined) {
+    throw new Error(`unknown role "${role}"`)
+  }
+  const response = await request({
+    method: 'POST',
+    path: join('graph', 'v1.0', 'users', id, 'appRoleAssignments'),
+    user: admin,
+    body: JSON.stringify({
+      principalId: id,
+      appRoleId: userRoleStore.get(role),
+      resourceId: applicationEntity.id
+    })
+  })
+  checkResponseStatus(response, 'Failed while assigning role to the user')
 }

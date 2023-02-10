@@ -7,9 +7,9 @@ Feature: spaces public link
             | Brian |
             | Carol |
             | Marie |
-        And "Admin" assigns following roles to the users
-            | id    | role       |
-            | Alice | SpaceAdmin |
+        And "Admin" assigns following roles to the users using API
+          | id    | role        |
+          | Alice | Space Admin |
         And "Alice" creates the following project space using API
           | name | id     |
           | team | team.1 |
