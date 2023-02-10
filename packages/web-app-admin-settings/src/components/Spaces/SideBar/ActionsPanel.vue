@@ -12,7 +12,7 @@
         :key="`action-${index}`"
         :action="action"
         :items="resources"
-        class="oc-py-xs"
+        class="oc-rounded"
       />
     </oc-list>
   </div>

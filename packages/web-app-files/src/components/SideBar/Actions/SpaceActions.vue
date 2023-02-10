@@ -22,7 +22,7 @@
         :action="action"
         :items="resources"
         :space="space"
-        class="oc-py-xs"
+        class="oc-rounded"
       />
     </oc-list>
   </div>
@@ -118,6 +118,11 @@ export default defineComponent({
     display: inline-flex;
     gap: 10px;
     vertical-align: top;
+  }
+
+  > li:hover {
+    text-decoration: none !important;
+    background-color: var(--oc-color-background-hover);
   }
 }
 </style>

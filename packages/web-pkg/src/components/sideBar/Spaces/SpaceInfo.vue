@@ -1,5 +1,5 @@
 <template>
-  <div class="space_info">
+  <div class="space_info oc-p-s">
     <div class="space_info__body oc-text-overflow oc-flex oc-flex-middle">
       <div class="oc-mr-s">
         <oc-icon
@@ -32,6 +32,10 @@ export default defineComponent({
 
 <style lang="scss">
 .space_info {
+  &.sidebar-panel__space_info {
+    border-bottom: 1px solid var(--oc-color-border);
+  }
+
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
