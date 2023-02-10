@@ -1,3 +1,7 @@
+// ATTENTION: this is a .mjs (instead of a .ts) file on purpose,
+// because we don't want to transpile it before publishing
+// c.f. https://github.com/vitejs/vite/issues/5370
+
 import { mergeConfig, searchForWorkspaceRoot } from 'vite'
 import { join } from 'path'
 import { cwd } from 'process'
