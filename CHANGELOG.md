@@ -34,6 +34,7 @@ Summary
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Improve performance when loading folders and share indicators: [#7721](https://github.com/owncloud/web/issues/7721)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
+* Enhancement - Optional Contributor role and configurable resharing permissions: [#7965](https://github.com/owncloud/web/pull/7965)
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
 * Enhancement - Add switch to enable condensed resource table: [#7976](https://github.com/owncloud/web/pull/7976)
 * Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
@@ -306,6 +307,17 @@ Details
    issue, by setting the env variable DOCUMENTATION_URL.
 
    https://github.com/owncloud/web/pull/7942
+
+* Enhancement - Optional Contributor role and configurable resharing permissions: [#7965](https://github.com/owncloud/web/pull/7965)
+
+   We've added 2 new capabilities that modify the sharing Roles: -
+   `files_sharing.resharing_default` (default true): wether the resharing bit should be
+   added to the normal roles (viewer, editor, etc) by default when re-sharing is enabled
+   systemwise. If default is set false, users can still set resharing in the custom permissions
+   role. - `files_sharing.public.can_contribute` (default true): enables or disables the
+   Contributor role for public links
+
+   https://github.com/owncloud/web/pull/7965
 
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
 
