@@ -1,5 +1,5 @@
 <template>
-  <div class="file_info oc-flex oc-flex-between">
+  <div class="file_info oc-flex oc-flex-between oc-p-s">
     <div class="oc-flex oc-flex-middle">
       <oc-resource-icon
         v-if="isSubPanelActive"
@@ -65,6 +65,10 @@ export default defineComponent({
 
 <style lang="scss">
 .file_info {
+  &.sidebar-panel__file_info {
+    border-bottom: 1px solid var(--oc-color-border);
+  }
+
   button {
     white-space: nowrap;
   }

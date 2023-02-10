@@ -4,10 +4,11 @@
       v-oc-tooltip="showTooltip || action.hideLabel ? action.label(filterParams) : ''"
       :type="action.componentType"
       v-bind="componentProps"
-      :class="[action.class, 'action-menu-item']"
+      :class="[action.class, 'action-menu-item', 'oc-py-s', 'oc-px-m', 'oc-width-1-1']"
       data-testid="action-handler"
       size="small"
       v-on="componentListeners"
+      justify-content="left"
     >
       <oc-img
         v-if="action.img"

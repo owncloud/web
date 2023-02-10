@@ -1,0 +1,5 @@
+Enhancement: Use standardized layout for file/space action list
+
+We've applied the styles for action lists to the fileinfo/space action lists.
+
+https://github.com/owncloud/web/pull/8398
