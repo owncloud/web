@@ -356,30 +356,26 @@ export abstract class PeopleShareRoles {
 }
 
 export abstract class LinkShareRoles {
-  static readonly all = [
-    linkRoleViewerFile,
-    linkRoleViewerFolder,
-    linkRoleContributorFolder,
-    linkRoleEditorFolder,
-    linkRoleUploaderFolder
-  ]
-
   static list(
     isFolder: boolean,
     canEditFile = false,
+    canContribute = false,
     hasAliasLinks = false,
     hasPassword = false
   ): ShareRole[] {
     return [
       ...(hasAliasLinks && !hasPassword ? [linkRoleInternalFile, linkRoleInternalFolder] : []),
-      ...this.all,
+      linkRoleViewerFile,
+      linkRoleViewerFolder,
+      ...(canContribute ? [linkRoleContributorFolder] : []),
+      linkRoleEditorFolder,
+      linkRoleUploaderFolder,
       ...(canEditFile ? [linkRoleEditorFile] : [])
     ].filter((r) => r.folder === isFolder)
   }
 
   static getByBitmask(bitmask: number, isFolder: boolean): ShareRole {
-    return [...this.all, linkRoleEditorFile, linkRoleInternalFile, linkRoleInternalFolder] // Always return all roles
-      .find((r) => r.folder === isFolder && r.bitmask(false) === bitmask)
+    return this.list(isFolder, true, true, true, false).find((r) => r.bitmask(false) === bitmask)
   }
 
   /**
@@ -387,6 +383,7 @@ export abstract class LinkShareRoles {
    * @param bitmask
    * @param isFolder
    * @param canEditFile
+   * @param canContribute
    * @param hasAliasLinks
    * @param hasPassword
    */
@@ -394,16 +391,15 @@ export abstract class LinkShareRoles {
     bitmask: number,
     isFolder: boolean,
     canEditFile = false,
+    canContribute = false,
     hasAliasLinks = false,
     hasPassword = false
   ): ShareRole[] {
-    return [
-      ...(hasAliasLinks && !hasPassword ? [linkRoleInternalFile, linkRoleInternalFolder] : []),
-      ...this.all,
-      ...(canEditFile ? [linkRoleEditorFile] : [])
-    ].filter((r) => {
-      return r.folder === isFolder && bitmask === (bitmask | r.bitmask(false))
-    })
+    return this.list(isFolder, canEditFile, canContribute, hasAliasLinks, hasPassword).filter(
+      (r) => {
+        return bitmask === (bitmask | r.bitmask(false))
+      }
+    )
   }
 }
 

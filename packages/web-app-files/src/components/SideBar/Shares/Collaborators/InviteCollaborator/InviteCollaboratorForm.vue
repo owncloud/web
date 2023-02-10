@@ -85,6 +85,7 @@ import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingCanDenyAccess,
   useCapabilityFilesSharingResharing,
+  useCapabilityFilesSharingResharingDefault,
   useCapabilityShareJailEnabled,
   useStore
 } from 'web-pkg/src/composables'
@@ -124,6 +125,7 @@ export default defineComponent({
     return {
       resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
+      resharingDefault: useCapabilityFilesSharingResharingDefault(store),
       hasShareJail: useCapabilityShareJailEnabled(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
       hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
@@ -302,7 +304,9 @@ export default defineComponent({
             const bitmask = this.selectedRole.hasCustomPermissions
               ? SharePermissions.permissionsToBitmask(this.customPermissions)
               : SharePermissions.permissionsToBitmask(
-                  this.selectedRole.permissions(this.hasResharing || this.resourceIsSpace)
+                  this.selectedRole.permissions(
+                    (this.hasResharing && this.resharingDefault) || this.resourceIsSpace
+                  )
                 )
 
             let path = this.resource.path

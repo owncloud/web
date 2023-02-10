@@ -33,6 +33,10 @@ export const useCapabilityFilesSharingResharing = createCapabilityComposable(
   'files_sharing.resharing',
   true
 )
+export const useCapabilityFilesSharingResharingDefault = createCapabilityComposable(
+  'files_sharing.resharing_default',
+  true
+)
 
 export const useCapabilitySpacesEnabled = createCapabilityComposable('spaces.enabled', false)
 export const useCapabilityProjectSpacesEnabled = createCapabilityComposable(
@@ -68,6 +72,10 @@ export const useCapabilityFilesSharingAllowCustomPermissions = createCapabilityC
 export const useCapabilityFilesSharingPublicCanEdit = createCapabilityComposable(
   'files_sharing.public.can_edit',
   false
+)
+export const useCapabilityFilesSharingPublicCanContribute = createCapabilityComposable(
+  'files_sharing.public.can_contribute',
+  true
 )
 export const useCapabilityFilesSharingPublicAlias = createCapabilityComposable(
   'files_sharing.public.alias',

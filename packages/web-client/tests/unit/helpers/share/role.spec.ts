@@ -2,9 +2,12 @@ import {
   linkRoleContributorFolder,
   linkRoleEditorFolder,
   linkRoleUploaderFolder,
+  linkRoleInternalFile,
+  linkRoleInternalFolder,
   linkRoleViewerFile,
   linkRoleViewerFolder,
   LinkShareRoles,
+  linkRoleEditorFile,
   peopleRoleCustomFile,
   peopleRoleCustomFolder,
   peopleRoleEditorFile,
@@ -219,18 +222,24 @@ describe('roles', () => {
           'all folder related share roles',
           {
             folder: true,
-            result: LinkShareRoles.all.filter((r) => r.folder === true)
+            result: [
+              linkRoleInternalFolder,
+              linkRoleViewerFolder,
+              linkRoleContributorFolder,
+              linkRoleEditorFolder,
+              linkRoleUploaderFolder
+            ]
           }
         ],
         [
           'all file related share roles',
           {
             folder: false,
-            result: LinkShareRoles.all.filter((r) => r.folder === false)
+            result: [linkRoleInternalFile, linkRoleViewerFile, linkRoleEditorFile]
           }
         ]
       ])('%s', (name: string, { folder, result }) => {
-        expect(LinkShareRoles.list(folder)).toEqual(result)
+        expect(LinkShareRoles.list(folder, true, true, true, false)).toEqual(result)
       })
     })
     describe('getByBitmask', () => {

@@ -9,7 +9,7 @@ import {
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 
-const availableRoleOptions = LinkShareRoles.list(false, true, true)
+const availableRoleOptions = LinkShareRoles.list(false, true, true, true)
 
 const exampleLink = {
   name: 'Example link',

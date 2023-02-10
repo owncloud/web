@@ -42,7 +42,10 @@
           >
             <span class="oc-flex oc-flex-middle">
               <oc-icon :name="role.icon" class="oc-pl-s oc-pr-m" />
-              <role-item :role="role" :allow-share-permission="allowSharePermission" />
+              <role-item
+                :role="role"
+                :allow-share-permission="allowSharePermission && resharingDefault"
+              />
             </span>
             <span class="oc-flex">
               <oc-icon v-if="isSelectedRole(role)" name="check" />
@@ -117,6 +120,7 @@ import { defineComponent, inject, PropType } from 'vue'
 import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingCanDenyAccess,
+  useCapabilityFilesSharingResharingDefault,
   useStore
 } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
@@ -152,7 +156,8 @@ export default defineComponent({
       resource: inject<Resource>('resource'),
       incomingParentShare: inject<Resource>('incomingParentShare'),
       hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
-      hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store)
+      hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
+      resharingDefault: useCapabilityFilesSharingResharingDefault(store)
     }
   },
   data() {
@@ -214,7 +219,7 @@ export default defineComponent({
       return this.resource.type === 'space'
     },
     defaultCustomPermissions() {
-      return [...this.selectedRole.permissions(this.allowSharePermission)]
+      return [...this.selectedRole.permissions(this.allowSharePermission && this.resharingDefault)]
     }
   },
 
@@ -263,7 +268,7 @@ export default defineComponent({
         return
       }
       this.selectedRole = role
-      this.customPermissions = role.permissions(this.allowSharePermission)
+      this.customPermissions = role.permissions(this.allowSharePermission && this.resharingDefault)
       this.publishChange()
     },
 
@@ -281,7 +286,7 @@ export default defineComponent({
       this.selectedRole = PeopleShareRoles.getByBitmask(
         bitmask,
         this.resource.isFolder,
-        this.allowSharePermission
+        this.allowSharePermission && this.resharingDefault
       )
       this.publishChange()
     },
