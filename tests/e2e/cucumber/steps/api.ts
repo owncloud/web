@@ -23,7 +23,7 @@ Given(
 )
 
 Given(
-  '{string} assigns following roles to the users',
+  '{string} assigns following roles to the users using API',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const admin = this.usersEnvironment.getUser({ key: stepUser })
     for await (const info of stepTable.hashes()) {

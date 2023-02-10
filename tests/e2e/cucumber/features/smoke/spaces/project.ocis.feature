@@ -19,7 +19,7 @@ Feature: spaces.personal
       | id    |
       | Alice |
       | Brian |
-    Then "Admin" assigns following roles to the users
+    And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
     When "Alice" logs in
