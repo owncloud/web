@@ -35,7 +35,7 @@ export default defineComponent({
   },
   setup(props) {
     const instance = getCurrentInstance().proxy as any
-
+    const $gettext = instance.$gettext
     const filterParams = computed(() => ({ resources: props.items }))
     const selectedPersonalDrives = reactive([])
     watch(
@@ -44,9 +44,12 @@ export default defineComponent({
         selectedPersonalDrives.splice(0, selectedPersonalDrives.length)
         props.items.forEach((user) => {
           const drive = toRaw(user.drive)
+          if(drive === undefined || drive.id === undefined) {
+            return;
+          }
           const spaceResource = {
             id: drive.id,
-            name: 'Personal Drive of ' + user.displayName,
+            name: $gettext(' of %{name}', { name: user.displayName}),
             spaceQuota: drive.quota
           } as SpaceResource
           selectedPersonalDrives.push(spaceResource)
