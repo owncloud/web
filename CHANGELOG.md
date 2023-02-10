@@ -67,6 +67,7 @@ Summary
 * Enhancement - Add `ItemFilter` component: [#8354](https://github.com/owncloud/web/issues/8354)
 * Enhancement - Admin settings general section: [#8363](https://github.com/owncloud/web/issues/8363)
 * Enhancement - Add appearance section in general settings: [#8375](https://github.com/owncloud/web/pull/8375)
+* Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
 
 Details
 -------
@@ -617,6 +618,12 @@ Details
    selected by the admin for the web ui.
 
    https://github.com/owncloud/web/pull/8375
+
+* Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
+
+   We've applied the styles for action lists to the fileinfo/space action lists.
+
+   https://github.com/owncloud/web/pull/8398
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
