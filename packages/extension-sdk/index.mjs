@@ -76,7 +76,7 @@ export const defineConfig = (overrides = {}) => {
         },
         plugins: [
           vue({
-            customElement: true
+            customElement: false
           })
         ]
       },
