@@ -34,16 +34,31 @@ export const patchRouter = (router: Router) => {
     }
   }
 
-  const routerMethodFactory = (method) => (to) => {
+  let navigation = Promise.resolve()
+
+  const routerMethodFactory = (method) => async (to) => {
+    const oldNavigation = navigation
+    let outerResolve
+    let outerReject
+    navigation = new Promise((resolve, reject) => {
+      outerResolve = resolve
+      outerReject = reject
+    })
+
+    try {
+      await oldNavigation
+    } catch (e) {}
+
     const resolved = router.resolve(to)
-    if (resolved.meta?.patchCleanPath !== true) {
-      return method(to)
+    let newTo = to
+    if (resolved.meta?.patchCleanPath === true) {
+      newTo = {
+        path: cleanPath(resolved.fullPath),
+        query: resolved.query
+      }
     }
 
-    return method({
-      path: cleanPath(resolved.fullPath),
-      query: resolved.query
-    })
+    method(newTo).then(outerResolve, outerReject)
   }
 
   router.push = routerMethodFactory(router.push.bind(router))

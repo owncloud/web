@@ -1,6 +1,8 @@
-import { computed, Ref, unref } from 'vue'
+import { computed, nextTick, Ref, unref } from 'vue'
 import { useRouter } from './useRouter'
 import { QueryValue } from './types'
+
+let queue: Record<string, any> = {}
 
 export const useRouteQuery = (name: string, defaultValue?: QueryValue): Ref<QueryValue> => {
   const router = useRouter()
@@ -14,14 +16,17 @@ export const useRouteQuery = (name: string, defaultValue?: QueryValue): Ref<Quer
         return
       }
 
+      queue[name] = v === null ? undefined : v
+
+      await nextTick()
       await router.replace({
-        // FIXME: passing the path does not seem to be required at runtime, but somehow is required in tests
-        path: unref(router.currentRoute).path,
         query: {
           ...unref(router.currentRoute).query,
-          [name]: v
+          ...queue
         }
       })
+
+      queue = {}
     }
   })
 }
