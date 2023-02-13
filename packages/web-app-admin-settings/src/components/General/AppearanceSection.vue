@@ -51,10 +51,10 @@ import { useStore } from 'web-pkg'
 
 export default defineComponent({
   name: 'AppearanceSection',
-  mixins: [UploadLogo, ResetLogo],
   components: {
     ContextActionMenu
   },
+  mixins: [UploadLogo, ResetLogo],
   setup() {
     const store = useStore()
     const instance = getCurrentInstance().proxy as any

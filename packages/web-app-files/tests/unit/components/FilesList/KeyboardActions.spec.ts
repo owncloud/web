@@ -70,7 +70,6 @@ describe('KeyboardActions', () => {
     })
   })
   describe('global shortcuts', () => {
-
     it('copy selected files', () => {
       const event = new KeyboardEvent('keyDown', {
         keyCode: keycode('c'),
