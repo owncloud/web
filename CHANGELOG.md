@@ -526,6 +526,7 @@ Details
 
    https://github.com/owncloud/web/pull/8261
    https://github.com/owncloud/web/pull/8330
+   https://github.com/owncloud/web/pull/8418
 
 * Enhancement - Move user group select to edit panel: [#8279](https://github.com/owncloud/web/pull/8279)
 
