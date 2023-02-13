@@ -368,13 +368,7 @@ export default defineComponent({
         })
       }
     },
-    async updateUserAppRoleAssignments(user, editUser) {
-      await this.graphClient.users.createUserAppRoleAssignment(user.id, {
-        appRoleId: editUser.appRoleAssignments[0].appRoleId,
-        resourceId: editUser.appRoleAssignments[0].resourceId,
-        principalId: editUser.id
-      })
-    },
+
     async updateUserDrive(editUser) {
       const updateDriveResponse = await this.graphClient.drives.updateDrive(
         editUser.drive.id,
@@ -391,7 +385,14 @@ export default defineComponent({
         })
       }
     },
-    async updateUserGroupAssignments(user, editUser) {
+    updateUserAppRoleAssignments(user, editUser) {
+      return this.graphClient.users.createUserAppRoleAssignment(user.id, {
+        appRoleId: editUser.appRoleAssignments[0].appRoleId,
+        resourceId: editUser.appRoleAssignments[0].resourceId,
+        principalId: editUser.id
+      })
+    },
+    updateUserGroupAssignments(user, editUser) {
       const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
         return !user.memberOf.some((g) => g.id === editUserGroup.id)
       })
@@ -412,7 +413,7 @@ export default defineComponent({
         requests.push(this.graphClient.groups.deleteMember(groupToDelete.id, user.id))
       }
 
-      await Promise.all(requests)
+      return Promise.all(requests)
     }
   }
 })
