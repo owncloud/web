@@ -44,12 +44,12 @@ export default defineComponent({
         selectedPersonalDrives.splice(0, selectedPersonalDrives.length)
         props.items.forEach((user) => {
           const drive = toRaw(user.drive)
-          if(drive === undefined || drive.id === undefined) {
-            return;
+          if (drive === undefined || drive.id === undefined) {
+            return
           }
           const spaceResource = {
             id: drive.id,
-            name: $gettext(' of %{name}', { name: user.displayName}),
+            name: $gettext(' of %{name}', { name: user.displayName }),
             spaceQuota: drive.quota
           } as SpaceResource
           selectedPersonalDrives.push(spaceResource)
