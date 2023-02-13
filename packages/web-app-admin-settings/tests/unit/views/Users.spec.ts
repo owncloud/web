@@ -15,7 +15,7 @@ import {
 import { AxiosResponse } from 'axios'
 import { queryItemAsString } from 'web-pkg'
 
-const mixins = ['$_editQuota_items']
+const mixins = ['$_delete_items', '$_editQuota_items']
 jest.mock('web-pkg/src/composables/appDefaults')
 
 const getDefaultUser = () => {
@@ -325,11 +325,11 @@ describe('Users view', () => {
       expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
     })
     it('display when more than one users selected', async () => {
-      /*const { wrapper } = getMountedWrapper({ mountType: mount })
+      const { wrapper } = getMountedWrapper({ mountType: mount })
       await wrapper.vm.loadResourcesTask.last
       wrapper.vm.toggleSelectAllUsers()
       await wrapper.vm.$nextTick()
-      expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()*/
+      expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
     })
   })
 
@@ -399,11 +399,14 @@ function getMountedWrapper({
           CreateUserModal: true,
           AppLoadingSpinner: true,
           OcBreadcrumb: true,
+          NoContentMessage: true,
           OcTable: true,
           ItemFilter: true,
           BatchActions: true
+    
         }
       }
-    })
+    }
+    )
   }
 }

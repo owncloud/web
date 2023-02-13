@@ -51,8 +51,8 @@ describe('Spaces view', () => {
     expect(wrapper.find(selectors.noContentMessageStub).exists()).toBeTruthy()
   })
   describe('toggle selection', () => {
-    fdescribe('toggleSelectAllSpaces method', () => {
-      fit('selects all spaces', async () => {
+    describe('toggleSelectAllSpaces method', () => {
+      it('selects all spaces', async () => {
         const spaces = [{ name: 'Some Space' }]
         const { wrapper } = getWrapper({ spaces })
         await wrapper.vm.loadResourcesTask.last
