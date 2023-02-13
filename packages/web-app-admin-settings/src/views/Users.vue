@@ -368,13 +368,7 @@ export default defineComponent({
         })
       }
     },
-    async updateUserAppRoleAssignments(user, editUser) {
-      await this.graphClient.users.createUserAppRoleAssignment(user.id, {
-        appRoleId: editUser.appRoleAssignments[0].appRoleId,
-        resourceId: editUser.appRoleAssignments[0].resourceId,
-        principalId: editUser.id
-      })
-    },
+
     async updateUserDrive(editUser) {
       const updateDriveResponse = await this.graphClient.drives.updateDrive(
         editUser.drive.id,
@@ -391,22 +385,32 @@ export default defineComponent({
         })
       }
     },
-    async updateUserGroupAssignments(user, editUser) {
-      const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
-        return !user.memberOf.some((g) => g.id === editUserGroup.id)
+    updateUserAppRoleAssignments(user, editUser) {
+      return this.graphClient.users.createUserAppRoleAssignment(user.id, {
+        appRoleId: editUser.appRoleAssignments[0].appRoleId,
+        resourceId: editUser.appRoleAssignments[0].resourceId,
+        principalId: editUser.id
       })
-
-      const groupsToDelete = user.memberOf.filter((editUserGroup) => {
-        return !editUser.memberOf.some((g) => g.id === editUserGroup.id)
-      })
+    },
+    updateUserGroupAssignments(user, editUser) {
+      const groupsToAdd = editUser.memberOf.filter(
+        (editUserGroup) => !user.memberOf.some((g) => g.id === editUserGroup.id)
+      )
+      const groupsToDelete = user.memberOf.filter(
+        (editUserGroup) => !editUser.memberOf.some((g) => g.id === editUserGroup.id)
+      )
+      const requests = []
 
       for (const groupToAdd of groupsToAdd) {
-        await this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
+        requests.push(
+          this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
+        )
+      }
+      for (const groupToDelete of groupsToDelete) {
+        requests.push(this.graphClient.groups.deleteMember(groupToDelete.id, user.id))
       }
 
-      for (const groupToDelete of groupsToDelete) {
-        await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
-      }
+      return Promise.all(requests)
     }
   }
 })
