@@ -11,7 +11,8 @@ import {
   useRouteQuery,
   useStore
 } from 'web-pkg/src/composables'
-import { determineSortFields } from '../../helpers/ui/resourceTable'
+import { determineSortFields as determineResourceTableSortFields } from '../../helpers/ui/resourceTable'
+import { determineSortFields as determineResourceTilesSortFields } from '../../helpers/ui/resourceTiles'
 import { Task } from 'vue-concurrency'
 import { Resource } from 'web-client'
 import { useSelectedResources, SelectedResourcesResult } from '../selection'
@@ -59,14 +60,6 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } = useFileListHeaderPosition()
 
   const storeItems = computed((): T[] => store.getters['Files/activeFiles'] || [])
-  const fields = computed((): SortField[] => {
-    return determineSortFields(unref(storeItems)[0])
-  })
-
-  const { sortBy, sortDir, items, handleSort } = useSort<T>({
-    items: storeItems,
-    fields
-  })
 
   const currentViewModeQuery = useRouteQuery('view-mode', ViewModeConstants.defaultModeName)
   const currentViewMode = computed((): string => queryItemAsString(currentViewModeQuery.value))
@@ -75,6 +68,18 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   const currentTilesSizeQuery = useRouteQuery('tiles-size', '1')
   const currentTilesSize = computed((): string => String(currentTilesSizeQuery.value))
   const viewSize = useViewSize(currentTilesSize)
+
+  const fields = computed((): SortField[] => {
+    if (unref(viewMode) === ViewModeConstants.tilesView.name) {
+      return determineResourceTilesSortFields(unref(storeItems)[0])
+    }
+    return determineResourceTableSortFields(unref(storeItems)[0])
+  })
+
+  const { sortBy, sortDir, items, handleSort } = useSort<T>({
+    items: storeItems,
+    fields
+  })
 
   const paginationPageQuery = useRouteQuery('page', '1')
   const paginationPage = computed((): number => parseInt(String(paginationPageQuery.value)))

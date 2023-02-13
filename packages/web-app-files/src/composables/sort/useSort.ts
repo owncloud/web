@@ -16,6 +16,7 @@ export interface SortField {
   // eslint-disable-next-line @typescript-eslint/ban-types
   sortable?: MaybeRef<boolean | Function | string>
   sortDir?: MaybeRef<SortDir>
+  label?: MaybeRef<string>
 }
 
 export interface SortOptions<T extends SortableItem> {

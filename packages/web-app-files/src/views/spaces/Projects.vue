@@ -26,7 +26,14 @@
           </template>
         </no-content-message>
         <div v-else class="spaces-list oc-px-m oc-mt-l">
-          <resource-tiles v-model:selectedIds="selectedResourcesIds" :data="spaces">
+          <resource-tiles
+            v-model:selectedIds="selectedResourcesIds"
+            :data="spaces"
+            :sort-fields="sortFields"
+            :sort-by="sortBy"
+            :sort-dir="sortDir"
+            @sort="handleSort"
+          >
             <template #image="{ resource }">
               <img
                 v-if="imageContentObject[resource.id]"
@@ -79,7 +86,8 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from 'web-pkg/src/composables/sideBar'
 import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
-import { useSelectedResources } from 'web-app-files/src/composables'
+import { useSelectedResources, useSort } from 'web-app-files/src/composables'
+import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
 
 export default defineComponent({
   components: {
@@ -96,12 +104,21 @@ export default defineComponent({
     const store = useStore()
     const { selectedResourcesIds } = useSelectedResources({ store })
 
-    const spaces = computed(
-      () =>
-        store.getters['runtime/spaces/spaces']
-          .filter((s) => isProjectSpaceResource(s))
-          .sort((a, b) => a.name.localeCompare(b.name)) || []
+    const runtimeSpaces = computed(
+      () => store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
     )
+
+    const sortFields = [availableSortFields[0], availableSortFields[1]]
+    const {
+      sortBy,
+      sortDir,
+      items: spaces,
+      handleSort
+    } = useSort({
+      items: runtimeSpaces,
+      fields: sortFields
+    })
+
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
 
@@ -126,7 +143,11 @@ export default defineComponent({
       loadResourcesTask,
       areResourcesLoading,
       accessToken,
-      selectedResourcesIds
+      selectedResourcesIds,
+      handleSort,
+      sortBy,
+      sortDir,
+      sortFields
     }
   },
   data: function () {
