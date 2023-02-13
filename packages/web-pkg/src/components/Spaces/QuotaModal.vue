@@ -25,6 +25,7 @@ import { mapActions, mapMutations } from 'vuex'
 import { useGraphClient } from 'web-pkg/src/composables'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { SpaceResource } from 'web-client/src'
+import { eventBus } from 'web-pkg/src'
 
 export default defineComponent({
   name: 'SpaceQuotaModal',
@@ -78,40 +79,59 @@ export default defineComponent({
     changeSelectedQuotaOption(option) {
       this.selectedOption = option.value
     },
-    editQuota() {
-      const requests = []
-      this.spaces.forEach((space) => {
-        const request = this.graphClient.drives
-          .updateDrive(space.id, { quota: { total: this.selectedOption } }, {})
-          .then(({ data }) => {
-            this.cancel()
-            if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
-              this.$emit('spaceQuotaUpdated', data.quota)
-            }
-            this.UPDATE_SPACE_FIELD({
-              id: space.id,
-              field: 'spaceQuota',
-              value: data.quota
-            })
-            this.UPDATE_RESOURCE_FIELD({
-              id: space.id,
-              field: 'spaceQuota',
-              value: data.quota
-            })
-            this.showMessage({
-              title: this.$gettext('Space quota was changed successfully')
-            })
+    async editQuota(): Promise<void> {
+      const requests = this.spaces.map(async (space): Promise<void> => {
+        const { data: driveData } = await this.graphClient.drives.updateDrive(
+          space.id,
+          { quota: { total: this.selectedOption } },
+          {}
+        )
+        this.cancel()
+        if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
+          eventBus.publish('app.admin-settings.spaces.space.quota.updated', {
+            spaceId: space.id,
+            quota: driveData.quota
           })
-          .catch((error) => {
-            console.error(error)
-            this.showMessage({
-              title: this.$gettext('Failed to change space quota'),
-              status: 'danger'
-            })
-          })
-        requests.push(request)
+        }
+        this.UPDATE_SPACE_FIELD({
+          id: space.id,
+          field: 'spaceQuota',
+          value: driveData.quota
+        })
+        this.UPDATE_RESOURCE_FIELD({
+          id: space.id,
+          field: 'spaceQuota',
+          value: driveData.quota
+        })
       })
-      return Promise.all(requests)
+      const results = await Promise.allSettled<Array<unknown>>(requests)
+      const succeeded = results.filter((r) => r.status === 'fulfilled')
+      if (succeeded.length) {
+        this.showMessage({
+          title: this.$ngettext(
+            'Space quota was changed successfully',
+            'Space quota of %{count} spaces was changed successfully',
+            succeeded.length,
+            {
+              count: succeeded.length
+            }
+          )
+        })
+      }
+      const errors = results.filter((r) => r.status === 'rejected')
+      if (errors.length) {
+        errors.forEach(console.error)
+        this.showMessage({
+          title: this.$ngettext(
+            'Failed to change space quota',
+            'Failed to change space quota for %{count} spaces',
+            errors.length,
+            {
+              count: errors.length
+            }
+          )
+        })
+      }
     }
   }
 })
