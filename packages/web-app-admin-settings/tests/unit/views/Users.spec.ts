@@ -391,22 +391,23 @@ function getMountedWrapper({
 
   return {
     mocks,
-    wrapper: mountType({...Users, mixins}, {
-      global: {
-        plugins: [...defaultPlugins(), store],
-        mocks,
-        stubs: {
-          CreateUserModal: true,
-          AppLoadingSpinner: true,
-          OcBreadcrumb: true,
-          NoContentMessage: true,
-          OcTable: true,
-          ItemFilter: true,
-          BatchActions: true
-    
+    wrapper: mountType(
+      { ...Users, mixins },
+      {
+        global: {
+          plugins: [...defaultPlugins(), store],
+          mocks,
+          stubs: {
+            CreateUserModal: true,
+            AppLoadingSpinner: true,
+            OcBreadcrumb: true,
+            NoContentMessage: true,
+            OcTable: true,
+            ItemFilter: true,
+            BatchActions: true
+          }
         }
       }
-    }
     )
   }
 }

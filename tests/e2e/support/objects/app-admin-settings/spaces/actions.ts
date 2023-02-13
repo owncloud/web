@@ -5,7 +5,7 @@ const spaceTrSelector = 'tr'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
 const spaceIdSelector = `[data-item-id="%s"] .spaces-table-btn-action-dropdown`
 const spaceCheckboxSelector = `[data-item-id="%s"]:not(.oc-table-highlighted) input[type=checkbox]`
-const quotaActionBtn = `.oc-files-actions-edit-quota-trigger`
+const quotaActionBtn = `(.oc-files-actions-edit-quota-trigger)[1]`
 const disableActionBtn = `.oc-files-actions-disable-trigger`
 const deleteActionBtn = `.oc-files-actions-delete-trigger`
 const modalConfirmBtn = `.oc-modal-body-actions-confirm`

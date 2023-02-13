@@ -101,6 +101,7 @@ import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
+import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import Delete from '../mixins/users/delete'
 import {
   queryItemAsString,
@@ -140,7 +141,8 @@ export default defineComponent({
     CreateUserModal,
     BatchActions,
     ContextActions,
-    ItemFilter
+    ItemFilter,
+    QuotaModal
   },
   mixins: [Delete, EditQuota],
   setup() {
