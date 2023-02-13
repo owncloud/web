@@ -163,21 +163,15 @@ export default defineComponent({
       roles.value = applicationsResponse.data.value[0].appRoles
     })
 
-    const loadResourcesTask = useTask(function* (signal, loadGroups = true, groupIds = null) {
-      const groupFilter = groupIds
-        ?.reduce((acc, id) => {
-          acc += `memberOf/any(m:m/id eq '${id}') and `
-          return acc
-        }, '')
-        .slice(0, -5)
-
+    const loadUsersTask = useTask(function* (signal, groupIds) {
+      const groupFilter = groupIds?.map((id) => `memberOf/any(m:m/id eq '${id}')`).join(' and ')
       const usersResponse = yield unref(graphClient).users.listUsers('displayName', groupFilter)
       users.value = usersResponse.data.value || []
+    })
 
-      if (loadGroups) {
-        yield loadGroupsTask.perform()
-      }
-
+    const loadResourcesTask = useTask(function* (signal, groupIds = null) {
+      yield loadUsersTask.perform(groupIds)
+      yield loadGroupsTask.perform()
       yield loadAppRolesTask.perform()
     })
 
@@ -193,7 +187,7 @@ export default defineComponent({
 
     const filterGroups = (groups) => {
       const groupIds = groups.map((g) => g.id)
-      loadResourcesTask.perform(false, groupIds)
+      loadUsersTask.perform(groupIds)
     }
 
     watch(
@@ -230,7 +224,7 @@ export default defineComponent({
 
     onMounted(async () => {
       const groupFilterIds = queryItemAsString(unref(groupFilterParam))?.split('+')
-      await loadResourcesTask.perform(true, groupFilterIds)
+      await loadResourcesTask.perform(groupFilterIds)
       loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
         loadResourcesTask.perform()
         selectedUsers.value = []
