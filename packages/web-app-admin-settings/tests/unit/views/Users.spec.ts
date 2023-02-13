@@ -343,8 +343,11 @@ describe('Users view', () => {
       )
       await wrapper.vm.$nextTick()
       expect(graphMock.users.listUsers).toHaveBeenCalledTimes(2)
-      // TODO: check for filter
-      expect(graphMock.users.listUsers).toHaveBeenNthCalledWith(2, 'displayName')
+      expect(graphMock.users.listUsers).toHaveBeenNthCalledWith(
+        2,
+        'displayName',
+        "memberOf/any(m:m/id eq '1')"
+      )
     })
     it('does filter initially if group ids are given via query param', async () => {
       const groupIdsQueryParam = '1+2'
@@ -355,8 +358,10 @@ describe('Users view', () => {
         queryItem: groupIdsQueryParam
       })
       await wrapper.vm.loadResourcesTask.last
-      // TODO: check for filter
-      expect(graphMock.users.listUsers).toHaveBeenCalledWith('displayName')
+      expect(graphMock.users.listUsers).toHaveBeenCalledWith(
+        'displayName',
+        "memberOf/any(m:m/id eq '1') and memberOf/any(m:m/id eq '2')"
+      )
     })
   })
 })
@@ -390,7 +395,6 @@ function getMountedWrapper({
         stubs: {
           CreateUserModal: true,
           AppLoadingSpinner: true,
-          NoContentMessage: true,
           OcBreadcrumb: true,
           OcTable: true,
           ItemFilter: true,

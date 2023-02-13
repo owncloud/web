@@ -35,57 +35,45 @@
       <template #mainContent>
         <app-loading-spinner v-if="loadResourcesTask.isRunning || !loadResourcesTask.last" />
         <div v-else>
-          <no-content-message
-            v-if="!users.length"
-            id="admin-settings-users-empty"
-            class="files-empty"
-            icon="user"
+          <UsersList
+            :users="users"
+            :roles="roles"
+            :class="{ 'users-table-squashed': sideBarOpen }"
+            :selected-users="selectedUsers"
+            :header-position="listHeaderPosition"
+            @toggle-select-user="toggleSelectUser"
+            @toggle-select-all-users="toggleSelectAllUsers"
+            @un-select-all-users="unselectAllUsers"
           >
-            <template #message>
-              <span v-translate>No users in here</span>
+            <template #contextMenu>
+              <context-actions :items="selectedUsers" />
             </template>
-          </no-content-message>
-          <div v-else>
-            <UsersList
-              :users="users"
-              :roles="roles"
-              :class="{ 'users-table-squashed': sideBarOpen }"
-              :selected-users="selectedUsers"
-              :header-position="listHeaderPosition"
-              @toggle-select-user="toggleSelectUser"
-              @toggle-select-all-users="toggleSelectAllUsers"
-              @un-select-all-users="unselectAllUsers"
-            >
-              <template #contextMenu>
-                <context-actions :items="selectedUsers" />
-              </template>
-              <template #filter>
-                <div class="oc-flex oc-flex-middle oc-ml-m oc-mb-m oc-mt-m">
-                  <div class="oc-mr-m oc-flex oc-flex-middle">
-                    <oc-icon name="filter-2" class="oc-mr-xs" />
-                    <span v-text="$gettext('Filter:')" />
-                  </div>
-                  <item-filter
-                    filter-name="groups"
-                    :filter-label="$gettext('Groups')"
-                    :items="groups"
-                    :show-filter="true"
-                    :allow-multiple="true"
-                    display-name-attribute="displayName"
-                    :filterable-attributes="['displayName']"
-                    @selection-change="filterGroups"
-                  >
-                    <template #image="{ item }">
-                      <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
-                    </template>
-                    <template #item="{ item }">
-                      <div v-text="item.displayName" />
-                    </template>
-                  </item-filter>
+            <template #filter>
+              <div class="oc-flex oc-flex-middle oc-ml-m oc-mb-m oc-mt-m">
+                <div class="oc-mr-m oc-flex oc-flex-middle">
+                  <oc-icon name="filter-2" class="oc-mr-xs" />
+                  <span v-text="$gettext('Filter:')" />
                 </div>
-              </template>
-            </UsersList>
-          </div>
+                <item-filter
+                  filter-name="groups"
+                  :filter-label="$gettext('Groups')"
+                  :items="groups"
+                  :show-filter="true"
+                  :allow-multiple="true"
+                  display-name-attribute="displayName"
+                  :filterable-attributes="['displayName']"
+                  @selection-change="filterGroups"
+                >
+                  <template #image="{ item }">
+                    <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
+                  </template>
+                  <template #item="{ item }">
+                    <div v-text="item.displayName" />
+                  </template>
+                </item-filter>
+              </div>
+            </template>
+          </UsersList>
         </div>
       </template>
     </app-template>
@@ -108,7 +96,6 @@ import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import Delete from '../mixins/users/delete'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import {
   queryItemAsString,
   useAccessToken,
@@ -140,7 +127,6 @@ export default defineComponent({
     AppLoadingSpinner,
     AppTemplate,
     UsersList,
-    NoContentMessage,
     CreateUserModal,
     BatchActions,
     ContextActions,
@@ -178,8 +164,13 @@ export default defineComponent({
     })
 
     const loadResourcesTask = useTask(function* (signal, loadGroups = true, groupIds = null) {
-      // TODO: filter multiple group ids
-      const groupFilter = groupIds?.length ? `memberOf/any(m:m/id eq '${groupIds[0]}')` : ''
+      const groupFilter = groupIds
+        ?.reduce((acc, id) => {
+          acc += `memberOf/any(m:m/id eq '${id}') and `
+          return acc
+        }, '')
+        .slice(0, -5)
+
       const usersResponse = yield unref(graphClient).users.listUsers('displayName', groupFilter)
       users.value = usersResponse.data.value || []
 
