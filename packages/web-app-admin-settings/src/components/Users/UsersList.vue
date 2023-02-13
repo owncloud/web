@@ -8,12 +8,7 @@
       autocomplete="off"
     />
     <slot name="filter" />
-    <no-content-message
-      v-if="!users.length"
-      id="admin-settings-users-empty"
-      class="files-empty"
-      icon="user"
-    >
+    <no-content-message v-if="!users.length" icon="user">
       <template #message>
         <span v-text="$gettext('No users in here')" />
       </template>
