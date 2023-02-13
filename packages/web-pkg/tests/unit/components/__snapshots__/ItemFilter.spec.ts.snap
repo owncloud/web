@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ItemFilter can use a custom attribute as display name 1`] = `
-<div class="item-filter oc-flex">
+<div class="item-filter oc-flex item-filter-users">
   <div class="oc-filter-chip oc-flex">
     <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button" id="oc-filter-chip-5" type="button">
       <!-- @slot Content of the button -->
@@ -47,7 +47,7 @@ exports[`ItemFilter can use a custom attribute as display name 1`] = `
 `;
 
 exports[`ItemFilter renders all items 1`] = `
-<div class="item-filter oc-flex">
+<div class="item-filter oc-flex item-filter-users">
   <div class="oc-filter-chip oc-flex">
     <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button" id="oc-filter-chip-1" type="button">
       <!-- @slot Content of the button -->

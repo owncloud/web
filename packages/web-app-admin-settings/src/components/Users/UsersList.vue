@@ -4,10 +4,17 @@
       id="users-filter"
       v-model="filterTerm"
       class="oc-ml-m oc-my-s"
-      :label="$gettext('Filter users')"
+      :label="$gettext('Search')"
       autocomplete="off"
     />
+    <slot name="filter" />
+    <no-content-message v-if="!users.length" icon="user">
+      <template #message>
+        <span v-text="$gettext('No users in here')" />
+      </template>
+    </no-content-message>
     <oc-table
+      v-else
       ref="tableRef"
       class="users-table"
       :sort-by="sortBy"
@@ -95,10 +102,11 @@ import { displayPositionedDropdown, eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { User } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
+import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
 export default defineComponent({
   name: 'UsersList',
-  components: { ContextMenuQuickAction },
+  components: { ContextMenuQuickAction, NoContentMessage },
   props: {
     users: {
       type: Array as PropType<User[]>,
@@ -253,21 +261,16 @@ export default defineComponent({
   },
   watch: {
     filterTerm() {
-      if (!this.markInstance) {
-        return
+      if (this.$refs.tableRef) {
+        this.markInstance = new Mark(this.$refs.tableRef.$el)
+        this.markInstance.unmark()
+        this.markInstance.mark(this.filterTerm, {
+          element: 'span',
+          className: 'highlight-mark',
+          exclude: ['th *', 'tfoot *']
+        })
       }
-      this.markInstance.unmark()
-      this.markInstance.mark(this.filterTerm, {
-        element: 'span',
-        className: 'highlight-mark',
-        exclude: ['th *', 'tfoot *']
-      })
     }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.markInstance = new Mark(this.$refs.tableRef.$el)
-    })
   },
   methods: {
     filter(users, filterTerm) {

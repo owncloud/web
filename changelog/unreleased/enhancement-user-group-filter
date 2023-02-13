@@ -1,0 +1,6 @@
+Enhancement: User group filter
+
+Users in the users list can now be filtered by their group assignments.
+
+https://github.com/owncloud/web/issues/8377
+https://github.com/owncloud/web/pull/8378

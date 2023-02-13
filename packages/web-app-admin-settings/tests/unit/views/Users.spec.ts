@@ -12,6 +12,7 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
+import { queryItemAsString } from 'web-pkg'
 
 jest.mock('web-pkg/src/composables/appDefaults')
 
@@ -80,6 +81,10 @@ const getDefaultGraphMock = () => {
   )
 
   return graph
+}
+
+const selectors = {
+  itemFilterGroupsStub: 'item-filter-stub[filtername="groups"]'
 }
 
 describe('Users view', () => {
@@ -325,9 +330,48 @@ describe('Users view', () => {
       expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
     })
   })
+
+  describe('filter', () => {
+    it('does filter users by groups when the "selectionChange"-event is triggered', async () => {
+      const graphMock = getDefaultGraphMock()
+      const { wrapper } = getMountedWrapper({ mountType: mount, graph: graphMock })
+      await wrapper.vm.loadResourcesTask.last
+      expect(graphMock.users.listUsers).toHaveBeenCalledTimes(1)
+      ;(wrapper.findComponent<any>(selectors.itemFilterGroupsStub).vm as any).$emit(
+        'selectionChange',
+        [{ id: '1' }]
+      )
+      await wrapper.vm.$nextTick()
+      expect(graphMock.users.listUsers).toHaveBeenCalledTimes(2)
+      expect(graphMock.users.listUsers).toHaveBeenNthCalledWith(
+        2,
+        'displayName',
+        "memberOf/any(m:m/id eq '1')"
+      )
+    })
+    it('does filter initially if group ids are given via query param', async () => {
+      const groupIdsQueryParam = '1+2'
+      const graphMock = getDefaultGraphMock()
+      const { wrapper } = getMountedWrapper({
+        mountType: mount,
+        graph: graphMock,
+        queryItem: groupIdsQueryParam
+      })
+      await wrapper.vm.loadResourcesTask.last
+      expect(graphMock.users.listUsers).toHaveBeenCalledWith(
+        'displayName',
+        "memberOf/any(m:m/id eq '1') and memberOf/any(m:m/id eq '2')"
+      )
+    })
+  })
 })
 
-function getMountedWrapper({ mountType = shallowMount, graph = getDefaultGraphMock() } = {}) {
+function getMountedWrapper({
+  mountType = shallowMount,
+  graph = getDefaultGraphMock(),
+  queryItem = null
+} = {}) {
+  jest.mocked(queryItemAsString).mockImplementation(() => queryItem)
   const mocks = {
     ...defaultComponentMocks()
   }
@@ -351,9 +395,9 @@ function getMountedWrapper({ mountType = shallowMount, graph = getDefaultGraphMo
         stubs: {
           CreateUserModal: true,
           AppLoadingSpinner: true,
-          NoContentMessage: true,
-          UsersList: true,
           OcBreadcrumb: true,
+          OcTable: true,
+          ItemFilter: true,
           BatchActions: true
         }
       }
