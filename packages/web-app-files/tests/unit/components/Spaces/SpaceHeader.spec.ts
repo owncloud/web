@@ -43,7 +43,10 @@ describe('SpaceHeader', () => {
 
 function getWrapper({ space = {}, sideBarOpen = false }) {
   const mocks = {
-    ...defaultComponentMocks()
+    ...defaultComponentMocks(),
+    $permissionManager: {
+      canEditSpaceQuota: () => true
+    }
   }
   const store = createStore(defaultStoreMockOptions)
   return mount(SpaceHeader, {
@@ -53,7 +56,10 @@ function getWrapper({ space = {}, sideBarOpen = false }) {
     },
     global: {
       mocks,
-      plugins: [...defaultPlugins(), store]
+      plugins: [...defaultPlugins(), store],
+      stubs: {
+        'quota-modal': true
+      }
     }
   })
 }

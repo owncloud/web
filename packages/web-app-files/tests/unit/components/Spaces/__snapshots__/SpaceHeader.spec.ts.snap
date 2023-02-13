@@ -36,6 +36,19 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
                     </button>
                   </li>
                 </ul>
+                <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-pt-s oc-files-context-actions-border" id="oc-files-context-actions-secondaryActions">
+                  <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
+                    <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-edit-quota-trigger action-menu-item" type="button">
+                      <!-- @slot Content of the button -->
+                      <span class="oc-icon oc-icon-m oc-icon-passive">
+                        <!---->
+                      </span>
+                      <span class="oc-files-context-action-label">Edit quota</span>
+                      <!--v-if-->
+                      <!--v-if-->
+                    </button>
+                  </li>
+                </ul>
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s" id="oc-files-context-actions-trashBin">
                   <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item oc-py-s oc-px-m oc-width-1-1" type="button">
@@ -105,6 +118,19 @@ exports[`SpaceHeader space image should show the default image if no other image
                     </button>
                   </li>
                 </ul>
+                <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-pt-s oc-files-context-actions-border" id="oc-files-context-actions-secondaryActions">
+                  <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
+                    <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-edit-quota-trigger action-menu-item" type="button">
+                      <!-- @slot Content of the button -->
+                      <span class="oc-icon oc-icon-m oc-icon-passive">
+                        <!---->
+                      </span>
+                      <span class="oc-files-context-action-label">Edit quota</span>
+                      <!--v-if-->
+                      <!--v-if-->
+                    </button>
+                  </li>
+                </ul>
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s" id="oc-files-context-actions-trashBin">
                   <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
                     <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item oc-py-s oc-px-m oc-width-1-1" type="button">
@@ -165,6 +191,19 @@ exports[`SpaceHeader space image should show the set image 1`] = `
                         <!---->
                       </span>
                       <span class="oc-files-context-action-label">Members</span>
+                      <!--v-if-->
+                      <!--v-if-->
+                    </button>
+                  </li>
+                </ul>
+                <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-pt-s oc-files-context-actions-border" id="oc-files-context-actions-secondaryActions">
+                  <li class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover">
+                    <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-edit-quota-trigger action-menu-item" type="button">
+                      <!-- @slot Content of the button -->
+                      <span class="oc-icon oc-icon-m oc-icon-passive">
+                        <!---->
+                      </span>
+                      <span class="oc-files-context-action-label">Edit quota</span>
                       <!--v-if-->
                       <!--v-if-->
                     </button>

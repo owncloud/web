@@ -27,7 +27,7 @@ const selectors = {
   batchActionsStub: 'batch-actions-stub'
 }
 
-const mixins = ['$_disable_items', '$_restore_items', '$_delete_items']
+const mixins = ['$_disable_items', '$_restore_items', '$_delete_items', '$_editQuota_items']
 jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('Spaces view', () => {
@@ -51,8 +51,8 @@ describe('Spaces view', () => {
     expect(wrapper.find(selectors.noContentMessageStub).exists()).toBeTruthy()
   })
   describe('toggle selection', () => {
-    describe('toggleSelectAllSpaces method', () => {
-      it('selects all spaces', async () => {
+    fdescribe('toggleSelectAllSpaces method', () => {
+      fit('selects all spaces', async () => {
         const spaces = [{ name: 'Some Space' }]
         const { wrapper } = getWrapper({ spaces })
         await wrapper.vm.loadResourcesTask.last

@@ -21,7 +21,7 @@ export default {
           },
           handler: this.$_editQuota_trigger,
           isEnabled: ({ resources }) => {
-            if (!resources.length) {
+            if (!resources || !resources.length) {
               return false
             }
             const isProjectSpace = 'spaceQuota' in resources[0]
