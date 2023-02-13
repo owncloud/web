@@ -1,6 +1,5 @@
 <template>
   <main>
-    <open-file-bar :resource="resource" @close="closeApp"/>
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
@@ -10,7 +9,6 @@
 </template>
 <script lang="ts">
 import { useAppDefaults } from 'web-pkg/src/composables'
-import OpenFileBar from 'web-pkg/src/portals/OpenFileBar.vue'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import { defineComponent } from 'vue'
@@ -19,8 +17,7 @@ export default defineComponent({
   name: 'PDFViewer',
   components: {
     ErrorScreen,
-    LoadingScreen,
-    OpenFileBar
+    LoadingScreen
   },
   setup() {
     return {

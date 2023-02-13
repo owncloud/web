@@ -53,7 +53,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
-import ContextActions from '../../../web-app-files/src/components/FilesList/ContextActions.vue'
+import ContextActions from 'web-app-files/src/components/FilesList/ContextActions.vue'
 
 export default defineComponent({
   name: 'OpenFileBar',
