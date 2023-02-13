@@ -161,12 +161,10 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
           new Set<any>([]),
           new Set<any>(['members'])
         ),
-      addMember: (groupId: string, userId: string, server: string) => {
-        groupApiFactory.addMember(groupId, { '@odata.id': `${server}graph/v1.0/users/${userId}` })
-      },
-      deleteMember: (groupId: string, userId: string) => {
+      addMember: (groupId: string, userId: string, server: string) =>
+        groupApiFactory.addMember(groupId, { '@odata.id': `${server}graph/v1.0/users/${userId}` }),
+      deleteMember: (groupId: string, userId: string) =>
         groupApiFactory.deleteMember(groupId, userId)
-      }
     }
   }
 }

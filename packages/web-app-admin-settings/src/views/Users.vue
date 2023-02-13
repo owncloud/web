@@ -400,13 +400,19 @@ export default defineComponent({
         return !editUser.memberOf.some((g) => g.id === editUserGroup.id)
       })
 
+      const requests = []
+
       for (const groupToAdd of groupsToAdd) {
-        await this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
+        requests.push(
+          this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
+        )
       }
 
       for (const groupToDelete of groupsToDelete) {
-        await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
+        requests.push(this.graphClient.groups.deleteMember(groupToDelete.id, user.id))
       }
+
+      await Promise.all(requests)
     }
   }
 })
