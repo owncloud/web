@@ -4,7 +4,7 @@
       id="spaces-filter"
       v-model="filterTerm"
       class="oc-ml-m oc-my-s"
-      :label="$gettext('Filter spaces')"
+      :label="$gettext('Search')"
       autocomplete="off"
     />
     <oc-table

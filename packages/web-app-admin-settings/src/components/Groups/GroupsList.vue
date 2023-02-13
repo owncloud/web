@@ -4,7 +4,7 @@
       id="groups-filter"
       v-model="filterTerm"
       class="oc-ml-m oc-my-s"
-      :label="$gettext('Filter groups')"
+      :label="$gettext('Search')"
       autocomplete="off"
     />
     <oc-table
