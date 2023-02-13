@@ -393,14 +393,12 @@ export default defineComponent({
       })
     },
     updateUserGroupAssignments(user, editUser) {
-      const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
-        return !user.memberOf.some((g) => g.id === editUserGroup.id)
-      })
-
-      const groupsToDelete = user.memberOf.filter((editUserGroup) => {
-        return !editUser.memberOf.some((g) => g.id === editUserGroup.id)
-      })
-
+      const groupsToAdd = editUser.memberOf.filter(
+        (editUserGroup) => !user.memberOf.some((g) => g.id === editUserGroup.id)
+      )
+      const groupsToDelete = user.memberOf.filter(
+        (editUserGroup) => !editUser.memberOf.some((g) => g.id === editUserGroup.id)
+      )
       const requests = []
 
       for (const groupToAdd of groupsToAdd) {
@@ -408,7 +406,6 @@ export default defineComponent({
           this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
         )
       }
-
       for (const groupToDelete of groupsToDelete) {
         requests.push(this.graphClient.groups.deleteMember(groupToDelete.id, user.id))
       }
