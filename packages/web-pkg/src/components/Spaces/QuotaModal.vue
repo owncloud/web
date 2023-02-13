@@ -67,7 +67,6 @@ export default defineComponent({
     }
   },
   mounted() {
-    console.log(this.spaces)
     this.selectedOption = this.spaces[0].spaceQuota.total || 0
   },
   methods: {

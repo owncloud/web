@@ -205,6 +205,7 @@ export default defineComponent({
       () => unref(selectedUsers).length,
       async () => {
         sideBarLoading.value = true
+        // Load additional user data
         const requests = []
         unref(selectedUsers).forEach((user) => {
           requests.push(loadAdditionalUserDataTask.perform(user))
