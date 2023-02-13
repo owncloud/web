@@ -14,14 +14,22 @@
 import ShowDetails from '../../mixins/showDetails'
 import Delete from '../../mixins/users/delete'
 import Edit from '../../mixins/users/edit'
-import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  PropType,
+  unref,
+  watch,
+  toRaw,
+  ref
+} from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import { User } from 'web-client/src/generated'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
-import { watch, toRaw } from 'vue'
 import { SpaceResource } from 'web-client/src'
-import { reactive } from 'vue'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'ContextActions',
@@ -35,13 +43,13 @@ export default defineComponent({
   },
   setup(props) {
     const instance = getCurrentInstance().proxy as any
-    const $gettext = instance.$gettext
+    const { $gettext } = useGettext()
     const filterParams = computed(() => ({ resources: props.items }))
-    const selectedPersonalDrives = reactive([])
+    const selectedPersonalDrives = ref([])
     watch(
       () => props.items,
       async () => {
-        selectedPersonalDrives.splice(0, selectedPersonalDrives.length)
+        selectedPersonalDrives.value.splice(0, unref(selectedPersonalDrives).length)
         props.items.forEach((user) => {
           const drive = toRaw(user.drive)
           if (drive === undefined || drive.id === undefined) {
@@ -52,7 +60,7 @@ export default defineComponent({
             name: $gettext(' of %{name}', { name: user.displayName }),
             spaceQuota: drive.quota
           } as SpaceResource
-          selectedPersonalDrives.push(spaceResource)
+          selectedPersonalDrives.value.push(spaceResource)
         })
       },
       { deep: true, immediate: true }

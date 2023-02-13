@@ -20,10 +20,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, unref } from 'vue'
+import { defineComponent, unref, PropType } from 'vue'
 import { mapActions, mapMutations } from 'vuex'
 import { useGraphClient } from 'web-pkg/src/composables'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
+import { SpaceResource } from 'web-client/src'
 
 export default defineComponent({
   name: 'SpaceQuotaModal',
@@ -32,7 +33,7 @@ export default defineComponent({
   },
   props: {
     spaces: {
-      type: Array,
+      type: Array as PropType<SpaceResource[]>,
       required: true
     },
     cancel: {

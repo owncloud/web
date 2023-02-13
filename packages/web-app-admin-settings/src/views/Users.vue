@@ -129,6 +129,7 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import { toRaw } from 'vue'
 import { SpaceResource } from 'web-client/src'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'UsersView',
@@ -144,7 +145,7 @@ export default defineComponent({
   mixins: [Delete, EditQuota],
   setup() {
     const instance = getCurrentInstance().proxy as any
-    const $gettext = instance.$gettext
+    const { $gettext } = useGettext()
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
@@ -217,10 +218,13 @@ export default defineComponent({
           Object.assign(user, additionalUserData)
           if (unref(selectedUsers).length === 1) {
             loadedUser.value = additionalUserData
+            sideBarLoading.value = false
             return
           }
-          loadedUser.value = null
         })
+        if (unref(selectedUsers).length !== 1) {
+          loadedUser.value = null
+        }
         sideBarLoading.value = false
         selectedPersonalDrives.value.splice(0, unref(selectedPersonalDrives).length)
         unref(selectedUsers).forEach((user) => {
