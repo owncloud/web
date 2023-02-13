@@ -607,6 +607,7 @@ importers:
       vue-router: 4.1.6
       vue3-gettext: 2.5.0-alpha.1
       vuex: 4.1.0
+      web-app-files: workspace:*
       web-client: workspace:@ownclouders/web-client@*
       web-pkg: workspace:@ownclouders/web-pkg@*
     dependencies:
@@ -622,6 +623,7 @@ importers:
       vue-router: 4.1.6_vue@3.2.45
       vue3-gettext: 2.5.0-alpha.1_tfvhctuaqmmqnirfl65c47tqwu
       vuex: 4.1.0_vue@3.2.45
+      web-app-files: link:../web-app-files
       web-client: link:../web-client
       web-pkg: 'link:'
     devDependencies:
@@ -675,6 +677,7 @@ importers:
       vue-select: 4.0.0-beta.6
       vue3-gettext: ^2.3.3
       vuex: 4.1.0
+      web-app-files: workspace:*
       web-client: workspace:@ownclouders/web-client@*
       web-pkg: workspace:@ownclouders/web-pkg@*
       web-runtime: workspace:*
@@ -722,6 +725,7 @@ importers:
       vue-select: 4.0.0-beta.6_vue@3.2.45
       vue3-gettext: 2.3.4_tfvhctuaqmmqnirfl65c47tqwu
       vuex: 4.1.0_vue@3.2.45
+      web-app-files: link:../web-app-files
       web-client: link:../web-client
       web-pkg: link:../web-pkg
       web-runtime: 'link:'

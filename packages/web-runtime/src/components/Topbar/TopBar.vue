@@ -9,8 +9,10 @@
       <router-link ref="navigationSidebarLogo" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image" />
       </router-link>
+      <open-file-bar v-if="openResource" :resource="openResource" @close="closeAppFile" />
+      <portal-target name="app.runtime.header.left" @change="updateLeftPortal"></portal-target>
     </div>
-    <div class="portal-wrapper">
+    <div v-if="showMiddleSlot" class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle oc-flex-between">
@@ -28,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import NavigationMixin from '../../mixins/navigationMixin'
 
 import ApplicationsMenu from './ApplicationsMenu.vue'
@@ -38,6 +40,8 @@ import FeedbackLink from './FeedbackLink.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
 import { useCapabilityNotifications } from 'web-pkg/src'
 import { computed, unref } from 'vue'
+import OpenFileBar from './OpenFileBar.vue'
+import { useAppDefaults } from 'web-pkg/src/composables'
 
 export default {
   components: {
@@ -45,7 +49,8 @@ export default {
     FeedbackLink,
     Notifications,
     ThemeSwitcher,
-    UserMenu
+    UserMenu,
+    OpenFileBar
   },
   mixins: [NavigationMixin],
   props: {
@@ -68,11 +73,26 @@ export default {
     })
 
     return {
-      isNotificationBellEnabled
+      isNotificationBellEnabled,
+      ...useAppDefaults({
+        applicationId: 'files'
+      })
+    }
+  },
+  data: function () {
+    return {
+      contentOnLeftPortal: false,
+      openResource: null
     }
   },
   computed: {
+    ...mapState(['apps']),
     ...mapGetters(['configuration', 'user']),
+    ...mapGetters('Files', ['currentFolder']),
+
+    showMiddleSlot() {
+      return !this.contentOnLeftPortal
+    },
 
     activeRoutePath() {
       return this.$router.resolve(this.$route).path
@@ -116,6 +136,56 @@ export default {
 
     isUserMenuEnabled() {
       return this.user?.id
+    }
+  },
+  mounted() {
+    this.checkFileOpen(this.$route)
+    this.$watch('$route', (to, from) => {
+      if (to.name !== from?.name) {
+        this.checkFileOpen(to)
+      }
+    })
+
+    this.$watch('currentFileContext', (to, from) => {
+      if (to.path !== from.path) {
+        this.checkFileOpen(this.$route)
+      }
+    })
+  },
+
+  methods: {
+    ...mapActions('Files', ['setOpenedFile']),
+    updateLeftPortal(newContent, oldContent) {
+      this.contentOnLeftPortal = newContent
+    },
+    closeAppFile() {
+      this.openResource = null
+      this.closeApp()
+    },
+    checkFileOpen(route) {
+      this.openResource = null
+      if (
+        route &&
+        this.isFileEditorOpen(route) &&
+        this.currentFileContext?.path &&
+        !(this.currentFileContext.path === '/' || this.currentFileContext.item === '/')
+      ) {
+        this.getOpenResource()
+      }
+    },
+    isFileEditorOpen(route) {
+      return (
+        route.name === 'external-apps' ||
+        this.apps.fileEditors.some((e) => route.path.startsWith('/' + e.app))
+      )
+    },
+    async getOpenResource() {
+      try {
+        this.loading = true
+        this.openResource = await this.getFileInfo(this.currentFileContext)
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 }

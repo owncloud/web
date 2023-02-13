@@ -47,6 +47,7 @@
     "web-client": "workspace:@ownclouders/web-client@*",
     "web-pkg": "workspace:@ownclouders/web-pkg@*",
     "web-runtime": "workspace:*",
+    "web-app-files": "workspace:*",
     "webdav": "^4.10.0",
     "webfontloader": "^1.6.28",
     "xml-js": "^1.6.11",

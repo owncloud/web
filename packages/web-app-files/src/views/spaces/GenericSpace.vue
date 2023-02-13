@@ -441,7 +441,7 @@ export default defineComponent({
         !this.isLightweightHome && this.performLoaderTask(true)
       }
     },
-    paginatedResources: function () {
+    paginatedResources: function (from, to) {
       if (this.isSingleFile) {
         this.SET_FILE_SELECTION(this.paginatedResources)
 
@@ -450,7 +450,7 @@ export default defineComponent({
             resources: this.paginatedResources
           }).label()
 
-        if (!this.$route.query.scrollTo && defaultAction !== 'Download') {
+        if (from?.[0]?.id !== to?.[0]?.id && !this.$route.query.scrollTo && defaultAction !== 'Download') {
           this.$_fileActions_triggerDefaultAction({
             space: this.space,
             resources: this.paginatedResources,

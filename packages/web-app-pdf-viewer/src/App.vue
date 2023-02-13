@@ -1,16 +1,14 @@
 <template>
   <main>
-    <app-top-bar :resource="resource" @close="closeApp" />
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
-      <object class="pdf-viewer oc-width-1-1" :data="url" type="application/pdf" />
+      <object class="pdf-viewer oc-width-1-1 oc-height-1-1" :data="url" type="application/pdf" />
     </div>
   </main>
 </template>
 <script lang="ts">
 import { useAppDefaults } from 'web-pkg/src/composables'
-import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import { defineComponent } from 'vue'
@@ -19,8 +17,7 @@ export default defineComponent({
   name: 'PDFViewer',
   components: {
     ErrorScreen,
-    LoadingScreen,
-    AppTopBar
+    LoadingScreen
   },
   setup() {
     return {
@@ -75,6 +72,5 @@ export default defineComponent({
   margin: 0;
   padding: 0;
   overflow: hidden;
-  height: calc(100% - 52px);
 }
 </style>

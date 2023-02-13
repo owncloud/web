@@ -40,7 +40,8 @@ export default defineComponent({
     filePath: '',
     fileExtension: '',
     isReadOnly: null,
-    currentETag: null
+    currentETag: null,
+    resource: null
   }),
   computed: {
     config() {
@@ -149,6 +150,7 @@ export default defineComponent({
     async loadFileContent() {
       try {
         const response = await this.getFileContents(this.currentFileContext)
+        this.resource = await this.getFileInfo(this.currentFileContext)
         this.currentETag = response.headers.ETag
         this.$refs.drawIoEditor.contentWindow.postMessage(
           JSON.stringify({

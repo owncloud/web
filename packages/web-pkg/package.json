@@ -30,6 +30,7 @@
     "vue3-gettext": "2.5.0-alpha.1",
     "vuex": "4.1.0",
     "web-client": "workspace:@ownclouders/web-client@*",
-    "web-pkg": "workspace:@ownclouders/web-pkg@*"
+    "web-pkg": "workspace:@ownclouders/web-pkg@*",
+    "web-app-files": "workspace:*"
   }
 }

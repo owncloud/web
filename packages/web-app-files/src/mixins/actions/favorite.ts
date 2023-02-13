@@ -30,6 +30,14 @@ export default {
               return false
             }
 
+            if (this.$route.query.contextRouteName === 'files-public-link') {
+              return false
+            }
+
+            if (this.$route.query.contextRouteParams?.driveAliasAndItem === 'public') {
+              return false
+            }
+
             return this.capabilities?.files?.favorites
           },
           componentType: 'button',
