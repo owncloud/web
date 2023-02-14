@@ -69,6 +69,7 @@ Summary
 * Enhancement - Admin settings general section: [#8363](https://github.com/owncloud/web/issues/8363)
 * Enhancement - Add appearance section in general settings: [#8375](https://github.com/owncloud/web/pull/8375)
 * Enhancement - User group filter: [#8377](https://github.com/owncloud/web/issues/8377)
+* Enhancement - Batch edit quota in admin panel: [#8387](https://github.com/owncloud/web/pull/8387)
 * Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
 
 Details
@@ -639,6 +640,14 @@ Details
 
    https://github.com/owncloud/web/issues/8377
    https://github.com/owncloud/web/pull/8378
+
+* Enhancement - Batch edit quota in admin panel: [#8387](https://github.com/owncloud/web/pull/8387)
+
+   We've added the batch edit quota functionality to the admin panel for users personal space and
+   in the spaces list
+
+   https://github.com/owncloud/web/issues/8417
+   https://github.com/owncloud/web/pull/8387
 
 * Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
 
