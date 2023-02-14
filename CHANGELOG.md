@@ -71,6 +71,7 @@ Summary
 * Enhancement - User group filter: [#8377](https://github.com/owncloud/web/issues/8377)
 * Enhancement - Batch edit quota in admin panel: [#8387](https://github.com/owncloud/web/pull/8387)
 * Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
+* Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
 
 Details
 -------
@@ -654,6 +655,22 @@ Details
    We've applied the styles for action lists to the fileinfo/space action lists.
 
    https://github.com/owncloud/web/pull/8398
+
+* Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
+
+   We have added the possibility to include own header scripts and styles. This function is
+   currently still experimental and there is a possibility that the api will change.
+
+   For the reasons mentioned, the functionality is not yet documented in the official
+   documentation, but can be used as follows:
+
+   * to inject custom css add the following property to your `config.json`, `"styles": [{ "href":
+   "css/custom.css", }]`. * to inject custom scripts add the following property to your
+   `config.json`, `"scripts": [{ "src": "js/custom.js", "async": true, }]`.
+
+   https://github.com/owncloud/web/issues/4735
+   https://github.com/owncloud/web/pull/8432
+   https://github.com/owncloud/web/pull/7689
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
