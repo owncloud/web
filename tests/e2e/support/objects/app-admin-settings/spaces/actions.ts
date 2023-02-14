@@ -33,7 +33,7 @@ export const changeSpaceQuota = async (args: {
   const { page, value, id } = args
   await page.locator(util.format(spaceIdSelector, id)).click()
   await page.waitForSelector(quotaActionBtn)
-  await page.locator(quotaActionBtn).click()
+  await page.locator(`.context-menu`).locator(quotaActionBtn).click()
 
   const searchLocator = await page.locator(spacesQuotaSearchField)
   await searchLocator.fill(value)

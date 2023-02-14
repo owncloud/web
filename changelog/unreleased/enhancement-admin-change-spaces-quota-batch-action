@@ -1,0 +1,6 @@
+Enhancement: Batch edit quota in admin panel
+
+We've added the batch edit quota functionality to the admin panel for users personal space and in the spaces list
+
+https://github.com/owncloud/web/pull/8387
+https://github.com/owncloud/web/issues/8417

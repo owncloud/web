@@ -74,19 +74,27 @@ function getWrapper(graphMock) {
       },
       props: {
         cancel: jest.fn(),
-        space: {
-          id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
-          spaceQuota: {
-            remaining: 9999999836,
-            state: 'normal',
-            total: 10000000000,
-            used: 164
+        spaces: [
+          {
+            id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
+            spaceQuota: {
+              remaining: 9999999836,
+              state: 'normal',
+              total: 10000000000,
+              used: 164
+            }
           }
-        }
+        ]
       },
       global: {
         stubs: { ...defaultStubs, portal: true, 'oc-modal': true },
-        mocks: { ...defaultComponentMocks(), $clientService },
+        mocks: {
+          ...defaultComponentMocks(),
+          $clientService,
+          $permissionManager: {
+            canEditSpaceQuota: () => true
+          }
+        },
         plugins: [...defaultPlugins(), store]
       }
     })

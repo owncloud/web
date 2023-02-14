@@ -27,7 +27,7 @@ const selectors = {
   batchActionsStub: 'batch-actions-stub'
 }
 
-const mixins = ['$_disable_items', '$_restore_items', '$_delete_items']
+const mixins = ['$_disable_items', '$_restore_items', '$_delete_items', '$_editQuota_items']
 jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('Spaces view', () => {

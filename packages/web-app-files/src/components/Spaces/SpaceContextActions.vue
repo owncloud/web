@@ -4,7 +4,7 @@
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
-      :space="quotaModalSelectedSpace"
+      :spaces="quotaModalSelectedSpace"
     />
     <readme-content-modal
       v-if="readmeContentModalIsOpen"
@@ -75,7 +75,7 @@ export default defineComponent({
 
   computed: {
     quotaModalSelectedSpace() {
-      return this.$data.$_editQuota_selectedSpace
+      return [this.$data.$_editQuota_selectedSpace]
     },
     quotaModalIsOpen() {
       return this.$data.$_editQuota_modalOpen

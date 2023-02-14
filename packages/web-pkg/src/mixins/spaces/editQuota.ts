@@ -21,14 +21,16 @@ export default {
           },
           handler: this.$_editQuota_trigger,
           isEnabled: ({ resources }) => {
-            if (resources.length !== 1) {
+            if (!resources || !resources.length) {
               return false
             }
-
-            if (!resources[0].spaceQuota) {
+            const isProjectSpace = 'spaceQuota' in resources[0]
+            if (resources.length === 1 && !isProjectSpace && !resources[0].drive?.quota) {
               return false
             }
-
+            if (resources.some((r) => r.spaceQuota === false)) {
+              return false
+            }
             return this.$permissionManager.canEditSpaceQuota()
           },
           componentType: 'button',

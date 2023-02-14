@@ -38,6 +38,12 @@
         </div>
       </template>
       <template #mainContent>
+        <quota-modal
+          v-if="quotaModalIsOpen"
+          :cancel="closeQuotaModal"
+          :spaces="selectedSpaces"
+          @space-quota-updated="spaceQuotaUpdated"
+        />
         <no-content-message
           v-if="!spaces.length"
           id="admin-settings-spaces-empty"
@@ -97,6 +103,8 @@ import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
 import Delete from 'web-pkg/src/mixins/spaces/delete'
 import Disable from 'web-pkg/src/mixins/spaces/disable'
 import Restore from 'web-pkg/src/mixins/spaces/restore'
+import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
+import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import { useGettext } from 'vue3-gettext'
 
@@ -108,9 +116,10 @@ export default defineComponent({
     NoContentMessage,
     ContextActions,
     SpaceInfo,
-    BatchActions
+    BatchActions,
+    QuotaModal
   },
-  mixins: [Delete, Disable, Restore],
+  mixins: [Delete, Disable, Restore, EditQuota],
   provide() {
     return {
       resource: computed(() => this.selectedSpaces[0])
@@ -126,6 +135,7 @@ export default defineComponent({
     const { sideBarOpen, sideBarActivePanel } = useSideBar()
 
     const loadResourcesEventToken = ref(null)
+    const updateQuotaForSpaceEventToken = ref(null)
     const template = ref(null)
     const listHeaderPosition = ref(0)
     const selectedSpaces = ref([])
@@ -176,6 +186,7 @@ export default defineComponent({
 
     const batchActions = computed(() => {
       return [
+        ...instance.$_editQuota_items,
         ...instance.$_restore_items,
         ...instance.$_delete_items,
         ...instance.$_disable_items
@@ -253,12 +264,34 @@ export default defineComponent({
       calculateListHeaderPosition()
       window.addEventListener('resize', calculateListHeaderPosition)
       resizeObserver.observe(unref(appBarActionsRef))
+
+      updateQuotaForSpaceEventToken.value = eventBus.subscribe(
+        'app.admin-settings.spaces.space.quota.updated',
+        ({ spaceId, quota }) => {
+          const space = unref(spaces).find((s) => s.id === spaceId)
+          if (space) {
+            space.spaceQuota = quota
+          }
+        }
+      )
     })
 
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
+      eventBus.unsubscribe(
+        'app.admin-settings.spaces.space.quota.updated',
+        unref(updateQuotaForSpaceEventToken)
+      )
       resizeObserver.unobserve(unref(appBarActionsRef))
     })
+
+    const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
+    const closeQuotaModal = () => {
+      instance.$_editQuota_closeModal()
+    }
+    const spaceQuotaUpdated = (quota) => {
+      instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
+    }
 
     return {
       sideBarOpen,
@@ -278,7 +311,10 @@ export default defineComponent({
       unselectAllSpaces,
       limitedScreenSpace,
       appBarActionsRef,
-      onResize
+      onResize,
+      quotaModalIsOpen,
+      closeQuotaModal,
+      spaceQuotaUpdated
     }
   }
 })

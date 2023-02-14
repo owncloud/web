@@ -83,6 +83,12 @@
       @cancel="toggleCreateUserModal"
       @confirm="createUser"
     />
+    <quota-modal
+      v-if="quotaModalIsOpen"
+      :cancel="closeQuotaModal"
+      :spaces="selectedPersonalDrives"
+      @space-quota-updated="spaceQuotaUpdated"
+    />
   </div>
 </template>
 
@@ -95,6 +101,7 @@ import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
+import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import Delete from '../mixins/users/delete'
 import {
   queryItemAsString,
@@ -120,6 +127,10 @@ import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
+import { toRaw } from 'vue'
+import { SpaceResource } from 'web-client/src'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'UsersView',
@@ -130,11 +141,13 @@ export default defineComponent({
     CreateUserModal,
     BatchActions,
     ContextActions,
-    ItemFilter
+    ItemFilter,
+    QuotaModal
   },
-  mixins: [Delete],
+  mixins: [Delete, EditQuota],
   setup() {
     const instance = getCurrentInstance().proxy as any
+    const { $gettext } = useGettext()
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
@@ -190,26 +203,45 @@ export default defineComponent({
       loadUsersTask.perform(groupIds)
     }
 
+    const selectedPersonalDrives = ref([])
     watch(
-      selectedUsers,
+      () => unref(selectedUsers).length,
       async () => {
-        const loadAdditionalData = unref(selectedUsers).length === 1
-        if (loadAdditionalData && unref(loadedUser)?.id === unref(selectedUsers)[0].id) {
-          // current user is already loaded
-          return
-        }
-
         sideBarLoading.value = true
-        if (loadAdditionalData) {
-          loadedUser.value = await loadAdditionalUserDataTask.perform(unref(selectedUsers)[0])
-          sideBarLoading.value = false
-          return
-        }
+        // Load additional user data
+        const requests = []
+        unref(selectedUsers).forEach((user) => {
+          requests.push(loadAdditionalUserDataTask.perform(user))
+        })
 
-        loadedUser.value = null
+        const loadedUsers = await Promise.all(requests)
+        unref(selectedUsers).forEach((user) => {
+          const additionalUserData = loadedUsers.find((loadedUser) => loadedUser.id === user.id)
+          Object.assign(user, additionalUserData)
+          if (unref(selectedUsers).length === 1) {
+            loadedUser.value = additionalUserData
+            sideBarLoading.value = false
+            return
+          }
+        })
+        if (unref(selectedUsers).length !== 1) {
+          loadedUser.value = null
+        }
         sideBarLoading.value = false
-      },
-      { deep: true }
+        selectedPersonalDrives.value.splice(0, unref(selectedPersonalDrives).length)
+        unref(selectedUsers).forEach((user) => {
+          const drive = toRaw(user.drive)
+          if (drive === undefined || drive.id === undefined) {
+            return
+          }
+          const spaceResource = {
+            id: drive.id,
+            name: $gettext(' of %{name}', { name: user.displayName }),
+            spaceQuota: drive.quota
+          } as SpaceResource
+          selectedPersonalDrives.value.push(spaceResource)
+        })
+      }
     )
 
     const calculateListHeaderPosition = () => {
@@ -217,7 +249,7 @@ export default defineComponent({
     }
 
     const batchActions = computed(() => {
-      return [...instance.$_delete_items].filter((item) =>
+      return [...instance.$_delete_items, ...instance.$_editQuota_items].filter((item) =>
         item.isEnabled({ resources: unref(selectedUsers) })
       )
     })
@@ -245,6 +277,14 @@ export default defineComponent({
       eventBus.unsubscribe('app.admin-settings.users.user.updated', userUpdatedEventToken)
     })
 
+    const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
+    const closeQuotaModal = () => {
+      instance.$_editQuota_closeModal()
+    }
+    const spaceQuotaUpdated = (quota) => {
+      instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
+    }
+
     return {
       ...useSideBar(),
       template,
@@ -261,7 +301,11 @@ export default defineComponent({
       listHeaderPosition,
       createUserModalOpen,
       batchActions,
-      filterGroups
+      filterGroups,
+      quotaModalIsOpen,
+      closeQuotaModal,
+      spaceQuotaUpdated,
+      selectedPersonalDrives
     }
   },
   computed: {

@@ -1,6 +1,12 @@
 <template>
   <div>
     <context-action-menu :menu-sections="menuSections" :items="items" />
+    <quota-modal
+      v-if="quotaModalIsOpen"
+      :cancel="closeQuotaModal"
+      :spaces="selectedPersonalDrives"
+      @space-quota-updated="spaceQuotaUpdated"
+    />
   </div>
 </template>
 
@@ -8,14 +14,27 @@
 import ShowDetails from '../../mixins/showDetails'
 import Delete from '../../mixins/users/delete'
 import Edit from '../../mixins/users/edit'
-import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  PropType,
+  unref,
+  watch,
+  toRaw,
+  ref
+} from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import { User } from 'web-client/src/generated'
+import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
+import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
+import { SpaceResource } from 'web-client/src'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'ContextActions',
-  components: { ContextActionMenu },
-  mixins: [Delete, Edit, ShowDetails],
+  components: { ContextActionMenu, QuotaModal },
+  mixins: [Delete, Edit, ShowDetails, EditQuota],
   props: {
     items: {
       type: Array as PropType<User[]>,
@@ -24,12 +43,35 @@ export default defineComponent({
   },
   setup(props) {
     const instance = getCurrentInstance().proxy as any
-
+    const { $gettext } = useGettext()
     const filterParams = computed(() => ({ resources: props.items }))
+    const selectedPersonalDrives = ref([])
+    watch(
+      () => props.items,
+      async () => {
+        selectedPersonalDrives.value.splice(0, unref(selectedPersonalDrives).length)
+        props.items.forEach((user) => {
+          const drive = toRaw(user.drive)
+          if (drive === undefined || drive.id === undefined) {
+            return
+          }
+          const spaceResource = {
+            id: drive.id,
+            name: $gettext(' of %{name}', { name: user.displayName }),
+            spaceQuota: drive.quota
+          } as SpaceResource
+          selectedPersonalDrives.value.push(spaceResource)
+        })
+      },
+      { deep: true, immediate: true }
+    )
     const menuItemsPrimaryActions = computed(() =>
       [...instance.$_edit_items, ...instance.$_delete_items].filter((item) =>
         item.isEnabled(unref(filterParams))
       )
+    )
+    const menuItemsSecondaryActions = computed(() =>
+      [...instance.$_editQuota_items].filter((item) => item.isEnabled(unref(filterParams)))
     )
 
     const menuItemsSidebar = computed(() =>
@@ -45,6 +87,12 @@ export default defineComponent({
           items: unref(menuItemsPrimaryActions)
         })
       }
+      if (unref(menuItemsSecondaryActions).length) {
+        sections.push({
+          name: 'secondaryActions',
+          items: unref(menuItemsSecondaryActions)
+        })
+      }
       if (unref(menuItemsSidebar).length) {
         sections.push({
           name: 'sidebar',
@@ -54,8 +102,20 @@ export default defineComponent({
       return sections
     })
 
+    const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
+    const closeQuotaModal = () => {
+      instance.$_editQuota_closeModal()
+    }
+    const spaceQuotaUpdated = (quota) => {
+      instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
+    }
+
     return {
-      menuSections
+      menuSections,
+      quotaModalIsOpen,
+      closeQuotaModal,
+      spaceQuotaUpdated,
+      selectedPersonalDrives
     }
   }
 })

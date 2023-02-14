@@ -7,8 +7,8 @@
       :class="[action.class, 'action-menu-item', 'oc-py-s', 'oc-px-m', 'oc-width-1-1']"
       data-testid="action-handler"
       size="small"
-      v-on="componentListeners"
       justify-content="left"
+      v-on="componentListeners"
     >
       <oc-img
         v-if="action.img"
