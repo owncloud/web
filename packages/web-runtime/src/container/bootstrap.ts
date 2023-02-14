@@ -390,3 +390,52 @@ export const startSentry = (runtimeConfiguration: RuntimeConfiguration, app: App
     })
   }
 }
+
+/**
+ * announceCustomScripts injects custom header scripts.
+ *
+ * @param runtimeConfiguration
+ */
+export const announceCustomScripts = ({
+  runtimeConfiguration
+}: {
+  runtimeConfiguration?: RuntimeConfiguration
+}): void => {
+  const { scripts = [] } = runtimeConfiguration
+
+  scripts.forEach(({ src = '', async = false }) => {
+    if (!src) {
+      return
+    }
+
+    const script = document.createElement('script')
+    script.src = src
+    script.async = async
+    document.head.appendChild(script)
+  })
+}
+
+/**
+ * announceCustomStyles injects custom header styles.
+ *
+ * @param runtimeConfiguration
+ */
+export const announceCustomStyles = ({
+  runtimeConfiguration
+}: {
+  runtimeConfiguration?: RuntimeConfiguration
+}): void => {
+  const { styles = [] } = runtimeConfiguration
+
+  styles.forEach(({ href = '' }) => {
+    if (!href) {
+      return
+    }
+
+    const link = document.createElement('link')
+    link.href = href
+    link.type = 'text/css'
+    link.rel = 'stylesheet'
+    document.head.appendChild(link)
+  })
+}

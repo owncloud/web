@@ -1,0 +1,13 @@
+Enhancement: Inject customizations
+
+We have added the possibility to include own header scripts and styles.
+This function is currently still experimental and there is a possibility that the api will change.
+
+For the reasons mentioned, the functionality is not yet documented in the official documentation, but can be used as follows:
+
+* to inject custom css add the following property to your `config.json`, `"styles": [{ "href": "css/custom.css", }]`.
+* to inject custom scripts add the following property to your `config.json`, `"scripts": [{ "src": "js/custom.js", "async": true, }]`.
+
+https://github.com/owncloud/web/pull/8432
+https://github.com/owncloud/web/pull/7689
+https://github.com/owncloud/web/issues/4735
