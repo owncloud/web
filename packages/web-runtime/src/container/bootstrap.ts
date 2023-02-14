@@ -323,7 +323,8 @@ export const announceAuthService = ({
   store: Store<any>
   router: Router
 }): void => {
-  authService.initialize(configurationManager, clientService, store, router)
+  const $ability = app.config.globalProperties.$ability
+  authService.initialize(configurationManager, clientService, store, router, $ability)
   app.config.globalProperties.$authService = authService
 }
 

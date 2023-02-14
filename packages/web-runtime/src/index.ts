@@ -2,6 +2,9 @@ import { DesignSystem as designSystem, pages, translations, supportedLanguages }
 import { router } from './router'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createHead } from '@vueuse/head'
+import { abilitiesPlugin } from '@casl/vue'
+import { createMongoAbility } from '@casl/ability'
+
 import {
   announceConfiguration,
   initializeApplications,
@@ -46,6 +49,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   const store = await announceStore({ runtimeConfiguration })
   announcePermissionManager({ app, store })
+  app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
   const applicationsPromise = await initializeApplications({
     app,

@@ -1,3 +1,4 @@
+export * from './ability'
 export * from './appDefaults'
 export * from './authContext'
 export * from './capability'

@@ -11,6 +11,8 @@ import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
 import axios from 'axios'
 import { v4 as uuidV4 } from 'uuid'
+import { Ability, Actions, Subjects } from 'web-pkg/src/utils'
+import { SubjectRawRule } from '@casl/ability'
 
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
 type UnloadReason = 'authError' | 'logout'
@@ -19,6 +21,7 @@ export interface UserManagerOptions {
   clientService: ClientService
   configurationManager: ConfigurationManager
   store: Store<any>
+  $ability: Ability
 }
 
 export class UserManager extends OidcUserManager {
@@ -28,6 +31,7 @@ export class UserManager extends OidcUserManager {
   private store: Store<any>
   private updateAccessTokenPromise: Promise<void> | null
   private _unloadReason: UnloadReason
+  private $ability: Ability
 
   constructor(options: UserManagerOptions) {
     const storePrefix = 'oc_oAuth.'
@@ -84,6 +88,7 @@ export class UserManager extends OidcUserManager {
     this.clientService = options.clientService
     this.configurationManager = options.configurationManager
     this.store = options.store
+    this.$ability = options.$ability
   }
 
   /**
@@ -132,6 +137,7 @@ export class UserManager extends OidcUserManager {
 
       if (!userKnown) {
         await this.fetchUserInfo(accessToken)
+        this.updateUserAbilities(this.store.getters.user)
         this.store.commit('runtime/auth/SET_USER_CONTEXT_READY', true)
       }
     })()
@@ -265,5 +271,16 @@ export class UserManager extends OidcUserManager {
     const capabilities = await client.getCapabilities()
 
     this.store.commit('SET_CAPABILITIES', capabilities)
+  }
+
+  private updateUserAbilities(user) {
+    const rules: SubjectRawRule<Actions, Subjects, any>[] = []
+
+    // TODO: expand capabilities
+    if (!!user.role?.settings.find((s) => s.name === 'create-space')) {
+      rules.push({ action: 'create', subject: 'Space' })
+    }
+
+    this.$ability.update(rules)
   }
 }
