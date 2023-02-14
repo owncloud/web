@@ -24,9 +24,7 @@ export default {
             if (!resources || !resources.length) {
               return false
             }
-            if (
-              !resources.some((resource) => ('spaceQuota' in resource) || resource.drive?.quota)
-            ) {
+            if (!resources.some((resource) => 'spaceQuota' in resource || resource.drive?.quota)) {
               return false
             }
             if (resources.some((r) => r.spaceQuota === false)) {
