@@ -1,9 +1,7 @@
 import { DesignSystem as designSystem, pages, translations, supportedLanguages } from './defaults'
-
 import { router } from './router'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createHead } from '@vueuse/head'
-
 import {
   announceConfiguration,
   initializeApplications,
@@ -13,14 +11,16 @@ import {
   announceClientService,
   announceStore,
   announceTheme,
+  announceCustomStyles,
   announceTranslations,
   announceVersions,
-  applicationStore,
   announceUppyService,
   announceAuthService,
   announcePermissionManager,
-  startSentry
-} from './container'
+  startSentry,
+  announceCustomScripts
+} from './container/bootstrap'
+import { applicationStore } from './container/store'
 import {
   buildPublicSpaceResource,
   buildSpace,
@@ -63,6 +63,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   announceUppyService({ app })
   await announceClient(runtimeConfiguration)
   await announceAuthService({ app, configurationManager, store, router })
+  announceCustomStyles({ runtimeConfiguration })
+  announceCustomScripts({ runtimeConfiguration })
   announceDefaults({ store, router })
 
   app.use(router)

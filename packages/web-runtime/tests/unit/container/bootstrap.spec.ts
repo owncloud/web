@@ -4,8 +4,10 @@ import { ConfigurationManager } from 'web-pkg/src'
 import {
   initializeApplications,
   announceApplicationsReady,
-  announcePermissionManager
-} from '../../../src/container'
+  announcePermissionManager,
+  announceCustomScripts,
+  announceCustomStyles
+} from '../../../src/container/bootstrap'
 import { buildApplication } from '../../../src/container/application'
 
 jest.mock('../../../src/container/application')
@@ -57,5 +59,61 @@ describe('announcePermissionManager', () => {
     announcePermissionManager({ app, store: {} as any })
     expect(app.config.globalProperties.$permissionManager).toBeDefined()
     expect((window as any).__$permissionManager).toBeDefined()
+  })
+})
+
+describe('announceCustomScripts', () => {
+  afterEach(() => {
+    document.getElementsByTagName('html')[0].innerHTML = ''
+  })
+
+  it('injects basic scripts', () => {
+    announceCustomScripts({
+      runtimeConfiguration: { scripts: [{ src: 'foo.js' }, { src: 'bar.js' }] }
+    })
+    const elements = document.getElementsByTagName('script')
+    expect(elements.length).toBe(2)
+  })
+
+  it('skips the injection if no src option is provided', () => {
+    announceCustomScripts({ runtimeConfiguration: { scripts: [{}, {}, {}, {}, {}] } })
+    const elements = document.getElementsByTagName('script')
+    expect(elements.length).toBeFalsy()
+  })
+
+  it('loads scripts synchronous by default', () => {
+    announceCustomScripts({ runtimeConfiguration: { scripts: [{ src: 'foo.js' }] } })
+    const element = document.querySelector<HTMLScriptElement>('[src="foo.js"]')
+    expect(element.async).toBeFalsy()
+  })
+
+  it('injects scripts async if the corresponding configurations option is set', () => {
+    announceCustomScripts({ runtimeConfiguration: { scripts: [{ src: 'foo.js', async: true }] } })
+    const element = document.querySelector<HTMLScriptElement>('[src="foo.js"]')
+    expect(element.async).toBeTruthy()
+  })
+})
+
+describe('announceCustomStyles', () => {
+  afterEach(() => {
+    document.getElementsByTagName('html')[0].innerHTML = ''
+  })
+
+  it('injects basic styles', () => {
+    const styles = [{ href: 'foo.css' }, { href: 'bar.css' }]
+    announceCustomStyles({ runtimeConfiguration: { styles } })
+
+    styles.forEach(({ href }) => {
+      const element = document.querySelector<HTMLLinkElement>(`[href="${href}"]`)
+      expect(element).toBeTruthy()
+      expect(element.type).toBe('text/css')
+      expect(element.rel).toBe('stylesheet')
+    })
+  })
+
+  it('skips the injection if no href option is provided', () => {
+    announceCustomStyles({ runtimeConfiguration: { styles: [{}, {}] } })
+    const elements = document.getElementsByTagName('link')
+    expect(elements.length).toBeFalsy()
   })
 })
