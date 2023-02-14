@@ -24,8 +24,9 @@ export default {
             if (!resources || !resources.length) {
               return false
             }
-            const isProjectSpace = 'spaceQuota' in resources[0]
-            if (resources.length === 1 && !isProjectSpace && !resources[0].drive?.quota) {
+            if (
+              resources.every((resource) => !('spaceQuota' in resource) && !resource.drive?.quota)
+            ) {
               return false
             }
             if (resources.some((r) => r.spaceQuota === false)) {
