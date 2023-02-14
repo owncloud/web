@@ -25,7 +25,7 @@ export default {
               return false
             }
             if (
-              resources.every((resource) => !('spaceQuota' in resource) && !resource.drive?.quota)
+              !resources.some((resource) => ('spaceQuota' in resource) || resource.drive?.quota)
             ) {
               return false
             }
