@@ -156,6 +156,10 @@ export default defineComponent({
     const groups = ref([])
     const roles = ref([])
     const selectedUsers = ref([])
+    const additionalUserDataLoadedForUserIds = ref([])
+    const selectedUserIds = computed(() =>
+      unref(selectedUsers).map((selectedUser) => selectedUser.id)
+    )
     const loadedUser = ref(null)
     const sideBarLoading = ref(false)
     const createUserModalOpen = ref(false)
@@ -193,9 +197,17 @@ export default defineComponent({
      * this is necessary as we don't load all the data while listing the users
      * for performance reasons
      */
-    const loadAdditionalUserDataTask = useTask(function* (signal, user) {
+    const loadAdditionalUserDataTask = useTask(function* (signal, user, forceReload = false) {
+      /**
+       * Prevent load additional user data multiple times if not needed
+       */
+      if (!forceReload && unref(additionalUserDataLoadedForUserIds).includes(user.id)) {
+        return
+      }
+
       const { data } = yield unref(graphClient).users.getUser(user.id)
-      return data
+      unref(additionalUserDataLoadedForUserIds).push(user.id)
+      Object.assign(user, data)
     })
 
     const filterGroups = (groups) => {
@@ -204,45 +216,37 @@ export default defineComponent({
     }
 
     const selectedPersonalDrives = ref([])
-    watch(
-      () => unref(selectedUsers).length,
-      async () => {
-        sideBarLoading.value = true
-        // Load additional user data
-        const requests = []
-        unref(selectedUsers).forEach((user) => {
-          requests.push(loadAdditionalUserDataTask.perform(user))
-        })
+    watch(selectedUserIds, async () => {
+      sideBarLoading.value = true
+      // Load additional user data
+      const requests = []
+      unref(selectedUsers).forEach((user) => {
+        requests.push(loadAdditionalUserDataTask.perform(user))
+      })
+      await Promise.all(requests)
 
-        const loadedUsers = await Promise.all(requests)
-        unref(selectedUsers).forEach((user) => {
-          const additionalUserData = loadedUsers.find((loadedUser) => loadedUser.id === user.id)
-          Object.assign(user, additionalUserData)
-          if (unref(selectedUsers).length === 1) {
-            loadedUser.value = additionalUserData
-            sideBarLoading.value = false
-            return
-          }
-        })
-        if (unref(selectedUsers).length !== 1) {
-          loadedUser.value = null
-        }
+      if (unref(selectedUsers).length === 1) {
+        loadedUser.value = unref(selectedUsers)[0]
         sideBarLoading.value = false
-        selectedPersonalDrives.value.splice(0, unref(selectedPersonalDrives).length)
-        unref(selectedUsers).forEach((user) => {
-          const drive = toRaw(user.drive)
-          if (drive === undefined || drive.id === undefined) {
-            return
-          }
-          const spaceResource = {
-            id: drive.id,
-            name: $gettext(' of %{name}', { name: user.displayName }),
-            spaceQuota: drive.quota
-          } as SpaceResource
-          selectedPersonalDrives.value.push(spaceResource)
-        })
+        return
       }
-    )
+
+      loadedUser.value = null
+      sideBarLoading.value = false
+      selectedPersonalDrives.value.splice(0, unref(selectedPersonalDrives).length)
+      unref(selectedUsers).forEach((user) => {
+        const drive = toRaw(user.drive)
+        if (drive === undefined || drive.id === undefined) {
+          return
+        }
+        const spaceResource = {
+          id: drive.id,
+          name: $gettext(' of %{name}', { name: user.displayName }),
+          spaceQuota: drive.quota
+        } as SpaceResource
+        selectedPersonalDrives.value.push(spaceResource)
+      })
+    })
 
     const calculateListHeaderPosition = () => {
       listHeaderPosition.value = unref(template)?.$refs?.appBar?.getBoundingClientRect()?.height
