@@ -57,6 +57,18 @@
       <template #role="{ item }">
         <template v-if="item.appRoleAssignments">{{ getRoleDisplayNameByUser(item) }}</template>
       </template>
+      <template #accountEnabled="{ item }">
+        <span v-if="item.accountEnabled === false" class="oc-flex oc-flex-middle">
+          <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
+            v-text="$gettext('Forbidden')"
+          />
+        </span>
+        <span v-else class="oc-flex oc-flex-middle">
+          <oc-icon name="play-circle" fill-type="line" class="oc-mr-s" /><span
+            v-text="$gettext('Allowed')"
+          />
+        </span>
+      </template>
       <template #actions="{ item }">
         <oc-button
           v-oc-tooltip="$gettext('Details')"
@@ -243,6 +255,12 @@ export default defineComponent({
           sortable: true
         },
         {
+          name: 'accountEnabled',
+          title: this.$gettext('Login'),
+          type: 'slot',
+          sortable: true
+        },
+        {
           name: 'actions',
           title: this.$gettext('Actions'),
           sortable: false,
@@ -290,12 +308,18 @@ export default defineComponent({
       return [...list].sort((user1, user2) => {
         let a, b
 
-        if (prop === 'role') {
-          a = this.getRoleDisplayNameByUser(user1)
-          b = this.getRoleDisplayNameByUser(user2)
-        } else {
-          a = user1[prop] || ''
-          b = user2[prop] || ''
+        switch (prop) {
+          case 'role':
+            a = this.getRoleDisplayNameByUser(user1)
+            b = this.getRoleDisplayNameByUser(user2)
+            break
+          case 'accountEnabled':
+            a = user1.accountEnabled.toString()
+            b = user2.accountEnabled.toString()
+            break
+          default:
+            a = user1[prop] || ''
+            b = user2[prop] || ''
         }
 
         return desc ? b.localeCompare(a) : a.localeCompare(b)

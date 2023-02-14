@@ -52,6 +52,20 @@
           </oc-select>
           <div class="oc-text-input-message"></div>
         </div>
+        <div class="oc-mb-s">
+          <oc-select
+            :model-value="editUser"
+            :label="$gettext('Login')"
+            :options="loginOptions"
+            :clearable="false"
+            @update:model-value="onUpdateLogin"
+          >
+            <template #selected-option>
+              {{ selectedLoginLabel }}
+            </template>
+          </oc-select>
+          <div class="oc-text-input-message"></div>
+        </div>
         <quota-select
           v-if="showQuota"
           :key="'quota-select-' + user.id"
@@ -143,6 +157,21 @@ export default defineComponent({
     return { editUser, formData, groupOptions, ...useGraphClient() }
   },
   computed: {
+    loginOptions() {
+      return [
+        {
+          label: this.$gettext('Allowed'),
+          value: true
+        },
+        {
+          label: this.$gettext('Forbidden'),
+          value: false
+        }
+      ]
+    },
+    selectedLoginLabel() {
+      return this.editUser.accountEnabled === false ? this.$gettext('Forbidden') : this.$gettext('Allowed')
+    },
     translatedRoleOptions() {
       return this.roles.map((role) => {
         return { ...role, displayName: this.$gettext(role.displayName) }
@@ -261,6 +290,9 @@ export default defineComponent({
       this.editUser.passwordProfile = {
         password
       }
+    },
+    onUpdateLogin({ value }) {
+      this.editUser.accountEnabled = value
     }
   }
 })
