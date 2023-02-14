@@ -8,6 +8,6 @@ For the reasons mentioned, the functionality is not yet documented in the offici
 * to inject custom css add the following property to your `config.json`, `"styles": [{ "href": "css/custom.css", }]`.
 * to inject custom scripts add the following property to your `config.json`, `"scripts": [{ "src": "css/custom.js", "async": true, }]`.
 
-https://github.com/owncloud/web/pull/8430
+https://github.com/owncloud/web/pull/8432
 https://github.com/owncloud/web/pull/7689
 https://github.com/owncloud/web/issues/4735
