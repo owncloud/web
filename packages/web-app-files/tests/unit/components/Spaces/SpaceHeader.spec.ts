@@ -8,16 +8,6 @@ import {
   defaultComponentMocks
 } from 'web-test-helpers'
 
-window.ResizeObserver =
-  window.ResizeObserver ||
-  jest.fn().mockImplementation(() => ({
-    disconnect: jest.fn(),
-    observe: jest.fn(),
-    unobserve: jest.fn()
-  }))
-
-afterEach(() => jest.clearAllMocks())
-
 describe('SpaceHeader', () => {
   it('should add the "squashed"-class when the sidebar is opened', () => {
     const wrapper = getWrapper({ space: buildSpace({ id: 1 }), sideBarOpen: true })
