@@ -156,6 +156,7 @@ export default defineComponent({
     const groups = ref([])
     const roles = ref([])
     const selectedUsers = ref([])
+    const additionalUserDataLoadedForUserIds = ref([])
     const selectedUserIds = computed(() =>
       unref(selectedUsers).map((selectedUser) => selectedUser.id)
     )
@@ -196,8 +197,16 @@ export default defineComponent({
      * this is necessary as we don't load all the data while listing the users
      * for performance reasons
      */
-    const loadAdditionalUserDataTask = useTask(function* (signal, user) {
+    const loadAdditionalUserDataTask = useTask(function* (signal, user, forceReload = false) {
+      /**
+       * Prevent load additional user data multiple times if not needed
+       */
+      if (!forceReload && unref(additionalUserDataLoadedForUserIds).includes(user.id)) {
+        return
+      }
+
       const { data } = yield unref(graphClient).users.getUser(user.id)
+      unref(additionalUserDataLoadedForUserIds).push(user.id)
       Object.assign(user, data)
     })
 
