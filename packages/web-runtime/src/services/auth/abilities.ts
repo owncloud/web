@@ -1,8 +1,10 @@
 import { SubjectRawRule } from '@casl/ability'
-import { Actions, Subjects } from 'web-pkg'
+import { AbilityActions, AbilitySubjects } from 'web-pkg'
 
-export const getAbilities = (permissions: string[]): SubjectRawRule<Actions, Subjects, any>[] => {
-  const abilities: SubjectRawRule<Actions, Subjects, any>[] = []
+export const getAbilities = (
+  permissions: string[]
+): SubjectRawRule<AbilityActions, AbilitySubjects, any>[] => {
+  const abilities: SubjectRawRule<AbilityActions, AbilitySubjects, any>[] = []
 
   // account
   if (permissions.includes('account-management')) {
