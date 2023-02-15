@@ -366,10 +366,12 @@ Details
    https://github.com/owncloud/web/issues/8367
    https://github.com/owncloud/web/issues/8368
    https://github.com/owncloud/web/issues/8365
+   https://github.com/owncloud/web/issues/8370
    https://github.com/owncloud/web/pull/7991
    https://github.com/owncloud/web/pull/8372
    https://github.com/owncloud/web/pull/8392
    https://github.com/owncloud/web/pull/8404
+   https://github.com/owncloud/web/pull/8410
 
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 
