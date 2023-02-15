@@ -23,9 +23,9 @@ class ClassicApplication extends NextApplication {
 
   initialize(): Promise<void> {
     const { routes, navItems, translations, quickActions, store } = this.applicationScript
-    const permissionManager = this.app.config.globalProperties.$permissionManager
-    const _routes = typeof routes === 'function' ? routes(permissionManager) : routes
-    const _navItems = typeof navItems === 'function' ? navItems(permissionManager) : navItems
+    const { globalProperties } = this.app.config
+    const _routes = typeof routes === 'function' ? routes(globalProperties) : routes
+    const _navItems = typeof navItems === 'function' ? navItems(globalProperties) : navItems
 
     routes && this.runtimeApi.announceRoutes(_routes)
     navItems && this.runtimeApi.announceNavigationItems(_navItems)

@@ -15,11 +15,11 @@ const appInfo = {
   isFileEditor: false
 }
 
-const routes = (permissionManager) => [
+const routes = ({ $permissionManager }) => [
   {
     path: '/',
     redirect: () => {
-      if (permissionManager.hasSystemManagement()) {
+      if ($permissionManager.hasSystemManagement()) {
         return { name: 'admin-settings-general' }
       }
       return { name: 'admin-settings-spaces' }
@@ -63,7 +63,7 @@ const routes = (permissionManager) => [
   }
 ]
 
-const navItems = (permissionManager) => [
+const navItems = ({ $permissionManager }) => [
   {
     name: $gettext('General'),
     icon: 'settings-4',
@@ -71,7 +71,7 @@ const navItems = (permissionManager) => [
       path: `/${appInfo.id}/general?`
     },
     enabled: () => {
-      return permissionManager.hasSystemManagement()
+      return $permissionManager.hasSystemManagement()
     }
   },
   {
@@ -81,7 +81,7 @@ const navItems = (permissionManager) => [
       path: `/${appInfo.id}/users?`
     },
     enabled: () => {
-      return permissionManager.hasUserManagement()
+      return $permissionManager.hasUserManagement()
     }
   },
   {
@@ -91,7 +91,7 @@ const navItems = (permissionManager) => [
       path: `/${appInfo.id}/groups?`
     },
     enabled: () => {
-      return permissionManager.hasUserManagement()
+      return $permissionManager.hasUserManagement()
     }
   },
   {
@@ -101,7 +101,7 @@ const navItems = (permissionManager) => [
       path: `/${appInfo.id}/spaces?`
     },
     enabled: () => {
-      return permissionManager.hasSpaceManagement()
+      return $permissionManager.hasSpaceManagement()
     }
   }
 ]
