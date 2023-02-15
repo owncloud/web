@@ -52,7 +52,7 @@
           :resizable="true"
           :target-route-callback="resourceTargetRouteCallback"
           :space="space"
-          :sort-fields="fields"
+          :sort-fields="sortFields"
           :sort-by="sortBy"
           :sort-dir="sortDir"
           @row-mounted="rowMounted"

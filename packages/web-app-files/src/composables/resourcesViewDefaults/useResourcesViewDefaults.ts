@@ -30,7 +30,7 @@ type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
   loadResourcesTask: Task<TT, TU>
   areResourcesLoading: ReadOnlyRef<boolean>
   storeItems: ReadOnlyRef<T[]>
-  fields: ReadOnlyRef<SortField[]>
+  sortFields: ReadOnlyRef<SortField[]>
   paginatedResources: Ref<T[]>
   paginationPages: ReadOnlyRef<number>
   paginationPage: ReadOnlyRef<number>
@@ -69,14 +69,14 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   const currentTilesSize = computed((): string => String(currentTilesSizeQuery.value))
   const viewSize = useViewSize(currentTilesSize)
 
-  const fields = computed((): SortField[] => {
+  const sortFields = computed((): SortField[] => {
     if (unref(viewMode) === ViewModeConstants.tilesView.name) {
       return determineResourceTilesSortFields(unref(storeItems)[0])
     }
     return determineResourceTableSortFields(unref(storeItems)[0])
   })
 
-  const { sortBy, sortDir, items, handleSort } = useSort({ items: storeItems, fields })
+  const { sortBy, sortDir, items, handleSort } = useSort({ items: storeItems, fields: sortFields })
   const paginationPageQuery = useRouteQuery('page', '1')
   const paginationPage = computed((): number => parseInt(String(paginationPageQuery.value)))
   const { items: paginatedResources, total: paginationPages } = usePagination({
@@ -95,7 +95,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     loadResourcesTask,
     areResourcesLoading,
     storeItems,
-    fields,
+    sortFields,
     viewMode,
     viewSize,
     paginatedResources,
