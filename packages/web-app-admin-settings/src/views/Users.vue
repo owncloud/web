@@ -223,7 +223,7 @@ export default defineComponent({
       const results = await Promise.allSettled<Array<unknown>>(requests)
       const failedRequests = results.filter((result) => result.status === 'rejected')
       if (failedRequests.length > 0) {
-        console.error('Failed to load additional user data', failedRequests)
+        console.debug('Failed to load additional user data', failedRequests)
       }
 
       if (unref(selectedUsers).length === 1) {
