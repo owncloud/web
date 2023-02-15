@@ -5,6 +5,7 @@
       <div class="oc-flex oc-flex-middle">
         <h3 v-text="$gettext('Logo')" />
         <oc-button
+          v-if="menuItems.length"
           :id="`logo-context-btn`"
           v-oc-tooltip="$gettext('Show context menu')"
           :aria-label="$gettext('Show context menu')"
@@ -59,10 +60,9 @@ export default defineComponent({
     const store = useStore()
     const instance = getCurrentInstance().proxy as any
 
-    const menuItems = computed(() => [
-      ...instance.$_uploadLogo_items,
-      ...instance.$_resetLogo_items
-    ])
+    const menuItems = computed(() =>
+      [...instance.$_uploadLogo_items, ...instance.$_resetLogo_items].filter((i) => i.isEnabled())
+    )
     const logo = computed(() => store.getters.configuration.currentTheme.logo.topbar)
     const menuSections = computed(() => [
       {
