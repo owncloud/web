@@ -14,7 +14,8 @@ import * as luxon from 'luxon' // eslint-disable-line
 import * as vueGettext from 'vue3-gettext' // eslint-disable-line
 
 import { urlJoin } from 'web-client/src/utils'
-import { ConfigurationManager, PermissionManager } from 'web-pkg'
+import { ConfigurationManager } from 'web-pkg'
+import { App } from 'vue'
 
 export { NextApplication } from './next'
 
@@ -52,21 +53,21 @@ const loadScriptRequireJS = <T>(moduleUri: string) => {
  * @param args
  */
 export const buildApplication = async ({
+  app,
   applicationPath,
   store,
   router,
   translations,
   supportedLanguages,
-  configurationManager,
-  permissionManager
+  configurationManager
 }: {
+  app: App
   applicationPath: string
   store: Store<unknown>
   router: Router
   translations: unknown
   supportedLanguages: { [key: string]: string }
   configurationManager: ConfigurationManager
-  permissionManager: PermissionManager
 }): Promise<NextApplication> => {
   if (applicationStore.has(applicationPath)) {
     throw new RuntimeError('application already announced', applicationPath)
@@ -113,12 +114,12 @@ export const buildApplication = async ({
       throw new RuntimeError('next applications not implemented yet, stay tuned')
     } else {
       application = await convertClassicApplication({
+        app,
         applicationScript,
         store,
         router,
         translations,
-        supportedLanguages,
-        permissionManager
+        supportedLanguages
       }).catch()
     }
   } catch (err) {

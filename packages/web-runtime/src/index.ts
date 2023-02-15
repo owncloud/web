@@ -48,13 +48,13 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   announcePermissionManager({ app, store })
 
   const applicationsPromise = await initializeApplications({
+    app,
     runtimeConfiguration,
     configurationManager,
     store,
     supportedLanguages,
     router,
-    translations,
-    permissionManager: app.config.globalProperties.$permissionManager
+    translations
   })
   const themePromise = announceTheme({ store, app, designSystem, runtimeConfiguration })
   await Promise.all([applicationsPromise, themePromise])
