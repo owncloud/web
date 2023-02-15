@@ -13,17 +13,22 @@ import { RuntimeError } from '../error'
  */
 class ClassicApplication extends NextApplication {
   private readonly applicationScript: ClassicApplicationScript
+  private readonly app: App
 
-  constructor(runtimeApi: RuntimeApi, applicationScript: ClassicApplicationScript) {
+  constructor(runtimeApi: RuntimeApi, applicationScript: ClassicApplicationScript, app: App) {
     super(runtimeApi)
     this.applicationScript = applicationScript
+    this.app = app
   }
 
   initialize(): Promise<void> {
     const { routes, navItems, translations, quickActions, store } = this.applicationScript
+    const { globalProperties } = this.app.config
+    const _routes = typeof routes === 'function' ? routes(globalProperties) : routes
+    const _navItems = typeof navItems === 'function' ? navItems(globalProperties) : navItems
 
-    routes && this.runtimeApi.announceRoutes(routes)
-    navItems && this.runtimeApi.announceNavigationItems(navItems)
+    routes && this.runtimeApi.announceRoutes(_routes)
+    navItems && this.runtimeApi.announceNavigationItems(_navItems)
     translations && this.runtimeApi.announceTranslations(translations)
     quickActions && this.runtimeApi.announceQuickActions(quickActions)
     store && this.runtimeApi.announceStore(store)
@@ -61,6 +66,7 @@ class ClassicApplication extends NextApplication {
 
 /**
  *
+ * @param app
  * @param applicationPath
  * @param store
  * @param router
@@ -68,12 +74,14 @@ class ClassicApplication extends NextApplication {
  * @param supportedLanguages
  */
 export const convertClassicApplication = async ({
+  app,
   applicationScript,
   store,
   router,
   translations,
   supportedLanguages
 }: {
+  app: App
   applicationScript: ClassicApplicationScript
   store: Store<unknown>
   router: Router
@@ -107,5 +115,5 @@ export const convertClassicApplication = async ({
 
   await store.dispatch('registerApp', applicationScript.appInfo)
 
-  return new ClassicApplication(runtimeApi, applicationScript)
+  return new ClassicApplication(runtimeApi, applicationScript, app)
 }

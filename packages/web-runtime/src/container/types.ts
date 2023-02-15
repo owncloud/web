@@ -65,8 +65,8 @@ export interface ApplicationTranslations {
 export interface ClassicApplicationScript {
   appInfo?: ApplicationInformation
   store?: Store<any>
-  routes?: RouteRecordRaw[]
-  navItems?: ApplicationNavigationItem[]
+  routes?: ((...args) => RouteRecordRaw[]) | RouteRecordRaw[]
+  navItems?: ((...args) => ApplicationNavigationItem[]) | ApplicationNavigationItem[]
   quickActions?: ApplicationQuickActions
   translations?: ApplicationTranslations
   initialize?: () => void

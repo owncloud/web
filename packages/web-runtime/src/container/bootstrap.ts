@@ -97,6 +97,7 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * - bulk build all applications
  * - bulk register all applications, no other application is guaranteed to be registered here, don't request one
  *
+ * @param app
  * @param runtimeConfiguration
  * @param store
  * @param router
@@ -104,6 +105,7 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * @param supportedLanguages
  */
 export const initializeApplications = async ({
+  app,
   runtimeConfiguration,
   configurationManager,
   store,
@@ -111,6 +113,7 @@ export const initializeApplications = async ({
   translations,
   supportedLanguages
 }: {
+  app: App
   runtimeConfiguration: RuntimeConfiguration
   configurationManager: ConfigurationManager
   store: Store<unknown>
@@ -129,6 +132,7 @@ export const initializeApplications = async ({
   const applicationResults = await Promise.allSettled(
     applicationPaths.map((applicationPath) =>
       buildApplication({
+        app,
         applicationPath,
         store,
         supportedLanguages,
