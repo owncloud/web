@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!!sortFields.length" class="oc-tile-sorting oc-border-b oc-mb-m oc-pb-s">
+    <div v-if="sortFields.length" class="oc-tile-sorting oc-border-b oc-mb-m oc-pb-s">
       <span class="oc-mr-xs" v-text="$gettext('Sort by: ')" />
       <oc-button id="oc-tiles-sort-btn" appearance="raw" gap-size="none">
         <span v-text="$gettext(currentSortField.label)" />

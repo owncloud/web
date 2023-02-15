@@ -76,11 +76,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     return determineResourceTableSortFields(unref(storeItems)[0])
   })
 
-  const { sortBy, sortDir, items, handleSort } = useSort<T>({
-    items: storeItems,
-    fields
-  })
-
+  const { sortBy, sortDir, items, handleSort } = useSort({ items: storeItems, fields })
   const paginationPageQuery = useRouteQuery('page', '1')
   const paginationPage = computed((): number => parseInt(String(paginationPageQuery.value)))
   const { items: paginatedResources, total: paginationPages } = usePagination({
