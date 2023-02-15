@@ -135,7 +135,7 @@ export default defineComponent({
     const { sideBarOpen, sideBarActivePanel } = useSideBar()
 
     const loadResourcesEventToken = ref(null)
-    const updateQuotaForSpaceEventToken = ref(null)
+    let updateQuotaForSpaceEventToken
     const template = ref(null)
     const listHeaderPosition = ref(0)
     const selectedSpaces = ref([])
@@ -265,7 +265,7 @@ export default defineComponent({
       window.addEventListener('resize', calculateListHeaderPosition)
       resizeObserver.observe(unref(appBarActionsRef))
 
-      updateQuotaForSpaceEventToken.value = eventBus.subscribe(
+      updateQuotaForSpaceEventToken = eventBus.subscribe(
         'app.admin-settings.spaces.space.quota.updated',
         ({ spaceId, quota }) => {
           const space = unref(spaces).find((s) => s.id === spaceId)
@@ -280,7 +280,7 @@ export default defineComponent({
       eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
       eventBus.unsubscribe(
         'app.admin-settings.spaces.space.quota.updated',
-        unref(updateQuotaForSpaceEventToken)
+        updateQuotaForSpaceEventToken
       )
       resizeObserver.unobserve(unref(appBarActionsRef))
     })

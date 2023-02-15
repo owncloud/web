@@ -69,7 +69,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.selectedOption = this.spaces[0].spaceQuota.total || 0
+    this.selectedOption = this.spaces[0]?.spaceQuota?.total || 0
   },
   methods: {
     ...mapActions(['showMessage']),

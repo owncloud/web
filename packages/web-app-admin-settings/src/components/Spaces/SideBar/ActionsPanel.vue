@@ -3,7 +3,7 @@
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
-      :spaces="[resources[0]]"
+      :spaces="resources"
       @space-quota-updated="spaceQuotaUpdated"
     />
     <oc-list id="oc-spaces-actions-sidebar" class-name="oc-mt-s">

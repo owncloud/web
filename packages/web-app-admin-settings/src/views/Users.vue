@@ -219,11 +219,12 @@ export default defineComponent({
     watch(selectedUserIds, async () => {
       sideBarLoading.value = true
       // Load additional user data
-      const requests = []
-      unref(selectedUsers).forEach((user) => {
-        requests.push(loadAdditionalUserDataTask.perform(user))
-      })
-      await Promise.all(requests)
+      const requests = unref(selectedUsers).map((user) => loadAdditionalUserDataTask.perform(user))
+      const results = await Promise.allSettled<Array<unknown>>(requests)
+      const failedRequests = results.filter((result) => result.status === 'rejected')
+      if (failedRequests.length > 0) {
+        console.debug('Failed to load additional user data', failedRequests)
+      }
 
       if (unref(selectedUsers).length === 1) {
         loadedUser.value = unref(selectedUsers)[0]
