@@ -4,7 +4,6 @@ import { ConfigurationManager } from 'web-pkg/src'
 import {
   initializeApplications,
   announceApplicationsReady,
-  announcePermissionManager,
   announceCustomScripts,
   announceCustomStyles
 } from '../../../src/container/bootstrap'
@@ -51,15 +50,6 @@ describe('initialize applications', () => {
 
     await announceApplicationsReady({ applications })
     expect(ready).toHaveBeenCalledTimes(2)
-  })
-})
-
-describe('announcePermissionManager', () => {
-  it('should inject vue object contains permissionManager instance', () => {
-    const app = createApp(defineComponent({}))
-    announcePermissionManager({ app, store: {} as any })
-    expect(app.config.globalProperties.$permissionManager).toBeDefined()
-    expect((window as any).__$permissionManager).toBeDefined()
   })
 })
 

@@ -3,6 +3,8 @@ import General from './views/General.vue'
 import Users from './views/Users.vue'
 import Groups from './views/Groups.vue'
 import Spaces from './views/Spaces.vue'
+import { Ability } from 'web-pkg'
+
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
   return msg
@@ -15,14 +17,20 @@ const appInfo = {
   isFileEditor: false
 }
 
-const routes = ({ $permissionManager }) => [
+const routes = ({ $ability }: { $ability: Ability }) => [
   {
     path: '/',
     redirect: () => {
-      if ($permissionManager.hasSystemManagement()) {
+      if ($ability.can('manage', 'Setting')) {
         return { name: 'admin-settings-general' }
       }
-      return { name: 'admin-settings-spaces' }
+      if ($ability.can('manage', 'User')) {
+        return { name: 'admin-settings-users' }
+      }
+      if ($ability.can('manage', 'Space')) {
+        return { name: 'admin-settings-spaces' }
+      }
+      throw Error('Insufficient permissions')
     }
   },
   {
@@ -63,7 +71,7 @@ const routes = ({ $permissionManager }) => [
   }
 ]
 
-const navItems = ({ $permissionManager }) => [
+const navItems = ({ $ability }: { $ability: Ability }) => [
   {
     name: $gettext('General'),
     icon: 'settings-4',
@@ -71,7 +79,7 @@ const navItems = ({ $permissionManager }) => [
       path: `/${appInfo.id}/general?`
     },
     enabled: () => {
-      return $permissionManager.hasSystemManagement()
+      return $ability.can('manage', 'Setting')
     }
   },
   {
@@ -81,7 +89,7 @@ const navItems = ({ $permissionManager }) => [
       path: `/${appInfo.id}/users?`
     },
     enabled: () => {
-      return $permissionManager.hasUserManagement()
+      return $ability.can('manage', 'User')
     }
   },
   {
@@ -91,7 +99,7 @@ const navItems = ({ $permissionManager }) => [
       path: `/${appInfo.id}/groups?`
     },
     enabled: () => {
-      return $permissionManager.hasUserManagement()
+      return $ability.can('manage', 'Group')
     }
   },
   {
@@ -101,7 +109,7 @@ const navItems = ({ $permissionManager }) => [
       path: `/${appInfo.id}/spaces?`
     },
     enabled: () => {
-      return $permissionManager.hasSpaceManagement()
+      return $ability.can('manage', 'Space')
     }
   }
 ]

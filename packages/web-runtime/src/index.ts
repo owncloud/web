@@ -19,7 +19,6 @@ import {
   announceVersions,
   announceUppyService,
   announceAuthService,
-  announcePermissionManager,
   startSentry,
   announceCustomScripts
 } from './container/bootstrap'
@@ -48,7 +47,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   startSentry(runtimeConfiguration, app)
 
   const store = await announceStore({ runtimeConfiguration })
-  announcePermissionManager({ app, store })
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
   const applicationsPromise = await initializeApplications({

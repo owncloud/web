@@ -90,10 +90,7 @@ function getWrapper(graphMock) {
         stubs: { ...defaultStubs, portal: true, 'oc-modal': true },
         mocks: {
           ...defaultComponentMocks(),
-          $clientService,
-          $permissionManager: {
-            canEditSpaceQuota: () => true
-          }
+          $clientService
         },
         plugins: [...defaultPlugins(), store]
       }
