@@ -14,7 +14,7 @@ import * as luxon from 'luxon' // eslint-disable-line
 import * as vueGettext from 'vue3-gettext' // eslint-disable-line
 
 import { urlJoin } from 'web-client/src/utils'
-import { ConfigurationManager } from 'web-pkg'
+import { ConfigurationManager, PermissionManager } from 'web-pkg'
 
 export { NextApplication } from './next'
 
@@ -57,7 +57,8 @@ export const buildApplication = async ({
   router,
   translations,
   supportedLanguages,
-  configurationManager
+  configurationManager,
+  permissionManager
 }: {
   applicationPath: string
   store: Store<unknown>
@@ -65,6 +66,7 @@ export const buildApplication = async ({
   translations: unknown
   supportedLanguages: { [key: string]: string }
   configurationManager: ConfigurationManager
+  permissionManager: PermissionManager
 }): Promise<NextApplication> => {
   if (applicationStore.has(applicationPath)) {
     throw new RuntimeError('application already announced', applicationPath)
@@ -115,7 +117,8 @@ export const buildApplication = async ({
         store,
         router,
         translations,
-        supportedLanguages
+        supportedLanguages,
+        permissionManager
       }).catch()
     }
   } catch (err) {

@@ -6,6 +6,7 @@ import { NextApplication } from './next'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { RuntimeError } from '../error'
+import { PermissionManager } from 'web-pkg'
 
 /**
  * this wraps a classic application structure into a next application format.
@@ -13,17 +14,25 @@ import { RuntimeError } from '../error'
  */
 class ClassicApplication extends NextApplication {
   private readonly applicationScript: ClassicApplicationScript
+  private readonly permissionManager: PermissionManager
 
-  constructor(runtimeApi: RuntimeApi, applicationScript: ClassicApplicationScript) {
+  constructor(
+    runtimeApi: RuntimeApi,
+    applicationScript: ClassicApplicationScript,
+    permissionManager: PermissionManager
+  ) {
     super(runtimeApi)
     this.applicationScript = applicationScript
+    this.permissionManager = permissionManager
   }
 
   initialize(): Promise<void> {
     const { routes, navItems, translations, quickActions, store } = this.applicationScript
+    const _routes = typeof routes === 'function' ? routes(this.permissionManager) : routes
+    const _navItems = typeof navItems === 'function' ? navItems(this.permissionManager) : navItems
 
-    routes && this.runtimeApi.announceRoutes(routes)
-    navItems && this.runtimeApi.announceNavigationItems(navItems)
+    routes && this.runtimeApi.announceRoutes(_routes)
+    navItems && this.runtimeApi.announceNavigationItems(_navItems)
     translations && this.runtimeApi.announceTranslations(translations)
     quickActions && this.runtimeApi.announceQuickActions(quickActions)
     store && this.runtimeApi.announceStore(store)
@@ -66,19 +75,22 @@ class ClassicApplication extends NextApplication {
  * @param router
  * @param translations
  * @param supportedLanguages
+ * @param permissionManager
  */
 export const convertClassicApplication = async ({
   applicationScript,
   store,
   router,
   translations,
-  supportedLanguages
+  supportedLanguages,
+  permissionManager
 }: {
   applicationScript: ClassicApplicationScript
   store: Store<unknown>
   router: Router
   translations: unknown
   supportedLanguages: { [key: string]: string }
+  permissionManager: PermissionManager
 }): Promise<NextApplication> => {
   const { appInfo } = applicationScript
 
@@ -107,5 +119,5 @@ export const convertClassicApplication = async ({
 
   await store.dispatch('registerApp', applicationScript.appInfo)
 
-  return new ClassicApplication(runtimeApi, applicationScript)
+  return new ClassicApplication(runtimeApi, applicationScript, permissionManager)
 }

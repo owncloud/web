@@ -102,6 +102,7 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * @param router
  * @param translations
  * @param supportedLanguages
+ * @param permissionManager
  */
 export const initializeApplications = async ({
   runtimeConfiguration,
@@ -109,7 +110,8 @@ export const initializeApplications = async ({
   store,
   router,
   translations,
-  supportedLanguages
+  supportedLanguages,
+  permissionManager
 }: {
   runtimeConfiguration: RuntimeConfiguration
   configurationManager: ConfigurationManager
@@ -117,6 +119,7 @@ export const initializeApplications = async ({
   router: Router
   translations: unknown
   supportedLanguages: { [key: string]: string }
+  permissionManager: PermissionManager
 }): Promise<NextApplication[]> => {
   const { apps: internalApplications = [], external_apps: externalApplications = [] } =
     rewriteDeprecatedAppNames(runtimeConfiguration)
@@ -134,7 +137,8 @@ export const initializeApplications = async ({
         supportedLanguages,
         router,
         translations,
-        configurationManager
+        configurationManager,
+        permissionManager
       })
     )
   )

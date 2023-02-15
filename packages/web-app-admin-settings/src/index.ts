@@ -15,14 +15,11 @@ const appInfo = {
   isFileEditor: false
 }
 
-// FIXME: a better way to access this is needed
-const permissionManager = () => (window as any).__$permissionManager
-
-const routes = [
+const routes = (permissionManager) => [
   {
     path: '/',
     redirect: () => {
-      if (permissionManager().hasSystemManagement()) {
+      if (permissionManager.hasSystemManagement()) {
         return { name: 'admin-settings-general' }
       }
       return { name: 'admin-settings-spaces' }
@@ -66,7 +63,7 @@ const routes = [
   }
 ]
 
-const navItems = [
+const navItems = (permissionManager) => [
   {
     name: $gettext('General'),
     icon: 'settings-4',
@@ -74,7 +71,7 @@ const navItems = [
       path: `/${appInfo.id}/general?`
     },
     enabled: () => {
-      return permissionManager().hasSystemManagement()
+      return permissionManager.hasSystemManagement()
     }
   },
   {
@@ -84,7 +81,7 @@ const navItems = [
       path: `/${appInfo.id}/users?`
     },
     enabled: () => {
-      return permissionManager().hasUserManagement()
+      return permissionManager.hasUserManagement()
     }
   },
   {
@@ -94,7 +91,7 @@ const navItems = [
       path: `/${appInfo.id}/groups?`
     },
     enabled: () => {
-      return permissionManager().hasUserManagement()
+      return permissionManager.hasUserManagement()
     }
   },
   {
@@ -104,7 +101,7 @@ const navItems = [
       path: `/${appInfo.id}/spaces?`
     },
     enabled: () => {
-      return permissionManager().hasSpaceManagement()
+      return permissionManager.hasSpaceManagement()
     }
   }
 ]
