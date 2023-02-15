@@ -5,14 +5,12 @@ import {
   UserManagerSettings
 } from 'oidc-client-ts'
 import { buildUrl } from '../../router'
+import { getAbilities } from './abilities'
 import { ConfigurationManager } from 'web-pkg/src/configuration'
-import { ClientService } from 'web-pkg/src/services'
+import { clientService, ClientService } from 'web-pkg/src/services'
 import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
-import axios from 'axios'
-import { v4 as uuidV4 } from 'uuid'
-import { Ability, Actions, Subjects } from 'web-pkg/src/utils'
-import { SubjectRawRule } from '@casl/ability'
+import { Ability } from 'web-pkg/src/utils'
 
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
 type UnloadReason = 'authError' | 'logout'
@@ -137,7 +135,7 @@ export class UserManager extends OidcUserManager {
 
       if (!userKnown) {
         await this.fetchUserInfo(accessToken)
-        this.updateUserAbilities(this.store.getters.user)
+        await this.updateUserAbilities(this.store.getters.user, accessToken)
         this.store.commit('runtime/auth/SET_USER_CONTEXT_READY', true)
       }
     })()
@@ -212,19 +210,11 @@ export class UserManager extends OidcUserManager {
   }
 
   private async fetchRoles({ accessToken = '' }): Promise<any> {
+    const httpClient = clientService.httpAuthenticated(accessToken)
     try {
       const {
         data: { bundles: roles }
-      } = await axios.post(
-        '/api/v0/settings/roles-list',
-        {},
-        {
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-            'X-Request-ID': uuidV4()
-          }
-        }
-      )
+      } = await httpClient.post('/api/v0/settings/roles-list', {})
       return roles
     } catch (e) {
       console.error(e)
@@ -242,18 +232,10 @@ export class UserManager extends OidcUserManager {
   }
 
   private async fetchRole({ graphUser, accessToken, roles }): Promise<any> {
-    const userAssignmentResponse = await axios.post(
-      '/api/v0/settings/assignments-list',
-      {
-        account_uuid: graphUser.data.id
-      },
-      {
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-          'X-Request-ID': uuidV4()
-        }
-      }
-    )
+    const httpClient = clientService.httpAuthenticated(accessToken)
+    const userAssignmentResponse = await httpClient.post('/api/v0/settings/assignments-list', {
+      account_uuid: graphUser.data.id
+    })
     const assignments = userAssignmentResponse.data?.assignments
     const roleAssignment = assignments.find((assignment) => 'roleId' in assignment)
     return roleAssignment ? roles.find((role) => role.id === roleAssignment.roleId) : null
@@ -273,14 +255,22 @@ export class UserManager extends OidcUserManager {
     this.store.commit('SET_CAPABILITIES', capabilities)
   }
 
-  private updateUserAbilities(user) {
-    const rules: SubjectRawRule<Actions, Subjects, any>[] = []
-
-    // TODO: expand capabilities
-    if (!!user.role?.settings.find((s) => s.name === 'create-space')) {
-      rules.push({ action: 'create', subject: 'Space' })
+  private async fetchPermissions({ user, accessToken = '' }): Promise<any> {
+    const httpClient = clientService.httpAuthenticated(accessToken)
+    try {
+      const {
+        data: { permissions }
+      } = await httpClient.post('/api/v0/settings/permissions-list', { account_uuid: user.uuid })
+      return permissions
+    } catch (e) {
+      console.error(e)
+      return []
     }
+  }
 
-    this.$ability.update(rules)
+  private async updateUserAbilities(user, accessToken) {
+    const permissions = await this.fetchPermissions({ user, accessToken })
+    const abilities = getAbilities(permissions)
+    this.$ability.update(abilities)
   }
 }
