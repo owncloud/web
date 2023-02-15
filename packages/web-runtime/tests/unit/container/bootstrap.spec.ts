@@ -31,6 +31,7 @@ describe('initialize applications', () => {
     jest.mocked(buildApplication).mockImplementation(buildApplicationMock)
 
     const applications = await initializeApplications({
+      app: createApp(defineComponent({})),
       configurationManager: mockDeep<ConfigurationManager>(),
       runtimeConfiguration: {
         apps: ['internalFishy', 'internalValid'],
