@@ -69,7 +69,11 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.selectedOption = this.spaces[0].spaceQuota.total || 0
+    if(this.spaces.length === 0) {
+      this.cancel()
+      return
+    }
+    this.selectedOption = this.spaces[0].spaceQuota?.total || 0
   },
   methods: {
     ...mapActions(['showMessage']),

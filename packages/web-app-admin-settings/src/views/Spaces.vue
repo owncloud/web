@@ -135,7 +135,7 @@ export default defineComponent({
     const { sideBarOpen, sideBarActivePanel } = useSideBar()
 
     const loadResourcesEventToken = ref(null)
-    const updateQuotaForSpaceEventToken = ref(null)
+    const updateQuotaForSpaceEventToken = null
     const template = ref(null)
     const listHeaderPosition = ref(0)
     const selectedSpaces = ref([])
