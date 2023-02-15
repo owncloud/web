@@ -15,7 +15,7 @@ export const useResourcesViewDefaultsMock = (
     }),
     areResourcesLoading: ref(false),
     storeItems: ref([]),
-    fields: ref([]),
+    sortFields: ref([]),
     paginatedResources: ref([]),
     paginationPages: readonly(ref(0)),
     paginationPage: readonly(ref(0)),

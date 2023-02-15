@@ -1,5 +1,39 @@
 <template>
   <div>
+    <div v-if="sortFields.length" class="oc-tile-sorting oc-border-b oc-mb-m oc-pb-s">
+      <span class="oc-mr-xs" v-text="$gettext('Sort by: ')" />
+      <oc-button id="oc-tiles-sort-btn" appearance="raw" gap-size="none">
+        <span v-text="$gettext(currentSortField.label)" />
+        <oc-icon name="arrow-down-s" />
+      </oc-button>
+      <oc-drop
+        ref="sortDrop"
+        toggle="#oc-tiles-sort-btn"
+        class="oc-tiles-sort-drop"
+        mode="click"
+        padding-size="small"
+        close-on-click
+      >
+        <oc-list class="oc-tiles-sort-list">
+          <li v-for="(field, index) in sortFields" :key="index" class="oc-my-xs">
+            <oc-button
+              appearance="raw"
+              justify-content="space-between"
+              class="oc-tiles-sort-list-item oc-p-s oc-width-1-1"
+              :class="{
+                'oc-background-primary-gradient': isSortFieldSelected(field),
+                selected: isSortFieldSelected(field)
+              }"
+              :variation="isSortFieldSelected(field) ? 'inverse' : 'passive'"
+              @click="selectSorting(field)"
+            >
+              <span v-text="$gettext(field.label)" />
+              <oc-icon v-if="isSortFieldSelected(field)" name="check" />
+            </oc-button>
+          </li>
+        </oc-list>
+      </oc-drop>
+    </div>
     <oc-list class="oc-tiles oc-flex" :class="resizable ? 'resizableTiles' : ''">
       <li v-for="resource in data" :key="resource.id" class="oc-tiles-item">
         <oc-tile
@@ -65,6 +99,7 @@ import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/Contex
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
 import { useResourceRouteResolver } from '../../composables/filesList'
+import { SortDir, SortField } from 'web-app-files/src/composables'
 
 export default defineComponent({
   name: 'ResourceTiles',
@@ -94,9 +129,28 @@ export default defineComponent({
       type: Object as PropType<SpaceResource>,
       required: false,
       default: null
+    },
+    sortFields: {
+      type: Array as PropType<SortField[]>,
+      default: () => []
+    },
+    sortBy: {
+      type: String,
+      required: false,
+      default: undefined
+    },
+    sortDir: {
+      type: String,
+      required: false,
+      default: undefined,
+      validator: (value: string) => {
+        return (
+          value === undefined || [SortDir.Asc.toString(), SortDir.Desc.toString()].includes(value)
+        )
+      }
     }
   },
-  emits: ['fileClick', 'rowMounted', 'update:selectedIds'],
+  emits: ['fileClick', 'rowMounted', 'sort', 'update:selectedIds'],
   setup(props, context) {
     const store = useStore()
     const { $gettext } = useGettext()
@@ -195,6 +249,19 @@ export default defineComponent({
       }
     }
 
+    const currentSortField = computed(() => {
+      return (
+        props.sortFields.find((o) => o.name === props.sortBy && o.sortDir === props.sortDir) ||
+        props.sortFields[0]
+      )
+    })
+    const selectSorting = (field) => {
+      context.emit('sort', { sortBy: field.name, sortDir: field.sortDir })
+    }
+    const isSortFieldSelected = (field) => {
+      return unref(currentSortField) === field
+    }
+
     onBeforeUpdate(() => {
       tileRefs.value = {
         tiles: [],
@@ -210,7 +277,10 @@ export default defineComponent({
       tileRefs,
       isResourceSelected,
       toggleSelection,
-      getResourceCheckboxLabel
+      getResourceCheckboxLabel,
+      selectSorting,
+      isSortFieldSelected,
+      currentSortField
     }
   },
   data() {
@@ -248,6 +318,30 @@ export default defineComponent({
     font-size: var(--oc-font-size-default);
     line-height: 1.4;
     padding: var(--oc-space-xsmall);
+  }
+
+  &-sort-drop {
+    width: 200px;
+  }
+
+  &-sort-list {
+    &:hover .oc-tiles-sort-list-item.selected:not(:hover),
+    &:focus .oc-tiles-sort-list-item.selected:not(:focus) {
+      color: var(--oc-color-swatch-passive-default);
+    }
+
+    &-item {
+      &:hover,
+      &:focus {
+        background-color: var(--oc-color-background-hover);
+        color: var(--oc-color-swatch-passive-default);
+        text-decoration: none;
+      }
+
+      &.selected {
+        color: var(--oc-color-swatch-inverse-default) !important;
+      }
+    }
   }
 }
 </style>

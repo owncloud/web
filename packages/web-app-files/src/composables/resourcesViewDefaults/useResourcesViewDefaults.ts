@@ -11,7 +11,8 @@ import {
   useRouteQuery,
   useStore
 } from 'web-pkg/src/composables'
-import { determineSortFields } from '../../helpers/ui/resourceTable'
+import { determineSortFields as determineResourceTableSortFields } from '../../helpers/ui/resourceTable'
+import { determineSortFields as determineResourceTilesSortFields } from '../../helpers/ui/resourceTiles'
 import { Task } from 'vue-concurrency'
 import { Resource } from 'web-client'
 import { useSelectedResources, SelectedResourcesResult } from '../selection'
@@ -29,7 +30,7 @@ type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
   loadResourcesTask: Task<TT, TU>
   areResourcesLoading: ReadOnlyRef<boolean>
   storeItems: ReadOnlyRef<T[]>
-  fields: ReadOnlyRef<SortField[]>
+  sortFields: ReadOnlyRef<SortField[]>
   paginatedResources: Ref<T[]>
   paginationPages: ReadOnlyRef<number>
   paginationPage: ReadOnlyRef<number>
@@ -59,14 +60,6 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } = useFileListHeaderPosition()
 
   const storeItems = computed((): T[] => store.getters['Files/activeFiles'] || [])
-  const fields = computed((): SortField[] => {
-    return determineSortFields(unref(storeItems)[0])
-  })
-
-  const { sortBy, sortDir, items, handleSort } = useSort<T>({
-    items: storeItems,
-    fields
-  })
 
   const currentViewModeQuery = useRouteQuery('view-mode', ViewModeConstants.defaultModeName)
   const currentViewMode = computed((): string => queryItemAsString(currentViewModeQuery.value))
@@ -76,6 +69,14 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   const currentTilesSize = computed((): string => String(currentTilesSizeQuery.value))
   const viewSize = useViewSize(currentTilesSize)
 
+  const sortFields = computed((): SortField[] => {
+    if (unref(viewMode) === ViewModeConstants.tilesView.name) {
+      return determineResourceTilesSortFields(unref(storeItems)[0])
+    }
+    return determineResourceTableSortFields(unref(storeItems)[0])
+  })
+
+  const { sortBy, sortDir, items, handleSort } = useSort({ items: storeItems, fields: sortFields })
   const paginationPageQuery = useRouteQuery('page', '1')
   const paginationPage = computed((): number => parseInt(String(paginationPageQuery.value)))
   const { items: paginatedResources, total: paginationPages } = usePagination({
@@ -94,7 +95,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     loadResourcesTask,
     areResourcesLoading,
     storeItems,
-    fields,
+    sortFields,
     viewMode,
     viewSize,
     paginatedResources,

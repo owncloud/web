@@ -52,18 +52,13 @@
           :resizable="true"
           :target-route-callback="resourceTargetRouteCallback"
           :space="space"
+          :sort-fields="sortFields"
+          :sort-by="sortBy"
+          :sort-dir="sortDir"
           @row-mounted="rowMounted"
           @file-click="$_fileActions_triggerDefaultAction"
+          @sort="handleSort"
         >
-          <!-- Share quickactions targets current folder, not resource... -->
-          <!-- <template #actions="{ resource }">
-            <quick-actions
-              :class="resource.preview"
-              class="oc-visible@s"
-              :item="resource"
-              :actions="app.quickActions"
-            />
-          </template> -->
           <template #contextMenuActions="{ resource }">
             <context-actions :space="space" :items="[resource]" />
           </template>

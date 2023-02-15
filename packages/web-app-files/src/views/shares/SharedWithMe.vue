@@ -88,7 +88,7 @@ export default defineComponent({
   setup() {
     const {
       areResourcesLoading,
-      fields,
+      sortFields,
       fileListHeaderY,
       loadResourcesTask,
       selectedResources,
@@ -110,7 +110,7 @@ export default defineComponent({
       handleSort: pendingHandleSort
     } = useSort({
       items: pending,
-      fields,
+      fields: sortFields,
       sortByQueryName: 'pending-sort-by',
       sortDirQueryName: 'pending-sort-dir'
     })
@@ -126,7 +126,7 @@ export default defineComponent({
       handleSort: acceptedHandleSort
     } = useSort({
       items: accepted,
-      fields,
+      fields: sortFields,
       sortByQueryName: 'accepted-sort-by',
       sortDirQueryName: 'accepted-sort-dir'
     })
@@ -142,7 +142,7 @@ export default defineComponent({
       handleSort: declinedHandleSort
     } = useSort({
       items: declined,
-      fields,
+      fields: sortFields,
       sortByQueryName: 'declined-sort-by',
       sortDirQueryName: 'declined-sort-dir'
     })
