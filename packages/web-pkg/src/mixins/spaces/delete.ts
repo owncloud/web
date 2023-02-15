@@ -42,7 +42,7 @@ export default {
     ...mapMutations('runtime/spaces', ['REMOVE_SPACE']),
 
     filterResourcesToDelete(resources) {
-      return resources.filter((r) => r.canBeDeleted({ user: this.user }))
+      return resources.filter((r) => r.canBeDeleted({ user: this.user, ability: this.$ability }))
     },
     $_delete_trigger({ resources }) {
       const allowedResources = this.filterResourcesToDelete(resources)

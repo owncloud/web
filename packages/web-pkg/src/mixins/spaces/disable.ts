@@ -41,7 +41,7 @@ export default {
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     filterResourcesToDisable(resources): SpaceResource[] {
-      return resources.filter((r) => r.canDisable({ user: this.user }))
+      return resources.filter((r) => r.canDisable({ user: this.user, ability: this.$ability }))
     },
     $_disable_trigger({ resources }) {
       const allowedResources = this.filterResourcesToDisable(resources)
