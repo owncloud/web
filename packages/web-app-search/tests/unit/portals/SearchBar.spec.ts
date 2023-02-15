@@ -23,7 +23,8 @@ const providerFiles = {
     available: true,
     search: jest.fn(),
     component
-  }
+  },
+  listSearch: {}
 }
 
 const providerContacts = {
@@ -131,11 +132,11 @@ describe('Search Bar portal component', () => {
     expect(providerDisplayNameItems.at(0).text()).toEqual('Files')
     expect(providerDisplayNameItems.at(1).text()).toEqual('Contacts')
   })
-  test('displays the more results link for the available providers', async () => {
+  test('The search provider only displays the more results link if a listSearch component is present', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
-    expect(wrapper.findAll(selectors.providerMoreResultsLink).length).toEqual(2)
+    expect(wrapper.findAll(selectors.providerMoreResultsLink).length).toEqual(1)
   })
   test('hides options on preview item click', async () => {
     wrapper = getMountedWrapper().wrapper

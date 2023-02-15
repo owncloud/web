@@ -14,39 +14,65 @@ export class HttpClient {
     this.cancelToken.cancel(msg)
   }
 
-  public delete(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.delete(url, this.obtainConfig(config))
+  public delete<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.instance.delete(url, this.obtainConfig<D>(config))
   }
 
-  public get(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.get(url, this.obtainConfig(config))
+  public get<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.instance.get(url, this.obtainConfig<D>(config))
   }
 
-  public head(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.head(url, this.obtainConfig(config))
+  public head<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.instance.head(url, this.obtainConfig<D>(config))
   }
 
-  public options(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.options(url, this.obtainConfig(config))
+  public options<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.instance.options(url, this.obtainConfig<D>(config))
   }
 
-  public patch(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.patch(url, data, this.obtainConfig(config))
+  public patch<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.instance.patch(url, data, this.obtainConfig<D>(config))
   }
 
-  public post(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.post(url, data, this.obtainConfig(config))
+  public post<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.instance.post(url, data, this.obtainConfig<D>(config))
   }
 
-  public put(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.put(url, data, this.obtainConfig(config))
+  public put<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.instance.put(url, data, this.obtainConfig<D>(config))
   }
 
-  public request(config: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.request(this.obtainConfig(config))
+  public request<T = any, R = AxiosResponse<T>, D = any>(
+    config: AxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.instance.request(this.obtainConfig<D>(config))
   }
 
-  private obtainConfig(config?: AxiosRequestConfig): AxiosRequestConfig {
+  private obtainConfig<D = any>(config?: AxiosRequestConfig): AxiosRequestConfig<D> {
     return merge({ cancelToken: this.cancelToken.token }, config)
   }
 }

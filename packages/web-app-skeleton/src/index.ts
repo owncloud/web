@@ -1,4 +1,6 @@
 import App from './App.vue'
+import { GitHUbSearch } from './search/github'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 
 const appInfo = {
   name: 'web-app-skeleton',
@@ -8,7 +10,11 @@ const appInfo = {
   extensions: []
 }
 
-const injectExtensions = async (api) => {
+const injectSearch = (): void => {
+  eventBus.publish('app.search.register.provider', new GitHUbSearch())
+}
+
+const injectExtensions = async (api): Promise<void> => {
   // the promise is just there to showcase lazy loading of extensions
   await new Promise((resolve) => setTimeout(resolve, 2000))
 
@@ -42,6 +48,7 @@ export default {
     }
   ],
   async mounted(api) {
+    await injectSearch()
     await injectExtensions(api)
   }
 }

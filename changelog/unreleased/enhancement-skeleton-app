@@ -1,0 +1,8 @@
+Enhancement: Skeleton App
+
+The skeleton app has been part of the project for a long time, but with the conversion to vite it has since been ignored and no longer transpiled.
+Due to the change, the app is now taken into account again, but must be explicitly enabled. For this please see the associated APP README.
+
+Also new is a search example that is now included and uses GitHub to show how a custom search provider can be developed.
+
+https://github.com/owncloud/web/pull/8441

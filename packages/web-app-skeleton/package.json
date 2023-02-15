@@ -4,14 +4,8 @@
   "private": true,
   "description": "ownCloud web app skeleton",
   "license": "AGPL-3.0",
-  "scripts": {
-    "build": "rollup -c",
-    "serve": "SERVER=true rollup -c -w"
-  },
-  "devDependencies": {
-    "rollup": "3.9.1",
-    "rollup-plugin-serve": "1.1.0",
-    "rollup-plugin-vue": "5.1.9",
-    "vue": "2.7.14"
+  "peerDependencies": {
+    "web-app-search": "workspace:*",
+    "web-pkg": "workspace:@ownclouders/web-pkg@*"
   }
 }
