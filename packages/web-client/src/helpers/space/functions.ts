@@ -170,7 +170,7 @@ export function buildSpace(data): SpaceResource {
       return true
     },
     canBeDeleted: function ({ user, ability }: { user?: User; ability?: any } = {}) {
-      return this.disabled && (ability.can('delete', 'Space') || this.isManager(user))
+      return this.disabled && (ability?.can('delete', 'Space') || this.isManager(user))
     },
     canRename: function ({ user }: { user?: User } = {}) {
       return this.isManager(user)
@@ -182,7 +182,7 @@ export function buildSpace(data): SpaceResource {
       return this.disabled && this.isManager(user)
     },
     canDisable: function ({ user, ability }: { user?: User; ability?: any } = {}) {
-      return !this.disabled && (ability.can('delete', 'Space') || this.isManager(user))
+      return !this.disabled && (ability?.can('delete', 'Space') || this.isManager(user))
     },
     canShare: function ({ user }: { user?: User } = {}) {
       return this.isManager(user)

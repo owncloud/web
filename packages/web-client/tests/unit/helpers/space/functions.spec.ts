@@ -2,6 +2,7 @@ import { buildSpace, ProjectSpaceResource } from '../../../../src/helpers/space'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../../../../src/helpers/share'
 import { mock } from 'jest-mock-extended'
 import { User } from 'web-client/src'
+import { Ability } from 'web-pkg'
 
 describe('buildSpace', () => {
   const uuid = '1'
@@ -66,108 +67,86 @@ describe('buildSpace', () => {
 
   it.each([
     {
-      userRole: 'user',
+      userCan: false,
       spaceRole: spaceRoleManager.name,
       spaceDisabled: true,
       expectedResult: true
     },
     {
-      userRole: 'user',
+      userCan: false,
       spaceRole: spaceRoleEditor.name,
       spaceDisabled: true,
       expectedResult: false
     },
     {
-      userRole: 'user',
+      userCan: false,
       spaceRole: spaceRoleViewer.name,
       spaceDisabled: true,
       expectedResult: false
     },
     {
-      userRole: 'spaceadmin',
+      userCan: true,
       spaceRole: spaceRoleViewer.name,
       spaceDisabled: true,
       expectedResult: true
     },
     {
-      userRole: 'spaceadmin',
+      userCan: true,
       spaceRole: spaceRoleViewer.name,
       spaceDisabled: false,
       expectedResult: false
     }
   ])('canBeDeleted', (data) => {
+    const ability = mock<Ability>({ can: () => data.userCan })
     const space = buildSpace({
       root: {
         permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }],
         ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
       }
     }) as ProjectSpaceResource
-    expect(space.canBeDeleted({ user: mock<User>({ uuid, role: { name: data.userRole } }) })).toBe(
-      data.expectedResult
-    )
+    expect(space.canBeDeleted({ user: mock<User>({ uuid }), ability })).toBe(data.expectedResult)
   })
 
   it.each([
-    { userRole: 'user', spaceRole: spaceRoleManager.name, expectedResult: true },
-    { userRole: 'user', spaceRole: spaceRoleEditor.name, expectedResult: false },
-    { userRole: 'user', spaceRole: spaceRoleViewer.name, expectedResult: false },
-    { userRole: 'spaceadmin', spaceRole: spaceRoleViewer.name, expectedResult: true }
+    { spaceRole: spaceRoleManager.name, expectedResult: true },
+    { spaceRole: spaceRoleEditor.name, expectedResult: false },
+    { spaceRole: spaceRoleViewer.name, expectedResult: false }
   ])('canRename', (data) => {
     const space = buildSpace({
       root: {
         permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }]
       }
     }) as ProjectSpaceResource
-    expect(space.canRename({ user: mock<User>({ uuid, role: { name: data.userRole } }) })).toBe(
-      data.expectedResult
-    )
+    expect(space.canRename({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
   })
 
   it.each([
-    { userRole: 'user', spaceRole: spaceRoleManager.name, expectedResult: true },
-    { userRole: 'user', spaceRole: spaceRoleEditor.name, expectedResult: false },
-    { userRole: 'user', spaceRole: spaceRoleViewer.name, expectedResult: false },
-    { userRole: 'spaceadmin', spaceRole: spaceRoleViewer.name, expectedResult: true }
+    { spaceRole: spaceRoleManager.name, expectedResult: true },
+    { spaceRole: spaceRoleEditor.name, expectedResult: false },
+    { spaceRole: spaceRoleViewer.name, expectedResult: false }
   ])('canEditDescription', (data) => {
     const space = buildSpace({
       root: {
         permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }]
       }
     }) as ProjectSpaceResource
-    expect(
-      space.canEditDescription({ user: mock<User>({ uuid, role: { name: data.userRole } }) })
-    ).toBe(data.expectedResult)
+    expect(space.canEditDescription({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
   })
 
   it.each([
     {
-      userRole: 'user',
       spaceRole: spaceRoleManager.name,
       spaceDisabled: true,
       expectedResult: true
     },
     {
-      userRole: 'user',
       spaceRole: spaceRoleEditor.name,
       spaceDisabled: true,
       expectedResult: false
     },
     {
-      userRole: 'user',
       spaceRole: spaceRoleViewer.name,
       spaceDisabled: true,
-      expectedResult: false
-    },
-    {
-      userRole: 'spaceadmin',
-      spaceRole: spaceRoleViewer.name,
-      spaceDisabled: true,
-      expectedResult: true
-    },
-    {
-      userRole: 'spaceadmin',
-      spaceRole: spaceRoleViewer.name,
-      spaceDisabled: false,
       expectedResult: false
     }
   ])('canRestore', (data) => {
@@ -177,52 +156,49 @@ describe('buildSpace', () => {
         ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
       }
     }) as ProjectSpaceResource
-    expect(space.canRestore({ user: mock<User>({ uuid, role: { name: data.userRole } }) })).toBe(
-      data.expectedResult
-    )
+    expect(space.canRestore({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
   })
 
   it.each([
     {
-      userRole: 'user',
+      userCan: false,
       spaceRole: spaceRoleManager.name,
       spaceDisabled: false,
       expectedResult: true
     },
     {
-      userRole: 'user',
+      userCan: false,
       spaceRole: spaceRoleEditor.name,
       spaceDisabled: false,
       expectedResult: false
     },
     {
-      userRole: 'user',
+      userCan: false,
       spaceRole: spaceRoleViewer.name,
       spaceDisabled: false,
       expectedResult: false
     },
     {
-      userRole: 'spaceadmin',
+      userCan: true,
       spaceRole: spaceRoleViewer.name,
       spaceDisabled: false,
       expectedResult: true
     },
     {
-      userRole: 'spaceadmin',
+      userCan: true,
       spaceRole: spaceRoleViewer.name,
       spaceDisabled: true,
       expectedResult: false
     }
   ])('canDisable', (data) => {
+    const ability = mock<Ability>({ can: () => data.userCan })
     const space = buildSpace({
       root: {
         permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }],
         ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
       }
     }) as ProjectSpaceResource
-    expect(space.canDisable({ user: mock<User>({ uuid, role: { name: data.userRole } }) })).toBe(
-      data.expectedResult
-    )
+    expect(space.canDisable({ user: mock<User>({ uuid }), ability })).toBe(data.expectedResult)
   })
 
   it.each([
