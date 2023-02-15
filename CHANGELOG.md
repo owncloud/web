@@ -652,6 +652,7 @@ Details
    https://github.com/owncloud/web/issues/8417
    https://github.com/owncloud/web/pull/8387
    https://github.com/owncloud/web/pull/8430
+   https://github.com/owncloud/web/pull/8438
 
 * Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
 
