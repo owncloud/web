@@ -167,7 +167,7 @@ export default defineComponent({
     })
     const footerTextFilter = computed(() => {
       return $gettext('%{spaceCount} matching spaces', {
-        spaceCount: unref(orderedSpaces)
+        spaceCount: unref(orderedSpaces).length
       })
     })
 
