@@ -32,14 +32,40 @@ jest.spyOn((TopBar as any).mixins[0].methods, 'navigation_getMenuItems').mockImp
 describe('Top Bar component', () => {
   it('Displays applications menu', () => {
     const { wrapper } = getWrapper()
-    expect(wrapper.html().indexOf('applications-menu-stub')).toBeGreaterThan(-1)
+    expect(wrapper.find('applications-menu-stub').exists()).toBeTruthy()
     expect(wrapper.html()).toMatchSnapshot()
+  })
+  it('should display notifications bell', () => {
+    const { wrapper } = getWrapper({
+      notifications: {
+        'ocs-endpoints': ['list', 'get', 'delete']
+      }
+    })
+    expect(wrapper.find('notifications-stub').exists()).toBeTruthy()
+  })
+  it('should not display notifications bell if notifications capability is missing', () => {
+    const { wrapper } = getWrapper()
+    expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
+  })
+  it('should not display notifications bell if endpoint list is missing', () => {
+    const { wrapper } = getWrapper({
+      notifications: {
+        'ocs-endpoints': []
+      }
+    })
+    expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
   })
 })
 
-const getWrapper = () => {
+const getWrapper = (capabilities = {}) => {
   const mocks = { ...defaultComponentMocks() }
-  const storeOptions = defaultStoreMockOptions
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    getters: {
+      ...defaultStoreMockOptions.getters,
+      capabilities: () => capabilities
+    }
+  }
   storeOptions.getters.configuration.mockImplementation(() => ({
     options: { disableFeedbackLink: false },
     themes: {
@@ -61,7 +87,7 @@ const getWrapper = () => {
       },
       global: {
         plugins: [...defaultPlugins(), store],
-        stubs: { 'router-link': true, 'portal-target': true },
+        stubs: { 'router-link': true, 'portal-target': true, notifications: true },
         mocks
       }
     })

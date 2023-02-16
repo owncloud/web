@@ -36,6 +36,8 @@ import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
+import { useCapabilityNotifications } from 'web-pkg/src'
+import { computed, unref } from 'vue'
 
 export default {
   components: {
@@ -56,6 +58,17 @@ export default {
       type: [Array, Boolean],
       required: false,
       default: () => []
+    }
+  },
+  setup() {
+    const notificationsSupport = useCapabilityNotifications()
+
+    const isNotificationBellEnabled = computed(() => {
+      return unref(notificationsSupport).includes('list')
+    })
+
+    return {
+      isNotificationBellEnabled
     }
   },
   computed: {
@@ -99,10 +112,6 @@ export default {
         ...(feedback.ariaLabel && { ariaLabel: feedback.ariaLabel }),
         ...(feedback.description && { description: feedback.description })
       }
-    },
-
-    isNotificationBellEnabled() {
-      return this.user?.id && this.activeNotifications.length
     },
 
     isUserMenuEnabled() {

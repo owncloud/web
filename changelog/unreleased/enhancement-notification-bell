@@ -1,0 +1,6 @@
+Enhancement: Rework notifications
+
+We're now showing the notification bell based on whether the server supports notifications. Previously it was hidden when there were no notifications.
+
+https://github.com/owncloud/web/pull/8450
+https://github.com/owncloud/web/issues/8452

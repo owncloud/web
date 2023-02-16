@@ -81,3 +81,7 @@ export const useCapabilityFilesSharingPublicAlias = createCapabilityComposable(
   'files_sharing.public.alias',
   false
 )
+export const useCapabilityNotifications = createCapabilityComposable(
+  'notifications.ocs-endpoints',
+  []
+)
