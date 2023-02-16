@@ -30,6 +30,7 @@ Summary
 * Bugfix - Re-loading space members panel: [#8300](https://github.com/owncloud/web/pull/8300)
 * Bugfix - Editing users who never logged in: [#8326](https://github.com/owncloud/web/pull/8326)
 * Bugfix - Cancel custom permissions: [#8340](https://github.com/owncloud/web/pull/8340)
+* Bugfix - Drop menus with limited vertical screen space: [#8411](https://github.com/owncloud/web/issues/8411)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Improve performance when loading folders and share indicators: [#7721](https://github.com/owncloud/web/issues/7721)
@@ -240,6 +241,15 @@ Details
 
    https://github.com/owncloud/web/issues/8335
    https://github.com/owncloud/web/pull/8340
+
+* Bugfix - Drop menus with limited vertical screen space: [#8411](https://github.com/owncloud/web/issues/8411)
+
+   We've changed the way how drop menus are positioned when only limited vertical screen space is
+   available. They now fully utilize the available vertical screen space.
+
+   https://github.com/owncloud/web/issues/8411
+   https://github.com/owncloud/web/issues/8412
+   https://github.com/owncloud/web/pull/8453
 
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 
