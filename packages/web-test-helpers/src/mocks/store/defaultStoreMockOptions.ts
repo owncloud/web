@@ -11,9 +11,15 @@ export const defaultStoreMockOptions = {
     quota: jest.fn(() => ({})),
     capabilities: jest.fn().mockImplementation(() => ({})),
     user: jest.fn().mockImplementation(() => ({})),
-    configuration: jest
-      .fn()
-      .mockImplementation(() => ({ currentTheme: { general: { slogan: '' } } }))
+    configuration: jest.fn().mockImplementation(() => ({
+      currentTheme: { general: { slogan: '' } },
+      options: {
+        editor: {
+          autosaveEnabled: false,
+          autosaveInterval: 120000
+        }
+      }
+    }))
   },
   modules: {
     ...filesModuleMockOptions,

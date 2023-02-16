@@ -1,8 +1,7 @@
-import App from '../../src/App.vue'
-import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
-import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults'
 import { mock } from 'jest-mock-extended'
 import { ref } from 'vue'
+import { Resource } from 'web-client'
+import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults'
 import {
   createStore,
   defaultPlugins,
@@ -11,7 +10,8 @@ import {
   defaultComponentMocks,
   defaultStubs
 } from 'web-test-helpers'
-import { Resource } from 'web-client'
+import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
+import App from '../../src/App.vue'
 
 jest.mock('web-pkg/src/composables/appDefaults')
 

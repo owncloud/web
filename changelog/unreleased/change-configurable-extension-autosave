@@ -1,0 +1,8 @@
+Change: Configurable extension autosave
+
+We have added a global setting in the configuration to enable autosave (and the corresponding timeout) for bundled and external extensions,
+instead of having a per-extension configuration which was limited to external extensions.
+Handling of the provided autosave needs to be taken care of by the extension itself.
+
+https://github.com/owncloud/web/pull/8455
+https://github.com/owncloud/web/pull/8457
