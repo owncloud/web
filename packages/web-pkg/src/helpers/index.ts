@@ -1,5 +1,5 @@
 export * from './cache'
-export * from './contextMenuDropdown'
+export * from './dropdown'
 export * from './preview'
 export * from './datetime'
 export * from './filesize'

@@ -15,6 +15,7 @@
         class="edit-public-link-role-dropdown"
         :drop-id="`edit-public-link-role-dropdown`"
         :toggle="`#edit-public-link-role-dropdown-toggle-${link.id}`"
+        :popper-options="popperOptions"
         padding-size="small"
         offset="0"
         mode="click"
@@ -99,7 +100,7 @@
       />
       <div v-if="isModifiable">
         <oc-button
-          :id="`edit-public-link-dropdown-toggl-${link.id}`"
+          :id="`edit-public-link-dropdown-toggle-${link.id}`"
           appearance="raw"
           class="edit-drop-trigger"
           :data-testid="`files-link-id-${link.id}-btn-edit`"
@@ -109,7 +110,7 @@
         <oc-drop
           ref="editPublicLinkDropdown"
           :drop-id="`edit-public-link-dropdown`"
-          :toggle="`#edit-public-link-dropdown-toggl-${link.id}`"
+          :toggle="`#edit-public-link-dropdown-toggle-${link.id}`"
           padding-size="small"
           mode="click"
         >
@@ -184,7 +185,12 @@ import {
   ShareRole
 } from 'web-client/src/helpers/share'
 import { defineComponent, inject, PropType } from 'vue'
-import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
+import {
+  formatDateFromDateTime,
+  formatRelativeDateFromDateTime,
+  getPopperOptions,
+  getSidebarOffset
+} from 'web-pkg/src/helpers'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
@@ -223,7 +229,13 @@ export default defineComponent({
   },
   emits: ['removePublicLink', 'updateLink'],
   setup() {
-    return { space: inject<Resource>('space'), resource: inject<Resource>('resource') }
+    const popperOptions = getPopperOptions({ topOffset: getSidebarOffset() })
+
+    return {
+      space: inject<Resource>('space'),
+      resource: inject<Resource>('resource'),
+      popperOptions
+    }
   },
   data() {
     return {

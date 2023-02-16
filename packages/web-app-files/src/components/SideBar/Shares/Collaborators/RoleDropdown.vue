@@ -19,6 +19,7 @@
       v-if="availableRoles.length > 1"
       ref="rolesDrop"
       :toggle="'#' + roleButtonId"
+      :popper-options="popperOptions"
       mode="click"
       padding-size="small"
       class="files-recipient-role-drop"
@@ -60,6 +61,7 @@
       class="files-recipient-custom-permissions-drop"
       mode="manual"
       :target="'#' + roleButtonId"
+      :popper-options="popperOptions"
       padding-size="remove"
     >
       <h4
@@ -124,6 +126,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
+import { getPopperOptions, getSidebarOffset } from 'web-pkg'
 
 export default defineComponent({
   name: 'RoleDropdown',
@@ -152,12 +155,15 @@ export default defineComponent({
   emits: ['optionChange'],
   setup() {
     const store = useStore()
+    const popperOptions = getPopperOptions({ topOffset: getSidebarOffset() })
+
     return {
       resource: inject<Resource>('resource'),
       incomingParentShare: inject<Resource>('incomingParentShare'),
       hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
-      resharingDefault: useCapabilityFilesSharingResharingDefault(store)
+      resharingDefault: useCapabilityFilesSharingResharingDefault(store),
+      popperOptions
     }
   },
   data() {

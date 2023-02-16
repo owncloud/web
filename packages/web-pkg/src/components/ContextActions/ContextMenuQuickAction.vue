@@ -32,7 +32,7 @@
 import { computed, defineComponent } from 'vue'
 import { extractDomSelector } from 'web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
-import { popperOptions as defaultPopperOptions } from 'web-pkg'
+import { getPopperOptions, getTopBarOffset } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'ContextMenuQuickAction',
@@ -51,7 +51,7 @@ export default defineComponent({
   setup() {
     const { $gettext } = useGettext()
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
-    const popperOptions = computed(() => defaultPopperOptions)
+    const popperOptions = getPopperOptions({ topOffset: getTopBarOffset() })
     return { contextMenuLabel, popperOptions }
   }
 })
