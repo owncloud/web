@@ -39,7 +39,7 @@ const state = {
     defaultExtension: 'files',
     editor: {
       autosaveEnabled: false,
-      autosaveInterval: 120000
+      autosaveInterval: 120
     },
     // ugly hack to still have notifications but don't have
     // them blocking UI elements in acceptance/E2E tests

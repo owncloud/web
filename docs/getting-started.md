@@ -66,7 +66,7 @@ hovers the row with his mouse. Defaults to `false`.
   - `options.routing.idBased` Enable or disable fileIds being added to the URL. Defaults to `true` because otherwise e.g. spaces with name clashes can't be resolved correctly. Only disable this if you can guarantee server side that spaces of the same namespace can't have name clashes.   
 - `options.upload.xhr.timeout` Specifies the timeout for XHR uploads in milliseconds.
 - `options.editor.autosaveEnabled` Specifies if the autosave for the editor apps is enabled.
-- `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in milliseconds.
+- `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
 
 ### Sentry
 

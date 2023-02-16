@@ -16,7 +16,7 @@ export const defaultStoreMockOptions = {
       options: {
         editor: {
           autosaveEnabled: false,
-          autosaveInterval: 120000
+          autosaveInterval: 120
         }
       }
     }))
