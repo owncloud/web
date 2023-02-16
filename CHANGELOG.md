@@ -73,6 +73,7 @@ Summary
 * Enhancement - Batch edit quota in admin panel: [#8387](https://github.com/owncloud/web/pull/8387)
 * Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
 * Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
+* Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 
 Details
 -------
@@ -682,6 +683,13 @@ Details
    https://github.com/owncloud/web/issues/4735
    https://github.com/owncloud/web/pull/8432
    https://github.com/owncloud/web/pull/7689
+
+* Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
+
+   We've added a portal `app.runtime.header.right` that allows extensions to render
+   themselves on the top right icons bar.
+
+   https://github.com/owncloud/web/pull/8449
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
