@@ -22,7 +22,10 @@
       class="oc-overflow-auto oc-width-3-4 oc-width-large@s"
       padding-size="small"
     >
-      <div v-for="(el, index) in activeNotifications" :key="index" class="oc-width-1-1">
+      <div v-if="!activeNotifications.length">
+        <span v-text="$gettext('Nothing new')" />
+      </div>
+      <div v-for="(el, index) in activeNotifications" v-else :key="index" class="oc-width-1-1">
         <h4 v-text="el.subject" />
         <p v-if="el.message" class="oc-text-small">{{ el.message }}</p>
         <p>

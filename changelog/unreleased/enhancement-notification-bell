@@ -1,0 +1,5 @@
+Enhancement: Rework notifications
+
+We've added the notification capability to enable the notification bell
+
+https://github.com/owncloud/web/pull/8450
