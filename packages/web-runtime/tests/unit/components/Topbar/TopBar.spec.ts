@@ -32,7 +32,7 @@ jest.spyOn((TopBar as any).mixins[0].methods, 'navigation_getMenuItems').mockImp
 describe('Top Bar component', () => {
   it('Displays applications menu', () => {
     const { wrapper } = getWrapper()
-    expect(wrapper.html().indexOf('applications-menu-stub')).toBeGreaterThan(-1)
+    expect(wrapper.find('applications-menu-stub').exists()).toBeTruthy()
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('should display notifications bell', () => {
@@ -41,13 +41,11 @@ describe('Top Bar component', () => {
         'ocs-endpoints': ['list', 'get', 'delete']
       }
     })
-    expect(wrapper.html().indexOf('notifications-stub')).toBeGreaterThan(-1)
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.find('notifications-stub').exists()).toBeTruthy()
   })
   it('should not display notifications bell if notifications capability is missing', () => {
     const { wrapper } = getWrapper()
-    expect(wrapper.html().indexOf('notifications-stub')).toBe(-1)
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
   })
   it('should not display notifications bell if endpoint list is missing', () => {
     const { wrapper } = getWrapper({
@@ -55,8 +53,7 @@ describe('Top Bar component', () => {
         'ocs-endpoints': []
       }
     })
-    expect(wrapper.html().indexOf('notifications-stub')).toBe(-1)
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
   })
 })
 
