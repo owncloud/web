@@ -4,7 +4,7 @@ import { AbilityActions, AbilitySubjects } from 'web-pkg'
 export const getAbilities = (
   permissions: string[]
 ): SubjectRawRule<AbilityActions, AbilitySubjects, any>[] => {
-  const abilities = {
+  const abilities: Record<string, SubjectRawRule<AbilityActions, AbilitySubjects, any>[]> = {
     'account-management': [
       { action: 'create', subject: 'Account' },
       { action: 'delete', subject: 'Account' },
