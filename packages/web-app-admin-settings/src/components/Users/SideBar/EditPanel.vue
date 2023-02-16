@@ -206,10 +206,9 @@ export default defineComponent({
       if (this.user.onPremisesSamAccountName !== this.editUser.onPremisesSamAccountName) {
         try {
           await this.graphClient.users.getUser(this.editUser.onPremisesSamAccountName)
-          this.formData.userName.errorMessage = this.$gettext(
-            this.$gettext('User "%{userName}" already exists'),
-            { userName: this.editUser.onPremisesSamAccountName }
-          )
+          this.formData.userName.errorMessage = this.$gettext('User "%{userName}" already exists', {
+            userName: this.editUser.onPremisesSamAccountName
+          })
           return false
         } catch (e) {
           /**

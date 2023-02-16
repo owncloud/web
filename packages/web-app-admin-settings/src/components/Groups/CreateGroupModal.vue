@@ -75,7 +75,7 @@ export default defineComponent({
         )
       ) {
         this.formData.displayName.errorMessage = this.$gettext(
-          this.$gettext('Group "%{groupName}" already exists'),
+          'Group "%{groupName}" already exists',
           { groupName: this.group.displayName }
         )
         return false
