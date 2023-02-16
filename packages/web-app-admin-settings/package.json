@@ -5,6 +5,7 @@
   "description": "ownCloud admin settings",
   "license": "AGPL-3.0",
   "dependencies": {
+    "deep-object-diff": "^1.1.9",
     "email-validator": "^2.0.4",
     "mark.js": "^8.11.1"
   },
@@ -15,7 +16,7 @@
     "uuid": "^9.0.0",
     "vue-concurrency": "4.0.0",
     "vuex": "4.1.0",
-    "web-pkg": "workspace:@ownclouders/web-pkg@*",
-    "web-client": "workspace:@ownclouders/web-client@*"
+    "web-client": "workspace:@ownclouders/web-client@*",
+    "web-pkg": "workspace:@ownclouders/web-pkg@*"
   }
 }

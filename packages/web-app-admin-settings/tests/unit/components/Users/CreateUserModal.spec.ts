@@ -1,5 +1,15 @@
 import CreateUserModal from '../../../../src/components/Users/CreateUserModal.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStoreMockOptions,
+  mockAxiosReject,
+  shallowMount
+} from 'web-test-helpers'
+import { mock, mockDeep } from 'jest-mock-extended'
+import { Graph } from 'web-client'
+import { AxiosResponse } from 'axios'
 
 describe('CreateUserModal', () => {
   describe('computed method "isFormInvalid"', () => {
@@ -18,30 +28,40 @@ describe('CreateUserModal', () => {
   })
 
   describe('method "validateUserName"', () => {
-    it('should be false when userName is empty', () => {
+    it('should be false when userName is empty', async () => {
       const { wrapper } = getWrapper()
       wrapper.vm.user.onPremisesSamAccountName = ''
-      expect(wrapper.vm.validateUserName()).toBeFalsy()
+      expect(await wrapper.vm.validateUserName()).toBeFalsy()
     })
-    it('should be false when userName contains white spaces', () => {
+    it('should be false when userName contains white spaces', async () => {
       const { wrapper } = getWrapper()
       wrapper.vm.user.onPremisesSamAccountName = 'jan owncCloud'
-      expect(wrapper.vm.validateUserName()).toBeFalsy()
+      expect(await wrapper.vm.validateUserName()).toBeFalsy()
     })
-    it('should be false when userName starts with a numeric value', () => {
+    it('should be false when userName starts with a numeric value', async () => {
       const { wrapper } = getWrapper()
       wrapper.vm.user.onPremisesSamAccountName = '1moretry'
-      expect(wrapper.vm.validateUserName()).toBeFalsy()
+      expect(await wrapper.vm.validateUserName()).toBeFalsy()
     })
-    it('should be false when userName is already existing', () => {
-      const { wrapper } = getWrapper()
+    it('should be false when userName is already existing', async () => {
+      const { wrapper, mocks } = getWrapper()
+      const graphMock = mockDeep<Graph>()
+      const getUserStub = graphMock.users.getUser.mockResolvedValue(
+        mock<AxiosResponse>({ data: { onPremisesSamAccountName: 'jan' } })
+      )
+      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
       wrapper.vm.user.onPremisesSamAccountName = 'jan'
-      expect(wrapper.vm.validateUserName()).toBeFalsy()
+      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      expect(getUserStub).toHaveBeenCalled()
     })
-    it('should be true when userName is valid', () => {
-      const { wrapper } = getWrapper()
+    it('should be true when userName is valid', async () => {
+      const { wrapper, mocks } = getWrapper()
+      const graphMock = mockDeep<Graph>()
+      const getUserStub = graphMock.users.getUser.mockRejectedValue(() => mockAxiosReject())
+      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
       wrapper.vm.user.onPremisesSamAccountName = 'jana'
-      expect(wrapper.vm.validateUserName()).toBeTruthy()
+      expect(await wrapper.vm.validateUserName()).toBeTruthy()
+      expect(getUserStub).toHaveBeenCalled()
     })
   })
 
@@ -88,19 +108,20 @@ describe('CreateUserModal', () => {
 })
 
 function getWrapper() {
+  const mocks = defaultComponentMocks()
+  const storeOptions = defaultStoreMockOptions
+  const store = createStore(storeOptions)
+
   return {
+    mocks,
     wrapper: shallowMount(CreateUserModal, {
       props: {
         cancel: jest.fn(),
-        confirm: jest.fn(),
-        existingUsers: [
-          {
-            onPremisesSamAccountName: 'jan'
-          }
-        ]
+        confirm: jest.fn()
       },
       global: {
-        plugins: [...defaultPlugins()]
+        mocks,
+        plugins: [...defaultPlugins(), store]
       }
     })
   }

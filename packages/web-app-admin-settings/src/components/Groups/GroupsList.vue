@@ -208,12 +208,10 @@ export default defineComponent({
       return this.groups.length === this.selectedGroups.length
     },
     footerTextTotal() {
-      const translated = this.$gettext('%{groupCount} groups in total')
-      return this.$gettextInterpolate(translated, { groupCount: this.groups.length })
+      return this.$gettext('%{groupCount} groups in total', { groupCount: this.groups.length })
     },
     footerTextFilter() {
-      const translated = this.$gettext('%{groupCount} matching groups')
-      return this.$gettextInterpolate(translated, { groupCount: this.data.length })
+      return this.$gettext('%{groupCount} matching groups', { groupCount: this.data.length })
     },
     data() {
       const orderedGroups = this.orderBy(this.groups, this.sortBy, this.sortDir === 'desc')
@@ -267,8 +265,7 @@ export default defineComponent({
       this.sortDir = event.sortDir
     },
     getSelectGroupLabel(group) {
-      const translated = this.$gettext('Select %{ group }')
-      return this.$gettextInterpolate(translated, { group: group.displayName }, true)
+      return this.$gettext('Select %{ group }', { group: group.displayName }, true)
     }
   }
 })

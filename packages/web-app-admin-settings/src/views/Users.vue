@@ -79,7 +79,6 @@
     </app-template>
     <create-user-modal
       v-if="createUserModalOpen"
-      :existing-users="users"
       @cancel="toggleCreateUserModal"
       @confirm="createUser"
     />
@@ -94,6 +93,7 @@
 
 <script lang="ts">
 import isEqual from 'lodash-es/isEqual'
+import isEmpty from 'lodash-es/isEmpty'
 import omit from 'lodash-es/omit'
 import UsersList from '../components/Users/UsersList.vue'
 import CreateUserModal from '../components/Users/CreateUserModal.vue'
@@ -131,6 +131,7 @@ import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import { toRaw } from 'vue'
 import { SpaceResource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
+import { diff } from 'deep-object-diff'
 
 export default defineComponent({
   name: 'UsersView',
@@ -318,9 +319,7 @@ export default defineComponent({
     ...mapState({ currentUser: 'user' }),
 
     selectedUsersText() {
-      const translated = this.$gettext('%{ userCount } selected')
-
-      return this.$gettextInterpolate(translated, { userCount: this.selectedUsers.length })
+      return this.$gettext('%{ userCount } selected', { userCount: this.selectedUsers.length })
     },
     breadcrumbs() {
       return [
@@ -409,17 +408,16 @@ export default defineComponent({
     },
     async editUser({ user, editUser }) {
       try {
-        const graphEditUserRawObjectExtractor = (user) => {
+        const graphEditUserPayloadExtractor = (user) => {
           return omit(user, ['drive', 'appRoleAssignments', 'memberOf'])
         }
+        const graphEditUserPayload = diff(
+          graphEditUserPayloadExtractor(user),
+          graphEditUserPayloadExtractor(editUser)
+        )
 
-        if (
-          !isEqual(graphEditUserRawObjectExtractor(user), graphEditUserRawObjectExtractor(editUser))
-        ) {
-          await this.graphClient.users.editUser(
-            editUser.id,
-            graphEditUserRawObjectExtractor(editUser)
-          )
+        if (!isEmpty(graphEditUserPayload)) {
+          await this.graphClient.users.editUser(editUser.id, graphEditUserPayload)
         }
 
         if (!isEqual(user.drive?.quota?.total, editUser.drive?.quota?.total)) {

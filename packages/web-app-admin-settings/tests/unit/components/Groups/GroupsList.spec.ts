@@ -1,4 +1,4 @@
-import UsersList from '../../../../src/components/Groups/GroupsList.vue'
+import GroupsList from '../../../../src/components/Groups/GroupsList.vue'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { displayPositionedDropdown, eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
@@ -87,7 +87,7 @@ describe('GroupsList', () => {
 
 function getWrapper({ mountType = shallowMount, props = {} } = {}) {
   return {
-    wrapper: mountType(UsersList, {
+    wrapper: mountType(GroupsList, {
       props: {
         groups: [],
         selectedGroups: [],

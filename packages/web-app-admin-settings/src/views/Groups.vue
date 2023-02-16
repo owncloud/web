@@ -159,9 +159,7 @@ export default defineComponent({
   },
   computed: {
     selectedGroupsText() {
-      const translated = this.$gettext('%{ groupCount } selected')
-
-      return this.$gettextInterpolate(translated, { groupCount: this.selectedGroups.length })
+      return this.$gettext('%{ groupCount } selected', { groupCount: this.selectedGroups.length })
     },
     breadcrumbs() {
       return [
