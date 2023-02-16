@@ -134,7 +134,7 @@ export default defineComponent({
 
       try {
         await this.graphClient.users.getUser(this.user.onPremisesSamAccountName)
-        this.formData.userName.errorMessage = this.$gettextInterpolate(
+        this.formData.userName.errorMessage = this.$gettext(
           this.$gettext('User "%{userName}" already exists'),
           { userName: this.user.onPremisesSamAccountName }
         )

@@ -52,7 +52,7 @@ export default defineComponent({
       return this.groups.length > 1
     },
     multipleGroupsSelectedText() {
-      return this.$gettextInterpolate('%{count} groups selected', {
+      return this.$gettext('%{count} groups selected', {
         count: this.groups.length
       })
     }

@@ -150,7 +150,7 @@ export default defineComponent({
   },
   emits: ['toggleSelectSpace', 'toggleSelectAllSpaces', 'unSelectAllSpaces'],
   setup: function (props, { emit }) {
-    const { $gettext, interpolate: $gettextInterpolate, current: currentLanguage } = useGettext()
+    const { $gettext, current: currentLanguage } = useGettext()
     const contextMenuButtonRef = ref(undefined)
     const sortBy = ref('name')
     const sortDir = ref('asc')
@@ -162,11 +162,11 @@ export default defineComponent({
     const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
     const footerTextTotal = computed(() => {
       const translated = $gettext('%{spaceCount} spaces in total')
-      return $gettextInterpolate(translated, { spaceCount: props.spaces.length })
+      return $gettext(translated, { spaceCount: props.spaces.length })
     })
     const footerTextFilter = computed(() => {
       const translated = $gettext('%{spaceCount} matching spaces')
-      return $gettextInterpolate(translated, { spaceCount: unref(orderedSpaces).length })
+      return $gettext(translated, { spaceCount: unref(orderedSpaces).length })
     })
 
     const orderBy = (list, prop, desc) => {
@@ -336,7 +336,7 @@ export default defineComponent({
 
     const getSelectSpaceLabel = (space: SpaceResource) => {
       const translated = $gettext('Select %{ space }')
-      return $gettextInterpolate(translated, { space: space.name }, true)
+      return $gettext(translated, { space: space.name }, true)
     }
 
     const selectSpace = (space) => {

@@ -320,7 +320,7 @@ export default defineComponent({
     selectedUsersText() {
       const translated = this.$gettext('%{ userCount } selected')
 
-      return this.$gettextInterpolate(translated, { userCount: this.selectedUsers.length })
+      return this.$gettext(translated, { userCount: this.selectedUsers.length })
     },
     breadcrumbs() {
       return [

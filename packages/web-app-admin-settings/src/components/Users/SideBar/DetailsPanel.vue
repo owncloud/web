@@ -105,7 +105,7 @@ export default defineComponent({
       return this.users.length > 1
     },
     multipleUsersSelectedText() {
-      return this.$gettextInterpolate('%{count} users selected', {
+      return this.$gettext('%{count} users selected', {
         count: this.users.length
       })
     },

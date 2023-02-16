@@ -74,7 +74,7 @@ export default defineComponent({
           (existingGroup) => existingGroup.displayName === this.group.displayName
         )
       ) {
-        this.formData.displayName.errorMessage = this.$gettextInterpolate(
+        this.formData.displayName.errorMessage = this.$gettext(
           this.$gettext('Group "%{groupName}" already exists'),
           { groupName: this.group.displayName }
         )
