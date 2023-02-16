@@ -152,7 +152,7 @@ export default defineComponent({
       this.formData.displayName.valid = false
 
       if (this.user.displayName.trim() === '') {
-        this.formData.displayName.errorMessage = this.$gettext('Display name cannot be empty')
+        this.formData.displayName.errorMessage = this.$gettext('First and last name cannot be empty')
         return false
       }
 

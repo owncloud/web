@@ -75,7 +75,7 @@ export default defineComponent({
       this.formData.displayName.valid = false
 
       if (this.editGroup.displayName.trim() === '') {
-        this.formData.displayName.errorMessage = this.$gettext('Display name cannot be empty')
+        this.formData.displayName.errorMessage = this.$gettext('Name cannot be empty')
         return false
       }
 
