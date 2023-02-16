@@ -318,9 +318,7 @@ export default defineComponent({
     ...mapState({ currentUser: 'user' }),
 
     selectedUsersText() {
-      const translated = this.$gettext('%{ userCount } selected')
-
-      return this.$gettext(translated, { userCount: this.selectedUsers.length })
+      return this.$gettext('%{ userCount } selected', { userCount: this.selectedUsers.length })
     },
     breadcrumbs() {
       return [

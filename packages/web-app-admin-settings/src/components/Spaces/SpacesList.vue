@@ -161,12 +161,14 @@ export default defineComponent({
     const allSpacesSelected = computed(() => props.spaces.length === props.selectedSpaces.length)
     const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
     const footerTextTotal = computed(() => {
-      const translated = $gettext('%{spaceCount} spaces in total')
-      return $gettext(translated, { spaceCount: props.spaces.length })
+      return $gettext('%{spaceCount} spaces in total', {
+        spaceCount: props.spaces.length.toString()
+      })
     })
     const footerTextFilter = computed(() => {
-      const translated = $gettext('%{spaceCount} matching spaces')
-      return $gettext(translated, { spaceCount: unref(orderedSpaces).length })
+      return $gettext('%{spaceCount} matching spaces', {
+        spaceCount: unref(orderedSpaces)
+      })
     })
 
     const orderBy = (list, prop, desc) => {
@@ -335,8 +337,7 @@ export default defineComponent({
     }
 
     const getSelectSpaceLabel = (space: SpaceResource) => {
-      const translated = $gettext('Select %{ space }')
-      return $gettext(translated, { space: space.name }, true)
+      return $gettext('Select %{ space }', { space: space.name }, true)
     }
 
     const selectSpace = (space) => {
