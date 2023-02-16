@@ -1,0 +1,5 @@
+Enhancement: Autosave content changes in text editor
+
+We have added the configurable functionality to autosave content changes in text editor.
+
+https://github.com/owncloud/web/pull/8455
