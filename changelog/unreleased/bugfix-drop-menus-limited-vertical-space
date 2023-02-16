@@ -1,0 +1,7 @@
+Bugfix: Drop menus with limited vertical screen space
+
+We've changed the way how drop menus are positioned when only limited vertical screen space is available. They now fully utilize the available vertical screen space.
+
+https://github.com/owncloud/web/issues/8411
+https://github.com/owncloud/web/issues/8412
+https://github.com/owncloud/web/pull/8453

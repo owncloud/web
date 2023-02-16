@@ -16,7 +16,6 @@
       :ref="`context-menu-drop-ref-${resourceDomSelector(item)}`"
       :drop-id="`context-menu-drop-${resourceDomSelector(item)}`"
       :toggle="`#context-menu-trigger-${resourceDomSelector(item)}`"
-      :popper-options="popperOptions"
       class="oc-overflow-hidden"
       mode="click"
       close-on-click
@@ -32,7 +31,6 @@
 import { computed, defineComponent } from 'vue'
 import { extractDomSelector } from 'web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
-import { popperOptions as defaultPopperOptions } from 'web-pkg'
 
 export default defineComponent({
   name: 'ContextMenuQuickAction',
@@ -51,8 +49,7 @@ export default defineComponent({
   setup() {
     const { $gettext } = useGettext()
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
-    const popperOptions = computed(() => defaultPopperOptions)
-    return { contextMenuLabel, popperOptions }
+    return { contextMenuLabel }
   }
 })
 </script>

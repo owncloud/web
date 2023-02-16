@@ -1,5 +1,3 @@
-import maxSize from 'popper-max-size-modifier'
-
 export const displayPositionedDropdown = (dropdown, event, contextMenuButton) => {
   const contextMenuButtonPos = contextMenuButton.$el.getBoundingClientRect()
   dropdown.setProps({
@@ -19,21 +17,4 @@ export const displayPositionedDropdown = (dropdown, event, contextMenuButton) =>
   })
 
   dropdown.show()
-}
-
-export const popperOptions = {
-  modifiers: [
-    maxSize,
-    {
-      name: 'applyMaxSize',
-      enabled: true,
-      phase: 'beforeWrite',
-      requires: ['maxSize'],
-      fn({ state }) {
-        const { height } = state.modifiersData.maxSize
-        state.styles.popper.overflowY = `auto`
-        state.styles.popper.maxHeight = `${height - 5}px`
-      }
-    }
-  ]
 }
