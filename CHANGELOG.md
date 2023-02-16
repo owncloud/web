@@ -74,6 +74,7 @@ Summary
 * Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
 * Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
+* Enhancement - Rework notifications: [#8450](https://github.com/owncloud/web/pull/8450)
 
 Details
 -------
@@ -690,6 +691,14 @@ Details
    themselves on the top right icons bar.
 
    https://github.com/owncloud/web/pull/8449
+
+* Enhancement - Rework notifications: [#8450](https://github.com/owncloud/web/pull/8450)
+
+   We're now showing the notification bell based on whether the server supports notifications.
+   Previously it was hidden when there were no notifications.
+
+   https://github.com/owncloud/web/issues/8452
+   https://github.com/owncloud/web/pull/8450
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
