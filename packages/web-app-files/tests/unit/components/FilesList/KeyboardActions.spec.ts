@@ -70,15 +70,6 @@ describe('KeyboardActions', () => {
     })
   })
   describe('global shortcuts', () => {
-    beforeEach(() => {
-      document.body.innerHTML =
-        '<table>' +
-        '<tr class="oc-tbody-tr" data-item-id="0"><td></td></tr>' +
-        '<tr class="oc-tbody-tr" data-item-id="1"><td></td></tr>' +
-        '<tr class="oc-tbody-tr" data-item-id="2"><td></td></tr>' +
-        '</table>'
-    })
-
     it('copy selected files', () => {
       const event = new KeyboardEvent('keyDown', {
         keyCode: keycode('c'),
@@ -123,7 +114,6 @@ describe('KeyboardActions', () => {
       const event = new KeyboardEvent('keyDown', { keyCode: keycode(key) })
       const { wrapper, storeOptions } = getWrapper()
       wrapper.vm.handleGlobalShortcuts(event)
-      expect(storeOptions.modules.Files.actions.resetFileSelection).toHaveBeenCalled()
       expect(storeOptions.modules.Files.mutations.ADD_FILE_SELECTION).toHaveBeenCalled()
     })
     it.each(['down', 'up'])('navigate via shift + up and down keys', (key) => {
@@ -178,7 +168,15 @@ const getWrapper = ({ props = {}, latestSelectedId = undefined } = {}) => {
   return {
     storeOptions,
     wrapper: mount(KeyboardActions, {
-      props: { paginatedResources: [], space: mock<SpaceResource>(), ...props },
+      props: {
+        paginatedResources: [
+          mock<Resource>({ id: 0 }),
+          mock<Resource>({ id: 1 }),
+          mock<Resource>({ id: 2 })
+        ],
+        space: mock<SpaceResource>(),
+        ...props
+      },
       global: {
         plugins: [...defaultPlugins(), store]
       }

@@ -15,7 +15,7 @@ import {
   ref,
   unref
 } from 'vue'
-import { SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { useClientService, useStore } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -23,7 +23,7 @@ import { useGettext } from 'vue3-gettext'
 export default defineComponent({
   props: {
     paginatedResources: {
-      type: Array,
+      type: Array as PropType<Resource[]>,
       required: true
     },
     keybindOnElementId: {
@@ -82,28 +82,20 @@ export default defineComponent({
       selectionCursor.value = 0
     }
     const getNextResourceId = (previous = false) => {
-      const latestSelectedRow = document.querySelectorAll(
-        `[data-item-id='${unref(latestSelectedId)}']`
-      )[0]
-      let nextRow
-      try {
-        nextRow = (
-          previous ? latestSelectedRow.previousElementSibling : latestSelectedRow.nextElementSibling
-        ) as HTMLElement
-      } catch {
+      const latestSelectedResourceIndex = props.paginatedResources.findIndex(
+        (resource) => resource.id === latestSelectedId.value
+      )
+      if (latestSelectedResourceIndex === -1) {
         return -1
       }
-      if (nextRow === null) {
+      const nextResourceIndex = latestSelectedResourceIndex + (previous ? -1 : 1)
+      if (nextResourceIndex < 0 || nextResourceIndex >= props.paginatedResources.length) {
         return -1
       }
-      return nextRow.getAttribute('data-item-id')
+      return props.paginatedResources[nextResourceIndex].id
     }
     const getFirstResourceId = () => {
-      const firstRow = document.getElementsByClassName('oc-tbody-tr')[0]
-      if (!firstRow) {
-        return -1
-      }
-      return firstRow.getAttribute('data-item-id')
+      return props.paginatedResources.length ? props.paginatedResources[0].id : -1
     }
 
     const handleSpaceAction = (event) => {
@@ -124,12 +116,7 @@ export default defineComponent({
     }
     const handleNavigateAction = (event, up = false) => {
       event.preventDefault()
-      let nextId
-      if (!unref(latestSelectedId)) {
-        nextId = getFirstResourceId()
-      } else {
-        nextId = getNextResourceId(up)
-      }
+      const nextId = !unref(latestSelectedId) ? getFirstResourceId() : getNextResourceId(up)
       if (nextId === -1) {
         return
       }
