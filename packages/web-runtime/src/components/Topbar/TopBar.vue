@@ -59,7 +59,7 @@ export default {
     const notificationsSupport = useCapabilityNotifications()
 
     const isNotificationBellEnabled = computed(() => {
-      return unref(notificationsSupport)?.includes('list') || false
+      return unref(notificationsSupport).includes('list')
     })
 
     return {
