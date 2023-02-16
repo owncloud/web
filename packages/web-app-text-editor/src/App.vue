@@ -102,12 +102,19 @@ export default defineComponent({
     const resource: Ref<Resource> = ref()
     const store = useStore()
     const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+    let autosaveIntervalId = null
 
     const errorPopup = (error) => {
       store.dispatch('showMessage', {
         title: $gettext('An error occurred'),
         desc: error,
         status: 'danger'
+      })
+    }
+
+    const autosavePopup = () => {
+      store.dispatch('showMessage', {
+        title: $gettext('File autosaved')
       })
     }
 
@@ -194,7 +201,7 @@ export default defineComponent({
     })
 
     const isLoading = computed(() => {
-      return loadFileTask.isRunning || saveFileTask.isRunning
+      return loadFileTask.isRunning
     })
 
     const showPreview = computed(() => {
@@ -215,11 +222,21 @@ export default defineComponent({
       document.addEventListener('keydown', handleSKey, false)
       // Ensure reload is not possible if there are changes
       window.addEventListener('beforeunload', handleUnload)
+
+      const editorOptions = store.getters.configuration.options.editor
+      if (editorOptions.autosaveEnabled) {
+        autosaveIntervalId = setInterval(() => {
+          if (isDirty.value) {
+            save().then((r) => autosavePopup())
+          }
+        }, editorOptions.autosaveInterval * 1000)
+      }
     })
 
     onBeforeUnmount(() => {
       window.removeEventListener('beforeunload', handleUnload)
       document.removeEventListener('keydown', handleSKey, false)
+      clearInterval(autosaveIntervalId)
     })
 
     const save = async function () {
