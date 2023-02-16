@@ -32,6 +32,7 @@ Summary
 * Bugfix - Cancel custom permissions: [#8340](https://github.com/owncloud/web/pull/8340)
 * Bugfix - Drop menus with limited vertical screen space: [#8411](https://github.com/owncloud/web/issues/8411)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
+* Change - Configurable extension autosave: [#8455](https://github.com/owncloud/web/pull/8455)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Improve performance when loading folders and share indicators: [#7721](https://github.com/owncloud/web/issues/7721)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
@@ -76,6 +77,7 @@ Summary
 * Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 * Enhancement - Rework notifications: [#8450](https://github.com/owncloud/web/pull/8450)
+* Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
 
 Details
 -------
@@ -283,6 +285,16 @@ Details
    https://github.com/owncloud/web/pull/8288
    https://github.com/owncloud/web/pull/8308
    https://github.com/owncloud/web/pull/8311
+
+* Change - Configurable extension autosave: [#8455](https://github.com/owncloud/web/pull/8455)
+
+   We have added a global setting in the configuration to enable autosave (and the corresponding
+   timeout) for bundled and external extensions, instead of having a per-extension
+   configuration which was limited to external extensions. Handling of the provided autosave
+   needs to be taken care of by the extension itself.
+
+   https://github.com/owncloud/web/pull/8455
+   https://github.com/owncloud/web/pull/8457
 
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 
@@ -709,6 +721,12 @@ Details
 
    https://github.com/owncloud/web/issues/8452
    https://github.com/owncloud/web/pull/8450
+
+* Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
+
+   We have added the configurable functionality to autosave content changes in text editor.
+
+   https://github.com/owncloud/web/pull/8455
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
