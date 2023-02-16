@@ -21,7 +21,7 @@ export const displayPositionedDropdown = (dropdown, event, contextMenuButton) =>
   dropdown.show()
 }
 
-export const getPopperOptions = ({ topOffset = 0 }) => ({
+export const getPopperOptions = ({ topOffset = 0 } = {}) => ({
   modifiers: [
     maxSize,
     {
