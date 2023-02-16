@@ -35,11 +35,44 @@ describe('Top Bar component', () => {
     expect(wrapper.html().indexOf('applications-menu-stub')).toBeGreaterThan(-1)
     expect(wrapper.html()).toMatchSnapshot()
   })
+  it('should display notifications bell', () => {
+    const { wrapper } = getWrapper({
+      notifications: {
+        'ocs-endpoints': [
+          'list',
+          'get',
+          'delete'
+        ]
+      }
+    })
+    expect(wrapper.html().indexOf('notifications-stub')).toBeGreaterThan(-1)
+    expect(wrapper.html()).toMatchSnapshot()
+  })
+  it('should not display notifications bell if notifications capability is missing', () => {
+    const { wrapper } = getWrapper()
+    expect(wrapper.html().indexOf('notifications-stub')).toBe(-1)
+    expect(wrapper.html()).toMatchSnapshot()
+  })
+  it('should not display notifications bell if endpoint list is missing', () => {
+    const { wrapper } = getWrapper({
+      notifications: {
+        'ocs-endpoints': []
+      }
+    })
+    expect(wrapper.html().indexOf('notifications-stub')).toBe(-1)
+    expect(wrapper.html()).toMatchSnapshot()
+  })
 })
 
-const getWrapper = () => {
+const getWrapper = (capabilities = {}) => {
   const mocks = { ...defaultComponentMocks() }
-  const storeOptions = defaultStoreMockOptions
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    getters: {
+      ...defaultStoreMockOptions.getters,
+      capabilities: () => (capabilities)
+    }
+  }
   storeOptions.getters.configuration.mockImplementation(() => ({
     options: { disableFeedbackLink: false },
     themes: {
@@ -61,7 +94,7 @@ const getWrapper = () => {
       },
       global: {
         plugins: [...defaultPlugins(), store],
-        stubs: { 'router-link': true, 'portal-target': true },
+        stubs: { 'router-link': true, 'portal-target': true, 'notifications': true },
         mocks
       }
     })
