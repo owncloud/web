@@ -6,7 +6,6 @@
     <oc-drop
       ref="expirationDateDrop"
       :toggle="'#' + editShareBtnId"
-      :popper-options="popperOptions"
       mode="click"
       padding-size="small"
     >
@@ -58,7 +57,6 @@ import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
 import uniqueId from '@ownclouders/design-system/src/utils/uniqueId'
-import { getPopperOptions, getSidebarOffset } from 'web-pkg'
 
 export default defineComponent({
   name: 'EditDropdown',
@@ -82,10 +80,6 @@ export default defineComponent({
     }
   },
   emits: ['expirationDateChanged', 'removeShare', 'showAccessDetails'],
-  setup() {
-    const popperOptions = getPopperOptions({ topOffset: getSidebarOffset() })
-    return { popperOptions }
-  },
   data: function () {
     return {
       enteredExpirationDate: null

@@ -17,11 +17,13 @@
 
 <script lang="ts">
 import tippy, { hideAll } from 'tippy.js'
+import { detectOverflow } from '@popperjs/core'
 import { destroy, hideOnEsc } from '../../directives/OcTooltip'
 import { AVAILABLE_SIZES } from '../../helpers/constants'
 import uniqueId from '../../utils/uniqueId'
 import { getSizeClass } from '../../utils/sizeClasses'
 import { defineComponent } from 'vue'
+
 /**
  * Position any element in relation to another element.
  */
@@ -182,7 +184,40 @@ export default defineComponent({
           this.$emit('hideDrop')
         }
       }),
-      popperOptions: this.popperOptions,
+      popperOptions: {
+        ...this.popperOptions,
+        modifiers: [
+          ...(this.popperOptions?.modifiers ? this.popperOptions.modifiers : []),
+          {
+            name: 'fixVerticalPosition',
+            enabled: true,
+            phase: 'beforeWrite',
+            requiresIfExists: ['offset', 'preventOverflow', 'flip'],
+            fn({ state }) {
+              const overflow = detectOverflow(state)
+              const dropHeight =
+                state.modifiersData.fullHeight || state.elements.popper.offsetHeight
+              const dropYPos = overflow.top * -1 - 10
+              const availableHeight = dropYPos + dropHeight + overflow.bottom * -1
+              const spaceBelow = availableHeight - dropYPos
+              const spaceAbove = availableHeight - spaceBelow
+
+              if (dropHeight > spaceBelow && dropHeight > spaceAbove) {
+                // place drop on top of screen because of limited screen estate above and below
+                state.styles.popper.top = `-${dropYPos}px`
+                state.modifiersData.fullHeight = dropHeight
+              }
+
+              if (dropHeight > availableHeight) {
+                // drop is bigger than total available height
+                state.styles.popper.maxHeight = `${availableHeight - 10}px`
+                state.styles.popper.overflowY = `auto`
+                state.styles.popper.overflowX = `hidden`
+              }
+            }
+          }
+        ]
+      },
       content
     }
 
