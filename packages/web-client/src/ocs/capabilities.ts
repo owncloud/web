@@ -4,6 +4,9 @@ import get from 'lodash-es/get'
 /* eslint-disable camelcase */
 export interface Capabilities {
   capabilities: {
+    notifications: {
+      ocs_endpoints: string[]
+    }
     core: {
       pollinterval: number
       status: {
