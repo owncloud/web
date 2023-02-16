@@ -66,6 +66,7 @@ Summary
 * Enhancement - Add context menu to users: [#8324](https://github.com/owncloud/web/pull/8324)
 * Enhancement - Admin settings users section details improvement: [#8331](https://github.com/owncloud/web/pull/8331)
 * Enhancement - Add `ItemFilter` component: [#8354](https://github.com/owncloud/web/issues/8354)
+* Enhancement - Slight improvement of key up/down performance: [#8356](https://github.com/owncloud/web/pull/8356)
 * Enhancement - Admin settings general section: [#8363](https://github.com/owncloud/web/issues/8363)
 * Enhancement - Add appearance section in general settings: [#8375](https://github.com/owncloud/web/pull/8375)
 * Enhancement - User group filter: [#8377](https://github.com/owncloud/web/issues/8377)
@@ -621,6 +622,12 @@ Details
 
    https://github.com/owncloud/web/issues/8354
    https://github.com/owncloud/web/pull/8355
+
+* Enhancement - Slight improvement of key up/down performance: [#8356](https://github.com/owncloud/web/pull/8356)
+
+   The render performance of the key up/down events in file lists has been improved slightly.
+
+   https://github.com/owncloud/web/pull/8356
 
 * Enhancement - Admin settings general section: [#8363](https://github.com/owncloud/web/issues/8363)
 
