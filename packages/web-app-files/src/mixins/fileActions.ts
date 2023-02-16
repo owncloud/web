@@ -1,8 +1,13 @@
 import get from 'lodash-es/get'
+import kebabCase from 'lodash-es/kebabCase'
 import { mapGetters, mapState } from 'vuex'
+import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
+import { ShareStatus } from 'web-client/src/helpers/share'
+import { routeToContextQuery } from 'web-pkg/src/composables/appDefaults'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 import { isLocationSharesActive, isLocationTrashActive } from '../router'
-import { routeToContextQuery } from 'web-pkg/src/composables/appDefaults'
 import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
 import DeclineShare from './actions/declineShare'
@@ -15,12 +20,7 @@ import ShowEditTags from './actions/showEditTags'
 import Navigate from './actions/navigate'
 import Rename from './actions/rename'
 import Restore from './actions/restore'
-import kebabCase from 'lodash-es/kebabCase'
-import { ShareStatus } from 'web-client/src/helpers/share'
 import isSearchActive from './helpers/isSearchActive'
-import { Resource } from 'web-client'
-import { SpaceResource } from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg/src/configuration'
 
 const actionsMixins = [
   'navigate',
@@ -169,7 +169,7 @@ export default {
         shareId
       )
 
-      if (editor.newTab) {
+      if (this.configuration.options.openAppsInTab) {
         const path = this.$router.resolve(routeOpts).href
         const target = `${editor.routeName}-${filePath}`
         const win = window.open(path, target)

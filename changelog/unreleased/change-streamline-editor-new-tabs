@@ -1,0 +1,7 @@
+Change: Streamline new tab handling in extensions
+
+We have added a global configuration for opening extensions in new tabs.
+This will now be configured by the administrator and applies for all extensions in the same way. 
+
+https://github.com/owncloud/web/issues/6661
+https://github.com/owncloud/web/pull/8458

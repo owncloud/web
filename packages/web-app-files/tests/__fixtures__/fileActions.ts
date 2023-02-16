@@ -35,7 +35,6 @@ const editors = [
     extension: 'drawio',
     handler: null,
     icon: null,
-    newTab: true,
     routeName: 'draw-io-edit',
     routes
   },
@@ -44,7 +43,6 @@ const editors = [
     extension: 'png',
     handler: null,
     icon: null,
-    newTab: false,
     routeName: 'preview-media',
     routes
   },
@@ -53,7 +51,6 @@ const editors = [
     extension: 'md',
     handler: null,
     icon: null,
-    newTab: false,
     routeName: 'text-editor',
     routes
   }
