@@ -14,11 +14,16 @@
       <portal-target name="app.runtime.header" multiple></portal-target>
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle oc-flex-between">
+      <portal-target name="app.runtime.header.right" multiple />
+    </div>
+    <portal to="app.runtime.header.right" :order="50">
       <theme-switcher v-if="darkThemeAvailable" />
       <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
+    </portal>
+    <portal to="app.runtime.header.right" :order="100">
       <notifications v-if="isNotificationBellEnabled" />
       <user-menu v-if="isUserMenuEnabled" :applications-list="userMenuItems" />
-    </div>
+    </portal>
   </header>
 </template>
 

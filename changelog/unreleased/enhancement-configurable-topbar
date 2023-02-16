@@ -1,0 +1,5 @@
+Enhancement: Configurable top bar
+
+We've added a portal `app.runtime.header.right` that allows extensions to render themselves on the top right icons bar.
+
+https://github.com/owncloud/web/pull/8449

@@ -10,10 +10,15 @@ exports[`Top Bar component Displays applications menu 1`] = `
     <portal-target-stub multiple="" name="app.runtime.header"></portal-target-stub>
   </div>
   <div class="oc-topbar-right oc-flex oc-flex-middle oc-flex-between">
+    <portal-target-stub multiple="" name="app.runtime.header.right"></portal-target-stub>
+  </div>
+  <portal order="50" to="app.runtime.header.right">
     <theme-switcher-stub></theme-switcher-stub>
     <feedback-link-stub></feedback-link-stub>
+  </portal>
+  <portal order="100" to="app.runtime.header.right">
     <!--v-if-->
     <user-menu-stub applicationslist="[object Object],[object Object],[object Object]"></user-menu-stub>
-  </div>
+  </portal>
 </header>
 `;
