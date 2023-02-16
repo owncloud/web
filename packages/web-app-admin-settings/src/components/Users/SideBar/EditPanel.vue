@@ -170,7 +170,9 @@ export default defineComponent({
       ]
     },
     selectedLoginLabel() {
-      return this.editUser.accountEnabled === false ? this.$gettext('Forbidden') : this.$gettext('Allowed')
+      return this.editUser.accountEnabled === false
+        ? this.$gettext('Forbidden')
+        : this.$gettext('Allowed')
     },
     translatedRoleOptions() {
       return this.roles.map((role) => {
