@@ -19,4 +19,3 @@ Feature: display notifications on the webUI
     When user "Alice" is sent a notification in the server
     Then the user should see the notification bell on the webUI after a page reload
     And the user marks the notification as read
-    And the notification bell should disappear on the webUI

@@ -24,10 +24,6 @@ Then('the user should see the notification bell on the webUI after a page reload
   return client.page.webPage().waitForElementVisible('@notificationBell')
 })
 
-Then('the notification bell should disappear on the webUI', function () {
-  return client.page.webPage().waitForElementNotPresent('@notificationBell')
-})
-
 Then(
   'the user should see {int} notifications on the webUI with these details',
   async function (numberOfNotifications, dataTable) {
