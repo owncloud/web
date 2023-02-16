@@ -102,7 +102,7 @@ export default defineComponent({
     const resource: Ref<Resource> = ref()
     const store = useStore()
     const { $gettext, interpolate: $gettextInterpolate } = useGettext()
-    let autosaveInterval = ref(null)
+    let autosaveIntervalId = null
 
     const errorPopup = (error) => {
       store.dispatch('showMessage', {
@@ -223,21 +223,20 @@ export default defineComponent({
       // Ensure reload is not possible if there are changes
       window.addEventListener('beforeunload', handleUnload)
 
-      // Autosave
-      const editorOptions = store.getters.configuration?.options?.editor
-      if (editorOptions?.autosaveEnabled && editorOptions?.autosaveInterval) {
-        autosaveInterval.value = setInterval(() => {
+      const editorOptions = store.getters.configuration.options.editor
+      if (editorOptions.autosaveEnabled) {
+        autosaveIntervalId = setInterval(() => {
           if (isDirty.value) {
             save().then((r) => autosavePopup())
           }
-        }, editorOptions?.autosaveInterval)
+        }, editorOptions.autosaveInterval)
       }
     })
 
     onBeforeUnmount(() => {
       window.removeEventListener('beforeunload', handleUnload)
       document.removeEventListener('keydown', handleSKey, false)
-      clearInterval(autosaveInterval)
+      clearInterval(autosaveIntervalId)
     })
 
     const save = async function () {

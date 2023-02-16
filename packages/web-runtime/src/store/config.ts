@@ -37,6 +37,10 @@ const state = {
   options: {
     contextHelpers: true,
     defaultExtension: 'files',
+    editor: {
+      autosaveEnabled: false,
+      autosaveInterval: 120000
+    },
     // ugly hack to still have notifications but don't have
     // them blocking UI elements in acceptance/E2E tests
     topCenterNotifications: false,
