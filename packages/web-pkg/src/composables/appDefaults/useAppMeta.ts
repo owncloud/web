@@ -9,7 +9,6 @@ interface AppMetaOptions {
 
 export interface AppMetaObject {
   config: AppConfigObject
-  autosave: boolean
   theme: string
   url: string
   icon: string

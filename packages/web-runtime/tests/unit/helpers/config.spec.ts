@@ -20,7 +20,6 @@ const validConfig = `{
       "path": "web-app-draw-io",
       "config": {
         "url": "https://embed.diagrams.net",
-        "autosave": false,
         "theme": "minimal"
       }
     }

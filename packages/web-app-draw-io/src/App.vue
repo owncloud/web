@@ -14,21 +14,25 @@
   </main>
 </template>
 <script lang="ts">
-import { mapActions } from 'vuex'
-import qs from 'qs'
 import { DateTime } from 'luxon'
-import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
-import { useAppDefaults } from 'web-pkg/src/composables'
-import { defineComponent } from 'vue'
 import { basename } from 'path'
+import qs from 'qs'
+import { defineComponent } from 'vue'
+import { mapActions } from 'vuex'
+import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
+import { useAppDefaults, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'DrawIoEditor',
   setup() {
+    const store = useStore()
+    const isAutoSaveEnabled = store.getters.configuration.options.editor.autosaveEnabled
+
     return {
       ...useAppDefaults({
         applicationId: 'draw-io'
-      })
+      }),
+      isAutoSaveEnabled
     }
   },
   data: () => ({
@@ -40,12 +44,8 @@ export default defineComponent({
   }),
   computed: {
     config() {
-      const {
-        url = 'https://embed.diagrams.net',
-        theme = 'minimal',
-        autosave = false
-      } = this.applicationConfig
-      return { url, theme, autosave: autosave ? 1 : 0 }
+      const { url = 'https://embed.diagrams.net', theme = 'minimal' } = this.applicationConfig
+      return { url, theme }
     },
     urlHost() {
       const url = new URL(this.config.url)
@@ -88,7 +88,9 @@ export default defineComponent({
             this.fileExtension === 'vsdx' ? this.importVisio() : this.load()
             break
           case 'autosave':
-            this.save(payload, true)
+            if (this.isAutoSaveEnabled) {
+              this.save(payload, true)
+            }
             break
           case 'save':
             this.save(payload)
@@ -148,7 +150,7 @@ export default defineComponent({
           JSON.stringify({
             action: 'load',
             xml: response.body,
-            autosave: this.config.autosave
+            autosave: this.isAutoSaveEnabled
           }),
           this.urlHost
         )
@@ -189,7 +191,7 @@ export default defineComponent({
               JSON.stringify({
                 action: 'load',
                 xml: reader.result,
-                autosave: this.config.autosave
+                autosave: this.isAutoSaveEnabled
               }),
               this.urlHost
             )
