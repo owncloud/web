@@ -45,7 +45,7 @@ export default {
         notificationCountLabel.value = `${props.notificationCount}`
       }
     }
-    
+
     updateNotificationLabel()
     watch(
       () => props.notificationCount,
