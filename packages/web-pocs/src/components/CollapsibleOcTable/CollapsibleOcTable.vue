@@ -1,10 +1,10 @@
 <template>
   <div>
     <div v-if="groupingAllowed && groupingSettings.showGroupingOptions" class="oc-pb-m">
-      <div class="oc-docs-width-small" style="display: inline">
-        <label class="oc-mx-s">Group By:</label>
+      <div class="oc-docs-width-small grouping-label">
+        <label class="oc-mx-s" v-text="$gettext('Group By:')"></label>
       </div>
-      <div class="oc-docs-width-medium" style="display: inline-block; width: 250px">
+      <div class="oc-docs-width-medium grouping-oc-select">
         <oc-select
           v-model="selectedGroupingOption"
           :options="[
@@ -97,22 +97,16 @@
         :key="`${group.name + index}`"
       >
         <oc-tr
-          style="
-             {
-              height: rowHeight + 'px';
-              cursor: pointer;
-            }
-          "
           :class="['oc-tbody-tr', 'oc-tbody-tr-accordion']"
           @click="toggleGroup(index)"
         >
           <oc-td :colspan="fields.length - 1" class="oc-pl-s"> {{ group.name }}</oc-td>
           <!-- Column with collapsible buttons -->
           <oc-td class="oc-table-cell-align-right">
-            <span class="oc-ml-xs oc-icon-l" :style="[itemOpen(index) ? { display: 'none' } : {}]">
+            <span class="oc-ml-xs oc-icon-l" :class="[!itemOpen(index) && 'oc-hidden']">
               <oc-icon name="arrow-down-s" size="medium" />
             </span>
-            <span class="oc-ml-xs oc-icon-l" :style="[itemOpen(index) ? {} : { display: 'none' }]">
+            <span class="oc-ml-xs oc-icon-l" :class="[itemOpen(index) && 'oc-hidden']">
               <oc-icon name="arrow-up-s" size="medium" /> </span
           ></oc-td>
         </oc-tr>
@@ -160,25 +154,16 @@
         </tr>
       </tfoot>
       <Teleport v-if="dragItem" to="body">
-        <oc-ghost-element
-          ref="ghostElement"
-          :preview-items="[dragItem, ...dragSelection]"
-        ></oc-ghost-element>
+        <oc-ghost-element ref="ghostElement" :preview-items="[dragItem, ...dragSelection]" />
       </Teleport>
     </table>
   </div>
 </template>
 <script lang="ts">
-// import OcThead from '../../../../design-system/src/components/_OcTableHeader/_OcTableHeader.vue'
-// import OcTbody from '../../../../design-system/src/components/_OcTableBody/_OcTableBody.vue'
-// import OcTr from '../../../../design-system/src/components/_OcTableRow/_OcTableRow.vue'
-// import OcTh from '../../../../design-system/src/components/_OcTableCellHead/_OcTableCellHead.vue'
-// import OcTd from '../../../../design-system/src/components/_OcTableCellData/_OcTableCellData.vue'
-// import OcGhostElement from '../../../../design-system/src/components/_OcGhostElement/_OcGhostElement.vue'
-// import OcButton from '../../../../design-system/src/components/OcButton/OcButton.vue'
+import { defineComponent, ref } from 'vue'
+
 import SortMixin from '../../../../design-system/src/mixins/sort'
 import { getSizeClass } from '../../../../design-system/src/utils/sizeClasses'
-import { defineComponent, ref } from 'vue'
 
 import {
   EVENT_THEAD_CLICKED,
@@ -190,21 +175,12 @@ import {
 } from '../../../../design-system/src/helpers/constants'
 
 /**
- * A table component with dynamic layout and data.
+ * A collapsible table component with dynamic layout and data.
  */
 export default defineComponent({
-  name: 'OcTable',
-  status: 'ready',
-  release: '2.1.0',
-  components: {
-    // OcThead,
-    // OcTbody,
-    // OcTr,
-    // OcTh,
-    // OcTd,
-    // OcButton,
-    // OcGhostElement
-  },
+  name: 'CollapsibleOcTable',
+  status: 'prototype',
+  release: 'unreleased',
   mixins: [SortMixin],
   props: {
     /**
@@ -664,7 +640,17 @@ export default defineComponent({
   align-items: center;
 }
 
+.grouping-label {
+  display: inline;
+}
+
+.grouping-oc-select {
+  display: inline-block;
+  width: 250px;
+}
+
 .oc-tbody-tr-accordion {
+  cursor: pointer;
   background-color: var(--oc-color-input-bg);
 }
 

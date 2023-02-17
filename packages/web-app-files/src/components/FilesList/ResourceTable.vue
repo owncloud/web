@@ -220,8 +220,7 @@ import {
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { configurationManager } from 'web-pkg/src/configuration'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
-import AdvancedTable from 'web-pocs/src/components/CollapsibleOcTable/CollapsibleOcTable.vue'
-import { components } from '@ownclouders/design-system'
+import CollapsibleOcTable from 'web-pocs/src/components/CollapsibleOcTable/CollapsibleOcTable.vue'
 
 import { useResourceRouteResolver } from 'web-app-files/src/composables/filesList/useResourceRouteResolver'
 import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
@@ -239,7 +238,7 @@ import { ref } from 'vue'
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
-  components: { ContextMenuQuickAction, AdvancedTable },
+  components: { ContextMenuQuickAction, CollapsibleOcTable },
   props: {
     /**
      * Resources to be displayed in the table.
@@ -487,8 +486,7 @@ export default defineComponent({
     ]),
     ...mapState('runtime/spaces', ['spaces']),
     table() {
-      const { OcTable } = components
-      return this.configuration?.options?.enableAdvancedTable ? AdvancedTable : OcTable
+      return this.configuration?.options?.enableAdvancedTable ? CollapsibleOcTable : 'OcTable'
     },
     fields() {
       if (this.resources.length === 0) {
