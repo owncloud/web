@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Archiver in protected public links: [#6423](https://github.com/owncloud/web/issues/6423)
 * Bugfix - Loading shares in deep nested folders: [#7655](https://github.com/owncloud/web/issues/7655)
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
@@ -83,6 +84,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Archiver in protected public links: [#6423](https://github.com/owncloud/web/issues/6423)
+
+   Downloading multiple resources as archive in protected public links has been fixed.
+
+   https://github.com/owncloud/web/issues/6423
+   https://github.com/owncloud/web/pull/8466
 
 * Bugfix - Loading shares in deep nested folders: [#7655](https://github.com/owncloud/web/issues/7655)
 
