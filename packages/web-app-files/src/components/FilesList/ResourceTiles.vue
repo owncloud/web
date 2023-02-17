@@ -41,6 +41,7 @@
           :resource="resource"
           :resource-route="getRoute(resource)"
           :is-resource-selected="isResourceSelected(resource)"
+          :is-extension-displayed="areFileExtensionsShown"
           @vue:mounted="
             $emit('rowMounted', resource, tileRefs.tiles[resource.id], ImageDimension.Tile)
           "
@@ -154,6 +155,8 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore()
     const { $gettext } = useGettext()
+
+    const areFileExtensionsShown = computed(() => store.state.Files.areFileExtensionsShown)
 
     const tileRefs = ref({
       tiles: [],
@@ -270,6 +273,7 @@ export default defineComponent({
     })
 
     return {
+      areFileExtensionsShown,
       emitTileClick,
       getRoute,
       showContextMenuOnBtnClick,

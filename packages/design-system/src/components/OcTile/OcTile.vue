@@ -43,6 +43,7 @@
           <oc-resource
             :resource="resource"
             :is-icon-displayed="false"
+            :is-extension-displayed="isExtensionDisplayed"
             :folder-link="resourceRoute"
             @click="$emit('click')"
           />
@@ -98,6 +99,10 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+    isExtensionDisplayed: {
+      type: Boolean,
+      default: true
     }
   },
   emits: ['click', 'contextmenu']
