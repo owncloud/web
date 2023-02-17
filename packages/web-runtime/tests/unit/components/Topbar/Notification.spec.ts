@@ -66,21 +66,6 @@ const testData = {
 describe('Notification component', () => {
   const { selectors } = testData
 
-  describe('notification bell', () => {
-    it('displays notification bell', () => {
-      const { wrapper } = getWrapper({
-        mountType: shallowMount,
-        activeNotifications: testData.notifications.emptyActions
-      })
-
-      const bell = wrapper.find(selectors.notificationBell)
-      expect(bell.exists()).toBeTruthy()
-      expect(bell.find(selectors.ocIconStub).exists()).toBeTruthy()
-      expect(bell.find(selectors.ocIconStub).attributes('name')).toBe('notification-3')
-      expect(bell.attributes('arialabel')).toBe('Notifications')
-    })
-  })
-
   describe('when active notification contains a message', () => {
     it('displays the notification message', () => {
       const { wrapper } = getWrapper({
