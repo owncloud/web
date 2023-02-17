@@ -66,7 +66,7 @@ export class AuthService {
         clientService: this.clientService,
         configurationManager: this.configurationManager,
         store: this.store,
-        $ability: this.$ability
+        ability: this.$ability
       })
 
       this.userManager.events.addAccessTokenExpired((...args): void => {

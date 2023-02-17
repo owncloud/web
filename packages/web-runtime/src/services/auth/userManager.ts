@@ -19,7 +19,7 @@ export interface UserManagerOptions {
   clientService: ClientService
   configurationManager: ConfigurationManager
   store: Store<any>
-  $ability: Ability
+  ability: Ability
 }
 
 export class UserManager extends OidcUserManager {
@@ -29,7 +29,7 @@ export class UserManager extends OidcUserManager {
   private store: Store<any>
   private updateAccessTokenPromise: Promise<void> | null
   private _unloadReason: UnloadReason
-  private $ability: Ability
+  private ability: Ability
 
   constructor(options: UserManagerOptions) {
     const storePrefix = 'oc_oAuth.'
@@ -86,7 +86,7 @@ export class UserManager extends OidcUserManager {
     this.clientService = options.clientService
     this.configurationManager = options.configurationManager
     this.store = options.store
-    this.$ability = options.$ability
+    this.ability = options.ability
   }
 
   /**
@@ -271,6 +271,6 @@ export class UserManager extends OidcUserManager {
   private async updateUserAbilities(user, accessToken) {
     const permissions = await this.fetchPermissions({ user, accessToken })
     const abilities = getAbilities(permissions)
-    this.$ability.update(abilities)
+    this.ability.update(abilities)
   }
 }
