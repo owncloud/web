@@ -1,5 +1,23 @@
 import { archiverService, ArchiverService } from '../../../src/services'
 import { RuntimeError } from 'web-runtime/src/container/error'
+import { mock, mockDeep } from 'jest-mock-extended'
+import { ClientService, HttpClient } from 'web-pkg'
+import { OwnCloudSdk } from 'web-client/src/types'
+
+const getClientServiceMock = () => {
+  const clientMock = mock<HttpClient>()
+  clientMock.get.mockImplementation(
+    () =>
+      ({
+        data: new ArrayBuffer(8),
+        headers: { 'content-disposition': 'filename="download.tar"' }
+      } as any)
+  )
+  return mockDeep<ClientService>({
+    owncloudSdk: mock<OwnCloudSdk>({ signUrl: (url) => url }),
+    httpUnAuthenticated: clientMock
+  })
+}
 
 describe('archiver', () => {
   describe('archiverService', () => {
@@ -18,11 +36,6 @@ describe('archiver', () => {
     })
     describe('when initialized', () => {
       const serverUrl = 'https://demo.owncloud.com'
-      const clientServiceMock = {
-        owncloudSdk: {
-          signUrl: (url) => url
-        }
-      }
       let service
       beforeEach(() => {
         service = new ArchiverService()
@@ -62,11 +75,12 @@ describe('archiver', () => {
           )
         })
         it('returns a download url for a valid archive download trigger', async () => {
+          window.URL.createObjectURL = jest.fn()
+
           const fileId = 'asdf'
-          const url = await service.triggerDownload({
-            fileIds: [fileId],
-            clientService: clientServiceMock
-          })
+          const clientService = getClientServiceMock()
+          const url = await service.triggerDownload({ fileIds: [fileId], clientService })
+          expect(window.URL.createObjectURL).toHaveBeenCalled()
           expect(url.startsWith(archiverUrl)).toBeTruthy()
           expect(url.indexOf(`id=${fileId}`)).toBeGreaterThan(-1)
         })
@@ -93,13 +107,13 @@ describe('archiver', () => {
           )
         })
         it('returns a download url for a valid archive download trigger', async () => {
+          window.URL.createObjectURL = jest.fn()
           const dir = '/some/path'
           const fileName = 'qwer'
-          const url = await service.triggerDownload({
-            dir,
-            files: [fileName],
-            clientService: clientServiceMock
-          })
+          const clientService = getClientServiceMock()
+          const url = await service.triggerDownload({ dir, files: [fileName], clientService })
+
+          expect(window.URL.createObjectURL).toHaveBeenCalled()
           expect(url.startsWith(archiverUrl)).toBeTruthy()
           expect(url.indexOf(`files[]=${fileName}`)).toBeGreaterThan(-1)
           expect(url.indexOf(`dir=${encodeURIComponent(dir)}`)).toBeGreaterThan(-1)
@@ -130,10 +144,8 @@ describe('archiver', () => {
           expect(service.available).toBe(true)
         })
         it('uses the highest major version', async () => {
-          const downloadUrl = await service.triggerDownload({
-            fileIds: ['any'],
-            clientService: clientServiceMock
-          })
+          const clientService = getClientServiceMock()
+          const downloadUrl = await service.triggerDownload({ fileIds: ['any'], clientService })
           expect(downloadUrl.startsWith(capabilityV2.archiver_url)).toBeTruthy()
         })
       })

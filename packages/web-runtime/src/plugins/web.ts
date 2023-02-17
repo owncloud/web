@@ -2,6 +2,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 import { encodePath } from 'web-pkg/src/utils'
 import { v4 as uuidV4 } from 'uuid'
+import { triggerDownloadWithFilename } from 'web-pkg/src/helpers'
 
 export default {
   install(app) {
@@ -65,16 +66,7 @@ export default {
         },
         encodePath,
         triggerDownload(url, name) {
-          const a = document.createElement('a')
-          a.style.display = 'none'
-          document.body.appendChild(a)
-          a.href = url
-          // use download attribute to set desired file name
-          a.setAttribute('download', name)
-          // trigger the download by simulating click
-          a.click()
-          // cleanup
-          document.body.removeChild(a)
+          triggerDownloadWithFilename(url, name)
         }
       }
     })

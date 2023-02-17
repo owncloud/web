@@ -6,6 +6,7 @@ import { RuntimeError } from 'web-runtime/src/container/error'
 import { clientService as defaultClientService, ClientService } from 'web-pkg/src/services'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { triggerDownloadWithFilename } from 'web-pkg/src/helpers'
 /**
  * Archiver struct within the capabilities as defined in reva
  * @see https://github.com/cs3org/reva/blob/41d5a6858c2200a61736d2c165e551b9785000d1/internal/http/services/owncloud/ocs/data/capabilities.go#L105
@@ -72,7 +73,7 @@ export class ArchiverService {
       : await clientService.owncloudSdk.signUrl(downloadUrl)
 
     try {
-      const { data } = await clientService.httpUnAuthenticated.get(url, {
+      const response = await clientService.httpUnAuthenticated.get(url, {
         headers: {
           ...(!!options.publicLinkPassword && {
             Authorization:
@@ -82,13 +83,12 @@ export class ArchiverService {
         },
         responseType: 'arraybuffer'
       })
-      const blob = new Blob([data], { type: 'application/tar' })
+
+      const blob = new Blob([response.data], { type: 'application/octet-stream' })
       const objectUrl = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.download = 'download.tar'
-      a.href = objectUrl
-      a.click()
-      return objectUrl
+      const fileName = this.getFileNameFromResponseHeaders(response.headers)
+      triggerDownloadWithFilename(objectUrl, fileName)
+      return url
     } catch (e) {
       throw new RuntimeError('archive could not be fetched')
     }
@@ -131,6 +131,12 @@ export class ArchiverService {
       return this.capability.archiver_url
     }
     return urlJoin(configurationManager.serverUrl, this.capability.archiver_url)
+  }
+
+  private getFileNameFromResponseHeaders(headers) {
+    const contentDispositionArr = headers['content-disposition']?.split('"')
+    const fileName = contentDispositionArr[1] ?? null
+    return fileName || 'download.tar'
   }
 }
 
