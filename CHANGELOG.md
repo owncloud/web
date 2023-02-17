@@ -33,6 +33,7 @@ Summary
 * Bugfix - Drop menus with limited vertical screen space: [#8411](https://github.com/owncloud/web/issues/8411)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
+* Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
 * Change - Configurable extension autosave: [#8455](https://github.com/owncloud/web/pull/8455)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Improve performance when loading folders and share indicators: [#7721](https://github.com/owncloud/web/issues/7721)
@@ -294,6 +295,14 @@ Details
    https://github.com/owncloud/web/pull/8288
    https://github.com/owncloud/web/pull/8308
    https://github.com/owncloud/web/pull/8311
+
+* Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
+
+   BREAKING CHANGE for developers: The `PermissionManager` has been removed. Permission
+   management is now being handled by `CASL`. For more details on how it works please see the linked
+   PR down below.
+
+   https://github.com/owncloud/web/pull/8431
 
 * Change - Configurable extension autosave: [#8455](https://github.com/owncloud/web/pull/8455)
 
