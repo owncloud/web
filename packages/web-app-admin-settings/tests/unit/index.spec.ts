@@ -82,7 +82,7 @@ describe('admin settings index', () => {
             .redirect().name
         ).toEqual('admin-settings-spaces')
       })
-      it('should throw an error if permission are insufficient', () => {
+      it('should throw an error if permissions are insufficient', () => {
         const ability = mock<Ability>()
         ability.can.mockReturnValue(false)
         expect(index.routes({ $ability: ability }).find((n) => n.path === '/').redirect).toThrow()
