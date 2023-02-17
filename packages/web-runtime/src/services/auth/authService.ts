@@ -6,6 +6,7 @@ import { ConfigurationManager } from 'web-pkg/src/configuration'
 import { RouteLocation, Router } from 'vue-router'
 import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from '../../router'
 import { unref } from 'vue'
+import { Ability } from 'web-pkg/src/utils'
 
 export class AuthService {
   private clientService: ClientService
@@ -14,6 +15,7 @@ export class AuthService {
   private router: Router
   private userManager: UserManager
   private publicLinkManager: PublicLinkManager
+  private ability: Ability
 
   public hasAuthErrorOccured: boolean
 
@@ -21,13 +23,15 @@ export class AuthService {
     configurationManager: ConfigurationManager,
     clientService: ClientService,
     store: Store<any>,
-    router: Router
+    router: Router,
+    ability: Ability
   ): void {
     this.configurationManager = configurationManager
     this.clientService = clientService
     this.store = store
     this.router = router
     this.hasAuthErrorOccured = false
+    this.ability = ability
   }
 
   /**
@@ -61,7 +65,8 @@ export class AuthService {
       this.userManager = new UserManager({
         clientService: this.clientService,
         configurationManager: this.configurationManager,
-        store: this.store
+        store: this.store,
+        ability: this.ability
       })
 
       this.userManager.events.addAccessTokenExpired((...args): void => {

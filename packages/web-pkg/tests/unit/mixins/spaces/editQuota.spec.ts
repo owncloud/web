@@ -55,9 +55,7 @@ function getWrapper({ canEditSpaceQuota = false } = {}) {
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: {
-          $permissionManager: {
-            canEditSpaceQuota: () => canEditSpaceQuota
-          }
+          $can: () => canEditSpaceQuota
         }
       }
     })

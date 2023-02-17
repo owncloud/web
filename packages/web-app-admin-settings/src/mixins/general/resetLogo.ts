@@ -11,6 +11,9 @@ export default {
           label: () => {
             return this.$gettext('Reset logo')
           },
+          isEnabled: () => {
+            return this.$can('update-all', 'Logo')
+          },
           handler: this.$_resetLogo_trigger,
           componentType: 'button',
           class: 'oc-general-actions-reset-logo-trigger'

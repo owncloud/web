@@ -1,14 +1,19 @@
 import DesignSystem from '@ownclouders/design-system'
 import { createGettext } from 'vue3-gettext'
 import { h } from 'vue'
+import { abilitiesPlugin } from '@casl/vue'
+import { createMongoAbility } from '@casl/ability'
+
 export interface DefaultPluginsOptions {
   designSystem?: boolean
   gettext?: boolean
+  abilities?: any
 }
 
 export const defaultPlugins = ({
   designSystem = true,
-  gettext = true
+  gettext = true,
+  abilities = []
 }: DefaultPluginsOptions = {}) => {
   const plugins = []
 
@@ -28,6 +33,12 @@ export const defaultPlugins = ({
       }
     })
   }
+
+  plugins.push({
+    install(app) {
+      app.use(abilitiesPlugin, createMongoAbility(abilities))
+    }
+  })
 
   plugins.push({
     install(app) {

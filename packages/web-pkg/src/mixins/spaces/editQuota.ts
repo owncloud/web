@@ -30,7 +30,7 @@ export default {
             if (resources.some((r) => r.spaceQuota === false)) {
               return false
             }
-            return this.$permissionManager.canEditSpaceQuota()
+            return this.$can('set-quota-all', 'Space')
           },
           componentType: 'button',
           class: 'oc-files-actions-edit-quota-trigger'

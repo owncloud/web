@@ -39,14 +39,6 @@ const breadCrumbItemWithContextActionAllowed = {
   allowContextActions: true
 }
 
-window.ResizeObserver =
-  window.ResizeObserver ||
-  jest.fn().mockImplementation(() => ({
-    disconnect: jest.fn(),
-    observe: jest.fn(),
-    unobserve: jest.fn()
-  }))
-
 describe('AppBar component', () => {
   describe('renders', () => {
     it('by default no breadcrumbs, no bulkactions, no sharesnavigation but viewoptions and sidebartoggle', () => {

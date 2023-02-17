@@ -12,6 +12,9 @@ export default {
           label: () => {
             return this.$gettext('Upload logo')
           },
+          isEnabled: () => {
+            return this.$can('update-all', 'Logo')
+          },
           handler: this.$_uploadLogo_trigger,
           componentType: 'button',
           class: 'oc-general-actions-upload-logo-trigger'

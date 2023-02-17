@@ -35,9 +35,7 @@ function getWrapper(space) {
       global: {
         mocks: {
           ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) }),
-          $permissionManager: {
-            canEditSpaceQuota: () => true
-          }
+          $can: () => true
         },
         plugins: [...defaultPlugins(), store]
       }

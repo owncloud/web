@@ -590,6 +590,8 @@ importers:
 
   packages/web-pkg:
     specifiers:
+      '@casl/ability': ^6.3.3
+      '@casl/vue': ^2.2.1
       axios: ^0.27.2
       filesize: ^9.0.11
       fuse.js: ^6.5.3
@@ -605,6 +607,8 @@ importers:
       web-client: workspace:@ownclouders/web-client@*
       web-pkg: workspace:@ownclouders/web-pkg@*
     dependencies:
+      '@casl/ability': 6.3.3
+      '@casl/vue': 2.2.1_iguwcvvchwz4fu5vynmua7ad3i
       axios: 0.27.2
       filesize: 9.0.11
       fuse.js: 6.5.3
@@ -622,6 +626,8 @@ importers:
 
   packages/web-runtime:
     specifiers:
+      '@casl/ability': ^6.3.3
+      '@casl/vue': ^2.2.1
       '@fortawesome/fontawesome-free': 6.2.1
       '@jest/globals': 29.3.1
       '@ownclouders/design-system': workspace:*
@@ -671,6 +677,8 @@ importers:
       webfontloader: ^1.6.28
       xml-js: ^1.6.11
     dependencies:
+      '@casl/ability': 6.3.3
+      '@casl/vue': 2.2.1_iguwcvvchwz4fu5vynmua7ad3i
       '@fortawesome/fontawesome-free': 6.2.1
       '@ownclouders/design-system': link:../design-system
       '@popperjs/core': 2.11.5
@@ -723,11 +731,15 @@ importers:
 
   packages/web-test-helpers:
     specifiers:
+      '@casl/ability': ^6.3.3
+      '@casl/vue': ^2.2.1
       axios: 0.27.2
       vue-router: 4.1.6
       vue3-gettext: ^2.3.3
       vuex: 4.1.0
     dependencies:
+      '@casl/ability': 6.3.3
+      '@casl/vue': 2.2.1_iguwcvvchwz4fu5vynmua7ad3i
       axios: 0.27.2
       vue-router: 4.1.6_vue@3.2.45
       vue3-gettext: 2.3.4_tfvhctuaqmmqnirfl65c47tqwu
@@ -4214,6 +4226,22 @@ packages:
     resolution: {integrity: sha512-iZf+UWfL+DogJVpd/xMQyP6X6McYd6ArdYoPMiv/zlOTzeXXfQbYxBNJJBF6tThvsjLMbA8tLjkCdm9RWMFCCw==}
     dev: true
 
+  /@casl/ability/6.3.3:
+    resolution: {integrity: sha512-UzbqsE9etu6QzZrRmqIyVun2kztAzJ46Tz7lC/2P2buCE6B6Ll7Vptz7JTQtGwapLbeKo2jS7dL966TVOQ7x4g==}
+    dependencies:
+      '@ucast/mongo2js': 1.3.3
+    dev: false
+
+  /@casl/vue/2.2.1_iguwcvvchwz4fu5vynmua7ad3i:
+    resolution: {integrity: sha512-1OeGhT4A7VBkEACacF2ZlHkPiFJvyFy9h2PhBnMoetFDojMHbrn3ZjKgL5zQ4wSIrTQo9KbbzG3f0uAei2GKCQ==}
+    peerDependencies:
+      '@casl/ability': ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.1.0 || ^6.0.0
+      vue: ^3.0.0
+    dependencies:
+      '@casl/ability': 6.3.3
+      vue: 3.2.45
+    dev: false
+
   /@cspotcode/source-map-support/0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
@@ -6171,6 +6199,30 @@ packages:
     dependencies:
       '@typescript-eslint/types': 5.39.0
       eslint-visitor-keys: 3.3.0
+    dev: false
+
+  /@ucast/core/1.10.1:
+    resolution: {integrity: sha512-sXKbvQiagjFh2JCpaHUa64P4UdJbOxYeC5xiZFn8y6iYdb0WkismduE+RmiJrIjw/eLDYmIEXiQeIYYowmkcAw==}
+    dev: false
+
+  /@ucast/js/3.0.2:
+    resolution: {integrity: sha512-zxNkdIPVvqJjHI7D/iK8Aai1+59yqU+N7bpHFodVmiTN7ukeNiGGpNmmSjQgsUw7eNcEBnPrZHNzp5UBxwmaPw==}
+    dependencies:
+      '@ucast/core': 1.10.1
+    dev: false
+
+  /@ucast/mongo/2.4.2:
+    resolution: {integrity: sha512-/zH1TdBJlYGKKD+Wh0oyD+aBvDSWrwHcD8b4tUL9UgHLhzHtkEnMVFuxbw3SRIRsAa01wmy06+LWt+WoZdj1Bw==}
+    dependencies:
+      '@ucast/core': 1.10.1
+    dev: false
+
+  /@ucast/mongo2js/1.3.3:
+    resolution: {integrity: sha512-sBPtMUYg+hRnYeVYKL+ATm8FaRPdlU9PijMhGYKgsPGjV9J4Ks41ytIjGayvKUnBOEhiCaKUUnY4qPeifdqATw==}
+    dependencies:
+      '@ucast/core': 1.10.1
+      '@ucast/js': 3.0.2
+      '@ucast/mongo': 2.4.2
     dev: false
 
   /@unhead/dom/1.0.15:
@@ -8403,7 +8455,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -18669,6 +18721,15 @@ packages:
   /progress/2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
+    dev: true
+
+  /promise-inflight/1.0.1:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
     dev: true
 
   /promise-inflight/1.0.1_bluebird@3.7.2:

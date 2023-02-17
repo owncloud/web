@@ -66,9 +66,16 @@ describe('Projects view', () => {
       expect(wrapper.findAll('.oc-tiles-item').length).toEqual(spaces.length)
     })
   })
+  it('should display the "Create Space"-button when permission given', () => {
+    const { wrapper } = getMountedWrapper({
+      abilities: [{ action: 'create-all', subject: 'Space' }],
+      stubAppBar: false
+    })
+    expect(wrapper.find('create-space-stub').exists()).toBeTruthy()
+  })
 })
 
-function getMountedWrapper({ mocks = {}, spaces = [] } = {}) {
+function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar = true } = {}) {
   const defaultMocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
@@ -83,9 +90,14 @@ function getMountedWrapper({ mocks = {}, spaces = [] } = {}) {
     storeOptions,
     wrapper: mount(Projects, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins({ abilities }), store],
         mocks: defaultMocks,
-        stubs: { ...defaultStubs, 'space-context-actions': true }
+        stubs: {
+          ...defaultStubs,
+          'space-context-actions': true,
+          'app-bar': stubAppBar,
+          CreateSpace: true
+        }
       }
     })
   }

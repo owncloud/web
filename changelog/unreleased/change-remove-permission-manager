@@ -1,0 +1,5 @@
+Change: Remove permission manager
+
+BREAKING CHANGE for developers: The `PermissionManager` has been removed. Permission management is now being handled by `CASL`. For more details on how it works please see the linked PR down below.
+
+https://github.com/owncloud/web/pull/8431

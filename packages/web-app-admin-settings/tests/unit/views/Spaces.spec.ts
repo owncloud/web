@@ -12,14 +12,6 @@ import {
 } from 'web-test-helpers'
 import Spaces from '../../../src/views/Spaces.vue'
 
-window.ResizeObserver =
-  window.ResizeObserver ||
-  jest.fn().mockImplementation(() => ({
-    disconnect: jest.fn(),
-    observe: jest.fn(),
-    unobserve: jest.fn()
-  }))
-
 const selectors = {
   loadingSpinnerStub: 'app-loading-spinner-stub',
   spacesListStub: 'spaces-list-stub',

@@ -12,7 +12,7 @@ import { useLocalStorage } from 'web-pkg/src/composables'
 import { unref } from 'vue'
 import { useDefaultThemeName } from '../composables'
 import { authService } from '../services/auth'
-import { clientService, PermissionManager } from 'web-pkg/src/services'
+import { clientService } from 'web-pkg/src/services'
 import { UppyService } from '../services/uppyService'
 import { default as storeOptions } from '../store'
 import { init as sentryInit } from '@sentry/vue'
@@ -279,26 +279,6 @@ export const announceClientService = ({
  * announce uppyService and inject it into vue
  *
  * @param vue
- * @param store
- */
-export const announcePermissionManager = ({
-  app,
-  store
-}: {
-  app: App
-  store: Store<any>
-}): void => {
-  const permissionManager = new PermissionManager(store)
-  app.config.globalProperties.$permissionManager = permissionManager
-
-  // FIXME: make properly available to redirect() in routes definitions of apps
-  ;(window as any).__$permissionManager = permissionManager
-}
-
-/**
- * announce uppyService and inject it into vue
- *
- * @param vue
  */
 export const announceUppyService = ({ app }: { app: App }): void => {
   app.config.globalProperties.$uppyService = new UppyService()
@@ -323,7 +303,8 @@ export const announceAuthService = ({
   store: Store<any>
   router: Router
 }): void => {
-  authService.initialize(configurationManager, clientService, store, router)
+  const ability = app.config.globalProperties.$ability
+  authService.initialize(configurationManager, clientService, store, router, ability)
   app.config.globalProperties.$authService = authService
 }
 

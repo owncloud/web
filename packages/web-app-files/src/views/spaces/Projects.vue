@@ -73,7 +73,7 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 import AppBar from '../../components/AppBar/AppBar.vue'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
-import { useAccessToken, useStore, useGraphClient } from 'web-pkg/src/composables'
+import { useAbility, useAccessToken, useStore, useGraphClient } from 'web-pkg/src/composables'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
@@ -103,6 +103,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { selectedResourcesIds } = useSelectedResources({ store })
+    const { can } = useAbility()
 
     const runtimeSpaces = computed(
       () => store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
@@ -135,6 +136,8 @@ export default defineComponent({
       return loadResourcesTask.isRunning || !loadResourcesTask.last
     })
 
+    const hasCreatePermission = computed(() => can('create-all', 'Space'))
+
     return {
       ...useSideBar(),
       ...useScrollTo(),
@@ -147,7 +150,8 @@ export default defineComponent({
       handleSort,
       sortBy,
       sortDir,
-      sortFields
+      sortFields,
+      hasCreatePermission
     }
   },
   data: function () {
@@ -168,9 +172,6 @@ export default defineComponent({
     },
     showSpaceMemberLabel() {
       return this.$gettext('Show members')
-    },
-    hasCreatePermission() {
-      return this.$permissionManager.hasSpaceManagement()
     }
   },
   watch: {
