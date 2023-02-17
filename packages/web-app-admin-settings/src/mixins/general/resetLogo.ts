@@ -12,7 +12,7 @@ export default {
             return this.$gettext('Reset logo')
           },
           isEnabled: () => {
-            return this.$can('update', 'Logo')
+            return this.$can('update-all', 'Logo')
           },
           handler: this.$_resetLogo_trigger,
           componentType: 'button',

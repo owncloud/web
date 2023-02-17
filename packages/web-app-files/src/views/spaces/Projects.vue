@@ -136,7 +136,7 @@ export default defineComponent({
       return loadResourcesTask.isRunning || !loadResourcesTask.last
     })
 
-    const hasCreatePermission = computed(() => can('create', 'Space'))
+    const hasCreatePermission = computed(() => can('create-all', 'Space'))
 
     return {
       ...useSideBar(),

@@ -68,7 +68,7 @@ describe('Projects view', () => {
   })
   it('should display the "Create Space"-button when permission given', () => {
     const { wrapper } = getMountedWrapper({
-      abilities: [{ action: 'create', subject: 'Space' }],
+      abilities: [{ action: 'create-all', subject: 'Space' }],
       stubAppBar: false
     })
     expect(wrapper.find('create-space-stub').exists()).toBeTruthy()

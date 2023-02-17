@@ -21,13 +21,13 @@ const routes = ({ $ability }: { $ability: Ability }) => [
   {
     path: '/',
     redirect: () => {
-      if ($ability.can('read', 'Setting')) {
+      if ($ability.can('read-all', 'Setting')) {
         return { name: 'admin-settings-general' }
       }
-      if ($ability.can('read', 'Account')) {
+      if ($ability.can('read-all', 'Account')) {
         return { name: 'admin-settings-users' }
       }
-      if ($ability.can('read', 'Space')) {
+      if ($ability.can('read-all', 'Space')) {
         return { name: 'admin-settings-spaces' }
       }
       throw Error('Insufficient permissions')
@@ -79,7 +79,7 @@ const navItems = ({ $ability }: { $ability: Ability }) => [
       path: `/${appInfo.id}/general?`
     },
     enabled: () => {
-      return $ability.can('read', 'Setting')
+      return $ability.can('read-all', 'Setting')
     }
   },
   {
@@ -89,7 +89,7 @@ const navItems = ({ $ability }: { $ability: Ability }) => [
       path: `/${appInfo.id}/users?`
     },
     enabled: () => {
-      return $ability.can('read', 'Account')
+      return $ability.can('read-all', 'Account')
     }
   },
   {
@@ -99,7 +99,7 @@ const navItems = ({ $ability }: { $ability: Ability }) => [
       path: `/${appInfo.id}/groups?`
     },
     enabled: () => {
-      return $ability.can('read', 'Group')
+      return $ability.can('read-all', 'Group')
     }
   },
   {
@@ -109,7 +109,7 @@ const navItems = ({ $ability }: { $ability: Ability }) => [
       path: `/${appInfo.id}/spaces?`
     },
     enabled: () => {
-      return $ability.can('read', 'Space')
+      return $ability.can('read-all', 'Space')
     }
   }
 ]

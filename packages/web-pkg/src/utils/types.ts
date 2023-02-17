@@ -5,7 +5,18 @@ export type ReadOnlyRef<T> = Readonly<Ref<T>>
 export type MaybeRef<T> = T | Ref<T>
 export type MaybeReadonlyRef<T> = MaybeRef<T> | ReadOnlyRef<T>
 
-export type AbilityActions = 'create' | 'delete' | 'read' | 'set-quota' | 'update'
+export type AbilityActions =
+  | 'create'
+  | 'create-all'
+  | 'delete'
+  | 'delete-all'
+  | 'read'
+  | 'read-all'
+  | 'set-quota'
+  | 'set-quota-all'
+  | 'update'
+  | 'update-all'
+
 export type AbilitySubjects =
   | 'Account'
   | 'Group'

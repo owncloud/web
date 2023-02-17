@@ -13,7 +13,7 @@ export default {
             return this.$gettext('Upload logo')
           },
           isEnabled: () => {
-            return this.$can('update', 'Logo')
+            return this.$can('update-all', 'Logo')
           },
           handler: this.$_uploadLogo_trigger,
           componentType: 'button',
