@@ -45,7 +45,7 @@ export default {
               })
               if (response.status === 200) {
                 const signedUrl = await this.$client.signUrl(url)
-                this.triggerDownload(signedUrl, file.name)
+                triggerDownloadWithFilename(signedUrl, file.name)
                 return
               }
             } catch (e) {
@@ -62,12 +62,9 @@ export default {
             return
           }
 
-          this.triggerDownload(url, file.name)
+          triggerDownloadWithFilename(url, file.name)
         },
-        encodePath,
-        triggerDownload(url, name) {
-          triggerDownloadWithFilename(url, name)
-        }
+        encodePath
       }
     })
   }
