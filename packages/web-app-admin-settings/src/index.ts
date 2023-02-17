@@ -27,6 +27,9 @@ const routes = ({ $ability }: { $ability: Ability }) => [
       if ($ability.can('read-all', 'Account')) {
         return { name: 'admin-settings-users' }
       }
+      if ($ability.can('read-all', 'Group')) {
+        return { name: 'admin-settings-groups' }
+      }
       if ($ability.can('read-all', 'Space')) {
         return { name: 'admin-settings-spaces' }
       }

@@ -70,8 +70,21 @@ describe('admin settings index', () => {
             .redirect().name
         ).toEqual('admin-settings-users')
       })
+      it('should redirect to group management if permission given', () => {
+        const ability = mock<Ability>()
+        ability.can.mockReturnValueOnce(false)
+        ability.can.mockReturnValueOnce(false)
+        ability.can.mockReturnValueOnce(true)
+        expect(
+          index
+            .routes({ $ability: ability })
+            .find((n) => n.path === '/')
+            .redirect().name
+        ).toEqual('admin-settings-groups')
+      })
       it('should redirect to space management if permission given', () => {
         const ability = mock<Ability>()
+        ability.can.mockReturnValueOnce(false)
         ability.can.mockReturnValueOnce(false)
         ability.can.mockReturnValueOnce(false)
         ability.can.mockReturnValueOnce(true)
