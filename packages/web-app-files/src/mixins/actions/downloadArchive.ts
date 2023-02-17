@@ -9,10 +9,13 @@ import path from 'path'
 import first from 'lodash-es/first'
 import { archiverService } from '../../services'
 import { isPublicSpaceResource, Resource } from 'web-client/src/helpers'
+import { mapGetters } from 'vuex'
 
 export default {
   mixins: [isFilesAppActive],
   computed: {
+    ...mapGetters('runtime/auth', ['publicLinkPassword']),
+
     $_downloadArchive_items() {
       return [
         {
@@ -79,7 +82,8 @@ export default {
         .triggerDownload({
           ...fileOptions,
           ...(isPublicSpaceResource(this.space) && {
-            publicToken: this.space.id
+            publicToken: this.space.id,
+            publicLinkPassword: this.publicLinkPassword
           })
         })
         .catch((e) => {

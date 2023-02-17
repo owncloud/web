@@ -6,6 +6,7 @@ import { RuntimeError } from 'web-runtime/src/container/error'
 import { clientService as defaultClientService, ClientService } from 'web-pkg/src/services'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { triggerDownloadWithFilename } from 'web-pkg/src/helpers'
 /**
  * Archiver struct within the capabilities as defined in reva
  * @see https://github.com/cs3org/reva/blob/41d5a6858c2200a61736d2c165e551b9785000d1/internal/http/services/owncloud/ocs/data/capabilities.go#L105
@@ -24,6 +25,7 @@ interface TriggerDownloadOptions {
   fileIds?: string[]
   downloadSecret?: string
   publicToken?: string
+  publicLinkPassword?: string
   clientService?: ClientService
 }
 
@@ -69,8 +71,27 @@ export class ArchiverService {
     const url = options.publicToken
       ? downloadUrl
       : await clientService.owncloudSdk.signUrl(downloadUrl)
-    window.location = url
-    return url
+
+    try {
+      const response = await clientService.httpUnAuthenticated.get(url, {
+        headers: {
+          ...(!!options.publicLinkPassword && {
+            Authorization:
+              'Basic ' +
+              Buffer.from(['public', options.publicLinkPassword].join(':')).toString('base64')
+          })
+        },
+        responseType: 'arraybuffer'
+      })
+
+      const blob = new Blob([response.data], { type: 'application/octet-stream' })
+      const objectUrl = URL.createObjectURL(blob)
+      const fileName = this.getFileNameFromResponseHeaders(response.headers)
+      triggerDownloadWithFilename(objectUrl, fileName)
+      return url
+    } catch (e) {
+      throw new RuntimeError('archive could not be fetched')
+    }
   }
 
   private buildDownloadUrl(options: TriggerDownloadOptions): string {
@@ -110,6 +131,11 @@ export class ArchiverService {
       return this.capability.archiver_url
     }
     return urlJoin(configurationManager.serverUrl, this.capability.archiver_url)
+  }
+
+  private getFileNameFromResponseHeaders(headers) {
+    const fileName = headers['content-disposition']?.split('"')[1]
+    return decodeURI(fileName)
   }
 }
 
