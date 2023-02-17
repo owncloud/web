@@ -1,0 +1,7 @@
+Bugfix: Archiver in protected public links
+
+Downloading multiple resources as archive in protected public links has been fixed.
+
+https://github.com/owncloud/web/issues/6423
+https://github.com/owncloud/web/pull/8466
+

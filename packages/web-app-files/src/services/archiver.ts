@@ -24,6 +24,7 @@ interface TriggerDownloadOptions {
   fileIds?: string[]
   downloadSecret?: string
   publicToken?: string
+  publicLinkPassword?: string
   clientService?: ClientService
 }
 
@@ -69,8 +70,28 @@ export class ArchiverService {
     const url = options.publicToken
       ? downloadUrl
       : await clientService.owncloudSdk.signUrl(downloadUrl)
-    window.location = url
-    return url
+
+    try {
+      const { data } = await clientService.httpUnAuthenticated.get(url, {
+        headers: {
+          ...(!!options.publicLinkPassword && {
+            Authorization:
+              'Basic ' +
+              Buffer.from(['public', options.publicLinkPassword].join(':')).toString('base64')
+          })
+        },
+        responseType: 'arraybuffer'
+      })
+      const blob = new Blob([data], { type: 'application/tar' })
+      const objectUrl = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.download = 'download.tar'
+      a.href = objectUrl
+      a.click()
+      return objectUrl
+    } catch (e) {
+      throw new RuntimeError('archive could not be fetched')
+    }
   }
 
   private buildDownloadUrl(options: TriggerDownloadOptions): string {
