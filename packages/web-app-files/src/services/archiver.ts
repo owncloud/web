@@ -134,9 +134,8 @@ export class ArchiverService {
   }
 
   private getFileNameFromResponseHeaders(headers) {
-    const contentDispositionArr = headers['content-disposition']?.split('"')
-    const fileName = contentDispositionArr[1] ?? null
-    return fileName ? decodeURI(fileName) : 'download.tar'
+    const fileName = headers['content-disposition']?.split('"')[1]
+    return decodeURI(fileName)
   }
 }
 
