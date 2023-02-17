@@ -37,6 +37,7 @@ const state = {
   options: {
     contextHelpers: true,
     defaultExtension: 'files',
+    openAppsInTab: false,
     editor: {
       autosaveEnabled: false,
       autosaveInterval: 120

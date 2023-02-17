@@ -23,7 +23,6 @@ const mutations = {
       app,
       icon: extension.icon,
       img: extension.img,
-      newTab: extension.newTab || false,
       routeName: extension.routeName,
       routes: extension.routes || [],
       extension: extension.extension,

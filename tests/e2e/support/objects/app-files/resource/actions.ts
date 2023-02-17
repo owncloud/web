@@ -144,15 +144,16 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
       await page.locator(createNewDrawioFileButton).click()
       await page.locator(resourceNameInput).fill(name)
 
-      const [drawioTab] = await Promise.all([
-        page.waitForEvent('popup'),
-        page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
-        page.locator(util.format(actionConfirmationButton, 'Create')).click()
-      ])
-      await drawioTab.waitForLoadState()
-      await drawioTab.frameLocator(drawioIframe).locator(drawioSaveButton).click()
-      await drawioTab.waitForURL('**/draw-io/personal/**')
-      await drawioTab.close()
+      await page.locator(util.format(actionConfirmationButton, 'Create')).click()
+      await page.waitForResponse(
+        (resp) => resp.status() === 201 && resp.request().method() === 'PUT'
+      )
+      await page.waitForLoadState()
+      await page.frameLocator(drawioIframe).locator(drawioSaveButton).click()
+      await page.waitForURL('**/draw-io/personal/**')
+
+      // TODO: Update to use appTopBar once #8447 is merged
+      await page.goto(page.url())
       break
     }
   }

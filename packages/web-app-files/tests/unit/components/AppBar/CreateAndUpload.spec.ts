@@ -32,7 +32,6 @@ const fileHandlerMocks = [
     ext: 'txt',
     action: {
       app: 'text-editor',
-      newTab: false,
       extension: 'txt'
     },
     menuTitle: () => 'Plain text file'
@@ -41,7 +40,6 @@ const fileHandlerMocks = [
     ext: 'md',
     action: {
       app: 'text-editor',
-      newTab: false,
       extension: 'md'
     },
     menuTitle: () => 'Mark-down file'
@@ -50,7 +48,6 @@ const fileHandlerMocks = [
     ext: 'drawio',
     action: {
       app: 'draw-io',
-      newTab: true,
       routeName: 'draw-io-edit',
       extension: 'drawio'
     },

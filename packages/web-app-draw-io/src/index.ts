@@ -20,7 +20,6 @@ const appInfo = {
   extensions: [
     {
       extension: 'drawio',
-      newTab: true,
       routeName: 'draw-io',
       newFileMenu: {
         menuTitle($gettext) {
@@ -30,7 +29,6 @@ const appInfo = {
     },
     {
       extension: 'vsdx',
-      newTab: true,
       routeName: 'draw-io'
     }
   ]
