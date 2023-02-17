@@ -229,7 +229,7 @@ export default defineComponent({
           if (isDirty.value) {
             save().then((r) => autosavePopup())
           }
-        }, editorOptions.autosaveInterval * 1000)
+        }, (editorOptions.autosaveInterval || 120) * 1000)
       }
     })
 
