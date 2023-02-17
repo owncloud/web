@@ -15,7 +15,7 @@ export class AuthService {
   private router: Router
   private userManager: UserManager
   private publicLinkManager: PublicLinkManager
-  private $ability: Ability
+  private ability: Ability
 
   public hasAuthErrorOccured: boolean
 
@@ -24,14 +24,14 @@ export class AuthService {
     clientService: ClientService,
     store: Store<any>,
     router: Router,
-    $ability: Ability
+    ability: Ability
   ): void {
     this.configurationManager = configurationManager
     this.clientService = clientService
     this.store = store
     this.router = router
     this.hasAuthErrorOccured = false
-    this.$ability = $ability
+    this.ability = ability
   }
 
   /**
@@ -66,7 +66,7 @@ export class AuthService {
         clientService: this.clientService,
         configurationManager: this.configurationManager,
         store: this.store,
-        ability: this.$ability
+        ability: this.ability
       })
 
       this.userManager.events.addAccessTokenExpired((...args): void => {
