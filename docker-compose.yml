@@ -56,7 +56,7 @@ services:
       - ./dev/docker/ocis.entrypoint.sh:/usr/bin/entrypoint
       - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
       - ./dev/docker/ocis-ca:/var/lib/ocis/proxy
-      - ./dist:/web/dist:ro
+      - ./dist:/web/dist
       - ${OCIS_WEB_CONFIG:-./dev/docker/ocis.web.config.json}:/web/config.json:ro
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}

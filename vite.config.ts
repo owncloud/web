@@ -71,13 +71,15 @@ export default defineConfig(({ mode, command }) => {
           },
           // workaround: https://github.com/owncloud/ocis/issues/5108
           proxy: Object.fromEntries(
-            ['api', 'ocs', 'graph', 'remote.php', 'app', 'archiver', 'settings.js'].map((p) => [
-              `/${p}`,
-              {
-                target: 'https://host.docker.internal:9200',
-                secure: false
-              }
-            ])
+            ['api', 'ocs', 'graph', 'remote.php', 'app', 'archiver', 'settings.js', 'branding'].map(
+              (p) => [
+                `/${p}`,
+                {
+                  target: 'https://host.docker.internal:9200',
+                  secure: false
+                }
+              ]
+            )
           )
         }
       })
