@@ -12,9 +12,10 @@
       fill-type="line"
     />
     <span
+      v-if="notificationCount"
       :key="notificationCount"
       :class="{ shake: animate, badge: true }"
-      v-text="notificationCount"
+      v-text="notificationCountLabel"
     />
   </oc-button>
 </template>
@@ -34,11 +35,22 @@ export default {
   setup(props) {
     const { $gettext } = useGettext()
     const notificationsLabel = computed(() => $gettext('Notifications'))
+    const notificationCountLabel = ref(`${props.notificationCount}`)
     const animate = ref(false)
 
+    const updateNotificationLabel = () => {
+      if (props.notificationCount > 99) {
+        notificationCountLabel.value = '99+'
+      } else {
+        notificationCountLabel.value = `${props.notificationCount}`
+      }
+    }
+    
+    updateNotificationLabel()
     watch(
       () => props.notificationCount,
       () => {
+        updateNotificationLabel()
         animate.value = true
         setTimeout(() => {
           animate.value = false
@@ -48,7 +60,9 @@ export default {
 
     return {
       animate,
-      notificationsLabel
+      notificationsLabel,
+      notificationCountLabel,
+      updateNotificationLabel
     }
   }
 }
