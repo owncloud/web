@@ -45,12 +45,9 @@ Depending on the backend you are using, there are sample config files provided i
 menu item. The user will not be jailed in that directory. It simply serves as a default location. You can either provide a static location, or you can use
 variables of the user object to come up with a user specific home path. This uses twig template variable style and allows you to pick a value or a
 substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}}` and `/{{substr 0 3 .Id}}/{{.Id}`.
-- `options.openAppsInTab` Configures whether apps and extensions generally should open in a new tab. Defaults to false.
 - `options.disablePreviews` Set this option to `true` to disable previews in all the different file listing views. The only list view that is not affected
   by this is the trash bin, as that doesn't allow showing previews at all.
 - `options.previewFileMimeTypes` Specifies which mimeTypes will be previewed in the ui. For example to only preview jpg and text files set this option to `["image/jpeg", "text/plain"]`.
-- `options.accountEditLink` This accepts an object with the following optional fields to have a link on the account page:
-  - `options.accountEditLink.href` Set a different target URL for the edit link. Make sure to prepend it with `http(s)://`.
 - `options.disableFeedbackLink` Set this option to `true` to disable the feedback link in the topbar. Keeping it enabled (value `false` or absence of the option)
   allows ownCloud to get feedback from your user base through a dedicated survey website.
 - `options.feedbackLink` This accepts an object with the following optional fields to customize the feedback link in the topbar:
@@ -66,8 +63,6 @@ hovers the row with his mouse. Defaults to `false`.
 - `option.routing` This accepts an object with the following fields to customize the routing behaviour:
   - `options.routing.idBased` Enable or disable fileIds being added to the URL. Defaults to `true` because otherwise e.g. spaces with name clashes can't be resolved correctly. Only disable this if you can guarantee server side that spaces of the same namespace can't have name clashes.   
 - `options.upload.xhr.timeout` Specifies the timeout for XHR uploads in milliseconds.
-- `options.editor.autosaveEnabled` Specifies if the autosave for the editor apps is enabled.
-- `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
 
 ### Sentry
 
