@@ -39,8 +39,27 @@ describe('NotificationBell', () => {
     await wrapper.setProps({ notificationCount: input })
     expect(wrapper.find('.badge').text()).toBe(expected)
   })
+  it('displays a tooltip with the notifications label', () => {
+    const { wrapper } = getWrapper({
+      mountType: mount,
+      props: {
+        notificationCount: 0
+      }
+    })
+    expect(wrapper.find('#oc-notification-bell').attributes('aria-label')).toEqual('Notifications')
+  })
+  it('animates when notification count changes', async () => {
+    const { wrapper } = getWrapper({
+      props: {
+        notificationCount: 5
+      }
+    })
+    wrapper.setProps({ notificationCount: 10 })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('.shake').exists()).toBe(true)
+  })
 })
-function getWrapper({ mountType = mount, capabilities = {}, mocks = {} } = {}) {
+function getWrapper({ mountType = mount, capabilities = {}, mocks = {}, props = {} } = {}) {
   const localMocks = { ...defaultComponentMocks(), ...mocks }
   const storeOptions = {
     ...defaultStoreMockOptions,
