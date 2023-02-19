@@ -13,13 +13,7 @@ describe('NotificationBell', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('should not render badge if 0 notifications', async () => {
-    const { wrapper } = getWrapper({
-      capabilities: {
-        notifications: {
-          'ocs-endpoints': ['list', 'get', 'delete']
-        }
-      }
-    })
+    const { wrapper } = getWrapper({})
     await wrapper.setProps({ notificationCount: 0 })
     expect(wrapper.find('.badge').exists()).toBeFalsy()
   })
@@ -29,13 +23,7 @@ describe('NotificationBell', () => {
     [99, '99'],
     [110, '99+']
   ])("should render badge count '%s'", async (input, expected) => {
-    const { wrapper } = getWrapper({
-      capabilities: {
-        notifications: {
-          'ocs-endpoints': ['list', 'get', 'delete']
-        }
-      }
-    })
+    const { wrapper } = getWrapper({})
     await wrapper.setProps({ notificationCount: input })
     expect(wrapper.find('.badge').text()).toBe(expected)
   })
@@ -59,11 +47,10 @@ describe('NotificationBell', () => {
     expect(wrapper.find('.shake').exists()).toBe(true)
   })
 })
-function getWrapper({ mountType = mount, capabilities = {}, mocks = {}, props = {} } = {}) {
+function getWrapper({ mountType = mount, mocks = {}, props = {} } = {}) {
   const localMocks = { ...defaultComponentMocks(), ...mocks }
   const storeOptions = {
-    ...defaultStoreMockOptions,
-    capabilities: () => capabilities
+    ...defaultStoreMockOptions
   }
   const store = createStore(storeOptions)
   return {

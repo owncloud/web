@@ -1,6 +1,6 @@
 <template>
   <div id="oc-notification" class="oc-flex oc-flex-middle">
-    <notification-bell />
+    <notification-bell :notification-count="activeNotifications" />
     <oc-drop
       id="oc-notification-drop"
       drop-id="notifications-dropdown"
@@ -66,10 +66,6 @@ export default {
   },
   computed: {
     ...mapGetters(['activeNotifications', 'configuration']),
-
-    notificationsLabel() {
-      return this.$gettext('Notifications')
-    }
   },
   methods: {
     ...mapActions(['deleteNotification', 'showMessage']),
