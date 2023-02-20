@@ -106,9 +106,15 @@ export default defineComponent({
       store.dispatch('Files/pasteSelectedFiles', {
         targetSpace: props.space,
         clientService: clientService,
-        createModal: instance.createModal, // FIXME
-        hideModal: instance.hideModal, // FIXME
-        showMessage: instance.showMessage, // FIXME
+        createModal: (modal) => {
+          store.dispatch('createModal', modal)
+        },
+        hideModal: (modal) => {
+          store.dispatch('hideModal', modal)
+        },
+        showMessage: (msg) => {
+          store.dispatch('showMessage', msg)
+        },
         $gettext: language.$gettext,
         $gettextInterpolate: language.interpolate,
         $ngettext: language.$ngettext

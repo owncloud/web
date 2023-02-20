@@ -1,0 +1,6 @@
+Bugfix: Paste action conflict dialog broken
+
+We've fixed a bug that resulted in the paste action not doing anything in cases of a conflict
+
+https://github.com/owncloud/web/pull/8480
+https://github.com/owncloud/web/issues/8462
