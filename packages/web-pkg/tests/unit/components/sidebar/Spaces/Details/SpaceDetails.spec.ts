@@ -13,7 +13,7 @@ const spaceMock = {
   id: '1',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   spaceRoles: {
-    manager: [],
+    manager: [{ id: '1', displayName: 'alice' }],
     editor: [],
     viewer: []
   },
@@ -60,7 +60,7 @@ describe('Details SideBar Panel', () => {
 
 function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.user.mockImplementation(() => ({ id: 'marie' }))
+  storeOptions.getters.user.mockImplementation(() => ({ id: 'marie', uuid: '1' }))
   storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(() => [
     spaceShare
   ])
