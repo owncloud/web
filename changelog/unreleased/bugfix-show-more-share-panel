@@ -1,0 +1,6 @@
+Bugfix: "Show more"-action in shares panel
+
+We've fixed a bug where the "Show more"-action would show in the shares panel of the sidebar without having any effect.
+
+https://github.com/owncloud/web/issues/8479
+https://github.com/owncloud/web/pull/8482
