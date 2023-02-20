@@ -594,6 +594,7 @@ importers:
 
   packages/web-pkg:
     specifiers:
+      '@vueuse/core': ^9.8.2
       axios: ^0.27.2
       filesize: ^9.0.11
       fuse.js: ^6.5.3
@@ -625,6 +626,8 @@ importers:
       web-app-files: link:../web-app-files
       web-client: link:../web-client
       web-pkg: 'link:'
+    devDependencies:
+      '@vueuse/core': 9.8.2_vue@3.2.45
 
   packages/web-pocs:
     specifiers: {}

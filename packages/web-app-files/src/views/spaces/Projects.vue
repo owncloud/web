@@ -267,7 +267,7 @@ export default defineComponent({
         projects.push({
           name: project.name,
           id: project.name,
-          driveType: 'project',
+          //driveType: 'project',
           driveAlias: project.path,
           quota: { remaining: 1, state: 'normal', total: 2, used: 1 }
         })
