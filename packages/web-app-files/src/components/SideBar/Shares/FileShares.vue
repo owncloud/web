@@ -38,7 +38,7 @@
         <oc-button
           appearance="raw"
           class="toggle-shares-list-btn"
-          @click="toggleShareesListCollapsed"
+          @click="toggleShareListCollapsed"
           v-text="collapseButtonTitle"
         />
       </div>
@@ -54,10 +54,10 @@
           <collaborator-list-item :share="collaborator" :modifiable="false" />
         </li>
       </ul>
-      <div v-if="showShareToggle" class="oc-flex oc-flex-center">
+      <div v-if="showMemberToggle" class="oc-flex oc-flex-center">
         <oc-button
           appearance="raw"
-          @click="toggleShareesListCollapsed"
+          @click="toggleMemberListCollapsed"
           v-text="collapseButtonTitle"
         />
       </div>
@@ -83,7 +83,7 @@ import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
-import { computed, defineComponent, inject } from 'vue'
+import { computed, defineComponent, inject, ref, unref } from 'vue'
 import { isProjectSpaceResource, Resource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
@@ -95,7 +95,18 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    const sharesListCollapsed = ref(
+      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    )
+    const toggleShareListCollapsed = () => {
+      sharesListCollapsed.value = !unref(sharesListCollapsed)
+    }
+    const memberListCollapsed = ref(
+      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    )
+    const toggleMemberListCollapsed = () => {
+      memberListCollapsed.value = !unref(memberListCollapsed)
+    }
     const currentUserIsMemberOfSpace = computed(() => {
       const userId = store.getters.user?.id
       if (!userId) {
@@ -110,6 +121,9 @@ export default defineComponent({
       resource: inject<Resource>('resource'),
       space: inject<Resource>('space'),
       sharesListCollapsed,
+      toggleShareListCollapsed,
+      memberListCollapsed,
+      toggleMemberListCollapsed,
       currentUserIsMemberOfSpace,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
@@ -178,14 +192,18 @@ export default defineComponent({
     },
 
     displaySpaceMembers() {
-      if (this.spaceMembers.length > 3 && this.sharesListCollapsed) {
+      if (this.spaceMembers.length > 3 && this.memberListCollapsed) {
         return this.spaceMembers.slice(0, 3)
       }
       return this.spaceMembers
     },
 
     showShareToggle() {
-      return this.spaceMembers.length > 3 || this.collaborators.length > 3
+      return this.collaborators.length > 3
+    },
+
+    showMemberToggle() {
+      return this.spaceMembers.length > 3
     },
 
     indirectOutgoingShares() {
@@ -238,9 +256,6 @@ export default defineComponent({
     ...mapActions(['createModal', 'hideModal', 'showMessage']),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
-    toggleShareesListCollapsed() {
-      this.sharesListCollapsed = !this.sharesListCollapsed
-    },
     $_isCollaboratorShare(collaborator) {
       return ShareTypes.containsAnyValue(ShareTypes.authenticated, [collaborator.shareType])
     },
