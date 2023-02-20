@@ -65,7 +65,7 @@ export default {
     NotificationBell
   },
   computed: {
-    ...mapGetters(['activeNotifications', 'configuration']),
+    ...mapGetters(['activeNotifications', 'configuration'])
   },
   methods: {
     ...mapActions(['deleteNotification', 'showMessage']),
