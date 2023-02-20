@@ -1,18 +1,6 @@
 <template>
   <div id="oc-notification" class="oc-flex oc-flex-middle">
-    <oc-button
-      id="oc-notification-bell"
-      v-oc-tooltip="notificationsLabel"
-      appearance="raw"
-      variation="inverse"
-      :aria-label="notificationsLabel"
-    >
-      <oc-icon
-        class="oc-cursor-pointer oc-flex oc-flex-middle"
-        name="notification-3"
-        fill-type="line"
-      />
-    </oc-button>
+    <notification-bell :notification-count="activeNotifications" />
     <oc-drop
       id="oc-notification-drop"
       drop-id="notifications-dropdown"
@@ -70,14 +58,14 @@
 import { mapGetters, mapActions } from 'vuex'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { ShareStatus } from 'web-client/src/helpers/share'
+import NotificationBell from './NotificationBell.vue'
 
 export default {
+  components: {
+    NotificationBell
+  },
   computed: {
-    ...mapGetters(['activeNotifications', 'configuration']),
-
-    notificationsLabel() {
-      return this.$gettext('Notifications')
-    }
+    ...mapGetters(['activeNotifications', 'configuration'])
   },
   methods: {
     ...mapActions(['deleteNotification', 'showMessage']),
