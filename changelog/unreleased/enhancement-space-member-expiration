@@ -3,4 +3,5 @@ Enhancement: Space member expiration
 Space member shares now support expiration.
 
 https://github.com/owncloud/web/pull/8320
+https://github.com/owncloud/web/pull/8482
 https://github.com/owncloud/web/issues/8328
