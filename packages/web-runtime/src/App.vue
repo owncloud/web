@@ -1,5 +1,11 @@
 <template>
   <div id="web">
+    <tos-dialog
+      v-if="showTosDialog"
+      src="https://bycs.de/nutzungsbedingungen/index.html"
+      @accept="tosDialogAccept"
+      @decline="tosDialogDecline"
+    />
     <oc-hidden-announcer :announcement="announcement" level="polite" />
     <skip-to target="web-content-main">
       <span v-text="$gettext('Skip to main')" />
@@ -53,14 +59,27 @@ import { additionalTranslations } from './helpers/additionalTranslations' // esl
 import { eventBus } from 'web-pkg/src/services'
 import { useHead } from './composables/head'
 import { useStore } from 'web-pkg/src/composables'
+import TosDialog from 'web-pkg/src/components/Tos/TosDialog.vue'
+import { ref } from 'vue'
 
 export default defineComponent({
   components: {
-    SkipTo
+    SkipTo,
+    TosDialog
   },
   setup() {
     const store = useStore()
+    const showTosDialog = ref(true)
+
+    const tosDialogAccept = () => {
+      showTosDialog.value = false
+    }
+    const tosDialogDecline = () => {
+      location.href = 'https://owncloud.com'
+    }
     useHead({ store })
+
+    return { showTosDialog, tosDialogAccept, tosDialogDecline }
   },
   data() {
     return {
