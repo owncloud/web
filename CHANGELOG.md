@@ -745,10 +745,12 @@ Details
 * Enhancement - Rework notifications: [#8450](https://github.com/owncloud/web/pull/8450)
 
    We're now showing the notification bell based on whether the server supports notifications.
-   Previously it was hidden when there were no notifications.
+   Previously it was hidden when there were no notifications. We've added a badge that displays
+   the amount of new notifications.
 
    https://github.com/owncloud/web/issues/8452
    https://github.com/owncloud/web/pull/8450
+   https://github.com/owncloud/web/pull/8454
 
 * Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
 
