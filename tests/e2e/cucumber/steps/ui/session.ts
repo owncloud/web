@@ -21,6 +21,7 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
   const user = this.usersEnvironment.getUser({ key: stepUser })
   await page.goto(config.frontendUrl)
   await sessionObject.login({ user })
+  await page.waitForSelector('#web')
 }
 
 Given('{string} has logged in', LogInUser)
@@ -40,11 +41,23 @@ Given('{string} has logged out', LogOutUser)
 
 When('{string} logs out', LogOutUser)
 
+When('{string} fails to log in', async function (this: World, stepUser: string): Promise<void> {
+  const sessionObject = await createNewSession(this, stepUser)
+  const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+  const user = this.usersEnvironment.getUser({ key: stepUser })
+  await page.goto(config.frontendUrl)
+  user.password = 'fail'
+  await sessionObject.login({ user })
+  await page.waitForSelector('#oc-login-error-message')
+})
+
 When(
   '{string} logs in from the internal link',
   async function (this: World, stepUser: string): Promise<void> {
     const sessionObject = await createNewSession(this, stepUser)
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const user = this.usersEnvironment.getUser({ key: stepUser })
     await sessionObject.login({ user })
+    await page.waitForSelector('#web')
   }
 )
