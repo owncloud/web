@@ -3,8 +3,8 @@ import util from 'util'
 
 const userIdSelector = `[data-item-id="%s"] .users-table-btn-action-dropdown`
 const editActionBtn = `.oc-users-actions-edit-trigger`
-const loginDropDown = '.vs__dropdown-toggle'
-const loginValueDropDownOption = `.vs__dropdown-option :text-is("%s")`
+const loginDropDown = '.vs__dropdown-menu'
+const loginValueDropDownOption = '.vs__dropdown-option'
 const loginInput = '#login-input'
 const actionConfirmButton = '.compare-save-dialog-confirm-btn'
 
@@ -24,7 +24,8 @@ export const changeAccountEnabled = async (args: {
   await page.waitForSelector(loginDropDown)
 
   await page
-    .locator(util.format(loginValueDropDownOption, value === true ? 'Allowed' : 'Forbidden'))
+    .locator(loginValueDropDownOption)
+    .getByText(value === false ? 'Forbidden' : 'Allowed')
     .click()
 
   await Promise.all([

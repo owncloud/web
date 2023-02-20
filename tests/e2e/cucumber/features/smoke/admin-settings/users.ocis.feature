@@ -1,6 +1,6 @@
 Feature: spaces management
 
-  Scenario: spaces can be managed in the admin settings
+  Scenario: user login can be managed in the admin settings
     Given "Admin" creates following users
       | id    |
       | Alice |
