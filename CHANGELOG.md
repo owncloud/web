@@ -32,6 +32,7 @@ Summary
 * Bugfix - Editing users who never logged in: [#8326](https://github.com/owncloud/web/pull/8326)
 * Bugfix - Cancel custom permissions: [#8340](https://github.com/owncloud/web/pull/8340)
 * Bugfix - Drop menus with limited vertical screen space: [#8411](https://github.com/owncloud/web/issues/8411)
+* Bugfix - Paste action conflict dialog broken: [#8480](https://github.com/owncloud/web/pull/8480)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -262,6 +263,13 @@ Details
    https://github.com/owncloud/web/issues/8411
    https://github.com/owncloud/web/issues/8412
    https://github.com/owncloud/web/pull/8453
+
+* Bugfix - Paste action conflict dialog broken: [#8480](https://github.com/owncloud/web/pull/8480)
+
+   We've fixed a bug that resulted in the paste action not doing anything in cases of a conflict
+
+   https://github.com/owncloud/web/issues/8462
+   https://github.com/owncloud/web/pull/8480
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
