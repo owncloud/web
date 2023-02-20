@@ -314,8 +314,8 @@ export default defineComponent({
             b = this.getRoleDisplayNameByUser(user2)
             break
           case 'accountEnabled':
-            a = user1.accountEnabled.toString()
-            b = user2.accountEnabled.toString()
+            a = (user1.accountEnabled || false).toString()
+            b = (user2.accountEnabled || false).toString()
             break
           default:
             a = user1[prop] || ''

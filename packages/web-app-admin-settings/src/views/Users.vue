@@ -185,12 +185,6 @@ export default defineComponent({
       const groupFilter = groupIds?.map((id) => `memberOf/any(m:m/id eq '${id}')`).join(' and ')
       const usersResponse = yield unref(graphClient).users.listUsers('displayName', groupFilter)
       users.value = usersResponse.data.value || []
-
-      /**
-       * MOCK DATA REMOVE LATER
-       */
-
-      users.value.map((u) => (u.accountEnabled = false))
     })
 
     const loadResourcesTask = useTask(function* (signal, groupIds = null) {
@@ -214,11 +208,6 @@ export default defineComponent({
 
       const { data } = yield unref(graphClient).users.getUser(user.id)
       unref(additionalUserDataLoadedForUserIds).push(user.id)
-
-      /**
-       * MOCK DATA REMOVE LATER
-       */
-      data.accountEnabled = false
 
       Object.assign(user, data)
     })
@@ -447,13 +436,8 @@ export default defineComponent({
         }
 
         const { data: updatedUser } = await this.graphClient.users.getUser(user.id)
-
-        /**
-         * MOCK DATA REMOVE LATER
-         */
-        updatedUser.accountEnabled = editUser.accountEnabled
-
         const userIndex = this.users.findIndex((user) => user.id === updatedUser.id)
+
         this.users[userIndex] = updatedUser
 
         eventBus.publish('sidebar.entity.saved')

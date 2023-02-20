@@ -204,6 +204,19 @@ export default defineComponent({
       },
       deep: true,
       immediate: true
+    },
+    editUser: {
+      handler: function () {
+        /**
+         * Property accountEnabled won't be always set, but this still means, that login is allowed.
+         * So we actually don't need to change the property if missing and not set to forbidden in the UI.
+         * This also avoids the compare save dialog from displaying that there are unsaved changes.
+         */
+        if (this.editUser.accountEnabled === true && this.user.accountEnabled !== false) {
+          delete this.editUser.accountEnabled
+        }
+      },
+      deep: true
     }
   },
   methods: {
