@@ -14,7 +14,6 @@ export const changeAccountEnabled = async (args: {
   value: boolean
 }): Promise<void> => {
   const { page, value, uuid } = args
-  console.log(uuid)
   await page.locator(util.format(userIdSelector, uuid)).click()
   await page.waitForSelector(editActionBtn)
   await page.locator(`.context-menu`).locator(editActionBtn).click()
