@@ -91,3 +91,31 @@ When(
     }
   }
 )
+
+When(
+  '{string} navigates to the users management page',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationAdminSettings.page.Users({ page })
+    await pageObject.navigate()
+  }
+)
+
+When(
+  /^"([^"]*)" (allows|forbids) the login for the following user "([^"]*)" using the sidebar panel$/,
+  async function (this: World, stepUser: string, action: string, key: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+    switch (action) {
+      case 'allows':
+        await usersObject.allowLogin({ key })
+        break
+      case 'forbids':
+        await usersObject.forbidLogin({ key })
+        break
+      default:
+        throw new Error(`${action} not implemented`)
+    }
+  }
+)

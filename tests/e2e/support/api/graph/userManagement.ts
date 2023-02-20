@@ -29,8 +29,11 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
     body,
     user: admin
   })
-
   checkResponseStatus(response, 'Failed while creating user')
+
+  const responseData = await response.json()
+  user.uuid = responseData.id
+
   return user
 }
 
