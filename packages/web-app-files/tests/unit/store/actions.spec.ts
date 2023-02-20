@@ -31,7 +31,7 @@ describe('vuex store actions', () => {
         expirationDate: null
       })
 
-      expect(stateMock.commit).toHaveBeenCalledTimes(1)
+      expect(stateMock.commit).toHaveBeenCalledTimes(2)
     })
     it('fails on error', async () => {
       const clientMock = mockDeep<OwnCloudSdk>()
