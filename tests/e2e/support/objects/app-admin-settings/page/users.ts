@@ -1,5 +1,7 @@
 import { Page } from 'playwright'
 
+const usersNavSelector = '//a[@data-nav-name="admin-settings-users"]'
+const appLoadingSpinnerSelector = '#app-loading-spinner'
 export class Users {
   #page: Page
 
@@ -8,7 +10,7 @@ export class Users {
   }
 
   async navigate(): Promise<void> {
-    await this.#page.locator('//a[@data-nav-name="admin-settings-users"]').click()
-    await this.#page.waitForSelector('#app-loading-spinner', { state: 'detached' })
+    await this.#page.locator(usersNavSelector).click()
+    await this.#page.waitForSelector(appLoadingSpinnerSelector, { state: 'detached' })
   }
 }
