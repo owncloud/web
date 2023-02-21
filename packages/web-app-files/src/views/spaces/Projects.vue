@@ -43,14 +43,14 @@
               />
             </template>
             <template #actions="{ resource }">
-              <oc-button
+              <!-- <oc-button
                 v-oc-tooltip="showSpaceMemberLabel"
                 :aria-label="showSpaceMemberLabel"
                 appearance="raw"
                 @click="openSidebarSharePanel(resource)"
               >
                 <oc-icon name="group" fill-type="line" />
-              </oc-button>
+              </oc-button> -->
             </template>
             <template #contextMenuActions="{ resource }">
               <space-context-actions :space="resource" :items="[resource]" />
