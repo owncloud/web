@@ -63,7 +63,7 @@
           />
         </li>
         <li
-          v-if="viewModeCurrent === ViewModeConstants.tilesView.name"
+          v-if="viewModes.length && viewModeCurrent === ViewModeConstants.tilesView.name"
           class="files-view-options-list-item oc-mt-m oc-visible@s oc-flex oc-flex-between"
         >
           <label for="tiles-size-slider" v-text="resizeTilesLabel" />
@@ -74,6 +74,7 @@
             max="6"
             name="tiles-size-slider"
             class="oc-range"
+            data-testid="files-tiles-size-slider"
             @input="setTilesViewSize"
           />
         </li>

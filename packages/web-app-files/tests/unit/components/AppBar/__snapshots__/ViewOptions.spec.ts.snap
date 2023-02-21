@@ -1,36 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ViewOptions component displays a tile-resize range slider in dropdown if currentViewMode is resource-tiles 1`] = `
-<div class="oc-drop oc-box-shadow-medium oc-rounded oc-width-auto" id="files-view-options-drop">
-  <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
-    <ul class="oc-list oc-my-rm oc-mx-rm">
-      <li class="files-view-options-list-item oc-mb-m">
-        <span class="oc-switch">
-          <span id="oc-switch-label-21">Show hidden files</span>
-          <button aria-checked="false" aria-labelledby="oc-switch-label-21" class="oc-switch-btn" role="switch"></button>
-        </span>
-      </li>
-      <li class="files-view-options-list-item oc-my-m">
-        <span class="oc-switch">
-          <span id="oc-switch-label-22">Show file extensions</span>
-          <button aria-checked="false" aria-labelledby="oc-switch-label-22" class="oc-switch-btn" role="switch"></button>
-        </span>
-      </li>
-      <li class="files-view-options-list-item oc-mt-m">
-        <div class="oc-page-size files-pagination-size">
-          <label class="oc-page-size-label" for="oc-page-size-23">Items per page</label>
-          <oc-select-stub class="oc-page-size-select" clearable="false" disabled="false" filter="[Function]" id="oc-select-24" input-id="oc-page-size-23" loading="false" model-value="100" options="100,500" searchable="false"></oc-select-stub>
-        </div>
-      </li>
-      <li class="files-view-options-list-item oc-mt-m oc-visible@s oc-flex oc-flex-between">
-        <label for="tiles-size-slider">Tile size</label>
-        <input class="oc-range" max="6" min="1" name="tiles-size-slider" type="range">
-      </li>
-    </ul>
-  </div>
-</div>
-`;
-
 exports[`ViewOptions component sets the correct initial files page limit 1`] = `
 <div class="oc-flex oc-flex-middle">
   <!--v-if-->
@@ -60,12 +29,5 @@ exports[`ViewOptions component sets the correct initial files page limit 1`] = `
       </ul>
     </div>
   </div>
-</div>
-`;
-
-exports[`ViewOptions component shows a viewmode switcher if more than one viewModes are passed 1`] = `
-<div class="viewmode-switch-buttons oc-button-group oc-visible@s oc-mr-s">
-  <oc-button-stub appearance="outline" arialabel="Switch to condensed table view" class="resource-table-condensed" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
-  <oc-button-stub appearance="outline" arialabel="Switch to default table view" class="resource-table" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
 </div>
 `;

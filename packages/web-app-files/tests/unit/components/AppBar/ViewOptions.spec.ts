@@ -9,13 +9,14 @@ import {
   mount
 } from 'web-test-helpers'
 import { ViewModeConstants } from 'web-app-files/src/composables'
-import { ViewMode } from 'web-pkg/src/ui/types'
 
 jest.mock('web-pkg/src/composables/router')
 const selectors = {
   pageSizeSelect: '.oc-page-size',
   hiddenFilesSwitch: '[data-testid="files-switch-hidden-files"]',
-  fileExtensionsSwitch: '[data-testid="files-switch-files-extensions-files"]'
+  fileExtensionsSwitch: '[data-testid="files-switch-files-extensions-files"]',
+  viewModeSwitchBtns: '.viewmode-switch-buttons',
+  tileSizeSlider: '[data-testid="files-tiles-size-slider"]'
 }
 
 describe('ViewOptions component', () => {
@@ -41,41 +42,35 @@ describe('ViewOptions component', () => {
     )
     expect(storeOptions.modules.Files.mutations.SET_FILE_EXTENSIONS_VISIBILITY).toHaveBeenCalled()
   })
-  it('initially does not show a viewmode switcher', () => {
-    const { wrapper } = getWrapper()
-    expect(wrapper.find('.viewmode-switch-buttons').exists()).toBeFalsy()
+  describe('view mode switcher', () => {
+    it('does not show initially', () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.find(selectors.viewModeSwitchBtns).exists()).toBeFalsy()
+    })
+    it('shows if more than one viewModes are passed', () => {
+      const { wrapper } = getWrapper({
+        props: { viewModes: [ViewModeConstants.condensedTable, ViewModeConstants.default] }
+      })
+      expect(wrapper.find(selectors.viewModeSwitchBtns).exists()).toBeTruthy()
+    })
   })
-  it('shows a viewmode switcher if more than one viewModes are passed', () => {
-    const { wrapper } = getWrapper(
-      {},
-      {
-        viewModes: [ViewModeConstants.condensedTable, ViewModeConstants.default]
-      }
-    )
-    const viewModeSwitchButtons = wrapper.find('.viewmode-switch-buttons')
-    expect(viewModeSwitchButtons.html()).toMatchSnapshot()
-  })
-  it('displays a tile-resize range slider in dropdown if currentViewMode is resource-tiles', async () => {
-    const { wrapper } = getWrapper(
-      {},
-      {
-        viewModes: [ViewModeConstants.condensedTable, ViewModeConstants.default]
-      },
-      'resource-tiles'
-    )
+  describe('tile resize slider', () => {
+    it('does not show initially', () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.find(selectors.tileSizeSlider).exists()).toBeFalsy()
+    })
+    it('shows if viewModes are given and currentViewMode is "resource-tiles"', async () => {
+      const { wrapper } = getWrapper({
+        props: { viewModes: [ViewModeConstants.tilesView] },
+        currentViewMode: 'resource-tiles'
+      })
 
-    const filesViewOptions = wrapper.find('#files-view-options-drop')
-    expect(filesViewOptions.html()).toMatchSnapshot()
+      expect(wrapper.find(selectors.tileSizeSlider).exists()).toBeTruthy()
+    })
   })
 })
 
-function getWrapper(
-  { perPage = '100' } = {},
-  props?: {
-    viewModes: ViewMode[]
-  },
-  currentViewMode = ''
-) {
+function getWrapper({ perPage = '100', currentViewMode = '', props = {} } = {}) {
   jest.mocked(useRouteQueryPersisted).mockImplementation(() => ref(perPage))
 
   const storeOptions = { ...defaultStoreMockOptions }
