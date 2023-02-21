@@ -1,7 +1,7 @@
 <template>
   <main id="files" class="oc-flex oc-height-1-1">
     <div v-if="dragareaEnabled" class="dragarea" />
-    <router-view tabindex="0" class="oc-width-expand" />
+    <router-view tabindex="0" class="files-wrapper oc-width-expand oc-height-1-1 oc-flex-wrap" />
   </main>
 </template>
 <script lang="ts">

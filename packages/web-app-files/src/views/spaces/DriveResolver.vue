@@ -1,13 +1,11 @@
 <template>
-  <div class="oc-flex oc-width-1-1">
-    <drive-redirect
-      v-if="!space"
-      :drive-alias-and-item="driveAliasAndItem"
-      :append-home-folder="isSpaceRoute"
-    />
-    <generic-trash v-else-if="isTrashRoute" :space="space" :item-id="itemId" />
-    <generic-space v-else :space="space" :item="item" :item-id="itemId" />
-  </div>
+  <drive-redirect
+    v-if="!space"
+    :drive-alias-and-item="driveAliasAndItem"
+    :append-home-folder="isSpaceRoute"
+  />
+  <generic-trash v-else-if="isTrashRoute" :space="space" :item-id="itemId" />
+  <generic-space v-else :space="space" :item="item" :item-id="itemId" />
 </template>
 
 <script lang="ts">
