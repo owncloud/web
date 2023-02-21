@@ -3,7 +3,7 @@
     <div class="oc-space-details-sidebar-image oc-text-center">
       <oc-spinner v-if="loadImageTask.isRunning" />
       <div v-else-if="spaceImage" class="oc-position-relative">
-        <img :src="spaceImage" alt="" class="oc-mb-m" />
+        <img :src="spaceImage" alt="" class="oc-mb-s" />
       </div>
       <oc-icon
         v-else
@@ -14,7 +14,7 @@
     </div>
     <div
       v-if="showShareIndicators && hasShares"
-      class="oc-flex oc-flex-middle oc-space-details-sidebar-members oc-mb-m oc-text-small"
+      class="oc-flex oc-flex-middle oc-space-details-sidebar-members oc-mb-s oc-text-small"
       style="gap: 15px"
     >
       <oc-button
@@ -153,26 +153,19 @@ export default defineComponent({
 
       switch (this.memberShareCount) {
         case 1:
-          return this.$gettextInterpolate(
-            this.$ngettext(
-              'This space has one member and %{linkShareCount} link.',
-              'This space has one member and %{linkShareCount} links.',
-              this.linkShareCount
-            ),
-            {
-              linkShareCount: this.linkShareCount
-            }
+          return this.$ngettext(
+            'This space has one member and %{linkShareCount} link.',
+            'This space has one member and %{linkShareCount} links.',
+            this.linkShareCount,
+            { linkShareCount: this.linkShareCount }
           )
         default:
           if (this.linkShareCount === 1) {
-            return this.$gettextInterpolate(
-              'This space has %{memberShareCount} members and one link.',
-              {
-                memberShareCount: this.memberShareCount
-              }
-            )
+            return this.$gettext('This space has %{memberShareCount} members and one link.', {
+              memberShareCount: this.memberShareCount
+            })
           }
-          return this.$gettextInterpolate(
+          return this.$gettext(
             'This space has %{memberShareCount} members and %{linkShareCount} links.',
             {
               memberShareCount: this.memberShareCount,
@@ -197,31 +190,12 @@ export default defineComponent({
       return formatDateFromISO(this.resource.mdate, this.$language.current)
     },
     ownerUsernames() {
-      /* TODO: Find a better solution for reactiveness
-         Why: Currently we use a different logic for the admin-panel and we need a solution that works for both
-      */
-      if (this.spaceResource) {
-        return this.resource.spaceRoles[spaceRoleManager.name]
-          .map((share) => {
-            if (share.displayName === this.user?.displayName) {
-              return this.$gettextInterpolate(this.$gettext('%{displayName} (me)'), {
-                displayName: share.displayName
-              })
-            }
-            return share.displayName
-          })
-          .join(', ')
-      }
-      const userId = this.user?.id
-      return this.spaceMembers
-        .filter((share) => share.role.name === spaceRoleManager.name)
+      return this.resource.spaceRoles[spaceRoleManager.name]
         .map((share) => {
-          if (share.collaborator.name === userId) {
-            return this.$gettextInterpolate(this.$gettext('%{displayName} (me)'), {
-              displayName: share.collaborator.displayName
-            })
+          if (share.id === this.user?.uuid) {
+            return this.$gettext('%{displayName} (me)', { displayName: share.displayName })
           }
-          return share.collaborator.displayName
+          return share.displayName
         })
         .join(', ')
     },
@@ -238,27 +212,19 @@ export default defineComponent({
       return this.currentFileOutgoingLinks.length
     },
     memberShareLabel() {
-      return this.$gettextInterpolate(
-        this.$ngettext(
-          'This space has %{memberShareCount} member.',
-          'This space has %{memberShareCount} members.',
-          this.memberShareCount
-        ),
-        {
-          memberShareCount: this.memberShareCount
-        }
+      return this.$ngettext(
+        'This space has %{memberShareCount} member.',
+        'This space has %{memberShareCount} members.',
+        this.memberShareCount,
+        { memberShareCount: this.memberShareCount }
       )
     },
     linkShareLabel() {
-      return this.$gettextInterpolate(
-        this.$ngettext(
-          '%{linkShareCount} link giving access.',
-          '%{linkShareCount} links giving access.',
-          this.linkShareCount
-        ),
-        {
-          linkShareCount: this.linkShareCount
-        }
+      return this.$ngettext(
+        '%{linkShareCount} link giving access.',
+        '%{linkShareCount} links giving access.',
+        this.linkShareCount,
+        { linkShareCount: this.linkShareCount }
       )
     }
   },
