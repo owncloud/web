@@ -82,11 +82,28 @@ describe('ViewOptions component', () => {
       })
       expect(wrapper.find(selectors.tileSizeSlider).exists()).toBeTruthy()
     })
+    it.each([1, 2, 3, 4, 5, 6])('applies the correct rem size via css', (tileSize) => {
+      getWrapper({
+        tileSize: tileSize.toString(),
+        props: { viewModes: [ViewModeConstants.tilesView] }
+      })
+      const rootStyle = (document.querySelector(':root') as HTMLElement).style
+      expect(rootStyle.getPropertyValue('--oc-size-tiles-resize-step')).toEqual(
+        `${tileSize * 12}rem`
+      )
+    })
   })
 })
 
-function getWrapper({ perPage = '100', props = {} } = {}) {
-  jest.mocked(useRouteQueryPersisted).mockImplementation(() => ref(perPage))
+function getWrapper({
+  perPage = '100',
+  viewMode = ViewModeConstants.default.name,
+  tileSize = '1',
+  props = {}
+} = {}) {
+  jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(perPage))
+  jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(viewMode))
+  jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(tileSize))
 
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)

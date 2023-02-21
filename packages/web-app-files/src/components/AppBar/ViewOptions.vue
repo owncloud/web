@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch } from 'vue'
+import { defineComponent, PropType, ref, unref, watch } from 'vue'
 import { mapMutations, mapState } from 'vuex'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { ViewMode } from 'web-pkg/src/ui/types'
@@ -110,11 +110,20 @@ export default defineComponent({
       name: ViewModeConstants.queryName,
       defaultValue: ViewModeConstants.defaultModeName
     })
-
     const viewSizeQuery = useRouteQueryPersisted({
       name: ViewModeConstants.tilesSizeQueryName,
       defaultValue: ViewModeConstants.tilesSizeDefault.toString()
     })
+
+    const setTilesViewSize = () => {
+      const rootStyle = (document.querySelector(':root') as HTMLElement).style
+      const currentSize = rootStyle.getPropertyValue('--oc-size-tiles-resize-step')
+      const newSize = `${(unref(viewSizeQuery) as any) * 12}rem`
+      if (!currentSize || currentSize !== newSize) {
+        rootStyle.setProperty(`--oc-size-tiles-resize-step`, newSize)
+      }
+    }
+
     watch(
       [perPageQuery, viewModeQuery, viewSizeQuery],
       (params) => {
@@ -123,17 +132,23 @@ export default defineComponent({
       { immediate: true, deep: true }
     )
 
+    watch(
+      viewSizeQuery,
+      (size) => {
+        if (size) {
+          setTilesViewSize()
+        }
+      },
+      { immediate: true }
+    )
+
     return {
       ViewModeConstants,
       viewModeCurrent: viewModeQuery,
       viewSizeCurrent: viewSizeQuery,
       itemsPerPage: perPageQuery,
-      queryParamsLoading
-    }
-  },
-  mounted() {
-    if (!this.queryParamsLoading) {
-      this.setTilesViewSize()
+      queryParamsLoading,
+      setTilesViewSize
     }
   },
   computed: {
@@ -169,12 +184,6 @@ export default defineComponent({
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
     setViewMode(mode) {
       this.viewModeCurrent = mode.name
-    },
-    setTilesViewSize() {
-      ;(document.querySelector(':root') as HTMLElement).style.setProperty(
-        `--oc-size-tiles-resize-step`,
-        `${this.viewSizeCurrent * 12}rem`
-      )
     },
     updateHiddenFilesShownModel(event) {
       this.hiddenFilesShownModel = event
