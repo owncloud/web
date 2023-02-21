@@ -136,7 +136,6 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const currentUser = store.getters.user
-    console.log(currentUser)
     const editUser: MaybeRef<User> = ref({})
     const formData = ref({
       displayName: {
