@@ -214,8 +214,11 @@ export default defineComponent({
       return this.$gettext('%{groupCount} matching groups', { groupCount: this.data.length })
     },
     data() {
-      const orderedGroups = this.orderBy(this.groups, this.sortBy, this.sortDir === 'desc')
-      return this.filter(orderedGroups, this.filterTerm)
+      return this.orderBy(
+        this.filter(this.groups, this.filterTerm),
+        this.sortBy,
+        this.sortDir === 'desc'
+      )
     },
     highlighted() {
       return this.selectedGroups.map((group) => group.id)

@@ -270,8 +270,11 @@ export default defineComponent({
       ]
     },
     data() {
-      const orderedUsers = this.orderBy(this.users, this.sortBy, this.sortDir === 'desc')
-      return this.filter(orderedUsers, this.filterTerm)
+      return this.orderBy(
+        this.filter(this.users, this.filterTerm),
+        this.sortBy,
+        this.sortDir === 'desc'
+      )
     },
     highlighted() {
       return this.selectedUsers.map((user) => user.id)

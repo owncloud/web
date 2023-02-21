@@ -205,7 +205,7 @@ export default defineComponent({
       })
     }
     const orderedSpaces = computed(() =>
-      filter(orderBy(props.spaces, unref(sortBy), unref(sortDir) === 'desc'), unref(filterTerm))
+      orderBy(filter(props.spaces, unref(filterTerm)), unref(sortBy), unref(sortDir) === 'desc')
     )
     const handleSort = (event) => {
       sortBy.value = event.sortBy
