@@ -13,10 +13,10 @@ exports[`ResourceTiles component renders an array of spaces correctly 1`] = `
   <!--v-if-->
   <oc-list class="oc-tiles oc-flex">
     <li class="oc-tiles-item">
-      <oc-tile is-resource-selected="false" resource="[object Object]" resource-route="[object Object]"></oc-tile>
+      <oc-tile is-resource-selected="false" resource="[object Object]" resource-icon-size="xlarge" resource-route="[object Object]"></oc-tile>
     </li>
     <li class="oc-tiles-item">
-      <oc-tile is-resource-selected="false" resource="[object Object]" resource-route="[object Object]"></oc-tile>
+      <oc-tile is-resource-selected="false" resource="[object Object]" resource-icon-size="xlarge" resource-route="[object Object]"></oc-tile>
     </li>
   </oc-list>
   <div class="oc-tiles-footer"></div>

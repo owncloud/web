@@ -31,7 +31,7 @@
           <oc-resource-icon
             v-else
             :resource="resource"
-            size="xlarge"
+            :size="resourceIconSize"
             class="tile-default-image oc-pt-xs"
           />
         </slot>
@@ -103,6 +103,13 @@ export default defineComponent({
     isExtensionDisplayed: {
       type: Boolean,
       default: true
+    },
+    resourceIconSize: {
+      type: String,
+      default: 'xlarge',
+      validator: (value: string) => {
+        return ['large', 'xlarge', 'xxlarge', 'xxxlarge'].includes(value)
+      }
     }
   },
   emits: ['click', 'contextmenu']

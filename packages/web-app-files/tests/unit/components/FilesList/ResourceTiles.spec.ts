@@ -71,6 +71,18 @@ describe('ResourceTiles component', () => {
     })
   })
 
+  it.each([
+    { viewSize: 1, expected: 'xlarge' },
+    { viewSize: 2, expected: 'xlarge' },
+    { viewSize: 3, expected: 'xxlarge' },
+    { viewSize: 4, expected: 'xxlarge' },
+    { viewSize: 5, expected: 'xxxlarge' },
+    { viewSize: 6, expected: 'xxxlarge' }
+  ])('passes the "viewSize" to the OcTile component', (data) => {
+    const { wrapper } = getWrapper({ data: spacesResources, viewSize: data.viewSize })
+    expect(wrapper.find('oc-tile').attributes()['resource-icon-size']).toEqual(data.expected)
+  })
+
   function getWrapper(props = {}, slots = {}) {
     const storeOptions = defaultStoreMockOptions
     const store = createStore(storeOptions)

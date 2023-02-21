@@ -55,6 +55,7 @@
           :sort-fields="sortFields"
           :sort-by="sortBy"
           :sort-dir="sortDir"
+          :view-size="viewSize"
           @row-mounted="rowMounted"
           @file-click="$_fileActions_triggerDefaultAction"
           @sort="handleSort"
