@@ -10,10 +10,18 @@ import {
   defaultStoreMockOptions,
   RouteLocation
 } from 'web-test-helpers'
+import { ViewModeConstants } from 'web-app-files/src/composables'
+
+const selectors = {
+  ocBreadcrumbStub: 'oc-breadcrumb-stub',
+  batchActionsStub: 'batch-actions-stub',
+  sharesNavigationStub: 'shares-navigation-stub',
+  viewOptionsStub: 'view-options-stub',
+  sidebarToggleStub: 'sidebar-toggle-stub'
+}
 
 const selectedFiles = [mockDeep<Resource>(), mockDeep<Resource>()]
 const actionSlot = "<button class='action-slot'>Click</button>"
-const contextMenuSlot = "<button class='context-menu-slot'>Click</button>"
 const contentSlot = "<div class='content-slot'>Foo</div>"
 
 const mixins = [
@@ -48,7 +56,10 @@ describe('AppBar component', () => {
     describe('breadcrumbs', () => {
       it('if given, by default without breadcrumbsContextActionsItems', () => {
         const { wrapper } = getShallowWrapper([], {}, { breadcrumbs: breadcrumbItems })
-        expect(wrapper.html()).toMatchSnapshot()
+        expect(wrapper.find(selectors.ocBreadcrumbStub).exists()).toBeTruthy()
+        expect(wrapper.findComponent<any>(selectors.ocBreadcrumbStub).props('items')).toEqual(
+          breadcrumbItems
+        )
       })
       it('if given, with breadcrumbsContextActionsItems if allowed on last breadcrumb item', () => {
         const { wrapper } = getShallowWrapper(
@@ -56,41 +67,48 @@ describe('AppBar component', () => {
           {},
           { breadcrumbs: [...breadcrumbItems, breadCrumbItemWithContextActionAllowed] }
         )
-        expect(wrapper.html()).toMatchSnapshot()
-      })
-      it('if given, with content in the contextMenu slot', () => {
-        const { wrapper } = getShallowWrapper(
-          [],
-          { contextMenu: contextMenuSlot },
-          { breadcrumbs: [...breadcrumbItems, breadCrumbItemWithContextActionAllowed] }
-        )
-        expect(wrapper.html()).toMatchSnapshot()
+        expect(wrapper.find(selectors.ocBreadcrumbStub).exists()).toBeTruthy()
+        expect(wrapper.findComponent<any>(selectors.ocBreadcrumbStub).props('items')).toEqual([
+          ...breadcrumbItems,
+          breadCrumbItemWithContextActionAllowed
+        ])
       })
     })
     describe('bulkActions', () => {
       it('if enabled', () => {
         const { wrapper } = getShallowWrapper(selectedFiles, {}, { hasBulkActions: true })
-        expect(wrapper.html()).toMatchSnapshot()
+        expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
+      })
+      it('if 1 file selected on trash routes', () => {
+        const { wrapper } = getShallowWrapper(
+          [selectedFiles[0]],
+          {},
+          { hasBulkActions: true },
+          'files-trash-generic'
+        )
+        expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
       })
       it('not if 1 file selected', () => {
         const { wrapper } = getShallowWrapper([selectedFiles[0]], {}, { hasBulkActions: true })
-        expect(wrapper.html()).toMatchSnapshot()
+        expect(wrapper.find(selectors.batchActionsStub).exists()).toBeFalsy()
       })
     })
     describe('sharesNavigation', () => {
       it('if enabled', () => {
         const { wrapper } = getShallowWrapper([], {}, { hasSharesNavigation: true })
-        expect(wrapper.html()).toMatchSnapshot()
+        expect(wrapper.find(selectors.sharesNavigationStub).exists()).toBeTruthy()
       })
     })
     describe('viewoptions and sidebartoggle', () => {
       it('only viewoptions if sidebartoggle is disabled', () => {
         const { wrapper } = getShallowWrapper([], {}, { hasSidebarToggle: false })
-        expect(wrapper.html()).toMatchSnapshot()
+        expect(wrapper.find(selectors.viewOptionsStub).exists()).toBeTruthy()
+        expect(wrapper.find(selectors.sidebarToggleStub).exists()).toBeFalsy()
       })
       it('only sidebartoggle if viewoptions is disabled', () => {
         const { wrapper } = getShallowWrapper([], {}, { hasViewOptions: false })
-        expect(wrapper.html()).toMatchSnapshot()
+        expect(wrapper.find(selectors.viewOptionsStub).exists()).toBeFalsy()
+        expect(wrapper.find(selectors.sidebarToggleStub).exists()).toBeTruthy()
       })
       it('neither if both are disabled', () => {
         const { wrapper } = getShallowWrapper(
@@ -98,15 +116,15 @@ describe('AppBar component', () => {
           {},
           { hasSidebarToggle: false, hasViewOptions: false }
         )
-        expect(wrapper.html()).toMatchSnapshot()
+        expect(wrapper.find(selectors.viewOptionsStub).exists()).toBeFalsy()
+        expect(wrapper.find(selectors.sidebarToggleStub).exists()).toBeFalsy()
       })
-      it('passes viewModes array to ViewOptions if displayViewModeSwitch props is enabled', () => {
-        const { wrapper } = getShallowWrapper(
-          [],
-          {},
-          { displayViewModeSwitch: true, hasViewOptions: true }
+      it('passes viewModes array to ViewOptions', () => {
+        const viewModes = [ViewModeConstants.tilesView]
+        const { wrapper } = getShallowWrapper([], {}, { hasViewOptions: true, viewModes })
+        expect(wrapper.findComponent<any>(selectors.viewOptionsStub).props('viewModes')).toEqual(
+          viewModes
         )
-        expect(wrapper.html()).toMatchSnapshot()
       })
     })
     it('if given, with content in the actions slot', () => {
@@ -130,11 +148,12 @@ function getShallowWrapper(
     hasSharesNavigation: false,
     hasSidebarToggle: true,
     hasViewOptions: true
-  }
+  },
+  currentRouteName = 'files-spaces-generic'
 ) {
   const mocks = {
     ...defaultComponentMocks({
-      currentRoute: mock<RouteLocation>({ name: 'files-trash-generic' })
+      currentRoute: mock<RouteLocation>({ name: currentRouteName })
     }),
     ...getActionMixinMocks({ actions: mixins })
   }

@@ -5,7 +5,11 @@
       <app-bar
         :breadcrumbs="breadcrumbs"
         :breadcrumbs-context-actions-items="[currentFolder]"
-        :display-view-mode-switch="true"
+        :view-modes="[
+          ViewModeConstants.default,
+          ViewModeConstants.condensedTable,
+          ViewModeConstants.tilesView
+        ]"
         :has-bulk-actions="true"
         :show-actions-on-selection="true"
         :side-bar-open="sideBarOpen"

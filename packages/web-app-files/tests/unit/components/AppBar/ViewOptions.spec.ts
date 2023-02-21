@@ -20,27 +20,44 @@ const selectors = {
 }
 
 describe('ViewOptions component', () => {
-  it('sets the correct initial files page limit', () => {
-    const perPage = '100'
-    const { wrapper } = getWrapper({ perPage })
-    expect(wrapper.findComponent<any>(selectors.pageSizeSelect).props().selected).toBe(perPage)
-    expect(wrapper.html()).toMatchSnapshot()
+  describe('pagination', () => {
+    it('does not show when disabled', () => {
+      const { wrapper } = getWrapper({ props: { hasPagination: false } })
+      expect(wrapper.find(selectors.pageSizeSelect).exists()).toBeFalsy()
+    })
+    it('sets the correct initial files page limit', () => {
+      const perPage = '100'
+      const { wrapper } = getWrapper({ perPage })
+      expect(wrapper.findComponent<any>(selectors.pageSizeSelect).props().selected).toBe(perPage)
+    })
   })
-  it('toggles the setting to show/hide hidden files', () => {
-    const { wrapper, storeOptions } = getWrapper()
-    ;(wrapper.findComponent<any>(selectors.hiddenFilesSwitch).vm as any).$emit(
-      'update:checked',
-      false
-    )
-    expect(storeOptions.modules.Files.mutations.SET_HIDDEN_FILES_VISIBILITY).toHaveBeenCalled()
+  describe('hidden files toggle', () => {
+    it('does not show when disabled', () => {
+      const { wrapper } = getWrapper({ props: { hasHiddenFiles: false } })
+      expect(wrapper.find(selectors.hiddenFilesSwitch).exists()).toBeFalsy()
+    })
+    it('toggles the setting to show/hide hidden files', () => {
+      const { wrapper, storeOptions } = getWrapper()
+      ;(wrapper.findComponent<any>(selectors.hiddenFilesSwitch).vm as any).$emit(
+        'update:checked',
+        false
+      )
+      expect(storeOptions.modules.Files.mutations.SET_HIDDEN_FILES_VISIBILITY).toHaveBeenCalled()
+    })
   })
-  it('toggles the setting to show/hide file extensions', () => {
-    const { wrapper, storeOptions } = getWrapper()
-    ;(wrapper.findComponent<any>(selectors.fileExtensionsSwitch).vm as any).$emit(
-      'update:checked',
-      false
-    )
-    expect(storeOptions.modules.Files.mutations.SET_FILE_EXTENSIONS_VISIBILITY).toHaveBeenCalled()
+  describe('file extension toggle', () => {
+    it('does not show when disabled', () => {
+      const { wrapper } = getWrapper({ props: { hasFileExtensions: false } })
+      expect(wrapper.find(selectors.fileExtensionsSwitch).exists()).toBeFalsy()
+    })
+    it('toggles the setting to show/hide file extensions', () => {
+      const { wrapper, storeOptions } = getWrapper()
+      ;(wrapper.findComponent<any>(selectors.fileExtensionsSwitch).vm as any).$emit(
+        'update:checked',
+        false
+      )
+      expect(storeOptions.modules.Files.mutations.SET_FILE_EXTENSIONS_VISIBILITY).toHaveBeenCalled()
+    })
   })
   describe('view mode switcher', () => {
     it('does not show initially', () => {
@@ -54,28 +71,26 @@ describe('ViewOptions component', () => {
       expect(wrapper.find(selectors.viewModeSwitchBtns).exists()).toBeTruthy()
     })
   })
-  describe('tile resize slider', () => {
+  describe('tile size slider', () => {
     it('does not show initially', () => {
       const { wrapper } = getWrapper()
       expect(wrapper.find(selectors.tileSizeSlider).exists()).toBeFalsy()
     })
-    it('shows if viewModes are given and currentViewMode is "resource-tiles"', async () => {
+    it('shows if the viewModes include "resource-tiles"', () => {
       const { wrapper } = getWrapper({
-        props: { viewModes: [ViewModeConstants.tilesView] },
-        currentViewMode: 'resource-tiles'
+        props: { viewModes: [ViewModeConstants.tilesView] }
       })
-
       expect(wrapper.find(selectors.tileSizeSlider).exists()).toBeTruthy()
     })
   })
 })
 
-function getWrapper({ perPage = '100', currentViewMode = '', props = {} } = {}) {
+function getWrapper({ perPage = '100', props = {} } = {}) {
   jest.mocked(useRouteQueryPersisted).mockImplementation(() => ref(perPage))
 
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
-  const mocks = { ...defaultComponentMocks(), viewModeCurrent: currentViewMode }
+  const mocks = { ...defaultComponentMocks() }
   return {
     storeOptions,
     mocks,

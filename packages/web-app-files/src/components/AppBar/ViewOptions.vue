@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex oc-flex-middle">
     <div
-      v-if="viewModes.length"
+      v-if="viewModes.length > 1"
       class="viewmode-switch-buttons oc-button-group oc-visible@s oc-mr-s"
     >
       <oc-button
@@ -35,7 +35,7 @@
       padding-size="medium"
     >
       <oc-list>
-        <li class="files-view-options-list-item oc-mb-m">
+        <li v-if="hasHiddenFiles" class="files-view-options-list-item">
           <oc-switch
             v-model:checked="hiddenFilesShownModel"
             data-testid="files-switch-hidden-files"
@@ -43,7 +43,7 @@
             @update:checked="updateHiddenFilesShownModel"
           />
         </li>
-        <li class="files-view-options-list-item oc-my-m">
+        <li v-if="hasFileExtensions" class="files-view-options-list-item">
           <oc-switch
             v-model:checked="fileExtensionsShownModel"
             data-testid="files-switch-files-extensions-files"
@@ -51,7 +51,7 @@
             @update:checked="updateFileExtensionsShownModel"
           />
         </li>
-        <li class="files-view-options-list-item oc-mt-m">
+        <li v-if="hasPagination" class="files-view-options-list-item">
           <oc-page-size
             v-if="!queryParamsLoading"
             :selected="itemsPerPage"
@@ -63,8 +63,8 @@
           />
         </li>
         <li
-          v-if="viewModes.length && viewModeCurrent === ViewModeConstants.tilesView.name"
-          class="files-view-options-list-item oc-mt-m oc-visible@s oc-flex oc-flex-between"
+          v-if="viewModes.includes(ViewModeConstants.tilesView)"
+          class="files-view-options-list-item oc-visible@s oc-flex oc-flex-between oc-flex-middle"
         >
           <label for="tiles-size-slider" v-text="resizeTilesLabel" />
           <input
@@ -92,6 +92,9 @@ import { PaginationConstants, ViewModeConstants } from '../../composables'
 
 export default defineComponent({
   props: {
+    hasHiddenFiles: { type: Boolean, default: true },
+    hasFileExtensions: { type: Boolean, default: true },
+    hasPagination: { type: Boolean, default: true },
     viewModes: {
       type: Array as PropType<ViewMode[]>,
       default: () => []
@@ -196,7 +199,12 @@ export default defineComponent({
     border-radius: 3px;
   }
 }
+
 .files-view-options-list-item {
+  &:not(:last-child) {
+    margin-bottom: var(--oc-space-medium);
+  }
+
   & > * {
     display: flex;
     justify-content: space-between;
