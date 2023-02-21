@@ -54,6 +54,7 @@
         </div>
         <div class="oc-mb-s">
           <oc-select
+            :disabled="isLoginInputDisabled"
             id="login-input"
             :model-value="editUser"
             :label="$gettext('Login')"
@@ -107,7 +108,7 @@ import GroupSelect from './GroupSelect.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
 import { Group, User } from 'web-client/src/generated'
-import { MaybeRef, useGraphClient } from 'web-pkg'
+import { MaybeRef, useGraphClient, useStore } from 'web-pkg'
 
 export default defineComponent({
   name: 'EditPanel',
@@ -133,6 +134,9 @@ export default defineComponent({
   },
   emits: ['confirm'],
   setup(props) {
+    const store = useStore()
+    const currentUser = store.getters.user
+    console.log(currentUser)
     const editUser: MaybeRef<User> = ref({})
     const formData = ref({
       displayName: {
@@ -148,6 +152,7 @@ export default defineComponent({
         valid: true
       }
     })
+
     const groupOptions = computed(() => {
       const { memberOf: selectedGroups } = unref(editUser)
       return props.groups
@@ -155,7 +160,11 @@ export default defineComponent({
         .sort((a, b) => a.displayName.localeCompare(b.displayName))
     })
 
-    return { editUser, formData, groupOptions, ...useGraphClient() }
+    const isLoginInputDisabled = computed(
+      () => currentUser.uuid === (props.user.id as PropType<User>)
+    )
+
+    return { isLoginInputDisabled, editUser, formData, groupOptions, ...useGraphClient() }
   },
   computed: {
     loginOptions() {
