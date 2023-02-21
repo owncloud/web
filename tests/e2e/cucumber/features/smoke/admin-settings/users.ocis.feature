@@ -16,3 +16,4 @@ Feature: spaces management
     And "Admin" allows the login for the following user "Alice" using the sidebar panel
     And "Admin" logs out
     Then "Alice" logs in
+    And "Alice" logs out

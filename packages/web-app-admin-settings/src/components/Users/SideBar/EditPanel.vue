@@ -159,9 +159,7 @@ export default defineComponent({
         .sort((a, b) => a.displayName.localeCompare(b.displayName))
     })
 
-    const isLoginInputDisabled = computed(
-      () => currentUser.uuid === (props.user.id as PropType<User>)
-    )
+    const isLoginInputDisabled = computed(() => currentUser.uuid === (props.user as User).id)
 
     return { isLoginInputDisabled, editUser, formData, groupOptions, ...useGraphClient() }
   },

@@ -1,4 +1,4 @@
-import { Given, When } from '@cucumber/cucumber'
+import { Given, When, Then } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { config } from '../../../config'
 import { DateTime } from 'luxon'
@@ -41,7 +41,7 @@ Given('{string} has logged out', LogOutUser)
 
 When('{string} logs out', LogOutUser)
 
-When('{string} fails to log in', async function (this: World, stepUser: string): Promise<void> {
+Then('{string} fails to log in', async function (this: World, stepUser: string): Promise<void> {
   const sessionObject = await createNewSession(this, stepUser)
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
   const user = this.usersEnvironment.getUser({ key: stepUser })
