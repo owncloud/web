@@ -60,22 +60,6 @@ describe('vuex store mutations', () => {
     })
   })
 
-  describe('SHARESTREE_ADD', () => {
-    it('adds sharesTrees', () => {
-      const state = { sharesTree: {} }
-      mutations.SHARESTREE_ADD(state, { '/Shares': {} })
-      const sharesTreeBefore = state.sharesTree
-      mutations.SHARESTREE_ADD(state, { '/Shares/123.png': {} })
-      expect(state.sharesTree).toEqual({
-        '/Shares': {},
-        '/Shares/123.png': {}
-      })
-
-      // TODO: find a better way to test reactivity
-      expect(state.sharesTree).not.toStrictEqual(sharesTreeBefore)
-    })
-  })
-
   it('SET_HIDDEN_FILES_VISIBILITY', () => {
     const state = { areHiddenFilesShown: true }
     const { SET_HIDDEN_FILES_VISIBILITY } = mutations
@@ -94,13 +78,13 @@ describe('vuex store mutations', () => {
     expect(state.areFileExtensionsShown).toEqual(false)
   })
 
-  describe('CURRENT_FILE_OUTGOING_SHARES_REMOVE', () => {
+  describe('OUTGOING_SHARES_REMOVE', () => {
     it('removes an outgoing user share', () => {
       const shareToRemove = { id: 1, shareType: ShareTypes.user.value }
-      const state = { currentFileOutgoingShares: [shareToRemove] }
-      mutations.CURRENT_FILE_OUTGOING_SHARES_REMOVE(state, shareToRemove)
+      const state = { outgoingShares: [shareToRemove] }
+      mutations.OUTGOING_SHARES_REMOVE(state, shareToRemove)
 
-      expect(state.currentFileOutgoingShares.length).toEqual(0)
+      expect(state.outgoingShares.length).toEqual(0)
     })
     it('removes an outgoing space share', () => {
       const shareToRemove = {
@@ -108,21 +92,21 @@ describe('vuex store mutations', () => {
         shareType: ShareTypes.spaceUser.value,
         collaborator: { name: 'admin' }
       }
-      const state = { currentFileOutgoingShares: [shareToRemove] }
-      mutations.CURRENT_FILE_OUTGOING_SHARES_REMOVE(state, shareToRemove)
+      const state = { outgoingShares: [shareToRemove] }
+      mutations.OUTGOING_SHARES_REMOVE(state, shareToRemove)
 
-      expect(state.currentFileOutgoingShares.length).toEqual(0)
+      expect(state.outgoingShares.length).toEqual(0)
     })
   })
 
-  describe('CURRENT_FILE_OUTGOING_SHARES_UPSERT', () => {
+  describe('OUTGOING_SHARES_UPSERT', () => {
     it('updates an outgoing user share', () => {
       const share = { id: 1, shareType: ShareTypes.user.value, permissions: 1 }
-      const state = { currentFileOutgoingShares: [share] }
+      const state = { outgoingShares: [share] }
       const updatedShare = { ...share, permissions: 31 }
-      mutations.CURRENT_FILE_OUTGOING_SHARES_UPSERT(state, updatedShare)
+      mutations.OUTGOING_SHARES_UPSERT(state, updatedShare)
 
-      expect(state.currentFileOutgoingShares[0]).toEqual(updatedShare)
+      expect(state.outgoingShares[0]).toEqual(updatedShare)
     })
     it('updates an outgoing space share', () => {
       const share = {
@@ -131,11 +115,11 @@ describe('vuex store mutations', () => {
         permissions: 1,
         collaborator: { name: 'admin' }
       }
-      const state = { currentFileOutgoingShares: [share] }
+      const state = { outgoingShares: [share] }
       const updatedShare = { ...share, permissions: 31 }
-      mutations.CURRENT_FILE_OUTGOING_SHARES_UPSERT(state, updatedShare)
+      mutations.OUTGOING_SHARES_UPSERT(state, updatedShare)
 
-      expect(state.currentFileOutgoingShares[0]).toEqual(updatedShare)
+      expect(state.outgoingShares[0]).toEqual(updatedShare)
     })
   })
 })

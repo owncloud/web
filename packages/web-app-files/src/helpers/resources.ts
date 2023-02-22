@@ -163,6 +163,7 @@ export function buildSharedResource(
     isFolder,
     sdate: DateTime.fromSeconds(parseInt(share.stime)).toRFC2822(),
     indicators: [],
+    tags: [],
     path: undefined,
     webDavPath: undefined
   }

@@ -36,6 +36,7 @@ const getCollaborator = () => ({
   file: {},
   stime: '1639152810',
   permissions: 15,
+  itemSource: '1',
   path: "/Neuer Ordner-'singe'",
   key: 'collaborator-f5c28709-b921-4ec8-b39a-4c243709b514'
 })
@@ -85,31 +86,15 @@ describe('FileShares', () => {
       await wrapper.vm.$nextTick()
       expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
     })
-    it('correctly passes the shared parent route to the collaborator list item', () => {
+    it('correctly passes the shared parent route to the collaborator list item for indirect shares', () => {
       const indirectCollaborator = { ...getCollaborator(), indirect: true }
-      const sharesTree = { [indirectCollaborator.path]: {} }
-      const { wrapper } = getWrapper({ collaborators: [indirectCollaborator], sharesTree })
-      expect(
-        wrapper.findComponent<any>('collaborator-list-item-stub').props().sharedParentRoute
-      ).toBeDefined()
-      expect(wrapper.html()).toMatchSnapshot()
-    })
-    it('lists indirect outgoing shares', () => {
-      const parentPath = '/parent'
-      const resource = mock<Resource>({ path: `${parentPath}/child`, canShare: () => true })
-      const sharesTree = {
-        [parentPath]: [
-          mock<Share>({
-            outgoing: true,
-            shareType: ShareTypes.user.value,
-            ...getCollaborator()
-          })
-        ]
+      const ancestorMetaData = {
+        '/somePath': { id: indirectCollaborator.itemSource }
       }
-      const { wrapper } = getWrapper({ sharesTree, resource, collaborators })
-      expect(
-        wrapper.findComponent<any>('collaborator-list-item-stub').props().sharedParentRoute
-      ).toBeDefined()
+      const { wrapper } = getWrapper({ collaborators: [indirectCollaborator], ancestorMetaData })
+      const listItemStub = wrapper.findComponent<any>('collaborator-list-item-stub')
+      expect(listItemStub.props('sharedParentRoute')).toBeTruthy()
+      expect(listItemStub.props('modifiable')).toBeFalsy()
     })
     it('toggles the share list', async () => {
       const showAllOnLoad = true
@@ -204,11 +189,11 @@ function getWrapper({
   hasReSharing = true,
   space = mock<SpaceResource>(),
   collaborators = [],
-  sharesTree = {},
   spaceMembers = [],
   user = { id: '1' },
   showAllOnLoad = true,
-  currentRouteName = 'files-spaces-generic'
+  currentRouteName = 'files-spaces-generic',
+  ancestorMetaData = {}
 } = {}) {
   const storeOptions = {
     ...defaultStoreMockOptions,
@@ -224,13 +209,11 @@ function getWrapper({
       }))
     }
   }
-  storeOptions.modules.Files.state.sharesTree = sharesTree
+  storeOptions.modules.Files.getters.ancestorMetaData.mockReturnValue(ancestorMetaData)
   storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(
     () => spaceMembers
   )
-  storeOptions.modules.Files.getters.currentFileOutgoingCollaborators.mockImplementation(
-    () => collaborators
-  )
+  storeOptions.modules.Files.getters.outgoingCollaborators.mockReturnValue(collaborators)
   const store = createStore(storeOptions)
   return {
     wrapper: mountType(FileShares, {

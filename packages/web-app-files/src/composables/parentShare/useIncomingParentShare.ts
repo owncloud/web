@@ -16,17 +16,14 @@ import { DavProperty } from 'web-client/src/webdav/constants'
 export function useIncomingParentShare() {
   const store = useStore()
   const incomingParentShare = ref(null)
-  const sharesTree = computed(() => store.getters['Files/sharesTree'])
+  const incomingCollaborators = computed(() => store.state.Files.incomingCollaborators)
   const hasSpaces = useCapabilitySpacesEnabled(store)
 
   const loadIncomingParentShare = useTask(function* (signal, resource) {
     let parentShare
-    for (const shares of Object.values(unref(sharesTree)) as any) {
-      parentShare = shares.find((s) => !s.outgoing)
-      if (parentShare) {
-        incomingParentShare.value = parentShare
-        return
-      }
+    const incoming = unref(incomingCollaborators).find((s) => s.itemSource === resource.id)
+    if (incoming) {
+      return incoming
     }
 
     if (resource.shareId) {

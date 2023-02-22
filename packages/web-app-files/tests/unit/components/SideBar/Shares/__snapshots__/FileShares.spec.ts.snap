@@ -1,25 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FileShares collaborators list correctly passes the shared parent route to the collaborator list item 1`] = `
-<div class="oc-position-relative" id="oc-files-sharing-sidebar">
-  <div class="oc-flex">
-    <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-current-language="en" data-msgid="Share with people">Share with people</h3>
-    <oc-contextual-helper-stub class="oc-pl-xs" endtext="" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" text="Enter a name or group to share this item." title="Invite specific people"></oc-contextual-helper-stub>
-  </div>
-  <invite-collaborator-form-stub class="oc-my-s" invitelabel="" savebuttonlabel="Share"></invite-collaborator-form-stub>
-  <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
-    <h4 class="oc-text-bold oc-my-rm">Shared with</h4>
-  </div>
-  <ul aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="files-collaborators-list">
-    <li>
-      <collaborator-list-item-stub modifiable="false" share="[object Object]"></collaborator-list-item-stub>
-    </li>
-  </ul>
-  <!--v-if-->
-  <!--v-if-->
-</div>
-`;
-
 exports[`FileShares collaborators list renders sharedWithLabel and sharee list 1`] = `
 <div class="oc-position-relative" id="oc-files-sharing-sidebar">
   <div class="oc-flex">

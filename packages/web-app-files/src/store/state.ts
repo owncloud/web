@@ -11,21 +11,11 @@ export default {
   ancestorMetaData: {},
 
   /**
-   * Outgoing shares and links from currently highlighted element
-   */
-  currentFileOutgoingShares: [],
-
-  /**
-   * Incoming shares from currently highlighted element
-   */
-  incomingShares: [],
-
-  /**
-   * Shares from parent folders
+   * Shares
    **/
-  sharesTree: {},
-  sharesTreeError: null,
-  sharesTreeLoading: false,
+  sharesLoading: false,
+  incomingShares: [],
+  outgoingShares: [],
 
   /**
    * View settings

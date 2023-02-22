@@ -73,9 +73,8 @@ import {
   useCapabilityShareJailEnabled,
   useCapabilityFilesSharingResharing
 } from 'web-pkg/src/composables'
-import { createLocationSpaces, isLocationSharesActive } from '../../../router'
+import { isLocationSharesActive } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
-import { getParentPaths } from '../../../helpers/path'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
@@ -83,9 +82,11 @@ import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
-import { computed, defineComponent, inject, ref, unref } from 'vue'
+import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import { isProjectSpaceResource, Resource } from 'web-client/src/helpers'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { getSharedAncestorRoute } from 'web-app-files/src/helpers/share'
+import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
+import { useShares } from 'web-app-files/src/composables'
 
 export default defineComponent({
   name: 'FileShares',
@@ -117,7 +118,15 @@ export default defineComponent({
       )
     })
 
+    const ancestorMetaData: Ref<AncestorMetaData> = computed(
+      () => store.getters['Files/ancestorMetaData']
+    )
+    const getSharedAncestor = (fileId) => {
+      return Object.values(unref(ancestorMetaData)).find((a) => a.id === fileId)
+    }
+
     return {
+      ...useShares(),
       resource: inject<Resource>('resource'),
       space: inject<Resource>('space'),
       sharesListCollapsed,
@@ -127,11 +136,11 @@ export default defineComponent({
       currentUserIsMemberOfSpace,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
-      hasResharing: useCapabilityFilesSharingResharing()
+      hasResharing: useCapabilityFilesSharingResharing(),
+      getSharedAncestor
     }
   },
   computed: {
-    ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'sharesTree']),
     ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState(['user']),
@@ -169,19 +178,17 @@ export default defineComponent({
     },
 
     collaborators() {
-      return [...this.currentFileOutgoingCollaborators, ...this.indirectOutgoingShares]
-        .sort(this.collaboratorsComparator)
-        .map((c) => {
-          const collaborator = { ...c }
-          collaborator.key = 'collaborator-' + collaborator.id
-          if (
-            collaborator.owner.name !== collaborator.fileOwner.name &&
-            collaborator.owner.name !== this.user.id
-          ) {
-            collaborator.resharers = [collaborator.owner]
-          }
-          return collaborator
-        })
+      return [...this.outgoingCollaborators].sort(this.collaboratorsComparator).map((c) => {
+        const collaborator = { ...c }
+        collaborator.key = 'collaborator-' + collaborator.id
+        if (
+          collaborator.owner.name !== collaborator.fileOwner.name &&
+          collaborator.owner.name !== this.user.id
+        ) {
+          collaborator.resharers = [collaborator.owner]
+        }
+        return collaborator
+      })
     },
 
     displayCollaborators() {
@@ -206,27 +213,6 @@ export default defineComponent({
       return this.spaceMembers.length > 3
     },
 
-    indirectOutgoingShares() {
-      const allShares = []
-      const parentPaths = getParentPaths(this.resource.path, false)
-      if (parentPaths.length === 0) {
-        return []
-      }
-
-      parentPaths.forEach((parentPath) => {
-        const shares = this.sharesTree[parentPath]
-        if (shares) {
-          shares.forEach((share) => {
-            if (share.outgoing && this.$_isCollaboratorShare(share)) {
-              allShares.push({ ...share, key: 'indirect-collaborator-' + share.id })
-            }
-          })
-        }
-      })
-
-      return allShares
-    },
-
     currentUserCanShare() {
       if (this.resource.isReceivedShare() && !this.hasResharing) {
         return false
@@ -249,6 +235,9 @@ export default defineComponent({
         this.resource.type !== 'space' &&
         this.currentUserIsMemberOfSpace
       )
+    },
+    matchingSpace() {
+      return this.space || this.spaces.find((space) => space.id === this.resource.storageId)
     }
   },
   methods: {
@@ -256,9 +245,6 @@ export default defineComponent({
     ...mapActions(['createModal', 'hideModal', 'showMessage']),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
-    $_isCollaboratorShare(collaborator) {
-      return ShareTypes.containsAnyValue(ShareTypes.authenticated, [collaborator.shareType])
-    },
     collaboratorsComparator(c1, c2) {
       // Sorted by: type, direct, display name, creation date
       const c1DisplayName = c1.collaborator ? c1.collaborator.displayName : c1.displayName
@@ -308,10 +294,8 @@ export default defineComponent({
         path = `/${this.resource.name}`
       }
 
-      const lastShareId =
-        this.currentFileOutgoingCollaborators.length === 1
-          ? this.currentFileOutgoingCollaborators[0].id
-          : undefined
+      const directCollaborators = this.outgoingCollaborators.filter((c) => !c.indirect)
+      const lastShareId = directCollaborators.length === 1 ? directCollaborators[0].id : undefined
 
       try {
         await this.deleteShare({
@@ -340,19 +324,15 @@ export default defineComponent({
       if (!parentShare.indirect) {
         return null
       }
-
-      // TODO: this doesn't work on files-spaces-share routes?!
-      if (this.space && this.sharesTree[parentShare.path]) {
-        return createLocationSpaces(
-          'files-spaces-generic',
-          createFileRouteOptions(this.space, {
-            path: parentShare.path,
-            fileId: parentShare.file.source
-          })
-        )
+      const sharedAncestor = this.getSharedAncestor(parentShare.itemSource)
+      if (!sharedAncestor) {
+        return null
       }
-
-      return null
+      return getSharedAncestorRoute({
+        resource: this.resource,
+        sharedAncestor,
+        matchingSpace: this.matchingSpace
+      })
     },
 
     // fixMe: head-breaking logic

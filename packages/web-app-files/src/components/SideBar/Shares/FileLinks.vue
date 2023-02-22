@@ -41,7 +41,7 @@
       />
     </div>
 
-    <oc-list v-if="links.length" class="oc-overflow-hidden oc-my-m">
+    <oc-list v-if="directLinks.length" class="oc-overflow-hidden oc-my-m">
       <li
         v-for="link in displayLinks"
         :key="link.key"
@@ -62,7 +62,7 @@
         />
       </li>
     </oc-list>
-    <div v-if="links.length > 3" class="oc-flex oc-flex-center">
+    <div v-if="directLinks.length > 3" class="oc-flex oc-flex-center">
       <oc-button appearance="raw" @click="toggleLinkListCollapsed">
         <span v-text="collapseButtonTitle" />
         <oc-icon :name="collapseButtonIcon" fill-type="line" />
@@ -107,7 +107,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, inject, ref } from 'vue'
+import { computed, defineComponent, inject, ref, unref } from 'vue'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import {
@@ -120,9 +120,7 @@ import {
   useCapabilityFilesSharingPublicAlias
 } from 'web-pkg/src/composables'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
-import { getParentPaths } from '../../../helpers/path'
-import { ShareTypes, LinkShareRoles, SharePermissions } from 'web-client/src/helpers/share'
-import { cloneStateObject } from '../../../helpers/store'
+import { LinkShareRoles, SharePermissions } from 'web-client/src/helpers/share'
 import { showQuickLinkPasswordModal } from '../../../quickActions'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
@@ -131,6 +129,7 @@ import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
 import { Resource } from 'web-client/src/helpers'
 import { isLocationSharesActive } from '../../../router'
+import { useShares } from 'web-app-files/src/composables'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -144,6 +143,23 @@ export default defineComponent({
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
     const indirectLinkListCollapsed = ref(linkListCollapsed)
+    const { outgoingLinks } = useShares()
+    const directLinks = computed(() =>
+      unref(outgoingLinks)
+        .filter((l) => !l.indirect && !l.quicklink)
+        .sort((a: any, b: any) => b.stime - a.stime)
+        .map((share) => {
+          return { ...share, key: 'direct-link-' + share.id }
+        })
+    )
+    const indirectLinks = computed(() =>
+      unref(outgoingLinks)
+        .filter((l) => l.indirect)
+        .sort((a: any, b: any) => b.stime - a.stime)
+        .map((share) => {
+          return { ...share, key: 'indirect-link-' + share.id }
+        })
+    )
 
     return {
       ...useGraphClient(),
@@ -157,14 +173,15 @@ export default defineComponent({
       hasPublicLinkContribute: useCapabilityFilesSharingPublicCanContribute(),
       hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias(),
       indirectLinkListCollapsed,
-      linkListCollapsed
+      linkListCollapsed,
+      outgoingLinks,
+      directLinks,
+      indirectLinks
     }
   },
   computed: {
-    ...mapGetters('Files', ['currentFileOutgoingLinks']),
     ...mapGetters(['capabilities', 'configuration']),
     ...mapState(['user']),
-    ...mapState('Files', ['sharesTree']),
 
     addButtonLabel() {
       return this.$gettext('Add link')
@@ -184,7 +201,7 @@ export default defineComponent({
     },
 
     quicklink() {
-      return this.currentFileOutgoingLinks.find((link) => link.quicklink === true)
+      return this.directLinks.find((link) => link.quicklink === true)
     },
 
     expirationDate() {
@@ -273,22 +290,11 @@ export default defineComponent({
       return this.$gettextInterpolate(translated, { count: this.indirectLinks.length })
     },
 
-    links() {
-      return this.currentFileOutgoingLinks
-        .filter((link) => !link.quicklink)
-        .map((share) => {
-          return { ...share, key: 'direct-link-' + share.id }
-        })
-        .sort((a, b) => {
-          return b.stime - a.stime
-        })
-    },
-
     displayLinks() {
-      if (this.links.length > 3 && this.linkListCollapsed) {
-        return this.links.slice(0, 3)
+      if (this.directLinks.length > 3 && this.linkListCollapsed) {
+        return this.directLinks.slice(0, 3)
       }
-      return this.links
+      return this.directLinks
     },
 
     displayIndirectLinks() {
@@ -296,29 +302,6 @@ export default defineComponent({
         return []
       }
       return this.indirectLinks
-    },
-
-    indirectLinks() {
-      const allShares = []
-      const parentPaths = getParentPaths(this.resource.path, false)
-      if (parentPaths.length === 0) {
-        return []
-      }
-
-      parentPaths.forEach((parentPath) => {
-        const shares = cloneStateObject(this.sharesTree[parentPath])
-        if (shares) {
-          shares.forEach((share) => {
-            if (share.outgoing && share.shareType === ShareTypes.link.value) {
-              share.key = 'indirect-link-' + share.id
-              allShares.push(share)
-            }
-          })
-        }
-      })
-      return allShares.sort((a, b) => {
-        return b.stime - a.stime
-      })
     },
 
     resourceIsSpace() {
@@ -536,8 +519,7 @@ export default defineComponent({
         path = `/${resource.name}`
       }
 
-      const lastLinkId =
-        this.currentFileOutgoingLinks.length === 1 ? this.currentFileOutgoingLinks[0].id : undefined
+      const lastLinkId = this.directLinks.length === 1 ? this.directLinks[0].id : undefined
 
       try {
         await this.removeLink({ client, share, path, loadIndicators: !!lastLinkId })

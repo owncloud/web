@@ -239,11 +239,10 @@ export default defineComponent({
     }
 
     const loadShares = () => {
-      store.dispatch('Files/loadSharesTree', {
+      store.dispatch('Files/loadShares', {
         client: owncloudSdk,
         path: unref(highlightedFile).path,
         storageId: unref(highlightedFile).fileId,
-        includeRoot: true,
         // cache must not be used on flat file lists that gather resources form various locations
         useCached: !(
           unref(isSharedWithMeLocation) ||
@@ -290,6 +289,7 @@ export default defineComponent({
 
         const currentFolderRequired = !unref(isShareLocation) && !unref(isProjectsLocation)
         if (!currentFolderRequired || unref(currentFolder)) {
+          store.dispatch('Files/pruneShares')
           loadedResource.value = null
           loading.value = false
         }

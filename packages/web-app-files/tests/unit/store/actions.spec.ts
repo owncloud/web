@@ -6,7 +6,12 @@ import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import { Language } from 'vue3-gettext'
 
-jest.mock('../../../src/helpers/resources')
+jest.mock('../../../src/helpers/resources', () => {
+  return {
+    buildShare: (share) => share,
+    buildCollaboratorShare: (share) => share
+  }
+})
 
 const stateMock = {
   commit: jest.fn(),
@@ -31,7 +36,7 @@ describe('vuex store actions', () => {
         expirationDate: null
       })
 
-      expect(stateMock.commit).toHaveBeenCalledTimes(2)
+      expect(stateMock.commit).toHaveBeenCalledTimes(1)
     })
     it('fails on error', async () => {
       const clientMock = mockDeep<OwnCloudSdk>()
@@ -70,7 +75,7 @@ describe('vuex store actions', () => {
       })
 
       expect(clientMock.shares[data.shareMethod]).toHaveBeenCalledTimes(1)
-      expect(stateMock.commit).toHaveBeenCalledTimes(3)
+      expect(stateMock.commit).toHaveBeenCalledTimes(2)
     })
     it('fails on error', async () => {
       const clientMock = mockDeep<OwnCloudSdk>()
@@ -102,12 +107,83 @@ describe('vuex store actions', () => {
         path: '/someFile.txt'
       })
 
-      expect(stateMock.commit).toHaveBeenCalledTimes(2)
+      expect(stateMock.commit).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('loadShares', () => {
+    const stateMock = {
+      sharesLoading: false,
+      outgoingShares: [],
+      incomingShares: [],
+      ancestorMetaData: {}
+    }
+    const gettersMock = {
+      highlightedFile: () => mock<Resource>({ path: 'someFolder/someFile.txt' })
+    }
+    let outgoingShares = []
+    let incomingShares = []
+    const commitMock = jest.fn((mutation, value) => {
+      if (mutation === 'OUTGOING_SHARES_SET') {
+        outgoingShares.push(...value)
+      }
+      if (mutation === 'INCOMING_SHARES_SET') {
+        incomingShares.push(...value)
+      }
+    })
+
+    beforeEach(() => {
+      outgoingShares = []
+      incomingShares = []
+    })
+
+    it('fetches shares and sets them as in- and outgoing shares', async () => {
+      const clientMock = mockDeep<OwnCloudSdk>()
+      clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 1 } }])
+      clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 3 } }])
+      clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 2 } }])
+      clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 4 } }])
+      await actions.loadShares(
+        { state: stateMock, getters: gettersMock, commit: commitMock },
+        {
+          client: clientMock,
+          path: '/someFolder/someFile.txt',
+          storageId: '1',
+          useCached: false
+        }
+      )
+
+      expect(outgoingShares).toEqual([
+        { id: 1, outgoing: true, indirect: false },
+        { id: 2, outgoing: true, indirect: true }
+      ])
+      expect(incomingShares).toEqual([
+        { id: 3, outgoing: false, indirect: false },
+        { id: 4, outgoing: false, indirect: true }
+      ])
+      expect(clientMock.shares.getShares).toHaveBeenCalledTimes(4)
+    })
+    it('uses the cache and only updates the "indirect" state', async () => {
+      const loadedShare = { id: 1, outgoing: true, indirect: true, path: '/someFile.txt' }
+      stateMock.outgoingShares = [loadedShare]
+      const clientMock = mockDeep<OwnCloudSdk>()
+      await actions.loadShares(
+        { state: stateMock, getters: gettersMock, commit: commitMock },
+        {
+          client: clientMock,
+          path: '/someFile.txt',
+          storageId: '1',
+          useCached: true
+        }
+      )
+
+      expect(outgoingShares).toEqual([{ ...loadedShare, indirect: false }])
+      expect(clientMock.shares.getShares).not.toHaveBeenCalled()
     })
   })
 
   describe('updateCurrentFileShareTypes', () => {
-    const stateMock = { currentFileOutgoingShares: [] }
+    const stateMock = { outgoingShares: [] }
     const commitSpy = jest.fn()
 
     it('updates the resource if given', () => {

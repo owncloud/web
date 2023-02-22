@@ -24,4 +24,5 @@ export interface Share {
   expires?: Date
   quicklink?: boolean
   outgoing?: boolean
+  indirect?: boolean
 }

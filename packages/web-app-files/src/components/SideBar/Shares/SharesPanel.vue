@@ -36,7 +36,7 @@ export default defineComponent({
   emits: ['scrollToElement'],
   setup() {
     const store = useStore()
-    const sharesLoading = computed(() => store.getters['Files/sharesTreeLoading'])
+    const sharesLoading = computed(() => store.getters['Files/sharesLoading'])
 
     const { incomingParentShare, ...rest } = useIncomingParentShare()
     provide('incomingParentShare', incomingParentShare)

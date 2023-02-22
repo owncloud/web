@@ -1,4 +1,3 @@
-import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
@@ -82,78 +81,29 @@ export default {
   REMOVE_FILES(state, removedFiles) {
     state.files = [...state.files].filter((file) => !removedFiles.find((r) => r.id === file.id))
   },
-  CURRENT_FILE_OUTGOING_SHARES_SET(state, shares) {
-    state.currentFileOutgoingShares = shares
+  OUTGOING_SHARES_SET(state, shares) {
+    state.outgoingShares = shares
   },
-  CURRENT_FILE_OUTGOING_SHARES_REMOVE(state, share) {
-    state.currentFileOutgoingShares = state.currentFileOutgoingShares.filter(
-      (s) => share.id !== s.id
-    )
+  OUTGOING_SHARES_REMOVE(state, share) {
+    state.outgoingShares = state.outgoingShares.filter((s) => share.id !== s.id)
   },
-  CURRENT_FILE_OUTGOING_SHARES_UPSERT(state, share) {
-    const fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
+  OUTGOING_SHARES_UPSERT(state, share) {
+    const fileIndex = state.outgoingShares.findIndex((s) => {
       return s.id === share.id
     })
 
     if (fileIndex >= 0) {
-      state.currentFileOutgoingShares[fileIndex] = share
+      state.outgoingShares[fileIndex] = share
     } else {
       // share was not present in the list while updating, add it instead
-      state.currentFileOutgoingShares.push(share)
+      state.outgoingShares.push(share)
     }
   },
-  INCOMING_SHARES_LOAD(state, shares) {
+  INCOMING_SHARES_SET(state, shares) {
     state.incomingShares = shares
   },
-  SHARESTREE_PRUNE_OUTSIDE_PATH(state, pathToKeep) {
-    if (pathToKeep !== '' && pathToKeep !== '/') {
-      // clear all children unrelated to the given path
-      //
-      // for example if the following paths are cached:
-      // - a
-      // - a/b
-      // - a/b/c
-      // - d/e/f
-      //
-      // and we request to keep only "a/b", the remaining tree becomes:
-      // - a
-      // - a/b
-      pathToKeep += '/'
-      if (pathToKeep.charAt(0) !== '/') {
-        pathToKeep = '/' + pathToKeep
-      }
-      state.sharesTree = pickBy(state.sharesTree, (shares, path) => {
-        return pathToKeep.startsWith(path + '/')
-      })
-    } else {
-      state.sharesTree = {}
-    }
-  },
-  SHARESTREE_ADD(state, sharesTree) {
-    state.sharesTree = Object.assign({}, state.sharesTree, sharesTree)
-  },
-  SHARESTREE_UPSERT(state, { path, share }) {
-    if (!state.sharesTree[path]) {
-      state.sharesTree[path] = []
-    }
-    const existingShare = state.sharesTree[path].find((s) => s.id === share.id)
-    if (existingShare) {
-      Object.assign(existingShare, share)
-      return
-    }
-    state.sharesTree[path].push(share)
-  },
-  SHARESTREE_REMOVE(state, { path, id }) {
-    if (!state.sharesTree[path]) {
-      return
-    }
-    state.sharesTree[path] = state.sharesTree[path].filter((s) => s.id !== id)
-  },
-  SHARESTREE_ERROR(state, error) {
-    state.sharesTreeError = error
-  },
-  SHARESTREE_LOADING(state, loading) {
-    state.sharesTreeLoading = loading
+  SHARES_LOADING(state, loading) {
+    state.sharesLoading = loading
   },
 
   CLEAR_CURRENT_FILES_LIST(state) {

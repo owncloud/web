@@ -20,6 +20,7 @@ import { WebDAV } from 'web-client/src/webdav'
 import { ClientService } from 'web-pkg/src/services'
 import { Language } from 'vue3-gettext'
 import { DavProperty } from 'web-client/src/webdav/constants'
+import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
 
 const allowSharePermissions = (getters) => {
   return (
@@ -217,7 +218,7 @@ export default {
     commit('UPDATE_RESOURCE_FIELD', {
       id: highlighted.id,
       field: 'shareTypes',
-      value: computeShareTypes(state.currentFileOutgoingShares)
+      value: computeShareTypes(state.outgoingShares)
     })
   },
   async changeShare(
@@ -234,16 +235,15 @@ export default {
         permissions,
         expireDate: expirationDate
       })
-      const builtShare = buildCollaboratorShare(
-        updatedShare.shareInfo,
-        getters.highlightedFile,
-        allowSharePermissions(rootGetters)
+
+      commit(
+        'OUTGOING_SHARES_UPSERT',
+        buildCollaboratorShare(
+          updatedShare.shareInfo,
+          getters.highlightedFile,
+          allowSharePermissions(rootGetters)
+        )
       )
-      commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', builtShare)
-      commit('SHARESTREE_UPSERT', {
-        path: share.path,
-        share: { ...builtShare, indirect: false, outgoing: true }
-      })
     } catch (error) {
       dispatch(
         'showMessage',
@@ -277,11 +277,7 @@ export default {
           context.getters.highlightedFile,
           allowSharePermissions(context.rootGetters)
         )
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', builtShare)
-        context.commit('SHARESTREE_UPSERT', {
-          path,
-          share: { ...builtShare, indirect: false, outgoing: true }
-        })
+        context.commit('OUTGOING_SHARES_UPSERT', builtShare)
         context.dispatch('updateCurrentFileShareTypes')
         context.commit('LOAD_INDICATORS', path)
       })
@@ -299,39 +295,29 @@ export default {
   },
   deleteShare(context, { client, share, path, loadIndicators = false }) {
     return client.shares.deleteShare(share.id, {} as any).then(() => {
-      context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
+      context.commit('OUTGOING_SHARES_REMOVE', share)
       context.dispatch('updateCurrentFileShareTypes')
-      context.commit('SHARESTREE_REMOVE', { path, id: share.id })
       if (loadIndicators) {
         context.commit('LOAD_INDICATORS', path)
       }
     })
   },
-  /**
-   * Prune all branches of the shares tree that are
-   * unrelated to the given path
-   */
-  pruneSharesTreeOutsidePath(context, path) {
-    context.commit('SHARESTREE_PRUNE_OUTSIDE_PATH', path)
-  },
-  /**
-   * Load shares for each parent of the given path.
-   * This will add new entries into the shares tree and will
-   * not remove unrelated existing ones.
-   */
-  loadSharesTree(context, { client, path, storageId, includeRoot = false, useCached = true }) {
-    context.commit('SHARESTREE_ERROR', null)
-    // prune shares tree cache for all unrelated paths, keeping only
-    // existing relevant parent entries
-    context.dispatch('pruneSharesTreeOutsidePath', path)
-    context.commit('INCOMING_SHARES_LOAD', [])
-    context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
-    context.commit('SHARESTREE_LOADING', true)
+  async loadShares(context, { client, path, storageId, useCached = true }) {
+    if (context.state.sharesLoading) {
+      await context.state.sharesLoading
+    }
+    let resolvePromise
+    const promise = new Promise((resolve) => {
+      resolvePromise = resolve
+    })
+    context.commit('SHARES_LOADING', promise)
+    promise.then(() => {
+      context.commit('SHARES_LOADING', false)
+    })
 
-    const parentPaths = path === '/' && includeRoot ? ['/'] : getParentPaths(path, true)
-    const sharesTree = {}
-    const outgoingShares = []
-    const incomingShares = []
+    const parentPaths = path === '/' ? ['/'] : getParentPaths(path, true)
+    const currentlyLoadedShares = [...context.state.outgoingShares, ...context.state.incomingShares]
+    const shares = []
 
     const shareQueriesQueue = new PQueue({ concurrency: 2 })
     const shareQueriesPromises = []
@@ -340,29 +326,20 @@ export default {
     const getShares = (subPath, indirect, options, outgoing) => {
       const buildMethod = outgoing ? buildShare : buildCollaboratorShare
       const resource = indirect || !highlightedFile ? { type: 'folder' } : highlightedFile
-      const arr = outgoing ? outgoingShares : incomingShares
       const permissions = allowSharePermissions(context.rootGetters)
-      if (!sharesTree[subPath]) {
-        sharesTree[subPath] = []
-      }
       return client.shares
         .getShares(subPath, options)
         .then((data) => {
           data.forEach((element) => {
-            const share = {
+            shares.push({
               ...buildMethod(element.shareInfo, resource, permissions),
               outgoing,
               indirect
-            }
-            sharesTree[subPath].push(share)
-            if (!indirect) {
-              arr.push(share)
-            }
+            })
           })
         })
         .catch((error) => {
           console.error('SHARESTREE_ERROR', error)
-          context.commit('SHARESTREE_ERROR', error.message)
         })
     }
 
@@ -377,16 +354,13 @@ export default {
       const ancestorMetaData = context.state.ancestorMetaData[queryPath] ?? null
       const indirect = path !== queryPath
       const spaceRef = indirect ? ancestorMetaData?.id : storageId
-      // no need to fetch cached paths again, only adjust the "indirect" state
-      if (context.getters.sharesTree[queryPath] && useCached) {
-        sharesTree[queryPath] = context.getters.sharesTree[queryPath].map((s) => {
-          if (!indirect) {
-            const arr = s.outgoing ? outgoingShares : incomingShares
-            arr.push({ ...s, indirect })
-          }
-          return { ...s, indirect }
-        })
-        return
+      // no need to fetch cached shares again, only adjust the "indirect" state
+      if (useCached && currentlyLoadedShares.length) {
+        const cached = currentlyLoadedShares.filter((s) => s.path === queryPath)
+        if (cached.length) {
+          shares.push(...cached.map((c) => ({ ...c, indirect })))
+          return
+        }
       }
 
       // query the outgoing share information for each of the parent paths
@@ -403,12 +377,23 @@ export default {
       )
     })
 
-    return Promise.all(shareQueriesPromises).then(() => {
-      context.commit('SHARESTREE_ADD', sharesTree)
-      context.commit('SHARESTREE_LOADING', false)
-      context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', outgoingShares)
-      context.commit('INCOMING_SHARES_LOAD', incomingShares)
+    return Promise.allSettled(shareQueriesPromises).then(() => {
+      context.commit(
+        'OUTGOING_SHARES_SET',
+        shares.filter((s) => s.outgoing)
+      )
+      context.commit(
+        'INCOMING_SHARES_SET',
+        shares.filter((s) => !s.outgoing)
+      )
+      resolvePromise()
     })
+  },
+  pruneShares({ commit }) {
+    commit('SHARES_LOADING', true)
+    commit('OUTGOING_SHARES_SET', [])
+    commit('INCOMING_SHARES_SET', [])
+    commit('SHARES_LOADING', false)
   },
   async loadVersions(context, { client, fileId }) {
     let response
@@ -427,13 +412,9 @@ export default {
         .shareFileWithLink(path, { ...params, spaceRef: storageId })
         .then((data) => {
           const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', link)
+          context.commit('OUTGOING_SHARES_UPSERT', link)
           context.dispatch('updateCurrentFileShareTypes')
           context.commit('LOAD_INDICATORS', path)
-          context.commit('SHARESTREE_UPSERT', {
-            path,
-            share: { ...link, indirect: false, outgoing: true }
-          })
           resolve(link)
         })
         .catch((e) => {
@@ -447,11 +428,7 @@ export default {
         .updateShare(id, params)
         .then((data) => {
           const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', link)
-          context.commit('SHARESTREE_UPSERT', {
-            path: link.path,
-            share: { ...link, indirect: false, outgoing: true }
-          })
+          context.commit('OUTGOING_SHARES_UPSERT', link)
           resolve(link)
         })
         .catch((e) => {
@@ -461,9 +438,8 @@ export default {
   },
   removeLink(context, { share, client, path, loadIndicators = false }) {
     return client.shares.deleteShare(share.id).then(() => {
-      context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
+      context.commit('OUTGOING_SHARES_REMOVE', share)
       context.dispatch('updateCurrentFileShareTypes')
-      context.commit('SHARESTREE_REMOVE', { path, id: share.id })
       if (loadIndicators) {
         context.commit('LOAD_INDICATORS', path)
       }
@@ -522,12 +498,13 @@ export default {
   },
 
   loadAncestorMetaData({ commit, state }, { folder, space, client }) {
-    const ancestorMetaData = {
+    const ancestorMetaData: AncestorMetaData = {
       [folder.path]: {
         id: folder.fileId,
         shareTypes: folder.shareTypes,
         parentFolderId: folder.parentFolderId,
-        spaceId: space.id
+        spaceId: space.id,
+        path: folder.path
       }
     }
     const promises = []
@@ -547,7 +524,8 @@ export default {
             id: resource.fileId,
             shareTypes: resource.shareTypes,
             parentFolderId: resource.parentFolderId,
-            spaceId: space.id
+            spaceId: space.id,
+            path
           }
         })
       )
