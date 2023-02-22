@@ -136,6 +136,11 @@ export default {
     if (!state.sharesTree[path]) {
       state.sharesTree[path] = []
     }
+    const existingShare = state.sharesTree[path].find((s) => s.id === share.id)
+    if (existingShare) {
+      Object.assign(existingShare, share)
+      return
+    }
     state.sharesTree[path].push(share)
   },
   SHARESTREE_REMOVE(state, { path, id }) {

@@ -10,7 +10,7 @@
       padding-size="small"
     >
       <oc-list class="collaborator-edit-dropdown-options-list" :aria-label="shareEditOptions">
-        <li v-if="isExpirationSupported" class="oc-rounded oc-menu-item-hover">
+        <li v-if="canEditOrDelete && isExpirationSupported" class="oc-rounded oc-menu-item-hover">
           <oc-datepicker
             v-model="enteredExpirationDate"
             :min-date="minExpirationDate"
