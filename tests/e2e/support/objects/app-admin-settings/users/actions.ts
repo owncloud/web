@@ -27,13 +27,11 @@ export const changeAccountEnabled = async (args: {
     .getByText(value === false ? 'Forbidden' : 'Allowed')
     .click()
 
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith(encodeURIComponent(uuid)) &&
-        resp.status() === 200 &&
-        resp.request().method() === 'PATCH'
-    ),
-    page.locator(actionConfirmButton).click()
-  ])
+  await page.locator(actionConfirmButton).click()
+  await page.waitForResponse(
+    (resp) =>
+      resp.url().endsWith(encodeURIComponent(uuid)) &&
+      resp.status() === 200 &&
+      resp.request().method() === 'PATCH'
+  )
 }
