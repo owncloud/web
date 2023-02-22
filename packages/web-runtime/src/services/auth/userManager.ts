@@ -261,7 +261,7 @@ export class UserManager extends OidcUserManager {
       const {
         data: { permissions }
       } = await httpClient.post('/api/v0/settings/permissions-list', { account_uuid: user.uuid })
-      return permissions
+      return permissions || []
     } catch (e) {
       console.error(e)
       return []
