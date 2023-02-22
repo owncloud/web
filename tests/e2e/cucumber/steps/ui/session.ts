@@ -46,7 +46,6 @@ Then('{string} fails to log in', async function (this: World, stepUser: string):
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
   const user = this.usersEnvironment.getUser({ key: stepUser })
   await page.goto(config.frontendUrl)
-  await sessionObject.login({ user: { ...user, password: 'fail' } })
   await page.waitForSelector('#oc-login-error-message')
 })
 
