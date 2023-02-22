@@ -413,7 +413,7 @@ importers:
 
   packages/web-app-admin-settings:
     specifiers:
-      axios: ^0.27.2
+      axios: ^0.27.2 || ^1.0.0
       deep-object-diff: ^1.1.9
       email-validator: ^2.0.4
       fuse.js: ^6.5.3
@@ -582,7 +582,7 @@ importers:
 
   packages/web-client:
     specifiers:
-      axios: ^0.27.2
+      axios: ^0.27.2 || ^1.0.0
       lodash-es: ^4.17.21
     dependencies:
       axios: 0.27.2
@@ -592,7 +592,7 @@ importers:
     specifiers:
       '@casl/ability': ^6.3.3
       '@casl/vue': ^2.2.1
-      axios: ^0.27.2
+      axios: ^0.27.2 || ^1.0.0
       filesize: ^9.0.11
       fuse.js: ^6.5.3
       lodash-es: ^4.17.21
@@ -641,7 +641,7 @@ importers:
       '@uppy/utils': ^5.1.2
       '@uppy/xhr-upload': ^3.0.1
       '@vueuse/head': 1.0.22
-      axios: ^0.27.2
+      axios: ^1.0.0
       easygettext: https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz
       filesize: ^9.0.11
       focus-trap: ^7.2.0
@@ -689,7 +689,7 @@ importers:
       '@uppy/utils': 5.1.2
       '@uppy/xhr-upload': 3.0.1_@uppy+core@3.0.5
       '@vueuse/head': 1.0.22_vue@3.2.45
-      axios: 0.27.2
+      axios: 1.3.4
       easygettext: '@github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz'
       filesize: 9.0.11
       focus-trap: 7.2.0
@@ -699,7 +699,7 @@ importers:
       luxon: 2.4.0
       marked: 4.0.12
       oidc-client-ts: 2.1.0
-      owncloud-sdk: 3.1.0-alpha.3_qgpf6seimtkgc6dfu7oqfstxh4
+      owncloud-sdk: 3.1.0-alpha.3_ul2zmj2rz65bej6rssu64pgdki
       p-queue: 6.6.2
       portal-vue: 3.0.0_vue@3.2.45
       postcss-import: 12.0.1
@@ -733,14 +733,14 @@ importers:
     specifiers:
       '@casl/ability': ^6.3.3
       '@casl/vue': ^2.2.1
-      axios: 0.27.2
+      axios: 1.3.4
       vue-router: 4.1.6
       vue3-gettext: ^2.3.3
       vuex: 4.1.0
     dependencies:
       '@casl/ability': 6.3.3
       '@casl/vue': 2.2.1_iguwcvvchwz4fu5vynmua7ad3i
-      axios: 0.27.2
+      axios: 1.3.4
       vue-router: 4.1.6_vue@3.2.45
       vue3-gettext: 2.3.4_tfvhctuaqmmqnirfl65c47tqwu
       vuex: 4.1.0_vue@3.2.45
@@ -7672,6 +7672,16 @@ packages:
     dependencies:
       follow-redirects: 1.15.1
       form-data: 4.0.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /axios/1.3.4:
+    resolution: {integrity: sha512-toYm+Bsyl6VC5wSkfkbbNB6ROv7KY93PEBBL6xyDczaIHasAiv4wPqQ/c4RjoQzipxRD2W5g21cOqQulZ7rHwQ==}
+    dependencies:
+      follow-redirects: 1.15.1
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -17578,7 +17588,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /owncloud-sdk/3.1.0-alpha.3_qgpf6seimtkgc6dfu7oqfstxh4:
+  /owncloud-sdk/3.1.0-alpha.3_ul2zmj2rz65bej6rssu64pgdki:
     resolution: {integrity: sha512-jouNHVHUJBuYs7A1ZPUNl+uSUulSYwTFzOjW4NhONl9xbDthKDeB+vWycUY9IdFRKroF8l1qo4xkXVO9mn7U/A==}
     peerDependencies:
       axios: ^0.27.2
@@ -17590,7 +17600,7 @@ packages:
       webdav: 4.10.0
       xml-js: ^1.6.11
     dependencies:
-      axios: 0.27.2
+      axios: 1.3.4
       cross-fetch: 3.1.4
       promise: 8.1.0
       qs: 6.10.3
@@ -18820,7 +18830,6 @@ packages:
 
   /proxy-from-env/1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
-    dev: true
 
   /prr/1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
