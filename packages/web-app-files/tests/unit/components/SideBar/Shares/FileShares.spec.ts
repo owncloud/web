@@ -3,7 +3,7 @@ import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import { v4 as uuidV4 } from 'uuid'
-import { Share, ShareTypes } from 'web-client/src/helpers/share'
+import { Share } from 'web-client/src/helpers/share'
 import {
   createStore,
   defaultPlugins,
