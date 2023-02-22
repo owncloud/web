@@ -5,7 +5,7 @@
       <app-bar
         :breadcrumbs="breadcrumbs"
         :breadcrumbs-context-actions-items="[currentFolder]"
-        :display-view-mode-switch="true"
+        :view-modes="viewModes"
         :has-bulk-actions="true"
         :show-actions-on-selection="true"
         :side-bar-open="sideBarOpen"
@@ -55,6 +55,7 @@
           :sort-fields="sortFields"
           :sort-by="sortBy"
           :sort-dir="sortDir"
+          :view-size="viewSize"
           @row-mounted="rowMounted"
           @file-click="$_fileActions_triggerDefaultAction"
           @sort="handleSort"
@@ -228,6 +229,12 @@ export default defineComponent({
     const store = useStore()
     let loadResourcesEventToken
 
+    const viewModes = computed(() => [
+      ViewModeConstants.default,
+      ViewModeConstants.condensedTable,
+      ViewModeConstants.tilesView
+    ])
+
     const resourceTargetRouteCallback = ({
       path,
       fileId
@@ -371,7 +378,8 @@ export default defineComponent({
       hasSpaceHeader,
       resourceTargetRouteCallback,
       performLoaderTask,
-      ViewModeConstants
+      ViewModeConstants,
+      viewModes
     }
   },
 

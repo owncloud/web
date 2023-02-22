@@ -16,6 +16,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .files-view-wrapper {
+  height: 100%;
   position: relative;
   overflow-y: auto;
   display: grid;

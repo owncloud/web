@@ -293,6 +293,10 @@ export default defineComponent({
   #app-sidebar {
     width: 100%;
   }
+
+  .files-wrapper {
+    flex-wrap: nowrap;
+  }
 }
 
 .sidebar-panel {

@@ -42,6 +42,7 @@
           :resource-route="getRoute(resource)"
           :is-resource-selected="isResourceSelected(resource)"
           :is-extension-displayed="areFileExtensionsShown"
+          :resource-icon-size="resourceIconSize"
           @vue:mounted="
             $emit('rowMounted', resource, tileRefs.tiles[resource.id], ImageDimension.Tile)
           "
@@ -100,7 +101,7 @@ import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/Contex
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
 import { useResourceRouteResolver } from '../../composables/filesList'
-import { SortDir, SortField } from 'web-app-files/src/composables'
+import { SortDir, SortField, ViewModeConstants } from 'web-app-files/src/composables'
 
 export default defineComponent({
   name: 'ResourceTiles',
@@ -149,6 +150,11 @@ export default defineComponent({
           value === undefined || [SortDir.Asc.toString(), SortDir.Desc.toString()].includes(value)
         )
       }
+    },
+    viewSize: {
+      type: Number,
+      required: false,
+      default: ViewModeConstants.tilesSizeDefault
     }
   },
   emits: ['fileClick', 'rowMounted', 'sort', 'update:selectedIds'],
@@ -265,6 +271,18 @@ export default defineComponent({
       return unref(currentSortField) === field
     }
 
+    const resourceIconSize = computed(() => {
+      const sizeMap = {
+        1: 'xlarge',
+        2: 'xlarge',
+        3: 'xxlarge',
+        4: 'xxlarge',
+        5: 'xxxlarge',
+        6: 'xxxlarge'
+      }
+      return sizeMap[props.viewSize] ?? 'xlarge'
+    })
+
     onBeforeUpdate(() => {
       tileRefs.value = {
         tiles: [],
@@ -284,7 +302,8 @@ export default defineComponent({
       getResourceCheckboxLabel,
       selectSorting,
       isSortFieldSelected,
-      currentSortField
+      currentSortField,
+      resourceIconSize
     }
   },
   data() {
@@ -299,12 +318,12 @@ export default defineComponent({
 .oc-tiles {
   column-gap: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, var(--oc-size-tiles-default));
+  grid-template-columns: repeat(auto-fill, minmax(auto, var(--oc-size-tiles-default)));
   justify-content: flex-start;
   row-gap: 1rem;
 
   &.resizableTiles {
-    grid-template-columns: repeat(auto-fill, var(--oc-size-tiles-resize-step));
+    grid-template-columns: repeat(auto-fill, minmax(auto, var(--oc-size-tiles-resize-step)));
   }
 
   @media only screen and (max-width: 640px) {

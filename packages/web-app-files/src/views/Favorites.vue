@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper>
-      <app-bar :display-view-mode-switch="true" :side-bar-open="sideBarOpen" />
+      <app-bar :view-modes="viewModes" :side-bar-open="sideBarOpen" />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
@@ -81,8 +81,8 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-import { useResourcesViewDefaults } from '../composables'
-import { defineComponent } from 'vue'
+import { useResourcesViewDefaults, ViewModeConstants } from '../composables'
+import { computed, defineComponent } from 'vue'
 import { Resource } from 'web-client'
 import SideBar from '../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../components/FilesViewWrapper.vue'
@@ -125,9 +125,16 @@ export default defineComponent({
       })
     }
 
+    const viewModes = computed(() => [
+      ViewModeConstants.default,
+      ViewModeConstants.condensedTable,
+      ViewModeConstants.tilesView
+    ])
+
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      getSpace
+      getSpace,
+      viewModes
     }
   },
 

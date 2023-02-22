@@ -28,7 +28,13 @@
         </oc-breadcrumb>
         <shares-navigation v-if="hasSharesNavigation" />
         <div v-if="hasViewOptions || hasSidebarToggle" class="oc-flex">
-          <view-options v-if="hasViewOptions" :view-modes="viewModes" />
+          <view-options
+            v-if="hasViewOptions"
+            :view-modes="viewModes"
+            :has-hidden-files="hasHiddenFiles"
+            :has-file-extensions="hasFileExtensions"
+            :has-pagination="hasPagination"
+          />
           <sidebar-toggle v-if="hasSidebarToggle" :side-bar-open="sideBarOpen" />
         </div>
       </div>
@@ -60,7 +66,6 @@ import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
-import { ViewModeConstants } from '../../composables/viewMode/constants'
 import { BreadcrumbItem } from '../../helpers/breadcrumbs'
 import MixinFileActions from '../../mixins/fileActions'
 import EmptyTrashBin from '../../mixins/actions/emptyTrashBin'
@@ -70,6 +75,7 @@ import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import ViewOptions from './ViewOptions.vue'
+import { ViewMode } from 'web-pkg/src/ui/types'
 
 export default defineComponent({
   components: {
@@ -89,14 +95,17 @@ export default defineComponent({
       type: Array as PropType<Resource[]>,
       default: () => []
     },
-    displayViewModeSwitch: {
-      type: Boolean,
-      default: false
+    viewModes: {
+      type: Array as PropType<ViewMode[]>,
+      default: () => []
     },
     hasBulkActions: { type: Boolean, default: false },
     hasSharesNavigation: { type: Boolean, default: false },
     hasSidebarToggle: { type: Boolean, default: true },
     hasViewOptions: { type: Boolean, default: true },
+    hasHiddenFiles: { type: Boolean, default: true },
+    hasFileExtensions: { type: Boolean, default: true },
+    hasPagination: { type: Boolean, default: true },
     showActionsOnSelection: { type: Boolean, default: false },
     sideBarOpen: { type: Boolean, default: false },
     space: {
@@ -139,16 +148,6 @@ export default defineComponent({
         this.selectedFiles.length
       )
       return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
-    },
-    viewModes() {
-      if (!this.displayViewModeSwitch) {
-        return []
-      }
-      return [
-        ViewModeConstants.condensedTable,
-        ViewModeConstants.default,
-        ViewModeConstants.tilesView
-      ]
     },
     batchActions() {
       return [

@@ -23,6 +23,13 @@ describe('OcTile component', () => {
     const wrapper = getWrapper({ resource: getSpaceMock(), isResourceSelected: true })
     expect(wrapper.find('.oc-tile-card-selected').exists()).toBeTruthy()
   })
+  it.each(['xlarge, xxlarge, xxxlarge'])(
+    'renders resource icon size correctly',
+    (resourceIconSize) => {
+      const wrapper = getWrapper({ resource: getSpaceMock(), resourceIconSize })
+      expect(wrapper.find('oc-resource-icon-stub').attributes().size).toEqual(resourceIconSize)
+    }
+  )
 
   function getWrapper(props = {}) {
     return shallowMount(OcTile, {

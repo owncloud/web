@@ -3,11 +3,14 @@
     <files-view-wrapper>
       <app-bar
         :breadcrumbs="breadcrumbs"
-        :has-view-options="false"
         :has-sidebar-toggle="true"
         :show-actions-on-selection="true"
         :has-bulk-actions="true"
+        :has-hidden-files="false"
+        :has-file-extensions="false"
+        :has-pagination="false"
         :side-bar-open="sideBarOpen"
+        :view-modes="viewModes"
       >
         <template #actions>
           <create-space v-if="hasCreatePermission" />
@@ -22,13 +25,14 @@
           icon="layout-grid"
         >
           <template #message>
-            <span v-translate>You don't have access to any spaces</span>
+            <span v-text="$gettext('You don\'t have access to any spaces')" />
           </template>
         </no-content-message>
         <div v-else class="spaces-list oc-px-m oc-mt-l">
           <resource-tiles
             v-model:selectedIds="selectedResourcesIds"
             :data="spaces"
+            :resizable="true"
             :sort-fields="sortFields"
             :sort-by="sortBy"
             :sort-dir="sortDir"
@@ -86,7 +90,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from 'web-pkg/src/composables/sideBar'
 import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
-import { useSelectedResources, useSort } from 'web-app-files/src/composables'
+import { useSelectedResources, useSort, ViewModeConstants } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
 
 export default defineComponent({
@@ -137,6 +141,7 @@ export default defineComponent({
     })
 
     const hasCreatePermission = computed(() => can('create-all', 'Space'))
+    const viewModes = computed(() => [ViewModeConstants.tilesView])
 
     return {
       ...useSideBar(),
@@ -151,7 +156,8 @@ export default defineComponent({
       sortBy,
       sortDir,
       sortFields,
-      hasCreatePermission
+      hasCreatePermission,
+      viewModes
     }
   },
   data: function () {
