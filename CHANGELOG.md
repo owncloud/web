@@ -444,6 +444,7 @@ Details
    https://github.com/owncloud/web/pull/8404
    https://github.com/owncloud/web/pull/8410
    https://github.com/owncloud/web/pull/8460
+   https://github.com/owncloud/web/pull/8483
 
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 
