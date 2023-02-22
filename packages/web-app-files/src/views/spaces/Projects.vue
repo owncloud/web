@@ -10,7 +10,7 @@
         :has-file-extensions="false"
         :has-pagination="false"
         :side-bar-open="sideBarOpen"
-        :view-modes="[ViewModeConstants.tilesView]"
+        :view-modes="viewModes"
       >
         <template #actions>
           <create-space v-if="hasCreatePermission" />
@@ -141,9 +141,9 @@ export default defineComponent({
     })
 
     const hasCreatePermission = computed(() => can('create-all', 'Space'))
+    const viewModes = computed(() => [ViewModeConstants.tilesView])
 
     return {
-      ViewModeConstants,
       ...useSideBar(),
       ...useScrollTo(),
       spaces,
@@ -156,7 +156,8 @@ export default defineComponent({
       sortBy,
       sortDir,
       sortFields,
-      hasCreatePermission
+      hasCreatePermission,
+      viewModes
     }
   },
   data: function () {
