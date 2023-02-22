@@ -86,6 +86,7 @@
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
       :spaces="selectedPersonalDrives"
+      :max-quota="maxQuota"
       @space-quota-updated="spaceQuotaUpdated"
     />
   </div>
@@ -106,6 +107,7 @@ import Delete from '../mixins/users/delete'
 import {
   queryItemAsString,
   useAccessToken,
+  useCapabilitySpacesMaxQuota,
   useGraphClient,
   useRouteQuery,
   useStore
@@ -294,6 +296,7 @@ export default defineComponent({
 
     return {
       ...useSideBar(),
+      maxQuota: useCapabilitySpacesMaxQuota(),
       template,
       selectedUsers,
       loadedUser,

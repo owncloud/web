@@ -5,6 +5,7 @@
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
       :spaces="quotaModalSelectedSpaces"
+      :max-quota="maxQuota"
     />
     <readme-content-modal
       v-if="readmeContentModalIsOpen"
@@ -44,6 +45,7 @@ import { isLocationSpacesActive } from '../../router'
 import { defineComponent, PropType } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 import { thumbnailService } from 'web-app-files/src/services'
+import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'SpaceContextActions',
@@ -72,7 +74,11 @@ export default defineComponent({
       required: true
     }
   },
-
+  setup() {
+    return {
+      maxQuota: useCapabilitySpacesMaxQuota()
+    }
+  },
   computed: {
     quotaModalSelectedSpaces() {
       return [this.$data.$_editQuota_selectedSpace]

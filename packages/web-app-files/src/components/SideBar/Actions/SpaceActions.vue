@@ -5,7 +5,12 @@
       :cancel="closeReadmeContentModal"
       :space="resources[0]"
     ></readme-content-modal>
-    <quota-modal v-if="quotaModalIsOpen" :cancel="closeQuotaModal" :spaces="[resources[0]]" />
+    <quota-modal
+      v-if="quotaModalIsOpen"
+      :cancel="closeQuotaModal"
+      :spaces="[resources[0]]"
+      :max-quota="maxQuota"
+    />
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"
@@ -44,6 +49,7 @@ import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal
 import { thumbnailService } from '../../../services'
 import { computed, ComputedRef, defineComponent, inject, unref } from 'vue'
 import { Resource, SpaceResource } from 'web-client'
+import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'SpaceActions',
@@ -66,6 +72,7 @@ export default defineComponent({
     })
 
     return {
+      maxQuota: useCapabilitySpacesMaxQuota(),
       space: inject<ComputedRef<SpaceResource>>('space'),
       resources
     }

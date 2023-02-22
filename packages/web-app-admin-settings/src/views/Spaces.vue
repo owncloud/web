@@ -42,6 +42,7 @@
           v-if="quotaModalIsOpen"
           :cancel="closeQuotaModal"
           :spaces="selectedSpaces"
+          :max-quota="maxQuota"
           @space-quota-updated="spaceQuotaUpdated"
         />
         <no-content-message
@@ -76,7 +77,12 @@
 
 <script lang="ts">
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { useAccessToken, useGraphClient, useStore } from 'web-pkg/src/composables'
+import {
+  useAccessToken,
+  useCapabilitySpacesMaxQuota,
+  useGraphClient,
+  useStore
+} from 'web-pkg/src/composables'
 import {
   computed,
   defineComponent,
@@ -294,6 +300,7 @@ export default defineComponent({
     }
 
     return {
+      maxQuota: useCapabilitySpacesMaxQuota(),
       sideBarOpen,
       sideBarActivePanel,
       spaces,

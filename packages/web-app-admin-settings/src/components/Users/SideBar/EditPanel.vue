@@ -74,6 +74,7 @@
           class="oc-mb-s"
           :title="$gettext('Personal quota')"
           :total-quota="editUser.drive.quota.total || 0"
+          :max-quota="maxQuota"
           @selected-option-change="changeSelectedQuotaOption"
         />
         <p
@@ -109,6 +110,7 @@ import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
 import { Group, User } from 'web-client/src/generated'
 import { MaybeRef, useGraphClient, useStore } from 'web-pkg'
+import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'EditPanel',
@@ -151,7 +153,6 @@ export default defineComponent({
         valid: true
       }
     })
-
     const groupOptions = computed(() => {
       const { memberOf: selectedGroups } = unref(editUser)
       return props.groups
@@ -161,7 +162,14 @@ export default defineComponent({
 
     const isLoginInputDisabled = computed(() => currentUser.uuid === (props.user as User).id)
 
-    return { isLoginInputDisabled, editUser, formData, groupOptions, ...useGraphClient() }
+    return {
+      maxQaxQuota: useCapabilitySpacesMaxQuota(),
+      isLoginInputDisabled,
+      editUser,
+      formData,
+      groupOptions,
+      ...useGraphClient()
+    }
   },
   computed: {
     loginOptions() {

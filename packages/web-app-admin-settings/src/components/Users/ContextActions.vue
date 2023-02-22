@@ -5,6 +5,7 @@
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
       :spaces="selectedPersonalDrives"
+      :max-quota="maxQuota"
       @space-quota-updated="spaceQuotaUpdated"
     />
   </div>
@@ -30,6 +31,7 @@ import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import { SpaceResource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
+import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'ContextActions',
@@ -111,6 +113,7 @@ export default defineComponent({
     }
 
     return {
+      maxQuota: useCapabilitySpacesMaxQuota(),
       menuSections,
       quotaModalIsOpen,
       closeQuotaModal,

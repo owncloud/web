@@ -4,6 +4,7 @@
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
       :spaces="resources"
+      :max-quota="maxQuota"
       @space-quota-updated="spaceQuotaUpdated"
     />
     <oc-list id="oc-spaces-actions-sidebar" class-name="oc-mt-s">
@@ -29,6 +30,7 @@ import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import { computed, defineComponent, getCurrentInstance, inject, unref } from 'vue'
 import { Resource } from 'web-client'
+import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'ActionsPanel',
@@ -58,7 +60,14 @@ export default defineComponent({
     const spaceQuotaUpdated = (quota) => {
       instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
     }
-    return { actions, quotaModalIsOpen, closeQuotaModal, spaceQuotaUpdated, resources }
+    return {
+      actions,
+      maxQuota: useCapabilitySpacesMaxQuota(),
+      quotaModalIsOpen,
+      closeQuotaModal,
+      spaceQuotaUpdated,
+      resources
+    }
   }
 })
 </script>

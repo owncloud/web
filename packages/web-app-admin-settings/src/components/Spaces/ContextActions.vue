@@ -5,6 +5,7 @@
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
       :spaces="items"
+      :max-quota="maxQuota"
       @space-quota-updated="spaceQuotaUpdated"
     />
   </div>
@@ -22,6 +23,7 @@ import { computed, defineComponent, getCurrentInstance, PropType, unref } from '
 import { Resource } from 'web-client'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
+import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'ContextActions',
@@ -85,6 +87,7 @@ export default defineComponent({
       instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
     }
     return {
+      maxQuota: useCapabilitySpacesMaxQuota(),
       menuSections,
       quotaModalIsOpen,
       closeQuotaModal,
