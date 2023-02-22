@@ -54,8 +54,8 @@
         </div>
         <div class="oc-mb-s">
           <oc-select
-            :disabled="isLoginInputDisabled"
             id="login-input"
+            :disabled="isLoginInputDisabled"
             :model-value="editUser"
             :label="$gettext('Login')"
             :options="loginOptions"
