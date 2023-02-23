@@ -1,0 +1,5 @@
+Enhancement: User role filter
+
+Users in the users list can now be filtered by their role assignments.
+
+https://github.com/owncloud/web/pull/8492
