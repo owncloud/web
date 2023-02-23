@@ -85,6 +85,7 @@ Summary
 * Enhancement - Rework notifications: [#8450](https://github.com/owncloud/web/pull/8450)
 * Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
 * Enhancement - Respect max quota: [#8489](https://github.com/owncloud/web/pull/8489)
+* Enhancement - User role filter: [#8492](https://github.com/owncloud/web/pull/8492)
 
 Details
 -------
@@ -798,6 +799,12 @@ Details
 
    https://github.com/owncloud/web/issues/8490
    https://github.com/owncloud/web/pull/8489
+
+* Enhancement - User role filter: [#8492](https://github.com/owncloud/web/pull/8492)
+
+   Users in the users list can now be filtered by their role assignments.
+
+   https://github.com/owncloud/web/pull/8492
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
