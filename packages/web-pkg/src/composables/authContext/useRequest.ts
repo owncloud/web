@@ -33,7 +33,7 @@ export function useRequest(options: RequestOptions = {}): RequestResult {
     config: AxiosRequestConfig = {}
   ): Promise<AxiosResponse> => {
     let httpClient
-    if (unref(accessToken)) {
+    if (!unref(publicToken) && unref(accessToken)) {
       httpClient = clientService.httpAuthenticated(unref(accessToken))
     } else {
       httpClient = clientService.httpUnAuthenticated
