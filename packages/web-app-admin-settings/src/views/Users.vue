@@ -62,6 +62,7 @@
                   :allow-multiple="true"
                   display-name-attribute="displayName"
                   :filterable-attributes="['displayName']"
+                  class="oc-mr-s"
                   @selection-change="filterGroups"
                 >
                   <template #image="{ item }">
@@ -69,6 +70,27 @@
                   </template>
                   <template #item="{ item }">
                     <div v-text="item.displayName" />
+                  </template>
+                </item-filter>
+                <item-filter
+                  filter-name="roles"
+                  :filter-label="$gettext('Roles')"
+                  :items="roles"
+                  :show-filter="true"
+                  :allow-multiple="true"
+                  display-name-attribute="displayName"
+                  :filterable-attributes="['displayName']"
+                  @selection-change="filterRoles"
+                >
+                  <template #image="{ item }">
+                    <avatar-image
+                      :width="32"
+                      :userid="item.id"
+                      :user-name="$gettext(item.displayName)"
+                    />
+                  </template>
+                  <template #item="{ item }">
+                    <div v-text="$gettext(item.displayName)" />
                   </template>
                 </item-filter>
               </div>
@@ -134,6 +156,7 @@ import { toRaw } from 'vue'
 import { SpaceResource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
 import { diff } from 'deep-object-diff'
+import { format } from 'util'
 
 export default defineComponent({
   name: 'UsersView',
@@ -171,7 +194,18 @@ export default defineComponent({
     let loadResourcesEventToken
     let userUpdatedEventToken
 
-    const groupFilterParam = useRouteQuery('q_groups')
+    const filters = {
+      groups: {
+        param: useRouteQuery('q_groups'),
+        query: `memberOf/any(m:m/id eq '%s')`,
+        ids: ref([])
+      },
+      roles: {
+        param: useRouteQuery('q_roles'),
+        query: `appRoleAssignments/any(m:m/appRoleId eq '%s')`,
+        ids: ref([])
+      }
+    }
 
     const loadGroupsTask = useTask(function* (signal) {
       const groupsResponse = yield unref(graphClient).groups.listGroups()
@@ -183,14 +217,25 @@ export default defineComponent({
       roles.value = applicationsResponse.data.value[0].appRoles
     })
 
-    const loadUsersTask = useTask(function* (signal, groupIds) {
-      const groupFilter = groupIds?.map((id) => `memberOf/any(m:m/id eq '${id}')`).join(' and ')
-      const usersResponse = yield unref(graphClient).users.listUsers('displayName', groupFilter)
+    const loadUsersTask = useTask(function* (signal) {
+      const filter = Object.values(filters)
+        .reduce((acc, f) => {
+          acc.push(
+            unref(f.ids)
+              .map((id) => format(f.query, id))
+              .join(' and ')
+          )
+          return acc
+        }, [])
+        .filter(Boolean)
+        .join(' and ')
+
+      const usersResponse = yield unref(graphClient).users.listUsers('displayName', filter)
       users.value = usersResponse.data.value || []
     })
 
-    const loadResourcesTask = useTask(function* (signal, groupIds = null) {
-      yield loadUsersTask.perform(groupIds)
+    const loadResourcesTask = useTask(function* (signal) {
+      yield loadUsersTask.perform()
       yield loadGroupsTask.perform()
       yield loadAppRolesTask.perform()
     })
@@ -215,8 +260,12 @@ export default defineComponent({
     })
 
     const filterGroups = (groups) => {
-      const groupIds = groups.map((g) => g.id)
-      loadUsersTask.perform(groupIds)
+      filters.groups.ids.value = groups.map((g) => g.id)
+      loadUsersTask.perform()
+    }
+    const filterRoles = (roles) => {
+      filters.roles.ids.value = roles.map((r) => r.id)
+      loadUsersTask.perform()
     }
 
     const selectedPersonalDrives = ref([])
@@ -264,8 +313,11 @@ export default defineComponent({
     })
 
     onMounted(async () => {
-      const groupFilterIds = queryItemAsString(unref(groupFilterParam))?.split('+')
-      await loadResourcesTask.perform(groupFilterIds)
+      for (const f in filters) {
+        filters[f].ids.value = queryItemAsString(unref(filters[f].param))?.split('+') || []
+      }
+
+      await loadResourcesTask.perform()
       loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
         loadResourcesTask.perform()
         selectedUsers.value = []
@@ -312,6 +364,7 @@ export default defineComponent({
       createUserModalOpen,
       batchActions,
       filterGroups,
+      filterRoles,
       quotaModalIsOpen,
       closeQuotaModal,
       spaceQuotaUpdated,

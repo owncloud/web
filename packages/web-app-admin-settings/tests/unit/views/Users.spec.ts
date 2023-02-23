@@ -86,7 +86,8 @@ const getDefaultGraphMock = () => {
 }
 
 const selectors = {
-  itemFilterGroupsStub: 'item-filter-stub[filtername="groups"]'
+  itemFilterGroupsStub: 'item-filter-stub[filtername="groups"]',
+  itemFilterRolesStub: 'item-filter-stub[filtername="roles"]'
 }
 
 describe('Users view', () => {
@@ -334,36 +335,71 @@ describe('Users view', () => {
   })
 
   describe('filter', () => {
-    it('does filter users by groups when the "selectionChange"-event is triggered', async () => {
-      const graphMock = getDefaultGraphMock()
-      const { wrapper } = getMountedWrapper({ mountType: mount, graph: graphMock })
-      await wrapper.vm.loadResourcesTask.last
-      expect(graphMock.users.listUsers).toHaveBeenCalledTimes(1)
-      ;(wrapper.findComponent<any>(selectors.itemFilterGroupsStub).vm as any).$emit(
-        'selectionChange',
-        [{ id: '1' }]
-      )
-      await wrapper.vm.$nextTick()
-      expect(graphMock.users.listUsers).toHaveBeenCalledTimes(2)
-      expect(graphMock.users.listUsers).toHaveBeenNthCalledWith(
-        2,
-        'displayName',
-        "memberOf/any(m:m/id eq '1')"
-      )
-    })
-    it('does filter initially if group ids are given via query param', async () => {
-      const groupIdsQueryParam = '1+2'
-      const graphMock = getDefaultGraphMock()
-      const { wrapper } = getMountedWrapper({
-        mountType: mount,
-        graph: graphMock,
-        queryItem: groupIdsQueryParam
+    describe('groups', () => {
+      it('does filter users by groups when the "selectionChange"-event is triggered', async () => {
+        const graphMock = getDefaultGraphMock()
+        const { wrapper } = getMountedWrapper({ mountType: mount, graph: graphMock })
+        await wrapper.vm.loadResourcesTask.last
+        expect(graphMock.users.listUsers).toHaveBeenCalledTimes(1)
+        ;(wrapper.findComponent<any>(selectors.itemFilterGroupsStub).vm as any).$emit(
+          'selectionChange',
+          [{ id: '1' }]
+        )
+        await wrapper.vm.$nextTick()
+        expect(graphMock.users.listUsers).toHaveBeenCalledTimes(2)
+        expect(graphMock.users.listUsers).toHaveBeenNthCalledWith(
+          2,
+          'displayName',
+          "memberOf/any(m:m/id eq '1')"
+        )
       })
-      await wrapper.vm.loadResourcesTask.last
-      expect(graphMock.users.listUsers).toHaveBeenCalledWith(
-        'displayName',
-        "memberOf/any(m:m/id eq '1') and memberOf/any(m:m/id eq '2')"
-      )
+      it('does filter initially if group ids are given via query param', async () => {
+        const groupIdsQueryParam = '1+2'
+        const graphMock = getDefaultGraphMock()
+        const { wrapper } = getMountedWrapper({
+          mountType: mount,
+          graph: graphMock,
+          groupFilterQuery: groupIdsQueryParam
+        })
+        await wrapper.vm.loadResourcesTask.last
+        expect(graphMock.users.listUsers).toHaveBeenCalledWith(
+          'displayName',
+          "memberOf/any(m:m/id eq '1') and memberOf/any(m:m/id eq '2')"
+        )
+      })
+    })
+    describe('roles', () => {
+      it('does filter users by roles when the "selectionChange"-event is triggered', async () => {
+        const graphMock = getDefaultGraphMock()
+        const { wrapper } = getMountedWrapper({ mountType: mount, graph: graphMock })
+        await wrapper.vm.loadResourcesTask.last
+        expect(graphMock.users.listUsers).toHaveBeenCalledTimes(1)
+        ;(wrapper.findComponent<any>(selectors.itemFilterRolesStub).vm as any).$emit(
+          'selectionChange',
+          [{ id: '1' }]
+        )
+        await wrapper.vm.$nextTick()
+        expect(graphMock.users.listUsers).toHaveBeenCalledTimes(2)
+        expect(graphMock.users.listUsers).toHaveBeenNthCalledWith(
+          2,
+          'displayName',
+          "appRoleAssignments/any(m:m/appRoleId eq '1')"
+        )
+      })
+      it('does filter initially if role ids are given via query param', async () => {
+        const roleIdsQueryParam = '1+2'
+        const graphMock = getDefaultGraphMock()
+        const { wrapper } = getMountedWrapper({
+          mountType: mount,
+          graph: graphMock,
+          roleFilterQuery: roleIdsQueryParam
+        })
+        await wrapper.vm.loadResourcesTask.last
+        expect(graphMock.users.listUsers).toHaveBeenCalledWith(
+          'displayName',
+          "appRoleAssignments/any(m:m/appRoleId eq '1') and appRoleAssignments/any(m:m/appRoleId eq '2')"
+        )
+      })
     })
   })
 })
@@ -371,9 +407,11 @@ describe('Users view', () => {
 function getMountedWrapper({
   mountType = shallowMount,
   graph = getDefaultGraphMock(),
-  queryItem = null
+  groupFilterQuery = null,
+  roleFilterQuery = null
 } = {}) {
-  jest.mocked(queryItemAsString).mockImplementation(() => queryItem)
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => groupFilterQuery)
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => roleFilterQuery)
   const mocks = {
     ...defaultComponentMocks(),
     ...getActionMixinMocks({ actions: mixins })
