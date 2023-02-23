@@ -80,6 +80,7 @@ Summary
 * Enhancement - Batch edit quota in admin panel: [#8387](https://github.com/owncloud/web/pull/8387)
 * Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
 * Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
+* Enhancement - User settings login field: [#8433](https://github.com/owncloud/web/pull/8433)
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 * Enhancement - Rework notifications: [#8450](https://github.com/owncloud/web/pull/8450)
 * Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
@@ -756,6 +757,15 @@ Details
    https://github.com/owncloud/web/issues/4735
    https://github.com/owncloud/web/pull/8432
    https://github.com/owncloud/web/pull/7689
+
+* Enhancement - User settings login field: [#8433](https://github.com/owncloud/web/pull/8433)
+
+   We've introduced the new login field in the user settings, where the admin can allow or disallow
+   the login for the respective user.
+
+   https://github.com/owncloud/web/issues/8484
+   https://github.com/owncloud/web/issues/8467
+   https://github.com/owncloud/web/pull/8433
 
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 
