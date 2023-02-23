@@ -19,6 +19,10 @@ export interface Actor {
 }
 
 export interface User {
+  /**
+   * actual id, that will be exposed by the graph api
+   */
+  uuid?: string
   id: string
   displayName: string
   password: string

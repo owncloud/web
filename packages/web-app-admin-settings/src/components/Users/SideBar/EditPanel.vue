@@ -52,6 +52,22 @@
           </oc-select>
           <div class="oc-text-input-message"></div>
         </div>
+        <div class="oc-mb-s">
+          <oc-select
+            id="login-input"
+            :disabled="isLoginInputDisabled"
+            :model-value="editUser"
+            :label="$gettext('Login')"
+            :options="loginOptions"
+            :clearable="false"
+            @update:model-value="onUpdateLogin"
+          >
+            <template #selected-option>
+              {{ selectedLoginLabel }}
+            </template>
+          </oc-select>
+          <div class="oc-text-input-message"></div>
+        </div>
         <quota-select
           v-if="showQuota"
           :key="'quota-select-' + user.id"
@@ -92,7 +108,7 @@ import GroupSelect from './GroupSelect.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
 import { Group, User } from 'web-client/src/generated'
-import { MaybeRef, useGraphClient } from 'web-pkg'
+import { MaybeRef, useGraphClient, useStore } from 'web-pkg'
 
 export default defineComponent({
   name: 'EditPanel',
@@ -118,6 +134,8 @@ export default defineComponent({
   },
   emits: ['confirm'],
   setup(props) {
+    const store = useStore()
+    const currentUser = store.getters.user
     const editUser: MaybeRef<User> = ref({})
     const formData = ref({
       displayName: {
@@ -133,6 +151,7 @@ export default defineComponent({
         valid: true
       }
     })
+
     const groupOptions = computed(() => {
       const { memberOf: selectedGroups } = unref(editUser)
       return props.groups
@@ -140,9 +159,28 @@ export default defineComponent({
         .sort((a, b) => a.displayName.localeCompare(b.displayName))
     })
 
-    return { editUser, formData, groupOptions, ...useGraphClient() }
+    const isLoginInputDisabled = computed(() => currentUser.uuid === (props.user as User).id)
+
+    return { isLoginInputDisabled, editUser, formData, groupOptions, ...useGraphClient() }
   },
   computed: {
+    loginOptions() {
+      return [
+        {
+          label: this.$gettext('Allowed'),
+          value: true
+        },
+        {
+          label: this.$gettext('Forbidden'),
+          value: false
+        }
+      ]
+    },
+    selectedLoginLabel() {
+      return this.editUser.accountEnabled === false
+        ? this.$gettext('Forbidden')
+        : this.$gettext('Allowed')
+    },
     translatedRoleOptions() {
       return this.roles.map((role) => {
         return { ...role, displayName: this.$gettext(role.displayName) }
@@ -173,6 +211,19 @@ export default defineComponent({
       },
       deep: true,
       immediate: true
+    },
+    editUser: {
+      handler: function () {
+        /**
+         * Property accountEnabled won't be always set, but this still means, that login is allowed.
+         * So we actually don't need to change the property if missing and not set to forbidden in the UI.
+         * This also avoids the compare save dialog from displaying that there are unsaved changes.
+         */
+        if (this.editUser.accountEnabled === true && this.user.accountEnabled !== false) {
+          delete this.editUser.accountEnabled
+        }
+      },
+      deep: true
     }
   },
   methods: {
@@ -261,6 +312,9 @@ export default defineComponent({
       this.editUser.passwordProfile = {
         password
       }
+    },
+    onUpdateLogin({ value }) {
+      this.editUser.accountEnabled = value
     }
   }
 })

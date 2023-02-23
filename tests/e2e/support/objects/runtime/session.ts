@@ -55,7 +55,6 @@ export class Session {
 
   async login({ user }: { user: User }): Promise<void> {
     await this.#adapter.login({ user })
-    await this.#page.waitForSelector('#web')
   }
 
   async logout(): Promise<void> {

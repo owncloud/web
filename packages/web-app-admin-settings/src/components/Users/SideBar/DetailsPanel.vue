@@ -35,6 +35,12 @@
           </td>
         </tr>
         <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Login')" />
+          <td>
+            <span v-text="loginDisplayValue" />
+          </td>
+        </tr>
+        <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
           <td>
             <span v-if="showUserQuota" v-text="quotaDisplayValue" />
@@ -129,6 +135,11 @@ export default defineComponent({
       return this.user.drive.quota.total === 0
         ? this.$gettext('No restriction')
         : formatFileSize(this.user.drive.quota.total, this.currentLanguage)
+    },
+    loginDisplayValue() {
+      return this.user.accountEnabled === false
+        ? this.$gettext('Forbidden')
+        : this.$gettext('Allowed')
     }
   }
 })

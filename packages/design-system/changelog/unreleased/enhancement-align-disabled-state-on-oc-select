@@ -1,0 +1,4 @@
+Enhancement: Align disabled state on oc-select component
+
+We've align the visual disabled state on the oc-select component,
+so it unifies with the disabled state of the oc-text-input component.

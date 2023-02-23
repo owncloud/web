@@ -167,7 +167,9 @@ export default defineComponent({
   .vs__open-indicator,
   .vs__search,
   .vs__selected {
-    background-color: var(--oc-color-input-bg) !important;
+    background-color: var(--oc-color-background-muted) !important;
+    color: var(--oc-color-text-muted) !important;
+    cursor: default;
   }
 }
 

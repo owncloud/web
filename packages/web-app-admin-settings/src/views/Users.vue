@@ -208,6 +208,7 @@ export default defineComponent({
 
       const { data } = yield unref(graphClient).users.getUser(user.id)
       unref(additionalUserDataLoadedForUserIds).push(user.id)
+
       Object.assign(user, data)
     })
 
@@ -435,8 +436,8 @@ export default defineComponent({
         }
 
         const { data: updatedUser } = await this.graphClient.users.getUser(user.id)
-
         const userIndex = this.users.findIndex((user) => user.id === updatedUser.id)
+
         this.users[userIndex] = updatedUser
 
         eventBus.publish('sidebar.entity.saved')
