@@ -84,6 +84,7 @@ Summary
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 * Enhancement - Rework notifications: [#8450](https://github.com/owncloud/web/pull/8450)
 * Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
+* Enhancement - Respect max quota: [#8489](https://github.com/owncloud/web/pull/8489)
 
 Details
 -------
@@ -789,6 +790,14 @@ Details
    We have added the configurable functionality to autosave content changes in text editor.
 
    https://github.com/owncloud/web/pull/8455
+
+* Enhancement - Respect max quota: [#8489](https://github.com/owncloud/web/pull/8489)
+
+   We've updated the quota-select component, so that values higher than max quota set on the
+   server side won't be shown.
+
+   https://github.com/owncloud/web/issues/8490
+   https://github.com/owncloud/web/pull/8489
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
