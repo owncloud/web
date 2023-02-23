@@ -727,6 +727,7 @@ Details
 
    https://github.com/owncloud/web/issues/8377
    https://github.com/owncloud/web/pull/8378
+   https://github.com/owncloud/web/pull/8495
 
 * Enhancement - Batch edit quota in admin panel: [#8387](https://github.com/owncloud/web/pull/8387)
 
@@ -805,6 +806,7 @@ Details
    Users in the users list can now be filtered by their role assignments.
 
    https://github.com/owncloud/web/pull/8492
+   https://github.com/owncloud/web/pull/8495
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
