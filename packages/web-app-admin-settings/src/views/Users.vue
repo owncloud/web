@@ -262,10 +262,14 @@ export default defineComponent({
     const filterGroups = (groups) => {
       filters.groups.ids.value = groups.map((g) => g.id)
       loadUsersTask.perform()
+      selectedUsers.value = []
+      additionalUserDataLoadedForUserIds.value = []
     }
     const filterRoles = (roles) => {
       filters.roles.ids.value = roles.map((r) => r.id)
       loadUsersTask.perform()
+      selectedUsers.value = []
+      additionalUserDataLoadedForUserIds.value = []
     }
 
     const selectedPersonalDrives = ref([])
