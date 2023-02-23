@@ -137,7 +137,7 @@ export default {
           value,
           displayValue,
           displayUnit: 'GB',
-          error: this.$gettext('Please enter a value less than %{ maxQuota } GB', {
+          error: this.$gettext('Please enter a value equal or less than %{ maxQuota } GB', {
             maxQuota: this.maxQuota * Math.pow(10, -9)
           }),
 
