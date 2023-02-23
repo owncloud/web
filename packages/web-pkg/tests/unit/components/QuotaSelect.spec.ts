@@ -18,14 +18,14 @@ describe('QuotaSelect', () => {
   describe('method "createOption"', () => {
     it('should create option', () => {
       const { wrapper } = getWrapper()
-      expect((wrapper.vm as any).createOption('11')).toEqual({
-        displayValue: '11',
+      expect((wrapper.vm as any).createOption('3')).toEqual({
+        displayValue: '3',
         displayUnit: 'GB',
-        value: 11 * Math.pow(10, 9)
+        value: 3 * Math.pow(10, 9)
       })
     })
     it('should contain error property while maxQuota will be exceeded', () => {
-      const { wrapper } = getWrapper()
+      const { wrapper } = getWrapper({ maxQuota: 3 * Math.pow(10, 9) })
       expect((wrapper.vm as any).createOption('2000')).toHaveProperty('error')
     })
     it('should contain error property while creating an invalid option', () => {
@@ -50,7 +50,56 @@ describe('QuotaSelect', () => {
           {
             displayValue: '45',
             displayUnit: 'GB',
-            value: 45 * Math.pow(10, 9)
+            value: 45 * Math.pow(10, 9),
+            selectable: true
+          }
+        ])
+      )
+    })
+    it('should only contain lower or equal options when max quota is set', () => {
+      const { wrapper } = getWrapper({
+        totalQuota: 2 * Math.pow(10, 9),
+        maxQuota: 4 * Math.pow(10, 9)
+      })
+      ;(wrapper.vm as any).setOptions()
+      expect((wrapper.vm as any).options).toEqual(
+        expect.arrayContaining([
+          {
+            displayValue: '1',
+            displayUnit: 'GB',
+            value: Math.pow(10, 9)
+          },
+          {
+            displayValue: '2',
+            displayUnit: 'GB',
+            value: 2 * Math.pow(10, 9)
+          }
+        ])
+      )
+    })
+    it('should contain a non selectable option if preset quota is higher than max quota', () => {
+      const { wrapper } = getWrapper({
+        totalQuota: 100 * Math.pow(10, 9),
+        maxQuota: 4 * Math.pow(10, 9)
+      })
+      ;(wrapper.vm as any).setOptions()
+      expect((wrapper.vm as any).options).toEqual(
+        expect.arrayContaining([
+          {
+            displayValue: '1',
+            displayUnit: 'GB',
+            value: Math.pow(10, 9)
+          },
+          {
+            displayValue: '2',
+            displayUnit: 'GB',
+            value: 2 * Math.pow(10, 9)
+          },
+          {
+            displayValue: '100',
+            displayUnit: 'GB',
+            value: 100 * Math.pow(10, 9),
+            selectable: false
           }
         ])
       )
@@ -58,7 +107,7 @@ describe('QuotaSelect', () => {
   })
 })
 
-function getWrapper({ totalQuota = 10000000000 } = {}) {
+function getWrapper({ totalQuota = 10 * Math.pow(10, 9), maxQuota = 0 } = {}) {
   return {
     wrapper: shallowMount(QuotaSelect, {
       data: () => {
@@ -73,7 +122,7 @@ function getWrapper({ totalQuota = 10000000000 } = {}) {
       },
       props: {
         totalQuota,
-        maxQuota: 100 * Math.pow(10, 9),
+        maxQuota,
         title: 'Personal quota'
       },
       global: {

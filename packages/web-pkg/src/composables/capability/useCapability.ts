@@ -39,6 +39,7 @@ export const useCapabilityFilesSharingResharingDefault = createCapabilityComposa
 )
 
 export const useCapabilitySpacesEnabled = createCapabilityComposable('spaces.enabled', false)
+export const useCapabilitySpacesMaxQuota = createCapabilityComposable('spaces.max_quota', 0)
 export const useCapabilityProjectSpacesEnabled = createCapabilityComposable(
   'spaces.projects',
   false

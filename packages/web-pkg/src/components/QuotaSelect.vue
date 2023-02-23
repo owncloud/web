@@ -68,6 +68,11 @@ export default {
           value: Math.pow(10, 9)
         },
         {
+          displayValue: '2',
+          displayUnit: 'GB',
+          value: 2 * Math.pow(10, 9)
+        },
+        {
           displayValue: '5',
           displayUnit: 'GB',
           value: 5 * Math.pow(10, 9)
@@ -86,16 +91,6 @@ export default {
           displayValue: '100',
           displayUnit: 'GB',
           value: 100 * Math.pow(10, 9)
-        },
-        {
-          displayValue: '500',
-          displayUnit: 'GB',
-          value: 500 * Math.pow(10, 9)
-        },
-        {
-          displayValue: '1000',
-          displayUnit: 'GB',
-          value: 1000 * Math.pow(10, 9)
         },
         {
           displayValue: this.$gettext('No restriction'),
@@ -142,10 +137,10 @@ export default {
           value,
           displayValue,
           displayUnit: 'GB',
-          error: this.$gettextInterpolate(
-            this.$gettext('Max quota limit of %{ limit } GB exceeded'),
-            { limit: this.maxQuota * Math.pow(10, -9) }
-          ),
+          error: this.$gettext('Please enter a value equal or less than %{ maxQuota } GB', {
+            maxQuota: this.maxQuota * Math.pow(10, -9)
+          }),
+
           selectable: false
         }
       }
@@ -156,34 +151,40 @@ export default {
       }
     },
     setOptions() {
-      let computedOptions = [...this.DEFAULT_OPTIONS]
-      const selectedQuotaInOptions = computedOptions.find(
+      let availableOptions = [...this.DEFAULT_OPTIONS]
+
+      if (this.maxQuota) {
+        availableOptions = availableOptions.filter((availableOption) => {
+          if (this.totalQuota === 0 && availableOption.value === 0) {
+            availableOption.selectable = false
+            return true
+          }
+          return availableOption.value !== 0 && availableOption.value <= this.maxQuota
+        })
+      }
+
+      const selectedQuotaInOptions = availableOptions.find(
         (option) => option.value === this.totalQuota
       )
+
       if (!selectedQuotaInOptions) {
-        const newOption = {
+        availableOptions.push({
           displayValue: (this.totalQuota * Math.pow(10, -9))
             .toFixed(2)
             .toString()
             .replace('.00', ''),
           displayUnit: 'GB',
-          value: this.totalQuota
-        }
-        computedOptions.push(newOption)
-      }
-      if (this.maxQuota) {
-        computedOptions.forEach((computedOption) => {
-          if (computedOption.value > this.maxQuota || computedOption.value === 0) {
-            computedOption.selectable = false
-          }
+          value: this.totalQuota,
+          selectable: !(this.maxQuota && this.totalQuota > this.maxQuota)
         })
       }
+
       // Sort options and make sure that unlimited is at the end
-      computedOptions = [
-        ...computedOptions.filter((o) => o.value).sort((a, b) => a.value - b.value),
-        ...computedOptions.filter((o) => !o.value)
+      availableOptions = [
+        ...availableOptions.filter((o) => o.value).sort((a, b) => a.value - b.value),
+        ...availableOptions.filter((o) => !o.value)
       ]
-      this.options = computedOptions
+      this.options = availableOptions
     }
   }
 }

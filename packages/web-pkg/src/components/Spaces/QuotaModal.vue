@@ -12,6 +12,7 @@
         <quota-select
           :title="$gettext('Space quota')"
           :total-quota="selectedOption"
+          :max-quota="maxQuota"
           @selected-option-change="changeSelectedQuotaOption"
         />
       </template>
@@ -40,6 +41,10 @@ export default defineComponent({
     cancel: {
       type: Function,
       required: true
+    },
+    maxQuota: {
+      type: Number,
+      default: 0
     }
   },
   emits: ['spaceQuotaUpdated'],
