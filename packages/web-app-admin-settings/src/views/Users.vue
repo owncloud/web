@@ -83,10 +83,14 @@
                   @selection-change="filterRoles"
                 >
                   <template #image="{ item }">
-                    <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
+                    <avatar-image
+                      :width="32"
+                      :userid="item.id"
+                      :user-name="$gettext(item.displayName)"
+                    />
                   </template>
                   <template #item="{ item }">
-                    <div v-text="item.displayName" />
+                    <div v-text="$gettext(item.displayName)" />
                   </template>
                 </item-filter>
               </div>
