@@ -11,7 +11,7 @@ import {
   declineShare,
   checkSharee,
   hasPermissionToShare,
-  copyQuickLink
+  copyAndGetQuickLinkUrl
 } from './actions'
 import { resourceIsNotOpenable, isAcceptedSharePresent } from './utils'
 import { copyLinkArgs } from '../link/actions'
@@ -69,9 +69,9 @@ export class Share {
     return await hasPermissionToShare({ page: this.#page, resource })
   }
 
-  async copyQuickLink(args: Omit<copyLinkArgs, 'page'>): Promise<void> {
+  async copyAndGetQuickLinkUrl(args: Omit<copyLinkArgs, 'page'>): Promise<void> {
     this.#linksEnvironment = new LinksEnvironment()
-    const url = await copyQuickLink({ ...args, page: this.#page })
+    const url = await copyAndGetQuickLinkUrl({ ...args, page: this.#page })
     const key = 'Quicklink'
     if (!linkStore.has(key)) {
       this.#linksEnvironment.createLink({

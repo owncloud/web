@@ -4,6 +4,7 @@ import Collaborator, { ICollaborator } from './collaborator'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 import { copyLinkArgs, waitForPopupNotPresent } from '../link/actions'
+import { config } from '../../../../config.js'
 
 const filesSharedWithMeAccepted =
   '#files-shared-with-me-accepted-section [data-test-resource-name="%s"]'
@@ -19,6 +20,11 @@ const actionsTriggerButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "oc-files-actions-%s-trigger")]'
 const filesSharedWithMeDeclined =
   '#files-shared-with-me-declined-section [data-test-resource-name="%s"]'
+
+const publicLinkInputField =
+  '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]' +
+  '/following-sibling::div//p[contains(@class,"oc-files-file-link-url")]'
+
 export interface ShareArgs {
   page: Page
   resource: string
@@ -187,11 +193,16 @@ export const hasPermissionToShare = async (
   return !(await page.isVisible(noPermissionToShareLabel))
 }
 
-export const copyQuickLink = async (args: copyLinkArgs): Promise<string> => {
+export const copyAndGetQuickLinkUrl = async (args: copyLinkArgs): Promise<string> => {
   const { page, resource, via } = args
+  let url = null
   if (via === 'CONTEXT_MENU') {
     await clickActionInContextMenu({ page, resource }, 'create-quicklink')
-    const url = await page.evaluate(() => navigator.clipboard.readText())
+    if (config.ocis) {
+      url = await page.evaluate(() => navigator.clipboard.readText())
+    } else {
+      url = await page.locator(util.format(publicLinkInputField, 'Quicklink')).textContent()
+    }
     await waitForPopupNotPresent(page)
     return url
   }
