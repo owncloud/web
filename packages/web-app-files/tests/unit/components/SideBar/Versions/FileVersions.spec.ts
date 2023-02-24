@@ -47,7 +47,6 @@ const versionTableStubSelector = 'oc-simple-table-stub'
 
 const selectors = {
   noVersionsMessage: '[data-testid="file-versions-no-versions"]',
-  fileTypeIcon: '[data-testid="file-versions-file-icon"] oc-resource-icon-stub',
   lastModifiedDate: '[data-testid="file-versions-file-last-modified-date"]',
   resourceSize: '[data-testid="file-versions-file-size"]',
   revertVersionButton: '[data-testid="file-versions-revert-button"]',
@@ -99,32 +98,6 @@ describe('FileVersions', () => {
 
     describe('when hasVersion is truthy', () => {
       describe('versions table', () => {
-        it('should render icon according to file type', () => {
-          const versions = [
-            {
-              fileInfo: {
-                '{DAV:}getcontentlength': '55474',
-                '{DAV:}getcontenttype': 'image/jpeg',
-                '{DAV:}getetag': '"156c87c7f5b017e55b38e1d188493f45"',
-                '{DAV:}getlastmodified': 'Sat, 27 Mar 2021 13:23:58 GMT',
-                '{DAV:}resourcetype': ''
-              },
-              name: '/meta/2147525688/v/1616851438',
-              tusSupport: null,
-              type: 'file'
-            }
-          ]
-          const resource = mockDeep<Resource>({
-            name: 'lorem.png',
-            extension: 'png',
-            type: 'file'
-          })
-
-          const { wrapper } = getMountedWrapper({ versions, resource })
-          const iconElements = wrapper.findAll(selectors.fileTypeIcon)
-
-          expect(iconElements.length).toBe(1)
-        })
         it('should show item last modified date', () => {
           const { wrapper } = getMountedWrapper({ mountType: shallowMount })
           const dateElement = wrapper.findAll(selectors.lastModifiedDate)

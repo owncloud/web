@@ -22,12 +22,12 @@ module.exports = {
   },
   elements: {
     versionsList: {
-      selector: '//div[@id="oc-file-versions-sidebar"]//tr[@class="file-row"]',
+      selector: '//div[@id="oc-file-versions-sidebar"]//li[contains(@class,"version-item")]',
       locateStrategy: 'xpath'
     },
     restorePreviousVersion: {
       selector:
-        '(//div[contains(@id,"oc-file-versions")]//tbody/tr[@class="file-row"])[1]//button[1]',
+        '(//div[contains(@id,"oc-file-versions")]//li[contains(@class,"version-item")])[1]//button[1]',
       locateStrategy: 'xpath'
     }
   }

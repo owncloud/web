@@ -3,6 +3,5 @@ Change: Beautify file version list
 We added css changes to the file versions list to make it look more clean and
 to use standardized layouts like action buttons, download icons etc.
 
-https://github.com/owncloud/web/issues/1234
-https://github.com/owncloud/web/pull/55555
-https://doc.owncloud.com/server/admin_manual/configuration/server/config_sample_php_parameters.html
+https://github.com/owncloud/web/issues/8503
+https://github.com/owncloud/web/pull/8504

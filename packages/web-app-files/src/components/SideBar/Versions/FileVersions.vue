@@ -1,31 +1,45 @@
 <template>
-  <div id="oc-file-versions-sidebar">
+  <div id="oc-file-versions-sidebar" class="-oc-mt-s">
     <oc-loader v-if="loading" />
-    <ul class="oc-m-rm oc-position-relative" v-if="!loading && hasVersion">
+    <ul v-if="!loading && hasVersion" class="oc-m-rm oc-position-relative">
       <li class="spacer oc-pb-l"></li>
-      <li v-for="(item, index) in versions" :key="index" class="version-item oc-pb-l oc-position-relative">
-        <div class="version-details"><span class="version-date" data-testid="file-versions-file-last-modified-date">{{ formatVersionDate(item) }}</span> - <span class="version-filesize" data-testid="file-versions-file-size">{{ formatVersionFileSize(item) }}</span></div>
+      <li
+        v-for="(item, index) in versions"
+        :key="index"
+        class="version-item oc-pb-m oc-position-relative"
+      >
+        <div class="version-details">
+          <span class="version-date" data-testid="file-versions-file-last-modified-date">{{
+            formatVersionDate(item)
+          }}</span>
+          -
+          <span class="version-filesize" data-testid="file-versions-file-size">{{
+            formatVersionFileSize(item)
+          }}</span>
+        </div>
         <oc-list id="oc-file-versions-sidebar-actions" class="oc-pt-xs">
           <li v-if="isRevertable">
             <oc-button
               data-testid="file-versions-revert-button"
               appearance="raw"
-              :aria-label="$gettext('Restore this version')"
-              @click="revertVersion(item)"
+              :aria-label="$gettext('Restore')"
               class="version-action-item oc-width-1-1 oc-rounded oc-button-justify-content-left oc-button-gap-m oc-py-s oc-px-m oc-display-block"
+              @click="revertVersion(item)"
             >
-              <oc-icon data-testid="file-versions-file-icon" name="restart" class="oc-icon-m oc-mr-s" fill-type="line" /> {{ $gettext('Restore') }}
+              <oc-icon name="history" class="oc-icon-m oc-mr-s -oc-mt-xs" fill-type="line" />
+              {{ $gettext('Restore') }}
             </oc-button>
           </li>
           <li>
             <oc-button
               data-testid="file-versions-download-button"
               appearance="raw"
-              :aria-label="$gettext('Download this version')"
-              @click="downloadVersion(item)"
+              :aria-label="$gettext('Download')"
               class="version-action-item oc-width-1-1 oc-rounded oc-button-justify-content-left oc-button-gap-m oc-py-s oc-px-m oc-display-block"
+              @click="downloadVersion(item)"
             >
-              <oc-icon data-testid="file-versions-file-icon" name="file-download" class="oc-icon-m oc-mr-s" fill-type="line" /> {{  $gettext('Download') }}
+              <oc-icon name="file-download" class="oc-icon-m oc-mr-s" fill-type="line" />
+              {{ $gettext('Download') }}
             </oc-button>
           </li>
         </oc-list>
@@ -44,7 +58,6 @@ import { WebDAV } from 'web-client/src/webdav'
 import { defineComponent, inject, ref, computed, unref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissions } from 'web-client/src/helpers/share'
-import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 
 export default defineComponent({
   name: 'FileVersions',
@@ -63,7 +76,6 @@ export default defineComponent({
       resources
     }
   },
-  components: { ActionMenuItem },
   computed: {
     ...mapGetters('Files', ['versions']),
     hasVersion() {
@@ -139,8 +151,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 #oc-file-versions-sidebar {
-  margin-top: calc(-1 * var(--oc-space-small)) !important; // design system: no negative margin classes?
-
   > ul {
     list-style: none;
 
@@ -167,9 +177,10 @@ export default defineComponent({
         background-color: var(--oc-color-border);
         border-radius: 50%;
       }
-
       .version-details {
-        font-weight: 600; // No css class for font-weight?
+        .version-date {
+          font-weight: 600; // No css class for font-weight?
+        }
       }
 
       button.version-action-item {
