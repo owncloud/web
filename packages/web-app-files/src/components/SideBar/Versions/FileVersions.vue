@@ -1,47 +1,36 @@
 <template>
   <div id="oc-file-versions-sidebar">
     <oc-loader v-if="loading" />
-    <oc-table-simple v-if="!loading && hasVersion">
-      <oc-tbody>
-        <oc-tr v-for="(item, index) in versions" :key="index" class="file-row">
-          <oc-td width="shrink" data-testid="file-versions-file-icon">
-            <oc-resource-icon :resource="resource" size="medium" />
-          </oc-td>
-          <oc-td
-            width="shrink"
-            class="oc-text-muted oc-text-nowrap"
-            data-testid="file-versions-file-last-modified-date"
-          >
-            {{ formatVersionDate(item) }}
-          </oc-td>
-          <oc-td class="oc-text-muted oc-text-nowrap" data-testid="file-versions-file-size">
-            {{ formatVersionFileSize(item) }}
-          </oc-td>
-          <oc-td v-if="isRevertable" width="shrink">
+    <ul class="oc-m-rm oc-position-relative" v-if="!loading && hasVersion">
+      <li class="spacer oc-pb-l"></li>
+      <li v-for="(item, index) in versions" :key="index" class="version-item oc-pb-l oc-position-relative">
+        <div class="version-details"><span class="version-date" data-testid="file-versions-file-last-modified-date">{{ formatVersionDate(item) }}</span> - <span class="version-filesize" data-testid="file-versions-file-size">{{ formatVersionFileSize(item) }}</span></div>
+        <oc-list id="oc-file-versions-sidebar-actions" class="oc-pt-xs">
+          <li v-if="isRevertable">
             <oc-button
-              v-oc-tooltip="$gettext('Restore older version')"
               data-testid="file-versions-revert-button"
               appearance="raw"
-              :aria-label="$gettext('Restore older version')"
+              :aria-label="$gettext('Restore this version')"
               @click="revertVersion(item)"
+              class="version-action-item oc-width-1-1 oc-rounded oc-button-justify-content-left oc-button-gap-m oc-py-s oc-px-m oc-display-block"
             >
-              <oc-icon name="restart" fill-type="line" />
+              <oc-icon data-testid="file-versions-file-icon" name="restart" class="oc-icon-m oc-mr-s" fill-type="line" /> {{ $gettext('Restore') }}
             </oc-button>
-          </oc-td>
-          <oc-td width="shrink">
+          </li>
+          <li>
             <oc-button
-              v-oc-tooltip="$gettext('Download older version')"
               data-testid="file-versions-download-button"
               appearance="raw"
-              :aria-label="$gettext('Download older version')"
+              :aria-label="$gettext('Download this version')"
               @click="downloadVersion(item)"
+              class="version-action-item oc-width-1-1 oc-rounded oc-button-justify-content-left oc-button-gap-m oc-py-s oc-px-m oc-display-block"
             >
-              <oc-icon name="download-cloud" fill-type="line" />
+              <oc-icon data-testid="file-versions-file-icon" name="file-download" class="oc-icon-m oc-mr-s" fill-type="line" /> {{  $gettext('Download') }}
             </oc-button>
-          </oc-td>
-        </oc-tr>
-      </oc-tbody>
-    </oc-table-simple>
+          </li>
+        </oc-list>
+      </li>
+    </ul>
     <div v-else>
       <p v-translate data-testid="file-versions-no-versions">No Versions available for this file</p>
     </div>
@@ -52,21 +41,29 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { defineComponent, inject, ref } from 'vue'
+import { defineComponent, inject, ref, computed, unref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissions } from 'web-client/src/helpers/share'
+import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 
 export default defineComponent({
   name: 'FileVersions',
   setup() {
     const loading = ref(false)
+    const resource = inject<Resource>('resource')
+    const space = inject<SpaceResource>('space')
+    const resources = computed(() => {
+      return [unref(resource)]
+    })
 
     return {
       space: inject<SpaceResource>('space'),
       resource: inject<Resource>('resource'),
-      loading
+      loading,
+      resources
     }
   },
+  components: { ActionMenuItem },
   computed: {
     ...mapGetters('Files', ['versions']),
     hasVersion() {
@@ -139,3 +136,57 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+#oc-file-versions-sidebar {
+  margin-top: calc(-1 * var(--oc-space-small)) !important; // design system: no negative margin classes?
+
+  > ul {
+    list-style: none;
+
+    .spacer {
+      border-left: 1px solid var(--oc-color-border);
+      margin-left: calc(-1 * var(--oc-space-large)) !important;
+    }
+
+    > li.version-item {
+      border-left: 1px solid var(--oc-color-border);
+      margin-left: calc(-1 * var(--oc-space-large)) !important;
+      padding-left: var(--oc-space-medium);
+      padding-bottom: var(--oc-space-medium);
+      margin-top: calc(-1 * var(--oc-space-small));
+
+      &::before {
+        content: '';
+        display: block;
+        width: 11px;
+        height: 11px;
+        position: absolute;
+        left: -6px;
+        top: 4px;
+        background-color: var(--oc-color-border);
+        border-radius: 50%;
+      }
+
+      .version-details {
+        font-weight: 600; // No css class for font-weight?
+      }
+
+      button.version-action-item {
+        &:hover {
+          color: var(--oc-color-primary-contrast);
+          background-color: var(--oc-color-background-hover);
+        }
+
+        .oc-icon {
+          vertical-align: middle;
+        }
+      }
+
+      &:last-child {
+        border-left: 1px solid transparent;
+      }
+    }
+  }
+}
+</style>
