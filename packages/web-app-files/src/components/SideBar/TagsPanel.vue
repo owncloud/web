@@ -13,7 +13,7 @@
         push-tags
         :label="$gettext('Add or edit tags')"
         :create-option="createOption"
-        :selectable="() => selectedTags.length <= tagsMaxCount"
+        :selectable="isOptionSelectable"
         :fix-message-line="true"
       >
         <template #selected-option="{ label }">
@@ -27,9 +27,9 @@
             <span>{{ label }}</span>
           </span>
         </template>
-        <template #option="{ label }">
+        <template #option="{ label, error }">
           <div class="oc-flex">
-            <span v-if="showSelectNewLabel(label)" v-translate class="oc-mr-s">New</span>
+            <span v-if="showSelectNewLabel(label)" class="oc-mr-s" v-text="$gettext('New')" />
             <span class="oc-flex oc-flex-center">
               <avatar-image
                 class="oc-flex oc-align-self-center oc-mr-s"
@@ -40,6 +40,7 @@
               <span>{{ label }}</span>
             </span>
           </div>
+          <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
         </template>
       </oc-select>
       <compare-save-dialog
@@ -61,6 +62,7 @@ import { useTask } from 'vue-concurrency'
 import { useStore, useGraphClient } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 import diff from 'lodash-es/difference'
+import { useGettext } from 'vue3-gettext'
 
 const tagsMaxCount = 100
 
@@ -72,6 +74,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { graphClient } = useGraphClient()
+    const { $gettext } = useGettext()
 
     const injectedResource = inject<Resource>('resource')
     const resource = computed(() => unref(injectedResource))
@@ -90,7 +93,17 @@ export default defineComponent({
       selectedTags.value = [...unref(resource).tags]
     }
     const createOption = (option) => {
-      return option.toLowerCase()
+      if (!option.trim().length) {
+        return {
+          label: option,
+          error: $gettext('Tag must not consist of blanks only'),
+          selectable: false
+        }
+      }
+      return option.toLowerCase().trim()
+    }
+    const isOptionSelectable = (option) => {
+      return unref(selectedTags).length <= tagsMaxCount && option.selectable !== false
     }
     const showSelectNewLabel = (option) => {
       return !unref(tagSelect).$refs.select.optionExists(option)
@@ -142,6 +155,7 @@ export default defineComponent({
       tagSelect,
       revertChanges,
       createOption,
+      isOptionSelectable,
       showSelectNewLabel,
       save
     }
