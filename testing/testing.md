@@ -88,13 +88,13 @@ and make sure there are no conflicting ports and everything runs smoothly. You c
 Depending on the backend you want to run the tests on, you can either run
 
 ```shell
-$ pnpm test:e2e:cucumber 'tests/e2e/cucumber/**/*[!.ocis].feature'
+$ pnpm test:e2e:cucumber tests/e2e/cucumber/**/*[!.ocis].feature
 ```
 
 for an **ownCloud 10** backend (filenames including `.ocis` are excluded) or
 
 ```shell
-$ OCIS=true pnpm test:e2e:cucumber 'tests/e2e/cucumber/**/*[!.oc10].feature'
+$ OCIS=true pnpm test:e2e:cucumber tests/e2e/cucumber/**/*[!.oc10].feature
 ```
 
 for an **oCIS** backend (filenames including `.oc10` are excluded).
