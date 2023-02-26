@@ -53,7 +53,7 @@
     "@babel/polyfill": "7.12.1",
     "@babel/preset-env": "7.20.2",
     "@babel/register": "7.18.9",
-    "@cucumber/cucumber": "7.3.2",
+    "@cucumber/cucumber": "8.11.1",
     "@cucumber/messages": "20.0.0",
     "@cucumber/pretty-formatter": "1.0.0",
     "@noble/hashes": "1.1.5",
