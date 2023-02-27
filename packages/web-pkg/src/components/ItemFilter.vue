@@ -158,9 +158,9 @@ export default defineComponent({
         return items
       }
       const usersSearchEngine = new Fuse(items, {
-        includeScore: true,
+        includeScore: false,
         useExtendedSearch: true,
-        threshold: 0.0,
+        threshold: 0.1,
         keys: props.filterableAttributes as any
       })
 

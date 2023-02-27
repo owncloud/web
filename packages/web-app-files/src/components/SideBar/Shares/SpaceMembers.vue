@@ -143,9 +143,9 @@ export default defineComponent({
         return collection
       }
       const searchEngine = new Fuse(collection, {
-        includeScore: true,
+        includeScore: false,
         useExtendedSearch: true,
-        threshold: 0.0,
+        threshold: 0.1,
         keys: ['collaborator.displayName', 'collaborator.name']
       })
 
