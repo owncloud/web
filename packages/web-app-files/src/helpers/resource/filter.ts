@@ -4,7 +4,7 @@ export const filterResources = (resources: unknown[], term: string, limit?: numb
   const engine = new Fuse(resources, {
     includeScore: true,
     useExtendedSearch: true,
-    threshold: 0.3,
+    threshold: 0.0,
     keys: ['name', 'type', 'icon', 'extension', 'tags']
   })
 

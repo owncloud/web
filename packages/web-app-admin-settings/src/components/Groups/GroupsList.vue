@@ -250,7 +250,7 @@ export default defineComponent({
       const groupsSearchEngine = new Fuse(groups, {
         includeScore: true,
         useExtendedSearch: true,
-        threshold: 0.3,
+        threshold: 0.0,
         keys: ['displayName']
       })
 

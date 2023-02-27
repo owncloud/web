@@ -301,7 +301,7 @@ export default defineComponent({
       const usersSearchEngine = new Fuse(users, {
         includeScore: true,
         useExtendedSearch: true,
-        threshold: 0.3,
+        threshold: 0.0,
         keys: ['displayName', 'mail', 'onPremisesSamAccountName', 'role.displayName']
       })
 

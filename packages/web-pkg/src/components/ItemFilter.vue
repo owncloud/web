@@ -160,7 +160,7 @@ export default defineComponent({
       const usersSearchEngine = new Fuse(items, {
         includeScore: true,
         useExtendedSearch: true,
-        threshold: 0.3,
+        threshold: 0.0,
         keys: props.filterableAttributes as any
       })
 

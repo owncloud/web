@@ -218,7 +218,7 @@ export default defineComponent({
       const searchEngine = new Fuse(spaces, {
         includeScore: true,
         useExtendedSearch: true,
-        threshold: 0.3,
+        threshold: 0.0,
         keys: ['name']
       })
 
