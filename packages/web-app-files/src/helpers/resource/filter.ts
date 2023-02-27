@@ -2,9 +2,9 @@ import Fuse from 'fuse.js'
 
 export const filterResources = (resources: unknown[], term: string, limit?: number): unknown[] => {
   const engine = new Fuse(resources, {
-    includeScore: true,
+    includeScore: false,
     useExtendedSearch: true,
-    threshold: 0.3,
+    threshold: 0.1,
     keys: ['name', 'type', 'icon', 'extension', 'tags']
   })
 
