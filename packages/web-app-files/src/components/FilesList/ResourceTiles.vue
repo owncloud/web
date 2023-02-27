@@ -43,11 +43,17 @@
           :is-resource-selected="isResourceSelected(resource)"
           :is-extension-displayed="areFileExtensionsShown"
           :resource-icon-size="resourceIconSize"
+          :draggable="dragDrop"
           @vue:mounted="
             $emit('rowMounted', resource, tileRefs.tiles[resource.id], ImageDimension.Tile)
           "
           @contextmenu="showContextMenu($event, resource.id, tileRefs.tiles[resource.id])"
           @click="emitTileClick(resource)"
+          @dragstart="dragStart(resource, $event)"
+          @dragenter.prevent="setDropStyling(resource, false, $event)"
+          @dragleave.prevent="setDropStyling(resource, true, $event)"
+          @drop="fileDropped(resource, $event)"
+          @dragover="$event.preventDefault()"
         >
           <template #selection>
             <oc-checkbox
@@ -80,6 +86,9 @@
         </oc-tile>
       </li>
     </oc-list>
+    <Teleport v-if="dragItem" to="body">
+      <oc-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
+    </Teleport>
     <div class="oc-tiles-footer">
       <slot name="footer" />
     </div>
@@ -87,7 +96,7 @@
 </template>
 
 <script lang="ts">
-import { onBeforeUpdate, defineComponent, PropType, computed, ref, unref } from 'vue'
+import { onBeforeUpdate, defineComponent, nextTick, PropType, computed, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Resource, SpaceResource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
@@ -96,12 +105,12 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { displayPositionedDropdown } from 'web-pkg/src/helpers/contextMenuDropdown'
 import { createLocationSpaces } from 'web-app-files/src/router'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
+import { SortDir, SortField, ViewModeConstants } from 'web-app-files/src/composables'
 
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
 import { useResourceRouteResolver } from '../../composables/filesList'
-import { SortDir, SortField, ViewModeConstants } from 'web-app-files/src/composables'
 
 export default defineComponent({
   name: 'ResourceTiles',
@@ -155,15 +164,21 @@ export default defineComponent({
       type: Number,
       required: false,
       default: ViewModeConstants.tilesSizeDefault
+    },
+    dragDrop: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['fileClick', 'rowMounted', 'sort', 'update:selectedIds'],
+  emits: ['fileClick', 'fileDropped', 'rowMounted', 'sort', 'update:selectedIds'],
   setup(props, context) {
     const store = useStore()
     const { $gettext } = useGettext()
 
     const areFileExtensionsShown = computed(() => store.state.Files.areFileExtensionsShown)
 
+    const dragItem = ref()
+    const ghostElementRef = ref()
     const tileRefs = ref({
       tiles: [],
       dropBtns: []
@@ -290,6 +305,53 @@ export default defineComponent({
       }
     })
 
+    const setDropStyling = (resource, leaving, event) => {
+      const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
+      if (
+        hasFilePayload ||
+        event.currentTarget?.contains(event.relatedTarget) ||
+        props.selectedIds.includes(resource.id) ||
+        resource.type !== 'folder'
+      ) {
+        return
+      }
+      const el = unref(tileRefs).tiles[resource.id]
+      if (leaving) {
+        el.$el.classList.remove('oc-tiles-item-drop-highlight')
+        return
+      }
+      el.$el.classList.add('oc-tiles-item-drop-highlight')
+    }
+    const dragSelection = computed(() => {
+      return props.selectedIds.filter((id) => id !== unref(dragItem).id)
+    })
+    const setDragItem = async (item, event) => {
+      dragItem.value = item
+      await nextTick()
+      unref(ghostElementRef).$el.ariaHidden = 'true'
+      unref(ghostElementRef).$el.style.left = '-99999px'
+      unref(ghostElementRef).$el.style.top = '-99999px'
+      event.dataTransfer.setDragImage(unref(ghostElementRef).$el, 0, 0)
+      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.effectAllowed = 'move'
+    }
+    const dragStart = async (resource, event) => {
+      if (!isResourceSelected(resource)) {
+        toggleSelection(resource)
+      }
+      await setDragItem(resource, event)
+    }
+
+    const fileDropped = (resource, event) => {
+      const hasFilePayload = (event.dataTransfer.types || []).some((e) => e === 'Files')
+      if (hasFilePayload) {
+        return
+      }
+      dragItem.value = null
+      setDropStyling(resource, true, event)
+      context.emit('fileDropped', resource.id)
+    }
+
     return {
       areFileExtensionsShown,
       emitTileClick,
@@ -303,7 +365,13 @@ export default defineComponent({
       selectSorting,
       isSortFieldSelected,
       currentSortField,
-      resourceIconSize
+      resourceIconSize,
+      ghostElementRef,
+      dragItem,
+      dragStart,
+      dragSelection,
+      fileDropped,
+      setDropStyling
     }
   },
   data() {
@@ -334,6 +402,10 @@ export default defineComponent({
     &.resizableTiles {
       grid-template-columns: 80%;
     }
+  }
+
+  &-item-drop-highlight {
+    background-color: var(--oc-color-input-border) !important;
   }
 
   &-footer {

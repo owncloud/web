@@ -1,6 +1,8 @@
 import { createStore, defaultPlugins, defaultStoreMockOptions, mount } from 'web-test-helpers'
 import ResourceTiles from 'web-app-files/src/components/FilesList/ResourceTiles.vue'
 import { sortFields } from 'web-app-files/src/helpers/ui/resourceTiles'
+import { Resource } from 'web-client'
+import { mock } from 'jest-mock-extended'
 
 const spacesResources = [
   {
@@ -67,6 +69,21 @@ describe('ResourceTiles component', () => {
       expect(wrapper.emitted('sort')[0][0]).toEqual({
         sortBy: sortFields[index].name,
         sortDir: sortFields[index].sortDir
+      })
+    })
+    describe('drag and drop', () => {
+      it('emits the "update:selectedIds"-event on drag start', async () => {
+        const { wrapper } = getWrapper()
+        wrapper.vm.dragItem = mock<Resource>()
+        await wrapper.vm.$nextTick()
+        ;(wrapper.vm.$refs.ghostElementRef as any).$el = { style: {} }
+        wrapper.vm.dragStart(mock<Resource>(), { dataTransfer: { setDragImage: jest.fn() } })
+        expect(wrapper.emitted('update:selectedIds')).toBeDefined()
+      })
+      it('emits the "fileDropped"-event on resource drop', () => {
+        const { wrapper } = getWrapper()
+        wrapper.vm.fileDropped(mock<Resource>(), { dataTransfer: {} })
+        expect(wrapper.emitted('fileDropped')).toBeDefined()
       })
     })
   })

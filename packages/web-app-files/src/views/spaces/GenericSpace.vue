@@ -52,12 +52,14 @@
           :resizable="true"
           :target-route-callback="resourceTargetRouteCallback"
           :space="space"
+          :drag-drop="true"
           :sort-fields="sortFields"
           :sort-by="sortBy"
           :sort-dir="sortDir"
           :view-size="viewSize"
           @row-mounted="rowMounted"
           @file-click="$_fileActions_triggerDefaultAction"
+          @file-dropped="fileDropped"
           @sort="handleSort"
         >
           <template #contextMenuActions="{ resource }">
