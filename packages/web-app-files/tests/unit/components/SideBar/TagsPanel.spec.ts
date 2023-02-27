@@ -119,6 +119,13 @@ describe('Tags Panel', () => {
     expect(assignTagsStub).toHaveBeenCalled()
     expect(eventStub).not.toHaveBeenCalled()
   })
+
+  it('does not accept tags consisting of blanks only', () => {
+    const { wrapper } = createWrapper(mockDeep<Resource>())
+    const option = wrapper.vm.createOption(' ')
+    expect(option.error).toBeDefined()
+    expect(option.selectable).toBeFalsy()
+  })
 })
 
 function createWrapper(resource, graphMock = mockDeep<Graph>()) {
