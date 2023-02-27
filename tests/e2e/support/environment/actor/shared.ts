@@ -20,7 +20,7 @@ export interface ActorOptions extends ActorsOptions {
 export const buildBrowserContextOptions = (options: ActorOptions): BrowserContextOptions => {
   const contextOptions: BrowserContextOptions = {
     acceptDownloads: options.context.acceptDownloads,
-    permissions: ['clipboard-read', 'clipboard-write'],
+    permissions: ['clipboard-read'],
     ignoreHTTPSErrors: true,
     locale: 'en-US'
   }

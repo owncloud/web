@@ -67,8 +67,8 @@ Feature: link
       | folderPublic/lorem.txt | lorem ipsum |
     And "Alice" logs in
     And "Alice" opens the "files" app
-    And "Alice" copies quick link of the resource "folderPublic" from the context menu
-    When "Anonymous" opens the public link "Quicklink"
+    When "Alice" copies quick link of the resource "folderPublic" from the context menu
+    And "Anonymous" opens the public link "Quicklink"
     And "Anonymous" downloads the following public link resources using the sidebar panel
       | resource  | type |
       | lorem.txt | file |

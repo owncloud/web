@@ -188,7 +188,7 @@ When(
   async function (this: World, stepUser: string, resource: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
-    await shareObject.copyAndGetQuickLinkUrl({
+    await shareObject.copyQuickLink({
       resource,
       via: 'CONTEXT_MENU'
     })

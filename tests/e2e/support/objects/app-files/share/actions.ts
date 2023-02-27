@@ -5,6 +5,7 @@ import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 import { copyLinkArgs, waitForPopupNotPresent } from '../link/actions'
 import { config } from '../../../../config.js'
+import { linkStore } from '../../../store'
 
 const filesSharedWithMeAccepted =
   '#files-shared-with-me-accepted-section [data-test-resource-name="%s"]'
@@ -193,17 +194,25 @@ export const hasPermissionToShare = async (
   return !(await page.isVisible(noPermissionToShareLabel))
 }
 
-export const copyAndGetQuickLinkUrl = async (args: copyLinkArgs): Promise<string> => {
+export const copyQuickLink = async (args: copyLinkArgs): Promise<string> => {
   const { page, resource, via } = args
-  let url = null
+  let url = ''
+  const linkName = 'Quicklink'
+
   if (via === 'CONTEXT_MENU') {
     await clickActionInContextMenu({ page, resource }, 'create-quicklink')
-    if (config.ocis) {
-      url = await page.evaluate(() => navigator.clipboard.readText())
-    } else {
-      url = await page.locator(util.format(publicLinkInputField, 'Quicklink')).textContent()
-    }
-    await waitForPopupNotPresent(page)
-    return url
   }
+
+  if (config.backendUrl.startsWith('https')) {
+    url = await page.evaluate(() => navigator.clipboard.readText())
+  } else {
+    url = await page.locator(util.format(publicLinkInputField, linkName)).textContent()
+  }
+
+  await waitForPopupNotPresent(page)
+
+  if (url && !linkStore.has(linkName)) {
+    linkStore.set(linkName, { name: linkName, url })
+  }
+  return url
 }
