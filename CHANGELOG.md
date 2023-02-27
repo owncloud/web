@@ -349,6 +349,7 @@ Details
 
    https://github.com/owncloud/web/pull/8431
    https://github.com/owncloud/web/pull/8488
+   https://github.com/owncloud/web/pull/8509
 
 * Change - Configurable extension autosave: [#8455](https://github.com/owncloud/web/pull/8455)
 
