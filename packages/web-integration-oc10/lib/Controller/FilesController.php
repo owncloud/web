@@ -124,16 +124,20 @@ class FilesController extends Controller {
 			$response->setContentSecurityPolicy($csp);
 		}
 		if (\strpos($path, "index.html") === 0) {
-            $csp = new ContentSecurityPolicy();
-            $csp->allowInlineScript(true);
-            $csp = $this->applyCSPOpenIDConnect($csp);
+			$csp = new ContentSecurityPolicy();
+			$csp->allowInlineScript(true);
+			$csp = $this->applyCSPOpenIDConnect($csp);
+			
+			// Required to support PDF Viewer
+			$csp->addAllowedFrameDomain('\'self\'');
+			$csp->addAllowedObjectDomain('\'self\' blob:');
 
-            // for now we set CSP rules manually, until we have sufficient requirements for a generic solution.
-            $csp = $this->applyCSPOnlyOffice($csp);
-            $csp = $this->applyCSPRichDocuments($csp);
+			// for now we set CSP rules manually, until we have sufficient requirements for a generic solution.
+			$csp = $this->applyCSPOnlyOffice($csp);
+			$csp = $this->applyCSPRichDocuments($csp);
 
-            $response->setContentSecurityPolicy($csp);
-        }
+			$response->setContentSecurityPolicy($csp);
+		}
 
 		return $response;
 	}
