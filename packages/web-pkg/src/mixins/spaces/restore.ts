@@ -41,7 +41,7 @@ export default {
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     filterResourcesToRestore(resources): SpaceResource[] {
-      return resources.filter((r) => r.canRestore({ user: this.user }))
+      return resources.filter((r) => r.canRestore({ user: this.user, ability: this.$ability }))
     },
     $_restore_trigger({ resources }) {
       const allowedResources = this.filterResourcesToRestore(resources)

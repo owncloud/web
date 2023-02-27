@@ -33,11 +33,11 @@ export const getAbilities = (
       { action: 'update-all', subject: 'Setting' }
     ],
     'create-space.all': [{ action: 'create-all', subject: 'Space' }],
-    'delete-all-spaces.all': [{ action: 'delete-all', subject: 'Space' }],
-    'list-all-spaces.all': [
-      { action: 'read-all', subject: 'Space' },
-      { action: 'delete-all', subject: 'Space' } // FIXME: Why is this needed? backend issue?
+    'Drive.ReadWriteEnabled.all': [
+      { action: 'delete-all', subject: 'Space' },
+      { action: 'update-all', subject: 'Space' }
     ],
+    'list-all-spaces.all': [{ action: 'read-all', subject: 'Space' }],
     'set-space-quota.all': [{ action: 'set-quota-all', subject: 'Space' }]
   }
 

@@ -20,7 +20,7 @@ export default {
               return false
             }
 
-            return resources[0].canRename({ user: this.user })
+            return resources[0].canRename({ user: this.user, ability: this.$ability })
           },
           componentType: 'button',
           class: 'oc-files-actions-rename-trigger'

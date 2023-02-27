@@ -22,7 +22,7 @@ export default {
               return false
             }
 
-            return resources[0].canEditDescription({ user: this.user })
+            return resources[0].canEditDescription({ user: this.user, ability: this.$ability })
           },
           componentType: 'button',
           class: 'oc-files-actions-edit-description-trigger'

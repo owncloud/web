@@ -172,14 +172,14 @@ export function buildSpace(data): SpaceResource {
     canBeDeleted: function ({ user, ability }: { user?: User; ability?: any } = {}) {
       return this.disabled && (ability?.can('delete-all', 'Space') || this.isManager(user))
     },
-    canRename: function ({ user }: { user?: User } = {}) {
-      return this.isManager(user)
+    canRename: function ({ user, ability }: { user?: User; ability?: any } = {}) {
+      return ability?.can('update-all', 'Space') || this.isManager(user)
     },
-    canEditDescription: function ({ user }: { user?: User } = {}) {
-      return this.isManager(user)
+    canEditDescription: function ({ user, ability }: { user?: User; ability?: any } = {}) {
+      return ability?.can('update-all', 'Space') || this.isManager(user)
     },
-    canRestore: function ({ user }: { user?: User } = {}) {
-      return this.disabled && this.isManager(user)
+    canRestore: function ({ user, ability }: { user?: User; ability?: any } = {}) {
+      return this.disabled && (ability?.can('update-all', 'Space') || this.isManager(user))
     },
     canDisable: function ({ user, ability }: { user?: User; ability?: any } = {}) {
       return !this.disabled && (ability?.can('delete-all', 'Space') || this.isManager(user))
