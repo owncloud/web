@@ -34,6 +34,7 @@ Summary
 * Bugfix - Drop menus with limited vertical screen space: [#8411](https://github.com/owncloud/web/issues/8411)
 * Bugfix - "Show more"-action in shares panel: [#8479](https://github.com/owncloud/web/issues/8479)
 * Bugfix - Paste action conflict dialog broken: [#8480](https://github.com/owncloud/web/pull/8480)
+* Bugfix - PDF display issue - Update CSP object-src policy: [#8498](https://github.com/owncloud/web/pull/8498)
 * Bugfix - Remove fuzzy search results: [#8508](https://github.com/owncloud/web/pull/8508)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
@@ -283,6 +284,14 @@ Details
 
    https://github.com/owncloud/web/issues/8462
    https://github.com/owncloud/web/pull/8480
+
+* Bugfix - PDF display issue - Update CSP object-src policy: [#8498](https://github.com/owncloud/web/pull/8498)
+
+   PDF display is associated with object-src / frame-src policy with blob values.
+
+   We allow those for only : 'self' blob:;
+
+   https://github.com/owncloud/web/pull/8498
 
 * Bugfix - Remove fuzzy search results: [#8508](https://github.com/owncloud/web/pull/8508)
 
