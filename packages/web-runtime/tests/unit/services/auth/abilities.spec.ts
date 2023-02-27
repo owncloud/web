@@ -38,8 +38,8 @@ describe('getAbilities', () => {
   it.each([
     { permissions: [''], expectedActions: [] },
     { permissions: ['create-space.all'], expectedActions: ['create-all'] },
-    { permissions: ['delete-all-spaces.all'], expectedActions: ['delete-all'] },
-    { permissions: ['list-all-spaces.all'], expectedActions: ['read-all', 'delete-all'] },
+    { permissions: ['list-all-spaces.all'], expectedActions: ['read-all'] },
+    { permissions: ['Drive.ReadWriteEnabled.all'], expectedActions: ['delete-all', 'update-all'] },
     { permissions: ['set-space-quota.all'], expectedActions: ['set-quota-all'] }
   ])('gets correct abilities for subject "Space"', function (data) {
     const abilities = getAbilities(data.permissions)
