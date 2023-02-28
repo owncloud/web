@@ -209,8 +209,8 @@ export default defineComponent({
     background-color: transparent;
     border-style: none;
     color: $color;
-    font-size: var(--oc-font-size-medium);
-    font-weight: normal;
+    font-size: inherit;
+    font-weight: inherit;
     min-height: 0;
     padding: 0;
 
