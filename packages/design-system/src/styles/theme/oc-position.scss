@@ -1,3 +1,44 @@
+.oc-inset-0,
+.oc-inset-x-0 {
+  right:0;
+  left:0
+}
+
+.oc-inset-0,
+.oc-inset-y-0
+{
+  top:0;
+  bottom:0
+}
+
+.oc-top-0 {
+  top:0
+}
+
+.oc-right-0 {
+  right:0
+}
+
+.oc-bottom-0 {
+  bottom:0
+}
+
+.oc-left-0 {
+  left:0
+}
+
+@each $directionKey, $directionValues in $directions {
+  .oc-#{$directionKey} {
+    @each $sizeKey, $sizeValue in $sizes {
+      &-#{$sizeKey} {
+        @each $direction in $directionValues {
+          #{$direction}: $sizeValue !important;
+        }
+      }
+    }
+  }
+}
+
 [class*="oc-float-"] {
   max-width: 100%;
 }
