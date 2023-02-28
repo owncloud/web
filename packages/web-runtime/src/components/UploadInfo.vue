@@ -157,7 +157,7 @@ export default defineComponent({
      * show the info including all uploads?
      * Prop only works intially, state gets copied ot local var infoExpanded
      */
-    infoExpanded: {
+    infoExpandedProp: {
       type: Boolean,
       default: false,
       required: false
@@ -180,6 +180,7 @@ export default defineComponent({
   },
   data: () => ({
     showInfo: false, // show the overlay?
+    infoExpanded: false, // show the info including all uploads?
     uploads: {} as Record<any, any>, // uploads that are being displayed via "infoExpanded"
     errors: {}, // all failed files
     successful: [], // all successful files
@@ -269,6 +270,8 @@ export default defineComponent({
     }
   },
   created() {
+    this.infoExpanded = this.infoExpandedProp
+
     this.$uppyService.subscribe('uploadStarted', () => {
       if (!this.remainingTime) {
         this.remainingTime = this.$gettext('Calculating estimated time...')

@@ -40,7 +40,7 @@
             />
             <div id="previews" hidden />
 
-            <upload-info :infoExpanded="true" :standalone="false" />
+            <upload-info :info-expanded-prop="true" :standalone="false" />
           </div>
 
           <div v-if="errorMessage" class="oc-text-center">
