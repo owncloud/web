@@ -2,16 +2,18 @@
   <div id="oc-file-versions-sidebar" class="-oc-mt-s">
     <oc-loader v-if="loading" />
     <ul v-if="!loading && hasVersion" class="oc-m-rm oc-position-relative">
-      <li class="spacer oc-pb-l"></li>
+      <li class="spacer oc-pb-l" aria-hidden="true"></li>
       <li
         v-for="(item, index) in versions"
         :key="index"
         class="version-item oc-pb-m oc-position-relative"
       >
         <div class="version-details">
-          <span class="version-date" data-testid="file-versions-file-last-modified-date">{{
-            formatVersionDate(item)
-          }}</span>
+          <span
+            class="version-date oc-font-black"
+            data-testid="file-versions-file-last-modified-date"
+            >{{ formatVersionDate(item) }}</span
+          >
           -
           <span class="version-filesize" data-testid="file-versions-file-size">{{
             formatVersionFileSize(item)
@@ -179,7 +181,7 @@ export default defineComponent({
       }
       .version-details {
         .version-date {
-          font-weight: 600; // No css class for font-weight?
+          font-weight: var(--oc-font-weight-semibold);
         }
       }
 
