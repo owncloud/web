@@ -1,8 +1,8 @@
 <template>
-  <div v-if="showInfo" id="upload-info" :class="{'oc-rounded oc-box-shadow-medium': standalone}">
+  <div v-if="showInfo" id="upload-info" :class="{ 'oc-rounded oc-box-shadow-medium': standalone }">
     <div
-      class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top"
       v-if="standalone"
+      class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top"
     >
       <p v-oc-tooltip="uploadDetails" class="oc-my-xs" v-text="uploadInfoTitle" />
       <oc-button
@@ -38,11 +38,11 @@
       </div>
       <div class="oc-flex">
         <oc-button
+          v-if="standalone"
           appearance="raw"
           class="oc-text-muted oc-text-small upload-info-toggle-details-btn"
           @click="toggleInfo"
           v-text="infoExpanded ? $gettext('Hide details') : $gettext('Show details')"
-          v-if="standalone"
         ></oc-button>
         <oc-button
           v-if="!runningUploads && Object.keys(errors).length"
@@ -152,14 +152,10 @@ import { formatFileSize } from 'web-pkg/src/helpers'
 import { UppyResource } from '../composables/upload'
 
 export default defineComponent({
-  setup() {
-    return {
-      hasShareJail: useCapabilityShareJailEnabled()
-    }
-  },
   props: {
     /*
      * show the info including all uploads?
+     * Prop only works intially, state gets copied ot local var infoExpanded
      */
     infoExpanded: {
       type: Boolean,
@@ -175,6 +171,11 @@ export default defineComponent({
       type: Boolean,
       default: true,
       required: false
+    }
+  },
+  setup() {
+    return {
+      hasShareJail: useCapabilityShareJailEnabled()
     }
   },
   data: () => ({

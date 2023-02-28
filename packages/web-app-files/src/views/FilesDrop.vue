@@ -1,8 +1,15 @@
 <template>
   <div class="oc-flex oc-flex-column oc-p-xl oc-pb-rm oc-flex-nowrap">
     <div class="oc-flex oc-flex-column oc-height-1-1">
-      <div id="files-drop-container" class="oc-flex oc-flex-column oc-flex-between oc-flex-center oc-width-expand oc-flex-nowrap oc-p-m" :class="{'dragarea-enabled': dragareaEnabled}">
-        <div v-if="dragareaEnabled" class="dragarea oc-position-absolute oc-inset-0 oc-background-highlight oc-flex oc-flex-center oc-flex-column oc-flex-middle oc-p-m" >
+      <div
+        id="files-drop-container"
+        class="oc-flex oc-flex-column oc-flex-between oc-flex-center oc-width-expand oc-flex-nowrap oc-p-m"
+        :class="{ 'dragarea-enabled': dragareaEnabled }"
+      >
+        <div
+          v-if="dragareaEnabled"
+          class="dragarea oc-position-absolute oc-inset-0 oc-background-highlight oc-flex oc-flex-center oc-flex-column oc-flex-middle oc-p-m"
+        >
           <div class="upload-icon oc-position-relative oc-mb-m oc-text-xlarge">
             <div class="box"></div>
             <div class="arrow oc-position-absolute oc-position-center"></div>
@@ -17,7 +24,11 @@
           </h2>
           <oc-spinner :aria-hidden="true" />
         </div>
-        <div v-else key="loaded-drop" class="oc-flex oc-flex-column oc-height-1-1 oc-flex-middle oc-flex-center">
+        <div
+          v-else
+          key="loaded-drop"
+          class="oc-flex oc-flex-column oc-height-1-1 oc-flex-middle oc-flex-center"
+        >
           <div class="oc-text-center oc-width-1-1 oc-flex oc-flex-middle oc-flex-column">
             <div v-text="title" />
             <resource-upload
@@ -25,7 +36,7 @@
               ref="fileUpload"
               class="oc-flex oc-flex-middle oc-flex-center oc-placeholder"
               :btn-label="$gettext('Choose a file')"
-              :btnClass="'oc-text-bold oc-button-l'"
+              :btn-class="'oc-text-bold oc-button-l'"
             />
             <div id="previews" hidden />
 
@@ -40,12 +51,24 @@
           </div>
 
           <div class="explanation oc-flex oc-flex-center oc-mt-l">
-              <div class="oc-width-1-2@m oc-width-1-3@xl oc-pt-l">
-                <h2 class="oc-text-center" v-text="$gettext('What is this?')" />
-                <p v-text="$gettext('You can upload files here simply by drag `n drop or click on “Choose a file“ to open a file selection box.')" />
-                <p v-text="$gettext('Since this an upload-only link you cannot see the contents existing within this resource. If you are not sure why you`re seeing this please contact the person who sent you the link or contact your local administrator.')" />
-              </div>
+            <div class="oc-width-1-2@m oc-width-1-3@xl oc-pt-l">
+              <h2 class="oc-text-center" v-text="$gettext('What is this?')" />
+              <p
+                v-text="
+                  $gettext(
+                    'You can upload files here simply by drag `n drop or click on “Choose a file“ to open a file selection box.'
+                  )
+                "
+              />
+              <p
+                v-text="
+                  $gettext(
+                    'Since this an upload-only link you cannot see the contents existing within this resource. If you are not sure why you`re seeing this please contact the person who sent you the link or contact your local administrator.'
+                  )
+                "
+              />
             </div>
+          </div>
         </div>
       </div>
       <div class="oc-text-center">
@@ -223,11 +246,11 @@ export default defineComponent({
   background: transparent;
   border: 3px dashed var(--oc-color-input-border);
   border-radius: 12px;
-  transition : border 500ms ease-out;
+  transition: border 500ms ease-out;
 
   &.dragarea-enabled {
     border: 3px dashed var(--oc-color-swatch-primary-muted);
-    transition : border 500ms ease-out;
+    transition: border 500ms ease-out;
   }
 
   .dragarea {
@@ -251,7 +274,7 @@ export default defineComponent({
 
       .arrow:before,
       .arrow:after {
-      content: '';
+        content: '';
         position: absolute;
         top: 0;
         right: -16px;
@@ -260,47 +283,78 @@ export default defineComponent({
         border-radius: 10px;
         display: block;
         background: var(--oc-color-text-default);
-        transform:rotate(-45deg);
-        -webkit-transform:rotate(-45deg);
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
       }
 
-      .arrow:after{
+      .arrow:after {
         right: inherit;
         left: -15px;
-        transform:rotate(45deg);
-        -webkit-transform:rotate(45deg);
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
       }
     }
   }
 
   .explanation {
-    &> div {
+    & > div {
       border-top: 1px solid var(--oc-color-input-border);
     }
   }
 }
 
 @-webkit-keyframes bounce {
-  0% {-webkit-transform: translateY(-30xp); opacity: 0;}
-  60% { opacity: 1;}
-  100% {-webkit-transform: translateY(-10px); opacity: 0}
+  0% {
+    -webkit-transform: translateY(-30xp);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(-10px);
+    opacity: 0;
+  }
 }
 
 @-moz-keyframes bounce {
-  0% {-webkit-transform: translateY(-30px); opacity: 0;}
-  60% { opacity: 1;}
-  100% {-webkit-transform: translateY(-10px); opacity: 0}
+  0% {
+    -webkit-transform: translateY(-30px);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(-10px);
+    opacity: 0;
+  }
 }
 
 @-o-keyframes bounce {
-  0% {-webkit-transform: translateY(-30px); opacity: 0;}
-  60% { opacity: 1;}
-  100% {-webkit-transform: translateY(-10px); opacity: 0}
+  0% {
+    -webkit-transform: translateY(-30px);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(-10px);
+    opacity: 0;
+  }
 }
 @keyframes bounce {
-  0% {-webkit-transform: translateY(-30px); opacity: 0;}
-  60% { opacity: 1;}
-  100% {-webkit-transform: translateY(-10px); opacity: 0}
+  0% {
+    -webkit-transform: translateY(-30px);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(-10px);
+    opacity: 0;
+  }
 }
-
 </style>

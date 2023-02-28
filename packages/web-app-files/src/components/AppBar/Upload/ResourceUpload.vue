@@ -2,10 +2,17 @@
   <div>
     <div class="oc-text-xlarge">
       <h1 class="oc-text-normal">
-        <oc-button :class="btnClass" justify-content="left" appearance="raw" @click="triggerUpload" class="oc-display-inline-block oc-text-bold oc-position-relative">
+        <oc-button
+          :class="btnClass"
+          justify-content="left"
+          appearance="raw"
+          class="oc-display-inline-block oc-text-bold oc-position-relative"
+          @click="triggerUpload"
+        >
           <span :id="uploadLabelId">{{ buttonLabel }}</span>
         </oc-button>
-        <span v-text="$gettext('or drag it here')" /></h1>
+        <span v-text="$gettext('or drag it here')" />
+      </h1>
     </div>
     <input
       :id="inputId"
@@ -120,5 +127,4 @@ button {
     }
   }
 }
-
 </style>
