@@ -42,7 +42,7 @@
           <div class="explanation oc-flex oc-flex-center oc-mt-l">
               <div class="oc-width-1-2@m oc-width-1-3@xl oc-pt-l">
                 <h2 class="oc-text-center" v-text="$gettext('What is this?')" />
-                <p v-text="$gettext('You can upload files here simply by drag `n drop of click on “Choose a file“ to open a file selection box.')" />
+                <p v-text="$gettext('You can upload files here simply by drag `n drop or click on “Choose a file“ to open a file selection box.')" />
                 <p v-text="$gettext('Since this an upload-only link you cannot see the contents existing within this resource. If you are not sure why you`re seeing this please contact the person who sent you the link or contact your local administrator.')" />
               </div>
             </div>
