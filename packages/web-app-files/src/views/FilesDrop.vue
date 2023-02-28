@@ -1,30 +1,34 @@
 <template>
-  <div id="files-drop-container" class="oc-height-1-1 oc-flex oc-flex-column oc-flex-between">
-    <div v-if="dragareaEnabled" class="dragarea" />
-    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-p oc-height-1-1">
-      <div v-if="loading" key="loading-drop" class="oc-flex oc-flex-column oc-flex-middle">
-        <h2 class="oc-login-card-title">
-          <span v-text="$gettext('Loading public link…')" />
-        </h2>
-        <oc-spinner :aria-hidden="true" />
-      </div>
-      <div v-else key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle oc-height-1-1">
-        <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
-          <h2 v-text="title" />
-          <resource-upload
-            id="files-drop-zone"
-            ref="fileUpload"
-            class="oc-flex oc-flex-middle oc-flex-center oc-placeholder"
-            :btn-label="$gettext('Drop files here to upload or click to select file')"
-          />
-          <div id="previews" hidden />
-        </div>
-        <div v-if="errorMessage" class="oc-text-center">
-          <h2>
-            <span v-text="$gettext('An error occurred while loading the public link')" />
+  <div>
+    <div id="files-drop-container" class="oc-flex oc-flex-column oc-flex-between oc-flex-center">
+      TESAT
+      <div v-if="dragareaEnabled" class="dragarea" />
+
+      <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
+      <div class="oc-p oc-height-1-1">
+        <div v-if="loading" key="loading-drop" class="oc-flex oc-flex-column oc-flex-middle">
+          <h2 class="oc-login-card-title">
+            <span v-text="$gettext('Loading public link…')" />
           </h2>
-          <p class="oc-m-rm" v-text="errorMessage" />
+          <oc-spinner :aria-hidden="true" />
+        </div>
+        <div v-else key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle oc-height-1-1">
+          <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
+            <h2 v-text="title" />
+            <resource-upload
+              id="files-drop-zone"
+              ref="fileUpload"
+              class="oc-flex oc-flex-middle oc-flex-center oc-placeholder"
+              :btn-label="$gettext('Drop files here to upload or click to select file')"
+            />
+            <div id="previews" hidden />
+          </div>
+          <div v-if="errorMessage" class="oc-text-center">
+            <h2>
+              <span v-text="$gettext('An error occurred while loading the public link')" />
+            </h2>
+            <p class="oc-m-rm" v-text="errorMessage" />
+          </div>
         </div>
       </div>
     </div>
@@ -197,8 +201,9 @@ export default defineComponent({
 #files-drop-container {
   position: relative;
   background: transparent;
-  border: 1px dashed var(--oc-color-input-border);
+  border: 3px dashed var(--oc-color-input-border);
   margin: var(--oc-space-xlarge);
+  border-radius: 12px;
 }
 .dragarea {
   background-color: rgba(60, 130, 225, 0.21);
