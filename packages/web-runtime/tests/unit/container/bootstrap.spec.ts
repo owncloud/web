@@ -60,26 +60,28 @@ describe('announceCustomScripts', () => {
 
   it('injects basic scripts', () => {
     announceCustomScripts({
-      runtimeConfiguration: { scripts: [{ src: 'foo.js' }, { src: 'bar.js' }] }
+      runtimeConfiguration: { options: { scripts: [{ src: 'foo.js' }, { src: 'bar.js' }] } }
     })
     const elements = document.getElementsByTagName('script')
     expect(elements.length).toBe(2)
   })
 
   it('skips the injection if no src option is provided', () => {
-    announceCustomScripts({ runtimeConfiguration: { scripts: [{}, {}, {}, {}, {}] } })
+    announceCustomScripts({ runtimeConfiguration: { options: { scripts: [{}, {}, {}, {}, {}] } } })
     const elements = document.getElementsByTagName('script')
     expect(elements.length).toBeFalsy()
   })
 
   it('loads scripts synchronous by default', () => {
-    announceCustomScripts({ runtimeConfiguration: { scripts: [{ src: 'foo.js' }] } })
+    announceCustomScripts({ runtimeConfiguration: { options: { scripts: [{ src: 'foo.js' }] } } })
     const element = document.querySelector<HTMLScriptElement>('[src="foo.js"]')
     expect(element.async).toBeFalsy()
   })
 
   it('injects scripts async if the corresponding configurations option is set', () => {
-    announceCustomScripts({ runtimeConfiguration: { scripts: [{ src: 'foo.js', async: true }] } })
+    announceCustomScripts({
+      runtimeConfiguration: { options: { scripts: [{ src: 'foo.js', async: true }] } }
+    })
     const element = document.querySelector<HTMLScriptElement>('[src="foo.js"]')
     expect(element.async).toBeTruthy()
   })
@@ -92,7 +94,7 @@ describe('announceCustomStyles', () => {
 
   it('injects basic styles', () => {
     const styles = [{ href: 'foo.css' }, { href: 'bar.css' }]
-    announceCustomStyles({ runtimeConfiguration: { styles } })
+    announceCustomStyles({ runtimeConfiguration: { options: { styles } } })
 
     styles.forEach(({ href }) => {
       const element = document.querySelector<HTMLLinkElement>(`[href="${href}"]`)
@@ -103,7 +105,7 @@ describe('announceCustomStyles', () => {
   })
 
   it('skips the injection if no href option is provided', () => {
-    announceCustomStyles({ runtimeConfiguration: { styles: [{}, {}] } })
+    announceCustomStyles({ runtimeConfiguration: { options: { styles: [{}, {}] } } })
     const elements = document.getElementsByTagName('link')
     expect(elements.length).toBeFalsy()
   })
