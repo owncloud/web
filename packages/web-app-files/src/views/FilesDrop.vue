@@ -217,7 +217,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #files-drop-container {
   position: relative;
   background: transparent;
@@ -301,11 +301,6 @@ export default defineComponent({
   0% {-webkit-transform: translateY(-30px); opacity: 0;}
   60% { opacity: 1;}
   100% {-webkit-transform: translateY(-10px); opacity: 0}
-}
-
-.snackbars #upload-info,  // hide upload info snackbar as it would be a duplicate
-#applications-menu {      // hide applications menu as there is no use in puplic link page
-  display: none;
 }
 
 </style>
