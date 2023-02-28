@@ -1,7 +1,8 @@
 <template>
-  <div v-if="showInfo" id="upload-info" class="oc-rounded oc-box-shadow-medium">
+  <div v-if="showInfo" id="upload-info" :class="{'oc-rounded oc-box-shadow-medium': standalone}">
     <div
       class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top"
+      v-if="standalone"
     >
       <p v-oc-tooltip="uploadDetails" class="oc-my-xs" v-text="uploadInfoTitle" />
       <oc-button
@@ -41,6 +42,7 @@
           class="oc-text-muted oc-text-small upload-info-toggle-details-btn"
           @click="toggleInfo"
           v-text="infoExpanded ? $gettext('Hide details') : $gettext('Show details')"
+          v-if="standalone"
         ></oc-button>
         <oc-button
           v-if="!runningUploads && Object.keys(errors).length"
@@ -155,9 +157,28 @@ export default defineComponent({
       hasShareJail: useCapabilityShareJailEnabled()
     }
   },
+  props: {
+    /*
+     * show the info including all uploads?
+     */
+    infoExpanded: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+
+    /**
+     * show it as standalone component?
+     * Renders the header and the close button
+     */
+    standalone: {
+      type: Boolean,
+      default: true,
+      required: false
+    }
+  },
   data: () => ({
     showInfo: false, // show the overlay?
-    infoExpanded: false, // show the info including all uploads?
     uploads: {} as Record<any, any>, // uploads that are being displayed via "infoExpanded"
     errors: {}, // all failed files
     successful: [], // all successful files
