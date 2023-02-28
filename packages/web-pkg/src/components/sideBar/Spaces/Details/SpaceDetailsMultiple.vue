@@ -9,23 +9,23 @@
     <div>
       <table class="details-table" :aria-label="detailsTableLabel">
         <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Total quota:')" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Total quota:')" />
           <td v-text="totalSelectedSpaceQuotaTotal" />
         </tr>
         <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Remaining quota:')" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Remaining quota:')" />
           <td v-text="totalSelectedSpaceQuotaRemaining" />
         </tr>
         <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Used quota:')" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Used quota:')" />
           <td v-text="totalSelectedSpaceQuotaUsed" />
         </tr>
         <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Enabled:')" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Enabled:')" />
           <td v-text="totalEnabledSpaces" />
         </tr>
         <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Disabled:')" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Disabled:')" />
           <td v-text="totalDisabledSpaces" />
         </tr>
       </table>
@@ -143,10 +143,6 @@ export default defineComponent({
 
   tr {
     height: 1.5rem;
-  }
-
-  th {
-    font-weight: 600;
   }
 }
 </style>

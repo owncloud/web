@@ -1,4 +1,4 @@
-Change: Beautify file version list
+Enhancement: Beautify file version list
 
 We added css changes to the file versions list to make it look more clean and
 to use standardized layouts like action buttons, download icons etc.

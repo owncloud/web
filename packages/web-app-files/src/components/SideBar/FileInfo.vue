@@ -8,7 +8,7 @@
         class="file_info__icon oc-mr-s"
       />
       <div class="file_info__body oc-text-overflow">
-        <h3 data-testid="files-info-name">
+        <h3 data-testid="files-info-name" class="oc-font-semibold">
           <oc-resource-name
             :name="resource.name"
             :extension="resource.extension"
@@ -78,7 +78,6 @@ export default defineComponent({
 
     h3 {
       font-size: var(--oc-font-size-medium);
-      font-weight: 600;
       margin: 0;
       word-break: break-all;
     }

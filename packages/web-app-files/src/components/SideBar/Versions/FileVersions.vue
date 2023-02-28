@@ -10,7 +10,7 @@
       >
         <div class="version-details">
           <span
-            class="version-date oc-font-black"
+            class="version-date oc-font-semibold"
             data-testid="file-versions-file-last-modified-date"
             >{{ formatVersionDate(item) }}</span
           >
@@ -57,7 +57,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { defineComponent, inject, ref, computed, unref } from 'vue'
+import { defineComponent, inject, ref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissions } from 'web-client/src/helpers/share'
 
@@ -65,17 +65,11 @@ export default defineComponent({
   name: 'FileVersions',
   setup() {
     const loading = ref(false)
-    const resource = inject<Resource>('resource')
-    const space = inject<SpaceResource>('space')
-    const resources = computed(() => {
-      return [unref(resource)]
-    })
 
     return {
       space: inject<SpaceResource>('space'),
       resource: inject<Resource>('resource'),
-      loading,
-      resources
+      loading
     }
   },
   computed: {
@@ -178,11 +172,6 @@ export default defineComponent({
         top: 4px;
         background-color: var(--oc-color-border);
         border-radius: 50%;
-      }
-      .version-details {
-        .version-date {
-          font-weight: var(--oc-font-weight-semibold);
-        }
       }
 
       button.version-action-item {

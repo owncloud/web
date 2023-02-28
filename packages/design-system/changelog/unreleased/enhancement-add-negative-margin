@@ -1,4 +1,4 @@
-Enhancement: Design Sytem: CSS classes for negative margin added
+Enhancement: CSS classes for negative margin added
 
 We added css classes to the design system which provide
 negative margins. Can be used like normal css margin classes

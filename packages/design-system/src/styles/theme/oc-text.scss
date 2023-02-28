@@ -198,3 +198,9 @@ td.oc-text-break {
 .oc-text-uppercase {
   text-transform: uppercase !important;
 }
+
+@each $weightKey, $weightValue in $weights {
+  .oc-font-#{$weightKey} {
+    font-weight: $weightValue;
+  }
+}

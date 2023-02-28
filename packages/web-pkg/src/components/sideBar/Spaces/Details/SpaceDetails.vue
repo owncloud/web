@@ -45,21 +45,21 @@
     </div>
     <table class="details-table" :aria-label="detailsTableLabel">
       <tr>
-        <th scope="col" class="oc-pr-s" v-text="$gettext('Last activity')" />
+        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Last activity')" />
         <td v-text="lastModifiedDate" />
       </tr>
       <tr v-if="resource.description">
-        <th scope="col" class="oc-pr-s" v-text="$gettext('Subtitle')" />
+        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Subtitle')" />
         <td v-text="resource.description" />
       </tr>
       <tr>
-        <th scope="col" class="oc-pr-s" v-text="$gettext('Manager')" />
+        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Manager')" />
         <td>
           <span v-text="ownerUsernames" />
         </td>
       </tr>
       <tr v-if="!resource.disabled">
-        <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
+        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Quota')" />
         <td>
           <space-quota :space-quota="resource.spaceQuota" />
         </td>
@@ -260,10 +260,6 @@ export default defineComponent({
 
   tr {
     height: 1.5rem;
-  }
-
-  th {
-    font-weight: 600;
   }
 }
 </style>

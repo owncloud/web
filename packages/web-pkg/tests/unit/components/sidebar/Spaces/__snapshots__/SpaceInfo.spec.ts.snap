@@ -7,7 +7,7 @@ exports[`SpaceInfo shows space info 1`] = `
       <oc-icon-stub accessiblelabel="" class="oc-display-block" color="" filltype="fill" name="layout-grid" size="medium" type="span" variation="passive"></oc-icon-stub>
     </div>
     <div>
-      <h3> space</h3>
+      <h3 class="oc-font-semibold oc-m-rm"> space</h3>
       <span></span>
     </div>
   </div>

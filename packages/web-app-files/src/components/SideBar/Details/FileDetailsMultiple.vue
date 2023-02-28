@@ -9,19 +9,19 @@
     <div>
       <table class="details-table" :aria-label="detailsTableLabel">
         <tr data-testid="filesCount">
-          <th scope="col" class="oc-pr-s" v-text="filesText" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="filesText" />
           <td v-text="filesCount" />
         </tr>
         <tr data-testid="foldersCount">
-          <th scope="col" class="oc-pr-s" v-text="foldersText" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="foldersText" />
           <td v-text="foldersCount" />
         </tr>
         <tr v-if="showSpaceCount" data-testid="spacesCount">
-          <th scope="col" class="oc-pr-s" v-text="spacesText" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="spacesText" />
           <td v-text="spacesCount" />
         </tr>
         <tr data-testid="size">
-          <th scope="col" class="oc-pr-s" v-text="sizeText" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="sizeText" />
           <td v-text="sizeValue" />
         </tr>
       </table>
@@ -117,10 +117,6 @@ export default defineComponent({
 
   tr {
     height: 1.5rem;
-  }
-
-  th {
-    font-weight: 600;
   }
 }
 </style>
