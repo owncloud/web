@@ -14,10 +14,6 @@ $directives: ("m": "margin", "p": "padding");
               #{$directiveValue}-#{$direction}: $sizeValue !important;
             }
           }
-
-          &-rm {
-            #{$directiveValue}-#{$direction}: 0 !important;
-          }
         }
       }
     }
@@ -25,6 +21,20 @@ $directives: ("m": "margin", "p": "padding");
     @each $sizeKey, $sizeValue in $sizes {
       &-#{$sizeKey} {
         #{$directiveValue}: $sizeValue !important;
+      }
+    }
+  }
+}
+
+@each $directiveKey, $directiveValue in $directives {
+  .oc-#{$directiveKey} {
+    @each $directionKey, $directionValues in $directions {
+      &#{$directionKey} {
+        @each $direction in $directionValues {
+          &-rm {
+            #{$directiveValue}-#{$direction}: 0 !important;
+          }
+        }
       }
     }
 
