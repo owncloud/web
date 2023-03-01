@@ -167,11 +167,9 @@ export default defineComponent({
     },
 
     breadcrumbs() {
-      let allowContextActions = true
       let currentNodeName = this.space?.name
       if (this.space.driveType === 'personal') {
         currentNodeName = this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files')
-        allowContextActions = false
       }
       return [
         {
@@ -179,7 +177,6 @@ export default defineComponent({
           to: createLocationTrash('files-trash-overview') // FIXME: UX of clicking `Deleted files` and being redirected to personal trash is wrong.
         },
         {
-          allowContextActions,
           text: currentNodeName,
           onClick: () => eventBus.publish('app.files.list.load')
         }
