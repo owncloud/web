@@ -35,12 +35,28 @@
               id="files-drop-zone"
               ref="fileUpload"
               class="oc-flex oc-flex-middle oc-flex-center oc-placeholder"
-              :btn-label="$gettext('Choose a file')"
-              :btn-class="'oc-text-bold oc-button-l'"
-            />
+            >
+              <template v-slot="{triggerUpload, uploadLabelId}">
+                <div class="oc-text-xlarge">
+                  <h1 class="oc-text-normal">
+                    <oc-button
+                      justify-content="left"
+                      appearance="raw"
+                      class="oc-font-semibold oc-button-l"
+                      variation="primary"
+                      @click="triggerUpload"
+                    >
+                      <span :id="uploadLabelId" v-text="$gettext('Choose a file')"></span>
+                    </oc-button>
+                    <span v-text="$gettext('or drag it here')" />
+                  </h1>
+                </div>
+              </template>
+            </resource-upload>
+
             <div id="previews" hidden />
 
-            <upload-info :info-expanded-initial="true" :standalone="false" />
+            <upload-info :info-expanded-initial="true" :headless="true" :show-expand-details-button="false" />
           </div>
 
           <div v-if="errorMessage" class="oc-text-center">
@@ -299,6 +315,13 @@ export default defineComponent({
   .explanation {
     & > div {
       border-top: 1px solid var(--oc-color-input-border);
+    }
+  }
+
+  button {
+    &:hover {
+      color: var(--oc-color-swatch-primary-default);
+      text-decoration: underline;
     }
   }
 }
