@@ -1,7 +1,7 @@
 <template>
-  <div v-if="showInfo" id="upload-info" :class="{ 'oc-rounded oc-box-shadow-medium': standalone }">
+  <div v-if="showInfo" id="upload-info" :class="{ 'oc-rounded oc-box-shadow-medium': headless === false }">
     <div
-      v-if="standalone"
+      v-if="headless === false"
       class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top"
     >
       <p v-oc-tooltip="uploadDetails" class="oc-my-xs" v-text="uploadInfoTitle" />
@@ -38,7 +38,7 @@
       </div>
       <div class="oc-flex">
         <oc-button
-          v-if="standalone"
+          v-if="showExpandDetailsButton"
           appearance="raw"
           class="oc-text-muted oc-text-small upload-info-toggle-details-btn"
           @click="toggleInfo"
@@ -157,17 +157,26 @@ export default defineComponent({
      * show the info including all uploads?
      * Prop only works intially, state gets copied ot local var infoExpanded
      */
-    infoExpandedInital: {
+    infoExpandedInitial: {
       type: Boolean,
       default: false,
       required: false
     },
 
     /**
-     * show it as standalone component?
+     * Render as headless component?
      * Renders the header and the close button
      */
-    standalone: {
+    headless: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+
+    /**
+     * Show the button to expand/hide upload details?
+     */
+     showExpandDetailsButton: {
       type: Boolean,
       default: true,
       required: false
@@ -270,7 +279,7 @@ export default defineComponent({
     }
   },
   created() {
-    this.infoExpanded = this.infoExpandedInital
+    this.infoExpanded = this.infoExpandedInitial
 
     this.$uppyService.subscribe('uploadStarted', () => {
       if (!this.remainingTime) {
