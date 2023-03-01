@@ -176,7 +176,7 @@ export default defineComponent({
       return [
         {
           text: this.$gettext('Deleted files'),
-          to: createLocationTrash('files-trash-generic') // FIXME: UX of clicking `Deleted files` and being redirected to personal trash is wrong.
+          to: createLocationTrash('files-trash-overview') // FIXME: UX of clicking `Deleted files` and being redirected to personal trash is wrong.
         },
         {
           allowContextActions,
