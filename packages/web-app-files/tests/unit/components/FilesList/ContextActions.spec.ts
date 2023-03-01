@@ -31,7 +31,6 @@ const mixins = [
   '$_declineShare_items',
   '$_setSpaceImage_items',
   '$_setSpaceReadme_items',
-  '$_navigate_space_items',
   '$_navigate_items',
   '$_favorite_items',
   '$_showDetails_items',

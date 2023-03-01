@@ -142,7 +142,6 @@ export default {
         ...this.$_declineShare_items,
         ...this.$_setSpaceImage_items,
         ...this.$_setSpaceReadme_items,
-        ...this.$_navigate_space_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 
