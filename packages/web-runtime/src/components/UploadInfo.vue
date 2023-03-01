@@ -157,7 +157,7 @@ export default defineComponent({
      * show the info including all uploads?
      * Prop only works intially, state gets copied ot local var infoExpanded
      */
-    infoExpandedProp: {
+    infoExpandedInital: {
       type: Boolean,
       default: false,
       required: false
@@ -270,7 +270,7 @@ export default defineComponent({
     }
   },
   created() {
-    this.infoExpanded = this.infoExpandedProp
+    this.infoExpanded = this.infoExpandedInital
 
     this.$uppyService.subscribe('uploadStarted', () => {
       if (!this.remainingTime) {
