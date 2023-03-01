@@ -94,7 +94,6 @@ export default defineComponent({
             (space.driveType === 'project' || space.driveType === 'personal')
         )
 
-      console.log(drives)
       if (drives.length === 1) {
         return router.push(getTrashLink(drives.pop()))
       }
@@ -123,10 +122,10 @@ export default defineComponent({
 
         if (prop === 'name') {
           if (s1.driveType === 'personal') {
-            return s1
+            return -1
           }
           if (s2.driveType === 'personal') {
-            return s2
+            return -1
           }
         }
 

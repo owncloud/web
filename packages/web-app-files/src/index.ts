@@ -80,7 +80,7 @@ const navItems = [
     icon: 'delete-bin-5',
     route: {
       path: `/${appInfo.id}/trash`,
-      activeFor: [{ path: `/${appInfo.id}/trash/` }]
+      activeFor: [{ path: `/${appInfo.id}/trash` }]
     },
     enabled(capabilities) {
       return capabilities.dav && capabilities.dav.trashbin === '1.0'
