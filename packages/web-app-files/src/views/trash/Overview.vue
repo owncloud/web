@@ -60,7 +60,12 @@ import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { configurationManager, useGraphClient, useRouter } from 'web-pkg'
+import {
+  configurationManager,
+  useCapabilityProjectSpacesEnabled,
+  useGraphClient,
+  useRouter
+} from 'web-pkg'
 import { createLocationTrash } from 'web-app-files/src/router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
@@ -71,9 +76,9 @@ export default defineComponent({
   components: { FilesViewWrapper, AppBar },
   methods: { createLocationTrash },
   setup: function () {
-    console.log('setup')
-    const { $gettext } = useGettext()
     const router = useRouter()
+    const hasProjectSpaces = useCapabilityProjectSpacesEnabled
+    const { $gettext } = useGettext()
     const sortBy = ref('name')
     const sortDir = ref('asc')
     const filterTerm = ref('')
@@ -93,10 +98,6 @@ export default defineComponent({
             space.disabled !== true &&
             (space.driveType === 'project' || space.driveType === 'personal')
         )
-
-      if (drives.length === 1) {
-        return router.push(getTrashLink(drives.pop()))
-      }
 
       spaces.value = orderBy(drives, 'name', 'asc')
     })
@@ -182,7 +183,14 @@ export default defineComponent({
     }
 
     onMounted(async () => {
+      if (!hasProjectSpaces) {
+        return router.push(createLocationTrash('files-trash-generic'))
+      }
       await loadResourcesTask.perform()
+
+      if (unref(spaces).length <= 1) {
+        return router.push(createLocationTrash('files-trash-generic'))
+      }
 
       nextTick(() => {
         markInstance.value = new Mark(unref(tableRef)?.$el)
@@ -211,6 +219,7 @@ export default defineComponent({
       fields,
       tableRef,
       spaces,
+      hasProjectSpaces,
       filter,
       handleSort,
       orderedSpaces,
