@@ -1,42 +1,54 @@
 <template>
-  <div>
-    <oc-text-input
-      id="spaces-filter"
-      v-model="filterTerm"
-      class="oc-ml-m oc-my-s"
-      :label="$gettext('Search')"
-      autocomplete="off"
-    />
-    <oc-table
-      ref="tableRef"
-      class="spaces-table"
-      :sort-by="sortBy"
-      :sort-dir="sortDir"
-      :fields="fields"
-      :data="orderedSpaces"
-      :sticky="true"
-      :hover="true"
-      @sort="handleSort"
-    >
-      <template #icon="{ item }">
-        <oc-icon v-if="item.driveType === 'personal'" name="folder" />
-        <oc-icon v-else name="layout-grid" />
-      </template>
-      <template #name="{ item }">
-        <oc-button
-          type="router-link"
-          appearance="raw"
-          :to="getTrashLink(item)"
-          v-text="getSpaceName(item)"
+  <div class="oc-flex">
+    <files-view-wrapper>
+      <app-bar
+        :breadcrumbs="breadcrumbs"
+        :has-sidebar-toggle="false"
+        :has-view-options="false"
+        :has-hidden-files="false"
+        :has-file-extensions="false"
+        :has-pagination="false"
+      />
+      <div>
+        <oc-text-input
+          id="spaces-filter"
+          v-model="filterTerm"
+          class="oc-ml-m oc-my-s"
+          :label="$gettext('Search')"
+          autocomplete="off"
         />
-      </template>
-      <template #footer>
-        <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
-          <p class="oc-text-muted">{{ footerTextTotal }}</p>
-          <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
-        </div>
-      </template>
-    </oc-table>
+        <oc-table
+          ref="tableRef"
+          class="spaces-table"
+          :sort-by="sortBy"
+          :sort-dir="sortDir"
+          :fields="fields"
+          :data="orderedSpaces"
+          :sticky="true"
+          :hover="true"
+          @sort="handleSort"
+        >
+          <template #icon="{ item }">
+            <oc-icon v-if="item.driveType === 'personal'" name="folder" />
+            <oc-icon v-else name="layout-grid" />
+          </template>
+          <template #name="{ item }">
+            <oc-button
+              type="router-link"
+              appearance="raw"
+              :to="getTrashLink(item)"
+              v-text="getSpaceName(item)"
+            />
+          </template>
+          <template #footer>
+            <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+              <p class="oc-text-muted">{{ footerTextTotal }}</p>
+              <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
+            </div>
+          </template>
+        </oc-table>
+      </div>
+    </files-view-wrapper>
   </div>
 </template>
 
@@ -47,12 +59,15 @@ import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { configurationManager, useGraphClient } from 'web-pkg'
+import { configurationManager, eventBus, useGraphClient } from 'web-pkg'
 import { createLocationTrash } from 'web-app-files/src/router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
+import FilesViewWrapper from 'web-app-files/src/components/FilesViewWrapper.vue'
 
 export default defineComponent({
   name: 'TrashOverview',
+  components: { FilesViewWrapper, AppBar },
   methods: { createLocationTrash },
   setup: function (props) {
     const { $gettext } = useGettext()
@@ -71,7 +86,7 @@ export default defineComponent({
       const drives = drivesResponse
         .map((space) => buildSpace({ ...space, serverUrl: configurationManager.serverUrl }))
         .filter((space) => space.driveType === 'project' || space.driveType === 'personal')
-      spaces.value = drives
+      spaces.value = orderBy(drives, 'name', 'asc')
     })
 
     const footerTextTotal = computed(() => {
@@ -84,6 +99,10 @@ export default defineComponent({
         spaceCount: unref(orderedSpaces).length
       })
     })
+
+    const breadcrumbs = computed(() => [
+      { text: $gettext('Deleted files'), onClick: () => loadResourcesTask.perform() }
+    ])
 
     const orderBy = (list, prop, desc) => {
       return [...list].sort((s1, s2) => {
@@ -155,7 +174,6 @@ export default defineComponent({
 
       nextTick(() => {
         markInstance.value = new Mark(unref(tableRef).$el)
-        orderBy(spaces, 'name', 'asc')
       })
     })
 
@@ -184,6 +202,7 @@ export default defineComponent({
       filter,
       handleSort,
       orderedSpaces,
+      breadcrumbs,
       getSpaceName,
       getTrashLink
     }
