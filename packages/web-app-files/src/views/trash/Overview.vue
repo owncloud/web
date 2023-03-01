@@ -77,7 +77,6 @@ export default defineComponent({
   methods: { createLocationTrash },
   setup: function () {
     const router = useRouter()
-    const hasProjectSpaces = useCapabilityProjectSpacesEnabled
     const { $gettext } = useGettext()
     const sortBy = ref('name')
     const sortDir = ref('asc')
@@ -86,6 +85,7 @@ export default defineComponent({
     const tableRef = ref(undefined)
     const spaces = ref([])
     const { graphClient } = useGraphClient()
+    const hasProjectSpaces = useCapabilityProjectSpacesEnabled()
 
     const loadResourcesTask = useTask(function* (signal) {
       const {
@@ -183,7 +183,7 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      if (!hasProjectSpaces) {
+      if (!unref(hasProjectSpaces)) {
         return router.push(createLocationTrash('files-trash-generic'))
       }
       await loadResourcesTask.perform()
