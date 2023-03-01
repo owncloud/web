@@ -1,5 +1,6 @@
 <template>
-  <div class="oc-flex">
+  <app-loading-spinner v-if="loadResourcesTask.isRunning || !loadResourcesTask.last" />
+  <div v-else class="oc-flex">
     <files-view-wrapper>
       <app-bar
         :breadcrumbs="breadcrumbs"
@@ -59,7 +60,7 @@ import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { configurationManager, useGraphClient } from 'web-pkg'
+import { configurationManager, useGraphClient, useRouter } from 'web-pkg'
 import { createLocationTrash } from 'web-app-files/src/router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
@@ -69,8 +70,10 @@ export default defineComponent({
   name: 'TrashOverview',
   components: { FilesViewWrapper, AppBar },
   methods: { createLocationTrash },
-  setup: function (props) {
+  setup: function () {
+    console.log('setup')
     const { $gettext } = useGettext()
+    const router = useRouter()
     const sortBy = ref('name')
     const sortDir = ref('asc')
     const filterTerm = ref('')
@@ -85,7 +88,17 @@ export default defineComponent({
       } = yield unref(graphClient).drives.listMyDrives()
       const drives = drivesResponse
         .map((space) => buildSpace({ ...space, serverUrl: configurationManager.serverUrl }))
-        .filter((space) => space.driveType === 'project' || space.driveType === 'personal')
+        .filter(
+          (space) =>
+            space.disabled !== true &&
+            (space.driveType === 'project' || space.driveType === 'personal')
+        )
+
+      console.log(drives)
+      if (drives.length === 1) {
+        return router.push(getTrashLink(drives.pop()))
+      }
+
       spaces.value = orderBy(drives, 'name', 'asc')
     })
 
@@ -173,7 +186,7 @@ export default defineComponent({
       await loadResourcesTask.perform()
 
       nextTick(() => {
-        markInstance.value = new Mark(unref(tableRef).$el)
+        markInstance.value = new Mark(unref(tableRef)?.$el)
       })
     })
 
@@ -204,7 +217,8 @@ export default defineComponent({
       orderedSpaces,
       breadcrumbs,
       getSpaceName,
-      getTrashLink
+      getTrashLink,
+      loadResourcesTask
     }
   }
 })
