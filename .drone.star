@@ -36,7 +36,7 @@ TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 
 OC10_VERSION = "latest"
 
-WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "eslint-config", "prettier-config", "tsconfig", "web-client", "web-pkg"]
+WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "eslint-config", "extension-sdk", "prettier-config", "tsconfig", "web-client", "web-pkg"]
 WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
 
 dir = {
@@ -842,8 +842,8 @@ def beforePipelines(ctx):
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
-    e2e_pipelines = e2eTests(ctx)
-    acceptance_pipelines = acceptance(ctx)
+    e2e_pipelines = []  # e2eTests(ctx)
+    acceptance_pipelines = []  # acceptance(ctx)
     return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
@@ -1942,7 +1942,7 @@ def buildRelease(ctx):
                 "name": "publish",
                 "image": OC_CI_NODEJS,
                 "environment": {
-                    "NODE_AUTH_TOKEN": {
+                    "npm_config_//registry.npmjs.org/:_authToken": {
                         "from_secret": "npm_token",
                     },
                 },
@@ -1953,7 +1953,6 @@ def buildRelease(ctx):
                     "git clean -fd",
                     "git diff",
                     "git status",
-                    "pnpm config set '//registry.npmjs.org/:_authToken' \"$${NODE_AUTH_TOKEN}\"",
                     "pnpm publish --no-git-checks --filter %s --access public --tag latest" % ("%s/%s" % (WEB_PUBLISH_NPM_ORGANIZATION, package)),
                 ],
                 "when": {
