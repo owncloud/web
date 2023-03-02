@@ -209,18 +209,6 @@ export const canUserEditSpaceResource = async (
 export const reloadSpacePage = async (page): Promise<void> => {
   await page.reload()
 }
-export interface openSpaceTrashBinArgs {
-  id: string
-  page: Page
-}
-export const openSpaceTrashBin = async (args: openSpaceTrashBinArgs): Promise<void> => {
-  const { id, page } = args
-  await openSpace({ page, id })
-  await page.locator(spaceContextButton).click()
-  await page.locator(spaceDeletedFilesButton).click()
-}
-
-/**/
 
 export const changeSpaceImage = async (args: {
   id: string

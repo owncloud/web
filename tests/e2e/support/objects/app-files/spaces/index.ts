@@ -104,11 +104,6 @@ export class Spaces {
     await reloadSpacePage(this.#page)
   }
 
-  async openTrashbin(key): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await openSpaceTrashBin({ id, page: this.#page })
-  }
-
   async changeSpaceImage({ key, resource }: { key: string; resource: File }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
     await changeSpaceImage({ id, resource, page: this.#page })
