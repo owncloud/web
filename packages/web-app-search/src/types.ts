@@ -22,7 +22,6 @@ export interface SearchProvider {
   id: string
   available: boolean
   label?: string
-
   previewSearch?: SearchPreview
   listSearch?: SearchList
 }

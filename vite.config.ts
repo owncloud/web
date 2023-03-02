@@ -17,6 +17,9 @@ import { getUserAgentRegExp } from 'browserslist-useragent-regexp'
 import browserslistToEsbuild from 'browserslist-to-esbuild'
 import { CompilerOptions } from '@vue/compiler-sfc'
 
+// ignoredPackages specifies which packages should be explicitly ignored and thus not be transpiled
+const ignoredPackages = ['web-app-skeleton']
+
 export const compilerOptions: CompilerOptions = {
   whitespace: 'preserve'
 }
@@ -39,7 +42,7 @@ const stripScssMarker = '/* STYLES STRIP IMPORTS MARKER */'
 // determine inputs
 const input = readdirSync('packages').reduce(
   (acc, i) => {
-    if (!i.startsWith('web-app')) {
+    if (!i.startsWith('web-app') || ignoredPackages.includes(i)) {
       return acc
     }
     for (const extension of ['js', 'ts']) {

@@ -56,7 +56,7 @@
             <oc-list>
               <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
                 <span class="display-name">{{ provider.displayName }}</span>
-                <span>
+                <span v-if="!!provider.listSearch">
                   <router-link
                     class="more-results"
                     :to="getMoreResultsLinkForProvider(provider)"
