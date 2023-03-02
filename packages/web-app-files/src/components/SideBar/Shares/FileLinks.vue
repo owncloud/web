@@ -520,9 +520,10 @@ export default defineComponent({
       }
 
       const lastLinkId = this.outgoingLinks.length === 1 ? this.outgoingLinks[0].id : undefined
+      const loadIndicators = this.outgoingLinks.filter((l) => !l.indirect).length === 1
 
       try {
-        await this.removeLink({ client, share, path, loadIndicators: !!lastLinkId })
+        await this.removeLink({ client, share, path, loadIndicators })
         this.showMessage({
           title: this.$gettext('Link was deleted successfully')
         })

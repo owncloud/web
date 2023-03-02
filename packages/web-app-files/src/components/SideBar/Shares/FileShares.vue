@@ -294,15 +294,16 @@ export default defineComponent({
         path = `/${this.resource.name}`
       }
 
-      const directCollaborators = this.outgoingCollaborators.filter((c) => !c.indirect)
-      const lastShareId = directCollaborators.length === 1 ? directCollaborators[0].id : undefined
+      const lastShareId =
+        this.outgoingCollaborators.length === 1 ? this.outgoingCollaborators[0].id : undefined
+      const loadIndicators = this.outgoingCollaborators.filter((c) => !c.indirect).length === 1
 
       try {
         await this.deleteShare({
           client: this.$client,
           share: share,
           path,
-          loadIndicators: !!lastShareId
+          loadIndicators
         })
 
         this.hideModal()

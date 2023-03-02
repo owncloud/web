@@ -218,7 +218,7 @@ export default {
     commit('UPDATE_RESOURCE_FIELD', {
       id: highlighted.id,
       field: 'shareTypes',
-      value: computeShareTypes(state.outgoingShares)
+      value: computeShareTypes(state.outgoingShares.filter((s) => !s.indirect))
     })
 
     const ancestorEntry = state.ancestorMetaData[highlighted.path] ?? null
@@ -226,7 +226,7 @@ export default {
       commit('UPDATE_ANCESTOR_FIELD', {
         path: ancestorEntry.path,
         field: 'shareTypes',
-        value: computeShareTypes(state.outgoingShares)
+        value: computeShareTypes(state.outgoingShares.filter((s) => !s.indirect))
       })
     }
   },
