@@ -35,6 +35,7 @@
           </template>
           <template #name="{ item }">
             <oc-button
+              class="oc-display-block"
               type="router-link"
               appearance="raw"
               :to="getTrashLink(item)"
