@@ -1,0 +1,16 @@
+Enhancement: CSS classes for font weight
+
+We added css classes to the design system which provide
+font weights from 100 - 900:
+
+.oc-font-thin: 100
+.oc-font-extralight: 200
+.oc-font-light: 300
+.oc-font-normal: 400
+.oc-font-medium: 500
+.oc-font-semibold: 600
+.oc-font-bold: 700
+.oc-font-extrabold: 800
+.oc-font-black: 900
+
+https://github.com/owncloud/web/pull/8504

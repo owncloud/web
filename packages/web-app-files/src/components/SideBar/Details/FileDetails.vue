@@ -29,7 +29,7 @@
       </div>
       <table class="details-table" :aria-label="detailsTableLabel">
         <tr v-if="hasTimestamp" data-testid="timestamp">
-          <th scope="col" class="oc-pr-s" v-text="timestampLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="timestampLabel" />
           <td>
             <oc-button
               v-if="showVersions"
@@ -43,7 +43,7 @@
           </td>
         </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
-          <th scope="col" class="oc-pr-s" v-text="sharedViaLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="sharedViaLabel" />
           <td>
             <router-link :to="sharedParentRoute">
               <span v-oc-tooltip="sharedViaTooltip" v-text="sharedParentDir" />
@@ -51,13 +51,13 @@
           </td>
         </tr>
         <tr v-if="showSharedBy" data-testid="shared-by">
-          <th scope="col" class="oc-pr-s" v-text="sharedByLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="sharedByLabel" />
           <td>
             <span v-text="sharedByDisplayName" />
           </td>
         </tr>
         <tr v-if="ownerDisplayName" data-testid="ownerDisplayName">
-          <th scope="col" class="oc-pr-s" v-text="ownerLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="ownerLabel" />
           <td>
             <p class="oc-m-rm">
               {{ ownerDisplayName }}
@@ -69,11 +69,11 @@
           </td>
         </tr>
         <tr v-if="showSize" data-testid="sizeInfo">
-          <th scope="col" class="oc-pr-s" v-text="sizeLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="sizeLabel" />
           <td v-text="resourceSize" />
         </tr>
         <tr v-if="showVersions" data-testid="versionsInfo">
-          <th scope="col" class="oc-pr-s" v-text="versionsLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="versionsLabel" />
           <td>
             <oc-button
               v-oc-tooltip="seeVersionsLabel"
@@ -85,7 +85,7 @@
           </td>
         </tr>
         <tr v-if="runningOnEos">
-          <th scope="col" class="oc-pr-s" v-text="eosPathLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="eosPathLabel" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p
@@ -114,7 +114,7 @@
           </td>
         </tr>
         <tr v-if="runningOnEos">
-          <th scope="col" class="oc-pr-s" v-text="directLinkLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="directLinkLabel" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p v-oc-tooltip="directLink" class="oc-my-rm oc-text-truncate" v-text="directLink" />
@@ -138,7 +138,7 @@
           </td>
         </tr>
         <tr v-if="showTags" data-testid="tags">
-          <th scope="col" class="oc-pr-s" v-text="tagsLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="tagsLabel" />
           <td>
             <span v-for="(tag, index) in resource.tags" :key="tag">
               <component
@@ -540,7 +540,6 @@ export default defineComponent({
   }
 
   th {
-    font-weight: 600;
     white-space: nowrap;
   }
 }

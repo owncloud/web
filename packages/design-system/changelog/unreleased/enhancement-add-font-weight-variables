@@ -1,0 +1,16 @@
+Enhancement: CSS variables for font weight
+
+We added css variables to the design system which provide
+font weights from 100 - 900:
+
+--oc-font-weight-thin: 100
+--oc-font-weight-extralight: 200
+--oc-font-weight-light: 300
+--oc-font-weight-normal: 400
+--oc-font-weight-medium: 500
+--oc-font-weight-semibold: 600
+--oc-font-weight-bold: 700
+--oc-font-weight-extrabold: 800
+--oc-font-weight-black: 900
+
+https://github.com/owncloud/web/pull/8504

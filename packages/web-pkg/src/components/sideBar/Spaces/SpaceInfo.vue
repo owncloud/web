@@ -9,7 +9,7 @@
         />
       </div>
       <div>
-        <h3 data-testid="space-info-name" v-text="resource.name" />
+        <h3 data-testid="space-info-name" class="oc-font-semibold oc-m-rm" v-text="resource.name" />
         <span data-testid="space-info-subtitle" v-text="resource.description" />
       </div>
     </div>
@@ -49,8 +49,6 @@ export default defineComponent({
 
     h3 {
       font-size: var(--oc-font-size-medium);
-      font-weight: 600;
-      margin: 0;
     }
   }
 }

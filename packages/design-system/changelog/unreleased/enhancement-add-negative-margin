@@ -1,0 +1,7 @@
+Enhancement: CSS classes for negative margin added
+
+We added css classes to the design system which provide
+negative margins. Can be used like normal css margin classes
+with a prepended "-", e.g. "-oc-mt-l".
+
+https://github.com/owncloud/web/pull/8504

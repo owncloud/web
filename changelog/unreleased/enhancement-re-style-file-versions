@@ -1,0 +1,7 @@
+Enhancement: Beautify file version list
+
+We added css changes to the file versions list to make it look more clean and
+to use standardized layouts like action buttons, download icons etc.
+
+https://github.com/owncloud/web/issues/8503
+https://github.com/owncloud/web/pull/8504

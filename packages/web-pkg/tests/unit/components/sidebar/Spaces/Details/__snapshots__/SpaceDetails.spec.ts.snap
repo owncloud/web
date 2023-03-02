@@ -14,18 +14,18 @@ exports[`Details SideBar Panel displays the details side panel 1`] = `
   <table aria-label="Overview of the information about the selected space" class="details-table">
     <tbody>
       <tr>
-        <th class="oc-pr-s" scope="col">Last activity</th>
+        <th class="oc-pr-s oc-font-semibold" scope="col">Last activity</th>
         <td>Invalid DateTime</td>
       </tr>
       <!--v-if-->
       <tr>
-        <th class="oc-pr-s" scope="col">Manager</th>
+        <th class="oc-pr-s oc-font-semibold" scope="col">Manager</th>
         <td>
           <span>alice (me)</span>
         </td>
       </tr>
       <tr>
-        <th class="oc-pr-s" scope="col">Quota</th>
+        <th class="oc-pr-s oc-font-semibold" scope="col">Quota</th>
         <td>
           <space-quota-stub spacequota="[object Object]"></space-quota-stub>
         </td>
