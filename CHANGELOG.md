@@ -40,7 +40,6 @@ Summary
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
 * Change - Configurable extension autosave: [#8455](https://github.com/owncloud/web/pull/8455)
-* Enhancement - Inject customizations: [#4735](https://github.com/owncloud/web/issues/4735)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Improve performance when loading folders and share indicators: [#7721](https://github.com/owncloud/web/issues/7721)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
@@ -82,6 +81,7 @@ Summary
 * Enhancement - User group filter: [#8377](https://github.com/owncloud/web/issues/8377)
 * Enhancement - Batch edit quota in admin panel: [#8387](https://github.com/owncloud/web/pull/8387)
 * Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
+* Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
 * Enhancement - User settings login field: [#8433](https://github.com/owncloud/web/pull/8433)
 * Enhancement - Skeleton App: [#8441](https://github.com/owncloud/web/pull/8441)
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
@@ -363,24 +363,6 @@ Details
    https://github.com/owncloud/web/pull/8455
    https://github.com/owncloud/web/pull/8457
    https://github.com/owncloud/web/pull/8474
-
-* Enhancement - Inject customizations: [#4735](https://github.com/owncloud/web/issues/4735)
-
-   We have added the possibility to include own header scripts and styles. This function is
-   currently still experimental and there is a possibility that the api will change.
-
-   For the reasons mentioned, the functionality is not yet documented in the official
-   documentation, but can be used as follows:
-
-   * to inject custom css add the following property to the `"options"` object in your
-   `config.json`, `"styles": [{ "href": "css/custom.css", }]`. * to inject custom scripts add
-   the following property to the `"options"` object in your `config.json`, `"scripts": [{
-   "src": "js/custom.js", "async": true, }]`.
-
-   https://github.com/owncloud/web/issues/4735
-   https://github.com/owncloud/web/pull/8432
-   https://github.com/owncloud/web/pull/7689
-   https://github.com/owncloud/web/pull/8512
 
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 
@@ -785,6 +767,22 @@ Details
    We've applied the styles for action lists to the fileinfo/space action lists.
 
    https://github.com/owncloud/web/pull/8398
+
+* Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
+
+   We have added the possibility to include own header scripts and styles. This function is
+   currently still experimental and there is a possibility that the api will change.
+
+   For the reasons mentioned, the functionality is not yet documented in the official
+   documentation, but can be used as follows:
+
+   * to inject custom css add the following property to your `config.json`, `"styles": [{ "href":
+   "css/custom.css", }]`. * to inject custom scripts add the following property to your
+   `config.json`, `"scripts": [{ "src": "js/custom.js", "async": true, }]`.
+
+   https://github.com/owncloud/web/issues/4735
+   https://github.com/owncloud/web/pull/8432
+   https://github.com/owncloud/web/pull/7689
 
 * Enhancement - User settings login field: [#8433](https://github.com/owncloud/web/pull/8433)
 
