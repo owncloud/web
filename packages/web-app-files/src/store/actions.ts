@@ -245,14 +245,12 @@ export default {
         expireDate: expirationDate
       })
 
-      commit(
-        'OUTGOING_SHARES_UPSERT',
-        buildCollaboratorShare(
-          updatedShare.shareInfo,
-          getters.highlightedFile,
-          allowSharePermissions(rootGetters)
-        )
+      const builtShare = buildCollaboratorShare(
+        updatedShare.shareInfo,
+        getters.highlightedFile,
+        allowSharePermissions(rootGetters)
       )
+      commit('OUTGOING_SHARES_UPSERT', { ...builtShare, outgoing: true })
     } catch (error) {
       dispatch(
         'showMessage',
@@ -431,7 +429,7 @@ export default {
         .updateShare(id, params)
         .then((data) => {
           const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
-          context.commit('OUTGOING_SHARES_UPSERT', link)
+          context.commit('OUTGOING_SHARES_UPSERT', { ...link, outgoing: true })
           resolve(link)
         })
         .catch((e) => {
