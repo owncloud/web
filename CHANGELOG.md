@@ -88,6 +88,7 @@ Summary
 * Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
 * Enhancement - Respect max quota: [#8489](https://github.com/owncloud/web/pull/8489)
 * Enhancement - User role filter: [#8492](https://github.com/owncloud/web/pull/8492)
+* Enhancement - Beautify file version list: [#8503](https://github.com/owncloud/web/issues/8503)
 
 Details
 -------
@@ -830,6 +831,14 @@ Details
 
    https://github.com/owncloud/web/pull/8492
    https://github.com/owncloud/web/pull/8495
+
+* Enhancement - Beautify file version list: [#8503](https://github.com/owncloud/web/issues/8503)
+
+   We added css changes to the file versions list to make it look more clean and to use standardized
+   layouts like action buttons, download icons etc.
+
+   https://github.com/owncloud/web/issues/8503
+   https://github.com/owncloud/web/pull/8504
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
