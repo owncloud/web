@@ -30,8 +30,8 @@
           @sort="handleSort"
         >
           <template #icon="{ item }">
-            <oc-icon v-if="item.driveType === 'personal'" name="folder" />
-            <oc-icon v-else name="layout-grid" />
+            <oc-icon class="oc-pl-m" v-if="item.driveType === 'personal'" name="folder" />
+            <oc-icon class="oc-pl-m" v-else name="layout-grid" />
           </template>
           <template #name="{ item }">
             <oc-button
