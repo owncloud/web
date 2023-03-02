@@ -105,6 +105,12 @@ export default {
   SHARES_LOADING(state, loading) {
     state.sharesLoading = loading
   },
+  PRUNE_SHARES(state) {
+    state.sharesLoading = true
+    state.outgoingShares = []
+    state.incomingShares = []
+    state.sharesLoading = false
+  },
 
   CLEAR_CURRENT_FILES_LIST(state) {
     state.currentFolder = null

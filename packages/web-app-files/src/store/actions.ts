@@ -398,12 +398,6 @@ export default {
       resolvePromise()
     })
   },
-  pruneShares({ commit }) {
-    commit('SHARES_LOADING', true)
-    commit('OUTGOING_SHARES_SET', [])
-    commit('INCOMING_SHARES_SET', [])
-    commit('SHARES_LOADING', false)
-  },
   async loadVersions(context, { client, fileId }) {
     let response
     try {

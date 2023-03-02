@@ -289,7 +289,7 @@ export default defineComponent({
 
         const currentFolderRequired = !unref(isShareLocation) && !unref(isProjectsLocation)
         if (!currentFolderRequired || unref(currentFolder)) {
-          store.dispatch('Files/pruneShares')
+          store.commit('Files/PRUNE_SHARES')
           loadedResource.value = null
           loading.value = false
         }
