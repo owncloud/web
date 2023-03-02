@@ -119,3 +119,19 @@ When(
     }
   }
 )
+
+When(
+  '{string} navigates to the general management page',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationAdminSettings.page.General({ page })
+    await pageObject.navigate()
+  }
+)
+
+Then(
+  '{string} should be able to upload an logo',
+  async function (this: World, stepUser: string): Promise<void> {
+
+  }
+)
