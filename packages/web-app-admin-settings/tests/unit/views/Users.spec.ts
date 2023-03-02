@@ -350,7 +350,7 @@ describe('Users view', () => {
         expect(graphMock.users.listUsers).toHaveBeenNthCalledWith(
           2,
           'displayName',
-          "memberOf/any(m:m/id eq '1')"
+          "(memberOf/any(m:m/id eq '1'))"
         )
       })
       it('does filter initially if group ids are given via query param', async () => {
@@ -364,7 +364,7 @@ describe('Users view', () => {
         await wrapper.vm.loadResourcesTask.last
         expect(graphMock.users.listUsers).toHaveBeenCalledWith(
           'displayName',
-          "memberOf/any(m:m/id eq '1') and memberOf/any(m:m/id eq '2')"
+          "(memberOf/any(m:m/id eq '1') or memberOf/any(m:m/id eq '2'))"
         )
       })
     })
@@ -383,7 +383,7 @@ describe('Users view', () => {
         expect(graphMock.users.listUsers).toHaveBeenNthCalledWith(
           2,
           'displayName',
-          "appRoleAssignments/any(m:m/appRoleId eq '1')"
+          "(appRoleAssignments/any(m:m/appRoleId eq '1'))"
         )
       })
       it('does filter initially if role ids are given via query param', async () => {
@@ -397,7 +397,7 @@ describe('Users view', () => {
         await wrapper.vm.loadResourcesTask.last
         expect(graphMock.users.listUsers).toHaveBeenCalledWith(
           'displayName',
-          "appRoleAssignments/any(m:m/appRoleId eq '1') and appRoleAssignments/any(m:m/appRoleId eq '2')"
+          "(appRoleAssignments/any(m:m/appRoleId eq '1') or appRoleAssignments/any(m:m/appRoleId eq '2'))"
         )
       })
     })
