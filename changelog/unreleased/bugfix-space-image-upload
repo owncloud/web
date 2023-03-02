@@ -1,0 +1,6 @@
+Bugfix: Space image upload
+
+We've fixed a bug where uploading images on the spaces overview page would not work.
+
+https://github.com/owncloud/web/issues/8523
+https://github.com/owncloud/web/pull/8526
