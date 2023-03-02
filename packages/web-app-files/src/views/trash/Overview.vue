@@ -188,8 +188,8 @@ export default defineComponent({
       }
       await loadResourcesTask.perform()
 
-      if (unref(spaces).length <= 1) {
-        return router.push(createLocationTrash('files-trash-generic'))
+      if (unref(spaces).length === 1) {
+        return router.push(getTrashLink(unref(spaces).pop()))
       }
 
       nextTick(() => {
