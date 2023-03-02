@@ -161,12 +161,6 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.trashbin.Overview({ page })
     await pageObject.navigate()
-    console.log('!!!!!!!!!!!')
-    console.log(key)
-    console.log('!!!!!!!!!!!!!!!!!!!!')
-    //const spacesObject = new objects.applicationFiles.Spaces({ page })
-    //await spacesObject.openTrashbin(key)
-
     const trashbinObject = new objects.applicationFiles.Trashbin({ page })
     await trashbinObject.open(key)
   }
