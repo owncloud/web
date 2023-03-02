@@ -13,7 +13,6 @@ import {
   createSpace,
   createSpaceArgs,
   openSpace,
-  openSpaceTrashBin,
   reloadSpacePage,
   removeAccessMembersArgs,
   removeAccessSpaceMembers,
