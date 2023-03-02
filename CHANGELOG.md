@@ -36,6 +36,7 @@ Summary
 * Bugfix - Paste action conflict dialog broken: [#8480](https://github.com/owncloud/web/pull/8480)
 * Bugfix - PDF display issue - Update CSP object-src policy: [#8498](https://github.com/owncloud/web/pull/8498)
 * Bugfix - Remove fuzzy search results: [#8508](https://github.com/owncloud/web/pull/8508)
+* Bugfix - Space image upload: [#8523](https://github.com/owncloud/web/issues/8523)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -81,6 +82,7 @@ Summary
 * Enhancement - User group filter: [#8377](https://github.com/owncloud/web/issues/8377)
 * Enhancement - Batch edit quota in admin panel: [#8387](https://github.com/owncloud/web/pull/8387)
 * Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
+* Enhancement - Add dark ownCloud logo: [#8425](https://github.com/owncloud/web/issues/8425)
 * Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
 * Enhancement - User settings login field: [#8433](https://github.com/owncloud/web/pull/8433)
 * Enhancement - Skeleton App: [#8441](https://github.com/owncloud/web/pull/8441)
@@ -301,6 +303,13 @@ Details
 
    https://github.com/owncloud/web/issues/8493
    https://github.com/owncloud/web/pull/8508
+
+* Bugfix - Space image upload: [#8523](https://github.com/owncloud/web/issues/8523)
+
+   We've fixed a bug where uploading images on the spaces overview page would not work.
+
+   https://github.com/owncloud/web/issues/8523
+   https://github.com/owncloud/web/pull/8526
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
@@ -767,6 +776,13 @@ Details
    We've applied the styles for action lists to the fileinfo/space action lists.
 
    https://github.com/owncloud/web/pull/8398
+
+* Enhancement - Add dark ownCloud logo: [#8425](https://github.com/owncloud/web/issues/8425)
+
+   We've added a dark version of the ownCloud logo
+
+   https://github.com/owncloud/web/issues/8425
+   https://github.com/owncloud/web/pull/8522
 
 * Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
 
