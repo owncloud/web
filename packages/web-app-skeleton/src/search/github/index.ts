@@ -4,7 +4,7 @@ import { EventBus } from 'web-pkg/src/services/eventBus'
 import { GitHubClient } from './client'
 import { HttpClient } from 'web-pkg'
 
-export class GitHUbSearch extends EventBus implements SearchProvider {
+export class GitHubSearch extends EventBus implements SearchProvider {
   public readonly id: string
   public readonly displayName: string
   public readonly previewSearch: SearchPreview

@@ -1,5 +1,5 @@
 import App from './App.vue'
-import { GitHUbSearch } from './search/github'
+import { GitHubSearch } from './search/github'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 
 const appInfo = {
@@ -11,7 +11,7 @@ const appInfo = {
 }
 
 const injectSearch = (): void => {
-  eventBus.publish('app.search.register.provider', new GitHUbSearch())
+  eventBus.publish('app.search.register.provider', new GitHubSearch())
 }
 
 const injectExtensions = async (api): Promise<void> => {

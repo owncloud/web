@@ -12,9 +12,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { PropType, defineComponent } from 'vue'
 import { Repository } from './client'
-import { PropType } from 'vue'
 
 export default defineComponent({
   props: {
