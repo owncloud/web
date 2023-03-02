@@ -36,7 +36,7 @@ TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 
 OC10_VERSION = "latest"
 
-WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "eslint-config", "prettier-config", "tsconfig", "web-client", "web-pkg"]
+WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "eslint-config", "extension-sdk", "prettier-config", "tsconfig", "web-client", "web-pkg"]
 WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
 
 dir = {
