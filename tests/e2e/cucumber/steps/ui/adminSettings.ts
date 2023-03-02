@@ -132,6 +132,6 @@ When(
 Then(
   '{string} should be able to upload an logo',
   async function (this: World, stepUser: string): Promise<void> {
-
-  }
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+  } 
 )
