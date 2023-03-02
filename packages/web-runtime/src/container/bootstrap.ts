@@ -386,7 +386,7 @@ export const announceCustomScripts = ({
 }: {
   runtimeConfiguration?: RuntimeConfiguration
 }): void => {
-  const { scripts = [] } = runtimeConfiguration?.options
+  const { scripts = [] } = runtimeConfiguration
 
   scripts.forEach(({ src = '', async = false }) => {
     if (!src) {
@@ -410,7 +410,7 @@ export const announceCustomStyles = ({
 }: {
   runtimeConfiguration?: RuntimeConfiguration
 }): void => {
-  const { styles = [] } = runtimeConfiguration?.options
+  const { styles = [] } = runtimeConfiguration
 
   styles.forEach(({ href = '' }) => {
     if (!href) {
