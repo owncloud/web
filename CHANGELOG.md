@@ -83,6 +83,7 @@ Summary
 * Enhancement - Batch edit quota in admin panel: [#8387](https://github.com/owncloud/web/pull/8387)
 * Enhancement - Use standardized layout for file/space action list: [#8398](https://github.com/owncloud/web/pull/8398)
 * Enhancement - User settings login field: [#8433](https://github.com/owncloud/web/pull/8433)
+* Enhancement - Skeleton App: [#8441](https://github.com/owncloud/web/pull/8441)
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 * Enhancement - Rework notifications: [#8450](https://github.com/owncloud/web/pull/8450)
 * Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
@@ -793,6 +794,17 @@ Details
    https://github.com/owncloud/web/issues/8484
    https://github.com/owncloud/web/issues/8467
    https://github.com/owncloud/web/pull/8433
+
+* Enhancement - Skeleton App: [#8441](https://github.com/owncloud/web/pull/8441)
+
+   The skeleton app has been part of the project for a long time, but with the conversion to vite it
+   has since been ignored and no longer transpiled. Due to the change, the app is now taken into
+   account again, but must be explicitly enabled. For this please see the associated APP README.
+
+   Also new is a search example that is now included and uses GitHub to show how a custom search
+   provider can be developed.
+
+   https://github.com/owncloud/web/pull/8441
 
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 
