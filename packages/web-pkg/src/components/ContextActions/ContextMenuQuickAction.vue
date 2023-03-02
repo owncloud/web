@@ -20,7 +20,6 @@
       mode="click"
       close-on-click
       padding-size="small"
-      @click.stop.prevent
     >
       <slot name="contextMenu" :item="item" />
     </oc-drop>
