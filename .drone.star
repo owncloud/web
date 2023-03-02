@@ -1942,7 +1942,7 @@ def buildRelease(ctx):
                 "name": "publish",
                 "image": OC_CI_NODEJS,
                 "environment": {
-                    "NODE_AUTH_TOKEN": {
+                    "NPM_TOKEN": {
                         "from_secret": "npm_token",
                     },
                 },
@@ -1953,8 +1953,9 @@ def buildRelease(ctx):
                     "git clean -fd",
                     "git diff",
                     "git status",
-                    "pnpm config set '//registry.npmjs.org/:_authToken' \"$${NODE_AUTH_TOKEN}\"",
-                    "pnpm publish --no-git-checks --filter %s --access public --tag latest" % ("%s/%s" % (WEB_PUBLISH_NPM_ORGANIZATION, package)),
+                    # until https://github.com/pnpm/pnpm/issues/5775 is resolved, we print pnpm whoami because that fails when the npm_token is invalid
+                    "env \"npm_config_//registry.npmjs.org/:_authToken=$${NPM_TOKEN}\" pnpm whoami",
+                    "env \"npm_config_//registry.npmjs.org/:_authToken=$${NPM_TOKEN}\" pnpm publish --no-git-checks --filter %s --access public --tag latest" % ("%s/%s" % (WEB_PUBLISH_NPM_ORGANIZATION, package)),
                 ],
                 "when": {
                     "ref": [
