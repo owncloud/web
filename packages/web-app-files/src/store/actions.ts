@@ -220,6 +220,15 @@ export default {
       field: 'shareTypes',
       value: computeShareTypes(state.outgoingShares)
     })
+
+    const ancestorEntry = state.ancestorMetaData[highlighted.path] ?? null
+    if (ancestorEntry) {
+      commit('UPDATE_ANCESTOR_FIELD', {
+        path: ancestorEntry.path,
+        field: 'shareTypes',
+        value: computeShareTypes(state.outgoingShares)
+      })
+    }
   },
   async changeShare(
     { commit, dispatch, getters, rootGetters },
@@ -277,7 +286,7 @@ export default {
           context.getters.highlightedFile,
           allowSharePermissions(context.rootGetters)
         )
-        context.commit('OUTGOING_SHARES_UPSERT', builtShare)
+        context.commit('OUTGOING_SHARES_UPSERT', { ...builtShare, outgoing: true })
         context.dispatch('updateCurrentFileShareTypes')
         context.commit('LOAD_INDICATORS', path)
       })
@@ -412,7 +421,7 @@ export default {
         .shareFileWithLink(path, { ...params, spaceRef: storageId })
         .then((data) => {
           const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
-          context.commit('OUTGOING_SHARES_UPSERT', link)
+          context.commit('OUTGOING_SHARES_UPSERT', { ...link, outgoing: true })
           context.dispatch('updateCurrentFileShareTypes')
           context.commit('LOAD_INDICATORS', path)
           resolve(link)

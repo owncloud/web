@@ -183,7 +183,7 @@ describe('vuex store actions', () => {
   })
 
   describe('updateCurrentFileShareTypes', () => {
-    const stateMock = { outgoingShares: [] }
+    const stateMock = { outgoingShares: [], ancestorMetaData: {} }
     const commitSpy = jest.fn()
 
     it('updates the resource if given', () => {
@@ -200,6 +200,16 @@ describe('vuex store actions', () => {
       const getters = { highlightedFile: mockDeep<SpaceResource>({ driveType: 'project' }) }
       actions.updateCurrentFileShareTypes({ state: stateMock, getters, commit: commitSpy })
       expect(commitSpy).toHaveBeenCalledTimes(0)
+    })
+    it('updates the ancestor if found', () => {
+      const highlightedFile = mockDeep<Resource>({ path: '/path' })
+      const getters = { highlightedFile }
+      actions.updateCurrentFileShareTypes({
+        state: { outgoingShares: [], ancestorMetaData: { [highlightedFile.path]: {} } },
+        getters,
+        commit: commitSpy
+      })
+      expect(commitSpy).toHaveBeenCalledTimes(2)
     })
   })
 })

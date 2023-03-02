@@ -201,7 +201,7 @@ export default defineComponent({
     },
 
     quicklink() {
-      return this.directLinks.find((link) => link.quicklink === true)
+      return this.outgoingLinks.find((link) => link.quicklink === true && !link.indirect)
     },
 
     expirationDate() {
@@ -519,7 +519,7 @@ export default defineComponent({
         path = `/${resource.name}`
       }
 
-      const lastLinkId = this.directLinks.length === 1 ? this.directLinks[0].id : undefined
+      const lastLinkId = this.outgoingLinks.length === 1 ? this.outgoingLinks[0].id : undefined
 
       try {
         await this.removeLink({ client, share, path, loadIndicators: !!lastLinkId })

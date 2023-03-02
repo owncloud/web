@@ -206,6 +206,13 @@ export default {
 
   SET_ANCESTOR_META_DATA(state, value) {
     state.ancestorMetaData = value
+  },
+
+  UPDATE_ANCESTOR_FIELD(state, params) {
+    const resource = state.ancestorMetaData[params.path] ?? null
+    if (resource) {
+      resource[params.field] = params.value
+    }
   }
 }
 
