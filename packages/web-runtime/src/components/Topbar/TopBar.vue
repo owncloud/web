@@ -53,11 +53,6 @@ export default {
       type: Array,
       required: false,
       default: () => []
-    },
-    activeNotifications: {
-      type: [Array, Boolean],
-      required: false,
-      default: () => []
     }
   },
   setup() {

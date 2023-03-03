@@ -42,7 +42,7 @@
   </div>
 </template>
 <script lang="ts">
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import SkipTo from './components/SkipTo.vue'
 import LayoutApplication from './layouts/Application.vue'
 import LayoutLoading from './layouts/Loading.vue'
@@ -64,15 +64,14 @@ export default defineComponent({
   },
   data() {
     return {
-      $_notificationsInterval: null,
       windowWidth: 0,
       announcement: '',
       activeBlobStyle: {}
     }
   },
   computed: {
-    ...mapState(['user', 'modal', 'sidebar']),
-    ...mapGetters(['configuration', 'capabilities', 'getSettingsValue']),
+    ...mapState(['user', 'modal']),
+    ...mapGetters(['configuration', 'getSettingsValue']),
     ...mapGetters('runtime/auth', ['isUserContextReady', 'isPublicLinkContextReady']),
     layout() {
       const plainLayoutRoutes = [
@@ -118,23 +117,6 @@ export default defineComponent({
         document.title = fullDocumentTitle
       }
     },
-    capabilities: {
-      immediate: true,
-      deep: true,
-      handler: function (caps) {
-        if (!caps?.notifications) {
-          return
-        }
-
-        // setup periodic loading of notifications if the server supports them
-        this.$nextTick(() => {
-          this.$_updateNotifications()
-        })
-        this.$_notificationsInterval = setInterval(() => {
-          this.$_updateNotifications()
-        }, 30000)
-      }
-    },
     selectedLanguage: {
       immediate: true,
       handler(language) {
@@ -165,25 +147,10 @@ export default defineComponent({
       }
     )
   },
-  unmounted() {
-    if (this.$_notificationsInterval) {
-      clearInterval(this.$_notificationsInterval)
-    }
-  },
-
   methods: {
-    ...mapActions(['fetchNotifications']),
-
     focusModal(component, event) {
       this.focus({
         revert: event === 'beforeUnmount'
-      })
-    },
-
-    $_updateNotifications() {
-      this.fetchNotifications(this.$client).catch((error) => {
-        console.error('Error while loading notifications: ', error)
-        clearInterval(this.$_notificationsInterval)
       })
     },
 
