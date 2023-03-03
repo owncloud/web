@@ -34,7 +34,7 @@ describe('NotificationBell', () => {
         notificationCount: 0
       }
     })
-    expect(wrapper.find('#oc-notification-bell').attributes('aria-label')).toEqual('Notifications')
+    expect(wrapper.find('#oc-notifications-bell').attributes('aria-label')).toEqual('Notifications')
   })
   it('animates when notification count changes', async () => {
     const { wrapper } = getWrapper({

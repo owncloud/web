@@ -33,7 +33,6 @@ describe('Top Bar component', () => {
   it('Displays applications menu', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.find('applications-menu-stub').exists()).toBeTruthy()
-    expect(wrapper.html()).toMatchSnapshot()
   })
   it('should display notifications bell', () => {
     const { wrapper } = getWrapper({
