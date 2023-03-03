@@ -1,5 +1,5 @@
 import { Page } from 'playwright'
-import { uploadLogo } from './actions'
+import { uploadLogo, resetLogo } from './actions'
 
 export class General {
   #page: Page
@@ -8,5 +8,8 @@ export class General {
   }
   async uploadLogo({ path }: { path: string }): Promise<void> {
     await uploadLogo(path, this.#page)
+  }
+  async resetLogo(): Promise<void> {
+    await resetLogo(this.#page)
   }
 }

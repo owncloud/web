@@ -138,3 +138,12 @@ Then(
     await generalObject.uploadLogo({ path: logoPath })
   }
 )
+
+Then(
+  '{string} should be able to reset the logo',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const generalObject = new objects.applicationAdminSettings.General({ page })
+    await generalObject.resetLogo()
+  }
+)
