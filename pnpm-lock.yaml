@@ -393,14 +393,14 @@ importers:
       '@vitejs/plugin-vue': 4.0.0
       rollup-plugin-node-polyfills: ^0.2.1
       rollup-plugin-serve: ^2.0.2
-      sass: 1.58.0
+      sass: 1.58.3
       vite: ^4.1.1
     dependencies:
       '@vitejs/plugin-vue': 4.0.0_vite@4.1.1+vue@3.2.45
       rollup-plugin-node-polyfills: 0.2.1
       rollup-plugin-serve: 2.0.2
-      sass: 1.58.0
-      vite: 4.1.1_sass@1.58.0
+      sass: 1.58.3
+      vite: 4.1.1_sass@1.58.3
 
   packages/prettier-config:
     specifiers:
@@ -6329,7 +6329,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.1.1_sass@1.58.0
+      vite: 4.1.1_sass@1.58.3
       vue: 3.2.45
     dev: false
 
@@ -19293,8 +19293,8 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /sass/1.58.0:
-    resolution: {integrity: sha512-PiMJcP33DdKtZ/1jSjjqVIKihoDc6yWmYr9K/4r3fVVIEDAluD0q7XZiRKrNJcPK3qkLRF/79DND1H5q1LBjgg==}
+  /sass/1.58.3:
+    resolution: {integrity: sha512-Q7RaEtYf6BflYrQ+buPudKR26/lH+10EmO9bBqbmPh/KeLqv8bjpTNqxe71ocONqXq+jYiCbpPUmQMS+JJPk4A==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
@@ -21382,7 +21382,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
 
-  /vite/4.1.1_sass@1.58.0:
+  /vite/4.1.1_sass@1.58.3:
     resolution: {integrity: sha512-LM9WWea8vsxhr782r9ntg+bhSFS06FJgCvvB0+8hf8UWtvaiDagKYWXndjfX6kGl74keHJUcpzrQliDXZlF5yg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -21411,7 +21411,7 @@ packages:
       postcss: 8.4.21
       resolve: 1.22.1
       rollup: 3.14.0
-      sass: 1.58.0
+      sass: 1.58.3
     optionalDependencies:
       fsevents: 2.3.2
     dev: false
