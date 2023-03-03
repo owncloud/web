@@ -3,6 +3,6 @@ export const uploadLogo = async (path, page): Promise<void> => {
 
   const logoInput = await page.$('#logo-upload-input')
   await logoInput.setInputFiles(path)
-
-  await page.waitForSelector('.oc-message-success')
+	
+  await page.waitForSelector('text=Logo was uploaded successfully')
 }
