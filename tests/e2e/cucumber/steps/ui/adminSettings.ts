@@ -130,7 +130,7 @@ When(
 )
 
 Then(
-  '{string} should be able to upload an logo from the local file {string}',
+  '{string} should be able to upload a logo from the local file {string}',
   async function (this: World, stepUser: string, localFile: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const generalObject = new objects.applicationAdminSettings.General({ page })
