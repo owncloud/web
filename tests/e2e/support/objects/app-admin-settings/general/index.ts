@@ -6,7 +6,7 @@ export class General {
 	constructor({ page }: { page: Page }) {
 		this.#page = page
 	}
-	async uploadLogo({ key }: { key: string }): Promise<void> {
-		await uploadLogo({ page: this.#page })
+	async uploadLogo({ path }: { path: string }): Promise<void> {
+		await uploadLogo(path, this.#page)
 	}
 }

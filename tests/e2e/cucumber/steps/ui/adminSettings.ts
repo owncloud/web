@@ -130,8 +130,11 @@ When(
 )
 
 Then(
-  '{string} should be able to upload an logo',
-  async function (this: World, stepUser: string): Promise<void> {
+  '{string} should be able to upload an logo from the local file {string}',
+  async function (this: World, stepUser: string, localFile: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const generalObject = new objects.applicationAdminSettings.General({ page })
+    const logoPath = this.filesEnvironment.getFile({ name: localFile.split('/').pop() }).path
+    await generalObject.uploadLogo({ path: logoPath })
   } 
 )

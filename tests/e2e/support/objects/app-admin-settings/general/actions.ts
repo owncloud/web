@@ -1,9 +1,10 @@
 import { resolve } from "path";
 
-export const uploadLogo = async (page): Promise<void> => {
-	await page.click('.oc-general-actions-upload-logo-trigger');
+export const uploadLogo = async (path, page): Promise<void> => {
+	await page.click('#logo-context-btn');
 
 	const logoInput = await page.$('#logo-upload-input');
-	await logoInput.setInputFiles('./path/to/supported/logo.png');
-	console.log(1337, resolve(__dirname, "bar.png"))
+	await logoInput.setInputFiles(path);
+
+	await page.waitForSelector('.oc-message-success');
 }
