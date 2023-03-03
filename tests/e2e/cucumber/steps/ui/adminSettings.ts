@@ -136,5 +136,5 @@ Then(
     const generalObject = new objects.applicationAdminSettings.General({ page })
     const logoPath = this.filesEnvironment.getFile({ name: localFile.split('/').pop() }).path
     await generalObject.uploadLogo({ path: logoPath })
-  } 
+  }
 )
