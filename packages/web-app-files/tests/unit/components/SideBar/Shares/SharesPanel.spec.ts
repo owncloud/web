@@ -28,7 +28,7 @@ describe('SharesPanel', () => {
 
   function getWrapper({ sharesLoading = false } = {}) {
     const storeOptions = defaultStoreMockOptions
-    storeOptions.modules.Files.getters.sharesTreeLoading.mockImplementation(() => sharesLoading)
+    storeOptions.modules.Files.getters.sharesLoading.mockImplementation(() => sharesLoading)
     const store = createStore(storeOptions)
     return {
       wrapper: shallowMount(SharesPanel, {

@@ -2,6 +2,8 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import { eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { createLocationShares } from 'web-app-files/src/router'
+import { Resource } from 'web-client'
+import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
 
 // dummy to trick gettext string extraction into recognizing strings
 const $gettext = (str) => {
@@ -60,7 +62,13 @@ const getLinkIndicator = ({ resource, isDirect }) => {
   }
 }
 
-export const getIndicators = ({ resource, ancestorMetaData }) => {
+export const getIndicators = ({
+  resource,
+  ancestorMetaData
+}: {
+  resource: Resource
+  ancestorMetaData: AncestorMetaData
+}) => {
   const indicators = []
   const parentShareTypes = Object.values(ancestorMetaData).reduce((acc: any, data: any) => {
     acc.push(...(data.shareTypes || []))

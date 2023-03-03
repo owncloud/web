@@ -27,9 +27,12 @@
         <oc-status-indicators :resource="resource" :indicators="shareIndicators" />
         <p class="oc-my-rm oc-mx-s" v-text="detailSharingInformation" />
       </div>
-      <table class="details-table" :aria-label="detailsTableLabel">
+      <table
+        class="details-table"
+        :aria-label="$gettext('Overview of the information about the selected file')"
+      >
         <tr v-if="hasTimestamp" data-testid="timestamp">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="timestampLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Last modified')" />
           <td>
             <oc-button
               v-if="showVersions"
@@ -43,21 +46,21 @@
           </td>
         </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="sharedViaLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared via')" />
           <td>
-            <router-link :to="sharedParentRoute">
-              <span v-oc-tooltip="sharedViaTooltip" v-text="sharedParentDir" />
+            <router-link :to="sharedAncestorRoute">
+              <span v-oc-tooltip="sharedViaTooltip" v-text="sharedAncestor.path" />
             </router-link>
           </td>
         </tr>
         <tr v-if="showSharedBy" data-testid="shared-by">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="sharedByLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared by')" />
           <td>
             <span v-text="sharedByDisplayName" />
           </td>
         </tr>
         <tr v-if="ownerDisplayName" data-testid="ownerDisplayName">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="ownerLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Owner')" />
           <td>
             <p class="oc-m-rm">
               {{ ownerDisplayName }}
@@ -69,11 +72,11 @@
           </td>
         </tr>
         <tr v-if="showSize" data-testid="sizeInfo">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="sizeLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
           <td v-text="resourceSize" />
         </tr>
         <tr v-if="showVersions" data-testid="versionsInfo">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="versionsLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Versions')" />
           <td>
             <oc-button
               v-oc-tooltip="seeVersionsLabel"
@@ -84,8 +87,8 @@
             />
           </td>
         </tr>
-        <tr v-if="runningOnEos">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="eosPathLabel" />
+        <tr v-if="runningOnEos" data-testid="eosPath">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('EOS Path')" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p
@@ -113,8 +116,8 @@
             </div>
           </td>
         </tr>
-        <tr v-if="runningOnEos">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="directLinkLabel" />
+        <tr v-if="runningOnEos" data-testid="eosDirectLink">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Direct link')" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p v-oc-tooltip="directLink" class="oc-my-rm oc-text-truncate" v-text="directLink" />
@@ -138,11 +141,11 @@
           </td>
         </tr>
         <tr v-if="showTags" data-testid="tags">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="tagsLabel" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Tags')" />
           <td>
             <span v-for="(tag, index) in resource.tags" :key="tag">
               <component
-                :is="isUserContext ? 'router-link' : 'span'"
+                :is="!isPublicLinkContext ? 'router-link' : 'span'"
                 v-bind="getTagComponentAttrs(tag)"
               >
                 <span v-if="index + 1 < resource.tags.length">{{ tag }}</span>
@@ -153,25 +156,23 @@
         </tr>
       </table>
     </div>
-    <p v-else data-testid="noContentText" v-text="noContentText" />
+    <p v-else data-testid="noContentText" v-text="$gettext('No information to display')" />
   </div>
 </template>
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, inject, ref, unref, watch } from 'vue'
+import { computed, ComputedRef, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { mapGetters } from 'vuex'
 import { ImageDimension } from 'web-pkg/src/constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
-import { basename, dirname } from 'path'
-import { createLocationSpaces, createLocationCommon } from '../../../router'
+import { createLocationCommon } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import {
   useAccessToken,
   useCapabilityFilesTags,
   useClientService,
   usePublicLinkContext,
-  useStore,
-  useUserContext
+  useStore
 } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { useClipboard } from '@vueuse/core'
@@ -180,11 +181,10 @@ import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Resource } from 'web-client'
-import { buildShareSpaceResource } from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
+import { getSharedAncestorRoute } from 'web-app-files/src/helpers/share'
+import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -254,6 +254,17 @@ export default defineComponent({
       })
     }).restartable()
 
+    const ancestorMetaData: Ref<AncestorMetaData> = computed(
+      () => store.getters['Files/ancestorMetaData']
+    )
+    const sharedAncestor = computed(() => {
+      return Object.values(unref(ancestorMetaData)).find(
+        (a) =>
+          a.path !== unref(resource).path &&
+          ShareTypes.containsAnyValue(ShareTypes.authenticated, a.shareTypes)
+      )
+    })
+
     watch(
       resource,
       () => {
@@ -272,19 +283,20 @@ export default defineComponent({
       copiedDirect,
       copyDirectLinkToClipboard,
       isClipboardCopySupported,
-      isUserContext: useUserContext({ store }),
       isPublicLinkContext,
       accessToken,
       space: inject<ComputedRef<Resource>>('space'),
       directLink,
       resource,
       hasTags: useCapabilityFilesTags(),
-      loadPreviewTask
+      loadPreviewTask,
+      ancestorMetaData,
+      sharedAncestor
     }
   },
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
-    ...mapGetters('Files', ['ancestorMetaData', 'versions', 'sharesTree', 'sharesTreeLoading']),
+    ...mapGetters('Files', ['versions']),
     ...mapGetters(['user', 'configuration']),
 
     matchingSpace() {
@@ -302,64 +314,25 @@ export default defineComponent({
         this.showVersions
       )
     },
-    noContentText() {
-      return this.$gettext('No information to display')
-    },
-    detailsTableLabel() {
-      return this.$gettext('Overview of the information about the selected file')
-    },
-    sharedViaLabel() {
-      return this.$gettext('Shared via')
-    },
     sharedViaTooltip() {
-      return this.$gettextInterpolate(
-        this.$gettext("Navigate to '%{folder}'"),
-        { folder: this.sharedParentDir || '' },
+      return this.$gettext(
+        "Navigate to '%{folder}'",
+        { folder: this.sharedAncestor.path || '' },
         true
       )
     },
     showSharedBy() {
-      return (
-        this.showShares &&
-        !this.ownedByCurrentUser &&
-        !this.sharesTreeLoading &&
-        this.sharedByDisplayName &&
-        this.sharedByName !== this.resource.ownerId
-      )
+      return this.showShares && !this.ownedByCurrentUser && this.sharedByDisplayName
     },
     showSharedVia() {
-      return (
-        this.showShares &&
-        !this.sharesTreeLoading &&
-        this.resource.path !== this.sharedParentDir &&
-        this.sharedParentDir
-      )
+      return this.showShares && this.sharedAncestor
     },
-    sharedParentRoute() {
-      if (this.resource.shareId) {
-        if (this.resource.path === '') {
-          return {}
-        }
-        const space = buildShareSpaceResource({
-          shareId: this.resource.shareId,
-          shareName: basename(this.resource.shareRoot),
-          serverUrl: configurationManager.serverUrl
-        })
-        return createLocationSpaces(
-          'files-spaces-generic',
-          createFileRouteOptions(space, { path: this.resource.path, fileId: this.resource.fileId })
-        )
-      }
-      if (!this.matchingSpace) {
-        return {}
-      }
-      return createLocationSpaces(
-        'files-spaces-generic',
-        createFileRouteOptions(this.matchingSpace, {
-          path: this.sharedParentDir,
-          fileId: this.sharedParentFileId
-        })
-      )
+    sharedAncestorRoute() {
+      return getSharedAncestorRoute({
+        resource: this.resource,
+        sharedAncestor: this.sharedAncestor,
+        matchingSpace: this.matchingSpace
+      })
     },
     showShares() {
       if (this.isPublicLinkContext) {
@@ -373,17 +346,8 @@ export default defineComponent({
       }
       return this.$gettext('This file has been shared.')
     },
-    sharedByLabel() {
-      return this.$gettext('Shared by')
-    },
     hasTimestamp() {
       return this.resource.mdate?.length > 0
-    },
-    timestampLabel() {
-      return this.$gettext('Last modified')
-    },
-    ownerLabel() {
-      return this.$gettext('Owner')
     },
     ownerDisplayName() {
       return (
@@ -395,14 +359,8 @@ export default defineComponent({
     ownerAdditionalInfo() {
       return this.resource.owner?.[0].additionalInfo
     },
-    directLinkLabel() {
-      return this.$gettext('Direct link')
-    },
     copyDirectLinkLabel() {
       return this.$gettext('Copy direct link')
-    },
-    eosPathLabel() {
-      return this.$gettext('EOS Path')
     },
     copyEosPathLabel() {
       return this.$gettext('Copy EOS path')
@@ -413,17 +371,11 @@ export default defineComponent({
     showSize() {
       return this.resourceSize !== '?'
     },
-    sizeLabel() {
-      return this.$gettext('Size')
-    },
     showVersions() {
       if (this.resource.type === 'folder' || this.isPublicLinkContext) {
         return
       }
       return this.versions.length > 0
-    },
-    versionsLabel() {
-      return this.$gettext('Versions')
     },
     seeVersionsLabel() {
       return this.$gettext('See all versions')
@@ -435,14 +387,11 @@ export default defineComponent({
     showTags() {
       return this.hasTags && this.resource.tags?.length
     },
-    tagsLabel() {
-      return this.$gettext('Tags')
-    },
     hasAnyShares() {
       return (
         this.resource.shareTypes?.length > 0 ||
         this.resource.indicators?.length > 0 ||
-        this.sharedItem !== null
+        this.sharedAncestor
       )
     },
     ownedByCurrentUser() {
@@ -455,52 +404,11 @@ export default defineComponent({
     shareIndicators() {
       return getIndicators({ resource: this.resource, ancestorMetaData: this.ancestorMetaData })
     },
-    shares() {
-      if (this.sharedParentDir === null) {
-        return []
-      }
-      return this.sharesTree[this.sharedParentDir]?.filter((s) =>
-        ShareTypes.containsAnyValue(
-          [...ShareTypes.individuals, ...ShareTypes.unauthenticated],
-          [s.shareType]
-        )
-      )
-    },
-    sharedItem() {
-      return this.shares.length ? this.shares[0] : null
-    },
-    sharedByName() {
-      return this.sharedItem?.owner?.name
-    },
     sharedByDisplayName() {
-      let sharedByDisplayName = this.sharedItem?.owner?.displayName
-      if (this.sharedItem?.owner?.additionalInfo) {
-        sharedByDisplayName += ' (' + this.sharedItem.owner.additionalInfo + ')'
-      }
-      return sharedByDisplayName
-    },
-    sharedParentDir() {
-      return this.getParentSharePath(this.resource.path, this.sharesTree)
-    },
-    sharedParentFileId() {
-      return this.sharedItem?.file?.source
+      return this.resource.share?.fileOwner.displayName
     }
   },
   methods: {
-    getParentSharePath(childPath, shares) {
-      let currentPath = childPath
-      if (!currentPath) {
-        return null
-      }
-      while (currentPath !== '/') {
-        const share = shares[currentPath]
-        if (share !== undefined && share[0] !== undefined) {
-          return currentPath
-        }
-        currentPath = dirname(currentPath)
-      }
-      return null
-    },
     expandVersionsPanel() {
       eventBus.publish(SideBarEventTopics.setActivePanel, 'versions')
     },
@@ -510,7 +418,7 @@ export default defineComponent({
       })
     },
     getTagComponentAttrs(tag) {
-      if (!this.isUserContext) {
+      if (this.isPublicLinkContext) {
         return {}
       }
 

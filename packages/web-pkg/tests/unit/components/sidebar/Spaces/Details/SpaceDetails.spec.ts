@@ -64,9 +64,7 @@ function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
   storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(() => [
     spaceShare
   ])
-  storeOptions.modules.Files.getters.currentFileOutgoingCollaborators.mockImplementation(() => [
-    spaceShare
-  ])
+  storeOptions.modules.Files.getters.outgoingCollaborators.mockImplementation(() => [spaceShare])
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(SpaceDetails, {

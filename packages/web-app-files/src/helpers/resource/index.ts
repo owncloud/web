@@ -1,3 +1,4 @@
+export * from './ancestorMetaData'
 export * from './filter'
 export * from './sameResource'
 export * from './conflictHandling'

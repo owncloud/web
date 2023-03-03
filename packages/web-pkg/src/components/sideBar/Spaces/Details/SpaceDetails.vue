@@ -134,10 +134,13 @@ export default defineComponent({
       })
     })
 
-    return { loadImageTask, spaceImage, resource }
+    const linkShareCount = () => {
+      return store.getters['Files/outgoingLinks'].length
+    }
+
+    return { loadImageTask, spaceImage, resource, linkShareCount }
   },
   computed: {
-    ...mapGetters('Files', ['currentFileOutgoingLinks']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['user']),
     hasShares() {
@@ -207,9 +210,6 @@ export default defineComponent({
     },
     memberShareCount() {
       return this.spaceMembers.length
-    },
-    linkShareCount() {
-      return this.currentFileOutgoingLinks.length
     },
     memberShareLabel() {
       return this.$ngettext(

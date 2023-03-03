@@ -41,7 +41,7 @@ describe('FileLinks', () => {
     describe('when links list is not empty', () => {
       const { wrapper } = getWrapper()
 
-      it('should render a list of links', () => {
+      it('should render a list of direct and indirect links', () => {
         const linkListItems = wrapper.findAllComponents<any>(linkListItemNameAndCopy)
         const linkListItemsDetails = wrapper.findAll(linkListItemDetailsAndEdit)
 
@@ -58,7 +58,7 @@ describe('FileLinks', () => {
           id: '2',
           indirect: true,
           name: 'public link 2',
-          key: 'direct-link-2'
+          key: 'indirect-link-2'
         })
       })
 
@@ -105,8 +105,7 @@ describe('FileLinks', () => {
 
 function getWrapper({
   resource = mockDeep<Resource>({ isFolder: false, canShare: () => true }),
-  links = defaultLinksList,
-  sharesTreeLoading = false
+  links = defaultLinksList
 } = {}) {
   const storeOptions = {
     ...defaultStoreMockOptions,
@@ -134,12 +133,7 @@ function getWrapper({
       })
     }
   }
-  defaultStoreMockOptions.modules.Files.getters.currentFileOutgoingLinks.mockImplementation(
-    () => links
-  )
-  defaultStoreMockOptions.modules.Files.getters.sharesTreeLoading.mockImplementation(
-    () => sharesTreeLoading
-  )
+  defaultStoreMockOptions.modules.Files.getters.outgoingLinks.mockReturnValue(links)
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(FileLinks, {

@@ -43,18 +43,22 @@ export default {
       spaces: spaceCount
     }
   },
-  currentFileOutgoingCollaborators: (state) => {
-    return state.currentFileOutgoingShares.filter((share) => {
-      return ShareTypes.containsAnyValue(ShareTypes.authenticated, [share.shareType])
-    })
+  outgoingCollaborators: (state) => {
+    return state.outgoingShares.filter((s) =>
+      ShareTypes.containsAnyValue(ShareTypes.authenticated, [s.shareType])
+    )
   },
-  currentFileOutgoingLinks: (state) => {
-    return state.currentFileOutgoingShares.filter((share) => {
+  incomingCollaborators: (state) => {
+    return state.incomingShares.filter((s) =>
+      ShareTypes.containsAnyValue(ShareTypes.authenticated, [s.shareType])
+    )
+  },
+  outgoingLinks: (state) => {
+    return state.outgoingShares.filter((share) => {
       return ShareTypes.containsAnyValue(ShareTypes.unauthenticated, [share.shareType])
     })
   },
-  sharesTree: (state) => state.sharesTree,
-  sharesTreeLoading: (state) => state.sharesTreeLoading,
+  sharesLoading: (state) => state.sharesLoading,
   quota: (state) => {
     return state.quota
   },

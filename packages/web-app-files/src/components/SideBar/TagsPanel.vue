@@ -136,13 +136,15 @@ export default defineComponent({
     }
 
     watch(resource, () => {
-      if (unref(resource)?.canEditTags()) {
+      if (unref(resource)?.tags) {
         revertChanges()
       }
     })
 
     onMounted(() => {
-      selectedTags.value = [...unref(resource).tags]
+      if (unref(resource)?.tags) {
+        selectedTags.value = [...unref(resource).tags]
+      }
       loadAvailableTagsTask.perform()
     })
 

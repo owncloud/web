@@ -4,7 +4,6 @@ export const filesModuleMockOptions = {
     state: {
       highlightedFile: undefined,
       currentFolder: undefined,
-      sharesTree: {},
       latestSelectedId: undefined
     },
     getters: {
@@ -12,14 +11,12 @@ export const filesModuleMockOptions = {
       files: jest.fn(() => []),
       activeFiles: jest.fn(),
       highlightedFile: jest.fn(),
-      currentFileOutgoingCollaborators: jest.fn(() => []),
-      indirectOutgoingShares: jest.fn(() => []),
       clipboardResources: jest.fn(() => []),
       selectedFiles: jest.fn(() => []),
       versions: jest.fn(() => []),
-      currentFileOutgoingLinks: jest.fn(() => []),
-      sharesTreeLoading: jest.fn(() => false),
-      sharesTree: jest.fn((state) => ({})),
+      outgoingCollaborators: jest.fn(() => []),
+      outgoingLinks: jest.fn(() => []),
+      sharesLoading: jest.fn(() => false),
       ancestorMetaData: jest.fn(() => ({}))
     },
     mutations: {
@@ -46,7 +43,7 @@ export const filesModuleMockOptions = {
       clearClipboardFiles: jest.fn(),
       loadIndicators: jest.fn(),
       loadVersions: jest.fn(),
-      loadSharesTree: jest.fn(),
+      loadShares: jest.fn(),
       deleteShare: jest.fn(),
       clearTrashBin: jest.fn(),
       removeFilesFromTrashbin: jest.fn(),

@@ -93,6 +93,7 @@ import {
 import { useGraphClient } from 'web-pkg/src/composables'
 import { defineComponent, inject } from 'vue'
 import { Resource } from 'web-client'
+import { useShares } from 'web-app-files/src/composables'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -129,7 +130,8 @@ export default defineComponent({
       hasShareJail: useCapabilityShareJailEnabled(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
       hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
-      ...useGraphClient()
+      ...useGraphClient(),
+      ...useShares()
     }
   },
 
@@ -147,7 +149,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('Files', ['currentFileOutgoingCollaborators']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['configuration', 'user', 'capabilities']),
 
@@ -226,7 +227,7 @@ export default defineComponent({
 
           const existingShares = this.resourceIsSpace
             ? this.spaceMembers
-            : this.currentFileOutgoingCollaborators
+            : this.outgoingCollaborators.filter((c) => !c.indirect)
           const exists = existingShares.find((share) => {
             const shareCollaboratorIdentifier =
               share.collaborator.name || share.collaborator.displayName
