@@ -1,6 +1,6 @@
 <template>
   <oc-button
-    id="oc-notification-bell"
+    id="oc-notifications-bell"
     v-oc-tooltip="notificationsLabel"
     appearance="raw"
     variation="inverse"
@@ -63,7 +63,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#oc-notification-bell {
+#oc-notifications-bell {
   position: relative;
   .badge {
     position: absolute;

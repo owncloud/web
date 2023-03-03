@@ -1,117 +1,332 @@
 <template>
-  <div id="oc-notification" class="oc-flex oc-flex-middle">
-    <notification-bell :notification-count="activeNotifications" />
+  <div id="oc-notifications">
+    <notification-bell :notification-count="notifications.length" />
     <oc-drop
-      id="oc-notification-drop"
+      id="oc-notifications-drop"
       drop-id="notifications-dropdown"
-      toggle="#oc-notification-bell"
+      toggle="#oc-notifications-bell"
       mode="click"
       :options="{ pos: 'bottom-right', delayHide: 0 }"
-      class="oc-overflow-auto oc-width-3-4 oc-width-large@s"
-      padding-size="small"
+      class="oc-overflow-auto"
+      @hide-drop="hideDrop"
+      @show-drop="showDrop"
     >
-      <template v-if="!activeNotifications.length">
-        <div>
-          <span v-text="$gettext('Nothing new')" />
+      <div class="oc-flex oc-flex-between oc-flex-middle oc-mb-s">
+        <span class="oc-text-bold oc-text-large oc-m-rm" v-text="$gettext('Notifications')" />
+        <oc-button
+          v-if="notifications.length"
+          class="oc-notifications-mark-all"
+          appearance="raw"
+          @click="deleteNotifications(notifications.map((n) => n.notification_id))"
+          ><span v-text="$gettext('Mark all as read')"
+        /></oc-button>
+      </div>
+      <hr />
+      <div class="oc-position-relative">
+        <div v-if="loading" class="oc-notifications-loading">
+          <div class="oc-notifications-loading-background oc-width-1-1 oc-height-1-1" />
+          <oc-spinner class="oc-notifications-loading-spinner" size="large" />
         </div>
-      </template>
-      <template v-else>
-        <div v-for="(el, index) in activeNotifications" :key="index" class="oc-width-1-1">
-          <h4 v-text="el.subject" />
-          <p v-if="el.message" class="oc-text-small">{{ el.message }}</p>
-          <p>
-            <a v-if="shouldDisplayLink(el)" :href="el.link" target="_blank">{{ el.link }}</a>
-          </p>
-          <div class="oc-width-1-1 oc-flex-right">
-            <template v-if="el.actions.length !== 0">
-              <oc-button
-                v-for="(action, actionIndex) in el.actions"
-                :key="index + '-' + actionIndex"
-                size="small"
-                :variation="action.primary ? 'primary' : 'passive'"
-                appearance="filled"
-                class="oc-ml-s"
-                @click.prevent="
-                  executeRequest(el.app, action.link, action.type, el.notification_id)
-                "
-                >{{ action.label }}</oc-button
-              >
-            </template>
-            <oc-button
-              v-else
-              id="resolve-notification-button"
-              size="small"
-              @click.prevent.once="
-                deleteNotification({ client: $client, notification: el.notification_id })
-              "
+        <span
+          v-if="!notifications.length"
+          class="oc-notifications-no-new"
+          v-text="$gettext('Nothing new')"
+        />
+        <oc-list v-else>
+          <li v-for="(el, index) in notifications" :key="index" class="oc-notifications-item">
+            <component
+              :is="el.computedLink ? 'router-link' : 'div'"
+              class="oc-flex oc-flex-middle oc-my-xs"
+              :to="el.computedLink"
             >
-              Mark as read
-            </oc-button>
-          </div>
-          <hr v-if="index + 1 !== activeNotifications.length" />
-        </div>
-      </template>
+              <avatar-image
+                class="oc-mr-m"
+                :width="32"
+                :userid="el.messageRichParameters?.user?.name || el.user"
+                :user-name="el.messageRichParameters?.user?.displayname || el.user"
+              />
+              <div>
+                <div v-if="!el.message && !el.messageRich" class="oc-notifications-subject">
+                  <span v-text="el.subject" />
+                </div>
+                <div v-if="el.computedMessage" class="oc-notifications-message">
+                  <span v-bind="{ innerHTML: el.computedMessage }" />
+                </div>
+                <div
+                  v-if="el.link && el.object_type !== 'local_share'"
+                  class="oc-notifications-link"
+                >
+                  <a :href="el.link" target="_blank" v-text="el.link" />
+                </div>
+                <div v-if="el.actions?.length" class="oc-notifications-actions oc-my-s">
+                  <oc-button
+                    v-for="(action, actionIndex) in el.actions"
+                    :key="index + '-' + actionIndex"
+                    size="small"
+                    :variation="action.primary ? 'primary' : 'passive'"
+                    @click.prevent="
+                      executeAction(el.app, action.link, action.type, el.notification_id)
+                    "
+                    >{{ action.label }}</oc-button
+                  >
+                </div>
+                <div v-if="el.datetime" class="oc-text-small oc-text-muted oc-mt-xs">
+                  <span
+                    v-oc-tooltip="formatDate(el.datetime)"
+                    tabindex="0"
+                    v-text="formatDateRelative(el.datetime)"
+                  />
+                </div>
+              </div>
+            </component>
+            <hr v-if="index + 1 !== notifications.length" class="oc-my-m" />
+          </li>
+        </oc-list>
+      </div>
     </oc-drop>
   </div>
 </template>
 <script lang="ts">
-import { mapGetters, mapActions } from 'vuex'
+import { onMounted, onUnmounted, ref, unref } from 'vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import NotificationBell from './NotificationBell.vue'
+import { Notification } from '../../helpers/notifications'
+import { formatDateFromISO, formatRelativeDateFromISO, useClientService, useStore } from 'web-pkg'
+import { useGettext } from 'vue3-gettext'
+import { useTask } from 'vue-concurrency'
+
+const POLLING_INTERVAL = 30000
 
 export default {
   components: {
     NotificationBell
   },
-  computed: {
-    ...mapGetters(['activeNotifications', 'configuration'])
-  },
-  methods: {
-    ...mapActions(['deleteNotification', 'showMessage']),
+  setup() {
+    const store = useStore()
+    const { owncloudSdk } = useClientService()
+    const { current: currentLanguage } = useGettext()
 
-    executeRequest(app, link, type, notificationId) {
-      this.$client.requests
-        .ocs({
+    const notifications = ref<Notification[]>([])
+    const loading = ref(false)
+    const notificationsInterval = ref()
+    const dropdownOpened = ref(false)
+
+    const formatDate = (date) => {
+      return formatDateFromISO(date, currentLanguage)
+    }
+    const formatDateRelative = (date) => {
+      return formatRelativeDateFromISO(date, currentLanguage)
+    }
+
+    const messageParameters = [
+      { name: 'user', labelAttribute: 'displayname' },
+      { name: 'resource', labelAttribute: 'name' },
+      { name: 'space', labelAttribute: 'name' }
+    ]
+    const getMessage = ({ message, messageRich, messageRichParameters }: Notification) => {
+      if (messageRich) {
+        let interpolatedMessage = messageRich
+        for (const param of messageParameters) {
+          if (interpolatedMessage.includes(`{${param.name}}`)) {
+            const label = messageRichParameters[param.name][param.labelAttribute]
+            interpolatedMessage = interpolatedMessage.replace(
+              `{${param.name}}`,
+              `<strong>${label}</strong>`
+            )
+          }
+        }
+        return interpolatedMessage
+      }
+      return message
+    }
+    const getLink = ({ messageRichParameters, object_type }: Notification) => {
+      if (!messageRichParameters) {
+        return null
+      }
+      if (object_type === 'share') {
+        return { name: 'files-shares-with-me' }
+      }
+      if (object_type === 'storagespace' && messageRichParameters?.space?.id) {
+        const space = store.getters['runtime/spaces/spaces'].find(
+          (s) => s.fileId === messageRichParameters?.space?.id.split('!')[0] && !s.disabled
+        )
+        if (space) {
+          return { name: 'files-spaces-generic', params: { driveAliasAndItem: space.driveAlias } }
+        }
+      }
+      return null
+    }
+
+    const setAdditionalData = () => {
+      loading.value = true
+      for (const notification of unref(notifications)) {
+        notification.computedMessage = getMessage(notification)
+        notification.computedLink = getLink(notification)
+      }
+      loading.value = false
+    }
+
+    const fetchNotificationsTask = useTask(function* (signal) {
+      loading.value = true
+      try {
+        const response = yield owncloudSdk.requests.ocs({
+          service: 'apps/notifications',
+          action: 'api/v1/notifications'
+        })
+
+        if (response.headers.get('Content-Length') === '0') {
+          return
+        }
+
+        const {
+          ocs: { data = [] }
+        } = yield response.json()
+        notifications.value = data || []
+      } catch (e) {
+        console.error(e)
+      } finally {
+        if (unref(dropdownOpened)) {
+          setAdditionalData()
+        }
+        loading.value = false
+      }
+    }).restartable()
+
+    const deleteNotifications = async (ids: string[]) => {
+      loading.value = true
+      try {
+        const { status } = await owncloudSdk.requests.ocs({
+          service: 'apps/notifications',
+          action: `api/v1/notifications`,
+          method: 'DELETE',
+          data: { ids }
+        })
+        if (status === 405) {
+          // oC10
+          const promises = []
+          for (const id of ids) {
+            promises.push(
+              owncloudSdk.requests.ocs({
+                service: 'apps/notifications',
+                action: `api/v1/notifications/${id}`,
+                method: 'DELETE'
+              })
+            )
+          }
+          return Promise.resolve(promises)
+        }
+      } catch (e) {
+        console.error(e)
+      } finally {
+        notifications.value = unref(notifications).filter((n) => !ids.includes(n.notification_id))
+        loading.value = false
+      }
+    }
+
+    const executeAction = async (app, link, type, notificationId) => {
+      try {
+        const response = await owncloudSdk.requests.ocs({
           service: 'apps/' + app,
           action: link.slice(link.lastIndexOf('api')),
           method: type
         })
-        .then((res) => {
-          this.deleteNotification({
-            client: this.$client,
-            notification: notificationId
-          })
-          res.json().then((json) => {
-            json.ocs.data.forEach((item) => {
-              const currentPath = this.$route.params.item ? `/${this.$route.params.item}` : '/'
-              const { state, path, file_target: fileTarget } = item
+        const {
+          ocs: { data }
+        } = await response.json()
 
-              // accepted federated share
-              if (state === ShareStatus.accepted && fileTarget) {
-                eventBus.publish('app.files.list.load')
-                return
-              }
+        await deleteNotifications([notificationId])
 
-              if (path) {
-                const itemPath = path.slice(0, path.lastIndexOf('/') + 1)
-                if (itemPath === currentPath) {
-                  eventBus.publish('app.files.list.load')
-                }
-              }
-            })
-          })
-        })
-    },
-    shouldDisplayLink(notification) {
-      return notification.link && notification.object_type !== 'local_share'
+        for (const item in data) {
+          const currentPath = this.$route.params.item ? `/${this.$route.params.item}` : '/'
+          const { state, path, file_target: fileTarget } = item as any
+
+          // accepted federated share
+          if (state === ShareStatus.accepted && fileTarget) {
+            eventBus.publish('app.files.list.load')
+            return
+          }
+
+          const itemPath = path?.slice(0, path.lastIndexOf('/') + 1)
+          if (itemPath === currentPath) {
+            eventBus.publish('app.files.list.load')
+          }
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
+    const hideDrop = () => {
+      dropdownOpened.value = false
+    }
+    const showDrop = () => {
+      dropdownOpened.value = true
+      setAdditionalData()
+    }
+
+    onMounted(() => {
+      fetchNotificationsTask.perform()
+      notificationsInterval.value = setInterval(() => {
+        fetchNotificationsTask.perform()
+      }, POLLING_INTERVAL)
+    })
+
+    onUnmounted(() => {
+      if (unref(notificationsInterval)) {
+        clearInterval(unref(notificationsInterval))
+      }
+    })
+
+    return {
+      notifications,
+      fetchNotificationsTask,
+      loading,
+      dropdownOpened,
+      deleteNotifications,
+      executeAction,
+      formatDate,
+      formatDateRelative,
+      getMessage,
+      getLink,
+      hideDrop,
+      showDrop
     }
   }
 }
 </script>
 
-<style scoped>
-div > div > div:nth-of-type(n + 2) {
-  margin-top: 20px;
+<style lang="scss" scoped>
+#oc-notifications-drop {
+  width: 400px;
+  max-width: 100%;
+  max-height: 400px;
+}
+.oc-notifications {
+  &-item {
+    > a {
+      color: var(--oc-color-text-default);
+    }
+  }
+  &-loading {
+    * {
+      position: absolute;
+    }
+    &-background {
+      background-color: var(--oc-color-background-secondary);
+      opacity: 0.6;
+    }
+    &-spinner {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 1;
+    }
+  }
+  &-actions {
+    button:not(:last-child) {
+      margin-right: var(--oc-space-small);
+    }
+  }
 }
 </style>
