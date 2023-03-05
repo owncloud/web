@@ -10,6 +10,7 @@
     >
       <template #content>
         <quota-select
+          id="quota-select-batch-action-form"
           :title="$gettext('Space quota')"
           :total-quota="selectedOption"
           :max-quota="maxQuota"

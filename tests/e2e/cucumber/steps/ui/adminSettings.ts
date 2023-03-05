@@ -147,3 +147,29 @@ Then(
     await generalObject.resetLogo()
   }
 )
+
+When(
+  /^"([^"]*)" changes the quota of the user "([^"]*)" to "([^"]*)"$/,
+  async function (this: World, stepUser: string, key: string, value: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const usersObject = new objects.applicationAdminSettings.Users({ page })
+    await usersObject.changeQuota({ key, value })
+  }
+)
+
+When(
+  /^"([^"]*)" changes the quota using a batch action to "([^"]*)" for users:$/,
+  async function (
+    this: World,
+    stepUser: string,
+    value: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const usersObject = new objects.applicationAdminSettings.Users({ page })
+    for (const info of stepTable.hashes()) {
+      await usersObject.selectUser({ key: info.id })
+    }
+    await usersObject.changeQuotaUsingBatchAction({ value })
+  }
+)
