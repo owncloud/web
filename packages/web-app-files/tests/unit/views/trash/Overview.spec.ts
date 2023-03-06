@@ -18,7 +18,7 @@ const spaceMocks = [
     id: '1',
     name: 'admin',
     disabled: false,
-    driveType: 'personal'
+    driveType: 'personal',
   },
   {
     id: '2',
@@ -56,9 +56,14 @@ describe('TrashOverview', () => {
       query: {}
     })
   })
+  it('shows the loading spinner during loading', () => {
+    const { wrapper } = getWrapper()
+    expect(wrapper.find('app-loading-spinner').exists()).toBeTruthy()
+  })
   it('should render all spaces in a table', async () => {
     const { wrapper } = getWrapper()
     await wrapper.vm.loadResourcesTask.last
+    expect(wrapper.find('app-loading-spinner').exists()).toBeFalsy()
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('sorts by property name', async () => {
