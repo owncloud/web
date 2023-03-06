@@ -1,325 +1,309 @@
 import get from 'lodash-es/get'
 import kebabCase from 'lodash-es/kebabCase'
-import { mapGetters, mapState } from 'vuex'
-import { Resource } from 'web-client'
-import { SpaceResource } from 'web-client/src/helpers'
+import { Store } from 'vuex'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { routeToContextQuery } from 'web-pkg/src/composables/appDefaults'
 import { configurationManager } from 'web-pkg/src/configuration'
 
 import { isLocationSharesActive, isLocationTrashActive } from '../router'
-import AcceptShare from './actions/acceptShare'
-import Copy from './actions/copy'
-import DeclineShare from './actions/declineShare'
-import Delete from './actions/delete'
-import DownloadArchive from './actions/downloadArchive'
-import DownloadFile from './actions/downloadFile'
-import Favorite from './actions/favorite'
-import Move from './actions/move'
-import ShowEditTags from './actions/showEditTags'
-import Navigate from './actions/navigate'
-import Rename from './actions/rename'
-import Restore from './actions/restore'
-import isSearchActive from './helpers/isSearchActive'
-import { Action } from 'web-pkg/src/actions'
-
-const actionsMixins = [
-  'navigate',
-  'downloadArchive',
-  'downloadFile',
-  'favorite',
-  'copy',
-  'move',
-  'rename',
-  'showEditTags',
-  'restore',
-  'delete',
-  'acceptShare',
-  'declineShare'
-]
+import { useAcceptShare } from './actions/acceptShare'
+// import Copy from './actions/copy'
+import { useDeclineShare } from './actions/declineShare'
+// import Delete from './actions/delete'
+// import DownloadArchive from './actions/downloadArchive'
+// import DownloadFile from './actions/downloadFile'
+// import Favorite from './actions/favorite'
+// import Move from './actions/move'
+// import ShowEditTags from './actions/showEditTags'
+// import Navigate from './actions/navigate'
+// import Rename from './actions/rename'
+// import Restore from './actions/restore'
+import { Action, ActionOptions } from 'web-pkg/src/actions'
+import { computed, unref } from 'vue'
+import { useRoute, useRouter, useStore } from 'web-pkg/src'
+import { useGettext } from 'vue3-gettext'
+import { useIsSearchActive } from 'web-pkg/src/composables/actions'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
 
-export type FileActionOptions = {
-  space: SpaceResource
-  resources: Resource[]
-}
+export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
+  store = store || useStore()
+  const router = useRouter()
+  const route = useRoute()
+  const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+  const isSearchActive = useIsSearchActive()
 
-export default {
-  mixins: [
-    AcceptShare,
-    Copy,
-    DeclineShare,
-    Delete,
-    DownloadFile,
-    DownloadArchive,
-    Favorite,
-    Move,
-    Navigate,
-    Rename,
-    Restore,
-    isSearchActive,
-    ShowEditTags
-  ],
-  computed: {
-    ...mapState(['apps']),
-    ...mapGetters('Files', ['currentFolder']),
-    ...mapGetters(['capabilities', 'configuration']),
+  const { actions: acceptShareActions } = useAcceptShare({ store })
+  const { actions: declineShareActions } = useDeclineShare({ store })
 
-    $_fileActions_systemActions() {
-      return actionsMixins.flatMap((actionMixin) => {
-        return this[`$_${actionMixin}_items`]
-      })
-    },
+  const systemActions = computed(() => [
+    // const actionsMixins = [
+    //   'copy',
+    //   'delete',
+    //   'downloadArchive',
+    //   'downloadFile',
+    //   'favorite',
+    //   'move',
+    //   'navigate',
+    //   'rename',
+    //   'restore',
+    //   'showEditTags',
+    // ]
 
-    $_fileActions_editorActions() {
-      return this.apps.fileEditors
-        .map((editor) => {
-          return {
-            label: () => {
-              if (editor.label) {
-                return this.$gettext(editor.label)
-              }
-              const translated = this.$gettext('Open in %{app}')
-              return this.$gettextInterpolate(
-                translated,
-                { app: this.apps.meta[editor.app].name },
-                true
-              )
-            },
-            icon: this.apps.meta[editor.app].icon,
-            ...(this.apps.meta[editor.app].iconFillType && {
-              iconFillType: this.apps.meta[editor.app].iconFillType
-            }),
-            img: this.apps.meta[editor.app].img,
-            handler: (options: FileActionOptions) =>
-              this.$_fileActions_openEditor(
-                editor,
-                options.space.getDriveAliasAndItem(options.resources[0]),
-                options.resources[0].webDavPath,
-                options.resources[0].fileId,
-                EDITOR_MODE_EDIT,
-                options.space.shareId
-              ),
-            isEnabled: ({ resources }) => {
-              if (resources.length !== 1) {
-                return false
-              }
+    ...unref(acceptShareActions),
+    ...unref(declineShareActions)
+  ])
 
-              if (
-                !this.$_isSearchActive &&
-                (isLocationTrashActive(this.$router, 'files-trash-generic') ||
-                  (isLocationSharesActive(this.$router, 'files-shares-with-me') &&
-                    resources[0].status !== ShareStatus.accepted))
-              ) {
-                return false
-              }
-
-              if (resources[0].extension && editor.extension) {
-                return resources[0].extension.toLowerCase() === editor.extension.toLowerCase()
-              }
-
-              if (resources[0].mimeType && editor.mimeType) {
-                return (
-                  resources[0].mimeType.toLowerCase() === editor.mimeType.toLowerCase() ||
-                  resources[0].mimeType.split('/')[0].toLowerCase() ===
-                    editor.mimeType.toLowerCase()
-                )
-              }
-
+  const editorActions = computed(() => {
+    const apps = store.state.apps
+    return (store.state.apps.fileEditors as any[])
+      .map((editor): Action => {
+        return {
+          label: () => {
+            if (editor.label) {
+              return $gettext(editor.label)
+            }
+            const translated = $gettext('Open in %{app}')
+            return $gettextInterpolate(translated, { app: apps.meta[editor.app].name }, true)
+          },
+          icon: apps.meta[editor.app].icon,
+          ...(apps.meta[editor.app].iconFillType && {
+            iconFillType: apps.meta[editor.app].iconFillType
+          }),
+          img: apps.meta[editor.app].img,
+          handler: (options: ActionOptions) =>
+            openEditor(
+              editor,
+              options.space.getDriveAliasAndItem(options.resources[0]),
+              options.resources[0].webDavPath,
+              options.resources[0].fileId,
+              EDITOR_MODE_EDIT,
+              options.space.shareId
+            ),
+          isEnabled: ({ resources }) => {
+            if (resources.length !== 1) {
               return false
-            },
-            canBeDefault: editor.canBeDefault,
-            componentType: 'button',
-            class: `oc-files-actions-${kebabCase(
-              this.apps.meta[editor.app].name
-            ).toLowerCase()}-trigger`
-          }
-        })
-        .sort((first, second) => {
-          // Ensure default are listed first
-          if (second.canBeDefault !== first.canBeDefault && second.canBeDefault) {
-            return 1
-          }
-          return 0
-        })
-    }
-  },
+            }
 
-  methods: {
-    $_fileActions_openEditor(editor, driveAliasAndItem: string, filePath, fileId, mode, shareId) {
-      if (editor.handler) {
-        return editor.handler({
-          config: this.configuration,
-          extensionConfig: editor.config,
-          driveAliasAndItem,
-          filePath,
-          fileId,
-          mode,
-          ...(shareId && { shareId })
-        })
+            if (
+              !unref(isSearchActive) &&
+              (isLocationTrashActive(router, 'files-trash-generic') ||
+                (isLocationSharesActive(router, 'files-shares-with-me') &&
+                  resources[0].status !== ShareStatus.accepted))
+            ) {
+              return false
+            }
+
+            if (resources[0].extension && editor.extension) {
+              return resources[0].extension.toLowerCase() === editor.extension.toLowerCase()
+            }
+
+            if (resources[0].mimeType && editor.mimeType) {
+              return (
+                resources[0].mimeType.toLowerCase() === editor.mimeType.toLowerCase() ||
+                resources[0].mimeType.split('/')[0].toLowerCase() === editor.mimeType.toLowerCase()
+              )
+            }
+
+            return false
+          },
+          canBeDefault: editor.canBeDefault,
+          componentType: 'button',
+          class: `oc-files-actions-${kebabCase(apps.meta[editor.app].name).toLowerCase()}-trigger`
+        }
+      })
+      .sort((first, second) => {
+        // Ensure default are listed first
+        if (second.canBeDefault !== first.canBeDefault && second.canBeDefault) {
+          return 1
+        }
+        return 0
+      })
+  })
+
+  const routeOptsHelper = (app, driveAliasAndItem: string, filePath, fileId, mode, shareId) => {
+    return {
+      name: app.routeName || app.app,
+      params: {
+        driveAliasAndItem,
+        filePath,
+        fileId,
+        mode
+      },
+      query: {
+        ...(shareId && { shareId }),
+        ...(fileId && configurationManager.options.routing.idBased && { fileId }),
+        ...routeToContextQuery(unref(route))
       }
+    }
+  }
 
-      const routeOpts = this.$_fileActions__routeOpts(
-        editor,
+  const openEditor = (editor, driveAliasAndItem: string, filePath, fileId, mode, shareId) => {
+    const configuration = store.getters['configuration']
+
+    if (editor.handler) {
+      return editor.handler({
+        config: configuration,
+        extensionConfig: editor.config,
         driveAliasAndItem,
         filePath,
         fileId,
         mode,
-        shareId
-      )
-
-      if (this.configuration.options.openAppsInTab) {
-        const path = this.$router.resolve(routeOpts).href
-        const target = `${editor.routeName}-${filePath}`
-        const win = window.open(path, target)
-        // in case popup is blocked win will be null
-        if (win) {
-          win.focus()
-        }
-        return
-      }
-
-      this.$router.push(routeOpts)
-    },
-
-    $_fileActions__routeOpts(app, driveAliasAndItem: string, filePath, fileId, mode, shareId) {
-      return {
-        name: app.routeName || app.app,
-        params: {
-          driveAliasAndItem,
-          filePath,
-          fileId,
-          mode
-        },
-        query: {
-          ...(shareId && { shareId }),
-          ...(fileId && configurationManager.options.routing.idBased && { fileId }),
-          ...routeToContextQuery(this.$route)
-        }
-      }
-    },
-
-    // TODO: Make user-configurable what is a defaultAction for a filetype/mimetype
-    // returns the _first_ action from actions array which we now construct from
-    // available mime-types coming from the app-provider and existing actions
-    $_fileActions_triggerDefaultAction(options: FileActionOptions) {
-      const action = this.$_fileActions_getDefaultAction(options)
-      action.handler({ ...options, ...action.handlerData })
-    },
-
-    $_fileActions_getDefaultAction(options: FileActionOptions) {
-      const filterCallback = (action) =>
-        action.canBeDefault &&
-        action.isEnabled({
-          ...options,
-          parent: this.currentFolder
-        })
-
-      // first priority: handlers from config
-      const defaultEditorActions = this.$_fileActions_editorActions.filter(filterCallback)
-      if (defaultEditorActions.length) {
-        return defaultEditorActions[0]
-      }
-
-      // second priority: `/app/open` endpoint of app provider if available
-      // FIXME: files app should not know anything about the `external apps` app
-      const externalAppsActions =
-        this.$_fileActions_loadExternalAppActions(options).filter(filterCallback)
-      if (externalAppsActions.length) {
-        return externalAppsActions[0]
-      }
-
-      // fallback: system actions
-      return this.$_fileActions_systemActions.filter(filterCallback)[0]
-    },
-
-    $_fileActions_getAllAvailableActions(options: FileActionOptions) {
-      return [
-        ...this.$_fileActions_editorActions,
-        ...this.$_fileActions_loadExternalAppActions(options),
-        ...this.$_fileActions_systemActions
-      ].filter((action) => {
-        return action.isEnabled(options)
+        ...(shareId && { shareId })
       })
-    },
-
-    // returns an array of available external Apps
-    // to open a resource with a specific mimeType
-    // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
-    $_fileActions_loadExternalAppActions(options: FileActionOptions): Action[] {
-      if (isLocationTrashActive(this.$router, 'files-trash-generic')) {
-        return []
-      }
-
-      // we don't support external apps as batch action as of now
-      if (options.resources.length !== 1) {
-        return []
-      }
-
-      const resource = options.resources[0]
-      const { mimeType, webDavPath, fileId } = resource
-      const driveAliasAndItem = options.space.getDriveAliasAndItem(resource)
-      const mimeTypes = this.$store.getters['External/mimeTypes'] || []
-      if (
-        mimeType === undefined ||
-        !get(this, 'capabilities.files.app_providers') ||
-        !mimeTypes.length
-      ) {
-        return []
-      }
-
-      const filteredMimeTypes = mimeTypes.find((t) => t.mime_type === mimeType)
-      if (filteredMimeTypes === undefined) {
-        return []
-      }
-      const { app_providers: appProviders = [], default_application: defaultApplication } =
-        filteredMimeTypes
-
-      return appProviders.map((app): Action => {
-        const label = this.$gettext('Open in %{ appName }')
-        return {
-          name: app.name,
-          icon: app.icon,
-          img: app.img,
-          componentType: 'button',
-          class: `oc-files-actions-${app.name}-trigger`,
-          isEnabled: () => true,
-          canBeDefault: defaultApplication === app.name,
-          handler: () =>
-            this.$_fileActions_openExternalApp(
-              app.name,
-              driveAliasAndItem,
-              webDavPath,
-              fileId,
-              options.space.shareId
-            ),
-          label: () => this.$gettextInterpolate(label, { appName: app.name })
-        }
-      })
-    },
-
-    $_fileActions_openExternalApp(app, driveAliasAndItem: string, filePath, fileId, shareId) {
-      const routeOpts = this.$_fileActions__routeOpts(
-        {
-          routeName: 'external-apps'
-        },
-        driveAliasAndItem,
-        filePath,
-        undefined,
-        undefined,
-        shareId
-      )
-
-      routeOpts.query = {
-        app,
-        fileId,
-        ...routeOpts.query
-      }
-
-      // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
-      window.open(this.$router.resolve(routeOpts).href, '_blank')
     }
+
+    const routeOpts = routeOptsHelper(editor, driveAliasAndItem, filePath, fileId, mode, shareId)
+
+    if (configuration.options.openAppsInTab) {
+      const path = router.resolve(routeOpts).href
+      const target = `${editor.routeName}-${filePath}`
+      const win = window.open(path, target)
+      // in case popup is blocked win will be null
+      if (win) {
+        win.focus()
+      }
+      return
+    }
+
+    router.push(routeOpts)
+  }
+
+  // TODO: Make user-configurable what is a defaultAction for a filetype/mimetype
+  // returns the _first_ action from actions array which we now construct from
+  // available mime-types coming from the app-provider and existing actions
+  const triggerDefaultAction = (options: ActionOptions) => {
+    const action = getDefaultAction(options)
+    action.handler({ ...options, ...action.handlerData })
+  }
+
+  const triggerAction = (name: string, options: ActionOptions) => {
+    const action = getAllAvailableActions(options).filter((action) => action.name === name)[0]
+    if (!action) {
+      throw new Error(`Action not found: '${name}'`)
+    }
+
+    action.handler(options)
+  }
+
+  const getDefaultAction = (options: ActionOptions) => {
+    const filterCallback = (action) =>
+      action.canBeDefault &&
+      action.isEnabled({
+        ...options,
+        parent: store.getters['Files/currentFolder']
+      })
+
+    // first priority: handlers from config
+    const defaultEditorActions = unref(editorActions).filter(filterCallback)
+    if (defaultEditorActions.length) {
+      return defaultEditorActions[0]
+    }
+
+    // second priority: `/app/open` endpoint of app provider if available
+    // FIXME: files app should not know anything about the `external apps` app
+    const externalAppsActions = loadExternalAppActions(options).filter(filterCallback)
+    if (externalAppsActions.length) {
+      return externalAppsActions[0]
+    }
+
+    // fallback: system actions
+    return unref(systemActions).filter(filterCallback)[0]
+  }
+
+  const getAllAvailableActions = (options: ActionOptions) => {
+    return [
+      ...unref(editorActions),
+      ...loadExternalAppActions(options),
+      ...unref(systemActions)
+    ].filter((action) => {
+      return action.isEnabled(options)
+    })
+  }
+
+  // returns an array of available external Apps
+  // to open a resource with a specific mimeType
+  // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
+  const loadExternalAppActions = (options: ActionOptions): Action[] => {
+    if (isLocationTrashActive(router, 'files-trash-generic')) {
+      return []
+    }
+
+    // we don't support external apps as batch action as of now
+    if (options.resources.length !== 1) {
+      return []
+    }
+
+    const resource = options.resources[0]
+    const { mimeType, webDavPath, fileId } = resource
+    const driveAliasAndItem = options.space?.getDriveAliasAndItem(resource)
+    if (!driveAliasAndItem) {
+      return []
+    }
+
+    const mimeTypes = store.getters['External/mimeTypes'] || []
+    if (
+      mimeType === undefined ||
+      !get(this, 'capabilities.files.app_providers') ||
+      !mimeTypes.length
+    ) {
+      return []
+    }
+
+    const filteredMimeTypes = mimeTypes.find((t) => t.mime_type === mimeType)
+    if (filteredMimeTypes === undefined) {
+      return []
+    }
+    const { app_providers: appProviders = [], default_application: defaultApplication } =
+      filteredMimeTypes
+
+    return appProviders.map((app): Action => {
+      const label = $gettext('Open in %{ appName }')
+      return {
+        name: app.name,
+        icon: app.icon,
+        img: app.img,
+        componentType: 'button',
+        class: `oc-files-actions-${app.name}-trigger`,
+        isEnabled: () => true,
+        canBeDefault: defaultApplication === app.name,
+        handler: () =>
+          openExternalApp(app.name, driveAliasAndItem, webDavPath, fileId, options.space.shareId),
+        label: () => $gettextInterpolate(label, { appName: app.name })
+      }
+    })
+  }
+
+  const openExternalApp = (app, driveAliasAndItem: string, filePath, fileId, shareId) => {
+    const routeOpts = routeOptsHelper(
+      {
+        routeName: 'external-apps'
+      },
+      driveAliasAndItem,
+      filePath,
+      undefined,
+      undefined,
+      shareId
+    )
+
+    routeOpts.query = {
+      app,
+      fileId,
+      ...routeOpts.query
+    } as any
+
+    // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
+    window.open(router.resolve(routeOpts).href, '_blank')
+  }
+
+  return {
+    editorActions,
+    systemActions,
+    getAllAvailableActions,
+    loadExternalAppActions,
+    openEditor,
+    triggerAction,
+    triggerDefaultAction
   }
 }

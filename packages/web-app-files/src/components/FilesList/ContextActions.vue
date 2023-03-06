@@ -5,7 +5,7 @@
 <script lang="ts">
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 
-import FileActions from '../../mixins/fileActions'
+import { useFileActions } from '../../mixins/fileActions'
 import CreateQuicklink from '../../mixins/actions/createQuicklink'
 import EmptyTrashBin from '../../mixins/actions/emptyTrashBin'
 import Paste from '../../mixins/actions/paste'
@@ -17,12 +17,14 @@ import SetSpaceReadme from 'web-pkg/src/mixins/spaces/setReadme'
 import { computed, getCurrentInstance, PropType, unref } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
+import { useAcceptShare } from 'web-app-files/src/mixins/actions/acceptShare'
+import { useDeclineShare } from 'web-app-files/src/mixins/actions/declineShare'
+import { useStore } from 'web-pkg/src'
 
 export default {
   name: 'ContextActions',
   components: { ContextActionMenu },
   mixins: [
-    FileActions,
     CreateQuicklink,
     EmptyTrashBin,
     Paste,
@@ -45,8 +47,13 @@ export default {
 
   setup(props) {
     const instance = getCurrentInstance().proxy as any
+    const store = useStore()
 
     const { actions: showDetailsItems } = useShowDetails()
+    const { editorActions, loadExternalAppActions } = useFileActions()
+
+    const { actions: acceptShareActions } = useAcceptShare({ store })
+    const { actions: declineShareActions } = useDeclineShare({ store })
 
     const filterParams = computed(() => {
       return {
@@ -57,22 +64,19 @@ export default {
 
     const menuItemsBatchActions = computed(() =>
       [
-        ...instance.$_acceptShare_items,
-        ...instance.$_declineShare_items,
-        ...instance.$_downloadArchive_items,
-        ...instance.$_delete_items,
-        ...instance.$_move_items,
-        ...instance.$_copy_items,
-        ...instance.$_emptyTrashBin_items,
-        ...instance.$_restore_items
+        ...unref(acceptShareActions),
+        ...unref(declineShareActions)
+        // ...instance.$_downloadArchive_items,
+        // ...instance.$_delete_items,
+        // ...instance.$_move_items,
+        // ...instance.$_copy_items,
+        // ...instance.$_emptyTrashBin_items,
+        // ...instance.$_restore_items
       ].filter((item) => item.isEnabled(unref(filterParams)))
     )
 
     const menuItemsContext = computed(() => {
-      const fileHandlers = [
-        ...instance.$_fileActions_editorActions,
-        ...instance.$_fileActions_loadExternalAppActions(unref(filterParams))
-      ]
+      const fileHandlers = [...unref(editorActions), ...loadExternalAppActions(unref(filterParams))]
 
       return [...fileHandlers]
         .filter((item) => item.isEnabled(unref(filterParams)))
@@ -87,30 +91,31 @@ export default {
 
     const menuItemsActions = computed(() => {
       return [
-        ...this.$_downloadArchive_items,
-        ...this.$_downloadFile_items,
-        ...this.$_delete_items,
-        ...this.$_move_items,
-        ...this.$_copy_items,
-        ...this.$_paste_items,
-        ...this.$_rename_items,
-        ...this.$_showEditTags_items,
-        ...this.$_restore_items,
-        ...this.$_acceptShare_items,
-        ...this.$_declineShare_items,
-        ...this.$_setSpaceImage_items,
-        ...this.$_setSpaceReadme_items
-      ].filter((item) => item.isEnabled(this.filterParams))
-    }
+        ...unref(acceptShareActions),
+        ...unref(declineShareActions)
+        // ...instance.$_copy_items,
+        // ...instance.$_delete_items,
+        // ...instance.$_downloadArchive_items,
+        // ...instance.$_downloadFile_items,
+        // ...instance.$_move_items,
+        // ...instance.$_paste_items,
+        // ...instance.$_rename_items,
+        // ...instance.$_restore_items,
+        // ...instance.$_setSpaceImage_items,
+        // ...instance.$_showEditTags_items,
+      ].filter((item) => item.isEnabled(unref(filterParams)))
+    })
 
     const menuItemsSidebar = computed(() => {
-      const fileHandlers = [...instance.$_navigate_items]
+      const fileHandlers = [
+        // ...instance.$_navigate_items
+      ]
 
       return [
-        ...instance.$_favorite_items.map((action) => {
-          action.keepOpen = true
-          return action
-        }),
+        // ...instance.$_favorite_items.map((action) => {
+        //   action.keepOpen = true
+        //   return action
+        // }),
         ...fileHandlers,
         ...unref(showDetailsItems)
       ].filter((item) => item.isEnabled(unref(filterParams)))

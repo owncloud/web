@@ -1,5 +1,9 @@
 import { Resource } from 'web-client/src'
 
+export type ActionOptions = {
+  space: SpaceResource
+  resources: Resource[]
+}
 export interface Action {
   name: string
   icon: string
@@ -7,7 +11,7 @@ export interface Action {
   componentType: 'button'
   class: string
   canBeDefault?: boolean
-  label(): string
-  isEnabled(options?: { resources?: Resource[] }): boolean
-  handler(options?: { resources?: Resource[] }): void
+  label(options?: ActionOptions): string
+  isEnabled(options?: ActionOptions): boolean
+  handler(options?: ActionOptions): void
 }

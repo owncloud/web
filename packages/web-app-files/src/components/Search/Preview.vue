@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import MixinFileActions from '../../mixins/fileActions'
+import { useFileActions } from '../../mixins/fileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension } from 'web-pkg/src/constants'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
@@ -40,7 +40,6 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
-  mixins: [MixinFileActions],
   props: {
     searchResult: {
       type: Object,
@@ -68,6 +67,7 @@ export default defineComponent({
       }
     })
     return {
+      ...useFileActions(),
       hasShareJail: useCapabilityShareJailEnabled(),
       accessToken: useAccessToken({ store }),
       previewData,
@@ -90,7 +90,7 @@ export default defineComponent({
         ? {}
         : {
             click: () =>
-              this.$_fileActions_triggerDefaultAction({
+              this.triggerDefaultAction({
                 space: this.matchingSpace,
                 resources: [this.resource]
               })

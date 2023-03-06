@@ -26,7 +26,7 @@
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
-          @file-click="$_fileActions_triggerDefaultAction"
+          @file-click="triggerDefaultAction"
           @row-mounted="rowMounted"
           @sort="handleSort"
         >
@@ -69,7 +69,7 @@
 import { mapGetters, mapState, mapActions } from 'vuex'
 import ResourceTable from '../components/FilesList/ResourceTable.vue'
 
-import FileActions from '../mixins/fileActions'
+import { useFileActions } from '../mixins/fileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { debounce } from 'lodash-es'
@@ -106,8 +106,6 @@ export default defineComponent({
     SideBar
   },
 
-  mixins: [FileActions],
-
   setup() {
     const store = useStore()
     const getSpace = (resource: Resource): SpaceResource => {
@@ -132,6 +130,7 @@ export default defineComponent({
     ])
 
     return {
+      ...useFileActions(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       getSpace,
       viewModes

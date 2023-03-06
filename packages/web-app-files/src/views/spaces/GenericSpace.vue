@@ -58,7 +58,7 @@
           :sort-dir="sortDir"
           :view-size="viewSize"
           @row-mounted="rowMounted"
-          @file-click="$_fileActions_triggerDefaultAction"
+          @file-click="triggerDefaultAction"
           @file-dropped="fileDropped"
           @sort="handleSort"
         >
@@ -92,7 +92,7 @@
           :sort-dir="sortDir"
           :space="space"
           @file-dropped="fileDropped"
-          @file-click="$_fileActions_triggerDefaultAction"
+          @file-click="triggerDefaultAction"
           @row-mounted="rowMounted"
           @sort="handleSort"
         >
@@ -153,7 +153,7 @@ import {
 } from 'web-client/src/helpers'
 
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
-import MixinFileActions from '../../mixins/fileActions'
+import { useFileActions } from '../../mixins/fileActions'
 
 import AppBar from '../../components/AppBar/AppBar.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
@@ -206,7 +206,7 @@ export default defineComponent({
     SpaceHeader
   },
 
-  mixins: [MixinAccessibleBreadcrumb, MixinFileActions],
+  mixins: [MixinAccessibleBreadcrumb],
 
   props: {
     space: {
@@ -375,6 +375,7 @@ export default defineComponent({
     })
 
     return {
+      ...useFileActions(),
       ...resourcesViewDefaults,
       breadcrumbs,
       hasSpaceHeader,
