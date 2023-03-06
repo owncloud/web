@@ -212,7 +212,7 @@ export default defineComponent({
   top: 0;
 
   .files-app-bar-controls {
-    height: 52px;
+    min-height: 52px;
   }
 
   .files-app-bar-actions {
