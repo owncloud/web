@@ -145,7 +145,12 @@ export default {
         return null
       }
       if (object_type === 'share') {
-        return { name: 'files-shares-with-me' }
+        return {
+          name: 'files-shares-with-me',
+          ...(!!messageRichParameters?.share?.id && {
+            query: { scrollTo: messageRichParameters.share.id }
+          })
+        }
       }
       if (object_type === 'storagespace' && messageRichParameters?.space?.id) {
         const space = store.getters['runtime/spaces/spaces'].find(

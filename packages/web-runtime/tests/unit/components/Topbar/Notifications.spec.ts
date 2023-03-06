@@ -137,7 +137,8 @@ describe('Notification component', () => {
           object_type: 'share',
           messageRichParameters: {
             user: { displayname: 'Albert Einstein' },
-            resource: { name: 'someFile.txt' }
+            resource: { name: 'someFile.txt' },
+            share: { id: '1' }
           }
         })
         const { wrapper } = getWrapper({ notifications: [notification] })
@@ -148,6 +149,9 @@ describe('Notification component', () => {
           `${selectors.notificationItem} router-link-stub`
         )
         expect(routerLink.props('to').name).toEqual('files-shares-with-me')
+        expect(routerLink.props('to').query).toEqual({
+          scrollTo: notification.messageRichParameters.share.id
+        })
       })
       it('renders notification as link for spaces', async () => {
         const spaceMock = mock<SpaceResource>({
