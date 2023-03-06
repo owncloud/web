@@ -22,6 +22,7 @@ export type AbilitySubjects =
   | 'Group'
   | 'Language'
   | 'Logo'
+  | 'PublicLink'
   | 'Role'
   | 'Setting'
   | 'Space'

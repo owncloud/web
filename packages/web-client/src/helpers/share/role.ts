@@ -361,16 +361,17 @@ export abstract class LinkShareRoles {
     canEditFile = false,
     canContribute = false,
     hasAliasLinks = false,
-    hasPassword = false
+    hasPassword = false,
+    canCreatePublicLinks = true
   ): ShareRole[] {
     return [
       ...(hasAliasLinks && !hasPassword ? [linkRoleInternalFile, linkRoleInternalFolder] : []),
-      linkRoleViewerFile,
-      linkRoleViewerFolder,
-      ...(canContribute ? [linkRoleContributorFolder] : []),
-      linkRoleEditorFolder,
-      linkRoleUploaderFolder,
-      ...(canEditFile ? [linkRoleEditorFile] : [])
+      ...(canCreatePublicLinks ? [linkRoleViewerFile] : []),
+      ...(canCreatePublicLinks ? [linkRoleViewerFolder] : []),
+      ...(canCreatePublicLinks && canContribute ? [linkRoleContributorFolder] : []),
+      ...(canCreatePublicLinks ? [linkRoleEditorFolder] : []),
+      ...(canCreatePublicLinks ? [linkRoleUploaderFolder] : []),
+      ...(canCreatePublicLinks && canEditFile ? [linkRoleEditorFile] : [])
     ].filter((r) => r.folder === isFolder)
   }
 
@@ -386,6 +387,7 @@ export abstract class LinkShareRoles {
    * @param canContribute
    * @param hasAliasLinks
    * @param hasPassword
+   * @param canCreatePublicLinks
    */
   static filterByBitmask(
     bitmask: number,
@@ -393,13 +395,19 @@ export abstract class LinkShareRoles {
     canEditFile = false,
     canContribute = false,
     hasAliasLinks = false,
-    hasPassword = false
+    hasPassword = false,
+    canCreatePublicLinks = true
   ): ShareRole[] {
-    return this.list(isFolder, canEditFile, canContribute, hasAliasLinks, hasPassword).filter(
-      (r) => {
-        return bitmask === (bitmask | r.bitmask(false))
-      }
-    )
+    return this.list(
+      isFolder,
+      canEditFile,
+      canContribute,
+      hasAliasLinks,
+      hasPassword,
+      canCreatePublicLinks
+    ).filter((r) => {
+      return bitmask === (bitmask | r.bitmask(false))
+    })
   }
 }
 

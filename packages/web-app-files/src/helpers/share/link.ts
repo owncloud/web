@@ -3,6 +3,7 @@ import { Share } from 'web-client/src/helpers/share'
 import { Store } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import { useClipboard } from '@vueuse/core'
+import { Ability } from 'web-pkg'
 
 interface CreateQuicklink {
   store: Store<any>
@@ -10,13 +11,14 @@ interface CreateQuicklink {
   resource: any
   password?: string
   $gettext: (string) => string
+  ability: Ability
 }
 
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
-  const { resource, store, password, $gettext } = args
+  const { resource, store, password, $gettext, ability } = args
   const params: { [key: string]: unknown } = {
     name: $gettext('Quicklink'),
-    permissions: 1,
+    permissions: ability.can('create-all', 'PublicLink') ? '1' : '0',
     quicklink: true
   }
 

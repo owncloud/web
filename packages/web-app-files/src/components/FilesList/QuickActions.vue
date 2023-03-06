@@ -8,7 +8,9 @@
       appearance="raw"
       class="oc-mr-xs quick-action-button oc-p-xs"
       :class="`files-quick-action-${action.id}`"
-      @click="action.handler({ ...$language, item, client: $client, store: $store })"
+      @click="
+        action.handler({ ...$language, item, client: $client, store: $store, ability: $ability })
+      "
     >
       <oc-icon :name="action.icon" fill-type="line" />
     </oc-button>

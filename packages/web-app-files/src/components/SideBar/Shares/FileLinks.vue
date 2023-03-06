@@ -5,7 +5,7 @@
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
     </div>
     <p
-      v-if="!canCreatePublicLinks"
+      v-if="!canCreateLinks"
       data-testid="files-links-no-reshare-permissions-message"
       class="oc-mt-m"
       v-text="noResharePermsMessage"
@@ -13,7 +13,7 @@
     <div class="oc-mt-m">
       <name-and-copy v-if="quicklink" :link="quicklink" />
       <create-quick-link
-        v-else-if="canCreatePublicLinks"
+        v-else-if="canCreateLinks"
         :expiration-date="expirationDate"
         @create-public-link="checkLinkToCreate"
       />
@@ -31,7 +31,7 @@
       />
       <hr class="oc-my-m" />
       <oc-button
-        v-if="canCreatePublicLinks"
+        v-if="canCreateLinks"
         id="files-file-link-add"
         variation="primary"
         appearance="raw"
@@ -117,7 +117,8 @@ import {
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingPublicCanEdit,
   useCapabilityFilesSharingPublicCanContribute,
-  useCapabilityFilesSharingPublicAlias
+  useCapabilityFilesSharingPublicAlias,
+  useAbility
 } from 'web-pkg/src/composables'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import { LinkShareRoles, SharePermissions } from 'web-client/src/helpers/share'
@@ -140,6 +141,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { can } = useAbility()
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
     const indirectLinkListCollapsed = ref(linkListCollapsed)
@@ -160,6 +162,7 @@ export default defineComponent({
           return { ...share, key: 'indirect-link-' + share.id }
         })
     )
+    const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
 
     return {
       ...useGraphClient(),
@@ -176,7 +179,8 @@ export default defineComponent({
       linkListCollapsed,
       outgoingLinks,
       directLinks,
-      indirectLinks
+      indirectLinks,
+      canCreatePublicLinks
     }
   },
   computed: {
@@ -255,7 +259,7 @@ export default defineComponent({
       return shareViaIndirectLinkHelp
     },
 
-    canCreatePublicLinks() {
+    canCreateLinks() {
       if (this.resource.isReceivedShare() && !this.hasResharing) {
         return false
       }
@@ -269,7 +273,7 @@ export default defineComponent({
     },
 
     canEdit() {
-      return this.canCreatePublicLinks
+      return this.canCreateLinks
     },
 
     noResharePermsMessage() {
@@ -363,7 +367,7 @@ export default defineComponent({
       this.checkLinkToCreate({
         link: {
           name: this.$gettext('Link'),
-          permissions: 1,
+          permissions: this.canCreatePublicLinks ? 1 : 0,
           expiration: this.expirationDate.default,
           password: false
         }
@@ -452,7 +456,6 @@ export default defineComponent({
       await this.addLink({
         path,
         client: this.$client,
-        $gettext: this.$gettext,
         storageId: this.resource.fileId || this.resource.id,
         params
       }).catch((e) => {
@@ -541,14 +544,15 @@ export default defineComponent({
     },
 
     getAvailableRoleOptions(link) {
-      if (this.incomingParentShare && this.canCreatePublicLinks) {
+      if (this.incomingParentShare && this.canCreateLinks) {
         return LinkShareRoles.filterByBitmask(
           this.incomingParentShare.permissions,
           this.resource.isFolder,
           this.hasPublicLinkEditing,
           this.hasPublicLinkContribute,
           this.hasPublicLinkAliasSupport,
-          !!link.password
+          !!link.password,
+          this.canCreatePublicLinks
         )
       }
 
@@ -557,7 +561,8 @@ export default defineComponent({
         this.hasPublicLinkEditing,
         this.hasPublicLinkContribute,
         this.hasPublicLinkAliasSupport,
-        !!link.password
+        !!link.password,
+        this.canCreatePublicLinks
       )
     }
   }
