@@ -21,6 +21,7 @@ import Navigate from './actions/navigate'
 import Rename from './actions/rename'
 import Restore from './actions/restore'
 import isSearchActive from './helpers/isSearchActive'
+import { Action } from 'web-pkg/src/actions'
 
 const actionsMixins = [
   'navigate',
@@ -247,7 +248,7 @@ export default {
     // returns an array of available external Apps
     // to open a resource with a specific mimeType
     // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
-    $_fileActions_loadExternalAppActions(options: FileActionOptions) {
+    $_fileActions_loadExternalAppActions(options: FileActionOptions): Action[] {
       if (isLocationTrashActive(this.$router, 'files-trash-generic')) {
         return []
       }
@@ -276,7 +277,7 @@ export default {
       const { app_providers: appProviders = [], default_application: defaultApplication } =
         filteredMimeTypes
 
-      return appProviders.map((app) => {
+      return appProviders.map((app): Action => {
         const label = this.$gettext('Open in %{ appName }')
         return {
           name: app.name,

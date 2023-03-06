@@ -10,11 +10,11 @@ import CreateQuicklink from '../../mixins/actions/createQuicklink'
 import EmptyTrashBin from '../../mixins/actions/emptyTrashBin'
 import Paste from '../../mixins/actions/paste'
 import ShowActions from '../../mixins/actions/showActions'
-import ShowDetails from '../../mixins/actions/showDetails'
+import { useShowDetails } from '../../mixins/actions/showDetails'
 import ShowShares from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
 import SetSpaceReadme from 'web-pkg/src/mixins/spaces/setReadme'
-import { PropType } from 'vue'
+import { computed, getCurrentInstance, PropType, unref } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 
@@ -27,7 +27,6 @@ export default {
     EmptyTrashBin,
     Paste,
     ShowActions,
-    ShowDetails,
     ShowShares,
     SetSpaceImage,
     SetSpaceReadme
@@ -44,88 +43,49 @@ export default {
     }
   },
 
-  computed: {
-    menuSections() {
-      const sections = []
-      if (this.items.length > 1) {
-        if (this.menuItemsBatchActions.length) {
-          sections.push({
-            name: 'batch-actions',
-            items: [...this.menuItemsBatchActions]
-          })
-        }
-        sections.push({
-          name: 'batch-details',
-          items: [...this.$_showDetails_items]
-        })
-        return sections
-      }
+  setup(props) {
+    const instance = getCurrentInstance().proxy as any
 
-      if (this.menuItemsContext.length) {
-        sections.push({
-          name: 'context',
-          items: this.menuItemsContext
-        })
-      }
-      if (this.menuItemsShare.length) {
-        sections.push({
-          name: 'share',
-          items: this.menuItemsShare
-        })
-      }
-      if (this.menuItemsActions.length) {
-        sections.push({
-          name: 'actions',
-          items: this.menuItemsActions
-        })
-      }
-      if (this.menuItemsSidebar.length) {
-        sections.push({
-          name: 'sidebar',
-          items: this.menuItemsSidebar
-        })
-      }
-      return sections
-    },
+    const { actions: showDetailsItems } = useShowDetails()
 
-    filterParams() {
+    const filterParams = computed(() => {
       return {
-        space: this.space,
-        resources: this.items
+        space: props.space,
+        resources: props.items
       }
-    },
+    })
 
-    menuItemsBatchActions() {
-      return [
-        ...this.$_acceptShare_items,
-        ...this.$_declineShare_items,
-        ...this.$_downloadArchive_items,
-        ...this.$_delete_items,
-        ...this.$_move_items,
-        ...this.$_copy_items,
-        ...this.$_emptyTrashBin_items,
-        ...this.$_restore_items
-      ].filter((item) => item.isEnabled(this.filterParams))
-    },
+    const menuItemsBatchActions = computed(() =>
+      [
+        ...instance.$_acceptShare_items,
+        ...instance.$_declineShare_items,
+        ...instance.$_downloadArchive_items,
+        ...instance.$_delete_items,
+        ...instance.$_move_items,
+        ...instance.$_copy_items,
+        ...instance.$_emptyTrashBin_items,
+        ...instance.$_restore_items
+      ].filter((item) => item.isEnabled(unref(filterParams)))
+    )
 
-    menuItemsContext() {
+    const menuItemsContext = computed(() => {
       const fileHandlers = [
-        ...this.$_fileActions_editorActions,
-        ...this.$_fileActions_loadExternalAppActions(this.filterParams)
+        ...instance.$_fileActions_editorActions,
+        ...instance.$_fileActions_loadExternalAppActions(unref(filterParams))
       ]
 
       return [...fileHandlers]
-        .filter((item) => item.isEnabled(this.filterParams))
+        .filter((item) => item.isEnabled(unref(filterParams)))
         .sort((x, y) => Number(y.canBeDefault) - Number(x.canBeDefault))
-    },
+    })
 
-    menuItemsShare() {
-      return [...this.$_showShares_items, ...this.$_createQuicklink_items].filter((item) =>
-        item.isEnabled(this.filterParams)
+    const menuItemsShare = computed(() => {
+      return [...instance.$_showShares_items, ...instance.$_createQuicklink_items].filter((item) =>
+        item.isEnabled(unref(filterParams))
       )
-    },
+    })
 
-    menuItemsActions() {
+    const menuItemsActions = computed(() => {
       return [
         ...this.$_downloadArchive_items,
         ...this.$_downloadFile_items,
@@ -141,19 +101,66 @@ export default {
         ...this.$_setSpaceImage_items,
         ...this.$_setSpaceReadme_items
       ].filter((item) => item.isEnabled(this.filterParams))
-    },
+    }
 
-    menuItemsSidebar() {
-      const fileHandlers = [...this.$_navigate_items]
+    const menuItemsSidebar = computed(() => {
+      const fileHandlers = [...instance.$_navigate_items]
 
       return [
-        ...this.$_favorite_items.map((action) => {
+        ...instance.$_favorite_items.map((action) => {
           action.keepOpen = true
           return action
         }),
         ...fileHandlers,
-        ...this.$_showDetails_items
-      ].filter((item) => item.isEnabled(this.filterParams))
+        ...unref(showDetailsItems)
+      ].filter((item) => item.isEnabled(unref(filterParams)))
+    })
+
+    const menuSections = computed(() => {
+      const sections = []
+      if (props.items.length > 1) {
+        if (unref(menuItemsBatchActions).length) {
+          sections.push({
+            name: 'batch-actions',
+            items: [...unref(menuItemsBatchActions)]
+          })
+        }
+        sections.push({
+          name: 'batch-details',
+          items: [...unref(showDetailsItems)]
+        })
+        return sections
+      }
+
+      if (unref(menuItemsContext).length) {
+        sections.push({
+          name: 'context',
+          items: unref(menuItemsContext)
+        })
+      }
+      if (unref(menuItemsShare).length) {
+        sections.push({
+          name: 'share',
+          items: unref(menuItemsShare)
+        })
+      }
+      if (unref(menuItemsActions).length) {
+        sections.push({
+          name: 'actions',
+          items: unref(menuItemsActions)
+        })
+      }
+      if (unref(menuItemsSidebar).length) {
+        sections.push({
+          name: 'sidebar',
+          items: unref(menuItemsSidebar)
+        })
+      }
+      return sections
+    })
+
+    return {
+      menuSections
     }
   }
 }
