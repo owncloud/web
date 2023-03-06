@@ -93,6 +93,7 @@ Summary
 * Enhancement - Respect max quota: [#8489](https://github.com/owncloud/web/pull/8489)
 * Enhancement - User role filter: [#8492](https://github.com/owncloud/web/pull/8492)
 * Enhancement - Beautify file version list: [#8503](https://github.com/owncloud/web/issues/8503)
+* Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
 
 Details
 -------
@@ -874,6 +875,15 @@ Details
 
    https://github.com/owncloud/web/issues/8503
    https://github.com/owncloud/web/pull/8504
+
+* Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
+
+   Support for the public link permission `PublicLink.Write.all` has been added. Users without
+   this permission won't be able to create public links (except for oC10 instances where this
+   permission is being set implicitly).
+
+   https://github.com/owncloud/web/issues/8540
+   https://github.com/owncloud/web/pull/8541
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
