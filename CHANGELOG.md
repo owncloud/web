@@ -760,6 +760,7 @@ Details
    https://github.com/owncloud/web/issues/8377
    https://github.com/owncloud/web/pull/8378
    https://github.com/owncloud/web/pull/8495
+   https://github.com/owncloud/web/pull/8525
 
 * Enhancement - Batch edit quota in admin panel: [#8387](https://github.com/owncloud/web/pull/8387)
 
@@ -857,6 +858,7 @@ Details
 
    https://github.com/owncloud/web/pull/8492
    https://github.com/owncloud/web/pull/8495
+   https://github.com/owncloud/web/pull/8525
 
 * Enhancement - Beautify file version list: [#8503](https://github.com/owncloud/web/issues/8503)
 
