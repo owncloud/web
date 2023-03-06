@@ -7,6 +7,7 @@ import {
 } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
+import { SharePermissions } from 'web-client/src/helpers/share'
 
 const defaultLinksList = [
   {
@@ -72,7 +73,7 @@ describe('FileLinks', () => {
       expect(wrapper.find('oc-list-stub').exists()).toBeFalsy()
     })
   })
-  describe('when canCreatePublicLinks is set to true', () => {
+  describe('when canCreateLinks is set to true', () => {
     it('should show a button to add a link', () => {
       const { wrapper } = getWrapper()
       expect(wrapper.find(selectors.linkAddButton).exists()).toBeTruthy()
@@ -88,7 +89,7 @@ describe('FileLinks', () => {
       })
     })
   })
-  describe('when canCreatePublicLinks is set to false', () => {
+  describe('when canCreateLinks is set to false', () => {
     it('should show the "no reshare permissions" message', () => {
       const resource = mockDeep<Resource>({
         path: '/lorem.txt',
@@ -101,11 +102,41 @@ describe('FileLinks', () => {
       expect(wrapper.find(selectors.noResharePermissions).exists()).toBeTruthy()
     })
   })
+  describe('user does not have the permission to create public links', () => {
+    it('only shows internal role option', () => {
+      const resource = mockDeep<Resource>({
+        path: '/lorem.txt',
+        type: 'file',
+        isFolder: false,
+        isReceivedShare: jest.fn()
+      })
+      const { wrapper } = getWrapper({ resource, abilities: [] })
+      const availableRoleOptions = wrapper
+        .findComponent<any>(linkListItemDetailsAndEdit)
+        .props('availableRoleOptions')
+      expect(availableRoleOptions.length).toBe(1)
+      expect(availableRoleOptions[0].permissions()).toEqual([SharePermissions.internal])
+    })
+    it('creates new links with permission 0', async () => {
+      const { wrapper, storeOptions } = getWrapper({ abilities: [] })
+      await wrapper.find(selectors.linkAddButton).trigger('click')
+      expect(storeOptions.modules.Files.actions.addLink).toHaveBeenCalledTimes(1)
+      expect(storeOptions.modules.Files.actions.addLink).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          params: expect.objectContaining({
+            permissions: '0'
+          })
+        })
+      )
+    })
+  })
 })
 
 function getWrapper({
   resource = mockDeep<Resource>({ isFolder: false, canShare: () => true }),
-  links = defaultLinksList
+  links = defaultLinksList,
+  abilities = [{ action: 'create-all', subject: 'PublicLink' }]
 } = {}) {
   const storeOptions = {
     ...defaultStoreMockOptions,
@@ -120,6 +151,7 @@ function getWrapper({
             public: {
               defaultPublicLinkShareName: 'public link name default',
               expire_date: new Date(),
+              alias: true,
               password: {
                 enforced_for: {
                   read_only: false,
@@ -136,9 +168,10 @@ function getWrapper({
   defaultStoreMockOptions.modules.Files.getters.outgoingLinks.mockReturnValue(links)
   const store = createStore(storeOptions)
   return {
+    storeOptions,
     wrapper: shallowMount(FileLinks, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins({ abilities }), store],
         renderStubDefaultSlot: true,
         stubs: { OcButton: false },
         provide: {

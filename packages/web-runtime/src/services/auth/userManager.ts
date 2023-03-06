@@ -257,14 +257,15 @@ export class UserManager extends OidcUserManager {
 
   private async fetchPermissions({ user, accessToken = '' }): Promise<any> {
     const httpClient = clientService.httpAuthenticated(accessToken)
+    const oC10DefaultPermissions = ['PublicLink.Write.all']
     try {
       const {
         data: { permissions }
       } = await httpClient.post('/api/v0/settings/permissions-list', { account_uuid: user.uuid })
-      return permissions || []
+      return permissions || oC10DefaultPermissions
     } catch (e) {
       console.error(e)
-      return []
+      return oC10DefaultPermissions
     }
   }
 

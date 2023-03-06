@@ -39,7 +39,8 @@ export default {
         resource,
         storageId: this.space?.id || resource?.fileId || resource?.id,
         store,
-        $gettext: this.$gettext
+        $gettext: this.$gettext,
+        ability: this.$ability
       })
     }
   }

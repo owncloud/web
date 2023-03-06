@@ -18,7 +18,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { useAbility } from 'web-pkg'
 
 export default defineComponent({
   name: 'CreateQuickLink',
@@ -30,6 +31,11 @@ export default defineComponent({
     }
   },
   emits: ['createPublicLink'],
+  setup() {
+    const { can } = useAbility()
+    const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
+    return { canCreatePublicLinks }
+  },
   computed: {
     heading() {
       return this.$gettext('Quick link')
@@ -49,7 +55,7 @@ export default defineComponent({
       this.$emit('createPublicLink', {
         link: {
           name: this.$gettext('Quicklink'),
-          permissions: 1,
+          permissions: this.canCreatePublicLinks ? 1 : 0,
           expiration: this.expirationDate.enforced ? this.expirationDate.default : null,
           quicklink: true,
           password: false

@@ -67,11 +67,11 @@ export default {
 
       if (passwordEnforced) {
         return showQuickLinkPasswordModal(ctx, async (password) => {
-          await createQuicklink({ ...ctx, resource: ctx.item, password })
+          await createQuicklink({ ...ctx, resource: ctx.item, password, ability: ctx.ability })
         })
       }
 
-      await createQuicklink({ ...ctx, resource: ctx.item })
+      await createQuicklink({ ...ctx, resource: ctx.item, ability: ctx.ability })
     },
     displayed: canShare
   }

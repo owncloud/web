@@ -22,6 +22,7 @@ export const getAbilities = (
       { action: 'update-all', subject: 'Language' }
     ],
     'change-logo.all': [{ action: 'update-all', subject: 'Logo' }],
+    'PublicLink.Write.all': [{ action: 'create-all', subject: 'PublicLink' }],
     'role-management.all': [
       { action: 'create-all', subject: 'Role' },
       { action: 'delete-all', subject: 'Role' },
