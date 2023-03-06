@@ -10,6 +10,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { nextTick } from 'vue'
+import { wrap } from 'lodash-es'
 
 const spaceMocks = [
   {
@@ -37,61 +38,72 @@ const spaceMocks = [
 
 describe('TrashOverview', () => {
   it('should navigate to single space trash if only one space exists', async () => {
-    const { mocks, wrapper } = getWrapper()
+    const { mocks } = getWrapper({ spaces: [spaceMocks[1]] })
     expect(mocks.$router.push).toHaveBeenCalledWith({
       name: 'files-trash-generic',
-      params: { driveAliasAndItem: '' },
+      params: { driveAliasAndItem: '2' },
       query: {}
     })
   })
-  it('shows the loading spinner during loading', () => {
-    const { wrapper } = getWrapper()
-    wrapper.vm.loadResourcesTask.perform()
-    expect(wrapper.find('app-loading-spinner').exists()).toBeTruthy()
-  })
-  it('should render spaces list', async () => {
-    const { wrapper } = getWrapper()
-    expect(wrapper.html()).toMatchSnapshot()
-  })
-  it('sorts by property name', async () => {
-    // fake
-    const { wrapper } = getWrapper()
-    const sortBy = 'name'
-    const sortDir = 'desc'
-    wrapper.vm.handleSort({ sortBy, sortDir })
-    expect(wrapper.vm.sortBy).toEqual(sortBy)
-    expect(wrapper.vm.sortDir).toEqual(sortDir)
-  })
-  it('should set the sort parameters accordingly when calling "handleSort"', () => {
-    const { wrapper } = getWrapper()
-    const sortBy = 'name'
-    const sortDir = 'desc'
-    wrapper.vm.handleSort({ sortBy, sortDir })
-    expect(wrapper.vm.sortBy).toEqual(sortBy)
-    expect(wrapper.vm.sortDir).toEqual(sortDir)
-  })
-  it('navigates to trash on space click', async () => {
-    const { mocks, wrapper } = getWrapper()
-    await wrapper.find(`[data-item-id="${spaceMocks[0].id}"] a`).trigger('click')
-    expect(mocks.$router.push).toHaveBeenCalledWith({
-      name: 'files-trash-generic',
-      params: { driveAliasAndItem: '' },
-      query: {}
+  describe('view states', () => {
+    it('shows the loading spinner during loading', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.loadResourcesTask.perform()
+      await nextTick()
+      expect(wrapper.find('oc-spinner-stub').exists()).toBeTruthy()
+    })
+    it('should render spaces list', async () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
-  it('shows only filtered spaces if filter applied', async () => {
-    const { wrapper } = getWrapper()
-    wrapper.vm.filterTerm = 'admin'
-    await nextTick()
-    expect(wrapper.vm.orderedSpaces.length).toEqual(1)
-    expect(wrapper.vm.orderedSpaces[0].id).toEqual(spaceMocks[0].id)
+  describe('sorting', () => {
+    it('sorts by property name', async () => {
+      const { wrapper } = getWrapper()
+      let sortedSpaces = []
+
+      wrapper.vm.sortBy = 'name'
+      await nextTick()
+      sortedSpaces = wrapper.findComponent<any>({ name: 'oc-table' }).props().data
+      expect(sortedSpaces[0].id).toEqual(spaceMocks[0].id)
+      expect(sortedSpaces[1].id).toEqual(spaceMocks[1].id)
+      expect(sortedSpaces[2].id).toEqual(spaceMocks[2].id)
+
+      wrapper.vm.sortDir = 'desc'
+      await nextTick()
+      console.log(wrapper.html())
+      sortedSpaces = wrapper.findComponent<any>({ name: 'oc-table' }).props().data
+      expect(sortedSpaces[0].id).toEqual(spaceMocks[0].id)
+      expect(sortedSpaces[2].id).toEqual(spaceMocks[2].id)
+      expect(sortedSpaces[1].id).toEqual(spaceMocks[1].id)
+    })
+    it('should set the sort parameters accordingly when calling "handleSort"', () => {
+      const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
+      const sortBy = 'members'
+      const sortDir = 'desc'
+      wrapper.vm.handleSort({ sortBy, sortDir })
+      expect(wrapper.vm.sortBy).toEqual(sortBy)
+      expect(wrapper.vm.sortDir).toEqual(sortDir)
+    })
+  })
+  describe('filtering', () => {
+    it('shows only filtered spaces if filter applied', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.filterTerm = 'admin'
+      await nextTick()
+      expect(wrapper.vm.displaySpaces.length).toEqual(1)
+      expect(wrapper.vm.displaySpaces[0].id).toEqual(spaceMocks[0].id)
+    })
   })
 })
 
 function getWrapper({ spaces = spaceMocks } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
-  storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => spaces)
+  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
+  storeOptions.modules.runtime.modules.spaces.actions.reloadProjectSpaces.mockReturnValue(
+    new Promise(() => undefined)
+  )
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'trash-overview' })

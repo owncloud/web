@@ -10,6 +10,7 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+import { nextTick } from 'vue'
 
 const spacesResources = [
   {
@@ -44,8 +45,10 @@ describe('Projects view', () => {
     expect(wrapper.find('side-bar-stub').exists()).toBeTruthy()
   })
   describe('different files view states', () => {
-    it('shows the loading spinner during loading', () => {
+    it('shows the loading spinner during loading', async () => {
       const { wrapper } = getMountedWrapper()
+      wrapper.vm.loadResourcesTask.perform()
+      await nextTick()
       expect(wrapper.find('oc-spinner-stub').exists()).toBeTruthy()
     })
     it('shows the no-content-message after loading', async () => {
@@ -84,6 +87,9 @@ function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar
   }
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => spaces)
+  storeOptions.modules.runtime.modules.spaces.actions.reloadProjectSpaces.mockReturnValue(
+    new Promise(() => undefined)
+  )
   const store = createStore(storeOptions)
   return {
     mocks: defaultMocks,

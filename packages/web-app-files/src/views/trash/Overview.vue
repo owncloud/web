@@ -24,7 +24,7 @@
           :sort-by="sortBy"
           :sort-dir="sortDir"
           :fields="fields"
-          :data="orderedSpaces"
+          :data="displaySpaces"
           :sticky="true"
           :hover="true"
           @sort="handleSort"
@@ -82,15 +82,11 @@ export default defineComponent({
     const tableRef = ref(undefined)
     const { graphClient } = useGraphClient()
 
-    const spaces = computed(() => {
-      return orderBy(
-        store.getters['runtime/spaces/spaces'].filter(
-          (s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s)
-        ),
-        unref(sortBy),
-        unref(sortDir)
+    const spaces = computed(() =>
+      store.getters['runtime/spaces/spaces'].filter(
+        (s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s)
       )
-    })
+    )
 
     const loadResourcesTask = useTask(function* () {
       store.commit('Files/CLEAR_FILES_SEARCHED')
@@ -108,7 +104,7 @@ export default defineComponent({
     })
     const footerTextFilter = computed(() => {
       return $gettext('%{spaceCount} matching trashes', {
-        spaceCount: unref(orderedSpaces).length
+        spaceCount: unref(displaySpaces).length
       })
     })
 
@@ -116,7 +112,7 @@ export default defineComponent({
       { text: $gettext('Deleted files'), onClick: () => loadResourcesTask.perform() }
     ])
 
-    const orderBy = (list, prop, desc) => {
+    const sort = (list, prop, desc) => {
       return [...list].sort((s1, s2) => {
         if (s1.driveType === 'personal') {
           return -1
@@ -131,8 +127,8 @@ export default defineComponent({
         return desc ? b.localeCompare(a) : a.localeCompare(b)
       })
     }
-    const orderedSpaces = computed(() =>
-      orderBy(filter(unref(spaces), unref(filterTerm)), unref(sortBy), unref(sortDir) === 'desc')
+    const displaySpaces = computed(() =>
+      sort(filter(unref(spaces), unref(filterTerm)), unref(sortBy), unref(sortDir) === 'desc')
     )
     const handleSort = (event) => {
       sortBy.value = event.sortBy
@@ -178,7 +174,6 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      console.log(unref(spaces))
       if (unref(spaces).length === 1) {
         return router.push(getTrashLink(unref(spaces).pop()))
       }
@@ -212,7 +207,7 @@ export default defineComponent({
       spaces,
       filter,
       handleSort,
-      orderedSpaces,
+      displaySpaces,
       breadcrumbs,
       getSpaceName,
       getTrashLink,
