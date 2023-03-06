@@ -220,11 +220,12 @@ export default defineComponent({
     const loadUsersTask = useTask(function* (signal) {
       const filter = Object.values(filters)
         .reduce((acc, f) => {
-          acc.push(
-            unref(f.ids)
-              .map((id) => format(f.query, id))
-              .join(' and ')
-          )
+          const str = unref(f.ids)
+            .map((id) => format(f.query, id))
+            .join(' or ')
+          if (str) {
+            acc.push(`(${str})`)
+          }
           return acc
         }, [])
         .filter(Boolean)
