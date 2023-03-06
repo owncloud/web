@@ -1,7 +1,7 @@
 Feature: users management
 
   Scenario: user login can be managed in the admin settings
-    Given "Admin" creates following users
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
     When "Admin" logs in
@@ -20,7 +20,7 @@ Feature: users management
 
 
   Scenario: admin user can change personal quotas for users
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |
@@ -43,7 +43,7 @@ Feature: users management
 
 
   Scenario: user group assignments can be handled via batch actions
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |
@@ -84,7 +84,7 @@ Feature: users management
 
 
   Scenario: edit user
-    Given "Admin" creates following users
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
     When "Admin" logs in
@@ -106,7 +106,7 @@ Feature: users management
 
 
   Scenario: assign user to groups
-    Given "Admin" creates following users
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
     And "Admin" creates following groups using API
@@ -128,10 +128,10 @@ Feature: users management
       | key    | value                                   |
       | groups | finance department, security department |
     And "Alice" logs out
-    
-    
+
+
   Scenario: delete user
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |
@@ -152,3 +152,19 @@ Feature: users management
       | Brian |
       | Carol |
     And "Admin" logs out
+
+
+  Scenario: admin creates user
+    When "Admin" logs in
+    And "Admin" opens the "admin-settings" app
+    And "Admin" navigates to the users management page
+    And "Admin" creates the following user
+      | name | displayname | email                   | password |
+      | max  | Max Testing | maxtesting@owncloud.com | 12345678 |
+    When "Max" logs in
+    Then "Max" should have self info:
+      | key         | value                   |
+      | username    | max                     |
+      | displayname | Max Testing             |
+      | email       | maxtesting@owncloud.com |
+    And "Max" logs out

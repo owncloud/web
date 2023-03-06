@@ -401,3 +401,23 @@ When(
     }
   }
 )
+When(
+  '{string} creates the following user(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const usersObject = new objects.applicationAdminSettings.Users({ page })
+    for (const info of stepTable.hashes()) {
+      const user = this.usersEnvironment.getUser({ key: info.name })
+      await api.graph.deleteUser({
+        user: user,
+        admin: this.usersEnvironment.getUser({ key: stepUser })
+      })
+      await usersObject.createUser({
+        name: info.name,
+        displayname: info.displayname,
+        email: info.email,
+        password: info.password
+      })
+    }
+  }
+)

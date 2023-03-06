@@ -5,7 +5,7 @@ Feature: share
     And "Admin" disables share auto accepting
 
   Scenario: folder
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |
@@ -73,7 +73,7 @@ Feature: share
     And "Brian" logs out
 
   Scenario: file
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |

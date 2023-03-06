@@ -4,7 +4,7 @@ Feature: Upload
   So that I can store them in owncloud
 
   Scenario: Upload resources in personal space
-    Given "Admin" creates following users
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
     And "Alice" logs in

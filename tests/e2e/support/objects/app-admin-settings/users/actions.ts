@@ -24,7 +24,34 @@ const quotaInputBatchAction = '#quota-select-batch-action-form .vs__search'
 const userInput = '#%s-input'
 const roleValueDropDown = `.vs__dropdown-menu :text-is("%s")`
 const groupsInput = '#user-group-select-form .vs__search'
+const createUserButton = '[data-test-id="create-user-btn"]'
+const userNameInput = '#create-user-input-user-name'
+const displayNameInput = '#create-user-input-display-name'
+const emailInput = '#create-user-input-email'
+const passwordInput = '#create-user-input-password'
 
+export const createUser = async (args: {
+  page: Page
+  name: string
+  displayname: string
+  email: string
+  password: string
+}): Promise<void> => {
+  const { page, name, displayname, email, password } = args
+  await page.locator(createUserButton).click()
+  await page.locator(userNameInput).fill(name)
+  await page.locator(displayNameInput).fill(displayname)
+  await page.locator(emailInput).fill(email)
+  await page.locator(passwordInput).fill(password)
+
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith('users') && resp.status() === 200 && resp.request().method() === 'POST'
+    ),
+    await page.locator(actionConfirmButton).click()
+  ])
+}
 export const changeAccountEnabled = async (args: {
   page: Page
   uuid: string

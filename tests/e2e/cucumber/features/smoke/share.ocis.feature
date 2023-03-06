@@ -1,7 +1,7 @@
 Feature: share
 
   Background:
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |

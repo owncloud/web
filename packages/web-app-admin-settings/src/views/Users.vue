@@ -27,7 +27,12 @@
             </oc-button>
           </div>
           <div v-else>
-            <oc-button variation="primary" appearance="filled" @click="toggleCreateUserModal">
+            <oc-button
+              variation="primary"
+              appearance="filled"
+              data-test-id="create-user-btn"
+              @click="toggleCreateUserModal"
+            >
               <oc-icon name="add" />
               <span v-text="$gettext('New user')" />
             </oc-button>

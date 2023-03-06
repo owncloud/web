@@ -5,7 +5,7 @@ import { api } from '../../support'
 import fs from 'fs'
 
 Given(
-  '{string} creates following users',
+  '{string} creates following user(s) using API',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const admin = this.usersEnvironment.getUser({ key: stepUser })
 

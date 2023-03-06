@@ -1,7 +1,7 @@
 Feature: spaces participant management
 
   Scenario: participant management
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id      |
       | Alice   |
       | Brian   |

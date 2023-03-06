@@ -1,7 +1,7 @@
 Feature: internal link share
 
   Scenario: share a link with internal role
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |

@@ -1,7 +1,7 @@
 Feature: Search in the project space
 
   Scenario: Search in the project spaces
-    Given "Admin" creates following users
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
     And "Admin" assigns following roles to the users using API

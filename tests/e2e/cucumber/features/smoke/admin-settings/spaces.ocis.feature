@@ -1,7 +1,7 @@
 Feature: spaces management
 
   Scenario: spaces can be managed in the admin settings via the context menu
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |
@@ -37,7 +37,7 @@ Feature: spaces management
 
 
   Scenario: multiple spaces can be managed at once in the admin settings via the batch actions
-    Given "Admin" creates following users
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
     And "Admin" assigns following roles to the users using API

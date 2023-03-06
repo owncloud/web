@@ -14,7 +14,8 @@ import {
   removeUserFromGroups,
   openEditPanel,
   deleteUserUsingContextMenu,
-  deleteUserUsingBatchAction
+  deleteUserUsingBatchAction,
+  createUser
 } from './actions'
 
 export class Users {
@@ -95,5 +96,18 @@ export class Users {
   }
   async deleteUserUsingBatchAction(): Promise<void> {
     await deleteUserUsingBatchAction({ page: this.#page })
+  }
+  async createUser({
+    name,
+    displayname,
+    email,
+    password
+  }: {
+    name: string
+    displayname: string
+    email: string
+    password: string
+  }): Promise<void> {
+    await createUser({ page: this.#page, name, displayname, email, password })
   }
 }

@@ -15,7 +15,7 @@ Feature: spaces.personal
   - ✗ trash bin
   - ✗ share
   - ✗ link
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |
