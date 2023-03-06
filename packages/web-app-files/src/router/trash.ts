@@ -22,7 +22,7 @@ export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
     component: components.App,
     children: [
       {
-        path: '',
+        path: 'overview',
         name: locationTrashOverview.name,
         component: components.Trash.Overview,
         meta: {
@@ -32,7 +32,7 @@ export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
       },
       {
         name: locationTrashGeneric.name,
-        path: 'trash/:driveAliasAndItem(.*)?',
+        path: ':driveAliasAndItem(.*)?',
         component: components.Spaces.DriveResolver,
         meta: {
           authContext: 'user',

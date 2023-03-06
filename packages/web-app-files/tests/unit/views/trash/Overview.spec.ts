@@ -60,7 +60,7 @@ describe('TrashOverview', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.find('app-loading-spinner').exists()).toBeTruthy()
   })
-  it('should render all spaces in a table', async () => {
+  it('should render spaces list after loading has been finished', async () => {
     const { wrapper } = getWrapper()
     await wrapper.vm.loadResourcesTask.last
     expect(wrapper.find('app-loading-spinner').exists()).toBeFalsy()
@@ -83,14 +83,16 @@ describe('TrashOverview', () => {
     expect(wrapper.vm.sortBy).toEqual(sortBy)
     expect(wrapper.vm.sortDir).toEqual(sortDir)
   })
-  it('emits events on file click', () => {
-    // fake
-    const { wrapper } = getWrapper()
-    const sortBy = 'name'
-    const sortDir = 'desc'
-    wrapper.vm.handleSort({ sortBy, sortDir })
-    expect(wrapper.vm.sortBy).toEqual(sortBy)
-    expect(wrapper.vm.sortDir).toEqual(sortDir)
+  it('navigates to trash on space click', async () => {
+    const { mocks, wrapper } = getWrapper()
+    await wrapper.vm.loadResourcesTask.last
+    console.log(wrapper.html())
+    await wrapper.find(`[data-item-id="${spaceMocks[0].id}"] a`).trigger('click')
+    expect(mocks.$router.push).toHaveBeenCalledWith({
+      name: 'files-trash-generic',
+      params: { driveAliasAndItem: '' },
+      query: {}
+    })
   })
   it('shows only filtered spaces if filter applied', async () => {
     const { wrapper } = getWrapper()
@@ -116,7 +118,7 @@ function getWrapper({ hasProjectSpaces = true, graph = defaultGraphMock() } = {}
     mocks,
     wrapper: mount(TrashOverview, {
       global: {
-        stubs: defaultStubs,
+        stubs: { ...defaultStubs, 'router-link': false },
         mocks,
         plugins: [...defaultPlugins(), store]
       }

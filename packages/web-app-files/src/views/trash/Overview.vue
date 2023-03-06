@@ -1,6 +1,5 @@
 <template>
-  <app-loading-spinner v-if="loadResourcesTask.isRunning || !loadResourcesTask.last" />
-  <div v-else class="oc-flex">
+  <div class="oc-flex">
     <files-view-wrapper>
       <app-bar
         :breadcrumbs="breadcrumbs"
@@ -10,7 +9,8 @@
         :has-file-extensions="false"
         :has-pagination="false"
       />
-      <div>
+      <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+      <template v-else>
         <oc-text-input
           id="spaces-filter"
           v-model="filterTerm"
@@ -49,34 +49,30 @@
             </div>
           </template>
         </oc-table>
-      </div>
+      </template>
     </files-view-wrapper>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
-import { buildSpace } from 'web-client/src/helpers'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import {
-  configurationManager,
-  useCapabilityProjectSpacesEnabled,
-  useGraphClient,
-  useRouter
-} from 'web-pkg'
+import { useGraphClient, useRouter, useStore } from 'web-pkg'
 import { createLocationTrash } from 'web-app-files/src/router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
 import FilesViewWrapper from 'web-app-files/src/components/FilesViewWrapper.vue'
+import { isPersonalSpaceResource, isProjectSpaceResource } from 'web-client/src/helpers'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 export default defineComponent({
   name: 'TrashOverview',
-  components: { FilesViewWrapper, AppBar },
-  methods: { createLocationTrash },
+  components: { FilesViewWrapper, AppBar, AppLoadingSpinner },
   setup: function () {
+    const store = useStore()
     const router = useRouter()
     const { $gettext } = useGettext()
     const sortBy = ref('name')
@@ -84,23 +80,26 @@ export default defineComponent({
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
-    const spaces = ref([])
+    const spaces = computed(() => {
+      return orderBy(
+        store.getters['runtime/spaces/spaces'].filter(
+          (s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s)
+        ),
+        'name',
+        'asc'
+      )
+    })
+    console.log(spaces)
+
     const { graphClient } = useGraphClient()
-    const hasProjectSpaces = useCapabilityProjectSpacesEnabled()
 
-    const loadResourcesTask = useTask(function* (signal) {
-      const {
-        data: { value: drivesResponse }
-      } = yield unref(graphClient).drives.listMyDrives()
-      const drives = drivesResponse
-        .map((space) => buildSpace({ ...space, serverUrl: configurationManager.serverUrl }))
-        .filter(
-          (space) =>
-            space.disabled !== true &&
-            (space.driveType === 'project' || space.driveType === 'personal')
-        )
-
-      spaces.value = orderBy(drives, 'name', 'asc')
+    const loadResourcesTask = useTask(function* () {
+      store.commit('Files/CLEAR_FILES_SEARCHED')
+      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+      yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
+        graphClient: unref(graphClient)
+      })
+      store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
     })
 
     const footerTextTotal = computed(() => {
@@ -184,11 +183,6 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      if (!unref(hasProjectSpaces)) {
-        return router.push(createLocationTrash('files-trash-generic'))
-      }
-      await loadResourcesTask.perform()
-
       if (unref(spaces).length === 1) {
         return router.push(getTrashLink(unref(spaces).pop()))
       }
@@ -220,7 +214,6 @@ export default defineComponent({
       fields,
       tableRef,
       spaces,
-      hasProjectSpaces,
       filter,
       handleSort,
       orderedSpaces,

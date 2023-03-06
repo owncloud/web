@@ -16,7 +16,7 @@
           <create-space v-if="hasCreatePermission" />
         </template>
       </app-bar>
-      <app-loading-spinner v-if="areResourcesLoading" />
+      <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
         <no-content-message
           v-if="!spaces.length"
@@ -136,10 +136,6 @@ export default defineComponent({
       store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
     })
 
-    const areResourcesLoading = computed(() => {
-      return loadResourcesTask.isRunning || !loadResourcesTask.last
-    })
-
     const hasCreatePermission = computed(() => can('create-all', 'Space'))
     const viewModes = computed(() => [ViewModeConstants.tilesView])
 
@@ -149,8 +145,7 @@ export default defineComponent({
       spaces,
       graphClient,
       loadResourcesTask,
-      areResourcesLoading,
-      accessToken,
+            accessToken,
       selectedResourcesIds,
       handleSort,
       sortBy,
@@ -227,7 +222,6 @@ export default defineComponent({
     }
   },
   async created() {
-    await this.loadResourcesTask.perform()
     this.scrollToResourceFromRoute(this.spaces)
   },
   methods: {
