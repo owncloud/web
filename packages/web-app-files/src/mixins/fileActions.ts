@@ -6,9 +6,6 @@ import { routeToContextQuery } from 'web-pkg/src/composables/appDefaults'
 import { configurationManager } from 'web-pkg/src/configuration'
 
 import { isLocationSharesActive, isLocationTrashActive } from '../router'
-import { useAcceptShare } from './actions/acceptShare'
-import { useCopy } from './actions/copy'
-import { useDeclineShare } from './actions/declineShare'
 // import Delete from './actions/delete'
 // import DownloadArchive from './actions/downloadArchive'
 // import DownloadFile from './actions/downloadFile'
@@ -18,11 +15,14 @@ import { useDeclineShare } from './actions/declineShare'
 // import Navigate from './actions/navigate'
 // import Rename from './actions/rename'
 // import Restore from './actions/restore'
-import { Action, ActionOptions } from 'web-pkg/src/actions'
 import { computed, unref } from 'vue'
 import { useRoute, useRouter, useStore } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'
-import { useIsSearchActive } from 'web-pkg/src/composables/actions'
+import { Action, ActionOptions, useIsSearchActive } from 'web-pkg/src/composables/actions'
+import { useDownloadArchive } from './actions/downloadArchive'
+import { useDelete } from './actions/delete'
+import { useMove } from './actions/move'
+import { useRestore } from './actions/restore'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -34,13 +34,9 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { $gettext, interpolate: $gettextInterpolate } = useGettext()
   const isSearchActive = useIsSearchActive()
 
-  const { actions: acceptShareActions } = useAcceptShare({ store })
-  const { actions: copyActions } = useCopy({ store })
-  const { actions: declineShareActions } = useDeclineShare({ store })
   const { actions: downloadArchiveActions } = useDownloadArchive({ store })
   const { actions: deleteActions } = useDelete({ store })
   const { actions: moveActions } = useMove({ store })
-  const { actions: emptyTrashBinActions } = useEmptyTrashBin({ store })
   const { actions: restoreActions } = useRestore({ store })
 
   const systemActions = computed(() => [
