@@ -661,7 +661,7 @@ importers:
       uuid: ^9.0.0
       vue: 3.2.45
       vue-concurrency: 4.0.0
-      vue-inline-svg: 3.1.0
+      vue-inline-svg: 3.1.2
       vue-router: 4.1.6
       vue-select: 4.0.0-beta.6
       vue3-gettext: ^2.3.3
@@ -709,7 +709,7 @@ importers:
       uuid: 9.0.0
       vue: 3.2.45
       vue-concurrency: 4.0.0_vue@3.2.45
-      vue-inline-svg: 3.1.0_agvlx64p3fh52dmj7mriww4tnm_vue@3.2.45
+      vue-inline-svg: 3.1.2_vue@3.2.45
       vue-router: 4.1.6_vue@3.2.45
       vue-select: 4.0.0-beta.6_vue@3.2.45
       vue3-gettext: 2.3.4_tfvhctuaqmmqnirfl65c47tqwu
@@ -21554,7 +21554,16 @@ packages:
       vue: ^3
     dependencies:
       vue: 3.2.45
+    dev: true
     patched: true
+
+  /vue-inline-svg/3.1.2_vue@3.2.45:
+    resolution: {integrity: sha512-K01sLANBnjosObee4JrBu/igXpYIFhQfy4EcEyVWxEWf6nmrxp7Isz6pmeRCsWx6XGrGWfrQH3uNwt4nOmrFdA==}
+    peerDependencies:
+      vue: ^3
+    dependencies:
+      vue: 3.2.45
+    dev: false
 
   /vue-loader/15.10.1_y4p7kvorzgilxnlq3klfoybme4:
     resolution: {integrity: sha512-SaPHK1A01VrNthlix6h1hq4uJu7S/z0kdLUb6klubo738NeQoLbS6V9/d8Pv19tU0XdQKju3D1HSKuI8wJ5wMA==}
