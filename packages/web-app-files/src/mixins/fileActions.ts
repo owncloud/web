@@ -63,6 +63,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     return (store.state.apps.fileEditors as any[])
       .map((editor): Action => {
         return {
+          name: `editor-${editor.id}`,
           label: () => {
             if (editor.label) {
               return $gettext(editor.label)
@@ -178,7 +179,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   // available mime-types coming from the app-provider and existing actions
   const triggerDefaultAction = (options: ActionOptions) => {
     const action = getDefaultAction(options)
-    action.handler({ ...options, ...action.handlerData })
+    action.handler({ ...options })
   }
 
   const triggerAction = (name: string, options: ActionOptions) => {
