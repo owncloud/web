@@ -41,7 +41,7 @@ import ShowMembers from 'web-pkg/src/mixins/spaces/showMembers'
 import UploadImage from '../../mixins/spaces/actions/uploadImage'
 import EditReadmeContent from 'web-pkg/src/mixins/spaces/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
-import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
+import { computed, defineComponent, getCurrentInstance, PropType, toRefs, unref } from 'vue'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { thumbnailService } from 'web-app-files/src/services'
 import { useCapabilitySpacesMaxQuota, useRouter } from 'web-pkg/src/composables'
@@ -74,11 +74,13 @@ export default defineComponent({
   setup(props) {
     const instance = getCurrentInstance().proxy as any
     const router = useRouter()
+    const { space } = toRefs(props)
 
     const { actions: showDetailsItems } = useShowDetails()
 
     const filterParams = computed(() => {
       return {
+        space: unref(space),
         resources: props.items
       }
     })

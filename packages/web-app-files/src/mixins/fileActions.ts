@@ -7,7 +7,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 
 import { isLocationSharesActive, isLocationTrashActive } from '../router'
 import { useAcceptShare } from './actions/acceptShare'
-// import Copy from './actions/copy'
+import { useCopy } from './actions/copy'
 import { useDeclineShare } from './actions/declineShare'
 // import Delete from './actions/delete'
 // import DownloadArchive from './actions/downloadArchive'
@@ -35,11 +35,11 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const isSearchActive = useIsSearchActive()
 
   const { actions: acceptShareActions } = useAcceptShare({ store })
+  const { actions: copyActions } = useCopy({ store })
   const { actions: declineShareActions } = useDeclineShare({ store })
 
   const systemActions = computed(() => [
     // const actionsMixins = [
-    //   'copy',
     //   'delete',
     //   'downloadArchive',
     //   'downloadFile',
@@ -52,6 +52,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     // ]
 
     ...unref(acceptShareActions),
+    ...unref(copyActions),
     ...unref(declineShareActions)
   ])
 

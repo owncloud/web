@@ -20,6 +20,7 @@ import { SpaceResource } from 'web-client/src/helpers'
 import { useAcceptShare } from 'web-app-files/src/mixins/actions/acceptShare'
 import { useDeclineShare } from 'web-app-files/src/mixins/actions/declineShare'
 import { useStore } from 'web-pkg/src'
+import { useCopy } from 'web-app-files/src/mixins/actions/copy'
 
 export default {
   name: 'ContextActions',
@@ -53,6 +54,7 @@ export default {
     const { editorActions, loadExternalAppActions } = useFileActions()
 
     const { actions: acceptShareActions } = useAcceptShare({ store })
+    const { actions: copyActions } = useCopy({ store })
     const { actions: declineShareActions } = useDeclineShare({ store })
 
     const filterParams = computed(() => {
@@ -65,6 +67,7 @@ export default {
     const menuItemsBatchActions = computed(() =>
       [
         ...unref(acceptShareActions),
+        ...unref(copyActions),
         ...unref(declineShareActions)
         // ...instance.$_downloadArchive_items,
         // ...instance.$_delete_items,
@@ -92,8 +95,8 @@ export default {
     const menuItemsActions = computed(() => {
       return [
         ...unref(acceptShareActions),
-        ...unref(declineShareActions)
-        // ...instance.$_copy_items,
+        ...unref(declineShareActions),
+        ...unref(copyActions),
         // ...instance.$_delete_items,
         // ...instance.$_downloadArchive_items,
         // ...instance.$_downloadFile_items,

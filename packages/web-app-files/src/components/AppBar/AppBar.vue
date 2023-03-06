@@ -78,6 +78,7 @@ import { ViewMode } from 'web-pkg/src/ui/types'
 import { useAcceptShare } from 'web-app-files/src/mixins/actions/acceptShare'
 import { useStore } from 'web-pkg/src'
 import { useDeclineShare } from 'web-app-files/src/mixins/actions/declineShare'
+import { useCopy } from 'web-app-files/src/mixins/actions/copy'
 
 export default defineComponent({
   components: {
@@ -121,12 +122,14 @@ export default defineComponent({
     const { space } = toRefs(props)
 
     const { actions: acceptShareActions } = useAcceptShare({ store })
+    const { actions: copyActions } = useCopy({ store })
     const { actions: declineShareActions } = useDeclineShare({ store })
 
     const batchActions = computed(() => {
       return [
         // ...this.$_clearSelection_items,
         ...unref(acceptShareActions),
+        ...unref(copyActions),
         ...unref(declineShareActions)
         // ...this.$_downloadArchive_items,
         // ...this.$_downloadFile_items,
