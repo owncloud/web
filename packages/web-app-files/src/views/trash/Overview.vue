@@ -178,6 +178,7 @@ export default defineComponent({
     }
 
     onMounted(async () => {
+      console.log(unref(spaces))
       if (unref(spaces).length === 1) {
         return router.push(getTrashLink(unref(spaces).pop()))
       }

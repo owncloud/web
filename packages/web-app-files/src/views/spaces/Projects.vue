@@ -145,7 +145,7 @@ export default defineComponent({
       spaces,
       graphClient,
       loadResourcesTask,
-            accessToken,
+      accessToken,
       selectedResourcesIds,
       handleSort,
       sortBy,
