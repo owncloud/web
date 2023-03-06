@@ -80,18 +80,17 @@ export default defineComponent({
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
+    const { graphClient } = useGraphClient()
+
     const spaces = computed(() => {
       return orderBy(
         store.getters['runtime/spaces/spaces'].filter(
           (s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s)
         ),
-        'name',
-        'asc'
+        unref(sortBy),
+        unref(sortDir)
       )
     })
-    console.log(spaces)
-
-    const { graphClient } = useGraphClient()
 
     const loadResourcesTask = useTask(function* () {
       store.commit('Files/CLEAR_FILES_SEARCHED')
