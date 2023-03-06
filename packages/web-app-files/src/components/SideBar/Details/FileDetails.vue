@@ -87,8 +87,8 @@
             />
           </td>
         </tr>
-        <tr v-if="runningOnEos" data-testid="eosPath">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('EOS Path')" />
+        <tr v-if="runningOnEos && !isPublicLinkContext" data-testid="eosPath">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('FUSE Path')" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
               <p
@@ -107,6 +107,34 @@
               >
                 <oc-icon
                   v-if="copiedEos"
+                  key="oc-copy-to-clipboard-copied"
+                  name="checkbox-circle"
+                  class="_clipboard-success-animation"
+                />
+                <oc-icon v-else key="oc-copy-to-clipboard-copy" name="clipboard" />
+              </oc-button>
+            </div>
+          </td>
+        </tr>
+        <tr v-if="cernFeatures && sambaPath && !isPublicLinkContext" data-testid="sambaPath">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Windows Path')" />
+          <td>
+            <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+              <p
+                ref="sambaFilePath"
+                v-oc-tooltip="sambaPath"
+                class="oc-my-rm oc-text-truncate"
+                v-text="sambaPath"
+              />
+              <oc-button
+                v-oc-tooltip="copySambaPathLabel"
+                :aria-label="copySambaPathLabel"
+                appearance="raw"
+                :variation="copiedSamba ? 'success' : 'passive'"
+                @click="copySambaPathToClipboard"
+              >
+                <oc-icon
+                  v-if="copiedSamba"
                   key="oc-copy-to-clipboard-copied"
                   name="checkbox-circle"
                   class="_clipboard-success-animation"
@@ -194,6 +222,7 @@ export default defineComponent({
 
     const copiedDirect = ref(false)
     const copiedEos = ref(false)
+    const copiedSamba = ref(false)
     const {
       copy,
       copied,
@@ -207,18 +236,41 @@ export default defineComponent({
     const preview = ref(undefined)
 
     const directLink = computed(() => {
-      return `${store.getters.configuration.server}files/spaces/personal/home${encodePath(
-        unref(resource).path
-      )}`
+      return !unref(isPublicLinkContext)
+        ? `${store.getters.configuration.server}files/spaces${encodePath(unref(resource).path)}`
+        : `${store.getters.configuration.server.replace(/\/+$/, '')}${unref(resource).downloadURL}`
     })
 
     const copyEosPathToClipboard = () => {
       copy(unref(resource).path)
       copiedEos.value = unref(copied)
       store.dispatch('showMessage', {
-        title: $gettext('EOS path copied'),
-        desc: $gettext('The EOS path has been copied to your clipboard.')
+        title: $gettext('FUSE path copied'),
+        desc: $gettext('The FUSE path has been copied to your clipboard.')
       })
+    }
+
+    const copySambaPathToClipboard = () => {
+      copy(getSambaPath(unref(resource).path))
+      copiedSamba.value = unref(copied)
+      store.dispatch('showMessage', {
+        title: $gettext('Windows path copied'),
+        desc: $gettext('The Windows path has been copied to your clipboard.')
+      })
+    }
+
+    const getSambaPath = (path) => {
+      const pathMappings = {
+        user: '\\\\cernbox-smb\\eos\\user\\',
+        project: '\\\\eosproject-smb\\eos\\project\\',
+        public: '\\\\eospublic-smb\\eos\\',
+        media: '\\\\eosmedia-smb\\eos\\'
+      }
+      const pathComponents = path?.split('/').filter(Boolean)
+      if (pathComponents.length > 1 && pathComponents[0] === 'eos') {
+        const translated = pathMappings[pathComponents[1]]
+        return translated && `${translated}${pathComponents.slice(2).join('\\')}`
+      }
     }
 
     const copyDirectLinkToClipboard = () => {
@@ -280,6 +332,8 @@ export default defineComponent({
       copiedEos,
       preview,
       copyEosPathToClipboard,
+      copySambaPathToClipboard,
+      getSambaPath,
       copiedDirect,
       copyDirectLinkToClipboard,
       isClipboardCopySupported,
@@ -304,6 +358,9 @@ export default defineComponent({
     },
     runningOnEos() {
       return !!this.configuration?.options?.runningOnEos
+    },
+    cernFeatures() {
+      return !!this.configuration?.options?.cernFeatures
     },
     hasContent() {
       return (
@@ -363,7 +420,10 @@ export default defineComponent({
       return this.$gettext('Copy direct link')
     },
     copyEosPathLabel() {
-      return this.$gettext('Copy EOS path')
+      return this.$gettext('Copy FUSE path')
+    },
+    copySambaPathLabel() {
+      return this.$gettext('Copy Windows path')
     },
     resourceSize() {
       return formatFileSize(this.resource.size, this.$language.current)
@@ -406,6 +466,9 @@ export default defineComponent({
     },
     sharedByDisplayName() {
       return this.resource.share?.fileOwner.displayName
+    },
+    sambaPath() {
+      return this.getSambaPath(this.resource.path)
     }
   },
   methods: {
