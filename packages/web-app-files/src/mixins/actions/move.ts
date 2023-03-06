@@ -4,59 +4,66 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
-import { mapActions } from 'vuex'
+import { Store } from 'vuex'
+import { useGettext } from 'vue3-gettext'
+import { ActionOptions } from 'web-pkg/src/composables/actions'
+import { computed, unref } from 'vue'
+import { useRouter, useStore } from 'web-pkg/src'
 
-export default {
-  computed: {
-    isMacOs() {
-      return window.navigator.platform.match('Mac')
-    },
-    getCutShortcutString() {
-      if (this.isMacOs) {
-        return this.$pgettext('Keyboard shortcut for macOS for cutting files', '⌘ + X')
-      }
-      return this.$pgettext('Keyboard shortcut for non-macOS systems for cutting files', 'Ctrl + X')
-    },
-    $_move_items() {
-      return [
-        {
-          name: 'cut',
-          icon: 'scissors',
-          handler: this.$_move_trigger,
-          shortcut: this.getCutShortcutString,
-          label: () =>
-            this.$pgettext('Action in the files list row to initiate cutting resources', 'Cut'),
-          isEnabled: ({ resources }) => {
-            if (
-              !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-              !isLocationPublicActive(this.$router, 'files-public-link') &&
-              !isLocationCommonActive(this.$router, 'files-common-favorites')
-            ) {
-              return false
-            }
-            if (resources.length === 0) {
-              return false
-            }
+export const useMove = ({ store }: { store?: Store<any> } = {}) => {
+  store = store || useStore()
+  const router = useRouter()
+  const language = useGettext()
+  const { $pgettext } = language
 
-            if (!this.currentFolder) {
-              return false
-            }
+  const isMacOs = computed(() => {
+    return window.navigator.platform.match('Mac')
+  })
 
-            const moveDisabled = resources.some((resource) => {
-              return canBeMoved(resource, this.currentFolder.path) === false
-            })
-            return !moveDisabled
-          },
-          componentType: 'button',
-          class: 'oc-files-actions-move-trigger'
+  const cutShortcutString = computed(() => {
+    if (unref(isMacOs)) {
+      return $pgettext('Keyboard shortcut for macOS for cutting files', '⌘ + X')
+    }
+    return $pgettext('Keyboard shortcut for non-macOS systems for cutting files', 'Ctrl + X')
+  })
+
+  const handler = ({ space, resources }: ActionOptions) => {
+    store.dispatch('cutSelectedFiles', { ...language, space, resources })
+  }
+  const actions = computed(() => [
+    {
+      name: 'cut',
+      icon: 'scissors',
+      handler,
+      shortcut: unref(cutShortcutString),
+      label: () => $pgettext('Action in the files list row to initiate cutting resources', 'Cut'),
+      isEnabled: ({ resources }) => {
+        if (
+          !isLocationSpacesActive(router, 'files-spaces-generic') &&
+          !isLocationPublicActive(router, 'files-public-link') &&
+          !isLocationCommonActive(router, 'files-common-favorites')
+        ) {
+          return false
         }
-      ]
+        if (resources.length === 0) {
+          return false
+        }
+
+        if (!store.getters['Files/currentFolder']) {
+          return false
+        }
+
+        const moveDisabled = resources.some((resource) => {
+          return canBeMoved(resource, store.getters['Files/currentFolder'].path) === false
+        })
+        return !moveDisabled
+      },
+      componentType: 'button',
+      class: 'oc-files-actions-move-trigger'
     }
-  },
-  methods: {
-    ...mapActions('Files', ['cutSelectedFiles']),
-    $_move_trigger({ resources }) {
-      this.cutSelectedFiles({ ...this.$language, space: this.space, resources })
-    }
+  ])
+
+  return {
+    actions
   }
 }

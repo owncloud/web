@@ -1,5 +1,5 @@
-import MixinDeleteResources from '../deleteResources'
-import { mapState, mapGetters } from 'vuex'
+import { useDeleteResources } from '../deleteResources'
+import { Store } from 'vuex'
 import {
   isLocationPublicActive,
   isLocationSpacesActive,
@@ -7,80 +7,87 @@ import {
   isLocationCommonActive
 } from '../../router'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { useCapabilityFilesPermanentDeletion, useRouter, useStore } from 'web-pkg/src'
+import { useGettext } from 'vue3-gettext'
+import { Action } from 'web-pkg/src/composables/actions'
+import { computed, unref } from 'vue'
 
-export default {
-  mixins: [MixinDeleteResources],
-  computed: {
-    ...mapState('Files', ['currentFolder']),
-    ...mapGetters(['capabilities', 'user']),
-    $_delete_items() {
-      return [
-        {
-          name: 'delete',
-          icon: 'delete-bin-5',
-          label: () => this.$gettext('Delete'),
-          handler: this.$_delete_trigger,
-          isEnabled: ({ resources }) => {
-            if (
-              !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-              !isLocationPublicActive(this.$router, 'files-public-link') &&
-              !isLocationCommonActive(this.$router, 'files-common-search')
-            ) {
-              return false
-            }
-            if (resources.length === 0) {
-              return false
-            }
+export const useDelete = ({ store }: { store?: Store<any> }) => {
+  store = store || useStore()
+  const router = useRouter()
+  const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
+  const { displayDialog } = useDeleteResources({ store })
 
-            if (
-              isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-              this.space?.driveType === 'share' &&
-              resources[0].path === '/'
-            ) {
-              return false
-            }
+  const { $gettext } = useGettext()
 
-            const deleteDisabled = resources.some((resource) => {
-              return !resource.canBeDeleted()
-            })
-            return !deleteDisabled
-          },
-          componentType: 'button',
-          class: 'oc-files-actions-delete-trigger'
-        },
-        {
-          // this menu item is ONLY for the trashbin (permanently delete a file/folder)
-          name: 'delete-permanent',
-          icon: 'delete-bin-5',
-          label: () => this.$gettext('Delete'),
-          handler: this.$_delete_trigger,
-          isEnabled: ({ resources }) => {
-            if (!isLocationTrashActive(this.$router, 'files-trash-generic')) {
-              return false
-            }
-            if (this.capabilities?.files?.permanent_deletion === false) {
-              return false
-            }
+  const handler = ({ resources }) => {
+    displayDialog(resources)
+  }
 
-            if (
-              isProjectSpaceResource(this.space) &&
-              !this.space.isEditor(this.user) &&
-              !this.space.isManager(this.user)
-            ) {
-              return false
-            }
-
-            return resources.length > 0
-          },
-          componentType: 'button',
-          class: 'oc-files-actions-delete-permanent-trigger'
+  const actions = computed((): Action[] => [
+    {
+      name: 'delete',
+      icon: 'delete-bin-5',
+      label: () => $gettext('Delete'),
+      handler,
+      isEnabled: ({ space, resources }) => {
+        if (
+          !isLocationSpacesActive(router, 'files-spaces-generic') &&
+          !isLocationPublicActive(router, 'files-public-link') &&
+          !isLocationCommonActive(router, 'files-common-search')
+        ) {
+          return false
         }
-      ]
+        if (resources.length === 0) {
+          return false
+        }
+
+        if (
+          isLocationSpacesActive(router, 'files-spaces-generic') &&
+          space?.driveType === 'share' &&
+          resources[0].path === '/'
+        ) {
+          return false
+        }
+
+        const deleteDisabled = resources.some((resource) => {
+          return !resource.canBeDeleted()
+        })
+        return !deleteDisabled
+      },
+      componentType: 'button',
+      class: 'oc-files-actions-delete-trigger'
+    },
+    {
+      // this menu item is ONLY for the trashbin (permanently delete a file/folder)
+      name: 'delete-permanent',
+      icon: 'delete-bin-5',
+      label: () => $gettext('Delete'),
+      handler,
+      isEnabled: ({ space, resources }) => {
+        if (!isLocationTrashActive(router, 'files-trash-generic')) {
+          return false
+        }
+        if (!unref(hasPermanentDeletion)) {
+          return false
+        }
+
+        if (
+          isProjectSpaceResource(space) &&
+          !space.isEditor(store.getters.user) &&
+          !space.isManager(store.getters.user)
+        ) {
+          return false
+        }
+
+        return resources.length > 0
+      },
+      componentType: 'button',
+      class: 'oc-files-actions-delete-permanent-trigger'
     }
-  },
-  methods: {
-    $_delete_trigger({ resources }) {
-      this.$_deleteResources_displayDialog(resources)
-    }
+  ])
+
+  return {
+    actions
   }
 }

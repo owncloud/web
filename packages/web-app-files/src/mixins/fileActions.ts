@@ -37,6 +37,11 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { actions: acceptShareActions } = useAcceptShare({ store })
   const { actions: copyActions } = useCopy({ store })
   const { actions: declineShareActions } = useDeclineShare({ store })
+  const { actions: downloadArchiveActions } = useDownloadArchive({ store })
+  const { actions: deleteActions } = useDelete({ store })
+  const { actions: moveActions } = useMove({ store })
+  const { actions: emptyTrashBinActions } = useEmptyTrashBin({ store })
+  const { actions: restoreActions } = useRestore({ store })
 
   const systemActions = computed(() => [
     // const actionsMixins = [
@@ -51,9 +56,10 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     //   'showEditTags',
     // ]
 
-    ...unref(acceptShareActions),
-    ...unref(copyActions),
-    ...unref(declineShareActions)
+    ...unref(deleteActions),
+    ...unref(downloadArchiveActions),
+    ...unref(moveActions),
+    ...unref(restoreActions)
   ])
 
   const editorActions = computed(() => {

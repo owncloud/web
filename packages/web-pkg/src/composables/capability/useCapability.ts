@@ -61,6 +61,10 @@ export const useCapabilityFilesTusExtension = createCapabilityComposable<string>
   'files.tus_support.extension',
   ''
 )
+export const useCapabilityFilesPermanentDeletion = createCapabilityComposable(
+  'files.permanent_deletion',
+  true
+)
 export const useCapabilityFilesTags = createCapabilityComposable('files.tags', false)
 export const useCapabilityPrivateLinks = createCapabilityComposable<boolean>(
   'files.privateLinks',

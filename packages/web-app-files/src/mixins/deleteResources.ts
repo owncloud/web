@@ -1,227 +1,234 @@
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { Store } from 'vuex'
 import { cloneStateObject } from '../helpers/store'
 import { isSameResource } from '../helpers/resource'
 import { buildWebDavFilesTrashPath } from '../helpers/resources'
-import { buildWebDavSpacesTrashPath } from 'web-client/src/helpers'
+import { buildWebDavSpacesTrashPath, SpaceResource } from 'web-client/src/helpers'
 import PQueue from 'p-queue'
 import { isLocationTrashActive, isLocationSpacesActive } from '../router'
-import { clientService } from 'web-pkg/src/services'
 import { dirname } from 'path'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { computed, unref } from 'vue'
+import {
+  useAccessToken,
+  useCapabilitySpacesEnabled,
+  useCapabilityShareJailEnabled,
+  useClientService,
+  useRouter,
+  useStore
+} from 'web-pkg/src'
+import { useGettext } from 'vue3-gettext'
 
-export default {
-  data: () => ({
-    deleteResources_queue: new PQueue({ concurrency: 4 }),
-    deleteResources_deleteOps: [],
-    resourcesToDelete: []
-  }),
+export const useDeleteResources = ({ store }: { store?: Store<any> }) => {
+  store = store || useStore()
+  const router = useRouter()
+  const language = useGettext()
+  const { $gettext, $ngettext, interpolate: $gettextInterpolate } = language
+  const hasShareJail = useCapabilityShareJailEnabled()
+  const hasSpacesEnabled = useCapabilitySpacesEnabled()
+  const clientService = useClientService()
+  const { owncloudSdk } = clientService
+  const accessToken = useAccessToken({ store })
 
-  computed: {
-    ...mapGetters('Files', ['selectedFiles', 'currentFolder']),
-    ...mapGetters(['user', 'configuration', 'capabilities']),
+  const queue = new PQueue({ concurrency: 4 })
+  const deleteOps = []
+  let resourcesToDelete = []
 
-    $_deleteResources_isInTrashbin() {
-      return isLocationTrashActive(this.$router, 'files-trash-generic')
-    },
+  const isInTrashbin = computed(() => {
+    return isLocationTrashActive(router, 'files-trash-generic')
+  })
 
-    $_deleteResources_resources() {
-      return cloneStateObject(this.resourcesToDelete)
-    },
+  const resources = computed(() => {
+    return cloneStateObject(resourcesToDelete)
+  })
 
-    $_deleteResources_dialogTitle() {
-      const resources = this.$_deleteResources_resources
-      const isFolder = resources[0].type === 'folder'
-      let title = null
+  const dialogTitle = computed(() => {
+    const currentResources = unref(resources)
+    const isFolder = currentResources[0].type === 'folder'
+    let title = null
 
-      if (resources.length === 1) {
-        if (isFolder) {
-          title = this.$_deleteResources_isInTrashbin
-            ? this.$gettext('Permanently delete folder %{name}')
-            : this.$gettext('Delete folder %{name}')
-        } else {
-          title = this.$_deleteResources_isInTrashbin
-            ? this.$gettext('Permanently delete file %{name}')
-            : this.$gettext('Delete file %{name}')
-        }
-        return this.$gettextInterpolate(
-          title,
-          {
-            name: resources[0].name
-          },
-          true
-        )
+    if (currentResources.length === 1) {
+      if (isFolder) {
+        title = unref(isInTrashbin)
+          ? $gettext('Permanently delete folder %{name}')
+          : $gettext('Delete folder %{name}')
+      } else {
+        title = unref(isInTrashbin)
+          ? $gettext('Permanently delete file %{name}')
+          : $gettext('Delete file %{name}')
       }
-
-      title = this.$_deleteResources_isInTrashbin
-        ? this.$ngettext(
-            'Permanently delete selected resource?',
-            'Permanently delete %{amount} selected resources?',
-            resources.length
-          )
-        : this.$ngettext(
-            'Delete selected resource?',
-            'Delete %{amount} selected resources?',
-            resources.length
-          )
-
-      return this.$gettextInterpolate(title, { amount: resources.length }, false)
-    },
-
-    $_deleteResources_dialogMessage() {
-      const resources = this.$_deleteResources_resources
-      const isFolder = resources[0].type === 'folder'
-
-      if (resources.length === 1) {
-        if (isFolder) {
-          return this.$_deleteResources_isInTrashbin
-            ? this.$gettext(
-                'Are you sure you want to delete this folder? All it’s content will be permanently removed. This action cannot be undone.'
-              )
-            : this.$gettext('Are you sure you want to delete this folder?')
-        }
-        return this.$_deleteResources_isInTrashbin
-          ? this.$gettext(
-              'Are you sure you want to delete this file? All it’s content will be permanently removed. This action cannot be undone.'
-            )
-          : this.$gettext('Are you sure you want to delete this file?')
-      }
-
-      return this.$_deleteResources_isInTrashbin
-        ? this.$gettext(
-            'Are you sure you want to delete all selected resources? All their content will be permanently removed. This action cannot be undone.'
-          )
-        : this.$gettext('Are you sure you want to delete all selected resources?')
+      return $gettextInterpolate(
+        title,
+        {
+          name: currentResources[0].name
+        },
+        true
+      )
     }
-  },
 
-  methods: {
-    ...mapActions('Files', ['removeFilesFromTrashbin', 'deleteFiles']),
-    ...mapActions(['showMessage', 'toggleModalConfirmButton', 'hideModal', 'createModal']),
-    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
-    ...mapMutations(['SET_QUOTA']),
+    title = unref(isInTrashbin)
+      ? $ngettext(
+          'Permanently delete selected resource?',
+          'Permanently delete %{amount} selected resources?',
+          currentResources.length
+        )
+      : $ngettext(
+          'Delete selected resource?',
+          'Delete %{amount} selected resources?',
+          currentResources.length
+        )
 
-    $_deleteResources_trashbin_deleteOp(resource) {
-      const hasShareJail = this.capabilities?.spaces?.share_jail === true
-      const path = hasShareJail
-        ? buildWebDavSpacesTrashPath(this.space.id)
-        : buildWebDavFilesTrashPath(this.user.id)
+    return $gettextInterpolate(title, { amount: currentResources.length }, false)
+  })
 
-      return this.$client.fileTrash
-        .clearTrashBin(path, resource.id)
-        .then(() => {
-          this.removeFilesFromTrashbin([resource])
-          const translated = this.$gettext('"%{file}" was deleted successfully')
-          this.showMessage({
-            title: this.$gettextInterpolate(translated, { file: resource.name }, true)
-          })
-        })
-        .catch((error) => {
-          if (error.statusCode === 423) {
-            // TODO: we need a may retry option ....
-            const p = this.deleteResources_queue.add(() => {
-              return this.$_deleteResources_trashbin_deleteOp(resource)
-            })
-            this.deleteResources_deleteOps.push(p)
-            return
-          }
+  const dialogMessage = computed(() => {
+    const currentResources = unref(resources)
+    const isFolder = currentResources[0].type === 'folder'
 
-          console.error(error)
-          const translated = this.$gettext('Failed to delete "%{file}"')
-          this.showMessage({
-            title: this.$gettextInterpolate(translated, { file: resource.name }, true),
-            status: 'danger'
-          })
-        })
-    },
-
-    $_deleteResources_trashbin_delete() {
-      // TODO: use clear all if all files are selected
-      this.toggleModalConfirmButton()
-      for (const file of this.$_deleteResources_resources) {
-        const p = this.deleteResources_queue.add(() => {
-          return this.$_deleteResources_trashbin_deleteOp(file)
-        })
-        this.deleteResources_deleteOps.push(p)
+    if (currentResources.length === 1) {
+      if (isFolder) {
+        return unref(isInTrashbin)
+          ? $gettext(
+              'Are you sure you want to delete this folder? All it’s content will be permanently removed. This action cannot be undone.'
+            )
+          : $gettext('Are you sure you want to delete this folder?')
       }
+      return unref(isInTrashbin)
+        ? $gettext(
+            'Are you sure you want to delete this file? All it’s content will be permanently removed. This action cannot be undone.'
+          )
+        : $gettext('Are you sure you want to delete this file?')
+    }
 
-      Promise.all(this.deleteResources_deleteOps).then(() => {
-        this.hideModal()
-        this.toggleModalConfirmButton()
+    return unref(isInTrashbin)
+      ? $gettext(
+          'Are you sure you want to delete all selected resources? All their content will be permanently removed. This action cannot be undone.'
+        )
+      : $gettext('Are you sure you want to delete all selected resources?')
+  })
+
+  const trashbin_deleteOp = (space, resource) => {
+    const path = unref(hasShareJail)
+      ? buildWebDavSpacesTrashPath(space.id)
+      : buildWebDavFilesTrashPath(store.getters.user.id)
+
+    return owncloudSdk.fileTrash
+      .clearTrashBin(path, resource.id)
+      .then(() => {
+        store.dispatch('Files/removeFilesFromTrashbin', [resource])
+        const translated = $gettext('"%{file}" was deleted successfully')
+        store.dispatch('showMessage', {
+          title: $gettextInterpolate(translated, { file: resource.name }, true)
+        })
       })
-    },
+      .catch((error) => {
+        if (error.statusCode === 423) {
+          // TODO: we need a may retry option ....
+          const p = queue.add(() => {
+            return trashbin_deleteOp(space, resource)
+          })
+          deleteOps.push(p)
+          return
+        }
 
-    $_deleteResources_filesList_delete() {
-      this.deleteFiles({
-        ...this.$language,
-        space: this.space,
-        files: this.$_deleteResources_resources,
-        clientService: this.$clientService
-      }).then(async () => {
-        this.hideModal()
-        this.toggleModalConfirmButton()
+        console.error(error)
+        const translated = $gettext('Failed to delete "%{file}"')
+        store.dispatch('showMessage', {
+          title: $gettextInterpolate(translated, { file: resource.name }, true),
+          status: 'danger'
+        })
+      })
+  }
+
+  const trashbin_delete = (space: SpaceResource) => {
+    // TODO: use clear all if all files are selected
+    store.dispatch('toggleModalConfirmButton')
+    for (const file of unref(resources)) {
+      const p = queue.add(() => {
+        return trashbin_deleteOp(space, file)
+      })
+      deleteOps.push(p)
+    }
+
+    Promise.all(deleteOps).then(() => {
+      store.dispatch('hideModal')
+      store.dispatch('toggleModalConfirmButton')
+    })
+  }
+
+  const filesList_delete = (space: SpaceResource) => {
+    store
+      .dispatch('Files/deleteFiles', {
+        ...language,
+        space,
+        files: unref(resources),
+        clientService
+      })
+      .then(async () => {
+        store.dispatch('hideModal')
+        store.dispatch('toggleModalConfirmButton')
 
         // Load quota
         if (
-          isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-          !['public', 'share'].includes(this.space?.driveType)
+          isLocationSpacesActive(router, 'files-spaces-generic') &&
+          !['public', 'share'].includes(space?.driveType)
         ) {
-          if (this.capabilities?.spaces?.enabled) {
-            const accessToken = this.$store.getters['runtime/auth/accessToken']
+          if (unref(hasSpacesEnabled)) {
             const graphClient = clientService.graphAuthenticated(
-              this.configuration.server,
-              accessToken
+              store.getters.configuration.server,
+              unref(accessToken)
             )
-            const driveResponse = await graphClient.drives.getDrive(
-              this.$_deleteResources_resources[0].storageId
-            )
-            this.UPDATE_SPACE_FIELD({
+            const driveResponse = await graphClient.drives.getDrive(unref(resources)[0].storageId)
+            store.dispatch('runtime/spaces/UPDATE_SPACE_FIELD', {
               id: driveResponse.data.id,
               field: 'spaceQuota',
               value: driveResponse.data.quota
             })
           } else {
-            const user = await this.$client.users.getUser(this.user.id)
-            this.SET_QUOTA(user.quota)
+            const user = await owncloudSdk.users.getUser(store.getters.user.id)
+            store.commit('SET_QUOTA', user.quota)
           }
         }
 
         if (
-          this.resourcesToDelete.length &&
-          isSameResource(this.resourcesToDelete[0], this.currentFolder)
+          resourcesToDelete.length &&
+          isSameResource(resourcesToDelete[0], store.getters['Files/currentFolder'])
         ) {
-          return this.$router.push(
-            createFileRouteOptions(this.space, {
-              path: dirname(this.resourcesToDelete[0].path),
-              fileId: this.resourcesToDelete[0].parentFolderId
+          return router.push(
+            createFileRouteOptions(space, {
+              path: dirname(resourcesToDelete[0].path),
+              fileId: resourcesToDelete[0].parentFolderId
             })
           )
         }
       })
-    },
+  }
 
-    $_deleteResources_delete() {
-      this.toggleModalConfirmButton()
+  const deleteHelper = (space: SpaceResource) => {
+    store.dispatch('toggleModalConfirmButton')
 
-      this.$_deleteResources_isInTrashbin
-        ? this.$_deleteResources_trashbin_delete()
-        : this.$_deleteResources_filesList_delete()
-    },
+    unref(isInTrashbin) ? trashbin_delete(space) : filesList_delete(space)
+  }
 
-    $_deleteResources_displayDialog(resources) {
-      this.resourcesToDelete = [...resources]
+  const displayDialog = (resources) => {
+    resourcesToDelete = [...resources]
 
-      const modal = {
-        variation: 'danger',
-        icon: 'alarm-warning',
-        title: this.$_deleteResources_dialogTitle,
-        message: this.$_deleteResources_dialogMessage,
-        cancelText: this.$gettext('Cancel'),
-        confirmText: this.$gettext('Delete'),
-        onCancel: this.hideModal,
-        onConfirm: this.$_deleteResources_delete
-      }
-
-      this.createModal(modal)
+    const modal = {
+      variation: 'danger',
+      icon: 'alarm-warning',
+      title: unref(dialogTitle),
+      message: unref(dialogMessage),
+      cancelText: $gettext('Cancel'),
+      confirmText: $gettext('Delete'),
+      onCancel: () => {
+        store.dispatch('hideModal')
+      },
+      onConfirm: deleteHelper
     }
+
+    store.dispatch('createModal', modal)
+  }
+
+  return {
+    displayDialog
   }
 }

@@ -54,17 +54,18 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Action } from 'web-pkg/src/composables/actions'
 
 export default defineComponent({
   name: 'ActionMenuItem',
   props: {
     action: {
-      type: Object,
+      type: Object as PropType<Action>,
       required: true
     },
     items: {
-      type: Array,
+      type: Array as PropType<Resource[]>,
       required: true
     },
     space: {
@@ -100,7 +101,9 @@ export default defineComponent({
     componentProps() {
       const props = {
         appearance: this.appearance,
-        ...(this.action.isDisabled && { disabled: this.action.isDisabled() }),
+        ...(this.action.isDisabled && {
+          disabled: this.action.isDisabled({ space: this.space, resources: this.items })
+        }),
         ...(this.action.variation && { variation: this.action.variation })
       }
 
