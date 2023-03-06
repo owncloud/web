@@ -89,6 +89,7 @@ Summary
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 * Enhancement - Rework notifications: [#8450](https://github.com/owncloud/web/pull/8450)
 * Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
+* Enhancement - Update CERN links: [#8473](https://github.com/owncloud/web/pull/8473)
 * Enhancement - Respect max quota: [#8489](https://github.com/owncloud/web/pull/8489)
 * Enhancement - User role filter: [#8492](https://github.com/owncloud/web/pull/8492)
 * Enhancement - Beautify file version list: [#8503](https://github.com/owncloud/web/issues/8503)
@@ -843,6 +844,12 @@ Details
    We have added the configurable functionality to autosave content changes in text editor.
 
    https://github.com/owncloud/web/pull/8455
+
+* Enhancement - Update CERN links: [#8473](https://github.com/owncloud/web/pull/8473)
+
+   We've updated the links displayed in the sidebar for CERN's deployment.
+
+   https://github.com/owncloud/web/pull/8473
 
 * Enhancement - Respect max quota: [#8489](https://github.com/owncloud/web/pull/8489)
 
