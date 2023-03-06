@@ -18,7 +18,7 @@ const spaceMocks = [
     id: '1',
     name: 'admin',
     disabled: false,
-    driveType: 'personal',
+    driveType: 'personal'
   },
   {
     id: '2',
