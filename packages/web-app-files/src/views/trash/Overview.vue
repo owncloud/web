@@ -118,19 +118,15 @@ export default defineComponent({
 
     const orderBy = (list, prop, desc) => {
       return [...list].sort((s1, s2) => {
-        let a, b
-
-        if (prop === 'name') {
-          if (s1.driveType === 'personal') {
-            return -1
-          }
-          if (s2.driveType === 'personal') {
-            return -1
-          }
+        if (s1.driveType === 'personal') {
+          return -1
+        }
+        if (s2.driveType === 'personal') {
+          return +1
         }
 
-        a = s1[prop]
-        b = s2[prop]
+        const a = s1[prop]
+        const b = s2[prop]
 
         return desc ? b.localeCompare(a) : a.localeCompare(b)
       })
