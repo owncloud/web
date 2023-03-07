@@ -206,7 +206,11 @@ export const copyQuickLink = async (args: copyLinkArgs): Promise<string> => {
   if (config.backendUrl.startsWith('https')) {
     url = await page.evaluate(() => navigator.clipboard.readText())
   } else {
-    url = await page.locator(util.format(publicLinkInputField, linkName)).textContent()
+    const quickLinkUrlLocator = util.format(publicLinkInputField, linkName)
+    if (!(await page.locator(quickLinkUrlLocator).isVisible())) {
+      await openSharingPanel(page, resource)
+    }
+    url = await page.locator(quickLinkUrlLocator).textContent()
   }
 
   await waitForPopupNotPresent(page)
