@@ -7,22 +7,24 @@
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
+      :show-batch-actions="!!selectedGroups.length"
+      :batch-actions="batchActions"
+      :batch-action-items="selectedGroups"
     >
       <template #topbarActions>
-        <div class="admin-settings-app-bar-actions oc-mt-xs">
+        <div class="admin-settings-app-bar-actions">
           <div v-if="selectedGroups.length" class="oc-flex oc-flex-middle">
             <span v-text="selectedGroupsText" />
             <oc-button
-              id="files-clear-selection"
+              id="groups-clear-selection"
               v-oc-tooltip="$gettext('Clear selection')"
               :aria-label="$gettext('Clear selection')"
-              class="oc-ml-m"
+              class="oc-ml-m oc-py-s"
               appearance="outline"
               @click="unselectAllGroups"
             >
               <oc-icon name="close" />
             </oc-button>
-            <batch-actions class="oc-ml-s" :items="selectedGroups" :actions="batchActions" />
           </div>
           <div v-else>
             <oc-button variation="primary" appearance="filled" @click="toggleCreateGroupModal">
@@ -72,7 +74,6 @@
 import GroupsList from '../components/Groups/GroupsList.vue'
 import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import ContextActions from '../components/Groups/ContextActions.vue'
-import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import {
   computed,
@@ -99,7 +100,6 @@ export default defineComponent({
     GroupsList,
     NoContentMessage,
     CreateGroupModal,
-    BatchActions,
     ContextActions
   },
   mixins: [Delete],

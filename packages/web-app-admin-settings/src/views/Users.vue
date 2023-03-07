@@ -7,22 +7,24 @@
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
       :side-bar-loading="sideBarLoading"
+      :show-batch-actions="!!selectedUsers.length"
+      :batch-actions="batchActions"
+      :batch-action-items="selectedUsers"
     >
       <template #topbarActions>
-        <div class="admin-settings-app-bar-actions oc-mt-xs">
+        <div class="admin-settings-app-bar-actions">
           <div v-if="selectedUsers.length" class="oc-flex oc-flex-middle">
             <span v-text="selectedUsersText" />
             <oc-button
-              id="files-clear-selection"
+              id="users-clear-selection"
               v-oc-tooltip="$gettext('Clear selection')"
               :aria-label="$gettext('Clear selection')"
-              class="oc-ml-m"
+              class="oc-ml-m oc-py-s"
               appearance="outline"
               @click="unselectAllUsers"
             >
               <oc-icon name="close" />
             </oc-button>
-            <batch-actions class="oc-ml-s" :items="selectedUsers" :actions="batchActions" />
           </div>
           <div v-else>
             <oc-button variation="primary" appearance="filled" @click="toggleCreateUserModal">
@@ -147,7 +149,6 @@ import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
-import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import Delete from '../mixins/users/delete'
 import {
@@ -193,7 +194,6 @@ export default defineComponent({
     AppTemplate,
     UsersList,
     CreateUserModal,
-    BatchActions,
     ContextActions,
     ItemFilter,
     QuotaModal,
