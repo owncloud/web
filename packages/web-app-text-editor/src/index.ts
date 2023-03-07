@@ -81,7 +81,7 @@ const fileExtensions = () => {
         }
       }
     }
-    extensionItem.canBeDefault = true
+    // extensionItem.canBeDefault = true
     acc.push(extensionItem)
     return acc
   }, [])
