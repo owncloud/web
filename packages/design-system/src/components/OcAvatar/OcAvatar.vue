@@ -147,6 +147,10 @@ export default defineComponent({
     height: auto;
     border-radius: 50%;
   }
+
+  .avatarInitials {
+    color: white !important;
+  }
 }
 </style>
 

@@ -563,6 +563,7 @@ export default defineComponent({
   }
 
   &-hover tr:hover td:not(:last-child) span:not(.avatarInitials):not(button span) {
+    // Not excluding .avatarInitials -> ?
     color: var(--oc-color-swatch-brand-hover) !important;
   }
 
