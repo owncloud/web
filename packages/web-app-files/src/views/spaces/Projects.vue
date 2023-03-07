@@ -129,14 +129,12 @@ export default defineComponent({
 
     const { scrollToResourceFromRoute } = useScrollTo()
 
-    const loadResourcesTask = useTask(function* (signal, reloadProjectSpaces: boolean) {
+    const loadResourcesTask = useTask(function* () {
       store.commit('Files/CLEAR_FILES_SEARCHED')
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
-      if (reloadProjectSpaces) {
-        yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
-          graphClient: unref(graphClient)
-        })
-      }
+      yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
+        graphClient: unref(graphClient)
+      })
       store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
     })
 
@@ -148,7 +146,7 @@ export default defineComponent({
     const viewModes = computed(() => [ViewModeConstants.tilesView])
 
     onMounted(async () => {
-      await loadResourcesTask.perform(false)
+      await loadResourcesTask.perform()
       scrollToResourceFromRoute(unref(spaces) as Resource[])
     })
 
@@ -180,7 +178,7 @@ export default defineComponent({
       return [
         {
           text: this.$gettext('Spaces'),
-          onClick: () => this.loadResourcesTask.perform(true)
+          onClick: () => this.loadResourcesTask.perform()
         }
       ]
     },

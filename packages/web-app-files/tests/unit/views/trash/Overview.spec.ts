@@ -45,9 +45,8 @@ describe('TrashOverview', () => {
     })
   })
   describe('view states', () => {
-    it('shows the loading spinner during loading', async () => {
+    it('shows the loading spinner during loading', () => {
       const { wrapper } = getWrapper()
-      await nextTick()
       expect(wrapper.find('oc-spinner-stub').exists()).toBeTruthy()
     })
     it('should render spaces list', async () => {
@@ -104,9 +103,6 @@ function getWrapper({ spaces = spaceMocks } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
   storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
-  storeOptions.modules.runtime.modules.spaces.actions.reloadProjectSpaces.mockReturnValue(
-    new Promise(() => undefined)
-  )
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'trash-overview' })

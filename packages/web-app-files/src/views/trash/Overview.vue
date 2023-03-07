@@ -92,14 +92,12 @@ export default defineComponent({
       )
     )
 
-    const loadResourcesTask = useTask(function* (signal, reloadProjectSpaces: boolean) {
+    const loadResourcesTask = useTask(function* () {
       store.commit('Files/CLEAR_FILES_SEARCHED')
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
-      if (reloadProjectSpaces) {
-        yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
-          graphClient: unref(graphClient)
-        })
-      }
+      yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
+        graphClient: unref(graphClient)
+      })
       store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
     })
 
@@ -119,7 +117,7 @@ export default defineComponent({
     })
 
     const breadcrumbs = computed(() => [
-      { text: $gettext('Deleted files'), onClick: () => loadResourcesTask.perform(true) }
+      { text: $gettext('Deleted files'), onClick: () => loadResourcesTask.perform() }
     ])
 
     const sort = (list: SpaceResource[], propName: string, desc: boolean) => {
@@ -188,7 +186,7 @@ export default defineComponent({
         return router.push(getTrashLink(unref(spaces).pop()))
       }
 
-      await loadResourcesTask.perform(false)
+      await loadResourcesTask.perform()
       await nextTick()
       markInstance.value = new Mark(unref(tableRef)?.$el)
     })
