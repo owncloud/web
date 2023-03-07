@@ -82,7 +82,7 @@ import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import {isProjectSpaceResource, Resource, SpaceResource} from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
@@ -92,6 +92,7 @@ import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { useSelectedResources, useSort, ViewModeConstants } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
+import { onMounted } from '@vue/runtime-dom'
 
 export default defineComponent({
   components: {
@@ -127,21 +128,26 @@ export default defineComponent({
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
 
+    const { scrollToResourceFromRoute } = useScrollTo()
+
     const loadResourcesTask = useTask(function* () {
       store.commit('Files/CLEAR_FILES_SEARCHED')
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
       yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
         graphClient: unref(graphClient)
       })
-      store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
     })
 
     const hasCreatePermission = computed(() => can('create-all', 'Space'))
     const viewModes = computed(() => [ViewModeConstants.tilesView])
 
+    onMounted(() => {
+      store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
+      scrollToResourceFromRoute(unref(spaces) as Resource[])
+    })
+
     return {
       ...useSideBar(),
-      ...useScrollTo(),
       spaces,
       graphClient,
       loadResourcesTask,
@@ -220,9 +226,6 @@ export default defineComponent({
       deep: true,
       immediate: true
     }
-  },
-  async created() {
-    this.scrollToResourceFromRoute(this.spaces)
   },
   methods: {
     ...mapMutations('Files', ['SET_FILE_SELECTION']),
