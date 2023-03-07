@@ -4,6 +4,8 @@ import Collaborator, { ICollaborator } from './collaborator'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 import { copyLinkArgs, waitForPopupNotPresent } from '../link/actions'
+import { config } from '../../../../config.js'
+import { linkStore } from '../../../store'
 
 const filesSharedWithMeAccepted =
   '#files-shared-with-me-accepted-section [data-test-resource-name="%s"]'
@@ -19,6 +21,11 @@ const actionsTriggerButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "oc-files-actions-%s-trigger")]'
 const filesSharedWithMeDeclined =
   '#files-shared-with-me-declined-section [data-test-resource-name="%s"]'
+
+const publicLinkInputField =
+  '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]' +
+  '/following-sibling::div//p[contains(@class,"oc-files-file-link-url")]'
+
 export interface ShareArgs {
   page: Page
   resource: string
@@ -187,10 +194,29 @@ export const hasPermissionToShare = async (
   return !(await page.isVisible(noPermissionToShareLabel))
 }
 
-export const copyQuickLink = async (args: copyLinkArgs): Promise<void> => {
+export const copyQuickLink = async (args: copyLinkArgs): Promise<string> => {
   const { page, resource, via } = args
+  let url = ''
+  const linkName = 'Quicklink'
+
   if (via === 'CONTEXT_MENU') {
     await clickActionInContextMenu({ page, resource }, 'create-quicklink')
-    await waitForPopupNotPresent(page)
   }
+
+  if (config.backendUrl.startsWith('https')) {
+    url = await page.evaluate(() => navigator.clipboard.readText())
+  } else {
+    const quickLinkUrlLocator = util.format(publicLinkInputField, linkName)
+    if (!(await page.locator(quickLinkUrlLocator).isVisible())) {
+      await openSharingPanel(page, resource)
+    }
+    url = await page.locator(quickLinkUrlLocator).textContent()
+  }
+
+  await waitForPopupNotPresent(page)
+
+  if (url && !linkStore.has(linkName)) {
+    linkStore.set(linkName, { name: linkName, url })
+  }
+  return url
 }
