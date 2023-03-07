@@ -228,7 +228,11 @@ export default defineComponent({
 
   async created() {
     await this.loadResourcesTask.perform()
-    this.scrollToResourceFromRoute(this.acceptedItems)
+    this.scrollToResourceFromRoute([
+      ...this.acceptedItems,
+      ...this.pendingItems,
+      ...this.declinedItems
+    ])
   }
 })
 </script>

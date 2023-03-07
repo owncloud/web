@@ -216,21 +216,6 @@ config = {
             "screenShots": True,
             "retry": False,
         },
-        "webUINotification": {
-            "type": NOTIFICATIONS,
-            "suites": {
-                "oC10Notification": [
-                    "webUINotifications",
-                    "webUISharingNotifications",
-                    "webUISharingNotificationsToRoot",
-                ],
-            },
-            "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-            },
-            "screenShots": True,
-            "notificationsAppNeeded": True,
-        },
         "webUIFederation": {
             "type": FEDERATED,
             "suites": {
@@ -244,22 +229,6 @@ config = {
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
             "federatedServerVersion": OC10_VERSION,
-        },
-        "webUI-XGA-Notifications": {
-            "type": NOTIFICATIONS,
-            "suites": {
-                "oC10XGAPortraitNotifications": [
-                    "webUINotifications",
-                    "webUISharingNotifications",
-                    "webUISharingNotificationsToRoot",
-                ],
-            },
-            "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md" % dir["web"],
-                "SCREEN_RESOLUTION": "768x1024",
-            },
-            "notificationsAppNeeded": True,
-            "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
         "webUI-XGA": {
             "type": FULL,
@@ -336,22 +305,6 @@ config = {
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
-        },
-        "webUI-Notifications-iPhone": {
-            "type": NOTIFICATIONS,
-            "suites": {
-                "oC10iPhoneNotifications": [
-                    "webUINotifications",
-                    "webUISharingNotifications",
-                    "webUISharingNotificationsToRoot",
-                ],
-            },
-            "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md" % dir["web"],
-                "SCREEN_RESOLUTION": "375x812",
-            },
-            "notificationsAppNeeded": True,
-            "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
         "webUI-iPhone": {
             "type": FULL,
@@ -436,7 +389,6 @@ config = {
             ],
             "suites": {
                 "oCISBasic": [
-                    "webUINotifications",
                     "webUIPrivateLinks",
                     "webUIPreview",
                     "webUIAccount",
@@ -446,7 +398,6 @@ config = {
                 "oCISSharingBasic": [
                     "webUISharingAcceptShares",
                     "webUIRestrictSharing",
-                    "webUISharingNotifications",
                 ],
                 "webUIFavorites": "oCISFavorites",
                 "oCISFiles1": [
@@ -535,25 +486,6 @@ config = {
             },
             "runningOnOCIS": True,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
-            "screenShots": True,
-        },
-        "webUI-notifications-oc10-integration": {
-            "type": NOTIFICATIONS,
-            "suites": {
-                "oC10IntegrationNotifications": [
-                    "webUINotifications",
-                    "webUISharingNotifications",
-                    "webUISharingNotificationsToRoot",
-                ],
-            },
-            "extraEnvironment": {
-                "WEB_UI_CONFIG": "%s" % dir["oc10IntegrationAppOauthConfig"],
-                "SERVER_HOST": "http://owncloud/index.php/apps/web/index.html",
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md" % dir["web"],
-            },
-            "filterTags": "not @skip and not @skipOnOC10 and not @notToImplementOnOC10 and not @openIdLogin and @smokeTest",
-            "oc10IntegrationAppIncluded": True,
-            "notificationsAppNeeded": True,
             "screenShots": True,
         },
         "webUI-oc10-integration": {
@@ -663,15 +595,6 @@ rootSharingTestSuites = [
     "webUISharingPermissionToRoot",
 ]
 
-notificationsTestSuites = [
-    "webUINotifications",
-    "webUISharingNotifications",
-]
-
-notificationsRootTestSuites = [
-    "webUISharingNotificationsToRoot",
-]
-
 basicTestSuites = [
     "webUIAccount",
     "webUICreateFilesFolders",
@@ -776,15 +699,11 @@ def checkTestSuites():
             expected += basicTestSuites
             if ("runningOnOCIS" not in test or test["runningOnOCIS"] != True):
                 expected += rootSharingTestSuites
-        elif (test["type"] == NOTIFICATIONS):
-            expected += notificationsTestSuites
-            if ("runningOnOCIS" not in test or test["runningOnOCIS"] != True):
-                expected += notificationsRootTestSuites
         elif (test["type"] == FEDERATED):
             expected += federatedTestSuites + federatedRootTestSuites
 
         if ("runningOnOCIS" in test and test["runningOnOCIS"] == True):
-            expected += notificationsTestSuites + ocisSpecificTestSuites
+            expected += ocisSpecificTestSuites
 
         if (sorted(suites) != sorted(expected)):
             print("Error: Suites dont match " + testGroupName)

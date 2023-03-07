@@ -1,10 +1,5 @@
 const state = {
   messages: [],
-  notifications: {
-    loading: true,
-    failed: false,
-    data: []
-  },
   quickActions: {}
 }
 
@@ -14,50 +9,6 @@ const actions = {
   },
   deleteMessage(context, mId) {
     context.commit('REMOVE_MESSAGE', mId)
-  },
-  fetchNotifications(context, client) {
-    context.commit('LOADING_NOTIFICATIONS', true)
-
-    return client.requests
-      .ocs({
-        service: 'apps/notifications',
-        action: 'api/v1/notifications'
-      })
-      .then((response) => {
-        if (response.headers.get('Content-Length') === '0') {
-          return
-        }
-        response.json().then((json) => {
-          if (response.ok) {
-            context.commit('UPDATE_NOTIFICATIONS', json.ocs.data)
-          } else {
-            context.commit('ERROR_NOTIFICATIONS', json.ocs.meta.message)
-          }
-          context.commit('LOADING_NOTIFICATIONS', false)
-        })
-      })
-      .catch((error) => {
-        context.commit('ERROR_NOTIFICATIONS', error)
-        context.commit('LOADING_NOTIFICATIONS', false)
-      })
-  },
-  deleteNotification(context, { client, notification }) {
-    client.requests
-      .ocs({
-        service: 'apps/notifications',
-        action: 'api/v1/notifications/' + notification,
-        method: 'DELETE'
-      })
-      .then((response) => {
-        if (response.ok) {
-          context.commit('DELETE_NOTIFICATION', notification)
-        } else {
-          context.commit('ERROR_NOTIFICATIONS', response.ocs.meta.status)
-        }
-      })
-      .catch((error) => {
-        context.commit('ERROR_NOTIFICATIONS', error)
-      })
   }
 }
 
@@ -73,22 +24,6 @@ const mutations = {
   REMOVE_MESSAGE(state, item) {
     state.messages.splice(state.messages.indexOf(item), 1)
   },
-  LOADING_NOTIFICATIONS(state, loading) {
-    state.notifications.loading = loading
-  },
-  ERROR_NOTIFICATIONS(state, failed) {
-    state.notifications.failed = failed
-  },
-  UPDATE_NOTIFICATIONS(state, notifications) {
-    state.notifications.data = notifications
-  },
-  DELETE_NOTIFICATION(state, notification) {
-    const data = state.notifications.data.filter((n) => {
-      return n.notification_id !== notification
-    })
-    state.notifications.data = data
-  },
-
   ADD_QUICK_ACTIONS(state, quickActions) {
     state.quickActions = Object.assign(state.quickActions, quickActions)
   }
@@ -97,11 +32,6 @@ const mutations = {
 const getters = {
   activeMessages: (state) => {
     return state.messages
-  },
-  activeNotifications: (state) => {
-    return state.notifications.data.length && !state.notifications.failed
-      ? state.notifications.data
-      : false
   }
 }
 

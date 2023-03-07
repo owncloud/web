@@ -65,12 +65,6 @@ module.exports = {
       await this.api.page.FilesPageElement.filesList().waitForLoadingFinished()
       return this
     },
-    markNotificationAsRead: function () {
-      return this.waitForElementVisible('@notificationBell')
-        .click('@notificationBell')
-        .waitForElementVisible('@markNotificationAsReadLink')
-        .click('@markNotificationAsReadLink')
-    },
     closeMessage: function () {
       return this.waitForElementPresent('@messageCloseIcon')
         .click('@messageCloseIcon')
@@ -117,20 +111,6 @@ module.exports = {
           .waitForAjaxCallsToStartAndFinish()
           .useCss()
       }
-    },
-    /**
-     * notification bell is present only when the user have got some notifications to show
-     * after clicking the notification bell then only user can see notifications received
-     * So,there would be no notifications when the notification bell on the top-bar of webUI is not visible
-     *
-     * @return boolean
-     */
-    isNotificationBellVisible: async function () {
-      let isVisible = false
-      await this.api.element('@notificationBell', (result) => {
-        isVisible = result.value === 0
-      })
-      return isVisible
     },
     /**
      * Perform decline action on the offered shares in the notifications
@@ -196,11 +176,6 @@ module.exports = {
       })
       return displayedmessage
     },
-    getLinkSelectorFromNotification: function (resource, sharer) {
-      const notifyString = `"${defaultUsers[sharer].displayname}" shared "${resource}" with you`
-      const linkSelector = util.format(this.elements.filelink.selector, notifyString)
-      return linkSelector
-    },
     followLink: function (linkSelector) {
       return this.useXpath().waitForElementVisible(linkSelector).click(linkSelector).useCss()
     },
@@ -264,10 +239,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     notificationBell: {
-      selector: '#oc-notification-bell'
-    },
-    markNotificationAsReadLink: {
-      selector: '#resolve-notification-button'
+      selector: '#oc-notifications-bell'
     },
     ocDialogPromptAlert: {
       selector: '.oc-modal .oc-text-input-message'
@@ -310,26 +282,21 @@ module.exports = {
       selector: '#files-view'
     },
     notificationElement: {
-      selector: '//div[@id="oc-notification"]//h4',
+      selector: '//div[@id="oc-notifications"]//div[contains(@class, "oc-notifications-message")]',
       locateStrategy: 'xpath'
     },
     declineSharesInNotifications: {
       selector:
-        '//div[@id="oc-notification"]//h4[contains(text(),\'%s\')]/../div/button[.="Decline"]',
+        '//div[@id="oc-notifications"]//span[contains(text(),\'%s\')]/../../div/button[contains(@class, "oc-button-passive")]',
       locateStrategy: 'xpath'
     },
     acceptSharesInNotifications: {
       selector:
-        '//div[@id="oc-notification"]//h4[contains(text(),\'%s\')]/../div/button[.="Accept"]',
+        '//div[@id="oc-notifications"]//span[contains(text(),\'%s\')]/../../div/button[contains(@class, "oc-button-primary")]',
       locateStrategy: 'xpath'
     },
     appNavigation: {
       selector: '#web-nav-sidebar'
-    },
-    filelink: {
-      selector:
-        '//div[@id="oc-notification-drop"]//h4[contains(text(),\'%s\')]/following-sibling::p/a',
-      locateStrategy: 'xpath'
     }
   }
 }

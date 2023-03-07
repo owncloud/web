@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`NotificationBell should match snapshot 1`] = `
-<button aria-label="Notifications" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw" id="oc-notification-bell" type="button">
+<button aria-label="Notifications" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw" id="oc-notifications-bell" type="button">
   <!-- @slot Content of the button -->
   <oc-icon-stub class="oc-cursor-pointer oc-flex oc-flex-middle" fill-type="line" name="notification-3"></oc-icon-stub>
   <!--v-if-->

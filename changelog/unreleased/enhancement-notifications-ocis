@@ -1,0 +1,7 @@
+Enhancement: Make notifications work with oCIS
+
+Notifications now work when running oCIS as backend.
+
+https://github.com/owncloud/web/pull/8518
+https://github.com/owncloud/web/issues/8519
+https://github.com/owncloud/web/issues/8520

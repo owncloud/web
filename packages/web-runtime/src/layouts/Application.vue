@@ -4,7 +4,7 @@
       <div v-if="isIE11" class="oc-background-muted oc-text-center oc-py-m">
         <p class="oc-m-rm" v-text="ieDeprecationWarning" />
       </div>
-      <top-bar :applications-list="applicationsList" :active-notifications="activeNotifications" />
+      <top-bar :applications-list="applicationsList" />
     </div>
     <div id="web-content-main" class="oc-px-s oc-pb-s">
       <div class="app-container oc-flex">
@@ -98,7 +98,6 @@ export default defineComponent({
     ...mapGetters([
       'apps',
       'activeMessages',
-      'activeNotifications',
       'capabilities',
       'configuration',
       'getExtensionsWithNavItems',
