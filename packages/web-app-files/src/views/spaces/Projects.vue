@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, unref } from 'vue'
+import { onMounted, computed, defineComponent, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { mapMutations, mapGetters } from 'vuex'
 
@@ -82,7 +82,7 @@ import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { configurationManager } from 'web-pkg/src/configuration'
-import {isProjectSpaceResource, Resource, SpaceResource} from 'web-client/src/helpers'
+import { isProjectSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
@@ -92,7 +92,6 @@ import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { useSelectedResources, useSort, ViewModeConstants } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
-import { onMounted } from '@vue/runtime-dom'
 
 export default defineComponent({
   components: {
