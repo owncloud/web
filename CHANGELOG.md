@@ -94,6 +94,7 @@ Summary
 * Enhancement - User role filter: [#8492](https://github.com/owncloud/web/pull/8492)
 * Enhancement - Beautify file version list: [#8503](https://github.com/owncloud/web/issues/8503)
 * Enhancement - Introduce trashbin overview: [#8515](https://github.com/owncloud/web/pull/8515)
+* Enhancement - Make notifications work with oCIS: [#8518](https://github.com/owncloud/web/pull/8518)
 * Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
 
 Details
@@ -885,6 +886,14 @@ Details
 
    https://github.com/owncloud/web/issues/8517
    https://github.com/owncloud/web/pull/8515
+
+* Enhancement - Make notifications work with oCIS: [#8518](https://github.com/owncloud/web/pull/8518)
+
+   Notifications now work when running oCIS as backend.
+
+   https://github.com/owncloud/web/issues/8519
+   https://github.com/owncloud/web/issues/8520
+   https://github.com/owncloud/web/pull/8518
 
 * Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
 
