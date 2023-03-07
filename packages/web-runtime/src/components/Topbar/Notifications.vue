@@ -158,7 +158,10 @@ export default {
           (s) => s.fileId === messageRichParameters?.space?.id.split('!')[0] && !s.disabled
         )
         if (space) {
-          return createFileRouteOptions(space, { path: '', fileId: space.fileId })
+          return {
+            name: 'files-spaces-generic',
+            ...createFileRouteOptions(space, { path: '', fileId: space.fileId })
+          }
         }
       }
       return null
