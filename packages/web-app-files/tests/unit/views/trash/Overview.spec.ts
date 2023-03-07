@@ -47,18 +47,19 @@ describe('TrashOverview', () => {
   describe('view states', () => {
     it('shows the loading spinner during loading', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.loadResourcesTask.perform()
       await nextTick()
       expect(wrapper.find('oc-spinner-stub').exists()).toBeTruthy()
     })
     it('should render spaces list', async () => {
       const { wrapper } = getWrapper()
+      await wrapper.vm.loadResourcesTask.last
       expect(wrapper.html()).toMatchSnapshot()
     })
   })
   describe('sorting', () => {
     it('sorts by property name', async () => {
       const { wrapper } = getWrapper()
+      await wrapper.vm.loadResourcesTask.last
       let sortedSpaces = []
 
       wrapper.vm.sortBy = 'name'

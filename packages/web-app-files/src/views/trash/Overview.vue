@@ -9,7 +9,7 @@
         :has-file-extensions="false"
         :has-pagination="false"
       />
-      <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+      <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <oc-text-input
           id="spaces-filter"
@@ -92,13 +92,19 @@ export default defineComponent({
       )
     )
 
-    const loadResourcesTask = useTask(function* () {
+    const loadResourcesTask = useTask(function* (signal, reloadProjectSpaces: boolean) {
       store.commit('Files/CLEAR_FILES_SEARCHED')
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
-      yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
-        graphClient: unref(graphClient)
-      })
+      if (reloadProjectSpaces) {
+        yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
+          graphClient: unref(graphClient)
+        })
+      }
       store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
+    })
+
+    const areResourcesLoading = computed(() => {
+      return loadResourcesTask.isRunning || !loadResourcesTask.last
     })
 
     const footerTextTotal = computed(() => {
@@ -113,7 +119,7 @@ export default defineComponent({
     })
 
     const breadcrumbs = computed(() => [
-      { text: $gettext('Deleted files'), onClick: () => loadResourcesTask.perform() }
+      { text: $gettext('Deleted files'), onClick: () => loadResourcesTask.perform(true) }
     ])
 
     const sort = (list: SpaceResource[], propName: string, desc: boolean) => {
@@ -177,14 +183,14 @@ export default defineComponent({
       })
     }
 
-    onMounted(() => {
+    onMounted(async () => {
       if (unref(spaces).length === 1) {
         return router.push(getTrashLink(unref(spaces).pop()))
       }
 
-      nextTick(() => {
-        markInstance.value = new Mark(unref(tableRef)?.$el)
-      })
+      await loadResourcesTask.perform(false)
+      await nextTick()
+      markInstance.value = new Mark(unref(tableRef)?.$el)
     })
 
     watch(filterTerm, () => {
@@ -216,6 +222,7 @@ export default defineComponent({
       getSpaceName,
       getTrashLink,
       loadResourcesTask,
+      areResourcesLoading,
       isPersonalSpaceResource
     }
   }

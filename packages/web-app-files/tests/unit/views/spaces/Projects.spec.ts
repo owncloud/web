@@ -47,7 +47,6 @@ describe('Projects view', () => {
   describe('different files view states', () => {
     it('shows the loading spinner during loading', async () => {
       const { wrapper } = getMountedWrapper()
-      wrapper.vm.loadResourcesTask.perform()
       await nextTick()
       expect(wrapper.find('oc-spinner-stub').exists()).toBeTruthy()
     })

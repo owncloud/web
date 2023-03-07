@@ -16,7 +16,7 @@
           <create-space v-if="hasCreatePermission" />
         </template>
       </app-bar>
-      <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+      <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
           v-if="!spaces.length"
@@ -129,19 +129,26 @@ export default defineComponent({
 
     const { scrollToResourceFromRoute } = useScrollTo()
 
-    const loadResourcesTask = useTask(function* () {
+    const loadResourcesTask = useTask(function* (signal, reloadProjectSpaces: boolean) {
       store.commit('Files/CLEAR_FILES_SEARCHED')
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
-      yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
-        graphClient: unref(graphClient)
-      })
+      if (reloadProjectSpaces) {
+        yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
+          graphClient: unref(graphClient)
+        })
+      }
+      store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
+    })
+
+    const areResourcesLoading = computed(() => {
+      return loadResourcesTask.isRunning || !loadResourcesTask.last
     })
 
     const hasCreatePermission = computed(() => can('create-all', 'Space'))
     const viewModes = computed(() => [ViewModeConstants.tilesView])
 
-    onMounted(() => {
-      store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
+    onMounted(async () => {
+      await loadResourcesTask.perform(false)
       scrollToResourceFromRoute(unref(spaces) as Resource[])
     })
 
@@ -150,6 +157,7 @@ export default defineComponent({
       spaces,
       graphClient,
       loadResourcesTask,
+      areResourcesLoading,
       accessToken,
       selectedResourcesIds,
       handleSort,
@@ -172,7 +180,7 @@ export default defineComponent({
       return [
         {
           text: this.$gettext('Spaces'),
-          onClick: () => this.loadResourcesTask.perform()
+          onClick: () => this.loadResourcesTask.perform(true)
         }
       ]
     },
