@@ -203,10 +203,6 @@ export default defineComponent({
     &__search::placeholder,
     &__dropdown-toggle,
     &__dropdown-menu {
-      background-color: var(--oc-color-input-bg);
-      border: 1px solid var(--oc-color-input-border);
-      color: var(--oc-color-input-text-default);
-
       -webkit-appearance: none;
       background-clip: padding-box, border-box;
       background-color: var(--oc-color-background-highlight);
