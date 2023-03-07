@@ -12,9 +12,9 @@ import {
   useStore
 } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'
-import { ActionOptions } from 'web-pkg/src/composables/actions'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 
-export const useEmptyTrashBin = ({ store }: { store?: Store<any> }) => {
+export const useEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $gettext, $pgettext } = useGettext()
@@ -68,7 +68,7 @@ export const useEmptyTrashBin = ({ store }: { store?: Store<any> }) => {
     store.dispatch('createModal', modal)
   }
 
-  const actions = computed(() => [
+  const actions = computed((): Action[] => [
     {
       name: 'empty-trash-bin',
       icon: 'delete-bin-5',

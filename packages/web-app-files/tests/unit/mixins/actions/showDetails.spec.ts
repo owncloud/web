@@ -8,17 +8,20 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
+import { Resource } from 'web-client/src'
+import { useStore } from 'web-pkg/src'
 
 describe('showDetails', () => {
   describe('method "$_showDetails_trigger"', () => {
     it('should trigger the open sidebar event', () => {
       getComposableWrapper(
         () => {
-          const { actions } = useShowDetails()
+          const store = useStore()
+          const { actions } = useShowDetails({ store })
 
           const busStub = jest.spyOn(eventBus, 'publish')
-          const resources = [{ id: 1, path: '/folder' }]
-          unref(actions)[0].handler({ resources })
+          const resources = [{ id: 1, path: '/folder' }] as Resource[]
+          unref(actions)[0].handler({ space: null, resources })
           expect(busStub).toHaveBeenCalledWith(SideBarEventTopics.open)
         },
         { mocks: defaultComponentMocks(), store: createStore(defaultStoreMockOptions) }

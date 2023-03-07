@@ -1,56 +1,65 @@
 import { mock } from 'jest-mock-extended'
-import acceptShare from 'web-app-files/src/mixins/actions/acceptShare'
+import { unref } from 'vue'
+import { useAcceptShare } from 'web-app-files/src/mixins/actions/acceptShare'
+import { Resource } from 'web-client/src'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import { defaultComponentMocks, mount, RouteLocation } from 'web-test-helpers'
+import { useStore } from 'web-pkg/src'
+import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 
 const sharesWithMeLocation = 'files-shares-with-me'
 const sharesWithOthersLocation = 'files-shares-with-others'
-
-const Component = {
-  template: '<div></div>',
-  mixins: [acceptShare]
-}
 
 describe('acceptShare', () => {
   describe('computed property "$_acceptShare_items"', () => {
     describe('isEnabled property of returned element', () => {
       it.each([
-        { resources: [{ status: ShareStatus.pending }], expectedStatus: true },
-        { resources: [{ status: ShareStatus.declined }], expectedStatus: true },
-        { resources: [{ status: ShareStatus.accepted }], expectedStatus: false }
+        { resources: [{ status: ShareStatus.pending }] as Resource[], expectedStatus: true },
+        { resources: [{ status: ShareStatus.declined }] as Resource[], expectedStatus: true },
+        { resources: [{ status: ShareStatus.accepted }] as Resource[], expectedStatus: false }
       ])(
         `should be set according to the resource share status if the route name is "${sharesWithMeLocation}"`,
         (inputData) => {
-          const { wrapper } = getWrapper()
+          const { wrapper } = getWrapper({
+            setup: () => {
+              const store = useStore()
+              const { actions } = useAcceptShare({ store })
 
-          const resources = inputData.resources
-          expect(wrapper.vm.$_acceptShare_items[0].isEnabled({ resources })).toBe(
-            inputData.expectedStatus
-          )
+              const resources = inputData.resources
+              expect(unref(actions)[0].isEnabled({ space: null, resources })).toBe(
+                inputData.expectedStatus
+              )
+            }
+          })
         }
       )
       it.each([
-        { status: ShareStatus.pending },
-        { status: ShareStatus.declined },
-        { status: ShareStatus.accepted }
+        { status: ShareStatus.pending } as Resource,
+        { status: ShareStatus.declined } as Resource,
+        { status: ShareStatus.accepted } as Resource
       ])(
         `should be set as false if the route name is other than "${sharesWithMeLocation}"`,
         (resource) => {
-          const { wrapper } = getWrapper(sharesWithOthersLocation)
+          const { wrapper } = getWrapper({
+            routeName: sharesWithOthersLocation,
+            setup: () => {
+              const store = useStore()
+              const { actions } = useAcceptShare({ store })
 
-          expect(wrapper.vm.$_acceptShare_items[0].isEnabled({ resource })).toBeFalsy()
+              expect(
+                unref(actions)[0].isEnabled({ space: null, resources: [resource] })
+              ).toBeFalsy()
+            }
+          })
         }
       )
     })
   })
 })
 
-function getWrapper(routeName = sharesWithMeLocation) {
+function getWrapper({ setup, routeName = sharesWithMeLocation }) {
   return {
-    wrapper: mount(Component, {
-      global: {
-        mocks: defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) })
-      }
+    wrapper: getComposableWrapper(setup, {
+      mocks: defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) })
     })
   }
 }

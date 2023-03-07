@@ -24,9 +24,9 @@ import {
 } from 'web-pkg/src'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { ActionOptions } from 'web-pkg/src/composables/actions'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 
-export const useRestore = ({ store }: { store?: Store<any> }) => {
+export const useRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
@@ -264,7 +264,7 @@ export const useRestore = ({ store }: { store?: Store<any> }) => {
     return restoreResources(space, resolvedResources, missingFolderPaths)
   }
 
-  const actions = computed(() => [
+  const actions = computed((): Action[] => [
     {
       name: 'restore',
       icon: 'arrow-go-back',

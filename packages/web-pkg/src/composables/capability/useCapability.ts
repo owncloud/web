@@ -49,6 +49,9 @@ export const useCapabilityProjectSpacesEnabled = createCapabilityComposable(
   false
 )
 export const useCapabilityShareJailEnabled = createCapabilityComposable('spaces.share_jail', false)
+
+export const useCapabilityFilesFavorites = createCapabilityComposable('files.favorites', false)
+
 export const useCapabilityFilesTusSupportHttpMethodOverride = createCapabilityComposable<boolean>(
   'files.tus_support.http_method_override',
   false
@@ -72,6 +75,10 @@ export const useCapabilityPrivateLinks = createCapabilityComposable<boolean>(
 )
 export const useCapabilityFilesSharingCanDenyAccess = createCapabilityComposable(
   'files_sharing.deny_access',
+  false
+)
+export const useCapabilityFilesSharingCanRename = createCapabilityComposable(
+  'files_sharing.can_rename',
   false
 )
 export const useCapabilityFilesSharingAllowCustomPermissions = createCapabilityComposable(

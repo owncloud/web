@@ -67,7 +67,7 @@ import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import { BreadcrumbItem } from '../../helpers/breadcrumbs'
-import ClearSelection from '../../mixins/actions/clearSelection'
+import { useClearSelection } from '../../mixins/actions/clearSelection'
 import { isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
@@ -83,6 +83,7 @@ import { useEmptyTrashBin } from '../../mixins/actions/emptyTrashBin'
 import { useMove } from 'web-app-files/src/mixins/actions/move'
 import { useRestore } from 'web-app-files/src/mixins/actions/restore'
 import { useStore } from 'web-pkg/src'
+import { useDownloadFile } from 'web-app-files/src/mixins/actions/downloadFile'
 
 export default defineComponent({
   components: {
@@ -92,7 +93,6 @@ export default defineComponent({
     SidebarToggle,
     ViewOptions
   },
-  mixins: [ClearSelection],
   props: {
     breadcrumbs: {
       type: Array as PropType<BreadcrumbItem[]>,
@@ -126,26 +126,28 @@ export default defineComponent({
     const { space } = toRefs(props)
 
     const { actions: acceptShareActions } = useAcceptShare({ store })
+    const { actions: clearSelectionActions } = useClearSelection({ store })
     const { actions: copyActions } = useCopy({ store })
     const { actions: declineShareActions } = useDeclineShare({ store })
-    const { actions: downloadArchiveActions } = useDownloadArchive({ store })
     const { actions: deleteActions } = useDelete({ store })
-    const { actions: moveActions } = useMove({ store })
+    const { actions: downloadArchiveActions } = useDownloadArchive({ store })
+    const { actions: downloadFileActions } = useDownloadFile()
     const { actions: emptyTrashBinActions } = useEmptyTrashBin({ store })
+    const { actions: moveActions } = useMove({ store })
     const { actions: restoreActions } = useRestore({ store })
 
     const batchActions = computed(() => {
       return [
         ...unref(acceptShareActions),
+        ...unref(clearSelectionActions),
         ...unref(copyActions),
         ...unref(deleteActions),
         ...unref(declineShareActions),
         ...unref(downloadArchiveActions),
+        ...unref(downloadFileActions),
         ...unref(emptyTrashBinActions),
         ...unref(moveActions),
         ...unref(restoreActions)
-        // ...this.$_clearSelection_items,
-        // ...this.$_downloadFile_items,
       ].filter((item) => item.isEnabled({ space, resources: store.getters['Files/selectedFiles'] }))
     })
 

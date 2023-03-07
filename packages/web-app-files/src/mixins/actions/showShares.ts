@@ -1,53 +1,58 @@
 import quickActions, { canShare } from '../../quickActions'
 import { isLocationSharesActive, isLocationTrashActive } from '../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import isFilesAppActive from './helpers/isFilesAppActive'
-import { mapMutations } from 'vuex'
+import { useIsFilesAppActive } from './helpers/isFilesAppActive'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { computed, unref } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useRouter, useStore } from 'web-pkg/src'
+import { Store } from 'vuex'
+import { Action } from 'web-pkg/src/composables/actions'
 
-export default {
-  mixins: [isFilesAppActive],
-  computed: {
-    $_showShares_items() {
-      return [
-        {
-          name: 'show-shares',
-          icon: quickActions.collaborators.icon,
-          iconFillType: quickActions.collaborators.iconFillType,
-          label: () => this.$gettext('Share'),
-          handler: this.$_showShares_trigger,
-          isEnabled: ({ resources }) => {
-            // sidebar is currently only available inside files app
-            if (!this.$_isFilesAppActive) {
-              return false
-            }
+export const useShowShares = ({ store }: { store?: Store<any> } = {}) => {
+  store = store || useStore()
+  const router = useRouter()
+  const { $gettext } = useGettext()
+  const isFilesAppActive = useIsFilesAppActive()
 
-            if (isLocationTrashActive(this.$router, 'files-trash-generic')) {
-              return false
-            }
-            if (resources.length !== 1) {
-              return false
-            }
-            if (isLocationSharesActive(this.$router, 'files-shares-with-me')) {
-              if (resources[0].status !== ShareStatus.accepted) {
-                return false
-              }
-            }
-            return canShare(resources[0], this.$store)
-          },
-          componentType: 'button',
-          class: 'oc-files-actions-show-shares-trigger'
+  const handler = ({ resources }) => {
+    store.commit('Files/SET_FILE_SELECTION', resources)
+    eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#peopleShares')
+  }
+
+  const actions = computed((): Action[] => [
+    {
+      name: 'show-shares',
+      icon: quickActions.collaborators.icon,
+      iconFillType: quickActions.collaborators.iconFillType,
+      label: () => $gettext('Share'),
+      handler,
+      isEnabled: ({ resources }) => {
+        // sidebar is currently only available inside files app
+        if (!unref(isFilesAppActive)) {
+          return false
         }
-      ]
-    }
-  },
-  methods: {
-    ...mapMutations('Files', ['SET_FILE_SELECTION']),
 
-    $_showShares_trigger({ resources }) {
-      this.SET_FILE_SELECTION(resources)
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#peopleShares')
+        if (isLocationTrashActive(router, 'files-trash-generic')) {
+          return false
+        }
+        if (resources.length !== 1) {
+          return false
+        }
+        if (isLocationSharesActive(router, 'files-shares-with-me')) {
+          if (resources[0].status !== ShareStatus.accepted) {
+            return false
+          }
+        }
+        return canShare(resources[0], store)
+      },
+      componentType: 'button',
+      class: 'oc-files-actions-show-shares-trigger'
     }
+  ])
+
+  return {
+    actions
   }
 }

@@ -214,7 +214,7 @@ import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
 import { ClipboardActions } from 'web-app-files/src/helpers/clipboardActions'
 import { isResourceTxtFileAlmostEmpty } from 'web-app-files/src/helpers/resources'
 import { determineSortFields } from 'web-app-files/src/helpers/ui/resourceTable'
-import Rename from 'web-app-files/src/mixins/actions/rename'
+import { useRename } from 'web-app-files/src/mixins/actions/rename'
 import { createLocationShares, createLocationCommon } from 'web-app-files/src/router'
 import { ref } from 'vue'
 
@@ -222,7 +222,6 @@ const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
   components: { ContextMenuQuickAction },
-  mixins: [Rename],
   props: {
     /**
      * Resources to be displayed in the table.
@@ -418,7 +417,11 @@ export default defineComponent({
       context
     )
 
+    const { actions: renameActions, handler: renameHandler } = useRename()
+
     return {
+      renameActions,
+      renameHandler,
       resourceRouteResolver,
       ViewModeConstants,
       hasTags,
@@ -623,14 +626,14 @@ export default defineComponent({
       return item.id === this.latestSelectedId
     },
     hasRenameAction(item) {
-      return this.$_rename_items.filter((menuItem) => menuItem.isEnabled({ resources: [item] }))
+      return this.renameActions.filter((menuItem) => menuItem.isEnabled({ resources: [item] }))
         .length
     },
     openRenameDialog(item) {
-      this.$_rename_trigger(
-        { resources: [item] },
-        this.resourceRouteResolver.getMatchingSpace(item)
-      )
+      this.renameHandler({
+        resources: [item],
+        targetSpace: this.resourceRouteResolver.getMatchingSpace(item)
+      })
     },
     openTagsSidebar() {
       eventBus.publish(SideBarEventTopics.open)

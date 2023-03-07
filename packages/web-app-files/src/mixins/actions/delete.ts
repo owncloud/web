@@ -12,7 +12,7 @@ import { useGettext } from 'vue3-gettext'
 import { Action } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'
 
-export const useDelete = ({ store }: { store?: Store<any> }) => {
+export const useDelete = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()

@@ -15,7 +15,7 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Action } from 'web-pkg/src/composables/actions/types'
 
-export const useAcceptShare = ({ store }: { store?: Store<any> }) => {
+export const useAcceptShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $ngettext } = useGettext()

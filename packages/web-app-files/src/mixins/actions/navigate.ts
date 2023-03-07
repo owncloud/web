@@ -1,4 +1,4 @@
-import { mapGetters, mapState } from 'vuex'
+import { Store } from 'vuex'
 import { isSameResource } from '../../helpers/resource'
 import {
   createLocationPublic,
@@ -9,98 +9,107 @@ import {
 } from '../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
-import { buildShareSpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
+import {
+  buildShareSpaceResource,
+  isShareSpaceResource,
+  Resource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { useRouter, useStore } from 'web-pkg/src'
+import { computed, unref } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 
-export default {
-  computed: {
-    ...mapGetters(['capabilities']),
-    ...mapState('Files', ['currentFolder']),
-    $_navigate_items() {
-      return [
-        {
-          name: 'navigate',
-          icon: 'folder-open',
-          label: () =>
-            this.$pgettext('Action in the files list row to open a folder', 'Open folder'),
-          isEnabled: ({ resources }) => {
-            if (isLocationTrashActive(this.$router, 'files-trash-generic')) {
-              return false
-            }
-            if (resources.length !== 1) {
-              return false
-            }
+export const useNavigate = ({ store }: { store?: Store<any> } = {}) => {
+  store = store || useStore()
+  const router = useRouter()
+  const { $pgettext } = useGettext()
 
-            if (this.currentFolder !== null && isSameResource(resources[0], this.currentFolder)) {
-              return false
-            }
+  const getSpace = (space: SpaceResource, resource: Resource) => {
+    if (space) {
+      return space
+    }
+    const storageId = resource.storageId
+    // FIXME: Once we have the shareId in the OCS response, we can check for that and early return the share
+    space = store.getters['runtime/spaces/spaces'].find((space) => space.id === storageId)
+    if (space) {
+      return space
+    }
 
-            if (!resources[0].isFolder || resources[0].type === 'space') {
-              return false
-            }
+    return buildShareSpaceResource({
+      shareId: resource.shareId,
+      shareName: resource.name,
+      serverUrl: configurationManager.serverUrl
+    })
+  }
 
-            if (
-              isLocationSharesActive(this.$router, 'files-shares-with-me') &&
-              resources[0].status !== ShareStatus.accepted
-            ) {
-              return false
-            }
+  const routeName = computed(() => {
+    if (isLocationPublicActive(router, 'files-public-link')) {
+      return createLocationPublic('files-public-link')
+    }
 
-            return true
-          },
-          canBeDefault: true,
-          componentType: 'router-link',
-          route: ({ resources }) => {
-            if (
-              isShareSpaceResource(this.space) &&
-              (isLocationSharesActive(this.$router, 'files-shares-with-others') ||
-                isLocationSharesActive(this.$router, 'files-shares-via-link'))
-            ) {
-              // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
-              return { name: 'resolvePrivateLink', params: { fileId: resources[0].fileId } }
-            }
+    return createLocationSpaces('files-spaces-generic')
+  })
 
-            return merge(
-              {},
-              this.routeName,
-              createFileRouteOptions(this.$_navigate_getSpace(resources[0]), {
-                path: resources[0].path,
-                fileId: resources[0].fileId
-              })
-            )
-          },
-          class: 'oc-files-actions-navigate-trigger'
+  const actions = computed((): Action[] => [
+    {
+      name: 'navigate',
+      icon: 'folder-open',
+      label: () => $pgettext('Action in the files list row to open a folder', 'Open folder'),
+      isEnabled: ({ resources }) => {
+        if (isLocationTrashActive(router, 'files-trash-generic')) {
+          return false
         }
-      ]
-    },
-    routeName() {
-      if (isLocationPublicActive(this.$router, 'files-public-link')) {
-        return createLocationPublic('files-public-link')
-      }
+        if (resources.length !== 1) {
+          return false
+        }
 
-      return createLocationSpaces('files-spaces-generic')
-    }
-  },
-  methods: {
-    $_navigate_getSpace(resource) {
-      if (this.space) {
-        return this.space
-      }
-      const storageId = resource.storageId
-      // FIXME: Once we have the shareId in the OCS response, we can check for that and early return the share
-      const space = this.$store.getters['runtime/spaces/spaces'].find(
-        (space) => space.id === storageId
-      )
-      if (space) {
-        return space
-      }
+        const currentFolder = store.getters['Files/currentFolder']
+        if (currentFolder !== null && isSameResource(resources[0], currentFolder)) {
+          return false
+        }
 
-      return buildShareSpaceResource({
-        shareId: resource.shareId,
-        shareName: resource.name,
-        serverUrl: configurationManager.serverUrl
-      })
+        if (!resources[0].isFolder || resources[0].type === 'space') {
+          return false
+        }
+
+        if (
+          isLocationSharesActive(router, 'files-shares-with-me') &&
+          resources[0].status !== ShareStatus.accepted
+        ) {
+          return false
+        }
+
+        return true
+      },
+      canBeDefault: true,
+      componentType: 'router-link',
+      route: ({ space, resources }: ActionOptions) => {
+        if (
+          isShareSpaceResource(space) &&
+          (isLocationSharesActive(router, 'files-shares-with-others') ||
+            isLocationSharesActive(router, 'files-shares-via-link'))
+        ) {
+          // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
+          return { name: 'resolvePrivateLink', params: { fileId: resources[0].fileId } }
+        }
+
+        return merge(
+          {},
+          unref(routeName),
+          createFileRouteOptions(getSpace(space, resources[0]), {
+            path: resources[0].path,
+            fileId: resources[0].fileId
+          })
+        )
+      },
+      class: 'oc-files-actions-navigate-trigger'
     }
+  ])
+
+  return {
+    actions
   }
 }

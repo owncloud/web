@@ -12,10 +12,10 @@ import { isPublicSpaceResource, Resource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { usePublicLinkPassword, useRouter, useStore } from 'web-pkg/src'
-import { ActionOptions } from 'web-pkg/src/composables/actions'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 
-export const useDownloadArchive = ({ store }: { store?: Store<any> }) => {
+export const useDownloadArchive = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $ngettext, $gettext } = useGettext()
@@ -52,7 +52,7 @@ export const useDownloadArchive = ({ store }: { store?: Store<any> }) => {
       })
   }
 
-  const actions = computed(() => {
+  const actions = computed((): Action[] => {
     return [
       {
         name: 'download-archive',

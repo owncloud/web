@@ -12,8 +12,9 @@ import {
 } from 'web-pkg/src'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { Action } from 'web-pkg/src/composables/actions'
 
-export const useDeclineShare = ({ store }: { store?: Store<any> }) => {
+export const useDeclineShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $ngettext } = useGettext()
@@ -76,7 +77,7 @@ export const useDeclineShare = ({ store }: { store?: Store<any> }) => {
     })
   }
 
-  const actions = computed(() => [
+  const actions = computed((): Action[] => [
     {
       name: 'decline-share',
       icon: 'spam-3',

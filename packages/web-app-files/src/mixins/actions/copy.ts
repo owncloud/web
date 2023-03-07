@@ -7,8 +7,9 @@ import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useRouter, useStore } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'
+import { Action } from 'web-pkg/src/composables/actions'
 
-export const useCopy = ({ store }: { store?: Store<any> }) => {
+export const useCopy = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
 
@@ -30,7 +31,7 @@ export const useCopy = ({ store }: { store?: Store<any> }) => {
     store.dispatch('Files/copySelectedFiles', { ...language, space, resources })
   }
 
-  const actions = computed(() => {
+  const actions = computed((): Action[] => {
     return [
       {
         name: 'copy',

@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { Action } from 'web-pkg/src/composables/actions'
 
@@ -88,33 +88,41 @@ export default defineComponent({
       required: false
     }
   },
-  computed: {
-    filterParams() {
+  setup(props) {
+    const filterParams = computed(() => {
       return {
-        space: this.space,
-        resources: this.items
+        space: props.space,
+        resources: props.items
       }
-    },
-    hasExternalImageIcon() {
-      return this.action.icon && /^https?:\/\//i.test(this.action.icon)
-    },
-    componentProps() {
-      const props = {
-        appearance: this.appearance,
-        ...(this.action.isDisabled && {
-          disabled: this.action.isDisabled({ space: this.space, resources: this.items })
+    })
+
+    const componentProps = computed(() => {
+      const properties = {
+        appearance: props.appearance,
+        ...(props.action.isDisabled && {
+          disabled: props.action.isDisabled({ space: props.space, resources: props.items })
         }),
-        ...(this.action.variation && { variation: this.action.variation })
+        ...(props.action.variation && { variation: props.action.variation })
       }
 
-      if (this.action.componentType === 'router-link' && this.action.route) {
+      if (props.action.componentType === 'router-link' && props.action.route) {
         return {
-          ...props,
-          to: this.action.route(this.filterParams)
+          ...properties,
+          to: props.action.route(unref(filterParams))
         }
       }
 
-      return props
+      return properties
+    })
+
+    return {
+      componentProps,
+      filterParams
+    }
+  },
+  computed: {
+    hasExternalImageIcon() {
+      return this.action.icon && /^https?:\/\//i.test(this.action.icon)
     },
     componentListeners() {
       if (typeof this.action.handler !== 'function' || this.action.componentType !== 'button') {

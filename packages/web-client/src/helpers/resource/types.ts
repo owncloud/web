@@ -53,7 +53,7 @@ export interface Resource {
   canUpload?({ user }: { user?: User }): boolean
   canDownload?(): boolean
   canShare?({ user }: { user?: User }): boolean
-  canRename?({ user }: { user?: User }): boolean
+  canRename?({ user }?: { user?: User }): boolean
   canBeDeleted?({ user }?: { user?: User; ability?: any }): boolean
   canBeRestored?(): boolean
   canDeny?(): boolean

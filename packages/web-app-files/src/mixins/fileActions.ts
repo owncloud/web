@@ -6,15 +6,6 @@ import { routeToContextQuery } from 'web-pkg/src/composables/appDefaults'
 import { configurationManager } from 'web-pkg/src/configuration'
 
 import { isLocationSharesActive, isLocationTrashActive } from '../router'
-// import Delete from './actions/delete'
-// import DownloadArchive from './actions/downloadArchive'
-// import DownloadFile from './actions/downloadFile'
-// import Favorite from './actions/favorite'
-// import Move from './actions/move'
-// import ShowEditTags from './actions/showEditTags'
-// import Navigate from './actions/navigate'
-// import Rename from './actions/rename'
-// import Restore from './actions/restore'
 import { computed, unref } from 'vue'
 import { useRoute, useRouter, useStore } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'
@@ -23,6 +14,11 @@ import { useDownloadArchive } from './actions/downloadArchive'
 import { useDelete } from './actions/delete'
 import { useMove } from './actions/move'
 import { useRestore } from './actions/restore'
+import { useFavorite } from './actions/favorite'
+import { useDownloadFile } from './actions/downloadFile'
+import { useNavigate } from './actions/navigate'
+import { useRename } from './actions/rename'
+import { useShowEditTags } from './actions/showEditTags'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -34,28 +30,26 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { $gettext, interpolate: $gettextInterpolate } = useGettext()
   const isSearchActive = useIsSearchActive()
 
-  const { actions: downloadArchiveActions } = useDownloadArchive({ store })
   const { actions: deleteActions } = useDelete({ store })
+  const { actions: downloadArchiveActions } = useDownloadArchive({ store })
+  const { actions: downloadFileActions } = useDownloadFile()
+  const { actions: favoriteActions } = useFavorite({ store })
   const { actions: moveActions } = useMove({ store })
+  const { actions: navigateActions } = useNavigate({ store })
+  const { actions: renameActions } = useRename({ store })
   const { actions: restoreActions } = useRestore({ store })
+  const { actions: showEditTagsActions } = useShowEditTags()
 
-  const systemActions = computed(() => [
-    // const actionsMixins = [
-    //   'delete',
-    //   'downloadArchive',
-    //   'downloadFile',
-    //   'favorite',
-    //   'move',
-    //   'navigate',
-    //   'rename',
-    //   'restore',
-    //   'showEditTags',
-    // ]
-
+  const systemActions = computed((): Action[] => [
     ...unref(deleteActions),
     ...unref(downloadArchiveActions),
+    ...unref(downloadFileActions),
+    ...unref(favoriteActions),
     ...unref(moveActions),
-    ...unref(restoreActions)
+    ...unref(navigateActions),
+    ...unref(renameActions),
+    ...unref(restoreActions),
+    ...unref(showEditTagsActions)
   ])
 
   const editorActions = computed(() => {
@@ -191,7 +185,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     action.handler(options)
   }
 
-  const getDefaultAction = (options: ActionOptions) => {
+  const getDefaultAction = (options: ActionOptions): Action => {
     const filterCallback = (action) =>
       action.canBeDefault &&
       action.isEnabled({

@@ -6,12 +6,11 @@
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 
 import { useFileActions } from '../../mixins/fileActions'
-import CreateQuicklink from '../../mixins/actions/createQuicklink'
+import { useCreateQuickLink } from '../../mixins/actions/createQuicklink'
 
-import Paste from '../../mixins/actions/paste'
-import ShowActions from '../../mixins/actions/showActions'
+import { usePaste } from '../../mixins/actions/paste'
 import { useShowDetails } from '../../mixins/actions/showDetails'
-import ShowShares from '../../mixins/actions/showShares'
+import { useShowShares } from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
 import SetSpaceReadme from 'web-pkg/src/mixins/spaces/setReadme'
 import { computed, getCurrentInstance, PropType, unref } from 'vue'
@@ -26,19 +25,16 @@ import { useEmptyTrashBin } from '../../mixins/actions/emptyTrashBin'
 import { useMove } from 'web-app-files/src/mixins/actions/move'
 import { useRestore } from 'web-app-files/src/mixins/actions/restore'
 import { useStore } from 'web-pkg/src'
+import { useDownloadFile } from 'web-app-files/src/mixins/actions/downloadFile'
+import { useRename } from 'web-app-files/src/mixins/actions/rename'
+import { useShowEditTags } from 'web-app-files/src/mixins/actions/showEditTags'
+import { useNavigate } from 'web-app-files/src/mixins/actions/navigate'
+import { useFavorite } from 'web-app-files/src/mixins/actions/favorite'
 
 export default {
   name: 'ContextActions',
   components: { ContextActionMenu },
-  mixins: [
-    CreateQuicklink,
-    Paste,
-    ShowActions,
-    ShowShares,
-    SetSpaceImage,
-    SetSpaceReadme
-  ],
-
+  mixins: [SetSpaceImage, SetSpaceReadme],
   props: {
     space: {
       type: Object as PropType<SpaceResource>,
@@ -54,17 +50,25 @@ export default {
     const instance = getCurrentInstance().proxy as any
     const store = useStore()
 
-    const { actions: showDetailsItems } = useShowDetails()
     const { editorActions, loadExternalAppActions } = useFileActions()
 
     const { actions: acceptShareActions } = useAcceptShare({ store })
     const { actions: copyActions } = useCopy({ store })
+    const { actions: createQuickLinkActions } = useCreateQuickLink({ store })
     const { actions: declineShareActions } = useDeclineShare({ store })
-    const { actions: downloadArchiveActions } = useDownloadArchive({ store })
     const { actions: deleteActions } = useDelete({ store })
-    const { actions: moveActions } = useMove({ store })
+    const { actions: downloadArchiveActions } = useDownloadArchive({ store })
+    const { actions: downloadFileActions } = useDownloadFile()
+    const { actions: favoriteActions } = useFavorite({ store })
     const { actions: emptyTrashBinActions } = useEmptyTrashBin({ store })
+    const { actions: moveActions } = useMove({ store })
+    const { actions: navigateActions } = useNavigate({ store })
+    const { actions: pasteActions } = usePaste({ store })
+    const { actions: renameActions } = useRename({ store })
     const { actions: restoreActions } = useRestore({ store })
+    const { actions: showDetailsActions } = useShowDetails({ store })
+    const { actions: showEditTagsActions } = useShowEditTags()
+    const { actions: showSharesActions } = useShowShares()
 
     const filterParams = computed(() => {
       return {
@@ -95,7 +99,7 @@ export default {
     })
 
     const menuItemsShare = computed(() => {
-      return [...instance.$_showShares_items, ...instance.$_createQuicklink_items].filter((item) =>
+      return [...unref(showSharesActions), ...unref(createQuickLinkActions)].filter((item) =>
         item.isEnabled(unref(filterParams))
       )
     })
@@ -107,29 +111,27 @@ export default {
         ...unref(copyActions),
         ...unref(deleteActions),
         ...unref(downloadArchiveActions),
-        // ...instance.$_downloadFile_items,
+        ...unref(downloadFileActions),
         ...unref(moveActions),
-        // ...instance.$_paste_items,
-        // ...instance.$_rename_items,
-        ...unref(restoreActions)
-        // ...instance.$_setSpaceImage_items,
-        // ...instance.$_setSpaceReadme_items,
-        // ...instance.$_showEditTags_items
+        ...unref(pasteActions),
+        ...unref(renameActions),
+        ...unref(restoreActions),
+        ...instance.$_setSpaceImage_items,
+        ...instance.$_setSpaceReadme_items,
+        ...unref(showEditTagsActions)
       ].filter((item) => item.isEnabled(unref(filterParams)))
     })
 
     const menuItemsSidebar = computed(() => {
-      const fileHandlers = [
-        // ...instance.$_navigate_items
-      ]
+      const fileHandlers = [...unref(navigateActions)]
 
       return [
-        // ...instance.$_favorite_items.map((action) => {
-        //   action.keepOpen = true
-        //   return action
-        // }),
+        ...unref(favoriteActions).map((action) => {
+          action.keepOpen = true
+          return action
+        }),
         ...fileHandlers,
-        ...unref(showDetailsItems)
+        ...unref(showDetailsActions)
       ].filter((item) => item.isEnabled(unref(filterParams)))
     })
 
@@ -144,7 +146,7 @@ export default {
         }
         sections.push({
           name: 'batch-details',
-          items: [...unref(showDetailsItems)]
+          items: [...unref(showDetailsActions)]
         })
         return sections
       }

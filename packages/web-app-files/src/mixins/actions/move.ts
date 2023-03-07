@@ -6,7 +6,7 @@ import {
 } from '../../router'
 import { Store } from 'vuex'
 import { useGettext } from 'vue3-gettext'
-import { ActionOptions } from 'web-pkg/src/composables/actions'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'
 import { useRouter, useStore } from 'web-pkg/src'
 
@@ -28,9 +28,9 @@ export const useMove = ({ store }: { store?: Store<any> } = {}) => {
   })
 
   const handler = ({ space, resources }: ActionOptions) => {
-    store.dispatch('cutSelectedFiles', { ...language, space, resources })
+    store.dispatch('Files/cutSelectedFiles', { ...language, space, resources })
   }
-  const actions = computed(() => [
+  const actions = computed((): Action[] => [
     {
       name: 'cut',
       icon: 'scissors',

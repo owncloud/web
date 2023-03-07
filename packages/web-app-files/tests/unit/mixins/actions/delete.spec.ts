@@ -1,43 +1,67 @@
 import { mock } from 'jest-mock-extended'
-import Delete from 'web-app-files/src/mixins/actions/delete'
+import { unref } from 'vue'
+import { useDelete } from 'web-app-files/src/mixins/actions/delete'
+import { Resource, SpaceResource } from 'web-client/src'
+import { useStore } from 'web-pkg/src'
 
 import {
   createStore,
   defaultComponentMocks,
-  defaultPlugins,
-  shallowMount,
   defaultStoreMockOptions,
-  RouteLocation
+  RouteLocation,
+  getComposableWrapper
 } from 'web-test-helpers'
-
-const Component = {
-  template: '<div></div>',
-  mixins: [Delete]
-}
 
 describe('delete', () => {
   describe('computed property "$_delete_items"', () => {
     describe('delete isEnabled property of returned element', () => {
       it.each([
-        { resources: [{ canBeDeleted: () => true }], invalidLocation: false, expectedStatus: true },
-        { resources: [{ canBeDeleted: () => true }], invalidLocation: true, expectedStatus: false },
         {
-          resources: [{ canBeDeleted: () => false }],
+          resources: [{ canBeDeleted: () => true }] as Resource[],
+          invalidLocation: false,
+          expectedStatus: true
+        },
+        {
+          resources: [{ canBeDeleted: () => true }] as Resource[],
+          invalidLocation: true,
+          expectedStatus: false
+        },
+        {
+          resources: [{ canBeDeleted: () => false }] as Resource[],
           invalidLocation: false,
           expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
-        const { wrapper } = getWrapper({ invalidLocation: inputData.invalidLocation })
-        const resources = inputData.resources
-        expect(wrapper.vm.$_delete_items[0].isEnabled({ resources })).toBe(inputData.expectedStatus)
+        const { wrapper } = getWrapper({
+          invalidLocation: inputData.invalidLocation,
+          setup: () => {
+            const store = useStore()
+            const { actions } = useDelete({ store })
+
+            const resources = inputData.resources
+            expect(unref(actions)[0].isEnabled({ space: null, resources })).toBe(
+              inputData.expectedStatus
+            )
+          }
+        })
       })
     })
     describe('delete-permanent isEnabled property of returned element', () => {
       it.each([
-        { resources: [{}], deletePermanent: true, invalidLocation: false, expectedStatus: true },
-        { resources: [{}], deletePermanent: true, invalidLocation: true, expectedStatus: false },
         {
-          resources: [],
+          resources: [{}] as Resource[],
+          deletePermanent: true,
+          invalidLocation: false,
+          expectedStatus: true
+        },
+        {
+          resources: [{}] as Resource[],
+          deletePermanent: true,
+          invalidLocation: true,
+          expectedStatus: false
+        },
+        {
+          resources: [] as Resource[],
           deletePermanent: true,
           invalidLocation: false,
           expectedStatus: false
@@ -45,16 +69,27 @@ describe('delete', () => {
       ])('should be set correctly', (inputData) => {
         const { wrapper } = getWrapper({
           deletePermanent: true,
-          invalidLocation: inputData.invalidLocation
+          invalidLocation: inputData.invalidLocation,
+          setup: () => {
+            const store = useStore()
+            const { actions } = useDelete({ store })
+
+            const resources = inputData.resources
+            expect(unref(actions)[1].isEnabled({ space: mock<SpaceResource>(), resources })).toBe(
+              inputData.expectedStatus
+            )
+          }
         })
-        const resources = inputData.resources
-        expect(wrapper.vm.$_delete_items[1].isEnabled({ resources })).toBe(inputData.expectedStatus)
       })
     })
   })
 })
 
-function getWrapper({ deletePermanent = false, invalidLocation = false } = {}) {
+function getWrapper({
+  deletePermanent = false,
+  invalidLocation = false,
+  setup = () => undefined
+} = {}) {
   const routeName = invalidLocation
     ? 'files-shares-via-link'
     : deletePermanent
@@ -67,8 +102,9 @@ function getWrapper({ deletePermanent = false, invalidLocation = false } = {}) {
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
   return {
-    wrapper: shallowMount(Component, {
-      global: { plugins: [...defaultPlugins(), store], mocks }
+    wrapper: getComposableWrapper(setup, {
+      mocks,
+      store
     })
   }
 }
