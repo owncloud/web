@@ -284,14 +284,6 @@ export default defineComponent({
         console.debug('Failed to load additional user data', failedRequests)
       }
 
-      if (unref(selectedUsers).length === 1) {
-        loadedUser.value = unref(selectedUsers)[0]
-        sideBarLoading.value = false
-        return
-      }
-
-      loadedUser.value = null
-      sideBarLoading.value = false
       selectedPersonalDrives.value.splice(0, unref(selectedPersonalDrives).length)
       unref(selectedUsers).forEach((user) => {
         const drive = toRaw(user.drive)
@@ -305,6 +297,9 @@ export default defineComponent({
         } as SpaceResource
         selectedPersonalDrives.value.push(spaceResource)
       })
+
+      loadedUser.value = unref(selectedUsers).length === 1 ? unref(selectedUsers)[0] : null
+      sideBarLoading.value = false
     })
 
     const calculateListHeaderPosition = () => {
