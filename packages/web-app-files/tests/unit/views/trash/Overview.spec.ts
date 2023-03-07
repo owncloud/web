@@ -64,16 +64,20 @@ describe('TrashOverview', () => {
       wrapper.vm.sortBy = 'name'
       await nextTick()
       sortedSpaces = wrapper.findComponent<any>({ name: 'oc-table' }).props().data
-      expect(sortedSpaces[0].id).toEqual(spaceMocks[0].id)
-      expect(sortedSpaces[1].id).toEqual(spaceMocks[1].id)
-      expect(sortedSpaces[2].id).toEqual(spaceMocks[2].id)
+      expect(sortedSpaces.map((s) => s.id)).toEqual([
+        spaceMocks[0].id,
+        spaceMocks[1].id,
+        spaceMocks[2].id
+      ])
 
       wrapper.vm.sortDir = 'desc'
       await nextTick()
       sortedSpaces = wrapper.findComponent<any>({ name: 'oc-table' }).props().data
-      expect(sortedSpaces[0].id).toEqual(spaceMocks[0].id)
-      expect(sortedSpaces[1].id).toEqual(spaceMocks[2].id)
-      expect(sortedSpaces[2].id).toEqual(spaceMocks[1].id)
+      expect(sortedSpaces.map((s) => s.id)).toEqual([
+        spaceMocks[0].id,
+        spaceMocks[2].id,
+        spaceMocks[1].id
+      ])
     })
     it('should set the sort parameters accordingly when calling "handleSort"', () => {
       const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
