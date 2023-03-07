@@ -343,6 +343,7 @@ export default defineComponent({
   },
   computed: {
     initialFocusRef() {
+      console.log(this.focusTrapInitial)
       if (this.focusTrapInitial) {
         return this.focusTrapInitial
       }

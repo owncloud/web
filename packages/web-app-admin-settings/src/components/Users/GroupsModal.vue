@@ -5,12 +5,12 @@
     :button-cancel-text="$gettext('Cancel')"
     :button-confirm-text="$gettext('Confirm')"
     :button-confirm-disabled="!selectedOptions.length"
-    focus-trap-initial="#create-user-input-display-name"
     @cancel="$emit('cancel')"
     @confirm="$emit('confirm', { users, groups: selectedOptions })"
   >
     <template #content>
       <oc-select
+        ref="groupsModal"
         v-model="selectedOptions"
         :label="$gettext('Groups')"
         multiple
