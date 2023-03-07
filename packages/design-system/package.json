@@ -41,7 +41,7 @@
     "not OperaMobile > 0"
   ],
   "devDependencies": {
-    "@adobe/leonardo-contrast-colors": "1.0.0-alpha.16",
+    "@adobe/leonardo-contrast-colors": "1.0.0-alpha.17",
     "@babel/core": "^7.16.5",
     "@babel/plugin-proposal-class-properties": "^7.16.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.16.5",
@@ -89,7 +89,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "rimraf": "^3.0.2",
-    "sass": "1.57.1",
+    "sass": "1.58.3",
     "sass-loader": "^10.1.0",
     "sass-resources-loader": "^2.0.1",
     "semver": "^7.1.3",
@@ -104,8 +104,8 @@
     "tippy.js": "^6.3.7",
     "typescript": "^4.3.2",
     "url-loader": "^4.1.1",
-    "v-calendar": "github:dschmidt/v-calendar#3ce6e3b8afd5491cb53ee811281d5fa8a45b044d",
-    "vue": "3.2.45",
+    "v-calendar": "github:dschmidt/v-calendar#a4e9bceb168aa302eeff5143d41d057c1c5ee547",
+    "vue": "3.2.47",
     "vue-inline-svg": "^3.1.0",
     "vue-loader": "^15.9.0",
     "vue-select": "4.0.0-beta.6",
