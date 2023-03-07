@@ -17,7 +17,7 @@ export const setupAuthGuard = (router: Router) => {
     // we need to guard this case to be able to show the access denied page
     // and not be redirected to the login page
     if (authService.hasAuthErrorOccured) {
-      return to.name === 'accessDenied' || { name: 'accessDenied' }
+      return to.name === 'accessDenied' || to.name === 'login' || { name: 'accessDenied' }
     }
 
     if (isPublicLinkContext(router, to)) {
