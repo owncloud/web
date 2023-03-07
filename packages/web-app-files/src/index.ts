@@ -6,6 +6,7 @@ import SharedWithOthers from './views/shares/SharedWithOthers.vue'
 import SharedViaLink from './views/shares/SharedViaLink.vue'
 import SpaceDriveResolver from './views/spaces/DriveResolver.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
+import TrashOverview from './views/trash/Overview.vue'
 import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
 import store from './store'
@@ -78,8 +79,9 @@ const navItems = [
     name: $gettext('Deleted files'),
     icon: 'delete-bin-5',
     route: {
-      path: `/${appInfo.id}/trash`
+      path: `/${appInfo.id}/trash/overview`
     },
+    activeFor: [{ path: `/${appInfo.id}/trash` }],
     enabled(capabilities) {
       return capabilities.dav && capabilities.dav.trashbin === '1.0'
     }
@@ -102,6 +104,9 @@ export default {
     Spaces: {
       DriveResolver: SpaceDriveResolver,
       Projects: SpaceProjects
+    },
+    Trash: {
+      Overview: TrashOverview
     }
   }),
   navItems,

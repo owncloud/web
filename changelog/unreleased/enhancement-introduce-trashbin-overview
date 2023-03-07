@@ -1,0 +1,7 @@
+Enhancement: Introduce trashbin overview
+
+We've added a trashbin overview page, where the user can see their personal trashbins but also the trashbin of
+the spaces they are a member of.
+
+https://github.com/owncloud/web/pull/8515
+https://github.com/owncloud/web/issues/8517

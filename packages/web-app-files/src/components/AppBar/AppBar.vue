@@ -4,7 +4,7 @@
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div
-        class="oc-flex"
+        class="oc-flex files-app-bar-controls"
         :class="{
           'oc-flex-between': breadcrumbs.length || hasSharesNavigation,
           'oc-flex-right': !breadcrumbs.length && !hasSharesNavigation
@@ -210,6 +210,10 @@ export default defineComponent({
   position: sticky;
   padding: 0 var(--oc-space-medium);
   top: 0;
+
+  .files-app-bar-controls {
+    min-height: 52px;
+  }
 
   .files-app-bar-actions {
     align-items: center;

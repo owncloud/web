@@ -14,7 +14,6 @@ import ShowDetails from '../../mixins/actions/showDetails'
 import ShowShares from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
 import SetSpaceReadme from 'web-pkg/src/mixins/spaces/setReadme'
-import SpaceNavigate from 'web-pkg/src/mixins/spaces/navigate'
 import { PropType } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
@@ -31,8 +30,7 @@ export default {
     ShowDetails,
     ShowShares,
     SetSpaceImage,
-    SetSpaceReadme,
-    SpaceNavigate
+    SetSpaceReadme
   ],
 
   props: {
@@ -141,8 +139,7 @@ export default {
         ...this.$_acceptShare_items,
         ...this.$_declineShare_items,
         ...this.$_setSpaceImage_items,
-        ...this.$_setSpaceReadme_items,
-        ...this.$_navigate_space_items
+        ...this.$_setSpaceReadme_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 

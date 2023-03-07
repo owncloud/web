@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, unref } from 'vue'
+import { onMounted, computed, defineComponent, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { mapMutations, mapGetters } from 'vuex'
 
@@ -82,7 +82,7 @@ import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
@@ -127,6 +127,8 @@ export default defineComponent({
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
 
+    const { scrollToResourceFromRoute } = useScrollTo()
+
     const loadResourcesTask = useTask(function* () {
       store.commit('Files/CLEAR_FILES_SEARCHED')
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
@@ -143,9 +145,13 @@ export default defineComponent({
     const hasCreatePermission = computed(() => can('create-all', 'Space'))
     const viewModes = computed(() => [ViewModeConstants.tilesView])
 
+    onMounted(async () => {
+      await loadResourcesTask.perform()
+      scrollToResourceFromRoute(unref(spaces) as Resource[])
+    })
+
     return {
       ...useSideBar(),
-      ...useScrollTo(),
       spaces,
       graphClient,
       loadResourcesTask,
@@ -225,10 +231,6 @@ export default defineComponent({
       deep: true,
       immediate: true
     }
-  },
-  async created() {
-    await this.loadResourcesTask.perform()
-    this.scrollToResourceFromRoute(this.spaces)
   },
   methods: {
     ...mapMutations('Files', ['SET_FILE_SELECTION']),

@@ -13,7 +13,6 @@ import {
   createSpace,
   createSpaceArgs,
   openSpace,
-  openSpaceTrashBin,
   reloadSpacePage,
   removeAccessMembersArgs,
   removeAccessSpaceMembers,
@@ -102,11 +101,6 @@ export class Spaces {
 
   async reloadPage(): Promise<void> {
     await reloadSpacePage(this.#page)
-  }
-
-  async openTrashbin(key): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await openSpaceTrashBin({ id, page: this.#page })
   }
 
   async changeSpaceImage({ key, resource }: { key: string; resource: File }): Promise<void> {

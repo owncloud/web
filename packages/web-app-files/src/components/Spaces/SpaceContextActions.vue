@@ -36,7 +36,6 @@ import Restore from 'web-pkg/src/mixins/spaces/restore'
 import ShowDetails from '../../mixins/actions/showDetails'
 import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
-import DeletedFiles from 'web-pkg/src/mixins/spaces/deletedFiles'
 import Disable from 'web-pkg/src/mixins/spaces/disable'
 import ShowMembers from 'web-pkg/src/mixins/spaces/showMembers'
 import UploadImage from '../../mixins/spaces/actions/uploadImage'
@@ -55,7 +54,6 @@ export default defineComponent({
     Delete,
     EditDescription,
     EditQuota,
-    DeletedFiles,
     Disable,
     ShowDetails,
     ShowMembers,
@@ -110,12 +108,6 @@ export default defineComponent({
           items: this.menuItemsSecondaryActions
         })
       }
-      if (this.menuItemsTrashBin.length) {
-        sections.push({
-          name: 'trashBin',
-          items: this.menuItemsTrashBin
-        })
-      }
       if (this.menuItemsSidebar.length) {
         sections.push({
           name: 'sidebar',
@@ -154,10 +146,6 @@ export default defineComponent({
         ...this.$_delete_items
       ]
 
-      return [...fileHandlers].filter((item) => item.isEnabled(this.filterParams))
-    },
-    menuItemsTrashBin() {
-      const fileHandlers = [...this.$_deletedFiles_items]
       return [...fileHandlers].filter((item) => item.isEnabled(this.filterParams))
     },
     menuItemsSidebar() {

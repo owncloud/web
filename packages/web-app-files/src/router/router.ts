@@ -23,4 +23,7 @@ export interface RouteComponents {
     DriveResolver: Component
     Projects: Component
   }
+  Trash: {
+    Overview: Component
+  }
 }

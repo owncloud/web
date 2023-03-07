@@ -37,7 +37,6 @@
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 import Rename from 'web-pkg/src/mixins/spaces/rename'
 import Delete from 'web-pkg/src/mixins/spaces/delete'
-import DeletedFiles from 'web-pkg/src/mixins/spaces/deletedFiles'
 import Disable from 'web-pkg/src/mixins/spaces/disable'
 import Restore from 'web-pkg/src/mixins/spaces/restore'
 import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
@@ -57,7 +56,6 @@ export default defineComponent({
   mixins: [
     Rename,
     Delete,
-    DeletedFiles,
     EditDescription,
     EditReadmeContent,
     Disable,
@@ -85,7 +83,6 @@ export default defineComponent({
         ...this.$_uploadImage_items,
         ...this.$_editReadmeContent_items,
         ...this.$_editQuota_items,
-        ...this.$_deletedFiles_items,
         ...this.$_restore_items,
         ...this.$_delete_items,
         ...this.$_disable_items

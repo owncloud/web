@@ -159,10 +159,10 @@ When(
   '{string} navigates to the trashbin of the project space {string}',
   async function (this: World, stepUser: string, key: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const pageObject = new objects.applicationFiles.page.spaces.Projects({ page })
+    const pageObject = new objects.applicationFiles.page.trashbin.Overview({ page })
     await pageObject.navigate()
-    const spacesObject = new objects.applicationFiles.Spaces({ page })
-    await spacesObject.openTrashbin(key)
+    const trashbinObject = new objects.applicationFiles.Trashbin({ page })
+    await trashbinObject.open(key)
   }
 )
 

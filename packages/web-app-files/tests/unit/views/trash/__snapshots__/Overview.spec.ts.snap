@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TrashOverview view states should render spaces list 1`] = `
+<div class="oc-flex">
+  <div class="files-view-wrapper oc-width-expand">
+    <div id="files-view">
+      <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hasbulkactions="false" hasfileextensions="false" hashiddenfiles="false" haspagination="false" hassharesnavigation="false" hassidebartoggle="false" hasviewoptions="false" showactionsonselection="false" sidebaropen="false" viewmodes=""></app-bar-stub>
+      <div class="oc-ml-m oc-my-s">
+        <label class="oc-label" for="spaces-filter">Search</label>
+        <div class="oc-position-relative">
+          <input aria-invalid="false" autocomplete="off" class="oc-text-input oc-input oc-rounded" id="spaces-filter" type="text">
+          <!--v-if-->
+        </div>
+        <!--v-if-->
+      </div>
+      <table class="oc-table oc-table-hover oc-table-sticky spaces-table">
+        <thead class="oc-thead">
+          <tr class="oc-table-header-row" tabindex="-1">
+            <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-icon oc-pl-s" style="top: 0px;">
+              <span class="oc-table-thead-content header-text"></span>
+              <!--v-if-->
+            </th>
+            <th aria-sort="ascending" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-name oc-pr-s" style="top: 0px;">
+              <span class="oc-table-thead-content header-text">Name</span>
+              <button aria-label="Sort by name" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-button-sort" type="button">
+                <!-- @slot Content of the button -->
+                <span class="oc-icon oc-icon-s oc-icon-passive">
+                  <!---->
+                </span>
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="oc-tbody-tr oc-tbody-tr-1" data-item-id="1" draggable="false" tabindex="-1">
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon oc-pl-s">
+              <span class="oc-icon oc-icon-m oc-icon-passive oc-pl-m">
+                <!---->
+              </span>
+            </td>
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-name oc-pr-s">
+              <router-link-stub class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-display-block" to="[object Object]">Personal</router-link-stub>
+            </td>
+          </tr>
+          <tr class="oc-tbody-tr oc-tbody-tr-2" data-item-id="2" draggable="false" tabindex="-1">
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon oc-pl-s">
+              <span class="oc-icon oc-icon-m oc-icon-passive oc-pl-m">
+                <!---->
+              </span>
+            </td>
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-name oc-pr-s">
+              <router-link-stub class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-display-block" to="[object Object]">Project space 1</router-link-stub>
+            </td>
+          </tr>
+          <tr class="oc-tbody-tr oc-tbody-tr-3" data-item-id="3" draggable="false" tabindex="-1">
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon oc-pl-s">
+              <span class="oc-icon oc-icon-m oc-icon-passive oc-pl-m">
+                <!---->
+              </span>
+            </td>
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-name oc-pr-s">
+              <router-link-stub class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-display-block" to="[object Object]">Project space 2</router-link-stub>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot class="oc-table-footer">
+          <tr class="oc-table-footer-row">
+            <td class="oc-table-footer-cell" colspan="2">
+              <!-- @slot Footer of the table -->
+              <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+                <p class="oc-text-muted">3 trashes in total</p>
+                <!--v-if-->
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+        <!--v-if-->
+      </table>
+    </div>
+  </div>
+</div>
+`;
