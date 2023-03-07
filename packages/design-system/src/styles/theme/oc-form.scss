@@ -267,7 +267,7 @@ $internal-form-checkbox-indeterminate-image: "data:image/svg+xml;charset=UTF-8,%
 }
 
 .oc-background-highlight .oc-input {
-  background-color: white;
+  background-color: var(--oc-color-background-muted);
 }
 
 /* 2 */
@@ -305,7 +305,7 @@ $internal-form-checkbox-indeterminate-image: "data:image/svg+xml;charset=UTF-8,%
   .oc-input:focus,
   .oc-select:focus,
   .oc-textarea:focus {
-    background-color: white;
+    background-color: var(--oc-color-background-muted);
   }
 }
 

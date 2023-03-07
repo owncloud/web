@@ -178,12 +178,6 @@ export default defineComponent({
   }
 }
 
-.vs--single {
-  &.vs--open .vs__selected {
-    opacity: 0.8 !important;
-  }
-}
-
 .oc-select {
   background-image: none !important;
   line-height: 24px !important;
@@ -309,7 +303,7 @@ export default defineComponent({
       &__search::placeholder,
       &__dropdown-toggle,
       &__dropdown-menu {
-        background-color: white;
+        background-color: var(--oc-color-background-muted);
       }
     }
 
@@ -317,8 +311,11 @@ export default defineComponent({
       .vs__dropdown-menu,
       .vs__dropdown-toggle {
         border-color: transparent;
-        background-color: white;
-        background-image: linear-gradient(white, white),
+        background-color: var(--oc-color-background-muted);
+        background-image: linear-gradient(
+            var(--oc-color-background-muted),
+            var(--oc-color-background-muted)
+          ),
           linear-gradient(
             90deg,
             var(--oc-color-swatch-primary-muted) 0%,
@@ -326,6 +323,15 @@ export default defineComponent({
           );
       }
     }
+  }
+}
+
+.vs--single {
+  &.vs--open .vs__selected {
+    opacity: 0.8 !important;
+  }
+  .vs__selected {
+    background-color: transparent !important;
   }
 }
 </style>
