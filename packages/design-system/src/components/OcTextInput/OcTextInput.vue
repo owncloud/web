@@ -274,18 +274,8 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-text-input {
-  background-color: var(--oc-color-input-bg);
-  border: 1px solid var(--oc-color-input-border);
-  color: var(--oc-color-input-text-muted);
-
-  &:focus {
-    background-color: var(--oc-color-input-bg);
-    border-color: var(--oc-color-input-text-default);
-    color: var(--oc-color-input-text-default);
-  }
-
   &:disabled {
-    color: var(--oc-color-input-text-muted);
+    color: var(--oc-color-input-text-muted); // Unnecessary? see oc-form.scss:306
   }
 
   &-description {

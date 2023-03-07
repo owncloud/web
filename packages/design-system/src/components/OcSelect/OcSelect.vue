@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label :for="id" v-text="label" />
+    <label :for="id" class="oc-label" v-text="label" />
     <vue-select
       ref="select"
       :disabled="disabled"
@@ -170,11 +170,18 @@ export default defineComponent({
     background-color: var(--oc-color-background-muted) !important;
     color: var(--oc-color-text-muted) !important;
     cursor: default;
+    pointer-events: none;
+  }
+
+  .vs__actions {
+    opacity: 0.5;
   }
 }
 
-.vs--single.vs--open .vs__selected {
-  opacity: 0.8 !important;
+.vs--single {
+  &.vs--open .vs__selected {
+    opacity: 0.8 !important;
+  }
 }
 
 .oc-select {
@@ -183,11 +190,14 @@ export default defineComponent({
   color: var(--oc-color-input-text-default);
 
   .vs {
-    &__search,
+    &__search {
+      color: var(--oc-color-input-text-default);
+      // padding: 0.625em;
+    }
+
     &__selected {
       color: var(--oc-color-input-text-default);
-    }
-    &__selected {
+      // padding: 0.25em 0.55em;
       background-color: var(--oc-color-background-default);
     }
     &__search::placeholder,
@@ -196,6 +206,26 @@ export default defineComponent({
       background-color: var(--oc-color-input-bg);
       border: 1px solid var(--oc-color-input-border);
       color: var(--oc-color-input-text-default);
+
+      -webkit-appearance: none;
+      background-clip: padding-box, border-box;
+      background-color: var(--oc-color-background-highlight);
+      background-origin: border-box;
+      border-radius: 0;
+      border-radius: 6px;
+      border: 1px solid var(--oc-color-input-border);
+      box-sizing: border-box;
+      color: var(--oc-color-input-text-default);
+      line-height: inherit;
+      margin: 0;
+      max-width: 100%;
+      outline: none;
+      overflow: visible;
+      padding: 0.25em 0.35em 0.5em 0.35em;
+      transition-duration: 0.2s;
+      transition-timing-function: ease-in-out;
+      transition-property: color, background-color;
+      width: 100%;
     }
 
     &__clear,
@@ -235,6 +265,7 @@ export default defineComponent({
 
     &__selected-options {
       flex: auto;
+      padding: 0;
     }
   }
 
@@ -255,7 +286,49 @@ export default defineComponent({
   &:focus-within {
     .vs__dropdown-menu,
     .vs__dropdown-toggle {
-      border: 1px solid var(--oc-color-input-text-default);
+      border-color: transparent;
+      background-image: linear-gradient(
+          var(--oc-color-background-highlight),
+          var(--oc-color-background-highlight)
+        ),
+        linear-gradient(
+          90deg,
+          var(--oc-color-swatch-primary-muted) 0%,
+          var(--oc-color-swatch-primary-gradient) 100%
+        );
+    }
+  }
+}
+
+.oc-background-highlight {
+  .oc-select {
+    .vs {
+      &__search,
+      &__selected {
+        color: var(--oc-color-input-text-default);
+      }
+      &__selected {
+        background-color: var(--oc-color-background-default);
+      }
+      &__search::placeholder,
+      &__dropdown-toggle,
+      &__dropdown-menu {
+        background-color: white;
+      }
+    }
+
+    &:focus-within {
+      .vs__dropdown-menu,
+      .vs__dropdown-toggle {
+        border-color: transparent;
+        background-color: white;
+        background-image: linear-gradient(white, white),
+          linear-gradient(
+            90deg,
+            var(--oc-color-swatch-primary-muted) 0%,
+            var(--oc-color-swatch-primary-gradient) 100%
+          );
+      }
     }
   }
 }

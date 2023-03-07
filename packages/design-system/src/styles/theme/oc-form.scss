@@ -40,7 +40,7 @@ $form-padding-vertical: var(--oc-space-xsmall) !default;
 $form-background: var(--oc-color-background-muted) !default;
 $form-color: var(--oc-color-text-default) !default;
 
-$form-focus-background: var(--oc-color-background-muted) !default;
+$form-focus-background: var(--oc-color-background-highlight) !default;
 $form-focus-color: var(--oc-color-text-default) !default;
 
 $form-disabled-background: var(--oc-color-background-muted) !default;
@@ -243,23 +243,31 @@ $internal-form-checkbox-indeterminate-image: "data:image/svg+xml;charset=UTF-8,%
  */
 
 .oc-input {
-  border: 1px solid var(--oc-color-input-border);
+  -webkit-appearance: none;
+  background-clip: padding-box, border-box;
+  background-color: $form-focus-background;
+  background-origin: border-box;
   border-radius: 0;
+  border-radius: 6px;
+  border: 1px solid var(--oc-color-input-border);
   box-sizing: border-box;
   color: var(--oc-color-input-text-default);
   display: inline-block;
-  height: 2rem;
   line-height: inherit;
   margin: 0;
   max-width: 100%;
+  outline: none;
   overflow: visible;
-  padding: var(--oc-space-xsmall) var(--oc-space-small);
-  transition: 0.2s ease-in-out;
-  transition-property: all;
-  transition-property: color, background-color, border;
+  padding: 0.625rem;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  transition-property: color, background-color;
   vertical-align: middle;
   width: 100%;
-  -webkit-appearance: none;
+}
+
+.oc-background-highlight .oc-input {
+  background-color: white;
 }
 
 /* 2 */
@@ -273,8 +281,7 @@ $internal-form-checkbox-indeterminate-image: "data:image/svg+xml;charset=UTF-8,%
  */
 
 .oc-textarea {
-  padding-bottom: $form-padding-vertical;
-  padding-top: $form-padding-vertical;
+  padding: $form-padding-vertical $form-padding-horizontal;
   vertical-align: top;
 }
 
@@ -282,9 +289,24 @@ $internal-form-checkbox-indeterminate-image: "data:image/svg+xml;charset=UTF-8,%
 .oc-input:focus,
 .oc-select:focus,
 .oc-textarea:focus {
-  background-color: $form-focus-background;
-  color: $form-focus-color;
   outline: none;
+
+  border-color: transparent;
+  color: $form-focus-color;
+  background-image: linear-gradient($form-focus-background, $form-focus-background),
+    linear-gradient(
+      90deg,
+      var(--oc-color-swatch-primary-muted) 0%,
+      var(--oc-color-swatch-primary-gradient) 100%
+    );
+}
+
+.oc-background-highlight {
+  .oc-input:focus,
+  .oc-select:focus,
+  .oc-textarea:focus {
+    background-color: white;
+  }
 }
 
 /* Disabled */
