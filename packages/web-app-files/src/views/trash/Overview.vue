@@ -30,8 +30,8 @@
           @sort="handleSort"
         >
           <template #icon="{ item }">
-            <oc-icon class="oc-pl-m" v-if="item.driveType === 'personal'" name="folder" />
-            <oc-icon class="oc-pl-m" v-else name="layout-grid" />
+            <oc-icon v-if="isPersonalSpaceResource(item)" class="oc-pl-m" name="folder" />
+            <oc-icon v-else class="oc-pl-m" name="layout-grid" />
           </template>
           <template #name="{ item }">
             <oc-button
@@ -65,13 +65,17 @@ import { createLocationTrash } from 'web-app-files/src/router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
 import FilesViewWrapper from 'web-app-files/src/components/FilesViewWrapper.vue'
-import { isPersonalSpaceResource, isProjectSpaceResource } from 'web-client/src/helpers'
+import {
+  isPersonalSpaceResource,
+  isProjectSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 export default defineComponent({
   name: 'TrashOverview',
   components: { FilesViewWrapper, AppBar, AppLoadingSpinner },
-  setup: function () {
+  setup() {
     const store = useStore()
     const router = useRouter()
     const { $gettext } = useGettext()
@@ -104,7 +108,7 @@ export default defineComponent({
     })
     const footerTextFilter = computed(() => {
       return $gettext('%{spaceCount} matching trashes', {
-        spaceCount: unref(displaySpaces).length
+        spaceCount: unref(displaySpaces).length.toString()
       })
     })
 
@@ -112,17 +116,17 @@ export default defineComponent({
       { text: $gettext('Deleted files'), onClick: () => loadResourcesTask.perform() }
     ])
 
-    const sort = (list, prop, desc) => {
+    const sort = (list: SpaceResource[], propName: string, desc: boolean) => {
       return [...list].sort((s1, s2) => {
-        if (s1.driveType === 'personal') {
+        if (isPersonalSpaceResource(s1)) {
           return -1
         }
-        if (s2.driveType === 'personal') {
+        if (isPersonalSpaceResource(s2)) {
           return +1
         }
 
-        const a = s1[prop]
-        const b = s2[prop]
+        const a = s1[propName]
+        const b = s2[propName]
 
         return desc ? b.localeCompare(a) : a.localeCompare(b)
       })
@@ -134,7 +138,7 @@ export default defineComponent({
       sortBy.value = event.sortBy
       sortDir.value = event.sortDir
     }
-    const filter = (spaces, filterTerm) => {
+    const filter = (spaces: SpaceResource[], filterTerm: string) => {
       if (!(filterTerm || '').trim()) {
         return spaces
       }
@@ -163,17 +167,17 @@ export default defineComponent({
       }
     ])
 
-    const getSpaceName = (space) => {
-      return space.driveType === 'personal' ? $gettext('Personal') : space.name
+    const getSpaceName = (space: SpaceResource) => {
+      return isPersonalSpaceResource(space) ? $gettext('Personal') : space.name
     }
 
-    const getTrashLink = (space) => {
+    const getTrashLink = (space: SpaceResource) => {
       return createLocationTrash('files-trash-generic', {
         ...createFileRouteOptions(space, { fileId: space.fileId })
       })
     }
 
-    onMounted(async () => {
+    onMounted(() => {
       if (unref(spaces).length === 1) {
         return router.push(getTrashLink(unref(spaces).pop()))
       }
@@ -211,7 +215,8 @@ export default defineComponent({
       breadcrumbs,
       getSpaceName,
       getTrashLink,
-      loadResourcesTask
+      loadResourcesTask,
+      isPersonalSpaceResource
     }
   }
 })
