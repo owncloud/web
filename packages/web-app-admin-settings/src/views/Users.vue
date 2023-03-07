@@ -185,7 +185,6 @@ import GroupsModal from '../components/Users/GroupsModal.vue'
 import { useRemoveFromGroups } from '../mixins/users/removeFromGroups'
 import { useAddToGroups } from '../mixins/users/addToGroups'
 import { configurationManager } from 'web-pkg'
-import { forEach } from 'lodash-es'
 
 export default defineComponent({
   name: 'UsersView',
