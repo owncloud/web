@@ -93,6 +93,7 @@ Summary
 * Enhancement - Respect max quota: [#8489](https://github.com/owncloud/web/pull/8489)
 * Enhancement - User role filter: [#8492](https://github.com/owncloud/web/pull/8492)
 * Enhancement - Beautify file version list: [#8503](https://github.com/owncloud/web/issues/8503)
+* Enhancement - Introduce trashbin overview: [#8515](https://github.com/owncloud/web/pull/8515)
 * Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
 
 Details
@@ -875,6 +876,14 @@ Details
 
    https://github.com/owncloud/web/issues/8503
    https://github.com/owncloud/web/pull/8504
+
+* Enhancement - Introduce trashbin overview: [#8515](https://github.com/owncloud/web/pull/8515)
+
+   We've added a trashbin overview page, where the user can see their personal trashbins but also
+   the trashbin of the spaces they are a member of.
+
+   https://github.com/owncloud/web/issues/8517
+   https://github.com/owncloud/web/pull/8515
 
 * Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
 
