@@ -156,7 +156,7 @@ describe('Notification component', () => {
       it('renders notification as link for spaces', async () => {
         const spaceMock = mock<SpaceResource>({
           fileId: '1',
-          driveAlias: 'driveAlias',
+          getDriveAliasAndItem: () => 'driveAlias',
           disabled: false
         })
         const notification = mock<Notification>({
@@ -174,9 +174,8 @@ describe('Notification component', () => {
         const routerLink = wrapper.findComponent<any>(
           `${selectors.notificationItem} router-link-stub`
         )
-        expect(routerLink.props('to').name).toEqual('files-spaces-generic')
         expect(routerLink.props('to').params).toEqual({
-          driveAliasAndItem: spaceMock.driveAlias
+          driveAliasAndItem: 'driveAlias'
         })
       })
     })

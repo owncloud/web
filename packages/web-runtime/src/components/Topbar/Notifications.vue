@@ -95,6 +95,7 @@ import { Notification } from '../../helpers/notifications'
 import { formatDateFromISO, formatRelativeDateFromISO, useClientService, useStore } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 const POLLING_INTERVAL = 30000
 
@@ -157,7 +158,7 @@ export default {
           (s) => s.fileId === messageRichParameters?.space?.id.split('!')[0] && !s.disabled
         )
         if (space) {
-          return { name: 'files-spaces-generic', params: { driveAliasAndItem: space.driveAlias } }
+          return createFileRouteOptions(space, { path: '', fileId: space.fileId })
         }
       }
       return null
