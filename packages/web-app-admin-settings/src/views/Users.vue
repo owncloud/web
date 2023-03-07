@@ -99,6 +99,30 @@
         </div>
       </template>
     </app-template>
+    <groups-modal
+      v-if="addToGroupsModalIsOpen"
+      :title="$gettext('Add to groups')"
+      :message="
+        $gettext('Add %{userCount} selected users to groups', { userCount: selectedUsers.length })
+      "
+      :groups="groups"
+      :users="selectedUsers"
+      @cancel="() => (addToGroupsModalIsOpen = false)"
+      @confirm="addUsersToGroups"
+    />
+    <groups-modal
+      v-if="removeFromGroupsModalIsOpen"
+      :title="$gettext('Remove from groups')"
+      :message="
+        $gettext('Remove %{userCount} selected users from groups', {
+          userCount: selectedUsers.length
+        })
+      "
+      :groups="groups"
+      :users="selectedUsers"
+      @cancel="() => (removeFromGroupsModalIsOpen = false)"
+      @confirm="removeUsersFromGroups"
+    />
     <create-user-modal
       v-if="createUserModalOpen"
       @cancel="toggleCreateUserModal"
@@ -146,7 +170,7 @@ import {
 } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
@@ -157,6 +181,11 @@ import { SpaceResource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
 import { diff } from 'deep-object-diff'
 import { format } from 'util'
+import GroupsModal from '../components/Users/GroupsModal.vue'
+import { useRemoveFromGroups } from '../mixins/users/removeFromGroups'
+import { useAddToGroups } from '../mixins/users/addToGroups'
+import { configurationManager } from 'web-pkg'
+import { forEach } from 'lodash-es'
 
 export default defineComponent({
   name: 'UsersView',
@@ -168,7 +197,8 @@ export default defineComponent({
     BatchActions,
     ContextActions,
     ItemFilter,
-    QuotaModal
+    QuotaModal,
+    GroupsModal
   },
   mixins: [Delete, EditQuota],
   setup() {
@@ -177,6 +207,9 @@ export default defineComponent({
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
+
+    const { actions: removeFromGroupsActions } = useRemoveFromGroups()
+    const { actions: addToGroupsActions } = useAddToGroups()
 
     const users = ref([])
     const groups = ref([])
@@ -189,10 +222,14 @@ export default defineComponent({
     const loadedUser = ref(null)
     const sideBarLoading = ref(false)
     const createUserModalOpen = ref(false)
+    const addToGroupsModalIsOpen = ref(false)
+    const removeFromGroupsModalIsOpen = ref(false)
     const listHeaderPosition = ref(0)
     const template = ref()
     let loadResourcesEventToken
     let userUpdatedEventToken
+    let addToGroupsActionEventToken
+    let removeFromGroupsActionEventToken
 
     const filters = {
       groups: {
@@ -307,9 +344,12 @@ export default defineComponent({
     }
 
     const batchActions = computed(() => {
-      return [...instance.$_delete_items, ...instance.$_editQuota_items].filter((item) =>
-        item.isEnabled({ resources: unref(selectedUsers) })
-      )
+      return [
+        ...instance.$_delete_items,
+        ...instance.$_editQuota_items,
+        ...unref(addToGroupsActions),
+        ...unref(removeFromGroupsActions)
+      ].filter((item) => item.isEnabled({ resources: unref(selectedUsers) }))
     })
 
     onMounted(async () => {
@@ -322,6 +362,9 @@ export default defineComponent({
         loadResourcesTask.perform()
         selectedUsers.value = []
       })
+
+      calculateListHeaderPosition()
+
       userUpdatedEventToken = eventBus.subscribe(
         'app.admin-settings.users.user.updated',
         (updatedUser) => {
@@ -329,13 +372,32 @@ export default defineComponent({
           loadedUser.value = updatedUser
         }
       )
-      calculateListHeaderPosition()
+      addToGroupsActionEventToken = eventBus.subscribe(
+        'app.admin-settings.users.actions.add-to-groups',
+        () => {
+          addToGroupsModalIsOpen.value = true
+        }
+      )
+      removeFromGroupsActionEventToken = eventBus.subscribe(
+        'app.admin-settings.users.actions.remove-from-groups',
+        () => {
+          removeFromGroupsModalIsOpen.value = true
+        }
+      )
       window.addEventListener('resize', calculateListHeaderPosition)
     })
 
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
       eventBus.unsubscribe('app.admin-settings.users.user.updated', userUpdatedEventToken)
+      eventBus.unsubscribe(
+        'app.admin-settings.users.actions.add-to-groups',
+        addToGroupsActionEventToken
+      )
+      eventBus.unsubscribe(
+        'app.admin-settings.users.actions.remove-from-groups',
+        removeFromGroupsActionEventToken
+      )
     })
 
     const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
@@ -344,6 +406,84 @@ export default defineComponent({
     }
     const spaceQuotaUpdated = (quota) => {
       instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
+    }
+
+    const addUsersToGroups = async ({ users, groups }) => {
+      try {
+        const usersToFetch = []
+        const addUsersToGroupsRequests = []
+        groups.reduce((acc, group) => {
+          for (const user of users) {
+            if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {
+              acc.push(
+                unref(graphClient).groups.addMember(
+                  group.id,
+                  user.id,
+                  configurationManager.serverUrl
+                )
+              )
+              if (!usersToFetch.includes(user.id)) {
+                usersToFetch.push(user.id)
+              }
+            }
+          }
+          return acc
+        }, addUsersToGroupsRequests)
+        await Promise.all(addUsersToGroupsRequests)
+        const usersResponse = await Promise.all(
+          usersToFetch.map((userId) => unref(graphClient).users.getUser(userId))
+        )
+        for (const { data: updatedUser } of usersResponse) {
+          const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
+          unref(users)[userIndex] = updatedUser
+        }
+        await store.dispatch('showMessage', {
+          title: $gettext('Users were added to groups successfully')
+        })
+        addToGroupsModalIsOpen.value = false
+      } catch (e) {
+        console.error(e)
+        await store.dispatch('showMessage', {
+          title: $gettext('Failed add users to group'),
+          status: 'danger'
+        })
+      }
+    }
+
+    const removeUsersFromGroups = async ({ users, groups }) => {
+      try {
+        const usersToFetch = []
+        const removeUsersToGroupsRequests = []
+        groups.reduce((acc, group) => {
+          for (const user of users) {
+            if (user.memberOf.find((userGroup) => userGroup.id === group.id)) {
+              acc.push(unref(graphClient).groups.deleteMember(group.id, user.id))
+              if (!usersToFetch.includes(user.id)) {
+                usersToFetch.push(user.id)
+              }
+            }
+          }
+          return acc
+        }, removeUsersToGroupsRequests)
+        await Promise.all(removeUsersToGroupsRequests)
+        const usersResponse = await Promise.all(
+          usersToFetch.map((userId) => unref(graphClient).users.getUser(userId))
+        )
+        for (const { data: updatedUser } of usersResponse) {
+          const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
+          unref(users)[userIndex] = updatedUser
+        }
+        await store.dispatch('showMessage', {
+          title: $gettext('Users were removed from groups successfully')
+        })
+        removeFromGroupsModalIsOpen.value = false
+      } catch (e) {
+        console.error(e)
+        await store.dispatch('showMessage', {
+          title: $gettext('Failed remove users from group'),
+          status: 'danger'
+        })
+      }
     }
 
     return {
@@ -362,17 +502,20 @@ export default defineComponent({
       accessToken,
       listHeaderPosition,
       createUserModalOpen,
+      addToGroupsModalIsOpen,
+      removeFromGroupsModalIsOpen,
       batchActions,
       filterGroups,
       filterRoles,
       quotaModalIsOpen,
       closeQuotaModal,
       spaceQuotaUpdated,
-      selectedPersonalDrives
+      selectedPersonalDrives,
+      addUsersToGroups,
+      removeUsersFromGroups
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
     ...mapState({ currentUser: 'user' }),
 
     selectedUsersText() {
@@ -543,7 +686,7 @@ export default defineComponent({
 
       for (const groupToAdd of groupsToAdd) {
         requests.push(
-          this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
+          this.graphClient.groups.addMember(groupToAdd.id, user.id, configurationManager.serverUrl)
         )
       }
       for (const groupToDelete of groupsToDelete) {
