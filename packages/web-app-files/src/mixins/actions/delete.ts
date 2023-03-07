@@ -9,7 +9,7 @@ import {
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { useCapabilityFilesPermanentDeletion, useRouter, useStore } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'
-import { Action } from 'web-pkg/src/composables/actions'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'
 
 export const useDelete = ({ store }: { store?: Store<any> } = {}) => {
@@ -20,8 +20,8 @@ export const useDelete = ({ store }: { store?: Store<any> } = {}) => {
 
   const { $gettext } = useGettext()
 
-  const handler = ({ resources }) => {
-    displayDialog(resources)
+  const handler = ({ space, resources }: ActionOptions) => {
+    displayDialog(space, resources)
   }
 
   const actions = computed((): Action[] => [

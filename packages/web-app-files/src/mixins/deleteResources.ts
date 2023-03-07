@@ -2,7 +2,7 @@ import { Store } from 'vuex'
 import { cloneStateObject } from '../helpers/store'
 import { isSameResource } from '../helpers/resource'
 import { buildWebDavFilesTrashPath } from '../helpers/resources'
-import { buildWebDavSpacesTrashPath, SpaceResource } from 'web-client/src/helpers'
+import { buildWebDavSpacesTrashPath, Resource, SpaceResource } from 'web-client/src/helpers'
 import PQueue from 'p-queue'
 import { isLocationTrashActive, isLocationSpacesActive } from '../router'
 import { dirname } from 'path'
@@ -209,7 +209,7 @@ export const useDeleteResources = ({ store }: { store?: Store<any> }) => {
     unref(isInTrashbin) ? trashbin_delete(space) : filesList_delete(space)
   }
 
-  const displayDialog = (resources) => {
+  const displayDialog = (space: SpaceResource, resources: Resource[]) => {
     resourcesToDelete = [...resources]
 
     const modal = {
@@ -222,7 +222,9 @@ export const useDeleteResources = ({ store }: { store?: Store<any> }) => {
       onCancel: () => {
         store.dispatch('hideModal')
       },
-      onConfirm: deleteHelper
+      onConfirm: () => {
+        deleteHelper(space)
+      }
     }
 
     store.dispatch('createModal', modal)
