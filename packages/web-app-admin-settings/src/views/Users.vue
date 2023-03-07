@@ -226,7 +226,6 @@ export default defineComponent({
     const listHeaderPosition = ref(0)
     const template = ref()
     let loadResourcesEventToken
-    let userUpdatedEventToken
     let addToGroupsActionEventToken
     let removeFromGroupsActionEventToken
 
@@ -364,13 +363,6 @@ export default defineComponent({
 
       calculateListHeaderPosition()
 
-      userUpdatedEventToken = eventBus.subscribe(
-        'app.admin-settings.users.user.updated',
-        (updatedUser) => {
-          selectedUsers.value = [updatedUser]
-          loadedUser.value = updatedUser
-        }
-      )
       addToGroupsActionEventToken = eventBus.subscribe(
         'app.admin-settings.users.actions.add-to-groups',
         () => {
@@ -388,7 +380,6 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
-      eventBus.unsubscribe('app.admin-settings.users.user.updated', userUpdatedEventToken)
       eventBus.unsubscribe(
         'app.admin-settings.users.actions.add-to-groups',
         addToGroupsActionEventToken
@@ -407,12 +398,12 @@ export default defineComponent({
       instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
     }
 
-    const addUsersToGroups = async ({ users, groups }) => {
+    const addUsersToGroups = async ({ users: affectedUsers, groups: groupsToAdd }) => {
       try {
         const usersToFetch = []
         const addUsersToGroupsRequests = []
-        groups.reduce((acc, group) => {
-          for (const user of users) {
+        groupsToAdd.reduce((acc, group) => {
+          for (const user of affectedUsers) {
             if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {
               acc.push(
                 unref(graphClient).groups.addMember(
@@ -449,12 +440,12 @@ export default defineComponent({
       }
     }
 
-    const removeUsersFromGroups = async ({ users, groups }) => {
+    const removeUsersFromGroups = async ({ users: affectedUsers, groups: groupsToRemove }) => {
       try {
         const usersToFetch = []
         const removeUsersToGroupsRequests = []
-        groups.reduce((acc, group) => {
-          for (const user of users) {
+        groupsToRemove.reduce((acc, group) => {
+          for (const user of affectedUsers) {
             if (user.memberOf.find((userGroup) => userGroup.id === group.id)) {
               acc.push(unref(graphClient).groups.deleteMember(group.id, user.id))
               if (!usersToFetch.includes(user.id)) {
@@ -576,7 +567,7 @@ export default defineComponent({
       const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
 
       if (!isUserSelected) {
-        return this.selectedUsers.push(toggledUser)
+        return this.selectedUsers.push(this.users.find((u) => u.id === toggledUser.id))
       }
 
       this.selectedUsers = this.selectedUsers.filter((user) => user.id !== toggledUser.id)
@@ -637,9 +628,9 @@ export default defineComponent({
         const userIndex = this.users.findIndex((user) => user.id === updatedUser.id)
 
         this.users[userIndex] = updatedUser
+        this.loadedUser = updatedUser
 
         eventBus.publish('sidebar.entity.saved')
-        eventBus.publish('app.admin-settings.users.user.updated', updatedUser)
 
         return updatedUser
       } catch (error) {
