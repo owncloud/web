@@ -8,6 +8,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { useStore } from 'web-pkg/src/composables'
+import { nextTick } from 'vue'
 
 const currentFolder = {
   id: 1,
@@ -16,29 +17,28 @@ const currentFolder = {
 
 describe('deleteResources', () => {
   describe('method "$_deleteResources_filesList_delete"', () => {
-    it.skip('should call the delete action on a resource in the file list', async () => {
+    it('should call the delete action on a resource in the file list', async () => {
       const resourcesToDelete = [{ id: 2, path: '/' }]
-      const { mocks, storeOptions, wrapper } = getWrapper({
+      const { wrapper } = getWrapper({
         currentFolder,
-        resourcesToDelete,
-        setup: async (instance) => {
-          await wrapper.vm.$_deleteResources_filesList_delete()
-          await wrapper.vm.$nextTick()
-          expect(mocks.$router.push).toHaveBeenCalledTimes(0)
+        setup: async ({ filesList_delete }, { space, router, storeOptions }) => {
+          await filesList_delete(space)
+          await nextTick()
+          expect(router.push).toHaveBeenCalledTimes(0)
           expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
         }
       })
     })
 
-    it.skip('should call the delete action on the current folder', async () => {
+    it('should call the delete action on the current folder', async () => {
       const resourcesToDelete = [currentFolder]
-      const { mocks, storeOptions, wrapper } = getWrapper({
+      const { wrapper } = getWrapper({
         currentFolder,
-        resourcesToDelete,
-        setup: async (instance) => {
-          await wrapper.vm.$_deleteResources_filesList_delete()
-          await wrapper.vm.$nextTick()
-          expect(mocks.$router.push).toHaveBeenCalledTimes(1)
+        setup: async ({ displayDialog, filesList_delete }, { space, router, storeOptions }) => {
+          displayDialog(space, resourcesToDelete)
+          await filesList_delete(space)
+          await nextTick()
+          expect(router.push).toHaveBeenCalledTimes(1)
           expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
         }
       })
@@ -48,12 +48,21 @@ describe('deleteResources', () => {
 
 function getWrapper({
   currentFolder,
-  resourcesToDelete,
   setup
 }: {
   currentFolder: FolderResource
-  resourcesToDelete: Resource[]
-  setup: (instance: ReturnType<typeof useDeleteResources>) => void
+  setup: (
+    instance: ReturnType<typeof useDeleteResources>,
+    {
+      space,
+      router,
+      storeOptions
+    }: {
+      space: SpaceResource
+      router: ReturnType<typeof defaultComponentMocks>['$router']
+      storeOptions: typeof defaultStoreMockOptions
+    }
+  ) => void
 }) {
   const mocks = {
     ...defaultComponentMocks(),
@@ -73,7 +82,7 @@ function getWrapper({
       () => {
         const store = useStore()
         const instance = useDeleteResources({ store })
-        setup(instance)
+        setup(instance, { space: mocks.space, storeOptions, router: mocks.$router })
       },
       {
         mocks,

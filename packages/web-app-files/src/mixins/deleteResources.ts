@@ -231,6 +231,8 @@ export const useDeleteResources = ({ store }: { store?: Store<any> }) => {
   }
 
   return {
-    displayDialog
+    displayDialog,
+    // HACK: exported for unit tests:
+    filesList_delete
   }
 }
