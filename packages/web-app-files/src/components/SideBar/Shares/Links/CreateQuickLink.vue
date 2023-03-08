@@ -18,14 +18,17 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
 import { computed, defineComponent } from 'vue'
 import { useAbility } from 'web-pkg'
 import { inject } from 'vue'
 import { Resource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
-import { linkRoleInternalFile, linkRoleInternalFolder, linkRoleViewerFile, linkRoleViewerFolder } from 'web-client/src/helpers/share'
-import { unref } from 'vue'
+import {
+  linkRoleInternalFile,
+  linkRoleInternalFolder,
+  linkRoleViewerFile,
+  linkRoleViewerFolder
+} from 'web-client/src/helpers/share'
 import { Capabilities } from 'web-client/src/ocs'
 
 export default defineComponent({
@@ -41,7 +44,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const { can } = useAbility()
     const { $gettext } = useGettext()
-    
+
     const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
     const resource = inject<Resource>('resource')
     const capabilities = inject<Capabilities>('capabilities')
@@ -52,13 +55,16 @@ export default defineComponent({
     const createQuickLink = () => {
       const allowResharing = capabilities.capabilities.files_sharing?.resharing
       const isDefaultRoleViewer = capabilities.capabilities.files_sharing?.quickLink?.default_role
-      const internalPerm = (resource.isFolder ? linkRoleInternalFolder : linkRoleInternalFile).bitmask
-      const viewerPerm = (resource.isFolder ? linkRoleViewerFolder : linkRoleViewerFile).bitmask(allowResharing)
+      const internalPerm = (resource.isFolder ? linkRoleInternalFolder : linkRoleInternalFile)
+        .bitmask
+      const viewerPerm = (resource.isFolder ? linkRoleViewerFolder : linkRoleViewerFile).bitmask(
+        allowResharing
+      )
       emit('createPublicLink', {
         link: {
           name: $gettext('Quicklink'),
           permissions:
-          canCreatePublicLinks && isDefaultRoleViewer === 'viewer'
+            canCreatePublicLinks.value && isDefaultRoleViewer === 'viewer'
               ? viewerPerm
               : internalPerm,
           expiration: props.expirationDate.enforced ? props.expirationDate.default : null,
