@@ -1,5 +1,11 @@
 import { DateTime } from 'luxon'
-import { Share } from 'web-client/src/helpers/share'
+import {
+  linkRoleInternalFile,
+  linkRoleInternalFolder,
+  linkRoleViewerFile,
+  linkRoleViewerFolder,
+  Share
+} from 'web-client/src/helpers/share'
 import { Store } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import { useClipboard } from '@vueuse/core'
@@ -17,12 +23,19 @@ export interface CreateQuicklink {
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
   const { resource, store, password, $gettext, ability } = args
 
+  const allowResharing = store.state.user.capabilities.files_sharing?.resharing
+  const isDefaultRoleViewer = store.state.user.capabilities.files_sharing?.quickLink?.default_role
+  const internalPerm = (resource.isFolder ? linkRoleInternalFolder : linkRoleInternalFile).bitmask(
+    allowResharing
+  )
+  const viewerPerm = (resource.isFolder ? linkRoleViewerFolder : linkRoleViewerFile).bitmask(
+    allowResharing
+  )
+  const canCreatePublicLink = ability.can('create-all', 'PublicLink')
   const params: { [key: string]: unknown } = {
     name: $gettext('Quicklink'),
     permissions:
-      store.state.user.capabilities.files_sharing?.quickLink?.default_role === 'viewer'
-        ? '1' /* viewer */
-        : '0' /* internal */,
+      canCreatePublicLink && isDefaultRoleViewer === 'viewer' ? viewerPerm : internalPerm,
     quicklink: true
   }
 

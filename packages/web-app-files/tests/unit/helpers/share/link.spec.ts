@@ -4,6 +4,7 @@ import { Store } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import { useClipboard } from '@vueuse/core'
 import { Ability } from 'web-pkg'
+import { mock } from 'jest-mock-extended'
 
 jest.mock('@vueuse/core', () => ({
   useClipboard: jest.fn().mockReturnValue({ copy: jest.fn() })
@@ -35,6 +36,8 @@ const mockResource = {
   path: '/path/to/file'
 }
 
+const getAbilityMock = (hasPermission) => mock<Ability>({ can: () => hasPermission })
+
 describe('createQuicklink', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -46,7 +49,7 @@ describe('createQuicklink', () => {
       resource: mockResource,
       password: 'password',
       $gettext: (str: string) => str,
-      ability: {} as Ability
+      ability: getAbilityMock(true)
     }
 
     const link = await createQuicklink(args)
@@ -61,7 +64,7 @@ describe('createQuicklink', () => {
       client: clientService.owncloudSdk,
       params: {
         name: 'Quicklink',
-        permissions: '1', // viewer
+        permissions: 1, // viewer
         quicklink: true,
         password: args.password,
         expireDate: DateTime.now().plus({ days: 5 }).endOf('day').toISO(),
@@ -84,7 +87,7 @@ describe('createQuicklink', () => {
         store: mockStore as unknown as Store<any>,
         resource: mockResource,
         $gettext: (str: string) => str,
-        ability: {} as Ability
+        ability: getAbilityMock(true)
       }
 
       const link = await createQuicklink(args)
@@ -99,7 +102,7 @@ describe('createQuicklink', () => {
         client: clientService.owncloudSdk,
         params: {
           name: 'Quicklink',
-          permissions: role === 'viewer' ? '1' : '0',
+          permissions: role === 'viewer' ? 1 : 0,
           quicklink: true,
           expireDate: DateTime.now().plus({ days: 5 }).endOf('day').toISO(),
           spaceRef: mockResource.fileId
