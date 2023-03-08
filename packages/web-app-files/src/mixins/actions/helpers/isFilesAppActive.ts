@@ -7,14 +7,6 @@ const isFilesAppActive = (activeApp: string): boolean => {
   return activeApp === 'files'
 }
 
-export default {
-  computed: {
-    $_isFilesAppActive(): boolean {
-      return isFilesAppActive(activeApp(this.$route))
-    }
-  }
-}
-
 // FIXME: move whole file to composables/ and delete mixin when we have gotten rid of action mixins
 export const useIsFilesAppActive = () => {
   const currentRoute = useRoute()
