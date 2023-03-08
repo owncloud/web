@@ -5,7 +5,7 @@ import { clientService } from 'web-pkg/src/services'
 import { useClipboard } from '@vueuse/core'
 import { Ability } from 'web-pkg'
 
-interface CreateQuicklink {
+export interface CreateQuicklink {
   store: Store<any>
   storageId?: any
   resource: any
