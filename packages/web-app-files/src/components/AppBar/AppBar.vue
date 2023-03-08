@@ -123,7 +123,6 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
-    const { space } = toRefs(props)
 
     const { actions: acceptShareActions } = useAcceptShare({ store })
     const { actions: clearSelectionActions } = useClearSelection({ store })
@@ -148,7 +147,9 @@ export default defineComponent({
         ...unref(emptyTrashBinActions),
         ...unref(moveActions),
         ...unref(restoreActions)
-      ].filter((item) => item.isEnabled({ space, resources: store.getters['Files/selectedFiles'] }))
+      ].filter((item) =>
+        item.isEnabled({ space: props.space, resources: store.getters['Files/selectedFiles'] })
+      )
     })
 
     return {
