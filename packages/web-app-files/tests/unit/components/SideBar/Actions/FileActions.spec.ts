@@ -11,11 +11,22 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
+import { useFileActions } from 'web-app-files/src/mixins/fileActions'
+import { computed } from 'vue'
+import { Action } from 'web-pkg/src/composables/actions'
+
+jest.mock('web-app-files/src/mixins/fileActions')
 
 describe('FileActions', () => {
   describe('when user is on personal route', () => {
     describe('action handlers', () => {
-      it.skip('renders action handlers as clickable elements', async () => {
+      it('renders action handlers as clickable elements', async () => {
+        jest.mocked(useFileActions).mockImplementation(() =>
+          mock<ReturnType<typeof useFileActions>>({
+            getAllAvailableActions: () => Object.values(fileActions) as Action[]
+          })
+        )
+
         const actions = ['copy', 'move', 'download', 'text-editor']
         const { wrapper } = getWrapper()
 
