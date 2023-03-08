@@ -11,6 +11,7 @@ import {
 import { useStore } from 'web-pkg/src/composables'
 import { unref } from 'vue'
 import { ProjectSpaceResource, Resource } from 'web-client/src/helpers'
+import { ActionOptions } from 'web-pkg/src/composables/actions'
 
 describe('emptyTrashBin', () => {
   afterEach(() => jest.clearAllMocks())
@@ -18,14 +19,14 @@ describe('emptyTrashBin', () => {
   describe('isEnabled property', () => {
     it('should be false when resource is given', () => {
       const { wrapper } = getWrapper({
-        setup: ({ actions }, space) => {
+        setup: ({ actions }, { space }) => {
           expect(unref(actions)[0].isEnabled({ space, resources: [{}] as Resource[] })).toBe(false)
         }
       })
     })
     it('should be true when no resource is given', () => {
       const { wrapper } = getWrapper({
-        setup: ({ actions }, space) => {
+        setup: ({ actions }, { space }) => {
           expect(unref(actions)[0].isEnabled({ space, resources: [] })).toBe(true)
         }
       })
@@ -33,7 +34,7 @@ describe('emptyTrashBin', () => {
     it('should be false when location is invalid', () => {
       const { wrapper } = getWrapper({
         invalidLocation: true,
-        setup: ({ actions }, space) => {
+        setup: ({ actions }, { space }) => {
           expect(unref(actions)[0].isEnabled({ space, resources: [] })).toBe(false)
         }
       })
@@ -41,7 +42,7 @@ describe('emptyTrashBin', () => {
     it('should be false in a space trash bin with insufficient permissions', () => {
       const { wrapper } = getWrapper({
         driveType: 'project',
-        setup: ({ actions }, space) => {
+        setup: ({ actions }, { space }) => {
           expect(
             unref(actions)[0].isEnabled({
               space,
@@ -53,39 +54,41 @@ describe('emptyTrashBin', () => {
     })
   })
 
-  describe.skip('method "$_emptyTrashBin_trigger"', () => {
+  describe('empty trashbin action', () => {
     it('should trigger the empty trash bin modal window', async () => {
       const { wrapper } = getWrapper({
-        setup: () => undefined
-      })
-      const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.vm.$_emptyTrashBin_trigger()
+        setup: async ({ actions }, { storeOptions }) => {
+          await unref(actions)[0].handler(mock<ActionOptions>())
 
-      expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
+        }
+      })
     })
   })
 
-  describe.skip('method "$_emptyTrashBin_emptyTrashBin"', () => {
+  describe('method "emptyTrashBin"', () => {
     it('should hide the modal and show message on success', async () => {
       const { wrapper } = getWrapper({
-        setup: () => undefined
-      })
-      const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.$_emptyTrashBin_emptyTrashBin()
+        setup: async ({ emptyTrashBin }, { space, storeOptions }) => {
+          await emptyTrashBin({ space })
 
-      expect(hideModalStub).toHaveBeenCalledTimes(1)
-      expect(showMessageStub).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+        }
+      })
     })
 
-    it.skip('should show message on error', async () => {
+    it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
-      const { wrapper } = getWrapper({ resolveClearTrashBin: false, setup: () => undefined })
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.$_emptyTrashBin_emptyTrashBin()
+      const { wrapper } = getWrapper({
+        resolveClearTrashBin: false,
+        setup: async ({ emptyTrashBin }, { space, storeOptions }) => {
+          await emptyTrashBin({ space })
 
-      expect(showMessageStub).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+        }
+      })
     })
   })
 })
@@ -99,7 +102,16 @@ function getWrapper({
   invalidLocation?: boolean
   resolveClearTrashBin?: boolean
   driveType?: string
-  setup: (instance: ReturnType<typeof useEmptyTrashBin>, space: ProjectSpaceResource) => void
+  setup: (
+    instance: ReturnType<typeof useEmptyTrashBin>,
+    {
+      space,
+      storeOptions
+    }: {
+      space: ProjectSpaceResource
+      storeOptions: typeof defaultStoreMockOptions
+    }
+  ) => void
 }) {
   const mocks = {
     ...defaultComponentMocks({
@@ -132,7 +144,7 @@ function getWrapper({
       () => {
         const store = useStore()
         const instance = useEmptyTrashBin({ store })
-        setup(instance, mocks.space)
+        setup(instance, { space: mocks.space, storeOptions })
       },
       {
         mocks,

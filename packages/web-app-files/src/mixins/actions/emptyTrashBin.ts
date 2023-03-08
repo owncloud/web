@@ -101,7 +101,9 @@ export const useEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   ])
 
   return {
-    actions
+    actions,
+    // HACK: exported for unit tests:
+    emptyTrashBin
   }
 }
 export default {
