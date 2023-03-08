@@ -1,0 +1,6 @@
+Enhancement: QuickActions role configurable
+
+We've added the option to change the default quickactions role via capabilities.
+
+https://github.com/owncloud/web/pull/8566
+https://github.com/owncloud/web/issues/8547
