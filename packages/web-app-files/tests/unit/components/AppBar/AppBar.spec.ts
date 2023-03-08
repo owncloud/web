@@ -1,6 +1,6 @@
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { Resource } from 'web-client'
+import { Resource, SpaceResource } from 'web-client'
 import {
   createStore,
   defaultComponentMocks,
@@ -171,7 +171,7 @@ function getShallowWrapper(
     wrapper: shallowMount(
       { ...AppBar, mixins },
       {
-        props: { ...props },
+        props: { ...props, space: mock<SpaceResource>() },
         slots,
         global: {
           plugins: [...defaultPlugins(), store],
