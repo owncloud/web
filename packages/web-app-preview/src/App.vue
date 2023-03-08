@@ -190,6 +190,7 @@ import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 
 export const appId = 'preview'
 
@@ -237,6 +238,7 @@ export default defineComponent({
       ...useAppDefaults({
         applicationId: 'preview'
       }),
+      ...useDownloadFile(),
       accessToken: useAccessToken({ store }),
       isPublicLinkContext: usePublicLinkContext({ store }),
 
