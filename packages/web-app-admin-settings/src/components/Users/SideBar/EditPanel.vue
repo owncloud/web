@@ -164,7 +164,7 @@ export default defineComponent({
     const isLoginInputDisabled = computed(() => currentUser.uuid === (props.user as User).id)
 
     return {
-      maxQaxQuota: useCapabilitySpacesMaxQuota(),
+      maxQuota: useCapabilitySpacesMaxQuota(),
       isLoginInputDisabled,
       editUser,
       formData,

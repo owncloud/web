@@ -3,4 +3,6 @@ Enhancement: Respect max quota
 We've updated the quota-select component, so that values higher than max quota set on the server side won't be shown.
 
 https://github.com/owncloud/web/pull/8489
+https://github.com/owncloud/web/pull/8571
 https://github.com/owncloud/web/issues/8490
+https://github.com/owncloud/web/issues/8536

@@ -19,8 +19,6 @@ describe('QuotaSelect', () => {
     it('should create option', () => {
       const { wrapper } = getWrapper()
       expect((wrapper.vm as any).createOption('3')).toEqual({
-        displayValue: '3',
-        displayUnit: 'GB',
         value: 3 * Math.pow(10, 9)
       })
     })
@@ -48,8 +46,6 @@ describe('QuotaSelect', () => {
         expect.arrayContaining([
           ...(wrapper.vm as any).DEFAULT_OPTIONS,
           {
-            displayValue: '45',
-            displayUnit: 'GB',
             value: 45 * Math.pow(10, 9),
             selectable: true
           }
@@ -65,13 +61,9 @@ describe('QuotaSelect', () => {
       expect((wrapper.vm as any).options).toEqual(
         expect.arrayContaining([
           {
-            displayValue: '1',
-            displayUnit: 'GB',
             value: Math.pow(10, 9)
           },
           {
-            displayValue: '2',
-            displayUnit: 'GB',
             value: 2 * Math.pow(10, 9)
           }
         ])
@@ -86,18 +78,12 @@ describe('QuotaSelect', () => {
       expect((wrapper.vm as any).options).toEqual(
         expect.arrayContaining([
           {
-            displayValue: '1',
-            displayUnit: 'GB',
             value: Math.pow(10, 9)
           },
           {
-            displayValue: '2',
-            displayUnit: 'GB',
             value: 2 * Math.pow(10, 9)
           },
           {
-            displayValue: '100',
-            displayUnit: 'GB',
             value: 100 * Math.pow(10, 9),
             selectable: false
           }
@@ -113,8 +99,6 @@ function getWrapper({ totalQuota = 10 * Math.pow(10, 9), maxQuota = 0 } = {}) {
       data: () => {
         return {
           selectedOption: {
-            displayValue: '10',
-            displayUnit: 'GB',
             value: 10 * Math.pow(10, 9)
           },
           options: []
