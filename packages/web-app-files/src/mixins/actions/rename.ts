@@ -10,7 +10,7 @@ import {
   extractNameWithoutExtension
 } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { renameResource } from '../../helpers/resources'
+import { renameResource as _renameResource } from '../../helpers/resources'
 import { computed, unref } from 'vue'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
@@ -24,7 +24,7 @@ export const useRename = ({ store }: { store?: Store<any> } = {}) => {
   const clientService = useClientService()
   const canRename = useCapabilityFilesSharingCanRename()
 
-  const checkNewName = (resource, newName, parentResources) => {
+  const checkNewName = (resource, newName, parentResources = undefined) => {
     const newPath =
       resource.path.substring(0, resource.path.length - resource.name.length) + newName
 
@@ -86,7 +86,7 @@ export const useRename = ({ store }: { store?: Store<any> } = {}) => {
     store.dispatch('setModalInputErrorMessage', null)
   }
 
-  const renameResourceHelper = async (
+  const renameResource = async (
     space: SpaceResource,
     resource: Resource,
     newName: string,
@@ -128,7 +128,7 @@ export const useRename = ({ store }: { store?: Store<any> } = {}) => {
 
       if (isCurrentFolder) {
         currentFolder = { ...currentFolder } as Resource
-        renameResource(space, currentFolder, newPath)
+        _renameResource(space, currentFolder, newPath)
         store.commit('SET_CURRENT_FOLDER', currentFolder)
         return router.push(
           createFileRouteOptions(space, {
@@ -138,7 +138,7 @@ export const useRename = ({ store }: { store?: Store<any> } = {}) => {
         )
       }
       const fileResource = { ...resource } as Resource
-      renameResource(space, fileResource, newPath)
+      _renameResource(space, fileResource, newPath)
       store.commit('Files/UPSERT_RESOURCE', fileResource)
     } catch (error) {
       console.error(error)
@@ -173,7 +173,7 @@ export const useRename = ({ store }: { store?: Store<any> } = {}) => {
         newName = `${newName}.${resources[0].extension}`
       }
 
-      renameResourceHelper(space, resources[0], newName, targetSpace)
+      renameResource(space, resources[0], newName, targetSpace)
     }
     const checkName = (newName) => {
       if (!areFileExtensionsShown) {
@@ -251,6 +251,8 @@ export const useRename = ({ store }: { store?: Store<any> } = {}) => {
 
   return {
     actions,
-    handler
+    // HACK: exported for unit tests:
+    checkNewName,
+    renameResource
   }
 }
