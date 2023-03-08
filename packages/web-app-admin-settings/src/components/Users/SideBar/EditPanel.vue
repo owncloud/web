@@ -70,6 +70,7 @@
         </div>
         <quota-select
           v-if="showQuota"
+          id="quota-select-form"
           :key="'quota-select-' + user.id"
           class="oc-mb-s"
           :title="$gettext('Personal quota')"
