@@ -1,0 +1,8 @@
+Enhancement: Add and remove users from groups batch actions
+
+We've introduced add and remove users from groups batch actions to the admin-settings app.
+
+https://github.com/owncloud/web/pull/8553
+https://github.com/owncloud/web/issues/8559
+https://github.com/owncloud/web/issues/8558
+https://github.com/owncloud/web/issues/8472
