@@ -5,7 +5,6 @@ import {
   createStore,
   defaultComponentMocks,
   defaultPlugins,
-  getActionMixinMocks,
   shallowMount,
   defaultStoreMockOptions,
   RouteLocation
@@ -23,19 +22,6 @@ const selectors = {
 const selectedFiles = [mockDeep<Resource>(), mockDeep<Resource>()]
 const actionSlot = "<button class='action-slot'>Click</button>"
 const contentSlot = "<div class='content-slot'>Foo</div>"
-
-const mixins = [
-  '$_clearSelection_items',
-  '$_acceptShare_items',
-  '$_declineShare_items',
-  '$_downloadArchive_items',
-  '$_downloadFile_items',
-  '$_move_items',
-  '$_copy_items',
-  '$_emptyTrashBin_items',
-  '$_delete_items',
-  '$_restore_items'
-]
 
 const breadcrumbItems = [
   { text: 'Example1', to: '/' },
@@ -160,24 +146,20 @@ function getShallowWrapper(
   const mocks = {
     ...defaultComponentMocks({
       currentRoute
-    }),
-    ...getActionMixinMocks({ actions: mixins })
+    })
   }
   mocks.$route.meta.title = 'ExampleTitle'
   const storeOptions = defaultStoreMockOptions
   storeOptions.modules.Files.getters.selectedFiles.mockImplementation(() => selected)
   const store = createStore(storeOptions)
   return {
-    wrapper: shallowMount(
-      { ...AppBar, mixins },
-      {
-        props: { ...props, space: mock<SpaceResource>() },
-        slots,
-        global: {
-          plugins: [...defaultPlugins(), store],
-          mocks
-        }
+    wrapper: shallowMount(AppBar, {
+      props: { ...props, space: mock<SpaceResource>() },
+      slots,
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks
       }
-    )
+    })
   }
 }

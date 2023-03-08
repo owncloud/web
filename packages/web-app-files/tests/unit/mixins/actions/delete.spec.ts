@@ -13,7 +13,7 @@ import {
 } from 'web-test-helpers'
 
 describe('delete', () => {
-  describe('computed property "$_delete_items"', () => {
+  describe('computed property "actions"', () => {
     describe('delete isEnabled property of returned element', () => {
       it.each([
         {

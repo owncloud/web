@@ -10,7 +10,7 @@ const sharesWithMeLocation = 'files-shares-with-me'
 const sharesWithOthersLocation = 'files-shares-with-others'
 
 describe('acceptShare', () => {
-  describe('computed property "$_acceptShare_items"', () => {
+  describe('computed property "actions"', () => {
     describe('isEnabled property of returned element', () => {
       it.each([
         { resources: [{ status: ShareStatus.pending }] as Resource[], expectedStatus: true },

@@ -16,7 +16,7 @@ const currentFolder = {
 }
 
 describe('rename', () => {
-  describe('computed property "$_rename_items"', () => {
+  describe('computed property "actions"', () => {
     describe('isEnabled property of returned element', () => {
       it.each([
         { resources: [{ canRename: () => true }] as Resource[], expectedStatus: true },

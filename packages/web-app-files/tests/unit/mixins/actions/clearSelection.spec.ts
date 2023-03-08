@@ -10,7 +10,7 @@ import {
 } from 'web-test-helpers'
 
 describe('clearSelection', () => {
-  describe('computed property "$_clearSelection_items"', () => {
+  describe('computed property "actions"', () => {
     describe('isEnabled property of returned element', () => {
       it.each([
         { resources: [] as Resource[], expectedStatus: false },

@@ -106,17 +106,3 @@ export const useEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
     emptyTrashBin
   }
 }
-export default {
-  computed: {
-    ...mapGetters('Files', ['activeFiles']),
-    ...mapGetters(['capabilities']),
-    ...mapState(['user']),
-    $_emptyTrashBin_items() {
-      return
-    }
-  },
-  methods: {
-    ...mapActions(['showMessage', 'createModal', 'hideModal', 'toggleModalConfirmButton']),
-    ...mapActions('Files', ['clearTrashBin'])
-  }
-}
