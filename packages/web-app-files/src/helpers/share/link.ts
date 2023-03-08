@@ -16,16 +16,15 @@ interface CreateQuicklink {
 
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
   const { resource, store, password, $gettext, ability } = args
+
   const params: { [key: string]: unknown } = {
     name: $gettext('Quicklink'),
     permissions:
-      store.state.capabilities.files_sharing?.quickLink?.default_role === 'viewer'
+      store.state.user.capabilities.files_sharing?.quickLink?.default_role === 'viewer'
         ? '1' /* viewer */
         : '0' /* internal */,
     quicklink: true
   }
-
-  console.log('permssions', store.state.capabilities.files_sharing?.quickLink?.default_role)
 
   if (password) {
     params.password = password
