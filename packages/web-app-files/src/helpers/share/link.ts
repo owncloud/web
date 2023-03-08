@@ -18,7 +18,10 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
   const { resource, store, password, $gettext, ability } = args
   const params: { [key: string]: unknown } = {
     name: $gettext('Quicklink'),
-    permissions: ability.can('create-all', 'PublicLink') ? '1' : '0',
+    permissions:
+      store.state.capabilities.files_sharing?.quickLink?.default_role === 'viewer'
+        ? '1' /* viewer */
+        : '0' /* internal */,
     quicklink: true
   }
 
