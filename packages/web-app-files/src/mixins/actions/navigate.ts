@@ -17,7 +17,7 @@ import {
 } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { useRouter, useStore } from 'web-pkg/src'
+import { useRouter, useStore } from 'web-pkg/src/composables'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Action, ActionOptions } from 'web-pkg/src/composables/actions'

@@ -39,7 +39,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { actions: navigateActions } = useNavigate({ store })
   const { actions: renameActions } = useRename({ store })
   const { actions: restoreActions } = useRestore({ store })
-  const { actions: showEditTagsActions } = useShowEditTags()
+  const { actions: showEditTagsActions } = useShowEditTags({ store })
 
   const systemActions = computed((): Action[] => [
     ...unref(copyActions),

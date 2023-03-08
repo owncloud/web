@@ -6,7 +6,7 @@ import {
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useClientService, useRouter, useStore } from 'web-pkg/src'
+import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { Action } from 'web-pkg/src/composables/actions'
 
 export const usePaste = ({ store }: { store?: Store<any> } = {}) => {

@@ -1,7 +1,7 @@
 import { isLocationSpacesActive } from '../../../router'
 import { Store } from 'vuex'
 import { thumbnailService } from '../../../services'
-import { useClientService, useRouter, useStore } from 'web-pkg/src'
+import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { ActionOptions } from 'web-pkg/src/composables/actions'

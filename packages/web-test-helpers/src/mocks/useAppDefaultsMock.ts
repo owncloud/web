@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { Resource } from 'web-client/src'
 import { FileResource } from 'web-client/src/helpers'
 import { GetFileContentsResponse } from 'web-client/src/webdav/getFileContents'
-import { AppConfigObject, FileContext, useAppDefaults } from 'web-pkg/src'
+import { AppConfigObject, FileContext, useAppDefaults } from 'web-pkg/src/composables'
 
 export const useAppDefaultsMock = (
   options: Partial<ReturnType<typeof useAppDefaults>> = {}

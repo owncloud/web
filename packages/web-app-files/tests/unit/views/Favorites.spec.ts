@@ -16,7 +16,7 @@ import { RouteLocation } from 'vue-router'
 
 jest.mock('web-app-files/src/composables')
 
-describe.skip('Favorites view', () => {
+describe('Favorites view', () => {
   it('appBar always present', () => {
     const { wrapper } = getMountedWrapper()
     expect(wrapper.find('app-bar-stub').exists()).toBeTruthy()

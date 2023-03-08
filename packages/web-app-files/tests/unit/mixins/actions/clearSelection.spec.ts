@@ -1,7 +1,7 @@
 import { unref } from 'vue'
 import { useClearSelection } from 'web-app-files/src/mixins/actions/clearSelection'
 import { Resource } from 'web-client/src'
-import { useStore } from 'web-pkg/src'
+import { useStore } from 'web-pkg/src/composables'
 import {
   getComposableWrapper,
   defaultComponentMocks,
