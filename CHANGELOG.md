@@ -355,6 +355,7 @@ Details
    https://github.com/owncloud/web/pull/8288
    https://github.com/owncloud/web/pull/8308
    https://github.com/owncloud/web/pull/8311
+   https://github.com/owncloud/web/pull/8567
 
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
 
