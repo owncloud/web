@@ -76,7 +76,6 @@ describe('restore', () => {
     })
   })
 
-  // FIXME: methods are not accessible anymore ...
   describe('method "$_restore_trigger"', () => {
     it('should show message on success', () => {
       const { wrapper } = getWrapper({
@@ -183,7 +182,7 @@ function getWrapper({
     })
   }
   mocks.$clientService.webdav.listFiles.mockImplementation(() => {
-    return { resource: {}, children: [] } as any // FIXME: use Promise.resolve
+    return Promise.resolve({ resource: mock<Resource>(), children: [] })
   })
   mocks.$clientService.webdav.restoreFile.mockImplementation(() => {
     if (resolveRestore) {
