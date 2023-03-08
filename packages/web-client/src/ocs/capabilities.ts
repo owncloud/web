@@ -91,6 +91,9 @@ export interface Capabilities {
           enabled: boolean
           version: string
         }[]
+      },
+      quickLink?: {
+        default_role?: string
       }
     }
     spaces?: {
@@ -120,7 +123,9 @@ export const GetCapabilitiesFactory = (baseURI: string, axios: AxiosInstance) =>
   return {
     async getCapabilities(): Promise<Capabilities> {
       const response = await axios.get(endpoint)
-      return get(response, 'data.ocs.data', { capabilities: null, version: null })
+      const t = get(response, 'data.ocs.data', { capabilities: null, version: null })
+      t.capabilities.files_sharing.quickLink.default_role = 'viewer'
+      return t
     }
   }
 }

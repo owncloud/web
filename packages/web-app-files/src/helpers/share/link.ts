@@ -25,6 +25,8 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
     quicklink: true
   }
 
+  console.log('permssions', store.state.capabilities.files_sharing?.quickLink?.default_role)
+
   if (password) {
     params.password = password
   }
