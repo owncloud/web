@@ -10,16 +10,21 @@ import { computed, unref } from 'vue'
 import { useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { Action, ActionOptions, useIsSearchActive } from 'web-pkg/src/composables/actions'
-import { useDownloadArchive } from './actions/downloadArchive'
-import { useDelete } from './actions/delete'
-import { useMove } from './actions/move'
-import { useRestore } from './actions/restore'
-import { useFavorite } from './actions/favorite'
-import { useDownloadFile } from './actions/downloadFile'
-import { useNavigate } from './actions/navigate'
-import { useRename } from './actions/rename'
-import { useShowEditTags } from './actions/showEditTags'
-import { useCopy } from './actions/copy'
+
+import {
+  useAcceptShare,
+  useCopy,
+  useDeclineShare,
+  useDelete,
+  useDownloadArchive,
+  useDownloadFile,
+  useFavorite,
+  useMove,
+  useNavigate,
+  useRename,
+  useRestore,
+  useShowEditTags
+} from './actions'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -30,8 +35,10 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { $gettext, interpolate: $gettextInterpolate } = useGettext()
   const isSearchActive = useIsSearchActive()
 
+  const { actions: acceptShareActions } = useAcceptShare({ store })
   const { actions: copyActions } = useCopy({ store })
   const { actions: deleteActions } = useDelete({ store })
+  const { actions: declineShareActions } = useDeclineShare({ store })
   const { actions: downloadArchiveActions } = useDownloadArchive({ store })
   const { actions: downloadFileActions } = useDownloadFile()
   const { actions: favoriteActions } = useFavorite({ store })
@@ -42,7 +49,9 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { actions: showEditTagsActions } = useShowEditTags({ store })
 
   const systemActions = computed((): Action[] => [
+    ...unref(acceptShareActions),
     ...unref(copyActions),
+    ...unref(declineShareActions),
     ...unref(deleteActions),
     ...unref(downloadArchiveActions),
     ...unref(downloadFileActions),
