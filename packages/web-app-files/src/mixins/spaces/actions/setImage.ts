@@ -1,5 +1,5 @@
 import { isLocationSpacesActive } from '../../../router'
-import { mapMutations, mapActions, mapGetters, mapState, Store } from 'vuex'
+import { Store } from 'vuex'
 import { thumbnailService } from '../../../services'
 import { useClientService, useRouter, useStore } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'

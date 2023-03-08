@@ -2,7 +2,12 @@ import { unref } from 'vue'
 import { useClearSelection } from 'web-app-files/src/mixins/actions/clearSelection'
 import { Resource } from 'web-client/src'
 import { useStore } from 'web-pkg/src'
-import { getComposableWrapper, defaultComponentMocks } from 'web-test-helpers'
+import {
+  getComposableWrapper,
+  defaultComponentMocks,
+  defaultStoreMockOptions,
+  createStore
+} from 'web-test-helpers'
 
 describe('clearSelection', () => {
   describe('computed property "$_clearSelection_items"', () => {
@@ -12,10 +17,7 @@ describe('clearSelection', () => {
         { resources: [{ id: 1 }] as Resource[], expectedStatus: true }
       ])('should be set correctly', (inputData) => {
         const { wrapper } = getWrapper({
-          setup: () => {
-            const store = useStore()
-            const { actions } = useClearSelection({ store })
-
+          setup: ({ actions }) => {
             const resources = inputData.resources
             expect(unref(actions)[0].isEnabled({ space: null, resources })).toBe(
               inputData.expectedStatus
@@ -26,28 +28,40 @@ describe('clearSelection', () => {
     })
   })
 
-  describe('method "$_clearSelection_trigger"', () => {
-    it.skip('should trigger "RESET_SELECTION"', async () => {
+  describe('clear selection action', () => {
+    it('should trigger "RESET_SELECTION"', async () => {
       const { wrapper } = getWrapper({
-        setup: () => {
-          const store = useStore()
-          const { actions } = useClearSelection({ store })
-
-          // FIXME: needs to spy on the store
-          // const spyCreateModalStub = jest.spyOn(wrapper.vm, 'RESET_SELECTION')
-          // const resources = [{ id: 1 }]
-          // await wrapper.vm.$_clearSelection_trigger({ resources })
-          // expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
+        setup: async ({ actions }, storeOptions) => {
+          const resources = [{ id: 1 }] as Resource[]
+          await unref(actions)[0].handler({ space: null, resources })
+          expect(storeOptions.modules.Files.mutations.RESET_SELECTION).toHaveBeenCalledTimes(1)
         }
       })
     })
   })
 })
 
-function getWrapper({ setup }) {
+function getWrapper({
+  setup
+}: {
+  setup: (
+    instance: ReturnType<typeof useClearSelection>,
+    options: typeof defaultStoreMockOptions
+  ) => void
+}) {
+  const storeOptions = defaultStoreMockOptions
+  const store = createStore(storeOptions)
   return {
-    wrapper: getComposableWrapper(setup, {
-      mocks: defaultComponentMocks()
-    })
+    wrapper: getComposableWrapper(
+      () => {
+        const store = useStore()
+        const instance = useClearSelection({ store })
+        setup(instance, storeOptions)
+      },
+      {
+        mocks: defaultComponentMocks(),
+        store
+      }
+    )
   }
 }

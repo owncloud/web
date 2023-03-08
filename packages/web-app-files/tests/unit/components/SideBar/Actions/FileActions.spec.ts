@@ -12,7 +12,6 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { useFileActions } from 'web-app-files/src/mixins/fileActions'
-import { computed } from 'vue'
 import { Action } from 'web-pkg/src/composables/actions'
 
 jest.mock('web-app-files/src/mixins/fileActions')

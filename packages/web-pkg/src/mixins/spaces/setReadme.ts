@@ -1,6 +1,6 @@
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { mapMutations, mapState, mapActions, Store } from 'vuex'
+import { Store } from 'vuex'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { ActionOptions } from 'web-pkg/src/composables/actions'
 
