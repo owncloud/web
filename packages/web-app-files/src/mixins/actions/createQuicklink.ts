@@ -4,7 +4,7 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 
 import { isLocationSharesActive } from '../../router'
 import { computed } from 'vue'
-import { useAbility, useRouter, useStore } from 'web-pkg/src'
+import { useAbility, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { Action } from 'web-pkg/src/composables/actions'

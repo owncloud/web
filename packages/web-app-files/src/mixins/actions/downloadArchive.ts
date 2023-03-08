@@ -11,7 +11,7 @@ import { archiverService } from '../../services'
 import { isPublicSpaceResource, Resource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
-import { usePublicLinkPassword, useRouter, useStore } from 'web-pkg/src'
+import { usePublicLinkPassword, useRouter, useStore } from 'web-pkg/src/composables'
 import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 

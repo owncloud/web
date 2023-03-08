@@ -5,7 +5,7 @@ import {
 } from '../../router'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
-import { useRouter, useStore } from 'web-pkg/src'
+import { useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { Action } from 'web-pkg/src/composables/actions'
 

@@ -15,7 +15,7 @@ import {
   useClientService,
   useRouter,
   useStore
-} from 'web-pkg/src'
+} from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 
 export const useDeleteResources = ({ store }: { store?: Store<any> }) => {

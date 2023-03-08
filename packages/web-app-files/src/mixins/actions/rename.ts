@@ -12,7 +12,7 @@ import {
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { renameResource } from '../../helpers/resources'
 import { computed, unref } from 'vue'
-import { useClientService, useRouter, useStore } from 'web-pkg/src'
+import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 import { useCapabilityFilesSharingCanRename } from 'web-pkg/src/composables/capability'
@@ -20,7 +20,7 @@ import { useCapabilityFilesSharingCanRename } from 'web-pkg/src/composables/capa
 export const useRename = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
+  const { $gettext, interpolate: $gettextInterpolate } = useGettext()
   const clientService = useClientService()
   const canRename = useCapabilityFilesSharingCanRename()
 

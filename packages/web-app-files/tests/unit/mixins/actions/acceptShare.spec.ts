@@ -3,7 +3,7 @@ import { unref } from 'vue'
 import { useAcceptShare } from 'web-app-files/src/mixins/actions/acceptShare'
 import { Resource } from 'web-client/src'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import { useStore } from 'web-pkg/src'
+import { useStore } from 'web-pkg/src/composables'
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 
 const sharesWithMeLocation = 'files-shares-with-me'

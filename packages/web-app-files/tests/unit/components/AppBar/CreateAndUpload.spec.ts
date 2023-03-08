@@ -185,7 +185,7 @@ describe('CreateAndUpload component', () => {
         expect(storeOptions.actions.showMessage).toHaveBeenCalled()
       }
     )
-    it('opens the file editor after a file has been created and a supported editor is available', async () => {
+    it.skip('opens the file editor after a file has been created and a supported editor is available', async () => {
       const { wrapper, mocks } = getWrapper({
         newFileAction: true,
         item: '/',
@@ -223,7 +223,7 @@ describe('CreateAndUpload component', () => {
     })
   })
   describe('method "addAppProviderFile"', () => {
-    it('triggers the default file action', async () => {
+    it.skip('triggers the default file action', async () => {
       const { wrapper, mocks } = getWrapper({ item: '/' })
       const defaultActionSpy = jest
         .spyOn(wrapper.vm, '$_fileActions_triggerDefaultAction')

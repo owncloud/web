@@ -2,7 +2,7 @@ import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { useDelete } from 'web-app-files/src/mixins/actions/delete'
 import { Resource, SpaceResource } from 'web-client/src'
-import { useStore } from 'web-pkg/src'
+import { useStore } from 'web-pkg/src/composables'
 
 import {
   createStore,

@@ -1,6 +1,11 @@
 import { computed, unref } from 'vue'
 import { Store } from 'vuex'
-import { useCapabilityFilesFavorites, useClientService, useRouter, useStore } from 'web-pkg/src'
+import {
+  useCapabilityFilesFavorites,
+  useClientService,
+  useRouter,
+  useStore
+} from 'web-pkg/src/composables'
 
 import { isLocationCommonActive, isLocationSpacesActive } from '../../router'
 import { useIsFilesAppActive } from './helpers/isFilesAppActive'

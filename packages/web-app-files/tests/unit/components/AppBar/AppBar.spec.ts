@@ -84,7 +84,10 @@ describe('AppBar component', () => {
           [selectedFiles[0]],
           {},
           { hasBulkActions: true },
-          'files-trash-generic'
+          mock<RouteLocation>({
+            name: 'files-trash-generic',
+            path: '/files/trash/personal/admin'
+          })
         )
         expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
       })
@@ -149,11 +152,14 @@ function getShallowWrapper(
     hasSidebarToggle: true,
     hasViewOptions: true
   },
-  currentRouteName = 'files-spaces-generic'
+  currentRoute = mock<RouteLocation>({
+    name: 'files-spaces-generic',
+    path: '/files/spaces/personal/admin'
+  })
 ) {
   const mocks = {
     ...defaultComponentMocks({
-      currentRoute: mock<RouteLocation>({ name: currentRouteName })
+      currentRoute
     }),
     ...getActionMixinMocks({ actions: mixins })
   }

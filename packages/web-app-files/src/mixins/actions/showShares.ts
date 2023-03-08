@@ -6,7 +6,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useRouter, useStore } from 'web-pkg/src'
+import { useRouter, useStore } from 'web-pkg/src/composables'
 import { Store } from 'vuex'
 import { Action } from 'web-pkg/src/composables/actions'
 

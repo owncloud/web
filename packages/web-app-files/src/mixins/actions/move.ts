@@ -8,7 +8,7 @@ import { Store } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'
-import { useRouter, useStore } from 'web-pkg/src'
+import { useRouter, useStore } from 'web-pkg/src/composables'
 
 export const useMove = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

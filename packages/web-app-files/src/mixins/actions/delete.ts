@@ -7,7 +7,7 @@ import {
   isLocationCommonActive
 } from '../../router'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
-import { useCapabilityFilesPermanentDeletion, useRouter, useStore } from 'web-pkg/src'
+import { useCapabilityFilesPermanentDeletion, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'

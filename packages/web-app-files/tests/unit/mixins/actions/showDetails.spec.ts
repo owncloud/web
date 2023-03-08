@@ -9,7 +9,7 @@ import {
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Resource } from 'web-client/src'
-import { useStore } from 'web-pkg/src'
+import { useStore } from 'web-pkg/src/composables'
 
 describe('showDetails', () => {
   describe('method "$_showDetails_trigger"', () => {

@@ -21,7 +21,7 @@ import {
   useClientService,
   useRouter,
   useStore
-} from 'web-pkg/src'
+} from 'web-pkg/src/composables'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Action, ActionOptions } from 'web-pkg/src/composables/actions'

@@ -3,7 +3,7 @@ import { createLocationTrash, createLocationSpaces } from 'web-app-files/src/rou
 import { mock, mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
 import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
-import { useStore } from 'web-pkg/src'
+import { useStore } from 'web-pkg/src/composables'
 import { unref } from 'vue'
 import { Resource } from 'web-client/src'
 import { ProjectSpaceResource } from 'web-client/src/helpers'

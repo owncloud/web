@@ -7,7 +7,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 
 import { isLocationSharesActive, isLocationTrashActive } from '../router'
 import { computed, unref } from 'vue'
-import { useRoute, useRouter, useStore } from 'web-pkg/src'
+import { useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { Action, ActionOptions, useIsSearchActive } from 'web-pkg/src/composables/actions'
 import { useDownloadArchive } from './actions/downloadArchive'
@@ -19,6 +19,7 @@ import { useDownloadFile } from './actions/downloadFile'
 import { useNavigate } from './actions/navigate'
 import { useRename } from './actions/rename'
 import { useShowEditTags } from './actions/showEditTags'
+import { useCopy } from './actions/copy'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -26,10 +27,10 @@ export const EDITOR_MODE_CREATE = 'create'
 export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const route = useRoute()
   const { $gettext, interpolate: $gettextInterpolate } = useGettext()
   const isSearchActive = useIsSearchActive()
 
+  const { actions: copyActions } = useCopy({ store })
   const { actions: deleteActions } = useDelete({ store })
   const { actions: downloadArchiveActions } = useDownloadArchive({ store })
   const { actions: downloadFileActions } = useDownloadFile()
@@ -41,6 +42,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { actions: showEditTagsActions } = useShowEditTags()
 
   const systemActions = computed((): Action[] => [
+    ...unref(copyActions),
     ...unref(deleteActions),
     ...unref(downloadArchiveActions),
     ...unref(downloadFileActions),
@@ -54,7 +56,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
 
   const editorActions = computed(() => {
     const apps = store.state.apps
-    return (store.state.apps.fileEditors as any[])
+    return (apps.fileEditors as any[])
       .map((editor): Action => {
         return {
           name: `editor-${editor.id}`,
@@ -132,7 +134,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
       query: {
         ...(shareId && { shareId }),
         ...(fileId && configurationManager.options.routing.idBased && { fileId }),
-        ...routeToContextQuery(unref(route))
+        ...routeToContextQuery(unref(router.currentRoute))
       }
     }
   }

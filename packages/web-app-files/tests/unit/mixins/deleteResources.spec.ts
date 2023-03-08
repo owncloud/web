@@ -7,7 +7,7 @@ import {
   defaultComponentMocks,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useStore } from 'web-pkg/src'
+import { useStore } from 'web-pkg/src/composables'
 
 const currentFolder = {
   id: 1,

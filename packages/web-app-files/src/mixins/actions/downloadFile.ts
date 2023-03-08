@@ -5,7 +5,7 @@ import {
   isLocationSpacesActive
 } from '../../router'
 import { useIsFilesAppActive } from './helpers/isFilesAppActive'
-import { useRouter } from 'web-pkg/src'
+import { useRouter } from 'web-pkg/src/composables'
 import { Action, useIsSearchActive } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
