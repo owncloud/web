@@ -162,9 +162,9 @@ function getWrapper({
   )
 
   const storeOptions = {
-    ...defaultStoreMockOptions,
-    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
+    ...defaultStoreMockOptions
   }
+
   const store = createStore(storeOptions)
   return {
     wrapper: getComposableWrapper(

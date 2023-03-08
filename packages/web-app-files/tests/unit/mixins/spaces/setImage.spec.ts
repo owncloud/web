@@ -1,178 +1,206 @@
-// import { useSetImage } from 'web-app-files/src/mixins/spaces/actions/setImage'
-// import { thumbnailService } from '../../../../src/services'
-// import { buildSpace, Resource } from 'web-client/src/helpers'
-// import { mock, mockDeep } from 'jest-mock-extended'
-// import { ClientService, clientService } from 'web-pkg'
-// import { Graph } from 'web-client'
-// import {
-//   createStore,
-//   defaultStoreMockOptions,
-//   defaultComponentMocks,
-//   RouteLocation
-// } from 'web-test-helpers'
+import { useSetImage } from 'web-app-files/src/mixins/spaces/actions/setImage'
+import { thumbnailService } from '../../../../src/services'
+import { buildSpace, Resource, SpaceResource } from 'web-client/src/helpers'
+import { mock, mockDeep } from 'jest-mock-extended'
+import { ClientService, clientService } from 'web-pkg'
+import { Graph } from 'web-client'
+import {
+  createStore,
+  defaultStoreMockOptions,
+  defaultComponentMocks,
+  RouteLocation,
+  getComposableWrapper
+} from 'web-test-helpers'
+import { nextTick, unref } from 'vue'
 
-// describe.skip('setImage', () => {
-//   beforeAll(() => {
-//     thumbnailService.initialize({
-//       enabled: true,
-//       version: '0.1',
-//       supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
-//     })
-//   })
+describe('setImage', () => {
+  beforeAll(() => {
+    thumbnailService.initialize({
+      enabled: true,
+      version: '0.1',
+      supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
+    })
+  })
 
-//   afterEach(() => jest.clearAllMocks())
+  afterEach(() => jest.clearAllMocks())
 
-//   describe('isEnabled property', () => {
-//     it('should be false when no resource given', () => {
-//       const spaceMock = {
-//         id: '1',
-//         quota: {},
-//         root: {
-//           permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
-//         },
-//         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
-//       }
-//       const wrapper = getWrapper(buildSpace(spaceMock))
-//       expect(wrapper.vm.$_setSpaceImage_items[0].isEnabled({ resources: [] })).toBe(false)
-//     })
-//     it('should be false when mimeType is not image', () => {
-//       const spaceMock = {
-//         id: '1',
-//         quota: {},
-//         root: {
-//           permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
-//         },
-//         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
-//       }
-//       const wrapper = getWrapper(buildSpace(spaceMock))
-//       expect(
-//         wrapper.vm.$_setSpaceImage_items[0].isEnabled({
-//           resources: [{ id: 1, mimeType: 'text/plain' }]
-//         })
-//       ).toBe(false)
-//     })
-//     it('should be true when the mimeType is image', () => {
-//       const spaceMock = {
-//         id: '1',
-//         quota: {},
-//         root: {
-//           permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
-//         },
-//         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
-//       }
-//       const wrapper = getWrapper(buildSpace(spaceMock))
-//       expect(
-//         wrapper.vm.$_setSpaceImage_items[0].isEnabled({
-//           resources: [{ id: 1, mimeType: 'image/png' }]
-//         })
-//       ).toBe(true)
-//     })
-//     it('should be false when the current user is a viewer', () => {
-//       const spaceMock = {
-//         id: '1',
-//         quota: {},
-//         root: {
-//           permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }]
-//         },
-//         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
-//       }
-//       const wrapper = getWrapper(buildSpace(spaceMock))
-//       expect(
-//         wrapper.vm.$_setSpaceImage_items[0].isEnabled({
-//           resources: [{ id: 1, mimeType: 'image/png' }]
-//         })
-//       ).toBe(false)
-//     })
-//   })
+  describe('isEnabled property', () => {
+    it('should be false when no resource given', () => {
+      const space = buildSpace({
+        id: '1',
+        quota: {},
+        root: {
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
+        },
+        special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
+      })
+      const wrapper = getWrapper({
+        setup: ({ actions }) => {
+          expect(unref(actions)[0].isEnabled({ space, resources: [] as Resource[] })).toBe(false)
+        }
+      })
+    })
+    it('should be false when mimeType is not image', () => {
+      const space = buildSpace({
+        id: '1',
+        quota: {},
+        root: {
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
+        },
+        special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
+      })
+      const wrapper = getWrapper({
+        setup: ({ actions }) => {
+          expect(
+            unref(actions)[0].isEnabled({
+              space,
+              resources: [{ id: 1, mimeType: 'text/plain' }] as Resource[]
+            })
+          ).toBe(false)
+        }
+      })
+    })
+    it('should be true when the mimeType is image', () => {
+      const space = buildSpace({
+        id: '1',
+        quota: {},
+        root: {
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
+        },
+        special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
+      })
+      const wrapper = getWrapper({
+        setup: async ({ actions }) => {
+          expect(
+            unref(actions)[0].isEnabled({
+              space,
+              resources: [{ id: 1, mimeType: 'image/png' }] as Resource[]
+            })
+          ).toBe(true)
+        }
+      })
+    })
+    it('should be false when the current user is a viewer', () => {
+      const space = buildSpace({
+        id: '1',
+        quota: {},
+        root: {
+          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }]
+        },
+        special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
+      })
+      const wrapper = getWrapper({
+        setup: ({ actions }) => {
+          expect(
+            unref(actions)[0].isEnabled({
+              space,
+              resources: [{ id: 1, mimeType: 'image/png' }] as Resource[]
+            })
+          ).toBe(false)
+        }
+      })
+    })
+  })
 
-//   describe('method "$_setSpaceImage_trigger"', () => {
-//     it('should show message on success', async () => {
-//       const responseMock = { data: { special: [{ specialFolder: { name: 'image' } }] } }
-//       const graphMock = mockDeep<Graph>({
-//         drives: { updateDrive: jest.fn().mockResolvedValue(responseMock) }
-//       })
-//       jest.spyOn(clientService, 'graphAuthenticated').mockImplementation(() => graphMock)
+  describe('method "$_setSpaceImage_trigger"', () => {
+    it('should show message on success', async () => {
+      const responseMock = { data: { special: [{ specialFolder: { name: 'image' } }] } }
+      const graphMock = mockDeep<Graph>({
+        drives: { updateDrive: jest.fn().mockResolvedValue(responseMock) }
+      })
 
-//       const wrapper = getWrapper({ id: 1 })
-//       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-//       await wrapper.vm.$_setSpaceImage_trigger({
-//         resources: [
-//           {
-//             webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/subfolder/image.png',
-//             name: 'image.png'
-//           }
-//         ]
-//       })
+      const space = mock<SpaceResource>({ id: 1 })
+      const wrapper = getWrapper({
+        setup: async ({ actions }, { storeOptions, clientService }) => {
+          clientService.graphAuthenticated.mockImplementation(() => graphMock)
+          await unref(actions)[0].handler({
+            space,
+            resources: [
+              {
+                webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/subfolder/image.png',
+                name: 'image.png'
+              }
+            ] as Resource[]
+          })
+          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+        }
+      })
+    })
 
-//       expect(showMessageStub).toHaveBeenCalledTimes(1)
-//     })
+    it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const graphMock = mockDeep<Graph>({
+        drives: { updateDrive: jest.fn().mockRejectedValue(new Error()) }
+      })
 
-//     it('should show message on error', async () => {
-//       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-//       const graphMock = mockDeep<Graph>({
-//         drives: { updateDrive: jest.fn().mockRejectedValue(new Error()) }
-//       })
-//       jest.spyOn(clientService, 'graphAuthenticated').mockImplementation(() => graphMock)
+      const space = mock<SpaceResource>({ id: 1 })
+      const wrapper = getWrapper({
+        setup: async ({ actions }, { storeOptions, clientService }) => {
+          await unref(actions)[0].handler({
+            space,
+            resources: [
+              {
+                webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/subfolder/image.png',
+                name: 'image.png'
+              }
+            ] as Resource[]
+          })
+          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+        }
+      })
+    })
 
-//       const wrapper = getWrapper({ id: 1 })
-//       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-//       await wrapper.vm.$_setSpaceImage_trigger({
-//         resources: [
-//           {
-//             webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/subfolder/image.png',
-//             name: 'image.png'
-//           }
-//         ]
-//       })
-
-//       expect(showMessageStub).toHaveBeenCalledTimes(1)
-//     })
-
-//     /* FIXME: Reintroduce with latest copyMove bugfix
-//     it('should not copy the image if source and destination path are the same', async () => {
-//       mockAxios.request.mockImplementationOnce(() => {
-//         return Promise.resolve({ data: { special: [{ specialFolder: { name: 'image' } }] } })
-//       })
-//       const wrapper = getWrapper()
-//       await wrapper.vm.$_setSpaceImage_trigger({
-//         resources: [
-//           {
-//             webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/.space/image.png',
-//             name: 'image.png'
-//           }
-//         ]
-//       })
-//       expect(wrapper.vm.$client.files.copy).toBeCalledTimes(0)
-//     }) */
-//   })
-// })
-
-// function getWrapper(space) {
-//   const clientMock = mockDeep<ClientService>()
-//   clientMock.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
-//   const defaultMocks = defaultComponentMocks({
-//     currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
-//   })
-//   const storeOptions = {
-//     ...defaultStoreMockOptions,
-//     modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
-//   }
-//   const store = createStore(storeOptions)
-//   // return mount(Component, {
-//   //   global: {
-//   //     plugins: [...defaultPlugins(), store],
-//   //     mocks: {
-//   //       ...defaultMocks,
-//   //       $clientService: clientMock,
-//   //       space
-//   //     }
-//   //   }
-//   // })
-// }
-
-import { createStore } from 'web-test-helpers'
-describe.skip('skipped', () => {
-  test.skip('foo', () => {
-    createStore({})
+    /* FIXME: Reintroduce with latest copyMove bugfix
+      it('should not copy the image if source and destination path are the same', async () => {
+        mockAxios.request.mockImplementationOnce(() => {
+          return Promise.resolve({ data: { special: [{ specialFolder: { name: 'image' } }] } })
+        })
+        const wrapper = getWrapper()
+        await wrapper.vm.$_setSpaceImage_trigger({
+          resources: [
+            {
+              webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/.space/image.png',
+              name: 'image.png'
+            }
+          ]
+        })
+        expect(wrapper.vm.$client.files.copy).toBeCalledTimes(0)
+      }) */
   })
 })
+
+function getWrapper({
+  setup
+}: {
+  setup: (
+    instance: ReturnType<typeof useSetImage>,
+    options: {
+      storeOptions: typeof defaultStoreMockOptions
+      clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
+    }
+  ) => void
+}) {
+  const mocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
+  })
+  mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
+
+  const storeOptions = {
+    ...defaultStoreMockOptions
+  }
+  storeOptions.getters.user.mockImplementation(() => ({ id: 'alice', uuid: 1 }))
+
+  const store = createStore(storeOptions)
+  return {
+    wrapper: getComposableWrapper(
+      () => {
+        const instance = useSetImage({ store })
+        setup(instance, { storeOptions, clientService: mocks.$clientService })
+      },
+      {
+        store,
+        mocks
+      }
+    )
+  }
+}
