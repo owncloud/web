@@ -15,6 +15,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { isEqual } from 'lodash-es'
 import { getSizeClass } from '../../utils/sizeClasses'
 import uniqueId from '../../utils/uniqueId'
 /**
@@ -107,7 +108,6 @@ export default defineComponent({
       },
       set: function (value) {
         this.$emit('update:modelValue', value)
-        this.setChecked(value)
       }
     },
     classes() {
@@ -116,7 +116,7 @@ export default defineComponent({
         'oc-rounded',
         'oc-checkbox-' + getSizeClass(this.size),
         { 'oc-checkbox-outline': this.outline },
-        { 'oc-checkbox-checked': this.modelValue }
+        { 'oc-checkbox-checked': this.isChecked }
       ]
     },
     labelClasses() {
@@ -124,18 +124,12 @@ export default defineComponent({
         'oc-invisible-sr': this.hideLabel,
         'oc-cursor-pointer': !this.disabled
       }
-    }
-  },
-  created() {
-    this.setChecked(this.model)
-  },
-  methods: {
-    setChecked: function (value) {
-      if (typeof value === 'boolean') {
-        this.checked = value
-      } else {
-        this.checked = value.includes(this.option)
+    },
+    isChecked() {
+      if (typeof this.model === 'boolean') {
+        return this.model
       }
+      return this.model.some((m) => isEqual(m, this.option))
     }
   }
 })
