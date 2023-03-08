@@ -178,7 +178,7 @@ export const useDeleteResources = ({ store }: { store?: Store<any> }) => {
               unref(accessToken)
             )
             const driveResponse = await graphClient.drives.getDrive(unref(resources)[0].storageId)
-            store.dispatch('runtime/spaces/UPDATE_SPACE_FIELD', {
+            store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
               id: driveResponse.data.id,
               field: 'spaceQuota',
               value: driveResponse.data.quota
