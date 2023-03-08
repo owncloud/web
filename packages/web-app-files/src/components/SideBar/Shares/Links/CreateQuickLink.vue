@@ -18,8 +18,15 @@
 </template>
 
 <script lang="ts">
+import { mapGetters } from 'vuex'
 import { computed, defineComponent } from 'vue'
 import { useAbility } from 'web-pkg'
+import { inject } from 'vue'
+import { Resource } from 'web-client/src'
+import { useGettext } from 'vue3-gettext'
+import { linkRoleInternalFile, linkRoleInternalFolder, linkRoleViewerFile, linkRoleViewerFolder } from 'web-client/src/helpers/share'
+import { unref } from 'vue'
+import { Capabilities } from 'web-client/src/ocs'
 
 export default defineComponent({
   name: 'CreateQuickLink',
@@ -31,36 +38,41 @@ export default defineComponent({
     }
   },
   emits: ['createPublicLink'],
-  setup() {
+  setup(props, { emit }) {
     const { can } = useAbility()
+    const { $gettext } = useGettext()
+    
     const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
-    return { canCreatePublicLinks }
-  },
-  computed: {
-    heading() {
-      return this.$gettext('Quick link')
-    },
-    createLinkHint() {
-      return this.$gettext('Create quick link')
-    },
-    createLinkLabel() {
-      return this.$gettext('Create link')
-    },
-    noLinkLabel() {
-      return this.$gettext('No link')
-    }
-  },
-  methods: {
-    createQuickLink() {
-      this.$emit('createPublicLink', {
+    const resource = inject<Resource>('resource')
+    const capabilities = inject<Capabilities>('capabilities')
+    const heading = computed(() => $gettext('Quick link'))
+    const createLinkHint = computed(() => $gettext('Create quick link'))
+    const createLinkLabel = computed(() => $gettext('Create link'))
+    const noLinkLabel = computed(() => $gettext('No link'))
+    const createQuickLink = () => {
+      const allowResharing = capabilities.capabilities.files_sharing?.resharing
+      const isDefaultRoleViewer = capabilities.capabilities.files_sharing?.quickLink?.default_role
+      const internalPerm = (resource.isFolder ? linkRoleInternalFolder : linkRoleInternalFile).bitmask
+      const viewerPerm = (resource.isFolder ? linkRoleViewerFolder : linkRoleViewerFile).bitmask(allowResharing)
+      emit('createPublicLink', {
         link: {
-          name: this.$gettext('Quicklink'),
-          permissions: this.canCreatePublicLinks ? 1 : 0,
-          expiration: this.expirationDate.enforced ? this.expirationDate.default : null,
+          name: $gettext('Quicklink'),
+          permissions:
+          canCreatePublicLinks && isDefaultRoleViewer === 'viewer'
+              ? viewerPerm
+              : internalPerm,
+          expiration: props.expirationDate.enforced ? props.expirationDate.default : null,
           quicklink: true,
           password: false
         }
       })
+    }
+    return {
+      heading,
+      createLinkHint,
+      createLinkLabel,
+      noLinkLabel,
+      createQuickLink
     }
   }
 })
