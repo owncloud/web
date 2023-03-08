@@ -2,7 +2,7 @@ import { useSetImage } from 'web-app-files/src/mixins/spaces/actions/setImage'
 import { thumbnailService } from '../../../../src/services'
 import { buildSpace, Resource, SpaceResource } from 'web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { ClientService, clientService } from 'web-pkg'
+import { clientService } from 'web-pkg'
 import { Graph } from 'web-client'
 import {
   createStore,
@@ -11,7 +11,7 @@ import {
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
-import { nextTick, unref } from 'vue'
+import { unref } from 'vue'
 
 describe('setImage', () => {
   beforeAll(() => {

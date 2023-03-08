@@ -3,8 +3,6 @@ import { Resource, SpaceResource } from 'web-client/src'
 export type ActionOptions = {
   space: SpaceResource
   resources: Resource[]
-
-  targetSpace?: SpaceResource
 }
 export interface Action {
   name: string

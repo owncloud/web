@@ -182,7 +182,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from 'vue'
+import { defineComponent, PropType, computed, unref } from 'vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
@@ -417,7 +417,8 @@ export default defineComponent({
       context
     )
 
-    const { actions: renameActions, handler: renameHandler } = useRename()
+    const { actions: renameActions } = useRename()
+    const renameHandler = computed(() => unref(renameActions)[0].handler)
 
     return {
       renameActions,
@@ -631,8 +632,8 @@ export default defineComponent({
     },
     openRenameDialog(item) {
       this.renameHandler({
-        resources: [item],
-        targetSpace: this.resourceRouteResolver.getMatchingSpace(item)
+        space: this.resourceRouteResolver.getMatchingSpace(item),
+        resources: [item]
       })
     },
     openTagsSidebar() {

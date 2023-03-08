@@ -86,17 +86,11 @@ export const useRename = ({ store }: { store?: Store<any> } = {}) => {
     store.dispatch('setModalInputErrorMessage', null)
   }
 
-  const renameResource = async (
-    space: SpaceResource,
-    resource: Resource,
-    newName: string,
-    targetSpace?: SpaceResource
-  ) => {
+  const renameResource = async (space: SpaceResource, resource: Resource, newName: string) => {
     store.dispatch('toggleModalConfirmButton')
     let currentFolder = store.getters['Files/currentFolder']
 
     try {
-      space = targetSpace || space
       const newPath = join(dirname(resource.path), newName)
       await (clientService.webdav as WebDAV).moveFiles(space, resource, space, {
         path: newPath
@@ -155,13 +149,13 @@ export const useRename = ({ store }: { store?: Store<any> } = {}) => {
     }
   }
 
-  const handler = async ({ space, resources, targetSpace }: ActionOptions) => {
+  const handler = async ({ space, resources }: ActionOptions) => {
     const currentFolder = store.getters['Files/currentFolder']
     let parentResources
     if (isSameResource(resources[0], currentFolder)) {
       const parentPath = dirname(currentFolder.path)
       parentResources = (
-        await (clientService.webdav as WebDAV).listFiles(targetSpace || space, {
+        await (clientService.webdav as WebDAV).listFiles(space, {
           path: parentPath
         })
       ).children
@@ -173,7 +167,7 @@ export const useRename = ({ store }: { store?: Store<any> } = {}) => {
         newName = `${newName}.${resources[0].extension}`
       }
 
-      renameResource(space, resources[0], newName, targetSpace)
+      renameResource(space, resources[0], newName)
     }
     const checkName = (newName) => {
       if (!areFileExtensionsShown) {
