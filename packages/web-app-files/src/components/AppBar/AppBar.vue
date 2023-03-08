@@ -61,7 +61,7 @@
 
 <script lang="ts">
 import last from 'lodash-es/last'
-import { computed, defineComponent, PropType, toRefs, unref } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
