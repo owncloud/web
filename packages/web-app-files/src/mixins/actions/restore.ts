@@ -223,7 +223,7 @@ export const useRestore = ({ store }: { store?: Store<any> } = {}) => {
       })
     } else {
       const user = await clientService.owncloudSdk.users.getUser(store.getters.user.id)
-      store.dispatch('SET_QUOTA', user.quota)
+      store.commit('SET_QUOTA', user.quota)
     }
   }
 
@@ -294,6 +294,8 @@ export const useRestore = ({ store }: { store?: Store<any> } = {}) => {
   ])
 
   return {
-    actions
+    actions,
+    // HACK: exported for unit tests:
+    restoreResources
   }
 }

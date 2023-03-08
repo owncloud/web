@@ -1,6 +1,6 @@
 import { useDeleteResources } from 'web-app-files/src/mixins/deleteResources'
 import { mockDeep } from 'jest-mock-extended'
-import { FolderResource, Resource, SpaceResource } from 'web-client/src/helpers'
+import { FolderResource, SpaceResource } from 'web-client/src/helpers'
 import {
   createStore,
   defaultStoreMockOptions,

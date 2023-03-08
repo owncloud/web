@@ -1,12 +1,17 @@
 import { useRestore } from 'web-app-files/src/mixins/actions/restore'
 import { createLocationTrash, createLocationSpaces } from 'web-app-files/src/router'
-import { mock, mockDeep } from 'jest-mock-extended'
-import { OwnCloudSdk } from 'web-client/src/types'
-import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultStoreMockOptions,
+  getComposableWrapper,
+  RouteLocation
+} from 'web-test-helpers'
 import { useStore } from 'web-pkg/src/composables'
 import { unref } from 'vue'
 import { Resource } from 'web-client/src'
-import { ProjectSpaceResource } from 'web-client/src/helpers'
+import { FileResource, ProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 
 describe('restore', () => {
   afterEach(() => jest.clearAllMocks())
@@ -14,7 +19,7 @@ describe('restore', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource is given', () => {
       const { wrapper } = getWrapper({
-        setup: ({ actions }, space) => {
+        setup: ({ actions }, { space }) => {
           expect(
             unref(actions)[0].isEnabled({
               space,
@@ -26,7 +31,7 @@ describe('restore', () => {
     })
     it('should be true when permission is sufficient', () => {
       const { wrapper } = getWrapper({
-        setup: ({ actions }, space) => {
+        setup: ({ actions }, { space }) => {
           expect(
             unref(actions)[0].isEnabled({
               space,
@@ -38,7 +43,7 @@ describe('restore', () => {
     })
     it('should be false when permission is not sufficient', () => {
       const { wrapper } = getWrapper({
-        setup: ({ actions }, space) => {
+        setup: ({ actions }, { space }) => {
           expect(
             unref(actions)[0].isEnabled({
               space,
@@ -51,7 +56,7 @@ describe('restore', () => {
     it('should be false when location is invalid', () => {
       const { wrapper } = getWrapper({
         invalidLocation: true,
-        setup: ({ actions }, space) => {
+        setup: ({ actions }, { space }) => {
           expect(unref(actions)[0].isEnabled({ space, resources: [{}] as Resource[] })).toBe(false)
         }
       })
@@ -59,7 +64,7 @@ describe('restore', () => {
     it('should be false in a space trash bin with insufficient permissions', () => {
       const { wrapper, mocks } = getWrapper({
         driveType: 'project',
-        setup: ({ actions }, space) => {
+        setup: ({ actions }, { space }) => {
           expect(
             unref(actions)[0].isEnabled({
               space,
@@ -73,15 +78,15 @@ describe('restore', () => {
 
   // FIXME: methods are not accessible anymore ...
   describe('method "$_restore_trigger"', () => {
-    it.skip('should show message on success', async () => {
+    it('should show message on success', () => {
       const { wrapper } = getWrapper({
-        setup: async ({ actions }) => {
-          const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-          const removeFilesFromTrashbinStub = jest.spyOn(wrapper.vm, 'removeFilesFromTrashbin')
-          await wrapper.vm.$_restore_restoreResources([{ id: '1', path: '/1' }], [])
+        setup: async ({ restoreResources }, { space, storeOptions }) => {
+          await restoreResources(space, [{ id: '1', path: '/1' }], [])
 
-          expect(showMessageStub).toHaveBeenCalledTimes(1)
-          expect(removeFilesFromTrashbinStub).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.modules.Files.actions.removeFilesFromTrashbin).toHaveBeenCalledTimes(
+            1
+          )
         }
       })
     })
@@ -151,52 +156,49 @@ function getWrapper({
   invalidLocation?: boolean
   resolveClearTrashBin?: boolean
   driveType?: string
-  setup: (instance: ReturnType<typeof useRestore>, space: ProjectSpaceResource) => void
+  setup: (
+    instance: ReturnType<typeof useRestore>,
+    {
+      space,
+      storeOptions
+    }: {
+      space: SpaceResource
+      storeOptions: typeof defaultStoreMockOptions
+      router: ReturnType<typeof defaultComponentMocks>['$router']
+    }
+  ) => void
 }) {
-  const clientMock = mockDeep<OwnCloudSdk>()
   const mocks = {
-    $router: {
-      currentRoute: invalidLocation
-        ? createLocationSpaces('files-spaces-generic')
-        : createLocationTrash('files-trash-generic'),
-      resolve: (r) => {
-        return { href: r.name }
-      }
-    },
-    $gettext: jest.fn(),
-    $gettextInterpolate: jest.fn(),
+    ...defaultComponentMocks({
+      currentRoute: mock<RouteLocation>(
+        invalidLocation
+          ? (createLocationSpaces('files-spaces-generic') as any)
+          : (createLocationTrash('files-trash-generic') as any)
+      )
+    }),
     space: mock<ProjectSpaceResource>({
       driveType,
       isEditor: () => false,
       isManager: () => false
-    }),
-    createModal: jest.fn(),
-    $clientService: {
-      webdav: {
-        listFiles: jest.fn().mockImplementation(() => {
-          return { resource: {}, children: [] }
-        }),
-        restoreFile: jest.fn().mockImplementation(() => {
-          if (resolveRestore) {
-            return Promise.resolve({})
-          }
-          return Promise.reject(new Error(''))
-        })
-      }
-    },
-    $client: {
-      ...clientMock,
-      users: { getUser: () => ({ quota: {} }) },
-      fileTrash: {
-        restore: jest.fn().mockImplementation(() => {
-          if (resolveRestore) {
-            return Promise.resolve({})
-          }
-          return Promise.reject(new Error(''))
-        })
-      }
-    }
+    })
   }
+  mocks.$clientService.webdav.listFiles.mockImplementation(() => {
+    return { resource: {}, children: [] } as any // FIXME: use Promise.resolve
+  })
+  mocks.$clientService.webdav.restoreFile.mockImplementation(() => {
+    if (resolveRestore) {
+      return Promise.resolve(mock<FileResource>())
+    }
+    return Promise.reject(new Error(''))
+  })
+  mocks.$clientService.owncloudSdk.users.getUser.mockImplementation(() => ({ quota: {} }))
+  mocks.$clientService.owncloudSdk.fileTrash.restore.mockImplementation(() => {
+    if (resolveRestore) {
+      return Promise.resolve({})
+    }
+    return Promise.reject(new Error(''))
+  })
+
   const storeOptions = {
     ...defaultStoreMockOptions,
     modules: {
@@ -211,7 +213,7 @@ function getWrapper({
       () => {
         const store = useStore()
         const instance = useRestore({ store })
-        setup(instance, mocks.space)
+        setup(instance, { space: mocks.space, storeOptions, router: mocks.$router })
       },
       {
         mocks,
