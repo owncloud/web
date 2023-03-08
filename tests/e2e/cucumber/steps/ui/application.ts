@@ -12,6 +12,12 @@ When(
   }
 )
 
+When('{string} reloads the page', async function (this: World, stepUser: string): Promise<void> {
+  const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+  const applicationObject = new objects.runtime.Application({ page })
+  await applicationObject.reloadPage()
+})
+
 Then(
   /^"([^"]*)" should have quota "([^"]*)"$/,
   async function (this: World, stepUser: string, quota: string): Promise<void> {
