@@ -4,74 +4,70 @@ import {
   defaultPlugins,
   defaultStoreMockOptions,
   defaultStubs,
-  getActionMixinMocks,
   mount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import ContextActions from 'web-app-files/src/components/FilesList/ContextActions.vue'
 
-const mixins = [
-  '$_acceptShare_items',
-  '$_downloadArchive_items',
-  '$_move_items',
-  '$_copy_items',
-  '$_emptyTrashBin_items',
-  '$_fileActions_editorActions',
-  '$_showShares_items',
-  '$_createQuicklink_items',
-  '$_downloadArchive_items',
-  '$_downloadFile_items',
-  '$_delete_items',
-  '$_move_items',
-  '$_copy_items',
-  '$_paste_items',
-  '$_rename_items',
-  '$_restore_items',
-  '$_declineShare_items',
-  '$_setSpaceImage_items',
-  '$_setSpaceReadme_items',
-  '$_navigate_items',
-  '$_favorite_items',
-  '$_showDetails_items',
-  '$_showEditTags_items'
-]
+import {
+  useAcceptShare,
+  useCreateQuickLink,
+  useRename,
+  useCopy
+} from 'web-app-files/src/mixins/actions'
+import { computed, ref } from 'vue'
+import { Action } from 'web-pkg/src/composables/actions'
+
+function createMockActionComposables(module) {
+  const mockModule: Record<string, any> = {}
+  for (const m of Object.keys(module)) {
+    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
+  }
+  return mockModule
+}
+
+jest.mock('web-app-files/src/mixins/actions', () =>
+  createMockActionComposables(jest.requireActual('web-app-files/src/mixins/actions'))
+)
+
+jest.mock('web-app-files/src/mixins/spaces/actions/setImage', () =>
+  createMockActionComposables(
+    jest.requireActual('web-app-files/src/mixins/spaces/actions/setImage')
+  )
+)
+
+jest.mock('web-pkg/src/mixins/spaces/setReadme', () =>
+  createMockActionComposables(jest.requireActual('web-pkg/src/mixins/spaces/setReadme'))
+)
 
 describe('ContextActions', () => {
-  describe.skip('menu sections', () => {
+  describe('menu sections', () => {
     it('do not render when no action enabled', () => {
       const { wrapper } = getWrapper()
       expect(wrapper.findAll('action-menu-item-stub').length).toBe(0)
     })
 
     it('render enabled actions', () => {
-      const enabledActions = [
-        '$_acceptShare_items',
-        '$_createQuicklink_items',
-        '$_rename_items',
-        '$_fileActions_editorActions'
-      ]
-      const { wrapper } = getWrapper({ enabledActions })
-      expect(wrapper.findAll('action-menu-item-stub').length).toBe(enabledActions.length)
+      const enabledComposables = [useAcceptShare, useCreateQuickLink, useRename, useCopy]
+      for (const composable of enabledComposables) {
+        jest.mocked(composable).mockImplementation(() => ({
+          actions: computed(() => [mock<Action>({ isEnabled: () => true })])
+        }))
+      }
+
+      const { wrapper } = getWrapper()
+      expect(wrapper.findAll('action-menu-item-stub').length).toBe(enabledComposables.length)
     })
   })
 })
 
-function getWrapper({ enabledActions = [] } = {}) {
+function getWrapper() {
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => '/')
   const store = createStore(storeOptions)
   const mocks = {
-    ...defaultComponentMocks(),
-    ...getActionMixinMocks({
-      actions: mixins,
-      enabledActions,
-      additionalActions: {
-        $_fileActions_loadExternalAppActions: jest.fn(() => [
-          { isEnabled: () => false, name: '', items: [] }
-        ])
-      }
-    })
+    ...defaultComponentMocks()
   }
   return {
     storeOptions,

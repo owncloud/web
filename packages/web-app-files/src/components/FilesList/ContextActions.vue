@@ -6,35 +6,38 @@
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 
 import { useFileActions } from '../../mixins/fileActions'
-import { useCreateQuickLink } from '../../mixins/actions/createQuicklink'
 
-import { usePaste } from '../../mixins/actions/paste'
-import { useShowDetails } from '../../mixins/actions/showDetails'
-import { useShowShares } from '../../mixins/actions/showShares'
-import SetSpaceImage from '../../mixins/spaces/actions/setImage'
-import SetSpaceReadme from 'web-pkg/src/mixins/spaces/setReadme'
-import { computed, getCurrentInstance, PropType, unref } from 'vue'
+import { useStore } from 'web-pkg/src/composables'
+import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
-import { useAcceptShare } from 'web-app-files/src/mixins/actions/acceptShare'
-import { useCopy } from 'web-app-files/src/mixins/actions/copy'
-import { useDeclineShare } from 'web-app-files/src/mixins/actions/declineShare'
-import { useDelete } from 'web-app-files/src/mixins/actions/delete'
-import { useDownloadArchive } from 'web-app-files/src/mixins/actions/downloadArchive'
-import { useEmptyTrashBin } from '../../mixins/actions/emptyTrashBin'
-import { useMove } from 'web-app-files/src/mixins/actions/move'
-import { useRestore } from 'web-app-files/src/mixins/actions/restore'
-import { useStore } from 'web-pkg/src'
-import { useDownloadFile } from 'web-app-files/src/mixins/actions/downloadFile'
-import { useRename } from 'web-app-files/src/mixins/actions/rename'
-import { useShowEditTags } from 'web-app-files/src/mixins/actions/showEditTags'
-import { useNavigate } from 'web-app-files/src/mixins/actions/navigate'
-import { useFavorite } from 'web-app-files/src/mixins/actions/favorite'
 
-export default {
+import { useSetImage } from '../../mixins/spaces/actions/setImage'
+import { useSetReadme } from 'web-pkg/src/mixins/spaces/setReadme'
+
+import {
+  useCreateQuickLink,
+  usePaste,
+  useShowDetails,
+  useShowShares,
+  useAcceptShare,
+  useCopy,
+  useDeclineShare,
+  useDelete,
+  useDownloadArchive,
+  useEmptyTrashBin,
+  useMove,
+  useRestore,
+  useDownloadFile,
+  useRename,
+  useShowEditTags,
+  useNavigate,
+  useFavorite
+} from '../../mixins/actions'
+
+export default defineComponent({
   name: 'ContextActions',
   components: { ContextActionMenu },
-  mixins: [SetSpaceImage, SetSpaceReadme],
   props: {
     space: {
       type: Object as PropType<SpaceResource>,
@@ -66,6 +69,8 @@ export default {
     const { actions: pasteActions } = usePaste({ store })
     const { actions: renameActions } = useRename({ store })
     const { actions: restoreActions } = useRestore({ store })
+    const { actions: setSpaceImageActions } = useSetImage({ store })
+    const { actions: setSpaceReadmeActions } = useSetReadme({ store })
     const { actions: showDetailsActions } = useShowDetails({ store })
     const { actions: showEditTagsActions } = useShowEditTags()
     const { actions: showSharesActions } = useShowShares()
@@ -116,15 +121,14 @@ export default {
         ...unref(pasteActions),
         ...unref(renameActions),
         ...unref(restoreActions),
-        ...instance.$_setSpaceImage_items,
-        ...instance.$_setSpaceReadme_items,
+        ...unref(setSpaceImageActions),
+        ...unref(setSpaceReadmeActions),
         ...unref(showEditTagsActions)
       ].filter((item) => item.isEnabled(unref(filterParams)))
     })
 
     const menuItemsSidebar = computed(() => {
       const fileHandlers = [...unref(navigateActions)]
-
       return [
         ...unref(favoriteActions).map((action) => {
           action.keepOpen = true
@@ -182,5 +186,5 @@ export default {
       menuSections
     }
   }
-}
+})
 </script>
