@@ -147,10 +147,14 @@ export const filterUsers = async (args: {
   const { page, filter, values } = args
   await page.locator(util.format(userFilter, filter)).click()
   for (const value of values) {
-    await page.locator(util.format(userFilterOption, value)).click()
-    await page.waitForResponse(
-      (resp) =>
-        resp.url().includes('/users') && resp.status() === 200 && resp.request().method() === 'GET'
-    )
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().includes('/users') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'GET'
+      ),
+      page.locator(util.format(userFilterOption, value)).click()
+    ])
   }
 }
