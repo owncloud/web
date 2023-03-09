@@ -29,6 +29,10 @@ export const useCapabilityCoreSupportUrlSigning = createCapabilityComposable(
   false
 )
 
+export const useCapabilityFilesSharingQuickLinkDefaultRole = createCapabilityComposable(
+  'files_sharing.quick_link.default_role',
+  'viewer'
+)
 export const useCapabilityFilesSharingResharing = createCapabilityComposable(
   'files_sharing.resharing',
   true

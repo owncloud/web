@@ -26,7 +26,11 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject } from 'vue'
-import { useAbility } from 'web-pkg'
+import {
+  useAbility,
+  useCapabilityFilesSharingQuickLinkDefaultRole,
+  useCapabilityFilesSharingResharing
+} from 'web-pkg'
 import { Resource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
 import { LinkShareRoles } from 'web-client/src/helpers/share'
@@ -48,9 +52,8 @@ export default defineComponent({
 
     const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
     const resource = inject<Resource>('resource')
-    const capabilities = inject<Capabilities>('capabilities')
     const createQuickLink = () => {
-      const allowResharing = capabilities.capabilities.files_sharing?.resharing
+      const allowResharing = useCapabilityFilesSharingResharing().value
       const emitData = {
         link: {
           name: $gettext('Quicklink'),
@@ -63,7 +66,7 @@ export default defineComponent({
       if (!canCreatePublicLinks.value) {
         emit('createPublicLink', emitData)
       }
-      const capabilitiesRoleName = capabilities.capabilities.files_sharing?.quick_link?.default_role || 'viewer'
+      const capabilitiesRoleName = useCapabilityFilesSharingQuickLinkDefaultRole().value
       emitData.link.permissions = (
         LinkShareRoles.getByName(capabilitiesRoleName, resource.isFolder) ||
         LinkShareRoles.getByName('viewer', resource.isFolder)
