@@ -863,7 +863,9 @@ Details
    server side won't be shown.
 
    https://github.com/owncloud/web/issues/8490
+   https://github.com/owncloud/web/issues/8536
    https://github.com/owncloud/web/pull/8489
+   https://github.com/owncloud/web/pull/8571
 
 * Enhancement - User role filter: [#8492](https://github.com/owncloud/web/pull/8492)
 
