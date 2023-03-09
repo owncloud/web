@@ -10,15 +10,16 @@ describe('QuotaSelect', () => {
       expect((wrapper.vm as any).optionSelectable({ selectable: true })).toBeTruthy()
       expect((wrapper.vm as any).optionSelectable({})).toBeTruthy()
     })
-    it('should return true while option selectable property is false', () => {
+    it('should return false while option selectable property is false', () => {
       const { wrapper } = getWrapper()
-      expect((wrapper.vm as any).optionSelectable({ unlimited: true })).toBeTruthy()
+      expect((wrapper.vm as any).optionSelectable({ selectable: false })).toBeFalsy()
     })
   })
   describe('method "createOption"', () => {
     it('should create option', () => {
       const { wrapper } = getWrapper()
       expect((wrapper.vm as any).createOption('3')).toEqual({
+        displayValue: '3 GB',
         value: 3 * Math.pow(10, 9)
       })
     })
@@ -46,6 +47,7 @@ describe('QuotaSelect', () => {
         expect.arrayContaining([
           ...(wrapper.vm as any).DEFAULT_OPTIONS,
           {
+            displayValue: '45 GB',
             value: 45 * Math.pow(10, 9),
             selectable: true
           }
@@ -61,9 +63,11 @@ describe('QuotaSelect', () => {
       expect((wrapper.vm as any).options).toEqual(
         expect.arrayContaining([
           {
+            displayValue: '1 GB',
             value: Math.pow(10, 9)
           },
           {
+            displayValue: '2 GB',
             value: 2 * Math.pow(10, 9)
           }
         ])
@@ -78,12 +82,15 @@ describe('QuotaSelect', () => {
       expect((wrapper.vm as any).options).toEqual(
         expect.arrayContaining([
           {
+            displayValue: '1 GB',
             value: Math.pow(10, 9)
           },
           {
+            displayValue: '2 GB',
             value: 2 * Math.pow(10, 9)
           },
           {
+            displayValue: '100 GB',
             value: 100 * Math.pow(10, 9),
             selectable: false
           }
