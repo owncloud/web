@@ -36,7 +36,7 @@ import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
-import { useCapabilityNotifications } from 'web-pkg/src'
+import { useCapabilityNotifications, useStore, useUserContext } from 'web-pkg/src'
 import { computed, unref } from 'vue'
 
 export default {
@@ -56,10 +56,12 @@ export default {
     }
   },
   setup() {
+    const store = useStore()
     const notificationsSupport = useCapabilityNotifications()
+    const isUserContext = useUserContext({ store })
 
     const isNotificationBellEnabled = computed(() => {
-      return unref(notificationsSupport).includes('list')
+      return unref(isUserContext) && unref(notificationsSupport).includes('list')
     })
 
     return {
