@@ -28,13 +28,15 @@
 import { computed, defineComponent, inject } from 'vue'
 import {
   useAbility,
+  useCapabilityFilesSharingPublicAlias,
+  useCapabilityFilesSharingPublicCanContribute,
+  useCapabilityFilesSharingPublicCanEdit,
   useCapabilityFilesSharingQuickLinkDefaultRole,
   useCapabilityFilesSharingResharing
 } from 'web-pkg'
 import { Resource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
 import { LinkShareRoles } from 'web-client/src/helpers/share'
-import { Capabilities } from 'web-client/src/ocs'
 
 export default defineComponent({
   name: 'CreateQuickLink',
@@ -54,10 +56,19 @@ export default defineComponent({
     const resource = inject<Resource>('resource')
     const createQuickLink = () => {
       const allowResharing = useCapabilityFilesSharingResharing().value
+      const canEdit = useCapabilityFilesSharingPublicCanEdit().value
+      const canContribute = useCapabilityFilesSharingPublicCanContribute().value
+      const alias = useCapabilityFilesSharingPublicAlias().value
       const emitData = {
         link: {
           name: $gettext('Quicklink'),
-          permissions: LinkShareRoles.getByName('none', resource.isFolder).bitmask(allowResharing),
+          permissions: LinkShareRoles.getByName(
+            'none',
+            resource.isFolder,
+            canEdit,
+            canContribute,
+            alias
+          ).bitmask(allowResharing),
           expiration: props.expirationDate.enforced ? props.expirationDate.default : null,
           quicklink: true,
           password: false
@@ -68,8 +79,13 @@ export default defineComponent({
       }
       const capabilitiesRoleName = useCapabilityFilesSharingQuickLinkDefaultRole().value
       emitData.link.permissions = (
-        LinkShareRoles.getByName(capabilitiesRoleName, resource.isFolder) ||
-        LinkShareRoles.getByName('viewer', resource.isFolder)
+        LinkShareRoles.getByName(
+          capabilitiesRoleName,
+          resource.isFolder,
+          canEdit,
+          canContribute,
+          alias
+        ) || LinkShareRoles.getByName('viewer', resource.isFolder, canEdit, canContribute, alias)
       ).bitmask(allowResharing)
       emit('createPublicLink', emitData)
     }

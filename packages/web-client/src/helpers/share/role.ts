@@ -410,8 +410,14 @@ export abstract class LinkShareRoles {
     })
   }
 
-  static getByName(name: string, isFolder: boolean): ShareRole {
-    return LinkShareRoles.list(isFolder, true, true, true).find(
+  static getByName(
+    name: string,
+    isFolder: boolean,
+    canEditFile: boolean,
+    canContribute: boolean,
+    hasAliasLinks: boolean
+  ): ShareRole {
+    return LinkShareRoles.list(isFolder, canEditFile, canContribute, hasAliasLinks).find(
       (role) => role.name.toLowerCase() === name.toLowerCase()
     )
   }
