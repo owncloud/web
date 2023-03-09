@@ -899,6 +899,7 @@ Details
    https://github.com/owncloud/web/issues/8519
    https://github.com/owncloud/web/issues/8520
    https://github.com/owncloud/web/pull/8518
+   https://github.com/owncloud/web/pull/8582
 
 * Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
 
