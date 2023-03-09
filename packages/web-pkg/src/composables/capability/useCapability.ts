@@ -79,7 +79,7 @@ export const useCapabilityFilesSharingCanDenyAccess = createCapabilityComposable
 )
 export const useCapabilityFilesSharingCanRename = createCapabilityComposable(
   'files_sharing.can_rename',
-  false
+  true
 )
 export const useCapabilityFilesSharingAllowCustomPermissions = createCapabilityComposable(
   'files_sharing.allow_custom',
