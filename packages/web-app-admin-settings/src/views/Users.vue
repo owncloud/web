@@ -105,7 +105,15 @@
       v-if="addToGroupsModalIsOpen"
       :title="$gettext('Add to groups')"
       :message="
-        $gettext('Add %{userCount} selected users to groups', { userCount: selectedUsers.length })
+        $ngettext(
+          'Add selected user %{user} to groups',
+          'Add %{userCount} selected users to groups ',
+          selectedUsers.length,
+          {
+            user: selectedUsers[0].displayName,
+            userCount: selectedUsers.length
+          }
+        )
       "
       :groups="groups"
       :users="selectedUsers"
@@ -116,9 +124,15 @@
       v-if="removeFromGroupsModalIsOpen"
       :title="$gettext('Remove from groups')"
       :message="
-        $gettext('Remove %{userCount} selected users from groups', {
-          userCount: selectedUsers.length
-        })
+        $ngettext(
+          'Remove selected user %{user} from groups',
+          'Remove %{userCount} selected users from groups ',
+          selectedUsers.length,
+          {
+            user: selectedUsers[0].displayName,
+            userCount: selectedUsers.length
+          }
+        )
       "
       :groups="groups"
       :users="selectedUsers"
@@ -243,7 +257,7 @@ export default defineComponent({
     }
 
     const loadGroupsTask = useTask(function* (signal) {
-      const groupsResponse = yield unref(graphClient).groups.listGroups()
+      const groupsResponse = yield unref(graphClient).groups.listGroups('displayName')
       groups.value = groupsResponse.data.value
     })
 

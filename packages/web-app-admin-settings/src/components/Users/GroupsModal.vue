@@ -9,13 +9,11 @@
     @confirm="$emit('confirm', { users, groups: selectedOptions })"
   >
     <template #content>
-      <oc-select
-        ref="groupsModal"
-        v-model="selectedOptions"
-        :label="$gettext('Groups')"
-        multiple
-        option-label="displayName"
-        :options="groups"
+      <p class="oc-modal-body-message" v-text="message" />
+      <GroupSelect
+        :selected-groups="selectedOptions"
+        :group-options="groups"
+        @selected-option-change="changeSelectedGroupOption"
       />
     </template>
   </oc-modal>
@@ -24,9 +22,11 @@
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
 import { Group, User } from 'web-client/src/generated'
+import GroupSelect from './GroupSelect.vue'
 
 export default defineComponent({
   name: 'GroupsModal',
+  components: { GroupSelect },
   props: {
     title: {
       type: String,
@@ -48,9 +48,12 @@ export default defineComponent({
   emits: ['confirm', 'cancel'],
   setup() {
     const selectedOptions = ref([])
-
+    const changeSelectedGroupOption = (options: Group[]) => {
+      selectedOptions.value = options
+    }
     return {
-      selectedOptions
+      selectedOptions,
+      changeSelectedGroupOption
     }
   }
 })
