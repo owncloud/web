@@ -232,7 +232,6 @@ export default defineComponent({
     const selectedUserIds = computed(() =>
       unref(selectedUsers).map((selectedUser) => selectedUser.id)
     )
-    const loadedUser = ref(null)
     const sideBarLoading = ref(false)
     const createUserModalOpen = ref(false)
     const addToGroupsModalIsOpen = ref(false)
@@ -347,7 +346,6 @@ export default defineComponent({
         selectedPersonalDrives.value.push(spaceResource)
       })
 
-      loadedUser.value = unref(selectedUsers).length === 1 ? unref(selectedUsers)[0] : null
       sideBarLoading.value = false
     })
 
@@ -440,6 +438,13 @@ export default defineComponent({
         for (const { data: updatedUser } of usersResponse) {
           const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
           unref(users)[userIndex] = updatedUser
+          const selectedUserIndex = unref(selectedUsers).findIndex(
+            (user) => user.id === updatedUser.id
+          )
+          if (selectedUserIndex >= 0) {
+            // FIXME: why do we need to update selectedUsers?
+            unref(selectedUsers)[selectedUserIndex] = updatedUser
+          }
         }
         await store.dispatch('showMessage', {
           title: $gettext('Users were added to groups successfully')
@@ -476,6 +481,13 @@ export default defineComponent({
         for (const { data: updatedUser } of usersResponse) {
           const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
           unref(users)[userIndex] = updatedUser
+          const selectedUserIndex = unref(selectedUsers).findIndex(
+            (user) => user.id === updatedUser.id
+          )
+          if (selectedUserIndex >= 0) {
+            // FIXME: why do we need to update selectedUsers?
+            unref(selectedUsers)[selectedUserIndex] = updatedUser
+          }
         }
         await store.dispatch('showMessage', {
           title: $gettext('Users were removed from groups successfully')
@@ -495,7 +507,6 @@ export default defineComponent({
       maxQuota: useCapabilitySpacesMaxQuota(),
       template,
       selectedUsers,
-      loadedUser,
       sideBarLoading,
       users,
       roles,
@@ -548,7 +559,11 @@ export default defineComponent({
           component: DetailsPanel,
           default: true,
           enabled: true,
-          componentAttrs: { user: this.loadedUser, users: this.selectedUsers, roles: this.roles }
+          componentAttrs: {
+            user: this.selectedUsers.length === 1 ? this.selectedUsers[0] : null,
+            users: this.selectedUsers,
+            roles: this.roles
+          }
         },
         {
           app: 'EditPanel',
@@ -558,7 +573,7 @@ export default defineComponent({
           default: false,
           enabled: this.selectedUsers.length === 1,
           componentAttrs: {
-            user: this.loadedUser,
+            user: this.selectedUsers.length === 1 ? this.selectedUsers[0] : null,
             roles: this.roles,
             groups: this.groups,
             onConfirm: this.editUser
@@ -575,7 +590,7 @@ export default defineComponent({
       if (this.allUsersSelected) {
         return (this.selectedUsers = [])
       }
-      this.selectedUsers = [...this.users]
+      this.selectedUsers = this.users
     },
     toggleSelectUser(toggledUser) {
       const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
@@ -640,9 +655,12 @@ export default defineComponent({
 
         const { data: updatedUser } = await this.graphClient.users.getUser(user.id)
         const userIndex = this.users.findIndex((user) => user.id === updatedUser.id)
-
         this.users[userIndex] = updatedUser
-        this.loadedUser = updatedUser
+        const selectedUserIndex = this.selectedUsers.findIndex((user) => user.id === updatedUser.id)
+        if (selectedUserIndex >= 0) {
+          // FIXME: why do we need to update selectedUsers?
+          this.selectedUsers[selectedUserIndex] = updatedUser
+        }
 
         eventBus.publish('sidebar.entity.saved')
 
