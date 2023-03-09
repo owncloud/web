@@ -411,7 +411,7 @@ export abstract class LinkShareRoles {
   }
 
   static getByName(name: string, isFolder: boolean): ShareRole {
-    return LinkShareRoles.list(isFolder).find(
+    return LinkShareRoles.list(isFolder, true, true, true).find(
       (role) => role.name.toLowerCase() === name.toLowerCase()
     )
   }

@@ -25,9 +25,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, inject } from 'vue'
 import { useAbility } from 'web-pkg'
-import { inject } from 'vue'
 import { Resource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
 import { LinkShareRoles } from 'web-client/src/helpers/share'
@@ -64,7 +63,7 @@ export default defineComponent({
       if (!canCreatePublicLinks.value) {
         emit('createPublicLink', emitData)
       }
-      const capabilitiesRoleName = capabilities.capabilities.files_sharing?.quickLink?.default_role || 'viewer'
+      const capabilitiesRoleName = capabilities.capabilities.files_sharing?.quick_link?.default_role || 'viewer'
       emitData.link.permissions = (
         LinkShareRoles.getByName(capabilitiesRoleName, resource.isFolder) ||
         LinkShareRoles.getByName('viewer', resource.isFolder)

@@ -92,7 +92,7 @@ export interface Capabilities {
           version: string
         }[]
       }
-      quickLink?: {
+      quick_link?: {
         default_role?: string
       }
     }
