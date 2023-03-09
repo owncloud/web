@@ -54,23 +54,25 @@ export default defineComponent({
 
     const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
     const resource = inject<Resource>('resource')
+    const allowResharing = useCapabilityFilesSharingResharing()
+    const canEdit = useCapabilityFilesSharingPublicCanEdit()
+    const canContribute = useCapabilityFilesSharingPublicCanContribute()
+    const alias = useCapabilityFilesSharingPublicAlias()
+    const capabilitiesRoleName = useCapabilityFilesSharingQuickLinkDefaultRole()
     const createQuickLink = () => {
-      const allowResharing = unref(useCapabilityFilesSharingResharing())
-      const canEdit = unref(useCapabilityFilesSharingPublicCanEdit())
-      const canContribute = unref(useCapabilityFilesSharingPublicCanContribute())
-      const alias = unref(useCapabilityFilesSharingPublicAlias())
-      const capabilitiesRoleName = unref(useCapabilityFilesSharingQuickLinkDefaultRole())
-      const roleName = !unref(canCreatePublicLinks) ? 'none' : capabilitiesRoleName || 'viewer'
+      const roleName = !unref(canCreatePublicLinks)
+        ? 'none'
+        : unref(capabilitiesRoleName) || 'viewer'
       const emitData = {
         link: {
           name: $gettext('Quicklink'),
           permissions: LinkShareRoles.getByName(
             roleName,
-            resource.isFolder,
-            canEdit,
-            canContribute,
-            alias
-          ).bitmask(allowResharing),
+            unref(resource).isFolder,
+            unref(canEdit),
+            unref(canContribute),
+            unref(alias)
+          ).bitmask(unref(allowResharing)),
           expiration: props.expirationDate.enforced ? props.expirationDate.default : null,
           quicklink: true,
           password: false
