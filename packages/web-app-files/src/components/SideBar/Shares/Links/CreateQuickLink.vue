@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject } from 'vue'
+import { computed, defineComponent, inject, unref } from 'vue'
 import {
   useAbility,
   useCapabilityFilesSharingPublicAlias,
@@ -55,10 +55,10 @@ export default defineComponent({
     const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
     const resource = inject<Resource>('resource')
     const createQuickLink = () => {
-      const allowResharing = useCapabilityFilesSharingResharing().value
-      const canEdit = useCapabilityFilesSharingPublicCanEdit().value
-      const canContribute = useCapabilityFilesSharingPublicCanContribute().value
-      const alias = useCapabilityFilesSharingPublicAlias().value
+      const allowResharing = unref(useCapabilityFilesSharingResharing())
+      const canEdit = unref(useCapabilityFilesSharingPublicCanEdit())
+      const canContribute = unref(useCapabilityFilesSharingPublicCanContribute())
+      const alias = unref(useCapabilityFilesSharingPublicAlias())
       const emitData = {
         link: {
           name: $gettext('Quicklink'),
