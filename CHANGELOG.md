@@ -96,6 +96,7 @@ Summary
 * Enhancement - Introduce trashbin overview: [#8515](https://github.com/owncloud/web/pull/8515)
 * Enhancement - Make notifications work with oCIS: [#8518](https://github.com/owncloud/web/pull/8518)
 * Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
+* Enhancement - Add and remove users from groups batch actions: [#8553](https://github.com/owncloud/web/pull/8553)
 
 Details
 -------
@@ -904,6 +905,15 @@ Details
 
    https://github.com/owncloud/web/issues/8540
    https://github.com/owncloud/web/pull/8541
+
+* Enhancement - Add and remove users from groups batch actions: [#8553](https://github.com/owncloud/web/pull/8553)
+
+   We've introduced add and remove users from groups batch actions to the admin-settings app.
+
+   https://github.com/owncloud/web/issues/8559
+   https://github.com/owncloud/web/issues/8558
+   https://github.com/owncloud/web/issues/8472
+   https://github.com/owncloud/web/pull/8553
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
