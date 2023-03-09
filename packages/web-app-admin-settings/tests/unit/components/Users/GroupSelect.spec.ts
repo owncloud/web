@@ -1,4 +1,4 @@
-import GroupSelect from '../../../../../src/components/Users/SideBar/GroupSelect.vue'
+import GroupSelect from '../../../../src/components/Users/GroupSelect.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Group } from 'web-client/src/generated'

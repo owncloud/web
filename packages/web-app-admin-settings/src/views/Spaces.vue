@@ -8,6 +8,9 @@
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
       :is-side-bar-header-compact="selectedSpaces.length === 1"
+      :show-batch-actions="!!selectedSpaces.length"
+      :batch-actions="batchActions"
+      :batch-action-items="selectedSpaces"
     >
       <template #sideBarHeader>
         <space-info
@@ -17,23 +20,18 @@
         />
       </template>
       <template #topbarActions>
-        <div ref="appBarActionsRef" class="admin-settings-app-bar-actions oc-mt-xs">
+        <div class="admin-settings-app-bar-actions">
           <div v-if="selectedSpaces.length >= 1" class="oc-flex oc-flex-middle">
             <oc-button
-              id="files-clear-selection"
+              id="spaces-clear-selection"
               v-oc-tooltip="$gettext('Clear selection')"
               :aria-label="$gettext('Clear selection')"
+              class="oc-py-s"
               appearance="outline"
               @click="unselectAllSpaces"
             >
               <oc-icon name="close" />
             </oc-button>
-            <batch-actions
-              class="oc-ml-s"
-              :items="selectedSpaces"
-              :actions="batchActions"
-              :limited-screen-space="limitedScreenSpace"
-            />
           </div>
         </div>
       </template>
@@ -104,7 +102,6 @@ import SpaceNoSelection from 'web-pkg/src/components/sideBar/Spaces/SpaceNoSelec
 import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
-import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
 import Delete from 'web-pkg/src/mixins/spaces/delete'
 import Disable from 'web-pkg/src/mixins/spaces/disable'
@@ -122,7 +119,6 @@ export default defineComponent({
     NoContentMessage,
     ContextActions,
     SpaceInfo,
-    BatchActions,
     QuotaModal
   },
   mixins: [Delete, Disable, Restore, EditQuota],
@@ -251,15 +247,6 @@ export default defineComponent({
       ].filter((p) => p.enabled)
     })
 
-    const limitedScreenSpace = ref(false)
-    const appBarActionsRef = ref()
-    const onResize = () => {
-      limitedScreenSpace.value = unref(sideBarOpen)
-        ? window.innerWidth <= 1280
-        : window.innerWidth <= 1000
-    }
-    const resizeObserver = new ResizeObserver(onResize)
-
     onMounted(async () => {
       await loadResourcesTask.perform()
       loadResourcesEventToken.value = eventBus.subscribe('app.admin-settings.list.load', () => {
@@ -269,7 +256,6 @@ export default defineComponent({
 
       calculateListHeaderPosition()
       window.addEventListener('resize', calculateListHeaderPosition)
-      resizeObserver.observe(unref(appBarActionsRef))
 
       updateQuotaForSpaceEventToken = eventBus.subscribe(
         'app.admin-settings.spaces.space.quota.updated',
@@ -288,7 +274,6 @@ export default defineComponent({
         'app.admin-settings.spaces.space.quota.updated',
         updateQuotaForSpaceEventToken
       )
-      resizeObserver.unobserve(unref(appBarActionsRef))
     })
 
     const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
@@ -316,9 +301,6 @@ export default defineComponent({
       toggleSelectAllSpaces,
       toggleSelectSpace,
       unselectAllSpaces,
-      limitedScreenSpace,
-      appBarActionsRef,
-      onResize,
       quotaModalIsOpen,
       closeQuotaModal,
       spaceQuotaUpdated

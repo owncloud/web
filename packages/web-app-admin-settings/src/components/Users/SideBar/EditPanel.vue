@@ -106,7 +106,7 @@ import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
-import GroupSelect from './GroupSelect.vue'
+import GroupSelect from '../GroupSelect.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
 import { Group, User } from 'web-client/src/generated'
@@ -156,9 +156,7 @@ export default defineComponent({
     })
     const groupOptions = computed(() => {
       const { memberOf: selectedGroups } = unref(editUser)
-      return props.groups
-        .filter((g) => !selectedGroups.some((s) => s.id === g.id))
-        .sort((a, b) => a.displayName.localeCompare(b.displayName))
+      return props.groups.filter((g) => !selectedGroups.some((s) => s.id === g.id))
     })
 
     const isLoginInputDisabled = computed(() => currentUser.uuid === (props.user as User).id)
@@ -239,7 +237,7 @@ export default defineComponent({
     changeSelectedQuotaOption(option) {
       this.editUser.drive.quota.total = option.value
     },
-    changeSelectedGroupOption(option: Group) {
+    changeSelectedGroupOption(option: Group[]) {
       this.editUser.memberOf = option
     },
     async validateUserName() {

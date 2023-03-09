@@ -23,6 +23,7 @@
                 class="item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs"
                 justify-content="left"
                 appearance="raw"
+                :data-test-value="item[displayNameAttribute]"
                 @click="toggleItemSelection(item)"
               >
                 <div>

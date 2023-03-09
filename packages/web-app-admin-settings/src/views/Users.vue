@@ -7,22 +7,24 @@
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
       :side-bar-loading="sideBarLoading"
+      :show-batch-actions="!!selectedUsers.length"
+      :batch-actions="batchActions"
+      :batch-action-items="selectedUsers"
     >
       <template #topbarActions>
-        <div class="admin-settings-app-bar-actions oc-mt-xs">
+        <div class="admin-settings-app-bar-actions">
           <div v-if="selectedUsers.length" class="oc-flex oc-flex-middle">
             <span v-text="selectedUsersText" />
             <oc-button
-              id="files-clear-selection"
+              id="users-clear-selection"
               v-oc-tooltip="$gettext('Clear selection')"
               :aria-label="$gettext('Clear selection')"
-              class="oc-ml-m"
+              class="oc-ml-m oc-py-s"
               appearance="outline"
               @click="unselectAllUsers"
             >
               <oc-icon name="close" />
             </oc-button>
-            <batch-actions class="oc-ml-s" :items="selectedUsers" :actions="batchActions" />
           </div>
           <div v-else>
             <oc-button variation="primary" appearance="filled" @click="toggleCreateUserModal">
@@ -99,6 +101,44 @@
         </div>
       </template>
     </app-template>
+    <groups-modal
+      v-if="addToGroupsModalIsOpen"
+      :title="$gettext('Add to groups')"
+      :message="
+        $ngettext(
+          'Add selected user %{user} to groups',
+          'Add %{userCount} selected users to groups ',
+          selectedUsers.length,
+          {
+            user: selectedUsers[0].displayName,
+            userCount: selectedUsers.length
+          }
+        )
+      "
+      :groups="groups"
+      :users="selectedUsers"
+      @cancel="() => (addToGroupsModalIsOpen = false)"
+      @confirm="addUsersToGroups"
+    />
+    <groups-modal
+      v-if="removeFromGroupsModalIsOpen"
+      :title="$gettext('Remove from groups')"
+      :message="
+        $ngettext(
+          'Remove selected user %{user} from groups',
+          'Remove %{userCount} selected users from groups ',
+          selectedUsers.length,
+          {
+            user: selectedUsers[0].displayName,
+            userCount: selectedUsers.length
+          }
+        )
+      "
+      :groups="groups"
+      :users="selectedUsers"
+      @cancel="() => (removeFromGroupsModalIsOpen = false)"
+      @confirm="removeUsersFromGroups"
+    />
     <create-user-modal
       v-if="createUserModalOpen"
       @cancel="toggleCreateUserModal"
@@ -123,7 +163,6 @@ import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
-import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import Delete from '../mixins/users/delete'
 import {
@@ -146,7 +185,7 @@ import {
 } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
@@ -157,6 +196,10 @@ import { SpaceResource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
 import { diff } from 'deep-object-diff'
 import { format } from 'util'
+import GroupsModal from '../components/Users/GroupsModal.vue'
+import { useRemoveFromGroups } from '../mixins/users/removeFromGroups'
+import { useAddToGroups } from '../mixins/users/addToGroups'
+import { configurationManager } from 'web-pkg'
 
 export default defineComponent({
   name: 'UsersView',
@@ -165,10 +208,10 @@ export default defineComponent({
     AppTemplate,
     UsersList,
     CreateUserModal,
-    BatchActions,
     ContextActions,
     ItemFilter,
-    QuotaModal
+    QuotaModal,
+    GroupsModal
   },
   mixins: [Delete, EditQuota],
   setup() {
@@ -178,6 +221,9 @@ export default defineComponent({
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
 
+    const { actions: removeFromGroupsActions } = useRemoveFromGroups()
+    const { actions: addToGroupsActions } = useAddToGroups()
+
     const users = ref([])
     const groups = ref([])
     const roles = ref([])
@@ -186,13 +232,15 @@ export default defineComponent({
     const selectedUserIds = computed(() =>
       unref(selectedUsers).map((selectedUser) => selectedUser.id)
     )
-    const loadedUser = ref(null)
     const sideBarLoading = ref(false)
     const createUserModalOpen = ref(false)
+    const addToGroupsModalIsOpen = ref(false)
+    const removeFromGroupsModalIsOpen = ref(false)
     const listHeaderPosition = ref(0)
     const template = ref()
     let loadResourcesEventToken
-    let userUpdatedEventToken
+    let addToGroupsActionEventToken
+    let removeFromGroupsActionEventToken
 
     const filters = {
       groups: {
@@ -208,7 +256,7 @@ export default defineComponent({
     }
 
     const loadGroupsTask = useTask(function* (signal) {
-      const groupsResponse = yield unref(graphClient).groups.listGroups()
+      const groupsResponse = yield unref(graphClient).groups.listGroups('displayName')
       groups.value = groupsResponse.data.value
     })
 
@@ -298,7 +346,6 @@ export default defineComponent({
         selectedPersonalDrives.value.push(spaceResource)
       })
 
-      loadedUser.value = unref(selectedUsers).length === 1 ? unref(selectedUsers)[0] : null
       sideBarLoading.value = false
     })
 
@@ -307,9 +354,12 @@ export default defineComponent({
     }
 
     const batchActions = computed(() => {
-      return [...instance.$_delete_items, ...instance.$_editQuota_items].filter((item) =>
-        item.isEnabled({ resources: unref(selectedUsers) })
-      )
+      return [
+        ...instance.$_delete_items,
+        ...instance.$_editQuota_items,
+        ...unref(addToGroupsActions),
+        ...unref(removeFromGroupsActions)
+      ].filter((item) => item.isEnabled({ resources: unref(selectedUsers) }))
     })
 
     onMounted(async () => {
@@ -322,20 +372,34 @@ export default defineComponent({
         loadResourcesTask.perform()
         selectedUsers.value = []
       })
-      userUpdatedEventToken = eventBus.subscribe(
-        'app.admin-settings.users.user.updated',
-        (updatedUser) => {
-          selectedUsers.value = [updatedUser]
-          loadedUser.value = updatedUser
+
+      calculateListHeaderPosition()
+
+      addToGroupsActionEventToken = eventBus.subscribe(
+        'app.admin-settings.users.actions.add-to-groups',
+        () => {
+          addToGroupsModalIsOpen.value = true
         }
       )
-      calculateListHeaderPosition()
+      removeFromGroupsActionEventToken = eventBus.subscribe(
+        'app.admin-settings.users.actions.remove-from-groups',
+        () => {
+          removeFromGroupsModalIsOpen.value = true
+        }
+      )
       window.addEventListener('resize', calculateListHeaderPosition)
     })
 
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
-      eventBus.unsubscribe('app.admin-settings.users.user.updated', userUpdatedEventToken)
+      eventBus.unsubscribe(
+        'app.admin-settings.users.actions.add-to-groups',
+        addToGroupsActionEventToken
+      )
+      eventBus.unsubscribe(
+        'app.admin-settings.users.actions.remove-from-groups',
+        removeFromGroupsActionEventToken
+      )
     })
 
     const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
@@ -346,12 +410,103 @@ export default defineComponent({
       instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
     }
 
+    const addUsersToGroups = async ({ users: affectedUsers, groups: groupsToAdd }) => {
+      try {
+        const usersToFetch = []
+        const addUsersToGroupsRequests = []
+        groupsToAdd.reduce((acc, group) => {
+          for (const user of affectedUsers) {
+            if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {
+              acc.push(
+                unref(graphClient).groups.addMember(
+                  group.id,
+                  user.id,
+                  configurationManager.serverUrl
+                )
+              )
+              if (!usersToFetch.includes(user.id)) {
+                usersToFetch.push(user.id)
+              }
+            }
+          }
+          return acc
+        }, addUsersToGroupsRequests)
+        await Promise.all(addUsersToGroupsRequests)
+        const usersResponse = await Promise.all(
+          usersToFetch.map((userId) => unref(graphClient).users.getUser(userId))
+        )
+        for (const { data: updatedUser } of usersResponse) {
+          const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
+          unref(users)[userIndex] = updatedUser
+          const selectedUserIndex = unref(selectedUsers).findIndex(
+            (user) => user.id === updatedUser.id
+          )
+          if (selectedUserIndex >= 0) {
+            // FIXME: why do we need to update selectedUsers?
+            unref(selectedUsers)[selectedUserIndex] = updatedUser
+          }
+        }
+        await store.dispatch('showMessage', {
+          title: $gettext('Users were added to groups successfully')
+        })
+        addToGroupsModalIsOpen.value = false
+      } catch (e) {
+        console.error(e)
+        await store.dispatch('showMessage', {
+          title: $gettext('Failed add users to group'),
+          status: 'danger'
+        })
+      }
+    }
+
+    const removeUsersFromGroups = async ({ users: affectedUsers, groups: groupsToRemove }) => {
+      try {
+        const usersToFetch = []
+        const removeUsersToGroupsRequests = []
+        groupsToRemove.reduce((acc, group) => {
+          for (const user of affectedUsers) {
+            if (user.memberOf.find((userGroup) => userGroup.id === group.id)) {
+              acc.push(unref(graphClient).groups.deleteMember(group.id, user.id))
+              if (!usersToFetch.includes(user.id)) {
+                usersToFetch.push(user.id)
+              }
+            }
+          }
+          return acc
+        }, removeUsersToGroupsRequests)
+        await Promise.all(removeUsersToGroupsRequests)
+        const usersResponse = await Promise.all(
+          usersToFetch.map((userId) => unref(graphClient).users.getUser(userId))
+        )
+        for (const { data: updatedUser } of usersResponse) {
+          const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
+          unref(users)[userIndex] = updatedUser
+          const selectedUserIndex = unref(selectedUsers).findIndex(
+            (user) => user.id === updatedUser.id
+          )
+          if (selectedUserIndex >= 0) {
+            // FIXME: why do we need to update selectedUsers?
+            unref(selectedUsers)[selectedUserIndex] = updatedUser
+          }
+        }
+        await store.dispatch('showMessage', {
+          title: $gettext('Users were removed from groups successfully')
+        })
+        removeFromGroupsModalIsOpen.value = false
+      } catch (e) {
+        console.error(e)
+        await store.dispatch('showMessage', {
+          title: $gettext('Failed remove users from group'),
+          status: 'danger'
+        })
+      }
+    }
+
     return {
       ...useSideBar(),
       maxQuota: useCapabilitySpacesMaxQuota(),
       template,
       selectedUsers,
-      loadedUser,
       sideBarLoading,
       users,
       roles,
@@ -362,17 +517,20 @@ export default defineComponent({
       accessToken,
       listHeaderPosition,
       createUserModalOpen,
+      addToGroupsModalIsOpen,
+      removeFromGroupsModalIsOpen,
       batchActions,
       filterGroups,
       filterRoles,
       quotaModalIsOpen,
       closeQuotaModal,
       spaceQuotaUpdated,
-      selectedPersonalDrives
+      selectedPersonalDrives,
+      addUsersToGroups,
+      removeUsersFromGroups
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
     ...mapState({ currentUser: 'user' }),
 
     selectedUsersText() {
@@ -401,7 +559,11 @@ export default defineComponent({
           component: DetailsPanel,
           default: true,
           enabled: true,
-          componentAttrs: { user: this.loadedUser, users: this.selectedUsers, roles: this.roles }
+          componentAttrs: {
+            user: this.selectedUsers.length === 1 ? this.selectedUsers[0] : null,
+            users: this.selectedUsers,
+            roles: this.roles
+          }
         },
         {
           app: 'EditPanel',
@@ -411,7 +573,7 @@ export default defineComponent({
           default: false,
           enabled: this.selectedUsers.length === 1,
           componentAttrs: {
-            user: this.loadedUser,
+            user: this.selectedUsers.length === 1 ? this.selectedUsers[0] : null,
             roles: this.roles,
             groups: this.groups,
             onConfirm: this.editUser
@@ -428,13 +590,13 @@ export default defineComponent({
       if (this.allUsersSelected) {
         return (this.selectedUsers = [])
       }
-      this.selectedUsers = [...this.users]
+      this.selectedUsers = this.users
     },
     toggleSelectUser(toggledUser) {
       const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
 
       if (!isUserSelected) {
-        return this.selectedUsers.push(toggledUser)
+        return this.selectedUsers.push(this.users.find((u) => u.id === toggledUser.id))
       }
 
       this.selectedUsers = this.selectedUsers.filter((user) => user.id !== toggledUser.id)
@@ -493,11 +655,14 @@ export default defineComponent({
 
         const { data: updatedUser } = await this.graphClient.users.getUser(user.id)
         const userIndex = this.users.findIndex((user) => user.id === updatedUser.id)
-
         this.users[userIndex] = updatedUser
+        const selectedUserIndex = this.selectedUsers.findIndex((user) => user.id === updatedUser.id)
+        if (selectedUserIndex >= 0) {
+          // FIXME: why do we need to update selectedUsers?
+          this.selectedUsers[selectedUserIndex] = updatedUser
+        }
 
         eventBus.publish('sidebar.entity.saved')
-        eventBus.publish('app.admin-settings.users.user.updated', updatedUser)
 
         return updatedUser
       } catch (error) {
@@ -543,7 +708,7 @@ export default defineComponent({
 
       for (const groupToAdd of groupsToAdd) {
         requests.push(
-          this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
+          this.graphClient.groups.addMember(groupToAdd.id, user.id, configurationManager.serverUrl)
         )
       }
       for (const groupToDelete of groupsToDelete) {

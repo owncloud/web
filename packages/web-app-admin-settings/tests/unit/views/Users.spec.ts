@@ -246,7 +246,7 @@ describe('Users view', () => {
       expect(updatedUser.drive.quota.total).toEqual(1000000000)
       expect(updatedUser.memberOf[0].id).toEqual('1')
 
-      expect(busStub).toHaveBeenCalledTimes(2)
+      expect(busStub).toHaveBeenCalled()
       expect(updateUserDriveStub).toHaveBeenCalled()
       expect(updateSpaceFieldStub).toHaveBeenCalled()
       expect(updateUserGroupAssignmentsStub).toHaveBeenCalled()

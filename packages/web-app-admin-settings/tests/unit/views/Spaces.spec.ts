@@ -125,7 +125,7 @@ function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
   const mocks = {
     ...defaultComponentMocks(),
     $clientService,
-    ...getActionMixinMocks({ actions: mixins })
+    ...getActionMixinMocks({ actions: mixins, enabledActions: mixins })
   }
 
   const storeOptions = { ...defaultStoreMockOptions }

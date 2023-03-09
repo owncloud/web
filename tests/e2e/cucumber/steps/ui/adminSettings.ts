@@ -173,3 +173,72 @@ When(
     await usersObject.changeQuotaUsingBatchAction({ value })
   }
 )
+
+Then(
+  /^"([^"]*)" (should see|should not see) the following user(s)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    action: string,
+    _: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const usersObject = new objects.applicationAdminSettings.Users({ page })
+    const users = await usersObject.getDisplayedUsers()
+    for (const { user } of stepTable.hashes()) {
+      switch (action) {
+        case 'should see':
+          expect(users).toContain(usersObject.getUUID({ key: user }))
+          break
+        case 'should not see':
+          expect(users).not.toContain(usersObject.getUUID({ key: user }))
+          break
+        default:
+          throw new Error(`${action} not implemented`)
+      }
+    }
+  }
+)
+
+Then(
+  '{string} sets the following filter(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+    for (const { filter, values } of stepTable.hashes()) {
+      await usersObject.filter({ filter, values: values.split(',') })
+    }
+  }
+)
+
+When(
+  /^"([^"]*)" (adds|removes) the following users (to|from) the groups "([^"]*)" using the batch actions$/,
+  async function (
+    this: World,
+    stepUser: string,
+    action: string,
+    _: string,
+    groups: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+    for (const { user } of stepTable.hashes()) {
+      await usersObject.select({ key: user })
+    }
+
+    switch (action) {
+      case 'adds':
+        await usersObject.addToGroups({ groups: groups.split(',') })
+        break
+      case 'removes':
+        await usersObject.removeFromGroups({ groups: groups.split(',') })
+        break
+      default:
+        throw new Error(`${action} not implemented`)
+    }
+  }
+)

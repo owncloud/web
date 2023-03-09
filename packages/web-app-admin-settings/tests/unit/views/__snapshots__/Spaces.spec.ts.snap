@@ -16,7 +16,10 @@ exports[`Spaces view loading states should render spaces list after loading has 
             </button>
           </div>
         </div>
-        <div class="admin-settings-app-bar-actions oc-mt-xs">
+        <div class="oc-flex oc-flex-middle oc-mt-xs">
+          <div class="admin-settings-app-bar-actions">
+            <!--v-if-->
+          </div>
           <!--v-if-->
         </div>
       </div>
