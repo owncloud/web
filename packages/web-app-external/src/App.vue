@@ -36,13 +36,20 @@
 import { mapActions, mapGetters } from 'vuex'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
-import { computed, unref } from 'vue'
-import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
-import { defineComponent } from 'vue'
+import {
+  queryItemAsString,
+  useClientService,
+  useAppDefaults,
+  useRouteQuery,
+  useRouteParam,
+  useRoute
+} from 'web-pkg/src/composables'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { urlJoin } from 'web-client/src/utils'
 import { stringify } from 'qs'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { authService } from 'web-runtime/src/services/auth'
+import { unref, computed, defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'ExternalApp',
@@ -52,6 +59,21 @@ export default defineComponent({
     LoadingScreen
   },
   setup() {
+    const clientService = useClientService()
+    const route = useRoute()
+    const token = useRouteParam('token')
+
+    if (unref(route).name === 'external-apps-remote') {
+      const passwordRequired = false
+      const password = ''
+
+      // onMounted(async () => {
+      //   await authService.initializeContext(unref(route))
+      //   await authService.resolveOcmLink(unref(token))
+      //   console.log("do what you want")
+      // })
+    }
+
     const appName = useRouteQuery('app')
     const applicationName = computed(() => queryItemAsString(unref(appName)))
     return {
@@ -110,11 +132,23 @@ export default defineComponent({
     async onCreate(editMode) {
       this.loading = true
       try {
-        if (!editMode)
-          this.fileInfo = await this.getFileInfo(this.currentFileContext, {
-            davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
-          })
-        const fileId = this.fileId || this.fileInfo.fileId
+        let defaultApplication = undefined
+        let fileId
+        let filePath
+
+        if (this.$route.name !== 'external-apps-remote') {
+          if (!editMode)
+            this.fileInfo = await this.getFileInfo(this.currentFileContext, {
+              davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
+            })
+          fileId = this.fileId || this.fileInfo.fileId
+        } else {
+          await authService.initializeContext(unref(this.$route))
+          await authService.resolveOcmLink(unref(this.$route.params.token))
+          sessionStorage.setItem('ocmToken', this.$route.params.token)
+
+          filePath = this.$route.params.remote_path
+        }
 
         // fetch iframe params for app and file
         const baseUrl = urlJoin(
@@ -130,7 +164,8 @@ export default defineComponent({
           : false
 
         const query = stringify({
-          file_id: fileId,
+          ...(fileId && { file_id: fileId }),
+          ...(filePath && { path: '/ocm/' + this.$route.params.token + '/' + filePath }),
           lang: this.$language.current,
           ...(this.applicationName && { app_name: this.applicationName }),
           ...(viewMode && { view_mode: viewMode })

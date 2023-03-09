@@ -1,18 +1,28 @@
 <template>
   <div>
-    <div v-if="groupingAllowed && groupingSettings.showGroupingOptions" class="oc-pb-m">
-      <div class="oc-docs-width-small" style="display: inline">
-        <label class="oc-mx-s">Group By:</label>
+    <div class="oc-flex oc-flex-middle">
+      <div v-if="groupingAllowed && groupingSettings.showGroupingOptions" class="oc-pb-m">
+        <div class="oc-docs-width-small" style="display: inline">
+          <label class="oc-mx-s">Group by:</label>
+        </div>
+        <div class="oc-docs-width-medium" style="display: inline-block; width: 250px">
+          <oc-select
+            v-model="selectedGroupingOption"
+            :options="[
+              ...Object.keys(groupingSettings.groupingFunctions),
+              ...(!Object.keys(groupingSettings.groupingFunctions).includes('None') ? ['None'] : [])
+            ]"
+            :clearable="false"
+            :searchable="false"
+          />
+        </div>
       </div>
-      <div class="oc-docs-width-medium" style="display: inline-block; width: 250px">
-        <oc-select
-          v-model="selectedGroupingOption"
-          :options="[
-            ...Object.keys(groupingSettings.groupingFunctions),
-            ... !Object.keys(groupingSettings.groupingFunctions).includes('None') ? ['None'] : [],
-          ]"
-          :clearable="false"
-          :searchable="false"
+      <br />
+      <div v-if="enableSMFilter" class="oc-pb-m oc-ml-l">
+        <oc-checkbox
+          label="Federated shares only"
+          :model-value="filterSM"
+          @update:model-value="toggleFilterSM"
         />
       </div>
     </div>
@@ -23,9 +33,9 @@
             v-for="(field, index) in fields"
             :key="`oc-thead-${field.name}`"
             v-bind="extractThProps(field, index)"
-          @click="handleTrClick(field)"
+            @click="handleTrClick(field)"
           >
-          <span v-if="field.headerType === 'slot'" class="oc-table-thead-content">
+            <span v-if="field.headerType === 'slot'" class="oc-table-thead-content">
               <slot :name="field.name + 'Header'" />
             </span>
             <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
@@ -41,7 +51,7 @@
               class="oc-button-sort"
               variation="passive"
               appearance="raw"
-            @click.stop="handleTrClick(field)"
+              @click.stop="handleTrClick(field)"
             >
               <oc-icon
                 :name="sortDir === 'asc' ? 'arrow-down' : 'arrow-up'"
@@ -61,17 +71,17 @@
           v-bind="extractTbodyTrProps(item, trIndex)"
           :data-item-id="item[idKey]"
           :draggable="dragDrop"
-        @click="$emit(constants.EVENT_TROW_CLICKED, [item, $event])"
-        @contextmenu="
+          @click="$emit(constants.EVENT_TROW_CLICKED, [item, $event])"
+          @contextmenu="
             $emit(constants.EVENT_TROW_CONTEXTMENU, $refs[`row-${trIndex}`][0], $event, item)
           "
-        @vue:mounted="$emit(constants.EVENT_TROW_MOUNTED, item, $refs[`row-${trIndex}`][0])"
-        @dragstart="dragStart(item, $event)"
-        @drop="dropRowEvent(itemDomSelector(item), $event)"
-        @dragenter.prevent="dropRowStyling(itemDomSelector(item), false, $event)"
-        @dragleave.prevent="dropRowStyling(itemDomSelector(item), true, $event)"
+          @vue:mounted="$emit(constants.EVENT_TROW_MOUNTED, item, $refs[`row-${trIndex}`][0])"
+          @dragstart="dragStart(item, $event)"
+          @drop="dropRowEvent(itemDomSelector(item), $event)"
+          @dragenter.prevent="dropRowStyling(itemDomSelector(item), false, $event)"
+          @dragleave.prevent="dropRowStyling(itemDomSelector(item), true, $event)"
           @mouseleave="dropRowStyling(itemDomSelector(item), true, $event)"
-        @dragover="dragOver($event)"
+          @dragover="dragOver($event)"
         >
           <oc-td
             v-for="(field, tdIndex) in fields"
@@ -159,12 +169,12 @@
           </td>
         </tr>
       </tfoot>
-    <Teleport v-if="dragItem" to="body">
-      <oc-ghost-element
-        ref="ghostElement"
-        :preview-items="[dragItem, ...dragSelection]"
-      ></oc-ghost-element>
-    </Teleport>
+      <Teleport v-if="dragItem" to="body">
+        <oc-ghost-element
+          ref="ghostElement"
+          :preview-items="[dragItem, ...dragSelection]"
+        ></oc-ghost-element>
+      </Teleport>
     </table>
   </div>
 </template>
@@ -218,6 +228,14 @@ export default defineComponent({
       type: Object,
       required: false,
       default: null
+    },
+    /**
+     * enable SM filter
+     */
+    enableSMFilter: {
+      type: Boolean,
+      required: false,
+      default: false
     },
     /**
      * The data for the table. Each array item will be rendered as one table row. Each array item needs to have a
@@ -353,11 +371,6 @@ export default defineComponent({
     EVENT_TROW_MOUNTED,
     EVENT_TROW_CONTEXTMENU
   ],
-  data() {
-    return {
-      selectedGroupingOption: this.groupingSettings?.groupingBy || 'None',
-    }
-  },
   setup() {
     const copyGroupedData = ref([])
     const ghostElement = ref()
@@ -369,6 +382,12 @@ export default defineComponent({
       EVENT_TROW_CONTEXTMENU
     }
     return { copyGroupedData, ghostElement, dragItem, constants }
+  },
+  data() {
+    return {
+      selectedGroupingOption: this.groupingSettings?.groupingBy || 'None',
+      filterSM: this.$route?.query?.filterSM
+    }
   },
   computed: {
     tableClasses() {
@@ -403,7 +422,10 @@ export default defineComponent({
       )
     },
     groupedData() {
-      let result = this.createGroupedData(this.selectedGroupingOption, this.data)
+      let result = this.createGroupedData(
+        this.selectedGroupingOption,
+        this.filterSM ? this.data.filter((d) => d.share.shareType === 6) : this.data
+      )
       if (!result.length) return []
       // sort groups if there is a given sorting function in grouping settings
       if (this.groupingSettings?.sortGroups?.[this.selectedGroupingOption]) {
@@ -437,6 +459,9 @@ export default defineComponent({
   },
 
   methods: {
+    toggleFilterSM() {
+      this.filterSM = !this.filterSM
+    },
     dragOver(event) {
       event.preventDefault()
     },

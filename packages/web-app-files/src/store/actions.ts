@@ -262,6 +262,8 @@ export default {
       client,
       path,
       shareWith,
+      shareWithUser,
+      shareWithProvider,
       shareType,
       permissions,
       role,
@@ -277,6 +279,8 @@ export default {
       expirationDate,
       spaceRef: storageId,
       remoteUser: undefined,
+      shareWithUser,
+      shareWithProvider,
       notify
     }
 
@@ -287,6 +291,14 @@ export default {
     const shareMethod = isGroupShare ? 'shareFileWithGroup' : 'shareFileWithUser'
     return client.shares[shareMethod](path, shareWith, options)
       .then((share) => {
+        context.dispatch(
+          'showMessage',
+          {
+            title: $gettext('Share created.'),
+            status: 'success'
+          },
+          { root: true }
+        )
         const builtShare = buildCollaboratorShare(
           share.shareInfo,
           context.getters.highlightedFile,

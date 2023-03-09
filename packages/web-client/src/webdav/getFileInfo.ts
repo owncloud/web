@@ -6,6 +6,7 @@ export const GetFileInfoFactory = (
   listFilesFactory: ReturnType<typeof ListFilesFactory>,
   options?: WebDavOptions
 ) => {
+  console.log("here we are")
   return {
     async getFileInfo(
       space: SpaceResource,

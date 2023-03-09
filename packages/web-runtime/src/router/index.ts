@@ -46,6 +46,12 @@ export const router = patchRouter(
         meta: { title: $gettext('Logout'), authContext: 'anonymous' }
       },
       {
+        path: '/accept',
+        redirect: () => {
+          return { path: "/sciencemesh-app" }
+        }
+      },
+      {
         path: '/oidc-callback',
         name: 'oidcCallback',
         component: OidcCallbackPage,

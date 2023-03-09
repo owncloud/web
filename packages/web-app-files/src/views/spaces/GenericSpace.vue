@@ -333,12 +333,23 @@ export default defineComponent({
         }
       }
 
-      return concatBreadcrumbs(
+      let breadcrumbs = concatBreadcrumbs(
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,
         // FIXME: needs file ids for each parent folder path
         ...breadcrumbsFromPath(unref(route), props.item)
       )
+
+      // add alias breadcrumb for sciencemesh shares  
+      if (
+        breadcrumbs?.[1].text === 'sciencemesh' &&
+        breadcrumbs?.[2].text &&
+        route?.value?.query?.fileName
+      ) {
+        breadcrumbs[2].text = route.value.query.fileName
+      }
+
+      return breadcrumbs
     })
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
@@ -446,11 +457,15 @@ export default defineComponent({
         this.SET_FILE_SELECTION(this.paginatedResources)
 
         const defaultAction = this.$_fileActions_getDefaultAction({
-            space: this.space,
-            resources: this.paginatedResources
-          }).label()
+          space: this.space,
+          resources: this.paginatedResources
+        }).label()
 
-        if (from?.[0]?.id !== to?.[0]?.id && !this.$route.query.scrollTo && defaultAction !== 'Download') {
+        if (
+          from?.[0]?.id !== to?.[0]?.id &&
+          !this.$route.query.scrollTo &&
+          defaultAction !== 'Download'
+        ) {
           this.$_fileActions_triggerDefaultAction({
             space: this.space,
             resources: this.paginatedResources,

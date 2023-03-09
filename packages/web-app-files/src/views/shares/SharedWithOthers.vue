@@ -23,6 +23,7 @@
           class="files-table"
           :class="{ 'files-table-squashed': sideBarOpen }"
           :grouping-settings="groupingSettings"
+          :enable-s-m-filter="true"
           :fields-displayed="['name', 'sharedWith', 'sdate']"
           :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"

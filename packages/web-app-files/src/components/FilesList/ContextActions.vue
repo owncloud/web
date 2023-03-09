@@ -13,6 +13,7 @@ import ShowActions from '../../mixins/actions/showActions'
 import ShowDetails from '../../mixins/actions/showDetails'
 import ShowShares from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
+import OpenFileRemote from '../../mixins/actions/openFileRemote'
 import SetSpaceReadme from 'web-pkg/src/mixins/spaces/setReadme'
 import SpaceNavigate from 'web-pkg/src/mixins/spaces/navigate'
 import { PropType } from 'vue'
@@ -34,7 +35,8 @@ export default {
     ShowShares,
     SetSpaceImage,
     SetSpaceReadme,
-    SpaceNavigate
+    SpaceNavigate,
+    OpenFileRemote
   ],
 
   props: {
@@ -136,6 +138,7 @@ export default {
 
     menuItemsActions() {
       return [
+        ...this.$_openFileRemote,
         ...this.$_downloadArchive_items,
         ...this.$_downloadFile_items,
         ...this.$_delete_items,

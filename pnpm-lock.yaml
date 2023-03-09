@@ -109,7 +109,7 @@ importers:
       jwt-decode: 3.1.2
       keycode: 2.2.1_nmisee7m676ph5sqah5fka5ueu
       portal-vue: 2.1.7_vue@3.2.45
-      rollup-plugin-gzip: 3.1.0_rollup@3.14.0
+      rollup-plugin-gzip: 3.1.0_rollup@3.9.1
       uuid: 9.0.0
       vite-plugin-static-copy: 0.12.0_vite@4.0.4
       vite-plugin-treat-umd-as-commonjs: 0.1.3_vite@4.0.4
@@ -131,7 +131,7 @@ importers:
       '@ownclouders/prettier-config': link:packages/prettier-config
       '@ownclouders/tsconfig': link:packages/tsconfig
       '@playwright/test': 1.29.1
-      '@rollup/plugin-inject': 5.0.3_rollup@3.14.0
+      '@rollup/plugin-inject': 5.0.3_rollup@3.9.1
       '@types/jest': 27.5.2
       '@types/jest-axe': 3.5.5
       '@types/lodash-es': 4.17.6
@@ -173,7 +173,7 @@ importers:
       react: 17.0.2
       requirejs: 2.3.6
       rollup-plugin-node-polyfills: 0.2.1
-      rollup-plugin-visualizer: 5.9.0_rollup@3.14.0
+      rollup-plugin-visualizer: 5.9.0_rollup@3.9.1
       ts-jest: 29.0.3_lpdtk6tcorkuyzgotacsdxtnxm
       ts-node: 10.9.1_qacynw5b4krdzzrloasmebsynu
       tslib: 2.4.1
@@ -285,7 +285,7 @@ importers:
       '@babel/preset-env': 7.19.4_@babel+core@7.19.6
       '@babel/runtime': 7.20.1
       '@popperjs/core': 2.11.5
-      autoprefixer: 10.4.12_postcss@8.4.21
+      autoprefixer: 10.4.12_postcss@8.4.20
       babel-core: 7.0.0-bridge.0_@babel+core@7.19.6
       babel-jest: 29.2.2_@babel+core@7.19.6
       babel-loader: 9.1.0_q4ydpsrmbqywduja5orgah6fgq
@@ -333,7 +333,7 @@ importers:
       style-loader: 2.0.0_webpack@4.46.0
       style-value-types: 5.1.2
       stylelint: 14.16.0
-      stylelint-config-sass-guidelines: 9.0.1_4hlw5ipnhspjrftdr7hqo6kmye
+      stylelint-config-sass-guidelines: 9.0.1_l3s4qeu3gkar2knsdy3w5miimm
       stylelint-config-standard: 26.0.0_stylelint@14.16.0
       tinycolor2: 1.4.2
       tippy.js: 6.3.7
@@ -458,12 +458,14 @@ importers:
       vuex: 4.1.0
       web-client: workspace:@ownclouders/web-client@*
       web-pkg: workspace:@ownclouders/web-pkg@*
+      web-runtime: workspace:*
     dependencies:
       uuid: 9.0.0
       vue3-gettext: 2.3.4_tfvhctuaqmmqnirfl65c47tqwu
       vuex: 4.1.0_vue@3.2.45
       web-client: link:../web-client
       web-pkg: link:../web-pkg
+      web-runtime: link:../web-runtime
 
   packages/web-app-files:
     specifiers:
@@ -540,6 +542,28 @@ importers:
       web-client: link:../web-client
       web-pkg: link:../web-pkg
 
+  packages/web-app-sciencemesh-app:
+    specifiers:
+      axios: ^0.27.2
+      fuse.js: ^6.5.3
+      lodash-es: 4.17.21
+      uuid: ^9.0.0
+      vue-concurrency: 4.0.0
+      vuex: 4.1.0
+      web-app-files: workspace:*
+      web-client: workspace:@ownclouders/web-client@*
+      web-pkg: workspace:@ownclouders/web-pkg@*
+    dependencies:
+      axios: 0.27.2
+      fuse.js: 6.5.3
+      lodash-es: 4.17.21
+      uuid: 9.0.0
+      vue-concurrency: 4.0.0_vue@3.2.45
+      vuex: 4.1.0_vue@3.2.45
+      web-app-files: link:../web-app-files
+      web-client: link:../web-client
+      web-pkg: link:../web-pkg
+
   packages/web-app-search:
     specifiers:
       lodash-es: ^4.17.21
@@ -563,7 +587,7 @@ importers:
     devDependencies:
       rollup: 3.9.1
       rollup-plugin-serve: 1.1.0
-      rollup-plugin-vue: 5.1.9_msb4omfpi5xaaav7gpce3lwjli
+      rollup-plugin-vue: 5.1.9_f5iv5tdq5eefnlpdsfwn2yhws4
       vue: 2.7.14
 
   packages/web-app-text-editor:
@@ -658,7 +682,7 @@ importers:
       luxon: ^2.4.0
       marked: ^4.0.12
       oidc-client-ts: ^2.1.0
-      owncloud-sdk: ~3.1.0-alpha.3
+      owncloud-sdk: file:../../../owncloud-sdk
       p-queue: ^6.6.2
       portal-vue: 3.0.0
       postcss-import: ^12.0.1
@@ -706,7 +730,7 @@ importers:
       luxon: 2.4.0
       marked: 4.0.12
       oidc-client-ts: 2.1.0
-      owncloud-sdk: 3.1.0-alpha.3_qgpf6seimtkgc6dfu7oqfstxh4
+      owncloud-sdk: file:../owncloud-sdk_qgpf6seimtkgc6dfu7oqfstxh4
       p-queue: 6.6.2
       portal-vue: 3.0.0_vue@3.2.45
       postcss-import: 12.0.1
@@ -5634,7 +5658,7 @@ packages:
     resolution: {integrity: sha512-NMrDy6EWh9TPdSRiHmHH2ye1v5U0gBD7pRYwSwJvomx7Bm4GG04vu63dYiVzebLOx2obPpJugew06xVP0Nk7hA==}
     dev: true
 
-  /@rollup/plugin-inject/5.0.3_rollup@3.14.0:
+  /@rollup/plugin-inject/5.0.3_rollup@3.9.1:
     resolution: {integrity: sha512-411QlbL+z2yXpRWFXSmw/teQRMkXcAAC8aYTemc15gwJRpvEVDQwoe+N/HTFD8RFG8+88Bme9DK2V9CVm7hJdA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -5643,10 +5667,10 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2_rollup@3.14.0
+      '@rollup/pluginutils': 5.0.2_rollup@3.9.1
       estree-walker: 2.0.2
       magic-string: 0.27.0
-      rollup: 3.14.0
+      rollup: 3.9.1
     dev: true
 
   /@rollup/pluginutils/4.2.1:
@@ -5657,7 +5681,7 @@ packages:
       picomatch: 2.3.1
     dev: false
 
-  /@rollup/pluginutils/5.0.2_rollup@3.14.0:
+  /@rollup/pluginutils/5.0.2_rollup@3.9.1:
     resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -5669,7 +5693,7 @@ packages:
       '@types/estree': 1.0.0
       estree-walker: 2.0.2
       picomatch: 2.3.1
-      rollup: 3.14.0
+      rollup: 3.9.1
     dev: true
 
   /@sentry/browser/7.31.1:
@@ -6624,7 +6648,7 @@ packages:
       - whiskers
     dev: true
 
-  /@vue/component-compiler/4.2.4_msb4omfpi5xaaav7gpce3lwjli:
+  /@vue/component-compiler/4.2.4_f5iv5tdq5eefnlpdsfwn2yhws4:
     resolution: {integrity: sha512-tFGw3h3+nxiqnyborwWQ+rUgKAwSFl0Sdg+BCZkWTyFfkEF5fqunTNoklEUDdtRQMmVqsajn1pOZdm0zh4Uicw==}
     peerDependencies:
       postcss: '>=6.0'
@@ -6633,14 +6657,14 @@ packages:
       '@vue/component-compiler-utils': 3.2.2_pug@3.0.2
       clean-css: 4.2.3
       hash-sum: 1.0.2
-      postcss: 8.4.21
+      postcss: 8.4.20
       postcss-modules-sync: 1.0.0
       source-map: 0.6.1
       vue-template-compiler: 2.7.14
     optionalDependencies:
       less: 3.13.1
       pug: 3.0.2
-      sass: 1.58.0
+      sass: 1.57.1
       stylus: 0.54.8
     transitivePeerDependencies:
       - arc-templates
@@ -7568,7 +7592,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dev: true
 
-  /autoprefixer/10.4.12_postcss@8.4.21:
+  /autoprefixer/10.4.12_postcss@8.4.20:
     resolution: {integrity: sha512-WrCGV9/b97Pa+jtwf5UGaRjgQIg7OK3D06GnoYoZNcG1Xb8Gt3EfuKjlhh9i/VtT16g6PYjZ69jdJ2g8FxSC4Q==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -7580,7 +7604,7 @@ packages:
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
-      postcss: 8.4.21
+      postcss: 8.4.20
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -17542,28 +17566,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /owncloud-sdk/3.1.0-alpha.3_qgpf6seimtkgc6dfu7oqfstxh4:
-    resolution: {integrity: sha512-jouNHVHUJBuYs7A1ZPUNl+uSUulSYwTFzOjW4NhONl9xbDthKDeB+vWycUY9IdFRKroF8l1qo4xkXVO9mn7U/A==}
-    peerDependencies:
-      axios: ^0.27.2
-      cross-fetch: ^3.0.6
-      promise: ^8.1.0
-      qs: ^6.10.3
-      utf8: ^3.0.0
-      uuid: ^8.2.0
-      webdav: 4.10.0
-      xml-js: ^1.6.11
-    dependencies:
-      axios: 0.27.2
-      cross-fetch: 3.1.4
-      promise: 8.1.0
-      qs: 6.10.3
-      utf8: 3.0.0
-      uuid: 9.0.0
-      webdav: 4.10.0
-      xml-js: 1.6.11
-    dev: false
-
   /p-finally/1.0.0:
     resolution: {integrity: sha512-LICb2p9CB7FS+0eR1oqWnHhp0FljGLZCWBE9aix0Uye9W8LTQPwMTYVGWQWIw9RdQiDg4+epXQODwIYJtSJaow==}
     engines: {node: '>=4'}
@@ -18462,13 +18464,13 @@ packages:
       postcss: 8.4.20
     dev: true
 
-  /postcss-scss/4.0.6_postcss@8.4.21:
+  /postcss-scss/4.0.6_postcss@8.4.20:
     resolution: {integrity: sha512-rLDPhJY4z/i4nVFZ27j9GqLxj1pwxE80eAzUNRMXtcpipFYIeowerzBgG3yJhMtObGEXidtIgbUpQ3eLDsf5OQ==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.4.19
     dependencies:
-      postcss: 8.4.21
+      postcss: 8.4.20
     dev: true
 
   /postcss-selector-parser/6.0.10:
@@ -18583,6 +18585,7 @@ packages:
       nanoid: 3.3.4
       picocolors: 1.0.0
       source-map-js: 1.0.2
+    dev: false
 
   /preact/10.7.1:
     resolution: {integrity: sha512-MufnRFz39aIhs9AMFisonjzTud1PK1bY+jcJLo6m2T9Uh8AqjD77w11eAAawmjUogoGOnipECq7e/1RClIKsxg==}
@@ -19817,13 +19820,13 @@ packages:
       inherits: 2.0.4
     dev: true
 
-  /rollup-plugin-gzip/3.1.0_rollup@3.14.0:
+  /rollup-plugin-gzip/3.1.0_rollup@3.9.1:
     resolution: {integrity: sha512-PFS9s6/w6dCra6/Z8PGD+ug3aaaqKLDCbr5y1Ek71Wd4rQSmMnOqCIIMgwbYxZ9A/gjP3pCN6rA4pAG47jxF0w==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       rollup: '>=2.0.0'
     dependencies:
-      rollup: 3.14.0
+      rollup: 3.9.1
     dev: false
 
   /rollup-plugin-inject/3.0.2:
@@ -19853,7 +19856,7 @@ packages:
       opener: 1.5.2
     dev: false
 
-  /rollup-plugin-visualizer/5.9.0_rollup@3.14.0:
+  /rollup-plugin-visualizer/5.9.0_rollup@3.9.1:
     resolution: {integrity: sha512-bbDOv47+Bw4C/cgs0czZqfm8L82xOZssk4ayZjG40y9zbXclNk7YikrZTDao6p7+HDiGxrN0b65SgZiVm9k1Cg==}
     engines: {node: '>=14'}
     hasBin: true
@@ -19865,17 +19868,17 @@ packages:
     dependencies:
       open: 8.4.0
       picomatch: 2.3.1
-      rollup: 3.14.0
+      rollup: 3.9.1
       source-map: 0.7.4
       yargs: 17.6.0
     dev: true
 
-  /rollup-plugin-vue/5.1.9_msb4omfpi5xaaav7gpce3lwjli:
+  /rollup-plugin-vue/5.1.9_f5iv5tdq5eefnlpdsfwn2yhws4:
     resolution: {integrity: sha512-DXzrBUD2j68Y6nls4MmuJsFL1SrQDpdgjxvhk/oy04LzJmXJoX1x31yLEBFkkmvpbon6Q885WJLvEMiMyT+3rA==}
     peerDependencies:
       vue-template-compiler: '*'
     dependencies:
-      '@vue/component-compiler': 4.2.4_msb4omfpi5xaaav7gpce3lwjli
+      '@vue/component-compiler': 4.2.4_f5iv5tdq5eefnlpdsfwn2yhws4
       '@vue/component-compiler-utils': 3.2.2
       debug: 4.3.4
       hash-sum: 1.0.2
@@ -19954,6 +19957,7 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
+    dev: false
 
   /rollup/3.9.1:
     resolution: {integrity: sha512-GswCYHXftN8ZKGVgQhTFUJB/NBXxrRGgO2NCy6E8s1rwEJ4Q9/VttNqcYfEvx4dTo4j58YqdC3OVztPzlKSX8w==}
@@ -20080,6 +20084,7 @@ packages:
       chokidar: 3.5.3
       immutable: 4.1.0
       source-map-js: 1.0.2
+    dev: false
 
   /sax/1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
@@ -21027,15 +21032,15 @@ packages:
       stylelint: 14.16.0
     dev: true
 
-  /stylelint-config-sass-guidelines/9.0.1_4hlw5ipnhspjrftdr7hqo6kmye:
+  /stylelint-config-sass-guidelines/9.0.1_l3s4qeu3gkar2knsdy3w5miimm:
     resolution: {integrity: sha512-N06PsVsrgKijQ3YT5hqKA7x3NUkgELTRI1cbWMqcYiCGG6MjzvNk6Cb5YYA1PrvrksBV76BvY9P9bAswojVMqA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     peerDependencies:
       postcss: ^8.3.3
       stylelint: ^14.0.1
     dependencies:
-      postcss: 8.4.21
-      postcss-scss: 4.0.6_postcss@8.4.21
+      postcss: 8.4.20
+      postcss-scss: 4.0.6_postcss@8.4.20
       stylelint: 14.16.0
       stylelint-order: 5.0.0_stylelint@14.16.0
       stylelint-scss: 4.3.0_stylelint@14.16.0
@@ -23363,6 +23368,31 @@ packages:
       pug: 3.0.2
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  file:../owncloud-sdk_qgpf6seimtkgc6dfu7oqfstxh4:
+    resolution: {directory: ../owncloud-sdk, type: directory}
+    id: file:../owncloud-sdk
+    name: owncloud-sdk
+    version: 3.0.0
+    peerDependencies:
+      axios: ^0.27.2
+      cross-fetch: ^3.0.6
+      promise: ^8.1.0
+      qs: ^6.10.3
+      utf8: ^3.0.0
+      uuid: ^8.2.0
+      webdav: 4.10.0
+      xml-js: ^1.6.11
+    dependencies:
+      axios: 0.27.2
+      cross-fetch: 3.1.4
+      promise: 8.1.0
+      qs: 6.10.3
+      utf8: 3.0.0
+      uuid: 9.0.0
+      webdav: 4.10.0
+      xml-js: 1.6.11
     dev: false
 
   github.com/dschmidt/v-calendar/3ce6e3b8afd5491cb53ee811281d5fa8a45b044d_vue@3.2.45:

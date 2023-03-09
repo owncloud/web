@@ -36,7 +36,8 @@ export class ClientService {
 
   private ocUserContextClient: OcClient
   private ocPublicLinkContextClient: OcClient
-
+  private ocmLinkContextClient: OcClient
+  private ocmClient: OcClient
   private owncloudSdkClient: OwnCloudSdk
 
   private webdavClient: WebDAV
@@ -84,6 +85,11 @@ export class ClientService {
     return this.ocPublicLinkContextClient.ocs
   }
 
+  public ocmLinkContext(serverUrl: string, token: string): OCS {
+    this.initOcmLinkContextClient(serverUrl, token)
+    return this.ocmLinkContextClient.ocs
+  }
+
   private initOcPublicLinkContextClient(serverUrl: string, token: string, password?: string) {
     if (!this.ocPublicLinkContextClient || this.ocPublicLinkContextClient.token !== token) {
       const { graph, ocs } = client(
@@ -94,6 +100,22 @@ export class ClientService {
         })
       )
       this.ocPublicLinkContextClient = {
+        token,
+        graph,
+        ocs
+      }
+    }
+  }
+
+  private initOcmLinkContextClient(serverUrl: string, token: string) {
+    if (token) {
+      const { graph, ocs } = client(
+        serverUrl,
+        createAxiosInstance({
+          ocmToken: token
+        })
+      )
+      this.ocmLinkContextClient = {
         token,
         graph,
         ocs

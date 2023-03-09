@@ -84,7 +84,7 @@
             />
           </td>
         </tr>
-        <tr v-if="runningOnEos && !isPublicLinkContext">
+        <tr v-if="runningOnEos && !isPublicLinkContext && !isFederatedShare">
           <th scope="col" class="oc-pr-s" v-text="eosPathLabel" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
@@ -113,7 +113,11 @@
             </div>
           </td>
         </tr>
-        <tr v-if="cernFeatures && getSambaPath(resource.path) && !isPublicLinkContext">
+        <tr
+          v-if="
+            cernFeatures && getSambaPath(resource.path) && !isPublicLinkContext && !isFederatedShare
+          "
+        >
           <th scope="col" class="oc-pr-s" v-text="sambaPathLabel" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
@@ -141,7 +145,7 @@
             </div>
           </td>
         </tr>
-        <tr v-if="runningOnEos">
+        <tr v-if="runningOnEos && !isFederatedShare">
           <th scope="col" class="oc-pr-s" v-text="directLinkLabel" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
@@ -338,6 +342,9 @@ export default defineComponent({
 
     matchingSpace() {
       return this.space || this.spaces.find((space) => space.id === this.resource.storageId)
+    },
+    isFederatedShare() {
+      return this.resource?.share?.shareType === 6
     },
     runningOnEos() {
       return !!this.configuration?.options?.runningOnEos

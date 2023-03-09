@@ -1,39 +1,58 @@
 <template>
   <div id="new-collaborators-form" data-testid="new-collaborators-form">
-    <oc-select
-      id="files-share-invite-input"
-      ref="ocSharingAutocomplete"
-      :model-value="selectedCollaborators"
-      :options="autocompleteResults"
-      :loading="searchInProgress"
-      :multiple="true"
-      :filter="filterRecipients"
-      :label="selectedCollaboratorsLabel"
-      aria-describedby="files-share-invite-hint"
-      :dropdown-should-open="
-        ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
-      "
-      @search:input="onSearch"
-      @update:model-value="resetFocusOnInvite"
-    >
-      <template #option="option">
-        <autocomplete-item :item="option" />
-      </template>
-      <template #no-options>
-        <span v-text="$gettext('No users or groups found.')" />
-      </template>
-      <template #selected-option-container="{ option, deselect }">
-        <recipient-container
-          :key="option.value.shareWith"
-          :recipient="option"
-          :deselect="deselect"
-        />
-      </template>
-      <template #open-indicator>
-        <!-- Empty to hide the caret -->
-        <span />
-      </template>
-    </oc-select>
+    <br />
+    <div class="oc-flex">
+      <oc-select
+        id="account-type-input"
+        v-model="accountType"
+        :options="accountTypes"
+        :label="'Account type'"
+        class="account-type-input"
+      >
+        <template #option="{ prefix, description }">
+          <span class="option oc-text-xsmall" v-text="description" />
+        </template>
+        <template #selected-option="{ description }">
+          <span class="option oc-text-xsmall" v-text="description" />
+        </template>
+      </oc-select>
+      <oc-select
+        id="files-share-invite-input"
+        ref="ocSharingAutocomplete"
+        :model-value="selectedCollaborators"
+        :options="autocompleteResults"
+        :loading="searchInProgress"
+        :multiple="true"
+        :filter="filterRecipients"
+        :label="selectedCollaboratorsLabel"
+        class="files-share-invite-input"
+        aria-describedby="files-share-invite-hint"
+        :dropdown-should-open="
+          ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
+        "
+        @search:input="onSearch"
+        @update:model-value="resetFocusOnInvite"
+      >
+        <template #option="option">
+          <autocomplete-item :item="option" />
+        </template>
+        <template #no-options>
+          <span v-text="$gettext('No users or groups found.')" />
+        </template>
+        <template #selected-option-container="{ option, deselect }">
+          <recipient-container
+            :key="option.value.shareWith"
+            :recipient="option"
+            :deselect="deselect"
+          />
+        </template>
+        <template #open-indicator>
+          <!-- Empty to hide the caret -->
+          <span />
+        </template>
+      </oc-select>
+    </div>
+
     <div class="oc-flex oc-flex-middle oc-flex-between oc-mb-l oc-mt-s">
       <role-dropdown
         :allow-share-permission="hasResharing || resourceIsSpace"
@@ -146,7 +165,15 @@ export default defineComponent({
       expirationDate: null,
       searchQuery: '',
       notifyEnabled: false,
-      formData: new URLSearchParams()
+      formData: new URLSearchParams(),
+      accountType: { prefix: '', description: 'standard' },
+      accountTypes: [
+        { prefix: '', description: 'standard', default: true },
+        { prefix: 'a:', description: 'secondary' },
+        { prefix: 'a:', description: 'service' },
+        { prefix: 'l:', description: 'guest' },
+        { prefix: 'sm:', description: 'federated' }
+      ]
     }
   },
   computed: {
@@ -171,6 +198,19 @@ export default defineComponent({
 
     resourceIsSpace() {
       return this.resource.type === 'space'
+    }
+  },
+  watch: {
+    selectedCollaborators(newCollaborators, oldCollaborators) {
+      if (newCollaborators.length === oldCollaborators.length + 1) {
+        const defaultAccountType = this.accountTypes.find((e) => e.default)
+        if (defaultAccountType) this.accountType = defaultAccountType
+      }
+    },
+
+    accountType() {
+      const inviteInput = document.getElementById('files-share-invite-input')
+      inviteInput.focus()
     }
   },
   mounted() {
@@ -264,8 +304,18 @@ export default defineComponent({
       }
 
       this.searchInProgress = true
-
-      this.fetchRecipients(query)
+      const prefix = this.accountType?.prefix
+      if (
+        prefix &&
+        this.accountTypes
+          .filter((t) => t.prefix.length > 0)
+          .some((t) => {
+            return query.startsWith(t.prefix)
+          })
+      )
+        this.fetchRecipients(query)
+      else if (prefix) this.fetchRecipients(prefix + query)
+      else this.fetchRecipients(query)
     },
 
     filterRecipients(recipients, query) {
@@ -320,6 +370,8 @@ export default defineComponent({
               path = `/${this.resource.name}`
             }
 
+            // put filter: "sm:"
+
             const addMethod = this.resourceIsSpace ? this.addSpaceMember : this.addShare
             addMethod({
               ...this.$language,
@@ -327,6 +379,8 @@ export default defineComponent({
               graphClient: this.graphClient,
               path,
               shareWith: collaborator.value.shareWith,
+              shareWithUser: collaborator.value.shareWith,
+              shareWithProvider: collaborator.value.shareWithProvider,
               displayName: collaborator.label,
               shareType: collaborator.value.shareType,
               permissions: bitmask,
@@ -356,3 +410,12 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.files-share-invite-input {
+  width: 70%;
+}
+.account-type-input {
+  width: 30%;
+}
+</style>

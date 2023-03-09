@@ -18,7 +18,7 @@ import { isUndefined } from 'lodash-es'
  */
 export const createFileRouteOptions = (
   space: SpaceResource,
-  target: { path?: string; fileId?: string | number },
+  target: { path?: string; fileId?: string | number; fileName?: string },
   options?: { configurationManager?: ConfigurationManager }
 ): { params: RouteParams; query: LocationQuery } => {
   const config = options?.configurationManager || configurationManager
@@ -29,7 +29,8 @@ export const createFileRouteOptions = (
     query: {
       ...(isShareSpaceResource(space) && { shareId: space.shareId }),
       ...(config?.options?.routing?.idBased &&
-        !isUndefined(target.fileId) && { fileId: `${target.fileId}` })
+        !isUndefined(target.fileId) && { fileId: `${target.fileId}` }),
+      ...(target.fileName && { fileName: target.fileName })
     }
   }
 }

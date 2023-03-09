@@ -1,5 +1,6 @@
 import { UserManager } from './userManager'
 import { PublicLinkManager } from './publicLinkManager'
+import { OcmLinkManager } from './ocmLinkManager'
 import { Store } from 'vuex'
 import { ClientService } from 'web-pkg/src/services'
 import { ConfigurationManager } from 'web-pkg/src/configuration'
@@ -14,6 +15,7 @@ export class AuthService {
   private router: Router
   private userManager: UserManager
   private publicLinkManager: PublicLinkManager
+  private ocmLinkManager: OcmLinkManager
 
   public hasAuthErrorOccured: boolean
 
@@ -41,7 +43,7 @@ export class AuthService {
    *
    * @param to {Route}
    */
-  public async initializeContext(to: RouteLocation) {
+  public async initializeContext(to?: RouteLocation) {
     if (!this.publicLinkManager) {
       this.publicLinkManager = new PublicLinkManager({
         clientService: this.clientService,
@@ -55,6 +57,14 @@ export class AuthService {
       if (publicLinkToken) {
         await this.publicLinkManager.updateContext(publicLinkToken)
       }
+    }
+
+    if (!this.ocmLinkManager) {
+      this.ocmLinkManager = new OcmLinkManager({
+        clientService: this.clientService,
+        configurationManager: this.configurationManager,
+        store: this.store
+      })
     }
 
     if (!this.userManager) {
@@ -204,6 +214,10 @@ export class AuthService {
     this.publicLinkManager.setResolved(token, true)
 
     await this.publicLinkManager.updateContext(token)
+  }
+
+  public async resolveOcmLink(token: string) {
+    await this.ocmLinkManager.updateContext(token)
   }
 
   public async logoutUser() {

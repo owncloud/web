@@ -1,15 +1,19 @@
 {
-  "name": "external",
+  "name": "sciencemesh-app",
   "version": "0.0.0",
-  "private": true,
-  "description": "ownCloud web integration of the reva app provider",
+  "description": "OCM",
   "license": "AGPL-3.0",
   "peerDependencies": {
+    "axios": "^0.27.2",
+    "fuse.js": "^6.5.3",
+    "lodash-es": "4.17.21",
     "uuid": "^9.0.0",
-    "vue3-gettext": "^2.3.3",
+    "vue-concurrency": "4.0.0",
     "vuex": "4.1.0",
     "web-client": "workspace:@ownclouders/web-client@*",
     "web-pkg": "workspace:@ownclouders/web-pkg@*",
-    "web-runtime": "workspace:*"
+    "web-app-files": "workspace:*"
   }
 }
+
+

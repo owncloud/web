@@ -9,6 +9,15 @@ const appInfo = {
 
 const routes = [
   {
+    name: 'apps-remote',
+    path: '/sciencemesh/:token/:remote_path?',
+    component: App,
+    meta: {
+      authContext: 'anonymous',
+      patchCleanPath: true
+    }
+  },
+  {
     name: 'apps',
     path: '/:driveAliasAndItem(.*)?',
     component: App,

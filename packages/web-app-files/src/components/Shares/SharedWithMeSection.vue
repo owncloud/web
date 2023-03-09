@@ -28,6 +28,7 @@
       :sort-by="sortBy"
       :sort-dir="sortDir"
       :grouping-settings="groupingSettings"
+      :enable-s-m-filter="true"
       @file-click="$_fileActions_triggerDefaultAction"
       @row-mounted="rowMounted"
       @sort="sortHandler"
@@ -213,10 +214,15 @@ export default defineComponent({
       const personalSpace = store.getters['runtime/spaces/spaces'].find(
         (space) => space.driveType === 'personal'
       )
-      return createLocationSpaces(
-        'files-spaces-generic',
-        createFileRouteOptions(personalSpace, { path, fileId })
-      )
+
+        return createLocationSpaces(
+          'files-spaces-generic',
+          createFileRouteOptions(personalSpace, {
+            path,
+            fileId,
+            ...(resource.share.shareType === 6 && resource.isFolder && { fileName: resource.name })
+          })
+        )
     }
 
     const personalSpace = computed(() => {

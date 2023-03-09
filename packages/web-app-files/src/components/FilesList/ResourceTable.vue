@@ -11,6 +11,7 @@
     :disabled="disabled"
     :sticky="true"
     :grouping-settings="groupingSettings"
+    :enable-s-m-filter="enableSMFilter"
     :header-position="headerPosition"
     :drag-drop="dragDrop"
     :hover="hover"
@@ -261,6 +262,14 @@ export default defineComponent({
       type: Object,
       required: false,
       default: null
+    },
+    /**
+     * enable SM filter
+     */
+    enableSMFilter: {
+      type: Boolean,
+      required: false,
+      default: false
     },
     /**
      * Closure function to mutate the resource id into a valid DOM selector.

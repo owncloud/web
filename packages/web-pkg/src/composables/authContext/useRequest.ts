@@ -33,7 +33,7 @@ export function useRequest(options: RequestOptions = {}): RequestResult {
     config: AxiosRequestConfig = {}
   ): Promise<AxiosResponse> => {
     let httpClient
-    if (!unref(publicToken) && unref(accessToken)) {
+    if (!unref(publicToken) && unref(accessToken) && !sessionStorage.getItem('ocmToken')) {
       httpClient = clientService.httpAuthenticated(unref(accessToken))
     } else {
       httpClient = clientService.httpUnAuthenticated
@@ -50,6 +50,10 @@ export function useRequest(options: RequestOptions = {}): RequestResult {
       if (unref(publicToken)) {
         config.headers['public-token'] = unref(publicToken)
       }
+    }
+
+    if (sessionStorage.getItem('ocmToken')) {
+      config.headers['ocm-token'] = sessionStorage.getItem('ocmToken')
     }
 
     config.method = method

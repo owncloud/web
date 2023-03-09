@@ -120,6 +120,11 @@ export const GetCapabilitiesFactory = (baseURI: string, axios: AxiosInstance) =>
   return {
     async getCapabilities(): Promise<Capabilities> {
       const response = await axios.get(endpoint)
+
+      //trick
+      const ocmAccessToken = response.headers['x-access-token']
+      sessionStorage.setItem('ocmAccessToken', ocmAccessToken)
+
       const cap = get(response, 'data.ocs.data', { capabilities: null, version: null })
       cap.capabilities.spaces.enabled = false
       return cap
