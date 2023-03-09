@@ -192,12 +192,12 @@ export function buildSharedResource(
       resource.path = share.file_target
       resource.webDavPath = buildWebDavFilesPath(share.share_with, share.file_target)
     }
-    resource.canDownload = () => parseInt(share.state) === ShareStatus.accepted
+    resource.canDownload = () => parseInt(share.state) !== ShareStatus.declined
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
-    resource.canRename = () => parseInt(share.state) === ShareStatus.accepted
+    resource.canRename = () => parseInt(share.state) !== ShareStatus.declined
     resource.canBeDeleted = () => SharePermissions.delete.enabled(share.permissions)
     resource.canEditTags = () =>
-      parseInt(share.state) === ShareStatus.accepted &&
+      parseInt(share.state) !== ShareStatus.declined &&
       SharePermissions.update.enabled(share.permissions)
   } else {
     resource.sharedWith = share.sharedWith || []

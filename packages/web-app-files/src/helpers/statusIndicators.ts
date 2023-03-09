@@ -24,8 +24,8 @@ const shareUserIconDescribedBy = ({ isDirect }) => {
 
 const shareLinkDescribedBy = ({ isDirect }) => {
   return isDirect
-    ? $gettext('This item is directly shared via links.')
-    : $gettext('This item is shared via links through one of the parent folders.')
+    ? $gettext('This item is directly shared publicly.')
+    : $gettext('This item is shared publicly through one of the parent folders.')
 }
 
 const getUserIndicator = ({ resource, isDirect, isIncoming = false }) => {

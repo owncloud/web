@@ -80,10 +80,6 @@
         </oc-button>
       </div>
     </template>
-    <template #status="{ item }">
-      <!-- @slot Status column -->
-      <slot name="status" :resource="item" />
-    </template>
     <template #size="{ item }">
       <oc-resource-size :size="item.size || Number.NaN" />
     </template>
@@ -158,6 +154,10 @@
           :accessible-description="getSharedWithAvatarDescription(item)"
         />
       </oc-button>
+    </template>
+    <template #status="{ item }">
+      <!-- @slot Status column -->
+      <slot name="status" :resource="item" />
     </template>
     <template #actions="{ item }">
       <div class="resource-table-actions">
@@ -506,13 +506,6 @@ export default defineComponent({
             alignH: 'right',
             wrap: 'nowrap'
           },
-          {
-            name: 'status',
-            title: this.$gettext('Status'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap'
-          },
           this.hasTags
             ? {
                 name: 'tags',
@@ -562,6 +555,13 @@ export default defineComponent({
             wrap: 'nowrap',
             accessibleLabelCallback: (item) =>
               this.formatDateRelative(item.ddate) + ' (' + this.formatDate(item.ddate) + ')'
+          },
+          {
+            name: 'status',
+            title: this.$gettext('Status'),
+            type: 'slot',
+            alignH: 'right',
+            wrap: 'nowrap'
           }
         ]
           .filter((field) => {

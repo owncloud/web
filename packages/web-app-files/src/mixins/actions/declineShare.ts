@@ -18,10 +18,10 @@ export default {
       return [
         {
           name: 'decline-share',
-          icon: 'spam-3',
+          icon: 'eye-off',
           handler: this.$_declineShare_trigger,
           label: ({ resources }) =>
-            this.$ngettext('Decline share', 'Decline shares', resources.length),
+            this.$ngettext('Hide share', 'Hide shares', resources.length),
           isEnabled: ({ resources }) => {
             if (
               !isLocationSharesActive(this.$router, 'files-shares-with-me') &&
@@ -90,8 +90,8 @@ export default {
         if (isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
           this.showMessage({
             title: this.$ngettext(
-              'The selected share was declined successfully',
-              'The selected shares were declined successfully',
+              'The selected share was hidden successfully',
+              'The selected shares were hidden successfully',
               resources.length
             )
           })
@@ -103,8 +103,8 @@ export default {
 
       this.showMessage({
         title: this.$ngettext(
-          'Failed to decline the selected share',
-          'Failed to decline selected shares',
+          'Failed to hide the selected share',
+          'Failed to hide selected shares',
           resources.length
         ),
         status: 'danger'

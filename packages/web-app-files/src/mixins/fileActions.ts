@@ -110,7 +110,7 @@ export default {
                 !this.$_isSearchActive &&
                 (isLocationTrashActive(this.$router, 'files-trash-generic') ||
                   (isLocationSharesActive(this.$router, 'files-shares-with-me') &&
-                    resources[0].status !== ShareStatus.accepted))
+                    resources[0].status === ShareStatus.declined))
               ) {
                 return false
               }
