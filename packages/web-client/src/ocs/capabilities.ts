@@ -92,6 +92,9 @@ export interface Capabilities {
           version: string
         }[]
       }
+      quick_link?: {
+        default_role?: string
+      }
     }
     spaces?: {
       enabled?: boolean

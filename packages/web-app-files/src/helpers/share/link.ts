@@ -1,11 +1,11 @@
 import { DateTime } from 'luxon'
-import { Share } from 'web-client/src/helpers/share'
+import { LinkShareRoles, Share } from 'web-client/src/helpers/share'
 import { Store } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import { useClipboard } from '@vueuse/core'
 import { Ability } from 'web-pkg'
 
-interface CreateQuicklink {
+export interface CreateQuicklink {
   store: Store<any>
   storageId?: any
   resource: any
@@ -16,9 +16,25 @@ interface CreateQuicklink {
 
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
   const { resource, store, password, $gettext, ability } = args
+
+  const canCreatePublicLink = ability.can('create-all', 'PublicLink')
+  const allowResharing = store.state.user.capabilities.files_sharing?.resharing
+  const capabilitiesRoleName =
+    store.state.user.capabilities.files_sharing?.quick_link?.default_role || 'viewer'
+  const canEdit = store.state.user.capabilities.files_sharing?.public?.can_edit || false
+  const canContribute = store.state.user.capabilities.files_sharing?.public?.can_contribute || false
+  const alias = store.state.user.capabilities.files_sharing?.public?.alias
+  const roleName = !canCreatePublicLink ? 'none' : capabilitiesRoleName || 'viewer'
+  const permissions = LinkShareRoles.getByName(
+    roleName,
+    resource.isFolder,
+    canEdit,
+    canContribute,
+    alias
+  ).bitmask(allowResharing)
   const params: { [key: string]: unknown } = {
     name: $gettext('Quicklink'),
-    permissions: ability.can('create-all', 'PublicLink') ? '1' : '0',
+    permissions,
     quicklink: true
   }
 
