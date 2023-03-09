@@ -97,6 +97,7 @@ Summary
 * Enhancement - Make notifications work with oCIS: [#8518](https://github.com/owncloud/web/pull/8518)
 * Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
 * Enhancement - Add and remove users from groups batch actions: [#8553](https://github.com/owncloud/web/pull/8553)
+* Enhancement - QuickActions role configurable: [#8566](https://github.com/owncloud/web/pull/8566)
 
 Details
 -------
@@ -916,6 +917,13 @@ Details
    https://github.com/owncloud/web/issues/8558
    https://github.com/owncloud/web/issues/8472
    https://github.com/owncloud/web/pull/8553
+
+* Enhancement - QuickActions role configurable: [#8566](https://github.com/owncloud/web/pull/8566)
+
+   We've added the option to change the default quickactions role via capabilities.
+
+   https://github.com/owncloud/web/issues/8547
+   https://github.com/owncloud/web/pull/8566
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
