@@ -1,11 +1,5 @@
 import { DateTime } from 'luxon'
-import {
-  linkRoleInternalFile,
-  linkRoleInternalFolder,
-  linkRoleViewerFile,
-  linkRoleViewerFolder,
-  Share
-} from 'web-client/src/helpers/share'
+import { LinkShareRoles, Share } from 'web-client/src/helpers/share'
 import { Store } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import { useClipboard } from '@vueuse/core'
@@ -23,19 +17,22 @@ export interface CreateQuicklink {
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
   const { resource, store, password, $gettext, ability } = args
 
-  const allowResharing = store.state.user.capabilities.files_sharing?.resharing
-  const isDefaultRoleViewer = store.state.user.capabilities.files_sharing?.quickLink?.default_role
-  const internalPerm = (resource.isFolder ? linkRoleInternalFolder : linkRoleInternalFile).bitmask(
-    allowResharing
-  )
-  const viewerPerm = (resource.isFolder ? linkRoleViewerFolder : linkRoleViewerFile).bitmask(
-    allowResharing
-  )
   const canCreatePublicLink = ability.can('create-all', 'PublicLink')
+  const allowResharing = store.state.user.capabilities.files_sharing?.resharing
+  const capabilitiesRoleName =
+    store.state.user.capabilities.capabilities.files_sharing?.quickLink?.default_role
+  let permissions
+  if (!canCreatePublicLink) {
+    permissions = LinkShareRoles.getByName('none', resource.isFolder).bitmask(allowResharing)
+  } else {
+    permissions = (
+      LinkShareRoles.getByName(capabilitiesRoleName, resource.isFolder) ||
+      LinkShareRoles.getByName('viewer', resource.isFolder)
+    ).bitmask(allowResharing)
+  }
   const params: { [key: string]: unknown } = {
     name: $gettext('Quicklink'),
-    permissions:
-      canCreatePublicLink && isDefaultRoleViewer === 'viewer' ? viewerPerm : internalPerm,
+    permissions,
     quicklink: true
   }
 

@@ -30,12 +30,7 @@ import { useAbility } from 'web-pkg'
 import { inject } from 'vue'
 import { Resource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
-import {
-  linkRoleInternalFile,
-  linkRoleInternalFolder,
-  linkRoleViewerFile,
-  linkRoleViewerFolder
-} from 'web-client/src/helpers/share'
+import { LinkShareRoles } from 'web-client/src/helpers/share'
 import { Capabilities } from 'web-client/src/ocs'
 
 export default defineComponent({
@@ -57,24 +52,24 @@ export default defineComponent({
     const capabilities = inject<Capabilities>('capabilities')
     const createQuickLink = () => {
       const allowResharing = capabilities.capabilities.files_sharing?.resharing
-      const isDefaultRoleViewer = capabilities.capabilities.files_sharing?.quickLink?.default_role
-      const internalPerm = (resource.isFolder ? linkRoleInternalFolder : linkRoleInternalFile)
-        .bitmask
-      const viewerPerm = (resource.isFolder ? linkRoleViewerFolder : linkRoleViewerFile).bitmask(
-        allowResharing
-      )
-      emit('createPublicLink', {
+      const emitData = {
         link: {
           name: $gettext('Quicklink'),
-          permissions:
-            canCreatePublicLinks.value && isDefaultRoleViewer === 'viewer'
-              ? viewerPerm
-              : internalPerm,
+          permissions: LinkShareRoles.getByName('none', resource.isFolder).bitmask(allowResharing),
           expiration: props.expirationDate.enforced ? props.expirationDate.default : null,
           quicklink: true,
           password: false
         }
-      })
+      }
+      if (!canCreatePublicLinks.value) {
+        emit('createPublicLink', emitData)
+      }
+      const capabilitiesRoleName = capabilities.capabilities.files_sharing?.quickLink?.default_role
+      emitData.link.permissions = (
+        LinkShareRoles.getByName(capabilitiesRoleName, resource.isFolder) ||
+        LinkShareRoles.getByName('viewer', resource.isFolder)
+      ).bitmask(allowResharing)
+      emit('createPublicLink', emitData)
     }
     return {
       createQuickLink

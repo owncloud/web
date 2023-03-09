@@ -409,6 +409,12 @@ export abstract class LinkShareRoles {
       return bitmask === (bitmask | r.bitmask(false))
     })
   }
+
+  static getByName(name: string, isFolder: boolean): ShareRole {
+    return LinkShareRoles.list(isFolder).find(
+      (role) => role.name.toLowerCase() === name.toLowerCase()
+    )
+  }
 }
 
 /**
