@@ -34,29 +34,38 @@ describe('Top Bar component', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.find('applications-menu-stub').exists()).toBeTruthy()
   })
-  it('should display notifications bell', () => {
-    const { wrapper } = getWrapper({
-      notifications: {
-        'ocs-endpoints': ['list', 'get', 'delete']
-      }
+  describe('notifications bell', () => {
+    it('should display in authenticated context if announced via capabilities', () => {
+      const { wrapper } = getWrapper({
+        capabilities: {
+          notifications: { 'ocs-endpoints': ['list', 'get', 'delete'] }
+        }
+      })
+      expect(wrapper.find('notifications-stub').exists()).toBeTruthy()
     })
-    expect(wrapper.find('notifications-stub').exists()).toBeTruthy()
-  })
-  it('should not display notifications bell if notifications capability is missing', () => {
-    const { wrapper } = getWrapper()
-    expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
-  })
-  it('should not display notifications bell if endpoint list is missing', () => {
-    const { wrapper } = getWrapper({
-      notifications: {
-        'ocs-endpoints': []
-      }
+    it('should not display in an unauthenticated context', () => {
+      const { wrapper } = getWrapper({
+        isUserContextReady: false,
+        capabilities: {
+          notifications: { 'ocs-endpoints': ['list', 'get', 'delete'] }
+        }
+      })
+      expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
     })
-    expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
+    it('should not display if capability is missing', () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
+    })
+    it('should not display if endpoint list is missing', () => {
+      const { wrapper } = getWrapper({
+        capabilities: { notifications: { 'ocs-endpoints': [] } }
+      })
+      expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
+    })
   })
 })
 
-const getWrapper = (capabilities = {}) => {
+const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
   const mocks = { ...defaultComponentMocks() }
   const storeOptions = {
     ...defaultStoreMockOptions,
@@ -78,6 +87,9 @@ const getWrapper = (capabilities = {}) => {
     }
   }))
   storeOptions.getters.user.mockImplementation(() => ({ id: 'einstein' }))
+  storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
+    isUserContextReady
+  )
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(TopBar, {
