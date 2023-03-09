@@ -9,21 +9,19 @@
       :clearable="false"
       :options="options"
       :create-option="createOption"
-      option-label="value"
+      option-label="displayValue"
       :label="title"
       @update:model-value="onUpdate"
     >
-      <template #selected-option="{ value }">
-        <span v-if="value === 0" v-text="$gettext('No restriction')" />
-        <span v-else>{{ getFormattedFileSize(value) }}</span>
+      <template #selected-option="{ displayValue }">
+        <span v-text="displayValue" />
       </template>
       <template #search="{ attributes, events }">
         <input class="vs__search" v-bind="attributes" v-on="events" />
       </template>
-      <template #option="{ value, error }">
+      <template #option="{ displayValue, error }">
         <div class="oc-flex oc-flex-between">
-          <span v-if="value === 0" v-text="$gettext('No restriction')" />
-          <span v-else>{{ getFormattedFileSize(value) }}</span>
+          <span v-text="displayValue" />
         </div>
         <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
       </template>
@@ -68,24 +66,31 @@ export default {
     DEFAULT_OPTIONS() {
       return [
         {
-          value: Math.pow(10, 9)
+          value: Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(Math.pow(10, 9))
         },
         {
-          value: 2 * Math.pow(10, 9)
+          value: 2 * Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(2 * Math.pow(10, 9))
         },
         {
-          value: 5 * Math.pow(10, 9)
+          value: 5 * Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(5 * Math.pow(10, 9))
         },
         {
-          value: 10 * Math.pow(10, 9)
+          value: 10 * Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(10 * Math.pow(10, 9))
         },
         {
-          value: 50 * Math.pow(10, 9)
+          value: 50 * Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(50 * Math.pow(10, 9))
         },
         {
-          value: 100 * Math.pow(10, 9)
+          value: 100 * Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(100 * Math.pow(10, 9))
         },
         {
+          displayValue: this.$gettext('No restriction'),
           value: 0
         }
       ]
@@ -120,6 +125,7 @@ export default {
 
       if (!this.isValueValidNumber(option)) {
         return {
+          displayValue: option,
           value: option,
           error: this.$gettext('Please enter only numbers'),
           selectable: false
@@ -130,6 +136,7 @@ export default {
       if (value > this.quotaLimit) {
         return {
           value,
+          displayValue: this.getFormattedFileSize(value),
           error: this.$gettext('Please enter a value equal to or less than %{ quotaLimit }', {
             quotaLimit: this.getFormattedFileSize(this.quotaLimit)
           }),
@@ -139,7 +146,8 @@ export default {
       }
 
       return {
-        value
+        value,
+        displayValue: this.getFormattedFileSize(value)
       }
     },
     setOptions() {
@@ -161,6 +169,7 @@ export default {
 
       if (!selectedQuotaInOptions) {
         availableOptions.push({
+          displayValue: this.getFormattedFileSize(this.totalQuota),
           value: this.totalQuota,
           selectable: this.totalQuota <= this.quotaLimit
         })
