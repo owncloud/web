@@ -118,7 +118,7 @@ export default {
     },
     isValueValidNumber(value) {
       const optionIsNumberRegex = /^[0-9]\d*(([.,])\d+)?$/g
-      return value !== '0' && optionIsNumberRegex.test(value)
+      return optionIsNumberRegex.test(value) && value > 0
     },
     createOption(option) {
       option = option.replace(',', '.')
