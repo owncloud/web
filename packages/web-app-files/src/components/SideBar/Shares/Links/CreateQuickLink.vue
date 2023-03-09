@@ -64,7 +64,7 @@ export default defineComponent({
       if (!canCreatePublicLinks.value) {
         emit('createPublicLink', emitData)
       }
-      const capabilitiesRoleName = capabilities.capabilities.files_sharing?.quickLink?.default_role
+      const capabilitiesRoleName = capabilities.capabilities.files_sharing?.quickLink?.default_role || 'viewer'
       emitData.link.permissions = (
         LinkShareRoles.getByName(capabilitiesRoleName, resource.isFolder) ||
         LinkShareRoles.getByName('viewer', resource.isFolder)

@@ -20,7 +20,7 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
   const canCreatePublicLink = ability.can('create-all', 'PublicLink')
   const allowResharing = store.state.user.capabilities.files_sharing?.resharing
   const capabilitiesRoleName =
-    store.state.user.capabilities.files_sharing?.quickLink?.default_role
+    store.state.user.capabilities.files_sharing?.quickLink?.default_role || 'viewer'
   let permissions
   if (!canCreatePublicLink) {
     permissions = LinkShareRoles.getByName('none', resource.isFolder).bitmask(allowResharing)
