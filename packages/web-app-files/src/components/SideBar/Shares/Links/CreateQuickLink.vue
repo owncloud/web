@@ -59,11 +59,13 @@ export default defineComponent({
       const canEdit = unref(useCapabilityFilesSharingPublicCanEdit())
       const canContribute = unref(useCapabilityFilesSharingPublicCanContribute())
       const alias = unref(useCapabilityFilesSharingPublicAlias())
+      const capabilitiesRoleName = unref(useCapabilityFilesSharingQuickLinkDefaultRole())
+      const roleName = !unref(canCreatePublicLinks) ? 'none' : capabilitiesRoleName || 'viewer'
       const emitData = {
         link: {
           name: $gettext('Quicklink'),
           permissions: LinkShareRoles.getByName(
-            'none',
+            roleName,
             resource.isFolder,
             canEdit,
             canContribute,
@@ -74,19 +76,6 @@ export default defineComponent({
           password: false
         }
       }
-      if (!canCreatePublicLinks.value) {
-        emit('createPublicLink', emitData)
-      }
-      const capabilitiesRoleName = useCapabilityFilesSharingQuickLinkDefaultRole().value
-      emitData.link.permissions = (
-        LinkShareRoles.getByName(
-          capabilitiesRoleName,
-          resource.isFolder,
-          canEdit,
-          canContribute,
-          alias
-        ) || LinkShareRoles.getByName('viewer', resource.isFolder, canEdit, canContribute, alias)
-      ).bitmask(allowResharing)
       emit('createPublicLink', emitData)
     }
     return {
