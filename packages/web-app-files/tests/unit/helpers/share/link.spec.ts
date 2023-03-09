@@ -38,6 +38,13 @@ const mockResource = {
 
 const getAbilityMock = (hasPermission) => mock<Ability>({ can: () => hasPermission })
 
+let returnBitmask = 1
+jest.mock('web-client/src/helpers/share', () => ({
+  LinkShareRoles: {
+    getByName: jest.fn().mockReturnValue({ bitmask: jest.fn(() => returnBitmask) })
+  }
+}))
+
 describe('createQuicklink', () => {
   it('should create a quicklink with the correct parameters', async () => {
     const args: CreateQuicklink = {
@@ -77,6 +84,7 @@ describe('createQuicklink', () => {
   it.each(['viewer', 'internal'])(
     'should create a quicklink without a password if no password is provided and capabilities set to default %s',
     async (role) => {
+      returnBitmask = role === 'viewer' ? 1 : 0
       mockStore.state.user.capabilities.files_sharing.quickLink.default_role = role
 
       const args: CreateQuicklink = {
