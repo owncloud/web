@@ -44,7 +44,7 @@ export default {
             }
 
             const acceptDisabled = resources.some((resource) => {
-              return resource.status === ShareStatus.accepted
+              return resource.status !== ShareStatus.declined
             })
             return !acceptDisabled
           },

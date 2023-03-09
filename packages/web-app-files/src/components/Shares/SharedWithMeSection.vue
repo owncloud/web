@@ -293,7 +293,7 @@ export default defineComponent({
       return resource.status === ShareStatus.declined
     },
     getShowDeclineButton(resource) {
-      return resource.status === ShareStatus.accepted || resource.status === ShareStatus.pending
+      return resource.status !== ShareStatus.declined
     },
     toggleShowMore() {
       this.showMore = !this.showMore

@@ -30,7 +30,7 @@ export default {
               return false
             }
             if (isLocationSharesActive(this.$router, 'files-shares-with-me')) {
-              if (resources[0].status !== ShareStatus.accepted) {
+              if (resources[0].status === ShareStatus.declined) {
                 return false
               }
             }

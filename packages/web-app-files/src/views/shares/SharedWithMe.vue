@@ -134,7 +134,7 @@ export default defineComponent({
     // accepted shares
     const accepted = computed(() =>
       unref(storeItems).filter(
-        (item) => item.status === ShareStatus.accepted || item.status === ShareStatus.pending
+        (item) => item.status !== ShareStatus.declined
       )
     )
     const {
