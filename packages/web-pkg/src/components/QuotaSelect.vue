@@ -13,17 +13,15 @@
       :label="title"
       @update:model-value="onUpdate"
     >
-      <template #selected-option="{ displayValue, displayUnit }">
-        <span>{{ displayValue }}</span>
-        <span v-if="displayUnit" class="oc-ml-s">{{ displayUnit }}</span>
+      <template #selected-option="{ displayValue }">
+        <span v-text="displayValue" />
       </template>
       <template #search="{ attributes, events }">
         <input class="vs__search" v-bind="attributes" v-on="events" />
       </template>
-      <template #option="{ displayValue, displayUnit, error }">
+      <template #option="{ displayValue, error }">
         <div class="oc-flex oc-flex-between">
-          <div>{{ displayValue }}</div>
-          <div v-if="displayUnit">{{ displayUnit }}</div>
+          <span v-text="displayValue" />
         </div>
         <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
       </template>
@@ -36,6 +34,8 @@
 </template>
 
 <script lang="ts">
+import { formatFileSize } from 'web-pkg'
+
 export default {
   name: 'QuotaSelect',
   props: {
@@ -60,41 +60,37 @@ export default {
     }
   },
   computed: {
+    quotaLimit() {
+      return this.maxQuota || 1e15
+    },
     DEFAULT_OPTIONS() {
       return [
         {
-          displayValue: '1',
-          displayUnit: 'GB',
-          value: Math.pow(10, 9)
+          value: Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(Math.pow(10, 9))
         },
         {
-          displayValue: '2',
-          displayUnit: 'GB',
-          value: 2 * Math.pow(10, 9)
+          value: 2 * Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(2 * Math.pow(10, 9))
         },
         {
-          displayValue: '5',
-          displayUnit: 'GB',
-          value: 5 * Math.pow(10, 9)
+          value: 5 * Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(5 * Math.pow(10, 9))
         },
         {
-          displayValue: '10',
-          displayUnit: 'GB',
-          value: 10 * Math.pow(10, 9)
+          value: 10 * Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(10 * Math.pow(10, 9))
         },
         {
-          displayValue: '50',
-          displayUnit: 'GB',
-          value: 50 * Math.pow(10, 9)
+          value: 50 * Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(50 * Math.pow(10, 9))
         },
         {
-          displayValue: '100',
-          displayUnit: 'GB',
-          value: 100 * Math.pow(10, 9)
+          value: 100 * Math.pow(10, 9),
+          displayValue: this.getFormattedFileSize(100 * Math.pow(10, 9))
         },
         {
           displayValue: this.$gettext('No restriction'),
-          displayUnit: '',
           value: 0
         }
       ]
@@ -120,34 +116,38 @@ export default {
     optionSelectable(option) {
       return option.selectable !== false
     },
+    isValueValidNumber(value) {
+      const optionIsNumberRegex = /^[0-9]\d*(([.,])\d+)?$/g
+      return optionIsNumberRegex.test(value) && value > 0
+    },
     createOption(option) {
       option = option.replace(',', '.')
-      const optionIsNumberRegex = /^[0-9]\d*(([.,])\d+)?$/g
-      if (option === '0' || !optionIsNumberRegex.test(option)) {
+
+      if (!this.isValueValidNumber(option)) {
         return {
           displayValue: option,
+          value: option,
           error: this.$gettext('Please enter only numbers'),
           selectable: false
         }
       }
       const value = parseFloat(option) * Math.pow(10, 9)
-      const displayValue = parseFloat(option).toFixed(2).replace('.00', '')
-      if (this.maxQuota && value > this.maxQuota) {
+
+      if (value > this.quotaLimit) {
         return {
           value,
-          displayValue,
-          displayUnit: 'GB',
-          error: this.$gettext('Please enter a value equal or less than %{ maxQuota } GB', {
-            maxQuota: this.maxQuota * Math.pow(10, -9)
+          displayValue: this.getFormattedFileSize(value),
+          error: this.$gettext('Please enter a value equal to or less than %{ quotaLimit }', {
+            quotaLimit: this.getFormattedFileSize(this.quotaLimit)
           }),
 
           selectable: false
         }
       }
+
       return {
         value,
-        displayValue,
-        displayUnit: 'GB'
+        displayValue: this.getFormattedFileSize(value)
       }
     },
     setOptions() {
@@ -169,13 +169,9 @@ export default {
 
       if (!selectedQuotaInOptions) {
         availableOptions.push({
-          displayValue: (this.totalQuota * Math.pow(10, -9))
-            .toFixed(2)
-            .toString()
-            .replace('.00', ''),
-          displayUnit: 'GB',
+          displayValue: this.getFormattedFileSize(this.totalQuota),
           value: this.totalQuota,
-          selectable: !(this.maxQuota && this.totalQuota > this.maxQuota)
+          selectable: this.totalQuota <= this.quotaLimit
         })
       }
 
@@ -185,6 +181,10 @@ export default {
         ...availableOptions.filter((o) => !o.value)
       ]
       this.options = availableOptions
+    },
+    getFormattedFileSize(value) {
+      const formattedFilesize = formatFileSize(value, this.$language.current)
+      return !this.isValueValidNumber(value) ? value : formattedFilesize
     }
   }
 }

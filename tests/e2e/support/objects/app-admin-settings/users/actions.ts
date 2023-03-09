@@ -61,7 +61,7 @@ export const changeQuota = async (args: {
   await page.locator(util.format(userIdSelector, uuid)).click()
   await page.locator(`.context-menu`).locator(editActionBtn).click()
   await page.locator(quotaInput).fill(value)
-  await page.locator(util.format(quotaValueDropDown, value)).click()
+  await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
 
   await Promise.all([
     page.waitForResponse(
@@ -81,7 +81,7 @@ export const changeQuotaUsingBatchAction = async (args: {
   const { page, value } = args
   await page.locator(editQuotaBtn).click()
   await page.locator(quotaInputBatchAction).fill(value)
-  await page.locator(util.format(quotaValueDropDown, value)).click()
+  await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
 
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'PATCH'),
