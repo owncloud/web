@@ -39,10 +39,6 @@ const mockResource = {
 const getAbilityMock = (hasPermission) => mock<Ability>({ can: () => hasPermission })
 
 describe('createQuicklink', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
   it('should create a quicklink with the correct parameters', async () => {
     const args: CreateQuicklink = {
       store: mockStore as unknown as Store<any>,
