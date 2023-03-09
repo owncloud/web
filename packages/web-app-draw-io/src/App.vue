@@ -78,30 +78,10 @@ export default defineComponent({
   created() {
     this.filePath = this.currentFileContext.path
     this.fileExtension = this.filePath.split('.').pop()
-    window.addEventListener('message', (event) => {
-      if (event.data.length > 0) {
-        if (event.origin !== this.config.url) {
-          return
-        }
-        const payload = JSON.parse(event.data)
-        switch (payload.event) {
-          case 'init':
-            this.fileExtension === 'vsdx' ? this.importVisio() : this.load()
-            break
-          case 'autosave':
-            if (this.isAutoSaveEnabled) {
-              this.save(payload, true)
-            }
-            break
-          case 'save':
-            this.save(payload)
-            break
-          case 'exit':
-            this.exit()
-            break
-        }
-      }
-    })
+    window.addEventListener('message', this.handleMessage)
+  },
+  beforeUnmount() {
+    window.removeEventListener('message', this.handleMessage)
   },
   methods: {
     ...mapActions(['showMessage']),
@@ -141,6 +121,30 @@ export default defineComponent({
         this.loading = false
       } catch (error) {
         this.errorPopup(error)
+      }
+    },
+    async handleMessage(event) {
+      if (event.data.length > 0) {
+        if (event.origin !== this.config.url) {
+          return
+        }
+        const payload = JSON.parse(event.data)
+        switch (payload.event) {
+          case 'init':
+            this.fileExtension === 'vsdx' ? this.importVisio() : this.load()
+            break
+          case 'autosave':
+            if (this.isAutoSaveEnabled) {
+              this.save(payload, true)
+            }
+            break
+          case 'save':
+            this.save(payload)
+            break
+          case 'exit':
+            this.exit()
+            break
+        }
       }
     },
     async loadFileContent() {
