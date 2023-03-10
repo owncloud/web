@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="dropdown" class="dropdown" :class="{ active: dropdownVisible }">
+    <div ref="dropdown" class="oc-expanding-dropdown" :class="{ active: dropdownVisible }">
       <oc-button
         appearance="raw"
         variation="inverse"
@@ -9,13 +9,10 @@
       >
         <oc-icon name="grid" size="large" class="oc-flex" />
       </oc-button>
-      <transition name="slidedrop">
-        <div v-if="dropdownVisible" class="dropdown-content">
-          <div style="width: 300px; padding: 10px">
-            <!--<slot />-->
-            <p>ferf</p>
-            <p>ferf</p>
-            <p>ferf</p>
+      <transition name="drop-down-slide" mode="out-in">
+        <div v-show="dropdownVisible" class="dropdown-content">
+          <div ref="content">
+            <slot />
           </div>
         </div>
       </transition>
@@ -32,13 +29,30 @@ export default {
   release: '0.0.1',
   setup() {
     const dropdown = ref(null)
+    const content = ref(null)
     const dropdownVisible = ref(false)
     const buttonText = ref('Toggle Dropdown')
 
     const toggleDropdown = () => {
       dropdownVisible.value = !dropdownVisible.value
     }
+
+    const calculateContentMax = () => {
+      const el = unref(content)
+      el.parentNode.style.setProperty('top', '-99999px')
+      el.parentNode.style.setProperty('display', 'block')
+      el.parentNode.style.setProperty('position', 'absolute')
+
+      const maxWidth = el.clientWidth
+      const maxHeight = el.clientHeight
+      el.parentNode.style.setProperty('display', 'none')
+      el.parentNode.style.setProperty('max-width', `${maxWidth}px`)
+      el.parentNode.style.setProperty('max-height', `${maxHeight}px`)
+      el.parentNode.style.removeProperty('top')
+      el.parentNode.style.removeProperty('position')
+    }
     onMounted(() => {
+      calculateContentMax()
       const el = unref(dropdown)
       el.clickOutsideEvent = (event) => {
         if (!(el == event.target || el.contains(event.target))) {
@@ -53,6 +67,7 @@ export default {
     })
     return {
       dropdown,
+      content,
       dropdownVisible,
       buttonText,
       toggleDropdown
@@ -62,20 +77,19 @@ export default {
 </script>
 
 <style lang="scss">
-.dropdown {
+.oc-expanding-dropdown {
   position: relative;
   display: inline-block;
   filter: none;
   transition: opacity 0.5s;
-  z-index: 9999;
 }
-.dropdown.active {
+.oc-expanding-dropdown.active {
   filter: drop-shadow(0px 2px 4px #232323);
 }
-.dropdown.active > .dropdown-button {
+.oc-expanding-dropdown.active > .dropdown-button {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
-  background-color: #4f4f4f !important;
+  background-color: #4f4f4f;
   transition-delay: 0s;
 }
 .dropdown-button {
@@ -92,48 +106,52 @@ export default {
   transition: all 0.15s ease-out;
   z-index: 1;
 }
+.oc-expanding-dropdown.active > .dropdown-button:focus:not([disabled]) {
+  background-color: #4f4f4f !important;
+}
+.oc-expanding-dropdown.active > .dropdown-button:hover {
+  background-color: #4f4f4f !important;
+}
 
 .dropdown-button i {
   font-size: 22px;
 }
-
 .dropdown-content {
   position: absolute;
   top: 45px;
   left: 0;
   color: #cccccc;
   background-color: #4f4f4f;
+  overflow: visible;
   z-index: 999999;
   border-bottom-left-radius: 5px;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
 
-.slidedrop-enter-active {
-  transition: all 10.15s;
+.drop-down-slide-enter-active {
+  transition: all 0.15s;
   transition-timing-function: ease-out;
 }
 
-.slidedrop-leave-active {
+.drop-down-slide-leave-active {
   transition-duration: 0.1s;
 }
 
-.slidedrop-enter-to,
-.slidedrop-leave {
+.drop-down-slide-enter-to,
+.drop-down-slide-leave-from {
   overflow: hidden;
-  max-height: 200px;
-  max-width: 500px;
   border-bottom-left-radius: 5px;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   opacity: 1;
 }
 
-.slidedrop-enter,
-.slidedrop-leave-to {
+.drop-down-slide-enter-from,
+.drop-down-slide-leave-to {
   overflow: hidden;
-  max-height: 2px;
-  max-width: 45px;
+  max-height: 2px !important;
+  max-width: 45px !important;
   border-radius: 0px;
   opacity: 0;
 }
