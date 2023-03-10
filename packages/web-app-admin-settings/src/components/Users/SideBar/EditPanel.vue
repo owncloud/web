@@ -341,7 +341,7 @@ export default defineComponent({
 <style lang="scss">
 #user-edit-panel {
   #user-edit-form {
-    border-radius: 5px;
+    border-radius: 6px;
   }
 }
 </style>
