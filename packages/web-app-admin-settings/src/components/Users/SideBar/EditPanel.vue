@@ -205,9 +205,9 @@ export default defineComponent({
       return cloneDeep(this.user)
     },
     selectedRoleName() {
+      const assignedRole = this.editUser.appRoleAssignments[0]
       return this.$gettext(
-        this.roles.find((role) => role.id === this.editUser.appRoleAssignments[0].appRoleId)
-          .displayName
+        this.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
       )
     }
   },
@@ -313,6 +313,10 @@ export default defineComponent({
       })
     },
     onUpdateRole(role) {
+      if (!this.editUser.appRoleAssignments.length) {
+        this.editUser.appRoleAssignments.push({ appRoleId: role.id, displayName: role.displayName })
+        return
+      }
       this.editUser.appRoleAssignments[0].appRoleId = role.id
     },
     onUpdatePassword(password) {

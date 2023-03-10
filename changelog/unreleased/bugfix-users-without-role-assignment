@@ -1,0 +1,6 @@
+Bugfix: Users without role assignment
+
+Listing and editing users without a role assignment in the admin settings has been fixed.
+
+https://github.com/owncloud/web/issues/8585
+https://github.com/owncloud/web/pull/8590
