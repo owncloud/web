@@ -18,9 +18,11 @@
       </div>
       <transition name="drop-down-slide" mode="out-in">
         <div v-show="dropdownVisible" class="dropdown-content">
-          <div v-if="expandHead" class="expand-head-filler"></div>
           <div ref="content">
-            <slot name="body" />
+            <div v-if="expandHead" class="space-divider oc-pb-s"></div>
+            <div>
+              <slot name="body" />
+            </div>
           </div>
         </div>
       </transition>
@@ -69,7 +71,7 @@ export default {
       setContentCssProperty('position', 'absolute')
 
       const maxWidth = el.clientWidth
-      const maxHeight = props.expandHead ? el.clientHeight + 45 : el.clientHeight
+      const maxHeight = el.clientHeight
 
       setContentCssProperty('display', 'none')
       setContentCssProperty('max-width', `${maxWidth}px`)
@@ -122,25 +124,39 @@ export default {
   transition: opacity 0.5s;
 
   &.active {
-    filter: drop-shadow(0px 2px 4px #232323);
+    filter: drop-shadow(0px 2px 4px rgba(20, 20, 20, 0.45));
     &:not(.expand-head) {
       .head {
         border-bottom-left-radius: 0px;
         border-bottom-right-radius: 0px;
         background-color: #4f4f4f;
-
-        .dropdown-button:focus:not([disabled]) {
-          background-color: transparent !important;
-        }
-        .dropdown-button:hover {
-          background-color: transparent !important;
-        }
       }
+    }
+  }
+  &:not(.active) {
+    .dropdown-button:focus:not([disabled]):not(:hover) {
+      background-color: transparent !important;
+    }
+    .dropdown-button:hover {
+      background-color: var(--oc-color-background-hover) !important;
+      border-radius: 5px;
     }
   }
   &.expand-head {
     .head {
       justify-content: left;
+    }
+    .space-divider {
+      height: 45px;
+      &::after {
+        content: '';
+        display: block;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        padding: 0 4px;
+        height: 120%;
+        width: calc(100% - 30px);
+        margin-left: 10px;
+      }
     }
   }
   .head {
@@ -156,6 +172,7 @@ export default {
       display: inline-block;
     }
     .dropdown-button {
+      display: flex;
       background-color: transparent;
       color: white;
       border: none;
@@ -163,9 +180,13 @@ export default {
       height: 45px;
       width: 45px;
       z-index: 1;
+      transition: all 0.15s ease-in;
 
       i {
         font-size: 22px;
+      }
+      & > * {
+        display: flex;
       }
     }
   }
@@ -186,8 +207,10 @@ export default {
       top: 45px;
     }
   }
-  .expand-head-filler {
-    height: 45px;
+  &.expand-head {
+    .dropdown-content {
+      border-radius: 5px;
+    }
   }
 }
 

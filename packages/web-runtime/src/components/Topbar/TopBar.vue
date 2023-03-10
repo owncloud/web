@@ -1,7 +1,7 @@
 <template>
   <header
     id="oc-topbar"
-    class="oc-flex oc-flex-middle oc-flex-between oc-px-m"
+    class="oc-flex oc-flex-middle oc-flex-between oc-pr-m oc-pl-s"
     :aria-label="$gettext('Top bar')"
   >
     <div class="oc-topbar-left oc-flex oc-flex-middle oc-flex-between">
@@ -213,11 +213,8 @@ export default {
   }
 
   .oc-topbar-left {
+    width: 10rem;
     gap: 30px;
-
-    img.oc-logo-image {
-      height: 38px;
-    }
   }
   .oc-topbar-right {
     gap: 20px;

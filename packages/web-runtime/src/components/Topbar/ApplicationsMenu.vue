@@ -10,7 +10,7 @@
       </template>
       <template #head>
         <router-link ref="navigationSidebarLogo" to="/">
-          <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image" />
+          <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image oc-flex" />
         </router-link>
       </template>
       <template #body>
@@ -67,7 +67,7 @@ export default defineComponent({
 
     sidebarLogoAlt() {
       return this.$gettext('Navigate to personal files page')
-    },
+    }
   },
   mounted() {
     this.$refs.menu?.tippy?.setProps({
@@ -92,7 +92,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .oc-logo-image {
-  height: 38px;
+  height: 35px;
   padding-left: 15px;
 }
 .applications-list {
@@ -106,20 +106,30 @@ export default defineComponent({
       gap: var(--oc-space-medium);
       justify-content: flex-start;
       width: 100%;
+      overflow: hidden;
 
       &:focus,
       &:hover {
         background-color: var(--oc-color-background-hover);
         color: var(--oc-color-swatch-passive-default);
         text-decoration: none;
+        .icon-box {
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
       }
 
       .icon-box {
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
+      }
+
+      &.router-link-active {
+        .icon-box {
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
       }
 
       .active-check {
