@@ -274,10 +274,6 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-text-input {
-  &:disabled {
-    color: var(--oc-color-input-text-muted); // Unnecessary? see oc-form.scss:306
-  }
-
   &-description {
     color: var(--oc-color-text-muted);
   }
