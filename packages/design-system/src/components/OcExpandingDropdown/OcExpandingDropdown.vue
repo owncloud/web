@@ -82,8 +82,7 @@ export default {
       if (!props.expandHead) {
         return
       }
-      const headEl = unref(head)
-      headEl.style.setProperty('width', `${maxWidth - 10}px`)
+      unref(head).style.setProperty('width', `${maxWidth - 10}px`)
     }
     const handleClick = () => {
       const el = unref(dropdown)
@@ -139,6 +138,7 @@ export default {
     }
     .dropdown-button:hover {
       background-color: var(--oc-color-background-hover) !important;
+      transform: scale(0.9);
       border-radius: 5px;
     }
   }
@@ -151,7 +151,7 @@ export default {
       &::after {
         content: '';
         display: block;
-        border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        border-bottom: 2px solid rgba(0, 0, 0, 0.15);
         padding: 0 4px;
         height: 120%;
         width: calc(100% - 30px);
@@ -195,7 +195,7 @@ export default {
     top: 0px;
     left: 0;
     color: #cccccc;
-    background-color: #4f4f4f;
+    background-color: var(--oc-color-background-secondary);
     overflow: hidden;
     z-index: -1;
     border-bottom-left-radius: 5px;

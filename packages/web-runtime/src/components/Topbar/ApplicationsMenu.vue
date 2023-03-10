@@ -93,7 +93,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .oc-logo-image {
   height: 35px;
-  padding-left: 15px;
+  padding-left: 20px;
 }
 .applications-list {
   padding: 10px;
