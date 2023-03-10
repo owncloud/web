@@ -347,7 +347,7 @@ export default defineComponent({
       const assignedRole = user.appRoleAssignments[0]
 
       return this.$gettext(
-        this.roles.find((role) => role.id === assignedRole.appRoleId)?.displayName || ''
+        this.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
       )
     }
   }

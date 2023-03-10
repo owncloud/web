@@ -229,6 +229,7 @@ export default defineComponent({
     const roles = ref([])
     const selectedUsers = ref([])
     const additionalUserDataLoadedForUserIds = ref([])
+    const applicationId = ref()
     const selectedUserIds = computed(() =>
       unref(selectedUsers).map((selectedUser) => selectedUser.id)
     )
@@ -263,6 +264,7 @@ export default defineComponent({
     const loadAppRolesTask = useTask(function* (signal) {
       const applicationsResponse = yield unref(graphClient).applications.listApplications()
       roles.value = applicationsResponse.data.value[0].appRoles
+      applicationId.value = applicationsResponse.data.value[0].id
     })
 
     const loadUsersTask = useTask(function* (signal) {
@@ -511,6 +513,7 @@ export default defineComponent({
       users,
       roles,
       groups,
+      applicationId,
       loadResourcesTask,
       loadAdditionalUserDataTask,
       graphClient,
@@ -648,7 +651,7 @@ export default defineComponent({
         }
 
         if (
-          !isEqual(user.appRoleAssignments[0].appRoleId, editUser.appRoleAssignments[0].appRoleId)
+          !isEqual(user.appRoleAssignments[0]?.appRoleId, editUser.appRoleAssignments[0]?.appRoleId)
         ) {
           await this.updateUserAppRoleAssignments(user, editUser)
         }
@@ -693,7 +696,7 @@ export default defineComponent({
     updateUserAppRoleAssignments(user, editUser) {
       return this.graphClient.users.createUserAppRoleAssignment(user.id, {
         appRoleId: editUser.appRoleAssignments[0].appRoleId,
-        resourceId: editUser.appRoleAssignments[0].resourceId,
+        resourceId: editUser.appRoleAssignments[0].resourceId || this.applicationId,
         principalId: editUser.id
       })
     },
