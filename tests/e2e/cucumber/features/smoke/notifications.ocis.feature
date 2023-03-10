@@ -35,8 +35,7 @@ Feature: Notifications
       | Alice Hansen shared folder_to_shared with you |
       | Alice Hansen added you to Space team          |
     And "Brian" marks all notifications as read
-    Then "Brian" should see the following notifications
-      | text |
+    Then "Brian" should see no notifications
     When "Alice" opens the "files" app
     And "Alice" removes following sharee
       | resource         | recipient |
@@ -52,8 +51,7 @@ Feature: Notifications
       | Alice Hansen unshared folder_to_shared with you |
       | Alice Hansen removed you from Space team        |
     And "Brian" marks all notifications as read
-    Then "Brian" should see the following notifications
-      | text |
+    Then "Brian" should see no notifications
     And "Brian" logs out
     When "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page

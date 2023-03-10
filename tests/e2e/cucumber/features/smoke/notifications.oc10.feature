@@ -25,6 +25,5 @@ Feature: Notifications
       | message                                        |
       | "Alice Hansen" invited you to view "folder_to_shared" |
     And "Brian" marks all notifications as read
-    Then "Brian" should see the following notifications
-      | text |
+    Then "Brian" should see no notifications
     And "Alice" logs out
