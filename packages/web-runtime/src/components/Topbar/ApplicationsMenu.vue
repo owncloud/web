@@ -4,26 +4,8 @@
     :aria-label="$gettext('Main navigation')"
     class="oc-flex oc-flex-middle"
   >
-    <oc-button
-      id="_appSwitcherButton"
-      ref="menubutton"
-      v-oc-tooltip="applicationSwitcherLabel"
-      appearance="raw-inverse"
-      variation="brand"
-      class="oc-topbar-menu-burger"
-      :aria-label="applicationSwitcherLabel"
-    >
-      <oc-icon name="grid" size="large" class="oc-flex" />
-    </oc-button>
-    <oc-drop
-      ref="menu"
-      drop-id="app-switcher-dropdown"
-      toggle="#_appSwitcherButton"
-      mode="click"
-      padding-size="small"
-      close-on-click
-    >
-      <oc-list class="applications-list">
+    <oc-expanding-dropdown>
+		<oc-list class="applications-list">
         <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" @click="clickApp(n)">
           <oc-button
             :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
@@ -43,7 +25,8 @@
           </oc-button>
         </li>
       </oc-list>
-    </oc-drop>
+	</oc-expanding-dropdown>
+
   </nav>
 </template>
 
@@ -51,8 +34,12 @@
 import { defineComponent, PropType } from 'vue'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { urlJoin } from 'web-client/src/utils'
+import OcExpandingDropdown from '../../../../design-system/src/components/OcExpandingDropdown/OcExpandingDropdown.vue'
 
 export default defineComponent({
+  components: {
+    OcExpandingDropdown
+  },
   props: {
     applicationsList: {
       type: Array as PropType<any[]>,
