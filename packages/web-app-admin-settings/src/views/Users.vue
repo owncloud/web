@@ -696,7 +696,7 @@ export default defineComponent({
     updateUserAppRoleAssignments(user, editUser) {
       return this.graphClient.users.createUserAppRoleAssignment(user.id, {
         appRoleId: editUser.appRoleAssignments[0].appRoleId,
-        resourceId: editUser.appRoleAssignments[0].resourceId || this.applicationId,
+        resourceId: this.applicationId,
         principalId: editUser.id
       })
     },
