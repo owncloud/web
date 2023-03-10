@@ -4,8 +4,8 @@
     :aria-label="$gettext('Main navigation')"
     class="oc-flex oc-flex-middle"
   >
-    <oc-expanding-dropdown>
-		<oc-list class="applications-list">
+  <oc-expanding-dropdown :close-on-click="true">
+    <oc-list class="applications-list">
         <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" @click="clickApp(n)">
           <oc-button
             :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
@@ -25,8 +25,7 @@
           </oc-button>
         </li>
       </oc-list>
-	</oc-expanding-dropdown>
-
+    </oc-expanding-dropdown>
   </nav>
 </template>
 

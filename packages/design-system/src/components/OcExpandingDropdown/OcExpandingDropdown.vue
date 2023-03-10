@@ -27,7 +27,14 @@ export default {
   name: 'OcExpandingDropdown',
   status: 'ready',
   release: '0.0.1',
-  setup() {
+  props: {
+    closeOnClick: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
+  setup(props) {
     const dropdown = ref(null)
     const content = ref(null)
     const dropdownVisible = ref(false)
@@ -51,15 +58,22 @@ export default {
       el.parentNode.style.removeProperty('top')
       el.parentNode.style.removeProperty('position')
     }
-    onMounted(() => {
-      calculateContentMax()
+    const handleClick = () => {
       const el = unref(dropdown)
+      const inner = unref(content)
       el.clickOutsideEvent = (event) => {
+        if (props.closeOnClick && (inner == event.target || inner.contains(event.target))) {
+          dropdownVisible.value = false
+        }
         if (!(el == event.target || el.contains(event.target))) {
           dropdownVisible.value = false
         }
       }
       document.addEventListener('click', el.clickOutsideEvent)
+    }
+    onMounted(() => {
+      calculateContentMax()
+      handleClick()
     })
     onUnmounted(() => {
       const el = unref(dropdown)
@@ -103,7 +117,7 @@ export default {
   height: 45px;
   width: 45px;
   border-radius: 5px;
-  transition: all 0.15s ease-out;
+  transition: all 0.2s ease-out;
   z-index: 1;
 }
 .oc-expanding-dropdown.active > .dropdown-button:focus:not([disabled]) {
@@ -130,12 +144,12 @@ export default {
 }
 
 .drop-down-slide-enter-active {
-  transition: all 0.15s;
+  transition: all 0.2s;
   transition-timing-function: ease-out;
 }
 
 .drop-down-slide-leave-active {
-  transition-duration: 0.1s;
+  transition: all 0.2s;
 }
 
 .drop-down-slide-enter-to,
