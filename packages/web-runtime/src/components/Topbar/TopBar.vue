@@ -6,9 +6,6 @@
   >
     <div class="oc-topbar-left oc-flex oc-flex-middle oc-flex-between">
       <applications-menu v-if="appMenuItems.length" :applications-list="appMenuItems" />
-      <router-link ref="navigationSidebarLogo" to="/">
-        <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image" />
-      </router-link>
     </div>
     <div class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>

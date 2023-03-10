@@ -1,18 +1,21 @@
 <template>
   <div>
     <div ref="dropdown" class="oc-expanding-dropdown" :class="{ active: dropdownVisible }">
-      <oc-button
-        appearance="raw"
-        variation="inverse"
-        class="dropdown-button"
-        @click="toggleDropdown"
-      >
-        <oc-icon name="grid" size="large" class="oc-flex" />
-      </oc-button>
+      <div ref="head" class="head">
+        <oc-button
+          appearance="raw"
+          variation="inverse"
+          class="dropdown-button"
+          @click="toggleDropdown"
+        >
+          <slot name="toggle" />
+        </oc-button>
+        <slot name="head" />
+      </div>
       <transition name="drop-down-slide" mode="out-in">
         <div v-show="dropdownVisible" class="dropdown-content">
           <div ref="content">
-            <slot />
+            <slot name="body" />
           </div>
         </div>
       </transition>
@@ -28,6 +31,11 @@ export default {
   status: 'ready',
   release: '0.0.1',
   props: {
+    expandHead: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     closeOnClick: {
       type: Boolean,
       required: false,
@@ -36,27 +44,39 @@ export default {
   },
   setup(props) {
     const dropdown = ref(null)
+    const head = ref(null)
     const content = ref(null)
     const dropdownVisible = ref(false)
-    const buttonText = ref('Toggle Dropdown')
 
     const toggleDropdown = () => {
       dropdownVisible.value = !dropdownVisible.value
     }
-
     const calculateContentMax = () => {
       const el = unref(content)
-      el.parentNode.style.setProperty('top', '-99999px')
-      el.parentNode.style.setProperty('display', 'block')
-      el.parentNode.style.setProperty('position', 'absolute')
+      const setContentCssProperty = (property, value) => {
+        el.parentNode.style.setProperty(property, value)
+      }
+      const removeContentCssProperty = (property) => {
+        el.parentNode.style.removeProperty(property)
+      }
+      setContentCssProperty('top', '-99999px')
+      setContentCssProperty('display', 'block')
+      setContentCssProperty('position', 'absolute')
 
       const maxWidth = el.clientWidth
       const maxHeight = el.clientHeight
-      el.parentNode.style.setProperty('display', 'none')
-      el.parentNode.style.setProperty('max-width', `${maxWidth}px`)
-      el.parentNode.style.setProperty('max-height', `${maxHeight}px`)
-      el.parentNode.style.removeProperty('top')
-      el.parentNode.style.removeProperty('position')
+
+      setContentCssProperty('display', 'none')
+      setContentCssProperty('max-width', `${maxWidth}px`)
+      setContentCssProperty('max-height', `${maxHeight}px`)
+      removeContentCssProperty('top')
+      removeContentCssProperty('position')
+
+      if (!props.expandHead) {
+        return
+      }
+      const headEl = unref(head)
+      headEl.style.setProperty('width', `${maxWidth - 10}px`)
     }
     const handleClick = () => {
       const el = unref(dropdown)
@@ -76,14 +96,13 @@ export default {
       handleClick()
     })
     onUnmounted(() => {
-      const el = unref(dropdown)
-      document.removeEventListener('click', el.clickOutsideEvent)
+      document.removeEventListener('click', unref(dropdown).clickOutsideEvent)
     })
     return {
       dropdown,
+      head,
       content,
       dropdownVisible,
-      buttonText,
       toggleDropdown
     }
   }
@@ -96,62 +115,70 @@ export default {
   display: inline-block;
   filter: none;
   transition: opacity 0.5s;
-}
-.oc-expanding-dropdown.active {
-  filter: drop-shadow(0px 2px 4px #232323);
-}
-.oc-expanding-dropdown.active > .dropdown-button {
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  background-color: #4f4f4f;
-  transition-delay: 0s;
-}
-.dropdown-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: transparent;
-  color: white;
-  border: none;
-  cursor: pointer;
-  height: 45px;
-  width: 45px;
-  border-radius: 5px;
-  transition: all 0.2s ease-out;
-  z-index: 1;
-}
-.oc-expanding-dropdown.active > .dropdown-button:focus:not([disabled]) {
-  background-color: #4f4f4f !important;
-}
-.oc-expanding-dropdown.active > .dropdown-button:hover {
-  background-color: #4f4f4f !important;
+
+  &.active {
+    filter: drop-shadow(0px 2px 4px #232323);
+    .head {
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+      background-color: #4f4f4f;
+
+      .dropdown-button:focus:not([disabled]) {
+        background-color: transparent !important;
+      }
+      .dropdown-button:hover {
+        background-color: transparent !important;
+      }
+    }
+  }
+  .head {
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-out;
+
+    & > * {
+      display: inline-block;
+    }
+    .dropdown-button {
+      background-color: transparent;
+      color: white;
+      border: none;
+      cursor: pointer;
+      height: 45px;
+      width: 45px;
+      z-index: 1;
+
+      i {
+        font-size: 22px;
+      }
+    }
+  }
+  .dropdown-content {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    color: #cccccc;
+    background-color: #4f4f4f;
+    overflow: visible;
+    z-index: 999999;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
 }
 
-.dropdown-button i {
-  font-size: 22px;
-}
-.dropdown-content {
-  position: absolute;
-  top: 45px;
-  left: 0;
-  color: #cccccc;
-  background-color: #4f4f4f;
-  overflow: visible;
-  z-index: 999999;
-  border-bottom-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
+/* Transition */
 .drop-down-slide-enter-active {
   transition: all 0.2s;
   transition-timing-function: ease-out;
 }
-
 .drop-down-slide-leave-active {
   transition: all 0.2s;
 }
-
 .drop-down-slide-enter-to,
 .drop-down-slide-leave-from {
   overflow: hidden;
@@ -160,7 +187,6 @@ export default {
   border-bottom-right-radius: 5px;
   opacity: 1;
 }
-
 .drop-down-slide-enter-from,
 .drop-down-slide-leave-to {
   overflow: hidden;
@@ -173,7 +199,7 @@ export default {
 
 <docs>
 ```js
-<div style="background: #dddddd; height: 200px; background-color: #292929; padding: 20px;">
+<div>
   <oc-expanding-dropdown>
 		<span>Hello World Hello World Hello World</span><br/>
 		<span>Hello World Hello World</span><br/>

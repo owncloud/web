@@ -4,27 +4,37 @@
     :aria-label="$gettext('Main navigation')"
     class="oc-flex oc-flex-middle"
   >
-  <oc-expanding-dropdown :close-on-click="true">
-    <oc-list class="applications-list">
-        <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" @click="clickApp(n)">
-          <oc-button
-            :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
-            :type="n.url ? 'a' : 'router-link'"
-            :target="n.target"
-            :href="n.url"
-            :to="n.path"
-            :appearance="n.active ? 'raw-inverse' : 'raw'"
-            :variation="n.active ? 'primary' : 'passive'"
-            :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
-          >
-            <span class="icon-box">
-              <oc-icon :name="n.icon" variation="inherit" />
-            </span>
-            <span v-text="$gettext(n.title)" />
-            <oc-icon v-if="n.active" name="check" class="active-check" variation="inherit" />
-          </oc-button>
-        </li>
-      </oc-list>
+    <oc-expanding-dropdown :expand-head="false" :close-on-click="true">
+      <template #toggle>
+        <oc-icon name="grid" size="large" class="oc-flex" />
+      </template>
+      <template #head>
+        <router-link ref="navigationSidebarLogo" to="/">
+          <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image" />
+        </router-link>
+      </template>
+      <template #body>
+        <oc-list class="applications-list">
+          <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" @click="clickApp(n)">
+            <oc-button
+              :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
+              :type="n.url ? 'a' : 'router-link'"
+              :target="n.target"
+              :href="n.url"
+              :to="n.path"
+              appearance="raw"
+              :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
+              :variation="n.active ? 'inverse' : 'passive'"
+            >
+              <span class="icon-box">
+                <oc-icon :name="n.icon" />
+              </span>
+              <span v-text="$gettext(n.title)" />
+              <oc-icon v-if="n.active" name="check" class="active-check" />
+            </oc-button>
+          </li>
+        </oc-list>
+      </template>
     </oc-expanding-dropdown>
   </nav>
 </template>
@@ -49,7 +59,15 @@ export default defineComponent({
   computed: {
     applicationSwitcherLabel() {
       return this.$gettext('Application Switcher')
-    }
+    },
+
+    logoImage() {
+      return this.configuration.currentTheme.logo.topbar
+    },
+
+    sidebarLogoAlt() {
+      return this.$gettext('Navigate to personal files page')
+    },
   },
   mounted() {
     this.$refs.menu?.tippy?.setProps({
@@ -73,6 +91,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.oc-logo-image {
+  height: 38px;
+  padding-left: 15px;
+}
 .applications-list {
   padding: 10px;
   width: 300px;
