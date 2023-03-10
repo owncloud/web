@@ -4,6 +4,7 @@
       ref="select"
       :model-value="selectedOption"
       :selectable="optionSelectable"
+      :disabled="disabled"
       taggable
       push-tags
       :clearable="false"
@@ -50,6 +51,10 @@ export default {
     maxQuota: {
       type: Number,
       default: 0
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['selectedOptionChange'],
