@@ -168,7 +168,7 @@ export default defineComponent({
   .vs__search,
   .vs__selected {
     background-color: var(--oc-color-background-muted) !important;
-    color: var(--oc-color-text-muted) !important;
+    color: var(--oc-color-input-text-muted) !important;
     cursor: default;
     pointer-events: none;
   }
@@ -218,6 +218,10 @@ export default defineComponent({
       width: 100%;
     }
 
+    &__dropdown-menu {
+      padding: 0;
+    }
+
     &__clear,
     &__open-indicator,
     &__deselect {
@@ -227,6 +231,8 @@ export default defineComponent({
     &__dropdown-option {
       color: var(--oc-color-input-text-default);
       white-space: normal;
+      padding: 0.5em calc(0.6em + 4px); // combined padding like vs__dropdown-toggle
+      border-radius: 6px;
 
       &--highlight {
         background-color: var(--oc-color-background-hover);
