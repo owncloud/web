@@ -4,7 +4,7 @@
     :aria-label="$gettext('Main navigation')"
     class="oc-flex oc-flex-middle"
   >
-    <oc-expanding-dropdown :expand-head="false" :close-on-click="true">
+    <oc-expanding-dropdown :expand-head="true" :close-on-click="true">
       <template #toggle>
         <oc-icon name="grid" size="large" class="oc-flex" />
       </template>

@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div ref="dropdown" class="oc-expanding-dropdown" :class="{ active: dropdownVisible }">
+    <div
+      ref="dropdown"
+      class="oc-expanding-dropdown"
+      :class="{ active: dropdownVisible, 'expand-head': expandHead }"
+    >
       <div ref="head" class="head">
         <oc-button
           appearance="raw"
@@ -14,6 +18,7 @@
       </div>
       <transition name="drop-down-slide" mode="out-in">
         <div v-show="dropdownVisible" class="dropdown-content">
+          <div v-if="expandHead" class="expand-head-filler"></div>
           <div ref="content">
             <slot name="body" />
           </div>
@@ -64,7 +69,7 @@ export default {
       setContentCssProperty('position', 'absolute')
 
       const maxWidth = el.clientWidth
-      const maxHeight = el.clientHeight
+      const maxHeight = props.expandHead ? el.clientHeight + 45 : el.clientHeight
 
       setContentCssProperty('display', 'none')
       setContentCssProperty('max-width', `${maxWidth}px`)
@@ -118,17 +123,24 @@ export default {
 
   &.active {
     filter: drop-shadow(0px 2px 4px #232323);
-    .head {
-      border-bottom-left-radius: 0px;
-      border-bottom-right-radius: 0px;
-      background-color: #4f4f4f;
+    &:not(.expand-head) {
+      .head {
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        background-color: #4f4f4f;
 
-      .dropdown-button:focus:not([disabled]) {
-        background-color: transparent !important;
+        .dropdown-button:focus:not([disabled]) {
+          background-color: transparent !important;
+        }
+        .dropdown-button:hover {
+          background-color: transparent !important;
+        }
       }
-      .dropdown-button:hover {
-        background-color: transparent !important;
-      }
+    }
+  }
+  &.expand-head {
+    .head {
+      justify-content: left;
     }
   }
   .head {
@@ -159,15 +171,23 @@ export default {
   }
   .dropdown-content {
     position: absolute;
-    top: 45px;
+    top: 0px;
     left: 0;
     color: #cccccc;
     background-color: #4f4f4f;
-    overflow: visible;
-    z-index: 999999;
+    overflow: hidden;
+    z-index: -1;
     border-bottom-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+  &:not(.expand-head) {
+    .dropdown-content {
+      top: 45px;
+    }
+  }
+  .expand-head-filler {
+    height: 45px;
   }
 }
 
