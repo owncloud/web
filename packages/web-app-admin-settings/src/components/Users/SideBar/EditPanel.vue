@@ -347,4 +347,31 @@ export default defineComponent({
     border-radius: 6px;
   }
 }
+
+// Fixme: Move this to own component
+.oc-alert {
+  padding: var(--oc-space-small) var(--oc-space-medium);
+  margin: var(--oc-space-medium) 0;
+  border-radius: 6px;
+  border-width: 1px;
+  border-style: solid;
+
+  &.oc-alert-success {
+    background-color: var(--oc-color-swatch-success-background);
+    color: var(--oc-color-swatch-success-default);
+    border-color: var(--oc-color-swatch-success-default);
+  }
+
+  &.oc-alert-warning {
+    background-color: var(--oc-color-swatch-warning-background);
+    color: var(--oc-color-swatch-warning-default);
+    border-color: var(--oc-color-swatch-warning-default);
+  }
+
+  &.oc-alert-danger {
+    background-color: var(--oc-color-swatch-danger-background);
+    color: var(--oc-color-swatch-danger-default);
+    border-color: var(--oc-color-swatch-danger-default);
+  }
+}
 </style>
