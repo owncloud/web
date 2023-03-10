@@ -191,7 +191,8 @@ export default {
         const {
           ocs: { data = [] }
         } = yield response.json()
-        notifications.value = data || []
+        notifications.value =
+          data?.sort((a, b) => (new Date(b.datetime) as any) - (new Date(a.datetime) as any)) || []
       } catch (e) {
         console.error(e)
       } finally {

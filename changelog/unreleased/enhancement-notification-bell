@@ -1,4 +1,4 @@
-Enhancement: Rework notifications
+Enhancement: Rework notification bell
 
 We're now showing the notification bell based on whether the server supports notifications. Previously it was hidden when there were no notifications.
 We've added a badge that displays the amount of new notifications.
