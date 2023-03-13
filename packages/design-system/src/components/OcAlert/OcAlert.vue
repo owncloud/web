@@ -5,12 +5,12 @@
       alertStyle,
       closed ? 'oc-hidden' : '',
       closeable ? 'oc-alert-closeable' : '',
-      hasIcon ? 'oc-alert-has-icon' : ''
+      renderIcon ? 'oc-alert-has-icon' : ''
     ]"
     :aria-label="ariaLabel"
     :data-test-user-name="alertStyle"
   >
-    <OcIcon v-if="hasIcon" :name="icon" class="oc-alert-icon" :accessible-label="ariaLabel" />
+    <OcIcon v-if="renderIcon" :name="icon" class="oc-alert-icon" :accessible-label="ariaLabel" />
     <OcButton
       v-if="closeable"
       size="small"
@@ -113,6 +113,18 @@ export default defineComponent({
         case 'danger':
           return 'close-circle'
       }
+    },
+
+    /**
+     * Whether the alert has an icon or not. Icon is determined by the style prop.
+     * If a custom Icon is used, it will always be rendered.
+     */
+    renderIcon() {
+      if (this.customIcon) {
+        return true
+      }
+
+      return this.hasIcon
     }
   },
   methods: {
