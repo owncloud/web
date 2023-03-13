@@ -37,6 +37,7 @@ Summary
 * Bugfix - PDF display issue - Update CSP object-src policy: [#8498](https://github.com/owncloud/web/pull/8498)
 * Bugfix - Remove fuzzy search results: [#8508](https://github.com/owncloud/web/pull/8508)
 * Bugfix - Space image upload: [#8523](https://github.com/owncloud/web/issues/8523)
+* Bugfix - De-duplicate event handling to prevent errors on Draw-io: [#8576](https://github.com/owncloud/web/pull/8576)
 * Bugfix - Users without role assignment: [#8585](https://github.com/owncloud/web/issues/8585)
 * Bugfix - Group members sorting: [#8592](https://github.com/owncloud/web/issues/8592)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
@@ -319,6 +320,14 @@ Details
 
    https://github.com/owncloud/web/issues/8523
    https://github.com/owncloud/web/pull/8526
+
+* Bugfix - De-duplicate event handling to prevent errors on Draw-io: [#8576](https://github.com/owncloud/web/pull/8576)
+
+   If users navigated out of Draw-io and returned afterwards, old event handlers were kept, which
+   failed trying to look for iframes that no longer existed. This fix removes the handlers when
+   exiting, preventing these user visible errors.
+
+   https://github.com/owncloud/web/pull/8576
 
 * Bugfix - Users without role assignment: [#8585](https://github.com/owncloud/web/issues/8585)
 
