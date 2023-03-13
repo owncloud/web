@@ -1,0 +1,6 @@
+Bugfix: De-duplicate event handling to prevent errors on Draw-io
+
+If users navigated out of Draw-io and returned afterwards, old event handlers were kept, which failed trying to look for iframes that no longer existed.
+This fix removes the handlers when exiting, preventing these user visible errors.
+
+https://github.com/owncloud/web/pull/8576
