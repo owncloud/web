@@ -50,7 +50,6 @@ export default defineComponent({
   },
 
   setup(props) {
-    const instance = getCurrentInstance().proxy as any
     const store = useStore()
 
     const { editorActions, loadExternalAppActions } = useFileActions()
@@ -72,8 +71,8 @@ export default defineComponent({
     const { actions: setSpaceImageActions } = useSetImage({ store })
     const { actions: setSpaceReadmeActions } = useSetReadme({ store })
     const { actions: showDetailsActions } = useShowDetails({ store })
-    const { actions: showEditTagsActions } = useShowEditTags()
-    const { actions: showSharesActions } = useShowShares()
+    const { actions: showEditTagsActions } = useShowEditTags({ store })
+    const { actions: showSharesActions } = useShowShares({ store })
 
     const filterParams = computed(() => {
       return {
