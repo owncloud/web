@@ -159,7 +159,8 @@ export default defineComponent({
       color: var(--oc-color-swatch-success-default);
       border-color: var(--oc-color-swatch-success-default);
 
-      svg {
+      svg,
+      .oc-alert-close-button svg {
         fill: var(--oc-color-swatch-success-default);
       }
     }
@@ -169,7 +170,8 @@ export default defineComponent({
       color: var(--oc-color-swatch-warning-default);
       border-color: var(--oc-color-swatch-warning-default);
 
-      svg {
+      svg,
+      .oc-alert-close-button svg {
         fill: var(--oc-color-swatch-warning-default);
       }
     }
@@ -179,7 +181,8 @@ export default defineComponent({
       color: var(--oc-color-swatch-danger-default);
       border-color: var(--oc-color-swatch-danger-default);
 
-      svg {
+      svg,
+      .oc-alert-close-button svg {
         fill: var(--oc-color-swatch-danger-default);
       }
     }
