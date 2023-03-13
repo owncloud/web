@@ -81,3 +81,24 @@ Feature: spaces management
       | Alice |
       | Brian |
     And "Admin" logs out
+
+
+  Scenario: edit user
+    Given "Admin" creates following users
+      | id    |
+      | Alice |
+    When "Admin" logs in
+    And "Admin" opens the "admin-settings" app
+    And "Admin" navigates to the users management page
+    When "Admin" changes userName to "anna" for user "Alice" using the sidebar panel
+    And "Admin" changes displayName to "Anna Murphy" for user "Alice" using the sidebar panel
+    And "Admin" changes email to "anna@example.org" for user "Alice" using the sidebar panel
+    And "Admin" changes password to "password" for user "Alice" using the sidebar panel
+    And "Admin" changes role to "Space Admin" for user "Alice" using the sidebar panel
+    And "Admin" logs out
+    When "anna" logs in
+    Then "anna" should have self info:
+      | key         | value            |
+      | username    | anna             |
+      | displayname | Anna Murphy      |
+      | email       | anna@example.org |

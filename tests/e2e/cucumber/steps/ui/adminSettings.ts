@@ -1,6 +1,6 @@
 import { DataTable, Then, When } from '@cucumber/cucumber'
 import { World } from '../../environment'
-import { objects } from '../../../support'
+import { api, objects } from '../../../support'
 import { expect } from '@playwright/test'
 
 When(
@@ -240,5 +240,37 @@ When(
       default:
         throw new Error(`${action} not implemented`)
     }
+  }
+)
+
+When(
+  /^"([^"]*)" changes (userName|displayName|email|password|role) to "([^"]*)" for user "([^"]*)" using the sidebar panel$/,
+  async function (
+    this: World,
+    stepUser: string,
+    attribute: string,
+    value: string,
+    user: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+    // deleting a user with a same userName before testing
+    if (attribute === 'userName') {
+      const newUser = this.usersEnvironment.createUser({
+        key: value,
+        user: {
+          id: value,
+          displayName: '',
+          password: 'password',
+          email: ''
+        }
+      })
+      await api.graph.deleteUser({
+        user: newUser,
+        admin: this.usersEnvironment.getUser({ key: stepUser })
+      })
+    }
+    await usersObject.changeUser({ key: user, attribute: attribute, value: value })
   }
 )
