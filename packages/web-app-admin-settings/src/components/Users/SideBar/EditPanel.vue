@@ -83,7 +83,7 @@
           :max-quota="maxQuota"
           @selected-option-change="changeSelectedQuotaOption"
         />
-        <OcAlert v-if="isQuotaInputDisabled" :style="'warning'">
+        <OcAlert v-if="isQuotaInputDisabled" :variant="'warning'">
           {{ $gettext('To set an individual quota, the user needs to have logged in once.') }}
         </OcAlert>
         <group-select

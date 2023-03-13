@@ -33,7 +33,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'OcAlert',
   status: 'ready',
-  release: '1.0.0',
+  release: '2.0.0',
   components: {},
   props: {
     /**
@@ -94,8 +94,8 @@ export default defineComponent({
           return 'oc-alert-warning'
         case 'danger':
           return 'oc-alert-danger'
-        default:
         case 'info':
+        default:
           return 'oc-alert-info'
       }
     },
