@@ -1,0 +1,6 @@
+Bugfix: Group members sorting
+
+Sorting groups by their member count has been fixed.
+
+https://github.com/owncloud/web/issues/8592
+https://github.com/owncloud/web/pull/8600
