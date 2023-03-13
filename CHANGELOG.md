@@ -280,6 +280,7 @@ Details
    https://github.com/owncloud/web/issues/8411
    https://github.com/owncloud/web/issues/8412
    https://github.com/owncloud/web/pull/8453
+   https://github.com/owncloud/web/pull/8584
 
 * Bugfix - "Show more"-action in shares panel: [#8479](https://github.com/owncloud/web/issues/8479)
 
