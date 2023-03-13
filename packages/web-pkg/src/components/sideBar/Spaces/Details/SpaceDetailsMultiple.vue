@@ -7,7 +7,7 @@
       </div>
     </div>
     <div>
-      <table class="details-table" :aria-label="detailsTableLabel">
+      <!-- <table class="details-table" :aria-label="detailsTableLabel">
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Total quota:')" />
           <td v-text="totalSelectedSpaceQuotaTotal" />
@@ -28,7 +28,7 @@
           <th scope="col" class="oc-pr-s" v-text="$gettext('Disabled:')" />
           <td v-text="totalDisabledSpaces" />
         </tr>
-      </table>
+      </table> -->
     </div>
   </div>
 </template>

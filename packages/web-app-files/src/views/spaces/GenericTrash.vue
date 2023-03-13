@@ -78,10 +78,14 @@ import { useResourcesViewDefaults } from '../../composables'
 import { computed, defineComponent, PropType, onMounted, onBeforeUnmount, unref } from 'vue'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
-import { createLocationTrash } from '../../router'
+import { createLocationTrash, createLocationSpaces } from '../../router'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { useGettext } from 'vue3-gettext'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { useRoute, useStore } from 'web-pkg/src/composables'
+
+
 
 export default defineComponent({
   name: 'GenericTrash',
@@ -115,9 +119,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     let loadResourcesEventToken
     const noContentMessage = computed(() => {
-      return props.space.driveType === 'personal'
-        ? $gettext('You have no deleted files')
-        : $gettext('Space has no deleted files')
+      return $gettext('There are no deleted files')
     })
 
     const hasSpaces = useCapabilitySpacesEnabled()
@@ -130,9 +132,18 @@ export default defineComponent({
     })
     useDocumentTitle({ titleSegments })
 
+    const route = useRoute()
+
+    const projectName = () => {
+      const path = route.value?.params?.driveAliasAndItem || ''
+      const re = /eos\/project\/[a-z]\/([a-z0-9\-]+)/i
+      const found = path.match(re)
+      return found ? found[1] : undefined
+    }
+
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
     const performLoaderTask = async () => {
-      await resourcesViewDefaults.loadResourcesTask.perform(props.space)
+      await resourcesViewDefaults.loadResourcesTask.perform(props.space, projectName())
       resourcesViewDefaults.refreshFileListHeaderPosition()
       resourcesViewDefaults.scrollToResourceFromRoute(
         unref(resourcesViewDefaults.paginatedResources)
@@ -153,7 +164,9 @@ export default defineComponent({
     return {
       ...resourcesViewDefaults,
       hasShareJail: useCapabilityShareJailEnabled(),
-      noContentMessage
+      noContentMessage,
+      performLoaderTask,
+      projectName
     }
   },
 
@@ -167,6 +180,7 @@ export default defineComponent({
     },
 
     breadcrumbs() {
+      /*
       let allowContextActions = true
       let currentNodeName = this.space?.name
       if (this.space.driveType === 'personal') {
@@ -184,14 +198,47 @@ export default defineComponent({
           onClick: () => eventBus.publish('app.files.list.load')
         }
       ]
+      */
+      const projectName = this.projectName()
+        return [
+          {
+            text: this.$gettext('Deleted files'),
+            to: createLocationTrash('files-trash-generic', createFileRouteOptions(this.space, {
+            path: '/eos'
+          }))
+          },
+        ...(projectName
+          ? [
+              {
+            text: this.$gettext('Projects'),
+            to: createLocationSpaces('files-spaces-projects')
+          },
+          {
+            text: projectName,
+            onClick: () => eventBus.publish('app.files.list.load')
+          }] : [
+          {
+          text: this.$gettext('Personal'),
+          onClick: () => eventBus.publish('app.files.list.load')
+        }
+          ])
+        ]
     },
 
     showActions() {
-      return (
-        !isProjectSpaceResource(this.space) ||
-        this.space.isEditor(this.user) ||
-        this.space.isManager(this.user)
-      )
+      // TODO only admins can restore?
+      return true
+    }
+  },
+
+  watch: {
+    $route: {
+      handler: function (to, from) {
+        if (
+          to.name === 'files-trash-generic' &&
+          from.params?.driveAliasAndItem !== to.params?.driveAliasAndItem)
+          this.performLoaderTask()
+      }
     }
   }
 })

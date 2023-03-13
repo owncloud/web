@@ -95,6 +95,9 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         }
         if (matchingSpace) {
           path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
+        } else if (driveAliasAndItem.startsWith('eos')) {
+          matchingSpace = unref(spaces).find((s) => s.driveType === 'personal')
+          path = driveAliasAndItem
         }
       }
       space.value = matchingSpace

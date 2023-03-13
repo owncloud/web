@@ -247,7 +247,12 @@ export default defineComponent({
       return createLocationSpaces('files-spaces-generic', { params, query })
     }
 
+    const route = useRoute()
     const hasSpaceHeader = computed(() => {
+      const elems = decodeURIComponent(route.value?.path)?.split('/').filter(Boolean) || [] //"/files/spaces/eos/project/c/cernbox"
+      if (elems.length === 6 && elems[3] === 'project') {
+        return true
+      }
       // for now the space header is only available in the root of a project space.
       return props.space.driveType === 'project' && props.item === '/'
     })
@@ -263,7 +268,6 @@ export default defineComponent({
     useDocumentTitle({ titleSegments })
 
     const { $gettext } = useGettext()
-    const route = useRoute()
     const breadcrumbs = computed(() => {
       const space = props.space
       const rootBreadcrumbItems: BreadcrumbItem[] = []

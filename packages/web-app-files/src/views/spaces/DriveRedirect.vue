@@ -13,7 +13,7 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 // 'personal/home' is used as personal drive alias from static contexts
 // (i.e. places where we can't load the actual personal space)
-const fakePersonalDriveAlias = 'personal/home'
+const fakePersonalDriveAlias = '/'
 
 export default defineComponent({
   name: 'DriveRedirect',

@@ -230,7 +230,7 @@ const panelGenerators: (({
       }
     },
     get enabled() {
-      return resource?.type === 'space' && !multipleSelection
+      return false//resource?.type === 'space' && !multipleSelection
     }
   }),
   ({ capabilities, resource, router, multipleSelection, rootFolder }) => ({

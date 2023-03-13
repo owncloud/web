@@ -15,7 +15,7 @@ export default {
           icon: 'group',
           label: () => this.$gettext('Members'),
           handler: this.$_showMembers_trigger,
-          isEnabled: ({ resources }) => resources.length === 1,
+          isEnabled: ({ resources }) => false,
           componentType: 'button',
           class: 'oc-files-actions-show-details-trigger'
         }
