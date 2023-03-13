@@ -42,7 +42,7 @@ export default defineComponent({
      * - warning: yellow background, yellow color, renders as oc-alert-warning
      * - danger: red background, red color, renders as oc-alert-danger
      */
-    style: {
+    variant: {
       type: String,
       default: 'info',
       validator(value: string) {
@@ -87,7 +87,7 @@ export default defineComponent({
   },
   computed: {
     alertStyle() {
-      switch (this.style) {
+      switch (this.variant) {
         case 'info':
           return 'oc-alert-info'
         case 'success':
@@ -103,7 +103,7 @@ export default defineComponent({
         return this.customIcon
       }
 
-      switch (this.style) {
+      switch (this.variant) {
         case 'info':
           return 'information'
         case 'success':
@@ -221,16 +221,16 @@ export default defineComponent({
   <OcAlert :closeable="true" :hasIcon="true">
     I'm just an info message. I can be closed and have the default info icon.
   </OcAlert>
-  <OcAlert :style="'success'" :closeable="true" :hasIcon="true">
+  <OcAlert :variant="'success'" :closeable="true" :hasIcon="true">
     Yay! Success! I can be closed and have the default success icon.
   </OcAlert>
-  <OcAlert :style="'warning'" :closeable="true">
+  <OcAlert :variant="'warning'" :closeable="true">
     Hm there seems to be something wrong. I can be closed and have no icon.
   </OcAlert>
-  <OcAlert :style="'danger'" :hasIcon="true">
+  <OcAlert :variant="'danger'" :hasIcon="true">
     WHAAA. PANIC! I can't be closed and have the default danger icon.
   </OcAlert>
-  <OcAlert :style="'danger'" customIcon="cloud-off" :closeable="true" :hasIcon="true">
+  <OcAlert :variant="'danger'" customIcon="cloud-off" :closeable="true" :hasIcon="true">
     WHAAA. PANIC! With a custom Icon
   </OcAlert>
 ```

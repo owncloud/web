@@ -92,7 +92,7 @@ describe('OcAlert', () => {
     describe('when type is set to "info"', () => {
       it('should render the component as info alert', () => {
         const wrapper = getWrapper({
-          style: 'info'
+          variant: 'info'
         })
 
         const alert = wrapper.find('.oc-alert.oc-alert-info')
@@ -117,7 +117,7 @@ describe('OcAlert', () => {
     describe('when type is set to "success"', () => {
       it('should render the component as success alert', () => {
         const wrapper = getWrapper({
-          style: 'success'
+          variant: 'success'
         })
 
         const alert = wrapper.find('.oc-alert.oc-alert-success')
@@ -142,7 +142,7 @@ describe('OcAlert', () => {
     describe('when type is set to "warning"', () => {
       it('should render the component as warning alert', () => {
         const wrapper = getWrapper({
-          style: 'warning'
+          variant: 'warning'
         })
 
         const alert = wrapper.find('.oc-alert.oc-alert-warning')
@@ -167,7 +167,7 @@ describe('OcAlert', () => {
     describe('when type is set to "danger"', () => {
       it('should render the component as danger alert', () => {
         const wrapper = getWrapper({
-          style: 'danger'
+          variant: 'danger'
         })
 
         const alert = wrapper.find('.oc-alert.oc-alert-danger')
@@ -191,7 +191,7 @@ describe('OcAlert', () => {
   })
 })
 
-function getWrapper(props: Object) {
+function getWrapper(props) {
   return mount(OcAlert, {
     props
   })
