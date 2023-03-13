@@ -8,7 +8,6 @@
       renderIcon ? 'oc-alert-has-icon' : ''
     ]"
     :aria-label="ariaLabel"
-    :data-test-user-name="alertStyle"
   >
     <OcIcon v-if="renderIcon" :name="icon" class="oc-alert-icon" :accessible-label="ariaLabel" />
     <OcButton
@@ -68,7 +67,8 @@ export default defineComponent({
     },
 
     /**
-     * Custom Icon, if default icons are not suitable
+     * Custom Icon, if default icons are not suitable; if set icon gets rendered
+     * regardless of hasIcon prop
      */
     customIcon: {
       type: String,
