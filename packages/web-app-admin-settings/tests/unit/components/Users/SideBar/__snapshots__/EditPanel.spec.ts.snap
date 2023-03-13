@@ -17,7 +17,8 @@ exports[`EditPanel renders all available inputs 1`] = `
         <oc-select-stub clearable="false" disabled="false" filter="[Function]" id="login-input" label="Login" loading="false" model-value="[object Object]" options="[object Object],[object Object]" searchable="true"></oc-select-stub>
         <div class="oc-text-input-message"></div>
       </div>
-      <quota-select-stub class="oc-mb-s" id="quota-select-form" maxquota="0" title="Personal quota" totalquota="0"></quota-select-stub>
+      <quota-select-stub class="oc-mb-s" disabled="false" maxquota="0" title="Personal quota" totalquota="0"></quota-select-stub>
+      <!--v-if-->
       <group-select-stub class="oc-mb-s" groupoptions="undefined,undefined" selectedgroups=""></group-select-stub>
     </div>
     <compare-save-dialog-stub class="edit-compare-save-dialog oc-mb-l" compareobject="[object Object]" confirmbuttondisabled="false" originalobject="[object Object]"></compare-save-dialog-stub>
