@@ -1,9 +1,9 @@
 <template>
   <div
+    v-if="!closed"
     class="oc-alert oc-position-relative"
     :class="[
       alertStyle,
-      closed ? 'oc-hidden' : '',
       closeable ? 'oc-alert-closeable' : '',
       renderIcon ? 'oc-alert-has-icon' : ''
     ]"
