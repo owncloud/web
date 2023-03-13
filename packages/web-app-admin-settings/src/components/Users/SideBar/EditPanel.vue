@@ -75,15 +75,15 @@
         </div>
         <quota-select
           id="quota-select-form"
-          :disabled="isQuotaInputDisabled"
           :key="'quota-select-' + user.id"
+          :disabled="isQuotaInputDisabled"
           class="oc-mb-s"
           :title="$gettext('Personal quota')"
           :total-quota="editUser.drive.quota ? editUser.drive.quota.total : 0"
           :max-quota="maxQuota"
           @selected-option-change="changeSelectedQuotaOption"
         />
-        <OcAlert :style="'warning'" v-if="isQuotaInputDisabled">
+        <OcAlert v-if="isQuotaInputDisabled" :style="'warning'">
           {{ $gettext('To set an individual quota, the user needs to have logged in once.') }}
         </OcAlert>
         <group-select

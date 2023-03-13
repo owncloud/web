@@ -88,14 +88,15 @@ export default defineComponent({
   computed: {
     alertStyle() {
       switch (this.variant) {
-        case 'info':
-          return 'oc-alert-info'
         case 'success':
           return 'oc-alert-success'
         case 'warning':
           return 'oc-alert-warning'
         case 'danger':
           return 'oc-alert-danger'
+        default:
+        case 'info':
+          return 'oc-alert-info'
       }
     },
     icon() {
@@ -104,14 +105,15 @@ export default defineComponent({
       }
 
       switch (this.variant) {
-        case 'info':
-          return 'information'
         case 'success':
           return 'checkbox-circle'
         case 'warning':
           return 'error-warning'
         case 'danger':
           return 'close-circle'
+        case 'info':
+        default:
+          return 'information'
       }
     },
 
