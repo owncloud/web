@@ -38,6 +38,7 @@ Summary
 * Bugfix - Remove fuzzy search results: [#8508](https://github.com/owncloud/web/pull/8508)
 * Bugfix - Space image upload: [#8523](https://github.com/owncloud/web/issues/8523)
 * Bugfix - Users without role assignment: [#8585](https://github.com/owncloud/web/issues/8585)
+* Bugfix - Group members sorting: [#8592](https://github.com/owncloud/web/issues/8592)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -325,6 +326,13 @@ Details
 
    https://github.com/owncloud/web/issues/8585
    https://github.com/owncloud/web/pull/8590
+
+* Bugfix - Group members sorting: [#8592](https://github.com/owncloud/web/issues/8592)
+
+   Sorting groups by their member count has been fixed.
+
+   https://github.com/owncloud/web/issues/8592
+   https://github.com/owncloud/web/pull/8600
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
