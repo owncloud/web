@@ -122,7 +122,9 @@ export default defineComponent({
       emit('toggleSelectGroup', group)
     }
     const showDetails = (group) => {
-      selectGroup(group)
+      if (!isGroupSelected(group)) {
+        selectGroup(group)
+      }
       eventBus.publish(SideBarEventTopics.open)
     }
     const rowClicked = (data) => {
@@ -258,8 +260,8 @@ export default defineComponent({
     },
     orderBy(list, prop, desc) {
       return [...list].sort((a, b) => {
-        a = a[prop] || ''
-        b = b[prop] || ''
+        a = a[prop]?.toString() || ''
+        b = b[prop]?.toString() || ''
         return desc ? b.localeCompare(a) : a.localeCompare(b)
       })
     },
