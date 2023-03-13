@@ -42,7 +42,7 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
       return unref(targetRouteCallback)(createTargetRouteOptions)
     }
 
-    const { path, fileId, resource } = createTargetRouteOptions
+    const { path, fileId = null, resource } = createTargetRouteOptions
     let space
     if (resource.shareId) {
       space = buildShareSpaceResource({
@@ -50,13 +50,13 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
         shareName: basename(resource.shareRoot),
         serverUrl: configurationManager.serverUrl
       })
-    } else if (!resource.shareId && !getInternalSpace(resource.storageId)) {
+    } /*else if (!resource.shareId && !getInternalSpace(resource.storageId)) {
       if (path === '/') {
         return createLocationShares('files-shares-with-me')
       }
       // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
       return { name: 'resolvePrivateLink', params: { fileId } }
-    } else {
+    } */ else {
       space = getMatchingSpace(resource)
     }
     if (!space) {

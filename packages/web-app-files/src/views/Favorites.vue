@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper>
-      <app-bar :display-view-mode-switch="true" :side-bar-open="sideBarOpen" />
+      <app-bar :side-bar-open="sideBarOpen" />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
