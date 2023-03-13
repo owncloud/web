@@ -8,7 +8,7 @@
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
-      :spaces="[resources[0]]"
+      :spaces="[resources[0] as SpaceResource]"
       :max-quota="maxQuota"
     />
     <input
@@ -18,7 +18,7 @@
       name="file"
       tabindex="-1"
       :accept="supportedSpaceImageMimeTypes"
-      @change="$_uploadImage_uploadImageSpace"
+      @change="uploadImageSpace"
     />
     <oc-list id="oc-spaces-actions-sidebar" class-name="oc-mt-s">
       <action-menu-item
@@ -41,38 +41,39 @@ import Disable from 'web-pkg/src/mixins/spaces/disable'
 import Restore from 'web-pkg/src/mixins/spaces/restore'
 import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
 import EditReadmeContent from 'web-pkg/src/mixins/spaces/editReadmeContent'
-import UploadImage from '../../../composables/actions/spaces/useSpaceActionsUploadImage'
+import { useSpaceActionsUploadImage } from '../../../composables/actions/spaces/useSpaceActionsUploadImage'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
 import { thumbnailService } from '../../../services'
-import { computed, ComputedRef, defineComponent, inject, unref } from 'vue'
+import { computed, ComputedRef, defineComponent, inject, ref, unref, VNodeRef } from 'vue'
 import { Resource, SpaceResource } from 'web-client'
-import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
+import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'SpaceActions',
   components: { ActionMenuItem, QuotaModal, ReadmeContentModal },
-  mixins: [
-    Rename,
-    Delete,
-    EditDescription,
-    EditReadmeContent,
-    Disable,
-    Restore,
-    UploadImage,
-    EditQuota
-  ],
+  mixins: [Rename, Delete, EditDescription, EditReadmeContent, Disable, Restore, EditQuota],
   setup() {
+    const store = useStore()
     const resource = inject<Resource>('resource')
     const resources = computed(() => {
       return [unref(resource)]
     })
 
+    const spaceImageInput: VNodeRef = ref(null)
+    const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
+      store,
+      spaceImageInput
+    })
+
     return {
       maxQuota: useCapabilitySpacesMaxQuota(),
       space: inject<ComputedRef<SpaceResource>>('space'),
-      resources
+      resources,
+      spaceImageInput,
+      uploadImageActions,
+      uploadImageSpace
     }
   },
   computed: {

@@ -20,7 +20,7 @@
       multiple
       tabindex="-1"
       :accept="supportedSpaceImageMimeTypes"
-      @change="$_uploadImage_uploadImageSpace"
+      @change="uploadImageSpace"
     />
   </div>
 </template>
@@ -38,10 +38,19 @@ import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import Disable from 'web-pkg/src/mixins/spaces/disable'
 import ShowMembers from 'web-pkg/src/mixins/spaces/showMembers'
-import UploadImage from '../../composables/actions/spaces/useSpaceActionsUploadImage'
+import { useSpaceActionsUploadImage } from '../../composables/actions/spaces/useSpaceActionsUploadImage'
 import EditReadmeContent from 'web-pkg/src/mixins/spaces/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
-import { computed, defineComponent, getCurrentInstance, PropType, toRefs, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  PropType,
+  ref,
+  toRefs,
+  unref,
+  VNodeRef
+} from 'vue'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { thumbnailService } from 'web-app-files/src/services'
 import { useCapabilitySpacesMaxQuota, useRouter, useStore } from 'web-pkg/src/composables'
@@ -57,7 +66,6 @@ export default defineComponent({
     Disable,
     ShowMembers,
     Restore,
-    UploadImage,
     EditReadmeContent
   ],
 
@@ -79,6 +87,12 @@ export default defineComponent({
 
     const { actions: showDetailsItems } = useFileActionsShowDetails({ store })
 
+    const spaceImageInput: VNodeRef = ref(null)
+    const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
+      store,
+      spaceImageInput
+    })
+
     const filterParams = computed(() => {
       return {
         space: unref(space),
@@ -95,7 +109,7 @@ export default defineComponent({
       const fileHandlers = [
         ...instance.$_rename_items,
         ...instance.$_editDescription_items,
-        ...instance.$_uploadImage_items
+        ...unref(uploadImageActions)
       ]
 
       if (isLocationSpacesActive(router, 'files-spaces-generic')) {
@@ -152,7 +166,10 @@ export default defineComponent({
 
     return {
       menuSections,
-      maxQuota: useCapabilitySpacesMaxQuota()
+      maxQuota: useCapabilitySpacesMaxQuota(),
+      spaceImageInput,
+      uploadImageActions,
+      uploadImageSpace
     }
   },
   computed: {
