@@ -17,6 +17,7 @@
       :drop-id="`context-menu-drop-${resourceDomSelector(item)}`"
       :toggle="`#context-menu-trigger-${resourceDomSelector(item)}`"
       class="oc-overflow-hidden"
+      position="bottom-end"
       mode="click"
       close-on-click
       padding-size="small"
