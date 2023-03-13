@@ -9,7 +9,9 @@ import {
   getDisplayedUsers,
   removeSelectedUsersFromGroups,
   selectUser,
-  changeUser
+  changeUser,
+  addUserToGroups,
+  removeUserFromGroups
 } from './actions'
 
 export class Users {
@@ -49,10 +51,10 @@ export class Users {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     await selectUser({ uuid, page: this.#page })
   }
-  async addToGroups({ groups }: { groups: string[] }): Promise<void> {
+  async addToGroupsBatchAtion({ groups }: { groups: string[] }): Promise<void> {
     await addSelectedUsersToGroups({ page: this.#page, groups })
   }
-  async removeFromGroups({ groups }: { groups: string[] }): Promise<void> {
+  async removeFromGroupsBatchAtion({ groups }: { groups: string[] }): Promise<void> {
     await removeSelectedUsersFromGroups({ page: this.#page, groups })
   }
   async filter({ filter, values }: { filter: string; values: string[] }): Promise<void> {
@@ -69,5 +71,13 @@ export class Users {
   }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     await changeUser({ uuid, attribute: attribute, value: value, page: this.#page })
+  }
+  async addToGroups({ key, groups }: { key: string; groups: string[] }): Promise<void> {
+    const { uuid } = this.#usersEnvironment.getUser({ key })
+    await addUserToGroups({ page: this.#page, uuid, groups })
+  }
+  async removeFromGroups({ key, groups }: { key: string; groups: string[] }): Promise<void> {
+    const { uuid } = this.#usersEnvironment.getUser({ key })
+    await removeUserFromGroups({ page: this.#page, uuid, groups })
   }
 }

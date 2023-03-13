@@ -9,11 +9,11 @@ Feature: reshare
       | Alice |
       | Brian |
       | Carol |
-    And "Admin" creates following group
+    And "Admin" creates following group using API
       | id      |
       | sales   |
       | finance |
-    And "Admin" adds user to the group
+    And "Admin" adds user to the group using API
       | user  | group |
       | Carol | sales |
     And "Alice" creates the following folder in personal space using API

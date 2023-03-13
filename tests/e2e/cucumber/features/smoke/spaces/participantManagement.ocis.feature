@@ -8,11 +8,11 @@ Feature: spaces participant management
       | Carol   |
       | Marie   |
       | Richard |
-    And "Admin" creates following group
+    And "Admin" creates following group using API
       | id       |
       | sales    |
       | security |
-    And "Admin" adds user to the group
+    And "Admin" adds user to the group using API
       | user    | group |
       | Marie   | sales |
       | Richard | security |

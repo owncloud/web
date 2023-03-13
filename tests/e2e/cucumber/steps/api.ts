@@ -62,7 +62,7 @@ Given(
 )
 
 Given(
-  '{string} creates following group(s)',
+  '{string} creates following group(s) using API',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const admin = this.usersEnvironment.getUser({ key: stepUser })
 
@@ -80,7 +80,7 @@ Given(
 )
 
 Given(
-  '{string} adds user(s) to the group(s)',
+  '{string} adds user(s) to the group(s) using API',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const admin = this.usersEnvironment.getUser({ key: stepUser })
 

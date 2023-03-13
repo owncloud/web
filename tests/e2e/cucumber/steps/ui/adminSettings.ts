@@ -232,10 +232,10 @@ When(
 
     switch (action) {
       case 'adds':
-        await usersObject.addToGroups({ groups: groups.split(',') })
+        await usersObject.addToGroupsBatchAtion({ groups: groups.split(',') })
         break
       case 'removes':
-        await usersObject.removeFromGroups({ groups: groups.split(',') })
+        await usersObject.removeFromGroupsBatchAtion({ groups: groups.split(',') })
         break
       default:
         throw new Error(`${action} not implemented`)
@@ -272,5 +272,31 @@ When(
       })
     }
     await usersObject.changeUser({ key: user, attribute: attribute, value: value })
+  }
+)
+
+When(
+  /^"([^"]*)" (adds|removes) the user "([^"]*)" (to|from) the (group|groups) "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: string,
+    action: string,
+    user: string,
+    _: string,
+    __: string,
+    groups: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const usersObject = new objects.applicationAdminSettings.Users({ page })
+    switch (action) {
+      case 'adds':
+        await usersObject.addToGroups({ key: user, groups: groups.split(',') })
+        break
+      case 'removes':
+        await usersObject.removeFromGroups({ key: user, groups: groups.split(',') })
+        break
+      default:
+        throw new Error(`${action} not implemented`)
+    }
   }
 )
