@@ -145,7 +145,7 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { join } from 'path'
 
-import { useFileActions, EDITOR_MODE_CREATE } from '../../mixins/fileActions'
+import { useFileActions, EDITOR_MODE_CREATE } from '../../composables/actions/files/useFileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
 

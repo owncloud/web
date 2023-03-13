@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
-import { useFileActions } from '../../../mixins/fileActions'
+import { useFileActions } from '../../../composables/actions/files/useFileActions'
 import { computed, defineComponent, inject, unref } from 'vue'
 import { Resource, SpaceResource } from 'web-client'
 

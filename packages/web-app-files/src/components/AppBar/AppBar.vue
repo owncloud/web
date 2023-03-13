@@ -67,23 +67,23 @@ import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import { BreadcrumbItem } from '../../helpers/breadcrumbs'
-import { useClearSelection } from '../../mixins/actions/clearSelection'
+import { useFileActionsClearSelection } from '../../composables/actions/files/useFileActionsClearSelection'
 import { isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import ViewOptions from './ViewOptions.vue'
 import { ViewMode } from 'web-pkg/src/ui/types'
-import { useAcceptShare } from 'web-app-files/src/mixins/actions/acceptShare'
-import { useCopy } from 'web-app-files/src/mixins/actions/copy'
-import { useDeclineShare } from 'web-app-files/src/mixins/actions/declineShare'
-import { useDelete } from 'web-app-files/src/mixins/actions/delete'
-import { useDownloadArchive } from 'web-app-files/src/mixins/actions/downloadArchive'
-import { useEmptyTrashBin } from '../../mixins/actions/emptyTrashBin'
-import { useMove } from 'web-app-files/src/mixins/actions/move'
-import { useRestore } from 'web-app-files/src/mixins/actions/restore'
+import { useFileActionsAcceptShare } from 'web-app-files/src/composables/actions/files/useFileActionsAcceptShare'
+import { useFileActionsCopy } from 'web-app-files/src/composables/actions/files/useFileActionsCopy'
+import { useFileActionsDeclineShare } from 'web-app-files/src/composables/actions/files/useFileActionsDeclineShare'
+import { useFileActionsDelete } from 'web-app-files/src/composables/actions/files/useFileActionsDelete'
+import { useFileActionsDownloadArchive } from 'web-app-files/src/composables/actions/files/useFileActionsDownloadArchive'
+import { useFileActionsEmptyTrashBin } from '../../composables/actions/files/useFileActionsEmptyTrashBin'
+import { useFileActionsMove } from 'web-app-files/src/composables/actions/files/useFileActionsMove'
+import { useFileActionsRestore } from 'web-app-files/src/composables/actions/files/useFileActionsRestore'
 import { useStore } from 'web-pkg/src'
-import { useDownloadFile } from 'web-app-files/src/mixins/actions/downloadFile'
+import { useFileActionsDownloadFile } from 'web-app-files/src/composables/actions/files/useFileActionsDownloadFile'
 
 export default defineComponent({
   components: {
@@ -124,16 +124,16 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
-    const { actions: acceptShareActions } = useAcceptShare({ store })
-    const { actions: clearSelectionActions } = useClearSelection({ store })
-    const { actions: copyActions } = useCopy({ store })
-    const { actions: declineShareActions } = useDeclineShare({ store })
-    const { actions: deleteActions } = useDelete({ store })
-    const { actions: downloadArchiveActions } = useDownloadArchive({ store })
-    const { actions: downloadFileActions } = useDownloadFile()
-    const { actions: emptyTrashBinActions } = useEmptyTrashBin({ store })
-    const { actions: moveActions } = useMove({ store })
-    const { actions: restoreActions } = useRestore({ store })
+    const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
+    const { actions: clearSelectionActions } = useFileActionsClearSelection({ store })
+    const { actions: copyActions } = useFileActionsCopy({ store })
+    const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
+    const { actions: deleteActions } = useFileActionsDelete({ store })
+    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
+    const { actions: downloadFileActions } = useFileActionsDownloadFile()
+    const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin({ store })
+    const { actions: moveActions } = useFileActionsMove({ store })
+    const { actions: restoreActions } = useFileActionsRestore({ store })
 
     const batchActions = computed(() => {
       return [

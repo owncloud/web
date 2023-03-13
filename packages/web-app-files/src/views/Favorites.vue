@@ -69,7 +69,7 @@
 import { mapGetters, mapState, mapActions } from 'vuex'
 import ResourceTable from '../components/FilesList/ResourceTable.vue'
 
-import { useFileActions } from '../mixins/fileActions'
+import { useFileActions } from '../composables/actions/files/useFileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { debounce } from 'lodash-es'

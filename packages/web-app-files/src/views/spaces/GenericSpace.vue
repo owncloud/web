@@ -153,7 +153,7 @@ import {
 } from 'web-client/src/helpers'
 
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
-import { useFileActions } from '../../mixins/fileActions'
+import { useFileActions } from '../../composables/actions/files/useFileActions'
 
 import AppBar from '../../components/AppBar/AppBar.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'

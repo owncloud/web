@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { useFileActions } from '../../mixins/fileActions'
+import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension } from 'web-pkg/src/constants'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'

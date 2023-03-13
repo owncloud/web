@@ -5,35 +5,35 @@
 <script lang="ts">
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 
-import { useFileActions } from '../../mixins/fileActions'
+import { useFileActions } from '../../composables/actions/files/useFileActions'
 
 import { useStore } from 'web-pkg/src/composables'
-import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 
-import { useSetImage } from '../../mixins/spaces/actions/setImage'
+import { useFileActionsSetImage } from '../../composables/actions/spaces/useSpaceActionsSetImage'
 import { useSetReadme } from 'web-pkg/src/mixins/spaces/setReadme'
 
 import {
-  useCreateQuickLink,
-  usePaste,
-  useShowDetails,
-  useShowShares,
-  useAcceptShare,
-  useCopy,
-  useDeclineShare,
-  useDelete,
-  useDownloadArchive,
-  useEmptyTrashBin,
-  useMove,
-  useRestore,
-  useDownloadFile,
-  useRename,
-  useShowEditTags,
-  useNavigate,
-  useFavorite
-} from '../../mixins/actions'
+  useFileActionsCreateQuickLink,
+  useFileActionsPaste,
+  useFileActionsShowDetails,
+  useFileActionsShowShares,
+  useFileActionsAcceptShare,
+  useFileActionsCopy,
+  useFileActionsDeclineShare,
+  useFileActionsDelete,
+  useFileActionsDownloadArchive,
+  useFileActionsEmptyTrashBin,
+  useFileActionsMove,
+  useFileActionsRestore,
+  useFileActionsDownloadFile,
+  useFileActionsRename,
+  useFileActionsShowEditTags,
+  useFileActionsNavigate,
+  useFileActionsFavorite
+} from '../../composables/actions/files'
 
 export default defineComponent({
   name: 'ContextActions',
@@ -54,25 +54,25 @@ export default defineComponent({
 
     const { editorActions, loadExternalAppActions } = useFileActions()
 
-    const { actions: acceptShareActions } = useAcceptShare({ store })
-    const { actions: copyActions } = useCopy({ store })
-    const { actions: createQuickLinkActions } = useCreateQuickLink({ store })
-    const { actions: declineShareActions } = useDeclineShare({ store })
-    const { actions: deleteActions } = useDelete({ store })
-    const { actions: downloadArchiveActions } = useDownloadArchive({ store })
-    const { actions: downloadFileActions } = useDownloadFile()
-    const { actions: favoriteActions } = useFavorite({ store })
-    const { actions: emptyTrashBinActions } = useEmptyTrashBin({ store })
-    const { actions: moveActions } = useMove({ store })
-    const { actions: navigateActions } = useNavigate({ store })
-    const { actions: pasteActions } = usePaste({ store })
-    const { actions: renameActions } = useRename({ store })
-    const { actions: restoreActions } = useRestore({ store })
-    const { actions: setSpaceImageActions } = useSetImage({ store })
+    const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
+    const { actions: copyActions } = useFileActionsCopy({ store })
+    const { actions: createQuickLinkActions } = useFileActionsCreateQuickLink({ store })
+    const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
+    const { actions: deleteActions } = useFileActionsDelete({ store })
+    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
+    const { actions: downloadFileActions } = useFileActionsDownloadFile()
+    const { actions: favoriteActions } = useFileActionsFavorite({ store })
+    const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin({ store })
+    const { actions: moveActions } = useFileActionsMove({ store })
+    const { actions: navigateActions } = useFileActionsNavigate({ store })
+    const { actions: pasteActions } = useFileActionsPaste({ store })
+    const { actions: renameActions } = useFileActionsRename({ store })
+    const { actions: restoreActions } = useFileActionsRestore({ store })
+    const { actions: setSpaceImageActions } = useFileActionsSetImage({ store })
     const { actions: setSpaceReadmeActions } = useSetReadme({ store })
-    const { actions: showDetailsActions } = useShowDetails({ store })
-    const { actions: showEditTagsActions } = useShowEditTags({ store })
-    const { actions: showSharesActions } = useShowShares({ store })
+    const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
+    const { actions: showEditTagsActions } = useFileActionsShowEditTags({ store })
+    const { actions: showSharesActions } = useFileActionsShowShares({ store })
 
     const filterParams = computed(() => {
       return {

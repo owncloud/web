@@ -33,12 +33,12 @@ import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal
 import Delete from 'web-pkg/src/mixins/spaces/delete'
 import Rename from 'web-pkg/src/mixins/spaces/rename'
 import Restore from 'web-pkg/src/mixins/spaces/restore'
-import { useShowDetails } from '../../mixins/actions/showDetails'
+import { useFileActionsShowDetails } from '../../composables/actions/files/useFileActionsShowDetails'
 import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import Disable from 'web-pkg/src/mixins/spaces/disable'
 import ShowMembers from 'web-pkg/src/mixins/spaces/showMembers'
-import UploadImage from '../../mixins/spaces/actions/uploadImage'
+import UploadImage from '../../composables/actions/spaces/useSpaceActionsUploadImage'
 import EditReadmeContent from 'web-pkg/src/mixins/spaces/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
 import { computed, defineComponent, getCurrentInstance, PropType, toRefs, unref } from 'vue'
@@ -77,7 +77,7 @@ export default defineComponent({
     const store = useStore()
     const { space } = toRefs(props)
 
-    const { actions: showDetailsItems } = useShowDetails({ store })
+    const { actions: showDetailsItems } = useFileActionsShowDetails({ store })
 
     const filterParams = computed(() => {
       return {

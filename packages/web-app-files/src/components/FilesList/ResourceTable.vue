@@ -214,7 +214,7 @@ import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
 import { ClipboardActions } from 'web-app-files/src/helpers/clipboardActions'
 import { isResourceTxtFileAlmostEmpty } from 'web-app-files/src/helpers/resources'
 import { determineSortFields } from 'web-app-files/src/helpers/ui/resourceTable'
-import { useRename } from 'web-app-files/src/mixins/actions/rename'
+import { useFileActionsRename } from 'web-app-files/src/composables/actions/files/useFileActionsRename'
 import { createLocationShares, createLocationCommon } from 'web-app-files/src/router'
 import { ref } from 'vue'
 
@@ -417,7 +417,7 @@ export default defineComponent({
       context
     )
 
-    const { actions: renameActions } = useRename()
+    const { actions: renameActions } = useFileActionsRename()
     const renameHandler = computed(() => unref(renameActions)[0].handler)
 
     return {

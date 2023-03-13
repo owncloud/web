@@ -11,11 +11,11 @@ import { Resource, SpaceResource } from 'web-client/src/helpers'
 import ContextActions from 'web-app-files/src/components/FilesList/ContextActions.vue'
 
 import {
-  useAcceptShare,
-  useCreateQuickLink,
-  useRename,
-  useCopy
-} from 'web-app-files/src/mixins/actions'
+  useFileActionsAcceptShare,
+  useFileActionsCreateQuickLink,
+  useFileActionsRename,
+  useFileActionsCopy
+} from 'web-app-files/src/composables/actions/files'
 import { computed, ref } from 'vue'
 import { Action } from 'web-pkg/src/composables/actions'
 
@@ -27,13 +27,13 @@ function createMockActionComposables(module) {
   return mockModule
 }
 
-jest.mock('web-app-files/src/mixins/actions', () =>
-  createMockActionComposables(jest.requireActual('web-app-files/src/mixins/actions'))
+jest.mock('web-app-files/src/composables/actions/files', () =>
+  createMockActionComposables(jest.requireActual('web-app-files/src/composables/actions/files'))
 )
 
-jest.mock('web-app-files/src/mixins/spaces/actions/setImage', () =>
+jest.mock('web-app-files/src/composables/actions/spaces/useSpaceActionsSetImage', () =>
   createMockActionComposables(
-    jest.requireActual('web-app-files/src/mixins/spaces/actions/setImage')
+    jest.requireActual('web-app-files/src/composables/actions/spaces/useSpaceActionsSetImage')
   )
 )
 
@@ -49,7 +49,12 @@ describe('ContextActions', () => {
     })
 
     it('render enabled actions', () => {
-      const enabledComposables = [useAcceptShare, useCreateQuickLink, useRename, useCopy]
+      const enabledComposables = [
+        useFileActionsAcceptShare,
+        useFileActionsCreateQuickLink,
+        useFileActionsRename,
+        useFileActionsCopy
+      ]
       for (const composable of enabledComposables) {
         jest.mocked(composable).mockImplementation(() => ({
           actions: computed(() => [mock<Action>({ isEnabled: () => true })])
