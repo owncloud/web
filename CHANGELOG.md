@@ -88,7 +88,7 @@ Summary
 * Enhancement - User settings login field: [#8433](https://github.com/owncloud/web/pull/8433)
 * Enhancement - Skeleton App: [#8441](https://github.com/owncloud/web/pull/8441)
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
-* Enhancement - Rework notifications: [#8450](https://github.com/owncloud/web/pull/8450)
+* Enhancement - Rework notification bell: [#8450](https://github.com/owncloud/web/pull/8450)
 * Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
 * Enhancement - Update CERN links: [#8473](https://github.com/owncloud/web/pull/8473)
 * Enhancement - Respect max quota: [#8489](https://github.com/owncloud/web/pull/8489)
@@ -844,7 +844,7 @@ Details
 
    https://github.com/owncloud/web/pull/8449
 
-* Enhancement - Rework notifications: [#8450](https://github.com/owncloud/web/pull/8450)
+* Enhancement - Rework notification bell: [#8450](https://github.com/owncloud/web/pull/8450)
 
    We're now showing the notification bell based on whether the server supports notifications.
    Previously it was hidden when there were no notifications. We've added a badge that displays
@@ -906,8 +906,10 @@ Details
 
    https://github.com/owncloud/web/issues/8519
    https://github.com/owncloud/web/issues/8520
+   https://github.com/owncloud/web/issues/8593
    https://github.com/owncloud/web/pull/8518
    https://github.com/owncloud/web/pull/8582
+   https://github.com/owncloud/web/pull/8595
 
 * Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
 
