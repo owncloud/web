@@ -33,7 +33,7 @@
             @update:model-value="inputOnInput"
             @keydown.enter.prevent="confirm"
           />
-          <p v-else key="modal-message" class="oc-modal-body-message" v-text="message" />
+          <p v-else key="modal-message" class="oc-modal-body-message oc-m-rm" v-text="message" />
           <div v-if="checkboxLabel" class="oc-modal-body-actions oc-flex oc-flex-left">
             <oc-checkbox
               v-model="checkboxValue"
@@ -46,31 +46,32 @@
             <span class="text" v-text="contextualHelperLabel" />
             <oc-contextual-helper class="oc-pl-xs" v-bind="contextualHelperData" />
           </div>
-          <div class="oc-modal-body-actions oc-flex oc-flex-right">
-            <oc-button
-              class="oc-modal-body-actions-cancel"
-              :variation="buttonCancelVariation"
-              :appearance="buttonCancelAppearance"
-              @click="cancelModalAction"
-              v-text="buttonCancelText"
-            />
-            <oc-button
-              v-if="buttonSecondaryText"
-              class="oc-modal-body-actions-secondary oc-ml-s"
-              :variation="buttonSecondaryVariation"
-              :appearance="buttonSecondaryAppearance"
-              @click="secondaryModalAction"
-              v-text="buttonSecondaryText"
-            />
-            <oc-button
-              class="oc-modal-body-actions-confirm oc-ml-s"
-              variation="primary"
-              :appearance="buttonConfirmAppearance"
-              :disabled="buttonConfirmDisabled || !!inputError"
-              @click="confirm"
-              v-text="buttonConfirmText"
-            />
-          </div>
+        </div>
+
+        <div class="oc-modal-body-actions oc-flex oc-flex-right">
+          <oc-button
+            class="oc-modal-body-actions-cancel"
+            :variation="buttonCancelVariation"
+            :appearance="buttonCancelAppearance"
+            @click="cancelModalAction"
+            v-text="buttonCancelText"
+          />
+          <oc-button
+            v-if="buttonSecondaryText"
+            class="oc-modal-body-actions-secondary oc-ml-s"
+            :variation="buttonSecondaryVariation"
+            :appearance="buttonSecondaryAppearance"
+            @click="secondaryModalAction"
+            v-text="buttonSecondaryText"
+          />
+          <oc-button
+            class="oc-modal-body-actions-confirm oc-ml-s"
+            variation="primary"
+            :appearance="buttonConfirmAppearance"
+            :disabled="buttonConfirmDisabled || !!inputError"
+            @click="confirm"
+            v-text="buttonConfirmText"
+          />
         </div>
       </div>
     </focus-trap>
@@ -413,6 +414,9 @@ export default defineComponent({
 .oc-modal {
   max-width: 500px;
   width: 100%;
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--oc-color-input-border);
+  border-radius: 6px;
 
   &:focus {
     outline: none;
@@ -450,21 +454,20 @@ export default defineComponent({
 
   &-title {
     align-items: center;
-    background-color: var(--oc-color-swatch-brand-default);
-    border: 1px solid var(--oc-color-swatch-brand-default);
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+    background-color: var(--oc-color-background-default);
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+    border-bottom: 1px solid var(--oc-color-input-border);
     display: flex;
     flex-flow: row wrap;
-    padding: var(--oc-space-small) var(--oc-space-medium);
+    padding: var(--oc-space-medium) var(--oc-space-medium);
 
     > .oc-icon {
       margin-right: var(--oc-space-small);
     }
 
     > h2 {
-      color: var(--oc-color-swatch-brand-contrast);
+      // color: var(--oc-color-swatch-inverse-default);
       font-size: 1rem;
       font-weight: bold;
       margin: 0;
@@ -473,12 +476,8 @@ export default defineComponent({
 
   &-body {
     background-color: var(--oc-color-background-default);
-    border: 1px solid var(--oc-color-swatch-brand-default);
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
     color: var(--oc-color-text-default);
-    padding: var(--oc-space-medium);
+    padding: var(--oc-space-medium) var(--oc-space-medium);
 
     span {
       color: var(--oc-color-text-default);
@@ -505,6 +504,11 @@ export default defineComponent({
 
     &-actions {
       text-align: right;
+      border-top: 1px solid var(--oc-color-input-border);
+      background: var(--oc-color-background-default);
+      border-bottom-right-radius: 6px;
+      border-bottom-left-radius: 6px;
+      padding: var(--oc-space-medium);
 
       .oc-button {
         border-radius: 4px;

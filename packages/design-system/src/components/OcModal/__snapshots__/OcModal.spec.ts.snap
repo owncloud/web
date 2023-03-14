@@ -12,11 +12,11 @@ exports[`OcModal displays input 1`] = `
         <oc-text-input-stub class="oc-modal-body-input" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="true" id="oc-textinput-1" label="Folder name" modelvalue="New folder" type="text"></oc-text-input-stub>
         <!--v-if-->
         <!--v-if-->
-        <div class="oc-modal-body-actions oc-flex oc-flex-right">
-          <oc-button-stub appearance="outline" class="oc-modal-body-actions-cancel" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
-          <!--v-if-->
-          <oc-button-stub appearance="filled" class="oc-modal-body-actions-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="primary">Confirm</oc-button-stub>
-        </div>
+      </div>
+      <div class="oc-modal-body-actions oc-flex oc-flex-right">
+        <oc-button-stub appearance="outline" class="oc-modal-body-actions-cancel" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+        <!--v-if-->
+        <oc-button-stub appearance="filled" class="oc-modal-body-actions-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="primary">Confirm</oc-button-stub>
       </div>
     </div>
   </focus-trap-stub>
@@ -32,14 +32,14 @@ exports[`OcModal hides icon if not specified 1`] = `
         <h2 id="oc-modal-title">Example title</h2>
       </div>
       <div class="oc-modal-body">
-        <p class="oc-modal-body-message">Example message</p>
+        <p class="oc-modal-body-message oc-m-rm">Example message</p>
         <!--v-if-->
         <!--v-if-->
-        <div class="oc-modal-body-actions oc-flex oc-flex-right">
-          <oc-button-stub appearance="outline" class="oc-modal-body-actions-cancel" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
-          <!--v-if-->
-          <oc-button-stub appearance="filled" class="oc-modal-body-actions-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="primary">Confirm</oc-button-stub>
-        </div>
+      </div>
+      <div class="oc-modal-body-actions oc-flex oc-flex-right">
+        <oc-button-stub appearance="outline" class="oc-modal-body-actions-cancel" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+        <!--v-if-->
+        <oc-button-stub appearance="filled" class="oc-modal-body-actions-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="primary">Confirm</oc-button-stub>
       </div>
     </div>
   </focus-trap-stub>
@@ -55,14 +55,14 @@ exports[`OcModal matches snapshot 1`] = `
         <h2 id="oc-modal-title">Example title</h2>
       </div>
       <div class="oc-modal-body">
-        <p class="oc-modal-body-message">Example message</p>
+        <p class="oc-modal-body-message oc-m-rm">Example message</p>
         <!--v-if-->
         <!--v-if-->
-        <div class="oc-modal-body-actions oc-flex oc-flex-right">
-          <oc-button-stub appearance="outline" class="oc-modal-body-actions-cancel" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
-          <!--v-if-->
-          <oc-button-stub appearance="filled" class="oc-modal-body-actions-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="primary">Confirm</oc-button-stub>
-        </div>
+      </div>
+      <div class="oc-modal-body-actions oc-flex oc-flex-right">
+        <oc-button-stub appearance="outline" class="oc-modal-body-actions-cancel" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+        <!--v-if-->
+        <oc-button-stub appearance="filled" class="oc-modal-body-actions-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="primary">Confirm</oc-button-stub>
       </div>
     </div>
   </focus-trap-stub>
@@ -83,11 +83,11 @@ exports[`OcModal overrides props message with slot 1`] = `
         </div>
         <!--v-if-->
         <!--v-if-->
-        <div class="oc-modal-body-actions oc-flex oc-flex-right">
-          <oc-button-stub appearance="outline" class="oc-modal-body-actions-cancel" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
-          <!--v-if-->
-          <oc-button-stub appearance="filled" class="oc-modal-body-actions-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="primary">Confirm</oc-button-stub>
-        </div>
+      </div>
+      <div class="oc-modal-body-actions oc-flex oc-flex-right">
+        <oc-button-stub appearance="outline" class="oc-modal-body-actions-cancel" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
+        <!--v-if-->
+        <oc-button-stub appearance="filled" class="oc-modal-body-actions-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="primary">Confirm</oc-button-stub>
       </div>
     </div>
   </focus-trap-stub>
