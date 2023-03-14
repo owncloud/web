@@ -1,12 +1,9 @@
 <template>
   <div>
-    <div
-      ref="dropdown"
-      class="oc-expanding-dropdown"
-      :class="{ active: dropdownVisible, 'expand-head': expandHead }"
-    >
+    <div ref="dropdown" class="oc-expanding-dropdown" :class="expandingDropdownClasses">
       <div ref="head" class="head">
         <oc-button
+          ref="toggle"
           appearance="raw"
           variation="inverse"
           class="dropdown-button"
@@ -16,7 +13,7 @@
         </oc-button>
         <slot name="head" />
       </div>
-      <transition name="drop-down-slide" mode="out-in">
+      <transition :name="dropdownTransitionName" mode="out-in">
         <div v-show="dropdownVisible" class="dropdown-content">
           <div ref="content">
             <div v-if="expandHead" class="space-divider oc-pb-s"></div>
@@ -31,7 +28,7 @@
 </template>
 
 <script>
-import { ref, unref, onMounted, onUnmounted } from 'vue'
+import { ref, unref, onMounted, onUnmounted, computed } from 'vue'
 
 export default {
   name: 'OcExpandingDropdown',
@@ -51,13 +48,44 @@ export default {
   },
   setup(props) {
     const dropdown = ref(null)
+    const toggle = ref(null)
     const head = ref(null)
     const content = ref(null)
     const dropdownVisible = ref(false)
 
+    const contentWidth = ref(-1)
+    const contentHeight = ref(-1)
+
+    const expandingDropdownClasses = computed(() => {
+      return {
+        active: dropdownVisible,
+        'expand-head': props.expandHead
+      }
+    })
     const toggleDropdown = () => {
       dropdownVisible.value = !dropdownVisible.value
     }
+    const dropdownTransitionName = computed(() => {
+      if (dropdownOpeningDirection.value === 'right') {
+        return 'drop-down-slide-right'
+      }
+      return 'drop-down-slide-left'
+    })
+    const dropdownOpeningDirection = computed(() => {
+      const toggleButton = unref(toggle)
+      if (toggleButton == null) {
+        // Page load
+        return 'right'
+      }
+      const buttonRect = toggleButton.$el.getBoundingClientRect()
+      const spaceLeft = buttonRect.left
+      const spaceRight = window.innerWidth - buttonRect.right
+
+      if (spaceRight >= spaceLeft) {
+        return 'right'
+      }
+      return 'left'
+    })
     const calculateContentMax = () => {
       const el = unref(content)
       const setContentCssProperty = (property, value) => {
@@ -70,19 +98,19 @@ export default {
       setContentCssProperty('display', 'block')
       setContentCssProperty('position', 'absolute')
 
-      const maxWidth = el.clientWidth
-      const maxHeight = el.clientHeight
+      contentWidth.value = el.clientWidth
+      contentHeight.value = el.clientHeight
 
       setContentCssProperty('display', 'none')
-      setContentCssProperty('max-width', `${maxWidth}px`)
-      setContentCssProperty('max-height', `${maxHeight}px`)
+      setContentCssProperty('max-width', `${unref(contentWidth)}px`)
+      setContentCssProperty('max-height', `${unref(contentHeight)}px`)
       removeContentCssProperty('top')
       removeContentCssProperty('position')
 
       if (!props.expandHead) {
         return
       }
-      unref(head).style.setProperty('width', `${maxWidth - 10}px`)
+      unref(head).style.setProperty('width', `${unref(contentWidth) - 10}px`)
     }
     const handleClick = () => {
       const el = unref(dropdown)
@@ -107,9 +135,13 @@ export default {
     return {
       dropdown,
       head,
+      toggle,
       content,
       dropdownVisible,
-      toggleDropdown
+      toggleDropdown,
+      expandingDropdownClasses,
+      dropdownOpeningDirection,
+      dropdownTransitionName
     }
   }
 }
@@ -128,7 +160,7 @@ export default {
       .head {
         border-bottom-left-radius: 0px;
         border-bottom-right-radius: 0px;
-        background-color: #4f4f4f;
+        background-color: var(--oc-color-background-hover);
       }
     }
   }
@@ -174,7 +206,6 @@ export default {
     .dropdown-button {
       display: flex;
       background-color: transparent;
-      color: white;
       border: none;
       cursor: pointer;
       height: 45px;
@@ -194,7 +225,6 @@ export default {
     position: absolute;
     top: 0px;
     left: 0;
-    color: #cccccc;
     background-color: var(--oc-color-background-secondary);
     overflow: hidden;
     z-index: -1;
@@ -214,27 +244,52 @@ export default {
   }
 }
 
-/* Transition */
-.drop-down-slide-enter-active {
+/* Transition to the right */
+.drop-down-slide-right-enter-active {
   transition: all 0.2s;
   transition-timing-function: ease-out;
 }
-.drop-down-slide-leave-active {
+.drop-down-slide-right-leave-active {
   transition: all 0.2s;
 }
-.drop-down-slide-enter-to,
-.drop-down-slide-leave-from {
+.drop-down-slide-right-enter-to,
+.drop-down-slide-right-leave-from {
   overflow: hidden;
   border-bottom-left-radius: 5px;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   opacity: 1;
 }
-.drop-down-slide-enter-from,
-.drop-down-slide-leave-to {
+.drop-down-slide-right-enter-from,
+.drop-down-slide-right-leave-to {
   overflow: hidden;
   max-height: 2px !important;
   max-width: 45px !important;
+  border-radius: 0px;
+  opacity: 0;
+}
+
+/* Transition to the left */
+.drop-down-slide-left-enter-active {
+  transition: all 0.2s;
+  transition-timing-function: ease-out;
+}
+.drop-down-slide-left-leave-active {
+  transition: all 0.2s;
+}
+.drop-down-slide-left-enter-to,
+.drop-down-slide-left-leave-from {
+  overflow: hidden;
+  border-bottom-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  max-height: 2px !important;
+  max-width: 45px !important;
+  opacity: 1;
+}
+.drop-down-slide-left-enter-from,
+.drop-down-slide-left-leave-to {
+  overflow: hidden;
   border-radius: 0px;
   opacity: 0;
 }
