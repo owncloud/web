@@ -92,7 +92,13 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
-import { formatDateFromISO, formatRelativeDateFromISO, useClientService, useRoute, useStore } from 'web-pkg'
+import {
+  formatDateFromISO,
+  formatRelativeDateFromISO,
+  useClientService,
+  useRoute,
+  useStore
+} from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'

@@ -25,7 +25,6 @@ import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActi
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
-
 export default defineComponent({
   name: 'ContextActions',
   components: { ContextActionMenu, QuotaModal },

@@ -29,7 +29,7 @@ import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import { computed, defineComponent, getCurrentInstance, inject, unref } from 'vue'
-import { Resource, SpaceResource } from 'web-client'
+import { Resource } from 'web-client'
 import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({

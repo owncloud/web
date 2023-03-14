@@ -44,11 +44,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref } from 'vue'
+import { computed, defineComponent, getCurrentInstance, PropType, ref, unref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import uniqueId from '../../utils/uniqueId'
-import { useRouter } from 'web-pkg/src'
 
 type Indicator = {
   id: string
@@ -104,7 +103,9 @@ export default defineComponent({
   },
 
   setup() {
-    const router = useRouter()
+    const router =
+      (getCurrentInstance().proxy as any).$router ||
+      (getCurrentInstance().parent.proxy as any).$router
     const accessibleDescriptionIds = ref({} as Record<string, string>)
 
     const hasHandler = (indicator: Indicator): boolean => {
