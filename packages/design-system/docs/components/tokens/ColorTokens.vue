@@ -34,7 +34,7 @@ export default defineComponent({
   name: 'ColorTokens',
 
   computed: {
-    tokens() {
+    tokens(): any {
       return Object.values(designTokens).filter((token) => token.name.startsWith('oc-color-'))
     }
   }
