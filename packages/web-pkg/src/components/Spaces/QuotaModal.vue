@@ -64,7 +64,7 @@ export default defineComponent({
     const modalTitle = computed(() => {
       if (props.resourceType === 'space') {
         if (props.spaces.length === 1) {
-          return $gettext('Change quota for space %{name}', {
+          return $gettext('Change quota for space "%{name}"', {
             name: props.spaces[0].name
           })
         }
@@ -74,7 +74,7 @@ export default defineComponent({
       }
       if (props.resourceType === 'user') {
         if (props.spaces.length === 1) {
-          return $gettext('Change quota for user %{name}', {
+          return $gettext('Change quota for user "%{name}"', {
             name: props.spaces[0].name
           })
         }
@@ -88,7 +88,7 @@ export default defineComponent({
       if (props.resourceType === 'space') {
         return $ngettext(
           'Space quota was changed successfully',
-          'Space quota of %{count} spaces was changed successfully',
+          'Quota of %{count} spaces was changed successfully',
           count,
           { count: count.toString() }
         )
@@ -96,7 +96,7 @@ export default defineComponent({
       if (props.resourceType === 'user') {
         return $ngettext(
           'User quota was changed successfully',
-          'User quota of %{count} users was changed successfully',
+          'Quota of %{count} users was changed successfully',
           count,
           { count: count.toString() }
         )
@@ -107,7 +107,7 @@ export default defineComponent({
       if (props.resourceType === 'space') {
         return $ngettext(
           'Failed to change space quota',
-          'Failed to change space quota for %{count} spaces',
+          'Failed to change quota for %{count} spaces',
           count,
           { count: count.toString() }
         )
@@ -115,7 +115,7 @@ export default defineComponent({
       if (props.resourceType === 'user') {
         return $ngettext(
           'Failed to change user quota',
-          'Failed to change user quota for %{count} users',
+          'Failed to change quota for %{count} users',
           count,
           { count: count.toString() }
         )
