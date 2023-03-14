@@ -81,7 +81,7 @@ export default defineComponent({
       return [
         ...this.$_rename_items,
         ...this.$_editDescription_items,
-        ...this.$_uploadImage_items,
+        ...this.uploadImageActions,
         ...this.$_editReadmeContent_items,
         ...this.$_editQuota_items,
         ...this.$_restore_items,
