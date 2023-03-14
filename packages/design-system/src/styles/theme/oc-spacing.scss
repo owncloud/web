@@ -26,6 +26,34 @@ $directives: ("m": "margin", "p": "padding");
   }
 }
 
+// Add responsive spacing
+@each $breakpointKey, $breakpointValue in $breakpoints {
+  @media (min-width: $breakpointValue) {
+    @each $directiveKey, $directiveValue in $directives {
+      .oc-#{$directiveKey} {
+        @each $sizeKey, $sizeValue in $sizes {
+          &-#{$sizeKey}\@#{$breakpointKey} {
+            #{$directiveValue}: $sizeValue !important;
+          }
+        }
+
+        @each $directionKey, $directionValues in $directions {
+          &#{$directionKey} {
+            @each $direction in $directionValues {
+              @each $sizeKey, $sizeValue in $sizes {
+                &-#{$sizeKey}\@#{$breakpointKey} {
+                  #{$directiveValue}-#{$direction}: $sizeValue !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Add classes to remove spacing
 @each $directiveKey, $directiveValue in $directives {
   .oc-#{$directiveKey} {
     @each $directionKey, $directionValues in $directions {

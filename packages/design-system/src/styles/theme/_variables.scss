@@ -28,5 +28,12 @@ $weights: (
   "black": $oc-font-weight-black
 );
 
+$breakpoints: (
+  "s": $oc-breakpoint-small-default,
+  "m": $oc-breakpoint-medium-default,
+  "l": $oc-breakpoint-large-default,
+  "xl": $oc-breakpoint-xlarge
+);
+
 $global-control-height: 15px;
 $global-border-width: 2px;
