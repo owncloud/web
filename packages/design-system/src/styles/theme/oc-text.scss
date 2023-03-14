@@ -9,6 +9,10 @@ p {
   color: var(--oc-color-text-default);
 }
 
+p {
+  line-height: 1.625;
+}
+
 html * {
   font-family: var(--oc-font-family);
 }
