@@ -157,7 +157,7 @@ export default defineComponent({
   outline: none;
 
   &-outline {
-    outline: solid 2px var(--oc-color-swatch-passive-default);
+    outline: solid 2px var(--oc-color-input-border);
   }
 
   &-s {
@@ -179,7 +179,7 @@ export default defineComponent({
   &-checked,
   :checked,
   &:indeterminate {
-    background-color: var(--oc-color-swatch-passive-contrast);
+    background-color: var(--oc-color-input-bg);
   }
 
   &-checked,
