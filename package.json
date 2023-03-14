@@ -5,7 +5,7 @@
   "license": "AGPL-3.0",
   "author": "ownCloud GmbH <devops@owncloud.com>",
   "scripts": {
-    "check-types": "tsc --noEmit",
+    "check-types": "vue-tsc --noEmit",
     "build": "vue-demi-fix && pnpm build:tokens && pnpm vite build",
     "build:w": "pnpm build --watch",
     "build:tokens": "pnpm --filter @ownclouders/design-system tokens",
