@@ -455,11 +455,12 @@ export default defineComponent({
   &-title {
     align-items: center;
     background-color: var(--oc-color-background-default);
-    border-top-right-radius: 6px;
-    border-top-left-radius: 6px;
     border-bottom: 1px solid var(--oc-color-input-border);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
     display: flex;
     flex-flow: row wrap;
+    line-height: 1.625;
     padding: var(--oc-space-medium) var(--oc-space-medium);
 
     > .oc-icon {
@@ -477,8 +478,8 @@ export default defineComponent({
   &-body {
     background-color: var(--oc-color-background-default);
     color: var(--oc-color-text-default);
+    line-height: 1.625;
     padding: var(--oc-space-medium) var(--oc-space-medium);
-
     span {
       color: var(--oc-color-text-default);
     }
