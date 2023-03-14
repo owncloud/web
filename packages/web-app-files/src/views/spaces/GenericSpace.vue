@@ -232,8 +232,8 @@ export default defineComponent({
     let loadResourcesEventToken
 
     const viewModes = computed(() => [
-      ViewModeConstants.default,
       ViewModeConstants.condensedTable,
+      ViewModeConstants.default,
       ViewModeConstants.tilesView
     ])
 

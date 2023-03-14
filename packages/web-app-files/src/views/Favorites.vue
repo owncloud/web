@@ -126,8 +126,8 @@ export default defineComponent({
     }
 
     const viewModes = computed(() => [
-      ViewModeConstants.default,
       ViewModeConstants.condensedTable,
+      ViewModeConstants.default,
       ViewModeConstants.tilesView
     ])
 
