@@ -28,7 +28,8 @@ describe('OcTextInput', () => {
   const selectors = {
     textInputMessage: '.oc-text-input-message span',
     clearInputButton: '.oc-text-input-btn-clear',
-    inputField: '.oc-text-input'
+    inputField: '.oc-text-input',
+    infoIcon: '.oc-text-input-message .oc-icon'
   }
 
   describe('id prop', () => {
@@ -60,6 +61,11 @@ describe('OcTextInput', () => {
     })
     it('should show the description message as the input message text', () => {
       expect(wrapper.find(selectors.textInputMessage).text()).toBe('You should pass.')
+    })
+
+    const mountedWrapper = getMountedWrapper({ descriptionMessage: 'You should pass.' })
+    it('should show an info icon', () => {
+      expect(mountedWrapper.find(selectors.infoIcon).exists()).toBe(true)
     })
   })
 
