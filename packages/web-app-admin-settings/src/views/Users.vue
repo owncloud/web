@@ -149,6 +149,7 @@
       :cancel="closeQuotaModal"
       :spaces="selectedPersonalDrives"
       :max-quota="maxQuota"
+      resource-type="user"
       @space-quota-updated="spaceQuotaUpdated"
     />
   </div>
@@ -342,7 +343,7 @@ export default defineComponent({
         }
         const spaceResource = {
           id: drive.id,
-          name: $gettext(' of %{name}', { name: user.displayName }),
+          name: user.displayName,
           spaceQuota: drive.quota
         } as SpaceResource
         selectedPersonalDrives.value.push(spaceResource)

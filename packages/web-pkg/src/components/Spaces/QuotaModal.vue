@@ -11,7 +11,7 @@
       <template #content>
         <quota-select
           id="quota-select-batch-action-form"
-          :title="$gettext('Space quota')"
+          :title="$gettext('Quota')"
           :total-quota="selectedOption"
           :max-quota="maxQuota"
           @selected-option-change="changeSelectedQuotaOption"
@@ -22,8 +22,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, unref, PropType } from 'vue'
+import { computed, defineComponent, unref, PropType } from 'vue'
 import { mapActions, mapMutations } from 'vuex'
+import { useGettext } from 'vue3-gettext'
 import { useGraphClient } from 'web-pkg/src/composables'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { SpaceResource } from 'web-client/src'
@@ -46,12 +47,87 @@ export default defineComponent({
     maxQuota: {
       type: Number,
       default: 0
+    },
+    resourceType: {
+      type: String,
+      required: false,
+      default: 'space',
+      validator: (value: string) => {
+        return ['space', 'user'].includes(value)
+      }
     }
   },
   emits: ['spaceQuotaUpdated'],
-  setup() {
+  setup(props) {
+    const { $gettext, $ngettext } = useGettext()
+
+    const modalTitle = computed(() => {
+      if (props.resourceType === 'space') {
+        if (props.spaces.length === 1) {
+          return $gettext('Change quota for space "%{name}"', {
+            name: props.spaces[0].name
+          })
+        }
+        return $gettext('Change quota for %{count} spaces', {
+          count: props.spaces.length.toString()
+        })
+      }
+      if (props.resourceType === 'user') {
+        if (props.spaces.length === 1) {
+          return $gettext('Change quota for user "%{name}"', {
+            name: props.spaces[0].name
+          })
+        }
+        return $gettext('Change quota for %{count} users', {
+          count: props.spaces.length.toString()
+        })
+      }
+      return $gettext('Change quota')
+    })
+    const getSuccessMessage = (count: number) => {
+      if (props.resourceType === 'space') {
+        return $ngettext(
+          'Space quota was changed successfully',
+          'Quota of %{count} spaces was changed successfully',
+          count,
+          { count: count.toString() }
+        )
+      }
+      if (props.resourceType === 'user') {
+        return $ngettext(
+          'User quota was changed successfully',
+          'Quota of %{count} users was changed successfully',
+          count,
+          { count: count.toString() }
+        )
+      }
+      return $gettext('Quota was changed successfully')
+    }
+    const getErrorMessage = (count: number) => {
+      if (props.resourceType === 'space') {
+        return $ngettext(
+          'Failed to change space quota',
+          'Failed to change quota for %{count} spaces',
+          count,
+          { count: count.toString() }
+        )
+      }
+      if (props.resourceType === 'user') {
+        return $ngettext(
+          'Failed to change user quota',
+          'Failed to change quota for %{count} users',
+          count,
+          { count: count.toString() }
+        )
+      }
+      return $gettext('Failed to change quota')
+    }
+
     return {
-      ...useGraphClient()
+      ...useGraphClient(),
+      modalTitle,
+      getSuccessMessage,
+      getErrorMessage
     }
   },
   data: function () {
@@ -62,16 +138,6 @@ export default defineComponent({
   computed: {
     confirmButtonDisabled() {
       return !this.spaces.some((space) => space.spaceQuota.total !== this.selectedOption)
-    },
-    modalTitle() {
-      if (this.spaces.length === 1) {
-        return this.$gettext('Change quota for space %{name}', {
-          name: this.spaces[0].name
-        })
-      }
-      return this.$gettext('Change quota for %{count} spaces', {
-        count: this.spaces.length
-      })
     }
   },
   mounted() {
@@ -113,30 +179,12 @@ export default defineComponent({
       const results = await Promise.allSettled<Array<unknown>>(requests)
       const succeeded = results.filter((r) => r.status === 'fulfilled')
       if (succeeded.length) {
-        this.showMessage({
-          title: this.$ngettext(
-            'Space quota was changed successfully',
-            'Space quota of %{count} spaces was changed successfully',
-            succeeded.length,
-            {
-              count: succeeded.length
-            }
-          )
-        })
+        this.showMessage({ title: this.getSuccessMessage(succeeded.length) })
       }
       const errors = results.filter((r) => r.status === 'rejected')
       if (errors.length) {
         errors.forEach(console.error)
-        this.showMessage({
-          title: this.$ngettext(
-            'Failed to change space quota',
-            'Failed to change space quota for %{count} spaces',
-            errors.length,
-            {
-              count: errors.length
-            }
-          )
-        })
+        this.showMessage({ title: this.getErrorMessage(errors.length) })
       }
     }
   }

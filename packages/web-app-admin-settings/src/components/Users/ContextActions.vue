@@ -6,6 +6,7 @@
       :cancel="closeQuotaModal"
       :spaces="selectedPersonalDrives"
       :max-quota="maxQuota"
+      resource-type="user"
       @space-quota-updated="spaceQuotaUpdated"
     />
   </div>
@@ -30,7 +31,6 @@ import { User } from 'web-client/src/generated'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import { SpaceResource } from 'web-client/src'
-import { useGettext } from 'vue3-gettext'
 import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({
@@ -45,7 +45,6 @@ export default defineComponent({
   },
   setup(props) {
     const instance = getCurrentInstance().proxy as any
-    const { $gettext } = useGettext()
     const filterParams = computed(() => ({ resources: props.items }))
     const selectedPersonalDrives = ref([])
     watch(
@@ -59,7 +58,7 @@ export default defineComponent({
           }
           const spaceResource = {
             id: drive.id,
-            name: $gettext(' of %{name}', { name: user.displayName }),
+            name: user.displayName,
             spaceQuota: drive.quota
           } as SpaceResource
           selectedPersonalDrives.value.push(spaceResource)
