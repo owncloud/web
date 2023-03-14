@@ -10,7 +10,7 @@ import {
 export const buildUrl = (pathname) => {
   const isHistoryMode = !!base
   const baseUrl = new URL(window.location.href.split('#')[0])
-  baseUrl.search = ''
+  baseUrl.search = window.location.search
   if (isHistoryMode) {
     // in history mode we can't determine the base path, it must be provided by the document
     baseUrl.pathname = new URL(base.href).pathname
