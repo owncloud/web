@@ -4,6 +4,7 @@
     <form id="user-edit-form" class="oc-background-highlight oc-p-m" autocomplete="off">
       <div>
         <oc-text-input
+          id="userName-input"
           v-model="editUser.onPremisesSamAccountName"
           class="oc-mb-s"
           :label="$gettext('User name')"
@@ -12,6 +13,7 @@
           @update:model-value="validateUserName"
         />
         <oc-text-input
+          id="displayName-input"
           v-model="editUser.displayName"
           class="oc-mb-s"
           :label="$gettext('First and last name')"
@@ -20,6 +22,7 @@
           @update:model-value="validateDisplayName"
         />
         <oc-text-input
+          id="email-input"
           v-model="editUser.mail"
           class="oc-mb-s"
           :label="$gettext('Email')"
@@ -29,6 +32,7 @@
           @change="validateEmail"
         />
         <oc-text-input
+          id="password-input"
           :model-value="editUser.passwordProfile?.password"
           class="oc-mb-s"
           :label="$gettext('Password')"
@@ -39,6 +43,7 @@
         />
         <div class="oc-mb-s">
           <oc-select
+            id="role-input"
             :model-value="editUser"
             :label="$gettext('Role')"
             option-label="displayName"

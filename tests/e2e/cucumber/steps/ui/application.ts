@@ -1,4 +1,4 @@
-import { When, Then } from '@cucumber/cucumber'
+import { When, Then, DataTable } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
@@ -25,5 +25,17 @@ Then(
     const accountObject = new objects.account.Account({ page })
     const quotaValue = await accountObject.getQuotaValue()
     expect(quotaValue).toBe(quota)
+  }
+)
+
+Then(
+  /^"([^"]*)" should have self info:$/,
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const accountObject = new objects.account.Account({ page })
+
+    for (const info of stepTable.hashes()) {
+      expect(info.value).toBe(await accountObject.getUserInfo(info.key))
+    }
   }
 )

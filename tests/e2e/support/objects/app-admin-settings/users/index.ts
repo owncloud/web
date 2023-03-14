@@ -8,7 +8,8 @@ import {
   filterUsers,
   getDisplayedUsers,
   removeSelectedUsersFromGroups,
-  selectUser
+  selectUser,
+  changeUser
 } from './actions'
 
 export class Users {
@@ -56,5 +57,17 @@ export class Users {
   }
   async filter({ filter, values }: { filter: string; values: string[] }): Promise<void> {
     await filterUsers({ page: this.#page, filter, values })
+  }
+  async changeUser({
+    key,
+    attribute,
+    value
+  }: {
+    key: string
+    attribute: string
+    value: string
+  }): Promise<void> {
+    const { uuid } = this.#usersEnvironment.getUser({ key })
+    await changeUser({ uuid, attribute: attribute, value: value, page: this.#page })
   }
 }

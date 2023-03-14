@@ -21,6 +21,8 @@ const userCheckboxSelector = `[data-item-id="%s"]:not(.oc-table-highlighted) inp
 const editQuotaBtn = '.oc-files-actions-edit-quota-trigger'
 const quotaInputBatchAction = '#quota-select-batch-action-form .vs__search'
 const confirmChangeQuotaSeveralSpacesBtn = '.oc-modal-body-actions-confirm'
+const userInput = '#%s-input'
+const roleValueDropDown = `.vs__dropdown-menu :text-is("%s")`
 
 export const changeAccountEnabled = async (args: {
   page: Page
@@ -157,4 +159,31 @@ export const filterUsers = async (args: {
       page.locator(util.format(userFilterOption, value)).click()
     ])
   }
+}
+
+export const changeUser = async (args: {
+  page: Page
+  uuid: string
+  attribute: string
+  value: string
+}): Promise<void> => {
+  const { page, attribute, value, uuid } = args
+  await page.locator(util.format(userIdSelector, uuid)).click()
+  await page.waitForSelector(editActionBtn)
+  await page.locator(`.context-menu`).locator(editActionBtn).click()
+  await page.locator(util.format(userInput, attribute)).fill(value)
+
+  if (attribute === 'role') {
+    await page.locator(util.format(roleValueDropDown, value)).click()
+  }
+
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith(encodeURIComponent(uuid)) &&
+        resp.status() === 200 &&
+        resp.request().method() === 'PATCH'
+    ),
+    await page.locator(compareDialogConfirm).click()
+  ])
 }
