@@ -104,7 +104,7 @@ Feature: spaces management
       | email       | anna@example.org |
 
 
-  Scenario: add user to the group and delete user from the group
+  Scenario: assigned groups
     Given "Admin" creates following users
       | id    |
       | Alice |

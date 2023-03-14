@@ -11,7 +11,8 @@ import {
   selectUser,
   changeUser,
   addUserToGroups,
-  removeUserFromGroups
+  removeUserFromGroups,
+  openEditPanel
 } from './actions'
 
 export class Users {
@@ -27,14 +28,17 @@ export class Users {
   }
   async allowLogin({ key }: { key: string }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
+    await openEditPanel({ page: this.#page, uuid })
     await changeAccountEnabled({ uuid, value: true, page: this.#page })
   }
   async forbidLogin({ key }: { key: string }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
+    await openEditPanel({ page: this.#page, uuid })
     await changeAccountEnabled({ uuid, value: false, page: this.#page })
   }
   async changeQuota({ key, value }: { key: string; value: string }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
+    await openEditPanel({ page: this.#page, uuid })
     await changeQuota({ uuid, value, page: this.#page })
   }
   async selectUser({ key }: { key: string }): Promise<void> {
@@ -70,14 +74,17 @@ export class Users {
     value: string
   }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
+    await openEditPanel({ page: this.#page, uuid })
     await changeUser({ uuid, attribute: attribute, value: value, page: this.#page })
   }
   async addToGroups({ key, groups }: { key: string; groups: string[] }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
-    await addUserToGroups({ page: this.#page, uuid, groups })
+    await openEditPanel({ page: this.#page, uuid })
+    await addUserToGroups({ page: this.#page, groups })
   }
   async removeFromGroups({ key, groups }: { key: string; groups: string[] }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
+    await openEditPanel({ page: this.#page, uuid })
     await removeUserFromGroups({ page: this.#page, uuid, groups })
   }
 }
