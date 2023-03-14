@@ -10,6 +10,8 @@ import { debounce } from 'lodash-es'
 
 export default defineComponent({
   data() {
+    // HACK: vue-tsc thinks this.$route is a `Function` for whatever reason
+    // TODO: port to composition api
     const { provider: providerId } = (this.$route as any).query
     const { listSearch } = providerStore.availableProviders.find(
       (provider) => provider.id === providerId

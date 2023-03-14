@@ -12,7 +12,7 @@
         >
           <template #message>
             <p class="oc-text-muted">
-              <span v-if="!!routeQueryTerm" v-translate>No results found</span>
+              <span v-if="!!route.query.term" v-translate>No results found</span>
               <span v-else v-translate>No search term entered</span>
             </p>
           </template>
@@ -86,7 +86,7 @@ import { Resource } from 'web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { useStore } from 'web-pkg/src/composables'
+import { useRoute, useStore } from 'web-pkg/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { basename } from 'path'
 
@@ -118,6 +118,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const route = useRoute()
     const getSpace = (resource: Resource): SpaceResource => {
       if (resource.shareId) {
         return buildShareSpaceResource({
@@ -130,6 +131,7 @@ export default defineComponent({
     }
 
     return {
+      route,
       ...useFileActions({ store }),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       getSpace
@@ -168,9 +170,6 @@ export default defineComponent({
         itemCount: this.itemCount,
         totalResults: this.searchResult.totalResults
       })
-    },
-    routeQueryTerm() {
-      return this.$route.query.term
     }
   },
   watch: {

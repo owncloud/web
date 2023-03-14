@@ -38,7 +38,7 @@ type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
   sortBy: ReadOnlyRef<string>
   sortDir: ReadOnlyRef<SortDir>
   viewMode: ReadOnlyRef<string>
-  viewSize: ReadOnlyRef<string>
+  viewSize: ReadOnlyRef<number>
   selectedResources: Ref<Resource[]>
   selectedResourcesIds: Ref<(string | number)[]>
   isResourceInSelection(resource: Resource): boolean

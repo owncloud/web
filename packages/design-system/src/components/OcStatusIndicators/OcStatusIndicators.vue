@@ -13,7 +13,7 @@
         variation="inverse"
         :data-testid="indicator.id"
         :data-test-indicator-type="indicator.type"
-        @click="indicator.handler(resource, indicator.target, $router)"
+        @click="indicator.handler(resource, indicator.target, router)"
       >
         <oc-icon :name="indicator.icon" size="small" fill-type="line" />
       </oc-button>
@@ -44,10 +44,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, ref, unref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import uniqueId from '../../utils/uniqueId'
+import { useRouter } from 'web-pkg/src'
 
 type Indicator = {
   id: string
@@ -102,26 +103,31 @@ export default defineComponent({
     }
   },
 
-  data() {
-    return {
-      accessibleDescriptionIds: {}
-    }
-  },
+  setup() {
+    const router = useRouter()
+    const accessibleDescriptionIds = ref({} as Record<string, string>)
 
-  methods: {
-    hasHandler(indicator) {
+    const hasHandler = (indicator: Indicator): boolean => {
       return Object.prototype.hasOwnProperty.call(indicator, 'handler')
-    },
-    getIndicatorDescriptionId(indicator) {
+    }
+
+    const getIndicatorDescriptionId = (indicator: Indicator): string | null => {
       if (!indicator.accessibleDescription) {
         return null
       }
 
-      if (!this.accessibleDescriptionIds[indicator.id]) {
-        this.accessibleDescriptionIds[indicator.id] = uniqueId('oc-indicator-description-')
+      if (!unref(accessibleDescriptionIds)[indicator.id]) {
+        unref(accessibleDescriptionIds)[indicator.id] = uniqueId('oc-indicator-description-')
       }
 
-      return this.accessibleDescriptionIds[indicator.id]
+      return unref(accessibleDescriptionIds)[indicator.id]
+    }
+
+    return {
+      router,
+      accessibleDescriptionIds,
+      hasHandler,
+      getIndicatorDescriptionId
     }
   }
 })

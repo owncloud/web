@@ -12,11 +12,11 @@ export enum SortDir {
   Asc = 'asc'
 }
 export interface SortField {
-  name: MaybeRef<string>
+  name: string
   // eslint-disable-next-line @typescript-eslint/ban-types
   sortable?: MaybeRef<boolean | Function | string>
   sortDir?: MaybeRef<SortDir>
-  label?: MaybeRef<string>
+  label?: string
 }
 
 export interface SortOptions<T extends SortableItem> {
@@ -30,7 +30,7 @@ export interface SortOptions<T extends SortableItem> {
 }
 
 export interface SortResult<T> {
-  items: MaybeRef<Array<T>>
+  items: Ref<Array<T>>
   sortBy: ReadOnlyRef<string>
   sortDir: ReadOnlyRef<SortDir>
   handleSort({ sortBy, sortDir }: { sortBy: string; sortDir: SortDir }): void

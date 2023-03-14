@@ -90,10 +90,9 @@
 import { onMounted, onUnmounted, ref, unref } from 'vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { ShareStatus } from 'web-client/src/helpers/share'
-<<<<<<< HEAD
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
-import { formatDateFromISO, formatRelativeDateFromISO, useClientService, useStore } from 'web-pkg'
+import { formatDateFromISO, formatRelativeDateFromISO, useClientService, useRoute, useStore } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -103,26 +102,12 @@ const POLLING_INTERVAL = 30000
 export default {
   components: {
     NotificationBell
-=======
-import { useClientService } from 'web-pkg'
-
-export default {
-  setup() {
-    const { owncloudSdk: client } = useClientService()
-    return { client }
-  },
-  computed: {
-    ...mapGetters(['activeNotifications', 'configuration']),
-
-    notificationsLabel() {
-      return this.$gettext('Notifications')
-    }
->>>>>>> f8e9dd126 ('Fix' more ts type errors in vue files)
   },
   setup() {
     const store = useStore()
     const { owncloudSdk } = useClientService()
     const { current: currentLanguage } = useGettext()
+    const route = useRoute()
 
     const notifications = ref<Notification[]>([])
     const loading = ref(false)
@@ -264,7 +249,7 @@ export default {
         await deleteNotifications([notificationId])
 
         for (const item in data) {
-          const currentPath = this.$route.params.item ? `/${this.$route.params.item}` : '/'
+          const currentPath = unref(route).params.item ? `/${unref(route).params.item}` : '/'
           const { state, path, file_target: fileTarget } = item as any
 
           // accepted federated share

@@ -119,7 +119,7 @@ export default defineComponent({
       sortDir,
       items: spaces,
       handleSort
-    } = useSort({
+    } = useSort<SpaceResource>({
       items: runtimeSpaces,
       fields: sortFields
     })

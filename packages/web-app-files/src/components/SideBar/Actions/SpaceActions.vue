@@ -47,7 +47,7 @@ import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
 import { thumbnailService } from '../../../services'
 import { computed, ComputedRef, defineComponent, inject, ref, unref, VNodeRef } from 'vue'
-import { Resource, SpaceResource } from 'web-client'
+import { SpaceResource } from 'web-client'
 import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
@@ -56,7 +56,7 @@ export default defineComponent({
   mixins: [Rename, Delete, EditDescription, EditReadmeContent, Disable, Restore, EditQuota],
   setup() {
     const store = useStore()
-    const resource = inject<Resource>('resource')
+    const resource = inject<SpaceResource>('resource')
     const resources = computed(() => {
       return [unref(resource)]
     })

@@ -183,17 +183,17 @@ export default defineComponent({
       pendingHandleSort,
       pendingSortBy,
       pendingSortDir,
-      pendingItems: pendingItems as Resource[], // Hack: Workaround for vue-tsc
+      pendingItems,
 
       acceptedHandleSort,
       acceptedSortBy,
       acceptedSortDir,
-      acceptedItems: acceptedItems as Resource[], // Hack: Workaround for vue-tsc
+      acceptedItems,
 
       declinedHandleSort,
       declinedSortBy,
       declinedSortDir,
-      declinedItems: declinedItems as Resource[] // Hack: Workaround for vue-tsc
+      declinedItems
     }
   },
 
