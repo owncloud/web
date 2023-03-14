@@ -15,9 +15,6 @@ patchedDependencies:
   vue-inline-svg@3.1.0:
     hash: agvlx64p3fh52dmj7mriww4tnm
     path: patches/vue-inline-svg@3.1.0.patch
-  '@volar/vue-language-core@1.0.20':
-    hash: dqkdrca4spzz7tewtrrj6gmrxy
-    path: patches/@volar__vue-language-core.patch
 
 importers:
 
@@ -6365,7 +6362,7 @@ packages:
       '@volar/language-core': 1.0.20
     dev: true
 
-  /@volar/vue-language-core/1.0.20_dqkdrca4spzz7tewtrrj6gmrxy:
+  /@volar/vue-language-core/1.0.20:
     resolution: {integrity: sha512-Zz6yuxtA6BG6YU8KPwV4qhO5kh3e2Et6+YOu0QC43SiDgjIw2Vzzi+qAqm8UYofg9UBn82OArO1L+VrZPCCK8A==}
     dependencies:
       '@volar/language-core': 1.0.20
@@ -6377,13 +6374,12 @@ packages:
       minimatch: 5.1.2
       vue-template-compiler: 2.7.14
     dev: true
-    patched: true
 
   /@volar/vue-typescript/1.0.20:
     resolution: {integrity: sha512-FxucnAIZc503CfkdEGmUSw8EQfT31gi0DST7YmCNBK3cWOqJTF7UaHaBDpejnYGbsB568KZQbWTLNSpid5S/lA==}
     dependencies:
       '@volar/typescript': 1.0.20
-      '@volar/vue-language-core': 1.0.20_dqkdrca4spzz7tewtrrj6gmrxy
+      '@volar/vue-language-core': 1.0.20
     dev: true
 
   /@vue/compiler-core/3.2.40:
@@ -8240,7 +8236,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -17996,6 +17992,15 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
+  /promise-inflight/1.0.1:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
+    dev: true
+
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -18244,7 +18249,6 @@ packages:
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
-    dev: true
 
   /qs/6.5.3:
     resolution: {integrity: sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==}
@@ -21795,7 +21799,7 @@ packages:
     peerDependencies:
       typescript: '*'
     dependencies:
-      '@volar/vue-language-core': 1.0.20_dqkdrca4spzz7tewtrrj6gmrxy
+      '@volar/vue-language-core': 1.0.20
       '@volar/vue-typescript': 1.0.20
       typescript: 4.9.4
     dev: true
