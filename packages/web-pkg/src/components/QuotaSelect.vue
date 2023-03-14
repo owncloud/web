@@ -13,6 +13,9 @@
       option-label="displayValue"
       :label="title"
       @update:model-value="onUpdate"
+      :errorMessage="errorMessage"
+      :warningMessage="warningMessage"
+      :descriptionMessage="descriptionMessage"
     >
       <template #selected-option="{ displayValue }">
         <span v-text="displayValue" />
@@ -27,10 +30,6 @@
         <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
       </template>
     </oc-select>
-    <p
-      class="oc-mt-xs oc-text-meta"
-      v-text="$gettext('Select a quota option or enter your own value')"
-    />
   </div>
 </template>
 
@@ -55,7 +54,30 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+
+    /**
+     * A warning message which is shown below the select.
+     */
+     warningMessage: {
+      type: String,
+      default: null
+    },
+    /**
+     * An error message which is shown below the select.
+     */
+    errorMessage: {
+      type: String,
+      default: null
+    },
+    /**
+     * A description text which is shown below the select field.
+     */
+    descriptionMessage: {
+      type: String,
+      default: null
     }
+
   },
   emits: ['selectedOptionChange'],
   data: function () {

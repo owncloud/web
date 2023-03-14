@@ -82,10 +82,8 @@
           :total-quota="editUser.drive.quota ? editUser.drive.quota.total : 0"
           :max-quota="maxQuota"
           @selected-option-change="changeSelectedQuotaOption"
+          :descriptionMessage="$gettext('To set an individual quota, the user needs to have logged in once.')"
         />
-        <OcAlert v-if="isQuotaInputDisabled" :variant="'warning'">
-          {{ $gettext('To set an individual quota, the user needs to have logged in once.') }}
-        </OcAlert>
         <group-select
           class="oc-mb-s"
           :selected-groups="editUser.memberOf"

@@ -24,6 +24,35 @@
         <oc-spinner v-if="loading" />
       </template>
     </vue-select>
+
+    <div
+      v-if="showMessageLine"
+      class="oc-text-input-message"
+      :class="{
+        'oc-text-input-description': !!descriptionMessage,
+        'oc-text-input-warning': !!warningMessage,
+        'oc-text-input-danger': !!errorMessage
+      }"
+    >
+      <OcIcon
+        v-if="messageText !== null && !!descriptionMessage"
+        name="information"
+        size="small"
+        fill-type="line"
+        accessible-label="info"
+        aria-hidden="true"
+      />
+
+      <span
+        :id="messageId"
+        :class="{
+          'oc-text-input-description': !!descriptionMessage,
+          'oc-text-input-warning': !!warningMessage,
+          'oc-text-input-danger': !!errorMessage
+        }"
+        v-text="messageText"
+      />
+    </div>
   </div>
 </template>
 
@@ -124,6 +153,36 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+
+    /**
+     * A warning message which is shown below the select.
+     */
+    warningMessage: {
+      type: String,
+      default: null
+    },
+    /**
+     * An error message which is shown below the select.
+     */
+    errorMessage: {
+      type: String,
+      default: null
+    },
+    /**
+     * Whether or not vertical space below the select should be reserved for a one line message,
+     * so that content actually appearing there doesn't shift the layout.
+     */
+    fixMessageLine: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * A description text which is shown below the select field.
+     */
+    descriptionMessage: {
+      type: String,
+      default: null
     }
   },
   emits: ['search:input', 'update:modelValue'],
@@ -136,6 +195,28 @@ export default defineComponent({
         additionalAttrs['label'] = this.optionLabel
       }
       return { ...this.$attrs, ...additionalAttrs }
+    },
+    showMessageLine() {
+      return (
+        this.fixMessageLine ||
+        !!this.warningMessage ||
+        !!this.errorMessage ||
+        !!this.descriptionMessage
+      )
+    },
+    messageText() {
+      if (this.errorMessage) {
+        return this.errorMessage
+      }
+
+      if (this.warningMessage) {
+        return this.warningMessage
+      }
+
+      return this.descriptionMessage
+    },
+    messageId() {
+      return `${this.id}-message`
     }
   },
 

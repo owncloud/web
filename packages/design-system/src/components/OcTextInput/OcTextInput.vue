@@ -29,7 +29,24 @@
         <oc-icon name="close" size="small" variation="passive" />
       </oc-button>
     </div>
-    <div v-if="showMessageLine" class="oc-text-input-message">
+    <div
+      v-if="showMessageLine"
+      class="oc-text-input-message"
+      :class="{
+        'oc-text-input-description': !!descriptionMessage,
+        'oc-text-input-warning': !!warningMessage,
+        'oc-text-input-danger': !!errorMessage
+      }"
+    >
+      <OcIcon
+        v-if="messageText !== null && !!descriptionMessage"
+        name="information"
+        size="small"
+        fill-type="line"
+        accessible-label="info"
+        aria-hidden="true"
+      />
+
       <span
         :id="messageId"
         :class="{
@@ -273,6 +290,20 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.oc-text-input-message.oc-text-input-description {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: var(--oc-space-large);
+  padding-top: calc(var(--oc-space-xsmall) - 2px);
+
+  .oc-icon {
+    position: absolute;
+    left: var(--oc-space-xsmall);
+    top: var(--oc-space-xsmall);
+  }
+}
+
 .oc-text-input {
   &-description {
     color: var(--oc-color-text-muted);
