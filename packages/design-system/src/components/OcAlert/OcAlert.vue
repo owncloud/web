@@ -151,7 +151,8 @@ export default defineComponent({
       color: var(--oc-color-swatch-primary-default);
       border-color: var(--oc-color-swatch-primary-default);
 
-      svg {
+      svg,
+      .oc-alert-close-button svg {
         fill: var(--oc-color-swatch-primary-default);
       }
     }

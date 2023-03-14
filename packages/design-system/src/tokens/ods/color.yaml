@@ -53,14 +53,14 @@ color:
         value: '{color.text.inverse.value}'
     warning:
       default:
-        value: rgb(198, 80, 27)
+        value: rgb(192,86,33)
         check:
           contrast:
             ratio: 4.6
       hover:
-        value: rgb(253, 169, 75)
+        value: rgb(192,86,33)
       muted:
-        value: rgb(179, 81, 0)
+        value: rgba(192,86,33, .5)
       contrast:
         value: '{color.text.inverse.value}'
     danger:
