@@ -9,12 +9,14 @@
     "default": {
       "general": {
         "name": "ownCloud",
-        "slogan": "ownCloud – A safe home for all your data"
+        "slogan": "ownCloud – A safe home for all your data",
+        "url": "https://owncloud.com"
       },
       "logo": {
         "topbar": "themes/owncloud/assets/logo.svg",
         "favicon": "themes/owncloud/assets/favicon.jpg",
-        "login": "themes/owncloud/assets/logo.svg"
+        "login": "themes/owncloud/assets/logo.svg",
+        "dark": "themes/owncloud/assets/logo_dark.svg"
       },
       "loginPage": {
         "autoRedirect": true,
