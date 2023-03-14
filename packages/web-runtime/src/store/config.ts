@@ -18,13 +18,15 @@ const state = {
   currentTheme: {
     general: {
       name: '',
-      slogan: ''
+      slogan: '',
+      url: ''
     },
     logo: {
       topbar: '',
       favicon: '',
       login: '',
-      notFound: ''
+      notFound: '',
+      dark: ''
     },
     loginPage: {
       autoRedirect: true,
