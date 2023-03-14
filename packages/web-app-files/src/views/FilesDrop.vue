@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex oc-flex-column oc-p-xl oc-flex-nowrap">
+  <div class="oc-flex oc-flex-column oc-p-m oc-p-xl@m oc-flex-nowrap">
     <div class="oc-flex oc-flex-column oc-height-1-1">
       <div
         id="files-drop-container"
@@ -79,21 +79,29 @@
             </div>
 
             <div class="oc-text-center oc-pt-l oc-mt-l oc-width-1-2@m oc-width-1-3@xl">
-              <img v-if="configuration.currentTheme.logo.dark" :src="configuration.currentTheme.logo.dark" alt="ownCloud" class="oc-width-1-3@m" />
-              <img v-else-if="configuration.currentTheme.logo.default" :src="configuration.currentTheme.logo.default" alt="ownCloud" class="oc-width-1-3@m" />
+              <img v-if="configuration.currentTheme.logo.dark" :src="configuration.currentTheme.logo.dark" alt="ownCloud" class="oc-width-1-2 oc-width-1-3@s oc-width-1-4@m" />
+              <img v-else-if="configuration.currentTheme.logo.default" :src="configuration.currentTheme.logo.default" alt="ownCloud" class="oc-width-1-2 oc-width-1-3@s oc-width-1-4@m" />
 
                 <div class="oc-mt-m">
                   <p
                   v-text="
                     $gettext(
                       'This feature is brought to you by %{ company }.',
-                      { company: 'ownCloud' }
+                      { company: configuration.currentTheme.general.name }
                     )
                   "
                 />
                   <p class="" v-text="configuration.currentTheme.general.slogan + '.'" />
                 </div>
-                <a v-if="configuration.currentTheme.general.url" :href="configuration.currentTheme.general.url" target="_blank" v-text="$gettext('Learn more about ownCloud')" />
+                <a
+                  v-if="configuration.currentTheme.general.url"
+                  :href="configuration.currentTheme.general.url"
+                  target="_blank"
+                  v-text="$gettext('Learn more about %{ company }',
+                  {
+                    company: configuration.currentTheme.general.name
+                  })"
+                />
               </div>
           </div>
         </div>
