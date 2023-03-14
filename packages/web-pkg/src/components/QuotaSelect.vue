@@ -12,10 +12,10 @@
       :create-option="createOption"
       option-label="displayValue"
       :label="title"
+      :error-message="errorMessage"
+      :warning-message="warningMessage"
+      :description-message="descriptionMessage"
       @update:model-value="onUpdate"
-      :errorMessage="errorMessage"
-      :warningMessage="warningMessage"
-      :descriptionMessage="descriptionMessage"
     >
       <template #selected-option="{ displayValue }">
         <span v-text="displayValue" />
@@ -59,7 +59,7 @@ export default {
     /**
      * A warning message which is shown below the select.
      */
-     warningMessage: {
+    warningMessage: {
       type: String,
       default: null
     },
@@ -77,7 +77,6 @@ export default {
       type: String,
       default: null
     }
-
   },
   emits: ['selectedOptionChange'],
   data: function () {
