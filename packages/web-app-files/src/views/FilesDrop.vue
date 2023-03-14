@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex oc-flex-column oc-p-xl oc-pb-rm oc-flex-nowrap">
+  <div class="oc-flex oc-flex-column oc-p-xl oc-flex-nowrap">
     <div class="oc-flex oc-flex-column oc-height-1-1">
       <div
         id="files-drop-container"
@@ -66,29 +66,37 @@
             <p class="oc-m-rm" v-text="errorMessage" />
           </div>
 
-          <div class="explanation oc-flex oc-flex-center oc-mt-l">
-            <div class="oc-width-1-2@m oc-width-1-3@xl oc-pt-l">
+          <div class="explanation oc-flex oc-flex-center oc-flex-column oc-flex-center oc-flex-middle">
+            <div class="oc-width-1-2@m oc-width-1-3@xl">
               <h2 class="oc-text-center" v-text="$gettext('What is this?')" />
-              <p
+              <p class="oc-mb-rm"
                 v-text="
                   $gettext(
-                    'You can upload files here simply by drag `n drop or click on “Choose a file“ to open a file selection box.'
-                  )
-                "
-              />
-              <p
-                v-text="
-                  $gettext(
-                    'Since this an upload-only link you cannot see the contents existing within this resource. If you are not sure why you`re seeing this please contact the person who sent you the link or contact your local administrator.'
+                    'You can upload files here simply by drag `n drop or click on “Choose a file“ to open a file selection box. Since this an upload-only link you cannot see the contents existing within this resource.'
                   )
                 "
               />
             </div>
+
+            <div class="oc-text-center oc-pt-l oc-mt-l oc-width-1-2@m oc-width-1-3@xl">
+              <img v-if="configuration.currentTheme.logo.dark" :src="configuration.currentTheme.logo.dark" alt="ownCloud" class="oc-width-1-3@m" />
+              <img v-else-if="configuration.currentTheme.logo.default" :src="configuration.currentTheme.logo.default" alt="ownCloud" class="oc-width-1-3@m" />
+
+                <div class="oc-mt-m">
+                  <p
+                  v-text="
+                    $gettext(
+                      'This feature is brought to you by %{ company }.',
+                      { company: 'ownCloud' }
+                    )
+                  "
+                />
+                  <p class="" v-text="configuration.currentTheme.general.slogan + '.'" />
+                </div>
+                <a v-if="configuration.currentTheme.general.url" :href="configuration.currentTheme.general.url" target="_blank" v-text="$gettext('Learn more about ownCloud')" />
+              </div>
           </div>
         </div>
-      </div>
-      <div class="oc-text-center">
-        <p v-text="configuration.currentTheme.general.slogan" />
       </div>
     </div>
   </div>
