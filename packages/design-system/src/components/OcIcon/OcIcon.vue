@@ -133,13 +133,17 @@ export default defineComponent({
     /**
      * Style variation to give additional meaning.
      * Defaults to `passive`.
-     * Can be `passive, primary, danger, success, warning or brand`.
+     * Can be `passive, primary, danger, success, warning, brand or inherit`.
+     * `inherit` will not set any color but instead rely on a container element already
+     * setting the icon fill.
      */
     variation: {
       type: String,
       default: 'passive',
       validator: (value: string) => {
-        return ['passive', 'primary', 'danger', 'success', 'warning', 'brand'].includes(value)
+        return ['passive', 'primary', 'danger', 'success', 'warning', 'brand', 'inherit'].includes(
+          value
+        )
       }
     },
     /**

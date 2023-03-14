@@ -273,12 +273,12 @@ export default defineComponent({
 
   &-outline:hover:not([disabled]),
   &-outline:focus:not([disabled]) {
-    color: var(--oc-color-text-inverse);
+    color: $contrast-color;
     background-color: $color;
     border-color: $color;
 
     .oc-icon > svg {
-      fill: var(--oc-color-text-inverse);
+      fill: $contrast-color;
     }
   }
 }

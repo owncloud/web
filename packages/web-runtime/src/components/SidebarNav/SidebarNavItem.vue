@@ -8,6 +8,7 @@
       v-oc-tooltip="toolTip"
       type="router-link"
       :appearance="active ? 'raw-inverse' : 'raw'"
+      :variation="active ? 'primary' : 'passive'"
       :class="['oc-sidebar-nav-item-link', { active: active }]"
       :to="target"
       :data-nav-id="index"

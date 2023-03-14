@@ -13,7 +13,12 @@
         :aria-label="$gettext(viewMode.label)"
         @click="setViewMode(viewMode)"
       >
-        <oc-icon :name="viewMode.icon.name" :fill-type="viewMode.icon.fillType" size="small" />
+        <oc-icon
+          :name="viewMode.icon.name"
+          :fill-type="viewMode.icon.fillType"
+          size="small"
+          variation="inherit"
+        />
       </oc-button>
     </div>
     <oc-button
