@@ -47,7 +47,7 @@ export default defineComponent({
   name: 'AllTokens',
   data() {
     return {
-      tokens: Object.values(designTokens) as any
+      tokens: Object.values(designTokens)
     }
   }
 })

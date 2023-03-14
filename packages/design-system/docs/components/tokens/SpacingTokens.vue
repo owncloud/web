@@ -27,7 +27,7 @@ import designTokens from '../../../src/assets/tokens/ods.json'
 export default defineComponent({
   name: 'SpacingTokens',
   computed: {
-    tokens(): any {
+    tokens() {
       return Object.values(designTokens).filter((token) => token.name.startsWith('oc-space'))
     }
   }

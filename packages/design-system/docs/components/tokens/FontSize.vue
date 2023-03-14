@@ -26,7 +26,7 @@ export default defineComponent({
   name: 'FontSize',
 
   computed: {
-    tokens(): any {
+    tokens() {
       return Object.values(designTokens).filter((token) => token.name.startsWith('oc-font-size-'))
     }
   }
