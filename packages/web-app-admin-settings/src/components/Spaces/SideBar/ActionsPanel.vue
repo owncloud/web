@@ -3,7 +3,7 @@
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
-      :spaces="resources as SpaceResource[]"
+      :spaces="resources"
       :max-quota="maxQuota"
       @space-quota-updated="spaceQuotaUpdated"
     />
@@ -29,7 +29,7 @@ import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import { computed, defineComponent, getCurrentInstance, inject, unref } from 'vue'
-import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client'
 import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({
@@ -38,7 +38,7 @@ export default defineComponent({
   mixins: [Rename, Delete, EditDescription, Disable, Restore, EditQuota],
   setup() {
     const instance = getCurrentInstance().proxy as any
-    const resource = inject<Resource>('resource')
+    const resource = inject<SpaceResource>('resource')
     const resources = computed(() => {
       return [unref(resource)]
     })
