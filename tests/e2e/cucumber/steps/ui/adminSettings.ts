@@ -297,21 +297,21 @@ When(
         break
       default:
         throw new Error(`${action} not implemented`)
-      }
     }
-  )
-  
- When(
+  }
+)
+
+When(
   '{string} navigates to the groups management page',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const groupsObject = new objects.applicationAdminSettings.page.Groups({ page })
     await groupsObject.navigate()
-    }
-  )
+  }
+)
 
 When(
-  '{string} creates the following group(s):',
+  '{string} creates following group(s):',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const groupsObject = new objects.applicationAdminSettings.Groups({ page })
@@ -324,4 +324,5 @@ When(
       })
       await groupsObject.createGroup({ key: group.displayName })
     }
-  )
+  }
+)
