@@ -120,7 +120,7 @@ export default defineComponent({
 }
 .applications-list {
   padding: 10px;
-  width: 300px;
+  max-width: 320px;
   li {
     margin: var(--oc-space-xsmall) 0;
 

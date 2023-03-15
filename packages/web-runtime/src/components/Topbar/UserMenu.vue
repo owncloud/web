@@ -175,8 +175,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .user-menu-list {
   padding: 10px;
-  width: 300px;
-  height: 200px;
   li {
     align-items: center;
     display: flex;

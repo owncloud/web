@@ -14,16 +14,6 @@
       <portal-target name="app.runtime.header.right" multiple />
     </div>
     <portal to="app.runtime.header.right" :order="50">
-      <oc-expanding-dropdown>
-        <template #toggle>
-          <oc-icon name="grid" size="large" class="oc-flex" />
-        </template>
-        <template #body>
-          <oc-list style="width: 300px">
-            <div style="width: 200px; height: 150px">123</div>
-          </oc-list>
-        </template>
-      </oc-expanding-dropdown>
       <theme-switcher v-if="darkThemeAvailable" />
       <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
     </portal>
@@ -50,7 +40,6 @@ import {
 } from 'web-pkg/src/composables'
 import { computed, unref, PropType } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import OcExpandingDropdown from '../../../../design-system/src/components/OcExpandingDropdown/OcExpandingDropdown.vue'
 
 export default {
   components: {
@@ -59,7 +48,6 @@ export default {
     Notifications,
     ThemeSwitcher,
     UserMenu,
-    OcExpandingDropdown
   },
   props: {
     applicationsList: {

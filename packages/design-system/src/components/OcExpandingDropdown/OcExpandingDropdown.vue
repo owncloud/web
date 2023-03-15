@@ -52,6 +52,7 @@ export default {
     const head = ref(null)
     const content = ref(null)
     const dropdownVisible = ref(false)
+    const resizeObserver = ref(null)
 
     const contentWidth = ref(-1)
     const contentHeight = ref(-1)
@@ -107,6 +108,12 @@ export default {
       removeContentCssProperty('top')
       removeContentCssProperty('position')
 
+      resizeObserver.value = new ResizeObserver(() => {
+        setContentCssProperty('max-width', `${unref(el.clientWidth)}px`)
+        setContentCssProperty('max-height', `${unref(el.clientHeight)}px`)
+      })
+      resizeObserver.value.observe(el)
+
       if (!props.expandHead) {
         return
       }
@@ -137,6 +144,8 @@ export default {
     })
     onUnmounted(() => {
       document.removeEventListener('click', unref(dropdown).clickOutsideEvent)
+      resizeObserver.value.unobserve(el)
+      resizeObserver.value = null
     })
     return {
       dropdown,
@@ -240,6 +249,7 @@ export default {
   .dropdown-content {
     position: absolute;
     top: 0px;
+    min-width: 300px;
     background-color: var(--oc-color-background-secondary);
     overflow: hidden;
     z-index: -1;
