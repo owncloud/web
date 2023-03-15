@@ -28,7 +28,7 @@
               :href="n.url"
               :to="n.path"
               appearance="raw"
-              :class="[`${n.gradient}`]"
+              :class="[`${n.gradient}`, { 'router-link-active': n.active }]"
               :variation="n.active ? 'inverse' : 'inverse'"
             >
               <span class="icon-box">
@@ -167,7 +167,7 @@ export default defineComponent({
 
       &.router-link-active {
         .icon-box {
-          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          box-shadow: inset 0 0 1px 3px rgba(255,255,255, 0.6);
         }
       }
 
