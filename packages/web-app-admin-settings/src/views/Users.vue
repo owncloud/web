@@ -201,6 +201,7 @@ import GroupsModal from '../components/Users/GroupsModal.vue'
 import { useRemoveFromGroups } from '../mixins/users/removeFromGroups'
 import { useAddToGroups } from '../mixins/users/addToGroups'
 import { configurationManager } from 'web-pkg'
+import { loadingService } from 'web-pkg/src/services'
 
 export default defineComponent({
   name: 'UsersView',
@@ -434,10 +435,10 @@ export default defineComponent({
           }
           return acc
         }, addUsersToGroupsRequests)
-        await Promise.all(addUsersToGroupsRequests)
-        const usersResponse = await Promise.all(
-          usersToFetch.map((userId) => unref(graphClient).users.getUser(userId))
-        )
+        const usersResponse = await loadingService.addTask(async () => {
+          await Promise.all(addUsersToGroupsRequests)
+          return Promise.all(usersToFetch.map((userId) => unref(graphClient).users.getUser(userId)))
+        })
         for (const { data: updatedUser } of usersResponse) {
           const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
           unref(users)[userIndex] = updatedUser
@@ -477,10 +478,10 @@ export default defineComponent({
           }
           return acc
         }, removeUsersToGroupsRequests)
-        await Promise.all(removeUsersToGroupsRequests)
-        const usersResponse = await Promise.all(
-          usersToFetch.map((userId) => unref(graphClient).users.getUser(userId))
-        )
+        const usersResponse = await loadingService.addTask(async () => {
+          await Promise.all(removeUsersToGroupsRequests)
+          return Promise.all(usersToFetch.map((userId) => unref(graphClient).users.getUser(userId)))
+        })
         for (const { data: updatedUser } of usersResponse) {
           const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
           unref(users)[userIndex] = updatedUser

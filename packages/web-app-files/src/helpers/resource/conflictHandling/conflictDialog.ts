@@ -2,7 +2,7 @@ import { join } from 'path'
 import { Resource } from 'web-client'
 import { ResolveConflict, ResolveStrategy } from '.'
 
-interface FileConflict {
+export interface FileConflict {
   resource: Resource
   strategy?: ResolveStrategy
 }

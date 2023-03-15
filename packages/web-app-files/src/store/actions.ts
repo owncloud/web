@@ -17,7 +17,7 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { ClientService } from 'web-pkg/src/services'
+import { ClientService, loadingService, LoadingTaskState } from 'web-pkg/src/services'
 import { Language } from 'vue3-gettext'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
@@ -106,20 +106,30 @@ export default {
     if (context.state.clipboardAction === ClipboardActions.Copy) {
       movedResources = await copyMove.perform(TransferType.COPY)
     }
-    context.commit('CLEAR_CLIPBOARD')
-    const loadingResources = []
-    for (const resource of movedResources) {
-      loadingResources.push(
-        (async () => {
-          const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
-            targetSpace,
-            resource
+
+    await loadingService.addTask(
+      () => {
+        context.commit('CLEAR_CLIPBOARD')
+        const loadingResources = []
+        const fetchedResources = []
+        for (const resource of movedResources) {
+          loadingResources.push(
+            (async () => {
+              const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
+                targetSpace,
+                resource
+              )
+              fetchedResources.push(movedResource)
+            })()
           )
-          context.commit('UPSERT_RESOURCE', movedResource)
-        })()
-      )
-    }
-    await Promise.all(loadingResources)
+        }
+
+        return Promise.all(loadingResources).then(() => {
+          context.commit('UPSERT_RESOURCES', fetchedResources)
+        })
+      },
+      { debounceTime: 0 }
+    )
   },
   resetFileSelection(context) {
     context.commit('RESET_SELECTION')
@@ -148,6 +158,7 @@ export default {
       space: SpaceResource
       files: Resource[]
       clientService: ClientService
+      setProgress: (args: LoadingTaskState) => void
       firstRun: boolean
     } & Language
   ) {
@@ -157,6 +168,7 @@ export default {
       space,
       files,
       clientService,
+      setProgress,
       firstRun = true
     } = options
     const promises = []
@@ -166,6 +178,7 @@ export default {
         .deleteFile(space, file)
         .then(() => {
           removedFiles.push(file)
+          setProgress({ total: files.length, current: removedFiles.length })
         })
         .catch((error) => {
           let translated = $gettext('Failed to delete "%{file}"')

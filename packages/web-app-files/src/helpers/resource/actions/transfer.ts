@@ -1,12 +1,13 @@
 import { Resource } from 'web-client'
 import { join } from 'path'
 import { SpaceResource } from 'web-client/src/helpers'
-import { ClientService } from 'web-pkg/src/services'
+import { ClientService, loadingService, LoadingTaskState } from 'web-pkg/src/services'
 import {
   ConflictDialog,
   ResolveStrategy,
   isResourceBeeingMovedToSameLocation,
-  resolveFileNameDuplicate
+  resolveFileNameDuplicate,
+  FileConflict
 } from '../conflictHandling'
 import { TransferType } from '.'
 
@@ -106,7 +107,6 @@ export class ResourceTransfer extends ConflictDialog {
       transferType = TransferType.COPY
     }
 
-    const errors = []
     const targetFolderResources = (
       await this.clientService.webdav.listFiles(this.targetSpace, this.targetFolder)
     ).children
@@ -116,9 +116,30 @@ export class ResourceTransfer extends ConflictDialog {
       this.targetFolder,
       targetFolderResources
     )
-    const movedResources: Resource[] = []
 
-    for (let resource of this.resourcesToMove) {
+    return loadingService.addTask(
+      ({ setProgress }) => {
+        return this.moveResources(
+          resolvedConflicts,
+          targetFolderResources,
+          transferType,
+          setProgress
+        )
+      },
+      { indeterminate: transferType === TransferType.COPY }
+    )
+  }
+
+  private async moveResources(
+    resolvedConflicts: FileConflict[],
+    targetFolderResources: Resource[],
+    transferType: TransferType,
+    setProgress: (args: LoadingTaskState) => void
+  ) {
+    const movedResources: Resource[] = []
+    const errors = []
+
+    for (let [i, resource] of this.resourcesToMove.entries()) {
       // shallow copy of resources to prevent modifying existing rows
       resource = { ...resource }
       const hasConflict = resolvedConflicts.some((e) => e.resource.id === resource.id)
@@ -176,6 +197,7 @@ export class ResourceTransfer extends ConflictDialog {
         resource.path = join(this.targetFolder.path, resource.name)
         resource.webDavPath = join(this.targetFolder.webDavPath, resource.name)
         movedResources.push(resource)
+        setProgress({ total: this.resourcesToMove.length, current: i + 1 })
       } catch (error) {
         console.error(error)
         error.resourceName = resource.name

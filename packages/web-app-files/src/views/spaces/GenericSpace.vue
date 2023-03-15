@@ -425,11 +425,7 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['loadPreview']),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
-    ...mapMutations('Files', [
-      'REMOVE_FILES',
-      'REMOVE_FILES_FROM_SEARCHED',
-      'REMOVE_FILE_SELECTION'
-    ]),
+    ...mapMutations('Files', ['REMOVE_FILES', 'REMOVE_FILES_FROM_SEARCHED', 'RESET_SELECTION']),
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]
@@ -441,6 +437,7 @@ export default defineComponent({
       if (targetFolder.type !== 'folder') {
         return
       }
+
       const copyMove = new ResourceTransfer(
         this.space,
         selected,
@@ -455,11 +452,9 @@ export default defineComponent({
         this.$gettextInterpolate
       )
       const movedResources = await copyMove.perform(TransferType.MOVE)
-      for (const resource of movedResources) {
-        this.REMOVE_FILES([resource])
-        this.REMOVE_FILES_FROM_SEARCHED([resource])
-        this.REMOVE_FILE_SELECTION(resource)
-      }
+      this.REMOVE_FILES(movedResources)
+      this.REMOVE_FILES_FROM_SEARCHED(movedResources)
+      this.RESET_SELECTION()
     },
 
     rowMounted(resource, component, dimensions) {

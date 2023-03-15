@@ -1,5 +1,6 @@
 <template>
   <div id="web-content">
+    <loading-indicator />
     <div id="web-content-header">
       <div v-if="isIE11" class="oc-background-muted oc-text-center oc-py-m">
         <p class="oc-m-rm" v-text="ieDeprecationWarning" />
@@ -34,6 +35,7 @@ import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
 import UploadInfo from '../components/UploadInfo.vue'
+import LoadingIndicator from 'web-pkg/src/components/LoadingIndicator.vue'
 import {
   useActiveApp,
   useRoute,
@@ -51,7 +53,8 @@ export default defineComponent({
     MessageBar,
     TopBar,
     SidebarNav,
-    UploadInfo
+    UploadInfo,
+    LoadingIndicator
   },
   setup() {
     const store = useStore()
