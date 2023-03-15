@@ -1930,6 +1930,7 @@ def documentation(ctx):
                             "from_secret": "github_token",
                         },
                         "pages_directory": "docs/",
+                        "copy_contents": "true",
                         "target_branch": "docs",
                     },
                     "when": {

@@ -149,7 +149,7 @@ Then(
 )
 
 When(
-  /^"([^"]*)" changes the quota of the user "([^"]*)" to "([^"]*)"$/,
+  /^"([^"]*)" changes the quota of the user "([^"]*)" to "([^"]*)" using the sidebar panel$/,
   async function (this: World, stepUser: string, key: string, value: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
@@ -158,7 +158,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" changes the quota using a batch action to "([^"]*)" for users:$/,
+  /^"([^"]*)" changes the quota to "([^"]*)" for users using the batch action$/,
   async function (
     this: World,
     stepUser: string,
@@ -232,10 +232,10 @@ When(
 
     switch (action) {
       case 'adds':
-        await usersObject.addToGroups({ groups: groups.split(',') })
+        await usersObject.addToGroupsBatchAtion({ groups: groups.split(',') })
         break
       case 'removes':
-        await usersObject.removeFromGroups({ groups: groups.split(',') })
+        await usersObject.removeFromGroupsBatchAtion({ groups: groups.split(',') })
         break
       default:
         throw new Error(`${action} not implemented`)
@@ -276,13 +276,39 @@ When(
 )
 
 When(
+  /^"([^"]*)" (adds|removes) the user "([^"]*)" (to|from) the (group|groups) "([^"]*)" using the sidebar panel$/,
+  async function (
+    this: World,
+    stepUser: string,
+    action: string,
+    user: string,
+    _: string,
+    __: string,
+    groups: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const usersObject = new objects.applicationAdminSettings.Users({ page })
+    switch (action) {
+      case 'adds':
+        await usersObject.addToGroups({ key: user, groups: groups.split(',') })
+        break
+      case 'removes':
+        await usersObject.removeFromGroups({ key: user, groups: groups.split(',') })
+        break
+      default:
+        throw new Error(`${action} not implemented`)
+      }
+    }
+  )
+  
+ When(
   '{string} navigates to the groups management page',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const groupsObject = new objects.applicationAdminSettings.page.Groups({ page })
     await groupsObject.navigate()
-  }
-)
+    }
+  )
 
 When(
   '{string} creates the following group(s):',
@@ -298,5 +324,4 @@ When(
       })
       await groupsObject.createGroup({ key: group.displayName })
     }
-  }
-)
+  )
