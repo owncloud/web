@@ -1,6 +1,7 @@
 import SpacesList from '../../../../src/components/Spaces/SpacesList.vue'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import { displayPositionedDropdown, eventBus } from 'web-pkg'
+import { eventBus } from 'web-pkg'
+import { displayPositionedDropdown } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { nextTick } from 'vue'
 
