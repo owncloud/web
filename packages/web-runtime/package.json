@@ -16,7 +16,7 @@
     "@uppy/tus": "^3.0.1",
     "@uppy/utils": "^5.1.2",
     "@uppy/xhr-upload": "^3.0.1",
-    "@vueuse/head": "1.0.22",
+    "@vueuse/head": "1.1.23",
     "axios": "^0.27.2",
     "easygettext": "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz",
     "filesize": "^9.0.11",
