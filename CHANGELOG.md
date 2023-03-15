@@ -39,6 +39,7 @@ Summary
 * Bugfix - Space image upload: [#8523](https://github.com/owncloud/web/issues/8523)
 * Bugfix - De-duplicate event handling to prevent errors on Draw-io: [#8576](https://github.com/owncloud/web/pull/8576)
 * Bugfix - Users without role assignment: [#8585](https://github.com/owncloud/web/issues/8585)
+* Bugfix - Password enforced check for public links: [#8587](https://github.com/owncloud/web/issues/8587)
 * Bugfix - Group members sorting: [#8592](https://github.com/owncloud/web/issues/8592)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
@@ -335,6 +336,15 @@ Details
 
    https://github.com/owncloud/web/issues/8585
    https://github.com/owncloud/web/pull/8590
+
+* Bugfix - Password enforced check for public links: [#8587](https://github.com/owncloud/web/issues/8587)
+
+   We've fixed a bug where we ignored the selected role in the password enforcement check. The web
+   ui was sending the request to update a link instead of showing a modal with a password input
+   prompt.
+
+   https://github.com/owncloud/web/issues/8587
+   https://github.com/owncloud/web/pull/8623
 
 * Bugfix - Group members sorting: [#8592](https://github.com/owncloud/web/issues/8592)
 
