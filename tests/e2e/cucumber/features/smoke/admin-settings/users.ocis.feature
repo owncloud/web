@@ -76,7 +76,7 @@ Feature: spaces management
     Then "Admin" should see the following users
       | user  |
       | Carol |
-    Then "Admin" should not see the following users
+    And "Admin" should not see the following users
       | user  |
       | Alice |
       | Brian |

@@ -4,7 +4,10 @@ import {
   deleteSpace,
   disableSpace,
   getDisplayedSpaces,
-  selectSpace
+  renameSpace,
+  changeSpaceSubtitle,
+  selectSpace,
+  enableSpace
 } from './actions'
 import { SpacesEnvironment } from '../../../environment'
 import { Space } from '../../../types'
@@ -36,6 +39,11 @@ export class Spaces {
     await disableSpace({ id, page: this.#page, context })
   }
 
+  async enable({ key, context }: { key: string; context: string }): Promise<void> {
+    const { id } = this.#spacesEnvironment.getSpace({ key })
+    await enableSpace({ id, page: this.#page, context })
+  }
+
   async delete({ key, context }: { key: string; context: string }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
     await deleteSpace({ id, page: this.#page, context })
@@ -44,5 +52,15 @@ export class Spaces {
   async select({ key }: { key: string }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
     await selectSpace({ id, page: this.#page })
+  }
+
+  async rename({ key, value }: { key: string; value: string }): Promise<void> {
+    const { id } = this.#spacesEnvironment.getSpace({ key })
+    await renameSpace({ id, page: this.#page, value })
+  }
+
+  async changeSubtitle({ key, value }: { key: string; value: string }): Promise<void> {
+    const { id } = this.#spacesEnvironment.getSpace({ key })
+    await changeSpaceSubtitle({ id, page: this.#page, value })
   }
 }

@@ -8,6 +8,11 @@ const spaceCheckboxSelector = `[data-item-id="%s"]:not(.oc-table-highlighted) in
 const quotaActionBtn = `.oc-files-actions-edit-quota-trigger`
 const disableActionBtn = `.oc-files-actions-disable-trigger`
 const deleteActionBtn = `.oc-files-actions-delete-trigger`
+const enableActionBtn = `.oc-files-actions-restore-trigger`
+const renameActionBtn = `.oc-files-actions-rename-trigger`
+const editSubtitleActionBtn = `.oc-files-actions-edit-description-trigger`
+const inputFieldSelector =
+  '//div[@class="oc-modal-body-input"]//input[contains(@class,"oc-text-input")]'
 const modalConfirmBtn = `.oc-modal-body-actions-confirm`
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const selectedQuotaValueField = '.vs__dropdown-toggle'
@@ -77,6 +82,32 @@ export const disableSpace = async (args: {
   ])
 }
 
+export const enableSpace = async (args: {
+  page: Page
+  id: string
+  context: string
+}): Promise<void> => {
+  const { page, id, context } = args
+  const isBatchActions = context === 'batch-actions'
+
+  if (!isBatchActions) {
+    await page.locator(util.format(spaceIdSelector, id)).click()
+  }
+  await page.waitForSelector(enableActionBtn)
+  await page.locator(`.${context}`).locator(enableActionBtn).click()
+  await page.waitForSelector(modalConfirmBtn)
+
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        (isBatchActions || resp.url().endsWith(encodeURIComponent(id))) &&
+        resp.status() === 200 &&
+        resp.request().method() === 'PATCH'
+    ),
+    page.locator(modalConfirmBtn).click()
+  ])
+}
+
 export const deleteSpace = async (args: {
   page: Page
   id: string
@@ -110,4 +141,46 @@ export const selectSpace = async (args: { page: Page; id: string }): Promise<voi
     return
   }
   await checkbox.click()
+}
+
+export const renameSpace = async (args: {
+  page: Page
+  id: string
+  value: string
+}): Promise<void> => {
+  const { page, id, value } = args
+  await page.locator(util.format(spaceIdSelector, id)).click()
+  await page.waitForSelector(renameActionBtn)
+  await page.locator(`.context-menu`).locator(renameActionBtn).click()
+  await page.locator(inputFieldSelector).fill(value)
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith(encodeURIComponent(id)) &&
+        resp.status() === 200 &&
+        resp.request().method() === 'PATCH'
+    ),
+    page.locator(actionConfirmButton).click()
+  ])
+}
+
+export const changeSpaceSubtitle = async (args: {
+  page: Page
+  id: string
+  value: string
+}): Promise<void> => {
+  const { page, id, value } = args
+  await page.locator(util.format(spaceIdSelector, id)).click()
+  await page.waitForSelector(editSubtitleActionBtn)
+  await page.locator(`.context-menu`).locator(editSubtitleActionBtn).click()
+  await page.locator(inputFieldSelector).fill(value)
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith(encodeURIComponent(id)) &&
+        resp.status() === 200 &&
+        resp.request().method() === 'PATCH'
+    ),
+    page.locator(actionConfirmButton).click()
+  ])
 }
