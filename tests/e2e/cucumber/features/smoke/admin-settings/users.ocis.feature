@@ -29,9 +29,9 @@ Feature: spaces management
     And "Admin" logs in
     And "Admin" opens the "admin-settings" app
     And "Admin" navigates to the users management page
-    When "Admin" changes the quota of the user "Alice" to "500"
+    When "Admin" changes the quota of the user "Alice" to "500" using the sidebar panel
     Then "Alice" should have quota "500"
-    When "Admin" changes the quota using a batch action to "20" for users:
+    When "Admin" changes the quota to "20" for users using the batch action
       | id    |
       | Alice |
       | Brian |
@@ -48,7 +48,7 @@ Feature: spaces management
       | Alice |
       | Brian |
       | Carol |
-    And "Admin" creates following groups
+    And "Admin" creates following groups using API
       | id      |
       | sales   |
       | finance |
@@ -102,3 +102,27 @@ Feature: spaces management
       | username    | anna             |
       | displayname | Anna Murphy      |
       | email       | anna@example.org |
+
+
+  Scenario: assign user to groups
+    Given "Admin" creates following users
+      | id    |
+      | Alice |
+    And "Admin" creates following groups using API
+      | id       |
+      | sales    |
+      | finance  |
+      | security |
+    And "Admin" adds user to the group using API
+      | user  | group |
+      | Alice | sales |
+    When "Admin" logs in
+    And "Admin" opens the "admin-settings" app
+    And "Admin" navigates to the users management page
+    When "Admin" adds the user "Alice" to the groups "finance,security" using the sidebar panel
+    And "Admin" removes the user "Alice" from the group "sales" using the sidebar panel
+    And "Admin" logs out
+    When "Alice" logs in
+    Then "Alice" should have self info:
+      | key    | value                                   |
+      | groups | finance department, security department |
