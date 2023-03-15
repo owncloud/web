@@ -13,7 +13,7 @@
         </oc-button>
         <slot name="head" />
       </div>
-      <transition :name="dropdownTransitionName" mode="out-in">
+      <transition name="drop-down-slide" mode="out-in">
         <div v-show="dropdownVisible" class="dropdown-content">
           <div ref="content">
             <div v-if="expandHead" class="space-divider oc-pb-s"></div>
@@ -46,7 +46,7 @@ export default {
       default: false
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     const dropdown = ref(null)
     const toggle = ref(null)
     const head = ref(null)
@@ -58,19 +58,19 @@ export default {
 
     const expandingDropdownClasses = computed(() => {
       return {
-        active: dropdownVisible,
-        'expand-head': props.expandHead
+        active: unref(dropdownVisible),
+        'expand-head': props.expandHead,
+        'open-left': unref(dropdownOpeningDirection) === 'left'
       }
     })
     const toggleDropdown = () => {
       dropdownVisible.value = !dropdownVisible.value
-    }
-    const dropdownTransitionName = computed(() => {
-      if (dropdownOpeningDirection.value === 'right') {
-        return 'drop-down-slide-right'
+      if (dropdownVisible.value) {
+        emit('dropdown-open', true)
+      } else {
+        emit('dropdown-close', true)
       }
-      return 'drop-down-slide-left'
-    })
+    }
     const dropdownOpeningDirection = computed(() => {
       const toggleButton = unref(toggle)
       if (toggleButton == null) {
@@ -116,11 +116,17 @@ export default {
       const el = unref(dropdown)
       const inner = unref(content)
       el.clickOutsideEvent = (event) => {
+        if (!unref(dropdownVisible)) {
+          // Don't check for clicks outside if dropdown is not visible/active
+          return
+        }
         if (props.closeOnClick && (inner == event.target || inner.contains(event.target))) {
           dropdownVisible.value = false
+          emit('dropdown-close', true)
         }
         if (!(el == event.target || el.contains(event.target))) {
           dropdownVisible.value = false
+          emit('dropdown-close', true)
         }
       }
       document.addEventListener('click', el.clickOutsideEvent)
@@ -140,8 +146,7 @@ export default {
       dropdownVisible,
       toggleDropdown,
       expandingDropdownClasses,
-      dropdownOpeningDirection,
-      dropdownTransitionName
+      dropdownOpeningDirection
     }
   }
 }
@@ -154,13 +159,24 @@ export default {
   filter: none;
   transition: opacity 0.5s;
 
+  &.open-left {
+    display: inline-flex;
+    justify-content: flex-end;
+
+    .dropdown-content {
+      border-radius: 5px;
+      border-top-right-radius: 0px !important;
+    }
+  }
+
   &.active {
     filter: drop-shadow(0px 2px 4px rgba(20, 20, 20, 0.45));
     &:not(.expand-head) {
       .head {
+        border-radius: 5px;
         border-bottom-left-radius: 0px;
         border-bottom-right-radius: 0px;
-        background-color: var(--oc-color-background-hover);
+        background-color: var(--oc-color-background-secondary);
       }
     }
   }
@@ -224,7 +240,6 @@ export default {
   .dropdown-content {
     position: absolute;
     top: 0px;
-    left: 0;
     background-color: var(--oc-color-background-secondary);
     overflow: hidden;
     z-index: -1;
@@ -244,24 +259,24 @@ export default {
   }
 }
 
-/* Transition to the right */
-.drop-down-slide-right-enter-active {
+/* Transitions */
+.drop-down-slide-enter-active {
   transition: all 0.2s;
   transition-timing-function: ease-out;
 }
-.drop-down-slide-right-leave-active {
+.drop-down-slide-leave-active {
   transition: all 0.2s;
 }
-.drop-down-slide-right-enter-to,
-.drop-down-slide-right-leave-from {
+.drop-down-slide-enter-to,
+.drop-down-slide-leave-from {
   overflow: hidden;
   border-bottom-left-radius: 5px;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   opacity: 1;
 }
-.drop-down-slide-right-enter-from,
-.drop-down-slide-right-leave-to {
+.drop-down-slide-enter-from,
+.drop-down-slide-leave-to {
   overflow: hidden;
   max-height: 2px !important;
   max-width: 45px !important;
@@ -270,29 +285,25 @@ export default {
 }
 
 /* Transition to the left */
-.drop-down-slide-left-enter-active {
-  transition: all 0.2s;
-  transition-timing-function: ease-out;
+/*.drop-down-slide-left-enter-active {
+  transition: all 0.2s ease-out;
+  transform-origin: top right;
+  transform: scale(0, 0);
 }
+
 .drop-down-slide-left-leave-active {
-  transition: all 0.2s;
+  transition: all 0.2s ease-out;
+  transform-origin: top right;
+  transform: scale(1, 1);
 }
-.drop-down-slide-left-enter-to,
-.drop-down-slide-left-leave-from {
-  overflow: hidden;
-  border-bottom-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  max-height: 2px !important;
-  max-width: 45px !important;
-  opacity: 1;
+
+.drop-down-slide-left-enter-to {
+  transform: scale(1, 1);
 }
-.drop-down-slide-left-enter-from,
+
 .drop-down-slide-left-leave-to {
-  overflow: hidden;
-  border-radius: 0px;
-  opacity: 0;
-}
+  transform: scale(0, 0);
+}*/
 </style>
 
 <docs>
