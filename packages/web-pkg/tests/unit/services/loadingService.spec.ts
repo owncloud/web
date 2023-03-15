@@ -1,0 +1,65 @@
+import { LoadingService } from '../../../src/services/loadingService'
+
+describe('LoadingService', () => {
+  beforeEach(() => {
+    jest.useFakeTimers('modern')
+  })
+  it('adds a task and sets it inactive initially', () => {
+    const service = new LoadingService()
+    const action = new Promise((resolve) => {
+      resolve(true)
+    })
+
+    service.addTask(() => action)
+    expect(service.isLoading).toBeFalsy()
+  })
+  it('adds a task and sets it active after the debounce', () => {
+    const service = new LoadingService()
+    const action = new Promise((resolve) => {
+      resolve(true)
+    })
+
+    service.addTask(() => action)
+    jest.runAllTimers()
+    expect(service.isLoading).toBeTruthy()
+  })
+  it('removes a task after being finished', async () => {
+    const service = new LoadingService()
+    const action = new Promise((resolve) => {
+      resolve(true)
+    })
+
+    await service.addTask(() => action)
+    jest.runAllTimers()
+    expect(service.isLoading).toBeFalsy()
+  })
+  it('returns the current progress of a running task', () => {
+    const service = new LoadingService()
+    const expectedResult = {
+      1: 25,
+      2: 50,
+      3: 75,
+      4: 100
+    }
+
+    service.addTask(
+      ({ setProgress }) => {
+        const promises = []
+        const actions = [1, 2, 3, 4]
+        for (const action of actions) {
+          promises.push(
+            new Promise((resolve) => {
+              resolve(true)
+            }).then(() => {
+              setProgress({ total: actions.length, current: action })
+              expect(service.currentProgress).toBe(expectedResult[action])
+            })
+          )
+        }
+        return Promise.all(promises)
+      },
+      { indeterminate: false }
+    )
+    jest.runAllTimers()
+  })
+})
