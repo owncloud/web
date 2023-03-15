@@ -29,9 +29,9 @@ Feature: spaces management
     And "Admin" logs in
     And "Admin" opens the "admin-settings" app
     And "Admin" navigates to the users management page
-    When "Admin" changes the quota of the user "Alice" to "500"
+    When "Admin" changes the quota of the user "Alice" to "500" using the sidebar panel
     Then "Alice" should have quota "500"
-    When "Admin" changes the quota using a batch action to "20" for users:
+    When "Admin" changes the quota to "20" for users using the batch action
       | id    |
       | Alice |
       | Brian |
@@ -104,7 +104,7 @@ Feature: spaces management
       | email       | anna@example.org |
 
 
-  Scenario: assigned groups
+  Scenario: assign user to groups
     Given "Admin" creates following users
       | id    |
       | Alice |
@@ -119,8 +119,8 @@ Feature: spaces management
     When "Admin" logs in
     And "Admin" opens the "admin-settings" app
     And "Admin" navigates to the users management page
-    When "Admin" adds the user "Alice" to the groups "finance,security"
-    And "Admin" removes the user "Alice" from the group "sales"
+    When "Admin" adds the user "Alice" to the groups "finance,security" using the sidebar panel
+    And "Admin" removes the user "Alice" from the group "sales" using the sidebar panel
     And "Admin" logs out
     When "Alice" logs in
     Then "Alice" should have self info:

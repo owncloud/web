@@ -149,7 +149,7 @@ Then(
 )
 
 When(
-  /^"([^"]*)" changes the quota of the user "([^"]*)" to "([^"]*)"$/,
+  /^"([^"]*)" changes the quota of the user "([^"]*)" to "([^"]*)" using the sidebar panel$/,
   async function (this: World, stepUser: string, key: string, value: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
@@ -158,7 +158,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" changes the quota using a batch action to "([^"]*)" for users:$/,
+  /^"([^"]*)" changes the quota to "([^"]*)" for users using the batch action$/,
   async function (
     this: World,
     stepUser: string,
@@ -276,7 +276,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" (adds|removes) the user "([^"]*)" (to|from) the (group|groups) "([^"]*)"$/,
+  /^"([^"]*)" (adds|removes) the user "([^"]*)" (to|from) the (group|groups) "([^"]*)" using the sidebar panel$/,
   async function (
     this: World,
     stepUser: string,
