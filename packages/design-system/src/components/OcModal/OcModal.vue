@@ -497,7 +497,7 @@ export default defineComponent({
     background-color: var(--oc-color-background-default);
     color: var(--oc-color-text-default);
     line-height: 1.625;
-    padding: var(--oc-space-medium) var(--oc-space-medium);
+    padding: var(--oc-space-medium) var(--oc-space-medium) 0;
     span {
       color: var(--oc-color-text-default);
     }
@@ -523,7 +523,6 @@ export default defineComponent({
 
     &-actions {
       text-align: right;
-      border-top: 1px solid var(--oc-color-input-border);
       background: var(--oc-color-background-default);
       border-bottom-right-radius: 15px;
       border-bottom-left-radius: 15px;
