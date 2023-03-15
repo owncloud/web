@@ -178,7 +178,6 @@ export default {
         .deleteFile(space, file)
         .then(() => {
           removedFiles.push(file)
-          setProgress({ total: files.length, current: removedFiles.length })
         })
         .catch((error) => {
           let translated = $gettext('Failed to delete "%{file}"')
@@ -204,6 +203,9 @@ export default {
             },
             { root: true }
           )
+        })
+        .finally(() => {
+          setProgress({ total: files.length, current: removedFiles.length })
         })
       promises.push(promise)
     }

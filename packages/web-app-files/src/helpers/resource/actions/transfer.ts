@@ -197,11 +197,12 @@ export class ResourceTransfer extends ConflictDialog {
         resource.path = join(this.targetFolder.path, resource.name)
         resource.webDavPath = join(this.targetFolder.webDavPath, resource.name)
         movedResources.push(resource)
-        setProgress({ total: this.resourcesToMove.length, current: i + 1 })
       } catch (error) {
         console.error(error)
         error.resourceName = resource.name
         errors.push(error)
+      } finally {
+        setProgress({ total: this.resourcesToMove.length, current: i + 1 })
       }
     }
     this.showResultMessage(errors, movedResources, transferType)
