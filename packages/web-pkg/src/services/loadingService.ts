@@ -19,6 +19,10 @@ export interface LoadingTask {
   state?: LoadingTaskState
 }
 
+export interface LoadingTaskCallbackArguments {
+  setProgress: (args: LoadingTaskState) => void
+}
+
 // time until a loading task is being set active
 const DEFAULT_DEBOUNCE_TIME = 200
 
@@ -51,13 +55,13 @@ export class LoadingService {
     return Math.round((progress / tasks.length) * 100)
   }
 
-  public addTask(
-    callback: ({ setProgress }: { setProgress: (args: LoadingTaskState) => void }) => Promise<any>,
+  public addTask<T>(
+    callback: ({ setProgress }: LoadingTaskCallbackArguments) => Promise<T>,
     {
       debounceTime = DEFAULT_DEBOUNCE_TIME,
       indeterminate = true
     }: { debounceTime?: number; indeterminate?: boolean } = {}
-  ): Promise<any> {
+  ): Promise<T> {
     const task = {
       id: uuid.v4(),
       active: false,

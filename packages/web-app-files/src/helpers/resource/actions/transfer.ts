@@ -1,7 +1,7 @@
 import { Resource } from 'web-client'
 import { join } from 'path'
 import { SpaceResource } from 'web-client/src/helpers'
-import { ClientService, LoadingService, LoadingTaskState } from 'web-pkg/src/services'
+import { ClientService, LoadingService, LoadingTaskCallbackArguments } from 'web-pkg/src/services'
 import {
   ConflictDialog,
   ResolveStrategy,
@@ -120,12 +120,9 @@ export class ResourceTransfer extends ConflictDialog {
 
     return this.loadingService.addTask(
       ({ setProgress }) => {
-        return this.moveResources(
-          resolvedConflicts,
-          targetFolderResources,
-          transferType,
+        return this.moveResources(resolvedConflicts, targetFolderResources, transferType, {
           setProgress
-        )
+        })
       },
       { indeterminate: transferType === TransferType.COPY }
     )
@@ -135,7 +132,7 @@ export class ResourceTransfer extends ConflictDialog {
     resolvedConflicts: FileConflict[],
     targetFolderResources: Resource[],
     transferType: TransferType,
-    setProgress: (args: LoadingTaskState) => void
+    { setProgress }: LoadingTaskCallbackArguments
   ) {
     const movedResources: Resource[] = []
     const errors = []

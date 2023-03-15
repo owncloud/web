@@ -1,4 +1,4 @@
-import { ClientService, LoadingService } from 'web-pkg/src/services'
+import { ClientService, LoadingService, LoadingTaskCallbackArguments } from 'web-pkg/src/services'
 import {
   ResolveConflict,
   ResourceTransfer,
@@ -12,7 +12,7 @@ import { ListFilesResult } from 'web-client/src/webdav/listFiles'
 const clientServiceMock = mockDeep<ClientService>()
 const loadingServiceMock = mock<LoadingService>({
   addTask: (callback) => {
-    return callback({ setProgress: jest.fn() })
+    return callback(mock<LoadingTaskCallbackArguments>())
   }
 })
 let resourcesToMove
