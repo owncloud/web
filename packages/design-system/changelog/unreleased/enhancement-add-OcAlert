@@ -3,4 +3,4 @@ Enhancement: Add `OcAlert` component
 The component can to be used to display messages as information, success, warning or danger.
 It can also be equipped with an icon, a custom icon and a close button.
 
-https://github.com/owncloud/web/pull/8554/
+https://github.com/owncloud/web/pull/8613
