@@ -10,7 +10,7 @@ exports[`EditPanel renders all available inputs 1`] = `
       <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" errormessage="" fixmessageline="true" id="email-input" label="Email" modelvalue="jan@owncloud.com" type="email"></oc-text-input-stub>
       <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="true" id="password-input" label="Password" modelvalue="" placeholder="●●●●●●●●" type="password"></oc-text-input-stub>
       <div class="oc-mb-s">
-        <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" id="oc-select-5" label="Role" loading="false" model-value="[object Object]" optionlabel="displayName" options="[object Object]" searchable="true"></oc-select-stub>
+        <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" id="role-input" label="Role" loading="false" model-value="[object Object]" optionlabel="displayName" options="[object Object]" searchable="true"></oc-select-stub>
         <div class="oc-text-input-message"></div>
       </div>
       <div class="oc-mb-s">

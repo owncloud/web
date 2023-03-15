@@ -63,7 +63,7 @@ describe('OcTextInput', () => {
       expect(wrapper.find(selectors.textInputMessage).text()).toBe('You should pass.')
     })
 
-    const mountedWrapper = getMountedWrapper({ descriptionMessage: 'You should pass.' })
+    const mountedWrapper = getMountedWrapper({ props: { descriptionMessage: 'You should pass.' } })
     it('should show an info icon', () => {
       expect(mountedWrapper.find(selectors.infoIcon).exists()).toBe(true)
     })

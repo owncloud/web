@@ -81,8 +81,12 @@
           :title="$gettext('Personal quota')"
           :total-quota="editUser.drive?.quota?.total || 0"
           :max-quota="maxQuota"
-          :fixMessageLine="true"
-          :description-message="isQuotaInputDisabled ? $gettext('To set an individual quota, the user needs to have logged in once.') : ''"
+          :fix-message-line="true"
+          :description-message="
+            isQuotaInputDisabled
+              ? $gettext('To set an individual quota, the user needs to have logged in once.')
+              : ''
+          "
           @selected-option-change="changeSelectedQuotaOption"
         />
         <group-select

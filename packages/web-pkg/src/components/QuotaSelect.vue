@@ -12,7 +12,7 @@
       :create-option="createOption"
       option-label="displayValue"
       :label="title"
-      :fixMessageLine="fixMessageLine"
+      :fix-message-line="fixMessageLine"
       :error-message="errorMessage"
       :warning-message="warningMessage"
       :description-message="descriptionMessage"
@@ -61,7 +61,7 @@ export default {
      * Whether or not vertical space below the input should be reserved for a one line message,
      * so that content actually appearing there doesn't shift the layout.
      */
-     fixMessageLine: {
+    fixMessageLine: {
       type: Boolean,
       default: false
     },
