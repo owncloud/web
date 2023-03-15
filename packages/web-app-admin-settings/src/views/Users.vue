@@ -171,6 +171,7 @@ import {
   useAccessToken,
   useCapabilitySpacesMaxQuota,
   useGraphClient,
+  useLoadingService,
   useRouteQuery,
   useStore
 } from 'web-pkg/src/composables'
@@ -201,7 +202,6 @@ import GroupsModal from '../components/Users/GroupsModal.vue'
 import { useRemoveFromGroups } from '../mixins/users/removeFromGroups'
 import { useAddToGroups } from '../mixins/users/addToGroups'
 import { configurationManager } from 'web-pkg'
-import { loadingService } from 'web-pkg/src/services'
 
 export default defineComponent({
   name: 'UsersView',
@@ -222,6 +222,7 @@ export default defineComponent({
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
+    const loadingService = useLoadingService()
 
     const { actions: removeFromGroupsActions } = useRemoveFromGroups()
     const { actions: addToGroupsActions } = useAddToGroups()

@@ -96,5 +96,3 @@ export class LoadingService {
     eventBus.publish(LoadingEventTopics.setProgress)
   }
 }
-
-export const loadingService = new LoadingService()

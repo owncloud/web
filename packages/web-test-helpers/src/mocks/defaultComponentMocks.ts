@@ -1,5 +1,5 @@
-import { mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg/src/services'
+import { mock, mockDeep } from 'jest-mock-extended'
+import { ClientService, LoadingService } from 'web-pkg/src/services'
 import { Router, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { OwnCloudSdk } from 'web-client/src/types'
@@ -22,6 +22,11 @@ export const defaultComponentMocks = ({ currentRoute = undefined }: ComponentMoc
     $route,
     $clientService: mockDeep<ClientService>(),
     $client: mockDeep<OwnCloudSdk>(),
-    $uppyService: mockDeep<UppyService>()
+    $uppyService: mockDeep<UppyService>(),
+    $loadingService: mock<LoadingService>({
+      addTask: (callback) => {
+        return callback({ setProgress: jest.fn() })
+      }
+    })
   }
 }

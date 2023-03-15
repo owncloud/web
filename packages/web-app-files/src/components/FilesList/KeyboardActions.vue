@@ -5,19 +5,10 @@
 <script lang="ts">
 import keycode from 'keycode'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import {
-  defineComponent,
-  getCurrentInstance,
-  onBeforeUnmount,
-  onMounted,
-  PropType,
-  computed,
-  ref,
-  unref
-} from 'vue'
+import { defineComponent, onBeforeUnmount, onMounted, PropType, computed, ref, unref } from 'vue'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
-import { useClientService, useStore } from 'web-pkg'
+import { useClientService, useLoadingService, useStore } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
@@ -37,11 +28,11 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const instance = getCurrentInstance().proxy as any
     const store = useStore()
     const language = useGettext()
     const clientService = useClientService()
     const { scrollToResource } = useScrollTo()
+    const loadingService = useLoadingService()
 
     const selectionCursor = ref(0)
     let fileListClickedEvent
@@ -106,6 +97,7 @@ export default defineComponent({
       store.dispatch('Files/pasteSelectedFiles', {
         targetSpace: props.space,
         clientService: clientService,
+        loadingService: loadingService,
         createModal: (modal) => {
           store.dispatch('createModal', modal)
         },

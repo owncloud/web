@@ -11,7 +11,7 @@ import { getBackendVersion, getWebVersion } from './versions'
 import { useLocalStorage } from 'web-pkg/src/composables'
 import { useDefaultThemeName } from '../composables'
 import { authService } from '../services/auth'
-import { ClientService } from 'web-pkg/src/services'
+import { ClientService, LoadingService } from 'web-pkg/src/services'
 import { UppyService } from '../services/uppyService'
 import { default as storeOptions } from '../store'
 import { init as sentryInit } from '@sentry/vue'
@@ -283,6 +283,14 @@ export const announceClientService = ({
   app.config.globalProperties.$clientService.webdav = webdav({
     sdk
   })
+}
+
+/**
+ * @param vue
+ */
+export const announceLoadingService = ({ app }: { app: App }): void => {
+  const loadingService = new LoadingService()
+  app.config.globalProperties.$loadingService = loadingService
 }
 
 /**

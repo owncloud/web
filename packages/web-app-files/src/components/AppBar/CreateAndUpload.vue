@@ -339,6 +339,7 @@ export default defineComponent({
       this.pasteSelectedFiles({
         targetSpace: this.space,
         clientService: this.$clientService,
+        loadingService: this.$loadingService,
         createModal: this.createModal,
         hideModal: this.hideModal,
         showMessage: this.showMessage,

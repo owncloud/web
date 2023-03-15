@@ -11,12 +11,13 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
-import { eventBus } from 'web-pkg'
-import { loadingService, LoadingEventTopics } from 'web-pkg/src/services'
+import { eventBus, useLoadingService } from 'web-pkg'
+import { LoadingEventTopics } from 'web-pkg/src/services'
 
 export default defineComponent({
   name: 'LoadingIndicator',
   setup() {
+    const loadingService = useLoadingService()
     let addLoadingEventToken
     let removeLoadingEventToken
     let setProgressToken

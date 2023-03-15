@@ -1,7 +1,7 @@
 import { Resource } from 'web-client'
 import { join } from 'path'
 import { SpaceResource } from 'web-client/src/helpers'
-import { ClientService, loadingService, LoadingTaskState } from 'web-pkg/src/services'
+import { ClientService, LoadingService, LoadingTaskState } from 'web-pkg/src/services'
 import {
   ConflictDialog,
   ResolveStrategy,
@@ -18,6 +18,7 @@ export class ResourceTransfer extends ConflictDialog {
     private targetSpace: SpaceResource,
     private targetFolder: Resource,
     private clientService: ClientService,
+    private loadingService: LoadingService,
     createModal: (modal: object) => void,
     hideModal: () => void,
     showMessage: (data: object) => void,
@@ -117,7 +118,7 @@ export class ResourceTransfer extends ConflictDialog {
       targetFolderResources
     )
 
-    return loadingService.addTask(
+    return this.loadingService.addTask(
       ({ setProgress }) => {
         return this.moveResources(
           resolvedConflicts,

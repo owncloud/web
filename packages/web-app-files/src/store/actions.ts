@@ -17,7 +17,7 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { ClientService, loadingService, LoadingTaskState } from 'web-pkg/src/services'
+import { ClientService, LoadingTaskState } from 'web-pkg/src/services'
 import { Language } from 'vue3-gettext'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
@@ -78,6 +78,7 @@ export default {
     {
       targetSpace,
       clientService,
+      loadingService,
       createModal,
       hideModal,
       showMessage,
@@ -92,6 +93,7 @@ export default {
       targetSpace,
       context.state.currentFolder,
       clientService,
+      loadingService,
       createModal,
       hideModal,
       showMessage,

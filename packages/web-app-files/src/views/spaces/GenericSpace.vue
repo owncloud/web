@@ -444,6 +444,7 @@ export default defineComponent({
         this.space,
         targetFolder,
         this.$clientService,
+        this.$loadingService,
         this.createModal,
         this.hideModal,
         this.showMessage,
