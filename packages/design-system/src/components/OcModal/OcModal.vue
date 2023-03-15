@@ -10,7 +10,7 @@
         @keydown.esc="cancelModalAction"
       >
         <div class="oc-modal-title">
-          <oc-icon v-if="icon" :name="icon" :variation="variation" />
+          <oc-icon v-if="iconName !== ''" :name="iconName" :variation="variation" />
           <h2 id="oc-modal-title" v-text="title" />
         </div>
         <div class="oc-modal-body">
@@ -125,7 +125,7 @@ export default defineComponent({
       required: false,
       default: 'passive',
       validator: (value: string) => {
-        return ['passive', 'primary', 'danger', 'success', 'warning'].includes(value)
+        return ['passive', 'primary', 'danger', 'success', 'warning', 'info'].includes(value)
       }
     },
     /**
@@ -353,6 +353,24 @@ export default defineComponent({
     },
     classes() {
       return ['oc-modal', `oc-modal-${this.variation}`]
+    },
+    iconName() {
+      if (this.icon) {
+        return this.icon
+      }
+
+      switch (this.variation) {
+        case 'danger':
+          return 'alert'
+        case 'warning':
+          return 'error-warning'
+        case 'success':
+          return 'checkbox-circle'
+        case 'info':
+          return 'information'
+        default:
+          return ''
+      }
     }
   },
   watch: {
@@ -416,7 +434,7 @@ export default defineComponent({
   width: 100%;
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
   border: 1px solid var(--oc-color-input-border);
-  border-radius: 6px;
+  border-radius: 15px;
 
   &:focus {
     outline: none;
@@ -456,8 +474,8 @@ export default defineComponent({
     align-items: center;
     background-color: var(--oc-color-background-default);
     border-bottom: 1px solid var(--oc-color-input-border);
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     display: flex;
     flex-flow: row wrap;
     line-height: 1.625;
@@ -507,8 +525,8 @@ export default defineComponent({
       text-align: right;
       border-top: 1px solid var(--oc-color-input-border);
       background: var(--oc-color-background-default);
-      border-bottom-right-radius: 6px;
-      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 15px;
+      border-bottom-left-radius: 15px;
       padding: var(--oc-space-medium);
 
       .oc-button {
@@ -536,7 +554,7 @@ export default defineComponent({
 <div>
   <oc-modal
     variation="danger"
-    icon="alarm-warning"
+    icon="alert"
     title="Delete file lorem.txt"
     message="Are you sure you want to delete this file? All it’s content will be permanently removed. This action cannot be undone."
     button-cancel-text="Cancel"
