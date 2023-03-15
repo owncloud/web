@@ -205,7 +205,7 @@ export default {
       background-color: transparent !important;
     }
     .dropdown-button:hover {
-      background-color: rgba(100, 100, 100, 0.6) !important;
+      background-color: rgba(200, 200, 200, 0.25) !important;
       transform: scale(0.9);
       border-radius: 5px;
     }
@@ -298,7 +298,7 @@ export default {
 .drop-down-slide-enter-from,
 .drop-down-slide-leave-to {
   overflow: hidden;
-  max-height: 2px !important;
+  max-height: 45px !important;
   max-width: 45px !important;
   border-radius: 0px;
   opacity: 0.5;

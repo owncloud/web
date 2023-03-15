@@ -94,10 +94,10 @@ export default defineComponent({
     ...mapActions(['openNavigation', 'closeNavigation']),
 
     closeSidebar() {
-      this.closeNavigation()
+      //this.closeNavigation()
     },
     reopenSidebar() {
-      this.openNavigation()
+      //this.openNavigation()
     },
     async clickApp(appEntry) {
       // @TODO use id or similar
@@ -138,6 +138,7 @@ export default defineComponent({
       overflow: hidden;
       text-align: center;
       font-size: 12px;
+      color: var(--oc-color-swatch-passive-default);
 
       &:focus,
       &:hover {
@@ -167,7 +168,7 @@ export default defineComponent({
 
       &.router-link-active {
         .icon-box {
-          box-shadow: inset 0 0 1px 3px rgba(255,255,255, 0.6);
+          box-shadow: inset 0 0 0px 2px var(--oc-color-text-default);
         }
       }
 
@@ -181,7 +182,6 @@ export default defineComponent({
     button.router-link-active {
       &:focus,
       &:hover {
-
       }
     }
   }
@@ -190,10 +190,11 @@ export default defineComponent({
   .icon-box {
     filter: drop-shadow(0px 1px 5px rgba(0, 0, 0, 0.25));
     overflow: hidden;
-    background:
-    linear-gradient(90deg,
+    background: linear-gradient(
+      90deg,
       var(--oc-color-swatch-primary-muted) 0%,
-      var(--oc-color-swatch-primary-gradient) 100%);
+      var(--oc-color-swatch-primary-gradient) 100%
+    );
   }
 }
 .gradient-admin {
@@ -202,7 +203,6 @@ export default defineComponent({
     overflow: hidden;
     background-color: #afafaf;
     background-image: linear-gradient(-45deg, #2d2d2d 0%, #3e3e3e 100%);
-
   }
 }
 </style>
