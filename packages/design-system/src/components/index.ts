@@ -1,4 +1,3 @@
-export { default as OcAlert } from './OcAlert/OcAlert.vue'
 export { default as OcAvatar } from './OcAvatar/OcAvatar.vue'
 export { default as OcAvatarCount } from './OcAvatarCount/OcAvatarCount.vue'
 export { default as OcAvatarFederated } from './OcAvatarFederated/OcAvatarFederated.vue'

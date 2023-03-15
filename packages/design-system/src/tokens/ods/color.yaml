@@ -75,7 +75,7 @@ color:
       hover:
         value: rgb(183, 76, 27)
       muted:
-        value: rgba(192,86,33, .5)
+        value: rgba(183, 76, 27, .5)
       contrast:
         value: '{color.text.inverse.value}'
     danger:
@@ -84,7 +84,7 @@ color:
       hover:
         value: rgb(168, 40, 40)
       muted:
-        value: rgb(181, 0, 0)
+        value: rgb(204, 117, 117)
       contrast:
         value: '{color.text.inverse.value}'
     passive:
