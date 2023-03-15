@@ -348,19 +348,16 @@ export default defineComponent({
       const canCreate = currentRole.hasPermission(SharePermissions.create)
       const canDelete = currentRole.hasPermission(SharePermissions.delete)
 
-      if (this.passwordEnforced.read_only === true) {
-        return canRead && !canUpdate && !canCreate && !canDelete
-      }
-      if (this.passwordEnforced.upload_only === true) {
-        return !canRead && !canUpdate && canCreate && !canDelete
-      }
-      if (this.passwordEnforced.read_write === true) {
-        return canRead && !canUpdate && canCreate && !canDelete
-      }
-      if (this.passwordEnforced.read_write_delete === true) {
-        return canRead && canUpdate && canCreate && canDelete
-      }
-      return false
+      const isReadOnly = canRead && !canUpdate && !canCreate && !canDelete
+      const isUploadOnly = !canRead && !canUpdate && canCreate && !canDelete
+      const isReadWrite = canRead && !canUpdate && canCreate && !canDelete
+      const isReadWriteDelete = canRead && canUpdate && canCreate && canDelete
+      return (
+        (this.passwordEnforced.read_only === true && isReadOnly) ||
+        (this.passwordEnforced.upload_only === true && isUploadOnly) ||
+        (this.passwordEnforced.read_write === true && isReadWrite) ||
+        (this.passwordEnforced.read_write_delete === true && isReadWriteDelete)
+      )
     },
 
     addNewLink() {
