@@ -34,13 +34,11 @@
         'oc-text-input-danger': !!errorMessage
       }"
     >
-      <OcIcon
+      <oc-icon
         v-if="messageText !== null && !!descriptionMessage"
         name="information"
         size="small"
         fill-type="line"
-        accessible-label="info"
-        aria-hidden="true"
       />
 
       <span
