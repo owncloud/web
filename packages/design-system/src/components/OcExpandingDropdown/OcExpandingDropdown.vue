@@ -5,7 +5,7 @@
         <oc-button
           ref="toggle"
           appearance="raw"
-          variation="inverse"
+          :variation="dropdownVisible ? 'passive' : 'inverse'"
           class="dropdown-button"
           @click="toggleDropdown"
         >
@@ -187,6 +187,17 @@ export default {
         border-bottom-right-radius: 0px;
         background-color: var(--oc-color-background-secondary);
       }
+    }
+    .dropdown-button {
+      display: flex;
+      margin-top: 3px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      height: 45px;
+      width: 45px;
+      z-index: 1;
+      transition: all 0.15s ease-in;
     }
   }
   &:not(.active) {
