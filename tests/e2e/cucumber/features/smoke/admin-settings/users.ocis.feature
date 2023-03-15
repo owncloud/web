@@ -128,3 +128,27 @@ Feature: spaces management
       | key    | value                                   |
       | groups | finance department, security department |
     And "Alice" logs out
+    
+    
+  Scenario: delete user
+    Given "Admin" creates following users
+      | id    |
+      | Alice |
+      | Brian |
+      | Carol |
+    When "Admin" logs in
+    And "Admin" opens the "admin-settings" app
+    And "Admin" navigates to the users management page
+    When "Admin" deletes the following users using the batch actions
+      | id    |
+      | Alice |
+      | Brian |
+    And "Admin" deletes the following user using the context menu
+      | user  |
+      | Carol |
+    Then "Admin" should not see the following users
+      | user  |
+      | Alice |
+      | Brian |
+      | Carol |
+    And "Admin" logs out

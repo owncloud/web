@@ -201,7 +201,7 @@ Then(
   }
 )
 
-Then(
+When(
   '{string} sets the following filter(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -297,6 +297,36 @@ When(
         break
       default:
         throw new Error(`${action} not implemented`)
+    }
+  }
+)
+
+When(
+  /^"([^"]*)" deletes the following (user|users) using the (batch actions|context menu)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: string,
+    way: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+    switch (way) {
+      case 'batch actions':
+        for (const user of stepTable.hashes()) {
+          await usersObject.selectUser({ key: user.id })
+        }
+        await usersObject.deleteUserUsingBatchAction()
+        break
+      case 'context menu':
+        for (const { user } of stepTable.hashes()) {
+          await usersObject.deleteUserUsingContextMenu({ key: user })
+        }
+        break
+      default:
+        throw new Error(`${way} not implemented`)
     }
   }
 )
