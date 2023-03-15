@@ -17,9 +17,7 @@
         <div v-show="dropdownVisible" class="dropdown-content">
           <div ref="content">
             <div v-if="expandHead" class="space-divider oc-pb-s"></div>
-            <div>
-              <slot name="body" />
-            </div>
+            <slot name="body" />
           </div>
         </div>
       </transition>
@@ -105,6 +103,8 @@ export default {
       setContentCssProperty('display', 'none')
       setContentCssProperty('max-width', `${unref(contentWidth)}px`)
       setContentCssProperty('max-height', `${unref(contentHeight)}px`)
+      el.style.setProperty('width', `${unref(contentWidth)}px`)
+      el.style.setProperty('height', `${unref(contentHeight)}px`)
       removeContentCssProperty('top')
       removeContentCssProperty('position')
 
@@ -144,7 +144,7 @@ export default {
     })
     onUnmounted(() => {
       document.removeEventListener('click', unref(dropdown).clickOutsideEvent)
-      resizeObserver.value.unobserve(el)
+      resizeObserver.value.disconnect()
       resizeObserver.value = null
     })
     return {
@@ -205,7 +205,7 @@ export default {
       background-color: transparent !important;
     }
     .dropdown-button:hover {
-      background-color: var(--oc-color-background-hover) !important;
+      background-color: rgba(100, 100, 100, 0.6) !important;
       transform: scale(0.9);
       border-radius: 5px;
     }
@@ -260,7 +260,6 @@ export default {
   .dropdown-content {
     position: absolute;
     top: 0px;
-    min-width: 300px;
     background-color: var(--oc-color-background-secondary);
     overflow: hidden;
     z-index: -1;
@@ -302,29 +301,8 @@ export default {
   max-height: 2px !important;
   max-width: 45px !important;
   border-radius: 0px;
-  opacity: 0;
+  opacity: 0.5;
 }
-
-/* Transition to the left */
-/*.drop-down-slide-left-enter-active {
-  transition: all 0.2s ease-out;
-  transform-origin: top right;
-  transform: scale(0, 0);
-}
-
-.drop-down-slide-left-leave-active {
-  transition: all 0.2s ease-out;
-  transform-origin: top right;
-  transform: scale(1, 1);
-}
-
-.drop-down-slide-left-enter-to {
-  transform: scale(1, 1);
-}
-
-.drop-down-slide-left-leave-to {
-  transform: scale(0, 0);
-}*/
 </style>
 
 <docs>

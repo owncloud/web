@@ -47,7 +47,7 @@ export default {
     FeedbackLink,
     Notifications,
     ThemeSwitcher,
-    UserMenu,
+    UserMenu
   },
   props: {
     applicationsList: {

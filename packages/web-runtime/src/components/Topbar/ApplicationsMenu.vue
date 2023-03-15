@@ -28,14 +28,14 @@
               :href="n.url"
               :to="n.path"
               appearance="raw"
-              :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
-              :variation="n.active ? 'inverse' : 'passive'"
+              :class="[`${n.gradient}`]"
+              :variation="n.active ? 'inverse' : 'inverse'"
             >
               <span class="icon-box">
-                <oc-icon :name="n.icon" />
+                <oc-icon size="medium" :name="n.icon" />
               </span>
-              <span v-text="$gettext(n.title)" />
-              <oc-icon v-if="n.active" name="check" class="active-check" />
+              <span v-text="$gettext(n.title.slice(0, 5))" />
+              <!--<oc-icon v-if="n.active" name="check" class="active-check" />-->
             </oc-button>
           </li>
         </oc-list>
@@ -119,17 +119,25 @@ export default defineComponent({
   padding-left: 20px;
 }
 .applications-list {
+  width: 320px;
   padding: 10px;
-  max-width: 320px;
+  display: flex;
+  gap: 10px;
   li {
     margin: var(--oc-space-xsmall) 0;
-
+    border-radius: 13px;
+    display: inline-flex;
+    overflow: hidden;
+    gap: 10px;
     a,
     button {
+      display: inline-block;
       gap: var(--oc-space-medium);
       justify-content: flex-start;
-      width: 100%;
+      width: 50px;
       overflow: hidden;
+      text-align: center;
+      font-size: 12px;
 
       &:focus,
       &:hover {
@@ -142,11 +150,15 @@ export default defineComponent({
       }
 
       .icon-box {
-        display: inline-flex;
+        display: flex;
         justify-content: center;
         align-items: center;
-        width: 45px;
-        height: 45px;
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        color: var(--oc-color-swatch-inverse-default);
+        margin-bottom: 2px;
+        //background: radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%);
       }
 
       &.router-link-active {
@@ -165,9 +177,28 @@ export default defineComponent({
     button.router-link-active {
       &:focus,
       &:hover {
-        color: var(--oc-color-swatch-inverse-default);
+
       }
     }
+  }
+}
+.gradient-files {
+  .icon-box {
+    filter: drop-shadow(0px 1px 5px rgba(0, 0, 0, 0.25));
+    overflow: hidden;
+    background:
+    linear-gradient(90deg,
+      var(--oc-color-swatch-primary-muted) 0%,
+      var(--oc-color-swatch-primary-gradient) 100%);
+  }
+}
+.gradient-admin {
+  .icon-box {
+    filter: drop-shadow(0px 1px 5px rgba(0, 0, 0, 0.25));
+    overflow: hidden;
+    background-color: #afafaf;
+    background-image: linear-gradient(-45deg, #2d2d2d 0%, #3e3e3e 100%);
+
   }
 }
 </style>

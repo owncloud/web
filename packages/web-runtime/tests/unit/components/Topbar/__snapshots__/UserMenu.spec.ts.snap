@@ -2,340 +2,428 @@
 
 exports[`User Menu component when no quota and email is set the user menu does not contain a quota 1`] = `
 <nav aria-label="Account menu">
-  <oc-button-stub appearance="raw" aria-label="User Menu" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
-  </oc-button-stub>
-  <oc-drop-stub close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
-    <oc-list-stub class="user-menu-list">
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span></span>
+  <div>
+    <div class="oc-expanding-dropdown">
+      <div class="head">
+        <oc-button-stub appearance="raw" class="dropdown-button" variation="inverse">
+          <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+        </oc-button-stub>
+      </div>
+      <transition-stub appear="false" css="true" mode="out-in" name="drop-down-slide" persisted="true">
+        <div class="dropdown-content" style="display: none; max-width: 0px; max-height: 0px;">
+          <div style="width: 0px; height: 0px;">
             <!--v-if-->
-            <!--v-if-->
-          </span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
-          <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
-          <span>Settings</span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
-      <!--v-if-->
-    </oc-list-stub>
-  </oc-drop-stub>
+            <oc-list-stub class="user-menu-list">
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
+                  <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
+                  <span class="profile-info-wrapper oc-py-xs">
+                    <span></span>
+                    <!--v-if-->
+                    <!--v-if-->
+                  </span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
+                  <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
+                  <span>Settings</span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+                  <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+                  <span>Log out</span>
+                </oc-button-stub>
+              </li>
+              <!--v-if-->
+            </oc-list-stub>
+          </div>
+        </div>
+      </transition-stub>
+    </div>
+  </div>
 </nav>
 `;
 
 exports[`User Menu component when no quota and no email is set the user menu does not contain a quota 1`] = `
 <nav aria-label="Account menu">
-  <oc-button-stub appearance="raw" aria-label="User Menu" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
-  </oc-button-stub>
-  <oc-drop-stub close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
-    <oc-list-stub class="user-menu-list">
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span></span>
+  <div>
+    <div class="oc-expanding-dropdown">
+      <div class="head">
+        <oc-button-stub appearance="raw" class="dropdown-button" variation="inverse">
+          <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+        </oc-button-stub>
+      </div>
+      <transition-stub appear="false" css="true" mode="out-in" name="drop-down-slide" persisted="true">
+        <div class="dropdown-content" style="display: none; max-width: 0px; max-height: 0px;">
+          <div style="width: 0px; height: 0px;">
             <!--v-if-->
-            <!--v-if-->
-          </span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
-          <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
-          <span>Settings</span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
-      <!--v-if-->
-    </oc-list-stub>
-  </oc-drop-stub>
+            <oc-list-stub class="user-menu-list">
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
+                  <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
+                  <span class="profile-info-wrapper oc-py-xs">
+                    <span></span>
+                    <!--v-if-->
+                    <!--v-if-->
+                  </span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
+                  <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
+                  <span>Settings</span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+                  <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+                  <span>Log out</span>
+                </oc-button-stub>
+              </li>
+              <!--v-if-->
+            </oc-list-stub>
+          </div>
+        </div>
+      </transition-stub>
+    </div>
+  </div>
 </nav>
 `;
 
 exports[`User Menu component when quota and no email is set renders a navigation without email 1`] = `
 <nav aria-label="Account menu">
-  <oc-button-stub appearance="raw" aria-label="User Menu" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
-  </oc-button-stub>
-  <oc-drop-stub close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
-    <oc-list-stub class="user-menu-list">
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span></span>
+  <div>
+    <div class="oc-expanding-dropdown">
+      <div class="head">
+        <oc-button-stub appearance="raw" class="dropdown-button" variation="inverse">
+          <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+        </oc-button-stub>
+      </div>
+      <transition-stub appear="false" css="true" mode="out-in" name="drop-down-slide" persisted="true">
+        <div class="dropdown-content" style="display: none; max-width: 0px; max-height: 0px;">
+          <div style="width: 0px; height: 0px;">
             <!--v-if-->
-            <!--v-if-->
-          </span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
-          <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
-          <span>Settings</span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
-      <li class="storage-wrapper oc-pl-s">
-        <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
-          <p class="oc-my-rm">
-            <span>Personal storage (30% used)</span>
-            <br>
-            <span class="oc-text-small">300 B of 1 kB used</span>
-          </p>
-          <oc-progress-stub max="100" size="small" value="30" variation="primary"></oc-progress-stub>
+            <oc-list-stub class="user-menu-list">
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
+                  <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
+                  <span class="profile-info-wrapper oc-py-xs">
+                    <span></span>
+                    <!--v-if-->
+                    <!--v-if-->
+                  </span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
+                  <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
+                  <span>Settings</span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+                  <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+                  <span>Log out</span>
+                </oc-button-stub>
+              </li>
+              <li class="storage-wrapper oc-pl-s">
+                <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
+                <div class="storage-wrapper-text">
+                  <p class="oc-my-rm">
+                    <span>Personal storage (30% used)</span>
+                    <br>
+                    <span class="oc-text-small">300 B of 1 kB used</span>
+                  </p>
+                  <oc-progress-stub max="100" size="small" value="30" variation="primary"></oc-progress-stub>
+                </div>
+              </li>
+            </oc-list-stub>
+          </div>
         </div>
-      </li>
-    </oc-list-stub>
-  </oc-drop-stub>
+      </transition-stub>
+    </div>
+  </div>
 </nav>
 `;
 
 exports[`User Menu component when quota is above 80% and below 90% renders a warning quota progress bar 1`] = `
 <nav aria-label="Account menu">
-  <oc-button-stub appearance="raw" aria-label="User Menu" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
-  </oc-button-stub>
-  <oc-drop-stub close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
-    <oc-list-stub class="user-menu-list">
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span></span>
+  <div>
+    <div class="oc-expanding-dropdown">
+      <div class="head">
+        <oc-button-stub appearance="raw" class="dropdown-button" variation="inverse">
+          <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+        </oc-button-stub>
+      </div>
+      <transition-stub appear="false" css="true" mode="out-in" name="drop-down-slide" persisted="true">
+        <div class="dropdown-content" style="display: none; max-width: 0px; max-height: 0px;">
+          <div style="width: 0px; height: 0px;">
             <!--v-if-->
-            <!--v-if-->
-          </span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
-          <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
-          <span>Settings</span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
-      <li class="storage-wrapper oc-pl-s">
-        <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
-          <p class="oc-my-rm">
-            <span>Personal storage (81% used)</span>
-            <br>
-            <span class="oc-text-small">810 B of 1 kB used</span>
-          </p>
-          <oc-progress-stub max="100" size="small" value="81" variation="warning"></oc-progress-stub>
+            <oc-list-stub class="user-menu-list">
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
+                  <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
+                  <span class="profile-info-wrapper oc-py-xs">
+                    <span></span>
+                    <!--v-if-->
+                    <!--v-if-->
+                  </span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
+                  <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
+                  <span>Settings</span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+                  <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+                  <span>Log out</span>
+                </oc-button-stub>
+              </li>
+              <li class="storage-wrapper oc-pl-s">
+                <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
+                <div class="storage-wrapper-text">
+                  <p class="oc-my-rm">
+                    <span>Personal storage (81% used)</span>
+                    <br>
+                    <span class="oc-text-small">810 B of 1 kB used</span>
+                  </p>
+                  <oc-progress-stub max="100" size="small" value="81" variation="warning"></oc-progress-stub>
+                </div>
+              </li>
+            </oc-list-stub>
+          </div>
         </div>
-      </li>
-    </oc-list-stub>
-  </oc-drop-stub>
+      </transition-stub>
+    </div>
+  </div>
 </nav>
 `;
 
 exports[`User Menu component when quota is above 90% renders a danger quota progress bar 1`] = `
 <nav aria-label="Account menu">
-  <oc-button-stub appearance="raw" aria-label="User Menu" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
-  </oc-button-stub>
-  <oc-drop-stub close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
-    <oc-list-stub class="user-menu-list">
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span></span>
+  <div>
+    <div class="oc-expanding-dropdown">
+      <div class="head">
+        <oc-button-stub appearance="raw" class="dropdown-button" variation="inverse">
+          <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+        </oc-button-stub>
+      </div>
+      <transition-stub appear="false" css="true" mode="out-in" name="drop-down-slide" persisted="true">
+        <div class="dropdown-content" style="display: none; max-width: 0px; max-height: 0px;">
+          <div style="width: 0px; height: 0px;">
             <!--v-if-->
-            <!--v-if-->
-          </span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
-          <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
-          <span>Settings</span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
-      <li class="storage-wrapper oc-pl-s">
-        <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
-          <p class="oc-my-rm">
-            <span>Personal storage (91% used)</span>
-            <br>
-            <span class="oc-text-small">910 B of 1 kB used</span>
-          </p>
-          <oc-progress-stub max="100" size="small" value="91" variation="danger"></oc-progress-stub>
+            <oc-list-stub class="user-menu-list">
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
+                  <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
+                  <span class="profile-info-wrapper oc-py-xs">
+                    <span></span>
+                    <!--v-if-->
+                    <!--v-if-->
+                  </span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
+                  <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
+                  <span>Settings</span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+                  <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+                  <span>Log out</span>
+                </oc-button-stub>
+              </li>
+              <li class="storage-wrapper oc-pl-s">
+                <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
+                <div class="storage-wrapper-text">
+                  <p class="oc-my-rm">
+                    <span>Personal storage (91% used)</span>
+                    <br>
+                    <span class="oc-text-small">910 B of 1 kB used</span>
+                  </p>
+                  <oc-progress-stub max="100" size="small" value="91" variation="danger"></oc-progress-stub>
+                </div>
+              </li>
+            </oc-list-stub>
+          </div>
         </div>
-      </li>
-    </oc-list-stub>
-  </oc-drop-stub>
+      </transition-stub>
+    </div>
+  </div>
 </nav>
 `;
 
 exports[`User Menu component when quota is below 80% renders a primary quota progress bar 1`] = `
 <nav aria-label="Account menu">
-  <oc-button-stub appearance="raw" aria-label="User Menu" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
-  </oc-button-stub>
-  <oc-drop-stub close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
-    <oc-list-stub class="user-menu-list">
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span></span>
+  <div>
+    <div class="oc-expanding-dropdown">
+      <div class="head">
+        <oc-button-stub appearance="raw" class="dropdown-button" variation="inverse">
+          <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+        </oc-button-stub>
+      </div>
+      <transition-stub appear="false" css="true" mode="out-in" name="drop-down-slide" persisted="true">
+        <div class="dropdown-content" style="display: none; max-width: 0px; max-height: 0px;">
+          <div style="width: 0px; height: 0px;">
             <!--v-if-->
-            <!--v-if-->
-          </span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
-          <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
-          <span>Settings</span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
-      <li class="storage-wrapper oc-pl-s">
-        <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
-          <p class="oc-my-rm">
-            <span>Personal storage (30% used)</span>
-            <br>
-            <span class="oc-text-small">300 B of 1 kB used</span>
-          </p>
-          <oc-progress-stub max="100" size="small" value="30" variation="primary"></oc-progress-stub>
+            <oc-list-stub class="user-menu-list">
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
+                  <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
+                  <span class="profile-info-wrapper oc-py-xs">
+                    <span></span>
+                    <!--v-if-->
+                    <!--v-if-->
+                  </span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
+                  <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
+                  <span>Settings</span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+                  <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+                  <span>Log out</span>
+                </oc-button-stub>
+              </li>
+              <li class="storage-wrapper oc-pl-s">
+                <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
+                <div class="storage-wrapper-text">
+                  <p class="oc-my-rm">
+                    <span>Personal storage (30% used)</span>
+                    <br>
+                    <span class="oc-text-small">300 B of 1 kB used</span>
+                  </p>
+                  <oc-progress-stub max="100" size="small" value="30" variation="primary"></oc-progress-stub>
+                </div>
+              </li>
+            </oc-list-stub>
+          </div>
         </div>
-      </li>
-    </oc-list-stub>
-  </oc-drop-stub>
+      </transition-stub>
+    </div>
+  </div>
 </nav>
 `;
 
 exports[`User Menu component when quota is not defined renders no percentag of total and no progress bar 1`] = `
 <nav aria-label="Account menu">
-  <oc-button-stub appearance="raw" aria-label="User Menu" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
-  </oc-button-stub>
-  <oc-drop-stub close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
-    <oc-list-stub class="user-menu-list">
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span></span>
+  <div>
+    <div class="oc-expanding-dropdown">
+      <div class="head">
+        <oc-button-stub appearance="raw" class="dropdown-button" variation="inverse">
+          <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+        </oc-button-stub>
+      </div>
+      <transition-stub appear="false" css="true" mode="out-in" name="drop-down-slide" persisted="true">
+        <div class="dropdown-content" style="display: none; max-width: 0px; max-height: 0px;">
+          <div style="width: 0px; height: 0px;">
             <!--v-if-->
-            <!--v-if-->
-          </span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
-          <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
-          <span>Settings</span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
-      <li class="storage-wrapper oc-pl-s">
-        <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
-          <p class="oc-my-rm">
-            <span>Personal storage</span>
-            <br>
-            <span class="oc-text-small">910 B used</span>
-          </p>
-          <!--v-if-->
+            <oc-list-stub class="user-menu-list">
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
+                  <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
+                  <span class="profile-info-wrapper oc-py-xs">
+                    <span></span>
+                    <!--v-if-->
+                    <!--v-if-->
+                  </span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
+                  <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
+                  <span>Settings</span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+                  <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+                  <span>Log out</span>
+                </oc-button-stub>
+              </li>
+              <li class="storage-wrapper oc-pl-s">
+                <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
+                <div class="storage-wrapper-text">
+                  <p class="oc-my-rm">
+                    <span>Personal storage</span>
+                    <br>
+                    <span class="oc-text-small">910 B used</span>
+                  </p>
+                  <!--v-if-->
+                </div>
+              </li>
+            </oc-list-stub>
+          </div>
         </div>
-      </li>
-    </oc-list-stub>
-  </oc-drop-stub>
+      </transition-stub>
+    </div>
+  </div>
 </nav>
 `;
 
 exports[`User Menu component when quota is unlimited renders no percentag of total and no progress bar 1`] = `
 <nav aria-label="Account menu">
-  <oc-button-stub appearance="raw" aria-label="User Menu" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
-  </oc-button-stub>
-  <oc-drop-stub close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
-    <oc-list-stub class="user-menu-list">
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span></span>
+  <div>
+    <div class="oc-expanding-dropdown">
+      <div class="head">
+        <oc-button-stub appearance="raw" class="dropdown-button" variation="inverse">
+          <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+        </oc-button-stub>
+      </div>
+      <transition-stub appear="false" css="true" mode="out-in" name="drop-down-slide" persisted="true">
+        <div class="dropdown-content" style="display: none; max-width: 0px; max-height: 0px;">
+          <div style="width: 0px; height: 0px;">
             <!--v-if-->
-            <!--v-if-->
-          </span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
-          <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
-          <span>Settings</span>
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
-      <li class="storage-wrapper oc-pl-s">
-        <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
-          <p class="oc-my-rm">
-            <span>Personal storage</span>
-            <br>
-            <span class="oc-text-small">300 B used</span>
-          </p>
-          <!--v-if-->
+            <oc-list-stub class="user-menu-list">
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
+                  <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
+                  <span class="profile-info-wrapper oc-py-xs">
+                    <span></span>
+                    <!--v-if-->
+                    <!--v-if-->
+                  </span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" to="[object Object]" type="router-link">
+                  <oc-icon-stub class="oc-p-xs" name="application"></oc-icon-stub>
+                  <span>Settings</span>
+                </oc-button-stub>
+              </li>
+              <li>
+                <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+                  <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+                  <span>Log out</span>
+                </oc-button-stub>
+              </li>
+              <li class="storage-wrapper oc-pl-s">
+                <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
+                <div class="storage-wrapper-text">
+                  <p class="oc-my-rm">
+                    <span>Personal storage</span>
+                    <br>
+                    <span class="oc-text-small">300 B used</span>
+                  </p>
+                  <!--v-if-->
+                </div>
+              </li>
+            </oc-list-stub>
+          </div>
         </div>
-      </li>
-    </oc-list-stub>
-  </oc-drop-stub>
+      </transition-stub>
+    </div>
+  </div>
 </nav>
 `;
