@@ -79,7 +79,7 @@
           :disabled="isQuotaInputDisabled"
           class="oc-mb-s"
           :title="$gettext('Personal quota')"
-          :total-quota="editUser.drive.quota ? editUser.drive.quota.total : 0"
+          :total-quota="editUser.drive?.quota?.total || 0"
           :max-quota="maxQuota"
           :fixMessageLine="true"
           :description-message="isQuotaInputDisabled ? $gettext('To set an individual quota, the user needs to have logged in once.') : ''"
