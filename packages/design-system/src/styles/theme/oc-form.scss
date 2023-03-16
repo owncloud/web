@@ -290,22 +290,15 @@ $internal-form-checkbox-indeterminate-image: "data:image/svg+xml;charset=UTF-8,%
 .oc-select:focus,
 .oc-textarea:focus {
   outline: none;
-
-  border-color: transparent;
+  border-color: var(--oc-color-swatch-primary-gradient);
   color: $form-focus-color;
-  background-image: linear-gradient($form-focus-background, $form-focus-background),
-    linear-gradient(
-      90deg,
-      var(--oc-color-swatch-primary-muted) 0%,
-      var(--oc-color-swatch-primary-gradient) 100%
-    );
 }
 
 .oc-background-highlight {
   .oc-input:focus,
   .oc-select:focus,
   .oc-textarea:focus {
-    background-color: var(--oc-color-background-muted);
+    background-color: var(--oc-color-background-default);
   }
 }
 
@@ -314,6 +307,7 @@ $internal-form-checkbox-indeterminate-image: "data:image/svg+xml;charset=UTF-8,%
 .oc-select:disabled {
   background-color: $form-disabled-background;
   color: $form-disabled-color;
+  cursor: not-allowed;
 }
 
 /*
