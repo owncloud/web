@@ -27,6 +27,7 @@
               :to="navItem.to"
               :class="{ 'oc-background-primary-gradient': navItem.active }"
               :appearance="navItem.active ? 'raw-inverse' : 'raw'"
+              :variation="navItem.active ? 'primary' : 'passive'"
             >
               <span class="icon-box" :class="{ 'icon-box-active': navItem.active }">
                 <oc-icon :name="navItem.icon" />

@@ -20,18 +20,15 @@
         mode="click"
       >
         <oc-list class="roleDropdownList">
-          <li
-            v-for="roleOption in availableRoleOptions"
-            :key="`role-dropdown-${roleOption.label.toLowerCase()}`"
-          >
+          <li v-for="roleOption in availableRoleOptions" :key="`role-dropdown-${roleOption.key}`">
             <oc-button
-              :id="`files-role-${roleOption.label.toLowerCase()}`"
+              :id="`files-role-${roleOption.key}`"
               :class="{
-                selected: link.permissions === roleOption.bitmask(false),
-                'oc-background-primary-gradient': link.permissions === roleOption.bitmask(false)
+                selected: isSelectedRole(roleOption),
+                'oc-background-primary-gradient': isSelectedRole(roleOption)
               }"
-              appearance="raw"
-              :variation="link.permissions === roleOption.bitmask(false) ? 'inverse' : 'passive'"
+              :appearance="isSelectedRole(roleOption) ? 'raw-inverse' : 'raw'"
+              :variation="isSelectedRole(roleOption) ? 'primary' : 'passive'"
               justify-content="space-between"
               class="oc-p-s"
               @click="
@@ -45,7 +42,7 @@
               "
             >
               <span class="oc-flex oc-flex-middle">
-                <oc-icon :name="roleOption.icon" class="oc-pl-s oc-pr-m" />
+                <oc-icon :name="roleOption.icon" class="oc-pl-s oc-pr-m" variation="inherit" />
                 <span>
                   <span
                     class="oc-text-bold oc-display-block oc-width-1-1"
@@ -55,7 +52,7 @@
                 </span>
               </span>
               <span class="oc-flex">
-                <oc-icon v-if="link.permissions === roleOption.bitmask(false)" name="check" />
+                <oc-icon v-if="isSelectedRole(roleOption)" name="check" variation="inherit" />
               </span>
             </oc-button>
           </li>
@@ -402,6 +399,10 @@ export default defineComponent({
   methods: {
     ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
 
+    isSelectedRole(role: ShareRole) {
+      return this.link.permissions === role.bitmask(false)
+    },
+
     updateLink({
       link = this.link,
       dropRef = this.$refs.editPublicLinkDropdown,
@@ -503,16 +504,7 @@ export default defineComponent({
     &:hover,
     &:focus {
       background-color: var(--oc-color-background-hover);
-      color: var(--oc-color-swatch-passive-default);
       text-decoration: none;
-    }
-
-    &.selected {
-      color: var(--oc-color-swatch-passive-contrast) !important;
-
-      ::v-deep .oc-icon > svg {
-        fill: var(--oc-color-swatch-passive-contrast) !important;
-      }
     }
   }
 }

@@ -10,11 +10,12 @@
         :aria-label="$gettext(indicator.label)"
         :aria-describedby="getIndicatorDescriptionId(indicator)"
         appearance="raw-inverse"
+        variation="primary"
         :data-testid="indicator.id"
         :data-test-indicator-type="indicator.type"
         @click="indicator.handler(resource, indicator.target, $router)"
       >
-        <oc-icon :name="indicator.icon" size="small" fill-type="line" />
+        <oc-icon :name="indicator.icon" size="small" fill-type="line" variation="inherit" />
       </oc-button>
       <oc-icon
         v-else

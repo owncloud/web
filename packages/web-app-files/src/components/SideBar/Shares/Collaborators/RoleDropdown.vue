@@ -30,25 +30,25 @@
           <oc-button
             :id="`files-recipient-role-drop-btn-${role.name}`"
             ref="roleSelect"
-            appearance="raw"
             justify-content="space-between"
             class="files-recipient-role-drop-btn oc-p-s"
             :class="{
               'oc-background-primary-gradient': isSelectedRole(role),
               selected: isSelectedRole(role)
             }"
-            :variation="isSelectedRole(role) ? 'inverse' : 'passive'"
+            :appearance="isSelectedRole(role) ? 'raw-inverse' : 'raw'"
+            :variation="isSelectedRole(role) ? 'primary' : 'passive'"
             @click="selectRole(role)"
           >
             <span class="oc-flex oc-flex-middle">
-              <oc-icon :name="role.icon" class="oc-pl-s oc-pr-m" />
+              <oc-icon :name="role.icon" class="oc-pl-s oc-pr-m" variation="inherit" />
               <role-item
                 :role="role"
                 :allow-share-permission="allowSharePermission && resharingDefault"
               />
             </span>
             <span class="oc-flex">
-              <oc-icon v-if="isSelectedRole(role)" name="check" />
+              <oc-icon v-if="isSelectedRole(role)" name="check" variation="inherit" />
             </span>
           </oc-button>
         </li>
@@ -272,7 +272,7 @@ export default defineComponent({
       this.publishChange()
     },
 
-    isSelectedRole(role) {
+    isSelectedRole(role: ShareRole) {
       return this.selectedRole.name === role.name
     },
 
@@ -367,15 +367,6 @@ export default defineComponent({
     width: 400px;
 
     &-list {
-      &:hover .files-recipient-role-drop-btn.selected:not(:hover),
-      &:focus .files-recipient-role-drop-btn.selected:not(:focus) {
-        color: var(--oc-color-swatch-passive-default);
-
-        ::v-deep .oc-icon > svg {
-          fill: var(--oc-color-swatch-passive-default);
-        }
-      }
-
       li {
         margin: var(--oc-space-xsmall) 0;
       }
@@ -388,16 +379,7 @@ export default defineComponent({
       &:hover,
       &:focus {
         background-color: var(--oc-color-background-hover);
-        color: var(--oc-color-swatch-passive-default);
         text-decoration: none;
-      }
-
-      &.selected {
-        color: var(--oc-color-swatch-passive-contrast) !important;
-
-        ::v-deep .oc-icon > svg {
-          fill: var(--oc-color-swatch-passive-contrast) !important;
-        }
       }
     }
   }
