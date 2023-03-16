@@ -259,7 +259,8 @@ export default defineComponent({
 }
 
 .oc-select {
-  line-height: 24px !important;
+  line-height: normal;
+  padding: 1px 0;
   color: var(--oc-color-input-text-default);
 
   .vs {
@@ -267,10 +268,6 @@ export default defineComponent({
       color: var(--oc-color-input-text-default);
     }
 
-    &__selected {
-      color: var(--oc-color-input-text-default);
-      background-color: var(--oc-color-background-default);
-    }
     &__search::placeholder,
     &__dropdown-toggle,
     &__dropdown-menu {
@@ -286,11 +283,16 @@ export default defineComponent({
       max-width: 100%;
       outline: none;
       overflow: visible;
-      padding: 0rem 0.35rem 0.3rem 0.35rem;
+      padding: 2px;
       transition-duration: 0.2s;
       transition-timing-function: ease-in-out;
       transition-property: color, background-color;
       width: 100%;
+    }
+
+    &__search,
+    &__search:focus {
+      padding: 0 5px;
     }
 
     &__dropdown-menu {
@@ -331,41 +333,43 @@ export default defineComponent({
       max-width: var(--oc-space-small);
     }
 
-    &__open-indicator {
-      margin-top: 2px;
-    }
-
     &__selected-options {
       flex: auto;
       padding: 0;
     }
-  }
 
-  // This seems to not work, attribute is multiple=""; better use .vs--multiple? IMHO this can be removed
-  &[multiple='multiple'] {
-    .vs {
-      &__selected {
-        background-color: var(--oc-color-swatch-inverse-default);
-        border: 1px solid var(--oc-color-input-border);
-        fill: var(--oc-color-text-default);
+    &__selected-options {
+      > * {
+        padding: 0px 2px;
+        margin: 2px 2px 2px 1px;
+        color: var(--oc-color-input-text-default);
       }
 
-      &__deselect {
-        fill: var(--oc-color-text-default);
+      > *:not(input) {
+        padding-left: 3px;
+        background-color: var(--oc-color-background-default);
       }
     }
   }
 
   &.vs--single {
     .vs {
-      &__selected {
-        background-color: transparent;
-        border: none;
+      &__selected-options > *:not(input) {
         fill: var(--oc-color-text-default);
       }
 
       &__deselect {
         fill: var(--oc-color-text-default);
+      }
+    }
+  }
+
+  &.vs--multiple {
+    .vs {
+      &__selected-options > *:not(input) {
+        color: var(--oc-color-input-text-default);
+        background-color: var(--oc-color-background-default);
+        padding: 2px;
       }
     }
   }
@@ -381,17 +385,21 @@ export default defineComponent({
 .oc-background-highlight {
   .oc-select {
     .vs {
-      &__search,
-      &__selected {
+      &__search {
         color: var(--oc-color-input-text-default);
       }
-      &__selected {
-        background-color: var(--oc-color-background-default);
-      }
+
       &__search::placeholder,
       &__dropdown-toggle,
       &__dropdown-menu {
         background-color: var(--oc-color-input-bg);
+      }
+    }
+
+    &.vs--multiple {
+      .vs__selected-options > *:not(input) {
+        color: var(--oc-color-input-text-default);
+        background-color: var(--oc-color-background-highlight);
       }
     }
 
@@ -408,7 +416,7 @@ export default defineComponent({
   &.vs--open .vs__selected {
     opacity: 0.8 !important;
   }
-  .vs__selected {
+  .vs__selected-options > *:not(input) {
     background-color: transparent !important;
   }
 }
