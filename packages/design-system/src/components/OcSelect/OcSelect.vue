@@ -312,7 +312,7 @@ export default defineComponent({
     &__dropdown-option {
       color: var(--oc-color-input-text-default);
       white-space: normal;
-      padding: 0.5em calc(0.6em + 4px); // combined padding like vs__dropdown-toggle
+      padding: 0.5em calc(0.6em + 4px);
       border-radius: 5px;
 
       &--highlight {
@@ -351,17 +351,6 @@ export default defineComponent({
       > *:not(input) {
         padding-left: 3px;
         background-color: var(--oc-color-background-default);
-      }
-    }
-  }
-
-  &.vs--single {
-    .vs {
-      &__selected-options > *:not(input) {
-        fill: var(--oc-color-text-default);
-      }
-
-      &__deselect {
         fill: var(--oc-color-text-default);
       }
     }
