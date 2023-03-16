@@ -29,9 +29,17 @@ export class Spaces {
     return this.#spacesEnvironment.getSpace({ key })
   }
 
-  async changeQuota({ key, value }: { key: string; value: string }): Promise<void> {
+  async changeQuota({
+    key,
+    value,
+    context
+  }: {
+    key: string
+    value: string
+    context: string
+  }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
-    await changeSpaceQuota({ id, value, page: this.#page })
+    await changeSpaceQuota({ id, value, page: this.#page, context })
   }
 
   async disable({ key, context }: { key: string; context: string }): Promise<void> {
