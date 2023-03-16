@@ -1,7 +1,7 @@
 <template>
   <div class="oc-mb-s oc-width-1-1">
     <h4 class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-m-rm" v-text="linkName" />
-    <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-s link-name-container">
+    <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-xs link-name-container">
       <div v-if="copied" class="oc-flex oc-flex-middle oc-text-truncate">
         <oc-icon variation="success" name="checkbox-circle" />
         <p class="oc-files-file-link-url url-copied oc-ml-s oc-my-rm" v-text="copiedLabel" />
