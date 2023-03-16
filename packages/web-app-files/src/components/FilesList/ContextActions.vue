@@ -13,7 +13,7 @@ import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 
 import { useFileActionsSetImage } from '../../composables/actions/spaces/useSpaceActionsSetImage'
-import { useSetReadme } from 'web-pkg/src/mixins/spaces/setReadme'
+import { useSetReadme } from 'web-pkg/src/composables/actions/spaces/setReadme'
 
 import {
   useFileActionsCreateQuickLink,

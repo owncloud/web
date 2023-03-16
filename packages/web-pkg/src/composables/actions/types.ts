@@ -25,6 +25,6 @@ export interface Action {
   // componentType: router-link
   route?(options?: ActionOptions): void
 
-  // TODO: We have isEnabled, why do we have isDisabled as well? It's only used once
+  // can be used to display the action in a disabled state in the UI
   isDisabled?(options?: ActionOptions): boolean
 }

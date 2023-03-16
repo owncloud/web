@@ -37,8 +37,10 @@ jest.mock('web-app-files/src/composables/actions/spaces/useSpaceActionsSetImage'
   )
 )
 
-jest.mock('web-pkg/src/mixins/spaces/setReadme', () =>
-  createMockActionComposables(jest.requireActual('web-pkg/src/mixins/spaces/setReadme'))
+jest.mock('web-pkg/src/composables/actions/spaces/setReadme', () =>
+  createMockActionComposables(
+    jest.requireActual('web-pkg/src/composables/actions/spaces/setReadme')
+  )
 )
 
 describe('ContextActions', () => {

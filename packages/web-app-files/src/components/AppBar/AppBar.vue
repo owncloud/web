@@ -67,23 +67,25 @@ import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import { BreadcrumbItem } from '../../helpers/breadcrumbs'
-import { useFileActionsClearSelection } from '../../composables/actions/files/useFileActionsClearSelection'
 import { isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import ViewOptions from './ViewOptions.vue'
 import { ViewMode } from 'web-pkg/src/ui/types'
-import { useFileActionsAcceptShare } from 'web-app-files/src/composables/actions/files/useFileActionsAcceptShare'
-import { useFileActionsCopy } from 'web-app-files/src/composables/actions/files/useFileActionsCopy'
-import { useFileActionsDeclineShare } from 'web-app-files/src/composables/actions/files/useFileActionsDeclineShare'
-import { useFileActionsDelete } from 'web-app-files/src/composables/actions/files/useFileActionsDelete'
-import { useFileActionsDownloadArchive } from 'web-app-files/src/composables/actions/files/useFileActionsDownloadArchive'
-import { useFileActionsEmptyTrashBin } from '../../composables/actions/files/useFileActionsEmptyTrashBin'
-import { useFileActionsMove } from 'web-app-files/src/composables/actions/files/useFileActionsMove'
-import { useFileActionsRestore } from 'web-app-files/src/composables/actions/files/useFileActionsRestore'
+import {
+  useFileActionsAcceptShare,
+  useFileActionsClearSelection,
+  useFileActionsCopy,
+  useFileActionsDeclineShare,
+  useFileActionsDelete,
+  useFileActionsDownloadArchive,
+  useFileActionsDownloadFile,
+  useFileActionsEmptyTrashBin,
+  useFileActionsMove,
+  useFileActionsRestore
+} from 'web-app-files/src/composables/actions'
 import { useStore } from 'web-pkg/src'
-import { useFileActionsDownloadFile } from 'web-app-files/src/composables/actions/files/useFileActionsDownloadFile'
 
 export default defineComponent({
   components: {

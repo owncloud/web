@@ -41,16 +41,7 @@ import ShowMembers from 'web-pkg/src/mixins/spaces/showMembers'
 import { useSpaceActionsUploadImage } from '../../composables/actions/spaces/useSpaceActionsUploadImage'
 import EditReadmeContent from 'web-pkg/src/mixins/spaces/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  PropType,
-  ref,
-  toRefs,
-  unref,
-  VNodeRef
-} from 'vue'
+import { computed, defineComponent, getCurrentInstance, PropType, ref, unref, VNodeRef } from 'vue'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { thumbnailService } from 'web-app-files/src/services'
 import { useCapabilitySpacesMaxQuota, useRouter, useStore } from 'web-pkg/src/composables'
@@ -83,7 +74,6 @@ export default defineComponent({
     const instance = getCurrentInstance().proxy as any
     const router = useRouter()
     const store = useStore()
-    const { space } = toRefs(props)
 
     const { actions: showDetailsItems } = useFileActionsShowDetails({ store })
 
@@ -95,7 +85,7 @@ export default defineComponent({
 
     const filterParams = computed(() => {
       return {
-        space: unref(space),
+        space: props.space,
         resources: props.items
       }
     })

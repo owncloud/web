@@ -1,4 +1,4 @@
-import { useSetReadme } from 'web-pkg/src/mixins/spaces/setReadme'
+import { useSetReadme } from 'web-pkg/src/composables/actions/spaces/setReadme'
 import { buildSpace, Resource, SpaceResource } from 'web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
