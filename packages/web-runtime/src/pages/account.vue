@@ -78,6 +78,21 @@
           />
         </dd>
       </div>
+      <div class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
+        <dt v-translate class="oc-text-normal oc-text-muted">Logout from active devices</dt>
+        <dd data-testid="logout">
+          <oc-button
+            appearance="raw"
+            type="a"
+            href="https://google.de"
+            target="_blank"
+            data-testid="account-page-logout-url-btn"
+          >
+            <span v-text="$gettext('Account security')" />
+            <oc-icon name="edit" />
+          </oc-button>
+        </dd>
+      </div>
     </dl>
   </main>
 </template>
