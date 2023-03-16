@@ -120,7 +120,13 @@ export const addSelectedUsersToGroups = async (args: {
     await page.locator(groupsModalInput).click()
     await page.locator(dropdownOption).getByText(group).click()
   }
-  await page.locator(actionConfirmButton).click()
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith('/$ref') && resp.status() === 204 && resp.request().method() === 'POST'
+    ),
+    await page.locator(actionConfirmButton).click()
+  ])
 }
 
 export const removeSelectedUsersFromGroups = async (args: {
@@ -133,7 +139,15 @@ export const removeSelectedUsersFromGroups = async (args: {
     await page.locator(groupsModalInput).click()
     await page.locator(dropdownOption).getByText(group).click()
   }
-  await page.locator(actionConfirmButton).click()
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith('/$ref') &&
+        resp.status() === 204 &&
+        resp.request().method() === 'DELETE'
+    ),
+    await page.locator(actionConfirmButton).click()
+  ])
 }
 
 export const filterUsers = async (args: {
