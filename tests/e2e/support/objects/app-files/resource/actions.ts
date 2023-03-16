@@ -415,7 +415,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
           (resp) =>
             resp.url().endsWith(resource) &&
             resp.status() === 201 &&
-            resp.request().method() === 'COPY'
+            resp.request().method() === (action === 'copy' ? 'COPY' : 'MOVE')
         ),
         page.locator(util.format(resourceNameSelector, resource)),
         await page.keyboard.press('Control+V')

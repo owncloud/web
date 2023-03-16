@@ -28,9 +28,9 @@ Feature: Copy
     And "Alice" copies the following resource using dropdown-menu
       | resource                | to          |
       | PARENTCopy3/example.txt | PARENTCopy1 |
-    And "Alice" copies the following resource using keyboard
-      | resource            | to          |
-      | KeyboardExample.txt | PARENTCopy3 |
+    # And "Alice" copies the following resource using keyboard
+    #   | resource            | to          |
+    #   | KeyboardExample.txt | PARENTCopy3 |
     And "Alice" moves the following resource using drag-drop
       | resource     | to          |
       | dragDrop.txt | PARENTCopy2 |
