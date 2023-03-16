@@ -341,11 +341,26 @@ export default defineComponent({
     }
   }
 
+  // This seems to not work, attribute is multiple=""; better use .vs--multiple? IMHO this can be removed
   &[multiple='multiple'] {
     .vs {
       &__selected {
         background-color: var(--oc-color-swatch-inverse-default);
         border: 1px solid var(--oc-color-input-border);
+        fill: var(--oc-color-text-default);
+      }
+
+      &__deselect {
+        fill: var(--oc-color-text-default);
+      }
+    }
+  }
+
+  &.vs--single {
+    .vs {
+      &__selected {
+        background-color: transparent;
+        border: none;
         fill: var(--oc-color-text-default);
       }
 
