@@ -277,7 +277,7 @@ export default defineComponent({
       -webkit-appearance: none;
       background-color: var(--oc-color-background-highlight);
       border-radius: 0;
-      border-radius: 6px;
+      border-radius: 5px;
       border: 1px solid var(--oc-color-input-border);
       box-sizing: border-box;
       color: var(--oc-color-input-text-default);
@@ -308,7 +308,7 @@ export default defineComponent({
       color: var(--oc-color-input-text-default);
       white-space: normal;
       padding: 0.5em calc(0.6em + 4px); // combined padding like vs__dropdown-toggle
-      border-radius: 6px;
+      border-radius: 5px;
 
       &--highlight {
         background-color: var(--oc-color-background-hover);
