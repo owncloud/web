@@ -305,6 +305,9 @@ export default defineComponent({
     &__deselect {
       fill: var(--oc-color-input-text-default);
     }
+    &__deselect {
+      margin: 0 var(--oc-space-small);
+    }
 
     &__dropdown-option {
       color: var(--oc-color-input-text-default);
