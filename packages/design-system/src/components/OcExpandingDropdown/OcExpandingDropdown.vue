@@ -11,7 +11,7 @@
         >
           <slot name="toggle" />
         </oc-button>
-        <slot name="head" />
+        <slot name="head" :dropdown-visible="dropdownVisible" />
       </div>
       <transition name="drop-down-slide" mode="out-in">
         <div v-show="dropdownVisible" class="dropdown-content">

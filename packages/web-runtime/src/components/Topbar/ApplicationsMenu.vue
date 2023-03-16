@@ -13,10 +13,13 @@
       <template #toggle>
         <oc-icon name="grid" size="large" class="oc-flex" />
       </template>
-      <template #head>
-        <router-link ref="navigationSidebarLogo" to="/">
-          <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image oc-flex" />
-        </router-link>
+      <template #head="{ dropdownVisible }">
+        <Transition name="slide-fade">
+          <router-link v-if="!dropdownVisible" ref="navigationSidebarLogo" to="/">
+            <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image oc-flex" />
+          </router-link>
+          <h3 style="margin-left: 10px;font-weight: 300;" v-else>Applications</h3>
+        </Transition>
       </template>
       <template #body>
         <oc-list class="applications-list">
@@ -29,7 +32,7 @@
               :to="n.path"
               appearance="raw"
               :class="[`${n.gradient}`, { 'router-link-active': n.active }]"
-              :variation="n.active ? 'inverse' : 'inverse'"
+              variation="inverse"
             >
               <span class="icon-box">
                 <oc-icon size="medium" :name="n.icon" />
@@ -62,13 +65,7 @@ export default defineComponent({
       default: () => []
     }
   },
-  data: () => {
-    return {
-      sidebarClosedBefore: false
-    }
-  },
   computed: {
-    ...mapState(['navigation']),
     ...mapGetters(['configuration', 'user']),
     ...mapGetters('runtime/auth', ['accessToken']),
 
@@ -91,14 +88,6 @@ export default defineComponent({
     })
   },
   methods: {
-    ...mapActions(['openNavigation', 'closeNavigation']),
-
-    closeSidebar() {
-      //this.closeNavigation()
-    },
-    reopenSidebar() {
-      //this.openNavigation()
-    },
     async clickApp(appEntry) {
       // @TODO use id or similar
       if (appEntry.url?.endsWith('/apps/files')) {
@@ -114,6 +103,25 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.slide-fade-enter-active {
+  transition: all 0.0s ease-out;
+  opacity: 0.5;
+  position: absolute;
+  transform: translateX(50px);
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+  opacity: 1;
+
+  position: relative;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+  position: absolute;
+}
 .oc-logo-image {
   height: 35px;
   padding-left: 20px;
@@ -167,6 +175,8 @@ export default defineComponent({
       }
 
       &.router-link-active {
+        color: var(--oc-color-text-default);
+        font-weight: 500 !important;
         .icon-box {
           box-shadow: inset 0 0 0px 2px var(--oc-color-text-default);
         }
