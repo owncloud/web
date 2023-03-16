@@ -410,23 +410,37 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
           await clickResource({ page, path: path })
         }
       }
-      await page.keyboard.press('Control+V')
-
-      await waitForResources({
-        page,
-        names: [resourceBase]
-      })
+      await Promise.all([
+        page.waitForResponse(
+          (resp) =>
+            resp.url().endsWith(resource) &&
+            resp.status() === 201 &&
+            resp.request().method() === (action === 'copy' ? 'COPY' : 'MOVE')
+        ),
+        page.locator(util.format(resourceNameSelector, resource)),
+        await page.keyboard.press('Control+V')
+      ])
       break
     }
     case 'drag-drop': {
       const source = page.locator(util.format(resourceNameSelector, resourceBase))
       const target = page.locator(util.format(resourceNameSelector, newLocation))
 
-      await source.dragTo(target)
-      await waitForResources({
-        page,
-        names: [resourceBase]
-      })
+      await Promise.all([
+        page.waitForResponse(
+          (resp) =>
+            resp.url().endsWith(resource) &&
+            resp.status() === 201 &&
+            resp.request().method() === 'MOVE'
+        ),
+        source.dragTo(target)
+      ])
+
+      await Promise.all([
+        page.locator(util.format(resourceNameSelector, resourceBase)),
+        page.locator(util.format(resourceNameSelector, newLocation)).click()
+      ])
+
       break
     }
   }
@@ -464,13 +478,9 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
         resp.status() === 201 &&
         resp.request().method() === 'MOVE'
     ),
+    page.locator(util.format(resourceNameSelector, newName)),
     page.locator(util.format(actionConfirmationButton, 'Rename')).click()
   ])
-
-  await waitForResources({
-    page,
-    names: [newName]
-  })
 }
 
 /**/
