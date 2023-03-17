@@ -31,12 +31,6 @@ jest.mock('web-app-files/src/composables/actions/files', () =>
   createMockActionComposables(jest.requireActual('web-app-files/src/composables/actions/files'))
 )
 
-jest.mock('web-app-files/src/composables/actions/spaces/useSpaceActionsSetImage', () =>
-  createMockActionComposables(
-    jest.requireActual('web-app-files/src/composables/actions/spaces/useSpaceActionsSetImage')
-  )
-)
-
 jest.mock('web-pkg/src/composables/actions/spaces/setReadme', () =>
   createMockActionComposables(
     jest.requireActual('web-pkg/src/composables/actions/spaces/setReadme')

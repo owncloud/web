@@ -10,7 +10,6 @@ import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { useStore } from 'web-pkg/src/composables'
 import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
 
-import { useFileActionsSetImage } from '../../composables/actions/spaces/useSpaceActionsSetImage'
 import { useSetReadme } from 'web-pkg/src/composables/actions/spaces/setReadme'
 
 import {
@@ -28,6 +27,7 @@ import {
   useFileActionsRestore,
   useFileActionsDownloadFile,
   useFileActionsRename,
+  useFileActionsSetImage,
   useFileActionsShowEditTags,
   useFileActionsNavigate,
   useFileActionsFavorite
