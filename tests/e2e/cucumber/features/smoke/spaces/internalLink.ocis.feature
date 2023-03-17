@@ -21,8 +21,8 @@ Feature: internal link share in project space
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "marketing.1"
     And "Alice" adds following users to the project space
-        | user  | role    | kind |
-        | Brian | editor  | user |
+      | user  | role   | kind |
+      | Brian | editor | user |
     And "Alice" creates a public link for the resource "myfolder" using the sidebar panel
     When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "internal"
     And "Brian" opens the public link "Link"
