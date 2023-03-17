@@ -1,6 +1,6 @@
 <template>
   <div>
-    <context-action-menu :menu-sections="menuSections" :items="items" />
+    <context-action-menu :menu-sections="menuSections" :action-options="{ resources: items }" />
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"

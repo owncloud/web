@@ -8,7 +8,7 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useRouter, useStore } from 'web-pkg/src/composables'
 import { Store } from 'vuex'
-import { Action } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsShowShares = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -16,12 +16,12 @@ export const useFileActionsShowShares = ({ store }: { store?: Store<any> } = {})
   const { $gettext } = useGettext()
   const isFilesAppActive = useIsFilesAppActive()
 
-  const handler = ({ resources }) => {
+  const handler = ({ resources }: FileActionOptions) => {
     store.commit('Files/SET_FILE_SELECTION', resources)
     eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#peopleShares')
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'show-shares',
       icon: quickActions.collaborators.icon,

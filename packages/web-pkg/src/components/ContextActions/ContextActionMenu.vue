@@ -11,8 +11,7 @@
         v-for="(action, actionIndex) in section.items"
         :key="`section-${section.name}-action-${actionIndex}`"
         :action="action"
-        :items="items"
-        :space="space"
+        :action-options="actionOptions"
         class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"
       />
     </oc-list>
@@ -22,7 +21,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import ActionMenuItem from './ActionMenuItem.vue'
-import { SpaceResource } from 'web-client/src/helpers'
+import { ActionOptions } from '../../composables/actions'
 
 type MenuSection = {
   name: string
@@ -37,14 +36,9 @@ export default defineComponent({
       type: Array as PropType<MenuSection[]>,
       required: true
     },
-    // items can e.g. be currentFolder (breadcrumbs) or selectedResources (resourceTable)
-    items: {
-      type: Array,
+    actionOptions: {
+      type: Object as PropType<ActionOptions>,
       required: true
-    },
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false
     }
   },
   methods: {

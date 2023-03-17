@@ -2,7 +2,7 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
-import { ActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useSetReadme = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -10,7 +10,7 @@ export const useSetReadme = ({ store }: { store?: Store<any> } = {}) => {
   const { $gettext } = useGettext()
   const { owncloudSdk } = useClientService()
 
-  const handler = async ({ space, resources }: ActionOptions) => {
+  const handler = async ({ space, resources }: FileActionOptions) => {
     try {
       const fileContent = await owncloudSdk.files.getFileContents(resources[0].webDavPath)
       const fileMetaData = await owncloudSdk.files.putFileContents(
@@ -34,7 +34,7 @@ export const useSetReadme = ({ store }: { store?: Store<any> } = {}) => {
     }
   }
 
-  const actions = computed(() => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'set-space-readme',
       icon: 'markdown',
@@ -42,7 +42,7 @@ export const useSetReadme = ({ store }: { store?: Store<any> } = {}) => {
       label: () => {
         return $gettext('Set as space description')
       },
-      isEnabled: ({ space, resources }: ActionOptions) => {
+      isEnabled: ({ space, resources }) => {
         if (resources.length !== 1) {
           return false
         }

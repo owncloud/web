@@ -99,7 +99,6 @@ function getWrapper({
         const spaceImageInput = mock<VNodeRef>()
         const instance = useSpaceActionsUploadImage({ store, spaceImageInput })
         unref(instance.actions)[0].handler({
-          space: null,
           resources: [
             mock<SpaceResource>({
               id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22'

@@ -21,8 +21,7 @@
           <template #contextMenu>
             <context-actions
               v-if="showContextActions"
-              :space="space"
-              :items="breadcrumbsContextActionsItems.filter(Boolean)"
+              :action-options="{ space, resources: breadcrumbsContextActionsItems.filter(Boolean) }"
             />
           </template>
         </oc-breadcrumb>

@@ -6,7 +6,7 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useRouter, useStore } from 'web-pkg/src/composables'
 import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
-import { Action } from 'web-pkg/src/composables/actions/types'
+import { FileAction } from 'web-pkg/src/composables/actions/types'
 
 export const useFileActionsShowDetails = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -15,7 +15,7 @@ export const useFileActionsShowDetails = ({ store }: { store?: Store<any> } = {}
   const { $gettext } = useGettext()
   const isFilesAppActive = useIsFilesAppActive()
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'show-details',
       icon: 'information',

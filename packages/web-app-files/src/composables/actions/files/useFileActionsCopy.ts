@@ -7,7 +7,7 @@ import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { Action } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -27,11 +27,11 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
     return $pgettext('Keyboard shortcut for non-macOS systems for copying files', 'Ctrl + C')
   })
 
-  const handler = ({ space, resources }) => {
+  const handler = ({ space, resources }: FileActionOptions) => {
     store.dispatch('Files/copySelectedFiles', { ...language, space, resources })
   }
 
-  const actions = computed((): Action[] => {
+  const actions = computed((): FileAction[] => {
     return [
       {
         name: 'copy',

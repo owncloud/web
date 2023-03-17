@@ -7,7 +7,7 @@ import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
-import { Action } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -26,7 +26,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
     return $pgettext('Keyboard shortcut for non-macOS systems for pasting files', 'Ctrl + V')
   })
 
-  const handler = ({ space }) => {
+  const handler = ({ space }: FileActionOptions) => {
     store.dispatch('Files/pasteSelectedFiles', {
       targetSpace: space,
       clientService,
@@ -39,7 +39,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
     })
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'paste',
       icon: 'clipboard',

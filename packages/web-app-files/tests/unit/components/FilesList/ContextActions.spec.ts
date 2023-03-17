@@ -81,8 +81,10 @@ function getWrapper() {
     mocks,
     wrapper: mount(ContextActions, {
       props: {
-        space: mock<SpaceResource>(),
-        items: [mock<Resource>()]
+        actionOptions: {
+          space: mock<SpaceResource>(),
+          resources: [mock<Resource>()]
+        }
       },
       global: {
         mocks,

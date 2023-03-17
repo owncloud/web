@@ -10,7 +10,7 @@ import {
 import { isLocationCommonActive, isLocationSpacesActive } from '../../../router'
 import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
 import { useGettext } from 'vue3-gettext'
-import { Action } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -19,7 +19,7 @@ export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) =
   const { owncloudSdk: client } = useClientService()
   const hasFavorites = useCapabilityFilesFavorites()
   const isFilesAppActive = useIsFilesAppActive()
-  const handler = ({ resources }) => {
+  const handler = ({ resources }: FileActionOptions) => {
     store
       .dispatch('Files/markFavorite', {
         client,
@@ -35,7 +35,7 @@ export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) =
       })
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'favorite',
       icon: 'star',

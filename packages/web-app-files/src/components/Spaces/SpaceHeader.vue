@@ -37,7 +37,7 @@
             padding-size="small"
             position="right-start"
           >
-            <space-context-actions :items="[space]" :space="space" />
+            <space-context-actions :action-options="{ resources: [space] }" />
           </oc-drop>
         </div>
         <oc-button

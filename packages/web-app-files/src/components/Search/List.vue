@@ -36,8 +36,7 @@
           <template #contextMenu="{ resource }">
             <context-actions
               v-if="isResourceInSelection(resource)"
-              :items="selectedResources"
-              :space="getSpace(resource)"
+              :action-options="{ space: getSpace(resource), resources: selectedResources }"
             />
           </template>
           <template #footer>

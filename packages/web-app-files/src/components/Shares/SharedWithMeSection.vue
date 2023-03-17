@@ -39,7 +39,7 @@
             size="small"
             variation="success"
             class="file-row-share-status-accept"
-            @click.stop="triggerAction('accept-share', { resources: [resource] })"
+            @click.stop="triggerAction('accept-share', { space: null, resources: [resource] })"
           >
             <oc-icon size="small" name="check" />
             <span v-translate>Accept</span>
@@ -48,7 +48,7 @@
             v-if="getShowDeclineButton(resource)"
             size="small"
             class="file-row-share-decline oc-ml-s"
-            @click.stop="triggerAction('decline-share', { resources: [resource] })"
+            @click.stop="triggerAction('decline-share', { space: null, resources: [resource] })"
           >
             <oc-icon size="small" name="spam-3" fill-type="line" />
             <span v-translate>Decline</span>
@@ -58,8 +58,7 @@
       <template #contextMenu="{ resource }">
         <context-actions
           v-if="isResourceInSelection(resource)"
-          :items="selectedResources"
-          :space="createShareSpace(resource)"
+          :action-options="{ space: createShareSpace(resource), resources: selectedResources }"
         />
       </template>
       <template #footer>

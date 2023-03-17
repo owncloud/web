@@ -16,7 +16,7 @@ import {
 } from 'web-pkg/src/composables'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Action } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -27,7 +27,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
   const hasShareJail = useCapabilityShareJailEnabled()
   const { owncloudSdk } = useClientService()
 
-  const handler = async ({ resources }) => {
+  const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({ concurrency: 4 })
@@ -81,7 +81,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
     })
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'decline-share',
       icon: 'spam-3',

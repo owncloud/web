@@ -55,7 +55,7 @@
             @un-select-all-groups="unselectAllGroups"
           >
             <template #contextMenu>
-              <context-actions :items="selectedGroups" />
+              <context-actions :action-options="{ resources: selectedGroups }" />
             </template>
           </GroupsList>
         </div>

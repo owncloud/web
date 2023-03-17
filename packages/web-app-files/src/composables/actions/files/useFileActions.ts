@@ -9,7 +9,12 @@ import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
 import { computed, unref } from 'vue'
 import { useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { Action, ActionOptions, useIsSearchActive } from 'web-pkg/src/composables/actions'
+import {
+  Action,
+  FileAction,
+  FileActionOptions,
+  useIsSearchActive
+} from 'web-pkg/src/composables/actions'
 
 import {
   useFileActionsAcceptShare,
@@ -66,7 +71,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const editorActions = computed(() => {
     const apps = store.state.apps
     return (apps.fileEditors as any[])
-      .map((editor): Action => {
+      .map((editor): FileAction => {
         return {
           name: `editor-${editor.id}`,
           label: () => {
@@ -81,7 +86,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
             iconFillType: apps.meta[editor.app].iconFillType
           }),
           img: apps.meta[editor.app].img,
-          handler: (options: ActionOptions) =>
+          handler: (options) =>
             openEditor(
               editor,
               options.space.getDriveAliasAndItem(options.resources[0]),
@@ -182,12 +187,12 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   // TODO: Make user-configurable what is a defaultAction for a filetype/mimetype
   // returns the _first_ action from actions array which we now construct from
   // available mime-types coming from the app-provider and existing actions
-  const triggerDefaultAction = (options: ActionOptions) => {
+  const triggerDefaultAction = (options: FileActionOptions) => {
     const action = getDefaultAction(options)
     action.handler({ ...options })
   }
 
-  const triggerAction = (name: string, options: ActionOptions) => {
+  const triggerAction = (name: string, options: FileActionOptions) => {
     const action = getAllAvailableActions(options).filter((action) => action.name === name)[0]
     if (!action) {
       throw new Error(`Action not found: '${name}'`)
@@ -196,7 +201,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     action.handler(options)
   }
 
-  const getDefaultAction = (options: ActionOptions): Action => {
+  const getDefaultAction = (options: FileActionOptions): Action => {
     const filterCallback = (action) =>
       action.canBeDefault &&
       action.isEnabled({
@@ -221,7 +226,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     return unref(systemActions).filter(filterCallback)[0]
   }
 
-  const getAllAvailableActions = (options: ActionOptions) => {
+  const getAllAvailableActions = (options: FileActionOptions) => {
     return [
       ...unref(editorActions),
       ...loadExternalAppActions(options),
@@ -234,7 +239,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   // returns an array of available external Apps
   // to open a resource with a specific mimeType
   // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
-  const loadExternalAppActions = (options: ActionOptions): Action[] => {
+  const loadExternalAppActions = (options: FileActionOptions): Action[] => {
     if (isLocationTrashActive(router, 'files-trash-generic')) {
       return []
     }
@@ -267,7 +272,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     const { app_providers: appProviders = [], default_application: defaultApplication } =
       filteredMimeTypes
 
-    return appProviders.map((app): Action => {
+    return appProviders.map((app): FileAction => {
       const label = $gettext('Open in %{ appName }')
       return {
         name: app.name,

@@ -1,5 +1,5 @@
 <template>
-  <context-action-menu :menu-sections="menuSections" :items="items" :space="space" />
+  <context-action-menu :menu-sections="menuSections" :action-options="_actionOptions" />
 </template>
 
 <script lang="ts">
@@ -8,9 +8,7 @@ import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActi
 import { useFileActions } from '../../composables/actions/files/useFileActions'
 
 import { useStore } from 'web-pkg/src/composables'
-import { computed, defineComponent, PropType, unref } from 'vue'
-import { Resource } from 'web-client'
-import { SpaceResource } from 'web-client/src/helpers'
+import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
 
 import { useFileActionsSetImage } from '../../composables/actions/spaces/useSpaceActionsSetImage'
 import { useSetReadme } from 'web-pkg/src/composables/actions/spaces/setReadme'
@@ -34,21 +32,17 @@ import {
   useFileActionsNavigate,
   useFileActionsFavorite
 } from '../../composables/actions/files'
+import { FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export default defineComponent({
   name: 'ContextActions',
   components: { ContextActionMenu },
   props: {
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: true
-    },
-    items: {
-      type: Array as PropType<Resource[]>,
+    actionOptions: {
+      type: Object as PropType<FileActionOptions>,
       required: true
     }
   },
-
   setup(props) {
     const store = useStore()
 
@@ -74,13 +68,8 @@ export default defineComponent({
     const { actions: showEditTagsActions } = useFileActionsShowEditTags({ store })
     const { actions: showSharesActions } = useFileActionsShowShares({ store })
 
-    const filterParams = computed(() => {
-      return {
-        space: props.space,
-        resources: props.items
-      }
-    })
-
+    // type cast to make vue-tsc aware of the type
+    const actionOptions = toRef(props, 'actionOptions') as Ref<FileActionOptions>
     const menuItemsBatchActions = computed(() =>
       [
         ...unref(acceptShareActions),
@@ -91,20 +80,23 @@ export default defineComponent({
         ...unref(emptyTrashBinActions),
         ...unref(deleteActions),
         ...unref(restoreActions)
-      ].filter((item) => item.isEnabled(unref(filterParams)))
+      ].filter((item) => item.isEnabled(unref(actionOptions)))
     )
 
     const menuItemsContext = computed(() => {
-      const fileHandlers = [...unref(editorActions), ...loadExternalAppActions(unref(filterParams))]
+      const fileHandlers = [
+        ...unref(editorActions),
+        ...loadExternalAppActions(unref(actionOptions))
+      ]
 
       return [...fileHandlers]
-        .filter((item) => item.isEnabled(unref(filterParams)))
+        .filter((item) => item.isEnabled(unref(actionOptions)))
         .sort((x, y) => Number(y.canBeDefault) - Number(x.canBeDefault))
     })
 
     const menuItemsShare = computed(() => {
       return [...unref(showSharesActions), ...unref(createQuickLinkActions)].filter((item) =>
-        item.isEnabled(unref(filterParams))
+        item.isEnabled(unref(actionOptions))
       )
     })
 
@@ -123,7 +115,7 @@ export default defineComponent({
         ...unref(declineShareActions),
         ...unref(setSpaceImageActions),
         ...unref(setSpaceReadmeActions)
-      ].filter((item) => item.isEnabled(unref(filterParams)))
+      ].filter((item) => item.isEnabled(unref(actionOptions)))
     })
 
     const menuItemsSidebar = computed(() => {
@@ -135,12 +127,12 @@ export default defineComponent({
         }),
         ...fileHandlers,
         ...unref(showDetailsActions)
-      ].filter((item) => item.isEnabled(unref(filterParams)))
+      ].filter((item) => item.isEnabled(unref(actionOptions)))
     })
 
     const menuSections = computed(() => {
       const sections = []
-      if (props.items.length > 1) {
+      if (unref(actionOptions).resources.length > 1) {
         if (unref(menuItemsBatchActions).length) {
           sections.push({
             name: 'batch-actions',
@@ -182,7 +174,8 @@ export default defineComponent({
     })
 
     return {
-      menuSections
+      menuSections,
+      _actionOptions: actionOptions
     }
   }
 })

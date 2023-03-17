@@ -11,9 +11,9 @@
       <action-menu-item
         v-for="(action, index) in actions"
         :key="`action-${index}`"
-        :action="action"
-        :items="resources"
         class="oc-rounded"
+        :action="action"
+        :action-options="actionOptions"
       />
     </oc-list>
   </div>
@@ -42,6 +42,9 @@ export default defineComponent({
     const resources = computed(() => {
       return [unref(resource)]
     })
+    const actionOptions = computed(() => ({
+      resources: unref(resources)
+    }))
 
     const actions = computed(() => {
       return [
@@ -51,7 +54,7 @@ export default defineComponent({
         ...instance.$_restore_items,
         ...instance.$_delete_items,
         ...instance.$_disable_items
-      ].filter((item) => item.isEnabled({ resources: unref(resources) }))
+      ].filter((item) => item.isEnabled(unref(actionOptions)))
     })
     const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
     const closeQuotaModal = () => {
@@ -62,6 +65,7 @@ export default defineComponent({
     }
     return {
       actions,
+      actionOptions,
       maxQuota: useCapabilitySpacesMaxQuota(),
       quotaModalIsOpen,
       closeQuotaModal,

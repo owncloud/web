@@ -12,7 +12,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
+import { ActionOptions, FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -50,7 +50,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
       })
   }
 
-  const handler = ({ space }: ActionOptions) => {
+  const handler = ({ space }: FileActionOptions) => {
     const modal = {
       variation: 'danger',
       icon: 'alarm-warning',
@@ -68,13 +68,13 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
     store.dispatch('createModal', modal)
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'empty-trash-bin',
       icon: 'delete-bin-5',
       label: () => $gettext('Empty trash bin'),
       handler,
-      isEnabled: ({ space, resources }: ActionOptions) => {
+      isEnabled: ({ space, resources }) => {
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }

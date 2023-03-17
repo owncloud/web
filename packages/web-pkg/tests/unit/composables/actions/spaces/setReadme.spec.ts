@@ -1,5 +1,5 @@
 import { useSetReadme } from 'web-pkg/src/composables/actions/spaces/setReadme'
-import { buildSpace, Resource, SpaceResource } from 'web-client/src/helpers'
+import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
 import {
@@ -34,7 +34,7 @@ describe('setReadme', () => {
           expect(
             unref(actions)[0].isEnabled({
               space,
-              resources: [{ id: 1, mimeType: 'image/png' }] as Resource[]
+              resources: [{ id: 1, mimeType: 'image/png' }] as SpaceResource[]
             })
           ).toBe(false)
         }
@@ -53,7 +53,7 @@ describe('setReadme', () => {
           expect(
             unref(actions)[0].isEnabled({
               space,
-              resources: [{ id: 1, mimeType: 'text/plain' }] as Resource[]
+              resources: [{ id: 1, mimeType: 'text/plain' }] as SpaceResource[]
             })
           ).toBe(false)
         }
@@ -72,7 +72,7 @@ describe('setReadme', () => {
           expect(
             unref(actions)[0].isEnabled({
               space,
-              resources: [{ id: 1, mimeType: 'text' }] as Resource[]
+              resources: [{ id: 1, mimeType: 'text' }] as SpaceResource[]
             })
           ).toBe(false)
         }
@@ -93,7 +93,7 @@ describe('setReadme', () => {
                 webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/subfolder',
                 name: 'readme.md'
               }
-            ] as Resource[]
+            ] as SpaceResource[]
           })
 
           await nextTick()
@@ -118,7 +118,7 @@ describe('setReadme', () => {
                 webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/subfolder',
                 name: 'readme.md'
               }
-            ] as Resource[]
+            ] as SpaceResource[]
           })
 
           await nextTick()

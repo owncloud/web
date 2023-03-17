@@ -1,7 +1,5 @@
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
-import { SpaceResource } from 'web-client/src/helpers'
 
 describe('ContextActionMenu component', () => {
   it('renders the menu with actions', () => {
@@ -17,9 +15,8 @@ function getShallowWrapper(menuSections, items = []) {
   return {
     wrapper: shallowMount(ContextActionMenu, {
       props: {
-        space: mock<SpaceResource>(),
         menuSections,
-        items
+        actionOptions: { resources: items }
       },
       global: {
         plugins: [...defaultPlugins()]

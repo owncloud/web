@@ -57,7 +57,7 @@
               </oc-button>
             </template>
             <template #contextMenuActions="{ resource }">
-              <space-context-actions :space="resource" :items="[resource]" />
+              <space-context-actions :action-options="{ resources: [resource] }" />
             </template>
           </resource-tiles>
         </div>

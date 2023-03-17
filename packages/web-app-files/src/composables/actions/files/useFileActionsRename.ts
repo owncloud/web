@@ -14,7 +14,7 @@ import { renameResource as _renameResource } from '../../../helpers/resources'
 import { computed, unref } from 'vue'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useCapabilityFilesSharingCanRename } from 'web-pkg/src/composables/capability'
 
 export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => {
@@ -149,7 +149,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
     }
   }
 
-  const handler = async ({ space, resources }: ActionOptions) => {
+  const handler = async ({ space, resources }: FileActionOptions) => {
     const currentFolder = store.getters['Files/currentFolder']
     let parentResources
     if (isSameResource(resources[0], currentFolder)) {
@@ -207,7 +207,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
     store.dispatch('createModal', modal)
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'rename',
       icon: 'pencil',

@@ -1,9 +1,10 @@
 import { mapActions } from 'vuex'
 import { clientService, configurationManager, eventBus } from 'web-pkg'
+import { UserAction } from 'web-pkg/src/composables/actions'
 
 export default {
   computed: {
-    $_delete_items() {
+    $_delete_items(): UserAction[] {
       return [
         {
           name: 'delete',

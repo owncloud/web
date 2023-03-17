@@ -13,7 +13,7 @@ import {
 } from 'web-pkg/src/composables'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Action } from 'web-pkg/src/composables/actions/types'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions/types'
 
 export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -24,7 +24,7 @@ export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}
   const hasShareJail = useCapabilityShareJailEnabled()
   const { owncloudSdk } = useClientService()
 
-  const handler = async ({ resources }) => {
+  const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({ concurrency: 4 })
@@ -77,7 +77,7 @@ export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}
     })
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'accept-share',
       icon: 'check',

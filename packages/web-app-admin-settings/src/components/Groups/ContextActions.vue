@@ -1,6 +1,6 @@
 <template>
   <div>
-    <context-action-menu :menu-sections="menuSections" :items="items" />
+    <context-action-menu :menu-sections="menuSections" :action-options="actionOptions" />
   </div>
 </template>
 
@@ -9,28 +9,27 @@ import ShowDetails from '../../mixins/showDetails'
 import Delete from '../../mixins/groups/delete'
 import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
-import { Group } from 'web-client/src/generated'
+import { GroupActionOptions } from 'web-pkg/src/composables/actions'
 
 export default defineComponent({
   name: 'ContextActions',
   components: { ContextActionMenu },
   mixins: [Delete, ShowDetails],
   props: {
-    items: {
-      type: Array as PropType<Group[]>,
+    actionOptions: {
+      type: Object as PropType<GroupActionOptions>,
       required: true
     }
   },
   setup(props) {
     const instance = getCurrentInstance().proxy as any
 
-    const filterParams = computed(() => ({ resources: props.items }))
     const menuItemsPrimaryActions = computed(() =>
-      [...instance.$_delete_items].filter((item) => item.isEnabled(unref(filterParams)))
+      [...instance.$_delete_items].filter((item) => item.isEnabled(props.actionOptions))
     )
 
     const menuItemsSidebar = computed(() =>
-      [...instance.$_showDetails_items].filter((item) => item.isEnabled(unref(filterParams)))
+      [...instance.$_showDetails_items].filter((item) => item.isEnabled(props.actionOptions))
     )
 
     const menuSections = computed(() => {

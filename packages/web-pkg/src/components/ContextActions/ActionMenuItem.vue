@@ -1,7 +1,7 @@
 <template>
   <li>
     <oc-button
-      v-oc-tooltip="showTooltip || action.hideLabel ? action.label(filterParams) : ''"
+      v-oc-tooltip="showTooltip || action.hideLabel ? action.label(actionOptions) : ''"
       :type="action.componentType"
       v-bind="componentProps"
       :class="[action.class, 'action-menu-item', 'oc-py-s', 'oc-px-m', 'oc-width-1-1']"
@@ -35,7 +35,7 @@
         v-if="!action.hideLabel"
         class="oc-files-context-action-label"
         data-testid="action-label"
-        >{{ action.label(filterParams) }}</span
+        >{{ action.label(actionOptions) }}</span
       >
       <span
         v-if="action.shortcut && shortcutHint"
@@ -53,9 +53,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, unref } from 'vue'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
-import { Action } from 'web-pkg/src/composables/actions'
+import { computed, defineComponent, PropType } from 'vue'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 
 export default defineComponent({
   name: 'ActionMenuItem',
@@ -64,14 +63,9 @@ export default defineComponent({
       type: Object as PropType<Action>,
       required: true
     },
-    items: {
-      type: Array as PropType<Resource[]>,
+    actionOptions: {
+      type: Object as PropType<ActionOptions>,
       required: true
-    },
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
     },
     appearance: {
       type: String,
@@ -89,18 +83,11 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const filterParams = computed(() => {
-      return {
-        space: props.space,
-        resources: props.items
-      }
-    })
-
     const componentProps = computed(() => {
       const properties = {
         appearance: props.appearance,
         ...(props.action.isDisabled && {
-          disabled: props.action.isDisabled({ space: props.space, resources: props.items })
+          disabled: props.action.isDisabled(props.actionOptions)
         }),
         ...(props.action.variation && { variation: props.action.variation })
       }
@@ -108,7 +95,7 @@ export default defineComponent({
       if (props.action.componentType === 'router-link' && props.action.route) {
         return {
           ...properties,
-          to: props.action.route(unref(filterParams))
+          to: props.action.route(props.actionOptions)
         }
       }
 
@@ -116,8 +103,7 @@ export default defineComponent({
     })
 
     return {
-      componentProps,
-      filterParams
+      componentProps
     }
   },
   computed: {
@@ -131,7 +117,7 @@ export default defineComponent({
 
       const callback = () =>
         this.action.handler({
-          ...this.filterParams,
+          ...this.actionOptions,
           ...this.action.handlerData
         })
       if (this.action.keepOpen) {

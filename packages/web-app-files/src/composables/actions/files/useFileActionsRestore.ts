@@ -24,7 +24,7 @@ import {
 } from 'web-pkg/src/composables'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -227,7 +227,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
     }
   }
 
-  const handler = async ({ space, resources }: ActionOptions) => {
+  const handler = async ({ space, resources }: FileActionOptions) => {
     // resources need to be sorted by path ASC to recover the parents first in case of deep nested folder structure
     const sortedResources = resources.sort((a, b) => a.path.length - b.path.length)
 
@@ -264,13 +264,13 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
     return restoreResources(space, resolvedResources, missingFolderPaths)
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'restore',
       icon: 'arrow-go-back',
       label: () => $gettext('Restore'),
       handler,
-      isEnabled: ({ space, resources }: ActionOptions) => {
+      isEnabled: ({ space, resources }) => {
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }

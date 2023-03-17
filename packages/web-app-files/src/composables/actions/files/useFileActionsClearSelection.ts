@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { Store, useStore } from 'vuex'
-import { Action } from 'web-pkg/src/composables/actions'
+import { FileAction } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 
 export const useFileActionsClearSelection = ({ store }: { store?: Store<any> } = {}) => {
@@ -11,7 +11,7 @@ export const useFileActionsClearSelection = ({ store }: { store?: Store<any> } =
     store.commit('Files/RESET_SELECTION')
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'clear-selection',
       icon: 'close',
