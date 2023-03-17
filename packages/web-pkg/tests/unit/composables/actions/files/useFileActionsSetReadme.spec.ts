@@ -1,4 +1,4 @@
-import { useSetReadme } from 'web-pkg/src/composables/actions/spaces/setReadme'
+import { useFileActionsSetReadme } from 'web-pkg/src/composables/actions/files/useFileActionsSetReadme'
 import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
@@ -138,7 +138,7 @@ function getWrapper({
   resolveGetFileContents?: boolean
   space?: SpaceResource
   setup: (
-    instance: ReturnType<typeof useSetReadme>,
+    instance: ReturnType<typeof useFileActionsSetReadme>,
     options: { storeOptions: typeof defaultStoreMockOptions }
   ) => void
 }) {
@@ -169,7 +169,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useSetReadme({ store })
+        const instance = useFileActionsSetReadme({ store })
         setup(instance, { storeOptions })
       },
       {

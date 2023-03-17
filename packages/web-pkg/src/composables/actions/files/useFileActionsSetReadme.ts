@@ -4,7 +4,7 @@ import { Store } from 'vuex'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
-export const useSetReadme = ({ store }: { store?: Store<any> } = {}) => {
+export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $gettext } = useGettext()

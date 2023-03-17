@@ -10,7 +10,7 @@ import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { useStore } from 'web-pkg/src/composables'
 import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
 
-import { useSetReadme } from 'web-pkg/src/composables/actions/spaces/setReadme'
+import { useFileActionsSetReadme } from 'web-pkg/src/composables/actions/files/useFileActionsSetReadme'
 
 import {
   useFileActionsCreateQuickLink,
@@ -63,7 +63,7 @@ export default defineComponent({
     const { actions: renameActions } = useFileActionsRename({ store })
     const { actions: restoreActions } = useFileActionsRestore({ store })
     const { actions: setSpaceImageActions } = useFileActionsSetImage({ store })
-    const { actions: setSpaceReadmeActions } = useSetReadme({ store })
+    const { actions: setSpaceReadmeActions } = useFileActionsSetReadme({ store })
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
     const { actions: showEditTagsActions } = useFileActionsShowEditTags({ store })
     const { actions: showSharesActions } = useFileActionsShowShares({ store })
