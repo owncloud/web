@@ -307,13 +307,13 @@ When(
     this: World,
     stepUser: string,
     _: string,
-    way: string,
+    actionType: string,
     stepTable: DataTable
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
 
-    switch (way) {
+    switch (actionType) {
       case 'batch actions':
         for (const user of stepTable.hashes()) {
           await usersObject.selectUser({ key: user.id })
@@ -326,7 +326,7 @@ When(
         }
         break
       default:
-        throw new Error(`${way} not implemented`)
+        throw new Error(`${actionType} not implemented`)
     }
   }
 )
