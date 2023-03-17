@@ -102,6 +102,7 @@ Feature: spaces management
       | username    | anna             |
       | displayname | Anna Murphy      |
       | email       | anna@example.org |
+    And "anna" logs out
 
 
   Scenario: assign user to groups
@@ -126,3 +127,4 @@ Feature: spaces management
     Then "Alice" should have self info:
       | key    | value                                   |
       | groups | finance department, security department |
+    And "Alice" logs out
