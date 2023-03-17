@@ -1,4 +1,4 @@
-Feature: spaces management
+Feature: users management
 
   Scenario: user login can be managed in the admin settings
     Given "Admin" creates following users

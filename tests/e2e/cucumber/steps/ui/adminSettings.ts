@@ -352,3 +352,29 @@ When(
     }
   }
 )
+
+When(
+  '{string} navigates to the groups management page',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const groupsObject = new objects.applicationAdminSettings.page.Groups({ page })
+    await groupsObject.navigate()
+  }
+)
+
+When(
+  '{string} creates the following group(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+
+    for (const info of stepTable.hashes()) {
+      const group = this.usersEnvironment.getGroup({ key: info.id })
+      await api.graph.deleteGroup({
+        group: group,
+        admin: this.usersEnvironment.getUser({ key: stepUser })
+      })
+      await groupsObject.createGroup({ key: group.displayName })
+    }
+  }
+)
