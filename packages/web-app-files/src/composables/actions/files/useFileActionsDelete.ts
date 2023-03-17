@@ -1,4 +1,4 @@
-import { useFileActionsDeleteResources } from './useFileActionsDeleteResources'
+import { useFileActionsDeleteResources } from '../helpers/useFileActionsDeleteResources'
 import { Store } from 'vuex'
 import {
   isLocationPublicActive,

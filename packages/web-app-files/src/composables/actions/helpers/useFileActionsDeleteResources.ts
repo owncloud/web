@@ -17,6 +17,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
+import { ref } from 'vue'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
@@ -31,14 +32,14 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
   const queue = new PQueue({ concurrency: 4 })
   const deleteOps = []
-  let resourcesToDelete = []
+  const resourcesToDelete = ref([])
 
   const isInTrashbin = computed(() => {
     return isLocationTrashActive(router, 'files-trash-generic')
   })
 
   const resources = computed(() => {
-    return cloneStateObject(resourcesToDelete)
+    return cloneStateObject(unref(resourcesToDelete))
   })
 
   const dialogTitle = computed(() => {
@@ -190,13 +191,13 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
         }
 
         if (
-          resourcesToDelete.length &&
-          isSameResource(resourcesToDelete[0], store.getters['Files/currentFolder'])
+          unref(resourcesToDelete).length &&
+          isSameResource(unref(resourcesToDelete)[0], store.getters['Files/currentFolder'])
         ) {
           return router.push(
             createFileRouteOptions(space, {
-              path: dirname(resourcesToDelete[0].path),
-              fileId: resourcesToDelete[0].parentFolderId
+              path: dirname(unref(resourcesToDelete)[0].path),
+              fileId: unref(resourcesToDelete)[0].parentFolderId
             })
           )
         }
@@ -210,7 +211,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   }
 
   const displayDialog = (space: SpaceResource, resources: Resource[]) => {
-    resourcesToDelete = [...resources]
+    resourcesToDelete.value = [...resources]
 
     const modal = {
       variation: 'danger',

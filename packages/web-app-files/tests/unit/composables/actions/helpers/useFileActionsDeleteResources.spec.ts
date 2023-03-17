@@ -1,4 +1,4 @@
-import { useFileActionsDeleteResources } from 'web-app-files/src/composables/actions/files/useFileActionsDeleteResources'
+import { useFileActionsDeleteResources } from 'web-app-files/src/composables/actions/helpers/useFileActionsDeleteResources'
 import { mockDeep } from 'jest-mock-extended'
 import { FolderResource, SpaceResource } from 'web-client/src/helpers'
 import {
@@ -18,7 +18,6 @@ const currentFolder = {
 describe('deleteResources', () => {
   describe('method "$_deleteResources_filesList_delete"', () => {
     it('should call the delete action on a resource in the file list', async () => {
-      const resourcesToDelete = [{ id: 2, path: '/' }]
       const { wrapper } = getWrapper({
         currentFolder,
         setup: async ({ filesList_delete }, { space, router, storeOptions }) => {
