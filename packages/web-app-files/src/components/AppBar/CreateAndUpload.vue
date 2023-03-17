@@ -173,13 +173,10 @@ import { stringify } from 'qs'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
-import * as ODSComponents from '@ownclouders/design-system/src/components'
 
 export default defineComponent({
   components: {
-    ResourceUpload,
-    // Remove when mixins are replaced
-    ...ODSComponents
+    ResourceUpload
   },
   props: {
     space: {

@@ -107,7 +107,6 @@ import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import * as ODSComponents from '@ownclouders/design-system/src/components'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -116,9 +115,7 @@ export default defineComponent({
     ResourceTable,
     ContextActions,
     ListInfo,
-    NoContentMessage,
-    // Remove when mixins are replaced
-    ...ODSComponents
+    NoContentMessage
   },
 
   props: {
