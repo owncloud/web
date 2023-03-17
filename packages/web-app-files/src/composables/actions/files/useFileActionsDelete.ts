@@ -9,7 +9,7 @@ import {
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { useCapabilityFilesPermanentDeletion, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { Action, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'
 
 export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
@@ -24,13 +24,13 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
     displayDialog(space, resources)
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'delete',
       icon: 'delete-bin-5',
       label: () => $gettext('Delete'),
       handler,
-      isEnabled: ({ space, resources }: FileActionOptions) => {
+      isEnabled: ({ space, resources }) => {
         if (
           !isLocationSpacesActive(router, 'files-spaces-generic') &&
           !isLocationPublicActive(router, 'files-public-link') &&
@@ -64,7 +64,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
       icon: 'delete-bin-5',
       label: () => $gettext('Delete'),
       handler,
-      isEnabled: ({ space, resources }: FileActionOptions) => {
+      isEnabled: ({ space, resources }) => {
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }
