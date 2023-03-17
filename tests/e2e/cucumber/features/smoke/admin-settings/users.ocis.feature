@@ -136,7 +136,7 @@ Feature: spaces management
       | Alice |
       | Brian |
       | Carol |
-    When "Admin" logs in
+    And "Admin" logs in
     And "Admin" opens the "admin-settings" app
     And "Admin" navigates to the users management page
     When "Admin" deletes the following users using the batch actions

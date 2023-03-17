@@ -60,7 +60,7 @@ When(
         await spacesObject.delete({ key, context: 'context-menu' })
         break
       default:
-        throw new Error(`${action} not implemented`)
+        throw new Error(`'${action}' not implemented`)
     }
   }
 )
@@ -87,7 +87,7 @@ When(
         await spacesObject.delete({ key: stepTable.hashes()[0].id, context: 'batch-actions' })
         break
       default:
-        throw new Error(`${action} not implemented`)
+        throw new Error(`'${action}' not implemented`)
     }
   }
 )
@@ -195,7 +195,7 @@ Then(
           expect(users).not.toContain(usersObject.getUUID({ key: user }))
           break
         default:
-          throw new Error(`${action} not implemented`)
+          throw new Error(`'${action}' not implemented`)
       }
     }
   }
@@ -238,7 +238,7 @@ When(
         await usersObject.removeFromGroupsBatchAtion({ groups: groups.split(',') })
         break
       default:
-        throw new Error(`${action} not implemented`)
+        throw new Error(`'${action}' not implemented`)
     }
   }
 )
@@ -296,17 +296,16 @@ When(
         await usersObject.removeFromGroups({ key: user, groups: groups.split(',') })
         break
       default:
-        throw new Error(`${action} not implemented`)
+        throw new Error(`'${action}' not implemented`)
     }
   }
 )
 
 When(
-  /^"([^"]*)" deletes the following (user|users) using the (batch actions|context menu)$/,
+  /^"([^"]*)" deletes the following (?:user|users) using the (batch actions|context menu)$/,
   async function (
     this: World,
     stepUser: string,
-    _: string,
     actionType: string,
     stepTable: DataTable
   ): Promise<void> {
@@ -326,7 +325,7 @@ When(
         }
         break
       default:
-        throw new Error(`${actionType} not implemented`)
+        throw new Error(`'${actionType}' not implemented`)
     }
   }
 )
