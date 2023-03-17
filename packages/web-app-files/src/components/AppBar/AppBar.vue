@@ -46,9 +46,8 @@
           />
           <batch-actions
             v-if="showBatchActions"
-            :items="selectedFiles"
             :actions="batchActions"
-            :space="space"
+            :action-options="{ space, resources: selectedFiles }"
             :limited-screen-space="limitedScreenSpace"
           />
         </div>

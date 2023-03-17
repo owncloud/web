@@ -29,8 +29,8 @@
             <batch-actions
               v-if="showBatchActions"
               class="oc-ml-s"
-              :items="batchActionItems"
               :actions="batchActions"
+              :action-options="{ resources: batchActionItems }"
               :limited-screen-space="limitedScreenSpace"
             />
           </div>
