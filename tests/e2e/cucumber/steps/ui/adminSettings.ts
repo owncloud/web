@@ -311,7 +311,7 @@ When(
 )
 
 When(
-  '{string} creates following group(s):',
+  '{string} creates the following group(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const groupsObject = new objects.applicationAdminSettings.Groups({ page })

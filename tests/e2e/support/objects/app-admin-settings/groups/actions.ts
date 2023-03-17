@@ -14,6 +14,6 @@ export const createGroup = async (args: { page: Page; key: string }): Promise<vo
       (resp) =>
         resp.url().endsWith('groups') && resp.status() === 200 && resp.request().method() === 'POST'
     ),
-    await page.locator(actionConfirmButton).click()
+    page.locator(actionConfirmButton).click()
   ])
 }
