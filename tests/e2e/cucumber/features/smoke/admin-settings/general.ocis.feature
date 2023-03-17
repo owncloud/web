@@ -6,5 +6,6 @@ Feature: general management
     And "Admin" navigates to the general management page
     Then "Admin" should be able to upload a logo from the local file "filesForUpload/testavatar.png"
     And "Admin" navigates to the general management page
-    Then "Admin" should be able to reset the logo
-  
+    And "Admin" should be able to reset the logo
+    And "Admin" logs out
+

@@ -27,3 +27,4 @@ Feature: Notifications
     And "Brian" marks all notifications as read
     Then "Brian" should see no notifications
     And "Alice" logs out
+    And "Brian" logs out
