@@ -7,7 +7,7 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { HttpClient } from 'web-pkg'
+import { ClientService } from 'web-pkg'
 import { AxiosResponse } from 'axios'
 import { nextTick } from 'vue'
 
@@ -22,9 +22,6 @@ const ocAvatar = 'oc-avatar-stub'
 
 describe('Avatar component', () => {
   window.URL.createObjectURL = jest.fn()
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
 
   it('should set user when the component is mounted', () => {
     const spySetUser = jest.spyOn((Avatar as any).methods, 'setUser')
@@ -76,14 +73,14 @@ describe('Avatar component', () => {
       const blob = 'blob:https://web.org/6fe8f675-6727'
       it('should set blob as src prop on oc-avatar component', async () => {
         global.URL.createObjectURL = jest.fn(() => blob)
-        const clientMock = mockDeep<HttpClient>()
-        clientMock.get.mockResolvedValue(
+        const clientService = mockDeep<ClientService>()
+        clientService.httpAuthenticated.get.mockResolvedValue(
           mock<AxiosResponse>({
             status: 200,
             data: blob
           })
         )
-        const { wrapper } = getShallowWrapper(false, clientMock)
+        const { wrapper } = getShallowWrapper(false, clientService)
         await nextTick()
         await nextTick()
         await nextTick()
@@ -94,13 +91,13 @@ describe('Avatar component', () => {
   })
 })
 
-function getShallowWrapper(loading = false, clientMock = undefined) {
+function getShallowWrapper(loading = false, clientService = undefined) {
   const mocks = { ...defaultComponentMocks() }
-  if (!clientMock) {
-    clientMock = mockDeep<HttpClient>()
-    clientMock.get.mockResolvedValue(mock<AxiosResponse>({ status: 200 }))
+  if (!clientService) {
+    clientService = mockDeep<ClientService>()
+    clientService.httpAuthenticated.get.mockResolvedValue(mock<AxiosResponse>({ status: 200 }))
   }
-  mocks.$clientService.httpAuthenticated.mockImplementation(() => clientMock)
+  mocks.$clientService = clientService
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.capabilities.mockImplementation(() => ({
     files_sharing: {

@@ -1,6 +1,5 @@
 import resetLogo from '../../../src/mixins/general/resetLogo'
-import { mock, mockDeep } from 'jest-mock-extended'
-import { clientService } from 'web-pkg'
+import { mock } from 'jest-mock-extended'
 import {
   createStore,
   defaultPlugins,
@@ -22,11 +21,8 @@ const Component = {
 describe('resetLogo', () => {
   describe('method "$_resetLogo_reset"', () => {
     it('should show message on request success', async () => {
-      const httpClientMock = mockDeep<any>({
-        delete: jest.fn().mockResolvedValue(() => mockAxiosResolve())
-      })
-      jest.spyOn(clientService, 'httpAuthenticated').mockImplementation(() => httpClientMock)
-      const { wrapper } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
+      mocks.$clientService.httpAuthenticated.delete.mockResolvedValue(() => mockAxiosResolve())
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_resetLogo_reset()
       jest.runAllTimers()
@@ -36,11 +32,8 @@ describe('resetLogo', () => {
 
     it('should show message on request error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const httpClientMock = mockDeep<any>({
-        delete: jest.fn().mockRejectedValue(() => mockAxiosReject())
-      })
-      jest.spyOn(clientService, 'httpAuthenticated').mockImplementation(() => httpClientMock)
-      const { wrapper } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
+      mocks.$clientService.httpAuthenticated.delete.mockRejectedValue(() => mockAxiosReject())
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_resetLogo_reset()
       jest.runAllTimers()
@@ -53,12 +46,14 @@ describe('resetLogo', () => {
 function getWrapper() {
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
+  const mocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ name: 'admin-settings-general' })
+  })
   return {
+    mocks,
     wrapper: mount(Component, {
       global: {
-        mocks: defaultComponentMocks({
-          currentRoute: mock<RouteLocation>({ name: 'admin-settings-general' })
-        }),
+        mocks,
         plugins: [...defaultPlugins(), store]
       }
     })

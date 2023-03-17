@@ -8,9 +8,7 @@ import {
   defaultStoreMockOptions,
   RouteLocation
 } from 'web-test-helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
-import { Graph } from 'web-client'
-import { clientService } from 'web-pkg'
+import { mock } from 'jest-mock-extended'
 
 const Component = {
   template: '<div></div>',
@@ -18,8 +16,6 @@ const Component = {
 }
 
 describe('editDescription', () => {
-  afterEach(() => jest.clearAllMocks())
-
   describe('method "$_editDescription_trigger"', () => {
     it('should trigger the editDescription modal window with one resource', async () => {
       const { wrapper } = getWrapper()
@@ -39,9 +35,10 @@ describe('editDescription', () => {
 
   describe('method "$_editDescription_editDescriptionSpace"', () => {
     it('should hide the modal on success', async () => {
-      const graphMock = mockDeep<Graph>()
-      graphMock.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
-      const { wrapper } = getWrapper(graphMock)
+      const { wrapper, mocks } = getWrapper()
+      mocks.$clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
+        mockAxiosResolve()
+      )
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
       await wrapper.vm.$_editDescription_editDescriptionSpace(1)
 
@@ -50,9 +47,8 @@ describe('editDescription', () => {
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graphMock = mockDeep<Graph>()
-      graphMock.drives.updateDrive.mockRejectedValue(new Error())
-      const { wrapper } = getWrapper(graphMock)
+      const { wrapper, mocks } = getWrapper()
+      mocks.$clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_editDescription_editDescriptionSpace(1)
 
@@ -61,20 +57,21 @@ describe('editDescription', () => {
   })
 })
 
-function getWrapper(graphMock = mockDeep<Graph>()) {
-  jest.spyOn(clientService, 'graphAuthenticated').mockImplementation(() => graphMock)
+function getWrapper() {
   const storeOptions = {
     ...defaultStoreMockOptions,
     modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
   }
   const store = createStore(storeOptions)
+  const mocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
+  })
   return {
+    mocks,
     wrapper: mount(Component, {
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks: defaultComponentMocks({
-          currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
-        })
+        mocks
       }
     })
   }

@@ -8,17 +8,12 @@ import {
   mount,
   mockAxiosResolve
 } from 'web-test-helpers'
-import { mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg'
-import { Graph } from 'web-client'
-
-afterEach(() => jest.clearAllMocks())
 
 describe('QuotaModal', () => {
   describe('method "editQuota"', () => {
     it('should show message on success', async () => {
-      const graphMock = mockDeep<Graph>()
-      graphMock.drives.updateDrive.mockImplementation(() =>
+      const { wrapper, mocks } = getWrapper()
+      mocks.$clientService.graphAuthenticated.drives.updateDrive.mockImplementation(() =>
         mockAxiosResolve({
           id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
           name: 'any',
@@ -30,8 +25,6 @@ describe('QuotaModal', () => {
           }
         })
       )
-
-      const { wrapper } = getWrapper(graphMock)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
       await wrapper.vm.editQuota()
@@ -42,10 +35,8 @@ describe('QuotaModal', () => {
 
     it('should show message on server error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graphMock = mockDeep<Graph>()
-      graphMock.drives.updateDrive.mockRejectedValue(new Error())
-
-      const { wrapper } = getWrapper(graphMock)
+      const { wrapper, mocks } = getWrapper()
+      mocks.$clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
       await wrapper.vm.editQuota()
@@ -56,12 +47,12 @@ describe('QuotaModal', () => {
   })
 })
 
-function getWrapper(graphMock) {
+function getWrapper() {
   const storeOptions = defaultStoreMockOptions
-  const $clientService = mockDeep<ClientService>({ graphAuthenticated: () => graphMock })
-
+  const mocks = defaultComponentMocks()
   const store = createStore(storeOptions)
   return {
+    mocks,
     wrapper: mount(QuotaModal, {
       data: () => {
         return {
@@ -88,10 +79,7 @@ function getWrapper(graphMock) {
       },
       global: {
         stubs: { ...defaultStubs, portal: true, 'oc-modal': true },
-        mocks: {
-          ...defaultComponentMocks(),
-          $clientService
-        },
+        mocks,
         plugins: [...defaultPlugins(), store]
       }
     })

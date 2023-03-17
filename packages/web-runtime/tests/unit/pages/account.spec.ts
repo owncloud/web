@@ -7,9 +7,6 @@ import {
   shallowMount,
   defaultStoreMockOptions
 } from 'web-test-helpers'
-import { mockDeep } from 'jest-mock-extended'
-import { Graph } from 'web-client'
-import { ClientService } from 'web-pkg'
 
 const $route = {
   meta: {
@@ -87,9 +84,10 @@ describe('account page', () => {
 
   describe('method "editPassword"', () => {
     it('should show message on success', async () => {
-      const graphMock = mockDeep<Graph>()
-      graphMock.users.changeOwnPassword.mockResolvedValue(mockAxiosResolve())
-      const { wrapper } = getWrapper({ graphMock })
+      const { wrapper, mocks } = getWrapper()
+      mocks.$clientService.graphAuthenticated.users.changeOwnPassword.mockResolvedValue(
+        mockAxiosResolve()
+      )
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.editPassword('password', 'newPassword')
       expect(showMessageStub).toHaveBeenCalled()
@@ -97,9 +95,8 @@ describe('account page', () => {
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graphMock = mockDeep<Graph>()
-      graphMock.users.changeOwnPassword.mockRejectedValue(new Error())
-      const { wrapper } = getWrapper({ graphMock })
+      const { wrapper, mocks } = getWrapper()
+      mocks.$clientService.graphAuthenticated.users.changeOwnPassword.mockRejectedValue(new Error())
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.editPassword('password', 'newPassword')
       expect(showMessageStub).toHaveBeenCalled()
@@ -118,14 +115,7 @@ describe('account page', () => {
   })
 })
 
-function getWrapper({
-  data = {},
-  user = {},
-  capabilities = {},
-  accountEditLink = undefined,
-  graphMock = mockDeep<Graph>()
-} = {}) {
-  const $clientService = mockDeep<ClientService>({ graphAuthenticated: () => graphMock })
+function getWrapper({ data = {}, user = {}, capabilities = {}, accountEditLink = undefined } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.getters.user.mockReturnValue({ groups: [], ...user })
   storeOptions.getters.capabilities.mockReturnValue(capabilities)
@@ -135,16 +125,17 @@ function getWrapper({
   })
 
   const store = createStore(storeOptions)
+  const mocks = {
+    ...defaultComponentMocks(),
+    $route
+  }
   return {
+    mocks,
     wrapper: shallowMount(account, {
       data: () => data,
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks: {
-          ...defaultComponentMocks(),
-          $clientService,
-          $route
-        },
+        mocks,
         stubs: {
           'oc-button': true,
           'oc-icon': true

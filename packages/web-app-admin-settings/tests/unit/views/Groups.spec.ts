@@ -1,6 +1,5 @@
 import Groups from '../../../src/views/Groups.vue'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
-import { Graph } from 'web-client'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg/src'
 import {
@@ -12,10 +11,12 @@ import {
 } from 'web-test-helpers'
 
 const selectors = { batchActionsStub: 'batch-actions-stub' }
-const defaultGraphMock = () => {
-  const graph = mockDeep<Graph>()
-  graph.groups.listGroups.mockImplementation(() => mockAxiosResolve({ value: [{ id: '1' }] }))
-  return graph
+const getClientServiceMock = () => {
+  const clientService = mockDeep<ClientService>()
+  clientService.graphAuthenticated.groups.listGroups.mockImplementation(() =>
+    mockAxiosResolve({ value: [{ id: '1' }] })
+  )
+  return clientService
 }
 jest.mock('web-pkg/src/composables/appDefaults')
 
@@ -33,9 +34,11 @@ describe('Groups view', () => {
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graph = defaultGraphMock()
-      graph.groups.createGroup.mockImplementation(() => mockAxiosReject())
-      const { wrapper } = getWrapper({ graph })
+      const clientService = getClientServiceMock()
+      clientService.graphAuthenticated.groups.createGroup.mockImplementation(() =>
+        mockAxiosReject()
+      )
+      const { wrapper } = getWrapper({ clientService })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleCreateGroupModalStub = jest.spyOn(wrapper.vm, 'toggleCreateGroupModal')
       await wrapper.vm.createGroup({ displayName: 'admins' })
@@ -56,9 +59,9 @@ describe('Groups view', () => {
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graph = defaultGraphMock()
-      graph.groups.editGroup.mockImplementation(() => mockAxiosReject())
-      const { wrapper } = getWrapper({ graph })
+      const clientService = getClientServiceMock()
+      clientService.graphAuthenticated.groups.editGroup.mockImplementation(() => mockAxiosReject())
+      const { wrapper } = getWrapper({ clientService })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.editGroup({})
 
@@ -101,11 +104,11 @@ describe('Groups view', () => {
       expect(wrapper.vm.allGroupsSelected).toBeTruthy()
     })
     it('should be false if not every group is selected', async () => {
-      const graph = defaultGraphMock()
-      graph.groups.listGroups.mockImplementation(() =>
+      const clientService = getClientServiceMock()
+      clientService.graphAuthenticated.groups.listGroups.mockImplementation(() =>
         mockAxiosResolve({ value: [{ id: '1' }, { id: '2' }] })
       )
-      const { wrapper } = getWrapper({ graph })
+      const { wrapper } = getWrapper({ clientService })
       wrapper.vm.selectedGroups = [{ id: '1' }]
       await wrapper.vm.loadResourcesTask.last
       expect(wrapper.vm.allGroupsSelected).toBeFalsy()
@@ -135,10 +138,8 @@ describe('Groups view', () => {
   })
 })
 
-function getWrapper({ graph = defaultGraphMock() } = {}) {
-  const $clientService = mockDeep<ClientService>()
-  $clientService.graphAuthenticated.mockImplementation(() => graph)
-  const mocks = { ...defaultComponentMocks(), $clientService }
+function getWrapper({ clientService = getClientServiceMock() } = {}) {
+  const mocks = { ...defaultComponentMocks(), $clientService: clientService }
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
   return {

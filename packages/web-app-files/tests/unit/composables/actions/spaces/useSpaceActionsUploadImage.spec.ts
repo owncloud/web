@@ -1,16 +1,18 @@
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables/actions/spaces/useSpaceActionsUploadImage'
 import { thumbnailService } from '../../../../../src/services'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import {
   createStore,
   defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation,
-  getComposableWrapper
+  getComposableWrapper,
+  mockAxiosResolve
 } from 'web-test-helpers'
 import { unref, VNodeRef } from 'vue'
 import { useStore } from 'web-pkg/src/composables'
-import { Graph, SpaceResource } from 'web-client/src'
+import { SpaceResource } from 'web-client/src'
+import { Drive } from 'web-client/src/generated'
 
 describe('uploadImage', () => {
   beforeAll(() => {
@@ -21,17 +23,14 @@ describe('uploadImage', () => {
     })
   })
 
-  afterEach(() => jest.clearAllMocks())
-
   describe('method "uploadImageSpace"', () => {
-    it('should show message on success', async () => {
-      const { wrapper } = getWrapper({
+    it('should show message on success', () => {
+      getWrapper({
         setup: async ({ uploadImageSpace }, { storeOptions, clientService }) => {
-          const responseMock = { data: { special: [{ specialFolder: { name: 'image' } }] } }
-          const graphMock = mockDeep<Graph>({
-            drives: { updateDrive: jest.fn().mockResolvedValue(responseMock) }
-          })
-          clientService.graphAuthenticated.mockImplementation(() => graphMock)
+          const driveMock = mock<Drive>({ special: [{ specialFolder: { name: 'image' } }] })
+          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
+            mockAxiosResolve(driveMock)
+          )
           clientService.owncloudSdk.files.putFileContents.mockImplementation(() =>
             Promise.resolve({
               'OC-FileId':
@@ -49,9 +48,9 @@ describe('uploadImage', () => {
       })
     })
 
-    it('should show message on error', async () => {
+    it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: async ({ uploadImageSpace }, { storeOptions, clientService }) => {
           clientService.owncloudSdk.files.putFileContents.mockImplementation(() =>
             Promise.reject(new Error(''))
@@ -89,7 +88,6 @@ function getWrapper({
     currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
   })
 
-  mocks.$clientService.graphAuthenticated
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
   return {

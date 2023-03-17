@@ -7,9 +7,8 @@ import {
   mockAxiosReject,
   shallowMount
 } from 'web-test-helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { Group } from 'web-client/src/generated'
-import { Graph } from 'web-client'
 import { AxiosResponse } from 'axios'
 
 const availableGroupOptions = [
@@ -73,20 +72,18 @@ describe('EditPanel', () => {
     })
     it('should be false when userName is already existing', async () => {
       const { wrapper, mocks } = getWrapper()
-      const graphMock = mockDeep<Graph>()
+      const graphMock = mocks.$clientService.graphAuthenticated
       const getUserStub = graphMock.users.getUser.mockResolvedValue(
         mock<AxiosResponse>({ data: { onPremisesSamAccountName: 'jan' } })
       )
-      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
       wrapper.vm.editUser.onPremisesSamAccountName = 'jan'
       expect(await wrapper.vm.validateUserName()).toBeFalsy()
       expect(getUserStub).toHaveBeenCalled()
     })
     it('should be true when userName is valid', async () => {
       const { wrapper, mocks } = getWrapper()
-      const graphMock = mockDeep<Graph>()
+      const graphMock = mocks.$clientService.graphAuthenticated
       const getUserStub = graphMock.users.getUser.mockRejectedValue(() => mockAxiosReject())
-      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
       wrapper.vm.editUser.onPremisesSamAccountName = 'jana'
       expect(await wrapper.vm.validateUserName()).toBeTruthy()
       expect(getUserStub).toHaveBeenCalled()

@@ -1,7 +1,6 @@
 import Users from '../../../src/views/Users.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { Graph } from 'web-client/src'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import {
   createStore,
@@ -13,7 +12,7 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
-import { queryItemAsString } from 'web-pkg'
+import { ClientService, queryItemAsString } from 'web-pkg'
 
 const mixins = ['$_delete_items', '$_editQuota_items']
 jest.mock('web-pkg/src/composables/appDefaults')
@@ -71,18 +70,22 @@ const getDefaultApplications = () => {
   ]
 }
 
-const getDefaultGraphMock = () => {
-  const graph = mockDeep<Graph>()
-  graph.users.listUsers.mockResolvedValue(
+const getClientService = () => {
+  const clientService = mockDeep<ClientService>()
+  clientService.graphAuthenticated.users.listUsers.mockResolvedValue(
     mock<AxiosResponse>({ data: { value: [getDefaultUser()] } })
   )
-  graph.users.getUser.mockResolvedValue(mock<AxiosResponse>({ data: getDefaultUser() }))
-  graph.groups.listGroups.mockResolvedValue(mock<AxiosResponse>({ data: { value: [] } }))
-  graph.applications.listApplications.mockResolvedValue(
+  clientService.graphAuthenticated.users.getUser.mockResolvedValue(
+    mock<AxiosResponse>({ data: getDefaultUser() })
+  )
+  clientService.graphAuthenticated.groups.listGroups.mockResolvedValue(
+    mock<AxiosResponse>({ data: { value: [] } })
+  )
+  clientService.graphAuthenticated.applications.listApplications.mockResolvedValue(
     mock<AxiosResponse>({ data: { value: getDefaultApplications() } })
   )
 
-  return graph
+  return clientService
 }
 
 const selectors = {
@@ -93,8 +96,8 @@ const selectors = {
 describe('Users view', () => {
   describe('method "createUser"', () => {
     it('should hide the modal and show message on success', async () => {
-      const graph = getDefaultGraphMock()
-      graph.users.createUser.mockImplementation(() =>
+      const clientService = getClientService()
+      clientService.graphAuthenticated.users.createUser.mockImplementation(() =>
         mockAxiosResolve({
           displayName: 'benedikt coolman',
           givenName: '',
@@ -104,7 +107,7 @@ describe('Users view', () => {
           surname: 'bene'
         })
       )
-      graph.users.getUser.mockImplementation(() =>
+      clientService.graphAuthenticated.users.getUser.mockImplementation(() =>
         mockAxiosResolve({
           appRoleAssignments: [
             {
@@ -125,7 +128,7 @@ describe('Users view', () => {
           surname: 'bene'
         })
       )
-      const { wrapper } = getMountedWrapper({ graph })
+      const { wrapper } = getMountedWrapper({ clientService })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleCreateUserModalStub = jest.spyOn(wrapper.vm, 'toggleCreateUserModal')
       await wrapper.vm.createUser({ displayName: 'jan' })
@@ -136,9 +139,9 @@ describe('Users view', () => {
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graph = getDefaultGraphMock()
-      graph.users.createUser.mockImplementation(() => mockAxiosReject())
-      const { wrapper } = getMountedWrapper({ graph })
+      const clientService = getClientService()
+      clientService.graphAuthenticated.users.createUser.mockImplementation(() => mockAxiosReject())
+      const { wrapper } = getMountedWrapper({ clientService })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleCreateUserModalStub = jest.spyOn(wrapper.vm, 'toggleCreateUserModal')
       await wrapper.vm.createUser({ displayName: 'jana' })
@@ -179,18 +182,20 @@ describe('Users view', () => {
         }
       }
 
-      const graph = getDefaultGraphMock()
-      graph.users.editUser.mockImplementation(() => mockAxiosResolve())
-      graph.users.createUserAppRoleAssignment.mockImplementation(() => mockAxiosResolve())
-      graph.groups.addMember.mockImplementation(() => mockAxiosResolve())
-      graph.drives.updateDrive.mockImplementation(() =>
+      const clientService = getClientService()
+      clientService.graphAuthenticated.users.editUser.mockImplementation(() => mockAxiosResolve())
+      clientService.graphAuthenticated.users.createUserAppRoleAssignment.mockImplementation(() =>
+        mockAxiosResolve()
+      )
+      clientService.graphAuthenticated.groups.addMember.mockImplementation(() => mockAxiosResolve())
+      clientService.graphAuthenticated.drives.updateDrive.mockImplementation(() =>
         mockAxiosResolve({
           id: '1',
           name: 'admin',
           quota: { remaining: 1000000000, state: 'normal', total: 1000000000, used: 0 }
         })
       )
-      graph.users.getUser.mockImplementation(() =>
+      clientService.graphAuthenticated.users.getUser.mockImplementation(() =>
         mockAxiosResolve({
           appRoleAssignments: [
             {
@@ -222,7 +227,7 @@ describe('Users view', () => {
       )
 
       const { wrapper } = getMountedWrapper({
-        graph
+        clientService
       })
 
       const busStub = jest.spyOn(eventBus, 'publish')
@@ -255,9 +260,9 @@ describe('Users view', () => {
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graph = getDefaultGraphMock()
-      graph.users.editUser.mockImplementation(() => mockAxiosReject())
-      const { wrapper } = getMountedWrapper({ graph })
+      const clientService = getClientService()
+      clientService.graphAuthenticated.users.editUser.mockImplementation(() => mockAxiosReject())
+      const { wrapper } = getMountedWrapper({ clientService })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
 
       await wrapper.vm.loadResourcesTask.last
@@ -301,11 +306,11 @@ describe('Users view', () => {
       expect(wrapper.vm.allUsersSelected).toBeTruthy()
     })
     it('should be false if not every user is selected', async () => {
-      const graph = getDefaultGraphMock()
-      graph.users.listUsers.mockImplementation(() =>
+      const clientService = getClientService()
+      clientService.graphAuthenticated.users.listUsers.mockImplementation(() =>
         mockAxiosResolve({ value: [{ id: '1' }, { id: '2' }] })
       )
-      const { wrapper } = getMountedWrapper({ graph })
+      const { wrapper } = getMountedWrapper({ clientService })
       wrapper.vm.selectedUsers = [{ id: '1' }]
       await wrapper.vm.loadResourcesTask.last
       expect(wrapper.vm.allUsersSelected).toBeFalsy()
@@ -337,17 +342,17 @@ describe('Users view', () => {
   describe('filter', () => {
     describe('groups', () => {
       it('does filter users by groups when the "selectionChange"-event is triggered', async () => {
-        const graphMock = getDefaultGraphMock()
-        const { wrapper } = getMountedWrapper({ mountType: mount, graph: graphMock })
+        const clientService = getClientService()
+        const { wrapper } = getMountedWrapper({ mountType: mount, clientService })
         await wrapper.vm.loadResourcesTask.last
-        expect(graphMock.users.listUsers).toHaveBeenCalledTimes(1)
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(1)
         ;(wrapper.findComponent<any>(selectors.itemFilterGroupsStub).vm as any).$emit(
           'selectionChange',
           [{ id: '1' }]
         )
         await wrapper.vm.$nextTick()
-        expect(graphMock.users.listUsers).toHaveBeenCalledTimes(2)
-        expect(graphMock.users.listUsers).toHaveBeenNthCalledWith(
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(2)
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(
           2,
           'displayName',
           "(memberOf/any(m:m/id eq '1'))"
@@ -355,14 +360,14 @@ describe('Users view', () => {
       })
       it('does filter initially if group ids are given via query param', async () => {
         const groupIdsQueryParam = '1+2'
-        const graphMock = getDefaultGraphMock()
+        const clientService = getClientService()
         const { wrapper } = getMountedWrapper({
           mountType: mount,
-          graph: graphMock,
+          clientService,
           groupFilterQuery: groupIdsQueryParam
         })
         await wrapper.vm.loadResourcesTask.last
-        expect(graphMock.users.listUsers).toHaveBeenCalledWith(
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
           'displayName',
           "(memberOf/any(m:m/id eq '1') or memberOf/any(m:m/id eq '2'))"
         )
@@ -370,17 +375,17 @@ describe('Users view', () => {
     })
     describe('roles', () => {
       it('does filter users by roles when the "selectionChange"-event is triggered', async () => {
-        const graphMock = getDefaultGraphMock()
-        const { wrapper } = getMountedWrapper({ mountType: mount, graph: graphMock })
+        const clientService = getClientService()
+        const { wrapper } = getMountedWrapper({ mountType: mount, clientService })
         await wrapper.vm.loadResourcesTask.last
-        expect(graphMock.users.listUsers).toHaveBeenCalledTimes(1)
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(1)
         ;(wrapper.findComponent<any>(selectors.itemFilterRolesStub).vm as any).$emit(
           'selectionChange',
           [{ id: '1' }]
         )
         await wrapper.vm.$nextTick()
-        expect(graphMock.users.listUsers).toHaveBeenCalledTimes(2)
-        expect(graphMock.users.listUsers).toHaveBeenNthCalledWith(
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(2)
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(
           2,
           'displayName',
           "(appRoleAssignments/any(m:m/appRoleId eq '1'))"
@@ -388,14 +393,14 @@ describe('Users view', () => {
       })
       it('does filter initially if role ids are given via query param', async () => {
         const roleIdsQueryParam = '1+2'
-        const graphMock = getDefaultGraphMock()
+        const clientService = getClientService()
         const { wrapper } = getMountedWrapper({
           mountType: mount,
-          graph: graphMock,
+          clientService,
           roleFilterQuery: roleIdsQueryParam
         })
         await wrapper.vm.loadResourcesTask.last
-        expect(graphMock.users.listUsers).toHaveBeenCalledWith(
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
           'displayName',
           "(appRoleAssignments/any(m:m/appRoleId eq '1') or appRoleAssignments/any(m:m/appRoleId eq '2'))"
         )
@@ -406,7 +411,7 @@ describe('Users view', () => {
 
 function getMountedWrapper({
   mountType = shallowMount,
-  graph = getDefaultGraphMock(),
+  clientService = getClientService(),
   groupFilterQuery = null,
   roleFilterQuery = null
 } = {}) {
@@ -416,7 +421,7 @@ function getMountedWrapper({
     ...defaultComponentMocks(),
     ...getActionMixinMocks({ actions: mixins })
   }
-  mocks.$clientService.graphAuthenticated.mockImplementation(() => graph)
+  mocks.$clientService = clientService
 
   const storeOptions = {
     ...defaultStoreMockOptions,
