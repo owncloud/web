@@ -1,0 +1,6 @@
+Enhancement: Add `Accept-Language` header to all outgoing requests
+
+All outgoing requests now have the `Accept-Language` header which includes the current user's language. It falls back to the browser language.
+
+https://github.com/owncloud/web/issues/8612
+https://github.com/owncloud/web/pull/8621
