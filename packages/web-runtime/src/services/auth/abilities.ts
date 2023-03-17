@@ -39,7 +39,7 @@ export const getAbilities = (
       { action: 'update-all', subject: 'Space' }
     ],
     'list-all-spaces.all': [{ action: 'read-all', subject: 'Space' }],
-    'set-space-quota.all': [{ action: 'set-quota-all', subject: 'Space' }]
+    'Drive.ReadWriteQuota.Project.all': [{ action: 'set-quota-all', subject: 'Space' }]
   }
 
   return Object.keys(abilities).reduce((acc, permission) => {

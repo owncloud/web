@@ -45,7 +45,7 @@ describe('getAbilities', () => {
     { permissions: ['create-space.all'], expectedActions: ['create-all'] },
     { permissions: ['list-all-spaces.all'], expectedActions: ['read-all'] },
     { permissions: ['Drive.ReadWriteEnabled.all'], expectedActions: ['delete-all', 'update-all'] },
-    { permissions: ['set-space-quota.all'], expectedActions: ['set-quota-all'] }
+    { permissions: ['Drive.ReadWriteQuota.Project.all'], expectedActions: ['set-quota-all'] }
   ])('gets correct abilities for subject "Space"', function (data) {
     const abilities = getAbilities(data.permissions)
     const expectedResult = data.expectedActions.map((action) => ({ action, subject: 'Space' }))
