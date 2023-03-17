@@ -60,10 +60,10 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   await Promise.all([applicationsPromise, themePromise])
 
   announceTranslations({ app, availableLanguages: supportedLanguages, translations })
-  announceClientService({ app, runtimeConfiguration })
+  announceClientService({ app, runtimeConfiguration, configurationManager, store })
   announceUppyService({ app })
   await announceClient(runtimeConfiguration)
-  await announceAuthService({ app, configurationManager, store, router })
+  announceAuthService({ app, configurationManager, store, router })
   announceCustomStyles({ runtimeConfiguration })
   announceCustomScripts({ runtimeConfiguration })
   announceDefaults({ store, router })
@@ -112,10 +112,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
       // Load spaces to make them available across the application
       if (store.getters.capabilities?.spaces?.enabled) {
-        const graphClient = clientService.graphAuthenticated(
-          store.getters.configuration.server,
-          store.getters['runtime/auth/accessToken']
-        )
+        const graphClient = clientService.graphAuthenticated
         await store.dispatch('runtime/spaces/loadSpaces', { graphClient })
         const personalSpace = store.getters['runtime/spaces/spaces'].find((space) =>
           isPersonalSpaceResource(space)

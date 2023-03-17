@@ -106,8 +106,10 @@ export default defineComponent({
     sideBarOpen: { type: Boolean, default: false }
   },
   setup(props) {
-    const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
-    const { getFileContents, getFileInfo } = useClientService().webdav
+    const language = useGettext()
+    const { $gettext, $ngettext, interpolate: $gettextInterpolate } = language
+    const clientService = useClientService()
+    const { getFileContents, getFileInfo } = clientService.webdav
     const store = useStore()
     const userId = computed(() => store.getters.user?.id)
     const accessToken = useAccessToken({ store })
@@ -219,6 +221,7 @@ export default defineComponent({
           path: decodeURIComponent(path)
         })
         imageContent.value = await loadPreview({
+          clientService,
           resource,
           isPublic: false,
           dimensions: ImageDimension.Preview,

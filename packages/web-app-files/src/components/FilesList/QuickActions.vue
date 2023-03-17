@@ -8,7 +8,7 @@
       appearance="raw"
       class="oc-mr-xs quick-action-button oc-p-xs"
       :class="`files-quick-action-${action.id}`"
-      @click="action.handler({ ...$language, item, client, store, ability })"
+      @click="action.handler({ ability, clientService, item, language, store })"
     >
       <oc-icon :name="action.icon" fill-type="line" />
     </oc-button>
@@ -18,7 +18,8 @@
 <script lang="ts">
 import pickBy from 'lodash-es/pickBy'
 import { computed, defineComponent } from 'vue'
-import { useAbility, useClientService, useStore } from 'web-pkg/src/composables'
+import { useAbility, useClientService, useStore } from 'web-pkg'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'QuickActions',
@@ -33,11 +34,11 @@ export default defineComponent({
       required: true
     }
   },
-
   setup(props) {
-    const { owncloudSdk: client } = useClientService()
     const store = useStore()
     const ability = useAbility()
+    const clientService = useClientService()
+    const language = useGettext()
 
     const filteredActions = computed(() =>
       pickBy(props.actions, (action) => action.displayed(props.item, store) === true)
@@ -45,8 +46,9 @@ export default defineComponent({
 
     return {
       ability,
-      client,
+      clientService,
       store,
+      language,
 
       filteredActions
     }

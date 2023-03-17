@@ -1,8 +1,7 @@
 import { buildShare } from '../../helpers/resources'
-import { useCapabilitySpacesEnabled, useStore } from 'web-pkg/src/composables'
+import { useCapabilitySpacesEnabled, useClientService, useStore } from 'web-pkg/src/composables'
 import { computed, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
-import { clientService } from 'web-pkg/src/services'
 import {
   buildSpace,
   buildWebDavSpacesPath,
@@ -15,6 +14,7 @@ import { DavProperty } from 'web-client/src/webdav/constants'
 
 export function useIncomingParentShare() {
   const store = useStore()
+  const clientService = useClientService()
   const incomingParentShare = ref(null)
   const incomingCollaborators = computed(() => store.state.Files.incomingCollaborators)
   const hasSpaces = useCapabilitySpacesEnabled(store)

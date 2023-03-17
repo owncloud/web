@@ -1,5 +1,4 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { clientService } from 'web-pkg/src/services'
 import { Drive } from 'web-client/src/generated'
 import { unref } from 'vue'
 
@@ -62,8 +61,7 @@ export default {
     },
 
     $_editDescription_editDescriptionSpace(space, description) {
-      const accessToken = this.$store.getters['runtime/auth/accessToken']
-      const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
+      const graphClient = this.$clientService.graphAuthenticated
       return graphClient.drives
         .updateDrive(space.id, { description } as Drive, {})
         .then(() => {

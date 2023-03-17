@@ -112,8 +112,8 @@ export default {
   navItems,
   quickActions,
   translations,
-  ready({ router, store }) {
-    Registry.sdkSearch = new SDKSearch(store, router)
+  ready({ clientService, router, store }) {
+    Registry.sdkSearch = new SDKSearch(store, router, clientService)
 
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.

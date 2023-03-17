@@ -3,7 +3,7 @@ import major from 'semver/functions/major'
 import rcompare from 'semver/functions/rcompare'
 
 import { RuntimeError } from 'web-runtime/src/container/error'
-import { clientService as defaultClientService, ClientService } from 'web-pkg/src/services'
+import { ClientService } from 'web-pkg/src/services'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { triggerDownloadWithFilename } from 'web-pkg/src/helpers'
@@ -20,13 +20,13 @@ interface ArchiverCapability {
 }
 
 interface TriggerDownloadOptions {
+  clientService: ClientService
   dir?: string
   files?: string[]
   fileIds?: string[]
   downloadSecret?: string
   publicToken?: string
   publicLinkPassword?: string
-  clientService?: ClientService
 }
 
 export class ArchiverService {
@@ -50,7 +50,7 @@ export class ArchiverService {
   }
 
   public async triggerDownload(options: TriggerDownloadOptions): Promise<string> {
-    const clientService = options.clientService || defaultClientService
+    const clientService = options.clientService
 
     if (!this.available) {
       throw new RuntimeError('no archiver available')

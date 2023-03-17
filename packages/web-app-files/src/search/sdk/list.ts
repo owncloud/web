@@ -1,6 +1,6 @@
 import { SearchList, SearchResult } from 'web-app-search/src/types'
 import ListComponent from '../../components/Search/List.vue'
-import { clientService } from 'web-pkg/src/services'
+import { ClientService } from 'web-pkg/src/services'
 import { buildResource } from 'web-client/src/helpers'
 import { Component } from 'vue'
 import { DavProperties } from 'web-client/src/webdav/constants'
@@ -11,10 +11,12 @@ export const searchLimit = 200
 export default class List implements SearchList {
   public readonly component: Component
   private readonly store: Store<any>
+  private readonly clientService: ClientService
 
-  constructor(store: Store<any>) {
+  constructor(store: Store<any>, clientService: ClientService) {
     this.component = ListComponent
     this.store = store
+    this.clientService = clientService
   }
 
   async search(term: string): Promise<SearchResult> {
@@ -25,7 +27,7 @@ export default class List implements SearchList {
       }
     }
 
-    const { range, results } = await clientService.owncloudSdk.files.search(
+    const { range, results } = await this.clientService.owncloudSdk.files.search(
       term,
       searchLimit,
       DavProperties.Default

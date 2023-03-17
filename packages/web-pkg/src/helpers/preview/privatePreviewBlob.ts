@@ -1,10 +1,10 @@
 import { encodePath } from '../../utils'
-import { cacheService } from '../../services'
-import { clientService } from '../../services'
+import { cacheService, ClientService } from '../../services'
 import { buildQueryString } from './common'
 import isEqual from 'lodash-es/isEqual'
 
 interface PrivatePreviewBlobOptions {
+  clientService: ClientService
   server: string
   userId: string
   resource: {
@@ -12,7 +12,6 @@ interface PrivatePreviewBlobOptions {
     webDavPath: string
     etag?: string
   }
-  token: string
   dimensions?: [number, number]
 }
 
@@ -35,7 +34,7 @@ export const privatePreviewBlob = async (
     })
   ].join('')
   try {
-    const { data } = await clientService.httpAuthenticated(options.token).get(url, {
+    const { data } = await options.clientService.httpAuthenticated.get(url, {
       responseType: 'blob'
     })
     return window.URL.createObjectURL(data)

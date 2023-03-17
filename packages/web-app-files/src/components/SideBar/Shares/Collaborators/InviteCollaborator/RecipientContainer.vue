@@ -21,7 +21,6 @@
 import { mapGetters } from 'vuex'
 import { avatarUrl } from '../../../../../helpers/user'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { useAccessToken, useStore } from 'web-pkg/src/composables'
 
 export default {
   props: {
@@ -33,14 +32,6 @@ export default {
       type: Function,
       required: false,
       default: null
-    }
-  },
-
-  setup() {
-    const store = useStore()
-    const accessToken = useAccessToken({ store })
-    return {
-      accessToken
     }
   },
 
@@ -73,8 +64,7 @@ export default {
         this.formattedRecipient.avatar = await avatarUrl({
           clientService: this.$clientService,
           server: this.configuration.server,
-          username: this.recipient.value.shareWith,
-          token: this.accessToken
+          username: this.recipient.value.shareWith
         })
       } catch (error) {
         console.error(error)

@@ -171,6 +171,7 @@ export default defineComponent({
       const debounced = debounce(({ unobserve }) => {
         unobserve()
         this.loadPreview({
+          clientService: this.$clientService,
           resource,
           isPublic: false,
           dimensions: ImageDimension.Thumbnail,

@@ -1,5 +1,4 @@
 import { mapActions } from 'vuex'
-import { clientService } from 'web-pkg'
 import { supportedLogoMimeTypes } from '../../defaults'
 
 export default {
@@ -43,8 +42,7 @@ export default {
       }
 
       try {
-        const accessToken = this.$store.getters['runtime/auth/accessToken']
-        const httpClient = clientService.httpAuthenticated(accessToken)
+        const httpClient = this.$clientService.httpAuthenticated
         const formData = new FormData()
         formData.append('logo', file)
         await httpClient.post('/branding/logo', formData as never, {

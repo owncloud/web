@@ -1,21 +1,25 @@
 import { DateTime } from 'luxon'
 import { LinkShareRoles, Share } from 'web-client/src/helpers/share'
 import { Store } from 'vuex'
-import { clientService } from 'web-pkg/src/services'
+import { ClientService } from 'web-pkg/src/services'
 import { useClipboard } from '@vueuse/core'
 import { Ability } from 'web-pkg'
+import { Resource } from 'web-client'
+import { Language } from 'vue3-gettext'
 
 export interface CreateQuicklink {
+  clientService: ClientService
+  language: Language
   store: Store<any>
   storageId?: any
-  resource: any
+  resource: Resource
   password?: string
-  $gettext: (string) => string
   ability: Ability
 }
 
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
-  const { resource, store, password, $gettext, ability } = args
+  const { clientService, resource, store, password, language, ability } = args
+  const { $gettext } = language
 
   const canCreatePublicLink = ability.can('create-all', 'PublicLink')
   const allowResharing = store.state.user.capabilities.files_sharing?.resharing

@@ -1,11 +1,9 @@
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { clientService } from 'web-pkg/src/services'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import { SpaceResource } from 'web-client'
 import { unref } from 'vue'
 
 export default {
   computed: {
-    ...mapGetters(['configuration']),
     ...mapState(['user']),
 
     $_disable_items() {
@@ -75,8 +73,7 @@ export default {
 
     $_disable_disableSpaces(spaces: SpaceResource[]) {
       const requests = []
-      const accessToken = this.$store.getters['runtime/auth/accessToken']
-      const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
+      const graphClient = this.$clientService.graphAuthenticated
       const currentRoute = unref(this.$router.currentRoute)
       spaces.forEach((space) => {
         const request = graphClient.drives

@@ -16,7 +16,6 @@ import {
 } from '../../../helpers/resource'
 import { urlJoin } from 'web-client/src/utils'
 import {
-  useAccessToken,
   useCapabilitySpacesEnabled,
   useClientService,
   useRouter,
@@ -31,7 +30,6 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
   const router = useRouter()
   const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
   const clientService = useClientService()
-  const accessToken = useAccessToken({ store })
 
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
 
@@ -211,10 +209,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
 
     // Reload quota
     if (unref(hasSpacesEnabled)) {
-      const graphClient = clientService.graphAuthenticated(
-        store.getters.configuration.server,
-        unref(accessToken)
-      )
+      const graphClient = clientService.graphAuthenticated
       const driveResponse = await graphClient.drives.getDrive(space.id as string)
       store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
         id: driveResponse.data.id,

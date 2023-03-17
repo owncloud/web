@@ -1,18 +1,11 @@
-import { computed, unref } from 'vue'
-import { Store } from 'vuex'
-import { useAccessToken, useClientService, useStore } from '../'
+import { computed } from 'vue'
+import { useClientService } from '../'
 
-interface GraphClientOptions {
-  store?: Store<any>
-}
-
-export const useGraphClient = ({ store }: GraphClientOptions = {}) => {
-  store = store || useStore<any>()
-  const accessToken = useAccessToken({ store })
+export const useGraphClient = () => {
   const clientService = useClientService()
 
   const graphClient = computed(() => {
-    return clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
+    return clientService.graphAuthenticated
   })
 
   return {

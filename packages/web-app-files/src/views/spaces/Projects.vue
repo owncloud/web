@@ -214,6 +214,7 @@ export default defineComponent({
 
           const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(space, { path })
           loadPreview({
+            clientService: this.$clientService,
             resource,
             isPublic: false,
             dimensions: ImageDimension.Tile,

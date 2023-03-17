@@ -1,5 +1,5 @@
 import { mapActions } from 'vuex'
-import { clientService, configurationManager, eventBus } from 'web-pkg'
+import { eventBus } from 'web-pkg'
 import { GroupAction } from 'web-pkg/src/composables/actions'
 
 export default {
@@ -58,11 +58,7 @@ export default {
     },
 
     async $_delete_deleteGroups(groups) {
-      const accessToken = this.$store.getters['runtime/auth/accessToken']
-      const graphClient = clientService.graphAuthenticated(
-        configurationManager.serverUrl,
-        accessToken
-      )
+      const graphClient = this.$clientService.graphAuthenticated
       const promises = groups.map((group) => graphClient.groups.deleteGroup(group.id))
 
       try {

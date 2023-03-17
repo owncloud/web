@@ -88,11 +88,9 @@ export default defineComponent({
         this.loading = false
         return
       }
-      const accessToken = this.$store.getters['runtime/auth/accessToken']
       const instance = this.configuration.server || window.location.origin
       const url = instance + 'remote.php/dav/avatars/' + userid + '/128.png'
-      this.$clientService
-        .httpAuthenticated(accessToken)
+      this.$clientService.httpAuthenticated
         .get(url, { responseType: 'blob' })
         .then((response) => {
           if (response.status === 200) {

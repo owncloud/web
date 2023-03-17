@@ -26,12 +26,11 @@ import { ImageDimension } from 'web-pkg/src/constants'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { debounce } from 'lodash-es'
-import { computed, ref, unref } from 'vue'
+import { computed, defineComponent, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
 import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
-import { defineComponent } from 'vue'
 import { buildShareSpaceResource, Resource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { eventBus } from 'web-pkg/src/services/eventBus'
@@ -150,6 +149,7 @@ export default defineComponent({
       unobserve()
       const preview = await loadPreview(
         {
+          clientService: this.$clientService,
           resource: this.resource,
           isPublic: false,
           dimensions: ImageDimension.Thumbnail,
