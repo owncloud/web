@@ -87,8 +87,8 @@ Feature: Search
       | new_share_from_brian |
       | new-lorem-big.txt    |
     But following resources should not be displayed in the search list for user "Alice"
-      | resource          |
-      | folder            |
-      | FolDer            |
-      | .hidden-file.txt  |
+      | resource         |
+      | folder           |
+      | FolDer           |
+      | .hidden-file.txt |
     And "Alice" logs out

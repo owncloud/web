@@ -37,9 +37,9 @@ Feature: Users can use web to organize tags
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" uploads the following resource
-      | resource      |
-      | lorem.txt     |
-      | textfile.txt  |
+      | resource     |
+      | lorem.txt    |
+      | textfile.txt |
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags         |
       | lorem.txt | tag 1, tag 2 |
@@ -73,8 +73,8 @@ Feature: Users can use web to organize tags
     And "Brian" logs in
     And "Brian" navigates to the shared with me page
     And "Brian" accepts the following share
-      | name                 |
-      | folder_to_shared     |
+      | name             |
+      | folder_to_shared |
     Then the following resources should contain the following tags in the files list for user "Brian"
       | resource                   | tags         |
       | folder_to_shared/lorem.txt | tag 1, tag 2 |
