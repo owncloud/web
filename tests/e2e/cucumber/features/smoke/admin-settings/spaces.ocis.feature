@@ -1,6 +1,6 @@
 Feature: spaces management
 
-  Scenario: spaces can be managed in the admin settings
+  Scenario: spaces can be managed in the admin settings via the context menu
     Given "Admin" creates following users
       | id    |
       | Alice |
@@ -16,24 +16,19 @@ Feature: spaces management
     When "Alice" logs in
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
+    When "Alice" updates the space "team.a" name to "developer team" using the context-menu
+    And "Alice" updates the space "team.a" subtitle to "developer team-subtitle" using the context-menu
+    And "Alice" updates the space "team.a" quota to "50" using the context-menu
+    And "Alice" disables the space "team.a" using the context-menu
+    And "Alice" enables the space "team.a" using the context-menu
     Then "Alice" should see the following spaces
       | id     |
       | team.a |
-    And "Alice" updates the quota for space "team.a" to "50"
-    And "Alice" disables the space "team.a" using the context-menu
-    And "Alice" deletes the space "team.a" using the context-menu
-    Then "Alice" should not see the following spaces
-      | id     |
-      | team.a |
     And "Alice" logs out
-    Then "Brian" logs in
+    When "Brian" logs in
     And "Brian" opens the "admin-settings" app
     And "Brian" navigates to the project spaces management page
-    Then "Brian" should see the following spaces
-      | id     |
-      | team.b |
-    And "Brian" updates the quota for space "team.b" to "50"
-    And "Brian" disables the space "team.b" using the context-menu
+    When "Brian" disables the space "team.b" using the context-menu
     And "Brian" deletes the space "team.b" using the context-menu
     Then "Brian" should not see the following spaces
       | id     |

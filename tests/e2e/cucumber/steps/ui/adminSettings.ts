@@ -38,16 +38,7 @@ Then(
 )
 
 When(
-  /^"([^"]*)" updates the quota for space "([^"]*)" to "([^"]*)"$/,
-  async function (this: World, stepUser: string, key: string, value: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
-    await spacesObject.changeQuota({ key, value })
-  }
-)
-
-When(
-  /^"([^"]*)" (disables|deletes) the space "([^"]*)" using the context-menu$/,
+  /^"([^"]*)" (disables|deletes|enables) the space "([^"]*)" using the context-menu$/,
   async function (this: World, stepUser: string, action: string, key: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
@@ -58,6 +49,38 @@ When(
         break
       case 'deletes':
         await spacesObject.delete({ key, context: 'context-menu' })
+        break
+      case 'enables':
+        await spacesObject.enable({ key, context: 'context-menu' })
+        break
+      default:
+        throw new Error(`${action} not implemented`)
+    }
+  }
+)
+
+When(
+  /^"([^"]*)" (changes|updates) the space "([^"]*)" (name|subtitle|quota) to "([^"]*)" using the context-menu$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: string,
+    key: string,
+    action: string,
+    value: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+
+    switch (action) {
+      case 'name':
+        await spacesObject.rename({ key, value })
+        break
+      case 'subtitle':
+        await spacesObject.changeSubtitle({ key, value })
+        break
+      case 'quota':
+        await spacesObject.changeQuota({ key, value })
         break
       default:
         throw new Error(`'${action}' not implemented`)
