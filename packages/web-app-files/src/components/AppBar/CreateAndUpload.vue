@@ -145,7 +145,7 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { join } from 'path'
 
-import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
+import { useFileActions, EDITOR_MODE_CREATE } from '../../composables/actions/files/useFileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
 
@@ -184,7 +184,6 @@ export default defineComponent({
   components: {
     ResourceUpload
   },
-  mixins: [MixinFileActions],
   props: {
     space: {
       type: Object as PropType<SpaceResource>,
@@ -230,6 +229,7 @@ export default defineComponent({
     })
 
     return {
+      ...useFileActions({ store }),
       ...useUpload({
         uppyService
       }),
@@ -533,7 +533,7 @@ export default defineComponent({
         this.UPSERT_RESOURCE(resource)
 
         if (this.newFileAction) {
-          this.$_fileActions_openEditor(
+          this.openEditor(
             this.newFileAction,
             this.space.getDriveAliasAndItem(resource),
             resource.webDavPath,
@@ -589,7 +589,7 @@ export default defineComponent({
           resource.indicators = getIndicators({ resource, ancestorMetaData: this.ancestorMetaData })
         }
 
-        this.$_fileActions_triggerDefaultAction({ space: this.space, resources: [resource] })
+        this.triggerDefaultAction({ space: this.space, resources: [resource] })
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
         this.showMessage({

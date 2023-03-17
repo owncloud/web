@@ -29,7 +29,7 @@
           :is-selectable="false"
           :sort-by="sortBy"
           :sort-dir="sortDir"
-          @file-click="$_fileActions_triggerDefaultAction"
+          @file-click="triggerDefaultAction"
           @row-mounted="rowMounted"
           @sort="handleSort"
         >
@@ -80,7 +80,7 @@ import AppBar from '../AppBar/AppBar.vue'
 import { defineComponent, nextTick } from 'vue'
 import ListInfo from '../FilesList/ListInfo.vue'
 import Pagination from '../FilesList/Pagination.vue'
-import MixinFileActions from '../../mixins/fileActions'
+import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { searchLimit } from '../../search/sdk/list'
 import { Resource } from 'web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
@@ -104,7 +104,6 @@ export default defineComponent({
     ResourceTable,
     FilesViewWrapper
   },
-  mixins: [MixinFileActions],
   props: {
     searchResult: {
       type: Object,
@@ -129,7 +128,9 @@ export default defineComponent({
       }
       return store.getters['runtime/spaces/spaces'].find((space) => space.id === resource.storageId)
     }
+
     return {
+      ...useFileActions({ store }),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       getSpace
     }

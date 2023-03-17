@@ -44,12 +44,12 @@ describe('Favorites view', () => {
 })
 
 function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
-  jest.mocked(useResourcesViewDefaults).mockImplementation(() =>
-    useResourcesViewDefaultsMock({
+  jest.mocked(useResourcesViewDefaults).mockImplementation(() => {
+    return useResourcesViewDefaultsMock({
       paginatedResources: ref(files),
       areResourcesLoading: ref(loading)
     })
-  )
+  })
   const defaultMocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-common-favorites' })

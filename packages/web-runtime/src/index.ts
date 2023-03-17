@@ -35,7 +35,6 @@ import { DavProperty } from 'web-client/src/webdav/constants'
 import { createApp } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
 
-import WebPlugin from './plugins/web'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import lifecycleMixin from './mixins/lifecycleMixin'
@@ -78,7 +77,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     wormhole: app.config.globalProperties.$wormhole
   })
 
-  app.use(WebPlugin)
   app.component('AvatarImage', Avatar)
   app.mixin(focusMixin)
   app.mixin(lifecycleMixin)

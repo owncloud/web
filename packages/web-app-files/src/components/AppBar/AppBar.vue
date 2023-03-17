@@ -61,21 +61,31 @@
 
 <script lang="ts">
 import last from 'lodash-es/last'
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import { BreadcrumbItem } from '../../helpers/breadcrumbs'
-import MixinFileActions from '../../mixins/fileActions'
-import EmptyTrashBin from '../../mixins/actions/emptyTrashBin'
-import ClearSelection from '../../mixins/actions/clearSelection'
 import { isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import ViewOptions from './ViewOptions.vue'
 import { ViewMode } from 'web-pkg/src/ui/types'
+import {
+  useFileActionsAcceptShare,
+  useFileActionsClearSelection,
+  useFileActionsCopy,
+  useFileActionsDeclineShare,
+  useFileActionsDelete,
+  useFileActionsDownloadArchive,
+  useFileActionsDownloadFile,
+  useFileActionsEmptyTrashBin,
+  useFileActionsMove,
+  useFileActionsRestore
+} from 'web-app-files/src/composables/actions'
+import { useStore } from 'web-pkg/src'
 
 export default defineComponent({
   components: {
@@ -85,7 +95,6 @@ export default defineComponent({
     SidebarToggle,
     ViewOptions
   },
-  mixins: [ClearSelection, EmptyTrashBin, MixinFileActions],
   props: {
     breadcrumbs: {
       type: Array as PropType<BreadcrumbItem[]>,
@@ -112,6 +121,41 @@ export default defineComponent({
       type: Object as PropType<SpaceResource>,
       required: false,
       default: null
+    }
+  },
+  setup(props) {
+    const store = useStore()
+
+    const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
+    const { actions: clearSelectionActions } = useFileActionsClearSelection({ store })
+    const { actions: copyActions } = useFileActionsCopy({ store })
+    const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
+    const { actions: deleteActions } = useFileActionsDelete({ store })
+    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
+    const { actions: downloadFileActions } = useFileActionsDownloadFile()
+    const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin({ store })
+    const { actions: moveActions } = useFileActionsMove({ store })
+    const { actions: restoreActions } = useFileActionsRestore({ store })
+
+    const batchActions = computed(() => {
+      return [
+        ...unref(clearSelectionActions),
+        ...unref(acceptShareActions),
+        ...unref(declineShareActions),
+        ...unref(downloadArchiveActions),
+        ...unref(downloadFileActions),
+        ...unref(moveActions),
+        ...unref(copyActions),
+        ...unref(emptyTrashBinActions),
+        ...unref(deleteActions),
+        ...unref(restoreActions)
+      ].filter((item) =>
+        item.isEnabled({ space: props.space, resources: store.getters['Files/selectedFiles'] })
+      )
+    })
+
+    return {
+      batchActions
     }
   },
   data: function () {
@@ -148,20 +192,6 @@ export default defineComponent({
         this.selectedFiles.length
       )
       return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
-    },
-    batchActions() {
-      return [
-        ...this.$_clearSelection_items,
-        ...this.$_acceptShare_items,
-        ...this.$_declineShare_items,
-        ...this.$_downloadArchive_items,
-        ...this.$_downloadFile_items,
-        ...this.$_move_items,
-        ...this.$_copy_items,
-        ...this.$_emptyTrashBin_items,
-        ...this.$_delete_items,
-        ...this.$_restore_items
-      ].filter((item) => item.isEnabled({ resources: this.selectedFiles }))
     }
   },
   mounted() {

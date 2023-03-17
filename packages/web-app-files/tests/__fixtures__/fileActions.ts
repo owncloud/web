@@ -1,4 +1,4 @@
-const meta = {
+export const meta = {
   files: {
     name: 'Files',
     id: 'files',
@@ -29,7 +29,7 @@ const routes = [
   'files-public-list'
 ]
 
-const editors = [
+export const editors = [
   {
     app: 'draw-io',
     extension: 'drawio',

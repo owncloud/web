@@ -191,7 +191,7 @@ describe('CreateAndUpload component', () => {
         item: '/',
         newFileHandlers: fileHandlerMocks
       })
-      const openEditorSpy = jest.spyOn(wrapper.vm, '$_fileActions_openEditor').mockImplementation()
+      const openEditorSpy = jest.spyOn(wrapper.vm, 'openEditor').mockImplementation()
       mocks.$clientService.webdav.putFileContents.mockResolvedValue(mockDeep<Resource>())
       await wrapper.vm.addNewFile('New resource.txt')
       expect(openEditorSpy).toHaveBeenCalled()
@@ -226,7 +226,7 @@ describe('CreateAndUpload component', () => {
     it('triggers the default file action', async () => {
       const { wrapper, mocks } = getWrapper({ item: '/' })
       const defaultActionSpy = jest
-        .spyOn(wrapper.vm, '$_fileActions_triggerDefaultAction')
+        .spyOn(wrapper.vm, 'triggerDefaultAction')
         .mockImplementation(() => undefined)
       mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
       await wrapper.vm.addAppProviderFile('someFile.txt')

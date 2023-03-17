@@ -1,4 +1,7 @@
 export type OwnCloudSdk = {
+  helpers: {
+    _davPath: string
+  }
   files: {
     createFolder(...args): any
     fileInfo(...args): any
@@ -16,6 +19,10 @@ export type OwnCloudSdk = {
   fileTrash: {
     list(...args): any
     restore(...args): any
+    clearTrashBin(...args): any
+  }
+  fileVersions: {
+    getFileVersionUrl(...args): any
   }
   publicFiles: {
     createFolder(...args): any

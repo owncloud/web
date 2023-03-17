@@ -36,7 +36,7 @@ import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
-import { useCapabilityNotifications, useStore, useUserContext } from 'web-pkg/src'
+import { useCapabilityNotifications, useStore, useUserContext } from 'web-pkg/src/composables'
 import { computed, unref } from 'vue'
 
 export default {

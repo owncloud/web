@@ -16,9 +16,9 @@ describe('BatchActions', () => {
     })
 
     it('render enabled actions', () => {
-      const enabledActions = ['$_delete_items']
-      const { wrapper } = getWrapper({ props: { actions: [{}] } })
-      expect(wrapper.findAll(selectors.actionMenuItemStub).length).toBe(enabledActions.length)
+      const actions = [{}]
+      const { wrapper } = getWrapper({ props: { actions } })
+      expect(wrapper.findAll(selectors.actionMenuItemStub).length).toBe(actions.length)
     })
   })
   describe('limited screen space', () => {

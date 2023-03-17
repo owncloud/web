@@ -13,6 +13,8 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 
+jest.mock('web-pkg/src/composables/download/useDownloadFile')
+
 const yesterday = DateTime.now().minus({ days: 1 }).toHTTP()
 const sevenDaysBefore = DateTime.now().minus({ days: 7 }).toHTTP()
 const defaultVersions = [

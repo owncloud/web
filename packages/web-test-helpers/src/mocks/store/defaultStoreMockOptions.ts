@@ -24,6 +24,10 @@ export const defaultStoreMockOptions = {
     ...filesModuleMockOptions,
     ...runtimeModuleMockOptions,
     apps: {
+      state: {
+        fileEditors: [],
+        meta: {}
+      },
       getters: {
         fileSideBars: jest.fn(() => [])
       }

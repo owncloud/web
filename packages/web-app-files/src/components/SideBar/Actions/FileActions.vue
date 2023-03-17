@@ -13,23 +13,22 @@
 
 <script lang="ts">
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
-import FileActions from '../../../mixins/fileActions'
-import { computed, defineComponent, getCurrentInstance, inject, unref } from 'vue'
+import { useFileActions } from '../../../composables/actions/files/useFileActions'
+import { computed, defineComponent, inject, unref } from 'vue'
 import { Resource, SpaceResource } from 'web-client'
 
 export default defineComponent({
   name: 'FileActions',
   components: { ActionMenuItem },
-  mixins: [FileActions],
   setup() {
-    const instance = getCurrentInstance().proxy as any
     const resource = inject<Resource>('resource')
     const space = inject<SpaceResource>('space')
     const resources = computed(() => {
       return [unref(resource)]
     })
+    const { getAllAvailableActions } = useFileActions()
     const actions = computed(() => {
-      return instance.$_fileActions_getAllAvailableActions({
+      return getAllAvailableActions({
         space: unref(space),
         resources: unref(resources)
       })

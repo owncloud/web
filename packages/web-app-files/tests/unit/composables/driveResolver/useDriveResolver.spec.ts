@@ -1,4 +1,4 @@
-import { useCapabilitySpacesEnabled, useDriveResolver } from 'web-pkg/src'
+import { useCapabilitySpacesEnabled, useDriveResolver } from 'web-pkg/src/composables'
 import { computed, ref, unref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { isShareSpaceResource, SpaceResource } from 'web-client/src/helpers'

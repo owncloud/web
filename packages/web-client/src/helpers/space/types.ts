@@ -53,7 +53,7 @@ export interface ShareSpaceResource extends SpaceResource {
   rename(newName: string): void
 }
 export const isShareSpaceResource = (resource: Resource): resource is ShareSpaceResource => {
-  return resource.driveType === 'share'
+  return resource?.driveType === 'share'
 }
 
 export interface MountPointSpaceResource extends SpaceResource {

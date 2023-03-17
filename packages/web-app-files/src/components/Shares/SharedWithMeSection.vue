@@ -25,7 +25,7 @@
       :header-position="fileListHeaderY"
       :sort-by="sortBy"
       :sort-dir="sortDir"
-      @file-click="$_fileActions_triggerDefaultAction"
+      @file-click="triggerDefaultAction"
       @row-mounted="rowMounted"
       @sort="sortHandler"
     >
@@ -39,7 +39,7 @@
             size="small"
             variation="success"
             class="file-row-share-status-accept"
-            @click.stop="$_acceptShare_trigger({ resources: [resource] })"
+            @click.stop="triggerAction('accept-share', { resources: [resource] })"
           >
             <oc-icon size="small" name="check" />
             <span v-translate>Accept</span>
@@ -48,7 +48,7 @@
             v-if="getShowDeclineButton(resource)"
             size="small"
             class="file-row-share-decline oc-ml-s"
-            @click.stop="$_declineShare_trigger({ resources: [resource] })"
+            @click.stop="triggerAction('decline-share', { resources: [resource] })"
           >
             <oc-icon size="small" name="spam-3" fill-type="line" />
             <span v-translate>Decline</span>
@@ -94,9 +94,7 @@ import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { mapActions, mapGetters } from 'vuex'
-import FileActions from '../../mixins/fileActions'
-import MixinAcceptShare from '../../mixins/actions/acceptShare'
-import MixinDeclineShare from '../../mixins/actions/declineShare'
+import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { createLocationSpaces } from '../../router'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
@@ -121,7 +119,6 @@ export default defineComponent({
     NoContentMessage
   },
 
-  mixins: [FileActions, MixinAcceptShare, MixinDeclineShare],
   props: {
     title: {
       type: String,
@@ -217,6 +214,7 @@ export default defineComponent({
     })
 
     return {
+      ...useFileActions(),
       resourceTargetRouteCallback,
       ...useSelectedResources({ store }),
       hasShareJail: useCapabilityShareJailEnabled(),

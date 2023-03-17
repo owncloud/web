@@ -60,6 +60,7 @@ import { WebDAV } from 'web-client/src/webdav'
 import { defineComponent, inject, ref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissions } from 'web-client/src/helpers/share'
+import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 
 export default defineComponent({
   name: 'FileVersions',
@@ -67,6 +68,7 @@ export default defineComponent({
     const loading = ref(false)
 
     return {
+      ...useDownloadFile(),
       space: inject<SpaceResource>('space'),
       resource: inject<Resource>('resource'),
       loading
