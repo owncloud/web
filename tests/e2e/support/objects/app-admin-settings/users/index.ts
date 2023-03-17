@@ -12,7 +12,9 @@ import {
   changeUser,
   addUserToGroups,
   removeUserFromGroups,
-  openEditPanel
+  openEditPanel,
+  deleteUserUsingContextMenu,
+  deleteUserUsingBatchAction
 } from './actions'
 
 export class Users {
@@ -86,5 +88,12 @@ export class Users {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     await openEditPanel({ page: this.#page, uuid })
     await removeUserFromGroups({ page: this.#page, uuid, groups })
+  }
+  async deleteUserUsingContextMenu({ key }: { key: string }): Promise<void> {
+    const { uuid } = this.#usersEnvironment.getUser({ key })
+    await deleteUserUsingContextMenu({ page: this.#page, uuid })
+  }
+  async deleteUserUsingBatchAction(): Promise<void> {
+    await deleteUserUsingBatchAction({ page: this.#page })
   }
 }
