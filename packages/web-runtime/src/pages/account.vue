@@ -95,6 +95,8 @@ import {
 import { useTask } from 'vue-concurrency'
 import axios from 'axios'
 import { v4 as uuidV4 } from 'uuid'
+import { useGettext } from 'vue3-gettext'
+import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 
 export default defineComponent({
   name: 'Personal',
@@ -104,6 +106,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const accessToken = useAccessToken({ store })
+    const language = useGettext()
 
     // FIXME: Use graph capability when we have it
     const isLanguageSupported = useCapabilitySpacesEnabled()
@@ -179,10 +182,9 @@ export default defineComponent({
         }
       )
 
-      store.commit('SET_SETTINGS_VALUE', {
-        identifier: accountSettingIdentifier,
-        value
-      })
+      const newSetting = { identifier: accountSettingIdentifier, value }
+      store.commit('SET_SETTINGS_VALUE', newSetting)
+      setCurrentLanguage({ language, languageSetting: newSetting })
     }
     const accountEditLink = computed(() => {
       return store.getters.configuration?.options?.accountEditLink

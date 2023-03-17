@@ -15,6 +15,7 @@ import * as uuid from 'uuid'
 import { SpaceResource } from 'web-client/src/helpers'
 import { join } from 'path'
 import { v4 as uuidV4 } from 'uuid'
+import { useGettext } from 'vue3-gettext'
 
 export interface UppyResource {
   id?: string
@@ -68,6 +69,7 @@ interface UploadResult {
 export function useUpload(options: UploadOptions): UploadResult {
   const store = useStore()
   const clientService = useClientService()
+  const { current: currentLanguage } = useGettext()
   const publicLinkPassword = usePublicLinkPassword({ store })
   const isPublicLinkContext = usePublicLinkContext({ store })
   const accessToken = useAccessToken({ store })
@@ -77,7 +79,7 @@ export function useUpload(options: UploadOptions): UploadResult {
   const tusExtension = useCapabilityFilesTusExtension()
 
   const headers = computed((): { [key: string]: string } => {
-    const headers = { 'X-Request-ID': uuidV4() }
+    const headers = { 'X-Request-ID': uuidV4(), 'Accept-Language': currentLanguage }
     if (unref(isPublicLinkContext)) {
       const password = unref(publicLinkPassword)
       if (password) {
@@ -103,6 +105,7 @@ export function useUpload(options: UploadOptions): UploadResult {
       onBeforeRequest: (req) => {
         req.setHeader('Authorization', unref(headers).Authorization)
         req.setHeader('X-Request-ID', unref(headers)['X-Request-ID'])
+        req.setHeader('Accept-Language', unref(headers)['Accept-Language'])
       },
       headers: (file) => ({
         'x-oc-mtime': file.data.lastModified / 1000,
