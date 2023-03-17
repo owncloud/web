@@ -139,15 +139,15 @@ export default defineComponent({
 
     const batchActions = computed(() => {
       return [
-        ...unref(acceptShareActions),
         ...unref(clearSelectionActions),
-        ...unref(copyActions),
-        ...unref(deleteActions),
+        ...unref(acceptShareActions),
         ...unref(declineShareActions),
         ...unref(downloadArchiveActions),
         ...unref(downloadFileActions),
-        ...unref(emptyTrashBinActions),
         ...unref(moveActions),
+        ...unref(copyActions),
+        ...unref(emptyTrashBinActions),
+        ...unref(deleteActions),
         ...unref(restoreActions)
       ].filter((item) =>
         item.isEnabled({ space: props.space, resources: store.getters['Files/selectedFiles'] })

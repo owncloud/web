@@ -84,12 +84,12 @@ export default defineComponent({
     const menuItemsBatchActions = computed(() =>
       [
         ...unref(acceptShareActions),
-        ...unref(copyActions),
         ...unref(declineShareActions),
-        ...unref(deleteActions),
         ...unref(downloadArchiveActions),
-        ...unref(emptyTrashBinActions),
         ...unref(moveActions),
+        ...unref(copyActions),
+        ...unref(emptyTrashBinActions),
+        ...unref(deleteActions),
         ...unref(restoreActions)
       ].filter((item) => item.isEnabled(unref(filterParams)))
     )
@@ -110,19 +110,19 @@ export default defineComponent({
 
     const menuItemsActions = computed(() => {
       return [
-        ...unref(acceptShareActions),
-        ...unref(declineShareActions),
-        ...unref(copyActions),
-        ...unref(deleteActions),
         ...unref(downloadArchiveActions),
         ...unref(downloadFileActions),
+        ...unref(deleteActions),
         ...unref(moveActions),
+        ...unref(copyActions),
         ...unref(pasteActions),
         ...unref(renameActions),
+        ...unref(showEditTagsActions),
         ...unref(restoreActions),
+        ...unref(acceptShareActions),
+        ...unref(declineShareActions),
         ...unref(setSpaceImageActions),
-        ...unref(setSpaceReadmeActions),
-        ...unref(showEditTagsActions)
+        ...unref(setSpaceReadmeActions)
       ].filter((item) => item.isEnabled(unref(filterParams)))
     })
 

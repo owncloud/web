@@ -49,18 +49,18 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { actions: showEditTagsActions } = useFileActionsShowEditTags({ store })
 
   const systemActions = computed((): Action[] => [
-    ...unref(acceptShareActions),
-    ...unref(copyActions),
-    ...unref(declineShareActions),
-    ...unref(deleteActions),
     ...unref(downloadArchiveActions),
     ...unref(downloadFileActions),
-    ...unref(favoriteActions),
+    ...unref(deleteActions),
     ...unref(moveActions),
-    ...unref(navigateActions),
+    ...unref(copyActions),
     ...unref(renameActions),
+    ...unref(showEditTagsActions),
     ...unref(restoreActions),
-    ...unref(showEditTagsActions)
+    ...unref(acceptShareActions),
+    ...unref(declineShareActions),
+    ...unref(favoriteActions),
+    ...unref(navigateActions)
   ])
 
   const editorActions = computed(() => {
