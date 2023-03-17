@@ -176,7 +176,7 @@ export default {
     const { setProgress } = loadingCallbackArgs
     const promises = []
     const removedFiles = []
-    for (const file of files) {
+    for (const [i, file] of files.entries()) {
       const promise = clientService.webdav
         .deleteFile(space, file)
         .then(() => {
@@ -208,7 +208,7 @@ export default {
           )
         })
         .finally(() => {
-          setProgress({ total: files.length, current: removedFiles.length })
+          setProgress({ total: files.length, current: i + 1 })
         })
       promises.push(promise)
     }

@@ -6,13 +6,14 @@ import {
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
+import { useClientService, useLoadingService, useRouter, useStore } from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const clientService = useClientService()
+  const loadingService = useLoadingService()
   const { $gettext, $pgettext, interpolate: $gettextInterpolate, $ngettext } = useGettext()
 
   const isMacOs = computed(() => {
@@ -30,6 +31,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
     store.dispatch('Files/pasteSelectedFiles', {
       targetSpace: space,
       clientService,
+      loadingService,
       createModal: (...args) => store.dispatch('createModal', ...args),
       hideModal: (...args) => store.dispatch('hideModal', ...args),
       showMessage: (...args) => store.dispatch('showMessage', ...args),

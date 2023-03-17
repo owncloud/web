@@ -12,6 +12,7 @@ import { useStore } from 'web-pkg/src/composables'
 import { unref } from 'vue'
 import { Resource } from 'web-client'
 import { FileResource, ProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { LoadingTaskCallbackArguments } from 'web-pkg'
 
 describe('restore', () => {
   afterEach(() => jest.clearAllMocks())
@@ -80,7 +81,12 @@ describe('restore', () => {
     it('should show message on success', () => {
       const { wrapper } = getWrapper({
         setup: async ({ restoreResources }, { space, storeOptions }) => {
-          await restoreResources(space, [{ id: '1', path: '/1' }], [])
+          await restoreResources(
+            space,
+            [{ id: '1', path: '/1' }],
+            [],
+            mock<LoadingTaskCallbackArguments>()
+          )
 
           expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
           expect(storeOptions.modules.Files.actions.removeFilesFromTrashbin).toHaveBeenCalledTimes(

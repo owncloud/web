@@ -11,6 +11,7 @@ import {
   useCapabilityFilesSharingResharing,
   useCapabilityShareJailEnabled,
   useClientService,
+  useLoadingService,
   useRouter,
   useStore
 } from 'web-pkg/src/composables'
@@ -26,6 +27,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
   const hasResharing = useCapabilityFilesSharingResharing()
   const hasShareJail = useCapabilityShareJailEnabled()
   const { owncloudSdk } = useClientService()
+  const loadingService = useLoadingService()
 
   const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
@@ -85,7 +87,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
     {
       name: 'decline-share',
       icon: 'spam-3',
-      handler,
+      handler: (args) => loadingService.addTask(() => handler(args)),
       label: ({ resources }) => $ngettext('Decline share', 'Decline shares', resources.length),
       isEnabled: ({ space, resources }) => {
         if (

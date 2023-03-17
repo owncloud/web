@@ -2,7 +2,7 @@ import { computed, unref, VNodeRef } from 'vue'
 import { Store } from 'vuex'
 import { SpaceResource } from 'web-client/src'
 import { Drive } from 'web-client/src/generated'
-import { useClientService, useStore } from 'web-pkg/src/composables'
+import { useClientService, useLoadingService, useStore } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { thumbnailService } from '../../../services'
 import { useGettext } from 'vue3-gettext'
@@ -18,6 +18,7 @@ export const useSpaceActionsUploadImage = ({
   store = store || useStore()
   const { $gettext } = useGettext()
   const clientService = useClientService()
+  const loadingService = useLoadingService()
 
   let selectedSpace: SpaceResource = null
   const handler = ({ resources }: SpaceActionOptions) => {
@@ -51,46 +52,48 @@ export const useSpaceActionsUploadImage = ({
       extraHeaders['X-OC-Mtime'] = '' + file.lastModified / 1000
     }
 
-    return clientService.owncloudSdk.files
-      .putFileContents(`/spaces/${selectedSpace.id}/.space/${file.name}`, file, {
-        headers: extraHeaders,
-        overwrite: true
-      })
-      .then((image) => {
-        return graphClient.drives
-          .updateDrive(
-            selectedSpace.id as string,
-            {
-              special: [
-                {
-                  specialFolder: {
-                    name: 'image'
-                  },
-                  id: image['OC-FileId']
-                }
-              ]
-            } as Drive,
-            {}
-          )
-          .then(({ data }) => {
-            store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-              id: selectedSpace.id as string,
-              field: 'spaceImageData',
-              value: data.special.find((special) => special.specialFolder.name === 'image')
-            })
-            store.dispatch('showMessage', {
-              title: $gettext('Space image was uploaded successfully')
-            })
-            eventBus.publish('app.files.list.load')
-          })
-      })
-      .catch((error) => {
-        console.error(error)
-        store.dispatch('showMessage', {
-          title: $gettext('Failed to upload space image'),
-          status: 'danger'
+    return loadingService.addTask(() => {
+      return clientService.owncloudSdk.files
+        .putFileContents(`/spaces/${selectedSpace.id}/.space/${file.name}`, file, {
+          headers: extraHeaders,
+          overwrite: true
         })
-      })
+        .then((image) => {
+          return graphClient.drives
+            .updateDrive(
+              selectedSpace.id as string,
+              {
+                special: [
+                  {
+                    specialFolder: {
+                      name: 'image'
+                    },
+                    id: image['OC-FileId']
+                  }
+                ]
+              } as Drive,
+              {}
+            )
+            .then(({ data }) => {
+              store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+                id: selectedSpace.id as string,
+                field: 'spaceImageData',
+                value: data.special.find((special) => special.specialFolder.name === 'image')
+              })
+              store.dispatch('showMessage', {
+                title: $gettext('Space image was uploaded successfully')
+              })
+              eventBus.publish('app.files.list.load')
+            })
+        })
+        .catch((error) => {
+          console.error(error)
+          store.dispatch('showMessage', {
+            title: $gettext('Failed to upload space image'),
+            status: 'danger'
+          })
+        })
+    })
   }
 
   const actions = computed(() => [

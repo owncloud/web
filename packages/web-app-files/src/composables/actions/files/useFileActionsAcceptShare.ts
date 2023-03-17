@@ -8,6 +8,7 @@ import {
   useCapabilityFilesSharingResharing,
   useCapabilityShareJailEnabled,
   useClientService,
+  useLoadingService,
   useRouter,
   useStore
 } from 'web-pkg/src/composables'
@@ -23,6 +24,7 @@ export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}
   const hasResharing = useCapabilityFilesSharingResharing()
   const hasShareJail = useCapabilityShareJailEnabled()
   const { owncloudSdk } = useClientService()
+  const loadingService = useLoadingService()
 
   const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
@@ -81,7 +83,7 @@ export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}
     {
       name: 'accept-share',
       icon: 'check',
-      handler,
+      handler: (args) => loadingService.addTask(() => handler(args)),
       label: ({ resources }) => $ngettext('Accept share', 'Accept shares', resources.length),
       isEnabled: ({ space, resources }) => {
         if (
