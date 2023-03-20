@@ -2,9 +2,10 @@ import { Drive } from 'web-client/src/generated'
 import { computed, unref } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useRoute } from '../../router'
-import { useAbility, useClientService, useStore } from 'web-pkg/src'
+import { useAbility, useClientService, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
+import { SpaceResource } from 'web-client/src'
 
 export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -13,10 +14,10 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
   const clientService = useClientService()
   const route = useRoute()
 
-  const editDescriptionSpace = (space, description) => {
+  const editDescriptionSpace = (space: SpaceResource, description: string) => {
     const graphClient = clientService.graphAuthenticated
     return graphClient.drives
-      .updateDrive(space.id, { description } as Drive, {})
+      .updateDrive(space.id as string, { description } as Drive, {})
       .then(() => {
         store.dispatch('hideModal')
         store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
@@ -82,6 +83,9 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
   ])
 
   return {
-    actions
+    actions,
+
+    // HACK: exported for unit tests:
+    editDescriptionSpace
   }
 }

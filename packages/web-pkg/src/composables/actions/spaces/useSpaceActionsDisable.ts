@@ -5,7 +5,7 @@ import { useGettext } from 'vue3-gettext'
 import { useRoute, useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useAbility } from '../../ability'
-import { useClientService } from 'web-pkg/src'
+import { useClientService } from 'web-pkg/src/composables'
 import { Store } from 'vuex'
 
 export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) => {
@@ -119,6 +119,9 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
   ])
 
   return {
-    actions
+    actions,
+
+    // HACK: exported for unit tests:
+    disableSpaces
   }
 }

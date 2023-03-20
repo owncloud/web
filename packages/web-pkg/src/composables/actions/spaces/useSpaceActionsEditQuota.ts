@@ -5,7 +5,7 @@ import { SpaceAction, SpaceActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from 'web-client/src'
 import { useAbility } from '../../ability'
-import { useClientService, useRoute } from 'web-pkg/src'
+import { useClientService, useRoute } from 'web-pkg/src/composables'
 
 export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

@@ -48,7 +48,6 @@ export default defineComponent({
       resources: unref(resources)
     }))
 
-
     const { actions: deleteActions } = useSpaceActionsDelete({ store })
     const { actions: disableActions } = useSpaceActionsDisable({ store })
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })

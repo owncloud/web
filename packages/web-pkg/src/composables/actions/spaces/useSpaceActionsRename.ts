@@ -1,7 +1,7 @@
 import { unref, computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
-import { useClientService } from 'web-pkg/src'
+import { useClientService } from 'web-pkg/src/composables'
 import { useAbility } from '../../ability'
 import { useRoute } from '../../router'
 import { useStore } from '../../store'
@@ -102,6 +102,10 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
   ])
 
   return {
-    actions
+    actions,
+
+    // HACK: exported for unit tests:
+    checkName,
+    renameSpace
   }
 }

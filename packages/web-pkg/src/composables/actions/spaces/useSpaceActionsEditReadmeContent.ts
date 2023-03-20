@@ -1,6 +1,6 @@
 import { Store } from 'vuex'
 import { useStore } from '../../store'
-import { FileAction, SpaceAction, SpaceActionOptions } from '../types'
+import { SpaceAction, SpaceActionOptions } from '../types'
 import { computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
