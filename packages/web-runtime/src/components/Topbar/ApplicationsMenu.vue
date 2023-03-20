@@ -48,12 +48,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { clientService } from 'web-pkg/src/services'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { mapGetters } from 'vuex'
 import { urlJoin } from 'web-client/src/utils'
-import { PropType } from 'vue-demi'
 
 export default defineComponent({
   props: {
