@@ -6,7 +6,7 @@ import { useClientService, useLoadingService, useStore } from 'web-pkg/src/compo
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { thumbnailService } from '../../../services'
 import { useGettext } from 'vue3-gettext'
-import { SpaceActionOptions } from 'web-pkg/src/composables/actions'
+import { SpaceAction, SpaceActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useSpaceActionsUploadImage = ({
   store,
@@ -96,7 +96,7 @@ export const useSpaceActionsUploadImage = ({
     })
   }
 
-  const actions = computed(() => [
+  const actions = computed((): SpaceAction[] => [
     {
       name: 'upload-space-image',
       icon: 'image-add',
