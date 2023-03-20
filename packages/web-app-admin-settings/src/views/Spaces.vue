@@ -114,7 +114,6 @@ import {
 } from 'web-pkg/src/composables/actions/spaces'
 import { SpaceAction } from 'web-pkg/src/composables/actions'
 
-
 export default defineComponent({
   name: 'SpacesView',
   components: {

@@ -3,7 +3,7 @@ import { computed, unref } from 'vue'
 import { Store } from 'vuex'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useRoute } from '../../router'
-import { useAbility, useClientService, useStore } from 'web-pkg/src'
+import { useAbility, useClientService, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 
 export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
@@ -120,6 +120,9 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
   ])
 
   return {
-    actions
+    actions,
+
+    // HACK: exported for unit tests:
+    restoreSpaces
   }
 }

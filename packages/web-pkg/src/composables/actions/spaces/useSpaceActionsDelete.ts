@@ -1,7 +1,7 @@
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from 'web-client/src'
-import { useClientService, useRoute } from 'web-pkg/src'
+import { useClientService, useRoute } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services'
 import { useAbility } from '../../ability'
 import { useStore } from '../../store'
@@ -31,8 +31,8 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
         })
         .then(() => {
           store.dispatch('hideModal')
-          store.commit('REMOVE_FILES', [{ id: space.id }])
-          store.commit('REMOVE_SPACE', { id: space.id })
+          store.commit('Files/REMOVE_FILES', [{ id: space.id }])
+          store.commit('runtime/spaces/REMOVE_SPACE', { id: space.id })
           return true
         })
         .catch((error) => {
@@ -114,6 +114,9 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
   ])
 
   return {
-    actions
+    actions,
+
+    // HACK: exported for unit tests:
+    deleteSpaces
   }
 }
