@@ -97,7 +97,8 @@ import { AVAILABLE_SIZES } from '../../helpers/constants'
 import OcButton from '../OcButton/OcButton.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
-import { BreadcrumbItem } from 'web-app-files/src/helpers/breadcrumbs'
+
+import { BreadcrumbItem } from './types'
 
 /**
  * Displays a breadcrumb. Each item in the items property has the following elements:

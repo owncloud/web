@@ -64,7 +64,6 @@ import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
-import { BreadcrumbItem } from '../../helpers/breadcrumbs'
 import { isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
@@ -84,6 +83,7 @@ import {
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
 import { useStore } from 'web-pkg/src'
+import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 
 export default defineComponent({
   components: {

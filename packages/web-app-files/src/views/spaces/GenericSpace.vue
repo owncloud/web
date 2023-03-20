@@ -175,12 +175,13 @@ import { ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
+import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults, ViewModeConstants } from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
 import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'
+import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 
 const visibilityObserver = new VisibilityObserver()
 

@@ -63,7 +63,7 @@ import { defineComponent, onBeforeUnmount, onMounted, PropType, ref, unref } fro
 import { eventBus, useAppDefaults } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Panel } from 'web-pkg/src/components/sideBar'
-import { BreadcrumbItem } from 'web-app-files/src/helpers/breadcrumbs'
+import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 
 export default defineComponent({
   components: {
