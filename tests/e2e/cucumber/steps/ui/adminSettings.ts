@@ -80,7 +80,7 @@ When(
         await spacesObject.changeSubtitle({ key, value })
         break
       case 'quota':
-        await spacesObject.changeQuota({ key, value })
+        await spacesObject.changeQuota({ key, value, context: 'context-menu' })
         break
       default:
         throw new Error(`'${action}' not implemented`)
@@ -89,12 +89,32 @@ When(
 )
 
 When(
-  /^"([^"]*)" (disables|deletes) the following space(s)? using the batch-actions$/,
+  /^"([^"]*)" (?:changes|updates) quota of the following space(?:s)? to "([^"]*)" using the batch-actions$/,
+  async function (
+    this: World,
+    stepUser: string,
+    value: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+    for (const info of stepTable.hashes()) {
+      await spacesObject.select({ key: info.id })
+    }
+    await spacesObject.changeQuota({
+      key: stepTable.hashes()[0].id,
+      value,
+      context: 'batch-actions'
+    })
+  }
+)
+
+When(
+  /^"([^"]*)" (disables|enables|deletes) the following space(?:s)? using the batch-actions$/,
   async function (
     this: World,
     stepUser: string,
     action: string,
-    _: string,
     stepTable: DataTable
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -108,6 +128,9 @@ When(
         break
       case 'deletes':
         await spacesObject.delete({ key: stepTable.hashes()[0].id, context: 'batch-actions' })
+        break
+      case 'enables':
+        await spacesObject.enable({ key: stepTable.hashes()[0].id, context: 'batch-actions' })
         break
       default:
         throw new Error(`'${action}' not implemented`)

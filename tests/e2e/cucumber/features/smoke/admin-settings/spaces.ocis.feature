@@ -56,6 +56,20 @@ Feature: spaces management
       | id     |
       | team.a |
       | team.b |
+      | team.c |
+      | team.d |
+    And "Alice" enables the following spaces using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+      | team.c |
+      | team.d |
+    And "Alice" updates quota of the following spaces to "50" using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+      | team.c |
+      | team.d |
     And "Alice" disables the following spaces using the batch-actions
       | id     |
       | team.a |
@@ -63,6 +77,12 @@ Feature: spaces management
       | team.c |
       | team.d |
     And "Alice" deletes the following spaces using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+      | team.c |
+      | team.d |
+    Then "Alice" should not see the following spaces
       | id     |
       | team.a |
       | team.b |
