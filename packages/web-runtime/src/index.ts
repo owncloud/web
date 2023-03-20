@@ -37,7 +37,6 @@ import PortalVue, { createWormhole } from 'portal-vue'
 
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
-import lifecycleMixin from './mixins/lifecycleMixin'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const app = createApp(pages.success)
@@ -79,7 +78,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   app.component('AvatarImage', Avatar)
   app.mixin(focusMixin)
-  app.mixin(lifecycleMixin)
 
   app.mount('#owncloud')
 
