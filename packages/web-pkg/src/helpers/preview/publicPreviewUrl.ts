@@ -1,7 +1,8 @@
 import { buildQueryString } from './common'
-import { clientService } from '../../services'
+import { ClientService } from '../../services'
 
 interface PublicPreviewUrlOptions {
+  clientService: ClientService
   resource: {
     etag?: string
     downloadURL: string
@@ -27,7 +28,7 @@ export const publicPreviewUrl = async (options: PublicPreviewUrlOptions): Promis
     .join('&')
 
   const previewUrl = [url, combinedQuery].filter(Boolean).join('?')
-  const { status } = await clientService.httpUnAuthenticated.head(previewUrl)
+  const { status } = await options.clientService.httpUnAuthenticated.head(previewUrl)
 
   if (status !== 404) {
     return previewUrl

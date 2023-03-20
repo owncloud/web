@@ -1,19 +1,13 @@
 import { SDKSearch } from '../../../src/search'
-import { clientService } from 'web-pkg/src/services'
+import { ClientService } from 'web-pkg/src/services'
 import { Store } from 'vuex'
 import { RouteLocation, Router } from 'vue-router'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ref } from 'vue'
 
 const searchMock = jest.fn()
-jest.spyOn(clientService, 'owncloudSdk', 'get').mockImplementation(
-  () =>
-    ({
-      files: {
-        search: searchMock
-      } as any
-    } as any)
-)
+const clientService = mockDeep<ClientService>()
+clientService.owncloudSdk.files.search.mockImplementation(searchMock)
 
 jest.mock('web-client/src/helpers', () => ({
   buildResource: (v) => v
@@ -36,7 +30,7 @@ const storeWithoutFileSearch = mockDeep<Store<any>>({
 
 describe('SDKProvider', () => {
   it('is only available if announced via capabilities', () => {
-    const search = new SDKSearch(storeWithoutFileSearch, mock<Router>())
+    const search = new SDKSearch(storeWithoutFileSearch, mock<Router>(), clientService)
     expect(search.available).toBe(false)
   })
 
@@ -51,7 +45,8 @@ describe('SDKProvider', () => {
           store,
           mock<Router>({
             currentRoute: ref(mock<RouteLocation>({ name: v.route }))
-          })
+          }),
+          clientService
         )
 
         expect(!!search.previewSearch.available).toBe(!!v.available)
@@ -59,7 +54,7 @@ describe('SDKProvider', () => {
     })
 
     it('can search', async () => {
-      const search = new SDKSearch(store, mock<Router>())
+      const search = new SDKSearch(store, mock<Router>(), clientService)
       const files = [
         { id: 'foo', name: 'foo' },
         { id: 'bar', name: 'bar' },
@@ -79,7 +74,7 @@ describe('SDKProvider', () => {
   })
   describe('SDKProvider listSearch', () => {
     it('can search', async () => {
-      const search = new SDKSearch(store, mock<Router>())
+      const search = new SDKSearch(store, mock<Router>(), clientService)
       const files = [
         { id: 'foo', name: 'foo' },
         { id: 'bar', name: 'bar' },

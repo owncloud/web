@@ -153,13 +153,14 @@ export default defineComponent({
     rowMounted(resource, component) {
       const debounced = debounce(({ unobserve }) => {
         unobserve()
-        this.loadAvatars({ resource })
+        this.loadAvatars({ resource, clientService: this.$clientService })
 
         if (!this.displayThumbnails) {
           return
         }
 
         this.loadPreview({
+          clientService: this.$clientService,
           resource,
           isPublic: false,
           dimensions: ImageDimension.Thumbnail,

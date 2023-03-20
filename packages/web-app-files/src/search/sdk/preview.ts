@@ -1,6 +1,6 @@
 import { SearchPreview, SearchResult } from 'web-app-search/src/types'
 import PreviewComponent from '../../components/Search/Preview.vue'
-import { clientService } from 'web-pkg/src/services'
+import { ClientService } from 'web-pkg/src/services'
 import { buildResource } from 'web-client/src/helpers'
 import { Cache } from 'web-pkg/src/helpers/cache'
 import { Component, unref } from 'vue'
@@ -15,13 +15,15 @@ export default class Preview implements SearchPreview {
   private readonly cache: Cache<string, SearchResult>
   private readonly router: Router
   private readonly store: Store<any>
+  private readonly clientService: ClientService
 
-  constructor(store: Store<any>, router: Router) {
+  constructor(store: Store<any>, router: Router, clientService: ClientService) {
     this.component = PreviewComponent
     this.router = router
     this.store = store
     // define how long the cache should be valid, maybe conf option?
     this.cache = new Cache({ ttl: 10000, capacity: 100 })
+    this.clientService = clientService
   }
 
   public async search(term: string): Promise<SearchResult> {
@@ -37,7 +39,7 @@ export default class Preview implements SearchPreview {
     }
 
     const areHiddenFilesShown = this.store.state.Files?.areHiddenFilesShown
-    const { range, results } = await clientService.owncloudSdk.files.search(
+    const { range, results } = await this.clientService.owncloudSdk.files.search(
       term,
       previewSearchLimit, // todo: add configuration option, other places need that too... needs consolidation
       DavProperties.Default

@@ -11,7 +11,12 @@ import { archiverService } from '../../../services'
 import { isPublicSpaceResource, Resource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
-import { usePublicLinkPassword, useRouter, useStore } from 'web-pkg/src/composables'
+import {
+  useClientService,
+  usePublicLinkPassword,
+  useRouter,
+  useStore
+} from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 
@@ -19,6 +24,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
   store = store || useStore()
   const router = useRouter()
   const { $ngettext, $gettext } = useGettext()
+  const clientService = useClientService()
   const publicLinkPassword = usePublicLinkPassword({ store })
   const isFilesAppActive = useIsFilesAppActive()
 
@@ -33,6 +39,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
         }
     await archiverService
       .triggerDownload({
+        clientService,
         ...fileOptions,
         ...(isPublicSpaceResource(space) && {
           publicToken: space.id as string,

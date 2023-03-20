@@ -118,10 +118,10 @@ describe('Spaces view', () => {
 })
 
 function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
-  const graph = mockDeep<Graph>()
-  graph.drives.listAllDrives.mockImplementation(() => mockAxiosResolve({ value: spaces }))
   const $clientService = mockDeep<ClientService>()
-  $clientService.graphAuthenticated.mockImplementation(() => graph)
+  $clientService.graphAuthenticated.drives.listAllDrives.mockImplementation(() =>
+    mockAxiosResolve({ value: spaces })
+  )
   const mocks = {
     ...defaultComponentMocks(),
     $clientService,

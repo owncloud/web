@@ -447,7 +447,16 @@ export default {
     })
   },
 
-  loadAvatars({ commit, rootGetters }, { resource }) {
+  loadAvatars(
+    { commit, rootGetters },
+    {
+      resource,
+      clientService
+    }: {
+      resource: Resource
+      clientService: ClientService
+    }
+  ) {
     if (!rootGetters.capabilities.files_sharing.user.profile_picture) {
       return
     }
@@ -459,10 +468,9 @@ export default {
         }
         avatarUrl(
           {
-            clientService: this.$clientService,
+            clientService,
             username: obj.username,
-            server: rootGetters.configuration.server,
-            token: rootGetters['runtime/auth/accessToken']
+            server: rootGetters.configuration.server
           },
           true
         ).then((url) =>
@@ -476,13 +484,17 @@ export default {
     })
   },
 
-  async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions, type }) {
+  async loadPreview(
+    { commit, rootGetters },
+    { clientService, resource, isPublic, dimensions, type }
+  ) {
     if (!thumbnailService.available || !thumbnailService.isMimetypeSupported(resource.mimeType)) {
       return
     }
 
     const preview = await loadPreview(
       {
+        clientService,
         resource,
         isPublic,
         dimensions,

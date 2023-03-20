@@ -1,11 +1,10 @@
 import { unref } from 'vue'
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import { SpaceResource } from 'web-client/src'
-import { clientService, eventBus } from 'web-pkg/src/services'
+import { eventBus } from 'web-pkg/src/services'
 
 export default {
   computed: {
-    ...mapGetters(['configuration']),
     ...mapState(['user']),
 
     $_delete_items() {
@@ -76,8 +75,7 @@ export default {
 
     $_delete_deleteSpaces(spaces: SpaceResource[]) {
       const requests = []
-      const accessToken = this.$store.getters['runtime/auth/accessToken']
-      const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
+      const graphClient = this.$clientService.graphAuthenticated
       spaces.forEach((space) => {
         const request = graphClient.drives
           .deleteDrive(space.id.toString(), '', {

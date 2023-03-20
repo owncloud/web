@@ -13,11 +13,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
   const clientService = useClientService()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
-    const accessToken = store.getters['runtime/auth/accessToken']
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      accessToken
-    )
+    const graphClient = clientService.graphAuthenticated
     const storageId = space?.id as string
     const sourcePath = resources[0].path
     const destinationPath = `/.space/${resources[0].name}`

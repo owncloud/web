@@ -1,21 +1,22 @@
 import { publicPreviewUrl } from 'web-pkg/src/helpers/preview'
-import mockAxios from 'jest-mock-axios'
 import { URLSearchParams } from 'url'
+import { mockDeep } from 'jest-mock-extended'
+import { ClientService } from 'web-pkg'
 
-beforeEach(mockAxios.reset)
-
-const defaultOptions = {
+const getDefaultOptions = () => ({
+  clientService: mockDeep<ClientService>(),
   resource: {
     etag: 'etag',
     downloadURL: 'downloadURL'
   }
-}
+})
 
 describe('publicPreviewUrl', () => {
   test('publicPreviewUrl', async () => {
+    const defaultOptions = getDefaultOptions()
+    defaultOptions.clientService.httpUnAuthenticated.head.mockResolvedValueOnce({ status: 200 })
     window.URL.createObjectURL = jest.fn()
     let publicPreviewUrlPromise = publicPreviewUrl(defaultOptions)
-    mockAxios.mockResponse({ data: undefined })
 
     let url = await publicPreviewUrlPromise
     const params = new URLSearchParams(url.split('?')[1])
@@ -23,13 +24,13 @@ describe('publicPreviewUrl', () => {
     expect(params.get('c')).toBe('etag')
     expect(params.get('preview')).toBe('1')
     expect(params.get('scalingup')).toBe('0')
-    expect(mockAxios.head).toHaveBeenCalledTimes(1)
+    expect(defaultOptions.clientService.httpUnAuthenticated.head).toHaveBeenCalledTimes(1)
 
+    defaultOptions.clientService.httpUnAuthenticated.head.mockResolvedValueOnce({ status: 404 })
     publicPreviewUrlPromise = publicPreviewUrl(defaultOptions)
-    mockAxios.mockResponse({ data: undefined, status: 404 })
 
     url = await publicPreviewUrlPromise
     expect(url).toBeFalsy()
-    expect(mockAxios.head).toHaveBeenCalledTimes(2)
+    expect(defaultOptions.clientService.httpUnAuthenticated.head).toHaveBeenCalledTimes(2)
   })
 })

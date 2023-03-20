@@ -551,6 +551,7 @@ export default defineComponent({
     },
     loadPreview(file) {
       return loadPreview({
+        clientService: this.$clientService,
         resource: file,
         isPublic: this.isPublicLinkContext,
         server: configurationManager.serverUrl,

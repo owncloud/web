@@ -32,7 +32,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   })
   const hasSpaces = useCapabilitySpacesEnabled(store)
 
-  const { graphClient } = useGraphClient({ store })
+  const { graphClient } = useGraphClient()
   const spaces = computed<SpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
   const space = ref<SpaceResource>(null)
   const item: Ref<string> = ref(null)

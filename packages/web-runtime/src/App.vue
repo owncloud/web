@@ -70,8 +70,8 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(['user', 'modal']),
-    ...mapGetters(['configuration', 'getSettingsValue']),
+    ...mapState(['modal']),
+    ...mapGetters(['configuration']),
     ...mapGetters('runtime/auth', ['isUserContextReady', 'isPublicLinkContextReady']),
     layout() {
       const plainLayoutRoutes = [
@@ -92,16 +92,6 @@ export default defineComponent({
         return this.isUserContextReady ? LayoutApplication : LayoutLoading
       }
       return LayoutApplication
-    },
-
-    selectedLanguage() {
-      return (
-        this.getSettingsValue({
-          extension: 'ocis-accounts',
-          bundle: 'profile',
-          setting: 'language'
-        }) || this.user.language
-      )
     }
   },
   watch: {
@@ -115,26 +105,6 @@ export default defineComponent({
         const { shortDocumentTitle, fullDocumentTitle } = extracted
         this.announceRouteChange(shortDocumentTitle)
         document.title = fullDocumentTitle
-      }
-    },
-    selectedLanguage: {
-      immediate: true,
-      handler(language) {
-        let languageCode = this.$language.defaultLanguage
-        if (language) {
-          if (typeof language === 'object' && language.listValue.values.length > 0) {
-            languageCode = language.listValue.values[0].stringValue
-          } else {
-            languageCode = language
-          }
-        }
-        if (languageCode?.indexOf('_')) {
-          languageCode = languageCode.split('_')[0]
-        }
-        if (languageCode) {
-          this.$language.current = languageCode
-          document.documentElement.lang = languageCode
-        }
       }
     }
   },
@@ -155,8 +125,7 @@ export default defineComponent({
     },
 
     announceRouteChange(pageTitle) {
-      const translated = this.$gettext('Navigated to %{ pageTitle }')
-      this.announcement = this.$gettextInterpolate(translated, { pageTitle })
+      this.announcement = this.$gettext('Navigated to %{ pageTitle }', { pageTitle })
     },
 
     extractPageTitleFromRoute(route) {

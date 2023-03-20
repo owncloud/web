@@ -1,6 +1,10 @@
 import { createQuicklink } from './helpers/share'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { Resource } from 'web-client'
+import { Language } from 'vue3-gettext'
+import { Ability, ClientService } from 'web-pkg'
+import { Store } from 'vuex'
 
 export function canShare(item, store) {
   const { capabilities } = store.state.user
@@ -46,6 +50,14 @@ export function showQuickLinkPasswordModal({ $gettext, store }, onConfirm) {
   return store.dispatch('createModal', modal)
 }
 
+interface QuickLinkContext {
+  ability: Ability
+  clientService: ClientService
+  item: Resource
+  language: Language
+  store: Store<any>
+}
+
 export default {
   collaborators: {
     id: 'collaborators',
@@ -60,18 +72,34 @@ export default {
     label: ($gettext) => $gettext('Copy quicklink'),
     icon: 'link',
     iconFillType: undefined,
-    handler: async (ctx) => {
+    handler: async ({ ability, clientService, item, language, store }: QuickLinkContext) => {
       const passwordEnforced =
-        ctx.store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only ===
+        store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only ===
         true
 
       if (passwordEnforced) {
-        return showQuickLinkPasswordModal(ctx, async (password) => {
-          await createQuicklink({ ...ctx, resource: ctx.item, password, ability: ctx.ability })
-        })
+        return showQuickLinkPasswordModal(
+          { store, $gettext: language.$gettext },
+          async (password) => {
+            await createQuicklink({
+              ability,
+              clientService,
+              language,
+              password,
+              resource: item,
+              store
+            })
+          }
+        )
       }
 
-      await createQuicklink({ ...ctx, resource: ctx.item, ability: ctx.ability })
+      await createQuicklink({
+        ability,
+        clientService,
+        language,
+        resource: item,
+        store
+      })
     },
     displayed: canShare
   }

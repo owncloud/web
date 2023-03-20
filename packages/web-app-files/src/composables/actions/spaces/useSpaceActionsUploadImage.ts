@@ -30,11 +30,7 @@ export const useSpaceActionsUploadImage = ({
   }
 
   const uploadImageSpace = (ev) => {
-    const accessToken = store.getters['runtime/auth/accessToken']
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      accessToken
-    )
+    const graphClient = clientService.graphAuthenticated
     const file = ev.currentTarget.files[0]
 
     if (!file) {

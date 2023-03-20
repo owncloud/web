@@ -287,7 +287,7 @@ export default defineComponent({
       if (unref(resource).type === 'file' && !unref(isPublicLinkContext)) {
         calls.push(
           store.dispatch('Files/loadVersions', {
-            client: unref(clientService).owncloudSdk,
+            client: clientService.owncloudSdk,
             fileId: unref(resource).id
           })
         )
@@ -297,6 +297,7 @@ export default defineComponent({
 
     const loadPreviewTask = useTask(function* (signal, resource) {
       preview.value = yield loadPreview({
+        clientService,
         resource,
         isPublic: unref(isPublicLinkContext),
         dimensions: ImageDimension.Preview,
@@ -339,7 +340,6 @@ export default defineComponent({
       copyDirectLinkToClipboard,
       isClipboardCopySupported,
       isPublicLinkContext,
-      accessToken,
       space: inject<ComputedRef<Resource>>('space'),
       directLink,
       resource,
@@ -466,7 +466,7 @@ export default defineComponent({
       return getIndicators({ resource: this.resource, ancestorMetaData: this.ancestorMetaData })
     },
     sharedByDisplayName() {
-      return this.resource.share?.fileOwner.displayName
+      return this.resource.share?.fileOwner?.displayName
     },
     sambaPath() {
       return this.getSambaPath(this.resource.path)

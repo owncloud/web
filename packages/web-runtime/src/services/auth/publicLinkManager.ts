@@ -111,11 +111,7 @@ export class PublicLinkManager {
     if (!isEmpty(this.store.getters.capabilities)) {
       return
     }
-    const client = this.clientService.ocsPublicLinkContext(
-      this.configurationManager.serverUrl,
-      token,
-      password
-    )
+    const client = this.clientService.ocsPublicLinkContext(password)
     const response = await client.getCapabilities()
     this.store.commit('SET_CAPABILITIES', response)
   }

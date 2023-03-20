@@ -5,7 +5,6 @@ interface AvatarUrlOptions {
   clientService: ClientService
   server: string
   username: string
-  token: string
   size?: number
 }
 
@@ -18,9 +17,7 @@ export const avatarUrl = async (options: AvatarUrlOptions, cached = false): Prom
 
   const url = [options.server, 'remote.php/dav/avatars/', options.username, `/${size}.png`].join('')
 
-  const { status, statusText } = await options.clientService
-    .httpAuthenticated(options.token)
-    .head(url)
+  const { status, statusText } = await options.clientService.httpAuthenticated.head(url)
 
   if (status !== 200) {
     throw new Error(statusText)

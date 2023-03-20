@@ -4,7 +4,7 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 
 import { isLocationSharesActive } from '../../../router'
 import { computed } from 'vue'
-import { useAbility, useRouter, useStore } from 'web-pkg/src/composables'
+import { useAbility, useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
@@ -12,16 +12,19 @@ import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 export const useFileActionsCreateQuickLink = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { $gettext } = useGettext()
+  const language = useGettext()
+  const { $gettext } = language
   const ability = useAbility()
+  const clientService = useClientService()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const [resource] = resources
     await createQuicklink({
+      clientService,
       resource,
       storageId: space?.id || resource?.fileId || resource?.id,
       store,
-      $gettext,
+      language,
       ability
     })
   }

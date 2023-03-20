@@ -32,12 +32,9 @@ export function useRequest(options: RequestOptions = {}): RequestResult {
     url: string,
     config: AxiosRequestConfig = {}
   ): Promise<AxiosResponse> => {
-    let httpClient
-    if (unref(accessToken)) {
-      httpClient = clientService.httpAuthenticated(unref(accessToken))
-    } else {
-      httpClient = clientService.httpUnAuthenticated
-    }
+    const httpClient = unref(accessToken)
+      ? clientService.httpAuthenticated
+      : clientService.httpUnAuthenticated
 
     config = config || {}
     config.headers = config.headers || {}

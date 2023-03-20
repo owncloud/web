@@ -9,9 +9,7 @@ import {
   defaultStoreMockOptions,
   RouteLocation
 } from 'web-test-helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
-import { clientService } from 'web-pkg'
-import { Graph } from 'web-client'
+import { mock } from 'jest-mock-extended'
 
 const Component = {
   template: '<div></div>',
@@ -19,8 +17,6 @@ const Component = {
 }
 
 describe('delete', () => {
-  afterEach(() => jest.clearAllMocks())
-
   describe('isEnabled property', () => {
     it('should be false when not resource given', () => {
       const { wrapper } = getWrapper()
@@ -89,9 +85,10 @@ describe('delete', () => {
 
   describe('method "$_delete_deleteSpace"', () => {
     it('should hide the modal and show message on success', async () => {
-      const graphMock = mockDeep<Graph>()
-      graphMock.drives.deleteDrive.mockResolvedValue(mockAxiosResolve())
-      const { wrapper } = getWrapper(graphMock)
+      const { wrapper, mocks } = getWrapper()
+      mocks.$clientService.graphAuthenticated.drives.deleteDrive.mockResolvedValue(
+        mockAxiosResolve()
+      )
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_delete_deleteSpaces([
@@ -104,9 +101,8 @@ describe('delete', () => {
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graphMock = mockDeep<Graph>()
-      graphMock.drives.deleteDrive.mockRejectedValue(new Error())
-      const { wrapper } = getWrapper(graphMock)
+      const { wrapper, mocks } = getWrapper()
+      mocks.$clientService.graphAuthenticated.drives.deleteDrive.mockRejectedValue(new Error())
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_delete_deleteSpaces([
         mock<SpaceResource>({ id: 1, canBeDeleted: () => true })
@@ -117,20 +113,21 @@ describe('delete', () => {
   })
 })
 
-function getWrapper(graphMock = mockDeep<Graph>()) {
-  jest.spyOn(clientService, 'graphAuthenticated').mockImplementation(() => graphMock)
+function getWrapper() {
   const storeOptions = {
     ...defaultStoreMockOptions,
     modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
   }
   const store = createStore(storeOptions)
+  const mocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
+  })
   return {
+    mocks,
     wrapper: mount(Component, {
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks: defaultComponentMocks({
-          currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
-        })
+        mocks
       }
     })
   }

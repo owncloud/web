@@ -1,8 +1,10 @@
 import { privatePreviewBlob } from './privatePreviewBlob'
 import { publicPreviewUrl } from './publicPreviewUrl'
+import { ClientService } from 'web-pkg'
 
 export const loadPreview = async (
   {
+    clientService,
     resource,
     isPublic,
     dimensions,
@@ -10,6 +12,7 @@ export const loadPreview = async (
     userId,
     token
   }: {
+    clientService: ClientService
     resource: any
     isPublic: boolean
     dimensions?: [number, number]
@@ -29,13 +32,13 @@ export const loadPreview = async (
   }
 
   if (isPublic) {
-    preview = await publicPreviewUrl({ resource, dimensions })
+    preview = await publicPreviewUrl({ clientService, resource, dimensions })
   } else {
     preview = await privatePreviewBlob(
       {
+        clientService,
         server,
         userId,
-        token,
         resource,
         dimensions
       },

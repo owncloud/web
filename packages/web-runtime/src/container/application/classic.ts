@@ -59,7 +59,8 @@ class ClassicApplication extends NextApplication {
         instance,
         store: this.runtimeApi.requestStore(),
         router: this.runtimeApi.requestRouter(),
-        announceExtension: this.runtimeApi.announceExtension
+        announceExtension: this.runtimeApi.announceExtension,
+        clientService: this.app.config.globalProperties.$clientService
       })
   }
 }

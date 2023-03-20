@@ -7,6 +7,7 @@ import { RouteLocation, Router } from 'vue-router'
 import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from '../../router'
 import { unref } from 'vue'
 import { Ability } from 'web-pkg/src/utils'
+import { Language } from 'vue3-gettext'
 
 export class AuthService {
   private clientService: ClientService
@@ -16,6 +17,7 @@ export class AuthService {
   private userManager: UserManager
   private publicLinkManager: PublicLinkManager
   private ability: Ability
+  private language: Language
 
   public hasAuthErrorOccured: boolean
 
@@ -24,7 +26,8 @@ export class AuthService {
     clientService: ClientService,
     store: Store<any>,
     router: Router,
-    ability: Ability
+    ability: Ability,
+    language: Language
   ): void {
     this.configurationManager = configurationManager
     this.clientService = clientService
@@ -32,6 +35,7 @@ export class AuthService {
     this.router = router
     this.hasAuthErrorOccured = false
     this.ability = ability
+    this.language = language
   }
 
   /**
@@ -66,7 +70,8 @@ export class AuthService {
         clientService: this.clientService,
         configurationManager: this.configurationManager,
         store: this.store,
-        ability: this.ability
+        ability: this.ability,
+        language: this.language
       })
 
       this.userManager.events.addAccessTokenExpired((...args): void => {

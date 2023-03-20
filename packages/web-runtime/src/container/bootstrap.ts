@@ -3,16 +3,15 @@ import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import { App } from 'vue'
+import { App, unref } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
 import { useLocalStorage } from 'web-pkg/src/composables'
-import { unref } from 'vue'
 import { useDefaultThemeName } from '../composables'
 import { authService } from '../services/auth'
-import { clientService } from 'web-pkg/src/services'
+import { ClientService } from 'web-pkg/src/services'
 import { UppyService } from '../services/uppyService'
 import { default as storeOptions } from '../store'
 import { init as sentryInit } from '@sentry/vue'
@@ -257,16 +256,27 @@ export const announceTranslations = ({
  *
  * @param vue
  * @param runtimeConfiguration
+ * @param configurationManager
+ * @param store
  */
 export const announceClientService = ({
   app,
-  runtimeConfiguration
+  runtimeConfiguration,
+  configurationManager,
+  store
 }: {
   app: App
   runtimeConfiguration: RuntimeConfiguration
+  configurationManager: ConfigurationManager
+  store: Store<any>
 }): void => {
   const sdk = new OwnCloud()
   sdk.init({ baseUrl: runtimeConfiguration.server || window.location.origin })
+  const clientService = new ClientService({
+    configurationManager,
+    language: app.config.globalProperties.$language,
+    store
+  })
   app.config.globalProperties.$client = sdk
   app.config.globalProperties.$clientService = clientService
   app.config.globalProperties.$clientService.owncloudSdk = sdk
@@ -304,7 +314,9 @@ export const announceAuthService = ({
   router: Router
 }): void => {
   const ability = app.config.globalProperties.$ability
-  authService.initialize(configurationManager, clientService, store, router, ability)
+  const language = app.config.globalProperties.$language
+  const clientService = app.config.globalProperties.$clientService
+  authService.initialize(configurationManager, clientService, store, router, ability, language)
   app.config.globalProperties.$authService = authService
 }
 

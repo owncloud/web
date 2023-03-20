@@ -71,12 +71,11 @@
 import { defineComponent, inject, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
-import { buildResource, Resource } from 'web-client/src/helpers'
+import { buildResource, buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { spaceRoleManager } from 'web-client/src/helpers/share'
-import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 import { ImageDimension } from 'web-pkg/src/constants'
-import { useAccessToken, useStore } from 'web-pkg/src/composables'
+import { useAccessToken, useClientService, useStore } from 'web-pkg/src/composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
 import { formatDateFromISO } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
@@ -100,6 +99,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
+    const clientService = useClientService()
     const accessToken = useAccessToken({ store })
     const resource = inject<Resource>('resource')
     const spaceImage = ref('')
@@ -125,6 +125,7 @@ export default defineComponent({
       const resource = buildResource(fileInfo)
 
       spaceImage.value = yield loadPreview({
+        clientService,
         resource,
         isPublic: false,
         dimensions: ImageDimension.Preview,

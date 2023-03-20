@@ -2,7 +2,6 @@ import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { UppyResource } from 'web-runtime/src/composables/upload'
-import { Graph } from 'web-client'
 import { Drive } from 'web-client/src/generated'
 import { eventBus, useRequest } from 'web-pkg'
 import {
@@ -140,9 +139,8 @@ describe('CreateAndUpload component', () => {
       const { driveType, updated } = data
       const { wrapper, mocks, storeOptions } = getWrapper()
       const file = mockDeep<UppyResource>({ meta: { driveType } })
-      const graphMock = mockDeep<Graph>()
+      const graphMock = mocks.$clientService.graphAuthenticated
       graphMock.drives.getDrive.mockResolvedValue(mockDeep<Drive>() as any)
-      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
       await wrapper.vm.onUploadComplete({ successful: [file] })
       expect(
         storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
@@ -156,9 +154,8 @@ describe('CreateAndUpload component', () => {
       const file = mockDeep<UppyResource>({
         meta: { driveType: 'project', spaceId: space.id, currentFolderId: itemId }
       })
-      const graphMock = mockDeep<Graph>()
+      const graphMock = mocks.$clientService.graphAuthenticated
       graphMock.drives.getDrive.mockResolvedValue(mockDeep<Drive>() as any)
-      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
       await wrapper.vm.onUploadComplete({ successful: [file] })
       expect(eventSpy).toHaveBeenCalled()
     })

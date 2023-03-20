@@ -1,6 +1,6 @@
 import CreateSpace from '../../../../src/components/AppBar/CreateSpace.vue'
 import { mockDeep } from 'jest-mock-extended'
-import { Graph, Resource } from 'web-client'
+import { Resource } from 'web-client'
 import { Drive } from 'web-client/src/generated'
 import {
   createStore,
@@ -57,11 +57,10 @@ describe('CreateSpace component', () => {
   describe('method "addNewSpace"', () => {
     it('creates the space and updates the readme data after creation', async () => {
       const { wrapper, mocks, storeOptions } = getWrapper()
-      const graphMock = mockDeep<Graph>()
+      const graphMock = mocks.$clientService.graphAuthenticated
       const drive = mockDeep<Drive>()
       graphMock.drives.createDrive.mockResolvedValue(drive as any)
       graphMock.drives.updateDrive.mockResolvedValue(drive as any)
-      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
       mocks.$clientService.webdav.putFileContents.mockResolvedValue(mockDeep<Resource>())
       await wrapper.vm.addNewSpace('New space')
       expect(storeOptions.modules.runtime.modules.spaces.mutations.UPSERT_SPACE).toHaveBeenCalled()
@@ -70,9 +69,8 @@ describe('CreateSpace component', () => {
     it('shows a message when an error occurred', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper, mocks, storeOptions } = getWrapper()
-      const graphMock = mockDeep<Graph>()
+      const graphMock = mocks.$clientService.graphAuthenticated
       graphMock.drives.createDrive.mockRejectedValue({})
-      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
       await wrapper.vm.addNewSpace('New space')
       expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
         expect.anything(),

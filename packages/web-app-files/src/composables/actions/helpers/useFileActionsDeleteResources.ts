@@ -9,7 +9,6 @@ import { dirname } from 'path'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { computed, unref } from 'vue'
 import {
-  useAccessToken,
   useCapabilitySpacesEnabled,
   useCapabilityShareJailEnabled,
   useClientService,
@@ -28,7 +27,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
   const clientService = useClientService()
   const { owncloudSdk } = clientService
-  const accessToken = useAccessToken({ store })
 
   const queue = new PQueue({ concurrency: 4 })
   const deleteOps = []
@@ -174,10 +172,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
           !['public', 'share'].includes(space?.driveType)
         ) {
           if (unref(hasSpacesEnabled)) {
-            const graphClient = clientService.graphAuthenticated(
-              store.getters.configuration.server,
-              unref(accessToken)
-            )
+            const graphClient = clientService.graphAuthenticated
             const driveResponse = await graphClient.drives.getDrive(unref(resources)[0].storageId)
             store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
               id: driveResponse.data.id,

@@ -1,6 +1,5 @@
 import { unref } from 'vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { clientService } from 'web-pkg/src/services'
 
 export default {
   computed: {
@@ -77,8 +76,7 @@ export default {
     },
 
     $_rename_renameSpace(space, name) {
-      const accessToken = this.$store.getters['runtime/auth/accessToken']
-      const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
+      const graphClient = this.$clientService.graphAuthenticated
       return graphClient.drives
         .updateDrive(space.id, { name }, {})
         .then(() => {

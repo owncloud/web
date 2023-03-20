@@ -1,22 +1,16 @@
 import { archiverService, ArchiverService } from '../../../src/services'
 import { RuntimeError } from 'web-runtime/src/container/error'
-import { mock, mockDeep } from 'jest-mock-extended'
-import { ClientService, HttpClient } from 'web-pkg'
-import { OwnCloudSdk } from 'web-client/src/types'
+import { mockDeep } from 'jest-mock-extended'
+import { ClientService } from 'web-pkg'
 
 const getClientServiceMock = () => {
-  const clientMock = mock<HttpClient>()
-  clientMock.get.mockImplementation(
-    () =>
-      ({
-        data: new ArrayBuffer(8),
-        headers: { 'content-disposition': 'filename="download.tar"' }
-      } as any)
-  )
-  return mockDeep<ClientService>({
-    owncloudSdk: mock<OwnCloudSdk>({ signUrl: (url) => url }),
-    httpUnAuthenticated: clientMock
+  const clientServiceMock = mockDeep<ClientService>()
+  clientServiceMock.httpUnAuthenticated.get.mockResolvedValue({
+    data: new ArrayBuffer(8),
+    headers: { 'content-disposition': 'filename="download.tar"' }
   })
+  clientServiceMock.owncloudSdk.signUrl.mockImplementation((url) => url)
+  return clientServiceMock
 }
 
 describe('archiver', () => {
@@ -29,9 +23,9 @@ describe('archiver', () => {
         expect(archiverService.available).toBe(false)
       })
       it('does not trigger downloads', async () => {
-        await expect(archiverService.triggerDownload({})).rejects.toThrow(
-          new RuntimeError('no archiver available')
-        )
+        await expect(
+          archiverService.triggerDownload({ clientService: getClientServiceMock() })
+        ).rejects.toThrow(new RuntimeError('no archiver available'))
       })
     })
     describe('when initialized', () => {
@@ -48,9 +42,9 @@ describe('archiver', () => {
           expect(service.available).toBe(false)
         })
         it('does not trigger downloads', async () => {
-          await expect(service.triggerDownload({})).rejects.toThrow(
-            new RuntimeError('no archiver available')
-          )
+          await expect(
+            service.triggerDownload({ clientService: getClientServiceMock() })
+          ).rejects.toThrow(new RuntimeError('no archiver available'))
         })
       })
       describe('with one v2 archiver capability', () => {

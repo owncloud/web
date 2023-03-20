@@ -1,4 +1,8 @@
 import { loadPreview } from 'web-pkg/src/helpers/preview'
+import { mockDeep } from 'jest-mock-extended'
+import { ClientService } from 'web-pkg'
+
+const clientService = mockDeep<ClientService>()
 
 jest.mock('web-pkg/src/helpers/preview/publicPreviewUrl', () => ({
   publicPreviewUrl: jest.fn().mockReturnValue('publicPreviewUrl')
@@ -11,6 +15,7 @@ jest.mock('web-pkg/src/helpers/preview/privatePreviewBlob', () => ({
 describe('loadPreview', () => {
   it('returns empty string if resource is a folder', async () => {
     const preview = await loadPreview({
+      clientService,
       resource: { type: 'folder' },
       isPublic: true,
       dimensions: [0, 0]
@@ -21,6 +26,7 @@ describe('loadPreview', () => {
 
   it('returns empty string if resource has no extension', async () => {
     const preview = await loadPreview({
+      clientService,
       resource: {},
       isPublic: true,
       dimensions: [0, 0]
@@ -29,9 +35,10 @@ describe('loadPreview', () => {
     expect(preview).toBe('')
   })
 
-  it('returns empty string if is private but no server, userId or token is given', async () => {
+  it('returns empty string if is private but no server or userId or token is given', async () => {
     await expect(
       loadPreview({
+        clientService,
         resource: { extension: 'jpg' },
         isPublic: false,
         dimensions: [0, 0]
@@ -40,6 +47,7 @@ describe('loadPreview', () => {
 
     await expect(
       loadPreview({
+        clientService,
         resource: { extension: 'jpg' },
         isPublic: false,
         dimensions: [0, 0],
@@ -49,6 +57,7 @@ describe('loadPreview', () => {
 
     await expect(
       loadPreview({
+        clientService,
         resource: { extension: 'jpg' },
         isPublic: false,
         dimensions: [0, 0],
@@ -61,6 +70,7 @@ describe('loadPreview', () => {
   it('returns a publicPreviewUrl', async () => {
     await expect(
       loadPreview({
+        clientService,
         resource: { extension: 'jpg' },
         isPublic: true,
         dimensions: [0, 0]
@@ -71,6 +81,7 @@ describe('loadPreview', () => {
   it('returns a privatePreviewBlob', async () => {
     await expect(
       loadPreview({
+        clientService,
         resource: { extension: 'jpg' },
         isPublic: false,
         dimensions: [0, 0],

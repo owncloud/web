@@ -2,16 +2,16 @@ import { useFileActionsSetImage } from 'web-app-files/src/composables/actions/fi
 import { thumbnailService } from '../../../../../src/services'
 import { buildSpace, Resource, SpaceResource } from 'web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { clientService } from 'web-pkg'
-import { Graph } from 'web-client'
 import {
   createStore,
   defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation,
-  getComposableWrapper
+  getComposableWrapper,
+  mockAxiosResolve
 } from 'web-test-helpers'
 import { unref } from 'vue'
+import { Drive } from 'web-client/src/generated'
 
 describe('setImage', () => {
   beforeAll(() => {
@@ -21,8 +21,6 @@ describe('setImage', () => {
       supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
     })
   })
-
-  afterEach(() => jest.clearAllMocks())
 
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
@@ -34,7 +32,7 @@ describe('setImage', () => {
         },
         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
       })
-      const wrapper = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ space, resources: [] as Resource[] })).toBe(false)
         }
@@ -49,7 +47,7 @@ describe('setImage', () => {
         },
         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
       })
-      const wrapper = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -69,7 +67,7 @@ describe('setImage', () => {
         },
         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
       })
-      const wrapper = getWrapper({
+      getWrapper({
         setup: async ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -89,7 +87,7 @@ describe('setImage', () => {
         },
         special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
       })
-      const wrapper = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -103,16 +101,15 @@ describe('setImage', () => {
   })
 
   describe('method "$_setSpaceImage_trigger"', () => {
-    it('should show message on success', async () => {
-      const responseMock = { data: { special: [{ specialFolder: { name: 'image' } }] } }
-      const graphMock = mockDeep<Graph>({
-        drives: { updateDrive: jest.fn().mockResolvedValue(responseMock) }
-      })
+    it('should show message on success', () => {
+      const driveMock = mock<Drive>({ special: [{ specialFolder: { name: 'image' } }] })
 
       const space = mock<SpaceResource>({ id: 1 })
-      const wrapper = getWrapper({
+      getWrapper({
         setup: async ({ actions }, { storeOptions, clientService }) => {
-          clientService.graphAuthenticated.mockImplementation(() => graphMock)
+          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
+            mockAxiosResolve(driveMock)
+          )
           await unref(actions)[0].handler({
             space,
             resources: [
@@ -127,15 +124,11 @@ describe('setImage', () => {
       })
     })
 
-    it('should show message on error', async () => {
+    it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const graphMock = mockDeep<Graph>({
-        drives: { updateDrive: jest.fn().mockRejectedValue(new Error()) }
-      })
-
       const space = mock<SpaceResource>({ id: 1 })
-      const wrapper = getWrapper({
-        setup: async ({ actions }, { storeOptions, clientService }) => {
+      getWrapper({
+        setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
             space,
             resources: [
@@ -155,7 +148,7 @@ describe('setImage', () => {
         mockAxios.request.mockImplementationOnce(() => {
           return Promise.resolve({ data: { special: [{ specialFolder: { name: 'image' } }] } })
         })
-        const wrapper = getWrapper()
+        getWrapper()
         await wrapper.vm.$_setSpaceImage_trigger({
           resources: [
             {
