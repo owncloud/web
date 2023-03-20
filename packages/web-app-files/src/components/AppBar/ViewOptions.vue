@@ -84,9 +84,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, watch } from 'vue'
+import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
 import { mapMutations, mapState } from 'vuex'
-import { useRouteQueryPersisted } from 'web-pkg/src/composables'
+import { queryItemAsString, useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { ViewMode } from 'web-pkg/src/ui/types'
 import { PaginationConstants, ViewModeConstants } from '../../composables'
 
@@ -105,6 +105,9 @@ export default defineComponent({
     const perPageQuery = useRouteQueryPersisted({
       name: PaginationConstants.perPageQueryName,
       defaultValue: PaginationConstants.perPageDefault
+    })
+    const itemsPerPage = computed(() => {
+      return queryItemAsString(unref(perPageQuery))
     })
     const viewModeQuery = useRouteQueryPersisted({
       name: ViewModeConstants.queryName,
@@ -146,7 +149,7 @@ export default defineComponent({
       ViewModeConstants,
       viewModeCurrent: viewModeQuery,
       viewSizeCurrent: viewSizeQuery,
-      itemsPerPage: perPageQuery,
+      itemsPerPage,
       queryParamsLoading,
       setTilesViewSize
     }

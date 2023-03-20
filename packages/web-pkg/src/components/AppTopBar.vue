@@ -22,13 +22,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { Resource } from 'web-client/src'
 
 export default defineComponent({
   name: 'AppTopBar',
   props: {
     resource: {
-      type: Object,
+      type: Object as PropType<Resource>,
       default: null
     }
   },

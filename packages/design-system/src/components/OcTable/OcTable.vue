@@ -109,17 +109,17 @@ import {
 
 export type FieldType = {
   name: string
-  title: string
-  headerType: string
-  type: string
-  callback: any
-  alignH: string
-  alignV: string
-  width: string
-  wrap: string
-  thClass: string
-  tdClass: string
-  sortable: string
+  title?: string
+  headerType?: string
+  type?: string
+  callback?: any
+  alignH?: string
+  alignV?: string
+  width?: string
+  wrap?: string
+  thClass?: string
+  tdClass?: string
+  sortable?: boolean
 }
 
 /**

@@ -10,7 +10,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { Resource } from 'web-client/src'
 
 /**
  * Please head to the ownCloud web ResourceTable component (https://github.com/owncloud/web/blob/master/packages/web-app-files/src/components/FilesList/ResourceTable.vue) for a demo of the Ghost Element.
@@ -21,7 +22,7 @@ export default defineComponent({
   release: '11.2.0',
   props: {
     previewItems: {
-      type: Array,
+      type: Array as PropType<Resource[]>,
       required: true
     }
   },

@@ -1,7 +1,7 @@
 <template>
   <div>
     <oc-button :class="btnClass" justify-content="left" appearance="raw" @click="triggerUpload">
-      <oc-resource-icon :resource="{ extension: '', isFolder }" size="medium" />
+      <oc-resource-icon :resource="resource" size="medium" />
       <span :id="uploadLabelId">{{ buttonLabel }}</span>
     </oc-button>
     <input
@@ -18,7 +18,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { Resource } from 'web-client/src'
 export default defineComponent({
   props: {
     btnLabel: {
@@ -35,6 +36,14 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    }
+  },
+  setup(props) {
+    const resource = computed(() => {
+      return { extension: '', isFolder: props.isFolder } as Resource
+    })
+    return {
+      resource
     }
   },
   computed: {

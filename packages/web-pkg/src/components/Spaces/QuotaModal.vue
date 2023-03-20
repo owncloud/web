@@ -41,7 +41,7 @@ export default defineComponent({
       required: true
     },
     cancel: {
-      type: Function,
+      type: Function as PropType<(...args: any) => unknown>,
       required: true
     },
     maxQuota: {

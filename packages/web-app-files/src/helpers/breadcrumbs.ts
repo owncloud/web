@@ -1,13 +1,7 @@
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { RouteLocation, RouteLocationRaw } from 'vue-router'
+import { RouteLocation } from 'vue-router'
 import omit from 'lodash-es/omit'
-
-export interface BreadcrumbItem {
-  text: string
-  to?: RouteLocationRaw
-  allowContextActions?: boolean
-  onClick?: () => void
-}
+import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 
 export const breadcrumbsFromPath = (
   currentRoute: RouteLocation,

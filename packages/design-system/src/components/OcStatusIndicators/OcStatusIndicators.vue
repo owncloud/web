@@ -13,7 +13,7 @@
         variation="inverse"
         :data-testid="indicator.id"
         :data-test-indicator-type="indicator.type"
-        @click="indicator.handler(resource, indicator.target, router)"
+        @click="indicator.handler(resource, indicator.target, $router)"
       >
         <oc-icon :name="indicator.icon" size="small" fill-type="line" />
       </oc-button>
@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, PropType, ref, unref } from 'vue'
+import { defineComponent, PropType, ref, unref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import uniqueId from '../../utils/uniqueId'
@@ -103,9 +103,6 @@ export default defineComponent({
   },
 
   setup() {
-    const router =
-      (getCurrentInstance().proxy as any).$router ||
-      (getCurrentInstance().parent.proxy as any).$router
     const accessibleDescriptionIds = ref({} as Record<string, string>)
 
     const hasHandler = (indicator: Indicator): boolean => {
@@ -125,7 +122,6 @@ export default defineComponent({
     }
 
     return {
-      router,
       accessibleDescriptionIds,
       hasHandler,
       getIndicatorDescriptionId

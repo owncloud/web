@@ -1,5 +1,6 @@
 import { Resource, SpaceResource } from 'web-client/src'
 import { Group, User } from 'web-client/src/generated'
+import { RouteLocationRaw } from 'vue-router'
 
 export type ActionOptions = Record<string, unknown>
 export interface Action<T = ActionOptions> {
@@ -23,7 +24,7 @@ export interface Action<T = ActionOptions> {
   handler?(options?: T): void
 
   // componentType: router-link
-  route?(options?: T): void
+  route?(options?: T): RouteLocationRaw
 
   // can be used to display the action in a disabled state in the UI
   isDisabled?(options?: T): boolean

@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { isEqual } from 'lodash-es'
 import { getSizeClass } from '../../utils/sizeClasses'
 import uniqueId from '../../utils/uniqueId'
@@ -49,6 +49,7 @@ export default defineComponent({
      **/
     // eslint-disable-next-line vue/require-prop-types
     modelValue: {
+      type: [Boolean, Array] as PropType<boolean | unknown[]>,
       required: false,
       default: false
     },

@@ -71,6 +71,7 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import { FieldType } from 'design-system/src/components/OcTable/OcTable.vue'
 
 export default defineComponent({
   name: 'TrashOverview',
@@ -156,7 +157,7 @@ export default defineComponent({
       return searchEngine.search(filterTerm).map((r) => r.item)
     }
 
-    const fields = computed(() => [
+    const fields = computed((): FieldType[] => [
       {
         name: 'icon',
         title: '',
