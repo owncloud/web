@@ -33,9 +33,9 @@
     "not OperaMobile > 0"
   ],
   "dependencies": {
-    "@vue/compiler-dom": "^3.2.45",
+    "@vue/compiler-dom": "3.2.47",
     "@vue/compiler-sfc": "3.2.47",
-    "@vue/runtime-dom": "^3.2.45",
+    "@vue/runtime-dom": "3.2.47",
     "keycode": "^2.2.1",
     "rollup-plugin-gzip": "^3.1.0",
     "vite-plugin-static-copy": "^0.12.0",
