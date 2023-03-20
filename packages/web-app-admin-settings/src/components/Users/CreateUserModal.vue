@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import * as EmailValidator from 'email-validator'
 import { useGraphClient } from 'web-pkg'
 
@@ -61,30 +61,31 @@ export default defineComponent({
   name: 'CreateUserModal',
   emits: ['cancel', 'confirm'],
   setup() {
+    const formData = ref({
+      userName: {
+        errorMessage: '',
+        valid: false
+      },
+      displayName: {
+        errorMessage: '',
+        valid: false
+      },
+      email: {
+        errorMessage: '',
+        valid: false
+      },
+      password: {
+        errorMessage: '',
+        valid: false
+      }
+    })
     return {
-      ...useGraphClient()
+      ...useGraphClient(),
+      formData
     }
   },
   data: function () {
     return {
-      formData: {
-        userName: {
-          errorMessage: '',
-          valid: false
-        },
-        displayName: {
-          errorMessage: '',
-          valid: false
-        },
-        email: {
-          errorMessage: '',
-          valid: false
-        },
-        password: {
-          errorMessage: '',
-          valid: false
-        }
-      },
       user: {
         onPremisesSamAccountName: '',
         displayName: '',
