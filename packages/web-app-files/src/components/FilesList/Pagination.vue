@@ -4,14 +4,13 @@
     :pages="pages"
     :current-page="currentPage"
     :max-displayed="3"
-    :current-route="route"
+    :current-route="$route"
     class="files-pagination oc-flex oc-flex-center oc-my-s"
   />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useRoute } from 'web-pkg/src/composables'
 
 export default defineComponent({
   props: {
@@ -22,12 +21,6 @@ export default defineComponent({
     currentPage: {
       type: Number,
       required: true
-    }
-  },
-  setup() {
-    const route = useRoute()
-    return {
-      route
     }
   },
   watch: {

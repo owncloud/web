@@ -123,7 +123,7 @@ export default defineComponent({
     const menuItemsSidebar = computed(() => {
       const fileHandlers = [...unref(showDetailsItems)]
       return [...fileHandlers].filter((item) =>
-        // HACK: showDetails provides FileAction[] but we use it as a SpaceAction[] here
+        // HACK: showDetails provides FileAction[] but we have SpaceAtionOptions, so we need to cast them to FileActionOptions
         item.isEnabled(unref(actionOptions) as unknown as FileActionOptions)
       )
     })

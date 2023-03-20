@@ -63,6 +63,7 @@ import { defineComponent, onBeforeUnmount, onMounted, PropType, ref, unref } fro
 import { eventBus, useAppDefaults } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Panel } from 'web-pkg/src/components/sideBar'
+import { BreadcrumbItem } from 'web-app-files/src/helpers/breadcrumbs'
 
 export default defineComponent({
   components: {
@@ -73,7 +74,7 @@ export default defineComponent({
   props: {
     breadcrumbs: {
       required: true,
-      type: Array
+      type: Array as PropType<BreadcrumbItem[]>
     },
     sideBarOpen: {
       required: false,

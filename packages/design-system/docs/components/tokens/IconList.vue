@@ -99,7 +99,7 @@ export default defineComponent({
           fillType: icon.endsWith('-fill') ? 'fill' : icon.endsWith('-line') ? 'line' : 'none'
         }))
     },
-    fields(): any {
+    fields() {
       return [
         {
           name: 'passive',
