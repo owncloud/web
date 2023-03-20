@@ -67,7 +67,10 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   })
 
   it('pre selects and enforces the default expiration date for users', async () => {
-    const { wrapper } = createWrapper({ capabilities: enabledCapabilities, stubOcDatepicker: true })
+    const { store, wrapper } = createWrapper({
+      capabilities: enabledCapabilities,
+      stubOcDatepicker: true
+    })
     await wrapper.setProps({ shareTypes: [ShareTypes.user.value] })
 
     const selectedDate = wrapper
@@ -82,7 +85,8 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
         capabilities: jest.fn().mockImplementation(() => ({ files_sharing: enforcedCapabilities }))
       }
     }
-    wrapper.vm.$store.hotUpdate(newCapabilities)
+
+    store.hotUpdate(newCapabilities)
     await nextTick()
     const maxDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['max-date']
     expect(
@@ -91,7 +95,10 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   })
 
   it('pre selects and enforces the default expiration date for groups', async () => {
-    const { wrapper } = createWrapper({ capabilities: enabledCapabilities, stubOcDatepicker: true })
+    const { store, wrapper } = createWrapper({
+      capabilities: enabledCapabilities,
+      stubOcDatepicker: true
+    })
     await wrapper.setProps({ shareTypes: [ShareTypes.group.value] })
     const selectedDate = wrapper
       .find('[data-testid="recipient-datepicker"]')
@@ -106,7 +113,7 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
         capabilities: jest.fn().mockImplementation(() => ({ files_sharing: enforcedCapabilities }))
       }
     }
-    wrapper.vm.$store.hotUpdate(newCapabilities)
+    store.hotUpdate(newCapabilities)
     await nextTick()
     const maxDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['max-date']
     expect(
@@ -115,7 +122,10 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   })
 
   it('pre selects and enforces the smallest expiration date if user and group shareTypes are provided', async () => {
-    const { wrapper } = createWrapper({ capabilities: enabledCapabilities, stubOcDatepicker: true })
+    const { store, wrapper } = createWrapper({
+      capabilities: enabledCapabilities,
+      stubOcDatepicker: true
+    })
     await wrapper.setProps({ shareTypes: [ShareTypes.group.value, ShareTypes.user.value] })
     const selectedDate = wrapper
       .find('[data-testid="recipient-datepicker"]')
@@ -130,7 +140,7 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
         capabilities: jest.fn().mockImplementation(() => ({ files_sharing: enforcedCapabilities }))
       }
     }
-    wrapper.vm.$store.hotUpdate(newCapabilities)
+    store.hotUpdate(newCapabilities)
     await nextTick()
     const maxDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['max-date']
     expect(
@@ -185,6 +195,7 @@ const createWrapper = ({ capabilities = {}, stubOcDatepicker = false } = {}) => 
   storeOptions.getters.capabilities.mockImplementation(() => ({ files_sharing: capabilities }))
   const store = createStore(storeOptions)
   return {
+    store,
     storeOptions,
     wrapper: mount(ExpirationDatepicker, {
       global: {

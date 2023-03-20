@@ -28,6 +28,7 @@ module.exports = {
     '^filesize$': '<rootDir>/node_modules/filesize/lib/filesize.esm.js',
 
     // dedupe ...
+    '^vue$': '<rootDir>/node_modules/vue/dist/vue.cjs.js',
     '^vue3-gettext$': '<rootDir>/node_modules/vue3-gettext/dist/cjs/index.js',
 
     // HACK: workaround for https://github.com/transloadit/uppy/issues/4127
