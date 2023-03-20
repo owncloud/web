@@ -22,7 +22,7 @@ export default defineComponent({
       type: Number,
       default: 0,
       required: true,
-      validator: (value) => {
+      validator: (value: number) => {
         return value >= 0 && value <= 100
       }
     },

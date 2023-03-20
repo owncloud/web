@@ -38,7 +38,7 @@ export default defineComponent({
       type: Number,
       required: false,
       default: undefined,
-      validator: (value) => {
+      validator: (value: number) => {
         return value > 0
       }
     },
