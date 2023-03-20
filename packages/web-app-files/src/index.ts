@@ -20,6 +20,7 @@ import { AppReadyHookArgs } from 'web-pkg/src/apps'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
+import { isPersonalSpaceResource } from 'web-client/src/helpers'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -34,60 +35,71 @@ const appInfo = {
   extensions: [],
   fileSideBars
 }
-const navItems = [
-  {
-    name(capabilities) {
-      return capabilities.spaces?.enabled ? $gettext('Personal') : $gettext('All files')
+const navItems = (context) => {
+  return [
+    {
+      name(capabilities) {
+        return capabilities.spaces?.enabled ? $gettext('Personal') : $gettext('All files')
+      },
+      icon: appInfo.icon,
+      route: {
+        path: `/${appInfo.id}/spaces/personal`
+      },
+      enabled(capabilities) {
+        return (
+          !capabilities.spaces?.enabled ||
+          (capabilities.spaces?.enabled &&
+            context?.$store?.getters['runtime/spaces/spaces'].find((drive) =>
+              isPersonalSpaceResource(drive)
+            ))
+        )
+      }
     },
-    icon: appInfo.icon,
-    route: {
-      path: `/${appInfo.id}/spaces/personal`
-    }
-  },
-  {
-    name: $gettext('Favorites'),
-    icon: 'star',
-    route: {
-      path: `/${appInfo.id}/favorites`
+    {
+      name: $gettext('Favorites'),
+      icon: 'star',
+      route: {
+        path: `/${appInfo.id}/favorites`
+      },
+      enabled(capabilities) {
+        return capabilities.files && capabilities.files.favorites
+      }
     },
-    enabled(capabilities) {
-      return capabilities.files && capabilities.files.favorites
-    }
-  },
-  {
-    name: $gettext('Shares'),
-    icon: 'share-forward',
-    route: {
-      path: `/${appInfo.id}/shares`
+    {
+      name: $gettext('Shares'),
+      icon: 'share-forward',
+      route: {
+        path: `/${appInfo.id}/shares`
+      },
+      activeFor: [{ path: `/${appInfo.id}/spaces/share` }],
+      enabled(capabilities) {
+        return capabilities.files_sharing?.api_enabled !== false
+      }
     },
-    activeFor: [{ path: `/${appInfo.id}/spaces/share` }],
-    enabled(capabilities) {
-      return capabilities.files_sharing?.api_enabled !== false
-    }
-  },
-  {
-    name: $gettext('Spaces'),
-    icon: 'layout-grid',
-    route: {
-      path: `/${appInfo.id}/spaces/projects`
+    {
+      name: $gettext('Spaces'),
+      icon: 'layout-grid',
+      route: {
+        path: `/${appInfo.id}/spaces/projects`
+      },
+      activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
+      enabled(capabilities) {
+        return capabilities.spaces && capabilities.spaces.projects === true
+      }
     },
-    activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
-    enabled(capabilities) {
-      return capabilities.spaces && capabilities.spaces.projects === true
+    {
+      name: $gettext('Deleted files'),
+      icon: 'delete-bin-5',
+      route: {
+        path: `/${appInfo.id}/trash/overview`
+      },
+      activeFor: [{ path: `/${appInfo.id}/trash` }],
+      enabled(capabilities) {
+        return capabilities.dav && capabilities.dav.trashbin === '1.0'
+      }
     }
-  },
-  {
-    name: $gettext('Deleted files'),
-    icon: 'delete-bin-5',
-    route: {
-      path: `/${appInfo.id}/trash/overview`
-    },
-    activeFor: [{ path: `/${appInfo.id}/trash` }],
-    enabled(capabilities) {
-      return capabilities.dav && capabilities.dav.trashbin === '1.0'
-    }
-  }
-]
+  ]
+}
 
 export default {
   appInfo,

@@ -6,10 +6,11 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue'
-import { useRoute, useRouter, useStore } from 'web-pkg/src/composables'
+import { useCapabilitySpacesEnabled, useRoute, useRouter, useStore } from 'web-pkg/src/composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { urlJoin } from 'web-client/src/utils'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { createLocationSpaces } from 'web-app-files/src/router'
 
 // 'personal/home' is used as personal drive alias from static contexts
 // (i.e. places where we can't load the actual personal space)
@@ -40,6 +41,10 @@ export default defineComponent({
     const personalSpace = computed(() => {
       return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
     })
+
+    if (useCapabilitySpacesEnabled() && !unref(personalSpace)) {
+      return router.push(createLocationSpaces('files-spaces-projects'))
+    }
     const itemPath = computed(() => {
       if (!props.appendHomeFolder) {
         return ''
