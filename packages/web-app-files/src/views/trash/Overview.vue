@@ -11,44 +11,51 @@
       />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
-        <oc-text-input
-          id="spaces-filter"
-          v-model="filterTerm"
-          class="oc-ml-m oc-my-s"
-          :label="$gettext('Search')"
-          autocomplete="off"
-        />
-        <oc-table
-          ref="tableRef"
-          class="spaces-table"
-          :sort-by="sortBy"
-          :sort-dir="sortDir"
-          :fields="fields"
-          :data="displaySpaces"
-          :sticky="true"
-          :hover="true"
-          @sort="handleSort"
-        >
-          <template #icon="{ item }">
-            <oc-icon v-if="isPersonalSpaceResource(item)" class="oc-pl-m" name="folder" />
-            <oc-icon v-else class="oc-pl-m" name="layout-grid" />
+        <no-content-message v-if="!spaces.length" icon="delete-bin-5">
+          <template #message>
+            <span v-text="$gettext('You don\'t have access to any trashbins')"></span>
           </template>
-          <template #name="{ item }">
-            <oc-button
-              class="oc-display-block"
-              type="router-link"
-              appearance="raw"
-              :to="getTrashLink(item)"
-              v-text="getSpaceName(item)"
-            />
-          </template>
-          <template #footer>
-            <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
-              <p class="oc-text-muted">{{ footerTextTotal }}</p>
-              <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
-            </div>
-          </template>
-        </oc-table>
+        </no-content-message>
+        <template v-else>
+          <oc-text-input
+            id="spaces-filter"
+            v-model="filterTerm"
+            class="oc-ml-m oc-my-s"
+            :label="$gettext('Search')"
+            autocomplete="off"
+          />
+          <oc-table
+            ref="tableRef"
+            class="spaces-table"
+            :sort-by="sortBy"
+            :sort-dir="sortDir"
+            :fields="fields"
+            :data="displaySpaces"
+            :sticky="true"
+            :hover="true"
+            @sort="handleSort"
+          >
+            <template #icon="{ item }">
+              <oc-icon v-if="isPersonalSpaceResource(item)" class="oc-pl-m" name="folder" />
+              <oc-icon v-else class="oc-pl-m" name="layout-grid" />
+            </template>
+            <template #name="{ item }">
+              <oc-button
+                class="oc-display-block"
+                type="router-link"
+                appearance="raw"
+                :to="getTrashLink(item)"
+                v-text="getSpaceName(item)"
+              />
+            </template>
+            <template #footer>
+              <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+                <p class="oc-text-muted">{{ footerTextTotal }}</p>
+                <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
+              </div>
+            </template>
+          </oc-table>
+        </template>
       </template>
     </files-view-wrapper>
   </div>
@@ -71,11 +78,12 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { FieldType } from 'design-system/src/components/OcTable/OcTable.vue'
 
 export default defineComponent({
   name: 'TrashOverview',
-  components: { FilesViewWrapper, AppBar, AppLoadingSpinner },
+  components: { FilesViewWrapper, AppBar, AppLoadingSpinner, NoContentMessage },
   setup() {
     const store = useStore()
     const router = useRouter()
