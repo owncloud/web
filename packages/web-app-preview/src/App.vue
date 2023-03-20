@@ -51,7 +51,7 @@
           v-else-if="activeMediaFileCached.isVideo"
           :key="`media-video-${activeMediaFileCached.id}`"
           controls
-          preload
+          preload="preload"
           :autoplay="isAutoPlayEnabled"
         >
           <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
@@ -60,7 +60,7 @@
           v-else-if="activeMediaFileCached.isAudio"
           :key="`media-audio-${activeMediaFileCached.id}`"
           controls
-          preload
+          preload="preload"
           :autoplay="isAutoPlayEnabled"
         >
           <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />

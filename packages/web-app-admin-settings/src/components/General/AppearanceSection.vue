@@ -21,7 +21,7 @@
           close-on-click
           padding-size="small"
         >
-          <context-action-menu :menu-sections="menuSections" :items="menuItems" />
+          <context-action-menu :menu-sections="menuSections" :action-options="actionOptions" />
         </oc-drop>
       </div>
       <div>
@@ -63,6 +63,11 @@ export default defineComponent({
     const menuItems = computed(() =>
       [...instance.$_uploadLogo_items, ...instance.$_resetLogo_items].filter((i) => i.isEnabled())
     )
+
+    const actionOptions = computed(() => ({
+      resources: unref(menuItems)
+    }))
+
     const logo = computed(() => store.getters.configuration.currentTheme.logo.topbar)
     const menuSections = computed(() => [
       {
@@ -74,6 +79,7 @@ export default defineComponent({
     const supportedLogoMimeTypesAcceptValue = supportedLogoMimeTypes.join(',')
 
     return {
+      actionOptions,
       logo,
       menuItems,
       menuSections,

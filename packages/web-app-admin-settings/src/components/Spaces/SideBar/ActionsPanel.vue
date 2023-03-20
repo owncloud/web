@@ -11,9 +11,9 @@
       <action-menu-item
         v-for="(action, index) in actions"
         :key="`action-${index}`"
-        :action="action"
-        :items="resources"
         class="oc-rounded"
+        :action="action"
+        :action-options="actionOptions"
       />
     </oc-list>
   </div>
@@ -29,7 +29,7 @@ import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
 import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import { computed, defineComponent, getCurrentInstance, inject, unref } from 'vue'
-import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client'
 import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({
@@ -38,10 +38,13 @@ export default defineComponent({
   mixins: [Rename, Delete, EditDescription, Disable, Restore, EditQuota],
   setup() {
     const instance = getCurrentInstance().proxy as any
-    const resource = inject<Resource>('resource')
+    const resource = inject<SpaceResource>('resource')
     const resources = computed(() => {
       return [unref(resource)]
     })
+    const actionOptions = computed(() => ({
+      resources: unref(resources)
+    }))
 
     const actions = computed(() => {
       return [
@@ -51,7 +54,7 @@ export default defineComponent({
         ...instance.$_restore_items,
         ...instance.$_delete_items,
         ...instance.$_disable_items
-      ].filter((item) => item.isEnabled({ resources: unref(resources) }))
+      ].filter((item) => item.isEnabled(unref(actionOptions)))
     })
     const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
     const closeQuotaModal = () => {
@@ -62,6 +65,7 @@ export default defineComponent({
     }
     return {
       actions,
+      actionOptions,
       maxQuota: useCapabilitySpacesMaxQuota(),
       quotaModalIsOpen,
       closeQuotaModal,

@@ -21,7 +21,7 @@
         :value="searchQuery"
         :disabled="loading"
         :placeholder="placeholder"
-        @input="onType($event.target.value)"
+        @input="onType(($event.target as HTMLInputElement).value)"
         @keydown.enter="onSearch"
         @keyup="$emit('keyup', $event)"
       />

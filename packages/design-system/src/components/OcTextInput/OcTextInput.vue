@@ -15,8 +15,8 @@
         :type="type"
         :value="displayValue"
         :disabled="disabled"
-        @change="onChange($event.target.value)"
-        @input="onInput($event.target.value)"
+        @change="onChange(($event.target as HTMLInputElement).value)"
+        @input="onInput(($event.target as HTMLInputElement).value)"
         @focus="onFocus($event.target)"
       />
       <oc-button
@@ -243,21 +243,21 @@ export default defineComponent({
       this.onInput(null)
       this.onChange(null)
     },
-    onChange(value) {
+    onChange(value: string) {
       /**
        * Change event
        * @type {event}
        **/
       this.$emit('change', value)
     },
-    onInput(value) {
+    onInput(value: string) {
       /**
        * Input event
        * @type {event}
        **/
       this.$emit('update:modelValue', value)
     },
-    onFocus(target) {
+    onFocus(target: HTMLInputElement) {
       target.select()
       if (this.selectionRange && this.selectionRange.length > 1) {
         target.setSelectionRange(this.selectionRange[0], this.selectionRange[1])

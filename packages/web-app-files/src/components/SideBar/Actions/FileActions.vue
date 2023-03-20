@@ -4,8 +4,7 @@
       v-for="(action, index) in actions"
       :key="`action-${index}`"
       :action="action"
-      :items="resources"
-      :space="space"
+      :action-options="{ space, resources }"
       class="oc-rounded"
     />
   </oc-list>
@@ -19,7 +18,9 @@ import { Resource, SpaceResource } from 'web-client'
 
 export default defineComponent({
   name: 'FileActions',
-  components: { ActionMenuItem },
+  components: {
+    ActionMenuItem
+  },
   setup() {
     const resource = inject<Resource>('resource')
     const space = inject<SpaceResource>('space')

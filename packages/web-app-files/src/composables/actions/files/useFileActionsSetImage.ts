@@ -4,7 +4,7 @@ import { thumbnailService } from '../../../services'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
-import { ActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -12,7 +12,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
   const { $gettext } = useGettext()
   const clientService = useClientService()
 
-  const handler = async ({ space, resources }: ActionOptions) => {
+  const handler = async ({ space, resources }: FileActionOptions) => {
     const accessToken = store.getters['runtime/auth/accessToken']
     const graphClient = clientService.graphAuthenticated(
       store.getters.configuration.server,
@@ -68,7 +68,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
     }
   }
 
-  const actions = computed(() => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'set-space-image',
       icon: 'image-edit',
@@ -76,7 +76,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
       label: () => {
         return $gettext('Set as space image')
       },
-      isEnabled: ({ space, resources }: ActionOptions) => {
+      isEnabled: ({ space, resources }) => {
         if (resources.length !== 1) {
           return false
         }

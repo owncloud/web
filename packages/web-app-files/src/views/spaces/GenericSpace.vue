@@ -63,7 +63,7 @@
           @sort="handleSort"
         >
           <template #contextMenuActions="{ resource }">
-            <context-actions :space="space" :items="[resource]" />
+            <context-actions :action-options="{ space, resources: [resource] }" />
           </template>
           <template #footer>
             <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -107,8 +107,7 @@
           <template #contextMenu="{ resource }">
             <context-actions
               v-if="isResourceInSelection(resource)"
-              :space="space"
-              :items="selectedResources"
+              :action-options="{ space, resources: selectedResources }"
             />
           </template>
           <template #footer>

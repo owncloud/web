@@ -1,10 +1,8 @@
 import { Resource, SpaceResource } from 'web-client/src'
+import { Group, User } from 'web-client/src/generated'
 
-export type ActionOptions = {
-  space: SpaceResource
-  resources: Resource[]
-}
-export interface Action {
+export type ActionOptions = Record<string, unknown>
+export interface Action<T = ActionOptions> {
   name: string
   icon: string
   iconFillType?: string
@@ -16,15 +14,38 @@ export interface Action {
   hideLabel?: boolean
   shortcut?: string
   keepOpen?: boolean
-  label(options?: ActionOptions): string
-  isEnabled(options?: ActionOptions): boolean
+  opensInNewWindow?: boolean
+
+  label(options?: T): string
+  isEnabled(options?: T): boolean
 
   // componentType: button
-  handler?(options?: ActionOptions): void
+  handler?(options?: T): void
 
   // componentType: router-link
-  route?(options?: ActionOptions): void
+  route?(options?: T): void
 
   // can be used to display the action in a disabled state in the UI
-  isDisabled?(options?: ActionOptions): boolean
+  isDisabled?(options?: T): boolean
 }
+
+export type FileActionOptions = {
+  space: SpaceResource
+  resources: Resource[]
+}
+export type FileAction = Action<FileActionOptions>
+
+export type GroupActionOptions = {
+  resources: Group[]
+}
+export type GroupAction = Action<GroupActionOptions>
+
+export type SpaceActionOptions = {
+  resources?: SpaceResource[]
+}
+export type SpaceAction = Action<SpaceActionOptions>
+
+export type UserActionOptions = {
+  resources: User[]
+}
+export type UserAction = Action<UserActionOptions>

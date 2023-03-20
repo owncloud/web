@@ -5,7 +5,7 @@ import { computed, unref } from 'vue'
 import { useRouter } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
-import { Action } from 'web-pkg/src/composables/actions'
+import { FileAction } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsShowActions = () => {
   const router = useRouter()
@@ -21,7 +21,7 @@ export const useFileActionsShowActions = () => {
     eventBus.publish(SideBarEventTopics.openWithPanel, panelName)
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'show-actions',
       icon: 'slideshow-3',

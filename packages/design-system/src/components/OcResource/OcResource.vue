@@ -59,7 +59,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import OcButton from '../OcButton/OcButton.vue'
 import OcImg from '../OcImage/OcImage.vue'
@@ -68,6 +68,7 @@ import OcResourceName from '../OcResourceName/OcResourceName.vue'
 import OcResourceIcon from '../OcResourceIcon/OcResourceIcon.vue'
 import OcResourceLink from '../OcResourceLink/OcResourceLink.vue'
 import * as path from 'path'
+import { Resource } from 'web-client/src'
 
 /**
  * Displays a resource together with the resource type icon or thumbnail
@@ -105,7 +106,7 @@ export default defineComponent({
      * The resource to be displayed
      */
     resource: {
-      type: Object,
+      type: Object as PropType<Resource>,
       required: true
     },
     /**

@@ -5,7 +5,7 @@ import { isLocationTrashActive, isLocationPublicActive } from '../../../router'
 import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { computed, unref } from 'vue'
-import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 
 export const useFileActionsShowEditTags = ({ store }: { store?: Store<any> } = {}) => {
@@ -15,12 +15,12 @@ export const useFileActionsShowEditTags = ({ store }: { store?: Store<any> } = {
   const isFilesAppActive = useIsFilesAppActive()
   const hasTags = useCapabilityFilesTags()
 
-  const handler = ({ resources }: ActionOptions) => {
+  const handler = ({ resources }: FileActionOptions) => {
     store.commit('Files/SET_FILE_SELECTION', resources)
     eventBus.publish(SideBarEventTopics.openWithPanel, 'tags')
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'show-edit-tags',
       icon: 'price-tag-3',

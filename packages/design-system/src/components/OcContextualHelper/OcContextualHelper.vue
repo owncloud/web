@@ -3,7 +3,7 @@
     <oc-button :id="buttonId" appearance="raw">
       <oc-icon name="question" fill-type="line" size="small" />
     </oc-button>
-    <oc-info-drop :drop-id="dropId" :toggle="toggleId" v-bind="$props" />
+    <oc-info-drop :drop-id="dropId" :toggle="toggleId" v-bind="$props as any" />
   </div>
 </template>
 

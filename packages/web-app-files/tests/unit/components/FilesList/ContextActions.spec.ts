@@ -31,15 +31,9 @@ jest.mock('web-app-files/src/composables/actions/files', () =>
   createMockActionComposables(jest.requireActual('web-app-files/src/composables/actions/files'))
 )
 
-jest.mock('web-app-files/src/composables/actions/spaces/useSpaceActionsSetImage', () =>
+jest.mock('web-pkg/src/composables/actions/files/useFileActionsSetReadme', () =>
   createMockActionComposables(
-    jest.requireActual('web-app-files/src/composables/actions/spaces/useSpaceActionsSetImage')
-  )
-)
-
-jest.mock('web-pkg/src/composables/actions/spaces/setReadme', () =>
-  createMockActionComposables(
-    jest.requireActual('web-pkg/src/composables/actions/spaces/setReadme')
+    jest.requireActual('web-pkg/src/composables/actions/files/useFileActionsSetReadme')
   )
 )
 
@@ -81,8 +75,10 @@ function getWrapper() {
     mocks,
     wrapper: mount(ContextActions, {
       props: {
-        space: mock<SpaceResource>(),
-        items: [mock<Resource>()]
+        actionOptions: {
+          space: mock<SpaceResource>(),
+          resources: [mock<Resource>()]
+        }
       },
       global: {
         mocks,

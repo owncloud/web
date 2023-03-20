@@ -1,10 +1,10 @@
-export const EVENT_THEAD_CLICKED = 'thead-clicked'
-export const EVENT_TROW_CLICKED = 'highlight'
-export const EVENT_TROW_MOUNTED = 'rowMounted'
-export const EVENT_TROW_CONTEXTMENU = 'contextmenuClicked'
-export const EVENT_ITEM_DROPPED = 'itemDropped'
-export const EVENT_ITEM_DRAGGED = 'itemDragged'
-export const EVENT_FILE_DROPPED = 'fileDropped'
+export const EVENT_THEAD_CLICKED = 'thead-clicked' as const
+export const EVENT_TROW_CLICKED = 'highlight' as const
+export const EVENT_TROW_MOUNTED = 'rowMounted' as const
+export const EVENT_TROW_CONTEXTMENU = 'contextmenuClicked' as const
+export const EVENT_ITEM_DROPPED = 'itemDropped' as const
+export const EVENT_ITEM_DRAGGED = 'itemDragged' as const
+export const EVENT_FILE_DROPPED = 'fileDropped' as const
 
 export const AVAILABLE_SIZES = [
   'xsmall',

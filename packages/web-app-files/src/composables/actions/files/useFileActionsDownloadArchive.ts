@@ -12,7 +12,7 @@ import { isPublicSpaceResource, Resource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { usePublicLinkPassword, useRouter, useStore } from 'web-pkg/src/composables'
-import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 
 export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } = {}) => {
@@ -22,7 +22,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
   const publicLinkPassword = usePublicLinkPassword({ store })
   const isFilesAppActive = useIsFilesAppActive()
 
-  const handler = async ({ space, resources }: ActionOptions) => {
+  const handler = async ({ space, resources }: FileActionOptions) => {
     const fileOptions = archiverService.fileIdsSupported
       ? {
           fileIds: resources.map((resource) => resource.fileId)
@@ -52,7 +52,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
       })
   }
 
-  const actions = computed((): Action[] => {
+  const actions = computed((): FileAction[] => {
     return [
       {
         name: 'download-archive',

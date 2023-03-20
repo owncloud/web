@@ -26,7 +26,7 @@
         <oc-list id="create-list">
           <li class="create-list-folder oc-menu-item-hover">
             <oc-button id="new-folder-btn" appearance="raw" @click="showCreateResourceModal">
-              <oc-resource-icon :resource="{ isFolder: true, extension: '' }" size="medium" />
+              <oc-resource-icon :resource="folderIconResource" size="medium" />
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
@@ -40,10 +40,7 @@
               :class="['new-file-btn-' + newFileHandler.ext]"
               @click="showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)"
             >
-              <oc-resource-icon
-                :resource="{ type: 'file', extension: newFileHandler.ext }"
-                size="medium"
-              />
+              <oc-resource-icon :resource="getIconResource(newFileHandler)" size="medium" />
               <span>{{ newFileHandler.menuTitle($gettext) }}</span>
             </oc-button>
           </li>
@@ -57,10 +54,7 @@
                 appearance="raw"
                 @click="showCreateResourceModal(false, mimetype.ext, false, true)"
               >
-                <oc-resource-icon
-                  :resource="{ type: 'file', extension: mimetype.ext }"
-                  size="medium"
-                />
+                <oc-resource-icon :resource="getIconResource(mimetype)" size="medium" />
                 <span v-text="$gettextInterpolate($gettext('%{name}'), { name: mimetype.name })" />
               </oc-button>
             </li>
@@ -170,7 +164,7 @@ import {
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { extractNameWithoutExtension, SpaceResource } from 'web-client/src/helpers'
+import { extractNameWithoutExtension, Resource, SpaceResource } from 'web-client/src/helpers'
 import { resolveFileNameDuplicate, ResourcesUpload } from '../../helpers/resource'
 import { WebDAV } from 'web-client/src/webdav'
 import { configurationManager } from 'web-pkg/src/configuration'
@@ -328,6 +322,10 @@ export default defineComponent({
 
     loadIndicatorsForNewFile() {
       return this.isSpacesGenericLocation && this.space.driveType !== 'share'
+    },
+
+    folderIconResource() {
+      return { isFolder: true, extension: '' } as Resource
     }
   },
   methods: {
@@ -656,6 +654,10 @@ export default defineComponent({
         this.$gettextInterpolate
       )
       uploader.perform()
+    },
+
+    getIconResource(fileHandler) {
+      return { type: 'file', extension: fileHandler.ext } as Resource
     }
   }
 })

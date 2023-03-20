@@ -1,9 +1,10 @@
 import { eventBus } from 'web-pkg'
+import { UserAction } from 'web-pkg/src/composables/actions'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export default {
   computed: {
-    $_edit_items() {
+    $_edit_items(): UserAction[] {
       return [
         {
           name: 'edit',

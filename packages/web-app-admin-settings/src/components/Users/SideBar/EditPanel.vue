@@ -76,7 +76,7 @@
         <quota-select
           v-if="showQuota"
           id="quota-select-form"
-          :key="'quota-select-' + user.id"
+          :key="'quota-select-' + _user.id"
           class="oc-mb-s"
           :title="$gettext('Personal quota')"
           :total-quota="editUser.drive.quota.total || 0"
@@ -129,7 +129,8 @@ export default defineComponent({
   props: {
     user: {
       type: Object as PropType<User>,
-      required: false
+      required: false,
+      default: null
     },
     roles: {
       type: Array,
@@ -172,7 +173,9 @@ export default defineComponent({
       editUser,
       formData,
       groupOptions,
-      ...useGraphClient()
+      ...useGraphClient(),
+      // HACK: make sure _user has a proper type
+      _user: computed(() => props.user as User)
     }
   },
   computed: {

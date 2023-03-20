@@ -6,7 +6,7 @@ import { useClientService, useStore } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { thumbnailService } from '../../../services'
 import { useGettext } from 'vue3-gettext'
-import { ActionOptions } from 'web-pkg/src/composables/actions'
+import { SpaceActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useSpaceActionsUploadImage = ({
   store,
@@ -20,7 +20,7 @@ export const useSpaceActionsUploadImage = ({
   const clientService = useClientService()
 
   let selectedSpace: SpaceResource = null
-  const handler = ({ resources }: ActionOptions) => {
+  const handler = ({ resources }: SpaceActionOptions) => {
     if (resources.length !== 1) {
       return
     }

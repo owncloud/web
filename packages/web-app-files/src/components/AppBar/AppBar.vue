@@ -21,8 +21,7 @@
           <template #contextMenu>
             <context-actions
               v-if="showContextActions"
-              :space="space"
-              :items="breadcrumbsContextActionsItems.filter(Boolean)"
+              :action-options="{ space, resources: breadcrumbsContextActionsItems.filter(Boolean) }"
             />
           </template>
         </oc-breadcrumb>
@@ -47,9 +46,8 @@
           />
           <batch-actions
             v-if="showBatchActions"
-            :items="selectedFiles"
             :actions="batchActions"
-            :space="space"
+            :action-options="{ space, resources: selectedFiles }"
             :limited-screen-space="limitedScreenSpace"
           />
         </div>

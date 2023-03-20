@@ -6,7 +6,7 @@
       type="radio"
       name="radio"
       :class="classes"
-      :aria-checked="(option === modelValue).toString()"
+      :aria-checked="option === modelValue"
       :value="option"
       :disabled="disabled"
     />

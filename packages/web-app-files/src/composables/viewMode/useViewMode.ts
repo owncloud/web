@@ -15,14 +15,14 @@ export function useViewMode(options: ComputedRef<string>): ComputedRef<string> {
   return computed(() => queryItemAsString(unref(viewModeQuery)))
 }
 
-export function useViewSize<T>(options: ComputedRef<string>): ComputedRef<string> {
+export function useViewSize<T>(options: ComputedRef<string>): ComputedRef<number> {
   if (options) {
-    return computed(() => unref(options))
+    return computed(() => parseInt(unref(options)))
   }
 
   const viewModeSize = useRouteQueryPersisted({
     name: ViewModeConstants.tilesSizeQueryName,
     defaultValue: ViewModeConstants.tilesSizeDefault.toString()
   })
-  return computed(() => String(unref(viewModeSize)))
+  return computed(() => parseInt(queryItemAsString(unref(viewModeSize))))
 }

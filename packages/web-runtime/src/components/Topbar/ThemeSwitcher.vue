@@ -24,9 +24,10 @@ export default defineComponent({
     const currentTheme = computed(() => store.getters.configuration.themes[unref(currentThemeName)])
     const applyTheme = (theme) => {
       for (const param in theme.designTokens.colorPalette) {
-        document
-          .querySelector(':root')
-          .style.setProperty(`--oc-color-${param}`, theme.designTokens.colorPalette[param])
+        ;(document.querySelector(':root') as HTMLElement).style.setProperty(
+          `--oc-color-${param}`,
+          theme.designTokens.colorPalette[param]
+        )
       }
     }
 

@@ -3,12 +3,12 @@
     <readme-content-modal
       v-if="readmeContentModalIsOpen"
       :cancel="closeReadmeContentModal"
-      :space="resources[0]"
+      :space="actionOptions.resources[0]"
     ></readme-content-modal>
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
-      :spaces="[resources[0] as SpaceResource]"
+      :spaces="[actionOptions.resources[0]]"
       :max-quota="maxQuota"
     />
     <input
@@ -25,8 +25,7 @@
         v-for="(action, index) in actions"
         :key="`action-${index}`"
         :action="action"
-        :items="resources"
-        :space="space"
+        :action-options="actionOptions"
         class="oc-rounded"
       />
     </oc-list>
@@ -46,8 +45,8 @@ import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
 import { thumbnailService } from '../../../services'
-import { computed, ComputedRef, defineComponent, inject, ref, unref, VNodeRef } from 'vue'
-import { Resource, SpaceResource } from 'web-client'
+import { computed, defineComponent, inject, ref, unref, VNodeRef } from 'vue'
+import { SpaceResource } from 'web-client'
 import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
@@ -56,10 +55,10 @@ export default defineComponent({
   mixins: [Rename, Delete, EditDescription, EditReadmeContent, Disable, Restore, EditQuota],
   setup() {
     const store = useStore()
-    const resource = inject<Resource>('resource')
-    const resources = computed(() => {
-      return [unref(resource)]
-    })
+    const resource = inject<SpaceResource>('resource')
+    const actionOptions = computed(() => ({
+      resources: [unref(resource)]
+    }))
 
     const spaceImageInput: VNodeRef = ref(null)
     const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
@@ -69,8 +68,7 @@ export default defineComponent({
 
     return {
       maxQuota: useCapabilitySpacesMaxQuota(),
-      space: inject<ComputedRef<SpaceResource>>('space'),
-      resources,
+      actionOptions,
       spaceImageInput,
       uploadImageActions,
       uploadImageSpace
@@ -87,7 +85,7 @@ export default defineComponent({
         ...this.$_restore_items,
         ...this.$_delete_items,
         ...this.$_disable_items
-      ].filter((item) => item.isEnabled({ resources: this.resources }))
+      ].filter((item) => item.isEnabled(this.actionOptions))
     },
     readmeContentModalIsOpen() {
       return this.$data.$_editReadmeContent_modalOpen

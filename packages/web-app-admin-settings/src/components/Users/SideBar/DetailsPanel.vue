@@ -8,30 +8,30 @@
       <oc-icon name="group" size="xxlarge" />
       <p>{{ multipleUsersSelectedText }}</p>
     </div>
-    <div v-if="user">
-      <UserInfoBox :user="user" />
+    <div v-if="_user">
+      <UserInfoBox :user="_user" />
       <table
         class="details-table"
         :aria-label="$gettext('Overview of the information about the selected user')"
       >
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('User name')" />
-          <td v-text="user.onPremisesSamAccountName" />
+          <td v-text="_user.onPremisesSamAccountName" />
         </tr>
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('First and last name')" />
-          <td v-text="user.displayName" />
+          <td v-text="_user.displayName" />
         </tr>
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Email')" />
           <td>
-            <span v-text="user.mail" />
+            <span v-text="_user.mail" />
           </td>
         </tr>
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Role')" />
           <td>
-            <span v-if="user.appRoleAssignments" v-text="roleDisplayName" />
+            <span v-if="_user.appRoleAssignments" v-text="roleDisplayName" />
           </td>
         </tr>
         <tr>
@@ -57,7 +57,7 @@
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Groups')" />
           <td>
-            <span v-if="user.memberOf.length" v-text="groupsDisplayValue" />
+            <span v-if="_user.memberOf.length" v-text="groupsDisplayValue" />
             <span v-else>
               <span class="oc-mr-xs">-</span>
               <oc-contextual-helper :text="$gettext('No groups assigned.')" />
@@ -69,7 +69,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import UserInfoBox from './UserInfoBox.vue'
 import { PropType } from 'vue'
 import { User } from 'web-client/src/generated'
@@ -84,7 +84,8 @@ export default defineComponent({
   props: {
     user: {
       type: Object as PropType<User>,
-      required: false
+      required: false,
+      default: null
     },
     users: {
       type: Array,
@@ -95,12 +96,14 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup(props) {
     const { $gettext, current: currentLanguage } = useGettext()
 
     return {
       $gettext,
-      currentLanguage
+      currentLanguage,
+      // HACK: make sure _user has a proper type
+      _user: computed(() => props.user as User)
     }
   },
   computed: {

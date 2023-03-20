@@ -12,7 +12,7 @@
         >
           <template #message>
             <p class="oc-text-muted">
-              <span v-if="!!$route.query.term" v-translate>No results found</span>
+              <span v-if="!!route.query.term" v-translate>No results found</span>
               <span v-else v-translate>No search term entered</span>
             </p>
           </template>
@@ -36,8 +36,7 @@
           <template #contextMenu="{ resource }">
             <context-actions
               v-if="isResourceInSelection(resource)"
-              :items="selectedResources"
-              :space="getSpace(resource)"
+              :action-options="{ space: getSpace(resource), resources: selectedResources }"
             />
           </template>
           <template #footer>
@@ -86,7 +85,7 @@ import { Resource } from 'web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { useStore } from 'web-pkg/src/composables'
+import { useRoute, useStore } from 'web-pkg/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { basename } from 'path'
 
@@ -118,6 +117,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const route = useRoute()
     const getSpace = (resource: Resource): SpaceResource => {
       if (resource.shareId) {
         return buildShareSpaceResource({
@@ -130,6 +130,7 @@ export default defineComponent({
     }
 
     return {
+      route,
       ...useFileActions({ store }),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       getSpace

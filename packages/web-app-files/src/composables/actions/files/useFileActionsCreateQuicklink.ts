@@ -7,7 +7,7 @@ import { computed } from 'vue'
 import { useAbility, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
-import { Action } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsCreateQuickLink = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -15,7 +15,7 @@ export const useFileActionsCreateQuickLink = ({ store }: { store?: Store<any> } 
   const { $gettext } = useGettext()
   const ability = useAbility()
 
-  const handler = async ({ space, resources }) => {
+  const handler = async ({ space, resources }: FileActionOptions) => {
     const [resource] = resources
     await createQuicklink({
       resource,
@@ -26,7 +26,7 @@ export const useFileActionsCreateQuickLink = ({ store }: { store?: Store<any> } 
     })
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'create-quicklink',
       icon: quickActions.quicklink.icon,

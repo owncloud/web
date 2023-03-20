@@ -21,7 +21,7 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
         </button>
         <div class="oc-drop oc-box-shadow-medium oc-rounded" id="space-context-drop" options="[object Object]">
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
-            <space-context-actions-stub items="[object Object]" space="[object Object]"></space-context-actions-stub>
+            <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@ exports[`SpaceHeader space image should show the default image if no other image
         </button>
         <div class="oc-drop oc-box-shadow-medium oc-rounded" id="space-context-drop" options="[object Object]">
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
-            <space-context-actions-stub items="[object Object]" space="[object Object]"></space-context-actions-stub>
+            <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
           </div>
         </div>
       </div>
@@ -91,7 +91,7 @@ exports[`SpaceHeader space image should show the set image 1`] = `
         </button>
         <div class="oc-drop oc-box-shadow-medium oc-rounded" id="space-context-drop" options="[object Object]">
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
-            <space-context-actions-stub items="[object Object]" space="[object Object]"></space-context-actions-stub>
+            <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
           </div>
         </div>
       </div>

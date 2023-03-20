@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { clientService } from 'web-pkg/src/services'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { mapGetters } from 'vuex'
@@ -57,7 +57,7 @@ import { urlJoin } from 'web-client/src/utils'
 export default defineComponent({
   props: {
     applicationsList: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: false,
       default: () => []
     }

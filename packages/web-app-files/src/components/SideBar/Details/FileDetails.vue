@@ -330,6 +330,7 @@ export default defineComponent({
 
     return {
       copiedEos,
+      copiedSamba,
       preview,
       copyEosPathToClipboard,
       copySambaPathToClipboard,

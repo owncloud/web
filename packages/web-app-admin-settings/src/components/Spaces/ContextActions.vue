@@ -1,6 +1,6 @@
 <template>
   <div>
-    <context-action-menu :menu-sections="menuSections" :items="items" />
+    <context-action-menu :menu-sections="menuSections" :action-options="{ resources: items }" />
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
@@ -20,7 +20,7 @@ import Rename from 'web-pkg/src/mixins/spaces/rename'
 import Restore from 'web-pkg/src/mixins/spaces/restore'
 import ShowDetails from '../../mixins/showDetails'
 import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
-import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
@@ -31,7 +31,7 @@ export default defineComponent({
   mixins: [Delete, Disable, EditDescription, EditQuota, Rename, Restore, ShowDetails],
   props: {
     items: {
-      type: Array as PropType<Resource[]>,
+      type: Array as PropType<SpaceResource[]>,
       required: true
     }
   },

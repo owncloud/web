@@ -89,7 +89,7 @@ function getMountedWrapper({ mocks = {}, loading = false, files = [] } = {}) {
       areResourcesLoading: ref(loading)
     })
   )
-  jest.mocked(useSort).mockImplementation((options) => useSortMock({ items: options.items }))
+  jest.mocked(useSort).mockImplementation((options) => useSortMock({ items: ref(options.items) }))
   const defaultMocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-shares-with-me' })

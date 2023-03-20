@@ -5,7 +5,6 @@
   "license": "AGPL-3.0",
   "author": "ownCloud GmbH <devops@owncloud.com>",
   "scripts": {
-    "check-types": "tsc --noEmit",
     "build": "vue-demi-fix && pnpm build:tokens && pnpm vite build",
     "build:w": "pnpm build --watch",
     "build:tokens": "pnpm --filter @ownclouders/design-system tokens",
@@ -19,7 +18,9 @@
     "licenses:save": "license-checker-rseidelsohn --relativeLicensePath --out /dev/null --files ./third-party-licenses/third-party-licenses",
     "vite": "vue-demi-fix && pnpm vite:ocis",
     "vite:ocis": "vite",
-    "vite:oc10": "OCIS=false vite"
+    "vite:oc10": "OCIS=false vite",
+    "check:types": "pnpm build:tokens && vue-tsc --noEmit",
+    "check:all": "pnpm check:types && pnpm lint --fix && pnpm test:unit"
   },
   "browserslist": [
     "last 1 year",

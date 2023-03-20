@@ -1,3 +1,3 @@
 export * from './helpers'
-export * from './spaces'
+export * from './files'
 export * from './types'

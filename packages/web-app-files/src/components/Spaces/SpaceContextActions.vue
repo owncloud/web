@@ -1,6 +1,6 @@
 <template>
   <div>
-    <context-action-menu :menu-sections="menuSections" :items="items" :space="space" />
+    <context-action-menu :menu-sections="menuSections" :action-options="_actionOptions" />
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
@@ -10,7 +10,7 @@
     <readme-content-modal
       v-if="readmeContentModalIsOpen"
       :cancel="closeReadmeContentModal"
-      :space="items[0]"
+      :space="_actionOptions.resources[0]"
     />
     <input
       id="space-image-upload-input"
@@ -41,10 +41,20 @@ import ShowMembers from 'web-pkg/src/mixins/spaces/showMembers'
 import { useSpaceActionsUploadImage } from '../../composables/actions/spaces/useSpaceActionsUploadImage'
 import EditReadmeContent from 'web-pkg/src/mixins/spaces/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
-import { computed, defineComponent, getCurrentInstance, PropType, ref, unref, VNodeRef } from 'vue'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  PropType,
+  Ref,
+  ref,
+  toRef,
+  unref,
+  VNodeRef
+} from 'vue'
 import { thumbnailService } from 'web-app-files/src/services'
 import { useCapabilitySpacesMaxQuota, useRouter, useStore } from 'web-pkg/src/composables'
+import { FileActionOptions, SpaceActionOptions } from 'web-pkg/src/composables/actions'
 
 export default defineComponent({
   name: 'SpaceContextActions',
@@ -61,12 +71,8 @@ export default defineComponent({
   ],
 
   props: {
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: true
-    },
-    items: {
-      type: Array as PropType<Resource[]>,
+    actionOptions: {
+      type: Object as PropType<SpaceActionOptions>,
       required: true
     }
   },
@@ -74,6 +80,8 @@ export default defineComponent({
     const instance = getCurrentInstance().proxy as any
     const router = useRouter()
     const store = useStore()
+
+    const actionOptions = toRef(props, 'actionOptions') as Ref<SpaceActionOptions>
 
     const { actions: showDetailsItems } = useFileActionsShowDetails({ store })
 
@@ -83,16 +91,9 @@ export default defineComponent({
       spaceImageInput
     })
 
-    const filterParams = computed(() => {
-      return {
-        space: props.space,
-        resources: props.items
-      }
-    })
-
     const menuItemsMembers = computed(() => {
       const fileHandlers = [...instance.$_showMembers_items]
-      return [...fileHandlers].filter((item) => item.isEnabled(unref(filterParams)))
+      return [...fileHandlers].filter((item) => item.isEnabled(unref(actionOptions)))
     })
 
     const menuItemsPrimaryActions = computed(() => {
@@ -105,7 +106,7 @@ export default defineComponent({
       if (isLocationSpacesActive(router, 'files-spaces-generic')) {
         fileHandlers.splice(2, 0, ...instance.$_editReadmeContent_items)
       }
-      return [...fileHandlers].filter((item) => item.isEnabled(unref(filterParams)))
+      return [...fileHandlers].filter((item) => item.isEnabled(unref(actionOptions)))
     })
 
     const menuItemsSecondaryActions = computed(() => {
@@ -116,12 +117,15 @@ export default defineComponent({
         ...instance.$_delete_items
       ]
 
-      return [...fileHandlers].filter((item) => item.isEnabled(unref(filterParams)))
+      return [...fileHandlers].filter((item) => item.isEnabled(unref(actionOptions)))
     })
 
     const menuItemsSidebar = computed(() => {
       const fileHandlers = [...unref(showDetailsItems)]
-      return [...fileHandlers].filter((item) => item.isEnabled(unref(filterParams)))
+      return [...fileHandlers].filter((item) =>
+        // HACK: showDetails provides FileAction[] but we use it as a SpaceAction[] here
+        item.isEnabled(unref(actionOptions) as unknown as FileActionOptions)
+      )
     })
 
     const menuSections = computed(() => {
@@ -155,6 +159,7 @@ export default defineComponent({
     })
 
     return {
+      _actionOptions: actionOptions,
       menuSections,
       maxQuota: useCapabilitySpacesMaxQuota(),
       spaceImageInput,

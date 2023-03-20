@@ -11,7 +11,7 @@ import {
 import { useStore } from 'web-pkg/src/composables'
 import { unref } from 'vue'
 import { ProjectSpaceResource, Resource } from 'web-client/src/helpers'
-import { ActionOptions } from 'web-pkg/src/composables/actions'
+import { FileActionOptions } from 'web-pkg/src/composables/actions'
 
 describe('emptyTrashBin', () => {
   afterEach(() => jest.clearAllMocks())
@@ -58,7 +58,7 @@ describe('emptyTrashBin', () => {
     it('should trigger the empty trash bin modal window', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
-          await unref(actions)[0].handler(mock<ActionOptions>())
+          await unref(actions)[0].handler(mock<FileActionOptions>())
 
           expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
         }

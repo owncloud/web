@@ -74,7 +74,7 @@ export default defineComponent({
           minMatchCharLength: 1
         })
 
-        return search.length ? fuse.search(search).map(({ item }) => item) : fuse.list
+        return search.length ? fuse.search(search).map(({ item }) => item) : (fuse as any).list
       }
     },
     /**

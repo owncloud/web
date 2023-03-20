@@ -20,7 +20,7 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useRouter, useStore } from 'web-pkg/src/composables'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -53,7 +53,7 @@ export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) =
     return createLocationSpaces('files-spaces-generic')
   })
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'navigate',
       icon: 'folder-open',
@@ -86,7 +86,7 @@ export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) =
       },
       canBeDefault: true,
       componentType: 'router-link',
-      route: ({ space, resources }: ActionOptions) => {
+      route: ({ space, resources }) => {
         if (
           isShareSpaceResource(space) &&
           (isLocationSharesActive(router, 'files-shares-with-others') ||

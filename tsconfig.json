@@ -1,5 +1,6 @@
 {
-  "extends": "@ownclouders/tsconfig",
+  // c.f. https://github.com/vuejs/language-tools/pull/2471
+  "extends": "./packages/tsconfig/tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {

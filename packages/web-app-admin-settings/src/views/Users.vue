@@ -111,7 +111,7 @@
           selectedUsers.length,
           {
             user: selectedUsers[0].displayName,
-            userCount: selectedUsers.length
+            userCount: selectedUsers.length.toString()
           }
         )
       "
@@ -130,7 +130,7 @@
           selectedUsers.length,
           {
             user: selectedUsers[0].displayName,
-            userCount: selectedUsers.length
+            userCount: selectedUsers.length.toString()
           }
         )
       "

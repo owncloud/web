@@ -8,8 +8,7 @@
         v-for="(action, index) in actions"
         :key="`action-${index}`"
         :action="action"
-        :items="items"
-        :space="space"
+        :action-options="actionOptions"
         appearance="outline"
         class="batch-actions oc-mr-s"
         :shortcut-hint="false"
@@ -22,24 +21,19 @@
 <script lang="ts">
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 import { defineComponent, PropType } from 'vue'
-import { SpaceResource } from 'web-client'
+import { Action, ActionOptions } from '../composables/actions'
 
 export default defineComponent({
   name: 'BatchActions',
   components: { ActionMenuItem },
   props: {
-    items: {
-      type: Array,
-      required: true
-    },
     actions: {
-      type: Array,
+      type: Array as PropType<Action[]>,
       required: true
     },
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
+    actionOptions: {
+      type: Object as PropType<ActionOptions>,
+      required: true
     },
     limitedScreenSpace: {
       type: Boolean,

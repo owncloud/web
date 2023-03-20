@@ -6,22 +6,22 @@ import {
 } from '../../../router'
 import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
 import { useRouter } from 'web-pkg/src/composables'
-import { Action, useIsSearchActive } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions, useIsSearchActive } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useDownloadFile as _useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
+import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 
 export const useFileActionsDownloadFile = () => {
   const router = useRouter()
   const { $gettext } = useGettext()
   const isFilesAppActive = useIsFilesAppActive()
   const isSearchActive = useIsSearchActive()
-  const { downloadFile } = _useDownloadFile()
-  const handler = ({ resources }) => {
+  const { downloadFile } = useDownloadFile()
+  const handler = ({ resources }: FileActionOptions) => {
     downloadFile(resources[0])
   }
 
-  const actions = computed((): Action[] => [
+  const actions = computed((): FileAction[] => [
     {
       name: 'download-file',
       icon: 'file-download',

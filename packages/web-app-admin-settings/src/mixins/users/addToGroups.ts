@@ -1,11 +1,12 @@
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { computed, Ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { UserAction } from 'web-pkg/src/composables/actions'
 
 export const useAddToGroups = (): { actions: Ref<unknown[]> } => {
   const { $gettext } = useGettext()
 
-  const actions = computed((): unknown[] => [
+  const actions = computed((): UserAction[] => [
     {
       name: 'add-to-groups',
       icon: 'add',

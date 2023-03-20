@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType, HTMLAttributes } from 'vue'
 /**
  * Live regions for screen reader announcements
  *
@@ -32,7 +32,7 @@ export default defineComponent({
      * `polite` adds the announcement to the screen reader speech queue at the end, `assertive` forces it to output directly, `off` disables the live region
      **/
     level: {
-      type: String,
+      type: String as PropType<HTMLAttributes['aria-live']>,
       required: false,
       default: 'polite',
       validator: (value: string) => {

@@ -29,8 +29,9 @@ function getWrapper(space) {
   return {
     wrapper: mount(SpaceContextActions, {
       props: {
-        items: [space],
-        space: space
+        actionOptions: {
+          resources: [space]
+        }
       },
       global: {
         mocks: {

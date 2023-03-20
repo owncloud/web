@@ -1,6 +1,14 @@
+import { mock } from 'jest-mock-extended'
 import _ from 'lodash'
 import Pagination from 'web-app-files/src/components/FilesList/Pagination.vue'
-import { defaultPlugins, mount, shallowMount, RouterLinkStub } from 'web-test-helpers'
+import {
+  defaultPlugins,
+  mount,
+  shallowMount,
+  RouterLinkStub,
+  defaultComponentMocks,
+  RouteLocation
+} from 'web-test-helpers'
 
 const filesPersonalRoute = { name: 'files-personal', path: '/files/home' }
 
@@ -38,19 +46,19 @@ describe('Pagination', () => {
   describe('current route', () => {
     it('should use provided route to render pages', () => {
       const { wrapper } = getWrapper({}, mount)
-      const currentRoute = wrapper.vm.$route
       const links = wrapper.findAllComponents<any>(RouterLinkStub)
 
       // three links (route to prev, next and last page)
       expect(links.length).toBe(3)
-      expect(links.at(0).props().to.name).toBe(currentRoute.name)
-      expect(links.at(1).props().to.name).toBe(currentRoute.name)
-      expect(links.at(2).props().to.name).toBe(currentRoute.name)
+      expect(links.at(0).props().to.name).toBe(filesPersonalRoute.name)
+      expect(links.at(1).props().to.name).toBe(filesPersonalRoute.name)
+      expect(links.at(2).props().to.name).toBe(filesPersonalRoute.name)
     })
   })
 })
 
 function getWrapper(propsData = {}, mountType = shallowMount) {
+  const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>(filesPersonalRoute) })
   return {
     wrapper: mountType(Pagination, {
       props: _.merge({ currentPage: 1, pages: 10 }, propsData),
@@ -58,11 +66,10 @@ function getWrapper(propsData = {}, mountType = shallowMount) {
         stubs: {
           RouterLink: RouterLinkStub
         },
-        mocks: {
-          $route: filesPersonalRoute
-        },
+        mocks,
         plugins: [...defaultPlugins()]
       }
-    })
+    }),
+    mocks
   }
 }

@@ -26,6 +26,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { Group } from 'web-client/src/generated'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 
 export default defineComponent({
@@ -42,7 +43,7 @@ export default defineComponent({
   emits: ['confirm'],
   data() {
     return {
-      editGroup: {},
+      editGroup: {} as Group,
       formData: {
         displayName: {
           errorMessage: '',
