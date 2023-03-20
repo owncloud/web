@@ -89,12 +89,10 @@ When(
 )
 
 When(
-  /^"([^"]*)" (changes|updates) quota of the following space(s)? to "([^"]*)" using the batch-actions$/,
+  /^"([^"]*)" (?:changes|updates) quota of the following space(?:s)? to "([^"]*)" using the batch-actions$/,
   async function (
     this: World,
     stepUser: string,
-    _: string,
-    __: string,
     value: string,
     stepTable: DataTable
   ): Promise<void> {
@@ -112,12 +110,11 @@ When(
 )
 
 When(
-  /^"([^"]*)" (disables|enables|deletes) the following space(s)? using the batch-actions$/,
+  /^"([^"]*)" (disables|enables|deletes) the following space(?:s)? using the batch-actions$/,
   async function (
     this: World,
     stepUser: string,
     action: string,
-    _: string,
     stepTable: DataTable
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })

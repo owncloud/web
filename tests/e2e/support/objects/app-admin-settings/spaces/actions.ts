@@ -32,9 +32,9 @@ const clickOnContextMenuActionButton = async (args: {
   isBatchActions: boolean
 }): Promise<void> => {
   const { page, id, action, isBatchActions } = args
-  let context = `.batch-actions`
+  let context = '.batch-actions'
   if (!isBatchActions) {
-    context = `.context-menu`
+    context = '.context-menu'
     await page.locator(util.format(spaceIdSelector, id)).click()
   }
 
