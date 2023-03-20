@@ -45,6 +45,7 @@ Summary
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
 * Change - Configurable extension autosave: [#8455](https://github.com/owncloud/web/pull/8455)
+* Enhancement - Global loading indicator: [#6183](https://github.com/owncloud/web/issues/6183)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Improve performance when loading folders and share indicators: [#7721](https://github.com/owncloud/web/issues/7721)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
@@ -416,6 +417,14 @@ Details
    https://github.com/owncloud/web/pull/8455
    https://github.com/owncloud/web/pull/8457
    https://github.com/owncloud/web/pull/8474
+
+* Enhancement - Global loading indicator: [#6183](https://github.com/owncloud/web/issues/6183)
+
+   A global loading indicator for long running actions has been added to the top of the page.
+
+   https://github.com/owncloud/web/issues/6183
+   https://github.com/owncloud/web/issues/2134
+   https://github.com/owncloud/web/pull/8611
 
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 
