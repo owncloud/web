@@ -102,6 +102,7 @@ Summary
 * Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
 * Enhancement - Add and remove users from groups batch actions: [#8553](https://github.com/owncloud/web/pull/8553)
 * Enhancement - QuickActions role configurable: [#8566](https://github.com/owncloud/web/pull/8566)
+* Enhancement - Add `Accept-Language` header to all outgoing requests: [#8612](https://github.com/owncloud/web/issues/8612)
 
 Details
 -------
@@ -964,6 +965,14 @@ Details
 
    https://github.com/owncloud/web/issues/8547
    https://github.com/owncloud/web/pull/8566
+
+* Enhancement - Add `Accept-Language` header to all outgoing requests: [#8612](https://github.com/owncloud/web/issues/8612)
+
+   All outgoing requests now have the `Accept-Language` header which includes the current
+   user's language. It falls back to the browser language.
+
+   https://github.com/owncloud/web/issues/8612
+   https://github.com/owncloud/web/pull/8621
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
