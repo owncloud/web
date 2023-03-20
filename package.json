@@ -65,7 +65,7 @@
     "@ownclouders/tsconfig": "workspace:*",
     "@playwright/test": "1.29.1",
     "@rollup/plugin-inject": "5.0.3",
-    "@types/jest": "27.5.2",
+    "@types/jest": "29.5.0",
     "@types/jest-axe": "3.5.5",
     "@types/lodash-es": "4.17.6",
     "@types/node": "16.18.11",
