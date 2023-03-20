@@ -131,7 +131,7 @@
     "postcss-import": "^12.0.1",
     "postcss-url": "^9.0.0",
     "tippy.js": "^6.3.7",
-    "v-calendar": "github:dschmidt/v-calendar#3ce6e3b8afd5491cb53ee811281d5fa8a45b044d",
+    "v-calendar": "github:dschmidt/v-calendar#a4e9bceb168aa302eeff5143d41d057c1c5ee547",
     "vue": "3.2.47",
     "vue-inline-svg": "^3.1.0",
     "vue-select": "^3.12.0",
