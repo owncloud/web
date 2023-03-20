@@ -43,7 +43,8 @@ export default defineComponent({
     })
 
     if (useCapabilitySpacesEnabled() && !unref(personalSpace)) {
-      return router.push(createLocationSpaces('files-spaces-projects'))
+      router.replace(createLocationSpaces('files-spaces-projects'))
+      return
     }
     const itemPath = computed(() => {
       if (!props.appendHomeFolder) {

@@ -24,9 +24,11 @@
           v-show="isAnyNavItemActive"
           id="nav-highlighter"
           class="oc-ml-s oc-background-primary-gradient"
+          v-bind="highlighterAttrs"
         />
         <sidebar-nav-item
           v-for="link in navItems"
+          :ref="(el) => (navItemRefs[link.route.path] = el)"
           :key="link.route.path"
           :index="getUuid()"
           :target="link.route.path"
@@ -45,7 +47,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, onMounted, PropType } from 'vue'
+import {
+  defineComponent,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  PropType,
+  ref,
+  unref,
+  watch
+} from 'vue'
 import { mapState, mapActions } from 'vuex'
 import SidebarNavItem from './SidebarNavItem.vue'
 import * as uuid from 'uuid'
@@ -60,8 +71,10 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup(props) {
     let resizeObserver
+    const navItemRefs = ref({})
+    const highlighterAttrs = ref({})
 
     onMounted(() => {
       const navBar = document.getElementById('web-nav-sidebar')
@@ -86,6 +99,30 @@ export default defineComponent({
     onBeforeUnmount(() => {
       resizeObserver.disconnect()
     })
+
+    const updateHighlighterPosition = () => {
+      const activeItem = props.navItems.find((n) => n.active)
+      const activeEl = unref(navItemRefs)[activeItem?.route.path]
+      if (activeEl) {
+        highlighterAttrs.value = {
+          style: {
+            transform: `translateY(${activeEl.$el.offsetTop}px)`,
+            'transition-duration': '0.2s'
+          }
+        }
+      }
+    }
+
+    watch(
+      () => props.navItems,
+      async () => {
+        await nextTick()
+        updateHighlighterPosition()
+      },
+      { deep: true, immediate: true }
+    )
+
+    return { highlighterAttrs, navItemRefs }
   },
   computed: {
     ...mapState(['navigation']),
