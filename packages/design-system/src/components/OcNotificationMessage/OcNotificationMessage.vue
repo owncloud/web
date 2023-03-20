@@ -70,7 +70,7 @@ export default defineComponent({
       type: Number,
       required: false,
       default: 5,
-      validator: (value) => value > 0
+      validator: (value: number) => value > 0
     }
   },
   emits: ['close'],
