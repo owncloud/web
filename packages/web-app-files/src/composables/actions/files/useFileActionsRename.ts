@@ -12,7 +12,7 @@ import {
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { renameResource as _renameResource } from '../../../helpers/resources'
 import { computed, unref } from 'vue'
-import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
+import { useClientService, useLoadingService, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useCapabilityFilesSharingCanRename } from 'web-pkg/src/composables/capability'
@@ -22,6 +22,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
   const router = useRouter()
   const { $gettext, interpolate: $gettextInterpolate } = useGettext()
   const clientService = useClientService()
+  const loadingService = useLoadingService()
   const canRename = useCapabilityFilesSharingCanRename()
 
   const checkNewName = (resource, newName, parentResources = undefined) => {
@@ -167,7 +168,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
         newName = `${newName}.${resources[0].extension}`
       }
 
-      renameResource(space, resources[0], newName)
+      return renameResource(space, resources[0], newName)
     }
     const checkName = (newName) => {
       if (!areFileExtensionsShown) {
@@ -200,7 +201,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
       inputSelectionRange,
       inputLabel: resources[0].isFolder ? $gettext('Folder name') : $gettext('File name'),
       onCancel: () => store.dispatch('hideModal'),
-      onConfirm: confirmAction,
+      onConfirm: (args) => loadingService.addTask(() => confirmAction(args)),
       onInput: checkName
     }
 

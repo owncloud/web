@@ -1,15 +1,20 @@
-import { ClientService } from 'web-pkg/src/services'
+import { ClientService, LoadingService, LoadingTaskCallbackArguments } from 'web-pkg/src/services'
 import {
   ResolveConflict,
   ResourceTransfer,
   TransferType,
   resolveFileNameDuplicate
 } from '../../../../src/helpers/resource'
-import { mockDeep, mockReset } from 'jest-mock-extended'
+import { mock, mockDeep, mockReset } from 'jest-mock-extended'
 import { buildSpace, Resource } from 'web-client/src/helpers'
 import { ListFilesResult } from 'web-client/src/webdav/listFiles'
 
 const clientServiceMock = mockDeep<ClientService>()
+const loadingServiceMock = mock<LoadingService>({
+  addTask: (callback) => {
+    return callback(mock<LoadingTaskCallbackArguments>())
+  }
+})
 let resourcesToMove
 let sourceSpace
 let targetSpace
@@ -60,6 +65,7 @@ describe('resourcesTransfer', () => {
       targetSpace,
       resourcesToMove[0],
       clientServiceMock,
+      loadingServiceMock,
       jest.fn(),
       jest.fn(),
       jest.fn(),
@@ -88,6 +94,7 @@ describe('resourcesTransfer', () => {
           targetSpace,
           targetFolder,
           clientServiceMock,
+          loadingServiceMock,
           jest.fn(),
           jest.fn(),
           jest.fn(),
@@ -127,6 +134,7 @@ describe('resourcesTransfer', () => {
       targetSpace,
       resourcesToMove[0],
       clientServiceMock,
+      loadingServiceMock,
       jest.fn(),
       jest.fn(),
       jest.fn(),

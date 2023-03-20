@@ -17,7 +17,7 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { ClientService } from 'web-pkg/src/services'
+import { ClientService, LoadingTaskCallbackArguments } from 'web-pkg/src/services'
 import { Language } from 'vue3-gettext'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
@@ -78,6 +78,7 @@ export default {
     {
       targetSpace,
       clientService,
+      loadingService,
       createModal,
       hideModal,
       showMessage,
@@ -92,6 +93,7 @@ export default {
       targetSpace,
       context.state.currentFolder,
       clientService,
+      loadingService,
       createModal,
       hideModal,
       showMessage,
@@ -106,20 +108,30 @@ export default {
     if (context.state.clipboardAction === ClipboardActions.Copy) {
       movedResources = await copyMove.perform(TransferType.COPY)
     }
-    context.commit('CLEAR_CLIPBOARD')
-    const loadingResources = []
-    for (const resource of movedResources) {
-      loadingResources.push(
-        (async () => {
-          const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
-            targetSpace,
-            resource
+
+    await loadingService.addTask(
+      () => {
+        context.commit('CLEAR_CLIPBOARD')
+        const loadingResources = []
+        const fetchedResources = []
+        for (const resource of movedResources) {
+          loadingResources.push(
+            (async () => {
+              const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
+                targetSpace,
+                resource
+              )
+              fetchedResources.push(movedResource)
+            })()
           )
-          context.commit('UPSERT_RESOURCE', movedResource)
-        })()
-      )
-    }
-    await Promise.all(loadingResources)
+        }
+
+        return Promise.all(loadingResources).then(() => {
+          context.commit('UPSERT_RESOURCES', fetchedResources)
+        })
+      },
+      { debounceTime: 0 }
+    )
   },
   resetFileSelection(context) {
     context.commit('RESET_SELECTION')
@@ -148,6 +160,7 @@ export default {
       space: SpaceResource
       files: Resource[]
       clientService: ClientService
+      loadingCallbackArgs: LoadingTaskCallbackArguments
       firstRun: boolean
     } & Language
   ) {
@@ -157,11 +170,13 @@ export default {
       space,
       files,
       clientService,
+      loadingCallbackArgs,
       firstRun = true
     } = options
+    const { setProgress } = loadingCallbackArgs
     const promises = []
     const removedFiles = []
-    for (const file of files) {
+    for (const [i, file] of files.entries()) {
       const promise = clientService.webdav
         .deleteFile(space, file)
         .then(() => {
@@ -191,6 +206,9 @@ export default {
             },
             { root: true }
           )
+        })
+        .finally(() => {
+          setProgress({ total: files.length, current: i + 1 })
         })
       promises.push(promise)
     }

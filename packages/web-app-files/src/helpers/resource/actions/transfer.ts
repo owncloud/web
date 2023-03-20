@@ -1,12 +1,13 @@
 import { Resource } from 'web-client'
 import { join } from 'path'
 import { SpaceResource } from 'web-client/src/helpers'
-import { ClientService } from 'web-pkg/src/services'
+import { ClientService, LoadingService, LoadingTaskCallbackArguments } from 'web-pkg/src/services'
 import {
   ConflictDialog,
   ResolveStrategy,
   isResourceBeeingMovedToSameLocation,
-  resolveFileNameDuplicate
+  resolveFileNameDuplicate,
+  FileConflict
 } from '../conflictHandling'
 import { TransferType } from '.'
 
@@ -17,6 +18,7 @@ export class ResourceTransfer extends ConflictDialog {
     private targetSpace: SpaceResource,
     private targetFolder: Resource,
     private clientService: ClientService,
+    private loadingService: LoadingService,
     createModal: (modal: object) => void,
     hideModal: () => void,
     showMessage: (data: object) => void,
@@ -106,7 +108,6 @@ export class ResourceTransfer extends ConflictDialog {
       transferType = TransferType.COPY
     }
 
-    const errors = []
     const targetFolderResources = (
       await this.clientService.webdav.listFiles(this.targetSpace, this.targetFolder)
     ).children
@@ -116,9 +117,27 @@ export class ResourceTransfer extends ConflictDialog {
       this.targetFolder,
       targetFolderResources
     )
-    const movedResources: Resource[] = []
 
-    for (let resource of this.resourcesToMove) {
+    return this.loadingService.addTask(
+      ({ setProgress }) => {
+        return this.moveResources(resolvedConflicts, targetFolderResources, transferType, {
+          setProgress
+        })
+      },
+      { indeterminate: transferType === TransferType.COPY }
+    )
+  }
+
+  private async moveResources(
+    resolvedConflicts: FileConflict[],
+    targetFolderResources: Resource[],
+    transferType: TransferType,
+    { setProgress }: LoadingTaskCallbackArguments
+  ) {
+    const movedResources: Resource[] = []
+    const errors = []
+
+    for (let [i, resource] of this.resourcesToMove.entries()) {
       // shallow copy of resources to prevent modifying existing rows
       resource = { ...resource }
       const hasConflict = resolvedConflicts.some((e) => e.resource.id === resource.id)
@@ -180,6 +199,8 @@ export class ResourceTransfer extends ConflictDialog {
         console.error(error)
         error.resourceName = resource.name
         errors.push(error)
+      } finally {
+        setProgress({ total: this.resourcesToMove.length, current: i + 1 })
       }
     }
     this.showResultMessage(errors, movedResources, transferType)

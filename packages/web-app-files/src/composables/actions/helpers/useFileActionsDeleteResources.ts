@@ -13,7 +13,8 @@ import {
   useCapabilityShareJailEnabled,
   useClientService,
   useRouter,
-  useStore
+  useStore,
+  useLoadingService
 } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
@@ -26,6 +27,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const hasShareJail = useCapabilityShareJailEnabled()
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
   const clientService = useClientService()
+  const loadingService = useLoadingService()
   const { owncloudSdk } = clientService
 
   const queue = new PQueue({ concurrency: 4 })
@@ -141,6 +143,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const trashbin_delete = (space: SpaceResource) => {
     // TODO: use clear all if all files are selected
     store.dispatch('toggleModalConfirmButton')
+    // FIXME: Implement proper batch delete and add loading indicator
     for (const file of unref(resources)) {
       const p = queue.add(() => {
         return trashbin_deleteOp(space, file)
@@ -155,48 +158,56 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   }
 
   const filesList_delete = (space: SpaceResource) => {
-    store
-      .dispatch('Files/deleteFiles', {
-        ...language,
-        space,
-        files: unref(resources),
-        clientService
-      })
-      .then(async () => {
-        store.dispatch('hideModal')
-        store.dispatch('toggleModalConfirmButton')
+    return loadingService.addTask(
+      (loadingCallbackArgs) => {
+        return store
+          .dispatch('Files/deleteFiles', {
+            ...language,
+            space,
+            files: unref(resources),
+            clientService,
+            loadingCallbackArgs
+          })
+          .then(async () => {
+            store.dispatch('hideModal')
+            store.dispatch('toggleModalConfirmButton')
 
-        // Load quota
-        if (
-          isLocationSpacesActive(router, 'files-spaces-generic') &&
-          !['public', 'share'].includes(space?.driveType)
-        ) {
-          if (unref(hasSpacesEnabled)) {
-            const graphClient = clientService.graphAuthenticated
-            const driveResponse = await graphClient.drives.getDrive(unref(resources)[0].storageId)
-            store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-              id: driveResponse.data.id,
-              field: 'spaceQuota',
-              value: driveResponse.data.quota
-            })
-          } else {
-            const user = await owncloudSdk.users.getUser(store.getters.user.id)
-            store.commit('SET_QUOTA', user.quota)
-          }
-        }
+            // Load quota
+            if (
+              isLocationSpacesActive(router, 'files-spaces-generic') &&
+              !['public', 'share'].includes(space?.driveType)
+            ) {
+              if (unref(hasSpacesEnabled)) {
+                const graphClient = clientService.graphAuthenticated
+                const driveResponse = await graphClient.drives.getDrive(
+                  unref(resources)[0].storageId
+                )
+                store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+                  id: driveResponse.data.id,
+                  field: 'spaceQuota',
+                  value: driveResponse.data.quota
+                })
+              } else {
+                const user = await owncloudSdk.users.getUser(store.getters.user.id)
+                store.commit('SET_QUOTA', user.quota)
+              }
+            }
 
-        if (
-          unref(resourcesToDelete).length &&
-          isSameResource(unref(resourcesToDelete)[0], store.getters['Files/currentFolder'])
-        ) {
-          return router.push(
-            createFileRouteOptions(space, {
-              path: dirname(unref(resourcesToDelete)[0].path),
-              fileId: unref(resourcesToDelete)[0].parentFolderId
-            })
-          )
-        }
-      })
+            if (
+              unref(resourcesToDelete).length &&
+              isSameResource(unref(resourcesToDelete)[0], store.getters['Files/currentFolder'])
+            ) {
+              return router.push(
+                createFileRouteOptions(space, {
+                  path: dirname(unref(resourcesToDelete)[0].path),
+                  fileId: unref(resourcesToDelete)[0].parentFolderId
+                })
+              )
+            }
+          })
+      },
+      { indeterminate: false }
+    )
   }
 
   const deleteHelper = (space: SpaceResource) => {

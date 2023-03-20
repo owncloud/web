@@ -1,0 +1,7 @@
+Enhancement: Global loading indicator
+
+A global loading indicator for long running actions has been added to the top of the page.
+
+https://github.com/owncloud/web/issues/6183
+https://github.com/owncloud/web/issues/2134
+https://github.com/owncloud/web/pull/8611

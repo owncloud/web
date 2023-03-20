@@ -1,7 +1,7 @@
 import { isLocationSpacesActive } from '../../../router'
 import { Store } from 'vuex'
 import { thumbnailService } from '../../../services'
-import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
+import { useClientService, useLoadingService, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
@@ -11,6 +11,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
+  const loadingService = useLoadingService()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const graphClient = clientService.graphAuthenticated
@@ -68,7 +69,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
     {
       name: 'set-space-image',
       icon: 'image-edit',
-      handler,
+      handler: (args) => loadingService.addTask(() => handler(args)),
       label: () => {
         return $gettext('Set as space image')
       },

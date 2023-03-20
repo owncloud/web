@@ -8,6 +8,7 @@ import {
   useCapabilityFilesPermanentDeletion,
   useCapabilityShareJailEnabled,
   useClientService,
+  useLoadingService,
   useRouter,
   useStore
 } from 'web-pkg/src/composables'
@@ -19,6 +20,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
   const router = useRouter()
   const { $gettext, $pgettext } = useGettext()
   const { owncloudSdk } = useClientService()
+  const loadingService = useLoadingService()
   const hasShareJail = useCapabilityShareJailEnabled()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
 
@@ -62,7 +64,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
       ),
       hasInput: false,
       onCancel: () => store.dispatch('hideModal'),
-      onConfirm: () => emptyTrashBin({ space })
+      onConfirm: () => loadingService.addTask(() => emptyTrashBin({ space }))
     }
 
     store.dispatch('createModal', modal)

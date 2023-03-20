@@ -156,6 +156,11 @@ export default {
     $_upsertResource(state, resource, true)
   },
 
+  UPSERT_RESOURCES(state, resources) {
+    const otherFiles = state.files.filter((f) => !resources.some((r) => r.id === f.id))
+    state.files = [...otherFiles, ...resources]
+  },
+
   /**
    * Updates the given resource in the store. If the resource doesn't exist in the store, the update
    * will be ignored. If you also want to allow inserts, use UPSERT_RESOURCE instead.

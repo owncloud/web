@@ -171,6 +171,7 @@ import {
   useAccessToken,
   useCapabilitySpacesMaxQuota,
   useGraphClient,
+  useLoadingService,
   useRouteQuery,
   useStore
 } from 'web-pkg/src/composables'
@@ -221,6 +222,7 @@ export default defineComponent({
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
+    const loadingService = useLoadingService()
 
     const { actions: removeFromGroupsActions } = useRemoveFromGroups()
     const { actions: addToGroupsActions } = useAddToGroups()
@@ -434,10 +436,10 @@ export default defineComponent({
           }
           return acc
         }, addUsersToGroupsRequests)
-        await Promise.all(addUsersToGroupsRequests)
-        const usersResponse = await Promise.all(
-          usersToFetch.map((userId) => unref(graphClient).users.getUser(userId))
-        )
+        const usersResponse = await loadingService.addTask(async () => {
+          await Promise.all(addUsersToGroupsRequests)
+          return Promise.all(usersToFetch.map((userId) => unref(graphClient).users.getUser(userId)))
+        })
         for (const { data: updatedUser } of usersResponse) {
           const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
           unref(users)[userIndex] = updatedUser
@@ -477,10 +479,10 @@ export default defineComponent({
           }
           return acc
         }, removeUsersToGroupsRequests)
-        await Promise.all(removeUsersToGroupsRequests)
-        const usersResponse = await Promise.all(
-          usersToFetch.map((userId) => unref(graphClient).users.getUser(userId))
-        )
+        const usersResponse = await loadingService.addTask(async () => {
+          await Promise.all(removeUsersToGroupsRequests)
+          return Promise.all(usersToFetch.map((userId) => unref(graphClient).users.getUser(userId)))
+        })
         for (const { data: updatedUser } of usersResponse) {
           const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
           unref(users)[userIndex] = updatedUser

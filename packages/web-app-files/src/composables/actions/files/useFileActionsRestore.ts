@@ -18,18 +18,21 @@ import { urlJoin } from 'web-client/src/utils'
 import {
   useCapabilitySpacesEnabled,
   useClientService,
+  useLoadingService,
   useRouter,
   useStore
 } from 'web-pkg/src/composables'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { LoadingTaskCallbackArguments } from 'web-pkg'
 
 export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
   const clientService = useClientService()
+  const loadingService = useLoadingService()
 
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
 
@@ -149,13 +152,14 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
   const restoreResources = async (
     space: SpaceResource,
     resources: Resource[],
-    missingFolderPaths: string[]
+    missingFolderPaths: string[],
+    { setProgress }: LoadingTaskCallbackArguments
   ) => {
     const restoredResources = []
     const failedResources = []
 
     let createdFolderPaths = []
-    for (const resource of resources) {
+    for (const [i, resource] of resources.entries()) {
       const parentPath = dirname(resource.path)
       if (missingFolderPaths.includes(parentPath)) {
         const { existingPaths } = await createFolderStructure(space, parentPath, createdFolderPaths)
@@ -170,6 +174,8 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
       } catch (e) {
         console.error(e)
         failedResources.push(resource)
+      } finally {
+        setProgress({ total: resources.length, current: i + 1 })
       }
     }
 
@@ -256,7 +262,12 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
       resource.path = urlJoin(parentPath, resolvedName)
       resolvedResources.push(resource)
     }
-    return restoreResources(space, resolvedResources, missingFolderPaths)
+    return loadingService.addTask(
+      ({ setProgress }) => {
+        return restoreResources(space, resolvedResources, missingFolderPaths, { setProgress })
+      },
+      { indeterminate: false }
+    )
   }
 
   const actions = computed((): FileAction[] => [

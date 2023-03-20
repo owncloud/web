@@ -13,6 +13,7 @@ import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import {
   useClientService,
+  useLoadingService,
   usePublicLinkPassword,
   useRouter,
   useStore
@@ -23,12 +24,13 @@ import { useGettext } from 'vue3-gettext'
 export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
+  const loadingService = useLoadingService()
   const { $ngettext, $gettext } = useGettext()
   const clientService = useClientService()
   const publicLinkPassword = usePublicLinkPassword({ store })
   const isFilesAppActive = useIsFilesAppActive()
 
-  const handler = async ({ space, resources }: FileActionOptions) => {
+  const handler = ({ space, resources }: FileActionOptions) => {
     const fileOptions = archiverService.fileIdsSupported
       ? {
           fileIds: resources.map((resource) => resource.fileId)
@@ -37,7 +39,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
           dir: path.dirname(first<Resource>(resources).path) || '/',
           files: resources.map((resource) => resource.name)
         }
-    await archiverService
+    return archiverService
       .triggerDownload({
         clientService,
         ...fileOptions,
@@ -64,7 +66,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
       {
         name: 'download-archive',
         icon: 'inbox-archive',
-        handler,
+        handler: (args) => loadingService.addTask(() => handler(args)),
         label: () => {
           return $gettext('Download')
         },
