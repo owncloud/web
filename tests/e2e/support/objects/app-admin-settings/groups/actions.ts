@@ -3,6 +3,7 @@ import { Page } from 'playwright'
 const newGroupBtn = '.admin-settings-app-bar-actions'
 const createGroupInput = '#create-group-input-display-name'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
+const groupTrSelector = 'tr'
 
 export const createGroup = async (args: { page: Page; key: string }): Promise<void> => {
   const { page, key } = args
@@ -16,4 +17,16 @@ export const createGroup = async (args: { page: Page; key: string }): Promise<vo
     ),
     page.locator(actionConfirmButton).click()
   ])
+}
+
+export const getDisplayedGroups = async (args: { page: Page }): Promise<string[]> => {
+  const { page } = args
+  const groups = []
+  const result = page.locator(groupTrSelector)
+
+  const count = await result.count()
+  for (let i = 0; i < count; i++) {
+    groups.push(await result.nth(i).getAttribute('data-item-id'))
+  }
+  return groups
 }

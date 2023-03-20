@@ -39,6 +39,7 @@ export interface Me {
 }
 
 export interface Group {
+  uuid?: string
   id: string
   displayName: string
 }

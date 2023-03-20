@@ -397,7 +397,39 @@ When(
         group: group,
         admin: this.usersEnvironment.getUser({ key: stepUser })
       })
+    }
+    await page.reload()
+    for (const info of stepTable.hashes()) {
+      const group = this.usersEnvironment.getGroup({ key: info.id })
       await groupsObject.createGroup({ key: group.displayName })
+    }
+  }
+)
+
+Then(
+  /^"([^"]*)" (should see|should not see) the following group(s)?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    action: string,
+    _: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+    const groups = await groupsObject.getDisplayedGroups()
+
+    for (const { group } of stepTable.hashes()) {
+      switch (action) {
+        case 'should see':
+          expect(groups).toContain(groupsObject.getUUID({ key: group }))
+          break
+        case 'should not see':
+          expect(groups).not.toContain(groupsObject.getUUID({ key: group }))
+          break
+        default:
+          throw new Error(`${action} not implemented`)
+      }
     }
   }
 )
