@@ -103,13 +103,17 @@ import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
 import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
-import Delete from 'web-pkg/src/mixins/spaces/delete'
-import Disable from 'web-pkg/src/mixins/spaces/disable'
-import Restore from 'web-pkg/src/mixins/spaces/restore'
-import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import { useGettext } from 'vue3-gettext'
+import {
+  useSpaceActionsDelete,
+  useSpaceActionsDisable,
+  useSpaceActionsRestore,
+  useSpaceActionsEditQuota
+} from 'web-pkg/src/composables/actions/spaces'
+import { SpaceAction } from 'web-pkg/src/composables/actions'
+
 
 export default defineComponent({
   name: 'SpacesView',
@@ -121,7 +125,6 @@ export default defineComponent({
     SpaceInfo,
     QuotaModal
   },
-  mixins: [Delete, Disable, Restore, EditQuota],
   provide() {
     return {
       resource: computed(() => this.selectedSpaces[0])
@@ -186,12 +189,22 @@ export default defineComponent({
       selectedSpaces.value = []
     }
 
-    const batchActions = computed(() => {
+    const { actions: deleteActions } = useSpaceActionsDelete({ store })
+    const { actions: disableActions } = useSpaceActionsDisable({ store })
+    const {
+      actions: editQuotaActions,
+      modalOpen: quotaModalIsOpen,
+      closeModal: closeQuotaModal,
+      spaceQuotaUpdated
+    } = useSpaceActionsEditQuota({ store })
+    const { actions: restoreActions } = useSpaceActionsRestore({ store })
+
+    const batchActions = computed((): SpaceAction[] => {
       return [
-        ...instance.$_editQuota_items,
-        ...instance.$_restore_items,
-        ...instance.$_delete_items,
-        ...instance.$_disable_items
+        ...unref(editQuotaActions),
+        ...unref(restoreActions),
+        ...unref(deleteActions),
+        ...unref(disableActions)
       ].filter((item) => item.isEnabled({ resources: unref(selectedSpaces) }))
     })
 
@@ -275,14 +288,6 @@ export default defineComponent({
         updateQuotaForSpaceEventToken
       )
     })
-
-    const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
-    const closeQuotaModal = () => {
-      instance.$_editQuota_closeModal()
-    }
-    const spaceQuotaUpdated = (quota) => {
-      instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
-    }
 
     return {
       maxQuota: useCapabilitySpacesMaxQuota(),

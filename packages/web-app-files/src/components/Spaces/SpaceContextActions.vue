@@ -30,16 +30,18 @@ import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActi
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
 
-import Delete from 'web-pkg/src/mixins/spaces/delete'
-import Rename from 'web-pkg/src/mixins/spaces/rename'
-import Restore from 'web-pkg/src/mixins/spaces/restore'
 import { useFileActionsShowDetails } from '../../composables/actions/files/useFileActionsShowDetails'
-import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
-import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
-import Disable from 'web-pkg/src/mixins/spaces/disable'
-import ShowMembers from 'web-pkg/src/mixins/spaces/showMembers'
 import { useSpaceActionsUploadImage } from '../../composables/actions/spaces/useSpaceActionsUploadImage'
-import EditReadmeContent from 'web-pkg/src/mixins/spaces/editReadmeContent'
+import {
+  useSpaceActionsDelete,
+  useSpaceActionsDisable,
+  useSpaceActionsEditDescription,
+  useSpaceActionsEditQuota,
+  useSpaceActionsEditReadmeContent,
+  useSpaceActionsRename,
+  useSpaceActionsRestore,
+  useSpaceActionsShowMembers
+} from 'web-pkg/src/composables/actions'
 import { isLocationSpacesActive } from '../../router'
 import {
   computed,
@@ -59,16 +61,6 @@ import { FileActionOptions, SpaceActionOptions } from 'web-pkg/src/composables/a
 export default defineComponent({
   name: 'SpaceContextActions',
   components: { ContextActionMenu, QuotaModal, ReadmeContentModal },
-  mixins: [
-    Rename,
-    Delete,
-    EditDescription,
-    EditQuota,
-    Disable,
-    ShowMembers,
-    Restore,
-    EditReadmeContent
-  ],
 
   props: {
     actionOptions: {
@@ -83,7 +75,30 @@ export default defineComponent({
 
     const actionOptions = toRef(props, 'actionOptions') as Ref<SpaceActionOptions>
 
-    const { actions: showDetailsItems } = useFileActionsShowDetails({ store })
+    const supportedSpaceImageMimeTypes = computed(() => {
+      return thumbnailService.getSupportedMimeTypes('image/').join(',')
+    })
+
+    const { actions: deleteActions } = useSpaceActionsDelete({ store })
+    const { actions: disableActions } = useSpaceActionsDisable({ store })
+    const {
+      actions: editQuotaActions,
+      modalOpen: quotaModalIsOpen,
+      closeModal: closeQuotaModal,
+      selectedSpace: quotaModalSelectedSpace,
+      spaceQuotaUpdated
+    } = useSpaceActionsEditQuota({ store })
+    const quotaModalSelectedSpaces = computed(() => [unref(quotaModalSelectedSpace)])
+    const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
+    const {
+      actions: editReadmeContentActions,
+      modalOpen: readmeContentModalIsOpen,
+      closeModal: closeReadmeContentModal
+    } = useSpaceActionsEditReadmeContent({ store })
+    const { actions: renameActions } = useSpaceActionsRename({ store })
+    const { actions: restoreActions } = useSpaceActionsRestore({ store })
+    const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
+    const { actions: showMembersActions } = useSpaceActionsShowMembers({ store })
 
     const spaceImageInput: VNodeRef = ref(null)
     const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
@@ -92,36 +107,36 @@ export default defineComponent({
     })
 
     const menuItemsMembers = computed(() => {
-      const fileHandlers = [...instance.$_showMembers_items]
+      const fileHandlers = [...unref(showMembersActions)]
       return [...fileHandlers].filter((item) => item.isEnabled(unref(actionOptions)))
     })
 
     const menuItemsPrimaryActions = computed(() => {
       const fileHandlers = [
-        ...instance.$_rename_items,
-        ...instance.$_editDescription_items,
+        ...unref(renameActions),
+        ...unref(editDescriptionActions),
         ...unref(uploadImageActions)
       ]
 
       if (isLocationSpacesActive(router, 'files-spaces-generic')) {
-        fileHandlers.splice(2, 0, ...instance.$_editReadmeContent_items)
+        fileHandlers.splice(2, 0, ...unref(editReadmeContentActions))
       }
       return [...fileHandlers].filter((item) => item.isEnabled(unref(actionOptions)))
     })
 
     const menuItemsSecondaryActions = computed(() => {
       const fileHandlers = [
-        ...instance.$_editQuota_items,
-        ...instance.$_disable_items,
-        ...instance.$_restore_items,
-        ...instance.$_delete_items
+        ...unref(editQuotaActions),
+        ...unref(disableActions),
+        ...unref(restoreActions),
+        ...unref(deleteActions)
       ]
 
       return [...fileHandlers].filter((item) => item.isEnabled(unref(actionOptions)))
     })
 
     const menuItemsSidebar = computed(() => {
-      const fileHandlers = [...unref(showDetailsItems)]
+      const fileHandlers = [...unref(showDetailsActions)]
       return [...fileHandlers].filter((item) =>
         // HACK: showDetails provides FileAction[] but we have SpaceAtionOptions, so we need to cast them to FileActionOptions
         item.isEnabled(unref(actionOptions) as unknown as FileActionOptions)
@@ -164,29 +179,16 @@ export default defineComponent({
       maxQuota: useCapabilitySpacesMaxQuota(),
       spaceImageInput,
       uploadImageActions,
-      uploadImageSpace
-    }
-  },
-  computed: {
-    quotaModalSelectedSpaces() {
-      return [this.$data.$_editQuota_selectedSpace]
-    },
-    quotaModalIsOpen() {
-      return this.$data.$_editQuota_modalOpen
-    },
-    readmeContentModalIsOpen() {
-      return this.$data.$_editReadmeContent_modalOpen
-    },
-    supportedSpaceImageMimeTypes() {
-      return thumbnailService.getSupportedMimeTypes('image/').join(',')
-    }
-  },
-  methods: {
-    closeQuotaModal() {
-      this.$_editQuota_closeModal()
-    },
-    closeReadmeContentModal() {
-      this.$_editReadmeContent_closeModal()
+      uploadImageSpace,
+
+      supportedSpaceImageMimeTypes,
+
+      readmeContentModalIsOpen,
+      closeReadmeContentModal,
+
+      quotaModalIsOpen,
+      closeQuotaModal,
+      quotaModalSelectedSpaces
     }
   }
 })

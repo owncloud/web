@@ -1,4 +1,4 @@
-import rename from 'web-pkg/src/mixins/spaces/rename'
+import rename from 'web-pkg/src/composables/actions/spaces/rename'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
