@@ -13,8 +13,8 @@ export class Groups {
     const { uuid } = this.#usersEnvironment.getGroup({ key })
     return uuid
   }
-  async createGroup({ key }: { key: string }): Promise<void> {
-    await createGroup({ page: this.#page, key: key })
+  async createGroup({ key }: { key: string }): Promise<string> {
+    return await createGroup({ page: this.#page, key: key })
   }
   getDisplayedGroups(): Promise<string[]> {
     return getDisplayedGroups({ page: this.#page })

@@ -401,18 +401,17 @@ When(
     await page.reload()
     for (const info of stepTable.hashes()) {
       const group = this.usersEnvironment.getGroup({ key: info.id })
-      await groupsObject.createGroup({ key: group.displayName })
+      group.uuid = await groupsObject.createGroup({ key: group.displayName })
     }
   }
 )
 
 Then(
-  /^"([^"]*)" (should see|should not see) the following group(s)?$/,
+  /^"([^"]*)" (should see|should not see) the following group(?:s)?$/,
   async function (
     this: World,
     stepUser: string,
     action: string,
-    _: string,
     stepTable: DataTable
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
