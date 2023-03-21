@@ -60,7 +60,7 @@ import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { useGraphClient, useRouter, useStore } from 'web-pkg'
+import { useClientService, useRouter, useStore } from 'web-pkg'
 import { createLocationTrash } from 'web-app-files/src/router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
@@ -80,12 +80,12 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const { $gettext } = useGettext()
+    const clientService = useClientService()
     const sortBy = ref('name')
     const sortDir = ref('asc')
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
-    const { graphClient } = useGraphClient()
 
     const spaces = computed(() =>
       store.getters['runtime/spaces/spaces'].filter(
@@ -97,7 +97,7 @@ export default defineComponent({
       store.commit('Files/CLEAR_FILES_SEARCHED')
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
       yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
-        graphClient: unref(graphClient)
+        graphClient: clientService.graphAuthenticated
       })
       store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
     })

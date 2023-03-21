@@ -55,12 +55,13 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import * as EmailValidator from 'email-validator'
-import { useGraphClient } from 'web-pkg'
+import { useClientService } from 'web-pkg'
 
 export default defineComponent({
   name: 'CreateUserModal',
   emits: ['cancel', 'confirm'],
   setup() {
+    const clientService = useClientService()
     const formData = ref({
       userName: {
         errorMessage: '',
@@ -80,7 +81,7 @@ export default defineComponent({
       }
     })
     return {
-      ...useGraphClient(),
+      clientService,
       formData
     }
   },
@@ -134,7 +135,8 @@ export default defineComponent({
       }
 
       try {
-        await this.graphClient.users.getUser(this.user.onPremisesSamAccountName)
+        const client = this.clientService.graphAuthenticated
+        await client.users.getUser(this.user.onPremisesSamAccountName)
         this.formData.userName.errorMessage = this.$gettext('User "%{userName}" already exists', {
           userName: this.user.onPremisesSamAccountName
         })

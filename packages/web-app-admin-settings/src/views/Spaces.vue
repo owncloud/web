@@ -78,7 +78,7 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import {
   useAccessToken,
   useCapabilitySpacesMaxQuota,
-  useGraphClient,
+  useClientService,
   useStore
 } from 'web-pkg/src/composables'
 import {
@@ -132,7 +132,7 @@ export default defineComponent({
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const spaces = ref([])
-    const { graphClient } = useGraphClient()
+    const clientService = useClientService()
     const { $gettext } = useGettext()
     const { sideBarOpen, sideBarActivePanel } = useSideBar()
 
@@ -145,7 +145,10 @@ export default defineComponent({
     const loadResourcesTask = useTask(function* (signal) {
       const {
         data: { value: drivesResponse }
-      } = yield unref(graphClient).drives.listAllDrives('name asc', 'driveType eq project')
+      } = yield clientService.graphAuthenticated.drives.listAllDrives(
+        'name asc',
+        'driveType eq project'
+      )
       const drives = drivesResponse.map((space) =>
         buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
       )
@@ -290,7 +293,6 @@ export default defineComponent({
       sideBarActivePanel,
       spaces,
       loadResourcesTask,
-      graphClient,
       accessToken,
       breadcrumbs,
       batchActions,

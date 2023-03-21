@@ -22,13 +22,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, unref, PropType } from 'vue'
-import { mapActions, mapMutations } from 'vuex'
+import { computed, defineComponent, unref, PropType, ref, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useGraphClient } from 'web-pkg/src/composables'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { SpaceResource } from 'web-client/src'
-import { eventBus } from 'web-pkg/src'
+import { eventBus, useClientService, useRouter } from 'web-pkg/src'
+import { useStore } from 'web-pkg/src/composables'
+import { Drive } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'SpaceQuotaModal',
@@ -59,7 +59,11 @@ export default defineComponent({
   },
   emits: ['spaceQuotaUpdated'],
   setup(props) {
+    const store = useStore()
     const { $gettext, $ngettext } = useGettext()
+    const clientService = useClientService()
+    const router = useRouter()
+    const selectedOption = ref(0)
 
     const modalTitle = computed(() => {
       if (props.resourceType === 'space') {
@@ -123,54 +127,35 @@ export default defineComponent({
       return $gettext('Failed to change quota')
     }
 
-    return {
-      ...useGraphClient(),
-      modalTitle,
-      getSuccessMessage,
-      getErrorMessage
-    }
-  },
-  data: function () {
-    return {
-      selectedOption: 0
-    }
-  },
-  computed: {
-    confirmButtonDisabled() {
-      return !this.spaces.some((space) => space.spaceQuota.total !== this.selectedOption)
-    }
-  },
-  mounted() {
-    this.selectedOption = this.spaces[0]?.spaceQuota?.total || 0
-  },
-  methods: {
-    ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
-    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
+    const confirmButtonDisabled = computed(() => {
+      return !props.spaces.some((space) => space.spaceQuota.total !== unref(selectedOption))
+    })
 
-    changeSelectedQuotaOption(option) {
-      this.selectedOption = option.value
-    },
-    async editQuota(): Promise<void> {
-      const requests = this.spaces.map(async (space): Promise<void> => {
-        const { data: driveData } = await this.graphClient.drives.updateDrive(
-          space.id,
-          { quota: { total: this.selectedOption } },
+    const changeSelectedQuotaOption = (option) => {
+      selectedOption.value = option.value
+    }
+
+    const editQuota = async (): Promise<void> => {
+      const client = clientService.graphAuthenticated
+      const requests = props.spaces.map(async (space): Promise<void> => {
+        const { data: driveData } = await client.drives.updateDrive(
+          space.id.toString(),
+          { quota: { total: unref(selectedOption) } } as Drive,
           {}
         )
-        this.cancel()
-        if (unref(this.$router.currentRoute).name === 'admin-settings-spaces') {
+        props.cancel()
+        if (unref(router.currentRoute).name === 'admin-settings-spaces') {
           eventBus.publish('app.admin-settings.spaces.space.quota.updated', {
             spaceId: space.id,
             quota: driveData.quota
           })
         }
-        this.UPDATE_SPACE_FIELD({
+        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
           id: space.id,
           field: 'spaceQuota',
           value: driveData.quota
         })
-        this.UPDATE_RESOURCE_FIELD({
+        store.commit('Files/UPDATE_RESOURCE_FIELD', {
           id: space.id,
           field: 'spaceQuota',
           value: driveData.quota
@@ -179,13 +164,25 @@ export default defineComponent({
       const results = await Promise.allSettled<Array<unknown>>(requests)
       const succeeded = results.filter((r) => r.status === 'fulfilled')
       if (succeeded.length) {
-        this.showMessage({ title: this.getSuccessMessage(succeeded.length) })
+        return store.dispatch('showMessage', { title: getSuccessMessage(succeeded.length) })
       }
       const errors = results.filter((r) => r.status === 'rejected')
       if (errors.length) {
         errors.forEach(console.error)
-        this.showMessage({ title: this.getErrorMessage(errors.length) })
+        await store.dispatch('showMessage', { title: getErrorMessage(errors.length) })
       }
+    }
+
+    onMounted(() => {
+      selectedOption.value = props.spaces[0]?.spaceQuota?.total || 0
+    })
+
+    return {
+      selectedOption,
+      modalTitle,
+      confirmButtonDisabled,
+      changeSelectedQuotaOption,
+      editQuota
     }
   }
 })

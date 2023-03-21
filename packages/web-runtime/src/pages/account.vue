@@ -89,7 +89,7 @@ import { computed, defineComponent, onMounted, unref } from 'vue'
 import {
   useAccessToken,
   useCapabilitySpacesEnabled,
-  useGraphClient,
+  useClientService,
   useStore
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
@@ -107,6 +107,7 @@ export default defineComponent({
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const language = useGettext()
+    const clientService = useClientService()
 
     // FIXME: Use graph capability when we have it
     const isLanguageSupported = useCapabilitySpacesEnabled()
@@ -207,7 +208,7 @@ export default defineComponent({
     })
 
     return {
-      ...useGraphClient(),
+      clientService,
       languageOptions,
       selectedLanguageOption,
       updateSelectedLanguage,
@@ -237,7 +238,7 @@ export default defineComponent({
       this.editPasswordModalOpen = false
     },
     editPassword(currentPassword, newPassword) {
-      return this.graphClient.users
+      return this.clientService.graphAuthenticated.users
         .changeOwnPassword(currentPassword.trim(), newPassword.trim())
         .then(() => {
           this.closeEditPasswordModal()

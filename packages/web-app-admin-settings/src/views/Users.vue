@@ -170,7 +170,7 @@ import {
   queryItemAsString,
   useAccessToken,
   useCapabilitySpacesMaxQuota,
-  useGraphClient,
+  useClientService,
   useLoadingService,
   useRouteQuery,
   useStore
@@ -221,7 +221,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const store = useStore()
     const accessToken = useAccessToken({ store })
-    const { graphClient } = useGraphClient()
+    const clientService = useClientService()
     const loadingService = useLoadingService()
 
     const { actions: removeFromGroupsActions } = useRemoveFromGroups()
@@ -260,12 +260,13 @@ export default defineComponent({
     }
 
     const loadGroupsTask = useTask(function* (signal) {
-      const groupsResponse = yield unref(graphClient).groups.listGroups('displayName')
+      const groupsResponse = yield clientService.graphAuthenticated.groups.listGroups('displayName')
       groups.value = groupsResponse.data.value
     })
 
     const loadAppRolesTask = useTask(function* (signal) {
-      const applicationsResponse = yield unref(graphClient).applications.listApplications()
+      const applicationsResponse =
+        yield clientService.graphAuthenticated.applications.listApplications()
       roles.value = applicationsResponse.data.value[0].appRoles
       applicationId.value = applicationsResponse.data.value[0].id
     })
@@ -284,7 +285,10 @@ export default defineComponent({
         .filter(Boolean)
         .join(' and ')
 
-      const usersResponse = yield unref(graphClient).users.listUsers('displayName', filter)
+      const usersResponse = yield clientService.graphAuthenticated.users.listUsers(
+        'displayName',
+        filter
+      )
       users.value = usersResponse.data.value || []
     })
 
@@ -307,7 +311,7 @@ export default defineComponent({
         return
       }
 
-      const { data } = yield unref(graphClient).users.getUser(user.id)
+      const { data } = yield clientService.graphAuthenticated.users.getUser(user.id)
       unref(additionalUserDataLoadedForUserIds).push(user.id)
 
       Object.assign(user, data)
@@ -417,18 +421,13 @@ export default defineComponent({
 
     const addUsersToGroups = async ({ users: affectedUsers, groups: groupsToAdd }) => {
       try {
+        const client = clientService.graphAuthenticated
         const usersToFetch = []
         const addUsersToGroupsRequests = []
         groupsToAdd.reduce((acc, group) => {
           for (const user of affectedUsers) {
             if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {
-              acc.push(
-                unref(graphClient).groups.addMember(
-                  group.id,
-                  user.id,
-                  configurationManager.serverUrl
-                )
-              )
+              acc.push(client.groups.addMember(group.id, user.id, configurationManager.serverUrl))
               if (!usersToFetch.includes(user.id)) {
                 usersToFetch.push(user.id)
               }
@@ -438,7 +437,7 @@ export default defineComponent({
         }, addUsersToGroupsRequests)
         const usersResponse = await loadingService.addTask(async () => {
           await Promise.all(addUsersToGroupsRequests)
-          return Promise.all(usersToFetch.map((userId) => unref(graphClient).users.getUser(userId)))
+          return Promise.all(usersToFetch.map((userId) => client.users.getUser(userId)))
         })
         for (const { data: updatedUser } of usersResponse) {
           const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
@@ -466,12 +465,13 @@ export default defineComponent({
 
     const removeUsersFromGroups = async ({ users: affectedUsers, groups: groupsToRemove }) => {
       try {
+        const client = clientService.graphAuthenticated
         const usersToFetch = []
         const removeUsersToGroupsRequests = []
         groupsToRemove.reduce((acc, group) => {
           for (const user of affectedUsers) {
             if (user.memberOf.find((userGroup) => userGroup.id === group.id)) {
-              acc.push(unref(graphClient).groups.deleteMember(group.id, user.id))
+              acc.push(client.groups.deleteMember(group.id, user.id))
               if (!usersToFetch.includes(user.id)) {
                 usersToFetch.push(user.id)
               }
@@ -481,7 +481,7 @@ export default defineComponent({
         }, removeUsersToGroupsRequests)
         const usersResponse = await loadingService.addTask(async () => {
           await Promise.all(removeUsersToGroupsRequests)
-          return Promise.all(usersToFetch.map((userId) => unref(graphClient).users.getUser(userId)))
+          return Promise.all(usersToFetch.map((userId) => client.users.getUser(userId)))
         })
         for (const { data: updatedUser } of usersResponse) {
           const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
@@ -519,7 +519,7 @@ export default defineComponent({
       applicationId,
       loadResourcesTask,
       loadAdditionalUserDataTask,
-      graphClient,
+      clientService,
       accessToken,
       listHeaderPosition,
       createUserModalOpen,
@@ -615,8 +615,9 @@ export default defineComponent({
     },
     async createUser(user) {
       try {
-        const { id: createdUserId } = (await this.graphClient.users.createUser(user))?.data
-        const { data: createdUser } = await this.graphClient.users.getUser(createdUserId)
+        const client = this.clientService.graphAuthenticated
+        const { id: createdUserId } = (await client.users.createUser(user))?.data
+        const { data: createdUser } = await client.users.getUser(createdUserId)
         this.users.push(createdUser)
 
         this.toggleCreateUserModal()
@@ -633,6 +634,7 @@ export default defineComponent({
     },
     async editUser({ user, editUser }) {
       try {
+        const client = this.clientService.graphAuthenticated
         const graphEditUserPayloadExtractor = (user) => {
           return omit(user, ['drive', 'appRoleAssignments', 'memberOf'])
         }
@@ -642,7 +644,7 @@ export default defineComponent({
         )
 
         if (!isEmpty(graphEditUserPayload)) {
-          await this.graphClient.users.editUser(editUser.id, graphEditUserPayload)
+          await client.users.editUser(editUser.id, graphEditUserPayload)
         }
 
         if (!isEqual(user.drive?.quota?.total, editUser.drive?.quota?.total)) {
@@ -659,7 +661,7 @@ export default defineComponent({
           await this.updateUserAppRoleAssignments(user, editUser)
         }
 
-        const { data: updatedUser } = await this.graphClient.users.getUser(user.id)
+        const { data: updatedUser } = await client.users.getUser(user.id)
         const userIndex = this.users.findIndex((user) => user.id === updatedUser.id)
         this.users[userIndex] = updatedUser
         const selectedUserIndex = this.selectedUsers.findIndex((user) => user.id === updatedUser.id)
@@ -681,7 +683,8 @@ export default defineComponent({
     },
 
     async updateUserDrive(editUser) {
-      const updateDriveResponse = await this.graphClient.drives.updateDrive(
+      const client = this.clientService.graphAuthenticated
+      const updateDriveResponse = await client.drives.updateDrive(
         editUser.drive.id,
         { quota: { total: editUser.drive.quota.total } },
         {}
@@ -697,13 +700,15 @@ export default defineComponent({
       }
     },
     updateUserAppRoleAssignments(user, editUser) {
-      return this.graphClient.users.createUserAppRoleAssignment(user.id, {
+      const client = this.clientService.graphAuthenticated
+      return client.users.createUserAppRoleAssignment(user.id, {
         appRoleId: editUser.appRoleAssignments[0].appRoleId,
         resourceId: this.applicationId,
         principalId: editUser.id
       })
     },
     updateUserGroupAssignments(user, editUser) {
+      const client = this.clientService.graphAuthenticated
       const groupsToAdd = editUser.memberOf.filter(
         (editUserGroup) => !user.memberOf.some((g) => g.id === editUserGroup.id)
       )
@@ -714,11 +719,11 @@ export default defineComponent({
 
       for (const groupToAdd of groupsToAdd) {
         requests.push(
-          this.graphClient.groups.addMember(groupToAdd.id, user.id, configurationManager.serverUrl)
+          client.groups.addMember(groupToAdd.id, user.id, configurationManager.serverUrl)
         )
       }
       for (const groupToDelete of groupsToDelete) {
-        requests.push(this.graphClient.groups.deleteMember(groupToDelete.id, user.id))
+        requests.push(client.groups.deleteMember(groupToDelete.id, user.id))
       }
 
       return Promise.all(requests)

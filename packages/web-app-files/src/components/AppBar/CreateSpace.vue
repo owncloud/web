@@ -17,16 +17,16 @@
 import { mapActions, mapMutations } from 'vuex'
 
 import { defineComponent } from 'vue'
-import { useGraphClient } from 'web-pkg/src/composables'
 import { buildSpace } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { WebDAV } from 'web-client/src/webdav'
+import { useClientService } from 'web-pkg/src/composables'
+import { Drive } from 'web-client/src/generated'
 
 export default defineComponent({
   setup() {
-    return {
-      ...useGraphClient()
-    }
+    const clientService = useClientService()
+    return { clientService }
   },
   methods: {
     ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
@@ -69,7 +69,8 @@ export default defineComponent({
 
     async addNewSpace(name) {
       try {
-        const { data: space } = await this.graphClient.drives.createDrive({ name }, {})
+        const client = this.clientService.graphAuthenticated
+        const { data: space } = await client.drives.createDrive({ name }, {})
         this.hideModal()
         const resource = buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
         this.UPSERT_RESOURCE(resource)
@@ -81,7 +82,7 @@ export default defineComponent({
           content: this.$gettext('Here you can add a description for this Space.')
         })
 
-        const { data: updatedSpace } = await this.graphClient.drives.updateDrive(
+        const { data: updatedSpace } = await client.drives.updateDrive(
           space.id,
           {
             special: [
@@ -92,7 +93,7 @@ export default defineComponent({
                 id: markdown.id as string
               }
             ]
-          },
+          } as Drive,
           {}
         )
         this.UPDATE_RESOURCE_FIELD({

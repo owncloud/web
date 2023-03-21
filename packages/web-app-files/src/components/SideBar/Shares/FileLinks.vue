@@ -125,7 +125,6 @@ import { LinkShareRoles, SharePermissions } from 'web-client/src/helpers/share'
 import { showQuickLinkPasswordModal } from '../../../quickActions'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
-import { useGraphClient } from 'web-pkg/src/composables'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
 import { Resource } from 'web-client/src/helpers'
@@ -165,7 +164,6 @@ export default defineComponent({
     const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
 
     return {
-      ...useGraphClient(),
       space: inject<Resource>('space'),
       resource: inject<Resource>('resource'),
       incomingParentShare: inject<Resource>('incomingParentShare'),

@@ -149,7 +149,7 @@ import {
   useCapabilitySpacesEnabled,
   useStore,
   useUserContext,
-  useGraphClient
+  useClientService
 } from 'web-pkg/src/composables'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
@@ -202,6 +202,7 @@ export default defineComponent({
   setup(props) {
     const instance = getCurrentInstance().proxy as any
     const uppyService = useService<UppyService>('$uppyService')
+    const clientService = useClientService()
     const store = useStore()
     let filesSelectedSub
     let uploadCompletedSub
@@ -234,7 +235,7 @@ export default defineComponent({
         currentFolderId: computed(() => props.itemId)
       }),
       ...useRequest(),
-      ...useGraphClient(),
+      clientService,
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
       hasShareJail: useCapabilityShareJailEnabled(),
@@ -338,7 +339,7 @@ export default defineComponent({
     pasteFilesHere() {
       this.pasteSelectedFiles({
         targetSpace: this.space,
-        clientService: this.$clientService,
+        clientService: this.clientService,
         loadingService: this.$loadingService,
         createModal: this.createModal,
         hideModal: this.hideModal,
@@ -362,7 +363,8 @@ export default defineComponent({
         const { spaceId, currentFolder, currentFolderId } = file.meta
         if (!['public', 'share'].includes(file.meta.driveType)) {
           if (this.hasSpaces) {
-            const driveResponse = await this.graphClient.drives.getDrive(spaceId)
+            const client = this.clientService.graphAuthenticated
+            const driveResponse = await client.drives.getDrive(spaceId)
             this.UPDATE_SPACE_FIELD({
               id: driveResponse.data.id,
               field: 'spaceQuota',
