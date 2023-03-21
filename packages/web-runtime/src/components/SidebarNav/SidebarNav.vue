@@ -48,6 +48,7 @@
 
 <script lang="ts">
 import {
+  ComponentPublicInstance,
   defineComponent,
   nextTick,
   onBeforeUnmount,
@@ -73,8 +74,8 @@ export default defineComponent({
   },
   setup(props) {
     let resizeObserver
-    const navItemRefs = ref({})
-    const highlighterAttrs = ref({})
+    const navItemRefs = ref<Record<string, ComponentPublicInstance>>({})
+    const highlighterAttrs = ref<Record<string, any>>({})
 
     onMounted(() => {
       const navBar = document.getElementById('web-nav-sidebar')

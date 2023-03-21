@@ -42,10 +42,6 @@ export default defineComponent({
       return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
     })
 
-    if (useCapabilitySpacesEnabled() && !unref(personalSpace)) {
-      router.replace(createLocationSpaces('files-spaces-projects'))
-      return
-    }
     const itemPath = computed(() => {
       if (!props.appendHomeFolder) {
         return ''
@@ -59,21 +55,25 @@ export default defineComponent({
       return store.getters.homeFolder
     })
 
-    const { params, query } = createFileRouteOptions(unref(personalSpace), {
-      path: unref(itemPath)
-    })
-
-    router
-      .replace({
-        ...unref(route),
-        params: {
-          ...unref(route).params,
-          ...params
-        },
-        query
+    if (useCapabilitySpacesEnabled() && !unref(personalSpace)) {
+      router.replace(createLocationSpaces('files-spaces-projects'))
+    } else {
+      const { params, query } = createFileRouteOptions(unref(personalSpace), {
+        path: unref(itemPath)
       })
-      // avoid NavigationDuplicated error in console
-      .catch(() => {})
+
+      router
+        .replace({
+          ...unref(route),
+          params: {
+            ...unref(route).params,
+            ...params
+          },
+          query
+        })
+        // avoid NavigationDuplicated error in console
+        .catch(() => {})
+    }
   }
 })
 </script>

@@ -8,7 +8,7 @@ exports[`OcSidebarNav renders navItems into a list 1`] = `
   </button>
   <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs">
     <oc-list-stub>
-      <div class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter"></div>
+      <div class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter" style="transform: translateY(0px); transition-duration: 0.2s;"></div>
       <sidebar-nav-item-stub active="true" collapsed="false" filltype="fill" icon="folder" index="00000000000000000000000000000000" name="Personal" target="/files/list/all"></sidebar-nav-item-stub>
       <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="share-forward" index="00000000000000000000000000000000" name="Shares" target="/files/list/shared-with-me"></sidebar-nav-item-stub>
       <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="delete" index="00000000000000000000000000000000" name="Deleted files" target="/files/list/trash-bin"></sidebar-nav-item-stub>
@@ -26,7 +26,7 @@ exports[`OcSidebarNav toggles back into open state upon button click 1`] = `
   </button>
   <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs">
     <oc-list-stub>
-      <div class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter"></div>
+      <div class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter" style="transform: translateY(0px); transition-duration: 0.2s;"></div>
       <sidebar-nav-item-stub active="true" collapsed="false" filltype="fill" icon="folder" index="00000000000000000000000000000000" name="Personal" target="/files/list/all"></sidebar-nav-item-stub>
       <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="share-forward" index="00000000000000000000000000000000" name="Shares" target="/files/list/shared-with-me"></sidebar-nav-item-stub>
       <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="delete" index="00000000000000000000000000000000" name="Deleted files" target="/files/list/trash-bin"></sidebar-nav-item-stub>
@@ -44,7 +44,7 @@ exports[`OcSidebarNav toggles into closed state upon button click 1`] = `
   </button>
   <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs">
     <oc-list-stub>
-      <div class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter"></div>
+      <div class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter" style="transform: translateY(0px); transition-duration: 0.2s;"></div>
       <sidebar-nav-item-stub active="true" collapsed="true" filltype="fill" icon="folder" index="00000000000000000000000000000000" name="Personal" target="/files/list/all"></sidebar-nav-item-stub>
       <sidebar-nav-item-stub active="false" collapsed="true" filltype="fill" icon="share-forward" index="00000000000000000000000000000000" name="Shares" target="/files/list/shared-with-me"></sidebar-nav-item-stub>
       <sidebar-nav-item-stub active="false" collapsed="true" filltype="fill" icon="delete" index="00000000000000000000000000000000" name="Deleted files" target="/files/list/trash-bin"></sidebar-nav-item-stub>

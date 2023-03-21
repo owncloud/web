@@ -46,12 +46,11 @@ const navItems = (context) => {
         path: `/${appInfo.id}/spaces/personal`
       },
       enabled(capabilities) {
-        return (
-          !capabilities.spaces?.enabled ||
-          (capabilities.spaces?.enabled &&
-            context?.$store?.getters['runtime/spaces/spaces'].find((drive) =>
-              isPersonalSpaceResource(drive)
-            ))
+        if (!capabilities.spaces?.enabled) {
+          return true
+        }
+        return context?.$store?.getters['runtime/spaces/spaces'].find((drive) =>
+          isPersonalSpaceResource(drive)
         )
       }
     },
