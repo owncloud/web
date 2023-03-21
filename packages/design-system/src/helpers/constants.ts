@@ -5,6 +5,7 @@ export const EVENT_TROW_CONTEXTMENU = 'contextmenuClicked' as const
 export const EVENT_ITEM_DROPPED = 'itemDropped' as const
 export const EVENT_ITEM_DRAGGED = 'itemDragged' as const
 export const EVENT_FILE_DROPPED = 'fileDropped' as const
+export const EVENT_SORT = 'sort' as const
 
 export const AVAILABLE_SIZES = [
   'xsmall',
