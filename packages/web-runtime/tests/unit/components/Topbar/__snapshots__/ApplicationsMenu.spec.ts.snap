@@ -10,7 +10,7 @@ exports[`ApplicationsMenu component should render navigation with button and men
       <li>
         <oc-button-stub appearance="raw" class="" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" to="/files" type="router-link" variation="passive">
           <span class="icon-box">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="folder" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="folder" size="medium" type="span" variation="inherit"></oc-icon-stub>
           </span>
           <span>Files</span>
           <!--v-if-->
@@ -19,7 +19,7 @@ exports[`ApplicationsMenu component should render navigation with button and men
       <li>
         <oc-button-stub appearance="raw" class="" disabled="false" gapsize="medium" href="http://some.org" justifycontent="center" size="medium" submit="button" target="_blank" type="a" variation="passive">
           <span class="icon-box">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="some-icon" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="some-icon" size="medium" type="span" variation="inherit"></oc-icon-stub>
           </span>
           <span>External</span>
           <!--v-if-->

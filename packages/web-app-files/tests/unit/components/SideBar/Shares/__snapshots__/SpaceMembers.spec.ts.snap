@@ -46,7 +46,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
                 <span class="oc-m-rm info-title">Add members to this Space</span>
                 <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
                   <!-- @slot Content of the button -->
-                  <oc-icon-stub accessiblelabel="" color="" filltype="line" name="close" size="medium" type="span" variation="passive"></oc-icon-stub>
+                  <oc-icon-stub accessiblelabel="" color="" filltype="line" name="close" size="medium" type="span" variation="inherit"></oc-icon-stub>
                 </button>
               </div>
               <p class="info-text">Enter a name to add people or groups as members to this Space.</p>
@@ -57,9 +57,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
                 <dd>Members with the Manager role can edit all properties and content of a Space, such as adding or removing members, sharing subfolders with non-members, or creating links to share.</dd>
               </dl>
               <!--v-if-->
-              <a class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw info-more-link" data-current-language="en" data-msgid="<!-- @slot Content of the button --> Read more" href="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" target="_blank">
-                <!-- @slot Content of the button --> Read more
-              </a>
+              <a class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw info-more-link" href="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" target="_blank">Read more</a>
             </div>
           </div>
         </div>

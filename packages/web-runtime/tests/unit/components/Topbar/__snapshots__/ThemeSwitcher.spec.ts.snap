@@ -4,7 +4,7 @@ exports[`ThemeSwitcher component restores dark theme if dark theme is saved in l
 <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
-  <oc-icon-stub fill-type="line" name="moon-clear"></oc-icon-stub>
+  <oc-icon-stub fill-type="line" name="moon-clear" variation="inherit"></oc-icon-stub>
 </button>
 `;
 
@@ -12,7 +12,7 @@ exports[`ThemeSwitcher component restores light theme if light theme is saved in
 <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
-  <oc-icon-stub fill-type="line" name="sun"></oc-icon-stub>
+  <oc-icon-stub fill-type="line" name="sun" variation="inherit"></oc-icon-stub>
 </button>
 `;
 
@@ -20,7 +20,7 @@ exports[`ThemeSwitcher component visually renders a button, initially in dark mo
 <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
-  <oc-icon-stub fill-type="line" name="moon-clear"></oc-icon-stub>
+  <oc-icon-stub fill-type="line" name="moon-clear" variation="inherit"></oc-icon-stub>
 </button>
 `;
 
@@ -28,7 +28,7 @@ exports[`ThemeSwitcher component visually renders a button, initially in light m
 <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
-  <oc-icon-stub fill-type="line" name="sun"></oc-icon-stub>
+  <oc-icon-stub fill-type="line" name="sun" variation="inherit"></oc-icon-stub>
 </button>
 `;
 
@@ -36,7 +36,7 @@ exports[`ThemeSwitcher component visually toggles between themes upon click 1`] 
 <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
-  <oc-icon-stub fill-type="line" name="moon-clear"></oc-icon-stub>
+  <oc-icon-stub fill-type="line" name="moon-clear" variation="inherit"></oc-icon-stub>
 </button>
 `;
 
@@ -44,6 +44,6 @@ exports[`ThemeSwitcher component visually toggles between themes upon click 2`] 
 <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
   <!-- @slot Content of the button -->
   <span aria-label="Currently used theme" class="oc-visible@s"></span>
-  <oc-icon-stub fill-type="line" name="sun"></oc-icon-stub>
+  <oc-icon-stub fill-type="line" name="sun" variation="inherit"></oc-icon-stub>
 </button>
 `;
