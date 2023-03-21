@@ -29,8 +29,7 @@ describe('disable', () => {
       }
       const { wrapper } = getWrapper({
         setup: ({ actions }) => {
-          // FIXME
-          // expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
+          expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
         }
       })
     })
@@ -129,9 +128,10 @@ function getWrapper({
   ) => void
 }) {
   const storeOptions = {
-    ...defaultStoreMockOptions,
-    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
+    ...defaultStoreMockOptions
   }
+  storeOptions.getters.user.mockReturnValue({ id: 'alice', uuid: 1 })
+
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })

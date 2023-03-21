@@ -4,6 +4,7 @@ import { computed, ref, Ref } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from 'web-client/src'
+import { User } from 'web-client/src/generated'
 import { useAbility } from '../../ability'
 import { useClientService, useRoute } from 'web-pkg/src/composables'
 
@@ -42,7 +43,12 @@ export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {})
         if (!resources || !resources.length) {
           return false
         }
-        if (!resources.some((resource) => 'spaceQuota' in resource)) {
+        // TODO: create separate useUserActionsEditQuota
+        if (
+          !resources.some(
+            (resource) => 'spaceQuota' in resource || (resource as unknown as User).drive?.quota
+          )
+        ) {
           return false
         }
         if (resources.some((r) => r.spaceQuota === false)) {

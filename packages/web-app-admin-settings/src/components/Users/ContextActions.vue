@@ -84,7 +84,7 @@ export default defineComponent({
     )
     const menuItemsSecondaryActions = computed(() =>
       [...unref(editQuotaActions)].filter((item) =>
-        // Why does this work at all? Edit Quota is a space action and props.items is of type User[]
+        // TODO: create separate useUserActionsEditQuota
         item.isEnabled(unref(filterParams) as SpaceActionOptions)
       )
     )
