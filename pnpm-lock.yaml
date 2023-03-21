@@ -422,6 +422,7 @@ importers:
       uuid: ^9.0.0
       vue-concurrency: 4.0.1
       vuex: 4.1.0
+      web-app-admin-settings: workspace:*
       web-client: workspace:@ownclouders/web-client@*
       web-pkg: workspace:@ownclouders/web-pkg@*
     dependencies:
@@ -434,6 +435,7 @@ importers:
       uuid: 9.0.0
       vue-concurrency: 4.0.1_vue@3.2.47
       vuex: 4.1.0_vue@3.2.47
+      web-app-admin-settings: 'link:'
       web-client: link:../web-client
       web-pkg: link:../web-pkg
 

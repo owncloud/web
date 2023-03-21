@@ -1,5 +1,5 @@
 {
-  "name": "admin-settings",
+  "name": "web-app-admin-settings",
   "version": "0.0.0",
   "private": true,
   "description": "ownCloud admin settings",
@@ -16,6 +16,7 @@
     "uuid": "^9.0.0",
     "vue-concurrency": "4.0.1",
     "vuex": "4.1.0",
+    "web-app-admin-settings": "workspace:*",
     "web-client": "workspace:@ownclouders/web-client@*",
     "web-pkg": "workspace:@ownclouders/web-pkg@*"
   }

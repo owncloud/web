@@ -75,24 +75,16 @@ import GroupsList from '../components/Groups/GroupsList.vue'
 import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import ContextActions from '../components/Groups/ContextActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import {
-  computed,
-  defineComponent,
-  ref,
-  getCurrentInstance,
-  unref,
-  onBeforeUnmount,
-  onMounted
-} from 'vue'
+import { computed, defineComponent, ref, unref, onBeforeUnmount, onMounted } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions } from 'vuex'
 import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
-import { useGraphClient } from 'web-pkg/src/composables'
+import { useGraphClient, useStore } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
-import Delete from '../mixins/groups/delete'
+import { useGroupActionsDelete } from '../composables/actions/groups'
 
 export default defineComponent({
   components: {
@@ -102,9 +94,8 @@ export default defineComponent({
     CreateGroupModal,
     ContextActions
   },
-  mixins: [Delete],
   setup() {
-    const instance = getCurrentInstance().proxy as any
+    const store = useStore()
     const groups = ref([])
     let loadResourcesEventToken
     const template = ref()
@@ -125,8 +116,9 @@ export default defineComponent({
       listHeaderPosition.value = unref(template)?.$refs?.appBar?.getBoundingClientRect()?.height
     }
 
+    const { actions: deleteActions } = useGroupActionsDelete({ store })
     const batchActions = computed(() => {
-      return [...instance.$_delete_items].filter((item) =>
+      return [...unref(deleteActions)].filter((item) =>
         item.isEnabled({ resources: unref(selectedGroups) })
       )
     })

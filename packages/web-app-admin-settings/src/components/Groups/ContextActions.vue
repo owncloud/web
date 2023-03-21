@@ -6,15 +6,15 @@
 
 <script lang="ts">
 import { useActionsShowDetails } from '../../../../web-pkg/src/composables/actions'
-import Delete from '../../mixins/groups/delete'
-import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import { GroupActionOptions } from 'web-pkg/src/composables/actions'
+import { useGroupActionsDelete } from '../../composables/actions/groups/useGroupActionsDelete'
+import { useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'ContextActions',
   components: { ContextActionMenu },
-  mixins: [Delete],
   props: {
     actionOptions: {
       type: Object as PropType<GroupActionOptions>,
@@ -22,12 +22,12 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const instance = getCurrentInstance().proxy as any
-
+    const store = useStore()
     const { actions: showDetailsActions } = useActionsShowDetails()
+    const { actions: deleteActions } = useGroupActionsDelete({ store })
 
     const menuItemsPrimaryActions = computed(() =>
-      [...instance.$_delete_items].filter((item) => item.isEnabled(props.actionOptions))
+      [...unref(deleteActions)].filter((item) => item.isEnabled(props.actionOptions))
     )
 
     const menuItemsSidebar = computed(() =>
