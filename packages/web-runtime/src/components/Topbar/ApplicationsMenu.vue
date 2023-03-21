@@ -96,6 +96,19 @@ export default defineComponent({
     justify-content: flex-start;
     width: 100%;
 
+    &.oc-button-primary-raw-inverse {
+      &:focus,
+      &:hover {
+        color: var(--oc-color-swatch-primary-contrast) !important;
+      }
+    }
+    &.oc-button-passive-raw {
+      &:focus,
+      &:hover {
+        color: var(--oc-color-swatch-passive-default) !important;
+      }
+    }
+
     &:focus,
     &:hover {
       background-color: var(--oc-color-background-hover);
