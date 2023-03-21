@@ -36,6 +36,11 @@ const spaceMocks = [
 ]
 
 describe('TrashOverview', () => {
+  it('should render no content message if no spaces exist', async () => {
+    const { wrapper } = getWrapper({ spaces: [] })
+    await wrapper.vm.loadResourcesTask.last
+    expect(wrapper.find('no-content-message-stub').exists()).toBeTruthy()
+  })
   it('should navigate to single space trash if only one space exists', () => {
     const { mocks } = getWrapper({ spaces: [spaceMocks[0]] })
     expect(mocks.$router.push).toHaveBeenCalledWith({
@@ -113,7 +118,7 @@ function getWrapper({ spaces = spaceMocks } = {}) {
     mocks,
     wrapper: mount(TrashOverview, {
       global: {
-        stubs: { ...defaultStubs },
+        stubs: { ...defaultStubs, NoContentMessage: true },
         mocks,
         plugins: [...defaultPlugins(), store]
       }
