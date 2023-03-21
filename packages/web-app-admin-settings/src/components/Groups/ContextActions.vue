@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import ShowDetails from '../../mixins/showDetails'
+import { useActionsShowDetails } from '../../../../web-pkg/src/composables/actions'
 import Delete from '../../mixins/groups/delete'
 import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
@@ -14,7 +14,7 @@ import { GroupActionOptions } from 'web-pkg/src/composables/actions'
 export default defineComponent({
   name: 'ContextActions',
   components: { ContextActionMenu },
-  mixins: [Delete, ShowDetails],
+  mixins: [Delete],
   props: {
     actionOptions: {
       type: Object as PropType<GroupActionOptions>,
@@ -24,12 +24,14 @@ export default defineComponent({
   setup(props) {
     const instance = getCurrentInstance().proxy as any
 
+    const { actions: showDetailsActions } = useActionsShowDetails()
+
     const menuItemsPrimaryActions = computed(() =>
       [...instance.$_delete_items].filter((item) => item.isEnabled(props.actionOptions))
     )
 
     const menuItemsSidebar = computed(() =>
-      [...instance.$_showDetails_items].filter((item) => item.isEnabled(props.actionOptions))
+      [...unref(showDetailsActions)].filter((item) => item.isEnabled(props.actionOptions))
     )
 
     const menuSections = computed(() => {

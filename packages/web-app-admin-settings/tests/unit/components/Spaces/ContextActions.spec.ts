@@ -4,27 +4,37 @@ import {
   defaultPlugins,
   defaultStoreMockOptions,
   defaultStubs,
-  getActionMixinMocks,
   mount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client/src/helpers'
 import ContextActions from '../../../../src/components/Spaces/ContextActions.vue'
+import {
+  Action,
+  useSpaceActionsDisable,
+  useSpaceActionsEditDescription,
+  useSpaceActionsEditQuota,
+  useSpaceActionsRename
+} from 'web-pkg/src/composables/actions'
+import { computed } from 'vue'
+import { ref } from 'vue'
 
-const mixins = [
-  '$_rename_items',
-  '$_editDescription_items',
-  '$_editQuota_items',
-  '$_disable_items',
-  '$_restore_items',
-  '$_delete_items',
-  '$_showDetails_items'
-]
-
-const Component = {
-  ...ContextActions,
-  mixins
+function createMockActionComposables(module) {
+  const mockModule: Record<string, any> = {}
+  for (const m of Object.keys(module)) {
+    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
+  }
+  return mockModule
 }
+
+jest.mock('web-pkg/src/composables/actions/spaces', () =>
+  createMockActionComposables(jest.requireActual('web-pkg/src/composables/actions/spaces'))
+)
+jest.mock('web-pkg/src/composables/actions/useActionsShowDetails', () =>
+  createMockActionComposables(
+    jest.requireActual('web-pkg/src/composables/actions/useActionsShowDetails')
+  )
+)
 
 describe('ContextActions', () => {
   describe('menu sections', () => {
@@ -34,29 +44,43 @@ describe('ContextActions', () => {
     })
 
     it('render enabled actions', () => {
-      const enabledActions = [
-        '$_rename_items',
-        '$_editDescription_items',
-        '$_editQuota_items',
-        '$_disable_items'
+      const enabledComposables = [
+        useSpaceActionsRename,
+        useSpaceActionsEditDescription,
+        useSpaceActionsEditQuota,
+        useSpaceActionsDisable
       ]
-      const { wrapper } = getWrapper({ enabledActions })
-      expect(wrapper.findAll('action-menu-item-stub').length).toBe(enabledActions.length)
+
+      for (const composable of enabledComposables) {
+        jest.mocked(composable).mockImplementation(() => ({
+          actions: computed(() => [mock<Action>({ isEnabled: () => true })]),
+          checkName: null,
+          renameSpace: null,
+          editDescriptionSpace: null,
+          selectedSpace: null,
+          modalOpen: null,
+          closeModal: null,
+          spaceQuotaUpdated: null,
+          disableSpaces: null
+        }))
+      }
+
+      const { wrapper } = getWrapper()
+      expect(wrapper.findAll('action-menu-item-stub').length).toBe(enabledComposables.length)
     })
   })
 })
 
-function getWrapper({ enabledActions = [] } = {}) {
+function getWrapper() {
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
   const mocks = {
-    ...defaultComponentMocks(),
-    ...getActionMixinMocks({ actions: mixins, enabledActions })
+    ...defaultComponentMocks()
   }
   return {
     storeOptions,
     mocks,
-    wrapper: mount(Component, {
+    wrapper: mount(ContextActions, {
       props: {
         items: [mock<Resource>()]
       },

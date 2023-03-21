@@ -7,11 +7,6 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
-import { useAbility } from 'web-pkg/src/composables/ability/useAbility'
-import { Ability } from 'web-pkg/src'
-import { mock } from 'jest-mock-extended'
-
-jest.mock('web-pkg/src/composables/ability/useAbility')
 
 describe('editQuota', () => {
   describe('isEnabled property', () => {
@@ -71,12 +66,6 @@ function getWrapper({
     }
   ) => void
 }) {
-  jest.mocked(useAbility).mockImplementation(() =>
-    mock<Ability>({
-      can: () => canEditSpaceQuota
-    })
-  )
-
   const mocks = defaultComponentMocks()
 
   const storeOptions = {
@@ -93,7 +82,10 @@ function getWrapper({
       },
       {
         store,
-        mocks
+        mocks,
+        pluginOptions: {
+          abilities: canEditSpaceQuota ? [{ action: 'set-quota-all', subject: 'Space' }] : []
+        }
       }
     )
   }
