@@ -4,6 +4,7 @@ import { config } from '../../config'
 import { api } from '../../support'
 import fs from 'fs'
 
+
 Given(
   '{string} creates following user(s) using API',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
@@ -217,4 +218,19 @@ Given(
       })
     }
   }
+)
+
+Given(
+    '{string} adds following member(s) to the space {string} using API',
+    async function (
+        this: World,
+        stepUser: string,
+        space: string,
+        stepTable: DataTable
+    ): Promise<void> {
+        const user = this.usersEnvironment.getUser({ key: stepUser })
+        for (const info of stepTable.hashes()) {
+            await api.dav.addMembersToTheProjectSpace({user,spaceName:space,shareWith:info.user,shareType:info.shareType,role:info.role})
+        }
+    }
 )

@@ -9,11 +9,13 @@ export const shareTypes: Readonly<{
   group: string
   public: string
   federated: string
+  space: string
 }> = {
   user: '0',
   group: '1',
   public: '3',
-  federated: '6'
+  federated: '6',
+  space: '7'
 }
 
 export const createShare = async ({
@@ -22,7 +24,8 @@ export const createShare = async ({
   shareWith,
   shareType,
   role,
-  name
+  name,
+                                    space_ref,
 }: {
   user: User
   path: string
@@ -30,6 +33,7 @@ export const createShare = async ({
   shareWith?: string
   role?: string
   name?: string
+  space_ref?: string
 }): Promise<void> => {
   const body = new URLSearchParams()
   body.append('path', path)
@@ -37,7 +41,9 @@ export const createShare = async ({
   body.append('shareType', shareTypes[shareType])
   body.append('role', role)
   body.append('name', name)
-
+  if(space_ref){
+    body.append('space_ref', space_ref)
+  }
   const response = await request({
     method: 'POST',
     path: join('ocs', 'v2.php', 'apps', 'files_sharing', 'api', 'v1', 'shares'),

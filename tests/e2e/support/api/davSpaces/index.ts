@@ -3,5 +3,6 @@ export {
   createFolderInsideSpaceBySpaceName,
   createFolderInsidePersonalSpace,
   getIdOfFileInsideSpace,
-  uploadFileInsideSpaceBySpaceName
+  uploadFileInsideSpaceBySpaceName,
+  addMembersToTheProjectSpace
 } from './spaces'

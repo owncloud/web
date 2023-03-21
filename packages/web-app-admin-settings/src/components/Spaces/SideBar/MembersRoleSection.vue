@@ -1,6 +1,6 @@
 <template>
   <ul class="oc-list">
-    <li v-for="(member, index) in members" :key="index" class="oc-flex oc-flex-middle oc-mb-s">
+    <li v-for="(member, index) in members" :key="index" class="oc-flex oc-flex-middle oc-mb-s" data-testid="space-members-list">
       <oc-avatar
         v-if="member.kind === 'user'"
         :user-name="member.displayName"

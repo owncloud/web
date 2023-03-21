@@ -1,2 +1,1 @@
-export { createShare } from './share'
-export { acceptShare } from './share'
+export { createShare, acceptShare } from './share'

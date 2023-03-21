@@ -6,6 +6,7 @@ import { config } from '../../../config'
 import { Response } from 'node-fetch'
 import convert from 'xml-js'
 import _ from 'lodash/object'
+import {createShare} from "../share";
 
 export const folderExists = async ({
   user,
@@ -201,3 +202,25 @@ export const getIdOfFileInsideSpace = async ({
   // extract file id form the response
   return _.get(fileDataResponse, '[0][d:prop][oc:fileid]')._text
 }
+
+export const addMembersToTheProjectSpace = async ({
+user,
+ spaceName,
+ shareWith,
+ shareType,
+    role
+
+}:{
+  user: User
+  spaceName: string
+  shareWith: string
+  shareType: string
+  role: string
+
+}):Promise<void> => {
+  const space_ref = await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName })
+  const path = '/' + spaceName
+  await createShare({user,path,shareWith,shareType,role,name:null,space_ref})
+}
+
+
