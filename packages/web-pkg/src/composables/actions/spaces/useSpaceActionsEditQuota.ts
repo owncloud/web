@@ -6,14 +6,11 @@ import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from 'web-client/src'
 import { User } from 'web-client/src/generated'
 import { useAbility } from '../../ability'
-import { useClientService, useRoute } from 'web-pkg/src/composables'
 
 export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const { $gettext } = useGettext()
   const ability = useAbility()
-  const clientService = useClientService()
-  const route = useRoute()
 
   const modalOpen = ref(false)
   const selectedSpace = ref(null) as Ref<SpaceResource>
