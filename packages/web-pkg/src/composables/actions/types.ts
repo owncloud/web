@@ -2,7 +2,7 @@ import { Resource, SpaceResource } from 'web-client/src'
 import { Group, User } from 'web-client/src/generated'
 import { RouteLocationRaw } from 'vue-router'
 
-export type ActionOptions = Record<string, unknown>
+export type ActionOptions = Record<string, unknown | unknown[]>
 export interface Action<T = ActionOptions> {
   name: string
   icon: string

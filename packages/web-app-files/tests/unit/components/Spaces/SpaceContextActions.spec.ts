@@ -17,7 +17,7 @@ const spaceMock = {
 
 describe('SpaceContextActions', () => {
   describe('action handlers', () => {
-    it('renders actions that are always available: "Members", "Deleted files", "Details"', () => {
+    it('renders actions that are always available: "Members", "Edit Quota", "Details"', () => {
       const { wrapper } = getWrapper(buildSpace(spaceMock))
       expect(wrapper.html()).toMatchSnapshot()
     })
@@ -35,10 +35,14 @@ function getWrapper(space) {
       },
       global: {
         mocks: {
-          ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) }),
-          $can: () => true
+          ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) })
         },
-        plugins: [...defaultPlugins(), store]
+        plugins: [
+          ...defaultPlugins({
+            abilities: [{ action: 'set-quota-all', subject: 'Space' }]
+          }),
+          store
+        ]
       }
     })
   }

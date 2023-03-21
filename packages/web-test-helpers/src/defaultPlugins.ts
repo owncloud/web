@@ -2,12 +2,13 @@ import DesignSystem from '@ownclouders/design-system'
 import { createGettext } from 'vue3-gettext'
 import { h } from 'vue'
 import { abilitiesPlugin } from '@casl/vue'
-import { createMongoAbility } from '@casl/ability'
+import { SubjectRawRule, createMongoAbility } from '@casl/ability'
+import { AbilityActions, AbilitySubjects } from 'web-pkg/src'
 
 export interface DefaultPluginsOptions {
   designSystem?: boolean
   gettext?: boolean
-  abilities?: any
+  abilities?: SubjectRawRule<AbilityActions, AbilitySubjects, any>[]
 }
 
 export const defaultPlugins = ({

@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import ShowDetails from '../../mixins/showDetails'
+import { useActionsShowDetails } from '../../../../web-pkg/src/composables/actions'
 import Delete from '../../mixins/users/delete'
 import Edit from '../../mixins/users/edit'
 import {
@@ -37,7 +37,7 @@ import { SpaceActionOptions } from 'web-pkg/src/composables/actions'
 export default defineComponent({
   name: 'ContextActions',
   components: { ContextActionMenu, QuotaModal },
-  mixins: [Delete, Edit, ShowDetails],
+  mixins: [Delete, Edit],
   props: {
     items: {
       type: Array as PropType<User[]>,
@@ -69,6 +69,7 @@ export default defineComponent({
       { deep: true, immediate: true }
     )
 
+    const { actions: showDetailsActions } = useActionsShowDetails()
     const {
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
@@ -89,7 +90,7 @@ export default defineComponent({
     )
 
     const menuItemsSidebar = computed(() =>
-      [...instance.$_showDetails_items].filter((item) => item.isEnabled(unref(filterParams)))
+      [...unref(showDetailsActions)].filter((item) => item.isEnabled(unref(filterParams)))
     )
 
     const menuSections = computed(() => {

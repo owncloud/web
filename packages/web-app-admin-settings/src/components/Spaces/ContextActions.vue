@@ -12,8 +12,7 @@
 </template>
 
 <script lang="ts">
-import ShowDetails from '../../mixins/showDetails'
-import { computed, defineComponent, getCurrentInstance, PropType, unref } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { SpaceResource } from 'web-client'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
@@ -25,13 +24,13 @@ import {
   useSpaceActionsEditDescription,
   useSpaceActionsEditQuota,
   useSpaceActionsRename,
-  useSpaceActionsRestore
+  useSpaceActionsRestore,
+  useActionsShowDetails
 } from 'web-pkg/src/composables/actions'
 
 export default defineComponent({
   name: 'ContextActions',
   components: { ContextActionMenu, QuotaModal },
-  mixins: [ShowDetails],
   props: {
     items: {
       type: Array as PropType<SpaceResource[]>,
@@ -39,7 +38,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const instance = getCurrentInstance().proxy as any
     const store = useStore()
     const filterParams = computed(() => ({ resources: props.items }))
 
@@ -54,6 +52,7 @@ export default defineComponent({
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
     const { actions: renameActions } = useSpaceActionsRename({ store })
     const { actions: restoreActions } = useSpaceActionsRestore({ store })
+    const { actions: showDetailsActions } = useActionsShowDetails()
 
     const menuItemsPrimaryActions = computed(() =>
       [...unref(renameActions), ...unref(editDescriptionActions)].filter((item) =>
@@ -69,7 +68,7 @@ export default defineComponent({
       ].filter((item) => item.isEnabled(unref(filterParams)))
     )
     const menuItemsSidebar = computed(() =>
-      [...instance.$_showDetails_items].filter((item) => item.isEnabled(unref(filterParams)))
+      [...unref(showDetailsActions)].filter((item) => item.isEnabled(unref(filterParams)))
     )
 
     const menuSections = computed(() => {
