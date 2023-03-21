@@ -1,0 +1,7 @@
+Change: theme colors
+
+We've introduced `contrast` color variables for all the color swatches in the design system. As a result the `contrast` color variable needs to be added to all existing web themes.
+
+BREAKING CHANGE for non-default themes in existing deployments: You need to add the `contrast` color variable to all swatches in your theme. A good default is the `color-text-inverse` value. You can find an example here: https://owncloud.dev/clients/web/theming/#example-theme
+
+https://github.com/owncloud/web/pull/8563
