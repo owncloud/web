@@ -42,7 +42,7 @@ describe('Cache', () => {
   })
 
   it('can handle ttl', () => {
-    jest.useFakeTimers('modern')
+    jest.useFakeTimers()
     const cacheValues: number[] = []
     const cache = newCache(cacheValues, 50)
 

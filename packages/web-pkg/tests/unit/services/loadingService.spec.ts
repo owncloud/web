@@ -2,7 +2,7 @@ import { LoadingService } from '../../../src/services/loadingService'
 
 describe('LoadingService', () => {
   beforeEach(() => {
-    jest.useFakeTimers('modern')
+    jest.useFakeTimers()
   })
   it('adds a task and sets it inactive initially', () => {
     const service = new LoadingService()
