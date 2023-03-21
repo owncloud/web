@@ -28,7 +28,7 @@
         />
         <sidebar-nav-item
           v-for="link in navItems"
-          :ref="(el) => (navItemRefs[link.route.path] = el)"
+          :ref="(el: ComponentPublicInstance) => (navItemRefs[link.route.path] = el)"
           :key="link.route.path"
           :index="getUuid()"
           :target="link.route.path"
@@ -48,6 +48,7 @@
 
 <script lang="ts">
 import {
+  ComponentPublicInstance,
   defineComponent,
   nextTick,
   onBeforeUnmount,
@@ -55,7 +56,6 @@ import {
   PropType,
   ref,
   unref,
-  VNodeRef,
   watch
 } from 'vue'
 import { mapState, mapActions } from 'vuex'
@@ -74,7 +74,7 @@ export default defineComponent({
   },
   setup(props) {
     let resizeObserver
-    const navItemRefs = ref<Record<string, VNodeRef>>({})
+    const navItemRefs = ref<Record<string, ComponentPublicInstance>>({})
     const highlighterAttrs = ref<Record<string, any>>({})
 
     onMounted(() => {
