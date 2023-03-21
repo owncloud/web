@@ -161,6 +161,7 @@ Feature: users management
     And "Admin" creates the following user
       | name | displayname | email                   | password |
       | max  | Max Testing | maxtesting@owncloud.com | 12345678 |
+    And "Admin" logs out
     When "Max" logs in
     Then "Max" should have self info:
       | key         | value                   |
