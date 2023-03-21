@@ -49,7 +49,7 @@ const navItems = (context) => {
         if (!capabilities.spaces?.enabled) {
           return true
         }
-        return context?.$store?.getters['runtime/spaces/spaces'].find((drive) =>
+        return !!context?.$store?.getters['runtime/spaces/spaces'].find((drive) =>
           isPersonalSpaceResource(drive)
         )
       }
