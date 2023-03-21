@@ -80,6 +80,9 @@ export const createGroup = async ({
   })
 
   checkResponseStatus(response, 'Failed while creating group')
+
+  const responseData = await response.json()
+  group.uuid = responseData.id
   return group
 }
 
