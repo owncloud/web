@@ -4,3 +4,4 @@ All outgoing requests now have the `Accept-Language` header which includes the c
 
 https://github.com/owncloud/web/issues/8612
 https://github.com/owncloud/web/pull/8621
+https://github.com/owncloud/web/pull/8660
