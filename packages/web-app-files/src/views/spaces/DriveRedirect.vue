@@ -55,7 +55,7 @@ export default defineComponent({
       return store.getters.homeFolder
     })
 
-    if (useCapabilitySpacesEnabled() && !unref(personalSpace)) {
+    if (unref(useCapabilitySpacesEnabled()) && !unref(personalSpace)) {
       router.replace(createLocationSpaces('files-spaces-projects'))
     } else {
       const { params, query } = createFileRouteOptions(unref(personalSpace), {
