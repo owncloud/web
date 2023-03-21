@@ -48,7 +48,6 @@
 
 <script lang="ts">
 import {
-  ComponentPublicInstance,
   defineComponent,
   nextTick,
   onBeforeUnmount,
@@ -56,6 +55,7 @@ import {
   PropType,
   ref,
   unref,
+  VNodeRef,
   watch
 } from 'vue'
 import { mapState, mapActions } from 'vuex'
@@ -74,7 +74,7 @@ export default defineComponent({
   },
   setup(props) {
     let resizeObserver
-    const navItemRefs = ref<Record<string, ComponentPublicInstance>>({})
+    const navItemRefs = ref<Record<string, VNodeRef>>({})
     const highlighterAttrs = ref<Record<string, any>>({})
 
     onMounted(() => {
@@ -107,7 +107,7 @@ export default defineComponent({
       if (activeEl) {
         highlighterAttrs.value = {
           style: {
-            transform: `translateY(${activeEl.$el.offsetTop}px)`,
+            transform: `translateY(${(activeEl as any).$el.offsetTop}px)`,
             'transition-duration': '0.2s'
           }
         }

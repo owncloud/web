@@ -4,51 +4,17 @@ exports[`OcSidebarNav renders navItems into a list 1`] = `
 <div class="oc-app-navigation-expanded" id="web-nav-sidebar">
   <button aria-label="Toggle sidebar" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-expanded oc-pr-s toggle-sidebar-button oc-pb-s oc-pt-m" type="button">
     <!-- @slot Content of the button -->
-    <oc-icon-stub fill-type="line" name="arrow-drop-left" size="large"></oc-icon-stub>
+    <span class="oc-icon oc-icon-l oc-icon-passive">
+      <!---->
+    </span>
   </button>
   <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs">
-    <oc-list-stub>
-      <div class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter" style="transform: translateY(0px); transition-duration: 0.2s;"></div>
+    <ul class="oc-list oc-my-rm oc-mx-rm">
+      <div class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter"></div>
       <sidebar-nav-item-stub active="true" collapsed="false" filltype="fill" icon="folder" index="00000000000000000000000000000000" name="Personal" target="/files/list/all"></sidebar-nav-item-stub>
       <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="share-forward" index="00000000000000000000000000000000" name="Shares" target="/files/list/shared-with-me"></sidebar-nav-item-stub>
       <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="delete" index="00000000000000000000000000000000" name="Deleted files" target="/files/list/trash-bin"></sidebar-nav-item-stub>
-    </oc-list-stub>
-  </nav> <!-- @slot bottom content of the sidebar -->
-  <span class="footer">Footer</span>
-</div>
-`;
-
-exports[`OcSidebarNav toggles back into open state upon button click 1`] = `
-<div class="oc-app-navigation-expanded" id="web-nav-sidebar">
-  <button aria-label="Toggle sidebar" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-expanded oc-pr-s toggle-sidebar-button oc-pb-s oc-pt-m" type="button">
-    <!-- @slot Content of the button -->
-    <oc-icon-stub fill-type="line" name="arrow-drop-left" size="large"></oc-icon-stub>
-  </button>
-  <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs">
-    <oc-list-stub>
-      <div class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter" style="transform: translateY(0px); transition-duration: 0.2s;"></div>
-      <sidebar-nav-item-stub active="true" collapsed="false" filltype="fill" icon="folder" index="00000000000000000000000000000000" name="Personal" target="/files/list/all"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="share-forward" index="00000000000000000000000000000000" name="Shares" target="/files/list/shared-with-me"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="delete" index="00000000000000000000000000000000" name="Deleted files" target="/files/list/trash-bin"></sidebar-nav-item-stub>
-    </oc-list-stub>
-  </nav> <!-- @slot bottom content of the sidebar -->
-  <span class="footer">Footer</span>
-</div>
-`;
-
-exports[`OcSidebarNav toggles into closed state upon button click 1`] = `
-<div class="oc-app-navigation-collapsed" id="web-nav-sidebar">
-  <button aria-label="Toggle sidebar" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-collapsed toggle-sidebar-button oc-pb-s oc-pt-m" type="button">
-    <!-- @slot Content of the button -->
-    <oc-icon-stub fill-type="line" name="arrow-drop-right" size="large"></oc-icon-stub>
-  </button>
-  <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs">
-    <oc-list-stub>
-      <div class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter" style="transform: translateY(0px); transition-duration: 0.2s;"></div>
-      <sidebar-nav-item-stub active="true" collapsed="true" filltype="fill" icon="folder" index="00000000000000000000000000000000" name="Personal" target="/files/list/all"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub active="false" collapsed="true" filltype="fill" icon="share-forward" index="00000000000000000000000000000000" name="Shares" target="/files/list/shared-with-me"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub active="false" collapsed="true" filltype="fill" icon="delete" index="00000000000000000000000000000000" name="Deleted files" target="/files/list/trash-bin"></sidebar-nav-item-stub>
-    </oc-list-stub>
+    </ul>
   </nav> <!-- @slot bottom content of the sidebar -->
   <span class="footer">Footer</span>
 </div>
