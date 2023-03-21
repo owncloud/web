@@ -1,4 +1,5 @@
 import {
+  createMockActionComposables,
   defaultPlugins,
   defaultStoreMockOptions,
   getActionMixinMocks,
@@ -7,15 +8,6 @@ import {
 import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client/src/helpers'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
-import { ref } from 'vue'
-
-function createMockActionComposables(module) {
-  const mockModule: Record<string, any> = {}
-  for (const m of Object.keys(module)) {
-    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
-  }
-  return mockModule
-}
 
 jest.mock('web-pkg/src/composables/actions/useActionsShowDetails', () =>
   createMockActionComposables(

@@ -1,4 +1,5 @@
 import {
+  createMockActionComposables,
   createStore,
   defaultComponentMocks,
   defaultPlugins,
@@ -16,16 +17,8 @@ import {
   useFileActionsRename,
   useFileActionsCopy
 } from 'web-app-files/src/composables/actions/files'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { Action } from 'web-pkg/src/composables/actions'
-
-function createMockActionComposables(module) {
-  const mockModule: Record<string, any> = {}
-  for (const m of Object.keys(module)) {
-    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
-  }
-  return mockModule
-}
 
 jest.mock('web-app-files/src/composables/actions/files', () =>
   createMockActionComposables(jest.requireActual('web-app-files/src/composables/actions/files'))

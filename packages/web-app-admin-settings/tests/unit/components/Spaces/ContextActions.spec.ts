@@ -1,4 +1,5 @@
 import {
+  createMockActionComposables,
   createStore,
   defaultComponentMocks,
   defaultPlugins,
@@ -17,15 +18,6 @@ import {
   useSpaceActionsRename
 } from 'web-pkg/src/composables/actions'
 import { computed } from 'vue'
-import { ref } from 'vue'
-
-function createMockActionComposables(module) {
-  const mockModule: Record<string, any> = {}
-  for (const m of Object.keys(module)) {
-    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
-  }
-  return mockModule
-}
 
 jest.mock('web-pkg/src/composables/actions/spaces', () =>
   createMockActionComposables(jest.requireActual('web-pkg/src/composables/actions/spaces'))
