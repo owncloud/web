@@ -94,7 +94,6 @@ import OcTh from '../_OcTableCellHead/_OcTableCellHead.vue'
 import OcTd from '../_OcTableCellData/_OcTableCellData.vue'
 import OcGhostElement from '../_OcGhostElement/_OcGhostElement.vue'
 import OcButton from '../OcButton/OcButton.vue'
-import SortMixin from '../../mixins/sort'
 import { getSizeClass } from '../../utils/sizeClasses'
 import { defineComponent, PropType, ref } from 'vue'
 
@@ -104,8 +103,12 @@ import {
   EVENT_TROW_MOUNTED,
   EVENT_TROW_CONTEXTMENU,
   EVENT_ITEM_DROPPED,
-  EVENT_ITEM_DRAGGED
+  EVENT_ITEM_DRAGGED,
+  EVENT_SORT
 } from '../../helpers/constants'
+
+const SORT_DIRECTION_ASC = 'asc' as const
+const SORT_DIRECTION_DESC = 'desc' as const
 
 export type FieldType = {
   name: string
@@ -138,7 +141,6 @@ export default defineComponent({
     OcButton,
     OcGhostElement
   },
-  mixins: [SortMixin],
   props: {
     /**
      * The data for the table. Each array item will be rendered as one table row. Each array item needs to have a
@@ -291,7 +293,8 @@ export default defineComponent({
     EVENT_THEAD_CLICKED,
     EVENT_TROW_CLICKED,
     EVENT_TROW_MOUNTED,
-    EVENT_TROW_CONTEXTMENU
+    EVENT_TROW_CONTEXTMENU,
+    EVENT_SORT
   ],
   setup() {
     const ghostElement = ref()
@@ -305,6 +308,9 @@ export default defineComponent({
     return { ghostElement, dragItem, constants }
   },
   computed: {
+    isSortable() {
+      return this.fields.some((f) => f.sortable)
+    },
     tableClasses() {
       const result = ['oc-table']
 
@@ -500,6 +506,47 @@ export default defineComponent({
       if (this.isSortable) {
         this.handleSort(field)
       }
+    },
+
+    extractSortThProps(props, field) {
+      if (!this.fieldIsSortable(field)) {
+        return
+      }
+
+      let sort = 'none'
+      if (this.sortBy === field.name) {
+        sort = this.sortDir === SORT_DIRECTION_ASC ? 'ascending' : 'descending'
+      }
+      props['aria-sort'] = sort
+    },
+    fieldIsSortable({ sortable }) {
+      return !!sortable
+    },
+    handleSort(field) {
+      if (!this.fieldIsSortable(field)) {
+        return
+      }
+
+      let sortDir = this.sortDir
+      // toggle sortDir if already sorted by this column
+      if (this.sortBy === field.name && this.sortDir !== undefined) {
+        sortDir = this.sortDir === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC
+      }
+      // set default sortDir of the field when sortDir not set or sortBy changed
+      if (this.sortBy !== field.name || this.sortDir === undefined) {
+        sortDir = field.sortDir || SORT_DIRECTION_DESC
+      }
+
+      /**
+       * Triggers when table heads are clicked
+       *
+       * @property {string} sortBy requested column to sort by
+       * @property {string} sortDir requested order to sort in (either asc or desc)
+       */
+      this.$emit('sort', {
+        sortBy: field.name,
+        sortDir
+      })
     }
   }
 })
