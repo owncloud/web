@@ -222,7 +222,7 @@ importers:
       jest: ^29.5.0
       jest-axe: ^6.0.0
       jest-environment-jsdom: ^29.0.0
-      jest-serializer-vue: ^2.0.2
+      jest-serializer-vue: ^3.0.0
       luxon: ^3.0.1
       mini-css-extract-plugin: ^1.3.1
       node-notifier: ^10.0.0
@@ -305,7 +305,7 @@ importers:
       jest: 29.5.0_node-notifier@10.0.1
       jest-axe: 6.0.1
       jest-environment-jsdom: 29.3.1
-      jest-serializer-vue: 2.0.2
+      jest-serializer-vue: 3.1.0
       luxon: 3.1.1
       mini-css-extract-plugin: 1.6.2_webpack@4.46.0
       node-notifier: 10.0.1
@@ -1648,7 +1648,7 @@ packages:
     dependencies:
       '@babel/core': 7.17.5
       '@babel/helper-create-class-features-plugin': 7.19.0_@babel+core@7.17.5
-      '@babel/helper-plugin-utils': 7.20.2
+      '@babel/helper-plugin-utils': 7.19.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1674,7 +1674,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-create-class-features-plugin': 7.19.0_@babel+core@7.20.12
-      '@babel/helper-plugin-utils': 7.20.2
+      '@babel/helper-plugin-utils': 7.19.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8195,7 +8195,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -14178,8 +14178,8 @@ packages:
     dev: true
     patched: true
 
-  /jest-serializer-vue/2.0.2:
-    resolution: {integrity: sha512-nK/YIFo6qe3i9Ge+hr3h4PpRehuPPGZFt8LDBdTHYldMb7ZWlkanZS8Ls7D8h6qmQP2lBQVDLP0DKn5bJ9QApQ==}
+  /jest-serializer-vue/3.1.0:
+    resolution: {integrity: sha512-vXz9/3IgBbLhsaVANYLG4ROCQd+Wg3qbB6ICofzFL+fbhSFPlqb0/MMGXcueVsjaovdWlYiRaLQLpdi1PTcoRQ==}
     dependencies:
       pretty: 2.0.0
     dev: true
@@ -17578,6 +17578,15 @@ packages:
   /progress/2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
+    dev: true
+
+  /promise-inflight/1.0.1:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
     dev: true
 
   /promise-inflight/1.0.1_bluebird@3.7.2:
