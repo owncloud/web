@@ -1,6 +1,12 @@
 import { Page } from 'playwright'
 import { UsersEnvironment } from '../../../environment'
-import { createGroup, getDisplayedGroups } from './actions'
+import {
+  createGroup,
+  getDisplayedGroups,
+  selectGroup,
+  deleteGroupUsingContextMenu,
+  deleteGrouprUsingBatchAction
+} from './actions'
 
 export class Groups {
   #page: Page
@@ -18,5 +24,16 @@ export class Groups {
   }
   getDisplayedGroups(): Promise<string[]> {
     return getDisplayedGroups({ page: this.#page })
+  }
+  async selectGroup({ key }: { key: string }): Promise<void> {
+    const { uuid } = this.#usersEnvironment.getGroup({ key })
+    await selectGroup({ uuid, page: this.#page })
+  }
+  async deleteGroupUsingBatchAction(): Promise<void> {
+    await deleteGrouprUsingBatchAction({ page: this.#page })
+  }
+  async deleteGroupUsingContextMenu({ key }: { key: string }): Promise<void> {
+    const { uuid } = this.#usersEnvironment.getGroup({ key })
+    await deleteGroupUsingContextMenu({ page: this.#page, uuid })
   }
 }

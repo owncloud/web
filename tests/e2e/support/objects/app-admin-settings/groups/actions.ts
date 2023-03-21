@@ -1,9 +1,14 @@
 import { Page } from 'playwright'
+import util from 'util'
 
 const newGroupBtn = '.admin-settings-app-bar-actions'
 const createGroupInput = '#create-group-input-display-name'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
 const groupTrSelector = 'tr'
+const groupIdSelector = `[data-item-id="%s"] .groups-table-btn-action-dropdown`
+const groupCheckboxSelector = `[data-item-id="%s"]:not(.oc-table-highlighted) input[type=checkbox]`
+const deleteBtnContextMenu = '.context-menu .oc-groups-actions-delete-trigger'
+const deleteBtnBatchAction = '#oc-appbar-batch-actions'
 
 export const createGroup = async (args: { page: Page; key: string }): Promise<string> => {
   const { page, key } = args
@@ -31,4 +36,49 @@ export const getDisplayedGroups = async (args: { page: Page }): Promise<string[]
     groups.push(await result.nth(i).getAttribute('data-item-id'))
   }
   return groups
+}
+
+export const selectGroup = async (args: { page: Page; uuid: string }): Promise<void> => {
+  const { page, uuid } = args
+  const checkbox = await page.locator(util.format(groupCheckboxSelector, uuid))
+  const checkBoxAlreadySelected = await checkbox.isChecked()
+
+  if (checkBoxAlreadySelected) {
+    return
+  }
+  await checkbox.click()
+}
+
+export const deleteGroupUsingContextMenu = async (args: {
+  page: Page
+  uuid: string
+}): Promise<void> => {
+  const { page, uuid } = args
+  await page.locator(util.format(groupIdSelector, uuid)).click()
+  await page.locator(deleteBtnContextMenu).click()
+
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith(encodeURIComponent(uuid)) &&
+        resp.status() === 204 &&
+        resp.request().method() === 'DELETE'
+    ),
+    await page.locator(actionConfirmButton).click()
+  ])
+}
+
+export const deleteGrouprUsingBatchAction = async (args: { page: Page }): Promise<void> => {
+  const { page } = args
+  await page.locator(deleteBtnBatchAction).click()
+
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().includes('groups') &&
+        resp.status() === 204 &&
+        resp.request().method() === 'DELETE'
+    ),
+    await page.locator(actionConfirmButton).click()
+  ])
 }
