@@ -13,7 +13,6 @@
 </template>
 
 <script lang="ts">
-import { useActionsShowDetails } from '../../../../web-pkg/src/composables/actions'
 import Delete from '../../mixins/users/delete'
 import Edit from '../../mixins/users/edit'
 import {
@@ -32,7 +31,7 @@ import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import { useSpaceActionsEditQuota } from 'web-pkg/src/composables/actions/spaces'
 import { SpaceResource } from 'web-client/src'
 import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
-import { SpaceActionOptions } from 'web-pkg/src/composables/actions'
+import { SpaceActionOptions, useActionsShowDetails } from 'web-pkg/src/composables/actions'
 
 export default defineComponent({
   name: 'ContextActions',

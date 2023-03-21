@@ -7,7 +7,6 @@ import {
   defaultStubs,
   mount
 } from 'web-test-helpers'
-import { ref } from 'vue'
 import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client/src/helpers'
 import ActionsPanel from '../../../../../src/components/Spaces/SideBar/ActionsPanel.vue'
