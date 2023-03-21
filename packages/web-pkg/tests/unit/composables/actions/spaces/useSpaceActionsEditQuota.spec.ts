@@ -59,10 +59,8 @@ function getWrapper({
     instance: ReturnType<typeof useSpaceActionsEditQuota>,
     {
       storeOptions
-    }: // clientService
-    {
+    }: {
       storeOptions: typeof defaultStoreMockOptions
-      // clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
 }) {
