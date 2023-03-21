@@ -170,7 +170,6 @@ import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
-import Delete from '../mixins/users/delete'
 import {
   queryItemAsString,
   useAccessToken,
@@ -180,16 +179,7 @@ import {
   useRouteQuery,
   useStore
 } from 'web-pkg/src/composables'
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  ref,
-  onBeforeUnmount,
-  onMounted,
-  unref,
-  watch
-} from 'vue'
+import { computed, defineComponent, ref, onBeforeUnmount, onMounted, unref, watch } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapMutations, mapState } from 'vuex'
@@ -204,8 +194,11 @@ import { useGettext } from 'vue3-gettext'
 import { diff } from 'deep-object-diff'
 import { format } from 'util'
 import GroupsModal from '../components/Users/GroupsModal.vue'
-import { useRemoveFromGroups } from '../mixins/users/removeFromGroups'
-import { useAddToGroups } from '../mixins/users/addToGroups'
+import {
+  useUserActionsDelete,
+  useUserActionsRemoveFromGroups,
+  useUserActionsAddToGroups
+} from '../composables/actions/users'
 import { configurationManager } from 'web-pkg'
 
 export default defineComponent({
@@ -220,17 +213,16 @@ export default defineComponent({
     QuotaModal,
     GroupsModal
   },
-  mixins: [Delete],
   setup() {
-    const instance = getCurrentInstance().proxy as any
     const { $gettext } = useGettext()
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const clientService = useClientService()
     const loadingService = useLoadingService()
 
-    const { actions: removeFromGroupsActions } = useRemoveFromGroups()
-    const { actions: addToGroupsActions } = useAddToGroups()
+    const { actions: deleteActions } = useUserActionsDelete({ store })
+    const { actions: removeFromGroupsActions } = useUserActionsRemoveFromGroups()
+    const { actions: addToGroupsActions } = useUserActionsAddToGroups()
     const {
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
@@ -375,7 +367,7 @@ export default defineComponent({
 
     const batchActions = computed(() => {
       return [
-        ...instance.$_delete_items,
+        ...unref(deleteActions),
         ...unref(editQuotaActions),
         ...unref(addToGroupsActions),
         ...unref(removeFromGroupsActions)

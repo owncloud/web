@@ -13,8 +13,7 @@
 </template>
 
 <script lang="ts">
-import Delete from '../../mixins/users/delete'
-import Edit from '../../mixins/users/edit'
+import { useUserActionsEdit, useUserActionsDelete } from '../../composables/actions/users'
 import {
   computed,
   defineComponent,
@@ -36,7 +35,6 @@ import { SpaceActionOptions, useActionsShowDetails } from 'web-pkg/src/composabl
 export default defineComponent({
   name: 'ContextActions',
   components: { ContextActionMenu, QuotaModal },
-  mixins: [Delete, Edit],
   props: {
     items: {
       type: Array as PropType<User[]>,
@@ -75,9 +73,11 @@ export default defineComponent({
       closeModal: closeQuotaModal,
       spaceQuotaUpdated
     } = useSpaceActionsEditQuota({ store })
+    const { actions: userEditActions } = useUserActionsEdit()
+    const { actions: userDeleteActions } = useUserActionsDelete({ store })
 
     const menuItemsPrimaryActions = computed(() =>
-      [...instance.$_edit_items, ...instance.$_delete_items].filter((item) =>
+      [...unref(userEditActions), ...unref(userDeleteActions)].filter((item) =>
         item.isEnabled(unref(filterParams))
       )
     )
