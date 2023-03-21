@@ -272,17 +272,14 @@ export default defineComponent({
 
       if (this.user.onPremisesSamAccountName !== this.editUser.onPremisesSamAccountName) {
         try {
+          // Validate username by fetching the user. If the request succeeds, we throw a validation error
           const client = this.clientService.graphAuthenticated
           await client.users.getUser(this.editUser.onPremisesSamAccountName)
           this.formData.userName.errorMessage = this.$gettext('User "%{userName}" already exists', {
             userName: this.editUser.onPremisesSamAccountName
           })
           return false
-        } catch (e) {
-          /**
-           * If the backend throws an error, the user doesn't exist and everything is alright
-           */
-        }
+        } catch (e) {}
       }
 
       this.formData.userName.errorMessage = ''
