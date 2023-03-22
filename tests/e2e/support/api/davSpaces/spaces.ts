@@ -217,6 +217,5 @@ export const addMembersToTheProjectSpace = async ({
   role: string
 }): Promise<void> => {
   const space_ref = await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName })
-  const path = '/' + spaceName
-  await createShare({ user, path, shareWith, shareType, role, name: null, space_ref })
+  await createShare({ user, path: null, shareWith, shareType, role, name: null, space_ref })
 }

@@ -92,7 +92,7 @@ Feature: spaces management
 
 
   Scenario: list members via sidebar
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id      |
       | Alice   |
       | Brian   |
@@ -105,7 +105,7 @@ Feature: spaces management
     And "Alice" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
-    And "Alice" adds following members to the space "team A" using API
+    And "Alice" adds the following members to the space "team A" using API
       | user    | role   | shareType |
       | Brian   | editor | space     |
       | Carol   | viewer | space     |

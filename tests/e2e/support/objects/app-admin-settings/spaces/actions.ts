@@ -256,8 +256,8 @@ export const openSpaceAdminActionSidebarPanel = async (args: {
     await backButton.click()
     await locatorUtils.waitForEvent(currentPanel, 'transitionend')
   }
-  const panelSelector = await page.locator(util.format(sideBarActionButtons, 'SpaceMembers'))
-  const nextPanel = page.locator(util.format(siderBarActionPanel, 'SpaceMembers'))
+  const panelSelector = await page.locator(util.format(sideBarActionButtons, action))
+  const nextPanel = page.locator(util.format(siderBarActionPanel, action))
   await panelSelector.click()
   await locatorUtils.waitForEvent(nextPanel, 'transitionend')
 }
@@ -268,8 +268,7 @@ export const listSpaceMembers = async (args: {
 }): Promise<Array<string>> => {
   const { page, filter } = args
   await page.waitForSelector(spaceMembersDiv)
-  let users = null
-  let name = null
+  let users = []
   const names = []
   switch (filter) {
     case 'managers':
@@ -284,7 +283,7 @@ export const listSpaceMembers = async (args: {
   }
   for (const user of users) {
     // the value comes in "['initials firstName secondName lastName',..]" format so only get the first name
-    [, name] = user.split(' ')
+    const [, name] = user.split(' ')
     names.push(name)
   }
   return names

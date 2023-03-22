@@ -220,7 +220,7 @@ Given(
 )
 
 Given(
-  '{string} adds following member(s) to the space {string} using API',
+  '{string} adds the following member(s) to the space {string} using API',
   async function (
     this: World,
     stepUser: string,

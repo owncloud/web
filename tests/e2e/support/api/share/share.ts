@@ -28,7 +28,7 @@ export const createShare = async ({
   space_ref
 }: {
   user: User
-  path: string
+  path?: string
   shareType: string
   shareWith?: string
   role?: string
