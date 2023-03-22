@@ -20,7 +20,9 @@ const sideBarCloseButton = '.sidebar-panel .header__close:visible'
 const sideBarBackButton = '.sidebar-panel .header__back:visible'
 const sideBarActionButtons = `#sidebar-panel-%s-select`
 const siderBarActionPanel = `#sidebar-panel-%s`
-const spaceMembers = '[data-testid="space-members"]'
+const spaceMembersDiv = '[data-testid="space-members"]'
+const spaceMemberList =
+  '[data-testid="space-members-role-%s"] ul [data-testid="space-members-list"]'
 
 export const getDisplayedSpaces = async (page): Promise<string[]> => {
   const spaces = []
@@ -231,44 +233,59 @@ const waitForSpaceResponse = async (args: {
   ])
 }
 
-export const openSpaceAdminSidebarPanel = async (args:{
-page: Page
+export const openSpaceAdminSidebarPanel = async (args: {
+  page: Page
   id: string
-}):Promise<void> => {
-  const { page, id} = args
+}): Promise<void> => {
+  const { page, id } = args
   if (await page.locator(appSidebarDiv).count()) {
     await page.locator(sideBarCloseButton).click()
   }
-  await selectSpace({page,id})
+  await selectSpace({ page, id })
   await page.click(toggleSidebarButton)
 }
 
-export const openSpaceAdminActionSidebarPanel = async (args:{
+export const openSpaceAdminActionSidebarPanel = async (args: {
   page: Page
   action: string
-}):Promise<void> => {
-  const { page, action} = args
+}): Promise<void> => {
+  const { page, action } = args
   const currentPanel = await page.locator(sideBarActive)
   const backButton = await currentPanel.locator(sideBarBackButton)
   if (await backButton.count()) {
     await backButton.click()
     await locatorUtils.waitForEvent(currentPanel, 'transitionend')
   }
-  const panelSelector = await page.locator(util.format(sideBarActionButtons,'SpaceMembers'))
-  const nextPanel = page.locator(util.format(siderBarActionPanel,'SpaceMembers'))
+  const panelSelector = await page.locator(util.format(sideBarActionButtons, 'SpaceMembers'))
+  const nextPanel = page.locator(util.format(siderBarActionPanel, 'SpaceMembers'))
   await panelSelector.click()
   await locatorUtils.waitForEvent(nextPanel, 'transitionend')
 }
 
-export const listSpaceMambers = async (args:{
-  page:Page
-  filter:string
-}):Promise<void> => {
-  const {page} = args
-  await page.waitForSelector(spaceMembers)
-  const test = await page.getByTestId('space-members-role').allInnerTexts()
-  const test2 = await page.getByTestId('space-members-list').allInnerTexts()
-  console.log(test)
-  console.log(test2)
-
+export const listSpaceMembers = async (args: {
+  page: Page
+  filter: string
+}): Promise<Array<string>> => {
+  const { page, filter } = args
+  await page.waitForSelector(spaceMembersDiv)
+  let users = null
+  let name = null
+  const names = []
+  switch (filter) {
+    case 'managers':
+      users = await page.locator(util.format(spaceMemberList, 'managers')).allTextContents()
+      break
+    case 'viewers':
+      users = await page.locator(util.format(spaceMemberList, 'viewers')).allTextContents()
+      break
+    case 'editors':
+      users = await page.locator(util.format(spaceMemberList, 'editors')).allTextContents()
+      break
+  }
+  for (const user of users) {
+    // the value comes in "['initials firstName secondName lastName',..]" format so only get the first name
+    [, name] = user.split(' ')
+    names.push(name)
+  }
+  return names
 }

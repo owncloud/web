@@ -25,7 +25,7 @@ export const createShare = async ({
   shareType,
   role,
   name,
-                                    space_ref,
+  space_ref
 }: {
   user: User
   path: string
@@ -41,7 +41,7 @@ export const createShare = async ({
   body.append('shareType', shareTypes[shareType])
   body.append('role', role)
   body.append('name', name)
-  if(space_ref){
+  if (space_ref) {
     body.append('space_ref', space_ref)
   }
   const response = await request({

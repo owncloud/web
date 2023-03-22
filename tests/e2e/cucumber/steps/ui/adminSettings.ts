@@ -542,6 +542,6 @@ Then(
           default:
             throw new Error(`'${info.role}' role not implemented`)
         }
-      }
     }
+  }
 )

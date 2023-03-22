@@ -111,7 +111,7 @@ Feature: spaces management
       | Carol   | viewer | space     |
       | Marie   | viewer | space     |
       | Richard | viewer | space     |
-    When "Alice" logs in
+    And "Alice" logs in
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     When "Alice" lists the members of project space "team.a" using a sidebar panel

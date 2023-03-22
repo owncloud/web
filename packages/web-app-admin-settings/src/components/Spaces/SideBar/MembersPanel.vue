@@ -9,16 +9,28 @@
       <div v-if="!filteredSpaceMembers.length">
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('No members found')" />
       </div>
-      <div v-if="filteredSpaceManagers.length" class="oc-mb-m" data-testid="space-members-role-manager">
+      <div
+        v-if="filteredSpaceManagers.length"
+        class="oc-mb-m"
+        data-testid="space-members-role-managers"
+      >
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Managers')" />
         <members-role-section :members="filteredSpaceManagers" />
       </div>
-      <div v-if="filteredSpaceEditors.length" class="oc-mb-m" data-testid="space-members-role-editor">
+      <div
+        v-if="filteredSpaceEditors.length"
+        class="oc-mb-m"
+        data-testid="space-members-role-editors"
+      >
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Editors')" />
         <members-role-section :members="filteredSpaceEditors" />
       </div>
-      <div v-if="filteredSpaceViewers.length" class="oc-mb-m" data-testid="space-members-role-viewers">
-        <h3 class="oc-text-bold oc-text-medium"  v-text="$gettext('Viewers')" />
+      <div
+        v-if="filteredSpaceViewers.length"
+        class="oc-mb-m"
+        data-testid="space-members-role-viewers"
+      >
+        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Viewers')" />
         <members-role-section :members="filteredSpaceViewers" />
       </div>
     </div>

@@ -7,7 +7,10 @@ import {
   renameSpace,
   changeSpaceSubtitle,
   selectSpace,
-  enableSpace, openSpaceAdminSidebarPanel, openSpaceAdminActionSidebarPanel, listSpaceMambers
+  enableSpace,
+  openSpaceAdminSidebarPanel,
+  openSpaceAdminActionSidebarPanel,
+  listSpaceMembers
 } from './actions'
 import { SpacesEnvironment } from '../../../environment'
 import { Space } from '../../../types'
@@ -72,16 +75,16 @@ export class Spaces {
     await changeSpaceSubtitle({ id, page: this.#page, value })
   }
 
-  async openPanel({key}:{key:string}): Promise<void>{
-    const { id } = this.#spacesEnvironment.getSpace({key})
-    await openSpaceAdminSidebarPanel({page: this.#page,id})
+  async openPanel({ key }: { key: string }): Promise<void> {
+    const { id } = this.#spacesEnvironment.getSpace({ key })
+    await openSpaceAdminSidebarPanel({ page: this.#page, id })
   }
 
-  async openActionSideBarPanel({action}:{action:string}): Promise<void>{
-    await openSpaceAdminActionSidebarPanel({page:this.#page,action})
+  async openActionSideBarPanel({ action }: { action: string }): Promise<void> {
+    await openSpaceAdminActionSidebarPanel({ page: this.#page, action })
   }
 
-  async listMembers({filter}:{filter:string}):Promise<void>{
-    await listSpaceMambers({page:this.#page, filter})
+  async listMembers({ filter }: { filter: string }): Promise<Array<string>> {
+    return listSpaceMembers({ page: this.#page, filter })
   }
 }
