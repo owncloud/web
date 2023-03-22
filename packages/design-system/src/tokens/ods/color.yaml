@@ -21,6 +21,10 @@ color:
         value: rgb(4, 30, 66)
       hover:
         value: rgb(34, 57, 89)
+      muted:
+        value: rgb(0, 20, 40)
+      contrast:
+        value: "{color.text.inverse.value}"
     primary:
       default:
         value: rgb(74, 118, 172)
@@ -33,6 +37,8 @@ color:
         value: rgb(8, 105, 222)
       gradient:
         value: rgb(78, 133, 200)
+      contrast:
+        value: "{color.text.inverse.value}"
     success:
       default:
         value: rgb(79, 130, 47)
@@ -43,6 +49,8 @@ color:
         value: rgb(147, 224, 84)
       muted:
         value: rgb(83, 150, 10)
+      contrast:
+        value: "{color.text.inverse.value}"
     warning:
       default:
         value: rgb(198, 80, 27)
@@ -53,6 +61,8 @@ color:
         value: rgb(253, 169, 75)
       muted:
         value: rgb(179, 81, 0)
+      contrast:
+        value: "{color.text.inverse.value}"
     danger:
       default:
         value: rgb(224, 0, 0)
@@ -60,6 +70,8 @@ color:
         value: rgb(233, 100, 100)
       muted:
         value: rgb(181, 0, 0)
+      contrast:
+        value: "{color.text.inverse.value}"
     passive:
       default:
         value: rgb(76, 95, 121)
@@ -67,6 +79,8 @@ color:
         value: rgb(151, 162, 177)
       muted:
         value: rgb(40, 62, 93)
+      contrast:
+        value: "{color.text.inverse.value}"
     inverse:
       default:
         value: rgb(255, 255, 255)
@@ -74,6 +88,8 @@ color:
         value: rgb(255, 255, 255)
       muted:
         value: rgb(191, 191, 191)
+      contrast:
+        value: "{color.text.default.value}"
   background:
     default:
       value: rgb(255, 255, 255)

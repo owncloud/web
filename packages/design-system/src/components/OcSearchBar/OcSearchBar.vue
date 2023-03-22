@@ -50,8 +50,8 @@
     <oc-button
       v-if="showCancelButton"
       :variation="cancelButtonVariation"
+      :appearance="cancelButtonAppearance"
       class="oc-ml-m"
-      appearance="raw"
       @click="onCancel"
     >
       <span v-text="$gettext('Cancel')" />
@@ -203,7 +203,18 @@ export default defineComponent({
       required: false,
       default: 'primary',
       validator: (value: string) => {
-        return ['passive', 'primary', 'danger', 'success', 'warning', 'inverse'].includes(value)
+        return ['passive', 'primary', 'danger', 'success', 'warning', 'brand'].includes(value)
+      }
+    },
+    /**
+     * Appearance of the cancel button
+     */
+    cancelButtonAppearance: {
+      type: String,
+      required: false,
+      default: 'raw',
+      validator: (value: string) => {
+        return ['outline', 'filled', 'raw', 'raw-inverse'].includes(value)
       }
     },
     /**
@@ -294,7 +305,7 @@ export default defineComponent({
   &-button {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    // Prevend double borders
+    // Prevent double borders
     // from input and button
     transform: translateX(-1px);
     z-index: 0;

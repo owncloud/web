@@ -11,7 +11,7 @@
       <div v-if="title" class="oc-flex oc-flex-between info-header oc-border-b oc-pb-s">
         <span class="oc-m-rm info-title" v-text="$gettext(title)" />
         <oc-button appearance="raw">
-          <oc-icon name="close" fill-type="line" size="medium" />
+          <oc-icon name="close" fill-type="line" size="medium" variation="inherit" />
         </oc-button>
       </div>
       <p class="info-text" v-text="$gettext(text)" />
@@ -26,15 +26,14 @@
       <p v-if="endText" class="info-text-end" v-text="$gettext(endText)" />
       <oc-button
         v-if="readMoreLink"
-        v-translate
         type="a"
         appearance="raw"
         size="small"
         class="info-more-link"
         :href="readMoreLink"
         target="_blank"
-        >Read more</oc-button
-      >
+        v-text="$gettext('Read more')"
+      />
     </div>
   </oc-drop>
 </template>

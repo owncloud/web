@@ -1,0 +1,5 @@
+Enhancement: Contrast token in swatches
+
+We've added a `contrast` token to each of our color swatches. Its purpose is to provide a high contrast color in comparison to the `default` token of the color swatch.
+
+https://github.com/owncloud/web/pull/8563

@@ -61,7 +61,7 @@ export default defineComponent({
     height: 2px;
 
     &-primary div {
-      background-color: var(--oc-color-swatch-inverse-default);
+      background-color: var(--oc-color-swatch-primary-contrast);
     }
 
     &-indeterminate-first {

@@ -14,7 +14,8 @@
       :placeholder="searchLabel"
       :button-hidden="true"
       :show-cancel-button="showCancelButton"
-      cancel-button-variation="inverse"
+      cancel-button-variation="brand"
+      cancel-button-appearance="raw-inverse"
       :cancel-handler="cancelSearch"
       @input="updateTerm"
       @clear="onClear"
@@ -28,8 +29,8 @@
       v-oc-tooltip="$gettext('Display search bar')"
       :aria-label="$gettext('Click to display and focus the search bar')"
       class="mobile-search-btn oc-mr-s"
-      appearance="raw"
-      variation="inverse"
+      appearance="raw-inverse"
+      variation="brand"
       @click="showSearchBar"
     >
       <oc-icon name="search" fill-type="line"></oc-icon>

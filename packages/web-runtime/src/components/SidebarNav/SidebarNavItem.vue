@@ -7,15 +7,15 @@
     <oc-button
       v-oc-tooltip="toolTip"
       type="router-link"
-      appearance="raw"
-      :variation="active ? 'inverse' : 'passive'"
+      :appearance="active ? 'raw-inverse' : 'raw'"
+      :variation="active ? 'primary' : 'passive'"
       :class="['oc-sidebar-nav-item-link', { active: active }]"
       :to="target"
       :data-nav-id="index"
       :data-nav-name="navName"
     >
       <span class="oc-flex">
-        <oc-icon :name="icon" :fill-type="fillType" />
+        <oc-icon :name="icon" :fill-type="fillType" variation="inherit" />
         <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
       </span>
       <oc-tag v-if="tag" class="oc-py-rm" size="small">{{ tag }}</oc-tag>

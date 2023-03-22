@@ -9,20 +9,20 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
   <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-7" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
-        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+        <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="primary">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub>
           </span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">
@@ -33,7 +33,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">
@@ -79,20 +79,20 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
   <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-5" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
-        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+        <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="primary">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub>
           </span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">
@@ -103,7 +103,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">
@@ -149,20 +149,20 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
   <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-3" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
-        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+        <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="primary">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub>
           </span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">
@@ -173,7 +173,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">
@@ -213,20 +213,20 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
   <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-1" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
-        <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="inverse">
+        <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="primary">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub>
           </span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">
@@ -237,7 +237,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
           <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="passive"></oc-icon-stub>
+            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub>
             <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
           </span>
           <span class="oc-flex">

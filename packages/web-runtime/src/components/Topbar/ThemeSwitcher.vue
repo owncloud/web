@@ -3,12 +3,12 @@
     v-oc-tooltip="buttonLabel"
     class="themeswitcher-btn"
     :aria-label="buttonLabel"
-    appearance="raw"
-    variation="inverse"
+    appearance="raw-inverse"
+    variation="brand"
     @click="toggleTheme"
   >
     <span class="oc-visible@s" :aria-label="switchLabel" />
-    <oc-icon :name="switchIcon" fill-type="line" />
+    <oc-icon :name="switchIcon" fill-type="line" variation="inherit" />
   </oc-button>
 </template>
 <script lang="ts">

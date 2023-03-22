@@ -46,19 +46,6 @@
       <template #danger="{ item }">
         <oc-icon :name="item.filename" :fill-type="item.fillType" size="large" variation="danger" />
       </template>
-      <template #inverse="{ item }">
-        <span
-          style="background-color: var(--oc-color-swatch-brand-default); display: inline-block"
-          class="oc-icon-l"
-        >
-          <oc-icon
-            :name="item.filename"
-            :fill-type="item.fillType"
-            size="large"
-            variation="inverse"
-          />
-        </span>
-      </template>
       <template #filename="{ item }">
         <highlighted-text :value="item.filename" :highlighted="query" />
       </template>
@@ -124,11 +111,6 @@ export default defineComponent({
         {
           name: 'danger',
           title: 'Danger',
-          type: 'slot'
-        },
-        {
-          name: 'inverse',
-          title: 'Inverse',
           type: 'slot'
         },
         {

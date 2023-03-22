@@ -194,7 +194,7 @@ export const peopleRoleDenyFolder = new PeopleShareRole(
   [SharePermissions.denied]
 )
 export const linkRoleInternalFile = new LinkShareRole(
-  'none',
+  'internal',
   false,
   $gettext('Internal'),
   $gettext('internal'),
@@ -202,7 +202,7 @@ export const linkRoleInternalFile = new LinkShareRole(
   [SharePermissions.internal]
 )
 export const linkRoleInternalFolder = new LinkShareRole(
-  'none',
+  'internal',
   true,
   $gettext('Internal'),
   $gettext('internal'),

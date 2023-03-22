@@ -8,8 +8,8 @@
       id="_appSwitcherButton"
       ref="menubutton"
       v-oc-tooltip="applicationSwitcherLabel"
-      appearance="raw"
-      variation="inverse"
+      appearance="raw-inverse"
+      variation="brand"
       class="oc-topbar-menu-burger"
       :aria-label="applicationSwitcherLabel"
     >
@@ -31,15 +31,15 @@
             :target="n.target"
             :href="n.url"
             :to="n.path"
-            appearance="raw"
+            :appearance="n.active ? 'raw-inverse' : 'raw'"
+            :variation="n.active ? 'primary' : 'passive'"
             :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
-            :variation="n.active ? 'inverse' : 'passive'"
           >
             <span class="icon-box">
-              <oc-icon :name="n.icon" />
+              <oc-icon :name="n.icon" variation="inherit" />
             </span>
             <span v-text="$gettext(n.title)" />
-            <oc-icon v-if="n.active" name="check" class="active-check" />
+            <oc-icon v-if="n.active" name="check" class="active-check" variation="inherit" />
           </oc-button>
         </li>
       </oc-list>
@@ -96,10 +96,22 @@ export default defineComponent({
     justify-content: flex-start;
     width: 100%;
 
+    &.oc-button-primary-raw-inverse {
+      &:focus,
+      &:hover {
+        color: var(--oc-color-swatch-primary-contrast) !important;
+      }
+    }
+    &.oc-button-passive-raw {
+      &:focus,
+      &:hover {
+        color: var(--oc-color-swatch-passive-default) !important;
+      }
+    }
+
     &:focus,
     &:hover {
       background-color: var(--oc-color-background-hover);
-      color: var(--oc-color-swatch-passive-default);
       text-decoration: none;
     }
 
@@ -114,14 +126,6 @@ export default defineComponent({
     .active-check {
       position: absolute;
       right: 1rem;
-    }
-  }
-
-  a.router-link-active,
-  button.router-link-active {
-    &:focus,
-    &:hover {
-      color: var(--oc-color-swatch-inverse-default);
     }
   }
 }

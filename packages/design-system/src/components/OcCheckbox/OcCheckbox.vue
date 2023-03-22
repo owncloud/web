@@ -179,20 +179,16 @@ export default defineComponent({
   &-checked,
   :checked,
   &:indeterminate {
-    background-color: var(--oc-color-swatch-inverse-default);
+    background-color: white;
   }
 
   &-checked,
   :checked {
-    @include svg-fill($internal-form-checkbox-image, '#000', $form-radio-checked-icon-color);
+    @include svg-fill($internal-form-checkbox-image, '#000', '#000');
   }
 
   &:indeterminate {
-    @include svg-fill(
-      $internal-form-checkbox-indeterminate-image,
-      '#000',
-      $form-radio-checked-icon-color
-    );
+    @include svg-fill($internal-form-checkbox-indeterminate-image, '#000', '#000');
   }
 
   &:disabled {

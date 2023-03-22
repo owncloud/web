@@ -22,6 +22,7 @@ services:
       # WEB
       WEB_UI_CONFIG: ${WEB_UI_CONFIG:-/web/config.json}
       WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
+      WEB_UI_THEME_PATH: ${WEB_UI_THEME_PATH:-/themes/owncloud/theme.json}
 
       #FRONTEND
       FRONTEND_SEARCH_MIN_LENGTH: "2"

@@ -434,7 +434,7 @@ export default defineComponent({
       }
 
       &.selected {
-        color: var(--oc-color-swatch-inverse-default) !important;
+        color: var(--oc-color-swatch-passive-contrast) !important;
       }
     }
   }

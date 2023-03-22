@@ -136,7 +136,7 @@
       />
     </template>
     <template #owner="{ item }">
-      <oc-button appearance="raw" variation="inverse" @click="openSharingSidebar(item)">
+      <oc-button appearance="raw-inverse" variation="passive" @click="openSharingSidebar(item)">
         <oc-avatars
           class="resource-table-people"
           :items="item.owner"
@@ -146,7 +146,7 @@
       </oc-button>
     </template>
     <template #sharedWith="{ item }">
-      <oc-button appearance="raw" variation="inverse" @click="openSharingSidebar(item)">
+      <oc-button appearance="raw-inverse" variation="passive" @click="openSharingSidebar(item)">
         <oc-avatars
           class="resource-table-people"
           :items="item.sharedWith"

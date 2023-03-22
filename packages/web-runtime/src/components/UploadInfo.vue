@@ -8,8 +8,8 @@
         v-if="!filesInProgressCount"
         id="close-upload-info-btn"
         v-oc-tooltip="$gettext('Close')"
-        appearance="raw"
-        variation="inverse"
+        appearance="raw-inverse"
+        variation="brand"
         @click="closeInfo"
       >
         <oc-icon name="close" />
@@ -622,7 +622,7 @@ export default defineComponent({
   }
 
   .upload-info-title p {
-    color: var(--oc-color-swatch-inverse-default);
+    color: var(--oc-color-swatch-brand-contrast);
   }
 
   .oc-resource-indicators .parent-folder .text {

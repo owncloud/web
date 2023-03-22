@@ -9,13 +9,13 @@
         class="oc-status-indicators-indicator oc-background-primary-gradient oc-p-xs oc-ml-xs"
         :aria-label="$gettext(indicator.label)"
         :aria-describedby="getIndicatorDescriptionId(indicator)"
-        appearance="raw"
-        variation="inverse"
+        appearance="raw-inverse"
+        variation="primary"
         :data-testid="indicator.id"
         :data-test-indicator-type="indicator.type"
         @click="indicator.handler(resource, indicator.target, $router)"
       >
-        <oc-icon :name="indicator.icon" size="small" fill-type="line" />
+        <oc-icon :name="indicator.icon" size="small" fill-type="line" variation="inherit" />
       </oc-button>
       <oc-icon
         v-else
