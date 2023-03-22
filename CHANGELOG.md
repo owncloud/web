@@ -46,6 +46,7 @@ Summary
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
 * Change - Configurable extension autosave: [#8455](https://github.com/owncloud/web/pull/8455)
+* Change - Theme colors: [#8563](https://github.com/owncloud/web/pull/8563)
 * Enhancement - Global loading indicator: [#6183](https://github.com/owncloud/web/issues/6183)
 * Enhancement - Add tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Improve performance when loading folders and share indicators: [#7721](https://github.com/owncloud/web/issues/7721)
@@ -426,6 +427,18 @@ Details
    https://github.com/owncloud/web/pull/8455
    https://github.com/owncloud/web/pull/8457
    https://github.com/owncloud/web/pull/8474
+
+* Change - Theme colors: [#8563](https://github.com/owncloud/web/pull/8563)
+
+   We've introduced `contrast` color variables for all the color swatches in the design system.
+   As a result the `contrast` color variable needs to be added to all existing web themes.
+
+   BREAKING CHANGE for non-default themes in existing deployments: You need to add the
+   `contrast` color variable to all swatches in your theme. A good default is the
+   `color-text-inverse` value. You can find an example here:
+   https://owncloud.dev/clients/web/theming/#example-theme
+
+   https://github.com/owncloud/web/pull/8563
 
 * Enhancement - Global loading indicator: [#6183](https://github.com/owncloud/web/issues/6183)
 
