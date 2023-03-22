@@ -638,7 +638,7 @@ importers:
       '@uppy/xhr-upload': ^3.0.1
       '@vueuse/head': 1.1.23
       axios: ^0.27.2
-      easygettext: https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz
+      easygettext: https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.2-oc.tar.gz
       filesize: ^9.0.11
       focus-trap: ^7.2.0
       focus-trap-vue: ^4.0.1
@@ -686,7 +686,7 @@ importers:
       '@uppy/xhr-upload': 3.0.1_@uppy+core@3.0.5
       '@vueuse/head': 1.1.23_vue@3.2.47
       axios: 0.27.2
-      easygettext: '@github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz'
+      easygettext: '@github.com/owncloud/easygettext/archive/refs/tags/v2.18.2-oc.tar.gz_typescript@4.9.5'
       filesize: 9.0.11
       focus-trap: 7.2.0
       focus-trap-vue: 4.0.1_sc5smigrnndzyzpmn4n4e4xcs4
@@ -22190,14 +22190,16 @@ packages:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
 
-  '@github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz':
-    resolution: {tarball: https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz}
+  '@github.com/owncloud/easygettext/archive/refs/tags/v2.18.2-oc.tar.gz_typescript@4.9.5':
+    resolution: {tarball: https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.2-oc.tar.gz}
+    id: '@github.com/owncloud/easygettext/archive/refs/tags/v2.18.2-oc.tar.gz'
     name: easygettext
     version: 2.16.0
     engines: {node: '>=8'}
     hasBin: true
     dependencies:
       '@babel/core': 7.20.12
+      '@typescript-eslint/typescript-estree': 5.56.0_typescript@4.9.5
       acorn: 7.4.1
       acorn-stage3: 4.0.0_acorn@7.4.1
       acorn-walk: 8.2.0
@@ -22211,6 +22213,7 @@ packages:
       pug: 3.0.2
     transitivePeerDependencies:
       - supports-color
+      - typescript
     dev: false
 
   github.com/dschmidt/v-calendar/3ce6e3b8afd5491cb53ee811281d5fa8a45b044d_vue@3.2.47:
