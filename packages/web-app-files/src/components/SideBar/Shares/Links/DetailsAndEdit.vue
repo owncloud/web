@@ -22,7 +22,7 @@
         <oc-list class="roleDropdownList">
           <li v-for="roleOption in availableRoleOptions" :key="`role-dropdown-${roleOption.key}`">
             <oc-button
-              :id="`files-role-${roleOption.key}`"
+              :id="`files-role-${roleOption.name}`"
               :class="{
                 selected: isSelectedRole(roleOption),
                 'oc-background-primary-gradient': isSelectedRole(roleOption)
