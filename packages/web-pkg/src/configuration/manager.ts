@@ -14,6 +14,7 @@ export interface RawConfig {
   auth?: any
   openIdConnect?: any
   options?: OptionsConfiguration
+  logoutUrl?: string
 }
 
 export class ConfigurationManager {
@@ -34,6 +35,15 @@ export class ConfigurationManager {
     this.oidcConfiguration = rawConfig.openIdConnect
       ? (rawConfig.openIdConnect as OIDCConfiguration)
       : null
+    this.logoutUrl = rawConfig.logoutUrl ? rawConfig.logoutUrl : null
+  }
+
+  set logoutUrl(url: string) {
+    this.runtimeConfiguration.logoutUrl = url
+  }
+
+  get logoutUrl(): string {
+    return this.runtimeConfiguration.logoutUrl
   }
 
   set serverUrl(url: string) {

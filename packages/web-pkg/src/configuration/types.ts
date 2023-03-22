@@ -1,5 +1,6 @@
 export interface RuntimeConfiguration {
   serverUrl: string
+  logoutUrl?: string
 }
 
 export interface RoutingOptionsConfiguration {

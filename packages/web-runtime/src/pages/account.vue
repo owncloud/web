@@ -80,13 +80,13 @@
           />
         </dd>
       </div>
-      <div class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
+      <div v-if="logoutUrl" class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
         <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Logout from active devices')" />
         <dd data-testid="logout">
           <oc-button
             appearance="raw"
             type="a"
-            href="https://google.de"
+            :href="logoutUrl"
             target="_blank"
             data-testid="account-page-logout-url-btn"
           >
@@ -114,6 +114,7 @@ import axios from 'axios'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   name: 'Personal',
@@ -217,6 +218,10 @@ export default defineComponent({
       return unref(user).groups.join(', ')
     })
 
+    const logoutUrl = computed(() => {
+      return configurationManager.logoutUrl
+    })
+
     onMounted(() => {
       if (unref(isLanguageSupported)) {
         loadAccountBundleTask.perform()
@@ -232,7 +237,8 @@ export default defineComponent({
       isChangePasswordEnabled,
       isLanguageSupported,
       groupNames,
-      user
+      user,
+      logoutUrl
     }
   },
   data() {
