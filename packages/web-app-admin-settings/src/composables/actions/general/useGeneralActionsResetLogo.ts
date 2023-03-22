@@ -20,7 +20,6 @@ export const useGeneralActionsResetLogo = ({ store }: { store?: Store<any> }) =>
       })
       setTimeout(() => {
         router.go(0)
-        router
       }, 1000)
     } catch (e) {
       console.error(e)
