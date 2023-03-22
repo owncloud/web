@@ -1,0 +1,6 @@
+Bugfix: Accessing route in admin-settings with insufficient permissions
+
+Each route in the admin-settings app now has a dedicated permission check. This fixes an issue where accessing such route with insufficient permissions would break the page.
+
+https://github.com/owncloud/web/issues/8434
+https://github.com/owncloud/web/pull/8672

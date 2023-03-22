@@ -40,6 +40,12 @@ const routes = ({ $ability }: { $ability: Ability }) => [
     path: '/general',
     name: 'admin-settings-general',
     component: General,
+    beforeEnter: (to, from, next) => {
+      if (!$ability.can('read-all', 'Setting')) {
+        next({ path: '/' })
+      }
+      next()
+    },
     meta: {
       authContext: 'user',
       title: $gettext('General')
@@ -49,6 +55,12 @@ const routes = ({ $ability }: { $ability: Ability }) => [
     path: '/users',
     name: 'admin-settings-users',
     component: Users,
+    beforeEnter: (to, from, next) => {
+      if (!$ability.can('read-all', 'Account')) {
+        next({ path: '/' })
+      }
+      next()
+    },
     meta: {
       authContext: 'user',
       title: $gettext('Users')
@@ -58,6 +70,12 @@ const routes = ({ $ability }: { $ability: Ability }) => [
     path: '/groups',
     name: 'admin-settings-groups',
     component: Groups,
+    beforeEnter: (to, from, next) => {
+      if (!$ability.can('read-all', 'Group')) {
+        next({ path: '/' })
+      }
+      next()
+    },
     meta: {
       authContext: 'user',
       title: $gettext('Groups')
@@ -67,6 +85,12 @@ const routes = ({ $ability }: { $ability: Ability }) => [
     path: '/spaces',
     name: 'admin-settings-spaces',
     component: Spaces,
+    beforeEnter: (to, from, next) => {
+      if (!$ability.can('read-all', 'Space')) {
+        next({ path: '/' })
+      }
+      next()
+    },
     meta: {
       authContext: 'user',
       title: $gettext('Spaces')
