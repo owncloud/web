@@ -14,7 +14,7 @@ import {
 jest.useFakeTimers()
 
 describe('uploadImage', () => {
-  describe('method "$_uploadLogo_upload"', () => {
+  describe('method "uploadImage"', () => {
     it('should show message on request success', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ uploadImage }, { storeOptions, clientService, router }) => {

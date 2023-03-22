@@ -14,7 +14,7 @@ import {
 jest.useFakeTimers()
 
 describe('resetLogo', () => {
-  describe('method "$_resetLogo_reset"', () => {
+  describe('handler', () => {
     it('should show message on request success', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions, clientService, router }) => {
