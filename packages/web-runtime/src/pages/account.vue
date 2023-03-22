@@ -30,44 +30,46 @@
         </oc-button>
       </div>
     </div>
-    <h2 v-translate class="oc-text-bold oc-mb">Account Information</h2>
+    <h2 class="oc-text-bold oc-mb" v-text="$gettext('Account Information')" />
     <dl class="account-page-info oc-flex oc-flex-wrap">
       <div class="account-page-info-username oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted">Username</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Username')" />
         <dd>
           {{ user.username || user.id }}
         </dd>
       </div>
       <div v-if="user.username && user.id" class="account-page-info-userid">
-        <dt v-translate class="oc-text-normal oc-text-muted">User ID</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('User ID')" />
         <dd>
           {{ user.id }}
         </dd>
       </div>
       <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted">Display name</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Display name')" />
         <dd>
           {{ user.displayname }}
         </dd>
       </div>
       <div class="account-page-info-email oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted">Email</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Email')" />
         <dd>
           <template v-if="user.email">{{ user.email }}</template>
-          <span v-else v-translate>No email has been set up</span>
+          <span v-else v-text="$gettext('No email has been set up')" />
         </dd>
       </div>
       <div class="account-page-info-groups oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted">Group memberships</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Group memberships')" />
         <dd data-testid="group-names">
           <span v-if="groupNames">{{ groupNames }}</span>
-          <span v-else v-translate data-testid="group-names-empty"
-            >You are not part of any group</span
-          >
+          <span
+            v-else
+            data-testid="group-names-empty"
+            v-text="$gettext('You are not part of any group')"
+          />
         </dd>
       </div>
       <div v-if="isLanguageSupported" class="account-page-info-language oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted">Language</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Language')" />
         <dd data-testid="language">
           <oc-select
             v-if="languageOptions"
@@ -79,7 +81,7 @@
         </dd>
       </div>
       <div class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted">Logout from active devices</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Logout from active devices')" />
         <dd data-testid="logout">
           <oc-button
             appearance="raw"
