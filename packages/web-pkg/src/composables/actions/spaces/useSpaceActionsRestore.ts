@@ -83,9 +83,15 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
 
     const modal = {
       variation: 'passive',
-      title: $ngettext('Enable Space?', 'Enable %{spaceCount} Spaces?', allowedResources.length, {
-        spaceCount: allowedResources.length.toString()
-      }),
+      title: $ngettext(
+        'Enable Space "%{space}"?',
+        'Enable %{spaceCount} Spaces?',
+        allowedResources.length,
+        {
+          space: allowedResources[0].name,
+          spaceCount: allowedResources.length.toString()
+        }
+      ),
       cancelText: $gettext('Cancel'),
       confirmText,
       icon: 'alarm-warning',
