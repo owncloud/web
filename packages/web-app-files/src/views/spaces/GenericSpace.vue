@@ -128,17 +128,9 @@
 </template>
 
 <script lang="ts">
-import { debounce, omit } from 'lodash-es'
+import { debounce, omit, last } from 'lodash-es'
 import { basename } from 'path'
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  PropType,
-  onBeforeUnmount,
-  onMounted,
-  unref
-} from 'vue'
+import { computed, defineComponent, PropType, onBeforeUnmount, onMounted, unref } from 'vue'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
 import { useGettext } from 'vue3-gettext'
@@ -151,7 +143,6 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 
-import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { useFileActions } from '../../composables/actions/files/useFileActions'
 
 import AppBar from '../../components/AppBar/AppBar.vue'
@@ -205,9 +196,6 @@ export default defineComponent({
     SideBar,
     SpaceHeader
   },
-
-  mixins: [MixinAccessibleBreadcrumb],
-
   props: {
     space: {
       type: Object as PropType<SpaceResource>,
@@ -227,8 +215,8 @@ export default defineComponent({
   },
 
   setup(props) {
-    const instance = getCurrentInstance().proxy as any
     const store = useStore()
+    const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
     let loadResourcesEventToken
 
     const viewModes = computed(() => [
@@ -263,7 +251,6 @@ export default defineComponent({
     })
     useDocumentTitle({ titleSegments })
 
-    const { $gettext } = useGettext()
     const route = useRoute()
     const breadcrumbs = computed(() => {
       const space = props.space
@@ -333,6 +320,43 @@ export default defineComponent({
       )
     })
 
+    const focusAndAnnounceBreadcrumb = (sameRoute) => {
+      const breadcrumbEl = document.getElementById('files-breadcrumb')
+      if (!breadcrumbEl) {
+        return
+      }
+      const activeBreadcrumb = last(breadcrumbEl.children[0].children)
+      const activeBreadcrumbItem = activeBreadcrumb.getElementsByTagName('button')[0]
+      if (!activeBreadcrumbItem) {
+        return
+      }
+
+      const totalFilesCount = store.getters['Files/totalFilesCount']
+      const itemCount = totalFilesCount.files + totalFilesCount.folders
+
+      const announcement = $gettextInterpolate(
+        $ngettext(
+          'This folder contains %{ amount } item.',
+          'This folder contains %{ amount } items.',
+          itemCount
+        ),
+        { amount: itemCount }
+      )
+
+      const translatedHint = itemCount > 0 ? announcement : $gettext('This folder has no content.')
+
+      document.querySelectorAll('.oc-breadcrumb-sr').forEach((el) => el.remove())
+
+      const invisibleHint = document.createElement('p')
+      invisibleHint.className = 'oc-invisible-sr oc-breadcrumb-sr'
+      invisibleHint.innerHTML = translatedHint
+
+      activeBreadcrumb.append(invisibleHint)
+      if (sameRoute) {
+        activeBreadcrumbItem.focus()
+      }
+    }
+
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
     const performLoaderTask = async (
       sameRoute: boolean,
@@ -356,7 +380,7 @@ export default defineComponent({
         ...unref(resourcesViewDefaults.paginatedResources)
       ])
       resourcesViewDefaults.refreshFileListHeaderPosition()
-      instance.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
+      focusAndAnnounceBreadcrumb(sameRoute)
     }
 
     onMounted(() => {
