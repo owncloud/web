@@ -79,14 +79,13 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
       allowedResources.length,
       { count: allowedResources.length.toString() }
     )
-    const confirmText =
-      resources.length === 1
-        ? $gettext('Disable')
-        : $gettext('Disable (%{count})', { count: allowedResources.length.toString() })
+    const confirmText = $gettext('Disable')
     const modal = {
       variation: 'danger',
       icon: 'alarm-warning',
-      title: $ngettext('Disable Space?', 'Disable Spaces?', allowedResources.length),
+      title: $ngettext('Disable Space?', 'Disable %{spaceCount} Spaces?', allowedResources.length, {
+        spaceCount: allowedResources.length.toString()
+      }),
       cancelText: $gettext('Cancel'),
       confirmText,
       message,
