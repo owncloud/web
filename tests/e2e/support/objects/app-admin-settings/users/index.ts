@@ -15,7 +15,8 @@ import {
   openEditPanel,
   deleteUserUsingContextMenu,
   deleteUserUsingBatchAction,
-  createUser
+  createUser,
+  waitForEditPanelToBeVisible
 } from './actions'
 
 export class Users {
@@ -29,19 +30,27 @@ export class Users {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     return uuid
   }
-  async allowLogin({ key }: { key: string }): Promise<void> {
+  async allowLogin({ key, action }: { key: string; action: string }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
-    await openEditPanel({ page: this.#page, uuid })
+    await openEditPanel({ page: this.#page, uuid, action })
     await changeAccountEnabled({ uuid, value: true, page: this.#page })
   }
-  async forbidLogin({ key }: { key: string }): Promise<void> {
+  async forbidLogin({ key, action }: { key: string; action: string }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
-    await openEditPanel({ page: this.#page, uuid })
+    await openEditPanel({ page: this.#page, uuid, action })
     await changeAccountEnabled({ uuid, value: false, page: this.#page })
   }
-  async changeQuota({ key, value }: { key: string; value: string }): Promise<void> {
+  async changeQuota({
+    key,
+    value,
+    action
+  }: {
+    key: string
+    value: string
+    action: string
+  }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
-    await openEditPanel({ page: this.#page, uuid })
+    await openEditPanel({ page: this.#page, uuid, action })
     await changeQuota({ uuid, value, page: this.#page })
   }
   async selectUser({ key }: { key: string }): Promise<void> {
@@ -70,24 +79,42 @@ export class Users {
   async changeUser({
     key,
     attribute,
-    value
+    value,
+    action
   }: {
     key: string
     attribute: string
     value: string
+    action: string
   }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
-    await openEditPanel({ page: this.#page, uuid })
+    await openEditPanel({ page: this.#page, uuid, action })
     await changeUser({ uuid, attribute: attribute, value: value, page: this.#page })
   }
-  async addToGroups({ key, groups }: { key: string; groups: string[] }): Promise<void> {
+  async addToGroups({
+    key,
+    groups,
+    action
+  }: {
+    key: string
+    groups: string[]
+    action: string
+  }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
-    await openEditPanel({ page: this.#page, uuid })
+    await openEditPanel({ page: this.#page, uuid, action })
     await addUserToGroups({ page: this.#page, groups })
   }
-  async removeFromGroups({ key, groups }: { key: string; groups: string[] }): Promise<void> {
+  async removeFromGroups({
+    key,
+    groups,
+    action
+  }: {
+    key: string
+    groups: string[]
+    action: string
+  }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
-    await openEditPanel({ page: this.#page, uuid })
+    await openEditPanel({ page: this.#page, uuid, action })
     await removeUserFromGroups({ page: this.#page, uuid, groups })
   }
   async deleteUserUsingContextMenu({ key }: { key: string }): Promise<void> {
@@ -109,5 +136,14 @@ export class Users {
     password: string
   }): Promise<void> {
     await createUser({ page: this.#page, name, displayname, email, password })
+  }
+
+  async openEditPanel({ key, action }: { key: string; action: string }): Promise<void> {
+    const { uuid } = this.#usersEnvironment.getUser({ key })
+    await openEditPanel({ page: this.#page, uuid, action })
+  }
+
+  async editPanelVisible(): Promise<void> {
+    await waitForEditPanelToBeVisible({ page: this.#page })
   }
 }
