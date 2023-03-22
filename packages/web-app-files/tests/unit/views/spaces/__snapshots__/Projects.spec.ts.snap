@@ -35,6 +35,34 @@ exports[`Projects view different files view states lists all available project s
                       <!--v-if-->
                     </button>
                   </li>
+                  <li class="oc-my-xs">
+                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw oc-tiles-sort-list-item oc-p-s oc-width-1-1" type="button">
+                      <!-- @slot Content of the button -->
+                      <span>Newest</span>
+                      <!--v-if-->
+                    </button>
+                  </li>
+                  <li class="oc-my-xs">
+                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw oc-tiles-sort-list-item oc-p-s oc-width-1-1" type="button">
+                      <!-- @slot Content of the button -->
+                      <span>Oldest</span>
+                      <!--v-if-->
+                    </button>
+                  </li>
+                  <li class="oc-my-xs">
+                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw oc-tiles-sort-list-item oc-p-s oc-width-1-1" type="button">
+                      <!-- @slot Content of the button -->
+                      <span>Largest</span>
+                      <!--v-if-->
+                    </button>
+                  </li>
+                  <li class="oc-my-xs">
+                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw oc-tiles-sort-list-item oc-p-s oc-width-1-1" type="button">
+                      <!-- @slot Content of the button -->
+                      <span>Smallest</span>
+                      <!--v-if-->
+                    </button>
+                  </li>
                 </ul>
               </div>
             </div>

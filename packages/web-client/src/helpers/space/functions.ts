@@ -143,7 +143,7 @@ export function buildSpace(data): SpaceResource {
     type: 'space',
     isFolder: true,
     mdate: data.lastModifiedDateTime,
-    size: '',
+    size: data.quota?.used,
     indicators: [],
     permissions: '',
     starred: false,

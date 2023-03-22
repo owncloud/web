@@ -51,13 +51,15 @@
                 v-oc-tooltip="showSpaceMemberLabel"
                 :aria-label="showSpaceMemberLabel"
                 appearance="raw"
-                @click="openSidebarSharePanel(resource)"
+                @click="openSidebarSharePanel(resource as SpaceResource)"
               >
                 <oc-icon name="group" fill-type="line" />
               </oc-button>
             </template>
             <template #contextMenuActions="{ resource }">
-              <space-context-actions :action-options="{ resources: [resource] }" />
+              <space-context-actions
+                :action-options="{ resources: [resource] as SpaceResource[] }"
+              />
             </template>
           </resource-tiles>
         </div>
@@ -82,7 +84,7 @@ import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { isProjectSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
@@ -110,11 +112,11 @@ export default defineComponent({
     const { selectedResourcesIds } = useSelectedResources({ store })
     const { can } = useAbility()
 
-    const runtimeSpaces = computed(
-      () => store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
-    )
+    const runtimeSpaces = computed((): SpaceResource[] => {
+      return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
+    })
 
-    const sortFields = [availableSortFields[0], availableSortFields[1]]
+    const sortFields = availableSortFields
     const {
       sortBy,
       sortDir,
@@ -147,7 +149,7 @@ export default defineComponent({
 
     onMounted(async () => {
       await loadResourcesTask.perform()
-      scrollToResourceFromRoute(unref(spaces) as Resource[])
+      scrollToResourceFromRoute(unref(spaces))
     })
 
     return {
