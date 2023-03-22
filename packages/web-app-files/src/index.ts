@@ -12,10 +12,11 @@ import quickActions from './quickActions'
 import store from './store'
 import { SDKSearch } from './search'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { archiverService, thumbnailService, Registry } from './services'
+import { Registry, ArchiverService, ThumbnailService } from './services'
 import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
 import get from 'lodash-es/get'
+import { AppReadyHookArgs } from 'web-runtime/src/container/types'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
@@ -112,14 +113,15 @@ export default {
   navItems,
   quickActions,
   translations,
-  ready({ clientService, router, store }) {
-    Registry.sdkSearch = new SDKSearch(store, router, clientService)
+  ready({ router, store, globalProperties }: AppReadyHookArgs) {
+    const { $clientService } = globalProperties
+    Registry.sdkSearch = new SDKSearch(store, router, $clientService)
 
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.
     eventBus.publish('app.search.register.provider', Registry.sdkSearch)
-
-    archiverService.initialize(
+    globalProperties.$archiverService = new ArchiverService(
+      $clientService,
       store.getters.configuration.server || window.location.origin,
       get(store, 'getters.capabilities.files.archivers', [
         {
@@ -130,8 +132,9 @@ export default {
         }
       ])
     )
+
     // FIXME: Use capability data only as soon as available
-    thumbnailService.initialize(
+    globalProperties.$thumbnailService = new ThumbnailService(
       get(store, 'getters.capabilities.files.thumbnail', {
         enabled: true,
         version: 'v0.1',

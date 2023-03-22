@@ -10,6 +10,7 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { ViewModeConstants } from 'web-app-files/src/composables'
+import { ArchiverService } from 'web-app-files/src/services'
 
 const selectors = {
   ocBreadcrumbStub: 'oc-breadcrumb-stub',
@@ -146,7 +147,8 @@ function getShallowWrapper(
   const mocks = {
     ...defaultComponentMocks({
       currentRoute
-    })
+    }),
+    $archiverService: mock<ArchiverService>()
   }
   mocks.$route.meta.title = 'ExampleTitle'
   const storeOptions = defaultStoreMockOptions

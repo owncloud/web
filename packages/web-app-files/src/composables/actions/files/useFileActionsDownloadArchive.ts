@@ -7,12 +7,10 @@ import {
 import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
 import path from 'path'
 import first from 'lodash-es/first'
-import { archiverService } from '../../../services'
 import { isPublicSpaceResource, Resource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import {
-  useClientService,
   useLoadingService,
   usePublicLinkPassword,
   useRouter,
@@ -20,13 +18,14 @@ import {
 } from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
+import { useArchiverService } from 'web-app-files/src/composables/archiverService'
 
 export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const loadingService = useLoadingService()
+  const archiverService = useArchiverService()
   const { $ngettext, $gettext } = useGettext()
-  const clientService = useClientService()
   const publicLinkPassword = usePublicLinkPassword({ store })
   const isFilesAppActive = useIsFilesAppActive()
 
@@ -41,7 +40,6 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
         }
     return archiverService
       .triggerDownload({
-        clientService,
         ...fileOptions,
         ...(isPublicSpaceResource(space) && {
           publicToken: space.id as string,

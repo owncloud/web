@@ -9,7 +9,6 @@ import { has } from 'lodash-es'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import get from 'lodash-es/get'
 import { ClipboardActions } from '../helpers/clipboardActions'
-import { thumbnailService } from '../services'
 import {
   buildResource,
   isProjectSpaceResource,
@@ -504,7 +503,7 @@ export default {
 
   async loadPreview(
     { commit, rootGetters },
-    { clientService, resource, isPublic, dimensions, type }
+    { clientService, thumbnailService, resource, isPublic, dimensions, type }
   ) {
     if (!thumbnailService.available || !thumbnailService.isMimetypeSupported(resource.mimeType)) {
       return

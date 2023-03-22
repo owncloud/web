@@ -1,4 +1,4 @@
-import { ClassicApplicationScript, RuntimeApi } from '../types'
+import { AppReadyHookArgs, ClassicApplicationScript, RuntimeApi } from '../types'
 import { buildRuntimeApi } from '../api'
 import { App } from 'vue'
 import { isFunction, isObject } from 'lodash-es'
@@ -48,7 +48,7 @@ class ClassicApplication extends NextApplication {
     return Promise.resolve(undefined)
   }
 
-  private attachPublicApi(hook: unknown, instance?: App) {
+  private attachPublicApi(hook: (arg: AppReadyHookArgs) => void, instance?: App) {
     isFunction(hook) &&
       hook({
         ...(instance && {
@@ -60,7 +60,7 @@ class ClassicApplication extends NextApplication {
         store: this.runtimeApi.requestStore(),
         router: this.runtimeApi.requestRouter(),
         announceExtension: this.runtimeApi.announceExtension,
-        clientService: this.app.config.globalProperties.$clientService
+        globalProperties: this.app.config.globalProperties
       })
   }
 }

@@ -9,6 +9,7 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
+import { ThumbnailService } from 'web-app-files/src/services'
 
 const spaceMock = {
   id: '1',
@@ -35,7 +36,8 @@ function getWrapper(space) {
       },
       global: {
         mocks: {
-          ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) })
+          ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) }),
+          $thumbnailService: mock<ThumbnailService>({ getSupportedMimeTypes: jest.fn(() => []) })
         },
         plugins: [
           ...defaultPlugins({

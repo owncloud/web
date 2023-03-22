@@ -1,6 +1,6 @@
 import { Store } from 'vuex'
 import { RouteRecordRaw, Router } from 'vue-router'
-import { App, Component } from 'vue'
+import { App, Component, ComponentCustomProperties } from 'vue'
 
 /** shim configuration for now, should be typed in a later step */
 export type RuntimeConfiguration = any
@@ -91,4 +91,14 @@ export interface RuntimeApi {
     order: number,
     components: Component[]
   ) => void
+}
+
+/** Defines the args of the ready-hook which is available for each app */
+export interface AppReadyHookArgs {
+  announceExtension: (extension: { [key: string]: unknown }) => void
+  globalProperties: ComponentCustomProperties & Record<string, any>
+  router: Router
+  store: Store<unknown>
+  instance?: App
+  portal?: any
 }

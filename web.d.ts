@@ -1,6 +1,8 @@
 /// <reference types="vite/client" />
 
 // This file must have at least one export or import on top-level
+import { Ability, ClientService, LoadingService } from 'web-pkg'
+
 export {}
 
 declare module 'vue' {
@@ -71,6 +73,9 @@ declare module 'vue' {
   }
 
   interface ComponentCustomProperties {
+    $ability: Ability
+    $clientService: ClientService
+    $loadingService: LoadingService
     $router: Router
     $route: RouteRecordNormalizedLoaded
   }
