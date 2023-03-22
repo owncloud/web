@@ -143,7 +143,7 @@ export class Users {
     await openEditPanel({ page: this.#page, uuid, action })
   }
 
-  async editPanelVisible(): Promise<void> {
+  async waitForEditPanelToBeVisible(): Promise<void> {
     await waitForEditPanelToBeVisible({ page: this.#page })
   }
 }

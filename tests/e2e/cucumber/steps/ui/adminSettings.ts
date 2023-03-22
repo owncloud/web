@@ -501,21 +501,12 @@ When(
   async function (this: World, stepUser: string, actionUser: string, action: string) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
-    switch (action) {
-      case 'quick action':
-        await usersObject.openEditPanel({ key: actionUser, action: 'quick-action' })
-        break
-      case 'context menu':
-        await usersObject.openEditPanel({ key: actionUser, action: 'context-menu' })
-        break
-      default:
-        throw new Error(`${action} not implemented`)
-    }
+    await usersObject.openEditPanel({ key: actionUser, action: action.replace(' ', '-') })
   }
 )
 
 Then('{string} should see the edit panel', async function (this: World, stepUser: string) {
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
-  await usersObject.editPanelVisible()
+  await usersObject.waitForEditPanelToBeVisible()
 })

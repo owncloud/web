@@ -185,7 +185,7 @@ Feature: users management
 
 
   Scenario: edit panel can be opened via quick action and context menu
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |
