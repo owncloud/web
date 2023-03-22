@@ -54,7 +54,7 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
       hasInput: true,
       inputLabel: $gettext('Space subtitle'),
       inputValue: resources[0].description,
-      onCancel: store.dispatch('hideModal'),
+      onCancel: () => store.dispatch('hideModal'),
       onConfirm: (description) => editDescriptionSpace(resources[0], description)
     }
 

@@ -91,7 +91,7 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
       confirmText,
       message,
       hasInput: false,
-      onCancel: store.dispatch('hideModal'),
+      onCancel: () => store.dispatch('hideModal'),
       onConfirm: () => disableSpaces(allowedResources)
     }
 

@@ -92,7 +92,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
       icon: 'alarm-warning',
       message,
       hasInput: false,
-      onCancel: store.dispatch('hideModal'),
+      onCancel: () => store.dispatch('hideModal'),
       onConfirm: () => restoreSpaces(allowedResources)
     }
 
