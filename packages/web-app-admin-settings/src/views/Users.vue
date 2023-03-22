@@ -197,7 +197,7 @@ import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
+import { useSpaceActionsEditQuota } from 'web-pkg/src/composables/actions/spaces'
 import { toRaw } from 'vue'
 import { SpaceResource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
@@ -220,7 +220,7 @@ export default defineComponent({
     QuotaModal,
     GroupsModal
   },
-  mixins: [Delete, EditQuota],
+  mixins: [Delete],
   setup() {
     const instance = getCurrentInstance().proxy as any
     const { $gettext } = useGettext()
@@ -231,6 +231,12 @@ export default defineComponent({
 
     const { actions: removeFromGroupsActions } = useRemoveFromGroups()
     const { actions: addToGroupsActions } = useAddToGroups()
+    const {
+      actions: editQuotaActions,
+      modalOpen: quotaModalIsOpen,
+      closeModal: closeQuotaModal,
+      spaceQuotaUpdated
+    } = useSpaceActionsEditQuota({ store })
 
     const users = ref([])
     const groups = ref([])
@@ -370,7 +376,7 @@ export default defineComponent({
     const batchActions = computed(() => {
       return [
         ...instance.$_delete_items,
-        ...instance.$_editQuota_items,
+        ...unref(editQuotaActions),
         ...unref(addToGroupsActions),
         ...unref(removeFromGroupsActions)
       ].filter((item) => item.isEnabled({ resources: unref(selectedUsers) }))
@@ -415,14 +421,6 @@ export default defineComponent({
         removeFromGroupsActionEventToken
       )
     })
-
-    const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
-    const closeQuotaModal = () => {
-      instance.$_editQuota_closeModal()
-    }
-    const spaceQuotaUpdated = (quota) => {
-      instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
-    }
 
     const addUsersToGroups = async ({ users: affectedUsers, groups: groupsToAdd }) => {
       try {

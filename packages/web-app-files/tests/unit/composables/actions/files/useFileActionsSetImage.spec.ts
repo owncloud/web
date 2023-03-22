@@ -100,7 +100,7 @@ describe('setImage', () => {
     })
   })
 
-  describe('method "$_setSpaceImage_trigger"', () => {
+  describe('handler', () => {
     it('should show message on success', () => {
       const driveMock = mock<Drive>({ special: [{ specialFolder: { name: 'image' } }] })
 

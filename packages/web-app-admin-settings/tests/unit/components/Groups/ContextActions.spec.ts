@@ -1,4 +1,5 @@
 import {
+  createMockActionComposables,
   defaultPlugins,
   defaultStoreMockOptions,
   getActionMixinMocks,
@@ -8,7 +9,13 @@ import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client/src/helpers'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
 
-const mixins = ['$_delete_items', '$_showDetails_items']
+jest.mock('web-pkg/src/composables/actions/useActionsShowDetails', () =>
+  createMockActionComposables(
+    jest.requireActual('web-pkg/src/composables/actions/useActionsShowDetails')
+  )
+)
+
+const mixins = ['$_delete_items']
 const selectors = {
   actionMenuItemStub: 'action-menu-item-stub'
 }
@@ -21,7 +28,7 @@ describe('ContextActions', () => {
     })
 
     it('render enabled actions', () => {
-      const enabledActions = ['$_delete_items', '$_showDetails_items']
+      const enabledActions = ['$_delete_items']
       const { wrapper } = getWrapper({ enabledActions })
       expect(wrapper.findAll(selectors.actionMenuItemStub).length).toBe(enabledActions.length)
     })

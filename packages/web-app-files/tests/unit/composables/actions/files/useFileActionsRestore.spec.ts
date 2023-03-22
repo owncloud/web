@@ -77,7 +77,7 @@ describe('restore', () => {
     })
   })
 
-  describe('method "$_restore_trigger"', () => {
+  describe('method "restoreResources"', () => {
     it('should show message on success', () => {
       const { wrapper } = getWrapper({
         setup: async ({ restoreResources }, { space, storeOptions }) => {

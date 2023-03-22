@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SpaceContextActions action handlers renders actions that are always available: "Members", "Deleted files", "Details" 1`] = `
+exports[`SpaceContextActions action handlers renders actions that are always available: "Members", "Edit Quota", "Details" 1`] = `
 <div>
   <div id="oc-files-context-menu">
     <ul class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border" id="oc-files-context-actions-members">

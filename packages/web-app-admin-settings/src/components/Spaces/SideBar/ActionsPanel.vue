@@ -21,22 +21,24 @@
 
 <script lang="ts">
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
-import Rename from 'web-pkg/src/mixins/spaces/rename'
-import Delete from 'web-pkg/src/mixins/spaces/delete'
-import Disable from 'web-pkg/src/mixins/spaces/disable'
-import Restore from 'web-pkg/src/mixins/spaces/restore'
-import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
-import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
+import {
+  useSpaceActionsDelete,
+  useSpaceActionsDisable,
+  useSpaceActionsEditDescription,
+  useSpaceActionsEditQuota,
+  useSpaceActionsRename,
+  useSpaceActionsRestore
+} from 'web-pkg/src/composables/actions/spaces'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import { computed, defineComponent, getCurrentInstance, inject, unref } from 'vue'
 import { SpaceResource } from 'web-client'
-import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
+import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'ActionsPanel',
   components: { ActionMenuItem, QuotaModal },
-  mixins: [Rename, Delete, EditDescription, Disable, Restore, EditQuota],
   setup() {
+    const store = useStore()
     const instance = getCurrentInstance().proxy as any
     const resource = inject<SpaceResource>('resource')
     const resources = computed(() => {
@@ -46,23 +48,29 @@ export default defineComponent({
       resources: unref(resources)
     }))
 
+    const { actions: deleteActions } = useSpaceActionsDelete({ store })
+    const { actions: disableActions } = useSpaceActionsDisable({ store })
+    const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
+    const {
+      actions: editQuotaActions,
+      modalOpen: quotaModalIsOpen,
+      closeModal: closeQuotaModal,
+      spaceQuotaUpdated
+    } = useSpaceActionsEditQuota({ store })
+    const { actions: renameActions } = useSpaceActionsRename({ store })
+    const { actions: restoreActions } = useSpaceActionsRestore({ store })
+
     const actions = computed(() => {
       return [
-        ...instance.$_rename_items,
-        ...instance.$_editDescription_items,
-        ...instance.$_editQuota_items,
-        ...instance.$_restore_items,
-        ...instance.$_delete_items,
-        ...instance.$_disable_items
+        ...unref(renameActions),
+        ...unref(editDescriptionActions),
+        ...unref(editQuotaActions),
+        ...unref(restoreActions),
+        ...unref(deleteActions),
+        ...unref(disableActions)
       ].filter((item) => item.isEnabled(unref(actionOptions)))
     })
-    const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
-    const closeQuotaModal = () => {
-      instance.$_editQuota_closeModal()
-    }
-    const spaceQuotaUpdated = (quota) => {
-      instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
-    }
+
     return {
       actions,
       actionOptions,

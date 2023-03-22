@@ -1,5 +1,5 @@
 import { Ref } from 'vue'
-import { MongoAbility } from '@casl/ability'
+import { MongoAbility, SubjectRawRule } from '@casl/ability'
 
 export type ReadOnlyRef<T> = Readonly<Ref<T>>
 export type MaybeRef<T> = T | Ref<T>
@@ -28,3 +28,5 @@ export type AbilitySubjects =
   | 'Space'
 
 export type Ability = MongoAbility<[AbilityActions, AbilitySubjects]>
+
+export type AbilityRule = SubjectRawRule<AbilityActions, AbilitySubjects, any>

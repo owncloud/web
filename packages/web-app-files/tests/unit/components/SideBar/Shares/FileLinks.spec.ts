@@ -8,6 +8,7 @@ import {
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import { SharePermissions } from 'web-client/src/helpers/share'
+import { AbilityRule } from 'web-pkg/src'
 
 const defaultLinksList = [
   {
@@ -137,6 +138,10 @@ function getWrapper({
   resource = mockDeep<Resource>({ isFolder: false, canShare: () => true }),
   links = defaultLinksList,
   abilities = [{ action: 'create-all', subject: 'PublicLink' }]
+}: {
+  resource?: Resource
+  links?: typeof defaultLinksList
+  abilities?: AbilityRule[]
 } = {}) {
   const storeOptions = {
     ...defaultStoreMockOptions,

@@ -13,7 +13,6 @@
 </template>
 
 <script lang="ts">
-import ShowDetails from '../../mixins/showDetails'
 import Delete from '../../mixins/users/delete'
 import Edit from '../../mixins/users/edit'
 import {
@@ -29,14 +28,15 @@ import {
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import { User } from 'web-client/src/generated'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
-import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
+import { useSpaceActionsEditQuota } from 'web-pkg/src/composables/actions/spaces'
 import { SpaceResource } from 'web-client/src'
-import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
+import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
+import { SpaceActionOptions, useActionsShowDetails } from 'web-pkg/src/composables/actions'
 
 export default defineComponent({
   name: 'ContextActions',
   components: { ContextActionMenu, QuotaModal },
-  mixins: [Delete, Edit, ShowDetails, EditQuota],
+  mixins: [Delete, Edit],
   props: {
     items: {
       type: Array as PropType<User[]>,
@@ -45,6 +45,7 @@ export default defineComponent({
   },
   setup(props) {
     const instance = getCurrentInstance().proxy as any
+    const store = useStore()
     const filterParams = computed(() => ({ resources: props.items }))
     const selectedPersonalDrives = ref([])
     watch(
@@ -66,17 +67,29 @@ export default defineComponent({
       },
       { deep: true, immediate: true }
     )
+
+    const { actions: showDetailsActions } = useActionsShowDetails()
+    const {
+      actions: editQuotaActions,
+      modalOpen: quotaModalIsOpen,
+      closeModal: closeQuotaModal,
+      spaceQuotaUpdated
+    } = useSpaceActionsEditQuota({ store })
+
     const menuItemsPrimaryActions = computed(() =>
       [...instance.$_edit_items, ...instance.$_delete_items].filter((item) =>
         item.isEnabled(unref(filterParams))
       )
     )
     const menuItemsSecondaryActions = computed(() =>
-      [...instance.$_editQuota_items].filter((item) => item.isEnabled(unref(filterParams)))
+      [...unref(editQuotaActions)].filter((item) =>
+        // TODO: create separate useUserActionsEditQuota
+        item.isEnabled(unref(filterParams) as SpaceActionOptions)
+      )
     )
 
     const menuItemsSidebar = computed(() =>
-      [...instance.$_showDetails_items].filter((item) => item.isEnabled(unref(filterParams)))
+      [...unref(showDetailsActions)].filter((item) => item.isEnabled(unref(filterParams)))
     )
 
     const menuSections = computed(() => {
@@ -102,14 +115,6 @@ export default defineComponent({
       }
       return sections
     })
-
-    const quotaModalIsOpen = computed(() => instance.$data.$_editQuota_modalOpen)
-    const closeQuotaModal = () => {
-      instance.$_editQuota_closeModal()
-    }
-    const spaceQuotaUpdated = (quota) => {
-      instance.$data.$_editQuota_selectedSpace.spaceQuota = quota
-    }
 
     return {
       maxQuota: useCapabilitySpacesMaxQuota(),

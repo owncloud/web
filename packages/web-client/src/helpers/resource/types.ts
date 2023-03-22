@@ -1,3 +1,4 @@
+import { Ability } from 'web-pkg/src'
 import { User } from '../user'
 
 export interface SpaceRole {
@@ -53,11 +54,11 @@ export interface Resource {
   canUpload?({ user }: { user?: User }): boolean
   canDownload?(): boolean
   canShare?({ user }: { user?: User }): boolean
-  canRename?({ user }?: { user?: User }): boolean
-  canBeDeleted?({ user }?: { user?: User; ability?: any }): boolean
+  canRename?({ user }?: { user?: User; ability?: Ability }): boolean
+  canBeDeleted?({ user }?: { user?: User; ability?: Ability }): boolean
   canBeRestored?(): boolean
   canDeny?(): boolean
-  canEditDescription?({ user }: { user?: User }): boolean
+  canEditDescription?({ user }: { user?: User; ability?: Ability }): boolean
   canRestore?({ user }: { user?: User }): boolean
   canDisable?({ user }: { user?: User; ability?: any }): boolean
   canEditImage?({ user }: { user?: User }): boolean

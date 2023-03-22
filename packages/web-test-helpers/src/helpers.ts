@@ -1,7 +1,7 @@
 import { createStore as _createStore, StoreOptions } from 'vuex'
 import { mount as _mount, MountingOptions } from '@vue/test-utils'
-import { defineComponent } from 'vue'
-import { defaultPlugins } from 'web-test-helpers'
+import { defineComponent, ref } from 'vue'
+import { defaultPlugins, DefaultPluginsOptions } from 'web-test-helpers'
 import { createRouter as _createRouter } from 'web-runtime/src/router'
 import { createMemoryHistory, RouterOptions } from 'vue-router'
 
@@ -21,9 +21,19 @@ export const shallowMount = <T>(component: any, options?: MountingOptions<T>) =>
   return mount(component, options)
 }
 
-export const getComposableWrapper = (
+export const getComposableWrapper = <T>(
   setup: any,
-  { mocks = undefined, store = undefined, template = undefined } = {}
+  {
+    mocks = undefined,
+    store = undefined,
+    template = undefined,
+    pluginOptions = undefined
+  }: {
+    mocks?: Record<string, unknown>
+    store?: StoreOptions<T>
+    template?: string
+    pluginOptions?: DefaultPluginsOptions
+  } = {}
 ) => {
   return mount(
     defineComponent({
@@ -32,7 +42,7 @@ export const getComposableWrapper = (
     }),
     {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins(pluginOptions), store],
         ...(mocks && { mocks })
       }
     }
@@ -52,3 +62,11 @@ export const createRouter = (options?: Partial<RouterOptions>) =>
     strict: false,
     ...options
   })
+
+export const createMockActionComposables = (module) => {
+  const mockModule: Record<string, any> = {}
+  for (const m of Object.keys(module)) {
+    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
+  }
+  return mockModule
+}

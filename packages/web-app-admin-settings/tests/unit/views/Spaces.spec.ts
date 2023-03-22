@@ -3,14 +3,20 @@ import { Graph } from 'web-client'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg/src'
 import {
+  createMockActionComposables,
   createStore,
   defaultComponentMocks,
   defaultPlugins,
   defaultStoreMockOptions,
-  getActionMixinMocks,
   mount
 } from 'web-test-helpers'
 import Spaces from '../../../src/views/Spaces.vue'
+
+jest.mock('web-pkg/src/composables/actions/spaces', () =>
+  createMockActionComposables(jest.requireActual('web-pkg/src/composables/actions/spaces'))
+)
+
+jest.mock('web-pkg/src/composables/appDefaults')
 
 const selectors = {
   loadingSpinnerStub: 'app-loading-spinner-stub',
@@ -18,9 +24,6 @@ const selectors = {
   noContentMessageStub: 'no-content-message-stub',
   batchActionsStub: 'batch-actions-stub'
 }
-
-const mixins = ['$_disable_items', '$_restore_items', '$_delete_items', '$_editQuota_items']
-jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('Spaces view', () => {
   describe('loading states', () => {
@@ -124,29 +127,25 @@ function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
   )
   const mocks = {
     ...defaultComponentMocks(),
-    $clientService,
-    ...getActionMixinMocks({ actions: mixins, enabledActions: mixins })
+    $clientService
   }
 
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
 
   return {
-    wrapper: mount(
-      { ...Spaces, mixins },
-      {
-        global: {
-          plugins: [...defaultPlugins(), store],
-          mocks,
-          stubs: {
-            AppLoadingSpinner: true,
-            NoContentMessage: true,
-            SpacesList: true,
-            OcBreadcrumb: true,
-            BatchActions: true
-          }
+    wrapper: mount(Spaces, {
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks,
+        stubs: {
+          AppLoadingSpinner: true,
+          NoContentMessage: true,
+          SpacesList: true,
+          OcBreadcrumb: true,
+          BatchActions: true
         }
       }
-    )
+    })
   }
 }

@@ -34,25 +34,29 @@
 
 <script lang="ts">
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
-import Rename from 'web-pkg/src/mixins/spaces/rename'
-import Delete from 'web-pkg/src/mixins/spaces/delete'
-import Disable from 'web-pkg/src/mixins/spaces/disable'
-import Restore from 'web-pkg/src/mixins/spaces/restore'
-import EditDescription from 'web-pkg/src/mixins/spaces/editDescription'
-import EditReadmeContent from 'web-pkg/src/mixins/spaces/editReadmeContent'
 import { useSpaceActionsUploadImage } from '../../../composables/actions/spaces/useSpaceActionsUploadImage'
-import EditQuota from 'web-pkg/src/mixins/spaces/editQuota'
+
+import {
+  useSpaceActionsDelete,
+  useSpaceActionsDisable,
+  useSpaceActionsEditDescription,
+  useSpaceActionsEditQuota,
+  useSpaceActionsEditReadmeContent,
+  useSpaceActionsRename,
+  useSpaceActionsRestore
+} from 'web-pkg/src/composables/actions/spaces'
+
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
 import { thumbnailService } from '../../../services'
 import { computed, defineComponent, inject, ref, unref, VNodeRef } from 'vue'
 import { SpaceResource } from 'web-client'
 import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
+import { SpaceAction } from 'web-pkg/src/composables/actions'
 
 export default defineComponent({
   name: 'SpaceActions',
   components: { ActionMenuItem, QuotaModal, ReadmeContentModal },
-  mixins: [Rename, Delete, EditDescription, EditReadmeContent, Disable, Restore, EditQuota],
   setup() {
     const store = useStore()
     const resource = inject<SpaceResource>('resource')
@@ -61,48 +65,58 @@ export default defineComponent({
     }))
 
     const spaceImageInput: VNodeRef = ref(null)
+    const supportedSpaceImageMimeTypes = computed(() => {
+      return thumbnailService.getSupportedMimeTypes('image/').join(',')
+    })
+
+    const { actions: deleteActions } = useSpaceActionsDelete({ store })
+    const { actions: disableActions } = useSpaceActionsDisable({ store })
+    const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
+    const {
+      actions: editQuotaActions,
+      modalOpen: quotaModalIsOpen,
+      closeModal: closeQuotaModal
+    } = useSpaceActionsEditQuota({ store })
+    const {
+      actions: editReadmeContentActions,
+      modalOpen: readmeContentModalIsOpen,
+      closeModal: closeReadmeContentModal
+    } = useSpaceActionsEditReadmeContent({ store })
+    const { actions: renameActions } = useSpaceActionsRename({ store })
+    const { actions: restoreActions } = useSpaceActionsRestore({ store })
     const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
       store,
       spaceImageInput
     })
 
+    const actions = computed((): SpaceAction[] =>
+      [
+        ...unref(renameActions),
+        ...unref(editDescriptionActions),
+        ...unref(uploadImageActions),
+        ...unref(editReadmeContentActions),
+        ...unref(editQuotaActions),
+        ...unref(restoreActions),
+        ...unref(deleteActions),
+        ...unref(disableActions)
+      ].filter((item) => item.isEnabled(unref(actionOptions)))
+    )
+
     return {
       maxQuota: useCapabilitySpacesMaxQuota(),
+      actions,
       actionOptions,
       spaceImageInput,
+      supportedSpaceImageMimeTypes,
+
       uploadImageActions,
-      uploadImageSpace
-    }
-  },
-  computed: {
-    actions() {
-      return [
-        ...this.$_rename_items,
-        ...this.$_editDescription_items,
-        ...this.uploadImageActions,
-        ...this.$_editReadmeContent_items,
-        ...this.$_editQuota_items,
-        ...this.$_restore_items,
-        ...this.$_delete_items,
-        ...this.$_disable_items
-      ].filter((item) => item.isEnabled(this.actionOptions))
-    },
-    readmeContentModalIsOpen() {
-      return this.$data.$_editReadmeContent_modalOpen
-    },
-    quotaModalIsOpen() {
-      return this.$data.$_editQuota_modalOpen
-    },
-    supportedSpaceImageMimeTypes() {
-      return thumbnailService.getSupportedMimeTypes('image/').join(',')
-    }
-  },
-  methods: {
-    closeReadmeContentModal() {
-      this.$_editReadmeContent_closeModal()
-    },
-    closeQuotaModal() {
-      this.$_editQuota_closeModal()
+      uploadImageSpace,
+
+      readmeContentModalIsOpen,
+      closeReadmeContentModal,
+
+      quotaModalIsOpen,
+      closeQuotaModal
     }
   }
 })

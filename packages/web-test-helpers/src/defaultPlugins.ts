@@ -3,11 +3,12 @@ import { createGettext } from 'vue3-gettext'
 import { h } from 'vue'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
+import { AbilityRule } from 'web-pkg/src'
 
 export interface DefaultPluginsOptions {
   designSystem?: boolean
   gettext?: boolean
-  abilities?: any
+  abilities?: AbilityRule[]
 }
 
 export const defaultPlugins = ({
