@@ -29,15 +29,20 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
-import NavigationMixin from '../../mixins/navigationMixin'
 
 import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
-import { useCapabilityNotifications, useStore, useUserContext } from 'web-pkg/src/composables'
-import { computed, unref } from 'vue'
+import {
+  useCapabilityNotifications,
+  useRouter,
+  useStore,
+  useUserContext
+} from 'web-pkg/src/composables'
+import { computed, unref, PropType } from 'vue'
+import { useGettext } from 'vue3-gettext'
 
 export default {
   components: {
@@ -47,40 +52,111 @@ export default {
     ThemeSwitcher,
     UserMenu
   },
-  mixins: [NavigationMixin],
   props: {
     applicationsList: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: false,
       default: () => []
     }
   },
-  setup() {
+  setup(props) {
     const store = useStore()
     const notificationsSupport = useCapabilityNotifications()
     const isUserContext = useUserContext({ store })
+    const language = useGettext()
+    const router = useRouter()
 
     const isNotificationBellEnabled = computed(() => {
       return unref(isUserContext) && unref(notificationsSupport).includes('list')
     })
 
+    const isNavItemPermitted = (permittedMenus, navItem) => {
+      if (navItem.menu) {
+        return permittedMenus.includes(navItem.menu)
+      }
+      return permittedMenus.includes(null)
+    }
+
+    /**
+     * Returns well formed menuItem objects by a list of extensions.
+     * The following properties must be accessible in the wrapping code:
+     * - applicationsList
+     * - $language
+     *
+     * @param {Array} permittedMenus
+     * @param {String} activeRoutePath
+     * @returns {*}
+     */
+    const getMenuItems = (permittedMenus, activeRoutePath) => {
+      return props.applicationsList
+        .filter((app) => {
+          if (app.type === 'extension') {
+            // check if the extension has at least one navItem with a matching menuId
+            return (
+              store.getters
+                .getNavItemsByExtension(app.id)
+                .filter((navItem) => isNavItemPermitted(permittedMenus, navItem)).length > 0
+            )
+          }
+          return isNavItemPermitted(permittedMenus, app)
+        })
+        .map((item) => {
+          const lang = language.current
+          // TODO: move language resolution to a common function
+          // FIXME: need to handle logic for variants like en_US vs en_GB
+          let title = item.title ? item.title.en : item.name
+          let icon
+          let iconUrl
+          if (item.title && item.title[lang]) {
+            title = item.title[lang]
+          }
+
+          if (!item.icon) {
+            icon = 'deprecated' // "broken" icon
+          } else if (item.icon.indexOf('.') < 0) {
+            // not a file name or URL, treat as a material icon name instead
+            icon = item.icon
+          } else {
+            iconUrl = item.icon
+          }
+
+          const app: any = {
+            icon: icon,
+            iconUrl: iconUrl,
+            title: title
+          }
+
+          if (item.url) {
+            app.url = item.url
+            app.target = ['_blank', '_self', '_parent', '_top'].includes(item.target)
+              ? item.target
+              : '_blank'
+          } else if (item.path) {
+            app.path = item.path
+            app.active = activeRoutePath?.startsWith(app.path)
+          } else {
+            app.path = `/${item.id}`
+            app.active = activeRoutePath?.startsWith(app.path)
+          }
+
+          return app
+        })
+    }
+
+    const activeRoutePath = computed(() => router.resolve(unref(router.currentRoute)).path)
+    const userMenuItems = computed(() => getMenuItems(['user'], unref(activeRoutePath)))
+    const appMenuItems = computed(() =>
+      getMenuItems([null, 'apps', 'appSwitcher'], unref(activeRoutePath))
+    )
+
     return {
-      isNotificationBellEnabled
+      isNotificationBellEnabled,
+      userMenuItems,
+      appMenuItems
     }
   },
   computed: {
     ...mapGetters(['configuration', 'user']),
-
-    activeRoutePath() {
-      return this.$router.resolve(this.$route).path
-    },
-
-    appMenuItems() {
-      return this.navigation_getMenuItems([null, 'apps', 'appSwitcher'], this.activeRoutePath)
-    },
-    userMenuItems() {
-      return this.navigation_getMenuItems(['user'], this.activeRoutePath)
-    },
 
     darkThemeAvailable() {
       return this.configuration.themes.default && this.configuration.themes['default-dark']
