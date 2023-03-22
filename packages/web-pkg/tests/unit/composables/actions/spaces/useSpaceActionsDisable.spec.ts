@@ -62,7 +62,7 @@ describe('disable', () => {
     })
   })
 
-  describe('method "$_disable_trigger"', () => {
+  describe('handler', () => {
     it('should trigger the disable modal window', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
@@ -87,7 +87,7 @@ describe('disable', () => {
     })
   })
 
-  describe('method "$_disable_disableSpace"', () => {
+  describe('method "disableSpace"', () => {
     it('should hide the modal on success', async () => {
       const { wrapper, mocks } = getWrapper({
         setup: async ({ disableSpaces }, { storeOptions, clientService }) => {

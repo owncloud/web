@@ -12,7 +12,7 @@ import { unref } from 'vue'
 import { SpaceResource } from 'web-client/src'
 
 describe('editDescription', () => {
-  describe('method "$_editDescription_trigger"', () => {
+  describe('handler', () => {
     it('should trigger the editDescription modal window with one resource', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
@@ -33,7 +33,7 @@ describe('editDescription', () => {
     })
   })
 
-  describe('method "$_editDescription_editDescriptionSpace"', () => {
+  describe('method "editDescriptionSpace"', () => {
     it('should hide the modal on success', async () => {
       const { wrapper, mocks } = getWrapper({
         setup: async ({ actions, editDescriptionSpace }, { storeOptions, clientService }) => {

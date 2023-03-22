@@ -13,7 +13,7 @@ import { unref } from 'vue'
 
 describe('delete', () => {
   describe('isEnabled property', () => {
-    it('should be false when not resource given', () => {
+    it('should be false when no resource given', () => {
       const { wrapper } = getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
@@ -63,7 +63,7 @@ describe('delete', () => {
     })
   })
 
-  describe('method "handler"', () => {
+  describe('handler', () => {
     it('should trigger the delete modal window', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
@@ -88,7 +88,7 @@ describe('delete', () => {
     })
   })
 
-  describe('method "$_delete_deleteSpace"', () => {
+  describe('method "deleteSpace"', () => {
     it('should hide the modal and show message on success', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions, deleteSpaces }, { storeOptions, clientService }) => {

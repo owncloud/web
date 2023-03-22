@@ -16,7 +16,7 @@ const currentFolder = {
 }
 
 describe('deleteResources', () => {
-  describe('method "$_deleteResources_filesList_delete"', () => {
+  describe('method "filesList_delete"', () => {
     it('should call the delete action on a resource in the file list', async () => {
       const { wrapper } = getWrapper({
         currentFolder,

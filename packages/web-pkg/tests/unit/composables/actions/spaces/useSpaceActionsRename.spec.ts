@@ -12,7 +12,7 @@ import { unref } from 'vue'
 import { SpaceResource } from 'web-client/src'
 
 describe('rename', () => {
-  describe('method "$_rename_trigger"', () => {
+  describe('handler', () => {
     it('should trigger the rename modal window', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
@@ -35,7 +35,7 @@ describe('rename', () => {
     })
   })
 
-  describe('method "$_rename_checkName"', () => {
+  describe('method "checkName"', () => {
     it('should throw an error with an empty space name', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ checkName }, { storeOptions }) => {
@@ -68,7 +68,7 @@ describe('rename', () => {
     )
   })
 
-  describe('method "$_rename_renameSpace"', () => {
+  describe('method "renameSpace"', () => {
     it('should hide the modal and show message on success', async () => {
       const { wrapper, mocks } = getWrapper({
         setup: async ({ renameSpace }, { storeOptions, clientService }) => {

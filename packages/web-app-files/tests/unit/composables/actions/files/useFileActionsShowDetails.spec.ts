@@ -12,7 +12,7 @@ import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 
 describe('showDetails', () => {
-  describe('method "$_showDetails_trigger"', () => {
+  describe('handler', () => {
     it('should trigger the open sidebar event', () => {
       getComposableWrapper(
         () => {

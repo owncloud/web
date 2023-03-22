@@ -63,7 +63,7 @@ describe('restore', () => {
     })
   })
 
-  describe('method "$_restore_trigger"', () => {
+  describe('handler', () => {
     it('should trigger the restore modal window', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
@@ -88,7 +88,7 @@ describe('restore', () => {
     })
   })
 
-  describe('method "$_restore_restoreSpace"', () => {
+  describe('method "restoreSpace"', () => {
     it('should hide the modal on success', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ restoreSpaces }, { storeOptions, clientService }) => {

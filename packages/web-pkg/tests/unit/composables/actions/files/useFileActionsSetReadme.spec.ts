@@ -79,7 +79,7 @@ describe('setReadme', () => {
       })
     })
   })
-  describe('method "$_setSpaceReadme_trigger"', () => {
+  describe('handler', () => {
     it('should show message on success', async () => {
       const space = mock<SpaceResource>({ id: '1' })
       const { wrapper } = getWrapper({
