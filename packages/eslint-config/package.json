@@ -16,9 +16,9 @@
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.19.1",
-    "@typescript-eslint/eslint-plugin": "^5.39.0",
-    "@typescript-eslint/parser": "^5.39.0",
-    "eslint-config-prettier": "^8.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^27.1.1",
@@ -28,7 +28,7 @@
     "eslint-plugin-unused-imports": "^2.0.0",
     "eslint-plugin-vue": "^9.6.0",
     "eslint-plugin-vuejs-accessibility": "^1.2.0",
-    "typescript": "^5.0.0"
+    "typescript": "4.9.5"
   },
   "peerDependencies": {
     "eslint": "^8.25.0"
