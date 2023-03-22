@@ -101,5 +101,49 @@ describe('admin settings index', () => {
         expect(index.routes({ $ability: ability }).find((n) => n.path === '/').redirect).toThrow()
       })
     })
+    it.each([
+      { can: true, redirect: null },
+      { can: false, redirect: { path: '/' } }
+    ])('redirects "/general" with sufficient permissions', ({ can, redirect }) => {
+      const ability = mock<Ability>({ can: jest.fn(() => can) })
+      const route = index.routes({ $ability: ability }).find((n) => n.path === '/general')
+      const nextMock = jest.fn()
+      route.beforeEnter({}, {}, nextMock)
+      const args = [...(redirect ? [redirect] : [])]
+      expect(nextMock).toHaveBeenCalledWith(...args)
+    })
+    it.each([
+      { can: true, redirect: null },
+      { can: false, redirect: { path: '/' } }
+    ])('redirects "/users" with sufficient permissions', ({ can, redirect }) => {
+      const ability = mock<Ability>({ can: jest.fn(() => can) })
+      const route = index.routes({ $ability: ability }).find((n) => n.path === '/users')
+      const nextMock = jest.fn()
+      route.beforeEnter({}, {}, nextMock)
+      const args = [...(redirect ? [redirect] : [])]
+      expect(nextMock).toHaveBeenCalledWith(...args)
+    })
+    it.each([
+      { can: true, redirect: null },
+      { can: false, redirect: { path: '/' } }
+    ])('redirects "/groups" with sufficient permissions', ({ can, redirect }) => {
+      const ability = mock<Ability>({ can: jest.fn(() => can) })
+      const route = index.routes({ $ability: ability }).find((n) => n.path === '/groups')
+      const nextMock = jest.fn()
+      route.beforeEnter({}, {}, nextMock)
+      const args = [...(redirect ? [redirect] : [])]
+      expect(nextMock).toHaveBeenCalledWith(...args)
+    })
+    it.each([
+      { can: true, redirect: null },
+      { can: false, redirect: { path: '/' } }
+    ])('redirects "/spaces" with sufficient permissions', ({ can, redirect }) => {
+      const ability = mock<Ability>({ can: jest.fn(() => can) })
+      const route = index.routes({ $ability: ability }).find((n) => n.path === '/spaces')
+      const nextMock = jest.fn()
+      route.beforeEnter({}, {}, nextMock)
+      const args = [...(redirect ? [redirect] : [])]
+      expect(nextMock).toHaveBeenCalledWith(...args)
+    })
   })
 })
