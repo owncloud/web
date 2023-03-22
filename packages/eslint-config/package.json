@@ -27,7 +27,7 @@
     "eslint-plugin-promise": "^6.0.1",
     "eslint-plugin-unused-imports": "^2.0.0",
     "eslint-plugin-vue": "^9.6.0",
-    "eslint-plugin-vuejs-accessibility": "^1.2.0",
+    "eslint-plugin-vuejs-accessibility": "^2.0.0",
     "typescript": "4.9.5"
   },
   "peerDependencies": {
