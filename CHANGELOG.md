@@ -992,6 +992,7 @@ Details
 
    https://github.com/owncloud/web/issues/8612
    https://github.com/owncloud/web/pull/8621
+   https://github.com/owncloud/web/pull/8660
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
