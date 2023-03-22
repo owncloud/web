@@ -103,18 +103,7 @@
     </app-template>
     <groups-modal
       v-if="addToGroupsModalIsOpen"
-      :title="$gettext('Add to groups')"
-      :message="
-        $ngettext(
-          'Add selected user %{user} to groups',
-          'Add %{userCount} selected users to groups ',
-          selectedUsers.length,
-          {
-            user: selectedUsers[0].displayName,
-            userCount: selectedUsers.length.toString()
-          }
-        )
-      "
+      :title="addToGroupsModalTitle"
       :groups="groups"
       :users="selectedUsers"
       @cancel="() => (addToGroupsModalIsOpen = false)"
@@ -122,18 +111,7 @@
     />
     <groups-modal
       v-if="removeFromGroupsModalIsOpen"
-      :title="$gettext('Remove from groups')"
-      :message="
-        $ngettext(
-          'Remove selected user %{user} from groups',
-          'Remove %{userCount} selected users from groups ',
-          selectedUsers.length,
-          {
-            user: selectedUsers[0].displayName,
-            userCount: selectedUsers.length.toString()
-          }
-        )
-      "
+      :title="removeFromGroupsModalTitle"
       :groups="groups"
       :users="selectedUsers"
       @cancel="() => (removeFromGroupsModalIsOpen = false)"
@@ -209,7 +187,7 @@ export default defineComponent({
     GroupsModal
   },
   setup() {
-    const { $gettext } = useGettext()
+    const { $gettext, $ngettext } = useGettext()
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
@@ -243,6 +221,28 @@ export default defineComponent({
     let loadResourcesEventToken
     let addToGroupsActionEventToken
     let removeFromGroupsActionEventToken
+    const addToGroupsModalTitle = computed(() => {
+      return $ngettext(
+        'Add user "%{user}" to groups',
+        'Add %{userCount} users to groups ',
+        unref(selectedUsers).length,
+        {
+          user: unref(selectedUsers)[0].displayName,
+          userCount: unref(selectedUsers).length.toString()
+        }
+      )
+    })
+    const removeFromGroupsModalTitle = computed(() => {
+      return $ngettext(
+        'Remove user "%{user}" from groups',
+        'Remove %{userCount} users from groups ',
+        unref(selectedUsers).length,
+        {
+          user: unref(selectedUsers)[0].displayName,
+          userCount: unref(selectedUsers).length.toString()
+        }
+      )
+    })
 
     const filters = {
       groups: {
@@ -513,7 +513,9 @@ export default defineComponent({
       accessToken,
       listHeaderPosition,
       createUserModalOpen,
+      addToGroupsModalTitle,
       addToGroupsModalIsOpen,
+      removeFromGroupsModalTitle,
       removeFromGroupsModalIsOpen,
       batchActions,
       filterGroups,

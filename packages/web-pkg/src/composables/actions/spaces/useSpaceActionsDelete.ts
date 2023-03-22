@@ -79,9 +79,15 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
     const modal = {
       variation: 'danger',
       icon: 'alarm-warning',
-      title: $ngettext('Delete Space?', 'Delete %{spaceCount} Spaces?', allowedResources.length, {
-        spaceCount: allowedResources.length.toString()
-      }),
+      title: $ngettext(
+        'Delete Space "%{space}"?',
+        'Delete %{spaceCount} Spaces?',
+        allowedResources.length,
+        {
+          space: allowedResources[0].name,
+          spaceCount: allowedResources.length.toString()
+        }
+      ),
       cancelText: $gettext('Cancel'),
       confirmText,
       message: message,

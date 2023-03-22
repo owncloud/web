@@ -51,21 +51,19 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
     const modal = {
       variation: 'danger',
       icon: 'alarm-warning',
-      title: $ngettext(
-        'Delete user %{user}?',
-        'Delete %{userCount} selected users?',
-        resources.length,
-        {
-          user: resources[0].displayName,
-          userCount: resources.length.toString()
-        }
-      ),
+      title: $ngettext('Delete user "%{user}"?', 'Delete %{userCount} users?', resources.length, {
+        user: resources[0].displayName,
+        userCount: resources.length.toString()
+      }),
       cancelText: $gettext('Cancel'),
       confirmText: $gettext('Delete'),
       message: $ngettext(
         'Are you sure you want to delete this user?',
-        'Are you sure you want to delete all selected users?',
-        resources.length
+        'Are you sure you want to delete the %{userCount} selected users?',
+        resources.length,
+        {
+          userCount: resources.length.toString()
+        }
       ),
       hasInput: false,
       onCancel: () => store.dispatch('hideModal'),
