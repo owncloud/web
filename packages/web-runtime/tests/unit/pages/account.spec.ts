@@ -25,7 +25,7 @@ const selectors = {
 
 jest.mock('web-pkg/src/configuration', () => ({
   configurationManager: {
-    logoutUrl: 'defined'
+    logoutUrl: "https://owncloud.com"
   }
 }))
 
@@ -128,6 +128,11 @@ describe('account page', () => {
       const { wrapper } = getWrapper()
       wrapper.vm.logoutUrl = undefined
       expect(wrapper.find('[data-testid="logout"]').exists()).toBe(true)
+    })
+    it('should use url from configuration manager', () => {
+      const { wrapper } = getWrapper()
+      const button = wrapper.find('oc-button-stub')
+      expect(button.attributes('href')).toBe("https://owncloud.com")
     })
   })
 })

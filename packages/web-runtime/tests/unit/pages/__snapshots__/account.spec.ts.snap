@@ -27,7 +27,7 @@ exports[`account page account information displays basic user information 1`] = 
   <div class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Logout from active devices</dt>
     <dd>
-      <oc-button-stub appearance="raw" href="defined" target="_blank" type="a"></oc-button-stub>
+      <oc-button-stub appearance="raw" href="https://owncloud.com" target="_blank" type="a"></oc-button-stub>
     </dd>
   </div>
 </dl>
