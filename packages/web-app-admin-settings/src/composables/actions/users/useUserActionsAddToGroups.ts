@@ -1,21 +1,21 @@
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { computed, Ref } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { UserAction } from 'web-pkg/src/composables/actions'
 
-export const useRemoveFromGroups = (): { actions: Ref<UserAction[]> } => {
+export const useUserActionsAddToGroups = () => {
   const { $gettext } = useGettext()
 
   const actions = computed((): UserAction[] => [
     {
-      name: 'remove-users-from-groups',
-      icon: 'subtract',
+      name: 'add-to-groups',
+      icon: 'add',
       componentType: 'button',
-      class: 'oc-users-actions-remove-from-groups-trigger',
-      label: () => $gettext('Remove from groups'),
+      class: 'oc-users-actions-add-to-groups-trigger',
+      label: () => $gettext('Add to groups'),
       isEnabled: ({ resources }) => resources.length > 0,
       handler() {
-        eventBus.publish('app.admin-settings.users.actions.remove-from-groups')
+        eventBus.publish('app.admin-settings.users.actions.add-to-groups')
       }
     }
   ])

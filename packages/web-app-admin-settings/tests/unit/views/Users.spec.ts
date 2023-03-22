@@ -7,14 +7,12 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   defaultStoreMockOptions,
-  getActionMixinMocks,
   mount,
   shallowMount
 } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
 import { ClientService, queryItemAsString } from 'web-pkg'
 
-const mixins = ['$_delete_items', '$_editQuota_items']
 jest.mock('web-pkg/src/composables/appDefaults')
 
 const getDefaultUser = () => {
@@ -418,8 +416,7 @@ function getMountedWrapper({
   jest.mocked(queryItemAsString).mockImplementationOnce(() => groupFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => roleFilterQuery)
   const mocks = {
-    ...defaultComponentMocks(),
-    ...getActionMixinMocks({ actions: mixins })
+    ...defaultComponentMocks()
   }
   mocks.$clientService = clientService
 
@@ -434,23 +431,20 @@ function getMountedWrapper({
 
   return {
     mocks,
-    wrapper: mountType(
-      { ...Users, mixins },
-      {
-        global: {
-          plugins: [...defaultPlugins(), store],
-          mocks,
-          stubs: {
-            CreateUserModal: true,
-            AppLoadingSpinner: true,
-            OcBreadcrumb: true,
-            NoContentMessage: true,
-            OcTable: true,
-            ItemFilter: true,
-            BatchActions: true
-          }
+    wrapper: mountType(Users, {
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks,
+        stubs: {
+          CreateUserModal: true,
+          AppLoadingSpinner: true,
+          OcBreadcrumb: true,
+          NoContentMessage: true,
+          OcTable: true,
+          ItemFilter: true,
+          BatchActions: true
         }
       }
-    )
+    })
   }
 }

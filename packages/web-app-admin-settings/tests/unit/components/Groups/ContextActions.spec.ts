@@ -2,12 +2,14 @@ import {
   createMockActionComposables,
   defaultPlugins,
   defaultStoreMockOptions,
-  getActionMixinMocks,
   mount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client/src/helpers'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
+import { useGroupActionsDelete } from 'web-app-admin-settings/src/composables/actions'
+import { computed } from 'vue'
+import { Action } from 'web-pkg/src/composables/actions'
 
 jest.mock('web-pkg/src/composables/actions/useActionsShowDetails', () =>
   createMockActionComposables(
@@ -15,7 +17,14 @@ jest.mock('web-pkg/src/composables/actions/useActionsShowDetails', () =>
   )
 )
 
-const mixins = ['$_delete_items']
+jest.mock('web-app-admin-settings/src/composables/actions/groups/useGroupActionsDelete', () =>
+  createMockActionComposables(
+    jest.requireActual(
+      'web-app-admin-settings/src/composables/actions/groups/useGroupActionsDelete'
+    )
+  )
+)
+
 const selectors = {
   actionMenuItemStub: 'action-menu-item-stub'
 }
@@ -28,31 +37,28 @@ describe('ContextActions', () => {
     })
 
     it('render enabled actions', () => {
-      const enabledActions = ['$_delete_items']
-      const { wrapper } = getWrapper({ enabledActions })
-      expect(wrapper.findAll(selectors.actionMenuItemStub).length).toBe(enabledActions.length)
+      const enabledComposables = [useGroupActionsDelete]
+      jest.mocked(useGroupActionsDelete).mockImplementation(() => ({
+        actions: computed(() => [mock<Action>({ isEnabled: () => true })])
+      }))
+      const { wrapper } = getWrapper()
+      expect(wrapper.findAll(selectors.actionMenuItemStub).length).toBe(enabledComposables.length)
     })
   })
 })
 
-function getWrapper({ enabledActions = [] } = {}) {
+function getWrapper() {
   const storeOptions = { ...defaultStoreMockOptions }
-  const mocks = getActionMixinMocks({ actions: mixins, enabledActions })
   return {
     storeOptions,
-    mocks,
-    wrapper: mount(
-      { ...ContextActions, mixins },
-      {
-        props: {
-          items: [mock<Resource>()]
-        },
-        global: {
-          mocks,
-          stubs: { 'action-menu-item': true },
-          plugins: [...defaultPlugins()]
-        }
+    wrapper: mount(ContextActions, {
+      props: {
+        items: [mock<Resource>()]
+      },
+      global: {
+        stubs: { 'action-menu-item': true },
+        plugins: [...defaultPlugins()]
       }
-    )
+    })
   }
 }

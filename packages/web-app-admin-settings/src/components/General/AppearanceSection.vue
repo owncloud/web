@@ -35,7 +35,7 @@
           name="file"
           tabindex="-1"
           :accept="supportedLogoMimeTypesAcceptValue"
-          @change="$_uploadLogo_upload"
+          @change="uploadImage"
         />
       </div>
     </div>
@@ -43,25 +43,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, computed, unref } from 'vue'
+import { defineComponent, computed, unref, VNodeRef, ref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
-import UploadLogo from '../../mixins/general/uploadLogo'
-import ResetLogo from '../../mixins/general/resetLogo'
+import {
+  useGeneralActionsResetLogo,
+  useGeneralActionsUploadLogo
+} from '../../composables/actions/general'
 import { supportedLogoMimeTypes } from '../../defaults'
-import { useStore } from 'web-pkg'
+import { useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'AppearanceSection',
   components: {
     ContextActionMenu
   },
-  mixins: [UploadLogo, ResetLogo],
   setup() {
     const store = useStore()
-    const instance = getCurrentInstance().proxy as any
+
+    const logoInput: VNodeRef = ref(null)
+
+    const { actions: resetLogoActions } = useGeneralActionsResetLogo({ store })
+    const { actions: uploadLogoActions, uploadImage } = useGeneralActionsUploadLogo({
+      imageInput: logoInput
+    })
 
     const menuItems = computed(() =>
-      [...instance.$_uploadLogo_items, ...instance.$_resetLogo_items].filter((i) => i.isEnabled())
+      [...unref(uploadLogoActions), ...unref(resetLogoActions)].filter((i) => i.isEnabled())
     )
 
     const actionOptions = computed(() => ({
@@ -83,7 +90,9 @@ export default defineComponent({
       logo,
       menuItems,
       menuSections,
-      supportedLogoMimeTypesAcceptValue
+      supportedLogoMimeTypesAcceptValue,
+      uploadImage,
+      logoInput
     }
   }
 })
