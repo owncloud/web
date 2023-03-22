@@ -3,13 +3,8 @@ Feature: Tiles
   I want to view and navigate resources displayed as tiles
   So that I can identify them better
 
-  Background:
-    Given "Admin" creates following users
-      | id    |
-      | Alice |
-
   Scenario: Users can navigate web via tiles
-    Given "Admin" creates following users
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
     And "Alice" logs in

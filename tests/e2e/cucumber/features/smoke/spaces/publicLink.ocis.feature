@@ -1,7 +1,7 @@
 Feature: spaces public link
 
   Scenario: public link for space
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |

@@ -54,5 +54,14 @@ export const userStore = new Map<string, User>([
       password: '1234',
       email: 'richard@example.org'
     }
+  ],
+  [
+    'max',
+    {
+      id: 'max',
+      displayName: 'Max Testing',
+      password: '12345678',
+      email: 'maxtesting@owncloud.com'
+    }
   ]
 ])

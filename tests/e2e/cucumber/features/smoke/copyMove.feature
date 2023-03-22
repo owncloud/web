@@ -4,7 +4,7 @@ Feature: Copy
   So that I can work safely on a copy or move resource to different location
 
   Scenario: Copy and move resources in personal space
-    Given "Admin" creates following users
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
     And "Alice" creates the following folders in personal space using API

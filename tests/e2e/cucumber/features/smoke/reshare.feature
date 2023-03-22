@@ -4,7 +4,7 @@ Feature: reshare
     Given "Admin" disables share auto accepting
 
   Scenario: re-sharing
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |

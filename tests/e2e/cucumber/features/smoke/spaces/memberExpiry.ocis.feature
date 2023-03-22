@@ -2,7 +2,7 @@ Feature: spaces member expiry
 
 
   Scenario: space members can be invited with an expiration date
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |

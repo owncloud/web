@@ -1,7 +1,7 @@
 Feature: Users can use web to organize tags
 
   Background:
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |

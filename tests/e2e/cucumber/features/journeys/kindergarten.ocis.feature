@@ -5,7 +5,7 @@ Feature: Kindergarten can use web to organize a day
   So that i'm sure all parents are informed and have the latest information in a easy and secure way
 
   Background:
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |

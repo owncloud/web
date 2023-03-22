@@ -1,7 +1,7 @@
 Feature: link
 
   Scenario: public link
-    Given "Admin" creates following users
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
     When "Alice" logs in
@@ -56,7 +56,7 @@ Feature: link
 
 
   Scenario: Quick link
-    Given "Admin" creates following users
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
     And "Alice" creates the following folders in personal space using API

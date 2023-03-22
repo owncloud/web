@@ -8,7 +8,7 @@ Feature: Search
     And "Admin" disables share auto accepting
 
   Scenario: Search in personal spaces
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |

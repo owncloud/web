@@ -11,7 +11,7 @@
     <template #content>
       <form autocomplete="off" @submit.prevent="onFormSubmit">
         <oc-text-input
-          id="create-user-input-display-name"
+          id="create-user-input-user-name"
           v-model="user.onPremisesSamAccountName"
           class="oc-mb-s"
           :label="$gettext('User name') + '*'"
@@ -20,6 +20,7 @@
           @update:model-value="validateUserName"
         />
         <oc-text-input
+          id="create-user-input-display-name"
           v-model="user.displayName"
           class="oc-mb-s"
           :label="$gettext('First and last name') + '*'"
@@ -28,6 +29,7 @@
           @update:model-value="validateDisplayName"
         />
         <oc-text-input
+          id="create-user-input-email"
           v-model="user.mail"
           class="oc-mb-s"
           :label="$gettext('Email') + '*'"
@@ -38,6 +40,7 @@
           @change="validateEmail"
         />
         <oc-text-input
+          id="create-user-input-password"
           v-model="user.passwordProfile.password"
           class="oc-mb-s"
           :label="$gettext('Password') + '*'"

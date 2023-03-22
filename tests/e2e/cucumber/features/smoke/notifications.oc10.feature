@@ -4,7 +4,7 @@ Feature: Notifications
   About new things that concern me
 
   Background:
-    Given "Admin" creates following users
+    Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |
