@@ -115,7 +115,7 @@ import GroupSelect from '../GroupSelect.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
 import { Group, User } from 'web-client/src/generated'
-import { MaybeRef, useGraphClient, useStore } from 'web-pkg'
+import { MaybeRef, useClientService, useStore } from 'web-pkg'
 import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({
@@ -144,6 +144,7 @@ export default defineComponent({
   emits: ['confirm'],
   setup(props) {
     const store = useStore()
+    const clientService = useClientService()
     const currentUser = store.getters.user
     const editUser: MaybeRef<User> = ref({})
     const formData = ref({
@@ -173,7 +174,7 @@ export default defineComponent({
       editUser,
       formData,
       groupOptions,
-      ...useGraphClient(),
+      clientService,
       // HACK: make sure _user has a proper type
       _user: computed(() => props.user as User)
     }
@@ -271,16 +272,14 @@ export default defineComponent({
 
       if (this.user.onPremisesSamAccountName !== this.editUser.onPremisesSamAccountName) {
         try {
-          await this.graphClient.users.getUser(this.editUser.onPremisesSamAccountName)
+          // Validate username by fetching the user. If the request succeeds, we throw a validation error
+          const client = this.clientService.graphAuthenticated
+          await client.users.getUser(this.editUser.onPremisesSamAccountName)
           this.formData.userName.errorMessage = this.$gettext('User "%{userName}" already exists', {
             userName: this.editUser.onPremisesSamAccountName
           })
           return false
-        } catch (e) {
-          /**
-           * If the backend throws an error, the user doesn't exist and everything is alright
-           */
-        }
+        } catch (e) {}
       }
 
       this.formData.userName.errorMessage = ''

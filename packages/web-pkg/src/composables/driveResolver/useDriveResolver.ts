@@ -3,13 +3,13 @@ import { Store } from 'vuex'
 import { computed, Ref, ref, unref, watch } from 'vue'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { useRouteQuery } from '../router'
-import { useGraphClient } from '../graphClient'
 import { Resource } from 'web-client'
 import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
 import { configurationManager } from '../../configuration'
 import { urlJoin } from 'web-client/src/utils'
 import { useCapabilitySpacesEnabled } from '../capability'
+import { useClientService } from 'web-pkg/src/composables'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -32,7 +32,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   })
   const hasSpaces = useCapabilitySpacesEnabled(store)
 
-  const { graphClient } = useGraphClient()
+  const clientService = useClientService()
   const spaces = computed<SpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
   const space = ref<SpaceResource>(null)
   const item: Ref<string> = ref(null)
@@ -111,7 +111,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         return
       }
       return store.dispatch('runtime/spaces/loadSpaceMembers', {
-        graphClient: unref(graphClient),
+        graphClient: clientService.graphAuthenticated,
         space: s
       })
     },

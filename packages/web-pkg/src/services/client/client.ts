@@ -22,7 +22,7 @@ interface HttpClient {
   token?: string
 }
 
-const createAxiosInstance = (authParams: AuthParameters, language): AxiosInstance => {
+const createAxiosInstance = (authParams: AuthParameters, language: string): AxiosInstance => {
   const auth = new Auth(authParams)
   const axiosClient = axios.create({
     headers: auth.getHeaders()

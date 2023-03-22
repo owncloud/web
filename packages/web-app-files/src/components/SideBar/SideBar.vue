@@ -54,7 +54,6 @@ import {
 import {
   useCapabilityShareJailEnabled,
   useClientService,
-  useGraphClient,
   useStore,
   useRouter
 } from 'web-pkg/src/composables'
@@ -83,7 +82,7 @@ export default defineComponent({
     const router = useRouter()
     const { $gettext } = useGettext()
     const { owncloudSdk } = useClientService()
-    const { graphClient } = useGraphClient()
+    const clientService = useClientService()
     const { webdav } = useClientService()
 
     const loadedResource = ref()
@@ -274,7 +273,7 @@ export default defineComponent({
 
           if (unref(highlightedFileIsSpace)) {
             store.dispatch('runtime/spaces/loadSpaceMembers', {
-              graphClient: unref(graphClient),
+              graphClient: clientService.graphAuthenticated,
               space: unref(highlightedSpace)
             })
           }

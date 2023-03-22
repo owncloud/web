@@ -115,7 +115,7 @@ import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { defineComponent } from 'vue'
 import * as uuid from 'uuid'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
-import { useGraphClient } from 'web-pkg/src/composables'
+import { useClientService } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'ListItem',
@@ -139,10 +139,11 @@ export default defineComponent({
   },
   emits: ['onDelete'],
   setup() {
+    const clientService = useClientService()
     return {
       hasResharing: useCapabilityFilesSharingResharing(),
       resharingDefault: useCapabilityFilesSharingResharingDefault(),
-      ...useGraphClient()
+      clientService
     }
   },
   computed: {
@@ -369,7 +370,7 @@ export default defineComponent({
       changeMethod({
         ...this.$language,
         client: this.$client,
-        graphClient: this.graphClient,
+        graphClient: this.clientService.graphAuthenticated,
         share: this.share,
         permissions: bitmask,
         expirationDate: expirationDate || '',

@@ -12,7 +12,7 @@ import {
 describe('QuotaModal', () => {
   describe('method "editQuota"', () => {
     it('should show message on success', async () => {
-      const { wrapper, mocks } = getWrapper()
+      const { wrapper, mocks, storeOptions } = getWrapper()
       mocks.$clientService.graphAuthenticated.drives.updateDrive.mockImplementation(() =>
         mockAxiosResolve({
           id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
@@ -25,24 +25,24 @@ describe('QuotaModal', () => {
           }
         })
       )
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
       await wrapper.vm.editQuota()
 
-      expect(updateSpaceFieldStub).toHaveBeenCalledTimes(1)
-      expect(showMessageStub).toHaveBeenCalledTimes(1)
+      expect(
+        storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
+      ).toHaveBeenCalledTimes(1)
+      expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
     })
 
     it('should show message on server error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper, mocks } = getWrapper()
+      const { wrapper, mocks, storeOptions } = getWrapper()
       mocks.$clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
       await wrapper.vm.editQuota()
 
-      expect(updateSpaceFieldStub).toHaveBeenCalledTimes(0)
-      expect(showMessageStub).toHaveBeenCalledTimes(1)
+      expect(
+        storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
+      ).toHaveBeenCalledTimes(0)
+      expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
     })
   })
 })
@@ -53,16 +53,8 @@ function getWrapper() {
   const store = createStore(storeOptions)
   return {
     mocks,
+    storeOptions,
     wrapper: mount(QuotaModal, {
-      data: () => {
-        return {
-          selectedOption: {
-            displayValue: '10',
-            displayUnit: 'GB',
-            value: 10 * Math.pow(10, 9)
-          }
-        }
-      },
       props: {
         cancel: jest.fn(),
         spaces: [

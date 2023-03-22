@@ -89,7 +89,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions } from 'vuex'
 import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
-import { useGraphClient } from 'web-pkg/src/composables'
+import { useClientService } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import Delete from '../mixins/groups/delete'
@@ -111,10 +111,10 @@ export default defineComponent({
     const selectedGroups = ref([])
     const createGroupModalOpen = ref(false)
     const listHeaderPosition = ref(0)
-    const { graphClient } = useGraphClient()
+    const clientService = useClientService()
 
     const loadResourcesTask = useTask(function* (signal) {
-      const response = yield unref(graphClient).groups.listGroups('displayName')
+      const response = yield clientService.graphAuthenticated.groups.listGroups('displayName')
       groups.value = response.data.value || []
       groups.value.forEach((group) => {
         group.members = group.members || []
@@ -152,7 +152,7 @@ export default defineComponent({
       createGroupModalOpen,
       template,
       loadResourcesTask,
-      graphClient,
+      clientService,
       listHeaderPosition,
       batchActions
     }
@@ -225,7 +225,8 @@ export default defineComponent({
     },
     async createGroup(group) {
       try {
-        const response = await this.graphClient.groups.createGroup(group)
+        const client = this.clientService.graphAuthenticated
+        const response = await client.groups.createGroup(group)
         this.toggleCreateGroupModal()
         this.showMessage({
           title: this.$gettext('Group was created successfully')
@@ -241,7 +242,8 @@ export default defineComponent({
     },
     async editGroup(editGroup) {
       try {
-        await this.graphClient.groups.editGroup(editGroup.id, editGroup)
+        const client = this.clientService.graphAuthenticated
+        await client.groups.editGroup(editGroup.id, editGroup)
         const group = this.groups.find((group) => group.id === editGroup.id)
         Object.assign(group, editGroup)
 

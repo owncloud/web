@@ -283,7 +283,7 @@ importers:
       '@babel/preset-env': 7.19.4_@babel+core@7.19.6
       '@babel/runtime': 7.20.1
       '@popperjs/core': 2.11.5
-      autoprefixer: 10.4.12_postcss@8.4.20
+      autoprefixer: 10.4.12_postcss@8.4.21
       babel-core: 7.0.0-bridge.0_@babel+core@7.19.6
       babel-jest: 29.2.2_@babel+core@7.19.6
       babel-loader: 9.1.0_q4ydpsrmbqywduja5orgah6fgq
@@ -331,7 +331,7 @@ importers:
       style-loader: 2.0.0_webpack@4.46.0
       style-value-types: 5.1.2
       stylelint: 14.16.0
-      stylelint-config-sass-guidelines: 9.0.1_l3s4qeu3gkar2knsdy3w5miimm
+      stylelint-config-sass-guidelines: 9.0.1_4hlw5ipnhspjrftdr7hqo6kmye
       stylelint-config-standard: 26.0.0_stylelint@14.16.0
       tinycolor2: 1.4.2
       tippy.js: 6.3.7
@@ -647,7 +647,7 @@ importers:
       luxon: ^2.4.0
       marked: ^4.0.12
       oidc-client-ts: ^2.1.0
-      owncloud-sdk: ~3.1.0-alpha.3
+      owncloud-sdk: ~3.1.0-alpha.4
       p-queue: ^6.6.2
       portal-vue: 3.0.0
       postcss-import: ^12.0.1
@@ -695,7 +695,7 @@ importers:
       luxon: 2.4.0
       marked: 4.0.12
       oidc-client-ts: 2.1.0
-      owncloud-sdk: 3.1.0-alpha.3_qgpf6seimtkgc6dfu7oqfstxh4
+      owncloud-sdk: 3.1.0-alpha.4_qgpf6seimtkgc6dfu7oqfstxh4
       p-queue: 6.6.2
       portal-vue: 3.0.0_vue@3.2.47
       postcss-import: 12.0.1
@@ -7426,7 +7426,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dev: true
 
-  /autoprefixer/10.4.12_postcss@8.4.20:
+  /autoprefixer/10.4.12_postcss@8.4.21:
     resolution: {integrity: sha512-WrCGV9/b97Pa+jtwf5UGaRjgQIg7OK3D06GnoYoZNcG1Xb8Gt3EfuKjlhh9i/VtT16g6PYjZ69jdJ2g8FxSC4Q==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -7438,7 +7438,7 @@ packages:
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
-      postcss: 8.4.20
+      postcss: 8.4.21
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -16561,8 +16561,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /owncloud-sdk/3.1.0-alpha.3_qgpf6seimtkgc6dfu7oqfstxh4:
-    resolution: {integrity: sha512-jouNHVHUJBuYs7A1ZPUNl+uSUulSYwTFzOjW4NhONl9xbDthKDeB+vWycUY9IdFRKroF8l1qo4xkXVO9mn7U/A==}
+  /owncloud-sdk/3.1.0-alpha.4_qgpf6seimtkgc6dfu7oqfstxh4:
+    resolution: {integrity: sha512-Z+ZKPhccB+BrPKqT5Lv8jwTl3zBtw8POgytPi5jByNQpPoU1JuQ9H32ysHa3yFU/rhIuYWWDBSHPlvw+nyIUlA==}
     peerDependencies:
       axios: ^0.27.2
       cross-fetch: ^3.0.6
@@ -17456,13 +17456,13 @@ packages:
       postcss: 8.4.20
     dev: true
 
-  /postcss-scss/4.0.6_postcss@8.4.20:
+  /postcss-scss/4.0.6_postcss@8.4.21:
     resolution: {integrity: sha512-rLDPhJY4z/i4nVFZ27j9GqLxj1pwxE80eAzUNRMXtcpipFYIeowerzBgG3yJhMtObGEXidtIgbUpQ3eLDsf5OQ==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.4.19
     dependencies:
-      postcss: 8.4.20
+      postcss: 8.4.21
     dev: true
 
   /postcss-selector-parser/6.0.10:
@@ -17558,7 +17558,6 @@ packages:
       nanoid: 3.3.4
       picocolors: 1.0.0
       source-map-js: 1.0.2
-    dev: false
 
   /preact/10.7.1:
     resolution: {integrity: sha512-MufnRFz39aIhs9AMFisonjzTud1PK1bY+jcJLo6m2T9Uh8AqjD77w11eAAawmjUogoGOnipECq7e/1RClIKsxg==}
@@ -19909,15 +19908,15 @@ packages:
       stylelint: 14.16.0
     dev: true
 
-  /stylelint-config-sass-guidelines/9.0.1_l3s4qeu3gkar2knsdy3w5miimm:
+  /stylelint-config-sass-guidelines/9.0.1_4hlw5ipnhspjrftdr7hqo6kmye:
     resolution: {integrity: sha512-N06PsVsrgKijQ3YT5hqKA7x3NUkgELTRI1cbWMqcYiCGG6MjzvNk6Cb5YYA1PrvrksBV76BvY9P9bAswojVMqA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     peerDependencies:
       postcss: ^8.3.3
       stylelint: ^14.0.1
     dependencies:
-      postcss: 8.4.20
-      postcss-scss: 4.0.6_postcss@8.4.20
+      postcss: 8.4.21
+      postcss-scss: 4.0.6_postcss@8.4.21
       stylelint: 14.16.0
       stylelint-order: 5.0.0_stylelint@14.16.0
       stylelint-scss: 4.3.0_stylelint@14.16.0

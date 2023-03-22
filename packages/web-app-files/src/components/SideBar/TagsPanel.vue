@@ -59,7 +59,7 @@ import { computed, defineComponent, inject, onMounted, ref, unref, watch } from 
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
-import { useStore, useGraphClient } from 'web-pkg/src/composables'
+import { useClientService, useStore } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 import diff from 'lodash-es/difference'
 import { useGettext } from 'vue3-gettext'
@@ -73,7 +73,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const { graphClient } = useGraphClient()
+    const clientService = useClientService()
     const { $gettext } = useGettext()
 
     const injectedResource = inject<Resource>('resource')
@@ -85,7 +85,7 @@ export default defineComponent({
     const loadAvailableTagsTask = useTask(function* () {
       const {
         data: { value: tags = [] }
-      } = yield unref(graphClient).tags.getTags()
+      } = yield clientService.graphAuthenticated.tags.getTags()
       availableTags.value = [...tags]
     })
 
@@ -116,11 +116,17 @@ export default defineComponent({
         const tagsToRemove = diff(tags, selectedTags.value)
 
         if (tagsToAdd.length) {
-          await unref(graphClient).tags.assignTags({ resourceId: fileId, tags: tagsToAdd })
+          await clientService.graphAuthenticated.tags.assignTags({
+            resourceId: fileId,
+            tags: tagsToAdd
+          })
         }
 
         if (tagsToRemove.length) {
-          await unref(graphClient).tags.unassignTags({ resourceId: fileId, tags: tagsToRemove })
+          await clientService.graphAuthenticated.tags.unassignTags({
+            resourceId: fileId,
+            tags: tagsToRemove
+          })
         }
 
         store.commit('Files/UPDATE_RESOURCE_FIELD', {

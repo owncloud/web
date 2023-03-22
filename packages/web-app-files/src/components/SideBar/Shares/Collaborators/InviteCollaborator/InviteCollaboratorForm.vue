@@ -87,10 +87,10 @@ import {
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingResharingDefault,
   useCapabilityShareJailEnabled,
+  useClientService,
   useStore
 } from 'web-pkg/src/composables'
 
-import { useGraphClient } from 'web-pkg/src/composables'
 import { defineComponent, inject } from 'vue'
 import { Resource } from 'web-client'
 import { useShares } from 'web-app-files/src/composables'
@@ -123,6 +123,7 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
+    const clientService = useClientService()
     return {
       resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
@@ -130,7 +131,7 @@ export default defineComponent({
       hasShareJail: useCapabilityShareJailEnabled(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
       hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
-      ...useGraphClient(),
+      clientService,
       ...useShares()
     }
   },
@@ -320,7 +321,7 @@ export default defineComponent({
             addMethod({
               ...this.$language,
               client: this.$client,
-              graphClient: this.graphClient,
+              graphClient: this.clientService.graphAuthenticated,
               path,
               shareWith: collaborator.value.shareWith,
               displayName: collaborator.label,

@@ -1,12 +1,8 @@
 import { mapMutations } from 'vuex'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { useGraphClient } from 'web-pkg/src/composables'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export default {
-  setup() {
-    return { ...useGraphClient() }
-  },
   computed: {
     $_showMembers_items() {
       return [

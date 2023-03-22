@@ -70,7 +70,7 @@ import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { defineComponent, inject } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { Resource } from 'web-client/src/helpers'
-import { useGraphClient } from 'web-pkg/src/composables'
+import { useClientService } from 'web-pkg/src/composables'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 
@@ -81,8 +81,9 @@ export default defineComponent({
     InviteCollaboratorForm
   },
   setup() {
+    const clientService = useClientService()
     return {
-      ...useGraphClient(),
+      clientService,
       resource: inject<Resource>('resource')
     }
   },
@@ -191,7 +192,7 @@ export default defineComponent({
         const currentUserRemoved = share.collaborator.name === this.user.id
         await this.deleteSpaceMember({
           client: this.$client,
-          graphClient: this.graphClient,
+          graphClient: this.clientService.graphAuthenticated,
           share: share,
           reloadSpace: !currentUserRemoved
         })
