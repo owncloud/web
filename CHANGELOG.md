@@ -32,6 +32,7 @@ Summary
 * Bugfix - Editing users who never logged in: [#8326](https://github.com/owncloud/web/pull/8326)
 * Bugfix - Cancel custom permissions: [#8340](https://github.com/owncloud/web/pull/8340)
 * Bugfix - Drop menus with limited vertical screen space: [#8411](https://github.com/owncloud/web/issues/8411)
+* Bugfix - Accessing route in admin-settings with insufficient permissions: [#8434](https://github.com/owncloud/web/issues/8434)
 * Bugfix - "Show more"-action in shares panel: [#8479](https://github.com/owncloud/web/issues/8479)
 * Bugfix - Paste action conflict dialog broken: [#8480](https://github.com/owncloud/web/pull/8480)
 * Bugfix - PDF display issue - Update CSP object-src policy: [#8498](https://github.com/owncloud/web/pull/8498)
@@ -286,6 +287,14 @@ Details
    https://github.com/owncloud/web/issues/8412
    https://github.com/owncloud/web/pull/8453
    https://github.com/owncloud/web/pull/8584
+
+* Bugfix - Accessing route in admin-settings with insufficient permissions: [#8434](https://github.com/owncloud/web/issues/8434)
+
+   Each route in the admin-settings app now has a dedicated permission check. This fixes an issue
+   where accessing such route with insufficient permissions would break the page.
+
+   https://github.com/owncloud/web/issues/8434
+   https://github.com/owncloud/web/pull/8672
 
 * Bugfix - "Show more"-action in shares panel: [#8479](https://github.com/owncloud/web/issues/8479)
 
