@@ -30,7 +30,7 @@
         </div>
         <input
           id="logo-upload-input"
-          :ref="logoInput"
+          ref="logoInput"
           type="file"
           name="file"
           tabindex="-1"
