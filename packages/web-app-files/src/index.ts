@@ -45,10 +45,7 @@ const navItems = (context) => {
       route: {
         path: `/${appInfo.id}/spaces/personal`
       },
-      enabled(capabilities) {
-        if (!capabilities.spaces?.enabled) {
-          return true
-        }
+      enabled() {
         return !!context?.$store?.getters['runtime/spaces/spaces'].find((drive) =>
           isPersonalSpaceResource(drive)
         )
@@ -61,7 +58,7 @@ const navItems = (context) => {
         path: `/${appInfo.id}/favorites`
       },
       enabled(capabilities) {
-        return capabilities.files && capabilities.files.favorites
+        return capabilities.files?.favorites
       }
     },
     {
@@ -83,7 +80,7 @@ const navItems = (context) => {
       },
       activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
       enabled(capabilities) {
-        return capabilities.spaces && capabilities.spaces.projects === true
+        return capabilities.spaces?.projects
       }
     },
     {
@@ -94,7 +91,7 @@ const navItems = (context) => {
       },
       activeFor: [{ path: `/${appInfo.id}/trash` }],
       enabled(capabilities) {
-        return capabilities.dav && capabilities.dav.trashbin === '1.0'
+        return capabilities.dav?.trashbin === '1.0'
       }
     }
   ]

@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue'
-import { useCapabilitySpacesEnabled, useRoute, useRouter, useStore } from 'web-pkg/src/composables'
+import { useRoute, useRouter, useStore } from 'web-pkg/src/composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { urlJoin } from 'web-client/src/utils'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -55,7 +55,7 @@ export default defineComponent({
       return store.getters.homeFolder
     })
 
-    if (unref(useCapabilitySpacesEnabled()) && !unref(personalSpace)) {
+    if (!unref(personalSpace)) {
       router.replace(createLocationSpaces('files-spaces-projects'))
     } else {
       const { params, query } = createFileRouteOptions(unref(personalSpace), {
