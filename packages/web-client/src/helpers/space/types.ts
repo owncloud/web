@@ -29,6 +29,9 @@ export interface SpaceResource extends Resource {
   getWebDavUrl({ path }: { path: string }): string
   getWebDavTrashUrl({ path }: { path: string }): string
   getDriveAliasAndItem(resource: Resource): string
+  isViewer(uuid: User): boolean
+  isEditor(uuid: User): boolean
+  isManager(uuid: User): boolean
 }
 
 export interface PersonalSpaceResource extends SpaceResource {
@@ -40,9 +43,6 @@ export const isPersonalSpaceResource = (resource: Resource): resource is Persona
 
 export interface ProjectSpaceResource extends SpaceResource {
   __projectSpaceResource?: any
-  isViewer(uuid: User): boolean
-  isEditor(uuid: User): boolean
-  isManager(uuid: User): boolean
 }
 export const isProjectSpaceResource = (resource: Resource): resource is ProjectSpaceResource => {
   return resource.driveType === 'project'

@@ -69,7 +69,7 @@ import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { defineComponent, inject } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
-import { Resource } from 'web-client/src/helpers'
+import { ProjectSpaceResource } from 'web-client/src/helpers'
 import { useClientService } from 'web-pkg/src/composables'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
@@ -85,7 +85,7 @@ export default defineComponent({
     const clientService = useClientService()
     return {
       clientService,
-      resource: inject<Resource>('resource')
+      resource: inject<ProjectSpaceResource>('resource')
     }
   },
   data: () => {
@@ -119,7 +119,7 @@ export default defineComponent({
       return this.currentUserIsManager
     },
     currentUserIsManager() {
-      return (this.resource as any).isManager(this.user)
+      return this.resource.isManager(this.user)
     }
   },
   watch: {

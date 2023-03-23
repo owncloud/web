@@ -111,6 +111,7 @@ import get from 'lodash-es/get'
 import RoleItem from '../Shared/RoleItem.vue'
 import {
   PeopleShareRoles,
+  Share,
   SharePermissions,
   ShareRole,
   SpacePeopleShareRoles
@@ -155,7 +156,7 @@ export default defineComponent({
     const store = useStore()
     return {
       resource: inject<Resource>('resource'),
-      incomingParentShare: inject<Resource>('incomingParentShare'),
+      incomingParentShare: inject<Share>('incomingParentShare'),
       hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
       resharingDefault: useCapabilityFilesSharingResharingDefault(store)
@@ -200,7 +201,7 @@ export default defineComponent({
 
       if (this.incomingParentShare && this.resourceIsSharable) {
         return PeopleShareRoles.filterByBitmask(
-          parseInt(this.incomingParentShare.permissions),
+          this.incomingParentShare.permissions,
           this.resource.isFolder,
           this.allowSharePermission,
           this.hasRoleCustomPermissions
@@ -212,7 +213,7 @@ export default defineComponent({
     },
     availablePermissions() {
       if (this.incomingParentShare && this.resourceIsSharable) {
-        return SharePermissions.bitmaskToPermissions(parseInt(this.incomingParentShare.permissions))
+        return SharePermissions.bitmaskToPermissions(this.incomingParentShare.permissions)
       }
       return this.customPermissionsRole.permissions(this.allowSharePermission)
     },

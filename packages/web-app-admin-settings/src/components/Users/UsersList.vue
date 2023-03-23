@@ -112,7 +112,7 @@ import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { displayPositionedDropdown, eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import { User } from 'web-client/src/generated'
+import { AppRole, User } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
@@ -125,7 +125,7 @@ export default defineComponent({
       required: true
     },
     roles: {
-      type: Array as PropType<any[]>,
+      type: Array as PropType<AppRole[]>,
       required: true
     },
     selectedUsers: {
@@ -352,7 +352,7 @@ export default defineComponent({
 
       return (
         this.$gettext(
-          (this.roles.find((role) => role.id === assignedRole?.appRoleId) as any)?.displayName || ''
+          this.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
         ) || '-'
       )
     }

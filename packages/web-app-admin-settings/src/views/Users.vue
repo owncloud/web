@@ -182,6 +182,7 @@ import {
   useUserActionsAddToGroups
 } from '../composables/actions/users'
 import { configurationManager } from 'web-pkg'
+import { Drive } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'UsersView',
@@ -689,7 +690,7 @@ export default defineComponent({
       const client = this.clientService.graphAuthenticated
       const updateDriveResponse = await client.drives.updateDrive(
         editUser.drive.id,
-        { name: editUser.drive.name, quota: { total: editUser.drive.quota.total } },
+        { quota: { total: editUser.drive.quota.total } } as Drive,
         {}
       )
 

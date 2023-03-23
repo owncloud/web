@@ -115,7 +115,7 @@ import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.
 import GroupSelect from '../GroupSelect.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
-import { Group, User } from 'web-client/src/generated'
+import { AppRole, AppRoleAssignment, Group, User } from 'web-client/src/generated'
 import { MaybeRef, useClientService, useStore } from 'web-pkg'
 import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
@@ -134,7 +134,7 @@ export default defineComponent({
       default: null
     },
     roles: {
-      type: Array as PropType<any[]>,
+      type: Array as PropType<AppRole[]>,
       required: true
     },
     groups: {
@@ -325,10 +325,10 @@ export default defineComponent({
     },
     onUpdateRole(role) {
       if (!this.editUser.appRoleAssignments.length) {
+        // FIXME: Add resourceId and principalId to be able to remove type cast
         this.editUser.appRoleAssignments.push({
-          appRoleId: role.id,
-          displayName: role.displayName
-        } as any)
+          appRoleId: role.id
+        } as AppRoleAssignment)
         return
       }
       this.editUser.appRoleAssignments[0].appRoleId = role.id
