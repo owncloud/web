@@ -59,8 +59,8 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
       if (result.filter(Boolean).length) {
         store.dispatch('showMessage', {
           title: $ngettext(
-            'Space was restored successfully',
-            'Spaces were restored successfully',
+            'Space was enabled successfully',
+            'Spaces were enabled successfully',
             result.filter(Boolean).length
           )
         })
