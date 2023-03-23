@@ -30,44 +30,46 @@
         </oc-button>
       </div>
     </div>
-    <h2 v-translate class="oc-text-bold oc-mb">Account Information</h2>
+    <h2 class="oc-text-bold oc-mb" v-text="$gettext('Account Information')" />
     <dl class="account-page-info oc-flex oc-flex-wrap">
       <div class="account-page-info-username oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted">Username</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Username')" />
         <dd>
           {{ user.username || user.id }}
         </dd>
       </div>
       <div v-if="user.username && user.id" class="account-page-info-userid">
-        <dt v-translate class="oc-text-normal oc-text-muted">User ID</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('User ID')" />
         <dd>
           {{ user.id }}
         </dd>
       </div>
       <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted">Display name</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Display name')" />
         <dd>
           {{ user.displayname }}
         </dd>
       </div>
       <div class="account-page-info-email oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted">Email</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Email')" />
         <dd>
           <template v-if="user.email">{{ user.email }}</template>
-          <span v-else v-translate>No email has been set up</span>
+          <span v-else v-text="$gettext('No email has been set up')" />
         </dd>
       </div>
       <div class="account-page-info-groups oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted">Group memberships</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Group memberships')" />
         <dd data-testid="group-names">
           <span v-if="groupNames">{{ groupNames }}</span>
-          <span v-else v-translate data-testid="group-names-empty"
-            >You are not part of any group</span
-          >
+          <span
+            v-else
+            data-testid="group-names-empty"
+            v-text="$gettext('You are not part of any group')"
+          />
         </dd>
       </div>
       <div v-if="isLanguageSupported" class="account-page-info-language oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted">Language</dt>
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Language')" />
         <dd data-testid="language">
           <oc-select
             v-if="languageOptions"
@@ -76,6 +78,20 @@
             :options="languageOptions"
             @update:model-value="updateSelectedLanguage"
           />
+        </dd>
+      </div>
+      <div v-if="logoutUrl" class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Logout from active devices')" />
+        <dd data-testid="logout">
+          <oc-button
+            appearance="raw"
+            type="a"
+            :href="logoutUrl"
+            target="_blank"
+            data-testid="account-page-logout-url-btn"
+          >
+            <span v-text="$gettext('Account security')" />
+          </oc-button>
         </dd>
       </div>
     </dl>
@@ -97,6 +113,7 @@ import axios from 'axios'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   name: 'Personal',
@@ -201,6 +218,10 @@ export default defineComponent({
       return unref(user).groups.join(', ')
     })
 
+    const logoutUrl = computed(() => {
+      return configurationManager.logoutUrl
+    })
+
     onMounted(() => {
       if (unref(isLanguageSupported)) {
         loadAccountBundleTask.perform()
@@ -216,7 +237,8 @@ export default defineComponent({
       isChangePasswordEnabled,
       isLanguageSupported,
       groupNames,
-      user
+      user,
+      logoutUrl
     }
   },
   data() {

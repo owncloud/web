@@ -23,6 +23,12 @@ const selectors = {
   groupNamesEmpty: '[data-testid="group-names-empty"]'
 }
 
+jest.mock('web-pkg/src/configuration', () => ({
+  configurationManager: {
+    logoutUrl: 'https://account-manager/logout'
+  }
+}))
+
 describe('account page', () => {
   describe('header section', () => {
     it('renders page title', () => {
@@ -111,6 +117,22 @@ describe('account page', () => {
     it('should be false if capability is not enabled', () => {
       const { wrapper } = getWrapper()
       expect(wrapper.vm.isChangePasswordEnabled).toBeFalsy()
+    })
+  })
+  describe('Logout from all devices link', () => {
+    it('should render the logout from active devices if logoutUrl is provided', () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.find('[data-testid="logout"]').exists()).toBe(true)
+    })
+    it("shouldn't render the logout from active devices if logoutUrl isn't provided", () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.logoutUrl = undefined
+      expect(wrapper.find('[data-testid="logout"]').exists()).toBe(true)
+    })
+    it('should use url from configuration manager', () => {
+      const { wrapper } = getWrapper()
+      const button = wrapper.find('oc-button-stub')
+      expect(button.attributes('href')).toBe('https://account-manager/logout')
     })
   })
 })

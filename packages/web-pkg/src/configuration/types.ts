@@ -8,6 +8,7 @@ export interface RoutingOptionsConfiguration {
 
 export interface OptionsConfiguration {
   routing?: RoutingOptionsConfiguration
+  logoutUrl?: string
 }
 
 export interface OAuth2Configuration {
