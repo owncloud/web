@@ -435,6 +435,7 @@ export default defineComponent({
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
   border: 1px solid var(--oc-color-input-border);
   border-radius: 15px;
+  background-color: var(--oc-color-background-default);
 
   &:focus {
     outline: none;
@@ -472,7 +473,6 @@ export default defineComponent({
 
   &-title {
     align-items: center;
-    background-color: var(--oc-color-background-default);
     border-bottom: 1px solid var(--oc-color-input-border);
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -493,7 +493,6 @@ export default defineComponent({
   }
 
   &-body {
-    background-color: var(--oc-color-background-default);
     color: var(--oc-color-text-default);
     line-height: 1.625;
     padding: var(--oc-space-medium) var(--oc-space-medium) 0;
