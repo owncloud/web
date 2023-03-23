@@ -106,6 +106,7 @@ Summary
 * Enhancement - Add and remove users from groups batch actions: [#8553](https://github.com/owncloud/web/pull/8553)
 * Enhancement - QuickActions role configurable: [#8566](https://github.com/owncloud/web/pull/8566)
 * Enhancement - Add `Accept-Language` header to all outgoing requests: [#8612](https://github.com/owncloud/web/issues/8612)
+* Enhancement - Add logout url: [#8630](https://github.com/owncloud/web/pull/8630)
 
 Details
 -------
@@ -1008,6 +1009,13 @@ Details
    https://github.com/owncloud/web/issues/8612
    https://github.com/owncloud/web/pull/8621
    https://github.com/owncloud/web/pull/8660
+
+* Enhancement - Add logout url: [#8630](https://github.com/owncloud/web/pull/8630)
+
+   We've added "Logout from active devices" in the account settings
+
+   https://github.com/owncloud/web/issues/8609
+   https://github.com/owncloud/web/pull/8630
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
