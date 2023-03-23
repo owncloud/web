@@ -1,0 +1,6 @@
+Bugfix: Broken re-login after logout
+
+After a user logged out, it was no longer possible to login without reloading the ocis root domain,
+this has now been fixed and only allowed query-params are taken into account.
+
+https://github.com/owncloud/web/pull/8694

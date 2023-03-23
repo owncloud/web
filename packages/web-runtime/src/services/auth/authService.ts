@@ -8,6 +8,7 @@ import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from '../.
 import { unref } from 'vue'
 import { Ability } from 'web-pkg/src/utils'
 import { Language } from 'vue3-gettext'
+import pick from 'lodash-es/pick'
 
 export class AuthService {
   private clientService: ClientService
@@ -164,20 +165,25 @@ export class AuthService {
    * Sign in callback gets called from the IDP after initial login.
    */
   public async signInCallback() {
-    // craft a url that the parser in oidc-client-ts can handle… this is required for oauth2 logins
-    const url =
-      '/?' +
-      new URLSearchParams(
-        unref(this.router.currentRoute).query as Record<string, string>
-      ).toString()
+    const currentQuery = unref(this.router.currentRoute).query
+    // craft an url that the parser in oidc-client-ts can handle… this is required for oauth2 logins
+    const url = '/?' + new URLSearchParams(currentQuery as Record<string, string>).toString()
 
     try {
       await this.userManager.signinRedirectCallback(url)
 
       const redirectUrl = this.userManager.getAndClearPostLoginRedirectUrl()
+
+      // transportQuery defines a set of query parameters which should be part of router route replace.
+      // The resulting object only contains the properties listed here.
+      const transportQuery = pick(currentQuery, [
+        // needed for private links
+        'details'
+      ])
+
       return this.router.replace({
         path: redirectUrl,
-        query: unref(this.router.currentRoute).query
+        query: transportQuery
       })
     } catch (e) {
       console.warn('error during authentication:', e)
