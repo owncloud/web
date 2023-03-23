@@ -1,4 +1,4 @@
-import { AppReadyHookArgs, ClassicApplicationScript, RuntimeApi } from '../types'
+import { ClassicApplicationScript, RuntimeApi } from '../types'
 import { buildRuntimeApi } from '../api'
 import { App } from 'vue'
 import { isFunction, isObject } from 'lodash-es'
@@ -6,6 +6,7 @@ import { NextApplication } from './next'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { RuntimeError } from '../error'
+import { AppReadyHookArgs } from 'web-pkg/src/apps'
 
 /**
  * this wraps a classic application structure into a next application format.

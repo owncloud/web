@@ -16,7 +16,7 @@ import { Registry, ArchiverService, ThumbnailService } from './services'
 import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
 import get from 'lodash-es/get'
-import { AppReadyHookArgs } from 'web-runtime/src/container/types'
+import { AppReadyHookArgs } from 'web-pkg/src/apps'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
