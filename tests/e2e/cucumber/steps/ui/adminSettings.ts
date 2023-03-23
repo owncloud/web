@@ -45,13 +45,13 @@ When(
 
     switch (action) {
       case 'disables':
-        await spacesObject.disable({ key, context: 'context-menu' })
+        await spacesObject.disable({ spaces: [key], context: 'context-menu' })
         break
       case 'deletes':
-        await spacesObject.delete({ key, context: 'context-menu' })
+        await spacesObject.delete({ spaces: [key], context: 'context-menu' })
         break
       case 'enables':
-        await spacesObject.enable({ key, context: 'context-menu' })
+        await spacesObject.enable({ spaces: [key], context: 'context-menu' })
         break
       default:
         throw new Error(`${action} not implemented`)
@@ -80,7 +80,7 @@ When(
         await spacesObject.changeSubtitle({ key, value })
         break
       case 'quota':
-        await spacesObject.changeQuota({ key, value, context: 'context-menu' })
+        await spacesObject.changeQuota({ spaces: [key], value, context: 'context-menu' })
         break
       default:
         throw new Error(`'${action}' not implemented`)
@@ -98,11 +98,13 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+    const spaces = []
     for (const info of stepTable.hashes()) {
+      spaces.push(info.id)
       await spacesObject.select({ key: info.id })
     }
     await spacesObject.changeQuota({
-      key: stepTable.hashes()[0].id,
+      spaces,
       value,
       context: 'batch-actions'
     })
@@ -119,18 +121,20 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+    const spaces = []
     for (const info of stepTable.hashes()) {
+      spaces.push(info.id)
       await spacesObject.select({ key: info.id })
     }
     switch (action) {
       case 'disables':
-        await spacesObject.disable({ key: stepTable.hashes()[0].id, context: 'batch-actions' })
+        await spacesObject.disable({ spaces, context: 'batch-actions' })
         break
       case 'deletes':
-        await spacesObject.delete({ key: stepTable.hashes()[0].id, context: 'batch-actions' })
+        await spacesObject.delete({ spaces, context: 'batch-actions' })
         break
       case 'enables':
-        await spacesObject.enable({ key: stepTable.hashes()[0].id, context: 'batch-actions' })
+        await spacesObject.enable({ spaces, context: 'batch-actions' })
         break
       default:
         throw new Error(`'${action}' not implemented`)
