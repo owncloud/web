@@ -218,3 +218,24 @@ Given(
     }
   }
 )
+
+Given(
+  '{string} adds the following member(s) to the space {string} using API',
+  async function (
+    this: World,
+    stepUser: string,
+    space: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (const info of stepTable.hashes()) {
+      await api.dav.addMembersToTheProjectSpace({
+        user,
+        spaceName: space,
+        shareWith: info.user,
+        shareType: info.shareType,
+        role: info.role
+      })
+    }
+  }
+)

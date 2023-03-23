@@ -89,3 +89,36 @@ Feature: spaces management
     #   | team.c |
     #   | team.d |
     And "Alice" logs out
+
+
+  Scenario: list members via sidebar
+    Given "Admin" creates following users using API
+      | id      |
+      | Alice   |
+      | Brian   |
+      | Carol   |
+      | Marie   |
+      | Richard |
+    And "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Alice | Space Admin |
+    And "Alice" creates the following project spaces using API
+      | name   | id     |
+      | team A | team.a |
+    And "Alice" adds the following members to the space "team A" using API
+      | user    | role   | shareType |
+      | Brian   | editor | space     |
+      | Carol   | viewer | space     |
+      | Marie   | viewer | space     |
+      | Richard | viewer | space     |
+    And "Alice" logs in
+    And "Alice" opens the "admin-settings" app
+    And "Alice" navigates to the project spaces management page
+    When "Alice" lists the members of project space "team.a" using a sidebar panel
+    Then "Alice" should see the following users in the sidebar panel of spaces admin settings
+      | user    | role    |
+      | Alice   | manager |
+      | Brian   | editor  |
+      | Carol   | viewer  |
+      | Marie   | viewer  |
+      | Richard | viewer  |

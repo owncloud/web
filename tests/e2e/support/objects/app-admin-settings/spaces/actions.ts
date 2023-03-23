@@ -1,5 +1,6 @@
 import { Page } from 'playwright'
 import util from 'util'
+import { locatorUtils } from '../../../utils'
 
 const spaceTrSelector = 'tr'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
@@ -12,6 +13,16 @@ const modalConfirmBtn = `.oc-modal-body-actions-confirm`
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const selectedQuotaValueField = '.vs__dropdown-toggle'
 const spacesQuotaSearchField = '.oc-modal .vs__search'
+const appSidebarDiv = '#app-sidebar'
+const toggleSidebarButton = '#files-toggle-sidebar'
+const sideBarActive = '.sidebar-panel.is-active-default-panel'
+const sideBarCloseButton = '.sidebar-panel .header__close:visible'
+const sideBarBackButton = '.sidebar-panel .header__back:visible'
+const sideBarActionButtons = `#sidebar-panel-%s-select`
+const siderBarActionPanel = `#sidebar-panel-%s`
+const spaceMembersDiv = '[data-testid="space-members"]'
+const spaceMemberList =
+  '[data-testid="space-members-role-%s"] ul [data-testid="space-members-list"]'
 
 export const getDisplayedSpaces = async (page): Promise<string[]> => {
   const spaces = []
@@ -220,4 +231,60 @@ const waitForSpaceResponse = async (args: {
     ),
     page.locator(confirmButton).click()
   ])
+}
+
+export const openSpaceAdminSidebarPanel = async (args: {
+  page: Page
+  id: string
+}): Promise<void> => {
+  const { page, id } = args
+  if (await page.locator(appSidebarDiv).count()) {
+    await page.locator(sideBarCloseButton).click()
+  }
+  await selectSpace({ page, id })
+  await page.click(toggleSidebarButton)
+}
+
+export const openSpaceAdminActionSidebarPanel = async (args: {
+  page: Page
+  action: string
+}): Promise<void> => {
+  const { page, action } = args
+  const currentPanel = await page.locator(sideBarActive)
+  const backButton = await currentPanel.locator(sideBarBackButton)
+  if (await backButton.count()) {
+    await backButton.click()
+    await locatorUtils.waitForEvent(currentPanel, 'transitionend')
+  }
+  const panelSelector = await page.locator(util.format(sideBarActionButtons, action))
+  const nextPanel = page.locator(util.format(siderBarActionPanel, action))
+  await panelSelector.click()
+  await locatorUtils.waitForEvent(nextPanel, 'transitionend')
+}
+
+export const listSpaceMembers = async (args: {
+  page: Page
+  filter: string
+}): Promise<Array<string>> => {
+  const { page, filter } = args
+  await page.waitForSelector(spaceMembersDiv)
+  let users = []
+  const names = []
+  switch (filter) {
+    case 'managers':
+      users = await page.locator(util.format(spaceMemberList, 'managers')).allTextContents()
+      break
+    case 'viewers':
+      users = await page.locator(util.format(spaceMemberList, 'viewers')).allTextContents()
+      break
+    case 'editors':
+      users = await page.locator(util.format(spaceMemberList, 'editors')).allTextContents()
+      break
+  }
+  for (const user of users) {
+    // the value comes in "['initials firstName secondName lastName',..]" format so only get the first name
+    const [, name] = user.split(' ')
+    names.push(name)
+  }
+  return names
 }
