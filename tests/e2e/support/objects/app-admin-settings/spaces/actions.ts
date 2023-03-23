@@ -2,7 +2,8 @@ import { Page } from 'playwright'
 import util from 'util'
 import { locatorUtils } from '../../../utils'
 
-const spaceTrSelector = 'tr'
+const spaceTrSelector = '.spaces-table tbody > tr'
+const spacesEmptySelector = '#admin-settings-spaces-empty'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
 const spaceIdSelector = `[data-item-id="%s"] .spaces-table-btn-action-dropdown`
 const spaceCheckboxSelector = `[data-item-id="%s"]:not(.oc-table-highlighted) input[type=checkbox]`
@@ -26,7 +27,15 @@ const spaceMemberList =
 
 export const getDisplayedSpaces = async (page): Promise<string[]> => {
   const spaces = []
-  const result = page.locator(spaceTrSelector)
+  try {
+    // check if the list is empty
+    // early return if there are no spaces
+    await page.waitForSelector(spacesEmptySelector, { timeout: 500 })
+    return spaces
+  } catch (e) {
+    console.log('[INFO] Spaces list is not empty')
+  }
+  const result = await page.locator(spaceTrSelector)
 
   const count = await result.count()
   for (let i = 0; i < count; i++) {
