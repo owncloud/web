@@ -3,7 +3,7 @@
 exports[`NameAndCopy should show link info component including a copy-to-clipboard button 1`] = `
 <div class="oc-mb-s oc-width-1-1">
   <h4 class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-m-rm">Example link</h4>
-  <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-s link-name-container">
+  <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-xs link-name-container">
     <div class="oc-flex oc-flex-middle oc-text-truncate">
       <span class="oc-icon oc-icon-m oc-icon-passive">
         <!---->
@@ -18,7 +18,7 @@ exports[`NameAndCopy should show link info component including a copy-to-clipboa
 exports[`NameAndCopy upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second 1`] = `
 <div class="oc-mb-s oc-width-1-1">
   <h4 class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-m-rm">Example link</h4>
-  <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-s link-name-container">
+  <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-xs link-name-container">
     <div class="oc-flex oc-flex-middle oc-text-truncate">
       <span class="oc-icon oc-icon-m oc-icon-success">
         <!---->
@@ -33,7 +33,7 @@ exports[`NameAndCopy upon clicking it should copy the private link to the clipbo
 exports[`NameAndCopy upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second 2`] = `
 <div class="oc-mb-s oc-width-1-1">
   <h4 class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-m-rm">Example link</h4>
-  <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-s link-name-container">
+  <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-xs link-name-container">
     <div class="oc-flex oc-flex-middle oc-text-truncate">
       <span class="oc-icon oc-icon-m oc-icon-passive">
         <!---->
