@@ -184,6 +184,7 @@ import { defineComponent, inject, PropType } from 'vue'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -411,7 +412,7 @@ export default defineComponent({
     },
     deleteLink() {
       this.$emit('removePublicLink', { link: this.link })
-      ;(this.$refs.editPublicLinkDropdown as any).hide()
+      ;(this.$refs.editPublicLinkDropdown as typeof OcDrop).hide()
     },
     showRenameModal() {
       const modal = {

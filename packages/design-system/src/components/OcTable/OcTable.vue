@@ -256,7 +256,7 @@ export default defineComponent({
      * Array of items that should be selected by default.
      */
     selection: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: false,
       default: () => []
     },
@@ -331,7 +331,7 @@ export default defineComponent({
     dragSelection() {
       const selection = [...this.selection]
       selection.splice(
-        selection.findIndex((i) => (i as any).id === this.dragItem.id),
+        selection.findIndex((i) => i.id === this.dragItem.id),
         1
       )
       return selection
