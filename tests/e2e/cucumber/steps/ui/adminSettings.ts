@@ -452,3 +452,31 @@ When(
     }
   }
 )
+When(
+  /^"([^"]*)" deletes the following (?:group|groups) using the (batch actions|context menu)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+
+    switch (actionType) {
+      case 'batch actions':
+        for (const { group } of stepTable.hashes()) {
+          await groupsObject.selectGroup({ key: group })
+        }
+        await groupsObject.deleteGroupUsingBatchAction()
+        break
+      case 'context menu':
+        for (const { group } of stepTable.hashes()) {
+          await groupsObject.deleteGroupUsingContextMenu({ key: group })
+        }
+        break
+      default:
+        throw new Error(`'${actionType}' not implemented`)
+    }
+  }
+)
