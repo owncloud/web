@@ -22,6 +22,7 @@ import { mapGetters } from 'vuex'
 import { avatarUrl } from '../../../../../helpers/user'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { defineComponent } from 'vue'
+import { Recipient } from 'design-system/src/components/OcRecipient/OcRecipient.vue'
 
 export default defineComponent({
   props: {
@@ -36,7 +37,7 @@ export default defineComponent({
     }
   },
 
-  data() {
+  data(): { formattedRecipient: Recipient } {
     return {
       formattedRecipient: {
         name: this.recipient.label,
@@ -44,8 +45,7 @@ export default defineComponent({
         hasAvatar: [ShareTypes.user.value, ShareTypes.spaceUser.value].includes(
           this.recipient.value.shareType
         ),
-        isLoadingAvatar: true,
-        avatar: undefined
+        isLoadingAvatar: true
       }
     }
   },

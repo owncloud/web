@@ -192,7 +192,7 @@ export default defineComponent({
       return PeopleShareRoles.custom(this.resource.isFolder)
     },
     resourceIsSharable() {
-      return this.allowSharePermission && (this.resource as any).canShare()
+      return this.allowSharePermission && this.resource.canShare()
     },
     availableRoles() {
       if (this.resourceIsSpace) {
