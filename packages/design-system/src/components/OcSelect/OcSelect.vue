@@ -59,7 +59,7 @@ import Fuse from 'fuse.js'
 import uniqueId from '../../utils/uniqueId'
 import VueSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
-import { defineComponent } from 'vue'
+import { defineComponent, ComponentPublicInstance } from 'vue'
 
 /**
  * Select component with a trigger and dropdown based on [Vue Select](https://vue-select.org/)
@@ -224,7 +224,9 @@ export default defineComponent({
 
   methods: {
     setComboBoxAriaLabel() {
-      const comboBoxElement = this.$refs.select.$el.querySelector('div:first-child')
+      const comboBoxElement = (this.$refs.select as ComponentPublicInstance).$el.querySelector(
+        'div:first-child'
+      )
       comboBoxElement.setAttribute('aria-label', this.$gettext('Search for option'))
     },
     userInput(event) {

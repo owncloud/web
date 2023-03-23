@@ -171,7 +171,7 @@ export default defineComponent({
         return false
       }
       const slotContent = contextMenuSlot()[0] ?? null
-      return !!slotContent?.type?.name
+      return !!(slotContent?.type as any)?.name
     }
   },
   methods: {
@@ -179,7 +179,7 @@ export default defineComponent({
       return this.items.length - 1 === index ? 'page' : null
     },
     clickMobileDropdown() {
-      this.$refs.mobileDropdown.click()
+      ;(this.$refs.mobileDropdown as HTMLElement).click()
     }
   }
 })

@@ -57,6 +57,7 @@ import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
 import uniqueId from '@ownclouders/design-system/src/utils/uniqueId'
+import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
   name: 'EditDropdown',
@@ -235,13 +236,13 @@ export default defineComponent({
       this.$emit('expirationDateChanged', {
         expirationDate: DateTime.fromJSDate(this.enteredExpirationDate).endOf('day').toISO()
       })
-      this.$refs.expirationDateDrop.hide()
+      ;(this.$refs.expirationDateDrop as typeof OcDrop).hide()
     },
     removeExpirationDate() {
       this.$emit('expirationDateChanged', {
         expirationDate: null
       })
-      this.$refs.expirationDateDrop.hide()
+      ;(this.$refs.expirationDateDrop as typeof OcDrop).hide()
     },
     removeShare() {
       this.$emit('removeShare')

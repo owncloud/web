@@ -403,17 +403,15 @@ export default defineComponent({
       return this.link.permissions === role.bitmask(false)
     },
 
-    updateLink({
-      link = this.link,
-      dropRef = this.$refs.editPublicLinkDropdown,
-      onSuccess = () => {}
-    }) {
+    updateLink({ link, dropRef = undefined, onSuccess = () => {} }) {
+      link = link || this.link
+      dropRef = dropRef || this.$refs.editPublicLinkDropdown
       this.$emit('updateLink', { link, onSuccess })
       dropRef.hide()
     },
     deleteLink() {
       this.$emit('removePublicLink', { link: this.link })
-      this.$refs.editPublicLinkDropdown.hide()
+      ;(this.$refs.editPublicLinkDropdown as any).hide()
     },
     showRenameModal() {
       const modal = {

@@ -117,8 +117,7 @@ export default defineComponent({
 
       const callback = () =>
         this.action.handler({
-          ...this.actionOptions,
-          ...this.action.handlerData
+          ...this.actionOptions
         })
       if (this.action.keepOpen) {
         return {

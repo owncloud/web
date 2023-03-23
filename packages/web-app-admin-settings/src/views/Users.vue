@@ -541,7 +541,9 @@ export default defineComponent({
     ...mapState({ currentUser: 'user' }),
 
     selectedUsersText() {
-      return this.$gettext('%{ userCount } selected', { userCount: this.selectedUsers.length })
+      return this.$gettext('%{ userCount } selected', {
+        userCount: this.selectedUsers.length.toString()
+      })
     },
     breadcrumbs() {
       return [
@@ -687,7 +689,7 @@ export default defineComponent({
       const client = this.clientService.graphAuthenticated
       const updateDriveResponse = await client.drives.updateDrive(
         editUser.drive.id,
-        { quota: { total: editUser.drive.quota.total } },
+        { name: editUser.drive.name, quota: { total: editUser.drive.quota.total } },
         {}
       )
 

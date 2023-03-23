@@ -63,7 +63,7 @@ interface UploadResult {
     currentPath: string,
     files: UppyResource[],
     currentFolderId?: string | number
-  ): void
+  ): Promise<CreateDirectoryTreeResult>
 }
 
 export function useUpload(options: UploadOptions): UploadResult {

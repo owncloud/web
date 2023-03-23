@@ -26,7 +26,8 @@ export default defineComponent({
 
   computed: {
     formattedSize() {
-      if (isNaN(this.size)) {
+      const size = parseInt(this.size.toString())
+      if (isNaN(size)) {
         return '?'
       }
 
@@ -36,7 +37,7 @@ export default defineComponent({
 
       const mb = 1048576
 
-      return filesize(this.size, {
+      return filesize(size, {
         round: this.size < mb ? 0 : 1,
         locale: (this.$language?.current || '').split('_')[0]
       })

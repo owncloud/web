@@ -17,7 +17,7 @@
 import { DateTime } from 'luxon'
 import { basename } from 'path'
 import qs from 'qs'
-import { defineComponent } from 'vue'
+import { defineComponent, unref } from 'vue'
 import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { useAppDefaults, useStore } from 'web-pkg/src/composables'
@@ -75,7 +75,7 @@ export default defineComponent({
     }
   },
   created() {
-    this.filePath = this.currentFileContext.path
+    this.filePath = unref(this.currentFileContext.path)
     this.fileExtension = this.filePath.split('.').pop()
     window.addEventListener('message', this.handleMessage)
   },
@@ -99,7 +99,7 @@ export default defineComponent({
       })
     },
     errorNotification(error) {
-      this.$refs.drawIoEditor.contentWindow.postMessage(
+      ;(this.$refs.drawIoEditor as HTMLIFrameElement).contentWindow.postMessage(
         JSON.stringify({
           action: 'status',
           message: error,
@@ -150,7 +150,7 @@ export default defineComponent({
       try {
         const response = await this.getFileContents(this.currentFileContext)
         this.currentETag = response.headers.ETag
-        this.$refs.drawIoEditor.contentWindow.postMessage(
+        ;(this.$refs.drawIoEditor as HTMLIFrameElement).contentWindow.postMessage(
           JSON.stringify({
             action: 'load',
             xml: response.body,
@@ -191,7 +191,7 @@ export default defineComponent({
           const blob = new Blob([arrayBuffer], { type: 'application/vnd.visio' })
           const reader = new FileReader()
           reader.onloadend = () => {
-            this.$refs.drawIoEditor.contentWindow.postMessage(
+            ;(this.$refs.drawIoEditor as HTMLIFrameElement).contentWindow.postMessage(
               JSON.stringify({
                 action: 'load',
                 xml: reader.result,
@@ -212,11 +212,12 @@ export default defineComponent({
         previousEntityTag: this.currentETag
       })
         .then((resp) => {
-          this.currentETag = resp.ETag
+          // FIXME: is this correct? The type says ... yes
+          this.currentETag = resp.etag
 
           const message = this.$gettext('File saved!')
           if (auto) {
-            this.$refs.drawIoEditor.contentWindow.postMessage(
+            ;(this.$refs.drawIoEditor as HTMLIFrameElement).contentWindow.postMessage(
               JSON.stringify({
                 action: 'status',
                 message: message,

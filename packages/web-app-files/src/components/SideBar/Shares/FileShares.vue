@@ -83,7 +83,7 @@ import {
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
-import { isProjectSpaceResource, Resource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, Resource, ShareSpaceResource } from 'web-client/src/helpers'
 import { getSharedAncestorRoute } from 'web-app-files/src/helpers/share'
 import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
 import { useShares } from 'web-app-files/src/composables'
@@ -129,7 +129,7 @@ export default defineComponent({
     return {
       ...useShares(),
       resource: inject<Resource>('resource'),
-      space: inject<Resource>('space'),
+      space: inject<ShareSpaceResource>('space'),
       sharesListCollapsed,
       toggleShareListCollapsed,
       memberListCollapsed,
@@ -183,7 +183,7 @@ export default defineComponent({
 
     collaborators() {
       return [...this.outgoingCollaborators].sort(this.collaboratorsComparator).map((c) => {
-        const collaborator = { ...c }
+        const collaborator: typeof c & { key?: string; resharers?: any[] } = { ...c }
         collaborator.key = 'collaborator-' + collaborator.id
         if (
           collaborator.owner.name !== collaborator.fileOwner.name &&
@@ -241,7 +241,7 @@ export default defineComponent({
       )
     },
     matchingSpace() {
-      return this.space || this.spaces.find((space) => space.id === this.resource.storageId)
+      return this.space
     }
   },
   methods: {
@@ -345,7 +345,8 @@ export default defineComponent({
       const isPersonalMember = this.currentUserIsMemberOfSpace
       const isIndirectPersonalCollaborator = collaborator.indirect
       const isProjectSpaceShare = !isPersonalSpaceShare
-      const isManager = this.space?.isManager(this.user)
+      // FIXME
+      const isManager = (this.space as any)?.isManager(this.user)
 
       if (isPersonalSpaceShare && isPersonalMember && isManager) {
         return true

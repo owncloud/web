@@ -107,7 +107,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref } from 'vue'
+import { defineComponent, PropType, ref, unref, ComponentPublicInstance } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { displayPositionedDropdown, eventBus } from 'web-pkg'
@@ -125,7 +125,7 @@ export default defineComponent({
       required: true
     },
     roles: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true
     },
     selectedUsers: {
@@ -221,10 +221,14 @@ export default defineComponent({
       return this.users.length === this.selectedUsers.length
     },
     footerTextTotal() {
-      return this.$gettext('%{userCount} users in total', { userCount: this.users.length })
+      return this.$gettext('%{userCount} users in total', {
+        userCount: this.users.length.toString()
+      })
     },
     footerTextFilter() {
-      return this.$gettext('%{userCount} matching users', { userCount: this.data.length })
+      return this.$gettext('%{userCount} matching users', {
+        userCount: this.data.length.toString()
+      })
     },
     fields() {
       return [
@@ -291,7 +295,7 @@ export default defineComponent({
   watch: {
     filterTerm() {
       if (this.$refs.tableRef) {
-        this.markInstance = new Mark(this.$refs.tableRef.$el)
+        this.markInstance = new Mark((this.$refs.tableRef as ComponentPublicInstance).$el)
         this.markInstance.unmark()
         this.markInstance.mark(this.filterTerm, {
           element: 'span',
@@ -348,7 +352,7 @@ export default defineComponent({
 
       return (
         this.$gettext(
-          this.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
+          (this.roles.find((role) => role.id === assignedRole?.appRoleId) as any)?.displayName || ''
         ) || '-'
       )
     }

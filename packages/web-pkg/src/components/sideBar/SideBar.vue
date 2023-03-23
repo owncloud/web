@@ -252,8 +252,7 @@ export default defineComponent({
 
       visibilityObserver.disconnect()
       hiddenObserver.disconnect()
-
-      this.$refs.panels.forEach((panel) => {
+      ;(this.$refs.panels as HTMLElement[]).forEach((panel) => {
         visibilityObserver.observe(panel, {
           onEnter: doFocus,
           onExit: doFocus

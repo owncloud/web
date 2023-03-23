@@ -49,17 +49,6 @@ export default defineComponent({
       })
     }
   },
-  watch: {
-    'space.spaceQuota': {
-      handler: function (val) {
-        if (!val) {
-          return
-        }
-        this.setOptions()
-      },
-      deep: true
-    }
-  },
   async mounted() {
     const webDavPathComponents = this.space.spaceReadmeData.webDavUrl.split('/')
     const path = webDavPathComponents.slice(webDavPathComponents.indexOf('dav') + 1).join('/')

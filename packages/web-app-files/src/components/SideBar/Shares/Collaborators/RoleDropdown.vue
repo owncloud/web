@@ -116,7 +116,7 @@ import {
   SpacePeopleShareRoles
 } from 'web-client/src/helpers/share'
 import * as uuid from 'uuid'
-import { defineComponent, inject, PropType } from 'vue'
+import { defineComponent, inject, PropType, ComponentPublicInstance } from 'vue'
 import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingCanDenyAccess,
@@ -124,6 +124,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
+import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
   name: 'RoleDropdown',
@@ -190,7 +191,7 @@ export default defineComponent({
       return PeopleShareRoles.custom(this.resource.isFolder)
     },
     resourceIsSharable() {
-      return this.allowSharePermission && this.resource.canShare()
+      return this.allowSharePermission && (this.resource as any).canShare()
     },
     availableRoles() {
       if (this.resourceIsSpace) {
@@ -264,7 +265,7 @@ export default defineComponent({
 
     selectRole(role) {
       if (role.hasCustomPermissions) {
-        this.$refs.customPermissionsDrop.show()
+        ;(this.$refs.customPermissionsDrop as typeof OcDrop).show()
         return
       }
       this.selectedRole = role
@@ -281,7 +282,7 @@ export default defineComponent({
     },
 
     confirmCustomPermissions() {
-      this.$refs.customPermissionsDrop.hide()
+      ;(this.$refs.customPermissionsDrop as typeof OcDrop).hide()
       const bitmask = SharePermissions.permissionsToBitmask(this.customPermissions)
       this.selectedRole = PeopleShareRoles.getByBitmask(
         bitmask,
@@ -295,8 +296,8 @@ export default defineComponent({
       this.customPermissions = this.existingPermissions.length
         ? this.existingPermissions
         : this.defaultCustomPermissions
-      this.$refs.customPermissionsDrop.hide()
-      this.$refs.rolesDrop.show()
+      ;(this.$refs.customPermissionsDrop as typeof OcDrop).hide()
+      ;(this.$refs.rolesDrop as typeof OcDrop).show()
     },
 
     cycleRoles(event) {
@@ -317,7 +318,7 @@ export default defineComponent({
 
       // if there is only 1 or no roleSelect we can early return
       // it does not make sense to cycle through it if value is less than 1
-      const roleSelect = this.$refs.roleSelect || []
+      const roleSelect = (this.$refs.roleSelect as ComponentPublicInstance[]) || []
 
       if (roleSelect.length <= 1) {
         return

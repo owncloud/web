@@ -92,7 +92,7 @@ export default defineComponent({
       required: true
     },
     roles: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true
     }
   },
@@ -115,7 +115,7 @@ export default defineComponent({
     },
     multipleUsersSelectedText() {
       return this.$gettext('%{count} users selected', {
-        count: this.users.length
+        count: this.users.length.toString()
       })
     },
     roleDisplayName() {

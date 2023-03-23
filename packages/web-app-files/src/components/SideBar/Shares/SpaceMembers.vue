@@ -119,7 +119,7 @@ export default defineComponent({
       return this.currentUserIsManager
     },
     currentUserIsManager() {
-      return this.resource.isManager(this.user)
+      return (this.resource as any).isManager(this.user)
     }
   },
   watch: {
@@ -205,7 +205,7 @@ export default defineComponent({
 
         if (currentUserRemoved) {
           if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
-            return this.$router.go()
+            return this.$router.go(0)
           }
           return this.$router.push(createLocationSpaces('files-spaces-projects'))
         }

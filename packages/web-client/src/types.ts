@@ -23,8 +23,11 @@ export type OwnCloudSdk = {
   }
   fileVersions: {
     getFileVersionUrl(...args): any
+    restoreFileVersion(...args): any
   }
   publicFiles: {
+    PUBLIC_LINK_SHARE_OWNER: string
+
     createFolder(...args): any
     delete(...args): any
     download(...args): any
@@ -46,6 +49,7 @@ export type OwnCloudSdk = {
     getShare(...args): any
     getShares(...args): any
     getProtectedTokenInfo(...args): any
+    getRecipients(...args): any
     getUnprotectedTokenInfo(...args): any
     shareFileWithGroup(...args): any
     shareFileWithUser(...args): any

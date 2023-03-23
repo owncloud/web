@@ -21,6 +21,7 @@ export interface SearchPreview extends SearchList {
 export interface SearchProvider {
   id: string
   available: boolean
+  displayName?: string
   label?: string
   previewSearch?: SearchPreview
   listSearch?: SearchList

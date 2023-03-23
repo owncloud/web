@@ -134,7 +134,7 @@ export default defineComponent({
       default: null
     },
     roles: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true
     },
     groups: {
@@ -268,7 +268,7 @@ export default defineComponent({
 
       if (
         this.editUser.onPremisesSamAccountName.length &&
-        !isNaN(this.editUser.onPremisesSamAccountName[0])
+        !isNaN(parseInt(this.editUser.onPremisesSamAccountName[0]))
       ) {
         this.formData.userName.errorMessage = this.$gettext('User name cannot start with a number')
         return false
@@ -325,7 +325,10 @@ export default defineComponent({
     },
     onUpdateRole(role) {
       if (!this.editUser.appRoleAssignments.length) {
-        this.editUser.appRoleAssignments.push({ appRoleId: role.id, displayName: role.displayName })
+        this.editUser.appRoleAssignments.push({
+          appRoleId: role.id,
+          displayName: role.displayName
+        } as any)
         return
       }
       this.editUser.appRoleAssignments[0].appRoleId = role.id

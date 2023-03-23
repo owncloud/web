@@ -261,7 +261,7 @@ export default defineComponent({
       this.runningUploads += 1
       this.inFinalization = false
     })
-    this.$uppyService.subscribe('addedForUpload', (files) => {
+    this.$uppyService.subscribe('addedForUpload', (files: any[]) => {
       this.filesInProgressCount += files.filter((f) => !f.isFolder).length
 
       for (const file of files) {
@@ -295,7 +295,7 @@ export default defineComponent({
         this.resetProgress()
       }
     })
-    this.$uppyService.subscribe('progress', (value) => {
+    this.$uppyService.subscribe('progress', (value: number) => {
       this.totalProgress = value
     })
     this.$uppyService.subscribe('upload-progress', ({ file, progress }) => {
@@ -356,7 +356,7 @@ export default defineComponent({
         this.handleTopLevelFolderUpdate(file, 'error')
       }
     })
-    this.$uppyService.subscribe('uploadSuccess', (file) => {
+    this.$uppyService.subscribe('uploadSuccess', (file: any) => {
       // item inside folder
       if (!this.uploads[file.meta.uploadId]) {
         if (!file.isFolder) {

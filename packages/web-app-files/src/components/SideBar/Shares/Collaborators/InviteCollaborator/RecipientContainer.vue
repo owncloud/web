@@ -43,7 +43,8 @@ export default {
         hasAvatar: [ShareTypes.user.value, ShareTypes.spaceUser.value].includes(
           this.recipient.value.shareType
         ),
-        isLoadingAvatar: true
+        isLoadingAvatar: true,
+        avatar: undefined
       }
     }
   },
@@ -59,7 +60,7 @@ export default {
   },
 
   async created() {
-    if (this.capabilities.files_sharing.user.profile_picture && this.hasAvatar) {
+    if (this.capabilities.files_sharing.user.profile_picture && (this as any).hasAvatar) {
       try {
         this.formattedRecipient.avatar = await avatarUrl({
           clientService: this.$clientService,

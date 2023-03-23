@@ -166,7 +166,7 @@ export default defineComponent({
       type: Function,
       required: false,
       default(item) {
-        return item[this.idKey]
+        return item[(this as any).idKey]
       }
     },
     /**
@@ -331,7 +331,7 @@ export default defineComponent({
     dragSelection() {
       const selection = [...this.selection]
       selection.splice(
-        selection.findIndex((i) => i.id === this.dragItem.id),
+        selection.findIndex((i) => (i as any).id === this.dragItem.id),
         1
       )
       return selection
@@ -413,7 +413,7 @@ export default defineComponent({
         props.class += ` oc-pr-${getSizeClass(this.paddingX)}`
       }
 
-      this.extractSortThProps(props, field, index)
+      this.extractSortThProps(props, field)
 
       return props
     },
@@ -429,7 +429,7 @@ export default defineComponent({
       }
     },
     extractTdProps(field, index, item) {
-      const props = this.extractCellProps(field, index)
+      const props = this.extractCellProps(field)
       props.class = `oc-table-data-cell oc-table-data-cell-${field.name}`
       if (Object.prototype.hasOwnProperty.call(field, 'tdClass')) {
         props.class += ` ${field.tdClass}`
@@ -456,7 +456,10 @@ export default defineComponent({
       return {
         ...(field?.alignH && { alignH: field.alignH }),
         ...(field?.alignV && { alignV: field.alignV }),
-        ...(field?.width && { width: field.width })
+        ...(field?.width && { width: field.width }),
+        class: undefined,
+        wrap: undefined,
+        style: undefined
       }
     },
     isHighlighted(item) {

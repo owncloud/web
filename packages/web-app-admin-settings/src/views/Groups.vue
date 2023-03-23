@@ -151,7 +151,9 @@ export default defineComponent({
   },
   computed: {
     selectedGroupsText() {
-      return this.$gettext('%{ groupCount } selected', { groupCount: this.selectedGroups.length })
+      return this.$gettext('%{ groupCount } selected', {
+        groupCount: this.selectedGroups.length.toString()
+      })
     },
     breadcrumbs() {
       return [

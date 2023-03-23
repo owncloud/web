@@ -136,7 +136,7 @@ export default {
         continue
       }
 
-      this.commit('Files/UPDATE_RESOURCE_FIELD', {
+      ;(this as any).commit('Files/UPDATE_RESOURCE_FIELD', {
         id: resource.id,
         field: 'indicators',
         value: indicators

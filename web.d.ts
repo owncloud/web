@@ -5,7 +5,7 @@ import { OwnCloudSdk } from 'web-client/src/types'
 import { Language } from 'vue3-gettext'
 import { Router, RouteRecordNormalizedLoaded } from 'vue-router'
 import { Store } from 'vuex'
-import { ClientService, PreviewService } from 'web-pkg/src/services'
+import { ClientService, LoadingService, PreviewService } from 'web-pkg/src/services'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 
 // This file must have at least one export or import on top-level
@@ -26,6 +26,7 @@ declare module 'vue' {
     $router: Router
     $store: Store<any>
     $uppyService: UppyService
+    $loadingService: LoadingService
   }
 
   interface GlobalComponents {

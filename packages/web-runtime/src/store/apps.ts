@@ -45,7 +45,7 @@ const mutations = {
   REGISTER_APP(state, appInfo) {
     if (appInfo.extensions) {
       appInfo.extensions.forEach((extension) => {
-        this.commit('REGISTER_EXTENSION', {
+        ;(this as any).commit('REGISTER_EXTENSION', {
           app: appInfo.id,
           extension
         })

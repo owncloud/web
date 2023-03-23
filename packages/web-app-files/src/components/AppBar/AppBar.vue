@@ -193,10 +193,10 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.resizeObserver.observe(this.$refs.filesAppBar)
+    this.resizeObserver.observe(this.$refs.filesAppBar as HTMLElement)
   },
   beforeUnmount() {
-    this.resizeObserver.unobserve(this.$refs.filesAppBar)
+    this.resizeObserver.unobserve(this.$refs.filesAppBar as HTMLElement)
   },
 
   created() {

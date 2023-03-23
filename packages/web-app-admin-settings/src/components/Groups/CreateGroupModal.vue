@@ -26,13 +26,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { Group } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'CreateGroupModal',
   props: {
     existingGroups: {
-      type: Array,
+      type: Array as PropType<Group[]>,
       required: false,
       default: () => {
         return []
@@ -50,7 +51,7 @@ export default defineComponent({
       },
       group: {
         displayName: ''
-      }
+      } as Group
     }
   },
   computed: {

@@ -1,6 +1,5 @@
 export * from './composables'
 export * from './configuration'
-export * from './decorator'
 export * from './helpers'
 export * from './http'
 export * from './observer'

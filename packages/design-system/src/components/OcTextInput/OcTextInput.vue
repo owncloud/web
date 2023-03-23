@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, HTMLAttributes, PropType } from 'vue'
 
 import uniqueId from '../../utils/uniqueId'
 import OcButton from '../OcButton/OcButton.vue'
@@ -119,7 +119,7 @@ export default defineComponent({
      * Selection range to accomplish partial selection
      */
     selectionRange: {
-      type: Array,
+      type: Array as unknown as PropType<[number, number]>,
       required: false,
       default: null
     },
@@ -223,7 +223,7 @@ export default defineComponent({
       return { ...attrs, ...additionalAttrs }
     },
     ariaInvalid() {
-      return (!!this.errorMessage).toString()
+      return (!!this.errorMessage).toString() as HTMLAttributes['aria-invalid']
     },
     messageText() {
       if (this.errorMessage) {
@@ -252,7 +252,7 @@ export default defineComponent({
      * @public
      */
     focus() {
-      this.$refs.input.focus()
+      ;(this.$refs.input as HTMLInputElement).focus()
     },
     onClear() {
       this.focus()

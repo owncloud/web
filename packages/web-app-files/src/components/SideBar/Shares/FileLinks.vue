@@ -542,7 +542,8 @@ export default defineComponent({
     getAvailableRoleOptions(link) {
       if (this.incomingParentShare && this.canCreateLinks) {
         return LinkShareRoles.filterByBitmask(
-          this.incomingParentShare.permissions,
+          // FIXME: which type needs fixing?
+          this.incomingParentShare.permissions as any,
           this.resource.isFolder,
           this.hasPublicLinkEditing,
           this.hasPublicLinkContribute,

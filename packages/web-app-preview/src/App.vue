@@ -171,10 +171,16 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, unref } from 'vue'
-import { useAppDefaults, usePublicLinkContext, useStore } from 'web-pkg/src/composables'
+import {
+  queryItemAsString,
+  useAppDefaults,
+  usePublicLinkContext,
+  useStore
+} from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
+import { RouteLocationRaw } from 'vue-router'
 
 export const appId = 'preview'
 
@@ -367,8 +373,8 @@ export default defineComponent({
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     document.addEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
     await this.loadFolderForFileContext(this.currentFileContext)
-    this.setActiveFile(this.currentFileContext.driveAliasAndItem)
-    this.$refs.preview.focus()
+    this.setActiveFile(unref(this.currentFileContext.driveAliasAndItem))
+    ;(this.$refs.preview as any).focus()
   },
 
   beforeUnmount() {
@@ -384,7 +390,7 @@ export default defineComponent({
     setActiveFile(driveAliasAndItem: string) {
       for (let i = 0; i < this.filteredFiles.length; i++) {
         if (
-          this.currentFileContext.space?.getDriveAliasAndItem(this.filteredFiles[i]) ===
+          unref(this.currentFileContext.space)?.getDriveAliasAndItem(this.filteredFiles[i]) ===
           driveAliasAndItem
         ) {
           this.activeIndex = i
@@ -397,8 +403,8 @@ export default defineComponent({
     },
     // react to PopStateEvent ()
     handleLocalHistoryEvent() {
-      const result = this.$router.resolve(document.location)
-      this.setActiveFile(result.route.params.driveAliasAndItem)
+      const result = this.$router.resolve(document.location as unknown as RouteLocationRaw)
+      this.setActiveFile(queryItemAsString(result.params.driveAliasAndItem))
     },
     handleFullScreenChangeEvent() {
       if (document.fullscreenElement === null) {
@@ -436,7 +442,7 @@ export default defineComponent({
         let mediaUrl
         if (loadRawFile) {
           mediaUrl = await this.getUrlForResource(
-            this.currentFileContext.space,
+            unref(this.currentFileContext.space),
             this.activeFilteredFile
           )
         } else {

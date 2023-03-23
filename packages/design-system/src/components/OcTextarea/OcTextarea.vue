@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, HTMLAttributes } from 'vue'
 import uniqueId from '../../utils/uniqueId'
 
 /**
@@ -135,7 +135,7 @@ export default defineComponent({
       return { ...this.$attrs, ...additionalAttrs }
     },
     ariaInvalid() {
-      return (!!this.errorMessage).toString()
+      return (!!this.errorMessage).toString() as HTMLAttributes['aria-invalid']
     },
     messageText() {
       if (this.errorMessage) {
@@ -153,7 +153,7 @@ export default defineComponent({
      * @public
      */
     focus() {
-      this.$refs.input.focus()
+      ;(this.$refs.input as HTMLInputElement).focus()
     },
     onInput(value) {
       /**

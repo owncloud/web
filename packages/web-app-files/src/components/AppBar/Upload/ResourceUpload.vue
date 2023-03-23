@@ -80,14 +80,14 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.$uppyService.registerUploadInput(this.$refs.input)
+    this.$uppyService.registerUploadInput(this.$refs.input as HTMLInputElement)
   },
   beforeUnmount() {
-    this.$uppyService.removeUploadInput(this.$refs.input)
+    this.$uppyService.removeUploadInput(this.$refs.input as HTMLInputElement)
   },
   methods: {
     triggerUpload() {
-      this.$refs.input.click()
+      ;(this.$refs.input as HTMLInputElement).click()
     }
   }
 })

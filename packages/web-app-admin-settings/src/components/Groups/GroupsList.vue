@@ -85,7 +85,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref } from 'vue'
+import { defineComponent, PropType, ref, unref, ComponentPublicInstance } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { displayPositionedDropdown, eventBus } from 'web-pkg'
@@ -210,10 +210,14 @@ export default defineComponent({
       return this.groups.length === this.selectedGroups.length
     },
     footerTextTotal() {
-      return this.$gettext('%{groupCount} groups in total', { groupCount: this.groups.length })
+      return this.$gettext('%{groupCount} groups in total', {
+        groupCount: this.groups.length.toString()
+      })
     },
     footerTextFilter() {
-      return this.$gettext('%{groupCount} matching groups', { groupCount: this.data.length })
+      return this.$gettext('%{groupCount} matching groups', {
+        groupCount: this.data.length.toString()
+      })
     },
     data() {
       return this.orderBy(
@@ -241,7 +245,7 @@ export default defineComponent({
   },
   mounted() {
     this.$nextTick(() => {
-      this.markInstance = new Mark(this.$refs.tableRef.$el)
+      this.markInstance = new Mark((this.$refs.tableRef as ComponentPublicInstance).$el)
     })
   },
   methods: {

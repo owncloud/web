@@ -255,7 +255,7 @@ export default defineComponent({
   },
   methods: {
     focusSearchInput() {
-      this.$refs.searchInput.focus()
+      ;(this.$refs.searchInput as any).focus()
     },
     onSearch() {
       /**
@@ -266,7 +266,7 @@ export default defineComponent({
       this.$emit('search', this.query)
     },
     onType(query) {
-      this.query = !this.noTrim ? query.trim() : query
+      this.query = !this.trimQuery ? query.trim() : query
       /**
        * Input event to support model directive
        * @event Input
@@ -279,7 +279,7 @@ export default defineComponent({
       this.query = ''
       this.onType('')
       this.onSearch()
-      this.$refs.searchInput.focus()
+      ;(this.$refs.searchInput as any).focus()
 
       /**
        * Clear event triggered after the clear of the search query
