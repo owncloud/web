@@ -82,12 +82,12 @@ Feature: spaces management
       | team.b |
       | team.c |
       | team.d |
-    # Then "Alice" should not see the following spaces
-    #   | id     |
-    #   | team.a |
-    #   | team.b |
-    #   | team.c |
-    #   | team.d |
+    Then "Alice" should not see the following spaces
+      | id     |
+      | team.a |
+      | team.b |
+      | team.c |
+      | team.d |
     And "Alice" logs out
 
 

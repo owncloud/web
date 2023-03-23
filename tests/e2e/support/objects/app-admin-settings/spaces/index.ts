@@ -33,31 +33,43 @@ export class Spaces {
   }
 
   async changeQuota({
-    key,
+    spaces,
     value,
     context
   }: {
-    key: string
+    spaces: string[]
     value: string
     context: string
   }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await changeSpaceQuota({ id, value, page: this.#page, context })
+    const spaceIds = []
+    for (const space of spaces) {
+      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
+    }
+    await changeSpaceQuota({ spaceIds, value, page: this.#page, context })
   }
 
-  async disable({ key, context }: { key: string; context: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await disableSpace({ id, page: this.#page, context })
+  async disable({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
+    const spaceIds = []
+    for (const space of spaces) {
+      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
+    }
+    await disableSpace({ spaceIds, page: this.#page, context })
   }
 
-  async enable({ key, context }: { key: string; context: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await enableSpace({ id, page: this.#page, context })
+  async enable({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
+    const spaceIds = []
+    for (const space of spaces) {
+      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
+    }
+    await enableSpace({ spaceIds, page: this.#page, context })
   }
 
-  async delete({ key, context }: { key: string; context: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await deleteSpace({ id, page: this.#page, context })
+  async delete({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
+    const spaceIds = []
+    for (const space of spaces) {
+      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
+    }
+    await deleteSpace({ spaceIds, page: this.#page, context })
   }
 
   async select({ key }: { key: string }): Promise<void> {
