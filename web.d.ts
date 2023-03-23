@@ -7,6 +7,7 @@ import { Router, RouteRecordNormalizedLoaded } from 'vue-router'
 import { Store } from 'vuex'
 import { ClientService, LoadingService, PreviewService } from 'web-pkg/src/services'
 import { UppyService } from 'web-runtime/src/services/uppyService'
+import { ThumbnailService } from 'web-app-files/src/services'
 
 // This file must have at least one export or import on top-level
 export {}
@@ -25,8 +26,8 @@ declare module 'vue' {
     $route: RouteRecordNormalizedLoaded
     $router: Router
     $store: Store<any>
+    $thumbnailService: ThumbnailService
     $uppyService: UppyService
-    $loadingService: LoadingService
   }
 
   interface GlobalComponents {
