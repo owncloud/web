@@ -1,6 +1,11 @@
 import { ref, Ref, computed, unref, isRef } from 'vue'
 import { MaybeRef, ReadOnlyRef } from 'web-pkg/src/utils'
-import { useRouteName, useRouteQueryPersisted, QueryValue } from 'web-pkg/src/composables'
+import {
+  useRouteName,
+  useRouter,
+  useRouteQueryPersisted,
+  QueryValue
+} from 'web-pkg/src/composables'
 import { SortConstants } from './constants'
 
 export interface SortableItem {
@@ -37,6 +42,7 @@ export interface SortResult<T> {
 }
 
 export function useSort<T extends SortableItem>(options: SortOptions<T>): SortResult<T> {
+  const router = useRouter()
   const sortByRef = createSortByQueryRef(options)
   const sortDirRef = createSortDirQueryRef(options)
 
@@ -63,8 +69,15 @@ export function useSort<T extends SortableItem>(options: SortOptions<T>): SortRe
   })
 
   const handleSort = ({ sortBy, sortDir }: { sortBy: string; sortDir: SortDir }) => {
-    sortByRef.value = sortBy
-    sortDirRef.value = sortDir
+    // normally we would just set sortBy and sortDir here, but then the router could lose one of the two changes.
+    // hence we update the router directly by setting both values as query.
+    return router.replace({
+      query: {
+        ...unref(router.currentRoute).query,
+        'sort-by': sortBy,
+        'sort-dir': sortDir
+      }
+    })
   }
 
   return {

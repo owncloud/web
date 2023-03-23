@@ -1,9 +1,4 @@
-import { DateTime } from 'luxon'
 import { SortDir, SortField } from '../../composables/sort'
-
-const dateSortValue = (date) => {
-  return DateTime.fromRFC2822(date).toUTC().valueOf()
-}
 
 export const determineSortFields = (firstResource): SortField[] => {
   if (!firstResource) {
@@ -50,17 +45,17 @@ export const determineSortFields = (firstResource): SortField[] => {
     },
     {
       name: 'mdate',
-      sortable: (date) => dateSortValue(date),
+      sortable: (date) => new Date(date).valueOf(),
       sortDir: SortDir.Desc
     },
     {
       name: 'sdate',
-      sortable: (date) => dateSortValue(date),
+      sortable: (date) => new Date(date).valueOf(),
       sortDir: SortDir.Desc
     },
     {
       name: 'ddate',
-      sortable: (date) => dateSortValue(date),
+      sortable: (date) => new Date(date).valueOf(),
       sortDir: SortDir.Desc
     }
   ].filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))
