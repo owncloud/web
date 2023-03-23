@@ -43,7 +43,7 @@ export class Spaces {
   }): Promise<void> {
     const spaceIds = []
     for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }))
+      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
     }
     await changeSpaceQuota({ spaceIds, value, page: this.#page, context })
   }
@@ -51,7 +51,7 @@ export class Spaces {
   async disable({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
     const spaceIds = []
     for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }))
+      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
     }
     await disableSpace({ spaceIds, page: this.#page, context })
   }
@@ -59,7 +59,7 @@ export class Spaces {
   async enable({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
     const spaceIds = []
     for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }))
+      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
     }
     await enableSpace({ spaceIds, page: this.#page, context })
   }
@@ -67,7 +67,7 @@ export class Spaces {
   async delete({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
     const spaceIds = []
     for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }))
+      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
     }
     await deleteSpace({ spaceIds, page: this.#page, context })
   }

@@ -204,7 +204,7 @@ const confirmAction = async (args: {
 
   const checkResponses = []
   for (const id of spaceIds) {
-    checkResponses.push(() =>
+    checkResponses.push(
       page.waitForResponse(
         (resp) =>
           resp.url().endsWith(encodeURIComponent(id)) &&
