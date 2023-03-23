@@ -369,7 +369,7 @@ export default defineComponent({
   &:focus-within {
     .vs__dropdown-menu,
     .vs__dropdown-toggle {
-      border-color: var(--oc-color-swatch-primary-gradient);
+      border-color: var(--oc-color-swatch-passive-default);
     }
   }
 }
