@@ -1,7 +1,6 @@
 <template>
   <oc-modal
     :title="title"
-    :message="message"
     :button-cancel-text="$gettext('Cancel')"
     :button-confirm-text="$gettext('Confirm')"
     :button-confirm-disabled="!selectedOptions.length"
@@ -29,10 +28,6 @@ export default defineComponent({
   components: { GroupSelect },
   props: {
     title: {
-      type: String,
-      required: true
-    },
-    message: {
       type: String,
       required: true
     },
