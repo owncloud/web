@@ -182,3 +182,19 @@ Feature: users management
       | displayname | Max Testing             |
       | email       | maxtesting@owncloud.com |
     And "Max" logs out
+
+
+  Scenario: edit panel can be opened via quick action and context menu
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+      | Brian |
+      | Carol |
+    And "Admin" logs in
+    And "Admin" opens the "admin-settings" app
+    And "Admin" navigates to the users management page
+    When "Admin" opens the edit panel of user "Brian" using the quick action
+    Then "Admin" should see the edit panel
+    When "Admin" opens the edit panel of user "Brian" using the context menu
+    Then "Admin" should see the edit panel
+    And "Admin" logs out

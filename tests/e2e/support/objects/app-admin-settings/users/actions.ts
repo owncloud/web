@@ -2,7 +2,11 @@ import { Page } from 'playwright'
 import util from 'util'
 
 const userIdSelector = `[data-item-id="%s"] .users-table-btn-action-dropdown`
-const editActionBtn = `.context-menu .oc-users-actions-edit-trigger`
+const editActionBtnContextMenu = '.context-menu .oc-users-actions-edit-trigger'
+const editActionBtnQuickActions =
+  '[data-item-id="%s"] .oc-table-data-cell-actions .users-table-btn-edit'
+const editPanel = '.sidebar-panel__body-EditPanel:visible'
+const closeEditPanel = '.sidebar-panel__header .header__close'
 const deleteActionBtn = '.oc-users-actions-delete-trigger'
 const loginDropDown = '.vs__dropdown-menu'
 const dropdownOption = '.vs__dropdown-option'
@@ -257,10 +261,27 @@ export const removeUserFromGroups = async (args: {
   ])
 }
 
-export const openEditPanel = async (args: { page: Page; uuid: string }): Promise<void> => {
-  const { page, uuid } = args
-  await page.locator(util.format(userIdSelector, uuid)).click()
-  await page.locator(editActionBtn).click()
+export const openEditPanel = async (args: {
+  page: Page
+  uuid: string
+  action: string
+}): Promise<void> => {
+  const { page, uuid, action } = args
+  if (await page.locator(editPanel).count()) {
+    await page.locator(closeEditPanel).click()
+  }
+  switch (action) {
+    case 'context-menu':
+      await page.locator(util.format(userIdSelector, uuid)).click()
+      await page.locator(editActionBtnContextMenu).click()
+      break
+    case 'quick-action':
+      await selectUser({ page, uuid })
+      await page.locator(util.format(editActionBtnQuickActions, uuid)).click()
+      break
+    default:
+      throw new Error(`${action} not implemented`)
+  }
 }
 
 export const deleteUserUsingContextMenu = async (args: {
@@ -295,4 +316,9 @@ export const deleteUserUsingBatchAction = async (args: { page: Page }): Promise<
     ),
     await page.locator(actionConfirmButton).click()
   ])
+}
+
+export const waitForEditPanelToBeVisible = async (args: { page: Page }): Promise<void> => {
+  const { page } = args
+  await page.waitForSelector(editPanel)
 }
