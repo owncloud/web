@@ -7,28 +7,6 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 
-jest.spyOn((TopBar as any).mixins[0].methods, 'navigation_getMenuItems').mockImplementation(() => [
-  {
-    icon: 'folder',
-    iconUrl: undefined,
-    title: 'Files',
-    path: '/files'
-  },
-  {
-    icon: 'some-icon',
-    iconUrl: undefined,
-    title: 'External',
-    url: 'http://some.org',
-    target: '_blank'
-  },
-  {
-    icon: 'application',
-    iconUrl: undefined,
-    path: '/settings',
-    title: 'Settings'
-  }
-])
-
 describe('Top Bar component', () => {
   it('Displays applications menu', () => {
     const { wrapper } = getWrapper()
