@@ -52,8 +52,8 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
       variation: 'danger',
       icon: 'alarm-warning',
       title: $ngettext(
-        'Delete group %{group}?',
-        'Delete %{groupCount} selected groups?',
+        'Delete group "%{group}"?',
+        'Delete %{groupCount} groups?',
         resources.length,
         {
           group: resources[0].displayName,
@@ -64,8 +64,11 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
       confirmText: $gettext('Delete'),
       message: $ngettext(
         'Are you sure you want to delete this group?',
-        'Are you sure you want to delete all selected groups?',
-        resources.length
+        'Are you sure you want to delete the %{groupCount} selected groups?',
+        resources.length,
+        {
+          groupCount: resources.length.toString()
+        }
       ),
       hasInput: false,
       onCancel: () => store.dispatch('hideModal'),

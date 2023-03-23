@@ -59,8 +59,8 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
       if (result.filter(Boolean).length) {
         store.dispatch('showMessage', {
           title: $ngettext(
-            'Space was restored successfully',
-            'Spaces were restored successfully',
+            'Space was enabled successfully',
+            'Spaces were enabled successfully',
             result.filter(Boolean).length
           )
         })
@@ -79,14 +79,19 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
       allowedResources.length,
       { count: allowedResources.length.toString() }
     )
-    const confirmText =
-      resources.length === 1
-        ? $gettext('Enable')
-        : $gettext('Enable (%{count})', { count: allowedResources.length.toString() })
+    const confirmText = $gettext('Enable')
 
     const modal = {
       variation: 'passive',
-      title: $ngettext('Enable Space?', 'Enable Spaces?', allowedResources.length),
+      title: $ngettext(
+        'Enable Space "%{space}"?',
+        'Enable %{spaceCount} Spaces?',
+        allowedResources.length,
+        {
+          space: allowedResources[0].name,
+          spaceCount: allowedResources.length.toString()
+        }
+      ),
       cancelText: $gettext('Cancel'),
       confirmText,
       icon: 'alarm-warning',

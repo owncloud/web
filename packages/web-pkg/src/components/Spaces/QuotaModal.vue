@@ -68,11 +68,11 @@ export default defineComponent({
     const modalTitle = computed(() => {
       if (props.resourceType === 'space') {
         if (props.spaces.length === 1) {
-          return $gettext('Change quota for space "%{name}"', {
+          return $gettext('Change quota for Space "%{name}"', {
             name: props.spaces[0].name
           })
         }
-        return $gettext('Change quota for %{count} spaces', {
+        return $gettext('Change quota for %{count} Spaces', {
           count: props.spaces.length.toString()
         })
       }
