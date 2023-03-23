@@ -8,7 +8,6 @@
     @confirm="$emit('confirm', { users, groups: selectedOptions })"
   >
     <template #content>
-      <p class="oc-modal-body-message" v-text="message" />
       <GroupSelect
         :selected-groups="selectedOptions"
         :group-options="groups"
