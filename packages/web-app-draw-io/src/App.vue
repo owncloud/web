@@ -212,7 +212,6 @@ export default defineComponent({
         previousEntityTag: this.currentETag
       })
         .then((resp) => {
-          // FIXME: is this correct? The type says ... yes
           this.currentETag = resp.etag
 
           const message = this.$gettext('File saved!')

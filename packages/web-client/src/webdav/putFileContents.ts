@@ -28,7 +28,7 @@ export const PutFileContentsFactory = (
         await sdk.files.putFileContents(urlJoin(space.webDavPath, path), content, options)
       }
 
-      return getFileInfoFactory.getFileInfo(space, { path }) as Promise<FileResource>
+      return getFileInfoFactory.getFileInfo(space, { path })
     }
   }
 }
