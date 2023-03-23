@@ -23,7 +23,8 @@ export function useIncomingParentShare() {
     let parentShare
     const incoming = unref(incomingCollaborators).find((s) => s.itemSource === resource.id)
     if (incoming) {
-      return incoming
+      incomingParentShare.value = incoming
+      return
     }
 
     if (resource.shareId) {
