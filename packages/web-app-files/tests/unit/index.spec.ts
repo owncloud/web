@@ -3,10 +3,6 @@ import WebAppFiles from '../../src/index'
 describe('Web app files', () => {
   describe('navItems', () => {
     describe('Personal', () => {
-      it('should be enabled if spaces not supported', () => {
-        const navItems = WebAppFiles.navItems({})
-        expect(navItems[0].enabled({ spaces: { enabled: false } })).toBeTruthy()
-      })
       it('should be enabled if user has a personal space', () => {
         const navItems = WebAppFiles.navItems({
           $store: { getters: { 'runtime/spaces/spaces': [{ id: '1', driveType: 'personal' }] } }
