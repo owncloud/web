@@ -45,17 +45,34 @@ export const createSpace = async (args: createSpaceArgs): Promise<string> => {
 
   await page.locator(newSpaceMenuButton).click()
   await page.locator(spaceNameInputField).fill(name)
-  const [response] = await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.status() === 201 && resp.request().method() === 'POST' && resp.url().endsWith('drives')
-    ),
-    page.locator(actionConfirmButton).click()
-  ])
 
-  const { id } = await response.json()
+  const postResponsePromise = page.waitForResponse(
+    (postResp) =>
+      postResp.status() === 201 &&
+      postResp.request().method() === 'POST' &&
+      postResp.url().endsWith('drives')
+  )
+  const mkcolResponsePromise = page.waitForResponse(
+    (resp) =>
+      resp.status() === 201 && resp.request().method() === 'MKCOL' && resp.url().endsWith('.space/')
+  )
+  const putResponsePromise = page.waitForResponse(
+    (resp) =>
+      resp.status() === 201 &&
+      resp.request().method() === 'PUT' &&
+      resp.url().endsWith('/.space/readme.md')
+  )
+  const patchResponsePromise = page.waitForResponse(
+    (resp) => resp.status() === 200 && resp.request().method() === 'PATCH'
+  )
 
-  await page.waitForSelector(util.format(spaceIdSelector, id))
+  await page.locator(actionConfirmButton).click()
+  await postResponsePromise
+  await mkcolResponsePromise
+  await putResponsePromise
+  await patchResponsePromise
+
+  const { id } = await (await postResponsePromise).json()
 
   return id
 }
