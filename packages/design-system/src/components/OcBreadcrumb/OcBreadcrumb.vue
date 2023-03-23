@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, useSlots } from 'vue'
 
 import { AVAILABLE_SIZES } from '../../helpers/constants'
 
@@ -149,6 +149,17 @@ export default defineComponent({
       }
     }
   },
+  setup() {
+    const slots = useSlots()
+
+    const showContextMenu = computed(() => {
+      return !!slots.contextMenu
+    })
+
+    return {
+      showContextMenu
+    }
+  },
   computed: {
     dropdownItems() {
       if (this.items.length <= 1 || !this.items) {
@@ -164,14 +175,6 @@ export default defineComponent({
     },
     contextMenuLabel() {
       return this.$gettext('Show actions for current folder')
-    },
-    showContextMenu() {
-      const contextMenuSlot = this.$slots.contextMenu
-      if (!contextMenuSlot) {
-        return false
-      }
-      const slotContent = contextMenuSlot()[0] ?? null
-      return !!(slotContent?.type as any)?.name
     }
   },
   methods: {
