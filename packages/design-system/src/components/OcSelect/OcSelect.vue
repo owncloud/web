@@ -298,6 +298,7 @@ export default defineComponent({
     &__dropdown-menu {
       padding: 0;
       background-color: var(--oc-color-background-default);
+      margin-top: -1px;
     }
 
     &__clear,
