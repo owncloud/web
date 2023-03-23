@@ -91,7 +91,6 @@
             data-testid="account-page-logout-url-btn"
           >
             <span v-text="$gettext('Account security')" />
-            <oc-icon name="edit" />
           </oc-button>
         </dd>
       </div>
