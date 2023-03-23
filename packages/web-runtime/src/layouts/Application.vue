@@ -9,9 +9,13 @@
     </div>
     <div id="web-content-main" class="oc-px-s oc-pb-s">
       <div class="app-container oc-flex">
-        <sidebar-nav v-if="isSidebarVisible" class="app-navigation" :nav-items="sidebarNavItems" />
         <app-loading-spinner v-if="isLoading" />
         <template v-else>
+          <sidebar-nav
+            v-if="isSidebarVisible"
+            class="app-navigation"
+            :nav-items="sidebarNavItems"
+          />
           <router-view
             v-for="name in ['default', 'app', 'fullscreen']"
             :key="`router-view-${name}`"

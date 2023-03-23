@@ -45,9 +45,16 @@ export const defaultStoreMockOptions = {
     showMessage: jest.fn(),
     deleteNotification: jest.fn(),
     loadTheme: jest.fn(),
-    setModalInputErrorMessage: jest.fn()
+    setModalInputErrorMessage: jest.fn(),
+    openNavigation: jest.fn(),
+    closeNavigation: jest.fn()
   },
   mutations: {
     SET_QUOTA: () => jest.fn()
+  },
+  state: {
+    navigation: {
+      closed: false
+    }
   }
 } // FIXME: when we switch to TypeScript 4.9: satisfies StoreOptionsExtended<any>

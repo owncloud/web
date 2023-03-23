@@ -119,6 +119,11 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
         const personalSpace = store.getters['runtime/spaces/spaces'].find((space) =>
           isPersonalSpaceResource(space)
         )
+
+        if (!personalSpace) {
+          return
+        }
+
         store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
           id: personalSpace.id,
           field: 'name',

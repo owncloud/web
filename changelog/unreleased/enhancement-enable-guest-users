@@ -1,0 +1,6 @@
+Enhancement: Enable guest users
+
+We've added a way to allow guest users without a personal drive to use the web ui.
+
+https://github.com/owncloud/web/pull/8652
+https://github.com/owncloud/web/issues/8663
