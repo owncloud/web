@@ -50,7 +50,6 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
 
     const modal = {
       variation: 'danger',
-      icon: 'alarm-warning',
       title: $ngettext(
         'Delete group "%{group}"?',
         'Delete %{groupCount} groups?',

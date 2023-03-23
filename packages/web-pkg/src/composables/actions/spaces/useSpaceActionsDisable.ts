@@ -82,7 +82,6 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
     const confirmText = $gettext('Disable')
     const modal = {
       variation: 'danger',
-      icon: 'alarm-warning',
       title: $ngettext(
         'Disable Space "%{space}"?',
         'Disable %{spaceCount} Spaces?',

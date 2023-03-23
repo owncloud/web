@@ -55,7 +55,6 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
   const handler = ({ space }: FileActionOptions) => {
     const modal = {
       variation: 'danger',
-      icon: 'alarm-warning',
       title: $gettext('Empty trash bin'),
       cancelText: $gettext('Cancel'),
       confirmText: $gettext('Delete'),

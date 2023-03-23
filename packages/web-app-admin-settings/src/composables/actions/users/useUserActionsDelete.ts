@@ -50,7 +50,6 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
 
     const modal = {
       variation: 'danger',
-      icon: 'alarm-warning',
       title: $ngettext('Delete user "%{user}"?', 'Delete %{userCount} users?', resources.length, {
         user: resources[0].displayName,
         userCount: resources.length.toString()
