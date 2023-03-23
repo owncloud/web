@@ -24,13 +24,12 @@ import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension } from 'web-pkg/src/constants'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
-import { loadPreview } from 'web-pkg/src/helpers'
 import { debounce } from 'lodash-es'
 import { computed, defineComponent, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
-import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { buildShareSpaceResource, Resource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { eventBus } from 'web-pkg/src/services/eventBus'
@@ -54,7 +53,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
     const previewData = ref()
     const resource = computed((): Resource => {
       return {
@@ -68,13 +66,12 @@ export default defineComponent({
     return {
       ...useFileActions(),
       hasShareJail: useCapabilityShareJailEnabled(),
-      accessToken: useAccessToken({ store }),
       previewData,
       resource
     }
   },
   computed: {
-    ...mapGetters(['configuration', 'user']),
+    ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaces']),
 
     attrs() {
@@ -147,15 +144,11 @@ export default defineComponent({
 
     const debounced = debounce(async ({ unobserve }) => {
       unobserve()
-      const preview = await loadPreview(
+      const preview = await this.$previewService.loadPreview(
         {
-          clientService: this.$clientService,
+          space: this.matchingSpace,
           resource: this.resource,
-          isPublic: false,
-          dimensions: ImageDimension.Thumbnail,
-          server: this.configuration.server,
-          userId: this.user.id,
-          token: this.accessToken
+          dimensions: ImageDimension.Thumbnail
         },
         true
       )

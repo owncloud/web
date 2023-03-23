@@ -171,16 +171,8 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, unref } from 'vue'
-import { mapGetters } from 'vuex'
-import {
-  useAccessToken,
-  useAppDefaults,
-  usePublicLinkContext,
-  useStore
-} from 'web-pkg/src/composables'
+import { useAppDefaults, usePublicLinkContext, useStore } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
-import { loadPreview } from 'web-pkg/src/helpers'
-import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 
@@ -231,7 +223,6 @@ export default defineComponent({
         applicationId: 'preview'
       }),
       ...useDownloadFile(),
-      accessToken: useAccessToken({ store }),
       isPublicLinkContext: usePublicLinkContext({ store }),
 
       isFullScreenModeActivated,
@@ -258,8 +249,6 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters(['capabilities', 'user']),
-
     pageTitle() {
       const translated = this.$gettext('Preview for %{currentMediumName}')
       return this.$gettextInterpolate(translated, {
@@ -542,13 +531,9 @@ export default defineComponent({
       })
     },
     loadPreview(file) {
-      return loadPreview({
-        clientService: this.$clientService,
+      return this.$previewService.loadPreview({
+        space: unref(this.currentFileContext.space),
         resource: file,
-        isPublic: this.isPublicLinkContext,
-        server: configurationManager.serverUrl,
-        userId: this.user.id,
-        token: this.accessToken,
         dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
       })
     },

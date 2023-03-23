@@ -11,7 +11,6 @@ import {
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Drive } from 'web-client/src/generated'
-import { ThumbnailService } from 'web-app-files/src/services'
 
 describe('setImage', () => {
   describe('isEnabled property', () => {
@@ -171,11 +170,9 @@ function getWrapper({
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
-    }),
-    $thumbnailService: mock<ThumbnailService>({
-      isMimetypeSupported: jest.fn(() => isMimetypeSupported)
     })
   }
+  mocks.$previewService.isMimetypeSupported.mockReturnValue(isMimetypeSupported)
   mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
 
   const storeOptions = {

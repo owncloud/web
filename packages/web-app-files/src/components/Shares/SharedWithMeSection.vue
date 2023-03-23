@@ -58,7 +58,7 @@
       <template #contextMenu="{ resource }">
         <context-actions
           v-if="isResourceInSelection(resource)"
-          :action-options="{ space: createShareSpace(resource), resources: selectedResources }"
+          :action-options="{ space: getSpace(resource), resources: selectedResources }"
         />
       </template>
       <template #footer>
@@ -88,11 +88,11 @@
 
 <script lang="ts">
 import ResourceTable from '../FilesList/ResourceTable.vue'
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { defineComponent, PropType, unref } from 'vue'
 import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { createLocationSpaces } from '../../router'
@@ -103,7 +103,7 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useSelectedResources } from '../../composables/selection'
 import { SortDir } from '../../composables'
 import { RouteLocationNamedRaw } from 'vue-router'
-import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { buildShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -183,41 +183,35 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
+
+    const getSpace = (resource: Resource): SpaceResource => {
+      if (unref(hasShareJail)) {
+        return buildShareSpaceResource({
+          shareId: resource.id,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
+        })
+      }
+      return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
+    }
+
     const resourceTargetRouteCallback = ({
       path,
       fileId,
       resource
     }: CreateTargetRouteOptions): RouteLocationNamedRaw => {
-      if (unref(hasShareJail)) {
-        const space = buildShareSpaceResource({
-          shareId: resource.id,
-          shareName: resource.name,
-          serverUrl: configurationManager.serverUrl
-        })
-        return createLocationSpaces(
-          'files-spaces-generic',
-          createFileRouteOptions(space, { path, fileId })
-        )
-      }
-      const personalSpace = store.getters['runtime/spaces/spaces'].find(
-        (space) => space.driveType === 'personal'
-      )
       return createLocationSpaces(
         'files-spaces-generic',
-        createFileRouteOptions(personalSpace, { path, fileId })
+        createFileRouteOptions(getSpace(resource), { path, fileId })
       )
     }
-
-    const personalSpace = computed(() => {
-      return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
-    })
 
     return {
       ...useFileActions(),
       resourceTargetRouteCallback,
       ...useSelectedResources({ store }),
       hasShareJail: useCapabilityShareJailEnabled(),
-      personalSpace
+      getSpace
     }
   },
 
@@ -227,8 +221,6 @@ export default defineComponent({
   }),
 
   computed: {
-    ...mapGetters(['configuration']),
-
     displayedFields() {
       return ['name', 'status', 'owner', 'sdate', 'sharedWith']
     },
@@ -267,10 +259,9 @@ export default defineComponent({
         }
 
         this.loadPreview({
-          clientService: this.$clientService,
-          thumbnailService: this.$thumbnailService,
+          previewService: this.$previewService,
+          space: this.getSpace(resource),
           resource,
-          isPublic: false,
           dimensions: ImageDimension.Thumbnail,
           type: ImageType.Thumbnail
         })
@@ -289,16 +280,6 @@ export default defineComponent({
     },
     toggleShowMore() {
       this.showMore = !this.showMore
-    },
-    createShareSpace(resource) {
-      if (!this.hasShareJail) {
-        return this.personalSpace
-      }
-      return buildShareSpaceResource({
-        shareId: resource.shareId,
-        shareName: resource.name,
-        serverUrl: configurationManager.serverUrl
-      })
     }
   }
 })

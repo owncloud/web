@@ -79,11 +79,9 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 import AppBar from '../../components/AppBar/AppBar.vue'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
-import { useAbility, useAccessToken, useClientService, useStore } from 'web-pkg/src/composables'
-import { loadPreview } from 'web-pkg/src/helpers/preview'
+import { useAbility, useClientService, useStore } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
-import { configurationManager } from 'web-pkg/src/configuration'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
@@ -127,8 +125,6 @@ export default defineComponent({
       fields: sortFields
     })
 
-    const accessToken = useAccessToken({ store })
-
     const { scrollToResourceFromRoute } = useScrollTo()
 
     const loadResourcesTask = useTask(function* () {
@@ -158,7 +154,6 @@ export default defineComponent({
       clientService,
       loadResourcesTask,
       areResourcesLoading,
-      accessToken,
       selectedResourcesIds,
       handleSort,
       sortBy,
@@ -174,7 +169,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['user']),
     ...mapGetters('Files', ['highlightedFile']),
     breadcrumbs() {
       return [
@@ -214,21 +208,15 @@ export default defineComponent({
             .slice(webDavPathComponents.indexOf(idComponent) + 1)
             .join('/')
 
-          const resource = await (this.clientService.webdav as WebDAV).getFileInfo(space, { path })
-          loadPreview({
-            clientService: this.clientService,
-            resource,
-            isPublic: false,
-            dimensions: ImageDimension.Tile,
-            server: configurationManager.serverUrl,
-            userId: this.user.id,
-            token: this.accessToken
-          }).then((imageBlob) => {
-            this.imageContentObject[space.id] = {
-              fileId: space.spaceImageData.id,
-              data: imageBlob
-            }
-          })
+          const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(space, { path })
+          this.$previewService
+            .loadPreview({ space, resource, dimensions: ImageDimension.Tile })
+            .then((imageBlob) => {
+              this.imageContentObject[space.id] = {
+                fileId: space.spaceImageData.id,
+                data: imageBlob
+              }
+            })
         }
       },
       deep: true,

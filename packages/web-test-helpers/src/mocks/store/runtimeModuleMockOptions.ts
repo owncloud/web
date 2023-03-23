@@ -6,7 +6,8 @@ export const runtimeModuleMockOptions = {
         namespaced: true,
         getters: {
           isPublicLinkContextReady: jest.fn(() => true),
-          isUserContextReady: jest.fn(() => true)
+          isUserContextReady: jest.fn(() => true),
+          accessToken: jest.fn(() => '')
         }
       },
       spaces: {

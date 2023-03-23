@@ -3,7 +3,6 @@ import PQueue from 'p-queue'
 import { getParentPaths } from '../helpers/path'
 import { buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { ResourceTransfer, TransferType } from '../helpers/resource'
-import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import { ShareTypes } from 'web-client/src/helpers/share'
@@ -501,27 +500,8 @@ export default {
     })
   },
 
-  async loadPreview(
-    { commit, rootGetters },
-    { clientService, thumbnailService, resource, isPublic, dimensions, type }
-  ) {
-    if (!thumbnailService.available || !thumbnailService.isMimetypeSupported(resource.mimeType)) {
-      return
-    }
-
-    const preview = await loadPreview(
-      {
-        clientService,
-        resource,
-        isPublic,
-        dimensions,
-        server: rootGetters.configuration.server,
-        userId: rootGetters.user.id,
-        token: rootGetters['runtime/auth/accessToken']
-      },
-      true
-    )
-
+  async loadPreview({ commit }, { previewService, space, resource, dimensions, type }) {
+    const preview = await previewService.loadPreview({ space, resource, dimensions }, true)
     if (preview) {
       commit('UPDATE_RESOURCE_FIELD', { id: resource.id, field: type, value: preview })
     }

@@ -80,9 +80,9 @@ import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
-import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
 import { useStore } from 'web-pkg/src/composables'
-import { configurationManager } from 'web-pkg/src/configuration'
+import { getSpaceFromResource } from 'web-app-files/src/helpers/resource/getSpace'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -102,18 +102,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const getSpace = (resource: Resource): SpaceResource => {
-      const storageId = resource.storageId
-      // FIXME: Once we have the shareId in the OCS response, we can check for that and early return the share
-      const space = store.getters['runtime/spaces/spaces'].find((space) => space.id === storageId)
-      if (space) {
-        return space
-      }
-
-      return buildShareSpaceResource({
-        shareId: resource.shareId,
-        shareName: resource.name,
-        serverUrl: configurationManager.serverUrl
-      })
+      return getSpaceFromResource({ spaces: store.getters['runtime/spaces/spaces'], resource })
     }
 
     return {
@@ -160,10 +149,9 @@ export default defineComponent({
         }
 
         this.loadPreview({
-          clientService: this.$clientService,
-          thumbnailService: this.$thumbnailService,
+          previewService: this.$previewService,
+          space: this.getSpace(resource),
           resource,
-          isPublic: false,
           dimensions: ImageDimension.Thumbnail,
           type: ImageType.Thumbnail
         })

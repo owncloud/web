@@ -44,9 +44,13 @@ import {
 } from 'web-pkg/src/composables/actions'
 import { isLocationSpacesActive } from '../../router'
 import { computed, defineComponent, PropType, Ref, ref, toRef, unref, VNodeRef } from 'vue'
-import { useCapabilitySpacesMaxQuota, useRouter, useStore } from 'web-pkg/src/composables'
+import {
+  useCapabilitySpacesMaxQuota,
+  useRouter,
+  useStore,
+  usePreviewService
+} from 'web-pkg/src/composables'
 import { FileActionOptions, SpaceActionOptions } from 'web-pkg/src/composables/actions'
-import { useThumbnailService } from 'web-app-files/src/composables/thumbnailService'
 
 export default defineComponent({
   name: 'SpaceContextActions',
@@ -61,12 +65,12 @@ export default defineComponent({
   setup(props) {
     const router = useRouter()
     const store = useStore()
-    const thumbnailService = useThumbnailService()
+    const previewService = usePreviewService()
 
     const actionOptions = toRef(props, 'actionOptions') as Ref<SpaceActionOptions>
 
     const supportedSpaceImageMimeTypes = computed(() => {
-      return thumbnailService.getSupportedMimeTypes('image/').join(',')
+      return previewService.getSupportedMimeTypes('image/').join(',')
     })
 
     const { actions: deleteActions } = useSpaceActionsDelete({ store })

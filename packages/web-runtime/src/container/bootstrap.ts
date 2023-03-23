@@ -11,7 +11,7 @@ import { getBackendVersion, getWebVersion } from './versions'
 import { useLocalStorage } from 'web-pkg/src/composables'
 import { useDefaultThemeName } from '../composables'
 import { authService } from '../services/auth'
-import { ClientService, LoadingService } from 'web-pkg/src/services'
+import { ClientService, LoadingService, PreviewService } from 'web-pkg/src/services'
 import { UppyService } from '../services/uppyService'
 import { default as storeOptions } from '../store'
 import { init as sentryInit } from '@sentry/vue'
@@ -300,6 +300,25 @@ export const announceLoadingService = ({ app }: { app: App }): void => {
  */
 export const announceUppyService = ({ app }: { app: App }): void => {
   app.config.globalProperties.$uppyService = new UppyService()
+}
+
+/**
+ * @param vue
+ * @param store
+ * @param configurationManager
+ */
+export const announcePreviewService = ({
+  app,
+  store,
+  configurationManager
+}: {
+  app: App
+  store: Store<any>
+  configurationManager: ConfigurationManager
+}): void => {
+  const clientService = app.config.globalProperties.$clientService
+  const previewService = new PreviewService({ store, clientService, configurationManager })
+  app.config.globalProperties.$previewService = previewService
 }
 
 /**

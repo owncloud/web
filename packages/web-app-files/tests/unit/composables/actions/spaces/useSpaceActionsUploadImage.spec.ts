@@ -12,7 +12,6 @@ import { unref, VNodeRef } from 'vue'
 import { useStore } from 'web-pkg/src/composables'
 import { SpaceResource } from 'web-client/src'
 import { Drive } from 'web-client/src/generated'
-import { ThumbnailService } from 'web-app-files/src/services'
 
 describe('uploadImage', () => {
   describe('method "uploadImageSpace"', () => {
@@ -79,9 +78,9 @@ function getWrapper({
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
-    }),
-    $thumbnailService: mock<ThumbnailService>({ isMimetypeSupported: jest.fn(() => true) })
+    })
   }
+  mocks.$previewService.isMimetypeSupported.mockReturnValue(true)
 
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)

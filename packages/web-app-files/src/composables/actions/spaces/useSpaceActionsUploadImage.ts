@@ -2,11 +2,15 @@ import { computed, unref, VNodeRef } from 'vue'
 import { Store } from 'vuex'
 import { SpaceResource } from 'web-client/src'
 import { Drive } from 'web-client/src/generated'
-import { useClientService, useLoadingService, useStore } from 'web-pkg/src/composables'
+import {
+  useClientService,
+  useLoadingService,
+  useStore,
+  usePreviewService
+} from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useGettext } from 'vue3-gettext'
 import { SpaceAction, SpaceActionOptions } from 'web-pkg/src/composables/actions'
-import { useThumbnailService } from '../../'
 
 export const useSpaceActionsUploadImage = ({
   store,
@@ -19,7 +23,7 @@ export const useSpaceActionsUploadImage = ({
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const thumbnailService = useThumbnailService()
+  const previewService = usePreviewService()
 
   let selectedSpace: SpaceResource = null
   const handler = ({ resources }: SpaceActionOptions) => {
@@ -39,7 +43,7 @@ export const useSpaceActionsUploadImage = ({
       return
     }
 
-    if (!thumbnailService.isMimetypeSupported(file.type, true)) {
+    if (!previewService.isMimetypeSupported(file.type, true)) {
       return store.dispatch('showMessage', {
         title: $gettext('The file type is unsupported'),
         status: 'danger'

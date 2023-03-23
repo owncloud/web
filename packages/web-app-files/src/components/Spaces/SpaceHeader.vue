@@ -78,10 +78,8 @@ import {
   watch
 } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
-import { loadPreview } from 'web-pkg/src/helpers'
-import { useAccessToken, useClientService, useStore } from 'web-pkg/src/composables'
+import { useClientService, useStore, usePreviewService } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
-import { configurationManager } from 'web-pkg/src/configuration'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
@@ -111,8 +109,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { getFileContents, getFileInfo } = clientService.webdav
     const store = useStore()
-    const userId = computed(() => store.getters.user?.id)
-    const accessToken = useAccessToken({ store })
+    const previewService = usePreviewService()
 
     const markdownContainerRef = ref(null)
     const markdownContent = ref('')
@@ -220,14 +217,10 @@ export default defineComponent({
         const resource = await getFileInfo(props.space, {
           path: decodeURIComponent(path)
         })
-        imageContent.value = await loadPreview({
-          clientService,
+        imageContent.value = await previewService.loadPreview({
+          space: props.space,
           resource,
-          isPublic: false,
-          dimensions: ImageDimension.Preview,
-          server: configurationManager.serverUrl,
-          userId: unref(userId),
-          token: unref(accessToken)
+          dimensions: ImageDimension.Preview
         })
       },
       { deep: true, immediate: true }

@@ -1,7 +1,12 @@
 import { isLocationSpacesActive } from '../../../router'
-import { useThumbnailService } from '../../'
 import { Store } from 'vuex'
-import { useClientService, useLoadingService, useRouter, useStore } from 'web-pkg/src/composables'
+import {
+  useClientService,
+  useLoadingService,
+  useRouter,
+  useStore,
+  usePreviewService
+} from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
@@ -12,7 +17,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const thumbnailService = useThumbnailService()
+  const previewService = usePreviewService()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const graphClient = clientService.graphAuthenticated
@@ -81,7 +86,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
         if (!resources[0].mimeType) {
           return false
         }
-        if (!thumbnailService.isMimetypeSupported(resources[0].mimeType, true)) {
+        if (!previewService.isMimetypeSupported(resources[0].mimeType, true)) {
           return false
         }
 
