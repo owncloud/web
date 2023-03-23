@@ -1,5 +1,4 @@
 import { useFileActionsSetImage } from 'web-app-files/src/composables/actions/files/useFileActionsSetImage'
-import { thumbnailService } from '../../../../../src/services'
 import { buildSpace, Resource, SpaceResource } from 'web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import {
@@ -12,16 +11,9 @@ import {
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Drive } from 'web-client/src/generated'
+import { ThumbnailService } from 'web-app-files/src/services'
 
 describe('setImage', () => {
-  beforeAll(() => {
-    thumbnailService.initialize({
-      enabled: true,
-      version: '0.1',
-      supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
-    })
-  })
-
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
       const space = buildSpace({
@@ -55,7 +47,8 @@ describe('setImage', () => {
               resources: [{ id: 1, mimeType: 'text/plain' }] as Resource[]
             })
           ).toBe(false)
-        }
+        },
+        isMimetypeSupported: false
       })
     })
     it('should be true when the mimeType is image', () => {
@@ -163,7 +156,8 @@ describe('setImage', () => {
 })
 
 function getWrapper({
-  setup
+  setup,
+  isMimetypeSupported = true
 }: {
   setup: (
     instance: ReturnType<typeof useFileActionsSetImage>,
@@ -172,10 +166,16 @@ function getWrapper({
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
+  isMimetypeSupported?: boolean
 }) {
-  const mocks = defaultComponentMocks({
-    currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
-  })
+  const mocks = {
+    ...defaultComponentMocks({
+      currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
+    }),
+    $thumbnailService: mock<ThumbnailService>({
+      isMimetypeSupported: jest.fn(() => isMimetypeSupported)
+    })
+  }
   mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
 
   const storeOptions = {

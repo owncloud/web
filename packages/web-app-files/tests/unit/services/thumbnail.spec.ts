@@ -1,52 +1,46 @@
-import { thumbnailService, ThumbnailService } from '../../../src/services'
+import { ThumbnailCapability, ThumbnailService } from '../../../src/services'
+import { mock } from 'jest-mock-extended'
 
-describe('thumbnail', () => {
-  describe('thumbnailService', () => {
-    it('creates an ArchiverService instance exported as `archiverService`', () => {
-      expect(thumbnailService).toBeInstanceOf(ThumbnailService)
+const getThumbnailServiceInstance = ({ supportedMimeTypes = [], version = undefined } = {}) => {
+  const thumbnailCapability = mock<ThumbnailCapability>({ supportedMimeTypes, version })
+  return new ThumbnailService(thumbnailCapability)
+}
+
+describe('ThumbnailService', () => {
+  describe('availability', () => {
+    it('is unavailable if no version given via capabilities', () => {
+      expect(getThumbnailServiceInstance({ version: undefined }).available).toBe(false)
     })
-    describe('when not being initialized', () => {
-      it('is announcing itself as unavailable', () => {
-        expect(thumbnailService.available).toBe(false)
-      })
+    it('is available if a version is given via capabilities', () => {
+      expect(getThumbnailServiceInstance({ version: '1' }).available).toBe(true)
     })
-    describe('when initialized', () => {
-      let service
-      beforeEach(() => {
-        service = new ThumbnailService()
-      })
-      describe('without thumbnail capability', () => {
-        beforeEach(() => {
-          service.initialize(null)
-        })
-        it('is announcing itself as unavailable', () => {
-          expect(service.available).toBe(false)
-        })
-      })
-      describe('with capability', () => {
-        const capability = {
-          enabled: true,
-          version: 'v0.1',
-          supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
-        }
-        beforeEach(() => {
-          service.initialize(capability)
-        })
-        it('is announcing itself as available', () => {
-          expect(service.available).toBe(true)
-        })
-        describe('method isMimetypeSupported', () => {
-          it('should be true if mimeType is supported', () => {
-            expect(service.isMimetypeSupported('image/png')).toBe(true)
-          })
-          it('should be false if mimeType is not supported', () => {
-            expect(service.isMimetypeSupported('image/pdf')).toBe(false)
-          })
-          it('should be false if mimeType is supported but excluded via onlyImages property', () => {
-            expect(service.isMimetypeSupported('text/plain', true)).toBe(false)
-          })
-        })
-      })
+  })
+  describe('method "isMimetypeSupported"', () => {
+    it('should return true if mimeType is supported', () => {
+      const supportedMimeTypes = ['image/png']
+      const thumbnailServiceMock = getThumbnailServiceInstance({ supportedMimeTypes })
+      expect(thumbnailServiceMock.isMimetypeSupported(supportedMimeTypes[0])).toBe(true)
+    })
+    it('should return true if no specific supported mimeTypes given', () => {
+      const thumbnailServiceMock = getThumbnailServiceInstance()
+      expect(thumbnailServiceMock.isMimetypeSupported('image/png')).toBe(true)
+    })
+    it('should return false if mimeType is not supported', () => {
+      const supportedMimeTypes = ['image/png']
+      const thumbnailServiceMock = getThumbnailServiceInstance({ supportedMimeTypes })
+      expect(thumbnailServiceMock.isMimetypeSupported('image/jpeg')).toBe(false)
+    })
+  })
+  describe('method "getSupportedMimeTypes"', () => {
+    it('reads the supported mime types from the capabilities', () => {
+      const supportedMimeTypes = ['image/png']
+      const thumbnailServiceMock = getThumbnailServiceInstance({ supportedMimeTypes })
+      expect(thumbnailServiceMock.getSupportedMimeTypes()).toEqual(supportedMimeTypes)
+    })
+    it('filters the supported mime types from the capabilities', () => {
+      const supportedMimeTypes = ['image/png', 'text/plain']
+      const thumbnailServiceMock = getThumbnailServiceInstance({ supportedMimeTypes })
+      expect(thumbnailServiceMock.getSupportedMimeTypes('image')).toEqual([supportedMimeTypes[0]])
     })
   })
 })

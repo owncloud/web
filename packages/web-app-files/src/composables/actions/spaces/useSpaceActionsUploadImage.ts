@@ -4,9 +4,9 @@ import { SpaceResource } from 'web-client/src'
 import { Drive } from 'web-client/src/generated'
 import { useClientService, useLoadingService, useStore } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { thumbnailService } from '../../../services'
 import { useGettext } from 'vue3-gettext'
 import { SpaceAction, SpaceActionOptions } from 'web-pkg/src/composables/actions'
+import { useThumbnailService } from '../../'
 
 export const useSpaceActionsUploadImage = ({
   store,
@@ -19,6 +19,7 @@ export const useSpaceActionsUploadImage = ({
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
+  const thumbnailService = useThumbnailService()
 
   let selectedSpace: SpaceResource = null
   const handler = ({ resources }: SpaceActionOptions) => {

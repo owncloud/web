@@ -11,7 +11,7 @@ import { triggerDownloadWithFilename } from 'web-pkg/src/helpers'
  * Archiver struct within the capabilities as defined in reva
  * @see https://github.com/cs3org/reva/blob/41d5a6858c2200a61736d2c165e551b9785000d1/internal/http/services/owncloud/ocs/data/capabilities.go#L105
  */
-interface ArchiverCapability {
+export interface ArchiverCapability {
   enabled: boolean
   version: string // version is just a major version, e.g. `v2`
   formats: string[]
@@ -20,7 +20,6 @@ interface ArchiverCapability {
 }
 
 interface TriggerDownloadOptions {
-  clientService: ClientService
   dir?: string
   files?: string[]
   fileIds?: string[]
@@ -30,10 +29,16 @@ interface TriggerDownloadOptions {
 }
 
 export class ArchiverService {
+  clientService: ClientService
   serverUrl: string
   capability?: ArchiverCapability
 
-  public initialize(serverUrl: string, archiverCapabilities: ArchiverCapability[] = []): void {
+  constructor(
+    clientService: ClientService,
+    serverUrl: string,
+    archiverCapabilities: ArchiverCapability[] = []
+  ) {
+    this.clientService = clientService
     this.serverUrl = serverUrl
     const archivers = archiverCapabilities
       .filter((a) => a.enabled)
@@ -50,8 +55,6 @@ export class ArchiverService {
   }
 
   public async triggerDownload(options: TriggerDownloadOptions): Promise<string> {
-    const clientService = options.clientService
-
     if (!this.available) {
       throw new RuntimeError('no archiver available')
     }
@@ -60,20 +63,17 @@ export class ArchiverService {
       throw new RuntimeError('requested archive with empty list of resources')
     }
 
-    const downloadUrl = this.buildDownloadUrl({
-      ...options,
-      clientService
-    })
+    const downloadUrl = this.buildDownloadUrl({ ...options })
     if (!downloadUrl) {
       throw new RuntimeError('download url could not be built')
     }
 
     const url = options.publicToken
       ? downloadUrl
-      : await clientService.owncloudSdk.signUrl(downloadUrl)
+      : await this.clientService.owncloudSdk.signUrl(downloadUrl)
 
     try {
-      const response = await clientService.httpUnAuthenticated.get(url, {
+      const response = await this.clientService.httpUnAuthenticated.get(url, {
         headers: {
           ...(!!options.publicLinkPassword && {
             Authorization:
@@ -138,5 +138,3 @@ export class ArchiverService {
     return decodeURI(fileName)
   }
 }
-
-export const archiverService = new ArchiverService()

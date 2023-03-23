@@ -172,6 +172,7 @@ export default defineComponent({
         unobserve()
         this.loadPreview({
           clientService: this.$clientService,
+          thumbnailService: this.$thumbnailService,
           resource,
           isPublic: false,
           dimensions: ImageDimension.Thumbnail,

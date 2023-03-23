@@ -1,5 +1,4 @@
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables/actions/spaces/useSpaceActionsUploadImage'
-import { thumbnailService } from '../../../../../src/services'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -13,16 +12,9 @@ import { unref, VNodeRef } from 'vue'
 import { useStore } from 'web-pkg/src/composables'
 import { SpaceResource } from 'web-client/src'
 import { Drive } from 'web-client/src/generated'
+import { ThumbnailService } from 'web-app-files/src/services'
 
 describe('uploadImage', () => {
-  beforeAll(() => {
-    thumbnailService.initialize({
-      enabled: true,
-      version: '0.1',
-      supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
-    })
-  })
-
   describe('method "uploadImageSpace"', () => {
     it('should show message on success', () => {
       getWrapper({
@@ -84,9 +76,12 @@ function getWrapper({
     }
   ) => void
 }) {
-  const mocks = defaultComponentMocks({
-    currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
-  })
+  const mocks = {
+    ...defaultComponentMocks({
+      currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
+    }),
+    $thumbnailService: mock<ThumbnailService>({ isMimetypeSupported: jest.fn(() => true) })
+  }
 
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)

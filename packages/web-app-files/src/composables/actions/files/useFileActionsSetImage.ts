@@ -1,6 +1,6 @@
 import { isLocationSpacesActive } from '../../../router'
+import { useThumbnailService } from '../../'
 import { Store } from 'vuex'
-import { thumbnailService } from '../../../services'
 import { useClientService, useLoadingService, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
@@ -12,6 +12,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
+  const thumbnailService = useThumbnailService()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const graphClient = clientService.graphAuthenticated

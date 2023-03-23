@@ -43,20 +43,10 @@ import {
   useSpaceActionsShowMembers
 } from 'web-pkg/src/composables/actions'
 import { isLocationSpacesActive } from '../../router'
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  PropType,
-  Ref,
-  ref,
-  toRef,
-  unref,
-  VNodeRef
-} from 'vue'
-import { thumbnailService } from 'web-app-files/src/services'
+import { computed, defineComponent, PropType, Ref, ref, toRef, unref, VNodeRef } from 'vue'
 import { useCapabilitySpacesMaxQuota, useRouter, useStore } from 'web-pkg/src/composables'
 import { FileActionOptions, SpaceActionOptions } from 'web-pkg/src/composables/actions'
+import { useThumbnailService } from 'web-app-files/src/composables/thumbnailService'
 
 export default defineComponent({
   name: 'SpaceContextActions',
@@ -69,9 +59,9 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const instance = getCurrentInstance().proxy as any
     const router = useRouter()
     const store = useStore()
+    const thumbnailService = useThumbnailService()
 
     const actionOptions = toRef(props, 'actionOptions') as Ref<SpaceActionOptions>
 
@@ -138,7 +128,7 @@ export default defineComponent({
     const menuItemsSidebar = computed(() => {
       const fileHandlers = [...unref(showDetailsActions)]
       return [...fileHandlers].filter((item) =>
-        // HACK: showDetails provides FileAction[] but we have SpaceAtionOptions, so we need to cast them to FileActionOptions
+        // HACK: showDetails provides FileAction[] but we have SpaceActionOptions, so we need to cast them to FileActionOptions
         item.isEnabled(unref(actionOptions) as unknown as FileActionOptions)
       )
     })

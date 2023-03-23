@@ -1,4 +1,4 @@
-interface ThumbnailCapability {
+export interface ThumbnailCapability {
   enabled: boolean
   version: string // version is just a major version, e.g. `v2`
   supportedMimeTypes: string[]
@@ -8,7 +8,7 @@ export class ThumbnailService {
   serverUrl: string
   capability?: ThumbnailCapability
 
-  public initialize(thumbnailCapability: ThumbnailCapability = null): void {
+  constructor(thumbnailCapability: ThumbnailCapability = null) {
     this.capability = thumbnailCapability
   }
 
@@ -36,5 +36,3 @@ export class ThumbnailService {
     return this.supportedMimeTypes.filter((mimeType) => mimeType.startsWith(filter))
   }
 }
-
-export const thumbnailService = new ThumbnailService()
