@@ -154,21 +154,42 @@ export const selectUser = async (args: { page: Page; uuid: string }): Promise<vo
 
 export const addSelectedUsersToGroups = async (args: {
   page: Page
+  userIds: string[]
   groups: string[]
 }): Promise<void> => {
-  const { page, groups } = args
+  const { page, userIds, groups } = args
+  const usersEnvironment = new UsersEnvironment()
+  const groupIds = []
+
   await page.locator(addToGroupsBatchAction).click()
   for (const group of groups) {
+    groupIds.push(usersEnvironment.getGroup({ key: group }).uuid)
     await page.locator(groupsModalInput).click()
-    await page.locator(dropdownOption).getByText(group).click()
+    await page.locator(groupsModalInput).fill(group)
+    await page.keyboard.press('Enter')
   }
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith('/$ref') && resp.status() === 204 && resp.request().method() === 'POST'
-    ),
-    await page.locator(actionConfirmButton).click()
-  ])
+
+  const checkResponses = []
+  for (const userId of userIds) {
+    for (const groupId of groupIds) {
+      checkResponses.push(
+        page.waitForResponse((resp) => {
+          if (
+            resp.url().endsWith(`groups/${encodeURIComponent(groupId)}/members/$ref`) &&
+            resp.status() === 204 &&
+            resp.request().method() === 'POST'
+          ) {
+            return JSON.parse(resp.request().postData())['@odata.id'].endsWith(
+              `/users/${encodeURIComponent(userId)}`
+            )
+          }
+          return false
+        })
+      )
+    }
+  }
+  console.log(checkResponses.length)
+  await Promise.all([...checkResponses, await page.locator(actionConfirmButton).click()])
 }
 
 export const removeSelectedUsersFromGroups = async (args: {
@@ -250,11 +271,11 @@ export const addUserToGroups = async (args: {
   }
 
   const checkResponses = []
-  for (const id of groupIds) {
+  for (const groupId of groupIds) {
     checkResponses.push(
       page.waitForResponse((resp) => {
         if (
-          resp.url().endsWith(`groups/${encodeURIComponent(id)}/members/$ref`) &&
+          resp.url().endsWith(`groups/${encodeURIComponent(groupId)}/members/$ref`) &&
           resp.status() === 204 &&
           resp.request().method() === 'POST'
         ) {

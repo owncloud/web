@@ -277,14 +277,16 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
+    const users = []
 
     for (const { user } of stepTable.hashes()) {
+      users.push(user)
       await usersObject.select({ key: user })
     }
 
     switch (action) {
       case 'adds':
-        await usersObject.addToGroupsBatchAtion({ groups: groups.split(',') })
+        await usersObject.addToGroupsBatchAtion({ users, groups: groups.split(',') })
         break
       case 'removes':
         await usersObject.removeFromGroupsBatchAtion({ groups: groups.split(',') })

@@ -83,8 +83,15 @@ export class Users {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     await selectUser({ uuid, page: this.#page })
   }
-  async addToGroupsBatchAtion({ groups }: { groups: string[] }): Promise<void> {
-    await addSelectedUsersToGroups({ page: this.#page, groups })
+  async addToGroupsBatchAtion({
+    users,
+    groups
+  }: {
+    users: string[]
+    groups: string[]
+  }): Promise<void> {
+    const userIds = this.getUserIds(users)
+    await addSelectedUsersToGroups({ page: this.#page, userIds, groups })
   }
   async removeFromGroupsBatchAtion({ groups }: { groups: string[] }): Promise<void> {
     await removeSelectedUsersFromGroups({ page: this.#page, groups })
