@@ -313,8 +313,9 @@ export default defineComponent({
     &__dropdown-option {
       color: var(--oc-color-input-text-default);
       white-space: normal;
-      padding: 0.5em calc(0.6em + 4px);
+      padding: 6px 0.6rem;
       border-radius: 5px;
+      line-height: var(--vs-line-height);
 
       &--highlight {
         background-color: var(--oc-color-background-hover);
