@@ -2,6 +2,13 @@ import { AxiosInstance } from 'axios'
 import get from 'lodash-es/get'
 
 /* eslint-disable camelcase */
+export interface AppProviderCapability {
+  apps_url: string
+  enabled: boolean
+  new_url: string
+  open_url: string
+  version: string
+}
 export interface Capabilities {
   capabilities: {
     notifications: {
@@ -27,13 +34,7 @@ export interface Capabilities {
       reports: string[]
     }
     files: {
-      app_providers?: {
-        apps_url: string
-        enabled: boolean
-        new_url: string
-        open_url: string
-        version: string
-      }[]
+      app_providers?: AppProviderCapability[]
       archivers?: {
         archiver_url: string
         enabled: boolean

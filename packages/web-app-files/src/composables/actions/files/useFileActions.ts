@@ -1,4 +1,3 @@
-import get from 'lodash-es/get'
 import kebabCase from 'lodash-es/kebabCase'
 import { Store } from 'vuex'
 import { ShareStatus } from 'web-client/src/helpers/share'
@@ -7,7 +6,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 
 import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
 import { computed, unref } from 'vue'
-import { useRouter, useStore } from 'web-pkg/src/composables'
+import { useCapabilityFilesAppProviders, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import {
   Action,
@@ -39,6 +38,10 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const router = useRouter()
   const { $gettext, interpolate: $gettextInterpolate } = useGettext()
   const isSearchActive = useIsSearchActive()
+  const appProviders = useCapabilityFilesAppProviders()
+  const appProvidersEnabled = computed(() => {
+    return !!unref(appProviders).find((appProvider) => appProvider.enabled)
+  })
 
   const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
   const { actions: copyActions } = useFileActionsCopy({ store })
@@ -257,11 +260,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     }
 
     const mimeTypes = store.getters['External/mimeTypes'] || []
-    if (
-      mimeType === undefined ||
-      !get(this, 'capabilities.files.app_providers') ||
-      !mimeTypes.length
-    ) {
+    if (mimeType === undefined || !unref(appProvidersEnabled) || !mimeTypes.length) {
       return []
     }
 

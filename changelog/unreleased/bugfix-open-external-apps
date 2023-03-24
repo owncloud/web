@@ -1,0 +1,6 @@
+Bugfix: Open files in external app
+
+We've fixed a bug that caused office documents not to be opened in app provider editors anymore.
+
+https://github.com/owncloud/web/pull/8705
+https://github.com/owncloud/web/issues/8695
