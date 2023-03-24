@@ -289,7 +289,7 @@ When(
         await usersObject.addToGroupsBatchAtion({ users, groups: groups.split(',') })
         break
       case 'removes':
-        await usersObject.removeFromGroupsBatchAtion({ groups: groups.split(',') })
+        await usersObject.removeFromGroupsBatchAtion({ users, groups: groups.split(',') })
         break
       default:
         throw new Error(`'${action}' not implemented`)

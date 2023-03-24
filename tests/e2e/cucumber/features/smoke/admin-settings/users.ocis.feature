@@ -68,7 +68,7 @@ Feature: users management
       | Alice |
       | Brian |
       | Carol |
-    And "Admin" removes the following users from the groups "sales department,finance department" using the batch actions
+    And "Admin" removes the following users from the groups "sales,finance" using the batch actions
       | user  |
       | Alice |
       | Brian |

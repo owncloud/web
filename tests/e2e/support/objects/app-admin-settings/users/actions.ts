@@ -188,29 +188,42 @@ export const addSelectedUsersToGroups = async (args: {
       )
     }
   }
-  console.log(checkResponses.length)
+
   await Promise.all([...checkResponses, await page.locator(actionConfirmButton).click()])
 }
 
 export const removeSelectedUsersFromGroups = async (args: {
   page: Page
+  userIds: string[]
   groups: string[]
 }): Promise<void> => {
-  const { page, groups } = args
+  const { page, userIds, groups } = args
+  const usersEnvironment = new UsersEnvironment()
+  const groupIds = []
+
   await page.locator(removeFromGroupsBatchAction).click()
   for (const group of groups) {
+    groupIds.push(usersEnvironment.getGroup({ key: group }).uuid)
     await page.locator(groupsModalInput).click()
-    await page.locator(dropdownOption).getByText(group).click()
+    await page.locator(groupsModalInput).fill(group)
+    await page.keyboard.press('Enter')
   }
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith('/$ref') &&
-        resp.status() === 204 &&
-        resp.request().method() === 'DELETE'
-    ),
-    await page.locator(actionConfirmButton).click()
-  ])
+
+  const checkResponses = []
+  for (const userId of userIds) {
+    for (const groupId of groupIds) {
+      checkResponses.push(
+        page.waitForResponse(
+          (resp) =>
+            resp.url().endsWith(`groups/${groupId}/members/${encodeURIComponent(userId)}/$ref`) &&
+            resp.status() === 204 &&
+            resp.request().method() === 'DELETE'
+        )
+      )
+    }
+  }
+
+  await Promise.all([...checkResponses, await page.locator(actionConfirmButton).click()])
 }
 
 export const filterUsers = async (args: {

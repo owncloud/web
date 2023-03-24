@@ -93,8 +93,15 @@ export class Users {
     const userIds = this.getUserIds(users)
     await addSelectedUsersToGroups({ page: this.#page, userIds, groups })
   }
-  async removeFromGroupsBatchAtion({ groups }: { groups: string[] }): Promise<void> {
-    await removeSelectedUsersFromGroups({ page: this.#page, groups })
+  async removeFromGroupsBatchAtion({
+    users,
+    groups
+  }: {
+    users: string[]
+    groups: string[]
+  }): Promise<void> {
+    const userIds = this.getUserIds(users)
+    await removeSelectedUsersFromGroups({ page: this.#page, userIds, groups })
   }
   async filter({ filter, values }: { filter: string; values: string[] }): Promise<void> {
     await filterUsers({ page: this.#page, filter, values })
