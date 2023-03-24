@@ -1,4 +1,4 @@
-import { defineConfig, PluginOption, UserConfigExport } from 'vite'
+import { defineConfig, PluginOption, UserConfig, ViteDevServer } from 'vite'
 import { mergeConfig, searchForWorkspaceRoot } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import EnvironmentPlugin from 'vite-plugin-environment'
@@ -16,6 +16,8 @@ import packageJson from './package.json'
 import { getUserAgentRegExp } from 'browserslist-useragent-regexp'
 import browserslistToEsbuild from 'browserslist-to-esbuild'
 import { CompilerOptions } from '@vue/compiler-sfc'
+import fetch from 'node-fetch'
+import { Agent } from 'https'
 
 // ignoredPackages specifies which packages should be explicitly ignored and thus not be transpiled
 const ignoredPackages = ['web-app-skeleton']
@@ -57,13 +59,44 @@ const input = readdirSync('packages').reduce(
   { 'index.html': 'index.html' }
 )
 
-export default defineConfig(({ mode, command }) => {
+export default defineConfig(async ({ mode, command }) => {
   const production = mode === 'production'
   const ocis = process.env.OCIS !== 'false'
-  let config: UserConfigExport
-  let configName: string
+  let config: UserConfig
+
+  /**
+   * When setting `OWNCLOUD_WEB_CONFIG_URL` make sure to configure the oauth/oidc client
+   * For oCIS instances you can use `./dev/docker/ocis.idp.config.yaml`.
+   * In docker setups you need to mount it to `/etc/ocis/idp.yaml`.
+   * E.g. with docker-compose you could add a volume to the ocis container like this:
+   * - /home/youruser/projects/oc-web/dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
+   */
+  const configUrl =
+    process.env.OWNCLOUD_WEB_CONFIG_URL ||
+    (ocis
+      ? 'https://host.docker.internal:9200/config.json'
+      : 'http://host.docker.internal:8080/index.php/apps/web/config.json')
+
+  let proxiedServerUrl
+  let configJson
+  if (command === 'serve') {
+    configJson = await (
+      await fetch(configUrl, {
+        ...(configUrl.startsWith('https:') && {
+          agent: new Agent({ rejectUnauthorized: false })
+        })
+      })
+    ).json()
+
+    // determine server urls
+    proxiedServerUrl = configJson.server
+
+    // enable previews and enable lazy resources, which are disabled for fast tests
+    configJson.options.disablePreviews = false
+    configJson.options.displayResourcesLazy = true
+  }
+
   if (ocis) {
-    configName = 'ocis'
     config = {
       ...(!production && {
         server: {
@@ -87,7 +120,8 @@ export default defineConfig(({ mode, command }) => {
             ].map((p) => [
               `/${p}`,
               {
-                target: 'https://host.docker.internal:9200',
+                target: proxiedServerUrl,
+                changeOrigin: true,
                 secure: false
               }
             ])
@@ -95,12 +129,27 @@ export default defineConfig(({ mode, command }) => {
         }
       })
     }
+
+    if (command === 'serve') {
+      // replace server urls in config.json to use the vite proxy
+      const vitePort = config.server.port
+      const viteUrl = `http${config.server.https ? 's' : ''}://host.docker.internal:${vitePort}`
+      configJson.server = configJson.server.replace(proxiedServerUrl, viteUrl)
+      configJson.theme = configJson.theme.replace(proxiedServerUrl, viteUrl)
+    }
   } else {
-    configName = 'oc10'
     config = {
       server: {
         port: 8081
       }
+    }
+
+    if (command === 'serve') {
+      configJson.auth.clientId =
+        process.env.OWNCLOUD_WEB_CLIENT_ID ||
+        'AWhZZsxb59ouGg97HsdR7GiN8pnzEYvk1cL6aVJgTQH1Gcdxly1gendLVTZ5zpYC'
+
+      configJson.auth.clientSecret = process.env.OWNCLOUD_WEB_CLIENT_SECRET || undefined
     }
   }
 
@@ -209,16 +258,23 @@ export default defineConfig(({ mode, command }) => {
               }
             ]
 
-            if (command === 'serve') {
-              targets.push({
-                src: `./config/vite_${configName}/*`,
-                dest: ``
-              })
-            }
-
             return targets
           })()
         }),
+        {
+          name: '@ownclouders/vite-plugin-runtime-config',
+          configureServer(server: ViteDevServer) {
+            server.middlewares.use((request, response, next) => {
+              if (request.url === '/config.json') {
+                response.statusCode = 200
+                response.setHeader('Content-Type', 'application/json')
+                response.end(JSON.stringify(configJson))
+                return
+              }
+              next()
+            })
+          }
+        },
         {
           name: '@ownclouders/vite-plugin-docs',
           transform(src, id) {
