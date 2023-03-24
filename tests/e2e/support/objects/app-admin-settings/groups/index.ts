@@ -16,8 +16,7 @@ export class Groups {
     this.#page = page
   }
   getUUID({ key }: { key: string }) {
-    const { uuid } = this.#usersEnvironment.getGroup({ key })
-    return uuid
+    return this.#usersEnvironment.getGroup({ key }).uuid
   }
   async createGroup({ key }: { key: string }): Promise<string> {
     return await createGroup({ page: this.#page, key: key })
@@ -26,14 +25,12 @@ export class Groups {
     return getDisplayedGroups({ page: this.#page })
   }
   async selectGroup({ key }: { key: string }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getGroup({ key })
-    await selectGroup({ uuid, page: this.#page })
+    await selectGroup({ page: this.#page, uuid: this.getUUID({ key }) })
   }
   async deleteGroupUsingBatchAction({ groupIds }: { groupIds: string[] }): Promise<void> {
     await deleteGrouprUsingBatchAction({ page: this.#page, groupIds })
   }
   async deleteGroupUsingContextMenu({ key }: { key: string }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getGroup({ key })
-    await deleteGroupUsingContextMenu({ page: this.#page, uuid })
+    await deleteGroupUsingContextMenu({ page: this.#page, uuid: this.getUUID({ key }) })
   }
 }

@@ -25,7 +25,7 @@ export class Spaces {
   }
 
   getUUID({ key }: { key: string }) {
-    return this.#spacesEnvironment.getSpace({ key }).id
+    return this.getSpace({ key }).id
   }
 
   getDisplayedSpaces(): Promise<string[]> {
@@ -61,23 +61,19 @@ export class Spaces {
   }
 
   async select({ key }: { key: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await selectSpace({ id, page: this.#page })
+    await selectSpace({ page: this.#page, id: this.getUUID({ key }) })
   }
 
   async rename({ key, value }: { key: string; value: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await renameSpace({ id, page: this.#page, value })
+    await renameSpace({ page: this.#page, id: this.getUUID({ key }), value })
   }
 
   async changeSubtitle({ key, value }: { key: string; value: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await changeSpaceSubtitle({ id, page: this.#page, value })
+    await changeSpaceSubtitle({ page: this.#page, id: this.getUUID({ key }), value })
   }
 
   async openPanel({ key }: { key: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await openSpaceAdminSidebarPanel({ page: this.#page, id })
+    await openSpaceAdminSidebarPanel({ page: this.#page, id: this.getUUID({ key }) })
   }
 
   async openActionSideBarPanel({ action }: { action: string }): Promise<void> {
