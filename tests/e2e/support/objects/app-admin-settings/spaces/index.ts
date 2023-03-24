@@ -24,51 +24,39 @@ export class Spaces {
     this.#page = page
   }
 
+  getUUID({ key }: { key: string }) {
+    return this.#spacesEnvironment.getSpace({ key }).id
+  }
+
   getDisplayedSpaces(): Promise<string[]> {
     return getDisplayedSpaces(this.#page)
   }
 
-  async getSpace({ key }: { key: string }): Promise<Space> {
+  getSpace({ key }: { key: string }): Space {
     return this.#spacesEnvironment.getSpace({ key })
   }
 
   async changeQuota({
-    spaces,
+    spaceIds,
     value,
     context
   }: {
-    spaces: string[]
+    spaceIds: string[]
     value: string
     context: string
   }): Promise<void> {
-    const spaceIds = []
-    for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
-    }
     await changeSpaceQuota({ spaceIds, value, page: this.#page, context })
   }
 
-  async disable({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
-    const spaceIds = []
-    for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
-    }
+  async disable({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
     await disableSpace({ spaceIds, page: this.#page, context })
   }
 
-  async enable({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
-    const spaceIds = []
-    for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
-    }
+  async enable({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
     await enableSpace({ spaceIds, page: this.#page, context })
   }
 
-  async delete({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
-    const spaceIds = []
-    for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
-    }
+  async delete({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
     await deleteSpace({ spaceIds, page: this.#page, context })
   }
 
@@ -96,7 +84,7 @@ export class Spaces {
     await openSpaceAdminActionSidebarPanel({ page: this.#page, action })
   }
 
-  async listMembers({ filter }: { filter: string }): Promise<Array<string>> {
+  listMembers({ filter }: { filter: string }): Promise<Array<string>> {
     return listSpaceMembers({ page: this.#page, filter })
   }
 }

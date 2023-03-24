@@ -31,14 +31,6 @@ export class Users {
     return uuid
   }
 
-  getUserIds(users: string[]): string[] {
-    const userIds = []
-    for (const user of users) {
-      userIds.push(this.getUUID({ key: user }))
-    }
-    return userIds
-  }
-
   async allowLogin({ key, action }: { key: string; action: string }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     await openEditPanel({ page: this.#page, uuid, action })
@@ -68,12 +60,11 @@ export class Users {
   }
   async changeQuotaUsingBatchAction({
     value,
-    users
+    userIds
   }: {
     value: string
-    users: string[]
+    userIds: string[]
   }): Promise<void> {
-    const userIds = this.getUserIds(users)
     await changeQuotaUsingBatchAction({ page: this.#page, value, userIds })
   }
   getDisplayedUsers(): Promise<string[]> {
@@ -84,23 +75,21 @@ export class Users {
     await selectUser({ uuid, page: this.#page })
   }
   async addToGroupsBatchAtion({
-    users,
+    userIds,
     groups
   }: {
-    users: string[]
+    userIds: string[]
     groups: string[]
   }): Promise<void> {
-    const userIds = this.getUserIds(users)
     await addSelectedUsersToGroups({ page: this.#page, userIds, groups })
   }
   async removeFromGroupsBatchAtion({
-    users,
+    userIds,
     groups
   }: {
-    users: string[]
+    userIds: string[]
     groups: string[]
   }): Promise<void> {
-    const userIds = this.getUserIds(users)
     await removeSelectedUsersFromGroups({ page: this.#page, userIds, groups })
   }
   async filter({ filter, values }: { filter: string; values: string[] }): Promise<void> {
@@ -151,8 +140,7 @@ export class Users {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     await deleteUserUsingContextMenu({ page: this.#page, uuid })
   }
-  async deleteUserUsingBatchAction({ users }: { users: string[] }): Promise<void> {
-    const userIds = this.getUserIds(users)
+  async deleteUserUsingBatchAction({ userIds }: { userIds: string[] }): Promise<void> {
     await deleteUserUsingBatchAction({ page: this.#page, userIds })
   }
   async createUser({
