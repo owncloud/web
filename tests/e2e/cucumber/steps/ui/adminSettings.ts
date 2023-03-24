@@ -376,13 +376,14 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
-
+    const users = []
     switch (actionType) {
       case 'batch actions':
         for (const user of stepTable.hashes()) {
+          users.push(user.id)
           await usersObject.selectUser({ key: user.id })
         }
-        await usersObject.deleteUserUsingBatchAction()
+        await usersObject.deleteUserUsingBatchAction({ users })
         break
       case 'context menu':
         for (const { user } of stepTable.hashes()) {

@@ -30,6 +30,15 @@ export class Users {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     return uuid
   }
+
+  getUserIds(users: string[]): string[] {
+    const userIds = []
+    for (const user of users) {
+      userIds.push(this.getUUID({ key: user }))
+    }
+    return userIds
+  }
+
   async allowLogin({ key, action }: { key: string; action: string }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     await openEditPanel({ page: this.#page, uuid, action })
@@ -64,10 +73,7 @@ export class Users {
     value: string
     users: string[]
   }): Promise<void> {
-    const userIds = []
-    for (const user of users) {
-      userIds.push(this.#usersEnvironment.getUser({ key: user }).uuid)
-    }
+    const userIds = this.getUserIds(users)
     await changeQuotaUsingBatchAction({ page: this.#page, value, userIds })
   }
   getDisplayedUsers(): Promise<string[]> {
@@ -131,8 +137,9 @@ export class Users {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     await deleteUserUsingContextMenu({ page: this.#page, uuid })
   }
-  async deleteUserUsingBatchAction(): Promise<void> {
-    await deleteUserUsingBatchAction({ page: this.#page })
+  async deleteUserUsingBatchAction({ users }: { users: string[] }): Promise<void> {
+    const userIds = this.getUserIds(users)
+    await deleteUserUsingBatchAction({ page: this.#page, userIds })
   }
   async createUser({
     name,

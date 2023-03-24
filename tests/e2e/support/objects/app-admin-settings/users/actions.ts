@@ -313,19 +313,26 @@ export const deleteUserUsingContextMenu = async (args: {
   ])
 }
 
-export const deleteUserUsingBatchAction = async (args: { page: Page }): Promise<void> => {
-  const { page } = args
+export const deleteUserUsingBatchAction = async (args: {
+  page: Page
+  userIds: string[]
+}): Promise<void> => {
+  const { page, userIds } = args
   await page.locator(deleteActionBtn).click()
 
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().includes('users') &&
-        resp.status() === 204 &&
-        resp.request().method() === 'DELETE'
-    ),
-    await page.locator(actionConfirmButton).click()
-  ])
+  const checkResponses = []
+  for (const id of userIds) {
+    checkResponses.push(
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith(encodeURIComponent(id)) &&
+          resp.status() === 204 &&
+          resp.request().method() === 'DELETE'
+      )
+    )
+  }
+
+  await Promise.all([...checkResponses, await page.locator(actionConfirmButton).click()])
 }
 
 export const waitForEditPanelToBeVisible = async (args: { page: Page }): Promise<void> => {
