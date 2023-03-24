@@ -530,21 +530,13 @@ Then(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
-    let expected = null
+    const actualMemberList = {
+      manager: await spacesObject.listMembers({ filter: 'managers' }),
+      viewer: await spacesObject.listMembers({ filter: 'viewers' }),
+      editor: await spacesObject.listMembers({ filter: 'editors' })
+    }
     for (const info of stepTable.hashes()) {
-      switch (info.role) {
-        case 'manager':
-          expected = await spacesObject.listMembers({ filter: 'managers' })
-          break
-        case 'editor':
-          expected = await spacesObject.listMembers({ filter: 'editor' })
-          break
-        case 'viewer':
-          expected = await spacesObject.listMembers({ filter: 'viewer' })
-          break
-        default:
-          throw new Error(`'${info.role}' role not implemented`)
-      }
+      expect(actualMemberList[info.role]).toContain(info.user)
     }
   }
 )

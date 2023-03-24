@@ -257,15 +257,16 @@ export const listSpaceMembers = async (args: {
   const names = []
   switch (filter) {
     case 'managers':
-      users = await page.locator(util.format(spaceMemberList, 'managers')).allTextContents()
+      users = await page.locator(util.format(spaceMemberList, filter)).allTextContents()
       break
     case 'viewers':
-      users = await page.locator(util.format(spaceMemberList, 'viewers')).allTextContents()
+      users = await page.locator(util.format(spaceMemberList, filter)).allTextContents()
       break
     case 'editors':
-      users = await page.locator(util.format(spaceMemberList, 'editors')).allTextContents()
+      users = await page.locator(util.format(spaceMemberList, filter)).allTextContents()
       break
   }
+
   for (const user of users) {
     // the value comes in "['initials firstName secondName lastName',..]" format so only get the first name
     const [, name] = user.split(' ')
