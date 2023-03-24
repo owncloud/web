@@ -349,7 +349,8 @@ export default defineComponent({
         return this.focusTrapInitial
       }
       return () => {
-        return (((this.$refs.ocModalInput as ComponentPublicInstance)?.$el as HTMLElement) ||
+        // FIXME: according to the types it's incorrect to pass this.$refs.ocModalInput
+        return ((this.$refs.ocModalInput as ComponentPublicInstance as unknown as HTMLElement) ||
           (this.$refs.ocModal as HTMLElement)) as FocusTargetValueOrFalse
       }
     },
