@@ -15,7 +15,7 @@ export class Groups {
     this.#usersEnvironment = new UsersEnvironment()
     this.#page = page
   }
-  getUUID({ key }: { key: string }) {
+  getUUID({ key }: { key: string }): string {
     return this.#usersEnvironment.getGroup({ key }).uuid
   }
   async createGroup({ key }: { key: string }): Promise<string> {

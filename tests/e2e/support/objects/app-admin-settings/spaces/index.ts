@@ -24,7 +24,7 @@ export class Spaces {
     this.#page = page
   }
 
-  getUUID({ key }: { key: string }) {
+  getUUID({ key }: { key: string }): string {
     return this.getSpace({ key }).id
   }
 

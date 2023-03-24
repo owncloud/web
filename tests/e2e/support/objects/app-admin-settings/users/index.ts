@@ -26,7 +26,7 @@ export class Users {
     this.#usersEnvironment = new UsersEnvironment()
     this.#page = page
   }
-  getUUID({ key }: { key: string }) {
+  getUUID({ key }: { key: string }): string {
     return this.#usersEnvironment.getUser({ key }).uuid
   }
 
