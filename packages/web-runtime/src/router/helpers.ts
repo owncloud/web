@@ -1,5 +1,6 @@
 import { base, router } from './index'
 import { RouteLocation, RouteParams, Router, RouteRecordNormalized } from 'vue-router'
+import pick from 'lodash-es/pick'
 import {
   AuthContext,
   authContextValues,
@@ -10,7 +11,18 @@ import {
 export const buildUrl = (pathname) => {
   const isHistoryMode = !!base
   const baseUrl = new URL(window.location.href.split('#')[0])
-  baseUrl.search = window.location.search
+
+  // searchParams defines a set of search parameters which should be part of new url.
+  // The resulting querystring only contains the properties listed here.
+  const searchParams = new URLSearchParams(
+    pick(Object.fromEntries(new URLSearchParams(window.location.search).entries()), [
+      // needed for private links
+      'details'
+    ])
+  ).toString()
+
+  baseUrl.search = searchParams
+
   if (isHistoryMode) {
     // in history mode we can't determine the base path, it must be provided by the document
     baseUrl.pathname = new URL(base.href).pathname

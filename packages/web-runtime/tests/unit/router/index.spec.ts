@@ -15,6 +15,9 @@ describe('buildUrl', () => {
     ${'https://localhost:9200/files/list/all'}                                        | ${'/foo'}                    | ${'/login/foo'} | ${'https://localhost:9200/foo/login/foo'}
     ${'https://localhost:9200/files/list/all'}                                        | ${'/'}                       | ${'/bar.html'}  | ${'https://localhost:9200/bar.html'}
     ${'https://localhost:9200/files/list/all'}                                        | ${'/foo'}                    | ${'/bar.html'}  | ${'https://localhost:9200/foo/bar.html'}
+    ${'https://localhost:9200/files/list/all?details=91953740'}                       | ${'/foo'}                    | ${'/bar.html'}  | ${'https://localhost:9200/foo/bar.html?details=91953740'}
+    ${'https://localhost:9200/files/list/all?details=91953740&unknown=87987987'}      | ${'/foo'}                    | ${'/bar.html'}  | ${'https://localhost:9200/foo/bar.html?details=91953740'}
+    ${'https://localhost:9200/files/list/all?unknown=87987987'}                       | ${'/foo'}                    | ${'/bar.html'}  | ${'https://localhost:9200/foo/bar.html'}
   `('$path -> $expected', async ({ location, base, path, expected }) => {
     delete window.location
     window.location = new URL(location) as any
