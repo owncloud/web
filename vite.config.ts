@@ -88,7 +88,7 @@ export default defineConfig(async ({ mode, command }) => {
       })
     ).json()
 
-    // determine server urls
+    // determine server url
     proxiedServerUrl = configJson.server
 
     // enable previews and enable lazy resources, which are disabled for fast tests
