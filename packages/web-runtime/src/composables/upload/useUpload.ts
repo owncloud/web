@@ -21,6 +21,7 @@ export interface UppyResource {
   id?: string
   source: string
   name: string
+  isFolder: boolean
   type: string
   size: number
   data: Blob

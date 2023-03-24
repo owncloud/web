@@ -89,6 +89,7 @@ const inputFilesToUppyFiles = ({
       uppyFiles.push({
         source: 'file input',
         name: file.name,
+        isFolder: false,
         type: file.type,
         size: file.size,
         data: file,

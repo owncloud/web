@@ -261,7 +261,7 @@ export default defineComponent({
       this.runningUploads += 1
       this.inFinalization = false
     })
-    this.$uppyService.subscribe('addedForUpload', (files: any[]) => {
+    this.$uppyService.subscribe('addedForUpload', (files: UppyResource[]) => {
       this.filesInProgressCount += files.filter((f) => !f.isFolder).length
 
       for (const file of files) {
@@ -356,7 +356,7 @@ export default defineComponent({
         this.handleTopLevelFolderUpdate(file, 'error')
       }
     })
-    this.$uppyService.subscribe('uploadSuccess', (file: any) => {
+    this.$uppyService.subscribe('uploadSuccess', (file: UppyResource) => {
       // item inside folder
       if (!this.uploads[file.meta.uploadId]) {
         if (!file.isFolder) {

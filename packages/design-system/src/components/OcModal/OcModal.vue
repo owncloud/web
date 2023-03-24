@@ -350,6 +350,7 @@ export default defineComponent({
       }
       return () => {
         // FIXME: according to the types it's incorrect to pass this.$refs.ocModalInput
+        // but passing this.$refs.ocModalInput?.$el does not work …
         return ((this.$refs.ocModalInput as ComponentPublicInstance as unknown as HTMLElement) ||
           (this.$refs.ocModal as HTMLElement)) as FocusTargetValueOrFalse
       }
