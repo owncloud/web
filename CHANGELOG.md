@@ -42,6 +42,7 @@ Summary
 * Bugfix - Users without role assignment: [#8585](https://github.com/owncloud/web/issues/8585)
 * Bugfix - Password enforced check for public links: [#8587](https://github.com/owncloud/web/issues/8587)
 * Bugfix - Group members sorting: [#8592](https://github.com/owncloud/web/issues/8592)
+* Bugfix - Open files in external app: [#8705](https://github.com/owncloud/web/pull/8705)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -366,6 +367,13 @@ Details
 
    https://github.com/owncloud/web/issues/8592
    https://github.com/owncloud/web/pull/8600
+
+* Bugfix - Open files in external app: [#8705](https://github.com/owncloud/web/pull/8705)
+
+   We've fixed a bug that caused office documents not to be opened in app provider editors anymore.
+
+   https://github.com/owncloud/web/issues/8695
+   https://github.com/owncloud/web/pull/8705
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
