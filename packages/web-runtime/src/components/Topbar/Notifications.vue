@@ -88,6 +88,7 @@
 </template>
 <script lang="ts">
 import { onMounted, onUnmounted, ref, unref } from 'vue'
+import isEmpty from 'lodash-es/isEmpty'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import NotificationBell from './NotificationBell.vue'
@@ -130,14 +131,22 @@ export default {
     const messageParameters = [
       { name: 'user', labelAttribute: 'displayname' },
       { name: 'resource', labelAttribute: 'name' },
-      { name: 'space', labelAttribute: 'name' }
+      { name: 'space', labelAttribute: 'name' },
+      { name: 'virus', labelAttribute: 'name' }
     ]
     const getMessage = ({ message, messageRich, messageRichParameters }: Notification) => {
-      if (messageRich) {
+      if (messageRich && !isEmpty(messageRichParameters)) {
         let interpolatedMessage = messageRich
         for (const param of messageParameters) {
           if (interpolatedMessage.includes(`{${param.name}}`)) {
-            const label = messageRichParameters[param.name][param.labelAttribute]
+            const richParam = messageRichParameters[param.name] ?? undefined
+            if (!richParam) {
+              return message
+            }
+            const label = richParam[param.labelAttribute] ?? undefined
+            if (!label) {
+              return message
+            }
             interpolatedMessage = interpolatedMessage.replace(
               `{${param.name}}`,
               `<strong>${label}</strong>`
