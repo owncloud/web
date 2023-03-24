@@ -66,14 +66,15 @@ export const createSpace = async (args: createSpaceArgs): Promise<string> => {
     (resp) => resp.status() === 200 && resp.request().method() === 'PATCH'
   )
 
-  await page.locator(actionConfirmButton).click()
-  await postResponsePromise
-  await mkcolResponsePromise
-  await putResponsePromise
-  await patchResponsePromise
+  const [responses] = await Promise.all([
+    postResponsePromise,
+    mkcolResponsePromise,
+    putResponsePromise,
+    patchResponsePromise,
+    page.locator(actionConfirmButton).click()
+  ])
 
-  const { id } = await (await postResponsePromise).json()
-
+  const { id } = await responses.json()
   return id
 }
 
