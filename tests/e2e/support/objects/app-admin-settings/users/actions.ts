@@ -1,5 +1,6 @@
 import { Page } from 'playwright'
 import util from 'util'
+import { UsersEnvironment } from '../../../environment'
 
 const userIdSelector = `[data-item-id="%s"] .users-table-btn-action-dropdown`
 const editActionBtnContextMenu = '.context-menu .oc-users-actions-edit-trigger'
@@ -234,21 +235,39 @@ export const changeUser = async (args: {
   ])
 }
 
-export const addUserToGroups = async (args: { page: Page; groups: string[] }): Promise<void> => {
-  const { page, groups } = args
+export const addUserToGroups = async (args: {
+  page: Page
+  userId: string
+  groups: string[]
+}): Promise<void> => {
+  const { page, userId, groups } = args
+  const usersEnvironment = new UsersEnvironment()
+  const groupIds = []
   for (const group of groups) {
+    groupIds.push(usersEnvironment.getGroup({ key: group }).uuid)
     await page.locator(groupsInput).fill(group)
     await page.keyboard.press('Enter')
   }
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith('members/$ref') &&
-        resp.status() === 204 &&
-        resp.request().method() === 'POST'
-    ),
-    await page.locator(compareDialogConfirm).click()
-  ])
+
+  const checkResponses = []
+  for (const id of groupIds) {
+    checkResponses.push(
+      page.waitForResponse((resp) => {
+        if (
+          resp.url().endsWith(`groups/${encodeURIComponent(id)}/members/$ref`) &&
+          resp.status() === 204 &&
+          resp.request().method() === 'POST'
+        ) {
+          return JSON.parse(resp.request().postData())['@odata.id'].endsWith(
+            `/users/${encodeURIComponent(userId)}`
+          )
+        }
+        return false
+      })
+    )
+  }
+
+  await Promise.all([...checkResponses, await page.locator(compareDialogConfirm).click()])
 }
 
 export const removeUserFromGroups = async (args: {

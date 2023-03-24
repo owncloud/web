@@ -118,7 +118,7 @@ export class Users {
   }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     await openEditPanel({ page: this.#page, uuid, action })
-    await addUserToGroups({ page: this.#page, groups })
+    await addUserToGroups({ page: this.#page, userId: uuid, groups })
   }
   async removeFromGroups({
     key,
