@@ -2,6 +2,7 @@ import { Store } from 'vuex'
 import get from 'lodash-es/get'
 import { computed, ComputedRef } from 'vue'
 import { useStore } from '../store'
+import { AppProviderCapability } from 'web-client/src/ocs/capabilities'
 
 export const useCapability = <T>(
   store: Store<any>,
@@ -72,6 +73,10 @@ export const useCapabilityFilesTags = createCapabilityComposable('files.tags', f
 export const useCapabilityPrivateLinks = createCapabilityComposable<boolean>(
   'files.privateLinks',
   false
+)
+export const useCapabilityFilesAppProviders = createCapabilityComposable<AppProviderCapability[]>(
+  'files.app_providers',
+  []
 )
 export const useCapabilityFilesSharingCanDenyAccess = createCapabilityComposable(
   'files_sharing.deny_access',
