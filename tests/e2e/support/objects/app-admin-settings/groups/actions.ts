@@ -68,17 +68,24 @@ export const deleteGroupUsingContextMenu = async (args: {
   ])
 }
 
-export const deleteGrouprUsingBatchAction = async (args: { page: Page }): Promise<void> => {
-  const { page } = args
+export const deleteGrouprUsingBatchAction = async (args: {
+  page: Page
+  groupIds: string[]
+}): Promise<void> => {
+  const { page, groupIds } = args
   await page.locator(deleteBtnBatchAction).click()
 
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().includes('groups') &&
-        resp.status() === 204 &&
-        resp.request().method() === 'DELETE'
-    ),
-    await page.locator(actionConfirmButton).click()
-  ])
+  const checkResponses = []
+  for (const id of groupIds) {
+    checkResponses.push(
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith(encodeURIComponent(id)) &&
+          resp.status() === 204 &&
+          resp.request().method() === 'DELETE'
+      )
+    )
+  }
+
+  await Promise.all([...checkResponses, page.locator(actionConfirmButton).click()])
 }

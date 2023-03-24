@@ -481,13 +481,15 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+    const groups = []
 
     switch (actionType) {
       case 'batch actions':
         for (const { group } of stepTable.hashes()) {
+          groups.push(group)
           await groupsObject.selectGroup({ key: group })
         }
-        await groupsObject.deleteGroupUsingBatchAction()
+        await groupsObject.deleteGroupUsingBatchAction({ groups })
         break
       case 'context menu':
         for (const { group } of stepTable.hashes()) {
