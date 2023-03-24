@@ -158,12 +158,11 @@ export const addSelectedUsersToGroups = async (args: {
   groups: string[]
 }): Promise<void> => {
   const { page, userIds, groups } = args
-  const usersEnvironment = new UsersEnvironment()
   const groupIds = []
 
   await page.locator(addToGroupsBatchAction).click()
   for (const group of groups) {
-    groupIds.push(usersEnvironment.getGroup({ key: group }).uuid)
+    groupIds.push(getGroupId(group))
     await page.locator(groupsModalInput).click()
     await page.locator(groupsModalInput).fill(group)
     await page.keyboard.press('Enter')
@@ -198,12 +197,11 @@ export const removeSelectedUsersFromGroups = async (args: {
   groups: string[]
 }): Promise<void> => {
   const { page, userIds, groups } = args
-  const usersEnvironment = new UsersEnvironment()
   const groupIds = []
 
   await page.locator(removeFromGroupsBatchAction).click()
   for (const group of groups) {
-    groupIds.push(usersEnvironment.getGroup({ key: group }).uuid)
+    groupIds.push(getGroupId(group))
     await page.locator(groupsModalInput).click()
     await page.locator(groupsModalInput).fill(group)
     await page.keyboard.press('Enter')
@@ -215,7 +213,11 @@ export const removeSelectedUsersFromGroups = async (args: {
       checkResponses.push(
         page.waitForResponse(
           (resp) =>
-            resp.url().endsWith(`groups/${groupId}/members/${encodeURIComponent(userId)}/$ref`) &&
+            resp
+              .url()
+              .endsWith(
+                `groups/${encodeURIComponent(groupId)}/members/${encodeURIComponent(userId)}/$ref`
+              ) &&
             resp.status() === 204 &&
             resp.request().method() === 'DELETE'
         )
@@ -275,10 +277,9 @@ export const addUserToGroups = async (args: {
   groups: string[]
 }): Promise<void> => {
   const { page, userId, groups } = args
-  const usersEnvironment = new UsersEnvironment()
   const groupIds = []
   for (const group of groups) {
-    groupIds.push(usersEnvironment.getGroup({ key: group }).uuid)
+    groupIds.push(getGroupId(group))
     await page.locator(groupsInput).fill(group)
     await page.keyboard.press('Enter')
   }
@@ -310,10 +311,9 @@ export const removeUserFromGroups = async (args: {
   groups: string[]
 }): Promise<void> => {
   const { page, userId, groups } = args
-  const usersEnvironment = new UsersEnvironment()
   const groupIds = []
   for (const group of groups) {
-    groupIds.push(usersEnvironment.getGroup({ key: group }).uuid)
+    groupIds.push(getGroupId(group))
     await page.getByTitle(group).click()
   }
 
@@ -322,7 +322,11 @@ export const removeUserFromGroups = async (args: {
     checkResponses.push(
       page.waitForResponse(
         (resp) =>
-          resp.url().endsWith(`groups/${groupId}/members/${encodeURIComponent(userId)}/$ref`) &&
+          resp
+            .url()
+            .endsWith(
+              `groups/${encodeURIComponent(groupId)}/members/${encodeURIComponent(userId)}/$ref`
+            ) &&
           resp.status() === 204 &&
           resp.request().method() === 'DELETE'
       )
@@ -399,4 +403,9 @@ export const deleteUserUsingBatchAction = async (args: {
 export const waitForEditPanelToBeVisible = async (args: { page: Page }): Promise<void> => {
   const { page } = args
   await page.waitForSelector(editPanel)
+}
+
+const getGroupId = (group: string): string => {
+  const usersEnvironment = new UsersEnvironment()
+  return usersEnvironment.getGroup({ key: group }).uuid
 }
