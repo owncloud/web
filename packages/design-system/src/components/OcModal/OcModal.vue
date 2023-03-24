@@ -349,7 +349,7 @@ export default defineComponent({
         return this.focusTrapInitial
       }
       return () => {
-        return (((this.$refs.ocModalInput as ComponentPublicInstance).$el as HTMLElement) ||
+        return (((this.$refs.ocModalInput as ComponentPublicInstance)?.$el as HTMLElement) ||
           (this.$refs.ocModal as HTMLElement)) as FocusTargetValueOrFalse
       }
     },
