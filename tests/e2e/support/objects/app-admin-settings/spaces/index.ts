@@ -24,79 +24,63 @@ export class Spaces {
     this.#page = page
   }
 
+  getUUID({ key }: { key: string }): string {
+    return this.getSpace({ key }).id
+  }
+
   getDisplayedSpaces(): Promise<string[]> {
     return getDisplayedSpaces(this.#page)
   }
 
-  async getSpace({ key }: { key: string }): Promise<Space> {
+  getSpace({ key }: { key: string }): Space {
     return this.#spacesEnvironment.getSpace({ key })
   }
 
   async changeQuota({
-    spaces,
+    spaceIds,
     value,
     context
   }: {
-    spaces: string[]
+    spaceIds: string[]
     value: string
     context: string
   }): Promise<void> {
-    const spaceIds = []
-    for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
-    }
     await changeSpaceQuota({ spaceIds, value, page: this.#page, context })
   }
 
-  async disable({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
-    const spaceIds = []
-    for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
-    }
+  async disable({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
     await disableSpace({ spaceIds, page: this.#page, context })
   }
 
-  async enable({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
-    const spaceIds = []
-    for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
-    }
+  async enable({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
     await enableSpace({ spaceIds, page: this.#page, context })
   }
 
-  async delete({ spaces, context }: { spaces: string[]; context: string }): Promise<void> {
-    const spaceIds = []
-    for (const space of spaces) {
-      spaceIds.push(this.#spacesEnvironment.getSpace({ key: space }).id)
-    }
+  async delete({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
     await deleteSpace({ spaceIds, page: this.#page, context })
   }
 
   async select({ key }: { key: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await selectSpace({ id, page: this.#page })
+    await selectSpace({ page: this.#page, id: this.getUUID({ key }) })
   }
 
   async rename({ key, value }: { key: string; value: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await renameSpace({ id, page: this.#page, value })
+    await renameSpace({ page: this.#page, id: this.getUUID({ key }), value })
   }
 
   async changeSubtitle({ key, value }: { key: string; value: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await changeSpaceSubtitle({ id, page: this.#page, value })
+    await changeSpaceSubtitle({ page: this.#page, id: this.getUUID({ key }), value })
   }
 
   async openPanel({ key }: { key: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    await openSpaceAdminSidebarPanel({ page: this.#page, id })
+    await openSpaceAdminSidebarPanel({ page: this.#page, id: this.getUUID({ key }) })
   }
 
   async openActionSideBarPanel({ action }: { action: string }): Promise<void> {
     await openSpaceAdminActionSidebarPanel({ page: this.#page, action })
   }
 
-  async listMembers({ filter }: { filter: string }): Promise<Array<string>> {
+  listMembers({ filter }: { filter: string }): Promise<Array<string>> {
     return listSpaceMembers({ page: this.#page, filter })
   }
 }

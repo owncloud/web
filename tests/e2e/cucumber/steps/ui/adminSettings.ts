@@ -42,16 +42,16 @@ When(
   async function (this: World, stepUser: string, action: string, key: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
-
+    const spaceId = spacesObject.getUUID({ key })
     switch (action) {
       case 'disables':
-        await spacesObject.disable({ spaces: [key], context: 'context-menu' })
+        await spacesObject.disable({ spaceIds: [spaceId], context: 'context-menu' })
         break
       case 'deletes':
-        await spacesObject.delete({ spaces: [key], context: 'context-menu' })
+        await spacesObject.delete({ spaceIds: [spaceId], context: 'context-menu' })
         break
       case 'enables':
-        await spacesObject.enable({ spaces: [key], context: 'context-menu' })
+        await spacesObject.enable({ spaceIds: [spaceId], context: 'context-menu' })
         break
       default:
         throw new Error(`${action} not implemented`)
@@ -71,7 +71,7 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
-
+    const spaceId = spacesObject.getUUID({ key })
     switch (action) {
       case 'name':
         await spacesObject.rename({ key, value })
@@ -80,7 +80,7 @@ When(
         await spacesObject.changeSubtitle({ key, value })
         break
       case 'quota':
-        await spacesObject.changeQuota({ spaces: [key], value, context: 'context-menu' })
+        await spacesObject.changeQuota({ spaceIds: [spaceId], value, context: 'context-menu' })
         break
       default:
         throw new Error(`'${action}' not implemented`)
@@ -98,13 +98,13 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
-    const spaces = []
-    for (const info of stepTable.hashes()) {
-      spaces.push(info.id)
-      await spacesObject.select({ key: info.id })
+    const spaceIds = []
+    for (const { id: space } of stepTable.hashes()) {
+      spaceIds.push(spacesObject.getUUID({ key: space }))
+      await spacesObject.select({ key: space })
     }
     await spacesObject.changeQuota({
-      spaces,
+      spaceIds,
       value,
       context: 'batch-actions'
     })
@@ -121,20 +121,20 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
-    const spaces = []
-    for (const info of stepTable.hashes()) {
-      spaces.push(info.id)
-      await spacesObject.select({ key: info.id })
+    const spaceIds = []
+    for (const { id: space } of stepTable.hashes()) {
+      spaceIds.push(spacesObject.getUUID({ key: space }))
+      await spacesObject.select({ key: space })
     }
     switch (action) {
       case 'disables':
-        await spacesObject.disable({ spaces, context: 'batch-actions' })
+        await spacesObject.disable({ spaceIds, context: 'batch-actions' })
         break
       case 'deletes':
-        await spacesObject.delete({ spaces, context: 'batch-actions' })
+        await spacesObject.delete({ spaceIds, context: 'batch-actions' })
         break
       case 'enables':
-        await spacesObject.enable({ spaces, context: 'batch-actions' })
+        await spacesObject.enable({ spaceIds, context: 'batch-actions' })
         break
       default:
         throw new Error(`'${action}' not implemented`)
@@ -217,10 +217,12 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
-    for (const info of stepTable.hashes()) {
-      await usersObject.selectUser({ key: info.id })
+    const userIds = []
+    for (const { id: user } of stepTable.hashes()) {
+      userIds.push(usersObject.getUUID({ key: user }))
+      await usersObject.selectUser({ key: user })
     }
-    await usersObject.changeQuotaUsingBatchAction({ value })
+    await usersObject.changeQuotaUsingBatchAction({ value, userIds })
   }
 )
 
@@ -275,17 +277,19 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
+    const userIds = []
 
     for (const { user } of stepTable.hashes()) {
+      userIds.push(usersObject.getUUID({ key: user }))
       await usersObject.select({ key: user })
     }
 
     switch (action) {
       case 'adds':
-        await usersObject.addToGroupsBatchAtion({ groups: groups.split(',') })
+        await usersObject.addToGroupsBatchAtion({ userIds, groups: groups.split(',') })
         break
       case 'removes':
-        await usersObject.removeFromGroupsBatchAtion({ groups: groups.split(',') })
+        await usersObject.removeFromGroupsBatchAtion({ userIds, groups: groups.split(',') })
         break
       default:
         throw new Error(`'${action}' not implemented`)
@@ -374,13 +378,14 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
-
+    const userIds = []
     switch (actionType) {
       case 'batch actions':
-        for (const user of stepTable.hashes()) {
-          await usersObject.selectUser({ key: user.id })
+        for (const { id: user } of stepTable.hashes()) {
+          userIds.push(usersObject.getUUID({ key: user }))
+          await usersObject.selectUser({ key: user })
         }
-        await usersObject.deleteUserUsingBatchAction()
+        await usersObject.deleteUserUsingBatchAction({ userIds })
         break
       case 'context menu':
         for (const { user } of stepTable.hashes()) {
@@ -481,13 +486,15 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+    const groupIds = []
 
     switch (actionType) {
       case 'batch actions':
         for (const { group } of stepTable.hashes()) {
+          groupIds.push(groupsObject.getUUID({ key: group }))
           await groupsObject.selectGroup({ key: group })
         }
-        await groupsObject.deleteGroupUsingBatchAction()
+        await groupsObject.deleteGroupUsingBatchAction({ groupIds })
         break
       case 'context menu':
         for (const { group } of stepTable.hashes()) {

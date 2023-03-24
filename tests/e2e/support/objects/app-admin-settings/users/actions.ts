@@ -1,5 +1,6 @@
 import { Page } from 'playwright'
 import util from 'util'
+import { UsersEnvironment } from '../../../environment'
 
 const userIdSelector = `[data-item-id="%s"] .users-table-btn-action-dropdown`
 const editActionBtnContextMenu = '.context-menu .oc-users-actions-edit-trigger'
@@ -105,16 +106,26 @@ export const changeQuota = async (args: {
 export const changeQuotaUsingBatchAction = async (args: {
   page: Page
   value: string
+  userIds: string[]
 }): Promise<void> => {
-  const { page, value } = args
+  const { page, value, userIds } = args
   await page.locator(editQuotaBtn).click()
   await page.locator(quotaInputBatchAction).fill(value)
   await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
 
-  await Promise.all([
-    page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'PATCH'),
-    page.locator(actionConfirmButton).click()
-  ])
+  const checkResponses = []
+  for (const id of userIds) {
+    checkResponses.push(
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith(encodeURIComponent(id)) &&
+          resp.status() === 200 &&
+          resp.request().method() === 'PATCH'
+      )
+    )
+  }
+
+  await Promise.all([...checkResponses, page.locator(actionConfirmButton).click()])
 }
 
 export const getDisplayedUsers = async (args: { page: Page }): Promise<string[]> => {
@@ -143,42 +154,78 @@ export const selectUser = async (args: { page: Page; uuid: string }): Promise<vo
 
 export const addSelectedUsersToGroups = async (args: {
   page: Page
+  userIds: string[]
   groups: string[]
 }): Promise<void> => {
-  const { page, groups } = args
+  const { page, userIds, groups } = args
+  const groupIds = []
+
   await page.locator(addToGroupsBatchAction).click()
   for (const group of groups) {
+    groupIds.push(getGroupId(group))
     await page.locator(groupsModalInput).click()
-    await page.locator(dropdownOption).getByText(group).click()
+    await page.locator(groupsModalInput).fill(group)
+    await page.keyboard.press('Enter')
   }
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith('/$ref') && resp.status() === 204 && resp.request().method() === 'POST'
-    ),
-    await page.locator(actionConfirmButton).click()
-  ])
+
+  const checkResponses = []
+  for (const userId of userIds) {
+    for (const groupId of groupIds) {
+      checkResponses.push(
+        page.waitForResponse((resp) => {
+          if (
+            resp.url().endsWith(`groups/${encodeURIComponent(groupId)}/members/$ref`) &&
+            resp.status() === 204 &&
+            resp.request().method() === 'POST'
+          ) {
+            return JSON.parse(resp.request().postData())['@odata.id'].endsWith(
+              `/users/${encodeURIComponent(userId)}`
+            )
+          }
+          return false
+        })
+      )
+    }
+  }
+
+  await Promise.all([...checkResponses, await page.locator(actionConfirmButton).click()])
 }
 
 export const removeSelectedUsersFromGroups = async (args: {
   page: Page
+  userIds: string[]
   groups: string[]
 }): Promise<void> => {
-  const { page, groups } = args
+  const { page, userIds, groups } = args
+  const groupIds = []
+
   await page.locator(removeFromGroupsBatchAction).click()
   for (const group of groups) {
+    groupIds.push(getGroupId(group))
     await page.locator(groupsModalInput).click()
-    await page.locator(dropdownOption).getByText(group).click()
+    await page.locator(groupsModalInput).fill(group)
+    await page.keyboard.press('Enter')
   }
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith('/$ref') &&
-        resp.status() === 204 &&
-        resp.request().method() === 'DELETE'
-    ),
-    await page.locator(actionConfirmButton).click()
-  ])
+
+  const checkResponses = []
+  for (const userId of userIds) {
+    for (const groupId of groupIds) {
+      checkResponses.push(
+        page.waitForResponse(
+          (resp) =>
+            resp
+              .url()
+              .endsWith(
+                `groups/${encodeURIComponent(groupId)}/members/${encodeURIComponent(userId)}/$ref`
+              ) &&
+            resp.status() === 204 &&
+            resp.request().method() === 'DELETE'
+        )
+      )
+    }
+  }
+
+  await Promise.all([...checkResponses, await page.locator(actionConfirmButton).click()])
 }
 
 export const filterUsers = async (args: {
@@ -224,41 +271,69 @@ export const changeUser = async (args: {
   ])
 }
 
-export const addUserToGroups = async (args: { page: Page; groups: string[] }): Promise<void> => {
-  const { page, groups } = args
+export const addUserToGroups = async (args: {
+  page: Page
+  userId: string
+  groups: string[]
+}): Promise<void> => {
+  const { page, userId, groups } = args
+  const groupIds = []
   for (const group of groups) {
+    groupIds.push(getGroupId(group))
     await page.locator(groupsInput).fill(group)
     await page.keyboard.press('Enter')
   }
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith('members/$ref') &&
-        resp.status() === 204 &&
-        resp.request().method() === 'POST'
-    ),
-    await page.locator(compareDialogConfirm).click()
-  ])
+
+  const checkResponses = []
+  for (const groupId of groupIds) {
+    checkResponses.push(
+      page.waitForResponse((resp) => {
+        if (
+          resp.url().endsWith(`groups/${encodeURIComponent(groupId)}/members/$ref`) &&
+          resp.status() === 204 &&
+          resp.request().method() === 'POST'
+        ) {
+          return JSON.parse(resp.request().postData())['@odata.id'].endsWith(
+            `/users/${encodeURIComponent(userId)}`
+          )
+        }
+        return false
+      })
+    )
+  }
+
+  await Promise.all([...checkResponses, await page.locator(compareDialogConfirm).click()])
 }
 
 export const removeUserFromGroups = async (args: {
   page: Page
-  uuid: string
+  userId: string
   groups: string[]
 }): Promise<void> => {
-  const { page, uuid, groups } = args
+  const { page, userId, groups } = args
+  const groupIds = []
   for (const group of groups) {
+    groupIds.push(getGroupId(group))
     await page.getByTitle(group).click()
   }
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith(encodeURIComponent(uuid) + '/$ref') &&
-        resp.status() === 204 &&
-        resp.request().method() === 'DELETE'
-    ),
-    await page.locator(compareDialogConfirm).click()
-  ])
+
+  const checkResponses = []
+  for (const groupId of groupIds) {
+    checkResponses.push(
+      page.waitForResponse(
+        (resp) =>
+          resp
+            .url()
+            .endsWith(
+              `groups/${encodeURIComponent(groupId)}/members/${encodeURIComponent(userId)}/$ref`
+            ) &&
+          resp.status() === 204 &&
+          resp.request().method() === 'DELETE'
+      )
+    )
+  }
+
+  await Promise.all([...checkResponses, await page.locator(compareDialogConfirm).click()])
 }
 
 export const openEditPanel = async (args: {
@@ -303,22 +378,34 @@ export const deleteUserUsingContextMenu = async (args: {
   ])
 }
 
-export const deleteUserUsingBatchAction = async (args: { page: Page }): Promise<void> => {
-  const { page } = args
+export const deleteUserUsingBatchAction = async (args: {
+  page: Page
+  userIds: string[]
+}): Promise<void> => {
+  const { page, userIds } = args
   await page.locator(deleteActionBtn).click()
 
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().includes('users') &&
-        resp.status() === 204 &&
-        resp.request().method() === 'DELETE'
-    ),
-    await page.locator(actionConfirmButton).click()
-  ])
+  const checkResponses = []
+  for (const id of userIds) {
+    checkResponses.push(
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith(encodeURIComponent(id)) &&
+          resp.status() === 204 &&
+          resp.request().method() === 'DELETE'
+      )
+    )
+  }
+
+  await Promise.all([...checkResponses, await page.locator(actionConfirmButton).click()])
 }
 
 export const waitForEditPanelToBeVisible = async (args: { page: Page }): Promise<void> => {
   const { page } = args
   await page.waitForSelector(editPanel)
+}
+
+const getGroupId = (group: string): string => {
+  const usersEnvironment = new UsersEnvironment()
+  return usersEnvironment.getGroup({ key: group }).uuid
 }

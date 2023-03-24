@@ -26,17 +26,17 @@ export class Users {
     this.#usersEnvironment = new UsersEnvironment()
     this.#page = page
   }
-  getUUID({ key }: { key: string }) {
-    const { uuid } = this.#usersEnvironment.getUser({ key })
-    return uuid
+  getUUID({ key }: { key: string }): string {
+    return this.#usersEnvironment.getUser({ key }).uuid
   }
+
   async allowLogin({ key, action }: { key: string; action: string }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getUser({ key })
+    const uuid = this.getUUID({ key })
     await openEditPanel({ page: this.#page, uuid, action })
     await changeAccountEnabled({ uuid, value: true, page: this.#page })
   }
   async forbidLogin({ key, action }: { key: string; action: string }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getUser({ key })
+    const uuid = this.getUUID({ key })
     await openEditPanel({ page: this.#page, uuid, action })
     await changeAccountEnabled({ uuid, value: false, page: this.#page })
   }
@@ -49,29 +49,45 @@ export class Users {
     value: string
     action: string
   }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getUser({ key })
+    const uuid = this.getUUID({ key })
     await openEditPanel({ page: this.#page, uuid, action })
     await changeQuota({ uuid, value, page: this.#page })
   }
   async selectUser({ key }: { key: string }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getUser({ key })
-    await selectUser({ uuid, page: this.#page })
+    await selectUser({ page: this.#page, uuid: this.getUUID({ key }) })
   }
-  async changeQuotaUsingBatchAction({ value }: { value: string }): Promise<void> {
-    await changeQuotaUsingBatchAction({ value, page: this.#page })
+  async changeQuotaUsingBatchAction({
+    value,
+    userIds
+  }: {
+    value: string
+    userIds: string[]
+  }): Promise<void> {
+    await changeQuotaUsingBatchAction({ page: this.#page, value, userIds })
   }
   getDisplayedUsers(): Promise<string[]> {
     return getDisplayedUsers({ page: this.#page })
   }
   async select({ key }: { key: string }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getUser({ key })
-    await selectUser({ uuid, page: this.#page })
+    await selectUser({ page: this.#page, uuid: this.getUUID({ key }) })
   }
-  async addToGroupsBatchAtion({ groups }: { groups: string[] }): Promise<void> {
-    await addSelectedUsersToGroups({ page: this.#page, groups })
+  async addToGroupsBatchAtion({
+    userIds,
+    groups
+  }: {
+    userIds: string[]
+    groups: string[]
+  }): Promise<void> {
+    await addSelectedUsersToGroups({ page: this.#page, userIds, groups })
   }
-  async removeFromGroupsBatchAtion({ groups }: { groups: string[] }): Promise<void> {
-    await removeSelectedUsersFromGroups({ page: this.#page, groups })
+  async removeFromGroupsBatchAtion({
+    userIds,
+    groups
+  }: {
+    userIds: string[]
+    groups: string[]
+  }): Promise<void> {
+    await removeSelectedUsersFromGroups({ page: this.#page, userIds, groups })
   }
   async filter({ filter, values }: { filter: string; values: string[] }): Promise<void> {
     await filterUsers({ page: this.#page, filter, values })
@@ -87,7 +103,7 @@ export class Users {
     value: string
     action: string
   }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getUser({ key })
+    const uuid = this.getUUID({ key })
     await openEditPanel({ page: this.#page, uuid, action })
     await changeUser({ uuid, attribute: attribute, value: value, page: this.#page })
   }
@@ -100,9 +116,9 @@ export class Users {
     groups: string[]
     action: string
   }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getUser({ key })
+    const uuid = this.getUUID({ key })
     await openEditPanel({ page: this.#page, uuid, action })
-    await addUserToGroups({ page: this.#page, groups })
+    await addUserToGroups({ page: this.#page, userId: uuid, groups })
   }
   async removeFromGroups({
     key,
@@ -113,16 +129,15 @@ export class Users {
     groups: string[]
     action: string
   }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getUser({ key })
+    const uuid = this.getUUID({ key })
     await openEditPanel({ page: this.#page, uuid, action })
-    await removeUserFromGroups({ page: this.#page, uuid, groups })
+    await removeUserFromGroups({ page: this.#page, userId: uuid, groups })
   }
   async deleteUserUsingContextMenu({ key }: { key: string }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getUser({ key })
-    await deleteUserUsingContextMenu({ page: this.#page, uuid })
+    await deleteUserUsingContextMenu({ page: this.#page, uuid: this.getUUID({ key }) })
   }
-  async deleteUserUsingBatchAction(): Promise<void> {
-    await deleteUserUsingBatchAction({ page: this.#page })
+  async deleteUserUsingBatchAction({ userIds }: { userIds: string[] }): Promise<void> {
+    await deleteUserUsingBatchAction({ page: this.#page, userIds })
   }
   async createUser({
     name,
@@ -139,8 +154,7 @@ export class Users {
   }
 
   async openEditPanel({ key, action }: { key: string; action: string }): Promise<void> {
-    const { uuid } = this.#usersEnvironment.getUser({ key })
-    await openEditPanel({ page: this.#page, uuid, action })
+    await openEditPanel({ page: this.#page, uuid: this.getUUID({ key }), action })
   }
 
   async waitForEditPanelToBeVisible(): Promise<void> {
