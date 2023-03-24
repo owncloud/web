@@ -340,9 +340,7 @@ export default defineComponent({
     &__selected-options {
       flex: auto;
       padding: 0;
-    }
 
-    &__selected-options {
       > * {
         padding: 0px 2px;
         margin: 2px 2px 2px 1px;
