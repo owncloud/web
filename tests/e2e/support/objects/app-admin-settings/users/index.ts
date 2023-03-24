@@ -131,7 +131,7 @@ export class Users {
   }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     await openEditPanel({ page: this.#page, uuid, action })
-    await removeUserFromGroups({ page: this.#page, uuid, groups })
+    await removeUserFromGroups({ page: this.#page, userId: uuid, groups })
   }
   async deleteUserUsingContextMenu({ key }: { key: string }): Promise<void> {
     const { uuid } = this.#usersEnvironment.getUser({ key })

@@ -272,22 +272,30 @@ export const addUserToGroups = async (args: {
 
 export const removeUserFromGroups = async (args: {
   page: Page
-  uuid: string
+  userId: string
   groups: string[]
 }): Promise<void> => {
-  const { page, uuid, groups } = args
+  const { page, userId, groups } = args
+  const usersEnvironment = new UsersEnvironment()
+  const groupIds = []
   for (const group of groups) {
+    groupIds.push(usersEnvironment.getGroup({ key: group }).uuid)
     await page.getByTitle(group).click()
   }
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith(encodeURIComponent(uuid) + '/$ref') &&
-        resp.status() === 204 &&
-        resp.request().method() === 'DELETE'
-    ),
-    await page.locator(compareDialogConfirm).click()
-  ])
+
+  const checkResponses = []
+  for (const groupId of groupIds) {
+    checkResponses.push(
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith(`groups/${groupId}/members/${encodeURIComponent(userId)}/$ref`) &&
+          resp.status() === 204 &&
+          resp.request().method() === 'DELETE'
+      )
+    )
+  }
+
+  await Promise.all([...checkResponses, await page.locator(compareDialogConfirm).click()])
 }
 
 export const openEditPanel = async (args: {
