@@ -105,16 +105,26 @@ export const changeQuota = async (args: {
 export const changeQuotaUsingBatchAction = async (args: {
   page: Page
   value: string
+  userIds: string[]
 }): Promise<void> => {
-  const { page, value } = args
+  const { page, value, userIds } = args
   await page.locator(editQuotaBtn).click()
   await page.locator(quotaInputBatchAction).fill(value)
   await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
 
-  await Promise.all([
-    page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'PATCH'),
-    page.locator(actionConfirmButton).click()
-  ])
+  const checkResponses = []
+  for (const id of userIds) {
+    checkResponses.push(
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith(encodeURIComponent(id)) &&
+          resp.status() === 200 &&
+          resp.request().method() === 'PATCH'
+      )
+    )
+  }
+
+  await Promise.all([...checkResponses, page.locator(actionConfirmButton).click()])
 }
 
 export const getDisplayedUsers = async (args: { page: Page }): Promise<string[]> => {

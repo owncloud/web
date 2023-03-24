@@ -57,8 +57,18 @@ export class Users {
     const { uuid } = this.#usersEnvironment.getUser({ key })
     await selectUser({ uuid, page: this.#page })
   }
-  async changeQuotaUsingBatchAction({ value }: { value: string }): Promise<void> {
-    await changeQuotaUsingBatchAction({ value, page: this.#page })
+  async changeQuotaUsingBatchAction({
+    value,
+    users
+  }: {
+    value: string
+    users: string[]
+  }): Promise<void> {
+    const userIds = []
+    for (const user of users) {
+      userIds.push(this.#usersEnvironment.getUser({ key: user }).uuid)
+    }
+    await changeQuotaUsingBatchAction({ page: this.#page, value, userIds })
   }
   getDisplayedUsers(): Promise<string[]> {
     return getDisplayedUsers({ page: this.#page })

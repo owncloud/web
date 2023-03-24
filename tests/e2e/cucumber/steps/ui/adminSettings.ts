@@ -217,10 +217,12 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
+    const users = []
     for (const info of stepTable.hashes()) {
+      users.push(info.id)
       await usersObject.selectUser({ key: info.id })
     }
-    await usersObject.changeQuotaUsingBatchAction({ value })
+    await usersObject.changeQuotaUsingBatchAction({ value, users })
   }
 )
 
