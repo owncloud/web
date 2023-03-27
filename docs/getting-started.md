@@ -68,7 +68,7 @@ hovers the row with his mouse. Defaults to `false`.
 - `options.upload.xhr.timeout` Specifies the timeout for XHR uploads in milliseconds.
 - `options.editor.autosaveEnabled` Specifies if the autosave for the editor apps is enabled.
 - `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
-- `options.editor.contextHelpersReadMore` Specifies whether the "Read more" link should be displayed or not.
+- `options.contextHelpersReadMore` Specifies whether the "Read more" link should be displayed or not.
 
 ### Sentry
 
