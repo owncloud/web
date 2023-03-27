@@ -15,21 +15,6 @@ color:
   #        brighten: 10
   #        desaturate: 10
   #        saturate: 10
-  #  sample:
-  #    default:
-  #      value: "{color.swatch.warning.hover.value}"
-  #      check:
-  #        contrast:
-  #          ratio: 3.5
-  #          background:
-  #            - "{color.background.default.value}"
-  #            - "{color.background.muted.value}"
-  #      transform:
-  #        darken: 23
-  #        lighten: 10
-  #        brighten: 10
-  #        desaturate: 10
-  #        saturate: 10
   swatch:
     brand:
       default:
