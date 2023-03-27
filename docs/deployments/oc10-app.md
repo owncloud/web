@@ -68,7 +68,7 @@ There are a few config values which need to be set in order for ownCloud Web to 
 ```json
 {
   "server" : "https://<your-owncloud-server>",
-  "theme": "https://<your-owncloud-server>/themes/owncloud/theme.json",
+  "theme": "https://<your-owncloud-server>/index.php/apps/web/themes/owncloud/theme.json",
   "auth": {
     "clientId": "<client-id-from-oauth2>",
     "url": "https://<your-owncloud-server>/index.php/apps/oauth2/api/v1/token",
@@ -194,7 +194,7 @@ Make sure that ONLYOFFICE works as expected in the Classic UI and add the follow
 "external_apps": [
     {
         "id": "onlyoffice",
-        "path": "https://<your-owncloud-server>/apps/onlyoffice/js/web/onlyoffice.js"
+        "path": "https://<your-owncloud-server>/apps-external/onlyoffice/js/web/onlyoffice.js"
     }
 ]
 ```
