@@ -88,7 +88,7 @@
 
 <script lang="ts">
 import ResourceTable from '../FilesList/ResourceTable.vue'
-import { defineComponent, PropType, unref } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -184,6 +184,10 @@ export default defineComponent({
     const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
 
+    const personalSpace = computed((): SpaceResource => {
+      return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
+    })
+
     const getSpace = (resource: Resource): SpaceResource => {
       if (unref(hasShareJail)) {
         return buildShareSpaceResource({
@@ -192,7 +196,7 @@ export default defineComponent({
           serverUrl: configurationManager.serverUrl
         })
       }
-      return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
+      return unref(personalSpace)
     }
 
     const resourceTargetRouteCallback = ({
