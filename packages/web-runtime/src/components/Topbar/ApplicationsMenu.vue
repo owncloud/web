@@ -48,7 +48,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { urlJoin } from 'web-client/src/utils'
 import OcExpandingDropdown from '../../../../design-system/src/components/OcExpandingDropdown/OcExpandingDropdown.vue'
 
@@ -105,14 +105,14 @@ export default defineComponent({
   z-index: 3;
 
   .dropdown-title-wrapper {
-    position:relative;
+    position: relative;
     height: 50px;
 
     h3 {
       margin-left: 10px;
       font-weight: 300;
       position: absolute;
-      overflow:hidden;
+      overflow: hidden;
     }
   }
 }
@@ -136,11 +136,11 @@ export default defineComponent({
       overflow: hidden;
       text-align: center;
       font-size: 12px;
+      padding: 0;
       color: var(--oc-color-swatch-passive-default);
 
       &:focus,
       &:hover {
-        background-color: rgba(0, 0, 0, 0.15);
         color: var(--oc-color-swatch-passive-default);
         text-decoration: none;
         .icon-box {
