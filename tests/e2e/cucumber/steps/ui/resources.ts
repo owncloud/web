@@ -279,8 +279,7 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const isVisible = await resourceObject.areResourcesShownAsTiles()
-    expect(isVisible).toBe(true)
+    await resourceObject.expectThatResourcesAreTiles()
   }
 )
 
