@@ -114,6 +114,8 @@ function createShallowMountWrapper() {
     })
   )
 
+  const mocks = defaultComponentMocks()
+  mocks.$previewService.loadPreview.mockResolvedValue('')
   return {
     wrapper: shallowMount(App, {
       data: function () {
@@ -123,7 +125,7 @@ function createShallowMountWrapper() {
       },
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks: { ...defaultComponentMocks() }
+        mocks
       }
     })
   }

@@ -12,7 +12,7 @@ import quickActions from './quickActions'
 import store from './store'
 import { SDKSearch } from './search'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { Registry, ArchiverService, ThumbnailService } from './services'
+import { Registry, ArchiverService } from './services'
 import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
 import get from 'lodash-es/get'
@@ -142,15 +142,6 @@ export default {
           archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
         }
       ])
-    )
-
-    // FIXME: Use capability data only as soon as available
-    globalProperties.$thumbnailService = new ThumbnailService(
-      get(store, 'getters.capabilities.files.thumbnail', {
-        enabled: true,
-        version: 'v0.1',
-        supportedMimeTypes: store.getters.configuration?.options?.previewFileMimeTypes || []
-      })
     )
   }
 }

@@ -68,17 +68,15 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, inject, ref, unref } from 'vue'
+import { defineComponent, inject, ref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
-import { buildResource, buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
-import { loadPreview } from 'web-pkg/src/helpers/preview'
+import { buildResource, buildWebDavSpacesPath, SpaceResource } from 'web-client/src/helpers'
 import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { ImageDimension } from 'web-pkg/src/constants'
-import { useAccessToken, useClientService, useStore } from 'web-pkg/src/composables'
+import { useStore, usePreviewService } from 'web-pkg/src/composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
 import { formatDateFromISO } from 'web-pkg/src/helpers'
-import { configurationManager } from 'web-pkg/src/configuration'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
@@ -99,9 +97,8 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
-    const clientService = useClientService()
-    const accessToken = useAccessToken({ store })
-    const resource = inject<Resource>('resource')
+    const previewService = usePreviewService()
+    const resource = inject<SpaceResource>('resource')
     const spaceImage = ref('')
 
     const loadImageTask = useTask(function* (signal, ref) {
@@ -122,16 +119,12 @@ export default defineComponent({
       const fileInfo = yield ref.$client.files.fileInfo(
         buildWebDavSpacesPath(idComponent, decodeURIComponent(path))
       )
-      const resource = buildResource(fileInfo)
+      const imageResource = buildResource(fileInfo)
 
-      spaceImage.value = yield loadPreview({
-        clientService,
-        resource,
-        isPublic: false,
-        dimensions: ImageDimension.Preview,
-        server: configurationManager.serverUrl,
-        userId: ref.user.id,
-        token: unref(accessToken)
+      spaceImage.value = yield previewService.loadPreview({
+        space: resource,
+        resource: imageResource,
+        dimensions: ImageDimension.Preview
       })
     })
 

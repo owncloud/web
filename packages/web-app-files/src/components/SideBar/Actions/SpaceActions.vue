@@ -50,16 +50,15 @@ import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
 import { computed, defineComponent, inject, ref, unref, VNodeRef } from 'vue'
 import { SpaceResource } from 'web-client'
-import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
+import { useCapabilitySpacesMaxQuota, useStore, usePreviewService } from 'web-pkg/src/composables'
 import { SpaceAction } from 'web-pkg/src/composables/actions'
-import { useThumbnailService } from 'web-app-files/src/composables/thumbnailService'
 
 export default defineComponent({
   name: 'SpaceActions',
   components: { ActionMenuItem, QuotaModal, ReadmeContentModal },
   setup() {
     const store = useStore()
-    const thumbnailService = useThumbnailService()
+    const previewService = usePreviewService()
     const resource = inject<SpaceResource>('resource')
     const actionOptions = computed(() => ({
       resources: [unref(resource)]
@@ -67,7 +66,7 @@ export default defineComponent({
 
     const spaceImageInput: VNodeRef = ref(null)
     const supportedSpaceImageMimeTypes = computed(() => {
-      return thumbnailService.getSupportedMimeTypes('image/').join(',')
+      return previewService.getSupportedMimeTypes('image/').join(',')
     })
 
     const { actions: deleteActions } = useSpaceActionsDelete({ store })

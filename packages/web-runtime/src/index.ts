@@ -21,7 +21,8 @@ import {
   announceAuthService,
   startSentry,
   announceCustomScripts,
-  announceLoadingService
+  announceLoadingService,
+  announcePreviewService
 } from './container/bootstrap'
 import { applicationStore } from './container/store'
 import {
@@ -64,6 +65,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   announceClientService({ app, runtimeConfiguration, configurationManager, store })
   announceUppyService({ app })
   announceLoadingService({ app })
+  announcePreviewService({ app, store, configurationManager })
   await announceClient(runtimeConfiguration)
   announceAuthService({ app, configurationManager, store, router })
   announceCustomStyles({ runtimeConfiguration })

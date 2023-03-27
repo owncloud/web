@@ -188,19 +188,18 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { mapGetters } from 'vuex'
 import { ImageDimension } from 'web-pkg/src/constants'
-import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
 import { createLocationCommon } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import {
-  useAccessToken,
   useCapabilityFilesTags,
   useClientService,
   usePublicLinkContext,
-  useStore
+  useStore,
+  usePreviewService
 } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { useClipboard } from '@vueuse/core'
@@ -208,7 +207,7 @@ import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import { Resource } from 'web-client'
+import { Resource, SpaceResource } from 'web-client'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from 'web-app-files/src/helpers/share'
@@ -230,9 +229,10 @@ export default defineComponent({
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const resource = inject<Resource>('resource')
+    const space = inject<SpaceResource>('space')
     const isPublicLinkContext = usePublicLinkContext({ store })
-    const accessToken = useAccessToken({ store })
     const clientService = useClientService()
+    const previewService = usePreviewService()
     const preview = ref(undefined)
 
     const directLink = computed(() => {
@@ -296,14 +296,10 @@ export default defineComponent({
     }
 
     const loadPreviewTask = useTask(function* (signal, resource) {
-      preview.value = yield loadPreview({
-        clientService,
+      preview.value = yield previewService.loadPreview({
+        space,
         resource,
-        isPublic: unref(isPublicLinkContext),
-        dimensions: ImageDimension.Preview,
-        server: store.getters.configuration.server,
-        userId: store.getters.user.id,
-        token: unref(accessToken)
+        dimensions: ImageDimension.Preview
       })
     }).restartable()
 
@@ -340,7 +336,7 @@ export default defineComponent({
       copyDirectLinkToClipboard,
       isClipboardCopySupported,
       isPublicLinkContext,
-      space: inject<ComputedRef<Resource>>('space'),
+      space,
       directLink,
       resource,
       hasTags: useCapabilityFilesTags(),
