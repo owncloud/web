@@ -1,9 +1,9 @@
 <template>
   <div
-    v-if="!closed"
+    v-show="!closed"
     class="oc-alert oc-position-relative"
     :class="[
-      alertStyle,
+      alertStyles[variant],
       closeable ? 'oc-alert-closeable' : '',
       renderIcon ? 'oc-alert-has-icon' : ''
     ]"
@@ -45,24 +45,13 @@ export default defineComponent({
   release: '2.0.0',
   components: {},
   props: {
-    /**
-     * Style of the alert:
-     * - info: light blue background, blue color, renders as oc-alert-info; use for informational messages
-     * - success: light green background, green color, renders as oc-alert-success, use for success messages
-     * - warning: light yellow background, yellow color, renders as oc-alert-warning, use for warning messages
-     * - danger: light red background, red color, renders as oc-alert-danger, use for error messages
-     */
     variant: {
       type: String,
       default: 'info',
-      validator(value: string) {
-        // The value must match one of these strings
+      validator(value) {
         return ['info', 'success', 'warning', 'danger'].includes(value)
       }
     },
-    /**
-     * Whether the alert can be closed or not
-     */
     closeable: {
       type: Boolean,
       default: false
@@ -75,16 +64,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-
-    /**
-     * Custom Icon, if default icons are not suitable; if set icon gets rendered
-     * regardless of hasIcon prop
-     */
     customIcon: {
       type: String,
       default: ''
     },
-
     ariaLabel: {
       type: String,
       default: 'Alert'
@@ -96,46 +79,29 @@ export default defineComponent({
     }
   },
   computed: {
-    alertStyle() {
-      switch (this.variant) {
-        case 'success':
-          return 'oc-alert-success'
-        case 'warning':
-          return 'oc-alert-warning'
-        case 'danger':
-          return 'oc-alert-danger'
-        case 'info':
-        default:
-          return 'oc-alert-info'
+    alertStyles() {
+      return {
+        info: 'oc-alert-info',
+        success: 'oc-alert-success',
+        warning: 'oc-alert-warning',
+        danger: 'oc-alert-danger'
       }
     },
     icon() {
       if (this.customIcon) {
         return this.customIcon
       }
-
-      switch (this.variant) {
-        case 'success':
-          return 'checkbox-circle'
-        case 'warning':
-          return 'error-warning'
-        case 'danger':
-          return 'close-circle'
-        case 'info':
-        default:
-          return 'information'
-      }
+      return {
+        info: 'information',
+        success: 'checkbox-circle',
+        warning: 'error-warning',
+        danger: 'close-circle'
+      }[this.variant]
     },
-
-    /**
-     * Whether the alert has an icon or not. Icon is determined by the style prop.
-     * If a custom Icon is used, it will always be rendered.
-     */
     renderIcon() {
       if (this.customIcon) {
         return true
       }
-
       return this.hasIcon
     }
   },
