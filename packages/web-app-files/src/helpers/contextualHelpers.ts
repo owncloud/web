@@ -1,3 +1,5 @@
+import { ConfigurationManager } from 'web-pkg'
+
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
   return msg
@@ -6,33 +8,40 @@ export const empty = {
   text: '',
   list: ['', '', '']
 }
-export const shareInviteCollaboratorHelp = {
-  title: $gettext('Invite specific people'),
-  text: $gettext('Enter a name or group to share this item.'),
-  list: [
-    { text: $gettext('Subfolders'), headline: true },
-    {
-      text: $gettext(
-        'If you share a folder, all of its contents and subfolders will be shared as well.'
-      )
-    },
-    { text: $gettext('Notification'), headline: true },
-    {
-      text: $gettext('Invited people will be notified via email or in-app notification.')
-    },
-    { text: $gettext('Incognito'), headline: true },
-    {
-      text: $gettext('Invited people can not see who else has access..')
-    },
-    { text: $gettext('“via folder”'), headline: true },
-    {
-      text: $gettext(
-        'The “via folder” is shown next to a share, if access has already been given via a parent folder. Click on the “via folder” to edit the share on its parent folder.'
-      )
-    }
-  ],
-  readMoreLink: 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
+export const shareInviteCollaboratorHelp = (configurationManager: ConfigurationManager) => {
+  console.log(configurationManager.options)
+  return {
+    title: $gettext('Invite specific people'),
+    text: $gettext('Enter a name or group to share this item.'),
+    list: [
+      { text: $gettext('Subfolders'), headline: true },
+      {
+        text: $gettext(
+          'If you share a folder, all of its contents and subfolders will be shared as well.'
+        )
+      },
+      { text: $gettext('Notification'), headline: true },
+      {
+        text: $gettext('Invited people will be notified via email or in-app notification.')
+      },
+      { text: $gettext('Incognito'), headline: true },
+      {
+        text: $gettext('Invited people can not see who else has access..')
+      },
+      { text: $gettext('“via folder”'), headline: true },
+      {
+        text: $gettext(
+          'The “via folder” is shown next to a share, if access has already been given via a parent folder. Click on the “via folder” to edit the share on its parent folder.'
+        )
+      }
+    ],
+    readMoreLink:
+      configurationManager.options.contextHelpersReadMore === false
+        ? ''
+        : 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
+  }
 }
+
 export const shareInviteCollaboratorHelpCern = {
   list: [
     { text: $gettext('Search for service or secondary Account'), headline: true },
@@ -43,7 +52,7 @@ export const shareInviteCollaboratorHelpCern = {
     }
   ]
 }
-export const shareSpaceAddMemberHelp = {
+export const shareSpaceAddMemberHelp = (configurationManager: ConfigurationManager) => ({
   title: $gettext('Add members to this Space'),
   text: $gettext('Enter a name to add people or groups as members to this Space.'),
   list: [
@@ -60,9 +69,12 @@ export const shareSpaceAddMemberHelp = {
       )
     }
   ],
-  readMoreLink: 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
-}
-export const shareViaLinkHelp = {
+  readMoreLink:
+    configurationManager.options.contextHelpersReadMore === false
+      ? ''
+      : 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
+})
+export const shareViaLinkHelp = (configurationManager: ConfigurationManager) => ({
   title: $gettext('Choose how access is granted'),
   list: [
     {
@@ -93,9 +105,12 @@ export const shareViaLinkHelp = {
       )
     }
   ],
-  readMoreLink: 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
-}
-export const shareViaIndirectLinkHelp = {
+  readMoreLink:
+    configurationManager.options.contextHelpersReadMore === false
+      ? ''
+      : 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
+})
+export const shareViaIndirectLinkHelp = (configurationManager: ConfigurationManager) => ({
   title: $gettext('What are indirect links?'),
   text: $gettext('Indirect links are links giving access by a parent folder.'),
   list: [
@@ -109,5 +124,8 @@ export const shareViaIndirectLinkHelp = {
       )
     }
   ],
-  readMoreLink: 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
-}
+  readMoreLink:
+    configurationManager.options.contextHelpersReadMore === false
+      ? ''
+      : 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
+})

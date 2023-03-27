@@ -87,6 +87,7 @@ import { isProjectSpaceResource, Resource } from 'web-client/src/helpers'
 import { getSharedAncestorRoute } from 'web-app-files/src/helpers/share'
 import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
 import { useShares } from 'web-app-files/src/composables'
+import { configurationManager } from 'web-pkg'
 
 export default defineComponent({
   name: 'FileShares',
@@ -137,7 +138,8 @@ export default defineComponent({
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
-      getSharedAncestor
+      getSharedAncestor,
+      configurationManager
     }
   },
   computed: {
@@ -149,15 +151,15 @@ export default defineComponent({
       const cernFeatures = !!this.configuration?.options?.cernFeatures
 
       if (cernFeatures) {
-        const mergedHelp = shareInviteCollaboratorHelp
+        const mergedHelp = shareInviteCollaboratorHelp(this.configurationManager)
         mergedHelp.list = [
           ...shareInviteCollaboratorHelpCern.list,
-          ...shareInviteCollaboratorHelp.list
+          ...shareInviteCollaboratorHelp(this.configurationManager).list
         ]
         return mergedHelp
       }
 
-      return shareInviteCollaboratorHelp
+      return shareInviteCollaboratorHelp(this.configurationManager)
     },
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers

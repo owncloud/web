@@ -130,6 +130,7 @@ import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
 import { Resource } from 'web-client/src/helpers'
 import { isLocationSharesActive } from '../../../router'
 import { useShares } from 'web-app-files/src/composables'
+import { configurationManager } from 'web-pkg'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -178,7 +179,8 @@ export default defineComponent({
       outgoingLinks,
       directLinks,
       indirectLinks,
-      canCreatePublicLinks
+      canCreatePublicLinks,
+      configurationManager
     }
   },
   computed: {
@@ -251,10 +253,10 @@ export default defineComponent({
     },
 
     viaLinkHelp() {
-      return shareViaLinkHelp
+      return shareViaLinkHelp(this.configurationManager)
     },
     indirectLinkHelp() {
-      return shareViaIndirectLinkHelp
+      return shareViaIndirectLinkHelp(this.configurationManager)
     },
 
     canCreateLinks() {

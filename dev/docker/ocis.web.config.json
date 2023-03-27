@@ -25,7 +25,8 @@
       "image/tiff",
       "image/bmp",
       "image/x-ms-bmp"
-    ]
+    ],
+    "contextHelpersReadMore": true
   },
   "apps": ["files", "text-editor", "pdf-viewer", "search", "external", "admin-settings"],
   "external_apps": [

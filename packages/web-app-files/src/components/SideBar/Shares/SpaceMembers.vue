@@ -73,6 +73,7 @@ import { Resource } from 'web-client/src/helpers'
 import { useClientService } from 'web-pkg/src/composables'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
+import { configurationManager } from 'web-pkg'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -91,7 +92,8 @@ export default defineComponent({
     return {
       filterTerm: '',
       isFilterOpen: false,
-      markInstance: null
+      markInstance: null,
+      configurationManager
     }
   },
   computed: {
@@ -106,7 +108,7 @@ export default defineComponent({
       return this.configuration?.options?.contextHelpers
     },
     spaceAddMemberHelp() {
-      return shareSpaceAddMemberHelp
+      return shareSpaceAddMemberHelp(this.configurationManager)
     },
     hasCollaborators() {
       return this.spaceMembers.length > 0
