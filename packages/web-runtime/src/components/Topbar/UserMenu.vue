@@ -161,7 +161,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    ;(this.$refs.menu as typeof OcDrop)?.tippy?.setProps({
+    ;(this.$refs.menu as InstanceType<typeof OcDrop>)?.tippy?.setProps({
       onHidden: () => (this.$refs.menuButton as ComponentPublicInstance).$el.focus(),
       onShown: () =>
         (this.$refs.menu as ComponentPublicInstance).$el.querySelector('a:first-of-type').focus()

@@ -255,7 +255,7 @@ export default defineComponent({
   },
   methods: {
     focusSearchInput() {
-      ;(this.$refs.searchInput as any).focus()
+      ;(this.$refs.searchInput as HTMLElement).focus()
     },
     onSearch() {
       /**
@@ -279,7 +279,7 @@ export default defineComponent({
       this.query = ''
       this.onType('')
       this.onSearch()
-      ;(this.$refs.searchInput as any).focus()
+      ;(this.$refs.searchInput as HTMLElement).focus()
 
       /**
        * Clear event triggered after the clear of the search query

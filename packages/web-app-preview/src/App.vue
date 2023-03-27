@@ -374,7 +374,7 @@ export default defineComponent({
     document.addEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
     await this.loadFolderForFileContext(this.currentFileContext)
     this.setActiveFile(unref(this.currentFileContext.driveAliasAndItem))
-    ;(this.$refs.preview as any).focus()
+    ;(this.$refs.preview as HTMLElement).focus()
   },
 
   beforeUnmount() {

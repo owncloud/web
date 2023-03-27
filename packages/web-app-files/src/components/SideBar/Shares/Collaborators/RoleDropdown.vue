@@ -266,7 +266,7 @@ export default defineComponent({
 
     selectRole(role) {
       if (role.hasCustomPermissions) {
-        ;(this.$refs.customPermissionsDrop as typeof OcDrop).show()
+        ;(this.$refs.customPermissionsDrop as InstanceType<typeof OcDrop>).show()
         return
       }
       this.selectedRole = role
@@ -283,7 +283,7 @@ export default defineComponent({
     },
 
     confirmCustomPermissions() {
-      ;(this.$refs.customPermissionsDrop as typeof OcDrop).hide()
+      ;(this.$refs.customPermissionsDrop as InstanceType<typeof OcDrop>).hide()
       const bitmask = SharePermissions.permissionsToBitmask(this.customPermissions)
       this.selectedRole = PeopleShareRoles.getByBitmask(
         bitmask,
@@ -297,8 +297,8 @@ export default defineComponent({
       this.customPermissions = this.existingPermissions.length
         ? this.existingPermissions
         : this.defaultCustomPermissions
-      ;(this.$refs.customPermissionsDrop as typeof OcDrop).hide()
-      ;(this.$refs.rolesDrop as typeof OcDrop).show()
+      ;(this.$refs.customPermissionsDrop as InstanceType<typeof OcDrop>).hide()
+      ;(this.$refs.rolesDrop as InstanceType<typeof OcDrop>).show()
     },
 
     cycleRoles(event) {

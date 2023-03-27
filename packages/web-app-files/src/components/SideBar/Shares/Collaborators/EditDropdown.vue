@@ -236,13 +236,13 @@ export default defineComponent({
       this.$emit('expirationDateChanged', {
         expirationDate: DateTime.fromJSDate(this.enteredExpirationDate).endOf('day').toISO()
       })
-      ;(this.$refs.expirationDateDrop as typeof OcDrop).hide()
+      ;(this.$refs.expirationDateDrop as InstanceType<typeof OcDrop>).hide()
     },
     removeExpirationDate() {
       this.$emit('expirationDateChanged', {
         expirationDate: null
       })
-      ;(this.$refs.expirationDateDrop as typeof OcDrop).hide()
+      ;(this.$refs.expirationDateDrop as InstanceType<typeof OcDrop>).hide()
     },
     removeShare() {
       this.$emit('removeShare')

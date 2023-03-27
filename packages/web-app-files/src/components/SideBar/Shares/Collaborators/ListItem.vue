@@ -329,7 +329,10 @@ export default defineComponent({
     },
 
     showAccessDetails() {
-      ;((this.$refs.accessDetailsDrop as typeof OcInfoDrop).$refs.drop as typeof OcDrop).show()
+      ;(
+        (this.$refs.accessDetailsDrop as InstanceType<typeof OcInfoDrop>).$refs
+          .drop as InstanceType<typeof OcDrop>
+      ).show()
     },
 
     shareRoleChanged({ role, permissions }) {

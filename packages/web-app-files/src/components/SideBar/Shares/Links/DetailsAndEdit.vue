@@ -412,7 +412,7 @@ export default defineComponent({
     },
     deleteLink() {
       this.$emit('removePublicLink', { link: this.link })
-      ;(this.$refs.editPublicLinkDropdown as typeof OcDrop).hide()
+      ;(this.$refs.editPublicLinkDropdown as InstanceType<typeof OcDrop>).hide()
     },
     showRenameModal() {
       const modal = {

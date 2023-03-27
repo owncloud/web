@@ -157,7 +157,7 @@ export default defineComponent({
     },
 
     optionsDrop() {
-      return this.$refs.optionsDrop as typeof OcDrop
+      return this.$refs.optionsDrop as InstanceType<typeof OcDrop>
     }
   },
 
