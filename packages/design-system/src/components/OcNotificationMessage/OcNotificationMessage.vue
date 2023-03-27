@@ -1,23 +1,16 @@
 <template>
-  <div
-    class="oc-fade-in oc-flex oc-flex-wrap oc-notification-message oc-box-shadow-medium oc-rounded oc-p-m"
-    :class="classes"
+  <oc-alert
+    class="oc-fade-in oc-box-shadow-medium"
+    :closeable="true"
+    :has-icon="true"
+    :role="role"
+    :aria-live="ariaLive"
   >
-    <div class="oc-flex oc-flex-wrap oc-flex-middle oc-flex-1" :role="role" :aria-live="ariaLive">
-      <div class="oc-flex oc-flex-middle">
-        <oc-icon :variation="iconVariation" name="information" fill-type="line" class="oc-mr-s" />
-        <div class="oc-notification-message-title">
-          {{ title }}
-        </div>
-      </div>
-      <div
-        v-if="message"
-        class="oc-text-muted oc-width-1-1 oc-notification-message-content oc-mt-s oc-pl-s oc-ml-l"
-      >
-        {{ message }}
-      </div>
-    </div>
-  </div>
+    {{ title }}
+    <template #message>
+      {{ message }}
+    </template>
+  </oc-alert>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
@@ -96,8 +89,8 @@ export default defineComponent({
      * Notification will be destroyed if timeout is set
      */
     setTimeout(() => {
-      this.close()
-    }, this.timeout * 1000)
+      // this.close()
+    }, this.timeout * 5000000000000)
   },
   methods: {
     close() {
