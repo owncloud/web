@@ -9,24 +9,33 @@
     ]"
     :aria-label="ariaLabel"
   >
-    <oc-icon v-if="renderIcon" :name="icon" class="oc-alert-icon" :accessible-label="ariaLabel" />
-    <oc-button
-      v-if="closeable"
-      size="small"
-      type="button"
-      appearance="raw"
-      class="oc-alert-close-button"
-      @click="close"
-    >
-      <oc-icon name="close" accessible-label="Close" />
-    </oc-button>
-    <slot />
+    <div class="oc-alert-title">
+      <oc-icon
+        v-if="renderIcon"
+        :name="icon"
+        class="oc-alert-icon oc-mr-s"
+        :accessible-label="ariaLabel"
+      />
+      <oc-button
+        v-if="closeable"
+        size="small"
+        type="button"
+        appearance="raw"
+        class="oc-alert-close-button"
+        @click="close"
+      >
+        <oc-icon name="close" accessible-label="Close" />
+      </oc-button>
+      <slot />
+    </div>
+    <div class="oc-alert-message oc-mt-s oc-pt-s">
+      <slot name="message" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-
 /**
  * Alert is component to display a message to the user in various colors.
  */
@@ -60,7 +69,7 @@ export default defineComponent({
     },
 
     /**
-     * Whether the alert has an icon or not. Icon is determined by the style prop.
+     * Whether the alert has an icon or not. Icon is determined by the `variant` prop.
      */
     hasIcon: {
       type: Boolean,
@@ -146,6 +155,17 @@ export default defineComponent({
   border-width: 1px;
   border-style: solid;
 
+  .oc-alert-message {
+    display: block;
+    border-top: 1px solid var(--oc-color-swatch-primary-default);
+    font-size: 1rem;
+    line-height: 1.75;
+
+    &:empty {
+      display: none;
+    }
+  }
+
   &.oc-alert- {
     &info {
       background-color: var(--oc-color-background-highlight);
@@ -192,18 +212,13 @@ export default defineComponent({
     }
 
     &has-icon {
-      display: flex;
-      align-items: center;
-      padding-left: var(--oc-space-large);
-
-      .oc-alert-icon svg {
-        position: absolute;
-        left: var(--oc-space-small);
-        top: var(--oc-space-small);
+      .oc-alert-title {
+        display: flex;
+        align-items: center;
       }
     }
 
-    &closeable {
+    &closeable > .oc-alert-title {
       padding-right: var(--oc-space-large);
     }
   }
@@ -224,6 +239,12 @@ export default defineComponent({
 ```js
   <oc-alert :closeable="true" :hasIcon="true">
     I'm just an info message. I can be closed and have the default info icon.
+  </oc-alert>
+  <oc-alert :closeable="true" :hasIcon="true">
+    I'm just an info message. I can be closed and have the default info icon.
+    <template #message>
+      <p>And I have a custom message, which can be multiline or multipart. It acts as alert body - contents are passed via named slot</p>
+    </template>
   </oc-alert>
   <oc-alert :variant="'success'" :closeable="true" :hasIcon="true">
     Yay! Success! I can be closed and have the default success icon.
