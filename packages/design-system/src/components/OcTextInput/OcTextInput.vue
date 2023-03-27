@@ -29,7 +29,24 @@
         <oc-icon name="close" size="small" variation="passive" />
       </oc-button>
     </div>
-    <div v-if="showMessageLine" class="oc-text-input-message">
+    <div
+      v-if="showMessageLine"
+      class="oc-text-input-message"
+      :class="{
+        'oc-text-input-description': !!descriptionMessage,
+        'oc-text-input-warning': !!warningMessage,
+        'oc-text-input-danger': !!errorMessage
+      }"
+    >
+      <oc-icon
+        v-if="messageText !== null && !!descriptionMessage"
+        name="information"
+        size="small"
+        fill-type="line"
+        accessible-label="info"
+        aria-hidden="true"
+      />
+
       <span
         :id="messageId"
         :class="{
@@ -273,21 +290,21 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.oc-text-input-message.oc-text-input-description {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: var(--oc-space-large);
+  padding-top: calc(var(--oc-space-xsmall) - 2px);
+
+  .oc-icon {
+    position: absolute;
+    left: var(--oc-space-xsmall);
+    top: var(--oc-space-xsmall);
+  }
+}
+
 .oc-text-input {
-  background-color: var(--oc-color-input-bg);
-  border: 1px solid var(--oc-color-input-border);
-  color: var(--oc-color-input-text-muted);
-
-  &:focus {
-    background-color: var(--oc-color-input-bg);
-    border-color: var(--oc-color-input-text-default);
-    color: var(--oc-color-input-text-default);
-  }
-
-  &:disabled {
-    color: var(--oc-color-input-text-muted);
-  }
-
   &-description {
     color: var(--oc-color-text-muted);
   }

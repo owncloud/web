@@ -74,19 +74,20 @@
           <div class="oc-text-input-message"></div>
         </div>
         <quota-select
-          v-if="showQuota"
           id="quota-select-form"
-          :key="'quota-select-' + _user.id"
+          :key="'quota-select-' + user.id"
+          :disabled="isQuotaInputDisabled"
           class="oc-mb-s"
           :title="$gettext('Personal quota')"
-          :total-quota="editUser.drive.quota.total || 0"
+          :total-quota="editUser.drive?.quota?.total || 0"
           :max-quota="maxQuota"
+          :fix-message-line="true"
+          :description-message="
+            isQuotaInputDisabled
+              ? $gettext('To set an individual quota, the user needs to have logged in once.')
+              : ''
+          "
           @selected-option-change="changeSelectedQuotaOption"
-        />
-        <p
-          v-else
-          class="oc-mb-m oc-mt-rm oc-text-meta"
-          v-text="$gettext('To set an individual quota, the user needs to have logged in once.')"
         />
         <group-select
           class="oc-mb-s"
@@ -209,6 +210,9 @@ export default defineComponent({
     },
     showQuota() {
       return this.editUser.drive?.quota
+    },
+    isQuotaInputDisabled() {
+      return typeof this.showQuota === 'undefined'
     },
     compareSaveDialogOriginalObject() {
       return cloneDeep(this.user)

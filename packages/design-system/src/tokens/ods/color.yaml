@@ -1,20 +1,20 @@
 ---
 color:
-#  sample:
-#    default:
-#      value: "{color.swatch.warning.hover.value}"
-#      check:
-#        contrast:
-#          ratio: 3.5
-#          background:
-#            - "{color.background.default.value}"
-#            - "{color.background.muted.value}"
-#      transform:
-#        darken: 23
-#        lighten: 10
-#        brighten: 10
-#        desaturate: 10
-#        saturate: 10
+  #  sample:
+  #    default:
+  #      value: "{color.swatch.warning.hover.value}"
+  #      check:
+  #        contrast:
+  #          ratio: 3.5
+  #          background:
+  #            - "{color.background.default.value}"
+  #            - "{color.background.muted.value}"
+  #      transform:
+  #        darken: 23
+  #        lighten: 10
+  #        brighten: 10
+  #        desaturate: 10
+  #        saturate: 10
   swatch:
     brand:
       default:
@@ -24,7 +24,7 @@ color:
       muted:
         value: rgb(0, 20, 40)
       contrast:
-        value: "{color.text.inverse.value}"
+        value: '{color.text.inverse.value}'
     primary:
       default:
         value: rgb(74, 118, 172)
@@ -38,10 +38,10 @@ color:
       gradient:
         value: rgb(78, 133, 200)
       contrast:
-        value: "{color.text.inverse.value}"
+        value: '{color.text.inverse.value}'
     success:
       default:
-        value: rgb(79, 130, 47)
+        value: rgb(3, 84, 63)
         check:
           contrast:
             ratio: 4.6
@@ -50,28 +50,28 @@ color:
       muted:
         value: rgb(83, 150, 10)
       contrast:
-        value: "{color.text.inverse.value}"
+        value: '{color.text.inverse.value}'
     warning:
       default:
-        value: rgb(198, 80, 27)
+        value: rgb(183, 76, 27)
         check:
           contrast:
             ratio: 4.6
       hover:
-        value: rgb(253, 169, 75)
+        value: rgb(183, 76, 27)
       muted:
-        value: rgb(179, 81, 0)
+        value: rgba(183, 76, 27, .5)
       contrast:
-        value: "{color.text.inverse.value}"
+        value: '{color.text.inverse.value}'
     danger:
       default:
-        value: rgb(224, 0, 0)
+        value: rgb(197, 48, 48)
       hover:
-        value: rgb(233, 100, 100)
+        value: rgb(168, 40, 40)
       muted:
-        value: rgb(181, 0, 0)
+        value: rgb(204, 117, 117)
       contrast:
-        value: "{color.text.inverse.value}"
+        value: '{color.text.inverse.value}'
     passive:
       default:
         value: rgb(76, 95, 121)
@@ -80,7 +80,7 @@ color:
       muted:
         value: rgb(40, 62, 93)
       contrast:
-        value: "{color.text.inverse.value}"
+        value: '{color.text.inverse.value}'
     inverse:
       default:
         value: rgb(255, 255, 255)
@@ -89,7 +89,7 @@ color:
       muted:
         value: rgb(191, 191, 191)
       contrast:
-        value: "{color.text.default.value}"
+        value: '{color.text.default.value}'
   background:
     default:
       value: rgb(255, 255, 255)
@@ -107,17 +107,17 @@ color:
     value: rgb(236, 235, 238)
   text:
     default:
-      value: "{color.swatch.brand.default.value}"
+      value: '{color.swatch.brand.default.value}'
     muted:
-      value: "{color.swatch.passive.default.value}"
+      value: '{color.swatch.passive.default.value}'
     inverse:
-      value: "{color.background.default.value}"
+      value: '{color.background.default.value}'
   input:
     text:
       default:
-        value: "{color.swatch.brand.default.value}"
+        value: '{color.swatch.brand.default.value}'
       muted:
-        value: "{color.swatch.passive.default.value}"
+        value: '{color.swatch.passive.default.value}'
     border:
       value: rgb(206, 221, 238)
     bg:
@@ -132,7 +132,7 @@ color:
     drawio:
       value: rgb(255, 111, 0)
     file:
-      value: "{color.text.default.value}"
+      value: '{color.text.default.value}'
     ifc:
       value: rgb(208, 67, 236)
     image:
@@ -140,9 +140,9 @@ color:
     jupyter:
       value: rgb(243, 119, 38)
     code:
-      value: "{color.text.default.value}"
+      value: '{color.text.default.value}'
     text:
-      value: "{color.text.default.value}"
+      value: '{color.text.default.value}'
     spreadsheet:
       value: rgb(0, 182, 87)
     document:

@@ -4,6 +4,7 @@
       ref="select"
       :model-value="selectedOption"
       :selectable="optionSelectable"
+      :disabled="disabled"
       taggable
       push-tags
       :clearable="false"
@@ -11,6 +12,10 @@
       :create-option="createOption"
       option-label="displayValue"
       :label="title"
+      :fix-message-line="fixMessageLine"
+      :error-message="errorMessage"
+      :warning-message="warningMessage"
+      :description-message="descriptionMessage"
       @update:model-value="onUpdate"
     >
       <template #selected-option="{ displayValue }">
@@ -26,10 +31,6 @@
         <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
       </template>
     </oc-select>
-    <p
-      class="oc-mt-xs oc-text-meta"
-      v-text="$gettext('Select a quota option or enter your own value')"
-    />
   </div>
 </template>
 
@@ -50,6 +51,40 @@ export default {
     maxQuota: {
       type: Number,
       default: 0
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+
+    /**
+     * Whether or not vertical space below the input should be reserved for a one line message,
+     * so that content actually appearing there doesn't shift the layout.
+     */
+    fixMessageLine: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * A warning message which is shown below the select.
+     */
+    warningMessage: {
+      type: String,
+      default: null
+    },
+    /**
+     * An error message which is shown below the select.
+     */
+    errorMessage: {
+      type: String,
+      default: null
+    },
+    /**
+     * A description text which is shown below the select field.
+     */
+    descriptionMessage: {
+      type: String,
+      default: null
     }
   },
   emits: ['selectedOptionChange'],

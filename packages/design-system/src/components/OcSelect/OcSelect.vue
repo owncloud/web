@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label :for="id" v-text="label" />
+    <label :for="id" class="oc-label" v-text="label" />
     <vue-select
       ref="select"
       :disabled="disabled"
@@ -24,6 +24,33 @@
         <oc-spinner v-if="loading" />
       </template>
     </vue-select>
+
+    <div
+      v-if="showMessageLine"
+      class="oc-text-input-message"
+      :class="{
+        'oc-text-input-description': !!descriptionMessage,
+        'oc-text-input-warning': !!warningMessage,
+        'oc-text-input-danger': !!errorMessage
+      }"
+    >
+      <oc-icon
+        v-if="messageText !== null && !!descriptionMessage"
+        name="information"
+        size="small"
+        fill-type="line"
+      />
+
+      <span
+        :id="messageId"
+        :class="{
+          'oc-text-input-description': !!descriptionMessage,
+          'oc-text-input-warning': !!warningMessage,
+          'oc-text-input-danger': !!errorMessage
+        }"
+        v-text="messageText"
+      />
+    </div>
   </div>
 </template>
 
@@ -124,6 +151,36 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+
+    /**
+     * A warning message which is shown below the select.
+     */
+    warningMessage: {
+      type: String,
+      default: null
+    },
+    /**
+     * An error message which is shown below the select.
+     */
+    errorMessage: {
+      type: String,
+      default: null
+    },
+    /**
+     * Whether or not vertical space below the select should be reserved for a one line message,
+     * so that content actually appearing there doesn't shift the layout.
+     */
+    fixMessageLine: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * A description text which is shown below the select field.
+     */
+    descriptionMessage: {
+      type: String,
+      default: null
     }
   },
   emits: ['search:input', 'update:modelValue'],
@@ -136,6 +193,28 @@ export default defineComponent({
         additionalAttrs['label'] = this.optionLabel
       }
       return { ...this.$attrs, ...additionalAttrs }
+    },
+    showMessageLine() {
+      return (
+        this.fixMessageLine ||
+        !!this.warningMessage ||
+        !!this.errorMessage ||
+        !!this.descriptionMessage
+      )
+    },
+    messageText() {
+      if (this.errorMessage) {
+        return this.errorMessage
+      }
+
+      if (this.warningMessage) {
+        return this.warningMessage
+      }
+
+      return this.descriptionMessage
+    },
+    messageId() {
+      return `${this.id}-message`
     }
   },
 
@@ -162,40 +241,64 @@ export default defineComponent({
 
 <style lang="scss">
 .vs--disabled {
+  cursor: not-allowed;
+
   .vs__clear,
   .vs__dropdown-toggle,
   .vs__open-indicator,
   .vs__search,
   .vs__selected {
     background-color: var(--oc-color-background-muted) !important;
-    color: var(--oc-color-text-muted) !important;
-    cursor: default;
+    color: var(--oc-color-input-text-muted) !important;
+    pointer-events: none;
+  }
+
+  .vs__actions {
+    opacity: 0.3;
   }
 }
 
-.vs--single.vs--open .vs__selected {
-  opacity: 0.8 !important;
-}
-
 .oc-select {
-  background-image: none !important;
-  line-height: 24px !important;
+  line-height: normal;
+  padding: 1px 0;
   color: var(--oc-color-input-text-default);
 
   .vs {
-    &__search,
-    &__selected {
+    &__search {
       color: var(--oc-color-input-text-default);
     }
-    &__selected {
-      background-color: var(--oc-color-background-default);
-    }
+
     &__search::placeholder,
     &__dropdown-toggle,
     &__dropdown-menu {
-      background-color: var(--oc-color-input-bg);
+      -webkit-appearance: none;
+      background-color: var(--oc-color-background-highlight);
+      border-radius: 0;
+      border-radius: 5px;
       border: 1px solid var(--oc-color-input-border);
+      box-sizing: border-box;
       color: var(--oc-color-input-text-default);
+      line-height: inherit;
+      margin: 0;
+      max-width: 100%;
+      outline: none;
+      overflow: visible;
+      padding: 2px;
+      transition-duration: 0.2s;
+      transition-timing-function: ease-in-out;
+      transition-property: color, background-color;
+      width: 100%;
+    }
+
+    &__search,
+    &__search:focus {
+      padding: 0 5px;
+    }
+
+    &__dropdown-menu {
+      padding: 0;
+      background-color: var(--oc-color-background-default);
+      margin-top: -1px;
     }
 
     &__clear,
@@ -203,10 +306,16 @@ export default defineComponent({
     &__deselect {
       fill: var(--oc-color-input-text-default);
     }
+    &__deselect {
+      margin: 0 var(--oc-space-small);
+    }
 
     &__dropdown-option {
       color: var(--oc-color-input-text-default);
       white-space: normal;
+      padding: 6px 0.6rem;
+      border-radius: 5px;
+      line-height: var(--vs-line-height);
 
       &--highlight {
         background-color: var(--oc-color-background-hover);
@@ -229,25 +338,30 @@ export default defineComponent({
       max-width: var(--oc-space-small);
     }
 
-    &__open-indicator {
-      margin-top: 2px;
-    }
-
     &__selected-options {
       flex: auto;
+      padding: 0;
+
+      > * {
+        padding: 0px 2px;
+        margin: 2px 2px 2px 1px;
+        color: var(--oc-color-input-text-default);
+      }
+
+      > *:not(input) {
+        padding-left: 3px;
+        background-color: var(--oc-color-background-default);
+        fill: var(--oc-color-text-default);
+      }
     }
   }
 
-  &[multiple='multiple'] {
+  &.vs--multiple {
     .vs {
-      &__selected {
-        background-color: var(--oc-color-swatch-inverse-default);
-        border: 1px solid var(--oc-color-input-border);
-        fill: var(--oc-color-text-default);
-      }
-
-      &__deselect {
-        fill: var(--oc-color-text-default);
+      &__selected-options > *:not(input) {
+        color: var(--oc-color-input-text-default);
+        background-color: var(--oc-color-background-default);
+        padding: 2px;
       }
     }
   }
@@ -255,8 +369,47 @@ export default defineComponent({
   &:focus-within {
     .vs__dropdown-menu,
     .vs__dropdown-toggle {
-      border: 1px solid var(--oc-color-input-text-default);
+      border-color: var(--oc-color-swatch-passive-default);
     }
+  }
+}
+
+.oc-background-highlight {
+  .oc-select {
+    .vs {
+      &__search {
+        color: var(--oc-color-input-text-default);
+      }
+
+      &__search::placeholder,
+      &__dropdown-toggle,
+      &__dropdown-menu {
+        background-color: var(--oc-color-input-bg);
+      }
+    }
+
+    &.vs--multiple {
+      .vs__selected-options > *:not(input) {
+        color: var(--oc-color-input-text-default);
+        background-color: var(--oc-color-background-highlight);
+      }
+    }
+
+    &:focus-within {
+      .vs__dropdown-menu,
+      .vs__dropdown-toggle {
+        background-color: var(--oc-color-background-default);
+      }
+    }
+  }
+}
+
+.vs--single {
+  &.vs--open .vs__selected {
+    opacity: 0.8 !important;
+  }
+  .vs__selected-options > *:not(input) {
+    background-color: transparent !important;
   }
 }
 </style>

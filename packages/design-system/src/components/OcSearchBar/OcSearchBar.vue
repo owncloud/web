@@ -325,13 +325,14 @@ export default defineComponent({
 
   &-input {
     border-radius: 25px !important;
-    border: 1px solid var(--oc-color-input-border) !important;
+    border: none;
     color: var(--oc-color-input-text-muted) !important;
 
     &:focus {
       background-color: var(--oc-color-input-bg);
       border-color: var(--oc-color-input-text-default);
       color: var(--oc-color-input-text-default);
+      background-image: none;
     }
 
     &::-ms-clear,
