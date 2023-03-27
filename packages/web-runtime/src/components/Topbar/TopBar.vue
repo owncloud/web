@@ -123,7 +123,8 @@ export default {
           const app: any = {
             icon: icon,
             iconUrl: iconUrl,
-            title: title
+            title: title,
+            gradient: `gradient-${title.slice(0, 5).toLowerCase()}`
           }
 
           if (item.url) {
