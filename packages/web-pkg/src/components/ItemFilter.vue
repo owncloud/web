@@ -225,7 +225,7 @@ export default defineComponent({
   },
   computed: {
     getPlaceholder() {
-      return this.placeholder === '' ? this.$gettext('Search…') : this.placeholder
+      return this.placeholder === '' ? this.$gettext('Filter…') : this.placeholder
     }
   }
 })
