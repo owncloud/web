@@ -176,7 +176,9 @@ export const createResources = async (args: createResourceArgs): Promise<void> =
     }
     await clickResource({ page, path })
   }
+  await page.pause()
   await createNewFileOrFolder({ page, name: resource, type, content })
+  
 }
 
 export const editTextDocument = async ({
@@ -828,9 +830,10 @@ export const clickViewModeToggle = async (args: switchViewModeArgs): Promise<voi
   await page.locator(`.viewmode-switch-buttons .${target}`).click()
 }
 
-export const getTilesVisibility = async (args): Promise<boolean> => {
+export const expectThatResourcesAreTiles = async (args): Promise<void> => {
   const { page } = args
-  return await page.locator(resourcesAsTiles).isVisible()
+  const tiles = page.locator(resourcesAsTiles)
+  await expect(tiles).toBeVisible()
 }
 
 export const showHiddenResources = async (page): Promise<void> => {

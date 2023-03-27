@@ -43,7 +43,7 @@ import {
   getDisplayedResourcesFromFilesList,
   resourceTagsArgs,
   clickViewModeToggle,
-  getTilesVisibility
+  expectThatResourcesAreTiles
 } from './actions'
 
 export class Resource {
@@ -193,8 +193,8 @@ export class Resource {
     await clickViewModeToggle({ page: this.#page, target: 'resource-tiles' })
   }
 
-  async areResourcesShownAsTiles(): Promise<boolean> {
-    return await getTilesVisibility({ page: this.#page })
+  async expectThatResourcesAreTiles(): Promise<void> {
+    await expectThatResourcesAreTiles({ page: this.#page })
   }
 
   async showHiddenFiles(): Promise<void> {
