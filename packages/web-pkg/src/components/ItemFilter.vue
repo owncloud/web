@@ -14,6 +14,7 @@
           class="item-filter-input oc-mb-m oc-mt-s"
           autocomplete="off"
           :placeholder="getPlaceholder"
+          :label="getLabel"
         />
         <div ref="itemFilterListRef">
           <oc-list class="item-filter-list">
@@ -73,6 +74,11 @@ export default defineComponent({
       required: true
     },
     placeholder: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    label: {
       type: String,
       required: false,
       default: ''
@@ -225,7 +231,10 @@ export default defineComponent({
   },
   computed: {
     getPlaceholder() {
-      return this.placeholder === '' ? this.$gettext('Filter…') : this.placeholder
+      return this.placeholder === '' ? this.$gettext('Enter term') : this.placeholder
+    },
+    getLabel() {
+      return this.label === '' ? this.$gettext('Filter list') : this.label
     }
   }
 })
