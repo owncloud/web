@@ -115,7 +115,7 @@ describe('ItemFilter', () => {
 
   describe('placeholder prop', () => {
     it('sets the correct placeholder using getPlaceholder computed property', () => {
-      const placeholder = 'Search...'
+      const placeholder = 'Enter group name'
       const { wrapper } = getWrapper({
         props: {
           showFilter: true,
@@ -123,7 +123,7 @@ describe('ItemFilter', () => {
           placeholder: placeholder
         }
       })
-      expect(wrapper.find(selectors.filterInput).attributes('placeholder')).toBe('Search...')
+      expect(wrapper.find(selectors.filterInput).attributes('placeholder')).toBe(placeholder)
     })
 
     it('sets the default placeholder using getPlaceholder computed property when no prop is set', () => {
@@ -135,8 +135,34 @@ describe('ItemFilter', () => {
           placeholder: placeholder
         }
       })
-      expect(wrapper.find(selectors.filterInput).attributes('placeholder')).toBe('Search…')
+      expect(wrapper.find(selectors.filterInput).attributes('placeholder')).toBe('Enter term')
     })
+  })
+})
+
+describe('label prop', () => {
+  it('sets the correct label using getLabel computed property', () => {
+    const label = 'Filter groups'
+    const { wrapper } = getWrapper({
+      props: {
+        showFilter: true,
+        filterableAttributes: ['name'],
+        label: label
+      }
+    })
+    expect(wrapper.find('.item-filter-input label').text()).toBe(label)
+  })
+
+  it('sets the default label using getLabel computed property when no prop is set', () => {
+    const label = undefined
+    const { wrapper } = getWrapper({
+      props: {
+        showFilter: true,
+        filterableAttributes: ['name'],
+        label: label
+      }
+    })
+    expect(wrapper.find('.item-filter-input label').text()).toBe('Filter list')
   })
 })
 
