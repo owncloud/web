@@ -630,7 +630,7 @@ importers:
       '@jest/globals': 29.3.1
       '@ownclouders/design-system': workspace:*
       '@popperjs/core': ^2.11.5
-      '@sentry/vue': 7.43.0
+      '@sentry/vue': 7.45.0
       '@types/luxon': 2.4.0
       '@types/semver': 7.3.13
       '@uppy/core': ^3.0.5
@@ -680,7 +680,7 @@ importers:
       '@fortawesome/fontawesome-free': 6.3.0
       '@ownclouders/design-system': link:../design-system
       '@popperjs/core': 2.11.5
-      '@sentry/vue': 7.43.0_vue@3.2.47
+      '@sentry/vue': 7.45.0_vue@3.2.47
       '@uppy/core': 3.0.5
       '@uppy/drop-target': 2.0.0_@uppy+core@3.0.5
       '@uppy/tus': 3.0.1_@uppy+core@3.0.5
@@ -5671,58 +5671,69 @@ packages:
       rollup: 3.14.0
     dev: true
 
-  /@sentry/browser/7.43.0:
-    resolution: {integrity: sha512-NlRkBYKb9o5IQdGY8Ktps19Hz9RdSuqS1tlLC7Sjr+MqZqSHmhKq8MWJKciRynxBeMbeGt0smExi9BqpVQdCEg==}
+  /@sentry-internal/tracing/7.45.0:
+    resolution: {integrity: sha512-0aIDY2OvUX7k2XHaimOlWkboXoQvJ9dEKvfpu0Wh0YxfUTGPa+wplUdg3WVdkk018sq1L11MKmj4MPZyYUvXhw==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/core': 7.43.0
-      '@sentry/replay': 7.43.0
-      '@sentry/types': 7.43.0
-      '@sentry/utils': 7.43.0
+      '@sentry/core': 7.45.0
+      '@sentry/types': 7.45.0
+      '@sentry/utils': 7.45.0
       tslib: 1.14.1
     dev: false
 
-  /@sentry/core/7.43.0:
-    resolution: {integrity: sha512-zvMZgEi7ptLBwDnd+xR/u4zdSe5UzS4S3ZhoemdQrn1PxsaVySD/ptyzLoGSZEABqlRxGHnQrZ78MU1hUDvKuQ==}
+  /@sentry/browser/7.45.0:
+    resolution: {integrity: sha512-/dUrUwnI34voMj+jSJT7b5Jun+xy1utVyzzwTq3Oc22N+SB17ZOX9svZ4jl1Lu6tVJPVjPyvL6zlcbrbMwqFjg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.43.0
-      '@sentry/utils': 7.43.0
+      '@sentry-internal/tracing': 7.45.0
+      '@sentry/core': 7.45.0
+      '@sentry/replay': 7.45.0
+      '@sentry/types': 7.45.0
+      '@sentry/utils': 7.45.0
       tslib: 1.14.1
     dev: false
 
-  /@sentry/replay/7.43.0:
-    resolution: {integrity: sha512-2dGJS6p8uG1JZ7x/A3FyqnILTkXarbvfR+o1lC7z9lu34Wx0ZBeU2in/S2YHNGAE6XvfsePq3ya/s7LaNkk4qQ==}
+  /@sentry/core/7.45.0:
+    resolution: {integrity: sha512-xJfdTS4lRmHvZI/A5MazdnKhBJFkisKu6G9EGNLlZLre+6W4PH5sb7QX4+xoBdqG7v10Jvdia112vi762ojO2w==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.45.0
+      '@sentry/utils': 7.45.0
+      tslib: 1.14.1
+    dev: false
+
+  /@sentry/replay/7.45.0:
+    resolution: {integrity: sha512-smM7FIcFIyKu30BqCl8BzLo1gH/z9WwXdGX6V0fNvHab9fJZ09+xjFn+LmIyo6N8H8jjwsup0+yQ12kiF/ZsEw==}
     engines: {node: '>=12'}
     dependencies:
-      '@sentry/core': 7.43.0
-      '@sentry/types': 7.43.0
-      '@sentry/utils': 7.43.0
+      '@sentry/core': 7.45.0
+      '@sentry/types': 7.45.0
+      '@sentry/utils': 7.45.0
     dev: false
 
-  /@sentry/types/7.43.0:
-    resolution: {integrity: sha512-5XxCWqYWJNoS+P6Ie2ZpUDxLRCt7FTEzmlQkCdjW6MFWOX26hAbF/wEuOTYAFKZXMIXOz0Egofik1e8v1Cg6/A==}
+  /@sentry/types/7.45.0:
+    resolution: {integrity: sha512-iFt7msfUK8LCodFF3RKUyaxy9tJv/gpWhzxUFyNxtuVwlpmd+q6mtsFGn8Af3pbpm8A+MKyz1ebMwXj0PQqknw==}
     engines: {node: '>=8'}
     dev: false
 
-  /@sentry/utils/7.43.0:
-    resolution: {integrity: sha512-f78YfMLcgNU7+suyWFCuQhQlneXXMS+egb0EFZh7iU7kANUPRX5T4b+0C+fwaPm5gA6XfGYskr4ZnzQJLOlSqg==}
+  /@sentry/utils/7.45.0:
+    resolution: {integrity: sha512-aTY7qqtNUudd09SH5DVSKMm3iQ6ZeWufduc0I9bPZe6UMM09BDc4KmjmrzRkdQ+VaOmHo7+v+HZKQk5f+AbuTQ==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.43.0
+      '@sentry/types': 7.45.0
       tslib: 1.14.1
     dev: false
 
-  /@sentry/vue/7.43.0_vue@3.2.47:
-    resolution: {integrity: sha512-i3n3w3KkqhnRKcOVX5Xm4wIy+jIW7kjVRiAZjkH/KYn846Mruud37d2GvgaCANJHZTDNsR2W7mGaEf8g1CJgyg==}
+  /@sentry/vue/7.45.0_vue@3.2.47:
+    resolution: {integrity: sha512-31wn10AjdMnCy5bzrMt3QLmX34ijuoxLOK4xE/E7NbtwAuPxd+mnc67CMy6UVfo8Ng36HFZFeNMewdqF676V5Q==}
     engines: {node: '>=8'}
     peerDependencies:
       vue: 2.x || 3.x
     dependencies:
-      '@sentry/browser': 7.43.0
-      '@sentry/core': 7.43.0
-      '@sentry/types': 7.43.0
-      '@sentry/utils': 7.43.0
+      '@sentry/browser': 7.45.0
+      '@sentry/core': 7.45.0
+      '@sentry/types': 7.45.0
+      '@sentry/utils': 7.45.0
       tslib: 1.14.1
       vue: 3.2.47
     dev: false
