@@ -48,7 +48,7 @@ export default defineComponent({
     variant: {
       type: String,
       default: 'info',
-      validator(value) {
+      validator(value: string) {
         return ['info', 'success', 'warning', 'danger'].includes(value)
       }
     },
