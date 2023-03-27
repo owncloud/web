@@ -151,15 +151,17 @@ export default defineComponent({
       const cernFeatures = !!this.configuration?.options?.cernFeatures
 
       if (cernFeatures) {
-        const mergedHelp = shareInviteCollaboratorHelp(this.configurationManager)
-        mergedHelp.list = [
-          ...shareInviteCollaboratorHelpCern.list,
-          ...shareInviteCollaboratorHelp(this.configurationManager).list
-        ]
+        const options = {
+          configurationManager: this.configurationManager
+        }
+        const mergedHelp = shareInviteCollaboratorHelp(options)
+        mergedHelp.list = [...shareInviteCollaboratorHelpCern(options).list, ...mergedHelp.list]
         return mergedHelp
       }
 
-      return shareInviteCollaboratorHelp(this.configurationManager)
+      return shareInviteCollaboratorHelp({
+        configurationManager: this.configurationManager
+      })
     },
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers

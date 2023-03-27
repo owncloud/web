@@ -3,4 +3,5 @@ Enhancement: Context helper read more link configurable
 We've added a configuration variable to disable the read more link in the contextual helper.
 
 https://github.com/owncloud/web/pull/8713
+https://github.com/owncloud/web/pull/8719
 https://github.com/owncloud/web/issues/8570
