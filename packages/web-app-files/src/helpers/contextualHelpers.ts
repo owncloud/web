@@ -1,6 +1,6 @@
-// just a dummy function to trick gettext tools
 import { ConfigurationManager } from 'web-pkg'
 
+// just a dummy function to trick gettext tools
 function $gettext(msg) {
   return msg
 }
