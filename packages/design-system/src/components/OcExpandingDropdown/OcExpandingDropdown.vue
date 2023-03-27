@@ -117,7 +117,7 @@ export default {
       if (!props.expandHead) {
         return
       }
-      unref(head).style.setProperty('width', `${unref(contentWidth) - 10}px`)
+      //unref(head).style.setProperty('width', `${unref(contentWidth) - 10}px`)
     }
     const handleClick = () => {
       const el = unref(dropdown)

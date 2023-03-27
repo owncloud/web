@@ -6,6 +6,9 @@
   >
     <div class="oc-topbar-left oc-flex oc-flex-middle oc-flex-between">
       <applications-menu v-if="appMenuItems.length" :applications-list="appMenuItems" />
+      <router-link ref="navigationSidebarLogo" to="/">
+        <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image oc-flex" />
+      </router-link>
     </div>
     <div class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>
@@ -214,7 +217,7 @@ export default {
 
   .oc-topbar-left {
     width: 10rem;
-    gap: 30px;
+    gap: 20px;
   }
   .oc-topbar-right {
     gap: 20px;

@@ -13,10 +13,12 @@
       <template #toggle>
         <oc-icon name="grid" size="large" class="oc-flex" />
       </template>
-      <template #head>
-        <router-link v-if="!dropdownVisible" ref="navigationSidebarLogo" to="/">
-          <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image oc-flex" />
-        </router-link>
+      <template #head="{ dropdownVisible }">
+        <div class="dropdown-title-wrapper">
+          <transition name="slide-fade">
+            <h3 v-if="dropdownVisible">Applications</h3>
+          </transition>
+        </div>
       </template>
       <template #body>
         <oc-list class="applications-list">
@@ -35,7 +37,6 @@
                 <oc-icon size="medium" :name="n.icon" />
               </span>
               <span v-text="$gettext(n.title.slice(0, 5))" />
-              <!--<oc-icon v-if="n.active" name="check" class="active-check" />-->
             </oc-button>
           </li>
         </oc-list>
@@ -100,31 +101,20 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.slide-fade-enter-active {
-  transition: all 0.0s ease-out;
-  opacity: 0.5;
-  position: absolute;
-  transform: translateX(50px);
-}
-
-.slide-fade-leave-active {
-  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
-  opacity: 1;
-
-  position: relative;
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  opacity: 0;
-  position: absolute;
-}
-.oc-logo-image {
-  height: 35px;
-  padding-left: 20px;
-}
 #applications-menu {
   z-index: 3;
+
+  .dropdown-title-wrapper {
+    position:relative;
+    height: 50px;
+
+    h3 {
+      margin-left: 10px;
+      font-weight: 300;
+      position: absolute;
+      overflow:hidden;
+    }
+  }
 }
 .applications-list {
   width: 320px;
@@ -186,15 +176,11 @@ export default defineComponent({
         right: calc(1rem + 5px);
       }
     }
-
-    a.router-link-active,
-    button.router-link-active {
-      &:focus,
-      &:hover {
-      }
-    }
   }
 }
+
+/* Application-Gradients */
+// TODO: Add default gradient / or add prop to choose gradient in the future
 .gradient-files {
   .icon-box {
     filter: drop-shadow(0px 1px 5px rgba(0, 0, 0, 0.25));
@@ -213,5 +199,25 @@ export default defineComponent({
     background-color: #afafaf;
     background-image: linear-gradient(-45deg, #2d2d2d 0%, #3e3e3e 100%);
   }
+}
+
+/* Transitions */
+.slide-fade-enter-active {
+  transition: all 0.15s ease-in-out;
+  opacity: 1;
+  width: 100px;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.15s ease-in-out;
+  opacity: 1;
+  position: relative;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  width: 0px;
+  opacity: 0.7;
+  position: absolute;
 }
 </style>
