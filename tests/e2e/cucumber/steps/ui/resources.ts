@@ -280,7 +280,6 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.expectThatResourcesAreTiles()
-    
   }
 )
 

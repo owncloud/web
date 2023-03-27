@@ -176,9 +176,7 @@ export const createResources = async (args: createResourceArgs): Promise<void> =
     }
     await clickResource({ page, path })
   }
-  await page.pause()
   await createNewFileOrFolder({ page, name: resource, type, content })
-  
 }
 
 export const editTextDocument = async ({
