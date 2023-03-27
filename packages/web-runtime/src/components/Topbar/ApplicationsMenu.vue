@@ -123,6 +123,9 @@ export default defineComponent({
   height: 35px;
   padding-left: 20px;
 }
+#applications-menu {
+  z-index: 3;
+}
 .applications-list {
   width: 320px;
   padding: 10px;
@@ -165,7 +168,6 @@ export default defineComponent({
         color: var(--oc-color-swatch-inverse-default);
         margin-bottom: 2px;
         transition: all 0.2s ease-in-out;
-        //background: radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%);
       }
       &:hover > .icon-box {
         transform: scale(0.9);
