@@ -74,6 +74,11 @@ export class ConfigurationManager {
 
   set options(options: OptionsConfiguration) {
     set(this.optionsConfiguration, 'routing.idBased', get(options, 'routing.idBased', true))
+    set(
+      this.optionsConfiguration,
+      'contextHelpersReadMore',
+      get(options, 'contextHelpersReadMore', true)
+    )
   }
 
   get options(): OptionsConfiguration {
