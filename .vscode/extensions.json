@@ -2,7 +2,7 @@
   // See https://go.microsoft.com/fwlink/?LinkId=827846
   // for the documentation about the extensions.json format
   "recommendations": [
-    "rvest.vs-code-prettier-eslint",
+    "esbenp.prettier-vscode",
     "EditorConfig.EditorConfig",
     "Orta.vscode-jest",
     "Vue.volar"
