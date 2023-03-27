@@ -56,7 +56,7 @@
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
-import uniqueId from '@ownclouders/design-system/src/utils/uniqueId'
+import uniqueId from 'design-system/src/utils/uniqueId'
 import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({

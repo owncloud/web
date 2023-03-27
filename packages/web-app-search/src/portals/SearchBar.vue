@@ -102,7 +102,7 @@ import { debounce } from 'lodash-es'
 import { useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { defineComponent } from 'vue'
-import { OcDrop } from 'design-system/src/components'
+import { GlobalComponents } from 'vue'
 
 export default defineComponent({
   name: 'SearchBar',
@@ -157,7 +157,7 @@ export default defineComponent({
     },
 
     optionsDrop() {
-      return this.$refs.optionsDrop as InstanceType<typeof OcDrop>
+      return this.$refs.optionsDrop as InstanceType<GlobalComponents['OcDrop']>
     }
   },
 

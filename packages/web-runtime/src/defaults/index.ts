@@ -6,7 +6,7 @@ import { coreTranslations, clientTranslations, pkgTranslations, odsTranslations 
 // fontawesome-free attributions console message
 import '@fortawesome/fontawesome-free/attribution'
 
-export { default as DesignSystem } from '@ownclouders/design-system'
+export { default as DesignSystem } from 'design-system'
 
 export const pages = { success: App, failure: missingOrInvalidConfigPage }
 export const translations = merge(
