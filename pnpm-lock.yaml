@@ -626,7 +626,7 @@ importers:
     specifiers:
       '@casl/ability': ^6.3.3
       '@casl/vue': ^2.2.1
-      '@fortawesome/fontawesome-free': 6.3.0
+      '@fortawesome/fontawesome-free': 6.4.0
       '@jest/globals': 29.3.1
       '@ownclouders/design-system': workspace:*
       '@popperjs/core': ^2.11.5
@@ -677,7 +677,7 @@ importers:
     dependencies:
       '@casl/ability': 6.3.3
       '@casl/vue': 2.2.1_ngqjo6rhl7wmuvfz6w5cgmvwx4
-      '@fortawesome/fontawesome-free': 6.3.0
+      '@fortawesome/fontawesome-free': 6.4.0
       '@ownclouders/design-system': link:../design-system
       '@popperjs/core': 2.11.5
       '@sentry/vue': 7.43.0_vue@3.2.47
@@ -4888,8 +4888,8 @@ packages:
       - supports-color
     dev: true
 
-  /@fortawesome/fontawesome-free/6.3.0:
-    resolution: {integrity: sha512-qVtd5i1Cc7cdrqnTWqTObKQHjPWAiRwjUPaXObaeNPcy7+WKxJumGBx66rfSFgK6LNpIasVKkEgW8oyf0tmPLA==}
+  /@fortawesome/fontawesome-free/6.4.0:
+    resolution: {integrity: sha512-0NyytTlPJwB/BF5LtRV8rrABDbe3TdTXqNB3PdZ+UUUZAEIrdOJdmABqKjt4AXwIoJNaRVVZEXxpNrqvE1GAYQ==}
     engines: {node: '>=6'}
     requiresBuild: true
     dev: false
