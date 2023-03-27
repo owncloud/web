@@ -106,6 +106,7 @@ Summary
 * Enhancement - Make notifications work with oCIS: [#8518](https://github.com/owncloud/web/pull/8518)
 * Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
 * Enhancement - Add and remove users from groups batch actions: [#8553](https://github.com/owncloud/web/pull/8553)
+* Enhancement - Beautify form inputs: [#8554](https://github.com/owncloud/web/pull/8554)
 * Enhancement - QuickActions role configurable: [#8566](https://github.com/owncloud/web/pull/8566)
 * Enhancement - Add `Accept-Language` header to all outgoing requests: [#8612](https://github.com/owncloud/web/issues/8612)
 * Enhancement - Add logout url: [#8630](https://github.com/owncloud/web/pull/8630)
@@ -1012,6 +1013,12 @@ Details
    https://github.com/owncloud/web/issues/8558
    https://github.com/owncloud/web/issues/8472
    https://github.com/owncloud/web/pull/8553
+
+* Enhancement - Beautify form inputs: [#8554](https://github.com/owncloud/web/pull/8554)
+
+   We've updated the styling of text inputs.
+
+   https://github.com/owncloud/web/pull/8554
 
 * Enhancement - QuickActions role configurable: [#8566](https://github.com/owncloud/web/pull/8566)
 
