@@ -1,24 +1,16 @@
 import { createStore as _createStore, StoreOptions } from 'vuex'
-import { mount as _mount, MountingOptions } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import { defineComponent, ref } from 'vue'
 import { defaultPlugins, DefaultPluginsOptions } from 'web-test-helpers'
 import { createRouter as _createRouter } from 'web-runtime/src/router'
 import { createMemoryHistory, RouterOptions } from 'vue-router'
 
+export { mount, shallowMount } from '@vue/test-utils'
+
 jest.spyOn(console, 'warn').mockImplementation(() => undefined)
 
 export const createStore = <T>(storeOptions: StoreOptions<T>) => {
   return _createStore(storeOptions)
-}
-export const mount = <T>(component: any, options?: MountingOptions<T>) => {
-  return _mount<any>(component, options)
-}
-
-export const shallowMount = <T>(component: any, options?: MountingOptions<T>) => {
-  options = options || {}
-  options.shallow = true
-
-  return mount(component, options)
 }
 
 export const getComposableWrapper = <T>(
