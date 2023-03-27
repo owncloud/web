@@ -9,7 +9,6 @@ export const empty = {
   list: ['', '', '']
 }
 export const shareInviteCollaboratorHelp = (configurationManager: ConfigurationManager) => {
-  console.log(configurationManager.options)
   return {
     title: $gettext('Invite specific people'),
     text: $gettext('Enter a name or group to share this item.'),
