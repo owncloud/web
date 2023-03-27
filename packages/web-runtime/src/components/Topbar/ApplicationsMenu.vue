@@ -13,13 +13,10 @@
       <template #toggle>
         <oc-icon name="grid" size="large" class="oc-flex" />
       </template>
-      <template #head="{ dropdownVisible }">
-        <Transition name="slide-fade">
-          <router-link v-if="!dropdownVisible" ref="navigationSidebarLogo" to="/">
-            <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image oc-flex" />
-          </router-link>
-          <h3 style="margin-left: 10px;font-weight: 300;" v-else>Applications</h3>
-        </Transition>
+      <template #head>
+        <router-link v-if="!dropdownVisible" ref="navigationSidebarLogo" to="/">
+          <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image oc-flex" />
+        </router-link>
       </template>
       <template #body>
         <oc-list class="applications-list">
