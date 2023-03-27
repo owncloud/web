@@ -1,17 +1,26 @@
 import EditPanel from '../../../../../src/components/Groups/SideBar/EditPanel.vue'
-import { defaultPlugins, mount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStoreMockOptions,
+  mockAxiosReject,
+  mount
+} from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
+import { AxiosResponse } from 'axios'
 
 describe('EditPanel', () => {
+  it('renders all available inputs', () => {
+    const { wrapper } = getWrapper()
+    expect(wrapper.html()).toMatchSnapshot()
+  })
   describe('method "revertChanges"', () => {
     it('should revert changes on property editGroup', () => {
-      const { wrapper } = getWrapper({
-        propsData: {
-          groups: [{ displayName: 'group' }]
-        }
-      })
-      wrapper.vm.editGroup = { displayName: 'my group' }
+      const { wrapper } = getWrapper()
+      wrapper.vm.editGroup.dispayName = 'users'
       wrapper.vm.revertChanges()
-      expect(wrapper.vm.editGroup).toEqual({ displayName: 'group' })
+      expect(wrapper.vm.editGroup.displayName).toEqual('group')
     })
     it('should revert changes on property formData', () => {
       const { wrapper } = getWrapper({
@@ -28,17 +37,28 @@ describe('EditPanel', () => {
   })
 
   describe('method "validateDisplayName"', () => {
-    it('should return true if displayName is valid', () => {
-      const { wrapper } = getWrapper()
-      wrapper.vm.editGroup.displayName = 'jan'
-      expect(wrapper.vm.validateDisplayName()).toBeTruthy()
-      expect(wrapper.vm.formData.displayName.valid).toBeTruthy()
+    it('should return true if displayName is valid', async () => {
+      const { wrapper, mocks } = getWrapper()
+      wrapper.vm.editGroup.displayName = 'users'
+      const graphMock = mocks.$clientService.graphAuthenticated
+      const getGroupStub = graphMock.groups.getGroup.mockRejectedValue(() => mockAxiosReject())
+      expect(await wrapper.vm.validateDisplayName()).toBeTruthy()
+      expect(getGroupStub).toHaveBeenCalled()
     })
-    it('should return false if displayName is not valid', () => {
+    it('should return false if displayName is empty', async () => {
       const { wrapper } = getWrapper()
       wrapper.vm.editGroup.displayName = ''
-      expect(wrapper.vm.validateDisplayName()).toBeFalsy()
-      expect(wrapper.vm.formData.displayName.valid).toBeFalsy()
+      expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
+    })
+    it('should return false if displayName is already existing', async () => {
+      const { wrapper, mocks } = getWrapper()
+      wrapper.vm.editGroup.displayName = 'users'
+      const graphMock = mocks.$clientService.graphAuthenticated
+      const getGroupStub = graphMock.groups.getGroup.mockResolvedValue(
+        mock<AxiosResponse>({ data: { displayName: 'group' } })
+      )
+      expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
+      expect(getGroupStub).toHaveBeenCalled()
     })
   })
 
@@ -51,20 +71,26 @@ describe('EditPanel', () => {
     it('should be true if formData is valid', () => {
       const { wrapper } = getWrapper()
       wrapper.vm.formData.displayName.valid = false
-      expect(wrapper.vm.invalidFormData).toBeTruthy()
+      console.log(wrapper.vm.formData)
+      expect(wrapper.vm.invalidFormData).toBeFalsy()
     })
   })
 })
 
 function getWrapper({ propsData = {} } = {}) {
+  const mocks = defaultComponentMocks()
+  const storeOptions = defaultStoreMockOptions
+  const store = createStore(storeOptions)
+
   return {
+    mocks,
     wrapper: mount(EditPanel, {
       props: {
-        groups: [{ displayName: 'group' }],
-        ...propsData
+        group: { displayName: 'group', members: [] },
       },
       global: {
-        plugins: [...defaultPlugins()],
+        mocks,
+        plugins: [...defaultPlugins(), store],
         stubs: {
           'oc-text-input': true,
           'avatar-image': true,

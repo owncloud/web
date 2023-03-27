@@ -9,7 +9,7 @@ import { useActionsShowDetails } from '../../../../web-pkg/src/composables/actio
 import { computed, defineComponent, PropType, unref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import { GroupActionOptions } from 'web-pkg/src/composables/actions'
-import { useGroupActionsDelete } from '../../composables/actions/groups/useGroupActionsDelete'
+import { useGroupActionsEdit, useGroupActionsDelete } from '../../composables/actions/groups'
 import { useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
@@ -25,9 +25,12 @@ export default defineComponent({
     const store = useStore()
     const { actions: showDetailsActions } = useActionsShowDetails()
     const { actions: deleteActions } = useGroupActionsDelete({ store })
+    const { actions: editActions } = useGroupActionsEdit()
 
     const menuItemsPrimaryActions = computed(() =>
-      [...unref(deleteActions)].filter((item) => item.isEnabled(props.actionOptions))
+      [...unref(editActions), ...unref(deleteActions)].filter((item) =>
+        item.isEnabled(props.actionOptions)
+      )
     )
 
     const menuItemsSidebar = computed(() =>

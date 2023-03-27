@@ -9,15 +9,7 @@
       <p>{{ multipleGroupsSelectedText }}</p>
     </div>
     <div v-if="group">
-      <div class="oc-flex group-info oc-mb-l">
-        <avatar-image
-          class="oc-mb-m"
-          :width="80"
-          :userid="group.id"
-          :user-name="group.displayName"
-        />
-        <span class="oc-text-muted group-info-display-name" v-text="group.displayName"></span>
-      </div>
+      <GroupInfoBox :group="group" />
       <table
         class="details-table"
         :aria-label="$gettext('Overview of the information about the selected group')"
@@ -31,11 +23,13 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
+import GroupInfoBox from './GroupInfoBox.vue'
 import { Group } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'DetailsPanel',
+  components: { GroupInfoBox },
   props: {
     groups: {
       type: Array as PropType<Group[]>,

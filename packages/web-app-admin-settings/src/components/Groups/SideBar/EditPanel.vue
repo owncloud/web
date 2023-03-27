@@ -1,9 +1,6 @@
 <template>
   <div id="group-edit-panel" class="oc-mt-xl">
-    <div class="oc-flex group-info oc-mb-l">
-      <avatar-image class="oc-mb-m" :width="80" :userid="group.id" :user-name="group.displayName" />
-      <span class="oc-text-muted group-info-display-name" v-text="group.displayName"></span>
-    </div>
+    <GroupInfoBox :group="group" />
     <form id="group-edit-form" class="oc-background-highlight oc-p-m" autocomplete="off">
       <oc-text-input
         v-model="editGroup.displayName"
@@ -28,19 +25,29 @@
 import { defineComponent, PropType } from 'vue'
 import { Group } from 'web-client/src/generated'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
+import { useClientService } from 'web-pkg'
+import GroupInfoBox from './GroupInfoBox.vue'
 
 export default defineComponent({
   name: 'EditPanel',
   components: {
+    GroupInfoBox,
     CompareSaveDialog
   },
   props: {
-    groups: {
-      type: Array as PropType<Group[]>,
-      required: true
+    group: {
+      type: Object as PropType<Group>,
+      required: true,
+      default: null
     }
   },
   emits: ['confirm'],
+  setup() {
+    const clientService = useClientService()
+    return {
+      clientService
+    }
+  },
   data() {
     return {
       editGroup: {} as Group,
@@ -53,9 +60,6 @@ export default defineComponent({
     }
   },
   computed: {
-    group() {
-      return this.groups.length === 1 ? this.groups[0] : null
-    },
     invalidFormData() {
       return Object.values(this.formData)
         .map((v: any) => !!v.valid)
@@ -72,12 +76,26 @@ export default defineComponent({
     }
   },
   methods: {
-    validateDisplayName() {
+    async validateDisplayName() {
       this.formData.displayName.valid = false
 
       if (this.editGroup.displayName.trim() === '') {
         this.formData.displayName.errorMessage = this.$gettext('Name cannot be empty')
         return false
+      }
+
+      if (this.group.displayName !== this.editGroup.displayName) {
+        try {
+          const client = this.clientService.graphAuthenticated
+          await client.groups.getGroup(this.editGroup.displayName)
+          this.formData.displayName.errorMessage = this.$gettext(
+            'Group "%{groupName}" already exists',
+            {
+              groupName: this.editGroup.displayName
+            }
+          )
+          return false
+        } catch (e) {}
       }
 
       this.formData.displayName.errorMessage = ''

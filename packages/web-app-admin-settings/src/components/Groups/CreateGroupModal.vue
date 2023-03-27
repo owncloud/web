@@ -28,19 +28,17 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { Group } from 'web-client/src/generated'
+import { useClientService } from 'web-pkg'
 
 export default defineComponent({
   name: 'CreateGroupModal',
-  props: {
-    existingGroups: {
-      type: Array as PropType<Group[]>,
-      required: false,
-      default: () => {
-        return []
-      }
+  emits: ['cancel', 'confirm'],
+  setup() {
+    const clientService = useClientService()
+    return {
+      clientService
     }
   },
-  emits: ['cancel', 'confirm'],
   data: function () {
     return {
       formData: {
@@ -62,7 +60,7 @@ export default defineComponent({
     }
   },
   methods: {
-    validateDisplayName() {
+    async validateDisplayName() {
       this.formData.displayName.valid = false
 
       if (this.group.displayName.trim() === '') {
@@ -70,17 +68,17 @@ export default defineComponent({
         return false
       }
 
-      if (
-        this.existingGroups.find(
-          (existingGroup) => existingGroup.displayName === this.group.displayName
-        )
-      ) {
+      try {
+        const client = this.clientService.graphAuthenticated
+        await client.groups.getGroup(this.group.displayName)
         this.formData.displayName.errorMessage = this.$gettext(
           'Group "%{groupName}" already exists',
-          { groupName: this.group.displayName }
+          {
+            groupName: this.group.displayName
+          }
         )
         return false
-      }
+      } catch (e) {}
 
       this.formData.displayName.errorMessage = ''
       this.formData.displayName.valid = true

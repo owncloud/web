@@ -148,7 +148,8 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     groups: {
       createGroup: (group: Group) => groupsApiFactory.createGroup(group),
       editGroup: (groupId: string, group: Group) => groupApiFactory.updateGroup(groupId, group),
-      getGroup: (groupId: string) => groupApiFactory.getGroup(groupId),
+      getGroup: (groupId: string) =>
+        groupApiFactory.getGroup(groupId, new Set<any>([]), new Set<any>(['members'])),
       deleteGroup: (groupId: string) => groupApiFactory.deleteGroup(groupId),
       listGroups: (orderBy?: any) =>
         groupsApiFactory.listGroups(
