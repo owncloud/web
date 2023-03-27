@@ -13,7 +13,7 @@
           v-model="filterTerm"
           class="item-filter-input oc-mb-m oc-mt-s"
           autocomplete="off"
-          :placeholder="$gettext('Filter')"
+          :placeholder="getPlaceholder"
         />
         <div ref="itemFilterListRef">
           <oc-list class="item-filter-list">
@@ -71,6 +71,11 @@ export default defineComponent({
     filterName: {
       type: String,
       required: true
+    },
+    placeholder: {
+      type: String,
+      required: false,
+      default: ''
     },
     items: {
       type: Array,
@@ -204,18 +209,23 @@ export default defineComponent({
     })
 
     return {
-      queryParam,
-      filterInputRef,
-      itemFilterListRef,
-      selectedItems,
       clearFilter,
-      toggleItemSelection,
-      isItemSelected,
       displayedItems,
+      filterInputRef,
       filterTerm,
+      isItemSelected,
       isSelectionAllowed,
+      itemFilterListRef,
+      queryParam,
+      selectedItems,
       setDisplayedItems,
-      showDrop
+      showDrop,
+      toggleItemSelection
+    }
+  },
+  computed: {
+    getPlaceholder() {
+      return this.placeholder === '' ? this.$gettext('Search…') : this.placeholder
     }
   }
 })

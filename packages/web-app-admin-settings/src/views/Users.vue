@@ -62,14 +62,15 @@
                   <span v-text="$gettext('Filter:')" />
                 </div>
                 <item-filter
-                  filter-name="groups"
-                  :filter-label="$gettext('Groups')"
-                  :items="groups"
-                  :show-filter="true"
                   :allow-multiple="true"
-                  display-name-attribute="displayName"
+                  :filter-label="$gettext('Groups')"
                   :filterable-attributes="['displayName']"
+                  :items="groups"
+                  :placeholder="$gettext('Search groups…')"
+                  :show-filter="true"
                   class="oc-mr-s"
+                  display-name-attribute="displayName"
+                  filter-name="groups"
                   @selection-change="filterGroups"
                 >
                   <template #image="{ item }">
@@ -80,13 +81,14 @@
                   </template>
                 </item-filter>
                 <item-filter
-                  filter-name="roles"
-                  :filter-label="$gettext('Roles')"
-                  :items="roles"
-                  :show-filter="true"
                   :allow-multiple="true"
-                  display-name-attribute="displayName"
+                  :filter-label="$gettext('Roles')"
                   :filterable-attributes="['displayName']"
+                  :items="roles"
+                  :placeholder="$gettext('Search roles…')"
+                  :show-filter="true"
+                  display-name-attribute="displayName"
+                  filter-name="roles"
                   @selection-change="filterRoles"
                 >
                   <template #image="{ item }">

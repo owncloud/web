@@ -112,6 +112,32 @@ describe('ItemFilter', () => {
       expect(wrapper.vm.selectedItems).toEqual([filterItems[0]])
     })
   })
+
+  describe('placeholder prop', () => {
+    it('sets the correct placeholder using getPlaceholder computed property', () => {
+      const placeholder = 'Search...'
+      const { wrapper } = getWrapper({
+        props: {
+          showFilter: true,
+          filterableAttributes: ['name'],
+          placeholder: placeholder
+        }
+      })
+      expect(wrapper.find(selectors.filterInput).attributes('placeholder')).toBe('Search...')
+    })
+
+    it('sets the default placeholder using getPlaceholder computed property when no prop is set', () => {
+      const placeholder = undefined
+      const { wrapper } = getWrapper({
+        props: {
+          showFilter: true,
+          filterableAttributes: ['name'],
+          placeholder: placeholder
+        }
+      })
+      expect(wrapper.find(selectors.filterInput).attributes('placeholder')).toBe('Search…')
+    })
+  })
 })
 
 function getWrapper({ props = {}, initialQuery = '' }: any = {}) {
