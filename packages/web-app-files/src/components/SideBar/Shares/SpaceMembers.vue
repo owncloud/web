@@ -108,7 +108,9 @@ export default defineComponent({
       return this.configuration?.options?.contextHelpers
     },
     spaceAddMemberHelp() {
-      return shareSpaceAddMemberHelp(this.configurationManager)
+      return shareSpaceAddMemberHelp({
+        configurationManager: this.configurationManager
+      })
     },
     hasCollaborators() {
       return this.spaceMembers.length > 0

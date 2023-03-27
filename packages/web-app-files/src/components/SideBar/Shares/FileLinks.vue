@@ -253,10 +253,10 @@ export default defineComponent({
     },
 
     viaLinkHelp() {
-      return shareViaLinkHelp(this.configurationManager)
+      return shareViaLinkHelp({ configurationManager: this.configurationManager })
     },
     indirectLinkHelp() {
-      return shareViaIndirectLinkHelp(this.configurationManager)
+      return shareViaIndirectLinkHelp({ configurationManager: this.configurationManager })
     },
 
     canCreateLinks() {
