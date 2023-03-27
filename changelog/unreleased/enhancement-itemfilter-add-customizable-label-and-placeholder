@@ -1,6 +1,7 @@
-Enhancement: Make placeholder on ItemFilter configurable
+Enhancement: Add customizable label and placeholder
 
 The formerly fixed placeholder for the text input on item filter component is now configurable
 via prop for improved customization.
+Also, we added a customizable label.
 
 https://github.com/owncloud/web/pull/8711
