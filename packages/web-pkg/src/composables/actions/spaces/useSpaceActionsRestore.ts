@@ -94,7 +94,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
       ),
       cancelText: $gettext('Cancel'),
       confirmText,
-      icon: 'alarm-warning',
+      icon: 'alert',
       message,
       hasInput: false,
       onCancel: () => store.dispatch('hideModal'),

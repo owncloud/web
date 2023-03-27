@@ -90,7 +90,6 @@ export class ConflictDialog {
       let doForAllConflicts = false
       const modal = {
         variation: 'danger',
-        icon: 'alarm-warning',
         title: resource.isFolder
           ? this.$gettext('Folder already exists')
           : this.$gettext('File already exists'),
@@ -132,7 +131,6 @@ export class ConflictDialog {
     return new Promise<boolean>((resolve) => {
       const modal = {
         variation: 'danger',
-        icon: 'alarm-warning',
         title: this.$gettext('Copy here?'),
         customContent:
           '<p>Moving files from one space to another is not possible. Do you want to copy instead?</p><p>Note: Links and shares of the original file are not copied.</p>',

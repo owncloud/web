@@ -10,7 +10,7 @@
         @keydown.esc="cancelModalAction"
       >
         <div class="oc-modal-title">
-          <oc-icon v-if="icon" :name="icon" :variation="variation" />
+          <oc-icon v-if="iconName !== ''" :name="iconName" :variation="variation" />
           <h2 id="oc-modal-title" v-text="title" />
         </div>
         <div class="oc-modal-body">
@@ -33,7 +33,7 @@
             @update:model-value="inputOnInput"
             @keydown.enter.prevent="confirm"
           />
-          <p v-else key="modal-message" class="oc-modal-body-message" v-text="message" />
+          <p v-else key="modal-message" class="oc-modal-body-message oc-m-rm" v-text="message" />
           <div v-if="checkboxLabel" class="oc-modal-body-actions oc-flex oc-flex-left">
             <oc-checkbox
               v-model="checkboxValue"
@@ -46,31 +46,32 @@
             <span class="text" v-text="contextualHelperLabel" />
             <oc-contextual-helper class="oc-pl-xs" v-bind="contextualHelperData" />
           </div>
-          <div class="oc-modal-body-actions oc-flex oc-flex-right">
-            <oc-button
-              class="oc-modal-body-actions-cancel"
-              :variation="buttonCancelVariation"
-              :appearance="buttonCancelAppearance"
-              @click="cancelModalAction"
-              v-text="buttonCancelText"
-            />
-            <oc-button
-              v-if="buttonSecondaryText"
-              class="oc-modal-body-actions-secondary oc-ml-s"
-              :variation="buttonSecondaryVariation"
-              :appearance="buttonSecondaryAppearance"
-              @click="secondaryModalAction"
-              v-text="buttonSecondaryText"
-            />
-            <oc-button
-              class="oc-modal-body-actions-confirm oc-ml-s"
-              variation="primary"
-              :appearance="buttonConfirmAppearance"
-              :disabled="buttonConfirmDisabled || !!inputError"
-              @click="confirm"
-              v-text="buttonConfirmText"
-            />
-          </div>
+        </div>
+
+        <div class="oc-modal-body-actions oc-flex oc-flex-right">
+          <oc-button
+            class="oc-modal-body-actions-cancel"
+            :variation="buttonCancelVariation"
+            :appearance="buttonCancelAppearance"
+            @click="cancelModalAction"
+            v-text="buttonCancelText"
+          />
+          <oc-button
+            v-if="buttonSecondaryText"
+            class="oc-modal-body-actions-secondary oc-ml-s"
+            :variation="buttonSecondaryVariation"
+            :appearance="buttonSecondaryAppearance"
+            @click="secondaryModalAction"
+            v-text="buttonSecondaryText"
+          />
+          <oc-button
+            class="oc-modal-body-actions-confirm oc-ml-s"
+            variation="primary"
+            :appearance="buttonConfirmAppearance"
+            :disabled="buttonConfirmDisabled || !!inputError"
+            @click="confirm"
+            v-text="buttonConfirmText"
+          />
         </div>
       </div>
     </focus-trap>
@@ -124,7 +125,7 @@ export default defineComponent({
       required: false,
       default: 'passive',
       validator: (value: string) => {
-        return ['passive', 'primary', 'danger', 'success', 'warning'].includes(value)
+        return ['passive', 'primary', 'danger', 'success', 'warning', 'info'].includes(value)
       }
     },
     /**
@@ -352,6 +353,24 @@ export default defineComponent({
     },
     classes() {
       return ['oc-modal', `oc-modal-${this.variation}`]
+    },
+    iconName() {
+      if (this.icon) {
+        return this.icon
+      }
+
+      switch (this.variation) {
+        case 'danger':
+          return 'alert'
+        case 'warning':
+          return 'error-warning'
+        case 'success':
+          return 'checkbox-circle'
+        case 'info':
+          return 'information'
+        default:
+          return ''
+      }
     }
   },
   watch: {
@@ -413,6 +432,10 @@ export default defineComponent({
 .oc-modal {
   max-width: 500px;
   width: 100%;
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--oc-color-input-border);
+  border-radius: 15px;
+  background-color: var(--oc-color-background-default);
 
   &:focus {
     outline: none;
@@ -450,21 +473,19 @@ export default defineComponent({
 
   &-title {
     align-items: center;
-    background-color: var(--oc-color-swatch-brand-default);
-    border: 1px solid var(--oc-color-swatch-brand-default);
+    border-bottom: 1px solid var(--oc-color-input-border);
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-flow: row wrap;
-    padding: var(--oc-space-small) var(--oc-space-medium);
+    line-height: 1.625;
+    padding: var(--oc-space-medium) var(--oc-space-medium);
 
     > .oc-icon {
       margin-right: var(--oc-space-small);
     }
 
     > h2 {
-      color: var(--oc-color-swatch-brand-contrast);
       font-size: 1rem;
       font-weight: bold;
       margin: 0;
@@ -472,14 +493,9 @@ export default defineComponent({
   }
 
   &-body {
-    background-color: var(--oc-color-background-default);
-    border: 1px solid var(--oc-color-swatch-brand-default);
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
     color: var(--oc-color-text-default);
-    padding: var(--oc-space-medium);
-
+    line-height: 1.625;
+    padding: var(--oc-space-medium) var(--oc-space-medium) 0;
     span {
       color: var(--oc-color-text-default);
     }
@@ -505,6 +521,10 @@ export default defineComponent({
 
     &-actions {
       text-align: right;
+      background: var(--oc-color-background-default);
+      border-bottom-right-radius: 15px;
+      border-bottom-left-radius: 15px;
+      padding: var(--oc-space-medium);
 
       .oc-button {
         border-radius: 4px;
@@ -531,7 +551,7 @@ export default defineComponent({
 <div>
   <oc-modal
     variation="danger"
-    icon="alarm-warning"
+    icon="alert"
     title="Delete file lorem.txt"
     message="Are you sure you want to delete this file? All it’s content will be permanently removed. This action cannot be undone."
     button-cancel-text="Cancel"

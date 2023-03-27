@@ -221,7 +221,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
     const modal = {
       variation: 'danger',
-      icon: 'alarm-warning',
       title: unref(dialogTitle),
       message: unref(dialogMessage),
       cancelText: $gettext('Cancel'),
