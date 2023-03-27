@@ -110,6 +110,7 @@ Summary
 * Enhancement - Add `Accept-Language` header to all outgoing requests: [#8612](https://github.com/owncloud/web/issues/8612)
 * Enhancement - Add logout url: [#8630](https://github.com/owncloud/web/pull/8630)
 * Enhancement - Enable guest users: [#8652](https://github.com/owncloud/web/pull/8652)
+* Enhancement - Context helper read more link configurable: [#8713](https://github.com/owncloud/web/pull/8713)
 
 Details
 -------
@@ -1041,6 +1042,13 @@ Details
 
    https://github.com/owncloud/web/issues/8663
    https://github.com/owncloud/web/pull/8652
+
+* Enhancement - Context helper read more link configurable: [#8713](https://github.com/owncloud/web/pull/8713)
+
+   We've added a configuration variable to disable the read more link in the contextual helper.
+
+   https://github.com/owncloud/web/issues/8570
+   https://github.com/owncloud/web/pull/8713
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
