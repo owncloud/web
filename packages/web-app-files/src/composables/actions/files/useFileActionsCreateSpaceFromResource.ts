@@ -31,6 +31,10 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
         title: $gettext('Space was created successfully')
       })
 
+      if (resources.length === 1 && resources[0].isFolder()) {
+        //TODO: FOR LATER
+      }
+
       for (const resource of resources) {
         copyOps.push(
           queue.add(() => webdav.copyFiles(space, resource, createdSpace, { path: resource.name }))
