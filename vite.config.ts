@@ -59,6 +59,45 @@ const input = readdirSync('packages').reduce(
   { 'index.html': 'index.html' }
 )
 
+const getJson = async (url: string) => {
+  return (
+    await fetch(url, {
+      ...(url.startsWith('https:') && {
+        agent: new Agent({ rejectUnauthorized: false })
+      })
+    })
+  ).json()
+}
+
+const getConfigJson = async (url: string, config: UserConfig) => {
+  const configJson = await getJson(url)
+
+  // enable previews and enable lazy resources, which are disabled for fast tests
+  configJson.options.disablePreviews = false
+  configJson.options.displayResourcesLazy = true
+
+  const vitePort = config.server.port
+  const viteUrl = `http${config.server.https ? 's' : ''}://host.docker.internal:${vitePort}`
+
+  // oCIS
+  if (configJson.openIdConnect) {
+    // replace server urls in config.json to use the vite proxy
+    configJson.theme = configJson.theme.replace(configJson.server, viteUrl)
+    configJson.server = configJson.server.replace(configJson.server, viteUrl)
+  }
+
+  // oC 10
+  if (configJson.auth) {
+    configJson.auth.clientId =
+      process.env.OWNCLOUD_WEB_CLIENT_ID ||
+      'AWhZZsxb59ouGg97HsdR7GiN8pnzEYvk1cL6aVJgTQH1Gcdxly1gendLVTZ5zpYC'
+
+    configJson.auth.clientSecret = process.env.OWNCLOUD_WEB_CLIENT_SECRET || undefined
+  }
+
+  return configJson
+}
+
 export default defineConfig(async ({ mode, command }) => {
   const production = mode === 'production'
   const ocis = process.env.OCIS !== 'false'
@@ -78,22 +117,10 @@ export default defineConfig(async ({ mode, command }) => {
       : 'http://host.docker.internal:8080/index.php/apps/web/config.json')
 
   let proxiedServerUrl
-  let configJson
   if (command === 'serve') {
-    configJson = await (
-      await fetch(configUrl, {
-        ...(configUrl.startsWith('https:') && {
-          agent: new Agent({ rejectUnauthorized: false })
-        })
-      })
-    ).json()
-
     // determine server url
+    const configJson = await getJson(configUrl)
     proxiedServerUrl = configJson.server
-
-    // enable previews and enable lazy resources, which are disabled for fast tests
-    configJson.options.disablePreviews = false
-    configJson.options.displayResourcesLazy = true
   }
 
   if (ocis) {
@@ -129,27 +156,11 @@ export default defineConfig(async ({ mode, command }) => {
         }
       })
     }
-
-    if (command === 'serve') {
-      // replace server urls in config.json to use the vite proxy
-      const vitePort = config.server.port
-      const viteUrl = `http${config.server.https ? 's' : ''}://host.docker.internal:${vitePort}`
-      configJson.server = configJson.server.replace(proxiedServerUrl, viteUrl)
-      configJson.theme = configJson.theme.replace(proxiedServerUrl, viteUrl)
-    }
   } else {
     config = {
       server: {
         port: 8081
       }
-    }
-
-    if (command === 'serve') {
-      configJson.auth.clientId =
-        process.env.OWNCLOUD_WEB_CLIENT_ID ||
-        'AWhZZsxb59ouGg97HsdR7GiN8pnzEYvk1cL6aVJgTQH1Gcdxly1gendLVTZ5zpYC'
-
-      configJson.auth.clientSecret = process.env.OWNCLOUD_WEB_CLIENT_SECRET || undefined
     }
   }
 
@@ -264,11 +275,11 @@ export default defineConfig(async ({ mode, command }) => {
         {
           name: '@ownclouders/vite-plugin-runtime-config',
           configureServer(server: ViteDevServer) {
-            server.middlewares.use((request, response, next) => {
+            server.middlewares.use(async (request, response, next) => {
               if (request.url === '/config.json') {
                 response.statusCode = 200
                 response.setHeader('Content-Type', 'application/json')
-                response.end(JSON.stringify(configJson))
+                response.end(JSON.stringify(await getConfigJson(configUrl, config)))
                 return
               }
               next()
