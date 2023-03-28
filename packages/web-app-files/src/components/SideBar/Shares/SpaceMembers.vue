@@ -85,6 +85,7 @@ export default defineComponent({
     const clientService = useClientService()
     return {
       clientService,
+      configurationManager,
       resource: inject<ProjectSpaceResource>('resource')
     }
   },
@@ -92,8 +93,7 @@ export default defineComponent({
     return {
       filterTerm: '',
       isFilterOpen: false,
-      markInstance: null,
-      configurationManager
+      markInstance: null
     }
   },
   computed: {
