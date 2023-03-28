@@ -31,8 +31,9 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
         title: $gettext('Space was created successfully')
       })
 
-      if (resources.length === 1 && resources[0].isFolder()) {
-        //TODO: FOR LATER
+      if (resources.length === 1 && resources[0].isFolder) {
+        //If a single folder is selected we copy it's content to the Space's root folder
+        resources = (await webdav.listFiles(space, { path: resources[0].path })).children
       }
 
       for (const resource of resources) {
