@@ -5,7 +5,7 @@ import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useAbility, useClientService, useLoadingService, useRouter } from 'web-pkg/src/composables'
 import { isPersonalSpaceResource } from 'web-client/src/helpers'
 import { isLocationSpacesActive } from 'web-app-files/src/router'
-import { useCreateSpace } from 'web-app-files/src/composables'
+import { useCreateSpace } from 'web-app-files/src/composables/spaces'
 import { useSpaceHelpers } from 'web-pkg/src/composables/spaces'
 import PQueue from 'p-queue'
 
