@@ -87,7 +87,6 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
     actions,
 
     // HACK: exported for unit tests:
-    checkName: checkSpaceNameModalInput,
     renameSpace
   }
 }
