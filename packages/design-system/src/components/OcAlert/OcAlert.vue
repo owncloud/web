@@ -1,10 +1,10 @@
 <template>
   <div
-    v-show="!closed"
+    v-show="!dismissed"
     class="oc-alert oc-position-relative"
     :class="[
       alertStyles[variant],
-      closeable ? 'oc-alert-closeable' : '',
+      dismissable ? 'oc-alert-dismissable' : '',
       renderIcon ? 'oc-alert-has-icon' : ''
     ]"
     :aria-label="ariaLabel"
@@ -17,12 +17,12 @@
         :accessible-label="ariaLabel"
       />
       <oc-button
-        v-if="closeable"
+        v-if="dismissable"
         size="small"
         type="button"
         appearance="raw"
         class="oc-alert-close-button"
-        @click="close"
+        @click="dismiss"
       >
         <oc-icon name="close" accessible-label="Close" />
       </oc-button>
@@ -52,7 +52,7 @@ export default defineComponent({
         return ['info', 'success', 'warning', 'danger'].includes(value)
       }
     },
-    closeable: {
+    dismissable: {
       type: Boolean,
       default: false
     },
@@ -62,8 +62,12 @@ export default defineComponent({
      */
     hasIcon: {
       type: Boolean,
-      default: false
+      default: true
     },
+
+    /**
+     * Pass custom icon name to use instead of the default one.
+     */
     customIcon: {
       type: String,
       default: ''
@@ -73,9 +77,10 @@ export default defineComponent({
       default: 'Alert'
     }
   },
+  emits: ['dismissed'],
   data() {
     return {
-      closed: false
+      dismissed: false
     }
   },
   computed: {
@@ -106,8 +111,9 @@ export default defineComponent({
     }
   },
   methods: {
-    close() {
-      this.closed = true
+    dismiss() {
+      this.dismissed = true
+      this.$emit('dismissed')
     }
   }
 })
@@ -115,7 +121,7 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-alert {
-  padding: var(--oc-space-small) var(--oc-space-medium);
+  padding: var(--oc-space-small) var(--oc-space-medium) var(--oc-space-small) var(--oc-space-small);
   margin: var(--oc-space-medium) 0;
   border-radius: 6px;
   border-width: 1px;
@@ -184,7 +190,7 @@ export default defineComponent({
       }
     }
 
-    &closeable > .oc-alert-title {
+    &dismissable > .oc-alert-title {
       padding-right: var(--oc-space-large);
     }
   }
@@ -203,25 +209,25 @@ export default defineComponent({
 
 <docs>
 ```js
-  <oc-alert :closeable="true" :hasIcon="true">
+  <oc-alert :dismissable="true" :hasIcon="true">
     I'm just an info message. I can be closed and have the default info icon.
   </oc-alert>
-  <oc-alert :closeable="true" :hasIcon="true">
+  <oc-alert :dismissable="true" :hasIcon="true">
     I'm just an info message. I can be closed and have the default info icon.
     <template #message>
       <p>And I have a custom message, which can be multiline or multipart. It acts as alert body - contents are passed via named slot</p>
     </template>
   </oc-alert>
-  <oc-alert :variant="'success'" :closeable="true" :hasIcon="true">
+  <oc-alert :variant="'success'" :dismissable="true" :hasIcon="true">
     Yay! Success! I can be closed and have the default success icon.
   </oc-alert>
-  <oc-alert :variant="'warning'" :closeable="true">
+  <oc-alert :variant="'warning'" :dismissable="true">
     Hm there seems to be something wrong. I can be closed and have no icon.
   </oc-alert>
   <oc-alert :variant="'danger'" :hasIcon="true">
     WHAAA. PANIC! I can't be closed and have the default danger icon.
   </oc-alert>
-  <oc-alert :variant="'danger'" customIcon="cloud-off" :closeable="true" :hasIcon="true">
+  <oc-alert :variant="'danger'" customIcon="cloud-off" :dismissable="true" :hasIcon="true">
     WHAAA. PANIC! With a custom Icon
   </oc-alert>
 ```

@@ -6,8 +6,9 @@
       :title="item.title"
       :message="item.desc"
       :status="item.status"
-      @close="deleteMessage(item)"
     />
+      :dismissable="true"
+      @dismissed="deleteMessage(item)"
   </oc-notifications>
 </template>
 
