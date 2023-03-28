@@ -8,12 +8,15 @@
     >
       <template #default>
         <oc-text-input
-          v-if="showFilter && filterableAttributes.length"
+          v-if="showOptionFilter && filterableAttributes.length"
           ref="filterInputRef"
           v-model="filterTerm"
           class="item-filter-input oc-mb-m oc-mt-s"
           autocomplete="off"
-          :placeholder="$gettext('Filter')"
+          :placeholder="
+            optionFilterPlaceholder === '' ? $gettext('Enter term') : optionFilterPlaceholder
+          "
+          :label="optionFilterLabel === '' ? $gettext('Filter list') : optionFilterLabel"
         />
         <div ref="itemFilterListRef">
           <oc-list class="item-filter-list">
@@ -72,14 +75,24 @@ export default defineComponent({
       type: String,
       required: true
     },
-    items: {
-      type: Array,
-      required: true
+    optionFilterPlaceholder: {
+      type: String,
+      required: false,
+      default: ''
     },
-    showFilter: {
+    optionFilterLabel: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    showOptionFilter: {
       type: Boolean,
       required: false,
       default: false
+    },
+    items: {
+      type: Array,
+      required: true
     },
     allowMultiple: {
       type: Boolean,
@@ -204,18 +217,18 @@ export default defineComponent({
     })
 
     return {
-      queryParam,
-      filterInputRef,
-      itemFilterListRef,
-      selectedItems,
       clearFilter,
-      toggleItemSelection,
-      isItemSelected,
       displayedItems,
+      filterInputRef,
       filterTerm,
+      isItemSelected,
       isSelectionAllowed,
+      itemFilterListRef,
+      queryParam,
+      selectedItems,
       setDisplayedItems,
-      showDrop
+      showDrop,
+      toggleItemSelection
     }
   }
 })
