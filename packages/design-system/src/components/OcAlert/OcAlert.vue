@@ -42,7 +42,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'OcAlert',
   status: 'ready',
-  release: '2.0.0',
+  release: '2.0.1',
   components: {},
   props: {
     variant: {
