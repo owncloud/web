@@ -1,14 +1,18 @@
 <template>
   <oc-notifications :position="notificationPosition">
-    <oc-notification-message
+    <oc-alert
       v-for="item in $_ocMessages_limited"
+      class="oc-fade-in oc-box-shadow-medium oc-my-s"
       :key="item.id"
-      :title="item.title"
-      :message="item.desc"
-      :status="item.status"
-    />
+      :variant="item.status"
       :dismissable="true"
       @dismissed="deleteMessage(item)"
+    >
+      {{ item.title }}
+      <template #message>
+        {{ item.desc }}
+      </template>
+    </oc-alert>
   </oc-notifications>
 </template>
 

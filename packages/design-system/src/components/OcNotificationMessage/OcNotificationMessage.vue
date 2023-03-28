@@ -5,6 +5,7 @@
     :has-icon="true"
     :role="role"
     :aria-live="ariaLive"
+    :variant="status"
   >
     {{ title }}
     <template #message>
@@ -14,7 +15,6 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import OcIcon from '../OcIcon/OcIcon.vue'
 
 /**
  * Notifications are used to inform users about errors, warnings and as confirmations for their actions.
@@ -23,9 +23,6 @@ export default defineComponent({
   name: 'OcNotificationMessage',
   status: 'ready',
   release: '1.0.0',
-  components: {
-    OcIcon
-  },
   props: {
     /**
      * Notification messages are sub components of the oc-notifications component.
@@ -36,9 +33,9 @@ export default defineComponent({
     status: {
       type: String,
       required: false,
-      default: 'passive',
+      default: 'info',
       validator: (value: string) => {
-        return ['passive', 'primary', 'success', 'warning', 'danger'].includes(value)
+        return ['info', 'success', 'warning', 'danger'].includes(value)
       }
     },
     /**
@@ -89,8 +86,8 @@ export default defineComponent({
      * Notification will be destroyed if timeout is set
      */
     setTimeout(() => {
-      // this.close()
-    }, this.timeout * 5000000000000)
+      this.close()
+    }, this.timeout * 1000)
   },
   methods: {
     close() {
