@@ -13,8 +13,8 @@
           v-model="filterTerm"
           class="item-filter-input oc-mb-m oc-mt-s"
           autocomplete="off"
-          :placeholder="getPlaceholder"
-          :label="getLabel"
+          :placeholder="placeholder === '' ? $gettext('Enter term') : placeholder"
+          :label="label === '' ? $gettext('Filter list') : label"
         />
         <div ref="itemFilterListRef">
           <oc-list class="item-filter-list">
@@ -227,14 +227,6 @@ export default defineComponent({
       setDisplayedItems,
       showDrop,
       toggleItemSelection
-    }
-  },
-  computed: {
-    getPlaceholder() {
-      return this.placeholder === '' ? this.$gettext('Enter term') : this.placeholder
-    },
-    getLabel() {
-      return this.label === '' ? this.$gettext('Filter list') : this.label
     }
   }
 })
