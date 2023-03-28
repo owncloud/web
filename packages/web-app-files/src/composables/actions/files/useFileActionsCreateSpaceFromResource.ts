@@ -2,7 +2,13 @@ import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
-import { configurationManager, useAbility, useClientService, useRouter } from 'web-pkg'
+import {
+  configurationManager,
+  useAbility,
+  useClientService,
+  useLoadingService,
+  useRouter
+} from 'web-pkg'
 import { buildSpace, isPersonalSpaceResource } from 'web-client/src/helpers'
 import { isLocationSpacesActive } from 'web-app-files/src/router'
 import { WebDAV } from 'web-client/src/webdav'
@@ -11,15 +17,16 @@ import { Drive } from 'web-client/src/generated'
 export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store<any> } = {}) => {
   const { can } = useAbility()
   const { $gettext, $ngettext } = useGettext()
+  const loadingService = useLoadingService()
   const router = useRouter()
   const clientService = useClientService()
   const hasCreatePermission = computed(() => can('create-all', 'Space'))
 
-  const confirmAction = async ({ spaceName, resources }) => {
+  const confirmAction = async ({ spaceName, resources, space }) => {
     store.dispatch('hideModal')
+    const client = clientService.graphAuthenticated
 
     try {
-      const client = clientService.graphAuthenticated
       const { data: createdSpace } = await client.drives.createDrive({ name: spaceName }, {})
       const spaceResource = buildSpace({
         ...createdSpace,
@@ -57,6 +64,10 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
         field: 'spaceQuota',
         value: updatedSpace.quota
       })
+
+      store.dispatch('showMessage', {
+        title: $gettext('Space was created successfully')
+      })
     } catch (error) {
       console.error(error)
       store.dispatch('showMessage', {
@@ -90,7 +101,8 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
       inputLabel: $gettext('Space name'),
       onInput: checkSpaceName,
       onCancel: () => store.dispatch('hideModal'),
-      onConfirm: (spaceName) => confirmAction({ spaceName, space, resources })
+      onConfirm: (spaceName) =>
+        loadingService.addTask(() => confirmAction({ spaceName, space, resources }))
     }
 
     store.dispatch('createModal', modal)
