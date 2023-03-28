@@ -169,7 +169,10 @@ export default defineComponent({
       const errors = results.filter((r) => r.status === 'rejected')
       if (errors.length) {
         errors.forEach(console.error)
-        await store.dispatch('showMessage', { title: getErrorMessage(errors.length), status: 'danger' })
+        await store.dispatch('showMessage', {
+          title: getErrorMessage(errors.length),
+          status: 'danger'
+        })
       }
     }
 

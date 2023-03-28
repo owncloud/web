@@ -2,8 +2,8 @@
   <oc-notifications :position="notificationPosition">
     <oc-alert
       v-for="item in $_ocMessages_limited"
-      class="oc-fade-in oc-box-shadow-medium oc-my-s"
       :key="item.id"
+      class="oc-fade-in oc-box-shadow-medium oc-my-s"
       :variant="item.status"
       :dismissable="true"
       @dismissed="deleteMessage(item)"
