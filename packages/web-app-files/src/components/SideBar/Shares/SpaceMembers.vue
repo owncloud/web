@@ -200,7 +200,8 @@ export default defineComponent({
           reloadSpace: !currentUserRemoved
         })
         this.showMessage({
-          title: this.$gettext('Share was removed successfully')
+          title: this.$gettext('Share was removed successfully'),
+          status: 'success'
         })
 
         if (currentUserRemoved) {

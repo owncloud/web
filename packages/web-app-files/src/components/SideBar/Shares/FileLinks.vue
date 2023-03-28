@@ -465,7 +465,8 @@ export default defineComponent({
       })
 
       this.showMessage({
-        title: this.$gettext('Link was created successfully')
+        title: this.$gettext('Link was created successfully'),
+        status: 'success'
       })
     },
 
@@ -486,7 +487,8 @@ export default defineComponent({
         })
 
       this.showMessage({
-        title: this.$gettext('Link was updated successfully')
+        title: this.$gettext('Link was updated successfully'),
+        status: 'success'
       })
     },
 
@@ -524,7 +526,8 @@ export default defineComponent({
       try {
         await this.removeLink({ client, share, path, loadIndicators })
         this.showMessage({
-          title: this.$gettext('Link was deleted successfully')
+          title: this.$gettext('Link was deleted successfully'),
+          status: 'success'
         })
 
         if (lastLinkId && isLocationSharesActive(this.$router, 'files-shares-via-link')) {

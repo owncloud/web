@@ -311,7 +311,8 @@ export default defineComponent({
 
         this.hideModal()
         this.showMessage({
-          title: this.$gettext('Share was removed successfully')
+          title: this.$gettext('Share was removed successfully'),
+          status: 'success'
         })
         if (lastShareId && isLocationSharesActive(this.$router, 'files-shares-with-others')) {
           this.REMOVE_FILES([{ id: lastShareId }])

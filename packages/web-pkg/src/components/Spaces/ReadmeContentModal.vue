@@ -83,7 +83,8 @@ export default defineComponent({
             value: { ...this.space.spaceReadmeData, ...{ etag: readmeMetaData.ETag } }
           })
           this.showMessage({
-            title: this.$gettext('Space description was edited successfully')
+            title: this.$gettext('Space description was edited successfully'),
+            status: 'success'
           })
         })
         .catch((error) => {

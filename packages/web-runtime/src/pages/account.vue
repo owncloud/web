@@ -265,7 +265,8 @@ export default defineComponent({
         .then(() => {
           this.closeEditPasswordModal()
           this.showMessage({
-            title: this.$gettext('Password was changed successfully')
+            title: this.$gettext('Password was changed successfully'),
+            status: 'success'
           })
         })
         .catch((error) => {

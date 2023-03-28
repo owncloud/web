@@ -474,7 +474,8 @@ export default defineComponent({
             {
               folderName
             }
-          )
+          ),
+          status: 'success'
         })
       } catch (error) {
         console.error(error)
@@ -550,7 +551,8 @@ export default defineComponent({
         this.showMessage({
           title: this.$gettextInterpolate(this.$gettext('"%{fileName}" was created successfully'), {
             fileName
-          })
+          }),
+          status: 'success'
         })
       } catch (error) {
         console.error(error)
@@ -596,7 +598,8 @@ export default defineComponent({
         this.showMessage({
           title: this.$gettextInterpolate(this.$gettext('"%{fileName}" was created successfully'), {
             fileName
-          })
+          }),
+          status: 'success'
         })
       } catch (error) {
         console.error(error)
