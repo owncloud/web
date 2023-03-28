@@ -34,7 +34,7 @@ describe('ItemFilter', () => {
   describe('filter', () => {
     it('renders the input field when enabled', () => {
       const { wrapper } = getWrapper({
-        props: { showFilter: true, filterableAttributes: ['name'] }
+        props: { showOptionFilter: true, filterableAttributes: ['name'] }
       })
       expect(wrapper.find(selectors.filterInput).exists()).toBeTruthy()
     })
@@ -44,7 +44,7 @@ describe('ItemFilter', () => {
       { filterTerm: 'invalid', expectedResult: 0 }
     ])('filters on input', async (data) => {
       const { wrapper } = getWrapper({
-        props: { showFilter: true, filterableAttributes: ['name'] }
+        props: { showOptionFilter: true, filterableAttributes: ['name'] }
       })
       await wrapper.find(selectors.filterInput).setValue(data.filterTerm)
       expect(wrapper.findAll(selectors.filterListItem).length).toBe(data.expectedResult)
@@ -118,9 +118,9 @@ describe('ItemFilter', () => {
       const placeholder = 'Enter group name'
       const { wrapper } = getWrapper({
         props: {
-          showFilter: true,
+          showOptionFilter: true,
           filterableAttributes: ['name'],
-          placeholder: placeholder
+          optionFilterPlaceholder: placeholder
         }
       })
       expect(wrapper.find(selectors.filterInput).attributes('placeholder')).toBe(placeholder)
@@ -130,7 +130,7 @@ describe('ItemFilter', () => {
       const placeholder = undefined
       const { wrapper } = getWrapper({
         props: {
-          showFilter: true,
+          showOptionFilter: true,
           filterableAttributes: ['name'],
           placeholder: placeholder
         }
@@ -145,9 +145,9 @@ describe('label prop', () => {
     const label = 'Filter groups'
     const { wrapper } = getWrapper({
       props: {
-        showFilter: true,
+        showOptionFilter: true,
         filterableAttributes: ['name'],
-        label: label
+        optionFilterLabel: label
       }
     })
     expect(wrapper.find('.item-filter-input label').text()).toBe(label)
@@ -157,9 +157,9 @@ describe('label prop', () => {
     const label = undefined
     const { wrapper } = getWrapper({
       props: {
-        showFilter: true,
+        showOptionFilter: true,
         filterableAttributes: ['name'],
-        label: label
+        optionFilterLabel: label
       }
     })
     expect(wrapper.find('.item-filter-input label').text()).toBe('Filter list')

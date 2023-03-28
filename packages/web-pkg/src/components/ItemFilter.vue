@@ -8,13 +8,13 @@
     >
       <template #default>
         <oc-text-input
-          v-if="showFilter && filterableAttributes.length"
+          v-if="showOptionFilter && filterableAttributes.length"
           ref="filterInputRef"
           v-model="filterTerm"
           class="item-filter-input oc-mb-m oc-mt-s"
           autocomplete="off"
-          :placeholder="placeholder === '' ? $gettext('Enter term') : placeholder"
-          :label="label === '' ? $gettext('Filter list') : label"
+          :placeholder="optionFilterPlaceholder === '' ? $gettext('Enter term') : optionFilterPlaceholder"
+          :label="optionFilterLabel === '' ? $gettext('Filter list') : optionFilterLabel"
         />
         <div ref="itemFilterListRef">
           <oc-list class="item-filter-list">
@@ -73,12 +73,12 @@ export default defineComponent({
       type: String,
       required: true
     },
-    placeholder: {
+    optionFilterPlaceholder: {
       type: String,
       required: false,
       default: ''
     },
-    label: {
+    optionFilterLabel: {
       type: String,
       required: false,
       default: ''
@@ -87,7 +87,7 @@ export default defineComponent({
       type: Array,
       required: true
     },
-    showFilter: {
+    showOptionFilter: {
       type: Boolean,
       required: false,
       default: false
