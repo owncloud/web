@@ -43,6 +43,7 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
       }
 
       await Promise.all(copyOps)
+      store.dispatch('Files/resetFileSelection')
     } catch (error) {
       console.error(error)
       store.dispatch('showMessage', {
