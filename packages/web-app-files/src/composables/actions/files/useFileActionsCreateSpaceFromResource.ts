@@ -2,69 +2,28 @@ import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
-import {
-  configurationManager,
-  useAbility,
-  useClientService,
-  useLoadingService,
-  useRouter
-} from 'web-pkg'
-import { buildSpace, isPersonalSpaceResource } from 'web-client/src/helpers'
+import { useAbility, useLoadingService, useRouter } from 'web-pkg'
+import { isPersonalSpaceResource } from 'web-client/src/helpers'
 import { isLocationSpacesActive } from 'web-app-files/src/router'
-import { WebDAV } from 'web-client/src/webdav'
-import { Drive } from 'web-client/src/generated'
+import { useCreateSpace } from 'web-app-files/src/composables'
+import { useSpaceHelpers } from 'web-pkg/src/composables/spaces'
 
 export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store<any> } = {}) => {
   const { can } = useAbility()
   const { $gettext, $ngettext } = useGettext()
   const loadingService = useLoadingService()
+  const { createSpace } = useCreateSpace()
+  const { checkSpaceNameModalInput } = useSpaceHelpers()
   const router = useRouter()
-  const clientService = useClientService()
   const hasCreatePermission = computed(() => can('create-all', 'Space'))
 
   const confirmAction = async ({ spaceName, resources, space }) => {
     store.dispatch('hideModal')
-    const client = clientService.graphAuthenticated
+    store.dispatch('Files/SET_SELECTED_IDS', [])
 
     try {
-      const { data: createdSpace } = await client.drives.createDrive({ name: spaceName }, {})
-      const spaceResource = buildSpace({
-        ...createdSpace,
-        serverUrl: configurationManager.serverUrl
-      })
-      store.commit('runtime/spaces/UPSERT_SPACE', spaceResource)
-
-      await (clientService.webdav as WebDAV).createFolder(spaceResource, { path: '.space' })
-      const markdown = await (clientService.webdav as WebDAV).putFileContents(spaceResource, {
-        path: '.space/readme.md',
-        content: $gettext('Here you can add a description for this Space.')
-      })
-
-      const { data: updatedSpace } = await client.drives.updateDrive(
-        createdSpace.id,
-        {
-          special: [
-            {
-              specialFolder: {
-                name: 'readme'
-              },
-              id: markdown.id as string
-            }
-          ]
-        } as Drive,
-        {}
-      )
-      store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-        id: createdSpace.id,
-        field: 'spaceReadmeData',
-        value: updatedSpace.special.find((special) => special.specialFolder.name === 'readme')
-      })
-      store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-        id: createdSpace.id,
-        field: 'spaceQuota',
-        value: updatedSpace.quota
-      })
-
+      const createdSpace = createSpace(spaceName)
+      store.commit('runtime/spaces/UPSERT_SPACE', createdSpace)
       store.dispatch('showMessage', {
         title: $gettext('Space was created successfully')
       })
@@ -99,32 +58,13 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
       confirmText: $gettext('Create'),
       hasInput: true,
       inputLabel: $gettext('Space name'),
-      onInput: checkSpaceName,
+      onInput: checkSpaceNameModalInput,
       onCancel: () => store.dispatch('hideModal'),
       onConfirm: (spaceName) =>
         loadingService.addTask(() => confirmAction({ spaceName, space, resources }))
     }
 
     store.dispatch('createModal', modal)
-  }
-
-  const checkSpaceName = (name) => {
-    if (name.trim() === '') {
-      return store.dispatch('setModalInputErrorMessage', $gettext('Space name cannot be empty'))
-    }
-    if (name.length > 255) {
-      return store.dispatch(
-        'setModalInputErrorMessage',
-        $gettext('Space name cannot exceed 255 characters')
-      )
-    }
-    if (/[/\\.:?*"><|]/.test(name)) {
-      return store.dispatch(
-        'setModalInputErrorMessage',
-        $gettext('Space name cannot contain the following characters: / \\\\ . : ? * " > < |\'')
-      )
-    }
-    store.dispatch('setModalInputErrorMessage', null)
   }
 
   const actions = computed((): FileAction[] => {

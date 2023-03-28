@@ -1,7 +1,7 @@
 import { unref, computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
-import { useClientService } from 'web-pkg/src/composables'
+import { useClientService, useSpaceHelpers } from 'web-pkg/src/composables'
 import { useAbility } from '../../ability'
 import { useRoute } from '../../router'
 import { useStore } from '../../store'
@@ -13,25 +13,7 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
   const ability = useAbility()
   const clientService = useClientService()
   const route = useRoute()
-
-  const checkName = (name) => {
-    if (name.trim() === '') {
-      return store.dispatch('setModalInputErrorMessage', $gettext('Space name cannot be empty'))
-    }
-    if (name.length > 255) {
-      return store.dispatch(
-        'setModalInputErrorMessage',
-        $gettext('Space name cannot exceed 255 characters')
-      )
-    }
-    if (/[/\\.:?*"><|]/.test(name)) {
-      return store.dispatch(
-        'setModalInputErrorMessage',
-        $gettext('Space name cannot contain the following characters: / \\ . : ? * " > < |')
-      )
-    }
-    return store.dispatch('setModalInputErrorMessage', null)
-  }
+  const { checkSpaceNameModalInput } = useSpaceHelpers()
 
   const renameSpace = (space, name) => {
     const graphClient = clientService.graphAuthenticated
@@ -75,7 +57,7 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
       inputValue: resources[0].name,
       onCancel: () => store.dispatch('hideModal'),
       onConfirm: (name) => renameSpace(resources[0], name),
-      onInput: checkName
+      onInput: checkSpaceNameModalInput
     }
 
     store.dispatch('createModal', modal)
@@ -105,7 +87,7 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
     actions,
 
     // HACK: exported for unit tests:
-    checkName,
+    checkName: checkSpaceNameModalInput,
     renameSpace
   }
 }
