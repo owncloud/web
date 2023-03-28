@@ -2,11 +2,12 @@ import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
-import { useAbility, useLoadingService, useRouter } from 'web-pkg/src/composables'
+import { useAbility, useClientService, useLoadingService, useRouter } from 'web-pkg/src/composables'
 import { isPersonalSpaceResource } from 'web-client/src/helpers'
 import { isLocationSpacesActive } from 'web-app-files/src/router'
 import { useCreateSpace } from 'web-app-files/src/composables'
 import { useSpaceHelpers } from 'web-pkg/src/composables/spaces'
+import PQueue from 'p-queue'
 
 export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store<any> } = {}) => {
   const { can } = useAbility()
@@ -14,19 +15,29 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
   const loadingService = useLoadingService()
   const { createSpace } = useCreateSpace()
   const { checkSpaceNameModalInput } = useSpaceHelpers()
+  const { webdav } = useClientService()
   const router = useRouter()
   const hasCreatePermission = computed(() => can('create-all', 'Space'))
 
   const confirmAction = async ({ spaceName, resources, space }) => {
     store.dispatch('hideModal')
-    store.dispatch('Files/SET_SELECTED_IDS', [])
+    const queue = new PQueue({ concurrency: 4 })
+    const copyOps = []
 
     try {
-      const createdSpace = createSpace(spaceName)
+      const createdSpace = await createSpace(spaceName)
       store.commit('runtime/spaces/UPSERT_SPACE', createdSpace)
       store.dispatch('showMessage', {
         title: $gettext('Space was created successfully')
       })
+
+      for (const resource of resources) {
+        copyOps.push(
+          queue.add(() => webdav.copyFiles(space, resource, createdSpace, { path: resource.name }))
+        )
+      }
+
+      await Promise.all(copyOps)
     } catch (error) {
       console.error(error)
       store.dispatch('showMessage', {
