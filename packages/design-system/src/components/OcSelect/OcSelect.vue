@@ -310,7 +310,8 @@ export default defineComponent({
       margin: 0 var(--oc-space-small);
     }
 
-    &__dropdown-option {
+    &__dropdown-option,
+    &__no-options {
       color: var(--oc-color-input-text-default);
       white-space: normal;
       padding: 6px 0.6rem;

@@ -1,0 +1,5 @@
+Bugfix: Height of dropdown no-option
+
+We fixed the height of the select dropdown field if no select option is available.
+
+https://github.com/owncloud/web/pull/8554
