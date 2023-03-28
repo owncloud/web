@@ -103,15 +103,9 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-notification-message {
-  background-color: var(--oc-color-background-default) !important;
-  cursor: pointer;
   margin-top: var(--oc-space-small);
   position: relative;
   word-break: break-word;
-
-  &-title {
-    font-size: 1.15rem;
-  }
 }
 </style>
 
