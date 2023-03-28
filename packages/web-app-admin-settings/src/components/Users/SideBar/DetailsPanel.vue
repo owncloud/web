@@ -72,7 +72,7 @@
 import { computed, defineComponent } from 'vue'
 import UserInfoBox from './UserInfoBox.vue'
 import { PropType } from 'vue'
-import { User } from 'web-client/src/generated'
+import { AppRole, User } from 'web-client/src/generated'
 import { formatFileSize } from 'web-pkg/src/helpers'
 import { useGettext } from 'vue3-gettext'
 
@@ -92,7 +92,7 @@ export default defineComponent({
       required: true
     },
     roles: {
-      type: Array,
+      type: Array as PropType<AppRole[]>,
       required: true
     }
   },
@@ -115,7 +115,7 @@ export default defineComponent({
     },
     multipleUsersSelectedText() {
       return this.$gettext('%{count} users selected', {
-        count: this.users.length
+        count: this.users.length.toString()
       })
     },
     roleDisplayName() {

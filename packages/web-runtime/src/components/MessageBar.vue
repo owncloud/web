@@ -32,7 +32,7 @@ export default defineComponent({
       }
       return 'default'
     },
-    $_ocMessages_limited() {
+    $_ocMessages_limited(): any[] {
       return this.activeMessages ? this.activeMessages.slice(0, 5) : []
     }
   },

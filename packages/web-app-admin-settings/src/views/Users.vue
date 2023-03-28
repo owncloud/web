@@ -182,6 +182,7 @@ import {
   useUserActionsAddToGroups
 } from '../composables/actions/users'
 import { configurationManager } from 'web-pkg'
+import { Drive } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'UsersView',
@@ -541,7 +542,9 @@ export default defineComponent({
     ...mapState({ currentUser: 'user' }),
 
     selectedUsersText() {
-      return this.$gettext('%{ userCount } selected', { userCount: this.selectedUsers.length })
+      return this.$gettext('%{ userCount } selected', {
+        userCount: this.selectedUsers.length.toString()
+      })
     },
     breadcrumbs() {
       return [
@@ -687,7 +690,7 @@ export default defineComponent({
       const client = this.clientService.graphAuthenticated
       const updateDriveResponse = await client.drives.updateDrive(
         editUser.drive.id,
-        { quota: { total: editUser.drive.quota.total } },
+        { quota: { total: editUser.drive.quota.total } } as Drive,
         {}
       )
 

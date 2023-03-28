@@ -31,13 +31,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { Group } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'DetailsPanel',
   props: {
     groups: {
-      type: Array,
+      type: Array as PropType<Group[]>,
       required: true
     }
   },
@@ -53,7 +54,7 @@ export default defineComponent({
     },
     multipleGroupsSelectedText() {
       return this.$gettext('%{count} groups selected', {
-        count: this.groups.length
+        count: this.groups.length.toString()
       })
     }
   }

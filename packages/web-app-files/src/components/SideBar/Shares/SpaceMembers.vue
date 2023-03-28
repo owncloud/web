@@ -69,7 +69,7 @@ import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { defineComponent, inject } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
-import { Resource } from 'web-client/src/helpers'
+import { ProjectSpaceResource } from 'web-client/src/helpers'
 import { useClientService } from 'web-pkg/src/composables'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
@@ -85,15 +85,15 @@ export default defineComponent({
     const clientService = useClientService()
     return {
       clientService,
-      resource: inject<Resource>('resource')
+      configurationManager,
+      resource: inject<ProjectSpaceResource>('resource')
     }
   },
   data: () => {
     return {
       filterTerm: '',
       isFilterOpen: false,
-      markInstance: null,
-      configurationManager
+      markInstance: null
     }
   },
   computed: {
@@ -205,7 +205,7 @@ export default defineComponent({
 
         if (currentUserRemoved) {
           if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
-            return this.$router.go()
+            return this.$router.go(0)
           }
           return this.$router.push(createLocationSpaces('files-spaces-projects'))
         }

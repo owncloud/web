@@ -95,7 +95,7 @@ export default defineComponent({
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
 
-    const spaces = computed(() =>
+    const spaces = computed<SpaceResource[]>(() =>
       store.getters['runtime/spaces/spaces'].filter(
         (s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s)
       )

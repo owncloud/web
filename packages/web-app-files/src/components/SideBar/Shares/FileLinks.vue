@@ -121,7 +121,7 @@ import {
   useAbility
 } from 'web-pkg/src/composables'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
-import { LinkShareRoles, SharePermissions } from 'web-client/src/helpers/share'
+import { LinkShareRoles, Share, SharePermissions } from 'web-client/src/helpers/share'
 import { showQuickLinkPasswordModal } from '../../../quickActions'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
@@ -167,7 +167,7 @@ export default defineComponent({
     return {
       space: inject<Resource>('space'),
       resource: inject<Resource>('resource'),
-      incomingParentShare: inject<Resource>('incomingParentShare'),
+      incomingParentShare: inject<Share>('incomingParentShare'),
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),

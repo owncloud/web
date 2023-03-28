@@ -16,14 +16,15 @@ export function useIncomingParentShare() {
   const store = useStore()
   const clientService = useClientService()
   const incomingParentShare = ref(null)
-  const incomingCollaborators = computed(() => store.state.Files.incomingCollaborators)
+  const incomingCollaborators = computed(() => store.getters['Files/incomingCollaborators'])
   const hasSpaces = useCapabilitySpacesEnabled(store)
 
   const loadIncomingParentShare = useTask(function* (signal, resource) {
     let parentShare
     const incoming = unref(incomingCollaborators).find((s) => s.itemSource === resource.id)
     if (incoming) {
-      return incoming
+      incomingParentShare.value = incoming
+      return
     }
 
     if (resource.shareId) {

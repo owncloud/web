@@ -241,7 +241,7 @@ export default defineComponent({
      *
      * @public
      */
-    show(duration) {
+    show(duration?: number) {
       this.tippy.show(duration)
     },
 
@@ -250,7 +250,7 @@ export default defineComponent({
      *
      * @public
      */
-    hide(duration) {
+    hide(duration?: number) {
       this.tippy.hide(duration)
     }
   }

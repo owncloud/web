@@ -116,6 +116,7 @@ import { defineComponent } from 'vue'
 import * as uuid from 'uuid'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 import { useClientService } from 'web-pkg/src/composables'
+import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
   name: 'ListItem',
@@ -328,7 +329,10 @@ export default defineComponent({
     },
 
     showAccessDetails() {
-      this.$refs.accessDetailsDrop.$refs.drop.show()
+      ;(
+        (this.$refs.accessDetailsDrop as InstanceType<typeof OcInfoDrop>).$refs
+          .drop as InstanceType<typeof OcDrop>
+      ).show()
     },
 
     shareRoleChanged({ role, permissions }) {

@@ -102,6 +102,7 @@ import { debounce } from 'lodash-es'
 import { useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { defineComponent } from 'vue'
+import { GlobalComponents } from 'vue'
 
 export default defineComponent({
   name: 'SearchBar',
@@ -149,6 +150,14 @@ export default defineComponent({
     },
     searchLabel() {
       return this.$gettext('Enter search term')
+    },
+
+    searchBar() {
+      return this.$refs.searchBar as Element
+    },
+
+    optionsDrop() {
+      return this.$refs.optionsDrop as InstanceType<GlobalComponents['OcDrop']>
     }
   },
 
@@ -164,8 +173,8 @@ export default defineComponent({
           if (this.showNoResults) {
             return
           }
-          if (this.$refs.optionsDrop) {
-            this.markInstance = new Mark(this.$refs.optionsDrop.$refs.drop)
+          if (this.optionsDrop) {
+            this.markInstance = new Mark(this.optionsDrop.$refs.drop)
             this.markInstance.unmark()
             this.markInstance.mark(this.term, {
               element: 'span',
@@ -199,19 +208,19 @@ export default defineComponent({
     this.debouncedSearch = debounce(this.search, 500)
 
     this.hideOptionsDropEvent = eventBus.subscribe('app.search.options-drop.hide', () => {
-      this.$refs.optionsDrop.hide()
+      this.optionsDrop.hide()
     })
   },
 
   mounted() {
     if (this.isSearchBarEnabled) {
-      this.resizeObserver.observe(this.$refs.searchBar)
+      this.resizeObserver.observe(this.searchBar)
     }
   },
 
   beforeUnmount() {
     if (this.isSearchBarEnabled) {
-      this.resizeObserver.unobserve(this.$refs.searchBar)
+      this.resizeObserver.unobserve(this.searchBar)
     }
     eventBus.unsubscribe('app.search.options-drop.hide', this.hideOptionsDropEvent)
   },
@@ -222,7 +231,7 @@ export default defineComponent({
         return
       }
 
-      this.$refs.optionsDrop.show()
+      this.optionsDrop.show()
       await this.search()
     },
     async search() {
@@ -246,10 +255,10 @@ export default defineComponent({
     },
     onClear() {
       this.term = ''
-      this.$refs.optionsDrop.hide()
+      this.optionsDrop.hide()
     },
     onKeyUpEnter() {
-      this.$refs.optionsDrop.hide()
+      this.optionsDrop.hide()
 
       if (this.term && this.activePreviewIndex === null) {
         this.$router.push(
@@ -260,13 +269,13 @@ export default defineComponent({
       }
 
       if (this.activePreviewIndex !== null) {
-        this.$refs.optionsDrop.$el
+        this.optionsDrop.$el
           .querySelectorAll('.preview')
           [this.activePreviewIndex].firstChild.click()
       }
     },
     onKeyUpUp() {
-      const previewElementsCount = this.$refs.optionsDrop.$el.querySelectorAll('.preview').length
+      const previewElementsCount = this.optionsDrop.$el.querySelectorAll('.preview').length
 
       if (!previewElementsCount) {
         return
@@ -281,7 +290,7 @@ export default defineComponent({
       this.scrollToActivePreviewOption()
     },
     onKeyUpDown() {
-      const previewElementsCount = this.$refs.optionsDrop.$el.querySelectorAll('.preview').length
+      const previewElementsCount = this.optionsDrop.$el.querySelectorAll('.preview').length
 
       if (!previewElementsCount) {
         return
@@ -297,13 +306,13 @@ export default defineComponent({
       this.scrollToActivePreviewOption()
     },
     scrollToActivePreviewOption() {
-      if (typeof this.$refs.optionsDrop.$el.scrollTo !== 'function') {
+      if (typeof this.optionsDrop.$el.scrollTo !== 'function') {
         return
       }
 
-      const previewElements = this.$refs.optionsDrop.$el.querySelectorAll('.preview')
+      const previewElements = this.optionsDrop.$el.querySelectorAll('.preview')
 
-      this.$refs.optionsDrop.$el.scrollTo(
+      this.optionsDrop.$el.scrollTo(
         0,
         this.activePreviewIndex === null
           ? 0
@@ -315,10 +324,10 @@ export default defineComponent({
       this.term = term
 
       if (!this.term) {
-        return this.$refs.optionsDrop.hide()
+        return this.optionsDrop.hide()
       }
 
-      return this.$refs.optionsDrop.show()
+      return this.optionsDrop.show()
     },
     getSearchResultForProvider(provider) {
       return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
@@ -345,7 +354,7 @@ export default defineComponent({
       })
     },
     isPreviewElementActive(searchId) {
-      const previewElements = this.$refs.optionsDrop.$el.querySelectorAll('.preview')
+      const previewElements = this.optionsDrop.$el.querySelectorAll('.preview')
       return previewElements[this.activePreviewIndex]?.dataset?.searchId === searchId
     },
     showSearchBar() {
@@ -377,7 +386,7 @@ export default defineComponent({
       }
     },
     hideOptionsDrop() {
-      this.$refs.optionsDrop.hide()
+      this.optionsDrop.hide()
     }
   }
 })

@@ -98,7 +98,7 @@ export default {
     quotaLimit() {
       return this.maxQuota || 1e15
     },
-    DEFAULT_OPTIONS() {
+    DEFAULT_OPTIONS(): { value: number; displayValue: string; selectable?: boolean }[] {
       return [
         {
           value: Math.pow(10, 9),

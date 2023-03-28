@@ -37,7 +37,7 @@ import OcAvatarLink from '../OcAvatarLink/OcAvatarLink.vue'
 import OcAvatarGroup from '../OcAvatarGroup/OcAvatarGroup.vue'
 import OcAvatarFederated from '../OcAvatarFederated/OcAvatarFederated.vue'
 import OcAvatarGuest from '../OcAvatarGuest/OcAvatarGuest.vue'
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 /**
  * Display a group of avatars
@@ -61,7 +61,7 @@ export default defineComponent({
      * Users, public links, groups, federated and guests to be displayed with avatars
      */
     items: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true
     },
     /**
@@ -129,7 +129,7 @@ export default defineComponent({
       if (!this.isOverlapping) {
         return a
       }
-      return a.slice(0, this.maxDisplayed)
+      return a.slice(0, this.maxDisplayed) as any[]
     },
 
     otherItems() {
@@ -140,7 +140,7 @@ export default defineComponent({
       if (this.maxDisplayed <= this.avatars.length) {
         return []
       }
-      return a.slice(0, this.maxDisplayed - this.avatars.length)
+      return a.slice(0, this.maxDisplayed - this.avatars.length) as any[]
     }
   },
   methods: {

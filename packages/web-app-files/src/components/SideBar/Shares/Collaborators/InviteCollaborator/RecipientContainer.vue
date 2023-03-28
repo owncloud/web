@@ -21,8 +21,10 @@
 import { mapGetters } from 'vuex'
 import { avatarUrl } from '../../../../../helpers/user'
 import { ShareTypes } from 'web-client/src/helpers/share'
+import { defineComponent } from 'vue'
+import { Recipient } from 'design-system/src/components/OcRecipient/OcRecipient.vue'
 
-export default {
+export default defineComponent({
   props: {
     recipient: {
       type: Object,
@@ -35,7 +37,7 @@ export default {
     }
   },
 
-  data() {
+  data(): { formattedRecipient: Recipient } {
     return {
       formattedRecipient: {
         name: this.recipient.label,
@@ -59,7 +61,7 @@ export default {
   },
 
   async created() {
-    if (this.capabilities.files_sharing.user.profile_picture && this.hasAvatar) {
+    if (this.capabilities.files_sharing.user.profile_picture && this.formattedRecipient.hasAvatar) {
       try {
         this.formattedRecipient.avatar = await avatarUrl({
           clientService: this.$clientService,
@@ -103,7 +105,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

@@ -77,12 +77,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
 import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
   props: {
@@ -160,9 +161,10 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.$refs.menu?.tippy?.setProps({
-      onHidden: () => this.$refs.menuButton.$el.focus(),
-      onShown: () => this.$refs.menu.$el.querySelector('a:first-of-type').focus()
+    ;(this.$refs.menu as InstanceType<typeof OcDrop>)?.tippy?.setProps({
+      onHidden: () => (this.$refs.menuButton as ComponentPublicInstance).$el.focus(),
+      onShown: () =>
+        (this.$refs.menu as ComponentPublicInstance).$el.querySelector('a:first-of-type').focus()
     })
   },
   methods: {

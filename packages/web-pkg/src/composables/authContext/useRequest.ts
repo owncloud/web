@@ -15,7 +15,7 @@ interface RequestOptions {
 }
 
 export interface RequestResult {
-  makeRequest(method: Method, url: string, config: AxiosRequestConfig): Promise<AxiosResponse>
+  makeRequest(method: Method, url: string, config?: AxiosRequestConfig): Promise<AxiosResponse>
 }
 
 export function useRequest(options: RequestOptions = {}): RequestResult {
@@ -36,7 +36,6 @@ export function useRequest(options: RequestOptions = {}): RequestResult {
       ? clientService.httpAuthenticated
       : clientService.httpUnAuthenticated
 
-    config = config || {}
     config.headers = config.headers || {}
 
     if (unref(isPublicLinkContext)) {

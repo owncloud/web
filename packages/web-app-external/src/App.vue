@@ -148,7 +148,7 @@ export default defineComponent({
       }
 
       if (this.method === 'POST' && this.formParameters) {
-        this.$nextTick(() => this.$refs.subm.click())
+        this.$nextTick(() => (this.$refs.subm as HTMLInputElement).click())
       }
       this.loading = false
     } catch (error) {

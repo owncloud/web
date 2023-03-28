@@ -48,9 +48,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { urlJoin } from 'web-client/src/utils'
+import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
   props: {
@@ -66,9 +67,10 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.$refs.menu?.tippy?.setProps({
-      onHidden: () => this.$refs.menubutton.$el.focus(),
-      onShown: () => this.$refs.menu.$el.querySelector('a:first-of-type').focus()
+    ;(this.$refs.menu as InstanceType<typeof OcDrop>)?.tippy?.setProps({
+      onHidden: () => (this.$refs.menubutton as ComponentPublicInstance).$el.focus(),
+      onShown: () =>
+        (this.$refs.menu as ComponentPublicInstance).$el.querySelector('a:first-of-type').focus()
     })
   },
   methods: {

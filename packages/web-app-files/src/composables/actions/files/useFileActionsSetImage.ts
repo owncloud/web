@@ -10,6 +10,7 @@ import {
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { Drive } from 'web-client/src/generated'
 
 export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -40,7 +41,6 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
       const { data } = await graphClient.drives.updateDrive(
         storageId,
         {
-          name: space.name,
           special: [
             {
               specialFolder: {
@@ -49,7 +49,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
               id: file.id as string
             }
           ]
-        },
+        } as Drive,
         {}
       )
 

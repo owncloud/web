@@ -79,12 +79,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcCheckbox from '../OcCheckbox/OcCheckbox.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
 import { FocusTrap } from 'focus-trap-vue'
+import { FocusTargetOrFalse, FocusTargetValueOrFalse } from 'focus-trap'
 
 /**
  * Modals are generally used to force the user to focus on confirming or completing a single action.
@@ -289,7 +290,7 @@ export default defineComponent({
      * Selection range for input to accomplish partial selection
      */
     inputSelectionRange: {
-      type: Array,
+      type: Array as unknown as PropType<[number, number]>,
       required: false,
       default: null
     },
@@ -343,12 +344,15 @@ export default defineComponent({
     }
   },
   computed: {
-    initialFocusRef() {
+    initialFocusRef(): FocusTargetOrFalse {
       if (this.focusTrapInitial) {
         return this.focusTrapInitial
       }
       return () => {
-        return this.$refs.ocModalInput || this.$refs.ocModal
+        // FIXME: according to the types it's incorrect to pass this.$refs.ocModalInput
+        // but passing this.$refs.ocModalInput?.$el does not work …
+        return ((this.$refs.ocModalInput as ComponentPublicInstance as unknown as HTMLElement) ||
+          (this.$refs.ocModal as HTMLElement)) as FocusTargetValueOrFalse
       }
     },
     classes() {

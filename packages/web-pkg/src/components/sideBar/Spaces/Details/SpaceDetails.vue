@@ -68,7 +68,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, inject, ref } from 'vue'
+import { defineComponent, inject, ref, computed } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
 import { buildResource, buildWebDavSpacesPath, SpaceResource } from 'web-client/src/helpers'
@@ -128,9 +128,9 @@ export default defineComponent({
       })
     })
 
-    const linkShareCount = () => {
+    const linkShareCount = computed(() => {
       return store.getters['Files/outgoingLinks'].length
-    }
+    })
 
     return { loadImageTask, spaceImage, resource, linkShareCount }
   },

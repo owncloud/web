@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, provide } from 'vue'
+import { ComponentPublicInstance, computed, defineComponent, inject, provide } from 'vue'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
@@ -56,7 +56,7 @@ export default defineComponent({
           this.loadIncomingParentShare.perform(this.resource)
         }
         // FIXME: !old can be removed as soon as https://github.com/owncloud/web/issues/7621 has been fixed
-        if (this.loading || !this.activePanel || !old) {
+        if (!this.activePanel || !old) {
           return
         }
         this.$nextTick(() => {
@@ -65,7 +65,10 @@ export default defineComponent({
           if (!ref || !this.$refs[ref]) {
             return
           }
-          this.$emit('scrollToElement', { element: this.$refs[ref].$el, panelName })
+          this.$emit('scrollToElement', {
+            element: (this.$refs[ref] as ComponentPublicInstance).$el,
+            panelName
+          })
         })
       },
       immediate: true

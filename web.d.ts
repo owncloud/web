@@ -1,11 +1,33 @@
 /// <reference types="vite/client" />
 
-// This file must have at least one export or import on top-level
-import { Ability, ClientService, LoadingService, PreviewService } from 'web-pkg'
+import { Ability, ClientService, LoadingService } from 'web-pkg'
+import { OwnCloudSdk } from 'web-client/src/types'
+import { Language } from 'vue3-gettext'
+import { Router, RouteRecordNormalizedLoaded } from 'vue-router'
+import { Store } from 'vuex'
+import { ClientService, LoadingService, PreviewService } from 'web-pkg/src/services'
+import { UppyService } from 'web-runtime/src/services/uppyService'
 
+// This file must have at least one export or import on top-level
 export {}
 
 declare module 'vue' {
+  interface ComponentCustomProperties {
+    $ability: Ability
+    $client: OwnCloudSdk
+    $clientService: ClientService
+    $gettext: Language['$gettext']
+    $gettextInterpolate: Language['interpolate']
+    $language: Language
+    $loadingService: LoadingService
+    $ngettext: Language['$ngettext']
+    $previewService: PreviewService
+    $route: RouteRecordNormalizedLoaded
+    $router: Router
+    $store: Store<any>
+    $uppyService: UppyService
+  }
+
   interface GlobalComponents {
     Portal: typeof import('portal-vue')['Portal']
     PortalTarget: typeof import('portal-vue')['PortalTarget']
@@ -71,13 +93,18 @@ declare module 'vue' {
     OcTableHeader: typeof import('@ownclouders/design-system/src/components')['OcTableHeader']
     OcTableRow: typeof import('@ownclouders/design-system/src/components')['OcTableRow']
   }
+}
 
-  interface ComponentCustomProperties {
-    $ability: Ability
-    $clientService: ClientService
-    $loadingService: LoadingService
-    $previewService: PreviewService
-    $router: Router
-    $route: RouteRecordNormalizedLoaded
-  }
+// TODO: Remove once https://github.com/vuejs/test-utils/issues/1973 is resolved
+declare module '@vue/test-utils' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
+  export function mount<T extends DefineComponent<{}, {}, any>>(
+    component: T,
+    options?: ComponentMountingOptions<T>
+  ): VueWrapper<InstanceType<T>>
+
+  export function shallowMount<T extends DefineComponent<{}, {}, any>>(
+    component: T,
+    options?: ComponentMountingOptions<T>
+  ): VueWrapper<InstanceType<T>>
 }

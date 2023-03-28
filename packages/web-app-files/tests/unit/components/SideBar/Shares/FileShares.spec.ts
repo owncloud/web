@@ -120,7 +120,7 @@ describe('FileShares', () => {
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
     })
     it('share should not be modifiable if user is not manager', async () => {
-      const space = mock<SpaceResource>({ driveType: 'personal' }) as any
+      const space = mock<SpaceResource>({ driveType: 'personal' })
       ;(space as any).isManager = jest.fn(() => false)
       collaborators[0]['indirect'] = true
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })

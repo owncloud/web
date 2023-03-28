@@ -23,9 +23,10 @@ describe('InviteCollaborator RecipientContainer', () => {
       expect(wrapper.html()).toMatchSnapshot()
     })
   })
-  it('displays an avatar image if capability is present', () => {
+  it('displays an avatar image if capability is present', async () => {
     const recipient = getRecipient()
     const { wrapper } = getMountedWrapper(recipient, true)
+    await wrapper.vm.$nextTick()
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('emits an event if deselect button is clicked', async () => {

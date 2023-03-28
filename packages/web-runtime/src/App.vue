@@ -119,7 +119,7 @@ export default defineComponent({
   },
   methods: {
     focusModal(component, event) {
-      this.focus({
+      ;(this as any).focus({
         revert: event === 'beforeUnmount'
       })
     },

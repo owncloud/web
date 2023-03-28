@@ -111,12 +111,13 @@ import get from 'lodash-es/get'
 import RoleItem from '../Shared/RoleItem.vue'
 import {
   PeopleShareRoles,
+  Share,
   SharePermissions,
   ShareRole,
   SpacePeopleShareRoles
 } from 'web-client/src/helpers/share'
 import * as uuid from 'uuid'
-import { defineComponent, inject, PropType } from 'vue'
+import { defineComponent, inject, PropType, ComponentPublicInstance } from 'vue'
 import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingCanDenyAccess,
@@ -124,6 +125,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
+import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
   name: 'RoleDropdown',
@@ -154,7 +156,7 @@ export default defineComponent({
     const store = useStore()
     return {
       resource: inject<Resource>('resource'),
-      incomingParentShare: inject<Resource>('incomingParentShare'),
+      incomingParentShare: inject<Share>('incomingParentShare'),
       hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
       resharingDefault: useCapabilityFilesSharingResharingDefault(store)
@@ -199,7 +201,7 @@ export default defineComponent({
 
       if (this.incomingParentShare && this.resourceIsSharable) {
         return PeopleShareRoles.filterByBitmask(
-          parseInt(this.incomingParentShare.permissions),
+          this.incomingParentShare.permissions,
           this.resource.isFolder,
           this.allowSharePermission,
           this.hasRoleCustomPermissions
@@ -211,7 +213,7 @@ export default defineComponent({
     },
     availablePermissions() {
       if (this.incomingParentShare && this.resourceIsSharable) {
-        return SharePermissions.bitmaskToPermissions(parseInt(this.incomingParentShare.permissions))
+        return SharePermissions.bitmaskToPermissions(this.incomingParentShare.permissions)
       }
       return this.customPermissionsRole.permissions(this.allowSharePermission)
     },
@@ -264,7 +266,7 @@ export default defineComponent({
 
     selectRole(role) {
       if (role.hasCustomPermissions) {
-        this.$refs.customPermissionsDrop.show()
+        ;(this.$refs.customPermissionsDrop as InstanceType<typeof OcDrop>).show()
         return
       }
       this.selectedRole = role
@@ -281,7 +283,7 @@ export default defineComponent({
     },
 
     confirmCustomPermissions() {
-      this.$refs.customPermissionsDrop.hide()
+      ;(this.$refs.customPermissionsDrop as InstanceType<typeof OcDrop>).hide()
       const bitmask = SharePermissions.permissionsToBitmask(this.customPermissions)
       this.selectedRole = PeopleShareRoles.getByBitmask(
         bitmask,
@@ -295,8 +297,8 @@ export default defineComponent({
       this.customPermissions = this.existingPermissions.length
         ? this.existingPermissions
         : this.defaultCustomPermissions
-      this.$refs.customPermissionsDrop.hide()
-      this.$refs.rolesDrop.show()
+      ;(this.$refs.customPermissionsDrop as InstanceType<typeof OcDrop>).hide()
+      ;(this.$refs.rolesDrop as InstanceType<typeof OcDrop>).show()
     },
 
     cycleRoles(event) {
@@ -317,7 +319,7 @@ export default defineComponent({
 
       // if there is only 1 or no roleSelect we can early return
       // it does not make sense to cycle through it if value is less than 1
-      const roleSelect = this.$refs.roleSelect || []
+      const roleSelect = (this.$refs.roleSelect as ComponentPublicInstance[]) || []
 
       if (roleSelect.length <= 1) {
         return

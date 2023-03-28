@@ -129,7 +129,7 @@ export default defineComponent({
       default: ''
     },
     items: {
-      type: Array,
+      type: Array as PropType<Resource[]>,
       required: true
     },
     shareStatus: {

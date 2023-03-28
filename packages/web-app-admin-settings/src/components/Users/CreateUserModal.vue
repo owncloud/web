@@ -131,7 +131,7 @@ export default defineComponent({
 
       if (
         this.user.onPremisesSamAccountName.length &&
-        !isNaN(this.user.onPremisesSamAccountName[0])
+        !isNaN(parseInt(this.user.onPremisesSamAccountName[0]))
       ) {
         this.formData.userName.errorMessage = this.$gettext('User name cannot start with a number')
         return false

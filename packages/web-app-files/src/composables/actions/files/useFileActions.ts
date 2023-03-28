@@ -156,7 +156,14 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     }
   }
 
-  const openEditor = (editor, driveAliasAndItem: string, filePath, fileId, mode, shareId) => {
+  const openEditor = (
+    editor,
+    driveAliasAndItem: string,
+    filePath,
+    fileId,
+    mode,
+    shareId = undefined
+  ) => {
     const configuration = store.getters['configuration']
 
     if (editor.handler) {

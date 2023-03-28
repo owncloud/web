@@ -627,8 +627,9 @@ export default defineComponent({
       return item.id === this.latestSelectedId
     },
     hasRenameAction(item) {
-      return this.renameActions.filter((menuItem) => menuItem.isEnabled({ resources: [item] }))
-        .length
+      return this.renameActions.filter((menuItem) =>
+        menuItem.isEnabled({ space: this.space, resources: [item] })
+      ).length
     },
     openRenameDialog(item) {
       this.renameHandler({
