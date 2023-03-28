@@ -30,7 +30,8 @@ import {
   useFileActionsSetImage,
   useFileActionsShowEditTags,
   useFileActionsNavigate,
-  useFileActionsFavorite
+  useFileActionsFavorite,
+  useFileActionsCreateSpaceFromResource
 } from '../../composables/actions/files'
 import { FileActionOptions } from 'web-pkg/src/composables/actions'
 
@@ -66,6 +67,7 @@ export default defineComponent({
     const { actions: setSpaceReadmeActions } = useFileActionsSetReadme({ store })
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
     const { actions: showEditTagsActions } = useFileActionsShowEditTags({ store })
+    const { actions: createSpaceFromResourceActions } = useFileActionsCreateSpaceFromResource({ store })
     const { actions: showSharesActions } = useFileActionsShowShares({ store })
 
     // type cast to make vue-tsc aware of the type
@@ -79,7 +81,8 @@ export default defineComponent({
         ...unref(copyActions),
         ...unref(emptyTrashBinActions),
         ...unref(deleteActions),
-        ...unref(restoreActions)
+        ...unref(restoreActions),
+        ...unref(createSpaceFromResourceActions)
       ].filter((item) => item.isEnabled(unref(actionOptions)))
     )
 
@@ -109,6 +112,7 @@ export default defineComponent({
         ...unref(copyActions),
         ...unref(pasteActions),
         ...unref(renameActions),
+        ...unref(createSpaceFromResourceActions),
         ...unref(showEditTagsActions),
         ...unref(restoreActions),
         ...unref(acceptShareActions),

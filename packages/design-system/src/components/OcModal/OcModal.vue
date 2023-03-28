@@ -17,23 +17,31 @@
           <div v-if="$slots.content" key="modal-slot-content" class="oc-modal-body-message">
             <slot name="content" />
           </div>
-          <oc-text-input
-            v-else-if="hasInput"
-            key="modal-input"
-            ref="ocModalInput"
-            v-model="userInputValue"
-            class="oc-modal-body-input"
-            :error-message="inputError"
-            :label="inputLabel"
-            :type="inputType"
-            :description-message="inputDescription"
-            :disabled="inputDisabled"
-            :fix-message-line="true"
-            :selection-range="inputSelectionRange"
-            @update:model-value="inputOnInput"
-            @keydown.enter.prevent="confirm"
-          />
-          <p v-else key="modal-message" class="oc-modal-body-message oc-m-rm" v-text="message" />
+          <template v-else>
+            <p
+              v-if="message"
+              key="modal-message"
+              class="oc-modal-body-message oc-mt-rm"
+              :class="{ 'oc-mb-rm': !hasInput }"
+              v-text="message"
+            />
+            <oc-text-input
+              v-if="hasInput"
+              key="modal-input"
+              ref="ocModalInput"
+              v-model="userInputValue"
+              class="oc-modal-body-input"
+              :error-message="inputError"
+              :label="inputLabel"
+              :type="inputType"
+              :description-message="inputDescription"
+              :disabled="inputDisabled"
+              :fix-message-line="true"
+              :selection-range="inputSelectionRange"
+              @update:model-value="inputOnInput"
+              @keydown.enter.prevent="confirm"
+            />
+          </template>
           <div v-if="checkboxLabel" class="oc-modal-body-actions oc-flex oc-flex-left">
             <oc-checkbox
               v-model="checkboxValue"
