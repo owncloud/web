@@ -25,7 +25,7 @@ importers:
       '@babel/preset-env': 7.20.2
       '@babel/register': 7.18.9
       '@cucumber/cucumber': 7.3.2
-      '@cucumber/messages': 20.0.0
+      '@cucumber/messages': 21.0.1
       '@cucumber/pretty-formatter': 1.0.0
       '@noble/hashes': 1.1.5
       '@ownclouders/babel-preset': workspace:*
@@ -120,8 +120,8 @@ importers:
       '@babel/preset-env': 7.20.2_@babel+core@7.20.12
       '@babel/register': 7.18.9_@babel+core@7.20.12
       '@cucumber/cucumber': 7.3.2
-      '@cucumber/messages': 20.0.0
-      '@cucumber/pretty-formatter': 1.0.0_abdeawmydh2dfoa3rc72ddbzhq
+      '@cucumber/messages': 21.0.1
+      '@cucumber/pretty-formatter': 1.0.0_ppkeinktwrkxc4spqrejcvsjhi
       '@noble/hashes': 1.1.5
       '@ownclouders/babel-preset': link:packages/babel-preset
       '@ownclouders/design-system': link:packages/design-system
@@ -4424,8 +4424,8 @@ packages:
       uuid: 8.3.2
     dev: true
 
-  /@cucumber/messages/20.0.0:
-    resolution: {integrity: sha512-JFrFwuhxsbig0afaViNhuzoQyC+GQzlI7m+rX+lSiDGV13K3sJzMmHjkbCiNOgoRlKAMwIGR9TRMH0xj9/My0w==}
+  /@cucumber/messages/21.0.1:
+    resolution: {integrity: sha512-pGR7iURM4SF9Qp1IIpNiVQ77J9kfxMkPOEbyy+zRmGABnWWCsqMpJdfHeh9Mb3VskemVw85++e15JT0PYdcR3g==}
     dependencies:
       '@types/uuid': 8.3.4
       class-transformer: 0.5.1
@@ -4447,14 +4447,14 @@ packages:
       ts-dedent: 2.2.0
     dev: true
 
-  /@cucumber/pretty-formatter/1.0.0_abdeawmydh2dfoa3rc72ddbzhq:
+  /@cucumber/pretty-formatter/1.0.0_ppkeinktwrkxc4spqrejcvsjhi:
     resolution: {integrity: sha512-wcnIMN94HyaHGsfq72dgCvr1d8q6VGH4Y6Gl5weJ2TNZw1qn2UY85Iki4c9VdaLUONYnyYH3+178YB+9RFe/Hw==}
     peerDependencies:
       '@cucumber/cucumber': '>=7.0.0'
       '@cucumber/messages': '*'
     dependencies:
       '@cucumber/cucumber': 7.3.2
-      '@cucumber/messages': 20.0.0
+      '@cucumber/messages': 21.0.1
       ansi-styles: 5.2.0
       cli-table3: 0.6.0
       figures: 3.2.0
