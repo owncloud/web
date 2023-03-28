@@ -112,6 +112,7 @@ Summary
 * Enhancement - Add `Accept-Language` header to all outgoing requests: [#8612](https://github.com/owncloud/web/issues/8612)
 * Enhancement - Add logout url: [#8630](https://github.com/owncloud/web/pull/8630)
 * Enhancement - Enable guest users: [#8652](https://github.com/owncloud/web/pull/8652)
+* Enhancement - Add customizable label and placeholder: [#8711](https://github.com/owncloud/web/pull/8711)
 * Enhancement - Context helper read more link configurable: [#8713](https://github.com/owncloud/web/pull/8713)
 
 Details
@@ -1056,6 +1057,13 @@ Details
 
    https://github.com/owncloud/web/issues/8663
    https://github.com/owncloud/web/pull/8652
+
+* Enhancement - Add customizable label and placeholder: [#8711](https://github.com/owncloud/web/pull/8711)
+
+   The formerly fixed placeholder for the text input on item filter component is now configurable
+   via prop for improved customization. Also, we added a customizable label.
+
+   https://github.com/owncloud/web/pull/8711
 
 * Enhancement - Context helper read more link configurable: [#8713](https://github.com/owncloud/web/pull/8713)
 
