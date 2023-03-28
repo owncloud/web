@@ -38,6 +38,7 @@ Summary
 * Bugfix - PDF display issue - Update CSP object-src policy: [#8498](https://github.com/owncloud/web/pull/8498)
 * Bugfix - Remove fuzzy search results: [#8508](https://github.com/owncloud/web/pull/8508)
 * Bugfix - Space image upload: [#8523](https://github.com/owncloud/web/issues/8523)
+* Bugfix - Height of dropdown no-option: [#8554](https://github.com/owncloud/web/pull/8554)
 * Bugfix - De-duplicate event handling to prevent errors on Draw-io: [#8576](https://github.com/owncloud/web/pull/8576)
 * Bugfix - Users without role assignment: [#8585](https://github.com/owncloud/web/issues/8585)
 * Bugfix - Password enforced check for public links: [#8587](https://github.com/owncloud/web/issues/8587)
@@ -339,6 +340,12 @@ Details
 
    https://github.com/owncloud/web/issues/8523
    https://github.com/owncloud/web/pull/8526
+
+* Bugfix - Height of dropdown no-option: [#8554](https://github.com/owncloud/web/pull/8554)
+
+   We fixed the height of the select dropdown field if no select option is available.
+
+   https://github.com/owncloud/web/pull/8554
 
 * Bugfix - De-duplicate event handling to prevent errors on Draw-io: [#8576](https://github.com/owncloud/web/pull/8576)
 
