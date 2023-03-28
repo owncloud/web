@@ -13,7 +13,9 @@
           v-model="filterTerm"
           class="item-filter-input oc-mb-m oc-mt-s"
           autocomplete="off"
-          :placeholder="optionFilterPlaceholder === '' ? $gettext('Enter term') : optionFilterPlaceholder"
+          :placeholder="
+            optionFilterPlaceholder === '' ? $gettext('Enter term') : optionFilterPlaceholder
+          "
           :label="optionFilterLabel === '' ? $gettext('Filter list') : optionFilterLabel"
         />
         <div ref="itemFilterListRef">
