@@ -63,8 +63,8 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
         }
       ),
       message: $ngettext(
-        'Create Space with the content of "%{resourceName}". The content will be copied',
-        'Create Space with the selected files. The content will be copied',
+        'Create Space with the content of "%{resourceName}". The content will be copied.',
+        'Create Space with the selected files. The content will be copied.',
         resources.length,
         {
           resourceName: resources[0].name
