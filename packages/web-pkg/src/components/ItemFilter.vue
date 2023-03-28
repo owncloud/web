@@ -83,14 +83,14 @@ export default defineComponent({
       required: false,
       default: ''
     },
-    items: {
-      type: Array,
-      required: true
-    },
     showOptionFilter: {
       type: Boolean,
       required: false,
       default: false
+    },
+    items: {
+      type: Array,
+      required: true
     },
     allowMultiple: {
       type: Boolean,
