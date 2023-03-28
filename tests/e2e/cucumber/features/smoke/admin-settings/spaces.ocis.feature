@@ -122,3 +122,4 @@ Feature: spaces management
       | Carol   | viewer  |
       | Marie   | viewer  |
       | Richard | viewer  |
+    And "Alice" logs out
