@@ -1,0 +1,8 @@
+Enhancement: Create Space from selection
+
+We've added a new action 'Create Space from selection' to the users
+personal home so they can create a Space with the copied content of their
+selected files and folders.
+
+https://github.com/owncloud/web/pull/8730
+https://github.com/owncloud/web/issues/8735
