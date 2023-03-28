@@ -22,7 +22,7 @@ import {
   addExpirationDateToMember,
   removeExpirationDateFromMember
 } from './actions'
-import { spaceWithSpaceIDExist } from './utils'
+import { spaceWithSpaceIDNotExist } from './utils'
 import { ICollaborator } from '../share/collaborator'
 
 export class Spaces {
@@ -84,8 +84,8 @@ export class Spaces {
     return id
   }
 
-  async spacesIdExist(spaceID: string): Promise<boolean> {
-    return await spaceWithSpaceIDExist({ spaceID, page: this.#page })
+  async expectThatSpacesIdNotExist(spaceID: string): Promise<void> {
+    await spaceWithSpaceIDNotExist({ spaceID, page: this.#page })
   }
 
   async canUserEditResource(args: Omit<canUserEditSpaceResourceArgs, 'page'>): Promise<boolean> {

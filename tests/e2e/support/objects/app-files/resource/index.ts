@@ -30,8 +30,8 @@ import {
   editResourcesArgs,
   openFileInViewer,
   openFileInViewerArgs,
-  getDeleteResourceButtonVisibility,
-  getRestoreResourceButtonVisibility,
+  expectThatDeleteButtonIsNotVisible,
+  expectThatRestoreResourceButtonVisibility,
   deleteResourceTrashbinArgs,
   addTagsToResource,
   removeTagsFromResource,
@@ -140,10 +140,10 @@ export class Resource {
     return message
   }
 
-  async isDeleteTrashBinButtonVisible(
+  async expectThatDeleteTrashBinButtonIsNotVisible(
     args: Omit<deleteResourceTrashbinArgs, 'page'>
-  ): Promise<boolean> {
-    return await getDeleteResourceButtonVisibility({ ...args, page: this.#page })
+  ): Promise<void> {
+    return await expectThatDeleteButtonIsNotVisible({ ...args, page: this.#page })
   }
 
   async restoreTrashBin(args: Omit<restoreResourceTrashbinArgs, 'page'>): Promise<string> {
@@ -153,10 +153,10 @@ export class Resource {
     return message
   }
 
-  async isRestoreTrashBinButtonVisible(
+  async expectThatRestoreTrashBinButtonIsNotVisible(
     args: Omit<restoreResourceTrashbinArgs, 'page'>
-  ): Promise<boolean> {
-    return await getRestoreResourceButtonVisibility({ ...args, page: this.#page })
+  ): Promise<void> {
+    return await expectThatRestoreResourceButtonVisibility({ ...args, page: this.#page })
   }
 
   async areTagsVisibleForResourceInFilesTable(
