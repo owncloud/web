@@ -141,8 +141,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     const spaceID = spacesObject.getSpaceID({ key: space })
-    const isSpaceNotVisible = await spacesObject.spacesIdExist(spaceID)
-    expect(isSpaceNotVisible).toBe(true)
+    await spacesObject.expectThatSpacesIdNotExist(spaceID)
   }
 )
 

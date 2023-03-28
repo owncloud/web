@@ -23,7 +23,7 @@ const userFilterOption = '//ul[contains(@class, "item-filter-list")]//button[@da
 const usersTable = '.users-table'
 const quotaInput = '#quota-select-form .vs__search'
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
-const userCheckboxSelector = `[data-item-id="%s"]:not(.oc-table-highlighted) input[type=checkbox]`
+const userCheckboxSelector = `[data-item-id="%s"] input[type=checkbox]`
 const editQuotaBtn = '.oc-files-actions-edit-quota-trigger'
 const quotaInputBatchAction = '#quota-select-batch-action-form .vs__search'
 const userInput = '#%s-input'
@@ -145,7 +145,7 @@ export const getDisplayedUsers = async (args: { page: Page }): Promise<string[]>
 export const selectUser = async (args: { page: Page; uuid: string }): Promise<void> => {
   const { page, uuid } = args
   const checkbox = await page.locator(util.format(userCheckboxSelector, uuid))
-  const checkBoxAlreadySelected = !(await checkbox.isVisible())
+  const checkBoxAlreadySelected = await checkbox.isChecked()
   if (checkBoxAlreadySelected) {
     return
   }

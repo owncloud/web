@@ -20,8 +20,6 @@ const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger:vis
 const spacesDescriptionInputArea = '#description-input-area'
 const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
-const spaceDeletedFilesButton = '.oc-files-actions-delete-trigger:visible'
-const spaceContextButton = '#space-context-btn'
 
 export const openActionsPanel = async (page: Page): Promise<void> => {
   await sidebar.open({ page })

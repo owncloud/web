@@ -639,9 +639,9 @@ export const deleteResourceTrashbin = async (args: deleteResourceTrashbinArgs): 
   return message.trim().toLowerCase()
 }
 
-export const getDeleteResourceButtonVisibility = async (
+export const expectThatDeleteButtonIsNotVisible = async (
   args: deleteResourceTrashbinArgs
-): Promise<boolean> => {
+): Promise<void> => {
   const { page, resource } = args
   const resourceCheckbox = page.locator(
     util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
@@ -649,7 +649,8 @@ export const getDeleteResourceButtonVisibility = async (
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
-  return await page.locator(permanentDeleteButton).isVisible()
+  const deleteButton = page.locator(permanentDeleteButton)
+  await expect(deleteButton).not.toBeVisible()
 }
 
 export interface restoreResourceTrashbinArgs {
@@ -685,9 +686,9 @@ export const restoreResourceTrashbin = async (
   return message.trim().toLowerCase()
 }
 
-export const getRestoreResourceButtonVisibility = async (
+export const expectThatRestoreResourceButtonVisibility = async (
   args: restoreResourceTrashbinArgs
-): Promise<boolean> => {
+): Promise<void> => {
   const { page, resource } = args
   const resourceCheckbox = page.locator(
     util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
@@ -695,7 +696,8 @@ export const getRestoreResourceButtonVisibility = async (
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
-  return await page.locator(restoreResourceButton).isVisible()
+  const restoreButton = page.locator(restoreResourceButton)
+  await expect(restoreButton).not.toBeVisible()
 }
 
 export const getTagsForResourceVisibilityInFilesTable = async (

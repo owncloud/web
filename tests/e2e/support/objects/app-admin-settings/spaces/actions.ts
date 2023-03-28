@@ -5,7 +5,7 @@ import { locatorUtils } from '../../../utils'
 const spaceTrSelector = '.spaces-table tbody > tr'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
 const contextMenuSelector = `[data-item-id="%s"] .spaces-table-btn-action-dropdown`
-const spaceCheckboxSelector = `[data-item-id="%s"]:not(.oc-table-highlighted) input[type=checkbox]`
+const spaceCheckboxSelector = `[data-item-id="%s"] input[type=checkbox]`
 const contextMenuActionButton = `.oc-files-actions-%s-trigger`
 const inputFieldSelector =
   '//div[@class="oc-modal-body-input"]//input[contains(@class,"oc-text-input")]'
@@ -148,7 +148,7 @@ export const deleteSpace = async (args: {
 export const selectSpace = async (args: { page: Page; id: string }): Promise<void> => {
   const { page, id } = args
   const checkbox = await page.locator(util.format(spaceCheckboxSelector, id))
-  const checkBoxAlreadySelected = !(await checkbox.isVisible())
+  const checkBoxAlreadySelected = await checkbox.isChecked()
   if (checkBoxAlreadySelected) {
     return
   }
