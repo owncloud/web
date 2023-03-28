@@ -67,7 +67,9 @@ export default defineComponent({
     const { actions: setSpaceReadmeActions } = useFileActionsSetReadme({ store })
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
     const { actions: showEditTagsActions } = useFileActionsShowEditTags({ store })
-    const { actions: createSpaceFromResourceActions } = useFileActionsCreateSpaceFromResource({ store })
+    const { actions: createSpaceFromResourceActions } = useFileActionsCreateSpaceFromResource({
+      store
+    })
     const { actions: showSharesActions } = useFileActionsShowShares({ store })
 
     // type cast to make vue-tsc aware of the type
