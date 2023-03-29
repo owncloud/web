@@ -450,19 +450,22 @@ export default defineComponent({
       if (this.hasShareJail && path === '/') {
         path = `/${this.resource.name}`
       }
-      await this.addLink({
-        path,
-        client: this.$client,
-        storageId: this.resource.fileId || this.resource.id,
-        params
-      }).catch((e) => {
+      try {
+        await this.addLink({
+          path,
+          client: this.$client,
+          storageId: this.resource.fileId || this.resource.id,
+          params
+        })
+      } catch (e) {
         onError(e)
         console.error(e)
         this.showMessage({
           title: this.$gettext('Failed to create link'),
           status: 'danger'
         })
-      })
+        return
+      }
 
       this.showMessage({
         title: this.$gettext('Link was created successfully')
@@ -470,20 +473,21 @@ export default defineComponent({
     },
 
     async updatePublicLink({ params, onSuccess = () => {}, onError = (e) => {} }) {
-      await this.updateLink({
-        id: params.id,
-        client: this.$client,
-        params
-      })
-        .then(onSuccess)
-        .catch((e) => {
-          onError(e)
-          console.error(e)
-          this.showMessage({
-            title: this.$gettext('Failed to update link'),
-            status: 'danger'
-          })
+      try {
+        await this.updateLink({
+          id: params.id,
+          client: this.$client,
+          params
+        }).then(onSuccess)
+      } catch (e) {
+        onError(e)
+        console.error(e)
+        this.showMessage({
+          title: this.$gettext('Failed to update link'),
+          status: 'danger'
         })
+        return
+      }
 
       this.showMessage({
         title: this.$gettext('Link was updated successfully')
