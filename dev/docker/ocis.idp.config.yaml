@@ -15,3 +15,13 @@ clients:
     - https://host.docker.internal:9100
     - https://host.docker.internal:9200
     - https://host.docker.internal:9201
+- id: filepicker
+  name: ownCloud file picker
+  application_type: ""
+  trusted: true
+  secret: ""
+  redirect_uris:
+    - https://host.docker.internal:8080/
+    - https://host.docker.internal:8080/oidc-callback.html
+  origins:
+    - https://host.docker.internal:8080
