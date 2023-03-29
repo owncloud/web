@@ -13,9 +13,6 @@
           v-model="filterTerm"
           class="item-filter-input oc-mb-m oc-mt-s"
           autocomplete="off"
-          :placeholder="
-            optionFilterPlaceholder === '' ? $gettext('Enter term') : optionFilterPlaceholder
-          "
           :label="optionFilterLabel === '' ? $gettext('Filter list') : optionFilterLabel"
         />
         <div ref="itemFilterListRef">
@@ -74,11 +71,6 @@ export default defineComponent({
     filterName: {
       type: String,
       required: true
-    },
-    optionFilterPlaceholder: {
-      type: String,
-      required: false,
-      default: ''
     },
     optionFilterLabel: {
       type: String,
