@@ -17,7 +17,7 @@ export const useCreateSpace = () => {
     })
 
     await webdav.createFolder(spaceResource, { path: '.space' })
-    const markdown = await (webdav as WebDAV).putFileContents(spaceResource, {
+    const markdown = await webdav.putFileContents(spaceResource, {
       path: '.space/readme.md',
       content: $gettext('Here you can add a description for this Space.')
     })
