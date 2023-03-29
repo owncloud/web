@@ -480,3 +480,12 @@ When(
     }
   }
 )
+
+When(
+  '{string} creates space {string} from folder {string} using the context menu',
+  async function (this: World, stepUser: string, spaceName: string, folderName: string) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.createSpaceFromFolder({ folderName: folderName, spaceName: spaceName })
+  }
+)

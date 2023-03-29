@@ -20,7 +20,8 @@ import {
   changeSpaceRole,
   createPublicLinkForSpace,
   addExpirationDateToMember,
-  removeExpirationDateFromMember
+  removeExpirationDateFromMember,
+  openSpaceNamed
 } from './actions'
 import { spaceWithSpaceIDNotExist } from './utils'
 import { ICollaborator } from '../share/collaborator'
@@ -50,6 +51,10 @@ export class Spaces {
   async open({ key }: { key: string }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
     await openSpace({ page: this.#page, id })
+  }
+
+  async openNamed({ name }: { name: string }): Promise<void> {
+    await openSpaceNamed({ page: this.#page, name })
   }
 
   async changeName({ key, value }: { key: string; value: string }): Promise<void> {

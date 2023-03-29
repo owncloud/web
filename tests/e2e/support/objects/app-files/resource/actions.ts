@@ -97,6 +97,21 @@ export interface createResourceArgs {
   content?: string
 }
 
+export const createSpaceFromFolder = async ({
+  page,
+  folderName,
+  spaceName
+}: {
+  page: Page
+  folderName: string
+  spaceName: string
+}): Promise<void> => {
+  await page.locator(util.format(resourceNameSelector, folderName)).click({ button: 'right' })
+  await page.locator('text=Create Space from selection').first().click()
+  await page.locator('.oc-text-input').first().fill(spaceName)
+  await page.locator(util.format(actionConfirmationButton, 'Create')).click()
+}
+
 export const createNewFolder = async ({
   page,
   resource
@@ -662,6 +677,12 @@ export interface restoreResourceTrashbinArgs {
 export interface clickTagArgs {
   resource: string
   tag: string
+  page: Page
+}
+
+export interface createSpaceFromFolderArgs {
+  folderName: string
+  spaceName: string
   page: Page
 }
 

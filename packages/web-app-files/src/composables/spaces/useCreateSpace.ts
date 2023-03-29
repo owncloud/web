@@ -1,5 +1,4 @@
 import { buildSpace } from 'web-client/src/helpers'
-import { WebDAV } from 'web-client/src/webdav'
 import { Drive } from 'web-client/src/generated'
 import { useGettext } from 'vue3-gettext'
 import { useConfigurationManager, useClientService } from 'web-pkg/src/composables'

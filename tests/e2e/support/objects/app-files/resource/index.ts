@@ -43,7 +43,9 @@ import {
   getDisplayedResourcesFromFilesList,
   resourceTagsArgs,
   clickViewModeToggle,
-  expectThatResourcesAreTiles
+  expectThatResourcesAreTiles,
+  createSpaceFromFolder,
+  createSpaceFromFolderArgs
 } from './actions'
 
 export class Resource {
@@ -223,5 +225,9 @@ export class Resource {
 
   async clickTag(args: Omit<clickTagArgs, 'page'>): Promise<void> {
     return await clickResourceTag({ ...args, page: this.#page })
+  }
+
+  async createSpaceFromFolder(args: Omit<createSpaceFromFolderArgs, 'page'>): Promise<void> {
+    return await createSpaceFromFolder({ ...args, page: this.#page })
   }
 }
