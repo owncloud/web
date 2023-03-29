@@ -486,6 +486,27 @@ When(
   async function (this: World, stepUser: string, spaceName: string, folderName: string) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.createSpaceFromFolder({ folderName: folderName, spaceName: spaceName })
+    const space = await resourceObject.createSpaceFromFolder({
+      folderName: folderName,
+      spaceName: spaceName
+    })
+    this.spacesEnvironment.createSpace({
+      key: space.name,
+      space: { name: space.name, id: space.id }
+    })
+  }
+)
+
+When(
+  '{string} creates space {string} from resources using the context menu',
+  async function (this: World, stepUser: string, spaceName: string, stepTable: DataTable) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const resources = stepTable.hashes().map((item) => item.resource)
+    const space = await resourceObject.createSpaceFromSelection({ resources, spaceName })
+    this.spacesEnvironment.createSpace({
+      key: space.name,
+      space: { name: space.name, id: space.id }
+    })
   }
 )

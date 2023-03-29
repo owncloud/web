@@ -44,16 +44,6 @@ When(
 )
 
 When(
-  '{string} navigates to the first project space named {string}',
-  async function (this: World, stepUser: string, name: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const spacesObject = new objects.applicationFiles.Spaces({ page })
-
-    await spacesObject.openNamed({ name })
-  }
-)
-
-When(
   /^"([^"]*)" (changes|updates) the space "([^"]*)" (name|subtitle|description|quota|image) to "([^"]*)"$/,
   async function (
     this: World,

@@ -87,11 +87,6 @@ export const openSpace = async (args: openSpaceArgs): Promise<void> => {
   const { page, id } = args
   await page.locator(util.format(spaceIdSelector, id)).click()
 }
-
-export const openSpaceNamed = async (args: { name: string; page: Page }): Promise<void> => {
-  const { page, name } = args
-  await page.locator(`text=${name}`).click()
-}
 /**/
 
 export const changeSpaceName = async (args: {

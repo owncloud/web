@@ -3,7 +3,7 @@ import { expect } from '@playwright/test'
 import util from 'util'
 import { resourceExists, waitForResources } from './utils'
 import path from 'path'
-import { File } from '../../../types'
+import { File, Space } from '../../../types'
 import { sidebar } from '../utils'
 import { config } from '../../../../config'
 
@@ -105,11 +105,46 @@ export const createSpaceFromFolder = async ({
   page: Page
   folderName: string
   spaceName: string
-}): Promise<void> => {
+}): Promise<Space> => {
   await page.locator(util.format(resourceNameSelector, folderName)).click({ button: 'right' })
   await page.locator('text=Create Space from selection').first().click()
   await page.locator('.oc-text-input').first().fill(spaceName)
   await page.locator(util.format(actionConfirmationButton, 'Create')).click()
+  const response = await page.waitForResponse(
+    (resp) =>
+      resp.status() === 201 && resp.request().method() === 'POST' && resp.url().endsWith('/drives')
+  )
+  await page.waitForSelector('#oc-loading-indicator')
+  await page.waitForSelector('#oc-loading-indicator', { state: 'detached' })
+  return (await response.json()) as Space
+}
+
+export const createSpaceFromSelection = async ({
+  page,
+  resources,
+  spaceName
+}: {
+  page: Page
+  resources: string[]
+  spaceName: string
+}): Promise<Space> => {
+  await selectOrDeselectResources({
+    page,
+    resources: resources.map((r) => ({ name: r } as resourceArgs)),
+    select: true
+  })
+  await page.locator(util.format(resourceNameSelector, resources[0])).click({ button: 'right' })
+
+  await page.locator('text=Create Space from selection').first().click()
+  await page.locator('.oc-text-input').first().fill(spaceName)
+  await page.locator(util.format(actionConfirmationButton, 'Create')).click()
+  const response = await page.waitForResponse(
+    (resp) =>
+      resp.status() === 201 && resp.request().method() === 'POST' && resp.url().endsWith('/drives')
+  )
+  await page.waitForSelector('#oc-loading-indicator')
+  await page.waitForSelector('#oc-loading-indicator', { state: 'detached' })
+  return (await response.json()) as Space
 }
 
 export const createNewFolder = async ({
@@ -275,7 +310,7 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
 
 interface resourceArgs {
   name: string
-  type: string
+  type?: string
 }
 
 export interface downloadResourcesArgs {
@@ -682,6 +717,12 @@ export interface clickTagArgs {
 
 export interface createSpaceFromFolderArgs {
   folderName: string
+  spaceName: string
+  page: Page
+}
+
+export interface createSpaceFromSelectionArgs {
+  resources: string[]
   spaceName: string
   page: Page
 }
