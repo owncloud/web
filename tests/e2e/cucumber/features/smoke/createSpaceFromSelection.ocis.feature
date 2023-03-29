@@ -1,7 +1,6 @@
-#oc-files-actions-create-space-from-resource-trigger
-Feature: create space shortcut
+Feature: create Space shortcut
 
-  Scenario: create space from folder
+  Scenario: create Space from folder
     Given "Admin" creates following users using API
       | id    |
       | Alice |
@@ -22,10 +21,10 @@ Feature: create space shortcut
     And "Alice" creates space "folderSpace" from folder "spaceFolder" using the context menu
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "folderSpace"
-    And "Alice" downloads the following resources using the sidebar panel
-      | resource            | from  | type   |
-      | data.zip            |       | file   |
-      | lorem.txt           |       | file   |
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource  |
+      | data.zip  |
+      | lorem.txt |
     And "Alice" logs out
 
   Scenario: create space from resources

@@ -3,7 +3,6 @@ import { spaceStore } from '../store'
 
 export class SpacesEnvironment {
   getSpace({ key }: { key: string }): Space {
-    console.log(spaceStore)
     if (!spaceStore.has(key)) {
       throw new Error(`space with key '${key}' not found`)
     }
