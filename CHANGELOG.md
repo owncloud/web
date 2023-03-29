@@ -371,6 +371,7 @@ Details
 
    https://github.com/owncloud/web/issues/8587
    https://github.com/owncloud/web/pull/8623
+   https://github.com/owncloud/web/pull/8745
 
 * Bugfix - Group members sorting: [#8592](https://github.com/owncloud/web/issues/8592)
 
