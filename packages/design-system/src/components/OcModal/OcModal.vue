@@ -513,6 +513,10 @@ export default defineComponent({
       margin-bottom: var(--oc-space-medium);
     }
 
+    .oc-input {
+      line-height: normal;
+    }
+
     &-input {
       /* FIXME: this is ugly, but required so that the bottom padding doesn't look off when reserving vertical space for error messages below the input. */
       margin-bottom: -20px;
