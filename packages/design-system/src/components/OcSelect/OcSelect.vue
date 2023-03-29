@@ -8,6 +8,7 @@
       :loading="loading"
       :searchable="searchable"
       :clearable="clearable"
+      :multiple="multiple"
       class="oc-select"
       style="background: transparent"
       v-bind="additionalAttributes"
@@ -19,9 +20,30 @@
       <template v-for="(index, name) in $slots" #[name]="data">
         <slot v-if="name !== 'search'" :name="name" v-bind="data" />
       </template>
-      <template #no-options><div v-translate>No options available.</div></template>
+      <template #no-options><div v-text="$gettext('No options available.')" /></template>
       <template #spinner="{ loading }">
         <oc-spinner v-if="loading" />
+      </template>
+      <template #selected-option-container="{ option, deselect }">
+        <span class="vs__selected" :class="{ 'vs__selected-readonly': option.readonly }">
+          <slot name="selected-option" v-bind="option">
+            {{ getOptionLabel(option) }}
+          </slot>
+          <span v-if="multiple" class="oc-flex oc-flex-middle oc-ml-s oc-mr-xs">
+            <oc-icon v-if="option.readonly" class="vs__deselect-lock" name="lock" size="small" />
+            <oc-button
+              v-else
+              appearance="raw"
+              :title="$gettext('Deselect %{label}', { label: getOptionLabel(option) })"
+              :aria-label="$gettext('Deselect %{label}', { label: getOptionLabel(option) })"
+              class="vs__deselect oc-mx-rm"
+              @mousedown.stop.prevent
+              @click="deselect(option)"
+            >
+              <oc-icon name="close" size="small" />
+            </oc-button>
+          </span>
+        </span>
       </template>
     </vue-select>
 
@@ -58,8 +80,9 @@
 import Fuse from 'fuse.js'
 import uniqueId from '../../utils/uniqueId'
 import VueSelect from 'vue-select'
+import { defineComponent, ComponentPublicInstance, onMounted, ref, unref, VNodeRef } from 'vue'
+import { useGettext } from 'vue3-gettext'
 import 'vue-select/dist/vue-select.css'
-import { defineComponent, ComponentPublicInstance } from 'vue'
 
 /**
  * Select component with a trigger and dropdown based on [Vue Select](https://vue-select.org/)
@@ -126,7 +149,7 @@ export default defineComponent({
      */
     optionLabel: {
       type: String,
-      default: null
+      default: 'label'
     },
     /**
      * Determines if the select field is searchable
@@ -181,10 +204,56 @@ export default defineComponent({
     descriptionMessage: {
       type: String,
       default: null
+    },
+    /**
+     * Determines if multiple options can be selected.
+     */
+    multiple: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['search:input', 'update:modelValue'],
+  setup(props, { emit }) {
+    const { $gettext } = useGettext()
+    const select: VNodeRef = ref()
 
+    const getOptionLabel = (option) => {
+      if (typeof option === 'object') {
+        if (!option.hasOwnProperty(props.optionLabel)) {
+          return console.warn(
+            `[vue-select warn]: Label key "option.${props.optionLabel}" does not` +
+              ` exist in options object ${JSON.stringify(option)}.\n` +
+              'https://vue-select.org/api/props.html#getoptionlabel'
+          )
+        }
+        return option[props.optionLabel]
+      }
+      return option
+    }
+
+    const setComboBoxAriaLabel = () => {
+      const comboBoxElement = (unref(select) as ComponentPublicInstance).$el.querySelector(
+        'div:first-child'
+      )
+      comboBoxElement?.setAttribute('aria-label', $gettext('Search for option'))
+    }
+
+    const userInput = (event) => {
+      /**
+       * Triggers when a value of search input is changed
+       *
+       * @property {string} query search query
+       */
+      emit('search:input', event.target.value)
+    }
+
+    onMounted(() => {
+      setComboBoxAriaLabel()
+    })
+
+    return { select, getOptionLabel, userInput }
+  },
   computed: {
     additionalAttributes() {
       const additionalAttrs = {}
@@ -215,27 +284,6 @@ export default defineComponent({
     },
     messageId() {
       return `${this.id}-message`
-    }
-  },
-
-  mounted() {
-    this.setComboBoxAriaLabel()
-  },
-
-  methods: {
-    setComboBoxAriaLabel() {
-      const comboBoxElement = (this.$refs.select as ComponentPublicInstance).$el.querySelector(
-        'div:first-child'
-      )
-      comboBoxElement.setAttribute('aria-label', this.$gettext('Search for option'))
-    },
-    userInput(event) {
-      /**
-       * Triggers when a value of search input is changed
-       *
-       * @property {string} query search query
-       */
-      this.$emit('search:input', event.target.value)
     }
   }
 })
@@ -290,6 +338,10 @@ export default defineComponent({
       transition-timing-function: ease-in-out;
       transition-property: color, background-color;
       width: 100%;
+    }
+
+    &__selected-readonly {
+      background-color: var(--oc-color-background-muted) !important;
     }
 
     &__search,

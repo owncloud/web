@@ -2,7 +2,6 @@ import {
   createStore,
   defaultComponentMocks,
   defaultStoreMockOptions,
-  defaultStubs,
   mount,
   defaultPlugins,
   mockAxiosResolve
@@ -16,14 +15,14 @@ jest.mock('web-pkg/src/composables/authContext')
 
 describe('Tags Panel', () => {
   it('show tags input form if loaded successfully', () => {
-    const resource = mockDeep<Resource>()
+    const resource = mockDeep<Resource>({ tags: [] })
     const { wrapper } = createWrapper(resource)
     expect(wrapper.find('#tags-form').exists()).toBeTruthy()
   })
 
   it('all available tags are selectable', async () => {
     const tags = 'a,b,c'
-    const resource = mockDeep<Resource>()
+    const resource = mockDeep<Resource>({ tags: [] })
     const clientService = mockDeep<ClientService>()
     clientService.graphAuthenticated.tags.getTags.mockResolvedValueOnce(
       mockAxiosResolve({ value: tags.split(',') })
@@ -31,7 +30,11 @@ describe('Tags Panel', () => {
 
     const { wrapper } = createWrapper(resource, clientService)
     await wrapper.vm.loadAvailableTagsTask.last
-    expect(wrapper.find('oc-select-stub').attributes().options).toEqual(tags)
+    expect(wrapper.findComponent<any>('vue-select-stub').props('options')).toEqual([
+      { label: 'a' },
+      { label: 'b' },
+      { label: 'c' }
+    ])
   })
 
   describe('save method', () => {
@@ -44,12 +47,12 @@ describe('Tags Panel', () => {
     })
   })
 
-  test.each<[string[], string[], string[]]>([
-    [['a', 'b'], ['c'], ['c']],
-    [['a', 'b'], ['a', 'b', 'c'], ['c']],
+  test.each<[string[], { label: string }[], string[]]>([
+    [['a', 'b'], [{ label: 'c' }], ['c']],
+    [['a', 'b'], [{ label: 'a' }, { label: 'b' }, { label: 'c' }], ['c']],
     [
       ['a', 'b'],
-      ['a', 'a', 'c', 'd'],
+      [{ label: 'a' }, { label: 'b' }, { label: 'c' }, { label: 'd' }],
       ['c', 'd']
     ]
   ])(
@@ -77,9 +80,9 @@ describe('Tags Panel', () => {
     }
   )
 
-  test.each<[string[], string[], string[]]>([
-    [['a', 'b'], ['a'], ['b']],
-    [['a', 'b'], ['a', 'b', 'c'], []],
+  test.each<[string[], { label: string }[], string[]]>([
+    [['a', 'b'], [{ label: 'a' }], ['b']],
+    [['a', 'b'], [{ label: 'a' }, { label: 'b' }, { label: 'c' }], []],
     [['a', 'b'], [], ['a', 'b']]
   ])(
     'resource with the initial tags %s and selected tags %s removes %s',
@@ -122,7 +125,7 @@ describe('Tags Panel', () => {
   })
 
   it('does not accept tags consisting of blanks only', () => {
-    const { wrapper } = createWrapper(mockDeep<Resource>())
+    const { wrapper } = createWrapper(mockDeep<Resource>({ tags: [] }))
     const option = wrapper.vm.createOption(' ')
     expect(option.error).toBeDefined()
     expect(option.selectable).toBeFalsy()
@@ -135,8 +138,8 @@ function createWrapper(resource, clientService = mockDeep<ClientService>()) {
       global: {
         plugins: [...defaultPlugins(), createStore(defaultStoreMockOptions)],
         mocks: { ...defaultComponentMocks(), $clientService: clientService },
-        stubs: defaultStubs,
-        provide: { resource }
+        provide: { resource },
+        stubs: { VueSelect: true, CompareSaveDialog: true }
       }
     })
   }
