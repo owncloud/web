@@ -27,9 +27,6 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
     try {
       const createdSpace = await createSpace(spaceName)
       store.commit('runtime/spaces/UPSERT_SPACE', createdSpace)
-      store.dispatch('showMessage', {
-        title: $gettext('Space was created successfully')
-      })
 
       if (resources.length === 1 && resources[0].isFolder) {
         //If a single folder is selected we copy it's content to the Space's root folder
@@ -44,6 +41,9 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
 
       await Promise.all(copyOps)
       store.dispatch('Files/resetFileSelection')
+      store.dispatch('showMessage', {
+        title: $gettext('Space was created successfully')
+      })
     } catch (error) {
       console.error(error)
       store.dispatch('showMessage', {
