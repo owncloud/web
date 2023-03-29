@@ -121,7 +121,14 @@ import {
   useAbility
 } from 'web-pkg/src/composables'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
-import { LinkShareRoles, Share, SharePermissions } from 'web-client/src/helpers/share'
+import {
+  linkRoleContributorFolder,
+  linkRoleEditorFolder,
+  linkRoleUploaderFolder,
+  linkRoleViewerFolder,
+  LinkShareRoles,
+  Share
+} from 'web-client/src/helpers/share'
 import { showQuickLinkPasswordModal } from '../../../quickActions'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
@@ -338,25 +345,24 @@ export default defineComponent({
     },
 
     isPasswordEnforcedFor(link) {
-      const currentRole = LinkShareRoles.getByBitmask(
-        link.permissions,
-        link.indirect || this.resource.isFolder
-      )
+      const isFolder = link.indirect || this.resource.isFolder
+      const currentRole = LinkShareRoles.getByBitmask(link.permissions, isFolder)
 
-      const canRead = currentRole.hasPermission(SharePermissions.read)
-      const canUpdate = currentRole.hasPermission(SharePermissions.update)
-      const canCreate = currentRole.hasPermission(SharePermissions.create)
-      const canDelete = currentRole.hasPermission(SharePermissions.delete)
-
-      const isReadOnly = canRead && !canUpdate && !canCreate && !canDelete
-      const isUploadOnly = !canRead && !canUpdate && canCreate && !canDelete
-      const isReadWrite = canRead && !canUpdate && canCreate && !canDelete
-      const isReadWriteDelete = canRead && canUpdate && canCreate && canDelete
+      /**
+       * `passwordEnforced` members are oddly designed. they look like they map to permissions,
+       * but in reality they map to role names. hence the comparison with specific link roles.
+       *
+       * comparisons are happening based on role names because file-roles and folder-roles share the same name.
+       */
       return (
-        (this.passwordEnforced.read_only === true && isReadOnly) ||
-        (this.passwordEnforced.upload_only === true && isUploadOnly) ||
-        (this.passwordEnforced.read_write === true && isReadWrite) ||
-        (this.passwordEnforced.read_write_delete === true && isReadWriteDelete)
+        (this.passwordEnforced.read_only === true &&
+          currentRole.name === linkRoleViewerFolder.name) ||
+        (this.passwordEnforced.upload_only === true &&
+          currentRole.name === linkRoleUploaderFolder.name) ||
+        (this.passwordEnforced.read_write === true &&
+          currentRole.name === linkRoleContributorFolder.name) ||
+        (this.passwordEnforced.read_write_delete === true &&
+          currentRole.name === linkRoleEditorFolder.name)
       )
     },
 
