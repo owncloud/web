@@ -1,0 +1,5 @@
+Enhancement: Remove placeholder on ItemFilter component.
+
+We removed the placeholder for the filter input field in the ItemFilter component.
+
+https://github.com/owncloud/web/pull/8736

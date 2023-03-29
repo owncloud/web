@@ -113,56 +113,30 @@ describe('ItemFilter', () => {
     })
   })
 
-  describe('placeholder prop', () => {
-    it('sets the correct placeholder using getPlaceholder computed property', () => {
-      const placeholder = 'Enter group name'
+  describe('label prop', () => {
+    it('sets the correct label using getLabel computed property', () => {
+      const label = 'Filter groups'
       const { wrapper } = getWrapper({
         props: {
           showOptionFilter: true,
           filterableAttributes: ['name'],
-          optionFilterPlaceholder: placeholder
+          optionFilterLabel: label
         }
       })
-      expect(wrapper.find(selectors.filterInput).attributes('placeholder')).toBe(placeholder)
+      expect(wrapper.find('.item-filter-input label').text()).toBe(label)
     })
 
-    it('sets the default placeholder using getPlaceholder computed property when no prop is set', () => {
-      const placeholder = undefined
+    it('sets the default label using getLabel computed property when no prop is set', () => {
+      const label = undefined
       const { wrapper } = getWrapper({
         props: {
           showOptionFilter: true,
           filterableAttributes: ['name'],
-          placeholder: placeholder
+          optionFilterLabel: label
         }
       })
-      expect(wrapper.find(selectors.filterInput).attributes('placeholder')).toBe('Enter term')
+      expect(wrapper.find('.item-filter-input label').text()).toBe('Filter list')
     })
-  })
-})
-
-describe('label prop', () => {
-  it('sets the correct label using getLabel computed property', () => {
-    const label = 'Filter groups'
-    const { wrapper } = getWrapper({
-      props: {
-        showOptionFilter: true,
-        filterableAttributes: ['name'],
-        optionFilterLabel: label
-      }
-    })
-    expect(wrapper.find('.item-filter-input label').text()).toBe(label)
-  })
-
-  it('sets the default label using getLabel computed property when no prop is set', () => {
-    const label = undefined
-    const { wrapper } = getWrapper({
-      props: {
-        showOptionFilter: true,
-        filterableAttributes: ['name'],
-        optionFilterLabel: label
-      }
-    })
-    expect(wrapper.find('.item-filter-input label').text()).toBe('Filter list')
   })
 })
 
