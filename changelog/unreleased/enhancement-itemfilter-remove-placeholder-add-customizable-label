@@ -1,0 +1,6 @@
+Enhancement: Remove placeholder, add customizable label
+
+The formerly fixed placeholder for the text input on item filter component got removed.
+Also, we added a customizable label.
+
+https://github.com/owncloud/web/pull/8711
