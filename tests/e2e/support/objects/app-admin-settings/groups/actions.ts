@@ -123,7 +123,6 @@ export const openEditPanel = async (args: {
   action: string
 }): Promise<void> => {
   const { page, uuid, action } = args
-  console.log(uuid)
   if (await page.locator(editPanel).count()) {
     await page.locator(closeEditPanel).click()
   }

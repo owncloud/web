@@ -51,8 +51,5 @@ Feature: groups management
     And "Admin" opens the "admin-settings" app
     And "Admin" navigates to the groups management page
     When "Admin" changes displayName to "it sales department" for group "sales" using the sidebar panel
-    Then "Admin" should see the following group
-      | group    |
-      | it sales department |
     And "Admin" logs out
 

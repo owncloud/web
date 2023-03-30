@@ -8,7 +8,7 @@ exports[`EditPanel renders all available inputs 1`] = `
     <span class="oc-text-muted">0 members</span>
   </div>
   <form autocomplete="off" class="oc-background-highlight oc-p-m" id="group-edit-form">
-    <oc-text-input-stub class="oc-mb-s" error-message="" fix-message-line="true" label="Group name" modelvalue="group"></oc-text-input-stub>
+    <oc-text-input-stub class="oc-mb-s" error-message="" fix-message-line="true" id="displayName-input" label="Group name" modelvalue="group"></oc-text-input-stub>
     <div class="compare-save-dialog oc-width-1-1 oc-flex oc-flex-between oc-flex-middle edit-compare-save-dialog oc-mb-l">
       <span class="state-indicator">No changes</span>
       <div>
