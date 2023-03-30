@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
 import { Group } from 'web-client/src/generated'
 import { useClientService } from 'web-pkg'
 

@@ -77,7 +77,7 @@ describe('EditPanel', () => {
   })
 })
 
-function getWrapper({ propsData = {} } = {}) {
+function getWrapper() {
   const mocks = defaultComponentMocks()
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
@@ -86,7 +86,7 @@ function getWrapper({ propsData = {} } = {}) {
     mocks,
     wrapper: mount(EditPanel, {
       props: {
-        group: { displayName: 'group', members: [] },
+        group: { displayName: 'group', members: [] }
       },
       global: {
         mocks,
