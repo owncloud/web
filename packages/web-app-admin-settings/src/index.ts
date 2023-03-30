@@ -4,6 +4,7 @@ import Users from './views/Users.vue'
 import Groups from './views/Groups.vue'
 import Spaces from './views/Spaces.vue'
 import { Ability } from 'web-pkg'
+import { AppNavigationItem } from 'web-pkg/src/apps'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -98,7 +99,7 @@ const routes = ({ $ability }: { $ability: Ability }) => [
   }
 ]
 
-const navItems = ({ $ability }: { $ability: Ability }) => [
+const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem[] => [
   {
     name: $gettext('General'),
     icon: 'settings-4',

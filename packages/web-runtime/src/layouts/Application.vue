@@ -11,11 +11,10 @@
       <div class="app-container oc-flex">
         <app-loading-spinner v-if="isLoading" />
         <template v-else>
-          <sidebar-nav
-            v-if="isSidebarVisible"
-            class="app-navigation"
-            :nav-items="sidebarNavItems"
-          />
+          <sidebar-nav v-if="isSidebarVisible" class="app-navigation" :nav-items="navItems" />
+          <portal to="app.runtime.mobile.nav">
+            <mobile-nav v-if="isMobileWidth" :nav-items="navItems" />
+          </portal>
           <router-view
             v-for="name in ['default', 'app', 'fullscreen']"
             :key="`router-view-${name}`"
@@ -39,6 +38,8 @@ import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
 import UploadInfo from '../components/UploadInfo.vue'
+import MobileNav from '../components/MobileNav.vue'
+import { NavItem } from '../helpers/navItems'
 import LoadingIndicator from 'web-pkg/src/components/LoadingIndicator.vue'
 import {
   useActiveApp,
@@ -48,13 +49,18 @@ import {
   useStore,
   useUserContext
 } from 'web-pkg/src/composables'
-import { computed, defineComponent, unref, watch } from 'vue'
+import { computed, defineComponent, provide, ref, unref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useGettext } from 'vue3-gettext'
+
+const MOBILE_BREAKPOINT = 640
 
 export default defineComponent({
   name: 'ApplicationLayout',
   components: {
     AppLoadingSpinner,
     MessageBar,
+    MobileNav,
     TopBar,
     SidebarNav,
     UploadInfo,
@@ -62,6 +68,12 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
+    const { $gettext } = useGettext()
+    const isUserContext = useUserContext({ store })
+    const activeApp = useActiveApp()
+
     // FIXME: we can convert to a single router-view without name (thus without the loop) and without this watcher when we release v6.0.0
     watch(
       useRoute(),
@@ -90,26 +102,62 @@ export default defineComponent({
       }
       return unref(areSpacesLoading)
     })
-    return {
-      isLoading,
-      activeApp: useActiveApp(),
-      isUserContext: useUserContext({ store })
+
+    const isMobileWidth = ref<boolean>(window.innerWidth < MOBILE_BREAKPOINT)
+    provide('isMobileWidth', isMobileWidth)
+    const onResize = () => {
+      isMobileWidth.value = window.innerWidth < MOBILE_BREAKPOINT
     }
-  },
-  data() {
+
+    const navItems = computed<NavItem[]>(() => {
+      if (!unref(isUserContext)) {
+        return []
+      }
+
+      const items = store.getters['getNavItemsByExtension'](unref(activeApp))
+      if (!items) {
+        return []
+      }
+
+      const { href: currentHref } = router.resolve(unref(route))
+      return items.map((item) => {
+        const active = [item.route, ...(item.activeFor || [])]
+          .filter(Boolean)
+          .some((currentItem) => {
+            try {
+              const comparativeHref = router.resolve(currentItem).href
+              return currentHref.startsWith(comparativeHref)
+            } catch (e) {
+              console.error(e)
+              return false
+            }
+          })
+
+        const name =
+          typeof item.name === 'function' ? item.name(store.getters['capabilities']) : item.name
+
+        return {
+          ...item,
+          name: $gettext(name),
+          active
+        }
+      })
+    })
+
+    const isSidebarVisible = computed(() => {
+      return unref(navItems).length && !unref(isMobileWidth)
+    })
+
     return {
-      windowWidth: 0
+      isSidebarVisible,
+      isLoading,
+      navItems,
+      onResize,
+      isMobileWidth
     }
   },
   computed: {
-    ...mapGetters([
-      'apps',
-      'activeMessages',
-      'capabilities',
-      'configuration',
-      'getExtensionsWithNavItems',
-      'getNavItemsByExtension'
-    ]),
+    ...mapGetters(['apps', 'activeMessages', 'configuration', 'getExtensionsWithNavItems']),
     isIE11() {
       return !!(window as any).MSInputMethodContext && !!(document as any).documentMode
     },
@@ -118,42 +166,7 @@ export default defineComponent({
         'Internet Explorer (your current browser) is not officially supported. For security reasons, please switch to another browser.'
       )
     },
-    isSidebarVisible() {
-      return this.sidebarNavItems.length && this.windowWidth >= 640
-    },
-    sidebarNavItems() {
-      if (!this.isUserContext) {
-        return []
-      }
 
-      const items = this.getNavItemsByExtension(this.activeApp)
-      if (!items) {
-        return []
-      }
-
-      const { href: currentHref } = this.$router.resolve(this.$route)
-      return items.map((item) => {
-        const active = [item.route, ...(item.activeFor || [])]
-          .filter(Boolean)
-          .some((currentItem) => {
-            try {
-              const comparativeHref = this.$router.resolve(currentItem).href
-              return currentHref.startsWith(comparativeHref)
-            } catch (e) {
-              console.error(e)
-              return false
-            }
-          })
-
-        const name = typeof item.name === 'function' ? item.name(this.capabilities) : item.name
-
-        return {
-          ...item,
-          name: this.$gettext(name),
-          active
-        }
-      })
-    },
     applicationsList() {
       const list = []
 
@@ -186,10 +199,7 @@ export default defineComponent({
     window.removeEventListener('resize', this.onResize)
   },
   methods: {
-    ...mapActions(['deleteMessage']),
-    onResize() {
-      this.windowWidth = window.innerWidth
-    }
+    ...mapActions(['deleteMessage'])
   }
 })
 </script>

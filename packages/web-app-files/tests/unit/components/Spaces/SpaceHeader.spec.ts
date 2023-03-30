@@ -14,7 +14,6 @@ describe('SpaceHeader', () => {
     expect(wrapper.find('.space-header-squashed').exists()).toBeTruthy()
     expect(wrapper.html()).toMatchSnapshot()
   })
-
   describe('space image', () => {
     it('should show the default image if no other image is set', () => {
       const wrapper = getWrapper({ space: buildSpace({ id: 1 }) })
@@ -28,10 +27,19 @@ describe('SpaceHeader', () => {
       expect(wrapper.find('.space-header-image img').exists()).toBeTruthy()
       expect(wrapper.html()).toMatchSnapshot()
     })
+    it('should take full width in mobile view', () => {
+      const spaceMock = { spaceImageData: { webDavUrl: '/' } }
+      const wrapper = getWrapper({
+        space: { ...buildSpace({ id: 1 }), ...spaceMock },
+        isMobileWidth: true
+      })
+      expect(wrapper.find('.space-header').classes()).not.toContain('oc-flex')
+      expect(wrapper.find('.space-header-image').classes()).toContain('space-header-image-expanded')
+    })
   })
 })
 
-function getWrapper({ space = {}, sideBarOpen = false }) {
+function getWrapper({ space = {}, sideBarOpen = false, isMobileWidth = false }) {
   const mocks = defaultComponentMocks()
   const store = createStore(defaultStoreMockOptions)
   return mount(SpaceHeader, {
@@ -42,6 +50,7 @@ function getWrapper({ space = {}, sideBarOpen = false }) {
     global: {
       mocks,
       plugins: [...defaultPlugins(), store],
+      provide: { isMobileWidth },
       stubs: {
         'quota-modal': true,
         'space-context-actions': true

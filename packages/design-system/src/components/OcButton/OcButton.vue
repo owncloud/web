@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { getSizeClass } from '../../utils/sizeClasses'
 
 export default defineComponent({
@@ -71,7 +71,7 @@ export default defineComponent({
      * When setting the button’s type to a router-link, use this option to give a to.
      */
     to: {
-      type: [String, Object],
+      type: [String, Object] as PropType<string | any>,
       default: null
     },
     /**

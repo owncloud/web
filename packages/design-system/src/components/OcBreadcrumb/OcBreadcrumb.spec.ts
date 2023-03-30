@@ -10,49 +10,54 @@ const items = [
 
 describe('OcBreadcrumb', () => {
   it('sets correct variation', () => {
-    const wrapper = shallowMount(Breadcrumb, {
-      props: {
-        variation: 'lead',
-        items
-      },
-      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
-    })
-
+    const { wrapper } = getWrapper({ variation: 'lead' })
     expect(wrapper.props().variation).toMatch('lead')
-    expect(wrapper.classes()).toContain('oc-breadcrumb-lead')
+    expect(wrapper.find('.oc-breadcrumb').classes()).toContain('oc-breadcrumb-lead')
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('displays all items', () => {
-    const wrapper = shallowMount(Breadcrumb, {
-      props: {
-        items
-      },
-      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
-    })
-
+    const { wrapper } = getWrapper()
     expect(wrapper.findAll('.oc-breadcrumb-list-item').length).toBe(items.length)
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('displays context menu trigger if enabled via property', () => {
-    const wrapper = shallowMount(Breadcrumb, {
-      props: {
-        items,
-        showContextActions: true
-      },
-      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
-    })
-
+    const { wrapper } = getWrapper({ showContextActions: true })
     expect(wrapper.find('#oc-breadcrumb-contextmenu-trigger').exists()).toBe(true)
   })
   it('does not display context menu trigger if not enabled via property', () => {
-    const wrapper = shallowMount(Breadcrumb, {
+    const { wrapper } = getWrapper({ showContextActions: false })
+    expect(wrapper.find('#oc-breadcrumb-contextmenu-trigger').exists()).toBe(false)
+  })
+  describe('mobile navigation', () => {
+    it.each([
+      { items: [], shows: false },
+      { items: [items[0]], shows: false },
+      { items: [items[0], items[1]], shows: true }
+    ])('shows if more than 1 breadcrumb item is given', ({ items, shows }) => {
+      const { wrapper } = getWrapper({ items })
+      expect(wrapper.find('.oc-breadcrumb-mobile-navigation').exists()).toBe(shows)
+    })
+  })
+  describe('mobile current folder', () => {
+    it.each([
+      { items: [], shows: false },
+      { items: [items[0]], shows: false },
+      { items: [items[0], items[1]], shows: true }
+    ])('shows if more than 1 breadcrumb item is given', ({ items, shows }) => {
+      const { wrapper } = getWrapper({ items })
+      expect(wrapper.find('.oc-breadcrumb-mobile-current').exists()).toBe(shows)
+    })
+  })
+})
+
+const getWrapper = (props = {}) => {
+  return {
+    wrapper: shallowMount(Breadcrumb, {
       props: {
         items,
-        showContextActions: false
+        ...props
       },
       global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
     })
-
-    expect(wrapper.find('#oc-breadcrumb-contextmenu-trigger').exists()).toBe(false)
-  })
-})
+  }
+}

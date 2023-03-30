@@ -1,5 +1,5 @@
 <template>
-  <nav :class="`oc-breadcrumb oc-breadcrumb-${variation}`">
+  <nav :id="id" :class="`oc-breadcrumb oc-breadcrumb-${variation}`">
     <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
       <li
         v-for="(item, index) in items"
@@ -47,56 +47,32 @@
         </template>
       </li>
     </ol>
-    <div class="oc-breadcrumb-drop">
-      <label
-        ref="mobileDropdown"
-        tabindex="0"
-        class="oc-breadcrumb-drop-label oc-flex oc-flex-middle oc-flex-between"
-        @keydown.enter="clickMobileDropdown"
-      >
-        <span
-          v-if="currentFolder"
-          class="oc-breadcrumb-drop-label-text oc-text-truncate"
-          aria-current="page"
-          v-text="currentFolder.text"
-        />
-        <oc-icon
-          class="oc-breadcrumb-drop-label-icon"
-          name="arrow-down-s"
-          :accessible-label="$gettext('Expand more')"
-        />
-      </label>
-      <oc-drop v-if="dropdownItems">
-        <ol>
-          <li v-for="(item, index) in dropdownItems" :key="index">
-            <router-link v-if="item.to" :aria-current="getAriaCurrent(index)" :to="item.to">
-              {{ item.text }}
-            </router-link>
-            <oc-button
-              v-else-if="item.onClick"
-              justify-content="left"
-              appearance="raw"
-              :aria-current="getAriaCurrent(index)"
-              @click="item.onClick"
-            >
-              {{ item.text }}
-            </oc-button>
-            <span v-else :aria-current="getAriaCurrent(index)" v-text="item.text" />
-          </li>
-        </ol>
-      </oc-drop>
-    </div>
+    <oc-button
+      v-if="items.length > 1"
+      appearance="raw"
+      type="router-link"
+      :aria-label="$gettext('Navigate one level up')"
+      :to="parentFolderTo"
+      class="oc-breadcrumb-mobile-navigation"
+    >
+      <oc-icon name="arrow-left-s" fill-type="line" size="large" class="oc-mr-m" />
+    </oc-button>
   </nav>
+  <div v-if="items.length > 1" class="oc-breadcrumb-mobile-current">
+    <span class="oc-text-truncate" aria-current="page" v-text="currentFolder.text" />
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
+import { useGettext } from 'vue3-gettext'
 
 import { AVAILABLE_SIZES } from '../../helpers/constants'
 
 import OcButton from '../OcButton/OcButton.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
+import uniqueId from '../../utils/uniqueId'
 
 import { BreadcrumbItem } from './types'
 
@@ -118,6 +94,14 @@ export default defineComponent({
   },
 
   props: {
+    /**
+     * Id for the breadcrumbs. If it's empty, a generated one will be used.
+     */
+    id: {
+      type: String,
+      required: false,
+      default: () => uniqueId('oc-breadcrumbs-')
+    },
     /**
      * Array of breadcrumb items
      */
@@ -156,30 +140,28 @@ export default defineComponent({
       default: false
     }
   },
-  computed: {
-    dropdownItems() {
-      if (this.items.length <= 1 || !this.items) {
-        return false
+  setup(props) {
+    const { $gettext } = useGettext()
+
+    const currentFolder = computed<BreadcrumbItem>(() => {
+      if (props.items.length === 0 || !props.items) {
+        return undefined
       }
-      return [...this.items].reverse().slice(1)
-    },
-    currentFolder() {
-      if (this.items.length === 0 || !this.items) {
-        return false
-      }
-      return [...this.items].reverse()[0]
-    },
-    contextMenuLabel() {
-      return this.$gettext('Show actions for current folder')
+      return [...props.items].reverse()[0]
+    })
+    const parentFolderTo = computed(() => {
+      return [...props.items].reverse()[1].to
+    })
+
+    const contextMenuLabel = computed(() => {
+      return $gettext('Show actions for current folder')
+    })
+
+    const getAriaCurrent = (index): 'page' | null => {
+      return props.items.length - 1 === index ? 'page' : null
     }
-  },
-  methods: {
-    getAriaCurrent(index) {
-      return this.items.length - 1 === index ? 'page' : null
-    },
-    clickMobileDropdown() {
-      ;(this.$refs.mobileDropdown as HTMLElement).click()
-    }
+
+    return { currentFolder, parentFolderTo, contextMenuLabel, getAriaCurrent }
   }
 })
 </script>
@@ -187,6 +169,13 @@ export default defineComponent({
 <style lang="scss">
 .oc-breadcrumb {
   overflow: hidden;
+
+  &-mobile-current,
+  &-mobile-navigation {
+    @media (min-width: $oc-breakpoint-small-default) {
+      display: none !important;
+    }
+  }
 
   &-list {
     @media (max-width: $oc-breakpoint-xsmall-max) {
@@ -241,43 +230,6 @@ export default defineComponent({
     button,
     span {
       font-size: var(--oc-font-size-large);
-    }
-  }
-  /* stylelint-enable */
-
-  &-drop {
-    @media (min-width: $oc-breakpoint-small-default) {
-      display: none !important;
-    }
-
-    .oc-drop > .oc-card > ol {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-
-      > li a,
-      > li button,
-      > li span {
-        color: var(--oc-color-text-default);
-        font-size: 0.875rem;
-      }
-
-      > li a:hover,
-      > li span:hover,
-      > li button:hover {
-        color: var(--oc-color-swatch-brand-default);
-      }
-
-      li button {
-        width: 100%;
-      }
-    }
-
-    &-label {
-      border: $global-border-width solid var(--oc-color-swatch-primary-muted);
-      cursor: pointer;
-      height: $global-control-height;
-      padding: var(--oc-space-small);
     }
   }
 }

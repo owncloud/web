@@ -16,7 +16,7 @@ import { Registry, ArchiverService } from './services'
 import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
 import get from 'lodash-es/get'
-import { AppReadyHookArgs } from 'web-pkg/src/apps'
+import { AppNavigationItem, AppReadyHookArgs } from 'web-pkg/src/apps'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
@@ -35,7 +35,7 @@ const appInfo = {
   extensions: [],
   fileSideBars
 }
-const navItems = (context) => {
+const navItems = (context): AppNavigationItem[] => {
   return [
     {
       name(capabilities) {

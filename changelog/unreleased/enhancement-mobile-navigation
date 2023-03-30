@@ -1,0 +1,8 @@
+Enhancement: Rework mobile navigation
+
+The navigation for mobile devices <640px has been reworked.
+
+https://github.com/owncloud/web/issues/8557
+https://github.com/owncloud/web/issues/7253
+https://github.com/owncloud/web/issues/3774
+https://github.com/owncloud/web/pull/8757

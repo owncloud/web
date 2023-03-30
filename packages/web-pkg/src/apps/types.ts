@@ -10,3 +10,13 @@ export interface AppReadyHookArgs {
   instance?: App
   portal?: any
 }
+
+export interface AppNavigationItem {
+  activeFor?: { name?: string; path?: string }[]
+  enabled?: (capabilities?: Record<string, any>) => boolean
+  fillType?: string
+  icon?: string
+  name?: string | ((capabilities?: Record<string, any>) => string)
+  route?: { name?: string; path?: string }
+  tag?: string
+}

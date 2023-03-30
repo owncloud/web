@@ -17,7 +17,8 @@ const selectors = {
   batchActionsStub: 'batch-actions-stub',
   sharesNavigationStub: 'shares-navigation-stub',
   viewOptionsStub: 'view-options-stub',
-  sidebarToggleStub: 'sidebar-toggle-stub'
+  sidebarToggleStub: 'sidebar-toggle-stub',
+  mobileNavPortal: 'portal-target[name="app.runtime.mobile.nav"]'
 }
 
 const selectedFiles = [mockDeep<Resource>(), mockDeep<Resource>()]
@@ -60,6 +61,20 @@ describe('AppBar component', () => {
           breadCrumbItemWithContextActionAllowed
         ])
       })
+      it('not if no breadcrumb items given', () => {
+        const { wrapper } = getShallowWrapper([], {}, { breadcrumbs: [] })
+        expect(wrapper.find(selectors.ocBreadcrumbStub).exists()).toBeFalsy()
+      })
+      it('not if one breadcrumb item is given in mobile view', () => {
+        const { wrapper } = getShallowWrapper(
+          [],
+          {},
+          { breadcrumbs: [breadcrumbItems[0]] },
+          mock<RouteLocation>(),
+          true
+        )
+        expect(wrapper.find(selectors.ocBreadcrumbStub).exists()).toBeFalsy()
+      })
     })
     describe('bulkActions', () => {
       it('if enabled', () => {
@@ -81,6 +96,16 @@ describe('AppBar component', () => {
       it('not if 1 file selected', () => {
         const { wrapper } = getShallowWrapper([selectedFiles[0]], {}, { hasBulkActions: true })
         expect(wrapper.find(selectors.batchActionsStub).exists()).toBeFalsy()
+      })
+    })
+    describe('mobile navigation portal', () => {
+      it.each([
+        { items: [], shows: true },
+        { items: [breadcrumbItems[0]], shows: true },
+        { items: [breadcrumbItems[0], breadcrumbItems[1]], shows: false }
+      ])('if less than 2 breadcrumb items given', ({ items, shows }) => {
+        const { wrapper } = getShallowWrapper([], {}, { breadcrumbs: items })
+        expect(wrapper.find(selectors.mobileNavPortal).exists()).toBe(shows)
       })
     })
     describe('sharesNavigation', () => {
@@ -142,7 +167,8 @@ function getShallowWrapper(
   currentRoute = mock<RouteLocation>({
     name: 'files-spaces-generic',
     path: '/files/spaces/personal/admin'
-  })
+  }),
+  isMobileWidth = false
 ) {
   const mocks = {
     ...defaultComponentMocks({
@@ -160,6 +186,7 @@ function getShallowWrapper(
       slots,
       global: {
         plugins: [...defaultPlugins(), store],
+        provide: { isMobileWidth },
         mocks
       }
     })

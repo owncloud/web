@@ -59,8 +59,9 @@ import {
   watch
 } from 'vue'
 import { mapState, mapActions } from 'vuex'
-import SidebarNavItem from './SidebarNavItem.vue'
 import * as uuid from 'uuid'
+import SidebarNavItem from './SidebarNavItem.vue'
+import { NavItem } from '../../helpers/navItems'
 
 export default defineComponent({
   components: {
@@ -68,7 +69,7 @@ export default defineComponent({
   },
   props: {
     navItems: {
-      type: Array as PropType<any[]>,
+      type: Array as PropType<NavItem[]>,
       required: true
     }
   },

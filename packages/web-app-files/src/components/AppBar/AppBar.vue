@@ -4,14 +4,14 @@
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div
-        class="oc-flex files-app-bar-controls"
+        class="oc-flex oc-flex-middle files-app-bar-controls"
         :class="{
           'oc-flex-between': breadcrumbs.length || hasSharesNavigation,
           'oc-flex-right': !breadcrumbs.length && !hasSharesNavigation
         }"
       >
         <oc-breadcrumb
-          v-if="breadcrumbs.length"
+          v-if="(!isMobileWidth && breadcrumbs.length) || breadcrumbs.length > 1"
           id="files-breadcrumb"
           data-testid="files-breadcrumbs"
           class="oc-flex oc-flex-middle"
@@ -25,6 +25,7 @@
             />
           </template>
         </oc-breadcrumb>
+        <portal-target v-if="breadcrumbs.length <= 1" name="app.runtime.mobile.nav" />
         <shares-navigation v-if="hasSharesNavigation" />
         <div v-if="hasViewOptions || hasSidebarToggle" class="oc-flex">
           <view-options
@@ -59,7 +60,7 @@
 
 <script lang="ts">
 import last from 'lodash-es/last'
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { computed, defineComponent, inject, PropType, Ref, unref } from 'vue'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
@@ -153,6 +154,7 @@ export default defineComponent({
     })
 
     return {
+      isMobileWidth: inject<Ref<boolean>>('isMobileWidth'),
       batchActions
     }
   },
@@ -241,6 +243,10 @@ export default defineComponent({
 
   .files-app-bar-controls {
     min-height: 52px;
+
+    @media (max-width: $oc-breakpoint-xsmall-max) {
+      justify-content: space-between;
+    }
   }
 
   .files-app-bar-actions {
