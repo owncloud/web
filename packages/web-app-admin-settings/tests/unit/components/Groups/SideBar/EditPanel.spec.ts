@@ -67,7 +67,6 @@ describe('EditPanel', () => {
     it('should be true if formData is valid', () => {
       const { wrapper } = getWrapper()
       wrapper.vm.formData.displayName.valid = false
-      console.log(wrapper.vm.formData)
       expect(wrapper.vm.invalidFormData).toBeFalsy()
     })
   })
