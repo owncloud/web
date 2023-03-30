@@ -1,0 +1,5 @@
+Bugfix: Preview controls colors
+
+We've fixed a bug where the controls of the "preview" app were appearing black-on-grey in the dark theme.
+
+https://github.com/owncloud/web/pull/8758
