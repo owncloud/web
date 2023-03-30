@@ -45,6 +45,7 @@ Summary
 * Bugfix - Group members sorting: [#8592](https://github.com/owncloud/web/issues/8592)
 * Bugfix - Broken re-login after logout: [#8694](https://github.com/owncloud/web/pull/8694)
 * Bugfix - Open files in external app: [#8705](https://github.com/owncloud/web/pull/8705)
+* Bugfix - Preview controls colors: [#8758](https://github.com/owncloud/web/pull/8758)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -393,6 +394,13 @@ Details
 
    https://github.com/owncloud/web/issues/8695
    https://github.com/owncloud/web/pull/8705
+
+* Bugfix - Preview controls colors: [#8758](https://github.com/owncloud/web/pull/8758)
+
+   We've fixed a bug where the controls of the "preview" app were appearing black-on-grey in the
+   dark theme.
+
+   https://github.com/owncloud/web/pull/8758
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
