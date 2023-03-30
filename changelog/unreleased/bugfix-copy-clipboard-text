@@ -1,0 +1,5 @@
+Bugfix: Copy link to clipboard text
+
+We've fixed an issue that caused the link message to display the wrong text
+
+https://github.com/owncloud/web/issues/8725

@@ -53,16 +53,13 @@ export default defineComponent({
 
     const copyLinkToClipboard = () => {
       copy(props.link.url)
+      console.log(1337, props.link.name)
       store.dispatch('showMessage', {
         title: props.link.quicklink
           ? $gettext('The quicklink has been copied to your clipboard.')
-          : $gettextInterpolate(
-              $gettext('The link "%{linkName}" has been copied to your clipboard.'),
-              {
-                linkName: props.link.linkName
-              },
-              true
-            )
+          : $gettext('The link "%{linkName}" has been copied to your clipboard.', {
+              linkName: props.link.name
+            })
       })
     }
 
