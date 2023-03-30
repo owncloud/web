@@ -42,7 +42,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+    const { $gettext } = useGettext()
     const store = useStore<any>()
 
     const {
@@ -56,13 +56,9 @@ export default defineComponent({
       store.dispatch('showMessage', {
         title: props.link.quicklink
           ? $gettext('The quicklink has been copied to your clipboard.')
-          : $gettextInterpolate(
-              $gettext('The link "%{linkName}" has been copied to your clipboard.'),
-              {
-                linkName: props.link.linkName
-              },
-              true
-            )
+          : $gettext('The link "%{linkName}" has been copied to your clipboard.', {
+              linkName: props.link.name
+            })
       })
     }
 
