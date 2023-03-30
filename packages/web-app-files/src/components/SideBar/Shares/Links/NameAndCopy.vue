@@ -42,7 +42,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+    const { $gettext } = useGettext()
     const store = useStore<any>()
 
     const {
