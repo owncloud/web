@@ -23,7 +23,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import GroupInfoBox from './GroupInfoBox.vue'
 import { Group } from 'web-client/src/generated'
 

@@ -23,11 +23,7 @@ describe('EditPanel', () => {
       expect(wrapper.vm.editGroup.displayName).toEqual('group')
     })
     it('should revert changes on property formData', () => {
-      const { wrapper } = getWrapper({
-        propsData: {
-          groups: [{ displayName: 'group' }]
-        }
-      })
+      const { wrapper } = getWrapper()
       wrapper.vm.formData.displayName.valid = false
       wrapper.vm.formData.displayName.errorMessage = 'error'
       wrapper.vm.revertChanges()
