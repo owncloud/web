@@ -22,7 +22,7 @@ describe('CreateGroupModal', () => {
       Object.keys(wrapper.vm.formData).forEach((key) => {
         wrapper.vm.formData[key].valid = true
       })
-      expect(wrapper.vm.isFormInvalid).toBeTruthy()
+      expect(wrapper.vm.isFormInvalid).toBeFalsy()
     })
   })
   describe('method "validateDisplayName"', () => {
