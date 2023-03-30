@@ -78,10 +78,11 @@
           v-oc-tooltip="previousDescription"
           class="preview-controls-previous"
           appearance="raw-inverse"
+          variation="brand"
           :aria-label="previousDescription"
           @click="prev"
         >
-          <oc-icon size="large" name="arrow-drop-left" />
+          <oc-icon size="large" name="arrow-drop-left" variation="inherit" />
         </oc-button>
         <p v-if="!isFolderLoading" class="oc-m-rm preview-controls-action-count">
           <span aria-hidden="true" v-text="ariaHiddenFileCount" />
@@ -91,10 +92,11 @@
           v-oc-tooltip="nextDescription"
           class="preview-controls-next"
           appearance="raw-inverse"
+          variation="brand"
           :aria-label="nextDescription"
           @click="next"
         >
-          <oc-icon size="large" name="arrow-drop-right" />
+          <oc-icon size="large" name="arrow-drop-right" variation="inherit" />
         </oc-button>
         <div class="oc-flex">
           <oc-button
@@ -103,6 +105,7 @@
             "
             class="preview-controls-fullscreen"
             appearance="raw-inverse"
+            variation="brand"
             :aria-label="
               isFullScreenModeActivated ? exitFullScreenDescription : enterFullScreenDescription
             "
@@ -111,6 +114,7 @@
             <oc-icon
               fill-type="line"
               :name="isFullScreenModeActivated ? 'fullscreen-exit' : 'fullscreen'"
+              variation="inherit"
             />
           </oc-button>
         </div>
@@ -120,15 +124,17 @@
               v-oc-tooltip="imageShrinkDescription"
               class="preview-controls-image-shrink"
               appearance="raw-inverse"
+              variation="brand"
               :aria-label="imageShrinkDescription"
               @click="imageShrink"
             >
-              <oc-icon fill-type="line" name="checkbox-indeterminate" />
+              <oc-icon fill-type="line" name="checkbox-indeterminate" variation="inherit" />
             </oc-button>
             <oc-button
               v-oc-tooltip="imageOriginalSizeDescription"
               class="preview-controls-image-original-size oc-ml-s oc-mr-s"
               appearance="raw-inverse"
+              variation="brand"
               :aria-label="imageOriginalSizeDescription"
               @click="currentImageZoom = 1"
             >
@@ -138,10 +144,11 @@
               v-oc-tooltip="imageZoomDescription"
               class="preview-controls-image-zoom"
               appearance="raw-inverse"
+              variation="brand"
               :aria-label="imageZoomDescription"
               @click="imageZoom"
             >
-              <oc-icon fill-type="line" name="add-box" />
+              <oc-icon fill-type="line" name="add-box" variation="inherit" />
             </oc-button>
           </div>
           <div class="oc-ml-m">
@@ -149,19 +156,21 @@
               v-oc-tooltip="imageRotateLeftDescription"
               class="preview-controls-rotate-left"
               appearance="raw-inverse"
+              variation="brand"
               :aria-label="imageRotateLeftDescription"
               @click="imageRotateLeft"
             >
-              <oc-icon fill-type="line" name="anticlockwise" />
+              <oc-icon fill-type="line" name="anticlockwise" variation="inherit" />
             </oc-button>
             <oc-button
               v-oc-tooltip="imageRotateRightDescription"
               class="preview-rotate-right"
               appearance="raw-inverse"
+              variation="brand"
               :aria-label="imageRotateRightDescription"
               @click="imageRotateRight"
             >
-              <oc-icon fill-type="line" name="clockwise" />
+              <oc-icon fill-type="line" name="clockwise" variation="inherit" />
             </oc-button>
           </div>
         </div>
@@ -635,7 +644,7 @@ export default defineComponent({
 }
 
 .preview-controls-action-count {
-  color: var(--oc-color-swatch-passive-contrast);
+  color: var(--oc-color-swatch-brand-contrast);
 }
 
 .preview-controls-image-original-size {
