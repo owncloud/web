@@ -310,21 +310,19 @@ export default class Collaborator {
     } = args
     const collaboratorRow = Collaborator.getCollaboratorUserOrGroupSelector(collaborator, type)
     await page.locator(collaboratorRow).waitFor()
-
     await page
       .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
       .click()
-    await page
-      .locator(util.format(Collaborator.removeExpirationDateCollaboratorButton, collaboratorRow))
-      .click()
-
     await Promise.all([
       page.waitForResponse(
         (resp) =>
           resp.url().includes('shares') &&
           resp.status() === 200 &&
           resp.request().method() === 'POST'
-      )
+      ),
+      page
+        .locator(util.format(Collaborator.removeExpirationDateCollaboratorButton, collaboratorRow))
+        .click()
     ])
   }
 
