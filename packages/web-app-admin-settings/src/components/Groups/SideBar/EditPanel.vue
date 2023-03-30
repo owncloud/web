@@ -4,6 +4,7 @@
     <form id="group-edit-form" class="oc-background-highlight oc-p-m" autocomplete="off">
       <oc-text-input
         v-model="editGroup.displayName"
+        id="displayName-input"
         class="oc-mb-s"
         :label="$gettext('Group name')"
         :error-message="formData.displayName.errorMessage"
