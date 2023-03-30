@@ -20,5 +20,12 @@
   },
   "jest.jestCommandLine": "pnpm test:unit",
   "npm.packageManager": "pnpm",
-  "typescript.format.enable": false
+  "typescript.format.enable": false,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "cucumberautocomplete.steps": [
+    "tests/e2e/cucumber/steps/**/*.ts"
+  ],
+  "cucumberautocomplete.strictGherkinCompletion": true
 }
