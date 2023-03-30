@@ -227,15 +227,11 @@ Then(
     stepUser: string,
     stepTable: DataTable
   ): Promise<void> {
-      console.log("a")
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-      console.log("b")
-      const resourceObject = new objects.applicationFiles.Resource({ page })
-      console.log("c")
-      const actualList = await resourceObject.getDisplayedResources({
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const actualList = await resourceObject.getDisplayedResources({
       keyword: listType as displayedResourceType
     })
-      console.log(actualList)
     for (const info of stepTable.hashes()) {
       const found = actualList.includes(info.resource)
       if (actionType === 'should') {

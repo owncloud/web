@@ -873,12 +873,10 @@ export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> =
 
 export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]> => {
   const files = []
-  const result = page.locator('.oc-resource-name')
-  const items = await page.$$('[data-test-resource-path]')
-  console.log(items)
+  await page.waitForSelector('[data-test-resource-path]')
+  const result = await page.locator('[data-test-resource-path]')
 
   const count = await result.count()
-  console.log(count)
   for (let i = 0; i < count; i++) {
     files.push(await result.nth(i).getAttribute('data-test-resource-name'))
   }

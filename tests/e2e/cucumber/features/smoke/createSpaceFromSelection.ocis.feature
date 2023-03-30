@@ -50,7 +50,7 @@ Feature: create Space shortcut
       | lorem.txt               |
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "resourceSpace"
-    And "Alice" downloads the following resources using the sidebar panel
-      | resource            | from  | type   |
-      | resourceFolder      |       | folder |
-      | lorem.txt           |       | file   |
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource        |
+      | resourceFolder  |
+      | lorem.txt       |

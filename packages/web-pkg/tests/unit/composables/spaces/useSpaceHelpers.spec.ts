@@ -3,16 +3,11 @@ import {
   createStore,
   defaultComponentMocks,
   defaultStoreMockOptions,
-  getComposableWrapper,
-  getStoreInstance,
-  RouteLocation
+  getComposableWrapper
 } from 'web-test-helpers'
-import user from 'web-runtime/src/store/user'
 import { SpaceResource } from 'web-client'
 import { useFileActionsSetReadme } from 'web-pkg/src/composables/actions'
-import { mock, mockDeep } from 'jest-mock-extended'
-import { OwnCloudSdk } from 'web-client/src/types'
-import {unref} from "vue";
+import { unref } from 'vue'
 
 describe('useCapability', () => {
   it('should be valid', () => {
