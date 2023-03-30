@@ -45,6 +45,7 @@ Summary
 * Bugfix - Group members sorting: [#8592](https://github.com/owncloud/web/issues/8592)
 * Bugfix - Broken re-login after logout: [#8694](https://github.com/owncloud/web/pull/8694)
 * Bugfix - Open files in external app: [#8705](https://github.com/owncloud/web/pull/8705)
+* Bugfix - Copy link to clipboard text: [#8756](https://github.com/owncloud/web/pull/8756)
 * Bugfix - Preview controls colors: [#8758](https://github.com/owncloud/web/pull/8758)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
@@ -394,6 +395,13 @@ Details
 
    https://github.com/owncloud/web/issues/8695
    https://github.com/owncloud/web/pull/8705
+
+* Bugfix - Copy link to clipboard text: [#8756](https://github.com/owncloud/web/pull/8756)
+
+   We've fixed an issue that caused the link message to display the wrong text
+
+   https://github.com/owncloud/web/issues/8725
+   https://github.com/owncloud/web/pull/8756
 
 * Bugfix - Preview controls colors: [#8758](https://github.com/owncloud/web/pull/8758)
 
