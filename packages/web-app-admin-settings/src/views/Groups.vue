@@ -238,7 +238,6 @@ export default defineComponent({
       try {
         const client = this.clientService.graphAuthenticated
         await client.groups.editGroup(editGroup.id, editGroup)
-
         const { data: updatedGroup } = await client.groups.getGroup(editGroup.id)
         const groupIndex = this.groups.findIndex((group) => group.id === editGroup.id)
         this.groups[groupIndex] = updatedGroup

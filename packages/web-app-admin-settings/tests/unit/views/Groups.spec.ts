@@ -51,24 +51,24 @@ describe('Groups view', () => {
   describe('method "editGroup"', () => {
     it('should emit event on success', async () => {
       const clientService = getClientServiceMock()
-      clientService.graphAuthenticated.users.editUser.mockImplementation(() => mockAxiosResolve())
-      const { wrapper } = getWrapper()
+      clientService.graphAuthenticated.groups.editGroup.mockImplementation(() => mockAxiosResolve())
       clientService.graphAuthenticated.groups.getGroup.mockImplementation(() =>
-        mockAxiosResolve({ id: '1', displayName: 'superusers' })
+        mockAxiosResolve({ id: '1', displayName: 'administrators' })
       )
+      const { wrapper } = getWrapper({ clientService })
 
       const editGroup = {
         id: '1',
-        name: 'administrator'
+        name: 'administrators'
       }
 
       const busStub = jest.spyOn(eventBus, 'publish')
       await wrapper.vm.loadResourcesTask.last
 
-      const updatedUser = await wrapper.vm.editGroup(editGroup)
+      const updatedGroup = await wrapper.vm.editGroup(editGroup)
 
-      expect(updatedUser.id).toEqual('1')
-      expect(updatedUser.displayName).toEqual('administrator')
+      expect(updatedGroup.id).toEqual('1')
+      expect(updatedGroup.displayName).toEqual('administrators')
       expect(busStub).toHaveBeenCalled()
     })
 
