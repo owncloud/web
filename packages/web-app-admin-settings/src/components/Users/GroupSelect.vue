@@ -3,7 +3,7 @@
     <oc-select
       :model-value="selectedOption"
       class="oc-mb-s"
-      multiple
+      :multiple="true"
       :options="groupOptions"
       option-label="displayName"
       :label="$gettext('Groups')"

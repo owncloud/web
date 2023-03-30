@@ -1,0 +1,6 @@
+Enhancement: Read-only select options
+
+The `OcSelect` component now supports read-only select options which can't be removed if selected.
+
+https://github.com/owncloud/web/issues/8729
+https://github.com/owncloud/web/pull/8727

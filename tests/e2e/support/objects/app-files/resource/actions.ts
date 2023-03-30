@@ -60,7 +60,7 @@ const tagTableCell =
 const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//ancestor::a'
 const tagInDetailsPanel = '//*[@data-testid="tags"]/td//span[text()="%s"]'
 const tagInInputForm =
-  '//span[contains(@class, "vs__selected")]//span[text()="%s"]//ancestor::span/button[contains(@class, "vs__deselect")]'
+  '//span[contains(@class, "vs__selected")]//span[text()="%s"]//ancestor::span//button[contains(@class, "vs__deselect")]'
 const tagFormInput = '#tags-form input'
 const compareDialogConfirmBtn = '.compare-save-dialog-confirm-btn'
 const resourcesAsTiles = '#files-view .oc-tiles'

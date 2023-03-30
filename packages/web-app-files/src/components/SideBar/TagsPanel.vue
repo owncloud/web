@@ -7,7 +7,7 @@
         ref="tagSelect"
         v-model="selectedTags"
         class="oc-mb-s"
-        multiple
+        :multiple="true"
         :options="availableTags"
         taggable
         push-tags
@@ -29,7 +29,7 @@
         </template>
         <template #option="{ label, error }">
           <div class="oc-flex">
-            <span v-if="showSelectNewLabel(label)" class="oc-mr-s" v-text="$gettext('New')" />
+            <span v-if="showSelectNewLabel({ label })" class="oc-mr-s" v-text="$gettext('New')" />
             <span class="oc-flex oc-flex-center">
               <avatar-image
                 class="oc-flex oc-align-self-center oc-mr-s"
@@ -45,8 +45,8 @@
       </oc-select>
       <compare-save-dialog
         class="edit-compare-save-dialog oc-mb-l"
-        :original-object="{ tags: resource.tags }"
-        :compare-object="{ tags: selectedTags }"
+        :original-object="{ tags: currentTags.map((t) => t.label) }"
+        :compare-object="{ tags: selectedTags.map((t) => t.label) }"
         @revert="revertChanges"
         @confirm="save"
       ></compare-save-dialog>
@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, onMounted, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, onMounted, ref, unref, VNodeRef, watch } from 'vue'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
@@ -65,6 +65,12 @@ import diff from 'lodash-es/difference'
 import { useGettext } from 'vue3-gettext'
 
 const tagsMaxCount = 100
+
+type TagOption = {
+  label: string
+  error?: string
+  selectable?: boolean
+}
 
 export default defineComponent({
   name: 'TagsPanel',
@@ -77,43 +83,48 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     const injectedResource = inject<Resource>('resource')
-    const resource = computed(() => unref(injectedResource))
-    const selectedTags = ref([])
-    const availableTags = ref([])
-    const tagSelect = ref(null)
+    const resource = computed<Resource>(() => unref(injectedResource))
+    const selectedTags = ref<TagOption[]>([])
+    const availableTags = ref<TagOption[]>([])
+    const tagSelect: VNodeRef = ref(null)
+
+    const currentTags = computed<TagOption[]>(() => {
+      return [...unref(resource).tags.map((t) => ({ label: t }))]
+    })
 
     const loadAvailableTagsTask = useTask(function* () {
       const {
         data: { value: tags = [] }
       } = yield clientService.graphAuthenticated.tags.getTags()
-      availableTags.value = [...tags]
+      availableTags.value = [...tags.map((t) => ({ label: t }))]
     })
 
     const revertChanges = () => {
-      selectedTags.value = [...unref(resource).tags]
+      selectedTags.value = unref(currentTags)
     }
-    const createOption = (option) => {
-      if (!option.trim().length) {
+    const createOption = (label: string): TagOption => {
+      if (!label.trim().length) {
         return {
-          label: option,
+          label: label.toLowerCase().trim(),
           error: $gettext('Tag must not consist of blanks only'),
           selectable: false
         }
       }
-      return option.toLowerCase().trim()
+      return { label: label.toLowerCase().trim() }
     }
-    const isOptionSelectable = (option) => {
+    const isOptionSelectable = (option: TagOption) => {
       return unref(selectedTags).length <= tagsMaxCount && option.selectable !== false
     }
-    const showSelectNewLabel = (option) => {
+    const showSelectNewLabel = (option: TagOption) => {
       return !unref(tagSelect).$refs.select.optionExists(option)
     }
 
     const save = async () => {
       try {
         const { id, tags, fileId } = unref(resource)
-        const tagsToAdd = diff(selectedTags.value, tags)
-        const tagsToRemove = diff(tags, selectedTags.value)
+        const selectedTagLabels = unref(selectedTags).map((t) => t.label)
+        const tagsToAdd = diff(selectedTagLabels, tags)
+        const tagsToRemove = diff(tags, selectedTagLabels)
 
         if (tagsToAdd.length) {
           await clientService.graphAuthenticated.tags.assignTags({
@@ -132,7 +143,7 @@ export default defineComponent({
         store.commit('Files/UPDATE_RESOURCE_FIELD', {
           id: id,
           field: 'tags',
-          value: [...unref(selectedTags)]
+          value: [...selectedTagLabels]
         })
 
         eventBus.publish('sidebar.entity.saved')
@@ -149,7 +160,7 @@ export default defineComponent({
 
     onMounted(() => {
       if (unref(resource)?.tags) {
-        selectedTags.value = [...unref(resource).tags]
+        selectedTags.value = unref(currentTags)
       }
       loadAvailableTagsTask.perform()
     })
@@ -161,6 +172,7 @@ export default defineComponent({
       selectedTags,
       resource,
       tagSelect,
+      currentTags,
       revertChanges,
       createOption,
       isOptionSelectable,
