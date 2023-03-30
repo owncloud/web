@@ -104,11 +104,42 @@ export default defineConfig(async ({ mode, command }) => {
   let config: UserConfig
 
   /**
-   * When setting `OWNCLOUD_WEB_CONFIG_URL` make sure to configure the oauth/oidc client
-   * For oCIS instances you can use `./dev/docker/ocis.idp.config.yaml`.
-   * In docker setups you need to mount it to `/etc/ocis/idp.yaml`.
-   * E.g. with docker-compose you could add a volume to the ocis container like this:
-   * - /home/youruser/projects/oc-web/dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
+    When setting `OWNCLOUD_WEB_CONFIG_URL` make sure to configure the oauth/oidc client
+
+
+    # oCIS
+    For oCIS instances you can use `./dev/docker/ocis.idp.config.yaml`.
+    In docker setups you need to mount it to `/etc/ocis/idp.yaml`.
+    E.g. with docker-compose you could add a volume to the ocis container like this:
+    - /home/youruser/projects/oc-web/dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
+
+    To use the oCIS deployment examples start vite like this:
+    OWNCLOUD_WEB_CONFIG_URL="https://ocis.owncloud.test/config.json" pnpm vite
+
+
+    # oC 10
+    For oC 10 you need to setup a separate OAuth client for vite, as the oauth2 app does
+    not support multiple redirect urls per client.
+
+    You can either setup a client with identical settings as we do in oc10.entrypoint.sh:
+
+    occ oauth2:add-client \
+      web-vite \
+      AWhZZsxb59ouGg97HsdR7GiN8pnzEYvk1cL6aVJgTQH1Gcdxly1gendLVTZ5zpYC \
+      VsrTbbeTPJ56e93eKpCdb6Wf5IGHD2meadlsDT1M9EpS3k7Y1ywTYgOhTkKZ0QTL \
+      http://host.docker.internal:8081/oidc-callback.html \
+      false \
+      true
+
+    and then just start vite like this:
+
+    OWNCLOUD_WEB_CONFIG_URL="https://owncloud.some.host/config.json" pnpm vite:oc10
+
+    or you can provide OWNCLOUD_WEB_CLIENT_ID and OWNCLOUD_WEB_CLIENT_SECRET env vars:
+
+     OWNCLOUD_WEB_CONFIG_URL="https://owncloud.some.host/config.json" \
+     OWNCLOUD_WEB_CLIENT_ID="..." OWNCLOUD_WEB_CLIENT_SECRET="..." pnpm vite:oc10
+
    */
   const configUrl =
     process.env.OWNCLOUD_WEB_CONFIG_URL ||
