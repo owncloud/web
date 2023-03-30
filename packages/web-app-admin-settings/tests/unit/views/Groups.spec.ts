@@ -1,7 +1,7 @@
 import Groups from '../../../src/views/Groups.vue'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import { mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg/src'
+import { ClientService, eventBus } from 'web-pkg/src'
 import {
   createStore,
   defaultComponentMocks,
@@ -14,7 +14,7 @@ const selectors = { batchActionsStub: 'batch-actions-stub' }
 const getClientServiceMock = () => {
   const clientService = mockDeep<ClientService>()
   clientService.graphAuthenticated.groups.listGroups.mockImplementation(() =>
-    mockAxiosResolve({ value: [{ id: '1' }] })
+    mockAxiosResolve({ value: [{ id: '1', name: 'users' }] })
   )
   return clientService
 }
@@ -49,12 +49,27 @@ describe('Groups view', () => {
   })
 
   describe('method "editGroup"', () => {
-    it('should show message on success', async () => {
+    it('should emit event on success', async () => {
+      const clientService = getClientServiceMock()
+      clientService.graphAuthenticated.users.editUser.mockImplementation(() => mockAxiosResolve())
       const { wrapper } = getWrapper()
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.editGroup({ id: '1', displayName: 'Super group' })
+      clientService.graphAuthenticated.groups.getGroup.mockImplementation(() =>
+        mockAxiosResolve({ id: '1', displayName: 'superusers' })
+      )
 
-      expect(showMessageStub).toHaveBeenCalled()
+      const editGroup = {
+        id: '1',
+        name: 'administrator'
+      }
+
+      const busStub = jest.spyOn(eventBus, 'publish')
+      await wrapper.vm.loadResourcesTask.last
+
+      const updatedUser = await wrapper.vm.editGroup(editGroup)
+
+      expect(updatedUser.id).toEqual('1')
+      expect(updatedUser.displayName).toEqual('administrator')
+      expect(busStub).toHaveBeenCalled()
     })
 
     it('should show message on error', async () => {
@@ -70,11 +85,7 @@ describe('Groups view', () => {
   })
 
   describe('computed method "sideBarAvailablePanels"', () => {
-    /**
-     * As soon as edit panel will be available in group management, please un-skip it.
-     */
-    // eslint-disable-next-line jest/no-disabled-tests
-    it.skip('should contain EditPanel when one group is selected', () => {
+    it('should contain EditPanel when one group is selected', () => {
       const { wrapper } = getWrapper()
       wrapper.vm.selectedGroups = [{ id: '1' }]
       expect(
