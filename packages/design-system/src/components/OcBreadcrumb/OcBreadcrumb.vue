@@ -25,7 +25,7 @@
           <span>{{ item.text }}</span>
         </oc-button>
         <span v-else :aria-current="getAriaCurrent(index)" tabindex="-1" v-text="item.text" />
-        <template v-if="showContextMenu && index === items.length - 1">
+        <template v-if="showContextActions && index === items.length - 1">
           <oc-button
             id="oc-breadcrumb-contextmenu-trigger"
             v-oc-tooltip="contextMenuLabel"
@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, useSlots } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import { AVAILABLE_SIZES } from '../../helpers/constants'
 
@@ -147,17 +147,13 @@ export default defineComponent({
       validator: (value) => {
         return [...AVAILABLE_SIZES, 'remove'].some((e) => e === value)
       }
-    }
-  },
-  setup() {
-    const slots = useSlots()
-
-    const showContextMenu = computed(() => {
-      return !!slots.contextMenu
-    })
-
-    return {
-      showContextMenu
+    },
+    /**
+     * Determines if the last breadcrumb item should have context menu actions.
+     */
+    showContextActions: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

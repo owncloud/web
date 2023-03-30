@@ -1,6 +1,5 @@
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import Breadcrumb from './OcBreadcrumb.vue'
-import { defineComponent } from 'vue'
 
 const items = [
   { text: 'First folder', to: { path: 'folder' } },
@@ -34,23 +33,22 @@ describe('OcBreadcrumb', () => {
     expect(wrapper.findAll('.oc-breadcrumb-list-item').length).toBe(items.length)
     expect(wrapper.html()).toMatchSnapshot()
   })
-  it('displays context menu trigger when a slot is given', () => {
+  it('displays context menu trigger if enabled via property', () => {
     const wrapper = shallowMount(Breadcrumb, {
       props: {
-        items
-      },
-      slots: {
-        contextMenu: defineComponent({})
+        items,
+        showContextActions: true
       },
       global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
     })
 
     expect(wrapper.find('#oc-breadcrumb-contextmenu-trigger').exists()).toBe(true)
   })
-  it('does not display context menu trigger when no slot given', () => {
+  it('does not display context menu trigger if not enabled via property', () => {
     const wrapper = shallowMount(Breadcrumb, {
       props: {
-        items
+        items,
+        showContextActions: false
       },
       global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
     })

@@ -16,11 +16,11 @@
           data-testid="files-breadcrumbs"
           class="oc-flex oc-flex-middle"
           context-menu-padding="small"
+          :show-context-actions="showContextActions"
           :items="breadcrumbs"
         >
           <template #contextMenu>
             <context-actions
-              v-if="showContextActions"
               :action-options="{ space, resources: breadcrumbsContextActionsItems.filter(Boolean) }"
             />
           </template>
