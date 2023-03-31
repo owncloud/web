@@ -4,7 +4,12 @@ import { Store } from 'vuex'
 import { ClientService } from 'web-pkg/src/services'
 import { ConfigurationManager } from 'web-pkg/src/configuration'
 import { RouteLocation, Router } from 'vue-router'
-import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from '../../router'
+import {
+  extractPublicLinkToken,
+  isAnonymousContext,
+  isPublicLinkContext,
+  isUserContext
+} from '../../router'
 import { unref } from 'vue'
 import { Ability } from 'web-pkg/src/utils'
 import { Language } from 'vue3-gettext'
@@ -20,7 +25,7 @@ export class AuthService {
   private ability: Ability
   private language: Language
 
-  public hasAuthErrorOccured: boolean
+  public hasAuthErrorOccurred: boolean
 
   public initialize(
     configurationManager: ConfigurationManager,
@@ -34,7 +39,7 @@ export class AuthService {
     this.clientService = clientService
     this.store = store
     this.router = router
-    this.hasAuthErrorOccured = false
+    this.hasAuthErrorOccurred = false
     this.ability = ability
     this.language = language
   }
@@ -74,7 +79,9 @@ export class AuthService {
         ability: this.ability,
         language: this.language
       })
+    }
 
+    if (!this.userManager.areEventHandlersRegistered && !isAnonymousContext(this.router, to)) {
       this.userManager.events.addAccessTokenExpired((...args): void => {
         const handleExpirationError = () => {
           console.error('AccessToken Expired：', ...args)
@@ -123,7 +130,7 @@ export class AuthService {
         await this.resetStateAfterUserLogout()
 
         if (this.userManager.unloadReason === 'authError') {
-          this.hasAuthErrorOccured = true
+          this.hasAuthErrorOccurred = true
           return this.router.push({ name: 'accessDenied' })
         }
 
@@ -141,17 +148,21 @@ export class AuthService {
         console.error('Silent Renew Error：', error)
         await this.handleAuthError(unref(this.router.currentRoute))
       })
+
+      this.userManager.areEventHandlersRegistered = true
     }
 
     // relevant for page reload: token is already in userStore
     // no userLoaded event and no signInCallback gets triggered
-    const accessToken = await this.userManager.getAccessToken()
-    if (accessToken) {
-      try {
-        await this.userManager.updateContext(accessToken)
-      } catch (e) {
-        console.error(e)
-        await this.handleAuthError(unref(this.router.currentRoute))
+    if (!isAnonymousContext(this.router, to)) {
+      const accessToken = await this.userManager.getAccessToken()
+      if (accessToken) {
+        try {
+          await this.userManager.updateContext(accessToken)
+        } catch (e) {
+          console.error(e)
+          await this.handleAuthError(unref(this.router.currentRoute))
+        }
       }
     }
   }
@@ -166,11 +177,9 @@ export class AuthService {
    */
   public async signInCallback() {
     const currentQuery = unref(this.router.currentRoute).query
-    // craft an url that the parser in oidc-client-ts can handle… this is required for oauth2 logins
-    const url = '/?' + new URLSearchParams(currentQuery as Record<string, string>).toString()
 
     try {
-      await this.userManager.signinRedirectCallback(url)
+      await this.userManager.signinRedirectCallback(this.buildSignInCallbackUrl())
 
       const redirectUrl = this.userManager.getAndClearPostLoginRedirectUrl()
 
@@ -199,7 +208,15 @@ export class AuthService {
    * in web.
    */
   public async signInSilentCallback() {
-    await this.userManager.signinSilentCallback()
+    await this.userManager.signinSilentCallback(this.buildSignInCallbackUrl())
+  }
+
+  /**
+   * craft a url that the parser in oidc-client-ts can handle…
+   */
+  private buildSignInCallbackUrl() {
+    const currentQuery = unref(this.router.currentRoute).query
+    return '/?' + new URLSearchParams(currentQuery as Record<string, string>).toString()
   }
 
   public async handleAuthError(route: RouteLocation) {
