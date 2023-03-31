@@ -32,6 +32,7 @@ Summary
 * Bugfix - Editing users who never logged in: [#8326](https://github.com/owncloud/web/pull/8326)
 * Bugfix - Cancel custom permissions: [#8340](https://github.com/owncloud/web/pull/8340)
 * Bugfix - Drop menus with limited vertical screen space: [#8411](https://github.com/owncloud/web/issues/8411)
+* Bugfix - Token renewal in vue router hash mode: [#8420](https://github.com/owncloud/web/issues/8420)
 * Bugfix - Accessing route in admin-settings with insufficient permissions: [#8434](https://github.com/owncloud/web/issues/8434)
 * Bugfix - "Show more"-action in shares panel: [#8479](https://github.com/owncloud/web/issues/8479)
 * Bugfix - Paste action conflict dialog broken: [#8480](https://github.com/owncloud/web/pull/8480)
@@ -116,6 +117,7 @@ Summary
 * Enhancement - Enable guest users: [#8652](https://github.com/owncloud/web/pull/8652)
 * Enhancement - Remove placeholder, add customizable label: [#8711](https://github.com/owncloud/web/pull/8711)
 * Enhancement - Context helper read more link configurable: [#8713](https://github.com/owncloud/web/pull/8713)
+* Enhancement - Stop bootstrapping application earlier in anonymous contexts: [#8762](https://github.com/owncloud/web/pull/8762)
 
 Details
 -------
@@ -298,6 +300,14 @@ Details
    https://github.com/owncloud/web/issues/8412
    https://github.com/owncloud/web/pull/8453
    https://github.com/owncloud/web/pull/8584
+
+* Bugfix - Token renewal in vue router hash mode: [#8420](https://github.com/owncloud/web/issues/8420)
+
+   We've fixed a bug where the silent token renewal (= in iframe) with the vue router hash mode had a
+   URL format that could not be parsed by the oidc-client-ts lib.
+
+   https://github.com/owncloud/web/issues/8420
+   https://github.com/owncloud/web/pull/8762
 
 * Bugfix - Accessing route in admin-settings with insufficient permissions: [#8434](https://github.com/owncloud/web/issues/8434)
 
@@ -1089,6 +1099,12 @@ Details
    https://github.com/owncloud/web/issues/8570
    https://github.com/owncloud/web/pull/8713
    https://github.com/owncloud/web/pull/8719
+
+* Enhancement - Stop bootstrapping application earlier in anonymous contexts: [#8762](https://github.com/owncloud/web/pull/8762)
+
+   We've optimized the silent token refresh to make less application bootstrapping requests.
+
+   https://github.com/owncloud/web/pull/8762
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
