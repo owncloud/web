@@ -35,6 +35,8 @@ export class UserManager extends OidcUserManager {
   private ability: Ability
   private language: Language
 
+  public areEventHandlersRegistered: boolean
+
   constructor(options: UserManagerOptions) {
     const storePrefix = 'oc_oAuth.'
     const userStore = new WebStorageStateStore({
