@@ -12,7 +12,7 @@ import { useGettext } from 'vue3-gettext'
 export default defineComponent({
   name: 'GroupInfoBox',
   setup(props) {
-    const _group = computed(() => props.group as Group)
+    const _group = computed<Group>(() => props.group)
     const { $ngettext } = useGettext()
     const groupMembersText = computed(() => {
       return $ngettext(
