@@ -30,6 +30,7 @@ exports[`account page account information displays basic user information 1`] = 
       <oc-button-stub appearance="raw" href="https://account-manager/logout" target="_blank" type="a"></oc-button-stub>
     </dd>
   </div>
+  <!--v-if-->
 </dl>
 `;
 
