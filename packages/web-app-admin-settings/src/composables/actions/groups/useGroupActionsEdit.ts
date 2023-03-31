@@ -7,7 +7,7 @@ import { UserAction } from 'web-pkg/src/composables/actions'
 export const useGroupActionsEdit = () => {
   const { $gettext } = useGettext()
 
-  const actions = computed((): UserAction[] => [
+  const actions = computed((): GroupAction[] => [
     {
       name: 'edit',
       icon: 'pencil',
