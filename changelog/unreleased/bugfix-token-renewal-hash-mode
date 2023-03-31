@@ -1,0 +1,6 @@
+Bugfix: Token renewal in vue router hash mode
+
+We've fixed a bug where the silent token renewal (= in iframe) with the vue router hash mode had a URL format that could not be parsed by the oidc-client-ts lib.
+
+https://github.com/owncloud/web/issues/8420
+https://github.com/owncloud/web/pull/8762 

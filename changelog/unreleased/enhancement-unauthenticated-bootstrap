@@ -1,0 +1,5 @@
+Enhancement: Stop bootstrapping application earlier in anonymous contexts
+
+We've optimized the silent token refresh to make less application bootstrapping requests.
+
+https://github.com/owncloud/web/pull/8762
