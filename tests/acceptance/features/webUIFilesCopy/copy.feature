@@ -8,7 +8,7 @@ Feature: copy files and folders
     And the administrator has set the default folder for received shares to "Shares" in the server
     And user "Alice" has been created with default attributes and without skeleton files in the server
 
-  @smokeTest @ocisSmokeTest
+  @smokeTest @ocisSmokeTest @skipOnIphoneResolution
   Scenario: copy a file and a folder into a folder
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created folder "simple-empty-folder" in the server
@@ -34,7 +34,7 @@ Feature: copy files and folders
     When the user tries to copy file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
     Then the "modal error" message with header 'File with name "strängé filename (duplicate #2 &).txt" already exists.' should be displayed on the webUI
 
-  @smokeTest @ocisSmokeTest
+  @smokeTest @ocisSmokeTest @skipOnIphoneResolution
   Scenario: Copy multiple files at once
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
