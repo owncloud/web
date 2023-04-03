@@ -118,6 +118,7 @@ Summary
 * Enhancement - Enable guest users: [#8652](https://github.com/owncloud/web/pull/8652)
 * Enhancement - Remove placeholder, add customizable label: [#8711](https://github.com/owncloud/web/pull/8711)
 * Enhancement - Context helper read more link configurable: [#8713](https://github.com/owncloud/web/pull/8713)
+* Enhancement - Enable rename groups: [#8715](https://github.com/owncloud/web/pull/8715)
 * Enhancement - Stop bootstrapping application earlier in anonymous contexts: [#8762](https://github.com/owncloud/web/pull/8762)
 
 Details
@@ -1108,6 +1109,13 @@ Details
    https://github.com/owncloud/web/issues/8570
    https://github.com/owncloud/web/pull/8713
    https://github.com/owncloud/web/pull/8719
+
+* Enhancement - Enable rename groups: [#8715](https://github.com/owncloud/web/pull/8715)
+
+   Groups can now be renamed via the admin-settings.
+
+   https://github.com/owncloud/web/issues/8714
+   https://github.com/owncloud/web/pull/8715
 
 * Enhancement - Stop bootstrapping application earlier in anonymous contexts: [#8762](https://github.com/owncloud/web/pull/8762)
 
