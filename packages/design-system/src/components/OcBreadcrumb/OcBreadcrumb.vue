@@ -7,7 +7,10 @@
         class="oc-breadcrumb-list-item oc-flex oc-flex-middle"
       >
         <router-link v-if="item.to" :aria-current="getAriaCurrent(index)" :to="item.to">
-          <span>{{ item.text }}</span>
+          <span v-if="shortenItemShown(item.text)" v-oc-tooltip="item.text">{{
+            getItemText(item.text)
+          }}</span>
+          <span v-else>{{ item.text }}</span>
         </router-link>
         <oc-icon
           v-if="item.to"
@@ -24,6 +27,13 @@
         >
           <span>{{ item.text }}</span>
         </oc-button>
+        <span
+          v-else-if="shortenItemShown(item.text)"
+          v-oc-tooltip="item.text"
+          :aria-current="getAriaCurrent(index)"
+          tabindex="-1"
+          v-text="getItemText(item.text)"
+        />
         <span v-else :aria-current="getAriaCurrent(index)" tabindex="-1" v-text="item.text" />
         <template v-if="showContextActions && index === items.length - 1">
           <oc-button
@@ -138,6 +148,15 @@ export default defineComponent({
     showContextActions: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Defines the maximal length of a breadcrumb item. By longer item adds '...'. Defaults to 0 (no maximal length).
+     */
+    itemMaxLength: {
+      type: Number,
+      required: false,
+      default: 0,
+      validator: (value: number) => Number.isInteger(value) && value >= 0
     }
   },
   setup(props) {
@@ -161,7 +180,22 @@ export default defineComponent({
       return props.items.length - 1 === index ? 'page' : null
     }
 
-    return { currentFolder, parentFolderTo, contextMenuLabel, getAriaCurrent }
+    const getItemText = (itemText) => {
+      return `${itemText.slice(0, props.itemMaxLength - 1)}...`
+    }
+
+    const shortenItemShown = (itemText) => {
+      return props.itemMaxLength && itemText.length - props.itemMaxLength > 3
+    }
+
+    return {
+      currentFolder,
+      parentFolderTo,
+      contextMenuLabel,
+      getAriaCurrent,
+      getItemText,
+      shortenItemShown
+    }
   }
 })
 </script>

@@ -18,6 +18,7 @@
           context-menu-padding="small"
           :show-context-actions="showContextActions"
           :items="breadcrumbs"
+          :itemMaxLength="breadcrumbItemMaxLength"
         >
           <template #contextMenu>
             <context-actions
@@ -182,10 +183,13 @@ export default defineComponent({
       return props.breadcrumbs.length <= 1
     })
 
+    const breadcrumbItemMaxLength = store.getters.configuration?.options?.breadcrumbItemMaxLength
+
     return {
       batchActions,
       showBreadcrumb,
-      showMobileNav
+      showMobileNav,
+      breadcrumbItemMaxLength
     }
   },
   data: function () {
