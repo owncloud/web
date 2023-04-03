@@ -31,14 +31,14 @@ export default defineComponent({
         return '?'
       }
 
-      if (this.size < 0) {
+      if (size < 0) {
         return '--'
       }
 
       const mb = 1048576
 
       return filesize(size, {
-        round: this.size < mb ? 0 : 1,
+        round: size < mb ? 0 : 1,
         locale: (this.$language?.current || '').split('_')[0]
       })
     }
