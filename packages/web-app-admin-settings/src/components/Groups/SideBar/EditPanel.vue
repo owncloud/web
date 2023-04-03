@@ -1,10 +1,10 @@
 <template>
   <div id="group-edit-panel" class="oc-mt-xl">
-    <GroupInfoBox :group="group" />
+    <group-info-box :group="group" />
     <form id="group-edit-form" class="oc-background-highlight oc-p-m" autocomplete="off">
       <oc-text-input
-        v-model="editGroup.displayName"
         id="displayName-input"
+        v-model="editGroup.displayName"
         class="oc-mb-s"
         :label="$gettext('Group name')"
         :error-message="formData.displayName.errorMessage"
@@ -23,10 +23,10 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, ref } from 'vue'
 import { Group } from 'web-client/src/generated'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
-import { useClientService } from 'web-pkg'
+import { MaybeRef, useClientService } from 'web-pkg'
 import GroupInfoBox from './GroupInfoBox.vue'
 
 export default defineComponent({
@@ -45,19 +45,19 @@ export default defineComponent({
   emits: ['confirm'],
   setup() {
     const clientService = useClientService()
-    return {
-      clientService
-    }
-  },
-  data() {
-    return {
-      editGroup: {} as Group,
-      formData: {
-        displayName: {
-          errorMessage: '',
-          valid: true
-        }
+
+    const editGroup: MaybeRef<Group> = ref({})
+    const formData = ref({
+      displayName: {
+        errorMessage: '',
+        valid: true
       }
+    })
+
+    return {
+      clientService,
+      editGroup,
+      formData
     }
   },
   computed: {

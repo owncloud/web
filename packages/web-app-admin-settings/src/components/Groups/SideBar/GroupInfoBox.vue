@@ -11,6 +11,12 @@ import { Group } from 'web-client/src/generated'
 import { useGettext } from 'vue3-gettext'
 export default defineComponent({
   name: 'GroupInfoBox',
+  props: {
+    group: {
+      type: Object as PropType<Group>,
+      required: true
+    }
+  },
   setup(props) {
     const _group = computed<Group>(() => props.group)
     const { $ngettext } = useGettext()
@@ -28,12 +34,6 @@ export default defineComponent({
     return {
       groupMembersText,
       _group
-    }
-  },
-  props: {
-    group: {
-      type: Object as PropType<Group>,
-      required: true
     }
   }
 })

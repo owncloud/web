@@ -26,30 +26,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { Group } from 'web-client/src/generated'
-import { useClientService } from 'web-pkg'
+import { MaybeRef, useClientService } from 'web-pkg'
 
 export default defineComponent({
   name: 'CreateGroupModal',
   emits: ['cancel', 'confirm'],
   setup() {
     const clientService = useClientService()
+
+    const group: MaybeRef<Group> = ref({ displayName: '' })
+    const formData = ref({
+      displayName: {
+        errorMessage: '',
+        valid: false
+      }
+    })
+
     return {
-      clientService
-    }
-  },
-  data: function () {
-    return {
-      formData: {
-        displayName: {
-          errorMessage: '',
-          valid: false
-        }
-      },
-      group: {
-        displayName: ''
-      } as Group
+      clientService,
+      group,
+      formData
     }
   },
   computed: {
