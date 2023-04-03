@@ -1,5 +1,14 @@
 import CreateGroupModal from '../../../../src/components/Groups/CreateGroupModal.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStoreMockOptions,
+  mockAxiosReject,
+  shallowMount
+} from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
+import { AxiosResponse } from 'axios'
 
 describe('CreateGroupModal', () => {
   describe('computed method "isFormInvalid"', () => {
@@ -8,48 +17,56 @@ describe('CreateGroupModal', () => {
       wrapper.vm.formData.displayName.valid = false
       expect(wrapper.vm.isFormInvalid).toBeTruthy()
     })
-  })
-  it('should be false if no data set is invalid', () => {
-    const { wrapper } = getWrapper()
-    Object.keys(wrapper.vm.formData).forEach((key) => {
-      wrapper.vm.formData[key].valid = true
+    it('should be false if no data set is invalid', () => {
+      const { wrapper } = getWrapper()
+      Object.keys(wrapper.vm.formData).forEach((key) => {
+        wrapper.vm.formData[key].valid = true
+      })
+      expect(wrapper.vm.isFormInvalid).toBeFalsy()
     })
-    expect(wrapper.vm.isFormInvalid).toBeFalsy()
   })
-
   describe('method "validateDisplayName"', () => {
-    it('should be false when displayName is empty', () => {
+    it('should be false when displayName is empty', async () => {
       const { wrapper } = getWrapper()
       wrapper.vm.group.displayName = ''
-      expect(wrapper.vm.validateDisplayName()).toBeFalsy()
+      expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
     })
-    it('should be false when displayName is already existing', () => {
-      const { wrapper } = getWrapper()
+    it('should be false when displayName is already existing', async () => {
+      const { wrapper, mocks } = getWrapper()
+      const graphMock = mocks.$clientService.graphAuthenticated
       wrapper.vm.group.displayName = 'admins'
-      expect(wrapper.vm.validateDisplayName()).toBeFalsy()
+      const getGroupSub = graphMock.groups.getGroup.mockResolvedValue(
+        mock<AxiosResponse>({ data: { displayName: 'admins' } })
+      )
+      expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
+      expect(getGroupSub).toHaveBeenCalled()
     })
-    it('should be true when displayName is valid', () => {
-      const { wrapper } = getWrapper()
+    it('should be true when displayName is valid', async () => {
+      const { wrapper, mocks } = getWrapper()
+      const graphMock = mocks.$clientService.graphAuthenticated
+      const getGroupSub = graphMock.groups.getGroup.mockRejectedValue(() => mockAxiosReject())
       wrapper.vm.group.displayName = 'users'
-      expect(wrapper.vm.validateDisplayName()).toBeTruthy()
+      expect(await wrapper.vm.validateDisplayName()).toBeTruthy()
+      expect(getGroupSub).toHaveBeenCalled()
     })
   })
 })
 
 function getWrapper() {
+  const mocks = defaultComponentMocks()
+  const storeOptions = defaultStoreMockOptions
+  const store = createStore(storeOptions)
+
   return {
+    mocks,
     wrapper: shallowMount(CreateGroupModal, {
       props: {
         cancel: jest.fn(),
-        confirm: jest.fn(),
-        existingGroups: [
-          {
-            displayName: 'admins'
-          }
-        ]
+        confirm: jest.fn()
       },
       global: {
-        plugins: [...defaultPlugins()]
+        mocks,
+        plugins: [...defaultPlugins(), store]
       }
     })
   }

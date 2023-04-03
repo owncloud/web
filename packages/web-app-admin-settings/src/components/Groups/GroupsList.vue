@@ -58,6 +58,14 @@
         >
           <oc-icon name="information" fill-type="line" />
         </oc-button>
+        <oc-button
+          v-oc-tooltip="$gettext('Edit')"
+          appearance="raw"
+          class="oc-mr-xs quick-action-button oc-p-xs groups-table-btn-edit"
+          @click="showEditPanel(item)"
+        >
+          <oc-icon name="pencil" fill-type="line" />
+        </oc-button>
         <context-menu-quick-action
           ref="contextMenuButtonRef"
           :item="item"
@@ -153,13 +161,21 @@ export default defineComponent({
       displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
     }
 
+    const showEditPanel = (group) => {
+      if (!isGroupSelected(group)) {
+        selectGroup(group)
+      }
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'EditPanel')
+    }
+
     return {
       showDetails,
       rowClicked,
       isGroupSelected,
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
-      contextMenuButtonRef
+      contextMenuButtonRef,
+      showEditPanel
     }
   },
   data() {

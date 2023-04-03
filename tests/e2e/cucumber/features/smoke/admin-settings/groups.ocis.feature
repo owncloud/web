@@ -39,3 +39,17 @@ Feature: groups management
       | security |
       | finance  |
     And "Admin" logs out
+
+  Scenario: edit groups
+    Given "Admin" creates following user using API
+      | id    |
+      | Alice |
+    Given "Admin" creates following groups using API
+      | id    |
+      | sales |
+    When "Admin" logs in
+    And "Admin" opens the "admin-settings" app
+    And "Admin" navigates to the groups management page
+    When "Admin" changes displayName to "a renamed group" for group "sales" using the sidebar panel
+    And "Admin" logs out
+

@@ -2,10 +2,12 @@ import { Page } from 'playwright'
 import { UsersEnvironment } from '../../../environment'
 import {
   createGroup,
+  openEditPanel,
   getDisplayedGroups,
   selectGroup,
   deleteGroupUsingContextMenu,
-  deleteGrouprUsingBatchAction
+  deleteGrouprUsingBatchAction,
+  changeGroup
 } from './actions'
 
 export class Groups {
@@ -32,5 +34,25 @@ export class Groups {
   }
   async deleteGroupUsingContextMenu({ key }: { key: string }): Promise<void> {
     await deleteGroupUsingContextMenu({ page: this.#page, uuid: this.getUUID({ key }) })
+  }
+
+  async changeGroup({
+    key,
+    attribute,
+    value,
+    action
+  }: {
+    key: string
+    attribute: string
+    value: string
+    action: string
+  }): Promise<void> {
+    const uuid = this.getUUID({ key })
+    await openEditPanel({ page: this.#page, uuid, action })
+    await changeGroup({ uuid, attribute: attribute, value: value, page: this.#page })
+  }
+
+  async openEditPanel({ key, action }: { key: string; action: string }): Promise<void> {
+    await openEditPanel({ page: this.#page, uuid: this.getUUID({ key }), action })
   }
 }

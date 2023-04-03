@@ -63,7 +63,6 @@
     </app-template>
     <create-group-modal
       v-if="createGroupModalOpen"
-      :existing-groups="groups"
       @cancel="toggleCreateGroupModal"
       @confirm="createGroup"
     />
@@ -186,10 +185,11 @@ export default defineComponent({
           title: this.$gettext('Edit group'),
           component: EditPanel,
           default: false,
-          enabled: false // this.selectedGroups.length === 1
-          /**
-           * Editing groups is currently not supported by backend
-           */
+          enabled: this.selectedGroups.length === 1,
+          componentAttrs: {
+            group: this.selectedGroups.length === 1 ? this.selectedGroups[0] : null,
+            onConfirm: this.editGroup
+          }
         }
       ].filter((p) => p.enabled)
     }
@@ -238,12 +238,20 @@ export default defineComponent({
       try {
         const client = this.clientService.graphAuthenticated
         await client.groups.editGroup(editGroup.id, editGroup)
-        const group = this.groups.find((group) => group.id === editGroup.id)
-        Object.assign(group, editGroup)
+        const { data: updatedGroup } = await client.groups.getGroup(editGroup.id)
+        const groupIndex = this.groups.findIndex((group) => group.id === editGroup.id)
+        this.groups[groupIndex] = updatedGroup
+        const selectedGroupIndex = this.selectedGroups.findIndex(
+          (group) => group.id === updatedGroup.id
+        )
+        if (selectedGroupIndex >= 0) {
+          // FIXME: why do we need to update selectedUsers?
+          this.selectedGroups[selectedGroupIndex] = updatedGroup
+        }
 
-        this.showMessage({
-          title: this.$gettext('Group was edited successfully')
-        })
+        eventBus.publish('sidebar.entity.saved')
+
+        return updatedGroup
       } catch (error) {
         console.error(error)
         this.showMessage({

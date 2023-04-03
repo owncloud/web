@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditPanel renders all available inputs 1`] = `
+<div class="oc-mt-xl" id="group-edit-panel">
+  <div class="oc-flex group-info oc-mb-l">
+    <avatar-image-stub class="oc-mb-m" user-name="group" width="80"></avatar-image-stub>
+    <span class="oc-text-muted group-info-display-name">group</span>
+    <span class="oc-text-muted">0 members</span>
+  </div>
+  <form autocomplete="off" class="oc-background-highlight oc-p-m" id="group-edit-form">
+    <oc-text-input-stub class="oc-mb-s" error-message="" fix-message-line="true" id="displayName-input" label="Group name" modelvalue="group"></oc-text-input-stub>
+    <div class="compare-save-dialog oc-width-1-1 oc-flex oc-flex-between oc-flex-middle edit-compare-save-dialog oc-mb-l">
+      <span class="state-indicator">No changes</span>
+      <div>
+        <oc-button-stub class="compare-save-dialog-revert-btn" disabled="true"></oc-button-stub>
+        <oc-button-stub appearance="filled" class="compare-save-dialog-confirm-btn" disabled="true" variation="primary"></oc-button-stub>
+      </div>
+    </div>
+  </form>
+</div>
+`;

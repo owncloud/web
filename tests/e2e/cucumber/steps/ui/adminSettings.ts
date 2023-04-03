@@ -428,6 +428,27 @@ When(
   }
 )
 
+When(
+  /^"([^"]*)" changes (displayName) to "([^"]*)" for group "([^"]*)" using the sidebar panel$/,
+  async function (
+    this: World,
+    stepUser: string,
+    attribute: string,
+    value: string,
+    user: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+
+    await groupsObject.changeGroup({
+      key: user,
+      attribute: attribute,
+      value: value,
+      action: 'context-menu'
+    })
+  }
+)
+
 Then(
   /^"([^"]*)" (should see|should not see) the following group(?:s)?$/,
   async function (

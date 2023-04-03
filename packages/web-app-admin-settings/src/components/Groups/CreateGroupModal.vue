@@ -26,32 +26,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { Group } from 'web-client/src/generated'
+import { MaybeRef, useClientService } from 'web-pkg'
 
 export default defineComponent({
   name: 'CreateGroupModal',
-  props: {
-    existingGroups: {
-      type: Array as PropType<Group[]>,
-      required: false,
-      default: () => {
-        return []
-      }
-    }
-  },
   emits: ['cancel', 'confirm'],
-  data: function () {
+  setup() {
+    const clientService = useClientService()
+
+    const group: MaybeRef<Group> = ref({ displayName: '' })
+    const formData = ref({
+      displayName: {
+        errorMessage: '',
+        valid: false
+      }
+    })
+
     return {
-      formData: {
-        displayName: {
-          errorMessage: '',
-          valid: false
-        }
-      },
-      group: {
-        displayName: ''
-      } as Group
+      clientService,
+      group,
+      formData
     }
   },
   computed: {
@@ -62,7 +58,7 @@ export default defineComponent({
     }
   },
   methods: {
-    validateDisplayName() {
+    async validateDisplayName() {
       this.formData.displayName.valid = false
 
       if (this.group.displayName.trim() === '') {
@@ -70,17 +66,17 @@ export default defineComponent({
         return false
       }
 
-      if (
-        this.existingGroups.find(
-          (existingGroup) => existingGroup.displayName === this.group.displayName
-        )
-      ) {
+      try {
+        const client = this.clientService.graphAuthenticated
+        await client.groups.getGroup(this.group.displayName)
         this.formData.displayName.errorMessage = this.$gettext(
           'Group "%{groupName}" already exists',
-          { groupName: this.group.displayName }
+          {
+            groupName: this.group.displayName
+          }
         )
         return false
-      }
+      } catch (e) {}
 
       this.formData.displayName.errorMessage = ''
       this.formData.displayName.valid = true

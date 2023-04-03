@@ -1,0 +1,6 @@
+Enhancement: Enable rename groups
+
+Groups can now be renamed via the admin-settings.
+
+https://github.com/owncloud/web/pull/8715
+https://github.com/owncloud/web/issues/8714

@@ -7,7 +7,10 @@ import {
 import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client/src/helpers'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
-import { useGroupActionsDelete } from 'web-app-admin-settings/src/composables/actions'
+import {
+  useGroupActionsDelete,
+  useGroupActionsEdit
+} from 'web-app-admin-settings/src/composables/actions'
 import { computed } from 'vue'
 import { Action } from 'web-pkg/src/composables/actions'
 
@@ -25,6 +28,12 @@ jest.mock('web-app-admin-settings/src/composables/actions/groups/useGroupActions
   )
 )
 
+jest.mock('web-app-admin-settings/src/composables/actions/groups/useGroupActionsEdit', () =>
+  createMockActionComposables(
+    jest.requireActual('web-app-admin-settings/src/composables/actions/groups/useGroupActionsEdit')
+  )
+)
+
 const selectors = {
   actionMenuItemStub: 'action-menu-item-stub'
 }
@@ -37,8 +46,11 @@ describe('ContextActions', () => {
     })
 
     it('render enabled actions', () => {
-      const enabledComposables = [useGroupActionsDelete]
+      const enabledComposables = [useGroupActionsDelete, useGroupActionsEdit]
       jest.mocked(useGroupActionsDelete).mockImplementation(() => ({
+        actions: computed(() => [mock<Action>({ isEnabled: () => true })])
+      }))
+      jest.mocked(useGroupActionsEdit).mockImplementation(() => ({
         actions: computed(() => [mock<Action>({ isEnabled: () => true })])
       }))
       const { wrapper } = getWrapper()
