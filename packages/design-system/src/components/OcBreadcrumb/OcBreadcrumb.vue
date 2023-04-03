@@ -195,6 +195,7 @@ export default defineComponent({
 
     list-style: none;
     align-items: baseline;
+    flex-wrap: wrap;
 
     #oc-breadcrumb-contextmenu-trigger > span {
       vertical-align: middle;

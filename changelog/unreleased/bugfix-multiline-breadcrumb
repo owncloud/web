@@ -1,0 +1,6 @@
+Bugfix: Layout with long breadcrumb
+
+The breadcrumb component with total length longer than the app area was breaking the layout and has been fixed
+
+https://github.com/owncloud/web/issues/6731
+https://github.com/owncloud/web/pull/8765
