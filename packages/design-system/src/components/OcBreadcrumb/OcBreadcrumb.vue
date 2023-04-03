@@ -7,7 +7,10 @@
         class="oc-breadcrumb-list-item oc-flex oc-flex-middle"
       >
         <router-link v-if="item.to" :aria-current="getAriaCurrent(index)" :to="item.to">
-          <span>{{ item.text }}</span>
+          <span v-if="shortenItemShown(item.text)" v-oc-tooltip="item.text">{{
+            getItemText(item.text)
+          }}</span>
+          <span v-else>{{ item.text }}</span>
         </router-link>
         <oc-icon
           v-if="item.to"
@@ -22,8 +25,18 @@
           appearance="raw"
           @click="item.onClick"
         >
-          <span>{{ item.text }}</span>
+          <span v-if="shortenItemShown(item.text)" v-oc-tooltip="item.text">{{
+            getItemText(item.text)
+          }}</span>
+          <span v-else>{{ item.text }}</span>
         </oc-button>
+        <span
+          v-else-if="shortenItemShown(item.text)"
+          v-oc-tooltip="item.text"
+          :aria-current="getAriaCurrent(index)"
+          tabindex="-1"
+          v-text="getItemText(item.text)"
+        />
         <span v-else :aria-current="getAriaCurrent(index)" tabindex="-1" v-text="item.text" />
         <template v-if="showContextMenu && index === items.length - 1">
           <oc-button
@@ -146,6 +159,15 @@ export default defineComponent({
       validator: (value) => {
         return [...AVAILABLE_SIZES, 'remove'].some((e) => e === value)
       }
+    },
+    /**
+     * Defines the maximal length of a breadcrumb item. By longer item adds '...'. Defaults to 0 (no maximal length).
+     */
+    itemMaxLength: {
+      type: Number,
+      required: false,
+      default: 0,
+      validator: (value: number) => Number.isInteger(value) && value >= 0
     }
   },
   computed: {
@@ -179,6 +201,12 @@ export default defineComponent({
     },
     clickMobileDropdown() {
       this.$refs.mobileDropdown.click()
+    },
+    getItemText(itemText) {
+      return `${itemText.slice(0, this.itemMaxLength - 1)}...`
+    },
+    shortenItemShown(itemText) {
+      return this.itemMaxLength && itemText.length - this.itemMaxLength > 3
     }
   }
 })
