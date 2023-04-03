@@ -17,6 +17,7 @@
           class="oc-flex oc-flex-middle"
           context-menu-padding="small"
           :items="breadcrumbs"
+          :itemMaxLength="breadcrumbItemMaxLength"
         >
           <template #contextMenu>
             <context-actions
@@ -70,6 +71,7 @@ import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import ViewOptions from './ViewOptions.vue'
+import { useStore } from 'web-pkg/src'
 
 export default defineComponent({
   components: {
@@ -105,6 +107,15 @@ export default defineComponent({
       default: null
     }
   },
+  setup() {
+    const store = useStore()
+
+    const breadcrumbItemMaxLength = store.getters.configuration?.options?.breadcrumbItemMaxLength
+    return {
+      breadcrumbItemMaxLength
+    }
+  },
+
   data: function () {
     return {
       resizeObserver: new ResizeObserver(this.onResize as ResizeObserverCallback),

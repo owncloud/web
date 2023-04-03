@@ -57,7 +57,8 @@ const state = {
     previewFileMimeTypes: [],
     runningOnEos: false,
     cernFeatures: false,
-    sharingRecipientsPerPage: 200
+    sharingRecipientsPerPage: 200,
+    breadcrumbItemMaxLength: 0
   }
 }
 
