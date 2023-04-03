@@ -71,6 +71,7 @@ hovers the row with his mouse. Defaults to `false`.
 - `options.editor.autosaveEnabled` Specifies if the autosave for the editor apps is enabled.
 - `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
 - `options.contextHelpersReadMore` Specifies whether the "Read more" link should be displayed or not.
+- `options.breadcrumbItemMaxLength` Specifies the maximum length in letters for the breadcrumb item. If set to 0, no maximum length will be set.
 
 ### Sentry
 
