@@ -15,7 +15,7 @@ import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
 import { Browser, chromium, firefox, webkit } from 'playwright'
-import { spaceStore, linkStore } from '../../support/store'
+import {spaceStore, linkStore, userStore, groupStore} from '../../support/store'
 
 export { World }
 
@@ -106,6 +106,23 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
   if (result.status !== Status.PASSED) {
     await this.actorsEnvironment.close()
   }
+
+  await userStore.forEach((user) =>{
+    if (user.id !== 'admin'){
+      api.graph.deleteUser({
+        user: this.usersEnvironment.getUser({ key: user.id }),
+        admin: this.usersEnvironment.getUser({ key: 'admin' })
+      })
+    }
+  })
+
+  await groupStore.forEach( (group) =>{
+    api.graph.deleteGroup({
+      group: this.usersEnvironment.getGroup({ key: group.id }),
+      admin: this.usersEnvironment.getUser({ key: 'admin' })
+    })
+  })
+
   spaceStore.clear()
   linkStore.clear()
 })

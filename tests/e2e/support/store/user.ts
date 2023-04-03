@@ -38,21 +38,21 @@ export const userStore = new Map<string, User>([
     }
   ],
   [
-    'marie',
+    'rina',
     {
-      id: 'marie',
-      displayName: 'Marie Skłodowska Curie',
+      id: 'rina',
+      displayName: 'Rina kumari Shrestha',
       password: '1234',
-      email: 'marie@example.org'
+      email: 'rina@example.org'
     }
   ],
   [
-    'richard',
+    'anu',
     {
-      id: 'richard',
-      displayName: 'Richard Phillips Feynman',
+      id: 'anu',
+      displayName: 'Anu Singh Feynman',
       password: '1234',
-      email: 'richard@example.org'
+      email: 'anu@example.org'
     }
   ],
   [
