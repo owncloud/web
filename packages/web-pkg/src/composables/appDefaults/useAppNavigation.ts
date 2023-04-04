@@ -56,12 +56,14 @@ export const contextQueryToFileContextProps = (
   }
 }
 
-export const queryItemAsString = (queryItem: string | string[]) => {
+export const queryItemAsString = (
+  queryItem: string | number | Exclude<string | number, null | undefined>[]
+): string => {
   if (Array.isArray(queryItem)) {
-    return queryItem[0]
+    return queryItem[0].toString()
   }
 
-  return queryItem
+  return queryItem?.toString()
 }
 
 export function useAppNavigation({
