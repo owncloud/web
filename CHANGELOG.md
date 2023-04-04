@@ -119,6 +119,7 @@ Summary
 * Enhancement - Remove placeholder, add customizable label: [#8711](https://github.com/owncloud/web/pull/8711)
 * Enhancement - Context helper read more link configurable: [#8713](https://github.com/owncloud/web/pull/8713)
 * Enhancement - Enable rename groups: [#8715](https://github.com/owncloud/web/pull/8715)
+* Enhancement - GDPR export: [#8738](https://github.com/owncloud/web/issues/8738)
 * Enhancement - Stop bootstrapping application earlier in anonymous contexts: [#8762](https://github.com/owncloud/web/pull/8762)
 
 Details
@@ -692,6 +693,7 @@ Details
    https://github.com/owncloud/web/pull/8132
    https://github.com/owncloud/web/pull/8171
    https://github.com/owncloud/web/pull/8250
+   https://github.com/owncloud/web/pull/8741
 
 * Enhancement - Make clipboard copy available to more browsers: [#8136](https://github.com/owncloud/web/pull/8136)
 
@@ -1116,6 +1118,14 @@ Details
 
    https://github.com/owncloud/web/issues/8714
    https://github.com/owncloud/web/pull/8715
+
+* Enhancement - GDPR export: [#8738](https://github.com/owncloud/web/issues/8738)
+
+   Users can now request a GDPR export on their account page. Note that this is only supported when
+   running oCIS as backend.
+
+   https://github.com/owncloud/web/issues/8738
+   https://github.com/owncloud/web/pull/8741
 
 * Enhancement - Stop bootstrapping application earlier in anonymous contexts: [#8762](https://github.com/owncloud/web/pull/8762)
 
