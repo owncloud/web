@@ -7,6 +7,8 @@ import {
   shallowMount,
   defaultStoreMockOptions
 } from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
+import { SpaceResource } from 'web-client/src/helpers'
 
 const $route = {
   meta: {
@@ -20,7 +22,8 @@ const selectors = {
   editUrlButton: '[data-testid="account-page-edit-url-btn"]',
   accountPageInfo: '.account-page-info',
   groupNames: '[data-testid="group-names"]',
-  groupNamesEmpty: '[data-testid="group-names-empty"]'
+  groupNamesEmpty: '[data-testid="group-names-empty"]',
+  gdprExport: '[data-testid="gdpr-export"]'
 }
 
 jest.mock('web-pkg/src/configuration', () => ({
@@ -88,6 +91,33 @@ describe('account page', () => {
     })
   })
 
+  describe('gdpr export section', () => {
+    it('does show if announced via capabilities and user has a personal space', () => {
+      const spaces = [mock<SpaceResource>({ driveType: 'personal' })]
+      const { wrapper } = getWrapper({
+        spaces,
+        capabilities: { graph: { 'personal-data-export': true } }
+      })
+      expect(wrapper.find(selectors.gdprExport).exists()).toBeTruthy()
+    })
+    it('does not show if not announced via capabilities', () => {
+      const spaces = [mock<SpaceResource>({ driveType: 'personal' })]
+      const { wrapper } = getWrapper({
+        spaces,
+        capabilities: { graph: { 'personal-data-export': false } }
+      })
+      expect(wrapper.find(selectors.gdprExport).exists()).toBeFalsy()
+    })
+    it('does not show if user has no personal space', () => {
+      const spaces = [mock<SpaceResource>({ driveType: 'project' })]
+      const { wrapper } = getWrapper({
+        spaces,
+        capabilities: { graph: { 'personal-data-export': true } }
+      })
+      expect(wrapper.find(selectors.gdprExport).exists()).toBeFalsy()
+    })
+  })
+
   describe('method "editPassword"', () => {
     it('should show message on success', async () => {
       const { wrapper, mocks } = getWrapper()
@@ -137,8 +167,15 @@ describe('account page', () => {
   })
 })
 
-function getWrapper({ data = {}, user = {}, capabilities = {}, accountEditLink = undefined } = {}) {
+function getWrapper({
+  data = {},
+  user = {},
+  capabilities = {},
+  accountEditLink = undefined,
+  spaces = []
+} = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
+  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
   storeOptions.getters.user.mockReturnValue({ groups: [], ...user })
   storeOptions.getters.capabilities.mockReturnValue(capabilities)
   storeOptions.getters.configuration.mockReturnValue({

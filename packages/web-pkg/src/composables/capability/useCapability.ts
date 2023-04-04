@@ -29,7 +29,10 @@ export const useCapabilityCoreSupportUrlSigning = createCapabilityComposable(
   'core.support-url-signing',
   false
 )
-
+export const useCapabilityGraphPersonalDataExport = createCapabilityComposable(
+  'graph.personal-data-export',
+  false
+)
 export const useCapabilityFilesSharingQuickLinkDefaultRole = createCapabilityComposable(
   'files_sharing.quick_link.default_role',
   'viewer'

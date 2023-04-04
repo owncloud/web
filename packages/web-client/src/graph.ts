@@ -23,7 +23,8 @@ import {
   CollectionOfApplications,
   ApplicationsApiFactory,
   UserAppRoleAssignmentApiFactory,
-  AppRoleAssignment
+  AppRoleAssignment,
+  ExportPersonalDataRequest
 } from './generated'
 
 export interface Graph {
@@ -55,6 +56,10 @@ export interface Graph {
       userId: string,
       appRoleAssignment: AppRoleAssignment
     ) => AxiosPromise<AppRoleAssignment>
+    exportPersonalData: (
+      userId: string,
+      exportPersonalDataRequest?: ExportPersonalDataRequest
+    ) => AxiosPromise<void>
   }
   groups: {
     listGroups: (orderBy?: string) => AxiosPromise<CollectionOfGroup>
@@ -133,17 +138,16 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
       deleteUser: (userId: string) => userApiFactory.deleteUser(userId),
       listUsers: (orderBy?: any, filter?: string) =>
         usersApiFactory.listUsers(
-          0,
-          0,
           '',
           filter,
-          false,
           new Set<any>([orderBy]),
           new Set<any>([]),
           new Set<any>(['memberOf', 'appRoleAssignments'])
         ),
       createUserAppRoleAssignment: (userId: string, appRoleAssignment: AppRoleAssignment) =>
-        userAppRoleAssignmentApiFactory.userCreateAppRoleAssignments(userId, appRoleAssignment)
+        userAppRoleAssignmentApiFactory.userCreateAppRoleAssignments(userId, appRoleAssignment),
+      exportPersonalData: (userId: string, exportPersonalDataRequest?: ExportPersonalDataRequest) =>
+        userApiFactory.exportPersonalData(userId, exportPersonalDataRequest)
     },
     groups: {
       createGroup: (group: Group) => groupsApiFactory.createGroup(group),
@@ -153,11 +157,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
       deleteGroup: (groupId: string) => groupApiFactory.deleteGroup(groupId),
       listGroups: (orderBy?: any) =>
         groupsApiFactory.listGroups(
-          0,
-          0,
           '',
-          '',
-          false,
           new Set<any>([orderBy]),
           new Set<any>([]),
           new Set<any>(['members'])

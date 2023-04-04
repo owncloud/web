@@ -1,0 +1,6 @@
+Enhancement: GDPR export
+
+Users can now request a GDPR export on their account page. Note that this is only supported when running oCIS as backend.
+
+https://github.com/owncloud/web/issues/8738
+https://github.com/owncloud/web/pull/8741

@@ -94,6 +94,12 @@
           </oc-button>
         </dd>
       </div>
+      <div v-if="showGdprExport" class="account-page-gdpr-export oc-mb oc-width-1-2@s">
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('GDPR export')" />
+        <dd data-testid="gdpr-export">
+          <gdpr-export />
+        </dd>
+      </div>
     </dl>
   </main>
 </template>
@@ -104,6 +110,7 @@ import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { computed, defineComponent, onMounted, unref } from 'vue'
 import {
   useAccessToken,
+  useCapabilityGraphPersonalDataExport,
   useCapabilitySpacesEnabled,
   useClientService,
   useStore
@@ -113,24 +120,36 @@ import axios from 'axios'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
-import { configurationManager } from 'web-pkg/src/configuration'
+import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
+import { useConfigurationManager } from 'web-pkg/src/composables/configuration'
+import { isPersonalSpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'Personal',
   components: {
-    EditPasswordModal
+    EditPasswordModal,
+    GdprExport
   },
   setup() {
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const language = useGettext()
     const clientService = useClientService()
+    const configurationManager = useConfigurationManager()
 
     // FIXME: Use graph capability when we have it
     const isLanguageSupported = useCapabilitySpacesEnabled()
     const isChangePasswordEnabled = useCapabilitySpacesEnabled()
+    const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
     const user = computed(() => {
       return store.getters.user
+    })
+
+    const showGdprExport = computed(() => {
+      return (
+        unref(isPersonalDataExportEnabled) &&
+        store.getters['runtime/spaces/spaces'].some((s) => isPersonalSpaceResource(s))
+      )
     })
 
     const loadAccountBundleTask = useTask(function* () {
@@ -235,6 +254,7 @@ export default defineComponent({
       updateSelectedLanguage,
       accountEditLink,
       isChangePasswordEnabled,
+      showGdprExport,
       isLanguageSupported,
       groupNames,
       user,
