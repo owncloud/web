@@ -131,3 +131,26 @@ export const updateSpaceSpecialSection = async ({
     `Failed while creating special section "${type}" inside project space`
   )
 }
+
+export const disableSpace = async ({
+  user,
+  space
+}: {
+  user: User
+  space: Space
+}): Promise<void> => {
+  await request({
+    method: 'DELETE',
+    path: join('graph', 'v1.0', 'drives', space.id),
+    user: user
+  })
+}
+
+export const deleteSpace = async ({ user, space }: { user: User; space: Space }): Promise<void> => {
+  await request({
+    method: 'DELETE',
+    path: join('graph', 'v1.0', 'drives', space.id),
+    user: user,
+    header: { Purge: 'T' }
+  })
+}

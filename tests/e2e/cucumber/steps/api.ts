@@ -12,10 +12,8 @@ Given(
     for (const info of stepTable.hashes()) {
       const user = this.usersEnvironment.getUser({ key: info.id })
       if (config.ocis) {
-        await api.graph.deleteUser({ user, admin })
         await api.graph.createUser({ user, admin })
       } else {
-        await api.user.deleteUser({ user, admin })
         await api.user.createUser({ user, admin })
       }
     }
@@ -69,10 +67,8 @@ Given(
     for (const info of stepTable.hashes()) {
       const group = this.usersEnvironment.getGroup({ key: info.id })
       if (config.ocis) {
-        await api.graph.deleteGroup({ group, admin })
         await api.graph.createGroup({ group, admin })
       } else {
-        await api.user.deleteGroup({ group, admin })
         await api.user.createGroup({ group, admin })
       }
     }

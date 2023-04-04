@@ -2,11 +2,11 @@ Feature: spaces public link
 
   Scenario: public link for space
     Given "Admin" creates following users using API
-      | id    |
-      | Alice |
-      | Brian |
-      | Carol |
-      | Marie |
+      | id       |
+      | Alice    |
+      | Brian    |
+      | Carol    |
+      | Gehendra |
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
@@ -24,10 +24,10 @@ Feature: spaces public link
     And "Alice" creates a public link for the resource "spaceFolder" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "spaceFolder" to "folderLink"
     And "Alice" adds following users to the project space
-      | user  | role    | kind |
-      | Brian | editor  | user |
-      | Carol | viewer  | user |
-      | Marie | manager | user |
+      | user     | role    | kind |
+      | Brian    | editor  | user |
+      | Carol    | viewer  | user |
+      | Gehendra | manager | user |
     And "Alice" logs out
     When "Brian" logs in
     And "Brian" navigates to the projects space page
@@ -35,12 +35,12 @@ Feature: spaces public link
     Then public link named "spaceLink" should be visible to "Brian"
     But "Brian" should not be able to edit the public link named "spaceLink"
     And "Brian" logs out
-    When "Marie" logs in
-    And "Marie" navigates to the projects space page
-    And "Marie" navigates to the project space "team.1"
-    And "Marie" edits the public link named "spaceLink" of the space changing role to "editor"
-    And "Marie" edits the public link named "folderLink" of resource "spaceFolder" changing role to "editor"
-    And "Marie" logs out
+    When "Gehendra" logs in
+    And "Gehendra" navigates to the projects space page
+    And "Gehendra" navigates to the project space "team.1"
+    And "Gehendra" edits the public link named "spaceLink" of the space changing role to "editor"
+    And "Gehendra" edits the public link named "folderLink" of resource "spaceFolder" changing role to "editor"
+    And "Gehendra" logs out
     When "Carol" logs in
     And "Carol" navigates to the projects space page
     And "Carol" navigates to the project space "team.1"

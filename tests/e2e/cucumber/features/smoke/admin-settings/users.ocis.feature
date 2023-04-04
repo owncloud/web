@@ -132,15 +132,15 @@ Feature: users management
 
   Scenario: delete user
     Given "Admin" creates following users using API
-      | id    |
-      | Alice |
-      | Brian |
-      | Carol |
-      | Marie |
+      | id       |
+      | Alice    |
+      | Brian    |
+      | Carol    |
+      | Gehendra |
     And "Admin" logs in
     And "Admin" opens the "admin-settings" app
     And "Admin" navigates to the users management page
-    And "Admin" changes role to "Space Admin" for user "Marie" using the sidebar panel
+    And "Admin" changes role to "Space Admin" for user "Gehendra" using the sidebar panel
     When "Admin" sets the following filter
       | filter | values     |
       | roles  | User,Admin |
@@ -150,8 +150,8 @@ Feature: users management
       | Brian |
       | Carol |
     And "Admin" should not see the following users
-      | user  |
-      | Marie |
+      | user     |
+      | Gehendra |
     When "Admin" deletes the following users using the batch actions
       | id    |
       | Alice |

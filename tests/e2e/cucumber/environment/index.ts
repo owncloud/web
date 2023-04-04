@@ -15,7 +15,7 @@ import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
 import { Browser, chromium, firefox, webkit } from 'playwright'
-import {spaceStore, linkStore, userStore, groupStore} from '../../support/store'
+import { spaceStore, linkStore, userStore, groupStore } from '../../support/store'
 
 export { World }
 
@@ -107,8 +107,8 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
     await this.actorsEnvironment.close()
   }
 
-  await userStore.forEach((user) =>{
-    if (user.id !== 'admin'){
+  await userStore.forEach((user) => {
+    if (user.id !== 'admin') {
       api.graph.deleteUser({
         user: this.usersEnvironment.getUser({ key: user.id }),
         admin: this.usersEnvironment.getUser({ key: 'admin' })
@@ -116,10 +116,22 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
     }
   })
 
-  await groupStore.forEach( (group) =>{
+  await groupStore.forEach((group) => {
     api.graph.deleteGroup({
       group: this.usersEnvironment.getGroup({ key: group.id }),
       admin: this.usersEnvironment.getUser({ key: 'admin' })
+    })
+  })
+
+  await spaceStore.forEach((space) => {
+    api.graph.disableSpace({
+      user: this.usersEnvironment.getUser({ key: 'admin' }),
+      space: space
+    })
+
+    api.graph.deleteSpace({
+      user: this.usersEnvironment.getUser({ key: 'admin' }),
+      space: space
     })
   })
 

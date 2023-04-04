@@ -413,13 +413,6 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const groupsObject = new objects.applicationAdminSettings.Groups({ page })
 
-    for (const info of stepTable.hashes()) {
-      const group = this.usersEnvironment.getGroup({ key: info.id })
-      await api.graph.deleteGroup({
-        group: group,
-        admin: this.usersEnvironment.getUser({ key: stepUser })
-      })
-    }
     await page.reload()
     for (const info of stepTable.hashes()) {
       const group = this.usersEnvironment.getGroup({ key: info.id })
@@ -483,10 +476,6 @@ When(
     const usersObject = new objects.applicationAdminSettings.Users({ page })
     for (const info of stepTable.hashes()) {
       const user = this.usersEnvironment.getUser({ key: info.name })
-      await api.graph.deleteUser({
-        user: user,
-        admin: this.usersEnvironment.getUser({ key: stepUser })
-      })
       await usersObject.createUser({
         name: info.name,
         displayname: info.displayname,

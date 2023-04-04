@@ -2,20 +2,20 @@ Feature: spaces participant management
 
   Scenario: participant management
     Given "Admin" creates following users using API
-      | id      |
-      | Alice   |
-      | Brian   |
-      | Carol   |
-      | Marie   |
-      | Richard |
+      | id       |
+      | Alice    |
+      | Brian    |
+      | Carol    |
+      | Gehendra |
+      | Bishal   |
     And "Admin" creates following group using API
       | id       |
       | sales    |
       | security |
     And "Admin" adds user to the group using API
-      | user    | group    |
-      | Marie   | sales    |
-      | Richard | security |
+      | user     | group    |
+      | Gehendra | sales    |
+      | Bishal   | security |
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
@@ -41,21 +41,21 @@ Feature: spaces participant management
     And "Brian" uploads the following resources
       | resource  | to     |
       | lorem.txt | parent |
-    When "Marie" logs in
-    And "Marie" navigates to the projects space page
-    And "Marie" navigates to the project space "team.1"
-    Then "Marie" should see folder "parent" but should not be able to edit
-    And "Marie" logs out
-    When "Richard" logs in
-    And "Richard" navigates to the projects space page
-    And "Richard" navigates to the project space "team.1"
-    And "Richard" creates the following resources
+    When "Gehendra" logs in
+    And "Gehendra" navigates to the projects space page
+    And "Gehendra" navigates to the project space "team.1"
+    Then "Gehendra" should see folder "parent" but should not be able to edit
+    And "Gehendra" logs out
+    When "Bishal" logs in
+    And "Bishal" navigates to the projects space page
+    And "Bishal" navigates to the project space "team.1"
+    And "Bishal" creates the following resources
       | resource | type   |
-      | richard  | folder |
-    And "Richard" uploads the following resources
-      | resource  | to      |
-      | lorem.txt | richard |
-    And "Richard" logs out
+      | bishal   | folder |
+    And "Bishal" uploads the following resources
+      | resource  | to     |
+      | lorem.txt | bishal |
+    And "Bishal" logs out
     When "Carol" logs in
     And "Carol" navigates to the projects space page
     And "Carol" navigates to the project space "team.1"
