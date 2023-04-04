@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import SpaceHeader from 'web-app-files/src/components/Spaces/SpaceHeader.vue'
 import { buildSpace } from 'web-client/src/helpers'
 import {
@@ -50,7 +51,7 @@ function getWrapper({ space = {}, sideBarOpen = false, isMobileWidth = false }) 
     global: {
       mocks,
       plugins: [...defaultPlugins(), store],
-      provide: { isMobileWidth },
+      provide: { isMobileWidth: ref(isMobileWidth) },
       stubs: {
         'quota-modal': true,
         'space-context-actions': true

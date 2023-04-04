@@ -258,6 +258,7 @@ importers:
       vue: 3.2.47
       vue-inline-svg: ^3.1.0
       vue-loader: ^15.9.0
+      vue-router: 4.1.6
       vue-select: 4.0.0-beta.6
       vue-style-loader: ^4.1.2
       vue-styleguidist: ^4.44.2
@@ -341,6 +342,7 @@ importers:
       vue: 3.2.47
       vue-inline-svg: 3.1.0_agvlx64p3fh52dmj7mriww4tnm_vue@3.2.47
       vue-loader: 15.10.1_raysebghbyp6ou5wploutyk5qu
+      vue-router: 4.1.6_vue@3.2.47
       vue-select: 4.0.0-beta.6_vue@3.2.47
       vue-style-loader: 4.1.3
       vue-styleguidist: 4.54.3_lszi2v6jnxpnp5hutwyh6yidiu
@@ -6603,7 +6605,6 @@ packages:
 
   /@vue/devtools-api/6.4.5:
     resolution: {integrity: sha512-JD5fcdIuFxU4fQyXUu3w2KpAJHzTVdN+p4iOX2lMWSHMOoQdMAcpFLZzm9Z/2nmsoZ1a96QEhZ26e50xLBsgOQ==}
-    dev: false
 
   /@vue/reactivity-transform/3.2.40:
     resolution: {integrity: sha512-HQUCVwEaacq6fGEsg2NUuGKIhUveMCjOk8jGHqLXPI2w6zFoPrlQhwWEaINTv5kkZDXKEnCijAp+4gNEHG03yw==}
@@ -8313,7 +8314,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -17719,15 +17720,6 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /promise-inflight/1.0.1:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dev: true
-
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -21410,7 +21402,6 @@ packages:
     dependencies:
       '@vue/devtools-api': 6.4.5
       vue: 3.2.47
-    dev: false
 
   /vue-select/4.0.0-beta.6_vue@3.2.47:
     resolution: {integrity: sha512-K+zrNBSpwMPhAxYLTCl56gaMrWZGgayoWCLqe5rWwkB8aUbAUh7u6sXjIR7v4ckp2WKC7zEEUY27g6h1MRsIHw==}

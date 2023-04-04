@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client'
@@ -186,7 +187,7 @@ function getShallowWrapper(
       slots,
       global: {
         plugins: [...defaultPlugins(), store],
-        provide: { isMobileWidth },
+        provide: { isMobileWidth: ref(isMobileWidth) },
         mocks
       }
     })

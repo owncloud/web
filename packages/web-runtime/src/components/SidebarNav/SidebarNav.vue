@@ -27,11 +27,11 @@
           v-bind="highlighterAttrs"
         />
         <sidebar-nav-item
-          v-for="link in navItems"
-          :ref="(el: ComponentPublicInstance) => (navItemRefs[link.route.path] = el)"
-          :key="link.route.path"
+          v-for="(link, index) in navItems"
+          :ref="(el: ComponentPublicInstance) => (navItemRefs[index] = el)"
+          :key="index"
           :index="getUuid()"
-          :target="link.route.path"
+          :target="link.route"
           :active="link.active"
           :icon="link.icon"
           :fill-type="link.fillType"
@@ -103,8 +103,8 @@ export default defineComponent({
     })
 
     const updateHighlighterPosition = () => {
-      const activeItem = props.navItems.find((n) => n.active)
-      const activeEl = unref(navItemRefs)[activeItem?.route.path]
+      const activeItemIndex = props.navItems.findIndex((n) => n.active)
+      const activeEl = unref(navItemRefs)[activeItemIndex]
       if (activeEl) {
         highlighterAttrs.value = {
           style: {

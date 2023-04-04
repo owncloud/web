@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
+import { RouteLocationRaw } from 'vue-router'
 import { getSizeClass } from '../../utils/sizeClasses'
 
 export default defineComponent({
@@ -71,7 +72,7 @@ export default defineComponent({
      * When setting the button’s type to a router-link, use this option to give a to.
      */
     to: {
-      type: [String, Object] as PropType<string | any>,
+      type: [String, Object] as PropType<RouteLocationRaw>,
       default: null
     },
     /**

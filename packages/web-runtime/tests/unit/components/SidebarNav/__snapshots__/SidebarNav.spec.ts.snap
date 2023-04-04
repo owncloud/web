@@ -11,9 +11,9 @@ exports[`OcSidebarNav renders navItems into a list 1`] = `
   <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs">
     <ul class="oc-list oc-my-rm oc-mx-rm">
       <div class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter"></div>
-      <sidebar-nav-item-stub active="true" collapsed="false" filltype="fill" icon="folder" index="00000000000000000000000000000000" name="Personal" target="/files/list/all"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="share-forward" index="00000000000000000000000000000000" name="Shares" target="/files/list/shared-with-me"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="delete" index="00000000000000000000000000000000" name="Deleted files" target="/files/list/trash-bin"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub active="true" collapsed="false" filltype="fill" icon="folder" index="00000000000000000000000000000000" name="Personal" target="[object Object]"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="share-forward" index="00000000000000000000000000000000" name="Shares" target="[object Object]"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="delete" index="00000000000000000000000000000000" name="Deleted files" target="[object Object]"></sidebar-nav-item-stub>
     </ul>
   </nav> <!-- @slot bottom content of the sidebar -->
   <span class="footer">Footer</span>

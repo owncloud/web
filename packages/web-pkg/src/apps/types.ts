@@ -1,5 +1,5 @@
 import { App, ComponentCustomProperties } from 'vue'
-import { Router } from 'vue-router'
+import { RouteLocationRaw, Router } from 'vue-router'
 import { Store } from 'vuex'
 
 export interface AppReadyHookArgs {
@@ -17,6 +17,6 @@ export interface AppNavigationItem {
   fillType?: string
   icon?: string
   name?: string | ((capabilities?: Record<string, any>) => string)
-  route?: { name?: string; path?: string }
+  route?: RouteLocationRaw
   tag?: string
 }

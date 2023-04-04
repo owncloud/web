@@ -19,8 +19,8 @@
   </li>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { Router } from 'vue-router'
+import { defineComponent, PropType } from 'vue'
+import { RouteLocationRaw } from 'vue-router'
 
 export default defineComponent({
   props: {
@@ -38,7 +38,7 @@ export default defineComponent({
       default: false
     },
     target: {
-      type: String,
+      type: [String, Object] as PropType<RouteLocationRaw>,
       required: false,
       default: null
     },
@@ -64,7 +64,7 @@ export default defineComponent({
   },
   computed: {
     navName() {
-      return (this.$router as Router)?.resolve(this.target, this.$route)?.name || 'route.name'
+      return this.$router?.resolve(this.target, this.$route)?.name || 'route.name'
     },
     toolTip() {
       const value = this.collapsed

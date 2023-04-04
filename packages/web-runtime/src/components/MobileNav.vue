@@ -12,12 +12,12 @@
       close-on-click
     >
       <oc-list>
-        <li v-for="item in navItems" :key="item.route.path" class="mobile-nav-item oc-width-1-1">
+        <li v-for="(item, index) in navItems" :key="index" class="mobile-nav-item oc-width-1-1">
           <oc-button
             type="router-link"
             :appearance="item.active ? 'raw-inverse' : 'raw'"
             :variation="item.active ? 'primary' : 'passive'"
-            :to="item.route.path"
+            :to="item.route"
             class="oc-display-block oc-p-s"
             :class="{ 'oc-background-primary-gradient router-link-active': item.active }"
           >

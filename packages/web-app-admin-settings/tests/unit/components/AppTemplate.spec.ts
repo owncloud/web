@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import AppTemplate from '../../../src/components/AppTemplate.vue'
 import {
   createStore,
@@ -135,7 +136,7 @@ function getWrapper({ props = {}, isMobileWidth = false } = {}) {
       },
       global: {
         plugins: [...defaultPlugins(), store],
-        provide: { isMobileWidth },
+        provide: { isMobileWidth: ref(isMobileWidth) },
         stubs: {
           OcButton: false
         },
