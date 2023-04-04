@@ -106,17 +106,19 @@ import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from './RoleDropdown.vue'
-import { SharePermissions, ShareTypes } from 'web-client/src/helpers/share'
+import { Share, SharePermissions, ShareTypes } from 'web-client/src/helpers/share'
 import {
+  queryItemAsString,
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingResharingDefault
 } from 'web-pkg/src/composables'
 import { extractDomSelector } from 'web-client/src/helpers/resource'
-import { defineComponent } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import * as uuid from 'uuid'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 import { useClientService } from 'web-pkg/src/composables'
 import { OcInfoDrop, OcDrop } from 'design-system/src/components'
+import { RouteLocationNamedRaw } from 'vue-router'
 
 export default defineComponent({
   name: 'ListItem',
@@ -126,7 +128,7 @@ export default defineComponent({
   },
   props: {
     share: {
-      type: Object,
+      type: Object as PropType<Share>,
       required: true
     },
     modifiable: {
@@ -134,17 +136,23 @@ export default defineComponent({
       default: false
     },
     sharedParentRoute: {
-      type: Object,
+      type: Object as PropType<RouteLocationNamedRaw>,
       default: null
     }
   },
   emits: ['onDelete'],
-  setup() {
+  setup(props) {
     const clientService = useClientService()
+
+    const sharedParentDir = computed(() => {
+      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem).split('/').pop()
+    })
+
     return {
       hasResharing: useCapabilityFilesSharingResharing(),
       resharingDefault: useCapabilityFilesSharingResharingDefault(),
-      clientService
+      clientService,
+      sharedParentDir
     }
   },
   computed: {
@@ -246,10 +254,6 @@ export default defineComponent({
         DateTime.fromJSDate(this.share.expires).endOf('day'),
         this.$language.current
       )
-    },
-
-    sharedParentDir() {
-      return this.sharedParentRoute?.params?.driveAliasAndItem.split('/').pop()
     },
 
     editDropDownToggleId() {
