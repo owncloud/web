@@ -14,7 +14,7 @@ const selectors = { batchActionsStub: 'batch-actions-stub' }
 const getClientServiceMock = () => {
   const clientService = mockDeep<ClientService>()
   clientService.graphAuthenticated.groups.listGroups.mockImplementation(() =>
-    mockAxiosResolve({ value: [{ id: '1', name: 'users' }] })
+    mockAxiosResolve({ value: [{ id: '1', name: 'users', groupTypes: [] }] })
   )
   return clientService
 }
@@ -85,25 +85,36 @@ describe('Groups view', () => {
   })
 
   describe('computed method "sideBarAvailablePanels"', () => {
-    it('should contain EditPanel when one group is selected', () => {
-      const { wrapper } = getWrapper()
-      wrapper.vm.selectedGroups = [{ id: '1' }]
-      expect(
-        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
-      ).toBeTruthy()
+    describe('EditPanel', () => {
+      it('should be available when one group is selected', () => {
+        const { wrapper } = getWrapper()
+        wrapper.vm.selectedGroups = [{ id: '1' }]
+        expect(
+          wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel')
+        ).toBeTruthy()
+      })
+      it('should not be available when multiple groups are selected', () => {
+        const { wrapper } = getWrapper()
+        wrapper.vm.selectedGroups = [{ id: '1' }, { id: '2' }]
+        expect(
+          wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel')
+        ).toBeFalsy()
+      })
+      it('should not be available when one read-only group is selected', () => {
+        const { wrapper } = getWrapper()
+        wrapper.vm.selectedGroups = [{ id: '1', groupTypes: ['ReadOnly'] }]
+        expect(
+          wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel')
+        ).toBeFalsy()
+      })
     })
-    it('should contain DetailsPanel when no group is selected', () => {
-      const { wrapper } = getWrapper()
-      expect(
-        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'DetailsPanel').enabled
-      ).toBeTruthy()
-    })
-    it('should not contain EditPanel multiple groups are selected', () => {
-      const { wrapper } = getWrapper()
-      wrapper.vm.selectedGroups = [{ id: '1' }, { id: '2' }]
-      expect(
-        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel')
-      ).toBeFalsy()
+    describe('DetailsPanel', () => {
+      it('should contain DetailsPanel when no group is selected', () => {
+        const { wrapper } = getWrapper()
+        expect(
+          wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'DetailsPanel')
+        ).toBeTruthy()
+      })
     })
   })
 

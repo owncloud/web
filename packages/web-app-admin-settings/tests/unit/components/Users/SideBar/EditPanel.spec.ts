@@ -12,8 +12,8 @@ import { Group } from 'web-client/src/generated'
 import { AxiosResponse } from 'axios'
 
 const availableGroupOptions = [
-  mock<Group>({ id: '1', displayName: 'group1' }),
-  mock<Group>({ id: '2', displayName: 'group2' })
+  mock<Group>({ id: '1', displayName: 'group1', groupTypes: [] }),
+  mock<Group>({ id: '2', displayName: 'group2', groupTypes: [] })
 ]
 const selectors = {
   groupSelectStub: 'group-select-stub'
@@ -132,9 +132,24 @@ describe('EditPanel', () => {
       expect(wrapper.vm.invalidFormData).toBeTruthy()
     })
   })
+
+  describe('group select', () => {
+    it('takes all available groups', () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.findComponent<any>('group-select-stub').props('groupOptions').length).toBe(
+        availableGroupOptions.length
+      )
+    })
+    it('filters out read-only groups', () => {
+      const { wrapper } = getWrapper({
+        groups: [mock<Group>({ id: '1', displayName: 'group1', groupTypes: ['ReadOnly'] })]
+      })
+      expect(wrapper.findComponent<any>('group-select-stub').props('groupOptions').length).toBe(0)
+    })
+  })
 })
 
-function getWrapper({ selectedGroups = [] } = {}) {
+function getWrapper({ selectedGroups = [], groups = availableGroupOptions } = {}) {
   const mocks = defaultComponentMocks()
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
@@ -151,7 +166,7 @@ function getWrapper({ selectedGroups = [] } = {}) {
           memberOf: selectedGroups
         },
         roles: [{ id: '1', displayName: 'admin' }],
-        groups: availableGroupOptions
+        groups
       },
       global: {
         mocks,

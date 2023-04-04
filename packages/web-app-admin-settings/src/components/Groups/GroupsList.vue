@@ -46,6 +46,20 @@
       <template #avatar="rowData">
         <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
       </template>
+      <template #displayName="rowData">
+        <div class="oc-flex oc-flex-middle">
+          {{ rowData.item.displayName }}
+          <oc-icon
+            v-if="rowData.item.groupTypes?.includes('ReadOnly')"
+            v-oc-tooltip="readOnlyLabel"
+            name="lock"
+            size="small"
+            fill-type="line"
+            class="oc-ml-s"
+            :accessible-label="readOnlyLabel"
+          />
+        </div>
+      </template>
       <template #members="rowData">
         {{ rowData.item.members.length }}
       </template>
@@ -59,6 +73,7 @@
           <oc-icon name="information" fill-type="line" />
         </oc-button>
         <oc-button
+          v-if="!item.groupTypes?.includes('ReadOnly')"
           v-oc-tooltip="$gettext('Edit')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs groups-table-btn-edit"
@@ -76,11 +91,6 @@
             <slot name="contextMenu" :group="item" />
           </template>
         </context-menu-quick-action>
-        <!-- Editing groups is currently not supported by backend
-      <oc-button v-oc-tooltip="$gettext('Edit')" class="oc-ml-s" @click="$emit('clickEdit', item)">
-        <oc-icon size="small" name="pencil" />
-      </oc-button>
-      -->
       </template>
       <template #footer>
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
@@ -93,13 +103,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, ComponentPublicInstance } from 'vue'
+import { defineComponent, PropType, ref, unref, ComponentPublicInstance, computed } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { displayPositionedDropdown, eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Group } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'GroupsList',
@@ -120,6 +131,7 @@ export default defineComponent({
   },
   emits: ['toggleSelectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
   setup(props, { emit }) {
+    const { $gettext } = useGettext()
     const contextMenuButtonRef = ref(undefined)
 
     const isGroupSelected = (group) => {
@@ -168,6 +180,8 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.openWithPanel, 'EditPanel')
     }
 
+    const readOnlyLabel = computed(() => $gettext("This group is read-only and can't be edited"))
+
     return {
       showDetails,
       rowClicked,
@@ -175,7 +189,8 @@ export default defineComponent({
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
       contextMenuButtonRef,
-      showEditPanel
+      showEditPanel,
+      readOnlyLabel
     }
   },
   data() {
@@ -205,6 +220,7 @@ export default defineComponent({
         {
           name: 'displayName',
           title: this.$gettext('Group name'),
+          type: 'slot',
           sortable: true
         },
         {

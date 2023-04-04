@@ -8,7 +8,7 @@
     @confirm="$emit('confirm', { users, groups: selectedOptions })"
   >
     <template #content>
-      <GroupSelect
+      <group-select
         :selected-groups="selectedOptions"
         :group-options="groups"
         @selected-option-change="changeSelectedGroupOption"
