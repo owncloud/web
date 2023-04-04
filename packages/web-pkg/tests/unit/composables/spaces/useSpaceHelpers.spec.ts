@@ -5,30 +5,51 @@ import {
   defaultStoreMockOptions,
   getComposableWrapper
 } from 'web-test-helpers'
-import { SpaceResource } from 'web-client'
-import { useFileActionsSetReadme } from 'web-pkg/src/composables/actions'
-import { unref } from 'vue'
 
-describe('useCapability', () => {
+describe('useSpaceHelpers', () => {
   it('should be valid', () => {
     expect(useSpaceHelpers).toBeDefined()
   })
-  describe('method "checkName"', () => {
+  describe('method "checkSpaceNameModalInput"', () => {
     it('should not show an error message with a valid space name', () => {
-      const { checkSpaceNameModalInput } = useSpaceHelpers()
-      checkSpaceNameModalInput('Space')
-
-      const { wrapper } = getWrapper({
-        setup: ({ actions }) => {
-          expect(
-            unref(actions)[0].isEnabled({
-              space,
-              resources: [{ id: 1, mimeType: 'text/plain' }] as SpaceResource[]
-            })
-          ).toBe(false)
+      getWrapper({
+        setup: ({ checkSpaceNameModalInput }, { storeOptions }) => {
+          checkSpaceNameModalInput('Space')
+          const { setModalInputErrorMessage } = storeOptions.actions
+          expect(setModalInputErrorMessage).toHaveBeenCalledWith(expect.anything(), null)
         }
       })
     })
+    it('should show an error message with an empty name', () => {
+      getWrapper({
+        setup: ({ checkSpaceNameModalInput }, { storeOptions }) => {
+          checkSpaceNameModalInput('')
+          const { setModalInputErrorMessage } = storeOptions.actions
+          expect(setModalInputErrorMessage).not.toHaveBeenCalledWith(expect.anything(), null)
+        }
+      })
+    })
+    it('should show an error with an name longer than 255 characters', () => {
+      getWrapper({
+        setup: ({ checkSpaceNameModalInput }, { storeOptions }) => {
+          checkSpaceNameModalInput('n'.repeat(256))
+          const { setModalInputErrorMessage } = storeOptions.actions
+          expect(setModalInputErrorMessage).not.toHaveBeenCalledWith(expect.anything(), null)
+        }
+      })
+    })
+    it.each(['/', '\\', '.', ':', '?', '*', '"', '>', '<', '|'])(
+      'should show an error message with a name including a special character',
+      (specialChar) => {
+        getWrapper({
+          setup: ({ checkSpaceNameModalInput }, { storeOptions }) => {
+            checkSpaceNameModalInput(specialChar)
+            const { setModalInputErrorMessage } = storeOptions.actions
+            expect(setModalInputErrorMessage).not.toHaveBeenCalledWith(expect.anything(), null)
+          }
+        })
+      }
+    )
   })
 })
 
@@ -36,18 +57,12 @@ function getWrapper({
   setup
 }: {
   setup: (
-    instance: ReturnType<typeof useFileActionsSetReadme>,
+    instance: ReturnType<typeof useSpaceHelpers>,
     options: { storeOptions: typeof defaultStoreMockOptions }
   ) => void
 }) {
-  const mocks = {
-    ...defaultComponentMocks({})
-  }
-
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-
+  const mocks = defaultComponentMocks()
+  const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
   return {
     wrapper: getComposableWrapper(
