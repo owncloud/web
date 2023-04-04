@@ -101,22 +101,41 @@ import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
 import { useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { defineComponent } from 'vue'
-import { GlobalComponents } from 'vue'
+import { defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 
 export default defineComponent({
   name: 'SearchBar',
   setup() {
     const store = useStore()
+    const showCancelButton = ref(false)
+    const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
+
+    watch(isMobileWidth, () => {
+      const searchBarEl = document.getElementById('files-global-search-bar')
+      const optionDropVisible = !!document.querySelector('.tippy-box[data-state="visible"]')
+
+      if (!unref(isMobileWidth)) {
+        searchBarEl.style.visibility = 'visible'
+        showCancelButton.value = false
+      } else {
+        if (optionDropVisible) {
+          searchBarEl.style.visibility = 'visible'
+          showCancelButton.value = true
+        } else {
+          searchBarEl.style.visibility = 'hidden'
+          showCancelButton.value = false
+        }
+      }
+    })
+
     return {
-      isUserContext: useUserContext({ store })
+      isUserContext: useUserContext({ store }),
+      showCancelButton
     }
   },
 
   data() {
     return {
-      resizeObserver: new ResizeObserver(this.onResize as ResizeObserverCallback),
-      showCancelButton: false,
       term: '',
       activeProvider: undefined,
       optionsVisible: false,
@@ -212,16 +231,7 @@ export default defineComponent({
     })
   },
 
-  mounted() {
-    if (this.isSearchBarEnabled) {
-      this.resizeObserver.observe(this.searchBar)
-    }
-  },
-
   beforeUnmount() {
-    if (this.isSearchBarEnabled) {
-      this.resizeObserver.unobserve(this.searchBar)
-    }
     eventBus.unsubscribe('app.search.options-drop.hide', this.hideOptionsDropEvent)
   },
 
@@ -368,23 +378,6 @@ export default defineComponent({
       document.getElementById('files-global-search-bar').style.visibility = 'hidden'
       this.showCancelButton = false
     },
-    onResize() {
-      const searchBarEl = document.getElementById('files-global-search-bar')
-      const optionDropVisible = !!document.querySelector('.tippy-box[data-state="visible"]')
-
-      if (window.innerWidth > 639) {
-        searchBarEl.style.visibility = 'visible'
-        this.showCancelButton = false
-      } else {
-        if (optionDropVisible) {
-          searchBarEl.style.visibility = 'visible'
-          this.showCancelButton = true
-        } else {
-          searchBarEl.style.visibility = 'hidden'
-          this.showCancelButton = false
-        }
-      }
-    },
     hideOptionsDrop() {
       this.optionsDrop.hide()
     }
@@ -428,6 +421,7 @@ export default defineComponent({
       margin: 0 auto;
       top: 0;
       width: 95vw !important;
+      z-index: 9;
 
       .oc-search-input-icon {
         padding: 0 var(--oc-space-xlarge);

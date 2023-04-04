@@ -1,9 +1,12 @@
 <template>
   <div
     class="space-header oc-p-m"
-    :class="{ 'oc-flex': !imageExpanded, 'space-header-squashed': sideBarOpen }"
+    :class="{ 'oc-flex': !imageExpanded && !isMobileWidth, 'space-header-squashed': sideBarOpen }"
   >
-    <div class="space-header-image" :class="{ 'space-header-image-expanded': imageExpanded }">
+    <div
+      class="space-header-image"
+      :class="{ 'space-header-image-expanded': imageExpanded || isMobileWidth }"
+    >
       <img
         v-if="hasImage"
         class="oc-cursor-pointer"
@@ -70,9 +73,11 @@
 import {
   computed,
   defineComponent,
+  inject,
   onBeforeUnmount,
   onMounted,
   PropType,
+  Ref,
   ref,
   unref,
   watch
@@ -246,6 +251,7 @@ export default defineComponent({
     }
 
     return {
+      isMobileWidth: inject<Ref<boolean>>('isMobileWidth'),
       markdownContainerRef,
       markdownContent,
       markdownCollapsed,

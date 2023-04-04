@@ -16,7 +16,7 @@ Feature: move files
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And file "lorem.txt" should be listed on the webUI
 
-  @smokeTest @ocisSmokeTest
+  @smokeTest @ocisSmokeTest @skipOnIphoneResolution
   Scenario: move a file into a folder
     Given user "Alice" has logged in using the webUI
     And user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz" in the server
@@ -47,7 +47,7 @@ Feature: move files
     When the user tries to move file "lorem.txt" into folder "simple-folder" using the webUI
     Then the "modal error" message with header 'File with name "lorem.txt" already exists.' should be displayed on the webUI
 
-  @smokeTest @ocisSmokeTest  @disablePreviews
+  @smokeTest @ocisSmokeTest @disablePreviews @skipOnIphoneResolution
   Scenario: Move multiple files at once
     Given user "Alice" has logged in using the webUI
     And user "Alice" has uploaded file "data.zip" to "data.zip" in the server

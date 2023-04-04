@@ -1,6 +1,7 @@
 import { Store } from 'vuex'
 import { RouteRecordRaw, Router } from 'vue-router'
 import { App, Component } from 'vue'
+import { AppNavigationItem } from 'web-pkg/src/apps'
 
 /** shim configuration for now, should be typed in a later step */
 export type RuntimeConfiguration = any
@@ -13,19 +14,6 @@ export interface ApplicationInformation {
   isFileEditor?: boolean
   extensions?: any[]
   fileSideBars?: any[]
-}
-
-/**
- * ApplicationNavigationItem describes an application navigation item.
- * an example use for this is the registration of application specific navigation items in the runtime
- */
-export interface ApplicationNavigationItem {
-  name?: string
-  icon?: string
-  route?: {
-    name?: string
-    path?: string
-  }
 }
 
 /**
@@ -66,7 +54,7 @@ export interface ClassicApplicationScript {
   appInfo?: ApplicationInformation
   store?: Store<any>
   routes?: ((...args) => RouteRecordRaw[]) | RouteRecordRaw[]
-  navItems?: ((...args) => ApplicationNavigationItem[]) | ApplicationNavigationItem[]
+  navItems?: ((...args) => AppNavigationItem[]) | AppNavigationItem[]
   quickActions?: ApplicationQuickActions
   translations?: ApplicationTranslations
   initialize?: () => void
@@ -77,7 +65,7 @@ export interface ClassicApplicationScript {
 /** RuntimeApi defines the publicly available runtime api */
 export interface RuntimeApi {
   announceRoutes: (routes: RouteRecordRaw[]) => void
-  announceNavigationItems: (navigationItems: ApplicationNavigationItem[]) => void
+  announceNavigationItems: (navigationItems: AppNavigationItem[]) => void
   announceTranslations: (appTranslations: ApplicationTranslations) => void
   announceQuickActions: (quickActions: ApplicationQuickActions) => void
   announceStore: (applicationStore: Store<unknown>) => void

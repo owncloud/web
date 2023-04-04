@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`OcBreadcrumb displays all items 1`] = `
-<nav class="oc-breadcrumb oc-breadcrumb-default">
+<nav class="oc-breadcrumb oc-breadcrumb-default" id="oc-breadcrumbs-2">
   <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
     <li class="oc-breadcrumb-list-item oc-flex oc-flex-middle">
       <router-link-stub tag="a" to="[object Object]">
@@ -30,30 +30,18 @@ exports[`OcBreadcrumb displays all items 1`] = `
       <!--v-if-->
     </li>
   </ol>
-  <div class="oc-breadcrumb-drop">
-    <label class="oc-breadcrumb-drop-label oc-flex oc-flex-middle oc-flex-between" tabindex="0">
-      <span aria-current="page" class="oc-breadcrumb-drop-label-text oc-text-truncate">Deeper ellipsize in responsive mode</span>
-      <oc-icon-stub accessiblelabel="Expand more" class="oc-breadcrumb-drop-label-icon" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
-    </label>
-    <oc-drop-stub closeonclick="false" dropid="oc-drop-2" isnested="false" mode="click" paddingsize="medium" position="bottom-start" toggle="">
-      <ol>
-        <li>
-          <router-link-stub tag="a" to="[object Object]">Deep</router-link-stub>
-        </li>
-        <li>
-          <oc-button-stub appearance="raw" disabled="false" gapsize="medium" justifycontent="left" size="medium" submit="button" type="button" variation="passive">Subfolder</oc-button-stub>
-        </li>
-        <li>
-          <router-link-stub tag="a" to="[object Object]">First folder</router-link-stub>
-        </li>
-      </ol>
-    </oc-drop-stub>
-  </div>
+  <oc-button-stub appearance="raw" arialabel="Navigate one level up" class="oc-breadcrumb-mobile-navigation" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" to="[object Object]" type="router-link" variation="passive">
+    <oc-icon-stub accessiblelabel="" class="oc-mr-m" color="" filltype="line" name="arrow-left-s" size="large" type="span" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
 </nav>
+
+<div class="oc-breadcrumb-mobile-current">
+  <span aria-current="page" class="oc-text-truncate">Deeper ellipsize in responsive mode</span>
+</div>
 `;
 
 exports[`OcBreadcrumb sets correct variation 1`] = `
-<nav class="oc-breadcrumb oc-breadcrumb-lead">
+<nav class="oc-breadcrumb oc-breadcrumb-lead" id="oc-breadcrumbs-1">
   <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
     <li class="oc-breadcrumb-list-item oc-flex oc-flex-middle">
       <router-link-stub tag="a" to="[object Object]">
@@ -82,24 +70,12 @@ exports[`OcBreadcrumb sets correct variation 1`] = `
       <!--v-if-->
     </li>
   </ol>
-  <div class="oc-breadcrumb-drop">
-    <label class="oc-breadcrumb-drop-label oc-flex oc-flex-middle oc-flex-between" tabindex="0">
-      <span aria-current="page" class="oc-breadcrumb-drop-label-text oc-text-truncate">Deeper ellipsize in responsive mode</span>
-      <oc-icon-stub accessiblelabel="Expand more" class="oc-breadcrumb-drop-label-icon" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
-    </label>
-    <oc-drop-stub closeonclick="false" dropid="oc-drop-1" isnested="false" mode="click" paddingsize="medium" position="bottom-start" toggle="">
-      <ol>
-        <li>
-          <router-link-stub tag="a" to="[object Object]">Deep</router-link-stub>
-        </li>
-        <li>
-          <oc-button-stub appearance="raw" disabled="false" gapsize="medium" justifycontent="left" size="medium" submit="button" type="button" variation="passive">Subfolder</oc-button-stub>
-        </li>
-        <li>
-          <router-link-stub tag="a" to="[object Object]">First folder</router-link-stub>
-        </li>
-      </ol>
-    </oc-drop-stub>
-  </div>
+  <oc-button-stub appearance="raw" arialabel="Navigate one level up" class="oc-breadcrumb-mobile-navigation" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" to="[object Object]" type="router-link" variation="passive">
+    <oc-icon-stub accessiblelabel="" class="oc-mr-m" color="" filltype="line" name="arrow-left-s" size="large" type="span" variation="passive"></oc-icon-stub>
+  </oc-button-stub>
 </nav>
+
+<div class="oc-breadcrumb-mobile-current">
+  <span aria-current="page" class="oc-text-truncate">Deeper ellipsize in responsive mode</span>
+</div>
 `;

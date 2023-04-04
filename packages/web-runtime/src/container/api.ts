@@ -1,15 +1,11 @@
 import { RouteRecordRaw, Router } from 'vue-router'
 import clone from 'lodash-es/clone'
-import {
-  RuntimeApi,
-  ApplicationNavigationItem,
-  ApplicationQuickActions,
-  ApplicationTranslations
-} from './types'
+import { RuntimeApi, ApplicationQuickActions, ApplicationTranslations } from './types'
 import { ApiError } from './error'
 import { get, isEqual, isObject, isArray } from 'lodash-es'
 import { Store } from 'vuex'
 import { App, Component, h } from 'vue'
+import { AppNavigationItem } from 'web-pkg/src/apps'
 
 /**
  * inject application specific routes into runtime
@@ -70,7 +66,7 @@ const announceRoutes = (applicationId: string, router: Router, routes: RouteReco
 const announceNavigationItems = (
   applicationId: string,
   store: Store<unknown>,
-  navigationItems: ApplicationNavigationItem[]
+  navigationItems: AppNavigationItem[]
 ): void => {
   if (!isObject(navigationItems)) {
     throw new ApiError("navigationItems can't be blank")
@@ -253,7 +249,7 @@ export const buildRuntimeApi = ({
   return {
     announceRoutes: (routes: RouteRecordRaw[]): void =>
       announceRoutes(applicationId, router, routes),
-    announceNavigationItems: (navigationItems: ApplicationNavigationItem[]): void =>
+    announceNavigationItems: (navigationItems: AppNavigationItem[]): void =>
       announceNavigationItems(applicationId, store, navigationItems),
     announceTranslations: (appTranslations: ApplicationTranslations): void =>
       announceTranslations(supportedLanguages, translations, appTranslations),

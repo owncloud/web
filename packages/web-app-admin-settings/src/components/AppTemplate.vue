@@ -4,12 +4,14 @@
     <template v-else>
       <div id="admin-settings-wrapper" class="oc-width-expand">
         <div id="admin-settings-app-bar" ref="appBar" class="oc-app-bar oc-py-s">
-          <div class="oc-flex oc-flex-between">
+          <div class="admin-settings-app-bar-controls oc-flex oc-flex-between oc-flex-middle">
             <oc-breadcrumb
+              v-if="!isMobileWidth"
               id="admin-settings-breadcrumb"
               class="oc-flex oc-flex-middle"
               :items="breadcrumbs"
             />
+            <portal-target name="app.runtime.mobile.nav" />
             <div>
               <oc-button
                 v-if="sideBarAvailablePanels.length"
@@ -59,7 +61,7 @@
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import SideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
-import { defineComponent, onBeforeUnmount, onMounted, PropType, ref, unref } from 'vue'
+import { defineComponent, inject, onBeforeUnmount, onMounted, PropType, Ref, ref, unref } from 'vue'
 import { eventBus, useAppDefaults } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Panel } from 'web-pkg/src/components/sideBar'
@@ -150,6 +152,7 @@ export default defineComponent({
     })
 
     return {
+      isMobileWidth: inject<Ref<boolean>>('isMobileWidth'),
       appBarRef,
       limitedScreenSpace,
       closeSideBar,
@@ -174,10 +177,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#admin-settings-breadcrumb {
-  height: 52px;
-}
-
 #admin-settings-app-bar {
   background-color: var(--oc-color-background-default);
   border-top-right-radius: 15px;
@@ -194,6 +193,14 @@ export default defineComponent({
   &:hover {
     background-color: var(--oc-color-background-hover);
     border-radius: 3px;
+  }
+}
+
+.admin-settings-app-bar-controls {
+  height: 52px;
+
+  @media (max-width: $oc-breakpoint-xsmall-max) {
+    justify-content: space-between;
   }
 }
 

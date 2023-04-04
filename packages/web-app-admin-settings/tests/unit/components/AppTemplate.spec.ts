@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import AppTemplate from '../../../src/components/AppTemplate.vue'
 import {
   createStore,
@@ -29,44 +30,44 @@ afterEach(() => jest.clearAllMocks())
 describe('AppTemplate', () => {
   describe('loading is true', () => {
     it('should show app loading spinner component', () => {
-      const { wrapper } = getWrapper({ propsData: { loading: true } })
+      const { wrapper } = getWrapper({ props: { loading: true } })
       expect(wrapper.find(stubSelectors.appLoadingSpinner).exists()).toBeTruthy()
     })
     it('should not show side bar component', () => {
-      const { wrapper } = getWrapper({ propsData: { loading: true } })
+      const { wrapper } = getWrapper({ props: { loading: true } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
     it('should not show admin settings wrapper', () => {
-      const { wrapper } = getWrapper({ propsData: { loading: true } })
+      const { wrapper } = getWrapper({ props: { loading: true } })
       expect(wrapper.find(elSelectors.adminSettingsWrapper).exists()).toBeFalsy()
     })
   })
   describe('loading is false', () => {
     it('should not show app loading spinner component', () => {
-      const { wrapper } = getWrapper({ propsData: { loading: false } })
+      const { wrapper } = getWrapper({ props: { loading: false } })
       expect(wrapper.find(stubSelectors.appLoadingSpinner).exists()).toBeFalsy()
     })
     it('should show side bar component', () => {
-      const { wrapper } = getWrapper({ propsData: { loading: false } })
+      const { wrapper } = getWrapper({ props: { loading: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeTruthy()
     })
     it('should show admin settings wrapper', () => {
-      const { wrapper } = getWrapper({ propsData: { loading: false } })
+      const { wrapper } = getWrapper({ props: { loading: false } })
       expect(wrapper.find(elSelectors.adminSettingsWrapper).exists()).toBeTruthy()
     })
   })
   describe('sideBar', () => {
     it('should show when opened', () => {
-      const { wrapper } = getWrapper({ propsData: { sideBarOpen: true } })
+      const { wrapper } = getWrapper({ props: { sideBarOpen: true } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeTruthy()
     })
     it('should not show when closed', () => {
-      const { wrapper } = getWrapper({ propsData: { sideBarOpen: false } })
+      const { wrapper } = getWrapper({ props: { sideBarOpen: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
     it('can be toggled', async () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
-      const { wrapper } = getWrapper({ propsData: { sideBarAvailablePanels: [jest.fn()] } })
+      const { wrapper } = getWrapper({ props: { sideBarAvailablePanels: [jest.fn()] } })
       await wrapper.find(stubSelectors.sideBarToggleButton).trigger('click')
       expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.toggle)
     })
@@ -88,18 +89,22 @@ describe('AppTemplate', () => {
     describe('oc breadcrumb component', () => {
       it('receives correct props', () => {
         const { wrapper } = getWrapper({
-          propsData: { breadcrumbs: [{ text: 'Administration Settings' }, { text: 'Users' }] }
+          props: { breadcrumbs: [{ text: 'Administration Settings' }, { text: 'Users' }] }
         })
         expect(wrapper.findComponent<any>(stubSelectors.ocBreadcrumb).props().items).toEqual([
           { text: 'Administration Settings' },
           { text: 'Users' }
         ])
       })
+      it('does not show in mobile view', () => {
+        const { wrapper } = getWrapper({ isMobileWidth: true })
+        expect(wrapper.find(stubSelectors.ocBreadcrumb).exists()).toBeFalsy()
+      })
     })
     describe('side bar component', () => {
       it('receives correct props', () => {
         const { wrapper } = getWrapper({
-          propsData: {
+          props: {
             sideBarActivePanel: 'DetailsPanel',
             sideBarAvailablePanels: [{ app: 'DetailsPanel' }]
           }
@@ -118,7 +123,7 @@ describe('AppTemplate', () => {
 const storeOptions = { ...defaultStoreMockOptions }
 const store = createStore(storeOptions)
 
-function getWrapper({ propsData = {} } = {}) {
+function getWrapper({ props = {}, isMobileWidth = false } = {}) {
   return {
     wrapper: shallowMount(AppTemplate, {
       props: {
@@ -127,10 +132,11 @@ function getWrapper({ propsData = {} } = {}) {
         sideBarOpen: true,
         sideBarAvailablePanels: [],
         sideBarActivePanel: '',
-        ...propsData
+        ...props
       },
       global: {
         plugins: [...defaultPlugins(), store],
+        provide: { isMobileWidth: ref(isMobileWidth) },
         stubs: {
           OcButton: false
         },

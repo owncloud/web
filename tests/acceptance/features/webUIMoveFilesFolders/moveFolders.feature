@@ -16,7 +16,7 @@ Feature: move folders
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And folder "simple-empty-folder" should be listed on the webUI
 
-  @smokeTest @ocisSmokeTest
+  @smokeTest @ocisSmokeTest @skipOnIphoneResolution
   Scenario: move a folder into another folder
     Given user "Alice" has created folder "strängé नेपाली folder" in the server
     And user "Alice" has logged in using the webUI
@@ -37,7 +37,7 @@ Feature: move folders
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder" using the webUI
     Then the "modal error" message with header 'Folder with name "simple-empty-folder" already exists.' should be displayed on the webUI
 
-  @smokeTest
+  @smokeTest @skipOnIphoneResolution
   Scenario: Move multiple folders at once
     Given user "Alice" has created folder "strängé नेपाली folder" in the server
     And user "Alice" has logged in using the webUI

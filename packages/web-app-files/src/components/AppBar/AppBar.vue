@@ -4,14 +4,14 @@
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div
-        class="oc-flex files-app-bar-controls"
+        class="oc-flex oc-flex-middle files-app-bar-controls"
         :class="{
           'oc-flex-between': breadcrumbs.length || hasSharesNavigation,
           'oc-flex-right': !breadcrumbs.length && !hasSharesNavigation
         }"
       >
         <oc-breadcrumb
-          v-if="breadcrumbs.length"
+          v-if="showBreadcrumb"
           id="files-breadcrumb"
           data-testid="files-breadcrumbs"
           class="oc-flex oc-flex-middle"
@@ -25,6 +25,7 @@
             />
           </template>
         </oc-breadcrumb>
+        <portal-target v-if="showMobileNav" name="app.runtime.mobile.nav" />
         <shares-navigation v-if="hasSharesNavigation" />
         <div v-if="hasViewOptions || hasSidebarToggle" class="oc-flex">
           <view-options
@@ -59,10 +60,14 @@
 
 <script lang="ts">
 import last from 'lodash-es/last'
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { computed, defineComponent, inject, PropType, Ref, unref } from 'vue'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
-import { SpaceResource } from 'web-client/src/helpers'
+import {
+  isPersonalSpaceResource,
+  isProjectSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import { isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
@@ -84,6 +89,7 @@ import {
 } from 'web-app-files/src/composables/actions'
 import { useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
+import { useActiveLocation } from 'web-app-files/src/composables'
 
 export default defineComponent({
   components: {
@@ -152,8 +158,34 @@ export default defineComponent({
       )
     })
 
+    const spaces = computed<SpaceResource[]>(() =>
+      store.getters['runtime/spaces/spaces'].filter(
+        (s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s)
+      )
+    )
+
+    const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
+    const isTrashLocation = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
+    const showBreadcrumb = computed(() => {
+      if (!unref(isMobileWidth) && props.breadcrumbs.length) {
+        return true
+      }
+      if (unref(isTrashLocation) && unref(spaces).length === 1) {
+        return false
+      }
+      return props.breadcrumbs.length > 1
+    })
+    const showMobileNav = computed(() => {
+      if (unref(isTrashLocation) && unref(spaces).length === 1) {
+        return props.breadcrumbs.length <= 2
+      }
+      return props.breadcrumbs.length <= 1
+    })
+
     return {
-      batchActions
+      batchActions,
+      showBreadcrumb,
+      showMobileNav
     }
   },
   data: function () {
@@ -241,6 +273,10 @@ export default defineComponent({
 
   .files-app-bar-controls {
     min-height: 52px;
+
+    @media (max-width: $oc-breakpoint-xsmall-max) {
+      justify-content: space-between;
+    }
   }
 
   .files-app-bar-actions {
