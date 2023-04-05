@@ -102,16 +102,23 @@ export default class Collaborator {
     await page.locator('.vs__dropdown-option').click()
   }
 
-  static async sendInvitation(page: Page): Promise<void> {
-    await Promise.all([
-      page.waitForResponse(
-        (resp) =>
-          resp.url().endsWith('shares') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'POST'
-      ),
-      page.locator(Collaborator.sendInvitationButton).click()
-    ])
+  static async sendInvitation(page: Page, collaborators: string[]): Promise<void> {
+    const checkResponses = []
+    for (const collaborator of collaborators) {
+      checkResponses.push(
+        page.waitForResponse((resp) => {
+          if (
+            resp.url().endsWith('shares') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'POST'
+          ) {
+            return resp.request().postDataJSON().shareWith.startsWith(collaborator)
+          }
+          return false
+        })
+      )
+    }
+    await Promise.all([...checkResponses, page.locator(Collaborator.sendInvitationButton).click()])
   }
 
   static async inviteCollaborators(args: InviteCollaboratorsArgs): Promise<void> {
@@ -120,12 +127,13 @@ export default class Collaborator {
     // the role of the first collaborator is used as the collaborators role
     const role = collaborators[0].role
     const resourceType = collaborators[0].resourceType
-
+    const collaboratorNames = []
     for (const collaborator of collaborators) {
       await Collaborator.addCollaborator({ page, collaborator })
+      collaboratorNames.push(collaborator.collaborator.id)
     }
     await Collaborator.setCollaboratorRole(page, role, resourceType)
-    await Collaborator.sendInvitation(page)
+    await Collaborator.sendInvitation(page, collaboratorNames)
   }
 
   static async setCustomPermissions(
