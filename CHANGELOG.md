@@ -120,6 +120,7 @@ Summary
 * Enhancement - Remove placeholder, add customizable label: [#8711](https://github.com/owncloud/web/pull/8711)
 * Enhancement - Context helper read more link configurable: [#8713](https://github.com/owncloud/web/pull/8713)
 * Enhancement - Enable rename groups: [#8715](https://github.com/owncloud/web/pull/8715)
+* Enhancement - Create Space from selection: [#8730](https://github.com/owncloud/web/pull/8730)
 * Enhancement - GDPR export: [#8738](https://github.com/owncloud/web/issues/8738)
 * Enhancement - Stop bootstrapping application earlier in anonymous contexts: [#8762](https://github.com/owncloud/web/pull/8762)
 
@@ -1128,6 +1129,14 @@ Details
 
    https://github.com/owncloud/web/issues/8714
    https://github.com/owncloud/web/pull/8715
+
+* Enhancement - Create Space from selection: [#8730](https://github.com/owncloud/web/pull/8730)
+
+   We've added a new action 'Create Space from selection' to the users personal home so they can
+   create a Space with the copied content of their selected files and folders.
+
+   https://github.com/owncloud/web/issues/8735
+   https://github.com/owncloud/web/pull/8730
 
 * Enhancement - GDPR export: [#8738](https://github.com/owncloud/web/issues/8738)
 
