@@ -54,3 +54,4 @@ Feature: create Space shortcut
       | resource        |
       | resourceFolder  |
       | lorem.txt       |
+    And "Alice" logs out
