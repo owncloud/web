@@ -123,6 +123,7 @@ Summary
 * Enhancement - Create Space from selection: [#8730](https://github.com/owncloud/web/pull/8730)
 * Enhancement - GDPR export: [#8738](https://github.com/owncloud/web/issues/8738)
 * Enhancement - Stop bootstrapping application earlier in anonymous contexts: [#8762](https://github.com/owncloud/web/pull/8762)
+* Enhancement - Add support for read-only groups: [#8766](https://github.com/owncloud/web/pull/8766)
 
 Details
 -------
@@ -1151,6 +1152,14 @@ Details
    We've optimized the silent token refresh to make less application bootstrapping requests.
 
    https://github.com/owncloud/web/pull/8762
+
+* Enhancement - Add support for read-only groups: [#8766](https://github.com/owncloud/web/pull/8766)
+
+   Read-only groups are now supported. Such groups can't be edited or assigned to/removed from
+   users. They are indicated via a lock icon in the group list and all affected inputs.
+
+   https://github.com/owncloud/web/issues/8729
+   https://github.com/owncloud/web/pull/8766
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
