@@ -25,35 +25,6 @@ describe('CreateSpace component', () => {
     await wrapper.find(selectors.newSpaceBtn).trigger('click')
     expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
   })
-  describe('method "checkSpaceName"', () => {
-    it('should not show an error message with a valid space name', () => {
-      const { wrapper } = getWrapper()
-      const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
-      wrapper.vm.checkSpaceName('Space')
-      expect(spyInputErrorMessageStub).toHaveBeenCalledWith(null)
-    })
-    it('should show an error message with an empty name', () => {
-      const { wrapper } = getWrapper()
-      const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
-      wrapper.vm.checkSpaceName('')
-      expect(spyInputErrorMessageStub).not.toHaveBeenCalledWith(null)
-    })
-    it('should show an error with an name longer than 255 characters', () => {
-      const { wrapper } = getWrapper()
-      const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
-      wrapper.vm.checkSpaceName('n'.repeat(256))
-      expect(spyInputErrorMessageStub).not.toHaveBeenCalledWith(null)
-    })
-    it.each(['/', '\\', '.', ':', '?', '*', '"', '>', '<', '|'])(
-      'should show an error message with a name including a special character',
-      (specialChar) => {
-        const { wrapper } = getWrapper()
-        const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
-        wrapper.vm.checkSpaceName(specialChar)
-        expect(spyInputErrorMessageStub).not.toHaveBeenCalledWith(null)
-      }
-    )
-  })
   describe('method "addNewSpace"', () => {
     it('creates the space and updates the readme data after creation', async () => {
       const { wrapper, mocks, storeOptions } = getWrapper()
@@ -64,7 +35,6 @@ describe('CreateSpace component', () => {
       mocks.$clientService.webdav.putFileContents.mockResolvedValue(mockDeep<Resource>())
       await wrapper.vm.addNewSpace('New space')
       expect(storeOptions.modules.runtime.modules.spaces.mutations.UPSERT_SPACE).toHaveBeenCalled()
-      expect(storeOptions.modules.Files.mutations.UPDATE_RESOURCE_FIELD).toHaveBeenCalled()
     })
     it('shows a message when an error occurred', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)

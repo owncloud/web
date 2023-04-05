@@ -43,8 +43,13 @@ import {
   getDisplayedResourcesFromFilesList,
   resourceTagsArgs,
   clickViewModeToggle,
-  expectThatResourcesAreTiles
+  expectThatResourcesAreTiles,
+  createSpaceFromFolder,
+  createSpaceFromFolderArgs,
+  createSpaceFromSelection,
+  createSpaceFromSelectionArgs
 } from './actions'
+import { Space } from '../../../types'
 
 export class Resource {
   #page: Page
@@ -223,5 +228,13 @@ export class Resource {
 
   async clickTag(args: Omit<clickTagArgs, 'page'>): Promise<void> {
     return await clickResourceTag({ ...args, page: this.#page })
+  }
+
+  async createSpaceFromFolder(args: Omit<createSpaceFromFolderArgs, 'page'>): Promise<Space> {
+    return createSpaceFromFolder({ ...args, page: this.#page })
+  }
+
+  async createSpaceFromSelection(args: Omit<createSpaceFromSelectionArgs, 'page'>): Promise<Space> {
+    return createSpaceFromSelection({ ...args, page: this.#page })
   }
 }

@@ -27,7 +27,8 @@ import {
   useFileActionsNavigate,
   useFileActionsRename,
   useFileActionsRestore,
-  useFileActionsShowEditTags
+  useFileActionsShowEditTags,
+  useFileActionsCreateSpaceFromResource
 } from './index'
 
 export const EDITOR_MODE_EDIT = 'edit'
@@ -55,6 +56,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { actions: renameActions } = useFileActionsRename({ store })
   const { actions: restoreActions } = useFileActionsRestore({ store })
   const { actions: showEditTagsActions } = useFileActionsShowEditTags({ store })
+  const { actions: createSpaceFromResource } = useFileActionsCreateSpaceFromResource({ store })
 
   const systemActions = computed((): Action[] => [
     ...unref(downloadArchiveActions),
@@ -63,6 +65,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     ...unref(moveActions),
     ...unref(copyActions),
     ...unref(renameActions),
+    ...unref(createSpaceFromResource),
     ...unref(showEditTagsActions),
     ...unref(restoreActions),
     ...unref(acceptShareActions),

@@ -34,40 +34,6 @@ describe('rename', () => {
       })
     })
   })
-
-  describe('method "checkName"', () => {
-    it('should throw an error with an empty space name', async () => {
-      const { wrapper } = getWrapper({
-        setup: async ({ checkName }, { storeOptions }) => {
-          await checkName('')
-
-          expect(storeOptions.actions.setModalInputErrorMessage).toHaveBeenCalledTimes(1)
-        }
-      })
-    })
-    it('should throw an error with an space name longer than 255 characters', async () => {
-      const { wrapper } = getWrapper({
-        setup: async ({ checkName }, { storeOptions }) => {
-          await checkName('n'.repeat(256))
-
-          expect(storeOptions.actions.setModalInputErrorMessage).toHaveBeenCalledTimes(1)
-        }
-      })
-    })
-    it.each(['/', '\\', '.', ':', '?', '*', '"', '>', '<', '|'])(
-      'should show an error message when trying to create a space with a special character',
-      (specialChar) => {
-        const { wrapper } = getWrapper({
-          setup: async ({ checkName }, { storeOptions }) => {
-            checkName(specialChar)
-
-            expect(storeOptions.actions.setModalInputErrorMessage).toHaveBeenCalledTimes(1)
-          }
-        })
-      }
-    )
-  })
-
   describe('method "renameSpace"', () => {
     it('should hide the modal and show message on success', async () => {
       const { wrapper, mocks } = getWrapper({
