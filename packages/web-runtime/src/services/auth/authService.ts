@@ -13,7 +13,6 @@ import {
 import { unref } from 'vue'
 import { Ability } from 'web-pkg/src/utils'
 import { Language } from 'vue3-gettext'
-import pick from 'lodash-es/pick'
 
 export class AuthService {
   private clientService: ClientService
@@ -176,23 +175,12 @@ export class AuthService {
    * Sign in callback gets called from the IDP after initial login.
    */
   public async signInCallback() {
-    const currentQuery = unref(this.router.currentRoute).query
-
     try {
       await this.userManager.signinRedirectCallback(this.buildSignInCallbackUrl())
-
-      const redirectUrl = this.userManager.getAndClearPostLoginRedirectUrl()
-
-      // transportQuery defines a set of query parameters which should be part of router route replace.
-      // The resulting object only contains the properties listed here.
-      const transportQuery = pick(currentQuery, [
-        // needed for private links
-        'details'
-      ])
-
+      const redirectRoute = this.router.resolve(this.userManager.getAndClearPostLoginRedirectUrl())
       return this.router.replace({
-        path: redirectUrl,
-        query: transportQuery
+        path: redirectRoute.path,
+        ...(redirectRoute.query && { query: redirectRoute.query })
       })
     } catch (e) {
       console.warn('error during authentication:', e)
