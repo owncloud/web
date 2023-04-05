@@ -86,7 +86,7 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
       },
       handler,
       isEnabled: ({ resources }) => {
-        return !!resources.length
+        return !!resources.length && !resources.some((r) => r.groupTypes?.includes('ReadOnly'))
       },
       componentType: 'button',
       class: 'oc-groups-actions-delete-trigger'

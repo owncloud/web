@@ -111,7 +111,7 @@
     <groups-modal
       v-if="addToGroupsModalIsOpen"
       :title="addToGroupsModalTitle"
-      :groups="groups"
+      :groups="writableGroups"
       :users="selectedUsers"
       @cancel="() => (addToGroupsModalIsOpen = false)"
       @confirm="addUsersToGroups"
@@ -119,7 +119,7 @@
     <groups-modal
       v-if="removeFromGroupsModalIsOpen"
       :title="removeFromGroupsModalTitle"
-      :groups="groups"
+      :groups="writableGroups"
       :users="selectedUsers"
       @cancel="() => (removeFromGroupsModalIsOpen = false)"
       @confirm="removeUsersFromGroups"
@@ -180,7 +180,7 @@ import {
   useUserActionsAddToGroups
 } from '../composables/actions/users'
 import { configurationManager } from 'web-pkg'
-import { Drive } from 'web-client/src/generated'
+import { Drive, Group } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'UsersView',
@@ -505,6 +505,10 @@ export default defineComponent({
       }
     }
 
+    const writableGroups = computed<Group[]>(() => {
+      return unref(groups).filter((g) => !g.groupTypes?.includes('ReadOnly'))
+    })
+
     return {
       ...useSideBar(),
       maxQuota: useCapabilitySpacesMaxQuota(),
@@ -533,7 +537,8 @@ export default defineComponent({
       spaceQuotaUpdated,
       selectedPersonalDrives,
       addUsersToGroups,
-      removeUsersFromGroups
+      removeUsersFromGroups,
+      writableGroups
     }
   },
   computed: {

@@ -1,0 +1,6 @@
+Enhancement: Add support for read-only groups
+
+Read-only groups are now supported. Such groups can't be edited or assigned to/removed from users. They are indicated via a lock icon in the group list and all affected inputs.
+
+https://github.com/owncloud/web/pull/8766
+https://github.com/owncloud/web/issues/8729

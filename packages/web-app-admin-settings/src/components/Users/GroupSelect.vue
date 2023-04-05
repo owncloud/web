@@ -1,7 +1,7 @@
 <template>
   <div id="user-group-select-form">
     <oc-select
-      :model-value="selectedOption"
+      :model-value="selectedOptions"
       class="oc-mb-s"
       :multiple="true"
       :options="groupOptions"
@@ -38,8 +38,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, watch } from 'vue'
-import { computed } from 'vue'
+import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
 import { Group } from 'web-client/src/generated'
 
 export default defineComponent({
@@ -56,18 +55,27 @@ export default defineComponent({
   },
   emits: ['selectedOptionChange'],
   setup(props, { emit }) {
-    const selectedOption = ref(props.selectedGroups)
+    const selectedOptions = ref()
     const onUpdate = (event) => {
-      selectedOption.value = event
-      emit('selectedOptionChange', unref(selectedOption))
+      selectedOptions.value = event
+      emit('selectedOptionChange', unref(selectedOptions))
     }
 
     const currentGroups = computed(() => props.selectedGroups)
-    watch(currentGroups, () => {
-      selectedOption.value = props.selectedGroups
-    })
+    watch(
+      currentGroups,
+      () => {
+        selectedOptions.value = props.selectedGroups
+          .map((g) => ({
+            ...g,
+            readonly: g.groupTypes?.includes('ReadOnly')
+          }))
+          .sort((a: any, b: any) => b.readonly - a.readonly)
+      },
+      { immediate: true }
+    )
 
-    return { selectedOption, onUpdate }
+    return { selectedOptions, onUpdate }
   }
 })
 </script>

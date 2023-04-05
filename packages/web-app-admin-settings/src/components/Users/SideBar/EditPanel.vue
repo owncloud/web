@@ -164,7 +164,9 @@ export default defineComponent({
     })
     const groupOptions = computed(() => {
       const { memberOf: selectedGroups } = unref(editUser)
-      return props.groups.filter((g) => !selectedGroups.some((s) => s.id === g.id))
+      return props.groups.filter(
+        (g) => !selectedGroups.some((s) => s.id === g.id) && !g.groupTypes?.includes('ReadOnly')
+      )
     })
 
     const isLoginInputDisabled = computed(() => currentUser.uuid === (props.user as User).id)

@@ -14,7 +14,7 @@ export const useGroupActionsEdit = () => {
       label: () => $gettext('Edit'),
       handler: () => eventBus.publish(SideBarEventTopics.openWithPanel, 'EditPanel'),
       isEnabled: ({ resources }) => {
-        return resources.length > 0
+        return resources.length === 1 && !resources[0].groupTypes?.includes('ReadOnly')
       },
       componentType: 'button',
       class: 'oc-groups-actions-edit-trigger'

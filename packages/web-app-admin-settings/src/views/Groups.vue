@@ -185,7 +185,9 @@ export default defineComponent({
           title: this.$gettext('Edit group'),
           component: EditPanel,
           default: false,
-          enabled: this.selectedGroups.length === 1,
+          enabled:
+            this.selectedGroups.length === 1 &&
+            !this.selectedGroups[0].groupTypes?.includes('ReadOnly'),
           componentAttrs: {
             group: this.selectedGroups.length === 1 ? this.selectedGroups[0] : null,
             onConfirm: this.editGroup
