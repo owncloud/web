@@ -55,12 +55,9 @@ Feature: share
     And "Alice" uploads the following resource
       | resource          | to               | option  |
       | PARENT/simple.pdf | folder_to_shared | replace |
-    And "Brian" downloads old version of the following resource
+    And "Brian" should not see the version of the file
       | resource   | to               |
       | simple.pdf | folder_to_shared |
-    And "Brian" restores following resources
-      | resource   | to               | version |
-      | simple.pdf | folder_to_shared | 1       |
     And "Alice" removes following sharee
       | resource               | recipient |
       | folder_to_customShared | Brian     |
