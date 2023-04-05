@@ -13,6 +13,7 @@ const downloadFolderButtonSidedBar =
   '#oc-files-actions-sidebar .oc-files-actions-download-archive-trigger'
 const downloadButtonBatchAction = '.oc-files-actions-download-archive-trigger'
 const deleteButtonBatchAction = '.oc-files-actions-delete-trigger'
+const createSpaceFromResourceAction = '.oc-files-actions-create-space-from-resource-trigger'
 const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
 const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//input`
 export const fileRow =
@@ -43,6 +44,7 @@ const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
 const actionButton = '//*[contains(@data-testid, "action-handler")]/span[text()="%s"]'
 const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
 const notificationMessageDialog = '.oc-notification-message-title'
+const notificationMessage = '.oc-notification-message'
 const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
 const restoreResourceButton = '.oc-files-actions-restore-trigger'
 const globalSearchInput = '.oc-search-input'
@@ -108,15 +110,14 @@ export const createSpaceFromFolder = async ({
   spaceName: string
 }): Promise<Space> => {
   await page.locator(util.format(resourceNameSelector, folderName)).click({ button: 'right' })
-  await page.locator('text=Create Space from selection').first().click()
-  await page.locator('.oc-text-input').first().fill(spaceName)
+  await page.locator(createSpaceFromResourceAction).first().click()
+  await page.locator(resourceNameInput).first().fill(spaceName)
   await page.locator(util.format(actionConfirmationButton, 'Create')).click()
   const response = await page.waitForResponse(
     (resp) =>
       resp.status() === 201 && resp.request().method() === 'POST' && resp.url().endsWith('/drives')
   )
-  await page.waitForSelector('#oc-loading-indicator')
-  await page.waitForSelector('#oc-loading-indicator', { state: 'detached' })
+  await page.waitForSelector(notificationMessage)
   return (await response.json()) as Space
 }
 
@@ -136,15 +137,14 @@ export const createSpaceFromSelection = async ({
   })
   await page.locator(util.format(resourceNameSelector, resources[0])).click({ button: 'right' })
 
-  await page.locator('text=Create Space from selection').first().click()
-  await page.locator('.oc-text-input').first().fill(spaceName)
+  await page.locator(createSpaceFromResourceAction).first().click()
+  await page.locator(resourceNameInput).first().fill(spaceName)
   await page.locator(util.format(actionConfirmationButton, 'Create')).click()
   const response = await page.waitForResponse(
     (resp) =>
       resp.status() === 201 && resp.request().method() === 'POST' && resp.url().endsWith('/drives')
   )
-  await page.waitForSelector('#oc-loading-indicator')
-  await page.waitForSelector('#oc-loading-indicator', { state: 'detached' })
+  await page.waitForSelector(notificationMessage)
   return (await response.json()) as Space
 }
 
