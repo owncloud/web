@@ -1,0 +1,6 @@
+Bugfix: Selection reset on action click
+
+Clicking a file action from the context menu doesn't reset the selection anymore.
+
+https://github.com/owncloud/web/issues/8776
+https://github.com/owncloud/web/pull/8777
