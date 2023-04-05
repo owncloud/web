@@ -41,12 +41,12 @@ Feature: Users can use web to organize tags
       | lorem.txt    |
       | textfile.txt |
     And "Alice" adds the following tags for the following resources using the sidebar panel
-      | resource  | tags         |
-      | lorem.txt | tag 1, tag 2 |
-    And "Alice" clicks the tag "tag 1" on the resource "lorem.txt"
+      | resource  | tags       |
+      | lorem.txt | tag1, tag2 |
+    And "Alice" clicks the tag "tag1" on the resource "lorem.txt"
     Then the following resources should contain the following tags in the files list for user "Alice"
-      | resource  | tags  |
-      | lorem.txt | tag 1 |
+      | resource  | tags |
+      | lorem.txt | tag1 |
     Then following resources should not be displayed in the files list for user "Alice"
       | resource     |
       | textfile.txt |
