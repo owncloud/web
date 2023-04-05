@@ -107,9 +107,9 @@ Feature: spaces.personal
     And "Alice" uploads the following resource
       | resource          | to               | option  |
       | PARENT/simple.pdf | folder_to_shared | replace |
-    When "Brian" restores following resources
-      | resource   | to               | version |
-      | simple.pdf | folder_to_shared | 1       |
+    When "Brian" should not see the version of the file
+      | resource   | to               |
+      | simple.pdf | folder_to_shared |
     When "Alice" deletes the following resources using the sidebar panel
       | resource         | from             |
       | lorem_new.txt    | folder_to_shared |
