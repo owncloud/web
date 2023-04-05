@@ -110,13 +110,18 @@ export const createSpaceFromFolder = async ({
   spaceName: string
 }): Promise<Space> => {
   await page.locator(util.format(resourceNameSelector, folderName)).click({ button: 'right' })
-  await page.locator(createSpaceFromResourceAction).first().click()
-  await page.locator(resourceNameInput).first().fill(spaceName)
-  await page.locator(util.format(actionConfirmationButton, 'Create')).click()
-  const response = await page.waitForResponse(
-    (resp) =>
-      resp.status() === 201 && resp.request().method() === 'POST' && resp.url().endsWith('/drives')
-  )
+  await page.locator(createSpaceFromResourceAction).click()
+  await page.locator(resourceNameInput).fill(spaceName)
+  const [response] = await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.status() === 201 &&
+        resp.request().method() === 'POST' &&
+        resp.url().endsWith('/drives')
+    ),
+    page.locator(util.format(actionConfirmationButton, 'Create')).click()
+  ])
+
   await page.waitForSelector(notificationMessage)
   return (await response.json()) as Space
 }
@@ -137,13 +142,17 @@ export const createSpaceFromSelection = async ({
   })
   await page.locator(util.format(resourceNameSelector, resources[0])).click({ button: 'right' })
 
-  await page.locator(createSpaceFromResourceAction).first().click()
-  await page.locator(resourceNameInput).first().fill(spaceName)
-  await page.locator(util.format(actionConfirmationButton, 'Create')).click()
-  const response = await page.waitForResponse(
-    (resp) =>
-      resp.status() === 201 && resp.request().method() === 'POST' && resp.url().endsWith('/drives')
-  )
+  await page.locator(createSpaceFromResourceAction).click()
+  await page.locator(resourceNameInput).fill(spaceName)
+  const [response] = await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.status() === 201 &&
+        resp.request().method() === 'POST' &&
+        resp.url().endsWith('/drives')
+    ),
+    page.locator(util.format(actionConfirmationButton, 'Create')).click()
+  ])
   await page.waitForSelector(notificationMessage)
   return (await response.json()) as Space
 }
