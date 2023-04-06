@@ -46,7 +46,7 @@ Summary
 * Bugfix - Password enforced check for public links: [#8587](https://github.com/owncloud/web/issues/8587)
 * Bugfix - Group members sorting: [#8592](https://github.com/owncloud/web/issues/8592)
 * Bugfix - Broken re-login after logout: [#8694](https://github.com/owncloud/web/pull/8694)
-* Bugfix - Open files in external app: [#8705](https://github.com/owncloud/web/pull/8705)
+* Bugfix - Open files in external app: [#8695](https://github.com/owncloud/web/issues/8695)
 * Bugfix - Copy link to clipboard text: [#8756](https://github.com/owncloud/web/pull/8756)
 * Bugfix - Preview controls colors: [#8758](https://github.com/owncloud/web/pull/8758)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
@@ -413,12 +413,14 @@ Details
 
    https://github.com/owncloud/web/pull/8694
 
-* Bugfix - Open files in external app: [#8705](https://github.com/owncloud/web/pull/8705)
+* Bugfix - Open files in external app: [#8695](https://github.com/owncloud/web/issues/8695)
 
-   We've fixed a bug that caused office documents not to be opened in app provider editors anymore.
+   We've fixed bugs that caused office documents not to be opened in app provider editors anymore.
 
    https://github.com/owncloud/web/issues/8695
+   https://github.com/owncloud/web/issues/8773
    https://github.com/owncloud/web/pull/8705
+   https://github.com/owncloud/web/pull/8782
 
 * Bugfix - Copy link to clipboard text: [#8756](https://github.com/owncloud/web/pull/8756)
 
