@@ -1,4 +1,4 @@
-import { useGeneralActionsResetLogo } from '../../../../src/composables/actions/general/useGeneralActionsResetLogo'
+import { useGeneralActionsResetLogo } from '../../../../../src/composables/actions/general/useGeneralActionsResetLogo'
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import {
@@ -15,8 +15,8 @@ jest.useFakeTimers()
 
 describe('resetLogo', () => {
   describe('handler', () => {
-    it('should show message on request success', async () => {
-      const { wrapper } = getWrapper({
+    it('should show message on request success', () => {
+      getWrapper({
         setup: async ({ actions }, { storeOptions, clientService, router }) => {
           clientService.httpAuthenticated.delete.mockResolvedValue(() => mockAxiosResolve())
           await unref(actions)[0].handler()
@@ -27,9 +27,9 @@ describe('resetLogo', () => {
       })
     })
 
-    it('should show message on request error', async () => {
+    it('should show message on request error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: async ({ actions }, { storeOptions, clientService, router }) => {
           clientService.httpAuthenticated.delete.mockRejectedValue(() => mockAxiosReject())
           await unref(actions)[0].handler()

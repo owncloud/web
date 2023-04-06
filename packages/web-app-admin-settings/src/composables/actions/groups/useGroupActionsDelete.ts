@@ -94,6 +94,8 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
   ])
 
   return {
-    actions
+    actions,
+    // HACK: exported for unit tests:
+    deleteGroups
   }
 }
