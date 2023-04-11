@@ -16,7 +16,7 @@ import {
   renameResource,
   renameResourceArgs,
   restoreResourceVersion,
-  restoreResourceVersionArgs,
+  resourceVersionArgs,
   uploadResource,
   uploadResourceArgs,
   restoreResourceTrashbinArgs,
@@ -47,7 +47,8 @@ import {
   createSpaceFromFolder,
   createSpaceFromFolderArgs,
   createSpaceFromSelection,
-  createSpaceFromSelectionArgs
+  createSpaceFromSelectionArgs,
+  checkThatFileVersionIsNotAvailable
 } from './actions'
 import { Space } from '../../../types'
 
@@ -118,7 +119,7 @@ export class Resource {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   async open(): Promise<void> {}
 
-  async restoreVersion(args: Omit<restoreResourceVersionArgs, 'page'>): Promise<void> {
+  async restoreVersion(args: Omit<resourceVersionArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await restoreResourceVersion({ ...args, page: this.#page })
     // Files details page does not update after restore button is clicked
@@ -236,5 +237,11 @@ export class Resource {
 
   async createSpaceFromSelection(args: Omit<createSpaceFromSelectionArgs, 'page'>): Promise<Space> {
     return createSpaceFromSelection({ ...args, page: this.#page })
+  }
+
+  async checkThatFileVersionIsNotAvailable(args: Omit<resourceVersionArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await checkThatFileVersionIsNotAvailable({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
   }
 }

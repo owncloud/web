@@ -64,6 +64,7 @@ const tagInInputForm =
 const tagFormInput = '#tags-form input'
 const compareDialogConfirmBtn = '.compare-save-dialog-confirm-btn'
 const resourcesAsTiles = '#files-view .oc-tiles'
+const fileVersionSidebar = '#oc-file-versions-sidebar'
 
 export const clickResource = async ({
   page,
@@ -536,13 +537,13 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
 
 /**/
 
-export interface restoreResourceVersionArgs {
+export interface resourceVersionArgs {
   page: Page
   files: File[]
   folder?: string
 }
 
-export const restoreResourceVersion = async (args: restoreResourceVersionArgs) => {
+export const restoreResourceVersion = async (args: resourceVersionArgs) => {
   const { page, files, folder } = args
   const fileName = files.map((file) => path.basename(file.name))
   await clickResource({ page, path: folder })
@@ -554,7 +555,7 @@ export const restoreResourceVersion = async (args: restoreResourceVersionArgs) =
       (resp) =>
         resp.url().includes('/v/') && resp.status() === 204 && resp.request().method() === 'COPY'
     ),
-    await page.locator(versionRevertButton).click()
+    await page.locator(versionRevertButton).first().click()
   ])
 }
 
@@ -1005,4 +1006,25 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
   }
 
   await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
+}
+
+export const checkThatFileVersionIsNotAvailable = async (
+  args: resourceVersionArgs
+): Promise<void> => {
+  const { page, files, folder } = args
+  const fileName = files.map((file) => path.basename(file.name))
+  await clickResource({ page, path: folder })
+
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().includes('dav/meta') &&
+        resp.status() === 403 &&
+        resp.request().method() === 'PROPFIND'
+    ),
+    sidebar.open({ page, resource: fileName[0] })
+  ])
+
+  await sidebar.openPanel({ page, name: 'versions' })
+  await expect(page.locator(fileVersionSidebar)).toHaveText('No Versions available for this file')
 }

@@ -107,9 +107,9 @@ Feature: spaces.personal
     And "Alice" uploads the following resource
       | resource          | to               | option  |
       | PARENT/simple.pdf | folder_to_shared | replace |
-    When "Brian" restores following resources
-      | resource   | to               | version |
-      | simple.pdf | folder_to_shared | 1       |
+    When "Brian" should not see the version of the file
+      | resource   | to               |
+      | simple.pdf | folder_to_shared |
     When "Alice" deletes the following resources using the sidebar panel
       | resource         | from             |
       | lorem_new.txt    | folder_to_shared |
@@ -129,4 +129,52 @@ Feature: spaces.personal
     # anonymous is done
     When "Anonymous" logs out
 
+
+  Scenario: members of the space can control the versions of the files
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+      | Brian |
+      | Carol |
+    And "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Alice | Space Admin |
+    And "Alice" creates the following project space using API
+      | name | id     |
+      | team | team.1 |
+    And "Alice" logs in
+    And "Alice" navigates to the projects space page
+    And "Alice" navigates to the project space "team.1"
+    And "Alice" creates the following resources
+      | resource            | type    | content             |
+      | parent/textfile.txt | txtFile | some random content |
+    When "Alice" uploads the following resources
+      | resource     | to     | option  |
+      | textfile.txt | parent | replace |
+    And "Alice" adds following users to the project space
+      | user  | role   | kind |
+      | Carol | viewer | user |
+      | Brian | editor | user |
+    And "Alice" logs out
+
+    When "Carol" logs in
+    And "Carol" opens the "files" app
+    And "Carol" navigates to the projects space page
+    And "Carol" navigates to the project space "team.1"
+    And "Carol" should not see the version of the file
+      | resource     | to     |
+      | textfile.txt | parent |
+    And "Carol" logs out
+
+    When "Brian" logs in
+    And "Brian" opens the "files" app
+    And "Brian" navigates to the projects space page
+    And "Brian" navigates to the project space "team.1"
+    And "Brian" downloads old version of the following resource
+      | resource     | to     |
+      | textfile.txt | parent |
+    And "Brian" restores following resources
+      | resource     | to     | version |
+      | textfile.txt | parent | 1       |
+    And "Brian" logs out
 
