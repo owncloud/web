@@ -65,16 +65,16 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const customTranslations = {}
 
   for (const customTranslation of configurationManager.customTranslations) {
+    const customTranslationResponse = await fetch(customTranslation.url, {
+      headers: { 'X-Request-ID': uuidV4() }
+    })
+    if (customTranslationResponse.status !== 200) {
+      console.error(
+        `translation file ${customTranslation} could not be loaded. HTTP status-code ${customTranslationResponse.status}`
+      )
+      continue
+    }
     try {
-      const customTranslationResponse = await fetch(customTranslation.url, {
-        headers: { 'X-Request-ID': uuidV4() }
-      })
-      if (customTranslationResponse.status !== 200) {
-        console.error(
-          `translation file ${customTranslation} could not be loaded. HTTP status-code ${customTranslationResponse.status}`
-        )
-        continue
-      }
       const customTranslationJSON = await customTranslationResponse.json()
       merge(customTranslations, customTranslationJSON)
     } catch (e) {
