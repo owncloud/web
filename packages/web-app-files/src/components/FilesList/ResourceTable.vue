@@ -93,7 +93,12 @@
         v-bind="getTagComponentAttrs(tag)"
         class="resource-table-tag-wrapper"
       >
-        <oc-tag class="resource-table-tag oc-ml-xs" :rounded="true" size="small">
+        <oc-tag
+          v-oc-tooltip="getTagToolTip(tag)"
+          class="resource-table-tag oc-ml-xs"
+          :rounded="true"
+          size="small"
+        >
           <oc-icon name="price-tag-3" size="small" />
           <span class="oc-text-truncate">{{ tag }}</span>
         </oc-tag>
@@ -420,7 +425,10 @@ export default defineComponent({
     const { actions: renameActions } = useFileActionsRename()
     const renameHandler = computed(() => unref(renameActions)[0].handler)
 
+    const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
+
     return {
+      getTagToolTip,
       renameActions,
       renameHandler,
       resourceRouteResolver,
