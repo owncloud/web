@@ -50,6 +50,7 @@ Summary
 * Bugfix - Open files in external app: [#8695](https://github.com/owncloud/web/issues/8695)
 * Bugfix - Copy link to clipboard text: [#8756](https://github.com/owncloud/web/pull/8756)
 * Bugfix - Preview controls colors: [#8758](https://github.com/owncloud/web/pull/8758)
+* Bugfix - Selection reset on action click: [#8776](https://github.com/owncloud/web/issues/8776)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -445,6 +446,13 @@ Details
    dark theme.
 
    https://github.com/owncloud/web/pull/8758
+
+* Bugfix - Selection reset on action click: [#8776](https://github.com/owncloud/web/issues/8776)
+
+   Clicking a file action from the context menu doesn't reset the selection anymore.
+
+   https://github.com/owncloud/web/issues/8776
+   https://github.com/owncloud/web/pull/8777
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
