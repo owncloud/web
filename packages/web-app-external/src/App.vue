@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import { computed, unref } from 'vue'
@@ -69,7 +69,10 @@ export default defineComponent({
     errorMessage: '',
     appUrl: '',
     method: '',
-    formParameters: {}
+    formParameters: {},
+    viewmodeWrite: false,
+    fileInfo: {},
+    reloadWithwriteOnEdit: undefined
   }),
   computed: {
     ...mapGetters(['capabilities']),
@@ -91,71 +94,96 @@ export default defineComponent({
     }
   },
   async created() {
-    this.loading = true
-    try {
-      const fileId =
-        this.fileId ||
-        (
-          await this.getFileInfo(this.currentFileContext, {
-            davProperties: [DavProperty.FileId]
+    await this.onCreate(false)
+  },
+  methods: {
+    async catchClickMicrosoftEdit() {
+      if (!this.reloadWithwriteOnEdit)
+        this.reloadWithwriteOnEdit = async (event) => {
+          if (JSON.parse(event.data).MessageId === 'UI_Edit') {
+            await this.onCreate(true)
+          }
+        }
+      window.removeEventListener('message', this.reloadWithwriteOnEdit)
+      window.addEventListener('message', await this.reloadWithwriteOnEdit)
+    },
+    async onCreate(editMode) {
+      this.loading = true
+      try {
+        if (!editMode)
+          this.fileInfo = await this.getFileInfo(this.currentFileContext, {
+            davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
           })
-        ).fileId
+        const fileId = this.fileId || this.fileInfo.fileId
 
-      // fetch iframe params for app and file
-      const baseUrl = urlJoin(
-        configurationManager.serverUrl,
-        this.capabilities.files.app_providers[0].open_url
-      )
-      const query = stringify({
-        file_id: fileId,
-        lang: this.$language.current,
-        ...(this.applicationName && { app_name: this.applicationName })
-      })
-      const url = `${baseUrl}?${query}`
-      const response = await this.makeRequest('POST', url, {
-        validateStatus: () => true
-      })
+        // fetch iframe params for app and file
+        const baseUrl = urlJoin(
+          configurationManager.serverUrl,
+          this.capabilities.files.app_providers[0].open_url
+        )
 
-      if (response.status !== 200) {
-        switch (response.status) {
-          case 425:
-            this.errorMessage = this.$gettext(
-              'This file is currently being processed and is not yet available for use. Please try again shortly.'
-            )
-            break
-          default:
-            this.errorMessage = response.data?.message
+        const viewMode = editMode
+          ? 'write'
+          : this.fileInfo.isReceivedShare() ||
+            window.location.pathname.startsWith('/external/public/')
+          ? 'preview'
+          : false
+
+        const query = stringify({
+          file_id: fileId,
+          lang: this.$language.current,
+          ...(this.applicationName && { app_name: this.applicationName }),
+          ...(viewMode && { view_mode: viewMode })
+        })
+        const url = `${baseUrl}?${query}`
+        const response = await this.makeRequest('POST', url, {
+          validateStatus: () => true
+        })
+
+        if (response.status !== 200) {
+          switch (response.status) {
+            case 425:
+              this.errorMessage = this.$gettext(
+                'This file is currently being processed and is not yet available for use. Please try again shortly.'
+              )
+              break
+            default:
+              this.errorMessage = response.data?.message
+          }
+
+          this.loading = false
+          this.loadingError = true
+          console.error('Error fetching app information', response.status, response.data.message)
+          return
         }
 
+        if (!response.data.app_url || !response.data.method) {
+          this.errorMessage = this.$gettext('Error in app server response')
+          this.loading = false
+          this.loadingError = true
+          console.error('Error in app server response')
+          return
+        }
+
+        this.appUrl = response.data.app_url
+        this.method = response.data.method
+        if (response.data.form_parameters) {
+          this.formParameters = response.data.form_parameters
+        }
+
+        if (this.method === 'POST' && this.formParameters) {
+          this.$nextTick(() => this.$refs.subm.click())
+        }
+        this.loading = false
+        if (window.location.href.includes('app=MS')) {
+          await this.catchClickMicrosoftEdit()
+        }
+      } catch (error) {
+        this.errorMessage = this.$gettext('Error retrieving file information')
+        console.error('Error retrieving file information', error)
         this.loading = false
         this.loadingError = true
-        console.error('Error fetching app information', response.status, response.data.message)
-        return
       }
-
-      if (!response.data.app_url || !response.data.method) {
-        this.errorMessage = this.$gettext('Error in app server response')
-        this.loading = false
-        this.loadingError = true
-        console.error('Error in app server response')
-        return
-      }
-
-      this.appUrl = response.data.app_url
-      this.method = response.data.method
-      if (response.data.form_parameters) {
-        this.formParameters = response.data.form_parameters
-      }
-
-      if (this.method === 'POST' && this.formParameters) {
-        this.$nextTick(() => this.$refs.subm.click())
-      }
-      this.loading = false
-    } catch (error) {
-      this.errorMessage = this.$gettext('Error retrieving file information')
-      console.error('Error retrieving file information', error)
-      this.loading = false
-      this.loadingError = true
     }
   }
 })
