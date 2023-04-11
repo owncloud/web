@@ -530,6 +530,7 @@ Details
    https://github.com/owncloud/web/issues/8253
    https://github.com/owncloud/web/issues/8254
    https://github.com/owncloud/web/issues/8390
+   https://github.com/owncloud/web/issues/8645
    https://github.com/owncloud/web/pull/7388
    https://github.com/owncloud/web/pull/7385
    https://github.com/owncloud/web/pull/7442
@@ -539,6 +540,7 @@ Details
    https://github.com/owncloud/web/pull/8309
    https://github.com/owncloud/web/pull/8405
    https://github.com/owncloud/web/pull/8502
+   https://github.com/owncloud/web/pull/8794
 
 * Enhancement - Improve performance when loading folders and share indicators: [#7721](https://github.com/owncloud/web/issues/7721)
 
