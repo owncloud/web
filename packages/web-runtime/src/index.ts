@@ -41,7 +41,6 @@ import PortalVue, { createWormhole } from 'portal-vue'
 
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
-import fs from 'fs'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const app = createApp(pages.success)
