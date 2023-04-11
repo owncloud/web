@@ -1,4 +1,5 @@
 import {
+  CustomTranslation,
   OAuth2Configuration,
   OIDCConfiguration,
   OptionsConfiguration,
@@ -14,6 +15,7 @@ export interface RawConfig {
   auth?: any
   openIdConnect?: any
   options?: OptionsConfiguration
+  customTranslations?: Array<CustomTranslation>
 }
 
 export class ConfigurationManager {
@@ -35,6 +37,7 @@ export class ConfigurationManager {
       ? (rawConfig.openIdConnect as OIDCConfiguration)
       : null
     this.logoutUrl = rawConfig.options?.logoutUrl
+    this.customTranslations = rawConfig.customTranslations
   }
 
   set logoutUrl(url: string) {
@@ -54,6 +57,13 @@ export class ConfigurationManager {
 
   get serverUrl(): string {
     return this.runtimeConfiguration.serverUrl
+  }
+
+  set customTranslations(customTranslations: Array<CustomTranslation>) {
+    this.runtimeConfiguration.customTranslations = customTranslations || []
+  }
+  get customTranslations(): Array<CustomTranslation> {
+    return this.runtimeConfiguration.customTranslations
   }
 
   get isOAuth2(): boolean {

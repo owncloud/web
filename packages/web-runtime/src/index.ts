@@ -4,6 +4,8 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { createHead } from '@vueuse/head'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
+import merge from 'lodash-es/merge'
+import { v4 as uuidV4 } from 'uuid'
 
 import {
   announceConfiguration,
@@ -39,6 +41,7 @@ import PortalVue, { createWormhole } from 'portal-vue'
 
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
+import fs from 'fs'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const app = createApp(pages.success)
@@ -60,8 +63,30 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
   const themePromise = announceTheme({ store, app, designSystem, runtimeConfiguration })
   await Promise.all([applicationsPromise, themePromise])
+  const customTranslations = {}
 
-  announceTranslations({ app, availableLanguages: supportedLanguages, translations })
+  for (const customTranslation of configurationManager.customTranslations) {
+    const customTranslationResponse = await fetch(customTranslation.url, {
+      headers: { 'X-Request-ID': uuidV4() }
+    })
+    if (customTranslationResponse.status !== 200) {
+      throw new Error(
+        `translation file ${customTranslation} could not be loaded. HTTP status-code ${customTranslationResponse.status}`
+      )
+    }
+    try {
+      const customTranslationJSON = await customTranslationResponse.json()
+      merge(customTranslations, customTranslationJSON)
+    } catch (e) {
+      throw new Error(`translation file ${customTranslation} could not be parsed. ${e}`)
+    }
+  }
+
+  announceTranslations({
+    app,
+    availableLanguages: supportedLanguages,
+    translations: merge(translations, customTranslations)
+  })
   announceClientService({ app, runtimeConfiguration, configurationManager, store })
   announceUppyService({ app })
   announceLoadingService({ app })
