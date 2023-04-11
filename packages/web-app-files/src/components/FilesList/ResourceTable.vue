@@ -729,6 +729,11 @@ export default defineComponent({
        */
       const resource = data[0]
       const eventData = data[1]
+
+      const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
+      if (contextActionClicked) {
+        return
+      }
       if (eventData && eventData.metaKey) {
         return eventBus.publish('app.files.list.clicked.meta', resource)
       }
