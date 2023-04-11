@@ -73,7 +73,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
         console.error(
           `translation file ${customTranslation} could not be loaded. HTTP status-code ${customTranslationResponse.status}`
         )
-        break
+        continue
       }
       const customTranslationJSON = await customTranslationResponse.json()
       merge(customTranslations, customTranslationJSON)
