@@ -40,6 +40,7 @@ Summary
 * Bugfix - PDF display issue - Update CSP object-src policy: [#8498](https://github.com/owncloud/web/pull/8498)
 * Bugfix - Remove fuzzy search results: [#8508](https://github.com/owncloud/web/pull/8508)
 * Bugfix - Space image upload: [#8523](https://github.com/owncloud/web/issues/8523)
+* Bugfix - Batch context actions in admin settings: [#8549](https://github.com/owncloud/web/issues/8549)
 * Bugfix - Height of dropdown no-option: [#8554](https://github.com/owncloud/web/pull/8554)
 * Bugfix - De-duplicate event handling to prevent errors on Draw-io: [#8576](https://github.com/owncloud/web/pull/8576)
 * Bugfix - Users without role assignment: [#8585](https://github.com/owncloud/web/issues/8585)
@@ -367,6 +368,15 @@ Details
 
    https://github.com/owncloud/web/issues/8523
    https://github.com/owncloud/web/pull/8526
+
+* Bugfix - Batch context actions in admin settings: [#8549](https://github.com/owncloud/web/issues/8549)
+
+   Several issues when triggering batch actions via the context menu for users/groups/spaces in
+   the admin-settings have been fixed. Some actions were showing wrongly ("edit"), some actions
+   were resetting the current selection ("show details").
+
+   https://github.com/owncloud/web/issues/8549
+   https://github.com/owncloud/web/pull/8785
 
 * Bugfix - Height of dropdown no-option: [#8554](https://github.com/owncloud/web/pull/8554)
 
