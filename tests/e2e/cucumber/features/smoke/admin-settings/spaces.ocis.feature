@@ -102,10 +102,10 @@ Feature: spaces management
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
-    And "Alice" creates the following project spaces using API
+    And "Admin" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
-    And "Alice" adds the following members to the space "team A" using API
+    And "Admin" adds the following members to the space "team A" using API
       | user    | role   | shareType |
       | Brian   | editor | space     |
       | Carol   | viewer | space     |
@@ -117,7 +117,7 @@ Feature: spaces management
     When "Alice" lists the members of project space "team.a" using a sidebar panel
     Then "Alice" should see the following users in the sidebar panel of spaces admin settings
       | user    | role    |
-      | Alice   | manager |
+      | Admin   | manager |
       | Brian   | editor  |
       | Carol   | viewer  |
       | Marie   | viewer  |

@@ -9,13 +9,14 @@ import {
   Status
 } from '@cucumber/cucumber'
 import pino from 'pino'
+import { Browser, chromium, firefox, webkit } from 'playwright'
 
 import { config } from '../../config'
 import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
-import { Browser, chromium, firefox, webkit } from 'playwright'
 import { spaceStore, linkStore } from '../../support/store'
+import { User } from '../../support/types'
 
 export { World }
 
@@ -106,10 +107,35 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
   if (result.status !== Status.PASSED) {
     await this.actorsEnvironment.close()
   }
-  spaceStore.clear()
+
+  await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
+
   linkStore.clear()
 })
 
 AfterAll(() => state.browser && state.browser.close())
 
 setWorldConstructor(World)
+
+const cleanUpSpaces = async (adminUser: User) => {
+  const requests = []
+  spaceStore.forEach((space) => {
+    requests.push(
+      api.graph
+        .disableSpace({
+          user: adminUser,
+          space
+        })
+        .then(async (res) => {
+          if (res.status === 204) {
+            await api.graph.deleteSpace({
+              user: adminUser,
+              space
+            })
+          }
+        })
+    )
+  })
+  await Promise.all(requests)
+  spaceStore.clear()
+}
