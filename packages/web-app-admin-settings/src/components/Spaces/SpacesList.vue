@@ -366,7 +366,9 @@ export default defineComponent({
 
     const fileClicked = (data) => {
       const space = data[0]
-      selectSpace(space)
+      if (!isSpaceSelected(space)) {
+        selectSpace(space)
+      }
     }
 
     const showContextMenuOnBtnClick = (data, space) => {

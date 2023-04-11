@@ -149,7 +149,9 @@ export default defineComponent({
     }
     const rowClicked = (data) => {
       const group = data[0]
-      selectGroup(group)
+      if (!isGroupSelected(group)) {
+        selectGroup(group)
+      }
     }
     const showContextMenuOnBtnClick = (data, group) => {
       const { dropdown, event } = data

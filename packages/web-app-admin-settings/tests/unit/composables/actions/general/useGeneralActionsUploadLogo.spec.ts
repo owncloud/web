@@ -1,4 +1,4 @@
-import { useGeneralActionsUploadLogo } from '../../../../src/composables/actions/general/useGeneralActionsUploadLogo'
+import { useGeneralActionsUploadLogo } from '../../../../../src/composables/actions/general/useGeneralActionsUploadLogo'
 import { mock } from 'jest-mock-extended'
 import { VNodeRef } from 'vue'
 import {
@@ -15,8 +15,8 @@ jest.useFakeTimers()
 
 describe('uploadImage', () => {
   describe('method "uploadImage"', () => {
-    it('should show message on request success', async () => {
-      const { wrapper } = getWrapper({
+    it('should show message on request success', () => {
+      getWrapper({
         setup: async ({ uploadImage }, { storeOptions, clientService, router }) => {
           clientService.httpAuthenticated.post.mockResolvedValue(() => mockAxiosResolve())
           await uploadImage({
@@ -31,9 +31,9 @@ describe('uploadImage', () => {
       })
     })
 
-    it('should show message on request error', async () => {
+    it('should show message on request error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: async ({ uploadImage }, { storeOptions, clientService, router }) => {
           clientService.httpAuthenticated.post.mockRejectedValue(() => mockAxiosReject())
           await uploadImage({
@@ -48,10 +48,10 @@ describe('uploadImage', () => {
       })
     })
 
-    it('should show message on invalid mimeType', async () => {
+    it('should show message on invalid mimeType', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper({
-        setup: async ({ uploadImage }, { storeOptions, clientService, router }) => {
+      getWrapper({
+        setup: async ({ uploadImage }, { storeOptions, clientService }) => {
           await uploadImage({
             currentTarget: {
               files: [{ name: 'text.txt', type: 'text/plain' }]

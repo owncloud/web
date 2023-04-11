@@ -1,0 +1,6 @@
+Bugfix: Batch context actions in admin settings
+
+Several issues when triggering batch actions via the context menu for users/groups/spaces in the admin-settings have been fixed. Some actions were showing wrongly ("edit"), some actions were resetting the current selection ("show details").
+
+https://github.com/owncloud/web/issues/8549
+https://github.com/owncloud/web/pull/8785

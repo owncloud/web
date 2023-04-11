@@ -14,7 +14,7 @@ export const useUserActionsEdit = () => {
       label: () => $gettext('Edit'),
       handler: () => eventBus.publish(SideBarEventTopics.openWithPanel, 'EditPanel'),
       isEnabled: ({ resources }) => {
-        return resources.length > 0
+        return resources.length === 1
       },
       componentType: 'button',
       class: 'oc-users-actions-edit-trigger'

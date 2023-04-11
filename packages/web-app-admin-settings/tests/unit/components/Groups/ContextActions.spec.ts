@@ -48,7 +48,8 @@ describe('ContextActions', () => {
     it('render enabled actions', () => {
       const enabledComposables = [useGroupActionsDelete, useGroupActionsEdit]
       jest.mocked(useGroupActionsDelete).mockImplementation(() => ({
-        actions: computed(() => [mock<Action>({ isEnabled: () => true })])
+        actions: computed(() => [mock<Action>({ isEnabled: () => true })]),
+        deleteGroups: null
       }))
       jest.mocked(useGroupActionsEdit).mockImplementation(() => ({
         actions: computed(() => [mock<Action>({ isEnabled: () => true })])
