@@ -174,6 +174,7 @@ export default defineComponent({
     const orderBy = (list, prop, desc) => {
       return [...list].sort((s1, s2) => {
         let a, b
+        let numeric = false
 
         switch (prop) {
           case 'members':
@@ -185,12 +186,14 @@ export default defineComponent({
             b = getTotalQuota(s2).toString()
             break
           case 'usedQuota':
-            a = getUsedQuota(s1).toString()
-            b = getUsedQuota(s2).toString()
+            a = (s1.spaceQuota.used || 0).toString()
+            b = (s2.spaceQuota.used || 0).toString()
+            numeric = true
             break
           case 'remainingQuota':
-            a = getRemainingQuota(s1).toString()
-            b = getRemainingQuota(s2).toString()
+            a = (s1.spaceQuota.remaining || 0).toString()
+            b = (s2.spaceQuota.remaining || 0).toString()
+            numeric = true
             break
           case 'status':
             a = s1.disabled.toString()
@@ -201,7 +204,9 @@ export default defineComponent({
             b = s2[prop] || ''
         }
 
-        return desc ? b.localeCompare(a) : a.localeCompare(b)
+        return desc
+          ? b.localeCompare(a, undefined, { numeric })
+          : a.localeCompare(b, undefined, { numeric })
       })
     }
     const orderedSpaces = computed(() =>
