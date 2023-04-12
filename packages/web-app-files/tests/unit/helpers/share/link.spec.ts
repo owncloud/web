@@ -44,7 +44,8 @@ let returnBitmask = 1
 jest.mock('web-client/src/helpers/share', () => ({
   LinkShareRoles: {
     getByName: jest.fn().mockReturnValue({ bitmask: jest.fn(() => returnBitmask) })
-  }
+  },
+  linkRoleViewerFolder: { name: 'viewer' }
 }))
 
 describe('createQuicklink', () => {

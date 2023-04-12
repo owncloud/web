@@ -36,7 +36,11 @@ import {
 } from 'web-pkg'
 import { Resource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
-import { LinkShareRoles } from 'web-client/src/helpers/share'
+import {
+  LinkShareRoles,
+  linkRoleInternalFolder,
+  linkRoleViewerFolder
+} from 'web-client/src/helpers/share'
 
 export default defineComponent({
   name: 'CreateQuickLink',
@@ -61,8 +65,8 @@ export default defineComponent({
     const capabilitiesRoleName = useCapabilityFilesSharingQuickLinkDefaultRole()
     const createQuickLink = () => {
       const roleName = !unref(canCreatePublicLinks)
-        ? 'internal'
-        : unref(capabilitiesRoleName) || 'viewer'
+        ? linkRoleInternalFolder.name
+        : unref(capabilitiesRoleName) || linkRoleViewerFolder.name
       const emitData = {
         link: {
           name: $gettext('Quicklink'),

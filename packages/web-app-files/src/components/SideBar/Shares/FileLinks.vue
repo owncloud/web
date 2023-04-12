@@ -136,7 +136,7 @@ import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
-import { Resource } from 'web-client/src/helpers'
+import { Resource, isShareSpaceResource } from 'web-client/src/helpers'
 import { isLocationSharesActive } from '../../../router'
 import { useShares } from 'web-app-files/src/composables'
 import { configurationManager } from 'web-pkg'
@@ -181,7 +181,7 @@ export default defineComponent({
         return false
       }
 
-      const isShareJail = unref(space)?.driveType === 'share'
+      const isShareJail = isShareSpaceResource(unref(space))
       if (isShareJail && !unref(hasResharing)) {
         return false
       }
