@@ -484,7 +484,7 @@ export default defineComponent({
     },
 
     checkNewFolderName(folderName) {
-      if (folderName === '') {
+      if (folderName.trim() === '') {
         return this.$gettext('Folder name cannot be empty')
       }
 
