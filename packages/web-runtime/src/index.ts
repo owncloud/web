@@ -34,6 +34,7 @@ import {
   isPublicSpaceResource,
   Resource
 } from 'web-client/src/helpers'
+import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { createApp } from 'vue'
@@ -60,27 +61,9 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     router,
     translations
   })
+  const customTranslations = await loadCustomTranslations({ configurationManager })
   const themePromise = announceTheme({ store, app, designSystem, runtimeConfiguration })
   await Promise.all([applicationsPromise, themePromise])
-  const customTranslations = {}
-
-  for (const customTranslation of configurationManager.customTranslations) {
-    const customTranslationResponse = await fetch(customTranslation.url, {
-      headers: { 'X-Request-ID': uuidV4() }
-    })
-    if (customTranslationResponse.status !== 200) {
-      console.error(
-        `translation file ${customTranslation} could not be loaded. HTTP status-code ${customTranslationResponse.status}`
-      )
-      continue
-    }
-    try {
-      const customTranslationJSON = await customTranslationResponse.json()
-      merge(customTranslations, customTranslationJSON)
-    } catch (e) {
-      console.error(`translation file ${customTranslation} could not be parsed. ${e}`)
-    }
-  }
 
   announceTranslations({
     app,
