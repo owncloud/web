@@ -1076,6 +1076,7 @@ Details
 
    https://github.com/owncloud/web/issues/8540
    https://github.com/owncloud/web/pull/8541
+   https://github.com/owncloud/web/pull/8796
 
 * Enhancement - Add and remove users from groups batch actions: [#8553](https://github.com/owncloud/web/pull/8553)
 
