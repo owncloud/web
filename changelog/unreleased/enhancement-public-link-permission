@@ -3,4 +3,5 @@ Enhancement: Public link permission `PublicLink.Write.all`
 Support for the public link permission `PublicLink.Write.all` has been added. Users without this permission won't be able to create public links (except for oC10 instances where this permission is being set implicitly).
 
 https://github.com/owncloud/web/pull/8541
+https://github.com/owncloud/web/pull/8796
 https://github.com/owncloud/web/issues/8540

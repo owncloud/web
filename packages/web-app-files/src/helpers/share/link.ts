@@ -28,7 +28,7 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
   const canEdit = store.state.user.capabilities.files_sharing?.public?.can_edit || false
   const canContribute = store.state.user.capabilities.files_sharing?.public?.can_contribute || false
   const alias = store.state.user.capabilities.files_sharing?.public?.alias
-  const roleName = !canCreatePublicLink ? 'none' : capabilitiesRoleName || 'viewer'
+  const roleName = !canCreatePublicLink ? 'internal' : capabilitiesRoleName || 'viewer'
   const permissions = LinkShareRoles.getByName(
     roleName,
     resource.isFolder,
@@ -38,7 +38,7 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
   ).bitmask(allowResharing)
   const params: { [key: string]: unknown } = {
     name: $gettext('Quicklink'),
-    permissions,
+    permissions: permissions.toString(),
     quicklink: true
   }
 

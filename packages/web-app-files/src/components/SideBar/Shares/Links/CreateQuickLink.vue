@@ -61,7 +61,7 @@ export default defineComponent({
     const capabilitiesRoleName = useCapabilityFilesSharingQuickLinkDefaultRole()
     const createQuickLink = () => {
       const roleName = !unref(canCreatePublicLinks)
-        ? 'none'
+        ? 'internal'
         : unref(capabilitiesRoleName) || 'viewer'
       const emitData = {
         link: {
@@ -72,7 +72,9 @@ export default defineComponent({
             unref(canEdit),
             unref(canContribute),
             unref(alias)
-          ).bitmask(unref(allowResharing)),
+          )
+            .bitmask(unref(allowResharing))
+            .toString(),
           expiration: props.expirationDate.enforced ? props.expirationDate.default : null,
           quicklink: true,
           password: false
