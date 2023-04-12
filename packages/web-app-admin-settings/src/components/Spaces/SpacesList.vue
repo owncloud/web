@@ -174,7 +174,7 @@ export default defineComponent({
     const orderBy = (list, prop, desc) => {
       return [...list].sort((s1, s2) => {
         let a, b
-        let numeric = false
+        const numeric = ['totalQuota', 'usedQuota', 'remainingQuota'].includes(prop)
 
         switch (prop) {
           case 'members':
@@ -182,18 +182,16 @@ export default defineComponent({
             b = getMemberCount(s2).toString()
             break
           case 'totalQuota':
-            a = getTotalQuota(s1).toString()
-            b = getTotalQuota(s2).toString()
+            a = (s1.spaceQuota.total || 0).toString()
+            b = (s2.spaceQuota.total || 0).toString()
             break
           case 'usedQuota':
             a = (s1.spaceQuota.used || 0).toString()
             b = (s2.spaceQuota.used || 0).toString()
-            numeric = true
             break
           case 'remainingQuota':
             a = (s1.spaceQuota.remaining || 0).toString()
             b = (s2.spaceQuota.remaining || 0).toString()
-            numeric = true
             break
           case 'status':
             a = s1.disabled.toString()
