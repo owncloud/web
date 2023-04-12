@@ -6,11 +6,15 @@ import * as directives from './directives'
 
 const initializeCustomProps = (tokens = [], prefix) => {
   for (const param in tokens) {
-    ;(document.querySelector(':root') as HTMLElement).style.setProperty(
-      '--oc-' + prefix + param,
-      tokens[param]
-    )
+    initializeCustomProp(prefix + param, tokens[param])
   }
+}
+
+const initializeCustomProp = (key: string, value: string | undefined) => {
+  if (value === undefined) {
+    return
+  }
+  ;(document.querySelector(':root') as HTMLElement).style.setProperty('--oc-' + key, value)
 }
 
 export default {
@@ -21,6 +25,7 @@ export default {
     initializeCustomProps(themeOptions?.fontSizes, 'font-size-')
     initializeCustomProps(themeOptions?.sizes, 'size-')
     initializeCustomProps(themeOptions?.spacing, 'space-')
+    initializeCustomProp('font-family', themeOptions?.fontFamily)
 
     Object.values(components).forEach((c) => app.component(c.name, c))
     Object.values(directives).forEach((d) => app.directive(d.name, d))

@@ -1,0 +1,6 @@
+Enhancement: Font family in theming
+
+We've added support for modifying the font family via theming.
+Please note that the chosen font needs to be made available as `font-face` via additional CSS.
+
+https://github.com/owncloud/web/pull/8797

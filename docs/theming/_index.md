@@ -97,6 +97,7 @@ In general, the theme loader looks for a `designTokens` key inside your theme co
       "designTokens": {
         "breakpoints": {},
         "colorPalette": {},
+        "fontFamily": "",
         "fontSizes": {},
         "sizes": {},
         "spacing": {}
@@ -204,6 +205,18 @@ Font size variables get prepended with `--oc-font-size-`, so e.g. *"default"* cr
   }
 }
 ```
+
+### Font family
+
+You can change the font family according to your needs. The font family gets written into the `--oc-font-family` CSS variable.
+
+```json
+{
+  "fontFamily": ""
+}
+```
+
+Please note that you also need to make the font available as a `font-face` via CSS.
 
 ### Sizes
 
@@ -330,6 +343,7 @@ An empty template for your custom theme is provided below, and you can use the i
           "large": "",
           "medium": ""
         },
+        "fontFamily": "",
         "sizes": {
           "form-check-default": "",
           "height-small": "",
