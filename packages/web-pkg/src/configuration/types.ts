@@ -1,5 +1,9 @@
+export interface CustomTranslation {
+  url: string
+}
 export interface RuntimeConfiguration {
   serverUrl: string
+  customTranslations?: Array<CustomTranslation>
 }
 
 export interface RoutingOptionsConfiguration {

@@ -4,6 +4,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { createHead } from '@vueuse/head'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
+import merge from 'lodash-es/merge'
 
 import {
   announceConfiguration,
@@ -32,6 +33,7 @@ import {
   isPublicSpaceResource,
   Resource
 } from 'web-client/src/helpers'
+import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { createApp } from 'vue'
@@ -49,7 +51,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const store = await announceStore({ runtimeConfiguration })
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
-  const applicationsPromise = await initializeApplications({
+  const applicationsPromise = initializeApplications({
     app,
     runtimeConfiguration,
     configurationManager,
@@ -58,10 +60,19 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     router,
     translations
   })
+  const customTranslationsPromise = loadCustomTranslations({ configurationManager })
   const themePromise = announceTheme({ store, app, designSystem, runtimeConfiguration })
-  await Promise.all([applicationsPromise, themePromise])
+  const [customTranslations] = await Promise.all([
+    customTranslationsPromise,
+    applicationsPromise,
+    themePromise
+  ])
 
-  announceTranslations({ app, availableLanguages: supportedLanguages, translations })
+  announceTranslations({
+    app,
+    availableLanguages: supportedLanguages,
+    translations: merge(translations, customTranslations)
+  })
   announceClientService({ app, runtimeConfiguration, configurationManager, store })
   announceUppyService({ app })
   announceLoadingService({ app })

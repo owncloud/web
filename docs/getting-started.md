@@ -40,6 +40,8 @@ Please refer to the [build documentation for Web]({{< ref "./building.md" >}}).
 
 Depending on the backend you are using, there are sample config files provided in the [config folder](https://github.com/owncloud/web/tree/master/config) of the ownCloud Web git repository. See below for available backends. Also, find some of the configuration details below.
 
+- `customTranslations` You can specify one or multiple files to overwrite existing translations. For example set this option to `[{url: "https://localhost:9200/customTranslations.json"}]`.
+
 #### Options
 - `options.homeFolder` You can specify a folder that is used when the user navigates `home`. Navigating home gets triggered by clicking on the `All files`
 menu item. The user will not be jailed in that directory. It simply serves as a default location. You can either provide a static location, or you can use
