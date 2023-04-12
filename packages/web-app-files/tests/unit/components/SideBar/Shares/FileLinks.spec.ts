@@ -104,19 +104,44 @@ describe('FileLinks', () => {
     })
   })
   describe('user does not have the permission to create public links', () => {
-    it('only shows internal role option', () => {
-      const resource = mockDeep<Resource>({
-        path: '/lorem.txt',
-        type: 'file',
-        isFolder: false,
-        isReceivedShare: jest.fn()
-      })
-      const { wrapper } = getWrapper({ resource, abilities: [] })
-      const availableRoleOptions = wrapper
-        .findComponent<any>(linkListItemDetailsAndEdit)
-        .props('availableRoleOptions')
+    const resource = mockDeep<Resource>({
+      path: '/lorem.txt',
+      type: 'file',
+      isFolder: false,
+      isReceivedShare: jest.fn(),
+      canShare: () => true
+    })
+
+    it('existing viewer link is not modifiable', () => {
+      const viewerLink = {
+        id: '1',
+        indirect: false,
+        name: 'public link 1',
+        url: 'some-link-1',
+        path: '/file-1.txt',
+        permissions: 1
+      }
+      const { wrapper } = getWrapper({ resource, abilities: [], links: [viewerLink] })
+      const detailsAndEdit = wrapper.findComponent<any>(linkListItemDetailsAndEdit)
+      const isModifiable = detailsAndEdit.props('isModifiable')
+      expect(isModifiable).toBeFalsy()
+    })
+    it('existing internal link is modifiable but only shows the internal link option', () => {
+      const internalLink = {
+        id: '1',
+        indirect: false,
+        name: 'internal link 1',
+        url: 'some-link-1',
+        path: '/file-1.txt',
+        permissions: 0
+      }
+      const { wrapper } = getWrapper({ resource, abilities: [], links: [internalLink] })
+      const detailsAndEdit = wrapper.findComponent<any>(linkListItemDetailsAndEdit)
+      const availableRoleOptions = detailsAndEdit.props('availableRoleOptions')
+      const isModifiable = detailsAndEdit.props('isModifiable')
       expect(availableRoleOptions.length).toBe(1)
       expect(availableRoleOptions[0].permissions()).toEqual([SharePermissions.internal])
+      expect(isModifiable).toBeTruthy()
     })
     it('creates new links with permission 0', async () => {
       const { wrapper, storeOptions } = getWrapper({ abilities: [] })
@@ -180,7 +205,7 @@ function getWrapper({
         renderStubDefaultSlot: true,
         stubs: { OcButton: false },
         provide: {
-          incomingParentShare: {},
+          incomingParentShare: undefined,
           resource
         }
       }

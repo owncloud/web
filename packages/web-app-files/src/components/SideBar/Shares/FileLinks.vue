@@ -23,7 +23,7 @@
         :can-rename="false"
         :expiration-date="expirationDate"
         :is-folder-share="resource.isFolder"
-        :is-modifiable="canEdit"
+        :is-modifiable="canEditLink(quicklink)"
         :is-password-enforced="isPasswordEnforcedFor(quicklink)"
         :link="quicklink"
         @update-link="checkLinkToUpdate"
@@ -37,8 +37,9 @@
         appearance="raw"
         data-testid="files-link-add-btn"
         @click="addNewLink"
-        v-text="addButtonLabel"
-      />
+      >
+        <span v-text="$gettext('Add link')"
+      /></oc-button>
     </div>
 
     <oc-list v-if="directLinks.length" class="oc-overflow-hidden oc-my-m">
@@ -54,7 +55,7 @@
           :can-rename="true"
           :expiration-date="expirationDate"
           :is-folder-share="resource.isFolder"
-          :is-modifiable="canEdit"
+          :is-modifiable="canEditLink(link)"
           :is-password-enforced="isPasswordEnforcedFor(link)"
           :link="link"
           @update-link="checkLinkToUpdate"
@@ -109,7 +110,7 @@
 <script lang="ts">
 import { computed, defineComponent, inject, ref, unref } from 'vue'
 import { DateTime } from 'luxon'
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import {
   useStore,
   useCapabilitySpacesEnabled,
@@ -127,14 +128,15 @@ import {
   linkRoleUploaderFolder,
   linkRoleViewerFolder,
   LinkShareRoles,
-  Share
+  Share,
+  SharePermissions
 } from 'web-client/src/helpers/share'
 import { showQuickLinkPasswordModal } from '../../../quickActions'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
-import { Resource } from 'web-client/src/helpers'
+import { Resource, isShareSpaceResource } from 'web-client/src/helpers'
 import { isLocationSharesActive } from '../../../router'
 import { useShares } from 'web-app-files/src/composables'
 import { configurationManager } from 'web-pkg'
@@ -149,6 +151,10 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { can } = useAbility()
+    const hasResharing = useCapabilityFilesSharingResharing()
+
+    const space = inject<Resource>('space')
+    const resource = inject<Resource>('resource')
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
     const indirectLinkListCollapsed = ref(linkListCollapsed)
@@ -170,14 +176,32 @@ export default defineComponent({
         })
     )
     const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
+    const canCreateLinks = computed(() => {
+      if (unref(resource).isReceivedShare() && !unref(hasResharing)) {
+        return false
+      }
+
+      const isShareJail = isShareSpaceResource(unref(space))
+      if (isShareJail && !unref(hasResharing)) {
+        return false
+      }
+
+      return unref(resource).canShare({ user: store.getters.user })
+    })
+
+    const canEditLink = ({ permissions }: Share) => {
+      return (
+        unref(canCreateLinks) &&
+        (can('create-all', 'PublicLink') || permissions === SharePermissions.internal.bit)
+      )
+    }
 
     return {
-      space: inject<Resource>('space'),
-      resource: inject<Resource>('resource'),
+      space,
+      resource,
       incomingParentShare: inject<Share>('incomingParentShare'),
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
-      hasResharing: useCapabilityFilesSharingResharing(),
       hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit(),
       hasPublicLinkContribute: useCapabilityFilesSharingPublicCanContribute(),
       hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias(),
@@ -187,16 +211,13 @@ export default defineComponent({
       directLinks,
       indirectLinks,
       canCreatePublicLinks,
-      configurationManager
+      configurationManager,
+      canCreateLinks,
+      canEditLink
     }
   },
   computed: {
     ...mapGetters(['capabilities', 'configuration']),
-    ...mapState(['user']),
-
-    addButtonLabel() {
-      return this.$gettext('Add link')
-    },
 
     collapseButtonTitle() {
       return this.linkListCollapsed ? this.$gettext('Show all') : this.$gettext('Show less')
@@ -265,24 +286,6 @@ export default defineComponent({
     indirectLinkHelp() {
       return shareViaIndirectLinkHelp({ configurationManager: this.configurationManager })
     },
-
-    canCreateLinks() {
-      if (this.resource.isReceivedShare() && !this.hasResharing) {
-        return false
-      }
-
-      const isShareJail = this.space?.driveType === 'share'
-      if (isShareJail && !this.hasResharing) {
-        return false
-      }
-
-      return this.resource.canShare({ user: this.user })
-    },
-
-    canEdit() {
-      return this.canCreateLinks
-    },
-
     noResharePermsMessage() {
       const translatedFile = this.$gettext("You don't have permission to share this file.")
       const translatedFolder = this.$gettext("You don't have permission to share this folder.")

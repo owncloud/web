@@ -44,7 +44,8 @@ let returnBitmask = 1
 jest.mock('web-client/src/helpers/share', () => ({
   LinkShareRoles: {
     getByName: jest.fn().mockReturnValue({ bitmask: jest.fn(() => returnBitmask) })
-  }
+  },
+  linkRoleViewerFolder: { name: 'viewer' }
 }))
 
 describe('createQuicklink', () => {
@@ -71,7 +72,7 @@ describe('createQuicklink', () => {
       client: clientService.owncloudSdk,
       params: {
         name: 'Quicklink',
-        permissions: 1, // viewer
+        permissions: '1', // viewer
         quicklink: true,
         password: args.password,
         expireDate: DateTime.now().plus({ days: 5 }).endOf('day').toISO(),
@@ -112,7 +113,7 @@ describe('createQuicklink', () => {
         client: clientService.owncloudSdk,
         params: {
           name: 'Quicklink',
-          permissions: role === 'viewer' ? 1 : 0,
+          permissions: role === 'viewer' ? '1' : '0',
           quicklink: true,
           expireDate: DateTime.now().plus({ days: 5 }).endOf('day').toISO(),
           spaceRef: mockResource.fileId
