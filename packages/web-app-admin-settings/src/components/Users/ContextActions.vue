@@ -6,6 +6,8 @@
       :cancel="closeQuotaModal"
       :spaces="selectedPersonalDrives"
       :max-quota="maxQuota"
+      :warning-message="quotaModalWarningMessage"
+      :warning-message-contextual-helper-data="quotaWarningMessageContextualHelperData"
       resource-type="user"
       @space-quota-updated="spaceQuotaUpdated"
     />
@@ -14,16 +16,7 @@
 
 <script lang="ts">
 import { useUserActionsEdit, useUserActionsDelete } from '../../composables/actions/users'
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  PropType,
-  unref,
-  watch,
-  toRaw,
-  ref
-} from 'vue'
+import { computed, defineComponent, PropType, unref, watch, toRaw, ref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import { User } from 'web-client/src/generated'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
@@ -31,6 +24,8 @@ import { useSpaceActionsEditQuota } from 'web-pkg/src/composables/actions/spaces
 import { SpaceResource } from 'web-client/src'
 import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
 import { SpaceActionOptions, useActionsShowDetails } from 'web-pkg/src/composables/actions'
+import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'ContextActions',
@@ -42,8 +37,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const instance = getCurrentInstance().proxy as any
     const store = useStore()
+    const { $gettext } = useGettext()
     const filterParams = computed(() => ({ resources: props.items }))
     const selectedPersonalDrives = ref([])
     watch(
@@ -65,6 +60,28 @@ export default defineComponent({
       },
       { deep: true, immediate: true }
     )
+
+    const usersWithoutDrive = computed(() => {
+      return props.items.filter(({ drive }) => !isPersonalSpaceResource(drive as SpaceResource))
+    })
+
+    const quotaModalWarningMessage = computed(() => {
+      return usersWithoutDrive.value.length
+        ? $gettext('Quota will only be applied to users who logged in at least once.')
+        : ''
+    })
+
+    const quotaWarningMessageContextualHelperData = computed(() => {
+      return usersWithoutDrive.value.length
+        ? {
+            title: $gettext('Unaffected users'),
+            text: [...usersWithoutDrive.value]
+              .sort((u1, u2) => u1.displayName.localeCompare(u2.displayName))
+              .map((user) => user.displayName)
+              .join(', ')
+          }
+        : {}
+    })
 
     const { actions: showDetailsActions } = useActionsShowDetails()
     const {
@@ -122,7 +139,9 @@ export default defineComponent({
       quotaModalIsOpen,
       closeQuotaModal,
       spaceQuotaUpdated,
-      selectedPersonalDrives
+      selectedPersonalDrives,
+      quotaModalWarningMessage,
+      quotaWarningMessageContextualHelperData
     }
   }
 })
