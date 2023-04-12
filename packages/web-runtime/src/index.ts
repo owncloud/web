@@ -61,9 +61,9 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     router,
     translations
   })
-  const customTranslations = await loadCustomTranslations({ configurationManager })
   const themePromise = announceTheme({ store, app, designSystem, runtimeConfiguration })
   await Promise.all([applicationsPromise, themePromise])
+  const customTranslations = await loadCustomTranslations({ configurationManager })
 
   announceTranslations({
     app,
