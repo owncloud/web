@@ -451,9 +451,7 @@ export default defineComponent({
     },
 
     async addNewFolder(folderName) {
-      if (folderName === '') {
-        return
-      }
+      folderName = folderName.trimEnd()
 
       try {
         const path = join(this.item, folderName)
@@ -486,7 +484,7 @@ export default defineComponent({
     },
 
     checkNewFolderName(folderName) {
-      if (folderName === '') {
+      if (folderName.trim() === '') {
         return this.$gettext('Folder name cannot be empty')
       }
 
@@ -500,10 +498,6 @@ export default defineComponent({
 
       if (folderName === '..') {
         return this.$gettext('Folder name cannot be equal to ".."')
-      }
-
-      if (/\s+$/.test(folderName)) {
-        return this.$gettext('Folder name cannot end with whitespace')
       }
 
       const exists = this.files.find((file) => file.name === folderName)

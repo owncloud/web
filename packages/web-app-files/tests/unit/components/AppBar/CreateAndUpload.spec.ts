@@ -196,19 +196,20 @@ describe('CreateAndUpload component', () => {
   })
   describe('methods "checkNewFolderName" & "checkNewFileName"', () => {
     it.each([
-      { name: '', valid: false },
-      { name: '/name', valid: false },
-      { name: '.', valid: false },
-      { name: '..', valid: false },
-      { name: 'name ', valid: false },
-      { name: 'name', valid: true }
+      { name: '', validFileName: false, validFolderName: false },
+      { name: '  ', validFileName: false, validFolderName: false },
+      { name: '/name', validFileName: false, validFolderName: false },
+      { name: '.', validFileName: false, validFolderName: false },
+      { name: '..', validFileName: false, validFolderName: false },
+      { name: 'name ', validFileName: false, validFolderName: true },
+      { name: 'name', validFileName: true, validFolderName: true }
     ])('verifies the resource name', (data) => {
-      const { name, valid } = data
+      const { name, validFileName, validFolderName } = data
       const { wrapper } = getWrapper()
       const folderResult = wrapper.vm.checkNewFolderName(name)
-      expect(folderResult === null).toBe(valid)
+      expect(folderResult === null).toBe(validFolderName)
       const fileResult = wrapper.vm.checkNewFileName(name)
-      expect(fileResult === null).toBe(valid)
+      expect(fileResult === null).toBe(validFileName)
     })
     it('shows error when the resource name already exists', () => {
       const existingFile = mockDeep<Resource>({ name: 'someFile.txt' })
