@@ -126,6 +126,7 @@ Summary
 * Enhancement - GDPR export: [#8738](https://github.com/owncloud/web/issues/8738)
 * Enhancement - Stop bootstrapping application earlier in anonymous contexts: [#8762](https://github.com/owncloud/web/pull/8762)
 * Enhancement - Add support for read-only groups: [#8766](https://github.com/owncloud/web/pull/8766)
+* Enhancement - Custom translations: [#8790](https://github.com/owncloud/web/pull/8790)
 * Enhancement - Font family in theming: [#8797](https://github.com/owncloud/web/pull/8797)
 
 Details
@@ -1184,6 +1185,15 @@ Details
 
    https://github.com/owncloud/web/issues/8729
    https://github.com/owncloud/web/pull/8766
+
+* Enhancement - Custom translations: [#8790](https://github.com/owncloud/web/pull/8790)
+
+   We have added the possibility to include own translations to override existing translations.
+   To inject custom translations add the following property to your `config.json`,
+   `"customTranslation": [{ "url": "https://localhost:9200/translations.json" }]`.
+
+   https://github.com/owncloud/web/issues/8791
+   https://github.com/owncloud/web/pull/8790
 
 * Enhancement - Font family in theming: [#8797](https://github.com/owncloud/web/pull/8797)
 
