@@ -241,7 +241,7 @@ export default defineComponent({
          * So we actually don't need to change the property if missing and not set to forbidden in the UI.
          * This also avoids the compare save dialog from displaying that there are unsaved changes.
          */
-        if (this.editUser.accountEnabled === true && this.user.accountEnabled !== false) {
+        if (this.editUser.accountEnabled === true && !('accountEnabled' in this.user)) {
           delete this.editUser.accountEnabled
         }
       },
