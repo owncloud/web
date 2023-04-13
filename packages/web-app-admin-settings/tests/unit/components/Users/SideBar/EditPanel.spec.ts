@@ -102,6 +102,11 @@ describe('EditPanel', () => {
       expect(wrapper.vm.validateDisplayName()).toBeTruthy()
       expect(wrapper.vm.formData.displayName.valid).toBeTruthy()
     })
+    it('should be false if displayName is longer than 255 characters', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.editUser.displayName = 'n'.repeat(256)
+      expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
+    })
     it('should return false if displayName is not valid', () => {
       const { wrapper } = getWrapper()
       wrapper.vm.editUser.displayName = ''

@@ -73,6 +73,11 @@ describe('CreateUserModal', () => {
       wrapper.vm.user.displayName = ''
       expect(wrapper.vm.validateDisplayName()).toBeFalsy()
     })
+    it('should be false when displayName is longer than 255 characters', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.user.displayName = 'n'.repeat(256)
+      expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
+    })
     it('should be true when displayName is valid', () => {
       const { wrapper } = getWrapper()
       wrapper.vm.user.displayName = 'jana'

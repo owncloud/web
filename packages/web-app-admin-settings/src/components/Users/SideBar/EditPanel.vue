@@ -309,6 +309,13 @@ export default defineComponent({
         return false
       }
 
+      if (this.editUser.displayName.length > 255) {
+        this.formData.displayName.errorMessage = this.$gettext(
+          'First and last name cannot cannot exceed 255 characters'
+        )
+        return false
+      }
+
       this.formData.displayName.errorMessage = ''
       this.formData.displayName.valid = true
       return true
