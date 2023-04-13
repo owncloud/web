@@ -403,7 +403,6 @@ export default defineComponent({
     isSelectedRole(role: ShareRole) {
       return this.link.permissions === role.bitmask(false)
     },
-
     updateLink({ link, dropRef = undefined, onSuccess = () => {} }) {
       link = link || this.link
       dropRef = dropRef || this.$refs.editPublicLinkDropdown
@@ -413,6 +412,14 @@ export default defineComponent({
     deleteLink() {
       this.$emit('removePublicLink', { link: this.link })
       ;(this.$refs.editPublicLinkDropdown as InstanceType<typeof OcDrop>).hide()
+    },
+    checkInputValue(value) {
+      if (value.length > 255) {
+        return this.setModalInputErrorMessage(
+          this.$gettext('Link name cannot cannot exceed 255 characters')
+        )
+      }
+      this.setModalInputErrorMessage(null)
     },
     showRenameModal() {
       const modal = {
@@ -424,6 +431,7 @@ export default defineComponent({
         inputValue: this.link.name,
         inputLabel: this.$gettext('Link name'),
         onCancel: this.hideModal,
+        onInput: this.checkInputValue,
         onConfirm: (name) =>
           this.updateLink({
             link: {
