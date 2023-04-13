@@ -89,7 +89,9 @@ import {
   queryItemAsString,
   sortHelper,
   useAppDefaults,
-  useRouteQuery
+  useRoute,
+  useRouteQuery,
+  useRouter
 } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -124,8 +126,12 @@ export default defineComponent({
     MediaControls
   },
   setup() {
+    const router = useRouter()
+    const route = useRoute()
     const appDefaults = useAppDefaults({ applicationId: 'preview' })
     const contextRouteQuery = useRouteQuery('contextRouteQuery')
+
+    const activeIndex = ref()
 
     const sortBy = computed(() => {
       if (!unref(contextRouteQuery)) {
@@ -137,10 +143,10 @@ export default defineComponent({
       if (!unref(contextRouteQuery)) {
         return 'desc'
       }
-      return unref(contextRouteQuery)['sort-dir'] ?? 'desc'
+      return unref(contextRouteQuery)['sort-dir'] ?? 'asc'
     })
 
-    const { activeFiles } = appDefaults
+    const { activeFiles, currentFileContext } = appDefaults
 
     const isFullScreenModeActivated = ref(false)
     const toggleFullscreenMode = () => {
@@ -168,14 +174,31 @@ export default defineComponent({
 
       return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
     })
+    const activeFilteredFile = computed(() => {
+      return unref(filteredFiles)[unref(activeIndex)]
+    })
+
+    const updateLocalHistory = () => {
+      const { params, query } = createFileRouteOptions(
+        unref(unref(currentFileContext).space),
+        unref(activeFilteredFile)
+      )
+      router.replace({
+        ...unref(route),
+        params: { ...unref(route).params, ...params },
+        query: { ...unref(route).query, ...query }
+      })
+    }
 
     return {
       ...appDefaults,
       ...useDownloadFile(),
       filteredFiles,
-
+      activeFilteredFile,
+      activeIndex,
       isFullScreenModeActivated,
-      toggleFullscreenMode
+      toggleFullscreenMode,
+      updateLocalHistory
     }
   },
   data() {
@@ -183,8 +206,6 @@ export default defineComponent({
       isFileContentLoading: true,
       isFileContentError: false,
       isAutoPlayEnabled: true,
-
-      activeIndex: null,
 
       cachedFiles: [],
       toPreloadImageIds: [],
@@ -201,9 +222,6 @@ export default defineComponent({
       return this.$gettext('Preview for %{currentMediumName}', {
         currentMediumName: this.activeFilteredFile?.name
       })
-    },
-    activeFilteredFile() {
-      return this.filteredFiles[this.activeIndex]
     },
     activeMediaFileCached() {
       const cached = this.cachedFiles.find((i) => i.id === this.activeFilteredFile.id)
@@ -292,14 +310,6 @@ export default defineComponent({
       if (document.fullscreenElement === null) {
         this.isFullScreenModeActivated = false
       }
-    },
-    // update route and url
-    updateLocalHistory() {
-      const routeOptions = createFileRouteOptions(
-        unref(this.currentFileContext.space),
-        this.activeFilteredFile
-      )
-      history.pushState({}, document.title, this.$router.resolve(routeOptions).href)
     },
     loadMedium() {
       this.isFileContentLoading = true
