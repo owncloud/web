@@ -39,32 +39,22 @@
         class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
         :class="{ lightbox: isFullScreenModeActivated }"
       >
-        <img
+        <media-image
           v-if="activeMediaFileCached.isImage"
-          :key="`media-image-${activeMediaFileCached.id}`"
-          :src="activeMediaFileCached.url"
-          :alt="activeMediaFileCached.name"
-          :data-id="activeMediaFileCached.id"
-          :style="`zoom: ${currentImageZoom};transform: rotate(${currentImageRotation}deg)`"
+          :file="activeMediaFileCached"
+          :current-image-rotation="currentImageRotation"
+          :current-image-zoom="currentImageZoom"
         />
-        <video
+        <media-video
           v-else-if="activeMediaFileCached.isVideo"
-          :key="`media-video-${activeMediaFileCached.id}`"
-          controls
-          preload="preload"
-          :autoplay="isAutoPlayEnabled"
-        >
-          <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
-        </video>
-        <audio
+          :file="activeMediaFileCached"
+          :is-auto-play-enabled="isAutoPlayEnabled"
+        />
+        <media-audio
           v-else-if="activeMediaFileCached.isAudio"
-          :key="`media-audio-${activeMediaFileCached.id}`"
-          controls
-          preload="preload"
-          :autoplay="isAutoPlayEnabled"
-        >
-          <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
-        </audio>
+          :file="activeMediaFileCached"
+          :is-auto-play-enabled="isAutoPlayEnabled"
+        />
       </div>
     </template>
     <media-controls
@@ -72,7 +62,7 @@
       :active-index="activeIndex"
       :is-full-screen-mode-activated="isFullScreenModeActivated"
       :is-folder-loading="isFolderLoading"
-      :is-image="activeMediaFileCached.isImage"
+      :is-image="activeMediaFileCached?.isImage"
       :current-image-rotation="currentImageRotation"
       :current-image-zoom="currentImageZoom"
       @set-rotation="currentImageRotation = $event"
@@ -99,6 +89,10 @@ import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFil
 import { RouteLocationRaw } from 'vue-router'
 import { Resource } from 'web-client/src'
 import MediaControls from './components/MediaControls.vue'
+import MediaAudio from './components/Sources/MediaAudio.vue'
+import MediaImage from './components/Sources/MediaImage.vue'
+import MediaVideo from './components/Sources/MediaVideo.vue'
+import { CachedFile } from './helpers/types'
 
 export const appId = 'preview'
 
@@ -123,7 +117,10 @@ export default defineComponent({
   name: 'Preview',
   components: {
     AppTopBar,
-    MediaControls
+    MediaControls,
+    MediaAudio,
+    MediaImage,
+    MediaVideo
   },
   setup() {
     const router = useRouter()
@@ -132,6 +129,7 @@ export default defineComponent({
     const contextRouteQuery = useRouteQuery('contextRouteQuery')
 
     const activeIndex = ref()
+    const cachedFiles = ref<CachedFile[]>([])
 
     const sortBy = computed(() => {
       if (!unref(contextRouteQuery)) {
@@ -177,6 +175,9 @@ export default defineComponent({
     const activeFilteredFile = computed(() => {
       return unref(filteredFiles)[unref(activeIndex)]
     })
+    const activeMediaFileCached = computed(() => {
+      return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile).id)
+    })
 
     const updateLocalHistory = () => {
       const { params, query } = createFileRouteOptions(
@@ -193,9 +194,11 @@ export default defineComponent({
     return {
       ...appDefaults,
       ...useDownloadFile(),
+      cachedFiles,
       filteredFiles,
       activeFilteredFile,
       activeIndex,
+      activeMediaFileCached,
       isFullScreenModeActivated,
       toggleFullscreenMode,
       updateLocalHistory
@@ -207,7 +210,6 @@ export default defineComponent({
       isFileContentError: false,
       isAutoPlayEnabled: true,
 
-      cachedFiles: [],
       toPreloadImageIds: [],
 
       currentImageZoom: 1,
@@ -222,10 +224,6 @@ export default defineComponent({
       return this.$gettext('Preview for %{currentMediumName}', {
         currentMediumName: this.activeFilteredFile?.name
       })
-    },
-    activeMediaFileCached() {
-      const cached = this.cachedFiles.find((i) => i.id === this.activeFilteredFile.id)
-      return cached !== undefined ? cached : false
     },
     thumbDimensions() {
       switch (true) {
