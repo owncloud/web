@@ -1,4 +1,4 @@
-import { useSort } from 'web-app-files/src/composables'
+import { useSort } from 'web-pkg/src/composables'
 import { ref } from 'vue'
 
 export const useSortMock = (

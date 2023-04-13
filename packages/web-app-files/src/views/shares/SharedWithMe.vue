@@ -62,7 +62,7 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
-import { useSort, useResourcesViewDefaults } from '../../composables'
+import { useResourcesViewDefaults } from '../../composables'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import AppBar from '../../components/AppBar/AppBar.vue'
@@ -74,7 +74,7 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useSort, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   components: {

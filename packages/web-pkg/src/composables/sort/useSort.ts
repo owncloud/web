@@ -128,7 +128,7 @@ const defaultSortDirection = (name: string, fields: SortField[]): SortDir => {
   return SortDir.Desc
 }
 
-const sortHelper = <T extends SortableItem>(
+export const sortHelper = <T extends SortableItem>(
   items: T[],
   fields: SortField[],
   sortBy: string,

@@ -199,6 +199,7 @@ import {
   useCapabilityFilesTags,
   useCapabilityProjectSpacesEnabled,
   useCapabilityShareJailEnabled,
+  SortDir,
   useStore,
   useUserContext
 } from 'web-pkg/src/composables'
@@ -213,7 +214,6 @@ import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { configurationManager } from 'web-pkg/src/configuration'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
-import { SortDir } from 'web-app-files/src/composables'
 import { useResourceRouteResolver } from 'web-app-files/src/composables/filesList/useResourceRouteResolver'
 import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
 import { ClipboardActions } from 'web-app-files/src/helpers/clipboardActions'
