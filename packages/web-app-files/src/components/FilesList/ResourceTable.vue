@@ -619,7 +619,7 @@ export default defineComponent({
     },
     getTagLink(tag) {
       return createLocationCommon('files-common-search', {
-        query: { term: `Tags:${tag}`, provider: 'files.sdk' }
+        query: { term: `Tags:"${tag}"`, provider: 'files.sdk' }
       })
     },
     getTagComponentAttrs(tag) {
