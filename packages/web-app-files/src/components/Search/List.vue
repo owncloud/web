@@ -88,6 +88,8 @@ import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { useStore } from 'web-pkg/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { basename } from 'path'
+import { onBeforeRouteLeave } from 'vue-router'
+import { eventBus } from 'web-pkg'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -117,6 +119,10 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+
+    onBeforeRouteLeave(() => {
+      eventBus.publish('app.search.term.clear')
+    })
     const getSpace = (resource: Resource): SpaceResource => {
       if (resource.shareId) {
         return buildShareSpaceResource({
