@@ -1,4 +1,4 @@
-import { SortDir, SortField } from '../../composables/sort'
+import { SortDir, SortField } from 'web-pkg/src/composables'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {

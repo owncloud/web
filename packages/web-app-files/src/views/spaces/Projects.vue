@@ -79,7 +79,7 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 import AppBar from '../../components/AppBar/AppBar.vue'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
-import { useAbility, useClientService, useStore } from 'web-pkg/src/composables'
+import { useAbility, useClientService, useSort, useStore } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
@@ -90,7 +90,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from 'web-pkg/src/composables/sideBar'
 import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
-import { useSelectedResources, useSort, ViewModeConstants } from 'web-app-files/src/composables'
+import { useSelectedResources, ViewModeConstants } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
 
 export default defineComponent({
