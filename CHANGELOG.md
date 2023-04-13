@@ -982,7 +982,9 @@ Details
 
    https://github.com/owncloud/web/issues/8484
    https://github.com/owncloud/web/issues/8467
+   https://github.com/owncloud/web/issues/8798
    https://github.com/owncloud/web/pull/8433
+   https://github.com/owncloud/web/pull/8799
 
 * Enhancement - Skeleton App: [#8441](https://github.com/owncloud/web/pull/8441)
 
