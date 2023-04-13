@@ -179,17 +179,20 @@
   </main>
 </template>
 <script lang="ts">
-import { defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, ref, unref } from 'vue'
 import {
   queryItemAsString,
+  sortHelper,
   useAppDefaults,
   usePublicLinkContext,
+  useRouteQuery,
   useStore
 } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 import { RouteLocationRaw } from 'vue-router'
+import { Resource } from 'web-client/src'
 
 export const appId = 'preview'
 
@@ -217,6 +220,16 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const appDefaults = useAppDefaults({ applicationId: 'preview' })
+    const contextRouteQuery = useRouteQuery('contextRouteQuery')
+    const sortBy = computed(() => {
+      return unref(contextRouteQuery)['sort-by']
+    })
+    const sortDir = computed(() => {
+      return unref(contextRouteQuery)['sort-dir']
+    })
+
+    const { activeFiles } = appDefaults
 
     const isFullScreenModeActivated = ref(false)
     const toggleFullscreenMode = () => {
@@ -233,12 +246,23 @@ export default defineComponent({
       }
     }
 
+    const filteredFiles = computed<Resource[]>(() => {
+      if (!unref(activeFiles)) {
+        return []
+      }
+
+      const filteredFiles = unref(activeFiles).filter((file) => {
+        return mimeTypes().includes(file.mimeType?.toLowerCase())
+      })
+
+      return sortHelper(filteredFiles, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
+    })
+
     return {
-      ...useAppDefaults({
-        applicationId: 'preview'
-      }),
+      ...appDefaults,
       ...useDownloadFile(),
       isPublicLinkContext: usePublicLinkContext({ store }),
+      filteredFiles,
 
       isFullScreenModeActivated,
       toggleFullscreenMode
@@ -282,15 +306,6 @@ export default defineComponent({
       return this.$gettextInterpolate(translated, {
         displayIndex: this.activeIndex + 1,
         availableMediaFiles: this.filteredFiles.length
-      })
-    },
-    filteredFiles() {
-      if (!this.activeFiles) {
-        return []
-      }
-
-      return this.activeFiles.filter((file) => {
-        return mimeTypes().includes(file.mimeType?.toLowerCase())
       })
     },
     activeFilteredFile() {
