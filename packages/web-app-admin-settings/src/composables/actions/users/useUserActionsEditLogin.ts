@@ -12,7 +12,7 @@ export const useUserActionsEditLogin = () => {
       icon: 'login-circle',
       componentType: 'button',
       class: 'oc-users-actions-edit-login-trigger',
-      label: () => $gettext('Edit Login'),
+      label: () => $gettext('Edit login'),
       isEnabled: ({ resources }) => resources.length > 0,
       handler() {
         eventBus.publish('app.admin-settings.users.actions.edit-login')

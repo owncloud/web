@@ -6,11 +6,13 @@ exports[`LoginModal renders the input including two options 1`] = `
     <div aria-modal="true" class="oc-modal oc-modal-passive" role="dialog" tabindex="0">
       <div class="oc-modal-title">
         <!--v-if-->
-        <h2 id="oc-modal-title">Edit Login</h2>
+        <h2 id="oc-modal-title">Edit login for "function () {
+          return fn.apply(this, arguments);
+          }"</h2>
       </div>
       <div class="oc-modal-body">
         <div class="oc-modal-body-message">
-          <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" id="oc-select-1" label="Set login status for selected users" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object]" placeholder="Select..." searchable="true" warningmessage=""></oc-select-stub>
+          <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" id="oc-select-1" label="Login status" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object]" placeholder="Select..." searchable="true" warningmessage=""></oc-select-stub>
         </div>
         <!--v-if-->
         <!--v-if-->

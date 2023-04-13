@@ -1,6 +1,6 @@
 <template>
   <oc-modal
-    :title="$gettext('Edit Login')"
+    :title="modalTitle"
     :button-cancel-text="$gettext('Cancel')"
     :button-confirm-text="$gettext('Confirm')"
     :button-confirm-disabled="!selectedOption"
@@ -10,11 +10,11 @@
     <template #content>
       <oc-select
         :model-value="selectedOption"
-        :label="$gettext('Set login status for selected users')"
+        :label="$gettext('Login status')"
         :options="options"
         :placeholder="$gettext('Select...')"
         :warning-message="
-          currentUserSelected ? $gettext('Your own login state will remain unchanged.') : ''
+          currentUserSelected ? $gettext('Your own login status will remain unchanged.') : ''
         "
         @update:model-value="changeSelectedOption"
       />
@@ -44,7 +44,7 @@ export default defineComponent({
   emits: ['confirm', 'cancel'],
   setup(props) {
     const store = useStore()
-    const { $gettext } = useGettext()
+    const { $gettext, $ngettext } = useGettext()
 
     const selectedOption = ref()
 
@@ -61,6 +61,18 @@ export default defineComponent({
       return props.users.some((u) => u.id === store.getters.user.uuid)
     })
 
+    const modalTitle = computed(() => {
+      return $ngettext(
+        'Edit login for "%{user}"',
+        'Edit login for %{userCount} users',
+        props.users.length,
+        {
+          user: props.users[0].displayName,
+          userCount: props.users.length.toString()
+        }
+      )
+    })
+
     onMounted(() => {
       if (props.users.every((u) => u.accountEnabled !== false)) {
         selectedOption.value = unref(options).find(({ value }) => !!value)
@@ -73,7 +85,8 @@ export default defineComponent({
       selectedOption,
       options,
       changeSelectedOption,
-      currentUserSelected
+      currentUserSelected,
+      modalTitle
     }
   }
 })
