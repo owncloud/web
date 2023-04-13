@@ -124,6 +124,12 @@
       @cancel="() => (removeFromGroupsModalIsOpen = false)"
       @confirm="removeUsersFromGroups"
     />
+    <login-modal
+      v-if="editLoginModalIsOpen"
+      :users="selectedUsers"
+      @cancel="() => (editLoginModalIsOpen = false)"
+      @confirm="editLoginForUsers"
+    />
     <create-user-modal
       v-if="createUserModalOpen"
       @cancel="toggleCreateUserModal"
@@ -174,13 +180,15 @@ import { useGettext } from 'vue3-gettext'
 import { diff } from 'deep-object-diff'
 import { format } from 'util'
 import GroupsModal from '../components/Users/GroupsModal.vue'
+import LoginModal from '../components/Users/LoginModal.vue'
 import {
   useUserActionsDelete,
   useUserActionsRemoveFromGroups,
-  useUserActionsAddToGroups
+  useUserActionsAddToGroups,
+  useUserActionsEditLogin
 } from '../composables/actions/users'
 import { configurationManager } from 'web-pkg'
-import { Drive, Group } from 'web-client/src/generated'
+import { Drive, Group, User } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'UsersView',
@@ -192,7 +200,8 @@ export default defineComponent({
     ContextActions,
     ItemFilter,
     QuotaModal,
-    GroupsModal
+    GroupsModal,
+    LoginModal
   },
   setup() {
     const { $gettext, $ngettext } = useGettext()
@@ -204,6 +213,7 @@ export default defineComponent({
     const { actions: deleteActions } = useUserActionsDelete({ store })
     const { actions: removeFromGroupsActions } = useUserActionsRemoveFromGroups()
     const { actions: addToGroupsActions } = useUserActionsAddToGroups()
+    const { actions: editLoginActions } = useUserActionsEditLogin()
     const {
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
@@ -224,11 +234,13 @@ export default defineComponent({
     const createUserModalOpen = ref(false)
     const addToGroupsModalIsOpen = ref(false)
     const removeFromGroupsModalIsOpen = ref(false)
+    const editLoginModalIsOpen = ref(false)
     const listHeaderPosition = ref(0)
     const template = ref()
     let loadResourcesEventToken
     let addToGroupsActionEventToken
     let removeFromGroupsActionEventToken
+    let editLoginActionEventToken
     const addToGroupsModalTitle = computed(() => {
       return $ngettext(
         'Add user "%{user}" to groups',
@@ -373,7 +385,8 @@ export default defineComponent({
         ...unref(deleteActions),
         ...unref(editQuotaActions),
         ...unref(addToGroupsActions),
-        ...unref(removeFromGroupsActions)
+        ...unref(removeFromGroupsActions),
+        ...unref(editLoginActions)
       ].filter((item) => item.isEnabled({ resources: unref(selectedUsers) }))
     })
 
@@ -402,6 +415,12 @@ export default defineComponent({
           removeFromGroupsModalIsOpen.value = true
         }
       )
+      editLoginActionEventToken = eventBus.subscribe(
+        'app.admin-settings.users.actions.edit-login',
+        () => {
+          editLoginModalIsOpen.value = true
+        }
+      )
       window.addEventListener('resize', calculateListHeaderPosition)
     })
 
@@ -415,7 +434,20 @@ export default defineComponent({
         'app.admin-settings.users.actions.remove-from-groups',
         removeFromGroupsActionEventToken
       )
+      eventBus.unsubscribe('app.admin-settings.users.actions.edit-login', editLoginActionEventToken)
     })
+
+    const updateLocalUsers = (usersToUpdate: User[]) => {
+      for (const _user of usersToUpdate) {
+        const userIndex = unref(users).findIndex((user) => user.id === _user.id)
+        unref(users)[userIndex] = _user
+        const selectedUserIndex = unref(selectedUsers).findIndex((user) => user.id === _user.id)
+        if (selectedUserIndex >= 0) {
+          // FIXME: why do we need to update selectedUsers?
+          unref(selectedUsers)[selectedUserIndex] = _user
+        }
+      }
+    }
 
     const addUsersToGroups = async ({ users: affectedUsers, groups: groupsToAdd }) => {
       try {
@@ -437,17 +469,7 @@ export default defineComponent({
           await Promise.all(addUsersToGroupsRequests)
           return Promise.all(usersToFetch.map((userId) => client.users.getUser(userId)))
         })
-        for (const { data: updatedUser } of usersResponse) {
-          const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
-          unref(users)[userIndex] = updatedUser
-          const selectedUserIndex = unref(selectedUsers).findIndex(
-            (user) => user.id === updatedUser.id
-          )
-          if (selectedUserIndex >= 0) {
-            // FIXME: why do we need to update selectedUsers?
-            unref(selectedUsers)[selectedUserIndex] = updatedUser
-          }
-        }
+        updateLocalUsers(usersResponse.map((r) => r.data))
         await store.dispatch('showMessage', {
           title: $gettext('Users were added to groups successfully')
         })
@@ -481,17 +503,7 @@ export default defineComponent({
           await Promise.all(removeUsersToGroupsRequests)
           return Promise.all(usersToFetch.map((userId) => client.users.getUser(userId)))
         })
-        for (const { data: updatedUser } of usersResponse) {
-          const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
-          unref(users)[userIndex] = updatedUser
-          const selectedUserIndex = unref(selectedUsers).findIndex(
-            (user) => user.id === updatedUser.id
-          )
-          if (selectedUserIndex >= 0) {
-            // FIXME: why do we need to update selectedUsers?
-            unref(selectedUsers)[selectedUserIndex] = updatedUser
-          }
-        }
+        updateLocalUsers(usersResponse.map((r) => r.data))
         await store.dispatch('showMessage', {
           title: $gettext('Users were removed from groups successfully')
         })
@@ -500,6 +512,35 @@ export default defineComponent({
         console.error(e)
         await store.dispatch('showMessage', {
           title: $gettext('Failed remove users from group'),
+          status: 'danger'
+        })
+      }
+    }
+
+    const editLoginForUsers = async ({
+      users: affectedUsers,
+      value
+    }: {
+      users: User[]
+      value: boolean
+    }) => {
+      try {
+        affectedUsers = affectedUsers.filter(({ id }) => store.getters.user.uuid !== id)
+        const client = clientService.graphAuthenticated
+        const promises = affectedUsers.map((u) =>
+          client.users.editUser(u.id, { accountEnabled: value })
+        )
+        const usersResponse = await loadingService.addTask(async () => {
+          await Promise.all(promises)
+          return Promise.all(affectedUsers.map((u) => client.users.getUser(u.id)))
+        })
+        updateLocalUsers(usersResponse.map((r) => r.data))
+        await store.dispatch('showMessage', { title: $gettext('Login was edited successfully') })
+        editLoginModalIsOpen.value = false
+      } catch (e) {
+        console.error(e)
+        return store.dispatch('showMessage', {
+          title: $gettext('Failed to edit login'),
           status: 'danger'
         })
       }
@@ -529,6 +570,8 @@ export default defineComponent({
       addToGroupsModalIsOpen,
       removeFromGroupsModalTitle,
       removeFromGroupsModalIsOpen,
+      editLoginModalIsOpen,
+      editLoginForUsers,
       batchActions,
       filterGroups,
       filterRoles,

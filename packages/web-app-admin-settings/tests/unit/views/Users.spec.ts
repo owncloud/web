@@ -12,6 +12,7 @@ import {
 } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
 import { ClientService, queryItemAsString } from 'web-pkg'
+import { User } from 'web-client/src/generated'
 
 jest.mock('web-pkg/src/composables/appDefaults')
 
@@ -335,6 +336,29 @@ describe('Users view', () => {
       await wrapper.vm.$nextTick()
       expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
     })
+    describe('edit login', () => {
+      it('does display the login modal when opened', async () => {
+        const { wrapper } = getMountedWrapper({ mountType: mount })
+        await wrapper.vm.loadResourcesTask.last
+        wrapper.vm.editLoginModalIsOpen = true
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('login-modal-stub ').exists()).toBeTruthy()
+      })
+      it('updates the login for all given users', async () => {
+        const { wrapper, mocks } = getMountedWrapper({ mountType: mount })
+        const users = [mock<User>(), mock<User>()]
+        await wrapper.vm.editLoginForUsers({ users, value: true })
+        expect(mocks.$clientService.graphAuthenticated.users.editUser).toHaveBeenCalledTimes(
+          users.length
+        )
+      })
+      it('omits the currently logged in user', async () => {
+        const { wrapper, mocks } = getMountedWrapper({ mountType: mount })
+        const users = [mock<User>({ id: '1' }), mock<User>()]
+        await wrapper.vm.editLoginForUsers({ users, value: true })
+        expect(mocks.$clientService.graphAuthenticated.users.editUser).toHaveBeenCalledTimes(1)
+      })
+    })
   })
 
   describe('filter', () => {
@@ -420,12 +444,9 @@ function getMountedWrapper({
   }
   mocks.$clientService = clientService
 
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    state: {
-      user: { id: '1', uuid: '1' }
-    }
-  }
+  const user = { id: '1', uuid: '1' }
+  const storeOptions = { ...defaultStoreMockOptions, state: { user } }
+  storeOptions.getters.user.mockReturnValue(user)
 
   const store = createStore(storeOptions)
 
@@ -442,7 +463,8 @@ function getMountedWrapper({
           NoContentMessage: true,
           OcTable: true,
           ItemFilter: true,
-          BatchActions: true
+          BatchActions: true,
+          LoginModal: true
         }
       }
     })
