@@ -11,6 +11,7 @@
       ref="search"
       :label="searchLabel"
       :type-ahead="true"
+      :value="term"
       :placeholder="searchLabel"
       :button-hidden="true"
       :show-cancel-button="showCancelButton"
@@ -145,7 +146,8 @@ export default defineComponent({
       providerStore,
       loading: false,
       searchResults: [],
-      hideOptionsDropEvent: null
+      hideOptionsDropEvent: null,
+      clearTermEvent: null
     }
   },
   computed: {
@@ -170,11 +172,6 @@ export default defineComponent({
     searchLabel() {
       return this.$gettext('Enter search term')
     },
-
-    searchBar() {
-      return this.$refs.searchBar as Element
-    },
-
     optionsDrop() {
       return this.$refs.optionsDrop as InstanceType<GlobalComponents['OcDrop']>
     }
@@ -226,12 +223,16 @@ export default defineComponent({
   created() {
     this.debouncedSearch = debounce(this.search, 500)
 
+    this.clearTermEvent = eventBus.subscribe('app.search.term.clear', () => {
+      this.term = ''
+    })
     this.hideOptionsDropEvent = eventBus.subscribe('app.search.options-drop.hide', () => {
       this.optionsDrop.hide()
     })
   },
 
   beforeUnmount() {
+    eventBus.unsubscribe('app.search.term.clear', this.clearTermEvent)
     eventBus.unsubscribe('app.search.options-drop.hide', this.hideOptionsDropEvent)
   },
 
