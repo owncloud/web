@@ -32,6 +32,11 @@ describe('CreateUserModal', () => {
       wrapper.vm.user.onPremisesSamAccountName = ''
       expect(await wrapper.vm.validateUserName()).toBeFalsy()
     })
+    it('should be false when userName is longer than 255 characters', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.user.onPremisesSamAccountName = 'n'.repeat(256)
+      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+    })
     it('should be false when userName contains white spaces', async () => {
       const { wrapper } = getWrapper()
       wrapper.vm.user.onPremisesSamAccountName = 'jan owncCloud'

@@ -60,6 +60,11 @@ describe('EditPanel', () => {
       wrapper.vm.editUser.onPremisesSamAccountName = ''
       expect(await wrapper.vm.validateUserName()).toBeFalsy()
     })
+    it('should be false if userName is longer than 255 characters', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.editUser.onPremisesSamAccountName = 'n'.repeat(256)
+      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+    })
     it('should be false when userName contains white spaces', async () => {
       const { wrapper } = getWrapper()
       wrapper.vm.editUser.onPremisesSamAccountName = 'jan owncCloud'

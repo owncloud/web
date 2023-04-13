@@ -31,6 +31,11 @@ describe('CreateGroupModal', () => {
       wrapper.vm.group.displayName = ''
       expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
     })
+    it('should be false when displayName is longer than 255 characters', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.group.displayName = 'n'.repeat(256)
+      expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
+    })
     it('should be false when displayName is already existing', async () => {
       const { wrapper, mocks } = getWrapper()
       const graphMock = mocks.$clientService.graphAuthenticated

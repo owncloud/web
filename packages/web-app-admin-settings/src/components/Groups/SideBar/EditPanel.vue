@@ -81,7 +81,14 @@ export default defineComponent({
       this.formData.displayName.valid = false
 
       if (this.editGroup.displayName.trim() === '') {
-        this.formData.displayName.errorMessage = this.$gettext('Name cannot be empty')
+        this.formData.displayName.errorMessage = this.$gettext('Group name cannot be empty')
+        return false
+      }
+
+      if (this.editGroup.displayName.length > 255) {
+        this.formData.displayName.errorMessage = this.$gettext(
+          'Group name cannot cannot exceed 255 characters'
+        )
         return false
       }
 
