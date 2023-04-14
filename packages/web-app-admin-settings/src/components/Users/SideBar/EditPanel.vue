@@ -42,9 +42,12 @@
           @update:model-value="onUpdatePassword"
         />
         <div class="oc-mb-s">
+          {{ selectedRoleValue }}
+          lol
+          {{ translatedRoleOptions }}
           <oc-select
             id="role-input"
-            :model-value="editUser"
+            :model-value="selectedRoleValue"
             :label="$gettext('Role')"
             option-label="displayName"
             :options="translatedRoleOptions"
@@ -61,16 +64,13 @@
           <oc-select
             id="login-input"
             :disabled="isLoginInputDisabled"
-            :model-value="editUser"
+            :model-value="selectedLoginValue"
             :label="$gettext('Login')"
             :options="loginOptions"
             :clearable="false"
             @update:model-value="onUpdateLogin"
-          >
-            <template #selected-option>
-              {{ selectedLoginLabel }}
-            </template>
-          </oc-select>
+          />
+
           <div class="oc-text-input-message"></div>
         </div>
         <quota-select
@@ -195,10 +195,12 @@ export default defineComponent({
         }
       ]
     },
-    selectedLoginLabel() {
-      return this.editUser.accountEnabled === false
-        ? this.$gettext('Forbidden')
-        : this.$gettext('Allowed')
+    selectedLoginValue() {
+      return this.loginOptions.find((option) =>
+        !('accountEnabled' in this.editUser)
+          ? option.value === false
+          : this.editUser.accountEnabled === option.value
+      )
     },
     translatedRoleOptions() {
       return this.roles.map((role) => {
@@ -224,6 +226,10 @@ export default defineComponent({
       return this.$gettext(
         this.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
       )
+    },
+    selectedRoleValue() {
+      const assignedRole = this.editUser.appRoleAssignments[0]
+      return this.roles.find((role) => role.id === assignedRole?.appRoleId)
     }
   },
   watch: {
