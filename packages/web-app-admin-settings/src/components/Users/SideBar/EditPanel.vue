@@ -276,6 +276,13 @@ export default defineComponent({
         return false
       }
 
+      if (this.editUser.onPremisesSamAccountName.length > 255) {
+        this.formData.userName.errorMessage = this.$gettext(
+          'User name cannot exceed 255 characters'
+        )
+        return false
+      }
+
       if (this.user.onPremisesSamAccountName !== this.editUser.onPremisesSamAccountName) {
         try {
           // Validate username by fetching the user. If the request succeeds, we throw a validation error
@@ -298,6 +305,13 @@ export default defineComponent({
       if (this.editUser.displayName.trim() === '') {
         this.formData.displayName.errorMessage = this.$gettext(
           'First and last name cannot be empty'
+        )
+        return false
+      }
+
+      if (this.editUser.displayName.length > 255) {
+        this.formData.displayName.errorMessage = this.$gettext(
+          'First and last name cannot exceed 255 characters'
         )
         return false
       }

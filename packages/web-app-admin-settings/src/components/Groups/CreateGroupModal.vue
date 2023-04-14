@@ -66,6 +66,13 @@ export default defineComponent({
         return false
       }
 
+      if (this.group.displayName.length > 255) {
+        this.formData.displayName.errorMessage = this.$gettext(
+          'Group name cannot exceed 255 characters'
+        )
+        return false
+      }
+
       try {
         const client = this.clientService.graphAuthenticated
         await client.groups.getGroup(this.group.displayName)

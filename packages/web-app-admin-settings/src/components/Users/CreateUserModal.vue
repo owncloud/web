@@ -129,6 +129,13 @@ export default defineComponent({
         return false
       }
 
+      if (this.user.onPremisesSamAccountName.length > 255) {
+        this.formData.userName.errorMessage = this.$gettext(
+          'User name cannot exceed 255 characters'
+        )
+        return false
+      }
+
       if (
         this.user.onPremisesSamAccountName.length &&
         !isNaN(parseInt(this.user.onPremisesSamAccountName[0]))
@@ -157,6 +164,13 @@ export default defineComponent({
       if (this.user.displayName.trim() === '') {
         this.formData.displayName.errorMessage = this.$gettext(
           'First and last name cannot be empty'
+        )
+        return false
+      }
+
+      if (this.user.displayName.length > 255) {
+        this.formData.displayName.errorMessage = this.$gettext(
+          'First and last name cannot cannot exceed 255 characters'
         )
         return false
       }

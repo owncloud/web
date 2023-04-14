@@ -41,6 +41,11 @@ describe('EditPanel', () => {
       expect(await wrapper.vm.validateDisplayName()).toBeTruthy()
       expect(getGroupStub).toHaveBeenCalled()
     })
+    it('should return false if displayName is longer than 255 characters', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.editGroup.displayName = 'n'.repeat(256)
+      expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
+    })
     it('should return false if displayName is empty', async () => {
       const { wrapper } = getWrapper()
       wrapper.vm.editGroup.displayName = ''
