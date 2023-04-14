@@ -149,7 +149,7 @@ export default defineComponent({
         eventBus.publish('sidebar.entity.saved')
       } catch (e) {
         console.error(e)
-        await store.dispatch('showMessage', {
+        store.dispatch('showMessage', {
           title: $gettext('Failed to edit tags'),
           status: 'danger'
         })
