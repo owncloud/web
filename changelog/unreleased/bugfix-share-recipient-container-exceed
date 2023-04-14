@@ -1,0 +1,6 @@
+Bugfix: Share recipient container exceed
+
+The share recipient container now shows a vertical scroll bar when the users would exceed the container height.
+
+https://github.com/owncloud/web/pull/8814
+https://github.com/owncloud/web/issues/8811
