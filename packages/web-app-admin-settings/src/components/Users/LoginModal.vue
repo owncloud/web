@@ -9,7 +9,7 @@
   >
     <template #content>
       <oc-select
-        :model-value="selectedOption"
+        :model-value="selectedOptionValue"
         :label="$gettext('Login status')"
         :options="options"
         :placeholder="$gettext('Select...')"
@@ -54,9 +54,15 @@ export default defineComponent({
         { label: $gettext('Forbidden'), value: false }
       ]
     })
+
+    const selectedOptionValue = computed(() => {
+      return options.value.find((o) => o.value === unref(selectedOption)?.value)
+    })
+
     const changeSelectedOption = (option: LoginOption) => {
       selectedOption.value = option
     }
+
     const currentUserSelected = computed(() => {
       return props.users.some((u) => u.id === store.getters.user.uuid)
     })
@@ -83,6 +89,7 @@ export default defineComponent({
 
     return {
       selectedOption,
+      selectedOptionValue,
       options,
       changeSelectedOption,
       currentUserSelected,

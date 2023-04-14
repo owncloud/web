@@ -326,7 +326,6 @@ export default defineComponent({
         } as AppRoleAssignment)
         return
       }
-      console.log(this.editUser)
       this.editUser.appRoleAssignments[0].appRoleId = role.id
     },
     onUpdatePassword(password) {
