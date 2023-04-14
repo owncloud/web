@@ -128,6 +128,7 @@ Summary
 * Enhancement - Add support for read-only groups: [#8766](https://github.com/owncloud/web/pull/8766)
 * Enhancement - Custom translations: [#8790](https://github.com/owncloud/web/pull/8790)
 * Enhancement - Font family in theming: [#8797](https://github.com/owncloud/web/pull/8797)
+* Enhancement - Preview app sorting: [#8806](https://github.com/owncloud/web/pull/8806)
 
 Details
 -------
@@ -1203,6 +1204,13 @@ Details
    needs to be made available as `font-face` via additional CSS.
 
    https://github.com/owncloud/web/pull/8797
+
+* Enhancement - Preview app sorting: [#8806](https://github.com/owncloud/web/pull/8806)
+
+   The preview app now respects the sorting from the file list.
+
+   https://github.com/owncloud/web/issues/7978
+   https://github.com/owncloud/web/pull/8806
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
