@@ -143,7 +143,6 @@
       :warning-message="quotaModalWarningMessage"
       :warning-message-contextual-helper-data="quotaWarningMessageContextualHelperData"
       resource-type="user"
-      @space-quota-updated="spaceQuotaUpdated"
     />
   </div>
 </template>
@@ -220,14 +219,13 @@ export default defineComponent({
     const {
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal,
-      spaceQuotaUpdated
+      closeModal: closeQuotaModal
     } = useSpaceActionsEditQuota({ store })
 
     const users = ref([])
     const groups = ref([])
     const roles = ref([])
-    const selectedUsers = ref([])
+    const selectedUsers = ref<User[]>([])
     const additionalUserDataLoadedForUserIds = ref([])
     const applicationId = ref()
     const selectedUserIds = computed(() =>
@@ -244,6 +242,7 @@ export default defineComponent({
     let addToGroupsActionEventToken
     let removeFromGroupsActionEventToken
     let editLoginActionEventToken
+    let editQuotaActionEventToken
     const addToGroupsModalTitle = computed(() => {
       return $ngettext(
         'Add user "%{user}" to groups',
@@ -390,8 +389,21 @@ export default defineComponent({
         ...unref(addToGroupsActions),
         ...unref(removeFromGroupsActions),
         ...unref(editLoginActions)
-      ].filter((item) => item.isEnabled({ resources: unref(selectedUsers) }))
+        // FIXME: cast to any because of editQuotaActions. create separate useUserActionsEditQuota for users!
+      ].filter((item) => item.isEnabled({ resources: unref(selectedUsers) as any }))
     })
+
+    const updateSpaceQuota = ({ spaceId, quota }) => {
+      const userIndex = unref(users).findIndex((u) => u.drive?.id === spaceId)
+      if (userIndex) {
+        unref(users)[userIndex].drive.quota = quota
+      }
+
+      const selectedIndex = unref(selectedUsers).findIndex((u) => u.drive?.id === spaceId)
+      if (selectedIndex) {
+        unref(selectedUsers)[selectedIndex].drive.quota = quota
+      }
+    }
 
     const usersWithoutDrive = computed(() => {
       return unref(selectedUsers).filter(
@@ -448,6 +460,10 @@ export default defineComponent({
           editLoginModalIsOpen.value = true
         }
       )
+      editLoginActionEventToken = eventBus.subscribe(
+        'app.admin-settings.users.user.quota.updated',
+        updateSpaceQuota
+      )
       window.addEventListener('resize', calculateListHeaderPosition)
     })
 
@@ -462,6 +478,7 @@ export default defineComponent({
         removeFromGroupsActionEventToken
       )
       eventBus.unsubscribe('app.admin-settings.users.actions.edit-login', editLoginActionEventToken)
+      eventBus.unsubscribe('app.admin-settings.users.user.quota.updated', editQuotaActionEventToken)
     })
 
     const updateLocalUsers = (usersToUpdate: User[]) => {
@@ -606,7 +623,6 @@ export default defineComponent({
       quotaModalWarningMessage,
       quotaWarningMessageContextualHelperData,
       closeQuotaModal,
-      spaceQuotaUpdated,
       selectedPersonalDrives,
       addUsersToGroups,
       removeUsersFromGroups,
