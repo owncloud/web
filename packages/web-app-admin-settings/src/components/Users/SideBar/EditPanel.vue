@@ -278,7 +278,7 @@ export default defineComponent({
 
       if (this.editUser.onPremisesSamAccountName.length > 255) {
         this.formData.userName.errorMessage = this.$gettext(
-          'User name cannot cannot exceed 255 characters'
+          'User name cannot exceed 255 characters'
         )
         return false
       }
