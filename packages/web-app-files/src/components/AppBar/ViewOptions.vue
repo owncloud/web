@@ -59,12 +59,12 @@
         <li v-if="hasPagination" class="files-view-options-list-item">
           <oc-page-size
             v-if="!queryParamsLoading"
-            :selected="itemsPerPage"
+            :selected="itemsPerPageCurrent"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
             :options="[100, 500]"
             class="files-pagination-size"
-            @change="itemsPerPage = $event"
+            @change="setItemsPerPage"
           />
         </li>
         <li
@@ -107,12 +107,10 @@ export default defineComponent({
   },
   setup() {
     const queryParamsLoading = ref(false)
-    const perPageQuery = useRouteQueryPersisted({
+
+    const itemsPerPageQuery = useRouteQueryPersisted({
       name: PaginationConstants.perPageQueryName,
       defaultValue: PaginationConstants.perPageDefault
-    })
-    const itemsPerPage = computed(() => {
-      return queryItemAsString(unref(perPageQuery))
     })
     const viewModeQuery = useRouteQueryPersisted({
       name: ViewModeConstants.queryName,
@@ -133,7 +131,7 @@ export default defineComponent({
     }
 
     watch(
-      [perPageQuery, viewModeQuery, viewSizeQuery],
+      [itemsPerPageQuery, viewModeQuery, viewSizeQuery],
       (params) => {
         queryParamsLoading.value = params.some((p) => !p)
       },
@@ -154,7 +152,7 @@ export default defineComponent({
       ViewModeConstants,
       viewModeCurrent: viewModeQuery,
       viewSizeCurrent: viewSizeQuery,
-      itemsPerPage,
+      itemsPerPageCurrent: itemsPerPageQuery,
       queryParamsLoading,
       setTilesViewSize
     }
@@ -192,6 +190,9 @@ export default defineComponent({
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
     setViewMode(mode) {
       this.viewModeCurrent = mode.name
+    },
+    setItemsPerPage(itemsPerPage) {
+      this.itemsPerPageCurrent = itemsPerPage
     },
     updateHiddenFilesShownModel(event) {
       this.hiddenFilesShownModel = event
