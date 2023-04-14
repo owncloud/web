@@ -1,4 +1,4 @@
-import App from '../../../App.vue'
+import App from '../../src/App.vue'
 import { nextTick, ref } from 'vue'
 import {
   createStore,

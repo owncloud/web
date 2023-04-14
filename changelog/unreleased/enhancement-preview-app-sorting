@@ -1,0 +1,6 @@
+Enhancement: Preview app sorting
+
+The preview app now respects the sorting from the file list.
+
+https://github.com/owncloud/web/pull/8806
+https://github.com/owncloud/web/issues/7978

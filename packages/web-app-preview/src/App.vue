@@ -39,157 +39,60 @@
         class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
         :class="{ lightbox: isFullScreenModeActivated }"
       >
-        <img
+        <media-image
           v-if="activeMediaFileCached.isImage"
-          :key="`media-image-${activeMediaFileCached.id}`"
-          :src="activeMediaFileCached.url"
-          :alt="activeMediaFileCached.name"
-          :data-id="activeMediaFileCached.id"
-          :style="`zoom: ${currentImageZoom};transform: rotate(${currentImageRotation}deg)`"
+          :file="activeMediaFileCached"
+          :current-image-rotation="currentImageRotation"
+          :current-image-zoom="currentImageZoom"
         />
-        <video
+        <media-video
           v-else-if="activeMediaFileCached.isVideo"
-          :key="`media-video-${activeMediaFileCached.id}`"
-          controls
-          preload="preload"
-          :autoplay="isAutoPlayEnabled"
-        >
-          <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
-        </video>
-        <audio
+          :file="activeMediaFileCached"
+          :is-auto-play-enabled="isAutoPlayEnabled"
+        />
+        <media-audio
           v-else-if="activeMediaFileCached.isAudio"
-          :key="`media-audio-${activeMediaFileCached.id}`"
-          controls
-          preload="preload"
-          :autoplay="isAutoPlayEnabled"
-        >
-          <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
-        </audio>
+          :file="activeMediaFileCached"
+          :is-auto-play-enabled="isAutoPlayEnabled"
+        />
       </div>
     </template>
-    <div
-      class="oc-position-medium oc-position-bottom-center preview-details"
-      :class="{ lightbox: isFullScreenModeActivated }"
-    >
-      <div
-        class="oc-background-brand oc-p-s oc-width-large oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
-      >
-        <oc-button
-          v-oc-tooltip="previousDescription"
-          class="preview-controls-previous"
-          appearance="raw-inverse"
-          variation="brand"
-          :aria-label="previousDescription"
-          @click="prev"
-        >
-          <oc-icon size="large" name="arrow-drop-left" variation="inherit" />
-        </oc-button>
-        <p v-if="!isFolderLoading" class="oc-m-rm preview-controls-action-count">
-          <span aria-hidden="true" v-text="ariaHiddenFileCount" />
-          <span class="oc-invisible-sr" v-text="screenreaderFileCount" />
-        </p>
-        <oc-button
-          v-oc-tooltip="nextDescription"
-          class="preview-controls-next"
-          appearance="raw-inverse"
-          variation="brand"
-          :aria-label="nextDescription"
-          @click="next"
-        >
-          <oc-icon size="large" name="arrow-drop-right" variation="inherit" />
-        </oc-button>
-        <div class="oc-flex">
-          <oc-button
-            v-oc-tooltip="
-              isFullScreenModeActivated ? exitFullScreenDescription : enterFullScreenDescription
-            "
-            class="preview-controls-fullscreen"
-            appearance="raw-inverse"
-            variation="brand"
-            :aria-label="
-              isFullScreenModeActivated ? exitFullScreenDescription : enterFullScreenDescription
-            "
-            @click="toggleFullscreenMode"
-          >
-            <oc-icon
-              fill-type="line"
-              :name="isFullScreenModeActivated ? 'fullscreen-exit' : 'fullscreen'"
-              variation="inherit"
-            />
-          </oc-button>
-        </div>
-        <div v-if="activeMediaFileCached.isImage" class="oc-flex oc-flex-middle">
-          <div class="oc-flex">
-            <oc-button
-              v-oc-tooltip="imageShrinkDescription"
-              class="preview-controls-image-shrink"
-              appearance="raw-inverse"
-              variation="brand"
-              :aria-label="imageShrinkDescription"
-              @click="imageShrink"
-            >
-              <oc-icon fill-type="line" name="checkbox-indeterminate" variation="inherit" />
-            </oc-button>
-            <oc-button
-              v-oc-tooltip="imageOriginalSizeDescription"
-              class="preview-controls-image-original-size oc-ml-s oc-mr-s"
-              appearance="raw-inverse"
-              variation="brand"
-              :aria-label="imageOriginalSizeDescription"
-              @click="currentImageZoom = 1"
-            >
-              <span v-text="currentZoomDisplayValue" />
-            </oc-button>
-            <oc-button
-              v-oc-tooltip="imageZoomDescription"
-              class="preview-controls-image-zoom"
-              appearance="raw-inverse"
-              variation="brand"
-              :aria-label="imageZoomDescription"
-              @click="imageZoom"
-            >
-              <oc-icon fill-type="line" name="add-box" variation="inherit" />
-            </oc-button>
-          </div>
-          <div class="oc-ml-m">
-            <oc-button
-              v-oc-tooltip="imageRotateLeftDescription"
-              class="preview-controls-rotate-left"
-              appearance="raw-inverse"
-              variation="brand"
-              :aria-label="imageRotateLeftDescription"
-              @click="imageRotateLeft"
-            >
-              <oc-icon fill-type="line" name="anticlockwise" variation="inherit" />
-            </oc-button>
-            <oc-button
-              v-oc-tooltip="imageRotateRightDescription"
-              class="preview-rotate-right"
-              appearance="raw-inverse"
-              variation="brand"
-              :aria-label="imageRotateRightDescription"
-              @click="imageRotateRight"
-            >
-              <oc-icon fill-type="line" name="clockwise" variation="inherit" />
-            </oc-button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <media-controls
+      :files="filteredFiles"
+      :active-index="activeIndex"
+      :is-full-screen-mode-activated="isFullScreenModeActivated"
+      :is-folder-loading="isFolderLoading"
+      :is-image="activeMediaFileCached?.isImage"
+      :current-image-rotation="currentImageRotation"
+      :current-image-zoom="currentImageZoom"
+      @set-rotation="currentImageRotation = $event"
+      @set-zoom="currentImageZoom = $event"
+      @toggle-full-screen="toggleFullscreenMode"
+      @toggle-previous="prev"
+      @toggle-next="next"
+    />
   </main>
 </template>
 <script lang="ts">
-import { defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, ref, unref } from 'vue'
 import {
   queryItemAsString,
+  sortHelper,
   useAppDefaults,
-  usePublicLinkContext,
-  useStore
+  useRoute,
+  useRouteQuery,
+  useRouter
 } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 import { RouteLocationRaw } from 'vue-router'
+import { Resource } from 'web-client/src'
+import MediaControls from './components/MediaControls.vue'
+import MediaAudio from './components/Sources/MediaAudio.vue'
+import MediaImage from './components/Sources/MediaImage.vue'
+import MediaVideo from './components/Sources/MediaVideo.vue'
+import { CachedFile } from './helpers/types'
 
 export const appId = 'preview'
 
@@ -213,10 +116,35 @@ export const mimeTypes = () => {
 export default defineComponent({
   name: 'Preview',
   components: {
-    AppTopBar
+    AppTopBar,
+    MediaControls,
+    MediaAudio,
+    MediaImage,
+    MediaVideo
   },
   setup() {
-    const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
+    const appDefaults = useAppDefaults({ applicationId: 'preview' })
+    const contextRouteQuery = useRouteQuery('contextRouteQuery')
+
+    const activeIndex = ref()
+    const cachedFiles = ref<CachedFile[]>([])
+
+    const sortBy = computed(() => {
+      if (!unref(contextRouteQuery)) {
+        return 'name'
+      }
+      return unref(contextRouteQuery)['sort-by'] ?? 'name'
+    })
+    const sortDir = computed(() => {
+      if (!unref(contextRouteQuery)) {
+        return 'desc'
+      }
+      return unref(contextRouteQuery)['sort-dir'] ?? 'asc'
+    })
+
+    const { activeFiles, currentFileContext } = appDefaults
 
     const isFullScreenModeActivated = ref(false)
     const toggleFullscreenMode = () => {
@@ -233,15 +161,47 @@ export default defineComponent({
       }
     }
 
-    return {
-      ...useAppDefaults({
-        applicationId: 'preview'
-      }),
-      ...useDownloadFile(),
-      isPublicLinkContext: usePublicLinkContext({ store }),
+    const filteredFiles = computed<Resource[]>(() => {
+      if (!unref(activeFiles)) {
+        return []
+      }
 
+      const files = unref(activeFiles).filter((file) => {
+        return mimeTypes().includes(file.mimeType?.toLowerCase())
+      })
+
+      return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
+    })
+    const activeFilteredFile = computed(() => {
+      return unref(filteredFiles)[unref(activeIndex)]
+    })
+    const activeMediaFileCached = computed(() => {
+      return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile).id)
+    })
+
+    const updateLocalHistory = () => {
+      const { params, query } = createFileRouteOptions(
+        unref(unref(currentFileContext).space),
+        unref(activeFilteredFile)
+      )
+      router.replace({
+        ...unref(route),
+        params: { ...unref(route).params, ...params },
+        query: { ...unref(route).query, ...query }
+      })
+    }
+
+    return {
+      ...appDefaults,
+      ...useDownloadFile(),
+      cachedFiles,
+      filteredFiles,
+      activeFilteredFile,
+      activeIndex,
+      activeMediaFileCached,
       isFullScreenModeActivated,
-      toggleFullscreenMode
+      toggleFullscreenMode,
+      updateLocalHistory
     }
   },
   data() {
@@ -250,10 +210,6 @@ export default defineComponent({
       isFileContentError: false,
       isAutoPlayEnabled: true,
 
-      activeIndex: null,
-      direction: 'rtl',
-
-      cachedFiles: [],
       toPreloadImageIds: [],
 
       currentImageZoom: 1,
@@ -265,40 +221,9 @@ export default defineComponent({
 
   computed: {
     pageTitle() {
-      const translated = this.$gettext('Preview for %{currentMediumName}')
-      return this.$gettextInterpolate(translated, {
+      return this.$gettext('Preview for %{currentMediumName}', {
         currentMediumName: this.activeFilteredFile?.name
       })
-    },
-    ariaHiddenFileCount() {
-      const translated = this.$gettext('%{ displayIndex } of %{ availableMediaFiles }')
-      return this.$gettextInterpolate(translated, {
-        displayIndex: this.activeIndex + 1,
-        availableMediaFiles: this.filteredFiles.length
-      })
-    },
-    screenreaderFileCount() {
-      const translated = this.$gettext('Media file %{ displayIndex } of %{ availableMediaFiles }')
-      return this.$gettextInterpolate(translated, {
-        displayIndex: this.activeIndex + 1,
-        availableMediaFiles: this.filteredFiles.length
-      })
-    },
-    filteredFiles() {
-      if (!this.activeFiles) {
-        return []
-      }
-
-      return this.activeFiles.filter((file) => {
-        return mimeTypes().includes(file.mimeType?.toLowerCase())
-      })
-    },
-    activeFilteredFile() {
-      return this.filteredFiles[this.activeIndex]
-    },
-    activeMediaFileCached() {
-      const cached = this.cachedFiles.find((i) => i.id === this.activeFilteredFile.id)
-      return cached !== undefined ? cached : false
     },
     thumbDimensions() {
       switch (true) {
@@ -314,50 +239,14 @@ export default defineComponent({
           return 3840
       }
     },
-
     isActiveFileTypeImage() {
       return !this.isActiveFileTypeAudio && !this.isActiveFileTypeVideo
     },
-
     isActiveFileTypeAudio() {
       return this.isFileTypeAudio(this.activeFilteredFile)
     },
-
     isActiveFileTypeVideo() {
       return this.isFileTypeVideo(this.activeFilteredFile)
-    },
-    enterFullScreenDescription() {
-      return this.$gettext('Enter full screen mode')
-    },
-    exitFullScreenDescription() {
-      return this.$gettext('Exit full screen mode')
-    },
-    imageShrinkDescription() {
-      return this.$gettext('Shrink the image')
-    },
-    imageZoomDescription() {
-      return this.$gettext('Enlarge the image')
-    },
-    imageOriginalSizeDescription() {
-      return this.$gettext('Show the image at its normal size')
-    },
-    imageRotateLeftDescription() {
-      return this.$gettext('Rotate the image 90 degrees to the left')
-    },
-    imageRotateRightDescription() {
-      return this.$gettext('Rotate the image 90 degrees to the right')
-    },
-    previousDescription() {
-      return this.$gettext('Show previous media file in folder')
-    },
-    nextDescription() {
-      return this.$gettext('Show next media file in folder')
-    },
-    currentZoomDisplayValue() {
-      return `${(this.currentImageZoom * 100).toFixed(0)}%`
-    },
-    toggleFullScreenDescription() {
-      return this.$gettext('Toggle full screen mode')
     }
   },
 
@@ -420,14 +309,6 @@ export default defineComponent({
         this.isFullScreenModeActivated = false
       }
     },
-    // update route and url
-    updateLocalHistory() {
-      const routeOptions = createFileRouteOptions(
-        unref(this.currentFileContext.space),
-        this.activeFilteredFile
-      )
-      history.pushState({}, document.title, this.$router.resolve(routeOptions).href)
-    },
     loadMedium() {
       this.isFileContentLoading = true
 
@@ -479,7 +360,6 @@ export default defineComponent({
         return
       }
       this.isFileContentError = false
-      this.direction = 'rtl'
       if (this.activeIndex + 1 >= this.filteredFiles.length) {
         this.activeIndex = 0
         this.updateLocalHistory()
@@ -493,7 +373,6 @@ export default defineComponent({
         return
       }
       this.isFileContentError = false
-      this.direction = 'ltr'
       if (this.activeIndex === 0) {
         this.activeIndex = this.filteredFiles.length - 1
         this.updateLocalHistory()
@@ -501,27 +380,6 @@ export default defineComponent({
       }
       this.activeIndex--
       this.updateLocalHistory()
-    },
-    calculateZoom(zoom, factor) {
-      return Math.round(zoom * factor * 20) / 20
-    },
-    imageShrink() {
-      this.currentImageZoom = Math.max(0.1, this.calculateZoom(this.currentImageZoom, 0.8))
-    },
-    imageZoom() {
-      const maxZoomValue = this.calculateZoom(9, 1.25)
-      this.currentImageZoom = Math.min(
-        this.calculateZoom(this.currentImageZoom, 1.25),
-        maxZoomValue
-      )
-    },
-    imageRotateLeft() {
-      this.currentImageRotation =
-        this.currentImageRotation === -270 ? 0 : this.currentImageRotation - 90
-    },
-    imageRotateRight() {
-      this.currentImageRotation =
-        this.currentImageRotation === 270 ? 0 : this.currentImageRotation + 90
     },
     isFileTypeImage(file) {
       return !this.isFileTypeAudio(file) && !this.isFileTypeVideo(file)
@@ -635,20 +493,6 @@ export default defineComponent({
 .preview-details.lightbox {
   z-index: 1000;
   opacity: 0.9;
-}
-
-.preview-tool-bar {
-  align-items: center;
-  justify-content: space-between;
-  z-index: 1001;
-}
-
-.preview-controls-action-count {
-  color: var(--oc-color-swatch-brand-contrast);
-}
-
-.preview-controls-image-original-size {
-  width: 42px;
 }
 
 @media (max-width: 959px) {

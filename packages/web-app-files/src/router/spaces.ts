@@ -37,7 +37,8 @@ export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
         component: components.Spaces.DriveResolver,
         meta: {
           authContext: 'user',
-          patchCleanPath: true
+          patchCleanPath: true,
+          contextQueryItems: ['sort-by', 'sort-dir']
         }
       }
     ]
