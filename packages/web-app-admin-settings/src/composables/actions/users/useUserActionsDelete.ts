@@ -13,34 +13,42 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
   const deleteUsers = async (users) => {
     const graphClient = clientService.graphAuthenticated
     const promises = users.map((user) => graphClient.users.deleteUser(user.id))
+    const results = await Promise.allSettled(promises)
 
-    try {
-      await Promise.all(promises)
-      store.dispatch('hideModal')
-      store.dispatch('showMessage', {
-        title: $ngettext(
-          'User "%{user}" was deleted successfully',
-          '%{userCount} users were deleted successfully',
-          users.length,
-          { userCount: users.length, user: users[0].displayName },
-          true
-        )
-      })
-      eventBus.publish('app.admin-settings.list.load')
-    } catch (error) {
-      console.error(error)
-      store.dispatch('hideModal')
-      store.dispatch('showMessage', {
-        title: $ngettext(
-          'Failed to delete user "%{user}"',
-          'Failed to delete %{userCount} users',
-          users.length,
-          { userCount: users.length, user: users[0].displayName },
-          true
-        ),
-        status: 'danger'
-      })
+    const succeeded = results.filter((r) => r.status === 'fulfilled')
+    if (succeeded.length) {
+      const title =
+        succeeded.length === 1 && users.length === 1
+          ? $gettext('User "%{user}" was deleted successfully', { user: users[0].displayName })
+          : $ngettext(
+              '%{userCount} user was deleted successfully',
+              '%{userCount} users were deleted successfully',
+              succeeded.length,
+              { userCount: succeeded.length.toString() },
+              true
+            )
+      store.dispatch('showMessage', { title })
     }
+
+    const failed = results.filter((r) => r.status === 'rejected')
+    if (failed.length) {
+      failed.forEach(console.error)
+
+      const title =
+        failed.length === 1 && users.length === 1
+          ? $gettext('Failed to delete user "%{user}"', { user: users[0].displayName })
+          : $ngettext(
+              'Failed to delete %{userCount} user',
+              'Failed to delete %{userCount} users',
+              failed.length,
+              { userCount: failed.length.toString() },
+              true
+            )
+      store.dispatch('showMessage', { title, status: 'danger' })
+    }
+
+    store.dispatch('hideModal')
+    eventBus.publish('app.admin-settings.list.load')
   }
 
   const handler = ({ resources }: UserActionOptions) => {
