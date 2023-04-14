@@ -140,6 +140,8 @@
       :cancel="closeQuotaModal"
       :spaces="selectedPersonalDrives"
       :max-quota="maxQuota"
+      :warning-message="quotaModalWarningMessage"
+      :warning-message-contextual-helper-data="quotaWarningMessageContextualHelperData"
       resource-type="user"
       @space-quota-updated="spaceQuotaUpdated"
     />
@@ -189,6 +191,7 @@ import {
 } from '../composables/actions/users'
 import { configurationManager } from 'web-pkg'
 import { Drive, Group, User } from 'web-client/src/generated'
+import { isPersonalSpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'UsersView',
@@ -390,6 +393,30 @@ export default defineComponent({
       ].filter((item) => item.isEnabled({ resources: unref(selectedUsers) }))
     })
 
+    const usersWithoutDrive = computed(() => {
+      return unref(selectedUsers).filter(
+        ({ drive }) => !isPersonalSpaceResource(drive as SpaceResource)
+      )
+    })
+
+    const quotaModalWarningMessage = computed(() => {
+      return usersWithoutDrive.value.length
+        ? $gettext('Quota will only be applied to users who logged in at least once.')
+        : ''
+    })
+
+    const quotaWarningMessageContextualHelperData = computed(() => {
+      return usersWithoutDrive.value.length
+        ? {
+            title: $gettext('Unaffected users'),
+            text: [...usersWithoutDrive.value]
+              .sort((u1, u2) => u1.displayName.localeCompare(u2.displayName))
+              .map((user) => user.displayName)
+              .join(', ')
+          }
+        : {}
+    })
+
     onMounted(async () => {
       for (const f in filters) {
         filters[f].ids.value = queryItemAsString(unref(filters[f].param))?.split('+') || []
@@ -576,6 +603,8 @@ export default defineComponent({
       filterGroups,
       filterRoles,
       quotaModalIsOpen,
+      quotaModalWarningMessage,
+      quotaWarningMessageContextualHelperData,
       closeQuotaModal,
       spaceQuotaUpdated,
       selectedPersonalDrives,

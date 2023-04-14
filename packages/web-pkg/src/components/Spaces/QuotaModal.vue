@@ -16,6 +16,14 @@
           :max-quota="maxQuota"
           @selected-option-change="changeSelectedQuotaOption"
         />
+        <div v-if="warningMessage" class="oc-mt-s">
+          <span class="oc-text-input-warning" v-text="warningMessage" />
+          <oc-contextual-helper
+            v-if="warningMessageContextualHelperData"
+            class="oc-pl-xs"
+            v-bind="warningMessageContextualHelperData"
+          />
+        </div>
       </template>
     </oc-modal>
   </portal>
@@ -47,6 +55,14 @@ export default defineComponent({
     maxQuota: {
       type: Number,
       default: 0
+    },
+    warningMessage: {
+      type: String,
+      default: ''
+    },
+    warningMessageContextualHelperData: {
+      type: Object,
+      default: () => {}
     },
     resourceType: {
       type: String,
