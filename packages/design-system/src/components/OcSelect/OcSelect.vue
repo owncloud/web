@@ -332,7 +332,6 @@ export default defineComponent({
       margin: 0;
       max-width: 100%;
       outline: none;
-      overflow: visible;
       padding: 2px;
       transition-duration: 0.2s;
       transition-timing-function: ease-in-out;
