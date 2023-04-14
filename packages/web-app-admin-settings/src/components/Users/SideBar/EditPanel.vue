@@ -42,9 +42,6 @@
           @update:model-value="onUpdatePassword"
         />
         <div class="oc-mb-s">
-          {{ selectedRoleValue }}
-          lol
-          {{ translatedRoleOptions }}
           <oc-select
             id="role-input"
             :model-value="selectedRoleValue"
@@ -53,11 +50,7 @@
             :options="translatedRoleOptions"
             :clearable="false"
             @update:model-value="onUpdateRole"
-          >
-            <template #selected-option>
-              {{ selectedRoleName }}
-            </template>
-          </oc-select>
+          />
           <div class="oc-text-input-message"></div>
         </div>
         <div class="oc-mb-s">
@@ -207,6 +200,10 @@ export default defineComponent({
         return { ...role, displayName: this.$gettext(role.displayName) }
       })
     },
+    selectedRoleValue() {
+      const assignedRole = this.editUser.appRoleAssignments[0]
+      return this.translatedRoleOptions.find((role) => role.id === assignedRole?.appRoleId)
+    },
     invalidFormData() {
       return Object.values(this.formData)
         .map((v: any) => !!v.valid)
@@ -220,16 +217,6 @@ export default defineComponent({
     },
     compareSaveDialogOriginalObject() {
       return cloneDeep(this.user)
-    },
-    selectedRoleName() {
-      const assignedRole = this.editUser.appRoleAssignments[0]
-      return this.$gettext(
-        this.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
-      )
-    },
-    selectedRoleValue() {
-      const assignedRole = this.editUser.appRoleAssignments[0]
-      return this.roles.find((role) => role.id === assignedRole?.appRoleId)
     }
   },
   watch: {
