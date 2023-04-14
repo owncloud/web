@@ -59,10 +59,10 @@
         <li v-if="hasPagination" class="files-view-options-list-item">
           <oc-page-size
             v-if="!queryParamsLoading"
-            :selected="queryItemAsString(itemsPerPageCurrent)"
+            :selected="itemsPerPageCurrent"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
-            :options="[100, 500]"
+            :options="['100', '500']"
             class="files-pagination-size"
             @change="setItemsPerPage"
           />
