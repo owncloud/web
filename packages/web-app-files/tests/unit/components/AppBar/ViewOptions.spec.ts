@@ -1,6 +1,6 @@
 import ViewOptions from 'web-app-files/src/components/AppBar/ViewOptions.vue'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables/router'
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import {
   createStore,
   defaultPlugins,
@@ -29,6 +29,16 @@ describe('ViewOptions component', () => {
       const perPage = '100'
       const { wrapper } = getWrapper({ perPage })
       expect(wrapper.findComponent<any>(selectors.pageSizeSelect).props().selected).toBe(perPage)
+    })
+    it('sets the correct files page limit', async () => {
+      const perPage = '100'
+      const newItemsPerPage = '500'
+      const { wrapper } = getWrapper({ perPage })
+      wrapper.vm.setItemsPerPage(newItemsPerPage)
+      await nextTick()
+      expect(wrapper.findComponent<any>(selectors.pageSizeSelect).props().selected).toBe(
+        newItemsPerPage
+      )
     })
   })
   describe('hidden files toggle', () => {
