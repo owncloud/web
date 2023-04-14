@@ -201,7 +201,7 @@ export default defineComponent({
       })
     },
     selectedRoleValue() {
-      const assignedRole = this.editUser.appRoleAssignments[0]
+      const assignedRole = this.editUser?.appRoleAssignments?.[0]
       return this.translatedRoleOptions.find((role) => role.id === assignedRole?.appRoleId)
     },
     invalidFormData() {
@@ -326,6 +326,7 @@ export default defineComponent({
         } as AppRoleAssignment)
         return
       }
+      console.log(this.editUser)
       this.editUser.appRoleAssignments[0].appRoleId = role.id
     },
     onUpdatePassword(password) {
