@@ -104,7 +104,6 @@ export default defineComponent({
       }
       return $gettext('Change quota')
     })
-
     const getSuccessMessage = (count: number) => {
       if (props.resourceType === 'space') {
         return $ngettext(
