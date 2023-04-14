@@ -416,7 +416,7 @@ export default defineComponent({
     checkInputValue(value) {
       if (value.length > 255) {
         return this.setModalInputErrorMessage(
-          this.$gettext('Link name cannot cannot exceed 255 characters')
+          this.$gettext('Link name cannot exceed 255 characters')
         )
       }
       this.setModalInputErrorMessage(null)
