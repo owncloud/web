@@ -59,7 +59,7 @@
         <li v-if="hasPagination" class="files-view-options-list-item">
           <oc-page-size
             v-if="!queryParamsLoading"
-            :selected="itemsPerPageCurrent"
+            :selected="queryItemAsString(itemsPerPageCurrent)"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
             :options="[100, 500]"
@@ -89,7 +89,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
+import { defineComponent, PropType, ref, unref, watch } from 'vue'
 import { mapMutations, mapState } from 'vuex'
 import { queryItemAsString, useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { ViewMode } from 'web-pkg/src/ui/types'
@@ -187,6 +187,7 @@ export default defineComponent({
     }
   },
   methods: {
+    queryItemAsString,
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
     setViewMode(mode) {
       this.viewModeCurrent = mode.name
