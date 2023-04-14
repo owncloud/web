@@ -109,7 +109,7 @@ describe('Tags Panel', () => {
     }
   )
 
-  it('logs error on failure', async () => {
+  it('shows message on failure', async () => {
     jest.spyOn(console, 'error').mockImplementation(() => undefined)
     const clientService = mockDeep<ClientService>()
     const assignTagsStub = clientService.graphAuthenticated.tags.assignTags
@@ -117,11 +117,12 @@ describe('Tags Panel', () => {
       .mockRejectedValue(new Error())
     const resource = mockDeep<Resource>({ tags: ['a'] })
     const eventStub = jest.spyOn(eventBus, 'publish')
-    const { wrapper } = createWrapper(resource, clientService)
+    const { wrapper, storeOptions } = createWrapper(resource, clientService)
     wrapper.vm.selectedTags.push('b')
     await wrapper.vm.save()
     expect(assignTagsStub).toHaveBeenCalled()
     expect(eventStub).not.toHaveBeenCalled()
+    expect(storeOptions.actions.showMessage).toHaveBeenCalled()
   })
 
   it('does not accept tags consisting of blanks only', () => {
@@ -133,10 +134,13 @@ describe('Tags Panel', () => {
 })
 
 function createWrapper(resource, clientService = mockDeep<ClientService>()) {
+  const storeOptions = defaultStoreMockOptions
+  const store = createStore(storeOptions)
   return {
+    storeOptions,
     wrapper: mount(TagsPanel, {
       global: {
-        plugins: [...defaultPlugins(), createStore(defaultStoreMockOptions)],
+        plugins: [...defaultPlugins(), store],
         mocks: { ...defaultComponentMocks(), $clientService: clientService },
         provide: { resource },
         stubs: { VueSelect: true, CompareSaveDialog: true }
