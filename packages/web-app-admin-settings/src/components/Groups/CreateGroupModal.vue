@@ -68,7 +68,7 @@ export default defineComponent({
 
       if (this.group.displayName.length > 255) {
         this.formData.displayName.errorMessage = this.$gettext(
-          'Group name cannot cannot exceed 255 characters'
+          'Group name cannot exceed 255 characters'
         )
         return false
       }
