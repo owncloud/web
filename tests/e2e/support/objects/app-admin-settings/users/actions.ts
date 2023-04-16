@@ -255,20 +255,23 @@ export const changeUser = async (args: {
   value: string
 }): Promise<void> => {
   const { page, attribute, value, uuid } = args
+  const promises = []
   await page.locator(util.format(userInput, attribute)).fill(value)
 
   if (attribute === 'role') {
-    await page.locator(util.format(roleValueDropDown, value)).click()
+    promises.push(page.locator(util.format(roleValueDropDown, value)).click())
   }
-  await Promise.all([
+  promises.push(
     page.waitForResponse(
       (resp) =>
         resp.url().endsWith(encodeURIComponent(uuid)) &&
         resp.status() === 200 &&
         resp.request().method() === 'PATCH'
-    ),
-    await page.locator(compareDialogConfirm).click()
-  ])
+    )
+  )
+  promises.push(page.locator(compareDialogConfirm).click())
+
+  await Promise.all(promises)
 }
 
 export const addUserToGroups = async (args: {
