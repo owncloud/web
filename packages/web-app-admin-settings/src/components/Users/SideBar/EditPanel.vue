@@ -44,33 +44,26 @@
         <div class="oc-mb-s">
           <oc-select
             id="role-input"
-            :model-value="editUser"
+            :model-value="selectedRoleValue"
             :label="$gettext('Role')"
             option-label="displayName"
             :options="translatedRoleOptions"
             :clearable="false"
             @update:model-value="onUpdateRole"
-          >
-            <template #selected-option>
-              {{ selectedRoleName }}
-            </template>
-          </oc-select>
+          />
           <div class="oc-text-input-message"></div>
         </div>
         <div class="oc-mb-s">
           <oc-select
             id="login-input"
             :disabled="isLoginInputDisabled"
-            :model-value="editUser"
+            :model-value="selectedLoginValue"
             :label="$gettext('Login')"
             :options="loginOptions"
             :clearable="false"
             @update:model-value="onUpdateLogin"
-          >
-            <template #selected-option>
-              {{ selectedLoginLabel }}
-            </template>
-          </oc-select>
+          />
+
           <div class="oc-text-input-message"></div>
         </div>
         <quota-select
@@ -195,15 +188,21 @@ export default defineComponent({
         }
       ]
     },
-    selectedLoginLabel() {
-      return this.editUser.accountEnabled === false
-        ? this.$gettext('Forbidden')
-        : this.$gettext('Allowed')
+    selectedLoginValue() {
+      return this.loginOptions.find((option) =>
+        !('accountEnabled' in this.editUser)
+          ? option.value === false
+          : this.editUser.accountEnabled === option.value
+      )
     },
     translatedRoleOptions() {
       return this.roles.map((role) => {
         return { ...role, displayName: this.$gettext(role.displayName) }
       })
+    },
+    selectedRoleValue() {
+      const assignedRole = this.editUser?.appRoleAssignments?.[0]
+      return this.translatedRoleOptions.find((role) => role.id === assignedRole?.appRoleId)
     },
     invalidFormData() {
       return Object.values(this.formData)
@@ -218,12 +217,6 @@ export default defineComponent({
     },
     compareSaveDialogOriginalObject() {
       return cloneDeep(this.user)
-    },
-    selectedRoleName() {
-      const assignedRole = this.editUser.appRoleAssignments[0]
-      return this.$gettext(
-        this.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
-      )
     }
   },
   watch: {
