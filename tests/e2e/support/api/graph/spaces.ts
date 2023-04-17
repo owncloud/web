@@ -1,6 +1,7 @@
+import { Response } from 'node-fetch'
+import join from 'join-path'
 import { checkResponseStatus, request } from '../http'
 import { Space, User } from '../../types'
-import join from 'join-path'
 import {
   createFolderInsideSpaceBySpaceName,
   getIdOfFileInsideSpace,
@@ -130,4 +131,33 @@ export const updateSpaceSpecialSection = async ({
     response,
     `Failed while creating special section "${type}" inside project space`
   )
+}
+
+export const disableSpace = async ({
+  user,
+  space
+}: {
+  user: User
+  space: Space
+}): Promise<Response> => {
+  return request({
+    method: 'DELETE',
+    path: join('graph', 'v1.0', 'drives', space.id),
+    user: user
+  })
+}
+
+export const deleteSpace = async ({
+  user,
+  space
+}: {
+  user: User
+  space: Space
+}): Promise<Response> => {
+  return request({
+    method: 'DELETE',
+    path: join('graph', 'v1.0', 'drives', space.id),
+    user: user,
+    header: { Purge: 'T' }
+  })
 }
