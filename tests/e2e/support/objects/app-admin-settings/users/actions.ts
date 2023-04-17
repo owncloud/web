@@ -258,9 +258,6 @@ export const changeUser = async (args: {
   const promises = []
   await page.locator(util.format(userInput, attribute)).fill(value)
 
-  if (attribute === 'role') {
-    promises.push(page.locator(util.format(roleValueDropDown, value)).click())
-  }
   promises.push(
     page.waitForResponse(
       (resp) =>
@@ -270,6 +267,10 @@ export const changeUser = async (args: {
     )
   )
   promises.push(page.locator(compareDialogConfirm).click())
+
+  if (attribute === 'role') {
+    promises.push(page.locator(util.format(roleValueDropDown, value)).click())
+  }
 
   await Promise.all(promises)
 }
