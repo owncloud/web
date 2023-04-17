@@ -1,52 +1,60 @@
 <template>
   <div>
     <label :for="id" class="oc-label" v-text="label" />
-    <vue-select
-      ref="select"
-      :disabled="disabled"
-      :filter="filter"
-      :loading="loading"
-      :searchable="searchable"
-      :clearable="clearable"
-      :multiple="multiple"
-      class="oc-select"
-      style="background: transparent"
-      v-bind="additionalAttributes"
-      @update:model-value="$emit('update:modelValue', $event)"
-    >
-      <template #search="{ attributes, events }">
-        <input class="vs__search" v-bind="attributes" @input="userInput" v-on="events" />
-      </template>
-      <template v-for="(index, name) in $slots" #[name]="data">
-        <slot v-if="name !== 'search'" :name="name" v-bind="data" />
-      </template>
-      <template #no-options><div v-text="$gettext('No options available.')" /></template>
-      <template #spinner="{ loading }">
-        <oc-spinner v-if="loading" />
-      </template>
-      <template #selected-option-container="{ option, deselect }">
-        <span class="vs__selected" :class="{ 'vs__selected-readonly': option.readonly }">
-          <slot name="selected-option" v-bind="option">
-            <oc-icon :name="icon" v-if="icon" class="oc-mr-xs" size="small" />
-            {{ getOptionLabel(option) }}
-          </slot>
-          <span v-if="multiple" class="oc-flex oc-flex-middle oc-ml-s oc-mr-xs">
-            <oc-icon v-if="option.readonly" class="vs__deselect-lock" name="lock" size="small" />
-            <oc-button
-              v-else
-              appearance="raw"
-              :title="$gettext('Deselect %{label}', { label: getOptionLabel(option) })"
-              :aria-label="$gettext('Deselect %{label}', { label: getOptionLabel(option) })"
-              class="vs__deselect oc-mx-rm"
-              @mousedown.stop.prevent
-              @click="deselect(option)"
-            >
-              <oc-icon name="close" size="small" />
-            </oc-button>
+    <div class="oc-position-relative">
+      <oc-icon
+        v-if="icon"
+        :name="icon"
+        size="small"
+        class="oc-select-icon oc-mt-s oc-ml-s oc-position-absolute"
+      />
+      <vue-select
+        ref="select"
+        :disabled="disabled"
+        :filter="filter"
+        :loading="loading"
+        :searchable="searchable"
+        :clearable="clearable"
+        :multiple="multiple"
+        class="oc-select"
+        :class="{ 'oc-select-has-icon': !!icon }"
+        style="background: transparent"
+        v-bind="additionalAttributes"
+        @update:model-value="$emit('update:modelValue', $event)"
+      >
+        <template #search="{ attributes, events }">
+          <input class="vs__search" v-bind="attributes" @input="userInput" v-on="events" />
+        </template>
+        <template v-for="(index, name) in $slots" #[name]="data">
+          <slot v-if="name !== 'search'" :name="name" v-bind="data" />
+        </template>
+        <template #no-options><div v-text="$gettext('No options available.')" /></template>
+        <template #spinner="{ loading }">
+          <oc-spinner v-if="loading" />
+        </template>
+        <template #selected-option-container="{ option, deselect }">
+          <span class="vs__selected" :class="{ 'vs__selected-readonly': option.readonly }">
+            <slot name="selected-option" v-bind="option">
+              {{ getOptionLabel(option) }}
+            </slot>
+            <span v-if="multiple" class="oc-flex oc-flex-middle oc-ml-s oc-mr-xs">
+              <oc-icon v-if="option.readonly" class="vs__deselect-lock" name="lock" size="small" />
+              <oc-button
+                v-else
+                appearance="raw"
+                :title="$gettext('Deselect %{label}', { label: getOptionLabel(option) })"
+                :aria-label="$gettext('Deselect %{label}', { label: getOptionLabel(option) })"
+                class="vs__deselect oc-mx-rm"
+                @mousedown.stop.prevent
+                @click="deselect(option)"
+              >
+                <oc-icon name="close" size="small" />
+              </oc-button>
+            </span>
           </span>
-        </span>
-      </template>
-    </vue-select>
+        </template>
+      </vue-select>
+    </div>
 
     <div
       v-if="showMessageLine"
@@ -313,6 +321,16 @@ export default defineComponent({
 
   .vs__actions {
     opacity: 0.3;
+  }
+}
+
+.oc-select-icon {
+  z-index: 999;
+}
+
+.oc-select.oc-select-has-icon {
+  .vs__dropdown-toggle {
+    padding-left: var(--oc-space-large) !important;
   }
 }
 
