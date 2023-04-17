@@ -159,7 +159,9 @@ import {
   getCurrentInstance,
   onMounted,
   onBeforeUnmount,
-  PropType
+  PropType,
+  unref,
+  watch
 } from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
@@ -207,14 +209,16 @@ export default defineComponent({
     let filesSelectedSub
     let uploadCompletedSub
 
+    const currentFolder = computed(() => {
+      return store.getters['Files/currentFolder']
+    })
+    const canUpload = computed(() => {
+      return unref(currentFolder)?.canUpload({ user: store.getters.user })
+    })
+
     onMounted(() => {
       filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
       uploadCompletedSub = uppyService.subscribe('uploadCompleted', instance.onUploadComplete)
-
-      uppyService.useDropTarget({
-        targetSelector: '#files-view',
-        uppyService
-      })
     })
 
     onBeforeUnmount(() => {
@@ -222,6 +226,18 @@ export default defineComponent({
       uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
       uppyService.removeDropTarget()
     })
+
+    watch(
+      canUpload,
+      () => {
+        if (unref(canUpload)) {
+          uppyService.useDropTarget({ targetSelector: '#files-view', uppyService })
+        } else {
+          uppyService.removeDropTarget()
+        }
+      },
+      { immediate: true }
+    )
 
     return {
       ...useFileActions({ store }),
@@ -240,7 +256,9 @@ export default defineComponent({
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasSpaces: useCapabilitySpacesEnabled(),
-      isUserContext: useUserContext({ store })
+      isUserContext: useUserContext({ store }),
+      canUpload,
+      currentFolder
     }
   },
   data: () => ({
@@ -248,13 +266,7 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', [
-      'ancestorMetaData',
-      'files',
-      'currentFolder',
-      'selectedFiles',
-      'clipboardResources'
-    ]),
+    ...mapGetters('Files', ['ancestorMetaData', 'files', 'selectedFiles', 'clipboardResources']),
     ...mapState('Files', ['areFileExtensionsShown']),
     ...mapGetters('runtime/spaces', ['spaces']),
 
@@ -312,13 +324,6 @@ export default defineComponent({
 
     uploadOrFileCreationBlocked() {
       return !this.canUpload
-    },
-
-    canUpload() {
-      if (!this.currentFolder) {
-        return false
-      }
-      return this.currentFolder.canUpload({ user: this.user })
     },
 
     loadIndicatorsForNewFile() {

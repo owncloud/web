@@ -238,6 +238,17 @@ describe('CreateAndUpload component', () => {
       expect(storeOptions.actions.showMessage).toHaveBeenCalled()
     })
   })
+  describe('drop target', () => {
+    it('is being initialized when user can upload', () => {
+      const { mocks } = getWrapper()
+      expect(mocks.$uppyService.useDropTarget).toHaveBeenCalled()
+    })
+    it('is not being initialized when user can not upload', () => {
+      const currentFolder = mockDeep<Resource>({ canUpload: () => false })
+      const { mocks } = getWrapper({ currentFolder })
+      expect(mocks.$uppyService.useDropTarget).not.toHaveBeenCalled()
+    })
+  })
 })
 
 function getWrapper({
