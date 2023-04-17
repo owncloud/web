@@ -130,6 +130,7 @@ Summary
 * Enhancement - Custom translations: [#8790](https://github.com/owncloud/web/pull/8790)
 * Enhancement - Font family in theming: [#8797](https://github.com/owncloud/web/pull/8797)
 * Enhancement - Preview app sorting: [#8806](https://github.com/owncloud/web/pull/8806)
+* Enhancement - Adjust missing reshare permissions message: [#8820](https://github.com/owncloud/web/pull/8820)
 
 Details
 -------
@@ -1220,6 +1221,13 @@ Details
 
    https://github.com/owncloud/web/issues/7978
    https://github.com/owncloud/web/pull/8806
+
+* Enhancement - Adjust missing reshare permissions message: [#8820](https://github.com/owncloud/web/pull/8820)
+
+   We've changed the missing reshare permission message to be more clear.
+
+   https://github.com/owncloud/web/issues/8701
+   https://github.com/owncloud/web/pull/8820
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
