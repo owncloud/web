@@ -1,0 +1,6 @@
+Bugfix: Remove drop target in read-only folders
+
+The drop target in read-only folders has been removed.
+
+https://github.com/owncloud/web/pull/8825
+https://github.com/owncloud/web/issues/8277
