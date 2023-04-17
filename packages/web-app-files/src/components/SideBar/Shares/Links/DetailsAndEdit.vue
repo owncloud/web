@@ -1,5 +1,5 @@
 <template>
-  <div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
+  <div class="link-details oc-flex oc-flex-between oc-flex-middle">
     <div v-if="isModifiable">
       <oc-button
         :id="`edit-public-link-role-dropdown-toggle-${link.id}`"
@@ -180,7 +180,7 @@ import {
   LinkShareRoles,
   ShareRole
 } from 'web-client/src/helpers/share'
-import { defineComponent, inject, PropType } from 'vue'
+import { defineComponent, inject, PropType, Ref } from 'vue'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -221,7 +221,10 @@ export default defineComponent({
   },
   emits: ['removePublicLink', 'updateLink'],
   setup() {
-    return { space: inject<Resource>('space'), resource: inject<Resource>('resource') }
+    return {
+      space: inject<Ref<SpaceResource>>('space'),
+      resource: inject<Ref<Resource>>('resource')
+    }
   },
   data() {
     return {
