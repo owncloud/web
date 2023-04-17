@@ -1,0 +1,18 @@
+{
+  "name": "web-app-webfinger",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ownCloud webfinger resolver",
+  "license": "AGPL-3.0",
+  "peerDependencies": {
+    "axios": "^0.27.2",
+    "design-system": "workspace:@ownclouders/design-system@*",
+    "lodash-es": "4.17.21",
+    "uuid": "^9.0.0",
+    "vue-concurrency": "4.0.1",
+    "vuex": "4.1.0",
+    "web-app-webfinger": "workspace:*",
+    "web-client": "workspace:@ownclouders/web-client@*",
+    "web-pkg": "workspace:@ownclouders/web-pkg@*"
+  }
+}
