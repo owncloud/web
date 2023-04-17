@@ -24,15 +24,14 @@
   </ul>
 </template>
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { SpaceRole, User } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'MembersRoleSection',
   props: {
     members: {
-      type: Array as PropType<SpaceRole[] | User[]>,
+      type: Array,
       required: true
     }
   },

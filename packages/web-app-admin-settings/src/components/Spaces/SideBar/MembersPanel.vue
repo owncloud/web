@@ -55,6 +55,7 @@ export default defineComponent({
   setup() {
     const resource = inject<Resource>('resource')
     const group = inject<Group>('group')
+
     const filterTerm = ref('')
     const markInstance = ref(null)
     const membersListRef = ref(null)
@@ -96,7 +97,9 @@ export default defineComponent({
 
     const groupMembers = computed(() => {
       if (group) {
-        return unref(group).members.sort((a, b) => a.displayName.localeCompare(b.displayName))
+        return unref(group)
+          .members.sort((a, b) => a.displayName.localeCompare(b.displayName))
+          .map((u) => ({ ...u, kind: 'user' }))
       }
       return []
     })
