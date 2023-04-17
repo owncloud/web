@@ -10,6 +10,7 @@ exports[`MembersPanel should display an empty result if no matching members foun
     <!--v-if-->
     <!--v-if-->
     <!--v-if-->
+    <!--v-if-->
   </div>
 </div>
 `;
@@ -18,6 +19,7 @@ exports[`MembersPanel should render all members accordingly to their role assign
 <div class="oc-ml-s">
   <oc-text-input-stub class="oc-text-truncate oc-mr-s oc-mt-m" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="false" id="oc-textinput-1" label="Filter members" modelvalue="" type="text"></oc-text-input-stub>
   <div>
+    <!--v-if-->
     <!--v-if-->
     <div class="oc-mb-m">
       <h3 class="oc-text-bold oc-text-medium">Managers</h3>
