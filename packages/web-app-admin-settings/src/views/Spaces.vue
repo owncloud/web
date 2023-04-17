@@ -41,7 +41,6 @@
           :cancel="closeQuotaModal"
           :spaces="selectedSpaces"
           :max-quota="maxQuota"
-          @space-quota-updated="spaceQuotaUpdated"
         />
         <no-content-message
           v-if="!spaces.length"
@@ -196,8 +195,7 @@ export default defineComponent({
     const {
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal,
-      spaceQuotaUpdated
+      closeModal: closeQuotaModal
     } = useSpaceActionsEditQuota({ store })
     const { actions: restoreActions } = useSpaceActionsRestore({ store })
 
@@ -308,8 +306,7 @@ export default defineComponent({
       toggleSelectSpace,
       unselectAllSpaces,
       quotaModalIsOpen,
-      closeQuotaModal,
-      spaceQuotaUpdated
+      closeQuotaModal
     }
   }
 })

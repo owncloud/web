@@ -9,7 +9,6 @@
       :warning-message="quotaModalWarningMessage"
       :warning-message-contextual-helper-data="quotaWarningMessageContextualHelperData"
       resource-type="user"
-      @space-quota-updated="spaceQuotaUpdated"
     />
   </div>
 </template>
@@ -43,7 +42,7 @@ export default defineComponent({
     const selectedPersonalDrives = ref([])
     watch(
       () => props.items,
-      async () => {
+      () => {
         selectedPersonalDrives.value.splice(0, unref(selectedPersonalDrives).length)
         props.items.forEach((user) => {
           const drive = toRaw(user.drive)
@@ -87,8 +86,7 @@ export default defineComponent({
     const {
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal,
-      spaceQuotaUpdated
+      closeModal: closeQuotaModal
     } = useSpaceActionsEditQuota({ store })
     const { actions: userEditActions } = useUserActionsEdit()
     const { actions: userDeleteActions } = useUserActionsDelete({ store })
@@ -138,7 +136,6 @@ export default defineComponent({
       menuSections,
       quotaModalIsOpen,
       closeQuotaModal,
-      spaceQuotaUpdated,
       selectedPersonalDrives,
       quotaModalWarningMessage,
       quotaWarningMessageContextualHelperData

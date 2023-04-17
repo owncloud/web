@@ -37,7 +37,7 @@ describe('useUserActionsDelete', () => {
         }
       })
     })
-    it('should handle errors and not reload the users list in such case', () => {
+    it('should handle errors', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const eventSpy = jest.spyOn(eventBus, 'publish')
       getWrapper({
@@ -47,7 +47,7 @@ describe('useUserActionsDelete', () => {
           await deleteUsers([user])
           expect(clientService.graphAuthenticated.users.deleteUser).toHaveBeenCalledWith(user.id)
           expect(storeOptions.actions.hideModal).toHaveBeenCalled()
-          expect(eventSpy).not.toHaveBeenCalledWith('app.admin-settings.list.load')
+          expect(eventSpy).toHaveBeenCalledWith('app.admin-settings.list.load')
         }
       })
     })

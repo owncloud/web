@@ -4,7 +4,7 @@
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
-      :spaces="quotaModalSelectedSpaces"
+      :spaces="_actionOptions.resources"
       :max-quota="maxQuota"
     />
     <readme-content-modal
@@ -78,11 +78,8 @@ export default defineComponent({
     const {
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal,
-      selectedSpace: quotaModalSelectedSpace,
-      spaceQuotaUpdated
+      closeModal: closeQuotaModal
     } = useSpaceActionsEditQuota({ store })
-    const quotaModalSelectedSpaces = computed(() => [unref(quotaModalSelectedSpace)])
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
     const {
       actions: editReadmeContentActions,
@@ -181,8 +178,7 @@ export default defineComponent({
       closeReadmeContentModal,
 
       quotaModalIsOpen,
-      closeQuotaModal,
-      quotaModalSelectedSpaces
+      closeQuotaModal
     }
   }
 })

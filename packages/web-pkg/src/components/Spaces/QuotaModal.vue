@@ -73,7 +73,6 @@ export default defineComponent({
       }
     }
   },
-  emits: ['spaceQuotaUpdated'],
   setup(props) {
     const store = useStore()
     const { $gettext, $ngettext } = useGettext()
@@ -159,9 +158,14 @@ export default defineComponent({
           { quota: { total: unref(selectedOption) } } as Drive,
           {}
         )
-        props.cancel()
         if (unref(router.currentRoute).name === 'admin-settings-spaces') {
           eventBus.publish('app.admin-settings.spaces.space.quota.updated', {
+            spaceId: space.id,
+            quota: driveData.quota
+          })
+        }
+        if (unref(router.currentRoute).name === 'admin-settings-users') {
+          eventBus.publish('app.admin-settings.users.user.quota.updated', {
             spaceId: space.id,
             quota: driveData.quota
           })
@@ -180,13 +184,15 @@ export default defineComponent({
       const results = await Promise.allSettled<Array<unknown>>(requests)
       const succeeded = results.filter((r) => r.status === 'fulfilled')
       if (succeeded.length) {
-        return store.dispatch('showMessage', { title: getSuccessMessage(succeeded.length) })
+        store.dispatch('showMessage', { title: getSuccessMessage(succeeded.length) })
       }
       const errors = results.filter((r) => r.status === 'rejected')
       if (errors.length) {
         errors.forEach(console.error)
-        await store.dispatch('showMessage', { title: getErrorMessage(errors.length) })
+        store.dispatch('showMessage', { title: getErrorMessage(errors.length) })
       }
+
+      props.cancel()
     }
 
     onMounted(() => {

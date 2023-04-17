@@ -1,9 +1,8 @@
 import { Store } from 'vuex'
 import { useStore } from '../../store'
-import { computed, ref, Ref } from 'vue'
-import { SpaceAction, SpaceActionOptions } from '../types'
+import { computed, ref } from 'vue'
+import { SpaceAction } from '../types'
 import { useGettext } from 'vue3-gettext'
-import { SpaceResource } from 'web-client/src'
 import { User } from 'web-client/src/generated'
 import { useAbility } from '../../ability'
 
@@ -13,18 +12,12 @@ export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {})
   const ability = useAbility()
 
   const modalOpen = ref(false)
-  const selectedSpace = ref(null) as Ref<SpaceResource>
-
-  const spaceQuotaUpdated = (quota) => {
-    selectedSpace.value.spaceQuota = quota
-  }
 
   const closeModal = () => {
     modalOpen.value = false
   }
 
-  const handler = ({ resources }: SpaceActionOptions) => {
-    selectedSpace.value = resources[0]
+  const handler = () => {
     modalOpen.value = true
   }
 
@@ -61,8 +54,6 @@ export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {})
   return {
     modalOpen,
     closeModal,
-    spaceQuotaUpdated,
-    selectedSpace,
     actions
   }
 }

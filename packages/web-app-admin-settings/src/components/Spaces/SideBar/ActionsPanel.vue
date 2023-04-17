@@ -5,7 +5,6 @@
       :cancel="closeQuotaModal"
       :spaces="resources"
       :max-quota="maxQuota"
-      @space-quota-updated="spaceQuotaUpdated"
     />
     <oc-list id="oc-spaces-actions-sidebar" class-name="oc-mt-s">
       <action-menu-item
@@ -54,8 +53,7 @@ export default defineComponent({
     const {
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal,
-      spaceQuotaUpdated
+      closeModal: closeQuotaModal
     } = useSpaceActionsEditQuota({ store })
     const { actions: renameActions } = useSpaceActionsRename({ store })
     const { actions: restoreActions } = useSpaceActionsRestore({ store })
@@ -77,7 +75,6 @@ export default defineComponent({
       maxQuota: useCapabilitySpacesMaxQuota(),
       quotaModalIsOpen,
       closeQuotaModal,
-      spaceQuotaUpdated,
       resources
     }
   }

@@ -6,7 +6,6 @@
       :cancel="closeQuotaModal"
       :spaces="items"
       :max-quota="maxQuota"
-      @space-quota-updated="spaceQuotaUpdated"
     />
   </div>
 </template>
@@ -46,8 +45,7 @@ export default defineComponent({
     const {
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal,
-      spaceQuotaUpdated
+      closeModal: closeQuotaModal
     } = useSpaceActionsEditQuota({ store })
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
     const { actions: renameActions } = useSpaceActionsRename({ store })
@@ -99,8 +97,7 @@ export default defineComponent({
       maxQuota: useCapabilitySpacesMaxQuota(),
       menuSections,
       quotaModalIsOpen,
-      closeQuotaModal,
-      spaceQuotaUpdated
+      closeQuotaModal
     }
   }
 })

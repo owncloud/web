@@ -14,33 +14,42 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
     const graphClient = clientService.graphAuthenticated
     const promises = groups.map((group) => graphClient.groups.deleteGroup(group.id))
 
-    try {
-      await Promise.all(promises)
-      store.dispatch('hideModal')
-      store.dispatch('showMessage', {
-        title: $ngettext(
-          'Group "%{group}" was deleted successfully',
-          '%{groupCount} groups were deleted successfully',
-          groups.length,
-          { groupCount: groups.length, group: groups[0].displayName },
-          true
-        )
-      })
-      eventBus.publish('app.admin-settings.list.load')
-    } catch (error) {
-      console.error(error)
-      store.dispatch('hideModal')
-      store.dispatch('showMessage', {
-        title: $ngettext(
-          'Failed to delete group "%{group}"',
-          'Failed to delete %{groupCount} groups',
-          groups.length,
-          { groupCount: groups.length, group: groups[0].displayName },
-          true
-        ),
-        status: 'danger'
-      })
+    const results = await Promise.allSettled(promises)
+
+    const succeeded = results.filter((r) => r.status === 'fulfilled')
+    if (succeeded.length) {
+      const title =
+        succeeded.length === 1 && groups.length === 1
+          ? $gettext('Group "%{group}" was deleted successfully', { group: groups[0].displayName })
+          : $ngettext(
+              '%{groupCount} group was deleted successfully',
+              '%{groupCount} groups were deleted successfully',
+              succeeded.length,
+              { groupCount: succeeded.length.toString() },
+              true
+            )
+      store.dispatch('showMessage', { title })
     }
+
+    const failed = results.filter((r) => r.status === 'rejected')
+    if (failed.length) {
+      failed.forEach(console.error)
+
+      const title =
+        failed.length === 1 && groups.length === 1
+          ? $gettext('Failed to delete group "%{group}"', { group: groups[0].displayName })
+          : $ngettext(
+              'Failed to delete %{groupCount} group',
+              'Failed to delete %{groupCount} groups',
+              failed.length,
+              { groupCount: failed.length.toString() },
+              true
+            )
+      store.dispatch('showMessage', { title, status: 'danger' })
+    }
+
+    store.dispatch('hideModal')
+    eventBus.publish('app.admin-settings.list.load')
   }
 
   const handler = ({ resources }: GroupActionOptions) => {
