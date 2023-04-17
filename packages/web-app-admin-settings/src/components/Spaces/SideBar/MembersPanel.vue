@@ -11,7 +11,7 @@
       </div>
       <div v-if="groupMembers.length" class="oc-mb-m" data-testid="group-members">
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Members')" />
-        <members-role-section :members="groupMembers" />
+        <members-role-section :group-members="groupMembers" />
       </div>
       <div
         v-if="filteredSpaceManagers.length"
@@ -19,7 +19,7 @@
         data-testid="space-members-role-managers"
       >
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Managers')" />
-        <members-role-section :members="filteredSpaceManagers" />
+        <members-role-section :space-members="filteredSpaceManagers" />
       </div>
       <div
         v-if="filteredSpaceEditors.length"
@@ -27,7 +27,7 @@
         data-testid="space-members-role-editors"
       >
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Editors')" />
-        <members-role-section :members="filteredSpaceEditors" />
+        <members-role-section :space-members="filteredSpaceEditors" />
       </div>
       <div
         v-if="filteredSpaceViewers.length"
@@ -35,7 +35,7 @@
         data-testid="space-members-role-viewers"
       >
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Viewers')" />
-        <members-role-section :members="filteredSpaceViewers" />
+        <members-role-section :space-members="filteredSpaceViewers" />
       </div>
     </div>
   </div>

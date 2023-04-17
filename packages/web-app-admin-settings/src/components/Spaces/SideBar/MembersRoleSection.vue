@@ -7,7 +7,7 @@
       data-testid="space-members-list"
     >
       <oc-avatar
-        v-if="member?.kind === 'user'"
+        v-if="groupMembers || (spaceMembers && member.kind === 'user')"
         :user-name="member.displayName"
         :width="36"
         class="oc-mr-s"
@@ -24,22 +24,30 @@
   </ul>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { ShareTypes } from 'web-client/src/helpers/share'
+import { SpaceRole, User } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'MembersRoleSection',
   props: {
-    members: {
-      type: Array,
-      required: true
+    spaceMembers: {
+      type: Array as PropType<SpaceRole[]>,
+      required: false
+    },
+    groupMembers: {
+      type: Array as PropType<User[]>,
+      required: false
     }
   },
-  setup() {
+  setup(props) {
     const groupIcon = computed(() => {
       return ShareTypes.group.icon
     })
-    return { groupIcon }
+    const members = computed(() => {
+      return unref(props.spaceMembers) || unref(props.groupMembers)
+    })
+    return { groupIcon, members }
   }
 })
 </script>
