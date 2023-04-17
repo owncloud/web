@@ -7,7 +7,7 @@
       data-testid="space-members-list"
     >
       <oc-avatar
-        v-if="member.kind === 'user'"
+        v-if="member?.kind === 'user'"
         :user-name="member.displayName"
         :width="36"
         class="oc-mr-s"
