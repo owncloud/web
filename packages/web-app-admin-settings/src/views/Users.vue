@@ -460,7 +460,7 @@ export default defineComponent({
           editLoginModalIsOpen.value = true
         }
       )
-      editLoginActionEventToken = eventBus.subscribe(
+      editQuotaActionEventToken = eventBus.subscribe(
         'app.admin-settings.users.user.quota.updated',
         updateSpaceQuota
       )
