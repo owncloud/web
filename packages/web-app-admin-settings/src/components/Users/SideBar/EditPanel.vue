@@ -5,8 +5,6 @@
       <div>
         <oc-text-input
           id="userName-input"
-          :disabled="false"
-          icon="lock"
           v-model="editUser.onPremisesSamAccountName"
           class="oc-mb-s"
           :label="$gettext('User name')"
@@ -14,11 +12,38 @@
           :fix-message-line="true"
           @update:model-value="validateUserName"
         />
+        <oc-text-input
+          id="displayName-input"
+          v-model="editUser.displayName"
+          class="oc-mb-s"
+          :label="$gettext('First and last name')"
+          :error-message="formData.displayName.errorMessage"
+          :fix-message-line="true"
+          @update:model-value="validateDisplayName"
+        />
+        <oc-text-input
+          id="email-input"
+          v-model="editUser.mail"
+          class="oc-mb-s"
+          :label="$gettext('Email')"
+          :error-message="formData.email.errorMessage"
+          type="email"
+          :fix-message-line="true"
+          @change="validateEmail"
+        />
+        <oc-text-input
+          id="password-input"
+          :model-value="editUser.passwordProfile?.password"
+          class="oc-mb-s"
+          :label="$gettext('Password')"
+          type="password"
+          :fix-message-line="true"
+          placeholder="●●●●●●●●"
+          @update:model-value="onUpdatePassword"
+        />
         <div class="oc-mb-s">
           <oc-select
             id="role-input"
-            :disabled="false"
-            icon="lock"
             :model-value="selectedRoleValue"
             :label="$gettext('Role')"
             option-label="displayName"

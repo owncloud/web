@@ -330,7 +330,7 @@ export default defineComponent({
 
 .oc-select.oc-select-has-icon {
   .vs__dropdown-toggle {
-    padding-left: var(--oc-space-large) !important;
+    padding-left: calc(var(--oc-space-large) - 3px) !important;
   }
 }
 
