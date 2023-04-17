@@ -246,7 +246,7 @@ export default defineComponent({
         path: unref(highlightedFile).path,
         storageId: unref(highlightedFile).fileId,
         // cache must not be used on flat file lists that gather resources form various locations
-        useCached: !unref(isFlatFileList)
+        useCached: !unref(isFlatFileList) && !unref(isProjectsLocation)
       })
     }
 
