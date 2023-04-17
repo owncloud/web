@@ -1,0 +1,6 @@
+Bugfix: Opening context menu via keyboard
+
+The position of the context menu when opened via keyboard has been fixed.
+
+https://github.com/owncloud/web/pull/8827
+https://github.com/owncloud/web/issues/8232
