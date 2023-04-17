@@ -560,6 +560,6 @@ export default defineComponent({
 
 .oc-files-public-link-expires {
   margin-top: 1px; // to align with the other elements
-  margin-left: 4px; // to align with the other elements
+  margin-left: var(--oc-space-xsmall); // to align with the other elements
 }
 </style>
