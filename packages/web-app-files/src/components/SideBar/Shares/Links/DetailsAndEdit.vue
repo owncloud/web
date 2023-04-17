@@ -447,9 +447,12 @@ export default defineComponent({
       this.createModal(modal)
     },
 
-    checkPasswordNotEmpty(password) {
+    checkPassword(password) {
       if (password === '') {
         return this.setModalInputErrorMessage(this.$gettext("Password can't be empty"))
+      }
+      if (password.length > 72) {
+        return this.setModalInputErrorMessage(this.$gettext("Password can't exceed 72 characters"))
       }
       return this.setModalInputErrorMessage(null)
     },
@@ -465,7 +468,7 @@ export default defineComponent({
         inputLabel: this.$gettext('Password'),
         inputType: 'password',
         onCancel: this.hideModal,
-        onInput: (password) => this.checkPasswordNotEmpty(password),
+        onInput: (password) => this.checkPassword(password),
         onConfirm: (password) => {
           this.updateLink({
             link: {
