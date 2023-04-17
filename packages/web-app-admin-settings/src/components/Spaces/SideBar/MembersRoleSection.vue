@@ -7,7 +7,7 @@
       data-testid="space-members-list"
     >
       <oc-avatar
-        v-if="groupMembers || (spaceMembers && member.kind === 'user')"
+        v-if="showOcAvatar(member)"
         :user-name="member.displayName"
         :width="36"
         class="oc-mr-s"
@@ -47,7 +47,10 @@ export default defineComponent({
     const members = computed(() => {
       return unref(props.spaceMembers) || unref(props.groupMembers)
     })
-    return { groupIcon, members }
+    const showOcAvatar = (member) => {
+      return (member as any).kind === 'user'
+    }
+    return { groupIcon, members, showOcAvatar }
   }
 })
 </script>
