@@ -52,6 +52,7 @@ Summary
 * Bugfix - Preview controls colors: [#8758](https://github.com/owncloud/web/pull/8758)
 * Bugfix - Selection reset on action click: [#8776](https://github.com/owncloud/web/issues/8776)
 * Bugfix - Share recipient container exceed: [#8814](https://github.com/owncloud/web/pull/8814)
+* Bugfix - Opening context menu via keyboard: [#8827](https://github.com/owncloud/web/pull/8827)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -466,6 +467,13 @@ Details
 
    https://github.com/owncloud/web/issues/8811
    https://github.com/owncloud/web/pull/8814
+
+* Bugfix - Opening context menu via keyboard: [#8827](https://github.com/owncloud/web/pull/8827)
+
+   The position of the context menu when opened via keyboard has been fixed.
+
+   https://github.com/owncloud/web/issues/8232
+   https://github.com/owncloud/web/pull/8827
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
