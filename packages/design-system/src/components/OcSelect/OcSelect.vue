@@ -27,6 +27,7 @@
       <template #selected-option-container="{ option, deselect }">
         <span class="vs__selected" :class="{ 'vs__selected-readonly': option.readonly }">
           <slot name="selected-option" v-bind="option">
+            <oc-icon :name="icon" v-if="icon" class="oc-mr-xs" size="small"/>
             {{ getOptionLabel(option) }}
           </slot>
           <span v-if="multiple" class="oc-flex oc-flex-middle oc-ml-s oc-mr-xs">
@@ -211,6 +212,13 @@ export default defineComponent({
     multiple: {
       type: Boolean,
       default: false
+    },
+    /**
+     * An icon that will be shown at the beginning of the select
+     */
+    icon: {
+      type: String,
+      default: ''
     }
   },
   emits: ['search:input', 'update:modelValue'],
@@ -493,13 +501,18 @@ prevent clearing the selected value by hitting `delete`.
 ```js
 <template>
   <div class="oc-docs-width-medium">
-    <oc-select v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :clearable="false" />
+    <oc-select
+      icon="flight-takeoff"
+      v-model="selected"
+      :options="['American Airlines', 'Delta Air Lines', 'United Airlines', 'Southwest Airlines']"
+      :clearable="false"
+    />
   </div>
 </template>
 <script>
   export default {
     data: () => ({
-      selected: "Apple"
+      selected: "American Airlines"
     })
   };
 </script>
