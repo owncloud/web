@@ -2,6 +2,7 @@
   <div :class="$attrs.class">
     <label class="oc-label" :for="id" v-text="label" />
     <div class="oc-position-relative">
+      <oc-icon v-if="icon" name="lock" size="small" class="oc-mt-s oc-ml-s oc-position-absolute" />
       <input
         :id="id"
         v-bind="additionalAttributes"
@@ -10,7 +11,8 @@
         class="oc-text-input oc-input oc-rounded"
         :class="{
           'oc-text-input-warning': !!warningMessage,
-          'oc-text-input-danger': !!errorMessage
+          'oc-text-input-danger': !!errorMessage,
+          'oc-pl-l': !!icon
         }"
         :type="type"
         :value="displayValue"
@@ -192,6 +194,13 @@ export default defineComponent({
     descriptionMessage: {
       type: String,
       default: null
+    },
+    /**
+     * An icon that will be shown at the beginning of the input
+     */
+    icon: {
+      type: String,
+      default: ''
     }
   },
   emits: ['change', 'update:modelValue', 'focus'],
@@ -342,6 +351,7 @@ export default defineComponent({
     <oc-text-input class="oc-mb-s" type="number" label="Number"/>
     <oc-text-input class="oc-mb-s" type="email" label="Email"/>
     <oc-text-input class="oc-mb-s" type="password" label="Password"/>
+    <oc-text-input class="oc-mb-s" label="Country" icon="earth"/>
     <h3 class="oc-heading-divider">
       Binding
     </h3>
