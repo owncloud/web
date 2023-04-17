@@ -67,7 +67,7 @@ import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
-import { defineComponent, inject } from 'vue'
+import { defineComponent, inject, Ref } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { ProjectSpaceResource } from 'web-client/src/helpers'
 import { useClientService } from 'web-pkg/src/composables'
@@ -86,7 +86,7 @@ export default defineComponent({
     return {
       clientService,
       configurationManager,
-      resource: inject<ProjectSpaceResource>('resource')
+      resource: inject<Ref<ProjectSpaceResource>>('resource')
     }
   },
   data: () => {
@@ -116,7 +116,7 @@ export default defineComponent({
       return this.spaceMembers.length > 0
     },
     currentUserCanShare() {
-      return this.currentUserIsManager
+      return !this.resource.disabled && this.currentUserIsManager
     },
     currentUserIsManager() {
       return this.resource.isManager(this.user)
@@ -160,7 +160,7 @@ export default defineComponent({
       this.isFilterOpen = !this.isFilterOpen
     },
     isModifiable(share) {
-      if (!this.currentUserIsManager) {
+      if (!this.currentUserCanShare) {
         return false
       }
 

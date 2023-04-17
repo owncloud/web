@@ -128,8 +128,8 @@ export default defineComponent({
 
     return {
       ...useShares(),
-      resource: inject<Resource>('resource'),
-      space: inject<SpaceResource>('space'),
+      resource: inject<Ref<Resource>>('resource'),
+      space: inject<Ref<SpaceResource>>('space'),
       sharesListCollapsed,
       toggleShareListCollapsed,
       memberListCollapsed,
@@ -225,7 +225,6 @@ export default defineComponent({
       if (isShareJail && !this.hasResharing) {
         return false
       }
-
       return this.resource.canShare({ user: this.user })
     },
     noResharePermsMessage() {

@@ -56,30 +56,40 @@ const memberMocks = {
 
 describe('SpaceMembers', () => {
   describe('invite collaborator form', () => {
-    it('renders the form when the current user is a manager of the space', () => {
-      const space = mock<ProjectSpaceResource>({ isManager: () => true })
+    it('renders the form when the current user is a manager of an enabled space', () => {
+      const space = mock<ProjectSpaceResource>({ isManager: () => true, disabled: false })
       const wrapper = getWrapper({ space })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
-      expect(wrapper.html()).toMatchSnapshot()
     })
-    it('does not render the form when the current user is no manager of the space', () => {
-      const space = mock<ProjectSpaceResource>({ isManager: () => false })
+    it('does not render the form when the current user is no manager of an enabled space', () => {
+      const space = mock<ProjectSpaceResource>({ isManager: () => false, disabled: false })
+      const wrapper = getWrapper({ space })
+      expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
+    })
+    it('does not render the form when the current user is a manager of a disabled space', () => {
+      const space = mock<ProjectSpaceResource>({ isManager: () => true, disabled: true })
       const wrapper = getWrapper({ space })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
     })
   })
 
   describe('existing members', () => {
-    it('can edit when current user is manager of the space', () => {
-      const space = mock<ProjectSpaceResource>({ isManager: () => true })
+    it('can edit when current user is manager of an enabled space', () => {
+      const space = mock<ProjectSpaceResource>({ isManager: () => true, disabled: false })
       const wrapper = getWrapper({ space })
       expect(
         wrapper.findAllComponents<any>('collaborator-list-item-stub').at(1).props().modifiable
       ).toEqual(true)
-      expect(wrapper.html()).toMatchSnapshot()
     })
-    it('can not edit when current user is not a manager of the space', () => {
-      const space = mock<ProjectSpaceResource>({ isManager: () => false })
+    it('can not edit when current user is not a manager of an enabled space', () => {
+      const space = mock<ProjectSpaceResource>({ isManager: () => false, disabled: false })
+      const wrapper = getWrapper({ space })
+      expect(
+        wrapper.findAllComponents<any>('collaborator-list-item-stub').at(1).props().modifiable
+      ).toEqual(false)
+    })
+    it('can not edit when current user is manager of a disabled space', () => {
+      const space = mock<ProjectSpaceResource>({ isManager: () => true, disabled: true })
       const wrapper = getWrapper({ space })
       expect(
         wrapper.findAllComponents<any>('collaborator-list-item-stub').at(1).props().modifiable
