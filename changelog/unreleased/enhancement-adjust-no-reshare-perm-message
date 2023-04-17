@@ -1,0 +1,6 @@
+Enhancement: Adjust missing reshare permissions message
+
+We've changed the missing reshare permission message to be more clear.
+
+https://github.com/owncloud/web/pull/8820
+https://github.com/owncloud/web/issues/8701

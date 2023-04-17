@@ -287,9 +287,7 @@ export default defineComponent({
       return shareViaIndirectLinkHelp({ configurationManager: this.configurationManager })
     },
     noResharePermsMessage() {
-      const translatedFile = this.$gettext("You don't have permission to share this file.")
-      const translatedFolder = this.$gettext("You don't have permission to share this folder.")
-      return this.resource.type === 'file' ? translatedFile : translatedFolder
+      return this.$gettext('You do not have permission to create links')
     },
 
     linksHeading() {
