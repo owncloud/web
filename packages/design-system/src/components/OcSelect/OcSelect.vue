@@ -27,7 +27,7 @@
       <template #selected-option-container="{ option, deselect }">
         <span class="vs__selected" :class="{ 'vs__selected-readonly': option.readonly }">
           <slot name="selected-option" v-bind="option">
-            <oc-icon :name="icon" v-if="icon" class="oc-mr-xs" size="small"/>
+            <oc-icon :name="icon" v-if="icon" class="oc-mr-xs" size="small" />
             {{ getOptionLabel(option) }}
           </slot>
           <span v-if="multiple" class="oc-flex oc-flex-middle oc-ml-s oc-mr-xs">
