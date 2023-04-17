@@ -70,6 +70,9 @@ export class Resource {
     const startUrl = this.#page.url()
     await uploadResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
+    if (!config.ocis) {
+      await this.#page.locator('body').click()
+    }
   }
 
   async download(args: Omit<downloadResourcesArgs, 'page'>): Promise<Download[]> {

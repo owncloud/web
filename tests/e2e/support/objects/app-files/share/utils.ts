@@ -1,9 +1,12 @@
 import { errors, Page } from 'playwright'
 import util from 'util'
-import { resourceNameSelector, fileRow } from '../resource/actions'
+import { fileRow } from '../resource/actions'
 
 const acceptedShareItem =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//span[@data-test-user-name="%s"]'
+const actionsTriggerButton =
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "resource-table-btn-action-dropdown")]'
+const showDetailsButton = '.oc-files-actions-show-details-trigger'
 
 export const resourceIsNotOpenable = async ({
   page,
@@ -12,7 +15,7 @@ export const resourceIsNotOpenable = async ({
   page: Page
   resource: string
 }): Promise<boolean> => {
-  const resourceLocator = await page.locator(util.format(resourceNameSelector, resource))
+  const resourceLocator = await page.locator(util.format(actionsTriggerButton, resource))
   const itemId = await resourceLocator.locator(fileRow).getAttribute('data-item-id')
   await Promise.all([
     page.waitForResponse((resp) => {
@@ -23,7 +26,7 @@ export const resourceIsNotOpenable = async ({
         resp.request().method() === 'PROPFIND'
       )
     }),
-    resourceLocator.click()
+    page.locator(showDetailsButton).click()
   ]).catch(() => {
     return false
   })
