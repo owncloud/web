@@ -395,14 +395,14 @@ importers:
       '@vitejs/plugin-vue': 4.1.0
       rollup-plugin-node-polyfills: ^0.2.1
       rollup-plugin-serve: ^2.0.2
-      sass: 1.60.0
+      sass: 1.62.0
       vite: ^4.1.1
     dependencies:
       '@vitejs/plugin-vue': 4.1.0_vite@4.1.1+vue@3.2.47
       rollup-plugin-node-polyfills: 0.2.1
       rollup-plugin-serve: 2.0.2
-      sass: 1.60.0
-      vite: 4.1.1_sass@1.60.0
+      sass: 1.62.0
+      vite: 4.1.1_sass@1.62.0
 
   packages/prettier-config:
     specifiers:
@@ -6415,7 +6415,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.1.1_sass@1.60.0
+      vite: 4.1.1_sass@1.62.0
       vue: 3.2.47
     dev: false
 
@@ -8314,7 +8314,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -17720,6 +17720,15 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
+  /promise-inflight/1.0.1:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
+    dev: true
+
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -19020,9 +19029,9 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /sass/1.60.0:
-    resolution: {integrity: sha512-updbwW6fNb5gGm8qMXzVO7V4sWf7LMXnMly/JEyfbfERbVH46Fn6q02BX7/eHTdKpE7d+oTkMMQpFWNUMfFbgQ==}
-    engines: {node: '>=12.0.0'}
+  /sass/1.62.0:
+    resolution: {integrity: sha512-Q4USplo4pLYgCi+XlipZCWUQz5pkg/ruSSgJ0WRDSb/+3z9tXUOkQ7QPYn4XrhZKYAK4HlpaQecRwKLJX6+DBg==}
+    engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
       chokidar: 3.5.3
@@ -21123,7 +21132,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
 
-  /vite/4.1.1_sass@1.60.0:
+  /vite/4.1.1_sass@1.62.0:
     resolution: {integrity: sha512-LM9WWea8vsxhr782r9ntg+bhSFS06FJgCvvB0+8hf8UWtvaiDagKYWXndjfX6kGl74keHJUcpzrQliDXZlF5yg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -21152,7 +21161,7 @@ packages:
       postcss: 8.4.21
       resolve: 1.22.1
       rollup: 3.14.0
-      sass: 1.60.0
+      sass: 1.62.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: false
