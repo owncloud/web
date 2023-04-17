@@ -1,34 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SpaceMembers existing members can edit when current user is manager of the space 1`] = `
-<div class="oc-position-relative" id="oc-files-sharing-sidebar">
-  <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
-    <div class="oc-flex oc-py-s">
-      <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-current-language="en" data-msgid="Members">Members</h3>
-      <oc-contextual-helper-stub class="oc-pl-xs" endtext="" list="[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" text="Enter a name to add people or groups as members to this Space." title="Add members to this Space"></oc-contextual-helper-stub>
-    </div>
-    <div class="oc-flex">
-      <button aria-label="Filter members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw open-filter-btn" type="button">
-        <!-- @slot Content of the button -->
-        <oc-icon-stub fill-type="line" name="search" size="small"></oc-icon-stub>
-      </button>
-    </div>
-  </div>
-  <invite-collaborator-form-stub class="oc-my-s" invitelabel="Add members" savebuttonlabel="Add"></invite-collaborator-form-stub>
-  <ul aria-label="Space members" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="files-collaborators-list">
-    <li>
-      <collaborator-list-item-stub modifiable="false" share="[object Object]"></collaborator-list-item-stub>
-    </li>
-    <li>
-      <collaborator-list-item-stub modifiable="true" share="[object Object]"></collaborator-list-item-stub>
-    </li>
-    <li>
-      <collaborator-list-item-stub modifiable="true" share="[object Object]"></collaborator-list-item-stub>
-    </li>
-  </ul>
-</div>
-`;
-
 exports[`SpaceMembers filter toggles the filter on click 1`] = `
 <div class="oc-position-relative" id="oc-files-sharing-sidebar">
   <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
@@ -80,45 +51,16 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
       </div>
     </div>
   </div>
-  <invite-collaborator-form-stub class="oc-my-s" invitelabel="Add members" savebuttonlabel="Add"></invite-collaborator-form-stub>
+  <!--v-if-->
   <ul aria-label="Space members" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="files-collaborators-list">
     <li>
       <collaborator-list-item-stub modifiable="false" share="[object Object]"></collaborator-list-item-stub>
     </li>
     <li>
-      <collaborator-list-item-stub modifiable="true" share="[object Object]"></collaborator-list-item-stub>
-    </li>
-    <li>
-      <collaborator-list-item-stub modifiable="true" share="[object Object]"></collaborator-list-item-stub>
-    </li>
-  </ul>
-</div>
-`;
-
-exports[`SpaceMembers invite collaborator form renders the form when the current user is a manager of the space 1`] = `
-<div class="oc-position-relative" id="oc-files-sharing-sidebar">
-  <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
-    <div class="oc-flex oc-py-s">
-      <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-current-language="en" data-msgid="Members">Members</h3>
-      <oc-contextual-helper-stub class="oc-pl-xs" endtext="" list="[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" text="Enter a name to add people or groups as members to this Space." title="Add members to this Space"></oc-contextual-helper-stub>
-    </div>
-    <div class="oc-flex">
-      <button aria-label="Filter members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw open-filter-btn" type="button">
-        <!-- @slot Content of the button -->
-        <oc-icon-stub fill-type="line" name="search" size="small"></oc-icon-stub>
-      </button>
-    </div>
-  </div>
-  <invite-collaborator-form-stub class="oc-my-s" invitelabel="Add members" savebuttonlabel="Add"></invite-collaborator-form-stub>
-  <ul aria-label="Space members" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="files-collaborators-list">
-    <li>
       <collaborator-list-item-stub modifiable="false" share="[object Object]"></collaborator-list-item-stub>
     </li>
     <li>
-      <collaborator-list-item-stub modifiable="true" share="[object Object]"></collaborator-list-item-stub>
-    </li>
-    <li>
-      <collaborator-list-item-stub modifiable="true" share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub modifiable="false" share="[object Object]"></collaborator-list-item-stub>
     </li>
   </ul>
 </div>

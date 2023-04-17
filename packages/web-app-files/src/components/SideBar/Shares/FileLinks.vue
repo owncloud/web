@@ -10,7 +10,7 @@
       class="oc-mt-m"
       v-text="noResharePermsMessage"
     />
-    <div class="oc-mt-m">
+    <div v-if="quicklink || canCreateLinks" class="oc-mt-m">
       <name-and-copy v-if="quicklink" :link="quicklink" />
       <create-quick-link
         v-else-if="canCreateLinks"
@@ -108,7 +108,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, inject, ref, unref } from 'vue'
+import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import {
@@ -136,7 +136,12 @@ import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
-import { Resource, isShareSpaceResource } from 'web-client/src/helpers'
+import {
+  Resource,
+  SpaceResource,
+  isProjectSpaceResource,
+  isShareSpaceResource
+} from 'web-client/src/helpers'
 import { isLocationSharesActive } from '../../../router'
 import { useShares } from 'web-app-files/src/composables'
 import { configurationManager } from 'web-pkg'
@@ -153,8 +158,8 @@ export default defineComponent({
     const { can } = useAbility()
     const hasResharing = useCapabilityFilesSharingResharing()
 
-    const space = inject<Resource>('space')
-    const resource = inject<Resource>('resource')
+    const space = inject<Ref<SpaceResource>>('space')
+    const resource = inject<Ref<Resource>>('resource')
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
     const indirectLinkListCollapsed = ref(linkListCollapsed)
@@ -183,6 +188,10 @@ export default defineComponent({
 
       const isShareJail = isShareSpaceResource(unref(space))
       if (isShareJail && !unref(hasResharing)) {
+        return false
+      }
+
+      if (isProjectSpaceResource(unref(resource)) && unref(resource).disabled) {
         return false
       }
 

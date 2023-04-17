@@ -188,7 +188,7 @@ export function buildSpace(data): SpaceResource {
       return this.isManager(user)
     },
     canEditImage: function ({ user }: { user?: User } = {}) {
-      return this.isManager(user) || this.isEditor(user)
+      return !this.disabled && (this.isManager(user) || this.isEditor(user))
     },
     canEditReadme: function ({ user }: { user?: User } = {}) {
       return this.isManager(user) || this.isEditor(user)
