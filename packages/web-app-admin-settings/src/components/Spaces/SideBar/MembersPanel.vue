@@ -9,6 +9,10 @@
       <div v-if="!filteredSpaceMembers.length">
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('No members found')" />
       </div>
+      <div v-if="groupMembers.length" class="oc-mb-m" data-testid="group-members">
+        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Members')" />
+        <members-role-section :members="groupMembers" />
+      </div>
       <div
         v-if="filteredSpaceManagers.length"
         class="oc-mb-m"
@@ -43,15 +47,18 @@ import MembersRoleSection from './MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
+import { Group } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'MembersPanel',
   components: { MembersRoleSection },
   setup() {
     const resource = inject<Resource>('resource')
+    const group = inject<Group>('group')
     const filterTerm = ref('')
     const markInstance = ref(null)
     const membersListRef = ref(null)
+
     const filterMembers = (collection, term) => {
       if (!(term || '').trim()) {
         return collection
@@ -68,20 +75,30 @@ export default defineComponent({
     }
 
     const spaceMembers = computed(() => {
-      return [
-        ...unref(resource).spaceRoles.manager.map((r) => ({
-          ...r,
-          roleType: spaceRoleManager.name
-        })),
-        ...unref(resource).spaceRoles.editor.map((r) => ({
-          ...r,
-          roleType: spaceRoleEditor.name
-        })),
-        ...unref(resource).spaceRoles.viewer.map((r) => ({
-          ...r,
-          roleType: spaceRoleViewer.name
-        }))
-      ].sort((a, b) => a.displayName.localeCompare(b.displayName))
+      if (resource) {
+        return [
+          ...unref(resource).spaceRoles.manager.map((r) => ({
+            ...r,
+            roleType: spaceRoleManager.name
+          })),
+          ...unref(resource).spaceRoles.editor.map((r) => ({
+            ...r,
+            roleType: spaceRoleEditor.name
+          })),
+          ...unref(resource).spaceRoles.viewer.map((r) => ({
+            ...r,
+            roleType: spaceRoleViewer.name
+          }))
+        ].sort((a, b) => a.displayName.localeCompare(b.displayName))
+      }
+      return []
+    })
+
+    const groupMembers = computed(() => {
+      if (group) {
+        return unref(group).members.sort((a, b) => a.displayName.localeCompare(b.displayName))
+      }
+      return []
     })
 
     const filteredSpaceMembers = computed(() => {
@@ -114,7 +131,8 @@ export default defineComponent({
       filteredSpaceManagers,
       filteredSpaceEditors,
       filteredSpaceViewers,
-      membersListRef
+      membersListRef,
+      groupMembers
     }
   }
 })

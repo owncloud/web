@@ -84,6 +84,7 @@ import { useClientService, useStore } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import { useGroupActionsDelete } from '../composables/actions/groups'
+import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 
 export default defineComponent({
   components: {
@@ -92,6 +93,11 @@ export default defineComponent({
     NoContentMessage,
     CreateGroupModal,
     ContextActions
+  },
+  provide() {
+    return {
+      group: computed(() => this.selectedGroups[0])
+    }
   },
   setup() {
     const store = useStore()
@@ -192,6 +198,14 @@ export default defineComponent({
             group: this.selectedGroups.length === 1 ? this.selectedGroups[0] : null,
             onConfirm: this.editGroup
           }
+        },
+        {
+          app: 'SpaceMembers',
+          icon: 'group',
+          title: this.$gettext('Members'),
+          component: MembersPanel,
+          default: false,
+          enabled: this.selectedGroups.length === 1
         }
       ].filter((p) => p.enabled)
     }
