@@ -23,15 +23,15 @@ exports[`MembersPanel should render all members accordingly to their role assign
     <!--v-if-->
     <div class="oc-mb-m">
       <h3 class="oc-text-bold oc-text-medium">Managers</h3>
-      <members-role-section-stub members="[object Object]"></members-role-section-stub>
+      <members-role-section-stub spacemembers="[object Object]"></members-role-section-stub>
     </div>
     <div class="oc-mb-m">
       <h3 class="oc-text-bold oc-text-medium">Editors</h3>
-      <members-role-section-stub members="[object Object],[object Object]"></members-role-section-stub>
+      <members-role-section-stub spacemembers="[object Object],[object Object]"></members-role-section-stub>
     </div>
     <div class="oc-mb-m">
       <h3 class="oc-text-bold oc-text-medium">Viewers</h3>
-      <members-role-section-stub members="[object Object]"></members-role-section-stub>
+      <members-role-section-stub spacemembers="[object Object]"></members-role-section-stub>
     </div>
   </div>
 </div>
