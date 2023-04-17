@@ -253,26 +253,32 @@ export const changeUser = async (args: {
   uuid: string
   attribute: string
   value: string
-}): Promise<void> => {
+}): Promise<unknown> => {
   const { page, attribute, value, uuid } = args
-  const promises = []
   await page.locator(util.format(userInput, attribute)).fill(value)
 
-  promises.push(
+  if (attribute === 'role') {
+    await page.locator(util.format(roleValueDropDown, value)).click()
+    return Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith(`${encodeURIComponent(uuid)}/appRoleAssignments`) &&
+          resp.status() === 201 &&
+          resp.request().method() === 'POST'
+      ),
+      await page.locator(compareDialogConfirm).click()
+    ])
+  }
+
+  return Promise.all([
     page.waitForResponse(
       (resp) =>
         resp.url().endsWith(encodeURIComponent(uuid)) &&
         resp.status() === 200 &&
         resp.request().method() === 'PATCH'
-    )
-  )
-  promises.push(page.locator(compareDialogConfirm).click())
-
-  if (attribute === 'role') {
-    promises.push(page.locator(util.format(roleValueDropDown, value)).click())
-  }
-
-  await Promise.all(promises)
+    ),
+    await page.locator(compareDialogConfirm).click()
+  ])
 }
 
 export const addUserToGroups = async (args: {
