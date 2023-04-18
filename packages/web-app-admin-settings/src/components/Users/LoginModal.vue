@@ -10,7 +10,7 @@
     <template #content>
       <oc-select
         :model-value="selectedOption"
-        :label="$gettext('Login status')"
+        :label="$gettext('Login')"
         :options="options"
         :placeholder="$gettext('Select...')"
         :warning-message="
