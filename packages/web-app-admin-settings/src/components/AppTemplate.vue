@@ -1,9 +1,9 @@
 <template>
-  <main ref="appBarRef" class="oc-flex oc-height-1-1 app-content oc-width-1-1">
+  <main class="oc-flex oc-flex-wrap oc-height-1-1 app-content oc-width-1-1">
     <app-loading-spinner v-if="loading" />
     <template v-else>
       <div id="admin-settings-wrapper" class="oc-width-expand">
-        <div id="admin-settings-app-bar" ref="appBar" class="oc-app-bar oc-py-s">
+        <div id="admin-settings-app-bar" ref="appBarRef" class="oc-app-bar oc-py-s">
           <div class="admin-settings-app-bar-controls oc-flex oc-flex-between oc-flex-middle">
             <oc-breadcrumb
               v-if="!isMobileWidth"
@@ -61,7 +61,17 @@
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import SideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
-import { defineComponent, inject, onBeforeUnmount, onMounted, PropType, Ref, ref, unref } from 'vue'
+import {
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  PropType,
+  Ref,
+  ref,
+  unref,
+  VNodeRef,
+  watch
+} from 'vue'
 import { eventBus, useAppDefaults } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Panel } from 'web-pkg/src/components/sideBar'
@@ -125,14 +135,14 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const appBarRef = ref()
+    const appBarRef = ref<VNodeRef>()
     const limitedScreenSpace = ref(false)
     const onResize = () => {
       limitedScreenSpace.value = props.sideBarOpen
-        ? window.innerWidth <= 1400
-        : window.innerWidth <= 1000
+        ? window.innerWidth <= 1600
+        : window.innerWidth <= 1200
     }
-    const resizeObserver = new ResizeObserver(onResize as ResizeObserverCallback)
+    const resizeObserver = new ResizeObserver(onResize)
 
     const closeSideBar = () => {
       eventBus.publish(SideBarEventTopics.close)
@@ -144,11 +154,20 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.setActivePanel, panel)
     }
 
-    onMounted(() => {
-      resizeObserver.observe(unref(appBarRef))
-    })
+    watch(
+      appBarRef,
+      (ref) => {
+        if (ref) {
+          resizeObserver.observe(unref(appBarRef) as unknown as HTMLElement)
+        }
+      },
+      { immediate: true }
+    )
+
     onBeforeUnmount(() => {
-      resizeObserver.unobserve(unref(appBarRef))
+      if (unref(appBarRef)) {
+        resizeObserver.unobserve(unref(appBarRef) as unknown as HTMLElement)
+      }
     })
 
     return {
