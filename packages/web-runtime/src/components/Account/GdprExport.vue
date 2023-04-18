@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p v-text="$gettext('Request a personal data export according to GDPR §20.')" />
+    <p v-text="$gettext('Request a personal data export according to §20 GDPR.')" />
     <span v-if="loading">
       <oc-spinner />
     </span>

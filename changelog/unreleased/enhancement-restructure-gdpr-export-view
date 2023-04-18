@@ -1,5 +1,6 @@
-Enhancement: Re-Structure GDPR-Export
+Enhancement: Re-Structure GDPR-Export view
 
 We re-structured the GDPR export to have it own section and provide some
 additional info.
 
+https://github.com/owncloud/web/pull/8851
