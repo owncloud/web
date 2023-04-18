@@ -54,6 +54,7 @@ Summary
 * Bugfix - Share recipient container exceed: [#8814](https://github.com/owncloud/web/pull/8814)
 * Bugfix - Remove drop target in read-only folders: [#8825](https://github.com/owncloud/web/pull/8825)
 * Bugfix - Opening context menu via keyboard: [#8827](https://github.com/owncloud/web/pull/8827)
+* Bugfix - Hide upload hint in empty read-only folders: [#8834](https://github.com/owncloud/web/issues/8834)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -482,6 +483,13 @@ Details
 
    https://github.com/owncloud/web/issues/8232
    https://github.com/owncloud/web/pull/8827
+
+* Bugfix - Hide upload hint in empty read-only folders: [#8834](https://github.com/owncloud/web/issues/8834)
+
+   Empty read-only folders now don't show the upload hint to the user.
+
+   https://github.com/owncloud/web/issues/8834
+   https://github.com/owncloud/web/pull/8846
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
