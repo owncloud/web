@@ -1950,7 +1950,7 @@ def documentation(ctx):
                             "from_secret": "drone_token",
                         },
                         "repositories": [
-                            "owncloud/owncloud.github.io@source",
+                            "owncloud/owncloud.github.io@main",
                         ],
                     },
                     "when": {
