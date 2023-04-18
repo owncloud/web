@@ -15,7 +15,7 @@
         data-testid="space-members-role-managers"
       >
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Managers')" />
-        <members-role-section :space-members="filteredSpaceManagers" />
+        <members-role-section :members="filteredSpaceManagers" />
       </div>
       <div
         v-if="filteredSpaceEditors.length"
@@ -23,7 +23,7 @@
         data-testid="space-members-role-editors"
       >
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Editors')" />
-        <members-role-section :space-members="filteredSpaceEditors" />
+        <members-role-section :members="filteredSpaceEditors" />
       </div>
       <div
         v-if="filteredSpaceViewers.length"
@@ -31,7 +31,7 @@
         data-testid="space-members-role-viewers"
       >
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Viewers')" />
-        <members-role-section :space-members="filteredSpaceViewers" />
+        <members-role-section :members="filteredSpaceViewers" />
       </div>
     </div>
   </div>
@@ -52,7 +52,6 @@ export default defineComponent({
     const filterTerm = ref('')
     const markInstance = ref(null)
     const membersListRef = ref(null)
-
     const filterMembers = (collection, term) => {
       if (!(term || '').trim()) {
         return collection
@@ -69,23 +68,20 @@ export default defineComponent({
     }
 
     const spaceMembers = computed(() => {
-      if (resource) {
-        return [
-          ...unref(resource).spaceRoles.manager.map((r) => ({
-            ...r,
-            roleType: spaceRoleManager.name
-          })),
-          ...unref(resource).spaceRoles.editor.map((r) => ({
-            ...r,
-            roleType: spaceRoleEditor.name
-          })),
-          ...unref(resource).spaceRoles.viewer.map((r) => ({
-            ...r,
-            roleType: spaceRoleViewer.name
-          }))
-        ].sort((a, b) => a.displayName.localeCompare(b.displayName))
-      }
-      return []
+      return [
+        ...unref(resource).spaceRoles.manager.map((r) => ({
+          ...r,
+          roleType: spaceRoleManager.name
+        })),
+        ...unref(resource).spaceRoles.editor.map((r) => ({
+          ...r,
+          roleType: spaceRoleEditor.name
+        })),
+        ...unref(resource).spaceRoles.viewer.map((r) => ({
+          ...r,
+          roleType: spaceRoleViewer.name
+        }))
+      ].sort((a, b) => a.displayName.localeCompare(b.displayName))
     })
 
     const filteredSpaceMembers = computed(() => {

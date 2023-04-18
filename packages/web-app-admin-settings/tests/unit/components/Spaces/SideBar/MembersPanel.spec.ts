@@ -30,7 +30,7 @@ describe('MembersPanel', () => {
     await wrapper.vm.$nextTick
     expect(wrapper.findAll(selectors.membersRolePanelStub).length).toBe(1)
     expect(
-      wrapper.findComponent<any>(selectors.membersRolePanelStub).props().spaceMembers[0].displayName
+      wrapper.findComponent<any>(selectors.membersRolePanelStub).props().members[0].displayName
     ).toEqual(userToFilterFor.displayName)
   })
   it('should display an empty result if no matching members found', async () => {

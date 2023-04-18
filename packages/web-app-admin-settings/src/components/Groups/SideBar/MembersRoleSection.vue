@@ -4,7 +4,7 @@
       v-for="(member, index) in groupMembers"
       :key="index"
       class="oc-flex oc-flex-middle oc-mb-s"
-      data-testid="space-members-list"
+      data-testid="group-members-list"
     >
       <oc-avatar :user-name="member.displayName" :width="36" class="oc-mr-s" />
       {{ member.displayName }}

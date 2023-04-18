@@ -17,7 +17,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, inject, ref, watch, unref } from 'vue'
+import { computed, defineComponent, inject, ref, watch, unref, Ref } from 'vue'
 import MembersRoleSection from '../../Groups/SideBar/MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
@@ -27,7 +27,7 @@ export default defineComponent({
   name: 'GroupsMembersPanel',
   components: { MembersRoleSection },
   setup() {
-    const group = inject<Group>('group')
+    const group = inject<Ref<Group>>('group')
     const filterTerm = ref('')
     const markInstance = ref(null)
     const membersListRef = ref(null)

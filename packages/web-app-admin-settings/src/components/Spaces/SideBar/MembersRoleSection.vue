@@ -1,13 +1,13 @@
 <template>
   <ul class="oc-list">
     <li
-      v-for="(member, index) in spaceMembers"
+      v-for="(member, index) in members"
       :key="index"
       class="oc-flex oc-flex-middle oc-mb-s"
       data-testid="space-members-list"
     >
       <oc-avatar
-        v-if="showOcAvatar(member)"
+        v-if="member.kind === 'user'"
         :user-name="member.displayName"
         :width="36"
         class="oc-mr-s"
@@ -31,19 +31,16 @@ import { SpaceRole } from 'web-client/src/helpers'
 export default defineComponent({
   name: 'MembersRoleSection',
   props: {
-    spaceMembers: {
+    members: {
       type: Array as PropType<SpaceRole[]>,
-      required: false
+      required: true
     }
   },
-  setup(props) {
+  setup() {
     const groupIcon = computed(() => {
       return ShareTypes.group.icon
     })
-    const showOcAvatar = (member) => {
-      return (member as any).kind === 'user'
-    }
-    return { groupIcon, showOcAvatar }
+    return { groupIcon }
   }
 })
 </script>
