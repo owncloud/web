@@ -1,0 +1,6 @@
+Bugfix: Pagination after increasing items per page
+
+An issue where the file list incorrectly showed no items after paginating and increasing the amount of items per page has been fixed.
+
+https://github.com/owncloud/web/issues/6768
+https://github.com/owncloud/web/pull/8854
