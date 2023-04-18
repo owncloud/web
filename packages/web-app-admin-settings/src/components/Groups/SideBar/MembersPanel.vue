@@ -6,10 +6,10 @@
       :label="$gettext('Filter members')"
     />
     <div ref="membersListRef" data-testid="space-members">
-      <div v-if="!members.length">
+      <div v-if="!filteredGroupMembers.length">
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('No members found')" />
       </div>
-      <div v-if="members.length" class="oc-mb-m" data-testid="group-members">
+      <div v-if="filteredGroupMembers.length" class="oc-mb-m" data-testid="group-members">
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Members')" />
         <members-role-section :group-members="filteredGroupMembers" />
       </div>

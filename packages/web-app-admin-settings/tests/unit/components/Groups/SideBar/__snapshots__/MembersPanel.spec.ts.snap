@@ -8,8 +8,6 @@ exports[`MembersPanel should display an empty result if no matching members foun
       <h3 class="oc-text-bold oc-text-medium">No members found</h3>
     </div>
     <!--v-if-->
-    <!--v-if-->
-    <!--v-if-->
   </div>
 </div>
 `;
@@ -20,16 +18,8 @@ exports[`MembersPanel should render all members accordingly to their role assign
   <div>
     <!--v-if-->
     <div class="oc-mb-m">
-      <h3 class="oc-text-bold oc-text-medium">Managers</h3>
-      <members-role-section-stub spacemembers="[object Object]"></members-role-section-stub>
-    </div>
-    <div class="oc-mb-m">
-      <h3 class="oc-text-bold oc-text-medium">Editors</h3>
-      <members-role-section-stub spacemembers="[object Object],[object Object]"></members-role-section-stub>
-    </div>
-    <div class="oc-mb-m">
-      <h3 class="oc-text-bold oc-text-medium">Viewers</h3>
-      <members-role-section-stub spacemembers="[object Object]"></members-role-section-stub>
+      <h3 class="oc-text-bold oc-text-medium">Members</h3>
+      <members-role-section-stub groupmembers="[object Object]"></members-role-section-stub>
     </div>
   </div>
 </div>
