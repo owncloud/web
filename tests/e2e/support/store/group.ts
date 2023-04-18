@@ -1,6 +1,6 @@
 import { Group } from '../types'
 
-export const groupStore = new Map<string, Group>([
+export const dummyGroupStore = new Map<string, Group>([
   [
     'security',
     {
@@ -23,3 +23,5 @@ export const groupStore = new Map<string, Group>([
     }
   ]
 ])
+
+export const createdGroupStore = new Map<string, Group>()

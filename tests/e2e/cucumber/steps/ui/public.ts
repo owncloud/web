@@ -5,7 +5,7 @@ import { DateTime } from 'luxon'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
-import { linkStore } from '../../../support/store'
+import { createdLinkStore } from '../../../support/store'
 
 When(
   '{string} opens the public link {string}',
@@ -145,7 +145,7 @@ When(
 Then(
   '{string} should not be able to open the old link {string}',
   function (this: World, stepUser: string, name: string): void {
-    expect(linkStore.has(name)).toBe(false)
+    expect(createdLinkStore.has(name)).toBe(false)
   }
 )
 

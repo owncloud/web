@@ -5,7 +5,7 @@ import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 import { copyLinkArgs, waitForPopupNotPresent } from '../link/actions'
 import { config } from '../../../../config.js'
-import { linkStore } from '../../../store'
+import { createdLinkStore } from '../../../store'
 
 const filesSharedWithMeAccepted =
   '#files-shared-with-me-accepted-section [data-test-resource-name="%s"]'
@@ -215,8 +215,8 @@ export const copyQuickLink = async (args: copyLinkArgs): Promise<string> => {
 
   await waitForPopupNotPresent(page)
 
-  if (url && !linkStore.has(linkName)) {
-    linkStore.set(linkName, { name: linkName, url })
+  if (url && !createdLinkStore.has(linkName)) {
+    createdLinkStore.set(linkName, { name: linkName, url })
   }
   return url
 }
