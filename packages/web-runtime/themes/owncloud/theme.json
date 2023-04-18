@@ -1,8 +1,18 @@
 {
   "common": {
+    "general": {
       "name": "ownCloud",
-      "slogan": "ownCloud – A safe home for all your data",
-      "logo": "themes/owncloud/assets/logo.svg"
+      "slogan": "ownCloud – A safe home for all your data"
+    },
+    "logo-dark": {
+      "generic": "themes/owncloud/assets/logo_dark.svg"
+    },
+    "logo-light": {
+      "generic": "themes/owncloud/assets/logo.svg"
+    },
+    "logo": {
+      "generic": "themes/owncloud/assets/logo.svg"
+    }
   },
   "ios": {},
   "web": {
