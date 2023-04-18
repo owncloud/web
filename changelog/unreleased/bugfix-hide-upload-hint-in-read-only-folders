@@ -1,0 +1,6 @@
+Bugfix: Hide upload hint in empty read-only folders
+
+Empty read-only folders now don't show the upload hint to the user.
+
+https://github.com/owncloud/web/issues/8834
+https://github.com/owncloud/web/pull/8846
