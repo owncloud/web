@@ -1,3 +1,3 @@
 import { Link } from '../types'
 
-export const linkStore = new Map<string, Link>()
+export const createdLinkStore = new Map<string, Link>()

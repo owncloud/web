@@ -1,6 +1,6 @@
 import { User } from '../types'
 
-export const userStore = new Map<string, User>([
+export const dummyUserStore = new Map<string, User>([
   [
     'admin',
     {
@@ -65,3 +65,5 @@ export const userStore = new Map<string, User>([
     }
   ]
 ])
+
+export const createdUserStore = new Map<string, User>()

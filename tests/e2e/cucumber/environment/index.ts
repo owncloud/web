@@ -15,7 +15,7 @@ import { config } from '../../config'
 import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
-import { spaceStore, linkStore } from '../../support/store'
+import { createdSpaceStore, createdLinkStore } from '../../support/store'
 import { User } from '../../support/types'
 
 export { World }
@@ -110,7 +110,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 
   await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
 
-  linkStore.clear()
+  createdLinkStore.clear()
 })
 
 AfterAll(() => state.browser && state.browser.close())
@@ -119,7 +119,7 @@ setWorldConstructor(World)
 
 const cleanUpSpaces = async (adminUser: User) => {
   const requests = []
-  spaceStore.forEach((space) => {
+  createdSpaceStore.forEach((space) => {
     requests.push(
       api.graph
         .disableSpace({
@@ -137,5 +137,5 @@ const cleanUpSpaces = async (adminUser: User) => {
     )
   })
   await Promise.all(requests)
-  spaceStore.clear()
+  createdSpaceStore.clear()
 }

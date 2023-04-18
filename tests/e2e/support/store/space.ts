@@ -1,3 +1,3 @@
 import { Space } from '../types'
 
-export const spaceStore = new Map<string, Space>()
+export const createdSpaceStore = new Map<string, Space>()

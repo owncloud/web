@@ -1,33 +1,33 @@
 import { Link } from '../types'
-import { linkStore } from '../store'
+import { createdLinkStore } from '../store'
 
 export class LinksEnvironment {
   getLink({ name }: { name: string }): Link {
-    if (!linkStore.has(name)) {
+    if (!createdLinkStore.has(name)) {
       throw new Error(`link with name '${name}' not found`)
     }
-    return linkStore.get(name)
+    return createdLinkStore.get(name)
   }
 
   updateLinkName({ key, link }: { key: string; link: Link }): any {
-    if (!linkStore.has(key)) {
+    if (!createdLinkStore.has(key)) {
       throw new Error(`link with name '${key}' not found`)
     }
-    linkStore.set(link.name, link)
-    linkStore.delete(key)
+    createdLinkStore.set(link.name, link)
+    createdLinkStore.delete(key)
   }
 
   createLink({ key, link }: { key: string; link: Link }): Link {
-    if (linkStore.has(key)) {
+    if (createdLinkStore.has(key)) {
       throw new Error(`link with key '${key}' already exists`)
     }
-    linkStore.set(key, link)
+    createdLinkStore.set(key, link)
     return link
   }
 
   deleteLink({ key }: { key: string }): boolean {
-    if (linkStore.has(key)) {
-      return linkStore.delete(key)
+    if (createdLinkStore.has(key)) {
+      return createdLinkStore.delete(key)
     }
     throw new Error(`link with key '${key}' doesn't exist`)
   }
