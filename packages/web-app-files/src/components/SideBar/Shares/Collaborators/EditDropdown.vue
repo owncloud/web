@@ -53,11 +53,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, inject, Ref } from 'vue'
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
 import uniqueId from 'design-system/src/utils/uniqueId'
 import { OcDrop } from 'design-system/src/components'
+import { Resource } from 'web-client/src'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'EditDropdown',
@@ -81,6 +83,11 @@ export default defineComponent({
     }
   },
   emits: ['expirationDateChanged', 'removeShare', 'showAccessDetails'],
+  setup() {
+    return {
+      resource: inject<Ref<Resource>>('resource')
+    }
+  },
   data: function () {
     return {
       enteredExpirationDate: null
@@ -106,7 +113,9 @@ export default defineComponent({
       return [
         ...result,
         {
-          title: this.$gettext('Remove share'),
+          title: isProjectSpaceResource(this.resource)
+            ? this.$gettext('Remove member')
+            : this.$gettext('Remove share'),
           method: this.removeShare,
           class: 'remove-share',
           enabled: this.canEditOrDelete,
