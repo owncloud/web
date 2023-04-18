@@ -84,7 +84,7 @@ import { useClientService, useStore } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import { useGroupActionsDelete } from '../composables/actions/groups'
-import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
+import MembersPanel from '../components/Groups/SideBar/MembersPanel.vue'
 
 export default defineComponent({
   components: {
@@ -200,7 +200,7 @@ export default defineComponent({
           }
         },
         {
-          app: 'SpaceMembers',
+          app: 'GroupMembers',
           icon: 'group',
           title: this.$gettext('Members'),
           component: MembersPanel,

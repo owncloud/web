@@ -9,10 +9,6 @@
       <div v-if="!filteredSpaceMembers.length">
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('No members found')" />
       </div>
-      <div v-if="groupMembers.length" class="oc-mb-m" data-testid="group-members">
-        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Members')" />
-        <members-role-section :group-members="groupMembers" />
-      </div>
       <div
         v-if="filteredSpaceManagers.length"
         class="oc-mb-m"
@@ -47,15 +43,12 @@ import MembersRoleSection from './MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
-import { Group } from 'web-client/src/generated'
 
 export default defineComponent({
   name: 'MembersPanel',
   components: { MembersRoleSection },
   setup() {
     const resource = inject<Resource>('resource')
-    const group = inject<Group>('group')
-
     const filterTerm = ref('')
     const markInstance = ref(null)
     const membersListRef = ref(null)
@@ -95,15 +88,6 @@ export default defineComponent({
       return []
     })
 
-    const groupMembers = computed(() => {
-      if (group) {
-        return unref(group)
-          .members.sort((a, b) => a.displayName.localeCompare(b.displayName))
-          .map((u) => ({ ...u, kind: 'user' }))
-      }
-      return []
-    })
-
     const filteredSpaceMembers = computed(() => {
       return filterMembers(unref(spaceMembers), unref(filterTerm))
     })
@@ -134,8 +118,7 @@ export default defineComponent({
       filteredSpaceManagers,
       filteredSpaceEditors,
       filteredSpaceViewers,
-      membersListRef,
-      groupMembers
+      membersListRef
     }
   }
 })
