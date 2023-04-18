@@ -12,7 +12,8 @@ exports[`LoginModal renders the input including two options 1`] = `
       </div>
       <div class="oc-modal-body">
         <div class="oc-modal-body-message">
-          <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" id="oc-select-1" label="Login status" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object]" placeholder="Select..." searchable="true" warningmessage=""></oc-select-stub>
+          <p>Specify for the selected users whether they can log in.</p>
+          <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" id="oc-select-1" label="Login" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object]" placeholder="Select..." searchable="true" warningmessage=""></oc-select-stub>
         </div>
         <!--v-if-->
         <!--v-if-->
