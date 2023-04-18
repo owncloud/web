@@ -39,7 +39,7 @@ docs-copy:
 	git remote rm origin; \
 	git remote add origin https://github.com/owncloud/owncloud.github.io; \
 	git fetch; \
-	git checkout origin/source -f; \
+	git checkout origin/main -f; \
 	make -C $(HUGO) theme; \
 	rsync --delete -ax ../docs/ content/$(NAME)
 
