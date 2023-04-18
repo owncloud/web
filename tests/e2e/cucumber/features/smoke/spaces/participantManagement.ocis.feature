@@ -2,20 +2,20 @@ Feature: spaces participant management
 
   Scenario: participant management
     Given "Admin" creates following users using API
-      | id      |
-      | Alice   |
-      | Brian   |
-      | Carol   |
-      | Marie   |
-      | Richard |
+      | id    |
+      | Alice |
+      | Brian |
+      | Carol |
+      | David |
+      | Edith |
     And "Admin" creates following group using API
       | id       |
       | sales    |
       | security |
     And "Admin" adds user to the group using API
-      | user    | group    |
-      | Marie   | sales    |
-      | Richard | security |
+      | user  | group    |
+      | David | sales    |
+      | Edith | security |
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
@@ -41,21 +41,21 @@ Feature: spaces participant management
     And "Brian" uploads the following resources
       | resource  | to     |
       | lorem.txt | parent |
-    When "Marie" logs in
-    And "Marie" navigates to the projects space page
-    And "Marie" navigates to the project space "team.1"
-    Then "Marie" should see folder "parent" but should not be able to edit
-    And "Marie" logs out
-    When "Richard" logs in
-    And "Richard" navigates to the projects space page
-    And "Richard" navigates to the project space "team.1"
-    And "Richard" creates the following resources
+    When "David" logs in
+    And "David" navigates to the projects space page
+    And "David" navigates to the project space "team.1"
+    Then "David" should see folder "parent" but should not be able to edit
+    And "David" logs out
+    When "Edith" logs in
+    And "Edith" navigates to the projects space page
+    And "Edith" navigates to the project space "team.1"
+    And "Edith" creates the following resources
       | resource | type   |
-      | richard  | folder |
-    And "Richard" uploads the following resources
-      | resource  | to      |
-      | lorem.txt | richard |
-    And "Richard" logs out
+      | edith    | folder |
+    And "Edith" uploads the following resources
+      | resource  | to    |
+      | lorem.txt | edith |
+    And "Edith" logs out
     When "Carol" logs in
     And "Carol" navigates to the projects space page
     And "Carol" navigates to the project space "team.1"
