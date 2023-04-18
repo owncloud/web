@@ -36,12 +36,10 @@
 
         <no-content-message v-if="isEmpty" id="files-space-empty" class="files-empty" icon="folder">
           <template #message>
-            <span v-translate>No resources found</span>
+            <span v-text="$gettext('No resources found')" />
           </template>
           <template #callToAction>
-            <span v-translate>
-              Drag files and folders here or use the "New" or "Upload" buttons to add files
-            </span>
+            <span v-if="canUpload" class="file-empty-upload-hint" v-text="uploadHint" />
           </template>
         </no-content-message>
         <resource-tiles
@@ -218,6 +216,10 @@ export default defineComponent({
     const store = useStore()
     const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
     let loadResourcesEventToken
+
+    const canUpload = computed(() => {
+      return store.getters['Files/currentFolder']?.canUpload({ user: store.getters.user })
+    })
 
     const viewModes = computed(() => [
       ViewModeConstants.condensedTable,
@@ -401,12 +403,16 @@ export default defineComponent({
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
+      canUpload,
       breadcrumbs,
       hasSpaceHeader,
       resourceTargetRouteCallback,
       performLoaderTask,
       ViewModeConstants,
-      viewModes
+      viewModes,
+      uploadHint: $gettext(
+        'Drag files and folders here or use the "New" or "Upload" buttons to add files'
+      )
     }
   },
 

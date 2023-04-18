@@ -117,6 +117,20 @@ describe('GenericSpace view', () => {
       expect(mocks.refreshFileListHeaderPosition).toHaveBeenCalledTimes(2)
     })
   })
+  describe('empty folder upload hint', () => {
+    it('renders if the user can upload to the current folder', () => {
+      const { wrapper } = getMountedWrapper({
+        currentFolder: mock<Resource>({ canUpload: () => true })
+      })
+      expect(wrapper.find('.file-empty-upload-hint').exists()).toBeTruthy()
+    })
+    it('does not render if the user can not upload to the current folder', () => {
+      const { wrapper } = getMountedWrapper({
+        currentFolder: mock<Resource>({ canUpload: () => false })
+      })
+      expect(wrapper.find('.file-empty-upload-hint').exists()).toBeFalsy()
+    })
+  })
 })
 
 function getMountedWrapper({
@@ -124,7 +138,8 @@ function getMountedWrapper({
   props = {},
   files = [],
   loading = false,
-  currentRoute = { name: 'files-spaces-generic', path: '/' }
+  currentRoute = { name: 'files-spaces-generic', path: '/' },
+  currentFolder = mock<Resource>()
 } = {}) {
   const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
     paginatedResources: ref(files),
@@ -136,6 +151,7 @@ function getMountedWrapper({
     ...(mocks && mocks)
   }
   const storeOptions = { ...defaultStoreMockOptions }
+  storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
   const propsData = {
     space: { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space' },
     item: '/',
