@@ -111,7 +111,7 @@ export default defineComponent({
       background-color: var(--oc-color-swatch-primary-default);
 
       &::before {
-        transform: translateX(calc(100% + 1px));
+        transform: translateX(calc(100% + 2px));
         left: 1px;
       }
     }
