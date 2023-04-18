@@ -1,5 +1,5 @@
 <template>
-  <span v-if="selectedRole" class="oc-flex oc-flex-middle">
+  <div v-if="selectedRole" class="oc-flex oc-flex-middle">
     <span v-if="availableRoles.length === 1">
       <span v-if="!existingRole" v-text="inviteLabel" />
       <span v-else>{{ $gettext(selectedRole.label) }}</span>
@@ -103,7 +103,7 @@
         />
       </div>
     </oc-drop>
-  </span>
+  </div>
 </template>
 
 <script lang="ts">

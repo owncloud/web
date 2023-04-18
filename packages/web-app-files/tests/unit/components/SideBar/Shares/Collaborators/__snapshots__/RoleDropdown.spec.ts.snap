@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`RoleDropdown renders a button with existing role if given for resource type file 1`] = `
-<span class="oc-flex oc-flex-middle">
+<div class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
     <span>Viewer</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
@@ -67,11 +67,11 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
       <oc-button-stub appearance="filled" class="files-recipient-custom-permissions-drop-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
     </div>
   </oc-drop-stub>
-</span>
+</div>
 `;
 
 exports[`RoleDropdown renders a button with existing role if given for resource type folder 1`] = `
-<span class="oc-flex oc-flex-middle">
+<div class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
     <span>Viewer</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
@@ -137,11 +137,11 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
       <oc-button-stub appearance="filled" class="files-recipient-custom-permissions-drop-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
     </div>
   </oc-drop-stub>
-</span>
+</div>
 `;
 
 exports[`RoleDropdown renders a button with invite text if no existing role given for resource type file 1`] = `
-<span class="oc-flex oc-flex-middle">
+<div class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
     <span>Invite as viewer</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
@@ -201,11 +201,11 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
       <oc-button-stub appearance="filled" class="files-recipient-custom-permissions-drop-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
     </div>
   </oc-drop-stub>
-</span>
+</div>
 `;
 
 exports[`RoleDropdown renders a button with invite text if no existing role given for resource type folder 1`] = `
-<span class="oc-flex oc-flex-middle">
+<div class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
     <span>Invite as viewer</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
@@ -271,5 +271,5 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
       <oc-button-stub appearance="filled" class="files-recipient-custom-permissions-drop-confirm oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" size="small" submit="button" type="button" variation="primary">Apply</oc-button-stub>
     </div>
   </oc-drop-stub>
-</span>
+</div>
 `;
