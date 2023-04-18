@@ -8,6 +8,7 @@
     @confirm="$emit('confirm', { users, value: selectedOption.value })"
   >
     <template #content>
+      <p v-text="$gettext('Specify for the selected users whether they can log in.')" />
       <oc-select
         :model-value="selectedOption"
         :label="$gettext('Login')"
