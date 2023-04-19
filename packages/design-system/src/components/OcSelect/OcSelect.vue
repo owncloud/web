@@ -218,7 +218,7 @@ export default defineComponent({
      *
      * Read only field will be visualized by a lock item and additionally behaves like a disabled field.
      * Read only takes effect if the server won't allow to change the value at all,
-     * disabled should be used if the value can't be changed in a specific context.
+     * disabled should be used instead, if the value can't be changed in a specific context.
      *
      * For example: If the backend doesn't allow to set the login states for users in general, use read only.
      * If it's not allowed to change for the current logged-in User, use disabled.
