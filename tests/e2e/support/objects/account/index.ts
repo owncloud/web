@@ -31,7 +31,7 @@ export class Account {
     await requestGdprExport({ page: this.#page })
   }
 
-  async downloadsGdprExport(): Promise<void> {
+  async downloadGdprExport(): Promise<void> {
     await downloadGdprExport({ page: this.#page })
   }
 }
