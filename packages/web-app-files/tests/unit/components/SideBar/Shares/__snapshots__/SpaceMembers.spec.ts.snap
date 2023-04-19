@@ -68,6 +68,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
         <div class="oc-text-truncate space-members-filter oc-mr-s">
           <label class="oc-label" for="oc-textinput-2"></label>
           <div class="oc-position-relative">
+            <!--v-if-->
             <input aria-invalid="false" class="oc-text-input oc-input oc-rounded" id="oc-textinput-2" placeholder="Filter members" type="text">
             <!--v-if-->
           </div>
