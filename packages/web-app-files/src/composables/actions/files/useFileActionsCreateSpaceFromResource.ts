@@ -15,11 +15,12 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
   const loadingService = useLoadingService()
   const { createSpace } = useCreateSpace()
   const { checkSpaceNameModalInput } = useSpaceHelpers()
-  const { webdav } = useClientService()
+  const clientService = useClientService()
   const router = useRouter()
   const hasCreatePermission = computed(() => can('create-all', 'Space'))
 
   const confirmAction = async ({ spaceName, resources, space }) => {
+    const { webdav } = clientService
     store.dispatch('hideModal')
     const queue = new PQueue({ concurrency: 4 })
     const copyOps = []

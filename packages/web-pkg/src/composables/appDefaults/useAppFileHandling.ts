@@ -31,15 +31,17 @@ export function useAppFileHandling({
   clientService: { webdav }
 }: AppFileHandlingOptions): AppFileHandlingResult {
   const isUrlSigningSupported = useCapabilityCoreSupportUrlSigning()
-  const {
-    webdav: { getFileUrl, revokeUrl }
-  } = useClientService()
+  const clientService = useClientService()
 
   const getUrlForResource = (space: SpaceResource, resource: Resource, options?: any) => {
-    return getFileUrl(space, resource, {
+    return clientService.webdav.getFileUrl(space, resource, {
       isUrlSigningEnabled: unref(isUrlSigningSupported),
       ...options
     })
+  }
+
+  const revokeUrl = (url: string) => {
+    return clientService.webdav.revokeUrl(url)
   }
 
   // TODO: support query parameters, possibly needs porting away from owncloud-sdk

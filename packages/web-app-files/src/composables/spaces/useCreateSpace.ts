@@ -4,11 +4,12 @@ import { useGettext } from 'vue3-gettext'
 import { useConfigurationManager, useClientService } from 'web-pkg/src/composables'
 
 export const useCreateSpace = () => {
-  const { graphAuthenticated, webdav } = useClientService()
+  const clientService = useClientService()
   const { $gettext } = useGettext()
   const configurationManager = useConfigurationManager()
 
   const createSpace = async (name: string) => {
+    const { graphAuthenticated, webdav } = clientService
     const { data: createdSpace } = await graphAuthenticated.drives.createDrive({ name }, {})
     const spaceResource = buildSpace({
       ...createdSpace,

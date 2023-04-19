@@ -112,7 +112,7 @@ export default {
   },
   setup() {
     const store = useStore()
-    const { owncloudSdk } = useClientService()
+    const clientService = useClientService()
     const { current: currentLanguage } = useGettext()
     const route = useRoute()
 
@@ -195,7 +195,7 @@ export default {
     const fetchNotificationsTask = useTask(function* (signal) {
       loading.value = true
       try {
-        const response = yield owncloudSdk.requests.ocs({
+        const response = yield clientService.owncloudSdk.requests.ocs({
           service: 'apps/notifications',
           action: 'api/v1/notifications'
         })
@@ -222,7 +222,7 @@ export default {
     const deleteNotifications = async (ids: string[]) => {
       loading.value = true
       try {
-        const { status } = await owncloudSdk.requests.ocs({
+        const { status } = await clientService.owncloudSdk.requests.ocs({
           service: 'apps/notifications',
           action: `api/v1/notifications`,
           method: 'DELETE',
@@ -233,7 +233,7 @@ export default {
           const promises = []
           for (const id of ids) {
             promises.push(
-              owncloudSdk.requests.ocs({
+              clientService.owncloudSdk.requests.ocs({
                 service: 'apps/notifications',
                 action: `api/v1/notifications/${id}`,
                 method: 'DELETE'
@@ -252,7 +252,7 @@ export default {
 
     const executeAction = async (app, link, type, notificationId) => {
       try {
-        const response = await owncloudSdk.requests.ocs({
+        const response = await clientService.owncloudSdk.requests.ocs({
           service: 'apps/' + app,
           action: link.slice(link.lastIndexOf('api')),
           method: type

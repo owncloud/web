@@ -26,7 +26,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
 
   const hasResharing = useCapabilityFilesSharingResharing()
   const hasShareJail = useCapabilityShareJailEnabled()
-  const { owncloudSdk } = useClientService()
+  const clientService = useClientService()
   const loadingService = useLoadingService()
 
   const handler = async ({ resources }: FileActionOptions) => {
@@ -42,7 +42,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
               ShareStatus.declined,
               unref(hasResharing),
               unref(hasShareJail),
-              owncloudSdk
+              clientService.owncloudSdk
             )
             if (share) {
               store.commit('Files/UPDATE_RESOURCE', share)

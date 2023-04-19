@@ -19,7 +19,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
   store = store || useStore()
   const router = useRouter()
   const { $gettext, $pgettext } = useGettext()
-  const { owncloudSdk } = useClientService()
+  const clientService = useClientService()
   const loadingService = useLoadingService()
   const hasShareJail = useCapabilityShareJailEnabled()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
@@ -29,7 +29,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
       ? buildWebDavSpacesTrashPath(space.id)
       : buildWebDavFilesTrashPath(store.getters.user.id)
 
-    return owncloudSdk.fileTrash
+    return clientService.owncloudSdk.fileTrash
       .clearTrashBin(path)
       .then(() => {
         store.dispatch('showMessage', {

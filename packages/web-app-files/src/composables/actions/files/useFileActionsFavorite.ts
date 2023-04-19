@@ -16,13 +16,13 @@ export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) =
   store = store || useStore()
   const router = useRouter()
   const { $gettext, interpolate: $gettextInterpolate } = useGettext()
-  const { owncloudSdk: client } = useClientService()
+  const clientService = useClientService()
   const hasFavorites = useCapabilityFilesFavorites()
   const isFilesAppActive = useIsFilesAppActive()
   const handler = ({ resources }: FileActionOptions) => {
     store
       .dispatch('Files/markFavorite', {
-        client,
+        client: clientService.owncloudSdk,
         file: resources[0]
       })
       .catch(() => {

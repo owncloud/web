@@ -23,7 +23,7 @@ export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}
 
   const hasResharing = useCapabilityFilesSharingResharing()
   const hasShareJail = useCapabilityShareJailEnabled()
-  const { owncloudSdk } = useClientService()
+  const clientService = useClientService()
   const loadingService = useLoadingService()
 
   const handler = async ({ resources }: FileActionOptions) => {
@@ -39,7 +39,7 @@ export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}
               ShareStatus.accepted,
               unref(hasResharing),
               unref(hasShareJail),
-              owncloudSdk
+              clientService.owncloudSdk
             )
             if (share) {
               store.commit('Files/UPDATE_RESOURCE', share)

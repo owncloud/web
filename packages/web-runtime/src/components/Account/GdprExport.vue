@@ -48,7 +48,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { $gettext, current: currentLanguage } = useGettext()
-    const { webdav, graphAuthenticated } = useClientService()
+    const clientService = useClientService()
     const { downloadFile } = useDownloadFile()
 
     const loading = ref(true)
@@ -62,7 +62,7 @@ export default defineComponent({
 
     const loadExportTask = useTask(function* () {
       try {
-        const resource = yield webdav.getFileInfo(unref(personalSpace), {
+        const resource = yield clientService.webdav.getFileInfo(unref(personalSpace), {
           path: `/${GDPR_EXPORT_FILE_NAME}`
         })
 
@@ -93,7 +93,7 @@ export default defineComponent({
 
     const requestExport = async () => {
       try {
-        await graphAuthenticated.users.exportPersonalData(store.getters.user.uuid, {
+        await clientService.graphAuthenticated.users.exportPersonalData(store.getters.user.uuid, {
           storageLocation: `/${GDPR_EXPORT_FILE_NAME}`
         })
         await loadExportTask.perform()
