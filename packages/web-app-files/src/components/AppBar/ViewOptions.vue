@@ -149,12 +149,11 @@ export default defineComponent({
     }
 
     const setItemsPerPage = (itemsPerPage: string) => {
-      const resetPagination = itemsPerPage > unref(itemsPerPageQuery) && unref(currentPage) > 1
       return router.replace({
         query: {
           ...unref(currentRoute).query,
           'items-per-page': itemsPerPage,
-          ...(resetPagination && { page: '1' })
+          ...(unref(currentPage) > 1 && { page: '1' })
         }
       })
     }

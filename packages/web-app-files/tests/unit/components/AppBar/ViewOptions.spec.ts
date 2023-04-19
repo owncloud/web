@@ -48,7 +48,7 @@ describe('ViewOptions component', () => {
         })
       )
     })
-    it('resets the page to 1 if current page is > 1 and amount of items per page is being increased', () => {
+    it('resets the page to 1 if current page is > 1', () => {
       const perPage = '100'
       const newItemsPerPage = '500'
       const { wrapper, mocks } = getWrapper({ perPage, currentPage: '2' })
