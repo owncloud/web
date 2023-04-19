@@ -62,8 +62,8 @@ export default defineComponent({
       if (unref(membersListRef)) {
         markInstance.value = new Mark(unref(membersListRef))
         unref(markInstance).unmark()
-        const searchTermRegex = new RegExp(`\\b${unref(filterTerm)}\\b`, 'gi')
-        unref(markInstance).markRegExp(searchTermRegex, {
+        const searchTermRegex = unref(filterTerm)
+        unref(markInstance).mark(searchTermRegex, {
           element: 'span',
           className: 'highlight-mark'
         })
