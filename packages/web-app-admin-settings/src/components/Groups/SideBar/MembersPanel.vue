@@ -49,9 +49,7 @@ export default defineComponent({
 
     const members = computed(() => {
       if (group) {
-        return unref(group)
-          .members.sort((a, b) => a.displayName.localeCompare(b.displayName))
-          .map((u) => ({ ...u, kind: 'user' }))
+        return unref(group).members.sort((a, b) => a.displayName.localeCompare(b.displayName))
       }
       return []
     })
@@ -64,7 +62,8 @@ export default defineComponent({
       if (unref(membersListRef)) {
         markInstance.value = new Mark(unref(membersListRef))
         unref(markInstance).unmark()
-        unref(markInstance).mark(unref(filterTerm), {
+        const searchTermRegex = new RegExp(`\\b${unref(filterTerm)}\\b`, 'gi')
+        unref(markInstance).markRegExp(searchTermRegex, {
           element: 'span',
           className: 'highlight-mark'
         })
