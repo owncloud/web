@@ -3,7 +3,7 @@
     <label :for="id" class="oc-label" v-text="label" />
     <vue-select
       ref="select"
-      :disabled="disabled"
+      :disabled="disabled || readOnly"
       :filter="filter"
       :loading="loading"
       :searchable="searchable"
@@ -27,7 +27,7 @@
       <template #selected-option-container="{ option, deselect }">
         <span class="vs__selected" :class="{ 'vs__selected-readonly': option.readonly }">
           <slot name="selected-option" v-bind="option">
-            <oc-icon :name="icon" v-if="icon" class="oc-mr-xs" size="small" />
+            <oc-icon v-if="readOnly" name="lock" class="oc-mr-xs" size="small" />
             {{ getOptionLabel(option) }}
           </slot>
           <span v-if="multiple" class="oc-flex oc-flex-middle oc-ml-s oc-mr-xs">
@@ -214,11 +214,11 @@ export default defineComponent({
       default: false
     },
     /**
-     * An icon that will be shown at the beginning of the select
+     * Determines if the select field is read only
      */
-    icon: {
-      type: String,
-      default: ''
+    readOnly: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['search:input', 'update:modelValue'],
@@ -501,18 +501,13 @@ prevent clearing the selected value by hitting `delete`.
 ```js
 <template>
   <div class="oc-docs-width-medium">
-    <oc-select
-      icon="flight-takeoff"
-      v-model="selected"
-      :options="['American Airlines', 'Delta Air Lines', 'United Airlines', 'Southwest Airlines']"
-      :clearable="false"
-    />
+    <oc-select v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :clearable="false" />
   </div>
 </template>
 <script>
   export default {
     data: () => ({
-      selected: "American Airlines"
+      selected: "Apple"
     })
   };
 </script>
