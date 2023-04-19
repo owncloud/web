@@ -73,7 +73,7 @@ import { ProjectSpaceResource } from 'web-client/src/helpers'
 import { useClientService } from 'web-pkg/src/composables'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { configurationManager } from 'web-pkg'
+import { configurationManager, defaultFuseOptions } from 'web-pkg'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -148,9 +148,7 @@ export default defineComponent({
         return collection
       }
       const searchEngine = new Fuse(collection, {
-        includeScore: false,
-        useExtendedSearch: true,
-        threshold: 0.1,
+        ...defaultFuseOptions,
         keys: ['collaborator.displayName', 'collaborator.name']
       })
 

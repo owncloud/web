@@ -119,8 +119,8 @@ export default defineComponent({
         const fuse = new Fuse(items, {
           ...(props.label && { keys: [props.label] }),
           shouldSort: true,
-          threshold: 0.1,
-          location: 0,
+          threshold: 0,
+          ignoreLocation: true,
           distance: 100,
           minMatchCharLength: 1
         })

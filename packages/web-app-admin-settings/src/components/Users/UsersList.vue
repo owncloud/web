@@ -110,7 +110,7 @@
 import { defineComponent, PropType, ref, unref, ComponentPublicInstance } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { displayPositionedDropdown, eventBus } from 'web-pkg'
+import { defaultFuseOptions, displayPositionedDropdown, eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { AppRole, User } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
@@ -311,9 +311,7 @@ export default defineComponent({
         return users
       }
       const usersSearchEngine = new Fuse(users, {
-        includeScore: false,
-        useExtendedSearch: true,
-        threshold: 0.1,
+        ...defaultFuseOptions,
         keys: ['displayName', 'mail', 'onPremisesSamAccountName', 'role.displayName']
       })
 

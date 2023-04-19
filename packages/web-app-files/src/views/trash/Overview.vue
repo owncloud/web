@@ -67,7 +67,7 @@ import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { useClientService, useRouter, useStore } from 'web-pkg'
+import { defaultFuseOptions, useClientService, useRouter, useStore } from 'web-pkg'
 import { createLocationTrash } from 'web-app-files/src/router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
@@ -155,13 +155,7 @@ export default defineComponent({
       if (!(filterTerm || '').trim()) {
         return spaces
       }
-      const searchEngine = new Fuse(spaces, {
-        includeScore: true,
-        useExtendedSearch: true,
-        threshold: 0.1,
-        keys: ['name']
-      })
-
+      const searchEngine = new Fuse(spaces, { ...defaultFuseOptions, keys: ['name'] })
       return searchEngine.search(filterTerm).map((r) => r.item)
     }
 

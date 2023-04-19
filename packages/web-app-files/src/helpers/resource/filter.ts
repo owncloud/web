@@ -1,10 +1,9 @@
 import Fuse from 'fuse.js'
+import { defaultFuseOptions } from 'web-pkg/src/helpers'
 
 export const filterResources = (resources: unknown[], term: string, limit?: number): unknown[] => {
   const engine = new Fuse(resources, {
-    includeScore: false,
-    useExtendedSearch: true,
-    threshold: 0.1,
+    ...defaultFuseOptions,
     keys: ['name', 'type', 'icon', 'extension', 'tags']
   })
 
