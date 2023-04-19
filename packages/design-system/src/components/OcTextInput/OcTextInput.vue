@@ -2,7 +2,12 @@
   <div :class="$attrs.class">
     <label class="oc-label" :for="id" v-text="label" />
     <div class="oc-position-relative">
-      <oc-icon v-if="readOnly" name="lock" size="small" class="oc-mt-s oc-ml-s oc-position-absolute" />
+      <oc-icon
+        v-if="readOnly"
+        name="lock"
+        size="small"
+        class="oc-mt-s oc-ml-s oc-position-absolute"
+      />
       <input
         :id="id"
         v-bind="additionalAttributes"
