@@ -1,6 +1,7 @@
 import { When, Then, DataTable } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { objects } from '../../../support'
+import { expect } from '@playwright/test'
 
 Then(
   /^"([^"]*)" should have quota "([^"]*)"$/,
