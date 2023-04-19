@@ -72,7 +72,7 @@
             class="files-collaborators-collaborator-expiration"
             data-testid="recipient-info-expiration-date"
             :aria-label="expirationDate"
-            name="calendar"
+            name="calendar-event"
             fill-type="line"
           />
           <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
@@ -408,5 +408,8 @@ export default defineComponent({
     grid-column-start: 2;
     margin-left: var(--oc-space-medium);
   }
+}
+.files-collaborators-collaborator-expiration {
+  margin-top: 5px;
 }
 </style>
