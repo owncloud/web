@@ -3,15 +3,6 @@ import { World } from '../../environment'
 import { api, objects } from '../../../support'
 import { expect } from '@playwright/test'
 
-When(
-  '{string} navigates to the project spaces management page',
-  async function (this: World, stepUser: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const pageObject = new objects.applicationAdminSettings.page.Spaces({ page })
-    await pageObject.navigate()
-  }
-)
-
 Then(
   /^"([^"]*)" (should|should not) see the following space(s)?$/,
   async function (
