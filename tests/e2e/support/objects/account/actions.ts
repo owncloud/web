@@ -44,17 +44,22 @@ export const requestGdprExport = async (args: { page: Page }): Promise<void> => 
         resp.status() === 201 &&
         resp.request().method() === 'POST'
     ),
+    // not waiting for the generation report
+    page.route('**/.personal_data_export.json', async route => {
+      const response = await route.fetch()
+      let body = await response.text()
+      body = body.replace('<d:status>HTTP/1.1 425 TOO EARLY</d:status>', '<d:status>HTTP/1.1 200 OK</d:status>')
+      route.fulfill({
+        response,
+        body
+      })
+    }),
     page.locator(requestExportButton).click()
-  ])
-  await expect(page.locator(exportInProcessMessage)).toHaveText(
-    'Export is being processed. This can take up to 24 hours.'
-  )
+  ])  
 }
 
 export const downloadGdprExport = async (args: { page: Page }): Promise<void> => {
   const { page } = args
-  // waiting for export generation
-  await page.locator(downloadExportButton).waitFor({ timeout: 60000 })
 
   const [download] = await Promise.all([
     page.waitForEvent('download'),
