@@ -3,7 +3,7 @@
     <label :for="id" class="oc-label" v-text="label" />
     <vue-select
       ref="select"
-      :disabled="disabled"
+      :disabled="disabled || readOnly"
       :filter="filter"
       :loading="loading"
       :searchable="searchable"
@@ -27,6 +27,7 @@
       <template #selected-option-container="{ option, deselect }">
         <span class="vs__selected" :class="{ 'vs__selected-readonly': option.readonly }">
           <slot name="selected-option" v-bind="option">
+            <oc-icon v-if="readOnly" name="lock" class="oc-mr-xs" size="small" />
             {{ getOptionLabel(option) }}
           </slot>
           <span v-if="multiple" class="oc-flex oc-flex-middle oc-ml-s oc-mr-xs">
@@ -209,6 +210,21 @@ export default defineComponent({
      * Determines if multiple options can be selected.
      */
     multiple: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * Determines if the select field is read only.
+     *
+     * Read only field will be visualized by a lock item and additionally behaves like a disabled field.
+     * Read only takes effect if the server won't allow to change the value at all,
+     * disabled should be used instead, if the value can't be changed in a specific context.
+     *
+     * For example: If the backend doesn't allow to set the login states for users in general, use read only.
+     * If it's not allowed to change for the current logged-in User, use disabled.
+     *
+     */
+    readOnly: {
       type: Boolean,
       default: false
     }

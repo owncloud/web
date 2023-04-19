@@ -2,6 +2,12 @@
   <div :class="$attrs.class">
     <label class="oc-label" :for="id" v-text="label" />
     <div class="oc-position-relative">
+      <oc-icon
+        v-if="readOnly"
+        name="lock"
+        size="small"
+        class="oc-mt-s oc-ml-s oc-position-absolute"
+      />
       <input
         :id="id"
         v-bind="additionalAttributes"
@@ -10,11 +16,12 @@
         class="oc-text-input oc-input oc-rounded"
         :class="{
           'oc-text-input-warning': !!warningMessage,
-          'oc-text-input-danger': !!errorMessage
+          'oc-text-input-danger': !!errorMessage,
+          'oc-pl-l': !!readOnly
         }"
         :type="type"
         :value="displayValue"
-        :disabled="disabled"
+        :disabled="disabled || readOnly"
         @change="onChange(($event.target as HTMLInputElement).value)"
         @input="onInput(($event.target as HTMLInputElement).value)"
         @focus="onFocus($event.target)"
@@ -192,6 +199,21 @@ export default defineComponent({
     descriptionMessage: {
       type: String,
       default: null
+    },
+    /**
+     * Determines if the input field is read only.
+     *
+     * Read only field will be visualized by a lock item and additionally behaves like a disabled field.
+     * Read only takes effect if the server won't allow to change the value at all,
+     * disabled should be used instead, if the value can't be changed in a specific context.
+     *
+     * For example: If the backend doesn't allow to set the login states for users in general, use read only.
+     * If it's not allowed to change for the current logged-in User, use disabled.
+     *
+     */
+    readOnly: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['change', 'update:modelValue', 'focus'],
@@ -339,6 +361,7 @@ export default defineComponent({
     </h3>
     <oc-text-input class="oc-mb-s" label="Text"/>
     <oc-text-input class="oc-mb-s" disabled label="Disabled" value="I am disabled"/>
+    <oc-text-input class="oc-mb-s" read-only="true" label="Read only" value="I am read only"/>
     <oc-text-input class="oc-mb-s" type="number" label="Number"/>
     <oc-text-input class="oc-mb-s" type="email" label="Email"/>
     <oc-text-input class="oc-mb-s" type="password" label="Password"/>

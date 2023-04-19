@@ -464,7 +464,7 @@ export default defineComponent({
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 4;
+    z-index: var(--oc-z-index-modal);
   }
 
   &-primary {
