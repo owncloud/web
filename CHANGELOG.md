@@ -134,6 +134,7 @@ Summary
 * Enhancement - Font family in theming: [#8797](https://github.com/owncloud/web/pull/8797)
 * Enhancement - Preview app sorting: [#8806](https://github.com/owncloud/web/pull/8806)
 * Enhancement - Adjust missing reshare permissions message: [#8820](https://github.com/owncloud/web/pull/8820)
+* Enhancement - Admin settings groups members panel: [#8826](https://github.com/owncloud/web/pull/8826)
 
 Details
 -------
@@ -1252,6 +1253,13 @@ Details
 
    https://github.com/owncloud/web/issues/8701
    https://github.com/owncloud/web/pull/8820
+
+* Enhancement - Admin settings groups members panel: [#8826](https://github.com/owncloud/web/pull/8826)
+
+   We've added the members panel to the groups page in admin settings.
+
+   https://github.com/owncloud/web/issues/8596
+   https://github.com/owncloud/web/pull/8826
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
