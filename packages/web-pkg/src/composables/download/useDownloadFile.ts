@@ -11,10 +11,11 @@ export const useDownloadFile = () => {
   const store = useStore()
   const isPublicLinkContext = usePublicLinkContext({ store })
   const isUrlSigningEnabled = useCapabilityCoreSupportUrlSigning()
-  const { owncloudSdk: client } = useClientService()
+  const clientService = useClientService()
   const { $gettext } = useGettext()
 
   const downloadFile = async (file, version = null) => {
+    const { owncloudSdk: client } = clientService
     const isUserContext = store.getters['runtime/auth/isUserContextReady']
 
     // construct the url and headers

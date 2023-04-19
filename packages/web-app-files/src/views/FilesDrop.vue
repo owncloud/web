@@ -66,7 +66,7 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const authService = useAuthService()
-    const { owncloudSdk } = useClientService()
+    const clientService = useClientService()
     const publicToken = usePublicLinkToken({ store })
     const publicLinkPassword = usePublicLinkPassword({ store })
 
@@ -88,7 +88,7 @@ export default defineComponent({
 
     const resolvePublicLink = () => {
       loading.value = true
-      owncloudSdk.publicFiles
+      clientService.owncloudSdk.publicFiles
         .list(unref(publicToken), unref(publicLinkPassword), DavProperties.PublicLink, '0')
         .then((files) => {
           // Redirect to files list if the link doesn't have role "uploader"

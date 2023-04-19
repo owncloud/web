@@ -81,9 +81,7 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const { $gettext } = useGettext()
-    const { owncloudSdk } = useClientService()
     const clientService = useClientService()
-    const { webdav } = useClientService()
 
     const loadedResource = ref()
     const loading = ref(false)
@@ -228,7 +226,7 @@ export default defineComponent({
 
       // shared resources look different, hence we need to fetch the actual resource here
       try {
-        const shareResource = await (unref(webdav) as WebDAV).getFileInfo(props.space, {
+        const shareResource = await (clientService.webdav as WebDAV).getFileInfo(props.space, {
           path: unref(highlightedFile).path
         })
         shareResource.share = unref(highlightedFile).share
@@ -242,7 +240,7 @@ export default defineComponent({
 
     const loadShares = () => {
       store.dispatch('Files/loadShares', {
-        client: owncloudSdk,
+        client: clientService.owncloudSdk,
         path: unref(highlightedFile).path,
         storageId: unref(highlightedFile).fileId,
         // cache must not be used on flat file lists that gather resources form various locations

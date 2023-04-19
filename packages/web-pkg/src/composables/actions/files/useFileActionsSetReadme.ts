@@ -8,10 +8,11 @@ export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) 
   store = store || useStore()
   const router = useRouter()
   const { $gettext } = useGettext()
-  const { owncloudSdk } = useClientService()
+  const clientService = useClientService()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     try {
+      const { owncloudSdk } = clientService
       const fileContent = await owncloudSdk.files.getFileContents(resources[0].webDavPath)
       const fileMetaData = await owncloudSdk.files.putFileContents(
         `/spaces/${space.id}/.space/readme.md`,
