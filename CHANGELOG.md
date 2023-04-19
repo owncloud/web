@@ -379,7 +379,9 @@ Details
    We've had a bug that caused some search results to show up that didn't align with the search term.
 
    https://github.com/owncloud/web/issues/8493
+   https://github.com/owncloud/web/issues/8860
    https://github.com/owncloud/web/pull/8508
+   https://github.com/owncloud/web/pull/8863
 
 * Bugfix - Space image upload: [#8523](https://github.com/owncloud/web/issues/8523)
 
