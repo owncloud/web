@@ -22,6 +22,7 @@ import MembersRoleSection from '../../Groups/SideBar/MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { Group } from 'web-client/src/generated'
+import { defaultFuseOptions } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'GroupsMembersPanel',
@@ -37,13 +38,7 @@ export default defineComponent({
         return collection
       }
 
-      const searchEngine = new Fuse(collection, {
-        includeScore: false,
-        useExtendedSearch: true,
-        threshold: 0.1,
-        keys: ['displayName']
-      })
-
+      const searchEngine = new Fuse(collection, { ...defaultFuseOptions, keys: ['displayName'] })
       return searchEngine.search(term).map((r) => r.item)
     }
 

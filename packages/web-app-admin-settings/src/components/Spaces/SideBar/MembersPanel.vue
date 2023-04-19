@@ -43,6 +43,7 @@ import MembersRoleSection from './MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
+import { defaultFuseOptions } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'MembersPanel',
@@ -57,13 +58,7 @@ export default defineComponent({
         return collection
       }
 
-      const searchEngine = new Fuse(collection, {
-        includeScore: false,
-        useExtendedSearch: true,
-        threshold: 0.1,
-        keys: ['displayName']
-      })
-
+      const searchEngine = new Fuse(collection, { ...defaultFuseOptions, keys: ['displayName'] })
       return searchEngine.search(term).map((r) => r.item)
     }
 

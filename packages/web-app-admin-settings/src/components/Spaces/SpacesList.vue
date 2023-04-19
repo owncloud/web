@@ -119,7 +119,8 @@ import {
   formatDateFromJSDate,
   formatRelativeDateFromJSDate,
   displayPositionedDropdown,
-  formatFileSize
+  formatFileSize,
+  defaultFuseOptions
 } from 'web-pkg/src/helpers'
 import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
@@ -218,13 +219,7 @@ export default defineComponent({
       if (!(filterTerm || '').trim()) {
         return spaces
       }
-      const searchEngine = new Fuse(spaces, {
-        includeScore: false,
-        useExtendedSearch: true,
-        threshold: 0.1,
-        keys: ['name']
-      })
-
+      const searchEngine = new Fuse(spaces, { ...defaultFuseOptions, keys: ['name'] })
       return searchEngine.search(filterTerm).map((r) => r.item)
     }
     const isSpaceSelected = (space: SpaceResource) => {

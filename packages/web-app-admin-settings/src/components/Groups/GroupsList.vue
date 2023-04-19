@@ -111,6 +111,7 @@ import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Group } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import { useGettext } from 'vue3-gettext'
+import { defaultFuseOptions } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'GroupsList',
@@ -287,13 +288,7 @@ export default defineComponent({
       if (!(filterTerm || '').trim()) {
         return groups
       }
-      const groupsSearchEngine = new Fuse(groups, {
-        includeScore: false,
-        useExtendedSearch: true,
-        threshold: 0.1,
-        keys: ['displayName']
-      })
-
+      const groupsSearchEngine = new Fuse(groups, { ...defaultFuseOptions, keys: ['displayName'] })
       return groupsSearchEngine.search(filterTerm).map((r) => r.item)
     },
     orderBy(list, prop, desc) {

@@ -58,7 +58,7 @@ import { defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import omit from 'lodash-es/omit'
-import { useRoute, useRouteQuery, useRouter } from 'web-pkg'
+import { defaultFuseOptions, useRoute, useRouteQuery, useRouter } from 'web-pkg'
 import { queryItemAsString } from 'web-pkg/src/composables/appDefaults'
 
 export default defineComponent({
@@ -164,9 +164,7 @@ export default defineComponent({
         return items
       }
       const usersSearchEngine = new Fuse(items, {
-        includeScore: false,
-        useExtendedSearch: true,
-        threshold: 0.1,
+        ...defaultFuseOptions,
         keys: props.filterableAttributes as any
       })
 
