@@ -1,16 +1,23 @@
 import ViewOptions from 'web-app-files/src/components/AppBar/ViewOptions.vue'
-import { useRouteQueryPersisted } from 'web-pkg/src/composables/router'
-import { ref, nextTick } from 'vue'
+import { useRouteQueryPersisted, useRouteQuery } from 'web-pkg/src/composables/router'
+import { ref } from 'vue'
 import {
   createStore,
   defaultPlugins,
   defaultStoreMockOptions,
   defaultComponentMocks,
-  mount
+  mount,
+  RouteLocation
 } from 'web-test-helpers'
 import { ViewModeConstants } from 'web-app-files/src/composables'
+import { mock } from 'jest-mock-extended'
 
-jest.mock('web-pkg/src/composables/router')
+jest.mock('web-pkg/src/composables/router', () => ({
+  ...jest.requireActual('web-pkg/src/composables/router'),
+  useRouteQueryPersisted: jest.fn(),
+  useRouteQuery: jest.fn()
+}))
+
 const selectors = {
   pageSizeSelect: '.oc-page-size',
   hiddenFilesSwitch: '[data-testid="files-switch-hidden-files"]',
@@ -30,14 +37,26 @@ describe('ViewOptions component', () => {
       const { wrapper } = getWrapper({ perPage })
       expect(wrapper.findComponent<any>(selectors.pageSizeSelect).props().selected).toBe(perPage)
     })
-    it('sets the correct files page limit', async () => {
+    it('sets the correct files page limit', () => {
       const perPage = '100'
       const newItemsPerPage = '500'
-      const { wrapper } = getWrapper({ perPage })
+      const { wrapper, mocks } = getWrapper({ perPage })
       wrapper.vm.setItemsPerPage(newItemsPerPage)
-      await nextTick()
-      expect(wrapper.findComponent<any>(selectors.pageSizeSelect).props().selected).toBe(
-        newItemsPerPage
+      expect(mocks.$router.replace).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: expect.objectContaining({ 'items-per-page': newItemsPerPage })
+        })
+      )
+    })
+    it('resets the page to 1 if current page is > 1', () => {
+      const perPage = '100'
+      const newItemsPerPage = '500'
+      const { wrapper, mocks } = getWrapper({ perPage, currentPage: '2' })
+      wrapper.vm.setItemsPerPage(newItemsPerPage)
+      expect(mocks.$router.replace).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: expect.objectContaining({ 'items-per-page': newItemsPerPage, page: '1' })
+        })
       )
     })
   })
@@ -109,15 +128,19 @@ function getWrapper({
   perPage = '100',
   viewMode = ViewModeConstants.default.name,
   tileSize = '1',
-  props = {}
+  props = {},
+  currentPage = '1'
 } = {}) {
   jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(perPage))
   jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(viewMode))
   jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(tileSize))
+  jest.mocked(useRouteQuery).mockImplementationOnce(() => ref(currentPage))
 
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
-  const mocks = { ...defaultComponentMocks() }
+  const mocks = {
+    ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) })
+  }
   return {
     storeOptions,
     mocks,

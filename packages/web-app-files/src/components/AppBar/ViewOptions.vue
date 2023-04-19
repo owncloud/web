@@ -71,7 +71,7 @@
           v-if="viewModes.includes(ViewModeConstants.tilesView)"
           class="files-view-options-list-item oc-visible@s oc-flex oc-flex-between oc-flex-middle"
         >
-          <label for="tiles-size-slider" v-text="resizeTilesLabel" />
+          <label for="tiles-size-slider" v-text="$gettext('Tile size')" />
           <input
             v-model="viewSizeCurrent"
             type="range"
@@ -89,9 +89,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, watch } from 'vue'
+import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
 import { mapMutations, mapState } from 'vuex'
-import { queryItemAsString, useRouteQueryPersisted } from 'web-pkg/src/composables'
+import { useGettext } from 'vue3-gettext'
+import {
+  queryItemAsString,
+  useRoute,
+  useRouteQuery,
+  useRouteQueryPersisted,
+  useRouter
+} from 'web-pkg/src/composables'
 import { ViewMode } from 'web-pkg/src/ui/types'
 import { PaginationConstants, ViewModeConstants } from '../../composables'
 
@@ -106,8 +113,19 @@ export default defineComponent({
     }
   },
   setup() {
+    const router = useRouter()
+    const currentRoute = useRoute()
+    const { $gettext } = useGettext()
+
     const queryParamsLoading = ref(false)
 
+    const currentPageQuery = useRouteQuery('page')
+    const currentPage = computed(() => {
+      if (!unref(currentPageQuery)) {
+        return 1
+      }
+      return parseInt(queryItemAsString(unref(currentPageQuery)))
+    })
     const itemsPerPageQuery = useRouteQueryPersisted({
       name: PaginationConstants.perPageQueryName,
       defaultValue: PaginationConstants.perPageDefault
@@ -128,6 +146,20 @@ export default defineComponent({
       if (!currentSize || currentSize !== newSize) {
         rootStyle.setProperty(`--oc-size-tiles-resize-step`, newSize)
       }
+    }
+
+    const setItemsPerPage = (itemsPerPage: string) => {
+      return router.replace({
+        query: {
+          ...unref(currentRoute).query,
+          'items-per-page': itemsPerPage,
+          ...(unref(currentPage) > 1 && { page: '1' })
+        }
+      })
+    }
+
+    const setViewMode = (mode: ViewMode) => {
+      viewModeQuery.value = mode.name
     }
 
     watch(
@@ -154,18 +186,14 @@ export default defineComponent({
       viewSizeCurrent: viewSizeQuery,
       itemsPerPageCurrent: itemsPerPageQuery,
       queryParamsLoading,
-      setTilesViewSize
+      setTilesViewSize,
+      setItemsPerPage,
+      setViewMode,
+      viewOptionsButtonLabel: $gettext('Display customization options of the files list')
     }
   },
   computed: {
     ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
-
-    viewOptionsButtonLabel() {
-      return this.$gettext('Display customization options of the files list')
-    },
-    resizeTilesLabel() {
-      return this.$gettext('Tile size')
-    },
 
     hiddenFilesShownModel: {
       get() {
@@ -189,12 +217,7 @@ export default defineComponent({
   methods: {
     queryItemAsString,
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
-    setViewMode(mode) {
-      this.viewModeCurrent = mode.name
-    },
-    setItemsPerPage(itemsPerPage) {
-      this.itemsPerPageCurrent = itemsPerPage
-    },
+
     updateHiddenFilesShownModel(event) {
       this.hiddenFilesShownModel = event
     },
