@@ -2,7 +2,7 @@
   <div :class="$attrs.class">
     <label class="oc-label" :for="id" v-text="label" />
     <div class="oc-position-relative">
-      <oc-icon v-if="icon" :name="icon" size="small" class="oc-mt-s oc-ml-s oc-position-absolute" />
+      <oc-icon v-if="readOnly" name="lock" size="small" class="oc-mt-s oc-ml-s oc-position-absolute" />
       <input
         :id="id"
         v-bind="additionalAttributes"
@@ -12,11 +12,11 @@
         :class="{
           'oc-text-input-warning': !!warningMessage,
           'oc-text-input-danger': !!errorMessage,
-          'oc-pl-l': !!icon
+          'oc-pl-l': !!readOnly
         }"
         :type="type"
         :value="displayValue"
-        :disabled="disabled"
+        :disabled="disabled || readOnly"
         @change="onChange(($event.target as HTMLInputElement).value)"
         @input="onInput(($event.target as HTMLInputElement).value)"
         @focus="onFocus($event.target)"
@@ -196,11 +196,11 @@ export default defineComponent({
       default: null
     },
     /**
-     * An icon that will be shown at the beginning of the input
+     * Determines if the select field is read only
      */
-    icon: {
-      type: String,
-      default: ''
+    readOnly: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['change', 'update:modelValue', 'focus'],
@@ -348,10 +348,10 @@ export default defineComponent({
     </h3>
     <oc-text-input class="oc-mb-s" label="Text"/>
     <oc-text-input class="oc-mb-s" disabled label="Disabled" value="I am disabled"/>
+    <oc-text-input class="oc-mb-s" read-only="true" label="Read only" value="I am read only"/>
     <oc-text-input class="oc-mb-s" type="number" label="Number"/>
     <oc-text-input class="oc-mb-s" type="email" label="Email"/>
     <oc-text-input class="oc-mb-s" type="password" label="Password"/>
-    <oc-text-input class="oc-mb-s" label="Country" icon="earth"/>
     <h3 class="oc-heading-divider">
       Binding
     </h3>
