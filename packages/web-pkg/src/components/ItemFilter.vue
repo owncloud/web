@@ -228,12 +228,23 @@ export default defineComponent({
 
 <style lang="scss">
 .item-filter {
-  &-list-item {
-    line-height: 1.5;
-    gap: 8px;
+  &-list {
+    li {
+      &:first-child {
+        margin-top: 0 !important;
+      }
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
 
-    &:hover {
-      background-color: var(--oc-color-background-hover) !important;
+    &-item {
+      line-height: 1.5;
+      gap: 8px;
+
+      &:hover {
+        background-color: var(--oc-color-background-hover) !important;
+      }
     }
   }
 }
