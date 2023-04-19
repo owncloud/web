@@ -20,8 +20,7 @@ clients:
   trusted: true
   secret: ""
   redirect_uris:
-    - https://host.docker.internal:3000/
-    - https://host.docker.internal:3000/oidc-callback.html
-    - https://host.docker.internal:3000/oidc-silent-redirect.html
+    - https://host.docker.internal:3000
+    - https://host.docker.internal:3000?redirect=true
   origins:
     - https://host.docker.internal:3000
