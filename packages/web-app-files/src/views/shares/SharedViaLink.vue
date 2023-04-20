@@ -8,10 +8,10 @@
           v-if="isEmpty"
           id="files-shared-via-link-empty"
           class="files-empty"
-          icon="link"
+          icon="file-forbid"
         >
           <template #message>
-            <span v-translate>There are no resources with a public link at the moment</span>
+            <span v-translate>You have not shared any resource via link.</span>
           </template>
         </no-content-message>
         <resource-table

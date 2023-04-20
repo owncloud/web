@@ -8,11 +8,11 @@
           v-if="isEmpty"
           id="files-shared-with-others-empty"
           class="files-empty"
-          icon="group"
+          icon="file-forbid"
         >
           <template #message>
             <span v-translate>
-              You are currently not collaborating on any of your resources with other people
+              You have not shared any resources with other people.
             </span>
           </template>
         </no-content-message>

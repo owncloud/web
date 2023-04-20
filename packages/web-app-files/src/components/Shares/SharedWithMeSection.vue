@@ -5,7 +5,7 @@
       <span class="oc-text-medium">({{ items.length }})</span>
     </h2>
 
-    <no-content-message v-if="!items.length" class="files-empty oc-flex-stretch" icon="group">
+    <no-content-message v-if="!items.length" class="files-empty oc-flex-stretch" icon="file-forbid">
       <template #message>
         <span>{{ emptyMessage }}</span>
       </template>
