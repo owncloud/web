@@ -2,7 +2,7 @@
   <div
     class="no-content-message oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center"
   >
-    <oc-icon :name="icon" type="div" size="xxlarge" :fill-type="iconFillType" />
+    <oc-icon :name="icon" type="div" size="xxlarge" :fill-type="iconFillType" class="oc-mb-m" />
     <div class="oc-text-muted oc-text-xlarge">
       <slot name="message" />
     </div>

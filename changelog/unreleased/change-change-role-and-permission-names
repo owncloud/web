@@ -1,0 +1,5 @@
+Change: Update roles and permissions names
+
+We changed the names of roles and permissions in sharing dialogs to verb-based terms.
+
+https://github.com/owncloud/web/pull/8876
