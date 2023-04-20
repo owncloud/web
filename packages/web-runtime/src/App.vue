@@ -12,6 +12,7 @@
       :icon="modal.icon"
       :title="modal.title"
       :message="modal.message"
+      :message-contextual-helper-data="modal.messageContextualHelperData"
       :has-input="modal.hasInput"
       :input-description="modal.inputDescription"
       :input-disabled="modal.inputDisabled"

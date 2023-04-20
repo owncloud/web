@@ -65,13 +65,17 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
         }
       ),
       message: $ngettext(
-        'Create Space with the content of "%{resourceName}". The content will be copied.',
-        'Create Space with the selected files. The content will be copied.',
+        'Create Space with the content of "%{resourceName}". The marked elements will be copied.',
+        'Create Space with the selected files. The marked elements will be copied.',
         resources.length,
         {
           resourceName: resources[0].name
         }
       ),
+      messageContextualHelperData: {
+        title: $gettext('Restrictions'),
+        text: $gettext('Shares, Versions and Tags will not be copied.')
+      },
       cancelText: $gettext('Cancel'),
       confirmText: $gettext('Create'),
       hasInput: true,

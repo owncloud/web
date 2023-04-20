@@ -18,13 +18,18 @@
             <slot name="content" />
           </div>
           <template v-else>
-            <p
+            <div
               v-if="message"
               key="modal-message"
               class="oc-modal-body-message oc-mt-rm"
               :class="{ 'oc-mb-rm': !hasInput }"
-              v-text="message"
-            />
+            >
+              <span v-text="message"></span>
+              <oc-contextual-helper
+                v-if="messageContextualHelperData"
+                v-bind="messageContextualHelperData"
+              />
+            </div>
             <oc-text-input
               v-if="hasInput"
               key="modal-input"
@@ -157,6 +162,14 @@ export default defineComponent({
      */
     message: {
       type: String,
+      required: false,
+      default: null
+    },
+    /**
+     * Modal message contextual helper data
+     */
+    messageContextualHelperData: {
+      type: Object,
       required: false,
       default: null
     },

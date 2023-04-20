@@ -6,6 +6,7 @@ const state = {
   icon: '',
   title: '',
   message: '',
+  messageContextualHelperData: {},
   cancelText: '',
   confirmText: '',
   buttonSecondaryText: '',
@@ -56,6 +57,7 @@ const mutations = {
     state.icon = modal.icon
     state.title = modal.title
     state.message = modal.message
+    state.messageContextualHelperData = modal.messageContextualHelperData
     state.buttonSecondaryText = modal.buttonSecondaryText
     state.checkboxLabel = modal.checkboxLabel || ''
     state.cancelText = modal.cancelText || 'Cancel'
