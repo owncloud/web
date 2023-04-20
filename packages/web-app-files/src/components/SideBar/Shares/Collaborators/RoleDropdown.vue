@@ -9,11 +9,16 @@
       :id="roleButtonId"
       class="files-recipient-role-select-btn"
       :class="{
-        'oc-pill oc-background-default oc-px-s': roleButtonId == 'files-collaborators-role-button-new'
+        'oc-pill oc-background-default oc-px-s':
+          roleButtonId == 'files-collaborators-role-button-new'
       }"
       appearance="raw"
       gap-size="none"
-      :aria-label="roleButtonId == 'files-collaborators-role-button-new' ? $gettext('Select permission') : $gettext('Edit permission')"
+      :aria-label="
+        roleButtonId == 'files-collaborators-role-button-new'
+          ? $gettext('Select permission')
+          : $gettext('Edit permission')
+      "
     >
       <span v-if="!existingRole" v-text="inviteLabel" />
       <span v-else>{{ $gettext(selectedRole.label) }}</span>

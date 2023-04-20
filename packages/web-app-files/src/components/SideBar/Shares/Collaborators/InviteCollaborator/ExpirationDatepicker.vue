@@ -15,8 +15,10 @@
           data-testid="recipient-datepicker-btn"
           appearance="raw"
           gap-size="none"
+          :aria-label="
+            dateCurrent ? $gettext('Edit expiration date') : $gettext('Set expiration date')
+          "
           @click="togglePopover"
-          :aria-label="dateCurrent ? $gettext('Edit expiration date') : $gettext('Set expiration date')"
         >
           <span
             v-if="!dateCurrent"
