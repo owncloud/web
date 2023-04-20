@@ -171,7 +171,7 @@ export default defineComponent({
     const isLoginInputDisabled = computed(() => currentUser.uuid === (props.user as User).id)
     const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
     const isInputFieldReadOnly = (key) => {
-      return readOnlyUserAttributes.value.includes(key)
+      return unref(readOnlyUserAttributes).includes(key)
     }
 
     return {
