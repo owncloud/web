@@ -212,14 +212,14 @@ export default defineComponent({
       return this.$gettext('Accepted shares')
     },
     acceptedEmptyMessage() {
-      return this.$gettext("You have no accepted shares.")
+      return this.$gettext('You have no accepted shares.')
     },
 
     declinedTitle() {
       return this.$gettext('Declined shares')
     },
     declinedEmptyMessage() {
-      return this.$gettext("You have no declined shares.")
+      return this.$gettext('You have no declined shares.')
     },
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews

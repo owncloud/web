@@ -87,7 +87,7 @@
                 </oc-button>
               </div>
             </template>
-            <p class="oc-text-center" v-else>{{ warningMessage }}</p>
+            <p v-else class="oc-text-center">{{ warningMessage }}</p>
           </div>
         </template>
       </div>
