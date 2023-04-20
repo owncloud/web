@@ -78,13 +78,13 @@ export const shareSpaceAddMemberHelp = (options: ContextualHelperOptions) =>
         { text: $gettext('What members can do'), headline: true },
         {
           text: $gettext(
-            'Members can see who else has access to this space and can access all files in this space. Read or write permissions can be set by the member’s role such as “Viewer” or “Editor”.'
+            'Members can see who else has access to this space and can access all files in this space. Read or write permissions can be set by the member’s role.'
           )
         },
         { text: $gettext('What Space managers can do'), headline: true },
         {
           text: $gettext(
-            'Members with the Manager role can edit all properties and content of a Space, such as adding or removing members, sharing subfolders with non-members, or creating links to share.'
+            'Space managers can edit all properties and content of a Space, such as adding or removing members, sharing subfolders with non-members, or creating links to share.'
           )
         }
       ],
