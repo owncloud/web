@@ -13,6 +13,7 @@
       }"
       appearance="raw"
       gap-size="none"
+      :aria-label="roleButtonId == 'files-collaborators-role-button-new' ? $gettext('Select permission') : $gettext('Edit permission')"
     >
       <span v-if="!existingRole" v-text="inviteLabel" />
       <span v-else>{{ $gettext(selectedRole.label) }}</span>

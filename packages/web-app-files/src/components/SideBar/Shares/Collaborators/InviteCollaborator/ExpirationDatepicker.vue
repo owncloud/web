@@ -16,6 +16,7 @@
           appearance="raw"
           gap-size="none"
           @click="togglePopover"
+          :aria-label="dateCurrent ? $gettext('Edit expiration date') : $gettext('Set expiration date')"
         >
           <span
             v-if="!dateCurrent"
