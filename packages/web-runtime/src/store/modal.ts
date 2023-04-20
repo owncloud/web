@@ -46,6 +46,10 @@ const actions = {
 
   toggleModalConfirmButton({ commit }) {
     commit('TOGGLE_MODAL_CONFIRM_BUTTON')
+  },
+
+  setModalConfirmButtonDisabled({ commit }, status) {
+    commit('SET_MODAL_CONFIRM_BUTTON_DISABLED', status)
   }
 }
 
@@ -89,6 +93,10 @@ const mutations = {
 
   TOGGLE_MODAL_CONFIRM_BUTTON(state) {
     state.confirmDisabled = !state.confirmDisabled
+  },
+
+  SET_MODAL_CONFIRM_BUTTON_DISABLED(state, status) {
+    state.confirmDisabled = status
   }
 }
 
