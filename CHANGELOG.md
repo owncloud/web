@@ -56,6 +56,7 @@ Summary
 * Bugfix - Remove drop target in read-only folders: [#8825](https://github.com/owncloud/web/pull/8825)
 * Bugfix - Opening context menu via keyboard: [#8827](https://github.com/owncloud/web/pull/8827)
 * Bugfix - Hide upload hint in empty read-only folders: [#8834](https://github.com/owncloud/web/issues/8834)
+* Bugfix - Public link empty password stays forever: [#8864](https://github.com/owncloud/web/pull/8864)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -503,6 +504,13 @@ Details
 
    https://github.com/owncloud/web/issues/8834
    https://github.com/owncloud/web/pull/8846
+
+* Bugfix - Public link empty password stays forever: [#8864](https://github.com/owncloud/web/pull/8864)
+
+   We've fixed a bug that caused the error message for the public link password to stay forever.
+
+   https://github.com/owncloud/web/issues/8521
+   https://github.com/owncloud/web/pull/8864
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
