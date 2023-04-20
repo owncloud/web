@@ -2,7 +2,7 @@
   <div class="oc-filter-chip oc-flex">
     <oc-button
       :id="id"
-      class="oc-filter-chip-button"
+      class="oc-filter-chip-button oc-pill"
       :class="{ 'oc-filter-chip-button-selected': filterActive }"
       appearance="raw"
     >
@@ -77,7 +77,6 @@ export default defineComponent({
     background-color: var(--oc-color-background-default) !important;
     color: var(--oc-color-text-muted) !important;
     border: 1px solid var(--oc-color-text-muted);
-    border-radius: 99px !important;
     box-sizing: border-box;
     display: inline-flex;
     gap: var(--oc-space-xsmall);
