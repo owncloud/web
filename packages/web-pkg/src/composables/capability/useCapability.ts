@@ -48,11 +48,17 @@ export const useCapabilityFilesSharingResharingDefault = createCapabilityComposa
 
 export const useCapabilitySpacesEnabled = createCapabilityComposable('spaces.enabled', false)
 export const useCapabilitySpacesMaxQuota = createCapabilityComposable('spaces.max_quota', 0)
+
 export const useCapabilityProjectSpacesEnabled = createCapabilityComposable(
   'spaces.projects',
   false
 )
 export const useCapabilityShareJailEnabled = createCapabilityComposable('spaces.share_jail', false)
+
+export const useCapabilityReadOnlyUserAttributes = createCapabilityComposable(
+  'graph.read_only_user_attributes',
+  []
+)
 
 export const useCapabilityFilesFavorites = createCapabilityComposable('files.favorites', false)
 
