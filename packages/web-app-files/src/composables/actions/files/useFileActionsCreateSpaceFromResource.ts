@@ -74,7 +74,7 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
       ),
       messageContextualHelperData: {
         title: $gettext('Restrictions'),
-        text: $gettext('Shares, Versions and Tags will not be copied.')
+        text: $gettext('Shares, versions and tags will not be copied.')
       },
       cancelText: $gettext('Cancel'),
       confirmText: $gettext('Create'),
