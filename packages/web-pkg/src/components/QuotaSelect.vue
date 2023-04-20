@@ -47,7 +47,7 @@ export default {
     maxQuota: {
       type: Number,
       default: 0
-    },
+    }
   },
   emits: ['selectedOptionChange'],
   data: function () {
