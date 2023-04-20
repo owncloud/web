@@ -36,10 +36,6 @@ import { formatFileSize } from 'web-pkg'
 export default {
   name: 'QuotaSelect',
   props: {
-    title: {
-      type: String,
-      required: true
-    },
     totalQuota: {
       type: Number,
       default: 0
