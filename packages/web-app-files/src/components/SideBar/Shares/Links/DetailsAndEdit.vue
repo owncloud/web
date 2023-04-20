@@ -373,6 +373,9 @@ export default defineComponent({
     },
 
     expirationDateHint() {
+      if (!this.expirationDateRelative) {
+        return ''
+      }
       return this.$gettext(
         'Expires %{timeToExpiry}',
         { timeToExpiry: this.expirationDateRelative },
