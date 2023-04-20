@@ -136,6 +136,7 @@ Summary
 * Enhancement - Preview app sorting: [#8806](https://github.com/owncloud/web/pull/8806)
 * Enhancement - Adjust missing reshare permissions message: [#8820](https://github.com/owncloud/web/pull/8820)
 * Enhancement - Admin settings groups members panel: [#8826](https://github.com/owncloud/web/pull/8826)
+* Enhancement - Respect user read-only configuration by the server: [#8868](https://github.com/owncloud/web/pull/8868)
 
 Details
 -------
@@ -1271,6 +1272,15 @@ Details
 
    https://github.com/owncloud/web/issues/8596
    https://github.com/owncloud/web/pull/8826
+
+* Enhancement - Respect user read-only configuration by the server: [#8868](https://github.com/owncloud/web/pull/8868)
+
+   The user edit dialog in the user management will respect the server's
+   FRONTEND_READONLY_USER_ATTRIBUTES configuration, recent fields will be disabled and will
+   have a lock icon to visualize, that those fields are read-only.
+
+   https://github.com/owncloud/web/issues/8840
+   https://github.com/owncloud/web/pull/8868
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
