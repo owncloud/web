@@ -365,16 +365,16 @@ export default defineComponent({
     },
 
     expirationDateTooltip() {
-      return this.$gettextInterpolate(
-        this.$gettext('Expires in %{timeToExpiry} (%{expiryDate})'),
+      return this.$gettext(
+        'Expires in %{timeToExpiry} (%{expiryDate})',
         { timeToExpiry: this.expirationDateRelative, expiryDate: this.localExpirationDate },
         true
       )
     },
 
     expirationDateHint() {
-      return this.$gettextInterpolate(
-        this.$gettext('Expires in %{timeToExpiry}'),
+      return this.$gettext(
+        'Expires in %{timeToExpiry}',
         { timeToExpiry: this.expirationDateRelative },
         true
       )
@@ -506,8 +506,8 @@ export default defineComponent({
   display: flex;
   justify-content: flex-end;
   .expiration-date-hint {
-    line-height: 25px;
-    height: 25px;
+    display: flex;
+    align-items: center;
     margin-right: var(--oc-space-small);
     color: var(--oc-color-swatch-passive-default);
   }

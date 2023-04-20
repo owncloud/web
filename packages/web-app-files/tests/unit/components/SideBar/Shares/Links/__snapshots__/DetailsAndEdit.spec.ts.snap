@@ -55,6 +55,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
     </oc-drop-stub>
   </div>
   <div class="details-buttons">
+    <span class="expiration-date-hint">Expires in timeToExpiry</span>
     <!--v-if-->
     <!--v-if-->
     <!--v-if-->
@@ -104,6 +105,7 @@ exports[`DetailsAndEdit component if user can not edit does not render dropdown 
     <span class="link-current-role">Viewer</span>
   </p>
   <div class="oc-pr-s details-buttons">
+    <span class="expiration-date-hint">Expires in timeToExpiry</span>
     <!--v-if-->
     <!--v-if-->
     <!--v-if-->
