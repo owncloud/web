@@ -35,6 +35,18 @@ describe('EditPanel', () => {
     expect(groupOptions.length).toBe(1)
     expect(groupOptions[0].id).toEqual(availableGroupOptions[1].id)
   })
+
+  describe('method "isInputFieldReadOnly"', () => {
+    it('should be true if included in capability ReadOnlyUserAttributes list', () => {
+      const { wrapper } = getWrapper({ readOnlyUserAttributes: ['user.displayName'] })
+      expect(wrapper.vm.isInputFieldReadOnly('user.displayName')).toBeTruthy()
+    })
+    it('should be false if not included in capability ReadOnlyUserAttributes list', () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.vm.isInputFieldReadOnly('user.displayName')).toBeFalsy()
+    })
+  })
+
   describe('method "revertChanges"', () => {
     it('should revert changes on property editUser', () => {
       const { wrapper } = getWrapper()
@@ -159,9 +171,18 @@ describe('EditPanel', () => {
   })
 })
 
-function getWrapper({ selectedGroups = [], groups = availableGroupOptions } = {}) {
+function getWrapper({
+  readOnlyUserAttributes = [],
+  selectedGroups = [],
+  groups = availableGroupOptions
+} = {}) {
   const mocks = defaultComponentMocks()
   const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.capabilities.mockReturnValue({
+    graph: {
+      read_only_user_attributes: readOnlyUserAttributes
+    }
+  })
   const store = createStore(storeOptions)
   return {
     mocks,
