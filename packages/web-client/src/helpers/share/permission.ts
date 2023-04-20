@@ -40,26 +40,30 @@ export abstract class SharePermissions {
     $gettext('Internal')
   )
 
-  static readonly read = new SharePermission('read', SharePermissionBit.Read, $gettext('Read'))
+  static readonly read = new SharePermission('read', SharePermissionBit.Read, $gettext('can read'))
   static readonly update = new SharePermission(
     'update',
     SharePermissionBit.Update,
-    $gettext('Edit')
+    $gettext('can update')
   )
 
   static readonly create = new SharePermission(
     'create',
     SharePermissionBit.Create,
-    $gettext('Create')
+    $gettext('can add')
   )
 
   static readonly delete = new SharePermission(
     'delete',
     SharePermissionBit.Delete,
-    $gettext('Delete')
+    $gettext('can delete')
   )
 
-  static readonly share = new SharePermission('share', SharePermissionBit.Share, $gettext('Share'))
+  static readonly share = new SharePermission(
+    'share',
+    SharePermissionBit.Share,
+    $gettext('can share')
+  )
 
   static readonly denied = new SharePermission('denied', 64, $gettext('Deny'))
 
