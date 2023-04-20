@@ -288,7 +288,6 @@ export default defineComponent({
       )
     },
     messageText() {
-      console.log(this.descriptionMessage)
       if (this.errorMessage) {
         return this.errorMessage
       }
