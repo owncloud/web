@@ -137,6 +137,7 @@ Summary
 * Enhancement - Preview app sorting: [#8806](https://github.com/owncloud/web/pull/8806)
 * Enhancement - Adjust missing reshare permissions message: [#8820](https://github.com/owncloud/web/pull/8820)
 * Enhancement - Admin settings groups members panel: [#8826](https://github.com/owncloud/web/pull/8826)
+* Enhancement - Add expiration date hint to public links: [#8866](https://github.com/owncloud/web/pull/8866)
 * Enhancement - Respect user read-only configuration by the server: [#8868](https://github.com/owncloud/web/pull/8868)
 
 Details
@@ -1280,6 +1281,13 @@ Details
 
    https://github.com/owncloud/web/issues/8596
    https://github.com/owncloud/web/pull/8826
+
+* Enhancement - Add expiration date hint to public links: [#8866](https://github.com/owncloud/web/pull/8866)
+
+   We've added a expiration date text hint to public links.
+
+   https://github.com/owncloud/web/issues/8211
+   https://github.com/owncloud/web/pull/8866
 
 * Enhancement - Respect user read-only configuration by the server: [#8868](https://github.com/owncloud/web/pull/8868)
 
