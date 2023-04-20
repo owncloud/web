@@ -168,10 +168,8 @@ export default defineComponent({
         (g) => !selectedGroups.some((s) => s.id === g.id) && !g.groupTypes?.includes('ReadOnly')
       )
     })
-    const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
-
     const isLoginInputDisabled = computed(() => currentUser.uuid === (props.user as User).id)
-
+    const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
     const isInputFieldReadOnly = (key) => {
       return readOnlyUserAttributes.value.includes(key)
     }
