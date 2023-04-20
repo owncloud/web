@@ -67,7 +67,10 @@
       />
     </p>
     <div :class="{ 'oc-pr-s': !isModifiable }" class="details-buttons">
-      <span class="oc-mr-s expiration-date-hint" v-text="expirationDateHint" />
+      <span
+        class="oc-flex oc-mr-s oc-align-self-center oc-text-muted"
+        v-text="expirationDateHint"
+      />
       <oc-button
         v-if="link.indirect"
         v-oc-tooltip="viaTooltip"
@@ -508,11 +511,6 @@ export default defineComponent({
   min-width: 5rem !important;
   display: flex;
   justify-content: flex-end;
-  .expiration-date-hint {
-    display: flex;
-    align-items: center;
-    color: var(--oc-color-swatch-passive-default);
-  }
 }
 
 .edit-public-link-role-dropdown {
