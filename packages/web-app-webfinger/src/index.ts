@@ -15,9 +15,13 @@ const appInfo = {
 
 const routes = () => [
   {
+    name: 'root',
     path: '/',
     redirect: () => {
       return { name: 'webfinger-resolve' }
+    },
+    meta: {
+      root: true
     }
   },
   {
