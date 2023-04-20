@@ -22,10 +22,10 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
               </div>
               <p class="info-text">Enter a name to add people or groups as members to this Space.</p>
               <dl class="info-list">
-                <dt>What members can do</dt>
-                <dd>Members can see who else has access to this space and can access all files in this space. Read or write permissions can be set by the member’s role.</dd>
-                <dt>What Space managers can do</dt>
-                <dd>Space managers can edit all properties and content of a Space, such as adding or removing members, sharing subfolders with non-members, or creating links to share.</dd>
+                <dt>Member capabilities</dt>
+                <dd>Members are able to see who has access to this space and access all files in this space. Read or write permissions can be set by assigning a role.</dd>
+                <dt>Space manager capabilities</dt>
+                <dd>Members with the Manager role are able to edit all properties and content of a Space, such as adding or removing members, sharing subfolders with non-members, or creating links to share.</dd>
               </dl>
               <!--v-if-->
               <a class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw info-more-link" href="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" target="_blank">Read more</a>
