@@ -14,7 +14,7 @@
           id="files-trashbin-empty"
           class="files-empty"
           icon="delete-bin-7"
-          iconFillType="line"
+          icon-fill-type="line"
         >
           <template #message>
             <span>{{ noContentMessage }}</span>
