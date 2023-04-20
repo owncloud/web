@@ -227,7 +227,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     modalErrorMessage: {
-      selector: '//div[@class=\'oc-modal-body\']/p[contains(@class, "oc-modal-body-message")]',
+      selector: '//div[@class=\'oc-modal-body\']/*[contains(@class, "oc-modal-body-message")]',
       locateStrategy: 'xpath'
     },
     errorMessages: {
