@@ -503,12 +503,6 @@ export default defineComponent({
   min-width: 5rem !important;
   display: flex;
   justify-content: flex-end;
-  .expiration-date-hint {
-    line-height: 25px;
-    height: 25px;
-    margin-right: var(--oc-space-small);
-    color: var(--oc-color-swatch-passive-default);
-  }
 }
 
 .edit-public-link-role-dropdown {
