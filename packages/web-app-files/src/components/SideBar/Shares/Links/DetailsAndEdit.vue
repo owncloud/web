@@ -401,7 +401,12 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
+    ...mapActions([
+      'createModal',
+      'hideModal',
+      'setModalInputErrorMessage',
+      'setModalConfirmButtonDisabled'
+    ]),
 
     isSelectedRole(role: ShareRole) {
       return this.link.permissions === role.bitmask(false)
@@ -452,11 +457,14 @@ export default defineComponent({
 
     checkPassword(password) {
       if (password === '') {
+        this.setModalConfirmButtonDisabled(true)
         return this.setModalInputErrorMessage(this.$gettext("Password can't be empty"))
       }
       if (password.length > 72) {
+        this.setModalConfirmButtonDisabled(true)
         return this.setModalInputErrorMessage(this.$gettext("Password can't exceed 72 characters"))
       }
+      this.setModalConfirmButtonDisabled(false)
       return this.setModalInputErrorMessage(null)
     },
 
@@ -467,7 +475,7 @@ export default defineComponent({
         cancelText: this.$gettext('Cancel'),
         confirmText: this.link.password ? this.$gettext('Apply') : this.$gettext('Set'),
         hasInput: true,
-        inputDescription: this.$gettext("Password can't be empty"),
+        confirmDisabled: true,
         inputLabel: this.$gettext('Password'),
         inputType: 'password',
         onCancel: this.hideModal,
@@ -484,7 +492,6 @@ export default defineComponent({
           })
         }
       }
-
       this.createModal(modal)
     }
   }
@@ -496,6 +503,12 @@ export default defineComponent({
   min-width: 5rem !important;
   display: flex;
   justify-content: flex-end;
+  .expiration-date-hint {
+    line-height: 25px;
+    height: 25px;
+    margin-right: var(--oc-space-small);
+    color: var(--oc-color-swatch-passive-default);
+  }
 }
 
 .edit-public-link-role-dropdown {

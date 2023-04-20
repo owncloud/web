@@ -42,6 +42,7 @@ export const defaultStoreMockOptions = {
     createModal: jest.fn(),
     hideModal: jest.fn(),
     toggleModalConfirmButton: jest.fn(),
+    setModalConfirmButtonDisabled: jest.fn(),
     showMessage: jest.fn(),
     deleteNotification: jest.fn(),
     loadTheme: jest.fn(),
