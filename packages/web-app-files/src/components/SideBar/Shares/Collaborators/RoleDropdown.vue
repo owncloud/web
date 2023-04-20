@@ -8,6 +8,9 @@
       v-else
       :id="roleButtonId"
       class="files-recipient-role-select-btn"
+      :class="{
+        'oc-pill oc-background-default oc-px-s': roleButtonId == 'files-collaborators-role-button-new'
+      }"
       appearance="raw"
       gap-size="none"
     >

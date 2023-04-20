@@ -11,7 +11,7 @@
     >
       <template #default="{ togglePopover }">
         <oc-button
-          class="files-collaborators-expiration-button"
+          class="files-collaborators-expiration-button oc-pill oc-background-default oc-px-s"
           data-testid="recipient-datepicker-btn"
           appearance="raw"
           gap-size="none"
