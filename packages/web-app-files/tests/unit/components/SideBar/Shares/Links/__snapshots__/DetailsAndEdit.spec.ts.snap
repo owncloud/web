@@ -8,7 +8,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
       <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
     </oc-button-stub>
     <oc-drop-stub class="edit-public-link-role-dropdown" closeonclick="false" dropid="edit-public-link-role-dropdown" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#edit-public-link-role-dropdown-toggle-undefined">
-      <oc-list-stub class="role-dropdown-ist" raw="false">
+      <oc-list-stub class="role-dropdown-list" raw="false">
         <li>
           <oc-button-stub appearance="raw" class="oc-p-s" disabled="false" gapsize="medium" id="files-role-internal" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
             <span class="oc-flex oc-flex-middle">
