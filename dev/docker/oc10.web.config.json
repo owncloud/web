@@ -30,7 +30,7 @@
         "en": "Classic Design",
         "de": "Klassisches Design",
         "fr": "Design classique",
-        "zh_CN": "文件"
+        "zh": "文件"
       },
       "icon": "swap-box",
       "url": "http://host.docker.internal:8080/index.php/apps/files"

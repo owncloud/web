@@ -31,7 +31,7 @@
         "en": "Classic Design",
         "de": "Dateien",
         "fr": "Fichiers",
-        "zh_CN": "文件"
+        "zh": "文件"
       },
       "icon": "swap-box",
       "url": "http://owncloud/index.php/apps/files"
