@@ -67,6 +67,10 @@
       />
     </p>
     <div :class="{ 'oc-pr-s': !isModifiable }" class="details-buttons">
+      <span
+        class="oc-flex oc-mr-s oc-align-self-center oc-text-muted"
+        v-text="expirationDateHint"
+      />
       <oc-button
         v-if="link.indirect"
         v-oc-tooltip="viaTooltip"
@@ -364,9 +368,20 @@ export default defineComponent({
     },
 
     expirationDateTooltip() {
-      return this.$gettextInterpolate(
-        this.$gettext('Expires in %{timeToExpiry} (%{expiryDate})'),
+      return this.$gettext(
+        'Expires %{timeToExpiry} (%{expiryDate})',
         { timeToExpiry: this.expirationDateRelative, expiryDate: this.localExpirationDate },
+        true
+      )
+    },
+
+    expirationDateHint() {
+      if (!this.expirationDateRelative) {
+        return ''
+      }
+      return this.$gettext(
+        'Expires %{timeToExpiry}',
+        { timeToExpiry: this.expirationDateRelative },
         true
       )
     },
