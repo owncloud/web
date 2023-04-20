@@ -33,7 +33,10 @@ exports[`OcModal hides icon if not specified 1`] = `
         <h2 id="oc-modal-title">Example title</h2>
       </div>
       <div class="oc-modal-body">
-        <p class="oc-modal-body-message oc-mt-rm oc-mb-rm">Example message</p>
+        <div class="oc-modal-body-message oc-mt-rm oc-mb-rm">
+          <span>Example message</span>
+          <!--v-if-->
+        </div>
         <!--v-if-->
         <!--v-if-->
         <!--v-if-->
@@ -57,7 +60,10 @@ exports[`OcModal matches snapshot 1`] = `
         <h2 id="oc-modal-title">Example title</h2>
       </div>
       <div class="oc-modal-body">
-        <p class="oc-modal-body-message oc-mt-rm oc-mb-rm">Example message</p>
+        <div class="oc-modal-body-message oc-mt-rm oc-mb-rm">
+          <span>Example message</span>
+          <!--v-if-->
+        </div>
         <!--v-if-->
         <!--v-if-->
         <!--v-if-->
