@@ -15,7 +15,6 @@ exports[`LoginModal renders the input including two options 1`] = `
           <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" id="oc-select-1" label="Login" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object]" placeholder="Select..." readonly="false" searchable="true" warningmessage=""></oc-select-stub>
         </div>
         <!--v-if-->
-        <!--v-if-->
       </div>
       <div class="oc-modal-body-actions oc-flex oc-flex-right">
         <oc-button-stub appearance="outline" class="oc-modal-body-actions-cancel" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
