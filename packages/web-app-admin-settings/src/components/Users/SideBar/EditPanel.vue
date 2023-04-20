@@ -10,6 +10,7 @@
           :label="$gettext('User name')"
           :error-message="formData.userName.errorMessage"
           :fix-message-line="true"
+          :read-only="isInputFieldReadOnly('user.onPremisesSamAccountName')"
           @update:model-value="validateUserName"
         />
         <oc-text-input
@@ -19,6 +20,7 @@
           :label="$gettext('First and last name')"
           :error-message="formData.displayName.errorMessage"
           :fix-message-line="true"
+          :read-only="isInputFieldReadOnly('user.displayName')"
           @update:model-value="validateDisplayName"
         />
         <oc-text-input
@@ -29,6 +31,7 @@
           :error-message="formData.email.errorMessage"
           type="email"
           :fix-message-line="true"
+          :read-only="isInputFieldReadOnly('user.mail')"
           @change="validateEmail"
         />
         <oc-text-input
@@ -39,6 +42,7 @@
           type="password"
           :fix-message-line="true"
           placeholder="●●●●●●●●"
+          :read-only="isInputFieldReadOnly('user.passwordProfile')"
           @update:model-value="onUpdatePassword"
         />
         <div class="oc-mb-s">
@@ -49,6 +53,7 @@
             option-label="displayName"
             :options="translatedRoleOptions"
             :clearable="false"
+            :read-only="isInputFieldReadOnly('user.appRoleAssignments')"
             @update:model-value="onUpdateRole"
           />
           <div class="oc-text-input-message"></div>
@@ -61,6 +66,7 @@
             :label="$gettext('Login')"
             :options="loginOptions"
             :clearable="false"
+            :read-only="isInputFieldReadOnly('user.accountEnabled')"
             @update:model-value="onUpdateLogin"
           />
 
@@ -71,15 +77,16 @@
           :key="'quota-select-' + user.id"
           :disabled="isQuotaInputDisabled"
           class="oc-mb-s"
-          :title="$gettext('Personal quota')"
+          :label="$gettext('Personal quota')"
           :total-quota="editUser.drive?.quota?.total || 0"
           :max-quota="maxQuota"
           :fix-message-line="true"
           :description-message="
-            isQuotaInputDisabled
+            isQuotaInputDisabled && !isInputFieldReadOnly('drive.quota')
               ? $gettext('To set an individual quota, the user needs to have logged in once.')
               : ''
           "
+          :read-only="isInputFieldReadOnly('drive.quota')"
           @selected-option-change="changeSelectedQuotaOption"
         />
         <group-select
@@ -109,7 +116,7 @@ import GroupSelect from '../GroupSelect.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
 import { AppRole, AppRoleAssignment, Group, User } from 'web-client/src/generated'
-import { MaybeRef, useClientService, useStore } from 'web-pkg'
+import { MaybeRef, useCapabilityReadOnlyUserAttributes, useClientService, useStore } from 'web-pkg'
 import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
 
 export default defineComponent({
@@ -161,11 +168,17 @@ export default defineComponent({
         (g) => !selectedGroups.some((s) => s.id === g.id) && !g.groupTypes?.includes('ReadOnly')
       )
     })
+    const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
 
     const isLoginInputDisabled = computed(() => currentUser.uuid === (props.user as User).id)
 
+    const isInputFieldReadOnly = (key) => {
+      return readOnlyUserAttributes.value.includes(key)
+    }
+
     return {
       maxQuota: useCapabilitySpacesMaxQuota(),
+      isInputFieldReadOnly,
       isLoginInputDisabled,
       editUser,
       formData,
