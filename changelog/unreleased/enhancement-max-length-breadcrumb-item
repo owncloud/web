@@ -1,0 +1,5 @@
+Enhancement: Option for the max length of a breadcrumb item
+
+We've added a configuration option `options.breadcrumbItemMaxLength` to set the max length of a breadcrumb items with exeption of the last item.
+
+https://github.com/owncloud/web/pull/8769
