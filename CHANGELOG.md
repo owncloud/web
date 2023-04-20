@@ -1240,7 +1240,7 @@ Details
 
    We have added the possibility to include own translations to override existing translations.
    To inject custom translations add the following property to your `config.json`,
-   `"customTranslation": [{ "url": "https://localhost:9200/translations.json" }]`.
+   `"customTranslations": [{ "url": "https://localhost:9200/translations.json" }]`.
 
    https://github.com/owncloud/web/issues/8791
    https://github.com/owncloud/web/pull/8790
