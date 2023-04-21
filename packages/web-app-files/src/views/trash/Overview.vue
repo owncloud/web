@@ -185,7 +185,7 @@ export default defineComponent({
     }
 
     const getSpaceAttributes = (space: SpaceResource) => {
-      if (isProjectSpaceResource(space) && space.disabled !== false) {
+      if (isProjectSpaceResource(space) && space.disabled === true) {
         return {
           disabled: true
         }
