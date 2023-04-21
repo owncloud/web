@@ -178,7 +178,7 @@ export default defineComponent({
         return $gettext('Personal')
       }
       if (space.disabled === true) {
-        return `${space.name} (${$gettext('disabled')})`
+        return $gettext('%{spaceName} (disabled)', { spaceName: space.name })
       }
 
       return space.name
