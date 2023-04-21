@@ -22,9 +22,17 @@
               v-if="message"
               key="modal-message"
               class="oc-modal-body-message oc-mt-rm"
-              :class="{ 'oc-mb-rm': !hasInput }"
+              :class="{ 'oc-mb-rm': !hasInput || contextualHelperData }"
               v-text="message"
             />
+            <div
+              v-if="contextualHelperData"
+              class="oc-modal-body-contextual-helper"
+              :class="{ 'oc-mb-rm': !hasInput }"
+            >
+              <span class="text" v-text="contextualHelperLabel" />
+              <oc-contextual-helper class="oc-pl-xs" v-bind="contextualHelperData" />
+            </div>
             <oc-text-input
               v-if="hasInput"
               key="modal-input"
@@ -49,10 +57,6 @@
               :label="checkboxLabel"
               :aria-label="checkboxLabel"
             />
-          </div>
-          <div v-if="contextualHelperData" class="oc-modal-body-contextual-helper">
-            <span class="text" v-text="contextualHelperLabel" />
-            <oc-contextual-helper class="oc-pl-xs" v-bind="contextualHelperData" />
           </div>
         </div>
 
