@@ -389,8 +389,7 @@ export default defineComponent({
         ...unref(addToGroupsActions),
         ...unref(removeFromGroupsActions),
         ...unref(editLoginActions)
-        // FIXME: cast to any because of editQuotaActions. create separate useUserActionsEditQuota for users!
-      ].filter((item) => item.isEnabled({ resources: unref(selectedUsers) as any }))
+      ].filter((item) => item.isEnabled({ resources: unref(selectedUsers) }))
     })
 
     const updateSpaceQuota = ({ spaceId, quota }) => {
