@@ -24,8 +24,8 @@ export interface ContextualHelperOptions {
 export const shareInviteCollaboratorHelp = (options: ContextualHelperOptions) =>
   filterContextHelper(
     {
-      title: $gettext('Invite specific people'),
-      text: $gettext('Enter a name or group to share this item.'),
+      title: $gettext('Share with people'),
+      text: $gettext('Use the input field to search for users and groups. Select them to share the item.'),
       list: [
         { text: $gettext('Subfolders'), headline: true },
         {
@@ -35,11 +35,11 @@ export const shareInviteCollaboratorHelp = (options: ContextualHelperOptions) =>
         },
         { text: $gettext('Notification'), headline: true },
         {
-          text: $gettext('Invited people will be notified via email or in-app notification.')
+          text: $gettext('People you share resources with will be notified via email or in-app notification.')
         },
         { text: $gettext('Incognito'), headline: true },
         {
-          text: $gettext('Invited people can not see who else has access..')
+          text: $gettext('People you share resources with can not see who else has access.')
         },
         { text: $gettext('“via folder”'), headline: true },
         {
