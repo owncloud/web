@@ -174,7 +174,6 @@ import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import { useSpaceActionsEditQuota } from 'web-pkg/src/composables/actions/spaces'
 import { toRaw } from 'vue'
 import { SpaceResource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
@@ -186,7 +185,8 @@ import {
   useUserActionsDelete,
   useUserActionsRemoveFromGroups,
   useUserActionsAddToGroups,
-  useUserActionsEditLogin
+  useUserActionsEditLogin,
+  useUserActionsEditQuota
 } from '../composables/actions/users'
 import { configurationManager } from 'web-pkg'
 import { Drive, Group, User } from 'web-client/src/generated'
@@ -220,7 +220,7 @@ export default defineComponent({
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
       closeModal: closeQuotaModal
-    } = useSpaceActionsEditQuota({ store })
+    } = useUserActionsEditQuota()
 
     const users = ref([])
     const groups = ref([])

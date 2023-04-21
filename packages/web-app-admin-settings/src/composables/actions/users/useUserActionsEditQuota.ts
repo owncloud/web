@@ -1,12 +1,12 @@
-import { Store } from 'vuex'
-import { computed, ref } from 'vue'
-import { SpaceAction } from '../types'
+import { computed, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useAbility } from '../../ability'
+import { useAbility, useCapabilityReadOnlyUserAttributes } from 'web-pkg'
+import { UserAction } from 'web-pkg/src/composables/actions'
 
-export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {}) => {
+export const useUserActionsEditQuota = () => {
   const { $gettext } = useGettext()
   const ability = useAbility()
+  const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
 
   const modalOpen = ref(false)
 
@@ -18,7 +18,7 @@ export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {})
     modalOpen.value = true
   }
 
-  const actions = computed((): SpaceAction[] => [
+  const actions = computed((): UserAction[] => [
     {
       name: 'editQuota',
       icon: 'cloud',
@@ -30,13 +30,19 @@ export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {})
         if (!resources || !resources.length) {
           return false
         }
-        if (resources.some((r) => r.spaceQuota === false)) {
+
+        if (unref(readOnlyUserAttributes).includes('drive.quota')) {
           return false
         }
+
+        if (!resources.some((r) => r.drive?.quota)) {
+          return false
+        }
+
         return ability.can('set-quota-all', 'Space')
       },
       componentType: 'button',
-      class: 'oc-files-actions-edit-quota-trigger'
+      class: 'oc-users-actions-edit-quota-trigger'
     }
   ])
 
