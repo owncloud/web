@@ -17,6 +17,7 @@
           :label="$gettext('User name') + '*'"
           :error-message="formData.userName.errorMessage"
           :fix-message-line="true"
+          autocomplete="off"
           @update:model-value="validateUserName"
         />
         <oc-text-input
@@ -26,6 +27,7 @@
           :label="$gettext('First and last name') + '*'"
           :error-message="formData.displayName.errorMessage"
           :fix-message-line="true"
+          autocomplete="off"
           @update:model-value="validateDisplayName"
         />
         <oc-text-input
@@ -35,6 +37,7 @@
           :label="$gettext('Email') + '*'"
           :error-message="formData.email.errorMessage"
           type="email"
+          autocomplete="off"
           :fix-message-line="true"
           @update:model-value="onInputEmail"
           @change="validateEmail"
@@ -46,6 +49,7 @@
           :label="$gettext('Password') + '*'"
           :error-message="formData.password.errorMessage"
           type="password"
+          autocomplete="new-password"
           :fix-message-line="true"
           @update:model-value="validatePassword"
         />
