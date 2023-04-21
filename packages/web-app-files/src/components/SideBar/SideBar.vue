@@ -21,12 +21,12 @@
   >
     <template #header>
       <file-info
-        v-if="loadedResource && !highlightedFileIsSpace"
+        v-if="highlightedFile && loadedResource && !highlightedFileIsSpace"
         class="sidebar-panel__file_info"
         :is-sub-panel-active="!!activePanel"
       />
       <space-info
-        v-if="loadedResource && highlightedFileIsSpace"
+        v-if="highlightedFile && loadedResource && highlightedFileIsSpace"
         class="sidebar-panel__space_info"
       />
     </template>
@@ -306,6 +306,7 @@ export default defineComponent({
 
     return {
       loadedResource,
+      highlightedFile,
       setActiveSideBarPanel,
       closeSideBar,
       destroySideBar,
