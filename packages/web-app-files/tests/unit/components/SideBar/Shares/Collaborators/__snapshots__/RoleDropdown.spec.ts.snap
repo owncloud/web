@@ -3,7 +3,7 @@
 exports[`RoleDropdown renders a button with existing role if given for resource type file 1`] = `
 <span class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-    <span>can view</span>
+    <span>Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
   <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-7" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
@@ -47,7 +47,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub raw="false">
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" hidelabel="false" id="files-collaborators-permission-read" label="can read" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" hidelabel="false" id="files-collaborators-permission-read" label="can view" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
         <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-update" label="can update" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
@@ -73,7 +73,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
 exports[`RoleDropdown renders a button with existing role if given for resource type folder 1`] = `
 <span class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-    <span>can view</span>
+    <span>Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
   <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-5" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
@@ -117,7 +117,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub raw="false">
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" hidelabel="false" id="files-collaborators-permission-read" label="can read" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" hidelabel="false" id="files-collaborators-permission-read" label="can view" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
         <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-update" label="can update" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
@@ -143,7 +143,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
 exports[`RoleDropdown renders a button with invite text if no existing role given for resource type file 1`] = `
 <span class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-    <span>can view</span>
+    <span>Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
   <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-3" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
@@ -187,7 +187,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub raw="false">
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" hidelabel="false" id="files-collaborators-permission-read" label="can read" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" hidelabel="false" id="files-collaborators-permission-read" label="can view" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
         <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-update" label="can update" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
@@ -207,7 +207,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
 exports[`RoleDropdown renders a button with invite text if no existing role given for resource type folder 1`] = `
 <span class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-    <span>can view</span>
+    <span>Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
   <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-1" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
@@ -251,7 +251,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub raw="false">
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" hidelabel="false" id="files-collaborators-permission-read" label="can read" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="true" hidelabel="false" id="files-collaborators-permission-read" label="can view" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
         <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-update" label="can update" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
