@@ -177,7 +177,7 @@ export default defineComponent({
       if (isPersonalSpaceResource(space)) {
         return $gettext('Personal')
       }
-      if (space.disabled !== false) {
+      if (space.disabled === true) {
         return `${space.name} (${$gettext('disabled')})`
       }
 
