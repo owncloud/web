@@ -42,10 +42,9 @@
             <template #name="{ item }">
               <oc-button
                 class="oc-display-block"
-                type="router-link"
                 appearance="raw"
-                :to="getTrashLink(item)"
                 v-text="getSpaceName(item)"
+                v-bind="getSpaceAttributes(item)"
               />
             </template>
             <template #footer>
@@ -175,7 +174,27 @@ export default defineComponent({
     ])
 
     const getSpaceName = (space: SpaceResource) => {
-      return isPersonalSpaceResource(space) ? $gettext('Personal') : space.name
+      if (isPersonalSpaceResource(space)) {
+        return $gettext('Personal')
+      }
+      if (space.disabled === true) {
+        return $gettext('%{spaceName} (disabled)', { spaceName: space.name })
+      }
+
+      return space.name
+    }
+
+    const getSpaceAttributes = (space: SpaceResource) => {
+      if (isProjectSpaceResource(space) && space.disabled === true) {
+        return {
+          disabled: true
+        }
+      }
+
+      return {
+        type: 'router-link',
+        to: getTrashLink(space)
+      }
     }
 
     const getTrashLink = (space: SpaceResource) => {
@@ -222,6 +241,7 @@ export default defineComponent({
       breadcrumbs,
       getSpaceName,
       getTrashLink,
+      getSpaceAttributes,
       loadResourcesTask,
       areResourcesLoading,
       isPersonalSpaceResource
