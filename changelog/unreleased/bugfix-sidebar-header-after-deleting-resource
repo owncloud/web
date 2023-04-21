@@ -1,0 +1,6 @@
+Bugfix: Sidebar header after deleting resource
+
+The sidebar header will now be removed correctly when you delete the currently selected resource.
+
+https://github.com/owncloud/web/issues/8880
+https://github.com/owncloud/web/pull/8886
