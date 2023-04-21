@@ -3,7 +3,7 @@ import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { User } from 'web-client/src/generated'
 import { eventBus } from 'web-pkg/src'
-import { getComposableWrapper } from 'web-test-helpers'
+import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
 
 describe('useUserActionsEditLogin', () => {
   describe('method "isEnabled"', () => {
@@ -15,6 +15,19 @@ describe('useUserActionsEditLogin', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources })).toEqual(isEnabled)
+        }
+      })
+    })
+    it('returns false if included in capability readOnlyUserAttributes list', () => {
+      getWrapper({
+        setup: ({ actions }, { storeOptions }) => {
+          storeOptions.getters.capabilities.mockReturnValue({
+            graph: {
+              read_only_user_attributes: ['user.accountEnabled']
+            }
+          })
+
+          expect(unref(actions)[0].isEnabled({ resources: [mock<User>()] })).toEqual(false)
         }
       })
     })
@@ -35,12 +48,24 @@ describe('useUserActionsEditLogin', () => {
 function getWrapper({
   setup
 }: {
-  setup: (instance: ReturnType<typeof useUserActionsEditLogin>) => void
+  setup: (
+    instance: ReturnType<typeof useUserActionsEditLogin>,
+    {
+      storeOptions
+    }: {
+      storeOptions: typeof defaultStoreMockOptions
+    }
+  ) => void
 }) {
+  const storeOptions = defaultStoreMockOptions
+  const store = createStore(storeOptions)
   return {
-    wrapper: getComposableWrapper(() => {
-      const instance = useUserActionsEditLogin()
-      setup(instance)
-    })
+    wrapper: getComposableWrapper(
+      () => {
+        const instance = useUserActionsEditLogin()
+        setup(instance, { storeOptions })
+      },
+      { store }
+    )
   }
 }
