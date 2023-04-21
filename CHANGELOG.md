@@ -57,6 +57,7 @@ Summary
 * Bugfix - Opening context menu via keyboard: [#8827](https://github.com/owncloud/web/pull/8827)
 * Bugfix - Hide upload hint in empty read-only folders: [#8834](https://github.com/owncloud/web/issues/8834)
 * Bugfix - Public link empty password stays forever: [#8864](https://github.com/owncloud/web/pull/8864)
+* Bugfix - Sidebar header after deleting resource: [#8880](https://github.com/owncloud/web/issues/8880)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -512,6 +513,14 @@ Details
 
    https://github.com/owncloud/web/issues/8521
    https://github.com/owncloud/web/pull/8864
+
+* Bugfix - Sidebar header after deleting resource: [#8880](https://github.com/owncloud/web/issues/8880)
+
+   The sidebar header will now be removed correctly when you delete the currently selected
+   resource.
+
+   https://github.com/owncloud/web/issues/8880
+   https://github.com/owncloud/web/pull/8886
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
