@@ -4,7 +4,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
 <div class="link-details oc-flex oc-flex-between oc-flex-middle" file="undefined">
   <div>
     <oc-button-stub appearance="raw" class="edit-public-link-role-dropdown-toggle oc-text-left" disabled="false" gapsize="none" id="edit-public-link-role-dropdown-toggle-undefined" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-      <span class="link-current-role">can view</span>
+      <span class="link-current-role">Can view</span>
       <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
     </oc-button-stub>
     <oc-drop-stub class="edit-public-link-role-dropdown" closeonclick="false" dropid="edit-public-link-role-dropdown" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#edit-public-link-role-dropdown-toggle-undefined">
@@ -15,7 +15,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
               <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="login-box" size="medium" type="span" variation="inherit"></oc-icon-stub>
               <span>
                 <span class="oc-text-bold oc-display-block oc-width-1-1">Internal</span>
-                <span class="oc-text-small">Recipients needs to login to access contents.</span>
+                <span class="oc-text-small">Recipients need to be invited and logged in to access contents.</span>
               </span>
             </span>
             <span class="oc-flex">
@@ -28,7 +28,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
             <span class="oc-flex oc-flex-middle">
               <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
               <span>
-                <span class="oc-text-bold oc-display-block oc-width-1-1">can view</span>
+                <span class="oc-text-bold oc-display-block oc-width-1-1">Can view</span>
                 <span class="oc-text-small">Recipients can view and download.</span>
               </span>
             </span>
@@ -42,7 +42,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
             <span class="oc-flex oc-flex-middle">
               <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="file-edit" size="medium" type="span" variation="inherit"></oc-icon-stub>
               <span>
-                <span class="oc-text-bold oc-display-block oc-width-1-1">can edit</span>
+                <span class="oc-text-bold oc-display-block oc-width-1-1">Can edit</span>
                 <span class="oc-text-small">Recipients can view, download and edit.</span>
               </span>
             </span>
@@ -102,7 +102,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
 exports[`DetailsAndEdit component if user can not edit does not render dropdown or edit button 1`] = `
 <div class="link-details oc-flex oc-flex-between oc-flex-middle" file="undefined">
   <p class="oc-my-rm">
-    <span class="link-current-role">can view</span>
+    <span class="link-current-role">Can view</span>
   </p>
   <div class="oc-pr-s details-buttons">
     <span class="oc-flex oc-mr-s oc-align-self-center oc-text-muted"></span>
