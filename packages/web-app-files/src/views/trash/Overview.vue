@@ -97,7 +97,7 @@ export default defineComponent({
 
     const spaces = computed<SpaceResource[]>(() =>
       store.getters['runtime/spaces/spaces'].filter(
-        (s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s)
+        (s) => isPersonalSpaceResource(s) || (isProjectSpaceResource(s) && s.disabled !== true)
       )
     )
 
