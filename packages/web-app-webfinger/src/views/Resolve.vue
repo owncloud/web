@@ -1,11 +1,21 @@
 <template>
-  <div class="webfinger-resolve oc-height-viewport oc-flex oc-flex-center oc-flex-middle">
-    <div
-      class="oc-card oc-card-body oc-width-large oc-height-small oc-flex oc-flex-center oc-flex-middle oc-text-center"
-    >
-      <p v-if="isLoading" v-text="resolveMessage" />
-      <p v-else-if="errorMessage" v-text="errorMessage" />
-      <p v-else v-text="successMessage" />
+  <div
+    class="webfinger-resolve oc-height-viewport oc-flex oc-flex-column oc-flex-center oc-flex-middle"
+  >
+    <div class="oc-card oc-card-body oc-text-center oc-width-large">
+      <template v-if="hasError">
+        <h2 key="webfinger-resolve-error">
+          <span v-text="$gettext('Sorry!')" />
+        </h2>
+        <p v-text="$gettext('Something went wrong.')" />
+        <p v-text="$gettext('(We could not resolve the destination)')" />
+      </template>
+      <template v-else>
+        <h2 key="webfinger-resolve-loading">
+          <span v-text="$gettext('One moment please…')" />
+        </h2>
+        <p v-text="$gettext('You are being redirected.')" />
+      </template>
     </div>
   </div>
 </template>
@@ -14,7 +24,6 @@
 import { computed, defineComponent, ref, watch } from 'vue'
 import { useClientService, useConfigurationManager, useLoadingService } from 'web-pkg'
 import { OwnCloudInstance, WebfingerDiscovery } from 'web-app-webfinger/src/discovery'
-import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'WebfingerResolve',
@@ -22,24 +31,21 @@ export default defineComponent({
     const configurationManager = useConfigurationManager()
     const clientService = useClientService()
     const loadingService = useLoadingService()
-    const { $gettext } = useGettext()
 
     const ownCloudInstances = ref<OwnCloudInstance[]>([])
     const isLoading = computed(() => loadingService.isLoading)
-    const errorMessage = ref('')
+    const hasError = ref(false)
     const webfingerDiscovery = new WebfingerDiscovery(configurationManager.serverUrl, clientService)
     loadingService.addTask(async () => {
       try {
         const instances = await webfingerDiscovery.discoverOwnCloudInstances()
         ownCloudInstances.value = instances
         if (instances.length === 0) {
-          // TODO: find good error message for a user not having any ownCloud instances
-          errorMessage.value = $gettext('We were unable to resolve your destination.')
+          hasError.value = true
         }
       } catch (e) {
         console.error(e)
-        // TODO: find good error message for unexpected errors while discovering ownCloud instances
-        errorMessage.value = $gettext('We were unable to resolve your destination.')
+        hasError.value = true
       }
     })
 
@@ -54,13 +60,7 @@ export default defineComponent({
     return {
       ownCloudInstances,
       isLoading,
-      errorMessage,
-      // TODO: find good resolve message
-      resolveMessage: $gettext("Please wait while we're resolving your destination…"),
-      // TODO: find good success message
-      successMessage: $gettext(
-        "We resolved your destination. Please wait while you're being redirected…"
-      )
+      hasError
     }
   }
 })
@@ -71,11 +71,15 @@ export default defineComponent({
   .oc-card {
     background: var(--oc-color-background-highlight);
     border-radius: 15px;
-  }
 
-  p {
-    margin: 0;
-    font-size: var(--oc-font-size-large);
+    &-body {
+      h2 {
+        margin-top: 0;
+      }
+      p {
+        font-size: var(--oc-font-size-large);
+      }
+    }
   }
 }
 </style>
