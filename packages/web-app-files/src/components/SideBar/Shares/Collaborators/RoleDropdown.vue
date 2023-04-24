@@ -9,11 +9,11 @@
       :id="roleButtonId"
       class="files-recipient-role-select-btn"
       :class="{
-        'oc-pill oc-background-default oc-px-s': mode == 'create'
+        'oc-pill oc-background-default oc-px-s': mode === 'create'
       }"
       appearance="raw"
       gap-size="none"
-      :aria-label="mode == 'create' ? $gettext('Select permission') : $gettext('Edit permission')"
+      :aria-label="mode === 'create' ? $gettext('Select permission') : $gettext('Edit permission')"
     >
       <span v-if="!existingRole" v-text="inviteLabel" />
       <span v-else>{{ $gettext(selectedRole.label) }}</span>
