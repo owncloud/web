@@ -1,7 +1,7 @@
 import { nextTick, computed, unref, Ref } from 'vue'
 import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
-import { usePagination, useFileListHeaderPosition } from '../'
+import { usePagination } from '../'
 import { useSort, SortDir, SortField } from 'web-pkg/src/composables'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 
@@ -17,6 +17,8 @@ import { Task } from 'vue-concurrency'
 import { Resource } from 'web-client'
 import { useSelectedResources, SelectedResourcesResult } from '../selection'
 import { ReadOnlyRef } from 'web-pkg'
+import { useFileListHeaderPosition } from 'web-pkg/src/composables'
+
 import { ScrollToResult, useScrollTo } from '../scrollTo'
 import { useViewMode, useViewSize, ViewModeConstants } from '../viewMode'
 

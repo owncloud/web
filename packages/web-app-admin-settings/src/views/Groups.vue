@@ -106,7 +106,6 @@ export default defineComponent({
     const template = ref()
     const selectedGroups = ref([])
     const createGroupModalOpen = ref(false)
-    const listHeaderPosition = ref(0)
     const clientService = useClientService()
 
     const loadResourcesTask = useTask(function* (signal) {
@@ -116,10 +115,6 @@ export default defineComponent({
         group.members = group.members || []
       })
     })
-
-    const calculateListHeaderPosition = () => {
-      listHeaderPosition.value = unref(template)?.$refs?.appBar?.getBoundingClientRect()?.height
-    }
 
     const { actions: deleteActions } = useGroupActionsDelete({ store })
     const batchActions = computed(() => {
@@ -134,8 +129,6 @@ export default defineComponent({
         loadResourcesTask.perform()
         selectedGroups.value = []
       })
-      calculateListHeaderPosition()
-      window.addEventListener('resize', calculateListHeaderPosition)
     })
 
     onBeforeUnmount(() => {
@@ -150,7 +143,6 @@ export default defineComponent({
       template,
       loadResourcesTask,
       clientService,
-      listHeaderPosition,
       batchActions
     }
   },

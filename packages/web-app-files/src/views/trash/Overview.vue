@@ -31,6 +31,7 @@
             :sort-dir="sortDir"
             :fields="fields"
             :data="displaySpaces"
+            :header-position="fileListHeaderY"
             :sticky="true"
             :hover="true"
             @sort="handleSort"
@@ -79,6 +80,7 @@ import {
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { FieldType } from 'design-system/src/components/OcTable/OcTable.vue'
+import { useFileListHeaderPosition } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'TrashOverview',
@@ -88,6 +90,7 @@ export default defineComponent({
     const router = useRouter()
     const { $gettext } = useGettext()
     const clientService = useClientService()
+    const { y: fileListHeaderY } = useFileListHeaderPosition()
     const sortBy = ref('name')
     const sortDir = ref('asc')
     const filterTerm = ref('')
@@ -244,7 +247,8 @@ export default defineComponent({
       getSpaceAttributes,
       loadResourcesTask,
       areResourcesLoading,
-      isPersonalSpaceResource
+      isPersonalSpaceResource,
+      fileListHeaderY
     }
   }
 })
