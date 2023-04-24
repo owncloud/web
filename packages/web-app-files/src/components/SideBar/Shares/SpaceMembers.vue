@@ -39,7 +39,7 @@
       v-if="currentUserCanShare"
       key="new-collaborator"
       :save-button-label="$gettext('Add')"
-      :invite-label="$gettext('Search for people and groups')"
+      :invite-label="$gettext('Search')"
       class="oc-my-s"
     />
     <template v-if="hasCollaborators">
