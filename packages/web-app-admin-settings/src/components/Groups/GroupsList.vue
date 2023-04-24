@@ -125,7 +125,7 @@ export default defineComponent({
     selectedGroups: {
       type: Array as PropType<Group[]>,
       required: true
-    },
+    }
   },
   emits: ['toggleSelectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
   setup(props, { emit }) {
