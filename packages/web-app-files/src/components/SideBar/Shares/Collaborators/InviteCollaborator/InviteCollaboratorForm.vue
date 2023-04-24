@@ -37,8 +37,8 @@
     <div class="oc-flex oc-flex-middle oc-flex-between oc-mb-l oc-mt-s">
       <role-dropdown
         :allow-share-permission="hasResharing || resourceIsSpace"
-        @option-change="collaboratorRoleChanged"
         mode="create"
+        @option-change="collaboratorRoleChanged"
       />
       <expiration-datepicker
         v-if="!saving"

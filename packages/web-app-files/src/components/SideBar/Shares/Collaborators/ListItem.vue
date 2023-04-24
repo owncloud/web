@@ -41,8 +41,8 @@
                 :existing-role="share.role"
                 :allow-share-permission="hasResharing || isAnySpaceShareType"
                 class="files-collaborators-collaborator-role"
-                @option-change="shareRoleChanged"
                 mode="edit"
+                @option-change="shareRoleChanged"
               />
             </div>
             <div v-else-if="share.role">
