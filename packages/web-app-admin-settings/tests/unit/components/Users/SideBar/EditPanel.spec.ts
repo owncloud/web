@@ -37,11 +37,11 @@ describe('EditPanel', () => {
   })
 
   describe('method "isInputFieldReadOnly"', () => {
-    it('should be true if included in capability ReadOnlyUserAttributes list', () => {
+    it('should be true if included in capability readOnlyUserAttributes list', () => {
       const { wrapper } = getWrapper({ readOnlyUserAttributes: ['user.displayName'] })
       expect(wrapper.vm.isInputFieldReadOnly('user.displayName')).toBeTruthy()
     })
-    it('should be false if not included in capability ReadOnlyUserAttributes list', () => {
+    it('should be false if not included in capability readOnlyUserAttributes list', () => {
       const { wrapper } = getWrapper()
       expect(wrapper.vm.isInputFieldReadOnly('user.displayName')).toBeFalsy()
     })

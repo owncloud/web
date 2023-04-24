@@ -14,15 +14,18 @@
 </template>
 
 <script lang="ts">
-import { useUserActionsEdit, useUserActionsDelete } from '../../composables/actions/users'
+import {
+  useUserActionsEdit,
+  useUserActionsDelete,
+  useUserActionsEditQuota
+} from '../../composables/actions/users'
 import { computed, defineComponent, PropType, unref, watch, toRaw, ref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import { User } from 'web-client/src/generated'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
-import { useSpaceActionsEditQuota } from 'web-pkg/src/composables/actions/spaces'
 import { SpaceResource } from 'web-client/src'
 import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
-import { SpaceActionOptions, useActionsShowDetails } from 'web-pkg/src/composables/actions'
+import { useActionsShowDetails } from 'web-pkg/src/composables/actions'
 import { isPersonalSpaceResource } from 'web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
 
@@ -87,7 +90,7 @@ export default defineComponent({
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
       closeModal: closeQuotaModal
-    } = useSpaceActionsEditQuota({ store })
+    } = useUserActionsEditQuota()
     const { actions: userEditActions } = useUserActionsEdit()
     const { actions: userDeleteActions } = useUserActionsDelete({ store })
 
@@ -97,10 +100,7 @@ export default defineComponent({
       )
     )
     const menuItemsSecondaryActions = computed(() =>
-      [...unref(editQuotaActions)].filter((item) =>
-        // TODO: create separate useUserActionsEditQuota
-        item.isEnabled(unref(filterParams) as SpaceActionOptions)
-      )
+      [...unref(editQuotaActions)].filter((item) => item.isEnabled(unref(filterParams)))
     )
 
     const menuItemsSidebar = computed(() =>

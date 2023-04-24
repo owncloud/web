@@ -24,7 +24,7 @@ const usersTable = '.users-table'
 const quotaInput = '#quota-select-form .vs__search'
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const userCheckboxSelector = `[data-item-id="%s"] input[type=checkbox]`
-const editQuotaBtn = '.oc-files-actions-edit-quota-trigger'
+const editQuotaBtn = '.oc-users-actions-edit-quota-trigger'
 const quotaInputBatchAction = '#quota-select-batch-action-form .vs__search'
 const userInput = '#%s-input'
 const roleValueDropDown = `.vs__dropdown-menu :text-is("%s")`
