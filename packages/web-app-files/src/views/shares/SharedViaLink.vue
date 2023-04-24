@@ -8,7 +8,7 @@
           v-if="isEmpty"
           id="files-shared-via-link-empty"
           class="files-empty"
-          icon="file-forbid"
+          icon="link"
         >
           <template #message>
             <span v-translate>You have not shared any resource via link.</span>
