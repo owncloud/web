@@ -17,9 +17,9 @@
       <oc-button
         v-if="isClipboardCopySupported"
         v-oc-tooltip="copyBtnHint"
-        appearance="raw"
         :aria-label="copyBtnHint"
-        class="oc-files-public-link-copy-url"
+        size="small"
+        class="oc-files-public-link-copy-url oc-ml-xs"
         @click="copyLinkToClipboard"
         v-text="copyBtnLabel"
       />
