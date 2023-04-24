@@ -2,7 +2,7 @@
   <div class="oc-mb-s oc-width-1-1 oc-mb-l">
     <h4
       class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-my-rm"
-      v-text="$gettext('Quick link')"
+      v-text="$gettext('Link')"
     />
     <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-xs link-name-container">
       <div class="oc-flex oc-flex-middle oc-text-truncate">
@@ -13,10 +13,11 @@
         />
       </div>
       <oc-button
-        v-oc-tooltip="$gettext('Create quick link')"
         class="oc-ml-s"
         size="small"
-        :aria-label="$gettext('Create quick link')"
+        v-oc-tooltip="$gettext('Create link')"
+        appearance="raw"
+        :aria-label="$gettext('Create link')"
         @click="createQuickLink"
       >
         <span v-text="$gettext('Create link')" />
@@ -70,7 +71,7 @@ export default defineComponent({
         : unref(capabilitiesRoleName) || linkRoleViewerFolder.name
       const emitData = {
         link: {
-          name: $gettext('Quicklink'),
+          name: $gettext('Link'),
           permissions: LinkShareRoles.getByName(
             roleName,
             unref(resource).isFolder,

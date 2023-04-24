@@ -45,7 +45,7 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
     alias
   ).bitmask(allowResharing)
   const params: { [key: string]: unknown } = {
-    name: $gettext('Quicklink'),
+    name: $gettext('Link'),
     permissions: permissions.toString(),
     quicklink: true
   }

@@ -114,15 +114,6 @@ export const shareViaLinkHelp = (options: ContextualHelperOptions) =>
           text: $gettext(
             'No login required. Everyone with the link can access. If you share this link with people from the list "Invited people", they need to login so that their individual assigned permissions can take effect. If they are not logged-in, the permissions of the link take effect.'
           )
-        },
-        {
-          text: $gettext('Quicklink'), // TODO: What to do with this?
-          headline: true
-        },
-        {
-          text: $gettext(
-            'The quicklink is the default link that is copied when you select "Get link” from the context menu.' // TODO: What to do with this?
-          )
         }
       ],
       readMoreLink: 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
