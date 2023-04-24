@@ -2,7 +2,7 @@
   <main class="oc-flex oc-flex-wrap oc-height-1-1 app-content oc-width-1-1">
     <app-loading-spinner v-if="loading" />
     <template v-else>
-      <div id="admin-settings-wrapper" class="oc-width-expand">
+      <div id="admin-settings-wrapper" class="oc-width-expand oc-height-1-1 oc-position-relative">
         <div id="admin-settings-app-bar" ref="appBarRef" class="oc-app-bar oc-py-s">
           <div class="admin-settings-app-bar-controls oc-flex oc-flex-between oc-flex-middle">
             <oc-breadcrumb
@@ -196,6 +196,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+#admin-settings-wrapper {
+  overflow-y: auto;
+}
+
 #admin-settings-app-bar {
   background-color: var(--oc-color-background-default);
   border-top-right-radius: 15px;
