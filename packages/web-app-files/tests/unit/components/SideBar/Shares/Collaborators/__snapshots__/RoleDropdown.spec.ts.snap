@@ -53,7 +53,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
         <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-update" label="can update" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-create" label="can add" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-create" label="can create" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
         <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-delete" label="can delete" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
@@ -123,7 +123,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
         <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-update" label="can update" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-create" label="can add" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-create" label="can create" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
         <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-delete" label="can delete" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
@@ -257,7 +257,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
         <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-update" label="can update" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
-        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-create" label="can add" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
+        <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-create" label="can create" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
       </li>
       <li class="oc-my-s oc-px-m">
         <oc-checkbox-stub class="oc-mr-xs files-collaborators-permission-checkbox" disabled="false" hidelabel="false" id="files-collaborators-permission-delete" label="can delete" modelvalue="[object Object],[object Object]" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
