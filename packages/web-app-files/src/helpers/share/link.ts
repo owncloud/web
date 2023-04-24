@@ -79,7 +79,7 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
   copy(link.url)
 
   await store.dispatch('showMessage', {
-    title: $gettext('The quicklink has been copied to your clipboard.')
+    title: $gettext('The link has been copied to your clipboard.')
   })
 
   return link

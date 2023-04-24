@@ -82,7 +82,7 @@ describe('createQuicklink', () => {
     })
 
     expect(mockStore.dispatch).toHaveBeenCalledWith('showMessage', {
-      title: 'The quicklink has been copied to your clipboard.'
+      title: 'The link has been copied to your clipboard.'
     })
   })
 
@@ -122,7 +122,7 @@ describe('createQuicklink', () => {
       })
 
       expect(mockStore.dispatch).toHaveBeenCalledWith('showMessage', {
-        title: 'The quicklink has been copied to your clipboard.'
+        title: 'The link has been copied to your clipboard.'
       })
     }
   )

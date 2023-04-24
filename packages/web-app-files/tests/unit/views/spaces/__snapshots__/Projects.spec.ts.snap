@@ -12,9 +12,7 @@ exports[`Projects view different files view states lists all available project s
             <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-raw" id="oc-tiles-sort-btn" type="button">
               <!-- @slot Content of the button -->
               <span>A-Z</span>
-              <span class="oc-icon oc-icon-m oc-icon-passive">
-                <!---->
-              </span>
+              <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
             </button>
             <div class="oc-drop oc-box-shadow-medium oc-rounded oc-tiles-sort-drop" id="oc-drop-1">
               <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
@@ -23,9 +21,7 @@ exports[`Projects view different files view states lists all available project s
                     <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-inverse oc-button-inverse-raw oc-tiles-sort-list-item oc-p-s oc-width-1-1 oc-background-primary-gradient selected" type="button">
                       <!-- @slot Content of the button -->
                       <span>A-Z</span>
-                      <span class="oc-icon oc-icon-m oc-icon-passive">
-                        <!---->
-                      </span>
+                      <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
                     </button>
                   </li>
                   <li class="oc-my-xs">

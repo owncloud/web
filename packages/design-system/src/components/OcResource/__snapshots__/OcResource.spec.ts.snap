@@ -4,9 +4,7 @@ exports[`OcResource displays parent folder name default if calculated name is em
 <div class="oc-resource oc-text-overflow">
   <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw" draggable="false" type="button">
     <!-- @slot Content of the button -->
-    <span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file">
-      <!---->
-    </span>
+    <span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span>
   </button>
   <div class="oc-resource-details oc-text-overflow oc-pl-s">
     <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw oc-text-overflow" draggable="false" type="button">
@@ -21,9 +19,7 @@ exports[`OcResource displays parent folder name default if calculated name is em
     </button>
     <div class="oc-resource-indicators">
       <span class="parent-folder" style="cursor: default;">
-        <span class="oc-icon oc-icon-s oc-icon-passive">
-          <!---->
-        </span>
+        <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
         <span class="text">Example parent folder name</span>
       </span>
     </div>

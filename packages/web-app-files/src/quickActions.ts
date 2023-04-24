@@ -69,7 +69,7 @@ export default {
   },
   quicklink: {
     id: 'quicklink',
-    label: ($gettext) => $gettext('Copy quicklink'),
+    label: ($gettext) => $gettext('Copy link'),
     icon: 'link',
     iconFillType: undefined,
     handler: async ({ ability, clientService, item, language, store }: QuickLinkContext) => {

@@ -44,8 +44,8 @@
               <oc-button
                 class="oc-display-block"
                 appearance="raw"
-                v-text="getSpaceName(item)"
                 v-bind="getSpaceAttributes(item)"
+                v-text="getSpaceName(item)"
               />
             </template>
             <template #footer>

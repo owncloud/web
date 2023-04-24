@@ -11,44 +11,35 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
       <oc-list-stub class="role-dropdown-list" raw="false">
         <li>
           <oc-button-stub appearance="raw" class="oc-p-s" disabled="false" gapsize="medium" id="files-role-internal" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
-            <span class="oc-flex oc-flex-middle">
-              <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="user" size="medium" type="span" variation="inherit"></oc-icon-stub>
+            <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="user" size="medium" type="span" variation="inherit"></oc-icon-stub>
               <span>
                 <span class="oc-text-bold oc-display-block oc-width-1-1">Internal</span>
                 <span class="oc-text-small">People need to be invited and login is required</span>
               </span>
             </span>
-            <span class="oc-flex">
-              <!--v-if-->
-            </span>
+            <span class="oc-flex"><!--v-if--></span>
           </oc-button-stub>
         </li>
         <li>
           <oc-button-stub appearance="raw-inverse" class="selected oc-background-primary-gradient oc-p-s" disabled="false" gapsize="medium" id="files-role-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="primary">
-            <span class="oc-flex oc-flex-middle">
-              <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
+            <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
               <span>
                 <span class="oc-text-bold oc-display-block oc-width-1-1">Viewer</span>
                 <span class="oc-text-small">Recipients can view and download contents.</span>
               </span>
             </span>
-            <span class="oc-flex">
-              <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            </span>
+            <span class="oc-flex"><oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub></span>
           </oc-button-stub>
         </li>
         <li>
           <oc-button-stub appearance="raw" class="oc-p-s" disabled="false" gapsize="medium" id="files-role-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
-            <span class="oc-flex oc-flex-middle">
-              <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
+            <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
               <span>
                 <span class="oc-text-bold oc-display-block oc-width-1-1">Editor</span>
                 <span class="oc-text-small">Recipients can view, download and edit contents.</span>
               </span>
             </span>
-            <span class="oc-flex">
-              <!--v-if-->
-            </span>
+            <span class="oc-flex"><!--v-if--></span>
           </oc-button-stub>
         </li>
       </oc-list-stub>

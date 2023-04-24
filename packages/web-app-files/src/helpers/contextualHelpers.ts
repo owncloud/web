@@ -116,12 +116,12 @@ export const shareViaLinkHelp = (options: ContextualHelperOptions) =>
           )
         },
         {
-          text: $gettext('Quicklink'),
+          text: $gettext('Quicklink'), // TODO: What to do with this?
           headline: true
         },
         {
           text: $gettext(
-            'The quicklink is the default link that is copied when you select "Get link” from the context menu.'
+            'The quicklink is the default link that is copied when you select "Get link” from the context menu.' // TODO: What to do with this?
           )
         }
       ],

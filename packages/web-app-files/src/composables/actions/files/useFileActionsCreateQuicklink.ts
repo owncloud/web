@@ -34,7 +34,7 @@ export const useFileActionsCreateQuickLink = ({ store }: { store?: Store<any> } 
       name: 'create-quicklink',
       icon: quickActions.quicklink.icon,
       iconFillType: quickActions.quicklink.iconFillType,
-      label: () => $gettext('Copy quicklink'),
+      label: () => $gettext('Copy link'),
       handler,
       isEnabled: ({ resources }) => {
         if (resources.length !== 1) {
