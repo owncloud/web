@@ -10,12 +10,12 @@
       class="files-recipient-role-select-btn"
       :class="{
         'oc-pill oc-background-default oc-px-s':
-          roleButtonId == 'files-collaborators-role-button-new'
+          mode == 'create'
       }"
       appearance="raw"
       gap-size="none"
       :aria-label="
-        roleButtonId == 'files-collaborators-role-button-new'
+        mode == 'create'
           ? $gettext('Select permission')
           : $gettext('Edit permission')
       "
@@ -158,6 +158,11 @@ export default defineComponent({
     allowSharePermission: {
       type: Boolean,
       required: true
+    },
+    mode: {
+      type: String,
+      required: false,
+      default: 'create'
     }
   },
   emits: ['optionChange'],
