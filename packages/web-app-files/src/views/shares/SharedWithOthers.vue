@@ -8,7 +8,7 @@
           v-if="isEmpty"
           id="files-shared-with-others-empty"
           class="files-empty"
-          icon="file-forbid"
+          icon="reply"
         >
           <template #message>
             <span v-translate> You have not shared any resources with other people. </span>
