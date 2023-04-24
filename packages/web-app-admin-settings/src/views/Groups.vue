@@ -49,7 +49,6 @@
           <GroupsList
             :groups="groups"
             :selected-groups="selectedGroups"
-            :header-position="listHeaderPosition"
             @toggle-select-group="toggleSelectGroup"
             @toggle-select-all-groups="toggleSelectAllGroups"
             @un-select-all-groups="unselectAllGroups"
