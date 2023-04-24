@@ -197,7 +197,7 @@ export const hasPermissionToShare = async (
 export const copyQuickLink = async (args: copyLinkArgs): Promise<string> => {
   const { page, resource, via } = args
   let url = ''
-  const linkName = 'Quicklink'
+  const linkName = 'Link'
 
   if (via === 'CONTEXT_MENU') {
     await clickActionInContextMenu({ page, resource }, 'create-quicklink')
