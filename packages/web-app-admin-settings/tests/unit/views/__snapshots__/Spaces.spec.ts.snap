@@ -3,7 +3,7 @@
 exports[`Spaces view loading states should render spaces list after loading has been finished 1`] = `
 <div>
   <main class="oc-flex oc-flex-wrap oc-height-1-1 app-content oc-width-1-1">
-    <div class="oc-width-expand" id="admin-settings-wrapper">
+    <div class="oc-width-expand oc-height-1-1 oc-position-relative" id="admin-settings-wrapper">
       <div class="oc-app-bar oc-py-s" id="admin-settings-app-bar">
         <div class="admin-settings-app-bar-controls oc-flex oc-flex-between oc-flex-middle">
           <oc-breadcrumb-stub class="oc-flex oc-flex-middle" contextmenupadding="medium" id="admin-settings-breadcrumb" items="[object Object],[object Object]" showcontextactions="false" variation="default"></oc-breadcrumb-stub>
@@ -26,7 +26,7 @@ exports[`Spaces view loading states should render spaces list after loading has 
       </div>
       <!--v-if-->
       <div>
-        <spaces-list-stub class="" headerposition="0" selectedspaces="" spaces="[object Object]"></spaces-list-stub>
+        <spaces-list-stub class="" selectedspaces="" spaces="[object Object]"></spaces-list-stub>
       </div>
     </div>
     <!--v-if-->

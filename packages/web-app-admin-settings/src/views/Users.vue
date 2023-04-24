@@ -47,7 +47,6 @@
             :roles="roles"
             :class="{ 'users-table-squashed': sideBarOpen }"
             :selected-users="selectedUsers"
-            :header-position="listHeaderPosition"
             @toggle-select-user="toggleSelectUser"
             @toggle-select-all-users="toggleSelectAllUsers"
             @un-select-all-users="unselectAllUsers"
@@ -236,7 +235,6 @@ export default defineComponent({
     const addToGroupsModalIsOpen = ref(false)
     const removeFromGroupsModalIsOpen = ref(false)
     const editLoginModalIsOpen = ref(false)
-    const listHeaderPosition = ref(0)
     const template = ref()
     let loadResourcesEventToken
     let addToGroupsActionEventToken
@@ -378,10 +376,6 @@ export default defineComponent({
       sideBarLoading.value = false
     })
 
-    const calculateListHeaderPosition = () => {
-      listHeaderPosition.value = unref(template)?.$refs?.appBar?.getBoundingClientRect()?.height
-    }
-
     const batchActions = computed(() => {
       return [
         ...unref(deleteActions),
@@ -439,8 +433,6 @@ export default defineComponent({
         selectedUsers.value = []
       })
 
-      calculateListHeaderPosition()
-
       addToGroupsActionEventToken = eventBus.subscribe(
         'app.admin-settings.users.actions.add-to-groups',
         () => {
@@ -463,7 +455,6 @@ export default defineComponent({
         'app.admin-settings.users.user.quota.updated',
         updateSpaceQuota
       )
-      window.addEventListener('resize', calculateListHeaderPosition)
     })
 
     onBeforeUnmount(() => {
@@ -607,7 +598,6 @@ export default defineComponent({
       loadAdditionalUserDataTask,
       clientService,
       accessToken,
-      listHeaderPosition,
       createUserModalOpen,
       addToGroupsModalTitle,
       addToGroupsModalIsOpen,

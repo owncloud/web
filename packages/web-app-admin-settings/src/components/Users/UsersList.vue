@@ -23,7 +23,7 @@
       :data="data"
       :highlighted="highlighted"
       :sticky="true"
-      :header-position="headerPosition"
+      :header-position="fileListHeaderY"
       :hover="true"
       @sort="handleSort"
       @contextmenu-clicked="showContextMenuOnRightClick"
@@ -115,6 +115,7 @@ import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { AppRole, User } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import { useFileListHeaderPosition } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'UsersList',
@@ -131,15 +132,12 @@ export default defineComponent({
     selectedUsers: {
       type: Array as PropType<User[]>,
       required: true
-    },
-    headerPosition: {
-      type: Number,
-      required: true
     }
   },
   emits: ['unSelectAllUsers', 'toggleSelectAllUsers', 'toggleSelectUser'],
   setup(props, { emit }) {
     const contextMenuButtonRef = ref(undefined)
+    const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const isUserSelected = (user) => {
       return props.selectedUsers.some((s) => s.id === user.id)
     }
@@ -205,7 +203,8 @@ export default defineComponent({
       rowClicked,
       contextMenuButtonRef,
       showContextMenuOnBtnClick,
-      showContextMenuOnRightClick
+      showContextMenuOnRightClick,
+      fileListHeaderY
     }
   },
   data() {

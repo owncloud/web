@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue'
-import { useFileListHeaderPosition } from 'web-app-files/src/composables'
+import { useFileListHeaderPosition } from 'web-pkg/src/composables'
 import { useStore } from 'web-pkg/src/composables'
 import { defaultPlugins, mount } from 'web-test-helpers'
 

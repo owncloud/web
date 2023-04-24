@@ -15,7 +15,7 @@
       :data="data"
       :highlighted="highlighted"
       :sticky="true"
-      :header-position="headerPosition"
+      :header-position="fileListHeaderY"
       :hover="true"
       @sort="handleSort"
       @contextmenu-clicked="showContextMenuOnRightClick"
@@ -112,6 +112,7 @@ import { Group } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import { useGettext } from 'vue3-gettext'
 import { defaultFuseOptions } from 'web-pkg/src/helpers'
+import { useFileListHeaderPosition } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'GroupsList',
@@ -124,15 +125,12 @@ export default defineComponent({
     selectedGroups: {
       type: Array as PropType<Group[]>,
       required: true
-    },
-    headerPosition: {
-      type: Number,
-      required: true
     }
   },
   emits: ['toggleSelectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
+    const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
 
     const isGroupSelected = (group) => {
@@ -191,6 +189,7 @@ export default defineComponent({
       isGroupSelected,
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
+      fileListHeaderY,
       contextMenuButtonRef,
       showEditPanel,
       readOnlyLabel

@@ -57,7 +57,6 @@
             :spaces="spaces"
             :class="{ 'spaces-table-squashed': sideBarOpen }"
             :selected-spaces="selectedSpaces"
-            :header-position="listHeaderPosition"
             @toggle-select-space="toggleSelectSpace"
             @toggle-select-all-spaces="toggleSelectAllSpaces"
             @un-select-all-spaces="unselectAllSpaces"
@@ -140,7 +139,6 @@ export default defineComponent({
     const loadResourcesEventToken = ref(null)
     let updateQuotaForSpaceEventToken
     const template = ref(null)
-    const listHeaderPosition = ref(0)
     const selectedSpaces = ref([])
 
     const loadResourcesTask = useTask(function* (signal) {
@@ -165,10 +163,6 @@ export default defineComponent({
     ])
 
     const allSpacesSelected = computed(() => unref(spaces).length === unref(selectedSpaces).length)
-
-    const calculateListHeaderPosition = () => {
-      listHeaderPosition.value = unref(template)?.$refs?.appBar?.getBoundingClientRect()?.height
-    }
     const toggleSelectAllSpaces = () => {
       if (unref(allSpacesSelected)) {
         selectedSpaces.value = []
@@ -267,9 +261,6 @@ export default defineComponent({
         selectedSpaces.value = []
       })
 
-      calculateListHeaderPosition()
-      window.addEventListener('resize', calculateListHeaderPosition)
-
       updateQuotaForSpaceEventToken = eventBus.subscribe(
         'app.admin-settings.spaces.space.quota.updated',
         ({ spaceId, quota }) => {
@@ -298,7 +289,6 @@ export default defineComponent({
       accessToken,
       breadcrumbs,
       batchActions,
-      listHeaderPosition,
       selectedSpaces,
       sideBarAvailablePanels,
       template,

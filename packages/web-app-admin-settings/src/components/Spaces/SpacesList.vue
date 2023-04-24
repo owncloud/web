@@ -16,7 +16,7 @@
       :data="orderedSpaces"
       :highlighted="highlighted"
       :sticky="true"
-      :header-position="headerPosition"
+      :header-position="fileListHeaderY"
       :hover="true"
       @sort="handleSort"
       @contextmenu-clicked="showContextMenuOnRightClick"
@@ -131,6 +131,7 @@ import { useGettext } from 'vue3-gettext'
 import { eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
+import { useFileListHeaderPosition } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -143,15 +144,12 @@ export default defineComponent({
     selectedSpaces: {
       type: Array as PropType<SpaceResource[]>,
       required: true
-    },
-    headerPosition: {
-      type: Number,
-      required: true
     }
   },
   emits: ['toggleSelectSpace', 'toggleSelectAllSpaces', 'unSelectAllSpaces'],
   setup: function (props, { emit }) {
     const { $gettext, current: currentLanguage } = useGettext()
+    const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
     const sortBy = ref('name')
     const sortDir = ref('asc')
@@ -426,7 +424,8 @@ export default defineComponent({
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
       spaceDetailsLabel,
-      showDetailsForSpace
+      showDetailsForSpace,
+      fileListHeaderY
     }
   }
 })

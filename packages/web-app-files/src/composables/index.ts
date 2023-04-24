@@ -1,6 +1,5 @@
 export * from './actions'
 export * from './archiverService'
-export * from './fileListHeaderPosition'
 export * from './pagination'
 export * from './resourcesViewDefaults'
 export * from './router'
