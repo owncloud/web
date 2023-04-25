@@ -1,6 +1,9 @@
 Feature: spaces member expiry
 
-
+  # skipped because scroller scrolls up automatically while
+  # tring to select the end of the month dates
+  # this test will work at the beginning/mid of a month
+  @skip @issue-7513
   Scenario: space members can be invited with an expiration date
     Given "Admin" creates following users using API
       | id    |
