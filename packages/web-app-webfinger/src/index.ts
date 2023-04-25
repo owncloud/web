@@ -27,7 +27,7 @@ const routes = () => [
     component: Resolve,
     meta: {
       authContext: 'user',
-      title: $gettext('Resolve ownCloud'),
+      title: $gettext('Resolve destination'),
       entryPoint: true
     }
   }
