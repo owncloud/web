@@ -1,0 +1,6 @@
+Bugfix: Calendar popup position in right sidebar
+
+The position of the calendar popup in the right sidebar has been fixed when using small screens.
+
+https://github.com/owncloud/web/issues/7513
+https://github.com/owncloud/web/pull/8909

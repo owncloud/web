@@ -1,5 +1,5 @@
 <template>
-  <date-picker ref="datePicker" class="oc-datepicker" v-bind="$attrs">
+  <date-picker ref="datePicker" class="oc-datepicker" v-bind="$attrs" :popover="popperOpts">
     <template #default="args">
       <!-- @slot Default slot to use as the popover anchor for datepicker -->
       <!-- args is undefined during initial render, hence we check it here -->
@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 
 import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
@@ -30,7 +30,33 @@ export default defineComponent({
   components: { DatePicker },
 
   inheritAttrs: true,
+  setup() {
+    const popperOpts = computed(() => {
+      return {
+        modifiers: [
+          {
+            name: 'fixVerticalPosition',
+            enabled: true,
+            phase: 'beforeWrite',
+            requiresIfExists: ['offset', 'flip'],
+            fn({ state }) {
+              const dropHeight =
+                state.modifiersData.fullHeight || state.elements.popper.offsetHeight
+              const rect = state.elements.popper.getBoundingClientRect()
+              const neededScreenSpace =
+                state.elements.reference.offsetHeight + rect.top + dropHeight
 
+              if (state.placement !== 'top-start' && neededScreenSpace > window.innerHeight) {
+                state.styles.popper.top = `-${150}px`
+              }
+            }
+          }
+        ]
+      }
+    })
+
+    return { popperOpts }
+  },
   mounted() {
     this.$el.__datePicker = this.$refs.datePicker
   }
