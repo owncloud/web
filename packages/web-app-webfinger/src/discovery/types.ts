@@ -1,5 +1,5 @@
-export interface OwnCloudInstance {
+export interface OwnCloudServer {
   rel: string
   href: string
-  titles?: any
+  titles?: Record<string, string>
 }
