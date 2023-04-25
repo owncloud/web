@@ -90,7 +90,7 @@
             target="_blank"
             data-testid="account-page-logout-url-btn"
           >
-            <span v-text="$gettext('Account security')" />
+            <span v-text="$gettext('Show devices')" />
           </oc-button>
         </dd>
       </div>
