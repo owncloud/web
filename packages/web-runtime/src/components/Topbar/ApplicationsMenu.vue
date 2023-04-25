@@ -92,6 +92,13 @@ export default defineComponent({
 .applications-list li {
   margin: var(--oc-space-xsmall) 0;
 
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+
   a,
   button {
     gap: var(--oc-space-medium);

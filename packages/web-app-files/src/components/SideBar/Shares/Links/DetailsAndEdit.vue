@@ -19,7 +19,7 @@
         offset="0"
         mode="click"
       >
-        <oc-list class="roleDropdownList">
+        <oc-list class="role-dropdown-list">
           <li v-for="roleOption in availableRoleOptions" :key="`role-dropdown-${roleOption.key}`">
             <oc-button
               :id="`files-role-${roleOption.name}`"
@@ -524,12 +524,19 @@ export default defineComponent({
   width: 400px;
 }
 
-.roleDropdownList span {
+.role-dropdown-list span {
   line-height: 1.3;
 }
 
-.roleDropdownList li {
+.role-dropdown-list li {
   margin: var(--oc-space-xsmall) 0;
+
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   .oc-button {
     text-align: left;

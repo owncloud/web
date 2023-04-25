@@ -32,8 +32,7 @@
           >
             <avatar-image :width="32" :userid="userId" :user-name="user.displayname" />
             <span class="profile-info-wrapper" :class="{ 'oc-py-xs': !user.email }">
-              <span v-text="user.displayname" />
-              <br v-if="user.email" />
+              <span class="oc-display-block" v-text="user.displayname" />
               <span v-if="user.email" class="oc-text-small" v-text="user.email" />
             </span>
           </oc-button>
@@ -58,8 +57,7 @@
           <oc-icon name="cloud" fill-type="line" class="oc-p-xs" />
           <div class="storage-wrapper-text">
             <p class="oc-my-rm">
-              <span v-text="personalStorageLabel" />
-              <br />
+              <span class="oc-display-block" v-text="personalStorageLabel" />
               <span class="oc-text-small" v-text="personalStorageDetailsLabel" />
             </p>
             <oc-progress
@@ -181,6 +179,13 @@ export default defineComponent({
   display: flex;
   margin: var(--oc-space-xsmall) 0;
 
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+
   a,
   button {
     gap: var(--oc-space-medium);
@@ -199,6 +204,7 @@ export default defineComponent({
     .profile-info-wrapper {
       text-align: left;
       word-break: break-all;
+      line-height: initial;
     }
   }
 
