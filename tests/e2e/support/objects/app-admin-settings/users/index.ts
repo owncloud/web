@@ -27,7 +27,7 @@ export class Users {
     this.#page = page
   }
   getUUID({ key }: { key: string }): string {
-    return this.#usersEnvironment.getUser({ key }).uuid
+    return this.#usersEnvironment.getCreatedUser({ key }).uuid
   }
 
   async allowLogin({ key, action }: { key: string; action: string }): Promise<void> {
@@ -104,9 +104,19 @@ export class Users {
     action: string
   }): Promise<void> {
     const uuid = this.getUUID({ key })
+
     await openEditPanel({ page: this.#page, uuid, action })
     await changeUser({ uuid, attribute: attribute, value: value, page: this.#page })
+    const currentUser = this.#usersEnvironment.getCreatedUser({ key })
+
+    if (attribute !== 'role') {
+      this.#usersEnvironment.updateCreatedUser({
+        key: key,
+        user: { ...currentUser, [attribute === 'userName' ? 'id' : attribute]: value }
+      })
+    }
   }
+
   async addToGroups({
     key,
     groups,
@@ -139,6 +149,7 @@ export class Users {
   async deleteUserUsingBatchAction({ userIds }: { userIds: string[] }): Promise<void> {
     await deleteUserUsingBatchAction({ page: this.#page, userIds })
   }
+
   async createUser({
     name,
     displayname,
@@ -150,7 +161,17 @@ export class Users {
     email: string
     password: string
   }): Promise<void> {
-    await createUser({ page: this.#page, name, displayname, email, password })
+    const response = await createUser({ page: this.#page, name, displayname, email, password })
+
+    this.#usersEnvironment.storeCreatedUser({
+      user: {
+        id: response.onPremisesSamAccountName,
+        displayName: response.displayName,
+        password: password,
+        email: response.mail,
+        uuid: response.id
+      }
+    })
   }
 
   async openEditPanel({ key, action }: { key: string; action: string }): Promise<void> {

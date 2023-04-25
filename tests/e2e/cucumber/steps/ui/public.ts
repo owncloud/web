@@ -15,18 +15,6 @@ When(
       user = this.usersEnvironment.getUser({ key: stepUser })
     } catch (e) {}
 
-    if (!user) {
-      user = this.usersEnvironment.createUser({
-        key: stepUser,
-        user: {
-          id: stepUser,
-          displayName: stepUser,
-          password: '',
-          email: ''
-        }
-      })
-    }
-
     let actor
     try {
       actor = this.actorsEnvironment.getActor(user)
