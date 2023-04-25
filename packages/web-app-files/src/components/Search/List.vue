@@ -22,6 +22,7 @@
           v-model:selectedIds="selectedResourcesIds"
           class="files-table"
           :class="{ 'files-table-squashed': false }"
+          :header-position="fileListHeaderY"
           :resources="paginatedResources"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="displayThumbnails"
@@ -85,7 +86,7 @@ import { Resource } from 'web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { useStore } from 'web-pkg/src/composables'
+import {useFileListHeaderPosition, useStore} from 'web-pkg/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { basename } from 'path'
 import { onBeforeRouteLeave } from 'vue-router'
@@ -119,6 +120,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { y: fileListHeaderY } = useFileListHeaderPosition()
 
     onBeforeRouteLeave(() => {
       eventBus.publish('app.search.term.clear')
@@ -137,6 +139,7 @@ export default defineComponent({
     return {
       ...useFileActions({ store }),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
+      fileListHeaderY,
       getSpace
     }
   },
