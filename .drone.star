@@ -1191,7 +1191,7 @@ def e2eTests(ctx):
                      "image": OC_CI_NODEJS,
                      "environment": environment,
                      "commands": [
-                         "sleep 10 && pnpm test:e2e:cucumber tests/e2e/cucumber/**/*[!.%s].feature" % ("oc10" if server == "oCIS" else "ocis"),
+                         "sleep 10 && pnpm test:e2e:cucumber tests/e2e/cucumber/**/*[!.%s].feature --tags ~@skip" % ("oc10" if server == "oCIS" else "ocis"),
                      ],
                  }] + \
                  uploadTracingResult(ctx) + \
