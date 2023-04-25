@@ -138,7 +138,7 @@ export default defineComponent({
     })
     const warningMessage = computed(() => {
       if (!unref(isShareAccepted)) {
-        return $gettext('Select an accepted share to show details here.')
+        return $gettext('Select an accepted share to show details.')
       }
 
       return null

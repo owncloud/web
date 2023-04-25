@@ -41,8 +41,8 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
         console.error(error)
         store.dispatch('showMessage', {
           title: $pgettext(
-            'Error message in case permanently deleting files fails',
-            'Failed to delete all files permanently'
+            'Error message in case emptying tash bin fails',
+            'Failed to empty trash bin'
           ),
           status: 'danger'
         })
@@ -55,7 +55,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
   const handler = ({ space }: FileActionOptions) => {
     const modal = {
       variation: 'danger',
-      title: $gettext('Delete all files permanently'),
+      title: $gettext('Empty trash bin'),
       cancelText: $gettext('Cancel'),
       confirmText: $gettext('Delete'),
       message: $gettext(
@@ -73,7 +73,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
     {
       name: 'empty-trash-bin',
       icon: 'delete-bin-5',
-      label: () => $gettext('Delete all files permanently'),
+      label: () => $gettext('Empty trash bin'),
       handler,
       isEnabled: ({ space, resources }) => {
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
