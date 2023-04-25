@@ -11,6 +11,7 @@ Summary
 * Bugfix - Archiver in protected public links: [#6423](https://github.com/owncloud/web/issues/6423)
 * Bugfix - Layout with long breadcrumb: [#6731](https://github.com/owncloud/web/issues/6731)
 * Bugfix - Pagination after increasing items per page: [#6768](https://github.com/owncloud/web/issues/6768)
+* Bugfix - Calendar popup position in right sidebar: [#7513](https://github.com/owncloud/web/issues/7513)
 * Bugfix - Loading shares in deep nested folders: [#7655](https://github.com/owncloud/web/issues/7655)
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
@@ -166,6 +167,13 @@ Details
 
    https://github.com/owncloud/web/issues/6768
    https://github.com/owncloud/web/pull/8854
+
+* Bugfix - Calendar popup position in right sidebar: [#7513](https://github.com/owncloud/web/issues/7513)
+
+   The position of the calendar popup in the right sidebar has been fixed when using small screens.
+
+   https://github.com/owncloud/web/issues/7513
+   https://github.com/owncloud/web/pull/8909
 
 * Bugfix - Loading shares in deep nested folders: [#7655](https://github.com/owncloud/web/issues/7655)
 
