@@ -356,7 +356,7 @@ export default defineComponent({
 
     isPasswordEnforcedFor(link) {
       const isFolder = link.indirect || this.resource.isFolder
-      const currentRole = LinkShareRoles.getByBitmask(link.permissions, isFolder)
+      const currentRole = LinkShareRoles.getByBitmask(parseInt(link.permissions), isFolder)
 
       /**
        * `passwordEnforced` members are oddly designed. they look like they map to permissions,
