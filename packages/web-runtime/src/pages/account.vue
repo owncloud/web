@@ -108,11 +108,11 @@
         <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Notifications')" />
         <dd data-testid="notification-mails">
           <oc-checkbox
-            :model-value="receiveNotificationMailsValue"
+            :model-value="disableEmailNotificationsValue"
             size="large"
             :label="$gettext('Receive notification mails')"
             data-testid="account-page-notification-mails-checkbox"
-            @update:model-value="updateReceiveNotificationMails"
+            @update:model-value="updateDisableEmailNotifications"
           />
         </dd>
       </div>
@@ -185,10 +185,10 @@ export default defineComponent({
             }
           }
         )
-        configurationValues.value = values
+        configurationValues.value = values || []
       } catch (e) {
         console.error(e)
-        return []
+        configurationValues.value = []
       }
     })
 
@@ -231,6 +231,20 @@ export default defineComponent({
       bundle: 'profile',
       setting: 'language'
     }
+
+    const disableEmailNotificationsSettings = computed(() => {
+      return unref(configurationValues).find(
+        (configurationValue) =>
+          configurationValue.identifier?.setting === 'disable email notifications'
+      )?.value
+    })
+
+    const disableEmailNotificationsValue = computed(() => {
+      return unref(disableEmailNotificationsSettings)
+        ? !unref(disableEmailNotificationsSettings).boolValue
+        : true
+    })
+
     const languageSetting = computed(() => {
       return unref(configurationValues).find(
         (configurationValue) => configurationValue.identifier?.setting === 'language'
@@ -279,12 +293,31 @@ export default defineComponent({
       loadValuesList.perform()
     }
 
-    const receiveNotificationMailsValue = computed(() => {
-      return true
-    })
+    const updateDisableEmailNotifications = async (option) => {
+      console.log(option)
+      const bundle = loadAccountBundleTask.last?.value
+      const value = {
+        bundleId: bundle?.id,
+        settingId: bundle?.settings.find((s) => s.name === 'disable email notifications')?.id,
+        resource: { type: 'TYPE_USER' },
+        boolValue: !option,
+        ...(unref(disableEmailNotificationsSettings) && {
+          id: unref(disableEmailNotificationsSettings).id
+        })
+      }
 
-    const updateReceiveNotificationMails = (value) => {
-      console.log(value)
+      await axios.post(
+        '/api/v0/settings/values-save',
+        { value: { ...value, accountUuid: 'me' } },
+        {
+          headers: {
+            authorization: `Bearer ${unref(accessToken)}`,
+            'X-Request-ID': uuidV4()
+          }
+        }
+      )
+
+      loadValuesList.perform()
     }
 
     const accountEditLink = computed(() => {
@@ -317,8 +350,7 @@ export default defineComponent({
       languageOptions,
       selectedLanguageOption,
       updateSelectedLanguage,
-      receiveNotificationMailsValue,
-      updateReceiveNotificationMails,
+      updateDisableEmailNotifications,
       accountEditLink,
       isChangePasswordEnabled,
       showGdprExport,
@@ -326,7 +358,8 @@ export default defineComponent({
       groupNames,
       user,
       logoutUrl,
-      isLoading
+      isLoading,
+      disableEmailNotificationsValue
     }
   },
   data() {
