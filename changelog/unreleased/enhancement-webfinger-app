@@ -1,0 +1,6 @@
+Enhancement: Webfinger redirect app
+
+We've added an app with the name `webfinger` which queries the oCIS webfinger service for the url of the oCIS instance of the user and performs a redirect. This app is not meant to be used in a standard deployment in its current state. It only uses web and its extension system as a platform. In the future this will become a multi tenancy select.
+
+https://github.com/owncloud/web/issues/8883
+https://github.com/owncloud/web/pull/8884
