@@ -15,13 +15,10 @@ const appInfo = {
 
 const routes = () => [
   {
-    name: 'root',
+    name: 'webfinger-root',
     path: '/',
     redirect: () => {
       return { name: 'webfinger-resolve' }
-    },
-    meta: {
-      root: true
     }
   },
   {
@@ -30,7 +27,8 @@ const routes = () => [
     component: Resolve,
     meta: {
       authContext: 'user',
-      title: $gettext('Resolve ownCloud')
+      title: $gettext('Resolve ownCloud'),
+      entryPoint: true
     }
   }
 ]

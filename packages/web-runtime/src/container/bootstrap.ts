@@ -368,7 +368,12 @@ export const announceDefaults = ({
     defaultExtensionId = appIds[0]
   }
 
-  const route = store.getters.getNavItemsByExtension(defaultExtensionId)[0]?.route
+  let route = router.getRoutes().find((r) => {
+    return r.path.startsWith(`/${defaultExtensionId}`) && r.meta?.entryPoint === true
+  })
+  if (!route) {
+    route = store.getters.getNavItemsByExtension(defaultExtensionId)[0]?.route
+  }
   if (route) {
     router.addRoute({
       path: '/',
