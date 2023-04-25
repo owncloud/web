@@ -100,6 +100,18 @@
           <gdpr-export />
         </dd>
       </div>
+      <div class="account-page-notification oc-mb oc-width-1-2@s">
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Notifications')" />
+        <dd data-testid="notification-mails">
+          <oc-checkbox
+            :model-value="receiveNotificationMailsValue"
+            size="large"
+            :label="$gettext('Receive notification mails')"
+            data-testid="account-page-notification-mails-checkbox"
+            @update:model-value="updateReceiveNotificationMails"
+          />
+        </dd>
+      </div>
     </dl>
   </main>
 </template>
@@ -223,6 +235,15 @@ export default defineComponent({
       store.commit('SET_SETTINGS_VALUE', newSetting)
       setCurrentLanguage({ language, languageSetting: newSetting })
     }
+
+    const receiveNotificationMailsValue = computed(() => {
+      return true
+    })
+
+    const updateReceiveNotificationMails = (value) => {
+      console.log(value)
+    }
+
     const accountEditLink = computed(() => {
       return store.getters.configuration?.options?.accountEditLink
     })
@@ -252,6 +273,8 @@ export default defineComponent({
       languageOptions,
       selectedLanguageOption,
       updateSelectedLanguage,
+      receiveNotificationMailsValue,
+      updateReceiveNotificationMails,
       accountEditLink,
       isChangePasswordEnabled,
       showGdprExport,
