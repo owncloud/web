@@ -193,7 +193,6 @@ export class UserManager extends OidcUserManager {
       let roles
       ;[graphUser, roles] = await Promise.all([graphClient.users.getMe(), this.fetchRoles()])
       this.store.commit('SET_ROLES', roles)
-      this.store.commit('SET_SETTINGS_VALUES', settings)
 
       role = await this.fetchRole({ graphUser, roles })
     } else {

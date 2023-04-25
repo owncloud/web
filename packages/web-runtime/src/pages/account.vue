@@ -1,5 +1,6 @@
 <template>
-  <main id="account" class="oc-height-1-1 oc-m">
+  <app-loading-spinner v-if="isLoading" />
+  <main v-else id="account" class="oc-height-1-1 oc-m">
     <div class="oc-flex oc-flex-between oc-flex-bottom oc-width-1-1 oc-border-b oc-py">
       <h1 id="account-page-title" class="oc-page-title oc-m-rm">{{ pageTitle }}</h1>
       <div>
@@ -68,7 +69,10 @@
           />
         </dd>
       </div>
-      <div v-if="isLanguageSupported" class="account-page-info-language oc-mb oc-width-1-2@s">
+      <div
+        v-if="isSettingsServiceSupported"
+        class="account-page-info-language oc-mb oc-width-1-2@s"
+      >
         <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Language')" />
         <dd data-testid="language">
           <oc-select
@@ -119,7 +123,7 @@
 <script lang="ts">
 import { mapActions } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
-import { computed, defineComponent, onMounted, unref } from 'vue'
+import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
   useAccessToken,
   useCapabilityGraphPersonalDataExport,
@@ -135,10 +139,12 @@ import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
 import { useConfigurationManager } from 'web-pkg/src/composables/configuration'
 import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 export default defineComponent({
   name: 'Personal',
   components: {
+    AppLoadingSpinner,
     EditPasswordModal,
     GdprExport
   },
@@ -148,9 +154,10 @@ export default defineComponent({
     const language = useGettext()
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
+    const configurationValues = ref()
 
     // FIXME: Use graph capability when we have it
-    const isLanguageSupported = useCapabilitySpacesEnabled()
+    const isSettingsServiceSupported = useCapabilitySpacesEnabled()
     const isChangePasswordEnabled = useCapabilitySpacesEnabled()
     const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
     const user = computed(() => {
@@ -162,6 +169,27 @@ export default defineComponent({
         unref(isPersonalDataExportEnabled) &&
         store.getters['runtime/spaces/spaces'].some((s) => isPersonalSpaceResource(s))
       )
+    })
+
+    const loadValuesList = useTask(function* () {
+      try {
+        const {
+          data: { values }
+        } = yield axios.post(
+          '/api/v0/settings/values-list',
+          { account_uuid: 'me' },
+          {
+            headers: {
+              authorization: `Bearer ${unref(accessToken)}`,
+              'X-Request-ID': uuidV4()
+            }
+          }
+        )
+        configurationValues.value = values
+      } catch (e) {
+        console.error(e)
+        return []
+      }
     })
 
     const loadAccountBundleTask = useTask(function* () {
@@ -185,13 +213,28 @@ export default defineComponent({
       }
     }).restartable()
 
+    const isLoading = computed(() => {
+      if (!isSettingsServiceSupported) {
+        return false
+      }
+
+      return (
+        loadValuesList.isRunning ||
+        !loadValuesList.last ||
+        loadAccountBundleTask.isRunning ||
+        !loadAccountBundleTask.last
+      )
+    })
+
     const accountSettingIdentifier = {
       extension: 'ocis-accounts',
       bundle: 'profile',
       setting: 'language'
     }
     const languageSetting = computed(() => {
-      return store.getters.getSettingsValue(accountSettingIdentifier)
+      return unref(configurationValues).find(
+        (configurationValue) => configurationValue.identifier?.setting === 'language'
+      )?.value
     })
     const languageOptions = computed(() => {
       const languageOptions = loadAccountBundleTask.last?.value?.settings.find(
@@ -210,7 +253,7 @@ export default defineComponent({
       }
       return unref(languageOptions).find((o) => o.value === current)
     })
-    const updateSelectedLanguage = (option) => {
+    const updateSelectedLanguage = async (option) => {
       const bundle = loadAccountBundleTask.last?.value
       const value = {
         bundleId: bundle?.id,
@@ -220,7 +263,7 @@ export default defineComponent({
         ...(unref(languageSetting) && { id: unref(languageSetting).id })
       }
 
-      axios.post(
+      await axios.post(
         '/api/v0/settings/values-save',
         { value: { ...value, accountUuid: 'me' } },
         {
@@ -232,8 +275,8 @@ export default defineComponent({
       )
 
       const newSetting = { identifier: accountSettingIdentifier, value }
-      store.commit('SET_SETTINGS_VALUE', newSetting)
       setCurrentLanguage({ language, languageSetting: newSetting })
+      loadValuesList.perform()
     }
 
     const receiveNotificationMailsValue = computed(() => {
@@ -263,7 +306,8 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      if (unref(isLanguageSupported)) {
+      if (unref(isSettingsServiceSupported)) {
+        loadValuesList.perform()
         loadAccountBundleTask.perform()
       }
     })
@@ -278,10 +322,11 @@ export default defineComponent({
       accountEditLink,
       isChangePasswordEnabled,
       showGdprExport,
-      isLanguageSupported,
+      isSettingsServiceSupported,
       groupNames,
       user,
-      logoutUrl
+      logoutUrl,
+      isLoading
     }
   },
   data() {

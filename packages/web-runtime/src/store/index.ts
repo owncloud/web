@@ -3,7 +3,6 @@ import apps from './apps'
 import auth from './auth'
 import config from './config'
 import user from './user'
-import settings from './settings'
 import modal from './modal'
 import navigation from './navigation'
 import spaces from './spaces'
@@ -24,7 +23,6 @@ export default {
     apps,
     user,
     config,
-    settings,
     modal,
     navigation,
     runtime
