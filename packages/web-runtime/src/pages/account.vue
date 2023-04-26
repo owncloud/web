@@ -316,10 +316,11 @@ export default defineComponent({
           valueOptions: { boolValue: !option }
         })
         disableEmailNotificationsValue.value = option
-      } catch (e) {
         store.dispatch('showMessage', {
           title: $gettext('Email notifications preference saved successfully.')
         })
+      } catch (e) {
+
         console.error(e)
         store.dispatch('showMessage', {
           title: $gettext('Unable to save email notifications preference…'),
