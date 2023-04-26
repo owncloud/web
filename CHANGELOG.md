@@ -142,6 +142,7 @@ Summary
 * Enhancement - Add expiration date hint to public links: [#8866](https://github.com/owncloud/web/pull/8866)
 * Enhancement - Respect user read-only configuration by the server: [#8868](https://github.com/owncloud/web/pull/8868)
 * Enhancement - Webfinger redirect app: [#8883](https://github.com/owncloud/web/issues/8883)
+* Enhancement - Rename "Quicklink" to "link": [#8898](https://github.com/owncloud/web/pull/8898)
 
 Details
 -------
@@ -1325,6 +1326,13 @@ Details
 
    https://github.com/owncloud/web/issues/8883
    https://github.com/owncloud/web/pull/8884
+
+* Enhancement - Rename "Quicklink" to "link": [#8898](https://github.com/owncloud/web/pull/8898)
+
+   We've renamed "Quicklink" to "link" in the UI
+
+   https://github.com/owncloud/web/issues/7891
+   https://github.com/owncloud/web/pull/8898
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
