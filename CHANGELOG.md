@@ -138,6 +138,7 @@ Summary
 * Enhancement - Font family in theming: [#8797](https://github.com/owncloud/web/pull/8797)
 * Enhancement - Preview app sorting: [#8806](https://github.com/owncloud/web/pull/8806)
 * Enhancement - Adjust missing reshare permissions message: [#8820](https://github.com/owncloud/web/pull/8820)
+* Enhancement - Fix quicklink icon alignment: [#8822](https://github.com/owncloud/web/pull/8822)
 * Enhancement - Admin settings groups members panel: [#8826](https://github.com/owncloud/web/pull/8826)
 * Enhancement - Add expiration date hint to public links: [#8866](https://github.com/owncloud/web/pull/8866)
 * Enhancement - Respect user read-only configuration by the server: [#8868](https://github.com/owncloud/web/pull/8868)
@@ -1294,6 +1295,13 @@ Details
 
    https://github.com/owncloud/web/issues/8701
    https://github.com/owncloud/web/pull/8820
+
+* Enhancement - Fix quicklink icon alignment: [#8822](https://github.com/owncloud/web/pull/8822)
+
+   We've fixed the alignment of the quicklink icons.
+
+   https://github.com/owncloud/web/issues/8606
+   https://github.com/owncloud/web/pull/8822
 
 * Enhancement - Admin settings groups members panel: [#8826](https://github.com/owncloud/web/pull/8826)
 
