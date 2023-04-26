@@ -10,6 +10,7 @@ export abstract class ShareRole {
   private readonly _folder: boolean
   private readonly _label: string
   private readonly _inlineLabel: string
+  private readonly _labelPrependText: string
   private readonly _icon: string
   private readonly _permissions: SharePermission[]
 
@@ -19,7 +20,8 @@ export abstract class ShareRole {
     label: string,
     inlineLabel: string,
     icon: string,
-    permissions: SharePermission[]
+    permissions: SharePermission[],
+    labelPrependText?: string,
   ) {
     this._name = name
     this._folder = folder
@@ -27,6 +29,7 @@ export abstract class ShareRole {
     this._inlineLabel = inlineLabel
     this._icon = icon
     this._permissions = permissions
+    this._labelPrependText = labelPrependText || ''
   }
 
   get key(): string {
@@ -47,6 +50,10 @@ export abstract class ShareRole {
 
   get inlineLabel(): string {
     return this._inlineLabel
+  }
+
+  get labelPrependText(): string {
+    return this._labelPrependText
   }
 
   get hasCustomPermissions(): boolean {
@@ -199,7 +206,7 @@ export const linkRoleInternalFile = new LinkShareRole(
   $gettext('Internal'),
   $gettext('internal'),
   'user',
-  [SharePermissions.internal]
+  [SharePermissions.internal],
 )
 export const linkRoleInternalFolder = new LinkShareRole(
   'internal',
@@ -207,7 +214,7 @@ export const linkRoleInternalFolder = new LinkShareRole(
   $gettext('Internal'),
   $gettext('internal'),
   'user',
-  [SharePermissions.internal]
+  [SharePermissions.internal],
 )
 export const linkRoleViewerFile = new LinkShareRole(
   'viewer',
@@ -215,7 +222,8 @@ export const linkRoleViewerFile = new LinkShareRole(
   $gettext('Can view'),
   $gettext('can view'),
   'eye',
-  [SharePermissions.read]
+  [SharePermissions.read],
+  $gettext('Anyone with the link')
 )
 export const linkRoleViewerFolder = new LinkShareRole(
   'viewer',
@@ -223,7 +231,8 @@ export const linkRoleViewerFolder = new LinkShareRole(
   $gettext('Can view'),
   $gettext('can view'),
   'eye',
-  [SharePermissions.read]
+  [SharePermissions.read],
+  $gettext('Anyone with the link')
 )
 export const linkRoleContributorFolder = new LinkShareRole(
   'contributor',
@@ -231,7 +240,8 @@ export const linkRoleContributorFolder = new LinkShareRole(
   $gettext('Can upload'),
   $gettext('can upload'),
   'upload',
-  [SharePermissions.read, SharePermissions.create]
+  [SharePermissions.read, SharePermissions.create],
+  $gettext('Anyone with the link')
 )
 export const linkRoleEditorFile = new LinkShareRole(
   'editor',
@@ -239,7 +249,8 @@ export const linkRoleEditorFile = new LinkShareRole(
   $gettext('Can edit'),
   $gettext('can edit'),
   'pencil',
-  [SharePermissions.read, SharePermissions.update]
+  [SharePermissions.read, SharePermissions.update],
+  $gettext('Anyone with the link')
 )
 export const linkRoleEditorFolder = new LinkShareRole(
   'editor',
@@ -247,15 +258,16 @@ export const linkRoleEditorFolder = new LinkShareRole(
   $gettext('Can edit'),
   $gettext('can edit'),
   'pencil',
-  [SharePermissions.read, SharePermissions.update, SharePermissions.create, SharePermissions.delete]
+  [SharePermissions.read, SharePermissions.update, SharePermissions.create, SharePermissions.delete],
+  $gettext('Anyone with the link')
 )
 export const linkRoleUploaderFolder = new LinkShareRole(
   'uploader',
   true,
   $gettext('Secret File Drop'),
-  $gettext('can upload'),
+  $gettext('Secret File Drop'),
   'inbox-unarchive',
-  [SharePermissions.create]
+  [SharePermissions.create],
 )
 export const spaceRoleViewer = new SpaceShareRole(
   'viewer',
