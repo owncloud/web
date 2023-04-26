@@ -7,13 +7,7 @@
         class="edit-public-link-role-dropdown-toggle oc-text-left"
         gap-size="none"
       >
-        <!-- <span class="link-current-role" v-if="currentLinkRole.name === 'internal'" v-text="$gettext(currentLinkRole.label)"></span>
-        <span class="link-current-role" v-else-if="currentLinkRole.name === 'uploader'" v-text="$gettext(currentLinkRole.label)"></span>
-        <span class="link-current-role" v-else v-text="$gettext('Anyone with the link %{ roleLabel }', { roleLabel: $gettext(currentLinkRole.inlineLabel) })"></span>
-       -->
-
         <span class="link-current-role" v-text="currentLinkRoleLabel" />
-
         <oc-icon name="arrow-down-s" />
       </oc-button>
       <oc-drop

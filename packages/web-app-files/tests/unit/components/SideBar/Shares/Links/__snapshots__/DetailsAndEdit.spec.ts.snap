@@ -4,10 +4,6 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
 <div class="link-details oc-flex oc-flex-between oc-flex-middle" file="undefined">
   <div>
     <oc-button-stub appearance="raw" class="edit-public-link-role-dropdown-toggle oc-text-left" disabled="false" gapsize="none" id="edit-public-link-role-dropdown-toggle-undefined" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
-      <!-- <span class="link-current-role" v-if="currentLinkRole.name === 'internal'" v-text="$gettext(currentLinkRole.label)"></span>
-        <span class="link-current-role" v-else-if="currentLinkRole.name === 'uploader'" v-text="$gettext(currentLinkRole.label)"></span>
-        <span class="link-current-role" v-else v-text="$gettext('Anyone with the link %{ roleLabel }', { roleLabel: $gettext(currentLinkRole.inlineLabel) })"></span>
-       -->
       <span class="link-current-role">Anyone with the link can view</span>
       <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
     </oc-button-stub>

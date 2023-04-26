@@ -41,7 +41,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
         console.error(error)
         store.dispatch('showMessage', {
           title: $pgettext(
-            'Error message in case emptying tash bin fails',
+            'Error message in case emptying trash bin fails',
             'Failed to empty trash bin'
           ),
           status: 'danger'
