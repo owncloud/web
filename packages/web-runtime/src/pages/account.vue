@@ -77,7 +77,7 @@
         <dd data-testid="language">
           <oc-select
             v-if="languageOptions"
-            :model-value="selectedLanguageOption"
+            :model-value="selectedLanguageValue"
             :clearable="false"
             :options="languageOptions"
             @update:model-value="updateSelectedLanguage"
@@ -123,7 +123,7 @@
 <script lang="ts">
 import { mapActions } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
-import { computed, defineComponent, onMounted, unref, ref } from 'vue'
+import { computed, defineComponent, onMounted, unref, ref, watch } from 'vue'
 import {
   useAccessToken,
   useCapabilityGraphPersonalDataExport,
@@ -155,6 +155,8 @@ export default defineComponent({
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
     const configurationValues = ref()
+    const bundleValues = ref()
+    const selectedLanguageValue = ref()
 
     // FIXME: Use graph capability when we have it
     const isSettingsServiceSupported = useCapabilitySpacesEnabled()
@@ -206,8 +208,10 @@ export default defineComponent({
             }
           }
         )
+        bundleValues.value = bundles.find((b) => b.extension === 'ocis-accounts')
         return bundles.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
+        bundleValues.value = []
         console.error(e)
         return []
       }
@@ -245,52 +249,53 @@ export default defineComponent({
         : true
     })
 
-    const languageSetting = computed(() => {
-      return unref(configurationValues).find(
-        (configurationValue) => configurationValue.identifier?.setting === 'language'
-      )?.value
-    })
     const languageOptions = computed(() => {
-      const languageOptions = loadAccountBundleTask.last?.value?.settings.find(
-        (s) => s.name === 'language'
-      )?.singleChoiceValue.options
+      const languageOptions = unref(bundleValues).settings.find((s) => s.name === 'language')
+        ?.singleChoiceValue.options
       return languageOptions?.map((l) => ({
         label: l.displayValue,
         value: l.value.stringValue,
         default: l.default
       }))
     })
-    const selectedLanguageOption = computed(() => {
-      const current = unref(languageSetting)?.listValue.values[0].stringValue
-      if (!current) {
-        return unref(languageOptions).find((o) => o.default)
-      }
-      return unref(languageOptions).find((o) => o.value === current)
-    })
+
     const updateSelectedLanguage = async (option) => {
       const bundle = loadAccountBundleTask.last?.value
+      const settingsId = unref(configurationValues).find(
+        (cV) => cV.identifier.setting === 'language'
+      )?.value?.id
+
+      console.log(settingsId)
+
       const value = {
         bundleId: bundle?.id,
         settingId: bundle?.settings.find((s) => s.name === 'language')?.id,
         resource: { type: 'TYPE_USER' },
         listValue: { values: [{ stringValue: option.value }] },
-        ...(unref(languageSetting) && { id: unref(languageSetting).id })
+        ...(settingsId && { id: settingsId })
       }
 
-      await axios.post(
-        '/api/v0/settings/values-save',
-        { value: { ...value, accountUuid: 'me' } },
-        {
-          headers: {
-            authorization: `Bearer ${unref(accessToken)}`,
-            'X-Request-ID': uuidV4()
+      try {
+        await axios.post(
+          '/api/v0/settings/values-save',
+          { value: { ...value, accountUuid: 'me' } },
+          {
+            headers: {
+              authorization: `Bearer ${unref(accessToken)}`,
+              'X-Request-ID': uuidV4()
+            }
           }
-        }
-      )
+        )
 
-      const newSetting = { identifier: accountSettingIdentifier, value }
-      setCurrentLanguage({ language, languageSetting: newSetting })
-      loadValuesList.perform()
+        selectedLanguageValue.value = option
+        setCurrentLanguage({
+          language,
+          languageSetting: { identifier: accountSettingIdentifier, value }
+        })
+      } catch (e) {
+        //TODO:: Show message
+        console.error(e)
+      }
     }
 
     const updateDisableEmailNotifications = async (option) => {
@@ -338,17 +343,32 @@ export default defineComponent({
       return configurationManager.logoutUrl
     })
 
-    onMounted(() => {
+    onMounted(async () => {
       if (unref(isSettingsServiceSupported)) {
-        loadValuesList.perform()
-        loadAccountBundleTask.perform()
+        await loadAccountBundleTask.perform()
+        await loadValuesList.perform()
       }
     })
+
+    watch(
+      configurationValues,
+      () => {
+        const languageConfiguration = unref(configurationValues).find(
+          (cV) => cV.identifier.setting === 'language'
+        )
+        selectedLanguageValue.value = languageConfiguration
+          ? unref(languageOptions).find(
+              (lO) => lO.value === languageConfiguration.value?.listValue?.values?.[0]?.stringValue
+            )
+          : unref(languageOptions).find((o) => o.default)
+      },
+      { deep: true }
+    )
 
     return {
       clientService,
       languageOptions,
-      selectedLanguageOption,
+      selectedLanguageValue,
       updateSelectedLanguage,
       updateDisableEmailNotifications,
       accountEditLink,
