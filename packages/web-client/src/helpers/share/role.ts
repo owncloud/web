@@ -119,9 +119,9 @@ export class SpaceShareRole extends ShareRole {
       case spaceRoleViewer.name:
         return $gettext('View and download.')
       case spaceRoleEditor.name:
-        return $gettext('View, download, upload, edit, add, delete.')
+        return $gettext('View, download, upload, edit, add and delete.')
       case spaceRoleManager.name:
-        return $gettext('View, download, upload, edit, add, delete and share.')
+        return $gettext('View, download, upload, edit, add, delete, share and manage members.')
     }
   }
 }
@@ -478,7 +478,7 @@ const linkRoleDescriptions = {
     'Anyone with the link can view, download and edit.'
   ),
   [linkRoleEditorFolder.bitmask(false)]: $gettext(
-    'Anyone with the link can view, download, edit, add, delete and upload.'
+    'Anyone with the link can view, download, upload, edit, add and delete.'
   ),
   [linkRoleUploaderFolder.bitmask(false)]: $gettext(
     'Anyone with the link can only upload, existing content is not revealed.'
