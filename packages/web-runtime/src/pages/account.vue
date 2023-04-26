@@ -125,15 +125,12 @@ import { mapActions } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
-  useAccessToken,
   useCapabilityGraphPersonalDataExport,
   useCapabilitySpacesEnabled,
   useClientService,
   useStore
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
-import axios from 'axios'
-import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
@@ -150,7 +147,6 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const accessToken = useAccessToken({ store })
     const language = useGettext()
     const { $gettext } = language
     const clientService = useClientService()
@@ -179,16 +175,9 @@ export default defineComponent({
       try {
         const {
           data: { values }
-        } = yield axios.post(
-          '/api/v0/settings/values-list',
-          { account_uuid: 'me' },
-          {
-            headers: {
-              authorization: `Bearer ${unref(accessToken)}`,
-              'X-Request-ID': uuidV4()
-            }
-          }
-        )
+        } = yield clientService.httpAuthenticated.post('/api/v0/settings/values-list', {
+          account_uuid: 'me'
+        })
         valuesList.value = values || []
       } catch (e) {
         console.error(e)
@@ -204,16 +193,7 @@ export default defineComponent({
       try {
         const {
           data: { bundles }
-        } = yield axios.post(
-          '/api/v0/settings/bundles-list',
-          {},
-          {
-            headers: {
-              authorization: `Bearer ${unref(accessToken)}`,
-              'X-Request-ID': uuidV4()
-            }
-          }
-        )
+        } = yield clientService.httpAuthenticated.post('/api/v0/settings/bundles-list')
         bundlesList.value = bundles.find((b) => b.extension === 'ocis-accounts')
         return bundles.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
@@ -266,30 +246,53 @@ export default defineComponent({
       return configurationManager.logoutUrl
     })
 
-    const updateSelectedLanguage = async (option) => {
-      const valueId = unref(valuesList).find((cV) => cV.identifier.setting === 'language')?.value
+    const saveValue = async ({
+      identifier,
+      valueOptions
+    }: {
+      identifier: string
+      valueOptions: Record<string, any>
+    }) => {
+      const valueId = unref(valuesList).find((cV) => cV.identifier.setting === identifier)?.value
         ?.id
 
       const value = {
         bundleId: unref(bundlesList)?.id,
-        settingId: unref(bundlesList)?.settings.find((s) => s.name === 'language')?.id,
+        settingId: unref(bundlesList)?.settings.find((s) => s.name === identifier)?.id,
         resource: { type: 'TYPE_USER' },
-        listValue: { values: [{ stringValue: option.value }] },
+        accountUuid: 'me',
+        ...valueOptions,
         ...(valueId && { id: valueId })
       }
 
       try {
-        await axios.post(
-          '/api/v0/settings/values-save',
-          { value: { ...value, accountUuid: 'me' } },
-          {
-            headers: {
-              authorization: `Bearer ${unref(accessToken)}`,
-              'X-Request-ID': uuidV4()
-            }
+        await clientService.httpAuthenticated.post('/api/v0/settings/values-save', {
+          value: {
+            accountUuid: 'me',
+            ...value
           }
-        )
+        })
 
+        /**
+         * Edge case: we need to reload the values list to retrieve the valueId if not set,
+         * otherwise the backend saves multiple entries
+         */
+        if (!valueId) {
+          loadValuesList.perform()
+        }
+
+        return value
+      } catch (e) {
+        throw e
+      }
+    }
+
+    const updateSelectedLanguage = async (option) => {
+      try {
+        const value = await saveValue({
+          identifier: 'language',
+          valueOptions: { listValue: { values: [{ stringValue: option.value }] } }
+        })
         selectedLanguageValue.value = option
         setCurrentLanguage({
           language,
@@ -302,14 +305,6 @@ export default defineComponent({
             value
           }
         })
-
-        /**
-         * Edge case: we need to reload the values list to retrieve the valueId if not set,
-         * otherwise the backend saves multiple entries
-         */
-        if (!valueId) {
-          loadValuesList.perform()
-        }
       } catch (e) {
         console.error(e)
         store.dispatch('showMessage', {
@@ -320,43 +315,12 @@ export default defineComponent({
     }
 
     const updateDisableEmailNotifications = async (option) => {
-      option = !option
-      console.log(option)
-      console.log(unref(bundlesList))
-
-      const valueId = unref(valuesList).find(
-        (cV) => cV.identifier.setting === 'disable email notifications'
-      )?.value?.id
-
-      const value = {
-        bundleId: unref(bundlesList)?.id,
-        settingId: unref(bundlesList)?.settings.find(
-          (s) => s.name === 'disable email notifications'
-        )?.id,
-        resource: { type: 'TYPE_USER' },
-        boolValue: option,
-        ...(valueId && { id: valueId })
-      }
-
       try {
-        await axios.post(
-          '/api/v0/settings/values-save',
-          { value: { ...value, accountUuid: 'me' } },
-          {
-            headers: {
-              authorization: `Bearer ${unref(accessToken)}`,
-              'X-Request-ID': uuidV4()
-            }
-          }
-        )
+        await saveValue({
+          identifier: 'disable email notifications',
+          valueOptions: { boolValue: !option }
+        })
         disableEmailNotificationsValue.value = option
-        /**
-         * Edge case: we need to reload the values list to retrieve the valueId if not set,
-         * otherwise the backend saves multiple entries
-         */
-        if (!valueId) {
-          loadValuesList.perform()
-        }
       } catch (e) {
         console.error(e)
         store.dispatch('showMessage', {
