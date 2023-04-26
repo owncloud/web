@@ -114,7 +114,7 @@ export class SpaceShareRole extends ShareRole {
       case spaceRoleEditor.name:
         return $gettext('Upload, edit, delete, download and preview')
       case spaceRoleManager.name:
-        return $gettext('Upload, edit, delete, download, preview and share')
+        return $gettext('Upload, edit, delete, download, preview, share and manage members')
     }
   }
 }
