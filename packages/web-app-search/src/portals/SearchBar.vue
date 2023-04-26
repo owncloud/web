@@ -57,7 +57,7 @@
           <li v-for="provider in displayProviders" :key="provider.id" class="provider">
             <oc-list>
               <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
-                <span class="display-name">{{ provider.displayName }}</span>
+                <span class="display-name" v-text="$gettext(provider.displayName)" />
                 <span v-if="!!provider.listSearch">
                   <router-link
                     class="more-results"
