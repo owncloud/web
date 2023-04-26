@@ -92,7 +92,7 @@
       <oc-icon
         v-if="link.expiration"
         v-oc-tooltip="expirationDateTooltip"
-        class="oc-files-public-link-expires"
+        class="oc-files-public-link-expires oc-ml-xs"
         :data-testid="`files-link-id-${link.id}-expiration-date`"
         :aria-label="expirationDateTooltip"
         name="calendar-event"
@@ -556,5 +556,9 @@ export default defineComponent({
     width: 100%;
     justify-content: flex-start;
   }
+}
+
+.oc-files-public-link-expires {
+  margin-top: 1px; // to align with the other elements
 }
 </style>

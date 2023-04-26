@@ -1,0 +1,6 @@
+Enhancement: Fix quicklink icon alignment
+
+We've fixed the alignment of the quicklink icons.
+
+https://github.com/owncloud/web/pull/8822
+https://github.com/owncloud/web/issues/8606
