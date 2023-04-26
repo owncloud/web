@@ -3,7 +3,7 @@
 exports[`DetailsAndEdit component if user can edit renders dropdown and edit button 1`] = `
 <div class="link-details oc-flex oc-flex-between oc-flex-middle" file="undefined">
   <div>
-    <oc-button-stub appearance="raw" class="edit-public-link-role-dropdown-toggle oc-text-left oc-pill oc-background-default oc-px-s" disabled="false" gapsize="none" id="edit-public-link-role-dropdown-toggle-undefined" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+    <oc-button-stub appearance="raw" class="edit-public-link-role-dropdown-toggle oc-text-left" disabled="false" gapsize="none" id="edit-public-link-role-dropdown-toggle-undefined" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
       <span class="link-current-role">Viewer</span>
       <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
     </oc-button-stub>

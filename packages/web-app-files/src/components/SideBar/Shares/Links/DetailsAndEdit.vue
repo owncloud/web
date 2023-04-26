@@ -4,7 +4,7 @@
       <oc-button
         :id="`edit-public-link-role-dropdown-toggle-${link.id}`"
         appearance="raw"
-        class="edit-public-link-role-dropdown-toggle oc-text-left oc-pill oc-background-default oc-px-s"
+        class="edit-public-link-role-dropdown-toggle oc-text-left"
         gap-size="none"
       >
         <span class="link-current-role" v-text="$gettext(currentLinkRoleLabel)" />
