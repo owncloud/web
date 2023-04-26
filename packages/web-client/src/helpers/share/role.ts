@@ -10,7 +10,7 @@ export abstract class ShareRole {
   private readonly _folder: boolean
   private readonly _label: string
   private readonly _inlineLabel: string
-  private readonly _labelPrependText: string
+  private readonly _longLabel: string
   private readonly _icon: string
   private readonly _permissions: SharePermission[]
 
@@ -21,7 +21,7 @@ export abstract class ShareRole {
     inlineLabel: string,
     icon: string,
     permissions: SharePermission[],
-    labelPrependText?: string
+    longLabel?: string
   ) {
     this._name = name
     this._folder = folder
@@ -29,7 +29,7 @@ export abstract class ShareRole {
     this._inlineLabel = inlineLabel
     this._icon = icon
     this._permissions = permissions
-    this._labelPrependText = labelPrependText || ''
+    this._longLabel = longLabel || ''
   }
 
   get key(): string {
@@ -52,8 +52,8 @@ export abstract class ShareRole {
     return this._inlineLabel
   }
 
-  get labelPrependText(): string {
-    return this._labelPrependText
+  get longLabel(): string {
+    return this._longLabel
   }
 
   get hasCustomPermissions(): boolean {
@@ -223,7 +223,7 @@ export const linkRoleViewerFile = new LinkShareRole(
   $gettext('can view'),
   'eye',
   [SharePermissions.read],
-  $gettext('Anyone with the link')
+  $gettext('Anyone with the link can view')
 )
 export const linkRoleViewerFolder = new LinkShareRole(
   'viewer',
@@ -232,7 +232,7 @@ export const linkRoleViewerFolder = new LinkShareRole(
   $gettext('can view'),
   'eye',
   [SharePermissions.read],
-  $gettext('Anyone with the link')
+  $gettext('Anyone with the link can view')
 )
 export const linkRoleContributorFolder = new LinkShareRole(
   'contributor',
@@ -241,7 +241,7 @@ export const linkRoleContributorFolder = new LinkShareRole(
   $gettext('can upload'),
   'upload',
   [SharePermissions.read, SharePermissions.create],
-  $gettext('Anyone with the link')
+  $gettext('Anyone with the link can upload')
 )
 export const linkRoleEditorFile = new LinkShareRole(
   'editor',
@@ -250,7 +250,7 @@ export const linkRoleEditorFile = new LinkShareRole(
   $gettext('can edit'),
   'pencil',
   [SharePermissions.read, SharePermissions.update],
-  $gettext('Anyone with the link')
+  $gettext('Anyone with the link can edit')
 )
 export const linkRoleEditorFolder = new LinkShareRole(
   'editor',
@@ -264,7 +264,7 @@ export const linkRoleEditorFolder = new LinkShareRole(
     SharePermissions.create,
     SharePermissions.delete
   ],
-  $gettext('Anyone with the link')
+  $gettext('Anyone with the link can edit')
 )
 export const linkRoleUploaderFolder = new LinkShareRole(
   'uploader',
