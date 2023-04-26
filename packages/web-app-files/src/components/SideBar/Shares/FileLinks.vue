@@ -161,8 +161,10 @@ export default defineComponent({
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
 
-    const linkListCollapsed = ref(!store.getters.configuration.options.sidebar.shares.showAllOnLoad)
-    const indirectLinkListCollapsed = ref(linkListCollapsed)
+    const initialLinkListCollapsed =
+      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    const linkListCollapsed = ref(initialLinkListCollapsed)
+    const indirectLinkListCollapsed = ref(initialLinkListCollapsed)
     const { outgoingLinks } = useShares()
     const directLinks = computed(() =>
       unref(outgoingLinks)
