@@ -17,6 +17,7 @@ import { World } from './world'
 import { state } from './shared'
 import { createdSpaceStore, createdLinkStore } from '../../support/store'
 import { User } from '../../support/types'
+import { createdGroupStore } from '../../support/store/group'
 
 export { World }
 
@@ -110,6 +111,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 
   await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
 
+  createdGroupStore.clear()
   createdLinkStore.clear()
 })
 

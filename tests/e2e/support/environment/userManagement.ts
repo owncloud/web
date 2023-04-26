@@ -74,6 +74,16 @@ export class UsersEnvironment {
     return dummyGroupStore.get(uniqueKey)
   }
 
+  getCreatedGroup({ key }: { key: string }): Group {
+    const uniqueKey = key.toLowerCase()
+
+    if (!createdGroupStore.has(uniqueKey)) {
+      throw new Error(`group with key '${uniqueKey}' not found`)
+    }
+    console.log(createdGroupStore.get(uniqueKey))
+    return createdGroupStore.get(uniqueKey)
+  }
+
   createGroup({ key, group }: { key: string; group: Group }): Group {
     const uniqueKey = key.toLowerCase()
 
@@ -82,6 +92,15 @@ export class UsersEnvironment {
     }
 
     dummyGroupStore.set(uniqueKey, group)
+
+    return group
+  }
+
+  storeGroup({ group }: { group: Group }): Group {
+    if (createdGroupStore.has(group.id)) {
+      throw new Error(`user with key '${group.id}' already exists`)
+    }
+    createdGroupStore.set(group.id, group)
 
     return group
   }
