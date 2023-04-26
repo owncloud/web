@@ -267,7 +267,7 @@ export default defineComponent({
     })
 
     const updateSelectedLanguage = async (option) => {
-      const settingsId = unref(valuesList).find((cV) => cV.identifier.setting === 'language')?.value
+      const valueId = unref(valuesList).find((cV) => cV.identifier.setting === 'language')?.value
         ?.id
 
       const value = {
@@ -275,7 +275,7 @@ export default defineComponent({
         settingId: unref(bundlesList)?.settings.find((s) => s.name === 'language')?.id,
         resource: { type: 'TYPE_USER' },
         listValue: { values: [{ stringValue: option.value }] },
-        ...(settingsId && { id: settingsId })
+        ...(valueId && { id: valueId })
       }
 
       try {
@@ -304,10 +304,10 @@ export default defineComponent({
         })
 
         /**
-         * Edge case: we need to reload the values list to retrieve the settingsId if not set,
+         * Edge case: we need to reload the values list to retrieve the valueId if not set,
          * otherwise the backend saves multiple entries
          */
-        if (!settingsId) {
+        if (!valueId) {
           loadValuesList.perform()
         }
       } catch (e) {
@@ -322,18 +322,20 @@ export default defineComponent({
     const updateDisableEmailNotifications = async (option) => {
       option = !option
       console.log(option)
-      const bundle = loadBundlesList.last?.value
+      console.log(unref(bundlesList))
 
-      const settingsId = unref(valuesList).find(
-        (cV) => cV.identifier.setting === "'disable email notifications"
+      const valueId = unref(valuesList).find(
+        (cV) => cV.identifier.setting === 'disable email notifications'
       )?.value?.id
 
       const value = {
-        bundleId: bundle?.id,
-        settingId: bundle?.settings.find((s) => s.name === 'disable email notifications')?.id,
+        bundleId: unref(bundlesList)?.id,
+        settingId: unref(bundlesList)?.settings.find(
+          (s) => s.name === 'disable email notifications'
+        )?.id,
         resource: { type: 'TYPE_USER' },
         boolValue: option,
-        ...(settingsId && { id: settingsId })
+        ...(valueId && { id: valueId })
       }
 
       try {
@@ -349,10 +351,10 @@ export default defineComponent({
         )
         disableEmailNotificationsValue.value = option
         /**
-         * Edge case: we need to reload the values list to retrieve the settingsId if not set,
+         * Edge case: we need to reload the values list to retrieve the valueId if not set,
          * otherwise the backend saves multiple entries
          */
-        if (!settingsId) {
+        if (!valueId) {
           loadValuesList.perform()
         }
       } catch (e) {
