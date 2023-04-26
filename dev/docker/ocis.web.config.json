@@ -28,7 +28,7 @@
     ],
     "contextHelpersReadMore": true
   },
-  "apps": ["files", "text-editor", "pdf-viewer", "search", "external", "admin-settings"],
+  "apps": ["files", "text-editor", "pdf-viewer", "search", "external", "admin-settings", "webfinger"],
   "external_apps": [
     {
       "id": "preview",
