@@ -26,8 +26,8 @@ Feature: Sharing files and folders with internal groups
     And the user shares file "testimage.jpg" with group "<group>" as "Viewer" using the webUI
     And user "Alice" accepts the share "Shares/simple-folder" offered by user "Carol" using the sharing API in the server
     And user "Alice" accepts the share "Shares/testimage.jpg" offered by user "Carol" using the sharing API in the server
-    Then group "<group>" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
-    And group "<group>" should be listed as "Viewer" in the collaborators list for file "testimage.jpg" on the webUI
+    Then group "<group>" should be listed as "Can view" in the collaborators list for folder "simple-folder" on the webUI
+    And group "<group>" should be listed as "Can view" in the collaborators list for file "testimage.jpg" on the webUI
     Examples:
       | group     |
       | ?\?@#%@,; |

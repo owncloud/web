@@ -169,7 +169,7 @@ Feature: Sharing files and folders with internal groups
     And user "Alice" has shared file "lorem.txt" with group "grp1" in the server
     And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice" in the server
     When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then group "grp1" should be listed as "Editor" in the collaborators list on the webUI
+    Then group "grp1" should be listed as "Can edit" in the collaborators list on the webUI
     When the user deletes "grp1" as collaborator for the current file using the webUI
     Then group "grp1" should not be listed in the collaborators list on the webUI
     And file "lorem.txt" should not be listed in shared-with-others page on the webUI
@@ -187,11 +187,11 @@ Feature: Sharing files and folders with internal groups
     And user "Alice" has shared file "lorem.txt" with group "grp2" in the server
     And user "Carol" has accepted the share "Shares/lorem.txt" offered by user "Alice" in the server
     When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then group "grp1" should be listed as "Editor" in the collaborators list on the webUI
-    And group "grp2" should be listed as "Editor" in the collaborators list on the webUI
+    Then group "grp1" should be listed as "Can edit" in the collaborators list on the webUI
+    And group "grp2" should be listed as "Can edit" in the collaborators list on the webUI
     When the user deletes "grp1" as collaborator for the current file using the webUI
     Then group "grp1" should not be listed in the collaborators list on the webUI
-    And group "grp2" should be listed as "Editor" in the collaborators list on the webUI
+    And group "grp2" should be listed as "Can edit" in the collaborators list on the webUI
     And file "lorem.txt" should be listed in shared-with-others page on the webUI
     And as "Brian" file "/Shares/lorem.txt" should not exist in the server
     But as "Carol" file "/Shares/lorem.txt" should exist in the server

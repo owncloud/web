@@ -29,10 +29,10 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
     Examples:
-      | role        | permissions                  |
-      | Viewer      | read                         |
-      | Editor      | read, update, create, delete |
-      | Contributor | read, create                 |
+      | role          | permissions                  |
+      | Can view      | read                         |
+      | Can edit      | read, update, create, delete |
+      | Can upload    | read, create                 |
 
   @skipOnOC10 @issue-ocis-reva-383
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -50,10 +50,10 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
     Examples:
-      | role        | permissions                  |
-      | Viewer      | read                         |
-      | Editor      | read, update, create, delete |
-      | Contributor | read, create                 |
+      | role          | permissions                  |
+      | Can view      | read                         |
+      | Can edit      | read, update, create, delete |
+      | Can upload    | read, create                 |
 
   @issue-ocis-reva-383
   Scenario: sharing by public link with "Uploader" role
@@ -68,7 +68,7 @@ Feature: Share by public link with different roles
       | permissions | create         |
       | path        | /simple-folder |
       | name        | Link           |
-    And a link named "Link" should be listed with role "Uploader" in the public link list of folder "simple-folder" on the webUI
+    And a link named "Link" should be listed with role "Secret File Drop" in the public link list of folder "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then the user should be redirected to the files-drop page
 

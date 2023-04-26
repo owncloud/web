@@ -141,13 +141,13 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has shared file "lorem.txt" with user "Carol" in the server
     And user "Carol" has accepted the share "Shares/lorem.txt" offered by user "Alice" in the server
     When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
-    And user "Carol King" should be listed as "Editor" in the collaborators list on the webUI
+    Then user "Brian Murphy" should be listed as "Can edit" in the collaborators list on the webUI
+    And user "Carol King" should be listed as "Can edit" in the collaborators list on the webUI
     And as "Brian" file "Shares/lorem.txt" should exist in the server
     And as "Carol" file "Shares/lorem.txt" should exist in the server
     When the user deletes "Brian Murphy" as collaborator for the current file using the webUI
     Then user "Brian Murphy" should not be listed in the collaborators list on the webUI
-    And user "Carol King" should be listed as "Editor" in the collaborators list on the webUI
+    And user "Carol King" should be listed as "Can edit" in the collaborators list on the webUI
     And file "lorem.txt" should be listed in shared-with-others page on the webUI
     And as "Brian" file "Shares/lorem.txt" should not exist in the server
     But as "Carol" file "Shares/lorem.txt" should exist in the server
@@ -252,7 +252,7 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has uploaded file with content "test" to "lorem.txt" in the server
     And the user has renamed file "lorem.txt" to "new-lorem.txt"
     When the user shares resource "new-lorem.txt" with user "Brian Murphy" using the quick action on the webUI
-    Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for file "new-lorem.txt" on the webUI
+    Then user "Brian Murphy" should be listed as "Can view" in the collaborators list for file "new-lorem.txt" on the webUI
 
 
   Scenario: user shares the file/folder with another internal user and delete the share with user
@@ -261,7 +261,7 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
     And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice" in the server
     When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
+    Then user "Brian Murphy" should be listed as "Can edit" in the collaborators list on the webUI
     And as "Brian" file "Shares/lorem.txt" should exist in the server
     When the user deletes "Brian Murphy" as collaborator for the current file using the webUI
     Then user "Brian Murphy" should not be listed in the collaborators list on the webUI

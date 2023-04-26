@@ -97,9 +97,9 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has logged in using the webUI
     When the user shares folder "simple-folder" with user "Carol King" as "Viewer" with permissions "," using the webUI
     And the user re-logs in as "Brian" using the webUI
-    Then user "Carol King" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "Carol King" should be listed as "Can view" in the collaborators list for folder "simple-folder" on the webUI
     And custom permission "share" should be set for user "Carol King" for folder "simple-folder" on the webUI
-    And user "Alice Hansen" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
+    And user "Alice Hansen" should be listed as "Can view" in the collaborators list for folder "simple-folder" on the webUI
     And user "Alice" should have received a share with these details in the server:
       | field       | value              |
       | uid_owner   | Brian              |
@@ -236,5 +236,5 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has shared folder "simple-folder" with user "Carol" in the server
     When user "Brian" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Editor" in the collaborators list on the webUI
-    # And user "Carol King" should be listed as "Editor" reshared through "Alice Hansen" in the collaborators list on the webUI
+    Then user "Alice Hansen" should be listed as "Can edit" in the collaborators list on the webUI
+    # And user "Carol King" should be listed as "Can edit" reshared through "Alice Hansen" in the collaborators list on the webUI
