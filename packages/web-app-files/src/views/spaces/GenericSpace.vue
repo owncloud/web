@@ -1,5 +1,12 @@
 <template>
   <div class="oc-flex oc-width-1-1" :class="{ 'space-frontpage': isSpaceFrontpage }">
+    <!--<space-generic-context-menu ref="genericContextMenu" class="resource-table-btn-action-dropdown" />-->
+    <space-generic-context-menu
+      ref="genericContextMenu"
+      class="oc-position-fixed generic"
+      style="z-index: var(--oc-z-index-modal); top: 200px"
+    >
+    </space-generic-context-menu>
     <keyboard-actions :paginated-resources="paginatedResources" :space="space" />
     <files-view-wrapper>
       <app-bar
@@ -128,7 +135,7 @@
 <script lang="ts">
 import { debounce, omit, last } from 'lodash-es'
 import { basename } from 'path'
-import { computed, defineComponent, PropType, onBeforeUnmount, onMounted, unref } from 'vue'
+import { computed, defineComponent, PropType, onBeforeUnmount, onMounted, unref, ref } from 'vue'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
 import { useGettext } from 'vue3-gettext'
@@ -158,6 +165,7 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import SpaceGenericContextMenu from 'web-app-files/src/components/Spaces/SpaceGenericContextMenu.vue'
 import { useRoute } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
@@ -171,6 +179,7 @@ import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
 import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
+import { displayPositionedDropdown } from 'web-pkg/src'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -192,7 +201,8 @@ export default defineComponent({
     ResourceTable,
     ResourceTiles,
     SideBar,
-    SpaceHeader
+    SpaceHeader,
+    SpaceGenericContextMenu
   },
   props: {
     space: {
@@ -400,6 +410,23 @@ export default defineComponent({
       eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     })
 
+    const genericContextMenu = ref(null)
+    const showContextMenu = (event) => {
+      console.log(genericContextMenu.value.$el)
+      const instance = (document.getElementsByClassName('generic') as unknown)[0]
+      console.log('instance', instance)
+      console.log('instance._tippy', instance._tippy)
+      if (instance === undefined) {
+        return
+      }
+      displayPositionedDropdown(instance._tippy, event, genericContextMenu.value)
+    }
+    document.addEventListener('click', (event) => {
+      console.log('test')
+      const newEvent = new MouseEvent('contextmenu', event)
+      showContextMenu(newEvent)
+    })
+
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
@@ -412,7 +439,8 @@ export default defineComponent({
       viewModes,
       uploadHint: $gettext(
         'Drag files and folders here or use the "New" or "Upload" buttons to add files'
-      )
+      ),
+      genericContextMenu
     }
   },
 
