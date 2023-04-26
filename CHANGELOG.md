@@ -141,6 +141,7 @@ Summary
 * Enhancement - Admin settings groups members panel: [#8826](https://github.com/owncloud/web/pull/8826)
 * Enhancement - Add expiration date hint to public links: [#8866](https://github.com/owncloud/web/pull/8866)
 * Enhancement - Respect user read-only configuration by the server: [#8868](https://github.com/owncloud/web/pull/8868)
+* Enhancement - Webfinger redirect app: [#8883](https://github.com/owncloud/web/issues/8883)
 
 Details
 -------
@@ -1314,6 +1315,16 @@ Details
 
    https://github.com/owncloud/web/issues/8840
    https://github.com/owncloud/web/pull/8868
+
+* Enhancement - Webfinger redirect app: [#8883](https://github.com/owncloud/web/issues/8883)
+
+   We've added an app with the name `webfinger` which queries the oCIS webfinger service for the
+   url of the oCIS instance of the user and performs a redirect. This app is not meant to be used in a
+   standard deployment in its current state. It only uses web and its extension system as a
+   platform. In the future this will become a multi tenancy select.
+
+   https://github.com/owncloud/web/issues/8883
+   https://github.com/owncloud/web/pull/8884
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
