@@ -142,6 +142,7 @@ Summary
 * Enhancement - Admin settings groups members panel: [#8826](https://github.com/owncloud/web/pull/8826)
 * Enhancement - Add expiration date hint to public links: [#8866](https://github.com/owncloud/web/pull/8866)
 * Enhancement - Respect user read-only configuration by the server: [#8868](https://github.com/owncloud/web/pull/8868)
+* Enhancement - Layout of Share role and expiration date dropdown: [#8882](https://github.com/owncloud/web/pull/8882)
 * Enhancement - Webfinger redirect app: [#8883](https://github.com/owncloud/web/issues/8883)
 * Enhancement - Rename "Quicklink" to "link": [#8898](https://github.com/owncloud/web/pull/8898)
 
@@ -1325,6 +1326,13 @@ Details
 
    https://github.com/owncloud/web/issues/8840
    https://github.com/owncloud/web/pull/8868
+
+* Enhancement - Layout of Share role and expiration date dropdown: [#8882](https://github.com/owncloud/web/pull/8882)
+
+   We changed the layout of the share role/permsission dropdown and expiration date select
+   button to make them more visible and distinctive
+
+   https://github.com/owncloud/web/pull/8882
 
 * Enhancement - Webfinger redirect app: [#8883](https://github.com/owncloud/web/issues/8883)
 
