@@ -196,7 +196,7 @@ export const peopleRoleDenyFolder = new PeopleShareRole(
 export const linkRoleInternalFile = new LinkShareRole(
   'internal',
   false,
-  $gettext('Only for invited people'),
+  $gettext('Internal'),
   $gettext('internal'),
   'user',
   [SharePermissions.internal]
@@ -204,7 +204,7 @@ export const linkRoleInternalFile = new LinkShareRole(
 export const linkRoleInternalFolder = new LinkShareRole(
   'internal',
   true,
-  $gettext('Only for invited people'),
+  $gettext('Internal'),
   $gettext('internal'),
   'user',
   [SharePermissions.internal]
@@ -228,7 +228,7 @@ export const linkRoleViewerFolder = new LinkShareRole(
 export const linkRoleContributorFolder = new LinkShareRole(
   'contributor',
   true,
-  $gettext('Anyone with the link can upload'),
+  $gettext('Can upload'),
   $gettext('can upload'),
   'upload',
   [SharePermissions.read, SharePermissions.create]
