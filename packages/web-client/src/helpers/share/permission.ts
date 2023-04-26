@@ -59,11 +59,7 @@ export abstract class SharePermissions {
     $gettext('Delete')
   )
 
-  static readonly share = new SharePermission(
-    'share',
-    SharePermissionBit.Share,
-    $gettext('Share')
-  )
+  static readonly share = new SharePermission('share', SharePermissionBit.Share, $gettext('Share'))
 
   static readonly denied = new SharePermission('denied', 64, $gettext('Deny'))
 
