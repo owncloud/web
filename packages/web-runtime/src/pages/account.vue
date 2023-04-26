@@ -123,7 +123,7 @@
 <script lang="ts">
 import { mapActions } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
-import { computed, defineComponent, onMounted, unref, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
   useAccessToken,
   useCapabilityGraphPersonalDataExport,
@@ -154,8 +154,8 @@ export default defineComponent({
     const language = useGettext()
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
-    const configurationValues = ref()
-    const bundleValues = ref()
+    const valuesList = ref()
+    const bundlesList = ref()
     const selectedLanguageValue = ref()
 
     // FIXME: Use graph capability when we have it
@@ -187,14 +187,14 @@ export default defineComponent({
             }
           }
         )
-        configurationValues.value = values || []
+        valuesList.value = values || []
       } catch (e) {
         console.error(e)
-        configurationValues.value = []
+        valuesList.value = []
       }
-    })
+    }).restartable()
 
-    const loadAccountBundleTask = useTask(function* () {
+    const loadBundlesList = useTask(function* () {
       try {
         const {
           data: { bundles }
@@ -208,10 +208,10 @@ export default defineComponent({
             }
           }
         )
-        bundleValues.value = bundles.find((b) => b.extension === 'ocis-accounts')
+        bundlesList.value = bundles.find((b) => b.extension === 'ocis-accounts')
         return bundles.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
-        bundleValues.value = []
+        bundlesList.value = []
         console.error(e)
         return []
       }
@@ -225,8 +225,8 @@ export default defineComponent({
       return (
         loadValuesList.isRunning ||
         !loadValuesList.last ||
-        loadAccountBundleTask.isRunning ||
-        !loadAccountBundleTask.last
+        loadBundlesList.isRunning ||
+        !loadBundlesList.last
       )
     })
 
@@ -237,7 +237,7 @@ export default defineComponent({
     }
 
     const disableEmailNotificationsSettings = computed(() => {
-      return unref(configurationValues).find(
+      return unref(valuesList).find(
         (configurationValue) =>
           configurationValue.identifier?.setting === 'disable email notifications'
       )?.value
@@ -250,7 +250,7 @@ export default defineComponent({
     })
 
     const languageOptions = computed(() => {
-      const languageOptions = unref(bundleValues).settings.find((s) => s.name === 'language')
+      const languageOptions = unref(bundlesList).settings.find((s) => s.name === 'language')
         ?.singleChoiceValue.options
       return languageOptions?.map((l) => ({
         label: l.displayValue,
@@ -260,16 +260,12 @@ export default defineComponent({
     })
 
     const updateSelectedLanguage = async (option) => {
-      const bundle = loadAccountBundleTask.last?.value
-      const settingsId = unref(configurationValues).find(
-        (cV) => cV.identifier.setting === 'language'
-      )?.value?.id
-
-      console.log(settingsId)
+      const settingsId = unref(valuesList).find((cV) => cV.identifier.setting === 'language')?.value
+        ?.id
 
       const value = {
-        bundleId: bundle?.id,
-        settingId: bundle?.settings.find((s) => s.name === 'language')?.id,
+        bundleId: unref(bundlesList)?.id,
+        settingId: unref(bundlesList)?.settings.find((s) => s.name === 'language')?.id,
         resource: { type: 'TYPE_USER' },
         listValue: { values: [{ stringValue: option.value }] },
         ...(settingsId && { id: settingsId })
@@ -292,6 +288,14 @@ export default defineComponent({
           language,
           languageSetting: { identifier: accountSettingIdentifier, value }
         })
+
+        /**
+         * Edge case: we need to reload the values list to retrieve the settingsId if not set,
+         * otherwise the backend saves multiple entries
+         */
+        if (!settingsId) {
+          loadValuesList.perform()
+        }
       } catch (e) {
         //TODO:: Show message
         console.error(e)
@@ -300,7 +304,7 @@ export default defineComponent({
 
     const updateDisableEmailNotifications = async (option) => {
       console.log(option)
-      const bundle = loadAccountBundleTask.last?.value
+      const bundle = loadBundlesList.last?.value
       const value = {
         bundleId: bundle?.id,
         settingId: bundle?.settings.find((s) => s.name === 'disable email notifications')?.id,
@@ -345,15 +349,10 @@ export default defineComponent({
 
     onMounted(async () => {
       if (unref(isSettingsServiceSupported)) {
-        await loadAccountBundleTask.perform()
+        await loadBundlesList.perform()
         await loadValuesList.perform()
-      }
-    })
 
-    watch(
-      configurationValues,
-      () => {
-        const languageConfiguration = unref(configurationValues).find(
+        const languageConfiguration = unref(valuesList).find(
           (cV) => cV.identifier.setting === 'language'
         )
         selectedLanguageValue.value = languageConfiguration
@@ -361,9 +360,8 @@ export default defineComponent({
               (lO) => lO.value === languageConfiguration.value?.listValue?.values?.[0]?.stringValue
             )
           : unref(languageOptions).find((o) => o.default)
-      },
-      { deep: true }
-    )
+      }
+    })
 
     return {
       clientService,
