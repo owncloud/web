@@ -193,7 +193,7 @@ export default defineComponent({
       try {
         const {
           data: { bundles }
-        } = yield clientService.httpAuthenticated.post('/api/v0/settings/bundles-list')
+        } = yield clientService.httpAuthenticated.post('/api/v0/settings/bundles-list', {})
         bundlesList.value = bundles.find((b) => b.extension === 'ocis-accounts')
         return bundles.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
@@ -228,10 +228,6 @@ export default defineComponent({
       }))
     })
 
-    const accountEditLink = computed(() => {
-      return store.getters.configuration?.options?.accountEditLink
-    })
-
     const groupNames = computed(() => {
       if (unref(useCapabilitySpacesEnabled())) {
         return unref(user)
@@ -240,10 +236,6 @@ export default defineComponent({
       }
 
       return unref(user).groups.join(', ')
-    })
-
-    const logoutUrl = computed(() => {
-      return configurationManager.logoutUrl
     })
 
     const saveValue = async ({
@@ -360,13 +352,13 @@ export default defineComponent({
       selectedLanguageValue,
       updateSelectedLanguage,
       updateDisableEmailNotifications,
-      accountEditLink,
+      accountEditLink: store.getters.configuration?.options?.accountEditLink,
       isChangePasswordEnabled,
       showGdprExport,
       isSettingsServiceSupported,
       groupNames,
       user,
-      logoutUrl,
+      logoutUrl: configurationManager.logoutUrl,
       isLoading,
       disableEmailNotificationsValue
     }
