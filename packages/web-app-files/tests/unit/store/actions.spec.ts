@@ -17,7 +17,8 @@ const stateMock = {
   commit: jest.fn(),
   dispatch: jest.fn(),
   getters: {},
-  rootGetters: {}
+  rootGetters: {},
+  state: {}
 }
 // we need to define $gettext explicitly to make it enumerable on the mock
 const languageMock = mock<Language>({ $gettext: jest.fn() })
