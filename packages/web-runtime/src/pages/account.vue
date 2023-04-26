@@ -104,7 +104,7 @@
           <gdpr-export />
         </dd>
       </div>
-      <div class="account-page-notification oc-mb oc-width-1-2@s">
+      <div v-if="isSettingsServiceSupported" class="account-page-notification oc-mb oc-width-1-2@s">
         <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Notifications')" />
         <dd data-testid="notification-mails">
           <oc-checkbox
@@ -297,10 +297,13 @@ export default defineComponent({
             value
           }
         })
+        store.dispatch('showMessage', {
+          title: $gettext('Language was saved successfully.')
+        })
       } catch (e) {
         console.error(e)
         store.dispatch('showMessage', {
-          title: $gettext('Unable to save language…'),
+          title: $gettext('Saving language failed…'),
           status: 'danger'
         })
       }
@@ -314,9 +317,12 @@ export default defineComponent({
         })
         disableEmailNotificationsValue.value = option
       } catch (e) {
+        store.dispatch('showMessage', {
+          title: $gettext('Email notifications preference saved successfully.')
+        })
         console.error(e)
         store.dispatch('showMessage', {
-          title: $gettext('Unable to save notifications email setting…'),
+          title: $gettext('Unable to save email notifications preference…'),
           status: 'danger'
         })
       }
