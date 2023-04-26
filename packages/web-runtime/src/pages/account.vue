@@ -152,6 +152,7 @@ export default defineComponent({
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const language = useGettext()
+    const { $gettext } = language
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
     const valuesList = ref()
@@ -190,6 +191,10 @@ export default defineComponent({
         valuesList.value = values || []
       } catch (e) {
         console.error(e)
+        store.dispatch('showMessage', {
+          title: $gettext('Unable to load account data…'),
+          status: 'danger'
+        })
         valuesList.value = []
       }
     }).restartable()
@@ -211,8 +216,12 @@ export default defineComponent({
         bundlesList.value = bundles.find((b) => b.extension === 'ocis-accounts')
         return bundles.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
-        bundlesList.value = []
         console.error(e)
+        store.dispatch('showMessage', {
+          title: $gettext('Unable to load account data…'),
+          status: 'danger'
+        })
+        bundlesList.value = []
       }
     }).restartable()
 
@@ -314,8 +323,11 @@ export default defineComponent({
           loadValuesList.perform()
         }
       } catch (e) {
-        //TODO:: Show message
         console.error(e)
+        store.dispatch('showMessage', {
+          title: $gettext('Unable to save language…'),
+          status: 'danger'
+        })
       }
     }
 
