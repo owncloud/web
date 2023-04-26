@@ -171,7 +171,7 @@ export default defineComponent({
       plugins: [hideOnEsc],
       theme: 'none',
       maxWidth: 400,
-      offset: this.offset,
+      offset: this.offset ? this.offset : 0,
       aria: {
         content: 'describedby'
       },
