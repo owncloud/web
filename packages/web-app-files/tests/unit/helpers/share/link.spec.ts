@@ -71,7 +71,7 @@ describe('createQuicklink', () => {
       path: mockResource.path,
       client: clientService.owncloudSdk,
       params: {
-        name: 'Quicklink',
+        name: 'Link',
         permissions: '1', // viewer
         quicklink: true,
         password: args.password,
@@ -82,7 +82,7 @@ describe('createQuicklink', () => {
     })
 
     expect(mockStore.dispatch).toHaveBeenCalledWith('showMessage', {
-      title: 'The quicklink has been copied to your clipboard.'
+      title: 'The link has been copied to your clipboard.'
     })
   })
 
@@ -112,7 +112,7 @@ describe('createQuicklink', () => {
         path: mockResource.path,
         client: clientService.owncloudSdk,
         params: {
-          name: 'Quicklink',
+          name: 'Link',
           permissions: role === 'viewer' ? '1' : '0',
           quicklink: true,
           expireDate: DateTime.now().plus({ days: 5 }).endOf('day').toISO(),
@@ -122,7 +122,7 @@ describe('createQuicklink', () => {
       })
 
       expect(mockStore.dispatch).toHaveBeenCalledWith('showMessage', {
-        title: 'The quicklink has been copied to your clipboard.'
+        title: 'The link has been copied to your clipboard.'
       })
     }
   )

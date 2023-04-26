@@ -172,10 +172,10 @@ Feature: Create public link shares
       | uid_owner   | Alice          |
       | permissions | read           |
       | path        | /simple-folder |
-      | name        | Quicklink      |
+      | name        | Link           |
     And the following success message should be displayed on the webUI
       """
-      The quicklink has been copied to your clipboard.
+      The link has been copied to your clipboard.
       """
 
   # This test is skipped in OCIS as the sharing jail has been implemented

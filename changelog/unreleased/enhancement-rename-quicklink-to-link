@@ -1,0 +1,6 @@
+Enhancement: Rename "Quicklink" to "link"
+
+We've renamed "Quicklink" to "link" in the UI
+
+https://github.com/owncloud/web/pull/8898
+https://github.com/owncloud/web/issues/7891
