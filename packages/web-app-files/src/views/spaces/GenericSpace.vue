@@ -403,6 +403,17 @@ export default defineComponent({
           performLoaderTask(true, path, fileId)
         }
       )
+      document
+        .getElementsByClassName('files-view-wrapper')[0]
+        .addEventListener('contextmenu', (event) => {
+          const { target } = event
+          if ((target as HTMLElement).closest('tbody')) {
+            return
+          }
+          event.preventDefault()
+          const newEvent = new MouseEvent('contextmenu', event)
+          showContextMenu(newEvent)
+        })
     })
 
     onBeforeUnmount(() => {
@@ -414,18 +425,11 @@ export default defineComponent({
     const showContextMenu = (event) => {
       console.log(genericContextMenu.value.$el)
       const instance = (document.getElementsByClassName('generic') as unknown)[0]
-      console.log('instance', instance)
-      console.log('instance._tippy', instance._tippy)
       if (instance === undefined) {
         return
       }
       displayPositionedDropdown(instance._tippy, event, genericContextMenu.value)
     }
-    document.addEventListener('click', (event) => {
-      console.log('test')
-      const newEvent = new MouseEvent('contextmenu', event)
-      showContextMenu(newEvent)
-    })
 
     return {
       ...useFileActions(),
