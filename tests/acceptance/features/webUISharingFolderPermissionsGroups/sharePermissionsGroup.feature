@@ -50,10 +50,10 @@ Feature: Sharing folders with internal groups with different roles and permissio
       | item_type   | folder                |
       | permissions | <actual-permissions>  |
     Examples:
-      | role               | displayed-role     | extra-permissions             | displayed-permissions         | actual-permissions           |
-      | Viewer             | Viewer             | ,                             | share                         | read, share                  |
-      | Editor             | Editor             | ,                             | delete, update, create, share | all                          |
-      | Custom permissions | Custom permissions | ,                             | ,                             | read                         |
-      | Custom permissions | Viewer             | share                         | share                         | read, share                  |
-      | Custom permissions | Custom permissions | delete, update, create        | delete, update, create        | read, delete, update, create |
-      | Custom permissions | Editor             | share, delete, update, create | delete, update, create, share | all                          |
+      | role               | displayed-role       | extra-permissions             | displayed-permissions         | actual-permissions           |
+      | Viewer             | Can view             | ,                             | share                         | read, share                  |
+      | Editor             | Can edit             | ,                             | delete, update, create, share | all                          |
+      | Custom permissions | Custom permissions   | ,                             | ,                             | read                         |
+      | Custom permissions | Can view             | share                         | share                         | read, share                  |
+      | Custom permissions | Custom permissions   | delete, update, create        | delete, update, create        | read, delete, update, create |
+      | Custom permissions | Can edit             | share, delete, update, create | delete, update, create, share | all                          |

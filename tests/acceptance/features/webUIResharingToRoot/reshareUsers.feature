@@ -52,12 +52,12 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder             |
       | permissions | <permissions>      |
     Examples:
-      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions         | permissions                         |
-      | Viewer               | Viewer               | ,                             | share                         | read, share                         |
-      | Editor               | Editor               | ,                             | share, delete, update, create | all                                 |
-      | Custom permissions   | Custom permissions   | share, create                 | share, create                 | read, share, create                 |
-      | Custom permissions   | Custom permissions   | update, share                 | share, update                 | read, update, share                 |
-      | Custom permissions   | Editor               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |
+      | role                 | displayed-role         | collaborators-permissions     | displayed-permissions         | permissions                         |
+      | Viewer               | Can view               | ,                             | share                         | read, share                         |
+      | Editor               | Can edit               | ,                             | share, delete, update, create | all                                 |
+      | Custom permissions   | Custom permissions     | share, create                 | share, create                 | read, share, create                 |
+      | Custom permissions   | Custom permissions     | update, share                 | share, update                 | read, update, share                 |
+      | Custom permissions   | Can edit               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |
 
 
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
@@ -84,12 +84,12 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder             |
       | permissions | <permissions>      |
     Examples:
-      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions         | permissions                         |
-      | Viewer               | Viewer               | ,                             | share                         | read, share                         |
-      | Editor               | Editor               | ,                             | share, delete, update, create | all                                 |
-      | Custom permissions   | Custom permissions   | share, create                 | share, create                 | read, share, create                 |
-      | Custom permissions   | Custom permissions   | update, share                 | share, update                 | read, update, share                 |
-      | Custom permissions   | Editor               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |
+      | role                 | displayed-role         | collaborators-permissions     | displayed-permissions         | permissions                         |
+      | Viewer               | Can view               | ,                             | share                         | read, share                         |
+      | Editor               | Can edit               | ,                             | share, delete, update, create | all                                 |
+      | Custom permissions   | Custom permissions     | share, create                 | share, create                 | read, share, create                 |
+      | Custom permissions   | Custom permissions     | update, share                 | share, update                 | read, update, share                 |
+      | Custom permissions   | Can edit               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |
 
 
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer

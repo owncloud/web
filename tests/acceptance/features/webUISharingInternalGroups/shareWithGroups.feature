@@ -68,10 +68,10 @@ Feature: Sharing files and folders with internal groups
     Then folder "simple-folder" should be marked as shared by "Carol King" on the webUI
     And file "testimage.jpg" should be marked as shared by "Carol King" on the webUI
     Examples:
-      | set-role             | expected-role        | permissions-folder              | permissions-file  |
-      | Viewer               | Viewer               | read,share                      | read,share        |
-      | Editor               | Editor               | read,update,create,delete,share | read,update,share |
-      | Custom permissions   | Custom permissions   | read                            | read              |
+      | set-role             | expected-role          | permissions-folder              | permissions-file  |
+      | Viewer               | Can view               | read,share                      | read,share        |
+      | Editor               | Can edit               | read,update,create,delete,share | read,update,share |
+      | Custom permissions   | Custom permissions     | read                            | read              |
 
   @issue-4102 @issue-ocis-2267 @issue-6896 @notToImplementOnOCIS
   Scenario: share a file with an internal group a member overwrites and unshares the file

@@ -46,5 +46,5 @@ Feature: Sharing files with internal groups with permissions
       | item_type   | file                 |
       | permissions | <actual-permissions> |
     Examples:
-      | role               | displayed-role | extra-permissions | displayed-permissions | actual-permissions  |
-      | Custom permissions | Editor         | share, update     | read, update, share   | read, update, share |
+      | role               | displayed-role   | extra-permissions | displayed-permissions | actual-permissions  |
+      | Custom permissions | Can edit         | share, update     | read, update, share   | read, update, share |

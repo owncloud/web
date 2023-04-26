@@ -40,10 +40,10 @@ Feature: Sharing files and folders with internal users
       | simple-folder |
       | testimage.jpg |
     Examples:
-      | set-role           | expected-role      | permissions-folder              | permissions-file  |
-      | Viewer             | Viewer             | read,share                      | read,share        |
-      | Editor             | Editor             | read,update,create,delete,share | read,update,share |
-      | Custom permissions | Custom permissions | read                            | read              |
+      | set-role           | expected-role        | permissions-folder              | permissions-file  |
+      | Viewer             | Can view             | read,share                      | read,share        |
+      | Editor             | Can edit             | read,update,create,delete,share | read,update,share |
+      | Custom permissions | Custom permissions   | read                            | read              |
 
   @disablePreviews
   Scenario: share a file with another internal user who overwrites and unshares the file
@@ -229,10 +229,10 @@ Feature: Sharing files and folders with internal users
       | Sample,Folder,With,Comma |
       | sample,1.txt             |
     Examples:
-      | set-role           | expected-role      | permissions-folder              | permissions-file  |
-      | Viewer             | Viewer             | read,share                      | read,share        |
-      | Editor             | Editor             | read,update,create,delete,share | read,update,share |
-      | Custom permissions | Custom permissions | read                            | read              |
+      | set-role           | expected-role        | permissions-folder              | permissions-file  |
+      | Viewer             | Can view             | read,share                      | read,share        |
+      | Editor             | Can edit             | read,update,create,delete,share | read,update,share |
+      | Custom permissions | Custom permissions   | read                            | read              |
 
   @disablePreviews
   Scenario: sharing file after renaming it is possible

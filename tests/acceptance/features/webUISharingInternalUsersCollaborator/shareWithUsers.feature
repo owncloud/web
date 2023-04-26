@@ -30,8 +30,8 @@ Feature: Shares collaborator list
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
-      | initial-permissions | set-role             | expected-role | set-permissions            | expected-permissions            |
-      | read,update,create  | Viewer               | Viewer        | ,                          | read,share                      |
-      | read                | Editor               | Editor        | ,                          | read,update,create,delete,share |
-      | read,share          | Custom permissions   | Viewer        | share                      | read,share                      |
-      | all                 | Custom permissions   | Editor        | update,create,delete,share | all                             |
+      | initial-permissions | set-role             | expected-role   | set-permissions            | expected-permissions            |
+      | read,update,create  | Viewer               | Can view        | ,                          | read,share                      |
+      | read                | Editor               | Can edit        | ,                          | read,update,create,delete,share |
+      | read,share          | Custom permissions   | Can view        | share                      | read,share                      |
+      | all                 | Custom permissions   | Can edit        | update,create,delete,share | all                             |
