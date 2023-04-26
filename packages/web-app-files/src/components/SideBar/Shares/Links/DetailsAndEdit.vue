@@ -12,7 +12,7 @@
         <span class="link-current-role" v-else v-text="$gettext('Anyone with the link %{ roleLabel }', { roleLabel: $gettext(currentLinkRole.inlineLabel) })"></span>
        -->
 
-       <span class="link-current-role" v-text="currentLinkRoleLabel" />
+        <span class="link-current-role" v-text="currentLinkRoleLabel" />
 
         <oc-icon name="arrow-down-s" />
       </oc-button>
@@ -251,8 +251,11 @@ export default defineComponent({
     },
 
     currentLinkRoleLabel() {
-      if(this.currentLinkRole.labelPrependText !== '' ) {
-        return this.$gettext('%{ rolePrependText } %{ roleInlineLabel }', { rolePrependText: this.$gettext(this.currentLinkRole.labelPrependText), roleInlineLabel: this.$gettext(this.currentLinkRole.inlineLabel) })
+      if (this.currentLinkRole.labelPrependText !== '') {
+        return this.$gettext('%{ rolePrependText } %{ roleInlineLabel }', {
+          rolePrependText: this.$gettext(this.currentLinkRole.labelPrependText),
+          roleInlineLabel: this.$gettext(this.currentLinkRole.inlineLabel)
+        })
       } else {
         return this.$gettext(this.currentLinkRole.label)
       }

@@ -21,7 +21,7 @@ export abstract class ShareRole {
     inlineLabel: string,
     icon: string,
     permissions: SharePermission[],
-    labelPrependText?: string,
+    labelPrependText?: string
   ) {
     this._name = name
     this._folder = folder
@@ -206,7 +206,7 @@ export const linkRoleInternalFile = new LinkShareRole(
   $gettext('Internal'),
   $gettext('internal'),
   'user',
-  [SharePermissions.internal],
+  [SharePermissions.internal]
 )
 export const linkRoleInternalFolder = new LinkShareRole(
   'internal',
@@ -214,7 +214,7 @@ export const linkRoleInternalFolder = new LinkShareRole(
   $gettext('Internal'),
   $gettext('internal'),
   'user',
-  [SharePermissions.internal],
+  [SharePermissions.internal]
 )
 export const linkRoleViewerFile = new LinkShareRole(
   'viewer',
@@ -258,7 +258,12 @@ export const linkRoleEditorFolder = new LinkShareRole(
   $gettext('Can edit'),
   $gettext('can edit'),
   'pencil',
-  [SharePermissions.read, SharePermissions.update, SharePermissions.create, SharePermissions.delete],
+  [
+    SharePermissions.read,
+    SharePermissions.update,
+    SharePermissions.create,
+    SharePermissions.delete
+  ],
   $gettext('Anyone with the link')
 )
 export const linkRoleUploaderFolder = new LinkShareRole(
@@ -267,7 +272,7 @@ export const linkRoleUploaderFolder = new LinkShareRole(
   $gettext('Secret File Drop'),
   $gettext('Secret File Drop'),
   'inbox-unarchive',
-  [SharePermissions.create],
+  [SharePermissions.create]
 )
 export const spaceRoleViewer = new SpaceShareRole(
   'viewer',
@@ -444,9 +449,7 @@ const shareRoleDescriptions = {
   [peopleRoleViewerFolder.bitmask(false)]: $gettext('View and download.'),
   [peopleRoleViewerFolder.bitmask(true)]: $gettext('View, download and share.'),
   [peopleRoleEditorFile.bitmask(false)]: $gettext('View, download, and edit.'),
-  [peopleRoleEditorFile.bitmask(true)]: $gettext(
-    'View, download, edit and share file.'
-  ),
+  [peopleRoleEditorFile.bitmask(true)]: $gettext('View, download, edit and share file.'),
   [peopleRoleEditorFolder.bitmask(false)]: $gettext(
     'View, download, upload, edit, add and delete.'
   ),
@@ -460,14 +463,20 @@ const shareRoleDescriptions = {
  * Maps relevant permission bitmasks of link roles to descriptions
  */
 const linkRoleDescriptions = {
-  [linkRoleInternalFile.bitmask(false)]: $gettext('Link works only for invited people. Login is required.'),
+  [linkRoleInternalFile.bitmask(false)]: $gettext(
+    'Link works only for invited people. Login is required.'
+  ),
   [linkRoleInternalFolder.bitmask(false)]: $gettext(
     'Link works only for invited people. Login is required.'
   ),
   [linkRoleViewerFile.bitmask(false)]: $gettext('Anyone with the link can view and download.'),
   [linkRoleViewerFolder.bitmask(false)]: $gettext('Anyone with the link can view and download.'),
-  [linkRoleContributorFolder.bitmask(false)]: $gettext('Anyone with the link can view, download and upload.'),
-  [linkRoleEditorFile.bitmask(false)]: $gettext('Anyone with the link can view, download and edit.'),
+  [linkRoleContributorFolder.bitmask(false)]: $gettext(
+    'Anyone with the link can view, download and upload.'
+  ),
+  [linkRoleEditorFile.bitmask(false)]: $gettext(
+    'Anyone with the link can view, download and edit.'
+  ),
   [linkRoleEditorFolder.bitmask(false)]: $gettext(
     'Anyone with the link can view, download, edit, add, delete and upload.'
   ),
