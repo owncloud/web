@@ -1,0 +1,6 @@
+Enhancement: Layout of Share role and expiration date dropdown
+
+We changed the layout of the share role/permsission dropdown and
+expiration date select button to make them more visible and distinctive
+
+https://github.com/owncloud/web/pull/8882

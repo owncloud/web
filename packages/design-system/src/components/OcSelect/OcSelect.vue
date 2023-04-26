@@ -431,7 +431,6 @@ export default defineComponent({
       &__selected-options > *:not(input) {
         color: var(--oc-color-input-text-default);
         background-color: var(--oc-color-background-default);
-        padding: 2px;
       }
     }
   }

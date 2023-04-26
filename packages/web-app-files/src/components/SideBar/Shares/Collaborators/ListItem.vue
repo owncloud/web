@@ -41,6 +41,7 @@
                 :existing-role="share.role"
                 :allow-share-permission="hasResharing || isAnySpaceShareType"
                 class="files-collaborators-collaborator-role"
+                mode="edit"
                 @option-change="shareRoleChanged"
               />
             </div>

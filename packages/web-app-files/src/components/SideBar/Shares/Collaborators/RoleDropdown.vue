@@ -10,6 +10,7 @@
       class="files-recipient-role-select-btn"
       appearance="raw"
       gap-size="none"
+      :aria-label="mode === 'create' ? $gettext('Select permission') : $gettext('Edit permission')"
     >
       <span v-if="!existingRole" v-text="inviteLabel" />
       <span v-else>{{ $gettext(selectedRole.label) }}</span>
@@ -149,6 +150,11 @@ export default defineComponent({
     allowSharePermission: {
       type: Boolean,
       required: true
+    },
+    mode: {
+      type: String,
+      required: false,
+      default: 'create'
     }
   },
   emits: ['optionChange'],

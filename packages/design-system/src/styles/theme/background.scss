@@ -13,6 +13,10 @@
   background-color: var(--oc-color-swatch-brand-default) !important;
 }
 
+.oc-background-default {
+  background-color: var(--oc-color-background-default) !important;
+}
+
 /* stylelint-disable */
 .oc-background-primary-gradient {
   @include oc-background-primary-gradient;
