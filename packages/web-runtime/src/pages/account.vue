@@ -158,6 +158,7 @@ export default defineComponent({
     const valuesList = ref()
     const bundlesList = ref()
     const selectedLanguageValue = ref()
+    const disableEmailNotificationsValue = ref()
 
     // FIXME: Use graph capability when we have it
     const isSettingsServiceSupported = useCapabilitySpacesEnabled()
@@ -235,19 +236,6 @@ export default defineComponent({
         loadBundlesList.isRunning ||
         !loadBundlesList.last
       )
-    })
-
-    const disableEmailNotificationsSettings = computed(() => {
-      return unref(valuesList).find(
-        (configurationValue) =>
-          configurationValue.identifier?.setting === 'disable email notifications'
-      )?.value
-    })
-
-    const disableEmailNotificationsValue = computed(() => {
-      return unref(disableEmailNotificationsSettings)
-        ? !unref(disableEmailNotificationsSettings).boolValue
-        : true
     })
 
     const languageOptions = computed(() => {
@@ -332,27 +320,48 @@ export default defineComponent({
     }
 
     const updateDisableEmailNotifications = async (option) => {
+      option = !option
+      console.log(option)
       const bundle = loadBundlesList.last?.value
+
+      const settingsId = unref(valuesList).find(
+        (cV) => cV.identifier.setting === "'disable email notifications"
+      )?.value?.id
+
       const value = {
         bundleId: bundle?.id,
         settingId: bundle?.settings.find((s) => s.name === 'disable email notifications')?.id,
         resource: { type: 'TYPE_USER' },
-        boolValue: !option,
-        ...(unref(disableEmailNotificationsSettings) && {
-          id: unref(disableEmailNotificationsSettings).id
-        })
+        boolValue: option,
+        ...(settingsId && { id: settingsId })
       }
 
-      await axios.post(
-        '/api/v0/settings/values-save',
-        { value: { ...value, accountUuid: 'me' } },
-        {
-          headers: {
-            authorization: `Bearer ${unref(accessToken)}`,
-            'X-Request-ID': uuidV4()
+      try {
+        await axios.post(
+          '/api/v0/settings/values-save',
+          { value: { ...value, accountUuid: 'me' } },
+          {
+            headers: {
+              authorization: `Bearer ${unref(accessToken)}`,
+              'X-Request-ID': uuidV4()
+            }
           }
+        )
+        disableEmailNotificationsValue.value = option
+        /**
+         * Edge case: we need to reload the values list to retrieve the settingsId if not set,
+         * otherwise the backend saves multiple entries
+         */
+        if (!settingsId) {
+          loadValuesList.perform()
         }
-      )
+      } catch (e) {
+        console.error(e)
+        store.dispatch('showMessage', {
+          title: $gettext('Unable to save notifications email setting…'),
+          status: 'danger'
+        })
+      }
     }
 
     onMounted(async () => {
@@ -368,6 +377,14 @@ export default defineComponent({
               (lO) => lO.value === languageConfiguration.value?.listValue?.values?.[0]?.stringValue
             )
           : unref(languageOptions).find((o) => o.default)
+
+        const disableEmailNotificationsConfiguration = unref(valuesList).find(
+          (cV) => cV.identifier.setting === 'disable email notifications'
+        )
+
+        disableEmailNotificationsValue.value = disableEmailNotificationsConfiguration
+          ? !disableEmailNotificationsConfiguration.value?.boolValue
+          : true
       }
     })
 
