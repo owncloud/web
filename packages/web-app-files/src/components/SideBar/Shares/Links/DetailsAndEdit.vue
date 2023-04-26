@@ -7,7 +7,7 @@
         class="edit-public-link-role-dropdown-toggle oc-text-left"
         gap-size="none"
       >
-        <span class="link-current-role" v-text="$gettext(currentLinkRoleLabel)" />
+        <span class="link-current-role" v-text="currentLinkRoleLabel" />
         <oc-icon name="arrow-down-s" />
       </oc-button>
       <oc-drop
@@ -245,7 +245,11 @@ export default defineComponent({
     },
 
     currentLinkRoleLabel() {
-      return this.currentLinkRole.label
+      if (this.currentLinkRole.longLabel !== '') {
+        return this.$gettext(this.currentLinkRole.longLabel)
+      } else {
+        return this.$gettext(this.currentLinkRole.label)
+      }
     },
 
     editOptions() {

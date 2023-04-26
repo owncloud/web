@@ -24,8 +24,10 @@ export interface ContextualHelperOptions {
 export const shareInviteCollaboratorHelp = (options: ContextualHelperOptions) =>
   filterContextHelper(
     {
-      title: $gettext('Invite specific people'),
-      text: $gettext('Enter a name or group to share this item.'),
+      title: $gettext('Share with people'),
+      text: $gettext(
+        'Use the input field to search for users and groups. Select them to share the item.'
+      ),
       list: [
         { text: $gettext('Subfolders'), headline: true },
         {
@@ -35,11 +37,13 @@ export const shareInviteCollaboratorHelp = (options: ContextualHelperOptions) =>
         },
         { text: $gettext('Notification'), headline: true },
         {
-          text: $gettext('Invited people will be notified via email or in-app notification.')
+          text: $gettext(
+            'People you share resources with will be notified via email or in-app notification.'
+          )
         },
         { text: $gettext('Incognito'), headline: true },
         {
-          text: $gettext('Invited people can not see who else has access..')
+          text: $gettext('People you share resources with can not see who else has access.')
         },
         { text: $gettext('“via folder”'), headline: true },
         {
@@ -75,16 +79,16 @@ export const shareSpaceAddMemberHelp = (options: ContextualHelperOptions) =>
       title: $gettext('Add members to this Space'),
       text: $gettext('Enter a name to add people or groups as members to this Space.'),
       list: [
-        { text: $gettext('What members can do'), headline: true },
+        { text: $gettext('Member capabilities'), headline: true },
         {
           text: $gettext(
-            'Members can see who else has access to this space and can access all files in this space. Read or write permissions can be set by the member’s role.'
+            'Members are able to see who has access to this space and access all files in this space. Read or write permissions can be set by assigning a role.'
           )
         },
-        { text: $gettext('What Space managers can do'), headline: true },
+        { text: $gettext('Space manager capabilities'), headline: true },
         {
           text: $gettext(
-            'Space managers can edit all properties and content of a Space, such as adding or removing members, sharing subfolders with non-members, or creating links to share.'
+            'Members with the Manager role are able to edit all properties and content of a Space, such as adding or removing members, sharing subfolders with non-members, or creating links to share.'
           )
         }
       ],

@@ -43,10 +43,10 @@ Feature: Sharing files with multiple internal users with different permissions
       | item_type   | file                 |
       | permissions | <actual-permissions> |
     Examples:
-      | role               | displayed-role     | extra-permissions | displayed-permissions | actual-permissions  |
-      | Viewer             | Viewer             | ,                 | read, share           | read, share         |
-      | Editor             | Editor             | ,                 | read, update, share   | read, update, share |
-      | Custom permissions | Custom permissions | ,                 | ,                     | read                |
-      | Custom permissions | Viewer             | share             | share                 | read, share         |
-      | Custom permissions | Custom permissions | update            | update                | read, update        |
-      | Custom permissions | Editor             | share, update     | read, update, share   | read, update, share |
+      | role               | displayed-role       | extra-permissions | displayed-permissions | actual-permissions  |
+      | Viewer             | Can view             | ,                 | read, share           | read, share         |
+      | Editor             | Can edit             | ,                 | read, update, share   | read, update, share |
+      | Custom permissions | Custom permissions   | ,                 | ,                     | read                |
+      | Custom permissions | Can view             | share             | share                 | read, share         |
+      | Custom permissions | Custom permissions   | update            | update                | read, update        |
+      | Custom permissions | Can edit             | share, update     | read, update, share   | read, update, share |

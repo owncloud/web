@@ -40,10 +40,10 @@ Feature: Sharing files and folders with internal users
       | simple-folder |
       | testimage.jpg |
     Examples:
-      | set-role           | expected-role      | permissions-folder              | permissions-file  |
-      | Viewer             | Viewer             | read,share                      | read,share        |
-      | Editor             | Editor             | read,update,create,delete,share | read,update,share |
-      | Custom permissions | Custom permissions | read                            | read              |
+      | set-role           | expected-role        | permissions-folder              | permissions-file  |
+      | Viewer             | Can view             | read,share                      | read,share        |
+      | Editor             | Can edit             | read,update,create,delete,share | read,update,share |
+      | Custom permissions | Custom permissions   | read                            | read              |
 
   @disablePreviews
   Scenario: share a file with another internal user who overwrites and unshares the file
@@ -123,7 +123,7 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
     When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
+    Then user "Brian Murphy" should be listed as "Can edit" in the collaborators list on the webUI
     And as "Brian" file "lorem.txt" should exist in the server
     When the user deletes "Brian Murphy" as collaborator for the current file using the webUI
     Then user "Brian Murphy" should not be listed in the collaborators list on the webUI
@@ -138,13 +138,13 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
     And user "Alice" has shared file "lorem.txt" with user "Carol" in the server
     When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
-    And user "Carol King" should be listed as "Editor" in the collaborators list on the webUI
+    Then user "Brian Murphy" should be listed as "Can edit" in the collaborators list on the webUI
+    And user "Carol King" should be listed as "Can edit" in the collaborators list on the webUI
     And as "Brian" file "lorem.txt" should exist in the server
     And as "Carol" file "lorem.txt" should exist in the server
     When the user deletes "Brian Murphy" as collaborator for the current file using the webUI
     Then user "Brian Murphy" should not be listed in the collaborators list on the webUI
-    And user "Carol King" should be listed as "Editor" in the collaborators list on the webUI
+    And user "Carol King" should be listed as "Can edit" in the collaborators list on the webUI
     And file "lorem.txt" should be listed in shared-with-others page on the webUI
     And as "Brian" file "lorem.txt" should not exist in the server
     But as "Carol" file "lorem.txt" should exist in the server
@@ -229,10 +229,10 @@ Feature: Sharing files and folders with internal users
       | Sample,Folder,With,Comma |
       | sample,1.txt             |
     Examples:
-      | set-role           | expected-role      | permissions-folder              | permissions-file  |
-      | Viewer             | Viewer             | read,share                      | read,share        |
-      | Editor             | Editor             | read,update,create,delete,share | read,update,share |
-      | Custom permissions | Custom permissions | read                            | read              |
+      | set-role           | expected-role        | permissions-folder              | permissions-file  |
+      | Viewer             | Can view             | read,share                      | read,share        |
+      | Editor             | Can edit             | read,update,create,delete,share | read,update,share |
+      | Custom permissions | Custom permissions   | read                            | read              |
 
   @disablePreviews
   Scenario: sharing file after renaming it is possible
@@ -240,4 +240,4 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has logged in using the webUI
     And the user has renamed file "lorem.txt" to "new-lorem.txt"
     When the user shares resource "new-lorem.txt" with user "Brian Murphy" using the quick action on the webUI
-    Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for file "new-lorem.txt" on the webUI
+    Then user "Brian Murphy" should be listed as "Can view" in the collaborators list for file "new-lorem.txt" on the webUI

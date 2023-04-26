@@ -95,12 +95,12 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                |
       | permissions | <permissions>         |
     Examples:
-      | role                 | displayed-role       | extra-permissions             | displayed-permissions         | permissions                         |
-      | Viewer               | Viewer               | ,                             | share                         | read, share                         |
-      | Editor               | Editor               | ,                             | delete, share, create, update | all                                 |
-      | Custom permissions   | Custom permissions   | share, create                 | share, create                 | read, share, create                 |
-      | Custom permissions   | Custom permissions   | update, share                 | share, update                 | read, update, share                 |
-      | Custom permissions   | Editor               | delete, share, create, update | delete, share, create, update | read, share, delete, update, create |
+      | role                 | displayed-role         | extra-permissions             | displayed-permissions         | permissions                         |
+      | Viewer               | Can view               | ,                             | share                         | read, share                         |
+      | Editor               | Can edit               | ,                             | delete, share, create, update | all                                 |
+      | Custom permissions   | Custom permissions     | share, create                 | share, create                 | read, share, create                 |
+      | Custom permissions   | Custom permissions     | update, share                 | share, update                 | read, update, share                 |
+      | Custom permissions   | Can edit               | delete, share, create, update | delete, share, create, update | read, share, delete, update, create |
 
   @issue-ocis-2260
   Scenario Outline: Change permissions of the previously shared file
@@ -152,10 +152,10 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | file              |
       | permissions | <permissions>     |
     Examples:
-      | role                 | displayed-role | collaborators-permissions | displayed-permissions | permissions         |
-      | Viewer               | Viewer         | ,                         | share                 | read, share         |
-      | Editor               | Editor         | ,                         | share, update         | read, share, update |
-      | Custom permissions   | Editor         | share, update             | share, update         | read, share, update |
+      | role                 | displayed-role   | collaborators-permissions | displayed-permissions | permissions         |
+      | Viewer               | Can view         | ,                         | share                 | read, share         |
+      | Editor               | Can edit         | ,                         | share, update         | read, share, update |
+      | Custom permissions   | Can edit         | share, update             | share, update         | read, share, update |
 
   @issue-ocis-2260
   Scenario: Share a folder without share permissions using API and check if it is listed on the collaborators list for original owner

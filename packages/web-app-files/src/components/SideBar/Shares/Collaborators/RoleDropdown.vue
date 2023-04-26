@@ -190,8 +190,7 @@ export default defineComponent({
       } else if (this.selectedRole.permissions().includes(SharePermissions.denied)) {
         return this.$gettext('Deny access')
       } else {
-        const name = this.$gettext(this.selectedRole.inlineLabel) || ''
-        return this.$gettext('Invite as %{ name }', { name })
+        return this.$gettext(this.selectedRole.label) || ''
       }
     },
     customPermissionsRole() {

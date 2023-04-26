@@ -10,6 +10,7 @@ export abstract class ShareRole {
   private readonly _folder: boolean
   private readonly _label: string
   private readonly _inlineLabel: string
+  private readonly _longLabel: string
   private readonly _icon: string
   private readonly _permissions: SharePermission[]
 
@@ -19,7 +20,8 @@ export abstract class ShareRole {
     label: string,
     inlineLabel: string,
     icon: string,
-    permissions: SharePermission[]
+    permissions: SharePermission[],
+    longLabel?: string
   ) {
     this._name = name
     this._folder = folder
@@ -27,6 +29,7 @@ export abstract class ShareRole {
     this._inlineLabel = inlineLabel
     this._icon = icon
     this._permissions = permissions
+    this._longLabel = longLabel || ''
   }
 
   get key(): string {
@@ -47,6 +50,10 @@ export abstract class ShareRole {
 
   get inlineLabel(): string {
     return this._inlineLabel
+  }
+
+  get longLabel(): string {
+    return this._longLabel
   }
 
   get hasCustomPermissions(): boolean {
@@ -95,7 +102,7 @@ export class CustomShareRole extends ShareRole {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public description(allowSharing: boolean): string {
-    return $gettext('Set detailed permissions')
+    return $gettext('Set custom permissions')
   }
 }
 
@@ -110,11 +117,11 @@ export class SpaceShareRole extends ShareRole {
   public description(allowSharing: boolean): string {
     switch (this.name) {
       case spaceRoleViewer.name:
-        return $gettext('Download and preview')
+        return $gettext('View and download.')
       case spaceRoleEditor.name:
-        return $gettext('Upload, edit, delete, download and preview')
+        return $gettext('View, download, upload, edit, add and delete.')
       case spaceRoleManager.name:
-        return $gettext('Upload, edit, delete, download, preview and share')
+        return $gettext('View, download, upload, edit, add, delete, share and manage members.')
     }
   }
 }
@@ -128,32 +135,32 @@ export class LinkShareRole extends ShareRole {
 export const peopleRoleViewerFile = new PeopleShareRole(
   'viewer',
   false,
-  $gettext('Viewer'),
-  $gettext('viewer'),
+  $gettext('Can view'),
+  $gettext('can view'),
   'eye',
   [SharePermissions.read, SharePermissions.share]
 )
 export const peopleRoleViewerFolder = new PeopleShareRole(
   'viewer',
   true,
-  $gettext('Viewer'),
-  $gettext('viewer'),
+  $gettext('Can view'),
+  $gettext('can view'),
   'eye',
   [SharePermissions.read, SharePermissions.share]
 )
 export const peopleRoleEditorFile = new PeopleShareRole(
   'editor',
   false,
-  $gettext('Editor'),
-  $gettext('editor'),
+  $gettext('Can edit'),
+  $gettext('can edit'),
   'pencil',
   [SharePermissions.read, SharePermissions.update, SharePermissions.share]
 )
 export const peopleRoleEditorFolder = new PeopleShareRole(
   'editor',
   true,
-  $gettext('Editor'),
-  $gettext('editor'),
+  $gettext('Can edit'),
+  $gettext('can edit'),
   'pencil',
   [
     SharePermissions.read,
@@ -168,7 +175,7 @@ export const peopleRoleCustomFile = new CustomShareRole(
   false,
   $gettext('Custom permissions'),
   $gettext('custom permissions'),
-  'settings-3',
+  'file-settings',
   [SharePermissions.read, SharePermissions.update, SharePermissions.share]
 )
 export const peopleRoleCustomFolder = new CustomShareRole(
@@ -176,7 +183,7 @@ export const peopleRoleCustomFolder = new CustomShareRole(
   true,
   $gettext('Custom permissions'),
   $gettext('custom permissions'),
-  'settings-3',
+  'file-settings',
   [
     SharePermissions.read,
     SharePermissions.update,
@@ -212,73 +219,83 @@ export const linkRoleInternalFolder = new LinkShareRole(
 export const linkRoleViewerFile = new LinkShareRole(
   'viewer',
   false,
-  $gettext('Viewer'),
-  $gettext('viewer'),
+  $gettext('Can view'),
+  $gettext('can view'),
   'eye',
-  [SharePermissions.read]
+  [SharePermissions.read],
+  $gettext('Anyone with the link can view')
 )
 export const linkRoleViewerFolder = new LinkShareRole(
   'viewer',
   true,
-  $gettext('Viewer'),
-  $gettext('viewer'),
+  $gettext('Can view'),
+  $gettext('can view'),
   'eye',
-  [SharePermissions.read]
+  [SharePermissions.read],
+  $gettext('Anyone with the link can view')
 )
 export const linkRoleContributorFolder = new LinkShareRole(
   'contributor',
   true,
-  $gettext('Contributor'),
-  $gettext('contributor'),
-  'user-settings',
-  [SharePermissions.read, SharePermissions.create]
+  $gettext('Can upload'),
+  $gettext('can upload'),
+  'upload',
+  [SharePermissions.read, SharePermissions.create],
+  $gettext('Anyone with the link can upload')
 )
 export const linkRoleEditorFile = new LinkShareRole(
   'editor',
   false,
-  $gettext('Editor'),
-  $gettext('editor'),
+  $gettext('Can edit'),
+  $gettext('can edit'),
   'pencil',
-  [SharePermissions.read, SharePermissions.update]
+  [SharePermissions.read, SharePermissions.update],
+  $gettext('Anyone with the link can edit')
 )
 export const linkRoleEditorFolder = new LinkShareRole(
   'editor',
   true,
-  $gettext('Editor'),
-  $gettext('editor'),
+  $gettext('Can edit'),
+  $gettext('can edit'),
   'pencil',
-  [SharePermissions.read, SharePermissions.update, SharePermissions.create, SharePermissions.delete]
+  [
+    SharePermissions.read,
+    SharePermissions.update,
+    SharePermissions.create,
+    SharePermissions.delete
+  ],
+  $gettext('Anyone with the link can edit')
 )
 export const linkRoleUploaderFolder = new LinkShareRole(
   'uploader',
   true,
-  $gettext('Uploader'),
-  $gettext('uploader'),
-  'upload',
+  $gettext('Secret File Drop'),
+  $gettext('Secret File Drop'),
+  'inbox-unarchive',
   [SharePermissions.create]
 )
 export const spaceRoleViewer = new SpaceShareRole(
   'viewer',
   false,
-  $gettext('Viewer'),
-  $gettext('viewer'),
+  $gettext('Can view'),
+  $gettext('can view'),
   'eye',
   [SharePermissions.read]
 )
 export const spaceRoleEditor = new SpaceShareRole(
   'editor',
   false,
-  $gettext('Editor'),
-  $gettext('editor'),
+  $gettext('Can edit'),
+  $gettext('can edit'),
   'pencil',
   [SharePermissions.read, SharePermissions.update, SharePermissions.create, SharePermissions.delete]
 )
 export const spaceRoleManager = new SpaceShareRole(
   'manager',
   false,
-  $gettext('Manager'),
-  $gettext('manager'),
-  'user',
+  $gettext('Can manage'),
+  $gettext('can manage'),
+  'user-star',
   [
     SharePermissions.read,
     SharePermissions.update,
@@ -427,15 +444,17 @@ export abstract class LinkShareRoles {
  * Maps relevant permission bitmasks of people roles to descriptions
  */
 const shareRoleDescriptions = {
-  [peopleRoleViewerFile.bitmask(false)]: $gettext('Download and preview'),
-  [peopleRoleViewerFile.bitmask(true)]: $gettext('Download, preview and share'),
-  [peopleRoleViewerFolder.bitmask(false)]: $gettext('Download and preview'),
-  [peopleRoleViewerFolder.bitmask(true)]: $gettext('Download, preview and share'),
-  [peopleRoleEditorFile.bitmask(false)]: $gettext('Edit, download and preview'),
-  [peopleRoleEditorFile.bitmask(true)]: $gettext('Edit, download, preview and share'),
-  [peopleRoleEditorFolder.bitmask(false)]: $gettext('Upload, edit, delete, download and preview'),
+  [peopleRoleViewerFile.bitmask(false)]: $gettext('View and download.'),
+  [peopleRoleViewerFile.bitmask(true)]: $gettext('View, download and share.'),
+  [peopleRoleViewerFolder.bitmask(false)]: $gettext('View and download.'),
+  [peopleRoleViewerFolder.bitmask(true)]: $gettext('View, download and share.'),
+  [peopleRoleEditorFile.bitmask(false)]: $gettext('View, download, and edit.'),
+  [peopleRoleEditorFile.bitmask(true)]: $gettext('View, download, edit and share file.'),
+  [peopleRoleEditorFolder.bitmask(false)]: $gettext(
+    'View, download, upload, edit, add and delete.'
+  ),
   [peopleRoleEditorFolder.bitmask(true)]: $gettext(
-    'Upload, edit, delete, download, preview and share'
+    'View, download, upload, edit, add, delete and share.'
   ),
   [peopleRoleDenyFolder.bitmask(false)]: $gettext('Deny access')
 }
@@ -445,21 +464,23 @@ const shareRoleDescriptions = {
  */
 const linkRoleDescriptions = {
   [linkRoleInternalFile.bitmask(false)]: $gettext(
-    'People need to be invited and login is required'
+    'Link works only for invited people. Login is required.'
   ),
   [linkRoleInternalFolder.bitmask(false)]: $gettext(
-    'People need to be invited and login is required'
+    'Link works only for invited people. Login is required.'
   ),
-  [linkRoleViewerFile.bitmask(false)]: $gettext('Recipients can view and download contents.'),
-  [linkRoleViewerFolder.bitmask(false)]: $gettext('Recipients can view and download contents.'),
+  [linkRoleViewerFile.bitmask(false)]: $gettext('Anyone with the link can view and download.'),
+  [linkRoleViewerFolder.bitmask(false)]: $gettext('Anyone with the link can view and download.'),
   [linkRoleContributorFolder.bitmask(false)]: $gettext(
-    'Recipients can view, download and upload contents.'
+    'Anyone with the link can view, download and upload.'
   ),
-  [linkRoleEditorFile.bitmask(false)]: $gettext('Recipients can view, download and edit contents.'),
+  [linkRoleEditorFile.bitmask(false)]: $gettext(
+    'Anyone with the link can view, download and edit.'
+  ),
   [linkRoleEditorFolder.bitmask(false)]: $gettext(
-    'Recipients can view, download, edit, delete and upload contents.'
+    'Anyone with the link can view, download, upload, edit, add and delete.'
   ),
   [linkRoleUploaderFolder.bitmask(false)]: $gettext(
-    'Recipients can upload, existing content is not revealed.'
+    'Anyone with the link can only upload, existing content is not revealed.'
   )
 }

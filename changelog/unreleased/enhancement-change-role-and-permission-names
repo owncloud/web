@@ -1,0 +1,6 @@
+Enhancement: Update roles and permissions names, labels, texts and icons
+
+We changed the names of roles and permissions in sharing dialogs to verb-based terms.
+Also we changed other permission related labels, texts and icons.
+
+https://github.com/owncloud/web/pull/8876

@@ -41,8 +41,8 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
         console.error(error)
         store.dispatch('showMessage', {
           title: $pgettext(
-            'Error message in case clearing the trash bin fails',
-            'Failed to delete all files permanently'
+            'Error message in case emptying trash bin fails',
+            'Failed to empty trash bin'
           ),
           status: 'danger'
         })
@@ -59,7 +59,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
       cancelText: $gettext('Cancel'),
       confirmText: $gettext('Delete'),
       message: $gettext(
-        'Are you sure you want to permanently delete your items in the trash bin? You can’t undo this action.'
+        'Are you sure you want to permanently delete the listed items? You can’t undo this action.'
       ),
       hasInput: false,
       onCancel: () => store.dispatch('hideModal'),

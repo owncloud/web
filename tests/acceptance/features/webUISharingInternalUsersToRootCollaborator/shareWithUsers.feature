@@ -28,11 +28,11 @@ Feature: Shares collaborator list
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
-      | initial-permissions | set-role             | expected-role | | set-permissions            | expected-permissions            |
-      | read,update,create  | Viewer               | Viewer        | | ,                          | read,share                      |
-      | read                | Editor               | Editor        | | ,                          | read,update,create,delete,share |
-      | read,share          | Custom permissions   | Viewer        | | share                      | read,share                      |
-      | all                 | Custom permissions   | Editor        | | update,create,delete,share | all                             |
+      | initial-permissions | set-role             | expected-role   | | set-permissions            | expected-permissions            |
+      | read,update,create  | Viewer               | Can view        | | ,                          | read,share                      |
+      | read                | Editor               | Can edit        | | ,                          | read,update,create,delete,share |
+      | read,share          | Custom permissions   | Can view        | | share                      | read,share                      |
+      | all                 | Custom permissions   | Can edit        | | update,create,delete,share | all                             |
 
 
   Scenario Outline: collaborators list contains additional info when enabled
@@ -59,7 +59,7 @@ Feature: Shares collaborator list
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes" in the server
     And user "Alice" has logged in using the webUI
     When the user shares resource "simple-folder" with user "Brian Murphy" using the quick action on the webUI
-    Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "Brian Murphy" should be listed as "Can view" in the collaborators list for folder "simple-folder" on the webUI
     And user "Brian" should have received a share with these details in the server:
       | field       | value              |
       | uid_owner   | Alice              |

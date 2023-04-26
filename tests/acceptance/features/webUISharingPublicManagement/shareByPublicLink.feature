@@ -106,7 +106,7 @@ Feature: Public link share management
       | name | Public Link    |
     And user "Alice" has logged in using the webUI
     When the user opens folder "simple-folder" using the webUI
-    Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "sub-folder" via "simple-folder" on the webUI
+    Then a link named "Public Link" should be listed with role "Anyone with the link can view" in the public link list of resource "sub-folder" via "simple-folder" on the webUI
 
   @issue-2897
   Scenario: sharing details of multiple indirect public link shares
@@ -120,8 +120,8 @@ Feature: Public link share management
       | name | strängé लिंक नाम (#2 &).नेपाली |
     And user "Alice" has logged in using the webUI
     When the user opens folder "simple-folder/sub-folder" directly on the webUI
-    Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "simple-folder" on the webUI
-    And a link named "strängé लिंक नाम (#2 &).नेपाली" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "sub-folder" on the webUI
+    Then a link named "Public Link" should be listed with role "Anyone with the link can view" in the public link list of resource "textfile.txt" via "simple-folder" on the webUI
+    And a link named "strängé लिंक नाम (#2 &).नेपाली" should be listed with role "Anyone with the link can view" in the public link list of resource "textfile.txt" via "sub-folder" on the webUI
 
   @issue-3040 @issue-3841 @issue-ocis-reva-372
   Scenario: sharing details of indirect link share in "favorites" file lists
@@ -135,10 +135,10 @@ Feature: Public link share management
     And user "Alice" has favorited element "simple-folder/simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-via-link page using the webUI
-    Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
-    And a link named "Public Link Sub" should be listed with role "Viewer" in the public link list of resource "simple-empty-folder" on the webUI
+    Then a link named "Public Link" should be listed with role "Anyone with the link can view" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
+    And a link named "Public Link Sub" should be listed with role "Anyone with the link can view" in the public link list of resource "simple-empty-folder" on the webUI
     When the user browses to the favorites page using the webUI
-    Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
+    Then a link named "Public Link" should be listed with role "Anyone with the link can view" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
 
   @issue-product-130
   Scenario: User can attempt to upload a file in public link

@@ -71,12 +71,12 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | <permissions>         |
     Examples:
-      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions         | permissions                         |
-      | Viewer               | Viewer               | ,                             | share                         | read, share                         |
-      | Editor               | Editor               | ,                             | share, delete, update, create | all                                 |
-      | Custom permissions   | Custom permissions   | share, create                 | share, create                 | read, share, create                 |
-      | Custom permissions   | Custom permissions   | update, share                 | share, update                 | read, update, share                 |
-      | Custom permissions   | Editor               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |
+      | role                 | displayed-role         | collaborators-permissions     | displayed-permissions         | permissions                         |
+      | Viewer               | Can view               | ,                             | share                         | read, share                         |
+      | Editor               | Can edit               | ,                             | share, delete, update, create | all                                 |
+      | Custom permissions   | Custom permissions     | update, share                 | share, update                 | read, update, share                 |
+      | Custom permissions   | Custom permissions     | share, create                 | share, create                 | read, share, create                 |
+      | Custom permissions   | Can edit               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |
 
    # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
   # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
@@ -108,9 +108,9 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | <permissions>         |
     Examples:
-      | role                 | displayed-role       | collaborators-permissions         | displayed-permissions         | permissions                         |
-      | Viewer               | Viewer               | ,                             | share                         | read, share                         |
-      | Editor               | Editor               | ,                             | share, delete, update, create | all                                 |
-      | Custom permissions   | Custom permissions   | share, create                 | share, create                 | read, share, create                 |
-      | Custom permissions   | Custom permissions   | update, share                 | share, update                 | read, update, share                 |
-      | Custom permissions   | Editor               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |
+      | role                 | displayed-role         | collaborators-permissions         | displayed-permissions         | permissions                     |
+      | Viewer               | Can view               | ,                             | share                         | read, share                         |
+      | Editor               | Can edit               | ,                             | share, delete, update, create | all                                 |
+      | Custom permissions   | Custom permissions     | share, create                 | share, create                 | read, share, create                 |
+      | Custom permissions   | Custom permissions     | update, share                 | share, update                 | read, update, share                 |
+      | Custom permissions   | Can edit               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |

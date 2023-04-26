@@ -212,14 +212,14 @@ export default defineComponent({
       return this.$gettext('Accepted shares')
     },
     acceptedEmptyMessage() {
-      return this.$gettext("You are not collaborating on other people's resources.")
+      return this.$gettext('You have no accepted shares.')
     },
 
     declinedTitle() {
       return this.$gettext('Declined shares')
     },
     declinedEmptyMessage() {
-      return this.$gettext("You don't have any previously declined shares.")
+      return this.$gettext('You have no declined shares.')
     },
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews

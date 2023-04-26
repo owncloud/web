@@ -166,7 +166,7 @@ export default defineComponent({
       return parseInt(this.user.capabilities.files_sharing.search_min_length, 10)
     },
     selectedCollaboratorsLabel() {
-      return this.inviteLabel || this.$gettext('Invite')
+      return this.inviteLabel || this.$gettext('Search')
     },
 
     resourceIsSpace() {

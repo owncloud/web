@@ -13,7 +13,8 @@
           v-if="isEmpty"
           id="files-trashbin-empty"
           class="files-empty"
-          icon="delete-bin-5"
+          icon="delete-bin-7"
+          icon-fill-type="line"
         >
           <template #message>
             <span>{{ noContentMessage }}</span>

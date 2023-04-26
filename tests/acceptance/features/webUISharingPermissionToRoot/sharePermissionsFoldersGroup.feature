@@ -46,5 +46,5 @@ Feature: Sharing folders with internal groups with different roles and permissio
       | item_type   | folder               |
       | permissions | <actual-permissions> |
     Examples:
-      | role               | displayed-role | extra-permissions             | displayed-permissions | actual-permissions |
-      | Custom permissions | Editor         | share, delete, update, create | delete, update, create, share | all        |
+      | role               | displayed-role   | extra-permissions             | displayed-permissions | actual-permissions |
+      | Custom permissions | Can edit         | share, delete, update, create | delete, update, create, share | all        |

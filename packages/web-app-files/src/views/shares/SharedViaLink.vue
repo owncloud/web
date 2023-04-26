@@ -11,7 +11,7 @@
           icon="link"
         >
           <template #message>
-            <span v-translate>There are no resources with a public link at the moment</span>
+            <span v-translate>You have not shared any resource via link.</span>
           </template>
         </no-content-message>
         <resource-table
