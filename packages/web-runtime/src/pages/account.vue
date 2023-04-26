@@ -213,7 +213,6 @@ export default defineComponent({
       } catch (e) {
         bundlesList.value = []
         console.error(e)
-        return []
       }
     }).restartable()
 
@@ -221,7 +220,6 @@ export default defineComponent({
       if (!isSettingsServiceSupported) {
         return false
       }
-
       return (
         loadValuesList.isRunning ||
         !loadValuesList.last ||
@@ -229,12 +227,6 @@ export default defineComponent({
         !loadBundlesList.last
       )
     })
-
-    const accountSettingIdentifier = {
-      extension: 'ocis-accounts',
-      bundle: 'profile',
-      setting: 'language'
-    }
 
     const disableEmailNotificationsSettings = computed(() => {
       return unref(valuesList).find(
@@ -257,6 +249,24 @@ export default defineComponent({
         value: l.value.stringValue,
         default: l.default
       }))
+    })
+
+    const accountEditLink = computed(() => {
+      return store.getters.configuration?.options?.accountEditLink
+    })
+
+    const groupNames = computed(() => {
+      if (unref(useCapabilitySpacesEnabled())) {
+        return unref(user)
+          .groups.map((group) => group.displayName)
+          .join(', ')
+      }
+
+      return unref(user).groups.join(', ')
+    })
+
+    const logoutUrl = computed(() => {
+      return configurationManager.logoutUrl
     })
 
     const updateSelectedLanguage = async (option) => {
@@ -286,7 +296,14 @@ export default defineComponent({
         selectedLanguageValue.value = option
         setCurrentLanguage({
           language,
-          languageSetting: { identifier: accountSettingIdentifier, value }
+          languageSetting: {
+            identifier: {
+              extension: 'ocis-accounts',
+              bundle: 'profile',
+              setting: 'language'
+            },
+            value
+          }
         })
 
         /**
@@ -303,7 +320,6 @@ export default defineComponent({
     }
 
     const updateDisableEmailNotifications = async (option) => {
-      console.log(option)
       const bundle = loadBundlesList.last?.value
       const value = {
         bundleId: bundle?.id,
@@ -325,27 +341,7 @@ export default defineComponent({
           }
         }
       )
-
-      loadValuesList.perform()
     }
-
-    const accountEditLink = computed(() => {
-      return store.getters.configuration?.options?.accountEditLink
-    })
-
-    const groupNames = computed(() => {
-      if (unref(useCapabilitySpacesEnabled())) {
-        return unref(user)
-          .groups.map((group) => group.displayName)
-          .join(', ')
-      }
-
-      return unref(user).groups.join(', ')
-    })
-
-    const logoutUrl = computed(() => {
-      return configurationManager.logoutUrl
-    })
 
     onMounted(async () => {
       if (unref(isSettingsServiceSupported)) {
