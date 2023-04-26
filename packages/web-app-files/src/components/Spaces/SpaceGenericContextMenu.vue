@@ -1,16 +1,8 @@
 <template>
-  <oc-button
-    :id="`context-menu-trigger-generic`"
-    v-oc-tooltip="contextMenuLabel"
-    :aria-label="contextMenuLabel"
-    appearance="raw"
-  >
-    <oc-icon name="more-2" />
+  <oc-button id="context-menu-trigger-generic" appearance="raw">
     <oc-drop
-      :ref="`context-menu-drop-ref-generic`"
-      :drop-id="`context-menu-drop-generic`"
-      :toggle="`#context-menu-trigger-generic`"
-      class="generic-dropdown"
+      drop-id="context-menu-drop-generic"
+      toggle="#context-menu-trigger-generic"
       position="bottom-end"
       mode="click"
       close-on-click
@@ -23,12 +15,10 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { extractDomSelector } from 'web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
-  name: 'ContextMenuQuickAction',
-  props: {},
+  name: 'SpaceGenericContextMenu',
   setup() {
     const { $gettext } = useGettext()
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
@@ -36,3 +26,11 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss">
+#context-menu-trigger-generic {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+</style>

@@ -1,12 +1,6 @@
 <template>
   <div class="oc-flex oc-width-1-1" :class="{ 'space-frontpage': isSpaceFrontpage }">
-    <!--<space-generic-context-menu ref="genericContextMenu" class="resource-table-btn-action-dropdown" />-->
-    <space-generic-context-menu
-      ref="genericContextMenu"
-      class="oc-position-fixed generic"
-      style="z-index: var(--oc-z-index-modal); top: 200px"
-    >
-    </space-generic-context-menu>
+    <space-generic-context-menu ref="genericContextMenu" />
     <keyboard-actions :paginated-resources="paginatedResources" :space="space" />
     <files-view-wrapper>
       <app-bar
@@ -423,12 +417,11 @@ export default defineComponent({
 
     const genericContextMenu = ref(null)
     const showContextMenu = (event) => {
-      console.log(genericContextMenu.value.$el)
-      const instance = (document.getElementsByClassName('generic') as unknown)[0]
-      if (instance === undefined) {
-        return
-      }
-      displayPositionedDropdown(instance._tippy, event, genericContextMenu.value)
+      displayPositionedDropdown(
+        genericContextMenu.value.$el._tippy,
+        event,
+        genericContextMenu.value
+      )
     }
 
     return {
