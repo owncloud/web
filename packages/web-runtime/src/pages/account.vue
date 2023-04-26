@@ -194,8 +194,8 @@ export default defineComponent({
         const {
           data: { bundles }
         } = yield clientService.httpAuthenticated.post('/api/v0/settings/bundles-list', {})
-        bundlesList.value = bundles.find((b) => b.extension === 'ocis-accounts')
-        return bundles.find((b) => b.extension === 'ocis-accounts')
+        bundlesList.value = bundles?.find((b) => b.extension === 'ocis-accounts')
+        return bundles?.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
         console.error(e)
         store.dispatch('showMessage', {
@@ -207,7 +207,7 @@ export default defineComponent({
     }).restartable()
 
     const isLoading = computed(() => {
-      if (!isSettingsServiceSupported) {
+      if (!unref(isSettingsServiceSupported)) {
         return false
       }
       return (
@@ -219,7 +219,7 @@ export default defineComponent({
     })
 
     const languageOptions = computed(() => {
-      const languageOptions = unref(bundlesList).settings.find((s) => s.name === 'language')
+      const languageOptions = unref(bundlesList)?.settings?.find((s) => s.name === 'language')
         ?.singleChoiceValue.options
       return languageOptions?.map((l) => ({
         label: l.displayValue,
@@ -245,12 +245,12 @@ export default defineComponent({
       identifier: string
       valueOptions: Record<string, any>
     }) => {
-      const valueId = unref(valuesList).find((cV) => cV.identifier.setting === identifier)?.value
+      const valueId = unref(valuesList)?.find((cV) => cV.identifier.setting === identifier)?.value
         ?.id
 
       const value = {
         bundleId: unref(bundlesList)?.id,
-        settingId: unref(bundlesList)?.settings.find((s) => s.name === identifier)?.id,
+        settingId: unref(bundlesList)?.settings?.find((s) => s.name === identifier)?.id,
         resource: { type: 'TYPE_USER' },
         accountUuid: 'me',
         ...valueOptions,
@@ -334,16 +334,16 @@ export default defineComponent({
         await loadBundlesList.perform()
         await loadValuesList.perform()
 
-        const languageConfiguration = unref(valuesList).find(
+        const languageConfiguration = unref(valuesList)?.find(
           (cV) => cV.identifier.setting === 'language'
         )
         selectedLanguageValue.value = languageConfiguration
-          ? unref(languageOptions).find(
+          ? unref(languageOptions)?.find(
               (lO) => lO.value === languageConfiguration.value?.listValue?.values?.[0]?.stringValue
             )
-          : unref(languageOptions).find((o) => o.default)
+          : unref(languageOptions)?.find((o) => o.default)
 
-        const disableEmailNotificationsConfiguration = unref(valuesList).find(
+        const disableEmailNotificationsConfiguration = unref(valuesList)?.find(
           (cV) => cV.identifier.setting === 'disable email notifications'
         )
 
