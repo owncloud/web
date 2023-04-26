@@ -251,11 +251,8 @@ export default defineComponent({
     },
 
     currentLinkRoleLabel() {
-      if (this.currentLinkRole.labelPrependText !== '') {
-        return this.$gettext('%{ rolePrependText } %{ roleInlineLabel }', {
-          rolePrependText: this.$gettext(this.currentLinkRole.labelPrependText),
-          roleInlineLabel: this.$gettext(this.currentLinkRole.inlineLabel)
-        })
+      if (this.currentLinkRole.longLabel !== '') {
+        return this.$gettext(this.currentLinkRole.longLabel)
       } else {
         return this.$gettext(this.currentLinkRole.label)
       }
