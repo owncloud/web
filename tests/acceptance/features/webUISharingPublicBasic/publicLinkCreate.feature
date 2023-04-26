@@ -20,7 +20,7 @@ Feature: Create public link shares
       | permissions | read           |
       | path        | /simple-folder |
       | name        | Link           |
-    And a link named "Link" should be listed with role "Can view" in the public link list of resource "simple-folder" on the webUI
+    And a link named "Link" should be listed with role "Anyone with the link can view" in the public link list of resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
@@ -36,7 +36,7 @@ Feature: Create public link shares
       | permissions | read        |
       | path        | /lorem.txt  |
       | name        | Link        |
-    And a link named "Link" should be listed with role "Can view" in the public link list of resource "lorem.txt" on the webUI
+    And a link named "Link" should be listed with role "Anyone with the link can view" in the public link list of resource "lorem.txt" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
@@ -110,8 +110,8 @@ Feature: Create public link shares
     And user "Alice" has logged in using the webUI
     When the user removes the public link named "first-name" of file "lorem.txt" using the webUI
     Then public link named "first-name" should not be listed on the public links list on the webUI
-    And a link named "second-name" should be listed with role "Can view" in the public link list of file "lorem.txt" on the webUI
-    And a link named "third-name" should be listed with role "Can view" in the public link list of folder "lorem.txt" on the webUI
+    And a link named "second-name" should be listed with role "Anyone with the link can view" in the public link list of file "lorem.txt" on the webUI
+    And a link named "third-name" should be listed with role "Anyone with the link can view" in the public link list of folder "lorem.txt" on the webUI
 
 
   Scenario: user creates a multiple public link of a file and delete the second link
@@ -128,8 +128,8 @@ Feature: Create public link shares
     And user "Alice" has logged in using the webUI
     When the user removes the public link named "second-name" of file "lorem.txt" using the webUI
     Then public link named "second-name" should not be listed on the public links list on the webUI
-    And a link named "first-name" should be listed with role "Can view" in the public link list of file "lorem.txt" on the webUI
-    And a link named "third-name" should be listed with role "Can view" in the public link list of folder "lorem.txt" on the webUI
+    And a link named "first-name" should be listed with role "Anyone with the link can view" in the public link list of file "lorem.txt" on the webUI
+    And a link named "third-name" should be listed with role "Anyone with the link can view" in the public link list of folder "lorem.txt" on the webUI
 
 
   Scenario: user creates a multiple public link of a file and delete the third link
@@ -146,8 +146,8 @@ Feature: Create public link shares
     And user "Alice" has logged in using the webUI
     When the user removes the public link named "third-name" of file "lorem.txt" using the webUI
     Then public link named "third-name" should not be listed on the public links list on the webUI
-    And a link named "first-name" should be listed with role "Can view" in the public link list of file "lorem.txt" on the webUI
-    And a link named "second-name" should be listed with role "Can view" in the public link list of folder "lorem.txt" on the webUI
+    And a link named "first-name" should be listed with role "Anyone with the link can view" in the public link list of file "lorem.txt" on the webUI
+    And a link named "second-name" should be listed with role "Anyone with the link can view" in the public link list of folder "lorem.txt" on the webUI
 
 
   Scenario Outline: user creates multiple public links with same name for the same file/folder

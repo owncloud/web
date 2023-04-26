@@ -25,14 +25,14 @@ Feature: Share by public link with different roles
       | permissions | <permissions>  |
       | path        | /simple-folder |
       | name        | Link           |
-    And a link named "Link" should be listed with role "<role>" in the public link list of folder "simple-folder" on the webUI
+    And a link named "Link" should be listed with role "<displayed-role>" in the public link list of folder "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
     Examples:
-      | role          | permissions                  |
-      | Can view      | read                         |
-      | Can edit      | read, update, create, delete |
-      | Can upload    | read, create                 |
+      | role        | displayed-role                  | permissions                  |
+      | Viewer      | Anyone with the link can view   | read                         |
+      | Editor      | Anyone with the link can edit   | read, update, create, delete |
+      | Contributor | Anyone with the link can upload | read, create                 |
 
   @skipOnOC10 @issue-ocis-reva-383
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -50,10 +50,10 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
     Examples:
-      | role          | permissions                  |
-      | Can view      | read                         |
-      | Can edit      | read, update, create, delete |
-      | Can upload    | read, create                 |
+      | role        | permissions                  |
+      | Viewer      | read                         |
+      | Editor      | read, update, create, delete |
+      | Contributor | read, create                 |
 
   @issue-ocis-reva-383
   Scenario: sharing by public link with "Uploader" role
