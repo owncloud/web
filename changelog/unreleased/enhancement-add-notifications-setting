@@ -1,0 +1,7 @@
+Enhancement: Add notification setting to account page
+
+We've added notification setting to the account page,
+where the user can turn on or off receiving emails for notifications.
+
+https://github.com/owncloud/web/pull/8911
+https://github.com/owncloud/web/issues/8904
