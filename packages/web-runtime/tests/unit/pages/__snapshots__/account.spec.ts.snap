@@ -31,6 +31,7 @@ exports[`account page account information displays basic user information 1`] = 
     </dd>
   </div>
   <!--v-if-->
+  <!--v-if-->
 </dl>
 `;
 

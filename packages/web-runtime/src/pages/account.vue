@@ -1,5 +1,6 @@
 <template>
-  <main id="account" class="oc-height-1-1 oc-m">
+  <app-loading-spinner v-if="isLoading" />
+  <main v-else id="account" class="oc-height-1-1 oc-m">
     <div class="oc-flex oc-flex-between oc-flex-bottom oc-width-1-1 oc-border-b oc-py">
       <h1 id="account-page-title" class="oc-page-title oc-m-rm">{{ pageTitle }}</h1>
       <div>
@@ -68,12 +69,15 @@
           />
         </dd>
       </div>
-      <div v-if="isLanguageSupported" class="account-page-info-language oc-mb oc-width-1-2@s">
+      <div
+        v-if="isSettingsServiceSupported"
+        class="account-page-info-language oc-mb oc-width-1-2@s"
+      >
         <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Language')" />
         <dd data-testid="language">
           <oc-select
             v-if="languageOptions"
-            :model-value="selectedLanguageOption"
+            :model-value="selectedLanguageValue"
             :clearable="false"
             :options="languageOptions"
             @update:model-value="updateSelectedLanguage"
@@ -100,6 +104,18 @@
           <gdpr-export />
         </dd>
       </div>
+      <div v-if="isSettingsServiceSupported" class="account-page-notification oc-mb oc-width-1-2@s">
+        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Notifications')" />
+        <dd data-testid="notification-mails">
+          <oc-checkbox
+            :model-value="disableEmailNotificationsValue"
+            size="large"
+            :label="$gettext('Receive notification mails')"
+            data-testid="account-page-notification-mails-checkbox"
+            @update:model-value="updateDisableEmailNotifications"
+          />
+        </dd>
+      </div>
     </dl>
   </main>
 </template>
@@ -107,38 +123,41 @@
 <script lang="ts">
 import { mapActions } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
-import { computed, defineComponent, onMounted, unref } from 'vue'
+import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
-  useAccessToken,
   useCapabilityGraphPersonalDataExport,
   useCapabilitySpacesEnabled,
   useClientService,
   useStore
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
-import axios from 'axios'
-import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
 import { useConfigurationManager } from 'web-pkg/src/composables/configuration'
 import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 export default defineComponent({
   name: 'Personal',
   components: {
+    AppLoadingSpinner,
     EditPasswordModal,
     GdprExport
   },
   setup() {
     const store = useStore()
-    const accessToken = useAccessToken({ store })
     const language = useGettext()
+    const { $gettext } = language
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
+    const valuesList = ref()
+    const bundlesList = ref()
+    const selectedLanguageValue = ref()
+    const disableEmailNotificationsValue = ref()
 
     // FIXME: Use graph capability when we have it
-    const isLanguageSupported = useCapabilitySpacesEnabled()
+    const isSettingsServiceSupported = useCapabilitySpacesEnabled()
     const isChangePasswordEnabled = useCapabilitySpacesEnabled()
     const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
     const user = computed(() => {
@@ -152,79 +171,60 @@ export default defineComponent({
       )
     })
 
-    const loadAccountBundleTask = useTask(function* () {
+    const loadValuesListTask = useTask(function* () {
       try {
         const {
-          data: { bundles }
-        } = yield axios.post(
-          '/api/v0/settings/bundles-list',
-          {},
-          {
-            headers: {
-              authorization: `Bearer ${unref(accessToken)}`,
-              'X-Request-ID': uuidV4()
-            }
-          }
-        )
-        return bundles.find((b) => b.extension === 'ocis-accounts')
+          data: { values }
+        } = yield clientService.httpAuthenticated.post('/api/v0/settings/values-list', {
+          account_uuid: 'me'
+        })
+        valuesList.value = values || []
       } catch (e) {
         console.error(e)
-        return []
+        store.dispatch('showMessage', {
+          title: $gettext('Unable to load account data…'),
+          status: 'danger'
+        })
+        valuesList.value = []
       }
     }).restartable()
 
-    const accountSettingIdentifier = {
-      extension: 'ocis-accounts',
-      bundle: 'profile',
-      setting: 'language'
-    }
-    const languageSetting = computed(() => {
-      return store.getters.getSettingsValue(accountSettingIdentifier)
+    const loadBundlesListTask = useTask(function* () {
+      try {
+        const {
+          data: { bundles }
+        } = yield clientService.httpAuthenticated.post('/api/v0/settings/bundles-list', {})
+        bundlesList.value = bundles?.find((b) => b.extension === 'ocis-accounts')
+      } catch (e) {
+        console.error(e)
+        store.dispatch('showMessage', {
+          title: $gettext('Unable to load account data…'),
+          status: 'danger'
+        })
+        bundlesList.value = []
+      }
+    }).restartable()
+
+    const isLoading = computed(() => {
+      if (!unref(isSettingsServiceSupported)) {
+        return false
+      }
+      return (
+        loadValuesListTask.isRunning ||
+        !loadValuesListTask.last ||
+        loadBundlesListTask.isRunning ||
+        !loadBundlesListTask.last
+      )
     })
+
     const languageOptions = computed(() => {
-      const languageOptions = loadAccountBundleTask.last?.value?.settings.find(
-        (s) => s.name === 'language'
-      )?.singleChoiceValue.options
+      const languageOptions = unref(bundlesList)?.settings?.find((s) => s.name === 'language')
+        ?.singleChoiceValue.options
       return languageOptions?.map((l) => ({
         label: l.displayValue,
         value: l.value.stringValue,
         default: l.default
       }))
-    })
-    const selectedLanguageOption = computed(() => {
-      const current = unref(languageSetting)?.listValue.values[0].stringValue
-      if (!current) {
-        return unref(languageOptions).find((o) => o.default)
-      }
-      return unref(languageOptions).find((o) => o.value === current)
-    })
-    const updateSelectedLanguage = (option) => {
-      const bundle = loadAccountBundleTask.last?.value
-      const value = {
-        bundleId: bundle?.id,
-        settingId: bundle?.settings.find((s) => s.name === 'language')?.id,
-        resource: { type: 'TYPE_USER' },
-        listValue: { values: [{ stringValue: option.value }] },
-        ...(unref(languageSetting) && { id: unref(languageSetting).id })
-      }
-
-      axios.post(
-        '/api/v0/settings/values-save',
-        { value: { ...value, accountUuid: 'me' } },
-        {
-          headers: {
-            authorization: `Bearer ${unref(accessToken)}`,
-            'X-Request-ID': uuidV4()
-          }
-        }
-      )
-
-      const newSetting = { identifier: accountSettingIdentifier, value }
-      store.commit('SET_SETTINGS_VALUE', newSetting)
-      setCurrentLanguage({ language, languageSetting: newSetting })
-    }
-    const accountEditLink = computed(() => {
-      return store.getters.configuration?.options?.accountEditLink
     })
 
     const groupNames = computed(() => {
@@ -237,28 +237,137 @@ export default defineComponent({
       return unref(user).groups.join(', ')
     })
 
-    const logoutUrl = computed(() => {
-      return configurationManager.logoutUrl
-    })
+    const saveValue = async ({
+      identifier,
+      valueOptions
+    }: {
+      identifier: string
+      valueOptions: Record<string, any>
+    }) => {
+      const valueId = unref(valuesList)?.find((cV) => cV.identifier.setting === identifier)?.value
+        ?.id
 
-    onMounted(() => {
-      if (unref(isLanguageSupported)) {
-        loadAccountBundleTask.perform()
+      const value = {
+        bundleId: unref(bundlesList)?.id,
+        settingId: unref(bundlesList)?.settings?.find((s) => s.name === identifier)?.id,
+        resource: { type: 'TYPE_USER' },
+        accountUuid: 'me',
+        ...valueOptions,
+        ...(valueId && { id: valueId })
+      }
+
+      try {
+        await clientService.httpAuthenticated.post('/api/v0/settings/values-save', {
+          value: {
+            accountUuid: 'me',
+            ...value
+          }
+        })
+
+        /**
+         * Edge case: we need to reload the values list to retrieve the valueId if not set,
+         * otherwise the backend saves multiple entries
+         */
+        if (!valueId) {
+          loadValuesListTask.perform()
+        }
+
+        return value
+      } catch (e) {
+        throw e
+      }
+    }
+
+    const updateSelectedLanguage = async (option) => {
+      try {
+        const value = await saveValue({
+          identifier: 'language',
+          valueOptions: { listValue: { values: [{ stringValue: option.value }] } }
+        })
+        selectedLanguageValue.value = option
+        setCurrentLanguage({
+          language,
+          languageSetting: {
+            identifier: {
+              extension: 'ocis-accounts',
+              bundle: 'profile',
+              setting: 'language'
+            },
+            value
+          }
+        })
+        store.dispatch('showMessage', {
+          title: $gettext('Language was saved successfully.')
+        })
+      } catch (e) {
+        console.error(e)
+        store.dispatch('showMessage', {
+          title: $gettext('Saving language failed…'),
+          status: 'danger'
+        })
+      }
+    }
+
+    const updateDisableEmailNotifications = async (option) => {
+      try {
+        await saveValue({
+          identifier: 'disable-email-notifications',
+          valueOptions: { boolValue: !option }
+        })
+        disableEmailNotificationsValue.value = option
+        store.dispatch('showMessage', {
+          title: $gettext('Email notifications preference saved successfully.')
+        })
+      } catch (e) {
+        console.error(e)
+        store.dispatch('showMessage', {
+          title: $gettext('Unable to save email notifications preference…'),
+          status: 'danger'
+        })
+      }
+    }
+
+    onMounted(async () => {
+      if (unref(isSettingsServiceSupported)) {
+        await loadBundlesListTask.perform()
+        await loadValuesListTask.perform()
+
+        const languageConfiguration = unref(valuesList)?.find(
+          (cV) => cV.identifier.setting === 'language'
+        )
+        selectedLanguageValue.value = languageConfiguration
+          ? unref(languageOptions)?.find(
+              (lO) => lO.value === languageConfiguration.value?.listValue?.values?.[0]?.stringValue
+            )
+          : unref(languageOptions)?.find((o) => o.default)
+
+        const disableEmailNotificationsConfiguration = unref(valuesList)?.find(
+          (cV) => cV.identifier.setting === 'disable-email-notifications'
+        )
+
+        disableEmailNotificationsValue.value = disableEmailNotificationsConfiguration
+          ? !disableEmailNotificationsConfiguration.value?.boolValue
+          : true
       }
     })
 
     return {
       clientService,
       languageOptions,
-      selectedLanguageOption,
+      selectedLanguageValue,
       updateSelectedLanguage,
-      accountEditLink,
+      updateDisableEmailNotifications,
+      accountEditLink: store.getters.configuration?.options?.accountEditLink,
       isChangePasswordEnabled,
       showGdprExport,
-      isLanguageSupported,
+      isSettingsServiceSupported,
       groupNames,
       user,
-      logoutUrl
+      logoutUrl: configurationManager.logoutUrl,
+      isLoading,
+      disableEmailNotificationsValue,
+      loadBundlesListTask,
+      loadValuesListTask
     }
   },
   data() {
