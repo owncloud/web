@@ -146,6 +146,7 @@ Summary
 * Enhancement - Layout of Share role and expiration date dropdown: [#8882](https://github.com/owncloud/web/pull/8882)
 * Enhancement - Webfinger redirect app: [#8883](https://github.com/owncloud/web/issues/8883)
 * Enhancement - Rename "Quicklink" to "link": [#8898](https://github.com/owncloud/web/pull/8898)
+* Enhancement - Add notification setting to account page: [#8911](https://github.com/owncloud/web/pull/8911)
 
 Details
 -------
@@ -1358,6 +1359,14 @@ Details
 
    https://github.com/owncloud/web/issues/7891
    https://github.com/owncloud/web/pull/8898
+
+* Enhancement - Add notification setting to account page: [#8911](https://github.com/owncloud/web/pull/8911)
+
+   We've added notification setting to the account page, where the user can turn on or off
+   receiving emails for notifications.
+
+   https://github.com/owncloud/web/issues/8904
+   https://github.com/owncloud/web/pull/8911
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
