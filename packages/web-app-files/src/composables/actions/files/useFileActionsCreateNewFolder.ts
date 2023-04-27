@@ -1,19 +1,32 @@
 import { Resource, extractNameWithoutExtension } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
-import { useStore } from 'web-pkg/src/composables'
+import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 import { resolveFileNameDuplicate } from 'web-app-files/src/helpers/resource'
+import { join } from 'path'
+import { WebDAV } from 'web-client/src/webdav'
+import { isLocationSpacesActive } from 'web-app-files/src/router'
+import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 
 export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const router = useRouter()
   const { $gettext } = useGettext()
 
+  const clientService = useClientService()
+  const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
   const files = computed((): Array<Resource> => store.getters['Files/files'])
+  const ancestorMetaData = computed(() => store.getters['Files/ancestorMetaData'])
   const areFileExtensionsShown = computed(
     (): boolean => store.getters['Files/areFileExtensionsShown']
   )
+
+  const storageId = unref(currentFolder).storageId
+  const currentSpace = store.getters['runtime/spaces/spaces'].find(
+    (space) => space.id === storageId
+  ) //TODO is this the way to replace this.space ( ͡° ͜ʖ ͡°)?
 
   const checkNewFolderName = (folderName) => {
     if (folderName.trim() === '') {
@@ -75,38 +88,38 @@ export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } 
 
   const addAppProviderFileFunc = async (fileName) => {}
 
+  const loadIndicatorsForNewFile = computed(() => {
+    return (
+      isLocationSpacesActive(router, 'files-spaces-projects') && currentSpace.driveType !== 'share'
+    )
+  })
+
   const addNewFolder = async (folderName) => {
-    /*folderName = folderName.trimEnd()
+    folderName = folderName.trimEnd()
 
     try {
-      const path = join(this.item, folderName)
-      const resource = await (clientService.webdav as WebDAV).createFolder(this.space, {
+      const path = join(unref(currentFolder).path, folderName) // TODO: Why was this.item used here isn't it just the currentFolderPath?
+      const resource = await (clientService.webdav as WebDAV).createFolder(currentSpace, {
         path
       })
 
-      if (this.loadIndicatorsForNewFile) {
-        resource.indicators = getIndicators({ resource, ancestorMetaData: this.ancestorMetaData })
+      if (unref(loadIndicatorsForNewFile)) {
+        resource.indicators = getIndicators({ resource, ancestorMetaData: unref(ancestorMetaData) })
       }
 
-      this.UPSERT_RESOURCE(resource)
-      this.hideModal()
+      store.commit('Files/UPSERT_RESOURCE', resource)
+      store.dispatch('hideModal')
 
-      this.showMessage({
-        title: this.$gettextInterpolate(
-          this.$gettext('"%{folderName}" was created successfully'),
-          {
-            folderName
-          }
-        )
+      store.dispatch('showMessage', {
+        title: $gettext('"%{folderName}" was created successfully', { folderName })
       })
     } catch (error) {
       console.error(error)
-      this.showMessage({
-        title: this.$gettext('Failed to create folder'),
+      store.dispatch('showMessage', {
+        title: $gettext('Failed to create folder'),
         status: 'danger'
       })
-    }*/
-    // TODO
+    }
   }
 
   const handler = ({ space, resources }: FileActionOptions) => {
@@ -150,7 +163,7 @@ export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } 
         ? checkNewFolderName(defaultName)
         : checkNewFileName(areFileExtensionsShown ? defaultName : `${defaultName}.${ext}`),
       inputSelectionRange,
-      onCancel: store.dispatch('hideModal'),
+      onCancel: () => store.dispatch('hideModal'),
       onConfirm: isFolder
         ? addNewFolder
         : addAppProviderFile
