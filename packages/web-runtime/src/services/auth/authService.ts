@@ -219,7 +219,12 @@ export class AuthService {
     }
     if (isUserContext(this.router, route)) {
       await this.userManager.removeUser('authError')
+      return
     }
+    // authGuard is taking care of redirecting the user to the
+    // accessDenied page if hasAuthErrorOccurred is set to true
+    // we can't push the route ourselves, see authGuard for details.
+    this.hasAuthErrorOccurred = true
   }
 
   public async resolvePublicLink(token: string, passwordRequired: boolean, password: string) {

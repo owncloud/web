@@ -1,0 +1,8 @@
+Bugfix: Infinite login redirect
+
+We've fixed a bug where a user would fall into an infinite redirect between login and accessDenied page if a) the user had valid IdP credentials but was not permitted in ocis, b) the user has authenticated successfully but then got deleted in the meantime.
+
+https://github.com/owncloud/web/issues/8928
+https://github.com/owncloud/web/issues/7354
+https://github.com/owncloud/web/issues/4677
+https://github.com/owncloud/web/pull/8947
