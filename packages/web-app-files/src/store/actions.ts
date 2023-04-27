@@ -294,12 +294,15 @@ export default {
 
     const shareMethod = isGroupShare ? 'shareFileWithGroup' : 'shareFileWithUser'
     return client.shares[shareMethod](path, shareWith, options)
-      .then((share) => {
+      .then(async (share) => {
         const builtShare = buildCollaboratorShare(
           share.shareInfo,
           context.getters.highlightedFile,
           allowSharePermissions(context.rootGetters)
         )
+        if (context.state.sharesLoading) {
+          await Promise.resolve(context.state.sharesLoading)
+        }
         context.commit('OUTGOING_SHARES_UPSERT', { ...builtShare, outgoing: true })
         context.dispatch('updateCurrentFileShareTypes')
         context.commit('LOAD_INDICATORS', path)
@@ -317,7 +320,10 @@ export default {
       })
   },
   deleteShare(context, { client, share, path, loadIndicators = false }) {
-    return client.shares.deleteShare(share.id, {} as any).then(() => {
+    return client.shares.deleteShare(share.id, {} as any).then(async () => {
+      if (context.state.sharesLoading) {
+        await Promise.resolve(context.state.sharesLoading)
+      }
       context.commit('OUTGOING_SHARES_REMOVE', share)
       context.dispatch('updateCurrentFileShareTypes')
       if (loadIndicators) {
@@ -427,8 +433,11 @@ export default {
     return new Promise((resolve, reject) => {
       client.shares
         .shareFileWithLink(path, { ...params, spaceRef: storageId })
-        .then((data) => {
+        .then(async (data) => {
           const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
+          if (context.state.sharesLoading) {
+            await Promise.resolve(context.state.sharesLoading)
+          }
           context.commit('OUTGOING_SHARES_UPSERT', { ...link, outgoing: true })
           context.dispatch('updateCurrentFileShareTypes')
           context.commit('LOAD_INDICATORS', path)
@@ -454,7 +463,10 @@ export default {
     })
   },
   removeLink(context, { share, client, path, loadIndicators = false }) {
-    return client.shares.deleteShare(share.id).then(() => {
+    return client.shares.deleteShare(share.id).then(async () => {
+      if (context.state.sharesLoading) {
+        await Promise.resolve(context.state.sharesLoading)
+      }
       context.commit('OUTGOING_SHARES_REMOVE', share)
       context.dispatch('updateCurrentFileShareTypes')
       if (loadIndicators) {
