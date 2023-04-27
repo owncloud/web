@@ -47,9 +47,9 @@ Feature: reshare
     And "Alice" opens the "files" app
     And "Alice" navigates to the personal space page
     Then "Alice" should see the following recipients
-      | resource         | recipient | type  | role   |
-      | folder_to_shared | Brian     | user  | editor |
-      | folder_to_shared | sales     | group | viewer |
+      | resource         | recipient | type  | role     |
+      | folder_to_shared | Brian     | user  | can edit |
+      | folder_to_shared | sales     | group | can view |
     And "Alice" logs out
 
     When "Brian" updates following sharee role
