@@ -14,7 +14,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
             <span class="oc-flex oc-flex-middle">
               <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="user" size="medium" type="span" variation="inherit"></oc-icon-stub>
               <span>
-                <span class="oc-text-bold oc-display-block oc-width-1-1">Internal</span>
+                <span class="oc-text-bold oc-display-block oc-width-1-1">Invited People</span>
                 <span class="oc-text-small">Link works only for invited people. Login is required.</span>
               </span>
             </span>
