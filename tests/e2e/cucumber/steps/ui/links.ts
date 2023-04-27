@@ -85,8 +85,8 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
-    const actualRole = await linkObject.changeRole({ linkName, resource, role })
-    expect(role).toBe(actualRole.toLowerCase())
+    const roleText = await linkObject.changeRole({ linkName, resource, role })
+    expect(linkObject.roleDisplayText[role].toLowerCase()).toBe(roleText.toLowerCase())
   }
 )
 
@@ -140,7 +140,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     const newPermission = await linkObject.changeRole({ linkName, role, space: true })
-    expect(role).toBe(newPermission.toLowerCase())
+    expect(linkObject.roleDisplayText[role].toLowerCase()).toBe(newPermission.toLowerCase())
   }
 )
 

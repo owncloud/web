@@ -27,6 +27,13 @@ export class Link {
     this.#linksEnvironment = new LinksEnvironment()
   }
 
+  roleDisplayText = {
+    internal: 'Internal',
+    viewer: 'Anyone with the link can view',
+    contributor: 'Anyone with the link can upload',
+    editor: 'Anyone with the link can edit',
+    uploader: 'Secret File drop'
+  }
   async create(args: Omit<createLinkArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     const url = await createLink({ ...args, page: this.#page })
