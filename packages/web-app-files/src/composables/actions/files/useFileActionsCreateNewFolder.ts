@@ -20,9 +20,9 @@ export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } 
   const files = computed((): Array<Resource> => store.getters['Files/files'])
   const ancestorMetaData = computed(() => store.getters['Files/ancestorMetaData'])
 
-  const storageId = unref(currentFolder).storageId
-  const currentSpace = store.getters['runtime/spaces/spaces'].find(
-    (space) => space.id === storageId
+  const storageId = computed(() => unref(currentFolder).storageId)
+  const currentSpace = computed(() =>
+    store.getters['runtime/spaces/spaces'].find((space) => space.id === unref(storageId))
   )
 
   const checkNewFolderName = (folderName) => {
@@ -54,7 +54,8 @@ export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } 
 
   const loadIndicatorsForNewFile = computed(() => {
     return (
-      isLocationSpacesActive(router, 'files-spaces-projects') && currentSpace.driveType !== 'share'
+      isLocationSpacesActive(router, 'files-spaces-projects') &&
+      unref(currentSpace).driveType !== 'share'
     )
   })
 
@@ -63,7 +64,7 @@ export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } 
 
     try {
       const path = join(unref(currentFolder).path, folderName)
-      const resource = await (clientService.webdav as WebDAV).createFolder(currentSpace, {
+      const resource = await (clientService.webdav as WebDAV).createFolder(unref(currentSpace), {
         path
       })
 

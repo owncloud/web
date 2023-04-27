@@ -51,13 +51,6 @@ export default defineComponent({
 
     const { editorActions, loadExternalAppActions } = useFileActions()
 
-    const { actions: createNewFile } = useFileActionsCreateNewFile({
-      store,
-      openAction: null,
-      addAppProviderFile: false,
-      extension: 'txt'
-    })
-    const { actions: createNewFolder } = useFileActionsCreateNewFolder({ store })
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
     const { actions: createQuickLinkActions } = useFileActionsCreateQuickLink({ store })
@@ -116,8 +109,6 @@ export default defineComponent({
 
     const menuItemsActions = computed(() => {
       return [
-        ...unref(createNewFile),
-        ...unref(createNewFolder),
         ...unref(downloadArchiveActions),
         ...unref(downloadFileActions),
         ...unref(deleteActions),

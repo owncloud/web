@@ -34,9 +34,9 @@ export const useFileActionsCreateNewFile = ({
   const areFileExtensionsShown = computed(
     (): boolean => store.getters['Files/areFileExtensionsShown']
   )
-  const storageId = unref(currentFolder).storageId
-  const currentSpace = store.getters['runtime/spaces/spaces'].find(
-    (space) => space.id === storageId
+  const storageId = computed(() => unref(currentFolder).storageId)
+  const currentSpace = computed(() =>
+    store.getters['runtime/spaces/spaces'].find((space) => space.id === unref(storageId))
   )
   const newFileAction = ref(null)
 
@@ -75,7 +75,8 @@ export const useFileActionsCreateNewFile = ({
 
   const loadIndicatorsForNewFile = computed(() => {
     return (
-      isLocationSpacesActive(router, 'files-spaces-projects') && currentSpace.driveType !== 'share'
+      isLocationSpacesActive(router, 'files-spaces-projects') &&
+      unref(currentSpace).driveType !== 'share'
     )
   })
 
@@ -86,7 +87,7 @@ export const useFileActionsCreateNewFile = ({
 
     try {
       const path = join(unref(currentFolder).path, fileName)
-      const resource = await (clientService.webdav as WebDAV).putFileContents(currentSpace, {
+      const resource = await (clientService.webdav as WebDAV).putFileContents(unref(currentSpace), {
         path
       })
 

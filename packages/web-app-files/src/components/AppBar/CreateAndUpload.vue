@@ -25,23 +25,23 @@
       >
         <oc-list id="create-list">
           <li class="create-list-folder oc-menu-item-hover">
-            <oc-button id="new-folder-btn" appearance="raw" @click="showCreateResourceModal">
+            <oc-button id="new-folder-btn" appearance="raw" @click="createNewFolder[0].handler">
               <oc-resource-icon :resource="folderIconResource" size="medium" />
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
           <li
-            v-for="(newFileHandler, key) in newFileHandlers"
+            v-for="(fileAction, key) in fileActions"
             :key="`file-creation-item-${key}`"
             class="create-list-file oc-menu-item-hover"
           >
             <oc-button
               appearance="raw"
-              :class="['new-file-btn-' + newFileHandler.ext]"
-              @click="showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)"
+              :class="['new-file-btn-' + fileAction.ext]"
+              @click="fileAction.handler"
             >
-              <oc-resource-icon :resource="getIconResource(newFileHandler)" size="medium" />
-              <span>{{ newFileHandler.menuTitle($gettext) }}</span>
+              <oc-resource-icon :resource="getIconResource(fileAction)" size="medium" />
+              <span>{{ fileAction.title }}</span>
             </oc-button>
           </li>
           <template v-if="mimetypesAllowedForCreation">
@@ -141,7 +141,11 @@ import { join } from 'path'
 
 import { useFileActions, EDITOR_MODE_CREATE } from '../../composables/actions/files/useFileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
-import { useActiveLocation } from '../../composables'
+import {
+  useActiveLocation,
+  useFileActionsCreateNewFile,
+  useFileActionsCreateNewFolder
+} from '../../composables'
 
 import {
   useRequest,
@@ -161,7 +165,8 @@ import {
   onBeforeUnmount,
   PropType,
   unref,
-  watch
+  watch,
+  ref
 } from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
@@ -175,6 +180,7 @@ import { stringify } from 'qs'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: {
@@ -206,9 +212,27 @@ export default defineComponent({
     const uppyService = useService<UppyService>('$uppyService')
     const clientService = useClientService()
     const store = useStore()
+    const { $gettext } = useGettext()
+    const { actions: createNewFolder } = useFileActionsCreateNewFolder({ store })
+    const fileActions = ref([])
+
     let filesSelectedSub
     let uploadCompletedSub
 
+    const newFileHandlers = store.getters['newFileHandlers']
+    unref(newFileHandlers).forEach((element) => {
+      const { actions } = useFileActionsCreateNewFile({
+        store,
+        openAction: element.action,
+        addAppProviderFile: false,
+        extension: element.ext
+      })
+      fileActions.value.push({
+        handler: unref(actions)[0].handler,
+        ext: element.ext,
+        title: element.menuTitle($gettext)
+      })
+    })
     const currentFolder = computed(() => {
       return store.getters['Files/currentFolder']
     })
@@ -258,7 +282,9 @@ export default defineComponent({
       hasSpaces: useCapabilitySpacesEnabled(),
       isUserContext: useUserContext({ store }),
       canUpload,
-      currentFolder
+      currentFolder,
+      fileActions,
+      createNewFolder
     }
   },
   data: () => ({
