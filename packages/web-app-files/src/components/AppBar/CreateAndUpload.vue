@@ -41,7 +41,7 @@
               @click="fileAction.handler"
             >
               <oc-resource-icon :resource="getIconResource(fileAction)" size="medium" />
-              <span>{{ fileAction.title }}</span>
+              <span>{{ fileAction.label() }}</span>
             </oc-button>
           </li>
           <template v-if="mimetypesAllowedForCreation">
@@ -163,8 +163,7 @@ import {
   onBeforeUnmount,
   PropType,
   unref,
-  watch,
-  ref
+  watch
 } from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
@@ -213,19 +212,13 @@ export default defineComponent({
 
     // use all new file handler actions
     const newFileHandlers = store.getters['newFileHandlers']
-    const fileActions = ref([])
-    unref(newFileHandlers).forEach((element) => {
-      const { actions } = useFileActionsCreateNewFile({
-        store,
-        openAction: element.action,
-        addAppProviderFile: false,
-        extension: element.ext
-      })
-      fileActions.value.push({
-        handler: unref(actions)[0].handler,
-        ext: element.ext,
-        title: element.menuTitle($gettext)
-      })
+
+    const { actions: createNewFileActions } = useFileActionsCreateNewFile({
+      store,
+      newFileHandlers
+    })
+    const fileActions = computed(() => {
+      return unref(createNewFileActions)
     })
 
     const mimetypesAllowedForCreation = computed(() => {
@@ -236,21 +229,17 @@ export default defineComponent({
       }
       return mimeTypes.filter((mimetype) => mimetype.allow_creation) || []
     })
-    // use all mime type handler actions
-    const mimeTypeActions = ref([])
-    unref(mimetypesAllowedForCreation).forEach((element) => {
-      const { actions } = useFileActionsCreateNewFile({
-        store,
-        openAction: false,
-        addAppProviderFile: true,
-        extension: element.ext
-      })
-      mimeTypeActions.value.push({
-        handler: unref(actions)[0].handler,
-        ext: element.ext,
-        name: element.name
-      })
+
+    // FIXME: Same like above, need to add mimetypesAllowedForCreation
+    // const { actions: mimeTypeFileActions } = useFileActionsCreateNewFile({
+    //   store,
+    //   mimetypesAllowedForCreation
+    // })
+    const mimeTypeActions = computed(() => {
+      return []
+      // return unref(mimeTypeFileActions)
     })
+
     const currentFolder = computed(() => {
       return store.getters['Files/currentFolder']
     })

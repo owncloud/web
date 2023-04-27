@@ -1,8 +1,8 @@
 import { Resource, extractNameWithoutExtension } from 'web-client/src/helpers'
 import { Store } from 'vuex'
-import { computed, ref, unref } from 'vue'
+import { computed, unref } from 'vue'
 import { useClientService, useRequest, useRouter, useStore } from 'web-pkg/src/composables'
-import { FileAction } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 import { resolveFileNameDuplicate } from 'web-app-files/src/helpers/resource'
 import { join } from 'path'
@@ -16,14 +16,12 @@ import { stringify } from 'qs'
 
 export const useFileActionsCreateNewFile = ({
   store,
-  openAction,
-  addAppProviderFile,
-  extension
+  newFileHandlers,
+  mimetypesAllowedForCreation
 }: {
   store?: Store<any>
-  openAction?: any
-  addAppProviderFile?: boolean
-  extension?: string
+  newFileHandlers?: any // FIXME: type?
+  mimetypesAllowedForCreation?: any // FIXME: type?
 } = {}) => {
   store = store || useStore()
   const router = useRouter()
@@ -42,7 +40,6 @@ export const useFileActionsCreateNewFile = ({
   const currentSpace = computed(() =>
     store.getters['runtime/spaces/spaces'].find((space) => space.id === unref(storageId))
   )
-  const newFileAction = ref(null)
 
   const capabilities = computed(() => store.getters['capabilities'])
 
@@ -125,7 +122,7 @@ export const useFileActionsCreateNewFile = ({
     )
   })
 
-  const addNewFile = async (fileName) => {
+  const addNewFile = async (fileName, openAction) => {
     if (fileName === '') {
       return
     }
@@ -142,9 +139,9 @@ export const useFileActionsCreateNewFile = ({
 
       store.commit('Files/UPSERT_RESOURCE', resource)
 
-      if (unref(newFileAction)) {
+      if (openAction) {
         openEditor(
-          unref(newFileAction),
+          openAction,
           unref(currentSpace).getDriveAliasAndItem(resource),
           resource.webDavPath,
           resource.fileId,
@@ -168,7 +165,12 @@ export const useFileActionsCreateNewFile = ({
     }
   }
 
-  const handler = () => {
+  const handler = (
+    fileActionOptions: FileActionOptions,
+    extension: string,
+    addAppProviderFile: boolean,
+    openAction: any // FIXME: type?
+  ) => {
     const checkInputValue = (value) => {
       store.dispatch(
         'setModalInputErrorMessage',
@@ -184,9 +186,6 @@ export const useFileActionsCreateNewFile = ({
     if (!areFileExtensionsShown.value) {
       defaultName = extractNameWithoutExtension({ name: defaultName, extension } as any)
     }
-
-    // Sets action to be executed after creation of the file
-    newFileAction.value = openAction
 
     const inputSelectionRange = !areFileExtensionsShown.value
       ? null
@@ -211,7 +210,7 @@ export const useFileActionsCreateNewFile = ({
             if (!areFileExtensionsShown.value) {
               fileName = `${fileName}.${extension}`
             }
-            addNewFile(fileName)
+            addNewFile(fileName, openAction)
           },
       onInput: checkInputValue
     }
@@ -220,22 +219,30 @@ export const useFileActionsCreateNewFile = ({
   }
 
   const actions = computed((): FileAction[] => {
-    return [
-      {
+    const actions = []
+    for (const newFileHandler of newFileHandlers) {
+      const addAppProviderFile = false
+      const openAction = newFileHandler.action
+      console.log(newFileHandler)
+
+      actions.push({
         name: 'create-new-file',
         icon: 'add',
-        handler,
-        label: () => {
-          return $gettext('Create new File')
-        },
+        handler: (args) => handler(args, newFileHandler.ext, addAppProviderFile, openAction),
+        label: () => newFileHandler.menuTitle($gettext),
         isEnabled: ({ resources }) => {
           return true
         },
         canBeDefault: true,
         componentType: 'button',
-        class: 'oc-files-actions-create-new-file'
-      }
-    ]
+        class: 'oc-files-actions-create-new-file',
+        ext: newFileHandler.ext
+      })
+    }
+
+    // TODO: Same for mimetypesAllowedForCreation
+
+    return actions
   })
 
   return {
