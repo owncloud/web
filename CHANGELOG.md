@@ -59,6 +59,7 @@ Summary
 * Bugfix - Hide upload hint in empty read-only folders: [#8834](https://github.com/owncloud/web/issues/8834)
 * Bugfix - Public link empty password stays forever: [#8864](https://github.com/owncloud/web/pull/8864)
 * Bugfix - Sidebar header after deleting resource: [#8880](https://github.com/owncloud/web/issues/8880)
+* Bugfix - Infinite login redirect: [#8928](https://github.com/owncloud/web/issues/8928)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -535,6 +536,17 @@ Details
 
    https://github.com/owncloud/web/issues/8880
    https://github.com/owncloud/web/pull/8886
+
+* Bugfix - Infinite login redirect: [#8928](https://github.com/owncloud/web/issues/8928)
+
+   We've fixed a bug where a user would fall into an infinite redirect between login and
+   accessDenied page if a) the user had valid IdP credentials but was not permitted in ocis, b) the
+   user has authenticated successfully but then got deleted in the meantime.
+
+   https://github.com/owncloud/web/issues/8928
+   https://github.com/owncloud/web/issues/7354
+   https://github.com/owncloud/web/issues/4677
+   https://github.com/owncloud/web/pull/8947
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
