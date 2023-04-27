@@ -41,4 +41,10 @@ exports[`account page account information group membership displays group names 
 </dd>
 `;
 
+exports[`account page group membership displays group names 1`] = `
+<dd>
+  <span>one, two, three</span>
+</dd>
+`;
+
 exports[`account page header section edit url button should be displayed if defined via config 1`] = `<oc-button-stub href="/" target="_blank" type="a" variation="primary"></oc-button-stub>`;

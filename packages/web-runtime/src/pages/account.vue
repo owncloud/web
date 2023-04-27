@@ -171,7 +171,7 @@ export default defineComponent({
       )
     })
 
-    const loadValuesList = useTask(function* () {
+    const loadValuesListTask = useTask(function* () {
       try {
         const {
           data: { values }
@@ -189,13 +189,12 @@ export default defineComponent({
       }
     }).restartable()
 
-    const loadBundlesList = useTask(function* () {
+    const loadBundlesListTask = useTask(function* () {
       try {
         const {
           data: { bundles }
         } = yield clientService.httpAuthenticated.post('/api/v0/settings/bundles-list', {})
         bundlesList.value = bundles?.find((b) => b.extension === 'ocis-accounts')
-        return bundles?.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
         console.error(e)
         store.dispatch('showMessage', {
@@ -211,10 +210,10 @@ export default defineComponent({
         return false
       }
       return (
-        loadValuesList.isRunning ||
-        !loadValuesList.last ||
-        loadBundlesList.isRunning ||
-        !loadBundlesList.last
+        loadValuesListTask.isRunning ||
+        !loadValuesListTask.last ||
+        loadBundlesListTask.isRunning ||
+        !loadBundlesListTask.last
       )
     })
 
@@ -270,7 +269,7 @@ export default defineComponent({
          * otherwise the backend saves multiple entries
          */
         if (!valueId) {
-          loadValuesList.perform()
+          loadValuesListTask.perform()
         }
 
         return value
@@ -319,6 +318,7 @@ export default defineComponent({
         store.dispatch('showMessage', {
           title: $gettext('Email notifications preference saved successfully.')
         })
+        console.log("???")
       } catch (e) {
         console.error(e)
         store.dispatch('showMessage', {
@@ -330,8 +330,8 @@ export default defineComponent({
 
     onMounted(async () => {
       if (unref(isSettingsServiceSupported)) {
-        await loadBundlesList.perform()
-        await loadValuesList.perform()
+        await loadBundlesListTask.perform()
+        await loadValuesListTask.perform()
 
         const languageConfiguration = unref(valuesList)?.find(
           (cV) => cV.identifier.setting === 'language'
@@ -366,7 +366,9 @@ export default defineComponent({
       user,
       logoutUrl: configurationManager.logoutUrl,
       isLoading,
-      disableEmailNotificationsValue
+      disableEmailNotificationsValue,
+      loadBundlesListTask,
+      loadValuesListTask
     }
   },
   data() {
