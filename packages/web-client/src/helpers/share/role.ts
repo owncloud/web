@@ -175,7 +175,7 @@ export const peopleRoleCustomFile = new CustomShareRole(
   false,
   $gettext('Custom permissions'),
   $gettext('custom permissions'),
-  'file-settings',
+  'settings-3',
   [SharePermissions.read, SharePermissions.update, SharePermissions.share]
 )
 export const peopleRoleCustomFolder = new CustomShareRole(
@@ -183,7 +183,7 @@ export const peopleRoleCustomFolder = new CustomShareRole(
   true,
   $gettext('Custom permissions'),
   $gettext('custom permissions'),
-  'file-settings',
+  'settings-3',
   [
     SharePermissions.read,
     SharePermissions.update,
@@ -203,18 +203,20 @@ export const peopleRoleDenyFolder = new PeopleShareRole(
 export const linkRoleInternalFile = new LinkShareRole(
   'internal',
   false,
-  $gettext('Internal'),
-  $gettext('internal'),
+  $gettext('Invited People'),
+  $gettext('invited People'),
   'user',
-  [SharePermissions.internal]
+  [SharePermissions.internal],
+  $gettext('Only for invited people')
 )
 export const linkRoleInternalFolder = new LinkShareRole(
   'internal',
   true,
-  $gettext('Internal'),
-  $gettext('internal'),
+  $gettext('Invited people'),
+  $gettext('invited people'),
   'user',
-  [SharePermissions.internal]
+  [SharePermissions.internal],
+  $gettext('Only for invited people')
 )
 export const linkRoleViewerFile = new LinkShareRole(
   'viewer',
