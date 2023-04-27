@@ -318,7 +318,6 @@ export default defineComponent({
         store.dispatch('showMessage', {
           title: $gettext('Email notifications preference saved successfully.')
         })
-        console.log("???")
       } catch (e) {
         console.error(e)
         store.dispatch('showMessage', {
