@@ -1,7 +1,7 @@
 import { Resource, extractNameWithoutExtension } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, ref, unref } from 'vue'
-import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
+import { useClientService, useRequest, useRouter, useStore } from 'web-pkg/src/composables'
 import { FileAction } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 import { resolveFileNameDuplicate } from 'web-app-files/src/helpers/resource'
@@ -10,6 +10,9 @@ import { WebDAV } from 'web-client/src/webdav'
 import { isLocationSpacesActive } from 'web-app-files/src/router'
 import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 import { EDITOR_MODE_CREATE, useFileActions } from './useFileActions'
+import { urlJoin } from 'web-client/src/utils'
+import { configurationManager } from 'web-pkg/src'
+import { stringify } from 'querystring'
 
 export const useFileActionsCreateNewFile = ({
   store,
@@ -25,8 +28,9 @@ export const useFileActionsCreateNewFile = ({
   store = store || useStore()
   const router = useRouter()
   const { $gettext } = useGettext()
+  const { makeRequest } = useRequest()
 
-  const { openEditor } = useFileActions()
+  const { openEditor, triggerDefaultAction } = useFileActions()
   const clientService = useClientService()
   const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
   const files = computed((): Array<Resource> => store.getters['Files/files'])
@@ -39,6 +43,8 @@ export const useFileActionsCreateNewFile = ({
     store.getters['runtime/spaces/spaces'].find((space) => space.id === unref(storageId))
   )
   const newFileAction = ref(null)
+
+  const capabilities = computed(() => store.getters['capabilities'])
 
   const checkNewFileName = (fileName) => {
     if (fileName === '') {
@@ -71,7 +77,46 @@ export const useFileActionsCreateNewFile = ({
     return null
   }
 
-  const addAppProviderFileFunc = async (fileName) => {}
+  const addAppProviderFileFunc = async (fileName) => {
+    // FIXME: this belongs in web-app-external, but the app provider handles file creation differently than other editor extensions. Needs more refactoring.
+    if (fileName === '') {
+      return
+    }
+    try {
+      const baseUrl = urlJoin(
+        configurationManager.serverUrl,
+        unref(capabilities).files.app_providers[0].new_url
+      )
+      const query = stringify({
+        parent_container_id: unref(currentFolder).fileId,
+        filename: fileName
+      })
+      const url = `${baseUrl}?${query}`
+      const response = await makeRequest('POST', url)
+      if (response.status !== 200) {
+        throw new Error(`An error has occurred: ${response.status}`)
+      }
+      const path = join(unref(currentFolder).path, fileName) || ''
+      const resource = await (clientService.webdav as WebDAV).getFileInfo(unref(currentSpace), {
+        path
+      })
+      if (unref(loadIndicatorsForNewFile)) {
+        resource.indicators = getIndicators({ resource, ancestorMetaData: unref(ancestorMetaData) })
+      }
+      triggerDefaultAction({ space: unref(currentSpace), resources: [resource] })
+      store.commit('Files/UPSERT_RESOURCE', resource)
+      store.dispatch('hideModal')
+      store.dispatch('showMessage', {
+        title: $gettext('"%{fileName}" was created successfully', { fileName })
+      })
+    } catch (error) {
+      console.error(error)
+      store.dispatch('showMessage', {
+        title: $gettext('Failed to create file'),
+        status: 'danger'
+      })
+    }
+  }
 
   const loadIndicatorsForNewFile = computed(() => {
     return (
