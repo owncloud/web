@@ -136,7 +136,7 @@ export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } 
     let defaultName = isFolder ? $gettext('New folder') : $gettext('New file') + `.${ext}`
 
     if (unref(files).some((f) => f.name === defaultName)) {
-      defaultName = resolveFileNameDuplicate(defaultName, isFolder ? '' : ext, files)
+      defaultName = resolveFileNameDuplicate(defaultName, isFolder ? '' : ext, unref(files))
     }
 
     if (!areFileExtensionsShown) {
