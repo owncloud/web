@@ -28,7 +28,7 @@ export class Link {
   }
 
   roleDisplayText = {
-    internal: 'Internal',
+    internal: 'Only for invited people',
     viewer: 'Anyone with the link can view',
     contributor: 'Anyone with the link can upload',
     editor: 'Anyone with the link can edit',
