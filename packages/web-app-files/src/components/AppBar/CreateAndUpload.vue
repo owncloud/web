@@ -136,9 +136,8 @@
 
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { join } from 'path'
 
-import { useFileActions, EDITOR_MODE_CREATE } from '../../composables/actions/files/useFileActions'
+import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import {
   useActiveLocation,
@@ -170,15 +169,10 @@ import {
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { extractNameWithoutExtension, Resource, SpaceResource } from 'web-client/src/helpers'
-import { resolveFileNameDuplicate, ResourcesUpload } from '../../helpers/resource'
-import { WebDAV } from 'web-client/src/webdav'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { urlJoin } from 'web-client/src/utils'
-import { stringify } from 'qs'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { ResourcesUpload } from '../../helpers/resource'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
-import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({

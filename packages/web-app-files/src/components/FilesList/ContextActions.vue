@@ -31,9 +31,7 @@ import {
   useFileActionsShowEditTags,
   useFileActionsNavigate,
   useFileActionsFavorite,
-  useFileActionsCreateSpaceFromResource,
-  useFileActionsCreateNewFolder,
-  useFileActionsCreateNewFile
+  useFileActionsCreateSpaceFromResource
 } from '../../composables/actions/files'
 import { FileActionOptions } from 'web-pkg/src/composables/actions'
 

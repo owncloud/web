@@ -136,7 +136,7 @@ export const useFileActionsCreateNewFile = ({
         path
       })
 
-      if (loadIndicatorsForNewFile) {
+      if (loadIndicatorsForNewFile.value) {
         resource.indicators = getIndicators({ resource, ancestorMetaData: unref(ancestorMetaData) })
       }
 
@@ -172,7 +172,7 @@ export const useFileActionsCreateNewFile = ({
     const checkInputValue = (value) => {
       store.dispatch(
         'setModalInputErrorMessage',
-        checkNewFileName(areFileExtensionsShown ? value : `${value}.${extension}`)
+        checkNewFileName(areFileExtensionsShown.value ? value : `${value}.${extension}`)
       )
     }
     let defaultName = $gettext('New file') + `.${extension}`
@@ -181,14 +181,14 @@ export const useFileActionsCreateNewFile = ({
       defaultName = resolveFileNameDuplicate(defaultName, extension, unref(files))
     }
 
-    if (!areFileExtensionsShown) {
+    if (!areFileExtensionsShown.value) {
       defaultName = extractNameWithoutExtension({ name: defaultName, extension } as any)
     }
 
     // Sets action to be executed after creation of the file
     newFileAction.value = openAction
 
-    const inputSelectionRange = !areFileExtensionsShown
+    const inputSelectionRange = !areFileExtensionsShown.value
       ? null
       : [0, defaultName.length - (extension.length + 1)]
 
@@ -201,14 +201,14 @@ export const useFileActionsCreateNewFile = ({
       inputValue: defaultName,
       inputLabel: $gettext('File name'),
       inputError: checkNewFileName(
-        areFileExtensionsShown ? defaultName : `${defaultName}.${extension}`
+        areFileExtensionsShown.value ? defaultName : `${defaultName}.${extension}`
       ),
       inputSelectionRange,
       onCancel: () => store.dispatch('hideModal'),
       onConfirm: addAppProviderFile
         ? addAppProviderFileFunc
         : (fileName) => {
-            if (!areFileExtensionsShown) {
+            if (!areFileExtensionsShown.value) {
               fileName = `${fileName}.${extension}`
             }
             addNewFile(fileName)
