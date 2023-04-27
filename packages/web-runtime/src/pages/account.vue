@@ -311,7 +311,7 @@ export default defineComponent({
     const updateDisableEmailNotifications = async (option) => {
       try {
         await saveValue({
-          identifier: 'disable email notifications',
+          identifier: 'disable-email-notifications',
           valueOptions: { boolValue: !option }
         })
         disableEmailNotificationsValue.value = option
@@ -342,7 +342,7 @@ export default defineComponent({
           : unref(languageOptions)?.find((o) => o.default)
 
         const disableEmailNotificationsConfiguration = unref(valuesList)?.find(
-          (cV) => cV.identifier.setting === 'disable email notifications'
+          (cV) => cV.identifier.setting === 'disable-email-notifications'
         )
 
         disableEmailNotificationsValue.value = disableEmailNotificationsConfiguration

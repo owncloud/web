@@ -191,7 +191,7 @@ describe('account page', () => {
                   },
                   {
                     id: '33ffb5d6-cd07-4dc0-afb0-84f7559ae438',
-                    name: 'disable email notifications',
+                    name: 'disable-email-notifications',
                     boolValue: { label: 'disable notifications' }
                   }
                 ]
@@ -215,7 +215,7 @@ describe('account page', () => {
                 identifier: {
                   extension: 'ocis-accounts',
                   bundle: 'profile',
-                  setting: 'disable email notifications'
+                  setting: 'disable-email-notifications'
                 },
                 value: {
                   id: '204d0e71-403c-42c5-b343-52a4021b32be',
@@ -266,7 +266,7 @@ describe('account page', () => {
                   },
                   {
                     id: '33ffb5d6-cd07-4dc0-afb0-84f7559ae438',
-                    name: 'disable email notifications',
+                    name: 'disable-email-notifications',
                     boolValue: { label: 'disable notifications' }
                   }
                 ]
@@ -290,7 +290,7 @@ describe('account page', () => {
                 identifier: {
                   extension: 'ocis-accounts',
                   bundle: 'profile',
-                  setting: 'disable email notifications'
+                  setting: 'disable-email-notifications'
                 },
                 value: {
                   id: '204d0e71-403c-42c5-b343-52a4021b32be',
