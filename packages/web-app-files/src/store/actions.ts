@@ -429,26 +429,28 @@ export default {
     context.commit('SET_VERSIONS', response)
   },
 
-  addLink(context, { path, client, params, storageId }) {
+  addLink({ commit, dispatch, getters, rootGetters, state }, { path, client, params, storageId }) {
     return new Promise((resolve, reject) => {
       client.shares
         .shareFileWithLink(path, { ...params, spaceRef: storageId })
         .then(async (data) => {
-          const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
-          if (context.state.sharesLoading) {
-            await Promise.resolve(context.state.sharesLoading)
+          const link = buildShare(data.shareInfo, null, allowSharePermissions(rootGetters))
+          if (state.sharesLoading) {
+            await Promise.resolve(state.sharesLoading)
           }
           const indirect =
-            !!context.getters.highlightedFile?.path && path !== context.getters.highlightedFile.path
-          context.commit('OUTGOING_SHARES_UPSERT', { ...link, outgoing: true, indirect })
-          context.dispatch('updateCurrentFileShareTypes')
+            !!getters.highlightedFile?.path &&
+            path !== getters.highlightedFile.path &&
+            !isProjectSpaceResource(getters.highlightedFile)
+          commit('OUTGOING_SHARES_UPSERT', { ...link, outgoing: true, indirect })
+          dispatch('updateCurrentFileShareTypes')
           if (indirect) {
             // we might need to update the share types for the ancestor resource as well
-            const ancestor = context.state.ancestorMetaData[path] ?? null
+            const ancestor = state.ancestorMetaData[path] ?? null
             if (ancestor) {
               const { shareTypes } = ancestor
               if (!shareTypes.includes(ShareTypes.link.value)) {
-                context.commit('UPDATE_ANCESTOR_FIELD', {
+                commit('UPDATE_ANCESTOR_FIELD', {
                   path: ancestor.path,
                   field: 'shareTypes',
                   value: [...shareTypes, ShareTypes.link.value]
@@ -456,7 +458,7 @@ export default {
               }
             }
           }
-          context.commit('LOAD_INDICATORS', path)
+          commit('LOAD_INDICATORS', path)
           resolve(link)
         })
         .catch((e) => {
