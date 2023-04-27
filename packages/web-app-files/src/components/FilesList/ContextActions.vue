@@ -31,9 +31,11 @@ import {
   useFileActionsShowEditTags,
   useFileActionsNavigate,
   useFileActionsFavorite,
-  useFileActionsCreateSpaceFromResource
+  useFileActionsCreateSpaceFromResource,
+  useFileActionsCreateNewFolder
 } from '../../composables/actions/files'
 import { FileActionOptions } from 'web-pkg/src/composables/actions'
+import { create } from 'domain'
 
 export default defineComponent({
   name: 'ContextActions',
@@ -49,6 +51,7 @@ export default defineComponent({
 
     const { editorActions, loadExternalAppActions } = useFileActions()
 
+    const { actions: createNewFolder } = useFileActionsCreateNewFolder({ store })
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
     const { actions: createQuickLinkActions } = useFileActionsCreateQuickLink({ store })
@@ -107,6 +110,7 @@ export default defineComponent({
 
     const menuItemsActions = computed(() => {
       return [
+        ...unref(createNewFolder),
         ...unref(downloadArchiveActions),
         ...unref(downloadFileActions),
         ...unref(deleteActions),
