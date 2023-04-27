@@ -186,7 +186,7 @@ export default defineComponent({
     },
     inviteLabel() {
       if (this.selectedRole.hasCustomPermissions) {
-        return this.$gettext('Invite with custom permissions')
+        return this.$gettext('Custom permissions')
       } else if (this.selectedRole.permissions().includes(SharePermissions.denied)) {
         return this.$gettext('Deny access')
       } else {
