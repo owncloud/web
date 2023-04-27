@@ -12,7 +12,7 @@ import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 import { EDITOR_MODE_CREATE, useFileActions } from './useFileActions'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src'
-import { stringify } from 'querystring'
+import { stringify } from 'qs'
 
 export const useFileActionsCreateNewFile = ({
   store,
