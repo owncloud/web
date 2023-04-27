@@ -438,8 +438,24 @@ export default {
           if (context.state.sharesLoading) {
             await Promise.resolve(context.state.sharesLoading)
           }
-          context.commit('OUTGOING_SHARES_UPSERT', { ...link, outgoing: true })
+          const indirect =
+            !!context.getters.highlightedFile?.path && path !== context.getters.highlightedFile.path
+          context.commit('OUTGOING_SHARES_UPSERT', { ...link, outgoing: true, indirect })
           context.dispatch('updateCurrentFileShareTypes')
+          if (indirect) {
+            // we might need to update the share types for the ancestor resource as well
+            const ancestor = context.state.ancestorMetaData[path] ?? null
+            if (ancestor) {
+              const { shareTypes } = ancestor
+              if (!shareTypes.includes(ShareTypes.link.value)) {
+                context.commit('UPDATE_ANCESTOR_FIELD', {
+                  path: ancestor.path,
+                  field: 'shareTypes',
+                  value: [...shareTypes, ShareTypes.link.value]
+                })
+              }
+            }
+          }
           context.commit('LOAD_INDICATORS', path)
           resolve(link)
         })
