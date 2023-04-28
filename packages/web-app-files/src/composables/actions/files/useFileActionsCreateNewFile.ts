@@ -237,7 +237,6 @@ export const useFileActionsCreateNewFile = ({
         ext: newFileHandler.ext
       })
     }
-    console.log('mimetypesAllowedForCreation', mimetypesAllowedForCreation)
     for (const mimeType of mimetypesAllowedForCreation || []) {
       const openAction = false
       const addAppProviderFile = true
