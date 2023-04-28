@@ -61,7 +61,7 @@ export default defineComponent({
         }
       } catch (e) {
         console.error(e)
-        if (e.statusCode === 401) {
+        if (e.response?.status === 401) {
           return authService.handleAuthError(unref(route))
         }
         hasError.value = true
