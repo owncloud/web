@@ -17,18 +17,18 @@
         <oc-list class="oc-tiles-sort-list">
           <li v-for="(field, index) in sortFields" :key="index" class="oc-my-xs">
             <oc-button
-              appearance="raw"
               justify-content="space-between"
               class="oc-tiles-sort-list-item oc-p-s oc-width-1-1"
               :class="{
                 'oc-background-primary-gradient': isSortFieldSelected(field),
                 selected: isSortFieldSelected(field)
               }"
-              :variation="isSortFieldSelected(field) ? 'inverse' : 'passive'"
+              :appearance="isSortFieldSelected(field) ? 'raw-inverse' : 'raw'"
+              :variation="isSortFieldSelected(field) ? 'primary' : 'passive'"
               @click="selectSorting(field)"
             >
               <span v-text="$gettext(field.label)" />
-              <oc-icon v-if="isSortFieldSelected(field)" name="check" />
+              <oc-icon v-if="isSortFieldSelected(field)" name="check" variation="inherit" />
             </oc-button>
           </li>
         </oc-list>
@@ -420,21 +420,11 @@ export default defineComponent({
   }
 
   &-sort-list {
-    &:hover .oc-tiles-sort-list-item.selected:not(:hover),
-    &:focus .oc-tiles-sort-list-item.selected:not(:focus) {
-      color: var(--oc-color-swatch-passive-default);
-    }
-
     &-item {
       &:hover,
       &:focus {
         background-color: var(--oc-color-background-hover);
-        color: var(--oc-color-swatch-passive-default);
         text-decoration: none;
-      }
-
-      &.selected {
-        color: var(--oc-color-swatch-passive-contrast) !important;
       }
     }
   }
