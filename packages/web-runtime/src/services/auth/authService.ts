@@ -7,6 +7,7 @@ import { RouteLocation, Router } from 'vue-router'
 import {
   extractPublicLinkToken,
   isAnonymousContext,
+  isIdpContext,
   isPublicLinkContext,
   isUserContext
 } from '../../router'
@@ -81,6 +82,8 @@ export class AuthService {
     }
 
     if (!isAnonymousContext(this.router, to)) {
+      const fetchUserData = !isIdpContext(this.router, to)
+
       if (!this.userManager.areEventHandlersRegistered) {
         this.userManager.events.addAccessTokenExpired((...args): void => {
           const handleExpirationError = () => {
@@ -118,7 +121,7 @@ export class AuthService {
             `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
           )
           try {
-            await this.userManager.updateContext(user.access_token)
+            await this.userManager.updateContext(user.access_token, fetchUserData)
           } catch (e) {
             console.error(e)
             await this.handleAuthError(unref(this.router.currentRoute))
@@ -157,7 +160,7 @@ export class AuthService {
       const accessToken = await this.userManager.getAccessToken()
       if (accessToken) {
         try {
-          await this.userManager.updateContext(accessToken)
+          await this.userManager.updateContext(accessToken, fetchUserData)
         } catch (e) {
           console.error(e)
           await this.handleAuthError(unref(this.router.currentRoute))

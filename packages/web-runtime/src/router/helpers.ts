@@ -39,7 +39,7 @@ export const buildUrl = (pathname) => {
 }
 
 /**
- * Checks if the `to` route or the route it was reached from (i.e. the `contextRoute`) needs authentication from the IDP.
+ * Checks if the `to` route or the route it was reached from (i.e. the `contextRoute`) needs authentication from the IdP and a successfully fetched ownCloud user.
  *
  * @param router {Router}
  * @param to {Route}
@@ -58,6 +58,25 @@ export const isUserContext = (router: Router, to: RouteLocation): boolean => {
   return (
     !contextRoute ||
     getRouteMeta({ meta: contextRoute.meta } as RouteLocation).authContext === 'user'
+  )
+}
+
+/**
+ * Checks if the `to` route or the route it was reached from (i.e. the `contextRoute`) needs authentication from the IdP but should not try to fetch an ownCloud user.
+ *
+ * @param router {Router}
+ * @param to {Route}
+ * @returns {boolean}
+ */
+export const isIdpContext = (router: Router, to: RouteLocation): boolean => {
+  const meta = getRouteMeta(to)
+  if (meta.authContext === 'idp') {
+    return true
+  }
+
+  const contextRoute = getContextRoute(router, to)
+  return (
+    contextRoute && getRouteMeta({ meta: contextRoute.meta } as RouteLocation).authContext === 'idp'
   )
 }
 

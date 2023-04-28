@@ -129,7 +129,7 @@ export class UserManager extends OidcUserManager {
     }
   }
 
-  updateContext(accessToken: string): Promise<void> {
+  updateContext(accessToken: string, fetchUserData: boolean): Promise<void> {
     const userKnown = !!this.store.getters.user.id
     const accessTokenChanged = this.store.getters['runtime/auth/accessToken'] !== accessToken
     if (!accessTokenChanged) {
@@ -138,6 +138,11 @@ export class UserManager extends OidcUserManager {
     this.store.commit('runtime/auth/SET_ACCESS_TOKEN', accessToken)
 
     this.updateAccessTokenPromise = (async () => {
+      if (!fetchUserData) {
+        this.store.commit('runtime/auth/SET_IDP_CONTEXT_READY', true)
+        return
+      }
+
       const settings = await this.fetchSettings()
       setCurrentLanguage({
         language: this.language,
@@ -147,7 +152,7 @@ export class UserManager extends OidcUserManager {
       this.initializeOwnCloudSdk(accessToken)
 
       if (!userKnown) {
-        await this.fetchUserInfo(settings)
+        await this.fetchUserInfo()
         await this.updateUserAbilities(this.store.getters.user)
         this.store.commit('runtime/auth/SET_USER_CONTEXT_READY', true)
       }
@@ -176,7 +181,7 @@ export class UserManager extends OidcUserManager {
     this.clientService.owncloudSdk.init(options)
   }
 
-  private async fetchUserInfo(settings): Promise<void> {
+  private async fetchUserInfo(): Promise<void> {
     const [login] = await Promise.all([
       this.clientService.owncloudSdk.getCurrentUser(),
       this.fetchCapabilities()

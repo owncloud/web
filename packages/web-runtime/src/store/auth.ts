@@ -1,5 +1,6 @@
 const state = {
   accessToken: null,
+  idpContextReady: false,
   userContextReady: false,
   publicLinkToken: null,
   publicLinkPassword: null,
@@ -8,6 +9,7 @@ const state = {
 
 const getters = {
   accessToken: (state) => state.accessToken,
+  isIdpContextReady: (state) => state.idpContextReady,
   isUserContextReady: (state) => state.userContextReady,
   publicLinkToken: (state) => state.publicLinkToken,
   publicLinkPassword: (state) => state.publicLinkPassword,
@@ -17,6 +19,9 @@ const getters = {
 const mutations = {
   SET_ACCESS_TOKEN(state, accessToken) {
     state.accessToken = accessToken
+  },
+  SET_IDP_CONTEXT_READY(state, ready) {
+    state.idpContextReady = ready
   },
   SET_USER_CONTEXT_READY(state, ready) {
     state.userContextReady = ready

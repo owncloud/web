@@ -7,7 +7,7 @@ export type LocationQuery = Dictionary<QueryValue>
 
 export type ParamValue = string
 
-export const authContextValues = ['anonymous', 'user', 'publicLink', 'hybrid'] as const
+export const authContextValues = ['anonymous', 'user', 'idp', 'publicLink', 'hybrid'] as const
 export type AuthContext = typeof authContextValues[number]
 
 export interface WebRouteMeta extends RouteMeta {

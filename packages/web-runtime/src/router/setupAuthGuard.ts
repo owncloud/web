@@ -1,4 +1,4 @@
-import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from './index'
+import { extractPublicLinkToken, isIdpContext, isPublicLinkContext, isUserContext } from './index'
 import { Router, RouteLocation } from 'vue-router'
 import { contextRouteNameKey, queryItemAsString } from 'web-pkg/src/composables'
 import { authService } from '../services/auth/authService'
@@ -38,6 +38,14 @@ export const setupAuthGuard = (router: Router) => {
       }
       return true
     }
+
+    if (isIdpContext(router, to)) {
+      if (!store.getters['runtime/auth/isIdpContextReady']) {
+        return { path: '/login', query: { redirectUrl: to.fullPath } }
+      }
+      return true
+    }
+
     return true
   })
   router.afterEach((to) => {

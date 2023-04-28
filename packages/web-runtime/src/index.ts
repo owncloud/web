@@ -102,6 +102,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   store.watch(
     (state, getters) =>
       getters['runtime/auth/isUserContextReady'] ||
+      getters['runtime/auth/isIdpContextReady'] ||
       getters['runtime/auth/isPublicLinkContextReady'],
     async (newValue, oldValue) => {
       if (!newValue || newValue === oldValue) {
@@ -112,6 +113,19 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     },
     {
       immediate: true
+    }
+  )
+
+  store.watch(
+    (state, getters) => {
+      return getters['runtime/auth/isIdpContextReady']
+    },
+    async (idpContextReady) => {
+      if (!idpContextReady) {
+        return
+      }
+      // fake spaces being loaded so that the ApplicationLayout doesn't stay in loading state
+      store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
     }
   )
 
