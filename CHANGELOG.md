@@ -1365,6 +1365,7 @@ Details
 
    https://github.com/owncloud/web/issues/8883
    https://github.com/owncloud/web/pull/8884
+   https://github.com/owncloud/web/pull/8950
 
 * Enhancement - Rename "Quicklink" to "link": [#8898](https://github.com/owncloud/web/pull/8898)
 
