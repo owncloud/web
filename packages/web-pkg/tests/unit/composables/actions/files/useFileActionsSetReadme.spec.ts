@@ -100,7 +100,6 @@ describe('setReadme', () => {
           await nextTick()
           await nextTick()
           await nextTick()
-
           expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
             expect.anything(),
             expect.not.objectContaining({ status: 'danger' })
