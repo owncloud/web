@@ -20,10 +20,10 @@ exports[`Projects view different files view states lists all available project s
               <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
                 <ul class="oc-list oc-my-rm oc-mx-rm oc-tiles-sort-list">
                   <li class="oc-my-xs">
-                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-inverse oc-button-inverse-raw oc-tiles-sort-list-item oc-p-s oc-width-1-1 oc-background-primary-gradient selected" type="button">
+                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-primary oc-button-primary-raw-inverse oc-tiles-sort-list-item oc-p-s oc-width-1-1 oc-background-primary-gradient selected" type="button">
                       <!-- @slot Content of the button -->
                       <span>A-Z</span>
-                      <span class="oc-icon oc-icon-m oc-icon-passive">
+                      <span class="oc-icon oc-icon-m oc-icon-inherit">
                         <!---->
                       </span>
                     </button>
