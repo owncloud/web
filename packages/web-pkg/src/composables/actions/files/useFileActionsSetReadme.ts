@@ -3,6 +3,8 @@ import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { Drive } from 'web-client/src/generated'
+import { buildSpace } from 'web-client/src/helpers'
 
 export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -12,16 +14,29 @@ export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) 
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     try {
-      const { owncloudSdk } = clientService
+      const { owncloudSdk, graphAuthenticated, webdav } = clientService
       const fileContent = await owncloudSdk.files.getFileContents(resources[0].webDavPath)
-      const fileMetaData = await owncloudSdk.files.putFileContents(
-        `/spaces/${space.id}/.space/readme.md`,
-        fileContent
+      await owncloudSdk.files.putFileContents(`/spaces/${space.id}/.space/readme.md`, fileContent)
+      const file = await webdav.getFileInfo(space, { path: '.space/readme.md' })
+
+      const { data: updatedDriveData } = await graphAuthenticated.drives.updateDrive(
+        space.id as string,
+        {
+          special: [
+            {
+              specialFolder: {
+                name: 'readme'
+              },
+              id: file.id
+            }
+          ]
+        } as Drive,
+        {}
       )
       store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
         id: space.id,
         field: 'spaceReadmeData',
-        value: { ...space.spaceReadmeData, ...{ etag: fileMetaData?.ETag } }
+        value: buildSpace(updatedDriveData).spaceReadmeData
       })
       store.dispatch('showMessage', {
         title: $gettext('Space description was set successfully')
