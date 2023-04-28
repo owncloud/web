@@ -19,6 +19,9 @@ const routes = () => [
     path: '/',
     redirect: () => {
       return { name: 'webfinger-resolve' }
+    },
+    meta: {
+      authContext: 'anonymous'
     }
   },
   {
@@ -26,7 +29,7 @@ const routes = () => [
     name: 'webfinger-resolve',
     component: Resolve,
     meta: {
-      authContext: 'user',
+      authContext: 'idp',
       title: $gettext('Resolve destination'),
       entryPoint: true
     }

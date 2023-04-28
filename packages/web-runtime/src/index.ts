@@ -102,6 +102,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   store.watch(
     (state, getters) =>
       getters['runtime/auth/isUserContextReady'] ||
+      getters['runtime/auth/isIdpContextReady'] ||
       getters['runtime/auth/isPublicLinkContextReady'],
     async (newValue, oldValue) => {
       if (!newValue || newValue === oldValue) {
