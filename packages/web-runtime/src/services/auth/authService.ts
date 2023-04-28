@@ -220,7 +220,7 @@ export class AuthService {
         query: { redirectUrl: route.fullPath }
       })
     }
-    if (isUserContext(this.router, route)) {
+    if (isUserContext(this.router, route) || isIdpContext(this.router, route)) {
       await this.userManager.removeUser('authError')
       return
     }

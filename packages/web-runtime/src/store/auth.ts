@@ -38,6 +38,7 @@ const mutations = {
 const actions = {
   clearUserContext({ commit }) {
     commit('SET_ACCESS_TOKEN', null)
+    commit('SET_IDP_CONTEXT_READY', false)
     commit('SET_USER_CONTEXT_READY', false)
   },
   clearPublicLinkContext({ commit }) {

@@ -23,9 +23,16 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, unref, watch } from 'vue'
-import { useClientService, useConfigurationManager, useLoadingService, useRouteMeta } from 'web-pkg'
+import {
+  useClientService,
+  useConfigurationManager,
+  useLoadingService,
+  useRoute,
+  useRouteMeta
+} from 'web-pkg'
 import { OwnCloudServer, WebfingerDiscovery } from 'web-app-webfinger/src/discovery'
 import { useGettext } from 'vue3-gettext'
+import { useAuthService } from 'web-pkg/src/composables/authContext/useAuthService'
 
 export default defineComponent({
   name: 'WebfingerResolve',
@@ -33,6 +40,8 @@ export default defineComponent({
     const configurationManager = useConfigurationManager()
     const clientService = useClientService()
     const loadingService = useLoadingService()
+    const authService = useAuthService()
+    const route = useRoute()
     const { $gettext } = useGettext()
 
     const title = useRouteMeta('title', '')
@@ -52,6 +61,9 @@ export default defineComponent({
         }
       } catch (e) {
         console.error(e)
+        if (e.statusCode === 401) {
+          return authService.handleAuthError(unref(route))
+        }
         hasError.value = true
       }
     })
