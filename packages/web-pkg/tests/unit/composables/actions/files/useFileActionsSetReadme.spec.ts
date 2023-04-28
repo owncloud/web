@@ -7,12 +7,12 @@ import {
   defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation,
-  getComposableWrapper
+  getComposableWrapper,
+  mockAxiosResolve
 } from 'web-test-helpers'
 import { nextTick, unref } from 'vue'
 
 describe('setReadme', () => {
-  afterEach(() => jest.clearAllMocks())
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
       const { wrapper } = getWrapper({
@@ -98,7 +98,13 @@ describe('setReadme', () => {
 
           await nextTick()
           await nextTick()
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          await nextTick()
+          await nextTick()
+
+          expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.not.objectContaining({ status: 'danger' })
+          )
         }
       })
     })
@@ -108,7 +114,7 @@ describe('setReadme', () => {
 
       const space = mock<SpaceResource>({ id: '1' })
       const { wrapper } = getWrapper({
-        resolveGetFileContents: true,
+        resolveGetFileContents: false,
         space,
         setup: async ({ actions }, { storeOptions }) => {
           unref(actions)[0].handler({
@@ -122,8 +128,10 @@ describe('setReadme', () => {
           })
 
           await nextTick()
-          await nextTick()
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({ status: 'danger' })
+          )
         }
       })
     })
@@ -159,6 +167,30 @@ function getWrapper({
 
   mocks.$clientService.owncloudSdk.files.putFileContents.mockImplementation(() =>
     Promise.resolve({ ETag: '60c7243c2e7f1' })
+  )
+
+  mocks.$clientService.webdav.getFileInfo.mockImplementation(() =>
+    Promise.resolve({ id: '1', path: '/space.readme.md' })
+  )
+
+  mocks.$clientService.graphAuthenticated.drives.updateDrive.mockImplementation(() =>
+    mockAxiosResolve({
+      id: '1',
+      name: 'space',
+      special: [
+        {
+          eTag: '6721ccbd5754e8b46ddccebad12fa23f',
+          file: {
+            mimeType: 'text/markdown'
+          },
+          id: '1',
+          name: 'readme.md',
+          specialFolder: {
+            name: 'readme'
+          }
+        }
+      ]
+    })
   )
 
   const storeOptions = {
