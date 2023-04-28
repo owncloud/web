@@ -25,7 +25,7 @@
       >
         <oc-list id="create-list">
           <li class="create-list-folder oc-menu-item-hover">
-            <oc-button id="new-folder-btn" appearance="raw" @click="createNewFolder[0].handler">
+            <oc-button id="new-folder-btn" appearance="raw" @click="createNewFolderAction">
               <oc-resource-icon :resource="folderIconResource" size="medium" />
               <span v-text="$gettext('Folder')" />
             </oc-button>
@@ -53,7 +53,9 @@
               <oc-button appearance="raw" @click="mimeTypeAction.handler">
                 <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
                 <span
-                  v-text="$gettextInterpolate($gettext('%{name}'), { name: mimeTypeAction.name })"
+                  v-text="
+                    $gettextInterpolate($gettext('%{name}'), { name: mimeTypeAction.label() })
+                  "
                 />
               </oc-button>
             </li>
@@ -70,7 +72,7 @@
           variation="primary"
           :aria-label="newButtonAriaLabel"
           :disabled="uploadOrFileCreationBlocked"
-          @click="createNewFolder[0].handler"
+          @click="createNewFolderAction"
         >
           <oc-icon name="resource-type-folder" />
           <span v-if="!hideButtonLabels" v-text="$gettext('New Folder')" />
@@ -205,24 +207,25 @@ export default defineComponent({
     const clientService = useClientService()
     const store = useStore()
     const { $gettext } = useGettext()
-    const { actions: createNewFolder } = useFileActionsCreateNewFolder({ store })
 
     let filesSelectedSub
     let uploadCompletedSub
 
-    // use all new file handler actions
-    const newFileHandlers = store.getters['newFileHandlers']
+    const { actions: createNewFolder } = useFileActionsCreateNewFolder({ store })
+    const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
+
+    const newFileHandlers = computed(() => store.getters.newFileHandlers)
 
     const { actions: createNewFileActions } = useFileActionsCreateNewFile({
       store,
-      newFileHandlers
+      newFileHandlers: unref(newFileHandlers)
     })
+
     const fileActions = computed(() => {
       return unref(createNewFileActions)
     })
 
     const mimetypesAllowedForCreation = computed(() => {
-      // we can't use `mapGetters` here because the External app doesn't exist in all deployments
       const mimeTypes = store.getters['External/mimeTypes']
       if (!mimeTypes) {
         return []
@@ -230,14 +233,13 @@ export default defineComponent({
       return mimeTypes.filter((mimetype) => mimetype.allow_creation) || []
     })
 
-    // FIXME: Same like above, need to add mimetypesAllowedForCreation
-    // const { actions: mimeTypeFileActions } = useFileActionsCreateNewFile({
-    //   store,
-    //   mimetypesAllowedForCreation
-    // })
+    const { actions: createNewFileMimeTypeActions } = useFileActionsCreateNewFile({
+      store,
+      mimetypesAllowedForCreation: unref(mimetypesAllowedForCreation)
+    })
+
     const mimeTypeActions = computed(() => {
-      return []
-      // return unref(mimeTypeFileActions)
+      return unref(createNewFileMimeTypeActions)
     })
 
     const currentFolder = computed(() => {
@@ -293,7 +295,8 @@ export default defineComponent({
       fileActions,
       mimeTypeActions,
       createNewFolder,
-      mimetypesAllowedForCreation
+      mimetypesAllowedForCreation,
+      createNewFolderAction
     }
   },
   data: () => ({

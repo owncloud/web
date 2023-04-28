@@ -220,11 +220,9 @@ export const useFileActionsCreateNewFile = ({
 
   const actions = computed((): FileAction[] => {
     const actions = []
-    for (const newFileHandler of newFileHandlers) {
+    for (const newFileHandler of newFileHandlers || []) {
       const addAppProviderFile = false
       const openAction = newFileHandler.action
-      console.log(newFileHandler)
-
       actions.push({
         name: 'create-new-file',
         icon: 'add',
@@ -239,8 +237,24 @@ export const useFileActionsCreateNewFile = ({
         ext: newFileHandler.ext
       })
     }
-
-    // TODO: Same for mimetypesAllowedForCreation
+    console.log('mimetypesAllowedForCreation', mimetypesAllowedForCreation)
+    for (const mimeType of mimetypesAllowedForCreation || []) {
+      const openAction = false
+      const addAppProviderFile = true
+      actions.push({
+        name: 'create-new-file',
+        icon: 'add',
+        handler: (args) => handler(args, mimeType.ext, addAppProviderFile, openAction),
+        label: () => mimeType.name,
+        isEnabled: ({ resources }) => {
+          return true
+        },
+        canBeDefault: true,
+        componentType: 'button',
+        class: 'oc-files-actions-create-new-file',
+        ext: mimeType.ext
+      })
+    }
 
     return actions
   })
