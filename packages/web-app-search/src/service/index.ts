@@ -1,1 +1,1 @@
-export { default as providerStore } from './providerStore'
+export * from './providerStore'

@@ -3,6 +3,8 @@ import { createLocationCommon } from 'web-app-files/src/router'
 import flushPromises from 'flush-promises'
 import { defineComponent } from 'vue'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
+import { ProviderStore } from 'web-app-search/src/service/providerStore'
 
 const component = defineComponent({
   emits: ['click', 'keyup'],
@@ -255,9 +257,9 @@ function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } 
       attachTo: document.body,
       data: () => {
         return {
-          providerStore: {
+          providerStore: mock<ProviderStore>({
             availableProviders: [providerFiles, providerContacts]
-          },
+          }),
           ...data
         }
       },

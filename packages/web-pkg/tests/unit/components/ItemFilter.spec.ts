@@ -153,7 +153,7 @@ function getWrapper({ props = {}, initialQuery = '' }: any = {}) {
         ...props
       },
       slots: {
-        item: function (data) {
+        item(data: any) {
           return props.displayNameAttribute ? data.item[props.displayNameAttribute] : data.item.name
         }
       },
