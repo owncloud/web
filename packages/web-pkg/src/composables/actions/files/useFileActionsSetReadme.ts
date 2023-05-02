@@ -16,6 +16,13 @@ export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) 
     try {
       const { owncloudSdk, graphAuthenticated, webdav } = clientService
       const fileContent = await owncloudSdk.files.getFileContents(resources[0].webDavPath)
+
+      try {
+        await webdav.getFileInfo(space, { path: '.space' })
+      } catch (_) {
+        await webdav.createFolder(space, { path: '.space' })
+      }
+
       await owncloudSdk.files.putFileContents(`/spaces/${space.id}/.space/readme.md`, fileContent)
       const file = await webdav.getFileInfo(space, { path: '.space/readme.md' })
 

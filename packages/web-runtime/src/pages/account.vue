@@ -77,6 +77,7 @@
         <dd data-testid="language">
           <oc-select
             v-if="languageOptions"
+            :placeholder="$gettext('Please choose...')"
             :model-value="selectedLanguageValue"
             :clearable="false"
             :options="languageOptions"
@@ -339,7 +340,7 @@ export default defineComponent({
           ? unref(languageOptions)?.find(
               (lO) => lO.value === languageConfiguration.value?.listValue?.values?.[0]?.stringValue
             )
-          : unref(languageOptions)?.find((o) => o.default)
+          : unref(languageOptions)?.find((o) => o.value === language.current)
 
         const disableEmailNotificationsConfiguration = unref(valuesList)?.find(
           (cV) => cV.identifier.setting === 'disable-email-notifications'
