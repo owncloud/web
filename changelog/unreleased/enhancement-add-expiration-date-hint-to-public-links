@@ -1,6 +1,0 @@
-Enhancement: Add expiration date hint to public links
-
-We've added a expiration date text hint to public links.
-
-https://github.com/owncloud/web/pull/8866
-https://github.com/owncloud/web/issues/8211
