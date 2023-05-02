@@ -11,6 +11,7 @@ import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { Drive } from 'web-client/src/generated'
+import { buildSpace } from 'web-client/src/helpers'
 
 export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -25,9 +26,15 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
     const storageId = space?.id as string
     const sourcePath = resources[0].path
     const destinationPath = `/.space/${resources[0].name}`
-    const { copyFiles, getFileInfo } = clientService.webdav
+    const { copyFiles, getFileInfo, createFolder } = clientService.webdav
 
     try {
+      try {
+        await getFileInfo(space, { path: '.space' })
+      } catch (_) {
+        await createFolder(space, { path: '.space' })
+      }
+
       if (sourcePath !== destinationPath) {
         await copyFiles(
           space,
@@ -37,8 +44,10 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
           { overwrite: true }
         )
       }
+
       const file = await getFileInfo(space, { path: destinationPath })
-      const { data } = await graphClient.drives.updateDrive(
+
+      const { data: updatedDriveData } = await graphClient.drives.updateDrive(
         storageId,
         {
           special: [
@@ -56,7 +65,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
       store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
         id: storageId,
         field: 'spaceImageData',
-        value: data.special.find((special) => special.specialFolder.name === 'image')
+        value: buildSpace(updatedDriveData).spaceImageData
       })
 
       store.dispatch('showMessage', {
