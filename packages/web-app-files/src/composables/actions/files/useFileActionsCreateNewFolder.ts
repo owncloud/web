@@ -45,8 +45,7 @@ export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } 
     const exists = unref(files).find((file) => file.name === folderName)
 
     if (exists) {
-      const translated = $gettext('%{name} already exists')
-      return $gettext(translated, { name: folderName }, true)
+      return $gettext('%{name} already exists', { name: folderName }, true)
     }
 
     return null
