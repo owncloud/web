@@ -79,6 +79,7 @@ export default defineComponent({
 }
 .vc-day {
   color: var(--oc-color-text-default) !important;
+  font-weight: var(--oc-font-weight-bold);
 }
 
 .vc-highlights {
@@ -92,6 +93,9 @@ export default defineComponent({
 
 .vc-day-content.is-disabled {
   color: var(--oc-color-text-muted) !important;
+  background: none;
+  cursor: not-allowed;
+  font-weight: var(--oc-font-weight-extralight);
 }
 </style>
 <docs>
