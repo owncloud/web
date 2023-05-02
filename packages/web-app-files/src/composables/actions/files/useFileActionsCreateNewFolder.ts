@@ -137,6 +137,7 @@ export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } 
 
   return {
     actions,
-    checkNewFolderName
+    checkNewFolderName,
+    addNewFolder
   }
 }
