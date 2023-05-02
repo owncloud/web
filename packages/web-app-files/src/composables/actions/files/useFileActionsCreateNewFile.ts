@@ -258,6 +258,7 @@ export const useFileActionsCreateNewFile = ({
 
   return {
     actions,
-    checkNewFileName
+    checkNewFileName,
+    addNewFile
   }
 }
