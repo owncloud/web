@@ -67,8 +67,7 @@ export const useFileActionsCreateNewFile = ({
     const exists = unref(files).find((file) => file.name === fileName)
 
     if (exists) {
-      const translated = $gettext('%{name} already exists')
-      return $gettext(translated, { name: fileName }, true)
+      return $gettext('%{name} already exists', { name: fileName }, true)
     }
 
     return null
@@ -221,12 +220,11 @@ export const useFileActionsCreateNewFile = ({
   const actions = computed((): FileAction[] => {
     const actions = []
     for (const newFileHandler of newFileHandlers || []) {
-      const addAppProviderFile = false
       const openAction = newFileHandler.action
       actions.push({
         name: 'create-new-file',
         icon: 'add',
-        handler: (args) => handler(args, newFileHandler.ext, addAppProviderFile, openAction),
+        handler: (args) => handler(args, newFileHandler.ext, !openAction, openAction),
         label: () => newFileHandler.menuTitle($gettext),
         isEnabled: ({ resources }) => {
           return true

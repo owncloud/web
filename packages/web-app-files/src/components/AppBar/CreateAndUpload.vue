@@ -31,7 +31,7 @@
             </oc-button>
           </li>
           <li
-            v-for="(fileAction, key) in fileActions"
+            v-for="(fileAction, key) in createNewFileActions"
             :key="`file-creation-item-${key}`"
             class="create-list-file oc-menu-item-hover"
           >
@@ -46,17 +46,13 @@
           </li>
           <template v-if="mimetypesAllowedForCreation">
             <li
-              v-for="(mimeTypeAction, key) in mimeTypeActions"
+              v-for="(mimeTypeAction, key) in createNewFileMimeTypeActions"
               :key="`file-creation-item-external-${key}`"
               class="create-list-file oc-menu-item-hover"
             >
               <oc-button appearance="raw" @click="mimeTypeAction.handler">
                 <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
-                <span
-                  v-text="
-                    $gettextInterpolate($gettext('%{name}'), { name: mimeTypeAction.label() })
-                  "
-                />
+                <span v-text="$gettext(mimeTypeAction.label())" />
               </oc-button>
             </li>
           </template>
@@ -174,7 +170,6 @@ import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { ResourcesUpload } from '../../helpers/resource'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
-import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: {
@@ -206,7 +201,6 @@ export default defineComponent({
     const uppyService = useService<UppyService>('$uppyService')
     const clientService = useClientService()
     const store = useStore()
-    const { $gettext } = useGettext()
 
     let filesSelectedSub
     let uploadCompletedSub
@@ -215,14 +209,11 @@ export default defineComponent({
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
 
     const newFileHandlers = computed(() => store.getters.newFileHandlers)
+    console.log('newFileHandlers', newFileHandlers)
 
     const { actions: createNewFileActions } = useFileActionsCreateNewFile({
       store,
       newFileHandlers: unref(newFileHandlers)
-    })
-
-    const fileActions = computed(() => {
-      return unref(createNewFileActions)
     })
 
     const mimetypesAllowedForCreation = computed(() => {
@@ -236,10 +227,6 @@ export default defineComponent({
     const { actions: createNewFileMimeTypeActions } = useFileActionsCreateNewFile({
       store,
       mimetypesAllowedForCreation: unref(mimetypesAllowedForCreation)
-    })
-
-    const mimeTypeActions = computed(() => {
-      return unref(createNewFileMimeTypeActions)
     })
 
     const currentFolder = computed(() => {
@@ -292,8 +279,8 @@ export default defineComponent({
       isUserContext: useUserContext({ store }),
       canUpload,
       currentFolder,
-      fileActions,
-      mimeTypeActions,
+      createNewFileActions,
+      createNewFileMimeTypeActions,
       createNewFolder,
       mimetypesAllowedForCreation,
       createNewFolderAction
