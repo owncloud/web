@@ -38,6 +38,7 @@
       <role-dropdown
         :allow-share-permission="hasResharing || resourceIsSpace"
         mode="create"
+        class="role-selection-dropdown"
         @option-change="collaboratorRoleChanged"
       />
       <expiration-datepicker
@@ -59,8 +60,9 @@
         appearance="filled"
         submit="submit"
         @click="share"
-        v-text="$gettext(saveButtonLabel)"
-      />
+      >
+        <span v-text="$gettext(saveButtonLabel)" />
+      </oc-button>
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />
   </div>
@@ -353,3 +355,8 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss">
+.role-selection-dropdown {
+  max-width: 150px;
+}
+</style>

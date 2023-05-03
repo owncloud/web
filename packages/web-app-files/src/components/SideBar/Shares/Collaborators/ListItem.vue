@@ -413,4 +413,7 @@ export default defineComponent({
 .files-collaborators-collaborator-expiration {
   margin-top: 5px;
 }
+.files-collaborators-collaborator-role {
+  max-width: 100%;
+}
 </style>
