@@ -122,7 +122,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsCreateNewFolder({ store, space: ref(space) })
+        const instance = useFileActionsCreateNewFolder({ store, space })
         setup(instance, { storeOptions })
       },
       {

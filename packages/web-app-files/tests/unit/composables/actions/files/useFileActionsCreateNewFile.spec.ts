@@ -127,7 +127,7 @@ function getWrapper({
       () => {
         const instance = useFileActionsCreateNewFile({
           store,
-          space: ref(space),
+          space,
           newFileHandlers: ref([{ action: null, ext: '.txt', menuTitle: jest.fn() }])
         })
         setup(instance, { storeOptions })

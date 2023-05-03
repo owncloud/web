@@ -13,7 +13,7 @@ import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 export const useFileActionsCreateNewFolder = ({
   store,
   space
-}: { store?: Store<any>; space?: Ref<SpaceResource> } = {}) => {
+}: { store?: Store<any>; space?: SpaceResource } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $gettext } = useGettext()
@@ -50,9 +50,7 @@ export const useFileActionsCreateNewFolder = ({
   }
 
   const loadIndicatorsForNewFile = computed(() => {
-    return (
-      isLocationSpacesActive(router, 'files-spaces-generic') && unref(space).driveType !== 'share'
-    )
+    return isLocationSpacesActive(router, 'files-spaces-generic') && space.driveType !== 'share'
   })
 
   const addNewFolder = async (folderName) => {
@@ -60,7 +58,7 @@ export const useFileActionsCreateNewFolder = ({
 
     try {
       const path = join(unref(currentFolder).path, folderName)
-      const resource = await (clientService.webdav as WebDAV).createFolder(unref(space), {
+      const resource = await (clientService.webdav as WebDAV).createFolder(space, {
         path
       })
 
