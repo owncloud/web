@@ -23,6 +23,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { useFileActionsPaste } from 'web-app-files/src/composables'
 import { useFileActionsCreateNewFolder } from 'web-app-files/src/composables/actions/files/useFileActionsCreateNewFolder'
 import { SpaceResource } from 'web-client/src'
 import { useStore } from 'web-pkg/src'
@@ -47,11 +48,19 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const store = useStore()
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
+    const actionOptions = computed(() => ({
+      space: props.space
+    }))
 
-    const { actions } = useFileActionsCreateNewFolder({ store, space: props.space })
-    console.log(unref(actions)[0])
-    props.items.push(unref(actions)[0])
-    return { contextMenuLabel }
+    const { actions: createNewFolderAction } = useFileActionsCreateNewFolder({
+      store,
+      space: props.space
+    })
+    const { actions: pasteAction } = useFileActionsPaste({ store })
+    console.log(unref(createNewFolderAction)[0])
+    props.items.push(unref(createNewFolderAction)[0])
+    props.items.push(unref(pasteAction)[0])
+    return { contextMenuLabel, actionOptions }
   }
 })
 </script>
