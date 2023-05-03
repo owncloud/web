@@ -1,5 +1,5 @@
 import { mock } from 'jest-mock-extended'
-import { nextTick, unref } from 'vue'
+import { nextTick, ref, unref } from 'vue'
 import { useFileActionsCreateNewFolder } from 'web-app-files/src/composables'
 import { SpaceResource } from 'web-client/src'
 import { FolderResource } from 'web-client/src/helpers'
@@ -122,7 +122,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsCreateNewFolder({ store })
+        const instance = useFileActionsCreateNewFolder({ store, space: ref(space) })
         setup(instance, { storeOptions })
       },
       {

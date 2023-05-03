@@ -1,6 +1,6 @@
-import { Resource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
-import { computed, unref } from 'vue'
+import { Ref, computed, unref } from 'vue'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { FileAction } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
@@ -10,7 +10,10 @@ import { WebDAV } from 'web-client/src/webdav'
 import { isLocationSpacesActive } from 'web-app-files/src/router'
 import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 
-export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } = {}) => {
+export const useFileActionsCreateNewFolder = ({
+  store,
+  space
+}: { store?: Store<any>; space?: Ref<SpaceResource> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $gettext } = useGettext()
@@ -19,11 +22,6 @@ export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } 
   const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
   const files = computed((): Array<Resource> => store.getters['Files/files'])
   const ancestorMetaData = computed(() => store.getters['Files/ancestorMetaData'])
-
-  const storageId = computed(() => unref(currentFolder).storageId)
-  const currentSpace = computed(() =>
-    store.getters['runtime/spaces/spaces'].find((space) => space.id === unref(storageId))
-  )
 
   const checkNewFolderName = (folderName) => {
     if (folderName.trim() === '') {
@@ -53,8 +51,7 @@ export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } 
 
   const loadIndicatorsForNewFile = computed(() => {
     return (
-      isLocationSpacesActive(router, 'files-spaces-projects') &&
-      unref(currentSpace).driveType !== 'share'
+      isLocationSpacesActive(router, 'files-spaces-generic') && unref(space).driveType !== 'share'
     )
   })
 
@@ -63,7 +60,7 @@ export const useFileActionsCreateNewFolder = ({ store }: { store?: Store<any> } 
 
     try {
       const path = join(unref(currentFolder).path, folderName)
-      const resource = await (clientService.webdav as WebDAV).createFolder(unref(currentSpace), {
+      const resource = await (clientService.webdav as WebDAV).createFolder(unref(space), {
         path
       })
 

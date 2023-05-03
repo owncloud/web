@@ -205,13 +205,17 @@ export default defineComponent({
     let filesSelectedSub
     let uploadCompletedSub
 
-    const { actions: createNewFolder } = useFileActionsCreateNewFolder({ store })
+    const { actions: createNewFolder } = useFileActionsCreateNewFolder({
+      store,
+      space: props.space
+    })
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
 
     const newFileHandlers = computed(() => store.getters.newFileHandlers)
 
     const { actions: createNewFileActions } = useFileActionsCreateNewFile({
       store,
+      space: props.space,
       newFileHandlers: newFileHandlers
     })
 
@@ -225,6 +229,7 @@ export default defineComponent({
 
     const { actions: createNewFileMimeTypeActions } = useFileActionsCreateNewFile({
       store,
+      space: props.space,
       mimetypesAllowedForCreation: mimetypesAllowedForCreation
     })
 

@@ -1,4 +1,4 @@
-import { Resource, extractNameWithoutExtension } from 'web-client/src/helpers'
+import { Resource, SpaceResource, extractNameWithoutExtension } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, Ref, unref } from 'vue'
 import { useClientService, useRequest, useRouter, useStore } from 'web-pkg/src/composables'
@@ -16,10 +16,12 @@ import { stringify } from 'qs'
 
 export const useFileActionsCreateNewFile = ({
   store,
+  space,
   newFileHandlers,
   mimetypesAllowedForCreation
 }: {
   store?: Store<any>
+  space?: Ref<SpaceResource>
   newFileHandlers?: Ref<any> // FIXME: type?
   mimetypesAllowedForCreation?: Ref<any> // FIXME: type?
 } = {}) => {
@@ -34,10 +36,6 @@ export const useFileActionsCreateNewFile = ({
   const files = computed((): Array<Resource> => store.getters['Files/files'])
   const ancestorMetaData = computed(() => store.getters['Files/ancestorMetaData'])
   const areFileExtensionsShown = computed((): boolean => store.state.Files.areFileExtensionsShown)
-  const storageId = computed(() => unref(currentFolder).storageId)
-  const currentSpace = computed(() =>
-    store.getters['runtime/spaces/spaces'].find((space) => space.id === unref(storageId))
-  )
 
   const capabilities = computed(() => store.getters['capabilities'])
 
@@ -91,13 +89,13 @@ export const useFileActionsCreateNewFile = ({
         throw new Error(`An error has occurred: ${response.status}`)
       }
       const path = join(unref(currentFolder).path, fileName) || ''
-      const resource = await (clientService.webdav as WebDAV).getFileInfo(unref(currentSpace), {
+      const resource = await (clientService.webdav as WebDAV).getFileInfo(unref(space), {
         path
       })
       if (unref(loadIndicatorsForNewFile)) {
         resource.indicators = getIndicators({ resource, ancestorMetaData: unref(ancestorMetaData) })
       }
-      triggerDefaultAction({ space: unref(currentSpace), resources: [resource] })
+      triggerDefaultAction({ space: unref(space), resources: [resource] })
       store.commit('Files/UPSERT_RESOURCE', resource)
       store.dispatch('hideModal')
       store.dispatch('showMessage', {
@@ -114,8 +112,7 @@ export const useFileActionsCreateNewFile = ({
 
   const loadIndicatorsForNewFile = computed(() => {
     return (
-      isLocationSpacesActive(router, 'files-spaces-projects') &&
-      unref(currentSpace).driveType !== 'share'
+      isLocationSpacesActive(router, 'files-spaces-generic') && unref(space).driveType !== 'share'
     )
   })
 
@@ -126,7 +123,7 @@ export const useFileActionsCreateNewFile = ({
 
     try {
       const path = join(unref(currentFolder).path, fileName)
-      const resource = await (clientService.webdav as WebDAV).putFileContents(unref(currentSpace), {
+      const resource = await (clientService.webdav as WebDAV).putFileContents(unref(space), {
         path
       })
 
@@ -139,7 +136,7 @@ export const useFileActionsCreateNewFile = ({
       if (openAction) {
         openEditor(
           openAction,
-          unref(currentSpace).getDriveAliasAndItem(resource),
+          unref(space).getDriveAliasAndItem(resource),
           resource.webDavPath,
           resource.fileId,
           EDITOR_MODE_CREATE
