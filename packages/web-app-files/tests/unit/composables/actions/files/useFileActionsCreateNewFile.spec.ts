@@ -1,5 +1,5 @@
 import { mock } from 'jest-mock-extended'
-import { nextTick, unref } from 'vue'
+import { nextTick, ref, unref } from 'vue'
 import { useFileActionsCreateNewFile } from 'web-app-files/src/composables'
 import { SpaceResource } from 'web-client/src'
 import { FolderResource } from 'web-client/src/helpers'
@@ -127,7 +127,7 @@ function getWrapper({
       () => {
         const instance = useFileActionsCreateNewFile({
           store,
-          newFileHandlers: [{ action: null, ext: '.txt', menuTitle: jest.fn() }]
+          newFileHandlers: ref([{ action: null, ext: '.txt', menuTitle: jest.fn() }])
         })
         setup(instance, { storeOptions })
       },
