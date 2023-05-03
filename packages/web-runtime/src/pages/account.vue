@@ -124,6 +124,7 @@
 <script lang="ts">
 import { mapActions } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
+import { AccountBundle, LanguageOption, SettingValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
   useCapabilityGraphPersonalDataExport,
@@ -140,7 +141,7 @@ import { isPersonalSpaceResource } from 'web-client/src/helpers'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 export default defineComponent({
-  name: 'Personal',
+  name: 'AccountPage',
   components: {
     AppLoadingSpinner,
     EditPasswordModal,
@@ -152,10 +153,11 @@ export default defineComponent({
     const { $gettext } = language
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
-    const valuesList = ref()
-    const bundlesList = ref()
-    const selectedLanguageValue = ref()
-    const disableEmailNotificationsValue = ref()
+    const valuesList = ref<SettingValue[]>()
+    const bundlesList = ref<AccountBundle>()
+    const languageOptions = ref<LanguageOption[]>()
+    const selectedLanguageValue = ref<LanguageOption>()
+    const disableEmailNotificationsValue = ref<boolean>()
 
     // FIXME: Use graph capability when we have it
     const isSettingsServiceSupported = useCapabilitySpacesEnabled()
@@ -202,7 +204,7 @@ export default defineComponent({
           title: $gettext('Unable to load account data…'),
           status: 'danger'
         })
-        bundlesList.value = []
+        bundlesList.value = undefined
       }
     }).restartable()
 
@@ -216,16 +218,6 @@ export default defineComponent({
         loadBundlesListTask.isRunning ||
         !loadBundlesListTask.last
       )
-    })
-
-    const languageOptions = computed(() => {
-      const languageOptions = unref(bundlesList)?.settings?.find((s) => s.name === 'language')
-        ?.singleChoiceValue.options
-      return languageOptions?.map((l) => ({
-        label: l.displayValue,
-        value: l.value.stringValue,
-        default: l.default
-      }))
     })
 
     const groupNames = computed(() => {
@@ -279,7 +271,7 @@ export default defineComponent({
       }
     }
 
-    const updateSelectedLanguage = async (option) => {
+    const updateSelectedLanguage = async (option: LanguageOption) => {
       try {
         const value = await saveValue({
           identifier: 'language',
@@ -309,7 +301,7 @@ export default defineComponent({
       }
     }
 
-    const updateDisableEmailNotifications = async (option) => {
+    const updateDisableEmailNotifications = async (option: boolean) => {
       try {
         await saveValue({
           identifier: 'disable-email-notifications',
@@ -332,6 +324,13 @@ export default defineComponent({
       if (unref(isSettingsServiceSupported)) {
         await loadBundlesListTask.perform()
         await loadValuesListTask.perform()
+
+        const options = unref(bundlesList)?.settings?.find((s) => s.name === 'language')
+          ?.singleChoiceValue.options
+        languageOptions.value = options?.map(({ displayValue, value }) => ({
+          label: displayValue,
+          value: value.stringValue
+        }))
 
         const languageConfiguration = unref(valuesList)?.find(
           (cV) => cV.identifier.setting === 'language'
