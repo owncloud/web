@@ -449,6 +449,8 @@ export default defineComponent({
         permissions: link.permissions.toString(),
         quicklink: link.quicklink,
         name: link.name,
+        notifyUploads: link.notifyUploads,
+        notifyUploadsExtraRecipients: link.notifyUploadsExtraRecipients,
         spaceRef: this.resource.fileId,
         ...(this.currentStorageId && {
           storageId: this.currentStorageId

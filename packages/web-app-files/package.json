@@ -5,7 +5,8 @@
   "description": "ownCloud web files",
   "license": "AGPL-3.0",
   "dependencies": {
-    "mark.js": "^8.11.1"
+    "mark.js": "^8.11.1",
+    "email-validator": "^2.0.4"
   },
   "devDependencies": {
     "@jest/globals": "29.3.1",

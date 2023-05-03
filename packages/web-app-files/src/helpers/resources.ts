@@ -284,7 +284,12 @@ function _buildLink(link): Share {
       parent: link.file_parent,
       source: link.file_source,
       target: link.file_target
-    }
+    },
+    notifyUploads: link.notify_uploads === 'true',
+    notifyUploadsExtraRecipients:
+      typeof link.notify_uploads_extra_recipients === 'string'
+        ? link.notify_uploads_extra_recipients
+        : null
   }
 }
 

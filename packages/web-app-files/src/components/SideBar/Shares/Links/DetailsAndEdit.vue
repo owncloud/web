@@ -69,6 +69,12 @@
         v-text="$gettext(currentLinkRoleLabel)"
       />
     </p>
+    <oc-checkbox
+      v-if="hasNotifications && isCurrentLinkRoleUploader()"
+      :model-value="currentLinkNotifyUploads"
+      :label="notifyUploadsLabel"
+      @input="toggleNotifyUploads()"
+    />
     <div :class="{ 'oc-pr-s': !isModifiable }" class="details-buttons">
       <oc-button
         v-if="link.indirect"
@@ -95,6 +101,13 @@
         :data-testid="`files-link-id-${link.id}-expiration-date`"
         :aria-label="expirationDateTooltip"
         name="calendar-event"
+        fill-type="line"
+      />
+      <oc-icon
+        v-if="currentLinkNotifyUploadsExtraRecipients"
+        v-oc-tooltip="notifyUploadsExtraRecipientsTooltip"
+        :aria-label="notifyUploadsExtraRecipientsTooltip"
+        name="mail-add"
         fill-type="line"
       />
       <div v-if="isModifiable">
@@ -173,6 +186,7 @@
 </template>
 
 <script lang="ts">
+import * as EmailValidator from 'email-validator'
 import { basename } from 'path'
 import { DateTime } from 'luxon'
 import { mapActions, mapGetters } from 'vuex'
@@ -180,12 +194,14 @@ import { createLocationSpaces } from '../../../../router'
 import {
   linkRoleInternalFile,
   linkRoleInternalFolder,
+  linkRoleUploaderFolder,
   LinkShareRoles,
   ShareRole
 } from 'web-client/src/helpers/share'
 import { defineComponent, inject, PropType } from 'vue'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { useCapabilityGroupBasedCapabilities } from 'web-pkg/src/composables'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
@@ -223,7 +239,11 @@ export default defineComponent({
   },
   emits: ['removePublicLink', 'updateLink'],
   setup() {
-    return { space: inject<Resource>('space'), resource: inject<Resource>('resource') }
+    return {
+      space: inject<Resource>('space'),
+      resource: inject<Resource>('resource'),
+      hasNotifications: useCapabilityGroupBasedCapabilities().value.includes('notifications')
+    }
   },
   data() {
     return {
@@ -319,6 +339,30 @@ export default defineComponent({
         })
       }
 
+      if (this.isCurrentLinkRoleUploader && this.currentLinkNotifyUploads) {
+        result.push({
+          id: 'add-notify-uploads-extra-recipients',
+          title: this.notifyUploadsExtraRecipientsMenuEntry,
+          icon: 'mail-add',
+          method: this.showNotifyUploadsExtraRecipientsModal
+        })
+      }
+
+      if (this.currentLinkNotifyUploadsExtraRecipients) {
+        result.push({
+          id: 'remove-notify-uploads-extra-recipients',
+          title: this.$gettext('Remove third party notification'),
+          icon: 'mail-close',
+          method: () =>
+            this.updateLink({
+              link: {
+                ...this.link,
+                notifyUploadsExtraRecipients: ''
+              }
+            })
+        })
+      }
+
       return result
     },
 
@@ -387,6 +431,25 @@ export default defineComponent({
 
     isAliasLink() {
       return [linkRoleInternalFolder, linkRoleInternalFile].includes(this.currentLinkRole)
+    },
+
+    currentLinkNotifyUploads() {
+      return this.link.notifyUploads
+    },
+    currentLinkNotifyUploadsExtraRecipients() {
+      return this.link.notifyUploadsExtraRecipients
+    },
+    notifyUploadsLabel() {
+      return this.$gettext('Notify me about uploads')
+    },
+    notifyUploadsExtraRecipientsTooltip() {
+      return this.$gettext('Uploads will be notified to a third party')
+    },
+    notifyUploadsExtraRecipientsMenuEntry() {
+      if (this.currentLinkNotifyUploadsExtraRecipients) {
+        return this.$gettext('Edit third party notification')
+      }
+      return this.$gettext('Notify a third party about uploads')
     }
   },
   watch: {
@@ -409,6 +472,22 @@ export default defineComponent({
     }) {
       this.$emit('updateLink', { link, onSuccess })
       dropRef.hide()
+    },
+    toggleNotifyUploads() {
+      if (this.currentLinkNotifyUploads) {
+        this.$emit('updateLink', {
+          link: { ...this.link, notifyUploads: false, notifyUploadsExtraRecipients: '' }
+        })
+      } else {
+        this.$emit('updateLink', { link: { ...this.link, notifyUploads: true } })
+      }
+    },
+    isCurrentLinkRoleUploader() {
+      return (
+        LinkShareRoles.getByBitmask(parseInt(this.link.permissions), this.isFolderShare).bitmask(
+          false
+        ) === linkRoleUploaderFolder.bitmask(false)
+      )
     },
     deleteLink() {
       this.$emit('removePublicLink', { link: this.link })
@@ -472,6 +551,50 @@ export default defineComponent({
       }
 
       this.createModal(modal)
+    },
+
+    showNotifyUploadsExtraRecipientsModal() {
+      const modal = {
+        variation: 'passive',
+        icon: 'mail-add',
+        title: this.$gettext('Notify a third party about uploads'),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Apply'),
+        hasInput: true,
+        inputDescription: this.$gettext(
+          'When a file is uploaded, this address will be notified as well.'
+        ),
+        inputValue: this.currentLinkNotifyUploadsExtraRecipients,
+        inputLabel: this.$gettext('Email address'),
+        inputType: 'email',
+        onCancel: this.hideModal,
+        onInput: (value) => this.checkEmailValid(value),
+        onConfirm: (value) => {
+          this.updateLink({
+            link: {
+              ...this.link,
+              notifyUploadsExtraRecipients: value
+            },
+            onSuccess: () => {
+              this.hideModal()
+            }
+          })
+        }
+      }
+
+      this.createModal(modal)
+    },
+
+    checkEmailValid(email) {
+      if (!EmailValidator.validate(email)) {
+        return this.setModalInputErrorMessage(this.$gettext('Email is invalid'))
+      }
+
+      if (email === '') {
+        return this.setModalInputErrorMessage(this.$gettext("Email can't be empty"))
+      }
+
+      return this.setModalInputErrorMessage(null)
     }
   }
 })

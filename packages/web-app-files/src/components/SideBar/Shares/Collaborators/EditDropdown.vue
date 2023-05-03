@@ -79,7 +79,7 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['expirationDateChanged', 'removeShare', 'showAccessDetails'],
+  emits: ['expirationDateChanged', 'notifyShare', 'removeShare', 'showAccessDetails'],
   data: function () {
     return {
       enteredExpirationDate: null
@@ -104,6 +104,13 @@ export default defineComponent({
       }
       return [
         ...result,
+        {
+          title: this.$gettext('Notify via mail'),
+          method: this.notifyShare,
+          enabled: true,
+          icon: 'mail',
+          class: 'notify-via-mail'
+        },
         {
           title: this.$gettext('Remove share'),
           method: this.removeShare,
@@ -248,6 +255,9 @@ export default defineComponent({
     },
     showAccessDetails() {
       this.$emit('showAccessDetails')
+    },
+    notifyShare() {
+      this.$emit('notifyShare')
     }
   }
 })

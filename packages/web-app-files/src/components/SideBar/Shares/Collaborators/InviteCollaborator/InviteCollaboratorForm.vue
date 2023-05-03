@@ -44,6 +44,7 @@
         :share-types="selectedCollaborators.map((c) => c.value.shareType)"
         @option-change="collaboratorExpiryChanged"
       />
+      <oc-checkbox v-model="notifyEnabled" :value="false" label="Notify via mail" />
       <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
         <oc-spinner :aria-label="$gettext('Creating share')" size="small" />
         <span :aria-hidden="true" v-text="$gettext(saveButtonLabel)" />
@@ -143,7 +144,9 @@ export default defineComponent({
       customPermissions: null,
       saving: false,
       expirationDate: null,
-      searchQuery: ''
+      searchQuery: '',
+      notifyEnabled: false,
+      formData: new URLSearchParams()
     }
   },
   computed: {
@@ -298,9 +301,11 @@ export default defineComponent({
 
       const saveQueue = new PQueue({ concurrency: 4 })
       const savePromises = []
-      this.selectedCollaborators.forEach((collaborator) => {
+
+      this.selectedCollaborators.forEach((collaborator, i) => {
         savePromises.push(
           saveQueue.add(() => {
+            const collaborators = this.selectedCollaborators
             const bitmask = this.selectedRole.hasCustomPermissions
               ? SharePermissions.permissionsToBitmask(this.customPermissions)
               : SharePermissions.permissionsToBitmask(
@@ -327,7 +332,8 @@ export default defineComponent({
               permissions: bitmask,
               role: this.selectedRole,
               expirationDate: this.expirationDate,
-              storageId: this.resource.fileId || this.resource.id
+              storageId: this.resource.fileId || this.resource.id,
+              notify: this.notifyEnabled
             })
           })
         )

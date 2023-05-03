@@ -85,3 +85,7 @@ export const useCapabilityNotifications = createCapabilityComposable(
   'notifications.ocs-endpoints',
   []
 )
+export const useCapabilityGroupBasedCapabilities = createCapabilityComposable(
+  'group_based.capabilities',
+  []
+)

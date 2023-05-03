@@ -87,6 +87,7 @@
           @expiration-date-changed="shareExpirationChanged"
           @remove-share="removeShare"
           @show-access-details="showAccessDetails"
+          @notify-share="$_ocCollaborators_notifyShare_trigger"
         />
         <oc-info-drop
           ref="accessDetailsDrop"
@@ -137,7 +138,6 @@ export default defineComponent({
       default: null
     }
   },
-  emits: ['onDelete'],
   setup() {
     return {
       hasResharing: useCapabilityFilesSharingResharing(),
@@ -318,12 +318,52 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(['showMessage']),
-    ...mapActions('Files', ['changeShare']),
+    ...mapActions(['createModal', 'hideModal', 'showMessage']),
+    ...mapActions('Files', ['changeShare', 'notifyShare']),
     ...mapActions('runtime/spaces', ['changeSpaceMember']),
 
     removeShare() {
       this.$emit('onDelete', this.share)
+    },
+
+    $_ocCollaborators_notifyShare_trigger() {
+      const modal = {
+        variation: 'warning',
+        icon: 'mail-send',
+        title: this.$gettext('Send a reminder'),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Send'),
+        message: this.$gettext('Are you sure you want to send a reminder about this share?'),
+        hasInput: false,
+        onCancel: this.hideModal,
+        onConfirm: () => this.$_ocCollaborators_notifyShare()
+      }
+
+      this.createModal(modal)
+    },
+
+    async $_ocCollaborators_notifyShare() {
+      try {
+        const response = await this.notifyShare({
+          client: this.$client,
+          share: this.share,
+        })
+
+        this.showMessage({
+          title: this.$gettext('Success'),
+          desc: `${this.$gettext('Email reminder sent to')} ${response[0]}`,
+          status: 'success'
+        })
+      } catch (error) {
+        console.error(error)
+        this.showMessage({
+          title: this.$gettext('An error occurred'),
+          desc: this.$gettext('Email notification could not be sent'),
+          status: 'danger'
+        })
+      } finally {
+        this.hideModal()
+      }
     },
 
     showAccessDetails() {
