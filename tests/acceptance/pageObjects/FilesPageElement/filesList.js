@@ -210,13 +210,21 @@ module.exports = {
      * @param {string} folder
      */
     navigateToFolder: async function (folder) {
-      await this.waitForFileVisible(folder)
+      const paths = folder.split('/')
+      for (const folderName of paths) {
+        if (folderName === '') {
+          continue
+        }
 
-      await this.useXpath().click(this.getFileLinkSelectorByFileName(folder, 'folder')).useCss()
+        await this.waitForFileVisible(folderName)
 
-      // wait until loading is finished
-      await this.waitForLoadingFinished()
+        await this.useXpath()
+          .click(this.getFileLinkSelectorByFileName(folderName, 'folder'))
+          .useCss()
 
+        // wait until loading is finished
+        await this.waitForLoadingFinished()
+      }
       return this
     },
 
