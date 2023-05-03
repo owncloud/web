@@ -797,7 +797,8 @@ Then('these files/folders/resources should be listed on the webUI', function (en
 Then(
   'these files/folders/resources should be listed in the folder {string} on the webUI',
   async function (folder, entryList) {
-    await client.page.personalPage().navigateAndWaitTillLoaded(folder)
+    await client.page.personalPage().navigateAndWaitTillLoaded()
+    await client.page.personalPage().navigateToFolder(folder)
     return theseResourcesShouldBeListed(entryList)
   }
 )
