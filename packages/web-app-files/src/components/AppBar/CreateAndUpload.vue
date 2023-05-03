@@ -25,37 +25,34 @@
       >
         <oc-list id="create-list">
           <li class="create-list-folder oc-menu-item-hover">
-            <oc-button id="new-folder-btn" appearance="raw" @click="showCreateResourceModal">
+            <oc-button id="new-folder-btn" appearance="raw" @click="createNewFolderAction">
               <oc-resource-icon :resource="folderIconResource" size="medium" />
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
           <li
-            v-for="(newFileHandler, key) in newFileHandlers"
+            v-for="(fileAction, key) in createNewFileActions"
             :key="`file-creation-item-${key}`"
             class="create-list-file oc-menu-item-hover"
           >
             <oc-button
               appearance="raw"
-              :class="['new-file-btn-' + newFileHandler.ext]"
-              @click="showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)"
+              :class="['new-file-btn-' + fileAction.ext]"
+              @click="fileAction.handler"
             >
-              <oc-resource-icon :resource="getIconResource(newFileHandler)" size="medium" />
-              <span>{{ newFileHandler.menuTitle($gettext) }}</span>
+              <oc-resource-icon :resource="getIconResource(fileAction)" size="medium" />
+              <span>{{ fileAction.label() }}</span>
             </oc-button>
           </li>
           <template v-if="mimetypesAllowedForCreation">
             <li
-              v-for="(mimetype, key) in mimetypesAllowedForCreation"
+              v-for="(mimeTypeAction, key) in createNewFileMimeTypeActions"
               :key="`file-creation-item-external-${key}`"
               class="create-list-file oc-menu-item-hover"
             >
-              <oc-button
-                appearance="raw"
-                @click="showCreateResourceModal(false, mimetype.ext, false, true)"
-              >
-                <oc-resource-icon :resource="getIconResource(mimetype)" size="medium" />
-                <span v-text="$gettextInterpolate($gettext('%{name}'), { name: mimetype.name })" />
+              <oc-button appearance="raw" @click="mimeTypeAction.handler">
+                <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
+                <span v-text="$gettext(mimeTypeAction.label())" />
               </oc-button>
             </li>
           </template>
@@ -71,7 +68,7 @@
           variation="primary"
           :aria-label="newButtonAriaLabel"
           :disabled="uploadOrFileCreationBlocked"
-          @click="showCreateResourceModal"
+          @click="createNewFolderAction"
         >
           <oc-icon name="resource-type-folder" />
           <span v-if="!hideButtonLabels" v-text="$gettext('New Folder')" />
@@ -136,12 +133,15 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { join } from 'path'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
-import { useFileActions, EDITOR_MODE_CREATE } from '../../composables/actions/files/useFileActions'
+import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
-import { useActiveLocation } from '../../composables'
+import {
+  useActiveLocation,
+  useFileActionsCreateNewFile,
+  useFileActionsCreateNewFolder
+} from '../../composables'
 
 import {
   useRequest,
@@ -166,15 +166,10 @@ import {
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { extractNameWithoutExtension, Resource, SpaceResource } from 'web-client/src/helpers'
-import { resolveFileNameDuplicate, ResourcesUpload } from '../../helpers/resource'
-import { WebDAV } from 'web-client/src/webdav'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { urlJoin } from 'web-client/src/utils'
-import { stringify } from 'qs'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { ResourcesUpload } from '../../helpers/resource'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
-import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 
 export default defineComponent({
   components: {
@@ -206,8 +201,37 @@ export default defineComponent({
     const uppyService = useService<UppyService>('$uppyService')
     const clientService = useClientService()
     const store = useStore()
+
     let filesSelectedSub
     let uploadCompletedSub
+
+    const { actions: createNewFolder } = useFileActionsCreateNewFolder({
+      store,
+      space: props.space
+    })
+    const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
+
+    const newFileHandlers = computed(() => store.getters.newFileHandlers)
+
+    const { actions: createNewFileActions } = useFileActionsCreateNewFile({
+      store,
+      space: props.space,
+      newFileHandlers: newFileHandlers
+    })
+
+    const mimetypesAllowedForCreation = computed(() => {
+      const mimeTypes = store.getters['External/mimeTypes']
+      if (!mimeTypes) {
+        return []
+      }
+      return mimeTypes.filter((mimetype) => mimetype.allow_creation) || []
+    })
+
+    const { actions: createNewFileMimeTypeActions } = useFileActionsCreateNewFile({
+      store,
+      space: props.space,
+      mimetypesAllowedForCreation: mimetypesAllowedForCreation
+    })
 
     const currentFolder = computed(() => {
       return store.getters['Files/currentFolder']
@@ -258,7 +282,12 @@ export default defineComponent({
       hasSpaces: useCapabilitySpacesEnabled(),
       isUserContext: useUserContext({ store }),
       canUpload,
-      currentFolder
+      currentFolder,
+      createNewFileActions,
+      createNewFileMimeTypeActions,
+      createNewFolder,
+      mimetypesAllowedForCreation,
+      createNewFolderAction
     }
   },
   data: () => ({
@@ -267,7 +296,6 @@ export default defineComponent({
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['ancestorMetaData', 'files', 'selectedFiles', 'clipboardResources']),
-    ...mapState('Files', ['areFileExtensionsShown']),
     ...mapGetters('runtime/spaces', ['spaces']),
 
     showPasteHereButton() {
@@ -275,14 +303,6 @@ export default defineComponent({
     },
     hideButtonLabels() {
       return this.limitedScreenSpace && this.showPasteHereButton
-    },
-    mimetypesAllowedForCreation() {
-      // we can't use `mapGetters` here because the External app doesn't exist in all deployments
-      const mimeTypes = this.$store.getters['External/mimeTypes']
-      if (!mimeTypes) {
-        return []
-      }
-      return mimeTypes.filter((mimetype) => mimetype.allow_creation) || []
     },
 
     showActions() {
@@ -389,251 +409,6 @@ export default defineComponent({
           eventBus.publish('app.files.list.load')
         }
       }
-    },
-
-    showCreateResourceModal(
-      isFolder = true,
-      ext = 'txt',
-      openAction = null,
-      addAppProviderFile = false
-    ) {
-      const checkInputValue = (value) => {
-        this.setModalInputErrorMessage(
-          isFolder
-            ? this.checkNewFolderName(value)
-            : this.checkNewFileName(this.areFileExtensionsShown ? value : `${value}.${ext}`)
-        )
-      }
-      let defaultName = isFolder
-        ? this.$gettext('New folder')
-        : this.$gettext('New file') + `.${ext}`
-
-      if (this.files.some((f) => f.name === defaultName)) {
-        defaultName = resolveFileNameDuplicate(defaultName, isFolder ? '' : ext, this.files)
-      }
-
-      if (!this.areFileExtensionsShown) {
-        defaultName = extractNameWithoutExtension({ name: defaultName, extension: ext } as any)
-      }
-
-      // Sets action to be executed after creation of the file
-      if (!isFolder) {
-        this.newFileAction = openAction
-      }
-
-      const inputSelectionRange =
-        isFolder || !this.areFileExtensionsShown ? null : [0, defaultName.length - (ext.length + 1)]
-
-      const modal = {
-        variation: 'passive',
-        title: isFolder ? this.$gettext('Create a new folder') : this.$gettext('Create a new file'),
-        cancelText: this.$gettext('Cancel'),
-        confirmText: this.$gettext('Create'),
-        hasInput: true,
-        inputValue: defaultName,
-        inputLabel: isFolder ? this.$gettext('Folder name') : this.$gettext('File name'),
-        inputError: isFolder
-          ? this.checkNewFolderName(defaultName)
-          : this.checkNewFileName(
-              this.areFileExtensionsShown ? defaultName : `${defaultName}.${ext}`
-            ),
-        inputSelectionRange,
-        onCancel: this.hideModal,
-        onConfirm: isFolder
-          ? this.addNewFolder
-          : addAppProviderFile
-          ? this.addAppProviderFile
-          : (fileName) => {
-              if (!this.areFileExtensionsShown) {
-                fileName = `${fileName}.${ext}`
-              }
-              this.addNewFile(fileName)
-            },
-        onInput: checkInputValue
-      }
-
-      this.createModal(modal)
-    },
-
-    async addNewFolder(folderName) {
-      folderName = folderName.trimEnd()
-
-      try {
-        const path = join(this.item, folderName)
-        const resource = await (this.$clientService.webdav as WebDAV).createFolder(this.space, {
-          path
-        })
-
-        if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource, ancestorMetaData: this.ancestorMetaData })
-        }
-
-        this.UPSERT_RESOURCE(resource)
-        this.hideModal()
-
-        this.showMessage({
-          title: this.$gettextInterpolate(
-            this.$gettext('"%{folderName}" was created successfully'),
-            {
-              folderName
-            }
-          )
-        })
-      } catch (error) {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettext('Failed to create folder'),
-          status: 'danger'
-        })
-      }
-    },
-
-    checkNewFolderName(folderName) {
-      if (folderName.trim() === '') {
-        return this.$gettext('Folder name cannot be empty')
-      }
-
-      if (/[/]/.test(folderName)) {
-        return this.$gettext('Folder name cannot contain "/"')
-      }
-
-      if (folderName === '.') {
-        return this.$gettext('Folder name cannot be equal to "."')
-      }
-
-      if (folderName === '..') {
-        return this.$gettext('Folder name cannot be equal to ".."')
-      }
-
-      const exists = this.files.find((file) => file.name === folderName)
-
-      if (exists) {
-        const translated = this.$gettext('%{name} already exists')
-        return this.$gettextInterpolate(translated, { name: folderName }, true)
-      }
-
-      return null
-    },
-
-    async addNewFile(fileName) {
-      if (fileName === '') {
-        return
-      }
-
-      try {
-        const path = join(this.item, fileName)
-        const resource = await (this.$clientService.webdav as WebDAV).putFileContents(this.space, {
-          path
-        })
-
-        if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource, ancestorMetaData: this.ancestorMetaData })
-        }
-
-        this.UPSERT_RESOURCE(resource)
-
-        if (this.newFileAction) {
-          this.openEditor(
-            this.newFileAction,
-            this.space.getDriveAliasAndItem(resource),
-            resource.webDavPath,
-            resource.fileId,
-            EDITOR_MODE_CREATE
-          )
-          this.hideModal()
-
-          return
-        }
-
-        this.hideModal()
-        this.showMessage({
-          title: this.$gettextInterpolate(this.$gettext('"%{fileName}" was created successfully'), {
-            fileName
-          })
-        })
-      } catch (error) {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettext('Failed to create file'),
-          status: 'danger'
-        })
-      }
-    },
-    async addAppProviderFile(fileName) {
-      // FIXME: this belongs in web-app-external, but the app provider handles file creation differently than other editor extensions. Needs more refactoring.
-      if (fileName === '') {
-        return
-      }
-      try {
-        const baseUrl = urlJoin(
-          configurationManager.serverUrl,
-          this.capabilities.files.app_providers[0].new_url
-        )
-        const query = stringify({
-          parent_container_id: this.currentFolder.fileId,
-          filename: fileName
-        })
-        const url = `${baseUrl}?${query}`
-        const response = await this.makeRequest('POST', url)
-
-        if (response.status !== 200) {
-          throw new Error(`An error has occurred: ${response.status}`)
-        }
-
-        const path = join(this.item, fileName) || ''
-        const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(this.space, {
-          path
-        })
-
-        if (this.loadIndicatorsForNewFile) {
-          resource.indicators = getIndicators({ resource, ancestorMetaData: this.ancestorMetaData })
-        }
-
-        this.triggerDefaultAction({ space: this.space, resources: [resource] })
-        this.UPSERT_RESOURCE(resource)
-        this.hideModal()
-        this.showMessage({
-          title: this.$gettextInterpolate(this.$gettext('"%{fileName}" was created successfully'), {
-            fileName
-          })
-        })
-      } catch (error) {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettext('Failed to create file'),
-          status: 'danger'
-        })
-      }
-    },
-    checkNewFileName(fileName) {
-      if (fileName === '') {
-        return this.$gettext('File name cannot be empty')
-      }
-
-      if (/[/]/.test(fileName)) {
-        return this.$gettext('File name cannot contain "/"')
-      }
-
-      if (fileName === '.') {
-        return this.$gettext('File name cannot be equal to "."')
-      }
-
-      if (fileName === '..') {
-        return this.$gettext('File name cannot be equal to ".."')
-      }
-
-      if (/\s+$/.test(fileName)) {
-        return this.$gettext('File name cannot end with whitespace')
-      }
-
-      const exists = this.files.find((file) => file.name === fileName)
-
-      if (exists) {
-        const translated = this.$gettext('%{name} already exists')
-        return this.$gettextInterpolate(translated, { name: fileName }, true)
-      }
-
-      return null
     },
 
     onFilesSelected(filesToUpload: File[]) {

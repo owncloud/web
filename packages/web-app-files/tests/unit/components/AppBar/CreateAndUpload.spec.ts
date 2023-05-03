@@ -106,29 +106,6 @@ describe('CreateAndUpload component', () => {
       expect(storeOptions.modules.Files.actions.clearClipboardFiles).toHaveBeenCalled()
     })
   })
-  describe('button triggers', () => {
-    it('should create a modal if "New folder" button is clicked', async () => {
-      const { wrapper } = getWrapper()
-      const createModalSpy = jest.spyOn(wrapper.vm, 'createModal')
-      await wrapper.find(elSelector.newFolderBtn).trigger('click')
-      expect(createModalSpy).toHaveBeenCalled()
-    })
-    it.each(fileHandlerMocks)(
-      'should create a modal if "New file" button is clicked',
-      async (fileHandler) => {
-        const { wrapper } = getWrapper({ newFileHandlers: fileHandlerMocks })
-        const createModalSpy = jest.spyOn(wrapper.vm, 'createModal')
-        const showCreateResourceModal = jest.spyOn(wrapper.vm, 'showCreateResourceModal')
-        await wrapper.find(`.new-file-btn-${fileHandler.ext}`).trigger('click')
-        expect(createModalSpy).toHaveBeenCalled()
-        expect(showCreateResourceModal).toHaveBeenCalledWith(
-          false,
-          fileHandler.ext,
-          fileHandler.action
-        )
-      }
-    )
-  })
   describe('method "onUploadComplete"', () => {
     it.each([
       { driveType: 'personal', updated: 1 },
@@ -158,84 +135,6 @@ describe('CreateAndUpload component', () => {
       graphMock.drives.getDrive.mockResolvedValue(mockDeep<Drive>() as any)
       await wrapper.vm.onUploadComplete({ successful: [file] })
       expect(eventSpy).toHaveBeenCalled()
-    })
-  })
-  describe('methods "addNewFolder" & "addNewFile"', () => {
-    it.each(['addNewFolder', 'addNewFile'])(
-      'updates the resource after the folder as been created successfully',
-      async (method) => {
-        const createMethod = method === 'addNewFolder' ? 'createFolder' : 'putFileContents'
-        const { wrapper, mocks, storeOptions } = getWrapper({ item: '/' })
-        mocks.$clientService.webdav[createMethod].mockResolvedValue(mockDeep<Resource>())
-        await wrapper.vm[method]('New resource')
-        expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
-      }
-    )
-    it.each(['addNewFolder', 'addNewFile'])(
-      'shows a message when an error occurres',
-      async (method) => {
-        const createMethod = method === 'addNewFolder' ? 'createFolder' : 'putFileContents'
-        jest.spyOn(console, 'error').mockImplementation(() => undefined)
-        const { wrapper, mocks, storeOptions } = getWrapper({ item: '/' })
-        mocks.$clientService.webdav[createMethod].mockRejectedValue(new Error())
-        await wrapper.vm[method]('New resource')
-        expect(storeOptions.actions.showMessage).toHaveBeenCalled()
-      }
-    )
-    it('opens the file editor after a file has been created and a supported editor is available', async () => {
-      const { wrapper, mocks } = getWrapper({
-        newFileAction: true,
-        item: '/',
-        newFileHandlers: fileHandlerMocks
-      })
-      const openEditorSpy = jest.spyOn(wrapper.vm, 'openEditor').mockImplementation()
-      mocks.$clientService.webdav.putFileContents.mockResolvedValue(mockDeep<Resource>())
-      await wrapper.vm.addNewFile('New resource.txt')
-      expect(openEditorSpy).toHaveBeenCalled()
-    })
-  })
-  describe('methods "checkNewFolderName" & "checkNewFileName"', () => {
-    it.each([
-      { name: '', validFileName: false, validFolderName: false },
-      { name: '  ', validFileName: false, validFolderName: false },
-      { name: '/name', validFileName: false, validFolderName: false },
-      { name: '.', validFileName: false, validFolderName: false },
-      { name: '..', validFileName: false, validFolderName: false },
-      { name: 'name ', validFileName: false, validFolderName: true },
-      { name: 'name', validFileName: true, validFolderName: true }
-    ])('verifies the resource name', (data) => {
-      const { name, validFileName, validFolderName } = data
-      const { wrapper } = getWrapper()
-      const folderResult = wrapper.vm.checkNewFolderName(name)
-      expect(folderResult === null).toBe(validFolderName)
-      const fileResult = wrapper.vm.checkNewFileName(name)
-      expect(fileResult === null).toBe(validFileName)
-    })
-    it('shows error when the resource name already exists', () => {
-      const existingFile = mockDeep<Resource>({ name: 'someFile.txt' })
-      const { wrapper } = getWrapper({ files: [existingFile] })
-      const folderResult = wrapper.vm.checkNewFolderName(existingFile.name)
-      expect(folderResult).not.toBeNull()
-      const fileResult = wrapper.vm.checkNewFileName(existingFile.name)
-      expect(fileResult).not.toBeNull()
-    })
-  })
-  describe('method "addAppProviderFile"', () => {
-    it('triggers the default file action', async () => {
-      const { wrapper, mocks } = getWrapper({ item: '/' })
-      const defaultActionSpy = jest
-        .spyOn(wrapper.vm, 'triggerDefaultAction')
-        .mockImplementation(() => undefined)
-      mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
-      await wrapper.vm.addAppProviderFile('someFile.txt')
-      expect(defaultActionSpy).toHaveBeenCalled()
-    })
-    it('shows a message when an error occurred', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper, mocks, storeOptions } = getWrapper({ item: '/' })
-      mocks.$clientService.webdav.getFileInfo.mockRejectedValue(new Error())
-      await wrapper.vm.addAppProviderFile('someFile.txt')
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
     })
   })
   describe('drop target', () => {

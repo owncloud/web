@@ -16,6 +16,7 @@ export interface Action<T = ActionOptions> {
   shortcut?: string
   keepOpen?: boolean
   opensInNewWindow?: boolean
+  ext?: string
 
   label(options?: T): string
   isEnabled(options?: T): boolean
