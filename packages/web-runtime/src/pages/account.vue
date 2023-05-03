@@ -219,13 +219,12 @@ export default defineComponent({
       )
     })
 
-    const languageOptions = computed<LanguageOption[]>(() => {
+    const languageOptions = computed(() => {
       const languageOptions = unref(bundlesList)?.settings?.find((s) => s.name === 'language')
         ?.singleChoiceValue.options
       return languageOptions?.map((l) => ({
         label: l.displayValue,
-        value: l.value.stringValue,
-        default: l.default
+        value: l.value.stringValue
       }))
     })
 
