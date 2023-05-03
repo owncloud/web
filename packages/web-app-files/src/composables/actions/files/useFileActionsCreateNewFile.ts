@@ -1,6 +1,6 @@
 import { Resource, extractNameWithoutExtension } from 'web-client/src/helpers'
 import { Store } from 'vuex'
-import { computed, unref } from 'vue'
+import { computed, Ref, unref } from 'vue'
 import { useClientService, useRequest, useRouter, useStore } from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
@@ -20,8 +20,8 @@ export const useFileActionsCreateNewFile = ({
   mimetypesAllowedForCreation
 }: {
   store?: Store<any>
-  newFileHandlers?: any // FIXME: type?
-  mimetypesAllowedForCreation?: any // FIXME: type?
+  newFileHandlers?: Ref<any> // FIXME: type?
+  mimetypesAllowedForCreation?: Ref<any> // FIXME: type?
 } = {}) => {
   store = store || useStore()
   const router = useRouter()
@@ -33,9 +33,7 @@ export const useFileActionsCreateNewFile = ({
   const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
   const files = computed((): Array<Resource> => store.getters['Files/files'])
   const ancestorMetaData = computed(() => store.getters['Files/ancestorMetaData'])
-  const areFileExtensionsShown = computed(
-    (): boolean => store.getters['Files/areFileExtensionsShown']
-  )
+  const areFileExtensionsShown = computed((): boolean => store.state.Files.areFileExtensionsShown)
   const storageId = computed(() => unref(currentFolder).storageId)
   const currentSpace = computed(() =>
     store.getters['runtime/spaces/spaces'].find((space) => space.id === unref(storageId))
@@ -167,7 +165,6 @@ export const useFileActionsCreateNewFile = ({
   const handler = (
     fileActionOptions: FileActionOptions,
     extension: string,
-    addAppProviderFile: boolean,
     openAction: any // FIXME: type?
   ) => {
     const checkInputValue = (value) => {
@@ -203,7 +200,7 @@ export const useFileActionsCreateNewFile = ({
       ),
       inputSelectionRange,
       onCancel: () => store.dispatch('hideModal'),
-      onConfirm: addAppProviderFile
+      onConfirm: !openAction
         ? addAppProviderFileFunc
         : (fileName) => {
             if (!areFileExtensionsShown.value) {
@@ -219,12 +216,12 @@ export const useFileActionsCreateNewFile = ({
 
   const actions = computed((): FileAction[] => {
     const actions = []
-    for (const newFileHandler of newFileHandlers || []) {
+    for (const newFileHandler of unref(newFileHandlers) || []) {
       const openAction = newFileHandler.action
       actions.push({
         name: 'create-new-file',
         icon: 'add',
-        handler: (args) => handler(args, newFileHandler.ext, !openAction, openAction),
+        handler: (args) => handler(args, newFileHandler.ext, openAction),
         label: () => newFileHandler.menuTitle($gettext),
         isEnabled: ({ resources }) => {
           return true
@@ -235,13 +232,12 @@ export const useFileActionsCreateNewFile = ({
         ext: newFileHandler.ext
       })
     }
-    for (const mimeType of mimetypesAllowedForCreation || []) {
+    for (const mimeType of unref(mimetypesAllowedForCreation) || []) {
       const openAction = false
-      const addAppProviderFile = true
       actions.push({
         name: 'create-new-file',
         icon: 'add',
-        handler: (args) => handler(args, mimeType.ext, addAppProviderFile, openAction),
+        handler: (args) => handler(args, mimeType.ext, openAction),
         label: () => mimeType.name,
         isEnabled: ({ resources }) => {
           return true

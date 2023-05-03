@@ -209,11 +209,10 @@ export default defineComponent({
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
 
     const newFileHandlers = computed(() => store.getters.newFileHandlers)
-    console.log('newFileHandlers', newFileHandlers)
 
     const { actions: createNewFileActions } = useFileActionsCreateNewFile({
       store,
-      newFileHandlers: unref(newFileHandlers)
+      newFileHandlers: newFileHandlers
     })
 
     const mimetypesAllowedForCreation = computed(() => {
@@ -226,7 +225,7 @@ export default defineComponent({
 
     const { actions: createNewFileMimeTypeActions } = useFileActionsCreateNewFile({
       store,
-      mimetypesAllowedForCreation: unref(mimetypesAllowedForCreation)
+      mimetypesAllowedForCreation: mimetypesAllowedForCreation
     })
 
     const currentFolder = computed(() => {
@@ -292,7 +291,6 @@ export default defineComponent({
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['ancestorMetaData', 'files', 'selectedFiles', 'clipboardResources']),
-    ...mapState('Files', ['areFileExtensionsShown']),
     ...mapGetters('runtime/spaces', ['spaces']),
 
     showPasteHereButton() {
