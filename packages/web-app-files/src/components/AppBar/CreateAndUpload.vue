@@ -133,7 +133,7 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
