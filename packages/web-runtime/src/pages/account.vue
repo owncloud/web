@@ -155,7 +155,6 @@ export default defineComponent({
     const configurationManager = useConfigurationManager()
     const valuesList = ref<SettingValue[]>()
     const bundlesList = ref<AccountBundle>()
-    const languageOptions = ref<LanguageOption[]>()
     const selectedLanguageValue = ref<LanguageOption>()
     const disableEmailNotificationsValue = ref<boolean>()
 
@@ -218,6 +217,16 @@ export default defineComponent({
         loadBundlesListTask.isRunning ||
         !loadBundlesListTask.last
       )
+    })
+
+    const languageOptions = computed<LanguageOption[]>(() => {
+      const languageOptions = unref(bundlesList)?.settings?.find((s) => s.name === 'language')
+        ?.singleChoiceValue.options
+      return languageOptions?.map((l) => ({
+        label: l.displayValue,
+        value: l.value.stringValue,
+        default: l.default
+      }))
     })
 
     const groupNames = computed(() => {
@@ -324,13 +333,6 @@ export default defineComponent({
       if (unref(isSettingsServiceSupported)) {
         await loadBundlesListTask.perform()
         await loadValuesListTask.perform()
-
-        const options = unref(bundlesList)?.settings?.find((s) => s.name === 'language')
-          ?.singleChoiceValue.options
-        languageOptions.value = options?.map(({ displayValue, value }) => ({
-          label: displayValue,
-          value: value.stringValue
-        }))
 
         const languageConfiguration = unref(valuesList)?.find(
           (cV) => cV.identifier.setting === 'language'
