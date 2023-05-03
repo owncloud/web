@@ -1,5 +1,5 @@
 import { mock } from 'jest-mock-extended'
-import { nextTick, ref, unref } from 'vue'
+import { nextTick, unref } from 'vue'
 import { useFileActionsCreateNewFolder } from 'web-app-files/src/composables'
 import { SpaceResource } from 'web-client/src'
 import { FolderResource } from 'web-client/src/helpers'
@@ -105,7 +105,12 @@ function getWrapper({
   }
   mocks.$clientService.webdav.createFolder.mockImplementation(() => {
     if (resolveCreateFolder) {
-      return Promise.resolve({ id: 1, type: 'folder' } as FolderResource)
+      return Promise.resolve({
+        id: 1,
+        type: 'folder',
+        isReceivedShare: jest.fn(),
+        path: '/'
+      } as FolderResource)
     }
     return Promise.reject('error')
   })

@@ -1,6 +1,6 @@
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
-import { Ref, computed, unref } from 'vue'
+import { computed, unref } from 'vue'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { FileAction } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'

@@ -2,7 +2,7 @@ import { mock } from 'jest-mock-extended'
 import { nextTick, ref, unref } from 'vue'
 import { useFileActionsCreateNewFile } from 'web-app-files/src/composables'
 import { SpaceResource } from 'web-client/src'
-import { FolderResource } from 'web-client/src/helpers'
+import { Resource } from 'web-client/src/helpers'
 import { FileActionOptions } from 'web-pkg/src/composables/actions'
 import {
   RouteLocation,
@@ -108,7 +108,12 @@ function getWrapper({
   }
   mocks.$clientService.webdav.putFileContents.mockImplementation(() => {
     if (resolveCreateFile) {
-      return Promise.resolve({ id: 1, type: 'folder' } as FolderResource)
+      return Promise.resolve({
+        id: 1,
+        type: 'folder',
+        path: '/',
+        isReceivedShare: jest.fn()
+      } as Resource)
     }
     return Promise.reject('error')
   })
