@@ -12,7 +12,7 @@ import { mock, mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
 import { AxiosResponse } from 'axios'
 import { ClientService } from 'web-pkg'
-import { AccountBundle, SettingValue } from 'web-runtime/src/helpers/settings'
+import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 
 const $route = {
   meta: {
@@ -173,10 +173,10 @@ describe('account page', () => {
     it('should show a message on success', async () => {
       const clientServiceMock = mockDeep<ClientService>()
       clientServiceMock.httpAuthenticated.post.mockResolvedValueOnce(
-        mock<AxiosResponse>({ data: { bundles: [mock<AccountBundle>()] } })
+        mock<AxiosResponse>({ data: { bundles: [mock<SettingsBundle>()] } })
       )
       clientServiceMock.httpAuthenticated.post.mockResolvedValueOnce(
-        mock<AxiosResponse>({ data: { values: [mock<SettingValue>()] } })
+        mock<AxiosResponse>({ data: { values: [mock<SettingsValue>()] } })
       )
 
       const { wrapper, mocks, storeOptions } = getWrapper({
@@ -184,7 +184,7 @@ describe('account page', () => {
         capabilities: { spaces: { enabled: true } }
       })
 
-      await wrapper.vm.loadBundlesListTask.last
+      await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
 
       mocks.$clientService.httpAuthenticated.post.mockResolvedValueOnce(mockAxiosResolve({}))
@@ -199,10 +199,10 @@ describe('account page', () => {
 
       const clientServiceMock = mockDeep<ClientService>()
       clientServiceMock.httpAuthenticated.post.mockResolvedValueOnce(
-        mock<AxiosResponse>({ data: { bundles: [mock<AccountBundle>()] } })
+        mock<AxiosResponse>({ data: { bundles: [mock<SettingsBundle>()] } })
       )
       clientServiceMock.httpAuthenticated.post.mockResolvedValueOnce(
-        mock<AxiosResponse>({ data: { values: [mock<SettingValue>()] } })
+        mock<AxiosResponse>({ data: { values: [mock<SettingsValue>()] } })
       )
 
       const { wrapper, mocks, storeOptions } = getWrapper({
@@ -210,7 +210,7 @@ describe('account page', () => {
         capabilities: { spaces: { enabled: true } }
       })
 
-      await wrapper.vm.loadBundlesListTask.last
+      await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
 
       mocks.$clientService.httpAuthenticated.post.mockImplementation(() => mockAxiosReject('err'))

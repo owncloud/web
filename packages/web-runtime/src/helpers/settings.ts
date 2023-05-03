@@ -1,4 +1,4 @@
-export interface SettingValue {
+export interface SettingsValue {
   identifier: {
     bundle: string
     extension: string
@@ -21,21 +21,7 @@ export interface SettingValue {
   }
 }
 
-export interface AccountBundleSetting {
-  description: string
-  displayName: string
-  id: string
-  name: string
-  resource: {
-    type: string
-  }
-  singleChoiceValue?: {
-    options: Record<string, any>[]
-  }
-  boolValue?: Record<string, any>
-}
-
-export interface AccountBundle {
+export interface SettingsBundle {
   displayName: string
   extension: string
   id: string
@@ -43,7 +29,19 @@ export interface AccountBundle {
   resource: {
     type: string
   }
-  settings: AccountBundleSetting[]
+  settings: {
+    description: string
+    displayName: string
+    id: string
+    name: string
+    resource: {
+      type: string
+    }
+    singleChoiceValue?: {
+      options: Record<string, any>[]
+    }
+    boolValue?: Record<string, any>
+  }[]
   type: string
 }
 
