@@ -23,10 +23,8 @@ module.exports = {
      * @param {string} folder
      */
     navigateToFolder: async function (folder) {
-      await this.page.FilesPageElement.filesList()
-        .navigateToFolder(folder)
-      await this.waitForElementVisible('@breadcrumb')
-        .assert.containsText('@breadcrumb', folder)
+      await this.page.FilesPageElement.filesList().navigateToFolder(folder)
+      await this.waitForElementVisible('@breadcrumb').assert.containsText('@breadcrumb', folder)
       return this
     },
     /**
