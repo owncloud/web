@@ -414,7 +414,7 @@ export default defineComponent({
         return
       }
       /**
-       * The user clicked on the confirm button. If input exists, emits it's value
+       * The user clicked on the confirm button. If input exists, emits its value
        *
        * @property {String} value Value of the input
        */
@@ -573,7 +573,7 @@ export default defineComponent({
     variation="danger"
     icon="alert"
     title="Delete file lorem.txt"
-    message="Are you sure you want to delete this file? All it’s content will be permanently removed. This action cannot be undone."
+    message="Are you sure you want to delete this file? All its content will be permanently removed. This action cannot be undone."
     button-cancel-text="Cancel"
     button-confirm-text="Delete"
     button-confirm-appearance="filled"

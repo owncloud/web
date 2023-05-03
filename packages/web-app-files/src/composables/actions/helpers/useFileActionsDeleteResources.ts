@@ -89,13 +89,13 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
       if (isFolder) {
         return unref(isInTrashbin)
           ? $gettext(
-              'Are you sure you want to delete this folder? All it’s content will be permanently removed. This action cannot be undone.'
+              'Are you sure you want to delete this folder? All its content will be permanently removed. This action cannot be undone.'
             )
           : $gettext('Are you sure you want to delete this folder?')
       }
       return unref(isInTrashbin)
         ? $gettext(
-            'Are you sure you want to delete this file? All it’s content will be permanently removed. This action cannot be undone.'
+            'Are you sure you want to delete this file? All its content will be permanently removed. This action cannot be undone.'
           )
         : $gettext('Are you sure you want to delete this file?')
     }
