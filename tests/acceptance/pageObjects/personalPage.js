@@ -22,11 +22,12 @@ module.exports = {
      *
      * @param {string} folder
      */
-    navigateToFolder: function (folder) {
-      return this.page.FilesPageElement.filesList()
+    navigateToFolder: async function (folder) {
+      await this.page.FilesPageElement.filesList()
         .navigateToFolder(folder)
-        .waitForElementVisible('@breadcrumb')
+      await this.waitForElementVisible('@breadcrumb')
         .assert.containsText('@breadcrumb', folder)
+      return this
     },
     /**
      *
