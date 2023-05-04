@@ -36,7 +36,6 @@ export const useFileActionsShowDetails = ({ store }: { store?: Store<any> } = {}
         return resources.length > 0
       },
       handler({ resources }) {
-        console.log('resource', resources)
         store.commit('Files/SET_FILE_SELECTION', resources)
         eventBus.publish(SideBarEventTopics.open)
       }

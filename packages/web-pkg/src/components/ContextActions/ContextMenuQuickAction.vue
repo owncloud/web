@@ -16,7 +16,7 @@
       :ref="`context-menu-drop-ref-${resourceDomSelector(item)}`"
       :drop-id="`context-menu-drop-${resourceDomSelector(item)}`"
       :toggle="`#context-menu-trigger-${resourceDomSelector(item)}`"
-      class="oc-overflow-hidden generic"
+      class="oc-overflow-hidden"
       position="bottom-end"
       mode="click"
       close-on-click
