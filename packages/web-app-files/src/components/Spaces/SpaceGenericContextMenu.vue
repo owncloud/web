@@ -11,7 +11,7 @@
     >
       <oc-list>
         <action-menu-item
-          v-for="(action, actionIndex) in items"
+          v-for="(action, actionIndex) in menuItemsActions"
           :key="`section-${action.name}-action-${actionIndex}`"
           :action="action"
           :action-options="actionOptions"
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, unref } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useFileActionsPaste, useFileActionsShowDetails } from 'web-app-files/src/composables'
 import { useFileActionsCreateNewFolder } from 'web-app-files/src/composables/actions/files/useFileActionsCreateNewFolder'
@@ -45,7 +45,6 @@ export default defineComponent({
   setup(props) {
     const { $gettext } = useGettext()
     const store = useStore()
-    const items = ref([])
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const currentFolder = computed(() => unref(store.getters['Files/currentFolder']))
     const actionOptions = computed(() => ({
@@ -53,22 +52,22 @@ export default defineComponent({
       resources: [currentFolder.value]
     }))
 
-    const { actions: createNewFolder } = useFileActionsCreateNewFolder({
+    const { actions: createNewFolderAction } = useFileActionsCreateNewFolder({
       store,
       space: props.space
     })
-    const { actions: showDetails } = useFileActionsShowDetails({ store })
-    const { actions: paste } = useFileActionsPaste({ store })
+    const { actions: showDetailsAction } = useFileActionsShowDetails({ store })
+    const { actions: pasteAction } = useFileActionsPaste({ store })
 
-    const createNewFolderAction = unref(createNewFolder)[0]
-    const showDetailsAction = unref(showDetails)[0]
-    const pasteAction = unref(paste)[0]
+    const menuItemsActions = computed(() => {
+      return [
+        ...unref(createNewFolderAction),
+        ...unref(pasteAction),
+        ...unref(showDetailsAction)
+      ].filter((item) => item.isEnabled(unref(actionOptions)))
+    })
 
-    items.value.push(createNewFolderAction)
-    items.value.push(pasteAction)
-    items.value.push(showDetailsAction)
-
-    return { contextMenuLabel, actionOptions, items, currentFolder }
+    return { contextMenuLabel, actionOptions, currentFolder, menuItemsActions }
   }
 })
 </script>
