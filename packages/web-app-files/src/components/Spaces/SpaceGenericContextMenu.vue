@@ -15,7 +15,8 @@
           :key="`section-${action.name}-action-${actionIndex}`"
           :action="action"
           :action-options="actionOptions"
-          class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"
+          class="oc-px-s oc-rounded oc-menu-item-hover"
+          :data-testid="`generic-context-menu-item-${action.name}`"
         />
       </oc-list>
     </oc-drop>
