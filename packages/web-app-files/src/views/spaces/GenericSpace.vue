@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex oc-width-1-1" :class="{ 'space-frontpage': isSpaceFrontpage }">
-    <space-generic-context-menu :space="space" ref="genericContextMenu" />
+    <space-generic-context-menu ref="genericContextMenu" :space="space" />
     <keyboard-actions :paginated-resources="paginatedResources" :space="space" />
     <files-view-wrapper>
       <app-bar

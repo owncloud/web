@@ -4,24 +4,26 @@
       drop-id="context-menu-drop-generic"
       toggle="#context-menu-trigger-generic"
       position="bottom-end"
-      class="oc-files-context-actions"
       mode="click"
+      class="generic-context-actions-list"
       close-on-click
       padding-size="small"
     >
-      <action-menu-item
-        v-for="(action, actionIndex) in items"
-        :key="`section-${action.name}-action-${actionIndex}`"
-        :action="action"
-        :action-options="actionOptions"
-        class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"
-      />
+      <oc-list>
+        <action-menu-item
+          v-for="(action, actionIndex) in items"
+          :key="`section-${action.name}-action-${actionIndex}`"
+          :action="action"
+          :action-options="actionOptions"
+          class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"
+        />
+      </oc-list>
     </oc-drop>
   </oc-button>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useFileActionsPaste } from 'web-app-files/src/composables'
 import { useFileActionsCreateNewFolder } from 'web-app-files/src/composables/actions/files/useFileActionsCreateNewFolder'
@@ -33,11 +35,6 @@ export default defineComponent({
   name: 'SpaceGenericContextMenu',
   components: { ActionMenuItem },
   props: {
-    items: {
-      type: Array,
-      required: true,
-      default: []
-    },
     space: {
       type: Object as PropType<SpaceResource>,
       required: false,
@@ -47,20 +44,24 @@ export default defineComponent({
   setup(props) {
     const { $gettext } = useGettext()
     const store = useStore()
+    const items = ref([])
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const actionOptions = computed(() => ({
-      space: props.space
+      space: props.space,
+      resources: []
     }))
 
-    const { actions: createNewFolderAction } = useFileActionsCreateNewFolder({
+    const { actions: createNewFolder } = useFileActionsCreateNewFolder({
       store,
       space: props.space
     })
-    const { actions: pasteAction } = useFileActionsPaste({ store })
-    console.log(unref(createNewFolderAction)[0])
-    props.items.push(unref(createNewFolderAction)[0])
-    props.items.push(unref(pasteAction)[0])
-    return { contextMenuLabel, actionOptions }
+    const { actions: paste } = useFileActionsPaste({ store })
+    const createNewFolderAction = unref(createNewFolder)[0]
+    const pasteAction = unref(paste)[0]
+
+    items.value.push(createNewFolderAction)
+    items.value.push(pasteAction)
+    return { contextMenuLabel, actionOptions, items }
   }
 })
 </script>
@@ -70,5 +71,25 @@ export default defineComponent({
   visibility: hidden;
   width: 0;
   height: 0;
+}
+.generic-context-actions-list {
+  .oc-card {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  text-align: left;
+  white-space: normal;
+
+  a,
+  button,
+  span {
+    display: inline-flex;
+    font-weight: normal !important;
+    gap: 10px;
+    justify-content: flex-start;
+    vertical-align: top;
+    width: 100%;
+    text-align: left;
+  }
 }
 </style>
