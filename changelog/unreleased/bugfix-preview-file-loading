@@ -1,0 +1,6 @@
+Bugfix: Preview app file loading
+
+A bug where the preview app would load the files of an image's source location instead of the files in the actual file list has been fixed.
+
+https://github.com/owncloud/web/issues/8932
+https://github.com/owncloud/web/pull/8975

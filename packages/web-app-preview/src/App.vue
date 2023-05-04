@@ -266,11 +266,10 @@ export default defineComponent({
     }
   },
 
-  async mounted() {
+  mounted() {
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     document.addEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
-    await this.loadFolderForFileContext(this.currentFileContext)
     this.setActiveFile(unref(this.currentFileContext.driveAliasAndItem))
     ;(this.$refs.preview as HTMLElement).focus()
   },
