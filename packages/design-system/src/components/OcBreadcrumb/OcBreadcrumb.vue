@@ -2,9 +2,16 @@
   <nav :id="id" :class="`oc-breadcrumb oc-breadcrumb-${variation}`">
     <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
       <li
-        v-for="(item, index) in items"
+        v-for="(item, index) in visibleItems"
         :key="index"
-        class="oc-breadcrumb-list-item oc-flex oc-flex-middle"
+        :data-key="index"
+        :class="{
+          'oc-breadcrumb-list-item': true,
+          'oc-flex': true,
+          'oc-flex-middle': true,
+          hide:
+            hiddenItems.indexOf(item) !== -1 || (item.type === 'hidden' && hiddenItems.length === 0)
+        }"
       >
         <router-link v-if="item.to" :aria-current="getAriaCurrent(index)" :to="item.to">
           <span>{{ item.text }}</span>
@@ -64,7 +71,17 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  PropType,
+  ref,
+  unref,
+  watch
+} from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 import { AVAILABLE_SIZES } from '../../helpers/constants'
@@ -92,7 +109,6 @@ export default defineComponent({
     OcIcon,
     OcButton
   },
-
   props: {
     /**
      * Id for the breadcrumbs. If it's empty, a generated one will be used.
@@ -142,6 +158,68 @@ export default defineComponent({
   },
   setup(props) {
     const { $gettext } = useGettext()
+    const visibleItems = ref([])
+    const hiddenItems = ref([])
+
+    const getBreadcrumbElement = (key): HTMLElement => {
+      return document.querySelector(`[data-key="${key}"]`)
+    }
+
+    const calculateTotalBreadcrumbWidth = () => {
+      const parent = document.getElementById(props.id)
+      const parentStyle = window.getComputedStyle(parent)
+      //const itemGap = parseFloat(parentStyle.getPropertyValue('gap'))
+      let totalBreadcrumbWidth = 0
+      visibleItems.value.forEach((item, index) => {
+        const breadcrumbElement = getBreadcrumbElement(index)
+        const itemClientWidth = breadcrumbElement.offsetWidth + 22
+        const itemWidth = itemClientWidth
+        totalBreadcrumbWidth += itemWidth
+      })
+      return totalBreadcrumbWidth
+    }
+
+    const reduceBreadcrumb = (offsetIndex) => {
+      const parentWidth = document.getElementById(props.id).offsetWidth
+      const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
+      const isOverflowing = parentWidth < totalBreadcrumbWidth
+      if (!isOverflowing) {
+        return
+      }
+      // Remove from the left side
+      hiddenItems.value.push(visibleItems.value.splice(offsetIndex, 1))
+      reduceBreadcrumb(offsetIndex)
+    }
+
+    const renderBreadcrumb = () => {
+      visibleItems.value = props.items.slice()
+      hiddenItems.value = []
+
+      nextTick(() => {
+        reduceBreadcrumb(1)
+      })
+    }
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      renderBreadcrumb()
+    })
+
+    watch(
+      () => props.items,
+      () => {
+        renderBreadcrumb()
+      }
+    )
+    onMounted(() => {
+      renderBreadcrumb()
+      window.addEventListener('resize', renderBreadcrumb)
+      resizeObserver.observe(document.getElementById(props.id))
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', renderBreadcrumb)
+      resizeObserver.disconnect()
+    })
 
     const currentFolder = computed<BreadcrumbItem>(() => {
       if (props.items.length === 0 || !props.items) {
@@ -161,14 +239,26 @@ export default defineComponent({
       return props.items.length - 1 === index ? 'page' : null
     }
 
-    return { currentFolder, parentFolderTo, contextMenuLabel, getAriaCurrent }
+    return {
+      currentFolder,
+      parentFolderTo,
+      contextMenuLabel,
+      getAriaCurrent,
+      visibleItems,
+      hiddenItems,
+      renderBreadcrumb
+    }
   }
 })
 </script>
 
 <style lang="scss">
+.hide {
+  display: none;
+}
 .oc-breadcrumb {
   overflow: hidden;
+  width: 50vw;
 
   &-mobile-current,
   &-mobile-navigation {
@@ -184,7 +274,7 @@ export default defineComponent({
 
     list-style: none;
     align-items: baseline;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 
     #oc-breadcrumb-contextmenu-trigger > span {
       vertical-align: middle;
