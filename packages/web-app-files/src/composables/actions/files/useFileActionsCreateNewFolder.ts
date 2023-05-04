@@ -115,10 +115,10 @@ export const useFileActionsCreateNewFolder = ({
     return [
       {
         name: 'create-folder',
-        icon: 'add',
+        icon: 'folder',
         handler,
         label: () => {
-          return $gettext('Create new Folder')
+          return $gettext('New Folder')
         },
         isEnabled: ({ resources }) => {
           return true
