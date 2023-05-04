@@ -220,3 +220,16 @@ export const copyQuickLink = async (args: copyLinkArgs): Promise<string> => {
   }
   return url
 }
+
+export interface setDenyShareArgs {
+  page: Page
+  resource: string
+  deny: boolean
+  collaborator: ICollaborator
+}
+
+export const setDenyShare = async (args: setDenyShareArgs): Promise<void> => {
+  const { page, resource, deny, collaborator } = args
+  await openSharingPanel(page, resource)
+  await Collaborator.setDenyShareForCollaborator({ page, deny, collaborator })
+}

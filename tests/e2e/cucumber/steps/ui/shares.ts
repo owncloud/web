@@ -2,6 +2,7 @@ import { DataTable, Then, When } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
+import { ICollaborator } from '../../../support/objects/app-files/share/collaborator'
 
 const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
   return stepTable.hashes().reduce((acc, stepRow) => {
@@ -220,6 +221,36 @@ Then(
       expect(isAcceptedSharePresent, '${resource} does not exist in accepted share').toBe(
         shouldExist
       )
+    }
+  }
+)
+
+When(
+  /^"([^"]*)" (grants|denies) access to the following resources(s)? for (group|user) "([^"]*)" using the sidebar panel?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    _: unknown,
+    collaboratorType: 'user' | 'group',
+    collaborator: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+
+    for (const { resource } of stepTable.hashes()) {
+      await shareObject.setDenyShare({
+        resource,
+        deny: actionType === 'denies',
+        collaborator: {
+          collaborator:
+            collaboratorType === 'group'
+              ? this.usersEnvironment.getGroup({ key: collaborator })
+              : this.usersEnvironment.getUser({ key: collaborator }),
+          type: collaboratorType
+        } as ICollaborator
+      })
     }
   }
 )

@@ -35,17 +35,32 @@
           </oc-datepicker>
         </li>
         <li v-for="(option, i) in options" :key="i" class="oc-rounded oc-menu-item-hover">
-          <oc-button
-            v-if="option.enabled"
-            appearance="raw"
-            class="oc-p-s action-menu-item"
-            :class="option.class"
-            v-bind="option.additionalAttributes || {}"
-            @click="option.method()"
-          >
-            <oc-icon :name="option.icon" fill-type="line" size="medium" variation="passive" />
-            <span v-text="option.title" />
-          </oc-button>
+          <template v-if="option.enabled">
+            <div
+              v-if="option.hasSwitch"
+              class="action-menu-item action-menu-item-has-switch oc-p-s oc-flex oc-flex-center"
+            >
+              <oc-icon :name="option.icon" fill-type="line" size="medium" variation="passive" />
+              <oc-switch
+                class="oc-ml-s oc-flex oc-width-1-1 oc-button-justify-content-space-between"
+                :checked="isShareDenied"
+                :class="option.class"
+                :label="option.title"
+                @update:checked="option.method"
+              />
+            </div>
+            <oc-button
+              v-else
+              appearance="raw"
+              class="oc-p-s action-menu-item"
+              :class="option.class"
+              v-bind="option.additionalAttributes || {}"
+              v-on="!option.hasSwitch ? { click: option.method } : {}"
+            >
+              <oc-icon :name="option.icon" fill-type="line" size="medium" variation="passive" />
+              <span class="oc-ml-s" v-text="option.title" />
+            </oc-button>
+          </template>
         </li>
       </oc-list>
     </oc-drop>
@@ -80,12 +95,25 @@ export default defineComponent({
     canEditOrDelete: {
       type: Boolean,
       required: true
+    },
+    isShareDenied: {
+      type: Boolean,
+      default: false
+    },
+    deniable: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['expirationDateChanged', 'removeShare', 'showAccessDetails'],
-  setup() {
+  emits: ['expirationDateChanged', 'removeShare', 'showAccessDetails', 'setDenyShare'],
+  setup(props, { emit }) {
+    const toggleShareDenied = (value) => {
+      emit('setDenyShare', value)
+    }
+
     return {
-      resource: inject<Ref<Resource>>('resource')
+      resource: inject<Ref<Resource>>('resource'),
+      toggleShareDenied
     }
   },
   data: function () {
@@ -130,6 +158,14 @@ export default defineComponent({
           enabled: true,
           icon: 'information',
           class: 'show-access-details'
+        },
+        {
+          title: this.$gettext('Deny access'),
+          method: this.toggleShareDenied,
+          enabled: this.deniable,
+          icon: 'stop-circle',
+          class: 'deny-share',
+          hasSwitch: true
         }
       ]
     },
@@ -266,5 +302,7 @@ export default defineComponent({
 .collaborator-edit-dropdown-options-list .action-menu-item {
   width: 100%;
   justify-content: flex-start;
+  color: var(--oc-color-swatch-passive-default);
+  gap: var(--oc-space-small);
 }
 </style>

@@ -28,9 +28,13 @@
         <li v-for="collaborator in displayCollaborators" :key="collaborator.key">
           <collaborator-list-item
             :share="collaborator"
+            :resource-name="resource.name"
+            :deniable="isShareDeniable(collaborator)"
             :modifiable="isShareModifiable(collaborator)"
+            :is-share-denied="isShareDenied(collaborator)"
             :shared-parent-route="getSharedParentRoute(collaborator)"
             @on-delete="$_ocCollaborators_deleteShare_trigger"
+            @on-set-deny="setDenyShare"
           />
         </li>
       </ul>
@@ -71,11 +75,12 @@ import {
   useStore,
   useCapabilityProjectSpacesEnabled,
   useCapabilityShareJailEnabled,
-  useCapabilityFilesSharingResharing
+  useCapabilityFilesSharingResharing,
+  useCapabilityFilesSharingCanDenyAccess
 } from 'web-pkg/src/composables'
 import { isLocationSharesActive } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { peopleRoleDenyFolder, Share, ShareTypes } from 'web-client/src/helpers/share'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import {
@@ -138,6 +143,7 @@ export default defineComponent({
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
+      hasShareCanDenyAccess: useCapabilityFilesSharingCanDenyAccess(),
       getSharedAncestor,
       configurationManager
     }
@@ -163,12 +169,15 @@ export default defineComponent({
         configurationManager: this.configurationManager
       })
     },
+
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers
     },
+
     sharedWithLabel() {
       return this.$gettext('Shared with')
     },
+
     spaceMemberLabel() {
       return this.$gettext('Space members')
     },
@@ -196,10 +205,14 @@ export default defineComponent({
     },
 
     displayCollaborators() {
-      if (this.collaborators.length > 3 && this.sharesListCollapsed) {
-        return this.collaborators.slice(0, 3)
+      const collaborators = this.collaborators.filter(
+        (c) => c.permissions !== peopleRoleDenyFolder.bitmask(false)
+      )
+
+      if (collaborators.length > 3 && this.sharesListCollapsed) {
+        return collaborators.slice(0, 3)
       }
-      return this.collaborators
+      return collaborators
     },
 
     displaySpaceMembers() {
@@ -227,11 +240,13 @@ export default defineComponent({
       }
       return this.resource.canShare({ user: this.user })
     },
+
     noResharePermsMessage() {
       const translatedFile = this.$gettext("You don't have permission to share this file.")
       const translatedFolder = this.$gettext("You don't have permission to share this folder.")
       return this.resource.type === 'file' ? translatedFile : translatedFolder
     },
+
     showSpaceMembers() {
       return (
         this.space?.driveType === 'project' &&
@@ -239,14 +254,29 @@ export default defineComponent({
         this.currentUserIsMemberOfSpace
       )
     },
+
     matchingSpace() {
       return this.space || this.spaces.find((space) => space.id === this.resource.storageId)
     }
   },
   methods: {
-    ...mapActions('Files', ['deleteShare']),
+    ...mapActions('Files', ['deleteShare', 'addShare']),
     ...mapActions(['createModal', 'hideModal', 'showMessage']),
     ...mapMutations('Files', ['REMOVE_FILES']),
+
+    getDeniedShare(collaborator: Share): Share {
+      return this.collaborators.find(
+        (c) =>
+          c.permissions === peopleRoleDenyFolder.bitmask(false) &&
+          c.file.source === this.resource.id &&
+          c.collaborator.name === collaborator.collaborator.name &&
+          c.shareType === collaborator.shareType
+      )
+    },
+
+    isShareDenied(collaborator: Share): boolean {
+      return !!this.getDeniedShare(collaborator)
+    },
 
     collaboratorsComparator(c1, c2) {
       // Sorted by: type, direct, display name, creation date
@@ -272,6 +302,50 @@ export default defineComponent({
       }
 
       return c1UserShare ? -1 : 1
+    },
+
+    async setDenyShare({ value, share }) {
+      if (value === true) {
+        try {
+          await this.addShare({
+            client: this.$client,
+            shareWith: share.collaborator.name,
+            displayName: share.collaborator.displayName,
+            shareType: share.shareType,
+            role: peopleRoleDenyFolder,
+            path: this.resource.path,
+            permissions: peopleRoleDenyFolder.bitmask(false),
+            storageId: this.resource.id
+          })
+          this.showMessage({
+            title: this.$gettext('Access was denied successfully')
+          })
+        } catch (e) {
+          console.error(e)
+          this.showMessage({
+            title: this.$gettext('Failed to deny access'),
+            status: 'danger'
+          })
+        }
+      } else {
+        try {
+          await this.deleteShare({
+            client: this.$client,
+            share: this.getDeniedShare(share),
+            path: this.resource.path,
+            loadIndicators: false
+          })
+          this.showMessage({
+            title: this.$gettext('Access was granted successfully')
+          })
+        } catch (e) {
+          console.error(e)
+          this.showMessage({
+            title: this.$gettext('Failed to grant access'),
+            status: 'danger'
+          })
+        }
+      }
     },
 
     $_ocCollaborators_deleteShare_trigger(share) {
@@ -323,6 +397,7 @@ export default defineComponent({
         })
       }
     },
+
     getSharedParentRoute(parentShare) {
       if (!parentShare.indirect) {
         return null
@@ -336,6 +411,14 @@ export default defineComponent({
         sharedAncestor,
         matchingSpace: this.matchingSpace
       })
+    },
+
+    isShareDeniable(collaborator) {
+      return (
+        this.hasShareCanDenyAccess &&
+        this.resource.isFolder &&
+        !!this.getSharedParentRoute(collaborator)
+      )
     },
 
     // fixMe: head-breaking logic
@@ -354,7 +437,7 @@ export default defineComponent({
         return true
       }
 
-      if (isProjectSpaceShare && isManager) {
+      if (isProjectSpaceShare && isManager && !isIndirectPersonalCollaborator) {
         return true
       }
 

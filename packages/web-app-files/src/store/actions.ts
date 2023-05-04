@@ -248,36 +248,28 @@ export default {
   },
   async changeShare(
     { commit, dispatch, getters, rootGetters },
-    { $gettext, client, share, permissions, expirationDate, role }
+    { client, share, permissions, expirationDate, role }
   ) {
     if (!permissions && !role) {
       throw new Error('Nothing changed')
     }
 
-    try {
-      const updatedShare = await client.shares.updateShare(share.id, {
-        role: role.name,
-        permissions,
-        expireDate: expirationDate
-      })
+    const updatedShare = await client.shares.updateShare(share.id, {
+      role: role.name,
+      permissions,
+      expireDate: expirationDate
+    })
 
-      const builtShare = buildCollaboratorShare(
-        updatedShare.shareInfo,
-        getters.highlightedFile,
-        allowSharePermissions(rootGetters)
-      )
-      commit('OUTGOING_SHARES_UPSERT', { ...builtShare, outgoing: true })
-    } catch (error) {
-      dispatch(
-        'showMessage',
-        { title: $gettext('Error while editing the share.'), status: 'danger' },
-        { root: true }
-      )
-    }
+    const builtShare = buildCollaboratorShare(
+      updatedShare.shareInfo,
+      getters.highlightedFile,
+      allowSharePermissions(rootGetters)
+    )
+    commit('OUTGOING_SHARES_UPSERT', { ...builtShare, outgoing: true })
   },
-  addShare(
+  async addShare(
     context,
-    { $gettext, client, path, shareWith, shareType, permissions, role, expirationDate, storageId }
+    { client, path, shareWith, shareType, permissions, role, expirationDate, storageId }
   ) {
     const isGroupShare = shareType === ShareTypes.group.value
     const options = {
@@ -293,43 +285,29 @@ export default {
     }
 
     const shareMethod = isGroupShare ? 'shareFileWithGroup' : 'shareFileWithUser'
-    return client.shares[shareMethod](path, shareWith, options)
-      .then(async (share) => {
-        const builtShare = buildCollaboratorShare(
-          share.shareInfo,
-          context.getters.highlightedFile,
-          allowSharePermissions(context.rootGetters)
-        )
-        if (context.state.sharesLoading) {
-          await Promise.resolve(context.state.sharesLoading)
-        }
-        context.commit('OUTGOING_SHARES_UPSERT', { ...builtShare, outgoing: true })
-        context.dispatch('updateCurrentFileShareTypes')
-        context.commit('LOAD_INDICATORS', path)
-      })
-      .catch((e) => {
-        context.dispatch(
-          'showMessage',
-          {
-            title: $gettext('Error while sharing.'),
-            desc: e,
-            status: 'danger'
-          },
-          { root: true }
-        )
-      })
+    const share = await client.shares[shareMethod](path, shareWith, options)
+    const builtShare = buildCollaboratorShare(
+      share.shareInfo,
+      context.getters.highlightedFile,
+      allowSharePermissions(context.rootGetters)
+    )
+    if (context.state.sharesLoading) {
+      await Promise.resolve(context.state.sharesLoading)
+    }
+    context.commit('OUTGOING_SHARES_UPSERT', { ...builtShare, outgoing: true })
+    context.dispatch('updateCurrentFileShareTypes')
+    context.commit('LOAD_INDICATORS', path)
   },
-  deleteShare(context, { client, share, path, loadIndicators = false }) {
-    return client.shares.deleteShare(share.id, {} as any).then(async () => {
-      if (context.state.sharesLoading) {
-        await Promise.resolve(context.state.sharesLoading)
-      }
-      context.commit('OUTGOING_SHARES_REMOVE', share)
-      context.dispatch('updateCurrentFileShareTypes')
-      if (loadIndicators) {
-        context.commit('LOAD_INDICATORS', path)
-      }
-    })
+  async deleteShare(context, { client, share, path, loadIndicators = false }) {
+    await client.shares.deleteShare(share.id, {} as any)
+    if (context.state.sharesLoading) {
+      await Promise.resolve(context.state.sharesLoading)
+    }
+    context.commit('OUTGOING_SHARES_REMOVE', share)
+    context.dispatch('updateCurrentFileShareTypes')
+    if (loadIndicators) {
+      context.commit('LOAD_INDICATORS', path)
+    }
   },
   async loadShares(context, { client, path, storageId, useCached = true }) {
     if (context.state.sharesLoading) {
