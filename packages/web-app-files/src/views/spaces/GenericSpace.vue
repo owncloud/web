@@ -401,7 +401,10 @@ export default defineComponent({
         .getElementsByClassName('files-view-wrapper')[0]
         .addEventListener('contextmenu', (event) => {
           const { target } = event
-          if ((target as HTMLElement).closest('tbody')) {
+          if (
+            (target as HTMLElement).closest('tbody') ||
+            (target as HTMLElement).closest('.oc-tiles-item')
+          ) {
             return
           }
           event.preventDefault()

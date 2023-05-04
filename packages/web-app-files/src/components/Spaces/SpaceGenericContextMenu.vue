@@ -25,7 +25,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useFileActionsPaste } from 'web-app-files/src/composables'
+import { useFileActionsPaste, useFileActionsShowDetails } from 'web-app-files/src/composables'
 import { useFileActionsCreateNewFolder } from 'web-app-files/src/composables/actions/files/useFileActionsCreateNewFolder'
 import { SpaceResource } from 'web-client/src'
 import { useStore } from 'web-pkg/src'
@@ -46,22 +46,28 @@ export default defineComponent({
     const store = useStore()
     const items = ref([])
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
+    const currentFolder = computed(() => unref(store.getters['Files/currentFolder']))
     const actionOptions = computed(() => ({
       space: props.space,
-      resources: []
+      resources: [currentFolder.value]
     }))
 
     const { actions: createNewFolder } = useFileActionsCreateNewFolder({
       store,
       space: props.space
     })
+    const { actions: showDetails } = useFileActionsShowDetails({ store })
     const { actions: paste } = useFileActionsPaste({ store })
+
     const createNewFolderAction = unref(createNewFolder)[0]
+    const showDetailsAction = unref(showDetails)[0]
     const pasteAction = unref(paste)[0]
 
     items.value.push(createNewFolderAction)
     items.value.push(pasteAction)
-    return { contextMenuLabel, actionOptions, items }
+    items.value.push(showDetailsAction)
+
+    return { contextMenuLabel, actionOptions, items, currentFolder }
   }
 })
 </script>
