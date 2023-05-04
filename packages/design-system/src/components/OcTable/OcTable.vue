@@ -19,7 +19,7 @@
           <oc-button
             v-if="field.sortable"
             :aria-label="getSortLabel(field.name)"
-            :class="{ 'oc-invisible': sortBy !== field.name }"
+            :class="{ 'oc-invisible-sr': sortBy !== field.name }"
             class="oc-button-sort"
             variation="passive"
             appearance="raw"

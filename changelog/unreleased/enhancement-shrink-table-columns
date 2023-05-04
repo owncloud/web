@@ -1,0 +1,6 @@
+Enhancement: Shrink table columns
+
+We've decided to shrink most table columns in the file list to their absolute minimum (Shares, Size, Modified/Shared/Delete date, Actions) so that the file name can take up more horizontal space.
+
+https://github.com/owncloud/web/issues/8599
+https://github.com/owncloud/web/pull/8978

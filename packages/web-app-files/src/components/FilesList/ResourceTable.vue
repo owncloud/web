@@ -344,9 +344,14 @@ export default defineComponent({
       required: false,
       default: false
     },
+    /**
+     * The active view mode.
+     */
     viewMode: {
       type: String,
-      default: ViewModeConstants.defaultModeName
+      default: ViewModeConstants.defaultModeName,
+      validator: (value: string) =>
+        [ViewModeConstants.condensedTable.name, ViewModeConstants.default.name].includes(value)
     },
     /**
      * Enable hover effect
@@ -486,21 +491,24 @@ export default defineComponent({
             title: this.$gettext('Shares'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap'
+            wrap: 'nowrap',
+            width: 'shrink'
           },
           {
             name: 'size',
             title: this.$gettext('Size'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap'
+            wrap: 'nowrap',
+            width: 'shrink'
           },
           {
             name: 'status',
             title: this.$gettext('Status'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap'
+            wrap: 'nowrap',
+            width: 'shrink'
           },
           this.hasTags
             ? {
@@ -508,7 +516,8 @@ export default defineComponent({
                 title: this.$gettext('Tags'),
                 type: 'slot',
                 alignH: 'right',
-                wrap: 'nowrap'
+                wrap: 'nowrap',
+                width: 'shrink'
               }
             : {},
           {
@@ -516,14 +525,16 @@ export default defineComponent({
             title: this.$gettext('Shared by'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap'
+            wrap: 'nowrap',
+            width: 'shrink'
           },
           {
             name: 'sharedWith',
             title: this.$gettext('Shared with'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap'
+            wrap: 'nowrap',
+            width: 'shrink'
           },
           {
             name: 'mdate',
@@ -531,6 +542,7 @@ export default defineComponent({
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
+            width: 'shrink',
             accessibleLabelCallback: (item) =>
               this.formatDateRelative(item.mdate) + ' (' + this.formatDate(item.mdate) + ')'
           },
@@ -540,6 +552,7 @@ export default defineComponent({
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
+            width: 'shrink',
             accessibleLabelCallback: (item) =>
               this.formatDateRelative(item.sdate) + ' (' + this.formatDate(item.sdate) + ')'
           },
@@ -549,6 +562,7 @@ export default defineComponent({
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
+            width: 'shrink',
             accessibleLabelCallback: (item) =>
               this.formatDateRelative(item.ddate) + ' (' + this.formatDate(item.ddate) + ')'
           }
@@ -577,7 +591,8 @@ export default defineComponent({
           title: this.$gettext('Actions'),
           type: 'slot',
           alignH: 'right',
-          wrap: 'nowrap'
+          wrap: 'nowrap',
+          width: 'shrink'
         })
       }
 
@@ -909,7 +924,7 @@ export default defineComponent({
   &-actions {
     align-items: center;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     gap: var(--oc-space-xsmall);
     justify-content: flex-end;
   }
