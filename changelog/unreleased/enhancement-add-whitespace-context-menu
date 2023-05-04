@@ -1,0 +1,6 @@
+Enhancement: Add whitespace context-menu
+
+We've added a generic context-menu for right clicking on whitespace.
+
+https://github.com/owncloud/web/pull/8921
+https://github.com/owncloud/web/issues/5861
