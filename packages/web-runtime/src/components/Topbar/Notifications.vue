@@ -103,7 +103,6 @@ import {
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { useAuthService } from 'web-pkg/src/composables/authContext/useAuthService'
 
 const POLLING_INTERVAL = 30000
 
@@ -116,7 +115,6 @@ export default {
     const clientService = useClientService()
     const { current: currentLanguage } = useGettext()
     const route = useRoute()
-    const authService = useAuthService()
 
     const notifications = ref<Notification[]>([])
     const loading = ref(false)
@@ -201,10 +199,7 @@ export default {
           service: 'apps/notifications',
           action: 'api/v1/notifications'
         })
-        if (response.status === 401) {
-          // FIXME: this can be removed as soon as the server actively informs Web about a logout
-          return authService.handleAuthError(unref(route))
-        }
+
         if (response.headers.get('Content-Length') === '0') {
           return
         }
