@@ -315,6 +315,7 @@ module.exports = {
       return this.waitForElementVisible('@publicLinkCreateButton')
         .initAjaxCounters()
         .click('@publicLinkCreateButton')
+        .waitForElementNotPresent('@popupNotificationMessage')
         .waitForOutstandingAjaxCalls()
     },
     /**
@@ -545,6 +546,11 @@ module.exports = {
     }
   },
   elements: {
+    popupNotificationMessage: {
+      selector:
+        '//*[contains(@class, "oc-notification-message")]//div[contains(@class, "oc-notification-message-title")]',
+      locateStrategy: 'xpath'
+    },
     latestLinkName: {
       selector: '//div[@id="oc-files-file-link"]//ul/li[1]//h4',
       locateStrategy: 'xpath'

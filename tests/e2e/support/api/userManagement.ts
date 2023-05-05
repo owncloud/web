@@ -2,6 +2,7 @@ import { checkResponseStatus, checkOCJsonStatus, request } from './http'
 import { Group, User } from '../types'
 import { URLSearchParams } from 'url'
 import join from 'join-path'
+import { UsersEnvironment } from '../environment'
 
 export const createUser = async ({ user, admin }: { user: User; admin: User }): Promise<void> => {
   const promChain = []
@@ -21,8 +22,11 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
     })
     checkResponseStatus(response, 'Failed while creating user')
 
-    const json = await response.json()
-    checkOCJsonStatus(json, 'Failed while creating user')
+    const jsonResponse = await response.json()
+    checkOCJsonStatus(jsonResponse, 'Failed while creating user')
+
+    const usersEnvironment = new UsersEnvironment()
+    usersEnvironment.storeCreatedUser({ user: { ...user, uuid: jsonResponse.id } })
   }
 
   ;[
@@ -55,7 +59,10 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
     path: join('ocs', 'v2.php', 'cloud', 'users', encodeURIComponent(user.id)),
     user: admin
   })
-
+  try {
+    const usersEnvironment = new UsersEnvironment()
+    usersEnvironment.removeCreatedUser({ key: user.id })
+  } catch (e) {}
   return user
 }
 

@@ -58,10 +58,10 @@ Feature: Sharing files and folders with internal groups
       | entry_name    |
       | simple-folder |
       | testimage.jpg |
-    And these resources should be listed in the folder "/Shares%2Fsimple-folder" on the webUI
+    And these resources should be listed in the folder "/Shares/simple-folder" on the webUI
       | entry_name |
       | lorem.txt  |
-    But these resources should not be listed in the folder "/Shares%2Fsimple-folder" on the webUI
+    But these resources should not be listed in the folder "/Shares/simple-folder" on the webUI
       | entry_name    |
       | simple-folder |
     When the user browses to the shared-with-me page
