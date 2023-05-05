@@ -4,6 +4,7 @@ import join from 'join-path'
 import { config } from '../../../config'
 import { getApplicationEntity } from './utils'
 import { userRoleStore } from '../../store'
+import { UsersEnvironment } from '../../environment'
 
 export const me = async ({ user }: { user: User }): Promise<Me> => {
   const response = await request({
@@ -32,9 +33,8 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
 
   checkResponseStatus(response, 'Failed while creating user')
 
-  const responseData = await response.json()
-  user.uuid = responseData.id
-
+  const usersEnvironment = new UsersEnvironment()
+  usersEnvironment.storeCreatedUser({ user: { ...user, uuid: (await response.json()).id } })
   return user
 }
 
@@ -44,7 +44,10 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
     path: join('graph', 'v1.0', 'users', user.id),
     user: admin
   })
-
+  try {
+    const usersEnvironment = new UsersEnvironment()
+    usersEnvironment.removeCreatedUser({ key: user.id })
+  } catch (e) {}
   return user
 }
 

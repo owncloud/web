@@ -35,13 +35,23 @@ const displayNameInput = '#create-user-input-display-name'
 const emailInput = '#create-user-input-email'
 const passwordInput = '#create-user-input-password'
 
+export interface UserInterface {
+  displayName: string
+  givenName: string
+  id: string
+  mail: string
+  onPremisesSamAccountName: string
+  surname: string
+  userType: string
+}
+
 export const createUser = async (args: {
   page: Page
   name: string
   displayname: string
   email: string
   password: string
-}): Promise<void> => {
+}): Promise<UserInterface> => {
   const { page, name, displayname, email, password } = args
   await page.locator(createUserButton).click()
   await page.locator(userNameInput).fill(name)
@@ -49,13 +59,15 @@ export const createUser = async (args: {
   await page.locator(emailInput).fill(email)
   await page.locator(passwordInput).fill(password)
 
-  await Promise.all([
+  const [response] = await Promise.all([
     page.waitForResponse(
       (resp) =>
         resp.url().endsWith('users') && resp.status() === 200 && resp.request().method() === 'POST'
     ),
-    await page.locator(actionConfirmButton).click()
+    page.locator(actionConfirmButton).click()
   ])
+
+  return await response.json()
 }
 export const changeAccountEnabled = async (args: {
   page: Page
