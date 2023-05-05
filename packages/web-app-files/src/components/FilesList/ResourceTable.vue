@@ -955,12 +955,6 @@ export default defineComponent({
 
 // Hide files table columns
 .files-table {
-  .oc-table-header-cell-mdate,
-  .oc-table-data-cell-mdate,
-  .oc-table-header-cell-sdate,
-  .oc-table-data-cell-sdate,
-  .oc-table-header-cell-ddate,
-  .oc-table-data-cell-ddate,
   .oc-table-header-cell-size,
   .oc-table-data-cell-size,
   .oc-table-header-cell-sharedWith,
@@ -976,8 +970,12 @@ export default defineComponent({
     }
   }
 
-  .oc-table-header-cell-owner,
-  .oc-table-data-cell-owner {
+  .oc-table-header-cell-mdate,
+  .oc-table-data-cell-mdate,
+  .oc-table-header-cell-sdate,
+  .oc-table-data-cell-sdate,
+  .oc-table-header-cell-ddate,
+  .oc-table-data-cell-ddate {
     display: none;
 
     @media only screen and (min-width: 960px) {
@@ -985,13 +983,25 @@ export default defineComponent({
     }
   }
 
+  .oc-table-header-cell-owner,
+  .oc-table-data-cell-owner,
+  .oc-table-header-cell-tags,
+  .oc-table-data-cell-tags,
+  .oc-table-header-cell-indicators,
+  .oc-table-data-cell-indicators {
+    display: none;
+
+    @media only screen and (min-width: 1200px) {
+      display: table-cell;
+    }
+  }
+
   &-squashed {
-    .oc-table-header-cell-mdate,
-    .oc-table-data-cell-mdate,
-    .oc-table-header-cell-sdate,
-    .oc-table-data-cell-sdate,
-    .oc-table-header-cell-ddate,
-    .oc-table-data-cell-ddate,
+    /**
+     * squashed = right sidebar is open.
+     * same media queries as above but +440px width of the right sidebar
+     * (because the right sidebar steals 440px from the file list)
+     */
     .oc-table-header-cell-size,
     .oc-table-data-cell-size,
     .oc-table-header-cell-sharedWith,
@@ -1002,26 +1012,33 @@ export default defineComponent({
     .oc-table-data-cell-status {
       display: none;
 
-      @media only screen and (min-width: 1600px) {
+      @media only screen and (min-width: 1080px) {
         display: table-cell;
       }
     }
-  }
 
-  &-squashed {
-    .resource-table-actions div:first-child {
+    .oc-table-header-cell-mdate,
+    .oc-table-data-cell-mdate,
+    .oc-table-header-cell-sdate,
+    .oc-table-data-cell-sdate,
+    .oc-table-header-cell-ddate,
+    .oc-table-data-cell-ddate {
       display: none;
 
-      @media only screen and (min-width: 1200px) {
-        display: inherit;
+      @media only screen and (min-width: 1400px) {
+        display: table-cell;
       }
     }
 
+    .oc-table-header-cell-owner,
+    .oc-table-data-cell-owner,
+    .oc-table-header-cell-tags,
+    .oc-table-data-cell-tags,
     .oc-table-header-cell-indicators,
     .oc-table-data-cell-indicators {
       display: none;
 
-      @media only screen and (min-width: 1200px) {
+      @media only screen and (min-width: 1640px) {
         display: table-cell;
       }
     }
