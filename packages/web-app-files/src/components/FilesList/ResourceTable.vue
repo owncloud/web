@@ -344,9 +344,14 @@ export default defineComponent({
       required: false,
       default: false
     },
+    /**
+     * The active view mode.
+     */
     viewMode: {
       type: String,
-      default: ViewModeConstants.defaultModeName
+      default: ViewModeConstants.defaultModeName,
+      validator: (value: string) =>
+        [ViewModeConstants.condensedTable.name, ViewModeConstants.default.name].includes(value)
     },
     /**
      * Enable hover effect
@@ -486,21 +491,24 @@ export default defineComponent({
             title: this.$gettext('Shares'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap'
+            wrap: 'nowrap',
+            width: 'shrink'
           },
           {
             name: 'size',
             title: this.$gettext('Size'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap'
+            wrap: 'nowrap',
+            width: 'shrink'
           },
           {
             name: 'status',
             title: this.$gettext('Status'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap'
+            wrap: 'nowrap',
+            width: 'shrink'
           },
           this.hasTags
             ? {
@@ -508,7 +516,8 @@ export default defineComponent({
                 title: this.$gettext('Tags'),
                 type: 'slot',
                 alignH: 'right',
-                wrap: 'nowrap'
+                wrap: 'nowrap',
+                width: 'shrink'
               }
             : {},
           {
@@ -516,14 +525,16 @@ export default defineComponent({
             title: this.$gettext('Shared by'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap'
+            wrap: 'nowrap',
+            width: 'shrink'
           },
           {
             name: 'sharedWith',
             title: this.$gettext('Shared with'),
             type: 'slot',
             alignH: 'right',
-            wrap: 'nowrap'
+            wrap: 'nowrap',
+            width: 'shrink'
           },
           {
             name: 'mdate',
@@ -531,6 +542,7 @@ export default defineComponent({
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
+            width: 'shrink',
             accessibleLabelCallback: (item) =>
               this.formatDateRelative(item.mdate) + ' (' + this.formatDate(item.mdate) + ')'
           },
@@ -540,6 +552,7 @@ export default defineComponent({
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
+            width: 'shrink',
             accessibleLabelCallback: (item) =>
               this.formatDateRelative(item.sdate) + ' (' + this.formatDate(item.sdate) + ')'
           },
@@ -549,6 +562,7 @@ export default defineComponent({
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
+            width: 'shrink',
             accessibleLabelCallback: (item) =>
               this.formatDateRelative(item.ddate) + ' (' + this.formatDate(item.ddate) + ')'
           }
@@ -577,7 +591,8 @@ export default defineComponent({
           title: this.$gettext('Actions'),
           type: 'slot',
           alignH: 'right',
-          wrap: 'nowrap'
+          wrap: 'nowrap',
+          width: 'shrink'
         })
       }
 
@@ -909,7 +924,7 @@ export default defineComponent({
   &-actions {
     align-items: center;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     gap: var(--oc-space-xsmall);
     justify-content: flex-end;
   }
@@ -940,12 +955,6 @@ export default defineComponent({
 
 // Hide files table columns
 .files-table {
-  .oc-table-header-cell-mdate,
-  .oc-table-data-cell-mdate,
-  .oc-table-header-cell-sdate,
-  .oc-table-data-cell-sdate,
-  .oc-table-header-cell-ddate,
-  .oc-table-data-cell-ddate,
   .oc-table-header-cell-size,
   .oc-table-data-cell-size,
   .oc-table-header-cell-sharedWith,
@@ -961,8 +970,12 @@ export default defineComponent({
     }
   }
 
-  .oc-table-header-cell-owner,
-  .oc-table-data-cell-owner {
+  .oc-table-header-cell-mdate,
+  .oc-table-data-cell-mdate,
+  .oc-table-header-cell-sdate,
+  .oc-table-data-cell-sdate,
+  .oc-table-header-cell-ddate,
+  .oc-table-data-cell-ddate {
     display: none;
 
     @media only screen and (min-width: 960px) {
@@ -970,13 +983,25 @@ export default defineComponent({
     }
   }
 
+  .oc-table-header-cell-owner,
+  .oc-table-data-cell-owner,
+  .oc-table-header-cell-tags,
+  .oc-table-data-cell-tags,
+  .oc-table-header-cell-indicators,
+  .oc-table-data-cell-indicators {
+    display: none;
+
+    @media only screen and (min-width: 1200px) {
+      display: table-cell;
+    }
+  }
+
   &-squashed {
-    .oc-table-header-cell-mdate,
-    .oc-table-data-cell-mdate,
-    .oc-table-header-cell-sdate,
-    .oc-table-data-cell-sdate,
-    .oc-table-header-cell-ddate,
-    .oc-table-data-cell-ddate,
+    /**
+     * squashed = right sidebar is open.
+     * same media queries as above but +440px width of the right sidebar
+     * (because the right sidebar steals 440px from the file list)
+     */
     .oc-table-header-cell-size,
     .oc-table-data-cell-size,
     .oc-table-header-cell-sharedWith,
@@ -987,26 +1012,33 @@ export default defineComponent({
     .oc-table-data-cell-status {
       display: none;
 
-      @media only screen and (min-width: 1600px) {
+      @media only screen and (min-width: 1080px) {
         display: table-cell;
       }
     }
-  }
 
-  &-squashed {
-    .resource-table-actions div:first-child {
+    .oc-table-header-cell-mdate,
+    .oc-table-data-cell-mdate,
+    .oc-table-header-cell-sdate,
+    .oc-table-data-cell-sdate,
+    .oc-table-header-cell-ddate,
+    .oc-table-data-cell-ddate {
       display: none;
 
-      @media only screen and (min-width: 1200px) {
-        display: inherit;
+      @media only screen and (min-width: 1400px) {
+        display: table-cell;
       }
     }
 
+    .oc-table-header-cell-owner,
+    .oc-table-data-cell-owner,
+    .oc-table-header-cell-tags,
+    .oc-table-data-cell-tags,
     .oc-table-header-cell-indicators,
     .oc-table-data-cell-indicators {
       display: none;
 
-      @media only screen and (min-width: 1200px) {
+      @media only screen and (min-width: 1640px) {
         display: table-cell;
       }
     }

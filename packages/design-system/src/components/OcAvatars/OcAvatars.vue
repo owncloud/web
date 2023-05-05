@@ -164,7 +164,7 @@ export default defineComponent({
 .oc-avatars {
   display: inline-flex;
   box-sizing: border-box;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   gap: var(--oc-space-xsmall);
   width: fit-content;
 

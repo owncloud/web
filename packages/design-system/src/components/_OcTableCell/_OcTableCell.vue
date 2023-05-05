@@ -58,7 +58,7 @@ export default defineComponent({
 <style lang="scss">
 .oc-table-cell {
   /* padding is not configurable until we need it */
-  padding: 0 var(--oc-space-xsmall);
+  padding: 0 var(--oc-space-small);
   position: relative;
 
   &-align {
