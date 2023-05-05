@@ -419,6 +419,7 @@ export default defineComponent({
 
     const genericContextMenu = ref(null)
     const showContextMenu = (event) => {
+      store.commit('Files/RESET_SELECTION')
       displayPositionedDropdown(
         genericContextMenu.value.$el._tippy,
         event,
