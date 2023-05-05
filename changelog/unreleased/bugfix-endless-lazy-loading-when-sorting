@@ -1,0 +1,6 @@
+Bugfix: Endless lazy loading indicator after sorting file table
+
+The endless lazy loading indicator when sorting the file table and re-entering it has been fixed.
+
+https://github.com/owncloud/web/issues/6434
+https://github.com/owncloud/web/pull/8988
