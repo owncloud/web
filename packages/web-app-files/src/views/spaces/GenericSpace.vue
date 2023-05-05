@@ -397,20 +397,19 @@ export default defineComponent({
           performLoaderTask(true, path, fileId)
         }
       )
-      document
-        .getElementsByClassName('files-view-wrapper')[0]
-        .addEventListener('contextmenu', (event) => {
-          const { target } = event
-          if (
-            (target as HTMLElement).closest('tbody') ||
-            (target as HTMLElement).closest('.oc-tiles-item')
-          ) {
-            return
-          }
-          event.preventDefault()
-          const newEvent = new MouseEvent('contextmenu', event)
-          showContextMenu(newEvent)
-        })
+      const filesViewWraapper = document.getElementsByClassName('files-view-wrapper')[0]
+      filesViewWraapper?.addEventListener('contextmenu', (event) => {
+        const { target } = event
+        if (
+          (target as HTMLElement).closest('tbody') ||
+          (target as HTMLElement).closest('.oc-tiles-item')
+        ) {
+          return
+        }
+        event.preventDefault()
+        const newEvent = new MouseEvent('contextmenu', event)
+        showContextMenu(newEvent)
+      })
     })
 
     onBeforeUnmount(() => {

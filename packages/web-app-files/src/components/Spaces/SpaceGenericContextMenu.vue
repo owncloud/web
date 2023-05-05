@@ -51,7 +51,6 @@ export default defineComponent({
       space: props.space,
       resources: [currentFolder.value]
     }))
-
     const { actions: createNewFolderAction } = useFileActionsCreateNewFolder({
       store,
       space: props.space

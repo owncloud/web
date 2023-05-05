@@ -18,5 +18,6 @@ export const defaultStubs = {
   'shared-with-me-section': true,
   'side-bar': true,
   'space-header': true,
+  'space-generic-context-menu': true,
   translate: true
 }
