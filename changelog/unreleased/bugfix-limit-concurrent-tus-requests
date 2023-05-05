@@ -1,0 +1,6 @@
+Bugfix: Limit amount of concurrent tus requests
+
+The amount of concurrent tus requests when uploading has been reduced to 5. This fixes an issue where the access token renewal failed during an ongoing upload because of the sheer amount of pending requests.
+
+https://github.com/owncloud/web/pull/8987
+https://github.com/owncloud/web/issues/8977
