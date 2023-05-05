@@ -1,27 +1,67 @@
 import { Group, User } from '../types'
 import { dummyUserStore, dummyGroupStore } from '../store'
+import { createdUserStore } from '../store/user'
 
 export class UsersEnvironment {
   getUser({ key }: { key: string }): User {
-    const uniqueKey = key.toLowerCase()
+    const userKey = key.toLowerCase()
 
-    if (!dummyUserStore.has(uniqueKey)) {
-      throw new Error(`user with key '${uniqueKey}' not found`)
+    if (!dummyUserStore.has(userKey)) {
+      throw new Error(`user with key '${userKey}' not found`)
     }
 
-    return dummyUserStore.get(uniqueKey)
+    return dummyUserStore.get(userKey)
   }
 
   createUser({ key, user }: { key: string; user: User }): User {
-    const uniqueKey = key.toLowerCase()
+    const userKey = key.toLowerCase()
 
-    if (dummyUserStore.has(uniqueKey)) {
-      throw new Error(`user with key '${uniqueKey}' already exists`)
+    if (dummyUserStore.has(userKey)) {
+      throw new Error(`user with key '${userKey}' already exists`)
     }
 
-    dummyUserStore.set(uniqueKey, user)
+    dummyUserStore.set(userKey, user)
 
     return user
+  }
+
+  storeCreatedUser({ user }: { user: User }): User {
+    if (createdUserStore.has(user.id)) {
+      throw new Error(`user '${user.id}' already exists`)
+    }
+    createdUserStore.set(user.id, user)
+
+    return user
+  }
+
+  getCreatedUser({ key }: { key: string }): User {
+    const userKey = key.toLowerCase()
+    if (!createdUserStore.has(userKey)) {
+      throw new Error(`user with key '${userKey}' not found`)
+    }
+
+    return createdUserStore.get(userKey)
+  }
+
+  updateCreatedUser({ key, user }: { key: string; user: User }): User {
+    const userKey = key.toLowerCase()
+    if (!createdUserStore.has(userKey)) {
+      throw new Error(`user '${userKey}' not found`)
+    }
+    createdUserStore.delete(userKey)
+    createdUserStore.set(user.id, user)
+
+    return user
+  }
+
+  removeCreatedUser({ key }: { key: string }): boolean {
+    const userKey = key.toLowerCase()
+
+    if (!createdUserStore.has(userKey)) {
+      throw new Error(`user '${userKey}' not found`)
+    }
+
+    return createdUserStore.delete(userKey)
   }
 
   getGroup({ key }: { key: string }): Group {
