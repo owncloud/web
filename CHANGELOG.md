@@ -125,6 +125,7 @@ Summary
 * Enhancement - Beautify form inputs: [#8554](https://github.com/owncloud/web/pull/8554)
 * Enhancement - Rework mobile navigation: [#8557](https://github.com/owncloud/web/issues/8557)
 * Enhancement - QuickActions role configurable: [#8566](https://github.com/owncloud/web/pull/8566)
+* Enhancement - Shrink table columns: [#8599](https://github.com/owncloud/web/issues/8599)
 * Enhancement - Add `Accept-Language` header to all outgoing requests: [#8612](https://github.com/owncloud/web/issues/8612)
 * Enhancement - Add logout url: [#8630](https://github.com/owncloud/web/pull/8630)
 * Enhancement - Enable guest users: [#8652](https://github.com/owncloud/web/pull/8652)
@@ -1206,6 +1207,15 @@ Details
 
    https://github.com/owncloud/web/issues/8547
    https://github.com/owncloud/web/pull/8566
+
+* Enhancement - Shrink table columns: [#8599](https://github.com/owncloud/web/issues/8599)
+
+   We've decided to shrink most table columns in the file list to their absolute minimum (Shares,
+   Size, Modified/Shared/Delete date, Actions) so that the file name can take up more horizontal
+   space.
+
+   https://github.com/owncloud/web/issues/8599
+   https://github.com/owncloud/web/pull/8978
 
 * Enhancement - Add `Accept-Language` header to all outgoing requests: [#8612](https://github.com/owncloud/web/issues/8612)
 
