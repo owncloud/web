@@ -25,7 +25,7 @@ export class Groups {
   async createGroup({ key }: { key: string }): Promise<void> {
     const group = this.#usersEnvironment.getGroup({ key })
     const response = await createGroup({ page: this.#page, key: group.displayName })
-    this.#usersEnvironment.storeGroup({
+    this.#usersEnvironment.storeCreatedGroup({
       group: {
         id: key,
         uuid: response['id'],

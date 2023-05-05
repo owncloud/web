@@ -15,9 +15,8 @@ import { config } from '../../config'
 import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
-import { createdSpaceStore, createdLinkStore } from '../../support/store'
+import { createdSpaceStore, createdLinkStore, createdGroupStore } from '../../support/store'
 import { User } from '../../support/types'
-import { createdGroupStore } from '../../support/store/group'
 
 export { World }
 

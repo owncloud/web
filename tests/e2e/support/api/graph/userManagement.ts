@@ -85,7 +85,7 @@ export const createGroup = async ({
   checkResponseStatus(response, 'Failed while creating group')
 
   const usersEnvironment = new UsersEnvironment()
-  usersEnvironment.storeGroup({ group: { ...group, uuid: (await response.json()).id } })
+  usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: (await response.json()).id } })
   return group
 }
 
