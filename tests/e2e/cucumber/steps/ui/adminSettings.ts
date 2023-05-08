@@ -413,8 +413,7 @@ When(
     }
     await page.reload()
     for (const info of stepTable.hashes()) {
-      const group = this.usersEnvironment.getGroup({ key: info.id })
-      group.uuid = await groupsObject.createGroup({ key: group.displayName })
+      await groupsObject.createGroup({ key: info.id })
     }
   }
 )
