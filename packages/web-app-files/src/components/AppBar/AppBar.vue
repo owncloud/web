@@ -1,6 +1,7 @@
 <template>
   <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': sideBarOpen }">
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
+    <div style="height: 114px"></div>
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div
@@ -290,5 +291,11 @@ export default defineComponent({
   #files-breadcrumb {
     min-height: 2rem;
   }
+}
+.files-topbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
 }
 </style>

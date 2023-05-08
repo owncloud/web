@@ -172,7 +172,7 @@ export default defineComponent({
       let totalBreadcrumbWidth = 0
       visibleItems.value.forEach((item, index) => {
         const breadcrumbElement = getBreadcrumbElement(index)
-        const itemClientWidth = breadcrumbElement.offsetWidth + 22
+        const itemClientWidth = breadcrumbElement.offsetWidth + 5
         const itemWidth = itemClientWidth
         totalBreadcrumbWidth += itemWidth
       })
@@ -180,7 +180,7 @@ export default defineComponent({
     }
 
     const reduceBreadcrumb = (offsetIndex) => {
-      const parentWidth = document.getElementById(props.id).offsetWidth
+      const parentWidth = document.getElementById(props.id).clientWidth
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
       const isOverflowing = parentWidth < totalBreadcrumbWidth
       if (!isOverflowing) {
@@ -259,7 +259,9 @@ export default defineComponent({
 }
 .oc-breadcrumb {
   overflow: hidden;
-  width: 50vw;
+  //width: 50vw;
+  width: 70%;
+  background-color: green;
 
   &-mobile-current,
   &-mobile-navigation {
