@@ -400,7 +400,7 @@ export default defineComponent({
       const filesViewWrapper = document.getElementsByClassName('files-view-wrapper')[0]
       filesViewWrapper?.addEventListener('contextmenu', (event) => {
         const { target } = event
-        if ((target as HTMLElement).closest('.no-whitespace')) {
+        if ((target as HTMLElement).closest('.has-item-context-menu')) {
           return
         }
         event.preventDefault()
