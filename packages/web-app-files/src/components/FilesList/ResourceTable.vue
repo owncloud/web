@@ -47,7 +47,7 @@
         :model-value="isResourceSelected(item)"
         :outline="isLatestSelectedItem(item)"
         @update:model-value="setSelection($event, item)"
-        @click.stop
+        @click.stop="fileClicked([item, $event])"
       />
     </template>
     <template #name="{ item }">
@@ -605,6 +605,9 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['toggleFileSelection']),
 
+    test() {
+      alert('test')
+    },
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
@@ -730,6 +733,7 @@ export default defineComponent({
       const resource = data[0]
       const eventData = data[1]
 
+      const isCheckboxClicked = eventData?.target.getAttribute('type') === 'checkbox'
       const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
       if (contextActionClicked) {
         return
@@ -739,6 +743,9 @@ export default defineComponent({
       }
       if (eventData && eventData.shiftKey) {
         return eventBus.publish('app.files.list.clicked.shift', resource)
+      }
+      if (isCheckboxClicked) {
+        return
       }
       return this.emitSelect([resource.id])
     },
