@@ -1,9 +1,4 @@
-import {
-  Resource,
-  SpaceResource,
-  extractNameWithoutExtension,
-  isProjectSpaceResource
-} from 'web-client/src/helpers'
+import { Resource, SpaceResource, extractNameWithoutExtension } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, Ref, unref } from 'vue'
 import { useClientService, useRequest, useRouter, useStore } from 'web-pkg/src/composables'
