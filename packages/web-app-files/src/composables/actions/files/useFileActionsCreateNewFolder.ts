@@ -121,11 +121,7 @@ export const useFileActionsCreateNewFolder = ({
           return $gettext('New Folder')
         },
         isEnabled: ({}) => {
-          if (
-            isProjectSpaceResource(space) &&
-            !space.isEditor(store.getters.user) &&
-            !space.isManager(store.getters.user)
-          ) {
+          if (isProjectSpaceResource(space) && !space.canUpload(store.getters.user)) {
             return false
           }
           return true

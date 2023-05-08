@@ -397,8 +397,8 @@ export default defineComponent({
           performLoaderTask(true, path, fileId)
         }
       )
-      const filesViewWraapper = document.getElementsByClassName('files-view-wrapper')[0]
-      filesViewWraapper?.addEventListener('contextmenu', (event) => {
+      const filesViewWrapper = document.getElementsByClassName('files-view-wrapper')[0]
+      filesViewWrapper?.addEventListener('contextmenu', (event) => {
         const { target } = event
         if (
           (target as HTMLElement).closest('tbody') ||
