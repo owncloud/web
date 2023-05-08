@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex oc-width-1-1" :class="{ 'space-frontpage': isSpaceFrontpage }">
-    <space-generic-context-menu ref="genericContextMenu" :space="space" />
+    <whitespace-context-menu ref="whitespaceContextMenu" :space="space" />
     <keyboard-actions :paginated-resources="paginatedResources" :space="space" />
     <files-view-wrapper>
       <app-bar
@@ -159,7 +159,7 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import SpaceGenericContextMenu from 'web-app-files/src/components/Spaces/SpaceGenericContextMenu.vue'
+import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
 import { useRoute } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
@@ -196,7 +196,7 @@ export default defineComponent({
     ResourceTiles,
     SideBar,
     SpaceHeader,
-    SpaceGenericContextMenu
+    WhitespaceContextMenu
   },
   props: {
     space: {
@@ -417,13 +417,13 @@ export default defineComponent({
       eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     })
 
-    const genericContextMenu = ref(null)
+    const whitespaceContextMenu = ref(null)
     const showContextMenu = (event) => {
       store.commit('Files/RESET_SELECTION')
       displayPositionedDropdown(
-        genericContextMenu.value.$el._tippy,
+        unref(whitespaceContextMenu).$el._tippy,
         event,
-        genericContextMenu.value
+        unref(whitespaceContextMenu)
       )
     }
 
@@ -440,7 +440,7 @@ export default defineComponent({
       uploadHint: $gettext(
         'Drag files and folders here or use the "New" or "Upload" buttons to add files'
       ),
-      genericContextMenu
+      whitespaceContextMenu
     }
   },
 

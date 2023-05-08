@@ -1,11 +1,11 @@
 <template>
-  <oc-button id="context-menu-trigger-generic" appearance="raw">
+  <oc-button id="context-menu-trigger-whitespace" appearance="raw">
     <oc-drop
-      drop-id="context-menu-drop-generic"
-      toggle="#context-menu-trigger-generic"
+      drop-id="context-menu-drop-whitespace"
+      toggle="#context-menu-trigger-whitespace"
       position="bottom-end"
       mode="click"
-      class="generic-context-actions-list"
+      class="whitespace-context-actions-list"
       close-on-click
       padding-size="small"
     >
@@ -16,7 +16,7 @@
           :action="action"
           :action-options="actionOptions"
           class="oc-px-s oc-rounded oc-menu-item-hover"
-          :data-testid="`generic-context-menu-item-${action.name}`"
+          :data-testid="`whitespace-context-menu-item-${action.name}`"
         />
       </oc-list>
     </oc-drop>
@@ -33,7 +33,7 @@ import { useStore } from 'web-pkg/src'
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 
 export default defineComponent({
-  name: 'SpaceGenericContextMenu',
+  name: 'WhitespaceContextMenu',
   components: { ActionMenuItem },
   props: {
     space: {
@@ -46,7 +46,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const store = useStore()
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
-    const currentFolder = computed(() => unref(store.getters['Files/currentFolder']))
+    const currentFolder = computed(() => store.getters['Files/currentFolder'])
     const actionOptions = computed(() => ({
       space: props.space,
       resources: [currentFolder.value]
@@ -72,12 +72,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#context-menu-trigger-generic {
+#context-menu-trigger-whitespace {
   visibility: hidden;
   width: 0;
   height: 0;
 }
-.generic-context-actions-list {
+.whitespace-context-actions-list {
   .oc-card {
     padding-left: 0px !important;
     padding-right: 0px !important;

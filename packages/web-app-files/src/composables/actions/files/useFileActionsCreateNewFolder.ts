@@ -1,4 +1,4 @@
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource, isProjectSpaceResource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
@@ -120,7 +120,14 @@ export const useFileActionsCreateNewFolder = ({
         label: () => {
           return $gettext('New Folder')
         },
-        isEnabled: ({ resources }) => {
+        isEnabled: ({}) => {
+          if (
+            isProjectSpaceResource(space) &&
+            !space.isEditor(store.getters.user) &&
+            !space.isManager(store.getters.user)
+          ) {
+            return false
+          }
           return true
         },
         canBeDefault: true,
