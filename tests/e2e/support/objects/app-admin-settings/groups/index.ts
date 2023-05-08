@@ -17,21 +17,35 @@ export class Groups {
     this.#usersEnvironment = new UsersEnvironment()
     this.#page = page
   }
+
   getUUID({ key }: { key: string }): string {
-    return this.#usersEnvironment.getGroup({ key }).uuid
+    return this.#usersEnvironment.getCreatedGroup({ key }).uuid
   }
-  async createGroup({ key }: { key: string }): Promise<string> {
-    return await createGroup({ page: this.#page, key: key })
+
+  async createGroup({ key }: { key: string }): Promise<void> {
+    const group = this.#usersEnvironment.getGroup({ key })
+    const response = await createGroup({ page: this.#page, key: group.displayName })
+    this.#usersEnvironment.storeCreatedGroup({
+      group: {
+        id: key,
+        uuid: response['id'],
+        displayName: response['displayName']
+      }
+    })
   }
+
   getDisplayedGroups(): Promise<string[]> {
     return getDisplayedGroups({ page: this.#page })
   }
+
   async selectGroup({ key }: { key: string }): Promise<void> {
     await selectGroup({ page: this.#page, uuid: this.getUUID({ key }) })
   }
+
   async deleteGroupUsingBatchAction({ groupIds }: { groupIds: string[] }): Promise<void> {
     await deleteGrouprUsingBatchAction({ page: this.#page, groupIds })
   }
+
   async deleteGroupUsingContextMenu({ key }: { key: string }): Promise<void> {
     await deleteGroupUsingContextMenu({ page: this.#page, uuid: this.getUUID({ key }) })
   }
