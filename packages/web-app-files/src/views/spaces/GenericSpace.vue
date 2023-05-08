@@ -400,10 +400,7 @@ export default defineComponent({
       const filesViewWrapper = document.getElementsByClassName('files-view-wrapper')[0]
       filesViewWrapper?.addEventListener('contextmenu', (event) => {
         const { target } = event
-        if (
-          (target as HTMLElement).closest('tbody') ||
-          (target as HTMLElement).closest('.oc-tiles-item')
-        ) {
+        if ((target as HTMLElement).closest('.no-whitespace')) {
           return
         }
         event.preventDefault()

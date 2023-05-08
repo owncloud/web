@@ -121,7 +121,7 @@ export const useFileActionsCreateNewFolder = ({
           return $gettext('New Folder')
         },
         isEnabled: () => {
-          return unref(currentFolder)?.canUpload({ user: store.getters.user })
+          return unref(currentFolder)?.canCreate()
         },
         canBeDefault: true,
         componentType: 'button',

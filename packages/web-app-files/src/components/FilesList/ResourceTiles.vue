@@ -35,7 +35,7 @@
       </oc-drop>
     </div>
     <oc-list class="oc-tiles oc-flex" :class="resizable ? 'resizableTiles' : ''">
-      <li v-for="resource in data" :key="resource.id" class="oc-tiles-item">
+      <li v-for="resource in data" :key="resource.id" class="oc-tiles-item no-whitespace">
         <oc-tile
           :ref="(el) => (tileRefs.tiles[resource.id] = el)"
           :resource="resource"
