@@ -137,7 +137,7 @@ import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
 import { useConfigurationManager } from 'web-pkg/src/composables/configuration'
-import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import { SpaceResource, isPersonalSpaceResource } from 'web-client/src/helpers'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 export default defineComponent({
@@ -166,11 +166,12 @@ export default defineComponent({
       return store.getters.user
     })
 
+    const personalSpace = computed<SpaceResource>(() => {
+      return store.getters['runtime/spaces/spaces'].find((s) => isPersonalSpaceResource(s))
+    })
+
     const showGdprExport = computed(() => {
-      return (
-        unref(isPersonalDataExportEnabled) &&
-        store.getters['runtime/spaces/spaces'].some((s) => isPersonalSpaceResource(s))
-      )
+      return unref(isPersonalDataExportEnabled) && unref(personalSpace)
     })
 
     const loadValuesListTask = useTask(function* () {
@@ -297,6 +298,14 @@ export default defineComponent({
             value
           }
         })
+        if (unref(personalSpace)) {
+          // update personal space name with new translation
+          store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+            id: unref(personalSpace).id,
+            field: 'name',
+            value: $gettext('Personal')
+          })
+        }
         store.dispatch('showMessage', {
           title: $gettext('Language was saved successfully.')
         })
