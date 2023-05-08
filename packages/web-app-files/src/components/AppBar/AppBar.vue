@@ -294,8 +294,8 @@ export default defineComponent({
 }
 .files-topbar {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: var(--oc-space-medium);
+  right: var(--oc-space-medium);
   top: 0;
 }
 </style>

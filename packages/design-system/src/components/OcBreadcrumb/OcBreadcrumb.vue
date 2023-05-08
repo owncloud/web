@@ -172,7 +172,7 @@ export default defineComponent({
       let totalBreadcrumbWidth = 0
       visibleItems.value.forEach((item, index) => {
         const breadcrumbElement = getBreadcrumbElement(index)
-        const itemClientWidth = breadcrumbElement.offsetWidth + 5
+        const itemClientWidth = breadcrumbElement.offsetWidth + 10
         const itemWidth = itemClientWidth
         totalBreadcrumbWidth += itemWidth
       })
@@ -214,7 +214,7 @@ export default defineComponent({
     onMounted(() => {
       renderBreadcrumb()
       window.addEventListener('resize', renderBreadcrumb)
-      resizeObserver.observe(document.getElementById(props.id))
+      resizeObserver.observe(document.getElementById('files-app-bar'))
     })
 
     onBeforeUnmount(() => {
@@ -260,7 +260,7 @@ export default defineComponent({
 .oc-breadcrumb {
   overflow: hidden;
   //width: 50vw;
-  width: 70%;
+  //width: 70%;
   background-color: green;
 
   &-mobile-current,
