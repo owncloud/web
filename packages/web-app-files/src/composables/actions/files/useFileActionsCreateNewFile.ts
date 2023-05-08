@@ -1,4 +1,9 @@
-import { Resource, SpaceResource, extractNameWithoutExtension } from 'web-client/src/helpers'
+import {
+  Resource,
+  SpaceResource,
+  extractNameWithoutExtension,
+  isProjectSpaceResource
+} from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, Ref, unref } from 'vue'
 import { useClientService, useRequest, useRouter, useStore } from 'web-pkg/src/composables'
@@ -218,8 +223,8 @@ export const useFileActionsCreateNewFile = ({
         icon: 'add',
         handler: (args) => handler(args, newFileHandler.ext, openAction),
         label: () => newFileHandler.menuTitle($gettext),
-        isEnabled: ({ resources }) => {
-          return true
+        isEnabled: () => {
+          return unref(currentFolder)?.canUpload({ user: store.getters.user })
         },
         canBeDefault: true,
         componentType: 'button',
@@ -234,8 +239,8 @@ export const useFileActionsCreateNewFile = ({
         icon: 'add',
         handler: (args) => handler(args, mimeType.ext, openAction),
         label: () => mimeType.name,
-        isEnabled: ({ resources }) => {
-          return true
+        isEnabled: () => {
+          return unref(currentFolder)?.canUpload({ user: store.getters.user })
         },
         canBeDefault: true,
         componentType: 'button',

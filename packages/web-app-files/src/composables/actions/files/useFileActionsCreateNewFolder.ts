@@ -120,11 +120,8 @@ export const useFileActionsCreateNewFolder = ({
         label: () => {
           return $gettext('New Folder')
         },
-        isEnabled: ({}) => {
-          if (isProjectSpaceResource(space) && !space.canUpload(store.getters.user)) {
-            return false
-          }
-          return true
+        isEnabled: () => {
+          return unref(currentFolder)?.canUpload({ user: store.getters.user })
         },
         canBeDefault: true,
         componentType: 'button',
