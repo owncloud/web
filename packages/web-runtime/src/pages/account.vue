@@ -158,9 +158,11 @@ export default defineComponent({
     const selectedLanguageValue = ref<LanguageOption>()
     const disableEmailNotificationsValue = ref<boolean>()
 
-    // FIXME: Use graph capability when we have it
+    // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = useCapabilitySpacesEnabled()
+    // FIXME: Use change password capability when we have it
     const isChangePasswordEnabled = useCapabilitySpacesEnabled()
+    const spacesEnabled = useCapabilitySpacesEnabled()
     const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
     const user = computed(() => {
       return store.getters.user
@@ -230,7 +232,7 @@ export default defineComponent({
     })
 
     const groupNames = computed(() => {
-      if (unref(useCapabilitySpacesEnabled())) {
+      if (unref(spacesEnabled)) {
         return unref(user)
           .groups.map((group) => group.displayName)
           .join(', ')
@@ -303,7 +305,7 @@ export default defineComponent({
           store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
             id: unref(personalSpace).id,
             field: 'name',
-            value: $gettext('Personal')
+            value: unref(spacesEnabled) ? $gettext('Personal') : $gettext('All files')
           })
         }
         store.dispatch('showMessage', {

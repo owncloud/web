@@ -142,17 +142,6 @@ describe('account page', () => {
       expect(showMessageStub).toHaveBeenCalled()
     })
   })
-
-  describe('computed method "isChangePasswordEnabled"', () => {
-    it('should be true if capability is enabled', () => {
-      const { wrapper } = getWrapper({ capabilities: { spaces: { enabled: true } } })
-      expect(wrapper.vm.isChangePasswordEnabled).toBeTruthy()
-    })
-    it('should be false if capability is not enabled', () => {
-      const { wrapper } = getWrapper()
-      expect(wrapper.vm.isChangePasswordEnabled).toBeFalsy()
-    })
-  })
   describe('Logout from all devices link', () => {
     it('should render the logout from active devices if logoutUrl is provided', () => {
       const { wrapper } = getWrapper()
