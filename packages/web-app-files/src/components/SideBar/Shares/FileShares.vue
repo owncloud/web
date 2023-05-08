@@ -55,7 +55,14 @@
         :aria-label="spaceMemberLabel"
       >
         <li v-for="collaborator in displaySpaceMembers" :key="collaborator.key">
-          <collaborator-list-item :share="collaborator" :modifiable="false" />
+          <collaborator-list-item
+            :share="collaborator"
+            :resource-name="resource.name"
+            :deniable="isSpaceMemberDeniable"
+            :modifiable="false"
+            :is-share-denied="isSpaceMemberDenied(collaborator)"
+            @on-set-deny="setDenyShare"
+          />
         </li>
       </ul>
       <div v-if="showMemberToggle" class="oc-flex oc-flex-center">
@@ -187,7 +194,7 @@ export default defineComponent({
     },
 
     hasSharees() {
-      return this.collaborators.length > 0
+      return this.displayCollaborators.length > 0
     },
 
     collaborators() {
@@ -257,6 +264,14 @@ export default defineComponent({
 
     matchingSpace() {
       return this.space || this.spaces.find((space) => space.id === this.resource.storageId)
+    },
+
+    isSpaceMemberDeniable() {
+      return this.hasShareCanDenyAccess && this.resource.isFolder
+    },
+
+    resourceIsSpace() {
+      return this.resource.type === 'space'
     }
   },
   methods: {
@@ -276,6 +291,30 @@ export default defineComponent({
 
     isShareDenied(collaborator: Share): boolean {
       return !!this.getDeniedShare(collaborator)
+    },
+
+    getDeniedSpaceMember(collaborator: Share): Share {
+      let shareType = null
+
+      if (collaborator.shareType === ShareTypes.spaceUser.value) {
+        shareType = ShareTypes.user.value
+      }
+
+      if (collaborator.shareType === ShareTypes.spaceGroup.value) {
+        shareType = ShareTypes.group.value
+      }
+
+      return this.collaborators.find(
+        (c) =>
+          c.permissions === peopleRoleDenyFolder.bitmask(false) &&
+          c.file.source === this.resource.id &&
+          c.collaborator.name === collaborator.collaborator.name &&
+          c.shareType === shareType
+      )
+    },
+
+    isSpaceMemberDenied(collaborator: Share): boolean {
+      return !!this.getDeniedSpaceMember(collaborator)
     },
 
     collaboratorsComparator(c1, c2) {
@@ -331,7 +370,11 @@ export default defineComponent({
         try {
           await this.deleteShare({
             client: this.$client,
-            share: this.getDeniedShare(share),
+            share:
+              share.shareType === ShareTypes.spaceUser.value ||
+              share.shareType === ShareTypes.spaceGroup.value
+                ? this.getDeniedSpaceMember(share)
+                : this.getDeniedShare(share),
             path: this.resource.path,
             loadIndicators: false
           })
