@@ -605,9 +605,6 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['toggleFileSelection']),
 
-    test() {
-      alert('test')
-    },
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
