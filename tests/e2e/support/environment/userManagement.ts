@@ -1,6 +1,5 @@
 import { Group, User } from '../types'
-import { dummyUserStore, dummyGroupStore } from '../store'
-import { createdUserStore } from '../store/user'
+import { dummyUserStore, dummyGroupStore, createdUserStore, createdGroupStore } from '../store'
 
 export class UsersEnvironment {
   getUser({ key }: { key: string }): User {
@@ -65,23 +64,30 @@ export class UsersEnvironment {
   }
 
   getGroup({ key }: { key: string }): Group {
-    const uniqueKey = key.toLowerCase()
+    const groupKey = key.toLowerCase()
 
-    if (!dummyGroupStore.has(uniqueKey)) {
-      throw new Error(`group with key '${uniqueKey}' not found`)
+    if (!dummyGroupStore.has(groupKey)) {
+      throw new Error(`group with key '${groupKey}' not found`)
     }
 
-    return dummyGroupStore.get(uniqueKey)
+    return dummyGroupStore.get(groupKey)
   }
 
-  createGroup({ key, group }: { key: string; group: Group }): Group {
-    const uniqueKey = key.toLowerCase()
+  getCreatedGroup({ key }: { key: string }): Group {
+    const groupKey = key.toLowerCase()
 
-    if (dummyUserStore.has(uniqueKey)) {
-      throw new Error(`group with key '${uniqueKey}' already exists`)
+    if (!createdGroupStore.has(groupKey)) {
+      throw new Error(`group with key '${groupKey}' not found`)
     }
 
-    dummyGroupStore.set(uniqueKey, group)
+    return createdGroupStore.get(groupKey)
+  }
+
+  storeCreatedGroup({ group }: { group: Group }): Group {
+    if (createdGroupStore.has(group.id)) {
+      throw new Error(`user with key '${group.id}' already exists`)
+    }
+    createdGroupStore.set(group.id, group)
 
     return group
   }
