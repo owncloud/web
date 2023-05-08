@@ -2,7 +2,7 @@
   <nav :id="id" :class="`oc-breadcrumb oc-breadcrumb-${variation}`">
     <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
       <li
-        v-for="(item, index) in visibleItems"
+        v-for="(item, index) in items"
         :key="index"
         :data-key="index"
         :class="{
@@ -187,7 +187,8 @@ export default defineComponent({
         return
       }
       // Remove from the left side
-      hiddenItems.value.push(visibleItems.value.splice(offsetIndex, 1))
+      const removed = visibleItems.value.splice(offsetIndex, 1)
+      hiddenItems.value.push(removed[0])
       reduceBreadcrumb(offsetIndex)
     }
 
