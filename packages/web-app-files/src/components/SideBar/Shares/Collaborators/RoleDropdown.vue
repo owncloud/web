@@ -12,8 +12,8 @@
       gap-size="none"
       :aria-label="mode === 'create' ? $gettext('Select permission') : $gettext('Edit permission')"
     >
-      <span v-if="!existingRole" v-text="inviteLabel" />
-      <span v-else>{{ $gettext(selectedRole.label) }}</span>
+      <span v-if="!existingRole" class="oc-text-truncate" v-text="inviteLabel" />
+      <span v-else class="oc-text-truncate" v-text="$gettext(selectedRole.label)" />
       <oc-icon name="arrow-down-s" />
     </oc-button>
     <oc-drop
@@ -396,6 +396,9 @@ export default defineComponent({
         text-decoration: none;
       }
     }
+  }
+  &-role-select-btn {
+    max-width: 100%;
   }
 
   &-custom-permissions-drop-cancel-confirm-btns {

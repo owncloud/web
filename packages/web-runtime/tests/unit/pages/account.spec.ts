@@ -12,6 +12,7 @@ import { mock, mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
 import { AxiosResponse } from 'axios'
 import { ClientService } from 'web-pkg'
+import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 
 const $route = {
   meta: {
@@ -172,59 +173,10 @@ describe('account page', () => {
     it('should show a message on success', async () => {
       const clientServiceMock = mockDeep<ClientService>()
       clientServiceMock.httpAuthenticated.post.mockResolvedValueOnce(
-        mock<AxiosResponse>({
-          data: {
-            bundles: [
-              {
-                id: '2a506de7-99bd-4f0d-994e-c38e72c28fd9',
-                extension: 'ocis-accounts',
-                settings: [
-                  {
-                    id: 'aa8cfbe5-95d4-4f7e-a032-c3c01f5f062f',
-                    name: 'language',
-                    singleChoiceValue: {
-                      options: [
-                        { value: { stringValue: 'de' }, displayValue: 'Deutsch' },
-                        { value: { stringValue: 'en' }, default: true, displayValue: 'English' }
-                      ]
-                    }
-                  },
-                  {
-                    id: '33ffb5d6-cd07-4dc0-afb0-84f7559ae438',
-                    name: 'disable-email-notifications',
-                    boolValue: { label: 'disable notifications' }
-                  }
-                ]
-              }
-            ]
-          }
-        })
+        mock<AxiosResponse>({ data: { bundles: [mock<SettingsBundle>()] } })
       )
       clientServiceMock.httpAuthenticated.post.mockResolvedValueOnce(
-        mock<AxiosResponse>({
-          data: {
-            values: [
-              {
-                identifier: { extension: 'ocis-accounts', bundle: 'profile', setting: 'language' },
-                value: {
-                  id: '2f411ff3-0040-4358-a537-1a3ceea228d8',
-                  listValue: { values: [{ stringValue: 'de' }] }
-                }
-              },
-              {
-                identifier: {
-                  extension: 'ocis-accounts',
-                  bundle: 'profile',
-                  setting: 'disable-email-notifications'
-                },
-                value: {
-                  id: '204d0e71-403c-42c5-b343-52a4021b32be',
-                  boolValue: false
-                }
-              }
-            ]
-          }
-        })
+        mock<AxiosResponse>({ data: { values: [mock<SettingsValue>()] } })
       )
 
       const { wrapper, mocks, storeOptions } = getWrapper({
@@ -232,7 +184,7 @@ describe('account page', () => {
         capabilities: { spaces: { enabled: true } }
       })
 
-      await wrapper.vm.loadBundlesListTask.last
+      await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
 
       mocks.$clientService.httpAuthenticated.post.mockResolvedValueOnce(mockAxiosResolve({}))
@@ -247,59 +199,10 @@ describe('account page', () => {
 
       const clientServiceMock = mockDeep<ClientService>()
       clientServiceMock.httpAuthenticated.post.mockResolvedValueOnce(
-        mock<AxiosResponse>({
-          data: {
-            bundles: [
-              {
-                id: '2a506de7-99bd-4f0d-994e-c38e72c28fd9',
-                extension: 'ocis-accounts',
-                settings: [
-                  {
-                    id: 'aa8cfbe5-95d4-4f7e-a032-c3c01f5f062f',
-                    name: 'language',
-                    singleChoiceValue: {
-                      options: [
-                        { value: { stringValue: 'de' }, displayValue: 'Deutsch' },
-                        { value: { stringValue: 'en' }, default: true, displayValue: 'English' }
-                      ]
-                    }
-                  },
-                  {
-                    id: '33ffb5d6-cd07-4dc0-afb0-84f7559ae438',
-                    name: 'disable-email-notifications',
-                    boolValue: { label: 'disable notifications' }
-                  }
-                ]
-              }
-            ]
-          }
-        })
+        mock<AxiosResponse>({ data: { bundles: [mock<SettingsBundle>()] } })
       )
       clientServiceMock.httpAuthenticated.post.mockResolvedValueOnce(
-        mock<AxiosResponse>({
-          data: {
-            values: [
-              {
-                identifier: { extension: 'ocis-accounts', bundle: 'profile', setting: 'language' },
-                value: {
-                  id: '2f411ff3-0040-4358-a537-1a3ceea228d8',
-                  listValue: { values: [{ stringValue: 'de' }] }
-                }
-              },
-              {
-                identifier: {
-                  extension: 'ocis-accounts',
-                  bundle: 'profile',
-                  setting: 'disable-email-notifications'
-                },
-                value: {
-                  id: '204d0e71-403c-42c5-b343-52a4021b32be',
-                  boolValue: false
-                }
-              }
-            ]
-          }
-        })
+        mock<AxiosResponse>({ data: { values: [mock<SettingsValue>()] } })
       )
 
       const { wrapper, mocks, storeOptions } = getWrapper({
@@ -307,7 +210,7 @@ describe('account page', () => {
         capabilities: { spaces: { enabled: true } }
       })
 
-      await wrapper.vm.loadBundlesListTask.last
+      await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
 
       mocks.$clientService.httpAuthenticated.post.mockImplementation(() => mockAxiosReject('err'))
