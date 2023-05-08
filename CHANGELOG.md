@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Archiver in protected public links: [#6423](https://github.com/owncloud/web/issues/6423)
+* Bugfix - Endless lazy loading indicator after sorting file table: [#6434](https://github.com/owncloud/web/issues/6434)
 * Bugfix - Layout with long breadcrumb: [#6731](https://github.com/owncloud/web/issues/6731)
 * Bugfix - Pagination after increasing items per page: [#6768](https://github.com/owncloud/web/issues/6768)
 * Bugfix - Calendar popup position in right sidebar: [#7513](https://github.com/owncloud/web/issues/7513)
@@ -60,6 +61,7 @@ Summary
 * Bugfix - Public link empty password stays forever: [#8864](https://github.com/owncloud/web/pull/8864)
 * Bugfix - Sidebar header after deleting resource: [#8880](https://github.com/owncloud/web/issues/8880)
 * Bugfix - Infinite login redirect: [#8928](https://github.com/owncloud/web/issues/8928)
+* Bugfix - Limit amount of concurrent tus requests: [#8987](https://github.com/owncloud/web/pull/8987)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -142,7 +144,6 @@ Summary
 * Enhancement - Adjust missing reshare permissions message: [#8820](https://github.com/owncloud/web/pull/8820)
 * Enhancement - Fix quicklink icon alignment: [#8822](https://github.com/owncloud/web/pull/8822)
 * Enhancement - Admin settings groups members panel: [#8826](https://github.com/owncloud/web/pull/8826)
-* Enhancement - Add expiration date hint to public links: [#8866](https://github.com/owncloud/web/pull/8866)
 * Enhancement - Respect user read-only configuration by the server: [#8868](https://github.com/owncloud/web/pull/8868)
 * Enhancement - Update roles and permissions names, labels, texts and icons: [#8876](https://github.com/owncloud/web/pull/8876)
 * Enhancement - Layout of Share role and expiration date dropdown: [#8882](https://github.com/owncloud/web/pull/8882)
@@ -159,6 +160,14 @@ Details
 
    https://github.com/owncloud/web/issues/6423
    https://github.com/owncloud/web/pull/8466
+
+* Bugfix - Endless lazy loading indicator after sorting file table: [#6434](https://github.com/owncloud/web/issues/6434)
+
+   The endless lazy loading indicator when sorting the file table and re-entering it has been
+   fixed.
+
+   https://github.com/owncloud/web/issues/6434
+   https://github.com/owncloud/web/pull/8988
 
 * Bugfix - Layout with long breadcrumb: [#6731](https://github.com/owncloud/web/issues/6731)
 
@@ -548,6 +557,15 @@ Details
    https://github.com/owncloud/web/issues/7354
    https://github.com/owncloud/web/issues/4677
    https://github.com/owncloud/web/pull/8947
+
+* Bugfix - Limit amount of concurrent tus requests: [#8987](https://github.com/owncloud/web/pull/8987)
+
+   The amount of concurrent tus requests when uploading has been reduced to 5. This fixes an issue
+   where the access token renewal failed during an ongoing upload because of the sheer amount of
+   pending requests.
+
+   https://github.com/owncloud/web/issues/8977
+   https://github.com/owncloud/web/pull/8987
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
@@ -1165,7 +1183,6 @@ Details
    https://github.com/owncloud/web/pull/8582
    https://github.com/owncloud/web/pull/8595
    https://github.com/owncloud/web/pull/8703
-   https://github.com/owncloud/web/pull/8910
 
 * Enhancement - Public link permission `PublicLink.Write.all`: [#8541](https://github.com/owncloud/web/pull/8541)
 
@@ -1336,13 +1353,6 @@ Details
    https://github.com/owncloud/web/issues/8596
    https://github.com/owncloud/web/pull/8826
 
-* Enhancement - Add expiration date hint to public links: [#8866](https://github.com/owncloud/web/pull/8866)
-
-   We've added a expiration date text hint to public links.
-
-   https://github.com/owncloud/web/issues/8211
-   https://github.com/owncloud/web/pull/8866
-
 * Enhancement - Respect user read-only configuration by the server: [#8868](https://github.com/owncloud/web/pull/8868)
 
    The user edit dialog in the user management will respect the server's
@@ -1392,6 +1402,7 @@ Details
 
    https://github.com/owncloud/web/issues/8904
    https://github.com/owncloud/web/pull/8911
+   https://github.com/owncloud/web/pull/8972
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
