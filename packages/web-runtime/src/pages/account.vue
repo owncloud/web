@@ -124,6 +124,7 @@
 <script lang="ts">
 import { mapActions } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
+import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
   useCapabilityGraphPersonalDataExport,
@@ -140,7 +141,7 @@ import { isPersonalSpaceResource } from 'web-client/src/helpers'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 export default defineComponent({
-  name: 'Personal',
+  name: 'AccountPage',
   components: {
     AppLoadingSpinner,
     EditPasswordModal,
@@ -152,10 +153,10 @@ export default defineComponent({
     const { $gettext } = language
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
-    const valuesList = ref()
-    const bundlesList = ref()
-    const selectedLanguageValue = ref()
-    const disableEmailNotificationsValue = ref()
+    const valuesList = ref<SettingsValue[]>()
+    const accountBundle = ref<SettingsBundle>()
+    const selectedLanguageValue = ref<LanguageOption>()
+    const disableEmailNotificationsValue = ref<boolean>()
 
     // FIXME: Use graph capability when we have it
     const isSettingsServiceSupported = useCapabilitySpacesEnabled()
@@ -190,19 +191,19 @@ export default defineComponent({
       }
     }).restartable()
 
-    const loadBundlesListTask = useTask(function* () {
+    const loadAccountBundleTask = useTask(function* () {
       try {
         const {
           data: { bundles }
         } = yield clientService.httpAuthenticated.post('/api/v0/settings/bundles-list', {})
-        bundlesList.value = bundles?.find((b) => b.extension === 'ocis-accounts')
+        accountBundle.value = bundles?.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
         console.error(e)
         store.dispatch('showMessage', {
           title: $gettext('Unable to load account data…'),
           status: 'danger'
         })
-        bundlesList.value = []
+        accountBundle.value = undefined
       }
     }).restartable()
 
@@ -213,18 +214,17 @@ export default defineComponent({
       return (
         loadValuesListTask.isRunning ||
         !loadValuesListTask.last ||
-        loadBundlesListTask.isRunning ||
-        !loadBundlesListTask.last
+        loadAccountBundleTask.isRunning ||
+        !loadAccountBundleTask.last
       )
     })
 
     const languageOptions = computed(() => {
-      const languageOptions = unref(bundlesList)?.settings?.find((s) => s.name === 'language')
+      const languageOptions = unref(accountBundle)?.settings?.find((s) => s.name === 'language')
         ?.singleChoiceValue.options
       return languageOptions?.map((l) => ({
         label: l.displayValue,
-        value: l.value.stringValue,
-        default: l.default
+        value: l.value.stringValue
       }))
     })
 
@@ -249,8 +249,8 @@ export default defineComponent({
         ?.id
 
       const value = {
-        bundleId: unref(bundlesList)?.id,
-        settingId: unref(bundlesList)?.settings?.find((s) => s.name === identifier)?.id,
+        bundleId: unref(accountBundle)?.id,
+        settingId: unref(accountBundle)?.settings?.find((s) => s.name === identifier)?.id,
         resource: { type: 'TYPE_USER' },
         accountUuid: 'me',
         ...valueOptions,
@@ -279,7 +279,7 @@ export default defineComponent({
       }
     }
 
-    const updateSelectedLanguage = async (option) => {
+    const updateSelectedLanguage = async (option: LanguageOption) => {
       try {
         const value = await saveValue({
           identifier: 'language',
@@ -309,7 +309,7 @@ export default defineComponent({
       }
     }
 
-    const updateDisableEmailNotifications = async (option) => {
+    const updateDisableEmailNotifications = async (option: boolean) => {
       try {
         await saveValue({
           identifier: 'disable-email-notifications',
@@ -330,7 +330,7 @@ export default defineComponent({
 
     onMounted(async () => {
       if (unref(isSettingsServiceSupported)) {
-        await loadBundlesListTask.perform()
+        await loadAccountBundleTask.perform()
         await loadValuesListTask.perform()
 
         const languageConfiguration = unref(valuesList)?.find(
@@ -367,7 +367,7 @@ export default defineComponent({
       logoutUrl: configurationManager.logoutUrl,
       isLoading,
       disableEmailNotificationsValue,
-      loadBundlesListTask,
+      loadAccountBundleTask,
       loadValuesListTask
     }
   },

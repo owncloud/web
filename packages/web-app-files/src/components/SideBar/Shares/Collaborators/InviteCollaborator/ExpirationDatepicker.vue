@@ -23,11 +23,13 @@
           <span
             v-if="!dateCurrent"
             key="no-expiration-date-label"
+            class="oc-text-truncate"
             v-text="$gettext('Set expiration date')"
           />
           <span
             v-else
             key="set-expiration-date-label"
+            class="oc-text-truncate"
             v-text="$gettextInterpolate($gettext('Expires %{expires}'), { expires: dateExpire })"
           />
           <oc-icon v-if="!dateCurrent" name="arrow-down-s" />
@@ -162,5 +164,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .recipient-edit-expiration-btn-remove {
   vertical-align: middle;
+}
+.files-collaborators-expiration-button {
+  max-width: 160px;
 }
 </style>
