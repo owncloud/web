@@ -201,6 +201,10 @@ export default defineComponent({
     const reduceBreadcrumb = (offsetIndex) => {
       const breadcrumbMaxWidth = props.calculateBreadcrumbMaxWidth()
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
+
+      console.log('breadcrumbMaxWidth', breadcrumbMaxWidth)
+      console.log('totalBreadcrumbWidth', totalBreadcrumbWidth)
+
       const isOverflowing = breadcrumbMaxWidth < totalBreadcrumbWidth
       console.log(totalBreadcrumbWidth)
       if (!isOverflowing) {
@@ -219,6 +223,12 @@ export default defineComponent({
         const lastVisibleItem = unref(visibleItems)[2]
         const oneBeforeLastVisibleItemIndex =
           unref(allItemsIncludingThreeDots).indexOf(lastVisibleItem) - 1
+        if (
+          oneBeforeLastVisibleItemIndex < 0 ||
+          oneBeforeLastVisibleItemIndex > unref(allItemsIncludingThreeDots).length - 1
+        ) {
+          return { to: {} }
+        }
         return unref(allItemsIncludingThreeDots)[oneBeforeLastVisibleItemIndex]
       }
       return { to: {} }
@@ -302,6 +312,7 @@ export default defineComponent({
 }
 .oc-breadcrumb {
   overflow: hidden;
+  background: green;
   //width: 50vw;
   //width: 70%;
   &-item-text {
