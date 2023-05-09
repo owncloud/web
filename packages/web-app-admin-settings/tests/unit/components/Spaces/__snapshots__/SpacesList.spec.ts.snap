@@ -97,7 +97,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="has-item-context-menu">
       <tr class="oc-tbody-tr oc-tbody-tr-1" data-item-id="1" draggable="false" tabindex="-1">
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-select oc-pl-s">
           <oc-checkbox-stub class="oc-ml-s" disabled="false" hidelabel="true" id="oc-checkbox-2" label="Select 1 Some space" modelvalue="false" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>

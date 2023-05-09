@@ -218,8 +218,8 @@ export const useFileActionsCreateNewFile = ({
         icon: 'add',
         handler: (args) => handler(args, newFileHandler.ext, openAction),
         label: () => newFileHandler.menuTitle($gettext),
-        isEnabled: ({ resources }) => {
-          return true
+        isEnabled: () => {
+          return unref(currentFolder)?.canUpload({ user: store.getters.user })
         },
         canBeDefault: true,
         componentType: 'button',
@@ -234,8 +234,8 @@ export const useFileActionsCreateNewFile = ({
         icon: 'add',
         handler: (args) => handler(args, mimeType.ext, openAction),
         label: () => mimeType.name,
-        isEnabled: ({ resources }) => {
-          return true
+        isEnabled: () => {
+          return unref(currentFolder)?.canUpload({ user: store.getters.user })
         },
         canBeDefault: true,
         componentType: 'button',

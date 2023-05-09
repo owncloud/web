@@ -68,10 +68,10 @@ exports[`Projects view different files view states lists all available project s
             </div>
           </div>
           <ul class="oc-list oc-my-rm oc-mx-rm oc-tiles oc-flex resizableTiles">
-            <li class="oc-tiles-item">
+            <li class="oc-tiles-item has-item-context-menu">
               <oc-tile-stub draggable="false" is-resource-selected="false" resource="[object Object]" resource-icon-size="xlarge" resource-route="[object Object]"></oc-tile-stub>
             </li>
-            <li class="oc-tiles-item">
+            <li class="oc-tiles-item has-item-context-menu">
               <oc-tile-stub draggable="false" is-resource-selected="false" resource="[object Object]" resource-icon-size="xlarge" resource-route="[object Object]"></oc-tile-stub>
             </li>
           </ul>

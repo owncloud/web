@@ -1,5 +1,6 @@
 <template>
   <div class="oc-flex oc-width-1-1" :class="{ 'space-frontpage': isSpaceFrontpage }">
+    <whitespace-context-menu ref="whitespaceContextMenu" :space="space" />
     <keyboard-actions :paginated-resources="paginatedResources" :space="space" />
     <files-view-wrapper>
       <app-bar
@@ -128,7 +129,7 @@
 <script lang="ts">
 import { debounce, omit, last } from 'lodash-es'
 import { basename } from 'path'
-import { computed, defineComponent, PropType, onBeforeUnmount, onMounted, unref } from 'vue'
+import { computed, defineComponent, PropType, onBeforeUnmount, onMounted, unref, ref } from 'vue'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
 import { useGettext } from 'vue3-gettext'
@@ -158,6 +159,7 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
 import { useRoute } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
@@ -171,6 +173,7 @@ import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
 import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
+import { displayPositionedDropdown } from 'web-pkg/src'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -192,7 +195,8 @@ export default defineComponent({
     ResourceTable,
     ResourceTiles,
     SideBar,
-    SpaceHeader
+    SpaceHeader,
+    WhitespaceContextMenu
   },
   props: {
     space: {
@@ -393,12 +397,32 @@ export default defineComponent({
           performLoaderTask(true, path, fileId)
         }
       )
+      const filesViewWrapper = document.getElementsByClassName('files-view-wrapper')[0]
+      filesViewWrapper?.addEventListener('contextmenu', (event) => {
+        const { target } = event
+        if ((target as HTMLElement).closest('.has-item-context-menu')) {
+          return
+        }
+        event.preventDefault()
+        const newEvent = new MouseEvent('contextmenu', event)
+        showContextMenu(newEvent)
+      })
     })
 
     onBeforeUnmount(() => {
       visibilityObserver.disconnect()
       eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     })
+
+    const whitespaceContextMenu = ref(null)
+    const showContextMenu = (event) => {
+      store.commit('Files/RESET_SELECTION')
+      displayPositionedDropdown(
+        unref(whitespaceContextMenu).$el._tippy,
+        event,
+        unref(whitespaceContextMenu)
+      )
+    }
 
     return {
       ...useFileActions(),
@@ -412,7 +436,8 @@ export default defineComponent({
       viewModes,
       uploadHint: $gettext(
         'Drag files and folders here or use the "New" or "Upload" buttons to add files'
-      )
+      ),
+      whitespaceContextMenu
     }
   },
 

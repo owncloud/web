@@ -35,7 +35,7 @@
         </oc-th>
       </oc-tr>
     </oc-thead>
-    <oc-tbody>
+    <oc-tbody class="has-item-context-menu">
       <oc-tr
         v-for="(item, trIndex) in data"
         :key="`oc-tbody-tr-${itemDomSelector(item) || trIndex}`"
