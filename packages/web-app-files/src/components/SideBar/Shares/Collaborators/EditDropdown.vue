@@ -38,7 +38,7 @@
           <template v-if="option.enabled">
             <div
               v-if="option.hasSwitch"
-              class="action-menu-item action-menu-item-has-switch oc-p-s oc-flex oc-flex-center"
+              class="action-menu-item item-has-switch oc-p-s oc-flex oc-flex-center"
             >
               <oc-icon :name="option.icon" fill-type="line" size="medium" variation="passive" />
               <oc-switch

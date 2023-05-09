@@ -269,7 +269,7 @@ export default defineComponent({
   }
   li.oc-menu-item-hover {
     a,
-    .action-menu-item-has-switch,
+    .item-has-switch,
     button:not([role='switch']) {
       box-sizing: border-box;
       padding: var(--oc-space-small);
