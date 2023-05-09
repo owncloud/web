@@ -19,6 +19,7 @@
           context-menu-padding="small"
           :show-context-actions="showContextActions"
           :items="breadcrumbs"
+          :calculate-breadcrumb-max-width="calculateBreadcrumbMaxWidth"
         >
           <template #contextMenu>
             <context-actions
@@ -185,10 +186,18 @@ export default defineComponent({
       return props.breadcrumbs.length <= 1
     })
 
+    const calculateBreadcrumbMaxWidth = () => {
+      const leftControlsWidth = document.getElementById('files-app-bar-controls-right').clientWidth
+      const appBarTotalWidth =
+        document.getElementById('files-app-bar').clientWidth - (leftControlsWidth + 20)
+      return appBarTotalWidth - leftControlsWidth
+    }
+
     return {
       batchActions,
       showBreadcrumb,
-      showMobileNav
+      showMobileNav,
+      calculateBreadcrumbMaxWidth
     }
   },
   data: function () {

@@ -2,7 +2,7 @@
   <nav :id="id" :class="`oc-breadcrumb oc-breadcrumb-${variation}`">
     <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
       <li
-        v-for="(item, index) in itemsWithThreeDots"
+        v-for="(item, index) in allItemsIncludingThreeDots"
         :key="index"
         :data-key="index"
         :class="{
@@ -36,7 +36,7 @@
           <span>{{ item.text }}</span>
         </oc-button>
         <span v-else :aria-current="getAriaCurrent(index)" tabindex="-1" v-text="item.text" />
-        <template v-if="showContextActions && index === itemsWithThreeDots.length - 1">
+        <template v-if="showContextActions && index === allItemsIncludingThreeDots.length - 1">
           <oc-button
             id="oc-breadcrumb-contextmenu-trigger"
             v-oc-tooltip="contextMenuLabel"
@@ -59,7 +59,7 @@
       </li>
     </ol>
     <oc-button
-      v-if="itemsWithThreeDots.length > 1"
+      v-if="allItemsIncludingThreeDots.length > 1"
       appearance="raw"
       type="router-link"
       :aria-label="$gettext('Navigate one level up')"
@@ -69,7 +69,7 @@
       <oc-icon name="arrow-left-s" fill-type="line" size="large" class="oc-mr-m" />
     </oc-button>
   </nav>
-  <div v-if="itemsWithThreeDots.length > 1" class="oc-breadcrumb-mobile-current">
+  <div v-if="allItemsIncludingThreeDots.length > 1" class="oc-breadcrumb-mobile-current">
     <span class="oc-text-truncate" aria-current="page" v-text="currentFolder.text" />
   </div>
 </template>
@@ -152,6 +152,14 @@ export default defineComponent({
         return [...AVAILABLE_SIZES, 'remove'].some((e) => e === value)
       }
     },
+
+    calculateBreadcrumbMaxWidth: {
+      type: Function,
+      required: false,
+      default: () => () => {
+        return 500
+      }
+    },
     /**
      * Determines if the last breadcrumb item should have context menu actions.
      */
@@ -164,7 +172,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const visibleItems = ref([])
     const hiddenItems = ref([])
-    const itemsWithThreeDots = ref(props.items.slice())
+    const allItemsIncludingThreeDots = ref(props.items.slice())
 
     const getBreadcrumbElement = (key): HTMLElement => {
       return document.querySelector(`[data-key="${key}"]`)
@@ -172,7 +180,6 @@ export default defineComponent({
 
     const calculateTotalBreadcrumbWidth = () => {
       const parent = document.getElementById(props.id)
-      const parentStyle = window.getComputedStyle(parent)
       let totalBreadcrumbWidth = 0
       visibleItems.value.forEach((item, index) => {
         const breadcrumbElement = getBreadcrumbElement(index)
@@ -184,11 +191,9 @@ export default defineComponent({
     }
 
     const reduceBreadcrumb = (offsetIndex) => {
-      const leftControlsWidth = document.getElementById('files-app-bar-controls-right').clientWidth
-      const parentWidth =
-        document.getElementById('files-app-bar').clientWidth - (leftControlsWidth + 20)
+      const breadcrumbMaxWidth = props.calculateBreadcrumbMaxWidth()
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
-      const isOverflowing = parentWidth < totalBreadcrumbWidth
+      const isOverflowing = breadcrumbMaxWidth < totalBreadcrumbWidth
       console.log(totalBreadcrumbWidth)
       if (!isOverflowing) {
         return
@@ -204,20 +209,24 @@ export default defineComponent({
 
     const lastHiddenItem = computed(() => {
       if (hiddenItems.value.length > 1) {
-        const lastIndex = unref(itemsWithThreeDots).indexOf(visibleItems.value[2]) - 1
+        const lastIndex = unref(allItemsIncludingThreeDots).indexOf(visibleItems.value[2]) - 1
         console.log('lastIndex', lastIndex)
-        return unref(itemsWithThreeDots)[lastIndex]
+        return unref(allItemsIncludingThreeDots)[lastIndex]
       }
       return { to: {} }
     })
 
     const renderBreadcrumb = () => {
-      itemsWithThreeDots.value = props.items.slice()
-      if (itemsWithThreeDots.value.length > 1) {
-        itemsWithThreeDots.value.splice(1, 0, { text: '...', allowContextActions: false, to: {} })
+      allItemsIncludingThreeDots.value = props.items.slice()
+      if (allItemsIncludingThreeDots.value.length > 1) {
+        allItemsIncludingThreeDots.value.splice(1, 0, {
+          text: '...',
+          allowContextActions: false,
+          to: {}
+        })
       }
-      console.log(itemsWithThreeDots.value)
-      visibleItems.value = itemsWithThreeDots.value.slice()
+      console.log(allItemsIncludingThreeDots.value)
+      visibleItems.value = allItemsIncludingThreeDots.value.slice()
       hiddenItems.value = []
 
       nextTick(() => {
@@ -272,7 +281,7 @@ export default defineComponent({
       visibleItems,
       hiddenItems,
       renderBreadcrumb,
-      itemsWithThreeDots,
+      allItemsIncludingThreeDots,
       lastHiddenItem
     }
   }
