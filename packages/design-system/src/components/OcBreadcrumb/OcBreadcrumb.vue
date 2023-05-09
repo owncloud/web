@@ -203,11 +203,7 @@ export default defineComponent({
       const breadcrumbMaxWidth = props.calculateBreadcrumbMaxWidth()
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
 
-      console.log('breadcrumbMaxWidth', breadcrumbMaxWidth)
-      console.log('totalBreadcrumbWidth', totalBreadcrumbWidth)
-
       const isOverflowing = breadcrumbMaxWidth < totalBreadcrumbWidth
-      console.log(totalBreadcrumbWidth)
       if (!isOverflowing) {
         return
       }
@@ -245,7 +241,6 @@ export default defineComponent({
           isPreviousHiddenFolder: true
         })
       }
-      console.log(allItemsIncludingThreeDots.value)
       visibleItems.value = allItemsIncludingThreeDots.value.slice()
       hiddenItems.value = []
 
