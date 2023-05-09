@@ -587,6 +587,8 @@ export default defineComponent({
       return this.configuration?.options?.displayResourcesLazy
     },
     areAllResourcesSelected() {
+      console.log('selected-ids length', this.selectedIds)
+      console.log('selected-ids length', this.selectedIds.length)
       return this.selectedIds.length === this.resources.length
     },
     selectedResources() {
