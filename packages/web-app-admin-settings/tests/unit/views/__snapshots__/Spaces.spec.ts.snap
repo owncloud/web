@@ -6,7 +6,7 @@ exports[`Spaces view loading states should render spaces list after loading has 
     <div class="oc-width-expand oc-height-1-1 oc-position-relative" id="admin-settings-wrapper">
       <div class="oc-app-bar oc-py-s" id="admin-settings-app-bar">
         <div class="admin-settings-app-bar-controls oc-flex oc-flex-between oc-flex-middle">
-          <oc-breadcrumb-stub class="oc-flex oc-flex-middle" contextmenupadding="medium" id="admin-settings-breadcrumb" items="[object Object],[object Object]" showcontextactions="false" variation="default"></oc-breadcrumb-stub>
+          <oc-breadcrumb-stub calculatebreadcrumbmaxwidth="[Function]" class="oc-flex oc-flex-middle" contextmenupadding="medium" id="admin-settings-breadcrumb" items="[object Object],[object Object]" showcontextactions="false" variation="default"></oc-breadcrumb-stub>
           <portal-target name="app.runtime.mobile.nav"></portal-target>
           <div>
             <button aria-label="Open sidebar to view details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-my-s oc-p-xs" id="files-toggle-sidebar" type="button">

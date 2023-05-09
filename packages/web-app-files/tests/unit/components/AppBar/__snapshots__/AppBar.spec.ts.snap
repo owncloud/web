@@ -3,15 +3,18 @@
 exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no sharesnavigation but viewoptions and sidebartoggle 1`] = `
 <div class="" displayviewmodeswitch="false" id="files-app-bar">
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
+  <div style="height: 114px;"></div>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
     <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
       <!--v-if-->
-      <portal-target name="app.runtime.mobile.nav"></portal-target>
-      <!--v-if-->
-      <div class="oc-flex">
-        <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" viewmodes=""></view-options-stub>
-        <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
+      <div id="files-app-bar-controls-right">
+        <portal-target name="app.runtime.mobile.nav"></portal-target>
+        <!--v-if-->
+        <div class="oc-flex">
+          <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" viewmodes=""></view-options-stub>
+          <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
+        </div>
       </div>
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
@@ -26,15 +29,18 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
 exports[`AppBar component renders if given, with content in the actions slot 1`] = `
 <div class="" displayviewmodeswitch="false" id="files-app-bar">
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
+  <div style="height: 114px;"></div>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
     <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
       <!--v-if-->
-      <portal-target name="app.runtime.mobile.nav"></portal-target>
-      <!--v-if-->
-      <div class="oc-flex">
-        <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" viewmodes=""></view-options-stub>
-        <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
+      <div id="files-app-bar-controls-right">
+        <portal-target name="app.runtime.mobile.nav"></portal-target>
+        <!--v-if-->
+        <div class="oc-flex">
+          <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" viewmodes=""></view-options-stub>
+          <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
+        </div>
       </div>
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
@@ -50,15 +56,18 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
 exports[`AppBar component renders if given, with content in the content slot 1`] = `
 <div class="" displayviewmodeswitch="false" id="files-app-bar">
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
+  <div style="height: 114px;"></div>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
     <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
       <!--v-if-->
-      <portal-target name="app.runtime.mobile.nav"></portal-target>
-      <!--v-if-->
-      <div class="oc-flex">
-        <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" viewmodes=""></view-options-stub>
-        <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
+      <div id="files-app-bar-controls-right">
+        <portal-target name="app.runtime.mobile.nav"></portal-target>
+        <!--v-if-->
+        <div class="oc-flex">
+          <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" viewmodes=""></view-options-stub>
+          <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
+        </div>
       </div>
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
