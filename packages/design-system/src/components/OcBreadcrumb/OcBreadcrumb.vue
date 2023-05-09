@@ -179,7 +179,6 @@ export default defineComponent({
     }
 
     const calculateTotalBreadcrumbWidth = () => {
-      const parent = document.getElementById(props.id)
       let totalBreadcrumbWidth = 0
       visibleItems.value.forEach((item, index) => {
         const breadcrumbElement = getBreadcrumbElement(index)
@@ -203,15 +202,15 @@ export default defineComponent({
       removed = visibleItems.value.splice(offsetIndex, 1)
 
       hiddenItems.value.push(removed[0])
-      console.log('hidden', hiddenItems.value)
       reduceBreadcrumb(offsetIndex)
     }
 
     const lastHiddenItem = computed(() => {
       if (hiddenItems.value.length > 1) {
-        const lastIndex = unref(allItemsIncludingThreeDots).indexOf(visibleItems.value[2]) - 1
-        console.log('lastIndex', lastIndex)
-        return unref(allItemsIncludingThreeDots)[lastIndex]
+        const lastVisibleItem = unref(visibleItems)[2]
+        const oneBeforeLastVisibleItemIndex =
+          unref(allItemsIncludingThreeDots).indexOf(lastVisibleItem) - 1
+        return unref(allItemsIncludingThreeDots)[oneBeforeLastVisibleItemIndex]
       }
       return { to: {} }
     })
