@@ -55,7 +55,7 @@
               class="oc-p-s action-menu-item"
               :class="option.class"
               v-bind="option.additionalAttributes || {}"
-              v-on="!option.hasSwitch ? { click: option.method } : {}"
+              @click="option.method"
             >
               <oc-icon :name="option.icon" fill-type="line" size="medium" variation="passive" />
               <span class="oc-ml-s" v-text="option.title" />

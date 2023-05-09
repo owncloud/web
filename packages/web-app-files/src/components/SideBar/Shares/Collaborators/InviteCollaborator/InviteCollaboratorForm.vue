@@ -347,7 +347,7 @@ export default defineComponent({
 
       const results = await Promise.allSettled(savePromises)
 
-      if (results.find((r) => r.status === 'fulfilled')) {
+      if (results.length !== errors.length) {
         this.showMessage({ title: this.$gettext('Share was added successfully') })
       }
       errors.forEach((e) => {

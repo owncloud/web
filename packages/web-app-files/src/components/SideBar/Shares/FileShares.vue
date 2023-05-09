@@ -58,7 +58,7 @@
           <collaborator-list-item
             :share="collaborator"
             :resource-name="resource.name"
-            :deniable="isSpaceMemberDeniable"
+            :deniable="isSpaceMemberDeniable(collaborator)"
             :modifiable="false"
             :is-share-denied="isSpaceMemberDenied(collaborator)"
             @on-set-deny="setDenyShare"
@@ -266,10 +266,6 @@ export default defineComponent({
       return this.space || this.spaces.find((space) => space.id === this.resource.storageId)
     },
 
-    isSpaceMemberDeniable() {
-      return this.hasShareCanDenyAccess && this.resource.isFolder
-    },
-
     resourceIsSpace() {
       return this.resource.type === 'space'
     }
@@ -454,6 +450,17 @@ export default defineComponent({
         sharedAncestor,
         matchingSpace: this.matchingSpace
       })
+    },
+
+    isSpaceMemberDeniable(collaborator) {
+      return (
+        this.hasShareCanDenyAccess &&
+        this.resource.isFolder &&
+        !(
+          collaborator.shareType === ShareTypes.spaceUser.value &&
+          collaborator.collaborator.name === this.user.id
+        )
+      )
     },
 
     isShareDeniable(collaborator) {
