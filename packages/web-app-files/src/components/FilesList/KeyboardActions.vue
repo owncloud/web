@@ -167,7 +167,7 @@ export default defineComponent({
       scrollToResource({ id: nextResourceId } as any)
       selectionCursor.value = unref(selectionCursor) + 1
     }
-    const handleShiftClickAction = (resource) => {
+    const handleShiftClickAction = ({ resource, skipTargetSelection }) => {
       const parent = document.querySelectorAll(`[data-item-id='${resource.id}']`)[0]
       const resourceNodes = Object.values(parent.parentNode.children)
       const latestNode = resourceNodes.find(
@@ -184,6 +184,9 @@ export default defineComponent({
 
       for (let i = minIndex; i <= maxIndex; i++) {
         const nodeId = resourceNodes[i].getAttribute('data-item-id')
+        if (skipTargetSelection && nodeId === resource.id) {
+          continue
+        }
         store.commit('Files/ADD_FILE_SELECTION', { id: nodeId })
       }
       store.commit('Files/SET_LATEST_SELECTED_FILE_ID', resource.id)
