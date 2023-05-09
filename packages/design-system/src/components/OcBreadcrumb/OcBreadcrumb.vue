@@ -308,9 +308,6 @@ export default defineComponent({
 }
 .oc-breadcrumb {
   overflow: hidden;
-  background: green;
-  //width: 50vw;
-  //width: 70%;
   &-item-text {
     display: flex !important;
     max-width: 100px;
