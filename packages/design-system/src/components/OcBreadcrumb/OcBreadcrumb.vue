@@ -13,7 +13,11 @@
             hiddenItems.indexOf(item) !== -1 || (item.text === '...' && hiddenItems.length === 0)
         }"
       >
-        <router-link v-if="item.to" :aria-current="getAriaCurrent(index)" :to="item.to">
+        <router-link
+          v-if="item.to"
+          :aria-current="getAriaCurrent(index)"
+          :to="item.text === '...' ? lastHiddenItem.to : item.to"
+        >
           <span>{{ item.text }}</span>
         </router-link>
         <oc-icon
@@ -169,7 +173,6 @@ export default defineComponent({
     const calculateTotalBreadcrumbWidth = () => {
       const parent = document.getElementById(props.id)
       const parentStyle = window.getComputedStyle(parent)
-      //const itemGap = parseFloat(parentStyle.getPropertyValue('gap'))
       let totalBreadcrumbWidth = 0
       visibleItems.value.forEach((item, index) => {
         const breadcrumbElement = getBreadcrumbElement(index)
@@ -181,34 +184,44 @@ export default defineComponent({
     }
 
     const reduceBreadcrumb = (offsetIndex) => {
-      const parentWidth = document.getElementById(props.id).clientWidth
+      const leftControlsWidth = document.getElementById('files-app-bar-controls-right').clientWidth
+      const parentWidth =
+        document.getElementById('files-app-bar').clientWidth - (leftControlsWidth + 20)
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
       const isOverflowing = parentWidth < totalBreadcrumbWidth
+      console.log(totalBreadcrumbWidth)
       if (!isOverflowing) {
         return
       }
       // Remove from the left side
       let removed
-      if (visibleItems.value[offsetIndex].text === '...') {
-        removed = visibleItems.value.splice(offsetIndex + 1, 1)
-      } else {
-        removed = visibleItems.value.splice(offsetIndex, 1)
-      }
+      removed = visibleItems.value.splice(offsetIndex, 1)
+
       hiddenItems.value.push(removed[0])
       console.log('hidden', hiddenItems.value)
       reduceBreadcrumb(offsetIndex)
     }
+
+    const lastHiddenItem = computed(() => {
+      if (hiddenItems.value.length > 1) {
+        const lastIndex = unref(itemsWithDropdown).indexOf(visibleItems.value[2]) - 1
+        console.log('lastIndex', lastIndex)
+        return unref(itemsWithDropdown)[lastIndex]
+      }
+      return { to: {} }
+    })
 
     const renderBreadcrumb = () => {
       itemsWithDropdown.value = props.items.slice()
       if (itemsWithDropdown.value.length > 1) {
         itemsWithDropdown.value.splice(1, 0, { text: '...', allowContextActions: false, to: {} })
       }
+      console.log(itemsWithDropdown.value)
       visibleItems.value = itemsWithDropdown.value.slice()
       hiddenItems.value = []
 
       nextTick(() => {
-        reduceBreadcrumb(1)
+        reduceBreadcrumb(2)
       })
     }
 
@@ -259,7 +272,8 @@ export default defineComponent({
       visibleItems,
       hiddenItems,
       renderBreadcrumb,
-      itemsWithDropdown
+      itemsWithDropdown,
+      lastHiddenItem
     }
   }
 })

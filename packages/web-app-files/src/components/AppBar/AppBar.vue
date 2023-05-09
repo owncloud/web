@@ -26,17 +26,19 @@
             />
           </template>
         </oc-breadcrumb>
-        <portal-target v-if="showMobileNav" name="app.runtime.mobile.nav" />
-        <shares-navigation v-if="hasSharesNavigation" />
-        <div v-if="hasViewOptions || hasSidebarToggle" class="oc-flex">
-          <view-options
-            v-if="hasViewOptions"
-            :view-modes="viewModes"
-            :has-hidden-files="hasHiddenFiles"
-            :has-file-extensions="hasFileExtensions"
-            :has-pagination="hasPagination"
-          />
-          <sidebar-toggle v-if="hasSidebarToggle" :side-bar-open="sideBarOpen" />
+        <div id="files-app-bar-controls-right">
+          <portal-target v-if="showMobileNav" name="app.runtime.mobile.nav" />
+          <shares-navigation v-if="hasSharesNavigation" />
+          <div v-if="hasViewOptions || hasSidebarToggle" class="oc-flex">
+            <view-options
+              v-if="hasViewOptions"
+              :view-modes="viewModes"
+              :has-hidden-files="hasHiddenFiles"
+              :has-file-extensions="hasFileExtensions"
+              :has-pagination="hasPagination"
+            />
+            <sidebar-toggle v-if="hasSidebarToggle" :side-bar-open="sideBarOpen" />
+          </div>
         </div>
       </div>
       <div class="files-app-bar-actions oc-mt-xs">
