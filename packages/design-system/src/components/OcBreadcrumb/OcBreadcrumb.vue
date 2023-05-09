@@ -208,8 +208,7 @@ export default defineComponent({
         return
       }
       // Remove from the left side
-      let removed
-      removed = visibleItems.value.splice(offsetIndex, 1)
+      const removed = visibleItems.value.splice(offsetIndex, 1)
 
       hiddenItems.value.push(removed[0])
       reduceBreadcrumb(offsetIndex)
