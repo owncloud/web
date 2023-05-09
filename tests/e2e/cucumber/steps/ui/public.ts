@@ -68,7 +68,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" downloads the following public link resource(s)? using the (sidebar panel|batch action)$/,
+  /^"([^"]*)" downloads the following public link resource(s)? using the (sidebar panel|batch action|single share view)$/,
   async function (
     this: World,
     stepUser: string,

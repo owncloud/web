@@ -7,9 +7,11 @@ import { File, Space } from '../../../types'
 import { sidebar } from '../utils'
 import { config } from '../../../../config'
 
+const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
+const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
 const downloadFileButtonSideBar =
   '#oc-files-actions-sidebar .oc-files-actions-download-file-trigger'
-const downloadFolderButtonSidedBar =
+const downloadFolderButtonSideBar =
   '#oc-files-actions-sidebar .oc-files-actions-download-archive-trigger'
 const downloadButtonBatchAction = '.oc-files-actions-download-archive-trigger'
 const deleteButtonBatchAction = '.oc-files-actions-delete-trigger'
@@ -327,7 +329,7 @@ export interface downloadResourcesArgs {
   page: Page
   resources: resourceArgs[]
   folder?: string
-  via: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
+  via: 'SIDEBAR_PANEL' | 'BATCH_ACTION' | 'SINGLE_SHARE_VIEW'
 }
 
 export const downloadResources = async (args: downloadResourcesArgs): Promise<Download[]> => {
@@ -343,7 +345,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
         await sidebar.open({ page, resource: resource.name })
         await sidebar.openPanel({ page, name: 'actions' })
         const downloadResourceSelector =
-          resource.type === 'file' ? downloadFileButtonSideBar : downloadFolderButtonSidedBar
+          resource.type === 'file' ? downloadFileButtonSideBar : downloadFolderButtonSideBar
         const [download] = await Promise.all([
           page.waitForEvent('download'),
           page.locator(downloadResourceSelector).click()
@@ -366,6 +368,25 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
         page.locator(downloadButtonBatchAction).click()
       ])
       downloads.push(download)
+      break
+    }
+
+    case 'SINGLE_SHARE_VIEW': {
+      if (folder) {
+        await clickResource({ page, path: folder })
+      }
+      for (const resource of resources) {
+        const downloadResourceSelector =
+          resource.type === 'file'
+            ? downloadFileButtonSingleShareView
+            : downloadFolderButtonSingleShareView
+        const [download] = await Promise.all([
+          page.waitForEvent('download'),
+          page.locator(downloadResourceSelector).click()
+        ])
+
+        downloads.push(download)
+      }
       break
     }
   }

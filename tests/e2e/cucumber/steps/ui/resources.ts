@@ -5,6 +5,8 @@ import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 import { config } from '../../../config'
 import { displayedResourceType } from '../../../support/objects/app-files/resource/actions'
+import { Public } from '../../../support/objects/app-files/page/public'
+import { Resource } from '../../../support/objects/app-files'
 
 When(
   '{string} creates the following resource(s)',
@@ -279,7 +281,11 @@ When(
   }
 )
 
-export const processDelete = async (stepTable: DataTable, pageObject: any, actionType: string) => {
+export const processDelete = async (
+  stepTable: DataTable,
+  pageObject: Public | Resource,
+  actionType: string
+) => {
   let files, parentFolder
   const deleteInfo = stepTable.hashes().reduce((acc, stepRow) => {
     const { resource, from } = stepRow
@@ -306,13 +312,11 @@ export const processDelete = async (stepTable: DataTable, pageObject: any, actio
 
 export const processDownload = async (
   stepTable: DataTable,
-  pageObject: any,
+  pageObject: Public | Resource,
   actionType: string
 ) => {
-  let downloads,
-    files,
-    parentFolder,
-    downloadedResources = []
+  let downloads, files, parentFolder
+  const downloadedResources = []
   const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
     const { resource, from, type } = stepRow
     const resourceInfo = {
@@ -334,7 +338,12 @@ export const processDownload = async (
     downloads = await pageObject.download({
       folder: parentFolder,
       resources: files,
-      via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+      via:
+        actionType === 'batch action'
+          ? 'BATCH_ACTION'
+          : actionType === 'sidebar panel'
+          ? 'SIDEBAR_PANEL'
+          : 'SINGLE_SHARE_VIEW'
     })
 
     downloads.forEach((download) => {
