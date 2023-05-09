@@ -150,6 +150,7 @@ Summary
 * Enhancement - Webfinger redirect app: [#8883](https://github.com/owncloud/web/issues/8883)
 * Enhancement - Rename "Quicklink" to "link": [#8898](https://github.com/owncloud/web/pull/8898)
 * Enhancement - Add notification setting to account page: [#8911](https://github.com/owncloud/web/pull/8911)
+* Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
 
 Details
 -------
@@ -1403,6 +1404,13 @@ Details
    https://github.com/owncloud/web/issues/8904
    https://github.com/owncloud/web/pull/8911
    https://github.com/owncloud/web/pull/8972
+
+* Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
+
+   We've added a generic context-menu for right clicking on whitespace.
+
+   https://github.com/owncloud/web/issues/5861
+   https://github.com/owncloud/web/pull/8921
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
