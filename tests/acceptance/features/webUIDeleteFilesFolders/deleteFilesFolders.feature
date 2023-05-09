@@ -164,7 +164,7 @@ Feature: deleting files and folders
       |                 | &and#hash       |
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    And the user deletes the following file using the webUI
+    And the user deletes the following single share using the webUI
       | name-parts      |
       | 'single'        |
       | "double" quotes |

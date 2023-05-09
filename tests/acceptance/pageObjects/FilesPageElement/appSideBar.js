@@ -118,19 +118,6 @@ module.exports = {
       const panelElement = this.elements[panelName + 'Panel']
       return await this.waitForElementPresent(panelElement.locateStrategy, panelElement.selector)
     },
-    getVisibleAccordionItems: async function () {
-      const items = []
-      let elements
-      await this.api.elements('@panelSelectButtons', function (result) {
-        elements = result.value
-      })
-      for (const { ELEMENT } of elements) {
-        await this.api.elementIdText(ELEMENT, function (result) {
-          items.push(result.value.toLowerCase())
-        })
-      }
-      return items
-    },
     getActionsMenuItemsExceptDefaults: async function () {
       const defaultItems = ['add to favorites', 'copy', 'cut', 'rename', 'delete']
       const items = []

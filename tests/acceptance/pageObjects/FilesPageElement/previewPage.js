@@ -11,6 +11,10 @@ module.exports = {
 
       return this
     },
+    openPreviewFromDetailsView: async function (fileName) {
+      await filesActionsMenu.preview()
+      return this
+    },
     waitForPreviewLoaded: function (fileName) {
       const image = util.format(this.elements.mediaImage.selector, fileName)
       return this.useXpath().waitForElementVisible(image).useCss()

@@ -53,7 +53,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 - [webUISharingExpirationDate/shareWithExpirationDate.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExpirationDate/shareWithExpirationDate.feature#L21)
 
 ### [Listing shares via ocs API does not show path for parent folders](https://github.com/owncloud/ocis/issues/1231)
--   [webUISharingPublicManagement/shareByPublicLink.feature:127](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L127)
+-   [webUISharingPublicManagement/shareByPublicLink.feature:110](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L110)
 
 ### [Propfind response to trashbin endpoint is different in ocis](https://github.com/owncloud/product/issues/186)
 -   [webUIFilesSearch/search.feature:131](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L131)
@@ -84,7 +84,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicManagement/shareByPublicLink.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L24)
 
 ### [Uploading folders does not work in files-drop](https://github.com/owncloud/web/issues/2443)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:245](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L245)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:268](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L268)
 
 ### [Resources cannot be locked under ocis](https://github.com/owncloud/ocis/issues/1284)
 -   [webUIWebdavLockProtection/delete.feature:33](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIWebdavLockProtection/delete.feature#L33)

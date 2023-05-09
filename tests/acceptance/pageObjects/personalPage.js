@@ -226,6 +226,9 @@ module.exports = {
       )
       return canCreate
     },
+    checkForNonPresentDeleteButtonInSingleShareView: function () {
+      return this.waitForElementNotPresent('@deleteSelectedButton')
+    },
     deleteAllCheckedFiles: function () {
       return this.waitForElementVisible('@deleteSelectedButton')
         .click('@deleteSelectedButton')

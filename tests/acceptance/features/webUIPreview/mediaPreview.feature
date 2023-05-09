@@ -3,8 +3,8 @@ Feature: display image in preview app on the webUI
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
 
-@ocisSmokeTest
-Scenario Outline: preview of image files with preview app is possible
+  @ocisSmokeTest
+  Scenario Outline: preview of image files with preview app is possible
     Given user "Alice" has uploaded file "<image-file>" to "<image-file>" in the server
     And user "Alice" has logged in using the webUI
     When the user views the file "<image-file>" in the preview app using the webUI
@@ -28,7 +28,7 @@ Scenario Outline: preview of image files with preview app is possible
     And user "Alice" has created a public link with following settings in the server
       | path | simple-empty-folder |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    And the public views the file "test_video.mp4" in the preview app using the webUI
+    And the public views the single share file "test_video.mp4" in the preview app using the webUI
     Then the file "test_video.mp4" should be displayed in the preview app webUI
 
 
@@ -38,7 +38,7 @@ Scenario Outline: preview of image files with preview app is possible
     And user "Alice" has created a public link with following settings in the server
       | path | simple-empty-folder |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    And the public views the file "testavatar.jpg" in the preview app using the webUI
+    And the public views the single share file "testavatar.jpg" in the preview app using the webUI
     Then the file "testavatar.jpg" should be displayed in the preview app webUI
 
 

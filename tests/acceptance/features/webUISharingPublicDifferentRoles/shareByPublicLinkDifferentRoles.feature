@@ -12,6 +12,26 @@ Feature: Share by public link with different roles
     Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "simple-folder" in the server
 
+  Scenario Outline: simple sharing by public link with read-only role
+    Given user "Alice" has created file "simple-folder/lorem.txt" in the server
+    And user "Alice" has logged in using the webUI
+    When the user creates a new public link for folder "simple-folder" using the webUI
+    And the user sets the role of the most recently created public link of resource "simple-folder" to "<role>"
+    Then user "Alice" should have a share with these details in the server:
+      | field       | value          |
+      | share_type  | public_link    |
+      | uid_owner   | Alice          |
+      | permissions | <permissions>  |
+      | path        | /simple-folder |
+    # Once issue @issue-ocis-reva-383 is resolved uncomment lines below
+    #   | name        | Link           |
+    # And a link named "Link" should be listed with role "<role>" in the public link list of folder "simple-folder" on the webUI
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
+    Then file "lorem.txt" should be listed on the webUI as single share
+    Examples:
+      | role   | permissions |
+      | Viewer | read        |
+
   @smokeTest @ocisSmokeTest @issue-ocis-reva-383
   Scenario Outline: simple sharing by public link with different roles
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
@@ -27,7 +47,7 @@ Feature: Share by public link with different roles
       | name        | Link           |
     And a link named "Link" should be listed with role "<displayed-role>" in the public link list of folder "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    Then file "lorem.txt" should be listed on the webUI
+    Then file "lorem.txt" should be listed on the webUI as single share
     Examples:
       | role        | displayed-role                  | permissions                  |
       | Viewer      | Anyone with the link can view   | read                         |
@@ -48,10 +68,9 @@ Feature: Share by public link with different roles
       | permissions | <permissions>  |
       | path        | /simple-folder |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    Then file "lorem.txt" should be listed on the webUI
+    Then file "lorem.txt" should be listed on the webUI as single share
     Examples:
       | role        | permissions                  |
-      | Viewer      | read                         |
       | Editor      | read, update, create, delete |
       | Contributor | read, create                 |
 
@@ -104,7 +123,9 @@ Feature: Share by public link with different roles
       | simple-empty-folder                   |
       | lorem.txt                             |
       | strängé filename (duplicate #2 &).txt |
-      | zzzz-must-be-last-file-in-folder.txt  |
+    And the user deletes the following single share using the webUI
+      | name                                 |
+      | zzzz-must-be-last-file-in-folder.txt |
     Then the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
@@ -125,7 +146,9 @@ Feature: Share by public link with different roles
       | simple-empty-folder                   |
       | lorem.txt                             |
       | strängé filename (duplicate #2 &).txt |
-      | zzzz-must-be-last-file-in-folder.txt  |
+    And the user deletes the following single share using the webUI
+      | name                                 |
+      | zzzz-must-be-last-file-in-folder.txt |
     Then the deleted elements should not be listed on the webUI
 
   @issue-ocis-270
@@ -133,14 +156,14 @@ Feature: Share by public link with different roles
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    Then it should not be possible to delete file "lorem.txt" using the webUI
+    Then it should not be possible to delete file "lorem.txt" as single share using the webUI
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a file
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user uploads file "new-lorem.txt" using the webUI
-    Then file "new-lorem.txt" should be listed on the webUI
+    Then file "new-lorem.txt" should be listed on the webUI as single share
     And as "Alice" file "simple-folder/new-lorem.txt" should exist in the server
 
 
@@ -150,7 +173,7 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     And the user opens folder "simple-empty-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
-    Then file "new-lorem.txt" should be listed on the webUI
+    Then file "new-lorem.txt" should be listed on the webUI as single share
     And as "Alice" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist in the server
 
 
@@ -160,7 +183,7 @@ Feature: Share by public link with different roles
     And the user uploads folder "PARENT" using the webUI
     Then folder "PARENT" should be listed on the webUI
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
-    And file "child.txt" should be listed in the folder "CHILD" on the webUI
+    And file "child.txt" should be listed in the folder "CHILD" on the webUI as single share
     And as "Alice" file "simple-folder/PARENT/CHILD/child.txt" should exist in the server
 
 
@@ -172,7 +195,7 @@ Feature: Share by public link with different roles
     And the user uploads folder "PARENT" using the webUI
     Then folder "PARENT" should be listed on the webUI
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
-    And file "child.txt" should be listed in the folder "CHILD" on the webUI
+    And file "child.txt" should be listed in the folder "CHILD" on the webUI as single share
     And as "Alice" file "simple-folder/simple-empty-folder/PARENT/CHILD/child.txt" should exist in the server
 
 
@@ -180,7 +203,7 @@ Feature: Share by public link with different roles
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     And the user uploads file "new-lorem.txt" using the webUI
-    Then file "new-lorem.txt" should be listed on the webUI
+    Then file "new-lorem.txt" should be listed on the webUI as single share
     And as "Alice" file "simple-folder/new-lorem.txt" should exist in the server
 
 
@@ -190,7 +213,7 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user opens folder "simple-empty-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
-    Then file "new-lorem.txt" should be listed on the webUI
+    Then file "new-lorem.txt" should be listed on the webUI as single share
     And as "Alice" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist in the server
 
 
@@ -200,7 +223,7 @@ Feature: Share by public link with different roles
     And the user uploads folder "PARENT" using the webUI
     Then folder "PARENT" should be listed on the webUI
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
-    And file "child.txt" should be listed in the folder "CHILD" on the webUI
+    And file "child.txt" should be listed in the folder "CHILD" on the webUI as single share
     And as "Alice" file "simple-folder/PARENT/CHILD/child.txt" should exist in the server
 
 
@@ -212,7 +235,7 @@ Feature: Share by public link with different roles
     And the user uploads folder "PARENT" using the webUI
     Then folder "PARENT" should be listed on the webUI
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
-    And file "child.txt" should be listed in the folder "CHILD" on the webUI
+    And file "child.txt" should be listed in the folder "CHILD" on the webUI as single share
     And as "Alice" file "simple-folder/simple-empty-folder/PARENT/CHILD/child.txt" should exist in the server
 
   @issue-ocis-723
@@ -237,7 +260,7 @@ Feature: Share by public link with different roles
     And the public uploads file "'single'quotes.txt" in files-drop page
     And the public uploads file "new-lorem.txt" in files-drop page
     Then the following files should be listed on the files-drop page:
-      | new-lorem.txt      |
+      | new-lorem.txt |
     And as "Alice" the content of "simple-folder/'single'quotes.txt" in the server should be the same as the content of local file "'single'quotes.txt"
     And as "Alice" the content of "simple-folder/new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
 
@@ -266,7 +289,7 @@ Feature: Share by public link with different roles
     And the public uploads file "'single'quotes.txt" in files-drop page
     And the public uploads file "new-lorem.txt" in files-drop page
     Then the following files should be listed on the files-drop page:
-      | new-lorem.txt      |
+      | new-lorem.txt |
     And as "Alice" the content of "simple-folder/'single'quotes.txt" in the server should be the same as the content of local file "'single'quotes.txt"
     And as "Alice" the content of "simple-folder/new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
 

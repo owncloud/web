@@ -172,8 +172,8 @@ When('the user deletes file/folder {string} using the webUI', function (element)
   return client.page.FilesPageElement.filesList().deleteFile(element)
 })
 
-When('the user tries to delete file/folder {string} using the webUI', function (element) {
-  return client.page.FilesPageElement.filesList().deleteFile(element)
+When('the user tries to delete single share {string} using the webUI', function (element) {
+  return client.page.FilesPageElement.filesList().deleteSingleShare(element)
 })
 
 Given('the user has deleted file/folder/resource {string} using the webUI', function (element) {
@@ -278,6 +278,13 @@ When(
   }
 )
 
+When(
+  'the user renames single share {string} to {string} using the webUI',
+  function (fromName, toName) {
+    return client.page.FilesPageElement.filesList().renameSingleShare(fromName, toName)
+  }
+)
+
 Given('the user has renamed file/folder {string} to {string}', function (fromName, toName) {
   return client.page.FilesPageElement.filesList().renameFile(fromName, toName)
 })
@@ -286,6 +293,13 @@ When(
   'the user tries to rename file/folder {string} to {string} using the webUI',
   function (fromName, toName) {
     return client.page.FilesPageElement.filesList().renameFile(fromName, toName, false)
+  }
+)
+
+When(
+  'the user tries to rename single share {string} to {string} using the webUI',
+  function (fromName, toName) {
+    return client.page.FilesPageElement.filesList().renameSingleShare(fromName, toName, false)
   }
 )
 
@@ -357,6 +371,10 @@ Then('file {string} should be listed on the webUI', (file) => {
 
 Then('folder {string} should be listed on the webUI', (folder) => {
   return client.page.FilesPageElement.filesList().waitForFileVisible(folder, 'folder')
+})
+
+Then('file/folder {string} should be listed on the webUI as single share', (resource) => {
+  return client.page.FilesPageElement.filesList().waitForFileVisibleAsSingleShare(resource)
 })
 
 Then('file/folder with path {string} should be listed on the webUI', function (path) {
@@ -885,36 +903,6 @@ Then('the {string} details panel should be visible', async function (panel) {
   assert.strictEqual(expanded, true, `'${panel}-panel' should be active, but is not`)
 })
 
-Then(
-  'the following panels should be visible in the details dialog on the webUI',
-  async function (table) {
-    const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleAccordionItems()
-    const expectedVisibleItems = table.rows()
-    const difference = _.difference(expectedVisibleItems.flat(), visibleItems)
-
-    assert.strictEqual(
-      difference.length,
-      0,
-      `'${difference}' panels were expected to be visible but not found. Available panels '${visibleItems}'`
-    )
-  }
-)
-
-Then(
-  'the following panels should not be visible in the details dialog on the webUI',
-  async function (table) {
-    const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleAccordionItems()
-    const expectedNotVisibleItems = table.rows()
-    const difference = _.difference(expectedNotVisibleItems.flat(), visibleItems)
-
-    assert.strictEqual(
-      expectedNotVisibleItems.length,
-      difference.length,
-      `'${expectedNotVisibleItems}' panels were not expected to be visible but found. Available panels '${visibleItems}'`
-    )
-  }
-)
-
 const assertElementsAreListed = async function (elements) {
   for (const element of elements) {
     const state = await client.page.FilesPageElement.filesList().isElementListed(element)
@@ -964,6 +952,14 @@ Then(
     await api.waitForFileVisible(file)
 
     return client
+  }
+)
+
+Then(
+  'file/folder {string} should be listed in the folder {string} on the webUI as single share',
+  async function (file, folder) {
+    await client.page.FilesPageElement.filesList().navigateToFolder(folder)
+    return client.page.FilesPageElement.filesList().waitForFileVisibleAsSingleShare(file)
   }
 )
 
@@ -1064,6 +1060,12 @@ Then(
     )
   }
 )
+Then(
+  'it should not be possible to delete file {string} as single share using the webUI',
+  function (resource) {
+    return client.page.personalPage().checkForNonPresentDeleteButtonInSingleShareView()
+  }
+)
 
 Then(
   'it should be possible to delete file/folder {string} using the webUI',
@@ -1121,6 +1123,13 @@ Then('the user deletes the following file using the webUI', function (table) {
     .map((data) => data['name-parts'])
     .join('')
   return client.page.FilesPageElement.filesList().deleteFile(name)
+})
+Then('the user deletes the following single share using the webUI', function (table) {
+  const name = table
+    .hashes()
+    .map((data) => data['name-parts'])
+    .join('')
+  return client.page.FilesPageElement.filesList().deleteSingleShare(name)
 })
 
 Then('the user should be redirected to the files-drop page', function () {
