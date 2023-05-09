@@ -479,7 +479,7 @@ export default defineComponent({
           collaborator.shareType === ShareTypes.spaceUser.value &&
           collaborator.collaborator.name === this.user.id
         ) &&
-        (this.getDeniedSpaceMember(collaborator) || !this.isSpaceMemberDenied(collaborator))
+        (!!this.getDeniedSpaceMember(collaborator) || !this.isSpaceMemberDenied(collaborator))
       )
     },
 
@@ -488,7 +488,7 @@ export default defineComponent({
         this.hasShareCanDenyAccess &&
         this.resource.isFolder &&
         !!this.getSharedParentRoute(collaborator) &&
-        (this.getDeniedShare(collaborator) || !this.isShareDenied(collaborator))
+        (!!this.getDeniedShare(collaborator) || !this.isShareDenied(collaborator))
       )
     },
 
