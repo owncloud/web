@@ -2,7 +2,7 @@
   <nav :id="id" :class="`oc-breadcrumb oc-breadcrumb-${variation}`">
     <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
       <li
-        v-for="(item, index) in itemsWithDropdown"
+        v-for="(item, index) in itemsWithThreeDots"
         :key="index"
         :data-key="index"
         :class="{
@@ -36,7 +36,7 @@
           <span>{{ item.text }}</span>
         </oc-button>
         <span v-else :aria-current="getAriaCurrent(index)" tabindex="-1" v-text="item.text" />
-        <template v-if="showContextActions && index === itemsWithDropdown.length - 1">
+        <template v-if="showContextActions && index === itemsWithThreeDots.length - 1">
           <oc-button
             id="oc-breadcrumb-contextmenu-trigger"
             v-oc-tooltip="contextMenuLabel"
@@ -59,7 +59,7 @@
       </li>
     </ol>
     <oc-button
-      v-if="itemsWithDropdown.length > 1"
+      v-if="itemsWithThreeDots.length > 1"
       appearance="raw"
       type="router-link"
       :aria-label="$gettext('Navigate one level up')"
@@ -69,7 +69,7 @@
       <oc-icon name="arrow-left-s" fill-type="line" size="large" class="oc-mr-m" />
     </oc-button>
   </nav>
-  <div v-if="itemsWithDropdown.length > 1" class="oc-breadcrumb-mobile-current">
+  <div v-if="itemsWithThreeDots.length > 1" class="oc-breadcrumb-mobile-current">
     <span class="oc-text-truncate" aria-current="page" v-text="currentFolder.text" />
   </div>
 </template>
@@ -164,7 +164,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const visibleItems = ref([])
     const hiddenItems = ref([])
-    const itemsWithDropdown = ref(props.items.slice())
+    const itemsWithThreeDots = ref(props.items.slice())
 
     const getBreadcrumbElement = (key): HTMLElement => {
       return document.querySelector(`[data-key="${key}"]`)
@@ -204,20 +204,20 @@ export default defineComponent({
 
     const lastHiddenItem = computed(() => {
       if (hiddenItems.value.length > 1) {
-        const lastIndex = unref(itemsWithDropdown).indexOf(visibleItems.value[2]) - 1
+        const lastIndex = unref(itemsWithThreeDots).indexOf(visibleItems.value[2]) - 1
         console.log('lastIndex', lastIndex)
-        return unref(itemsWithDropdown)[lastIndex]
+        return unref(itemsWithThreeDots)[lastIndex]
       }
       return { to: {} }
     })
 
     const renderBreadcrumb = () => {
-      itemsWithDropdown.value = props.items.slice()
-      if (itemsWithDropdown.value.length > 1) {
-        itemsWithDropdown.value.splice(1, 0, { text: '...', allowContextActions: false, to: {} })
+      itemsWithThreeDots.value = props.items.slice()
+      if (itemsWithThreeDots.value.length > 1) {
+        itemsWithThreeDots.value.splice(1, 0, { text: '...', allowContextActions: false, to: {} })
       }
-      console.log(itemsWithDropdown.value)
-      visibleItems.value = itemsWithDropdown.value.slice()
+      console.log(itemsWithThreeDots.value)
+      visibleItems.value = itemsWithThreeDots.value.slice()
       hiddenItems.value = []
 
       nextTick(() => {
@@ -272,7 +272,7 @@ export default defineComponent({
       visibleItems,
       hiddenItems,
       renderBreadcrumb,
-      itemsWithDropdown,
+      itemsWithThreeDots,
       lastHiddenItem
     }
   }
