@@ -20,7 +20,7 @@
           :aria-current="getAriaCurrent(index)"
           :to="item.text === '...' ? lastHiddenItem.to : item.to"
         >
-          <span>{{ item.text }}</span>
+          <span class="oc-breadcrumb-item-text">{{ item.text }}</span>
         </router-link>
         <oc-icon
           v-if="item.to"
@@ -33,11 +33,18 @@
           v-else-if="item.onClick"
           :aria-current="getAriaCurrent(index)"
           appearance="raw"
+          class="oc-flex"
           @click="item.onClick"
         >
-          <span>{{ item.text }}</span>
+          <span class="oc-breadcrumb-item-text">{{ item.text }}</span>
         </oc-button>
-        <span v-else :aria-current="getAriaCurrent(index)" tabindex="-1" v-text="item.text" />
+        <span
+          class="oc-breadcrumb-item-text"
+          v-else
+          :aria-current="getAriaCurrent(index)"
+          tabindex="-1"
+          v-text="item.text"
+        />
         <template v-if="showContextActions && index === allItemsIncludingThreeDots.length - 1">
           <oc-button
             id="oc-breadcrumb-contextmenu-trigger"
@@ -297,6 +304,13 @@ export default defineComponent({
   overflow: hidden;
   //width: 50vw;
   //width: 70%;
+  &-item-text {
+    display: flex !important;
+    max-width: 100px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 
   &-mobile-current,
   &-mobile-navigation {
