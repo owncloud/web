@@ -1,9 +1,9 @@
-import GenericSpace from '../../../../src/views/spaces/GenericSpace.vue'
-import { useResourcesViewDefaults } from 'web-app-files/src/composables'
-import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
+import GenericSpace from 'web-app-files/src/views/spaces/GenericSpace.vue'
+import { useResourcesViewDefaults } from 'web-app-files/src/composables'
+import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import {
   createStore,
   defaultPlugins,
@@ -140,6 +140,48 @@ describe('GenericSpace view', () => {
       expect(wrapper.vm.whitespaceContextMenu).toBeDefined()
     })
   })
+  describe('for a single file', () => {
+    describe('on EOS for single shared resources', () => {
+      it('renders the ResourceDetails component if no currentFolder id is present', () => {
+        const { wrapper } = getMountedWrapper({
+          currentFolder: {},
+          files: [mock<Resource>()],
+          runningOnEos: true
+        })
+        expect(wrapper.find('resource-details-stub').exists()).toBeTruthy()
+      })
+      it('renders the ResourceDetails component if currentFolder path matches single shared resource path', () => {
+        const path = 'foo'
+        const { wrapper } = getMountedWrapper({
+          currentFolder: {
+            ...mock<Resource>(),
+            path
+          },
+          files: [{ ...mock<Resource>(), path }],
+          runningOnEos: true
+        })
+        expect(wrapper.find('resource-details-stub').exists()).toBeTruthy()
+      })
+    })
+    describe('on public links', () => {
+      it('renders the ResourceDetails component', () => {
+        const { wrapper } = getMountedWrapper({
+          currentFolder: {
+            ...mock<Resource>(),
+            fileId: '4'
+          },
+          files: [{ ...mock<Resource>(), isFolder: false }],
+          space: {
+            id: 1,
+            getDriveAliasAndItem: jest.fn(),
+            name: 'Personal space',
+            driveType: 'public'
+          }
+        })
+        expect(wrapper.find('resource-details-stub').exists()).toBeTruthy()
+      })
+    })
+  })
 })
 
 function getMountedWrapper({
@@ -148,7 +190,9 @@ function getMountedWrapper({
   files = [],
   loading = false,
   currentRoute = { name: 'files-spaces-generic', path: '/' },
-  currentFolder = mock<Resource>()
+  currentFolder = mock<Resource>() || {},
+  runningOnEos = false,
+  space = { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space', driveType: '' }
 } = {}) {
   const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
     paginatedResources: ref(files),
@@ -159,10 +203,24 @@ function getMountedWrapper({
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute) }),
     ...(mocks && mocks)
   }
-  const storeOptions = { ...defaultStoreMockOptions }
+
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    getters: {
+      ...defaultStoreMockOptions.getters,
+      configuration: function () {
+        return {
+          currentTheme: { general: { slogan: 'Public link slogan' } },
+          options: {
+            runningOnEos
+          }
+        }
+      }
+    }
+  }
   storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
   const propsData = {
-    space: { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space' },
+    space,
     item: '/',
     ...props
   }
@@ -175,7 +233,7 @@ function getMountedWrapper({
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
-        stubs: defaultStubs
+        stubs: { ...defaultStubs, 'resource-details': true }
       }
     })
   }
