@@ -286,7 +286,12 @@ export default defineComponent({
     },
 
     isShareDenied(collaborator: Share): boolean {
-      return !!this.getDeniedShare(collaborator)
+      return this.collaborators.some(
+        (c) =>
+          c.permissions === peopleRoleDenyFolder.bitmask(false) &&
+          c.collaborator.name === collaborator.collaborator.name &&
+          c.shareType === collaborator.shareType
+      )
     },
 
     getDeniedSpaceMember(collaborator: Share): Share {
@@ -310,7 +315,21 @@ export default defineComponent({
     },
 
     isSpaceMemberDenied(collaborator: Share): boolean {
-      return !!this.getDeniedSpaceMember(collaborator)
+      let shareType = null
+
+      if (collaborator.shareType === ShareTypes.spaceUser.value) {
+        shareType = ShareTypes.user.value
+      }
+
+      if (collaborator.shareType === ShareTypes.spaceGroup.value) {
+        shareType = ShareTypes.group.value
+      }
+      return this.collaborators.some(
+        (c) =>
+          c.permissions === peopleRoleDenyFolder.bitmask(false) &&
+          c.collaborator.name === collaborator.collaborator.name &&
+          c.shareType === shareType
+      )
     },
 
     collaboratorsComparator(c1, c2) {
@@ -459,7 +478,8 @@ export default defineComponent({
         !(
           collaborator.shareType === ShareTypes.spaceUser.value &&
           collaborator.collaborator.name === this.user.id
-        )
+        ) &&
+        (this.getDeniedSpaceMember(collaborator) || !this.isSpaceMemberDenied(collaborator))
       )
     },
 
@@ -467,7 +487,8 @@ export default defineComponent({
       return (
         this.hasShareCanDenyAccess &&
         this.resource.isFolder &&
-        !!this.getSharedParentRoute(collaborator)
+        !!this.getSharedParentRoute(collaborator) &&
+        (this.getDeniedShare(collaborator) || !this.isShareDenied(collaborator))
       )
     },
 
