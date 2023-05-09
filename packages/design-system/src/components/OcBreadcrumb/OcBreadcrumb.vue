@@ -192,7 +192,7 @@ export default defineComponent({
       let totalBreadcrumbWidth = 0
       visibleItems.value.forEach((item, index) => {
         const breadcrumbElement = getBreadcrumbElement(index)
-        const itemClientWidth = breadcrumbElement.offsetWidth + 10
+        const itemClientWidth = breadcrumbElement?.offsetWidth + 10
         const itemWidth = itemClientWidth
         totalBreadcrumbWidth += itemWidth
       })

@@ -187,7 +187,7 @@ export default defineComponent({
     })
 
     const calculateBreadcrumbMaxWidth = () => {
-      const leftControlsWidth = document.getElementById('files-app-bar-controls-right').clientWidth
+      const leftControlsWidth = document.getElementById('files-app-bar-controls-right')?.clientWidth
       const appBarTotalWidth =
         document.getElementById('files-app-bar').clientWidth - (leftControlsWidth + 20)
       return appBarTotalWidth - leftControlsWidth
