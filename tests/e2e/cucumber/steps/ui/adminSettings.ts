@@ -300,22 +300,6 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
 
-    // deleting a user with a same userName before testing
-    if (attribute === 'userName') {
-      const newUser = this.usersEnvironment.createUser({
-        key: value,
-        user: {
-          id: value,
-          displayName: '',
-          password: 'password',
-          email: ''
-        }
-      })
-      await api.graph.deleteUser({
-        user: newUser,
-        admin: this.usersEnvironment.getUser({ key: stepUser })
-      })
-    }
     await usersObject.changeUser({
       key: user,
       attribute: attribute,
@@ -472,11 +456,6 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
     for (const info of stepTable.hashes()) {
-      const user = this.usersEnvironment.getUser({ key: info.name })
-      await api.graph.deleteUser({
-        user: user,
-        admin: this.usersEnvironment.getUser({ key: stepUser })
-      })
       await usersObject.createUser({
         name: info.name,
         displayname: info.displayname,

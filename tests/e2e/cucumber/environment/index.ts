@@ -15,7 +15,12 @@ import { config } from '../../config'
 import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
-import { createdSpaceStore, createdLinkStore, createdGroupStore } from '../../support/store'
+import {
+  createdSpaceStore,
+  createdLinkStore,
+  createdGroupStore,
+  createdUserStore
+} from '../../support/store'
 import { User } from '../../support/types'
 
 export { World }
@@ -108,6 +113,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
     await this.actorsEnvironment.close()
   }
 
+  await cleanUpUser(this.usersEnvironment.getUser({ key: 'admin' }))
   await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
 
   createdGroupStore.clear()
@@ -117,6 +123,19 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 AfterAll(() => state.browser && state.browser.close())
 
 setWorldConstructor(World)
+
+const cleanUpUser = async (adminUser: User) => {
+  const requests = []
+  createdUserStore.forEach((user) => {
+    if (config.ocis) {
+      requests.push(api.graph.deleteUser({ user, admin: adminUser }))
+    } else {
+      requests.push(api.user.deleteUser({ user, admin: adminUser }))
+    }
+  })
+  await Promise.all(requests)
+  createdUserStore.clear()
+}
 
 const cleanUpSpaces = async (adminUser: User) => {
   const requests = []
