@@ -5,13 +5,15 @@
         v-for="(item, index) in allItemsIncludingThreeDots"
         :key="index"
         :data-key="index"
-        :class="{
-          'oc-breadcrumb-list-item': true,
-          'oc-flex': true,
-          'oc-flex-middle': true,
-          hide:
-            hiddenItems.indexOf(item) !== -1 || (item.text === '...' && hiddenItems.length === 0)
-        }"
+        :class="[
+          'oc-breadcrumb-list-item',
+          'oc-flex',
+          'oc-flex-middle',
+          {
+            hide:
+              hiddenItems.indexOf(item) !== -1 || (item.text === '...' && hiddenItems.length === 0)
+          }
+        ]"
       >
         <router-link
           v-if="item.to"
