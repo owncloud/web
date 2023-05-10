@@ -215,9 +215,9 @@ export default defineComponent({
     }
 
     const lastHiddenItem = computed(() => {
-      /*if (hiddenItems.value.length >= 1) {
+      if (hiddenItems.value.length >= 1) {
         return unref(hiddenItems)[unref(hiddenItems).length - 1]
-      }*/
+      }
       return { to: {} }
     })
 
