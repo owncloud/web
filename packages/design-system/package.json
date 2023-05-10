@@ -41,7 +41,7 @@
     "not OperaMobile > 0"
   ],
   "devDependencies": {
-    "@adobe/leonardo-contrast-colors": "1.0.0-alpha.16",
+    "@adobe/leonardo-contrast-colors": "1.0.0-alpha.17",
     "@babel/core": "^7.16.5",
     "@babel/plugin-proposal-class-properties": "^7.16.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.16.5",
@@ -89,7 +89,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "rimraf": "^3.0.2",
-    "sass": "1.57.1",
+    "sass": "1.62.1",
     "sass-loader": "^10.1.0",
     "sass-resources-loader": "^2.0.1",
     "semver": "^7.1.3",
