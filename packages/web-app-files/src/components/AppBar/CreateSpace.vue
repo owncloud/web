@@ -35,7 +35,7 @@ export default defineComponent({
 
     onNewProjectButtonClick() {
       const win =window.open(
-        'https://cern.service-now.com/service-portal?id=sc_cat_item&name=EOS-projet-space&se=CERNBox-Service',
+        'https://cern.service-now.com/service-portal?id=sc_cat_item&name=request-storage-space&se=CERNBox-Service',
         '_blank'
       )
 
