@@ -151,6 +151,7 @@ Summary
 * Enhancement - Rename "Quicklink" to "link": [#8898](https://github.com/owncloud/web/pull/8898)
 * Enhancement - Add notification setting to account page: [#8911](https://github.com/owncloud/web/pull/8911)
 * Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
+* Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
 
 Details
 -------
@@ -1411,6 +1412,14 @@ Details
 
    https://github.com/owncloud/web/issues/5861
    https://github.com/owncloud/web/pull/8921
+
+* Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
+
+   We've added a way to deny the share access in sub folders in a share or space. This allows the share
+   editors to restrict access to certain resources within a share for certain share receivers.
+
+   https://github.com/owncloud/web/issues/7180
+   https://github.com/owncloud/web/pull/8983
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
