@@ -425,7 +425,6 @@ When(
 Then(
   'the following resource(s) should contain the following tag(s) in the files list for user {string}',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    console.log('stepUser', stepUser)
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const { resource, tags } of stepTable.hashes()) {
