@@ -1,7 +1,6 @@
 <template>
   <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': sideBarOpen }">
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
-    <div style="height: 114px"></div>
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div
@@ -189,8 +188,12 @@ export default defineComponent({
     const calculateBreadcrumbMaxWidth = () => {
       const leftControlsWidth = document.getElementById('files-app-bar-controls-right')?.clientWidth
       const appBarTotalWidth =
-        document.getElementById('files-app-bar')?.clientWidth - (leftControlsWidth + 20)
-      return appBarTotalWidth - leftControlsWidth
+        document.getElementById('files-view')?.parentElement?.clientWidth - leftControlsWidth * 2
+      const breadcrumbMaxWidth = appBarTotalWidth - leftControlsWidth
+      document
+        .getElementById('oc-breadcrumb')
+        ?.style.setProperty('--max-width', `${breadcrumbMaxWidth}px`)
+      return breadcrumbMaxWidth
     }
 
     return {
@@ -302,11 +305,5 @@ export default defineComponent({
   #files-breadcrumb {
     min-height: 2rem;
   }
-}
-.files-topbar {
-  position: absolute;
-  left: var(--oc-space-medium);
-  right: var(--oc-space-medium);
-  top: 0;
 }
 </style>
