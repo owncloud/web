@@ -48,7 +48,14 @@ import {
   createSpaceFromFolderArgs,
   createSpaceFromSelection,
   createSpaceFromSelectionArgs,
-  checkThatFileVersionIsNotAvailable
+  checkThatFileVersionIsNotAvailable,
+  changePageArgs,
+  changePagePersonalSpace,
+  getFileListFooterText,
+  getNumberOfResourcesInThePage,
+  changeItemsPerPage,
+  changeItemsPerPageArgs,
+  expectPageNumberNotToBeVisible
 } from './actions'
 import { Space } from '../../../types'
 
@@ -244,5 +251,25 @@ export class Resource {
     const startUrl = this.#page.url()
     await checkThatFileVersionIsNotAvailable({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
+  }
+
+  async changePagePersonalSpace(args: Omit<changePageArgs, 'page'>): Promise<void> {
+    await changePagePersonalSpace({ ...args, page: this.#page })
+  }
+
+  async changeItemsPerPage(args: Omit<changeItemsPerPageArgs, 'page'>): Promise<void> {
+    await changeItemsPerPage({ ...args, page: this.#page })
+  }
+
+  async getFileListFooterText(): Promise<string> {
+    return getFileListFooterText({ page: this.#page })
+  }
+
+  async getNumberOfResourcesInThePage(): Promise<string> {
+    return getNumberOfResourcesInThePage({ page: this.#page })
+  }
+
+  async expectPageNumberNotToBeVisible(): Promise<void> {
+    await expectPageNumberNotToBeVisible({ page: this.#page })
   }
 }
