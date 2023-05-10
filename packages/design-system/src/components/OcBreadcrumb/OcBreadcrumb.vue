@@ -204,7 +204,7 @@ export default defineComponent({
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
 
       const isOverflowing = breadcrumbMaxWidth < totalBreadcrumbWidth
-      if (!isOverflowing) {
+      if (!isOverflowing || visibleItems.value.length <= 3) {
         return
       }
       // Remove from the left side
