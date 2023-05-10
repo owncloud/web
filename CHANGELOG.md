@@ -113,6 +113,7 @@ Summary
 * Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
 * Enhancement - User settings login field: [#8433](https://github.com/owncloud/web/pull/8433)
 * Enhancement - Skeleton App: [#8441](https://github.com/owncloud/web/pull/8441)
+* Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 * Enhancement - Rework notification bell: [#8450](https://github.com/owncloud/web/pull/8450)
 * Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
@@ -1110,6 +1111,15 @@ Details
    provider can be developed.
 
    https://github.com/owncloud/web/pull/8441
+
+* Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
+
+   We have added functionality to open a single, publicly shared file in a different view (instead
+   of showing it in a table).
+
+   https://github.com/owncloud/web/issues/8445
+   https://github.com/owncloud/web/pull/8440
+   https://github.com/owncloud/web/pull/8446
 
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 
