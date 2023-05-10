@@ -520,7 +520,7 @@ When(
   }
 )
 
-When(
+Then(
   '{string} should not see the version of the file(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -540,5 +540,52 @@ When(
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.checkThatFileVersionIsNotAvailable({ folder, files: fileInfo[folder] })
     }
+  }
+)
+
+When(
+  '{string} navigates to the page {string} of personal space files view',
+  async function (this: World, stepUser: string, pageNumber: string) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.changePagePersonalSpace({ pageNumber })
+  }
+)
+
+When(
+  '{string} changes the items per page to {string}',
+  async function (this: World, stepUser: string, itemsPerPage: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.changeItemsPerPage({ itemsPerPage })
+  }
+)
+
+Then(
+  '{string} should see the text {string} at the footer of the page',
+  async function (this: World, stepUser: string, expectedText: string) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const actualText = await resourceObject.getFileListFooterText()
+    await expect(actualText).toBe(expectedText)
+  }
+)
+
+Then(
+  '{string} should see {int} resources in the personal space files view',
+  async function (this: World, stepUser: string, expectedNumberOfResources: number) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const actualNumberOfResources = await resourceObject.getNumberOfResourcesInThePage()
+    await expect(actualNumberOfResources).toBe(expectedNumberOfResources)
+  }
+)
+
+Then(
+  '{string} should not see page numbers at the footer of the personal space page',
+  async function (this: World, stepUser: string) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.expectPageNumberNotToBeVisible()
   }
 )

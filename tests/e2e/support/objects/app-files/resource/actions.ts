@@ -69,6 +69,14 @@ const tagFormInput = '#tags-form input'
 const compareDialogConfirmBtn = '.compare-save-dialog-confirm-btn'
 const resourcesAsTiles = '#files-view .oc-tiles'
 const fileVersionSidebar = '#oc-file-versions-sidebar'
+const listItemPageSelector = '//*[contains(@class,"oc-pagination-list-item-page") and text()="%s"]'
+const itemsPerPageDropDownOptionSelector =
+  '//li[contains(@class,"vs__dropdown-option") and text()="%s"]'
+const footerTextSelector = '//*[@data-testid="files-list-footer-info"]'
+const filesTableResourcesDetailsSelector =
+  '//td[contains(@class,"oc-table-data-cell-name")]//div//div[contains(@class,"oc-resource-details")]'
+const itemsPerPageDropDownSelector = '.vs__actions'
+const filesPaginationNavSelector = '.files-pagination'
 
 export const clickResource = async ({
   page,
@@ -934,6 +942,8 @@ export const expectThatResourcesAreTiles = async (args): Promise<void> => {
 export const showHiddenResources = async (page): Promise<void> => {
   await page.locator(filesViewOptionButton).click()
   await page.locator(hiddenFilesToggleButton).click()
+  //close the files view option view
+  await page.locator(filesViewOptionButton).click()
 }
 
 export interface editResourcesArgs {
@@ -1057,4 +1067,41 @@ export const checkThatFileVersionIsNotAvailable = async (
 
   await sidebar.openPanel({ page, name: 'versions' })
   await expect(page.locator(fileVersionSidebar)).toHaveText('No Versions available for this file')
+}
+
+export interface changePageArgs {
+  page: Page
+  pageNumber: string
+}
+export const changePagePersonalSpace = async (args: changePageArgs): Promise<void> => {
+  const { page, pageNumber } = args
+  await page.keyboard.down('End')
+  const pageNumberSelector = util.format(listItemPageSelector, pageNumber)
+  await expect(page.locator(pageNumberSelector)).toBeVisible()
+  await page.locator(pageNumberSelector).click()
+}
+
+export interface changeItemsPerPageArgs {
+  page: Page
+  itemsPerPage: string
+}
+export const changeItemsPerPage = async (args: changeItemsPerPageArgs): Promise<void> => {
+  const { page, itemsPerPage } = args
+  await page.locator(filesViewOptionButton).click()
+  await page.locator(itemsPerPageDropDownSelector).click()
+  await page.locator(util.format(itemsPerPageDropDownOptionSelector, itemsPerPage)).click()
+  //close the files view option view
+  await page.locator(filesViewOptionButton).click()
+}
+
+export const getFileListFooterText = async ({ page }): Promise<string> => {
+  return page.locator(footerTextSelector).textContent()
+}
+
+export const getNumberOfResourcesInThePage = async ({ page }): Promise<string> => {
+  return page.locator(filesTableResourcesDetailsSelector).count()
+}
+
+export const expectPageNumberNotToBeVisible = async ({ page }): Promise<void> => {
+  await expect(page.locator(filesPaginationNavSelector)).not.toBeVisible()
 }

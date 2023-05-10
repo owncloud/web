@@ -103,6 +103,17 @@ Given(
 )
 
 Given(
+  '{string} creates {int} folder(s) in personal space using API',
+  async function (this: World, stepUser: string, numberOfFolders: number): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (let i = 1; i <= numberOfFolders; i++) {
+      const folderName = 'testFolder' + i
+      await api.dav.createFolderInsidePersonalSpace({ user, folder: folderName })
+    }
+  }
+)
+
+Given(
   '{string} shares the following resource using API',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
@@ -141,6 +152,22 @@ Given(
         user,
         pathToFile: info.pathToFile,
         content: info.content
+      })
+    }
+  }
+)
+
+Given(
+  '{string} creates {int} file(s) in personal space using API',
+  async function (this: World, stepUser: string, numberOfFiles: number): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (let i = 1; i <= numberOfFiles; i++) {
+      const fileName = 'testfile' + i + '.txt'
+      const content = 'This is a test file' + i
+      await api.dav.uploadFileInPersonalSpace({
+        user,
+        pathToFile: fileName,
+        content: content
       })
     }
   }
