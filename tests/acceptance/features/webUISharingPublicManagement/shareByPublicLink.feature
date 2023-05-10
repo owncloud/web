@@ -77,25 +77,8 @@ Feature: Public link share management
     And user "Alice" has logged in using the webUI
     When the user copies the url of public link named "Public-link" of folder "simple-folder" using the webUI
     And the user navigates to the copied public link using the webUI
-    Then file "lorem.txt" should be listed on the webUI
+    Then file "lorem.txt" should be listed on the webUI as single share
 
-
-  Scenario: access details dialog of public share and check the tabs displayed
-    Given user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "simple-folder" using the webUI
-    And the user renames the most recently created public link of folder "simple-folder" to "link1"
-    And the user tries to edit the public link named "link1" of folder "simple-folder" changing the role to "Editor"
-    And the public uses the webUI to access the last public link created by user "Alice" in a new session
-    And the user opens the sidebar for file "lorem.txt" on the webUI
-    Then the following panels should be visible in the details dialog on the webUI
-      | name    |
-      | actions |
-    And the following panels should not be visible in the details dialog on the webUI
-      | name     |
-      | people   |
-      | links    |
-      | versions |
 
   @issue-2897
   Scenario: sharing details of indirect items inside a shared folder
@@ -148,7 +131,7 @@ Feature: Public link share management
       | name        | public link |
       | permissions | read        |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    Then file "lorem.txt" should be listed on the webUI
+    Then file "lorem.txt" should be listed on the webUI as single share
     And the create button should not be visible on the webUI
 
 

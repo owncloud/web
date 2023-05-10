@@ -22,7 +22,7 @@ Feature: Create public link shares
       | name        | Link           |
     And a link named "Link" should be listed with role "Anyone with the link can view" in the public link list of resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    Then file "lorem.txt" should be listed on the webUI
+    Then file "lorem.txt" should be listed on the webUI as single share
 
   @smokeTest @ocisSmokeTest @issue-ocis-reva-383
   Scenario: simple file sharing by public link
@@ -38,7 +38,7 @@ Feature: Create public link shares
       | name        | Link        |
     And a link named "Link" should be listed with role "Anyone with the link can view" in the public link list of resource "lorem.txt" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    Then file "lorem.txt" should be listed on the webUI
+    Then file "lorem.txt" should be listed on the webUI as single share
 
   @skipOnOC10 @issue-ocis-reva-383
   # When this issue is fixed delete this scenario and use the one above
@@ -54,7 +54,7 @@ Feature: Create public link shares
       | permissions | read           |
       | path        | /simple-folder |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    Then file "lorem.txt" should be listed on the webUI
+    Then file "lorem.txt" should be listed on the webUI as single share
 
   @skipOnOC10 @issue-ocis-reva-383
   # When this issue is fixed delete this scenario and use the one above
@@ -69,7 +69,7 @@ Feature: Create public link shares
       | permissions | read        |
       | path        | /lorem.txt  |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    Then file "lorem.txt" should be listed on the webUI
+    Then file "lorem.txt" should be listed on the webUI as single share
 
   @issue-ocis-reva-389
   Scenario: user shares a public link with folder longer than 64 chars and shorter link name
@@ -79,7 +79,7 @@ Feature: Create public link shares
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog" using the webUI
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
-    Then file "lorem.txt" should be listed on the webUI
+    Then file "lorem.txt" should be listed on the webUI as single share
 
 
   Scenario: share two files with same name but different paths by public link

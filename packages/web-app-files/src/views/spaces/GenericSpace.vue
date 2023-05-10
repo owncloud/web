@@ -6,11 +6,13 @@
       <app-bar
         :breadcrumbs="breadcrumbs"
         :breadcrumbs-context-actions-items="[currentFolder]"
-        :view-modes="viewModes"
-        :has-bulk-actions="true"
-        :show-actions-on-selection="true"
+        :has-bulk-actions="displayFullAppBar"
+        :show-actions-on-selection="displayFullAppBar"
+        :has-sidebar-toggle="displayFullAppBar"
+        :has-view-options="displayFullAppBar"
         :side-bar-open="sideBarOpen"
         :space="space"
+        :view-modes="viewModes"
       >
         <template #actions="{ limitedScreenSpace }">
           <create-and-upload
@@ -34,8 +36,12 @@
           :side-bar-open="sideBarOpen"
           class="oc-px-m oc-mt-m"
         />
-
-        <no-content-message v-if="isEmpty" id="files-space-empty" class="files-empty" icon="folder">
+        <no-content-message
+          v-if="isCurrentFolderEmpty"
+          id="files-space-empty"
+          class="files-empty"
+          icon="folder"
+        >
           <template #message>
             <span v-text="$gettext('No resources found')" />
           </template>
@@ -75,6 +81,11 @@
             />
           </template>
         </resource-tiles>
+        <resource-details
+          v-else-if="displayResourceAsSingleResource"
+          :single-resource="paginatedResources[0]"
+          :space="space"
+        />
         <resource-table
           v-else
           id="files-space-table"
@@ -153,6 +164,7 @@ import ListInfo from '../../components/FilesList/ListInfo.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
+import ResourceDetails from '../../components/FilesList/ResourceDetails.vue'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
@@ -192,6 +204,7 @@ export default defineComponent({
     NotFoundMessage,
     Pagination,
     QuickActions,
+    ResourceDetails,
     ResourceTable,
     ResourceTiles,
     SideBar,
@@ -246,6 +259,12 @@ export default defineComponent({
       // for now the space header is only available in the root of a project space.
       return props.space.driveType === 'project' && props.item === '/'
     })
+
+    const folderNotFound = computed(() => store.getters['Files/currentFolder'] === null)
+
+    const isCurrentFolderEmpty = computed(
+      () => unref(resourcesViewDefaults.paginatedResources).length < 1
+    )
 
     const titleSegments = computed(() => {
       const segments = [props.space.name]
@@ -429,7 +448,9 @@ export default defineComponent({
       ...resourcesViewDefaults,
       canUpload,
       breadcrumbs,
+      folderNotFound,
       hasSpaceHeader,
+      isCurrentFolderEmpty,
       resourceTargetRouteCallback,
       performLoaderTask,
       ViewModeConstants,
@@ -447,12 +468,30 @@ export default defineComponent({
     ...mapGetters('Files', ['currentFolder', 'totalFilesCount', 'totalFilesSize']),
     ...mapGetters(['user', 'configuration']),
 
-    isEmpty() {
-      return this.paginatedResources.length < 1
+    isRunningOnEos() {
+      return !!this.configuration?.options?.runningOnEos
     },
 
-    folderNotFound() {
-      return this.currentFolder === null
+    displayFullAppBar() {
+      return !this.displayResourceAsSingleResource
+    },
+
+    displayResourceAsSingleResource() {
+      if (this.paginatedResources.length !== 1) {
+        return false
+      }
+
+      if (
+        this.isRunningOnEos &&
+        (!this.currentFolder.fileId || this.currentFolder.path === this.paginatedResources[0].path)
+      ) {
+        return true
+      }
+      if (isPublicSpaceResource(this.space) && !this.paginatedResources[0].isFolder) {
+        return true
+      }
+
+      return false
     },
 
     displayThumbnails() {

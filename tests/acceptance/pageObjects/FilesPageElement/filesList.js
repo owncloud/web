@@ -57,6 +57,14 @@ module.exports = {
       await fileActionsMenu.delete()
       return this
     },
+    deleteSingleShare: async function () {
+      await fileActionsMenu.delete()
+      return this
+    },
+    deleteSingleShare: async function (resource) {
+      await fileActionsMenu.delete()
+      return this
+    },
     /**
      * @param {string} resource
      * @param {string} elementType
@@ -86,6 +94,15 @@ module.exports = {
      */
     renameFile: async function (fromName, toName, expectToSucceed = true, elementType = 'any') {
       await this.openFileActionsMenu(fromName, elementType)
+      await fileActionsMenu.rename(toName, expectToSucceed)
+      return this
+    },
+    renameSingleShare: async function (
+      fromName,
+      toName,
+      expectToSucceed = true,
+      elementType = 'any'
+    ) {
       await fileActionsMenu.rename(toName, expectToSucceed)
       return this
     },
@@ -349,6 +366,10 @@ module.exports = {
         return this
       }
       await this.waitForElementPresent({ selector: '@anyAfterLoading', abortOnFailure })
+      return this
+    },
+    waitForFileVisibleAsSingleShare: async function (resource) {
+      await this.waitForElementPresent({ selector: '@sharedDetailResource' })
       return this
     },
     /**
@@ -707,9 +728,12 @@ module.exports = {
     filesListProgressBar: {
       selector: '#files-list-progress'
     },
+    sharedDetailResource: {
+      selector: '.resource-details .oc-resource-name'
+    },
     anyAfterLoading: {
       selector:
-        '//*[self::table[contains(@class, "files-table")] or self::div[contains(@class, "files-empty")] or self::div[contains(@class, "files-not-found")]]',
+        '//*[self::table[contains(@class, "files-table")] or self::div[contains(@class, "files-empty")] or self::div[contains(@class, "files-not-found")] or self::div[contains(@class, "resource-details")]]',
       locateStrategy: 'xpath'
     },
     shareButtonInFileRow: {

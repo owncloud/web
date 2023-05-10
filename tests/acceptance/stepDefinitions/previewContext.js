@@ -20,6 +20,14 @@ When(
   }
 )
 
+When(
+  'the user/public views the single share file {string} in the preview app using the webUI',
+  async function (fileName) {
+    await previewPage.openPreviewFromDetailsView(fileName)
+    return previewPage.waitForPreviewLoaded(fileName)
+  }
+)
+
 When('the user navigates to the next media resource using the webUI', function () {
   return previewPage.nextMediaResource()
 })

@@ -1,0 +1,7 @@
+Enhancement: Open individually shared file in dedicated view
+
+We have added functionality to open a single, publicly shared file in a different view (instead of showing it in a table).
+
+https://github.com/owncloud/web/issues/8445
+https://github.com/owncloud/web/pull/8440
+https://github.com/owncloud/web/pull/8446
