@@ -8,21 +8,32 @@
     <div class="oc-width-1-1 oc-flex oc-flex-middle files-collaborators-collaborator-details">
       <div class="oc-width-2-3 oc-flex oc-flex-middle">
         <div>
-          <avatar-image
-            v-if="isAnyUserShareType"
-            :userid="share.collaborator.name"
-            :user-name="share.collaborator.displayName"
-            :width="36"
-            class="files-collaborators-collaborator-indicator"
-          />
-          <oc-avatar-item
-            v-else
-            :width="36"
-            icon-size="medium"
-            :icon="shareTypeIcon"
-            :name="shareTypeKey"
-            class="files-collaborators-collaborator-indicator"
-          />
+          <template v-if="isShareDenied">
+            <oc-avatar-item
+              :width="36"
+              icon-size="medium"
+              icon="stop"
+              :name="$gettext('Access denied')"
+              class="files-collaborators-collaborator-indicator"
+            />
+          </template>
+          <template v-else>
+            <avatar-image
+              v-if="isAnyUserShareType"
+              :userid="share.collaborator.name"
+              :user-name="share.collaborator.displayName"
+              :width="36"
+              class="files-collaborators-collaborator-indicator"
+            />
+            <oc-avatar-item
+              v-else
+              :width="36"
+              icon-size="medium"
+              :icon="shareTypeIcon"
+              :name="shareTypeKey"
+              class="files-collaborators-collaborator-indicator"
+            />
+          </template>
         </div>
         <div class="oc-pl-s oc-text-truncate">
           <div v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate">
@@ -134,6 +145,7 @@ import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/
 import { useClientService } from 'web-pkg/src/composables'
 import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'
+import {$gettext} from "web-app-files/src/router/utils";
 
 export default defineComponent({
   name: 'ListItem',
@@ -362,6 +374,7 @@ export default defineComponent({
     }
   },
   methods: {
+    $gettext,
     ...mapActions(['showMessage']),
     ...mapActions('Files', ['changeShare']),
     ...mapActions('runtime/spaces', ['changeSpaceMember']),
