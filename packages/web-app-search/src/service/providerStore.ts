@@ -1,6 +1,6 @@
 import { SearchProvider } from '../types'
 
-class ProviderStore {
+export class ProviderStore {
   public providers: SearchProvider[]
 
   constructor() {
@@ -16,4 +16,4 @@ class ProviderStore {
   }
 }
 
-export default new ProviderStore()
+export const providerStore = new ProviderStore()

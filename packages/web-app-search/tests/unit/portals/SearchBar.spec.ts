@@ -3,6 +3,7 @@ import { createLocationCommon } from 'web-app-files/src/router'
 import flushPromises from 'flush-promises'
 import { defineComponent } from 'vue'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
+import { ProviderStore } from 'web-app-search/src/service/providerStore'
 
 const component = defineComponent({
   emits: ['click', 'keyup'],
@@ -33,9 +34,9 @@ const providerContacts = {
   available: true,
   previewSearch: {
     available: true,
-    search: jest.fn()
-  },
-  component
+    search: jest.fn(),
+    component
+  }
 }
 
 const selectors = {
@@ -50,6 +51,8 @@ const selectors = {
 }
 
 jest.mock('lodash-es/debounce', () => (fn) => fn)
+
+const providerStore = new ProviderStore()
 
 beforeEach(() => {
   providerFiles.previewSearch.search.mockImplementation(() => {
@@ -69,6 +72,10 @@ beforeEach(() => {
       ]
     }
   })
+
+  jest
+    .spyOn(providerStore, 'availableProviders', 'get')
+    .mockReturnValue([providerFiles, providerContacts])
 })
 
 let wrapper
@@ -255,9 +262,7 @@ function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } 
       attachTo: document.body,
       data: () => {
         return {
-          providerStore: {
-            availableProviders: [providerFiles, providerContacts]
-          },
+          providerStore,
           ...data
         }
       },
