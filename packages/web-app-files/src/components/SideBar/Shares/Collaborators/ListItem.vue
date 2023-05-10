@@ -145,7 +145,6 @@ import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/
 import { useClientService } from 'web-pkg/src/composables'
 import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'
-import {$gettext} from "web-app-files/src/router/utils";
 
 export default defineComponent({
   name: 'ListItem',
@@ -374,7 +373,6 @@ export default defineComponent({
     }
   },
   methods: {
-    $gettext,
     ...mapActions(['showMessage']),
     ...mapActions('Files', ['changeShare']),
     ...mapActions('runtime/spaces', ['changeSpaceMember']),
