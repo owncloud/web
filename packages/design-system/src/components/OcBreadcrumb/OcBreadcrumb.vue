@@ -255,7 +255,7 @@ export default defineComponent({
     const resizeObserver = new ResizeObserver(
       throttleResizeObserver((entries) => {
         renderBreadcrumb()
-      }, 100)
+      }, 50)
     )
 
     watch(
