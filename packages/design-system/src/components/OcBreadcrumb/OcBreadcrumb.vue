@@ -215,17 +215,8 @@ export default defineComponent({
     }
 
     const lastHiddenItem = computed(() => {
-      if (hiddenItems.value.length > 1) {
-        const lastVisibleItem = unref(visibleItems)[2]
-        const oneBeforeLastVisibleItemIndex =
-          unref(allItemsIncludingThreeDots).indexOf(lastVisibleItem) - 1
-        if (
-          oneBeforeLastVisibleItemIndex < 0 ||
-          oneBeforeLastVisibleItemIndex > unref(allItemsIncludingThreeDots).length - 1
-        ) {
-          return { to: {} }
-        }
-        return unref(allItemsIncludingThreeDots)[oneBeforeLastVisibleItemIndex]
+      if (hiddenItems.value.length >= 1) {
+        return unref(hiddenItems)[unref(hiddenItems).length - 1]
       }
       return { to: {} }
     })
