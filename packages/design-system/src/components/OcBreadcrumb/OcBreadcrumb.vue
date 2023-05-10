@@ -215,9 +215,9 @@ export default defineComponent({
     }
 
     const lastHiddenItem = computed(() => {
-      if (hiddenItems.value.length >= 1) {
+      /*if (hiddenItems.value.length >= 1) {
         return unref(hiddenItems)[unref(hiddenItems).length - 1]
-      }
+      }*/
       return { to: {} }
     })
 
@@ -239,9 +239,24 @@ export default defineComponent({
       })
     }
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      renderBreadcrumb()
-    })
+    const throttleResizeObserver = (callback, delay) => {
+      let resizeTimeout
+
+      return function (entries) {
+        if (!resizeTimeout) {
+          resizeTimeout = setTimeout(() => {
+            resizeTimeout = null
+            callback(entries)
+          }, delay)
+        }
+      }
+    }
+
+    const resizeObserver = new ResizeObserver(
+      throttleResizeObserver((entries) => {
+        renderBreadcrumb()
+      }, 100)
+    )
 
     watch(
       () => props.items,
@@ -251,12 +266,10 @@ export default defineComponent({
     )
     onMounted(() => {
       renderBreadcrumb()
-      window.addEventListener('resize', renderBreadcrumb)
       resizeObserver.observe(document.getElementById('files-app-bar'))
     })
 
     onBeforeUnmount(() => {
-      window.removeEventListener('resize', renderBreadcrumb)
       resizeObserver.disconnect()
     })
 
