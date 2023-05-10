@@ -121,7 +121,6 @@ import * as uuid from 'uuid'
 import { defineComponent, inject, PropType, ComponentPublicInstance } from 'vue'
 import {
   useCapabilityFilesSharingAllowCustomPermissions,
-  useCapabilityFilesSharingCanDenyAccess,
   useCapabilityFilesSharingResharingDefault,
   useStore
 } from 'web-pkg/src/composables'
@@ -163,7 +162,6 @@ export default defineComponent({
     return {
       resource: inject<Resource>('resource'),
       incomingParentShare: inject<Share>('incomingParentShare'),
-      hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
       resharingDefault: useCapabilityFilesSharingResharingDefault(store)
     }
@@ -213,8 +211,7 @@ export default defineComponent({
         )
       }
 
-      const canDeny = this.resource.canDeny() && this.hasRoleDenyAccess
-      return PeopleShareRoles.list(this.resource.isFolder, this.hasRoleCustomPermissions, canDeny)
+      return PeopleShareRoles.list(this.resource.isFolder, this.hasRoleCustomPermissions)
     },
     availablePermissions() {
       if (this.incomingParentShare && this.resourceIsSharable) {
@@ -249,11 +246,9 @@ export default defineComponent({
       } else if (this.resourceIsSpace) {
         this.selectedRole = SpacePeopleShareRoles.list()[0]
       } else {
-        const canDeny = this.resource.canDeny() && this.hasRoleDenyAccess
         this.selectedRole = PeopleShareRoles.list(
           this.resource.isFolder,
-          this.hasRoleCustomPermissions,
-          canDeny
+          this.hasRoleCustomPermissions
         )[0]
       }
 

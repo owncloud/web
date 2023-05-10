@@ -2170,6 +2170,7 @@ def ocisService():
                 "WEB_ASSET_PATH": "%s/dist" % dir["web"],
                 "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
                 "FRONTEND_SEARCH_MIN_LENGTH": "2",
+                "FRONTEND_OCS_ENABLE_DENIALS": True,
             },
             "commands": [
                 "cd %s" % dir["ocis"],

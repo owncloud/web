@@ -6,7 +6,7 @@ import { getActualExpiryDate } from '../../../utils/datePicker'
 
 export interface ICollaborator {
   collaborator: User | Group
-  role: string
+  role?: string
   type?: CollaboratorType
   resourceType?: string
 }
@@ -37,6 +37,12 @@ export interface RemoveExpirationDateFromCollaboratorArgs
   collaborator: Omit<ICollaborator, 'role'>
 }
 
+export interface SetDenyShareForCollaboratorArgs extends Omit<CollaboratorArgs, 'collaborator'> {
+  collaborator: Omit<ICollaborator, 'role'>
+
+  deny: boolean
+}
+
 export type CollaboratorType = 'user' | 'group'
 export type CustomPermissionType = 'read' | 'update' | 'create' | 'delete' | 'share'
 
@@ -60,6 +66,8 @@ export default class Collaborator {
     '%s//button[contains(@class,"files-recipient-role-select-btn")]/span[text()="%s"]'
   private static readonly removeCollaboratorButton =
     '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-share")]'
+  private static readonly denyShareCollaboratorButton =
+    '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//span[contains(@class,"deny-share")]//button[contains(@aria-checked,"%s")]'
   private static readonly setExpirationDateCollaboratorButton =
     '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"files-collaborators-expiration-button")]'
   private static readonly removeExpirationDateCollaboratorButton =
@@ -346,5 +354,37 @@ export default class Collaborator {
           collaborator.id
         )
       : util.format(Collaborator.collaboratorUserSelector, collaborator.id)
+  }
+
+  static async setDenyShareForCollaborator(args: SetDenyShareForCollaboratorArgs): Promise<void> {
+    const {
+      page,
+      collaborator: { collaborator, type },
+      deny
+    } = args
+    const collaboratorRow = Collaborator.getCollaboratorUserOrGroupSelector(collaborator, type)
+    await page.locator(collaboratorRow).waitFor()
+
+    await page
+      .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
+      .click()
+
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().includes('shares') &&
+          resp.status() === 200 &&
+          resp.request().method() === (deny ? 'POST' : 'DELETE')
+      ),
+      page
+        .locator(
+          util.format(
+            Collaborator.denyShareCollaboratorButton,
+            collaboratorRow,
+            deny ? 'false' : 'true'
+          )
+        )
+        .click()
+    ])
   }
 }

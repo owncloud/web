@@ -11,11 +11,12 @@ import {
   declineShare,
   checkSharee,
   hasPermissionToShare,
-  copyQuickLink
+  copyQuickLink,
+  setDenyShareArgs,
+  setDenyShare
 } from './actions'
 import { resourceIsNotOpenable, isAcceptedSharePresent } from './utils'
 import { copyLinkArgs } from '../link/actions'
-
 export class Share {
   #page: Page
 
@@ -72,5 +73,11 @@ export class Share {
 
   async resourceIsNotOpenable(resource): Promise<boolean> {
     return await resourceIsNotOpenable({ page: this.#page, resource })
+  }
+
+  async setDenyShare(args: Omit<setDenyShareArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await setDenyShare({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
   }
 }

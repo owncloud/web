@@ -330,11 +330,8 @@ export abstract class PeopleShareRoles {
 
   static readonly allWithCustom = [...this.all, peopleRoleCustomFile, peopleRoleCustomFolder]
 
-  static list(isFolder: boolean, hasCustom = true, canDeny = false): ShareRole[] {
-    return [
-      ...(hasCustom ? this.allWithCustom : this.all),
-      ...(canDeny ? [peopleRoleDenyFolder] : [])
-    ].filter((r) => r.folder === isFolder)
+  static list(isFolder: boolean, hasCustom = true): ShareRole[] {
+    return [...(hasCustom ? this.allWithCustom : this.all)].filter((r) => r.folder === isFolder)
   }
 
   static custom(isFolder: boolean): ShareRole {

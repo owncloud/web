@@ -8,21 +8,32 @@
     <div class="oc-width-1-1 oc-flex oc-flex-middle files-collaborators-collaborator-details">
       <div class="oc-width-2-3 oc-flex oc-flex-middle">
         <div>
-          <avatar-image
-            v-if="isAnyUserShareType"
-            :userid="share.collaborator.name"
-            :user-name="share.collaborator.displayName"
-            :width="36"
-            class="files-collaborators-collaborator-indicator"
-          />
-          <oc-avatar-item
-            v-else
-            :width="36"
-            icon-size="medium"
-            :icon="shareTypeIcon"
-            :name="shareTypeKey"
-            class="files-collaborators-collaborator-indicator"
-          />
+          <template v-if="isShareDenied">
+            <oc-avatar-item
+              :width="36"
+              icon-size="medium"
+              icon="stop"
+              :name="$gettext('Access denied')"
+              class="files-collaborators-collaborator-indicator"
+            />
+          </template>
+          <template v-else>
+            <avatar-image
+              v-if="isAnyUserShareType"
+              :userid="share.collaborator.name"
+              :user-name="share.collaborator.displayName"
+              :width="36"
+              class="files-collaborators-collaborator-indicator"
+            />
+            <oc-avatar-item
+              v-else
+              :width="36"
+              icon-size="medium"
+              :icon="shareTypeIcon"
+              :name="shareTypeKey"
+              class="files-collaborators-collaborator-indicator"
+            />
+          </template>
         </div>
         <div class="oc-pl-s oc-text-truncate">
           <div v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate">
@@ -34,29 +45,40 @@
             <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
           </div>
           <div>
-            <div v-if="canEditOrDelete" class="oc-flex oc-flex-nowrap oc-flex-middle">
-              <role-dropdown
-                :dom-selector="shareDomSelector"
-                :existing-permissions="share.customPermissions"
-                :existing-role="share.role"
-                :allow-share-permission="hasResharing || isAnySpaceShareType"
-                class="files-collaborators-collaborator-role"
-                mode="edit"
-                @option-change="shareRoleChanged"
-              />
-            </div>
-            <div v-else-if="share.role">
-              <span
-                v-oc-tooltip="$gettext(share.role.description(false))"
-                class="oc-mr-xs"
-                v-text="$gettext(share.role.label)"
-              />
-            </div>
+            <div
+              v-if="isShareDenied"
+              class="oc-flex oc-flex-nowrap oc-flex-middle"
+              v-text="$gettext('Access denied')"
+              v-oc-tooltip="shareDeniedTooltip"
+            />
+            <template v-else>
+              <div v-if="canEditOrDelete" class="oc-flex oc-flex-nowrap oc-flex-middle">
+                <role-dropdown
+                  :dom-selector="shareDomSelector"
+                  :existing-permissions="share.customPermissions"
+                  :existing-role="share.role"
+                  :allow-share-permission="hasResharing || isAnySpaceShareType"
+                  class="files-collaborators-collaborator-role"
+                  mode="edit"
+                  @option-change="shareRoleChanged"
+                />
+              </div>
+              <div v-else-if="share.role">
+                <span
+                  v-oc-tooltip="$gettext(share.role.description(false))"
+                  class="oc-mr-xs"
+                  v-text="$gettext(share.role.label)"
+                />
+              </div>
+            </template>
           </div>
         </div>
       </div>
-      <div class="oc-flex flex-en oc-flex-middle oc-width-1-3" style="justify-content: end">
-        <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
+      <div class="oc-flex oc-flex-middle oc-width-1-3 files-collaborators-collaborator-navigation">
+        <div
+          v-if="sharedParentRoute && !isShareDenied"
+          class="oc-resource-indicators oc-text-truncate"
+        >
           <router-link
             v-oc-tooltip="$gettext('Navigate to parent folder')"
             class="parent-folder oc-text-truncate"
@@ -85,8 +107,11 @@
           :expiration-date="share.expires ? share.expires : null"
           :share-category="shareCategory"
           :can-edit-or-delete="canEditOrDelete"
+          :is-share-denied="isShareDenied"
+          :deniable="deniable"
           @expiration-date-changed="shareExpirationChanged"
           @remove-share="removeShare"
+          @set-deny-share="setDenyShare"
           @show-access-details="showAccessDetails"
         />
         <oc-info-drop
@@ -132,6 +157,10 @@ export default defineComponent({
       type: Object as PropType<Share>,
       required: true
     },
+    isShareDenied: {
+      type: Boolean,
+      default: false
+    },
     modifiable: {
       type: Boolean,
       default: false
@@ -139,21 +168,34 @@ export default defineComponent({
     sharedParentRoute: {
       type: Object as PropType<RouteLocationNamedRaw>,
       default: null
+    },
+    resourceName: {
+      type: String,
+      default: ''
+    },
+    deniable: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['onDelete'],
-  setup(props) {
+  emits: ['onDelete', 'onSetDeny'],
+  setup(props, { emit }) {
     const clientService = useClientService()
 
     const sharedParentDir = computed(() => {
       return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem).split('/').pop()
     })
 
+    const setDenyShare = (value) => {
+      emit('onSetDeny', { share: props.share, value })
+    }
+
     return {
       hasResharing: useCapabilityFilesSharingResharing(),
       resharingDefault: useCapabilityFilesSharingResharingDefault(),
       clientService,
-      sharedParentDir
+      sharedParentDir,
+      setDenyShare
     }
   },
   computed: {
@@ -194,9 +236,16 @@ export default defineComponent({
       return ShareTypes.isIndividual(this.shareType) ? 'user' : 'group'
     },
 
+    shareDeniedTooltip() {
+      return this.$gettext('%{shareType} cannot access %{resourceName}', {
+        shareType: this.shareTypeText,
+        resourceName: this.resourceName
+      })
+    },
+
     shareDisplayName() {
       if (this.user.id === this.share.collaborator.name) {
-        return this.$gettextInterpolate(this.$gettext('%{collaboratorName} (me)'), {
+        return this.$gettext('%{collaboratorName} (me)', {
           collaboratorName: this.share.collaborator.displayName
         })
       }
@@ -220,16 +269,15 @@ export default defineComponent({
           additionalInfo: this.share.collaborator.additionalInfo
         })
       }
-      let translated = this.$gettext('Share receiver name: %{ displayName }')
       if (this.shareAdditionalInfo) {
-        translated = this.$gettext('Share receiver name: %{ displayName } (%{ additionalInfo })')
+        return this.$gettext('Share receiver name: %{ displayName } (%{ additionalInfo })', context)
       }
-      return this.$gettextInterpolate(translated, context)
+
+      return this.$gettext('Share receiver name: %{ displayName }', context)
     },
 
     screenreaderShareExpiration() {
-      const translated = this.$gettext('Share expires %{ expiryDateRelative } (%{ expiryDate })')
-      return this.$gettextInterpolate(translated, {
+      return this.$gettext('Share expires %{ expiryDateRelative } (%{ expiryDate })', {
         expiryDateRelative: this.expirationDateRelative,
         expiryDate: this.expirationDate
       })
@@ -376,15 +424,24 @@ export default defineComponent({
             )
           )
       const changeMethod = this.isAnySpaceShareType ? this.changeSpaceMember : this.changeShare
-      changeMethod({
-        ...this.$language,
-        client: this.$client,
-        graphClient: this.clientService.graphAuthenticated,
-        share: this.share,
-        permissions: bitmask,
-        expirationDate: expirationDate || '',
-        role
-      })
+
+      try {
+        changeMethod({
+          client: this.$client,
+          graphClient: this.clientService.graphAuthenticated,
+          share: this.share,
+          permissions: bitmask,
+          expirationDate: expirationDate || '',
+          role
+        })
+        this.showMessage({ title: this.$gettext('Share successfully changed') })
+      } catch (e) {
+        console.error(e)
+        this.showMessage({
+          title: this.$gettext('Error while editing the share.'),
+          status: 'danger'
+        })
+      }
     }
   }
 })
@@ -412,6 +469,10 @@ export default defineComponent({
 }
 .files-collaborators-collaborator-expiration {
   margin-top: 5px;
+}
+
+.files-collaborators-collaborator-navigation {
+  justify-content: end;
 }
 .files-collaborators-collaborator-role {
   max-width: 100%;

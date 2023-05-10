@@ -86,7 +86,6 @@ import {
 } from 'web-client/src/helpers/share'
 import {
   useCapabilityFilesSharingAllowCustomPermissions,
-  useCapabilityFilesSharingCanDenyAccess,
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingResharingDefault,
   useCapabilityShareJailEnabled,
@@ -133,7 +132,6 @@ export default defineComponent({
       resharingDefault: useCapabilityFilesSharingResharingDefault(store),
       hasShareJail: useCapabilityShareJailEnabled(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
-      hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
       clientService,
       ...useShares()
     }
@@ -181,16 +179,15 @@ export default defineComponent({
     if (this.resourceIsSpace) {
       this.selectedRole = SpacePeopleShareRoles.list()[0]
     } else {
-      const canDeny = this.resource.canDeny() && this.hasRoleDenyAccess
       this.selectedRole = PeopleShareRoles.list(
         this.resource.isFolder,
-        this.hasRoleCustomPermissions,
-        canDeny
+        this.hasRoleCustomPermissions
       )[0]
     }
   },
 
   methods: {
+    ...mapActions(['showMessage']),
     ...mapActions('Files', ['addShare']),
     ...mapActions('runtime/spaces', ['addSpaceMember']),
 
@@ -300,12 +297,13 @@ export default defineComponent({
 
     async share() {
       this.saving = true
+      const errors = []
 
       const saveQueue = new PQueue({ concurrency: 4 })
       const savePromises = []
       this.selectedCollaborators.forEach((collaborator) => {
         savePromises.push(
-          saveQueue.add(() => {
+          saveQueue.add(async () => {
             const bitmask = this.selectedRole.hasCustomPermissions
               ? SharePermissions.permissionsToBitmask(this.customPermissions)
               : SharePermissions.permissionsToBitmask(
@@ -321,24 +319,46 @@ export default defineComponent({
             }
 
             const addMethod = this.resourceIsSpace ? this.addSpaceMember : this.addShare
-            addMethod({
-              ...this.$language,
-              client: this.$client,
-              graphClient: this.clientService.graphAuthenticated,
-              path,
-              shareWith: collaborator.value.shareWith,
-              displayName: collaborator.label,
-              shareType: collaborator.value.shareType,
-              permissions: bitmask,
-              role: this.selectedRole,
-              expirationDate: this.expirationDate,
-              storageId: this.resource.fileId || this.resource.id
-            })
+
+            try {
+              await addMethod({
+                client: this.$client,
+                graphClient: this.clientService.graphAuthenticated,
+                path,
+                shareWith: collaborator.value.shareWith,
+                displayName: collaborator.label,
+                shareType: collaborator.value.shareType,
+                permissions: bitmask,
+                role: this.selectedRole,
+                expirationDate: this.expirationDate,
+                storageId: this.resource.fileId || this.resource.id
+              })
+            } catch (e) {
+              console.error(e)
+              errors.push({
+                displayName: collaborator.label,
+                error: e
+              })
+              throw e
+            }
           })
         )
       })
 
-      await Promise.all(savePromises)
+      const results = await Promise.allSettled(savePromises)
+
+      if (results.length !== errors.length) {
+        this.showMessage({ title: this.$gettext('Share was added successfully') })
+      }
+      errors.forEach((e) => {
+        this.showMessage({
+          title: this.$gettext('Failed to add share for %{displayName}', {
+            displayName: e.displayName
+          }),
+          status: 'danger'
+        })
+      })
+
       this.selectedCollaborators = []
       this.saving = false
     },

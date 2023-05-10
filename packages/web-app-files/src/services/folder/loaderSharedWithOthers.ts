@@ -4,7 +4,7 @@ import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '../../router'
 import { aggregateResourceShares } from '../../helpers/resources'
 import { Store } from 'vuex'
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { peopleRoleDenyFolder, ShareTypes } from 'web-client/src/helpers/share'
 import {
   useCapabilityFilesSharingResharing,
   useCapabilityShareJailEnabled
@@ -47,8 +47,9 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
         reshares: true,
         include_tags: false
       })
-
-      resources = resources.map((r) => r.shareInfo)
+      resources = resources
+        .filter((r) => parseInt(r.shareInfo.permissions) !== peopleRoleDenyFolder.bitmask(false))
+        .map((r) => r.shareInfo)
       if (resources.length) {
         resources = aggregateResourceShares(
           resources,
