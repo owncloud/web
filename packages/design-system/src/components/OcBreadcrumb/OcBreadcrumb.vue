@@ -163,6 +163,10 @@ export default defineComponent({
       }
     },
 
+    /**
+     * Function to calculate the max width of the breadcrumb.
+     * Defaults to 500px.
+     */
     calculateBreadcrumbMaxWidth: {
       type: Function,
       required: false,
