@@ -215,6 +215,7 @@ export default defineComponent({
       const removed = visibleItems.value.splice(offsetIndex, 1)
 
       hiddenItems.value.push(removed[0])
+      console.log(hiddenItems.value)
       reduceBreadcrumb(offsetIndex)
     }
 
@@ -312,7 +313,7 @@ export default defineComponent({
 
 <style lang="scss">
 .hide {
-  display: none;
+  display: none !important;
 }
 .oc-breadcrumb {
   overflow: hidden;
