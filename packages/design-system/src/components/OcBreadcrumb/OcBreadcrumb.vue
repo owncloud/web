@@ -205,6 +205,7 @@ export default defineComponent({
 
     const reduceBreadcrumb = (offsetIndex) => {
       const breadcrumbMaxWidth = props.calculateBreadcrumbMaxWidth()
+      document.getElementById(props.id)?.style.setProperty('--max-width', `${breadcrumbMaxWidth}px`)
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
 
       const isOverflowing = breadcrumbMaxWidth < totalBreadcrumbWidth

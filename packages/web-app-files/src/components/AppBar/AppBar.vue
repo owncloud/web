@@ -190,9 +190,6 @@ export default defineComponent({
       const appBarTotalWidth =
         document.getElementById('files-view')?.parentElement?.clientWidth - leftControlsWidth * 2
       const breadcrumbMaxWidth = appBarTotalWidth - leftControlsWidth
-      document
-        .getElementById('oc-breadcrumb')
-        ?.style.setProperty('--max-width', `${breadcrumbMaxWidth}px`)
       return breadcrumbMaxWidth
     }
 

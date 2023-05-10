@@ -3,7 +3,6 @@
 exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no sharesnavigation but viewoptions and sidebartoggle 1`] = `
 <div class="" displayviewmodeswitch="false" id="files-app-bar">
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
-  <div style="height: 114px;"></div>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
     <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
@@ -29,7 +28,6 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
 exports[`AppBar component renders if given, with content in the actions slot 1`] = `
 <div class="" displayviewmodeswitch="false" id="files-app-bar">
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
-  <div style="height: 114px;"></div>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
     <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
@@ -56,7 +54,6 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
 exports[`AppBar component renders if given, with content in the content slot 1`] = `
 <div class="" displayviewmodeswitch="false" id="files-app-bar">
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
-  <div style="height: 114px;"></div>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
     <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
