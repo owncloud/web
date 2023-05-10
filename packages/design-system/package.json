@@ -41,7 +41,7 @@
     "not OperaMobile > 0"
   ],
   "devDependencies": {
-    "@adobe/leonardo-contrast-colors": "1.0.0-alpha.17",
+    "@adobe/leonardo-contrast-colors": "1.0.0-alpha.16",
     "@babel/core": "^7.16.5",
     "@babel/plugin-proposal-class-properties": "^7.16.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.16.5",
