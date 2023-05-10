@@ -2,15 +2,15 @@
   <div id="oc-file-details-sidebar">
     <div v-if="hasContent">
       <div
-        v-if="resource.thumbnail"
+        v-if="isPreviewLoading || preview"
         key="file-thumbnail"
         :style="{
-          'background-image': loadPreviewTask.isRunning ? 'none' : `url(${preview})`
+          'background-image': isPreviewLoading ? 'none' : `url(${preview})`
         }"
         class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb"
         data-testid="preview"
       >
-        <oc-spinner v-if="loadPreviewTask.isRunning" />
+        <oc-spinner v-if="isPreviewLoading" />
       </div>
       <div
         v-else
@@ -297,11 +297,14 @@ export default defineComponent({
 
     const loadPreviewTask = useTask(function* (signal, resource) {
       preview.value = yield previewService.loadPreview({
-        space,
+        space: unref(space),
         resource,
         dimensions: ImageDimension.Preview
       })
     }).restartable()
+    const isPreviewLoading = computed(() => {
+      return loadPreviewTask.isRunning || !loadPreviewTask.last
+    })
 
     const ancestorMetaData: Ref<AncestorMetaData> = computed(
       () => store.getters['Files/ancestorMetaData']
@@ -340,7 +343,7 @@ export default defineComponent({
       directLink,
       resource,
       hasTags: useCapabilityFilesTags(),
-      loadPreviewTask,
+      isPreviewLoading,
       ancestorMetaData,
       sharedAncestor
     }
