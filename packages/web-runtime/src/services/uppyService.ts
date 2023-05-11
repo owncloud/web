@@ -1,10 +1,10 @@
 import Uppy, { UppyFile } from '@uppy/core'
+import Tus from '@uppy/tus'
 import { TusOptions } from '@uppy/tus'
 import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { UppyResource } from '../composables/upload'
 import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
-import { CustomTus } from '../composables/upload/uppyPlugins/customTus'
 import { urlJoin } from 'web-client/src/utils'
 import getFileType from '@uppy/utils/lib/getFileType'
 import generateFileID from '@uppy/utils/lib/generateFileID'
@@ -84,7 +84,7 @@ export class UppyService {
       return
     }
 
-    this.uppy.use(CustomTus, tusPluginOptions as unknown as TusOptions)
+    this.uppy.use(Tus, tusPluginOptions as unknown as TusOptions)
   }
 
   useXhr({ headers, xhrTimeout }: { headers: () => uppyHeaders; xhrTimeout: number }) {
@@ -193,6 +193,9 @@ export class UppyService {
     this.uppy.on('file-added', (file) => {
       const addedFile = file as unknown as UppyResource
       if (this.uppy.getPlugin('Tus')) {
+        this.uppy.setFileState(addedFile.id, {
+          tus: { endpoint: addedFile.meta.tusEndpoint }
+        })
         this.uppy.setFileMeta(addedFile.id, {
           mtime: (addedFile.data as any).lastModified / 1000
         })
