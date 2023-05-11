@@ -1,6 +1,6 @@
 import { DataTable, Then, When } from '@cucumber/cucumber'
 import { World } from '../../environment'
-import { api, objects } from '../../../support'
+import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 
 Then(
