@@ -22,6 +22,7 @@ else
 	then
 		php occ config:system:set web.baseUrl --value="http://owncloud/index.php/apps/web"
 		php occ config:system:set enable_previews --type=boolean --value=false
+		php occ config:system:set skeletondirectory --value=''
 	else
 		php occ config:system:set web.baseUrl --value="http://web"
 		php occ config:system:set cors.allowed-domains 0 --value=http://web
