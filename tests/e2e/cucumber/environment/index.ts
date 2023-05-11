@@ -109,8 +109,8 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
   }
 
   await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
+  await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
 
-  createdGroupStore.clear()
   createdLinkStore.clear()
 })
 
@@ -139,4 +139,18 @@ const cleanUpSpaces = async (adminUser: User) => {
   })
   await Promise.all(requests)
   createdSpaceStore.clear()
+}
+
+const cleanUpGroup = async (adminUser: User) => {
+  const requests = []
+  createdGroupStore.forEach((group) => {
+    if (config.ocis) {
+      requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
+    } else {
+      requests.push(api.user.deleteGroup({ group, admin: adminUser }))
+    }
+  })
+
+  await Promise.all(requests)
+  createdGroupStore.clear()
 }
