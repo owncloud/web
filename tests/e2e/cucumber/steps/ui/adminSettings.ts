@@ -405,14 +405,6 @@ When(
     const groupsObject = new objects.applicationAdminSettings.Groups({ page })
 
     for (const info of stepTable.hashes()) {
-      const group = this.usersEnvironment.getGroup({ key: info.id })
-      await api.graph.deleteGroup({
-        group: group,
-        admin: this.usersEnvironment.getUser({ key: stepUser })
-      })
-    }
-    await page.reload()
-    for (const info of stepTable.hashes()) {
       await groupsObject.createGroup({ key: info.id })
     }
   }

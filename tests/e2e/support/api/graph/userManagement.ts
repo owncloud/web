@@ -109,7 +109,9 @@ export const deleteGroup = async ({
   group: Group
   admin: User
 }): Promise<Group> => {
-  const groupId = await getGroupId({ group, admin })
+  const usersEnvironment = new UsersEnvironment()
+  const groupId = usersEnvironment.getCreatedGroup({ key: group.id }).uuid
+
   await request({
     method: 'DELETE',
     path: join('graph', 'v1.0', 'groups', groupId),
