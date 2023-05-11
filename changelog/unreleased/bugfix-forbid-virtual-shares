@@ -1,0 +1,5 @@
+Bugfix: Prevent "virtual" spaces from being displayed in the UI
+
+While ownCloud Web is capable of displaying any type of spaces we found out that it is not valid to display so called "virtual" spaces. In such a case users now get redirected to their default location (personal space for users, project spaces overview  for guests).
+
+https://github.com/owncloud/web/pull/9015
