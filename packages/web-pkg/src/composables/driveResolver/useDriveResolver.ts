@@ -40,7 +40,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   watch(
     [options.driveAliasAndItem, areSpacesLoading],
     ([driveAliasAndItem]) => {
-      if (!driveAliasAndItem) {
+      if (!driveAliasAndItem || driveAliasAndItem.startsWith('virtual/')) {
         space.value = null
         item.value = null
         return
