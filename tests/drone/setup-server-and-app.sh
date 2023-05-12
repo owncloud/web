@@ -29,6 +29,4 @@ else
 	fi
 	php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool
 	php occ config:system:set web.rewriteLinks --value=true
-	# Remove when https://github.com/owncloud/core/pull/40024 is merged and released
-	php occ config:system:set cors.allowed-headers --type json --value '["cache-control"]'
 fi

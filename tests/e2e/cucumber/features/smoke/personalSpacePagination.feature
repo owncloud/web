@@ -1,7 +1,7 @@
 Feature: check files pagination in personal space
   As a user
   I want to check the pagination of files
-  So that I can ensure files are displayed with proper page numbers
+  So that I can ensure files are displayed in proper pages
 
   Scenario: pagination
     Given "Admin" creates following user using API
