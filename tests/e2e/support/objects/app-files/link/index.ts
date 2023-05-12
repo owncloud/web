@@ -84,9 +84,6 @@ export class Link {
   async delete(args: Omit<deleteLinkArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await deleteLink({ ...args, page: this.#page })
-    this.#linksEnvironment.deleteLink({
-      key: args.name
-    })
     await this.#page.goto(startUrl)
   }
 

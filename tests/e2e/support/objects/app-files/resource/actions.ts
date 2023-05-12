@@ -67,6 +67,7 @@ const tagFormInput = '#tags-form input'
 const compareDialogConfirmBtn = '.compare-save-dialog-confirm-btn'
 const resourcesAsTiles = '#files-view .oc-tiles'
 const fileVersionSidebar = '#oc-file-versions-sidebar'
+const noLinkMessage = '#web .oc-link-resolve-error-message'
 
 export const clickResource = async ({
   page,
@@ -1036,4 +1037,15 @@ export const checkThatFileVersionIsNotAvailable = async (
 
   await sidebar.openPanel({ page, name: 'versions' })
   await expect(page.locator(fileVersionSidebar)).toHaveText('No Versions available for this file')
+}
+
+export const expectThatPublicLinkIsDeleted = async (args): Promise<void> => {
+  const { page, url } = args
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 404 && resp.request().method() === 'PROPFIND'),
+    page.goto(url)
+  ])
+  await expect(page.locator(noLinkMessage)).toHaveText(
+    'Error: The resource could not be located, it may not exist anymore.'
+  )
 }
