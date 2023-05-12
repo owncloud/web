@@ -77,6 +77,7 @@ const filesTableResourcesDetailsSelector =
   '//td[contains(@class,"oc-table-data-cell-name")]//div//div[contains(@class,"oc-resource-details")]'
 const itemsPerPageDropDownSelector = '.vs__actions'
 const filesPaginationNavSelector = '.files-pagination'
+const noLinkMessage = '#web .oc-link-resolve-error-message'
 
 export const clickResource = async ({
   page,
@@ -1101,4 +1102,15 @@ export const getNumberOfResourcesInThePage = ({ page }): Promise<string> => {
 
 export const expectPageNumberNotToBeVisible = async ({ page }): Promise<void> => {
   await expect(page.locator(filesPaginationNavSelector)).not.toBeVisible()
+}
+
+export const expectThatPublicLinkIsDeleted = async (args): Promise<void> => {
+  const { page, url } = args
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 404 && resp.request().method() === 'PROPFIND'),
+    page.goto(url)
+  ])
+  await expect(page.locator(noLinkMessage)).toHaveText(
+    'Error: The resource could not be located, it may not exist anymore.'
+  )
 }

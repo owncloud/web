@@ -10,7 +10,8 @@ import {
   renameResource,
   renameResourceArgs,
   uploadResource,
-  uploadResourceArgs
+  uploadResourceArgs,
+  expectThatPublicLinkIsDeleted
 } from '../resource/actions'
 
 const passwordInput = 'input[type="password"]'
@@ -84,5 +85,9 @@ export class Public {
     const startUrl = this.#page.url()
     await deleteResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
+  }
+
+  async expectThatLinkIsDeleted({ url }: { url: string }): Promise<void> {
+    await expectThatPublicLinkIsDeleted({ page: this.#page, url })
   }
 }
