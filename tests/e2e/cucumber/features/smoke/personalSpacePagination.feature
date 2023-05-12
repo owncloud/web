@@ -21,3 +21,4 @@ Feature: check files pagination in personal space
     Then "Alice" should see 11 resources in the personal space files view
     When "Alice" changes the items per page to "500"
     Then "Alice" should not see page numbers at the footer of the personal space page
+    And "Alice" logs out
