@@ -47,9 +47,9 @@
           <div>
             <div
               v-if="isShareDenied"
+              v-oc-tooltip="shareDeniedTooltip"
               class="oc-flex oc-flex-nowrap oc-flex-middle"
               v-text="$gettext('Access denied')"
-              v-oc-tooltip="shareDeniedTooltip"
             />
             <template v-else>
               <div v-if="canEditOrDelete" class="oc-flex oc-flex-nowrap oc-flex-middle">
