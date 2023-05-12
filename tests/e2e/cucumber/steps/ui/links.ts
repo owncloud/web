@@ -139,7 +139,7 @@ When(
   async function (this: World, stepUser: string, linkName: string, role: any): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
-    const newPermission = await linkObject.changeRole({ linkName, role, space: true })
+    const newPermission = await linkObject.changeRole({ linkName, role })
     expect(linkObject.roleDisplayText[role].toLowerCase()).toBe(newPermission.toLowerCase())
   }
 )

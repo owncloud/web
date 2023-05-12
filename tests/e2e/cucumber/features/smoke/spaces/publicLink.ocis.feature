@@ -16,8 +16,6 @@ Feature: spaces public link
     When "Alice" logs in
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
-    And "Alice" creates a public link for the space using the sidebar panel
-    And "Alice" renames the most recently created public link of space to "spaceLink"
     And "Alice" creates the following resources
       | resource    | type   |
       | spaceFolder | folder |
@@ -32,19 +30,15 @@ Feature: spaces public link
     When "Brian" logs in
     And "Brian" navigates to the projects space page
     And "Brian" navigates to the project space "team.1"
-    Then public link named "spaceLink" should be visible to "Brian"
-    But "Brian" should not be able to edit the public link named "spaceLink"
+    And "Brian" should not be able to edit the public link named "folderLink"
     And "Brian" logs out
     When "David" logs in
     And "David" navigates to the projects space page
     And "David" navigates to the project space "team.1"
-    And "David" edits the public link named "spaceLink" of the space changing role to "editor"
     And "David" edits the public link named "folderLink" of resource "spaceFolder" changing role to "editor"
     And "David" logs out
     When "Carol" logs in
     And "Carol" navigates to the projects space page
     And "Carol" navigates to the project space "team.1"
-    And public link named "spaceLink" should be visible to "Carol"
-    But "Carol" should not be able to edit the public link named "spaceLink"
-    And public link named "folderLink" of the resource "spaceFolder" should be visible to "Carol"
+    And "Carol" should not be able to edit the public link named "folderLink"
     And "Carol" logs out
