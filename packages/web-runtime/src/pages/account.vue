@@ -378,7 +378,7 @@ export default defineComponent({
   },
   computed: {
     pageTitle() {
-      return this.$gettext(this.$route.meta.title)
+      return this.$gettext(this.$route.meta.title as string)
     }
   },
   methods: {
