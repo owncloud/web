@@ -544,11 +544,11 @@ Then(
 )
 
 When(
-  '{string} navigates to page {string} of the personal space files view',
+  '{string} navigates to page {string} of the personal/project space files view',
   async function (this: World, stepUser: string, pageNumber: string) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.changePagePersonalSpace({ pageNumber })
+    await resourceObject.changePage({ pageNumber })
   }
 )
 
@@ -572,17 +572,17 @@ Then(
 )
 
 Then(
-  '{string} should see {int} resources in the personal space files view',
+  '{string} should see {int} resources in the personal/project space files view',
   async function (this: World, stepUser: string, expectedNumberOfResources: number) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const actualNumberOfResources = await resourceObject.getNumberOfResourcesInThePage()
+    const actualNumberOfResources = await resourceObject.countNumberOfResourcesInThePage()
     await expect(actualNumberOfResources).toBe(expectedNumberOfResources)
   }
 )
 
 Then(
-  '{string} should not see the pagination in the personal space files view',
+  '{string} should not see the pagination in the personal/project space files view',
   async function (this: World, stepUser: string) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
