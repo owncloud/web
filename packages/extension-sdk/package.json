@@ -20,6 +20,6 @@
   },
   "peerDependencies": {
     "vite": "^4.1.1",
-    "sass": "1.62.0"
+    "sass": "1.62.1"
   }
 }
