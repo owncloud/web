@@ -16,7 +16,7 @@ import FileActions from '../SideBar/Actions/FileActions.vue'
 import FileDetails from '../SideBar/Details/FileDetails.vue'
 import FileInfo from '../SideBar/FileInfo.vue'
 import { useFileActions } from 'web-app-files/src/composables/actions/files/useFileActions'
-import {  useRouteQuery } from 'web-pkg'
+import { useRouteQuery } from 'web-pkg'
 import { useFileActionsDownloadFile } from 'web-app-files/src/composables/actions'
 
 export default defineComponent({
