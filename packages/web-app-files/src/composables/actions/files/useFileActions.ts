@@ -323,6 +323,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   return {
     editorActions,
     systemActions,
+    getDefaultAction,
     getAllAvailableActions,
     loadExternalAppActions,
     openEditor,

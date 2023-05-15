@@ -188,6 +188,7 @@ export default defineComponent({
 
       router.push({
         name: 'files-public-link',
+        query: { openWithDefaultApp: 'true' },
         params: { driveAliasAndItem: `public/${unref(token)}` }
       })
     })
