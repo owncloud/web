@@ -1,8 +1,13 @@
 import SearchBar from '../../../src/portals/SearchBar.vue'
-import { createLocationCommon } from 'web-app-files/src/router'
 import flushPromises from 'flush-promises'
 import { defineComponent } from 'vue'
-import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 import { ProviderStore } from 'web-app-search/src/service/providerStore'
 
 const component = defineComponent({
@@ -222,11 +227,10 @@ describe('Search Bar portal component', () => {
     await flushPromises()
     wrapper.find(selectors.searchInput).trigger('keyup.enter')
     expect(spyRouterPushStub).toHaveBeenCalledTimes(1)
-    expect(spyRouterPushStub).toHaveBeenCalledWith(
-      createLocationCommon('files-common-search', {
-        query: { term: 'albert', provider: 'files.sdk' }
-      })
-    )
+    expect(spyRouterPushStub).toHaveBeenCalledWith({
+      name: 'files-common-search',
+      query: expect.objectContaining({ term: 'albert', provider: 'files.sdk' })
+    })
   })
   test('does not navigate to files-common-search route on key press enter if no search term is given', async () => {
     wrapper = getMountedWrapper().wrapper
@@ -240,15 +244,8 @@ describe('Search Bar portal component', () => {
 
 function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } = {}) {
   const localMocks = {
-    $gettextInterpolate: (text) => text,
-    $gettext: (text) => text,
-    $route: {
-      name: ''
-    },
-    $router: {
-      go: jest.fn(),
-      push: jest.fn()
-    },
+    ...defaultComponentMocks(),
+    $route: { name: '' },
     ...mocks
   }
 

@@ -103,7 +103,7 @@ export default defineComponent({
     }
   },
   emits: ['selectionChange'],
-  setup: function (props, { emit }) {
+  setup: function (props, { emit, expose }) {
     const router = useRouter()
     const currentRoute = useRoute()
     const filterInputRef = ref()
@@ -198,12 +198,18 @@ export default defineComponent({
       }
     })
 
-    onMounted(() => {
+    const setSelectedItemsBasedOnQuery = () => {
       const queryStr = queryItemAsString(unref(currentRouteQuery))
       if (queryStr) {
         const ids = queryStr.split('+')
         selectedItems.value = props.items.filter((s: any) => ids.includes(s.id))
       }
+    }
+
+    expose({ setSelectedItemsBasedOnQuery })
+
+    onMounted(() => {
+      setSelectedItemsBasedOnQuery()
     })
 
     return {
@@ -247,4 +253,3 @@ export default defineComponent({
   }
 }
 </style>
-

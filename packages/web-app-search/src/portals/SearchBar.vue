@@ -272,9 +272,15 @@ export default defineComponent({
       this.optionsDrop.hide()
 
       if (this.term && this.activePreviewIndex === null) {
+        const currentQuery = unref(this.$router.currentRoute).query
+
         this.$router.push(
           createLocationCommon('files-common-search', {
-            query: { term: this.term, provider: 'files.sdk' }
+            query: {
+              ...(currentQuery && { ...currentQuery }),
+              term: this.term,
+              provider: 'files.sdk'
+            }
           })
         )
       }
@@ -344,8 +350,10 @@ export default defineComponent({
       return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
     },
     getMoreResultsLinkForProvider(provider) {
+      const currentQuery = unref(this.$router.currentRoute).query
+
       return createLocationCommon('files-common-search', {
-        query: { term: this.term, provider: provider.id }
+        query: { ...(currentQuery && { ...currentQuery }), term: this.term, provider: provider.id }
       })
     },
     getMoreResultsDetailsTextForProvider(provider) {

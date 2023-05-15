@@ -14,22 +14,27 @@ const mockProvider = {
 }
 
 beforeEach(() => {
-  providerStore.providers = []
+  providerStore.providers = [mockProvider]
 })
 
 describe('search result List view', () => {
-  test('it requests the listSearch from the current active provider', () => {
-    providerStore.providers = [mockProvider]
-    const mocks = { ...defaultComponentMocks() }
-    mocks.$route.query = { provider: 'p1' }
-    const wrapper = mount(List, {
-      global: {
-        stubs: {
-          OcSpinner: true
-        },
-        mocks
-      }
-    })
+  it('requests the listSearch from the current active provider', () => {
+    const { wrapper } = getWrapper()
     expect(wrapper.vm.$data.listSearch).toMatchObject(mockProvider.listSearch)
   })
+  it('triggers the search', async () => {
+    const { wrapper } = getWrapper()
+    await wrapper.vm.search('term')
+    expect(mockProvider.listSearch.search).toHaveBeenCalledTimes(1)
+  })
 })
+
+const getWrapper = () => {
+  const mocks = { ...defaultComponentMocks() }
+  mocks.$route.query = { provider: 'p1' }
+  return {
+    wrapper: mount(List, {
+      global: { mocks }
+    })
+  }
+}

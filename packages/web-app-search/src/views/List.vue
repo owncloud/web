@@ -1,13 +1,16 @@
 <template>
-  <component :is="listSearch.component" :search-result="searchResult" :loading="loading" />
+  <component
+    :is="listSearch.component"
+    :search-result="searchResult"
+    :loading="loading"
+    @search="search"
+  />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
 import { providerStore } from '../service'
-import { debounce } from 'lodash-es'
-import { queryItemAsString } from 'web-pkg/src'
 
 export default defineComponent({
   data() {
@@ -26,29 +29,10 @@ export default defineComponent({
       listSearch
     }
   },
-  watch: {
-    '$route.query': {
-      handler: function (newVal, oldVal) {
-        if (newVal?.term === oldVal?.term) {
-          return
-        }
-
-        this.$nextTick(() => {
-          this.debouncedSearch()
-        })
-      },
-      immediate: true
-    }
-  },
-  created() {
-    this.debouncedSearch = debounce(this.search, 10)
-  },
   methods: {
-    async search() {
+    async search(term: string) {
       this.loading = true
-      this.searchResult = await this.listSearch.search(
-        queryItemAsString(this.$route.query.term) || ''
-      )
+      this.searchResult = await this.listSearch.search(term || '')
       this.loading = false
     }
   }
