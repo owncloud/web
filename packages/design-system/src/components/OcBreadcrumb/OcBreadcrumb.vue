@@ -2,7 +2,7 @@
   <nav :id="id" :class="`oc-breadcrumb oc-breadcrumb-${variation}`">
     <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
       <li
-        v-for="(item, index) in allItemsIncludingThreeDots"
+        v-for="(item, index) in displayItems"
         :key="index"
         :data-key="index"
         :class="[
@@ -41,7 +41,7 @@
             :class="[
               'oc-breadcrumb-item-text',
               {
-                'oc-breadcrumb-item-text-last': index === allItemsIncludingThreeDots.length - 1
+                'oc-breadcrumb-item-text-last': index === displayItems.length - 1
               }
             ]"
             >{{ item.text }}</span
@@ -54,7 +54,7 @@
           tabindex="-1"
           v-text="item.text"
         />
-        <template v-if="showContextActions && index === allItemsIncludingThreeDots.length - 1">
+        <template v-if="showContextActions && index === displayItems.length - 1">
           <oc-button
             id="oc-breadcrumb-contextmenu-trigger"
             v-oc-tooltip="contextMenuLabel"
@@ -77,7 +77,7 @@
       </li>
     </ol>
     <oc-button
-      v-if="allItemsIncludingThreeDots.length > 1"
+      v-if="displayItems.length > 1"
       appearance="raw"
       type="router-link"
       :aria-label="$gettext('Navigate one level up')"
@@ -87,7 +87,7 @@
       <oc-icon name="arrow-left-s" fill-type="line" size="large" class="oc-mr-m" />
     </oc-button>
   </nav>
-  <div v-if="allItemsIncludingThreeDots.length > 1" class="oc-breadcrumb-mobile-current">
+  <div v-if="displayItems.length > 1" class="oc-breadcrumb-mobile-current">
     <span class="oc-text-truncate" aria-current="page" v-text="currentFolder.text" />
   </div>
 </template>
@@ -206,7 +206,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const visibleItems = ref([])
     const hiddenItems = ref([])
-    const allItemsIncludingThreeDots = ref(props.items.slice())
+    const displayItems = ref(props.items.slice())
 
     const getBreadcrumbElement = (key): HTMLElement => {
       return document.querySelector(`[data-key="${key}"]`)
@@ -247,16 +247,16 @@ export default defineComponent({
     })
 
     const renderBreadcrumb = () => {
-      allItemsIncludingThreeDots.value = props.items.slice()
-      if (allItemsIncludingThreeDots.value.length > 1) {
-        allItemsIncludingThreeDots.value.splice(1, 0, {
+      displayItems.value = props.items.slice()
+      if (displayItems.value.length > 1) {
+        displayItems.value.splice(1, 0, {
           text: '...',
           allowContextActions: false,
           to: {},
           isPreviousHiddenFolder: true
         })
       }
-      visibleItems.value = allItemsIncludingThreeDots.value.slice()
+      visibleItems.value = displayItems.value.slice()
       hiddenItems.value = []
 
       nextTick(() => {
@@ -331,7 +331,7 @@ export default defineComponent({
       visibleItems,
       hiddenItems,
       renderBreadcrumb,
-      allItemsIncludingThreeDots,
+      displayItems,
       lastHiddenItem
     }
   }
