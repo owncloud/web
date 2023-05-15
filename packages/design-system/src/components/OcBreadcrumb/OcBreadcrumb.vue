@@ -37,7 +37,15 @@
           class="oc-flex"
           @click="item.onClick"
         >
-          <span class="oc-breadcrumb-item-text">{{ item.text }}</span>
+          <span
+            :class="[
+              'oc-breadcrumb-item-text',
+              {
+                'oc-breadcrumb-item-text-last': index === allItemsIncludingThreeDots.length - 1
+              }
+            ]"
+            >{{ item.text }}</span
+          >
         </oc-button>
         <span
           class="oc-breadcrumb-item-text"
@@ -319,11 +327,14 @@ export default defineComponent({
 .oc-breadcrumb {
   overflow: hidden;
   &-item-text {
-    display: flex !important;
-    max-width: 100px;
+    max-width: 200px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+
+    &-last {
+      vertical-align: text-bottom;
+    }
   }
 
   &-mobile-current,
