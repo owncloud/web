@@ -190,7 +190,7 @@ export default defineComponent({
     calculateBreadcrumbMaxWidth: {
       type: Function,
       required: false,
-      default: () => () => {
+      default: () => {
         return 99999
       }
     },
