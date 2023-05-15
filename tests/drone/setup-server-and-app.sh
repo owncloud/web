@@ -22,12 +22,11 @@ else
 	then
 		php occ config:system:set web.baseUrl --value="http://owncloud/index.php/apps/web"
 		php occ config:system:set enable_previews --type=boolean --value=false
+		php occ config:system:set skeletondirectory --value=''
 	else
 		php occ config:system:set web.baseUrl --value="http://web"
 		php occ config:system:set cors.allowed-domains 0 --value=http://web
 	fi
 	php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool
 	php occ config:system:set web.rewriteLinks --value=true
-	# Remove when https://github.com/owncloud/core/pull/40024 is merged and released
-	php occ config:system:set cors.allowed-headers --type json --value '["cache-control"]'
 fi
