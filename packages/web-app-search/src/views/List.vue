@@ -7,12 +7,11 @@ import { defineComponent } from 'vue'
 
 import { providerStore } from '../service'
 import { debounce } from 'lodash-es'
+import { queryItemAsString } from 'web-pkg/src'
 
 export default defineComponent({
   data() {
-    // HACK: vue-tsc thinks this.$route is a `Function` for whatever reason
-    // TODO: port to composition api
-    const { provider: providerId } = (this.$route as any).query
+    const { provider: providerId } = this.$route.query
     const { listSearch } = providerStore.availableProviders.find(
       (provider) => provider.id === providerId
     )
@@ -47,7 +46,9 @@ export default defineComponent({
   methods: {
     async search() {
       this.loading = true
-      this.searchResult = await this.listSearch.search(this.$route.query.term || '')
+      this.searchResult = await this.listSearch.search(
+        queryItemAsString(this.$route.query.term) || ''
+      )
       this.loading = false
     }
   }

@@ -82,7 +82,7 @@ export default defineComponent({
         'resolvePublicLink',
         'accessDenied'
       ]
-      if (!this.$route.name || plainLayoutRoutes.includes(this.$route.name)) {
+      if (!this.$route.name || plainLayoutRoutes.includes(this.$route.name as string)) {
         return LayoutPlain
       }
       if (isPublicLinkContext(this.$router, this.$route)) {

@@ -149,7 +149,7 @@ export default defineComponent({
   computed: {
     ...mapGetters(['configuration']),
     pageTitle() {
-      return this.$gettext(this.$route.meta.title)
+      return this.$gettext(this.$route.meta.title as string)
     },
     publicLinkToken() {
       return this.$route.params.token

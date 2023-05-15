@@ -199,7 +199,7 @@ export default defineComponent({
     ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
 
     pageTitle() {
-      const title = this.$route.meta.title || ''
+      const title = (this.$route.meta.title as string) || ''
       return this.$gettext(title)
     },
     showContextActions() {
