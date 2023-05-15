@@ -172,6 +172,18 @@ export default defineComponent({
     },
 
     /**
+     * Max width of the parent selector.
+     * If set, the breadcrumb collapses if the breadcrumb is larger than the parent.
+     * Disabled if empty.
+     */
+
+    parentSelector: {
+      type: String,
+      required: false,
+      default: ''
+    },
+
+    /**
      * Function to calculate the max width of the breadcrumb.
      * Defaults to 500px.
      */
@@ -179,7 +191,7 @@ export default defineComponent({
       type: Function,
       required: false,
       default: () => () => {
-        return 500
+        return 99999
       }
     },
     /**
@@ -224,7 +236,6 @@ export default defineComponent({
       const removed = visibleItems.value.splice(offsetIndex, 1)
 
       hiddenItems.value.push(removed[0])
-      console.log(hiddenItems.value)
       reduceBreadcrumb(offsetIndex)
     }
 
@@ -269,7 +280,7 @@ export default defineComponent({
     const resizeObserver = new ResizeObserver(
       throttleResizeObserver((entries) => {
         renderBreadcrumb()
-      }, 50)
+      }, 10)
     )
 
     watch(
@@ -280,10 +291,17 @@ export default defineComponent({
     )
     onMounted(() => {
       renderBreadcrumb()
-      resizeObserver.observe(document.getElementById('files-app-bar'))
+      if (!props.parentSelector) {
+        return
+      }
+      const parentSelector = document.querySelector(props.parentSelector)
+      resizeObserver.observe(parentSelector)
     })
 
     onBeforeUnmount(() => {
+      if (!props.parentSelector) {
+        return
+      }
       resizeObserver.disconnect()
     })
 

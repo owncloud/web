@@ -18,6 +18,7 @@
           context-menu-padding="small"
           :show-context-actions="showContextActions"
           :items="breadcrumbs"
+          parent-selector="#files-app-bar"
           :calculate-breadcrumb-max-width="calculateBreadcrumbMaxWidth"
         >
           <template #contextMenu>
