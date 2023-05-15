@@ -172,7 +172,7 @@ export default defineComponent({
     },
 
     /**
-     * Max width of the parent selector.
+     * Parent selector to watch for resize events. (e.g. page gets smaller)
      * If set, the breadcrumb collapses if the breadcrumb is larger than the parent.
      * Disabled if empty.
      */
@@ -185,7 +185,7 @@ export default defineComponent({
 
     /**
      * Function to calculate the max width of the breadcrumb.
-     * Defaults to 500px.
+     * Defaults to 99999px.
      */
     calculateBreadcrumbMaxWidth: {
       type: Function,
