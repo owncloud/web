@@ -1,0 +1,6 @@
+Enhancement: Long breadcrumb strategy
+
+We've implemented a new solution to deal with long breadcrumbs even with long folder names.
+
+https://github.com/owncloud/web/pull/8984
+https://github.com/owncloud/web/issues/6731
