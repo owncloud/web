@@ -34,6 +34,10 @@ import {
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
 
+export interface GetFileActionsOptions extends FileActionOptions {
+  omitSystemActions?: boolean
+}
+
 export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
@@ -214,7 +218,11 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     action.handler(options)
   }
 
-  const getDefaultAction = (options: FileActionOptions): Action => {
+  const getDefaultEditorAction = (options: FileActionOptions): Action | null => {
+    return getDefaultAction({ ...options, omitSystemActions: true })
+  }
+
+  const getDefaultAction = (options: GetFileActionsOptions): Action | null => {
     const filterCallback = (action) =>
       action.canBeDefault &&
       action.isEnabled({
@@ -236,7 +244,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     }
 
     // fallback: system actions
-    return unref(systemActions).filter(filterCallback)[0]
+    return options.omitSystemActions ? null : unref(systemActions).filter(filterCallback)[0]
   }
 
   const getAllAvailableActions = (options: FileActionOptions) => {
@@ -323,6 +331,8 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   return {
     editorActions,
     systemActions,
+    getDefaultAction,
+    getDefaultEditorAction,
     getAllAvailableActions,
     loadExternalAppActions,
     openEditor,
