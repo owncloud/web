@@ -45,6 +45,7 @@ then
       true
     occ config:system:set trusted_domains 0 --value="localhost"
     occ config:system:set cors.allowed-domains 0 --value="http://localhost:9100"
+    occ config:system:set skeletondirectory --value=''
 fi
 
 if [ -d /var/www/owncloud/apps/web/ ]
