@@ -261,11 +261,11 @@ export class Resource {
     await changeItemsPerPage({ ...args, page: this.#page })
   }
 
-  async getFileListFooterText(): Promise<string> {
+  getFileListFooterText(): Promise<string> {
     return getFileListFooterText({ page: this.#page })
   }
 
-  async getNumberOfResourcesInThePage(): Promise<string> {
+  getNumberOfResourcesInThePage(): Promise<string> {
     return getNumberOfResourcesInThePage({ page: this.#page })
   }
 

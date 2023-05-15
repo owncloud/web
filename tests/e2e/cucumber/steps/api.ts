@@ -107,7 +107,7 @@ Given(
   async function (this: World, stepUser: string, numberOfFolders: number): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
     for (let i = 1; i <= numberOfFolders; i++) {
-      const folderName = 'testFolder' + i
+      const folderName = `testFolder${i}`
       await api.dav.createFolderInsidePersonalSpace({ user, folder: folderName })
     }
   }
@@ -162,8 +162,8 @@ Given(
   async function (this: World, stepUser: string, numberOfFiles: number): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
     for (let i = 1; i <= numberOfFiles; i++) {
-      const fileName = 'testfile' + i + '.txt'
-      const content = 'This is a test file' + i
+      const fileName = `testfile${i}.txt`
+      const content = `This is a test file${i}`
       await api.dav.uploadFileInPersonalSpace({
         user,
         pathToFile: fileName,
