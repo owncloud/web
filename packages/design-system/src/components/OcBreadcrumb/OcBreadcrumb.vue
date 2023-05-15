@@ -296,6 +296,7 @@ export default defineComponent({
       }
       const parentSelector = document.querySelector(props.parentSelector)
       resizeObserver.observe(parentSelector)
+      window.addEventListener('resize', renderBreadcrumb)
     })
 
     onBeforeUnmount(() => {
@@ -303,6 +304,7 @@ export default defineComponent({
         return
       }
       resizeObserver.disconnect()
+      window.removeEventListener('resize', renderBreadcrumb)
     })
 
     const currentFolder = computed<BreadcrumbItem>(() => {
