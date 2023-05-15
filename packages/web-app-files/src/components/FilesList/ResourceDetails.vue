@@ -54,7 +54,7 @@ export default defineComponent({
         space: props.space
       })?.name !== unref(fileActionsDownloadFile.actions)[0].name
 
-    if (unref(openWithDefaultAppQuery) == 'true' && hasDefaultAction) {
+    if (unref(openWithDefaultAppQuery) === 'true' && hasDefaultAction) {
       triggerDefaultAction({ resources: [props.singleResource], space: props.space })
     }
   }
