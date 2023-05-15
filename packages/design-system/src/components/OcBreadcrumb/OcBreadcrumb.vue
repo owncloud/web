@@ -10,7 +10,7 @@
           'oc-flex',
           'oc-flex-middle',
           {
-            hide:
+            'oc-hidden':
               hiddenItems.indexOf(item) !== -1 ||
               (item.isPreviousHiddenFolder && hiddenItems.length === 0)
           }
@@ -339,9 +339,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.hide {
-  display: none !important;
-}
 .oc-breadcrumb {
   overflow: hidden;
   &-item-text {
