@@ -221,6 +221,26 @@ Given(
 )
 
 Given(
+  '{string} creates {int} file(s) in space {string} using API',
+  async function (
+    this: World,
+    stepUser: string,
+    numberOfFiles: number,
+    space: string
+  ): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (let i = 1; i <= numberOfFiles; i++) {
+      await api.dav.uploadFileInsideSpaceBySpaceName({
+        user,
+        pathToFile: `testfile${i}.txt`,
+        spaceName: space,
+        content: `This is a test file${i}`
+      })
+    }
+  }
+)
+
+Given(
   '{string} creates the following folder(s) in space {string} using API',
   async function (
     this: World,
@@ -233,6 +253,25 @@ Given(
       await api.dav.createFolderInsideSpaceBySpaceName({
         user,
         folder: info.name,
+        spaceName: space
+      })
+    }
+  }
+)
+
+Given(
+  '{string} creates {int} folders(s) in space {string} using API',
+  async function (
+    this: World,
+    stepUser: string,
+    numberOfFolders: number,
+    space: string
+  ): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (let i = 1; i <= numberOfFolders; i++) {
+      await api.dav.createFolderInsideSpaceBySpaceName({
+        user,
+        folder: `testFolder${i}`,
         spaceName: space
       })
     }
