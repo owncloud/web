@@ -534,7 +534,7 @@ Then(
 )
 
 When(
-  '{string} navigates to the page {string} of personal space files view',
+  '{string} navigates to page {string} of the personal space files view',
   async function (this: World, stepUser: string, pageNumber: string) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -572,7 +572,7 @@ Then(
 )
 
 Then(
-  '{string} should not see page numbers at the footer of the personal space page',
+  '{string} should not see the pagination in the personal space files view',
   async function (this: World, stepUser: string) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })

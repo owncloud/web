@@ -922,7 +922,7 @@ export const expectThatResourcesAreTiles = async (args): Promise<void> => {
 export const showHiddenResources = async (page): Promise<void> => {
   await page.locator(filesViewOptionButton).click()
   await page.locator(hiddenFilesToggleButton).click()
-  //close the files view option view
+  // close the files view option
   await page.locator(filesViewOptionButton).click()
 }
 
@@ -1067,10 +1067,7 @@ export interface changePageArgs {
 
 export const changePagePersonalSpace = async (args: changePageArgs): Promise<void> => {
   const { page, pageNumber } = args
-  await page.keyboard.down('End')
-  const pageNumberSelector = util.format(listItemPageSelector, pageNumber)
-  await expect(page.locator(pageNumberSelector)).toBeVisible()
-  await page.locator(pageNumberSelector).click()
+  await page.locator(util.format(listItemPageSelector, pageNumber)).click()
 }
 
 export interface changeItemsPerPageArgs {
@@ -1083,15 +1080,15 @@ export const changeItemsPerPage = async (args: changeItemsPerPageArgs): Promise<
   await page.locator(filesViewOptionButton).click()
   await page.locator(itemsPerPageDropDownSelector).click()
   await page.locator(util.format(itemsPerPageDropDownOptionSelector, itemsPerPage)).click()
-  //close the files view option view
+  // close the files view option
   await page.locator(filesViewOptionButton).click()
 }
 
-export const getFileListFooterText = async ({ page }): Promise<string> => {
+export const getFileListFooterText = ({ page }): Promise<string> => {
   return page.locator(footerTextSelector).textContent()
 }
 
-export const getNumberOfResourcesInThePage = async ({ page }): Promise<string> => {
+export const getNumberOfResourcesInThePage = ({ page }): Promise<string> => {
   return page.locator(filesTableResourcesDetailsSelector).count()
 }
 
