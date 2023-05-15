@@ -145,6 +145,7 @@ export function buildSpace(data): SpaceResource {
     mdate: data.lastModifiedDateTime,
     size: data.quota?.used,
     indicators: [],
+    tags: [],
     permissions: '',
     starred: false,
     etag: '',
