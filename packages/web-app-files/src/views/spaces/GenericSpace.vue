@@ -555,9 +555,12 @@ export default defineComponent({
 
     async fileDropped(fileIdTarget) {
       alert(fileIdTarget)
+      if (typeof param === 'string' || param instanceof Object) {
       const selected = [...this.selectedResources]
       const targetFolder = this.paginatedResources.find((e) => e.id === fileIdTarget)
+      if(!targetFolder)
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
+      console.log('targetFolder', targetFolder)
       if (isTargetSelected) {
         return
       }

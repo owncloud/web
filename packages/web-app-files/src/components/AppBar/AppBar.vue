@@ -211,7 +211,7 @@ export default defineComponent({
           path: decodeURIComponent(data.path.replace('/files/spaces/personal/admin/', ''))
         })
         .then((targetResource) => {
-          emit(EVENT_ITEM_DROPPED, targetResource.fileId)
+          emit(EVENT_ITEM_DROPPED, targetResource)
         })
     }
 
