@@ -70,7 +70,6 @@ import { computed, defineComponent, inject, PropType, ref, Ref, unref } from 'vu
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import {
-  buildResource,
   isPersonalSpaceResource,
   isProjectSpaceResource,
   isShareSpaceResource,
@@ -98,7 +97,6 @@ import {
 import { useClientService, useRouter, useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
-import { WebDAV } from 'web-client/src/webdav'
 import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
 
 export default defineComponent({

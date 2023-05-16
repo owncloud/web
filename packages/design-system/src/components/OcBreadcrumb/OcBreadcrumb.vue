@@ -18,7 +18,10 @@
           }
         ]"
         @dragover="dragOver($event)"
-        @drop="dropRowEvent(item.to)"
+        @dragenter.prevent="dropItemStyling(index, false, $event)"
+        @dragleave.prevent="dropItemStyling(index, true, $event)"
+        @mouseleave="dropItemStyling(index, true, $event)"
+        @drop="dropItemEvent(item.to)"
       >
         <router-link
           v-if="item.to"
@@ -221,7 +224,7 @@ export default defineComponent({
       event.preventDefault()
     }
 
-    const dropRowEvent = (item) => {
+    const dropItemEvent = (item) => {
       emit(EVENT_ITEM_DROPPED_BREADCRUMB, item)
     }
 
@@ -312,6 +315,18 @@ export default defineComponent({
       return props.items.length - 1 === index ? 'page' : null
     }
 
+    const dropItemStyling = (key, leaving, event) => {
+      const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
+      if (hasFilePayload) return
+      if (event.currentTarget?.contains(event.relatedTarget)) {
+        return
+      }
+
+      const classList = getBreadcrumbElement(key).children[0].classList
+      const className = 'testclass'
+      leaving ? classList.remove(className) : classList.add(className)
+    }
+
     return {
       currentFolder,
       parentFolderTo,
@@ -322,14 +337,22 @@ export default defineComponent({
       renderBreadcrumb,
       displayItems,
       lastHiddenItem,
-      dropRowEvent,
-      dragOver
+      dropItemEvent,
+      dragOver,
+      dropItemStyling
     }
   }
 })
 </script>
 
 <style lang="scss">
+.testclass {
+  background-color: var(--oc-color-background-highlight);
+  border: 5px solid var(--oc-color-background-highlight);
+  border-top-width: 2px;
+  border-bottom-width: 2px;
+  border-radius: 5px;
+}
 .oc-breadcrumb {
   overflow: hidden;
   &-item-text {
