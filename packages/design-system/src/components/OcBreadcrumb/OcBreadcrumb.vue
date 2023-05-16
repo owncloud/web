@@ -285,9 +285,7 @@ export default defineComponent({
 
     watch(
       () => props.items,
-      () => {
-        renderBreadcrumb()
-      }
+      () => renderBreadcrumb()
     )
     onMounted(() => {
       renderBreadcrumb()
