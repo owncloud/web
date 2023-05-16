@@ -65,6 +65,7 @@ import { authService } from '../services/auth'
 import {
   queryItemAsString,
   useClientService,
+  useConfigurationManager,
   useRouteParam,
   useRouteQuery,
   useRouter,
@@ -86,6 +87,7 @@ import { useGettext } from 'vue3-gettext'
 export default defineComponent({
   name: 'ResolvePublicLink',
   setup() {
+    const configurationManager = useConfigurationManager()
     const clientService = useClientService()
     const router = useRouter()
     const store = useStore()
@@ -153,7 +155,12 @@ export default defineComponent({
       return router.push({
         name: 'resolvePrivateLink',
         params: { fileId: `${fileId}` },
-        ...(unref(details) && { query: { details: unref(details) } })
+        ...(unref(details) && {
+          query: {
+            details: unref(details),
+            ...(configurationManager.options.openWithDefaultApp && { openWithDefaultApp: 'true' })
+          }
+        })
       })
     }
     const resolvePublicLinkTask = useTask(function* (signal, passwordRequired: boolean) {
@@ -188,7 +195,9 @@ export default defineComponent({
 
       router.push({
         name: 'files-public-link',
-        query: { openWithDefaultApp: 'true' },
+        query: {
+          ...(configurationManager.options.openWithDefaultApp && { openWithDefaultApp: 'true' })
+        },
         params: { driveAliasAndItem: `public/${unref(token)}` }
       })
     })

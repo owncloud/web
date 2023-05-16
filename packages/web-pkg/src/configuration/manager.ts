@@ -89,6 +89,7 @@ export class ConfigurationManager {
       'contextHelpersReadMore',
       get(options, 'contextHelpersReadMore', true)
     )
+    set(this.optionsConfiguration, 'openWithDefaultApp', get(options, 'openWithDefaultApp', true))
   }
 
   get options(): OptionsConfiguration {
