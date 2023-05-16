@@ -77,7 +77,7 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
-import { isLocationTrashActive } from '../../router'
+import { createLocationSpaces, isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
@@ -205,10 +205,20 @@ export default defineComponent({
         : 2
     })
     const fileDroppedBreadcrumb = (data) => {
-      console.log(data)
-      const t = (clientService.webdav as WebDAV)
+      const spaceRootRoutePath = router.resolve(
+        createLocationSpaces('files-spaces-generic', {
+          params: {
+            driveAliasAndItem: props.space.driveAlias
+          }
+        })
+      ).path
+
+      const splitIndex = data.path.indexOf(spaceRootRoutePath) + spaceRootRoutePath.length
+      const path = decodeURIComponent(data.path.slice(splitIndex, data.path.length))
+
+      clientService.webdav
         .getFileInfo(props.space, {
-          path: decodeURIComponent(data.path.replace('/files/spaces/personal/admin/', ''))
+          path
         })
         .then((targetResource) => {
           emit(EVENT_ITEM_DROPPED, targetResource)
