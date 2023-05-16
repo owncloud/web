@@ -70,6 +70,7 @@ import { computed, defineComponent, inject, PropType, ref, Ref, unref } from 'vu
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import {
+  buildResource,
   isPersonalSpaceResource,
   isProjectSpaceResource,
   isShareSpaceResource,
@@ -94,9 +95,11 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
-import { useRouter, useStore } from 'web-pkg/src'
+import { useClientService, useRouter, useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
+import { WebDAV } from 'web-client/src/webdav'
+import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
 
 export default defineComponent({
   components: {
@@ -137,6 +140,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const router = useRouter()
+    const clientService = useClientService()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: clearSelectionActions } = useFileActionsClearSelection({ store })
@@ -200,13 +204,24 @@ export default defineComponent({
         ? 3
         : 2
     })
+    const fileDroppedBreadcrumb = (data) => {
+      console.log(data)
+      const t = (clientService.webdav as WebDAV)
+        .getFileInfo(props.space, {
+          path: decodeURIComponent(data.path.replace('/files/spaces/personal/admin/', ''))
+        })
+        .then((targetResource) => {
+          emit(EVENT_ITEM_DROPPED, targetResource.fileId)
+        })
+    }
 
     return {
       batchActions,
       showBreadcrumb,
       showMobileNav,
       breadcrumbMaxWidth,
-      breadcrumbTruncationOffset
+      breadcrumbTruncationOffset,
+      fileDroppedBreadcrumb
     }
   },
   data: function () {

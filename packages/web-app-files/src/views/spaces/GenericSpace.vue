@@ -13,6 +13,7 @@
         :side-bar-open="sideBarOpen"
         :space="space"
         :view-modes="viewModes"
+        @item-dropped="fileDropped"
       >
         <template #actions="{ limitedScreenSpace }">
           <create-and-upload
@@ -553,6 +554,7 @@ export default defineComponent({
     ...mapMutations('Files', ['REMOVE_FILES', 'REMOVE_FILES_FROM_SEARCHED', 'RESET_SELECTION']),
 
     async fileDropped(fileIdTarget) {
+      alert(fileIdTarget)
       const selected = [...this.selectedResources]
       const targetFolder = this.paginatedResources.find((e) => e.id === fileIdTarget)
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)

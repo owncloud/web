@@ -12,11 +12,13 @@
           'oc-flex',
           'oc-flex-middle',
           {
-            'oc-invisible-sr':
+            'oc-hidden':
               hiddenItems.indexOf(item) !== -1 ||
-              (item.isTruncationPlaceholder && hiddenItems.length === 0)
+              (item.isPreviousHiddenFolder && hiddenItems.length === 0)
           }
         ]"
+        @dragover="dragOver($event)"
+        @drop="dropRowEvent(item.to)"
       >
         <router-link
           v-if="item.to"
@@ -95,10 +97,24 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  PropType,
+  ref,
+  unref,
+  watch
+} from 'vue'
 import { useGettext } from 'vue3-gettext'
 
-import { AVAILABLE_SIZES } from '../../helpers/constants'
+import {
+  AVAILABLE_SIZES,
+  EVENT_ITEM_DROPPED,
+  EVENT_ITEM_DROPPED_BREADCRUMB
+} from '../../helpers/constants'
 
 import OcButton from '../OcButton/OcButton.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
@@ -190,35 +206,43 @@ export default defineComponent({
       default: false
     }
   },
-  setup(props) {
+  emits: [EVENT_ITEM_DROPPED_BREADCRUMB],
+  setup(props, { emit }) {
     const { $gettext } = useGettext()
-    const visibleItems = ref<BreadcrumbItem[]>([])
-    const hiddenItems = ref<BreadcrumbItem[]>([])
-    const displayItems = ref<BreadcrumbItem[]>(props.items.slice())
+    const visibleItems = ref([])
+    const hiddenItems = ref([])
+    const displayItems = ref(props.items.slice())
 
-    const getBreadcrumbElement = (id): HTMLElement => {
-      return document.querySelector(`.oc-breadcrumb-list [data-item-id="${id}"]`)
+    const getBreadcrumbElement = (key): HTMLElement => {
+      return document.querySelector(`[data-key="${key}"]`)
+    }
+
+    const dragOver = (event) => {
+      event.preventDefault()
+    }
+
+    const dropRowEvent = (item) => {
+      emit(EVENT_ITEM_DROPPED_BREADCRUMB, item)
     }
 
     const calculateTotalBreadcrumbWidth = () => {
-      let totalBreadcrumbWidth = 100 // 100px margin to the right to avoid breadcrumb from getting too close to the controls
-      visibleItems.value.forEach((item) => {
-        const breadcrumbElement = getBreadcrumbElement(item.id)
-        const itemClientWidth = breadcrumbElement?.getBoundingClientRect()?.width || 0
-        totalBreadcrumbWidth += itemClientWidth
+      let totalBreadcrumbWidth = 0
+      visibleItems.value.forEach((item, index) => {
+        const breadcrumbElement = getBreadcrumbElement(index)
+        const itemClientWidth = breadcrumbElement?.offsetWidth + 10
+        const itemWidth = itemClientWidth
+        totalBreadcrumbWidth += itemWidth
       })
       return totalBreadcrumbWidth
     }
 
     const reduceBreadcrumb = (offsetIndex) => {
       const breadcrumbMaxWidth = props.maxWidth
-      if (!breadcrumbMaxWidth) {
-        return
-      }
+      document.getElementById(props.id)?.style.setProperty('--max-width', `${breadcrumbMaxWidth}px`)
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
 
       const isOverflowing = breadcrumbMaxWidth < totalBreadcrumbWidth
-      if (!isOverflowing || visibleItems.value.length <= props.truncationOffset + 1) {
+      if (!isOverflowing || visibleItems.value.length <= 3) {
         return
       }
       // Remove from the left side
@@ -228,29 +252,47 @@ export default defineComponent({
       reduceBreadcrumb(offsetIndex)
     }
 
-    const lastHiddenItem = computed(() =>
-      hiddenItems.value.length >= 1 ? unref(hiddenItems)[unref(hiddenItems).length - 1] : { to: {} }
-    )
+    const lastHiddenItem = computed(() => {
+      if (hiddenItems.value.length >= 1) {
+        return unref(hiddenItems)[unref(hiddenItems).length - 1]
+      }
+      return { to: {} }
+    })
 
     const renderBreadcrumb = () => {
-      displayItems.value = [...props.items]
-      if (displayItems.value.length > props.truncationOffset - 1) {
-        displayItems.value.splice(props.truncationOffset - 1, 0, {
+      displayItems.value = props.items.slice()
+      if (displayItems.value.length > 1) {
+        displayItems.value.splice(1, 0, {
           text: '...',
           allowContextActions: false,
           to: {},
-          isTruncationPlaceholder: true
+          isPreviousHiddenFolder: true
         })
       }
-      visibleItems.value = [...displayItems.value]
+      visibleItems.value = displayItems.value.slice()
       hiddenItems.value = []
 
       nextTick(() => {
-        reduceBreadcrumb(props.truncationOffset)
+        reduceBreadcrumb(2)
       })
     }
 
-    watch([() => props.maxWidth, () => props.items], renderBreadcrumb, { immediate: true })
+    watch(
+      () => props.maxWidth,
+      () => renderBreadcrumb()
+    )
+    watch(
+      () => props.items,
+      () => renderBreadcrumb()
+    )
+    onMounted(() => {
+      renderBreadcrumb()
+      window.addEventListener('resize', renderBreadcrumb)
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', renderBreadcrumb)
+    })
 
     const currentFolder = computed<BreadcrumbItem>(() => {
       if (props.items.length === 0 || !props.items) {
@@ -279,7 +321,9 @@ export default defineComponent({
       hiddenItems,
       renderBreadcrumb,
       displayItems,
-      lastHiddenItem
+      lastHiddenItem,
+      dropRowEvent,
+      dragOver
     }
   }
 })
