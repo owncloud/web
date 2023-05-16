@@ -29,9 +29,8 @@ describe('ResourceDetails component', () => {
 
   describe('open with default actions', () => {
     it("doesn't open default action if query param 'openWithDefaultApp' isn't set true", () => {
-      jest.mocked(useRouteQuery).mockImplementationOnce(() => ref('true'))
       const { wrapper } = getWrapper()
-      expect(wrapper.vm.triggerDefaultAction).toHaveBeenCalled()
+      expect(wrapper.vm.triggerDefaultAction).not.toHaveBeenCalled()
     })
     it("opens default action if query param 'openWithDefaultApp' is set true", () => {
       jest.mocked(useRouteQuery).mockImplementationOnce(() => ref('true'))

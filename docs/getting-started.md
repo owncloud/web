@@ -1,5 +1,5 @@
 ---
-title: "Getting Started"
+title: 'Getting Started'
 date: 2018-05-02T00:00:00+00:00
 weight: 10
 geekdocRepo: https://github.com/owncloud/web
@@ -43,10 +43,11 @@ Depending on the backend you are using, there are sample config files provided i
 - `customTranslations` You can specify one or multiple files to overwrite existing translations. For example set this option to `[{url: "https://localhost:9200/customTranslations.json"}]`.
 
 #### Options
+
 - `options.homeFolder` You can specify a folder that is used when the user navigates `home`. Navigating home gets triggered by clicking on the `All files`
-menu item. The user will not be jailed in that directory. It simply serves as a default location. You can either provide a static location, or you can use
-variables of the user object to come up with a user specific home path. This uses twig template variable style and allows you to pick a value or a
-substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}}` and `/{{substr 0 3 .Id}}/{{.Id}`.
+  menu item. The user will not be jailed in that directory. It simply serves as a default location. You can either provide a static location, or you can use
+  variables of the user object to come up with a user specific home path. This uses twig template variable style and allows you to pick a value or a
+  substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}}` and `/{{substr 0 3 .Id}}/{{.Id}`.
 - `options.openAppsInTab` Configures whether apps and extensions generally should open in a new tab. Defaults to false.
 - `options.disablePreviews` Set this option to `true` to disable previews in all the different file listing views. The only list view that is not affected
   by this is the trash bin, as that doesn't allow showing previews at all.
@@ -64,13 +65,14 @@ substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}
 - `options.runningOnEos` Set this option to `true` if running on an [EOS storage backend](https://eos-web.web.cern.ch/eos-web/) to enable its specific features. Defaults to `false`.
 - `options.cernFeatures` Enabling this will activate CERN-specific features. Defaults to `false`.
 - `options.hoverableQuickActions` Set this option to `true` to hide the quick actions (buttons appearing on file rows), and only show them when the user
-hovers the row with his mouse. Defaults to `false`.
+  hovers the row with his mouse. Defaults to `false`.
 - `option.routing` This accepts an object with the following fields to customize the routing behaviour:
-  - `options.routing.idBased` Enable or disable fileIds being added to the URL. Defaults to `true` because otherwise e.g. spaces with name clashes can't be resolved correctly. Only disable this if you can guarantee server side that spaces of the same namespace can't have name clashes.   
+  - `options.routing.idBased` Enable or disable fileIds being added to the URL. Defaults to `true` because otherwise e.g. spaces with name clashes can't be resolved correctly. Only disable this if you can guarantee server side that spaces of the same namespace can't have name clashes.
 - `options.upload.xhr.timeout` Specifies the timeout for XHR uploads in milliseconds.
 - `options.editor.autosaveEnabled` Specifies if the autosave for the editor apps is enabled.
 - `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
 - `options.contextHelpersReadMore` Specifies whether the "Read more" link should be displayed or not.
+- `options.openWithDefaultApp` Specifies whether public link single file share should be opened with default app or not.
 
 ### Sentry
 
