@@ -39,6 +39,7 @@
           COLLABORA_DOMAIN: collabora.ocis-web.daily.owncloud.works
           ONLYOFFICE_DOMAIN: onlyoffice.ocis-web.daily.owncloud.works
           DEMO_USERS: true
+          SHARE_DENIALS: true
           COMPOSE_FILE: docker-compose.yml:monitoring_tracing/docker-compose-additions.yml
       - name: monitoring
         git_url: https://github.com/owncloud-devops/monitoring-tracing-client.git

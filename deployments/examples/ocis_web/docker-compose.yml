@@ -71,6 +71,8 @@ services:
       # fulltext search
       SEARCH_EXTRACTOR_TYPE: tika
       SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika:9998
+      # denial shares
+      FRONTEND_OCS_ENABLE_DENIALS: "${SHARE_DENIALS:-false}"
     volumes:
       - ./config/ocis/proxy.yaml:/etc/ocis/proxy.yaml
       - ./config/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
