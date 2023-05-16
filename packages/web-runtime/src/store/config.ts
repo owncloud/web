@@ -58,7 +58,8 @@ const state = {
     runningOnEos: false,
     cernFeatures: false,
     sharingRecipientsPerPage: 200,
-    contextHelpersReadMore: true
+    contextHelpersReadMore: true,
+    openWithDefaultApp: true
   }
 }
 
