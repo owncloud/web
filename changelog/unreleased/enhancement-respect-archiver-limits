@@ -1,0 +1,8 @@
+Enhancement: Respect archiver limits
+
+The archiver service can now announce a limit for both the amount of resources and 
+the size of the currently selected resources. The web UI now respects those limits 
+and shows a disabled download button once the limit has been reached.
+
+https://github.com/owncloud/web/pull/9055
+https://github.com/owncloud/web/issues/8456

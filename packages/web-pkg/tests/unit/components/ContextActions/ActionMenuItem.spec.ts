@@ -6,7 +6,8 @@ const selectors = {
   icon: '[data-testid="action-icon"]',
   img: '[data-testid="action-img"]',
   label: '[data-testid="action-label"]',
-  srHint: '[data-testid="action-sr-hint"]'
+  srHint: '[data-testid="action-sr-hint"]',
+  ariaLabel: '[aria-label="foo"]'
 }
 
 const fileActions = {
@@ -49,6 +50,15 @@ describe('ActionMenuItem component', () => {
     const { wrapper } = getWrapper(action)
     expect(wrapper.find(selectors.label).exists()).toBeTruthy()
     expect(wrapper.find(selectors.label).text()).toBe(action.label())
+  })
+  it('renders a tooltip for a disabled action', () => {
+    const action = { ...fileActions.download, disabledTooltip: () => 'Foo', isDisabled: () => true }
+    const { wrapper } = getWrapper(action)
+
+    expect(wrapper.find(fileActions.download.selector).attributes().arialabel).toBe(
+      action.disabledTooltip()
+    )
+    expect(wrapper.find(fileActions.download.selector).attributes().disabled).toBeTruthy()
   })
   describe('component is of type oc-button', () => {
     it('calls the action handler on button click', async () => {

@@ -59,6 +59,28 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
       })
   }
 
+  const archiverLimitsExceeded = (resources: Resource[]) => {
+    const archiverCapabilities = archiverService.capability
+    if (!archiverCapabilities) {
+      return
+    }
+
+    const selectedFilesAmount = resources.length
+
+    // TODO: selectedFilesSize doesn't traverse into folders, so currently limited to directly selected resources
+    const selectedFilesSize = resources.reduce(
+      (accumulator, currentValue) =>
+        accumulator +
+        (typeof currentValue.size === 'string' ? parseInt(currentValue.size) : currentValue.size),
+      0
+    )
+
+    return (
+      selectedFilesAmount > parseInt(archiverCapabilities.max_num_files) ||
+      selectedFilesSize > parseInt(archiverCapabilities.max_size)
+    )
+  }
+
   const actions = computed((): FileAction[] => {
     return [
       {
@@ -68,6 +90,12 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
         label: () => {
           return $gettext('Download')
         },
+        disabledTooltip: ({ resources }) => {
+          return archiverLimitsExceeded(resources)
+            ? $gettext('Unable to download that many files at once')
+            : ''
+        },
+        isDisabled: ({ resources }) => archiverLimitsExceeded(resources),
         isEnabled: ({ resources }) => {
           if (
             unref(isFilesAppActive) &&
