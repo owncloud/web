@@ -57,6 +57,10 @@ export default defineComponent({
     if (unref(openWithDefaultAppQuery) === 'true' && hasDefaultAction) {
       triggerDefaultAction({ resources: [props.singleResource], space: props.space })
     }
+
+    return {
+      triggerDefaultAction
+    }
   }
 })
 </script>
