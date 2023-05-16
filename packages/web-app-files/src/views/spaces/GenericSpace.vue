@@ -553,15 +553,19 @@ export default defineComponent({
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapMutations('Files', ['REMOVE_FILES', 'REMOVE_FILES_FROM_SEARCHED', 'RESET_SELECTION']),
 
-    async fileDropped(fileIdTarget) {
-      alert(fileIdTarget)
-      if (typeof param === 'string' || param instanceof Object) {
+    async fileDropped(fileTarget) {
       const selected = [...this.selectedResources]
-      const targetFolder = this.paginatedResources.find((e) => e.id === fileIdTarget)
-      if(!targetFolder)
-      const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
-      console.log('targetFolder', targetFolder)
-      if (isTargetSelected) {
+      let targetFolder = null
+      if (typeof fileTarget === 'string') {
+        targetFolder = this.paginatedResources.find((e) => e.id === fileTarget)
+        const isTargetSelected = selected.some((e) => e.id === fileTarget)
+        if (isTargetSelected) {
+          return
+        }
+      } else if (fileTarget instanceof Object) {
+        targetFolder = fileTarget
+      }
+      if (!targetFolder) {
         return
       }
       if (targetFolder.type !== 'folder') {
