@@ -59,7 +59,7 @@ const state = {
     cernFeatures: false,
     sharingRecipientsPerPage: 200,
     contextHelpersReadMore: true,
-    openWithDefaultApp: true
+    openLinksWithDefaultApp: true
   }
 }
 

@@ -72,7 +72,7 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.editor.autosaveEnabled` Specifies if the autosave for the editor apps is enabled.
 - `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
 - `options.contextHelpersReadMore` Specifies whether the "Read more" link should be displayed or not.
-- `options.openWithDefaultApp` Specifies whether public link single file share should be opened with default app or not.
+- `options.openLinksWithDefaultApp` Specifies whether single file link shares should be opened with default app or not.
 
 ### Sentry
 

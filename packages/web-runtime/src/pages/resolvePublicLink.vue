@@ -158,7 +158,9 @@ export default defineComponent({
         ...(unref(details) && {
           query: {
             details: unref(details),
-            ...(configurationManager.options.openWithDefaultApp && { openWithDefaultApp: 'true' })
+            ...(configurationManager.options.openLinksWithDefaultApp && {
+              openWithDefaultApp: 'true'
+            })
           }
         })
       })
@@ -196,7 +198,9 @@ export default defineComponent({
       router.push({
         name: 'files-public-link',
         query: {
-          ...(configurationManager.options.openWithDefaultApp && { openWithDefaultApp: 'true' })
+          ...(configurationManager.options.openLinksWithDefaultApp && {
+            openWithDefaultApp: 'true'
+          })
         },
         params: { driveAliasAndItem: `public/${unref(token)}` }
       })
