@@ -75,7 +75,7 @@ export interface Resource {
   shareTypes?: number[]
   privateLink?: string
   description?: string
-  driveType?: 'personal' | 'project' | 'share' | 'public' | (string & unknown)
+  driveType?: 'mountpoint' | 'personal' | 'project' | 'public' | 'share' | (string & unknown)
   driveAlias?: string
 
   canCreate?(): boolean

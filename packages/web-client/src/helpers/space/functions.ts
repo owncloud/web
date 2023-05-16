@@ -4,11 +4,18 @@ import {
   buildWebDavSpacesTrashPath,
   extractDomSelector,
   extractNodeId,
+  extractStorageId,
   Resource,
   SpaceRole
 } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
-import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID } from './types'
+import {
+  PublicSpaceResource,
+  ShareSpaceResource,
+  SpaceResource,
+  SHARE_JAIL_ID,
+  MountPointSpaceResource
+} from './types'
 
 import { DavProperty } from '../../webdav/constants'
 import { buildWebDavPublicPath } from '../publicLink'
@@ -67,6 +74,13 @@ export function buildShareSpaceResource({
   return space
 }
 
+export function buildMountPointSpaceResource(data): MountPointSpaceResource {
+  const space = buildSpace(data)
+  space.fileId = data.root.remoteItem.id
+  space.driveAlias = data.root.remoteItem.driveAlias
+  return space
+}
+
 export function buildSpace(data): SpaceResource {
   let spaceImageData, spaceReadmeData
   let disabled = false
@@ -120,7 +134,12 @@ export function buildSpace(data): SpaceResource {
     }
   }
 
-  const webDavPath = urlJoin(data.webDavPath || buildWebDavSpacesPath(data.id), {
+  const id = extractStorageId(data.root?.remoteItem?.id) || data.id
+  const name = data.root?.remoteItem?.name || data.name
+  const driveAlias = data.root?.remoteItem?.driveAlias || data.driveAlias
+  const path = data.root?.remoteItem?.path || '/'
+
+  const webDavPath = urlJoin(data.webDavPath || buildWebDavSpacesPath(id), {
     leadingSlash: true
   })
   const webDavUrl = urlJoin(data.serverUrl, 'remote.php/dav', webDavPath)
@@ -130,17 +149,17 @@ export function buildSpace(data): SpaceResource {
   const webDavTrashUrl = urlJoin(data.serverUrl, 'remote.php/dav', webDavTrashPath)
 
   const s = {
-    id: data.id,
-    fileId: data.id,
-    storageId: data.id,
+    id,
+    fileId: id,
+    storageId: id,
     mimeType: '',
-    name: data.name,
+    name,
     description: data.description,
     extension: '',
-    path: '/',
+    path,
     webDavPath,
     webDavTrashPath,
-    driveAlias: data.driveAlias,
+    driveAlias,
     driveType: data.driveType,
     type: 'space',
     isFolder: true,

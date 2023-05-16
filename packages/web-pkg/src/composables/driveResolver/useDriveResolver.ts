@@ -107,7 +107,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   watch(
     space,
     (s: Resource) => {
-      if (!s || ['public', 'share', 'personal'].includes(s.driveType)) {
+      if (!s || ['public', 'share', 'personal', 'mountpoint'].includes(s.driveType)) {
         return
       }
       return store.dispatch('runtime/spaces/loadSpaceMembers', {
