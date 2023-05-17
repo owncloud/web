@@ -172,7 +172,7 @@ import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
-import { useRoute } from 'web-pkg/src/composables'
+import { useRoute, useRouteQuery } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -180,7 +180,11 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
-import { useResourcesViewDefaults, ViewModeConstants } from '../../composables'
+import {
+  useFileActionsDownloadFile,
+  useResourcesViewDefaults,
+  ViewModeConstants
+} from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
 import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'
@@ -232,6 +236,9 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
+    const { getDefaultAction, triggerDefaultAction } = useFileActions()
+    const fileActionsDownloadFile = useFileActionsDownloadFile()
+    const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     let loadResourcesEventToken
 
     const canUpload = computed(() => {
@@ -382,6 +389,24 @@ export default defineComponent({
       }
     }
 
+    const openWithDefaultApp = () => {
+      const highlightedFile = store.getters['Files/highlightedFile']
+
+      if (!highlightedFile) {
+        return
+      }
+
+      const hasDefaultAction =
+        getDefaultAction({
+          resources: [highlightedFile],
+          space: props.space
+        })?.name !== unref(fileActionsDownloadFile.actions)[0].name
+
+      if (hasDefaultAction) {
+        triggerDefaultAction({ resources: [highlightedFile], space: props.space })
+      }
+    }
+
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
     const performLoaderTask = async (
       sameRoute: boolean,
@@ -406,6 +431,10 @@ export default defineComponent({
       ])
       resourcesViewDefaults.refreshFileListHeaderPosition()
       focusAndAnnounceBreadcrumb(sameRoute)
+
+      if (unref(openWithDefaultAppQuery) === 'true') {
+        openWithDefaultApp()
+      }
     }
 
     onMounted(() => {

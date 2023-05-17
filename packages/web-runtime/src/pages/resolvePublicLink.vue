@@ -157,10 +157,7 @@ export default defineComponent({
         params: { fileId: `${fileId}` },
         ...(unref(details) && {
           query: {
-            details: unref(details),
-            ...(configurationManager.options.openLinksWithDefaultApp && {
-              openWithDefaultApp: 'true'
-            })
+            details: unref(details)
           }
         })
       })
