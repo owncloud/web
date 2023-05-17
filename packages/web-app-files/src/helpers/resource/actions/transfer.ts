@@ -129,9 +129,9 @@ export class ResourceTransfer extends ConflictDialog {
   }
 
   // This is for an edge case if an user moves a subfolder with the same name as the parent folder into the parent of the parent folder (which is not possible because of the backend)
-  private isOverwritingParentFolder(resource, targetFolder, targetFolderResources) {
+  public isOverwritingParentFolder(resource, targetFolder, targetFolderResources) {
     if (resource.type !== 'folder') {
-      return
+      return false
     }
     const folderName = basename(resource.path)
     const newPath = join(targetFolder.path, folderName)
