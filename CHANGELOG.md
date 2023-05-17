@@ -153,6 +153,7 @@ Summary
 * Enhancement - Add notification setting to account page: [#8911](https://github.com/owncloud/web/pull/8911)
 * Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
 * Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
+* Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
 
 Details
 -------
@@ -1430,6 +1431,14 @@ Details
 
    https://github.com/owncloud/web/issues/7180
    https://github.com/owncloud/web/pull/8983
+
+* Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
+
+   The search result page now has a tag filter which can be used to filter the displayed search
+   result by tags.
+
+   https://github.com/owncloud/web/issues/9054
+   https://github.com/owncloud/web/pull/9044
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
