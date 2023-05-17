@@ -1,176 +1,92 @@
 import { describe } from '@jest/globals'
-// import List from 'web-app-files/src/components/Search/List.vue'
-//
-// const stubs = {
-//   'app-bar': true,
-//   'no-content-message': false,
-//   'resource-table': false,
-//   pagination: true,
-//   'list-info': true
-// }
-//
-// const selectors = {
-//   noContentMessage: '.files-empty',
-//   filesTable: '.files-table',
-//   pagination: 'pagination-stub',
-//   listInfo: 'list-info-stub'
-// }
-//
-// const user = { id: 'test' }
-//
+import { shallowMount } from '@vue/test-utils'
+import List from 'web-app-files/src/components/Search/List.vue'
+import { useResourcesViewDefaults } from 'web-app-files/src/composables'
+import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStoreMockOptions,
+  mockAxiosResolve
+} from 'web-test-helpers/src'
+import { queryItemAsString } from 'web-pkg'
+import { ref } from 'vue'
+import { Resource } from 'web-client/src'
+import { mock } from 'jest-mock-extended'
+
+jest.mock('web-app-files/src/composables')
+jest.mock('web-pkg/src/composables/appDefaults')
+
+const selectors = {
+  noContentMessageStub: 'no-content-message-stub',
+  resourceTableStub: 'resource-table-stub',
+  tagFilter: '.files-search-filter-tags'
+}
+
 describe('List component', () => {
-  it.todo('Refactor tests')
-  //   afterEach(() => {
-  //     jest.clearAllMocks()
-  //   })
-  //
-  //   describe.each(['no search term is entered', 'no resource is found'])('when %s', (message) => {
-  //     let wrapper
-  //     beforeEach(() => {
-  //       if (message === 'no search term is entered') {
-  //         wrapper = getWrapper()
-  //       } else {
-  //         wrapper = getWrapper('epsum.txt')
-  //       }
-  //     })
-  //
-  //     it('should show no-content-message component', () => {
-  //       const noContentMessage = wrapper.find(selectors.noContentMessage)
-  //
-  //       expect(noContentMessage.exists()).toBeTruthy()
-  //       expect(wrapper.html()).toMatchSnapshot()
-  //     })
-  //     it('should not show files table', () => {
-  //       const filesTable = wrapper.find(selectors.filesTable)
-  //       const listInfo = wrapper.find(selectors.listInfo)
-  //
-  //       expect(filesTable.exists()).toBeFalsy()
-  //       expect(listInfo.exists()).toBeFalsy()
-  //     })
-  //   })
-  //
-  //   describe('when resources are found', () => {
-  //     const spyTriggerDefaultAction = jest
-  //       .spyOn(List.mixins[0].methods, '$_fileActions_triggerDefaultAction')
-  //       .mockImplementation()
-  //     const spyRowMounted = jest.spyOn(List.methods, 'rowMounted')
-  //
-  //     let wrapper
-  //     beforeEach(() => {
-  //       wrapper = getWrapper('lorem', files)
-  //     })
-  //
-  //     it('should not show no-content-message component', () => {
-  //       const noContentMessage = wrapper.find(selectors.noContentMessage)
-  //
-  //       expect(noContentMessage.exists()).toBeFalsy()
-  //     })
-  //     it('should set correct props on list-info component', () => {
-  //       const listInfo = wrapper.find(selectors.listInfo)
-  //
-  //       expect(listInfo.exists()).toBeTruthy()
-  //       expect(listInfo.props().files).toEqual(files.length)
-  //       expect(listInfo.props().folders).toEqual(0)
-  //       expect(listInfo.props().size).toEqual(getTotalSize(files))
-  //     })
-  //     it('should trigger the default action when a "fileClick" event gets emitted', async () => {
-  //       const filesTable = wrapper.find(selectors.filesTable)
-  //
-  //       expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(0)
-  //
-  //       await filesTable.trigger('fileClick')
-  //
-  //       expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(1)
-  //     })
-  //     it('should lazily load previews when a "rowMounted" event gets emitted', () => {
-  //       expect(spyRowMounted).toHaveBeenCalledTimes(files.length)
-  //     })
-  //   })
+  it('should render no-content-message if no resources found', () => {
+    const { wrapper } = getWrapper()
+    expect(wrapper.find(selectors.noContentMessageStub).exists()).toBeTruthy()
+  })
+  it('should render resource table if resources found', () => {
+    const { wrapper } = getWrapper({ resources: [mock<Resource>()] })
+    expect(wrapper.find(selectors.resourceTableStub).exists()).toBeTruthy()
+  })
+  it('should emit search event on mount', async () => {
+    const { wrapper } = getWrapper()
+    await wrapper.vm.loadAvailableTagsTask.last
+    expect(wrapper.emitted('search').length).toBeGreaterThan(0)
+  })
+  describe('filter', () => {
+    describe('tags', () => {
+      it('should show all available tags', async () => {
+        const tag = 'tag1'
+        const { wrapper } = getWrapper({ availableTags: [tag] })
+        await wrapper.vm.loadAvailableTagsTask.last
+        expect(wrapper.find(selectors.tagFilter).exists()).toBeTruthy()
+        expect(wrapper.findComponent<any>(selectors.tagFilter).props('items')).toEqual([
+          { label: tag, id: tag }
+        ])
+      })
+      it('should set initial filter when tags are given via query param', async () => {
+        const tagFilterQuery = 'tag1'
+        const { wrapper } = getWrapper({
+          availableTags: ['tag1'],
+          tagFilterQuery
+        })
+        await wrapper.vm.loadAvailableTagsTask.last
+        expect(wrapper.emitted('search')[0][0]).toEqual(tagFilterQuery)
+      })
+    })
+  })
 })
-//
-// function getWrapper(searchTerm = '', files = []) {
-//   return mount(List, {
-//     propsData: {
-//       searchResult: {
-//         totalResults: 100,
-//         values: getSearchResults(files)
-//       }
-//     },
-//     store: createStore(files),
-//     stubs,
-//     mock: {
-//       webdav: {
-//         getFileInfo: jest.fn()
-//       }
-//     }
-//   })
-// }
-//
-// function createStore(activeFiles) {
-//   return createStore({
-//     getters: {
-//       configuration: () => ({
-//         options: {
-//           disablePreviews: true
-//         }
-//       }),
-//       user: () => user
-//     },
-//     modules: {
-//       Files: {
-//         namespaced: true,
-//         state: {
-//           selectedIds: []
-//         },
-//         getters: {
-//           activeFiles: () => activeFiles,
-//           selectedFiles: () => [],
-//           totalFilesCount: () => ({ files: activeFiles.length, folders: 0 }),
-//           totalFilesSize: () => getTotalSize(activeFiles),
-//           currentFolder: () => {
-//             return {
-//               path: '',
-//               canCreate() {
-//                 return false
-//               }
-//             }
-//           }
-//         },
-//         mutations: {
-//           CLEAR_CURRENT_FILES_LIST: jest.fn(),
-//           CLEAR_FILES_SEARCHED: jest.fn(),
-//           LOAD_FILES: jest.fn()
-//         }
-//       }
-//     }
-//   })
-// }
-//
-// function getSearchResults(files) {
-//   return files.map((file) => ({ data: file, id: file.id }))
-// }
-//
-// function getTotalSize(files) {
-//   return files.reduce((total, file) => total + file.size, 0)
-// }
-//
-// const files = [
-//   {
-//     id: '1',
-//     path: 'lorem.txt',
-//     size: 100
-//   },
-//   {
-//     id: '2',
-//     path: 'lorem.pdf',
-//     size: 50
-//   }
-// ].map((file) => {
-//   return {
-//     ...file,
-//     canDownload: () => true,
-//     canBeDeleted: () => true,
-//     isReceivedShare: () => false,
-//     isMounted: () => false
-//   }
-// })
+
+function getWrapper({ availableTags = [], resources = [], tagFilterQuery = null } = {}) {
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => tagFilterQuery)
+
+  const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
+    paginatedResources: ref(resources)
+  })
+  jest.mocked(useResourcesViewDefaults).mockImplementation(() => resourcesViewDetailsMock)
+
+  const mocks = defaultComponentMocks()
+  mocks.$clientService.graphAuthenticated.tags.getTags.mockReturnValue(
+    mockAxiosResolve({ value: availableTags })
+  )
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.capabilities.mockReturnValue({ files: { tags: true } })
+  const store = createStore(storeOptions)
+  return {
+    mocks,
+    wrapper: shallowMount(List, {
+      global: {
+        mocks,
+        stubs: {
+          FilesViewWrapper: false
+        },
+        plugins: [...defaultPlugins(), store]
+      }
+    })
+  }
+}

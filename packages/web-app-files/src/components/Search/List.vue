@@ -2,6 +2,32 @@
   <div class="files-search-result oc-flex">
     <files-view-wrapper>
       <app-bar :has-bulk-actions="false" :side-bar-open="sideBarOpen" />
+      <div class="files-search-result-filter oc-flex oc-mx-m oc-mb-m">
+        <div class="oc-mr-m oc-flex oc-flex-middle">
+          <oc-icon name="filter-2" class="oc-mr-xs" />
+          <span v-text="$gettext('Filter:')" />
+        </div>
+        <item-filter
+          v-if="availableTags.length"
+          ref="tagFilter"
+          :allow-multiple="true"
+          :filter-label="$gettext('Tags')"
+          :filterable-attributes="['label']"
+          :items="availableTags"
+          :option-filter-label="$gettext('Filter tags')"
+          :show-option-filter="true"
+          class="files-search-filter-tags oc-mr-s"
+          display-name-attribute="label"
+          filter-name="tags"
+        >
+          <template #image="{ item }">
+            <oc-avatar :width="24" :user-name="item.label" />
+          </template>
+          <template #item="{ item }">
+            <div v-text="item.label" />
+          </template>
+        </item-filter>
+      </div>
       <app-loading-spinner v-if="loading" />
       <template v-else>
         <no-content-message
@@ -77,7 +103,7 @@ import ContextActions from '../FilesList/ContextActions.vue'
 import { debounce } from 'lodash-es'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 import AppBar from '../AppBar/AppBar.vue'
-import { defineComponent, nextTick } from 'vue'
+import { computed, defineComponent, nextTick, onMounted, ref, unref, VNodeRef, watch } from 'vue'
 import ListInfo from '../FilesList/ListInfo.vue'
 import Pagination from '../FilesList/Pagination.vue'
 import { useFileActions } from '../../composables/actions/files/useFileActions'
@@ -86,13 +112,30 @@ import { Resource } from 'web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { useFileListHeaderPosition, useStore } from 'web-pkg/src/composables'
+import {
+  queryItemAsString,
+  useCapabilityFilesTags,
+  useClientService,
+  useFileListHeaderPosition,
+  useRoute,
+  useRouteQuery,
+  useRouter,
+  useStore
+} from 'web-pkg/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { basename } from 'path'
 import { onBeforeRouteLeave } from 'vue-router'
+import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg'
+import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
+import { isLocationCommonActive } from 'web-app-files/src/router'
 
 const visibilityObserver = new VisibilityObserver()
+
+type Tag = {
+  id: string
+  label: string
+}
 
 export default defineComponent({
   components: {
@@ -104,7 +147,8 @@ export default defineComponent({
     Pagination,
     NoContentMessage,
     ResourceTable,
-    FilesViewWrapper
+    FilesViewWrapper,
+    ItemFilter
   },
   props: {
     searchResult: {
@@ -118,9 +162,29 @@ export default defineComponent({
       default: false
     }
   },
-  setup() {
+  emits: ['search'],
+  setup(props, { emit }) {
     const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
     const { y: fileListHeaderY } = useFileListHeaderPosition()
+    const clientService = useClientService()
+    const hasTags = useCapabilityFilesTags()
+
+    const searchTermQuery = useRouteQuery('term')
+    const searchTerm = computed(() => {
+      return queryItemAsString(unref(searchTermQuery))
+    })
+
+    const availableTags = ref<Tag[]>([])
+    const tagFilter = ref<VNodeRef>()
+    const tagParam = useRouteQuery('q_tags')
+    const loadAvailableTagsTask = useTask(function* () {
+      const {
+        data: { value: tags = [] }
+      } = yield clientService.graphAuthenticated.tags.getTags()
+      availableTags.value = [...tags.map((t) => ({ id: t, label: t }))]
+    })
 
     onBeforeRouteLeave(() => {
       eventBus.publish('app.search.term.clear')
@@ -136,11 +200,53 @@ export default defineComponent({
       return store.getters['runtime/spaces/spaces'].find((space) => space.id === resource.storageId)
     }
 
+    const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
+      let term = unref(searchTerm)
+
+      const tags = queryItemAsString(unref(tagParam))
+      if (tags) {
+        const tagsTerm = tags.split('+')?.join(',') || ''
+        term += ` Tags:"${unref(tagsTerm)}"`
+        if (manuallyUpdateFilterChip && unref(tagFilter)) {
+          /**
+           * Handles edge cases where a filter is not being applied via the filter directly,
+           * e.g. when clicking on a tag in the files list.
+           * We need to manually update the selected items in the ItemFilter component because normally
+           * it only does this on mount or when interacting with the filter directly.
+           */
+          ;(unref(tagFilter) as any).setSelectedItemsBasedOnQuery()
+        }
+      }
+
+      return term
+    }
+
+    onMounted(async () => {
+      if (unref(hasTags)) {
+        await loadAvailableTagsTask.perform()
+      }
+      emit('search', buildSearchTerm())
+    })
+
+    watch(
+      () => unref(route).query,
+      (newVal, oldVal) => {
+        const isChange = newVal?.term !== oldVal?.term || newVal?.q_tags !== oldVal?.q_tags
+        if (isChange && isLocationCommonActive(router, 'files-common-search')) {
+          emit('search', buildSearchTerm(true))
+        }
+      },
+      { deep: true }
+    )
+
     return {
       ...useFileActions({ store }),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
+      loadAvailableTagsTask,
       fileListHeaderY,
-      getSpace
+      getSpace,
+      availableTags,
+      tagFilter
     }
   },
   computed: {
@@ -224,3 +330,8 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss">
+.files-search-result .files-app-bar-actions {
+  display: none !important;
+}
+</style>

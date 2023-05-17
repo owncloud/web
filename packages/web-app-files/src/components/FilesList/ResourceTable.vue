@@ -632,9 +632,10 @@ export default defineComponent({
     shouldDisplayThumbnails(item) {
       return this.areThumbnailsDisplayed && !isResourceTxtFileAlmostEmpty(item)
     },
-    getTagLink(tag) {
+    getTagLink(tag: string) {
+      const currentTerm = unref(this.$router.currentRoute).query?.term
       return createLocationCommon('files-common-search', {
-        query: { term: `Tags:"${tag}"`, provider: 'files.sdk' }
+        query: { provider: 'files.sdk', q_tags: tag, ...(currentTerm && { term: currentTerm }) }
       })
     },
     getTagComponentAttrs(tag) {
