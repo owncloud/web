@@ -24,9 +24,14 @@
             <oc-avatar :width="24" :user-name="item.label" />
           </template>
           <template #item="{ item }">
-            <div v-text="item.label" />
+            <span v-text="item.label" />
           </template>
         </item-filter>
+        <item-filter-toggle
+          :filter-label="$gettext('Search in file content')"
+          filter-name="fulltext"
+          class="files-search-filter-fulltext oc-mr-s"
+        />
       </div>
       <app-loading-spinner v-if="loading" />
       <template v-else>
@@ -129,6 +134,7 @@ import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg'
 import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
 import { isLocationCommonActive } from 'web-app-files/src/router'
+import ItemFilterToggle from 'web-pkg/src/components/ItemFilterToggle.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -148,7 +154,8 @@ export default defineComponent({
     NoContentMessage,
     ResourceTable,
     FilesViewWrapper,
-    ItemFilter
+    ItemFilter,
+    ItemFilterToggle
   },
   props: {
     searchResult: {
@@ -179,6 +186,8 @@ export default defineComponent({
     const availableTags = ref<Tag[]>([])
     const tagFilter = ref<VNodeRef>()
     const tagParam = useRouteQuery('q_tags')
+    const fulltextParam = useRouteQuery('q_fulltext')
+
     const loadAvailableTagsTask = useTask(function* () {
       const {
         data: { value: tags = [] }
@@ -202,6 +211,11 @@ export default defineComponent({
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
       let term = unref(searchTerm)
+
+      const fulltext = queryItemAsString(unref(fulltextParam))
+      if (fulltext) {
+        term = `Content:"${term}"`
+      }
 
       const tags = queryItemAsString(unref(tagParam))
       if (tags) {
@@ -231,7 +245,10 @@ export default defineComponent({
     watch(
       () => unref(route).query,
       (newVal, oldVal) => {
-        const isChange = newVal?.term !== oldVal?.term || newVal?.q_tags !== oldVal?.q_tags
+        const filters = ['q_fulltext', 'q_tags']
+        const isChange =
+          newVal?.term !== oldVal?.term || filters.some((f) => newVal[f] ?? '' !== oldVal[f] ?? '')
+
         if (isChange && isLocationCommonActive(router, 'files-common-search')) {
           emit('search', buildSearchTerm(true))
         }

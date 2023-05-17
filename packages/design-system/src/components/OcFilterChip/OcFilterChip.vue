@@ -1,10 +1,11 @@
 <template>
-  <div class="oc-filter-chip oc-flex">
+  <div class="oc-filter-chip oc-flex" :class="{ 'oc-filter-chip-toggle': isToggle }">
     <oc-button
       :id="id"
       class="oc-filter-chip-button oc-pill"
       :class="{ 'oc-filter-chip-button-selected': filterActive }"
       appearance="raw"
+      @click="isToggle ? $emit('toggleFilter') : () => ({})"
     >
       <oc-icon v-if="filterActive" name="check" size="small" color="var(--oc-color-text-inverse)" />
       <span
@@ -12,9 +13,10 @@
         v-text="!!selectedItemNames.length ? selectedItemNames[0] : filterLabel"
       />
       <span v-if="selectedItemNames.length > 1" v-text="` +${selectedItemNames.length - 1}`" />
-      <oc-icon v-if="!filterActive" name="arrow-down-s" size="small" />
+      <oc-icon v-if="!filterActive && !isToggle" name="arrow-down-s" size="small" />
     </oc-button>
     <oc-drop
+      v-if="!isToggle"
       :toggle="'#' + id"
       class="oc-filter-chip-drop"
       mode="click"
@@ -50,19 +52,42 @@ export default defineComponent({
       required: false,
       default: () => uniqueId('oc-filter-chip-')
     },
+    /**
+     * Label which is displayed when no items are selected.
+     */
     filterLabel: {
       type: String,
       required: true
     },
+    /**
+     * An array of selected item names. It is being ignored when `isToggle` is set to `true`.
+     */
     selectedItemNames: {
       type: Array,
       required: false,
       default: () => []
+    },
+    /**
+     * Display the filter chip as a on/off toggle.
+     */
+    isToggle: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * Whether the toggle filter is active. It only has an effect if `isToggle` is set to `true`.
+     */
+    isToggleActive: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['clearFilter', 'hideDrop', 'showDrop'],
+  emits: ['clearFilter', 'hideDrop', 'showDrop', 'toggleFilter'],
   setup(props) {
     const filterActive = computed(() => {
+      if (props.isToggle) {
+        return props.isToggleActive
+      }
       return !!props.selectedItemNames.length
     })
     return { filterActive }
@@ -83,7 +108,8 @@ export default defineComponent({
     text-decoration: none;
     font-size: var(--oc-font-size-xsmall);
     line-height: 1rem;
-    max-width: 120px;
+    max-width: 150px;
+    height: 24px;
     padding: var(--oc-space-xsmall) var(--oc-space-small) !important;
 
     &-selected,
@@ -94,11 +120,11 @@ export default defineComponent({
       border-bottom-left-radius: 99px !important;
       border-top-right-radius: 0px !important;
       border-bottom-right-radius: 0px !important;
+      border: 0;
     }
   }
   &-clear,
   &-clear:hover {
-    margin-left: 1px;
     background-color: var(--oc-color-swatch-primary-default) !important;
     color: var(--oc-color-text-inverse) !important;
     border-top-left-radius: 0px !important;
@@ -106,6 +132,9 @@ export default defineComponent({
     border-top-right-radius: 99px !important;
     border-bottom-right-radius: 99px !important;
   }
+  &-clear:not(.oc-filter-chip-toggle .oc-filter-chip-clear),
+  &-clear:hover:not(.oc-filter-chip-toggle .oc-filter-chip-clear) {
+    margin-left: 1px;
+  }
 }
 </style>
-

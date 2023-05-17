@@ -41,7 +41,7 @@
                 <div>
                   <slot name="image" :item="item" />
                 </div>
-                <div>
+                <div class="oc-text-truncate">
                   <slot name="item" :item="item" />
                 </div>
               </component>

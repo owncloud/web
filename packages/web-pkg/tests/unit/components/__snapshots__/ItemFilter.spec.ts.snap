@@ -24,7 +24,7 @@ exports[`ItemFilter can use a custom attribute as display name 1`] = `
                   <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-7" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
                 </div>
                 <div></div>
-                <div>Albert Einstein</div>
+                <div class="oc-text-truncate">Albert Einstein</div>
               </button>
             </li>
             <li class="oc-my-xs">
@@ -34,7 +34,7 @@ exports[`ItemFilter can use a custom attribute as display name 1`] = `
                   <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-8" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
                 </div>
                 <div></div>
-                <div>Marie Curie</div>
+                <div class="oc-text-truncate">Marie Curie</div>
               </button>
             </li>
           </ul>
@@ -70,7 +70,7 @@ exports[`ItemFilter renders all items 1`] = `
                   <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-3" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
                 </div>
                 <div></div>
-                <div>Albert Einstein</div>
+                <div class="oc-text-truncate">Albert Einstein</div>
               </button>
             </li>
             <li class="oc-my-xs">
@@ -80,7 +80,7 @@ exports[`ItemFilter renders all items 1`] = `
                   <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-4" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
                 </div>
                 <div></div>
-                <div>Marie Curie</div>
+                <div class="oc-text-truncate">Marie Curie</div>
               </button>
             </li>
           </ul>

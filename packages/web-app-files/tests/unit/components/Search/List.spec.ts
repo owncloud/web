@@ -21,7 +21,8 @@ jest.mock('web-pkg/src/composables/appDefaults')
 const selectors = {
   noContentMessageStub: 'no-content-message-stub',
   resourceTableStub: 'resource-table-stub',
-  tagFilter: '.files-search-filter-tags'
+  tagFilter: '.files-search-filter-tags',
+  fulltextFilter: '.files-search-filter-fulltext'
 }
 
 describe('List component', () => {
@@ -50,19 +51,41 @@ describe('List component', () => {
         ])
       })
       it('should set initial filter when tags are given via query param', async () => {
+        const searchTerm = 'term'
         const tagFilterQuery = 'tag1'
         const { wrapper } = getWrapper({
           availableTags: ['tag1'],
+          searchTerm,
           tagFilterQuery
         })
         await wrapper.vm.loadAvailableTagsTask.last
-        expect(wrapper.emitted('search')[0][0]).toEqual(tagFilterQuery)
+        expect(wrapper.emitted('search')[0][0]).toEqual(`${searchTerm} Tags:"${tagFilterQuery}"`)
+      })
+    })
+    describe('fulltext', () => {
+      it('should render filter', () => {
+        const { wrapper } = getWrapper()
+        expect(wrapper.find(selectors.fulltextFilter).exists()).toBeTruthy()
+      })
+      it('should set initial filter when fulltext is set active via query param', async () => {
+        const searchTerm = 'term'
+        const { wrapper } = getWrapper({ searchTerm, fulltextFilterQuery: 'true' })
+        await wrapper.vm.loadAvailableTagsTask.last
+        expect(wrapper.emitted('search')[0][0]).toEqual(`Content:"${searchTerm}"`)
       })
     })
   })
 })
 
-function getWrapper({ availableTags = [], resources = [], tagFilterQuery = null } = {}) {
+function getWrapper({
+  availableTags = [],
+  resources = [],
+  searchTerm = '',
+  tagFilterQuery = null,
+  fulltextFilterQuery = null
+} = {}) {
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => searchTerm)
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => fulltextFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => tagFilterQuery)
 
   const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
