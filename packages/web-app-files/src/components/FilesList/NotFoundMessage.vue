@@ -86,3 +86,8 @@ export default defineComponent({
   }
 })
 </script>
+<style>
+#files-list-not-found-message {
+  height: 75vh;
+}
+</style>

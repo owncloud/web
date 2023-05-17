@@ -1,0 +1,6 @@
+Bugfix: Resource not found and No content message at the same time
+
+We've fixed a bug where the "Resource not found" and "Empty folder" messages were shown at the same time.
+
+https://github.com/owncloud/web/issues/9061
+https://github.com/owncloud/web/pull/9062
