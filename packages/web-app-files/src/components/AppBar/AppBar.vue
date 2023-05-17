@@ -18,8 +18,7 @@
           context-menu-padding="small"
           :show-context-actions="showContextActions"
           :items="breadcrumbs"
-          parent-selector="#files-app-bar"
-          :calculate-breadcrumb-max-width="calculateBreadcrumbMaxWidth"
+          :max-width="maxWidth"
         >
           <template #contextMenu>
             <context-actions
@@ -66,7 +65,7 @@
 
 <script lang="ts">
 import last from 'lodash-es/last'
-import { computed, defineComponent, inject, PropType, Ref, unref } from 'vue'
+import { computed, defineComponent, inject, PropType, ref, Ref, unref } from 'vue'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import {
@@ -96,6 +95,7 @@ import {
 import { useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
+import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
 
 export default defineComponent({
   components: {
@@ -133,7 +133,8 @@ export default defineComponent({
       default: null
     }
   },
-  setup(props) {
+  emits: [EVENT_ITEM_DROPPED],
+  setup(props, { emit }) {
     const store = useStore()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
@@ -146,6 +147,8 @@ export default defineComponent({
     const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin({ store })
     const { actions: moveActions } = useFileActionsMove({ store })
     const { actions: restoreActions } = useFileActionsRestore({ store })
+
+    const maxWidth = ref<number>(0)
 
     const batchActions = computed(() => {
       return [
@@ -188,19 +191,11 @@ export default defineComponent({
       return props.breadcrumbs.length <= 1
     })
 
-    const calculateBreadcrumbMaxWidth = () => {
-      const leftControlsWidth = document.getElementById('files-app-bar-controls-right')?.clientWidth
-      const appBarTotalWidth =
-        document.getElementById('files-view')?.parentElement?.clientWidth - leftControlsWidth * 2
-      const breadcrumbMaxWidth = appBarTotalWidth - leftControlsWidth
-      return breadcrumbMaxWidth
-    }
-
     return {
       batchActions,
       showBreadcrumb,
       showMobileNav,
-      calculateBreadcrumbMaxWidth
+      maxWidth
     }
   },
   data: function () {
@@ -268,6 +263,10 @@ export default defineComponent({
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
 
     onResize() {
+      const leftControlsWidth = document.getElementById('files-app-bar-controls-right')?.clientWidth
+      const appBarTotalWidth =
+        document.getElementById('files-view')?.parentElement?.clientWidth - leftControlsWidth * 2
+      this.maxWidth = appBarTotalWidth - leftControlsWidth
       this.limitedScreenSpace = this.sideBarOpen
         ? window.innerWidth <= 1280
         : window.innerWidth <= 1000

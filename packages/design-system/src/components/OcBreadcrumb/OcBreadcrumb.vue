@@ -171,28 +171,10 @@ export default defineComponent({
       }
     },
 
-    /**
-     * Parent selector to watch for resize events. (e.g. page gets smaller)
-     * If set, the breadcrumb collapses if the breadcrumb is larger than the parent.
-     * Disabled if empty.
-     */
-
-    parentSelector: {
-      type: String,
+    maxWidth: {
+      type: Number,
       required: false,
-      default: ''
-    },
-
-    /**
-     * Function to calculate the max width of the breadcrumb.
-     * Defaults to 99999px.
-     */
-    calculateBreadcrumbMaxWidth: {
-      type: Function,
-      required: false,
-      default: () => {
-        return 99999
-      }
+      default: 99999
     },
     /**
      * Determines if the last breadcrumb item should have context menu actions.
@@ -224,7 +206,7 @@ export default defineComponent({
     }
 
     const reduceBreadcrumb = (offsetIndex) => {
-      const breadcrumbMaxWidth = props.calculateBreadcrumbMaxWidth()
+      const breadcrumbMaxWidth = props.maxWidth
       document.getElementById(props.id)?.style.setProperty('--max-width', `${breadcrumbMaxWidth}px`)
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
 
@@ -264,44 +246,20 @@ export default defineComponent({
       })
     }
 
-    const throttleResizeObserver = (callback, delay) => {
-      let resizeTimeout
-
-      return function (entries) {
-        if (!resizeTimeout) {
-          resizeTimeout = setTimeout(() => {
-            resizeTimeout = null
-            callback(entries)
-          }, delay)
-        }
-      }
-    }
-
-    const resizeObserver = new ResizeObserver(
-      throttleResizeObserver((entries) => {
-        renderBreadcrumb()
-      }, 10)
+    watch(
+      () => props.maxWidth,
+      () => renderBreadcrumb()
     )
-
     watch(
       () => props.items,
       () => renderBreadcrumb()
     )
     onMounted(() => {
       renderBreadcrumb()
-      if (!props.parentSelector) {
-        return
-      }
-      const parentSelector = document.querySelector(props.parentSelector)
-      resizeObserver.observe(parentSelector)
       window.addEventListener('resize', renderBreadcrumb)
     })
 
     onBeforeUnmount(() => {
-      if (!props.parentSelector) {
-        return
-      }
-      resizeObserver.disconnect()
       window.removeEventListener('resize', renderBreadcrumb)
     })
 
