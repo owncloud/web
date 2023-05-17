@@ -2,7 +2,11 @@
   <div class="files-search-result oc-flex">
     <files-view-wrapper>
       <app-bar :has-bulk-actions="false" :side-bar-open="sideBarOpen" />
-      <div class="files-search-result-filter oc-mx-m oc-mb-m">
+      <div class="files-search-result-filter oc-flex oc-mx-m oc-mb-m">
+        <div class="oc-mr-m oc-flex oc-flex-middle">
+          <oc-icon name="filter-2" class="oc-mr-xs" />
+          <span v-text="$gettext('Filter:')" />
+        </div>
         <item-filter
           v-if="availableTags.length"
           ref="tagFilter"
