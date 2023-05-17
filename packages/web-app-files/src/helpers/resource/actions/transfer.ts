@@ -96,11 +96,6 @@ export class ResourceTransfer extends ConflictDialog {
   }
 
   async perform(transferType: TransferType): Promise<Resource[]> {
-    // TODO: Check if parent resource still exists after moving
-    // One check before and one after moving
-    const parentDirPath = dirname(this.resourcesToMove[0].path)
-    const targetPath = this.targetFolder.path
-    console.log()
     if (this.hasRecursion()) {
       this.showRecursionErrorMessage()
       return []
