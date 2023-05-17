@@ -47,11 +47,14 @@ Given('{string} has logged out', LogOutUser)
 When('{string} logs out', LogOutUser)
 
 Then('{string} fails to log in', async function (this: World, stepUser: string): Promise<void> {
-  const sessionObject = await createNewSession(this, stepUser)
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
   const user = this.usersEnvironment.getUser({ key: stepUser })
+
+  await createNewSession(this, stepUser)
   await page.goto(config.frontendUrl)
-  await sessionObject.login({ user })
+  await page.locator('#oc-login-username').fill(user.id)
+  await page.locator('#oc-login-password').fill(user.password)
+  await page.locator('button[type="submit"]').click()
   await page.waitForSelector('#oc-login-error-message')
 })
 

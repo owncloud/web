@@ -59,13 +59,13 @@ Feature: link
     Given "Admin" creates following user using API
       | id    |
       | Alice |
+    And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name         |
       | folderPublic |
     And "Alice" creates the following files into personal space using API
       | pathToFile             | content     |
       | folderPublic/lorem.txt | lorem ipsum |
-    And "Alice" logs in
     And "Alice" opens the "files" app
     When "Alice" copies quick link of the resource "folderPublic" from the context menu
     And "Anonymous" opens the public link "Link"

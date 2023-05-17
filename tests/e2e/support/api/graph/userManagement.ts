@@ -51,7 +51,7 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
   return user
 }
 
-const getUserId = async ({ user, admin }: { user: User; admin: User }): Promise<string> => {
+export const getUserId = async ({ user, admin }: { user: User; admin: User }): Promise<string> => {
   let userId = ''
   const response = await request({
     method: 'GET',

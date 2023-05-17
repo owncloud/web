@@ -22,8 +22,8 @@ Feature: spaces.personal
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
-    When "Alice" logs in
-    And "Alice" opens the "files" app
+    And "Alice" logs in
+    When "Alice" opens the "files" app
     And "Alice" navigates to the projects space page
     And "Alice" creates the following project spaces
       | name  | id     |
@@ -127,8 +127,7 @@ Feature: spaces.personal
       | textfile.txt |
 
     # anonymous is done
-    When "Anonymous" logs out
-
+    And "Anonymous" logs out
 
   Scenario: members of the space can control the versions of the files
     Given "Admin" creates following users using API
@@ -136,13 +135,13 @@ Feature: spaces.personal
       | Alice |
       | Brian |
       | Carol |
+    And "Alice" logs in
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
     And "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
-    And "Alice" logs in
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" creates the following resources
@@ -177,4 +176,3 @@ Feature: spaces.personal
       | resource     | to     | version |
       | textfile.txt | parent | 1       |
     And "Brian" logs out
-

@@ -12,13 +12,13 @@ Feature: Search
       | id    |
       | Alice |
       | Brian |
+    And "Brian" logs in
     And "Brian" creates the following folder in personal space using API
       | name                 |
       | new_share_from_brian |
     And "Brian" uploads the following local file into personal space using API
       | localFile                        | to                |
       | filesForUpload/new-lorem-big.txt | new-lorem-big.txt |
-    When "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" shares the following resource using the sidebar panel
       | resource             | recipient | type | role   | resourceType |

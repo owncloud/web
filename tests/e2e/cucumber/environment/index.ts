@@ -22,6 +22,8 @@ import {
   createdUserStore
 } from '../../support/store'
 import { User } from '../../support/types'
+import { Session } from '../../support/objects/runtime/session'
+import { TokenEnvironment } from '../../support/environment/token'
 
 export { World }
 
@@ -94,6 +96,9 @@ BeforeAll(async (): Promise<void> => {
       await chromium.launch({ ...browserConfiguration, channel: 'chrome' }),
     chromium: async (): Promise<Browser> => await chromium.launch(browserConfiguration)
   }[config.browser]()
+
+  // get admin token
+  await getAdminToken(state.browser)
 })
 
 const defaults = {
@@ -172,4 +177,32 @@ const cleanUpGroup = async (adminUser: User) => {
 
   await Promise.all(requests)
   createdGroupStore.clear()
+}
+
+const getAdminToken = async (browser: Browser) => {
+  const ctx = await browser.newContext({ ignoreHTTPSErrors: true })
+  const page = await ctx.newPage()
+  const admin = usersEnvironment.getUser({ key: 'admin' })
+  // ...login...
+  await page.goto(config.frontendUrl)
+  const [response] = await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().includes('v1/token') &&
+        resp.status() === 200 &&
+        resp.request().method() === 'POST'
+    ),
+    new Session({ page }).login({
+      user: admin
+    })
+  ])
+  const { access_token } = await response.json()
+  const tokenEnvironment = new TokenEnvironment()
+  tokenEnvironment.createToken({
+    user: { ...admin },
+    token: { userId: admin.id, tokenValue: access_token }
+  })
+
+  await page.close()
+  await ctx.close()
 }
