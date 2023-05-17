@@ -349,17 +349,10 @@ export default defineComponent({
 .testclass {
   transition: background 0.06s, border 0s 0.08s, border-color 0s, border-width 0.06s;
   background-color: var(--oc-color-background-highlight);
-  border: 5px solid var(--oc-color-background-highlight);
-  border-top-width: 2px;
-  border-bottom-width: 2px;
+  box-shadow: 0 0 0 5px var(--oc-color-background-highlight);
   border-radius: 5px;
 }
 .oc-breadcrumb {
-  background: rgba(180, 180, 180, 0.1);
-  padding: 2px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 5px;
   overflow: hidden;
   &-item-text {
     max-width: 200px;
