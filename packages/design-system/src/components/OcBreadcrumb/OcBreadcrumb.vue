@@ -355,6 +355,11 @@ export default defineComponent({
   border-radius: 5px;
 }
 .oc-breadcrumb {
+  background: rgba(180, 180, 180, 0.1);
+  padding: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
   overflow: hidden;
   &-item-text {
     max-width: 200px;
