@@ -21,7 +21,7 @@
         @dragenter.prevent="dropItemStyling(index, false, $event)"
         @dragleave.prevent="dropItemStyling(index, true, $event)"
         @mouseleave="dropItemStyling(index, true, $event)"
-        @drop="dropItemEvent(item.to)"
+        @drop="dropItemEvent(item.to, index)"
       >
         <router-link
           v-if="item.to"
@@ -224,7 +224,11 @@ export default defineComponent({
       event.preventDefault()
     }
 
-    const dropItemEvent = (item) => {
+    const dropItemEvent = (item, index) => {
+      if (index === unref(displayItems).length - 1) {
+        return
+      }
+      item.path = item.path ? item.path : '/'
       emit(EVENT_ITEM_DROPPED_BREADCRUMB, item)
     }
 
@@ -316,6 +320,9 @@ export default defineComponent({
     }
 
     const dropItemStyling = (key, leaving, event) => {
+      if (key === unref(displayItems).length - 1) {
+        return
+      }
       const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
       if (hasFilePayload) return
       if (event.currentTarget?.contains(event.relatedTarget)) {
