@@ -347,6 +347,7 @@ export default defineComponent({
 
 <style lang="scss">
 .testclass {
+  transition: background 0.06s, border 0s 0.08s, border-color 0s, border-width 0.06s;
   background-color: var(--oc-color-background-highlight);
   border: 5px solid var(--oc-color-background-highlight);
   border-top-width: 2px;
