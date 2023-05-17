@@ -205,8 +205,8 @@ export default defineComponent({
 
       const tags = queryItemAsString(unref(tagParam))
       if (tags) {
-        const foo = tags.split('+')?.join(',') || ''
-        term += ` Tags:"${unref(foo)}"`
+        const tagsTerm = tags.split('+')?.join(',') || ''
+        term += ` Tags:"${unref(tagsTerm)}"`
         if (manuallyUpdateFilterChip && unref(tagFilter)) {
           /**
            * Handles edge cases where a filter is not being applied via the filter directly,
