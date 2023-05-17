@@ -265,7 +265,7 @@ export default defineComponent({
     onResize() {
       const leftControlsWidth = document.getElementById('files-app-bar-controls-right')?.clientWidth
       const appBarTotalWidth =
-        document.getElementById('files-view')?.parentElement?.clientWidth - leftControlsWidth * 2
+        document.getElementById('files-view')?.parentElement?.clientWidth - leftControlsWidth
       this.maxWidth = appBarTotalWidth - leftControlsWidth
       this.limitedScreenSpace = this.sideBarOpen
         ? window.innerWidth <= 1280
