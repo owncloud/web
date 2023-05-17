@@ -50,9 +50,9 @@ import {
   createSpaceFromSelectionArgs,
   checkThatFileVersionIsNotAvailable,
   changePageArgs,
-  changePagePersonalSpace,
+  changePage,
   getFileListFooterText,
-  getNumberOfResourcesInThePage,
+  countNumberOfResourcesInThePage,
   changeItemsPerPage,
   changeItemsPerPageArgs,
   expectPageNumberNotToBeVisible
@@ -253,8 +253,8 @@ export class Resource {
     await this.#page.goto(startUrl)
   }
 
-  async changePagePersonalSpace(args: Omit<changePageArgs, 'page'>): Promise<void> {
-    await changePagePersonalSpace({ ...args, page: this.#page })
+  async changePage(args: Omit<changePageArgs, 'page'>): Promise<void> {
+    await changePage({ ...args, page: this.#page })
   }
 
   async changeItemsPerPage(args: Omit<changeItemsPerPageArgs, 'page'>): Promise<void> {
@@ -265,8 +265,8 @@ export class Resource {
     return getFileListFooterText({ page: this.#page })
   }
 
-  getNumberOfResourcesInThePage(): Promise<string> {
-    return getNumberOfResourcesInThePage({ page: this.#page })
+  countNumberOfResourcesInThePage(): Promise<number> {
+    return countNumberOfResourcesInThePage({ page: this.#page })
   }
 
   async expectPageNumberNotToBeVisible(): Promise<void> {

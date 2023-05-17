@@ -73,8 +73,7 @@ const listItemPageSelector = '//*[contains(@class,"oc-pagination-list-item-page"
 const itemsPerPageDropDownOptionSelector =
   '//li[contains(@class,"vs__dropdown-option") and text()="%s"]'
 const footerTextSelector = '//*[@data-testid="files-list-footer-info"]'
-const filesTableResourcesDetailsSelector =
-  '//td[contains(@class,"oc-table-data-cell-name")]//div//div[contains(@class,"oc-resource-details")]'
+const filesTableRowSelector = 'tbody tr'
 const itemsPerPageDropDownSelector = '.vs__actions'
 const filesPaginationNavSelector = '.files-pagination'
 
@@ -1073,7 +1072,8 @@ export interface changePageArgs {
   page: Page
   pageNumber: string
 }
-export const changePagePersonalSpace = async (args: changePageArgs): Promise<void> => {
+
+export const changePage = async (args: changePageArgs): Promise<void> => {
   const { page, pageNumber } = args
   await page.locator(util.format(listItemPageSelector, pageNumber)).click()
 }
@@ -1095,8 +1095,21 @@ export const getFileListFooterText = ({ page }): Promise<string> => {
   return page.locator(footerTextSelector).textContent()
 }
 
-export const getNumberOfResourcesInThePage = ({ page }): Promise<string> => {
-  return page.locator(filesTableResourcesDetailsSelector).count()
+export interface expectNumberOfResourcesInThePageToBeArgs {
+  page: Page
+  numberOfResources: number
+}
+
+export const countNumberOfResourcesInThePage = async ({ page }): Promise<number> => {
+  // playwright's default count function is not used here because count only counts
+  // elements that are visible in the page but in this case we want to get
+  // all the elements present
+  return page.evaluate(
+    ([filesTableRowSelector]) => {
+      return Promise.resolve(document.querySelectorAll(filesTableRowSelector).length)
+    },
+    [filesTableRowSelector]
+  )
 }
 
 export const expectPageNumberNotToBeVisible = async ({ page }): Promise<void> => {
