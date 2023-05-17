@@ -214,6 +214,14 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     action.handler(options)
   }
 
+  const getDefaultEditorAction = (options: FileActionOptions): Action | null => {
+    const defaultAction = getDefaultAction(options)
+
+    return defaultAction && defaultAction.name !== unref(downloadFileActions)[0].name
+      ? defaultAction
+      : null
+  }
+
   const getDefaultAction = (options: FileActionOptions): Action => {
     const filterCallback = (action) =>
       action.canBeDefault &&
@@ -324,6 +332,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     editorActions,
     systemActions,
     getDefaultAction,
+    getDefaultEditorAction,
     getAllAvailableActions,
     loadExternalAppActions,
     openEditor,

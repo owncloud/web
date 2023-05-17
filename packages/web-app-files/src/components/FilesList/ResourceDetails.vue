@@ -17,7 +17,6 @@ import FileDetails from '../SideBar/Details/FileDetails.vue'
 import FileInfo from '../SideBar/FileInfo.vue'
 import { useFileActions } from 'web-app-files/src/composables/actions/files/useFileActions'
 import { useRouteQuery } from 'web-pkg'
-import { useFileActionsDownloadFile } from 'web-app-files/src/composables/actions'
 
 export default defineComponent({
   components: {
@@ -44,22 +43,20 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { getDefaultAction, triggerDefaultAction } = useFileActions()
-    const fileActionsDownloadFile = useFileActionsDownloadFile()
+    const { getDefaultEditorAction } = useFileActions()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
+    const fileActionsOptions = {
+      resources: [props.singleResource],
+      space: props.space
+    }
+    const defaultEditorAction = getDefaultEditorAction(fileActionsOptions)
 
-    const hasDefaultAction =
-      getDefaultAction({
-        resources: [props.singleResource],
-        space: props.space
-      })?.name !== unref(fileActionsDownloadFile.actions)[0].name
-
-    if (unref(openWithDefaultAppQuery) === 'true' && hasDefaultAction) {
-      triggerDefaultAction({ resources: [props.singleResource], space: props.space })
+    if (unref(openWithDefaultAppQuery) === 'true' && defaultEditorAction) {
+      defaultEditorAction.handler({ ...fileActionsOptions })
     }
 
     return {
-      triggerDefaultAction
+      defaultEditorAction
     }
   }
 })

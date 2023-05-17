@@ -180,11 +180,7 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
-import {
-  useFileActionsDownloadFile,
-  useResourcesViewDefaults,
-  ViewModeConstants
-} from '../../composables'
+import { useResourcesViewDefaults, ViewModeConstants } from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
 import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'
@@ -236,8 +232,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
-    const { getDefaultAction, triggerDefaultAction } = useFileActions()
-    const fileActionsDownloadFile = useFileActionsDownloadFile()
+    const { getDefaultEditorAction } = useFileActions()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     let loadResourcesEventToken
 
@@ -392,18 +387,19 @@ export default defineComponent({
     const openWithDefaultApp = () => {
       const highlightedFile = store.getters['Files/highlightedFile']
 
-      if (!highlightedFile) {
+      if (!highlightedFile || highlightedFile.isFolder) {
         return
       }
 
-      const hasDefaultAction =
-        getDefaultAction({
-          resources: [highlightedFile],
-          space: props.space
-        })?.name !== unref(fileActionsDownloadFile.actions)[0].name
+      const fileActionsOptions = {
+        resources: [highlightedFile],
+        space: props.space
+      }
 
-      if (hasDefaultAction) {
-        triggerDefaultAction({ resources: [highlightedFile], space: props.space })
+      const defaultEditorAction = getDefaultEditorAction(fileActionsOptions)
+
+      if (defaultEditorAction) {
+        defaultEditorAction.handler({ ...fileActionsOptions })
       }
     }
 

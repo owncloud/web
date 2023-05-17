@@ -12,6 +12,8 @@ import { useFileActions } from 'web-app-files/src/composables/actions/files/useF
 import { SpaceResource } from 'web-client'
 import { useRouteQuery } from 'web-pkg'
 import { ref } from 'vue'
+import { Action } from 'vuex'
+import { fileActions } from 'web-app-files/tests/__fixtures__/fileActions'
 
 jest.mock('web-app-files/src/composables/actions/files/useFileActions')
 jest.mock('web-pkg/src/composables/router', () => ({
@@ -20,7 +22,11 @@ jest.mock('web-pkg/src/composables/router', () => ({
 }))
 
 describe('ResourceDetails component', () => {
-  jest.mocked(useFileActions).mockImplementation(() => mock<ReturnType<typeof useFileActions>>({}))
+  jest.mocked(useFileActions).mockImplementation(() =>
+    mock<ReturnType<typeof useFileActions>>({
+      getDefaultEditorAction: () => ({ handler: jest.fn() } as any)
+    })
+  )
 
   it('renders resource details correctly', () => {
     const { wrapper } = getWrapper()
@@ -30,12 +36,12 @@ describe('ResourceDetails component', () => {
   describe('open with default actions', () => {
     it("doesn't open default action if query param 'openWithDefaultApp' isn't set true", () => {
       const { wrapper } = getWrapper()
-      expect(wrapper.vm.triggerDefaultAction).not.toHaveBeenCalled()
+      expect(wrapper.vm.defaultEditorAction.handler).not.toHaveBeenCalled()
     })
     it("opens default action if query param 'openWithDefaultApp' is set true", () => {
       jest.mocked(useRouteQuery).mockImplementationOnce(() => ref('true'))
       const { wrapper } = getWrapper()
-      expect(wrapper.vm.triggerDefaultAction).toHaveBeenCalled()
+      expect(wrapper.vm.defaultEditorAction.handler).toHaveBeenCalled()
     })
   })
 
