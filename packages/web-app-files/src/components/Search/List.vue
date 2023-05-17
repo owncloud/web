@@ -110,6 +110,7 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import {
   queryItemAsString,
+  useCapabilityFilesTags,
   useClientService,
   useFileListHeaderPosition,
   useRoute,
@@ -164,6 +165,7 @@ export default defineComponent({
     const route = useRoute()
     const { y: fileListHeaderY } = useFileListHeaderPosition()
     const clientService = useClientService()
+    const hasTags = useCapabilityFilesTags()
 
     const searchTermQuery = useRouteQuery('term')
     const searchTerm = computed(() => {
@@ -216,7 +218,9 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      await loadAvailableTagsTask.perform()
+      if (unref(hasTags)) {
+        await loadAvailableTagsTask.perform()
+      }
       emit('search', buildSearchTerm())
     })
 

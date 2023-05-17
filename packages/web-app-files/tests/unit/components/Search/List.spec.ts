@@ -75,6 +75,7 @@ function getWrapper({ availableTags = [], resources = [], tagFilterQuery = null 
     mockAxiosResolve({ value: availableTags })
   )
   const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.capabilities.mockReturnValue({ files: { tags: true } })
   const store = createStore(storeOptions)
   return {
     mocks,
