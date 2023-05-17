@@ -19,13 +19,14 @@ import {
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 import { useArchiverService } from 'web-app-files/src/composables/archiverService'
+import { formatFileSize } from 'web-pkg/src/helpers/filesize'
 
 export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const loadingService = useLoadingService()
   const archiverService = useArchiverService()
-  const { $ngettext, $gettext } = useGettext()
+  const { $ngettext, $gettext, interpolate: $gettextInterpolate, current } = useGettext()
   const publicLinkPassword = usePublicLinkPassword({ store })
   const isFilesAppActive = useIsFilesAppActive()
 
@@ -59,26 +60,18 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
       })
   }
 
-  const archiverLimitsExceeded = (resources: Resource[]) => {
+  const areArchiverLimitsExceeded = (resources: Resource[]) => {
     const archiverCapabilities = archiverService.capability
     if (!archiverCapabilities) {
       return
     }
 
-    const selectedFilesAmount = resources.length
-
-    // TODO: selectedFilesSize doesn't traverse into folders, so currently limited to directly selected resources
     const selectedFilesSize = resources.reduce(
-      (accumulator, currentValue) =>
-        accumulator +
-        (typeof currentValue.size === 'string' ? parseInt(currentValue.size) : currentValue.size),
+      (accumulator, currentValue) => accumulator + parseInt(`${currentValue.size}`),
       0
     )
 
-    return (
-      selectedFilesAmount > parseInt(archiverCapabilities.max_num_files) ||
-      selectedFilesSize > parseInt(archiverCapabilities.max_size)
-    )
+    return selectedFilesSize > parseInt(archiverCapabilities.max_size)
   }
 
   const actions = computed((): FileAction[] => {
@@ -91,11 +84,16 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
           return $gettext('Download')
         },
         disabledTooltip: ({ resources }) => {
-          return archiverLimitsExceeded(resources)
-            ? $gettext('Unable to download that many files at once')
+          return areArchiverLimitsExceeded(resources)
+            ? $gettextInterpolate(
+                $gettext('The selection exceeds the allowed archive size (max. %{maxSize})'),
+                {
+                  maxSize: formatFileSize(archiverService.capability.max_size, current)
+                }
+              )
             : ''
         },
-        isDisabled: ({ resources }) => archiverLimitsExceeded(resources),
+        isDisabled: ({ resources }) => areArchiverLimitsExceeded(resources),
         isEnabled: ({ resources }) => {
           if (
             unref(isFilesAppActive) &&
