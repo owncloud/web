@@ -22,6 +22,8 @@ import {
   createdUserStore
 } from '../../support/store'
 import { User } from '../../support/types'
+import fs from 'fs'
+import path from 'path'
 
 export { World }
 
@@ -118,6 +120,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
   await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
 
   createdLinkStore.clear()
+  removeDirectory()
 })
 
 AfterAll(() => state.browser && state.browser.close())
@@ -172,4 +175,11 @@ const cleanUpGroup = async (adminUser: User) => {
 
   await Promise.all(requests)
   createdGroupStore.clear()
+}
+
+const removeDirectory = () => {
+  const folder_path = path.join(config.assets, '/multipleFiles')
+  if (fs.existsSync(folder_path)) {
+    fs.rmSync(folder_path, { recursive: true })
+  }
 }

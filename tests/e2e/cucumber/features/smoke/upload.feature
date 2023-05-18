@@ -3,13 +3,16 @@ Feature: Upload
   I want to upload resources
   So that I can store them in owncloud
 
-  Scenario: Upload resources in personal space
+  Background:
     Given "Admin" creates following user using API
       | id    |
       | Alice |
     And "Alice" logs in
     And "Alice" opens the "files" app
-    And "Alice" creates the following resources
+
+
+  Scenario: Upload resources in personal space
+    Given "Alice" creates the following resources
       | resource          | type    | content             |
       | new-lorem-big.txt | txtFile | new lorem big file  |
       | lorem.txt         | txtFile | lorem file          |
@@ -31,4 +34,11 @@ Feature: Upload
   #  And "Alice" uploads the following resources
   #    | resource |
   #    | PARENT   |
+    And "Alice" logs out
+
+
+  Scenario: upload multiple small files
+    When "Alice" uploads 50 small files in personal space
+    Then "Alice" should see the text "50 items with 250 B in total (50 files, 0 folders)" at the footer of the page
+    And "Alice" should see 50 resources in the personal space files view
     And "Alice" logs out
