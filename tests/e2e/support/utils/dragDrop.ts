@@ -17,16 +17,19 @@ export const dragDropFiles = async (page: Page, resources: File[], targetSelecto
     buffer: readFileSync(file.path)
   }))
 
-  await page.evaluate((files: FileBuffer[]) => {
-    const dropArea = document.querySelector(targetSelector)
-    const dt = new DataTransfer()
+  await page.evaluate(
+    ([files, targetSelector]: [FileBuffer[], string]) => {
+      const dropArea = document.querySelector(targetSelector)
+      const dt = new DataTransfer()
 
-    for (const file of files) {
-      dt.items.add(new File([file.buffer.toString()], file.name))
-    }
+      for (const file of files) {
+        dt.items.add(new File([file.buffer.toString()], file.name))
+      }
 
-    dropArea.dispatchEvent(new DragEvent('drop', { dataTransfer: dt }))
+      dropArea.dispatchEvent(new DragEvent('drop', { dataTransfer: dt }))
 
-    return Promise.resolve()
-  }, files)
+      return Promise.resolve()
+    },
+    [files, targetSelector]
+  )
 }
