@@ -24,6 +24,8 @@ import {
 import { User } from '../../support/types'
 import { Session } from '../../support/objects/runtime/session'
 import { createdTokenStore } from '../../support/store/token'
+import fs from 'fs'
+import path from 'path'
 
 export { World }
 
@@ -124,6 +126,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 
   createdLinkStore.clear()
   createdTokenStore.clear()
+  removeDirectory()
 })
 
 AfterAll(() => state.browser && state.browser.close())
@@ -189,4 +192,11 @@ const getAdminToken = async (browser: Browser) => {
 
   await page.close()
   await ctx.close()
+}
+
+const removeDirectory = () => {
+  const folder_path = path.join(config.assets, '/multipleFiles')
+  if (fs.existsSync(folder_path)) {
+    fs.rmSync(folder_path, { recursive: true })
+  }
 }
