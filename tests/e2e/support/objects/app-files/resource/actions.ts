@@ -1,12 +1,14 @@
 import { Download, Page } from 'playwright'
 import { expect } from '@playwright/test'
 import util from 'util'
-import { resourceExists, waitForResources } from './utils'
 import path from 'path'
-import { File, Space } from '../../../types'
+import { resourceExists, waitForResources } from './utils'
 import { sidebar } from '../utils'
+import { File, Space } from '../../../types'
+import { dragDropFiles } from '../../../utils/dragDrop'
 import { config } from '../../../../config'
 
+const filesView = '#files-view'
 const downloadFileButtonSideBar =
   '#oc-files-actions-sidebar .oc-files-actions-download-file-trigger'
 const downloadFolderButtonSidedBar =
@@ -30,6 +32,8 @@ const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
+const uploadInfoSuccessLabelSelector = '.upload-info-success'
+const uploadInfoShowDetailsButton = '.upload-info-toggle-details-btn'
 const uploadInfoCloseButton = '#close-upload-info-btn'
 const filesAction = `.oc-files-actions-%s-trigger`
 const pasteButton = '.paste-files-btn'
@@ -322,6 +326,20 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
       names: resources.map((file) => path.basename(file.name))
     })
   }
+}
+
+export const dropUploadFiles = async (args: uploadResourceArgs): Promise<void> => {
+  const { page, resources } = args
+
+  await dragDropFiles(page, resources, filesView)
+
+  await page.waitForSelector(uploadInfoSuccessLabelSelector)
+  await page.locator(uploadInfoShowDetailsButton).click()
+  await Promise.all(
+    resources.map((file) =>
+      page.waitForSelector(util.format(resourceNameSelector, path.basename(file.name)))
+    )
+  )
 }
 
 /**/
