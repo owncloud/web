@@ -5,6 +5,7 @@
         v-for="(item, index) in displayItems"
         :key="index"
         :data-key="index"
+        :data-id="item.id"
         :class="[
           'oc-breadcrumb-list-item',
           'oc-flex',
@@ -93,17 +94,7 @@
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  PropType,
-  ref,
-  unref,
-  watch
-} from 'vue'
+import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 import { AVAILABLE_SIZES } from '../../helpers/constants'
@@ -186,23 +177,22 @@ export default defineComponent({
   },
   setup(props) {
     const { $gettext } = useGettext()
-    const visibleItems = ref([])
-    const hiddenItems = ref([])
-    const displayItems = ref(props.items.slice())
+    const visibleItems = ref<BreadcrumbItem[]>([])
+    const hiddenItems = ref<BreadcrumbItem[]>([])
+    const displayItems = ref<BreadcrumbItem[]>(props.items.slice())
 
-    const getBreadcrumbElement = (key): HTMLElement => {
-      return document.querySelector(`[data-key="${key}"]`)
+    const getBreadcrumbElement = (id): HTMLElement => {
+      return document.querySelector(`[data-id="${id}"]`)
     }
 
     const calculateTotalBreadcrumbWidth = () => {
       let totalBreadcrumbWidth = 0
       visibleItems.value.forEach((item, index) => {
-        const breadcrumbElement = getBreadcrumbElement(index)
-        const itemClientWidth = breadcrumbElement?.offsetWidth + 10
-        const itemWidth = itemClientWidth
-        totalBreadcrumbWidth += itemWidth
+        const breadcrumbElement = getBreadcrumbElement(item.id)
+        const itemClientWidth = breadcrumbElement?.getBoundingClientRect()?.width || 0
+        totalBreadcrumbWidth += itemClientWidth
       })
-      return totalBreadcrumbWidth
+      return totalBreadcrumbWidth + 100
     }
 
     const reduceBreadcrumb = (offsetIndex) => {
@@ -242,7 +232,9 @@ export default defineComponent({
       hiddenItems.value = []
 
       nextTick(() => {
-        reduceBreadcrumb(2)
+        nextTick(() => {
+          reduceBreadcrumb(2)
+        })
       })
     }
 
@@ -256,11 +248,6 @@ export default defineComponent({
     )
     onMounted(() => {
       renderBreadcrumb()
-      window.addEventListener('resize', renderBreadcrumb)
-    })
-
-    onBeforeUnmount(() => {
-      window.removeEventListener('resize', renderBreadcrumb)
     })
 
     const currentFolder = computed<BreadcrumbItem>(() => {

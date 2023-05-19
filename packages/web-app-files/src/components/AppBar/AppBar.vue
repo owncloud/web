@@ -18,7 +18,7 @@
           context-menu-padding="small"
           :show-context-actions="showContextActions"
           :items="breadcrumbs"
-          :max-width="maxWidth"
+          :max-width="breadcrumbMaxWidth"
         >
           <template #contextMenu>
             <context-actions
@@ -95,7 +95,6 @@ import {
 import { useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
-import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
 
 export default defineComponent({
   components: {
@@ -133,8 +132,7 @@ export default defineComponent({
       default: null
     }
   },
-  emits: [EVENT_ITEM_DROPPED],
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
@@ -148,7 +146,7 @@ export default defineComponent({
     const { actions: moveActions } = useFileActionsMove({ store })
     const { actions: restoreActions } = useFileActionsRestore({ store })
 
-    const maxWidth = ref<number>(0)
+    const breadcrumbMaxWidth = ref<number>(0)
 
     const batchActions = computed(() => {
       return [
@@ -195,7 +193,7 @@ export default defineComponent({
       batchActions,
       showBreadcrumb,
       showMobileNav,
-      maxWidth
+      breadcrumbMaxWidth
     }
   },
   data: function () {
@@ -236,9 +234,11 @@ export default defineComponent({
   },
   mounted() {
     this.resizeObserver.observe(this.$refs.filesAppBar as HTMLElement)
+    window.addEventListener('resize', this.onResize)
   },
   beforeUnmount() {
     this.resizeObserver.unobserve(this.$refs.filesAppBar as HTMLElement)
+    window.removeEventListener('resize', this.onResize)
   },
 
   created() {
@@ -263,10 +263,21 @@ export default defineComponent({
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
 
     onResize() {
-      const leftControlsWidth = document.getElementById('files-app-bar-controls-right')?.clientWidth
-      const appBarTotalWidth =
-        document.getElementById('files-view')?.parentElement?.clientWidth - leftControlsWidth
-      this.maxWidth = appBarTotalWidth - leftControlsWidth
+      const totalContentWidth = document
+        .getElementById('web-content-main')
+        .getBoundingClientRect().width
+      const leftSidebarWidth = document
+        .getElementById('web-nav-sidebar')
+        .getBoundingClientRect().width
+      const rightSidebarWidth =
+        document.getElementById('app-sidebar')?.getBoundingClientRect().width || 0
+
+      const rightControlsWidth = document.getElementById(
+        'files-app-bar-controls-right'
+      )?.clientWidth
+
+      this.breadcrumbMaxWidth =
+        totalContentWidth - leftSidebarWidth - rightSidebarWidth - rightControlsWidth
       this.limitedScreenSpace = this.sideBarOpen
         ? window.innerWidth <= 1280
         : window.innerWidth <= 1000

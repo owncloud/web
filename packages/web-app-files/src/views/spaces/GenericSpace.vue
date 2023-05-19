@@ -186,6 +186,7 @@ import { FolderLoaderOptions } from '../../services/folder'
 import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { displayPositionedDropdown } from 'web-pkg/src'
+import { v4 as uuidv4 } from 'uuid'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -282,16 +283,19 @@ export default defineComponent({
       const rootBreadcrumbItems: BreadcrumbItem[] = []
       if (isProjectSpaceResource(space)) {
         rootBreadcrumbItems.push({
+          id: uuidv4(),
           text: $gettext('Spaces'),
           to: createLocationSpaces('files-spaces-projects')
         })
       } else if (isShareSpaceResource(space)) {
         rootBreadcrumbItems.push(
           {
+            id: uuidv4(),
             text: $gettext('Shares'),
             to: { path: '/files/shares' }
           },
           {
+            id: uuidv4(),
             text: $gettext('Shared with me'),
             to: { path: '/files/shares/with-me' }
           }
@@ -303,6 +307,7 @@ export default defineComponent({
       query = omit({ ...unref(route).query, ...query }, 'page')
       if (isPersonalSpaceResource(space)) {
         spaceBreadcrumbItem = {
+          id: uuidv4(),
           text: space.name,
           to: createLocationSpaces('files-spaces-generic', {
             params,
@@ -311,6 +316,7 @@ export default defineComponent({
         }
       } else if (isShareSpaceResource(space)) {
         spaceBreadcrumbItem = {
+          id: uuidv4(),
           allowContextActions: true,
           text: space.name,
           to: createLocationSpaces('files-spaces-generic', {
@@ -320,6 +326,7 @@ export default defineComponent({
         }
       } else if (isPublicSpaceResource(space)) {
         spaceBreadcrumbItem = {
+          id: uuidv4(),
           text: $gettext('Public link'),
           to: createLocationPublic('files-public-link', {
             params,
@@ -328,6 +335,7 @@ export default defineComponent({
         }
       } else {
         spaceBreadcrumbItem = {
+          id: uuidv4(),
           allowContextActions: !unref(hasSpaceHeader),
           text: space.name,
           to: createLocationSpaces('files-spaces-generic', {
