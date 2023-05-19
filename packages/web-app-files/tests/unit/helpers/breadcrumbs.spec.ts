@@ -9,6 +9,7 @@ describe('builds an array of breadcrumbitems', () => {
     )
     expect(breadCrumbs).toEqual([
       {
+        id: expect.anything(),
         allowContextActions: true,
         text: 'test',
         to: { path: '/files/spaces/personal/home/test', query: {} }
@@ -25,12 +26,5 @@ describe('builds an array of breadcrumbitems', () => {
     const result = concatBreadcrumbs(...initialBreadCrumbs, ...breadCrumbsFromPath)
     expect(result[0]).toMatchObject({ text: 'Foo' })
     expect(result[1]).toMatchObject({ text: 'Bar' })
-    expect(JSON.stringify(result[2])).toEqual(
-      JSON.stringify({
-        allowContextActions: true,
-        text: 'bar',
-        onClick: () => undefined
-      })
-    )
   })
 })

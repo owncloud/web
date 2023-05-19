@@ -192,7 +192,7 @@ export default defineComponent({
         const itemClientWidth = breadcrumbElement?.getBoundingClientRect()?.width || 0
         totalBreadcrumbWidth += itemClientWidth
       })
-      return totalBreadcrumbWidth + 100
+      return totalBreadcrumbWidth + 100 // 100px margin to the right to avoid breadcrumb from getting too close to the controls
     }
 
     const reduceBreadcrumb = (offsetIndex) => {
