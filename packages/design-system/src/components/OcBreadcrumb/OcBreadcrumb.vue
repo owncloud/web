@@ -354,6 +354,8 @@ export default defineComponent({
       font-size: var(--oc-font-size-medium);
       color: var(--oc-color-text-default);
       display: inline-block;
+      vertical-align: sub;
+      line-height: normal;
     }
   }
 
