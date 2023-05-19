@@ -7,7 +7,7 @@ import { config } from '../../../config'
 import { displayedResourceType } from '../../../support/objects/app-files/resource/actions'
 import { Public } from '../../../support/objects/app-files/page/public'
 import { Resource } from '../../../support/objects/app-files'
-import createResourceOnRuntime from '../../../support/utils/createResourceOnRuntime'
+import createTempResources from '../../../support/utils/createTempResources'
 
 When(
   '{string} creates the following resource(s)',
@@ -27,7 +27,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
-      await resourceObject.upload({
+      await resourceObject.uploadAtOnce({
         to: info.to,
         resources: [this.filesEnvironment.getFile({ name: info.resource })],
         option: info.option
@@ -605,20 +605,13 @@ When(
 When(
   '{string} uploads {int} small files in personal space',
   async function (this: World, stepUser: string, numberOfFiles: number): Promise<void> {
-    createResourceOnRuntime(numberOfFiles)
+    const files = createTempResources(numberOfFiles)
+      .map((file) => this.filesEnvironment.getFile({ name: file }))
+      .reverse()
 
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    for (let i = 1; i <= numberOfFiles; i++) {
-      await resourceObject.upload({
-        to: null,
-        resources: [
-          this.filesEnvironment.getFile({
-            name: `multipleFiles/file${i}.txt`
-          })
-        ],
-        option: null
-      })
-    }
+
+    await resourceObject.uploadOneAtATime({ resources: files })
   }
 )
