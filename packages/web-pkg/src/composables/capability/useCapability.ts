@@ -64,13 +64,14 @@ export const useCapabilityCreateUsersDisabled = createCapabilityComposable(
   'graph.users.create_disabled',
   false
 )
-export const useCapabilityChangeSelfPasswordDisabled = createCapabilityComposable(
-  'graph.users.change_password_self_disabled',
-  false
-)
 
 export const useCapabilityDeleteUsersDisabled = createCapabilityComposable(
   'graph.users.delete_disabled',
+  false
+)
+
+export const useCapabilityChangeSelfPasswordDisabled = createCapabilityComposable(
+  'graph.users.change_password_self_disabled',
   false
 )
 
