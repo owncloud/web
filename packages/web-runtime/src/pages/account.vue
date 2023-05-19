@@ -12,7 +12,7 @@
         <oc-button
           v-if="!isChangePasswordDisabled"
           variation="primary"
-          data-testid="account-page-edit-url-btn"
+          data-testid="account-page-edit-password-btn"
           @click="showEditPasswordModal"
         >
           <oc-icon name="lock" />

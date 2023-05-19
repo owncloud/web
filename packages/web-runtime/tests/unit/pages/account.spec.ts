@@ -24,6 +24,7 @@ const selectors = {
   pageTitle: '.oc-page-title',
   loaderStub: 'oc-spinner-stub',
   editUrlButton: '[data-testid="account-page-edit-url-btn"]',
+  editPasswordButton: '[data-testid="account-page-edit-password-btn"]',
   accountPageInfo: '.account-page-info',
   groupNames: '[data-testid="group-names"]',
   groupNamesEmpty: '[data-testid="group-names-empty"]',
@@ -60,6 +61,23 @@ describe('account page', () => {
         })
         const editUrlButton = wrapper.find(selectors.editUrlButton)
         expect(editUrlButton.exists()).toBeFalsy()
+      })
+    })
+
+    describe('change password button', () => {
+      it('should be displayed if not disabled via capability', () => {
+        const { wrapper } = getWrapper({
+          capabilities: { graph: { users: { change_password_self_disabled: false } } }
+        })
+        const editPasswordButton = wrapper.find(selectors.editPasswordButton)
+        expect(editPasswordButton.exists()).toBeTruthy()
+      })
+      it('should not be displayed if disabled via capability', () => {
+        const { wrapper } = getWrapper({
+          capabilities: { graph: { users: { change_password_self_disabled: true } } }
+        })
+        const editPasswordButton = wrapper.find(selectors.editPasswordButton)
+        expect(editPasswordButton.exists()).toBeFalsy()
       })
     })
   })
@@ -142,6 +160,7 @@ describe('account page', () => {
       expect(showMessageStub).toHaveBeenCalled()
     })
   })
+
   describe('Logout from all devices link', () => {
     it('should render the logout from active devices if logoutUrl is provided', () => {
       const { wrapper } = getWrapper()
