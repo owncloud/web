@@ -161,7 +161,6 @@ export default defineComponent({
 
     // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = useCapabilitySpacesEnabled()
-    const isChangePasswordEnabled = useCapabilitySpacesEnabled()
     const spacesEnabled = useCapabilitySpacesEnabled()
     const isChangePasswordDisabled = useCapabilityChangeSelfPasswordDisabled()
     const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
