@@ -10,7 +10,7 @@
           @confirm="editPassword"
         ></edit-password-modal>
         <oc-button
-          v-if="isChangePasswordEnabled"
+          v-if="!isChangePasswordDisabled"
           variation="primary"
           data-testid="account-page-edit-url-btn"
           @click="showEditPasswordModal"
@@ -127,6 +127,7 @@ import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
+  useCapabilityChangeSelfPasswordDisabled,
   useCapabilityGraphPersonalDataExport,
   useCapabilitySpacesEnabled,
   useClientService,
@@ -160,7 +161,7 @@ export default defineComponent({
 
     // FIXME: Use graph capability when we have it
     const isSettingsServiceSupported = useCapabilitySpacesEnabled()
-    const isChangePasswordEnabled = useCapabilitySpacesEnabled()
+    const isChangePasswordDisabled = useCapabilityChangeSelfPasswordDisabled()
     const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
     const user = computed(() => {
       return store.getters.user
@@ -359,7 +360,7 @@ export default defineComponent({
       updateSelectedLanguage,
       updateDisableEmailNotifications,
       accountEditLink: store.getters.configuration?.options?.accountEditLink,
-      isChangePasswordEnabled,
+      isChangePasswordDisabled,
       showGdprExport,
       isSettingsServiceSupported,
       groupNames,
