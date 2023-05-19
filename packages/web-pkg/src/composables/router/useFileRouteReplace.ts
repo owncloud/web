@@ -1,9 +1,7 @@
-import { useRouter } from './useRouter'
-import { useConfigurationManager } from '../configuration'
+import { ConfigurationManager, useConfigurationManager, useRouter } from 'web-pkg'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from '../../helpers/router'
 import { Router } from 'vue-router'
-import { ConfigurationManager } from '../../configuration'
 
 export interface FileRouteReplaceOptions {
   router?: Router
@@ -14,7 +12,7 @@ export const useFileRouteReplace = (options: FileRouteReplaceOptions = {}) => {
   const router = options.router || useRouter()
   const configurationManager = options.configurationManager || useConfigurationManager()
 
-  const replaceInvalidFileRoute = ({
+  const replaceInvalidFileRoute = async ({
     space,
     resource,
     path,
@@ -24,7 +22,7 @@ export const useFileRouteReplace = (options: FileRouteReplaceOptions = {}) => {
     resource: Resource
     path: string
     fileId?: string | number
-  }): boolean => {
+  }): Promise<boolean> => {
     if (!configurationManager?.options?.routing?.idBased) {
       return false
     }
@@ -35,7 +33,7 @@ export const useFileRouteReplace = (options: FileRouteReplaceOptions = {}) => {
     const routeOptions = createFileRouteOptions(space, resource, {
       configurationManager
     })
-    router.replace(routeOptions)
+    await router.replace(routeOptions)
     return true
   }
 

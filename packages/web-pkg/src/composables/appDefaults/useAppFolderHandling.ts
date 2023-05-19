@@ -51,7 +51,7 @@ export function useAppFolderHandling({
       const pathResource = await getFileInfo(context, {
         davProperties: [DavProperty.FileId]
       })
-      replaceInvalidFileRoute({
+      await replaceInvalidFileRoute({
         space,
         resource: pathResource,
         path: unref(context.item),
