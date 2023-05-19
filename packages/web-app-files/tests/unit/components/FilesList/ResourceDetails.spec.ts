@@ -12,8 +12,6 @@ import { useFileActions } from 'web-app-files/src/composables/actions/files/useF
 import { SpaceResource } from 'web-client'
 import { useRouteQuery } from 'web-pkg'
 import { ref } from 'vue'
-import { Action } from 'vuex'
-import { fileActions } from 'web-app-files/tests/__fixtures__/fileActions'
 
 jest.mock('web-app-files/src/composables/actions/files/useFileActions')
 jest.mock('web-pkg/src/composables/router', () => ({
