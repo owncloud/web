@@ -56,7 +56,7 @@ export const useCapabilityProjectSpacesEnabled = createCapabilityComposable(
 export const useCapabilityShareJailEnabled = createCapabilityComposable('spaces.share_jail', false)
 
 export const useCapabilityReadOnlyUserAttributes = createCapabilityComposable(
-  'graph.users.read_only_user_attributes',
+  'graph.users.read_only_attributes',
   []
 )
 
