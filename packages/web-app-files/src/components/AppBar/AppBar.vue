@@ -263,12 +263,10 @@ export default defineComponent({
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
 
     onResize() {
-      const totalContentWidth = document
-        .getElementById('web-content-main')
-        .getBoundingClientRect().width
-      const leftSidebarWidth = document
-        .getElementById('web-nav-sidebar')
-        .getBoundingClientRect().width
+      const totalContentWidth =
+        document.getElementById('web-content-main')?.getBoundingClientRect().width || 0
+      const leftSidebarWidth =
+        document.getElementById('web-nav-sidebar')?.getBoundingClientRect().width || 0
       const rightSidebarWidth =
         document.getElementById('app-sidebar')?.getBoundingClientRect().width || 0
 
