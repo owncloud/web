@@ -19,13 +19,14 @@ import {
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 import { useArchiverService } from 'web-app-files/src/composables/archiverService'
+import { formatFileSize } from 'web-pkg/src/helpers/filesize'
 
 export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const loadingService = useLoadingService()
   const archiverService = useArchiverService()
-  const { $ngettext, $gettext } = useGettext()
+  const { $ngettext, $gettext, interpolate: $gettextInterpolate, current } = useGettext()
   const publicLinkPassword = usePublicLinkPassword({ store })
   const isFilesAppActive = useIsFilesAppActive()
 
@@ -59,6 +60,20 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
       })
   }
 
+  const areArchiverLimitsExceeded = (resources: Resource[]) => {
+    const archiverCapabilities = archiverService.capability
+    if (!archiverCapabilities) {
+      return
+    }
+
+    const selectedFilesSize = resources.reduce(
+      (accumulator, currentValue) => accumulator + parseInt(`${currentValue.size}`),
+      0
+    )
+
+    return selectedFilesSize > parseInt(archiverCapabilities.max_size)
+  }
+
   const actions = computed((): FileAction[] => {
     return [
       {
@@ -68,6 +83,17 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
         label: () => {
           return $gettext('Download')
         },
+        disabledTooltip: ({ resources }) => {
+          return areArchiverLimitsExceeded(resources)
+            ? $gettextInterpolate(
+                $gettext('The selection exceeds the allowed archive size (max. %{maxSize})'),
+                {
+                  maxSize: formatFileSize(archiverService.capability.max_size, current)
+                }
+              )
+            : ''
+        },
+        isDisabled: ({ resources }) => areArchiverLimitsExceeded(resources),
         isEnabled: ({ resources }) => {
           if (
             unref(isFilesAppActive) &&

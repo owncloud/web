@@ -29,6 +29,7 @@ export interface Action<T = ActionOptions> {
 
   // can be used to display the action in a disabled state in the UI
   isDisabled?(options?: T): boolean
+  disabledTooltip?(options?: T): string
 }
 
 export type FileActionOptions = {

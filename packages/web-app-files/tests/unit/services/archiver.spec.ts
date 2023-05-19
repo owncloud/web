@@ -40,7 +40,9 @@ describe('archiver', () => {
         enabled: true,
         version: 'v2.3.5',
         archiver_url: archiverUrl,
-        formats: []
+        formats: [],
+        max_num_files: '42',
+        max_size: '1073741824'
       }
     ]
 
@@ -72,7 +74,9 @@ describe('archiver', () => {
         enabled: true,
         version: 'v1.2.3',
         archiver_url: archiverUrl,
-        formats: []
+        formats: [],
+        max_num_files: '42',
+        max_size: '1073741824'
       }
     ]
     it('is announcing itself as not supporting fileIds', () => {
@@ -105,19 +109,25 @@ describe('archiver', () => {
       enabled: true,
       version: 'v1.2.3',
       archiver_url: archiverUrl + '/v1',
-      formats: []
+      formats: [],
+      max_num_files: '42',
+      max_size: '1073741824'
     }
     const capabilityV2 = {
       enabled: true,
       version: 'v2.3.5',
       archiver_url: archiverUrl + '/v2',
-      formats: []
+      formats: [],
+      max_num_files: '42',
+      max_size: '1073741824'
     }
     const capabilityV3 = {
       enabled: false,
       version: 'v3.2.5',
       archiver_url: archiverUrl + '/v3',
-      formats: []
+      formats: [],
+      max_num_files: '42',
+      max_size: '1073741824'
     }
 
     it('uses the highest major version', async () => {

@@ -1,10 +1,11 @@
 <template>
-  <li>
+  <li v-oc-tooltip="componentProps.disabled ? action.disabledTooltip(actionOptions) : ''">
     <oc-button
       v-oc-tooltip="showTooltip || action.hideLabel ? action.label(actionOptions) : ''"
       :type="action.componentType"
       v-bind="componentProps"
       :class="[action.class, 'action-menu-item', 'oc-py-s', 'oc-px-m', 'oc-width-1-1']"
+      :aria-label="componentProps.disabled ? action.disabledTooltip(actionOptions) : ''"
       data-testid="action-handler"
       size="small"
       justify-content="left"
@@ -35,8 +36,9 @@
         v-if="!action.hideLabel"
         class="oc-files-context-action-label"
         data-testid="action-label"
-        >{{ action.label(actionOptions) }}</span
       >
+        {{ action.label(actionOptions) }}
+      </span>
       <span
         v-if="action.shortcut && shortcutHint"
         class="oc-files-context-action-shortcut"

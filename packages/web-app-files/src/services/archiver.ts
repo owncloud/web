@@ -17,6 +17,8 @@ export interface ArchiverCapability {
   formats: string[]
   // eslint-disable-next-line camelcase
   archiver_url: string
+  max_num_files: string
+  max_size: string
 }
 
 interface TriggerDownloadOptions {
