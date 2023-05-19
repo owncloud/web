@@ -56,8 +56,22 @@ export const useCapabilityProjectSpacesEnabled = createCapabilityComposable(
 export const useCapabilityShareJailEnabled = createCapabilityComposable('spaces.share_jail', false)
 
 export const useCapabilityReadOnlyUserAttributes = createCapabilityComposable(
-  'graph.read_only_user_attributes',
+  'graph.users.read_only_user_attributes',
   []
+)
+
+export const useCapabilityCreateUsersDisabled = createCapabilityComposable(
+  'graph.users.create_disabled',
+  false
+)
+export const useCapabilityChangeSelfPasswordDisabled = createCapabilityComposable(
+  'graph.users.change_password_self_disabled',
+  false
+)
+
+export const useCapabilityDeleteUsersDisabled = createCapabilityComposable(
+  'graph.users.delete_disabled',
+  false
 )
 
 export const useCapabilityFilesFavorites = createCapabilityComposable('files.favorites', false)
