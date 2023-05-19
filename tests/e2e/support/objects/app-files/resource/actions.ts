@@ -327,6 +327,13 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
   }
 }
 
+export const uploadResourceOneAtATime = async (args: uploadResourceArgs): Promise<void> => {
+  const { page, resources } = args
+  for (const resource of resources) {
+    await uploadResource({ page, resources: [resource] })
+  }
+}
+
 export const dropUploadFiles = async (args: uploadResourceArgs): Promise<void> => {
   const { page, resources } = args
 

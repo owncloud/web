@@ -10,6 +10,7 @@ import {
 } from '@cucumber/cucumber'
 import pino from 'pino'
 import { Browser, chromium, firefox, webkit } from 'playwright'
+import fs from 'fs'
 
 import { config } from '../../config'
 import { api, environment } from '../../support'
@@ -24,8 +25,6 @@ import {
 import { User } from '../../support/types'
 import { Session } from '../../support/objects/runtime/session'
 import { createdTokenStore } from '../../support/store/token'
-import fs from 'fs'
-import path from 'path'
 
 export { World }
 
@@ -126,7 +125,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 
   createdLinkStore.clear()
   createdTokenStore.clear()
-  removeDirectory()
+  removeTempUploadDirectory()
 })
 
 AfterAll(() => state.browser && state.browser.close())
@@ -194,9 +193,8 @@ const getAdminToken = async (browser: Browser) => {
   await ctx.close()
 }
 
-const removeDirectory = () => {
-  const folder_path = path.join(config.assets, '/multipleFiles')
-  if (fs.existsSync(folder_path)) {
-    fs.rmSync(folder_path, { recursive: true })
+const removeTempUploadDirectory = () => {
+  if (fs.existsSync(config.tempAssetsPath)) {
+    fs.rmSync(config.tempAssetsPath, { recursive: true })
   }
 }
