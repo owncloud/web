@@ -154,6 +154,7 @@ Summary
 * Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
 * Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
 * Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
+* Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
 
 Details
 -------
@@ -1439,6 +1440,15 @@ Details
 
    https://github.com/owncloud/web/issues/9054
    https://github.com/owncloud/web/pull/9044
+
+* Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
+
+   The archiver service announces a limit for the accumulated filesize of the currently selected
+   resources. The web UI now respects those limits and shows a disabled download button once the
+   limit has been reached.
+
+   https://github.com/owncloud/web/issues/8456
+   https://github.com/owncloud/web/pull/9055
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
