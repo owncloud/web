@@ -20,6 +20,7 @@ import { WebDAV } from 'web-client/src/webdav'
 import { ClientService } from 'web-pkg/src/services'
 import { Language } from 'vue3-gettext'
 import { DavProperty } from 'web-client/src/webdav/constants'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 
 const allowSharePermissions = (getters) => {
   return (
@@ -136,6 +137,9 @@ export default {
           field: 'starred',
           value: newValue
         })
+        if (!newValue) {
+          eventBus.publish('app.files.list.removeFromFavorites')
+        }
       })
       .catch((error) => {
         throw new Error(error)
