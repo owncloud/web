@@ -12,6 +12,8 @@ import serve from 'rollup-plugin-serve'
 
 const distDir = 'dist'
 
+const certsDir = process.env.OWNCLOUD_CERTS_DIR
+
 export const defineConfig = (overrides = {}) => {
   return ({ mode }) => {
     const isProduction = mode === 'production'
@@ -39,7 +41,13 @@ export const defineConfig = (overrides = {}) => {
         server: {
           host,
           port,
-          strictPort: true
+          strictPort: true,
+          ...(certsDir && {
+            https: {
+              key: readFileSync(join(certsDir, 'server.key')),
+              cert: readFileSync(join(certsDir, 'server.crt'))
+            }
+          })
         },
         resolve: {
           alias: {
