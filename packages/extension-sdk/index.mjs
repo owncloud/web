@@ -13,6 +13,10 @@ import serve from 'rollup-plugin-serve'
 const distDir = 'dist'
 
 const certsDir = process.env.OWNCLOUD_CERTS_DIR
+const defaultHttps = certsDir && {
+  key: readFileSync(join(certsDir, 'server.key')),
+  cert: readFileSync(join(certsDir, 'server.crt'))
+}
 
 export const defineConfig = (overrides = {}) => {
   return ({ mode }) => {
@@ -27,7 +31,7 @@ export const defineConfig = (overrides = {}) => {
     const name = packageJson.name
 
     // take vite standard config and reuse it for rollup-plugin-serve config
-    const { https, port = 9210, host = 'localhost' } = overrides?.server
+    const { https = defaultHttps, port = 9210, host = 'localhost' } = overrides?.server || {}
     const isHttps = !!https
 
     if (isServing) {
@@ -42,12 +46,7 @@ export const defineConfig = (overrides = {}) => {
           host,
           port,
           strictPort: true,
-          ...(certsDir && {
-            https: {
-              key: readFileSync(join(certsDir, 'server.key')),
-              cert: readFileSync(join(certsDir, 'server.crt'))
-            }
-          })
+          ...(isHttps && https)
         },
         resolve: {
           alias: {
