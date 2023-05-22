@@ -18,7 +18,6 @@ import {
   restoreResourceVersion,
   resourceVersionArgs,
   uploadResource,
-  uploadResourceOneAtATime,
   uploadResourceArgs,
   dropUploadFiles,
   restoreResourceTrashbinArgs,
@@ -75,18 +74,9 @@ export class Resource {
     await this.#page.waitForSelector('#files-view')
   }
 
-  async uploadAtOnce(args: Omit<uploadResourceArgs, 'page'>): Promise<void> {
+  async upload(args: Omit<uploadResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await uploadResource({ ...args, page: this.#page })
-    await this.#page.goto(startUrl)
-    if (!config.ocis) {
-      await this.#page.locator('body').click()
-    }
-  }
-
-  async uploadOneAtATime(args: Omit<uploadResourceArgs, 'page'>): Promise<void> {
-    const startUrl = this.#page.url()
-    await uploadResourceOneAtATime({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     if (!config.ocis) {
       await this.#page.locator('body').click()
