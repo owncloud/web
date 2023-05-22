@@ -89,6 +89,7 @@ import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 import { useStore } from 'web-pkg/src/composables'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -149,10 +150,19 @@ export default defineComponent({
   async created() {
     await this.loadResourcesTask.perform()
     this.scrollToResourceFromRoute(this.paginatedResources)
+
+    this.loadResourcesEventToken = eventBus.subscribe(
+      'app.files.list.removeFromFavorites',
+      async () => {
+        await this.loadResourcesTask.perform()
+        this.scrollToResourceFromRoute(this.paginatedResources)
+      }
+    )
   },
 
   beforeUnmount() {
     visibilityObserver.disconnect()
+    eventBus.unsubscribe('app.files.list.removeFromFavorites', this.loadResourcesEventToken)
   },
 
   methods: {
