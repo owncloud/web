@@ -50,7 +50,17 @@ export const defineConfig = (overrides = {}) => {
           cssCodeSplit: true,
           minify: isProduction,
           rollupOptions: {
-            external: ['vue', 'vuex', 'luxon', 'web-pkg', 'web-client', 'vue3-gettext'],
+            external: [
+              'vue',
+              'vuex',
+              'luxon',
+              'vue3-gettext',
+
+              '@ownclouders/web-client',
+              '@ownclouders/web-pkg',
+              'web-client',
+              'web-pkg'
+            ],
             preserveEntrySignatures: 'strict',
             input: {
               [name]: './src/index.ts'
