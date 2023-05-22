@@ -20,7 +20,7 @@ const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
 const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//input`
 export const fileRow =
   '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
-export const resourceNameSelector = `[data-test-resource-name="%s"]`
+export const resourceNameSelector = `#files-space-table [data-test-resource-name="%s"]`
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
@@ -32,8 +32,6 @@ const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
-const uploadInfoSuccessLabelSelector = '.upload-info-success'
-const uploadInfoShowDetailsButton = '.upload-info-toggle-details-btn'
 const uploadInfoCloseButton = '#close-upload-info-btn'
 const filesAction = `.oc-files-actions-%s-trigger`
 const pasteButton = '.paste-files-btn'
@@ -333,8 +331,7 @@ export const dropUploadFiles = async (args: uploadResourceArgs): Promise<void> =
 
   await dragDropFiles(page, resources, filesView)
 
-  await page.waitForSelector(uploadInfoSuccessLabelSelector)
-  await page.locator(uploadInfoShowDetailsButton).click()
+  await page.locator(uploadInfoCloseButton).click()
   await Promise.all(
     resources.map((file) =>
       page.waitForSelector(util.format(resourceNameSelector, path.basename(file.name)))

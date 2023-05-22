@@ -16,7 +16,7 @@ import {
 
 const passwordInput = 'input[type="password"]'
 const fileUploadInput = '//input[@id="files-file-upload-input"]'
-const resourceNameSelector = '[data-test-resource-name="%s"]'
+const resourceNameSelector = '.upload-info-items [data-test-resource-name="%s"]'
 const toggleUploadDetailsButton = '.upload-info-toggle-details-btn'
 const uploadInfoSuccessLabelSelector = '.upload-info-success'
 const publicLinkAuthorizeButton = '.oc-login-authorize-button'
