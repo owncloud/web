@@ -27,6 +27,7 @@ Feature: Share by public link with different roles
     #   | name        | Link           |
     # And a link named "Link" should be listed with role "<role>" in the public link list of folder "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
     Examples:
       | role   | permissions |
@@ -47,6 +48,7 @@ Feature: Share by public link with different roles
       | name        | Link           |
     And a link named "Link" should be listed with role "<displayed-role>" in the public link list of folder "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
     Examples:
       | role        | displayed-role                  | permissions                  |
@@ -68,6 +70,7 @@ Feature: Share by public link with different roles
       | permissions | <permissions>  |
       | path        | /simple-folder |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
     Examples:
       | role        | permissions                  |
@@ -156,6 +159,7 @@ Feature: Share by public link with different roles
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     Then it should not be possible to delete file "lorem.txt" as single share using the webUI
 
 
@@ -163,6 +167,7 @@ Feature: Share by public link with different roles
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user uploads file "new-lorem.txt" using the webUI
+    And the user closes the text editor using the webUI
     Then file "new-lorem.txt" should be listed on the webUI as single share
     And as "Alice" file "simple-folder/new-lorem.txt" should exist in the server
 
@@ -203,9 +208,9 @@ Feature: Share by public link with different roles
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     And the user uploads file "new-lorem.txt" using the webUI
+    And the user closes the text editor using the webUI
     Then file "new-lorem.txt" should be listed on the webUI as single share
     And as "Alice" file "simple-folder/new-lorem.txt" should exist in the server
-
 
   Scenario: creating a public link with "Editor" role makes it possible to upload files inside a subdirectory
     Given user "Alice" has created folder "simple-folder/simple-empty-folder" in the server

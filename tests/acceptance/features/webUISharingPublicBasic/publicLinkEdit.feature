@@ -69,6 +69,7 @@ Feature: Edit public link shares
       | password    | pass123       |
     When the user renames the public link named "Public-link" of folder "simple-folder" to "simple-folder Share"
     And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
 
 
@@ -83,6 +84,7 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the password to "qwertyui"
     And the public uses the webUI to access the last public link created by user "Alice" with password "qwertyui" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
 
   @issue-3830
@@ -110,6 +112,7 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the role to "Viewer"
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
     And it should not be possible to delete file "lorem.txt" as single share using the webUI
 
@@ -156,6 +159,7 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the role to "Contributor"
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     And the user uploads file "lorem.txt" using the webUI
     Then file "simple.txt" should be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
@@ -169,4 +173,5 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user tries to edit the public link named "Public-link" of folder "lorem.txt" adding a password "pass123"
     And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
