@@ -22,103 +22,106 @@
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
-        <not-found-message
-          v-if="folderNotFound"
-          :space="space"
-          class="files-not-found oc-height-1-1"
-        />
-        <space-header
-          v-else-if="hasSpaceHeader"
-          :space="space"
-          :side-bar-open="sideBarOpen"
-          class="oc-px-m oc-mt-m"
-        />
+        <not-found-message v-if="folderNotFound" :space="space" class="files-not-found" />
+        <template v-else>
+          <space-header
+            v-if="hasSpaceHeader"
+            :space="space"
+            :side-bar-open="sideBarOpen"
+            class="oc-px-m oc-mt-m"
+          />
 
-        <no-content-message v-if="isEmpty" id="files-space-empty" class="files-empty" icon="folder">
-          <template #message>
-            <span v-text="$gettext('No resources found')" />
-          </template>
-          <template #callToAction>
-            <span v-if="canUpload" class="file-empty-upload-hint" v-text="uploadHint" />
-          </template>
-        </no-content-message>
-        <resource-tiles
-          v-else-if="viewMode === ViewModeConstants.tilesView.name"
-          v-model:selectedIds="selectedResourcesIds"
-          :data="paginatedResources"
-          class="oc-px-m oc-pt-l"
-          :resizable="true"
-          :target-route-callback="resourceTargetRouteCallback"
-          :space="space"
-          :drag-drop="true"
-          :sort-fields="sortFields"
-          :sort-by="sortBy"
-          :sort-dir="sortDir"
-          :view-size="viewSize"
-          @row-mounted="rowMounted"
-          @file-click="triggerDefaultAction"
-          @file-dropped="fileDropped"
-          @sort="handleSort"
-        >
-          <template #contextMenuActions="{ resource }">
-            <context-actions :action-options="{ space, resources: [resource] }" />
-          </template>
-          <template #footer>
-            <pagination :pages="paginationPages" :current-page="paginationPage" />
-            <list-info
-              v-if="paginatedResources.length > 0"
-              class="oc-width-1-1 oc-my-s"
-              :files="totalFilesCount.files"
-              :folders="totalFilesCount.folders"
-              :size="totalFilesSize"
-            />
-          </template>
-        </resource-tiles>
-        <resource-table
-          v-else
-          id="files-space-table"
-          v-model:selectedIds="selectedResourcesIds"
-          class="files-table"
-          :class="{ 'files-table-squashed': sideBarOpen }"
-          :view-mode="viewMode"
-          :are-thumbnails-displayed="displayThumbnails"
-          :resources="paginatedResources"
-          :target-route-callback="resourceTargetRouteCallback"
-          :header-position="fileListHeaderY"
-          :drag-drop="true"
-          :sort-by="sortBy"
-          :sort-dir="sortDir"
-          :space="space"
-          @file-dropped="fileDropped"
-          @file-click="triggerDefaultAction"
-          @row-mounted="rowMounted"
-          @sort="handleSort"
-        >
-          <template #quickActions="{ resource }">
-            <quick-actions
-              :class="resource.preview"
-              class="oc-visible@s"
-              :item="resource"
-              :actions="app.quickActions"
-            />
-          </template>
-          <template #contextMenu="{ resource }">
-            <context-actions
-              v-if="isResourceInSelection(resource)"
-              :action-options="{ space, resources: selectedResources }"
-            />
-          </template>
-          <template #footer>
-            <pagination :pages="paginationPages" :current-page="paginationPage" />
-            <list-info
-              v-if="paginatedResources.length > 0"
-              class="oc-width-1-1 oc-my-s"
-              :files="totalFilesCount.files"
-              :folders="totalFilesCount.folders"
-              :size="totalFilesSize"
-            />
-          </template>
-        </resource-table>
+          <no-content-message
+            v-if="isEmpty"
+            id="files-space-empty"
+            class="files-empty"
+            icon="folder"
+          >
+            <template #message>
+              <span v-text="$gettext('No resources found')" />
+            </template>
+            <template #callToAction>
+              <span v-if="canUpload" class="file-empty-upload-hint" v-text="uploadHint" />
+            </template>
+          </no-content-message>
+          <resource-tiles
+            v-else-if="viewMode === ViewModeConstants.tilesView.name"
+            v-model:selectedIds="selectedResourcesIds"
+            :data="paginatedResources"
+            class="oc-px-m oc-pt-l"
+            :resizable="true"
+            :target-route-callback="resourceTargetRouteCallback"
+            :space="space"
+            :drag-drop="true"
+            :sort-fields="sortFields"
+            :sort-by="sortBy"
+            :sort-dir="sortDir"
+            :view-size="viewSize"
+            @row-mounted="rowMounted"
+            @file-click="triggerDefaultAction"
+            @file-dropped="fileDropped"
+            @sort="handleSort"
+          >
+            <template #contextMenuActions="{ resource }">
+              <context-actions :action-options="{ space, resources: [resource] }" />
+            </template>
+            <template #footer>
+              <pagination :pages="paginationPages" :current-page="paginationPage" />
+              <list-info
+                v-if="paginatedResources.length > 0"
+                class="oc-width-1-1 oc-my-s"
+                :files="totalFilesCount.files"
+                :folders="totalFilesCount.folders"
+                :size="totalFilesSize"
+              />
+            </template>
+          </resource-tiles>
+          <resource-table
+            v-else
+            id="files-space-table"
+            v-model:selectedIds="selectedResourcesIds"
+            class="files-table"
+            :class="{ 'files-table-squashed': sideBarOpen }"
+            :view-mode="viewMode"
+            :are-thumbnails-displayed="displayThumbnails"
+            :resources="paginatedResources"
+            :target-route-callback="resourceTargetRouteCallback"
+            :header-position="fileListHeaderY"
+            :drag-drop="true"
+            :sort-by="sortBy"
+            :sort-dir="sortDir"
+            :space="space"
+            @file-dropped="fileDropped"
+            @file-click="triggerDefaultAction"
+            @row-mounted="rowMounted"
+            @sort="handleSort"
+          >
+            <template #quickActions="{ resource }">
+              <quick-actions
+                :class="resource.preview"
+                class="oc-visible@s"
+                :item="resource"
+                :actions="app.quickActions"
+              />
+            </template>
+            <template #contextMenu="{ resource }">
+              <context-actions
+                v-if="isResourceInSelection(resource)"
+                :action-options="{ space, resources: selectedResources }"
+              />
+            </template>
+            <template #footer>
+              <pagination :pages="paginationPages" :current-page="paginationPage" />
+              <list-info
+                v-if="paginatedResources.length > 0"
+                class="oc-width-1-1 oc-my-s"
+                :files="totalFilesCount.files"
+                :folders="totalFilesCount.folders"
+                :size="totalFilesSize"
+              />
+            </template>
+          </resource-table>
+        </template>
       </template>
     </files-view-wrapper>
     <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
@@ -427,7 +430,7 @@ export default defineComponent({
     },
 
     folderNotFound() {
-      return this.currentFolder === null
+      return !this.currentFolder
     },
 
     displayThumbnails() {
