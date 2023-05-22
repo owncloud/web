@@ -27,7 +27,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
-      await resourceObject.uploadAtOnce({
+      await resourceObject.upload({
         to: info.to,
         resources: [this.filesEnvironment.getFile({ name: info.resource })],
         option: info.option
@@ -612,6 +612,6 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
-    await resourceObject.uploadOneAtATime({ resources: files })
+    await resourceObject.upload({ resources: files })
   }
 )
