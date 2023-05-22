@@ -6,6 +6,7 @@ import path from 'path'
 import { File, Space } from '../../../types'
 import { sidebar } from '../utils'
 import { config } from '../../../../config'
+import closeEditor from '../utils/closeEditor'
 
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
@@ -27,7 +28,6 @@ const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
 const createNewDrawioFileButton = '.new-file-btn-drawio'
 const saveTextFileInEditorButton = '#text-editor-controls-save:visible'
-const closeTextEditorOrViewerButton = '#app-top-bar-close'
 const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
@@ -264,7 +264,7 @@ export const editTextDocument = async ({
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
     page.locator(saveTextFileInEditorButton).click()
   ])
-  await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
+  await closeEditor(page)
   await page.waitForSelector(util.format(resourceNameSelector, name))
   await page.waitForSelector(fileRow)
 }
@@ -1044,7 +1044,7 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
     ])
   }
 
-  await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
+  await closeEditor(page)
 }
 
 export const checkThatFileVersionIsNotAvailable = async (

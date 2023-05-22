@@ -12,8 +12,6 @@ Feature: link
     And "Alice" uploads the following resources
       | resource  | to           |
       | lorem.txt | folderPublic |
-    #Then "Alice" should see the following resource
-    #  | folderPublic/lorem.txt |
     And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
     And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "uploader"
@@ -22,15 +20,9 @@ Feature: link
     #Then "Alice" should see 1 public link
     When "Anonymous" opens the public link "myPublicLink"
     And "Anonymous" unlocks the public link with password "12345"
-    #Then the public should not see the following resource
-    #  | lorem.txt |
     And "Anonymous" drop uploads following resources
       | resource     |
       | textfile.txt |
-    #Then the public should see the following files on the files-drop page
-    #  | textfile.txt |
-    #Then the public should not see the following files on the files-drop page
-    #  | textfile.txt |
     When "Alice" downloads the following resources using the batch action
       | resource     | from         | type |
       | lorem.txt    | folderPublic | file |
@@ -69,6 +61,7 @@ Feature: link
     And "Alice" opens the "files" app
     When "Alice" copies quick link of the resource "folderPublic" from the context menu
     And "Anonymous" opens the public link "Link"
+    And "Anonymous" closes the editor
     And "Anonymous" downloads the following public link resources using the single share view
       | resource  | type |
       | lorem.txt | file |

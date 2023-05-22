@@ -188,6 +188,7 @@ Feature: rename files
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     And the user renames single share "lorem.txt" to "a-renamed-file.txt" using the webUI
     Then file "a-renamed-file.txt" should be listed on the webUI as single share
     But file "lorem.txt" should not be listed on the webUI
