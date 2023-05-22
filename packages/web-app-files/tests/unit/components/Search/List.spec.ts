@@ -39,6 +39,19 @@ describe('List component', () => {
     await wrapper.vm.loadAvailableTagsTask.last
     expect(wrapper.emitted('search').length).toBeGreaterThan(0)
   })
+  describe('breadcrumbs', () => {
+    it('show "Search" when no search term given', () => {
+      const { wrapper } = getWrapper()
+      const appBar = wrapper.findComponent<any>('app-bar-stub')
+      expect(appBar.props('breadcrumbs')[0].text).toEqual('Search')
+    })
+    it('include the search term if given', () => {
+      const searchTerm = 'term'
+      const { wrapper } = getWrapper({ searchTerm })
+      const appBar = wrapper.findComponent<any>('app-bar-stub')
+      expect(appBar.props('breadcrumbs')[0].text).toContain(searchTerm)
+    })
+  })
   describe('filter', () => {
     describe('tags', () => {
       it('should show all available tags', async () => {

@@ -34,6 +34,14 @@
       >
         <oc-icon name="close" size="small" variation="passive" />
       </oc-button>
+      <oc-button
+        :aria-label="$gettext('Open advanced search')"
+        class="oc-advanced-search oc-position-small oc-position-center-right oc-mt-rm"
+        appearance="raw"
+        @click.prevent.stop="$emit('advancedSearch', $event)"
+      >
+        <oc-icon name="equalizer" size="small" variation="passive" />
+      </oc-button>
     </div>
     <div class="oc-search-button-wrapper" :class="{ 'oc-invisible-sr': buttonHidden }">
       <oc-button
@@ -60,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 
 import OcButton from '../OcButton/OcButton.vue'
 import OcGrid from '../OcGrid/OcGrid.vue'
@@ -226,10 +234,20 @@ export default defineComponent({
       default: () => {}
     }
   },
-  emits: ['clear', 'input', 'keyup', 'search'],
-  data: () => ({
-    query: ''
-  }),
+  emits: ['advancedSearch', 'clear', 'input', 'keyup', 'search'],
+  setup(props) {
+    const query = ref<string>('')
+    watch(
+      () => props.value,
+      () => {
+        if (!props.value) {
+          query.value = ''
+        }
+      }
+    )
+
+    return { query }
+  },
   computed: {
     searchQuery() {
       // please don't treat empty string the same as null...
@@ -348,6 +366,10 @@ export default defineComponent({
   &-input-button {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
+  }
+
+  &-clear {
+    right: var(--oc-space-large);
   }
 
   &-small {

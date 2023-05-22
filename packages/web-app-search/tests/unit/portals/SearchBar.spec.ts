@@ -232,14 +232,6 @@ describe('Search Bar portal component', () => {
       query: expect.objectContaining({ term: 'albert', provider: 'files.sdk' })
     })
   })
-  test('does not navigate to files-common-search route on key press enter if no search term is given', async () => {
-    wrapper = getMountedWrapper().wrapper
-    wrapper.find(selectors.searchInput).setValue('')
-    const spyRouterPushStub = wrapper.vm.$router.push
-    await flushPromises()
-    wrapper.find(selectors.searchInput).trigger('keyup.enter')
-    expect(spyRouterPushStub).toHaveBeenCalledTimes(0)
-  })
 })
 
 function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } = {}) {
