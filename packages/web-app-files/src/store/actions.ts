@@ -19,6 +19,7 @@ import { ClientService, LoadingTaskCallbackArguments } from 'web-pkg/src/service
 import { Language } from 'vue3-gettext'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 
 const allowSharePermissions = (getters) => {
   return (
@@ -147,6 +148,9 @@ export default {
           field: 'starred',
           value: newValue
         })
+        if (!newValue) {
+          eventBus.publish('app.files.list.removeFromFavorites')
+        }
       })
       .catch((error) => {
         throw new Error(error)

@@ -88,6 +88,7 @@ import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 import { useStore } from 'web-pkg/src/composables'
 import { SpaceResource } from 'web-client/src/helpers'
 import { getSpaceFromResource } from 'web-app-files/src/helpers/resource/getSpace'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -117,11 +118,14 @@ export default defineComponent({
       ViewModeConstants.tilesView
     ])
 
+    let loadResourcesEventToken
+
     return {
       ...useFileActions(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       getSpace,
-      viewModes
+      viewModes,
+      loadResourcesEventToken
     }
   },
 
@@ -141,12 +145,18 @@ export default defineComponent({
   },
 
   async created() {
-    await this.loadResourcesTask.perform()
-    this.scrollToResourceFromRoute(this.paginatedResources)
+    this.loadResourcesEventToken = await eventBus.subscribe(
+      'app.files.list.removeFromFavorites',
+      async () => {
+        await this.loadResourcesTask.perform()
+        this.scrollToResourceFromRoute(this.paginatedResources)
+      }
+    )
   },
 
   beforeUnmount() {
     visibilityObserver.disconnect()
+    eventBus.unsubscribe('app.files.list.removeFromFavorites', this.loadResourcesEventToken)
   },
 
   methods: {
