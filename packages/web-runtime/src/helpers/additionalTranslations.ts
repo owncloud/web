@@ -13,5 +13,6 @@ export const additionalTranslations = {
   virusDetectedActivity: $gettext(
     'Virus "%{description}" detected. Please contact your administrator for more information.'
   ),
-  virusScan: $gettext('Scan for viruses')
+  virusScan: $gettext('Scan for viruses'),
+  requestErrorDeniedByPolicy: $gettext('Operation denied due to security policies')
 }
