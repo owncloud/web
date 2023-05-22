@@ -6,6 +6,14 @@ import { expect } from '@playwright/test'
 import { config } from '../../../config'
 import { displayedResourceType } from '../../../support/objects/app-files/resource/actions'
 import createTempResources from '../../../support/utils/createTempResources'
+import { getBytes, getTempUploadPath, createFileWithSize } from '../../../support/utils/runtimeFs'
+
+When(
+  'the user creates a file {string} with size {string} in the temp upload directory',
+  function (this: World, fileName: string, fileSize: string): void {
+    createFileWithSize(fileName, getBytes(fileSize), getTempUploadPath())
+  }
+)
 
 When(
   '{string} creates the following resource(s)',
@@ -31,6 +39,53 @@ When(
         option: info.option
       })
     }
+  }
+)
+
+When(
+  '{string} starts uploading the following large resource(s) from the temp upload directory',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const info of stepTable.hashes()) {
+      await resourceObject.startUpload({
+        to: info.to,
+        resources: [
+          this.filesEnvironment.getFile({
+            name: path.join(config.tempAssetsPath.replace(config.assets, ''), info.resource)
+          })
+        ],
+        option: info.option
+      })
+    }
+  }
+)
+
+When(
+  '{string} pauses the file upload',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await page.waitForTimeout(500)
+    await resourceObject.pauseUpload()
+  }
+)
+
+When(
+  '{string} resumes the file upload',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.resumeUpload()
+  }
+)
+
+When(
+  '{string} cancels the file upload',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.cancelUpload()
   }
 )
 
