@@ -24,6 +24,7 @@ import {
 import { User } from '../../support/types'
 import { Session } from '../../support/objects/runtime/session'
 import { TokenEnvironment } from '../../support/environment/token'
+import { createdTokenStore } from '../../support/store/token'
 
 export { World }
 
@@ -50,7 +51,7 @@ BeforeAll(async function (this: World) {
   })
 })
 
-Before(function (this: World, { pickle }: ITestCaseHookParameter) {
+Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   this.feature = pickle
   this.actorsEnvironment.on('console', (actorId, message): void => {
     const msg = {
@@ -76,6 +77,7 @@ Before(function (this: World, { pickle }: ITestCaseHookParameter) {
         break
     }
   })
+  await getAdminToken(state.browser)
 })
 
 BeforeAll(async (): Promise<void> => {
@@ -96,9 +98,6 @@ BeforeAll(async (): Promise<void> => {
       await chromium.launch({ ...browserConfiguration, channel: 'chrome' }),
     chromium: async (): Promise<Browser> => await chromium.launch(browserConfiguration)
   }[config.browser]()
-
-  // get admin token
-  await getAdminToken(state.browser)
 })
 
 const defaults = {
@@ -123,6 +122,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
   await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
 
   createdLinkStore.clear()
+  createdTokenStore.clear()
 })
 
 AfterAll(() => state.browser && state.browser.close())

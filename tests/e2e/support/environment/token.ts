@@ -12,7 +12,10 @@ export class TokenEnvironment {
 
   createToken({ user, token }: { user: User; token: Token }): Token {
     createdTokenStore.set(user.id, token)
-
     return token
+  }
+
+  removeToken({ user }: { user: User }): void {
+    createdTokenStore.delete(user.id)
   }
 }
