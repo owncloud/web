@@ -162,15 +162,16 @@ export default defineComponent({
     // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = useCapabilitySpacesEnabled()
     const spacesEnabled = useCapabilitySpacesEnabled()
+    const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
+
+    const user = computed(() => {
+      return store.getters.user
+    })
+
     const isChangePasswordDisabled = computed(() => {
       return (
         unref(useCapabilityChangeSelfPasswordDisabled()) || !unref(useCapabilitySpacesEnabled())
       )
-    })
-
-    const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
-    const user = computed(() => {
-      return store.getters.user
     })
 
     const personalSpace = computed<SpaceResource>(() => {
