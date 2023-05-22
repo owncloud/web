@@ -72,7 +72,7 @@ export const useCapabilityDeleteUsersDisabled = createCapabilityComposable(
 
 export const useCapabilityChangeSelfPasswordDisabled = createCapabilityComposable(
   'graph.users.change_password_self_disabled',
-  false
+  true
 )
 
 export const useCapabilityFilesFavorites = createCapabilityComposable('files.favorites', false)
