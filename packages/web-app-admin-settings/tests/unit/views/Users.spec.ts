@@ -89,10 +89,29 @@ const getClientService = () => {
 
 const selectors = {
   itemFilterGroupsStub: 'item-filter-stub[filtername="groups"]',
-  itemFilterRolesStub: 'item-filter-stub[filtername="roles"]'
+  itemFilterRolesStub: 'item-filter-stub[filtername="roles"]',
+  createUserButton: '[data-test-id="create-user-btn"]'
 }
 
 describe('Users view', () => {
+  describe('change password button', () => {
+    it('should be displayed if not disabled via capability', () => {
+      const { wrapper } = getMountedWrapper({
+        mountType: mount,
+        capabilities: { graph: { users: { create_disabled: false } } }
+      })
+      const createUserButton = wrapper.find(selectors.createUserButton)
+      expect(createUserButton.exists()).toBeTruthy()
+    })
+    it('should not be displayed if disabled via capability', () => {
+      const { wrapper } = getMountedWrapper({
+        mountType: mount,
+        capabilities: { graph: { users: { create_disabled: true } } }
+      })
+      const createUserButton = wrapper.find(selectors.createUserButton)
+      expect(createUserButton.exists()).toBeFalsy()
+    })
+  })
   describe('method "createUser"', () => {
     it('should hide the modal and show message on success', async () => {
       const clientService = getClientService()
@@ -435,7 +454,8 @@ function getMountedWrapper({
   mountType = shallowMount,
   clientService = getClientService(),
   groupFilterQuery = null,
-  roleFilterQuery = null
+  roleFilterQuery = null,
+  capabilities = {}
 } = {}) {
   jest.mocked(queryItemAsString).mockImplementationOnce(() => groupFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => roleFilterQuery)
@@ -446,6 +466,7 @@ function getMountedWrapper({
 
   const user = { id: '1', uuid: '1' }
   const storeOptions = { ...defaultStoreMockOptions, state: { user } }
+  storeOptions.getters.capabilities.mockReturnValue(capabilities)
   storeOptions.getters.user.mockReturnValue(user)
 
   const store = createStore(storeOptions)
@@ -464,7 +485,8 @@ function getMountedWrapper({
           OcTable: true,
           ItemFilter: true,
           BatchActions: true,
-          LoginModal: true
+          LoginModal: true,
+          OcButton: true
         }
       }
     })

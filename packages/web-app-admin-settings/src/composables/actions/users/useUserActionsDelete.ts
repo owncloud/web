@@ -1,6 +1,6 @@
-import { computed } from 'vue'
+import { computed, unref } from 'vue'
 import { Store } from 'vuex'
-import { eventBus } from 'web-pkg'
+import { eventBus, useCapabilityDeleteUsersDisabled } from 'web-pkg'
 import { useClientService, useStore } from 'web-pkg/src/composables'
 import { UserAction, UserActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
@@ -89,7 +89,7 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
       },
       handler,
       isEnabled: ({ resources }) => {
-        return !!resources.length
+        return !!resources.length && !unref(useCapabilityDeleteUsersDisabled())
       },
       componentType: 'button',
       class: 'oc-users-actions-delete-trigger'

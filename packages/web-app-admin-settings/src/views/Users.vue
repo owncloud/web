@@ -28,6 +28,7 @@
           </div>
           <div v-else>
             <oc-button
+              v-if="!createUsersDisabled"
               variation="primary"
               appearance="filled"
               data-test-id="create-user-btn"
@@ -159,6 +160,7 @@ import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import {
   queryItemAsString,
   useAccessToken,
+  useCapabilityCreateUsersDisabled,
   useCapabilitySpacesMaxQuota,
   useClientService,
   useLoadingService,
@@ -210,6 +212,7 @@ export default defineComponent({
     const accessToken = useAccessToken({ store })
     const clientService = useClientService()
     const loadingService = useLoadingService()
+    const createUsersDisabled = useCapabilityCreateUsersDisabled()
 
     const { actions: deleteActions } = useUserActionsDelete({ store })
     const { actions: removeFromGroupsActions } = useUserActionsRemoveFromGroups()
@@ -615,7 +618,8 @@ export default defineComponent({
       selectedPersonalDrives,
       addUsersToGroups,
       removeUsersFromGroups,
-      writableGroups
+      writableGroups,
+      createUsersDisabled
     }
   },
   computed: {
