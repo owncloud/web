@@ -24,6 +24,7 @@ const appInfo = {
   id: 'pdf-viewer',
   icon: 'resource-type-pdf',
   iconFillType: 'fill',
+  iconColor: 'var(--oc-color-icon-pdf)',
   extensions: [
     {
       extension: 'pdf',

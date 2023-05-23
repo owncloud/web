@@ -1,5 +1,6 @@
-import { mockDeep } from 'jest-mock-extended'
-import { createApp, defineComponent } from 'vue'
+import { mock, mockDeep } from 'jest-mock-extended'
+import { createApp, defineComponent, App } from 'vue'
+import { createStore } from 'vuex'
 import { ConfigurationManager } from 'web-pkg/src'
 import {
   initializeApplications,
@@ -8,6 +9,7 @@ import {
   announceCustomStyles
 } from '../../../src/container/bootstrap'
 import { buildApplication } from '../../../src/container/application'
+import { defaultStoreMockOptions } from 'web-test-helpers/src'
 
 jest.mock('../../../src/container/application')
 
@@ -48,7 +50,11 @@ describe('initialize applications', () => {
     expect(errorSpy.mock.calls[0][0]).toMatchObject(fishyError)
     expect(errorSpy.mock.calls[1][0]).toMatchObject(fishyError)
 
-    await announceApplicationsReady({ applications })
+    await announceApplicationsReady({
+      app: mock<App>(),
+      store: createStore(defaultStoreMockOptions),
+      applications
+    })
     expect(ready).toHaveBeenCalledTimes(2)
   })
 })
