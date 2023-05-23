@@ -5,7 +5,7 @@
       class="oc-filter-chip-button oc-pill"
       :class="{ 'oc-filter-chip-button-selected': filterActive }"
       appearance="raw"
-      @click="isToggle ? $emit('toggleFilter') : () => ({})"
+      @click="isToggle ? $emit('toggleFilter') : false"
     >
       <oc-icon v-if="filterActive" name="check" size="small" color="var(--oc-color-text-inverse)" />
       <span
