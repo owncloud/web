@@ -49,11 +49,6 @@ export const defineConfig = (overrides = {}) => {
           strictPort: true,
           ...(isHttps && https)
         },
-        resolve: {
-          alias: {
-            path: 'rollup-plugin-node-polyfills/polyfills/path'
-          }
-        },
         build: {
           cssCodeSplit: true,
           minify: isProduction,
