@@ -180,7 +180,7 @@ function getWrapper({
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.capabilities.mockReturnValue({
     graph: {
-      read_only_user_attributes: readOnlyUserAttributes
+      users: { read_only_attributes: readOnlyUserAttributes }
     }
   })
   const store = createStore(storeOptions)

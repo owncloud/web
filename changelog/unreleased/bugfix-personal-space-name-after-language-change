@@ -1,0 +1,6 @@
+Bugfix: Personal space name after language change
+
+The name of the personal space is now being updated properly after a language change.
+
+https://github.com/owncloud/web/pull/8992
+https://github.com/owncloud/web/issues/8968

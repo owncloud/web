@@ -1,11 +1,11 @@
 import { SearchPreview, SearchResult } from 'web-app-search/src/types'
 import PreviewComponent from '../../components/Search/Preview.vue'
 import { ClientService } from 'web-pkg/src/services'
-import { buildResource } from 'web-client/src/helpers'
+import { ProjectSpaceResource, buildResource, isProjectSpaceResource } from 'web-client/src/helpers'
 import { Cache } from 'web-pkg/src/helpers/cache'
-import { Component, unref } from 'vue'
+import { Component, computed, Ref, unref } from 'vue'
 import { Router } from 'vue-router'
-import { DavProperties } from 'web-client/src/webdav/constants'
+import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
 import { Store } from 'vuex'
 
 export const previewSearchLimit = 8
@@ -16,6 +16,7 @@ export default class Preview implements SearchPreview {
   private readonly router: Router
   private readonly store: Store<any>
   private readonly clientService: ClientService
+  private readonly projectSpaces: Ref<ProjectSpaceResource[]>
 
   constructor(store: Store<any>, router: Router, clientService: ClientService) {
     this.component = PreviewComponent
@@ -24,6 +25,13 @@ export default class Preview implements SearchPreview {
     // define how long the cache should be valid, maybe conf option?
     this.cache = new Cache({ ttl: 10000, capacity: 100 })
     this.clientService = clientService
+    this.projectSpaces = computed(() =>
+      this.store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s))
+    )
+  }
+
+  getMatchingSpace(id): ProjectSpaceResource {
+    return unref(this.projectSpaces).find((s) => s.id === id)
   }
 
   public async search(term: string): Promise<SearchResult> {
@@ -45,7 +53,8 @@ export default class Preview implements SearchPreview {
       DavProperties.Default
     )
     const resources = results.reduce((acc, result) => {
-      const resource = buildResource(result)
+      const matchingSpace = this.getMatchingSpace(result.fileInfo[DavProperty.FileParent])
+      const resource = matchingSpace ? matchingSpace : buildResource(result)
       // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
       if (!resource.storageId) {
         resource.storageId = this.store.getters.user.id

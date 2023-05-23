@@ -24,6 +24,8 @@ const selectors = {
   pageTitle: '.oc-page-title',
   loaderStub: 'oc-spinner-stub',
   editUrlButton: '[data-testid="account-page-edit-url-btn"]',
+  editPasswordButton: '[data-testid="account-page-edit-password-btn"]',
+  logoutButton: '[data-testid="account-page-logout-url-btn"]',
   accountPageInfo: '.account-page-info',
   groupNames: '[data-testid="group-names"]',
   groupNamesEmpty: '[data-testid="group-names-empty"]',
@@ -60,6 +62,23 @@ describe('account page', () => {
         })
         const editUrlButton = wrapper.find(selectors.editUrlButton)
         expect(editUrlButton.exists()).toBeFalsy()
+      })
+    })
+
+    describe('change password button', () => {
+      it('should be displayed if not disabled via capability', () => {
+        const { wrapper } = getWrapper({
+          capabilities: { graph: { users: { change_password_self_disabled: false } } }
+        })
+        const editPasswordButton = wrapper.find(selectors.editPasswordButton)
+        expect(editPasswordButton.exists()).toBeTruthy()
+      })
+      it('should not be displayed if disabled via capability', () => {
+        const { wrapper } = getWrapper({
+          capabilities: { graph: { users: { change_password_self_disabled: true } } }
+        })
+        const editPasswordButton = wrapper.find(selectors.editPasswordButton)
+        expect(editPasswordButton.exists()).toBeFalsy()
       })
     })
   })
@@ -143,16 +162,6 @@ describe('account page', () => {
     })
   })
 
-  describe('computed method "isChangePasswordEnabled"', () => {
-    it('should be true if capability is enabled', () => {
-      const { wrapper } = getWrapper({ capabilities: { spaces: { enabled: true } } })
-      expect(wrapper.vm.isChangePasswordEnabled).toBeTruthy()
-    })
-    it('should be false if capability is not enabled', () => {
-      const { wrapper } = getWrapper()
-      expect(wrapper.vm.isChangePasswordEnabled).toBeFalsy()
-    })
-  })
   describe('Logout from all devices link', () => {
     it('should render the logout from active devices if logoutUrl is provided', () => {
       const { wrapper } = getWrapper()
@@ -165,10 +174,11 @@ describe('account page', () => {
     })
     it('should use url from configuration manager', () => {
       const { wrapper } = getWrapper()
-      const button = wrapper.find('oc-button-stub')
-      expect(button.attributes('href')).toBe('https://account-manager/logout')
+      const logoutButton = wrapper.find(selectors.logoutButton)
+      expect(logoutButton.attributes('href')).toBe('https://account-manager/logout')
     })
   })
+
   describe('Method "updateDisableEmailNotifications', () => {
     it('should show a message on success', async () => {
       const clientServiceMock = mockDeep<ClientService>()

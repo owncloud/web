@@ -1,0 +1,7 @@
+Enhancement: Disable create user and delete user via capabilities
+
+We've added the functionality to disable create user and delete user in the admin-settings-app via capabilities,
+those can be set via env variable FRONTEND_LDAP_SERVER_WRITE_ENABLED.
+
+https://github.com/owncloud/web/pull/9070
+https://github.com/owncloud/web/issues/9060

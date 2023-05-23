@@ -129,6 +129,9 @@ export default defineComponent({
         if (error.statusCode === 401) {
           return true
         }
+        if (error.statusCode === 404) {
+          throw new Error('The resource could not be located, it may not exist anymore.')
+        }
         throw error
       }
     })
@@ -193,6 +196,9 @@ export default defineComponent({
     })
 
     const isLoading = computed<boolean>(() => {
+      if (unref(errorMessage)) {
+        return false
+      }
       if (
         loadTokenInfoTask.isRunning ||
         !loadTokenInfoTask.last ||

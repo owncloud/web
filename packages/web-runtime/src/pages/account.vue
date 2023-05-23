@@ -10,9 +10,9 @@
           @confirm="editPassword"
         ></edit-password-modal>
         <oc-button
-          v-if="isChangePasswordEnabled"
+          v-if="!isChangePasswordDisabled"
           variation="primary"
-          data-testid="account-page-edit-url-btn"
+          data-testid="account-page-edit-password-btn"
           @click="showEditPasswordModal"
         >
           <oc-icon name="lock" />
@@ -127,6 +127,7 @@ import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
+  useCapabilityChangeSelfPasswordDisabled,
   useCapabilityGraphPersonalDataExport,
   useCapabilitySpacesEnabled,
   useClientService,
@@ -137,7 +138,7 @@ import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
 import { useConfigurationManager } from 'web-pkg/src/composables/configuration'
-import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import { SpaceResource, isPersonalSpaceResource } from 'web-client/src/helpers'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 export default defineComponent({
@@ -158,19 +159,22 @@ export default defineComponent({
     const selectedLanguageValue = ref<LanguageOption>()
     const disableEmailNotificationsValue = ref<boolean>()
 
-    // FIXME: Use graph capability when we have it
+    // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = useCapabilitySpacesEnabled()
-    const isChangePasswordEnabled = useCapabilitySpacesEnabled()
+    const spacesEnabled = useCapabilitySpacesEnabled()
+    const isChangePasswordDisabled = useCapabilityChangeSelfPasswordDisabled()
     const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
+
     const user = computed(() => {
       return store.getters.user
     })
 
+    const personalSpace = computed<SpaceResource>(() => {
+      return store.getters['runtime/spaces/spaces'].find((s) => isPersonalSpaceResource(s))
+    })
+
     const showGdprExport = computed(() => {
-      return (
-        unref(isPersonalDataExportEnabled) &&
-        store.getters['runtime/spaces/spaces'].some((s) => isPersonalSpaceResource(s))
-      )
+      return unref(isPersonalDataExportEnabled) && unref(personalSpace)
     })
 
     const loadValuesListTask = useTask(function* () {
@@ -229,7 +233,7 @@ export default defineComponent({
     })
 
     const groupNames = computed(() => {
-      if (unref(useCapabilitySpacesEnabled())) {
+      if (unref(spacesEnabled)) {
         return unref(user)
           .groups.map((group) => group.displayName)
           .join(', ')
@@ -297,6 +301,14 @@ export default defineComponent({
             value
           }
         })
+        if (unref(personalSpace)) {
+          // update personal space name with new translation
+          store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+            id: unref(personalSpace).id,
+            field: 'name',
+            value: unref(spacesEnabled) ? $gettext('Personal') : $gettext('All files')
+          })
+        }
         store.dispatch('showMessage', {
           title: $gettext('Language was saved successfully.')
         })
@@ -359,7 +371,7 @@ export default defineComponent({
       updateSelectedLanguage,
       updateDisableEmailNotifications,
       accountEditLink: store.getters.configuration?.options?.accountEditLink,
-      isChangePasswordEnabled,
+      isChangePasswordDisabled,
       showGdprExport,
       isSettingsServiceSupported,
       groupNames,

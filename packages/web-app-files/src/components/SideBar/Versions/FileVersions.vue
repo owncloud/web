@@ -57,7 +57,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { defineComponent, inject, ref } from 'vue'
+import { defineComponent, inject, ref, Ref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissions } from 'web-client/src/helpers/share'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
@@ -69,8 +69,8 @@ export default defineComponent({
 
     return {
       ...useDownloadFile(),
-      space: inject<SpaceResource>('space'),
-      resource: inject<Resource>('resource'),
+      space: inject<Ref<SpaceResource>>('space'),
+      resource: inject<Ref<Resource>>('resource'),
       loading
     }
   },
@@ -95,7 +95,9 @@ export default defineComponent({
   },
   watch: {
     resource() {
-      this.fetchFileVersions()
+      if (this.resource) {
+        this.fetchFileVersions()
+      }
     }
   },
   mounted() {

@@ -137,7 +137,10 @@ describe('KeyboardActions', () => {
 
     it('adds the clicked file to the current selection', () => {
       const { wrapper, storeOptions } = getWrapper()
-      wrapper.vm.handleShiftClickAction(mock<Resource>({ id: resourceId }))
+      wrapper.vm.handleShiftClickAction({
+        resource: mock<Resource>({ id: resourceId }),
+        skipTargetSelection: false
+      })
       expect(storeOptions.modules.Files.mutations.ADD_FILE_SELECTION).toHaveBeenCalled()
       expect(storeOptions.modules.Files.mutations.SET_LATEST_SELECTED_FILE_ID).toHaveBeenCalled()
     })

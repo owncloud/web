@@ -1,0 +1,6 @@
+Bugfix: Spaces in search results
+
+Spaces in search results are no longer being displayed as folder resources, fixing wrong icons, parent folders and sidebar panels.
+
+https://github.com/owncloud/web/issues/9022
+https://github.com/owncloud/web/pull/9026

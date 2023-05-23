@@ -1,11 +1,9 @@
 import { DataTable, Then, When } from '@cucumber/cucumber'
-import { expect } from '@playwright/test'
 import { kebabCase } from 'lodash'
 import { DateTime } from 'luxon'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
-import { createdLinkStore } from '../../../support/store'
 
 When(
   '{string} opens the public link {string}',
@@ -132,8 +130,11 @@ When(
 
 Then(
   '{string} should not be able to open the old link {string}',
-  function (this: World, stepUser: string, name: string): void {
-    expect(createdLinkStore.has(name)).toBe(false)
+  async function (this: World, stepUser: string, name: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    const { url } = this.linksEnvironment.getLink({ name })
+    await pageObject.expectThatLinkIsDeleted({ url })
   }
 )
 
