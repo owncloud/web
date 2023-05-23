@@ -5,8 +5,6 @@ import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 import { config } from '../../../config'
 import { displayedResourceType } from '../../../support/objects/app-files/resource/actions'
-import { Public } from '../../../support/objects/app-files/page/public'
-import { Resource } from '../../../support/objects/app-files'
 import createTempResources from '../../../support/utils/createTempResources'
 
 When(
@@ -598,13 +596,13 @@ When(
 When(
   '{string} uploads {int} small files in personal space',
   async function (this: World, stepUser: string, numberOfFiles: number): Promise<void> {
-    const files = createTempResources(numberOfFiles)
-      .map((file) => this.filesEnvironment.getFile({ name: file }))
-      .reverse()
+    const files = createTempResources(numberOfFiles).map((file) =>
+      this.filesEnvironment.getFile({ name: file })
+    )
 
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
-    await resourceObject.upload({ resources: files })
+    await resourceObject.uploadSmallResources({ resources: files })
   }
 )

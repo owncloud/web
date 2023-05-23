@@ -56,7 +56,8 @@ import {
   countNumberOfResourcesInThePage,
   changeItemsPerPage,
   changeItemsPerPageArgs,
-  expectPageNumberNotToBeVisible
+  expectPageNumberNotToBeVisible,
+  uploadMultipleSmallResources
 } from './actions'
 import { Space } from '../../../types'
 
@@ -77,6 +78,15 @@ export class Resource {
   async upload(args: Omit<uploadResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await uploadResource({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+    if (!config.ocis) {
+      await this.#page.locator('body').click()
+    }
+  }
+
+  async uploadSmallResources(args: Omit<uploadResourceArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await uploadMultipleSmallResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     if (!config.ocis) {
       await this.#page.locator('body').click()
