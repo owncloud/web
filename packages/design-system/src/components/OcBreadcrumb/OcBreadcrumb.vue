@@ -5,7 +5,7 @@
         v-for="(item, index) in displayItems"
         :key="index"
         :data-key="index"
-        :data-id="item.id"
+        :data-item-id="item.id"
         :class="[
           'oc-breadcrumb-list-item',
           'oc-flex',
@@ -45,8 +45,8 @@
                 'oc-breadcrumb-item-text-last': index === displayItems.length - 1
               }
             ]"
-            >{{ item.text }}</span
-          >
+            v-text="item.text"
+          />
         </oc-button>
         <span
           class="oc-breadcrumb-item-text"
@@ -162,10 +162,15 @@ export default defineComponent({
       }
     },
 
+    /**
+     * Defines the maximum width of the breadcrumb. If the breadcrumb is wider than the given value, the breadcrumb
+     * will be reduced from the left side.
+     * If the value is -1, the breadcrumb will not be reduced.
+     */
     maxWidth: {
       type: Number,
       required: false,
-      default: 99999
+      default: -1
     },
     /**
      * Determines if the last breadcrumb item should have context menu actions.
@@ -182,21 +187,24 @@ export default defineComponent({
     const displayItems = ref<BreadcrumbItem[]>(props.items.slice())
 
     const getBreadcrumbElement = (id): HTMLElement => {
-      return document.querySelector(`[data-id="${id}"]`)
+      return document.querySelector(`[data-item-id="${id}"]`)
     }
 
     const calculateTotalBreadcrumbWidth = () => {
-      let totalBreadcrumbWidth = 0
+      let totalBreadcrumbWidth = 100 // 100px margin to the right to avoid breadcrumb from getting too close to the controls
       visibleItems.value.forEach((item, index) => {
         const breadcrumbElement = getBreadcrumbElement(item.id)
         const itemClientWidth = breadcrumbElement?.getBoundingClientRect()?.width || 0
         totalBreadcrumbWidth += itemClientWidth
       })
-      return totalBreadcrumbWidth + 100 // 100px margin to the right to avoid breadcrumb from getting too close to the controls
+      return totalBreadcrumbWidth
     }
 
     const reduceBreadcrumb = (offsetIndex) => {
       const breadcrumbMaxWidth = props.maxWidth
+      if (!breadcrumbMaxWidth) {
+        return
+      }
       document.getElementById(props.id)?.style.setProperty('--max-width', `${breadcrumbMaxWidth}px`)
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
 
@@ -211,12 +219,9 @@ export default defineComponent({
       reduceBreadcrumb(offsetIndex)
     }
 
-    const lastHiddenItem = computed(() => {
-      if (hiddenItems.value.length >= 1) {
-        return unref(hiddenItems)[unref(hiddenItems).length - 1]
-      }
-      return { to: {} }
-    })
+    const lastHiddenItem = computed(() =>
+      hiddenItems.value.length >= 1 ? unref(hiddenItems)[unref(hiddenItems).length - 1] : { to: {} }
+    )
 
     const renderBreadcrumb = () => {
       displayItems.value = props.items.slice()
@@ -238,14 +243,7 @@ export default defineComponent({
       })
     }
 
-    watch(
-      () => props.maxWidth,
-      () => renderBreadcrumb()
-    )
-    watch(
-      () => props.items,
-      () => renderBreadcrumb()
-    )
+    watch([() => props.maxWidth, () => props.items], renderBreadcrumb)
     onMounted(() => {
       renderBreadcrumb()
     })
