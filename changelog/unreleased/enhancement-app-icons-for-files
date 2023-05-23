@@ -1,0 +1,8 @@
+Enhancement: Use app icons for files
+
+Icons of apps are now rendered next to files that can be opened with them.
+Until now oC Web itself defined icons for file types, with this change an icon
+can be shown even if oC Web does not know the file type - there just needs to
+be an app loaded that supports opening the file type.
+
+https://github.com/owncloud/web/pull/9088
