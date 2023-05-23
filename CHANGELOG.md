@@ -62,6 +62,11 @@ Summary
 * Bugfix - Sidebar header after deleting resource: [#8880](https://github.com/owncloud/web/issues/8880)
 * Bugfix - Infinite login redirect: [#8928](https://github.com/owncloud/web/issues/8928)
 * Bugfix - Limit amount of concurrent tus requests: [#8987](https://github.com/owncloud/web/pull/8987)
+* Bugfix - Personal space name after language change: [#8992](https://github.com/owncloud/web/pull/8992)
+* Bugfix - Endless loading when encountering a public link error: [#9004](https://github.com/owncloud/web/issues/9004)
+* Bugfix - Prevent "virtual" spaces from being displayed in the UI: [#9015](https://github.com/owncloud/web/pull/9015)
+* Bugfix - Spaces in search results: [#9022](https://github.com/owncloud/web/issues/9022)
+* Bugfix - Resource not found and No content message at the same time: [#9061](https://github.com/owncloud/web/issues/9061)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -155,6 +160,8 @@ Summary
 * Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
 * Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
 * Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
+* Enhancement - Disable change password capability: [#9070](https://github.com/owncloud/web/pull/9070)
+* Enhancement - Disable create user and delete user via capabilities: [#9070](https://github.com/owncloud/web/pull/9070)
 
 Details
 -------
@@ -571,6 +578,45 @@ Details
 
    https://github.com/owncloud/web/issues/8977
    https://github.com/owncloud/web/pull/8987
+
+* Bugfix - Personal space name after language change: [#8992](https://github.com/owncloud/web/pull/8992)
+
+   The name of the personal space is now being updated properly after a language change.
+
+   https://github.com/owncloud/web/issues/8968
+   https://github.com/owncloud/web/pull/8992
+
+* Bugfix - Endless loading when encountering a public link error: [#9004](https://github.com/owncloud/web/issues/9004)
+
+   An endless loading state that occurred when encountering an error when loading a public link
+   has been fixed.
+
+   https://github.com/owncloud/web/issues/9004
+   https://github.com/owncloud/web/pull/9006
+
+* Bugfix - Prevent "virtual" spaces from being displayed in the UI: [#9015](https://github.com/owncloud/web/pull/9015)
+
+   While ownCloud Web is capable of displaying any type of spaces we found out that it is not valid to
+   display so called "virtual" spaces. In such a case users now get redirected to their default
+   location (personal space for users, project spaces overview for guests).
+
+   https://github.com/owncloud/web/pull/9015
+
+* Bugfix - Spaces in search results: [#9022](https://github.com/owncloud/web/issues/9022)
+
+   Spaces in search results are no longer being displayed as folder resources, fixing wrong
+   icons, parent folders and sidebar panels.
+
+   https://github.com/owncloud/web/issues/9022
+   https://github.com/owncloud/web/pull/9026
+
+* Bugfix - Resource not found and No content message at the same time: [#9061](https://github.com/owncloud/web/issues/9061)
+
+   We've fixed a bug where the "Resource not found" and "Empty folder" messages were shown at the
+   same time.
+
+   https://github.com/owncloud/web/issues/9061
+   https://github.com/owncloud/web/pull/9062
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
@@ -1230,7 +1276,9 @@ Details
    https://github.com/owncloud/web/issues/8557
    https://github.com/owncloud/web/issues/7253
    https://github.com/owncloud/web/issues/3774
+   https://github.com/owncloud/web/issues/9073
    https://github.com/owncloud/web/pull/8757
+   https://github.com/owncloud/web/pull/9074
 
 * Enhancement - QuickActions role configurable: [#8566](https://github.com/owncloud/web/pull/8566)
 
@@ -1449,6 +1497,23 @@ Details
 
    https://github.com/owncloud/web/issues/8456
    https://github.com/owncloud/web/pull/9055
+
+* Enhancement - Disable change password capability: [#9070](https://github.com/owncloud/web/pull/9070)
+
+   We've added the functionality to disable the change password button in the account page via
+   capability, this can be set via env variable FRONTEND_LDAP_SERVER_WRITE_ENABLED.
+
+   https://github.com/owncloud/web/issues/9060
+   https://github.com/owncloud/web/pull/9070
+
+* Enhancement - Disable create user and delete user via capabilities: [#9070](https://github.com/owncloud/web/pull/9070)
+
+   We've added the functionality to disable create user and delete user in the
+   admin-settings-app via capabilities, those can be set via env variable
+   FRONTEND_LDAP_SERVER_WRITE_ENABLED.
+
+   https://github.com/owncloud/web/issues/9060
+   https://github.com/owncloud/web/pull/9070
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
