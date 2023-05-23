@@ -1,0 +1,6 @@
+Enhancement: Advanced search button
+
+The search bar now has a button to open the search result page directly to display all available search filters (= advanced search).
+
+https://github.com/owncloud/web/pull/9077
+https://github.com/owncloud/web/issues/9072

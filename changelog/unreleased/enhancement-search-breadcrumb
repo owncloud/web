@@ -1,0 +1,6 @@
+Enhancement: Search breadcrumb
+
+The search result page now has a breadcrumb item to tell the user where they are.
+
+https://github.com/owncloud/web/pull/9077
+https://github.com/owncloud/web/issues/9072
