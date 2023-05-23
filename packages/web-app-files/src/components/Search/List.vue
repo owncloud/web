@@ -29,8 +29,8 @@
         </item-filter>
         <item-filter-toggle
           :filter-label="$gettext('Search in file content')"
-          filter-name="fulltext"
-          class="files-search-filter-fulltext oc-mr-s"
+          filter-name="fullText"
+          class="files-search-filter-full-text oc-mr-s"
         />
       </div>
       <app-loading-spinner v-if="loading" />
@@ -186,7 +186,7 @@ export default defineComponent({
     const availableTags = ref<Tag[]>([])
     const tagFilter = ref<VNodeRef>()
     const tagParam = useRouteQuery('q_tags')
-    const fulltextParam = useRouteQuery('q_fulltext')
+    const fullTextParam = useRouteQuery('q_fullText')
 
     const loadAvailableTagsTask = useTask(function* () {
       const {
@@ -212,8 +212,8 @@ export default defineComponent({
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
       let term = unref(searchTerm)
 
-      const fulltext = queryItemAsString(unref(fulltextParam))
-      if (fulltext) {
+      const fullTextQuery = queryItemAsString(unref(fullTextParam))
+      if (fullTextQuery) {
         term = `Content:"${term}"`
       }
 
@@ -245,7 +245,7 @@ export default defineComponent({
     watch(
       () => unref(route).query,
       (newVal, oldVal) => {
-        const filters = ['q_fulltext', 'q_tags']
+        const filters = ['q_fullText', 'q_tags']
         const isChange =
           newVal?.term !== oldVal?.term || filters.some((f) => newVal[f] ?? '' !== oldVal[f] ?? '')
 

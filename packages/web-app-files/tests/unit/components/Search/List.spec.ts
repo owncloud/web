@@ -22,7 +22,7 @@ const selectors = {
   noContentMessageStub: 'no-content-message-stub',
   resourceTableStub: 'resource-table-stub',
   tagFilter: '.files-search-filter-tags',
-  fulltextFilter: '.files-search-filter-fulltext'
+  fullTextFilter: '.files-search-filter-full-text'
 }
 
 describe('List component', () => {
@@ -62,14 +62,14 @@ describe('List component', () => {
         expect(wrapper.emitted('search')[0][0]).toEqual(`${searchTerm} Tags:"${tagFilterQuery}"`)
       })
     })
-    describe('fulltext', () => {
+    describe('fullText', () => {
       it('should render filter', () => {
         const { wrapper } = getWrapper()
-        expect(wrapper.find(selectors.fulltextFilter).exists()).toBeTruthy()
+        expect(wrapper.find(selectors.fullTextFilter).exists()).toBeTruthy()
       })
-      it('should set initial filter when fulltext is set active via query param', async () => {
+      it('should set initial filter when fullText is set active via query param', async () => {
         const searchTerm = 'term'
-        const { wrapper } = getWrapper({ searchTerm, fulltextFilterQuery: 'true' })
+        const { wrapper } = getWrapper({ searchTerm, fullTextFilterQuery: 'true' })
         await wrapper.vm.loadAvailableTagsTask.last
         expect(wrapper.emitted('search')[0][0]).toEqual(`Content:"${searchTerm}"`)
       })
@@ -82,10 +82,10 @@ function getWrapper({
   resources = [],
   searchTerm = '',
   tagFilterQuery = null,
-  fulltextFilterQuery = null
+  fullTextFilterQuery = null
 } = {}) {
   jest.mocked(queryItemAsString).mockImplementationOnce(() => searchTerm)
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => fulltextFilterQuery)
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => fullTextFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => tagFilterQuery)
 
   const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
