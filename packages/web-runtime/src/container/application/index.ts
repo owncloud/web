@@ -25,6 +25,7 @@ export { NextApplication } from './next'
 const { requirejs, define } = window as any
 
 // register modules with requirejs to provide them to applications
+// keep in sync with packages/extension-sdk/index.mjs
 const injectionMap = {
   luxon,
   vue,

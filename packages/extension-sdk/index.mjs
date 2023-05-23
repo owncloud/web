@@ -53,6 +53,7 @@ export const defineConfig = (overrides = {}) => {
           cssCodeSplit: true,
           minify: isProduction,
           rollupOptions: {
+            // keep in sync with packages/web-runtime/src/container/application/index.ts
             external: [
               'vue',
               'vuex',
