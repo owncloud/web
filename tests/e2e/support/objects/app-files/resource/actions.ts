@@ -20,7 +20,8 @@ const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
 const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//input`
 export const fileRow =
   '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
-export const resourceNameSelector = `#files-space-table [data-test-resource-name="%s"]`
+export const resourceNameSelector =
+  ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section) [data-test-resource-name="%s"]'
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
