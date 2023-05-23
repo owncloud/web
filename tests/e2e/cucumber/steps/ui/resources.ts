@@ -605,13 +605,13 @@ When(
 When(
   '{string} uploads {int} small files in personal space',
   async function (this: World, stepUser: string, numberOfFiles: number): Promise<void> {
-    const files = createTempResources(numberOfFiles)
-      .map((file) => this.filesEnvironment.getFile({ name: file }))
-      .reverse()
+    const files = createTempResources(numberOfFiles).map((file) =>
+      this.filesEnvironment.getFile({ name: file })
+    )
 
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
-    await resourceObject.upload({ resources: files })
+    await resourceObject.uploadSmallResources({ resources: files })
   }
 )

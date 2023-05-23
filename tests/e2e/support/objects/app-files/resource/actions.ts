@@ -80,6 +80,8 @@ const footerTextSelector = '//*[@data-testid="files-list-footer-info"]'
 const filesTableRowSelector = 'tbody tr'
 const itemsPerPageDropDownSelector = '.vs__actions'
 const filesPaginationNavSelector = '.files-pagination'
+const showUploadDetailsSelector = '.upload-info-toggle-details-btn'
+const uploadInfoSuccessLabelSelector = '.upload-info-label.upload-info-success'
 
 export const clickResource = async ({
   page,
@@ -329,11 +331,14 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
   }
 }
 
-export const uploadResourceOneAtATime = async (args: uploadResourceArgs): Promise<void> => {
+export const uploadMultipleSmallResources = async (args: uploadResourceArgs): Promise<void> => {
   const { page, resources } = args
-  for (const resource of resources) {
-    await uploadResource({ page, resources: [resource] })
-  }
+  await page.locator(resourceUploadButton).click()
+  await page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
+  await page.locator(showUploadDetailsSelector).click()
+  await expect(page.locator(uploadInfoSuccessLabelSelector)).toHaveText(
+    `${resources.length} items uploaded`
+  )
 }
 
 export const dropUploadFiles = async (args: uploadResourceArgs): Promise<void> => {
