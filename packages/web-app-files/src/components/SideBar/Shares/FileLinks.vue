@@ -208,6 +208,7 @@ export default defineComponent({
     }
 
     return {
+      $store: store,
       space,
       resource,
       incomingParentShare: inject<Share>('incomingParentShare'),

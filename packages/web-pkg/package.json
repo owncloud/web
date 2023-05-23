@@ -4,6 +4,7 @@
   "description": "ownCloud web pkg",
   "license": "AGPL-3.0",
   "main": "src/index.ts",
+  "types": "types.d.ts",
   "private": false,
   "author": "ownCloud GmbH <devops@owncloud.com>",
   "homepage": "https://github.com/owncloud/web/tree/master/packages/web-pkg",

@@ -18,6 +18,7 @@
   "license": "AGPL-3.0",
   "author": "ownClouders",
   "main": "src/index.ts",
+  "types": "types.d.ts",
   "scripts": {
     "start": "npm-run-all --parallel styleguide tokens:w",
     "build:docs": "npm-run-all tokens styleguide:build",
