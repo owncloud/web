@@ -12,15 +12,14 @@
           'oc-flex-middle',
           {
             'oc-hidden':
-              hiddenItems.indexOf(item) !== -1 ||
-              (item.isPreviousHiddenFolder && hiddenItems.length === 0)
+              hiddenItems.indexOf(item) !== -1 || (item.isTruncated && hiddenItems.length === 0)
           }
         ]"
       >
         <router-link
           v-if="item.to"
           :aria-current="getAriaCurrent(index)"
-          :to="item.isPreviousHiddenFolder ? lastHiddenItem.to : item.to"
+          :to="item.isTruncated ? lastHiddenItem.to : item.to"
         >
           <span class="oc-breadcrumb-item-text">{{ item.text }}</span>
         </router-link>
@@ -230,16 +229,14 @@ export default defineComponent({
           text: '...',
           allowContextActions: false,
           to: {},
-          isPreviousHiddenFolder: true
+          isTruncated: true
         })
       }
       visibleItems.value = displayItems.value.slice()
       hiddenItems.value = []
 
       nextTick(() => {
-        nextTick(() => {
-          reduceBreadcrumb(2)
-        })
+        reduceBreadcrumb(2)
       })
     }
 
