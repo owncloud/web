@@ -46,7 +46,7 @@ export default defineComponent({
   },
   setup(props) {
     const activeNavItem = computed(() => {
-      return unref(props.navItems).find((n) => n.active)
+      return unref(props.navItems).find((n) => n.active) || props.navItems[0]
     })
 
     return { activeNavItem }
