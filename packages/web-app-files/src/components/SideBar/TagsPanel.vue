@@ -56,7 +56,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject, onMounted, ref, unref, VNodeRef, watch } from 'vue'
-import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
+import CompareSaveDialog from 'web-pkg/src/components/SideBar/CompareSaveDialog.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
 import { useClientService, useStore } from 'web-pkg/src/composables'

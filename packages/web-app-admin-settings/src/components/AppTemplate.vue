@@ -59,7 +59,7 @@
 
 <script lang="ts">
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import SideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
+import SideBar from 'web-pkg/src/components/SideBar/SideBar.vue'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import {
   defineComponent,
@@ -74,7 +74,7 @@ import {
 } from 'vue'
 import { eventBus, useAppDefaults } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import { Panel } from 'web-pkg/src/components/sideBar'
+import { Panel } from 'web-pkg/src/components/SideBar'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 
 export default defineComponent({

@@ -1,5 +1,5 @@
 export * from './ContextActions'
-export * from './sideBar'
+export * from './SideBar'
 export * from './Spaces'
 
 export { default as AppLoadingSpinner } from './AppLoadingSpinner.vue'

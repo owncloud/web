@@ -111,7 +111,7 @@
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
-import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
+import CompareSaveDialog from 'web-pkg/src/components/SideBar/CompareSaveDialog.vue'
 import GroupSelect from '../GroupSelect.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
