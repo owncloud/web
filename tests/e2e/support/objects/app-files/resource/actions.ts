@@ -72,6 +72,7 @@ const tagFormInput = '#tags-form input'
 const compareDialogConfirmBtn = '.compare-save-dialog-confirm-btn'
 const resourcesAsTiles = '#files-view .oc-tiles'
 const fileVersionSidebar = '#oc-file-versions-sidebar'
+const noLinkMessage = '#web .oc-link-resolve-error-message'
 const listItemPageSelector = '//*[contains(@class,"oc-pagination-list-item-page") and text()="%s"]'
 const itemsPerPageDropDownOptionSelector =
   '//li[contains(@class,"vs__dropdown-option") and text()="%s"]'
@@ -1084,6 +1085,17 @@ export const checkThatFileVersionIsNotAvailable = async (
   await expect(page.locator(fileVersionSidebar)).toHaveText('No Versions available for this file')
 }
 
+export const expectThatPublicLinkIsDeleted = async (args): Promise<void> => {
+  const { page, url } = args
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 404 && resp.request().method() === 'PROPFIND'),
+    page.goto(url)
+  ])
+  await expect(page.locator(noLinkMessage)).toHaveText(
+    'Error: The resource could not be located, it may not exist anymore.'
+  )
+}
+
 export interface changePageArgs {
   page: Page
   pageNumber: string
@@ -1098,6 +1110,7 @@ export interface changeItemsPerPageArgs {
   page: Page
   itemsPerPage: string
 }
+
 export const changeItemsPerPage = async (args: changeItemsPerPageArgs): Promise<void> => {
   const { page, itemsPerPage } = args
   await page.locator(filesViewOptionButton).click()

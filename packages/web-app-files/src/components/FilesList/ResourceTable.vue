@@ -47,7 +47,7 @@
         :model-value="isResourceSelected(item)"
         :outline="isLatestSelectedItem(item)"
         @update:model-value="setSelection($event, item)"
-        @click.stop
+        @click.stop="fileClicked([item, $event, true])"
       />
     </template>
     <template #name="{ item }">
@@ -58,7 +58,7 @@
         <oc-resource
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
-          :is-path-displayed="getArePathsDisplayed(item)"
+          :is-path-displayed="arePathsDisplayed"
           :parent-folder-name-default="getDefaultParentFolderName(item)"
           :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-extension-displayed="areFileExtensionsShown"
@@ -192,7 +192,12 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from 'web-client'
-import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
+import {
+  buildShareSpaceResource,
+  extractDomSelector,
+  isProjectSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import { ShareTypes } from 'web-client/src/helpers/share'
 
 import {
@@ -220,7 +225,11 @@ import { ClipboardActions } from 'web-app-files/src/helpers/clipboardActions'
 import { isResourceTxtFileAlmostEmpty } from 'web-app-files/src/helpers/resources'
 import { determineSortFields } from 'web-app-files/src/helpers/ui/resourceTable'
 import { useFileActionsRename } from 'web-app-files/src/composables/actions/files/useFileActionsRename'
-import { createLocationShares, createLocationCommon } from 'web-app-files/src/router'
+import {
+  createLocationShares,
+  createLocationCommon,
+  createLocationSpaces
+} from 'web-app-files/src/router'
 import { ref } from 'vue'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
@@ -664,7 +673,7 @@ export default defineComponent({
     openTagsSidebar() {
       eventBus.publish(SideBarEventTopics.open)
     },
-    openSharingSidebar(file) {
+    openSharingSidebar(file: Resource) {
       let panelToOpen
       if (file.type === 'space') {
         panelToOpen = 'space-share'
@@ -675,16 +684,19 @@ export default defineComponent({
       }
       eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
-    folderLink(file) {
+    folderLink(file: Resource) {
       return this.resourceRouteResolver.createFolderLink({
         path: file.path,
         fileId: file.fileId,
         resource: file
       })
     },
-    parentFolderLink(file) {
+    parentFolderLink(file: Resource) {
       if (file.shareId && file.path === '/') {
         return createLocationShares('files-shares-with-me')
+      }
+      if (isProjectSpaceResource(file)) {
+        return createLocationSpaces('files-spaces-projects')
       }
 
       return this.resourceRouteResolver.createFolderLink({
@@ -745,7 +757,9 @@ export default defineComponent({
        */
       const resource = data[0]
       const eventData = data[1]
+      const skipTargetSelection = data[2] ?? false
 
+      const isCheckboxClicked = eventData?.target.getAttribute('type') === 'checkbox'
       const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
       if (contextActionClicked) {
         return
@@ -754,7 +768,10 @@ export default defineComponent({
         return eventBus.publish('app.files.list.clicked.meta', resource)
       }
       if (eventData && eventData.shiftKey) {
-        return eventBus.publish('app.files.list.clicked.shift', resource)
+        return eventBus.publish('app.files.list.clicked.shift', { resource, skipTargetSelection })
+      }
+      if (isCheckboxClicked) {
+        return
       }
       return this.emitSelect([resource.id])
     },
@@ -839,7 +856,7 @@ export default defineComponent({
         linkCount
       })
     },
-    getOwnerAvatarDescription(resource) {
+    getOwnerAvatarDescription(resource: Resource) {
       const translated = this.$gettext('This %{ resourceType } is owned by %{ ownerName }')
       const resourceType =
         resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
@@ -848,8 +865,11 @@ export default defineComponent({
         ownerName: resource.owner[0].displayName
       })
     },
-    getDefaultParentFolderName(resource) {
+    getDefaultParentFolderName(resource: Resource) {
       if (this.hasProjectSpaces) {
+        if (isProjectSpaceResource(resource)) {
+          return this.$gettext('Spaces')
+        }
         const matchingSpace = this.resourceRouteResolver.getMatchingSpace(resource)
         if (matchingSpace?.driveType === 'project') {
           return matchingSpace.name
@@ -871,9 +891,6 @@ export default defineComponent({
       }
 
       return this.$gettext('Personal')
-    },
-    getArePathsDisplayed(resource) {
-      return this.arePathsDisplayed && resource.type !== 'space'
     }
   }
 })

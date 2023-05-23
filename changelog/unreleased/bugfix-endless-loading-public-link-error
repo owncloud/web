@@ -1,0 +1,6 @@
+Bugfix: Endless loading when encountering a public link error
+
+An endless loading state that occurred when encountering an error when loading a public link has been fixed.
+
+https://github.com/owncloud/web/issues/9004
+https://github.com/owncloud/web/pull/9006

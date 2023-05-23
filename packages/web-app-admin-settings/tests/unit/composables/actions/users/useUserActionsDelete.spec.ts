@@ -13,16 +13,23 @@ import {
 describe('useUserActionsDelete', () => {
   describe('method "isEnabled"', () => {
     it.each([
-      { resources: [], isEnabled: false },
-      { resources: [mock<User>()], isEnabled: true },
-      { resources: [mock<User>(), mock<User>()], isEnabled: true }
-    ])('should only return true if 1 or more users are selected', ({ resources, isEnabled }) => {
-      getWrapper({
-        setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources })).toEqual(isEnabled)
-        }
-      })
-    })
+      { resources: [], disabledViaCapability: false, isEnabled: false },
+      { resources: [mock<User>()], disabledViaCapability: false, isEnabled: true },
+      { resources: [mock<User>(), mock<User>()], disabledViaCapability: false, isEnabled: true },
+      { resources: [mock<User>(), mock<User>()], disabledViaCapability: true, isEnabled: false }
+    ])(
+      'should only return true if 1 or more users are selected and not disabled via capability',
+      ({ resources, disabledViaCapability, isEnabled }) => {
+        getWrapper({
+          setup: ({ actions }, { storeOptions }) => {
+            storeOptions.getters.capabilities.mockImplementation(() => ({
+              graph: { users: { delete_disabled: !!disabledViaCapability } }
+            }))
+            expect(unref(actions)[0].isEnabled({ resources })).toEqual(isEnabled)
+          }
+        })
+      }
+    )
   })
   describe('method "deleteUsers"', () => {
     it('should successfully delete all given users and reload the users list', () => {

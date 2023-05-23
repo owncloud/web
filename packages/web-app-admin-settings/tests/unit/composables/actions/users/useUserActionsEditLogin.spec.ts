@@ -23,7 +23,7 @@ describe('useUserActionsEditLogin', () => {
         setup: ({ actions }, { storeOptions }) => {
           storeOptions.getters.capabilities.mockReturnValue({
             graph: {
-              read_only_user_attributes: ['user.accountEnabled']
+              users: { read_only_attributes: ['user.accountEnabled'] }
             }
           })
 

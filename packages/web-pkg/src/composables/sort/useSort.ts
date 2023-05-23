@@ -74,8 +74,8 @@ export function useSort<T extends SortableItem>(options: SortOptions<T>): SortRe
     return router.replace({
       query: {
         ...unref(router.currentRoute).query,
-        'sort-by': sortBy,
-        'sort-dir': sortDir
+        [unref(options.sortByQueryName) || SortConstants.sortByQueryName]: sortBy,
+        [unref(options.sortDirQueryName) || SortConstants.sortDirQueryName]: sortDir
       }
     })
   }

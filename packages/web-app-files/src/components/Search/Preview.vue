@@ -30,7 +30,7 @@ import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
-import { buildShareSpaceResource, Resource } from 'web-client/src/helpers'
+import { buildShareSpaceResource, isProjectSpaceResource, Resource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -115,6 +115,10 @@ export default defineComponent({
         return this.$gettext('All files and folders')
       }
 
+      if (isProjectSpaceResource(this.resource)) {
+        return this.$gettext('Spaces')
+      }
+
       if (this.matchingSpace?.driveType === 'project') {
         return this.matchingSpace.name
       }
@@ -133,6 +137,9 @@ export default defineComponent({
     parentFolderLink() {
       if (this.resource.shareId && this.resource.path === '/') {
         return createLocationShares('files-shares-with-me')
+      }
+      if (isProjectSpaceResource(this.resource)) {
+        return createLocationSpaces('files-spaces-projects')
       }
       return this.createFolderLink(dirname(this.resource.path), this.resource.parentFolderId)
     }

@@ -45,7 +45,6 @@ export type changeRoleArgs = {
   resource?: string
   linkName: string
   role: string
-  space?: boolean
 }
 
 export type deleteLinkArgs = {
@@ -109,19 +108,15 @@ export const waitForPopupNotPresent = async (page): Promise<void> => {
 }
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
-  const { page, resource, linkName, role, space } = args
-  let shareType = 'space-share'
+  const { page, resource, linkName, role } = args
   let resourceName = null
-  if (!space) {
-    const resourcePaths = resource.split('/')
-    resourceName = resourcePaths.pop()
-    shareType = 'sharing'
-    if (resourcePaths.length) {
-      await clickResource({ page: page, path: resourcePaths.join('/') })
-    }
+  const resourcePaths = resource.split('/')
+  resourceName = resourcePaths.pop()
+  if (resourcePaths.length) {
+    await clickResource({ page: page, path: resourcePaths.join('/') })
   }
   await sidebar.open({ page: page, resource: resourceName })
-  await sidebar.openPanel({ page: page, name: shareType })
+  await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(publicLinkEditRoleButton, linkName)).click()
   await page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
   const message = await page.locator(linkUpdateDialog).textContent()
