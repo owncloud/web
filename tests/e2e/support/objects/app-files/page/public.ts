@@ -15,7 +15,7 @@ import {
 
 const passwordInput = 'input[type="password"]'
 const fileUploadInput = '//input[@id="files-file-upload-input"]'
-const resourceNameSelector = '[data-test-resource-name="%s"]'
+const dropUploadResourceSelector = '.upload-info-items [data-test-resource-name="%s"]'
 const toggleUploadDetailsButton = '.upload-info-toggle-details-btn'
 const uploadInfoSuccessLabelSelector = '.upload-info-success'
 const publicLinkAuthorizeButton = '.oc-login-authorize-button'
@@ -43,7 +43,7 @@ export class Public {
     await this.#page.waitForSelector(uploadInfoSuccessLabelSelector)
     await this.#page.locator(toggleUploadDetailsButton).click()
     await Promise.all(
-      names.map((name) => this.#page.waitForSelector(util.format(resourceNameSelector, name)))
+      names.map((name) => this.#page.waitForSelector(util.format(dropUploadResourceSelector, name)))
     )
     await this.#page.goto(startUrl)
   }

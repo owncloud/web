@@ -19,6 +19,7 @@ import {
   resourceVersionArgs,
   uploadResource,
   uploadResourceArgs,
+  dropUploadFiles,
   restoreResourceTrashbinArgs,
   restoreResourceTrashbin,
   searchResourceGlobalSearch,
@@ -80,6 +81,12 @@ export class Resource {
     if (!config.ocis) {
       await this.#page.locator('body').click()
     }
+  }
+
+  async dropUpload(args: Omit<uploadResourceArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await dropUploadFiles({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
   }
 
   async download(args: Omit<downloadResourcesArgs, 'page'>): Promise<Download[]> {

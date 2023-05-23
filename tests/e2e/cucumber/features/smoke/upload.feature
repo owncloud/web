@@ -23,6 +23,10 @@ Feature: Upload
       | resource           | type    | content      |
       | PARENT/parent.txt  | txtFile | some text    |
       | PARENT/example.txt | txtFile | example text |
+    And "Alice" uploads the following resources via drag-n-drop
+        | resource       |
+        | simple.pdf     |
+        | testavatar.jpg |
   #  currently upload folder feature is not available in playwright
   #  And "Alice" uploads the following resources
   #    | resource |
