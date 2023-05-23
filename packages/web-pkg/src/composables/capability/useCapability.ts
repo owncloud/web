@@ -102,6 +102,10 @@ export const useCapabilityFilesAppProviders = createCapabilityComposable<AppProv
   'files.app_providers',
   []
 )
+export const useCapabilityFilesFullTextSearch = createCapabilityComposable(
+  'files.full_text_search',
+  false
+)
 export const useCapabilityFilesSharingCanDenyAccess = createCapabilityComposable(
   'files_sharing.deny_access',
   false
