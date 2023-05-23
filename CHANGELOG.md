@@ -160,6 +160,7 @@ Summary
 * Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
 * Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
 * Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
+* Enhancement - Search full-text filter: [#9059](https://github.com/owncloud/web/pull/9059)
 * Enhancement - Disable change password capability: [#9070](https://github.com/owncloud/web/pull/9070)
 * Enhancement - Disable create user and delete user via capabilities: [#9070](https://github.com/owncloud/web/pull/9070)
 
@@ -1497,6 +1498,14 @@ Details
 
    https://github.com/owncloud/web/issues/8456
    https://github.com/owncloud/web/pull/9055
+
+* Enhancement - Search full-text filter: [#9059](https://github.com/owncloud/web/pull/9059)
+
+   The search result page now has a full-text filter which can be used to filter the displayed files
+   by their content.
+
+   https://github.com/owncloud/web/issues/9058
+   https://github.com/owncloud/web/pull/9059
 
 * Enhancement - Disable change password capability: [#9070](https://github.com/owncloud/web/pull/9070)
 
