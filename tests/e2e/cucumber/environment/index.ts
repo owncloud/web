@@ -23,7 +23,6 @@ import {
 } from '../../support/store'
 import { User } from '../../support/types'
 import { Session } from '../../support/objects/runtime/session'
-import { TokenEnvironment } from '../../support/environment/token'
 import { createdTokenStore } from '../../support/store/token'
 
 export { World }
@@ -77,7 +76,9 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
         break
     }
   })
-  await getAdminToken(state.browser)
+  if (config.apiToken) {
+    await getAdminToken(state.browser)
+  }
 })
 
 BeforeAll(async (): Promise<void> => {
@@ -183,25 +184,8 @@ const getAdminToken = async (browser: Browser) => {
   const ctx = await browser.newContext({ ignoreHTTPSErrors: true })
   const page = await ctx.newPage()
   const admin = usersEnvironment.getUser({ key: 'admin' })
-  // ...login...
   await page.goto(config.frontendUrl)
-  const [response] = await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().includes('v1/token') &&
-        resp.status() === 200 &&
-        resp.request().method() === 'POST'
-    ),
-    new Session({ page }).login({
-      user: admin
-    })
-  ])
-  const { access_token } = await response.json()
-  const tokenEnvironment = new TokenEnvironment()
-  tokenEnvironment.createToken({
-    user: { ...admin },
-    token: { userId: admin.id, tokenValue: access_token }
-  })
+  await new Session({ page }).login({ user: admin })
 
   await page.close()
   await ctx.close()
