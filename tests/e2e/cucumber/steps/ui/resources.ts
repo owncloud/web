@@ -579,3 +579,15 @@ Then(
     await resourceObject.expectPageNumberNotToBeVisible()
   }
 )
+
+When(
+  '{string} uploads the following resource(s) via drag-n-drop',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const resources = stepTable
+      .hashes()
+      .map((item) => this.filesEnvironment.getFile({ name: item.resource }))
+    await resourceObject.dropUpload({ resources })
+  }
+)

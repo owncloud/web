@@ -1,7 +1,7 @@
 import { errors, Page } from 'playwright'
 import util from 'util'
 
-const resourceNameSelector = '[data-test-resource-name="%s"]'
+const resourceNameSelector = '#files-space-table [data-test-resource-name="%s"]'
 /**
  * one of the few places where timeout should be used, as we also use this to detect the absence of an element
  * it is not possible to differentiate between `element not there yet` and `element not loaded yet`.
