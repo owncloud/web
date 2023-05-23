@@ -1,14 +1,16 @@
 import { Download, Page } from 'playwright'
 import { expect } from '@playwright/test'
 import util from 'util'
-import { resourceExists, waitForResources } from './utils'
 import path from 'path'
-import { File, Space } from '../../../types'
+import { resourceExists, waitForResources } from './utils'
 import { sidebar } from '../utils'
+import { File, Space } from '../../../types'
+import { dragDropFiles } from '../../../utils/dragDrop'
 import { config } from '../../../../config'
 
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
+const filesView = '#files-view'
 const downloadFileButtonSideBar =
   '#oc-files-actions-sidebar .oc-files-actions-download-file-trigger'
 const downloadFolderButtonSideBar =
@@ -20,7 +22,8 @@ const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
 const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//input`
 export const fileRow =
   '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
-export const resourceNameSelector = `[data-test-resource-name="%s"]`
+export const resourceNameSelector =
+  ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section) [data-test-resource-name="%s"]'
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
@@ -323,6 +326,19 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
       names: resources.map((file) => path.basename(file.name))
     })
   }
+}
+
+export const dropUploadFiles = async (args: uploadResourceArgs): Promise<void> => {
+  const { page, resources } = args
+
+  await dragDropFiles(page, resources, filesView)
+
+  await page.locator(uploadInfoCloseButton).click()
+  await Promise.all(
+    resources.map((file) =>
+      page.locator(util.format(resourceNameSelector, path.basename(file.name))).waitFor()
+    )
+  )
 }
 
 /**/
