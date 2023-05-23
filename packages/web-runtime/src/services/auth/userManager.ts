@@ -10,7 +10,7 @@ import { ConfigurationManager } from 'web-pkg/src/configuration'
 import { ClientService } from 'web-pkg/src/services'
 import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
-import { Ability } from 'web-pkg/src/utils'
+import { Ability } from 'web-client/src/helpers/resource/types'
 import { Language } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 

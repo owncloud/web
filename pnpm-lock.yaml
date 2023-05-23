@@ -848,6 +848,9 @@ importers:
 
   packages/web-client:
     dependencies:
+      '@casl/ability':
+        specifier: ^6.3.3
+        version: 6.3.3
       axios:
         specifier: ^0.27.2
         version: 0.27.2
@@ -857,9 +860,6 @@ importers:
 
   packages/web-pkg:
     dependencies:
-      '@casl/ability':
-        specifier: ^6.3.3
-        version: 6.3.3
       '@casl/vue':
         specifier: ^2.2.1
         version: 2.2.1(@casl/ability@6.3.3)(vue@3.3.4)
@@ -1441,8 +1441,8 @@ packages:
     dependencies:
       '@babel/core': 7.17.5
       '@babel/helper-annotate-as-pure': 7.18.6
-      '@babel/helper-environment-visitor': 7.21.5
-      '@babel/helper-function-name': 7.21.0
+      '@babel/helper-environment-visitor': 7.18.9
+      '@babel/helper-function-name': 7.19.0
       '@babel/helper-member-expression-to-functions': 7.18.9
       '@babel/helper-optimise-call-expression': 7.18.6
       '@babel/helper-replace-supers': 7.19.1
@@ -1477,8 +1477,8 @@ packages:
     dependencies:
       '@babel/core': 7.21.8
       '@babel/helper-annotate-as-pure': 7.18.6
-      '@babel/helper-environment-visitor': 7.21.5
-      '@babel/helper-function-name': 7.21.0
+      '@babel/helper-environment-visitor': 7.18.9
+      '@babel/helper-function-name': 7.19.0
       '@babel/helper-member-expression-to-functions': 7.18.9
       '@babel/helper-optimise-call-expression': 7.18.6
       '@babel/helper-replace-supers': 7.19.1

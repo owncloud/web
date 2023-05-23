@@ -1,4 +1,4 @@
-import { Ability } from './src/utils'
+import { Ability } from 'web-client/src/helpers/resource/types'
 import { ClientService, LoadingService, PreviewService } from './src/services'
 
 export * from './src'
