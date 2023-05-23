@@ -80,10 +80,10 @@ const itemsPerPageDropDownSelector = '.vs__actions'
 const filesPaginationNavSelector = '.files-pagination'
 const showUploadDetailsSelector = '.upload-info-toggle-details-btn'
 const uploadInfoSuccessLabelSelector = '.upload-info-label.upload-info-success'
+const uploadInfoTitle = '.upload-info-title'
+const uploadInfoLabelSelector = '.upload-info-label'
 const pauseResumeUploadButton = '#pause-upload-info-btn'
 const cancelUploadButton = '#cancel-upload-info-btn'
-const uploadCancelledLabel = 'div.upload-info-title p:text("Upload cancelled")'
-const itemsUploadedLabel = 'div.upload-info-label:text("%s items uploaded")'
 const uploadPauseTooltip = '//div[text()="Pause upload"]'
 const uploadResumeTooltip = '//div[text()="Resume upload"]'
 
@@ -383,8 +383,8 @@ export const resumeResourceUpload = async (page: Page): Promise<void> => {
 
 export const cancelResourceUpload = async (page: Page): Promise<void> => {
   await page.locator(cancelUploadButton).click()
-  await page.locator(uploadCancelledLabel).waitFor()
-  await page.locator(util.format(itemsUploadedLabel, 0)).waitFor()
+  await expect(page.locator(uploadInfoTitle)).toHaveText('Upload cancelled')
+  await expect(page.locator(uploadInfoLabelSelector)).toHaveText('0 items uploaded')
 }
 
 /**/

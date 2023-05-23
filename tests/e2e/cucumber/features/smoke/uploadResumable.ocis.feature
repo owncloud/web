@@ -16,6 +16,7 @@ Feature: Upload
     And "Alice" pauses the file upload
     And "Alice" cancels the file upload
     # issue: https://github.com/owncloud/web/issues/9080
+    # Todo: uncomment when the issue is fixed
     # And "Alice" starts uploading the following large resources from the temp upload directory
     #   | resource      |
     #   | largefile.txt |

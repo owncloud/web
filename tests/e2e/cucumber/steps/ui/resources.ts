@@ -10,8 +10,8 @@ import { getBytes, getTempUploadPath, createFileWithSize } from '../../../suppor
 
 When(
   'the user creates a file {string} with size {string} in the temp upload directory',
-  function (this: World, fileName: string, fileSize: string): void {
-    createFileWithSize(fileName, getBytes(fileSize), getTempUploadPath())
+  function (this: World, fileName: string, fileSize: string): Promise<void> {
+    return createFileWithSize(fileName, getBytes(fileSize), getTempUploadPath())
   }
 )
 
@@ -66,6 +66,7 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
+    // wait for some data to upload
     await page.waitForTimeout(500)
     await resourceObject.pauseUpload()
   }

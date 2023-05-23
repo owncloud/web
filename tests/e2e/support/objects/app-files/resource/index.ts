@@ -43,12 +43,12 @@ export class Resource {
 
   // uploads the file but does check if the upload was successful
   // and does not navigate back to the startUrl
-  async startUpload(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
-    await po.startResourceUpload({ ...args, page: this.#page })
+  startUpload(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
+    return po.startResourceUpload({ ...args, page: this.#page })
   }
 
-  async pauseUpload(): Promise<void> {
-    await po.pauseResourceUpload(this.#page)
+  pauseUpload(): Promise<void> {
+    return po.pauseResourceUpload(this.#page)
   }
 
   async resumeUpload(): Promise<void> {
@@ -57,8 +57,8 @@ export class Resource {
     await this.#page.goto(startUrl)
   }
 
-  async cancelUpload(): Promise<void> {
-    await po.cancelResourceUpload(this.#page)
+  cancelUpload(): Promise<void> {
+    return po.cancelResourceUpload(this.#page)
   }
 
   async download(args: Omit<po.downloadResourcesArgs, 'page'>): Promise<Download[]> {
