@@ -90,6 +90,7 @@ export const defineConfig = (overrides = {}) => {
         },
         plugins: [
           vue({
+            // set to true when switching to esm
             customElement: false
           })
         ]
