@@ -158,6 +158,7 @@ Summary
 * Enhancement - Add notification setting to account page: [#8911](https://github.com/owncloud/web/pull/8911)
 * Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
 * Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
+* Enhancement - Long breadcrumb strategy: [#8984](https://github.com/owncloud/web/pull/8984)
 * Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
 * Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
 * Enhancement - Enable download (archive) on spaces: [#9056](https://github.com/owncloud/web/issues/9056)
@@ -1484,6 +1485,13 @@ Details
 
    https://github.com/owncloud/web/issues/7180
    https://github.com/owncloud/web/pull/8983
+
+* Enhancement - Long breadcrumb strategy: [#8984](https://github.com/owncloud/web/pull/8984)
+
+   We've implemented a new solution to deal with long breadcrumbs even with long folder names.
+
+   https://github.com/owncloud/web/issues/6731
+   https://github.com/owncloud/web/pull/8984
 
 * Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
 
