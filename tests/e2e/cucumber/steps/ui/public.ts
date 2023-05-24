@@ -57,11 +57,10 @@ When(
 )
 
 When(
-  /^"([^"]*)" downloads the following public link resource(s)? using the (sidebar panel|batch action)$/,
+  /^"([^"]*)" downloads the following public link resource(?:s)? using the (sidebar panel|batch action)$/,
   async function (
     this: World,
     stepUser: string,
-    _: string,
     actionType: string,
     stepTable: DataTable
   ): Promise<void> {
@@ -130,7 +129,7 @@ Then(
 )
 
 When(
-  /^"([^"]*)" deletes the following resources from public link using (sidebar panel| batch action)$/,
+  /^"([^"]*)" deletes the following resources from public link using (sidebar panel|batch action)$/,
   async function (
     this: World,
     stepUser: string,
