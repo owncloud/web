@@ -51,6 +51,7 @@ import {
   usePreviewService
 } from 'web-pkg/src/composables'
 import { FileActionOptions, SpaceActionOptions } from 'web-pkg/src/composables/actions'
+import { useFileActionsDownloadArchive } from 'web-app-files/src/composables'
 
 export default defineComponent({
   name: 'SpaceContextActions',
@@ -90,6 +91,7 @@ export default defineComponent({
     const { actions: restoreActions } = useSpaceActionsRestore({ store })
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
     const { actions: showMembersActions } = useSpaceActionsShowMembers({ store })
+    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
 
     const spaceImageInput: VNodeRef = ref(null)
     const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
@@ -98,8 +100,9 @@ export default defineComponent({
     })
 
     const menuItemsMembers = computed(() => {
-      const fileHandlers = [...unref(showMembersActions)]
-      return [...fileHandlers].filter((item) => item.isEnabled(unref(actionOptions)))
+      const fileHandlers = [...unref(showMembersActions), ...unref(downloadArchiveActions)]
+      // HACK: downloadArchiveActions requires FileActionOptions but we have SpaceActionOptions
+      return [...fileHandlers].filter((item) => item.isEnabled(unref(actionOptions) as any))
     })
 
     const menuItemsPrimaryActions = computed(() => {

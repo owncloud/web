@@ -7,7 +7,12 @@ import {
 import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
 import path from 'path'
 import first from 'lodash-es/first'
-import { isPublicSpaceResource, Resource } from 'web-client/src/helpers'
+import {
+  isProjectSpaceResource,
+  isPublicSpaceResource,
+  Resource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import {
@@ -42,10 +47,11 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
     return archiverService
       .triggerDownload({
         ...fileOptions,
-        ...(isPublicSpaceResource(space) && {
-          publicToken: space.id as string,
-          publicLinkPassword: unref(publicLinkPassword)
-        })
+        ...(space &&
+          isPublicSpaceResource(space) && {
+            publicToken: space.id as string,
+            publicLinkPassword: unref(publicLinkPassword)
+          })
       })
       .catch((e) => {
         console.error(e)
@@ -107,13 +113,14 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
           ) {
             return false
           }
-          if (isLocationSpacesActive(router, 'files-spaces-projects')) {
-            return false
-          }
+
           if (resources.length === 0) {
             return false
           }
           if (resources.length === 1 && !resources[0].isFolder) {
+            return false
+          }
+          if (isProjectSpaceResource(resources[0]) && resources[0].disabled) {
             return false
           }
           if (!archiverService.available) {
