@@ -7,6 +7,7 @@ import { config } from '../../../config'
 import { displayedResourceType } from '../../../support/objects/app-files/resource/actions'
 import { Public } from '../../../support/objects/app-files/page/public'
 import { Resource } from '../../../support/objects/app-files'
+import createTempResources from '../../../support/utils/createTempResources'
 
 When(
   '{string} creates the following resource(s)',
@@ -598,5 +599,19 @@ When(
       .hashes()
       .map((item) => this.filesEnvironment.getFile({ name: item.resource }))
     await resourceObject.dropUpload({ resources })
+  }
+)
+
+When(
+  '{string} uploads {int} small files in personal space',
+  async function (this: World, stepUser: string, numberOfFiles: number): Promise<void> {
+    const files = createTempResources(numberOfFiles).map((file) =>
+      this.filesEnvironment.getFile({ name: file })
+    )
+
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    await resourceObject.uploadSmallResources({ resources: files })
   }
 )

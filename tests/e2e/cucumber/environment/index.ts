@@ -10,6 +10,7 @@ import {
 } from '@cucumber/cucumber'
 import pino from 'pino'
 import { Browser, chromium, firefox, webkit } from 'playwright'
+import fs from 'fs'
 
 import { config } from '../../config'
 import { api, environment } from '../../support'
@@ -118,6 +119,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
   await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
 
   createdLinkStore.clear()
+  removeTempUploadDirectory()
 })
 
 AfterAll(() => state.browser && state.browser.close())
@@ -172,4 +174,10 @@ const cleanUpGroup = async (adminUser: User) => {
 
   await Promise.all(requests)
   createdGroupStore.clear()
+}
+
+const removeTempUploadDirectory = () => {
+  if (fs.existsSync(config.tempAssetsPath)) {
+    fs.rmSync(config.tempAssetsPath, { recursive: true })
+  }
 }
