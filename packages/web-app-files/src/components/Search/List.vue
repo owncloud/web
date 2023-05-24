@@ -1,8 +1,8 @@
 <template>
   <div class="files-search-result oc-flex">
     <files-view-wrapper>
-      <app-bar :has-bulk-actions="false" :side-bar-open="sideBarOpen" />
-      <div class="files-search-result-filter oc-flex oc-mx-m oc-mb-m">
+      <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="false" :side-bar-open="sideBarOpen" />
+      <div class="files-search-result-filter oc-flex oc-mx-m oc-mb-m oc-mt-xs">
         <div class="oc-mr-m oc-flex oc-flex-middle">
           <oc-icon name="filter-2" class="oc-mr-xs" />
           <span v-text="$gettext('Filter:')" />
@@ -44,8 +44,8 @@
         >
           <template #message>
             <p class="oc-text-muted">
-              <span v-if="!!$route.query.term" v-translate>No results found</span>
-              <span v-else v-translate>No search term entered</span>
+              <span v-if="!!$route.query.term" v-text="$gettext('No results found')" />
+              <span v-else v-text="$gettext('Search for files')" />
             </p>
           </template>
         </no-content-message>
@@ -108,6 +108,7 @@ import ResourceTable from '../FilesList/ResourceTable.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
 import { debounce } from 'lodash-es'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
+import { useGettext } from 'vue3-gettext'
 import AppBar from '../AppBar/AppBar.vue'
 import { computed, defineComponent, nextTick, onMounted, ref, unref, VNodeRef, watch } from 'vue'
 import ListInfo from '../FilesList/ListInfo.vue'
@@ -175,6 +176,7 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
+    const { $gettext } = useGettext()
     const { y: fileListHeaderY } = useFileListHeaderPosition()
     const clientService = useClientService()
     const hasTags = useCapabilityFilesTags()
@@ -237,6 +239,16 @@ export default defineComponent({
       return term
     }
 
+    const breadcrumbs = computed(() => {
+      return [
+        {
+          text: unref(searchTerm)
+            ? $gettext('Search results for "%{searchTerm}"', { searchTerm: unref(searchTerm) })
+            : $gettext('Search')
+        }
+      ]
+    })
+
     onMounted(async () => {
       if (unref(hasTags)) {
         await loadAvailableTagsTask.perform()
@@ -266,7 +278,8 @@ export default defineComponent({
       fullTextSearchEnabled,
       getSpace,
       availableTags,
-      tagFilter
+      tagFilter,
+      breadcrumbs
     }
   },
   computed: {

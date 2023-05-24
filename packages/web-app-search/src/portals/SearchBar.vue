@@ -18,6 +18,7 @@
       cancel-button-variation="brand"
       cancel-button-appearance="raw-inverse"
       :cancel-handler="cancelSearch"
+      @advanced-search="onKeyUpEnter"
       @input="updateTerm"
       @clear="onClear"
       @click="showPreview"
@@ -271,7 +272,7 @@ export default defineComponent({
     onKeyUpEnter() {
       this.optionsDrop.hide()
 
-      if (this.term && this.activePreviewIndex === null) {
+      if (this.activePreviewIndex === null) {
         const currentQuery = unref(this.$router.currentRoute).query
 
         this.$router.push(

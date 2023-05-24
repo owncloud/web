@@ -46,14 +46,14 @@ describe('OcSearchBar', () => {
         expect(searchInput.attributes('class')).toContain('oc-search-input-icon')
       })
       it('should render icon', () => {
-        const iconStub = wrapper.find('oc-icon-stub')
+        const iconStub = wrapper.find('oc-icon-stub[name="mdi-icon"]')
         expect(iconStub.exists()).toBeTruthy()
         expect(iconStub.attributes('name')).toBe('mdi-icon')
       })
     })
     it('should not render icon if false', () => {
       const wrapper = getWrapper({ icon: false })
-      const iconStub = wrapper.find('oc-icon-stub')
+      const iconStub = wrapper.find('.oc-search-icon')
       expect(iconStub.exists()).toBeFalsy()
     })
   })
@@ -211,6 +211,17 @@ describe('OcSearchBar', () => {
         await clearButton.trigger('click')
         expect(searchInput.element.value).toBe('')
       })
+    })
+  })
+  describe('advanced search button', () => {
+    it('should be visible', () => {
+      const wrapper = getWrapper()
+      expect(wrapper.find('.oc-advanced-search').exists()).toBeTruthy()
+    })
+    it('should trigger the "advancedSearch"-event on click', async () => {
+      const wrapper = getWrapper()
+      await wrapper.find('.oc-advanced-search').trigger('click')
+      expect(wrapper.emitted('advancedSearch').length).toBeGreaterThan(0)
     })
   })
 })
