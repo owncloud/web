@@ -9,7 +9,7 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
       <!--v-if-->
       <portal-target name="app.runtime.mobile.nav"></portal-target>
       <!--v-if-->
-      <div class="oc-flex">
+      <div class="oc-flex" id="files-app-bar-controls-right">
         <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" viewmodes=""></view-options-stub>
         <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
       </div>
@@ -32,7 +32,7 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
       <!--v-if-->
       <portal-target name="app.runtime.mobile.nav"></portal-target>
       <!--v-if-->
-      <div class="oc-flex">
+      <div class="oc-flex" id="files-app-bar-controls-right">
         <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" viewmodes=""></view-options-stub>
         <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
       </div>
@@ -56,7 +56,7 @@ exports[`AppBar component renders if given, with content in the content slot 1`]
       <!--v-if-->
       <portal-target name="app.runtime.mobile.nav"></portal-target>
       <!--v-if-->
-      <div class="oc-flex">
+      <div class="oc-flex" id="files-app-bar-controls-right">
         <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" viewmodes=""></view-options-stub>
         <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
       </div>

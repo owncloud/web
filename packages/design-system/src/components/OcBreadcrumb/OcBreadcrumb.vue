@@ -2,12 +2,28 @@
   <nav :id="id" :class="`oc-breadcrumb oc-breadcrumb-${variation}`">
     <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
       <li
-        v-for="(item, index) in items"
+        v-for="(item, index) in displayItems"
         :key="index"
-        class="oc-breadcrumb-list-item oc-flex oc-flex-middle"
+        :data-key="index"
+        :data-item-id="item.id"
+        :aria-hidden="item.isTruncationPlaceholder"
+        :class="[
+          'oc-breadcrumb-list-item',
+          'oc-flex',
+          'oc-flex-middle',
+          {
+            'oc-invisible-sr':
+              hiddenItems.indexOf(item) !== -1 ||
+              (item.isTruncationPlaceholder && hiddenItems.length === 0)
+          }
+        ]"
       >
-        <router-link v-if="item.to" :aria-current="getAriaCurrent(index)" :to="item.to">
-          <span>{{ item.text }}</span>
+        <router-link
+          v-if="item.to"
+          :aria-current="getAriaCurrent(index)"
+          :to="item.isTruncationPlaceholder ? lastHiddenItem.to : item.to"
+        >
+          <span class="oc-breadcrumb-item-text">{{ item.text }}</span>
         </router-link>
         <oc-icon
           v-if="item.to"
@@ -20,12 +36,27 @@
           v-else-if="item.onClick"
           :aria-current="getAriaCurrent(index)"
           appearance="raw"
+          class="oc-flex"
           @click="item.onClick"
         >
-          <span>{{ item.text }}</span>
+          <span
+            :class="[
+              'oc-breadcrumb-item-text',
+              {
+                'oc-breadcrumb-item-text-last': index === displayItems.length - 1
+              }
+            ]"
+            v-text="item.text"
+          />
         </oc-button>
-        <span v-else :aria-current="getAriaCurrent(index)" tabindex="-1" v-text="item.text" />
-        <template v-if="showContextActions && index === items.length - 1">
+        <span
+          v-else
+          class="oc-breadcrumb-item-text"
+          :aria-current="getAriaCurrent(index)"
+          tabindex="-1"
+          v-text="item.text"
+        />
+        <template v-if="showContextActions && index === displayItems.length - 1">
           <oc-button
             id="oc-breadcrumb-contextmenu-trigger"
             v-oc-tooltip="contextMenuLabel"
@@ -48,7 +79,7 @@
       </li>
     </ol>
     <oc-button
-      v-if="items.length > 1"
+      v-if="displayItems.length > 1"
       appearance="raw"
       type="router-link"
       :aria-label="$gettext('Navigate one level up')"
@@ -58,13 +89,13 @@
       <oc-icon name="arrow-left-s" fill-type="line" size="large" class="oc-mr-m" />
     </oc-button>
   </nav>
-  <div v-if="items.length > 1" class="oc-breadcrumb-mobile-current">
+  <div v-if="displayItems.length > 1" class="oc-breadcrumb-mobile-current">
     <span class="oc-text-truncate" aria-current="page" v-text="currentFolder.text" />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 import { AVAILABLE_SIZES } from '../../helpers/constants'
@@ -92,7 +123,6 @@ export default defineComponent({
     OcIcon,
     OcButton
   },
-
   props: {
     /**
      * Id for the breadcrumbs. If it's empty, a generated one will be used.
@@ -132,6 +162,26 @@ export default defineComponent({
         return [...AVAILABLE_SIZES, 'remove'].some((e) => e === value)
       }
     },
+
+    /**
+     * Defines the maximum width of the breadcrumb. If the breadcrumb is wider than the given value, the breadcrumb
+     * will be reduced from the left side.
+     * If the value is -1, the breadcrumb will not be reduced.
+     */
+    maxWidth: {
+      type: Number,
+      required: false,
+      default: -1
+    },
+    /**
+     * Defines the number of items that should be always displayed at the beginning of the breadcrumb.
+     * The default value is 2. e.g. Personal > ... > XYZ
+     */
+    truncationOffset: {
+      type: Number,
+      required: false,
+      default: 2
+    },
     /**
      * Determines if the last breadcrumb item should have context menu actions.
      */
@@ -142,6 +192,65 @@ export default defineComponent({
   },
   setup(props) {
     const { $gettext } = useGettext()
+    const visibleItems = ref<BreadcrumbItem[]>([])
+    const hiddenItems = ref<BreadcrumbItem[]>([])
+    const displayItems = ref<BreadcrumbItem[]>(props.items.slice())
+
+    const getBreadcrumbElement = (id): HTMLElement => {
+      return document.querySelector(`.oc-breadcrumb-list [data-item-id="${id}"]`)
+    }
+
+    const calculateTotalBreadcrumbWidth = () => {
+      let totalBreadcrumbWidth = 100 // 100px margin to the right to avoid breadcrumb from getting too close to the controls
+      visibleItems.value.forEach((item) => {
+        const breadcrumbElement = getBreadcrumbElement(item.id)
+        const itemClientWidth = breadcrumbElement?.getBoundingClientRect()?.width || 0
+        totalBreadcrumbWidth += itemClientWidth
+      })
+      return totalBreadcrumbWidth
+    }
+
+    const reduceBreadcrumb = (offsetIndex) => {
+      const breadcrumbMaxWidth = props.maxWidth
+      if (!breadcrumbMaxWidth) {
+        return
+      }
+      const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
+
+      const isOverflowing = breadcrumbMaxWidth < totalBreadcrumbWidth
+      if (!isOverflowing || visibleItems.value.length <= props.truncationOffset + 1) {
+        return
+      }
+      // Remove from the left side
+      const removed = visibleItems.value.splice(offsetIndex, 1)
+
+      hiddenItems.value.push(removed[0])
+      reduceBreadcrumb(offsetIndex)
+    }
+
+    const lastHiddenItem = computed(() =>
+      hiddenItems.value.length >= 1 ? unref(hiddenItems)[unref(hiddenItems).length - 1] : { to: {} }
+    )
+
+    const renderBreadcrumb = () => {
+      displayItems.value = [...props.items]
+      if (displayItems.value.length > props.truncationOffset - 1) {
+        displayItems.value.splice(props.truncationOffset - 1, 0, {
+          text: '...',
+          allowContextActions: false,
+          to: {},
+          isTruncationPlaceholder: true
+        })
+      }
+      visibleItems.value = [...displayItems.value]
+      hiddenItems.value = []
+
+      nextTick(() => {
+        reduceBreadcrumb(props.truncationOffset)
+      })
+    }
+
+    watch([() => props.maxWidth, () => props.items], renderBreadcrumb, { immediate: true })
 
     const currentFolder = computed<BreadcrumbItem>(() => {
       if (props.items.length === 0 || !props.items) {
@@ -161,7 +270,17 @@ export default defineComponent({
       return props.items.length - 1 === index ? 'page' : null
     }
 
-    return { currentFolder, parentFolderTo, contextMenuLabel, getAriaCurrent }
+    return {
+      currentFolder,
+      parentFolderTo,
+      contextMenuLabel,
+      getAriaCurrent,
+      visibleItems,
+      hiddenItems,
+      renderBreadcrumb,
+      displayItems,
+      lastHiddenItem
+    }
   }
 })
 </script>
@@ -169,6 +288,16 @@ export default defineComponent({
 <style lang="scss">
 .oc-breadcrumb {
   overflow: hidden;
+  &-item-text {
+    max-width: 200px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    &-last {
+      vertical-align: text-bottom;
+    }
+  }
 
   &-mobile-current,
   &-mobile-navigation {
@@ -184,7 +313,11 @@ export default defineComponent({
 
     list-style: none;
     align-items: baseline;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+
+    span {
+      white-space: nowrap;
+    }
 
     #oc-breadcrumb-contextmenu-trigger > span {
       vertical-align: middle;
@@ -223,6 +356,8 @@ export default defineComponent({
       font-size: var(--oc-font-size-medium);
       color: var(--oc-color-text-default);
       display: inline-block;
+      vertical-align: sub;
+      line-height: normal;
     }
   }
 

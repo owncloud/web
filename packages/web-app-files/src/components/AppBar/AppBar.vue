@@ -18,6 +18,8 @@
           context-menu-padding="small"
           :show-context-actions="showContextActions"
           :items="breadcrumbs"
+          :max-width="breadcrumbMaxWidth"
+          :truncation-offset="breadcrumbTruncationOffset"
         >
           <template #contextMenu>
             <context-actions
@@ -27,7 +29,11 @@
         </oc-breadcrumb>
         <portal-target v-if="showMobileNav" name="app.runtime.mobile.nav" />
         <shares-navigation v-if="hasSharesNavigation" />
-        <div v-if="hasViewOptions || hasSidebarToggle" class="oc-flex">
+        <div
+          v-if="hasViewOptions || hasSidebarToggle"
+          id="files-app-bar-controls-right"
+          class="oc-flex"
+        >
           <view-options
             v-if="hasViewOptions"
             :view-modes="viewModes"
@@ -60,12 +66,13 @@
 
 <script lang="ts">
 import last from 'lodash-es/last'
-import { computed, defineComponent, inject, PropType, Ref, unref } from 'vue'
+import { computed, defineComponent, inject, PropType, ref, Ref, unref } from 'vue'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
+  isShareSpaceResource,
   SpaceResource
 } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
@@ -87,7 +94,7 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
-import { useStore } from 'web-pkg/src'
+import { useRouter, useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
 
@@ -129,6 +136,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
+    const router = useRouter()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: clearSelectionActions } = useFileActionsClearSelection({ store })
@@ -140,6 +148,8 @@ export default defineComponent({
     const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin({ store })
     const { actions: moveActions } = useFileActionsMove({ store })
     const { actions: restoreActions } = useFileActionsRestore({ store })
+
+    const breadcrumbMaxWidth = ref<number>(0)
 
     const batchActions = computed(() => {
       return [
@@ -182,10 +192,21 @@ export default defineComponent({
       return props.breadcrumbs.length <= 1
     })
 
+    const breadcrumbTruncationOffset = computed(() => {
+      if (!props.space) {
+        return 2
+      }
+      return isProjectSpaceResource(unref(props.space)) || isShareSpaceResource(unref(props.space))
+        ? 3
+        : 2
+    })
+
     return {
       batchActions,
       showBreadcrumb,
-      showMobileNav
+      showMobileNav,
+      breadcrumbMaxWidth,
+      breadcrumbTruncationOffset
     }
   },
   data: function () {
@@ -226,9 +247,11 @@ export default defineComponent({
   },
   mounted() {
     this.resizeObserver.observe(this.$refs.filesAppBar as HTMLElement)
+    window.addEventListener('resize', this.onResize)
   },
   beforeUnmount() {
     this.resizeObserver.unobserve(this.$refs.filesAppBar as HTMLElement)
+    window.removeEventListener('resize', this.onResize)
   },
 
   created() {
@@ -253,6 +276,19 @@ export default defineComponent({
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
 
     onResize() {
+      const totalContentWidth =
+        document.getElementById('web-content-main')?.getBoundingClientRect().width || 0
+      const leftSidebarWidth =
+        document.getElementById('web-nav-sidebar')?.getBoundingClientRect().width || 0
+      const rightSidebarWidth =
+        document.getElementById('app-sidebar')?.getBoundingClientRect().width || 0
+
+      const rightControlsWidth = document.getElementById(
+        'files-app-bar-controls-right'
+      )?.clientWidth
+
+      this.breadcrumbMaxWidth =
+        totalContentWidth - leftSidebarWidth - rightSidebarWidth - rightControlsWidth
       this.limitedScreenSpace = this.sideBarOpen
         ? window.innerWidth <= 1280
         : window.innerWidth <= 1000
