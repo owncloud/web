@@ -1,5 +1,5 @@
 import { Page } from 'playwright'
-import { openTrashbin } from './actions'
+import * as PO from './actions'
 import { SpacesEnvironment } from '../../../environment'
 export class Trashbin {
   #page: Page
@@ -12,6 +12,6 @@ export class Trashbin {
 
   async open(key: string): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
-    await openTrashbin({ page: this.#page, id })
+    await PO.openTrashbin({ page: this.#page, id })
   }
 }
