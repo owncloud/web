@@ -73,6 +73,6 @@ export const downloadGdprExport = async (args: { page: Page }): Promise<void> =>
     ),
     page.locator(downloadExportButton).click()
   ])
-  await expect(download.suggestedFilename()).toContain('personal_data_export.json')
+  expect(download.suggestedFilename()).toContain('personal_data_export.json')
   await page.locator(requestExportButton).waitFor()
 }

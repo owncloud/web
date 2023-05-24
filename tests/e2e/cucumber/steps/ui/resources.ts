@@ -551,7 +551,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const actualText = await resourceObject.getFileListFooterText()
-    await expect(actualText).toBe(expectedText)
+    expect(actualText).toBe(expectedText)
   }
 )
 
@@ -561,7 +561,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const actualNumberOfResources = await resourceObject.countNumberOfResourcesInThePage()
-    await expect(actualNumberOfResources).toBe(expectedNumberOfResources)
+    expect(actualNumberOfResources).toBe(expectedNumberOfResources)
   }
 )
 
