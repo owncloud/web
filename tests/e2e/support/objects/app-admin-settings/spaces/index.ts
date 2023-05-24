@@ -1,17 +1,5 @@
 import { Page } from 'playwright'
-import {
-  changeSpaceQuota,
-  deleteSpace,
-  disableSpace,
-  getDisplayedSpaces,
-  renameSpace,
-  changeSpaceSubtitle,
-  selectSpace,
-  enableSpace,
-  openSpaceAdminSidebarPanel,
-  openSpaceAdminActionSidebarPanel,
-  listSpaceMembers
-} from './actions'
+import * as PO from './actions'
 import { SpacesEnvironment } from '../../../environment'
 import { Space } from '../../../types'
 
@@ -29,7 +17,7 @@ export class Spaces {
   }
 
   getDisplayedSpaces(): Promise<string[]> {
-    return getDisplayedSpaces(this.#page)
+    return PO.getDisplayedSpaces(this.#page)
   }
 
   getSpace({ key }: { key: string }): Space {
@@ -45,42 +33,42 @@ export class Spaces {
     value: string
     context: string
   }): Promise<void> {
-    await changeSpaceQuota({ spaceIds, value, page: this.#page, context })
+    await PO.changeSpaceQuota({ spaceIds, value, page: this.#page, context })
   }
 
   async disable({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
-    await disableSpace({ spaceIds, page: this.#page, context })
+    await PO.disableSpace({ spaceIds, page: this.#page, context })
   }
 
   async enable({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
-    await enableSpace({ spaceIds, page: this.#page, context })
+    await PO.enableSpace({ spaceIds, page: this.#page, context })
   }
 
   async delete({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
-    await deleteSpace({ spaceIds, page: this.#page, context })
+    await PO.deleteSpace({ spaceIds, page: this.#page, context })
   }
 
   async select({ key }: { key: string }): Promise<void> {
-    await selectSpace({ page: this.#page, id: this.getUUID({ key }) })
+    await PO.selectSpace({ page: this.#page, id: this.getUUID({ key }) })
   }
 
   async rename({ key, value }: { key: string; value: string }): Promise<void> {
-    await renameSpace({ page: this.#page, id: this.getUUID({ key }), value })
+    await PO.renameSpace({ page: this.#page, id: this.getUUID({ key }), value })
   }
 
   async changeSubtitle({ key, value }: { key: string; value: string }): Promise<void> {
-    await changeSpaceSubtitle({ page: this.#page, id: this.getUUID({ key }), value })
+    await PO.changeSpaceSubtitle({ page: this.#page, id: this.getUUID({ key }), value })
   }
 
   async openPanel({ key }: { key: string }): Promise<void> {
-    await openSpaceAdminSidebarPanel({ page: this.#page, id: this.getUUID({ key }) })
+    await PO.openSpaceAdminSidebarPanel({ page: this.#page, id: this.getUUID({ key }) })
   }
 
   async openActionSideBarPanel({ action }: { action: string }): Promise<void> {
-    await openSpaceAdminActionSidebarPanel({ page: this.#page, action })
+    await PO.openSpaceAdminActionSidebarPanel({ page: this.#page, action })
   }
 
   listMembers({ filter }: { filter: string }): Promise<Array<string>> {
-    return listSpaceMembers({ page: this.#page, filter })
+    return PO.listSpaceMembers({ page: this.#page, filter })
   }
 }

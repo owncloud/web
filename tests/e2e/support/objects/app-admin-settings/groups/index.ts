@@ -1,14 +1,6 @@
 import { Page } from 'playwright'
 import { UsersEnvironment } from '../../../environment'
-import {
-  createGroup,
-  openEditPanel,
-  getDisplayedGroups,
-  selectGroup,
-  deleteGroupUsingContextMenu,
-  deleteGrouprUsingBatchAction,
-  changeGroup
-} from './actions'
+import * as PO from './actions'
 
 export class Groups {
   #page: Page
@@ -24,7 +16,7 @@ export class Groups {
 
   async createGroup({ key }: { key: string }): Promise<void> {
     const group = this.#usersEnvironment.getGroup({ key })
-    const response = await createGroup({ page: this.#page, key: group.displayName })
+    const response = await PO.createGroup({ page: this.#page, key: group.displayName })
     this.#usersEnvironment.storeCreatedGroup({
       group: {
         id: key,
@@ -35,19 +27,19 @@ export class Groups {
   }
 
   getDisplayedGroups(): Promise<string[]> {
-    return getDisplayedGroups({ page: this.#page })
+    return PO.getDisplayedGroups({ page: this.#page })
   }
 
   async selectGroup({ key }: { key: string }): Promise<void> {
-    await selectGroup({ page: this.#page, uuid: this.getUUID({ key }) })
+    await PO.selectGroup({ page: this.#page, uuid: this.getUUID({ key }) })
   }
 
   async deleteGroupUsingBatchAction({ groupIds }: { groupIds: string[] }): Promise<void> {
-    await deleteGrouprUsingBatchAction({ page: this.#page, groupIds })
+    await PO.deleteGrouprUsingBatchAction({ page: this.#page, groupIds })
   }
 
   async deleteGroupUsingContextMenu({ key }: { key: string }): Promise<void> {
-    await deleteGroupUsingContextMenu({ page: this.#page, uuid: this.getUUID({ key }) })
+    await PO.deleteGroupUsingContextMenu({ page: this.#page, uuid: this.getUUID({ key }) })
   }
 
   async changeGroup({
@@ -62,11 +54,11 @@ export class Groups {
     action: string
   }): Promise<void> {
     const uuid = this.getUUID({ key })
-    await openEditPanel({ page: this.#page, uuid, action })
-    await changeGroup({ uuid, attribute: attribute, value: value, page: this.#page })
+    await PO.openEditPanel({ page: this.#page, uuid, action })
+    await PO.changeGroup({ uuid, attribute: attribute, value: value, page: this.#page })
   }
 
   async openEditPanel({ key, action }: { key: string; action: string }): Promise<void> {
-    await openEditPanel({ page: this.#page, uuid: this.getUUID({ key }), action })
+    await PO.openEditPanel({ page: this.#page, uuid: this.getUUID({ key }), action })
   }
 }

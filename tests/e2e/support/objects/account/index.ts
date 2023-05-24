@@ -1,12 +1,5 @@
 import { Page } from 'playwright'
-
-import {
-  getQuotaValue,
-  getUserInfo,
-  openAccountPage,
-  requestGdprExport,
-  downloadGdprExport
-} from './actions'
+import * as PO from './actions'
 
 export class Account {
   #page: Page
@@ -16,22 +9,22 @@ export class Account {
   }
 
   getQuotaValue(): Promise<string> {
-    return getQuotaValue({ page: this.#page })
+    return PO.getQuotaValue({ page: this.#page })
   }
 
   getUserInfo(key: string): Promise<string> {
-    return getUserInfo({ page: this.#page, key })
+    return PO.getUserInfo({ page: this.#page, key })
   }
 
   async openAccountPage(): Promise<void> {
-    await openAccountPage({ page: this.#page })
+    await PO.openAccountPage({ page: this.#page })
   }
 
   async requestGdprExport(): Promise<void> {
-    await requestGdprExport({ page: this.#page })
+    await PO.requestGdprExport({ page: this.#page })
   }
 
   async downloadGdprExport(): Promise<void> {
-    await downloadGdprExport({ page: this.#page })
+    await PO.downloadGdprExport({ page: this.#page })
   }
 }
