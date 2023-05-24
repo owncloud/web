@@ -39,7 +39,6 @@ import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
 import { useCapabilitySpacesMaxQuota, useStore, usePreviewService } from 'web-pkg/src/composables'
-import { SpaceAction } from 'web-pkg/src/composables/actions'
 import {
   useSpaceActionsDelete,
   useSpaceActionsDisable,
@@ -49,8 +48,10 @@ import {
   useSpaceActionsRename,
   useSpaceActionsRestore
 } from 'web-pkg/src/composables/actions/spaces'
-import { useSpaceActionsUploadImage } from '../../../composables/actions/spaces/useSpaceActionsUploadImage'
-
+import {
+  useFileActionsDownloadArchive,
+  useSpaceActionsUploadImage
+} from 'web-app-files/src/composables'
 export default defineComponent({
   name: 'SpaceActions',
   components: { ActionMenuItem, QuotaModal, ReadmeContentModal },
@@ -86,9 +87,11 @@ export default defineComponent({
       store,
       spaceImageInput
     })
+    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
 
-    const actions = computed((): SpaceAction[] =>
+    const actions = computed(() =>
       [
+        ...unref(downloadArchiveActions),
         ...unref(renameActions),
         ...unref(editDescriptionActions),
         ...unref(uploadImageActions),
@@ -97,7 +100,7 @@ export default defineComponent({
         ...unref(restoreActions),
         ...unref(deleteActions),
         ...unref(disableActions)
-      ].filter((item) => item.isEnabled(unref(actionOptions)))
+      ].filter((item) => item.isEnabled(unref(actionOptions) as any))
     )
 
     return {
