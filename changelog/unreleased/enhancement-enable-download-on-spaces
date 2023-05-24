@@ -1,0 +1,6 @@
+Enhancement: Enable download (archive) on spaces
+
+ We've enabled the download action for spaces, which downloads the space's content as archive.
+
+https://github.com/owncloud/web/issues/9056
+https://github.com/owncloud/web/pull/9095
