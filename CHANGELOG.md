@@ -163,6 +163,8 @@ Summary
 * Enhancement - Search full-text filter: [#9059](https://github.com/owncloud/web/pull/9059)
 * Enhancement - Disable change password capability: [#9070](https://github.com/owncloud/web/pull/9070)
 * Enhancement - Disable create user and delete user via capabilities: [#9070](https://github.com/owncloud/web/pull/9070)
+* Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
+* Enhancement - Search breadcrumb: [#9077](https://github.com/owncloud/web/pull/9077)
 
 Details
 -------
@@ -1524,6 +1526,21 @@ Details
 
    https://github.com/owncloud/web/issues/9060
    https://github.com/owncloud/web/pull/9070
+
+* Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
+
+   The search bar now has a button to open the search result page directly to display all available
+   search filters (= advanced search).
+
+   https://github.com/owncloud/web/issues/9072
+   https://github.com/owncloud/web/pull/9077
+
+* Enhancement - Search breadcrumb: [#9077](https://github.com/owncloud/web/pull/9077)
+
+   The search result page now has a breadcrumb item to tell the user where they are.
+
+   https://github.com/owncloud/web/issues/9072
+   https://github.com/owncloud/web/pull/9077
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
