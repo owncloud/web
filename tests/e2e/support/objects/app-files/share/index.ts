@@ -1,5 +1,5 @@
 import { Page } from 'playwright'
-import * as PO from './actions'
+import * as po from './actions'
 import { resourceIsNotOpenable, isAcceptedSharePresent } from './utils'
 import { copyLinkArgs } from '../link/actions'
 
@@ -10,37 +10,37 @@ export class Share {
     this.#page = page
   }
 
-  async create(args: Omit<PO.createShareArgs, 'page'>): Promise<void> {
+  async create(args: Omit<po.createShareArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await PO.createShare({ ...args, page: this.#page })
+    await po.createShare({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     // why? o_O
     await this.#page.locator('body').click()
   }
 
-  async accept(args: Omit<PO.ShareStatusArgs, 'page'>): Promise<void> {
-    await PO.acceptShare({ ...args, page: this.#page })
+  async accept(args: Omit<po.ShareStatusArgs, 'page'>): Promise<void> {
+    await po.acceptShare({ ...args, page: this.#page })
   }
 
-  async declineShare(args: Omit<PO.ShareStatusArgs, 'page'>): Promise<void> {
-    await PO.declineShare({ ...args, page: this.#page })
+  async declineShare(args: Omit<po.ShareStatusArgs, 'page'>): Promise<void> {
+    await po.declineShare({ ...args, page: this.#page })
   }
 
-  async changeShareeRole(args: Omit<PO.ShareArgs, 'page'>): Promise<void> {
+  async changeShareeRole(args: Omit<po.ShareArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await PO.changeShareeRole({ ...args, page: this.#page })
+    await po.changeShareeRole({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
-  async removeSharee(args: Omit<PO.removeShareeArgs, 'page'>): Promise<void> {
+  async removeSharee(args: Omit<po.removeShareeArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await PO.removeSharee({ ...args, page: this.#page })
+    await po.removeSharee({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
-  async checkSharee(args: Omit<PO.ShareArgs, 'page'>): Promise<void> {
+  async checkSharee(args: Omit<po.ShareArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await PO.checkSharee({ ...args, page: this.#page })
+    await po.checkSharee({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
@@ -50,11 +50,11 @@ export class Share {
   }
 
   async hasPermissionToShare(resource: string): Promise<boolean> {
-    return await PO.hasPermissionToShare({ page: this.#page, resource })
+    return await po.hasPermissionToShare({ page: this.#page, resource })
   }
 
   async copyQuickLink(args: Omit<copyLinkArgs, 'page'>): Promise<void> {
-    await PO.copyQuickLink({ ...args, page: this.#page })
+    await po.copyQuickLink({ ...args, page: this.#page })
   }
 
   async resourceIsNotOpenable(resource): Promise<boolean> {

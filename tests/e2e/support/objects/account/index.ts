@@ -1,5 +1,5 @@
 import { Page } from 'playwright'
-import * as PO from './actions'
+import * as po from './actions'
 
 export class Account {
   #page: Page
@@ -9,22 +9,22 @@ export class Account {
   }
 
   getQuotaValue(): Promise<string> {
-    return PO.getQuotaValue({ page: this.#page })
+    return po.getQuotaValue({ page: this.#page })
   }
 
   getUserInfo(key: string): Promise<string> {
-    return PO.getUserInfo({ page: this.#page, key })
+    return po.getUserInfo({ page: this.#page, key })
   }
 
   async openAccountPage(): Promise<void> {
-    await PO.openAccountPage({ page: this.#page })
+    await po.openAccountPage({ page: this.#page })
   }
 
   async requestGdprExport(): Promise<void> {
-    await PO.requestGdprExport({ page: this.#page })
+    await po.requestGdprExport({ page: this.#page })
   }
 
   async downloadGdprExport(): Promise<void> {
-    await PO.downloadGdprExport({ page: this.#page })
+    await po.downloadGdprExport({ page: this.#page })
   }
 }

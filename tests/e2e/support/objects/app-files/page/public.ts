@@ -2,7 +2,7 @@ import { Download, Page } from 'playwright'
 import { File } from '../../../types'
 import util from 'util'
 import path from 'path'
-import * as PO from '../resource/actions'
+import * as po from '../resource/actions'
 
 const passwordInput = 'input[type="password"]'
 const fileUploadInput = '//input[@id="files-file-upload-input"]'
@@ -43,43 +43,43 @@ export class Public {
     await this.#page.reload()
   }
 
-  async download(args: Omit<PO.downloadResourcesArgs, 'page'>): Promise<Download[]> {
+  async download(args: Omit<po.downloadResourcesArgs, 'page'>): Promise<Download[]> {
     const startUrl = this.#page.url()
-    const downloads = await PO.downloadResources({ ...args, page: this.#page })
+    const downloads = await po.downloadResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     return downloads
   }
 
-  async rename(args: Omit<PO.renameResourceArgs, 'page'>): Promise<void> {
+  async rename(args: Omit<po.renameResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await PO.renameResource({ ...args, page: this.#page })
+    await po.renameResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
-  async upload(args: Omit<PO.uploadResourceArgs, 'page'>): Promise<void> {
+  async upload(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await PO.uploadResource({ ...args, page: this.#page })
+    await po.uploadResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     await this.#page.locator('body').click()
   }
 
   async uploadInternal(
-    args: Omit<PO.uploadResourceArgs, 'page'> & { link: string }
+    args: Omit<po.uploadResourceArgs, 'page'> & { link: string }
   ): Promise<void> {
     // link is the public link url
     const { link } = args
     delete args.link
-    await PO.uploadResource({ ...args, page: this.#page })
+    await po.uploadResource({ ...args, page: this.#page })
     await this.#page.goto(link)
   }
 
-  async delete(args: Omit<PO.deleteResourceArgs, 'page'>): Promise<void> {
+  async delete(args: Omit<po.deleteResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await PO.deleteResource({ ...args, page: this.#page })
+    await po.deleteResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
   async expectThatLinkIsDeleted({ url }: { url: string }): Promise<void> {
-    await PO.expectThatPublicLinkIsDeleted({ page: this.#page, url })
+    await po.expectThatPublicLinkIsDeleted({ page: this.#page, url })
   }
 }
