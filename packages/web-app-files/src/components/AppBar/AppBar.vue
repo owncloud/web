@@ -72,10 +72,11 @@ import { Resource } from 'web-client'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
+  isShareSpaceResource,
   SpaceResource
 } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
-import { isLocationSpacesActive, isLocationTrashActive } from '../../router'
+import { isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
@@ -195,8 +196,7 @@ export default defineComponent({
       if (!props.space) {
         return 2
       }
-      return isLocationSpacesActive(router, 'files-spaces-projects') &&
-        !isPersonalSpaceResource(unref(props.space))
+      return isProjectSpaceResource(unref(props.space)) || isShareSpaceResource(unref(props.space))
         ? 3
         : 2
     })
