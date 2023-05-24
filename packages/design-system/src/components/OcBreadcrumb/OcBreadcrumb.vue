@@ -6,20 +6,22 @@
         :key="index"
         :data-key="index"
         :data-item-id="item.id"
+        :aria-hidden="item.isTruncationPlaceholder"
         :class="[
           'oc-breadcrumb-list-item',
           'oc-flex',
           'oc-flex-middle',
           {
-            'oc-hidden':
-              hiddenItems.indexOf(item) !== -1 || (item.isTruncated && hiddenItems.length === 0)
+            'oc-invisible-sr':
+              hiddenItems.indexOf(item) !== -1 ||
+              (item.isTruncationPlaceholder && hiddenItems.length === 0)
           }
         ]"
       >
         <router-link
           v-if="item.to"
           :aria-current="getAriaCurrent(index)"
-          :to="item.isTruncated ? lastHiddenItem.to : item.to"
+          :to="item.isTruncationPlaceholder ? lastHiddenItem.to : item.to"
         >
           <span class="oc-breadcrumb-item-text">{{ item.text }}</span>
         </router-link>
@@ -172,6 +174,15 @@ export default defineComponent({
       default: -1
     },
     /**
+     * Defines the number of items that should be always displayed at the beginning of the breadcrumb.
+     * The default value is 2. e.g. Personal > ... > XYZ
+     */
+    truncationOffset: {
+      type: Number,
+      required: false,
+      default: 2
+    },
+    /**
      * Determines if the last breadcrumb item should have context menu actions.
      */
     showContextActions: {
@@ -186,12 +197,12 @@ export default defineComponent({
     const displayItems = ref<BreadcrumbItem[]>(props.items.slice())
 
     const getBreadcrumbElement = (id): HTMLElement => {
-      return document.querySelector(`[data-item-id="${id}"]`)
+      return document.querySelector(`.oc-breadcrumb-list [data-item-id="${id}"]`)
     }
 
     const calculateTotalBreadcrumbWidth = () => {
       let totalBreadcrumbWidth = 100 // 100px margin to the right to avoid breadcrumb from getting too close to the controls
-      visibleItems.value.forEach((item, index) => {
+      visibleItems.value.forEach((item) => {
         const breadcrumbElement = getBreadcrumbElement(item.id)
         const itemClientWidth = breadcrumbElement?.getBoundingClientRect()?.width || 0
         totalBreadcrumbWidth += itemClientWidth
@@ -204,7 +215,6 @@ export default defineComponent({
       if (!breadcrumbMaxWidth) {
         return
       }
-      document.getElementById(props.id)?.style.setProperty('--max-width', `${breadcrumbMaxWidth}px`)
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
 
       const isOverflowing = breadcrumbMaxWidth < totalBreadcrumbWidth
@@ -223,27 +233,24 @@ export default defineComponent({
     )
 
     const renderBreadcrumb = () => {
-      displayItems.value = props.items.slice()
-      if (displayItems.value.length > 1) {
-        displayItems.value.splice(1, 0, {
+      displayItems.value = [...props.items]
+      if (displayItems.value.length > props.truncationOffset - 1) {
+        displayItems.value.splice(props.truncationOffset - 1, 0, {
           text: '...',
           allowContextActions: false,
           to: {},
-          isTruncated: true
+          isTruncationPlaceholder: true
         })
       }
-      visibleItems.value = displayItems.value.slice()
+      visibleItems.value = [...displayItems.value]
       hiddenItems.value = []
 
       nextTick(() => {
-        reduceBreadcrumb(2)
+        reduceBreadcrumb(props.truncationOffset)
       })
     }
 
-    watch([() => props.maxWidth, () => props.items], renderBreadcrumb)
-    onMounted(() => {
-      renderBreadcrumb()
-    })
+    watch([() => props.maxWidth, () => props.items], renderBreadcrumb, { immediate: true })
 
     const currentFolder = computed<BreadcrumbItem>(() => {
       if (props.items.length === 0 || !props.items) {

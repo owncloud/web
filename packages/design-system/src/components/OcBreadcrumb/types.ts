@@ -6,5 +6,5 @@ export interface BreadcrumbItem {
   to?: RouteLocationRaw
   allowContextActions?: boolean
   onClick?: () => void
-  isTruncated?: boolean
+  isTruncationPlaceholder?: boolean
 }

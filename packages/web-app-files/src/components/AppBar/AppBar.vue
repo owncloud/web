@@ -19,6 +19,7 @@
           :show-context-actions="showContextActions"
           :items="breadcrumbs"
           :max-width="breadcrumbMaxWidth"
+          :truncation-offset="breadcrumbTruncationOffset"
         >
           <template #contextMenu>
             <context-actions
@@ -74,7 +75,7 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
-import { isLocationTrashActive } from '../../router'
+import { isLocationSpacesActive, isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
@@ -92,7 +93,7 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
-import { useStore } from 'web-pkg/src'
+import { useRoute, useRouter, useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
 
@@ -134,6 +135,8 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: clearSelectionActions } = useFileActionsClearSelection({ store })
@@ -189,11 +192,18 @@ export default defineComponent({
       return props.breadcrumbs.length <= 1
     })
 
+    const breadcrumbTruncationOffset = computed(() => {
+      return isLocationSpacesActive(router, 'files-spaces-projects') ? 3 : 2
+    })
+
+    console.log('offset', route)
+
     return {
       batchActions,
       showBreadcrumb,
       showMobileNav,
-      breadcrumbMaxWidth
+      breadcrumbMaxWidth,
+      breadcrumbTruncationOffset
     }
   },
   data: function () {
