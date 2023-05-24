@@ -28,6 +28,7 @@
           </template>
         </item-filter>
         <item-filter-toggle
+          v-if="fullTextSearchEnabled"
           :filter-label="$gettext('Search in file content')"
           filter-name="fullText"
           class="files-search-filter-full-text oc-mr-s"
@@ -131,7 +132,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { basename } from 'path'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { eventBus } from 'web-pkg'
+import { eventBus, useCapabilityFilesFullTextSearch } from 'web-pkg'
 import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
 import { isLocationCommonActive } from 'web-app-files/src/router'
 import ItemFilterToggle from 'web-pkg/src/components/ItemFilterToggle.vue'
@@ -177,6 +178,7 @@ export default defineComponent({
     const { y: fileListHeaderY } = useFileListHeaderPosition()
     const clientService = useClientService()
     const hasTags = useCapabilityFilesTags()
+    const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
 
     const searchTermQuery = useRouteQuery('term')
     const searchTerm = computed(() => {
@@ -261,6 +263,7 @@ export default defineComponent({
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       loadAvailableTagsTask,
       fileListHeaderY,
+      fullTextSearchEnabled,
       getSpace,
       availableTags,
       tagFilter

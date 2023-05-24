@@ -63,13 +63,17 @@ describe('List component', () => {
       })
     })
     describe('fullText', () => {
-      it('should render filter', () => {
-        const { wrapper } = getWrapper()
+      it('should render filter if enabled via capabilities', () => {
+        const { wrapper } = getWrapper({ fullTextSearchEnabled: true })
         expect(wrapper.find(selectors.fullTextFilter).exists()).toBeTruthy()
       })
       it('should set initial filter when fullText is set active via query param', async () => {
         const searchTerm = 'term'
-        const { wrapper } = getWrapper({ searchTerm, fullTextFilterQuery: 'true' })
+        const { wrapper } = getWrapper({
+          searchTerm,
+          fullTextFilterQuery: 'true',
+          fullTextSearchEnabled: true
+        })
         await wrapper.vm.loadAvailableTagsTask.last
         expect(wrapper.emitted('search')[0][0]).toEqual(`Content:"${searchTerm}"`)
       })
@@ -82,7 +86,8 @@ function getWrapper({
   resources = [],
   searchTerm = '',
   tagFilterQuery = null,
-  fullTextFilterQuery = null
+  fullTextFilterQuery = null,
+  fullTextSearchEnabled = false
 } = {}) {
   jest.mocked(queryItemAsString).mockImplementationOnce(() => searchTerm)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => fullTextFilterQuery)
@@ -98,7 +103,9 @@ function getWrapper({
     mockAxiosResolve({ value: availableTags })
   )
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockReturnValue({ files: { tags: true } })
+  storeOptions.getters.capabilities.mockReturnValue({
+    files: { tags: true, full_text_search: fullTextSearchEnabled }
+  })
   const store = createStore(storeOptions)
   return {
     mocks,
