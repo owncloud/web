@@ -10,6 +10,7 @@ import {
 } from '@cucumber/cucumber'
 import pino from 'pino'
 import { Browser, chromium, firefox, webkit } from 'playwright'
+import fs from 'fs'
 
 import { config } from '../../config'
 import { api, environment } from '../../support'
@@ -124,6 +125,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 
   createdLinkStore.clear()
   createdTokenStore.clear()
+  removeTempUploadDirectory()
 })
 
 AfterAll(() => state.browser && state.browser.close())
@@ -189,4 +191,10 @@ const getAdminToken = async (browser: Browser) => {
 
   await page.close()
   await ctx.close()
+}
+
+const removeTempUploadDirectory = () => {
+  if (fs.existsSync(config.tempAssetsPath)) {
+    fs.rmSync(config.tempAssetsPath, { recursive: true })
+  }
 }
