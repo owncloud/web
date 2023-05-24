@@ -26,9 +26,9 @@ export class Resource {
     }
   }
 
-  async uploadSmallResources(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
+  async uploadLargeNumberOfResources(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await po.uploadMultipleSmallResources({ ...args, page: this.#page })
+    await po.uploadLargeNumberOfResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     if (!config.ocis) {
       await this.#page.locator('body').click()

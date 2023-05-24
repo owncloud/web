@@ -5,13 +5,12 @@ import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 import { config } from '../../../config'
 import { displayedResourceType } from '../../../support/objects/app-files/resource/actions'
-import createTempResources from '../../../support/utils/createTempResources'
-import { getBytes, getTempUploadPath, createFileWithSize } from '../../../support/utils/runtimeFs'
+import * as tempFs from '../../../support/utils/runtimeFs'
 
 When(
   'the user creates a file {string} with size {string} in the temp upload directory',
   function (this: World, fileName: string, fileSize: string): Promise<void> {
-    return createFileWithSize(fileName, getBytes(fileSize), getTempUploadPath())
+    return tempFs.createFileWithSize(fileName, tempFs.getBytes(fileSize))
   }
 )
 
@@ -52,7 +51,7 @@ When(
         to: info.to,
         resources: [
           this.filesEnvironment.getFile({
-            name: path.join(config.tempAssetsPath.replace(config.assets, ''), info.resource)
+            name: path.join(tempFs.getTempUploadPath().replace(config.assets, ''), info.resource)
           })
         ],
         option: info.option
@@ -645,13 +644,21 @@ When(
 When(
   '{string} uploads {int} small files in personal space',
   async function (this: World, stepUser: string, numberOfFiles: number): Promise<void> {
-    const files = createTempResources(numberOfFiles).map((file) =>
-      this.filesEnvironment.getFile({ name: file })
-    )
+    const files = []
+    for (let i = 0; i < numberOfFiles; i++) {
+      const file = `file${i}.txt`
+      tempFs.createFile(file, 'test content')
+
+      files.push(
+        this.filesEnvironment.getFile({
+          name: path.join(tempFs.getTempUploadPath().replace(config.assets, ''), file)
+        })
+      )
+    }
 
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
-    await resourceObject.uploadSmallResources({ resources: files })
+    await resourceObject.uploadLargeNumberOfResources({ resources: files })
   }
 )

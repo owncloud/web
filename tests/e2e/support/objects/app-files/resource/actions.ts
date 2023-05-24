@@ -316,11 +316,10 @@ const performUpload = async (args: uploadResourceArgs): Promise<void> => {
   }
 }
 
-export const uploadMultipleSmallResources = async (args: uploadResourceArgs): Promise<void> => {
+export const uploadLargeNumberOfResources = async (args: uploadResourceArgs): Promise<void> => {
   const { page, resources } = args
   await page.locator(resourceUploadButton).click()
   await page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
-  await page.locator(showUploadDetailsSelector).click()
   await expect(page.locator(uploadInfoSuccessLabelSelector)).toHaveText(
     `${resources.length} items uploaded`
   )

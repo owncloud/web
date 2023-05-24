@@ -47,7 +47,7 @@ export const getTempUploadPath = (): string => {
 export const createFileWithSize = (
   fileName: string,
   sizeInBytes: number,
-  dir: string
+  dir: string = getTempUploadPath()
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
     const fileStream = fs.createWriteStream(path.join(dir, fileName))
@@ -74,4 +74,18 @@ export const createFileWithSize = (
       reject(`An error occurred while writing file '${fileName}': ${err}`)
     })
   })
+}
+
+export const createFile = (
+  fileName: string,
+  content: string,
+  dir: string = getTempUploadPath()
+) => {
+  fs.writeFileSync(path.join(dir, fileName), content)
+}
+
+export const removeTempUploadDirectory = () => {
+  if (fs.existsSync(config.tempAssetsPath)) {
+    fs.rmSync(config.tempAssetsPath, { recursive: true })
+  }
 }
