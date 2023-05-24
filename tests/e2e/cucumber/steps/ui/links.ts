@@ -30,7 +30,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     const linkName = await linkObject.changeName({ resource, newName })
-    expect(newName).toBe(linkName)
+    expect(linkName).toBe(newName)
   }
 )
 
@@ -40,7 +40,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     const linkName = await linkObject.changeName({ newName, space: true })
-    expect(newName).toBe(linkName)
+    expect(linkName).toBe(newName)
   }
 )
 
@@ -86,7 +86,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     const roleText = await linkObject.changeRole({ linkName, resource, role })
-    expect(linkObject.roleDisplayText[role].toLowerCase()).toBe(roleText.toLowerCase())
+    expect(roleText.toLowerCase()).toBe(linkObject.roleDisplayText[role].toLowerCase())
   }
 )
 
@@ -103,9 +103,10 @@ Then(
   'public link named {string} should be visible to {string}',
   async function (this: World, linkName: string, stepUser: any): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const expectedPublicLink = this.linksEnvironment.getLink({ name: linkName })
     const linkObject = new objects.applicationFiles.Link({ page })
-    const publicLinkUrls = await linkObject.getPublicLinkUrl({ linkName, space: true })
-    expect(publicLinkUrls[0]).toBe(publicLinkUrls[1])
+    const actualPublicLink = await linkObject.getPublicLinkUrl({ linkName, space: true })
+    expect(actualPublicLink).toBe(expectedPublicLink)
   }
 )
 
@@ -113,9 +114,10 @@ Then(
   'public link named {string} of the resource {string} should be visible to {string}',
   async function (this: World, linkName: string, resource: string, stepUser: any): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const expectedPublicLink = this.linksEnvironment.getLink({ name: linkName })
     const linkObject = new objects.applicationFiles.Link({ page })
-    const publicLinkUrls = await linkObject.getPublicLinkUrl({ linkName, resource })
-    expect(publicLinkUrls[0]).toBe(publicLinkUrls[1])
+    const actualPublicLink = await linkObject.getPublicLinkUrl({ linkName, resource })
+    expect(actualPublicLink).toBe(expectedPublicLink)
   }
 )
 
@@ -140,7 +142,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     const newPermission = await linkObject.changeRole({ linkName, role })
-    expect(linkObject.roleDisplayText[role].toLowerCase()).toBe(newPermission.toLowerCase())
+    expect(newPermission.toLowerCase()).toBe(linkObject.roleDisplayText[role].toLowerCase())
   }
 )
 
