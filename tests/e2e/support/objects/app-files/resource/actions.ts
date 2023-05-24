@@ -95,17 +95,14 @@ export const clickResource = async ({
 }): Promise<void> => {
   const paths = path.split('/')
   for (const name of paths) {
-    const resource = await page.locator(util.format(resourceNameSelector, name))
+    const resource = page.locator(util.format(resourceNameSelector, name))
     const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
     await Promise.all([
-      resource.click(),
       page.waitForResponse(
         (resp) => resp.url().endsWith(encodeURIComponent(name)) || resp.url().endsWith(itemId)
-      )
+      ),
+      resource.click()
     ])
-
-    // TODO: Refactor so the line below becomes unnecessary
-    await new Promise((resolve) => setTimeout(resolve, 250))
   }
 }
 

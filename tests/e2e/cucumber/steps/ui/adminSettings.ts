@@ -17,7 +17,7 @@ Then(
     const actualList = await spacesObject.getDisplayedSpaces()
 
     for (const info of stepTable.hashes()) {
-      const space = await spacesObject.getSpace({ key: info.id })
+      const space = spacesObject.getSpace({ key: info.id })
       expect(actualList.includes(space.id)).toBe(actionType === 'should')
     }
   }

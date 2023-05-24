@@ -1,6 +1,5 @@
 import { DataTable, Then, When } from '@cucumber/cucumber'
-import { kebabCase } from 'lodash'
-import { DateTime } from 'luxon'
+import { Page } from 'playwright'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
@@ -8,26 +7,18 @@ import { processDelete, processDownload } from './resources'
 When(
   '{string} opens the public link {string}',
   async function (this: World, stepUser: string, name: string): Promise<void> {
-    let user
+    let page: Page
     try {
-      user = this.usersEnvironment.getUser({ key: stepUser })
-    } catch (e) {}
-
-    let actor
-    try {
-      actor = this.actorsEnvironment.getActor(user)
-    } catch (e) {}
-
-    if (!actor) {
-      actor = await this.actorsEnvironment.createActor({
-        key: stepUser,
-        namespace: kebabCase(
-          [this.feature.name, stepUser, DateTime.now().toFormat('yyyy-M-d-hh-mm-ss')].join('-')
-        )
-      })
+      page = this.actorsEnvironment.getActor({ key: stepUser }).page
+    } catch (e) {
+      await this.actorsEnvironment
+        .createActor({
+          key: stepUser,
+          namespace: this.actorsEnvironment.generateNamespace(this.feature.name, stepUser)
+        })
+        .then((actor) => (page = actor.page))
     }
 
-    const { page } = actor
     const { url } = this.linksEnvironment.getLink({ name })
     const pageObject = new objects.applicationFiles.page.Public({ page })
     await pageObject.open({ url })

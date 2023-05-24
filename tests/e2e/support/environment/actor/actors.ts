@@ -1,3 +1,5 @@
+import { kebabCase } from 'lodash'
+import { DateTime } from 'luxon'
 import { Actor } from '../../types'
 import { ActorsOptions } from './shared'
 import { ActorEnvironment } from './actor'
@@ -44,5 +46,9 @@ export class ActorsEnvironment extends EventEmitter {
 
   public async close(): Promise<void> {
     await Promise.all([...actorStore.values()].map((actor) => actor.close()))
+  }
+
+  public generateNamespace(scenarioTitle: string, user: string): string {
+    return kebabCase([scenarioTitle, user, DateTime.now().toFormat('yyyy-M-d-hh-mm-ss')].join('-'))
   }
 }
