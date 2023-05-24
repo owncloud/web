@@ -7,12 +7,7 @@ import {
 import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
 import path from 'path'
 import first from 'lodash-es/first'
-import {
-  isProjectSpaceResource,
-  isPublicSpaceResource,
-  Resource,
-  SpaceResource
-} from 'web-client/src/helpers'
+import { isProjectSpaceResource, isPublicSpaceResource, Resource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import {
