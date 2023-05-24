@@ -1506,6 +1506,7 @@ Details
 
    https://github.com/owncloud/web/issues/9058
    https://github.com/owncloud/web/pull/9059
+   https://github.com/owncloud/web/pull/9087
 
 * Enhancement - Disable change password capability: [#9070](https://github.com/owncloud/web/pull/9070)
 
