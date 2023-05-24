@@ -18,33 +18,36 @@
         <div ref="itemFilterListRef">
           <oc-list class="item-filter-list">
             <li v-for="(item, index) in displayedItems" :key="index" class="oc-my-xs">
-              <component
-                :is="isSelectionAllowed(item) ? 'oc-button' : 'div'"
+              <oc-button
                 class="item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs"
-                justify-content="left"
+                :class="{ 'item-filter-list-item-active': !allowMultiple && isItemSelected(item) }"
+                justify-content="space-between"
                 appearance="raw"
                 :data-test-value="item[displayNameAttribute]"
                 @click="toggleItemSelection(item)"
               >
-                <div>
+                <div class="oc-flex oc-flex-middle oc-text-truncate">
                   <oc-checkbox
+                    v-if="allowMultiple"
                     size="large"
-                    class="item-filter-checkbox"
+                    class="item-filter-checkbox oc-mr-s"
                     :label="$gettext('Toggle selection')"
                     :model-value="isItemSelected(item)"
-                    :disabled="!isSelectionAllowed(item)"
                     hide-label
                     @update:model-value="toggleItemSelection(item)"
                     @click.stop
                   />
+                  <div>
+                    <slot name="image" :item="item" />
+                  </div>
+                  <div class="oc-text-truncate oc-ml-s">
+                    <slot name="item" :item="item" />
+                  </div>
                 </div>
-                <div>
-                  <slot name="image" :item="item" />
+                <div class="oc-flex">
+                  <oc-icon v-if="!allowMultiple && isItemSelected(item)" name="check" />
                 </div>
-                <div class="oc-text-truncate">
-                  <slot name="item" :item="item" />
-                </div>
-              </component>
+              </oc-button>
             </li>
           </oc-list>
         </div>
@@ -133,16 +136,14 @@ export default defineComponent({
     const isItemSelected = (item) => {
       return !!unref(selectedItems).find((s) => s.id === item.id)
     }
-    const isSelectionAllowed = (item) => {
-      return props.allowMultiple || !unref(selectedItems).length || isItemSelected(item)
-    }
+
     const toggleItemSelection = (item) => {
-      if (!isSelectionAllowed(item)) {
-        return
-      }
       if (isItemSelected(item)) {
         selectedItems.value = unref(selectedItems).filter((s) => s.id !== item.id)
       } else {
+        if (!props.allowMultiple) {
+          selectedItems.value = []
+        }
         selectedItems.value.push(item)
       }
       emit('selectionChange', unref(selectedItems))
@@ -218,7 +219,6 @@ export default defineComponent({
       filterInputRef,
       filterTerm,
       isItemSelected,
-      isSelectionAllowed,
       itemFilterListRef,
       queryParam,
       selectedItems,
@@ -246,7 +246,8 @@ export default defineComponent({
       line-height: 1.5;
       gap: 8px;
 
-      &:hover {
+      &:hover,
+      &-active {
         background-color: var(--oc-color-background-hover) !important;
       }
     }
