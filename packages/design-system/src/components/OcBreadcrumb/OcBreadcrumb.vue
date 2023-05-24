@@ -50,8 +50,8 @@
           />
         </oc-button>
         <span
-          class="oc-breadcrumb-item-text"
           v-else
+          class="oc-breadcrumb-item-text"
           :aria-current="getAriaCurrent(index)"
           tabindex="-1"
           v-text="item.text"
@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
+import { computed, defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 import { AVAILABLE_SIZES } from '../../helpers/constants'
@@ -218,7 +218,7 @@ export default defineComponent({
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
 
       const isOverflowing = breadcrumbMaxWidth < totalBreadcrumbWidth
-      if (!isOverflowing || visibleItems.value.length <= 3) {
+      if (!isOverflowing || visibleItems.value.length <= props.truncationOffset + 1) {
         return
       }
       // Remove from the left side

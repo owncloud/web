@@ -17,7 +17,9 @@ describe('OcBreadcrumb', () => {
   })
   it('displays all items', () => {
     const { wrapper } = getWrapper()
-    expect(wrapper.findAll('.oc-breadcrumb-list-item').length).toBe(items.length)
+    expect(wrapper.findAll('.oc-breadcrumb-list-item:not(.oc-invisible-sr)').length).toBe(
+      items.length
+    )
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('displays context menu trigger if enabled via property', () => {

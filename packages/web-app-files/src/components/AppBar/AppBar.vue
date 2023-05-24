@@ -30,8 +30,8 @@
         <portal-target v-if="showMobileNav" name="app.runtime.mobile.nav" />
         <shares-navigation v-if="hasSharesNavigation" />
         <div
-          id="files-app-bar-controls-right"
           v-if="hasViewOptions || hasSidebarToggle"
+          id="files-app-bar-controls-right"
           class="oc-flex"
         >
           <view-options
