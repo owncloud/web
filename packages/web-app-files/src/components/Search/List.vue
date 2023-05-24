@@ -240,9 +240,9 @@ export default defineComponent({
     const breadcrumbs = computed(() => {
       return [
         {
-          text: !unref(searchTerm)
-            ? $gettext('Search')
-            : $gettext('Search results for "%{searchTerm}"', { searchTerm: unref(searchTerm) })
+          text: unref(searchTerm)
+            ? $gettext('Search results for "%{searchTerm}"', { searchTerm: unref(searchTerm) })
+            : $gettext('Search')
         }
       ]
     })
