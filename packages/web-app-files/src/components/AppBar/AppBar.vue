@@ -93,7 +93,7 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
-import { useRoute, useRouter, useStore } from 'web-pkg/src'
+import { useRouter, useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
 
@@ -136,7 +136,6 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const router = useRouter()
-    const route = useRoute()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: clearSelectionActions } = useFileActionsClearSelection({ store })
@@ -193,10 +192,14 @@ export default defineComponent({
     })
 
     const breadcrumbTruncationOffset = computed(() => {
-      return isLocationSpacesActive(router, 'files-spaces-projects') ? 3 : 2
+      if (!props.space) {
+        return 2
+      }
+      return isLocationSpacesActive(router, 'files-spaces-projects') &&
+        !isPersonalSpaceResource(unref(props.space))
+        ? 3
+        : 2
     })
-
-    console.log('offset', route)
 
     return {
       batchActions,
