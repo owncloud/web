@@ -305,10 +305,8 @@ export const processDownload = async (
   pageObject: any,
   actionType: string
 ) => {
-  let downloads,
-    files,
-    parentFolder,
-    downloadedResources = []
+  let downloads, files, parentFolder
+  const downloadedResources = []
   const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
     const { resource, from, type } = stepRow
     const resourceInfo = {

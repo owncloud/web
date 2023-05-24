@@ -256,11 +256,11 @@ export class Resource {
     return await clickResourceTag({ ...args, page: this.#page })
   }
 
-  async createSpaceFromFolder(args: Omit<createSpaceFromFolderArgs, 'page'>): Promise<Space> {
+  createSpaceFromFolder(args: Omit<createSpaceFromFolderArgs, 'page'>): Promise<Space> {
     return createSpaceFromFolder({ ...args, page: this.#page })
   }
 
-  async createSpaceFromSelection(args: Omit<createSpaceFromSelectionArgs, 'page'>): Promise<Space> {
+  createSpaceFromSelection(args: Omit<createSpaceFromSelectionArgs, 'page'>): Promise<Space> {
     return createSpaceFromSelection({ ...args, page: this.#page })
   }
 

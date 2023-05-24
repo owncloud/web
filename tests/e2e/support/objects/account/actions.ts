@@ -8,7 +8,6 @@ const accountManageButton = '#oc-topbar-account-manage'
 const infoValue = '.account-page-info-%s dd'
 const requestExportButton = '[data-testid="request-export-btn"]'
 const downloadExportButton = '[data-testid="download-export-btn"]'
-const exportInProcessMessage = '[data-testid="export-in-process"]'
 
 export const getQuotaValue = async (args: { page: Page }): Promise<string> => {
   const { page } = args

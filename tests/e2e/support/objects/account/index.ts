@@ -15,11 +15,11 @@ export class Account {
     this.#page = page
   }
 
-  async getQuotaValue(): Promise<string> {
+  getQuotaValue(): Promise<string> {
     return getQuotaValue({ page: this.#page })
   }
 
-  async getUserInfo(key: string): Promise<string> {
+  getUserInfo(key: string): Promise<string> {
     return getUserInfo({ page: this.#page, key })
   }
 
