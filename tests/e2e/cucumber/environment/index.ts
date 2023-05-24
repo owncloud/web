@@ -22,6 +22,8 @@ import {
   createdUserStore
 } from '../../support/store'
 import { User } from '../../support/types'
+import { Session } from '../../support/objects/runtime/session'
+import { createdTokenStore } from '../../support/store/token'
 
 export { World }
 
@@ -48,7 +50,7 @@ BeforeAll(async function (this: World) {
   })
 })
 
-Before(function (this: World, { pickle }: ITestCaseHookParameter) {
+Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   this.feature = pickle
   this.actorsEnvironment.on('console', (actorId, message): void => {
     const msg = {
@@ -74,6 +76,9 @@ Before(function (this: World, { pickle }: ITestCaseHookParameter) {
         break
     }
   })
+  if (config.apiToken) {
+    await getAdminToken(state.browser)
+  }
 })
 
 BeforeAll(async (): Promise<void> => {
@@ -118,6 +123,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
   await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
 
   createdLinkStore.clear()
+  createdTokenStore.clear()
 })
 
 AfterAll(() => state.browser && state.browser.close())
@@ -172,4 +178,15 @@ const cleanUpGroup = async (adminUser: User) => {
 
   await Promise.all(requests)
   createdGroupStore.clear()
+}
+
+const getAdminToken = async (browser: Browser) => {
+  const ctx = await browser.newContext({ ignoreHTTPSErrors: true })
+  const page = await ctx.newPage()
+  const admin = usersEnvironment.getUser({ key: 'admin' })
+  await page.goto(config.frontendUrl)
+  await new Session({ page }).login({ user: admin })
+
+  await page.close()
+  await ctx.close()
 }

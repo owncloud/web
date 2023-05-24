@@ -3,6 +3,7 @@ import fetch, { BodyInit, Response } from 'node-fetch'
 import { User } from '../types'
 import { config } from '../../config'
 import _ from 'lodash'
+import { TokenEnvironment } from '../environment'
 
 export const request = async ({
   method,
@@ -20,10 +21,14 @@ export const request = async ({
   header?: object
 }): Promise<Response> => {
   const format = config.ocis || !formatJson ? '' : 'format=json'
+  const tokenEnvironment = new TokenEnvironment()
+
   const basicHeader = {
     'OCS-APIREQUEST': true as any,
     ...(user && {
-      Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
+      Authorization: config.apiToken
+        ? 'Bearer ' + tokenEnvironment.getToken({ user }).tokenValue
+        : 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
     }),
     ...header
   }

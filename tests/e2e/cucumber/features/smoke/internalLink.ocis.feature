@@ -5,13 +5,13 @@ Feature: internal link share
       | id    |
       | Alice |
       | Brian |
+    And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name     |
       | myfolder |
     And "Alice" shares the following resource using API
       | resource | recipient | type | role   |
       | myfolder | Brian     | user | editor |
-    And "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates a public link for the resource "myfolder" using the sidebar panel
     When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "internal"

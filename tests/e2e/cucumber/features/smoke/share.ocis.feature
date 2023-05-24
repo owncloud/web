@@ -7,12 +7,12 @@ Feature: share
       | Brian |
 
   Scenario: folder
-    Given "Alice" creates the following folder in personal space using API
+    Given "Alice" logs in
+    And "Alice" creates the following folder in personal space using API
       | name                   |
       | folder_to_shared       |
       | folder_to_customShared |
       | shared_folder          |
-    And "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" uploads the following resource
       | resource      | to                     |
