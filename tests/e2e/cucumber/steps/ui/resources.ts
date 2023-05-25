@@ -422,7 +422,7 @@ When(
 )
 
 When(
-  '{string} opens the following file(s) in mediaviewer/pdfviewer',
+  /^"([^"].*)" opens the following file(?:s)? in (mediaviewer|pdfviewer)$/,
   async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -430,7 +430,7 @@ When(
     for (const info of stepTable.hashes()) {
       await resourceObject.openFileInViewer({
         name: info.resource,
-        actionType: actionType === 'mediaviewer' ? 'mediaviewer' : 'pdfviewer'
+        actionType: actionType as 'mediaviewer' | 'pdfviewer'
       })
     }
   }

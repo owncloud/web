@@ -44,7 +44,7 @@ When(
 
 When(
   '{string} reshares the following resource(s)',
-  async function (this: World, stepUser: string, _: string, stepTable: DataTable) {
+  async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
