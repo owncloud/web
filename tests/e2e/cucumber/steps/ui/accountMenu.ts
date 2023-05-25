@@ -8,8 +8,7 @@ Then(
   async function (this: World, stepUser: string, quota: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const accountObject = new objects.account.Account({ page })
-    const quotaValue = await accountObject.getQuotaValue()
-    expect(quotaValue).toBe(quota)
+    expect(await accountObject.getQuotaValue()).toBe(quota)
   }
 )
 
@@ -20,7 +19,7 @@ Then(
     const accountObject = new objects.account.Account({ page })
 
     for (const info of stepTable.hashes()) {
-      expect(info.value).toBe(await accountObject.getUserInfo(info.key))
+      expect(await accountObject.getUserInfo(info.key)).toBe(info.value)
     }
   }
 )

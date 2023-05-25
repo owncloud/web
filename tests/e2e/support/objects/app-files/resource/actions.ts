@@ -660,7 +660,7 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
         page.locator(util.format(actionConfirmationButton, 'Delete')).click()
       ])
       // assertion that the resources actually got deleted
-      expect(resourcesWithInfo.length).toBe(deletetedResources.length)
+      expect(deletetedResources.length).toBe(resourcesWithInfo.length)
       for (const resource of resourcesWithInfo) {
         expect(deletetedResources).toContain(resource.name)
       }

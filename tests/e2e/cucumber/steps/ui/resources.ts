@@ -234,12 +234,7 @@ Then(
       keyword: listType as displayedResourceType
     })
     for (const info of stepTable.hashes()) {
-      const found = actualList.includes(info.resource)
-      if (actionType === 'should') {
-        expect(found).toBe(true)
-      } else {
-        expect(found).toBe(false)
-      }
+      expect(actualList.includes(info.resource)).toBe(actionType === 'should')
     }
   }
 )
@@ -344,7 +339,7 @@ export const processDownload = async (
     })
 
     if (actionType === 'sidebar panel') {
-      expect(files.length).toBe(downloads.length)
+      expect(downloads.length).toBe(files.length)
       for (const resource of files) {
         const fileOrFolderName = path.parse(resource.name).name
         if (resource.type === 'file') {
