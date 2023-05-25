@@ -18,12 +18,7 @@ Then(
 
     for (const info of stepTable.hashes()) {
       const space = await spacesObject.getSpace({ key: info.id })
-      const found = actualList.includes(space.id)
-      if (actionType === 'should') {
-        expect(found).toBe(true)
-      } else {
-        expect(found).toBe(false)
-      }
+      expect(actualList.includes(space.id)).toBe(actionType === 'should')
     }
   }
 )

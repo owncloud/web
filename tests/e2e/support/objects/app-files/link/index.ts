@@ -87,15 +87,11 @@ export class Link {
     await this.#page.goto(startUrl)
   }
 
-  async getPublicLinkUrl(
-    args: Omit<publicLinkAndItsEditButtonVisibilityArgs, 'page'>
-  ): Promise<string[]> {
-    const linkUrl = this.#linksEnvironment.getLink({ name: args.linkName })
-    const publicLink = await getPublicLinkVisibility({
+  getPublicLinkUrl(args: Omit<publicLinkAndItsEditButtonVisibilityArgs, 'page'>): Promise<string> {
+    return getPublicLinkVisibility({
       ...args,
       page: this.#page
     })
-    return [linkUrl.url, publicLink]
   }
 
   async islinkEditButtonVisibile(linkName): Promise<boolean> {
