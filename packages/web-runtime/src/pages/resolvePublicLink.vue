@@ -89,6 +89,7 @@ export default defineComponent({
     const clientService = useClientService()
     const router = useRouter()
     const store = useStore()
+    const { $gettext } = useGettext()
     const token = useRouteParam('token')
     const redirectUrl = useRouteQuery('redirectUrl')
     const password = ref('')
@@ -130,7 +131,7 @@ export default defineComponent({
           return true
         }
         if (error.statusCode === 404) {
-          throw new Error('The resource could not be located, it may not exist anymore.')
+          throw new Error($gettext('The resource could not be located, it may not exist anymore.'))
         }
         throw error
       }
@@ -138,7 +139,7 @@ export default defineComponent({
     const loadPublicLinkTask = useTask(function* () {
       const resource = yield clientService.webdav.getFileInfo(unref(publicLinkSpace))
       if (!isPublicSpaceResource(resource)) {
-        const e: any = new Error('resolved resource has wrong type')
+        const e: any = new Error($gettext('The resource is not a public link.'))
         e.resource = resource
         throw e
       }
@@ -230,7 +231,6 @@ export default defineComponent({
       }
     })
 
-    const { $gettext } = useGettext()
     const footerSlogan = computed(() => store.getters.configuration.currentTheme.general.slogan)
     const passwordFieldLabel = computed(() => {
       return $gettext('Enter password for public link')

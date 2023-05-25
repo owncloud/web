@@ -8,6 +8,7 @@ Feature: internal link share in project space
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
+    And "Alice" logs in
     And "Alice" creates the following project space using API
       | name      | id          |
       | Marketing | marketing.1 |
@@ -17,7 +18,6 @@ Feature: internal link share in project space
     And "Alice" creates the following file in space "Marketing" using API
       | name              | content     |
       | myfolder/plan.txt | secret plan |
-    And "Alice" logs in
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "marketing.1"
     And "Alice" adds following users to the project space

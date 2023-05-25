@@ -7,13 +7,13 @@ Feature: spaces public link
       | Brian |
       | Carol |
       | David |
+    When "Alice" logs in
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
     And "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
-    When "Alice" logs in
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" creates the following resources

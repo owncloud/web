@@ -19,10 +19,10 @@ Feature: spaces participant management
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
+    And "Alice" logs in
     And "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
-    When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"

@@ -1,0 +1,5 @@
+Enhancement: Show detailed error messages while upload fails
+
+We now show detailed error messages while upload fails and the server provides the error cause.
+
+https://github.com/owncloud/web/pull/9076

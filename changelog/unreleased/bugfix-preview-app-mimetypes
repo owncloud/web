@@ -1,0 +1,6 @@
+Bugfix: Preview app mime type detection
+
+A bug where the preview app would not detect all supported mime types has been fixed (e.g. `image/x-ms-bmp`).
+
+https://github.com/owncloud/web/issues/9050
+https://github.com/owncloud/web/pull/9092

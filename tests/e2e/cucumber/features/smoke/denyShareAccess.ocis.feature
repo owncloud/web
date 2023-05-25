@@ -1,18 +1,16 @@
 Feature: deny share access
 
-  Background:
+  Scenario: deny and grant access
     Given "Admin" creates following users using API
       | id    |
       | Alice |
       | Brian |
-
-  Scenario: deny and grant access
-    Given "Alice" creates the following folder in personal space using API
+    When "Alice" logs in
+    And "Alice" creates the following folder in personal space using API
       | name                            |
       | folder_to_shared                |
       | folder_to_shared/folder         |
       | folder_to_shared/folder_to_deny |
-    And "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type | role   | resourceType |

@@ -9,7 +9,7 @@
         </h2>
         <oc-spinner :aria-hidden="true" />
       </div>
-      <div v-else key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle oc-height-1-1">
+      <div v-else key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle">
         <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
           <h2 v-text="title" />
           <resource-upload
@@ -27,9 +27,10 @@
           <p class="oc-m-rm" v-text="errorMessage" />
         </div>
       </div>
-    </div>
-    <div class="oc-text-center">
-      <p v-text="configuration.currentTheme.general.slogan" />
+
+      <div class="oc-text-center oc-mt-xxl">
+        <p v-text="configuration.currentTheme.general.slogan" />
+      </div>
     </div>
   </div>
 </template>

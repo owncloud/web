@@ -7,6 +7,7 @@ Feature: Copy
     Given "Admin" creates following user using API
       | id    |
       | Alice |
+    And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name        |
       | PARENTCopy1 |
@@ -19,7 +20,6 @@ Feature: Copy
       | KeyboardExample.txt     | copy with the help of keyboard      |
       | dragDrop.txt            | copy with the help of drag-drop     |
       | sidebar.txt             | copy with the help of sidebar panel |
-    And "Alice" logs in
     And "Alice" opens the "files" app
 
     When "Alice" copies the following resource using sidebar-panel
