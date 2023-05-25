@@ -78,7 +78,6 @@ const footerTextSelector = '//*[@data-testid="files-list-footer-info"]'
 const filesTableRowSelector = 'tbody tr'
 const itemsPerPageDropDownSelector = '.vs__actions'
 const filesPaginationNavSelector = '.files-pagination'
-const showUploadDetailsSelector = '.upload-info-toggle-details-btn'
 const uploadInfoSuccessLabelSelector = '.upload-info-label.upload-info-success'
 const uploadInfoTitle = '.upload-info-title'
 const uploadInfoLabelSelector = '.upload-info-label'
@@ -295,9 +294,14 @@ const performUpload = async (args: uploadResourceArgs): Promise<void> => {
   }
 
   await page.locator(resourceUploadButton).click()
-  await page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
+
+  let uploadAction: Promise<void> = page
+    .locator(fileUploadInput)
+    .setInputFiles(resources.map((file) => file.path))
 
   if (option) {
+    await uploadAction
+
     switch (option) {
       case 'skip': {
         await page.locator(actionSkipButton).click()
@@ -305,21 +309,29 @@ const performUpload = async (args: uploadResourceArgs): Promise<void> => {
       }
       case 'merge':
       case 'replace': {
-        await page.locator(actionSecondaryConfirmationButton).click()
+        uploadAction = page.locator(actionSecondaryConfirmationButton).click()
         break
       }
       case 'keep both': {
-        await page.locator(util.format(actionConfirmationButton, 'Keep both')).click()
+        uploadAction = page.locator(util.format(actionConfirmationButton, 'Keep both')).click()
         break
       }
     }
   }
+
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        [201, 204].includes(resp.status()) && ['POST', 'PUT'].includes(resp.request().method())
+    ),
+    uploadAction
+  ])
 }
 
 export const uploadLargeNumberOfResources = async (args: uploadResourceArgs): Promise<void> => {
   const { page, resources } = args
-  await page.locator(resourceUploadButton).click()
-  await page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
+  await performUpload(args)
+  await page.locator(uploadInfoCloseButton).waitFor()
   await expect(page.locator(uploadInfoSuccessLabelSelector)).toHaveText(
     `${resources.length} items uploaded`
   )
@@ -335,7 +347,7 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
   }
 
   await waitForResources({
-    page: page,
+    page,
     names: resources.map((file) => path.basename(file.name))
   })
 }

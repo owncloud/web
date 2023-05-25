@@ -58,8 +58,6 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    // wait for some data to upload
-    await page.waitForTimeout(500)
     await resourceObject.pauseUpload()
   }
 )
