@@ -305,10 +305,8 @@ export const processDownload = async (
   pageObject: any,
   actionType: string
 ) => {
-  let downloads,
-    files,
-    parentFolder,
-    downloadedResources = []
+  let downloads, files, parentFolder
+  const downloadedResources = []
   const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
     const { resource, from, type } = stepRow
     const resourceInfo = {
@@ -553,7 +551,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const actualText = await resourceObject.getFileListFooterText()
-    await expect(actualText).toBe(expectedText)
+    expect(actualText).toBe(expectedText)
   }
 )
 
@@ -563,7 +561,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const actualNumberOfResources = await resourceObject.countNumberOfResourcesInThePage()
-    await expect(actualNumberOfResources).toBe(expectedNumberOfResources)
+    expect(actualNumberOfResources).toBe(expectedNumberOfResources)
   }
 )
 

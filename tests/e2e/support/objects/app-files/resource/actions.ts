@@ -1120,7 +1120,7 @@ export interface expectNumberOfResourcesInThePageToBeArgs {
   numberOfResources: number
 }
 
-export const countNumberOfResourcesInThePage = async ({ page }): Promise<number> => {
+export const countNumberOfResourcesInThePage = ({ page }): Promise<number> => {
   // playwright's default count function is not used here because count only counts
   // elements that are visible in the page but in this case we want to get
   // all the elements present
