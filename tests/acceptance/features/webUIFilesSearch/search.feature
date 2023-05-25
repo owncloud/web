@@ -1,4 +1,4 @@
-@issue-ocis-1330
+@skipOnOC10 @issue-ocis-6378 @issue-ocis-1330
 Feature: Search
 
   As a user
