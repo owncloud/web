@@ -87,9 +87,10 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
-import { useStore } from 'web-pkg/src'
+import { useRouteMeta, useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: {
@@ -129,6 +130,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
+    const { $gettext } = useGettext()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: clearSelectionActions } = useFileActionsClearSelection({ store })
@@ -182,10 +184,19 @@ export default defineComponent({
       return props.breadcrumbs.length <= 1
     })
 
+    const routeMetaTitle = useRouteMeta('title')
+    const pageTitle = computed(() => {
+      if (unref(routeMetaTitle)) {
+        return $gettext(unref(routeMetaTitle))
+      }
+      return props.space?.name || ''
+    })
+
     return {
       batchActions,
       showBreadcrumb,
-      showMobileNav
+      showMobileNav,
+      pageTitle
     }
   },
   data: function () {
@@ -198,10 +209,6 @@ export default defineComponent({
     ...mapGetters('Files', ['files', 'selectedFiles']),
     ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
 
-    pageTitle() {
-      const title = this.$route.meta.title || ''
-      return this.$gettext(title)
-    },
     showContextActions() {
       return last<BreadcrumbItem>(this.breadcrumbs).allowContextActions
     },
