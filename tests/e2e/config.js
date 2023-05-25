@@ -7,6 +7,7 @@ exports.config = {
   tempAssetsPath: './tests/e2e/filesForUpload/temp',
   baseUrlOc10: process.env.BASE_URL_OCC ?? 'host.docker.internal:8080',
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
+  apiToken: process.env.API_TOKEN === 'true',
   get backendUrl() {
     return withHttp(
       process.env.BACKEND_HOST ||

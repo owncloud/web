@@ -10,6 +10,7 @@ Feature: check files pagination in project space
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
+    And "Alice" logs in
     And "Alice" creates the following project space using API
       | name       | id    |
       | Developers | dev.1 |
@@ -18,7 +19,6 @@ Feature: check files pagination in project space
     And "Alice" creates the following file in space "Developers" using API
       | name                 | content                |
       | .hidden-testFile.txt | This is a hidden file. |
-    And "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "dev.1"

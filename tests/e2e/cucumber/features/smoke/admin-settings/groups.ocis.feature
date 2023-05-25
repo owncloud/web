@@ -21,7 +21,7 @@ Feature: groups management
       | sales    |
       | security |
       | finance  |
-    When "Admin" logs in
+    And "Admin" logs in
     And "Admin" opens the "admin-settings" app
     And "Admin" navigates to the groups management page
     And "Admin" deletes the following group using the context menu
@@ -44,10 +44,10 @@ Feature: groups management
     Given "Admin" creates following user using API
       | id    |
       | Alice |
-    Given "Admin" creates following groups using API
+    And "Admin" creates following groups using API
       | id    |
       | sales |
-    When "Admin" logs in
+    And "Admin" logs in
     And "Admin" opens the "admin-settings" app
     And "Admin" navigates to the groups management page
     When "Admin" changes displayName to "a renamed group" for group "sales" using the sidebar panel

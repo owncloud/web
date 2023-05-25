@@ -681,7 +681,7 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
         page.locator(util.format(actionConfirmationButton, 'Delete')).click()
       ])
       // assertion that the resources actually got deleted
-      expect(resourcesWithInfo.length).toBe(deletetedResources.length)
+      expect(deletetedResources.length).toBe(resourcesWithInfo.length)
       for (const resource of resourcesWithInfo) {
         expect(deletetedResources).toContain(resource.name)
       }
@@ -1141,7 +1141,7 @@ export interface expectNumberOfResourcesInThePageToBeArgs {
   numberOfResources: number
 }
 
-export const countNumberOfResourcesInThePage = async ({ page }): Promise<number> => {
+export const countNumberOfResourcesInThePage = ({ page }): Promise<number> => {
   // playwright's default count function is not used here because count only counts
   // elements that are visible in the page but in this case we want to get
   // all the elements present

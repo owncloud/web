@@ -8,11 +8,11 @@ Feature: spaces member expiry
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
+    And "Alice" logs in
     And "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
-    When "Alice" logs in
-    And "Alice" opens the "files" app
+    When "Alice" opens the "files" app
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" adds following users to the project space

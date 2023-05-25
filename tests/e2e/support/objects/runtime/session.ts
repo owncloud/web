@@ -1,6 +1,8 @@
 import { Page } from 'playwright'
 import { User } from '../../types'
 import { config } from '../../../config'
+import { TokenEnvironment } from '../../environment'
+import { createdTokenStore } from '../../store/token'
 
 interface LoginAdapter {
   login({ user }: { user: User }): Promise<void>
@@ -54,7 +56,27 @@ export class Session {
   }
 
   async login({ user }: { user: User }): Promise<void> {
-    await this.#adapter.login({ user })
+    const [response] = await Promise.all([
+      this.#page.waitForResponse(
+        (resp) =>
+          resp.url().includes('v1/token') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'POST'
+      ),
+      this.#adapter.login({ user })
+    ])
+
+    if (config.apiToken) {
+      const body = await response.json()
+
+      if (!createdTokenStore.has(user.id)) {
+        const tokenEnvironment = new TokenEnvironment()
+        tokenEnvironment.createToken({
+          user: { ...user },
+          token: { userId: user.id, tokenValue: body.access_token }
+        })
+      }
+    }
   }
 
   async logout(): Promise<void> {

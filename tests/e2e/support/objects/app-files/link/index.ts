@@ -1,21 +1,5 @@
 import { Page } from 'playwright'
-import {
-  addExpiration,
-  addExpirationArgs,
-  addPassword,
-  addPasswordArgs,
-  changeName,
-  changeNameArgs,
-  changeRole,
-  changeRoleArgs,
-  createLink,
-  createLinkArgs,
-  deleteLink,
-  deleteLinkArgs,
-  getLinkEditButtonVisibility,
-  getPublicLinkVisibility,
-  publicLinkAndItsEditButtonVisibilityArgs
-} from './actions'
+import * as po from './actions'
 import { LinksEnvironment } from '../../../environment'
 
 export class Link {
@@ -34,9 +18,9 @@ export class Link {
     editor: 'Anyone with the link can edit',
     uploader: 'Secret File drop'
   }
-  async create(args: Omit<createLinkArgs, 'page'>): Promise<void> {
+  async create(args: Omit<po.createLinkArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    const url = await createLink({ ...args, page: this.#page })
+    const url = await po.createLink({ ...args, page: this.#page })
 
     this.#linksEnvironment.createLink({
       key: args.name,
@@ -46,9 +30,9 @@ export class Link {
     await this.#page.goto(startUrl)
   }
 
-  async changeName(args: Omit<changeNameArgs, 'page'>): Promise<string> {
+  async changeName(args: Omit<po.changeNameArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
-    const name = await changeName({ page: this.#page, ...args })
+    const name = await po.changeName({ page: this.#page, ...args })
     const currentLink = this.#linksEnvironment.getLink({ name: 'Link' })
 
     this.#linksEnvironment.updateLinkName({
@@ -59,46 +43,41 @@ export class Link {
     return name
   }
 
-  async addExpiration(args: Omit<addExpirationArgs, 'page'>): Promise<void> {
+  async addExpiration(args: Omit<po.addExpirationArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    // const name =
-    await addExpiration({ page: this.#page, ...args })
-    await this.#page.goto(startUrl)
-    // return
-  }
-
-  async addPassword(args: Omit<addPasswordArgs, 'page'>): Promise<void> {
-    const startUrl = this.#page.url()
-    // const name =
-    await addPassword({ page: this.#page, ...args })
+    await po.addExpiration({ page: this.#page, ...args })
     await this.#page.goto(startUrl)
   }
 
-  async changeRole(args: Omit<changeRoleArgs, 'page'>): Promise<string> {
+  async addPassword(args: Omit<po.addPasswordArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    const role = await changeRole({ page: this.#page, ...args })
+    await po.addPassword({ page: this.#page, ...args })
+    await this.#page.goto(startUrl)
+  }
+
+  async changeRole(args: Omit<po.changeRoleArgs, 'page'>): Promise<string> {
+    const startUrl = this.#page.url()
+    const role = await po.changeRole({ page: this.#page, ...args })
     await this.#page.goto(startUrl)
     return role
   }
 
-  async delete(args: Omit<deleteLinkArgs, 'page'>): Promise<void> {
+  async delete(args: Omit<po.deleteLinkArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await deleteLink({ ...args, page: this.#page })
+    await po.deleteLink({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
-  async getPublicLinkUrl(
-    args: Omit<publicLinkAndItsEditButtonVisibilityArgs, 'page'>
-  ): Promise<string[]> {
-    const linkUrl = this.#linksEnvironment.getLink({ name: args.linkName })
-    const publicLink = await getPublicLinkVisibility({
+  getPublicLinkUrl(
+    args: Omit<po.publicLinkAndItsEditButtonVisibilityArgs, 'page'>
+  ): Promise<string> {
+    return po.getPublicLinkVisibility({
       ...args,
       page: this.#page
     })
-    return [linkUrl.url, publicLink]
   }
 
   async islinkEditButtonVisibile(linkName): Promise<boolean> {
-    return await getLinkEditButtonVisibility({ page: this.#page, linkName })
+    return await po.getLinkEditButtonVisibility({ page: this.#page, linkName })
   }
 }

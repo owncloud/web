@@ -1,9 +1,9 @@
 Feature: Notifications
   As a user
   I want to be notified
-  About new things that concern me
+  About new things that concern me    
 
-  Background:
+  Scenario: User should be able to read and dismiss notifications
     Given "Admin" creates following users using API
       | id    |
       | Alice |
@@ -12,15 +12,14 @@ Feature: Notifications
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
-
-  Scenario: User should be able to read and dismiss notifications
-    Given "Admin" creates following groups using API
+    And "Admin" creates following groups using API
       | id    |
       | sales |
     And "Admin" adds user to the group using API
       | user  | group |
       | Alice | sales |
       | Brian | sales |
+    And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name             |
       | folder_to_shared |
@@ -28,7 +27,6 @@ Feature: Notifications
     And "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
-    And "Alice" logs in
     And "Alice" opens the "files" app
     When "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type  | role   | resourceType |

@@ -43,3 +43,8 @@ export interface Group {
   id: string
   displayName: string
 }
+
+export interface Token {
+  userId: string
+  tokenValue: string
+}

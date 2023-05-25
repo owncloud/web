@@ -109,7 +109,7 @@ export const mimeTypes = () => {
     'image/png',
     'video/mp4',
     'video/webm',
-    ...(window?.Vue?.$store?.getters.extensionConfigByAppId(appId).mimeTypes || [])
+    ...((window as any).__$store?.getters.extensionConfigByAppId(appId).mimeTypes || [])
   ]
 }
 

@@ -9,12 +9,12 @@ Feature: spaces management
       | id    | role        |
       | Alice | Space Admin |
       | Brian | Space Admin |
+    When "Alice" logs in
     And "Alice" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
       | team B | team.b |
-    When "Alice" logs in
-    And "Alice" opens the "admin-settings" app
+    When "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     When "Alice" updates the space "team.a" name to "developer team" using the context-menu
     And "Alice" updates the space "team.a" subtitle to "developer team-subtitle" using the context-menu
@@ -35,7 +35,6 @@ Feature: spaces management
       | team.b |
     And "Brian" logs out
 
-
   Scenario: multiple spaces can be managed at once in the admin settings via the batch actions
     Given "Admin" creates following user using API
       | id    |
@@ -43,14 +42,14 @@ Feature: spaces management
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
+    And "Alice" logs in
     And "Alice" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
       | team B | team.b |
       | team C | team.c |
       | team D | team.d |
-    When "Alice" logs in
-    And "Alice" opens the "admin-settings" app
+    When "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     And "Alice" disables the following spaces using the batch-actions
       | id     |
@@ -111,7 +110,7 @@ Feature: spaces management
       | Carol | viewer | space     |
       | David | viewer | space     |
       | Edith | viewer | space     |
-    And "Alice" logs in
+    When "Alice" logs in
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     When "Alice" lists the members of project space "team.a" using a sidebar panel

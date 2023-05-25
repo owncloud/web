@@ -7,11 +7,11 @@ Feature: create Space shortcut
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
+    And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name             |
       | spaceFolder      |
       | spaceFolder/test |
-    When "Alice" logs in
     And "Alice" navigates to the personal space page
     And "Alice" uploads the following resources
       | resource          | to           |
@@ -34,10 +34,10 @@ Feature: create Space shortcut
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
+    And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name             |
       | resourceFolder   |
-    When "Alice" logs in
     And "Alice" navigates to the personal space page
     And "Alice" uploads the following resources
       | resource          | to             |

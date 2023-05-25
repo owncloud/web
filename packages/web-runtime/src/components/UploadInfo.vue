@@ -573,26 +573,35 @@ export default defineComponent({
     getUploadItemMessage(item) {
       const error = this.errors[item.meta.uploadId]
 
-      if (error) {
-        // TODO: Remove code as soon as https://github.com/tus/tus-js-client/issues/448 is solved
-        let errorMessage = this.$gettext('Unknown error')
-        if (error.message.includes('response code: 507')) {
-          errorMessage = this.$gettext('Quota exceeded')
-        }
-        if (error.message.includes('precondition failed:')) {
-          errorMessage = this.$gettext('Parent folder does not exist')
-        }
+      if (!error) {
+        return
+      }
 
-        return errorMessage
+      //TODO: Remove extraction code as soon as https://github.com/tus/tus-js-client/issues/448 is solved
+      const formatErrorMessageToObject = (errorMessage) => {
+        let responseCode = errorMessage.match(/response code: (\d+)/)?.[1]
+        const errorBody = JSON.parse(
+          errorMessage.match(/response text: ([\s\S]+?), request id/)?.[1] || '{}'
+        )
 
-        /**
-         * TODO: Enable code as soon as https://github.com/tus/tus-js-client/issues/448 is solved
-        switch (error?.originalResponse?.getStatus()) {
-          case 507:
-            return this.$gettext('Quota exceeded')
-          default:
-            return this.$gettext('Unknown error')
-        }**/
+        return {
+          responseCode: responseCode ? parseInt(responseCode) : null,
+          errorCode: errorBody?.error?.code,
+          errorMessage: errorBody?.error?.message
+        }
+      }
+
+      const errorObject = formatErrorMessageToObject(error.message)
+
+      switch (errorObject.responseCode) {
+        case 507:
+          return this.$gettext('Quota exceeded')
+        case 412:
+          return this.$gettext('Parent folder does not exist')
+        default:
+          return errorObject.errorMessage
+            ? this.$gettext(errorObject.errorMessage)
+            : this.$gettext('Unknown error')
       }
     },
     getUploadItemClass(item) {
