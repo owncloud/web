@@ -66,6 +66,7 @@ Summary
 * Bugfix - Endless loading when encountering a public link error: [#9004](https://github.com/owncloud/web/issues/9004)
 * Bugfix - Prevent "virtual" spaces from being displayed in the UI: [#9015](https://github.com/owncloud/web/pull/9015)
 * Bugfix - Spaces in search results: [#9022](https://github.com/owncloud/web/issues/9022)
+* Bugfix - Preview app mime type detection: [#9050](https://github.com/owncloud/web/issues/9050)
 * Bugfix - Resource not found and No content message at the same time: [#9061](https://github.com/owncloud/web/issues/9061)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
@@ -165,6 +166,7 @@ Summary
 * Enhancement - Search full-text filter: [#9059](https://github.com/owncloud/web/pull/9059)
 * Enhancement - Disable change password capability: [#9070](https://github.com/owncloud/web/pull/9070)
 * Enhancement - Disable create user and delete user via capabilities: [#9070](https://github.com/owncloud/web/pull/9070)
+* Enhancement - Show detailed error messages while upload fails: [#9076](https://github.com/owncloud/web/pull/9076)
 * Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
 * Enhancement - Search breadcrumb: [#9077](https://github.com/owncloud/web/pull/9077)
 
@@ -614,6 +616,14 @@ Details
 
    https://github.com/owncloud/web/issues/9022
    https://github.com/owncloud/web/pull/9026
+
+* Bugfix - Preview app mime type detection: [#9050](https://github.com/owncloud/web/issues/9050)
+
+   A bug where the preview app would not detect all supported mime types has been fixed (e.g.
+   `image/x-ms-bmp`).
+
+   https://github.com/owncloud/web/issues/9050
+   https://github.com/owncloud/web/pull/9092
 
 * Bugfix - Resource not found and No content message at the same time: [#9061](https://github.com/owncloud/web/issues/9061)
 
@@ -1544,6 +1554,12 @@ Details
 
    https://github.com/owncloud/web/issues/9060
    https://github.com/owncloud/web/pull/9070
+
+* Enhancement - Show detailed error messages while upload fails: [#9076](https://github.com/owncloud/web/pull/9076)
+
+   We now show detailed error messages while upload fails and the server provides the error cause.
+
+   https://github.com/owncloud/web/pull/9076
 
 * Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
 
