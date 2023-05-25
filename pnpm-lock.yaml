@@ -905,8 +905,8 @@ importers:
         specifier: ^2.11.5
         version: 2.11.5
       '@sentry/vue':
-        specifier: 7.45.0
-        version: 7.45.0(vue@3.3.4)
+        specifier: 7.53.1
+        version: 7.53.1(vue@3.3.4)
       '@uppy/core':
         specifier: ^3.0.5
         version: 3.0.5
@@ -1204,11 +1204,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dev: true
 
-  /@babel/compat-data@7.20.5:
-    resolution: {integrity: sha512-KZXo2t10+/jxmkhNXc7pZTqRvSOIvVv/+lJwHS+B2rErwOyjuVRh60yVpb7liQ1U5t7lLJ1bz+t8tSypUZdm0g==}
-    engines: {node: '>=6.9.0'}
-    dev: true
-
   /@babel/compat-data@7.21.7:
     resolution: {integrity: sha512-KYMqFYTaenzMK4yUtf4EW9wc4N9ef80FsbMtkwool5zpwl4YrT1SdWYSTRcT94KO4hannogdS+LxY7L+arP3gA==}
     engines: {node: '>=6.9.0'}
@@ -1427,8 +1422,8 @@ packages:
     dependencies:
       '@babel/core': 7.17.5
       '@babel/helper-annotate-as-pure': 7.18.6
-      '@babel/helper-environment-visitor': 7.18.9
-      '@babel/helper-function-name': 7.19.0
+      '@babel/helper-environment-visitor': 7.21.5
+      '@babel/helper-function-name': 7.21.0
       '@babel/helper-member-expression-to-functions': 7.18.9
       '@babel/helper-optimise-call-expression': 7.18.6
       '@babel/helper-replace-supers': 7.19.1
@@ -1445,8 +1440,8 @@ packages:
     dependencies:
       '@babel/core': 7.19.6
       '@babel/helper-annotate-as-pure': 7.18.6
-      '@babel/helper-environment-visitor': 7.18.9
-      '@babel/helper-function-name': 7.19.0
+      '@babel/helper-environment-visitor': 7.21.5
+      '@babel/helper-function-name': 7.21.0
       '@babel/helper-member-expression-to-functions': 7.18.9
       '@babel/helper-optimise-call-expression': 7.18.6
       '@babel/helper-replace-supers': 7.19.1
@@ -1463,8 +1458,8 @@ packages:
     dependencies:
       '@babel/core': 7.21.8
       '@babel/helper-annotate-as-pure': 7.18.6
-      '@babel/helper-environment-visitor': 7.18.9
-      '@babel/helper-function-name': 7.19.0
+      '@babel/helper-environment-visitor': 7.21.5
+      '@babel/helper-function-name': 7.21.0
       '@babel/helper-member-expression-to-functions': 7.18.9
       '@babel/helper-optimise-call-expression': 7.18.6
       '@babel/helper-replace-supers': 7.19.1
@@ -1599,11 +1594,6 @@ packages:
       - supports-color
     dev: true
 
-  /@babel/helper-environment-visitor@7.18.9:
-    resolution: {integrity: sha512-3r/aACDJ3fhQ/EVgFy0hpj8oHyHpQc+LPtJoY9SzTThAsStm4Ptegq92vqKoE3vD706ZVFWITnMnxucw+S9Ipg==}
-    engines: {node: '>=6.9.0'}
-    dev: true
-
   /@babel/helper-environment-visitor@7.21.5:
     resolution: {integrity: sha512-IYl4gZ3ETsWocUWgsFZLM5i1BYx9SoemminVEXadgLBa9TdeorzgLKm8wWLA6J1N/kT3Kch8XIk1laNzYoHKvQ==}
     engines: {node: '>=6.9.0'}
@@ -1619,14 +1609,6 @@ packages:
     resolution: {integrity: sha512-eyAYAsQmB80jNfg4baAtLeWAQHfHFiR483rzFK+BhETlGZaQC9bsfrugfXDCbRHLQbIA7U5NxhhOxN7p/dWIcg==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.21.5
-    dev: true
-
-  /@babel/helper-function-name@7.19.0:
-    resolution: {integrity: sha512-WAwHBINyrpqywkUH0nTnNgI5ina5TFn85HKS0pbPDfxFfhyR/aNQEn4hGi1P1JyT//I0t4OgXUlofzWILRvS5w==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@babel/template': 7.20.7
       '@babel/types': 7.21.5
     dev: true
 
@@ -1856,11 +1838,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/types': 7.21.5
-
-  /@babel/helper-string-parser@7.19.4:
-    resolution: {integrity: sha512-nHtDoQcuqFmwYNYPz3Rah5ph2p8PFeFCsZk9A/48dPc/rGocJ5J3hAAZ7pb76VWX3fZKu+uEr/FhH5jLx7umrw==}
-    engines: {node: '>=6.9.0'}
-    dev: true
 
   /@babel/helper-string-parser@7.21.5:
     resolution: {integrity: sha512-5pTUx3hAJaZIdW99sJ6ZUUgWq/Y+Hja7TowEnLNMm1VivRgZQL3vpBY3qUACVsvw+yQU6+YgfBVmcbLaZtrA1w==}
@@ -3229,7 +3206,7 @@ packages:
       '@babel/helper-annotate-as-pure': 7.18.6
       '@babel/helper-compilation-targets': 7.21.5(@babel/core@7.19.6)
       '@babel/helper-environment-visitor': 7.21.5
-      '@babel/helper-function-name': 7.19.0
+      '@babel/helper-function-name': 7.21.0
       '@babel/helper-optimise-call-expression': 7.18.6
       '@babel/helper-plugin-utils': 7.20.2
       '@babel/helper-replace-supers': 7.19.1
@@ -3477,7 +3454,7 @@ packages:
     dependencies:
       '@babel/core': 7.19.6
       '@babel/helper-compilation-targets': 7.21.5(@babel/core@7.19.6)
-      '@babel/helper-function-name': 7.19.0
+      '@babel/helper-function-name': 7.21.0
       '@babel/helper-plugin-utils': 7.20.2
     dev: true
 
@@ -4603,7 +4580,7 @@ packages:
       '@babel/code-frame': 7.21.4
       '@babel/generator': 7.21.5
       '@babel/helper-environment-visitor': 7.21.5
-      '@babel/helper-function-name': 7.19.0
+      '@babel/helper-function-name': 7.21.0
       '@babel/helper-hoist-variables': 7.18.6
       '@babel/helper-split-export-declaration': 7.18.6
       '@babel/parser': 7.21.8
@@ -4643,7 +4620,7 @@ packages:
     resolution: {integrity: sha512-M5LK7nAeS6+9j7hAq+b3fQs+pNfUtTGq+yFFfHnauFA8zQtLRfmuipmsKDKKLuyG+wC8ABW43A153YNawNTEtw==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/helper-string-parser': 7.19.4
+      '@babel/helper-string-parser': 7.21.5
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
     dev: true
@@ -5819,69 +5796,69 @@ packages:
       rollup: 3.21.2
     dev: true
 
-  /@sentry-internal/tracing@7.45.0:
-    resolution: {integrity: sha512-0aIDY2OvUX7k2XHaimOlWkboXoQvJ9dEKvfpu0Wh0YxfUTGPa+wplUdg3WVdkk018sq1L11MKmj4MPZyYUvXhw==}
+  /@sentry-internal/tracing@7.53.1:
+    resolution: {integrity: sha512-a4H4rvVdz0XDGgNfRqc7zg6rMt2P1P05xBmgfIfztYy94Vciw1QMdboNiT7einr8ra8wogdEaK4Pe2AzYAPBJQ==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/core': 7.45.0
-      '@sentry/types': 7.45.0
-      '@sentry/utils': 7.45.0
+      '@sentry/core': 7.53.1
+      '@sentry/types': 7.53.1
+      '@sentry/utils': 7.53.1
       tslib: 1.14.1
     dev: false
 
-  /@sentry/browser@7.45.0:
-    resolution: {integrity: sha512-/dUrUwnI34voMj+jSJT7b5Jun+xy1utVyzzwTq3Oc22N+SB17ZOX9svZ4jl1Lu6tVJPVjPyvL6zlcbrbMwqFjg==}
+  /@sentry/browser@7.53.1:
+    resolution: {integrity: sha512-1zas2R6riJaj0k7FoeieCW0SuC7UyKaBGA6jEG2LsgIqyD7IDOlF3BPZ4Yt08GFav0ImpyhGn5Vbrq5JLbeQdw==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry-internal/tracing': 7.45.0
-      '@sentry/core': 7.45.0
-      '@sentry/replay': 7.45.0
-      '@sentry/types': 7.45.0
-      '@sentry/utils': 7.45.0
+      '@sentry-internal/tracing': 7.53.1
+      '@sentry/core': 7.53.1
+      '@sentry/replay': 7.53.1
+      '@sentry/types': 7.53.1
+      '@sentry/utils': 7.53.1
       tslib: 1.14.1
     dev: false
 
-  /@sentry/core@7.45.0:
-    resolution: {integrity: sha512-xJfdTS4lRmHvZI/A5MazdnKhBJFkisKu6G9EGNLlZLre+6W4PH5sb7QX4+xoBdqG7v10Jvdia112vi762ojO2w==}
+  /@sentry/core@7.53.1:
+    resolution: {integrity: sha512-DAH8IJNORJJ7kQLqsZuhMkN6cwJjXzFuuUoZor7IIDHIHjtl51W+2F3Stg3+I3ZoKDfJfUNKqhipk2WZjG0FBg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.45.0
-      '@sentry/utils': 7.45.0
+      '@sentry/types': 7.53.1
+      '@sentry/utils': 7.53.1
       tslib: 1.14.1
     dev: false
 
-  /@sentry/replay@7.45.0:
-    resolution: {integrity: sha512-smM7FIcFIyKu30BqCl8BzLo1gH/z9WwXdGX6V0fNvHab9fJZ09+xjFn+LmIyo6N8H8jjwsup0+yQ12kiF/ZsEw==}
+  /@sentry/replay@7.53.1:
+    resolution: {integrity: sha512-5He5JLJiYLeWtXHC53z2ZzfbgAedafbHNZVS4+MBCOtydCk7cnuyJ0gGV6Rfxej/lZSNXZxOdW7HeMhzBtZCxw==}
     engines: {node: '>=12'}
     dependencies:
-      '@sentry/core': 7.45.0
-      '@sentry/types': 7.45.0
-      '@sentry/utils': 7.45.0
+      '@sentry/core': 7.53.1
+      '@sentry/types': 7.53.1
+      '@sentry/utils': 7.53.1
     dev: false
 
-  /@sentry/types@7.45.0:
-    resolution: {integrity: sha512-iFt7msfUK8LCodFF3RKUyaxy9tJv/gpWhzxUFyNxtuVwlpmd+q6mtsFGn8Af3pbpm8A+MKyz1ebMwXj0PQqknw==}
+  /@sentry/types@7.53.1:
+    resolution: {integrity: sha512-/ijchRIu+jz3+j/zY+7KRPfLSCY14fTx5xujjbOdmEKjmIHQmwPBdszcQm40uwofrR8taV4hbt5MFN+WnjCkCw==}
     engines: {node: '>=8'}
     dev: false
 
-  /@sentry/utils@7.45.0:
-    resolution: {integrity: sha512-aTY7qqtNUudd09SH5DVSKMm3iQ6ZeWufduc0I9bPZe6UMM09BDc4KmjmrzRkdQ+VaOmHo7+v+HZKQk5f+AbuTQ==}
+  /@sentry/utils@7.53.1:
+    resolution: {integrity: sha512-DKJA1LSUOEv4KOR828MzVuLh+drjeAgzyKgN063OEKmnirgjgRgNNS8wUgwpG0Tn2k6ANZGCwrdfzPeSBxshKg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.45.0
+      '@sentry/types': 7.53.1
       tslib: 1.14.1
     dev: false
 
-  /@sentry/vue@7.45.0(vue@3.3.4):
-    resolution: {integrity: sha512-31wn10AjdMnCy5bzrMt3QLmX34ijuoxLOK4xE/E7NbtwAuPxd+mnc67CMy6UVfo8Ng36HFZFeNMewdqF676V5Q==}
+  /@sentry/vue@7.53.1(vue@3.3.4):
+    resolution: {integrity: sha512-E8KY02a6yDSkvnNOfDFe5K5h6sNoRS1sdEpe4hVfnW7m3wXDvLa2ipTwrlljokCp1sY2xQm5TL9whsNJXlR2KQ==}
     engines: {node: '>=8'}
     peerDependencies:
       vue: 2.x || 3.x
     dependencies:
-      '@sentry/browser': 7.45.0
-      '@sentry/core': 7.45.0
-      '@sentry/types': 7.45.0
-      '@sentry/utils': 7.45.0
+      '@sentry/browser': 7.53.1
+      '@sentry/core': 7.53.1
+      '@sentry/types': 7.53.1
+      '@sentry/utils': 7.53.1
       tslib: 1.14.1
       vue: 3.3.4
     dev: false
@@ -7700,7 +7677,7 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/compat-data': 7.20.5
+      '@babel/compat-data': 7.21.7
       '@babel/core': 7.19.6
       '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.19.6)
       semver: 6.3.0
@@ -7713,7 +7690,7 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/compat-data': 7.20.5
+      '@babel/compat-data': 7.21.7
       '@babel/core': 7.21.8
       '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.21.8)
       semver: 6.3.0
@@ -8111,9 +8088,9 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001439
-      electron-to-chromium: 1.4.275
-      node-releases: 2.0.6
+      caniuse-lite: 1.0.30001486
+      electron-to-chromium: 1.4.390
+      node-releases: 2.0.10
       update-browserslist-db: 1.0.10(browserslist@4.21.4)
     dev: true
 
@@ -8363,10 +8340,6 @@ packages:
 
   /caniuse-lite@1.0.30001418:
     resolution: {integrity: sha512-oIs7+JL3K9JRQ3jPZjlH6qyYDp+nBTCais7hjh0s+fuBwufc7uZ7hPYMXrDOJhV360KGMTcczMRObk0/iMqZRg==}
-    dev: true
-
-  /caniuse-lite@1.0.30001439:
-    resolution: {integrity: sha512-1MgUzEkoMO6gKfXflStpYgZDlFM7M/ck/bgfVCACO5vnAf0fXoNVHdWtqGU+MYca+4bL9Z5bpOVmR33cWW9G2A==}
     dev: true
 
   /caniuse-lite@1.0.30001486:
@@ -10405,10 +10378,6 @@ packages:
     hasBin: true
     dependencies:
       jake: 10.8.5
-    dev: true
-
-  /electron-to-chromium@1.4.275:
-    resolution: {integrity: sha512-aJeQQ+Hl9Jyyzv4chBqYJwmVRY46N5i2BEX5Cuyk/5gFCUZ5F3i7Hnba6snZftWla7Gglwc5pIgcd+E7cW+rPg==}
     dev: true
 
   /electron-to-chromium@1.4.390:
@@ -15323,10 +15292,6 @@ packages:
 
   /node-releases@2.0.10:
     resolution: {integrity: sha512-5GFldHPXVG/YZmFzJvKK2zDSzPKhEp0+ZR5SVaoSag9fsL5YgHbUHDfnG5494ISANDcK4KwPXAx2xqVEydmd7w==}
-
-  /node-releases@2.0.6:
-    resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
-    dev: true
 
   /nopt@5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
