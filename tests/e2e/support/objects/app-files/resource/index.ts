@@ -1,65 +1,7 @@
-import { config } from '../../../../config'
 import { Download, Page } from 'playwright'
-import {
-  createResources,
-  createResourceArgs,
-  deleteResource,
-  deleteResourceArgs,
-  deleteResourceTrashbin,
-  downloadResources,
-  downloadResourcesArgs,
-  downloadResourceVersion,
-  downloadResourceVersionArgs,
-  emptyTrashBinResources,
-  moveOrCopyResource,
-  moveOrCopyResourceArgs,
-  renameResource,
-  renameResourceArgs,
-  restoreResourceVersion,
-  resourceVersionArgs,
-  uploadResource,
-  uploadResourceArgs,
-  dropUploadFiles,
-  restoreResourceTrashbinArgs,
-  restoreResourceTrashbin,
-  searchResourceGlobalSearch,
-  searchResourceGlobalSearchArgs,
-  getDisplayedResourcesFromSearch,
-  clickResource,
-  showHiddenResources,
-  editResources,
-  editResourcesArgs,
-  openFileInViewer,
-  openFileInViewerArgs,
-  expectThatDeleteButtonIsNotVisible,
-  expectThatRestoreResourceButtonVisibility,
-  deleteResourceTrashbinArgs,
-  addTagsToResource,
-  removeTagsFromResource,
-  getTagsForResourceVisibilityInFilesTable,
-  getTagsForResourceVisibilityInDetailsPanel,
-  clickTagArgs,
-  clickResourceTag,
-  getDisplayedResourcesArgs,
-  getDisplayedResourcesFromFilesList,
-  resourceTagsArgs,
-  clickViewModeToggle,
-  expectThatResourcesAreTiles,
-  createSpaceFromFolder,
-  createSpaceFromFolderArgs,
-  createSpaceFromSelection,
-  createSpaceFromSelectionArgs,
-  checkThatFileVersionIsNotAvailable,
-  changePageArgs,
-  changePage,
-  getFileListFooterText,
-  countNumberOfResourcesInThePage,
-  changeItemsPerPage,
-  changeItemsPerPageArgs,
-  expectPageNumberNotToBeVisible,
-  uploadMultipleSmallResources
-} from './actions'
+import * as po from './actions'
 import { Space } from '../../../types'
+import { config } from '../../../../config'
 
 export class Resource {
   #page: Page
@@ -68,65 +10,54 @@ export class Resource {
     this.#page = page
   }
 
-  async create(args: Omit<createResourceArgs, 'page'>): Promise<void> {
+  async create(args: Omit<po.createResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await createResources({ ...args, page: this.#page })
+    await po.createResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     await this.#page.waitForSelector('#files-view')
   }
 
-  async upload(args: Omit<uploadResourceArgs, 'page'>): Promise<void> {
+  async upload(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await uploadResource({ ...args, page: this.#page })
+    await po.uploadResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     if (!config.ocis) {
       await this.#page.locator('body').click()
     }
   }
 
-  async uploadSmallResources(args: Omit<uploadResourceArgs, 'page'>): Promise<void> {
+  async uploadSmallResources(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await uploadMultipleSmallResources({ ...args, page: this.#page })
+    await po.uploadMultipleSmallResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     if (!config.ocis) {
       await this.#page.locator('body').click()
     }
   }
 
-  async dropUpload(args: Omit<uploadResourceArgs, 'page'>): Promise<void> {
+  async dropUpload(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await dropUploadFiles({ ...args, page: this.#page })
+    await po.dropUploadFiles({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
-  async download(args: Omit<downloadResourcesArgs, 'page'>): Promise<Download[]> {
+  async download(args: Omit<po.downloadResourcesArgs, 'page'>): Promise<Download[]> {
     const startUrl = this.#page.url()
-    const downloads = await downloadResources({ ...args, page: this.#page })
+    const downloads = await po.downloadResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
 
     return downloads
   }
 
-  async rename(args: Omit<renameResourceArgs, 'page'>): Promise<void> {
+  async rename(args: Omit<po.renameResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await renameResource({ ...args, page: this.#page })
+    await po.renameResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
-  async copy(args: Omit<moveOrCopyResourceArgs, 'page' | 'action'>): Promise<void> {
+  async copy(args: Omit<po.moveOrCopyResourceArgs, 'page' | 'action'>): Promise<void> {
     const startUrl = this.#page.url()
-    await moveOrCopyResource({ ...args, page: this.#page, action: 'copy' })
-    await this.#page.goto(startUrl)
-    // Sidebar remain open after we navigate to startUrl
-    // This is the issue: https://github.com/owncloud/web/issues/8172
-    if (!config.ocis) {
-      await this.#page.reload()
-    }
-  }
-
-  async move(args: Omit<moveOrCopyResourceArgs, 'page' | 'action'>): Promise<void> {
-    const startUrl = this.#page.url()
-    await moveOrCopyResource({ ...args, page: this.#page, action: 'move' })
+    await po.moveOrCopyResource({ ...args, page: this.#page, action: 'copy' })
     await this.#page.goto(startUrl)
     // Sidebar remain open after we navigate to startUrl
     // This is the issue: https://github.com/owncloud/web/issues/8172
@@ -135,158 +66,174 @@ export class Resource {
     }
   }
 
-  async delete(args: Omit<deleteResourceArgs, 'page'>): Promise<void> {
+  async move(args: Omit<po.moveOrCopyResourceArgs, 'page' | 'action'>): Promise<void> {
     const startUrl = this.#page.url()
-    await deleteResource({ ...args, page: this.#page })
+    await po.moveOrCopyResource({ ...args, page: this.#page, action: 'move' })
+    await this.#page.goto(startUrl)
+    // Sidebar remain open after we navigate to startUrl
+    // This is the issue: https://github.com/owncloud/web/issues/8172
+    if (!config.ocis) {
+      await this.#page.reload()
+    }
+  }
+
+  async delete(args: Omit<po.deleteResourceArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await po.deleteResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   async open(): Promise<void> {}
 
-  async restoreVersion(args: Omit<resourceVersionArgs, 'page'>): Promise<void> {
+  async restoreVersion(args: Omit<po.resourceVersionArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await restoreResourceVersion({ ...args, page: this.#page })
+    await po.restoreResourceVersion({ ...args, page: this.#page })
     // Files details page does not update after restore button is clicked
     // This is the issue: https://github.com/owncloud/web/issues/6361
     await this.#page.reload()
     await this.#page.goto(startUrl)
   }
 
-  async downloadVersion(args: Omit<downloadResourceVersionArgs, 'page'>): Promise<Download[]> {
+  async downloadVersion(args: Omit<po.downloadResourceVersionArgs, 'page'>): Promise<Download[]> {
     const startUrl = this.#page.url()
-    const downloads = await downloadResourceVersion({ ...args, page: this.#page })
+    const downloads = await po.downloadResourceVersion({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     return downloads
   }
 
   async emptyTrashBin() {
-    return await emptyTrashBinResources(this.#page)
+    return await po.emptyTrashBinResources(this.#page)
   }
 
-  async deleteTrashBin(args: Omit<deleteResourceTrashbinArgs, 'page'>): Promise<string> {
+  async deleteTrashBin(args: Omit<po.deleteResourceTrashbinArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
-    const message = await deleteResourceTrashbin({ ...args, page: this.#page })
+    const message = await po.deleteResourceTrashbin({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     return message
   }
 
   async expectThatDeleteTrashBinButtonIsNotVisible(
-    args: Omit<deleteResourceTrashbinArgs, 'page'>
+    args: Omit<po.deleteResourceTrashbinArgs, 'page'>
   ): Promise<void> {
-    return await expectThatDeleteButtonIsNotVisible({ ...args, page: this.#page })
+    return await po.expectThatDeleteButtonIsNotVisible({ ...args, page: this.#page })
   }
 
-  async restoreTrashBin(args: Omit<restoreResourceTrashbinArgs, 'page'>): Promise<string> {
+  async restoreTrashBin(args: Omit<po.restoreResourceTrashbinArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
-    const message = await restoreResourceTrashbin({ ...args, page: this.#page })
+    const message = await po.restoreResourceTrashbin({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     return message
   }
 
   async expectThatRestoreTrashBinButtonIsNotVisible(
-    args: Omit<restoreResourceTrashbinArgs, 'page'>
+    args: Omit<po.restoreResourceTrashbinArgs, 'page'>
   ): Promise<void> {
-    return await expectThatRestoreResourceButtonVisibility({ ...args, page: this.#page })
+    return await po.expectThatRestoreResourceButtonVisibility({ ...args, page: this.#page })
   }
 
   async areTagsVisibleForResourceInFilesTable(
-    args: Omit<resourceTagsArgs, 'page'>
+    args: Omit<po.resourceTagsArgs, 'page'>
   ): Promise<boolean> {
-    return await getTagsForResourceVisibilityInFilesTable({ ...args, page: this.#page })
+    return await po.getTagsForResourceVisibilityInFilesTable({ ...args, page: this.#page })
   }
 
   async areTagsVisibleForResourceInDetailsPanel(
-    args: Omit<resourceTagsArgs, 'page'>
+    args: Omit<po.resourceTagsArgs, 'page'>
   ): Promise<boolean> {
-    return await getTagsForResourceVisibilityInDetailsPanel({ ...args, page: this.#page })
+    return await po.getTagsForResourceVisibilityInDetailsPanel({
+      ...args,
+      page: this.#page
+    })
   }
 
-  async searchResource(args: Omit<searchResourceGlobalSearchArgs, 'page'>): Promise<void> {
-    await searchResourceGlobalSearch({ ...args, page: this.#page })
+  async searchResource(args: Omit<po.searchResourceGlobalSearchArgs, 'page'>): Promise<void> {
+    await po.searchResourceGlobalSearch({ ...args, page: this.#page })
   }
 
-  getDisplayedResources(args: Omit<getDisplayedResourcesArgs, 'page'>): Promise<string[]> {
+  getDisplayedResources(args: Omit<po.getDisplayedResourcesArgs, 'page'>): Promise<string[]> {
     if (args.keyword === 'files list') {
-      return getDisplayedResourcesFromFilesList(this.#page)
+      return po.getDisplayedResourcesFromFilesList(this.#page)
     } else if (args.keyword === 'search list') {
-      return getDisplayedResourcesFromSearch(this.#page)
+      return po.getDisplayedResourcesFromSearch(this.#page)
     } else {
       throw new Error('Unknown keyword')
     }
   }
 
   async openFolder(resource): Promise<void> {
-    await clickResource({ page: this.#page, path: resource })
+    await po.clickResource({ page: this.#page, path: resource })
   }
 
   async switchToTilesViewMode(): Promise<void> {
-    await clickViewModeToggle({ page: this.#page, target: 'resource-tiles' })
+    await po.clickViewModeToggle({ page: this.#page, target: 'resource-tiles' })
   }
 
   async expectThatResourcesAreTiles(): Promise<void> {
-    await expectThatResourcesAreTiles({ page: this.#page })
+    await po.expectThatResourcesAreTiles({ page: this.#page })
   }
 
   async showHiddenFiles(): Promise<void> {
-    await showHiddenResources(this.#page)
+    await po.showHiddenResources(this.#page)
   }
 
-  async editResource(args: Omit<editResourcesArgs, 'page'>): Promise<void> {
-    await editResources({ ...args, page: this.#page })
+  async editResource(args: Omit<po.editResourcesArgs, 'page'>): Promise<void> {
+    await po.editResources({ ...args, page: this.#page })
   }
 
-  async openFileInViewer(args: Omit<openFileInViewerArgs, 'page'>): Promise<void> {
-    await openFileInViewer({ ...args, page: this.#page })
+  async openFileInViewer(args: Omit<po.openFileInViewerArgs, 'page'>): Promise<void> {
+    await po.openFileInViewer({ ...args, page: this.#page })
   }
 
-  async addTags(args: Omit<resourceTagsArgs, 'page'>): Promise<void> {
+  async addTags(args: Omit<po.resourceTagsArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await addTagsToResource({ ...args, page: this.#page })
+    await po.addTagsToResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
-  async removeTags(args: Omit<resourceTagsArgs, 'page'>): Promise<void> {
+  async removeTags(args: Omit<po.resourceTagsArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await removeTagsFromResource({ ...args, page: this.#page })
+    await po.removeTagsFromResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
-  async clickTag(args: Omit<clickTagArgs, 'page'>): Promise<void> {
-    return await clickResourceTag({ ...args, page: this.#page })
+  async clickTag(args: Omit<po.clickTagArgs, 'page'>): Promise<void> {
+    return await po.clickResourceTag({ ...args, page: this.#page })
   }
 
-  async createSpaceFromFolder(args: Omit<createSpaceFromFolderArgs, 'page'>): Promise<Space> {
-    return createSpaceFromFolder({ ...args, page: this.#page })
+  createSpaceFromFolder(args: Omit<po.createSpaceFromFolderArgs, 'page'>): Promise<Space> {
+    return po.createSpaceFromFolder({ ...args, page: this.#page })
   }
 
-  async createSpaceFromSelection(args: Omit<createSpaceFromSelectionArgs, 'page'>): Promise<Space> {
-    return createSpaceFromSelection({ ...args, page: this.#page })
+  createSpaceFromSelection(args: Omit<po.createSpaceFromSelectionArgs, 'page'>): Promise<Space> {
+    return po.createSpaceFromSelection({ ...args, page: this.#page })
   }
 
-  async checkThatFileVersionIsNotAvailable(args: Omit<resourceVersionArgs, 'page'>): Promise<void> {
+  async checkThatFileVersionIsNotAvailable(
+    args: Omit<po.resourceVersionArgs, 'page'>
+  ): Promise<void> {
     const startUrl = this.#page.url()
-    await checkThatFileVersionIsNotAvailable({ ...args, page: this.#page })
+    await po.checkThatFileVersionIsNotAvailable({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
-  async changePage(args: Omit<changePageArgs, 'page'>): Promise<void> {
-    await changePage({ ...args, page: this.#page })
+  async changePage(args: Omit<po.changePageArgs, 'page'>): Promise<void> {
+    await po.changePage({ ...args, page: this.#page })
   }
 
-  async changeItemsPerPage(args: Omit<changeItemsPerPageArgs, 'page'>): Promise<void> {
-    await changeItemsPerPage({ ...args, page: this.#page })
+  async changeItemsPerPage(args: Omit<po.changeItemsPerPageArgs, 'page'>): Promise<void> {
+    await po.changeItemsPerPage({ ...args, page: this.#page })
   }
 
   getFileListFooterText(): Promise<string> {
-    return getFileListFooterText({ page: this.#page })
+    return po.getFileListFooterText({ page: this.#page })
   }
 
   countNumberOfResourcesInThePage(): Promise<number> {
-    return countNumberOfResourcesInThePage({ page: this.#page })
+    return po.countNumberOfResourcesInThePage({ page: this.#page })
   }
 
   async expectPageNumberNotToBeVisible(): Promise<void> {
-    await expectPageNumberNotToBeVisible({ page: this.#page })
+    await po.expectPageNumberNotToBeVisible({ page: this.#page })
   }
 }
