@@ -45,15 +45,12 @@ export class Link {
 
   async addExpiration(args: Omit<po.addExpirationArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    // const name =
     await po.addExpiration({ page: this.#page, ...args })
     await this.#page.goto(startUrl)
-    // return
   }
 
   async addPassword(args: Omit<po.addPasswordArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    // const name =
     await po.addPassword({ page: this.#page, ...args })
     await this.#page.goto(startUrl)
   }

@@ -14,8 +14,6 @@ export class Share {
     const startUrl = this.#page.url()
     await po.createShare({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
-    // why? o_O
-    await this.#page.locator('body').click()
   }
 
   async accept(args: Omit<po.ShareStatusArgs, 'page'>): Promise<void> {
