@@ -19,13 +19,14 @@
       class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs"
       :aria-label="$gettext('Sidebar navigation menu')"
     >
+      <div
+        v-show="isAnyNavItemActive"
+        id="nav-highlighter"
+        class="oc-ml-s oc-background-primary-gradient"
+        v-bind="highlighterAttrs"
+        :aria-hidden="true"
+      />
       <oc-list>
-        <div
-          v-show="isAnyNavItemActive"
-          id="nav-highlighter"
-          class="oc-ml-s oc-background-primary-gradient"
-          v-bind="highlighterAttrs"
-        />
         <sidebar-nav-item
           v-for="(link, index) in navItems"
           :ref="(el: ComponentPublicInstance) => (navItemRefs[index] = el)"
