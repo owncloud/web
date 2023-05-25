@@ -32,7 +32,16 @@ export default defineComponent({
   methods: {
     async search(term: string) {
       this.loading = true
-      this.searchResult = await this.listSearch.search(term || '')
+      try {
+        this.searchResult = await this.listSearch.search(term || '')
+      } catch (e) {
+        this.searchResult = {
+          values: [],
+          totalResults: null
+        }
+        console.error(e)
+      }
+
       this.loading = false
     }
   }

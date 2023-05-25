@@ -10,7 +10,6 @@
         <item-filter
           v-if="availableTags.length"
           ref="tagFilter"
-          :allow-multiple="true"
           :filter-label="$gettext('Tags')"
           :filterable-attributes="['label']"
           :items="availableTags"
@@ -214,17 +213,22 @@ export default defineComponent({
     }
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
-      let term = unref(searchTerm)
+      let term = ''
+      if (unref(searchTerm)) {
+        term = `+Name:*${unref(searchTerm)}*`
+      }
 
       const fullTextQuery = queryItemAsString(unref(fullTextParam))
       if (fullTextQuery) {
-        term = `Content:"${term}"`
+        term = `+Content:"${unref(searchTerm)}"`
       }
 
-      const tags = queryItemAsString(unref(tagParam))
-      if (tags) {
-        const tagsTerm = tags.split('+')?.join(',') || ''
-        term += ` Tags:"${unref(tagsTerm)}"`
+      const tagsQuery = queryItemAsString(unref(tagParam))
+      if (tagsQuery) {
+        tagsQuery.split('+')?.forEach((tag) => {
+          term += ` +Tags:"${unref(tag)}"`
+        })
+
         if (manuallyUpdateFilterChip && unref(tagFilter)) {
           /**
            * Handles edge cases where a filter is not being applied via the filter directly,
@@ -236,7 +240,7 @@ export default defineComponent({
         }
       }
 
-      return term
+      return term.trimStart()
     }
 
     const breadcrumbs = computed(() => {
@@ -261,7 +265,8 @@ export default defineComponent({
       (newVal, oldVal) => {
         const filters = ['q_fullText', 'q_tags']
         const isChange =
-          newVal?.term !== oldVal?.term || filters.some((f) => newVal[f] ?? '' !== oldVal[f] ?? '')
+          newVal?.term !== oldVal?.term ||
+          filters.some((f) => newVal[f] ?? undefined !== oldVal[f] ?? undefined)
 
         if (isChange && isLocationCommonActive(router, 'files-common-search')) {
           emit('search', buildSearchTerm(true))

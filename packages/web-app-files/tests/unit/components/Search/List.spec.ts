@@ -72,7 +72,9 @@ describe('List component', () => {
           tagFilterQuery
         })
         await wrapper.vm.loadAvailableTagsTask.last
-        expect(wrapper.emitted('search')[0][0]).toEqual(`${searchTerm} Tags:"${tagFilterQuery}"`)
+        expect(wrapper.emitted('search')[0][0]).toEqual(
+          `+Name:*${searchTerm}* +Tags:"${tagFilterQuery}"`
+        )
       })
     })
     describe('fullText', () => {
@@ -88,7 +90,7 @@ describe('List component', () => {
           fullTextSearchEnabled: true
         })
         await wrapper.vm.loadAvailableTagsTask.last
-        expect(wrapper.emitted('search')[0][0]).toEqual(`Content:"${searchTerm}"`)
+        expect(wrapper.emitted('search')[0][0]).toEqual(`+Content:"${searchTerm}"`)
       })
     })
   })

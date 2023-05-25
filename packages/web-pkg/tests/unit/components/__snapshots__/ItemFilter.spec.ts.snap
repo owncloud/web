@@ -3,7 +3,7 @@
 exports[`ItemFilter can use a custom attribute as display name 1`] = `
 <div class="item-filter oc-flex item-filter-users">
   <div class="oc-filter-chip oc-flex">
-    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button oc-pill" id="oc-filter-chip-5" type="button">
+    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button oc-pill" id="oc-filter-chip-3" type="button">
       <!-- @slot Content of the button -->
       <!--v-if-->
       <span class="oc-text-truncate oc-filter-chip-label">Users</span>
@@ -12,29 +12,35 @@ exports[`ItemFilter can use a custom attribute as display name 1`] = `
         <!---->
       </span>
     </button>
-    <div class="oc-drop oc-box-shadow-medium oc-rounded oc-filter-chip-drop" id="oc-drop-6">
+    <div class="oc-drop oc-box-shadow-medium oc-rounded oc-filter-chip-drop" id="oc-drop-4">
       <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
         <!--v-if-->
         <div>
           <ul class="oc-list oc-my-rm oc-mx-rm item-filter-list">
             <li class="oc-my-xs">
-              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs" data-test-value="Albert Einstein" type="button">
+              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs" data-test-value="Albert Einstein" type="button">
                 <!-- @slot Content of the button -->
-                <div>
-                  <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-7" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
+                <div class="oc-flex oc-flex-middle oc-text-truncate">
+                  <!--v-if-->
+                  <div></div>
+                  <div class="oc-text-truncate oc-ml-s">Albert Einstein</div>
                 </div>
-                <div></div>
-                <div class="oc-text-truncate">Albert Einstein</div>
+                <div class="oc-flex">
+                  <!--v-if-->
+                </div>
               </button>
             </li>
             <li class="oc-my-xs">
-              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs" data-test-value="Marie Curie" type="button">
+              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs" data-test-value="Marie Curie" type="button">
                 <!-- @slot Content of the button -->
-                <div>
-                  <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-8" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
+                <div class="oc-flex oc-flex-middle oc-text-truncate">
+                  <!--v-if-->
+                  <div></div>
+                  <div class="oc-text-truncate oc-ml-s">Marie Curie</div>
                 </div>
-                <div></div>
-                <div class="oc-text-truncate">Marie Curie</div>
+                <div class="oc-flex">
+                  <!--v-if-->
+                </div>
               </button>
             </li>
           </ul>
@@ -64,23 +70,29 @@ exports[`ItemFilter renders all items 1`] = `
         <div>
           <ul class="oc-list oc-my-rm oc-mx-rm item-filter-list">
             <li class="oc-my-xs">
-              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs" data-test-value="Albert Einstein" type="button">
+              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs" data-test-value="Albert Einstein" type="button">
                 <!-- @slot Content of the button -->
-                <div>
-                  <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-3" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
+                <div class="oc-flex oc-flex-middle oc-text-truncate">
+                  <!--v-if-->
+                  <div></div>
+                  <div class="oc-text-truncate oc-ml-s">Albert Einstein</div>
                 </div>
-                <div></div>
-                <div class="oc-text-truncate">Albert Einstein</div>
+                <div class="oc-flex">
+                  <!--v-if-->
+                </div>
               </button>
             </li>
             <li class="oc-my-xs">
-              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs" data-test-value="Marie Curie" type="button">
+              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs" data-test-value="Marie Curie" type="button">
                 <!-- @slot Content of the button -->
-                <div>
-                  <oc-checkbox-stub class="item-filter-checkbox" disabled="false" hidelabel="true" id="oc-checkbox-4" label="Toggle selection" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
+                <div class="oc-flex oc-flex-middle oc-text-truncate">
+                  <!--v-if-->
+                  <div></div>
+                  <div class="oc-text-truncate oc-ml-s">Marie Curie</div>
                 </div>
-                <div></div>
-                <div class="oc-text-truncate">Marie Curie</div>
+                <div class="oc-flex">
+                  <!--v-if-->
+                </div>
               </button>
             </li>
           </ul>

@@ -13,6 +13,7 @@ const selectors = {
   filterInput: '.item-filter-input input',
   checkboxStub: 'oc-checkbox-stub',
   filterListItem: '.item-filter-list-item',
+  activeFilterListItem: '.item-filter-list-item-active',
   clearBtn: '.oc-filter-chip-clear'
 }
 
@@ -64,22 +65,20 @@ describe('ItemFilter', () => {
       }
       expect(wrapper.vm.selectedItems.length).toBe(wrapper.findAll(selectors.filterListItem).length)
     })
-    it('does not allow selection of multiple items on click when disabled', async () => {
+    it('does not allow selection of multiple items when disabled', async () => {
       const { wrapper } = getWrapper({ props: { allowMultiple: false } })
       const first = wrapper.findAll(selectors.filterListItem).at(0)
       await first.trigger('click')
       expect(wrapper.emitted('selectionChange').length).toBe(1)
-      expect(first.findComponent<any>(selectors.checkboxStub).props('modelValue')).toBeTruthy()
+      expect(wrapper.find(selectors.activeFilterListItem).exists()).toBeTruthy()
 
       const second = wrapper.findAll(selectors.filterListItem).at(1)
       await second.trigger('click')
-      expect(wrapper.emitted('selectionChange').length).toBe(1)
-      expect(second.findComponent<any>(selectors.checkboxStub).props('modelValue')).toBeFalsy()
-      expect(second.findComponent<any>(selectors.checkboxStub).props('disabled')).toBeTruthy()
+      expect(wrapper.emitted('selectionChange').length).toBe(2)
       expect(wrapper.vm.selectedItems.length).toBe(1)
     })
-    it('can always de-select the current selected item', async () => {
-      const { wrapper } = getWrapper({ props: { allowMultiple: false } })
+    it('does de-select the current selected item on click', async () => {
+      const { wrapper } = getWrapper({ props: { allowMultiple: true } })
       const item = wrapper.findAll(selectors.filterListItem).at(0)
       await item.trigger('click')
       await item.trigger('click')
@@ -88,7 +87,7 @@ describe('ItemFilter', () => {
       expect(wrapper.vm.selectedItems.length).toBe(0)
     })
     it('clears the selection when the clear-button is being clicked', async () => {
-      const { wrapper } = getWrapper({ props: { allowMultiple: false } })
+      const { wrapper } = getWrapper({ props: { allowMultiple: true } })
       const item = wrapper.findAll(selectors.filterListItem).at(0)
       await item.trigger('click')
       await wrapper.find(selectors.clearBtn).trigger('click')
