@@ -1,9 +1,9 @@
 Feature: Upload
   As a user
-  I want to upload resources
-  So that I can store them in owncloud
+  I want to upload large resources
+  So that I can pause and resume the upload
 
-  Scenario: Upload resources in personal space
+  Scenario: Upload large resources in personal space
     Given "Admin" creates following user using API
       | id    |
       | Alice |
