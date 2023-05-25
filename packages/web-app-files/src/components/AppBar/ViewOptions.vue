@@ -73,11 +73,11 @@
         >
           <label for="tiles-size-slider" v-text="$gettext('Tile size')" />
           <input
+            id="tiles-size-slider"
             v-model="viewSizeCurrent"
             type="range"
             min="1"
             max="6"
-            name="tiles-size-slider"
             class="oc-range"
             data-testid="files-tiles-size-slider"
             @input="setTilesViewSize"
