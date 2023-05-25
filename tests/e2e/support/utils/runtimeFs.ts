@@ -7,8 +7,8 @@ export const MAX_FILE_SIZE = Math.pow(1024, 3) * 10
 
 export const getBytes = (fileSize: string): number => {
   fileSize = fileSize.replace(/\s/g, '').toLowerCase()
-  const size = parseInt(fileSize.match(/(\d+)/)[0])
-  const type = fileSize.match(/[kKmMgGbB]{2}/)[0]
+  const size = parseFloat(fileSize.match(/([\d.]+)/)[0])
+  const type = fileSize.match(/[kKmMgGbB]{1,2}/)[0]
 
   let sizeInbytes = size
 
@@ -17,6 +17,8 @@ export const getBytes = (fileSize: string): number => {
   }
 
   switch (type) {
+    case 'b':
+      sizeInbytes = size
     case 'kb':
       sizeInbytes = size * 1024
       break
@@ -27,7 +29,7 @@ export const getBytes = (fileSize: string): number => {
       sizeInbytes = size * Math.pow(1024, 3)
       break
     default:
-      throw new Error('Invalid file size. Must be one of these: kb, mb, gb')
+      throw new Error('Invalid file size. Must be one of these: b, kb, mb, gb')
   }
 
   if (sizeInbytes > MAX_FILE_SIZE) {

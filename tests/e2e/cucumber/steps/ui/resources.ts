@@ -8,13 +8,6 @@ import { displayedResourceType } from '../../../support/objects/app-files/resour
 import * as tempFs from '../../../support/utils/runtimeFs'
 
 When(
-  'the user creates a file {string} with size {string} in the temp upload directory',
-  function (this: World, fileName: string, fileSize: string): Promise<void> {
-    return tempFs.createFileWithSize(fileName, tempFs.getBytes(fileSize))
-  }
-)
-
-When(
   '{string} creates the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
