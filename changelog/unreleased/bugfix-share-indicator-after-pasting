@@ -1,0 +1,6 @@
+Bugfix: Share indicator loading after pasting resources
+
+Share indicators are now being displayed correctly after pasting resources into shared folders.
+
+https://github.com/owncloud/web/issues/9030
+https://github.com/owncloud/web/pull/9110
