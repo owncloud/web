@@ -1500,6 +1500,7 @@ Details
 
    https://github.com/owncloud/web/issues/9054
    https://github.com/owncloud/web/pull/9044
+   https://github.com/owncloud/web/pull/9096
 
 * Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
 
@@ -1525,6 +1526,7 @@ Details
    https://github.com/owncloud/web/issues/9058
    https://github.com/owncloud/web/pull/9059
    https://github.com/owncloud/web/pull/9087
+   https://github.com/owncloud/web/pull/9096
 
 * Enhancement - Disable change password capability: [#9070](https://github.com/owncloud/web/pull/9070)
 
