@@ -76,11 +76,11 @@ importers:
         specifier: 7.3.2
         version: 7.3.2
       '@cucumber/messages':
-        specifier: 20.0.0
-        version: 20.0.0
+        specifier: 22.0.0
+        version: 22.0.0
       '@cucumber/pretty-formatter':
         specifier: 1.0.0
-        version: 1.0.0(@cucumber/cucumber@7.3.2)(@cucumber/messages@20.0.0)
+        version: 1.0.0(@cucumber/cucumber@7.3.2)(@cucumber/messages@22.0.0)
       '@noble/hashes':
         specifier: 1.3.0
         version: 1.3.0
@@ -4861,23 +4861,23 @@ packages:
       uuid: 8.3.2
     dev: true
 
-  /@cucumber/messages@20.0.0:
-    resolution: {integrity: sha512-JFrFwuhxsbig0afaViNhuzoQyC+GQzlI7m+rX+lSiDGV13K3sJzMmHjkbCiNOgoRlKAMwIGR9TRMH0xj9/My0w==}
+  /@cucumber/messages@22.0.0:
+    resolution: {integrity: sha512-EuaUtYte9ilkxcKmfqGF9pJsHRUU0jwie5ukuZ/1NPTuHS1LxHPsGEODK17RPRbZHOFhqybNzG2rHAwThxEymg==}
     dependencies:
-      '@types/uuid': 8.3.4
+      '@types/uuid': 9.0.1
       class-transformer: 0.5.1
       reflect-metadata: 0.1.13
       uuid: 9.0.0
     dev: true
 
-  /@cucumber/pretty-formatter@1.0.0(@cucumber/cucumber@7.3.2)(@cucumber/messages@20.0.0):
+  /@cucumber/pretty-formatter@1.0.0(@cucumber/cucumber@7.3.2)(@cucumber/messages@22.0.0):
     resolution: {integrity: sha512-wcnIMN94HyaHGsfq72dgCvr1d8q6VGH4Y6Gl5weJ2TNZw1qn2UY85Iki4c9VdaLUONYnyYH3+178YB+9RFe/Hw==}
     peerDependencies:
       '@cucumber/cucumber': '>=7.0.0'
       '@cucumber/messages': '*'
     dependencies:
       '@cucumber/cucumber': 7.3.2
-      '@cucumber/messages': 20.0.0
+      '@cucumber/messages': 22.0.0
       ansi-styles: 5.2.0
       cli-table3: 0.6.0
       figures: 3.2.0
@@ -6259,8 +6259,8 @@ packages:
     resolution: {integrity: sha512-Y2mHTRAbqfFkpjldbkHGY8JIzRN6XqYRliG8/24FcHm2D2PwW24fl5xMRTVGdrb7iMrwCaIEbLWerGIkXuFWVg==}
     dev: true
 
-  /@types/uuid@8.3.4:
-    resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
+  /@types/uuid@9.0.1:
+    resolution: {integrity: sha512-rFT3ak0/2trgvp4yYZo5iKFEPsET7vKydKF+VRCxlQ9bpheehyAJH89dAkaLEq/j/RZXJIqcgsmPJKUP1Z28HA==}
     dev: true
 
   /@types/web-bluetooth@0.0.16:
