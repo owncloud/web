@@ -84,7 +84,7 @@ export const changeSpaceQuota = async (args: {
   const { page, value, spaceIds, context } = args
   await performAction({ page, action: 'edit-quota', context, id: spaceIds[0] })
 
-  const searchLocator = await page.locator(spacesQuotaSearchField)
+  const searchLocator = page.locator(spacesQuotaSearchField)
   await searchLocator.fill(value)
   await page.waitForSelector(selectedQuotaValueField)
   await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
@@ -147,7 +147,7 @@ export const deleteSpace = async (args: {
 
 export const selectSpace = async (args: { page: Page; id: string }): Promise<void> => {
   const { page, id } = args
-  const checkbox = await page.locator(util.format(spaceCheckboxSelector, id))
+  const checkbox = page.locator(util.format(spaceCheckboxSelector, id))
   const checkBoxAlreadySelected = await checkbox.isChecked()
   if (checkBoxAlreadySelected) {
     return
@@ -235,13 +235,13 @@ export const openSpaceAdminActionSidebarPanel = async (args: {
   action: string
 }): Promise<void> => {
   const { page, action } = args
-  const currentPanel = await page.locator(sideBarActive)
-  const backButton = await currentPanel.locator(sideBarBackButton)
+  const currentPanel = page.locator(sideBarActive)
+  const backButton = currentPanel.locator(sideBarBackButton)
   if (await backButton.count()) {
     await backButton.click()
     await locatorUtils.waitForEvent(currentPanel, 'transitionend')
   }
-  const panelSelector = await page.locator(util.format(sideBarActionButtons, action))
+  const panelSelector = page.locator(util.format(sideBarActionButtons, action))
   const nextPanel = page.locator(util.format(siderBarActionPanel, action))
   await panelSelector.click()
   await locatorUtils.waitForEvent(nextPanel, 'transitionend')

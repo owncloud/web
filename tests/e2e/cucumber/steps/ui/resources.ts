@@ -75,14 +75,8 @@ When(
 )
 
 When(
-  /^"([^"]*)" downloads the following resource(s)? using the (sidebar panel|batch action)$/,
-  async function (
-    this: World,
-    stepUser: string,
-    _: string,
-    actionType: string,
-    stepTable: DataTable
-  ) {
+  /^"([^"]*)" downloads the following resource(?:s)? using the (sidebar panel|batch action)$/,
+  async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await processDownload(stepTable, resourceObject, actionType)
@@ -90,14 +84,8 @@ When(
 )
 
 When(
-  /^"([^"]*)" deletes the following resource(s)? using the (sidebar panel|batch action)$/,
-  async function (
-    this: World,
-    stepUser: string,
-    _: string,
-    actionType: string,
-    stepTable: DataTable
-  ) {
+  /^"([^"]*)" deletes the following resource(?:s)? using the (sidebar panel|batch action)$/,
+  async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await processDelete(stepTable, resourceObject, actionType)
@@ -202,12 +190,11 @@ Then(
 )
 
 Then(
-  /^"([^"]*)" (should|should not) be able to delete following resource(s) from the trashbin?$/,
+  /^"([^"]*)" (should|should not) be able to delete following resource(?:s)? from the trashbin?$/,
   async function (
     this: World,
     stepUser: string,
     actionType: string,
-    _: string,
     stepTable: DataTable
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -225,12 +212,11 @@ Then(
 )
 
 Then(
-  /^"([^"]*)" (should|should not) be able to restore following resource(s) from the trashbin?$/,
+  /^"([^"]*)" (should|should not) be able to restore following resource(?:s)? from the trashbin?$/,
   async function (
     this: World,
     stepUser: string,
     actionType: string,
-    _: string,
     stepTable: DataTable
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -436,21 +422,15 @@ When(
 )
 
 When(
-  /^"([^"]*)" opens the following file(s)? in (mediaviewer|pdfviewer)$/,
-  async function (
-    this: World,
-    stepUser: string,
-    _: string,
-    actionType: string,
-    stepTable: DataTable
-  ) {
+  /^"([^"].*)" opens the following file(?:s)? in (mediaviewer|pdfviewer)$/,
+  async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const info of stepTable.hashes()) {
       await resourceObject.openFileInViewer({
         name: info.resource,
-        actionType: actionType === 'mediaviewer' ? 'mediaviewer' : 'pdfviewer'
+        actionType: actionType as 'mediaviewer' | 'pdfviewer'
       })
     }
   }

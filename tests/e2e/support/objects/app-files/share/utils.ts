@@ -15,7 +15,7 @@ export const resourceIsNotOpenable = async ({
   page: Page
   resource: string
 }): Promise<boolean> => {
-  const resourceLocator = await page.locator(util.format(actionsTriggerButton, resource))
+  const resourceLocator = page.locator(util.format(actionsTriggerButton, resource))
   const itemId = await resourceLocator.locator(fileRow).getAttribute('data-item-id')
   await Promise.all([
     page.waitForResponse((resp) => {
