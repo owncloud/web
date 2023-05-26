@@ -48,7 +48,7 @@ export const getDisplayedGroups = async (args: { page: Page }): Promise<string[]
 
 export const selectGroup = async (args: { page: Page; uuid: string }): Promise<void> => {
   const { page, uuid } = args
-  const checkbox = await page.locator(util.format(groupCheckboxSelector, uuid))
+  const checkbox = page.locator(util.format(groupCheckboxSelector, uuid))
   const checkBoxAlreadySelected = await checkbox.isChecked()
 
   if (checkBoxAlreadySelected) {

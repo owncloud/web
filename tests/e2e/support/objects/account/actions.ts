@@ -51,7 +51,7 @@ export const requestGdprExport = async (args: { page: Page }): Promise<void> => 
         '<d:status>HTTP/1.1 425 TOO EARLY</d:status>',
         '<d:status>HTTP/1.1 200 OK</d:status>'
       )
-      route.fulfill({
+      await route.fulfill({
         response,
         body
       })

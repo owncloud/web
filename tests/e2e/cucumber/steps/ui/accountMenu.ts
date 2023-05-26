@@ -4,7 +4,7 @@ import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 
 Then(
-  /^"([^"]*)" should have quota "([^"]*)"$/,
+  '{string} should have quota {string}',
   async function (this: World, stepUser: string, quota: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const accountObject = new objects.account.Account({ page })
@@ -13,7 +13,7 @@ Then(
 )
 
 Then(
-  /^"([^"]*)" should have self info:$/,
+  '{string} should have self info:',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const accountObject = new objects.account.Account({ page })

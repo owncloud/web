@@ -27,14 +27,8 @@ const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
 }
 
 When(
-  /^"([^"]*)" shares the following (resource|resources) using the (sidebar panel|quick action)$/,
-  async function (
-    this: World,
-    stepUser: string,
-    _: string,
-    actionType: string,
-    stepTable: DataTable
-  ) {
+  /^"([^"]*)" shares the following resource(?:s)? using the (sidebar panel|quick action)$/,
+  async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
@@ -50,8 +44,8 @@ When(
 )
 
 When(
-  /^"([^"]*)" reshares the following (resource|resources)$/,
-  async function (this: World, stepUser: string, _: string, stepTable: DataTable) {
+  '{string} reshares the following resource(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
@@ -120,15 +114,9 @@ Then(
 )
 
 Then(
-  /"([^"]*)" should( not | )be able to reshare the following resource(s)?$/,
-  async function (
-    this: World,
-    stepUser: string,
-    condition: string,
-    _: string,
-    stepTable: DataTable
-  ) {
-    const ableToShare = condition.trim() !== 'not'
+  /"([^"]*)" (should|should not) be able to reshare the following resource(?:s)?$/,
+  async function (this: World, stepUser: string, condition: string, stepTable: DataTable) {
+    const ableToShare = condition === 'should'
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
 
@@ -206,14 +194,14 @@ When(
 )
 
 Then(
-  /"([^"]*)" should( not | )be able to see the following shares$/,
+  /"([^"]*)" (should|should not) be able to see the following shares$/,
   async function (
     this: World,
     stepUser: string,
     condition: string,
     stepTable: DataTable
   ): Promise<void> {
-    const shouldExist = condition.trim() !== 'not'
+    const shouldExist = condition === 'should'
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     for (const { resource, owner } of stepTable.hashes()) {

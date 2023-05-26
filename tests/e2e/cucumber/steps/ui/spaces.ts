@@ -44,19 +44,18 @@ When(
 )
 
 When(
-  /^"([^"]*)" (changes|updates) the space "([^"]*)" (name|subtitle|description|quota|image) to "([^"]*)"$/,
+  /^"([^"]*)" (?:changes|updates) the space "([^"]*)" (name|subtitle|description|quota|image) to "([^"]*)"$/,
   async function (
     this: World,
     stepUser: string,
-    _: string,
     key: string,
-    action: string,
+    attribute: string,
     value: string
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
 
-    switch (action) {
+    switch (attribute) {
       case 'name':
         await spacesObject.changeName({ key, value })
         break
@@ -76,7 +75,7 @@ When(
         })
         break
       default:
-        throw new Error(`${action} not implemented`)
+        throw new Error(`${attribute} not implemented`)
     }
   }
 )

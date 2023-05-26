@@ -156,10 +156,7 @@ export default class Collaborator {
     for (const permission of permissions) {
       if (!CUSTOM_PERMISSIONS.includes(permission)) {
         throw new Error(
-          'Invalid custom permission: ' +
-            permission +
-            '\nAvailable permissions: ' +
-            CUSTOM_PERMISSIONS
+          `Invalid custom permission: ${permission}\nAvailable permissions: ${CUSTOM_PERMISSIONS}`
         )
       }
 
@@ -267,8 +264,9 @@ export default class Collaborator {
 
     if (role) {
       const parts = role.split(' ')
-      const collaboratorRole =
-        startCase(parts[0].toLowerCase()) + (parts[1] ? ` ${parts[1].toLowerCase()}` : '')
+      const collaboratorRole = `${startCase(parts[0].toLowerCase())} ${
+        parts[1] ? `${parts[1].toLowerCase()}` : ''
+      }`
       const roleSelector = util.format(
         Collaborator.collaboratorRoleSelector,
         collaboratorRow,
@@ -297,7 +295,7 @@ export default class Collaborator {
       .click()
 
     const newExpiryDate = getActualExpiryDate(
-      expirationDate.toLowerCase().match(/[dayrmonthwek]+/)[0] as any,
+      expirationDate.toLowerCase().match(/[dayrmonthwek]+/)[0],
       expirationDate
     )
     await page.locator(Collaborator.collaboratorExpirationDatepicker).evaluate(
