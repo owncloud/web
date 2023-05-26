@@ -26,9 +26,9 @@ export class Resource {
     }
   }
 
-  async uploadSmallResources(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
+  async uploadLargeNumberOfResources(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await po.uploadMultipleSmallResources({ ...args, page: this.#page })
+    await po.uploadLargeNumberOfResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     if (!config.ocis) {
       await this.#page.locator('body').click()
@@ -39,6 +39,26 @@ export class Resource {
     const startUrl = this.#page.url()
     await po.dropUploadFiles({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
+  }
+
+  // uploads the file but does check if the upload was successful
+  // and does not navigate back to the startUrl
+  startUpload(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
+    return po.startResourceUpload({ ...args, page: this.#page })
+  }
+
+  pauseUpload(): Promise<void> {
+    return po.pauseResourceUpload(this.#page)
+  }
+
+  async resumeUpload(): Promise<void> {
+    const startUrl = this.#page.url()
+    await po.resumeResourceUpload(this.#page)
+    await this.#page.goto(startUrl)
+  }
+
+  cancelUpload(): Promise<void> {
+    return po.cancelResourceUpload(this.#page)
   }
 
   async download(args: Omit<po.downloadResourcesArgs, 'page'>): Promise<Download[]> {

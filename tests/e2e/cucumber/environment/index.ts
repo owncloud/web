@@ -10,7 +10,6 @@ import {
 } from '@cucumber/cucumber'
 import pino from 'pino'
 import { Browser, chromium, firefox, webkit } from 'playwright'
-import fs from 'fs'
 
 import { config } from '../../config'
 import { api, environment } from '../../support'
@@ -25,6 +24,7 @@ import {
 import { User } from '../../support/types'
 import { Session } from '../../support/objects/runtime/session'
 import { createdTokenStore } from '../../support/store/token'
+import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 
 export { World }
 
@@ -191,10 +191,4 @@ const getAdminToken = async (browser: Browser) => {
 
   await page.close()
   await ctx.close()
-}
-
-const removeTempUploadDirectory = () => {
-  if (fs.existsSync(config.tempAssetsPath)) {
-    fs.rmSync(config.tempAssetsPath, { recursive: true })
-  }
 }
