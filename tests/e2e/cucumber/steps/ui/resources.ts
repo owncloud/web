@@ -5,7 +5,7 @@ import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 import { config } from '../../../config'
 import { displayedResourceType } from '../../../support/objects/app-files/resource/actions'
-import createTempResources from '../../../support/utils/createTempResources'
+import * as runtimeFs from '../../../support/utils/runtimeFs'
 
 When(
   '{string} creates the following resource(s)',
@@ -30,6 +30,46 @@ When(
         resources: [this.filesEnvironment.getFile({ name: info.resource })],
         option: info.option
       })
+    }
+  }
+)
+
+When(
+  '{string} starts uploading the following large resource(s) from the temp upload directory',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const info of stepTable.hashes()) {
+      await resourceObject.startUpload({
+        to: info.to,
+        resources: [
+          this.filesEnvironment.getFile({
+            name: path.join(runtimeFs.getTempUploadPath().replace(config.assets, ''), info.resource)
+          })
+        ],
+        option: info.option
+      })
+    }
+  }
+)
+
+When(
+  '{string} {word} the file upload',
+  async function (this: World, stepUser: string, action: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    switch (action) {
+      case 'pauses':
+        await resourceObject.pauseUpload()
+        break
+      case 'resumes':
+        await resourceObject.resumeUpload()
+        break
+      case 'cancels':
+        await resourceObject.cancelUpload()
+        break
+      default:
+        throw new Error(`Unknown action: ${action}`)
     }
   }
 )
@@ -589,13 +629,21 @@ When(
 When(
   '{string} uploads {int} small files in personal space',
   async function (this: World, stepUser: string, numberOfFiles: number): Promise<void> {
-    const files = createTempResources(numberOfFiles).map((file) =>
-      this.filesEnvironment.getFile({ name: file })
-    )
+    const files = []
+    for (let i = 0; i < numberOfFiles; i++) {
+      const file = `file${i}.txt`
+      runtimeFs.createFile(file, 'test content')
+
+      files.push(
+        this.filesEnvironment.getFile({
+          name: path.join(runtimeFs.getTempUploadPath().replace(config.assets, ''), file)
+        })
+      )
+    }
 
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
-    await resourceObject.uploadSmallResources({ resources: files })
+    await resourceObject.uploadLargeNumberOfResources({ resources: files })
   }
 )
