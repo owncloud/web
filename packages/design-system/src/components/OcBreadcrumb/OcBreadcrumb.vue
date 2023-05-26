@@ -18,9 +18,9 @@
           }
         ]"
         @dragover="dragOver($event)"
-        @dragenter.prevent="dropItemStyling(item.id, false, $event)"
-        @dragleave.prevent="dropItemStyling(item.id, true, $event)"
-        @mouseleave="dropItemStyling(item.id, true, $event)"
+        @dragenter.prevent="dropItemStyling(item.id, index, false, $event)"
+        @dragleave.prevent="dropItemStyling(item.id, index, true, $event)"
+        @mouseleave="dropItemStyling(item.id, index, true, $event)"
         @drop="dropItemEvent(item.to, index)"
       >
         <router-link
@@ -113,11 +113,7 @@ import {
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
-import {
-  AVAILABLE_SIZES,
-  EVENT_ITEM_DROPPED,
-  EVENT_ITEM_DROPPED_BREADCRUMB
-} from '../../helpers/constants'
+import { AVAILABLE_SIZES, EVENT_ITEM_DROPPED_BREADCRUMB } from '../../helpers/constants'
 
 import OcButton from '../OcButton/OcButton.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
@@ -225,7 +221,6 @@ export default defineComponent({
     }
 
     const dropItemEvent = (item, index) => {
-      console.log(item, index)
       if (index === unref(displayItems).length - 1) {
         return
       }
@@ -309,8 +304,8 @@ export default defineComponent({
       return props.items.length - 1 === index ? 'page' : null
     }
 
-    const dropItemStyling = (key, leaving, event) => {
-      if (key === unref(displayItems).length - 1) {
+    const dropItemStyling = (id, index, leaving, event) => {
+      if (index === unref(displayItems).length - 1) {
         return
       }
       const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
@@ -319,7 +314,7 @@ export default defineComponent({
         return
       }
 
-      const classList = getBreadcrumbElement(key).children[0].classList
+      const classList = getBreadcrumbElement(id).children[0].classList
       const className = 'testclass'
       leaving ? classList.remove(className) : classList.add(className)
     }
