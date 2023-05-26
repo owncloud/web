@@ -7,7 +7,7 @@ export const uploadLogo = async (path, page): Promise<void> => {
   const logoInput = await page.locator('#logo-upload-input')
   await logoInput.setInputFiles(path)
 
-  await page.waitForSelector('.oc-notification-message')
+  await page.locator('.oc-notification-message').waitFor()
   await page.reload()
   const logoImg = await page.locator('.logo-wrapper img')
   const logoSrc = await logoImg.getAttribute('src')
@@ -21,7 +21,7 @@ export const resetLogo = async (page): Promise<void> => {
 
   await page.click('.oc-general-actions-reset-logo-trigger')
 
-  await page.waitForSelector('.oc-notification-message')
+  await page.locator('.oc-notification-message').waitFor()
   await page.reload()
 
   const imgAfter = await page.locator('.logo-wrapper img')

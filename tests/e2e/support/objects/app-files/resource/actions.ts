@@ -137,7 +137,7 @@ export const createSpaceFromFolder = async ({
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
 
-  await page.waitForSelector(notificationMessage)
+  await page.locator(notificationMessage).waitFor()
   return (await response.json()) as Space
 }
 
@@ -168,7 +168,7 @@ export const createSpaceFromSelection = async ({
     ),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
-  await page.waitForSelector(notificationMessage)
+  await page.locator(notificationMessage).waitFor()
   return (await response.json()) as Space
 }
 
@@ -271,8 +271,8 @@ export const editTextDocument = async ({
     page.locator(saveTextFileInEditorButton).click()
   ])
   await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
-  await page.waitForSelector(util.format(resourceNameSelector, name))
-  await page.waitForSelector(fileRow)
+  await page.locator(util.format(resourceNameSelector, name)).waitFor()
+  await page.locator(fileRow).waitFor()
 }
 
 /**/
@@ -866,7 +866,7 @@ export const getTagsForResourceVisibilityInFilesTable = async (
   }
 
   const tagCellSelector = util.format(tagTableCell, resourceName)
-  await page.waitForSelector(tagCellSelector)
+  await page.locator(tagCellSelector).waitFor()
   const resourceTagCell = page.locator(tagCellSelector)
 
   for (const tag of tags) {
@@ -892,7 +892,7 @@ export const clickResourceTag = async (args: clickTagArgs): Promise<void> => {
   }
 
   const tagCellSelector = util.format(tagTableCell, resourceName)
-  await page.waitForSelector(tagCellSelector)
+  await page.locator(tagCellSelector).waitFor()
   const resourceTagCell = page.locator(tagCellSelector)
   const tagSpan = resourceTagCell.locator(util.format(tagInFilesTable, tag))
   return tagSpan.click()
@@ -915,7 +915,7 @@ export const getTagsForResourceVisibilityInDetailsPanel = async (
 
   for (const tag of tags) {
     const tagSelector = util.format(tagInDetailsPanel, tag)
-    await page.waitForSelector(tagSelector)
+    await page.locator(tagSelector).waitFor()
     const tagSpan = page.locator(tagSelector)
     const isVisible = await tagSpan.isVisible()
     if (!isVisible) {
@@ -962,7 +962,7 @@ export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> =
 
 export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]> => {
   const files = []
-  await page.waitForSelector('[data-test-resource-path]')
+  await page.locator('[data-test-resource-path]').waitFor()
   const result = await page.locator('[data-test-resource-path]')
 
   const count = await result.count()

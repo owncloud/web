@@ -71,7 +71,7 @@ const performAction = async (args: {
     default:
       throw new Error(`${action} not implemented`)
   }
-  await page.waitForSelector(contextMenuActionButtonSelector)
+  await page.locator(contextMenuActionButtonSelector).waitFor()
   await page.locator(`.${context}`).locator(contextMenuActionButtonSelector).click()
 }
 
@@ -86,7 +86,7 @@ export const changeSpaceQuota = async (args: {
 
   const searchLocator = page.locator(spacesQuotaSearchField)
   await searchLocator.fill(value)
-  await page.waitForSelector(selectedQuotaValueField)
+  await page.locator(selectedQuotaValueField).waitFor()
   await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
   await confirmAction({
     page,
@@ -214,7 +214,7 @@ const confirmAction = async (args: {
     )
   }
 
-  await page.waitForSelector(confirmButton)
+  await page.locator(confirmButton).waitFor()
   await Promise.all([...checkResponses, page.locator(confirmButton).click()])
 }
 
@@ -252,7 +252,7 @@ export const listSpaceMembers = async (args: {
   filter: string
 }): Promise<Array<string>> => {
   const { page, filter } = args
-  await page.waitForSelector(spaceMembersDiv)
+  await page.locator(spaceMembersDiv).waitFor()
   let users = []
   const names = []
   switch (filter) {

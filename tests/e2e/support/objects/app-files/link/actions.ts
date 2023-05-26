@@ -103,8 +103,8 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
 }
 
 export const waitForPopupNotPresent = async (page): Promise<void> => {
-  await page.waitForSelector(linkUpdateDialog)
-  await page.waitForSelector(linkUpdateDialog, { state: 'detached', strict: false })
+  await page.locator(linkUpdateDialog).waitFor()
+  await page.locator(linkUpdateDialog).waitFor({ state: 'detached' })
 }
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {

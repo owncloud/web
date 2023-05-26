@@ -75,9 +75,9 @@ export const changeAccountEnabled = async (args: {
   value: boolean
 }): Promise<void> => {
   const { page, value, uuid } = args
-  await page.waitForSelector(loginInput)
+  await page.locator(loginInput).waitFor()
   await page.locator(loginInput).click()
-  await page.waitForSelector(loginDropDown)
+  await page.locator(loginDropDown).waitFor()
 
   await page
     .locator(dropdownOption)
@@ -143,7 +143,7 @@ export const changeQuotaUsingBatchAction = async (args: {
 export const getDisplayedUsers = async (args: { page: Page }): Promise<string[]> => {
   const { page } = args
   const users = []
-  await page.waitForSelector(usersTable)
+  await page.locator(usersTable).waitFor()
   const result = page.locator(userTrSelector)
 
   const count = await result.count()
@@ -424,7 +424,7 @@ export const deleteUserUsingBatchAction = async (args: {
 
 export const waitForEditPanelToBeVisible = async (args: { page: Page }): Promise<void> => {
   const { page } = args
-  await page.waitForSelector(editPanel)
+  await page.locator(editPanel).waitFor()
 }
 
 const getGroupId = (group: string): string => {

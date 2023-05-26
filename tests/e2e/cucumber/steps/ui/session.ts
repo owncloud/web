@@ -22,7 +22,7 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
 
   await page.goto(config.frontendUrl)
   await sessionObject.login({ user })
-  await page.waitForSelector('#web')
+  await page.locator('#web').waitFor()
 }
 
 Given('{string} has logged in', LogInUser)
@@ -51,7 +51,7 @@ Then('{string} fails to log in', async function (this: World, stepUser: string):
   await page.locator('#oc-login-username').fill(user.id)
   await page.locator('#oc-login-password').fill(user.password)
   await page.locator('button[type="submit"]').click()
-  await page.waitForSelector('#oc-login-error-message')
+  await page.locator('#oc-login-error-message').waitFor()
 })
 
 When(
@@ -61,6 +61,6 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const user = this.usersEnvironment.getUser({ key: stepUser })
     await sessionObject.login({ user })
-    await page.waitForSelector('#web')
+    await page.locator('#web').waitFor()
   }
 )
