@@ -154,7 +154,7 @@ export default defineComponent({
   emits: ['unSelectAllUsers', 'toggleSelectAllUsers', 'toggleSelectUser'],
   setup(props, { emit }) {
     const itemsPerPageQuery = useRouteQueryPersisted({
-      name: 'items-per-page',
+      name: 'admin-settings-items-per-page',
       defaultValue: '200'
     })
     const pageQuery = useRouteQuery('page', '1')
