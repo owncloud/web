@@ -36,7 +36,9 @@
           :label="$gettext('Select all users')"
           :model-value="allUsersSelected"
           hide-label
-          @update:model-value="$emit('toggleSelectAllUsers', paginatedData)"
+          @update:model-value="
+            allUsersSelected ? $emit('unSelectAllUsers') : $emit('selectAllUsers', paginatedData)
+          "
         />
       </template>
       <template #select="{ item }">
@@ -108,31 +110,17 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  PropType,
-  ref,
-  unref,
-  ComponentPublicInstance,
-  computed,
-  watch
-} from 'vue'
+import { defineComponent, PropType, ref, unref, ComponentPublicInstance, watch } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import {
-  defaultFuseOptions,
-  displayPositionedDropdown,
-  eventBus,
-  queryItemAsString,
-  useRouteQuery,
-  useRouteQueryPersisted
-} from 'web-pkg'
+import { defaultFuseOptions, displayPositionedDropdown, eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { AppRole, User } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useFileListHeaderPosition } from 'web-pkg/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
+import { usePagination } from 'web-app-admin-settings/src/composables/actions/usePagination'
 
 export default defineComponent({
   name: 'UsersList',
@@ -151,23 +139,12 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['unSelectAllUsers', 'toggleSelectAllUsers', 'toggleSelectUser'],
+  emits: ['unSelectAllUsers', 'selectAllUsers', 'toggleSelectUser'],
   setup(props, { emit }) {
-    const itemsPerPageQuery = useRouteQueryPersisted({
-      name: 'admin-settings-items-per-page',
-      defaultValue: '200'
-    })
-    const pageQuery = useRouteQuery('page', '1')
+    const { currentPage, itemsPerPage } = usePagination()
     const contextMenuButtonRef = ref(undefined)
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
 
-    const itemsPerPage = computed(() => {
-      return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
-    })
-
-    const currentPage = computed(() => {
-      return parseInt(queryItemAsString(unref(pageQuery)))
-    })
     const isUserSelected = (user) => {
       return props.selectedUsers.some((s) => s.id === user.id)
     }
@@ -254,7 +231,7 @@ export default defineComponent({
   },
   computed: {
     allUsersSelected() {
-      return this.users.length === this.selectedUsers.length
+      return this.paginatedData.length === this.selectedUsers.length
     },
     footerTextTotal() {
       return this.$gettext('%{userCount} users in total', {
@@ -337,16 +314,19 @@ export default defineComponent({
     }
   },
   watch: {
-    filterTerm() {
-      if (this.$refs.tableRef) {
-        this.markInstance = new Mark((this.$refs.tableRef as ComponentPublicInstance).$el)
-        this.markInstance.unmark()
-        this.markInstance.mark(this.filterTerm, {
-          element: 'span',
-          className: 'highlight-mark',
-          exclude: ['th *', 'tfoot *']
-        })
+    async filterTerm() {
+      if (!this.$refs.tableRef) {
+        return
       }
+
+      await this.$router.push({ ...this.$route, query: { ...this.$route.query, page: '1' } })
+      this.markInstance = new Mark((this.$refs.tableRef as ComponentPublicInstance).$el)
+      this.markInstance.unmark()
+      this.markInstance.mark(this.filterTerm, {
+        element: 'span',
+        className: 'highlight-mark',
+        exclude: ['th *', 'tfoot *']
+      })
     }
   },
   methods: {

@@ -50,7 +50,7 @@
             :groups="groups"
             :selected-groups="selectedGroups"
             @toggle-select-group="toggleSelectGroup"
-            @toggle-select-all-groups="toggleSelectAllGroups"
+            @select-all-groups="selectAllGroups"
             @un-select-all-groups="unselectAllGroups"
           >
             <template #contextMenu>
@@ -160,11 +160,6 @@ export default defineComponent({
         }
       ]
     },
-
-    allGroupsSelected() {
-      return this.groups.length === this.selectedGroups.length
-    },
-
     sideBarAvailablePanels() {
       return [
         {
@@ -205,11 +200,8 @@ export default defineComponent({
   methods: {
     ...mapActions(['showMessage']),
 
-    toggleSelectAllGroups() {
-      if (this.allGroupsSelected) {
-        return (this.selectedGroups = [])
-      }
-      this.selectedGroups = [...this.groups]
+    selectAllGroups(groups) {
+      this.selectedGroups = [...groups]
     },
     toggleSelectGroup(toggledGroup) {
       const isGroupSelected = this.selectedGroups.find((group) => group.id === toggledGroup.id)

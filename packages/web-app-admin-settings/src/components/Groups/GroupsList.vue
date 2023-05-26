@@ -12,7 +12,7 @@
       :sort-by="sortBy"
       :sort-dir="sortDir"
       :fields="fields"
-      :data="data"
+      :data="paginatedData"
       :highlighted="highlighted"
       :sticky="true"
       :header-position="fileListHeaderY"
@@ -28,7 +28,9 @@
           :label="$gettext('Select all groups')"
           :model-value="allGroupsSelected"
           hide-label
-          @update:model-value="$emit('toggleSelectAllGroups')"
+          @update:model-value="
+            allGroupsSelected ? $emit('unSelectAllGroups') : $emit('selectAllGroups', paginatedData)
+          "
         />
       </template>
       <template #select="rowData">
@@ -93,6 +95,7 @@
         </context-menu-quick-action>
       </template>
       <template #footer>
+        <pagination :pages="paginationPages" :current-page="currentPage" />
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
           <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
@@ -103,7 +106,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, ComponentPublicInstance, computed } from 'vue'
+import {
+  defineComponent,
+  PropType,
+  ref,
+  unref,
+  ComponentPublicInstance,
+  computed,
+  watch
+} from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { displayPositionedDropdown, eventBus } from 'web-pkg'
@@ -113,10 +124,12 @@ import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/Contex
 import { useGettext } from 'vue3-gettext'
 import { defaultFuseOptions } from 'web-pkg/src/helpers'
 import { useFileListHeaderPosition } from 'web-pkg/src/composables'
+import Pagination from 'web-pkg/src/components/Pagination.vue'
+import { usePagination } from 'web-app-admin-settings/src/composables/actions/usePagination'
 
 export default defineComponent({
   name: 'GroupsList',
-  components: { ContextMenuQuickAction },
+  components: { ContextMenuQuickAction, Pagination },
   props: {
     groups: {
       type: Array as PropType<Group[]>,
@@ -127,9 +140,10 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['toggleSelectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
+  emits: ['selectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
+    const { currentPage, itemsPerPage } = usePagination()
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
 
@@ -140,6 +154,11 @@ export default defineComponent({
       emit('unSelectAllGroups')
       emit('toggleSelectGroup', group)
     }
+
+    watch(currentPage, () => {
+      emit('unSelectAllGroups')
+    })
+
     const showDetails = (group) => {
       if (!isGroupSelected(group)) {
         selectGroup(group)
@@ -192,7 +211,9 @@ export default defineComponent({
       fileListHeaderY,
       contextMenuButtonRef,
       showEditPanel,
-      readOnlyLabel
+      readOnlyLabel,
+      currentPage,
+      itemsPerPage
     }
   },
   data() {
@@ -241,7 +262,7 @@ export default defineComponent({
       ]
     },
     allGroupsSelected() {
-      return this.groups.length === this.selectedGroups.length
+      return this.paginatedData.length === this.selectedGroups.length
     },
     footerTextTotal() {
       return this.$gettext('%{groupCount} groups in total', {
@@ -260,15 +281,24 @@ export default defineComponent({
         this.sortDir === 'desc'
       )
     },
+    paginatedData() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage
+      const endIndex = startIndex + this.itemsPerPage
+      return this.data.slice(startIndex, endIndex)
+    },
     highlighted() {
       return this.selectedGroups.map((group) => group.id)
+    },
+    paginationPages() {
+      return Math.ceil(this.data.length / this.itemsPerPage)
     }
   },
   watch: {
-    filterTerm() {
+    async filterTerm() {
       if (!this.markInstance) {
         return
       }
+      await this.$router.push({ ...this.$route, query: { ...this.$route.query, page: '1' } })
       this.markInstance.unmark()
       this.markInstance.mark(this.filterTerm, {
         element: 'span',
