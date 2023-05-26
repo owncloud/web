@@ -49,7 +49,7 @@
             :class="{ 'users-table-squashed': sideBarOpen }"
             :selected-users="selectedUsers"
             @toggle-select-user="toggleSelectUser"
-            @select-all-users="toggleSelectAllUsers"
+            @select-all-users="selectUsers"
             @un-select-all-users="unselectAllUsers"
           >
             <template #contextMenu>
@@ -675,7 +675,7 @@ export default defineComponent({
     ...mapActions(['showMessage']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
-    toggleSelectAllUsers(users) {
+    selectUsers(users) {
       this.selectedUsers = users
     },
     toggleSelectUser(toggledUser) {

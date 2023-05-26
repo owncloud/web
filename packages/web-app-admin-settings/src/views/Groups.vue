@@ -50,7 +50,7 @@
             :groups="groups"
             :selected-groups="selectedGroups"
             @toggle-select-group="toggleSelectGroup"
-            @select-all-groups="selectAllGroups"
+            @select-all-groups="selectGroups"
             @un-select-all-groups="unselectAllGroups"
           >
             <template #contextMenu>
@@ -200,7 +200,7 @@ export default defineComponent({
   methods: {
     ...mapActions(['showMessage']),
 
-    selectAllGroups(groups) {
+    selectGroups(groups) {
       this.selectedGroups = [...groups]
     },
     toggleSelectGroup(toggledGroup) {

@@ -13,7 +13,7 @@
       :sort-by="sortBy"
       :sort-dir="sortDir"
       :fields="fields"
-      :data="paginatedSpaces"
+      :data="paginatedItems"
       :highlighted="highlighted"
       :sticky="true"
       :header-position="fileListHeaderY"
@@ -32,7 +32,7 @@
           @update:model-value="
             allSpacesSelected
               ? $emit('unSelectAllSpaces')
-              : $emit('selectAllSpaces', paginatedSpaces)
+              : $emit('selectAllSpaces', paginatedItems)
           "
         />
       </template>
@@ -137,7 +137,7 @@ import { eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import { useFileListHeaderPosition, useRoute, useRouter } from 'web-pkg/src/composables'
-import { usePagination } from 'web-app-admin-settings/src/composables/actions/usePagination'
+import { usePagination } from 'web-app-admin-settings/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 
 export default defineComponent({
@@ -158,7 +158,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const { $gettext, current: currentLanguage } = useGettext()
-    const { currentPage, itemsPerPage } = usePagination()
+
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
     const sortBy = ref('name')
@@ -167,9 +167,6 @@ export default defineComponent({
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
 
-    const allSpacesSelected = computed(() => {
-      return unref(paginatedSpaces).length === props.selectedSpaces.length
-    })
     const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
     const footerTextTotal = computed(() => {
       return $gettext('%{spaceCount} spaces in total', {
@@ -178,12 +175,8 @@ export default defineComponent({
     })
     const footerTextFilter = computed(() => {
       return $gettext('%{spaceCount} matching spaces', {
-        spaceCount: unref(orderedSpaces).length.toString()
+        spaceCount: unref(items).length.toString()
       })
-    })
-
-    watch(currentPage, () => {
-      emit('unSelectAllSpaces')
     })
 
     const orderBy = (list, prop, desc) => {
@@ -222,16 +215,18 @@ export default defineComponent({
           : a.localeCompare(b, undefined, { numeric })
       })
     }
-    const orderedSpaces = computed(() =>
+    const items = computed(() =>
       orderBy(filter(props.spaces, unref(filterTerm)), unref(sortBy), unref(sortDir) === 'desc')
     )
-    const paginatedSpaces = computed(() => {
-      const startIndex = (unref(currentPage) - 1) * unref(itemsPerPage)
-      const endIndex = startIndex + unref(itemsPerPage)
-      return unref(orderedSpaces).slice(startIndex, endIndex)
+
+    const pagination = usePagination({ items })
+
+    watch(pagination.currentPage, () => {
+      emit('unSelectAllSpaces')
     })
-    const paginationPages = computed(() => {
-      return Math.ceil(unref(orderedSpaces).length / unref(itemsPerPage))
+
+    const allSpacesSelected = computed(() => {
+      return unref(pagination.paginatedItems).length === props.selectedSpaces.length
     })
 
     const handleSort = (event) => {
@@ -443,9 +438,6 @@ export default defineComponent({
       getMemberCount,
       getSelectSpaceLabel,
       handleSort,
-      paginatedSpaces,
-      paginationPages,
-      currentPage,
       fileClicked,
       isSpaceSelected,
       contextMenuButtonRef,
@@ -453,7 +445,9 @@ export default defineComponent({
       showContextMenuOnRightClick,
       spaceDetailsLabel,
       showDetailsForSpace,
-      fileListHeaderY
+      fileListHeaderY,
+      items,
+      ...pagination
     }
   }
 })

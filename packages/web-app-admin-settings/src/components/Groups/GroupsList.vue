@@ -12,7 +12,7 @@
       :sort-by="sortBy"
       :sort-dir="sortDir"
       :fields="fields"
-      :data="paginatedData"
+      :data="paginatedItems"
       :highlighted="highlighted"
       :sticky="true"
       :header-position="fileListHeaderY"
@@ -29,7 +29,9 @@
           :model-value="allGroupsSelected"
           hide-label
           @update:model-value="
-            allGroupsSelected ? $emit('unSelectAllGroups') : $emit('selectAllGroups', paginatedData)
+            allGroupsSelected
+              ? $emit('unSelectAllGroups')
+              : $emit('selectAllGroups', paginatedItems)
           "
         />
       </template>
@@ -125,7 +127,7 @@ import { useGettext } from 'vue3-gettext'
 import { defaultFuseOptions } from 'web-pkg/src/helpers'
 import { useFileListHeaderPosition } from 'web-pkg/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
-import { usePagination } from 'web-app-admin-settings/src/composables/actions/usePagination'
+import { usePagination } from 'web-app-admin-settings/src/composables'
 
 export default defineComponent({
   name: 'GroupsList',
@@ -143,9 +145,11 @@ export default defineComponent({
   emits: ['selectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
-    const { currentPage, itemsPerPage } = usePagination()
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
+    const sortBy = ref<string>('displayName')
+    const sortDir = ref<string>('asc')
+    const filterTerm = ref<string>('')
 
     const isGroupSelected = (group) => {
       return props.selectedGroups.some((s) => s.id === group.id)
@@ -154,10 +158,6 @@ export default defineComponent({
       emit('unSelectAllGroups')
       emit('toggleSelectGroup', group)
     }
-
-    watch(currentPage, () => {
-      emit('unSelectAllGroups')
-    })
 
     const showDetails = (group) => {
       if (!isGroupSelected(group)) {
@@ -202,6 +202,36 @@ export default defineComponent({
 
     const readOnlyLabel = computed(() => $gettext("This group is read-only and can't be edited"))
 
+    const filter = (groups: Group[], filterTerm: string) => {
+      if (!(filterTerm || '').trim()) {
+        return groups
+      }
+      const groupsSearchEngine = new Fuse(groups, { ...defaultFuseOptions, keys: ['displayName'] })
+      return groupsSearchEngine.search(filterTerm).map((r) => r.item)
+    }
+
+    const orderBy = (list, prop, desc) => {
+      return [...list].sort((a, b) => {
+        a = a[prop]?.toString() || ''
+        b = b[prop]?.toString() || ''
+        return desc ? b.localeCompare(a) : a.localeCompare(b)
+      })
+    }
+
+    const items = computed(() => {
+      return orderBy(
+        filter(props.groups, unref(filterTerm)),
+        unref(sortBy),
+        unref(sortDir) === 'desc'
+      )
+    })
+
+    const pagination = usePagination({ items })
+
+    watch(pagination.currentPage, () => {
+      emit('unSelectAllGroups')
+    })
+
     return {
       showDetails,
       rowClicked,
@@ -212,16 +242,18 @@ export default defineComponent({
       contextMenuButtonRef,
       showEditPanel,
       readOnlyLabel,
-      currentPage,
-      itemsPerPage
+      filterTerm,
+      sortBy,
+      sortDir,
+      items,
+      ...pagination,
+      filter,
+      orderBy
     }
   },
   data() {
     return {
-      sortBy: 'displayName',
-      sortDir: 'asc',
-      markInstance: null,
-      filterTerm: ''
+      markInstance: null
     }
   },
   computed: {
@@ -262,7 +294,7 @@ export default defineComponent({
       ]
     },
     allGroupsSelected() {
-      return this.paginatedData.length === this.selectedGroups.length
+      return this.paginatedItems.length === this.selectedGroups.length
     },
     footerTextTotal() {
       return this.$gettext('%{groupCount} groups in total', {
@@ -271,26 +303,11 @@ export default defineComponent({
     },
     footerTextFilter() {
       return this.$gettext('%{groupCount} matching groups', {
-        groupCount: this.data.length.toString()
+        groupCount: this.items.length.toString()
       })
-    },
-    data() {
-      return this.orderBy(
-        this.filter(this.groups, this.filterTerm),
-        this.sortBy,
-        this.sortDir === 'desc'
-      )
-    },
-    paginatedData() {
-      const startIndex = (this.currentPage - 1) * this.itemsPerPage
-      const endIndex = startIndex + this.itemsPerPage
-      return this.data.slice(startIndex, endIndex)
     },
     highlighted() {
       return this.selectedGroups.map((group) => group.id)
-    },
-    paginationPages() {
-      return Math.ceil(this.data.length / this.itemsPerPage)
     }
   },
   watch: {
@@ -313,20 +330,6 @@ export default defineComponent({
     })
   },
   methods: {
-    filter(groups, filterTerm) {
-      if (!(filterTerm || '').trim()) {
-        return groups
-      }
-      const groupsSearchEngine = new Fuse(groups, { ...defaultFuseOptions, keys: ['displayName'] })
-      return groupsSearchEngine.search(filterTerm).map((r) => r.item)
-    },
-    orderBy(list, prop, desc) {
-      return [...list].sort((a, b) => {
-        a = a[prop]?.toString() || ''
-        b = b[prop]?.toString() || ''
-        return desc ? b.localeCompare(a) : a.localeCompare(b)
-      })
-    },
     handleSort(event) {
       this.sortBy = event.sortBy
       this.sortDir = event.sortDir
