@@ -1,5 +1,5 @@
 import { Resource } from 'web-client'
-import { basename, dirname, join } from 'path'
+import { basename, join } from 'path'
 import { SpaceResource } from 'web-client/src/helpers'
 import { ClientService, LoadingService, LoadingTaskCallbackArguments } from 'web-pkg/src/services'
 import {
