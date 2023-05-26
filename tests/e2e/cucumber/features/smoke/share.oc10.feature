@@ -20,8 +20,6 @@ Feature: share
       | resource      | to                     |
       | lorem.txt     | folder_to_shared       |
       | lorem-big.txt | folder_to_customShared |
-    #Then "Alice" should see the following resource
-    #  | folder_to_shared/lorem.txt |
     When "Alice" shares the following resource using the sidebar panel
       | resource               | recipient | type | role                                  | resourceType |
       | folder_to_shared       | Brian     | user | editor                                | folder       |
@@ -48,28 +46,20 @@ Feature: share
       | resource      | from                          |
       | lorem-big.txt | Shares/folder_to_customShared |
     When "Alice" opens the "files" app
-    #Then "Alice" should see the following resources
-    #  | folder_to_shared/lorem_new.txt |
-    #  | folder_to_shared/simple.pdf    |
     And "Alice" uploads the following resource
       | resource          | to               | option  |
       | PARENT/simple.pdf | folder_to_shared | replace |
-    #Then "Alice" should see that the resource "folder_to_shared/simple.pdf" has 1 version
     And "Brian" downloads old version of the following resource
       | resource   | to                      | type |
       | simple.pdf | Shares/folder_to_shared | file |
     When "Brian" restores following resources
       | resource   | to                      | version |
       | simple.pdf | Shares/folder_to_shared | 1       |
-    #Then "Brian" should see that the version of resource "simple.pdf" has been restored
     When "Alice" deletes the following resources using the sidebar panel
       | resource         | from             |
       | lorem_new.txt    | folder_to_shared |
       | folder_to_shared |                  |
     And "Alice" logs out
-    #And "Brian" opens the "files" app
-    #Then "Brian" should not see the following resource
-    #  | Shares/folder_to_shared |
     And "Brian" logs out
 
   Scenario: file
@@ -117,9 +107,4 @@ Feature: share
       | resource                         | recipient |
       | folder_to_shared/testavatar.jpeg | Brian     |
     And "Alice" logs out
-    #When "Brian" opens the "files" app
-    #Then "Brian" should not see the following resource
-    #  | Shares/testavatar_new.jpeg |
-    #But "Brian" should see the following resource
-    #  | testavatar.jpeg |
     And "Brian" logs out

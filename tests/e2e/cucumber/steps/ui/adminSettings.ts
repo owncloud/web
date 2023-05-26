@@ -4,12 +4,11 @@ import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 
 Then(
-  /^"([^"]*)" (should|should not) see the following space(s)?$/,
+  /^"([^"]*)" (should|should not) see the following space(?:s)?$/,
   async function (
     this: World,
     stepUser: string,
     actionType: string,
-    _: string,
     stepTable: DataTable
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -17,7 +16,7 @@ Then(
     const actualList = await spacesObject.getDisplayedSpaces()
 
     for (const info of stepTable.hashes()) {
-      const space = await spacesObject.getSpace({ key: info.id })
+      const space = spacesObject.getSpace({ key: info.id })
       expect(actualList.includes(space.id)).toBe(actionType === 'should')
     }
   }
@@ -46,19 +45,18 @@ When(
 )
 
 When(
-  /^"([^"]*)" (changes|updates) the space "([^"]*)" (name|subtitle|quota) to "([^"]*)" using the context-menu$/,
+  /^"([^"]*)" (?:changes|updates) the space "([^"]*)" (name|subtitle|quota) to "([^"]*)" using the context-menu$/,
   async function (
     this: World,
     stepUser: string,
-    _: string,
     key: string,
-    action: string,
+    attribute: string,
     value: string
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
     const spaceId = spacesObject.getUUID({ key })
-    switch (action) {
+    switch (attribute) {
       case 'name':
         await spacesObject.rename({ key, value })
         break
@@ -69,7 +67,7 @@ When(
         await spacesObject.changeQuota({ spaceIds: [spaceId], value, context: 'context-menu' })
         break
       default:
-        throw new Error(`'${action}' not implemented`)
+        throw new Error(`'${attribute}' not implemented`)
     }
   }
 )
@@ -185,7 +183,7 @@ Then(
 )
 
 When(
-  /^"([^"]*)" changes the quota of the user "([^"]*)" to "([^"]*)" using the sidebar panel$/,
+  '{string} changes the quota of the user {string} to {string} using the sidebar panel',
   async function (this: World, stepUser: string, key: string, value: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
@@ -194,7 +192,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" changes the quota to "([^"]*)" for users using the batch action$/,
+  '{string} changes the quota to {string} for users using the batch action',
   async function (
     this: World,
     stepUser: string,
@@ -213,12 +211,11 @@ When(
 )
 
 Then(
-  /^"([^"]*)" (should see|should not see) the following user(s)$/,
+  /^"([^"]*)" (should|should not) see the following user(?:s)?$/,
   async function (
     this: World,
     stepUser: string,
     action: string,
-    _: string,
     stepTable: DataTable
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -226,10 +223,10 @@ Then(
     const users = await usersObject.getDisplayedUsers()
     for (const { user } of stepTable.hashes()) {
       switch (action) {
-        case 'should see':
+        case 'should':
           expect(users).toContain(usersObject.getUUID({ key: user }))
           break
-        case 'should not see':
+        case 'should not':
           expect(users).not.toContain(usersObject.getUUID({ key: user }))
           break
         default:
@@ -252,12 +249,11 @@ When(
 )
 
 When(
-  /^"([^"]*)" (adds|removes) the following users (to|from) the groups "([^"]*)" using the batch actions$/,
+  /^"([^"]*)" (adds|removes) the following users (?:to|from) the groups "([^"]*)" using the batch actions$/,
   async function (
     this: World,
     stepUser: string,
     action: string,
-    _: string,
     groups: string,
     stepTable: DataTable
   ): Promise<void> {
@@ -305,14 +301,12 @@ When(
 )
 
 When(
-  /^"([^"]*)" (adds|removes) the user "([^"]*)" (to|from) the (group|groups) "([^"]*)" using the sidebar panel$/,
+  /^"([^"]*)" (adds|removes) the user "([^"]*)" (?:to|from) the group(?:s)? "([^"]*)" using the sidebar panel$/,
   async function (
     this: World,
     stepUser: string,
     action: string,
     user: string,
-    _: string,
-    __: string,
     groups: string
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -390,7 +384,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" changes (displayName) to "([^"]*)" for group "([^"]*)" using the sidebar panel$/,
+  '{string} changes {word} to {string} for group {string} using the sidebar panel',
   async function (
     this: World,
     stepUser: string,
@@ -411,7 +405,7 @@ When(
 )
 
 Then(
-  /^"([^"]*)" (should see|should not see) the following group(?:s)?$/,
+  /^"([^"]*)" (should|should not) see the following group(?:s)?$/,
   async function (
     this: World,
     stepUser: string,
@@ -424,10 +418,10 @@ Then(
 
     for (const { group } of stepTable.hashes()) {
       switch (action) {
-        case 'should see':
+        case 'should':
           expect(groups).toContain(groupsObject.getUUID({ key: group }))
           break
-        case 'should not see':
+        case 'should not':
           expect(groups).not.toContain(groupsObject.getUUID({ key: group }))
           break
         default:
@@ -454,7 +448,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" deletes the following (?:group|groups) using the (batch actions|context menu)$/,
+  /^"([^"]*)" deletes the following group(?:s)? using the (batch actions|context menu)$/,
   async function (
     this: World,
     stepUser: string,

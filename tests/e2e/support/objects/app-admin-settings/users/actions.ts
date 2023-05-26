@@ -156,7 +156,7 @@ export const getDisplayedUsers = async (args: { page: Page }): Promise<string[]>
 
 export const selectUser = async (args: { page: Page; uuid: string }): Promise<void> => {
   const { page, uuid } = args
-  const checkbox = await page.locator(util.format(userCheckboxSelector, uuid))
+  const checkbox = page.locator(util.format(userCheckboxSelector, uuid))
   const checkBoxAlreadySelected = await checkbox.isChecked()
   if (checkBoxAlreadySelected) {
     return
