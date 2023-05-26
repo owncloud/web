@@ -146,13 +146,13 @@ export const changeShareeRole = async (args: ShareArgs): Promise<void> => {
 
   for (const collaborator of recipients) {
     await Promise.all([
-      Collaborator.changeCollaboratorRole({ page, collaborator }),
       page.waitForResponse(
         (resp) =>
           resp.url().includes('shares') &&
           resp.status() === 200 &&
           resp.request().method() === 'PUT'
-      )
+      ),
+      Collaborator.changeCollaboratorRole({ page, collaborator })
     ])
   }
 }

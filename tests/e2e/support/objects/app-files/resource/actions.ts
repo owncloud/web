@@ -556,8 +556,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
             resp.status() === 201 &&
             resp.request().method() === (action === 'copy' ? 'COPY' : 'MOVE')
         ),
-        page.locator(util.format(resourceNameSelector, resource)),
-        await page.keyboard.press('Control+V')
+        page.keyboard.press('Control+V')
       ])
       break
     }
@@ -617,7 +616,6 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
         resp.status() === 201 &&
         resp.request().method() === 'MOVE'
     ),
-    page.locator(util.format(resourceNameSelector, newName)),
     page.locator(util.format(actionConfirmationButton, 'Rename')).click()
   ])
 }
@@ -642,7 +640,7 @@ export const restoreResourceVersion = async (args: resourceVersionArgs) => {
       (resp) =>
         resp.url().includes('/v/') && resp.status() === 204 && resp.request().method() === 'COPY'
     ),
-    await page.locator(versionRevertButton).first().click()
+    page.locator(versionRevertButton).first().click()
   ])
 }
 
@@ -732,7 +730,7 @@ export const downloadResourceVersion = async (
         resp.url().includes('/v/') && resp.status() === 200 && resp.request().method() === 'HEAD'
     ),
     page.waitForEvent('download'),
-    await page.locator('//*[@data-testid="file-versions-download-button"]').first().click()
+    page.locator('//*[@data-testid="file-versions-download-button"]').first().click()
   ])
   await sidebar.close({ page: page })
   downloads.push(download)
@@ -830,7 +828,7 @@ export const restoreResourceTrashbin = async (
     page.waitForResponse(
       (resp) => statuses.includes(resp.status()) && resp.request().method() === 'MOVE'
     ),
-    await page.locator(restoreResourceButton).click()
+    page.locator(restoreResourceButton).click()
   ])
 
   const message = await page.locator(notificationMessageDialog).textContent()

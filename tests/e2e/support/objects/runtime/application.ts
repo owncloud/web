@@ -26,6 +26,7 @@ export class Application {
   }
 
   async getNotificationMessages(): Promise<string[]> {
+    // wait for the notifications to load
     await this.#page.waitForResponse(
       (resp) =>
         resp.url().endsWith('notifications?format=json') &&
