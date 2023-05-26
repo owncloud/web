@@ -1,4 +1,4 @@
-Feature: Upload
+Feature: Upload large resources
   As a user
   I want to upload large resources
   So that I can pause and resume the upload
@@ -22,4 +22,7 @@ Feature: Upload
     #   | largefile.txt |
     # And "Alice" pauses the file upload
     # And "Alice" resumes the file upload
+    # Then following resources should be displayed in the files list for user "Alice"
+    #   | resource      |
+    #   | largefile.txt |
     And "Alice" logs out
