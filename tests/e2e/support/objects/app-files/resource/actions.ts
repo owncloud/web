@@ -573,12 +573,6 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
         ),
         source.dragTo(target)
       ])
-
-      await Promise.all([
-        page.locator(util.format(resourceNameSelector, resourceBase)),
-        page.locator(util.format(resourceNameSelector, newLocation)).click()
-      ])
-
       break
     }
   }
