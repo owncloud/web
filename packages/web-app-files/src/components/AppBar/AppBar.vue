@@ -20,6 +20,7 @@
           :items="breadcrumbs"
           :max-width="breadcrumbMaxWidth"
           :truncation-offset="breadcrumbTruncationOffset"
+          @item-dropped-breadcrumb="fileDroppedBreadcrumb"
         >
           <template #contextMenu>
             <context-actions
@@ -135,7 +136,7 @@ export default defineComponent({
       default: null
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     const store = useStore()
     const router = useRouter()
     const clientService = useClientService()

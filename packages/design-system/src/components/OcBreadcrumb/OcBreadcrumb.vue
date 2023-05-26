@@ -18,9 +18,9 @@
           }
         ]"
         @dragover="dragOver($event)"
-        @dragenter.prevent="dropItemStyling(index, false, $event)"
-        @dragleave.prevent="dropItemStyling(index, true, $event)"
-        @mouseleave="dropItemStyling(index, true, $event)"
+        @dragenter.prevent="dropItemStyling(item.id, false, $event)"
+        @dragleave.prevent="dropItemStyling(item.id, true, $event)"
+        @mouseleave="dropItemStyling(item.id, true, $event)"
         @drop="dropItemEvent(item.to, index)"
       >
         <router-link
@@ -225,6 +225,7 @@ export default defineComponent({
     }
 
     const dropItemEvent = (item, index) => {
+      console.log(item, index)
       if (index === unref(displayItems).length - 1) {
         return
       }
