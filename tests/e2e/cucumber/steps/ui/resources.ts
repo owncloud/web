@@ -54,29 +54,23 @@ When(
 )
 
 When(
-  '{string} pauses the file upload',
-  async function (this: World, stepUser: string): Promise<void> {
+  '{string} {word} the file upload',
+  async function (this: World, stepUser: string, action: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.pauseUpload()
-  }
-)
-
-When(
-  '{string} resumes the file upload',
-  async function (this: World, stepUser: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.resumeUpload()
-  }
-)
-
-When(
-  '{string} cancels the file upload',
-  async function (this: World, stepUser: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.cancelUpload()
+    switch (action) {
+      case 'pauses':
+        await resourceObject.pauseUpload()
+        break
+      case 'resumes':
+        await resourceObject.resumeUpload()
+        break
+      case 'cancels':
+        await resourceObject.cancelUpload()
+        break
+      default:
+        throw new Error(`Unknown action: ${action}`)
+    }
   }
 )
 
