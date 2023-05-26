@@ -12,9 +12,9 @@
           'oc-flex',
           'oc-flex-middle',
           {
-            'oc-hidden':
+            'oc-invisible-sr':
               hiddenItems.indexOf(item) !== -1 ||
-              (item.isPreviousHiddenFolder && hiddenItems.length === 0)
+              (item.isTruncationPlaceholder && hiddenItems.length === 0)
           }
         ]"
         @dragover="dragOver($event)"
@@ -212,12 +212,12 @@ export default defineComponent({
   emits: [EVENT_ITEM_DROPPED_BREADCRUMB],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
-    const visibleItems = ref([])
-    const hiddenItems = ref([])
-    const displayItems = ref(props.items.slice())
+    const visibleItems = ref<BreadcrumbItem[]>([])
+    const hiddenItems = ref<BreadcrumbItem[]>([])
+    const displayItems = ref<BreadcrumbItem[]>(props.items.slice())
 
-    const getBreadcrumbElement = (key): HTMLElement => {
-      return document.querySelector(`[data-key="${key}"]`)
+    const getBreadcrumbElement = (id): HTMLElement => {
+      return document.querySelector(`.oc-breadcrumb-list [data-item-id="${id}"]`)
     }
 
     const dragOver = (event) => {
@@ -233,23 +233,24 @@ export default defineComponent({
     }
 
     const calculateTotalBreadcrumbWidth = () => {
-      let totalBreadcrumbWidth = 0
-      visibleItems.value.forEach((item, index) => {
-        const breadcrumbElement = getBreadcrumbElement(index)
-        const itemClientWidth = breadcrumbElement?.offsetWidth + 10
-        const itemWidth = itemClientWidth
-        totalBreadcrumbWidth += itemWidth
+      let totalBreadcrumbWidth = 100 // 100px margin to the right to avoid breadcrumb from getting too close to the controls
+      visibleItems.value.forEach((item) => {
+        const breadcrumbElement = getBreadcrumbElement(item.id)
+        const itemClientWidth = breadcrumbElement?.getBoundingClientRect()?.width || 0
+        totalBreadcrumbWidth += itemClientWidth
       })
       return totalBreadcrumbWidth
     }
 
     const reduceBreadcrumb = (offsetIndex) => {
       const breadcrumbMaxWidth = props.maxWidth
-      document.getElementById(props.id)?.style.setProperty('--max-width', `${breadcrumbMaxWidth}px`)
+      if (!breadcrumbMaxWidth) {
+        return
+      }
       const totalBreadcrumbWidth = calculateTotalBreadcrumbWidth()
 
       const isOverflowing = breadcrumbMaxWidth < totalBreadcrumbWidth
-      if (!isOverflowing || visibleItems.value.length <= 3) {
+      if (!isOverflowing || visibleItems.value.length <= props.truncationOffset + 1) {
         return
       }
       // Remove from the left side
@@ -259,41 +260,29 @@ export default defineComponent({
       reduceBreadcrumb(offsetIndex)
     }
 
-    const lastHiddenItem = computed(() => {
-      if (hiddenItems.value.length >= 1) {
-        return unref(hiddenItems)[unref(hiddenItems).length - 1]
-      }
-      return { to: {} }
-    })
+    const lastHiddenItem = computed(() =>
+      hiddenItems.value.length >= 1 ? unref(hiddenItems)[unref(hiddenItems).length - 1] : { to: {} }
+    )
 
     const renderBreadcrumb = () => {
-      displayItems.value = props.items.slice()
-      if (displayItems.value.length > 1) {
-        displayItems.value.splice(1, 0, {
+      displayItems.value = [...props.items]
+      if (displayItems.value.length > props.truncationOffset - 1) {
+        displayItems.value.splice(props.truncationOffset - 1, 0, {
           text: '...',
           allowContextActions: false,
           to: {},
-          isPreviousHiddenFolder: true
+          isTruncationPlaceholder: true
         })
       }
-      visibleItems.value = displayItems.value.slice()
+      visibleItems.value = [...displayItems.value]
       hiddenItems.value = []
-
       nextTick(() => {
-        reduceBreadcrumb(2)
+        reduceBreadcrumb(props.truncationOffset)
       })
     }
 
-    watch(
-      () => props.maxWidth,
-      () => renderBreadcrumb()
-    )
-    watch(
-      () => props.items,
-      () => renderBreadcrumb()
-    )
+    watch([() => props.maxWidth, () => props.items], renderBreadcrumb, { immediate: true })
     onMounted(() => {
-      renderBreadcrumb()
       window.addEventListener('resize', renderBreadcrumb)
     })
 
