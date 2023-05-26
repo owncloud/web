@@ -1126,7 +1126,7 @@ export const expectThatPublicLinkIsDeleted = async (args): Promise<void> => {
     page.goto(url)
   ])
   await expect(page.locator(noLinkMessage)).toHaveText(
-    'Error: The resource could not be located, it may not exist anymore.'
+    'The resource could not be located, it may not exist anymore.'
   )
 }
 
