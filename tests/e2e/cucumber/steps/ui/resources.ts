@@ -5,7 +5,7 @@ import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 import { config } from '../../../config'
 import { displayedResourceType } from '../../../support/objects/app-files/resource/actions'
-import * as tempFs from '../../../support/utils/runtimeFs'
+import * as runtimeFs from '../../../support/utils/runtimeFs'
 
 When(
   '{string} creates the following resource(s)',
@@ -44,7 +44,7 @@ When(
         to: info.to,
         resources: [
           this.filesEnvironment.getFile({
-            name: path.join(tempFs.getTempUploadPath().replace(config.assets, ''), info.resource)
+            name: path.join(runtimeFs.getTempUploadPath().replace(config.assets, ''), info.resource)
           })
         ],
         option: info.option
@@ -638,11 +638,11 @@ When(
     const files = []
     for (let i = 0; i < numberOfFiles; i++) {
       const file = `file${i}.txt`
-      tempFs.createFile(file, 'test content')
+      runtimeFs.createFile(file, 'test content')
 
       files.push(
         this.filesEnvironment.getFile({
-          name: path.join(tempFs.getTempUploadPath().replace(config.assets, ''), file)
+          name: path.join(runtimeFs.getTempUploadPath().replace(config.assets, ''), file)
         })
       )
     }
