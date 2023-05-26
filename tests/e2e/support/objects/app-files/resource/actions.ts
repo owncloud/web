@@ -272,7 +272,6 @@ export const editTextDocument = async ({
   ])
   await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
   await page.locator(util.format(resourceNameSelector, name)).waitFor()
-  await page.locator(fileRow).waitFor()
 }
 
 /**/
