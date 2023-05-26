@@ -58,7 +58,7 @@
             :class="{ 'spaces-table-squashed': sideBarOpen }"
             :selected-spaces="selectedSpaces"
             @toggle-select-space="toggleSelectSpace"
-            @select-all-spaces="selectSpaces"
+            @select-spaces="selectSpaces"
             @un-select-all-spaces="unselectAllSpaces"
           >
             <template #contextMenu>

@@ -30,9 +30,7 @@
           :model-value="allSpacesSelected"
           hide-label
           @update:model-value="
-            allSpacesSelected
-              ? $emit('unSelectAllSpaces')
-              : $emit('selectAllSpaces', paginatedItems)
+            allSpacesSelected ? $emit('unSelectAllSpaces') : $emit('selectSpaces', paginatedItems)
           "
         />
       </template>
@@ -153,7 +151,7 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['toggleSelectSpace', 'selectAllSpaces', 'unSelectAllSpaces'],
+  emits: ['toggleSelectSpace', 'selectSpaces', 'unSelectAllSpaces'],
   setup: function (props, { emit }) {
     const router = useRouter()
     const route = useRoute()

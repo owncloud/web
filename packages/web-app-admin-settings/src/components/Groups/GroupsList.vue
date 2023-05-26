@@ -29,9 +29,7 @@
           :model-value="allGroupsSelected"
           hide-label
           @update:model-value="
-            allGroupsSelected
-              ? $emit('unSelectAllGroups')
-              : $emit('selectAllGroups', paginatedItems)
+            allGroupsSelected ? $emit('unSelectAllGroups') : $emit('selectGroups', paginatedItems)
           "
         />
       </template>
@@ -142,7 +140,7 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['selectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
+  emits: ['selectGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')

@@ -37,7 +37,7 @@
           :model-value="allUsersSelected"
           hide-label
           @update:model-value="
-            allUsersSelected ? $emit('unSelectAllUsers') : $emit('selectAllUsers', paginatedItems)
+            allUsersSelected ? $emit('unSelectAllUsers') : $emit('selectUsers', paginatedItems)
           "
         />
       </template>
@@ -141,7 +141,7 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['unSelectAllUsers', 'selectAllUsers', 'toggleSelectUser'],
+  emits: ['unSelectAllUsers', 'selectUsers', 'toggleSelectUser'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
 

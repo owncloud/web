@@ -49,7 +49,7 @@
             :class="{ 'users-table-squashed': sideBarOpen }"
             :selected-users="selectedUsers"
             @toggle-select-user="toggleSelectUser"
-            @select-all-users="selectUsers"
+            @select-users="selectUsers"
             @un-select-all-users="unselectAllUsers"
           >
             <template #contextMenu>

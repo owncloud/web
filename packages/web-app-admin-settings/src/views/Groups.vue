@@ -50,7 +50,7 @@
             :groups="groups"
             :selected-groups="selectedGroups"
             @toggle-select-group="toggleSelectGroup"
-            @select-all-groups="selectGroups"
+            @select-groups="selectGroups"
             @un-select-all-groups="unselectAllGroups"
           >
             <template #contextMenu>
