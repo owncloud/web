@@ -131,7 +131,7 @@ import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/s
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
-import { eventBus } from 'web-pkg'
+import { eventBus, SortDir } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import { useFileListHeaderPosition, useRoute, useRouter } from 'web-pkg/src/composables'
@@ -160,7 +160,7 @@ export default defineComponent({
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
     const sortBy = ref('name')
-    const sortDir = ref('asc')
+    const sortDir = ref(SortDir.Asc)
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
@@ -214,7 +214,11 @@ export default defineComponent({
       })
     }
     const items = computed(() =>
-      orderBy(filter(props.spaces, unref(filterTerm)), unref(sortBy), unref(sortDir) === 'desc')
+      orderBy(
+        filter(props.spaces, unref(filterTerm)),
+        unref(sortBy),
+        unref(sortDir) === SortDir.Desc
+      )
     )
 
     const pagination = usePagination({ items })

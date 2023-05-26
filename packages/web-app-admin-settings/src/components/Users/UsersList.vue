@@ -114,7 +114,7 @@ import { useGettext } from 'vue3-gettext'
 import { defineComponent, PropType, ref, unref, ComponentPublicInstance, watch } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { defaultFuseOptions, displayPositionedDropdown, eventBus } from 'web-pkg'
+import { defaultFuseOptions, displayPositionedDropdown, eventBus, SortDir } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { AppRole, User } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
@@ -148,7 +148,7 @@ export default defineComponent({
     const contextMenuButtonRef = ref(undefined)
     const filterTerm = ref<string>('')
     const sortBy = ref<string>('onPremisesSamAccountName')
-    const sortDir = ref<string>('asc')
+    const sortDir = ref<string>(SortDir.Asc)
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
 
     const isUserSelected = (user) => {
@@ -257,7 +257,7 @@ export default defineComponent({
       return orderBy(
         filter(props.users, unref(filterTerm)),
         unref(sortBy),
-        unref(sortDir) === 'desc'
+        unref(sortDir) === SortDir.Desc
       )
     })
 

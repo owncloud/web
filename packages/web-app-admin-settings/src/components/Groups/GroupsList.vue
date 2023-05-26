@@ -117,7 +117,7 @@ import {
 } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { displayPositionedDropdown, eventBus } from 'web-pkg'
+import { displayPositionedDropdown, eventBus, SortDir } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Group } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
@@ -146,7 +146,7 @@ export default defineComponent({
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
     const sortBy = ref<string>('displayName')
-    const sortDir = ref<string>('asc')
+    const sortDir = ref<string>(SortDir.Asc)
     const filterTerm = ref<string>('')
 
     const isGroupSelected = (group) => {
@@ -220,7 +220,7 @@ export default defineComponent({
       return orderBy(
         filter(props.groups, unref(filterTerm)),
         unref(sortBy),
-        unref(sortDir) === 'desc'
+        unref(sortDir) === SortDir.Desc
       )
     })
 
