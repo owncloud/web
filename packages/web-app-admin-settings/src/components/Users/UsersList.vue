@@ -36,7 +36,7 @@
           :label="$gettext('Select all users')"
           :model-value="allUsersSelected"
           hide-label
-          @update:model-value="$emit('toggleSelectAllUsers')"
+          @update:model-value="$emit('toggleSelectAllUsers', paginatedData)"
         />
       </template>
       <template #select="{ item }">
@@ -108,7 +108,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, ComponentPublicInstance, computed } from 'vue'
+import {
+  defineComponent,
+  PropType,
+  ref,
+  unref,
+  ComponentPublicInstance,
+  computed,
+  watch
+} from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import {
@@ -163,6 +171,11 @@ export default defineComponent({
     const isUserSelected = (user) => {
       return props.selectedUsers.some((s) => s.id === user.id)
     }
+
+    watch(currentPage, () => {
+      emit('unSelectAllUsers')
+    })
+
     const selectUser = (user) => {
       emit('unSelectAllUsers')
       emit('toggleSelectUser', user)

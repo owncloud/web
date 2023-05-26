@@ -680,11 +680,11 @@ export default defineComponent({
     ...mapActions(['showMessage']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
-    toggleSelectAllUsers() {
+    toggleSelectAllUsers(users) {
       if (this.allUsersSelected) {
         return (this.selectedUsers = [])
       }
-      this.selectedUsers = this.users
+      this.selectedUsers = users
     },
     toggleSelectUser(toggledUser) {
       const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
