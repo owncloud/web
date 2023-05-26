@@ -20,7 +20,7 @@
       :sort-by="sortBy"
       :sort-dir="sortDir"
       :fields="fields"
-      :data="data"
+      :data="paginatedData"
       :highlighted="highlighted"
       :sticky="true"
       :header-position="fileListHeaderY"
@@ -97,6 +97,7 @@
         </context-menu-quick-action>
       </template>
       <template #footer>
+        <pagination :pages="paginationPages" :current-page="currentPage" />
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
           <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
@@ -107,19 +108,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, ComponentPublicInstance } from 'vue'
+import { defineComponent, PropType, ref, unref, ComponentPublicInstance, computed } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { defaultFuseOptions, displayPositionedDropdown, eventBus } from 'web-pkg'
+import {
+  defaultFuseOptions,
+  displayPositionedDropdown,
+  eventBus,
+  queryItemAsString,
+  useRouteQuery,
+  useRouteQueryPersisted
+} from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { AppRole, User } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useFileListHeaderPosition } from 'web-pkg/src/composables'
+import Pagination from 'web-pkg/src/components/Pagination.vue'
 
 export default defineComponent({
   name: 'UsersList',
-  components: { ContextMenuQuickAction, NoContentMessage },
+  components: { ContextMenuQuickAction, NoContentMessage, Pagination },
   props: {
     users: {
       type: Array as PropType<User[]>,
@@ -136,8 +145,21 @@ export default defineComponent({
   },
   emits: ['unSelectAllUsers', 'toggleSelectAllUsers', 'toggleSelectUser'],
   setup(props, { emit }) {
+    const itemsPerPageQuery = useRouteQueryPersisted({
+      name: 'items-per-page',
+      defaultValue: '200'
+    })
+    const pageQuery = useRouteQuery('page', '1')
     const contextMenuButtonRef = ref(undefined)
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
+
+    const itemsPerPage = computed(() => {
+      return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
+    })
+
+    const currentPage = computed(() => {
+      return parseInt(queryItemAsString(unref(pageQuery)))
+    })
     const isUserSelected = (user) => {
       return props.selectedUsers.some((s) => s.id === user.id)
     }
@@ -204,7 +226,9 @@ export default defineComponent({
       contextMenuButtonRef,
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
-      fileListHeaderY
+      fileListHeaderY,
+      itemsPerPage,
+      currentPage
     }
   },
   data() {
@@ -287,8 +311,16 @@ export default defineComponent({
         this.sortDir === 'desc'
       )
     },
+    paginatedData() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage
+      const endIndex = startIndex + this.itemsPerPage
+      return this.data.slice(startIndex, endIndex)
+    },
     highlighted() {
       return this.selectedUsers.map((user) => user.id)
+    },
+    paginationPages() {
+      return Math.ceil(this.data.length / this.itemsPerPage)
     }
   },
   watch: {
