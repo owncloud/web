@@ -9,11 +9,12 @@ Feature: Copy
       | Alice |
     And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
-      | name        |
-      | PARENTCopy1 |
-      | PARENTCopy2 |
-      | PARENTMove  |
-      | PARENTCopy3 |
+      | name              |
+      | PARENTCopy1       |
+      | PARENTCopy2       |
+      | PARENTMove        |
+      | PARENTCopy3       |
+      | PARENTCopy4/Child |
     And "Alice" creates the following files into personal space using API
       | pathToFile              | content                             |
       | PARENTCopy3/example.txt | example text                        |
@@ -43,4 +44,8 @@ Feature: Copy
     And "Alice" moves the following resource using sidebar-panel
       | resource    | to         |
       | PARENTCopy3 | PARENTMove |
+    And "Alice" opens folder "PARENTCopy4"
+    And "Alice" moves the following resource using drag-drop-breadcrumb
+      | resource | to       |
+      | Child    | Personal |
     And "Alice" logs out
