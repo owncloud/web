@@ -50,14 +50,14 @@ Feature: spaces.personal
 
     And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic" to "team.1"
-    And "Alice" edits the public link named "team.1" of resource "folderPublic" changing role to "uploader"
+    And "Alice" edits the public link named "team.1" of resource "folderPublic" changing role to "Secret File Drop"
     And "Alice" sets the expiration date of the public link named "team.1" of resource "folderPublic" to "+5 days"
     And "Alice" sets the password of the public link named "team.1" of resource "folderPublic" to "12345"
 
     # borrowed from share.feature
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role   | resourceType |
-      | folder_to_shared | Brian     | user | editor | folder       |
+      | resource         | recipient | type | role     | resourceType |
+      | folder_to_shared | Brian     | user | Can edit | folder       |
 
     # team.2
     And "Alice" navigates to the projects space page
@@ -77,7 +77,7 @@ Feature: spaces.personal
 
     And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic" to "team.2"
-    And "Alice" edits the public link named "team.2" of resource "folderPublic" changing role to "uploader"
+    And "Alice" edits the public link named "team.2" of resource "folderPublic" changing role to "Secret File Drop"
     And "Alice" sets the expiration date of the public link named "team.2" of resource "folderPublic" to "+5 days"
     And "Alice" sets the password of the public link named "team.2" of resource "folderPublic" to "54321"
 
@@ -151,9 +151,9 @@ Feature: spaces.personal
       | resource     | to     | option  |
       | textfile.txt | parent | replace |
     And "Alice" adds following users to the project space
-      | user  | role   | kind |
-      | Carol | viewer | user |
-      | Brian | editor | user |
+      | user  | role     | kind |
+      | Carol | Can view | user |
+      | Brian | Can edit | user |
     And "Alice" logs out
 
     When "Carol" logs in

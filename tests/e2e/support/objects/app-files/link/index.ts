@@ -12,11 +12,11 @@ export class Link {
   }
 
   roleDisplayText = {
-    internal: 'Only for invited people',
-    viewer: 'Anyone with the link can view',
-    contributor: 'Anyone with the link can upload',
-    editor: 'Anyone with the link can edit',
-    uploader: 'Secret File drop'
+    'Invited people': 'Only for invited people',
+    'Can view': 'Anyone with the link can view',
+    'Can upload': 'Anyone with the link can upload',
+    'Can edit': 'Anyone with the link can edit',
+    'Secret File Drop': 'Secret File drop'
   }
   async create(args: Omit<po.createLinkArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
