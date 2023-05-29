@@ -961,7 +961,7 @@ export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> =
 
 export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]> => {
   const files = []
-  await page.locator('[data-test-resource-path]').waitFor()
+  await page.locator('[data-test-resource-path]').first().waitFor()
   const result = await page.locator('[data-test-resource-path]')
 
   const count = await result.count()
