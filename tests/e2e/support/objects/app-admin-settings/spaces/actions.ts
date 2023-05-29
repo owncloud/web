@@ -48,31 +48,30 @@ const performAction = async (args: {
     await page.locator(util.format(contextMenuSelector, id)).click()
   }
 
-  let contextMenuActionButtonSelector = null
+  let contextMenuActionButtonSelector = `.${context} `
   switch (action) {
     case 'rename':
-      contextMenuActionButtonSelector = util.format(contextMenuActionButton, action)
+      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'edit-description':
-      contextMenuActionButtonSelector = util.format(contextMenuActionButton, action)
+      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'edit-quota':
-      contextMenuActionButtonSelector = util.format(contextMenuActionButton, action)
+      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'delete':
-      contextMenuActionButtonSelector = util.format(contextMenuActionButton, action)
+      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'disable':
-      contextMenuActionButtonSelector = util.format(contextMenuActionButton, action)
+      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'restore':
-      contextMenuActionButtonSelector = util.format(contextMenuActionButton, action)
+      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
       break
     default:
       throw new Error(`${action} not implemented`)
   }
-  await page.locator(contextMenuActionButtonSelector).waitFor()
-  await page.locator(`.${context}`).locator(contextMenuActionButtonSelector).click()
+  await page.locator(contextMenuActionButtonSelector).click()
 }
 
 export const changeSpaceQuota = async (args: {
