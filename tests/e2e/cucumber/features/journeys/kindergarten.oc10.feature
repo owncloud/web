@@ -36,9 +36,9 @@ Feature: Kindergarten can use web to organize a day
     # Implementation of sharing with different roles is currently broken
     # since we switched to bulk creating of shares with a single dropdown
     And "Alice" shares the following resources using the sidebar panel
-      | resource                             | recipient | type | role   |
-      | groups/Pre-Schools Pirates/meal plan | Brian     | user | editor |
-      | groups/Pre-Schools Pirates/meal plan | Carol     | user | viewer |
+      | resource                             | recipient | type | role     |
+      | groups/Pre-Schools Pirates/meal plan | Brian     | user | Can edit |
+      | groups/Pre-Schools Pirates/meal plan | Carol     | user | Can view |
     # Then what do we check for to be confident that the above things done by Alice have worked?
     When "Brian" logs in
     And "Brian" opens the "files" app

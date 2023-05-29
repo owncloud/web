@@ -27,11 +27,11 @@ Feature: spaces participant management
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" adds following users to the project space
-      | user     | role   | kind  |
-      | Brian    | editor | user  |
-      | Carol    | viewer | user  |
-      | sales    | viewer | group |
-      | security | editor | group |
+      | user     | role     | kind  |
+      | Brian    | Can edit | user  |
+      | Carol    | Can view | user  |
+      | sales    | Can view | group |
+      | security | Can edit | group |
     When "Brian" logs in
     And "Brian" navigates to the projects space page
     And "Brian" navigates to the project space "team.1"
@@ -63,7 +63,7 @@ Feature: spaces participant management
     # page reload is necessary to fetch all the changes made by user Brian
     When "Alice" reloads the spaces page
     And "Alice" creates a public link for the resource "parent" using the sidebar panel
-    And "Alice" edits the public link named "Link" of resource "parent" changing role to "editor"
+    And "Alice" edits the public link named "Link" of resource "parent" changing role to "Can edit"
     And "Anonymous" opens the public link "Link"
     And "Anonymous" uploads the following resources in public link page
       | resource     |
@@ -99,8 +99,8 @@ Feature: spaces participant management
     Then "Brian" should not be able to see space "team.1"
     And "Brian" logs out
     When "Alice" changes the roles of the following users in the project space
-      | user  | role    |
-      | Carol | manager |
+      | user  | role       |
+      | Carol | Can manage |
     And "Alice" as project manager removes their own access to the project space
     Then "Alice" should not be able to see space "team.1"
     And "Alice" logs out

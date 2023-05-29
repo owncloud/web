@@ -1,7 +1,7 @@
 Feature: Notifications
   As a user
   I want to be notified
-  About new things that concern me
+  So that I can stay updated about the information
 
   Background:
     Given "Admin" creates following users using API
@@ -18,8 +18,8 @@ Feature: Notifications
     And "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role   | resourceType |
-      | folder_to_shared | Brian     | user | editor | folder       |
+      | resource         | recipient | type | role     | resourceType |
+      | folder_to_shared | Brian     | user | Can edit | folder       |
     When "Brian" logs in
     Then "Brian" should see the following notifications
       | message                                               |

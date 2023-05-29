@@ -4,6 +4,7 @@ import util from 'util'
 import { sidebar } from '../utils'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { clickResource } from '../resource/actions'
+import { shareRoles } from '../share/collaborator'
 
 export interface createLinkArgs {
   page: Page
@@ -126,7 +127,7 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
         res.request().method() === 'PUT' &&
         res.status() === 200
     ),
-    page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
+    page.locator(util.format(publicLinkSetRoleButton, shareRoles[role])).click()
   ])
 
   const message = await page.locator(linkUpdateDialog).textContent()
