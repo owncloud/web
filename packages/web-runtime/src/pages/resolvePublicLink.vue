@@ -215,10 +215,10 @@ export default defineComponent({
     })
     const errorMessage = computed<string>(() => {
       if (loadTokenInfoTask.isError) {
-        return loadTokenInfoTask.last.error
+        return loadTokenInfoTask.last.error.message
       }
       if (isPasswordRequiredTask.isError) {
-        return isPasswordRequiredTask.last.error
+        return isPasswordRequiredTask.last.error.message
       }
       return null
     })

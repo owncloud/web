@@ -1,6 +1,6 @@
 import UsersList from '../../../../src/components/Users/UsersList.vue'
-import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import { displayPositionedDropdown, eventBus } from 'web-pkg'
+import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import { displayPositionedDropdown, eventBus, queryItemAsString } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 const getUserMocks = () => [{ id: '1', displayName: 'jan' }]
@@ -8,6 +8,7 @@ jest.mock('web-pkg/src/helpers', () => ({
   ...jest.requireActual('web-pkg/src/helpers'),
   displayPositionedDropdown: jest.fn()
 }))
+jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('UsersList', () => {
   describe('computed method "allUsersSelected"', () => {
@@ -142,6 +143,9 @@ describe('UsersList', () => {
 })
 
 function getWrapper({ mountType = shallowMount, props = {} } = {}) {
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => '1')
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => '100')
+  const mocks = defaultComponentMocks()
   return {
     wrapper: mountType(UsersList, {
       props: {
@@ -170,6 +174,7 @@ function getWrapper({ mountType = shallowMount, props = {} } = {}) {
       },
       global: {
         plugins: [...defaultPlugins()],
+        mocks,
         stubs: {
           OcCheckbox: true
         }

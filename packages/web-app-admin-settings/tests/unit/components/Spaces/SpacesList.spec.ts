@@ -1,6 +1,6 @@
 import SpacesList from '../../../../src/components/Spaces/SpacesList.vue'
-import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import { eventBus } from 'web-pkg'
+import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import { eventBus, queryItemAsString } from 'web-pkg'
 import { displayPositionedDropdown } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { nextTick } from 'vue'
@@ -54,6 +54,7 @@ jest.mock('web-pkg/src/helpers', () => ({
   ...jest.requireActual('web-pkg/src/helpers'),
   displayPositionedDropdown: jest.fn()
 }))
+jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('SpacesList', () => {
   it('should render all spaces in a table', () => {
@@ -94,7 +95,7 @@ describe('SpacesList', () => {
     const { wrapper } = getWrapper({ spaces: spaceMocks })
     wrapper.vm.filterTerm = 'Another'
     await nextTick()
-    expect(wrapper.vm.orderedSpaces).toEqual([spaceMocks[1]])
+    expect(wrapper.vm.items).toEqual([spaceMocks[1]])
   })
   it('should show the context menu on right click', async () => {
     const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
@@ -117,6 +118,10 @@ describe('SpacesList', () => {
 })
 
 function getWrapper({ mountType = mount, spaces = [], selectedSpaces = [] } = {}) {
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => '1')
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => '100')
+  const mocks = defaultComponentMocks()
+
   return {
     wrapper: mountType(SpacesList, {
       props: {
@@ -126,6 +131,7 @@ function getWrapper({ mountType = mount, spaces = [], selectedSpaces = [] } = {}
       },
       global: {
         plugins: [...defaultPlugins()],
+        mocks,
         stubs: {
           OcCheckbox: true
         }

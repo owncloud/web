@@ -316,25 +316,6 @@ describe('Users view', () => {
     })
   })
 
-  describe('computed method "allUsersSelected"', () => {
-    it('should be true if every user is selected', async () => {
-      const { wrapper } = getMountedWrapper()
-      wrapper.vm.selectedUsers = [{ id: '1' }]
-      await wrapper.vm.loadResourcesTask.last
-      expect(wrapper.vm.allUsersSelected).toBeTruthy()
-    })
-    it('should be false if not every user is selected', async () => {
-      const clientService = getClientService()
-      clientService.graphAuthenticated.users.listUsers.mockImplementation(() =>
-        mockAxiosResolve({ value: [{ id: '1' }, { id: '2' }] })
-      )
-      const { wrapper } = getMountedWrapper({ clientService })
-      wrapper.vm.selectedUsers = [{ id: '1' }]
-      await wrapper.vm.loadResourcesTask.last
-      expect(wrapper.vm.allUsersSelected).toBeFalsy()
-    })
-  })
-
   describe('batch actions', () => {
     it('do not display when no user selected', async () => {
       const { wrapper } = getMountedWrapper({ mountType: mount })
@@ -351,7 +332,7 @@ describe('Users view', () => {
     it('display when more than one users selected', async () => {
       const { wrapper } = getMountedWrapper({ mountType: mount })
       await wrapper.vm.loadResourcesTask.last
-      wrapper.vm.toggleSelectAllUsers()
+      wrapper.vm.selectUsers([mock<User>(), mock<User>()])
       await wrapper.vm.$nextTick()
       expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
     })

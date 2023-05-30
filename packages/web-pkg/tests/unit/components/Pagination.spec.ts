@@ -1,6 +1,5 @@
 import { mock } from 'jest-mock-extended'
 import _ from 'lodash'
-import Pagination from 'web-app-files/src/components/FilesList/Pagination.vue'
 import {
   defaultPlugins,
   mount,
@@ -9,6 +8,7 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
+import Pagination from 'web-pkg/src/components/Pagination.vue'
 
 const filesPersonalRoute = { name: 'files-personal', path: '/files/home' }
 

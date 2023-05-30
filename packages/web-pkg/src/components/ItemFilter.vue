@@ -118,7 +118,7 @@ export default defineComponent({
     const queryParam = `q_${props.filterName}`
     const currentRouteQuery = useRouteQuery(queryParam)
     const setRouteQuery = () => {
-      router.push({
+      return router.push({
         query: {
           ...omit(unref(currentRoute).query, [queryParam]),
           ...(!!unref(selectedItems).length && {
@@ -137,7 +137,7 @@ export default defineComponent({
       return !!unref(selectedItems).find((s) => s.id === item.id)
     }
 
-    const toggleItemSelection = (item) => {
+    const toggleItemSelection = async (item) => {
       if (isItemSelected(item)) {
         selectedItems.value = unref(selectedItems).filter((s) => s.id !== item.id)
       } else {
@@ -146,8 +146,8 @@ export default defineComponent({
         }
         selectedItems.value.push(item)
       }
+      await setRouteQuery()
       emit('selectionChange', unref(selectedItems))
-      setRouteQuery()
     }
 
     const sortItems = (items) => {

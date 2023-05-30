@@ -125,7 +125,9 @@ export default {
         }
 
         return Promise.all(loadingResources).then(() => {
+          const currentFolder = context.getters.currentFolder
           context.commit('UPSERT_RESOURCES', fetchedResources)
+          context.commit('LOAD_INDICATORS', currentFolder.path)
         })
       },
       { debounceTime: 0 }

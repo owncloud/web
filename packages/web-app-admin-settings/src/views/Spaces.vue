@@ -58,7 +58,7 @@
             :class="{ 'spaces-table-squashed': sideBarOpen }"
             :selected-spaces="selectedSpaces"
             @toggle-select-space="toggleSelectSpace"
-            @toggle-select-all-spaces="toggleSelectAllSpaces"
+            @select-spaces="selectSpaces"
             @un-select-all-spaces="unselectAllSpaces"
           >
             <template #contextMenu>
@@ -162,13 +162,8 @@ export default defineComponent({
       }
     ])
 
-    const allSpacesSelected = computed(() => unref(spaces).length === unref(selectedSpaces).length)
-    const toggleSelectAllSpaces = () => {
-      if (unref(allSpacesSelected)) {
-        selectedSpaces.value = []
-        return
-      }
-      selectedSpaces.value = [...unref(spaces)]
+    const selectSpaces = (paginatedSpaces) => {
+      selectedSpaces.value = [...paginatedSpaces]
     }
 
     const toggleSelectSpace = (toggledSpace) => {
@@ -292,7 +287,7 @@ export default defineComponent({
       selectedSpaces,
       sideBarAvailablePanels,
       template,
-      toggleSelectAllSpaces,
+      selectSpaces,
       toggleSelectSpace,
       unselectAllSpaces,
       quotaModalIsOpen,
