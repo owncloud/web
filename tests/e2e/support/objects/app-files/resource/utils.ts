@@ -20,13 +20,16 @@ export const resourceExists = async ({
   timeout?: number
 }): Promise<boolean> => {
   let exist = true
-  await page.waitForSelector(util.format(resourceNameSelector, name), { timeout }).catch((e) => {
-    if (!(e instanceof errors.TimeoutError)) {
-      throw e
-    }
+  await page
+    .locator(util.format(resourceNameSelector, name))
+    .waitFor({ timeout })
+    .catch((e) => {
+      if (!(e instanceof errors.TimeoutError)) {
+        throw e
+      }
 
-    exist = false
-  })
+      exist = false
+    })
 
   return exist
 }
@@ -39,6 +42,6 @@ export const waitForResources = async ({
   names: string[]
 }): Promise<void> => {
   await Promise.all(
-    names.map((name) => page.waitForSelector(util.format(resourceNameSelector, name)))
+    names.map((name) => page.locator(util.format(resourceNameSelector, name)).waitFor())
   )
 }

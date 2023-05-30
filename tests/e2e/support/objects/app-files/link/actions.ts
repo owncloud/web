@@ -103,8 +103,8 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
 }
 
 export const waitForPopupNotPresent = async (page): Promise<void> => {
-  await page.waitForSelector(linkUpdateDialog)
-  await page.waitForSelector(linkUpdateDialog, { state: 'detached', strict: false })
+  await page.locator(linkUpdateDialog).last().waitFor()
+  await page.locator(linkUpdateDialog).last().waitFor({ state: 'detached' })
 }
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
@@ -118,8 +118,18 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
   await sidebar.open({ page: page, resource: resourceName })
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(publicLinkEditRoleButton, linkName)).click()
-  await page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
-  const message = await page.locator(linkUpdateDialog).textContent()
+
+  await Promise.all([
+    page.waitForResponse(
+      (res) =>
+        res.url().includes('api/v1/shares/') &&
+        res.request().method() === 'PUT' &&
+        res.status() === 200
+    ),
+    page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
+  ])
+
+  const message = await page.locator(linkUpdateDialog).last().textContent()
   expect(message.trim()).toBe('Link was updated successfully')
   return await page.locator(publicLinkCurrentRole).textContent()
 }
@@ -139,7 +149,7 @@ export const changeName = async (args: changeNameArgs): Promise<string> => {
   await page.locator(editPublicLinkRenameButton).click()
   await page.locator(editPublicLinkInput).fill(newName)
   await page.locator(editPublicLinkRenameConfirm).click()
-  const message = await page.locator(linkUpdateDialog).textContent()
+  const message = await page.locator(linkUpdateDialog).last().textContent()
   expect(message.trim()).toBe('Link was updated successfully')
   return await page.locator(getMostRecentLink + '//h4').textContent()
 }
@@ -157,7 +167,7 @@ export const addPassword = async (args: addPasswordArgs): Promise<void> => {
   await page.locator(editPublicLinkAddPasswordButton).click()
   await page.locator(editPublicLinkInput).fill(newPassword)
   await page.locator(editPublicLinkRenameConfirm).click()
-  const message = await page.locator(linkUpdateDialog).textContent()
+  const message = await page.locator(linkUpdateDialog).last().textContent()
   expect(message.trim()).toBe('Link was updated successfully')
 }
 
@@ -193,7 +203,7 @@ export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {
   await page.locator(util.format(editPublicLinkButton, name)).click()
   await page.locator(util.format(deleteLinkButton, name)).click()
   await page.locator(confirmDeleteButton).click()
-  const message = await page.locator(linkUpdateDialog).textContent()
+  const message = await page.locator(linkUpdateDialog).last().textContent()
   expect(message.trim()).toBe('Link was deleted successfully')
 }
 

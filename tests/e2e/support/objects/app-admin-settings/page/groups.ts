@@ -11,6 +11,6 @@ export class Groups {
 
   async navigate(): Promise<void> {
     await this.#page.locator(groupsNavSelector).click()
-    await this.#page.waitForSelector(appLoadingSpinnerSelector, { state: 'detached' })
+    await this.#page.locator(appLoadingSpinnerSelector).waitFor({ state: 'detached' })
   }
 }
