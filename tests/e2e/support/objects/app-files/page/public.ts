@@ -24,17 +24,19 @@ export class Public {
   async authenticate({ password }: { password: string }): Promise<void> {
     await this.#page.locator(passwordInput).fill(password)
     await this.#page.locator(publicLinkAuthorizeButton).click()
-    await this.#page.waitForSelector('#web-content')
+    await this.#page.locator('#web-content').waitFor()
   }
 
   async dropUpload({ resources }: { resources: File[] }): Promise<void> {
     const startUrl = this.#page.url()
     await this.#page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
     const names = resources.map((file) => path.basename(file.name))
-    await this.#page.waitForSelector(uploadInfoSuccessLabelSelector)
+    await this.#page.locator(uploadInfoSuccessLabelSelector).waitFor()
     await this.#page.locator(toggleUploadDetailsButton).click()
     await Promise.all(
-      names.map((name) => this.#page.waitForSelector(util.format(dropUploadResourceSelector, name)))
+      names.map((name) =>
+        this.#page.locator(util.format(dropUploadResourceSelector, name)).waitFor()
+      )
     )
     await this.#page.goto(startUrl)
   }

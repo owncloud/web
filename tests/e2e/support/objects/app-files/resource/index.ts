@@ -14,7 +14,7 @@ export class Resource {
     const startUrl = this.#page.url()
     await po.createResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
-    await this.#page.waitForSelector('#files-view')
+    await this.#page.locator('#files-view').waitFor()
   }
 
   async upload(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {

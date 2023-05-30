@@ -36,7 +36,7 @@ export class Application {
     if (!dropIsOpen) {
       await this.#page.locator(notificationsBell).click()
     }
-    await this.#page.waitForSelector(notificationsLoading, { state: 'detached' })
+    await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
     const result = this.#page.locator(notificationItemsMessages)
     const messages = []
     const count = await result.count()
@@ -51,7 +51,7 @@ export class Application {
     if (!dropIsOpen) {
       await this.#page.locator(notificationsBell).click()
     }
-    await this.#page.waitForSelector(notificationsLoading, { state: 'detached' })
+    await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
     await this.#page.locator(markNotificationsAsReadButton).click()
   }
 }

@@ -9,6 +9,6 @@ export class General {
 
   async navigate(): Promise<void> {
     await this.#page.locator('//a[@data-nav-name="admin-settings-general"]').click()
-    await this.#page.waitForSelector('#app-loading-spinner', { state: 'detached' })
+    await this.#page.locator('#app-loading-spinner').waitFor({ state: 'detached' })
   }
 }
