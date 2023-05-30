@@ -115,7 +115,7 @@ export default defineComponent({
     const queryParam = `q_${props.filterName}`
     const currentRouteQuery = useRouteQuery(queryParam)
     const setRouteQuery = () => {
-      router.push({
+      return router.push({
         query: {
           ...omit(unref(currentRoute).query, [queryParam]),
           ...(!!unref(selectedItems).length && {
@@ -136,7 +136,7 @@ export default defineComponent({
     const isSelectionAllowed = (item) => {
       return props.allowMultiple || !unref(selectedItems).length || isItemSelected(item)
     }
-    const toggleItemSelection = (item) => {
+    const toggleItemSelection = async (item) => {
       if (!isSelectionAllowed(item)) {
         return
       }
@@ -145,8 +145,8 @@ export default defineComponent({
       } else {
         selectedItems.value.push(item)
       }
+      await setRouteQuery()
       emit('selectionChange', unref(selectedItems))
-      setRouteQuery()
     }
 
     const sortItems = (items) => {
@@ -247,4 +247,3 @@ export default defineComponent({
   }
 }
 </style>
-
