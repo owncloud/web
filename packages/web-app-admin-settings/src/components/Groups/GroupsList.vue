@@ -12,7 +12,7 @@
       :sort-by="sortBy"
       :sort-dir="sortDir"
       :fields="fields"
-      :data="data"
+      :data="paginatedItems"
       :highlighted="highlighted"
       :sticky="true"
       :header-position="fileListHeaderY"
@@ -28,7 +28,9 @@
           :label="$gettext('Select all groups')"
           :model-value="allGroupsSelected"
           hide-label
-          @update:model-value="$emit('toggleSelectAllGroups')"
+          @update:model-value="
+            allGroupsSelected ? $emit('unSelectAllGroups') : $emit('selectGroups', paginatedItems)
+          "
         />
       </template>
       <template #select="rowData">
@@ -93,6 +95,7 @@
         </context-menu-quick-action>
       </template>
       <template #footer>
+        <pagination :pages="paginationPages" :current-page="currentPage" />
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
           <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
@@ -103,20 +106,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, ComponentPublicInstance, computed } from 'vue'
+import {
+  defineComponent,
+  PropType,
+  ref,
+  unref,
+  ComponentPublicInstance,
+  computed,
+  watch
+} from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { displayPositionedDropdown, eventBus } from 'web-pkg'
+import { displayPositionedDropdown, eventBus, SortDir } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Group } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import { useGettext } from 'vue3-gettext'
 import { defaultFuseOptions } from 'web-pkg/src/helpers'
 import { useFileListHeaderPosition } from 'web-pkg/src/composables'
+import Pagination from 'web-pkg/src/components/Pagination.vue'
+import { usePagination } from 'web-app-admin-settings/src/composables'
 
 export default defineComponent({
   name: 'GroupsList',
-  components: { ContextMenuQuickAction },
+  components: { ContextMenuQuickAction, Pagination },
   props: {
     groups: {
       type: Array as PropType<Group[]>,
@@ -127,11 +140,14 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['toggleSelectAllGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
+  emits: ['selectGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
+    const sortBy = ref<string>('displayName')
+    const sortDir = ref<string>(SortDir.Asc)
+    const filterTerm = ref<string>('')
 
     const isGroupSelected = (group) => {
       return props.selectedGroups.some((s) => s.id === group.id)
@@ -140,6 +156,7 @@ export default defineComponent({
       emit('unSelectAllGroups')
       emit('toggleSelectGroup', group)
     }
+
     const showDetails = (group) => {
       if (!isGroupSelected(group)) {
         selectGroup(group)
@@ -183,6 +200,36 @@ export default defineComponent({
 
     const readOnlyLabel = computed(() => $gettext("This group is read-only and can't be edited"))
 
+    const filter = (groups: Group[], filterTerm: string) => {
+      if (!(filterTerm || '').trim()) {
+        return groups
+      }
+      const groupsSearchEngine = new Fuse(groups, { ...defaultFuseOptions, keys: ['displayName'] })
+      return groupsSearchEngine.search(filterTerm).map((r) => r.item)
+    }
+
+    const orderBy = (list, prop, desc) => {
+      return [...list].sort((a, b) => {
+        a = a[prop]?.toString() || ''
+        b = b[prop]?.toString() || ''
+        return desc ? b.localeCompare(a) : a.localeCompare(b)
+      })
+    }
+
+    const items = computed(() => {
+      return orderBy(
+        filter(props.groups, unref(filterTerm)),
+        unref(sortBy),
+        unref(sortDir) === SortDir.Desc
+      )
+    })
+
+    const pagination = usePagination({ items })
+
+    watch(pagination.currentPage, () => {
+      emit('unSelectAllGroups')
+    })
+
     return {
       showDetails,
       rowClicked,
@@ -192,15 +239,19 @@ export default defineComponent({
       fileListHeaderY,
       contextMenuButtonRef,
       showEditPanel,
-      readOnlyLabel
+      readOnlyLabel,
+      filterTerm,
+      sortBy,
+      sortDir,
+      items,
+      ...pagination,
+      filter,
+      orderBy
     }
   },
   data() {
     return {
-      sortBy: 'displayName',
-      sortDir: 'asc',
-      markInstance: null,
-      filterTerm: ''
+      markInstance: null
     }
   },
   computed: {
@@ -241,7 +292,7 @@ export default defineComponent({
       ]
     },
     allGroupsSelected() {
-      return this.groups.length === this.selectedGroups.length
+      return this.paginatedItems.length === this.selectedGroups.length
     },
     footerTextTotal() {
       return this.$gettext('%{groupCount} groups in total', {
@@ -250,25 +301,19 @@ export default defineComponent({
     },
     footerTextFilter() {
       return this.$gettext('%{groupCount} matching groups', {
-        groupCount: this.data.length.toString()
+        groupCount: this.items.length.toString()
       })
-    },
-    data() {
-      return this.orderBy(
-        this.filter(this.groups, this.filterTerm),
-        this.sortBy,
-        this.sortDir === 'desc'
-      )
     },
     highlighted() {
       return this.selectedGroups.map((group) => group.id)
     }
   },
   watch: {
-    filterTerm() {
+    async filterTerm() {
       if (!this.markInstance) {
         return
       }
+      await this.$router.push({ ...this.$route, query: { ...this.$route.query, page: '1' } })
       this.markInstance.unmark()
       this.markInstance.mark(this.filterTerm, {
         element: 'span',
@@ -283,20 +328,6 @@ export default defineComponent({
     })
   },
   methods: {
-    filter(groups, filterTerm) {
-      if (!(filterTerm || '').trim()) {
-        return groups
-      }
-      const groupsSearchEngine = new Fuse(groups, { ...defaultFuseOptions, keys: ['displayName'] })
-      return groupsSearchEngine.search(filterTerm).map((r) => r.item)
-    },
-    orderBy(list, prop, desc) {
-      return [...list].sort((a, b) => {
-        a = a[prop]?.toString() || ''
-        b = b[prop]?.toString() || ''
-        return desc ? b.localeCompare(a) : a.localeCompare(b)
-      })
-    },
     handleSort(event) {
       this.sortBy = event.sortBy
       this.sortDir = event.sortDir

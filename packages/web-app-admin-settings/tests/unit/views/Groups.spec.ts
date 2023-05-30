@@ -1,6 +1,6 @@
 import Groups from '../../../src/views/Groups.vue'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService, eventBus } from 'web-pkg/src'
 import {
   createStore,
@@ -9,6 +9,7 @@ import {
   defaultStoreMockOptions,
   mount
 } from 'web-test-helpers'
+import { Group } from 'web-client/src/generated'
 
 const selectors = { batchActionsStub: 'batch-actions-stub' }
 const getClientServiceMock = () => {
@@ -118,25 +119,6 @@ describe('Groups view', () => {
     })
   })
 
-  describe('computed method "allGroupsSelected"', () => {
-    it('should be true if every group is selected', async () => {
-      const { wrapper } = getWrapper()
-      wrapper.vm.selectedGroups = [{ id: '1' }]
-      await wrapper.vm.loadResourcesTask.last
-      expect(wrapper.vm.allGroupsSelected).toBeTruthy()
-    })
-    it('should be false if not every group is selected', async () => {
-      const clientService = getClientServiceMock()
-      clientService.graphAuthenticated.groups.listGroups.mockImplementation(() =>
-        mockAxiosResolve({ value: [{ id: '1' }, { id: '2' }] })
-      )
-      const { wrapper } = getWrapper({ clientService })
-      wrapper.vm.selectedGroups = [{ id: '1' }]
-      await wrapper.vm.loadResourcesTask.last
-      expect(wrapper.vm.allGroupsSelected).toBeFalsy()
-    })
-  })
-
   describe('batch actions', () => {
     it('do not display when no group selected', async () => {
       const { wrapper } = getWrapper()
@@ -153,7 +135,7 @@ describe('Groups view', () => {
     it('display when more than one groups selected', async () => {
       const { wrapper } = getWrapper()
       await wrapper.vm.loadResourcesTask.last
-      wrapper.vm.toggleSelectAllGroups()
+      wrapper.vm.selectGroups([mock<Group>({ groupTypes: [] }), mock<Group>({ groupTypes: [] })])
       await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
     })

@@ -1,6 +1,6 @@
 import GroupsList from '../../../../src/components/Groups/GroupsList.vue'
-import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import { displayPositionedDropdown, eventBus } from 'web-pkg'
+import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import { displayPositionedDropdown, eventBus, queryItemAsString } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 const getGroupMocks = () => [
@@ -12,6 +12,7 @@ jest.mock('web-pkg/src/helpers', () => ({
   ...jest.requireActual('web-pkg/src/helpers'),
   displayPositionedDropdown: jest.fn()
 }))
+jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('GroupsList', () => {
   describe('method "orderBy"', () => {
@@ -86,6 +87,10 @@ describe('GroupsList', () => {
 })
 
 function getWrapper({ mountType = shallowMount, props = {} } = {}) {
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => '1')
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => '100')
+  const mocks = defaultComponentMocks()
+
   return {
     wrapper: mountType(GroupsList, {
       props: {
@@ -96,6 +101,7 @@ function getWrapper({ mountType = shallowMount, props = {} } = {}) {
       },
       global: {
         plugins: [...defaultPlugins()],
+        mocks,
         stubs: {
           OcCheckbox: true
         }

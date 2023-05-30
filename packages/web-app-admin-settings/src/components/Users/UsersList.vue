@@ -20,7 +20,7 @@
       :sort-by="sortBy"
       :sort-dir="sortDir"
       :fields="fields"
-      :data="data"
+      :data="paginatedItems"
       :highlighted="highlighted"
       :sticky="true"
       :header-position="fileListHeaderY"
@@ -36,7 +36,9 @@
           :label="$gettext('Select all users')"
           :model-value="allUsersSelected"
           hide-label
-          @update:model-value="$emit('toggleSelectAllUsers')"
+          @update:model-value="
+            allUsersSelected ? $emit('unSelectAllUsers') : $emit('selectUsers', paginatedItems)
+          "
         />
       </template>
       <template #select="{ item }">
@@ -97,6 +99,7 @@
         </context-menu-quick-action>
       </template>
       <template #footer>
+        <pagination :pages="paginationPages" :current-page="currentPage" />
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
           <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
@@ -107,19 +110,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, ComponentPublicInstance } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { defineComponent, PropType, ref, unref, ComponentPublicInstance, watch } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { defaultFuseOptions, displayPositionedDropdown, eventBus } from 'web-pkg'
+import { defaultFuseOptions, displayPositionedDropdown, eventBus, SortDir } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { AppRole, User } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useFileListHeaderPosition } from 'web-pkg/src/composables'
+import Pagination from 'web-pkg/src/components/Pagination.vue'
+import { usePagination } from 'web-app-admin-settings/src/composables'
+import { computed } from 'vue'
 
 export default defineComponent({
   name: 'UsersList',
-  components: { ContextMenuQuickAction, NoContentMessage },
+  components: { ContextMenuQuickAction, NoContentMessage, Pagination },
   props: {
     users: {
       type: Array as PropType<User[]>,
@@ -134,13 +141,20 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['unSelectAllUsers', 'toggleSelectAllUsers', 'toggleSelectUser'],
+  emits: ['unSelectAllUsers', 'selectUsers', 'toggleSelectUser'],
   setup(props, { emit }) {
+    const { $gettext } = useGettext()
+
     const contextMenuButtonRef = ref(undefined)
+    const filterTerm = ref<string>('')
+    const sortBy = ref<string>('onPremisesSamAccountName')
+    const sortDir = ref<string>(SortDir.Asc)
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
+
     const isUserSelected = (user) => {
       return props.selectedUsers.some((s) => s.id === user.id)
     }
+
     const selectUser = (user) => {
       emit('unSelectAllUsers')
       emit('toggleSelectUser', user)
@@ -195,6 +209,64 @@ export default defineComponent({
       displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
     }
 
+    const filter = (users: User[], filterTerm: string) => {
+      if (!(filterTerm || '').trim()) {
+        return users
+      }
+      const usersSearchEngine = new Fuse(users, {
+        ...defaultFuseOptions,
+        keys: ['displayName', 'mail', 'onPremisesSamAccountName', 'role.displayName']
+      })
+
+      return usersSearchEngine.search(filterTerm).map((r) => r.item)
+    }
+
+    const getRoleDisplayNameByUser = (user: User) => {
+      const assignedRole = user.appRoleAssignments[0]
+
+      return (
+        $gettext(
+          props.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
+        ) || '-'
+      )
+    }
+
+    const orderBy = (list, prop, desc) => {
+      return [...list].sort((user1, user2) => {
+        let a, b
+
+        switch (prop) {
+          case 'role':
+            a = getRoleDisplayNameByUser(user1)
+            b = getRoleDisplayNameByUser(user2)
+            break
+          case 'accountEnabled':
+            a = ('accountEnabled' in user1 ? user1.accountEnabled : true).toString()
+            b = ('accountEnabled' in user2 ? user2.accountEnabled : true).toString()
+            break
+          default:
+            a = user1[prop] || ''
+            b = user2[prop] || ''
+        }
+
+        return desc ? b.localeCompare(a) : a.localeCompare(b)
+      })
+    }
+
+    const items = computed(() => {
+      return orderBy(
+        filter(props.users, unref(filterTerm)),
+        unref(sortBy),
+        unref(sortDir) === SortDir.Desc
+      )
+    })
+
+    const pagination = usePagination({ items })
+
+    watch(pagination.currentPage, () => {
+      emit('unSelectAllUsers')
+    })
+
     return {
       showDetails,
       showEditPanel,
@@ -204,20 +276,25 @@ export default defineComponent({
       contextMenuButtonRef,
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
-      fileListHeaderY
+      fileListHeaderY,
+      getRoleDisplayNameByUser,
+      items,
+      filterTerm,
+      sortBy,
+      sortDir,
+      ...pagination,
+      filter,
+      orderBy
     }
   },
   data() {
     return {
-      sortBy: 'onPremisesSamAccountName',
-      sortDir: 'asc',
-      markInstance: null,
-      filterTerm: ''
+      markInstance: null
     }
   },
   computed: {
     allUsersSelected() {
-      return this.users.length === this.selectedUsers.length
+      return this.paginatedItems.length === this.selectedUsers.length
     },
     footerTextTotal() {
       return this.$gettext('%{userCount} users in total', {
@@ -226,7 +303,7 @@ export default defineComponent({
     },
     footerTextFilter() {
       return this.$gettext('%{userCount} matching users', {
-        userCount: this.data.length.toString()
+        userCount: this.items.length.toString()
       })
     },
     fields() {
@@ -280,78 +357,33 @@ export default defineComponent({
         }
       ]
     },
-    data() {
-      return this.orderBy(
-        this.filter(this.users, this.filterTerm),
-        this.sortBy,
-        this.sortDir === 'desc'
-      )
-    },
     highlighted() {
       return this.selectedUsers.map((user) => user.id)
     }
   },
   watch: {
-    filterTerm() {
-      if (this.$refs.tableRef) {
-        this.markInstance = new Mark((this.$refs.tableRef as ComponentPublicInstance).$el)
-        this.markInstance.unmark()
-        this.markInstance.mark(this.filterTerm, {
-          element: 'span',
-          className: 'highlight-mark',
-          exclude: ['th *', 'tfoot *']
-        })
+    async filterTerm() {
+      if (!this.$refs.tableRef) {
+        return
       }
+
+      await this.$router.push({ ...this.$route, query: { ...this.$route.query, page: '1' } })
+      this.markInstance = new Mark((this.$refs.tableRef as ComponentPublicInstance).$el)
+      this.markInstance.unmark()
+      this.markInstance.mark(this.filterTerm, {
+        element: 'span',
+        className: 'highlight-mark',
+        exclude: ['th *', 'tfoot *']
+      })
     }
   },
   methods: {
-    filter(users, filterTerm) {
-      if (!(filterTerm || '').trim()) {
-        return users
-      }
-      const usersSearchEngine = new Fuse(users, {
-        ...defaultFuseOptions,
-        keys: ['displayName', 'mail', 'onPremisesSamAccountName', 'role.displayName']
-      })
-
-      return usersSearchEngine.search(filterTerm).map((r) => r.item)
-    },
-    orderBy(list, prop, desc) {
-      return [...list].sort((user1, user2) => {
-        let a, b
-
-        switch (prop) {
-          case 'role':
-            a = this.getRoleDisplayNameByUser(user1)
-            b = this.getRoleDisplayNameByUser(user2)
-            break
-          case 'accountEnabled':
-            a = ('accountEnabled' in user1 ? user1.accountEnabled : true).toString()
-            b = ('accountEnabled' in user2 ? user2.accountEnabled : true).toString()
-            break
-          default:
-            a = user1[prop] || ''
-            b = user2[prop] || ''
-        }
-
-        return desc ? b.localeCompare(a) : a.localeCompare(b)
-      })
-    },
     handleSort(event) {
       this.sortBy = event.sortBy
       this.sortDir = event.sortDir
     },
     getSelectUserLabel(user) {
       return this.$gettext('Select %{ user }', { user: user.displayName }, true)
-    },
-    getRoleDisplayNameByUser(user) {
-      const assignedRole = user.appRoleAssignments[0]
-
-      return (
-        this.$gettext(
-          this.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
-        ) || '-'
-      )
     }
   }
 })
