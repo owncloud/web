@@ -1,5 +1,13 @@
 <template>
   <div class="oc-flex oc-p-s app-top-bar">
+    <oc-button
+      id="app-top-bar-close"
+      :aria-label="$gettext('Close')"
+      size="small"
+      @click="$emit('close')"
+    >
+      <oc-icon name="close" size="small" />
+    </oc-button>
     <oc-resource
       v-if="resource"
       id="app-top-bar-resource"
@@ -9,14 +17,6 @@
     <div v-else />
     <div>
       <slot name="right" />
-      <oc-button
-        id="app-top-bar-close"
-        :aria-label="$gettext('Close')"
-        size="small"
-        @click="$emit('close')"
-      >
-        <oc-icon name="close" size="small" />
-      </oc-button>
     </div>
   </div>
 </template>
