@@ -1,13 +1,9 @@
 import { ref, unref } from 'vue'
-import { usePagination } from 'web-app-admin-settings/src/composables'
-import { queryItemAsString } from 'web-pkg/src'
+import { usePagination } from 'web-pkg/src/composables'
 import { getComposableWrapper } from 'web-test-helpers'
 
-jest.mock('web-pkg/src/composables/appDefaults')
-jest.mock('web-pkg/src/composables/router')
-
 describe('usePagination', () => {
-  describe('paginatedItems', () => {
+  describe('computed items', () => {
     const items = [1, 2, 3, 4, 5, 6]
 
     it.each([
@@ -16,11 +12,28 @@ describe('usePagination', () => {
       { currentPage: 2, itemsPerPage: 2, expected: [3, 4] }
     ])('returns proper paginated items', ({ currentPage, itemsPerPage, expected }) => {
       getWrapper({
-        setup: ({ paginatedItems }) => {
-          expect(unref(paginatedItems)).toEqual(expected)
+        setup: ({ items }) => {
+          expect(unref(items)).toEqual(expected)
         },
         items,
         currentPage,
+        itemsPerPage
+      })
+    })
+  })
+  describe('computed total', () => {
+    it.each([
+      { itemCount: 1, itemsPerPage: 100, expected: 1 },
+      { itemCount: 101, itemsPerPage: 100, expected: 2 },
+      { itemCount: 201, itemsPerPage: 100, expected: 3 }
+    ])('returns proper total pages', ({ itemCount, itemsPerPage, expected }) => {
+      const items = Array(itemCount).fill(1)
+      getWrapper({
+        setup: ({ total }) => {
+          expect(unref(total)).toEqual(expected)
+        },
+        items,
+        currentPage: 1,
         itemsPerPage
       })
     })
@@ -38,11 +51,13 @@ function getWrapper({
   currentPage: number
   itemsPerPage: number
 }) {
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => currentPage.toString())
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => itemsPerPage.toString())
   return {
     wrapper: getComposableWrapper(() => {
-      const instance = usePagination({ items: ref(items) })
+      const instance = usePagination({
+        items: ref(items),
+        page: currentPage,
+        perPage: itemsPerPage
+      })
       setup(instance)
     })
   }

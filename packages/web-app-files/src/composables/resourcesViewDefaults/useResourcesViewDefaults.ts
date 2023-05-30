@@ -1,8 +1,7 @@
 import { nextTick, computed, unref, Ref } from 'vue'
 import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
-import { usePagination } from '../'
-import { useSort, SortDir, SortField } from 'web-pkg/src/composables'
+import { usePagination, useSort, SortDir, SortField } from 'web-pkg/src/composables'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 
 import {
@@ -79,12 +78,11 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   })
 
   const { sortBy, sortDir, items, handleSort } = useSort({ items: storeItems, fields: sortFields })
-  const paginationPageQuery = useRouteQuery('page', '1')
-  const paginationPage = computed((): number => parseInt(String(paginationPageQuery.value)))
-  const { items: paginatedResources, total: paginationPages } = usePagination({
-    page: paginationPage,
-    items
-  })
+  const {
+    items: paginatedResources,
+    total: paginationPages,
+    page: paginationPage
+  } = usePagination({ items })
 
   useMutationSubscription(['Files/UPSERT_RESOURCE'], async ({ payload }) => {
     await nextTick()
