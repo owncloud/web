@@ -162,6 +162,7 @@ Summary
 * Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
 * Enhancement - Long breadcrumb strategy: [#8984](https://github.com/owncloud/web/pull/8984)
 * Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
+* Enhancement - Single file link open with default app: [#9046](https://github.com/owncloud/web/pull/9046)
 * Enhancement - Support pagination in admin settings app: [#9048](https://github.com/owncloud/web/issues/9048)
 * Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
 * Enhancement - Enable download (archive) on spaces: [#9056](https://github.com/owncloud/web/issues/9056)
@@ -1521,6 +1522,14 @@ Details
    https://github.com/owncloud/web/issues/9054
    https://github.com/owncloud/web/pull/9044
    https://github.com/owncloud/web/pull/9096
+
+* Enhancement - Single file link open with default app: [#9046](https://github.com/owncloud/web/pull/9046)
+
+   We've added a configurable functionality, that a single shared file via link will be opened in
+   default app, for example text-editor.
+
+   https://github.com/owncloud/web/issues/9045
+   https://github.com/owncloud/web/pull/9046
 
 * Enhancement - Support pagination in admin settings app: [#9048](https://github.com/owncloud/web/issues/9048)
 
