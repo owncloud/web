@@ -214,7 +214,7 @@ export default defineComponent({
       }
 
       if (resolvePrivateLinkTask.isError) {
-        return resolvePrivateLinkTask.last.error
+        return resolvePrivateLinkTask.last.error.message
       }
       return null
     })

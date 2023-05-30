@@ -49,7 +49,7 @@
             :class="{ 'users-table-squashed': sideBarOpen }"
             :selected-users="selectedUsers"
             @toggle-select-user="toggleSelectUser"
-            @toggle-select-all-users="toggleSelectAllUsers"
+            @select-users="selectUsers"
             @un-select-all-users="unselectAllUsers"
           >
             <template #contextMenu>
@@ -164,7 +164,9 @@ import {
   useCapabilitySpacesMaxQuota,
   useClientService,
   useLoadingService,
+  useRoute,
   useRouteQuery,
+  useRouter,
   useStore
 } from 'web-pkg/src/composables'
 import { computed, defineComponent, ref, onBeforeUnmount, onMounted, unref, watch } from 'vue'
@@ -208,6 +210,8 @@ export default defineComponent({
   },
   setup() {
     const { $gettext, $ngettext } = useGettext()
+    const router = useRouter()
+    const route = useRoute()
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const clientService = useClientService()
@@ -338,17 +342,23 @@ export default defineComponent({
       Object.assign(user, data)
     })
 
+    const resetPagination = () => {
+      return router.push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
+    }
+
     const filterGroups = (groups) => {
       filters.groups.ids.value = groups.map((g) => g.id)
       loadUsersTask.perform()
       selectedUsers.value = []
       additionalUserDataLoadedForUserIds.value = []
+      return resetPagination()
     }
     const filterRoles = (roles) => {
       filters.roles.ids.value = roles.map((r) => r.id)
       loadUsersTask.perform()
       selectedUsers.value = []
       additionalUserDataLoadedForUserIds.value = []
+      return resetPagination()
     }
 
     const selectedPersonalDrives = ref([])
@@ -639,11 +649,6 @@ export default defineComponent({
         }
       ]
     },
-
-    allUsersSelected() {
-      return this.users.length === this.selectedUsers.length
-    },
-
     sideBarAvailablePanels() {
       return [
         {
@@ -680,11 +685,8 @@ export default defineComponent({
     ...mapActions(['showMessage']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
-    toggleSelectAllUsers() {
-      if (this.allUsersSelected) {
-        return (this.selectedUsers = [])
-      }
-      this.selectedUsers = this.users
+    selectUsers(users) {
+      this.selectedUsers = users
     },
     toggleSelectUser(toggledUser) {
       const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)

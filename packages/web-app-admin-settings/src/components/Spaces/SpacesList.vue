@@ -13,7 +13,7 @@
       :sort-by="sortBy"
       :sort-dir="sortDir"
       :fields="fields"
-      :data="orderedSpaces"
+      :data="paginatedItems"
       :highlighted="highlighted"
       :sticky="true"
       :header-position="fileListHeaderY"
@@ -29,7 +29,9 @@
           :label="$gettext('Select all spaces')"
           :model-value="allSpacesSelected"
           hide-label
-          @update:model-value="$emit('toggleSelectAllSpaces')"
+          @update:model-value="
+            allSpacesSelected ? $emit('unSelectAllSpaces') : $emit('selectSpaces', paginatedItems)
+          "
         />
       </template>
       <template #select="{ item }">
@@ -105,6 +107,7 @@
         </div>
       </template>
       <template #footer>
+        <pagination :pages="paginationPages" :current-page="currentPage" />
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
           <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
@@ -128,14 +131,16 @@ import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/s
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
-import { eventBus } from 'web-pkg'
+import { eventBus, SortDir } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
-import { useFileListHeaderPosition } from 'web-pkg/src/composables'
+import { useFileListHeaderPosition, useRoute, useRouter } from 'web-pkg/src/composables'
+import { usePagination } from 'web-app-admin-settings/src/composables'
+import Pagination from 'web-pkg/src/components/Pagination.vue'
 
 export default defineComponent({
   name: 'SpacesList',
-  components: { ContextMenuQuickAction },
+  components: { ContextMenuQuickAction, Pagination },
   props: {
     spaces: {
       type: Array as PropType<SpaceResource[]>,
@@ -146,18 +151,20 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['toggleSelectSpace', 'toggleSelectAllSpaces', 'unSelectAllSpaces'],
+  emits: ['toggleSelectSpace', 'selectSpaces', 'unSelectAllSpaces'],
   setup: function (props, { emit }) {
+    const router = useRouter()
+    const route = useRoute()
     const { $gettext, current: currentLanguage } = useGettext()
+
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
     const sortBy = ref('name')
-    const sortDir = ref('asc')
+    const sortDir = ref(SortDir.Asc)
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
 
-    const allSpacesSelected = computed(() => props.spaces.length === props.selectedSpaces.length)
     const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
     const footerTextTotal = computed(() => {
       return $gettext('%{spaceCount} spaces in total', {
@@ -166,7 +173,7 @@ export default defineComponent({
     })
     const footerTextFilter = computed(() => {
       return $gettext('%{spaceCount} matching spaces', {
-        spaceCount: unref(orderedSpaces).length.toString()
+        spaceCount: unref(items).length.toString()
       })
     })
 
@@ -206,9 +213,24 @@ export default defineComponent({
           : a.localeCompare(b, undefined, { numeric })
       })
     }
-    const orderedSpaces = computed(() =>
-      orderBy(filter(props.spaces, unref(filterTerm)), unref(sortBy), unref(sortDir) === 'desc')
+    const items = computed(() =>
+      orderBy(
+        filter(props.spaces, unref(filterTerm)),
+        unref(sortBy),
+        unref(sortDir) === SortDir.Desc
+      )
     )
+
+    const pagination = usePagination({ items })
+
+    watch(pagination.currentPage, () => {
+      emit('unSelectAllSpaces')
+    })
+
+    const allSpacesSelected = computed(() => {
+      return unref(pagination.paginatedItems).length === props.selectedSpaces.length
+    })
+
     const handleSort = (event) => {
       sortBy.value = event.sortBy
       sortDir.value = event.sortDir
@@ -347,11 +369,12 @@ export default defineComponent({
       })
     })
 
-    watch(filterTerm, () => {
+    watch(filterTerm, async () => {
       const instance = unref(markInstance)
       if (!instance) {
         return
       }
+      await router.push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
       instance.unmark()
       instance.mark(unref(filterTerm), {
         element: 'span',
@@ -417,7 +440,6 @@ export default defineComponent({
       getMemberCount,
       getSelectSpaceLabel,
       handleSort,
-      orderedSpaces,
       fileClicked,
       isSpaceSelected,
       contextMenuButtonRef,
@@ -425,7 +447,9 @@ export default defineComponent({
       showContextMenuOnRightClick,
       spaceDetailsLabel,
       showDetailsForSpace,
-      fileListHeaderY
+      fileListHeaderY,
+      items,
+      ...pagination
     }
   }
 })

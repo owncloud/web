@@ -46,23 +46,13 @@ describe('Spaces view', () => {
     expect(wrapper.find(selectors.noContentMessageStub).exists()).toBeTruthy()
   })
   describe('toggle selection', () => {
-    describe('toggleSelectAllSpaces method', () => {
+    describe('selectSpaces method', () => {
       it('selects all spaces', async () => {
-        const spaces = [{ name: 'Some Space' }]
+        const spaces = [{ name: 'Some Space' }, { name: 'Some other Space' }]
         const { wrapper } = getWrapper({ spaces })
         await wrapper.vm.loadResourcesTask.last
-        wrapper.vm.toggleSelectAllSpaces()
-        expect(wrapper.vm.selectedSpaces).toEqual(
-          expect.arrayContaining([expect.objectContaining({ name: spaces[0].name })])
-        )
-      })
-      it('de-selects all selected spaces', async () => {
-        const spaces = [{ name: 'Some Space' }]
-        const { wrapper } = getWrapper({ spaces })
-        await wrapper.vm.loadResourcesTask.last
-        wrapper.vm.selectedSpaces = spaces
-        wrapper.vm.toggleSelectAllSpaces()
-        expect(wrapper.vm.selectedSpaces.length).toBe(0)
+        wrapper.vm.selectSpaces(spaces)
+        expect(wrapper.vm.selectedSpaces.length).toBe(spaces.length)
       })
     })
     describe('toggleSelectSpace method', () => {
@@ -113,7 +103,7 @@ describe('Spaces view', () => {
       const spaces = [{ name: 'Some Space' }, { name: 'Some other Space' }]
       const { wrapper } = getWrapper({ spaces })
       await wrapper.vm.loadResourcesTask.last
-      wrapper.vm.toggleSelectAllSpaces()
+      wrapper.vm.selectSpaces(spaces)
       await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
     })
