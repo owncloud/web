@@ -174,7 +174,8 @@ export default defineComponent({
       return [
         {
           text: this.$gettext('Spaces'),
-          onClick: () => this.loadResourcesTask.perform()
+          onClick: () => this.loadResourcesTask.perform(),
+          isStativNav: true
         }
       ]
     },

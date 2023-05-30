@@ -286,19 +286,22 @@ export default defineComponent({
         rootBreadcrumbItems.push({
           id: uuidv4(),
           text: $gettext('Spaces'),
-          to: createLocationSpaces('files-spaces-projects')
+          to: createLocationSpaces('files-spaces-projects'),
+          isStaticNav: true
         })
       } else if (isShareSpaceResource(space)) {
         rootBreadcrumbItems.push(
           {
             id: uuidv4(),
             text: $gettext('Shares'),
-            to: { path: '/files/shares' }
+            to: { path: '/files/shares' },
+            isStaticNav: true
           },
           {
             id: uuidv4(),
             text: $gettext('Shared with me'),
-            to: { path: '/files/shares/with-me' }
+            to: { path: '/files/shares/with-me' },
+            isStaticNav: true
           }
         )
       }
@@ -332,7 +335,8 @@ export default defineComponent({
           to: createLocationPublic('files-public-link', {
             params,
             query
-          })
+          }),
+          isStaticNav: true
         }
       } else {
         spaceBreadcrumbItem = {

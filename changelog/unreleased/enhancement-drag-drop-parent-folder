@@ -1,6 +1,6 @@
 Enhancement: Drag & drop on parent folder
 
-We've added the possibility to drag & drop files onto the breadcrumb to move items faster.
+We've added the possibility to drag & drop files onto the breadcrumb to move items into parent folders in a fast and intuitive way.
 
 https://github.com/owncloud/web/pull/9052
 https://github.com/owncloud/web/issues/9043

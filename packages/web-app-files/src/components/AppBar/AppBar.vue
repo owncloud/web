@@ -203,7 +203,7 @@ export default defineComponent({
         ? 3
         : 2
     })
-    const fileDroppedBreadcrumb = (data) => {
+    const fileDroppedBreadcrumb = async (data) => {
       const spaceRootRoutePath = router.resolve(
         createLocationSpaces('files-spaces-generic', {
           params: {
@@ -215,13 +215,12 @@ export default defineComponent({
       const splitIndex = data.path.indexOf(spaceRootRoutePath) + spaceRootRoutePath.length
       const path = decodeURIComponent(data.path.slice(splitIndex, data.path.length))
 
-      clientService.webdav
-        .getFileInfo(props.space, {
-          path
-        })
-        .then((targetResource) => {
-          emit(EVENT_ITEM_DROPPED, targetResource)
-        })
+      try {
+        const targetResource = await clientService.webdav.getFileInfo(props.space, { path })
+        emit(EVENT_ITEM_DROPPED, targetResource)
+      } catch (e) {
+        console.error(e)
+      }
     }
 
     return {

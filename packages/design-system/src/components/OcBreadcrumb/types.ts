@@ -7,4 +7,5 @@ export interface BreadcrumbItem {
   allowContextActions?: boolean
   onClick?: () => void
   isTruncationPlaceholder?: boolean
+  isStaticNav?: boolean
 }

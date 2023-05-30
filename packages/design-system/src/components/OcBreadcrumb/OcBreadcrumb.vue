@@ -17,11 +17,11 @@
               (item.isTruncationPlaceholder && hiddenItems.length === 0)
           }
         ]"
-        @dragover="dragOver($event)"
-        @dragenter.prevent="dropItemStyling(item.id, index, false, $event)"
-        @dragleave.prevent="dropItemStyling(item.id, index, true, $event)"
-        @mouseleave="dropItemStyling(item.id, index, true, $event)"
-        @drop="dropItemEvent(item.to, index)"
+        @dragover.prevent
+        @dragenter.prevent="dropItemStyling(item, index, false, $event)"
+        @dragleave.prevent="dropItemStyling(item, index, true, $event)"
+        @mouseleave="dropItemStyling(item, index, true, $event)"
+        @drop="dropItemEvent(item, index)"
       >
         <router-link
           v-if="item.to"
@@ -216,16 +216,23 @@ export default defineComponent({
       return document.querySelector(`.oc-breadcrumb-list [data-item-id="${id}"]`)
     }
 
-    const dragOver = (event) => {
-      event.preventDefault()
+    const isDropAllowed = (item, index): boolean => {
+      if (
+        !item.id ||
+        index === unref(displayItems).length - 1 ||
+        item.isTruncationPlaceholder ||
+        item.isStaticNav
+      ) {
+        return false
+      }
+      return true
     }
-
     const dropItemEvent = (item, index) => {
-      if (index === unref(displayItems).length - 1) {
+      if (!isDropAllowed(item, index)) {
         return
       }
-      item.path = item.path ? item.path : '/'
-      emit(EVENT_ITEM_DROPPED_BREADCRUMB, item)
+      item.to.path = item.to.path ? item.to.path : '/'
+      emit(EVENT_ITEM_DROPPED_BREADCRUMB, item.to)
     }
 
     const calculateTotalBreadcrumbWidth = () => {
@@ -304,8 +311,8 @@ export default defineComponent({
       return props.items.length - 1 === index ? 'page' : null
     }
 
-    const dropItemStyling = (id, index, leaving, event) => {
-      if (index === unref(displayItems).length - 1) {
+    const dropItemStyling = (item, index, leaving, event) => {
+      if (!isDropAllowed(item, index)) {
         return
       }
       const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
@@ -314,7 +321,7 @@ export default defineComponent({
         return
       }
 
-      const classList = getBreadcrumbElement(id).children[0].classList
+      const classList = getBreadcrumbElement(item.id).children[0].classList
       const className = 'oc-breadcrumb-item-dragover'
       leaving ? classList.remove(className) : classList.add(className)
     }
@@ -330,7 +337,6 @@ export default defineComponent({
       displayItems,
       lastHiddenItem,
       dropItemEvent,
-      dragOver,
       dropItemStyling
     }
   }
