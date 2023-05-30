@@ -596,7 +596,7 @@ export default defineComponent({
       return this.configuration?.options?.displayResourcesLazy
     },
     areAllResourcesSelected() {
-      return this.selectedIds.length === this.resources.length
+      return this.selectedResources.length === this.resources.length
     },
     selectedResources() {
       return this.resources.filter((resource) => this.selectedIds.includes(resource.id))

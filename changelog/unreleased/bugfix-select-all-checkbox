@@ -1,0 +1,6 @@
+Bugfix: Select all checkbox
+
+We've fixed a bug in the shared-with-me page which caused unrelated checkboxes to be checked.
+
+https://github.com/owncloud/web/pull/9131
+https://github.com/owncloud/web/issues/9122
