@@ -229,7 +229,7 @@ export default defineComponent({
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const resource = inject<Resource>('resource')
-    const space = inject<SpaceResource>('space')
+    const space = inject<Ref<SpaceResource>>('space')
     const isPublicLinkContext = usePublicLinkContext({ store })
     const clientService = useClientService()
     const previewService = usePreviewService()
