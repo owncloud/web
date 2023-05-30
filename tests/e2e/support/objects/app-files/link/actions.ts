@@ -103,8 +103,8 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
 }
 
 export const waitForPopupNotPresent = async (page): Promise<void> => {
-  await page.waitForSelector(linkUpdateDialog)
-  await page.waitForSelector(linkUpdateDialog, { state: 'detached', strict: false })
+  await page.locator(linkUpdateDialog).waitFor()
+  await page.locator(linkUpdateDialog).waitFor({ state: 'detached' })
 }
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
@@ -118,7 +118,17 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
   await sidebar.open({ page: page, resource: resourceName })
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(publicLinkEditRoleButton, linkName)).click()
-  await page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
+
+  await Promise.all([
+    page.waitForResponse(
+      (res) =>
+        res.url().includes('api/v1/shares/') &&
+        res.request().method() === 'PUT' &&
+        res.status() === 200
+    ),
+    page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
+  ])
+
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
   return await page.locator(publicLinkCurrentRole).textContent()

@@ -11,6 +11,6 @@ export class Users {
 
   async navigate(): Promise<void> {
     await this.#page.locator(usersNavSelector).click()
-    await this.#page.waitForSelector(appLoadingSpinnerSelector, { state: 'detached' })
+    await this.#page.locator(appLoadingSpinnerSelector).waitFor({ state: 'detached' })
   }
 }

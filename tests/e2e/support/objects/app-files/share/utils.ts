@@ -46,7 +46,8 @@ export const isAcceptedSharePresent = async ({
 }): Promise<boolean> => {
   let exist = true
   await page
-    .waitForSelector(util.format(acceptedShareItem, resource, owner), { timeout })
+    .locator(util.format(acceptedShareItem, resource, owner))
+    .waitFor({ timeout })
     .catch((e) => {
       if (!(e instanceof errors.TimeoutError)) {
         throw e

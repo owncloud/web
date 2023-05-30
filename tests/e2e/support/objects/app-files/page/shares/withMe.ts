@@ -21,7 +21,7 @@ export class WithMe {
       this.#page.waitForEvent('popup'),
       this.#page.locator(openShareWithMeButton).click()
     ])
-    await newTab.waitForSelector(shareWithMeNavSelector)
+    await newTab.locator(shareWithMeNavSelector).waitFor()
     await actor.newPage(newTab)
   }
 }
