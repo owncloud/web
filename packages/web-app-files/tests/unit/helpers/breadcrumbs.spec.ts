@@ -10,6 +10,7 @@ describe('builds an array of breadcrumbitems', () => {
     expect(breadCrumbs).toEqual([
       {
         id: expect.anything(),
+        isStaticNav: false,
         allowContextActions: true,
         text: 'test',
         to: { path: '/files/spaces/personal/home/test', query: {} }
