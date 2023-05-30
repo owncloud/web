@@ -66,6 +66,7 @@ Summary
 * Bugfix - Endless loading when encountering a public link error: [#9004](https://github.com/owncloud/web/issues/9004)
 * Bugfix - Prevent "virtual" spaces from being displayed in the UI: [#9015](https://github.com/owncloud/web/pull/9015)
 * Bugfix - Spaces in search results: [#9022](https://github.com/owncloud/web/issues/9022)
+* Bugfix - Share indicator loading after pasting resources: [#9030](https://github.com/owncloud/web/issues/9030)
 * Bugfix - Preview app mime type detection: [#9050](https://github.com/owncloud/web/issues/9050)
 * Bugfix - Resource not found and No content message at the same time: [#9061](https://github.com/owncloud/web/issues/9061)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
@@ -161,6 +162,7 @@ Summary
 * Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
 * Enhancement - Long breadcrumb strategy: [#8984](https://github.com/owncloud/web/pull/8984)
 * Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
+* Enhancement - Support pagination in admin settings app: [#9048](https://github.com/owncloud/web/issues/9048)
 * Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
 * Enhancement - Enable download (archive) on spaces: [#9056](https://github.com/owncloud/web/issues/9056)
 * Enhancement - Search full-text filter: [#9059](https://github.com/owncloud/web/pull/9059)
@@ -616,6 +618,14 @@ Details
 
    https://github.com/owncloud/web/issues/9022
    https://github.com/owncloud/web/pull/9026
+
+* Bugfix - Share indicator loading after pasting resources: [#9030](https://github.com/owncloud/web/issues/9030)
+
+   Share indicators are now being displayed correctly after pasting resources into shared
+   folders.
+
+   https://github.com/owncloud/web/issues/9030
+   https://github.com/owncloud/web/pull/9110
 
 * Bugfix - Preview app mime type detection: [#9050](https://github.com/owncloud/web/issues/9050)
 
@@ -1511,6 +1521,14 @@ Details
    https://github.com/owncloud/web/issues/9054
    https://github.com/owncloud/web/pull/9044
    https://github.com/owncloud/web/pull/9096
+
+* Enhancement - Support pagination in admin settings app: [#9048](https://github.com/owncloud/web/issues/9048)
+
+   We've added pagination to various lists in the admin settings app. So there will be a page
+   selection at the end of the list if more than 50 items are present.
+
+   https://github.com/owncloud/web/issues/9048
+   https://github.com/owncloud/web/pull/9119
 
 * Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
 
