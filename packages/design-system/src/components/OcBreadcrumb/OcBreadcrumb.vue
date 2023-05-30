@@ -231,7 +231,7 @@ export default defineComponent({
       if (!isDropAllowed(item, index)) {
         return
       }
-      item.to.path = item.to.path ? item.to.path : '/'
+      item.to.path = item.to.path || '/'
       emit(EVENT_ITEM_DROPPED_BREADCRUMB, item.to)
     }
 
