@@ -12,6 +12,7 @@ import { Resource, SpaceResource } from 'web-client/src/helpers'
 
 const getResourceMock = ({
   type = 'file',
+  mimeType = 'image/jpeg',
   tags = [],
   thumbnail = null,
   shareTypes = [],
@@ -21,6 +22,8 @@ const getResourceMock = ({
   mock<Resource>({
     id: '1',
     type,
+    isFolder: type === 'folder',
+    mimeType,
     ownerId: 'marie',
     ownerDisplayName: 'Marie',
     owner: null,
@@ -51,11 +54,19 @@ const selectors = {
 
 describe('Details SideBar Panel', () => {
   describe('preview', () => {
-    it('shows if given for files', () => {
-      const resource = getResourceMock({ thumbnail: 'example.com/image' })
-      const { wrapper } = createWrapper({ resource })
-      expect(wrapper.find(selectors.preview).exists()).toBeTruthy()
-      expect(wrapper.find(selectors.resourceIcon).exists()).toBeFalsy()
+    describe('shows preview area', () => {
+      it('while trying to load a preview', () => {
+        const resource = getResourceMock()
+        const { wrapper } = createWrapper({ resource })
+        expect(wrapper.find(selectors.preview).exists()).toBeTruthy()
+        expect(wrapper.find(selectors.resourceIcon).exists()).toBeFalsy()
+      })
+      it('for allowed mime types', () => {
+        const resource = getResourceMock()
+        const { wrapper } = createWrapper({ resource })
+        expect(wrapper.find(selectors.preview).exists()).toBeTruthy()
+        expect(wrapper.find(selectors.resourceIcon).exists()).toBeFalsy()
+      })
     })
     it('shows resource icon instead if the resource is a folder', () => {
       const resource = getResourceMock({ type: 'folder' })

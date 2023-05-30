@@ -295,7 +295,13 @@ export default defineComponent({
       await Promise.all(calls.map((p) => p.catch((e) => e)))
     }
 
+    const isFolder = computed(() => {
+      return unref(resource).isFolder
+    })
     const loadPreviewTask = useTask(function* (signal, resource) {
+      if (unref(isFolder)) {
+        return
+      }
       preview.value = yield previewService.loadPreview({
         space: unref(space),
         resource,
@@ -303,6 +309,9 @@ export default defineComponent({
       })
     }).restartable()
     const isPreviewLoading = computed(() => {
+      if (unref(isFolder)) {
+        return false
+      }
       return loadPreviewTask.isRunning || !loadPreviewTask.last
     })
 
