@@ -22,6 +22,7 @@ Feature: Create public link shares
       | name        | Link           |
     And a link named "Link" should be listed with role "Anyone with the link can view" in the public link list of resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
 
   @smokeTest @ocisSmokeTest @issue-ocis-reva-383
@@ -38,6 +39,7 @@ Feature: Create public link shares
       | name        | Link        |
     And a link named "Link" should be listed with role "Anyone with the link can view" in the public link list of resource "lorem.txt" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
 
   @skipOnOC10 @issue-ocis-reva-383
@@ -54,6 +56,7 @@ Feature: Create public link shares
       | permissions | read           |
       | path        | /simple-folder |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
 
   @skipOnOC10 @issue-ocis-reva-383
@@ -69,6 +72,7 @@ Feature: Create public link shares
       | permissions | read        |
       | path        | /lorem.txt  |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
 
   @issue-ocis-reva-389
@@ -79,6 +83,7 @@ Feature: Create public link shares
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog" using the webUI
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
 
 

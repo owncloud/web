@@ -77,6 +77,7 @@ Feature: Public link share management
     And user "Alice" has logged in using the webUI
     When the user copies the url of public link named "Public-link" of folder "simple-folder" using the webUI
     And the user navigates to the copied public link using the webUI
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
 
 
@@ -131,6 +132,7 @@ Feature: Public link share management
       | name        | public link |
       | permissions | read        |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
+    And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
     And the create button should not be visible on the webUI
 

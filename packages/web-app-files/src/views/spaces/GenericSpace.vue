@@ -170,7 +170,7 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
-import { useRoute } from 'web-pkg/src/composables'
+import { useRoute, useRouteQuery } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -231,6 +231,8 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
+    const { getDefaultEditorAction } = useFileActions()
+    const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     let loadResourcesEventToken
 
     const canUpload = computed(() => {
@@ -388,6 +390,25 @@ export default defineComponent({
       }
     }
 
+    const openWithDefaultApp = () => {
+      const highlightedFile = store.getters['Files/highlightedFile']
+
+      if (!highlightedFile || highlightedFile.isFolder) {
+        return
+      }
+
+      const fileActionsOptions = {
+        resources: [highlightedFile],
+        space: props.space
+      }
+
+      const defaultEditorAction = getDefaultEditorAction(fileActionsOptions)
+
+      if (defaultEditorAction) {
+        defaultEditorAction.handler({ ...fileActionsOptions })
+      }
+    }
+
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
     const performLoaderTask = async (
       sameRoute: boolean,
@@ -412,6 +433,10 @@ export default defineComponent({
       ])
       resourcesViewDefaults.refreshFileListHeaderPosition()
       focusAndAnnounceBreadcrumb(sameRoute)
+
+      if (unref(openWithDefaultAppQuery) === 'true') {
+        openWithDefaultApp()
+      }
     }
 
     onMounted(() => {

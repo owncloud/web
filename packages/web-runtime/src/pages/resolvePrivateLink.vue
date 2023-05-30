@@ -148,7 +148,10 @@ export default defineComponent({
         query: {
           ...query,
           scrollTo: unref(resource).fileId,
-          ...(unref(details) && { details: unref(details) })
+          ...(unref(details) && { details: unref(details) }),
+          ...(configurationManager.options.openLinksWithDefaultApp && {
+            openWithDefaultApp: 'true'
+          })
         }
       }
       router.push(location)

@@ -3,6 +3,7 @@ import { Page } from 'playwright'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
+import { editor } from '../../../support/objects/app-files/utils'
 
 When(
   '{string} opens the public link {string}',
@@ -33,6 +34,11 @@ When(
     await pageObject.authenticate({ password })
   }
 )
+
+When('{string} closes the editor', async function (this: World, stepUser: string): Promise<void> {
+  const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+  await editor.close(page)
+})
 
 When(
   '{string} drop uploads following resources',

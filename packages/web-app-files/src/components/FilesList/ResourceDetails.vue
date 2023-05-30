@@ -7,14 +7,16 @@
     </div>
   </div>
 </template>
-  
-  <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+
+<script lang="ts">
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 
 import FileActions from '../SideBar/Actions/FileActions.vue'
 import FileDetails from '../SideBar/Details/FileDetails.vue'
 import FileInfo from '../SideBar/FileInfo.vue'
+import { useFileActions } from 'web-app-files/src/composables/actions/files/useFileActions'
+import { useRouteQuery } from 'web-pkg'
 
 export default defineComponent({
   components: {
@@ -38,6 +40,23 @@ export default defineComponent({
       type: Object as PropType<SpaceResource>,
       required: false,
       default: null
+    }
+  },
+  setup(props) {
+    const { getDefaultEditorAction } = useFileActions()
+    const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
+    const fileActionsOptions = {
+      resources: [props.singleResource],
+      space: props.space
+    }
+    const defaultEditorAction = getDefaultEditorAction(fileActionsOptions)
+
+    if (unref(openWithDefaultAppQuery) === 'true' && defaultEditorAction) {
+      defaultEditorAction.handler({ ...fileActionsOptions })
+    }
+
+    return {
+      defaultEditorAction
     }
   }
 })

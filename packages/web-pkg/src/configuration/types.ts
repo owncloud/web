@@ -14,6 +14,7 @@ export interface OptionsConfiguration {
   routing?: RoutingOptionsConfiguration
   logoutUrl?: string
   contextHelpersReadMore?: boolean
+  openLinksWithDefaultApp?: boolean
 }
 
 export interface OAuth2Configuration {

@@ -1,0 +1,7 @@
+Enhancement: Single file link open with default app
+
+We've added a configurable functionality, that a single shared file via link will be opened in default app,
+for example text-editor.
+
+https://github.com/owncloud/web/pull/9046
+https://github.com/owncloud/web/issues/9045

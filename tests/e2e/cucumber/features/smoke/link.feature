@@ -60,6 +60,7 @@ Feature: link
     And "Alice" opens the "files" app
     When "Alice" copies quick link of the resource "folderPublic" from the context menu
     And "Anonymous" opens the public link "Link"
+    And "Anonymous" closes the editor
     And "Anonymous" downloads the following public link resources using the single share view
       | resource  | type |
       | lorem.txt | file |

@@ -3,7 +3,7 @@ import { expect } from '@playwright/test'
 import util from 'util'
 import path from 'path'
 import { resourceExists, waitForResources } from './utils'
-import { sidebar } from '../utils'
+import { sidebar, editor } from '../utils'
 import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
 import { config } from '../../../../config'
@@ -30,7 +30,6 @@ const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
 const createNewDrawioFileButton = '.new-file-btn-drawio'
 const saveTextFileInEditorButton = '#text-editor-controls-save:visible'
-const closeTextEditorOrViewerButton = '#app-top-bar-close'
 const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
@@ -272,7 +271,7 @@ export const editTextDocument = async ({
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
     page.locator(saveTextFileInEditorButton).click()
   ])
-  await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
+  await editor.close(page)
   await page.locator(util.format(resourceNameSelector, name)).waitFor()
 }
 
@@ -1115,7 +1114,7 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
     ])
   }
 
-  await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
+  await editor.close(page)
 }
 
 export const checkThatFileVersionIsNotAvailable = async (
