@@ -3,11 +3,10 @@ import { expect } from '@playwright/test'
 import util from 'util'
 import path from 'path'
 import { resourceExists, waitForResources } from './utils'
-import { sidebar } from '../utils'
+import { sidebar, editor } from '../utils'
 import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
 import { config } from '../../../../config'
-import closeEditor from '../utils/closeEditor'
 
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
@@ -272,7 +271,7 @@ export const editTextDocument = async ({
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
     page.locator(saveTextFileInEditorButton).click()
   ])
-  await Promise.all([page.waitForNavigation(), closeEditor(page)])
+  await editor.close(page)
   await page.locator(util.format(resourceNameSelector, name)).waitFor()
 }
 
@@ -1115,7 +1114,7 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
     ])
   }
 
-  await Promise.all([page.waitForNavigation(), closeEditor(page)])
+  await editor.close(page)
 }
 
 export const checkThatFileVersionIsNotAvailable = async (

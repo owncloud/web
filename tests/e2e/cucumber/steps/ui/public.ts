@@ -3,7 +3,7 @@ import { Page } from 'playwright'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
-import closeEditor from '../../../support/objects/app-files/utils/closeEditor'
+import { editor } from '../../../support/objects/app-files/utils'
 
 When(
   '{string} opens the public link {string}',
@@ -37,7 +37,7 @@ When(
 
 When('{string} closes the editor', async function (this: World, stepUser: string): Promise<void> {
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-  await closeEditor(page)
+  await editor.close(page)
 })
 
 When(
