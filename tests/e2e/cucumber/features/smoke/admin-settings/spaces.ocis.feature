@@ -122,3 +122,44 @@ Feature: spaces management
       | David | Can view   |
       | Edith | Can view   |
     And "Alice" logs out
+
+
+  Scenario: admin user can manage the spaces created by other space admin user via context menu
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+      | Brian |
+      | Carol |
+    And "Admin" assigns following roles to the users using API
+      | id    | role  |
+      | Alice | Admin |
+    And "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Brian | Space Admin |
+      | Carol | Space Admin |
+    And "Brian" creates the following project spaces using API
+      | name   | id     |
+      | team A | team.a |
+    And "Carol" creates the following project spaces using API
+      | name   | id     |
+      | team B | team.b |
+    When "Alice" logs in
+    And "Alice" opens the "admin-settings" app
+    And "Alice" navigates to the project spaces management page
+    When "Alice" updates the space "team.a" name to "brian team" using the context-menu
+    And "Alice" updates the space "team.b" name to "carol team" using the context-menu
+    And "Alice" updates the space "team.a" quota to "10" using the context-menu
+    And "Alice" updates the space "team.b" quota to "50" using the context-menu
+    And "Alice" disables the space "team.a" using the context-menu
+    And "Alice" disables the space "team.b" using the context-menu
+    And "Alice" enables the space "team.a" using the context-menu
+    And "Alice" enables the space "team.b" using the context-menu
+    And "Alice" disables the space "team.a" using the context-menu
+    And "Alice" disables the space "team.b" using the context-menu
+    And "Alice" deletes the space "team.a" using the context-menu
+    And "Alice" deletes the space "team.b" using the context-menu
+    Then "Alice" should not see the following spaces
+      | id     |
+      | team.a |
+      | team.b |
+    And "Alice" logs out
