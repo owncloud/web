@@ -164,6 +164,7 @@ Summary
 * Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
 * Enhancement - Single file link open with default app: [#9046](https://github.com/owncloud/web/pull/9046)
 * Enhancement - Support pagination in admin settings app: [#9048](https://github.com/owncloud/web/issues/9048)
+* Enhancement - Drag & drop on parent folder: [#9052](https://github.com/owncloud/web/pull/9052)
 * Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
 * Enhancement - Enable download (archive) on spaces: [#9056](https://github.com/owncloud/web/issues/9056)
 * Enhancement - Search full-text filter: [#9059](https://github.com/owncloud/web/pull/9059)
@@ -1538,6 +1539,14 @@ Details
 
    https://github.com/owncloud/web/issues/9048
    https://github.com/owncloud/web/pull/9119
+
+* Enhancement - Drag & drop on parent folder: [#9052](https://github.com/owncloud/web/pull/9052)
+
+   We've added the possibility to drag & drop files onto the breadcrumb to move items into parent
+   folders in a fast and intuitive way.
+
+   https://github.com/owncloud/web/issues/9043
+   https://github.com/owncloud/web/pull/9052
 
 * Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
 
