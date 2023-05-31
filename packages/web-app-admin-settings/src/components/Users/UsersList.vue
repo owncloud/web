@@ -99,7 +99,7 @@
         </context-menu-quick-action>
       </template>
       <template #footer>
-        <pagination :pages="paginationPages" :current-page="currentPage" />
+        <pagination :pages="totalPages" :current-page="currentPage" />
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
           <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
@@ -119,10 +119,10 @@ import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { AppRole, User } from 'web-client/src/generated'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { useFileListHeaderPosition } from 'web-pkg/src/composables'
+import { useFileListHeaderPosition, usePagination } from 'web-pkg/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
-import { usePagination } from 'web-app-admin-settings/src/composables'
 import { computed } from 'vue'
+import { perPageDefault, perPageQueryName } from 'web-app-admin-settings/src/defaults'
 
 export default defineComponent({
   name: 'UsersList',
@@ -261,9 +261,13 @@ export default defineComponent({
       )
     })
 
-    const pagination = usePagination({ items })
+    const {
+      items: paginatedItems,
+      page: currentPage,
+      total: totalPages
+    } = usePagination({ items, perPageDefault, perPageQueryName })
 
-    watch(pagination.currentPage, () => {
+    watch(currentPage, () => {
       emit('unSelectAllUsers')
     })
 
@@ -282,7 +286,9 @@ export default defineComponent({
       filterTerm,
       sortBy,
       sortDir,
-      ...pagination,
+      paginatedItems,
+      currentPage,
+      totalPages,
       filter,
       orderBy
     }

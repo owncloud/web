@@ -97,10 +97,11 @@ import {
   useRoute,
   useRouteQuery,
   useRouteQueryPersisted,
-  useRouter
+  useRouter,
+  PaginationConstants
 } from 'web-pkg/src/composables'
 import { ViewMode } from 'web-pkg/src/ui/types'
-import { PaginationConstants, ViewModeConstants } from '../../composables'
+import { ViewModeConstants } from '../../composables'
 
 export default defineComponent({
   props: {

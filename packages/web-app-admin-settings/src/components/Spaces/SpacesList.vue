@@ -107,7 +107,7 @@
         </div>
       </template>
       <template #footer>
-        <pagination :pages="paginationPages" :current-page="currentPage" />
+        <pagination :pages="totalPages" :current-page="currentPage" />
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
           <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
@@ -134,9 +134,14 @@ import { useGettext } from 'vue3-gettext'
 import { eventBus, SortDir } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
-import { useFileListHeaderPosition, useRoute, useRouter } from 'web-pkg/src/composables'
-import { usePagination } from 'web-app-admin-settings/src/composables'
+import {
+  useFileListHeaderPosition,
+  useRoute,
+  useRouter,
+  usePagination
+} from 'web-pkg/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
+import { perPageDefault, perPageQueryName } from 'web-app-admin-settings/src/defaults'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -220,15 +225,18 @@ export default defineComponent({
         unref(sortDir) === SortDir.Desc
       )
     )
+    const {
+      items: paginatedItems,
+      page: currentPage,
+      total: totalPages
+    } = usePagination({ items, perPageDefault, perPageQueryName })
 
-    const pagination = usePagination({ items })
-
-    watch(pagination.currentPage, () => {
+    watch(currentPage, () => {
       emit('unSelectAllSpaces')
     })
 
     const allSpacesSelected = computed(() => {
-      return unref(pagination.paginatedItems).length === props.selectedSpaces.length
+      return unref(paginatedItems).length === props.selectedSpaces.length
     })
 
     const handleSort = (event) => {
@@ -449,7 +457,9 @@ export default defineComponent({
       showDetailsForSpace,
       fileListHeaderY,
       items,
-      ...pagination
+      paginatedItems,
+      currentPage,
+      totalPages
     }
   }
 })
