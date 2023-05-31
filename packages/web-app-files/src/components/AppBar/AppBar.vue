@@ -77,7 +77,7 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
-import { createLocationSpaces, isLocationTrashActive } from '../../router'
+import { isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
