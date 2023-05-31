@@ -131,20 +131,20 @@ Feature: spaces management
       | Brian |
       | Carol |
     And "Admin" assigns following roles to the users using API
-      | id    | role  |
-      | Alice | Admin |
-    And "Admin" assigns following roles to the users using API
       | id    | role        |
+      | Alice | Admin       |
       | Brian | Space Admin |
       | Carol | Space Admin |
+    When "Brian" logs in
     And "Brian" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
+    When "Carol" logs in
     And "Carol" creates the following project spaces using API
       | name   | id     |
       | team B | team.b |
     When "Alice" logs in
-    And "Alice" opens the "admin-settings" app
+    When "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     When "Alice" updates the space "team.a" name to "brian team" using the context-menu
     And "Alice" updates the space "team.b" name to "carol team" using the context-menu
@@ -163,3 +163,5 @@ Feature: spaces management
       | team.a |
       | team.b |
     And "Alice" logs out
+    And "Brian" logs out
+    And "Carol" logs out
