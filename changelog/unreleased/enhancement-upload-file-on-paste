@@ -1,0 +1,6 @@
+Enhancement: Upload file on paste
+
+We've implemented the possibility to upload a single file in the clipboard from anywhere via paste.
+
+https://github.com/owncloud/web/pull/9140
+https://github.com/owncloud/web/issues/9047
