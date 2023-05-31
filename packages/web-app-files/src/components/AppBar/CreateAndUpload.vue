@@ -247,7 +247,7 @@ export default defineComponent({
       }
       // Browsers only allow single files to be pasted for security reasons
       const items = (event.clipboardData || event.originalEvent.clipboardData).items
-      const fileItem = items.find((i) => i.kind === 'file')
+      const fileItem = [...items].find((i) => i.kind === 'file')
       if (!fileItem) {
         return
       }
