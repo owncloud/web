@@ -79,7 +79,12 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions } from 'vuex'
 import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
-import { useClientService, useStore } from 'web-pkg/src/composables'
+import {
+  queryItemAsString,
+  useClientService,
+  useRouteQuery,
+  useStore
+} from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 import { useGroupActionsDelete } from '../composables/actions/groups'
@@ -107,6 +112,16 @@ export default defineComponent({
     const createGroupModalOpen = ref(false)
     const clientService = useClientService()
 
+    const currentPageQuery = useRouteQuery('page', '1')
+    const currentPage = computed(() => {
+      return parseInt(queryItemAsString(unref(currentPageQuery)))
+    })
+
+    const itemsPerPageQuery = useRouteQuery('admin-settings-items-per-page', '1')
+    const itemsPerPage = computed(() => {
+      return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
+    })
+
     const loadResourcesTask = useTask(function* (signal) {
       const response = yield clientService.graphAuthenticated.groups.listGroups('displayName')
       groups.value = response.data.value || []
@@ -124,9 +139,15 @@ export default defineComponent({
 
     onMounted(async () => {
       await loadResourcesTask.perform()
-      loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
-        loadResourcesTask.perform()
+      loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', async () => {
+        await loadResourcesTask.perform()
         selectedGroups.value = []
+
+        const pageCount = Math.ceil(unref(groups).length / unref(itemsPerPage))
+        if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
+          // reset pagination to avoid empty lists (happens when deleting all items on the last page)
+          currentPageQuery.value = pageCount.toString()
+        }
       })
     })
 
