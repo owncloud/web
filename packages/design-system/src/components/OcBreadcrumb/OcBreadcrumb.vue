@@ -100,17 +100,7 @@
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  PropType,
-  ref,
-  unref,
-  watch
-} from 'vue'
+import { computed, defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 import { AVAILABLE_SIZES, EVENT_ITEM_DROPPED_BREADCRUMB } from '../../helpers/constants'
