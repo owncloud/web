@@ -313,7 +313,7 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', ['ancestorMetaData', 'files', 'selectedFiles']),
+    ...mapGetters('Files', ['ancestorMetaData', 'files', 'selectedFiles', 'clipboardResources']),
     ...mapGetters('runtime/spaces', ['spaces']),
 
     showPasteHereButton() {
