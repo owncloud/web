@@ -240,15 +240,33 @@ export default defineComponent({
       return unref(currentFolder)?.canUpload({ user: store.getters.user })
     })
 
+    const handlePasteFileEvent = (event) => {
+      if (store.state.Files.clipboardResources.length) {
+        return
+      }
+      const items = (event.clipboardData || event.originalEvent.clipboardData).items
+      for (let index in items) {
+        const item = items[index]
+        if (item.kind === 'file') {
+          const file = item.getAsFile()
+          instance.onFilesSelected([file])
+          event.preventDefault()
+          break
+        }
+      }
+    }
+
     onMounted(() => {
       filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
       uploadCompletedSub = uppyService.subscribe('uploadCompleted', instance.onUploadComplete)
+      document.addEventListener('paste', handlePasteFileEvent)
     })
 
     onBeforeUnmount(() => {
       uppyService.unsubscribe('filesSelected', filesSelectedSub)
       uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
       uppyService.removeDropTarget()
+      document.removeEventListener('paste', handlePasteFileEvent)
     })
 
     watch(
@@ -357,7 +375,7 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['clearClipboardFiles', 'pasteSelectedFiles']),
     ...mapActions(['showMessage', 'createModal', 'setModalInputErrorMessage', 'hideModal']),
-    ...mapMutations('Files', ['UPSERT_RESOURCE']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE', 'clipboardResources']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
