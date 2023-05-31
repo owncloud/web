@@ -5,14 +5,14 @@
         <div class="open-file-bar oc-flex">
           <oc-resource
             v-if="resource?.name"
-            id="open-file-bar-resource"
+            id="app-top-bar-resource"
             :is-thumbnail-displayed="false"
             :resource="resource"
           />
           <div v-else class="oc-resource oc-text-overflow">
             <span v-text="$gettext('Loading')" />
           </div>
-          <template v-if="showFileActions && dropDownActions.length">
+          <template v-if="dropDownActions.length">
             <oc-button
               id="oc-openfile-contextmenu-trigger"
               v-oc-tooltip="contextMenuLabel"
@@ -30,7 +30,7 @@
               @click.stop.prevent
             >
               <context-action-menu
-                :menu-sections="[{ name: 'foo', items: dropDownActions }]"
+                :menu-sections="[{ name: 'dropdown-actions', items: dropDownActions }]"
                 :action-options="{ resources: [resource] }"
               />
             </oc-drop>
@@ -38,9 +38,9 @@
         </div>
 
         <div class="oc-flex main-actions">
-          <template v-if="showFileActions && mainActions.length">
+          <template v-if="mainActions.length">
             <context-action-menu
-              :menu-sections="[{ name: 'foo', items: mainActions }]"
+              :menu-sections="[{ name: 'main-actions', items: mainActions }]"
               :action-options="{ resources: [resource] }"
             />
           </template>
@@ -73,10 +73,6 @@ export default defineComponent({
     ContextActionMenu
   },
   props: {
-    showFileActions: {
-      type: Boolean,
-      default: true
-    },
     dropDownActions: {
       type: Array as PropType<Action[]>,
       default: () => []
@@ -132,7 +128,7 @@ export default defineComponent({
 }
 
 .open-file-bar {
-  #open-file-bar-resource {
+  #app-top-bar-resource {
     max-width: 50vw;
 
     @media (min-width: $oc-breakpoint-small-default) {

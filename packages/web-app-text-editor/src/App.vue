@@ -254,11 +254,12 @@ export default defineComponent({
     const fileActions: Action<ActionOptions>[] = [
       {
         name: 'save-file',
-        id: 'text-editor-controls-save',
-        isEnabled: () => !(isReadOnly.value || !isDirty.value),
+        disabledTooltip: () => '',
+        isEnabled: () => true,
+        isDisabled: () => isReadOnly.value || !isDirty.value,
         componentType: 'button',
         icon: 'save',
-        class: 'oc-p-rm',
+        class: 'text-editor-controls-save oc-p-rm',
         label: () => '',
         handler: () => {
           save()
