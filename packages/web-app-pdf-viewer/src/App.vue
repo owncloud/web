@@ -9,18 +9,19 @@
   </main>
 </template>
 <script lang="ts">
+import { defineComponent } from 'vue'
+import { Resource } from 'web-client/src/helpers/resource/types'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
-import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'PDFViewer',
   components: {
+    AppTopBar,
     ErrorScreen,
-    LoadingScreen,
-    AppTopBar
+    LoadingScreen
   },
   setup() {
     return {
@@ -33,7 +34,7 @@ export default defineComponent({
     loading: true,
     loadingError: false,
     url: '',
-    resource: null
+    resource: <Resource>{}
   }),
   watch: {
     currentFileContext: {

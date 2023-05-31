@@ -103,6 +103,8 @@ color:
       value: rgba(255, 255, 5, 0.1)
     hover:
       value: rgb(236, 236, 236)
+    apptopbar:
+      value: 'transparent'
   border:
     value: rgb(236, 235, 238)
   text:

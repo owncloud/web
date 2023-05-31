@@ -1,18 +1,11 @@
 <template>
   <main id="text-editor" class="oc-height-1-1">
-    <app-top-bar :resource="resource" @close="closeApp">
-      <template #right>
-        <oc-button
-          v-if="!isLoading"
-          id="text-editor-controls-save"
-          :aria-label="$gettext('Save')"
-          :disabled="isReadOnly || !isDirty"
-          @click="save"
-        >
-          <oc-icon name="save" size="small" />
-        </oc-button>
-      </template>
-    </app-top-bar>
+    <app-top-bar
+      v-if="!isLoading"
+      :resource="resource"
+      :main-actions="fileActions"
+      @close="closeApp"
+    />
     <div v-if="isLoading" class="oc-text-center">
       <oc-spinner :aria-label="$gettext('Loading editor content')" />
     </div>
@@ -53,6 +46,7 @@ import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { Resource } from 'web-client'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions/types'
 
 export default defineComponent({
   name: 'TextEditor',
@@ -257,8 +251,24 @@ export default defineComponent({
       }
     }
 
+    const fileActions: Action<ActionOptions>[] = [
+      {
+        name: 'save-file',
+        id: 'text-editor-controls-save',
+        isEnabled: () => !(isReadOnly.value || !isDirty.value),
+        componentType: 'button',
+        icon: 'save',
+        class: 'oc-p-rm',
+        label: () => '',
+        handler: () => {
+          save()
+        }
+      }
+    ]
+
     return {
       ...defaults,
+      fileActions,
 
       // tasks
       loadFileTask,

@@ -1,0 +1,7 @@
+Enhancement: Improve extension app topbar
+
+We have redesigned the app topbar used in extensions and added more file actions.
+
+https://github.com/owncloud/web/issues/8422
+https://github.com/owncloud/web/pull/8442
+https://github.com/owncloud/web/pull/8447

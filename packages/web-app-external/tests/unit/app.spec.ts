@@ -22,6 +22,7 @@ jest.mock('web-pkg/src/composables/appDefaults', () => {
 })
 
 const componentStubs = {
+  AppTopBar: true,
   ErrorScreen: true,
   LoadingScreen: true
 }

@@ -30,7 +30,7 @@
     <oc-button
       v-oc-tooltip="$gettext('Display search bar')"
       :aria-label="$gettext('Click to display and focus the search bar')"
-      class="mobile-search-btn oc-mr-s"
+      class="mobile-search-btn oc-mr-l"
       appearance="raw-inverse"
       variation="brand"
       @click="showSearchBar"
