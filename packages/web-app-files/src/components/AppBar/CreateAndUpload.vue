@@ -245,15 +245,17 @@ export default defineComponent({
         return
       }
       const items = (event.clipboardData || event.originalEvent.clipboardData).items
+      const files = []
       for (let index in items) {
         const item = items[index]
         if (item.kind === 'file') {
           const file = item.getAsFile()
-          instance.onFilesSelected([file])
+          files.push(file)
           event.preventDefault()
           break
         }
       }
+      instance.onFilesSelected(files)
     }
 
     onMounted(() => {
