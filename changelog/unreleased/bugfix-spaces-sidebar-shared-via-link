@@ -1,0 +1,6 @@
+Bugfix: Sidebar for spaces on "Shared via link"-page
+
+The sidebar for spaces on the "Shared via link"-page has been fixed which acted like the space was a folder resource before.
+
+https://github.com/owncloud/web/issues/9020
+https://github.com/owncloud/web/pull/9023
