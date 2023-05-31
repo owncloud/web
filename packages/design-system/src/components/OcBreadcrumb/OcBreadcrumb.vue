@@ -282,13 +282,6 @@ export default defineComponent({
     }
 
     watch([() => props.maxWidth, () => props.items], renderBreadcrumb, { immediate: true })
-    onMounted(() => {
-      window.addEventListener('resize', renderBreadcrumb)
-    })
-
-    onBeforeUnmount(() => {
-      window.removeEventListener('resize', renderBreadcrumb)
-    })
 
     const currentFolder = computed<BreadcrumbItem>(() => {
       if (props.items.length === 0 || !props.items) {
