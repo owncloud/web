@@ -1,0 +1,6 @@
+Bugfix: Empty file list after deleting resources
+
+Deleting all resources on the last page lead to an empty file list although the other pages still contained resources. This has been fixed by resetting the pagination in such scenario.
+
+https://github.com/owncloud/web/issues/9014
+https://github.com/owncloud/web/pull/9017

@@ -72,6 +72,7 @@ function getWrapper({
     ...defaultStoreMockOptions
   }
   storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
+  storeOptions.modules.Files.getters.activeFiles.mockReturnValue([])
 
   const store = createStore(storeOptions)
   return {
