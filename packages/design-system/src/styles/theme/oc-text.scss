@@ -18,6 +18,10 @@ html {
   font-size: var(--oc-font-size-default);
 }
 
+button {
+  font-feature-settings: "cv11";
+}
+
 a {
   color: var(--oc-color-swatch-primary-default);
   text-decoration: none;
