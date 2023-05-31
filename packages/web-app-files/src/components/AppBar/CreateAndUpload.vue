@@ -375,7 +375,7 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['clearClipboardFiles', 'pasteSelectedFiles']),
     ...mapActions(['showMessage', 'createModal', 'setModalInputErrorMessage', 'hideModal']),
-    ...mapMutations('Files', ['UPSERT_RESOURCE', 'clipboardResources']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
