@@ -241,21 +241,19 @@ export default defineComponent({
     })
 
     const handlePasteFileEvent = (event) => {
+      // Ignore file in clipboard if there are already files from owncloud in the clipboard
       if (store.state.Files.clipboardResources.length) {
         return
       }
+      // Browsers only allow single files to be pasted for security reasons
       const items = (event.clipboardData || event.originalEvent.clipboardData).items
-      const files = []
-      for (let index in items) {
-        const item = items[index]
-        if (item.kind === 'file') {
-          const file = item.getAsFile()
-          files.push(file)
-          event.preventDefault()
-          break
-        }
+      const fileItem = items.find((i) => i.kind === 'file')
+      if (!fileItem) {
+        return
       }
-      instance.onFilesSelected(files)
+      const file = fileItem.getAsFile()
+      instance.onFilesSelected([file])
+      event.preventDefault()
     }
 
     onMounted(() => {
@@ -315,7 +313,7 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', ['ancestorMetaData', 'files', 'selectedFiles', 'clipboardResources']),
+    ...mapGetters('Files', ['ancestorMetaData', 'files', 'selectedFiles']),
     ...mapGetters('runtime/spaces', ['spaces']),
 
     showPasteHereButton() {
