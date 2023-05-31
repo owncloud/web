@@ -13,7 +13,7 @@ html * {
   font-family: var(--oc-font-family);
 }
 
-html {
+html, button {
   font-feature-settings: "cv11";
   font-size: var(--oc-font-size-default);
 }

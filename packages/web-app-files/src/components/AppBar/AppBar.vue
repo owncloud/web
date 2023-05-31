@@ -20,6 +20,7 @@
           :items="breadcrumbs"
           :max-width="breadcrumbMaxWidth"
           :truncation-offset="breadcrumbTruncationOffset"
+          @item-dropped-breadcrumb="fileDroppedBreadcrumb"
         >
           <template #contextMenu>
             <context-actions
@@ -94,9 +95,10 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
-import { useRouter, useStore } from 'web-pkg/src'
+import { useClientService, useRouter, useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
+import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
 
 export default defineComponent({
   components: {
@@ -134,9 +136,10 @@ export default defineComponent({
       default: null
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     const store = useStore()
     const router = useRouter()
+    const clientService = useClientService()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: clearSelectionActions } = useFileActionsClearSelection({ store })
@@ -200,13 +203,17 @@ export default defineComponent({
         ? 3
         : 2
     })
+    const fileDroppedBreadcrumb = async (data) => {
+      emit(EVENT_ITEM_DROPPED, data)
+    }
 
     return {
       batchActions,
       showBreadcrumb,
       showMobileNav,
       breadcrumbMaxWidth,
-      breadcrumbTruncationOffset
+      breadcrumbTruncationOffset,
+      fileDroppedBreadcrumb
     }
   },
   data: function () {

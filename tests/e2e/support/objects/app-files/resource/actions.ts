@@ -24,6 +24,8 @@ export const fileRow =
   '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
 export const resourceNameSelector =
   ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section) [data-test-resource-name="%s"]'
+const breadcrumbResourceNameSelector =
+  '//span[contains(@class, "oc-breadcrumb-item-text") and text()="%s"]'
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
@@ -598,6 +600,27 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
       await Promise.all([
         page.locator(util.format(resourceNameSelector, resourceBase)),
         page.locator(util.format(resourceNameSelector, newLocation)).click()
+      ])
+
+      break
+    }
+    case 'drag-drop-breadcrumb': {
+      const source = page.locator(util.format(resourceNameSelector, resourceBase))
+      const target = page.locator(util.format(breadcrumbResourceNameSelector, newLocation))
+
+      await Promise.all([
+        page.waitForResponse(
+          (resp) =>
+            resp.url().endsWith(resource) &&
+            resp.status() === 201 &&
+            resp.request().method() === 'MOVE'
+        ),
+        source.dragTo(target)
+      ])
+
+      await Promise.all([
+        page.locator(util.format(resourceNameSelector, resourceBase)),
+        page.locator(util.format(breadcrumbResourceNameSelector, newLocation)).click()
       ])
 
       break

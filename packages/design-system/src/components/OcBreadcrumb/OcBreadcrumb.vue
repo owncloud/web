@@ -17,6 +17,11 @@
               (item.isTruncationPlaceholder && hiddenItems.length === 0)
           }
         ]"
+        @dragover.prevent
+        @dragenter.prevent="dropItemStyling(item, index, false, $event)"
+        @dragleave.prevent="dropItemStyling(item, index, true, $event)"
+        @mouseleave="dropItemStyling(item, index, true, $event)"
+        @drop="dropItemEvent(item, index)"
       >
         <router-link
           v-if="item.to"
@@ -98,7 +103,7 @@
 import { computed, defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
-import { AVAILABLE_SIZES } from '../../helpers/constants'
+import { AVAILABLE_SIZES, EVENT_ITEM_DROPPED_BREADCRUMB } from '../../helpers/constants'
 
 import OcButton from '../OcButton/OcButton.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
@@ -190,7 +195,8 @@ export default defineComponent({
       default: false
     }
   },
-  setup(props) {
+  emits: [EVENT_ITEM_DROPPED_BREADCRUMB],
+  setup(props, { emit }) {
     const { $gettext } = useGettext()
     const visibleItems = ref<BreadcrumbItem[]>([])
     const hiddenItems = ref<BreadcrumbItem[]>([])
@@ -198,6 +204,22 @@ export default defineComponent({
 
     const getBreadcrumbElement = (id): HTMLElement => {
       return document.querySelector(`.oc-breadcrumb-list [data-item-id="${id}"]`)
+    }
+
+    const isDropAllowed = (item: BreadcrumbItem, index: number): boolean => {
+      return !(
+        !item.id ||
+        index === unref(displayItems).length - 1 ||
+        item.isTruncationPlaceholder ||
+        item.isStaticNav
+      )
+    }
+    const dropItemEvent = (item, index) => {
+      if (!isDropAllowed(item, index)) {
+        return
+      }
+      item.to.path = item.to.path || '/'
+      emit(EVENT_ITEM_DROPPED_BREADCRUMB, item.to)
     }
 
     const calculateTotalBreadcrumbWidth = () => {
@@ -244,7 +266,6 @@ export default defineComponent({
       }
       visibleItems.value = [...displayItems.value]
       hiddenItems.value = []
-
       nextTick(() => {
         reduceBreadcrumb(props.truncationOffset)
       })
@@ -270,6 +291,21 @@ export default defineComponent({
       return props.items.length - 1 === index ? 'page' : null
     }
 
+    const dropItemStyling = (item: BreadcrumbItem, index: number, leaving: boolean, event) => {
+      if (!isDropAllowed(item, index)) {
+        return
+      }
+      const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
+      if (hasFilePayload) return
+      if (event.currentTarget?.contains(event.relatedTarget)) {
+        return
+      }
+
+      const classList = getBreadcrumbElement(item.id).children[0].classList
+      const className = 'oc-breadcrumb-item-dragover'
+      leaving ? classList.remove(className) : classList.add(className)
+    }
+
     return {
       currentFolder,
       parentFolderTo,
@@ -279,7 +315,9 @@ export default defineComponent({
       hiddenItems,
       renderBreadcrumb,
       displayItems,
-      lastHiddenItem
+      lastHiddenItem,
+      dropItemEvent,
+      dropItemStyling
     }
   }
 })
@@ -287,7 +325,13 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-breadcrumb {
-  overflow: hidden;
+  overflow: visible;
+  &-item-dragover {
+    transition: background 0.06s, border 0s 0.08s, border-color 0s, border-width 0.06s;
+    background-color: var(--oc-color-background-highlight);
+    box-shadow: 0 0 0 5px var(--oc-color-background-highlight);
+    border-radius: 5px;
+  }
   &-item-text {
     max-width: 200px;
     white-space: nowrap;

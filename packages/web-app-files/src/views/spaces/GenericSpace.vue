@@ -13,6 +13,7 @@
         :side-bar-open="sideBarOpen"
         :space="space"
         :view-modes="viewModes"
+        @item-dropped="fileDropped"
       >
         <template #actions="{ limitedScreenSpace }">
           <create-and-upload
@@ -170,7 +171,7 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
-import { useRoute, useRouteQuery } from 'web-pkg/src/composables'
+import { useRoute, useRouteQuery, useClientService } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -233,6 +234,7 @@ export default defineComponent({
     const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
     const { getDefaultEditorAction } = useFileActions()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
+    const clientService = useClientService()
     let loadResourcesEventToken
 
     const canUpload = computed(() => {
@@ -285,19 +287,22 @@ export default defineComponent({
         rootBreadcrumbItems.push({
           id: uuidv4(),
           text: $gettext('Spaces'),
-          to: createLocationSpaces('files-spaces-projects')
+          to: createLocationSpaces('files-spaces-projects'),
+          isStaticNav: true
         })
       } else if (isShareSpaceResource(space)) {
         rootBreadcrumbItems.push(
           {
             id: uuidv4(),
             text: $gettext('Shares'),
-            to: { path: '/files/shares' }
+            to: { path: '/files/shares' },
+            isStaticNav: true
           },
           {
             id: uuidv4(),
             text: $gettext('Shared with me'),
-            to: { path: '/files/shares/with-me' }
+            to: { path: '/files/shares/with-me' },
+            isStaticNav: true
           }
         )
       }
@@ -331,7 +336,8 @@ export default defineComponent({
           to: createLocationPublic('files-public-link', {
             params,
             query
-          })
+          }),
+          isStaticNav: true
         }
       } else {
         spaceBreadcrumbItem = {
@@ -489,7 +495,8 @@ export default defineComponent({
       uploadHint: $gettext(
         'Drag files and folders here or use the "New" or "Upload" buttons to add files'
       ),
-      whitespaceContextMenu
+      whitespaceContextMenu,
+      clientService
     }
   },
 
@@ -552,11 +559,35 @@ export default defineComponent({
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapMutations('Files', ['REMOVE_FILES', 'REMOVE_FILES_FROM_SEARCHED', 'RESET_SELECTION']),
 
-    async fileDropped(fileIdTarget) {
+    async fileDropped(fileTarget) {
       const selected = [...this.selectedResources]
-      const targetFolder = this.paginatedResources.find((e) => e.id === fileIdTarget)
-      const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
-      if (isTargetSelected) {
+      let targetFolder = null
+      if (typeof fileTarget === 'string') {
+        targetFolder = this.paginatedResources.find((e) => e.id === fileTarget)
+        const isTargetSelected = selected.some((e) => e.id === fileTarget)
+        if (isTargetSelected) {
+          return
+        }
+      } else if (fileTarget instanceof Object) {
+        const spaceRootRoutePath = this.$router.resolve(
+          createLocationSpaces('files-spaces-generic', {
+            params: {
+              driveAliasAndItem: this.space.driveAlias
+            }
+          })
+        ).path
+
+        const splitIndex = fileTarget.path.indexOf(spaceRootRoutePath) + spaceRootRoutePath.length
+        const path = decodeURIComponent(fileTarget.path.slice(splitIndex, fileTarget.path.length))
+
+        try {
+          targetFolder = await this.clientService.webdav.getFileInfo(this.space, { path })
+        } catch (e) {
+          console.error(e)
+          return
+        }
+      }
+      if (!targetFolder) {
         return
       }
       if (targetFolder.type !== 'folder') {

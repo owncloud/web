@@ -21,7 +21,8 @@ export const breadcrumbsFromPath = (
         to: {
           path: '/' + [...current].splice(0, current.length - resource.length + i + 1).join('/'),
           query: omit(currentRoute.query, 'fileId', 'page') // TODO: we need the correct fileId in the query. until we have that we must omit it because otherwise we would correct the path to the one of the (wrong) fileId.
-        }
+        },
+        isStaticNav: false
       } as BreadcrumbItem)
   )
 }
@@ -35,7 +36,9 @@ export const concatBreadcrumbs = (...items: BreadcrumbItem[]): BreadcrumbItem[] 
       id: uuidv4(),
       allowContextActions: last.allowContextActions,
       text: last.text,
-      onClick: () => eventBus.publish('app.files.list.load')
+      onClick: () => eventBus.publish('app.files.list.load'),
+      isTruncationPlaceholder: last.isTruncationPlaceholder,
+      isStaticNav: last.isStaticNav
     }
   ]
 }

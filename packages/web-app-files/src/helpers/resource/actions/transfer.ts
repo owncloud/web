@@ -1,5 +1,5 @@
 import { Resource } from 'web-client'
-import { join } from 'path'
+import { basename, join } from 'path'
 import { SpaceResource } from 'web-client/src/helpers'
 import { ClientService, LoadingService, LoadingTaskCallbackArguments } from 'web-pkg/src/services'
 import {
@@ -128,6 +128,16 @@ export class ResourceTransfer extends ConflictDialog {
     )
   }
 
+  // This is for an edge case if a user moves a subfolder with the same name as the parent folder into the parent of the parent folder (which is not possible because of the backend)
+  public isOverwritingParentFolder(resource, targetFolder, targetFolderResources) {
+    if (resource.type !== 'folder') {
+      return false
+    }
+    const folderName = basename(resource.path)
+    const newPath = join(targetFolder.path, folderName)
+    return targetFolderResources.some((resource) => resource.path === newPath)
+  }
+
   private async moveResources(
     resolvedConflicts: FileConflict[],
     targetFolderResources: Resource[],
@@ -140,6 +150,7 @@ export class ResourceTransfer extends ConflictDialog {
     for (let [i, resource] of this.resourcesToMove.entries()) {
       // shallow copy of resources to prevent modifying existing rows
       resource = { ...resource }
+
       const hasConflict = resolvedConflicts.some((e) => e.resource.id === resource.id)
       let targetName = resource.name
       let overwriteTarget = false
@@ -151,6 +162,10 @@ export class ResourceTransfer extends ConflictDialog {
           continue
         }
         if (resolveStrategy === ResolveStrategy.REPLACE) {
+          if (this.isOverwritingParentFolder(resource, this.targetFolder, targetFolderResources)) {
+            errors.push({ resourceName: resource.name })
+            continue
+          }
           overwriteTarget = true
         }
         if (resolveStrategy === ResolveStrategy.KEEP_BOTH) {

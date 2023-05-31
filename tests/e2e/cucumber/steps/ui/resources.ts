@@ -106,7 +106,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" (copies|moves) the following resource(?:s)? using (keyboard|drag-drop|sidebar-panel|dropdown-menu)$/,
+  /^"([^"]*)" (copies|moves) the following resource(?:s)? using (keyboard|drag-drop|drag-drop-breadcrumb|sidebar-panel|dropdown-menu)$/,
   async function (
     this: World,
     stepUser: string,

@@ -27,7 +27,8 @@ describe('resourcesTransfer', () => {
       {
         id: 'a',
         name: 'a',
-        path: '/a'
+        path: '/a',
+        type: 'folder'
       },
       {
         id: 'b',
@@ -148,5 +149,42 @@ describe('resourcesTransfer', () => {
     await resourcesTransfer.resolveAllConflicts(resourcesToMove, targetFolder, targetFolderItems)
 
     expect(resourcesTransfer.resolveFileExists).toHaveBeenCalled()
+  })
+  it('should show error message if trying to overwrite parent', async () => {
+    const targetFolderItems = [
+      {
+        id: 'a',
+        path: 'target/a',
+        webDavPath: '/target/a',
+        name: '/target/a'
+      }
+    ]
+    const resourcesTransfer = new ResourceTransfer(
+      sourceSpace,
+      resourcesToMove,
+      targetSpace,
+      resourcesToMove[0],
+      clientServiceMock,
+      loadingServiceMock,
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn()
+    )
+    const namingClash = await resourcesTransfer.isOverwritingParentFolder(
+      resourcesToMove[0],
+      targetFolder,
+      targetFolderItems
+    )
+    const noNamingClash = await resourcesTransfer.isOverwritingParentFolder(
+      resourcesToMove[1],
+      targetFolder,
+      targetFolderItems
+    )
+
+    expect(namingClash).toBeTruthy()
+    expect(noNamingClash).toBeFalsy()
   })
 })
