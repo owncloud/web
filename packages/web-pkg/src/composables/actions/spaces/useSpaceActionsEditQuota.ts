@@ -33,7 +33,7 @@ export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {})
         if (resources.some((r) => r.spaceQuota === false)) {
           return false
         }
-        return ability.can('set-quota-all', 'Space')
+        return ability.can('set-quota-all', 'Drive')
       },
       componentType: 'button',
       class: 'oc-files-actions-edit-quota-trigger'

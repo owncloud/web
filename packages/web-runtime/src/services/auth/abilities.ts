@@ -5,41 +5,41 @@ export const getAbilities = (
   permissions: string[]
 ): SubjectRawRule<AbilityActions, AbilitySubjects, any>[] => {
   const abilities: Record<string, SubjectRawRule<AbilityActions, AbilitySubjects, any>[]> = {
-    'account-management.all': [
+    'Accounts.ReadWrite.all': [
       { action: 'create-all', subject: 'Account' },
       { action: 'delete-all', subject: 'Account' },
       { action: 'read-all', subject: 'Account' },
       { action: 'update-all', subject: 'Account' }
     ],
-    'group-management.all': [
+    'Groups.ReadWrite.all': [
       { action: 'create-all', subject: 'Group' },
       { action: 'delete-all', subject: 'Group' },
       { action: 'read-all', subject: 'Group' },
       { action: 'update-all', subject: 'Group' }
     ],
-    'language-readwrite.all': [
+    'Language.ReadWrite.all': [
       { action: 'read-all', subject: 'Language' },
       { action: 'update-all', subject: 'Language' }
     ],
-    'change-logo.all': [{ action: 'update-all', subject: 'Logo' }],
+    'Logo.Write.all': [{ action: 'update-all', subject: 'Logo' }],
     'PublicLink.Write.all': [{ action: 'create-all', subject: 'PublicLink' }],
-    'role-management.all': [
+    'Roles.ReadWrite.all': [
       { action: 'create-all', subject: 'Role' },
       { action: 'delete-all', subject: 'Role' },
       { action: 'read-all', subject: 'Role' },
       { action: 'update-all', subject: 'Role' }
     ],
-    'settings-management.all': [
+    'Settings.ReadWrite.all': [
       { action: 'read-all', subject: 'Setting' },
       { action: 'update-all', subject: 'Setting' }
     ],
-    'create-space.all': [{ action: 'create-all', subject: 'Space' }],
-    'Drive.ReadWriteEnabled.all': [
-      { action: 'delete-all', subject: 'Space' },
-      { action: 'update-all', subject: 'Space' }
+    'Drives.Create.all': [{ action: 'create-all', subject: 'Drive' }],
+    'Drives.ReadWriteEnabled.all': [
+      { action: 'delete-all', subject: 'Drive' },
+      { action: 'update-all', subject: 'Drive' }
     ],
-    'list-all-spaces.all': [{ action: 'read-all', subject: 'Space' }],
-    'Drive.ReadWriteQuota.Project.all': [{ action: 'set-quota-all', subject: 'Space' }]
+    'Drives.List.all': [{ action: 'read-all', subject: 'Drive' }],
+    'Drives.ReadWriteProjectQuota.all': [{ action: 'set-quota-all', subject: 'Drive' }]
   }
 
   return Object.keys(abilities).reduce((acc, permission) => {

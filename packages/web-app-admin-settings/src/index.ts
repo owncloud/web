@@ -31,7 +31,7 @@ const routes = ({ $ability }: { $ability: Ability }) => [
       if ($ability.can('read-all', 'Group')) {
         return { name: 'admin-settings-groups' }
       }
-      if ($ability.can('read-all', 'Space')) {
+      if ($ability.can('read-all', 'Drive')) {
         return { name: 'admin-settings-spaces' }
       }
       throw Error('Insufficient permissions')
@@ -87,7 +87,7 @@ const routes = ({ $ability }: { $ability: Ability }) => [
     name: 'admin-settings-spaces',
     component: Spaces,
     beforeEnter: (to, from, next) => {
-      if (!$ability.can('read-all', 'Space')) {
+      if (!$ability.can('read-all', 'Drive')) {
         next({ path: '/' })
       }
       next()
@@ -137,7 +137,7 @@ const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem[] => [
       path: `/${appInfo.id}/spaces?`
     },
     enabled: () => {
-      return $ability.can('read-all', 'Space')
+      return $ability.can('read-all', 'Drive')
     }
   }
 ]

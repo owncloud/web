@@ -82,7 +82,7 @@ function getWrapper({
         store,
         mocks,
         pluginOptions: {
-          abilities: canEditSpaceQuota ? [{ action: 'set-quota-all', subject: 'Space' }] : []
+          abilities: canEditSpaceQuota ? [{ action: 'set-quota-all', subject: 'Drive' }] : []
         }
       }
     )
