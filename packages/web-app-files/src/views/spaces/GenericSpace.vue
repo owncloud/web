@@ -171,7 +171,7 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
-import { useRoute, useRouteQuery } from 'web-pkg/src/composables'
+import { useRoute, useRouteQuery, useClientService } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -234,6 +234,7 @@ export default defineComponent({
     const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
     const { getDefaultEditorAction } = useFileActions()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
+    const clientService = useClientService()
     let loadResourcesEventToken
 
     const canUpload = computed(() => {
@@ -494,7 +495,8 @@ export default defineComponent({
       uploadHint: $gettext(
         'Drag files and folders here or use the "New" or "Upload" buttons to add files'
       ),
-      whitespaceContextMenu
+      whitespaceContextMenu,
+      clientService
     }
   },
 
@@ -567,7 +569,23 @@ export default defineComponent({
           return
         }
       } else if (fileTarget instanceof Object) {
-        targetFolder = fileTarget
+        const spaceRootRoutePath = this.$router.resolve(
+          createLocationSpaces('files-spaces-generic', {
+            params: {
+              driveAliasAndItem: this.space.driveAlias
+            }
+          })
+        ).path
+
+        const splitIndex = fileTarget.path.indexOf(spaceRootRoutePath) + spaceRootRoutePath.length
+        const path = decodeURIComponent(fileTarget.path.slice(splitIndex, fileTarget.path.length))
+
+        try {
+          targetFolder = await this.clientService.webdav.getFileInfo(this.space, { path })
+        } catch (e) {
+          console.error(e)
+          return
+        }
       }
       if (!targetFolder) {
         return

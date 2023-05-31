@@ -204,23 +204,7 @@ export default defineComponent({
         : 2
     })
     const fileDroppedBreadcrumb = async (data) => {
-      const spaceRootRoutePath = router.resolve(
-        createLocationSpaces('files-spaces-generic', {
-          params: {
-            driveAliasAndItem: props.space.driveAlias
-          }
-        })
-      ).path
-
-      const splitIndex = data.path.indexOf(spaceRootRoutePath) + spaceRootRoutePath.length
-      const path = decodeURIComponent(data.path.slice(splitIndex, data.path.length))
-
-      try {
-        const targetResource = await clientService.webdav.getFileInfo(props.space, { path })
-        emit(EVENT_ITEM_DROPPED, targetResource)
-      } catch (e) {
-        console.error(e)
-      }
+      emit(EVENT_ITEM_DROPPED, data)
     }
 
     return {
