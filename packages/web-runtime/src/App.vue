@@ -5,7 +5,7 @@
       <span v-text="$gettext('Skip to main')" />
     </skip-to>
     <component :is="layout"></component>
-    <portal-target name="app.runtime.modal" multiple></portal-target>
+    <portal-target name="app.runtime.modal" multiple />
     <oc-modal
       v-if="modal.displayed"
       :variation="modal.variation"
@@ -37,7 +37,7 @@
       @before-unmount="focusModal"
     >
       <template v-if="modal.customContent" #content>
-        <div v-html="modal.customContent"></div>
+        <div v-html="modal.customContent" />
       </template>
     </oc-modal>
   </div>

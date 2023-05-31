@@ -3,6 +3,7 @@
 exports[`The app provider extension should be able to load an iFrame via get 1`] = `
 <main class="oc-height-1-1">
   <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
+  <app-top-bar-stub resource="undefined"></app-top-bar-stub>
   <!--v-if-->
   <iframe allowfullscreen="" class="oc-width-1-1 oc-height-1-1" src="https://example.test/d12ab86/loe009157-MzBw" title="&quot;exampleApp&quot; app content area"></iframe>
   <!--v-if-->
@@ -12,6 +13,7 @@ exports[`The app provider extension should be able to load an iFrame via get 1`]
 exports[`The app provider extension should be able to load an iFrame via post 1`] = `
 <main class="oc-height-1-1">
   <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
+  <app-top-bar-stub resource="undefined"></app-top-bar-stub>
   <!--v-if-->
   <!--v-if-->
   <div class="oc-height-1-1">
@@ -32,6 +34,7 @@ exports[`The app provider extension should be able to load an iFrame via post 1`
 exports[`The app provider extension should fail for unauthenticated users 1`] = `
 <main class="oc-height-1-1 oc-flex oc-flex-center oc-flex-middle">
   <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
+  <!--v-if-->
   <error-screen-stub message="Error retrieving file information"></error-screen-stub>
   <!--v-if-->
   <!--v-if-->
@@ -41,6 +44,7 @@ exports[`The app provider extension should fail for unauthenticated users 1`] = 
 exports[`The app provider extension should show a loading spinner while loading 1`] = `
 <main class="oc-height-1-1 oc-flex oc-flex-center oc-flex-middle">
   <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
+  <app-top-bar-stub resource="undefined"></app-top-bar-stub>
   <loading-screen-stub></loading-screen-stub>
   <!--v-if-->
   <!--v-if-->
@@ -50,6 +54,7 @@ exports[`The app provider extension should show a loading spinner while loading 
 exports[`The app provider extension should show a meaningful message if an error occurs during loading 1`] = `
 <main class="oc-height-1-1 oc-flex oc-flex-center oc-flex-middle">
   <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
+  <!--v-if-->
   <error-screen-stub message="Error retrieving file information"></error-screen-stub>
   <!--v-if-->
   <!--v-if-->

@@ -6,6 +6,7 @@
     }"
   >
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
+    <app-top-bar v-if="!loadingError" :resource="resource" @close="closeApp" />
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" :message="errorMessage" />
     <iframe
@@ -33,20 +34,18 @@
 </template>
 
 <script lang="ts">
+import { stringify } from 'qs'
 import { mapGetters } from 'vuex'
+import { computed, defineComponent, unref } from 'vue'
+import { Resource } from 'web-client/src'
+import { urlJoin } from 'web-client/src/utils'
+import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
+import { configurationManager } from 'web-pkg/src/configuration'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
-import { computed, unref } from 'vue'
-import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
-import { defineComponent } from 'vue'
-import { DavProperty } from 'web-client/src/webdav/constants'
-import { urlJoin } from 'web-client/src/utils'
-import { stringify } from 'qs'
-import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   name: 'ExternalApp',
-
   components: {
     ErrorScreen,
     LoadingScreen
@@ -64,12 +63,13 @@ export default defineComponent({
   },
 
   data: () => ({
+    appUrl: '',
+    errorMessage: '',
+    formParameters: {},
     loading: false,
     loadingError: false,
-    errorMessage: '',
-    appUrl: '',
     method: '',
-    formParameters: {}
+    resource: <Resource>{}
   }),
   computed: {
     ...mapGetters(['capabilities']),
@@ -86,20 +86,18 @@ export default defineComponent({
         appName: this.applicationName
       })
     },
-    fileId() {
+    fileIdFromRoute() {
       return this.$route.query.fileId
     }
   },
   async created() {
     this.loading = true
     try {
-      const fileId =
-        this.fileId ||
-        (
-          await this.getFileInfo(this.currentFileContext, {
-            davProperties: [DavProperty.FileId]
-          })
-        ).fileId
+      this.resource = await this.getFileInfo(this.currentFileContext, {
+        davProperties: []
+      })
+
+      const fileId = this.fileIdFromRoute || this.resource.fileId
 
       // fetch iframe params for app and file
       const baseUrl = urlJoin(
