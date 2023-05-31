@@ -154,7 +154,7 @@ export default {
   },
   data: function () {
     return {
-      contentOnLeftPortal: true
+      contentOnLeftPortal: false
     }
   },
   computed: {
