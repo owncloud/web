@@ -39,7 +39,7 @@ export const useUserActionsEditQuota = () => {
           return false
         }
 
-        return ability.can('set-quota-all', 'Space')
+        return ability.can('set-quota-all', 'Drive')
       },
       componentType: 'button',
       class: 'oc-users-actions-edit-quota-trigger'

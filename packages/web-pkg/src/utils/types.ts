@@ -19,13 +19,13 @@ export type AbilityActions =
 
 export type AbilitySubjects =
   | 'Account'
+  | 'Drive'
   | 'Group'
   | 'Language'
   | 'Logo'
   | 'PublicLink'
   | 'Role'
   | 'Setting'
-  | 'Space'
 
 export type Ability = MongoAbility<[AbilityActions, AbilitySubjects]>
 
