@@ -216,16 +216,13 @@ export default defineComponent({
       return document.querySelector(`.oc-breadcrumb-list [data-item-id="${id}"]`)
     }
 
-    const isDropAllowed = (item, index): boolean => {
-      if (
+    const isDropAllowed = (item: BreadcrumbItem, index: number): boolean => {
+      return !(
         !item.id ||
         index === unref(displayItems).length - 1 ||
         item.isTruncationPlaceholder ||
         item.isStaticNav
-      ) {
-        return false
-      }
-      return true
+      )
     }
     const dropItemEvent = (item, index) => {
       if (!isDropAllowed(item, index)) {
@@ -311,7 +308,7 @@ export default defineComponent({
       return props.items.length - 1 === index ? 'page' : null
     }
 
-    const dropItemStyling = (item, index, leaving, event) => {
+    const dropItemStyling = (item: BreadcrumbItem, index: number, leaving: boolean, event) => {
       if (!isDropAllowed(item, index)) {
         return
       }
