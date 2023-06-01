@@ -242,7 +242,7 @@ export default defineComponent({
 
     const handlePasteFileEvent = (event) => {
       // Ignore file in clipboard if there are already files from owncloud in the clipboard
-      if (store.state.Files.clipboardResources.length) {
+      if (store.state.Files.clipboardResources.length || !unref(canUpload)) {
         return
       }
       // Browsers only allow single files to be pasted for security reasons
