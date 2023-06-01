@@ -27,7 +27,7 @@ describe('ResourceDetails component', () => {
   )
 
   it('renders resource details correctly', () => {
-    const { wrapper } = getWrapper()
+    const { wrapper } = getWrapper(true)
     expect(wrapper.html()).toMatchSnapshot()
   })
 
@@ -43,7 +43,7 @@ describe('ResourceDetails component', () => {
     })
   })
 
-  function getWrapper() {
+  function getWrapper(isFolder = false) {
     const mocks = {
       ...defaultComponentMocks({
         currentRoute: mock<RouteLocation>({
@@ -61,6 +61,7 @@ describe('ResourceDetails component', () => {
       size: 24064,
       mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
       mimeType: 'image/jpg',
+      isFolder,
       owner: [
         {
           username: 'admin'
