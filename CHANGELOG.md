@@ -64,11 +64,15 @@ Summary
 * Bugfix - Limit amount of concurrent tus requests: [#8987](https://github.com/owncloud/web/pull/8987)
 * Bugfix - Personal space name after language change: [#8992](https://github.com/owncloud/web/pull/8992)
 * Bugfix - Endless loading when encountering a public link error: [#9004](https://github.com/owncloud/web/issues/9004)
+* Bugfix - Public link file previews: [#9009](https://github.com/owncloud/web/pull/9009)
+* Bugfix - Empty file list after deleting resources: [#9014](https://github.com/owncloud/web/issues/9014)
 * Bugfix - Prevent "virtual" spaces from being displayed in the UI: [#9015](https://github.com/owncloud/web/pull/9015)
+* Bugfix - Sidebar for spaces on "Shared via link"-page: [#9020](https://github.com/owncloud/web/issues/9020)
 * Bugfix - Spaces in search results: [#9022](https://github.com/owncloud/web/issues/9022)
 * Bugfix - Share indicator loading after pasting resources: [#9030](https://github.com/owncloud/web/issues/9030)
 * Bugfix - Preview app mime type detection: [#9050](https://github.com/owncloud/web/issues/9050)
 * Bugfix - Resource not found and No content message at the same time: [#9061](https://github.com/owncloud/web/issues/9061)
+* Bugfix - Select all checkbox: [#9131](https://github.com/owncloud/web/pull/9131)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -606,6 +610,21 @@ Details
    https://github.com/owncloud/web/issues/9004
    https://github.com/owncloud/web/pull/9006
 
+* Bugfix - Public link file previews: [#9009](https://github.com/owncloud/web/pull/9009)
+
+   We've fixed a bug with file previews not being loaded in the right sidebar `Details` panel and in
+   the single file view for public links.
+
+   https://github.com/owncloud/web/pull/9009
+
+* Bugfix - Empty file list after deleting resources: [#9014](https://github.com/owncloud/web/issues/9014)
+
+   Deleting all resources on the last page lead to an empty file list although the other pages still
+   contained resources. This has been fixed by resetting the pagination in such scenario.
+
+   https://github.com/owncloud/web/issues/9014
+   https://github.com/owncloud/web/pull/9017
+
 * Bugfix - Prevent "virtual" spaces from being displayed in the UI: [#9015](https://github.com/owncloud/web/pull/9015)
 
    While ownCloud Web is capable of displaying any type of spaces we found out that it is not valid to
@@ -613,6 +632,14 @@ Details
    location (personal space for users, project spaces overview for guests).
 
    https://github.com/owncloud/web/pull/9015
+
+* Bugfix - Sidebar for spaces on "Shared via link"-page: [#9020](https://github.com/owncloud/web/issues/9020)
+
+   The sidebar for spaces on the "Shared via link"-page has been fixed which acted like the space
+   was a folder resource before.
+
+   https://github.com/owncloud/web/issues/9020
+   https://github.com/owncloud/web/pull/9023
 
 * Bugfix - Spaces in search results: [#9022](https://github.com/owncloud/web/issues/9022)
 
@@ -645,6 +672,13 @@ Details
 
    https://github.com/owncloud/web/issues/9061
    https://github.com/owncloud/web/pull/9062
+
+* Bugfix - Select all checkbox: [#9131](https://github.com/owncloud/web/pull/9131)
+
+   We've fixed a bug in the shared-with-me page which caused unrelated checkboxes to be checked.
+
+   https://github.com/owncloud/web/issues/9122
+   https://github.com/owncloud/web/pull/9131
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
@@ -1540,6 +1574,7 @@ Details
 
    https://github.com/owncloud/web/issues/9048
    https://github.com/owncloud/web/pull/9119
+   https://github.com/owncloud/web/pull/9136
 
 * Enhancement - Drag & drop on parent folder: [#9052](https://github.com/owncloud/web/pull/9052)
 
