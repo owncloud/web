@@ -240,15 +240,33 @@ export default defineComponent({
       return unref(currentFolder)?.canUpload({ user: store.getters.user })
     })
 
+    const handlePasteFileEvent = (event) => {
+      // Ignore file in clipboard if there are already files from owncloud in the clipboard
+      if (store.state.Files.clipboardResources.length || !unref(canUpload)) {
+        return
+      }
+      // Browsers only allow single files to be pasted for security reasons
+      const items = (event.clipboardData || event.originalEvent.clipboardData).items
+      const fileItem = [...items].find((i) => i.kind === 'file')
+      if (!fileItem) {
+        return
+      }
+      const file = fileItem.getAsFile()
+      instance.onFilesSelected([file])
+      event.preventDefault()
+    }
+
     onMounted(() => {
       filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
       uploadCompletedSub = uppyService.subscribe('uploadCompleted', instance.onUploadComplete)
+      document.addEventListener('paste', handlePasteFileEvent)
     })
 
     onBeforeUnmount(() => {
       uppyService.unsubscribe('filesSelected', filesSelectedSub)
       uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
       uppyService.removeDropTarget()
+      document.removeEventListener('paste', handlePasteFileEvent)
     })
 
     watch(
