@@ -173,6 +173,7 @@ Summary
 * Enhancement - Show detailed error messages while upload fails: [#9076](https://github.com/owncloud/web/pull/9076)
 * Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
 * Enhancement - Search breadcrumb: [#9077](https://github.com/owncloud/web/pull/9077)
+* Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
 
 Details
 -------
@@ -1611,6 +1612,14 @@ Details
 
    https://github.com/owncloud/web/issues/9072
    https://github.com/owncloud/web/pull/9077
+
+* Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
+
+   We've implemented the possibility to upload a single file in the clipboard from anywhere via
+   paste.
+
+   https://github.com/owncloud/web/issues/9047
+   https://github.com/owncloud/web/pull/9140
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
