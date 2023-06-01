@@ -13,7 +13,7 @@
 <script lang="ts">
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 import { useFileActions } from '../../../composables/actions/files/useFileActions'
-import { computed, defineComponent, inject, unref } from 'vue'
+import { computed, defineComponent, inject, Ref, unref } from 'vue'
 import { Resource, SpaceResource } from 'web-client'
 
 export default defineComponent({
@@ -23,7 +23,7 @@ export default defineComponent({
   },
   setup() {
     const resource = inject<Resource>('resource')
-    const space = inject<SpaceResource>('space')
+    const space = inject<Ref<SpaceResource>>('space')
     const resources = computed(() => {
       return [unref(resource)]
     })

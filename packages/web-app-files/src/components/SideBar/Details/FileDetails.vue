@@ -2,15 +2,15 @@
   <div id="oc-file-details-sidebar">
     <div v-if="hasContent">
       <div
-        v-if="resource.thumbnail"
+        v-if="isPreviewLoading || preview"
         key="file-thumbnail"
         :style="{
-          'background-image': loadPreviewTask.isRunning ? 'none' : `url(${preview})`
+          'background-image': isPreviewLoading ? 'none' : `url(${preview})`
         }"
         class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb"
         data-testid="preview"
       >
-        <oc-spinner v-if="loadPreviewTask.isRunning" />
+        <oc-spinner v-if="isPreviewLoading" />
       </div>
       <div
         v-else
@@ -229,7 +229,7 @@ export default defineComponent({
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const resource = inject<Resource>('resource')
-    const space = inject<SpaceResource>('space')
+    const space = inject<Ref<SpaceResource>>('space')
     const isPublicLinkContext = usePublicLinkContext({ store })
     const clientService = useClientService()
     const previewService = usePreviewService()
@@ -295,13 +295,25 @@ export default defineComponent({
       await Promise.all(calls.map((p) => p.catch((e) => e)))
     }
 
+    const isFolder = computed(() => {
+      return unref(resource).isFolder
+    })
     const loadPreviewTask = useTask(function* (signal, resource) {
+      if (unref(isFolder)) {
+        return
+      }
       preview.value = yield previewService.loadPreview({
-        space,
+        space: unref(space),
         resource,
         dimensions: ImageDimension.Preview
       })
     }).restartable()
+    const isPreviewLoading = computed(() => {
+      if (unref(isFolder)) {
+        return false
+      }
+      return loadPreviewTask.isRunning || !loadPreviewTask.last
+    })
 
     const ancestorMetaData: Ref<AncestorMetaData> = computed(
       () => store.getters['Files/ancestorMetaData']
@@ -340,7 +352,7 @@ export default defineComponent({
       directLink,
       resource,
       hasTags: useCapabilityFilesTags(),
-      loadPreviewTask,
+      isPreviewLoading,
       ancestorMetaData,
       sharedAncestor
     }

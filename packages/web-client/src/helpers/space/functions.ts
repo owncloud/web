@@ -171,19 +171,19 @@ export function buildSpace(data): SpaceResource {
       return true
     },
     canBeDeleted: function ({ user, ability }: { user?: User; ability?: any } = {}) {
-      return this.disabled && (ability?.can('delete-all', 'Space') || this.isManager(user))
+      return this.disabled && (ability?.can('delete-all', 'Drive') || this.isManager(user))
     },
     canRename: function ({ user, ability }: { user?: User; ability?: any } = {}) {
-      return ability?.can('update-all', 'Space') || this.isManager(user)
+      return ability?.can('update-all', 'Drive') || this.isManager(user)
     },
     canEditDescription: function ({ user, ability }: { user?: User; ability?: any } = {}) {
-      return ability?.can('update-all', 'Space') || this.isManager(user)
+      return ability?.can('update-all', 'Drive') || this.isManager(user)
     },
     canRestore: function ({ user, ability }: { user?: User; ability?: any } = {}) {
-      return this.disabled && (ability?.can('update-all', 'Space') || this.isManager(user))
+      return this.disabled && (ability?.can('update-all', 'Drive') || this.isManager(user))
     },
     canDisable: function ({ user, ability }: { user?: User; ability?: any } = {}) {
-      return !this.disabled && (ability?.can('delete-all', 'Space') || this.isManager(user))
+      return !this.disabled && (ability?.can('delete-all', 'Drive') || this.isManager(user))
     },
     canShare: function ({ user }: { user?: User } = {}) {
       return this.isManager(user)

@@ -140,7 +140,7 @@ export default defineComponent({
       return loadResourcesTask.isRunning || !loadResourcesTask.last
     })
 
-    const hasCreatePermission = computed(() => can('create-all', 'Space'))
+    const hasCreatePermission = computed(() => can('create-all', 'Drive'))
     const viewModes = computed(() => [ViewModeConstants.tilesView])
 
     onMounted(async () => {

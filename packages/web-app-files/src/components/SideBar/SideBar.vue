@@ -226,11 +226,14 @@ export default defineComponent({
 
       // shared resources look different, hence we need to fetch the actual resource here
       try {
-        const shareResource = await (clientService.webdav as WebDAV).getFileInfo(props.space, {
+        let shareResource = await (clientService.webdav as WebDAV).getFileInfo(props.space, {
           path: unref(highlightedFile).path
         })
         shareResource.share = unref(highlightedFile).share
         shareResource.status = unref(highlightedFile).status
+        if (unref(highlightedFileIsSpace)) {
+          shareResource = { ...shareResource, ...unref(highlightedFile) }
+        }
         loadedResource.value = shareResource
       } catch (error) {
         loadedResource.value = resource

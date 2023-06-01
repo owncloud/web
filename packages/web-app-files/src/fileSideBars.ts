@@ -139,7 +139,7 @@ const panelGenerators: (({
       return !!(!multipleSelection && !rootFolder && resource && resource.type !== 'space')
     }
   }),
-  ({ multipleSelection, resource, user }) => ({
+  ({ multipleSelection, resource, router, user }) => ({
     app: 'space-actions',
     icon: 'slideshow-3',
     title: $gettext('Actions'),
@@ -149,6 +149,12 @@ const panelGenerators: (({
         return false
       }
       if (resource?.type !== 'space') {
+        return false
+      }
+      if (
+        !isLocationSpacesActive(router, 'files-spaces-projects') &&
+        !isLocationSpacesActive(router, 'files-spaces-generic')
+      ) {
         return false
       }
       return !![

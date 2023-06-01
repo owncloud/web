@@ -14,7 +14,9 @@ import {
   useClientService,
   useRouter,
   useStore,
-  useLoadingService
+  useLoadingService,
+  useRouteQuery,
+  queryItemAsString
 } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
@@ -33,6 +35,16 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const queue = new PQueue({ concurrency: 4 })
   const deleteOps = []
   const resourcesToDelete = ref([])
+
+  const currentPageQuery = useRouteQuery('page', '1')
+  const currentPage = computed(() => {
+    return parseInt(queryItemAsString(unref(currentPageQuery)))
+  })
+
+  const itemsPerPageQuery = useRouteQuery('items-per-page', '1')
+  const itemsPerPage = computed(() => {
+    return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
+  })
 
   const isInTrashbin = computed(() => {
     return isLocationTrashActive(router, 'files-trash-generic')
@@ -197,12 +209,20 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
               unref(resourcesToDelete).length &&
               isSameResource(unref(resourcesToDelete)[0], store.getters['Files/currentFolder'])
             ) {
+              // current folder is being deleted
               return router.push(
                 createFileRouteOptions(space, {
                   path: dirname(unref(resourcesToDelete)[0].path),
                   fileId: unref(resourcesToDelete)[0].parentFolderId
                 })
               )
+            }
+
+            const activeFilesCount = store.getters['Files/activeFiles'].length
+            const pageCount = Math.ceil(unref(activeFilesCount) / unref(itemsPerPage))
+            if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
+              // reset pagination to avoid empty lists (happens when deleting all items on the last page)
+              currentPageQuery.value = pageCount.toString()
             }
           })
       },
