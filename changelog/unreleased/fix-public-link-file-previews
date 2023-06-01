@@ -1,0 +1,5 @@
+Bugfix: Public link file previews
+
+We've fixed a bug with file previews not being loaded in the right sidebar `Details` panel and in the single file view for public links.
+
+https://github.com/owncloud/web/pull/9009

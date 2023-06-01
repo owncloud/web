@@ -541,7 +541,7 @@ export default defineComponent({
         path = `/${resource.name}`
       }
 
-      const lastLinkId = this.outgoingLinks.length === 1 ? this.outgoingLinks[0].id : undefined
+      let lastLinkId = this.outgoingLinks.length === 1 ? this.outgoingLinks[0].id : undefined
       const loadIndicators = this.outgoingLinks.filter((l) => !l.indirect).length === 1
 
       try {
@@ -551,6 +551,10 @@ export default defineComponent({
         })
 
         if (lastLinkId && isLocationSharesActive(this.$router, 'files-shares-via-link')) {
+          if (this.resourceIsSpace) {
+            // spaces need their actual id instead of their share id to be removed from the file list
+            lastLinkId = this.resource.id.toString()
+          }
           this.REMOVE_FILES([{ id: lastLinkId }])
         }
       } catch (e) {

@@ -218,6 +218,16 @@ export default defineComponent({
     const loadingService = useLoadingService()
     const createUsersDisabled = useCapabilityCreateUsersDisabled()
 
+    const currentPageQuery = useRouteQuery('page', '1')
+    const currentPage = computed(() => {
+      return parseInt(queryItemAsString(unref(currentPageQuery)))
+    })
+
+    const itemsPerPageQuery = useRouteQuery('admin-settings-items-per-page', '1')
+    const itemsPerPage = computed(() => {
+      return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
+    })
+
     const { actions: deleteActions } = useUserActionsDelete({ store })
     const { actions: removeFromGroupsActions } = useUserActionsRemoveFromGroups()
     const { actions: addToGroupsActions } = useUserActionsAddToGroups()
@@ -441,9 +451,15 @@ export default defineComponent({
       }
 
       await loadResourcesTask.perform()
-      loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', () => {
-        loadResourcesTask.perform()
+      loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', async () => {
+        await loadResourcesTask.perform()
         selectedUsers.value = []
+
+        const pageCount = Math.ceil(unref(users).length / unref(itemsPerPage))
+        if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
+          // reset pagination to avoid empty lists (happens when deleting all items on the last page)
+          currentPageQuery.value = pageCount.toString()
+        }
       })
 
       addToGroupsActionEventToken = eventBus.subscribe(

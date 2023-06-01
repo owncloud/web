@@ -74,20 +74,14 @@
 <script lang="ts">
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import {
+  queryItemAsString,
   useAccessToken,
   useCapabilitySpacesMaxQuota,
   useClientService,
+  useRouteQuery,
   useStore
 } from 'web-pkg/src/composables'
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  unref
-} from 'vue'
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import AppTemplate from '../components/AppTemplate.vue'
@@ -128,7 +122,6 @@ export default defineComponent({
     }
   },
   setup() {
-    const instance = getCurrentInstance().proxy as any
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const spaces = ref([])
@@ -140,6 +133,16 @@ export default defineComponent({
     let updateQuotaForSpaceEventToken
     const template = ref(null)
     const selectedSpaces = ref([])
+
+    const currentPageQuery = useRouteQuery('page', '1')
+    const currentPage = computed(() => {
+      return parseInt(queryItemAsString(unref(currentPageQuery)))
+    })
+
+    const itemsPerPageQuery = useRouteQuery('admin-settings-items-per-page', '1')
+    const itemsPerPage = computed(() => {
+      return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
+    })
 
     const loadResourcesTask = useTask(function* (signal) {
       const {
@@ -251,10 +254,19 @@ export default defineComponent({
 
     onMounted(async () => {
       await loadResourcesTask.perform()
-      loadResourcesEventToken.value = eventBus.subscribe('app.admin-settings.list.load', () => {
-        loadResourcesTask.perform()
-        selectedSpaces.value = []
-      })
+      loadResourcesEventToken.value = eventBus.subscribe(
+        'app.admin-settings.list.load',
+        async () => {
+          await loadResourcesTask.perform()
+          selectedSpaces.value = []
+
+          const pageCount = Math.ceil(unref(spaces).length / unref(itemsPerPage))
+          if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
+            // reset pagination to avoid empty lists (happens when deleting all items on the last page)
+            currentPageQuery.value = pageCount.toString()
+          }
+        }
+      )
 
       updateQuotaForSpaceEventToken = eventBus.subscribe(
         'app.admin-settings.spaces.space.quota.updated',

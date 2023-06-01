@@ -17,7 +17,7 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
   const { checkSpaceNameModalInput } = useSpaceHelpers()
   const clientService = useClientService()
   const router = useRouter()
-  const hasCreatePermission = computed(() => can('create-all', 'Space'))
+  const hasCreatePermission = computed(() => can('create-all', 'Drive'))
 
   const confirmAction = async ({ spaceName, resources, space }) => {
     const { webdav } = clientService
