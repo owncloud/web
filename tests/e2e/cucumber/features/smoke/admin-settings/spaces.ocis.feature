@@ -124,7 +124,7 @@ Feature: spaces management
     And "Alice" logs out
 
 
-  Scenario: admin user can manage the spaces created by other space admin user via context menu
+  Scenario: admin user can manage the spaces created by other space admin user
     Given "Admin" creates following users using API
       | id    |
       | Alice |
@@ -139,12 +139,14 @@ Feature: spaces management
     And "Brian" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
+    And "Brian" logs out
     When "Carol" logs in
     And "Carol" creates the following project spaces using API
       | name   | id     |
       | team B | team.b |
+    And "Carol" logs out
     When "Alice" logs in
-    When "Alice" opens the "admin-settings" app
+    And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     When "Alice" updates the space "team.a" name to "brian team" using the context-menu
     And "Alice" updates the space "team.b" name to "carol team" using the context-menu
@@ -163,5 +165,3 @@ Feature: spaces management
       | team.a |
       | team.b |
     And "Alice" logs out
-    And "Brian" logs out
-    And "Carol" logs out
