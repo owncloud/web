@@ -19,8 +19,12 @@
           <oc-list class="item-filter-list">
             <li v-for="(item, index) in displayedItems" :key="index" class="oc-my-xs">
               <oc-button
-                class="item-filter-list-item oc-flex oc-flex-left oc-flex-middle oc-width-1-1 oc-p-xs"
-                :class="{ 'item-filter-list-item-active': !allowMultiple && isItemSelected(item) }"
+                class="item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs"
+                :class="{
+                  'item-filter-list-item-active': !allowMultiple && isItemSelected(item),
+                  'oc-flex-left': allowMultiple,
+                  'oc-flex-between': !allowMultiple
+                }"
                 justify-content="space-between"
                 appearance="raw"
                 :data-test-value="item[displayNameAttribute]"
