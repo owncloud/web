@@ -1,0 +1,6 @@
+Bugfix: Notifications link overflow
+
+We've fixed a bug that caused long links in notifications to overflow.
+
+https://github.com/owncloud/web/pull/9144
+https://github.com/owncloud/web/issues/9053
