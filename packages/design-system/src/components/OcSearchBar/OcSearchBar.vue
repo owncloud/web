@@ -369,7 +369,7 @@ export default defineComponent({
   }
 
   &-clear {
-    right: var(--oc-space-large);
+    right: var(--oc-space-large) !important;
   }
 
   &-small {
