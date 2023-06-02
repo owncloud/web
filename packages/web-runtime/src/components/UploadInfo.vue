@@ -459,6 +459,7 @@ export default defineComponent({
       this.remainingTime = undefined
       this.inPreparation = true
       this.inFinalization = false
+      this.uploadsPaused = false
     },
     displayFileAsResource(file) {
       return !!file.targetRoute
