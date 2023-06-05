@@ -74,10 +74,23 @@ config = {
             "db": "mysql:5.5",
             "earlyFail": True,
             "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/**/*[!.ocis].feature",
+            ],
         },
-        "oCIS": {
+        "oCIS-1": {
             "earlyFail": True,
             "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/{smoke,journeys}/*[!.oc10].feature",
+            ],
+        },
+        "oCIS-2": {
+            "earlyFail": True,
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*[!.oc10].feature",
+            ],
         },
     },
     "acceptance": {
@@ -1114,6 +1127,7 @@ def e2eTests(ctx):
         "logLevel": "2",
         "reportTracing": "false",
         "db": "mysql:5.5",
+        "featurePaths": "",
     }
 
     e2e_trigger = {
@@ -1157,7 +1171,7 @@ def e2eTests(ctx):
                 restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
                 copyFilesForUpload()
 
-        if server == "oC10":
+        if server.startswith("oC10"):
             # oC10 specific environment variables
             environment["BASE_URL_OCC"] = "owncloud"
 
@@ -1192,13 +1206,13 @@ def e2eTests(ctx):
                      "image": OC_CI_NODEJS,
                      "environment": environment,
                      "commands": [
-                         "sleep 10 && pnpm test:e2e:cucumber tests/e2e/cucumber/**/*[!.%s].feature" % ("oc10" if server == "oCIS" else "ocis"),
+                         "pnpm test:e2e:cucumber %s" % " ".join(params["featurePaths"]),
                      ],
                  }] + \
                  uploadTracingResult(ctx) + \
                  publishTracingResult(ctx, "e2e-tests %s" % server)
         if (params["earlyFail"]):
-            steps += buildGithubCommentForBuildStopped("e2e-ocis" if server == "oCIS" else "e2e-oc10")
+            steps += buildGithubCommentForBuildStopped("e2e-ocis" if server.startswith("oCIS") else "e2e-oc10")
         steps += githubComment("e2e-tests", server)
         if (params["earlyFail"]):
             steps += stopBuild()
@@ -1857,7 +1871,7 @@ def buildRelease(ctx):
             },
         ]
     else:
-        steps += [
+        steps.append(
             {
                 "name": "publish",
                 "image": OC_CI_NODEJS,
@@ -1883,7 +1897,7 @@ def buildRelease(ctx):
                     ],
                 },
             },
-        ]
+        )
 
     return steps
 
