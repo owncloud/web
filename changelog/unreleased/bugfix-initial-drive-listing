@@ -1,0 +1,5 @@
+Bugfix: Reduce space preloading
+
+We've reduced the set of spaces that get preloaded after login / after initial page load. This results in a faster first page rendering and reduces the server load. Loading the remaining spaces will happen on demand.
+
+https://github.com/owncloud/web/pull/9153
