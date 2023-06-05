@@ -27,7 +27,6 @@ const appInfo = {
   id: appId,
   icon: 'eye',
   extensions: mimeTypes().map((mimeType) => ({
-    canBeDefault: true,
     mimeType,
     routeName,
     label: $gettext('Preview')

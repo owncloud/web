@@ -96,7 +96,7 @@ export default defineComponent({
 
       return [...fileHandlers]
         .filter((item) => item.isEnabled(unref(actionOptions)))
-        .sort((x, y) => Number(y.canBeDefault) - Number(x.canBeDefault))
+        .sort((x, y) => Number(y.hasPriority) - Number(x.hasPriority))
     })
 
     const menuItemsShare = computed(() => {

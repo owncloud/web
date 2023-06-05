@@ -128,14 +128,14 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
 
             return false
           },
-          canBeDefault: editor.canBeDefault,
+          hasPriority: editor.hasPriority,
           componentType: 'button',
           class: `oc-files-actions-${kebabCase(apps.meta[editor.app].name).toLowerCase()}-trigger`
         }
       })
       .sort((first, second) => {
         // Ensure default are listed first
-        if (second.canBeDefault !== first.canBeDefault && second.canBeDefault) {
+        if (second.hasPriority !== first.hasPriority && second.hasPriority) {
           return 1
         }
         return 0
@@ -216,23 +216,25 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
 
   const getDefaultAction = (options: FileActionOptions): Action => {
     const filterCallback = (action) =>
-      action.canBeDefault &&
       action.isEnabled({
         ...options,
         parent: store.getters['Files/currentFolder']
       })
 
     // first priority: handlers from config
-    const defaultEditorActions = unref(editorActions).filter(filterCallback)
-    if (defaultEditorActions.length) {
-      return defaultEditorActions[0]
-    }
+    const enabledEditorActions = unref(editorActions).filter(filterCallback)
 
     // second priority: `/app/open` endpoint of app provider if available
     // FIXME: files app should not know anything about the `external apps` app
     const externalAppsActions = loadExternalAppActions(options).filter(filterCallback)
-    if (externalAppsActions.length) {
-      return externalAppsActions[0]
+
+    // prioritize apps that have hasPriority set
+    const appActions = [...enabledEditorActions, ...externalAppsActions].sort(
+      (a, b) => Number(b.hasPriority) - Number(a.hasPriority)
+    )
+
+    if (appActions.length) {
+      return appActions[0]
     }
 
     // fallback: system actions
@@ -290,7 +292,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
         componentType: 'button',
         class: `oc-files-actions-${app.name}-trigger`,
         isEnabled: () => true,
-        canBeDefault: defaultApplication === app.name,
+        hasPriority: defaultApplication === app.name,
         handler: () =>
           openExternalApp(app.name, driveAliasAndItem, webDavPath, fileId, options.space.shareId),
         label: () => $gettextInterpolate(label, { appName: app.name })

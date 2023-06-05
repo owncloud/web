@@ -82,7 +82,6 @@ export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) 
 
         return space.canEditReadme({ user: store.getters.user })
       },
-      canBeDefault: false,
       componentType: 'button',
       class: 'oc-files-actions-set-space-readme-trigger'
     }
