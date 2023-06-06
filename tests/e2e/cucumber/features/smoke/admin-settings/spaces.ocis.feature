@@ -105,20 +105,20 @@ Feature: spaces management
       | name   | id     |
       | team A | team.a |
     And "Admin" adds the following members to the space "team A" using API
-      | user  | role   | shareType |
-      | Brian | editor | space     |
-      | Carol | viewer | space     |
-      | David | viewer | space     |
-      | Edith | viewer | space     |
+      | user  | role     | shareType |
+      | Brian | Can edit | space     |
+      | Carol | Can view | space     |
+      | David | Can view | space     |
+      | Edith | Can view | space     |
     When "Alice" logs in
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     When "Alice" lists the members of project space "team.a" using a sidebar panel
     Then "Alice" should see the following users in the sidebar panel of spaces admin settings
-      | user  | role    |
-      | Admin | manager |
-      | Brian | editor  |
-      | Carol | viewer  |
-      | David | viewer  |
-      | Edith | viewer  |
+      | user  | role       |
+      | Admin | Can manage |
+      | Brian | Can edit   |
+      | Carol | Can view   |
+      | David | Can view   |
+      | Edith | Can view   |
     And "Alice" logs out

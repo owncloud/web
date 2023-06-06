@@ -46,6 +46,22 @@ export interface SetDenyShareForCollaboratorArgs extends Omit<CollaboratorArgs, 
 export type CollaboratorType = 'user' | 'group'
 export type CustomPermissionType = 'read' | 'update' | 'create' | 'delete' | 'share'
 
+export const shareRoles: Readonly<{
+  'Invited people': string
+  'Can upload': string
+  'Can manage': string
+  'Can edit': string
+  'Can view': string
+  'Secret File Drop': string
+}> = {
+  'Invited people': 'internal',
+  'Can upload': 'contributor',
+  'Can manage': 'manager',
+  'Can edit': 'editor',
+  'Can view': 'viewer',
+  'Secret File Drop': 'uploader'
+}
+
 export default class Collaborator {
   private static readonly invitePanel = '//*[@id="oc-files-sharing-sidebar"]'
   private static readonly inviteInput = '#files-share-invite-input'
@@ -203,7 +219,7 @@ export default class Collaborator {
 
       return await page.click(Collaborator.customPermissionApplyButton)
     }
-    return await page.click(util.format(itemSelector, role))
+    return await page.click(util.format(itemSelector, shareRoles[role]))
   }
 
   static async changeCollaboratorRole(args: CollaboratorArgs): Promise<void> {

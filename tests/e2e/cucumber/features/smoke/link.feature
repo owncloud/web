@@ -14,7 +14,7 @@ Feature: link
       | lorem.txt | folderPublic |
     And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
-    And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "uploader"
+    And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "Secret File Drop"
     And "Alice" sets the expiration date of the public link named "myPublicLink" of resource "folderPublic" to "+5 days"
     And "Alice" sets the password of the public link named "myPublicLink" of resource "folderPublic" to "12345"
     When "Anonymous" opens the public link "myPublicLink"
@@ -26,7 +26,7 @@ Feature: link
       | resource     | from         | type |
       | lorem.txt    | folderPublic | file |
       | textfile.txt | folderPublic | file |
-    And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "editor"
+    And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "Can edit"
     And "Anonymous" refreshes the old link
     And "Anonymous" downloads the following public link resources using the sidebar panel
       | resource     | type |

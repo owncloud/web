@@ -13,8 +13,8 @@ Feature: deny share access
       | folder_to_shared/folder_to_deny |
     And "Alice" opens the "files" app
     And "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role   | resourceType |
-      | folder_to_shared | Brian     | user | viewer | folder       |
+      | resource         | recipient | type | role     | resourceType |
+      | folder_to_shared | Brian     | user | Can view | folder       |
     And "Alice" opens folder "folder_to_shared"
     When "Alice" denies access to the following resources for user "Brian" using the sidebar panel
       | resource       |

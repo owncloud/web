@@ -10,11 +10,11 @@ Feature: internal link share
       | name     |
       | myfolder |
     And "Alice" shares the following resource using API
-      | resource | recipient | type | role   |
-      | myfolder | Brian     | user | editor |
+      | resource | recipient | type | role     |
+      | myfolder | Brian     | user | Can edit |
     And "Alice" opens the "files" app
     And "Alice" creates a public link for the resource "myfolder" using the sidebar panel
-    When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "internal"
+    When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "Invited people"
     And "Brian" opens the public link "Link"
     And "Brian" logs in from the internal link
     And "Brian" opens shared-with-me page from the internal link
