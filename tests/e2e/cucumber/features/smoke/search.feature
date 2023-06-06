@@ -21,9 +21,9 @@ Feature: Search
       | filesForUpload/new-lorem-big.txt | new-lorem-big.txt |
     And "Brian" opens the "files" app
     And "Brian" shares the following resource using the sidebar panel
-      | resource             | recipient | type | role   | resourceType |
-      | new_share_from_brian | Alice     | user | viewer | folder       |
-      | new-lorem-big.txt    | Alice     | user | viewer | file         |
+      | resource             | recipient | type | role     | resourceType |
+      | new_share_from_brian | Alice     | user | Can view | folder       |
+      | new-lorem-big.txt    | Alice     | user | Can view | file         |
     And "Brian" logs out
 
     When "Alice" logs in

@@ -1,8 +1,10 @@
-import { checkResponseStatus, request } from '../http'
-import { User } from '../../types'
 import join from 'join-path'
 import convert from 'xml-js'
 import _ from 'lodash/object'
+
+import { checkResponseStatus, request } from '../http'
+import { User } from '../../types'
+import { shareRoles } from '../../objects/app-files/share/collaborator'
 
 export const shareTypes: Readonly<{
   user: string
@@ -39,7 +41,7 @@ export const createShare = async ({
   body.append('path', path)
   body.append('shareWith', shareWith)
   body.append('shareType', shareTypes[shareType])
-  body.append('role', role)
+  body.append('role', shareRoles[role])
   body.append('name', name)
   if (space_ref) {
     body.append('space_ref', space_ref)

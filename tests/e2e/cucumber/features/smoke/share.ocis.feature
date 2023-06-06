@@ -20,8 +20,8 @@ Feature: share
       | lorem-big.txt | folder_to_customShared |
     When "Alice" shares the following resource using the sidebar panel
       | resource               | recipient | type | role                                  | resourceType |
-      | folder_to_shared       | Brian     | user | editor                                | folder       |
-      | shared_folder          | Brian     | user | editor                                | folder       |
+      | folder_to_shared       | Brian     | user | Can edit                              | folder       |
+      | shared_folder          | Brian     | user | Can edit                              | folder       |
       | folder_to_customShared | Brian     | user | custom_permissions:read,create,delete | folder       |
     And "Brian" logs in
     And "Brian" opens the "files" app
@@ -88,11 +88,11 @@ Feature: share
       | simple.pdf      |
     When "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type | role                                 | resourceType |
-      | shareToBrian.txt | Brian     | user | editor                               | file         |
-      | shareToBrian.md  | Brian     | user | editor                               | file         |
-      | testavatar.jpeg  | Brian     | user | viewer                               | file         |
+      | shareToBrian.txt | Brian     | user | Can edit                             | file         |
+      | shareToBrian.md  | Brian     | user | Can edit                             | file         |
+      | testavatar.jpeg  | Brian     | user | Can view                             | file         |
       | simple.pdf       | Brian     | user | custom_permissions:read,update,share | file         |
-      | sharedFile.txt   | Brian     | user | editor                               | file         |
+      | sharedFile.txt   | Brian     | user | Can edit                             | file         |
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page

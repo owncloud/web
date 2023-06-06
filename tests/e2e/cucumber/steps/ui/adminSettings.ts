@@ -2,6 +2,7 @@ import { DataTable, Then, When } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
+import { shareRoles } from '../../../support/objects/app-files/share/collaborator'
 
 Then(
   /^"([^"]*)" (should|should not) see the following space(?:s)?$/,
@@ -514,7 +515,7 @@ Then(
       editor: await spacesObject.listMembers({ filter: 'editors' })
     }
     for (const info of stepTable.hashes()) {
-      expect(actualMemberList[info.role]).toContain(info.user)
+      expect(actualMemberList[shareRoles[info.role]]).toContain(info.user)
     }
   }
 )

@@ -22,7 +22,7 @@ Feature: share
       | lorem-big.txt | folder_to_customShared |
     When "Alice" shares the following resource using the sidebar panel
       | resource               | recipient | type | role                                  | resourceType |
-      | folder_to_shared       | Brian     | user | editor                                | folder       |
+      | folder_to_shared       | Brian     | user | Can edit                              | folder       |
       | folder_to_customShared | Brian     | user | custom_permissions:read,create,delete | folder       |
     And "Brian" logs in
     And "Brian" opens the "files" app
@@ -78,7 +78,7 @@ Feature: share
       | lorem.txt       |                  |
     And "Alice" shares the following resource using the quick action
       | resource                         | recipient | type | role                                 |
-      | folder_to_shared/testavatar.jpeg | Brian     | user | viewer                               |
+      | folder_to_shared/testavatar.jpeg | Brian     | user | Can view                             |
       | lorem.txt                        | Brian     | user | custom_permissions:read,update,share |
     And "Brian" logs in
     And "Brian" opens the "files" app
@@ -95,8 +95,8 @@ Feature: share
       | resource        | from   | type |
       | testavatar.jpeg | Shares | file |
     And "Alice" updates following sharee role
-      | resource                         | recipient | role   | resourceType |
-      | folder_to_shared/testavatar.jpeg | Brian     | editor | file         |
+      | resource                         | recipient | role     | resourceType |
+      | folder_to_shared/testavatar.jpeg | Brian     | Can edit | file         |
     And "Brian" renames the following resource
       | resource               | as                  |
       | Shares/testavatar.jpeg | testavatar_new.jpeg |

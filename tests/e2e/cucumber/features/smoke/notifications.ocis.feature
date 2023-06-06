@@ -1,7 +1,7 @@
 Feature: Notifications
   As a user
   I want to be notified
-  About new things that concern me    
+  So that I can stay updated about the information
 
   Scenario: User should be able to read and dismiss notifications
     Given "Admin" creates following users using API
@@ -29,9 +29,9 @@ Feature: Notifications
       | team | team.1 |
     And "Alice" opens the "files" app
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type  | role   | resourceType |
-      | folder_to_shared | Brian     | user  | editor | folder       |
-      | share_to_group   | sales     | group | editor | folder       |
+      | resource         | recipient | type  | role     | resourceType |
+      | folder_to_shared | Brian     | user  | Can edit | folder       |
+      | share_to_group   | sales     | group | Can edit | folder       |
     And "Brian" logs in
     Then "Brian" should see the following notifications
       | message                                       |
@@ -44,9 +44,9 @@ Feature: Notifications
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" adds following users to the project space
-      | user  | role   | kind |
-      | Brian | editor | user |
-      | Carol | editor | user |
+      | user  | role     | kind |
+      | Brian | Can edit | user |
+      | Carol | Can edit | user |
     Then "Alice" should see no notifications
     And "Brian" should see the following notifications
       | message                                         |
@@ -54,13 +54,13 @@ Feature: Notifications
       | Alice Hansen added you to Space team            |
     And "Brian" marks all notifications as read
     When "Alice" removes access to following users from the project space
-      | user  | role   | kind |
-      | Carol | editor | user |
+      | user  | role     | kind |
+      | Carol | Can edit | user |
     And "Carol" logs in
     Then "Carol" should see the following notifications
       | message                                  |
       | Alice Hansen added you to Space team     |
-      | Alice Hansen removed you from Space team | 
+      | Alice Hansen removed you from Space team |
     And "Carol" logs out
     When "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
