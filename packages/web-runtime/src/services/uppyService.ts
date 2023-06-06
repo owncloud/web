@@ -1,7 +1,8 @@
-import Uppy, { UppyFile } from '@uppy/core'
+import Uppy, { BasePlugin, UppyFile, UIPlugin } from '@uppy/core'
 import Tus from '@uppy/tus'
 import { TusOptions } from '@uppy/tus'
 import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
+import { Language } from 'vue3-gettext'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { UppyResource } from '../composables/upload'
 import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
@@ -28,15 +29,39 @@ export type uppyHeaders = {
   [name: string]: string | number
 }
 
+interface UppyServiceOptions {
+  language: Language
+}
+
 export class UppyService {
   uppy: Uppy
   uploadInputs: HTMLInputElement[] = []
 
-  constructor() {
+  constructor({ language }: UppyServiceOptions) {
+    const { $gettext } = language
     this.uppy = new Uppy({
-      autoProceed: true
+      autoProceed: true,
+      locale: {
+        strings: {
+          // for some reason this string is required and missing in uppy
+          addedNumFiles: $gettext('Added %{numFiles} file(s)')
+        }
+      }
     })
+
     this.setUpEvents()
+  }
+
+  addPlugin(plugin: any, opts: any) {
+    this.uppy.use(plugin, opts)
+  }
+
+  removePlugin(plugin: UIPlugin | BasePlugin) {
+    this.uppy.removePlugin(plugin)
+  }
+
+  getPlugin(name: string): UIPlugin | BasePlugin {
+    return this.uppy.getPlugin(name)
   }
 
   useTus({

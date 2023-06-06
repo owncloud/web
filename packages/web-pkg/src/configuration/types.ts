@@ -10,8 +10,13 @@ export interface RoutingOptionsConfiguration {
   idBased?: boolean
 }
 
+export interface UploadOptionsConfiguration {
+  companionUrl?: string
+}
+
 export interface OptionsConfiguration {
   routing?: RoutingOptionsConfiguration
+  upload?: UploadOptionsConfiguration
   logoutUrl?: string
   contextHelpersReadMore?: boolean
   openLinksWithDefaultApp?: boolean

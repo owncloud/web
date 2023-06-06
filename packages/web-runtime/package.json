@@ -12,6 +12,7 @@
     "@popperjs/core": "^2.11.5",
     "@sentry/vue": "7.53.1",
     "@uppy/core": "^3.0.5",
+    "@uppy/dashboard": "3.4.0",
     "@uppy/drop-target": "^2.0.0",
     "@uppy/tus": "^3.0.1",
     "@uppy/utils": "^5.1.2",

@@ -299,7 +299,9 @@ export const announceLoadingService = ({ app }: { app: App }): void => {
  * @param vue
  */
 export const announceUppyService = ({ app }: { app: App }): void => {
-  app.config.globalProperties.$uppyService = new UppyService()
+  app.config.globalProperties.$uppyService = new UppyService({
+    language: app.config.globalProperties.$language
+  })
 }
 
 /**
