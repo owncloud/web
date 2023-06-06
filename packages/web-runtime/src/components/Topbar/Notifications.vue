@@ -354,5 +354,11 @@ export default {
       margin-right: var(--oc-space-small);
     }
   }
+  &-link {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 300px;
+  }
 }
 </style>

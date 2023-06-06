@@ -106,6 +106,9 @@ export default defineComponent({
       } else {
         // no matching space found => the file doesn't lie in own spaces => it's a share.
         // do PROPFINDs on parents until root of accepted share is found in `mountpoint` spaces
+        yield store.dispatch('runtime/spaces/loadMountPoints', {
+          graphClient: clientService.graphAuthenticated
+        })
         let mountPoint = findMatchingMountPoint(id)
         resource.value = yield loadFileInfoByIdTask.perform(id)
         const sharePathSegments = mountPoint ? [] : [unref(resource).name]

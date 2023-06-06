@@ -1,0 +1,6 @@
+Bugfix: Incorrect pause state in upload info
+
+An incorrect pause state in the upload info modal has been fixed.
+
+https://github.com/owncloud/web/issues/9080
+https://github.com/owncloud/web/pull/9141

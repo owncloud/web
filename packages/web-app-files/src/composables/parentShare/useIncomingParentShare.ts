@@ -52,6 +52,9 @@ export function useIncomingParentShare() {
   })
 
   const getParentShare = async (resource) => {
+    await store.dispatch('runtime/spaces/loadMountPoints', {
+      graphClient: clientService.graphAuthenticated
+    })
     // do PROPFINDs on parents until root of accepted share is found in `mountpoint` spaces
     let mountPoint = findMatchingMountPoint(resource.id)
     const sharePathSegments = mountPoint ? [] : [resource.name]
