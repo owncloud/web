@@ -160,8 +160,8 @@ export default defineConfig(async ({ mode, command }) => {
         server: {
           port: 9201,
           https: {
-            key: readFileSync('./dev/docker/ocis-ca/server.key'),
-            cert: readFileSync('./dev/docker/ocis-ca/server.crt')
+            key: readFileSync('./dev/docker/traefik/certificates/server.key'),
+            cert: readFileSync('./dev/docker/traefik/certificates/server.crt')
           },
           // workaround: https://github.com/owncloud/ocis/issues/5108
           proxy: Object.fromEntries(

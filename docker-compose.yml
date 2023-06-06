@@ -216,8 +216,8 @@ services:
       - "8090:8080"
       - "9200:443"
     volumes:
-      - "./data_traefik/letsencrypt:/letsencrypt"
-      - "./data_traefik/configs:/configs"
+      - "./dev/docker/traefik/certificates:/certificates"
+      - "./dev/docker/traefik/configs:/configs"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
 volumes:

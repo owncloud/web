@@ -65,4 +65,5 @@ tests/acceptance/report/cucumber_report.html
 
 # dev setup certificates
 /dev/docker/ocis-ca
+/dev/docker/traefik/certificates
 docker-compose.override.yml
