@@ -4,17 +4,15 @@ import { TusOptions } from '@uppy/tus'
 import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
 import { Language } from 'vue3-gettext'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { UppyResource } from '../composables/upload'
-import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
-import { urlJoin } from 'web-client/src/utils'
+import DropTarget from '@uppy/drop-target'
 import getFileType from '@uppy/utils/lib/getFileType'
 import generateFileID from '@uppy/utils/lib/generateFileID'
+import { urlJoin } from 'web-client/src/utils'
 
 type UppyServiceTopics =
   | 'uploadStarted'
   | 'uploadCancelled'
   | 'uploadCompleted'
-  | 'uploadRemoved'
   | 'uploadSuccess'
   | 'uploadError'
   | 'filesSelected'
@@ -40,7 +38,16 @@ export class UppyService {
   constructor({ language }: UppyServiceOptions) {
     const { $gettext } = language
     this.uppy = new Uppy({
-      autoProceed: true,
+      autoProceed: false,
+      onBeforeFileAdded: (file, files) => {
+        if (file.id in files) {
+          file.meta.retry = true
+        }
+        file.meta.relativePath = this.getRelativeFilePath(file)
+        // id needs to be generated after the relative path has been set.
+        file.id = generateFileID(file)
+        return file
+      },
       locale: {
         strings: {
           // for some reason this string is required and missing in uppy
@@ -50,6 +57,16 @@ export class UppyService {
     })
 
     this.setUpEvents()
+  }
+
+  getRelativeFilePath = (file: UppyFile): string | undefined => {
+    const _file = file as any
+    const relativePath =
+      _file.webkitRelativePath ||
+      _file.relativePath ||
+      _file.data.relativePath ||
+      _file.data.webkitRelativePath
+    return relativePath ? urlJoin(relativePath) : undefined
   }
 
   addPlugin(plugin: any, opts: any) {
@@ -142,21 +159,12 @@ export class UppyService {
     return !!this.uppy.getPlugin('Tus')
   }
 
-  useDropTarget({
-    targetSelector,
-    uppyService
-  }: {
-    targetSelector: string
-    uppyService: UppyService
-  }) {
+  useDropTarget({ targetSelector }: { targetSelector: string }) {
     if (this.uppy.getPlugin('DropTarget')) {
       return
     }
-    this.uppy.use(CustomDropTarget, {
+    this.uppy.use(DropTarget, {
       target: targetSelector,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      uppyService,
       onDragOver: (event) => {
         this.publish('drag-over', event)
       },
@@ -211,29 +219,6 @@ export class UppyService {
     this.uppy.on('upload-error', (file, error) => {
       this.publish('uploadError', { file, error })
     })
-    this.uppy.on('file-removed', () => {
-      this.publish('uploadRemoved')
-      this.clearInputs()
-    })
-    this.uppy.on('file-added', (file) => {
-      const addedFile = file as unknown as UppyResource
-      if (this.uppy.getPlugin('Tus')) {
-        this.uppy.setFileState(addedFile.id, {
-          tus: { endpoint: addedFile.meta.tusEndpoint }
-        })
-        this.uppy.setFileMeta(addedFile.id, {
-          mtime: (addedFile.data as any).lastModified / 1000
-        })
-      }
-      if (this.uppy.getPlugin('XHRUpload')) {
-        const escapedName = encodeURIComponent(addedFile.name)
-        this.uppy.setFileState(addedFile.id, {
-          xhrUpload: {
-            endpoint: urlJoin(addedFile.meta.tusEndpoint, escapedName)
-          }
-        })
-      }
-    })
   }
 
   registerUploadInput(el: HTMLInputElement) {
@@ -242,8 +227,8 @@ export class UppyService {
       el.setAttribute('listener', 'true')
       el.addEventListener('change', (event) => {
         const target = event.target as HTMLInputElement
-        const files = Array.from(target.files)
-        this.publish('filesSelected', files)
+        const files = Array.from(target.files) as unknown as UppyFile[]
+        this.addFiles(files)
       })
       this.uploadInputs.push(el)
     }
@@ -262,16 +247,12 @@ export class UppyService {
     } as unknown as UppyFile)
   }
 
-  getFailedFiles(): UppyResource[] {
-    return this.uppy.getFiles() as unknown as UppyResource[]
-  }
-
-  retryUpload(fileId) {
-    this.uppy.retryUpload(fileId)
-  }
-
-  uploadFiles(files: UppyResource[]) {
+  addFiles(files: UppyFile[]) {
     this.uppy.addFiles(files)
+  }
+
+  uploadFiles() {
+    return this.uppy.upload()
   }
 
   retryAllUploads() {

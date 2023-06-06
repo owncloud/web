@@ -178,12 +178,13 @@ import {
   watch
 } from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
-import { useUploadHelpers } from '../../composables/upload'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
-import { ResourcesUpload } from '../../helpers/resource'
+import { Resource, SpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
+import { HandleUpload } from 'web-app-files/src/HandleUpload'
+import { useRoute } from 'vue-router'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: {
@@ -215,8 +216,23 @@ export default defineComponent({
     const uppyService = useService<UppyService>('$uppyService')
     const clientService = useClientService()
     const store = useStore()
+    const route = useRoute()
+    const language = useGettext()
+    const hasSpaces = useCapabilitySpacesEnabled(store)
+    useUpload({ uppyService })
 
-    let filesSelectedSub
+    if (!uppyService.getPlugin('HandleUpload')) {
+      uppyService.addPlugin(HandleUpload, {
+        clientService,
+        hasSpaces,
+        language,
+        route,
+        space: props.space,
+        store,
+        uppyService
+      })
+    }
+
     let uploadCompletedSub
 
     const { actions: createNewFolder } = useFileActionsCreateNewFolder({
@@ -271,18 +287,17 @@ export default defineComponent({
         return
       }
       const file = fileItem.getAsFile()
-      instance.onFilesSelected([file])
+      uppyService.addFiles([file])
       event.preventDefault()
     }
 
     onMounted(() => {
-      filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
       uploadCompletedSub = uppyService.subscribe('uploadCompleted', instance.onUploadComplete)
       document.addEventListener('paste', handlePasteFileEvent)
     })
 
     onBeforeUnmount(() => {
-      uppyService.unsubscribe('filesSelected', filesSelectedSub)
+      uppyService.removePlugin(uppyService.getPlugin('HandleUpload'))
       uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
       uppyService.removeDropTarget()
       document.removeEventListener('paste', handlePasteFileEvent)
@@ -292,7 +307,7 @@ export default defineComponent({
       canUpload,
       () => {
         if (unref(canUpload)) {
-          uppyService.useDropTarget({ targetSelector: '#files-view', uppyService })
+          uppyService.useDropTarget({ targetSelector: '#files-view' })
         } else {
           uppyService.removeDropTarget()
         }
@@ -302,15 +317,6 @@ export default defineComponent({
 
     return {
       ...useFileActions({ store }),
-      ...useUpload({
-        uppyService
-      }),
-      ...useUploadHelpers({
-        uppyService,
-        space: computed(() => props.space),
-        currentFolder: computed(() => props.item),
-        currentFolderId: computed(() => props.itemId)
-      }),
       ...useRequest(),
       clientService,
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
@@ -328,9 +334,6 @@ export default defineComponent({
       extensionActions
     }
   },
-  data: () => ({
-    newFileAction: null
-  }),
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['ancestorMetaData', 'files', 'selectedFiles', 'clipboardResources']),
@@ -394,7 +397,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['clearClipboardFiles', 'pasteSelectedFiles']),
-    ...mapActions(['showMessage', 'createModal', 'setModalInputErrorMessage', 'hideModal']),
+    ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
@@ -440,36 +443,15 @@ export default defineComponent({
           }
         }
 
-        const sameFolder = this.itemId
-          ? this.itemId.toString().startsWith(currentFolderId)
-          : currentFolder === this.item
+        const sameFolder =
+          this.itemId && !isShareSpaceResource(this.space)
+            ? this.itemId.toString().startsWith(currentFolderId)
+            : currentFolder === this.item
         const fileIsInCurrentPath = spaceId === this.space.id && sameFolder
         if (fileIsInCurrentPath) {
           eventBus.publish('app.files.list.load')
         }
       }
-    },
-
-    onFilesSelected(filesToUpload: File[]) {
-      const uploader = new ResourcesUpload(
-        filesToUpload,
-        this.files,
-        this.inputFilesToUppyFiles,
-        this.$uppyService,
-        this.space,
-        this.item,
-        this.itemId,
-        this.spaces,
-        this.hasSpaces,
-        this.createDirectoryTree,
-        this.createModal,
-        this.hideModal,
-        this.showMessage,
-        this.$gettext,
-        this.$ngettext,
-        this.$gettextInterpolate
-      )
-      uploader.perform()
     },
 
     getIconResource(fileHandler) {

@@ -1,61 +1,34 @@
-import filesize from 'filesize'
+import { Language } from 'vue3-gettext'
+import { Store } from 'vuex'
 import { Resource } from 'web-client'
-import {
-  extractExtensionFromFile,
-  isShareSpaceResource,
-  SpaceResource
-} from 'web-client/src/helpers'
-import { CreateDirectoryTreeResult, UppyResource } from 'web-runtime/src/composables/upload'
-import { UppyService } from 'web-runtime/src/services/uppyService'
+import { extractExtensionFromFile } from 'web-client/src/helpers'
+import { UppyResource } from 'web-runtime/src/composables/upload'
 import { ConflictDialog, ResolveConflict, resolveFileNameDuplicate, ResolveStrategy } from '..'
-import { locationPublicLink } from '../../../router/public'
-import { locationSpacesGeneric } from '../../../router/spaces'
 
 interface ConflictedResource {
   name: string
   type: string
 }
 
-export class ResourcesUpload extends ConflictDialog {
-  constructor(
-    private filesToUpload: File[],
-    private currentFiles: Resource[],
-    private inputFilesToUppyFiles: (inputFileOptions) => UppyResource[],
-    private $uppyService: UppyService,
-    private space: SpaceResource,
-    private currentFolder: string,
-    private currentFolderId: string | number,
-    private spaces: SpaceResource[],
-    private hasSpaces: boolean,
-    private createDirectoryTree: (
-      space: SpaceResource,
-      currentPath: string,
-      files: UppyResource[],
-      currentFolderId?: string | number
-    ) => Promise<CreateDirectoryTreeResult>,
-    createModal: (modal: object) => void,
-    hideModal: () => void,
-    showMessage: (data: object) => void,
-    $gettext: (msg: string) => string,
-    $ngettext: (msgid: string, plural: string, n: number) => string,
-    $gettextInterpolate: (msg: string, context: object, disableHtmlEscaping?: boolean) => string
-  ) {
-    super(createModal, hideModal, showMessage, $gettext, $ngettext, $gettextInterpolate)
+export class ResourceConflict extends ConflictDialog {
+  store: Store<any>
+
+  constructor(store: Store<any>, language: Language) {
+    const { $gettext, $ngettext, interpolate: $gettextInterpolate } = language
+    super(
+      (modal) => store.dispatch('createModal', modal),
+      () => store.dispatch('hideModal'),
+      (msg) => store.dispatch('showMessage', msg),
+      $gettext,
+      $ngettext,
+      $gettextInterpolate
+    )
+
+    this.store = store
   }
 
-  perform() {
-    const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(this.filesToUpload)
-    const quotaExceeded = this.checkQuotaExceeded(uppyResources)
-    if (quotaExceeded) {
-      return this.$uppyService.clearInputs()
-    }
-
-    const conflicts = this.getConflicts(uppyResources)
-    if (conflicts.length) {
-      return this.displayOverwriteDialog(uppyResources, conflicts)
-    }
-
-    this.handleUppyFileUpload(this.space, this.currentFolder, uppyResources)
+  get files(): Resource[] {
+    return this.store.getters['Files/files']
   }
 
   getConflicts(files: UppyResource[]): ConflictedResource[] {
@@ -65,7 +38,7 @@ export class ResourcesUpload extends ConflictDialog {
       if (relativeFilePath) {
         // Logic for folders, applies to all files inside folder and subfolders
         const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
-        const exists = this.currentFiles.find((f) => f.name === rootFolder)
+        const exists = this.files.find((f) => f.name === rootFolder)
         if (exists) {
           if (conflicts.some((conflict) => conflict.name === rootFolder)) {
             continue
@@ -75,9 +48,7 @@ export class ResourcesUpload extends ConflictDialog {
         }
       }
       // Logic for files
-      const exists = this.currentFiles.find(
-        (f) => f.name === file.name && !file.meta.relativeFolder
-      )
+      const exists = this.files.find((f) => f.name === file.name && !file.meta.relativeFolder)
       if (exists) {
         conflicts.push({ name: file.name, type: 'file' })
       }
@@ -85,51 +56,10 @@ export class ResourcesUpload extends ConflictDialog {
     return conflicts
   }
 
-  async handleUppyFileUpload(space: SpaceResource, currentFolder: string, files: UppyResource[]) {
-    this.$uppyService.publish('uploadStarted')
-    const result = await this.createDirectoryTree(space, currentFolder, files, this.currentFolderId)
-
-    // filter out files in folders that could not be created
-    let filesToUpload = files
-    if (result.failed.length) {
-      filesToUpload = files.filter(
-        (f) => !result.failed.some((r) => f.meta.relativeFolder.startsWith(r))
-      )
-    }
-
-    // gather failed files to be retried
-    const failedFiles = this.$uppyService.getFailedFiles()
-    const retries = []
-
-    for (const failedFile of failedFiles) {
-      const fileToRetry = filesToUpload.find((f) => f.meta.uppyId === failedFile.meta.uppyId)
-      if (fileToRetry) {
-        // re-use the old uploadId
-        fileToRetry.meta.uploadId = failedFile.meta.uploadId
-        retries.push(fileToRetry)
-      }
-    }
-
-    if (filesToUpload.length) {
-      this.$uppyService.publish('addedForUpload', filesToUpload)
-    }
-
-    for (const retry of retries) {
-      this.$uppyService.retryUpload(retry.meta.uppyId)
-      // filter out files that have been retried
-      filesToUpload = filesToUpload.filter((f) => f.meta.uppyId !== retry.meta.uppyId)
-    }
-
-    if (filesToUpload.length) {
-      this.$uppyService.uploadFiles(filesToUpload)
-    }
-
-    if (!filesToUpload.length && !retries.length) {
-      this.$uppyService.publish('uploadCompleted', { successful: [] })
-    }
-  }
-
-  async displayOverwriteDialog(files: UppyResource[], conflicts: ConflictedResource[]) {
+  async displayOverwriteDialog(
+    files: UppyResource[],
+    conflicts: ConflictedResource[]
+  ): Promise<UppyResource[]> {
     let fileCount = 0
     let folderCount = 0
     const resolvedFileConflicts = []
@@ -208,12 +138,13 @@ export class ResourcesUpload extends ConflictDialog {
     for (const fileName of filesToKeepBoth) {
       const file = files.find((e) => e.name === fileName && !e.meta.relativeFolder)
       const extension = extractExtensionFromFile({ name: fileName } as Resource)
-      file.name = resolveFileNameDuplicate(fileName, extension, this.currentFiles)
+      file.name = resolveFileNameDuplicate(fileName, extension, this.files)
+      file.meta.name = file.name
     }
     for (const folder of foldersToKeepBoth) {
       const filesInFolder = files.filter((e) => e.meta.relativeFolder.split('/')[1] === folder)
       for (const file of filesInFolder) {
-        const newFolderName = resolveFileNameDuplicate(folder, '', this.currentFiles)
+        const newFolderName = resolveFileNameDuplicate(folder, '', this.files)
         file.meta.relativeFolder = file.meta.relativeFolder.replace(
           new RegExp(`/${folder}`),
           `/${newFolderName}`
@@ -228,81 +159,6 @@ export class ResourcesUpload extends ConflictDialog {
         )
       }
     }
-    if (files.length === 0) {
-      return this.$uppyService.clearInputs()
-    }
-    this.handleUppyFileUpload(this.space, this.currentFolder, files)
-  }
-
-  checkQuotaExceeded(uppyResources: UppyResource[]) {
-    if (!this.hasSpaces) {
-      return false
-    }
-
-    let quotaExceeded = false
-
-    const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
-      let targetUploadSpace
-
-      if (uppyResource.meta.routeName === locationPublicLink.name) {
-        return acc
-      }
-
-      if (uppyResource.meta.routeName === locationSpacesGeneric.name) {
-        targetUploadSpace = this.spaces.find((space) => space.id === uppyResource.meta.spaceId)
-      }
-
-      if (!targetUploadSpace || isShareSpaceResource(targetUploadSpace)) {
-        return acc
-      }
-
-      const existingFile = this.currentFiles.find(
-        (c) => !uppyResource.meta.relativeFolder && c.name === uppyResource.name
-      )
-      const existingFileSize = existingFile ? Number(existingFile.size) : 0
-
-      const matchingMappingRecord = acc.find(
-        (mappingRecord) => mappingRecord.space.id === targetUploadSpace.id
-      )
-
-      if (!matchingMappingRecord) {
-        acc.push({
-          space: targetUploadSpace,
-          uploadSize: uppyResource.data.size - existingFileSize
-        })
-        return acc
-      }
-
-      matchingMappingRecord.uploadSize = uppyResource.data.size - existingFileSize
-
-      return acc
-    }, [])
-
-    uploadSizeSpaceMapping.forEach(({ space, uploadSize }) => {
-      if (space.spaceQuota.remaining && space.spaceQuota.remaining < uploadSize) {
-        let spaceName = space.name
-
-        if (space.driveType === 'personal') {
-          spaceName = this.$gettext('Personal')
-        }
-
-        const translated = this.$gettext(
-          'There is not enough quota on %{spaceName}, you need additional %{missingSpace} to upload these files'
-        )
-
-        this.showMessage({
-          title: this.$gettext('Not enough quota'),
-          desc: this.$gettextInterpolate(translated, {
-            spaceName,
-            missingSpace: filesize((space.spaceQuota.remaining - uploadSize) * -1)
-          }),
-          status: 'danger'
-        })
-
-        quotaExceeded = true
-      }
-    })
-
-    return quotaExceeded
+    return files
   }
 }
