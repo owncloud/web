@@ -21,7 +21,7 @@
         class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle"
         icon="user-add"
         icon-fill-type="line"
-        icon-color="#000000"
+        icon-color="var(--oc-color-icon-text)"
         background="var(--oc-color-swatch-brand-contrast)"
       />
     </oc-button>
