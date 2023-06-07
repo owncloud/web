@@ -9,7 +9,7 @@
       <oc-button
         :disabled="!unsavedChanges"
         class="compare-save-dialog-revert-btn"
-        @click="$emit('revert')"
+        buttonType="reset"
       >
         <span v-text="$gettext('Revert')" />
       </oc-button>
@@ -18,7 +18,7 @@
         variation="primary"
         class="compare-save-dialog-confirm-btn"
         :disabled="!unsavedChanges || confirmButtonDisabled"
-        @click="$emit('confirm')"
+        buttonType="submit"
       >
         <span v-text="$gettext('Save')" />
       </oc-button>

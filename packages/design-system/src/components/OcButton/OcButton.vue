@@ -5,6 +5,7 @@
     :aria-label="ariaLabel"
     :class="$_ocButton_buttonClass"
     v-on="handlers"
+    :type="buttonType"
   >
     <!-- @slot Content of the button -->
     <slot />
@@ -30,6 +31,20 @@ export default defineComponent({
       default: 'button',
       validator: (value: any) => {
         return ['button', 'a', 'router-link'].includes(value)
+      }
+    },
+
+    /**
+     * HTML-Type of the button
+     * submit: Submit a form (@submit)
+     * reset: Reverts any changes in a form (@reset)
+     * button: Default. Defines a clickable button, click event needs to be catured manually
+     */
+    buttonType: {
+      type: String,
+      default: 'button',
+      validator: (value: any) => {
+        return ['button', 'submit', 'reset'].includes(value)
       }
     },
     /**

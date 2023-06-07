@@ -1,6 +1,6 @@
 <template>
   <div id="tags-panel">
-    <div id="tags-form" class="oc-background-highlight oc-p-m">
+    <form id="tags-form" class="oc-background-highlight oc-p-m" @submit.prevent="save" @reset.prevent="revertChanges">
       <oc-loader v-if="loadAvailableTagsTask.isRunning" />
       <oc-select
         v-else
@@ -47,10 +47,8 @@
         class="edit-compare-save-dialog oc-mb-l"
         :original-object="{ tags: currentTags.map((t) => t.label) }"
         :compare-object="{ tags: selectedTags.map((t) => t.label) }"
-        @revert="revertChanges"
-        @confirm="save"
       ></compare-save-dialog>
-    </div>
+    </form>
   </div>
 </template>
 
