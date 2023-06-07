@@ -42,7 +42,7 @@
               type="router-link"
               :to="loginLink"
             >
-              <oc-icon name="user-add" fill-type="line" class="oc-p-xs" />
+              <oc-icon name="login-box" fill-type="line" class="oc-p-xs" />
               <span v-text="$gettext('Log in')" />
             </oc-button>
           </li>

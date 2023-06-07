@@ -330,7 +330,7 @@ exports[`User Menu component when user is not logged in renders a navigation wit
 <nav aria-label="Account menu">
   <oc-button-stub appearance="raw" aria-label="User Menu" class="oc-topbar-personal" id="_userMenuButton">
     <div aria-hidden="true" class="oc-topbar-unauthenticated-avatar oc-flex-inline oc-flex-center oc-flex-middle" data-test-item-name="User Menu login" focusable="false">
-      <span class="oc-avatar-item" style="--icon-color: var(--oc-color-icon-text); --width: 32px;">
+      <span class="oc-avatar-item" style="--icon-color: var(--oc-color-swatch-brand-default); --width: 32px;">
         <oc-icon-stub accessiblelabel="" color="" filltype="line" name="user-add" size="small" type="span" variation="passive"></oc-icon-stub>
       </span>
     </div>
@@ -339,7 +339,7 @@ exports[`User Menu component when user is not logged in renders a navigation wit
     <oc-list-stub class="user-menu-list">
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-login" to="[object Object]" type="router-link">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="user-add"></oc-icon-stub>
+          <oc-icon-stub class="oc-p-xs" fill-type="line" name="login-box"></oc-icon-stub>
           <span>Log in</span>
         </oc-button-stub>
       </li>
