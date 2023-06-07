@@ -22,7 +22,7 @@
     </portal>
     <portal to="app.runtime.header.right" :order="100">
       <notifications v-if="isNotificationBellEnabled" />
-      <user-menu v-if="isUserMenuEnabled" :applications-list="userMenuItems" />
+      <user-menu :applications-list="userMenuItems" />
     </portal>
   </header>
 </template>
@@ -186,10 +186,6 @@ export default {
         ...(feedback.description && { description: feedback.description })
       }
     },
-
-    isUserMenuEnabled() {
-      return this.user?.id
-    }
   }
 }
 </script>
