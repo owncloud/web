@@ -5,11 +5,10 @@ import { computed, unref } from 'vue'
 import { useConfigurationManager, useRouter } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { Resource } from 'web-client/src/helpers'
-import { useAccessToken, useRoute, useStore } from 'web-pkg/src/composables'
+import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import { FileAction } from 'web-pkg/src/composables/actions'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
-import { HandleUpload } from '../../../uppyUploadPlugin'
 import { isLocationPublicActive } from 'web-app-files/src/router'
 import { ConfigurationManager } from 'web-pkg/types'
 
@@ -24,7 +23,6 @@ export const useFileActionsImport = ({
   configurationManager = configurationManager || useConfigurationManager()
 
   const router = useRouter()
-  const route = useRoute()
   const { $gettext } = useGettext()
   const accessToken = useAccessToken({ store })
   const uppyService = useService<UppyService>('$uppyService')
@@ -39,10 +37,6 @@ export const useFileActionsImport = ({
   })
 
   const removeUppyPlugins = () => {
-    const preparePlugin = uppyService.getPlugin('HandleUpload')
-    if (preparePlugin) {
-      uppyService.removePlugin(preparePlugin)
-    }
     const dashboardPlugin = uppyService.getPlugin('Dashboard')
     if (dashboardPlugin) {
       uppyService.removePlugin(dashboardPlugin)
@@ -88,7 +82,6 @@ export const useFileActionsImport = ({
 
     await store.dispatch('createModal', modal)
 
-    uppyService.addPlugin(HandleUpload, { route, store, uppyService })
     uppyService.addPlugin(Dashboard, {
       uppyService,
       inline: true,
