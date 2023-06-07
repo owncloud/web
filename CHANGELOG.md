@@ -24,6 +24,7 @@ Summary
 * Enhancement - Search breadcrumb: [#9077](https://github.com/owncloud/web/pull/9077)
 * Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
 * Enhancement - Cloud import: [#9151](https://github.com/owncloud/web/issues/9151)
+* Enhancement - Add login button to top bar: [#9178](https://github.com/owncloud/web/pull/9178)
 
 Details
 -------
@@ -157,6 +158,14 @@ Details
 
    https://github.com/owncloud/web/issues/9151
    https://github.com/owncloud/web/pull/9150
+
+* Enhancement - Add login button to top bar: [#9178](https://github.com/owncloud/web/pull/9178)
+
+   We've added a login button to the top bar, this might be handy if a user receives a public link, and
+   they want to login with their user account.
+
+   https://github.com/owncloud/web/issues/9177
+   https://github.com/owncloud/web/pull/9178
 
 Changelog for ownCloud Web [7.0.0] (2023-06-02)
 =======================================
