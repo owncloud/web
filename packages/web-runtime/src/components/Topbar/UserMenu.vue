@@ -10,15 +10,15 @@
       <avatar-image
         v-if="userId"
         class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle"
-        :name="$gettext('User Menu login')"
         :width="32"
         :userid="userId"
         :user-name="user.displayname"
       />
       <oc-avatar-item
         v-else
-        :width="32"
         class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle"
+        :name="$gettext('User Menu login')"
+        :width="32"
         icon="user-add"
         icon-fill-type="line"
         icon-color="var(--oc-color-icon-text)"
