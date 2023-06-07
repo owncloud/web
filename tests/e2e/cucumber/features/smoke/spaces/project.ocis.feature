@@ -126,8 +126,6 @@ Feature: spaces.personal
       | resource     |
       | textfile.txt |
 
-    # anonymous is done
-    And "Anonymous" logs out
 
   Scenario: members of the space can control the versions of the files
     Given "Admin" creates following users using API

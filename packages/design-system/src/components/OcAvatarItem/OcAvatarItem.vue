@@ -147,7 +147,7 @@ export default defineComponent({
   width: var(--width);
 
   .oc-icon > svg {
-    fill: var(--icon-color);
+    fill: var(--icon-color) !important;
   }
 }
 </style>

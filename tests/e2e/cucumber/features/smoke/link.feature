@@ -42,7 +42,6 @@ Feature: link
       | new-lorem.txt | test.txt         |
     And "Alice" removes the public link named "myPublicLink" of resource "folderPublic"
     And "Anonymous" should not be able to open the old link "myPublicLink"
-    And "Anonymous" logs out
     And "Alice" logs out
 
 
@@ -64,5 +63,4 @@ Feature: link
     And "Anonymous" downloads the following public link resources using the single share view
       | resource  | type |
       | lorem.txt | file |
-    And "Anonymous" logs out
     And "Alice" logs out

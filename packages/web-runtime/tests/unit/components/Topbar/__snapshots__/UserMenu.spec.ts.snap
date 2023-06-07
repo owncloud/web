@@ -325,3 +325,25 @@ exports[`User Menu component when quota is unlimited renders no percentag of tot
   </oc-drop-stub>
 </nav>
 `;
+
+exports[`User Menu component when user is not logged in renders a navigation with login button 1`] = `
+<nav aria-label="Account menu">
+  <oc-button-stub appearance="raw" aria-label="User Menu" class="oc-topbar-personal" id="_userMenuButton">
+    <div aria-hidden="true" class="oc-topbar-unauthenticated-avatar oc-flex-inline oc-flex-center oc-flex-middle" data-test-item-name="User Menu login" focusable="false">
+      <span class="oc-avatar-item" style="--icon-color: var(--oc-color-icon-text); --width: 32px;">
+        <oc-icon-stub accessiblelabel="" color="" filltype="line" name="user-add" size="small" type="span" variation="passive"></oc-icon-stub>
+      </span>
+    </div>
+  </oc-button-stub>
+  <oc-drop-stub close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
+    <oc-list-stub class="user-menu-list">
+      <li>
+        <oc-button-stub appearance="raw" id="oc-topbar-account-login" to="[object Object]" type="router-link">
+          <oc-icon-stub class="oc-p-xs" fill-type="line" name="user-add"></oc-icon-stub>
+          <span>Log in</span>
+        </oc-button-stub>
+      </li>
+    </oc-list-stub>
+  </oc-drop-stub>
+</nav>
+`;
