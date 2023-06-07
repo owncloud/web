@@ -1,0 +1,7 @@
+Enhancement: Add login button to top bar
+
+We've added a login button to the top bar, this might be handy if a user receives a public link,
+and they want to login with their user account.
+
+https://github.com/owncloud/web/pull/9178
+https://github.com/owncloud/web/issues/9177
