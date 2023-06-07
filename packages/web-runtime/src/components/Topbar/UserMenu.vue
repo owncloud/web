@@ -16,7 +16,7 @@
       />
       <oc-avatar-item
         v-else
-        class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle"
+        class="oc-topbar-unauthenticated-avatar oc-flex-inline oc-flex-center oc-flex-middle"
         :name="$gettext('User Menu login')"
         :width="32"
         icon="user-add"
@@ -112,9 +112,8 @@ import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
-import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { useCapabilitySpacesEnabled, useRoute} from 'web-pkg/src/composables'
 import { OcDrop } from 'design-system/src/components'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
   props: {
