@@ -122,3 +122,54 @@ Feature: spaces management
       | David | Can view   |
       | Edith | Can view   |
     And "Alice" logs out
+
+
+  Scenario: admin user can manage the spaces created by other space admin user
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+      | Brian |
+      | Carol |
+    And "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Alice | Admin       |
+      | Brian | Space Admin |
+      | Carol | Space Admin |
+    When "Brian" logs in
+    And "Brian" creates the following project spaces using API
+      | name   | id     |
+      | team A | team.a |
+    And "Brian" logs out
+    When "Carol" logs in
+    And "Carol" creates the following project spaces using API
+      | name   | id     |
+      | team B | team.b |
+    And "Carol" logs out
+    When "Alice" logs in
+    And "Alice" opens the "admin-settings" app
+    And "Alice" navigates to the project spaces management page
+    And "Alice" updates quota of the following spaces to "50" using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+    And "Alice" disables the following spaces using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+    And "Alice" enables the following spaces using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+    And "Alice" disables the following spaces using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+    And "Alice" deletes the following spaces using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+    Then "Alice" should not see the following spaces
+      | id     |
+      | team.a |
+      | team.b |
+    And "Alice" logs out
