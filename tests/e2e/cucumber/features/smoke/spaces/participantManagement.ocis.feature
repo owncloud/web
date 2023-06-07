@@ -75,7 +75,6 @@ Feature: spaces participant management
     When "Brian" deletes the following resources using the sidebar panel
       | resource     | from   |
       | textfile.txt | parent |
-    And "Anonymous" logs out
     When "Carol" navigates to the trashbin of the project space "team.1"
     Then "Carol" should not be able to delete following resources from the trashbin
       | resource            |
