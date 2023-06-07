@@ -32,6 +32,7 @@
       mode="click"
       close-on-click
       padding-size="small"
+      style="overflow: hidden"
     >
       <oc-list class="user-menu-list">
         <template v-if="!userId">
@@ -102,6 +103,7 @@
           </li>
         </template>
       </oc-list>
+      <div class="test"><a :href="imprintUrl">Imprint</a> - <a :href="privacyUrl">Privacy</a></div>
     </oc-drop>
   </nav>
 </template>
@@ -112,7 +114,7 @@ import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
-import { useCapabilitySpacesEnabled, useRoute } from 'web-pkg/src/composables'
+import { useCapabilitySpacesEnabled, useRoute, useStore } from 'web-pkg/src/composables'
 import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
@@ -131,9 +133,20 @@ export default defineComponent({
         query: { redirectUrl: unref(route).fullPath }
       }
     })
+    const store = useStore()
+    const imprintUrl = computed(() => {
+      const themesUrl = store.getters.configuration.currentTheme.general?.imprintUrl
+      return themesUrl
+    })
+    const privacyUrl = computed(() => {
+      const themesUrl = store.getters.configuration.currentTheme.general?.privacyUrl
+      return themesUrl
+    })
     return {
       hasSpaces: useCapabilitySpacesEnabled(),
-      loginLink
+      loginLink,
+      imprintUrl,
+      privacyUrl
     }
   },
   computed: {
@@ -214,6 +227,20 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.test {
+  background-color: var(--oc-color-background-hover);
+  margin-left: -8px;
+  width: calc(100% + 18px);
+  margin-bottom: -8px !important;
+  margin-top: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-align: center;
+  a {
+    font-size: var(--oc-font-size-medium) !important;
+    color: var(--oc-color-text-default);
+  }
+}
 .user-menu-list li {
   align-items: center;
   display: flex;

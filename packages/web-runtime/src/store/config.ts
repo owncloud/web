@@ -18,7 +18,9 @@ const state = {
   currentTheme: {
     general: {
       name: '',
-      slogan: ''
+      slogan: '',
+      privacyUrl: '',
+      imprintUrl: ''
     },
     logo: {
       topbar: '',
