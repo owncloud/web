@@ -21,7 +21,7 @@
         :width="32"
         icon="user-add"
         icon-fill-type="line"
-        icon-color="var(--oc-color-icon-text)"
+        icon-color="var(--oc-color-swatch-brand-default)"
         background="var(--oc-color-swatch-brand-contrast)"
       />
     </oc-button>
@@ -42,7 +42,7 @@
               type="router-link"
               :to="loginLink"
             >
-              <oc-icon name="user-add" fill-type="line" class="oc-p-xs" />
+              <oc-icon name="login-box" fill-type="line" class="oc-p-xs" />
               <span v-text="$gettext('Log in')" />
             </oc-button>
           </li>
