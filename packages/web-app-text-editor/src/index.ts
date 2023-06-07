@@ -62,15 +62,15 @@ const fileExtensions = () => {
   ]
 
   const config = (window as any).__$store.getters.extensionConfigByAppId(appId)
+  extensions.push(...(config.extraExtensions || []).map((ext) => ({ extension: ext })))
+
   let primaryExtensions = (window as any).__$store.getters.extensionConfigByAppId(appId)
     .primaryExtensions || ['txt', 'md']
 
-  let extraExtensions = config.extraExtensions || []
   if (typeof primaryExtensions === 'string') {
     primaryExtensions = [primaryExtensions]
   }
 
-  extensions.push(...extraExtensions.map((ext) => ({ extension: ext })))
   return extensions.reduce((acc, extensionItem) => {
     const isPrimary = primaryExtensions.includes(extensionItem.extension)
     if (isPrimary) {
