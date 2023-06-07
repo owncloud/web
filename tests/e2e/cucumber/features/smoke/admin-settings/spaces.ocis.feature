@@ -148,18 +148,26 @@ Feature: spaces management
     When "Alice" logs in
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
-    When "Alice" updates the space "team.a" name to "brian team" using the context-menu
-    And "Alice" updates the space "team.b" name to "carol team" using the context-menu
-    And "Alice" updates the space "team.a" quota to "10" using the context-menu
-    And "Alice" updates the space "team.b" quota to "50" using the context-menu
-    And "Alice" disables the space "team.a" using the context-menu
-    And "Alice" disables the space "team.b" using the context-menu
-    And "Alice" enables the space "team.a" using the context-menu
-    And "Alice" enables the space "team.b" using the context-menu
-    And "Alice" disables the space "team.a" using the context-menu
-    And "Alice" disables the space "team.b" using the context-menu
-    And "Alice" deletes the space "team.a" using the context-menu
-    And "Alice" deletes the space "team.b" using the context-menu
+    And "Alice" updates quota of the following spaces to "50" using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+    And "Alice" disables the following spaces using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+    And "Alice" enables the following spaces using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+    And "Alice" disables the following spaces using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
+    And "Alice" deletes the following spaces using the batch-actions
+      | id     |
+      | team.a |
+      | team.b |
     Then "Alice" should not see the following spaces
       | id     |
       | team.a |
