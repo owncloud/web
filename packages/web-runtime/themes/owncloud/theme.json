@@ -10,8 +10,8 @@
       "general": {
         "name": "ownCloud",
         "slogan": "ownCloud – A safe home for all your data",
-        "privacyUrl": "https://www.google.de",
-        "imprintUrl": "https://www.google.de"
+        "privacyUrl": "",
+        "imprintUrl": ""
       },
       "logo": {
         "topbar": "themes/owncloud/assets/logo.svg",
@@ -81,8 +81,8 @@
       "general": {
         "name": "ownCloud",
         "slogan": "ownCloud – A safe home for all your data",
-        "privacyUrl": "https://www.google.de",
-        "imprintUrl": "https://www.google.de"
+        "privacyUrl": "",
+        "imprintUrl": ""
       },
       "logo": {
         "topbar": "themes/owncloud/assets/logo.svg",
