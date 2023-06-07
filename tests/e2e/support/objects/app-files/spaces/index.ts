@@ -16,6 +16,11 @@ export class Spaces {
     this.#linksEnvironment = new LinksEnvironment()
   }
 
+  getSpaceID({ key }: { key: string }): string {
+    const { id } = this.#spacesEnvironment.getSpace({ key })
+    return id
+  }
+
   async create({
     key,
     space
@@ -59,12 +64,8 @@ export class Spaces {
     await po.removeAccessSpaceMembers({ ...args, page: this.#page })
   }
 
-  getSpaceID({ key }: { key: string }): string {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    return id
-  }
-
-  async expectThatSpacesIdNotExist(spaceID: string): Promise<void> {
+  async expectThatSpacesIdNotExist(space: string): Promise<void> {
+    const spaceID = this.getSpaceID({ key: space })
     await spaceWithSpaceIDNotExist({ spaceID, page: this.#page })
   }
 
@@ -108,5 +109,9 @@ export class Spaces {
 
   async removeExpirationDate({ member }: { member: Omit<ICollaborator, 'role'> }): Promise<void> {
     await po.removeExpirationDateFromMember({ member, page: this.#page })
+  }
+
+  async downloadSpace(): Promise<void> {
+    await po.downloadSpace(this.#page)
   }
 }
