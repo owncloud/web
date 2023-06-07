@@ -3,7 +3,158 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v6.0.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v7.0.0...master
+
+Summary
+-------
+
+* Bugfix - Reduce space preloading: [#9153](https://github.com/owncloud/web/pull/9153)
+* Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
+* Enhancement - Shrink table columns: [#8599](https://github.com/owncloud/web/issues/8599)
+* Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
+* Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
+* Enhancement - Long breadcrumb strategy: [#8984](https://github.com/owncloud/web/pull/8984)
+* Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
+* Enhancement - Single file link open with default app: [#9046](https://github.com/owncloud/web/pull/9046)
+* Enhancement - Drag & drop on parent folder: [#9052](https://github.com/owncloud/web/pull/9052)
+* Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
+* Enhancement - Enable download (archive) on spaces: [#9056](https://github.com/owncloud/web/issues/9056)
+* Enhancement - Search full-text filter: [#9059](https://github.com/owncloud/web/pull/9059)
+* Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
+* Enhancement - Search breadcrumb: [#9077](https://github.com/owncloud/web/pull/9077)
+* Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
+
+Details
+-------
+
+* Bugfix - Reduce space preloading: [#9153](https://github.com/owncloud/web/pull/9153)
+
+   We've reduced the set of spaces that get preloaded after login / after initial page load. This
+   results in a faster first page rendering and reduces the server load. Loading the remaining
+   spaces will happen on demand.
+
+   https://github.com/owncloud/web/pull/9153
+
+* Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
+
+   We have added functionality to open a single, publicly shared file in a different view (instead
+   of showing it in a table).
+
+   https://github.com/owncloud/web/issues/8445
+   https://github.com/owncloud/web/pull/8440
+   https://github.com/owncloud/web/pull/8446
+
+* Enhancement - Shrink table columns: [#8599](https://github.com/owncloud/web/issues/8599)
+
+   We've decided to shrink most table columns in the file list to their absolute minimum (Shares,
+   Size, Modified/Shared/Delete date, Actions) so that the file name can take up more horizontal
+   space.
+
+   https://github.com/owncloud/web/issues/8599
+   https://github.com/owncloud/web/pull/8978
+
+* Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
+
+   We've added a generic context-menu for right clicking on whitespace.
+
+   https://github.com/owncloud/web/issues/5861
+   https://github.com/owncloud/web/pull/8921
+
+* Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
+
+   We've added a way to deny the share access in sub folders in a share or space. This allows the share
+   editors to restrict access to certain resources within a share for certain share receivers.
+
+   https://github.com/owncloud/web/issues/7180
+   https://github.com/owncloud/web/pull/8983
+
+* Enhancement - Long breadcrumb strategy: [#8984](https://github.com/owncloud/web/pull/8984)
+
+   We've implemented a new solution to deal with long breadcrumbs even with long folder names.
+
+   https://github.com/owncloud/web/issues/6731
+   https://github.com/owncloud/web/pull/8984
+
+* Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
+
+   The search result page now has a tag filter which can be used to filter the displayed search
+   result by tags.
+
+   https://github.com/owncloud/web/issues/9054
+   https://github.com/owncloud/web/pull/9044
+   https://github.com/owncloud/web/pull/9096
+
+* Enhancement - Single file link open with default app: [#9046](https://github.com/owncloud/web/pull/9046)
+
+   We've added a configurable functionality, that a single shared file via link will be opened in
+   default app, for example text-editor.
+
+   https://github.com/owncloud/web/issues/9045
+   https://github.com/owncloud/web/pull/9046
+
+* Enhancement - Drag & drop on parent folder: [#9052](https://github.com/owncloud/web/pull/9052)
+
+   We've added the possibility to drag & drop files onto the breadcrumb to move items into parent
+   folders in a fast and intuitive way.
+
+   https://github.com/owncloud/web/issues/9043
+   https://github.com/owncloud/web/pull/9052
+
+* Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
+
+   The archiver service announces a limit for the accumulated filesize of the currently selected
+   resources. The web UI now respects those limits and shows a disabled download button once the
+   limit has been reached.
+
+   https://github.com/owncloud/web/issues/8456
+   https://github.com/owncloud/web/pull/9055
+
+* Enhancement - Enable download (archive) on spaces: [#9056](https://github.com/owncloud/web/issues/9056)
+
+   We've enabled the download action for spaces, which downloads the space's content as archive.
+
+   https://github.com/owncloud/web/issues/9056
+   https://github.com/owncloud/web/pull/9095
+
+* Enhancement - Search full-text filter: [#9059](https://github.com/owncloud/web/pull/9059)
+
+   The search result page now has a full-text filter which can be used to filter the displayed files
+   by their content.
+
+   https://github.com/owncloud/web/issues/9058
+   https://github.com/owncloud/web/pull/9059
+   https://github.com/owncloud/web/pull/9087
+   https://github.com/owncloud/web/pull/9096
+
+* Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
+
+   The search bar now has a button to open the search result page directly to display all available
+   search filters (= advanced search).
+
+   https://github.com/owncloud/web/issues/9072
+   https://github.com/owncloud/web/pull/9077
+
+* Enhancement - Search breadcrumb: [#9077](https://github.com/owncloud/web/pull/9077)
+
+   The search result page now has a breadcrumb item to tell the user where they are.
+
+   https://github.com/owncloud/web/issues/9072
+   https://github.com/owncloud/web/pull/9077
+
+* Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
+
+   We've implemented the possibility to upload a single file in the clipboard from anywhere via
+   paste.
+
+   https://github.com/owncloud/web/issues/9047
+   https://github.com/owncloud/web/pull/9140
+
+Changelog for ownCloud Web [7.0.0] (2023-06-02)
+=======================================
+The following sections list the changes in ownCloud web 7.0.0 relevant to
+ownCloud admins and users.
+
+[7.0.0]: https://github.com/owncloud/web/compare/v6.0.0...v7.0.0
 
 Summary
 -------
@@ -72,7 +223,9 @@ Summary
 * Bugfix - Share indicator loading after pasting resources: [#9030](https://github.com/owncloud/web/issues/9030)
 * Bugfix - Preview app mime type detection: [#9050](https://github.com/owncloud/web/issues/9050)
 * Bugfix - Resource not found and No content message at the same time: [#9061](https://github.com/owncloud/web/issues/9061)
+* Bugfix - Incorrect pause state in upload info: [#9080](https://github.com/owncloud/web/issues/9080)
 * Bugfix - Select all checkbox: [#9131](https://github.com/owncloud/web/pull/9131)
+* Bugfix - Notifications link overflow: [#9144](https://github.com/owncloud/web/pull/9144)
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 * Change - Update Vue to v3.2: [#7948](https://github.com/owncloud/web/issues/7948)
 * Change - Remove permission manager: [#8431](https://github.com/owncloud/web/pull/8431)
@@ -124,7 +277,6 @@ Summary
 * Enhancement - Inject customizations: [#8432](https://github.com/owncloud/web/pull/8432)
 * Enhancement - User settings login field: [#8433](https://github.com/owncloud/web/pull/8433)
 * Enhancement - Skeleton App: [#8441](https://github.com/owncloud/web/pull/8441)
-* Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 * Enhancement - Rework notification bell: [#8450](https://github.com/owncloud/web/pull/8450)
 * Enhancement - Autosave content changes in text editor: [#8455](https://github.com/owncloud/web/pull/8455)
@@ -139,7 +291,6 @@ Summary
 * Enhancement - Beautify form inputs: [#8554](https://github.com/owncloud/web/pull/8554)
 * Enhancement - Rework mobile navigation: [#8557](https://github.com/owncloud/web/issues/8557)
 * Enhancement - QuickActions role configurable: [#8566](https://github.com/owncloud/web/pull/8566)
-* Enhancement - Shrink table columns: [#8599](https://github.com/owncloud/web/issues/8599)
 * Enhancement - Add `Accept-Language` header to all outgoing requests: [#8612](https://github.com/owncloud/web/issues/8612)
 * Enhancement - Add logout url: [#8630](https://github.com/owncloud/web/pull/8630)
 * Enhancement - Enable guest users: [#8652](https://github.com/owncloud/web/pull/8652)
@@ -162,22 +313,10 @@ Summary
 * Enhancement - Webfinger redirect app: [#8883](https://github.com/owncloud/web/issues/8883)
 * Enhancement - Rename "Quicklink" to "link": [#8898](https://github.com/owncloud/web/pull/8898)
 * Enhancement - Add notification setting to account page: [#8911](https://github.com/owncloud/web/pull/8911)
-* Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
-* Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
-* Enhancement - Long breadcrumb strategy: [#8984](https://github.com/owncloud/web/pull/8984)
-* Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
-* Enhancement - Single file link open with default app: [#9046](https://github.com/owncloud/web/pull/9046)
 * Enhancement - Support pagination in admin settings app: [#9048](https://github.com/owncloud/web/issues/9048)
-* Enhancement - Drag & drop on parent folder: [#9052](https://github.com/owncloud/web/pull/9052)
-* Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
-* Enhancement - Enable download (archive) on spaces: [#9056](https://github.com/owncloud/web/issues/9056)
-* Enhancement - Search full-text filter: [#9059](https://github.com/owncloud/web/pull/9059)
 * Enhancement - Disable change password capability: [#9070](https://github.com/owncloud/web/pull/9070)
 * Enhancement - Disable create user and delete user via capabilities: [#9070](https://github.com/owncloud/web/pull/9070)
 * Enhancement - Show detailed error messages while upload fails: [#9076](https://github.com/owncloud/web/pull/9076)
-* Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
-* Enhancement - Search breadcrumb: [#9077](https://github.com/owncloud/web/pull/9077)
-* Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
 
 Details
 -------
@@ -673,12 +812,26 @@ Details
    https://github.com/owncloud/web/issues/9061
    https://github.com/owncloud/web/pull/9062
 
+* Bugfix - Incorrect pause state in upload info: [#9080](https://github.com/owncloud/web/issues/9080)
+
+   An incorrect pause state in the upload info modal has been fixed.
+
+   https://github.com/owncloud/web/issues/9080
+   https://github.com/owncloud/web/pull/9141
+
 * Bugfix - Select all checkbox: [#9131](https://github.com/owncloud/web/pull/9131)
 
    We've fixed a bug in the shared-with-me page which caused unrelated checkboxes to be checked.
 
    https://github.com/owncloud/web/issues/9122
    https://github.com/owncloud/web/pull/9131
+
+* Bugfix - Notifications link overflow: [#9144](https://github.com/owncloud/web/pull/9144)
+
+   We've fixed a bug that caused long links in notifications to overflow.
+
+   https://github.com/owncloud/web/issues/9053
+   https://github.com/owncloud/web/pull/9144
 
 * Change - Streamline new tab handling in extensions: [#6661](https://github.com/owncloud/web/issues/6661)
 
@@ -1222,15 +1375,6 @@ Details
 
    https://github.com/owncloud/web/pull/8441
 
-* Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
-
-   We have added functionality to open a single, publicly shared file in a different view (instead
-   of showing it in a table).
-
-   https://github.com/owncloud/web/issues/8445
-   https://github.com/owncloud/web/pull/8440
-   https://github.com/owncloud/web/pull/8446
-
 * Enhancement - Configurable top bar: [#8449](https://github.com/owncloud/web/pull/8449)
 
    We've added a portal `app.runtime.header.right` that allows extensions to render
@@ -1348,15 +1492,6 @@ Details
 
    https://github.com/owncloud/web/issues/8547
    https://github.com/owncloud/web/pull/8566
-
-* Enhancement - Shrink table columns: [#8599](https://github.com/owncloud/web/issues/8599)
-
-   We've decided to shrink most table columns in the file list to their absolute minimum (Shares,
-   Size, Modified/Shared/Delete date, Actions) so that the file name can take up more horizontal
-   space.
-
-   https://github.com/owncloud/web/issues/8599
-   https://github.com/owncloud/web/pull/8978
 
 * Enhancement - Add `Accept-Language` header to all outgoing requests: [#8612](https://github.com/owncloud/web/issues/8612)
 
@@ -1528,45 +1663,6 @@ Details
    https://github.com/owncloud/web/pull/8911
    https://github.com/owncloud/web/pull/8972
 
-* Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
-
-   We've added a generic context-menu for right clicking on whitespace.
-
-   https://github.com/owncloud/web/issues/5861
-   https://github.com/owncloud/web/pull/8921
-
-* Enhancement - Deny share access: [#8983](https://github.com/owncloud/web/pull/8983)
-
-   We've added a way to deny the share access in sub folders in a share or space. This allows the share
-   editors to restrict access to certain resources within a share for certain share receivers.
-
-   https://github.com/owncloud/web/issues/7180
-   https://github.com/owncloud/web/pull/8983
-
-* Enhancement - Long breadcrumb strategy: [#8984](https://github.com/owncloud/web/pull/8984)
-
-   We've implemented a new solution to deal with long breadcrumbs even with long folder names.
-
-   https://github.com/owncloud/web/issues/6731
-   https://github.com/owncloud/web/pull/8984
-
-* Enhancement - Search tag filter: [#9044](https://github.com/owncloud/web/pull/9044)
-
-   The search result page now has a tag filter which can be used to filter the displayed search
-   result by tags.
-
-   https://github.com/owncloud/web/issues/9054
-   https://github.com/owncloud/web/pull/9044
-   https://github.com/owncloud/web/pull/9096
-
-* Enhancement - Single file link open with default app: [#9046](https://github.com/owncloud/web/pull/9046)
-
-   We've added a configurable functionality, that a single shared file via link will be opened in
-   default app, for example text-editor.
-
-   https://github.com/owncloud/web/issues/9045
-   https://github.com/owncloud/web/pull/9046
-
 * Enhancement - Support pagination in admin settings app: [#9048](https://github.com/owncloud/web/issues/9048)
 
    We've added pagination to various lists in the admin settings app. So there will be a page
@@ -1575,40 +1671,6 @@ Details
    https://github.com/owncloud/web/issues/9048
    https://github.com/owncloud/web/pull/9119
    https://github.com/owncloud/web/pull/9136
-
-* Enhancement - Drag & drop on parent folder: [#9052](https://github.com/owncloud/web/pull/9052)
-
-   We've added the possibility to drag & drop files onto the breadcrumb to move items into parent
-   folders in a fast and intuitive way.
-
-   https://github.com/owncloud/web/issues/9043
-   https://github.com/owncloud/web/pull/9052
-
-* Enhancement - Respect archiver limits: [#9055](https://github.com/owncloud/web/pull/9055)
-
-   The archiver service announces a limit for the accumulated filesize of the currently selected
-   resources. The web UI now respects those limits and shows a disabled download button once the
-   limit has been reached.
-
-   https://github.com/owncloud/web/issues/8456
-   https://github.com/owncloud/web/pull/9055
-
-* Enhancement - Enable download (archive) on spaces: [#9056](https://github.com/owncloud/web/issues/9056)
-
-   We've enabled the download action for spaces, which downloads the space's content as archive.
-
-   https://github.com/owncloud/web/issues/9056
-   https://github.com/owncloud/web/pull/9095
-
-* Enhancement - Search full-text filter: [#9059](https://github.com/owncloud/web/pull/9059)
-
-   The search result page now has a full-text filter which can be used to filter the displayed files
-   by their content.
-
-   https://github.com/owncloud/web/issues/9058
-   https://github.com/owncloud/web/pull/9059
-   https://github.com/owncloud/web/pull/9087
-   https://github.com/owncloud/web/pull/9096
 
 * Enhancement - Disable change password capability: [#9070](https://github.com/owncloud/web/pull/9070)
 
@@ -1632,29 +1694,6 @@ Details
    We now show detailed error messages while upload fails and the server provides the error cause.
 
    https://github.com/owncloud/web/pull/9076
-
-* Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
-
-   The search bar now has a button to open the search result page directly to display all available
-   search filters (= advanced search).
-
-   https://github.com/owncloud/web/issues/9072
-   https://github.com/owncloud/web/pull/9077
-
-* Enhancement - Search breadcrumb: [#9077](https://github.com/owncloud/web/pull/9077)
-
-   The search result page now has a breadcrumb item to tell the user where they are.
-
-   https://github.com/owncloud/web/issues/9072
-   https://github.com/owncloud/web/pull/9077
-
-* Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
-
-   We've implemented the possibility to upload a single file in the clipboard from anywhere via
-   paste.
-
-   https://github.com/owncloud/web/issues/9047
-   https://github.com/owncloud/web/pull/9140
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
