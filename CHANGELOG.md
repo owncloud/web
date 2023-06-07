@@ -23,6 +23,7 @@ Summary
 * Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
 * Enhancement - Search breadcrumb: [#9077](https://github.com/owncloud/web/pull/9077)
 * Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
+* Enhancement - Cloud import: [#9151](https://github.com/owncloud/web/issues/9151)
 
 Details
 -------
@@ -148,6 +149,14 @@ Details
 
    https://github.com/owncloud/web/issues/9047
    https://github.com/owncloud/web/pull/9140
+
+* Enhancement - Cloud import: [#9151](https://github.com/owncloud/web/issues/9151)
+
+   An action to import files from other external cloud providers has been added. OneDrive is
+   currently the only supported option.
+
+   https://github.com/owncloud/web/issues/9151
+   https://github.com/owncloud/web/pull/9150
 
 Changelog for ownCloud Web [7.0.0] (2023-06-02)
 =======================================
