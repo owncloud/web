@@ -53,6 +53,9 @@ import { computed, defineComponent, provide, ref, unref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
+import '@uppy/core/dist/style.min.css'
+import '@uppy/dashboard/dist/style.min.css'
+
 const MOBILE_BREAKPOINT = 640
 
 export default defineComponent({

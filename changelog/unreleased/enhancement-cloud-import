@@ -1,0 +1,6 @@
+Enhancement: Cloud import
+
+An action to import files from other external cloud providers has been added. OneDrive is currently the only supported option.
+
+https://github.com/owncloud/web/issues/9151
+https://github.com/owncloud/web/pull/9150

@@ -95,12 +95,25 @@
       close-on-click
       padding-size="small"
     >
-      <oc-list id="upload-list">
+      <oc-list id="upload-list" :class="{ 'oc-pb-s': extensionActions.length }">
         <li class="oc-menu-item-hover">
           <resource-upload ref="folder-upload" btn-class="oc-width-1-1" />
         </li>
         <li class="oc-menu-item-hover">
           <resource-upload ref="file-upload" btn-class="oc-width-1-1" :is-folder="true" />
+        </li>
+      </oc-list>
+      <oc-list v-if="extensionActions.length" id="extension-list" class="oc-pt-s">
+        <li v-for="(action, key) in extensionActions" :key="key" class="oc-menu-item-hover">
+          <oc-button
+            class="oc-width-1-1"
+            :class="action.class"
+            appearance="raw"
+            justify-content="left"
+            @click="action.handler"
+          >
+            <oc-icon :name="action.icon" fill-type="line" /><span v-text="action.label()"
+          /></oc-button>
         </li>
       </oc-list>
     </oc-drop>
@@ -140,7 +153,8 @@ import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import {
   useActiveLocation,
   useFileActionsCreateNewFile,
-  useFileActionsCreateNewFolder
+  useFileActionsCreateNewFolder,
+  useFileActionsImport
 } from '../../composables'
 
 import {
@@ -233,6 +247,11 @@ export default defineComponent({
       mimetypesAllowedForCreation: mimetypesAllowedForCreation
     })
 
+    const { actions: importFile } = useFileActionsImport({ store })
+    const extensionActions = computed(() => {
+      return [...unref(importFile)].filter((e) => e.isEnabled())
+    })
+
     const currentFolder = computed(() => {
       return store.getters['Files/currentFolder']
     })
@@ -305,7 +324,8 @@ export default defineComponent({
       createNewFileMimeTypeActions,
       createNewFolder,
       mimetypesAllowedForCreation,
-      createNewFolderAction
+      createNewFolderAction,
+      extensionActions
     }
   },
   data: () => ({
@@ -403,6 +423,7 @@ export default defineComponent({
           return
         }
 
+        this.hideModal()
         const { spaceId, currentFolder, currentFolderId } = file.meta
         if (!['public', 'share'].includes(file.meta.driveType)) {
           if (this.hasSpaces) {
@@ -420,7 +441,7 @@ export default defineComponent({
         }
 
         const sameFolder = this.itemId
-          ? currentFolderId === this.itemId
+          ? this.itemId.toString().startsWith(currentFolderId)
           : currentFolder === this.item
         const fileIsInCurrentPath = spaceId === this.space.id && sameFolder
         if (fileIsInCurrentPath) {
@@ -493,6 +514,10 @@ export default defineComponent({
   .oc-icon-m svg {
     height: 100% !important;
   }
+}
+
+#extension-list {
+  border-top: 1px solid var(--oc-color-border);
 }
 
 #clipboard-btns {

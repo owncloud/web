@@ -17,7 +17,7 @@ exports[`CreateAndUpload component action buttons should show and be enabled if 
     </button>
   </span>
   <oc-drop-stub class="oc-width-auto" closeonclick="true" dropid="upload-menu-drop" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#upload-menu-btn">
-    <oc-list-stub id="upload-list" raw="false">
+    <oc-list-stub class="" id="upload-list" raw="false">
       <li class="oc-menu-item-hover">
         <resource-upload-stub btnclass="oc-width-1-1" btnlabel="" isfolder="false"></resource-upload-stub>
       </li>
@@ -25,6 +25,7 @@ exports[`CreateAndUpload component action buttons should show and be enabled if 
         <resource-upload-stub btnclass="oc-width-1-1" btnlabel="" isfolder="true"></resource-upload-stub>
       </li>
     </oc-list-stub>
+    <!--v-if-->
   </oc-drop-stub>
   <!--v-if-->
 </div>
@@ -79,7 +80,7 @@ exports[`CreateAndUpload component file handlers should show additional handlers
     </button>
   </span>
   <oc-drop-stub class="oc-width-auto" closeonclick="true" dropid="upload-menu-drop" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#upload-menu-btn">
-    <oc-list-stub id="upload-list" raw="false">
+    <oc-list-stub class="" id="upload-list" raw="false">
       <li class="oc-menu-item-hover">
         <resource-upload-stub btnclass="oc-width-1-1" btnlabel="" isfolder="false"></resource-upload-stub>
       </li>
@@ -87,6 +88,7 @@ exports[`CreateAndUpload component file handlers should show additional handlers
         <resource-upload-stub btnclass="oc-width-1-1" btnlabel="" isfolder="true"></resource-upload-stub>
       </li>
     </oc-list-stub>
+    <!--v-if-->
   </oc-drop-stub>
   <!--v-if-->
 </div>

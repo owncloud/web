@@ -33,6 +33,8 @@ module.exports = {
 
     // HACK: workaround for https://github.com/transloadit/uppy/issues/4127
     '@uppy/core': '<rootDir>tests/unit/stubs/uppy',
+    '@uppy/dashboard': '<rootDir>tests/unit/stubs/uppy',
+    '@uppy/onedrive': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/xhr-upload': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/drop-target': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/tus': '<rootDir>tests/unit/stubs/uppy',

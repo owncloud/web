@@ -2,8 +2,6 @@ services:
   ocis:
     image: ${OCIS_IMAGE:-owncloud/ocis:latest}
     container_name: web_ocis
-    ports:
-      - 9200:9200
     environment:
       # OCIS
       OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
@@ -54,6 +52,7 @@ services:
 
       # PROXY
       PROXY_ENABLE_BASIC_AUTH: "${PROXY_ENABLE_BASIC_AUTH:-true}"
+      PROXY_TLS: "false"
     volumes:
       - ./dev/docker/ocis.entrypoint.sh:/usr/bin/entrypoint
       - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
@@ -63,6 +62,10 @@ services:
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     entrypoint: /usr/bin/entrypoint
+    labels:
+      traefik.enable: true
+      traefik.http.routers.ocis.rule: PathPrefix(`/`)
+      traefik.http.routers.ocis.entrypoints: websecure
 
   oc10:
     build:
@@ -164,5 +167,60 @@ services:
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
 
+  companion:
+    image: transloadit/companion:4.5.0
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
+      COMPANION_DATADIR: /tmp/companion/
+      COMPANION_DOMAIN: host.docker.internal:9200
+      COMPANION_PROTOCOL: https
+      COMPANION_PATH: /companion
+    volumes:
+      - uppy_companion_datadir:/tmp/companion/
+    labels:
+      traefik.enable: true
+      traefik.http.routers.companion.rule: PathPrefix(`/companion`)
+      traefik.http.routers.companion.entrypoints: websecure
+      traefik.http.services.companion.loadbalancer.server.port: 3020
+
+  traefik:
+    image: traefik:v2.7.2
+    restart: unless-stopped
+    command:
+      - "--pilot.dashboard=false"
+      - "--log.level=DEBUG"
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--providers.file.directory=/configs"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.middlewares=https_config@docker"
+      - "--entrypoints.websecure.http.tls.options=default"
+    labels:
+      traefik.enable: true
+      traefik.http.routers.http_catchall.rule: HostRegexp(`{any:.+}`)
+      traefik.http.routers.http_catchall.entrypoints: web
+      traefik.http.routers.http_catchall.middlewares: https_config
+      traefik.http.middlewares.https_config.headers.sslRedirect: true
+      traefik.http.middlewares.https_config.headers.stsSeconds: 63072000
+      traefik.http.middlewares.https_config.headers.stsIncludeSubdomains: true
+      traefik.http.middlewares.https_config.headers.accesscontrolallowmethods: OPTIONS,HEAD,GET,PUT,POST,DELETE,PATCH
+      traefik.http.middlewares.https_config.headers.accesscontrolallowheaders: "*"
+      traefik.http.middlewares.https_config.headers.accesscontrolalloworiginlist: "*"
+    ports:
+      - "80:80"
+      - "8090:8080"
+      - "9200:443"
+    volumes:
+      - "./data_traefik/letsencrypt:/letsencrypt"
+      - "./data_traefik/configs:/configs"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
 volumes:
   uploads:
+  uppy_companion_datadir:
+  traefik_letsencrypt:

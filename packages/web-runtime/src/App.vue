@@ -21,6 +21,7 @@
       :input-type="modal.inputType"
       :input-value="modal.inputValue"
       :button-secondary-text="modal.buttonSecondaryText"
+      :without-button-confirm="modal.withoutButtonConfirm"
       :button-cancel-text="modal.cancelText"
       :button-confirm-text="modal.confirmText"
       :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"

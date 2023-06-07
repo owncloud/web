@@ -94,6 +94,7 @@ export class ConfigurationManager {
       'openLinksWithDefaultApp',
       get(options, 'openLinksWithDefaultApp', true)
     )
+    set(this.optionsConfiguration, 'upload.companionUrl', get(options, 'upload.companionUrl', ''))
   }
 
   get options(): OptionsConfiguration {

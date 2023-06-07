@@ -77,6 +77,7 @@
             v-text="buttonSecondaryText"
           />
           <oc-button
+            v-if="!withoutButtonConfirm"
             class="oc-modal-body-actions-confirm oc-ml-s"
             variation="primary"
             :appearance="buttonConfirmAppearance"
@@ -271,6 +272,14 @@ export default defineComponent({
      * Asserts whether the confirm action is disabled
      */
     buttonConfirmDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    /**
+     * Asserts whether the modal should render a confirm button
+     */
+    withoutButtonConfirm: {
       type: Boolean,
       required: false,
       default: false

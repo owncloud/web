@@ -8,6 +8,7 @@ const state = {
   message: '',
   cancelText: '',
   confirmText: '',
+  withoutButtonConfirm: false,
   buttonSecondaryText: '',
   // Input values
   confirmDisabled: false,
@@ -61,6 +62,7 @@ const mutations = {
     state.title = modal.title
     state.message = modal.message
     state.buttonSecondaryText = modal.buttonSecondaryText
+    state.withoutButtonConfirm = modal.withoutButtonConfirm || false
     state.checkboxLabel = modal.checkboxLabel || ''
     state.cancelText = modal.cancelText || 'Cancel'
     state.confirmText = modal.confirmText || 'Confirm'
