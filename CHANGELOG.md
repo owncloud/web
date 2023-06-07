@@ -174,6 +174,7 @@ Details
 
    https://github.com/owncloud/web/issues/9177
    https://github.com/owncloud/web/pull/9178
+   https://github.com/owncloud/web/pull/9187
 
 Changelog for ownCloud Web [7.0.0] (2023-06-02)
 =======================================
