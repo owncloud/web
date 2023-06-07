@@ -27,8 +27,7 @@ const appInfo = {
   extensions: [
     {
       extension: 'pdf',
-      routeName: 'pdf-viewer',
-      canBeDefault: true
+      routeName: 'pdf-viewer'
     }
   ]
 }

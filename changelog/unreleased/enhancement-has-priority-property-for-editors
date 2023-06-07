@@ -1,0 +1,5 @@
+Enhancement: Add hasPriority property for editors per extension
+
+hasPriority property has been added to replace canBeDefault. The property allows to set priority for opening with editors per extension.
+
+https://github.com/owncloud/web/pull/7967

@@ -177,7 +177,7 @@ export const getActions = function (actions = []) {
       isEnabled: () => true,
       componentType: action.componentType || 'oc-button',
       class: action.class,
-      canBeDefault: defaultActions.indexOf(key) > -1,
+      hasPriority: defaultActions.indexOf(key) > -1,
       opensInNewWindow: action.opensInNewWindow || false
     }
     res.push(actionObj)

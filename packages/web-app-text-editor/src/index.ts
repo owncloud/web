@@ -25,7 +25,6 @@ const fileExtensions = () => {
   const extensions: {
     extension: string
     label: string
-    canBeDefault?: boolean
     newFileMenu?: any
   }[] = [
     {
@@ -62,14 +61,18 @@ const fileExtensions = () => {
     }
   ]
 
+  const config = (window as any).__$store.getters.extensionConfigByAppId(appId)
+  extensions.push(...(config.extraExtensions || []).map((ext) => ({ extension: ext })))
+
   let primaryExtensions = (window as any).__$store.getters.extensionConfigByAppId(appId)
     .primaryExtensions || ['txt', 'md']
+
   if (typeof primaryExtensions === 'string') {
     primaryExtensions = [primaryExtensions]
   }
+
   return extensions.reduce((acc, extensionItem) => {
     const isPrimary = primaryExtensions.includes(extensionItem.extension)
-    extensionItem.canBeDefault = isPrimary
     if (isPrimary) {
       extensionItem.newFileMenu = {
         menuTitle($gettext) {
@@ -92,9 +95,6 @@ const appInfo = {
       extension: extensionItem.extension,
       ...(Object.prototype.hasOwnProperty.call(extensionItem, 'newFileMenu') && {
         newFileMenu: extensionItem.newFileMenu
-      }),
-      ...(Object.prototype.hasOwnProperty.call(extensionItem, 'canBeDefault') && {
-        canBeDefault: extensionItem.canBeDefault
       })
     }
   })

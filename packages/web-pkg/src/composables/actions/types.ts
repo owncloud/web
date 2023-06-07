@@ -11,7 +11,7 @@ export interface Action<T = ActionOptions> {
   img?: string
   componentType: 'button' | 'router-link'
   class: string
-  canBeDefault?: boolean
+  hasPriority?: boolean
   hideLabel?: boolean
   shortcut?: string
   keepOpen?: boolean

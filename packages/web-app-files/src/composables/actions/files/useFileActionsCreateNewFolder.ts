@@ -123,7 +123,6 @@ export const useFileActionsCreateNewFolder = ({
         isEnabled: () => {
           return unref(currentFolder)?.canCreate()
         },
-        canBeDefault: true,
         componentType: 'button',
         class: 'oc-files-actions-create-new-folder'
       }
