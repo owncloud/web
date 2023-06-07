@@ -1,9 +1,10 @@
 import { Page } from 'playwright'
-import { sidebar } from '../utils'
-import { File } from '../../../types'
+import { expect } from '@playwright/test'
 import util from 'util'
+import { sidebar } from '../utils'
 import Collaborator, { ICollaborator } from '../share/collaborator'
 import { createLink } from '../link/actions'
+import { File } from '../../../types'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
@@ -13,6 +14,7 @@ const spacesRenameOptionSelector = '.oc-files-actions-rename-trigger:visible'
 const editSpacesSubtitleOptionSelector = '.oc-files-actions-edit-description-trigger:visible'
 const editQuotaOptionSelector = '.oc-files-actions-edit-quota-trigger:visible'
 const editImageOptionSelector = '.oc-files-actions-upload-space-image-trigger:visible'
+const downloadSpaceSelector = '.oc-files-actions-download-archive-trigger:visible'
 const spacesQuotaSearchField = '.oc-modal .vs__search'
 const selectedQuotaValueField = '.vs--open'
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
@@ -309,4 +311,15 @@ export const removeExpirationDateFromMember = async (args: {
   const { page, member: collaborator } = args
   await openSharingPanel(page)
   await Collaborator.removeExpirationDateFromCollaborator({ page, collaborator })
+}
+
+export const downloadSpace = async (page: Page): Promise<void> => {
+  await openActionsPanel(page)
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.locator(downloadSpaceSelector).click()
+  ])
+  await sidebar.close({ page })
+
+  expect(download.suggestedFilename()).toContain('download.tar')
 }

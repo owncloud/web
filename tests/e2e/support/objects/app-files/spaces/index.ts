@@ -59,13 +59,9 @@ export class Spaces {
     await po.removeAccessSpaceMembers({ ...args, page: this.#page })
   }
 
-  getSpaceID({ key }: { key: string }): string {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
-    return id
-  }
-
-  async expectThatSpacesIdNotExist(spaceID: string): Promise<void> {
-    await spaceWithSpaceIDNotExist({ spaceID, page: this.#page })
+  async expectThatSpacesIdNotExist(space: string): Promise<void> {
+    const { id } = this.#spacesEnvironment.getSpace({ key: space })
+    await spaceWithSpaceIDNotExist({ spaceID: id, page: this.#page })
   }
 
   async canUserEditResource(args: Omit<po.canUserEditSpaceResourceArgs, 'page'>): Promise<boolean> {
@@ -108,5 +104,9 @@ export class Spaces {
 
   async removeExpirationDate({ member }: { member: Omit<ICollaborator, 'role'> }): Promise<void> {
     await po.removeExpirationDateFromMember({ member, page: this.#page })
+  }
+
+  async downloadSpace(): Promise<void> {
+    await po.downloadSpace(this.#page)
   }
 }
