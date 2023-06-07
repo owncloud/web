@@ -10,6 +10,7 @@
       <avatar-image
         v-if="userId"
         class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle"
+        :name="$gettext('User Menu login')"
         :width="32"
         :userid="userId"
         :user-name="user.displayname"
@@ -113,7 +114,7 @@ import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
 import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { OcDrop } from 'design-system/src/components'
-import {useRoute} from "vue-router";
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   props: {
