@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Reduce space preloading: [#9153](https://github.com/owncloud/web/pull/9153)
+* Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 * Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
 * Enhancement - Shrink table columns: [#8599](https://github.com/owncloud/web/issues/8599)
 * Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
@@ -36,6 +37,13 @@ Details
    spaces will happen on demand.
 
    https://github.com/owncloud/web/pull/9153
+
+* Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
+
+   HasPriority property has been added to replace canBeDefault. The property allows to set
+   priority for opening with editors per extension.
+
+   https://github.com/owncloud/web/pull/7967
 
 * Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
 
