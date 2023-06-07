@@ -107,12 +107,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, computed } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, computed, unref } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
-import { useCapabilitySpacesEnabled, useRoute} from 'web-pkg/src/composables'
+import { useCapabilitySpacesEnabled, useRoute } from 'web-pkg/src/composables'
 import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
@@ -128,10 +128,9 @@ export default defineComponent({
     const loginLink = computed(() => {
       return {
         name: 'login',
-        query: { redirectUrl: route.fullPath }
+        query: { redirectUrl: unref(route).fullPath }
       }
     })
-
     return {
       hasSpaces: useCapabilitySpacesEnabled(),
       loginLink

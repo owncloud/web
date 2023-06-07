@@ -4,8 +4,11 @@ import {
   defaultPlugins,
   defaultStubs,
   mount,
-  defaultStoreMockOptions
+  defaultStoreMockOptions,
+  defaultComponentMocks,
+  RouteLocation
 } from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
 
 const totalQuota = 1000
 const basicQuota = 300
@@ -20,6 +23,12 @@ const noEmail = ''
 const email = 'test@test.de'
 
 describe('User Menu component', () => {
+  describe('when user is not logged in', () => {
+    it('renders a navigation with login button', () => {
+      const wrapper = getMountedWrapper({}, noEmail, true)
+      expect(wrapper.html()).toMatchSnapshot()
+    })
+  })
   describe('when quota and no email is set', () => {
     it('renders a navigation without email', () => {
       const wrapper = getMountedWrapper(
@@ -111,15 +120,24 @@ describe('User Menu component', () => {
   })
 })
 
-const getMountedWrapper = (quota, userEmail) => {
+const getMountedWrapper = (quota, userEmail, noUser = false) => {
+  const mocks = {
+    ...defaultComponentMocks({
+      currentRoute: mock<RouteLocation>({ path: '/files', fullPath: '/files' })
+    })
+  }
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.quota.mockImplementation(() => quota)
-  storeOptions.getters.user.mockImplementation(() => ({
-    id: 'einstein',
-    username: 'einstein',
-    userDisplayName: 'Albert Einstein',
-    userEmail
-  }))
+  storeOptions.getters.user.mockImplementation(() => {
+    return noUser
+      ? {}
+      : {
+          id: 'einstein',
+          username: 'einstein',
+          userDisplayName: 'Albert Einstein',
+          userEmail
+        }
+  })
   const store = createStore(storeOptions)
   return mount(UserMenu, {
     props: {
@@ -142,7 +160,8 @@ const getMountedWrapper = (quota, userEmail) => {
         'avatar-image': true,
         'oc-icon': true,
         'oc-progress': true
-      }
+      },
+      mocks
     }
   })
 }
