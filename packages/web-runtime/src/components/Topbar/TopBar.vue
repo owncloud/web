@@ -185,7 +185,7 @@ export default {
         ...(feedback.ariaLabel && { ariaLabel: feedback.ariaLabel }),
         ...(feedback.description && { description: feedback.description })
       }
-    },
+    }
   }
 }
 </script>
