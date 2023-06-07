@@ -21,7 +21,7 @@
         :width="32"
         icon="user-add"
         icon-fill-type="line"
-        icon-color="var(--oc-color-icon-text)"
+        icon-color="var(--oc-color-swatch-brand-default)"
         background="var(--oc-color-swatch-brand-contrast)"
       />
     </oc-button>
