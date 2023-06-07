@@ -37,7 +37,7 @@
             <oc-button
               v-if="field.sortable"
               :aria-label="getSortLabel(field.name)"
-              :class="{ 'oc-invisible': sortBy !== field.name }"
+              :class="{ 'oc-invisible-sr': sortBy !== field.name }"
               class="oc-button-sort"
               variation="passive"
               appearance="raw"
@@ -53,7 +53,10 @@
           </oc-th>
         </oc-tr>
       </oc-thead>
-      <oc-tbody v-if="selectedGroupingOption === 'None' || !selectedGroupingOption">
+      <oc-tbody
+        v-if="selectedGroupingOption === 'None' || !selectedGroupingOption"
+        class="has-item-context-menu"
+      >
         <oc-tr
           v-for="(item, trIndex) in data"
           :key="`oc-tbody-tr-${itemDomSelector(item) || trIndex}`"
@@ -95,11 +98,9 @@
         v-for="(group, index) in groupedData"
         v-else-if="groupingAllowed && selectedGroupingOption !== 'None' && copyGroupedData.length"
         :key="`${group.name + index}`"
+        class="has-item-context-menu"
       >
-        <oc-tr
-          :class="['oc-tbody-tr', 'oc-tbody-tr-accordion']"
-          @click="toggleGroup(index)"
-        >
+        <oc-tr :class="['oc-tbody-tr', 'oc-tbody-tr-accordion']" @click="toggleGroup(index)">
           <oc-td :colspan="fields.length - 1" class="oc-pl-s"> {{ group.name }}</oc-td>
           <!-- Column with collapsible buttons -->
           <oc-td class="oc-table-cell-align-right">
@@ -160,10 +161,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-
-import SortMixin from '../../../../design-system/src/mixins/sort'
 import { getSizeClass } from '../../../../design-system/src/utils/sizeClasses'
+import { defineComponent, PropType, ref } from 'vue'
 
 import {
   EVENT_THEAD_CLICKED,
@@ -171,8 +170,27 @@ import {
   EVENT_TROW_MOUNTED,
   EVENT_TROW_CONTEXTMENU,
   EVENT_ITEM_DROPPED,
-  EVENT_ITEM_DRAGGED
+  EVENT_ITEM_DRAGGED,
+  EVENT_SORT
 } from '../../../../design-system/src/helpers/constants'
+
+const SORT_DIRECTION_ASC = 'asc' as const
+const SORT_DIRECTION_DESC = 'desc' as const
+
+export type FieldType = {
+  name: string
+  title?: string
+  headerType?: string
+  type?: string
+  callback?: any
+  alignH?: string
+  alignV?: string
+  width?: string
+  wrap?: string
+  thClass?: string
+  tdClass?: string
+  sortable?: boolean
+}
 
 /**
  * A collapsible table component with dynamic layout and data.
@@ -181,7 +199,6 @@ export default defineComponent({
   name: 'CollapsibleOcTable',
   status: 'prototype',
   release: 'unreleased',
-  mixins: [SortMixin],
   props: {
     /**
      * Grouping settings for the table. Following settings are possible:<br />
@@ -219,7 +236,7 @@ export default defineComponent({
       type: Function,
       required: false,
       default(item) {
-        return item[this.idKey]
+        return item[(this as any).idKey]
       }
     },
     /**
@@ -240,7 +257,7 @@ export default defineComponent({
      * - **sortable**: defines if the column is sortable, can be `true` or `false`.
      */
     fields: {
-      type: Array,
+      type: Array as PropType<FieldType[]>,
       required: true
     },
     /**
@@ -295,7 +312,7 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'small',
-      validator: (size) => /(xsmall|small|medium|large|xlarge)/.test(size)
+      validator: (size: string) => ['xsmall', 'small', 'medium', 'large', 'xlarge'].includes(size)
     },
     /**
      * Enable Drag & Drop events
@@ -309,7 +326,7 @@ export default defineComponent({
      * Array of items that should be selected by default.
      */
     selection: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: false,
       default: () => []
     },
@@ -319,6 +336,25 @@ export default defineComponent({
     lazy: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Show that the table is sorted ascendingly/descendingly (no actual sorting takes place)
+     */
+    sortDir: {
+      type: String,
+      required: false,
+      default: undefined,
+      validator: (value: string) => {
+        return value === undefined || ['asc', 'desc'].includes(value)
+      }
+    },
+    /**
+     * Show that the table is sorted by this column (no actual sorting takes place)
+     */
+    sortBy: {
+      type: String,
+      required: false,
+      default: undefined
     }
   },
   emits: [
@@ -327,7 +363,8 @@ export default defineComponent({
     EVENT_THEAD_CLICKED,
     EVENT_TROW_CLICKED,
     EVENT_TROW_MOUNTED,
-    EVENT_TROW_CONTEXTMENU
+    EVENT_TROW_CONTEXTMENU,
+    EVENT_SORT
   ],
   setup() {
     const copyGroupedData = ref([])
@@ -347,6 +384,9 @@ export default defineComponent({
     }
   },
   computed: {
+    isSortable() {
+      return this.fields.some((f) => f.sortable)
+    },
     tableClasses() {
       const result = ['oc-table']
 
@@ -488,7 +528,7 @@ export default defineComponent({
         props.class += ` oc-pr-${getSizeClass(this.paddingX)}`
       }
 
-      this.extractSortThProps(props, field, index)
+      this.extractSortThProps(props, field)
 
       return props
     },
@@ -504,7 +544,7 @@ export default defineComponent({
       }
     },
     extractTdProps(field, index, item) {
-      const props = this.extractCellProps(field, index)
+      const props = this.extractCellProps(field)
       props.class = `oc-table-data-cell oc-table-data-cell-${field.name}`
       if (Object.prototype.hasOwnProperty.call(field, 'tdClass')) {
         props.class += ` ${field.tdClass}`
@@ -528,18 +568,14 @@ export default defineComponent({
       return props
     },
     extractCellProps(field) {
-      const result = {}
-      if (Object.prototype.hasOwnProperty.call(field, 'alignH')) {
-        result.alignH = field.alignH
+      return {
+        ...(field?.alignH && { alignH: field.alignH }),
+        ...(field?.alignV && { alignV: field.alignV }),
+        ...(field?.width && { width: field.width }),
+        class: undefined,
+        wrap: undefined,
+        style: undefined
       }
-      if (Object.prototype.hasOwnProperty.call(field, 'alignV')) {
-        result.alignV = field.alignV
-      }
-      if (Object.prototype.hasOwnProperty.call(field, 'width')) {
-        result.width = field.width
-      }
-
-      return result
     },
     isHighlighted(item) {
       if (!this.highlighted) {
@@ -588,6 +624,47 @@ export default defineComponent({
       if (this.isSortable) {
         this.handleSort(field)
       }
+    },
+
+    extractSortThProps(props, field) {
+      if (!this.fieldIsSortable(field)) {
+        return
+      }
+
+      let sort = 'none'
+      if (this.sortBy === field.name) {
+        sort = this.sortDir === SORT_DIRECTION_ASC ? 'ascending' : 'descending'
+      }
+      props['aria-sort'] = sort
+    },
+    fieldIsSortable({ sortable }) {
+      return !!sortable
+    },
+    handleSort(field) {
+      if (!this.fieldIsSortable(field)) {
+        return
+      }
+
+      let sortDir = this.sortDir
+      // toggle sortDir if already sorted by this column
+      if (this.sortBy === field.name && this.sortDir !== undefined) {
+        sortDir = this.sortDir === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC
+      }
+      // set default sortDir of the field when sortDir not set or sortBy changed
+      if (this.sortBy !== field.name || this.sortDir === undefined) {
+        sortDir = field.sortDir || SORT_DIRECTION_DESC
+      }
+
+      /**
+       * Triggers when table heads are clicked
+       *
+       * @property {string} sortBy requested column to sort by
+       * @property {string} sortDir requested order to sort in (either asc or desc)
+       */
+      this.$emit('sort', {
+        sortBy: field.name,
+        sortDir
+      })
     },
     updateCopyGroupedData() {
       const tempData = [...this.groupedData]
