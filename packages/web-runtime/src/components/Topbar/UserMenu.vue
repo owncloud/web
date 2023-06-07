@@ -32,7 +32,7 @@
       mode="click"
       close-on-click
       padding-size="small"
-      style="overflow: hidden"
+      class="oc-overflow-hidden"
     >
       <oc-list class="user-menu-list">
         <template v-if="!userId">
@@ -103,7 +103,10 @@
           </li>
         </template>
       </oc-list>
-      <div class="test"><a :href="imprintUrl">Imprint</a> - <a :href="privacyUrl">Privacy</a></div>
+      <div v-if="imprintUrl && privacyUrl" class="imprint-footer oc-py-s oc-mt-m oc-text-center">
+        <a v-translate :href="imprintUrl" target="_blank">Imprint</a> -
+        <a v-translate :href="privacyUrl" target="_blank">Privacy</a>
+      </div>
     </oc-drop>
   </nav>
 </template>
@@ -135,12 +138,16 @@ export default defineComponent({
     })
     const store = useStore()
     const imprintUrl = computed(() => {
-      const themesUrl = store.getters.configuration.currentTheme.general?.imprintUrl
-      return themesUrl
+      return (
+        store.getters.configuration.currentTheme.general?.imprintUrl ||
+        store.getters.configuration.options.imprintUrl
+      )
     })
     const privacyUrl = computed(() => {
-      const themesUrl = store.getters.configuration.currentTheme.general?.privacyUrl
-      return themesUrl
+      return (
+        store.getters.configuration.currentTheme.general?.privacyUrl ||
+        store.getters.configuration.options.privacyUrl
+      )
     })
     return {
       hasSpaces: useCapabilitySpacesEnabled(),
@@ -227,20 +234,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.test {
-  background-color: var(--oc-color-background-hover);
-  margin-left: -8px;
-  width: calc(100% + 18px);
-  margin-bottom: -8px !important;
-  margin-top: 12px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  text-align: center;
-  a {
-    font-size: var(--oc-font-size-medium) !important;
-    color: var(--oc-color-text-default);
-  }
-}
 .user-menu-list li {
   align-items: center;
   display: flex;
@@ -283,6 +276,17 @@ export default defineComponent({
       align-self: flex-end;
       display: inline-block;
     }
+  }
+}
+
+.imprint-footer {
+  background-color: var(--oc-color-background-hover);
+  margin-left: -8px;
+  width: calc(100% + 16px);
+  margin-bottom: -8px !important;
+  a {
+    font-size: var(--oc-font-size-medium) !important;
+    color: var(--oc-color-text-default);
   }
 }
 </style>

@@ -10,8 +10,8 @@
       "general": {
         "name": "ownCloud",
         "slogan": "ownCloud – A safe home for all your data",
-        "privacy-url": "https://www.google.de",
-        "imprint-url": "https://www.google.de"
+        "privacyUrl": "https://www.google.de",
+        "imprintUrl": "https://www.google.de"
       },
       "logo": {
         "topbar": "themes/owncloud/assets/logo.svg",

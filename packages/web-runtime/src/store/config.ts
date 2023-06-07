@@ -61,7 +61,9 @@ const state = {
     cernFeatures: false,
     sharingRecipientsPerPage: 200,
     contextHelpersReadMore: true,
-    openLinksWithDefaultApp: true
+    openLinksWithDefaultApp: true,
+    privacyUrl: '',
+    imprintUrl: ''
   }
 }
 

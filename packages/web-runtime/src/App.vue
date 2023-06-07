@@ -110,7 +110,6 @@ export default defineComponent({
     }
   },
   mounted() {
-    console.log(this.$store.state)
     eventBus.subscribe(
       'runtime.documentTitle.changed',
       ({ shortDocumentTitle, fullDocumentTitle }) => {
