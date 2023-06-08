@@ -1,8 +1,4 @@
-lockfileVersion: '6.1'
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
+lockfileVersion: '6.0'
 
 packageExtensionsChecksum: e5e8993047f00ffc73fd28e87ccaecb8
 
