@@ -40,9 +40,9 @@ import { useActiveLocation } from '../../composables'
 import FileInfo from './FileInfo.vue'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { default as InnerSideBar } from 'web-pkg/src/components/sideBar/SideBar.vue'
-import SpaceInfo from 'web-pkg/src/components/sideBar/Spaces/SpaceInfo.vue'
-import { Panel } from 'web-pkg/src/components/sideBar'
+import { default as InnerSideBar } from 'web-pkg/src/components/SideBar/SideBar.vue'
+import SpaceInfo from 'web-pkg/src/components/SideBar/Spaces/SpaceInfo.vue'
+import { Panel } from 'web-pkg/src/components/SideBar'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import {
   isLocationCommonActive,

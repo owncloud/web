@@ -2,7 +2,7 @@ import { buildSpace, ProjectSpaceResource } from '../../../../src/helpers/space'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../../../../src/helpers/share'
 import { mock } from 'jest-mock-extended'
 import { User } from 'web-client/src'
-import { Ability } from 'web-pkg'
+import { Ability } from 'web-client/src/helpers/resource/types'
 
 describe('buildSpace', () => {
   const uuid = '1'

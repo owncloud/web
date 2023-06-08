@@ -1,6 +1,6 @@
 {
   "name": "@ownclouders/web-pkg",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "ownCloud web pkg",
   "license": "AGPL-3.0",
   "main": "src/index.ts",
@@ -14,7 +14,6 @@
     "directory": "packages/web-pkg"
   },
   "peerDependencies": {
-    "@casl/ability": "^6.3.3",
     "@casl/vue": "^2.2.1",
     "axios": "^0.27.2",
     "filesize": "^9.0.11",

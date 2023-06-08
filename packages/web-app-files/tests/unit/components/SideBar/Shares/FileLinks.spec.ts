@@ -8,7 +8,7 @@ import {
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import { SharePermissions } from 'web-client/src/helpers/share'
-import { AbilityRule } from 'web-pkg/src'
+import { AbilityRule } from 'web-client/src/helpers/resource/types'
 
 const defaultLinksList = [
   {

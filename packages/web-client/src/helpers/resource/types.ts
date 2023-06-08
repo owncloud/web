@@ -1,5 +1,30 @@
-import { Ability } from 'web-pkg/src'
 import { User } from '../user'
+import { MongoAbility, SubjectRawRule } from '@casl/ability'
+
+export type AbilityActions =
+  | 'create'
+  | 'create-all'
+  | 'delete'
+  | 'delete-all'
+  | 'read'
+  | 'read-all'
+  | 'set-quota'
+  | 'set-quota-all'
+  | 'update'
+  | 'update-all'
+
+export type AbilitySubjects =
+  | 'Account'
+  | 'Drive'
+  | 'Group'
+  | 'Language'
+  | 'Logo'
+  | 'PublicLink'
+  | 'Role'
+  | 'Setting'
+
+export type Ability = MongoAbility<[AbilityActions, AbilitySubjects]>
+export type AbilityRule = SubjectRawRule<AbilityActions, AbilitySubjects, any>
 
 export interface SpaceRole {
   id: string

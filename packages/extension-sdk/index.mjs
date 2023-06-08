@@ -12,6 +12,13 @@ import serve from 'rollup-plugin-serve'
 
 const distDir = 'dist'
 
+const certsDir = process.env.OWNCLOUD_CERTS_DIR
+const defaultHttps = () =>
+  certsDir && {
+    key: readFileSync(join(certsDir, 'server.key')),
+    cert: readFileSync(join(certsDir, 'server.crt'))
+  }
+
 export const defineConfig = (overrides = {}) => {
   return ({ mode }) => {
     const isProduction = mode === 'production'
@@ -25,7 +32,7 @@ export const defineConfig = (overrides = {}) => {
     const name = packageJson.name
 
     // take vite standard config and reuse it for rollup-plugin-serve config
-    const { https, port = 9210, host = 'localhost' } = overrides?.server
+    const { https = defaultHttps(), port = 9210, host = 'localhost' } = overrides?.server || {}
     const isHttps = !!https
 
     if (isServing) {
@@ -39,18 +46,25 @@ export const defineConfig = (overrides = {}) => {
         server: {
           host,
           port,
-          strictPort: true
-        },
-        resolve: {
-          alias: {
-            path: 'rollup-plugin-node-polyfills/polyfills/path'
-          }
+          strictPort: true,
+          ...(isHttps && https)
         },
         build: {
           cssCodeSplit: true,
           minify: isProduction,
           rollupOptions: {
-            external: ['vue', 'vuex', 'luxon', 'web-pkg', 'web-client', 'vue3-gettext'],
+            // keep in sync with packages/web-runtime/src/container/application/index.ts
+            external: [
+              'vue',
+              'vuex',
+              'luxon',
+              'vue3-gettext',
+
+              '@ownclouders/web-client',
+              '@ownclouders/web-pkg',
+              'web-client',
+              'web-pkg'
+            ],
             preserveEntrySignatures: 'strict',
             input: {
               [name]: './src/index.ts'
@@ -76,6 +90,7 @@ export const defineConfig = (overrides = {}) => {
         },
         plugins: [
           vue({
+            // set to true when switching to esm
             customElement: false
           })
         ]

@@ -1,4 +1,4 @@
-import CompareSaveDialog from '../../../../src/components/sideBar/CompareSaveDialog.vue'
+import CompareSaveDialog from '../../../../src/components/SideBar/CompareSaveDialog.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 afterEach(() => jest.clearAllMocks())

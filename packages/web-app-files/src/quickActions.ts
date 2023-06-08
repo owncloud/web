@@ -3,7 +3,8 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Resource } from 'web-client'
 import { Language } from 'vue3-gettext'
-import { Ability, ClientService } from 'web-pkg'
+import { ClientService } from 'web-pkg'
+import { Ability } from 'web-client/src/helpers/resource/types'
 import { Store } from 'vuex'
 
 export function canShare(item, store) {

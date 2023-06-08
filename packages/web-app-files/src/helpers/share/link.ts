@@ -8,7 +8,7 @@ import {
 import { Store } from 'vuex'
 import { ClientService } from 'web-pkg/src/services'
 import { useClipboard } from '@vueuse/core'
-import { Ability } from 'web-pkg'
+import { Ability } from 'web-client/src/helpers/resource/types'
 import { Resource } from 'web-client'
 import { Language } from 'vue3-gettext'
 
