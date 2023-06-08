@@ -10,7 +10,7 @@
     "mark.js": "^8.11.1"
   },
   "peerDependencies": {
-    "axios": "^0.27.2",
+    "axios": "^0.27.2 || ^1.0.0",
     "design-system": "workspace:@ownclouders/design-system@*",
     "fuse.js": "^6.5.3",
     "lodash-es": "4.17.21",
