@@ -66,6 +66,9 @@ export default defineComponent({
     const extension = computed(() => {
       return props.resource.extension?.toLowerCase()
     })
+    const mimeType = computed(() => {
+      return props.resource.mimeType?.toLowerCase()
+    })
 
     const icon = computed((): IconType => {
       if (unref(isSpace)) {
@@ -75,12 +78,12 @@ export default defineComponent({
         return { name: defaultFolderIcon, color: defaultFolderColor }
       }
 
-      let icon = iconMappingInjection?.mimeType[props.resource.mimeType]
+      let icon = iconMappingInjection?.mimeType[unref(mimeType)]
       if (icon) {
         return icon
       }
 
-      icon = iconMappingInjection?.extension[props.resource.extension]
+      icon = iconMappingInjection?.extension[unref(extension)]
       if (icon) {
         return icon
       }
