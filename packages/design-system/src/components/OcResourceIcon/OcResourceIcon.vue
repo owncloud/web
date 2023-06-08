@@ -23,7 +23,7 @@ const defaultFolderIcon = 'resource-type-folder'
 const defaultSpaceColor = 'var(--oc-color-swatch-passive-default)'
 const defaultSpaceIcon = 'layout-grid'
 const defaultFallbackIconColor = 'var(--oc-color-text-default)'
-const defaultFallbackIcon = 'file'
+const defaultFallbackIcon = 'resource-type-file'
 
 export default defineComponent({
   name: 'OcResourceIcon',
@@ -86,7 +86,7 @@ export default defineComponent({
       }
 
       icon = iconMapping[unref(extension)] as IconType
-      const name = `resource-type-${icon?.name || defaultFallbackIcon}`
+      const name = icon?.name || defaultFallbackIcon
       const color = icon?.color || defaultFallbackIconColor
 
       return {
