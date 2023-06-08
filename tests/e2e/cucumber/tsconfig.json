@@ -1,0 +1,6 @@
+{
+  "extends": "@ownclouders/tsconfig",
+  "compilerOptions": {
+    "module": "CommonJS"
+  }
+}
