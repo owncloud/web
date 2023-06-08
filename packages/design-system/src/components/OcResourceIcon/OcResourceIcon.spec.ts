@@ -45,9 +45,9 @@ describe('OcResourceIcon', () => {
 
 function match(resource: Partial<Resource>, additionalText?: string) {
   AVAILABLE_SIZES.forEach((size) => {
-    it(`renders OcIcon for resource type ${resource.type} in size ${size}${
+    it(`renders OcIcon for resource type ${resource.type}${
       additionalText ? ` ${additionalText}` : ''
-    }`, () => {
+    } in size ${size}`, () => {
       const { wrapper } = getWrapper({ resource, size })
       expect(wrapper.html()).toMatchSnapshot()
     })
