@@ -14,8 +14,8 @@ import { Resource } from 'web-client'
 
 import OcIcon from '../OcIcon/OcIcon.vue'
 import { AVAILABLE_SIZES, IconType } from '../../helpers'
-import * as iconColorMap from '../../helpers/resourceIconColorExtensionMapping.json'
-import * as iconNameMap from '../../helpers/resourceIconExtensionMapping.json'
+import * as iconMapping from '../../helpers/resourceIconMapping.json'
+
 import { OcResourceIconMapping, ocResourceIconMappingInjectionKey } from './types'
 
 const defaultFolderColor = 'var(--oc-color-icon-folder)'
@@ -85,12 +85,13 @@ export default defineComponent({
         return icon
       }
 
-      const name = iconNameMap[unref(extension)]
-      const color = iconColorMap[unref(extension)]
+      icon = iconMapping[unref(extension)] as IconType
+      const name = `resource-type-${icon?.name || defaultFallbackIcon}`
+      const color = icon?.color || defaultFallbackIconColor
 
       return {
-        name: `resource-type-${name ? name : defaultFallbackIcon}`,
-        color: color ? color : defaultFallbackIconColor
+        name,
+        color
       }
     })
 

@@ -1,0 +1,462 @@
+{
+  "7z": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "accdb": {
+    "name": "file",
+    "color": "var(--oc-color-text-default)"
+  },
+  "ai": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "apk": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "bash": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "bz2": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "c++": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "c": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "cb7": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "cba": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "cbr": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "cbt": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "cbtc": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "cbz": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "cc": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "cdr": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "cpp": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "css": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "csv": {
+    "name": "spreadsheet",
+    "color": "var(--oc-color-icon-spreadsheet)"
+  },
+  "cvbdl": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "deb": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "doc": {
+    "name": "document",
+    "color": "var(--oc-color-icon-document)"
+  },
+  "docm": {
+    "name": "document",
+    "color": "var(--oc-color-icon-document)"
+  },
+  "docx": {
+    "name": "document",
+    "color": "var(--oc-color-icon-document)"
+  },
+  "dot": {
+    "name": "document",
+    "color": "var(--oc-color-icon-document)"
+  },
+  "dotx": {
+    "name": "document",
+    "color": "var(--oc-color-icon-document)"
+  },
+  "drawio": {
+    "name": "drawio",
+    "color": "var(--oc-color-icon-drawio)"
+  },
+  "eml": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "eot": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "eps": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "epub": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "feature": {
+    "name": "code"
+  },
+  "go": {
+    "name": "code"
+  },
+  "gif": {
+    "name": "image"
+  },
+  "gz": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "gzip": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "h": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "hh": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "hpp": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "htm": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "html": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "ifc": {
+    "name": "ifc",
+    "color": "var(--oc-color-icon-ifc)"
+  },
+  "ipynb": {
+    "name": "jupyter",
+    "color": "var(--oc-color-icon-jupyter)"
+  },
+  "java": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "jpeg": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "jpg": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "js": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "json": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "lwp": {
+    "name": "document",
+    "color": "var(--oc-color-icon-document)"
+  },
+  "md": {
+    "name": "file"
+  },
+  "mdb": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "mov": {
+    "name": "video",
+    "color": "var(--oc-color-icon-video)"
+  },
+  "mp3": {
+    "name": "audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "mp4": {
+    "name": "video",
+    "color": "var(--oc-color-icon-video)"
+  },
+  "odp": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "odg": {
+    "name": "graphic",
+    "color": "var(--oc-color-icon-graphic)"
+  },
+  "ods": {
+    "name": "spreadsheet",
+    "color": "var(--oc-color-icon-spreadsheet)"
+  },
+  "odt": {
+    "name": "document",
+    "color": "var(--oc-color-icon-document)"
+  },
+  "one": {
+    "name": "document",
+    "color": "var(--oc-color-icon-document)"
+  },
+  "otf": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "pdf": {
+    "name": "pdf",
+    "color": "var(--oc-color-icon-pdf)"
+  },
+  "pfb": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "php": {
+    "name": "code",
+    "color": "var(--oc-color-icon-default)"
+  },
+  "pl": {
+    "name": "code",
+    "color": "var(--oc-color-icon-default)"
+  },
+  "png": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "pot": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "potm": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "potx": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "ppa": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "ppam": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "pps": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "ppsm": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "ppsx": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "ppt": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "pptm": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "pptx": {
+    "name": "presentation",
+    "color": "var(--oc-color-icon-presentation)"
+  },
+  "ps": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "psd": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "py": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "rar": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "root": {
+    "name": "root",
+    "color": "var(--oc-color-icon-root)"
+  },
+  "rss": {
+    "name": "file",
+    "color": "var(--oc-color-text-default)"
+  },
+  "scss": {
+    "name": "code"
+  },
+  "sh": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "sh-lib": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "sql": {
+    "name": "code"
+  },
+  "svg": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "swf": {
+    "name": "file",
+    "color": "var(--oc-color-text-default)"
+  },
+  "tar": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "tar.bz2": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "tar.gz": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "tbz2": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "tex": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "tgz": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  },
+  "ts": {
+    "name": "code"
+  },
+  "ttf": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "txt": {
+    "name": "text",
+    "color": "var(--oc-color-text-default)"
+  },
+  "vsd": {
+    "name": "document",
+    "color": "var(--oc-color-icon-document)"
+  },
+  "wav": {
+    "name": "audio"
+  },
+  "webm": {
+    "name": "video",
+    "color": "var(--oc-color-icon-video)"
+  },
+  "wmv": {
+    "name": "video",
+    "color": "var(--oc-color-icon-video)"
+  },
+  "woff": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "wpd": {
+    "name": "document",
+    "color": "var(--oc-color-icon-document)"
+  },
+  "xcf": {
+    "name": "image",
+    "color": "var(--oc-color-icon-image)"
+  },
+  "xla": {
+    "name": "spreadsheet",
+    "color": "var(--oc-color-icon-spreadsheet)"
+  },
+  "xlam": {
+    "name": "spreadsheet",
+    "color": "var(--oc-color-icon-spreadsheet)"
+  },
+  "xls": {
+    "name": "spreadsheet",
+    "color": "var(--oc-color-icon-spreadsheet)"
+  },
+  "xlsb": {
+    "name": "spreadsheet",
+    "color": "var(--oc-color-icon-spreadsheet)"
+  },
+  "xlsm": {
+    "name": "spreadsheet",
+    "color": "var(--oc-color-icon-spreadsheet)"
+  },
+  "xlsx": {
+    "name": "spreadsheet",
+    "color": "var(--oc-color-icon-spreadsheet)"
+  },
+  "xlt": {
+    "name": "spreadsheet",
+    "color": "var(--oc-color-icon-spreadsheet)"
+  },
+  "xltm": {
+    "name": "spreadsheet",
+    "color": "var(--oc-color-icon-spreadsheet)"
+  },
+  "xltx": {
+    "name": "spreadsheet",
+    "color": "var(--oc-color-icon-spreadsheet)"
+  },
+  "xml": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "yaml": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "yml": {
+    "name": "code",
+    "color": "var(--oc-color-text-default)"
+  },
+  "zip": {
+    "name": "archive",
+    "color": "var(--oc-color-icon-archive)"
+  }
+}
