@@ -18,12 +18,19 @@ import * as iconMapping from '../../helpers/resourceIconMapping.json'
 
 import { OcResourceIconMapping, ocResourceIconMappingInjectionKey } from './types'
 
-const defaultFolderColor = 'var(--oc-color-icon-folder)'
-const defaultFolderIcon = 'resource-type-folder'
-const defaultSpaceColor = 'var(--oc-color-swatch-passive-default)'
-const defaultSpaceIcon = 'layout-grid'
-const defaultFallbackIconColor = 'var(--oc-color-text-default)'
-const defaultFallbackIcon = 'resource-type-file'
+const defaultFolderIcon: IconType = {
+  name: 'resource-type-folder',
+  color: 'var(--oc-color-icon-folder)'
+}
+
+const defaultSpaceIcon: IconType = {
+  name: 'layout-grid',
+  color: 'var(--oc-color-swatch-passive-default)'
+}
+const defaultFallbackIcon: IconType = {
+  name: 'resource-type-file',
+  color: 'var(--oc-color-text-default)'
+}
 
 export default defineComponent({
   name: 'OcResourceIcon',
@@ -72,29 +79,23 @@ export default defineComponent({
 
     const icon = computed((): IconType => {
       if (unref(isSpace)) {
-        return { name: defaultSpaceIcon, color: defaultSpaceColor }
+        return defaultSpaceIcon
       }
       if (unref(isFolder)) {
-        return { name: defaultFolderIcon, color: defaultFolderColor }
+        return defaultFolderIcon
       }
 
-      let icon = iconMappingInjection?.mimeType[unref(mimeType)]
-      if (icon) {
-        return icon
+      let icon = iconMapping[unref(extension)] as IconType
+      if (!icon) {
+        icon = iconMappingInjection?.mimeType[unref(mimeType)]
+        if (!icon) {
+          icon = iconMappingInjection?.extension[unref(extension)]
+        }
       }
-
-      icon = iconMappingInjection?.extension[unref(extension)]
-      if (icon) {
-        return icon
-      }
-
-      icon = iconMapping[unref(extension)] as IconType
-      const name = icon?.name || defaultFallbackIcon
-      const color = icon?.color || defaultFallbackIconColor
 
       return {
-        name,
-        color
+        ...defaultFallbackIcon,
+        ...icon
       }
     })
 
