@@ -85,14 +85,10 @@ export default defineComponent({
         return defaultFolderIcon
       }
 
-      let icon = iconMapping[unref(extension)] as IconType
-      if (!icon) {
-        icon = iconMappingInjection?.mimeType[unref(mimeType)]
-        if (!icon) {
-          icon = iconMappingInjection?.extension[unref(extension)]
-        }
-      }
-
+      let icon =
+        (iconMapping[unref(extension)] as IconType) ||
+        iconMappingInjection?.mimeType[unref(mimeType)] ||
+        iconMappingInjection?.extension[unref(extension)]
       return {
         ...defaultFallbackIcon,
         ...icon
