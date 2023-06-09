@@ -29,7 +29,25 @@
           </template>
         </no-content-message>
         <div v-else class="spaces-list oc-px-m oc-mt-l">
+          <resource-table
+            v-model:selectedIds="selectedResourcesIds"
+            :resources="spaces"
+            :space="spaces[0]"
+            :fields-displayed="tableDisplayFields"
+            :are-thumbnails-displayed="true"
+            :sort-fields="sortFields"
+            :sort-by="sortBy"
+            :sort-dir="sortDir"
+            @sort="handleSort"
+          >
+            <template #contextMenu="{ resource }">
+              <space-context-actions
+                :action-options="{ resources: [resource] as SpaceResource[] }"
+              />
+            </template>
+          </resource-table>
           <resource-tiles
+            v-if="false"
             v-model:selectedIds="selectedResourcesIds"
             :data="spaces"
             :resizable="true"
@@ -88,16 +106,18 @@ import {
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
-import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from 'web-pkg/src/composables/sideBar'
 import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
-import { useSelectedResources } from 'web-app-files/src/composables'
+import { useResourcesViewDefaults, useSelectedResources } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
+import { $gettext } from 'web-app-files/src/router/utils'
 
 export default defineComponent({
   components: {
@@ -107,6 +127,7 @@ export default defineComponent({
     FilesViewWrapper,
     NoContentMessage,
     ResourceTiles,
+    ResourceTable,
     SideBar,
     SpaceContextActions
   },
@@ -119,6 +140,16 @@ export default defineComponent({
     const runtimeSpaces = computed((): SpaceResource[] => {
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
     })
+
+    const tableDisplayFields = computed(() => [
+      'name',
+      'manager',
+      'members',
+      'totalQuota',
+      'usedQuota',
+      'remainingQuota',
+      'mdate'
+    ])
 
     const sortFields = availableSortFields
     const {
@@ -166,7 +197,8 @@ export default defineComponent({
       sortDir,
       sortFields,
       hasCreatePermission,
-      viewModes
+      viewModes,
+      tableDisplayFields
     }
   },
   data: function () {

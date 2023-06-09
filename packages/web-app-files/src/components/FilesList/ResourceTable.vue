@@ -581,6 +581,42 @@ export default defineComponent({
             return field
           })
       )
+      if (firstResource.spaceQuota) {
+        fields.push(
+          ...[
+            {
+              name: 'manager',
+              title: this.$gettext('Manager'),
+              type: 'slot'
+            },
+            {
+              name: 'members',
+              title: this.$gettext('Members'),
+              type: 'slot',
+              sortable: true
+            },
+            {
+              name: 'totalQuota',
+              title: this.$gettext('Total quota'),
+              type: 'slot',
+              sortable: true
+            },
+            {
+              name: 'usedQuota',
+              title: this.$gettext('Used quota'),
+              type: 'slot',
+              sortable: true
+            },
+            {
+              name: 'remainingQuota',
+              title: this.$gettext('Remaining quota'),
+              type: 'slot',
+              sortable: true
+            }
+          ]
+        )
+      }
+
       if (this.hasActions) {
         fields.push({
           name: 'actions',
