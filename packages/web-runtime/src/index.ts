@@ -109,7 +109,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
         return
       }
       announceVersions({ store })
-      await announceApplicationsReady({ applications })
+      await announceApplicationsReady({ app, store, applications })
     },
     {
       immediate: true

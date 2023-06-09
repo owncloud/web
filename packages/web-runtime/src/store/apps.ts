@@ -82,6 +82,7 @@ const mutations = {
       id: appInfo.id,
       icon: appInfo.icon || 'check_box_outline_blank',
       ...(appInfo.iconFillType && { iconFillType: appInfo.iconFillType }),
+      ...(appInfo.iconColor && { iconColor: appInfo.iconColor }),
       img: appInfo.img || null,
       config: (state.fileEditorConfigs || {})[appInfo.id]
     }

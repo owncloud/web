@@ -81,11 +81,7 @@ const webpackConfig = merge(baseWebpackConfig, {
           to: config.system.assetsSubDirectory
         },
         {
-          from: path.resolve(__dirname, '../src/helpers/resourceIconColorExtensionMapping.json'),
-          to: config.system.assetsSubDirectory
-        },
-        {
-          from: path.resolve(__dirname, '../src/helpers/resourceIconExtensionMapping.json'),
+          from: path.resolve(__dirname, '../src/helpers/resourceIconMapping.json'),
           to: config.system.assetsSubDirectory
         }
       ]

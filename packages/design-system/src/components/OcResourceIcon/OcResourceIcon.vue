@@ -1,28 +1,36 @@
 <template>
   <oc-icon
-    :key="`resource-icon-${iconName}`"
-    :name="iconName"
-    :color="iconColor"
+    :key="`resource-icon-${icon.name}`"
+    :name="icon.name"
+    :color="icon.color"
     :size="size"
     :class="['oc-resource-icon', iconTypeClass]"
   />
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, inject, PropType, unref } from 'vue'
 import { Resource } from 'web-client'
 
 import OcIcon from '../OcIcon/OcIcon.vue'
-import { AVAILABLE_SIZES } from '../../helpers'
-import * as iconColorMap from '../../helpers/resourceIconColorExtensionMapping.json'
-import * as iconNameMap from '../../helpers/resourceIconExtensionMapping.json'
+import { AVAILABLE_SIZES, IconType } from '../../helpers'
+import * as iconMapping from '../../helpers/resourceIconMapping.json'
 
-const defaultFolderColor = 'var(--oc-color-icon-folder)'
-const defaultFolderIcon = 'resource-type-folder'
-const defaultSpaceColor = 'var(--oc-color-swatch-passive-default)'
-const defaultSpaceIcon = 'layout-grid'
-const defaultFallbackIconColor = 'var(--oc-color-text-default)'
-const defaultFallbackIcon = 'file'
+import { OcResourceIconMapping, ocResourceIconMappingInjectionKey } from './types'
+
+const defaultFolderIcon: IconType = {
+  name: 'resource-type-folder',
+  color: 'var(--oc-color-icon-folder)'
+}
+
+const defaultSpaceIcon: IconType = {
+  name: 'layout-grid',
+  color: 'var(--oc-color-swatch-passive-default)'
+}
+const defaultFallbackIcon: IconType = {
+  name: 'resource-type-file',
+  color: 'var(--oc-color-text-default)'
+}
 
 export default defineComponent({
   name: 'OcResourceIcon',
@@ -49,47 +57,57 @@ export default defineComponent({
       }
     }
   },
-  computed: {
-    iconName() {
-      if (this.isSpace) {
-        return defaultSpaceIcon
-      }
-      if (this.isFolder) {
-        return defaultFolderIcon
-      }
-      const icon = iconNameMap[this.extension]
-      return `resource-type-${icon ? icon : defaultFallbackIcon}`
-    },
-    iconColor() {
-      if (this.isSpace) {
-        return defaultSpaceColor
-      }
-      if (this.isFolder) {
-        return defaultFolderColor
-      }
-      const color = iconColorMap[this.extension]
-      return color ? color : defaultFallbackIconColor
-    },
-    iconTypeClass() {
-      if (this.isSpace) {
-        return 'oc-resource-icon-space'
-      }
-      if (this.isFolder) {
-        return 'oc-resource-icon-folder'
-      }
-      return 'oc-resource-icon-file'
-    },
-    isFolder() {
+  setup(props) {
+    const iconMappingInjection = inject<OcResourceIconMapping>(ocResourceIconMappingInjectionKey)
+
+    const isFolder = computed(() => {
       // fallback is necessary since
       // sometimes resources without a type
       // but with `isFolder` are being passed
-      return this.resource.type === 'folder' || this.resource.isFolder
-    },
-    isSpace() {
-      return this.resource.type === 'space'
-    },
-    extension() {
-      return this.resource.extension?.toLowerCase()
+      return props.resource.type === 'folder' || props.resource.isFolder
+    })
+
+    const isSpace = computed(() => {
+      return props.resource.type === 'space'
+    })
+    const extension = computed(() => {
+      return props.resource.extension?.toLowerCase()
+    })
+    const mimeType = computed(() => {
+      return props.resource.mimeType?.toLowerCase()
+    })
+
+    const icon = computed((): IconType => {
+      if (unref(isSpace)) {
+        return defaultSpaceIcon
+      }
+      if (unref(isFolder)) {
+        return defaultFolderIcon
+      }
+
+      let icon =
+        (iconMapping[unref(extension)] as IconType) ||
+        iconMappingInjection?.mimeType[unref(mimeType)] ||
+        iconMappingInjection?.extension[unref(extension)]
+      return {
+        ...defaultFallbackIcon,
+        ...icon
+      }
+    })
+
+    const iconTypeClass = computed(() => {
+      if (unref(isSpace)) {
+        return 'oc-resource-icon-space'
+      }
+      if (unref(isFolder)) {
+        return 'oc-resource-icon-folder'
+      }
+      return 'oc-resource-icon-file'
+    })
+
+    return {
+      icon,
+      iconTypeClass
     }
   }
 })

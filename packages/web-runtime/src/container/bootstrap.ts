@@ -18,6 +18,10 @@ import { init as sentryInit } from '@sentry/vue'
 import { configurationManager, RawConfig, ConfigurationManager } from 'web-pkg/src/configuration'
 import { webdav } from 'web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
+import {
+  ocResourceIconMappingInjectionKey,
+  OcResourceIconMapping
+} from 'design-system/src/components/OcResourceIcon/types'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -164,11 +168,47 @@ export const initializeApplications = async ({
  * @param applications
  */
 export const announceApplicationsReady = async ({
+  app,
+  store,
   applications
 }: {
+  app: App
+  store: Store<any>
   applications: NextApplication[]
 }): Promise<void> => {
   await Promise.all(applications.map((application) => application.ready()))
+  const apps = store.state.apps
+
+  const mapping: OcResourceIconMapping = {
+    mimeType: {},
+    extension: {}
+  }
+
+  ;(apps.fileEditors as any[]).forEach((editor) => {
+    const meta = apps.meta[editor.app]
+
+    const getIconDefinition = () => {
+      return {
+        name: meta.icon,
+        ...(meta.iconFillType && {
+          fillType: meta.iconFillType
+        }),
+        ...(meta.iconColor && {
+          color: meta.iconColor
+        })
+      }
+    }
+
+    if (editor.mimeType) {
+      mapping.mimeType[editor.mimeType] = getIconDefinition()
+    }
+
+    if (editor.extension) {
+      mapping.extension[editor.extension] = getIconDefinition()
+    }
+  })
+
+  app.provide(ocResourceIconMappingInjectionKey, mapping)
 }
 
 /**
