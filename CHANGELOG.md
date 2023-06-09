@@ -23,6 +23,7 @@ Summary
 * Enhancement - Search full-text filter: [#9059](https://github.com/owncloud/web/pull/9059)
 * Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
 * Enhancement - Search breadcrumb: [#9077](https://github.com/owncloud/web/pull/9077)
+* Enhancement - Use app icons for files: [#9088](https://github.com/owncloud/web/pull/9088)
 * Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
 * Enhancement - Cloud import: [#9151](https://github.com/owncloud/web/issues/9151)
 * Enhancement - Add login button to top bar: [#9178](https://github.com/owncloud/web/pull/9178)
@@ -150,6 +151,14 @@ Details
 
    https://github.com/owncloud/web/issues/9072
    https://github.com/owncloud/web/pull/9077
+
+* Enhancement - Use app icons for files: [#9088](https://github.com/owncloud/web/pull/9088)
+
+   Icons of apps are now rendered next to files that can be opened with them. Until now oC Web itself
+   defined icons for file types, with this change an icon can be shown even if oC Web does not know the
+   file type - there just needs to be an app loaded that supports opening the file type.
+
+   https://github.com/owncloud/web/pull/9088
 
 * Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
 
