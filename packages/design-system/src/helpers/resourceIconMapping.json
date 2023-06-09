@@ -124,13 +124,16 @@
     "color": "var(--oc-color-text-default)"
   },
   "feature": {
-    "name": "resource-type-code"
+    "name": "resource-type-code",
+    "color": "var(--oc-color-text-default)"
   },
   "go": {
-    "name": "resource-type-code"
+    "name": "resource-type-code",
+    "color": "var(--oc-color-text-default)"
   },
   "gif": {
-    "name": "resource-type-image"
+    "name": "resource-type-image",
+    "color": "var(--oc-color-icon-image)"
   },
   "gz": {
     "name": "resource-type-archive",
@@ -193,7 +196,8 @@
     "color": "var(--oc-color-icon-document)"
   },
   "md": {
-    "name": "resource-type-file"
+    "name": "resource-type-file",
+    "color": "var(--oc-color-text-default)"
   },
   "mdb": {
     "name": "resource-type-text",
@@ -324,7 +328,8 @@
     "color": "var(--oc-color-text-default)"
   },
   "scss": {
-    "name": "resource-type-code"
+    "name": "resource-type-code",
+    "color": "var(--oc-color-text-default)"
   },
   "sh": {
     "name": "resource-type-code",
@@ -335,7 +340,8 @@
     "color": "var(--oc-color-text-default)"
   },
   "sql": {
-    "name": "resource-type-code"
+    "name": "resource-type-code",
+    "color": "var(--oc-color-text-default)"
   },
   "svg": {
     "name": "resource-type-image",
@@ -370,7 +376,8 @@
     "color": "var(--oc-color-icon-archive)"
   },
   "ts": {
-    "name": "resource-type-code"
+    "name": "resource-type-code",
+    "color": "var(--oc-color-text-default)"
   },
   "ttf": {
     "name": "resource-type-image",
@@ -385,7 +392,8 @@
     "color": "var(--oc-color-icon-document)"
   },
   "wav": {
-    "name": "resource-type-audio"
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "webm": {
     "name": "resource-type-video",
