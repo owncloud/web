@@ -111,7 +111,7 @@ export class Spaces {
     await po.removeExpirationDateFromMember({ member, page: this.#page })
   }
 
-  async downloadSpace(): Promise<void> {
-    await po.downloadSpace(this.#page)
+  downloadSpace(): Promise<string> {
+    return po.downloadSpace(this.#page)
   }
 }

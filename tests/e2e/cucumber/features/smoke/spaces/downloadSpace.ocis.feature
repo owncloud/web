@@ -1,7 +1,7 @@
 Feature: download space
   As a user
   I want to download the project space
-  So that I can store the project resources locally
+  So that I can store the project's resources locally
 
   Scenario: download space
     Given "Admin" creates following users using API

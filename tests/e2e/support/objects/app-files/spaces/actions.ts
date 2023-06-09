@@ -1,5 +1,4 @@
 import { Page } from 'playwright'
-import { expect } from '@playwright/test'
 import util from 'util'
 
 import { sidebar } from '../utils'
@@ -314,7 +313,7 @@ export const removeExpirationDateFromMember = async (args: {
   await Collaborator.removeExpirationDateFromCollaborator({ page, collaborator })
 }
 
-export const downloadSpace = async (page: Page): Promise<void> => {
+export const downloadSpace = async (page: Page): Promise<string> => {
   await openActionsPanel(page)
   const [download] = await Promise.all([
     page.waitForEvent('download'),
@@ -322,5 +321,5 @@ export const downloadSpace = async (page: Page): Promise<void> => {
   ])
   await sidebar.close({ page })
 
-  expect(download.suggestedFilename()).toContain('download.tar')
+  return download.suggestedFilename()
 }
