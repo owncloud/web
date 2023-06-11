@@ -10,6 +10,7 @@
       :show-batch-actions="!!selectedUsers.length"
       :batch-actions="batchActions"
       :batch-action-items="selectedUsers"
+      :show-view-options="true"
     >
       <template #topbarActions>
         <div class="admin-settings-app-bar-actions">

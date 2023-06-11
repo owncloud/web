@@ -10,6 +10,7 @@
       :show-batch-actions="!!selectedGroups.length"
       :batch-actions="batchActions"
       :batch-action-items="selectedGroups"
+      :show-view-options="true"
     >
       <template #topbarActions>
         <div class="admin-settings-app-bar-actions">

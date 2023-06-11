@@ -62,7 +62,7 @@
             :selected="queryItemAsString(itemsPerPageCurrent)"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
-            :options="['100', '500']"
+            :options="paginationOptions"
             class="files-pagination-size"
             @change="setItemsPerPage"
           />
@@ -98,22 +98,30 @@ import {
   useRouteQuery,
   useRouteQueryPersisted,
   useRouter,
-  PaginationConstants
+  PaginationConstants,
+  ViewModeConstants
 } from 'web-pkg/src/composables'
 import { ViewMode } from 'web-pkg/src/ui/types'
-import { ViewModeConstants } from '../../composables'
 
 export default defineComponent({
   props: {
     hasHiddenFiles: { type: Boolean, default: true },
     hasFileExtensions: { type: Boolean, default: true },
     hasPagination: { type: Boolean, default: true },
+    paginationOptions: {
+      type: Array as PropType<string[]>,
+      default: () => ['20', '50', '100', '250', '500']
+    },
+    perPageQueryName: {
+      type: String,
+      default: PaginationConstants.perPageQueryName
+    },
     viewModes: {
       type: Array as PropType<ViewMode[]>,
       default: () => []
     }
   },
-  setup() {
+  setup(props) {
     const router = useRouter()
     const currentRoute = useRoute()
     const { $gettext } = useGettext()
@@ -128,7 +136,7 @@ export default defineComponent({
       return parseInt(queryItemAsString(unref(currentPageQuery)))
     })
     const itemsPerPageQuery = useRouteQueryPersisted({
-      name: PaginationConstants.perPageQueryName,
+      name: props.perPageQueryName,
       defaultValue: PaginationConstants.perPageDefault
     })
     const viewModeQuery = useRouteQueryPersisted({
@@ -153,7 +161,7 @@ export default defineComponent({
       return router.replace({
         query: {
           ...unref(currentRoute).query,
-          'items-per-page': itemsPerPage,
+          [props.perPageQueryName]: itemsPerPage,
           ...(unref(currentPage) > 1 && { page: '1' })
         }
       })

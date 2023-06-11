@@ -12,7 +12,15 @@
               :items="breadcrumbs"
             />
             <portal-target name="app.runtime.mobile.nav" />
-            <div>
+            <div class="oc-flex">
+              <view-options
+                v-if="showViewOptions"
+                :has-hidden-files="false"
+                :has-file-extensions="false"
+                :has-pagination="true"
+                :pagination-options="['20', '50', '100', '250']"
+                :per-page-query-name="perPageQueryName"
+              />
               <oc-button
                 v-if="sideBarAvailablePanels.length"
                 id="files-toggle-sidebar"
@@ -58,6 +66,7 @@
 </template>
 
 <script lang="ts">
+import { perPageQueryName } from 'web-app-admin-settings/src/defaults'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import SideBar from 'web-pkg/src/components/SideBar/SideBar.vue'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
@@ -76,12 +85,14 @@ import { eventBus, useAppDefaults } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Panel } from 'web-pkg/src/components/SideBar'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
+import ViewOptions from 'web-pkg/src/components/ViewOptions.vue'
 
 export default defineComponent({
   components: {
     SideBar,
     AppLoadingSpinner,
-    BatchActions
+    BatchActions,
+    ViewOptions
   },
   props: {
     breadcrumbs: {
@@ -116,6 +127,11 @@ export default defineComponent({
     isSideBarHeaderCompact: {
       required: false,
       type: Boolean,
+      default: false
+    },
+    showViewOptions: {
+      type: Boolean,
+      required: false,
       default: false
     },
     showBatchActions: {
@@ -179,7 +195,8 @@ export default defineComponent({
       selectPanel,
       ...useAppDefaults({
         applicationId: 'admin-settings'
-      })
+      }),
+      perPageQueryName
     }
   },
   computed: {

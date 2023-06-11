@@ -11,6 +11,7 @@
       :show-batch-actions="!!selectedSpaces.length"
       :batch-actions="batchActions"
       :batch-action-items="selectedSpaces"
+      :show-view-options="true"
     >
       <template #sideBarHeader>
         <space-info

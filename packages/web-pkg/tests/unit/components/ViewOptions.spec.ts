@@ -1,4 +1,3 @@
-import ViewOptions from 'web-app-files/src/components/AppBar/ViewOptions.vue'
 import { useRouteQueryPersisted, useRouteQuery } from 'web-pkg/src/composables/router'
 import { ref } from 'vue'
 import {
@@ -11,6 +10,7 @@ import {
 } from 'web-test-helpers'
 import { ViewModeConstants } from 'web-app-files/src/composables'
 import { mock } from 'jest-mock-extended'
+import ViewOptions from 'web-pkg/src/components/ViewOptions.vue'
 
 jest.mock('web-pkg/src/composables/router', () => ({
   ...jest.requireActual('web-pkg/src/composables/router'),
