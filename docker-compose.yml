@@ -66,6 +66,8 @@ services:
       traefik.enable: true
       traefik.http.routers.ocis.rule: PathPrefix(`/`)
       traefik.http.routers.ocis.entrypoints: websecure
+    depends_on:
+      - traefik
 
   oc10:
     build:
@@ -188,7 +190,7 @@ services:
   traefik:
     image: traefik:v2.7.2
     restart: unless-stopped
-    entrypoint: ["/bin/sh", "-c", "[ -f /certificates/server.key ] && ./entrypoint.sh $@ || (apk add openssl && openssl req -subj '/CN=ocis.test' -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout /certificates/server.key -out /certificates/server.crt && chmod -R 777 /certificates && ./entrypoint.sh $@)"]
+    entrypoint: ["/bin/sh", "-c", "[ -f /certificates/server.key ] && ./entrypoint.sh $$@ || (apk add openssl && openssl req -subj '/CN=ocis.test' -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout /certificates/server.key -out /certificates/server.crt && chmod -R 777 /certificates && ./entrypoint.sh $$@)"]
     command:
       - "--pilot.dashboard=false"
       - "--log.level=DEBUG"
