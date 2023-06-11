@@ -110,7 +110,7 @@ export default defineComponent({
     hasPagination: { type: Boolean, default: true },
     paginationOptions: {
       type: Array as PropType<string[]>,
-      default: () => ['20', '50', '100', '250', '500']
+      default: () => PaginationConstants.options
     },
     perPageQueryName: {
       type: String,
