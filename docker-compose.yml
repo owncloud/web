@@ -66,6 +66,8 @@ services:
       traefik.enable: true
       traefik.http.routers.ocis.rule: PathPrefix(`/`)
       traefik.http.routers.ocis.entrypoints: websecure
+    depends_on:
+      - traefik
 
   oc10:
     build:
