@@ -10,8 +10,8 @@ import {
   defaultStoreMockOptions,
   RouteLocation
 } from 'web-test-helpers'
-import { ViewModeConstants } from 'web-app-files/src/composables'
 import { ArchiverService } from 'web-app-files/src/services'
+import { ViewModeConstants } from 'web-pkg/src/composables'
 
 const selectors = {
   ocBreadcrumbStub: 'oc-breadcrumb-stub',

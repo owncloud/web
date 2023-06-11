@@ -206,7 +206,8 @@ import {
   useCapabilityShareJailEnabled,
   SortDir,
   useStore,
-  useUserContext
+  useUserContext,
+  ViewModeConstants
 } from 'web-pkg/src/composables'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from 'web-pkg/src/constants'
 import { eventBus } from 'web-pkg/src/services/eventBus'
@@ -220,7 +221,6 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
 import { useResourceRouteResolver } from 'web-app-files/src/composables/filesList/useResourceRouteResolver'
-import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
 import { ClipboardActions } from 'web-app-files/src/helpers/clipboardActions'
 import { isResourceTxtFileAlmostEmpty } from 'web-app-files/src/helpers/resources'
 import { determineSortFields } from 'web-app-files/src/helpers/ui/resourceTable'

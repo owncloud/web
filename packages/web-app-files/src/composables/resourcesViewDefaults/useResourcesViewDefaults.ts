@@ -16,10 +16,14 @@ import { Task } from 'vue-concurrency'
 import { Resource } from 'web-client'
 import { useSelectedResources, SelectedResourcesResult } from '../selection'
 import { ReadOnlyRef } from 'web-pkg'
-import { useFileListHeaderPosition } from 'web-pkg/src/composables'
+import {
+  useFileListHeaderPosition,
+  useViewMode,
+  useViewSize,
+  ViewModeConstants
+} from 'web-pkg/src/composables'
 
 import { ScrollToResult, useScrollTo } from '../scrollTo'
-import { useViewMode, useViewSize, ViewModeConstants } from '../viewMode'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>

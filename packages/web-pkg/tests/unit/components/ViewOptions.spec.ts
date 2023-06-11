@@ -1,4 +1,3 @@
-import { useRouteQueryPersisted, useRouteQuery } from 'web-pkg/src/composables/router'
 import { ref } from 'vue'
 import {
   createStore,
@@ -8,9 +7,9 @@ import {
   mount,
   RouteLocation
 } from 'web-test-helpers'
-import { ViewModeConstants } from 'web-app-files/src/composables'
 import { mock } from 'jest-mock-extended'
 import ViewOptions from 'web-pkg/src/components/ViewOptions.vue'
+import { ViewModeConstants, useRouteQuery, useRouteQueryPersisted } from 'web-pkg/src/composables'
 
 jest.mock('web-pkg/src/composables/router', () => ({
   ...jest.requireActual('web-pkg/src/composables/router'),
