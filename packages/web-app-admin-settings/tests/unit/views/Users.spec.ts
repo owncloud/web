@@ -461,6 +461,7 @@ function getMountedWrapper({
         stubs: {
           CreateUserModal: true,
           AppLoadingSpinner: true,
+          ViewOptions: true,
           OcBreadcrumb: true,
           NoContentMessage: true,
           OcTable: true,
