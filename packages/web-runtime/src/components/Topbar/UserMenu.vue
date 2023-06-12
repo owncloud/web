@@ -286,9 +286,9 @@ export default defineComponent({
 
 .imprint-footer {
   background-color: var(--oc-color-background-hover);
-  margin-left: -8px;
-  width: calc(100% + 16px);
-  margin-bottom: -8px !important;
+  margin-left: calc(var(--oc-space-small) * -1);
+  width: calc(100% + var(--oc-space-small) * 2);
+  margin-bottom: calc(var(--oc-space-small) * -1) !important;
   a {
     font-size: var(--oc-font-size-medium) !important;
     color: var(--oc-color-text-default);
