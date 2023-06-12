@@ -103,13 +103,13 @@ import {
   useAbility,
   useClientService,
   ViewModeConstants,
+  useRouteQueryPersisted,
   useSort,
-  useStore,
-  useRouteQueryPersisted
+  useStore
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
-import { isProjectSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
@@ -120,10 +120,6 @@ import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { useResourcesViewDefaults, useSelectedResources } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
-import { $gettext } from 'web-app-files/src/router/utils'
-import { formatFileSize } from 'web-pkg/src/helpers'
-import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
-import { useFileActions } from 'web-app-files/src/composables/actions/files/useFileActions'
 
 export default defineComponent({
   components: {
