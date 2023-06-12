@@ -8,6 +8,7 @@ import { computed, unref } from 'vue'
 import { useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -28,6 +29,10 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
   })
 
   const handler = ({ space, resources }: FileActionOptions) => {
+    if (isLocationCommonActive(router, 'files-common-search')) {
+      resources = resources.filter((r) => !isProjectSpaceResource(r))
+    }
+
     store.dispatch('Files/copySelectedFiles', { ...language, space, resources })
   }
 
@@ -38,13 +43,27 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
         icon: 'file-copy-2',
         handler,
         shortcut: unref(copyShortcutString),
-        label: () =>
-          $pgettext('Action in the files list row to initiate copying resources', 'Copy'),
+        label: ({ resources }) => {
+          const copyLabel = $pgettext(
+            'Action in the files list row to initiate copying resources',
+            'Copy'
+          )
+
+          if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
+            const copyableResourcesCount = resources.filter(
+              (r) => r.canDownload() && !isProjectSpaceResource(r)
+            ).length
+            return `${copyLabel} (${copyableResourcesCount.toString()})`
+          }
+
+          return copyLabel
+        },
         isEnabled: ({ resources }) => {
           if (
             !isLocationSpacesActive(router, 'files-spaces-generic') &&
             !isLocationPublicActive(router, 'files-public-link') &&
-            !isLocationCommonActive(router, 'files-common-favorites')
+            !isLocationCommonActive(router, 'files-common-favorites') &&
+            !isLocationCommonActive(router, 'files-common-search')
           ) {
             return false
           }
@@ -57,6 +76,13 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
 
           if (isLocationPublicActive(router, 'files-public-link')) {
             return store.getters['Files/currentFolder'].canCreate()
+          }
+
+          if (
+            isLocationCommonActive(router, 'files-common-search') &&
+            resources.every((r) => isProjectSpaceResource(r))
+          ) {
+            return false
           }
 
           // copy can't be restricted in authenticated context, because
