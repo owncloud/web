@@ -31,6 +31,10 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
   const isFilesAppActive = useIsFilesAppActive()
 
   const handler = ({ space, resources }: FileActionOptions) => {
+    if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
+      resources = resources.filter((r) => !isProjectSpaceResource(r))
+    }
+
     const fileOptions = unref(archiverService.fileIdsSupported)
       ? {
           fileIds: resources.map((resource) => resource.fileId)
@@ -81,8 +85,19 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
         name: 'download-archive',
         icon: 'inbox-archive',
         handler: (args) => loadingService.addTask(() => handler(args)),
-        label: () => {
-          return $gettext('Download')
+        label: ({ resources }) => {
+          const downloadLabel = $gettext('Download')
+
+          if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
+            const downloadableResourcesCount = resources.filter(
+              (r) => !isProjectSpaceResource(r)
+            ).length
+            return downloadableResourcesCount < resources.length
+              ? `${downloadLabel} (${downloadableResourcesCount.toString()})`
+              : downloadLabel
+          }
+
+          return downloadLabel
         },
         disabledTooltip: ({ resources }) => {
           return areArchiverLimitsExceeded(resources)
@@ -96,6 +111,13 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
         },
         isDisabled: ({ resources }) => areArchiverLimitsExceeded(resources),
         isEnabled: ({ resources }) => {
+          if (isLocationCommonActive(router, 'files-common-search')) {
+            return (
+              resources.length === 1 ||
+              resources.filter((r) => !isProjectSpaceResource(r)).length !== 0
+            )
+          }
+
           if (
             unref(isFilesAppActive) &&
             !isLocationSpacesActive(router, 'files-spaces-generic') &&

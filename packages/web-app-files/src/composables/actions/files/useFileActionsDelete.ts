@@ -21,6 +21,12 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
   const { $gettext } = useGettext()
 
   const handler = ({ space, resources }: FileActionOptions) => {
+    if (isLocationCommonActive(router, 'files-common-search')) {
+      return displayDialog(
+        space,
+        resources.filter((r) => !isProjectSpaceResource(r))
+      )
+    }
     displayDialog(space, resources)
   }
 
@@ -28,13 +34,30 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
     {
       name: 'delete',
       icon: 'delete-bin-5',
-      label: () => $gettext('Delete'),
+      label: ({ resources }) => {
+        const deleteLabel = $gettext('Delete')
+
+        if (isLocationCommonActive(router, 'files-common-search')) {
+          const deletableResourcesCount = resources.filter((r) => !isProjectSpaceResource(r)).length
+          return deletableResourcesCount < resources.length
+            ? `${deleteLabel} (${deletableResourcesCount.toString()})`
+            : deleteLabel
+        }
+
+        return deleteLabel
+      },
       handler,
       isEnabled: ({ space, resources }) => {
         if (
+          isLocationCommonActive(router, 'files-common-search') &&
+          resources.some((r) => !isProjectSpaceResource(r))
+        ) {
+          return true
+        }
+
+        if (
           !isLocationSpacesActive(router, 'files-spaces-generic') &&
-          !isLocationPublicActive(router, 'files-public-link') &&
-          !isLocationCommonActive(router, 'files-common-search')
+          !isLocationPublicActive(router, 'files-public-link')
         ) {
           return false
         }
