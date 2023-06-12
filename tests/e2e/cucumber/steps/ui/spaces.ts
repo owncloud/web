@@ -139,8 +139,7 @@ Then(
   async function (this: World, stepUser: string, space: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-    const spaceID = spacesObject.getSpaceID({ key: space })
-    await spacesObject.expectThatSpacesIdNotExist(spaceID)
+    await spacesObject.expectThatSpacesIdNotExist(space)
   }
 )
 
@@ -217,5 +216,15 @@ When(
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     const member = { collaborator: this.usersEnvironment.getUser({ key: memberName }) }
     await spacesObject.removeExpirationDate({ member })
+  }
+)
+
+When(
+  '{string} downloads the space {string}',
+  async function (this: World, stepUser: string, space: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    const downloadedResource = await spacesObject.downloadSpace()
+    expect(downloadedResource).toContain('download.tar')
   }
 )

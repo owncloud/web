@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { Page } from 'playwright'
 import util from 'util'
 
@@ -60,7 +59,7 @@ export const requestGdprExport = async (args: { page: Page }): Promise<void> => 
   ])
 }
 
-export const downloadGdprExport = async (args: { page: Page }): Promise<void> => {
+export const downloadGdprExport = async (args: { page: Page }): Promise<string> => {
   const { page } = args
 
   const [download] = await Promise.all([
@@ -73,6 +72,6 @@ export const downloadGdprExport = async (args: { page: Page }): Promise<void> =>
     ),
     page.locator(downloadExportButton).click()
   ])
-  expect(download.suggestedFilename()).toContain('personal_data_export.json')
   await page.locator(requestExportButton).waitFor()
+  return download.suggestedFilename()
 }

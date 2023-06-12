@@ -24,7 +24,7 @@ export class Account {
     await po.requestGdprExport({ page: this.#page })
   }
 
-  async downloadGdprExport(): Promise<void> {
-    await po.downloadGdprExport({ page: this.#page })
+  downloadGdprExport(): Promise<string> {
+    return po.downloadGdprExport({ page: this.#page })
   }
 }

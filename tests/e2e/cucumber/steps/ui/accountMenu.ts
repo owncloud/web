@@ -44,6 +44,7 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const accountObject = new objects.account.Account({ page })
-    await accountObject.downloadGdprExport()
+    const downloadedResource = await accountObject.downloadGdprExport()
+    expect(downloadedResource).toContain('personal_data_export.json')
   }
 )
