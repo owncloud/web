@@ -22,7 +22,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
 
   const handler = ({ space, resources }: FileActionOptions) => {
     if (isLocationCommonActive(router, 'files-common-search')) {
-      resources = resources.filter((r) => !isProjectSpaceResource(r) && !r.isReceivedShare())
+      resources = resources.filter((r) => r.canBeDeleted() && !isProjectSpaceResource(r))
     }
     displayDialog(space, resources)
   }
@@ -36,7 +36,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
 
         if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
           const deletableResourcesCount = resources.filter(
-            (r) => !isProjectSpaceResource(r) && !r.isReceivedShare()
+            (r) => r.canBeDeleted() && !isProjectSpaceResource(r)
           ).length
           return `${deleteLabel} (${deletableResourcesCount.toString()})`
         }
@@ -46,18 +46,13 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
       handler,
       isEnabled: ({ space, resources }) => {
         if (
-          isLocationCommonActive(router, 'files-common-search') &&
-          resources.some((r) => !isProjectSpaceResource(r) && !r.isReceivedShare())
-        ) {
-          return true
-        }
-
-        if (
           !isLocationSpacesActive(router, 'files-spaces-generic') &&
-          !isLocationPublicActive(router, 'files-public-link')
+          !isLocationPublicActive(router, 'files-public-link') &&
+          !isLocationCommonActive(router, 'files-common-search')
         ) {
           return false
         }
+
         if (resources.length === 0) {
           return false
         }
@@ -68,6 +63,10 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
           resources[0].path === '/'
         ) {
           return false
+        }
+
+        if (isLocationCommonActive(router, 'files-common-search')) {
+          return resources.some((r) => !isProjectSpaceResource(r) && r.canBeDeleted())
         }
 
         const deleteDisabled = resources.some((resource) => {

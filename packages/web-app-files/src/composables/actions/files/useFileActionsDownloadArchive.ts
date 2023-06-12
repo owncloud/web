@@ -32,7 +32,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
 
   const handler = ({ space, resources }: FileActionOptions) => {
     if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
-      resources = resources.filter((r) => !isProjectSpaceResource(r))
+      resources = resources.filter((r) => r.canDownload() && !isProjectSpaceResource(r))
     }
 
     const fileOptions = unref(archiverService.fileIdsSupported)
@@ -90,7 +90,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
 
           if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
             const downloadableResourcesCount = resources.filter(
-              (r) => !isProjectSpaceResource(r)
+              (r) => r.canDownload() && !isProjectSpaceResource(r)
             ).length
             return `${downloadLabel} (${downloadableResourcesCount.toString()})`
           }
@@ -109,13 +109,6 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
         },
         isDisabled: ({ resources }) => areArchiverLimitsExceeded(resources),
         isEnabled: ({ resources }) => {
-          if (isLocationCommonActive(router, 'files-common-search')) {
-            return (
-              (resources.length === 1 && resources[0].isFolder) ||
-              resources.filter((r) => r.isFolder && !isProjectSpaceResource(r)).length !== 0
-            )
-          }
-
           if (
             unref(isFilesAppActive) &&
             !isLocationSpacesActive(router, 'files-spaces-generic') &&
@@ -124,7 +117,8 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
             !isLocationCommonActive(router, 'files-common-search') &&
             !isLocationSharesActive(router, 'files-shares-with-me') &&
             !isLocationSharesActive(router, 'files-shares-with-others') &&
-            !isLocationSharesActive(router, 'files-shares-via-link')
+            !isLocationSharesActive(router, 'files-shares-via-link') &&
+            !isLocationCommonActive(router, 'files-common-search')
           ) {
             return false
           }
@@ -150,6 +144,11 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
           ) {
             return false
           }
+
+          if (isLocationCommonActive(router, 'files-common-search')) {
+            return resources.some((r) => r.canDownload() && !isProjectSpaceResource(r))
+          }
+
           const downloadDisabled = resources.some((resource) => {
             return !resource.canDownload()
           })
