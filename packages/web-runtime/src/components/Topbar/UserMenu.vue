@@ -117,7 +117,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, computed } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, computed, unref } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
