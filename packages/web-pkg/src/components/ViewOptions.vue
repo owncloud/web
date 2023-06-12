@@ -116,6 +116,10 @@ export default defineComponent({
       type: String,
       default: PaginationConstants.perPageQueryName
     },
+    perPageDefault: {
+      type: String,
+      default: PaginationConstants.perPageDefault
+    },
     viewModes: {
       type: Array as PropType<ViewMode[]>,
       default: () => []
@@ -137,7 +141,7 @@ export default defineComponent({
     })
     const itemsPerPageQuery = useRouteQueryPersisted({
       name: props.perPageQueryName,
-      defaultValue: PaginationConstants.perPageDefault
+      defaultValue: props.perPageDefault
     })
     const viewModeQuery = useRouteQueryPersisted({
       name: ViewModeConstants.queryName,

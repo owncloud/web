@@ -20,6 +20,7 @@
                 :has-pagination="true"
                 :pagination-options="paginationOptions"
                 :per-page-query-name="perPageQueryName"
+                :per-page-default="perPageDefault"
               />
               <oc-button
                 v-if="sideBarAvailablePanels.length"
@@ -66,7 +67,11 @@
 </template>
 
 <script lang="ts">
-import { perPageQueryName, paginationOptions } from 'web-app-admin-settings/src/defaults'
+import {
+  perPageQueryName,
+  perPageDefault,
+  paginationOptions
+} from 'web-app-admin-settings/src/defaults'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import SideBar from 'web-pkg/src/components/SideBar/SideBar.vue'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
@@ -197,6 +202,7 @@ export default defineComponent({
         applicationId: 'admin-settings'
       }),
       perPageQueryName,
+      perPageDefault,
       paginationOptions
     }
   },
