@@ -20,11 +20,18 @@ import {
 } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
+import { useResourceRouteResolver } from 'web-app-files/src/composables/filesList'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
   const router = useRouter()
   const language = useGettext()
+  const { getMatchingSpace } = useResourceRouteResolver(
+    {
+      spaces: store.getters['runtime/spaces/spaces']
+    },
+    null
+  )
   const { $gettext, $ngettext, interpolate: $gettextInterpolate } = language
   const hasShareJail = useCapabilityShareJailEnabled()
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
@@ -170,64 +177,86 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   }
 
   const filesList_delete = (space: SpaceResource) => {
-    return loadingService.addTask(
-      (loadingCallbackArgs) => {
-        return store
-          .dispatch('Files/deleteFiles', {
-            ...language,
-            space,
-            files: unref(resources),
-            clientService,
-            loadingCallbackArgs
-          })
-          .then(async () => {
-            store.dispatch('hideModal')
-            store.dispatch('toggleModalConfirmButton')
+    const fileSpaceMap: Record<string, { space: SpaceResource; resources: Resource[] }> = {}
 
-            // Load quota
-            if (
-              isLocationSpacesActive(router, 'files-spaces-generic') &&
-              !['public', 'share'].includes(space?.driveType)
-            ) {
-              if (unref(hasSpacesEnabled)) {
-                const graphClient = clientService.graphAuthenticated
-                const driveResponse = await graphClient.drives.getDrive(
-                  unref(resources)[0].storageId
-                )
-                store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-                  id: driveResponse.data.id,
-                  field: 'spaceQuota',
-                  value: driveResponse.data.quota
-                })
-              } else {
-                const user = await owncloudSdk.users.getUser(store.getters.user.id)
-                store.commit('SET_QUOTA', user.quota)
-              }
-            }
+    for (const resource of unref(resources)) {
+      const matchingSpace = getMatchingSpace(resource)
 
-            if (
-              unref(resourcesToDelete).length &&
-              isSameResource(unref(resourcesToDelete)[0], store.getters['Files/currentFolder'])
-            ) {
-              // current folder is being deleted
-              return router.push(
-                createFileRouteOptions(space, {
-                  path: dirname(unref(resourcesToDelete)[0].path),
-                  fileId: unref(resourcesToDelete)[0].parentFolderId
-                })
-              )
-            }
+      if (!(matchingSpace.id in fileSpaceMap)) {
+        fileSpaceMap[matchingSpace.id] = { space: matchingSpace, resources: [] }
+      }
 
-            const activeFilesCount = store.getters['Files/activeFiles'].length
-            const pageCount = Math.ceil(unref(activeFilesCount) / unref(itemsPerPage))
-            if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
-              // reset pagination to avoid empty lists (happens when deleting all items on the last page)
-              currentPageQuery.value = pageCount.toString()
-            }
-          })
-      },
-      { indeterminate: false }
-    )
+      fileSpaceMap[matchingSpace.id].resources.push(resource)
+    }
+
+    const promises = []
+
+    for (const { space: spaceForDeletion, resources: resourcesForDeletion } of Object.values(
+      fileSpaceMap
+    )) {
+      promises.push(
+        loadingService.addTask(
+          (loadingCallbackArgs) => {
+            return store
+              .dispatch('Files/deleteFiles', {
+                ...language,
+                space: spaceForDeletion,
+                files: resourcesForDeletion,
+                clientService,
+                loadingCallbackArgs
+              })
+              .then(async () => {
+                store.dispatch('hideModal')
+                store.dispatch('toggleModalConfirmButton')
+
+                // Load quota
+                if (
+                  isLocationSpacesActive(router, 'files-spaces-generic') &&
+                  !['public', 'share'].includes(space?.driveType)
+                ) {
+                  if (unref(hasSpacesEnabled)) {
+                    const graphClient = clientService.graphAuthenticated
+                    const driveResponse = await graphClient.drives.getDrive(
+                      unref(resources)[0].storageId
+                    )
+                    store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+                      id: driveResponse.data.id,
+                      field: 'spaceQuota',
+                      value: driveResponse.data.quota
+                    })
+                  } else {
+                    const user = await owncloudSdk.users.getUser(store.getters.user.id)
+                    store.commit('SET_QUOTA', user.quota)
+                  }
+                }
+
+                if (
+                  unref(resourcesToDelete).length &&
+                  isSameResource(unref(resourcesToDelete)[0], store.getters['Files/currentFolder'])
+                ) {
+                  // current folder is being deleted
+                  return router.push(
+                    createFileRouteOptions(space, {
+                      path: dirname(unref(resourcesToDelete)[0].path),
+                      fileId: unref(resourcesToDelete)[0].parentFolderId
+                    })
+                  )
+                }
+
+                const activeFilesCount = store.getters['Files/activeFiles'].length
+                const pageCount = Math.ceil(unref(activeFilesCount) / unref(itemsPerPage))
+                if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
+                  // reset pagination to avoid empty lists (happens when deleting all items on the last page)
+                  currentPageQuery.value = pageCount.toString()
+                }
+              })
+          },
+          { indeterminate: false }
+        )
+      )
+    }
+
+    return promises
   }
 
   const deleteHelper = (space: SpaceResource) => {

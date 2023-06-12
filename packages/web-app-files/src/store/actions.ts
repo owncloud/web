@@ -177,16 +177,8 @@ export default {
     const promises = []
     const removedFiles = []
     for (const [i, file] of files.entries()) {
-      let currentSpace = space
-
-      if (!space) {
-        currentSpace = context.rootGetters['runtime/spaces/spaces'].find(
-          (s) => s.id === file.storageId
-        )
-      }
-
       const promise = clientService.webdav
-        .deleteFile(currentSpace, file)
+        .deleteFile(space, file)
         .then(() => {
           removedFiles.push(file)
         })
@@ -196,7 +188,7 @@ export default {
             if (firstRun) {
               return context.dispatch('deleteFiles', {
                 ...options,
-                space: currentSpace,
+                space,
                 files: [file],
                 clientService,
                 firstRun: false
