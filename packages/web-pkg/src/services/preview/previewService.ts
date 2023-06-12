@@ -69,13 +69,7 @@ export class PreviewService {
   }
 
   public loadPreview(options: LoadPreviewOptions, cached = false): Promise<string> {
-    const { resource } = options
-    let { space } = options
-
-    if (!space) {
-      space = this.store.getters['runtime/spaces/spaces'].find((s) => s.id === resource.storageId)
-    }
-
+    const { space, resource } = options
     const serverSupportsPreview = this.available && this.isMimetypeSupported(resource.mimeType)
     const resourceSupportsPreview = resource.type !== 'folder' && resource.extension
     if (!serverSupportsPreview || !resourceSupportsPreview) {

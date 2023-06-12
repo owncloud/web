@@ -7,7 +7,12 @@ import {
   isLocationCommonActive
 } from '../../../router'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
-import { useCapabilityFilesPermanentDeletion, useRouter, useStore } from 'web-pkg/src/composables'
+import {
+  useCapabilityFilesPermanentDeletion,
+  useCapabilitySpacesEnabled,
+  useRouter,
+  useStore
+} from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'
@@ -15,6 +20,7 @@ import { computed, unref } from 'vue'
 export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
+  const hasSpaces = useCapabilitySpacesEnabled()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
   const { displayDialog } = useFileActionsDeleteResources({ store })
 
@@ -22,7 +28,10 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
 
   const handler = ({ space, resources }: FileActionOptions) => {
     if (isLocationCommonActive(router, 'files-common-search')) {
-      resources = resources.filter((r) => r.canBeDeleted() && !isProjectSpaceResource(r))
+      resources = resources.filter(
+        (r) =>
+          r.canBeDeleted() && (!hasSpaces || !r.isReceivedShare()) && !isProjectSpaceResource(r)
+      )
     }
     displayDialog(space, resources)
   }
@@ -36,7 +45,8 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
 
         if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
           const deletableResourcesCount = resources.filter(
-            (r) => r.canBeDeleted() && !isProjectSpaceResource(r)
+            (r) =>
+              r.canBeDeleted() && (!hasSpaces || !r.isReceivedShare()) && !isProjectSpaceResource(r)
           ).length
           return `${deleteLabel} (${deletableResourcesCount.toString()})`
         }
@@ -66,7 +76,10 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
         }
 
         if (isLocationCommonActive(router, 'files-common-search')) {
-          return resources.some((r) => !isProjectSpaceResource(r) && r.canBeDeleted())
+          return resources.some(
+            (r) =>
+              r.canBeDeleted() && (!hasSpaces || !r.isReceivedShare()) && !isProjectSpaceResource(r)
+          )
         }
 
         const deleteDisabled = resources.some((resource) => {
