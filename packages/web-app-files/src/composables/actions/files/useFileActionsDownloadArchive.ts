@@ -115,6 +115,9 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
           if (resources.length === 1 && !resources[0].isFolder) {
             return false
           }
+          if (resources.length > 1 && resources.some((r) => isProjectSpaceResource(r))) {
+            return false
+          }
           if (isProjectSpaceResource(resources[0]) && resources[0].disabled) {
             return false
           }
