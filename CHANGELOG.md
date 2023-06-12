@@ -27,6 +27,7 @@ Summary
 * Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
 * Enhancement - Cloud import: [#9151](https://github.com/owncloud/web/issues/9151)
 * Enhancement - Add login button to top bar: [#9178](https://github.com/owncloud/web/pull/9178)
+* Enhancement - Add pagination options to admin settings: [#9199](https://github.com/owncloud/web/pull/9199)
 
 Details
 -------
@@ -184,6 +185,14 @@ Details
    https://github.com/owncloud/web/issues/9177
    https://github.com/owncloud/web/pull/9178
    https://github.com/owncloud/web/pull/9187
+
+* Enhancement - Add pagination options to admin settings: [#9199](https://github.com/owncloud/web/pull/9199)
+
+   We've added pagination options to the admin settings app, furthermore we've added more
+   granular pagination options to the files app.
+
+   https://github.com/owncloud/web/issues/9188
+   https://github.com/owncloud/web/pull/9199
 
 Changelog for ownCloud Web [7.0.0] (2023-06-02)
 =======================================
