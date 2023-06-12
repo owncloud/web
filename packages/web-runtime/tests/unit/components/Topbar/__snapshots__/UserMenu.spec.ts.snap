@@ -343,7 +343,7 @@ exports[`User Menu component when user is not logged in renders a navigation wit
       </span>
     </div>
   </oc-button-stub>
-  <oc-drop-stub close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
+  <oc-drop-stub class="oc-overflow-hidden" close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
     <oc-list-stub class="user-menu-list">
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-login" to="[object Object]" type="router-link">
@@ -352,6 +352,7 @@ exports[`User Menu component when user is not logged in renders a navigation wit
         </oc-button-stub>
       </li>
     </oc-list-stub>
+    <!--v-if-->
   </oc-drop-stub>
 </nav>
 `;
