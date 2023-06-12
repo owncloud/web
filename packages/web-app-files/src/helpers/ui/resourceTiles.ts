@@ -41,6 +41,12 @@ export const sortFields: SortField[] = [
     name: 'size',
     sortable: true,
     sortDir: SortDir.Asc
+  },
+  {
+    label: $gettext('Remaining quota'),
+    name: 'remainingQuota',
+    sortable: true,
+    sortDir: SortDir.Desc
   }
 ]
 
