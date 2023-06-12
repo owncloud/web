@@ -111,7 +111,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
         isEnabled: ({ resources }) => {
           if (isLocationCommonActive(router, 'files-common-search')) {
             return (
-              resources.length === 1 ||
+              (resources.length === 1 && resources[0].isFolder) ||
               resources.filter((r) => !isProjectSpaceResource(r)).length !== 0
             )
           }
