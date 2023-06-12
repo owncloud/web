@@ -22,7 +22,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
 
   const handler = ({ space, resources }: FileActionOptions) => {
     if (isLocationCommonActive(router, 'files-common-search')) {
-      resources.filter((r) => !isProjectSpaceResource(r) && !r.isReceivedShare())
+      resources = resources.filter((r) => !isProjectSpaceResource(r) && !r.isReceivedShare())
     }
     displayDialog(space, resources)
   }

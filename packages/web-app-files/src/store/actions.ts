@@ -167,21 +167,26 @@ export default {
     const {
       $gettext,
       interpolate: $gettextInterpolate,
+      space,
       files,
       clientService,
       loadingCallbackArgs,
       firstRun = true
     } = options
-    let { space } = options
     const { setProgress } = loadingCallbackArgs
     const promises = []
     const removedFiles = []
     for (const [i, file] of files.entries()) {
+      let currentSpace = space
+
       if (!space) {
-        space = context.rootGetters['runtime/spaces/spaces'].find((s) => s.id === file.storageId)
+        currentSpace = context.rootGetters['runtime/spaces/spaces'].find(
+          (s) => s.id === file.storageId
+        )
       }
+
       const promise = clientService.webdav
-        .deleteFile(space, file)
+        .deleteFile(currentSpace, file)
         .then(() => {
           removedFiles.push(file)
         })
@@ -191,7 +196,7 @@ export default {
             if (firstRun) {
               return context.dispatch('deleteFiles', {
                 ...options,
-                space,
+                space: currentSpace,
                 files: [file],
                 clientService,
                 firstRun: false
