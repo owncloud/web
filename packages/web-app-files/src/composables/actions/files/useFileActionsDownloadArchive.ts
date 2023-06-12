@@ -31,7 +31,6 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
   const isFilesAppActive = useIsFilesAppActive()
 
   const handler = ({ space, resources }: FileActionOptions) => {
-    console.log(space)
     if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
       resources = resources.filter((r) => r.canDownload() && !isProjectSpaceResource(r))
     }
@@ -149,7 +148,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
           if (isLocationCommonActive(router, 'files-common-search')) {
             return (
               resources.some((r) => r.canDownload()) &&
-              !resources.every((r) => isProjectSpaceResource(r))
+              (resources.length === 1 || !resources.every((r) => isProjectSpaceResource(r)))
             )
           }
 

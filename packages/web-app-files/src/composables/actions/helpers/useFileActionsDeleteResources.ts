@@ -177,22 +177,22 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   }
 
   const filesList_delete = (space: SpaceResource) => {
-    const fileSpaceMap: Record<string, { space: SpaceResource; resources: Resource[] }> = {}
+    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> = {}
 
     for (const resource of unref(resources)) {
       const matchingSpace = getMatchingSpace(resource)
 
-      if (!(matchingSpace.id in fileSpaceMap)) {
-        fileSpaceMap[matchingSpace.id] = { space: matchingSpace, resources: [] }
+      if (!(matchingSpace.id in resourceSpaceMapping)) {
+        resourceSpaceMapping[matchingSpace.id] = { space: matchingSpace, resources: [] }
       }
 
-      fileSpaceMap[matchingSpace.id].resources.push(resource)
+      resourceSpaceMapping[matchingSpace.id].resources.push(resource)
     }
 
     const promises = []
 
     for (const { space: spaceForDeletion, resources: resourcesForDeletion } of Object.values(
-      fileSpaceMap
+      resourceSpaceMapping
     )) {
       promises.push(
         loadingService.addTask(
