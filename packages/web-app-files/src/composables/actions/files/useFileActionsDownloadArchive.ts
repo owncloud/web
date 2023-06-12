@@ -92,9 +92,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
             const downloadableResourcesCount = resources.filter(
               (r) => !isProjectSpaceResource(r)
             ).length
-            return downloadableResourcesCount < resources.length
-              ? `${downloadLabel} (${downloadableResourcesCount.toString()})`
-              : downloadLabel
+            return `${downloadLabel} (${downloadableResourcesCount.toString()})`
           }
 
           return downloadLabel

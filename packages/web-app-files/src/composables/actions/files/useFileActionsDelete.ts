@@ -6,7 +6,7 @@ import {
   isLocationTrashActive,
   isLocationCommonActive
 } from '../../../router'
-import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { isPersonalSpaceResource, isProjectSpaceResource } from 'web-client/src/helpers'
 import { useCapabilityFilesPermanentDeletion, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
@@ -22,10 +22,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
 
   const handler = ({ space, resources }: FileActionOptions) => {
     if (isLocationCommonActive(router, 'files-common-search')) {
-      return displayDialog(
-        space,
-        resources.filter((r) => !isProjectSpaceResource(r) && !r.isReceivedShare())
-      )
+      resources.filter((r) => !isProjectSpaceResource(r) && !r.isReceivedShare())
     }
     displayDialog(space, resources)
   }
@@ -38,13 +35,10 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
         const deleteLabel = $gettext('Delete')
 
         if (isLocationCommonActive(router, 'files-common-search')) {
-          console.log(resources)
           const deletableResourcesCount = resources.filter(
             (r) => !isProjectSpaceResource(r) && !r.isReceivedShare()
           ).length
-          return deletableResourcesCount < resources.length
-            ? `${deleteLabel} (${deletableResourcesCount.toString()})`
-            : deleteLabel
+          return `${deleteLabel} (${deletableResourcesCount.toString()})`
         }
 
         return deleteLabel

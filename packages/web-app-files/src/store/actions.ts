@@ -167,16 +167,19 @@ export default {
     const {
       $gettext,
       interpolate: $gettextInterpolate,
-      space,
       files,
       clientService,
       loadingCallbackArgs,
       firstRun = true
     } = options
+    let { space } = options
     const { setProgress } = loadingCallbackArgs
     const promises = []
     const removedFiles = []
     for (const [i, file] of files.entries()) {
+      if (!space) {
+        space = context.rootGetters['runtime/spaces/spaces'].find((s) => s.id === file.storageId)
+      }
       const promise = clientService.webdav
         .deleteFile(space, file)
         .then(() => {

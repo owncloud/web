@@ -232,7 +232,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
   const deleteHelper = (space: SpaceResource) => {
     store.dispatch('toggleModalConfirmButton')
-    console.log(space)
     unref(isInTrashbin) ? trashbin_delete(space) : filesList_delete(space)
   }
 

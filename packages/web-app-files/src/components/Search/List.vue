@@ -209,7 +209,7 @@ export default defineComponent({
           serverUrl: configurationManager.serverUrl
         })
       }
-      return store.getters['runtime/spaces/spaces'].find((space) => space.id === resource.storageId)
+      return store.getters['runtime/spaces/spaces'].rootGetters
     }
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
