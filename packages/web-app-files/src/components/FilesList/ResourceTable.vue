@@ -80,7 +80,7 @@
     </template>
     <template #status="{ item }">
       <!-- @slot Status column -->
-      <slot v-if="!resources[0].spaceQuota" name="status" :resource="item" />
+      <slot v-if="!(resources[0].type === 'space')" name="status" :resource="item" />
       <span v-else-if="item.disabled" class="oc-flex oc-flex-middle">
         <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
           v-text="$gettext('Disabled')"
@@ -544,7 +544,7 @@ export default defineComponent({
           width: 'shrink'
         })
       }
-      if (firstResource.spaceQuota) {
+      if (firstResource?.type === 'space') {
         fields.push(
           ...[
             {

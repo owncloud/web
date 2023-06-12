@@ -48,7 +48,7 @@
             </template>
           </resource-table>
           <resource-tiles
-            v-else-if="viewMode === ViewModeConstants.tilesView.name"
+            v-else
             v-model:selectedIds="selectedResourcesIds"
             class="oc-px-m"
             :data="spaces"
