@@ -24,7 +24,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
     if (isLocationCommonActive(router, 'files-common-search')) {
       return displayDialog(
         space,
-        resources.filter((r) => !isProjectSpaceResource(r))
+        resources.filter((r) => !isProjectSpaceResource(r) && !r.isReceivedShare())
       )
     }
     displayDialog(space, resources)
@@ -38,7 +38,10 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
         const deleteLabel = $gettext('Delete')
 
         if (isLocationCommonActive(router, 'files-common-search')) {
-          const deletableResourcesCount = resources.filter((r) => !isProjectSpaceResource(r)).length
+          console.log(resources)
+          const deletableResourcesCount = resources.filter(
+            (r) => !isProjectSpaceResource(r) && !r.isReceivedShare()
+          ).length
           return deletableResourcesCount < resources.length
             ? `${deleteLabel} (${deletableResourcesCount.toString()})`
             : deleteLabel
@@ -50,7 +53,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
       isEnabled: ({ space, resources }) => {
         if (
           isLocationCommonActive(router, 'files-common-search') &&
-          resources.some((r) => !isProjectSpaceResource(r))
+          resources.some((r) => !isProjectSpaceResource(r) && !r.isReceivedShare())
         ) {
           return true
         }
