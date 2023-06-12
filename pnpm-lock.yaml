@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 packageExtensionsChecksum: e5e8993047f00ffc73fd28e87ccaecb8
 
 patchedDependencies:
