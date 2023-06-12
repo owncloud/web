@@ -28,8 +28,9 @@
             <span v-text="$gettext('You don\'t have access to any spaces')" />
           </template>
         </no-content-message>
-        <div v-else class="spaces-list oc-px-m oc-mt-l">
+        <div v-else class="spaces-list oc-mt-l">
           <resource-table
+            v-if="viewMode === ViewModeConstants.default.name"
             v-model:selectedIds="selectedResourcesIds"
             :resources="spaces"
             :space="spaces[0]"
@@ -47,8 +48,9 @@
             </template>
           </resource-table>
           <resource-tiles
-            v-if="false"
+            v-else-if="viewMode === ViewModeConstants.tilesView.name"
             v-model:selectedIds="selectedResourcesIds"
+            class="oc-px-m"
             :data="spaces"
             :resizable="true"
             :sort-fields="sortFields"
@@ -100,9 +102,10 @@ import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import {
   useAbility,
   useClientService,
+  ViewModeConstants,
   useSort,
   useStore,
-  ViewModeConstants
+  useRouteQueryPersisted
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
@@ -118,6 +121,9 @@ import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { useResourcesViewDefaults, useSelectedResources } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
 import { $gettext } from 'web-app-files/src/router/utils'
+import { formatFileSize } from 'web-pkg/src/helpers'
+import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
+import { useFileActions } from 'web-app-files/src/composables/actions/files/useFileActions'
 
 export default defineComponent({
   components: {
@@ -178,7 +184,12 @@ export default defineComponent({
     })
 
     const hasCreatePermission = computed(() => can('create-all', 'Drive'))
-    const viewModes = computed(() => [ViewModeConstants.tilesView])
+    const viewModes = computed(() => [ViewModeConstants.tilesView, ViewModeConstants.default])
+
+    const viewMode = useRouteQueryPersisted({
+      name: ViewModeConstants.queryName,
+      defaultValue: ViewModeConstants.defaultModeName
+    })
 
     onMounted(async () => {
       await loadResourcesTask.perform()
@@ -198,7 +209,9 @@ export default defineComponent({
       sortFields,
       hasCreatePermission,
       viewModes,
-      tableDisplayFields
+      viewMode,
+      tableDisplayFields,
+      ViewModeConstants
     }
   },
   data: function () {

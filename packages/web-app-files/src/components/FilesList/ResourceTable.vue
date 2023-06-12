@@ -80,7 +80,17 @@
     </template>
     <template #status="{ item }">
       <!-- @slot Status column -->
-      <slot name="status" :resource="item" />
+      <slot v-if="!resources[0].spaceQuota" name="status" :resource="item" />
+      <span v-else-if="item.disabled" class="oc-flex oc-flex-middle">
+        <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
+          v-text="$gettext('Disabled')"
+        />
+      </span>
+      <span v-else class="oc-flex oc-flex-middle">
+        <oc-icon name="play-circle" fill-type="line" class="oc-mr-s" /><span
+          v-text="$gettext('Enabled')"
+        />
+      </span>
     </template>
     <template #size="{ item }">
       <oc-resource-size :size="item.size || Number.NaN" />
@@ -112,6 +122,15 @@
         + {{ item.tags.length - 2 }}
       </oc-tag>
     </template>
+    <template #manager="{ item }">
+      {{ getManagerNames(item) }}
+    </template>
+    <template #members="{ item }">
+      {{ getMemberCount(item) }}
+    </template>
+    <template #totalQuota="{ item }"> {{ getTotalQuota(item) }} </template>
+    <template #usedQuota="{ item }"> {{ getUsedQuota(item) }} </template>
+    <template #remainingQuota="{ item }"> {{ getRemainingQuota(item) }} </template>
     <template #mdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.mdate)"
@@ -192,8 +211,18 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from 'web-client'
-import { extractDomSelector, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { ShareTypes } from 'web-client/src/helpers/share'
+import {
+  buildShareSpaceResource,
+  extractDomSelector,
+  isProjectSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
+import {
+  ShareTypes,
+  spaceRoleEditor,
+  spaceRoleManager,
+  spaceRoleViewer
+} from 'web-client/src/helpers/share'
 
 import {
   useCapabilityFilesTags,
@@ -209,8 +238,11 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import {
   displayPositionedDropdown,
   formatDateFromJSDate,
+  formatFileSize,
   formatRelativeDateFromJSDate
 } from 'web-pkg/src/helpers'
+
+import { useGettext } from 'vue3-gettext'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
@@ -412,6 +444,8 @@ export default defineComponent({
   ],
   setup(props, context) {
     const store = useStore()
+
+    const { current: currentLanguage } = useGettext()
     const { width } = useWindowSize()
     const hasTags = computed(
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
@@ -421,6 +455,39 @@ export default defineComponent({
     const renameHandler = computed(() => unref(renameActions)[0].handler)
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
+
+    const getManagerNames = (space: SpaceResource) => {
+      const allManagers = space.spaceRoles[spaceRoleManager.name]
+      const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers
+      let managerStr = managers.map((m) => m.displayName).join(', ')
+      if (allManagers.length > 2) {
+        managerStr += `... +${allManagers.length - 2}`
+      }
+      return managerStr
+    }
+
+    const getTotalQuota = (space: SpaceResource) => {
+      return formatFileSize(space.spaceQuota.total, currentLanguage)
+    }
+    const getUsedQuota = (space: SpaceResource) => {
+      if (space.spaceQuota.used === undefined) {
+        return '-'
+      }
+      return formatFileSize(space.spaceQuota.used, currentLanguage)
+    }
+    const getRemainingQuota = (space: SpaceResource) => {
+      if (space.spaceQuota.remaining === undefined) {
+        return '-'
+      }
+      return formatFileSize(space.spaceQuota.remaining, currentLanguage)
+    }
+    const getMemberCount = (space: SpaceResource) => {
+      return (
+        space.spaceRoles[spaceRoleManager.name].length +
+        space.spaceRoles[spaceRoleEditor.name].length +
+        space.spaceRoles[spaceRoleViewer.name].length
+      )
+    }
 
     return {
       getTagToolTip,
@@ -437,7 +504,12 @@ export default defineComponent({
           targetRouteCallback: computed(() => props.targetRouteCallback)
         },
         context
-      )
+      ),
+      getManagerNames,
+      getTotalQuota,
+      getUsedQuota,
+      getRemainingQuota,
+      getMemberCount
     }
   },
   data() {
@@ -472,118 +544,21 @@ export default defineComponent({
           width: 'shrink'
         })
       }
-      const sortFields = determineSortFields(firstResource)
-      fields.push(
-        ...[
-          {
-            name: 'name',
-            title: this.$gettext('Name'),
-            type: 'slot',
-            width: 'expand',
-            wrap: 'truncate'
-          },
-          {
-            name: 'indicators',
-            title: this.$gettext('Shares'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          {
-            name: 'size',
-            title: this.$gettext('Size'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          {
-            name: 'status',
-            title: this.$gettext('Status'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          this.hasTags
-            ? {
-                name: 'tags',
-                title: this.$gettext('Tags'),
-                type: 'slot',
-                alignH: 'right',
-                wrap: 'nowrap',
-                width: 'shrink'
-              }
-            : {},
-          {
-            name: 'owner',
-            title: this.$gettext('Shared by'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          {
-            name: 'sharedWith',
-            title: this.$gettext('Shared with'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          {
-            name: 'mdate',
-            title: this.$gettext('Modified'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink',
-            accessibleLabelCallback: (item) =>
-              this.formatDateRelative(item.mdate) + ' (' + this.formatDate(item.mdate) + ')'
-          },
-          {
-            name: 'sdate',
-            title: this.$gettext('Shared on'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink',
-            accessibleLabelCallback: (item) =>
-              this.formatDateRelative(item.sdate) + ' (' + this.formatDate(item.sdate) + ')'
-          },
-          {
-            name: 'ddate',
-            title: this.$gettext('Deleted'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink',
-            accessibleLabelCallback: (item) =>
-              this.formatDateRelative(item.ddate) + ' (' + this.formatDate(item.ddate) + ')'
-          }
-        ]
-          .filter((field) => {
-            const hasField = Object.prototype.hasOwnProperty.call(firstResource, field.name)
-            if (!this.fieldsDisplayed) {
-              return hasField
-            }
-            return hasField && this.fieldsDisplayed.includes(field.name)
-          })
-          .map((field) => {
-            const sortField = sortFields.find((f) => f.name === field.name)
-            if (sortField) {
-              Object.assign(field, {
-                sortable: sortField.sortable,
-                sortDir: sortField.sortDir
-              })
-            }
-            return field
-          })
-      )
       if (firstResource.spaceQuota) {
         fields.push(
           ...[
+            {
+              name: 'icon',
+              title: '',
+              type: 'slot',
+              width: 'shrink'
+            },
+            {
+              name: 'name',
+              title: this.$gettext('Name'),
+              type: 'slot',
+              sortable: true
+            },
             {
               name: 'manager',
               title: this.$gettext('Manager'),
@@ -612,11 +587,132 @@ export default defineComponent({
               title: this.$gettext('Remaining quota'),
               type: 'slot',
               sortable: true
+            },
+            {
+              name: 'mdate',
+              title: this.$gettext('Modified'),
+              type: 'slot',
+              sortable: true
+            },
+            {
+              name: 'status',
+              title: this.$gettext('Status'),
+              type: 'slot',
+              sortable: true
             }
           ]
         )
+      } else {
+        const sortFields = determineSortFields(firstResource)
+        fields.push(
+          ...[
+            {
+              name: 'name',
+              title: this.$gettext('Name'),
+              type: 'slot',
+              width: 'expand',
+              wrap: 'truncate'
+            },
+            {
+              name: 'indicators',
+              title: this.$gettext('Shares'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
+            {
+              name: 'size',
+              title: this.$gettext('Size'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
+            {
+              name: 'status',
+              title: this.$gettext('Status'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
+            this.hasTags
+              ? {
+                  name: 'tags',
+                  title: this.$gettext('Tags'),
+                  type: 'slot',
+                  alignH: 'right',
+                  wrap: 'nowrap',
+                  width: 'shrink'
+                }
+              : {},
+            {
+              name: 'owner',
+              title: this.$gettext('Shared by'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
+            {
+              name: 'sharedWith',
+              title: this.$gettext('Shared with'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
+            {
+              name: 'mdate',
+              title: this.$gettext('Modified'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink',
+              accessibleLabelCallback: (item) =>
+                this.formatDateRelative(item.mdate) + ' (' + this.formatDate(item.mdate) + ')'
+            },
+            {
+              name: 'sdate',
+              title: this.$gettext('Shared on'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink',
+              accessibleLabelCallback: (item) =>
+                this.formatDateRelative(item.sdate) + ' (' + this.formatDate(item.sdate) + ')'
+            },
+            {
+              name: 'ddate',
+              title: this.$gettext('Deleted'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink',
+              accessibleLabelCallback: (item) =>
+                this.formatDateRelative(item.ddate) + ' (' + this.formatDate(item.ddate) + ')'
+            }
+          ]
+            .filter((field) => {
+              const hasField = Object.prototype.hasOwnProperty.call(firstResource, field.name)
+              if (!this.fieldsDisplayed) {
+                return hasField
+              }
+              return hasField && this.fieldsDisplayed.includes(field.name)
+            })
+            .map((field) => {
+              const sortField = sortFields.find((f) => f.name === field.name)
+              if (sortField) {
+                Object.assign(field, {
+                  sortable: sortField.sortable,
+                  sortDir: sortField.sortDir
+                })
+              }
+              return field
+            })
+        )
       }
-
       if (this.hasActions) {
         fields.push({
           name: 'actions',
