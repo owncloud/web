@@ -171,7 +171,12 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
-import { useRoute, useRouteQuery, useClientService } from 'web-pkg/src/composables'
+import {
+  useRoute,
+  useRouteQuery,
+  useClientService,
+  ViewModeConstants
+} from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -179,7 +184,7 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
-import { useResourcesViewDefaults, ViewModeConstants } from '../../composables'
+import { useResourcesViewDefaults } from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
 import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'

@@ -81,7 +81,6 @@ import { isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
-import ViewOptions from './ViewOptions.vue'
 import { ViewMode } from 'web-pkg/src/ui/types'
 import {
   useFileActionsAcceptShare,
@@ -99,6 +98,7 @@ import { useClientService, useRouter, useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
 import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
+import ViewOptions from 'web-pkg/src/components/ViewOptions.vue'
 
 export default defineComponent({
   components: {

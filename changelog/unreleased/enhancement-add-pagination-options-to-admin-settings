@@ -1,0 +1,7 @@
+Enhancement: Add pagination options to admin settings
+
+We've added pagination options to the admin settings app,
+furthermore we've added more granular pagination options to the files app.
+
+https://github.com/owncloud/web/pull/9199
+https://github.com/owncloud/web/issues/9188
