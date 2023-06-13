@@ -196,16 +196,18 @@ function createWrapper({
     isPublicLinkContext
   )
   const store = createStore(storeOptions)
+  const mocks = { ...defaultComponentMocks() }
   return {
     wrapper: shallowMount(FileDetails, {
       global: {
         stubs: { 'router-link': true, 'oc-resource-icon': true },
         provide: {
+          ...mocks,
           resource,
           space: mockDeep<SpaceResource>()
         },
         plugins: [...defaultPlugins(), store],
-        mocks: { ...defaultComponentMocks() }
+        mocks
       }
     })
   }

@@ -30,11 +30,13 @@ describe('LoadingIndicator', () => {
 })
 
 function getWrapper({ isLoading = false, currentProgress = null } = {}) {
+  const mocks = { $loadingService: mock<LoadingService>({ isLoading, currentProgress }) }
   return {
     wrapper: shallowMount(LoadingIndicator, {
       global: {
         plugins: [...defaultPlugins()],
-        mocks: { $loadingService: mock<LoadingService>({ isLoading, currentProgress }) }
+        mocks,
+        provide: mocks
       }
     })
   }

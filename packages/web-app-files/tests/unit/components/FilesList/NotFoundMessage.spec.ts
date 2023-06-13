@@ -87,12 +87,14 @@ describe('NotFoundMessage', () => {
 })
 
 function getWrapper(space, route) {
+  const mocks = defaultComponentMocks({ currentRoute: route })
   return {
     wrapper: shallowMount(NotFoundMessage, {
       props: { space },
       global: {
         renderStubDefaultSlot: true,
-        mocks: defaultComponentMocks({ currentRoute: route }),
+        mocks,
+        provide: mocks,
         plugins: [...defaultPlugins()]
       }
     })

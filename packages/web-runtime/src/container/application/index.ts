@@ -3,7 +3,7 @@ import { Router } from 'vue-router'
 import { NextApplication } from './next'
 import { convertClassicApplication } from './classic'
 import { ClassicApplicationScript } from '../types'
-import { RuntimeError } from '../error'
+import { RuntimeError } from 'web-pkg/src/errors'
 import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
 

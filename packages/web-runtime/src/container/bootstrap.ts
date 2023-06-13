@@ -323,6 +323,9 @@ export const announceClientService = ({
   app.config.globalProperties.$clientService.webdav = webdav({
     sdk
   })
+
+  app.provide('$client', sdk)
+  app.provide('$clientService', clientService)
 }
 
 /**
@@ -331,6 +334,7 @@ export const announceClientService = ({
 export const announceLoadingService = ({ app }: { app: App }): void => {
   const loadingService = new LoadingService()
   app.config.globalProperties.$loadingService = loadingService
+  app.provide('$loadingService', loadingService)
 }
 
 /**
@@ -342,6 +346,7 @@ export const announceUppyService = ({ app }: { app: App }): void => {
   app.config.globalProperties.$uppyService = new UppyService({
     language: app.config.globalProperties.$language
   })
+  app.provide('$uppyService', app.config.globalProperties.$uppyService)
 }
 
 /**
@@ -361,6 +366,7 @@ export const announcePreviewService = ({
   const clientService = app.config.globalProperties.$clientService
   const previewService = new PreviewService({ store, clientService, configurationManager })
   app.config.globalProperties.$previewService = previewService
+  app.provide('$previewService', previewService)
 }
 
 /**
@@ -387,6 +393,7 @@ export const announceAuthService = ({
   const clientService = app.config.globalProperties.$clientService
   authService.initialize(configurationManager, clientService, store, router, ability, language)
   app.config.globalProperties.$authService = authService
+  app.provide('$authService', authService)
 }
 
 /**

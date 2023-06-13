@@ -151,6 +151,7 @@ function getWrapper({ clientService = getClientServiceMock() } = {}) {
       global: {
         plugins: [...defaultPlugins(), store],
         mocks,
+        provide: mocks,
         stubs: {
           CreateGroupModal: true,
           AppLoadingSpinner: true,

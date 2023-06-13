@@ -68,6 +68,7 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
+        provide: defaultMocks,
         stubs: defaultStubs
       }
     })

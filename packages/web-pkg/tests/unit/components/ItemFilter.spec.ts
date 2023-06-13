@@ -159,6 +159,7 @@ function getWrapper({ props = {}, initialQuery = '' }: any = {}) {
       global: {
         plugins: [...defaultPlugins()],
         mocks,
+        provide: mocks,
         stubs: { OcCheckbox: true }
       }
     })

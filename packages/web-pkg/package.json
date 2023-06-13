@@ -23,6 +23,7 @@
     "luxon": "^2.4.0",
     "mark.js": "^8.11.1",
     "qs": "^6.10.3",
+    "semver": "^7.3.8",
     "uuid": "^9.0.0",
     "vue-concurrency": "4.0.1",
     "vue-router": "4.2.0",

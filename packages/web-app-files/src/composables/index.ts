@@ -1,5 +1,4 @@
 export * from './actions'
-export * from './archiverService'
 export * from './resourcesViewDefaults'
 export * from './router'
 export * from './selection'

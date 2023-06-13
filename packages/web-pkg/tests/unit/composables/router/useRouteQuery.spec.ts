@@ -26,6 +26,7 @@ describe('useRouteQuery', () => {
       },
       {
         mocks,
+        provide: mocks,
         template: `<div><div id="fooQuery">{{ fooQuery }}</div><div id="fooValue">{{ fooValue }}</div></div>`
       }
     )
@@ -76,7 +77,7 @@ describe('useRouteQuery', () => {
         router.push({})
         expect(fooQuery.value).toBe('defaultValue')
       },
-      { mocks }
+      { mocks, provide: mocks }
     )
   })
 
@@ -102,7 +103,7 @@ describe('useRouteQuery', () => {
         expect(fooQuery.value).toBe('foo-3')
         expect(barQuery.value).toBe('bar-1')
       },
-      { mocks }
+      { mocks, provide: mocks }
     )
   })
 
@@ -121,7 +122,7 @@ describe('useRouteQuery', () => {
         router.push({ path: '/sub' })
         expect(fooQuery.value).toBeUndefined()
       },
-      { mocks }
+      { mocks, provide: mocks }
     )
   })
 
@@ -140,7 +141,7 @@ describe('useRouteQuery', () => {
         await nextTick()
         expect(unref(router.currentRoute).query.foo).toBe('changedThroughRef')
       },
-      { mocks }
+      { mocks, provide: mocks }
     )
   })
 })

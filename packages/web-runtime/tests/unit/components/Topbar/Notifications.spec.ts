@@ -233,6 +233,7 @@ function getWrapper({ mocks = {}, notifications = [], spaces = [] } = {}) {
         renderStubDefaultSlot: true,
         plugins: [...defaultPlugins(), store],
         mocks: localMocks,
+        provide: localMocks,
         stubs: { 'avatar-image': true, OcButton: false }
       }
     })

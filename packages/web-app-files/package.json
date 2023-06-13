@@ -25,7 +25,6 @@
     "p-queue": "^6.6.2",
     "qs": "^6.10.3",
     "sanitize-html": "^2.7.0",
-    "semver": "^7.3.8",
     "uuid": "^9.0.0",
     "vue-concurrency": "4.0.1",
     "vue3-gettext": "^2.3.3",

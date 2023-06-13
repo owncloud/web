@@ -63,6 +63,7 @@ function getWrapper() {
     wrapper: mount(CreateSpace, {
       global: {
         mocks,
+        provide: mocks,
         plugins: [...defaultPlugins(), store]
       }
     })

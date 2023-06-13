@@ -128,6 +128,7 @@ function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
       global: {
         plugins: [...defaultPlugins(), store],
         mocks,
+        provide: mocks,
         stubs: {
           AppLoadingSpinner: true,
           NoContentMessage: true,

@@ -18,7 +18,7 @@ import {
 } from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
-import { useArchiverService } from 'web-app-files/src/composables/archiverService'
+import { useArchiverService } from 'web-pkg/src/composables/archiverService'
 import { formatFileSize } from 'web-pkg/src/helpers/filesize'
 
 export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } = {}) => {
@@ -31,7 +31,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
   const isFilesAppActive = useIsFilesAppActive()
 
   const handler = ({ space, resources }: FileActionOptions) => {
-    const fileOptions = archiverService.fileIdsSupported
+    const fileOptions = unref(archiverService.fileIdsSupported)
       ? {
           fileIds: resources.map((resource) => resource.fileId)
         }
@@ -62,7 +62,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
   }
 
   const areArchiverLimitsExceeded = (resources: Resource[]) => {
-    const archiverCapabilities = archiverService.capability
+    const archiverCapabilities = unref(archiverService.capability)
     if (!archiverCapabilities) {
       return
     }
@@ -89,7 +89,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
             ? $gettextInterpolate(
                 $gettext('The selection exceeds the allowed archive size (max. %{maxSize})'),
                 {
-                  maxSize: formatFileSize(archiverService.capability.max_size, current)
+                  maxSize: formatFileSize(unref(archiverService.capability).max_size, current)
                 }
               )
             : ''
@@ -121,11 +121,11 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
           if (isProjectSpaceResource(resources[0]) && resources[0].disabled) {
             return false
           }
-          if (!archiverService.available) {
+          if (!unref(archiverService.available)) {
             return false
           }
           if (
-            !archiverService.fileIdsSupported &&
+            !unref(archiverService.fileIdsSupported) &&
             isLocationCommonActive(router, 'files-common-favorites')
           ) {
             return false

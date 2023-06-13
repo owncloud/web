@@ -2,11 +2,14 @@
 import major from 'semver/functions/major'
 import rcompare from 'semver/functions/rcompare'
 
-import { RuntimeError } from 'web-runtime/src/container/error'
+import { RuntimeError } from 'web-pkg/src/errors'
 import { ClientService } from 'web-pkg/src/services'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { triggerDownloadWithFilename } from 'web-pkg/src/helpers'
+
+import { Ref, ref, computed, unref } from 'vue'
+
 /**
  * Archiver struct within the capabilities as defined in reva
  * @see https://github.com/cs3org/reva/blob/41d5a6858c2200a61736d2c165e551b9785000d1/internal/http/services/owncloud/ocs/data/capabilities.go#L105
@@ -33,31 +36,35 @@ interface TriggerDownloadOptions {
 export class ArchiverService {
   clientService: ClientService
   serverUrl: string
-  capability?: ArchiverCapability
+  capability: Ref<ArchiverCapability>
+  available: Ref<boolean>
+  fileIdsSupported: Ref<boolean>
 
   constructor(
     clientService: ClientService,
     serverUrl: string,
-    archiverCapabilities: ArchiverCapability[] = []
+    archiverCapabilities: Ref<ArchiverCapability[]> = ref([])
   ) {
     this.clientService = clientService
     this.serverUrl = serverUrl
-    const archivers = archiverCapabilities
-      .filter((a) => a.enabled)
-      .sort((a1, a2) => rcompare(a1.version, a2.version))
-    this.capability = archivers.length ? archivers[0] : null
-  }
+    this.capability = computed(() => {
+      const archivers = unref(archiverCapabilities)
+        .filter((a) => a.enabled)
+        .sort((a1, a2) => rcompare(a1.version, a2.version))
+      return archivers.length ? archivers[0] : null
+    })
 
-  public get available(): boolean {
-    return !!this.capability?.version
-  }
+    this.available = computed(() => {
+      return !!unref(this.capability)?.version
+    })
 
-  public get fileIdsSupported(): boolean {
-    return major(this.capability?.version) >= 2
+    this.fileIdsSupported = computed(() => {
+      return major(unref(this.capability)?.version) >= 2
+    })
   }
 
   public async triggerDownload(options: TriggerDownloadOptions): Promise<string> {
-    if (!this.available) {
+    if (!unref(this.available)) {
       throw new RuntimeError('no archiver available')
     }
 
@@ -102,7 +109,7 @@ export class ArchiverService {
       queryParams.push(`public-token=${options.publicToken}`)
     }
 
-    const majorVersion = major(this.capability.version)
+    const majorVersion = major(unref(this.capability).version)
     switch (majorVersion) {
       case 2: {
         queryParams.push(...options.fileIds.map((id) => `id=${id}`))
@@ -129,10 +136,11 @@ export class ArchiverService {
     if (!this.available) {
       throw new RuntimeError('no archiver available')
     }
-    if (/^https?:\/\//i.test(this.capability.archiver_url)) {
-      return this.capability.archiver_url
+    const capability = unref(this.capability)
+    if (/^https?:\/\//i.test(capability.archiver_url)) {
+      return capability.archiver_url
     }
-    return urlJoin(configurationManager.serverUrl, this.capability.archiver_url)
+    return urlJoin(configurationManager.serverUrl, capability.archiver_url)
   }
 
   private getFileNameFromResponseHeaders(headers) {

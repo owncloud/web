@@ -17,11 +17,13 @@ export const getComposableWrapper = <T>(
   setup: any,
   {
     mocks = undefined,
+    provide = undefined,
     store = undefined,
     template = undefined,
     pluginOptions = undefined
   }: {
     mocks?: Record<string, unknown>
+    provide?: Record<string, unknown>
     store?: StoreOptions<T>
     template?: string
     pluginOptions?: DefaultPluginsOptions
@@ -35,7 +37,8 @@ export const getComposableWrapper = <T>(
     {
       global: {
         plugins: [...defaultPlugins(pluginOptions), store],
-        ...(mocks && { mocks })
+        ...(mocks && { mocks }),
+        ...(provide && { provide })
       }
     }
   )

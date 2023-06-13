@@ -71,6 +71,7 @@ function getWrapper() {
       },
       global: {
         mocks,
+        provide: mocks,
         plugins: [...defaultPlugins(), store]
       }
     })

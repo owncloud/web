@@ -458,6 +458,7 @@ function getMountedWrapper({
       global: {
         plugins: [...defaultPlugins(), store],
         mocks,
+        provide: mocks,
         stubs: {
           CreateUserModal: true,
           AppLoadingSpinner: true,

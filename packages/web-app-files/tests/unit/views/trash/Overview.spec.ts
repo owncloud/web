@@ -120,6 +120,7 @@ function getWrapper({ spaces = spaceMocks } = {}) {
       global: {
         stubs: { ...defaultStubs, NoContentMessage: true },
         mocks,
+        provide: mocks,
         plugins: [...defaultPlugins(), store]
       }
     })

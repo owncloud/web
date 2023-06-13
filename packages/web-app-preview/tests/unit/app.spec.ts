@@ -125,7 +125,8 @@ function createShallowMountWrapper() {
       },
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks
+        mocks,
+        provide: mocks
       }
     })
   }

@@ -1,7 +1,7 @@
 import { RouteRecordRaw, Router } from 'vue-router'
 import clone from 'lodash-es/clone'
 import { RuntimeApi, ApplicationQuickActions, ApplicationTranslations } from './types'
-import { ApiError } from './error'
+import { ApiError } from 'web-pkg/src/errors'
 import { get, isEqual, isObject, isArray } from 'lodash-es'
 import { Store } from 'vuex'
 import { App, Component, h } from 'vue'

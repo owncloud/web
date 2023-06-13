@@ -72,6 +72,7 @@ function getWrapper() {
       global: {
         stubs: { ...defaultStubs, portal: true, 'oc-modal': true },
         mocks,
+        provide: mocks,
         plugins: [...defaultPlugins(), store]
       }
     })

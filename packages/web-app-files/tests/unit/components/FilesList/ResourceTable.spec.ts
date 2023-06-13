@@ -357,6 +357,9 @@ function getMountedWrapper({ props = {}, isUserContextReady = true } = {}) {
         mocks: {
           $route: router.currentRoute,
           $router: router
+        },
+        provide: {
+          $router: router
         }
       }
     })

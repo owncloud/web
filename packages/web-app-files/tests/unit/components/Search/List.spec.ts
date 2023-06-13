@@ -127,6 +127,7 @@ function getWrapper({
     wrapper: shallowMount(List, {
       global: {
         mocks,
+        provide: mocks,
         stubs: {
           FilesViewWrapper: false
         },

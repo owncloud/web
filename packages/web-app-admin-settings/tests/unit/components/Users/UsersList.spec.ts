@@ -175,6 +175,7 @@ function getWrapper({ mountType = shallowMount, props = {} } = {}) {
       global: {
         plugins: [...defaultPlugins()],
         mocks,
+        provide: mocks,
         stubs: {
           OcCheckbox: true
         }

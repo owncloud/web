@@ -18,13 +18,15 @@ describe('useDriveResolver', () => {
     expect(useDriveResolver).toBeDefined()
   })
   it('space and item should be null when no driveAliasAndItem given', () => {
+    const mocks = defaultComponentMocks()
+
     getComposableWrapper(
       () => {
         const { space, item } = useDriveResolver({ driveAliasAndItem: ref('') })
         expect(unref(space)).toEqual(null)
         expect(unref(item)).toEqual(null)
       },
-      { mocks: defaultComponentMocks(), store: createStore(defaultStoreMockOptions) }
+      { mocks, provide: mocks, store: createStore(defaultStoreMockOptions) }
     )
   })
   it('returns a public space on a public page', () => {
@@ -33,13 +35,15 @@ describe('useDriveResolver', () => {
     const storeOptions = { ...defaultStoreMockOptions }
     storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
     const store = createStore(storeOptions)
+    const mocks = defaultComponentMocks()
+
     getComposableWrapper(
       () => {
         const { space, item } = useDriveResolver({ driveAliasAndItem: ref(`public/${token}`) })
         expect(unref(space)).toEqual(spaceMock)
         expect(unref(item)).toEqual('/')
       },
-      { mocks: defaultComponentMocks(), store }
+      { mocks, provide: mocks, store }
     )
   })
   it('returns a share space for a share', () => {
@@ -47,6 +51,7 @@ describe('useDriveResolver', () => {
     const storeOptions = { ...defaultStoreMockOptions }
     storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
     const store = createStore(storeOptions)
+    const mocks = defaultComponentMocks()
     getComposableWrapper(
       () => {
         const { space, item } = useDriveResolver({
@@ -55,7 +60,7 @@ describe('useDriveResolver', () => {
         expect(isShareSpaceResource(unref(space))).toEqual(true)
         expect(unref(item)).toEqual('/')
       },
-      { mocks: defaultComponentMocks(), store }
+      { mocks, provide: mocks, store }
     )
   })
   it('returns a space by fileId if given', () => {
@@ -66,7 +71,13 @@ describe('useDriveResolver', () => {
     const storeOptions = { ...defaultStoreMockOptions }
     storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
     const store = createStore(storeOptions)
-
+    const mocks = defaultComponentMocks({
+      currentRoute: mock<RouteLocation>({
+        name: 'files-spaces-generic',
+        path: '/',
+        query: { fileId }
+      })
+    })
     jest.mocked(useCapabilitySpacesEnabled).mockImplementation(() => computed(() => hasSpaces))
 
     getComposableWrapper(
@@ -79,13 +90,8 @@ describe('useDriveResolver', () => {
         expect(unref(itemId)).toEqual(fileId)
       },
       {
-        mocks: defaultComponentMocks({
-          currentRoute: mock<RouteLocation>({
-            name: 'files-spaces-generic',
-            path: '/',
-            query: { fileId }
-          })
-        }),
+        mocks,
+        provide: mocks,
         store
       }
     )
@@ -98,7 +104,13 @@ describe('useDriveResolver', () => {
     const storeOptions = { ...defaultStoreMockOptions }
     storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
     const store = createStore(storeOptions)
-
+    const mocks = defaultComponentMocks({
+      currentRoute: mock<RouteLocation>({
+        name: 'files-spaces-generic',
+        path: '/',
+        query: { fileId: undefined }
+      })
+    })
     jest.mocked(useCapabilitySpacesEnabled).mockImplementation(() => computed(() => hasSpaces))
 
     getComposableWrapper(
@@ -110,13 +122,8 @@ describe('useDriveResolver', () => {
         expect(unref(item)).toEqual(resourcePath)
       },
       {
-        mocks: defaultComponentMocks({
-          currentRoute: mock<RouteLocation>({
-            name: 'files-spaces-generic',
-            path: '/',
-            query: { fileId: undefined }
-          })
-        }),
+        mocks,
+        provide: mocks,
         store
       }
     )
@@ -133,6 +140,14 @@ describe('useDriveResolver', () => {
     storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
     const store = createStore(storeOptions)
 
+    const mocks = defaultComponentMocks({
+      currentRoute: mock<RouteLocation>({
+        name: 'files-spaces-generic',
+        path: '/',
+        query: { fileId: undefined }
+      })
+    })
+
     getComposableWrapper(
       () => {
         useDriveResolver({ driveAliasAndItem: ref(`${driveAlias}/someFolder`) })
@@ -141,13 +156,8 @@ describe('useDriveResolver', () => {
         ).toHaveBeenCalledTimes(data.loadMembersCalls)
       },
       {
-        mocks: defaultComponentMocks({
-          currentRoute: mock<RouteLocation>({
-            name: 'files-spaces-generic',
-            path: '/',
-            query: { fileId: undefined }
-          })
-        }),
+        mocks,
+        provide: mocks,
         store
       }
     )

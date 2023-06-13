@@ -202,6 +202,7 @@ function getWrapper({
         stubs: { OcButton: false },
         renderStubDefaultSlot: true,
         mocks,
+        provide: mocks,
         plugins: [...defaultPlugins(), store]
       }
     })

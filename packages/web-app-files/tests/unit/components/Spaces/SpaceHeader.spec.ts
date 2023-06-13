@@ -51,7 +51,7 @@ function getWrapper({ space = {}, sideBarOpen = false, isMobileWidth = false }) 
     global: {
       mocks,
       plugins: [...defaultPlugins(), store],
-      provide: { isMobileWidth: ref(isMobileWidth) },
+      provide: { ...mocks, isMobileWidth: ref(isMobileWidth) },
       stubs: {
         'quota-modal': true,
         'space-context-actions': true

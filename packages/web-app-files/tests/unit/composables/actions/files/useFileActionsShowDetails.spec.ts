@@ -14,6 +14,7 @@ import { useStore } from 'web-pkg/src/composables'
 describe('showDetails', () => {
   describe('handler', () => {
     it('should trigger the open sidebar event', () => {
+      const mocks = defaultComponentMocks()
       getComposableWrapper(
         () => {
           const store = useStore()
@@ -24,7 +25,7 @@ describe('showDetails', () => {
           unref(actions)[0].handler({ space: null, resources })
           expect(busStub).toHaveBeenCalledWith(SideBarEventTopics.open)
         },
-        { mocks: defaultComponentMocks(), store: createStore(defaultStoreMockOptions) }
+        { mocks, provide: mocks, store: createStore(defaultStoreMockOptions) }
       )
     })
   })

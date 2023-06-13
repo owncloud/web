@@ -84,6 +84,9 @@ function getWrapper({
     files_sharing: { federation: { incoming: true, outgoing: true } }
   }))
   const store = createStore(storeOptions)
+  const mocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ params: { storageId } })
+  })
   return {
     wrapper: shallowMount(InviteCollaboratorForm, {
       data() {
@@ -93,10 +96,8 @@ function getWrapper({
       },
       global: {
         plugins: [...defaultPlugins(), store],
-        provide: { resource },
-        mocks: defaultComponentMocks({
-          currentRoute: mock<RouteLocation>({ params: { storageId } })
-        })
+        provide: { ...mocks, resource },
+        mocks
       }
     })
   }

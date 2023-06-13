@@ -132,6 +132,7 @@ function getWrapper({ mountType = mount, spaces = [], selectedSpaces = [] } = {}
       global: {
         plugins: [...defaultPlugins()],
         mocks,
+        provide: mocks,
         stubs: {
           OcCheckbox: true
         }

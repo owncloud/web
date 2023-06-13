@@ -90,6 +90,7 @@ function getWrapper() {
       },
       global: {
         mocks,
+        provide: mocks,
         plugins: [...defaultPlugins(), store],
         stubs: {
           'oc-text-input': true,

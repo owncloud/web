@@ -49,7 +49,8 @@ function getWrapper({ props = {}, initialQuery = '' } = {}) {
       },
       global: {
         plugins: [...defaultPlugins()],
-        mocks
+        mocks,
+        provide: mocks
       }
     })
   }

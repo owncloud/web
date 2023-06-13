@@ -147,6 +147,7 @@ function getWrapper({
       props: { ...props },
       global: {
         mocks,
+        provide: mocks,
         stubs: { OcButton: true, OcPageSize: false, OcSelect: true },
         plugins: [...defaultPlugins(), store]
       }

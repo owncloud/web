@@ -5,7 +5,7 @@ import { isFunction, isObject } from 'lodash-es'
 import { NextApplication } from './next'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import { RuntimeError } from '../error'
+import { RuntimeError } from 'web-pkg/src/errors'
 import { AppReadyHookArgs } from 'web-pkg/src/apps'
 
 /**

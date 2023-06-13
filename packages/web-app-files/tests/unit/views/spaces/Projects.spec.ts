@@ -92,6 +92,7 @@ function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar
       global: {
         plugins: [...defaultPlugins({ abilities }), store],
         mocks: defaultMocks,
+        provide: defaultMocks,
         stubs: {
           ...defaultStubs,
           'space-context-actions': true,
