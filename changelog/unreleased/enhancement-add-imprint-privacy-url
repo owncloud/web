@@ -1,0 +1,6 @@
+Enhancement: Privacy statement in account menu
+
+We've added the option to add an imprint and privacy statement via the config.
+
+https://github.com/owncloud/web/issues/9174
+https://github.com/owncloud/web/pull/9180

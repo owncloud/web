@@ -32,6 +32,7 @@
       mode="click"
       close-on-click
       padding-size="small"
+      class="oc-overflow-hidden"
     >
       <oc-list class="user-menu-list">
         <template v-if="!userId">
@@ -102,6 +103,15 @@
           </li>
         </template>
       </oc-list>
+      <div v-if="imprintUrl || privacyUrl" class="imprint-footer oc-py-s oc-mt-m oc-text-center">
+        <oc-button v-if="imprintUrl" type="a" appearance="raw" :href="imprintUrl" target="_blank"
+          ><span v-text="$gettext('Imprint')"
+        /></oc-button>
+        <span v-if="privacyUrl">·</span>
+        <oc-button v-if="privacyUrl" type="a" appearance="raw" :href="privacyUrl" target="_blank"
+          ><span v-text="$gettext('Privacy')"
+        /></oc-button>
+      </div>
     </oc-drop>
   </nav>
 </template>
@@ -112,7 +122,7 @@ import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
-import { useCapabilitySpacesEnabled, useRoute } from 'web-pkg/src/composables'
+import { useCapabilitySpacesEnabled, useRoute, useStore } from 'web-pkg/src/composables'
 import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
@@ -131,9 +141,24 @@ export default defineComponent({
         query: { redirectUrl: unref(route).fullPath }
       }
     })
+    const store = useStore()
+    const imprintUrl = computed(() => {
+      return (
+        store.getters.configuration.currentTheme.general?.imprintUrl ||
+        store.getters.configuration.options.imprintUrl
+      )
+    })
+    const privacyUrl = computed(() => {
+      return (
+        store.getters.configuration.currentTheme.general?.privacyUrl ||
+        store.getters.configuration.options.privacyUrl
+      )
+    })
     return {
       hasSpaces: useCapabilitySpacesEnabled(),
-      loginLink
+      loginLink,
+      imprintUrl,
+      privacyUrl
     }
   },
   computed: {
@@ -256,6 +281,17 @@ export default defineComponent({
       align-self: flex-end;
       display: inline-block;
     }
+  }
+}
+
+.imprint-footer {
+  background-color: var(--oc-color-background-hover);
+  margin-left: calc(var(--oc-space-small) * -1);
+  width: calc(100% + var(--oc-space-small) * 2);
+  margin-bottom: calc(var(--oc-space-small) * -1) !important;
+  a {
+    font-size: var(--oc-font-size-medium) !important;
+    color: var(--oc-color-text-default);
   }
 }
 </style>

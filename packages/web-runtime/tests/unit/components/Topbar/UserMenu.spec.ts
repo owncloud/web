@@ -118,15 +118,97 @@ describe('User Menu component', () => {
       expect(wrapper.html()).toMatchSnapshot()
     })
   })
+  describe('imprint and privacy urls', () => {
+    it('should renders imprint and privacy section if urls are defined', () => {
+      const wrapper = getMountedWrapper(
+        {
+          used: dangerQuota,
+          total: totalQuota,
+          relative: dangerRelativeQuota,
+          definition: 'none'
+        },
+        email,
+        false,
+        'https://imprint.url',
+        'https://privacy.url'
+      )
+      const element = wrapper.find('.imprint-footer')
+      expect(element.exists()).toBeTruthy()
+      const output = element.html()
+      expect(output).toContain('https://imprint.url')
+      expect(output).toContain('https://privacy.url')
+    })
+    it('should use theme url values over config url values', () => {
+      const wrapper = getMountedWrapper(
+        {
+          used: dangerQuota,
+          total: totalQuota,
+          relative: dangerRelativeQuota,
+          definition: 'none'
+        },
+        email,
+        false,
+        'https://imprint.url.theme',
+        'https://privacy.url.theme',
+        'https://imprint.url.config',
+        'https://privacy.url.config'
+      )
+      const element = wrapper.find('.imprint-footer')
+      const output = element.html()
+      expect(output).toContain('https://imprint.url.theme')
+      expect(output).toContain('https://privacy.url.theme')
+    })
+    it('should use config url values as fallback', () => {
+      const wrapper = getMountedWrapper(
+        {
+          used: dangerQuota,
+          total: totalQuota,
+          relative: dangerRelativeQuota,
+          definition: 'none'
+        },
+        email,
+        false,
+        '',
+        '',
+        'https://imprint.url.config',
+        'https://privacy.url.config'
+      )
+      const element = wrapper.find('.imprint-footer')
+      const output = element.html()
+      expect(output).toContain('https://imprint.url.config')
+      expect(output).toContain('https://privacy.url.config')
+    })
+  })
 })
 
-const getMountedWrapper = (quota, userEmail, noUser = false) => {
+const getMountedWrapper = (
+  quota,
+  userEmail,
+  noUser = false,
+  imprintUrlTheme = '',
+  privacyUrlTheme = '',
+  imprintUrlConfig = '',
+  privacyUrlConfig = ''
+) => {
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ path: '/files', fullPath: '/files' })
     })
   }
   const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.configuration.mockImplementation(() => ({
+    currentTheme: {
+      general: {
+        imprintUrl: imprintUrlTheme,
+        privacyUrl: privacyUrlTheme
+      }
+    },
+    options: {
+      imprintUrl: imprintUrlConfig,
+      privacyUrl: privacyUrlConfig
+    }
+  }))
+
   storeOptions.getters.quota.mockImplementation(() => quota)
   storeOptions.getters.user.mockImplementation(() => {
     return noUser

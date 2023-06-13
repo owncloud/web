@@ -18,7 +18,9 @@ const state = {
   currentTheme: {
     general: {
       name: '',
-      slogan: ''
+      slogan: '',
+      privacyUrl: '',
+      imprintUrl: ''
     },
     logo: {
       topbar: '',
@@ -59,7 +61,9 @@ const state = {
     cernFeatures: false,
     sharingRecipientsPerPage: 200,
     contextHelpersReadMore: true,
-    openLinksWithDefaultApp: true
+    openLinksWithDefaultApp: true,
+    privacyUrl: '',
+    imprintUrl: ''
   }
 }
 
