@@ -1,0 +1,6 @@
+Bugfix: Space creation does not block reoccurring event
+
+We've fixed a bug that caused multiple spaces to be created in case of a slow internet connection and if the user clicks confirm multiple times.
+
+https://github.com/owncloud/web/pull/9213
+https://github.com/owncloud/web/issues/9189
