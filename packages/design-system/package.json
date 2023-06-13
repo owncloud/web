@@ -56,7 +56,7 @@
     "babel-jest": "^29.0.2",
     "babel-loader": "^9.0.0",
     "babel-plugin-require-context-hook": "^1.0.0",
-    "chalk": "^4.1.0",
+    "chalk": "^5.0.0",
     "codemirror": "^6.0.0",
     "compression-webpack-plugin": "^6.1.1",
     "copy-webpack-plugin": "^6.3.2",
