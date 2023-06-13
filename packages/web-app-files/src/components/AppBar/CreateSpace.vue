@@ -51,8 +51,8 @@ export default defineComponent({
 
     async addNewSpace(name) {
       try {
-        const createdSpace = await this.createSpace(name)
         this.hideModal()
+        const createdSpace = await this.createSpace(name)
         this.UPSERT_RESOURCE(createdSpace)
         this.UPSERT_SPACE(createdSpace)
       } catch (error) {
