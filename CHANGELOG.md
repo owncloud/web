@@ -26,6 +26,7 @@ Summary
 * Enhancement - Use app icons for files: [#9088](https://github.com/owncloud/web/pull/9088)
 * Enhancement - Upload file on paste: [#9140](https://github.com/owncloud/web/pull/9140)
 * Enhancement - Cloud import: [#9151](https://github.com/owncloud/web/issues/9151)
+* Enhancement - Privacy statement in account menu: [#9174](https://github.com/owncloud/web/issues/9174)
 * Enhancement - Add login button to top bar: [#9178](https://github.com/owncloud/web/pull/9178)
 * Enhancement - Add pagination options to admin settings: [#9199](https://github.com/owncloud/web/pull/9199)
 
@@ -176,6 +177,13 @@ Details
 
    https://github.com/owncloud/web/issues/9151
    https://github.com/owncloud/web/pull/9150
+
+* Enhancement - Privacy statement in account menu: [#9174](https://github.com/owncloud/web/issues/9174)
+
+   We've added the option to add an imprint and privacy statement via the config.
+
+   https://github.com/owncloud/web/issues/9174
+   https://github.com/owncloud/web/pull/9180
 
 * Enhancement - Add login button to top bar: [#9178](https://github.com/owncloud/web/pull/9178)
 
