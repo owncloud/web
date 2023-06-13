@@ -114,12 +114,11 @@ import {
   useAbility,
   useClientService,
   ViewModeConstants,
-  usePreviewService,
   useRouteQueryPersisted,
   useSort,
   useStore
 } from 'web-pkg/src/composables'
-import { ImageDimension, ImageType } from 'web-pkg/src/constants'
+import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
@@ -130,9 +129,8 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from 'web-pkg/src/composables/sideBar'
 import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
-import { useResourcesViewDefaults, useSelectedResources } from 'web-app-files/src/composables'
+import { useSelectedResources } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
-import { debounce } from 'lodash-es'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 
 const visibilityObserver = new VisibilityObserver()
