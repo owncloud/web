@@ -141,7 +141,7 @@ import {
   usePagination
 } from 'web-pkg/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
-import { perPageDefault, perPageQueryName } from 'web-app-admin-settings/src/defaults'
+import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -229,7 +229,7 @@ export default defineComponent({
       items: paginatedItems,
       page: currentPage,
       total: totalPages
-    } = usePagination({ items, perPageDefault, perPageQueryName })
+    } = usePagination({ items, perPageDefault, perPageStoragePrefix })
 
     watch(currentPage, () => {
       emit('unSelectAllSpaces')

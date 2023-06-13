@@ -1,12 +1,11 @@
 import { Ref, watch, unref } from 'vue'
-import { useRouteQuery } from './useRouteQuery'
+import { useLocalStorage, useRouteQuery } from 'web-pkg'
 import { QueryValue } from './types'
-import { useLocalStorage } from '../localStorage'
 
 export interface RouteQueryPersistedOptions {
   name: string
   defaultValue: QueryValue
-  routeName?: string
+  storagePrefix?: string
 }
 
 interface WatcherValue {
@@ -50,5 +49,5 @@ export const useRouteQueryPersisted = (options: RouteQueryPersistedOptions): Ref
 }
 
 const localStorageKey = (options: RouteQueryPersistedOptions): string => {
-  return ['oc_options', options.routeName, options.name].filter(Boolean).join('_')
+  return ['oc-options', options.storagePrefix, options.name].filter(Boolean).join('_')
 }

@@ -41,6 +41,7 @@
             :has-hidden-files="hasHiddenFiles"
             :has-file-extensions="hasFileExtensions"
             :has-pagination="hasPagination"
+            per-page-storage-prefix="files"
           />
           <sidebar-toggle v-if="hasSidebarToggle" :side-bar-open="sideBarOpen" />
         </div>

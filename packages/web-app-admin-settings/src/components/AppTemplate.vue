@@ -19,8 +19,8 @@
                 :has-file-extensions="false"
                 :has-pagination="true"
                 :pagination-options="paginationOptions"
-                :per-page-query-name="perPageQueryName"
                 :per-page-default="perPageDefault"
+                per-page-storage-prefix="admin-settings"
               />
               <oc-button
                 v-if="sideBarAvailablePanels.length"
@@ -68,7 +68,6 @@
 
 <script lang="ts">
 import {
-  perPageQueryName,
   perPageDefault,
   paginationOptions
 } from 'web-app-admin-settings/src/defaults'
@@ -201,7 +200,6 @@ export default defineComponent({
       ...useAppDefaults({
         applicationId: 'admin-settings'
       }),
-      perPageQueryName,
       perPageDefault,
       paginationOptions
     }

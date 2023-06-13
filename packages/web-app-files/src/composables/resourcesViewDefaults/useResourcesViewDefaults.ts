@@ -86,7 +86,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     items: paginatedResources,
     total: paginationPages,
     page: paginationPage
-  } = usePagination({ items })
+  } = usePagination({ items, perPageStoragePrefix: 'files' })
 
   useMutationSubscription(['Files/UPSERT_RESOURCE'], async ({ payload }) => {
     await nextTick()

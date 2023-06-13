@@ -1,0 +1,5 @@
+Enhancement: Streamline URL query names
+
+We've used different URL query names for the pagination in the files app (`items-per-page`) and admin-settings app (`admin-settings-items-per-page`). We've streamlined this to use the same query name in all apps and still keep the possibility to have independent page sizes in different apps.
+
+https://github.com/owncloud/web/pull/9226
