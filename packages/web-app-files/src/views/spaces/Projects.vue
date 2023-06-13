@@ -145,7 +145,6 @@ export default defineComponent({
 
     const tableDisplayFields = computed(() => [
       'name',
-      'manager',
       'members',
       'totalQuota',
       'usedQuota',

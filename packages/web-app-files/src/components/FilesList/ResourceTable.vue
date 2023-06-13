@@ -560,11 +560,6 @@ export default defineComponent({
               sortable: true
             },
             {
-              name: 'manager',
-              title: this.$gettext('Manager'),
-              type: 'slot'
-            },
-            {
               name: 'members',
               title: this.$gettext('Members'),
               type: 'slot',

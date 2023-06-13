@@ -7,6 +7,7 @@ import {
   QueryValue
 } from 'web-pkg/src/composables'
 import { SortConstants } from './constants'
+import get from 'lodash-es/get'
 
 export interface SortableItem {
   type?: string
@@ -18,6 +19,7 @@ export enum SortDir {
 }
 export interface SortField {
   name: string
+  prop?: string
   // eslint-disable-next-line @typescript-eslint/ban-types
   sortable?: MaybeRef<boolean | Function | string>
   sortDir?: MaybeRef<SortDir>
@@ -134,7 +136,9 @@ export const sortHelper = <T extends SortableItem>(
   sortBy: string,
   sortDir: SortDir
 ) => {
-  const field = fields.find((f) => f.name === sortBy)
+  const field = fields.find((f) => {
+    return f.name === sortBy
+  })
   if (!field) {
     return items
   }
@@ -153,7 +157,9 @@ export const sortHelper = <T extends SortableItem>(
     }
     return files.concat(folders)
   }
-  return [...items].sort((a, b) => compare(a, b, collator, sortBy, sortDir, sortable))
+  return [...items].sort((a, b) =>
+    compare(a, b, collator, field.prop || field.name, sortDir, sortable)
+  )
 }
 
 const compare = (
@@ -164,8 +170,8 @@ const compare = (
   sortDir: SortDir,
   sortable
 ) => {
-  let aValue = a[sortBy]
-  let bValue = b[sortBy]
+  let aValue = get(a, sortBy)
+  let bValue = get(b, sortBy)
   const modifier = sortDir === SortDir.Asc ? 1 : -1
 
   if (sortable) {
