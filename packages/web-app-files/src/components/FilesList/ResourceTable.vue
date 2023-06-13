@@ -55,12 +55,14 @@
         class="resource-table-resource-wrapper"
         :class="[{ 'resource-table-resource-wrapper-limit-max-width': hasRenameAction(item) }]"
       >
+        <slot name="image" :resource="item" />
         <oc-resource
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
           :is-path-displayed="arePathsDisplayed"
           :parent-folder-name-default="getDefaultParentFolderName(item)"
           :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
+          :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item.id)"
           :folder-link="folderLink(item)"
@@ -548,12 +550,6 @@ export default defineComponent({
         fields.push(
           ...[
             {
-              name: 'icon',
-              title: '',
-              type: 'slot',
-              width: 'shrink'
-            },
-            {
               name: 'name',
               title: this.$gettext('Name'),
               type: 'slot',
@@ -567,8 +563,7 @@ export default defineComponent({
             {
               name: 'members',
               title: this.$gettext('Members'),
-              type: 'slot',
-              sortable: true
+              type: 'slot'
             },
             {
               name: 'totalQuota',

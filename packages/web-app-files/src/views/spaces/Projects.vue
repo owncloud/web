@@ -46,6 +46,17 @@
                 :action-options="{ resources: [resource] as SpaceResource[] }"
               />
             </template>
+            <template #image="{ resource }">
+              <img
+                v-if="imageContentObject[resource.id]"
+                class="tile-preview oc-mr-s oc-ml-xs"
+                :src="imageContentObject[resource.id]['data']"
+                alt=""
+                width="28"
+                height="28"
+              />
+              <oc-resource-icon v-else class="oc-mr-s" :resource="resource" />
+            </template>
           </resource-table>
           <resource-tiles
             v-else
@@ -103,11 +114,12 @@ import {
   useAbility,
   useClientService,
   ViewModeConstants,
+  usePreviewService,
   useRouteQueryPersisted,
   useSort,
   useStore
 } from 'web-pkg/src/composables'
-import { ImageDimension } from 'web-pkg/src/constants'
+import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
@@ -120,7 +132,10 @@ import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { useResourcesViewDefaults, useSelectedResources } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
+import { debounce } from 'lodash-es'
+import { VisibilityObserver } from 'web-pkg/src/observer'
 
+const visibilityObserver = new VisibilityObserver()
 export default defineComponent({
   components: {
     AppBar,
@@ -144,6 +159,7 @@ export default defineComponent({
     })
 
     const tableDisplayFields = computed(() => [
+      'image',
       'name',
       'manager',
       'members',
