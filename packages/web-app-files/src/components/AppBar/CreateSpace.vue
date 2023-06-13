@@ -19,6 +19,7 @@ import { defineComponent } from 'vue'
 import { useClientService } from 'web-pkg/src/composables'
 import { useCreateSpace } from 'web-app-files/src/composables'
 import { useSpaceHelpers } from 'web-pkg/src/composables/spaces'
+import { eventBus } from 'web-pkg/src/services'
 
 export default defineComponent({
   setup() {
@@ -51,10 +52,12 @@ export default defineComponent({
 
     async addNewSpace(name) {
       try {
+        eventBus.publish('runtime.modal.confirm.disabled', true)
         const createdSpace = await this.createSpace(name)
         this.hideModal()
         this.UPSERT_RESOURCE(createdSpace)
         this.UPSERT_SPACE(createdSpace)
+        eventBus.publish('runtime.modal.confirm.disabled', false)
       } catch (error) {
         console.error(error)
         this.showMessage({
