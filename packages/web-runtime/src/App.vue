@@ -24,7 +24,7 @@
       :without-button-confirm="modal.withoutButtonConfirm"
       :button-cancel-text="modal.cancelText"
       :button-confirm-text="modal.confirmText"
-      :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError || confirmDisabled"
+      :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
       :checkbox-label="modal.checkboxLabel"
       :contextual-helper-label="modal.contextualHelperLabel"
       :contextual-helper-data="modal.contextualHelperData"
@@ -67,8 +67,7 @@ export default defineComponent({
     return {
       windowWidth: 0,
       announcement: '',
-      activeBlobStyle: {},
-      confirmDisabled: false
+      activeBlobStyle: {}
     }
   },
   computed: {
@@ -118,9 +117,6 @@ export default defineComponent({
         this.announceRouteChange(shortDocumentTitle)
       }
     )
-    eventBus.subscribe('runtime.modal.confirm.disabled', (disabled: boolean) => {
-      this.confirmDisabled = disabled
-    })
   },
   methods: {
     focusModal(component, event) {

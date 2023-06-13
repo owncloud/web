@@ -52,12 +52,10 @@ export default defineComponent({
 
     async addNewSpace(name) {
       try {
-        eventBus.publish('runtime.modal.confirm.disabled', true)
-        const createdSpace = await this.createSpace(name)
         this.hideModal()
+        const createdSpace = await this.createSpace(name)
         this.UPSERT_RESOURCE(createdSpace)
         this.UPSERT_SPACE(createdSpace)
-        eventBus.publish('runtime.modal.confirm.disabled', false)
       } catch (error) {
         console.error(error)
         this.showMessage({
