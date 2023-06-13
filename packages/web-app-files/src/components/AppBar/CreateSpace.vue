@@ -19,7 +19,6 @@ import { defineComponent } from 'vue'
 import { useClientService } from 'web-pkg/src/composables'
 import { useCreateSpace } from 'web-app-files/src/composables'
 import { useSpaceHelpers } from 'web-pkg/src/composables/spaces'
-import { eventBus } from 'web-pkg/src/services'
 
 export default defineComponent({
   setup() {
