@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Reduce space preloading: [#9153](https://github.com/owncloud/web/pull/9153)
+* Bugfix - Space creation does not block reoccurring event: [#9213](https://github.com/owncloud/web/pull/9213)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 * Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
 * Enhancement - Shrink table columns: [#8599](https://github.com/owncloud/web/issues/8599)
@@ -40,6 +41,14 @@ Details
    spaces will happen on demand.
 
    https://github.com/owncloud/web/pull/9153
+
+* Bugfix - Space creation does not block reoccurring event: [#9213](https://github.com/owncloud/web/pull/9213)
+
+   We've fixed a bug that caused multiple spaces to be created in case of a slow internet connection
+   and if the user clicks confirm multiple times.
+
+   https://github.com/owncloud/web/issues/9189
+   https://github.com/owncloud/web/pull/9213
 
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 
