@@ -49,11 +49,11 @@
             <template #image="{ resource }">
               <img
                 v-if="imageContentObject[resource.id]"
-                class="tile-preview oc-mr-s oc-ml-xs"
+                class="tile-preview oc-mr-s"
                 :src="imageContentObject[resource.id]['data']"
                 alt=""
-                width="28"
-                height="28"
+                width="33"
+                height="33"
               />
               <oc-resource-icon v-else class="oc-mr-s" :resource="resource" />
             </template>
