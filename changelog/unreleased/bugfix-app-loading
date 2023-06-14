@@ -1,0 +1,5 @@
+Bugfix: Experimental app loading
+
+We've made a change to make our helper package "web-pkg" available in our (still experimental) extension system.
+
+https://github.com/owncloud/web/pull/9212
