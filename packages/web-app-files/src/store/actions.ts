@@ -84,12 +84,12 @@ export default {
       $gettextInterpolate,
       $ngettext,
       sourceSpace,
-      resourcesToCopy
+      resources
     }
   ) {
     const copyMove = new ResourceTransfer(
       sourceSpace || context.state.clipboardSpace,
-      resourcesToCopy || context.state.clipboardResources,
+      resources || context.state.clipboardResources,
       targetSpace,
       context.state.currentFolder,
       clientService,
@@ -108,7 +108,6 @@ export default {
     if (context.state.clipboardAction === ClipboardActions.Copy) {
       movedResources = await copyMove.perform(TransferType.COPY)
     }
-
     return loadingService.addTask(
       () => {
         context.commit('CLEAR_CLIPBOARD')

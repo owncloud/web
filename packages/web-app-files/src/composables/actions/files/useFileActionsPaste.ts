@@ -36,24 +36,21 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   })
 
   const handler = async ({ space }: FileActionOptions) => {
-    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> = {}
+    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
+      store.getters['Files/clipboardResources'].reduce((acc, resource) => {
+        const matchingSpace = getMatchingSpace(resource)
 
-    for (const resource of store.getters['Files/clipboardResources']) {
-      const matchingSpace = getMatchingSpace(resource)
+        if (!(matchingSpace.id in acc)) {
+          acc[matchingSpace.id] = { space: matchingSpace, resources: [] }
+        }
 
-      if (!(matchingSpace.id in resourceSpaceMapping)) {
-        resourceSpaceMapping[matchingSpace.id] = { space: matchingSpace, resources: [] }
-      }
-
-      resourceSpaceMapping[matchingSpace.id].resources.push(resource)
-    }
-
-    console.log(resourceSpaceMapping)
-
-    for (const { space: sourceSpace, resources: resourcesToCopy } of Object.values(
+        acc[matchingSpace.id].resources.push(resource)
+        return acc
+      }, {})
+    for (let { space: sourceSpace, resources: resourcesToCopy } of Object.values(
       resourceSpaceMapping
     )) {
-      await store.dispatch('Files/pasteSelectedFiles', {
+      store.dispatch('Files/pasteSelectedFiles', {
         targetSpace: space,
         sourceSpace: sourceSpace,
         resources: resourcesToCopy,
