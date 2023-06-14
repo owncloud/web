@@ -151,7 +151,7 @@ export default {
           value: newValue
         })
         if (!newValue) {
-          eventBus.publish('app.files.list.removeFromFavorites')
+          eventBus.publish('app.files.list.removeFromFavorites', file.id)
         }
       })
       .catch((error) => {

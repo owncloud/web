@@ -65,30 +65,30 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 import { mapGetters, mapState, mapActions } from 'vuex'
-import ResourceTable from '../components/FilesList/ResourceTable.vue'
+import { debounce } from 'lodash-es'
 
-import { useFileActions } from '../composables/actions/files/useFileActions'
+import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
-import { debounce } from 'lodash-es'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import Pagination from 'web-pkg/src/components/Pagination.vue'
+import { eventBus } from 'web-pkg/src/services/eventBus'
+import { useStore, ViewModeConstants } from 'web-pkg/src/composables'
 
 import AppBar from '../components/AppBar/AppBar.vue'
 import QuickActions from '../components/FilesList/QuickActions.vue'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
-import Pagination from 'web-pkg/src/components/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-import { useResourcesViewDefaults } from '../composables'
-import { computed, defineComponent } from 'vue'
-import { Resource } from 'web-client'
+import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import SideBar from '../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../components/FilesViewWrapper.vue'
-import { useStore, ViewModeConstants } from 'web-pkg/src/composables'
-import { SpaceResource } from 'web-client/src/helpers'
+import { useResourcesViewDefaults } from '../composables'
+import { useFileActions } from '../composables/actions/files/useFileActions'
 import { getSpaceFromResource } from 'web-app-files/src/helpers/resource/getSpace'
-import { eventBus } from 'web-pkg/src/services/eventBus'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -118,14 +118,27 @@ export default defineComponent({
       ViewModeConstants.tilesView
     ])
 
-    let loadResourcesEventToken
+    const loadResourcesEventToken = ref(null)
+
+    onMounted(() => {
+      loadResourcesEventToken.value = eventBus.subscribe(
+        'app.files.list.removeFromFavorites',
+        (resourceId: string) => {
+          store.commit('Files/REMOVE_FILES', [{ id: resourceId }])
+        }
+      )
+    })
+
+    onBeforeUnmount(() => {
+      visibilityObserver.disconnect()
+      eventBus.unsubscribe('app.files.list.removeFromFavorites', loadResourcesEventToken)
+    })
 
     return {
       ...useFileActions(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       getSpace,
-      viewModes,
-      loadResourcesEventToken
+      viewModes
     }
   },
 
@@ -145,18 +158,8 @@ export default defineComponent({
   },
 
   async created() {
-    this.loadResourcesEventToken = await eventBus.subscribe(
-      'app.files.list.removeFromFavorites',
-      async () => {
-        await this.loadResourcesTask.perform()
-        this.scrollToResourceFromRoute(this.paginatedResources)
-      }
-    )
-  },
-
-  beforeUnmount() {
-    visibilityObserver.disconnect()
-    eventBus.unsubscribe('app.files.list.removeFromFavorites', this.loadResourcesEventToken)
+    await this.loadResourcesTask.perform()
+    this.scrollToResourceFromRoute(this.paginatedResources)
   },
 
   methods: {
