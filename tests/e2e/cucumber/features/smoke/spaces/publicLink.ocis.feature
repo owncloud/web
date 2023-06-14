@@ -22,7 +22,6 @@ Feature: spaces public link
       | Brian | Can edit   | space |
       | Carol | Can view   | space |
       | David | Can manage | space |
-
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" creates a public link for the space using the sidebar panel

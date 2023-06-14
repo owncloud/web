@@ -20,10 +20,9 @@ Feature: internal link share in project space
       | name              | content     |
       | myfolder/plan.txt | secret plan |
     And "Alice" adds the following members to the space "Marketing" using API
-      | user  | role       | shareType |
-      | Brian | Can edit   | space |
-      | Carol | Can view   | space |
-
+      | user  | role     | shareType |
+      | Brian | Can edit | space     |
+      | Carol | Can view | space     |
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "marketing.1"
     # internal link to space
@@ -34,14 +33,14 @@ Feature: internal link share in project space
     And "Alice" creates a public link for the resource "myfolder" using the sidebar panel
     When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "Invited people"
     And "Alice" logs out
-    
+
     And "Brian" opens the public link "Link"
     And "Brian" logs in from the internal link
     And "Brian" uploads the following resource in internal link named "Link"
       | resource   |
       | simple.pdf |
     And "Brian" logs out
-    
+
     When "Carol" opens the public link "spaceLink"
     And "Carol" logs in from the internal link
     And "Carol" opens folder "myfolder"
