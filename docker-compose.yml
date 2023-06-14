@@ -66,6 +66,8 @@ services:
       traefik.enable: true
       traefik.http.routers.ocis.rule: PathPrefix(`/`)
       traefik.http.routers.ocis.entrypoints: websecure
+      # workaround: https://github.com/owncloud/ocis/issues/5108
+      traefik.http.routers.ocis.middlewares: cors
     depends_on:
       - traefik
 
@@ -211,9 +213,11 @@ services:
       traefik.http.middlewares.https_config.headers.sslRedirect: true
       traefik.http.middlewares.https_config.headers.stsSeconds: 63072000
       traefik.http.middlewares.https_config.headers.stsIncludeSubdomains: true
-      traefik.http.middlewares.https_config.headers.accesscontrolallowmethods: OPTIONS,HEAD,GET,PUT,POST,DELETE,PATCH
-      traefik.http.middlewares.https_config.headers.accesscontrolallowheaders: "*"
-      traefik.http.middlewares.https_config.headers.accesscontrolalloworiginlist: "*"
+      traefik.http.middlewares.cors.headers.accesscontrolallowmethods: "*"
+      traefik.http.middlewares.cors.headers.accesscontrolallowheaders: "*"
+      traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist: "*"
+      traefik.http.middlewares.cors.headers.accesscontrolmaxage: 100
+      traefik.http.middlewares.cors.headers.addvaryheader: true
     ports:
       - "80:80"
       - "8090:8080"
