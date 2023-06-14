@@ -2,8 +2,8 @@ clients:
 - id: web
   name: ownCloud web app
   application_type: web
-  insecure: yes
-  trusted: yes
+  insecure: true
+  trusted: true
   redirect_uris:
     - https://host.docker.internal:9200/
     - https://host.docker.internal:9200/oidc-callback.html
