@@ -1,7 +1,8 @@
 import { unref, Ref } from 'vue'
 import { basename } from 'path'
 
-import { ConfigurationManager, useGetMatchingSpace } from 'web-pkg/src'
+import { ConfigurationManager } from 'web-pkg/src'
+import { useGetMatchingSpace } from 'web-pkg/src/composables'
 import { useConfigurationManager } from 'web-pkg/src/composables/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { createLocationSpaces, createLocationShares } from '../../router'

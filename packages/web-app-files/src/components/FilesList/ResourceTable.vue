@@ -797,13 +797,6 @@ export default defineComponent({
     },
     emitFileClick(resource) {
       let space = this.getMatchingSpace(resource)
-      if (!space) {
-        space = buildShareSpaceResource({
-          shareId: resource.shareId,
-          shareName: resource.name,
-          serverUrl: configurationManager.serverUrl
-        })
-      }
 
       /**
        * Triggered when a default action is triggered on a file
