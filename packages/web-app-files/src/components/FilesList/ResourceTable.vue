@@ -207,6 +207,7 @@ import {
   SortDir,
   useStore,
   useUserContext,
+  useGetMatchingSpace,
   ViewModeConstants
 } from 'web-pkg/src/composables'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from 'web-pkg/src/constants'
@@ -230,7 +231,6 @@ import {
   createLocationCommon,
   createLocationSpaces
 } from 'web-app-files/src/router'
-import { ref } from 'vue'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -427,15 +427,6 @@ export default defineComponent({
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
     )
 
-    const resourceRouteResolver = useResourceRouteResolver(
-      {
-        space: ref(props.space),
-        spaces,
-        targetRouteCallback: computed(() => props.targetRouteCallback)
-      },
-      context
-    )
-
     const { actions: renameActions } = useFileActionsRename()
     const renameHandler = computed(() => unref(renameActions)[0].handler)
 
@@ -445,12 +436,18 @@ export default defineComponent({
       getTagToolTip,
       renameActions,
       renameHandler,
-      resourceRouteResolver,
       ViewModeConstants,
       hasTags,
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
-      isUserContext: useUserContext({ store })
+      isUserContext: useUserContext({ store }),
+      ...useGetMatchingSpace(),
+      ...useResourceRouteResolver(
+        {
+          targetRouteCallback: computed(() => props.targetRouteCallback)
+        },
+        context
+      )
     }
   },
   data() {
@@ -666,7 +663,7 @@ export default defineComponent({
     },
     openRenameDialog(item) {
       this.renameHandler({
-        space: this.resourceRouteResolver.getMatchingSpace(item),
+        space: this.getMatchingSpace(item),
         resources: [item]
       })
     },
@@ -685,7 +682,7 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
     folderLink(file: Resource) {
-      return this.resourceRouteResolver.createFolderLink({
+      return this.createFolderLink({
         path: file.path,
         fileId: file.fileId,
         resource: file
@@ -699,7 +696,7 @@ export default defineComponent({
         return createLocationSpaces('files-spaces-projects')
       }
 
-      return this.resourceRouteResolver.createFolderLink({
+      return this.createFolderLink({
         path: dirname(file.path),
         ...(file.parentFolderId && { fileId: file.parentFolderId }),
         resource: file
@@ -799,7 +796,7 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
-      let space = this.resourceRouteResolver.getMatchingSpace(resource)
+      let space = this.getMatchingSpace(resource)
       if (!space) {
         space = buildShareSpaceResource({
           shareId: resource.shareId,
@@ -870,7 +867,7 @@ export default defineComponent({
         if (isProjectSpaceResource(resource)) {
           return this.$gettext('Spaces')
         }
-        const matchingSpace = this.resourceRouteResolver.getMatchingSpace(resource)
+        const matchingSpace = this.getMatchingSpace(resource)
         if (matchingSpace?.driveType === 'project') {
           return matchingSpace.name
         }
@@ -886,7 +883,7 @@ export default defineComponent({
           : basename(resource.shareRoot)
       }
 
-      if (!this.resourceRouteResolver.getInternalSpace(resource.storageId)) {
+      if (!this.getInternalSpace(resource.storageId)) {
         return this.$gettext('Shared with me')
       }
 

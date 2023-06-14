@@ -183,14 +183,8 @@ export default defineComponent({
       dropBtns: []
     })
 
-    const spaces = computed(() => {
-      return store.getters['runtime/spaces/spaces']
-    })
-
     const resourceRouteResolver = useResourceRouteResolver(
       {
-        space: ref(props.space),
-        spaces,
         targetRouteCallback: computed(() => props.targetRouteCallback)
       },
       context

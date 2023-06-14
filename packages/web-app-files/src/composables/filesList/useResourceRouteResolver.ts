@@ -1,40 +1,23 @@
 import { unref, Ref } from 'vue'
 import { basename } from 'path'
 
-import { ConfigurationManager } from 'web-pkg/src'
+import { ConfigurationManager, useGetMatchingSpace } from 'web-pkg/src'
 import { useConfigurationManager } from 'web-pkg/src/composables/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { createLocationSpaces, createLocationShares } from '../../router'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink/types'
-import { Resource, SpaceResource } from 'web-client/src'
+import { Resource } from 'web-client/src'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 
 type ResourceRouteResolverOptions = {
   configurationManager?: ConfigurationManager
   targetRouteCallback?: Ref<any>
-  space?: Ref<SpaceResource>
-  spaces: Ref<SpaceResource[]>
 }
 
 export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, context) => {
   const configurationManager = options.configurationManager || useConfigurationManager()
-
-  const getInternalSpace = (storageId) => {
-    return unref(options.space) || unref(options.spaces).find((space) => space.id === storageId)
-  }
-
-  const getMatchingSpace = (resource: Resource): SpaceResource => {
-    return (
-      getInternalSpace(resource.storageId) ||
-      buildShareSpaceResource({
-        shareId: resource.shareId,
-        shareName: resource.name,
-        serverUrl: configurationManager.serverUrl
-      })
-    )
-  }
-
   const targetRouteCallback = options.targetRouteCallback
+  const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace()
 
   const createFolderLink = (createTargetRouteOptions: CreateTargetRouteOptions) => {
     if (unref(targetRouteCallback)) {

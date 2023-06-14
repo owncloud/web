@@ -16,22 +16,17 @@ import {
   useStore,
   useLoadingService,
   useRouteQuery,
-  queryItemAsString
+  queryItemAsString,
+  useGetMatchingSpace
 } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
-import { useResourceRouteResolver } from 'web-app-files/src/composables/filesList'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
   const router = useRouter()
   const language = useGettext()
-  const { getMatchingSpace } = useResourceRouteResolver(
-    {
-      spaces: store.getters['runtime/spaces/spaces']
-    },
-    null
-  )
+  const { getMatchingSpace } = useGetMatchingSpace()
   const { $gettext, $ngettext, interpolate: $gettextInterpolate } = language
   const hasShareJail = useCapabilityShareJailEnabled()
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
