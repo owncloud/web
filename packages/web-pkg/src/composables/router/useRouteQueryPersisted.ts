@@ -1,5 +1,6 @@
 import { Ref, watch, unref } from 'vue'
-import { useLocalStorage, useRouteQuery } from 'web-pkg'
+import { useRouteQuery } from './useRouteQuery'
+import { useLocalStorage } from '../localStorage/useLocalStorage'
 import { QueryValue } from './types'
 
 export interface RouteQueryPersistedOptions {

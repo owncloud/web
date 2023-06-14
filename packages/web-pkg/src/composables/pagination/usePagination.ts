@@ -5,7 +5,7 @@ import {
   useRouteQuery,
   useRouteQueryPersisted,
   PaginationConstants
-} from 'web-pkg'
+} from 'web-pkg/src/composables'
 
 interface PaginationOptions<T> {
   items: MaybeRef<Array<T>>
