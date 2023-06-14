@@ -746,27 +746,6 @@ importers:
         specifier: ^10.0.0
         version: 10.1.2(vue@3.3.4)
 
-  packages/web-app-importer:
-    dependencies:
-      '@ownclouders/design-system':
-        specifier: workspace:*
-        version: link:../design-system
-      '@ownclouders/web-client':
-        specifier: workspace:*
-        version: link:../web-client
-      '@ownclouders/web-pkg':
-        specifier: workspace:*
-        version: link:../web-pkg
-      '@uppy/dashboard':
-        specifier: 3.4.0
-        version: 3.4.0(@uppy/core@3.2.0)
-      '@uppy/onedrive':
-        specifier: ^3.1.1
-        version: 3.1.1(@uppy/core@3.2.0)
-      web-app-files:
-        specifier: workspace:*
-        version: link:../web-app-files
-
   packages/web-app-pdf-viewer:
     dependencies:
       vue3-gettext:
