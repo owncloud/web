@@ -1,4 +1,4 @@
-FROM python:3@sha256:380d708853b1564b71ad3744a69895d552099f618df60741c5d4a9e9e65873b9
+FROM python:3@sha256:45a0a776348e06d703d4cab0168bbcd2fb9ef571c23f17fc9eeb87cbe30bc63a
 
 WORKDIR /novnc
 RUN pip install numpy
