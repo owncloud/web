@@ -192,12 +192,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from 'web-client'
-import {
-  buildShareSpaceResource,
-  extractDomSelector,
-  isProjectSpaceResource,
-  SpaceResource
-} from 'web-client/src/helpers'
+import { extractDomSelector, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { ShareTypes } from 'web-client/src/helpers/share'
 
 import {
@@ -218,7 +213,6 @@ import {
   formatRelativeDateFromJSDate
 } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import { configurationManager } from 'web-pkg/src/configuration'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
 import { useResourceRouteResolver } from 'web-app-files/src/composables/filesList/useResourceRouteResolver'
