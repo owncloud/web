@@ -29,7 +29,7 @@ import {
   useSpaceActionsRestore
 } from 'web-pkg/src/composables/actions/spaces'
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
-import { computed, defineComponent, getCurrentInstance, inject, unref } from 'vue'
+import { computed, defineComponent, inject, unref } from 'vue'
 import { SpaceResource } from 'web-client'
 import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
 
@@ -38,7 +38,6 @@ export default defineComponent({
   components: { ActionMenuItem, QuotaModal },
   setup() {
     const store = useStore()
-    const instance = getCurrentInstance().proxy as any
     const resource = inject<SpaceResource>('resource')
     const resources = computed(() => {
       return [unref(resource)]

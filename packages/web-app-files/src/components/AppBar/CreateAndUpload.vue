@@ -146,7 +146,7 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
@@ -167,16 +167,7 @@ import {
 } from 'web-pkg/src/composables'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  onMounted,
-  onBeforeUnmount,
-  PropType,
-  unref,
-  watch
-} from 'vue'
+import { computed, defineComponent, onMounted, onBeforeUnmount, PropType, unref, watch } from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { Resource, SpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
@@ -212,7 +203,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const instance = getCurrentInstance().proxy as any
     const uppyService = useService<UppyService>('$uppyService')
     const clientService = useClientService()
     const store = useStore()
@@ -291,8 +281,44 @@ export default defineComponent({
       event.preventDefault()
     }
 
+    const onUploadComplete = async (result) => {
+      if (result.successful) {
+        const file = result.successful[0]
+
+        if (!file) {
+          return
+        }
+
+        store.dispatch('hideModal')
+        const { spaceId, currentFolder, currentFolderId } = file.meta
+        if (!['public', 'share'].includes(file.meta.driveType)) {
+          if (unref(hasSpaces)) {
+            const client = clientService.graphAuthenticated
+            const driveResponse = await client.drives.getDrive(spaceId)
+            store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+              id: driveResponse.data.id,
+              field: 'spaceQuota',
+              value: driveResponse.data.quota
+            })
+          } else {
+            const user = await clientService.owncloudSdk.users.getUser(store.getters.user.id)
+            store.commit('SET_QUOTA', user.quota)
+          }
+        }
+
+        const sameFolder =
+          props.itemId && !isShareSpaceResource(props.space)
+            ? props.itemId.toString().startsWith(currentFolderId)
+            : currentFolder === props.item
+        const fileIsInCurrentPath = spaceId === props.space.id && sameFolder
+        if (fileIsInCurrentPath) {
+          eventBus.publish('app.files.list.load')
+        }
+      }
+    }
+
     onMounted(() => {
-      uploadCompletedSub = uppyService.subscribe('uploadCompleted', instance.onUploadComplete)
+      uploadCompletedSub = uppyService.subscribe('uploadCompleted', onUploadComplete)
       document.addEventListener('paste', handlePasteFileEvent)
     })
 
@@ -331,7 +357,10 @@ export default defineComponent({
       createNewFolder,
       mimetypesAllowedForCreation,
       createNewFolderAction,
-      extensionActions
+      extensionActions,
+
+      // HACK: exported for unit tests:
+      onUploadComplete
     }
   },
   computed: {
@@ -398,9 +427,6 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['clearClipboardFiles', 'pasteSelectedFiles']),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
-    ...mapMutations('Files', ['UPSERT_RESOURCE']),
-    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
-    ...mapMutations(['SET_QUOTA']),
 
     pasteFilesHere() {
       this.pasteSelectedFiles({
@@ -416,42 +442,6 @@ export default defineComponent({
       }).then(() => {
         ;(document.activeElement as HTMLElement).blur()
       })
-    },
-
-    async onUploadComplete(result) {
-      if (result.successful) {
-        const file = result.successful[0]
-
-        if (!file) {
-          return
-        }
-
-        this.hideModal()
-        const { spaceId, currentFolder, currentFolderId } = file.meta
-        if (!['public', 'share'].includes(file.meta.driveType)) {
-          if (this.hasSpaces) {
-            const client = this.clientService.graphAuthenticated
-            const driveResponse = await client.drives.getDrive(spaceId)
-            this.UPDATE_SPACE_FIELD({
-              id: driveResponse.data.id,
-              field: 'spaceQuota',
-              value: driveResponse.data.quota
-            })
-          } else {
-            const user = await this.$client.users.getUser(this.user.id)
-            this.SET_QUOTA(user.quota)
-          }
-        }
-
-        const sameFolder =
-          this.itemId && !isShareSpaceResource(this.space)
-            ? this.itemId.toString().startsWith(currentFolderId)
-            : currentFolder === this.item
-        const fileIsInCurrentPath = spaceId === this.space.id && sameFolder
-        if (fileIsInCurrentPath) {
-          eventBus.publish('app.files.list.load')
-        }
-      }
     },
 
     getIconResource(fileHandler) {

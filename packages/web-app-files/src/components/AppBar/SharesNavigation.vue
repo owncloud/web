@@ -48,13 +48,14 @@ import {
   locationSharesWithMe,
   locationSharesWithOthers
 } from '../../router/shares'
-import { computed, defineComponent, getCurrentInstance, unref } from 'vue'
+import { computed, defineComponent, unref } from 'vue'
 import { useRouter } from 'web-pkg/src/composables'
 import { useActiveLocation } from '../../composables'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   setup() {
-    const $gettext = getCurrentInstance().proxy.$gettext
+    const { $gettext } = useGettext()
     const router = useRouter()
     const sharesRoutes = [
       locationSharesWithMe,
