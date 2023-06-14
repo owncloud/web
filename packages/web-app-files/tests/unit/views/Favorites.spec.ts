@@ -59,7 +59,6 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
   return {
-    provide: defaultMocks,
     storeOptions,
     wrapper: mount(Favorites, {
       global: {

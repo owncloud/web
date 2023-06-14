@@ -81,7 +81,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   announceClientService({ app, runtimeConfiguration, configurationManager, store })
 
   // TODO: move to announceArchiverService function
-  console.log('$clientService', app.config.globalProperties.$clientService)
   app.config.globalProperties.$archiverService = new ArchiverService(
     app.config.globalProperties.$clientService,
     store.getters.configuration.server || window.location.origin,
