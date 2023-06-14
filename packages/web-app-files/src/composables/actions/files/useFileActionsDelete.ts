@@ -78,7 +78,6 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
         }
 
         if (isLocationCommonActive(router, 'files-common-search')) {
-          resources.forEach((r) => {})
           return resources.some(
             (r) =>
               r.canBeDeleted() &&
