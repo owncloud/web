@@ -67,10 +67,7 @@
 </template>
 
 <script lang="ts">
-import {
-  perPageDefault,
-  paginationOptions
-} from 'web-app-admin-settings/src/defaults'
+import { perPageDefault, paginationOptions } from 'web-app-admin-settings/src/defaults'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import SideBar from 'web-pkg/src/components/SideBar/SideBar.vue'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
