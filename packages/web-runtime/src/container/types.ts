@@ -2,6 +2,8 @@ import { Store } from 'vuex'
 import { RouteRecordRaw, Router } from 'vue-router'
 import { App, Component } from 'vue'
 import { AppNavigationItem } from 'web-pkg/src/apps'
+import { Extension } from 'web-pkg/src/services/extensionRegistry'
+import { AppConfigObject } from 'web-pkg/src'
 
 /** shim configuration for now, should be typed in a later step */
 export type RuntimeConfiguration = any
@@ -57,6 +59,7 @@ export interface ClassicApplicationScript {
   navItems?: ((...args) => AppNavigationItem[]) | AppNavigationItem[]
   quickActions?: ApplicationQuickActions
   translations?: ApplicationTranslations
+  extensions: ({ applicationConfig }: { applicationConfig: AppConfigObject }) => Extension[]
   initialize?: () => void
   ready?: () => void
   mounted?: () => void

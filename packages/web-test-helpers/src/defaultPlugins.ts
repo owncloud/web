@@ -4,6 +4,7 @@ import { h } from 'vue'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
 import { AbilityRule } from 'web-client/src/helpers/resource/types'
+import { createPinia } from 'pinia'
 
 export interface DefaultPluginsOptions {
   designSystem?: boolean
@@ -17,6 +18,9 @@ export const defaultPlugins = ({
   abilities = []
 }: DefaultPluginsOptions = {}) => {
   const plugins = []
+
+  const pinia = createPinia()
+  plugins.push(pinia)
 
   if (designSystem) {
     plugins.push(DesignSystem)

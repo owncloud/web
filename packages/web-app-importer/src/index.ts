@@ -1,31 +1,31 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import translations from '../l10n/translations.json'
+
+import { useAccessToken } from '@ownclouders/web-pkg/src/composables'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '@ownclouders/web-pkg/src/composables'
+import { useService } from '@ownclouders/web-pkg/src/composables/service'
+import type { UppyService } from 'web-runtime/src/services/uppyService'
+import { computed, unref } from 'vue'
+import { Resource } from 'web-client/src'
+
+import '@uppy/dashboard/dist/style.min.css'
 import Dashboard from '@uppy/dashboard'
 import OneDrive from '@uppy/onedrive'
-import { Store } from 'vuex'
-import { computed, unref } from 'vue'
-import { useConfigurationManager, useRouter } from 'web-pkg/src/composables'
-import { useGettext } from 'vue3-gettext'
-import { Resource } from 'web-client/src/helpers'
-import { useAccessToken, useStore } from 'web-pkg/src/composables'
-import { FileAction } from 'web-pkg/src/composables/actions'
-import { useService } from 'web-pkg/src/composables/service'
-import { UppyService } from 'web-runtime/src/services/uppyService'
-import { isLocationPublicActive } from 'web-app-files/src/router'
-import { ConfigurationManager } from 'web-pkg/types'
 
-export const useFileActionsImport = ({
-  store,
-  configurationManager
-}: {
-  store?: Store<any>
-  configurationManager?: ConfigurationManager
-} = {}) => {
-  store = store || useStore()
-  configurationManager = configurationManager || useConfigurationManager()
+// just a dummy function to trick gettext tools
+const $gettext = (msg) => {
+  return msg
+}
 
-  const router = useRouter()
+const extensions = ({ applicationConfig }) => {
+  const store = useStore()
   const { $gettext } = useGettext()
   const accessToken = useAccessToken({ store })
   const uppyService = useService<UppyService>('$uppyService')
+
+  const { companionUrl } = applicationConfig
 
   const supportedClouds = ['OneDrive']
 
@@ -68,7 +68,6 @@ export const useFileActionsImport = ({
         headers: { Authorization: 'Bearer ' + unref(accessToken) }
       })
     }
-
     const modal = {
       variation: 'passive',
       title: $gettext('Import files'),
@@ -79,9 +78,7 @@ export const useFileActionsImport = ({
         return store.dispatch('hideModal')
       }
     }
-
     await store.dispatch('createModal', modal)
-
     uppyService.addPlugin(Dashboard, {
       uppyService,
       inline: true,
@@ -97,33 +94,41 @@ export const useFileActionsImport = ({
     })
     uppyService.addPlugin(OneDrive, {
       target: Dashboard,
-      companionUrl: configurationManager.options.upload.companionUrl
+      companionUrl
     })
   }
 
-  const actions = computed((): FileAction[] => {
-    return [
-      {
+  return [
+    {
+      id: 'com.github.owncloud.web.import-file',
+      type: 'action',
+      action: {
         name: 'import-files',
         icon: 'cloud',
         handler,
         label: () => $gettext('Import'),
         isEnabled: () => {
-          if (!configurationManager.options.upload.companionUrl) {
+          if (!companionUrl) {
             return false
           }
-          if (isLocationPublicActive(router, 'files-public-link')) {
-            return false
-          }
+          // FIXME: this is only available in the files app, should probably be solved via scopes
+          // if (isLocationPublicActive(router, 'files-public-link')) {
+          //   return false
+          // }
           return unref(canUpload)
         },
         componentType: 'button',
         class: 'oc-files-actions-import'
       }
-    ]
-  })
+    }
+  ]
+}
 
-  return {
-    actions
-  }
+export default {
+  appInfo: {
+    id: 'importer',
+    name: $gettext('Importer')
+  },
+  translations,
+  extensions
 }

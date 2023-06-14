@@ -1,6 +1,7 @@
 export * from './components'
 export * from './composables'
 export * from './configuration'
+export * from './errors'
 export * from './helpers'
 export * from './http'
 export * from './observer'

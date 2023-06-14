@@ -746,6 +746,27 @@ importers:
         specifier: ^10.0.0
         version: 10.1.2(vue@3.3.4)
 
+  packages/web-app-importer:
+    dependencies:
+      '@ownclouders/design-system':
+        specifier: workspace:*
+        version: link:../design-system
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
+      '@uppy/dashboard':
+        specifier: 3.4.0
+        version: 3.4.0(@uppy/core@3.2.0)
+      '@uppy/onedrive':
+        specifier: ^3.1.1
+        version: 3.1.1(@uppy/core@3.2.0)
+      web-app-files:
+        specifier: workspace:*
+        version: link:../web-app-files
+
   packages/web-app-pdf-viewer:
     dependencies:
       vue3-gettext:
@@ -877,6 +898,9 @@ importers:
       mark.js:
         specifier: ^8.11.1
         version: 8.11.1
+      pinia:
+        specifier: ^2.1.3
+        version: 2.1.3(typescript@4.9.5)(vue@3.3.4)
       qs:
         specifier: ^6.10.3
         version: 6.10.3
@@ -925,9 +949,6 @@ importers:
       '@uppy/core':
         specifier: ^3.2.0
         version: 3.2.0
-      '@uppy/dashboard':
-        specifier: 3.4.0
-        version: 3.4.0(@uppy/core@3.2.0)
       '@uppy/drop-target':
         specifier: ^2.0.0
         version: 2.0.0(@uppy/core@3.2.0)
@@ -982,6 +1003,9 @@ importers:
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2
+      pinia:
+        specifier: ^2.1.3
+        version: 2.1.3(typescript@4.9.5)(vue@3.3.4)
       portal-vue:
         specifier: 3.0.0
         version: 3.0.0(vue@3.3.4)
@@ -1076,6 +1100,9 @@ importers:
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
+      pinia:
+        specifier: 2.1.4
+        version: 2.1.4(typescript@4.9.5)(vue@3.3.4)
       vue-router:
         specifier: 4.2.0
         version: 4.2.0(vue@3.3.4)
@@ -3345,7 +3372,7 @@ packages:
     dependencies:
       '@babel/core': 7.19.6
       '@babel/helper-create-regexp-features-plugin': 7.19.0(@babel/core@7.19.6)
-      '@babel/helper-plugin-utils': 7.20.2
+      '@babel/helper-plugin-utils': 7.21.5
     dev: true
 
   /@babel/plugin-transform-dotall-regex@7.18.6(@babel/core@7.21.8):
@@ -16352,6 +16379,42 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /pinia@2.1.3(typescript@4.9.5)(vue@3.3.4):
+    resolution: {integrity: sha512-XNA/z/ye4P5rU1pieVmh0g/hSuDO98/a5UC8oSP0DNdvt6YtetJNHTrXwpwsQuflkGT34qKxAEcp7lSxXNjf/A==}
+    peerDependencies:
+      '@vue/composition-api': ^1.4.0
+      typescript: '>=4.4.4'
+      vue: ^2.6.14 || ^3.3.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      '@vue/devtools-api': 6.5.0
+      typescript: 4.9.5
+      vue: 3.3.4
+      vue-demi: 0.14.5(vue@3.3.4)
+    dev: false
+
+  /pinia@2.1.4(typescript@4.9.5)(vue@3.3.4):
+    resolution: {integrity: sha512-vYlnDu+Y/FXxv1ABo1vhjC+IbqvzUdiUC3sfDRrRyY2CQSrqqaa+iiHmqtARFxJVqWQMCJfXx1PBvFs9aJVLXQ==}
+    peerDependencies:
+      '@vue/composition-api': ^1.4.0
+      typescript: '>=4.4.4'
+      vue: ^2.6.14 || ^3.3.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      '@vue/devtools-api': 6.5.0
+      typescript: 4.9.5
+      vue: 3.3.4
+      vue-demi: 0.14.5(vue@3.3.4)
+    dev: false
+
   /pinkie-promise@2.0.1:
     resolution: {integrity: sha512-0Gni6D4UcLTbv9c57DfxDGdr41XfgUjqWZu492f0cIGr16zDU06BWP/RAEvOuo7CQ0CNjHaLlM59YJJFm3NWlw==}
     engines: {node: '>=0.10.0'}
@@ -20499,7 +20562,6 @@ packages:
         optional: true
     dependencies:
       vue: 3.3.4
-    dev: true
 
   /vue-docgen-api@4.56.0(vue@3.3.4):
     resolution: {integrity: sha512-ab/Scb0DCjm4YVLf+AFa/R7XMFl8TVwUsvh26fFT5iaURih1m2hdd5Y8NveA7NQDcycpWavkFZj9eVbQdp2VGQ==}

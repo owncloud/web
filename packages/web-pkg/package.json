@@ -14,8 +14,8 @@
     "directory": "packages/web-pkg"
   },
   "peerDependencies": {
-    "@casl/vue": "^2.2.1",
     "@casl/ability": "^6.3.3",
+    "@casl/vue": "^2.2.1",
     "axios": "^0.27.2 || ^1.0.0",
     "filesize": "^9.0.11",
     "fuse.js": "^6.5.3",
@@ -31,5 +31,8 @@
     "vuex": "4.1.0",
     "web-client": "workspace:@ownclouders/web-client@*",
     "web-pkg": "workspace:@ownclouders/web-pkg@*"
+  },
+  "dependencies": {
+    "pinia": "^2.1.3"
   }
 }

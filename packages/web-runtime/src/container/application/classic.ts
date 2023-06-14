@@ -7,6 +7,8 @@ import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { RuntimeError } from 'web-pkg/src/errors'
 import { AppReadyHookArgs } from 'web-pkg/src/apps'
+import { useExtensionRegistry } from 'web-pkg/src/services/extensionRegistry'
+import { AppConfigObject } from 'web-pkg/src'
 
 /**
  * this wraps a classic application structure into a next application format.
@@ -78,6 +80,7 @@ class ClassicApplication extends NextApplication {
 export const convertClassicApplication = async ({
   app,
   applicationScript,
+  applicationConfig,
   store,
   router,
   translations,
@@ -85,6 +88,7 @@ export const convertClassicApplication = async ({
 }: {
   app: App
   applicationScript: ClassicApplicationScript
+  applicationConfig: AppConfigObject
   store: Store<unknown>
   router: Router
   translations: unknown
@@ -116,6 +120,15 @@ export const convertClassicApplication = async ({
   })
 
   await store.dispatch('registerApp', applicationScript.appInfo)
+
+  if (applicationScript.extensions) {
+    const extensions = app.runWithContext(() => {
+      return applicationScript.extensions({
+        ...(applicationConfig && { applicationConfig })
+      })
+    })
+    useExtensionRegistry().registerExtensions(extensions)
+  }
 
   return new ClassicApplication(runtimeApi, applicationScript, app)
 }

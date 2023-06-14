@@ -16,7 +16,7 @@ import * as webPkg from 'web-pkg'
 import * as webClient from 'web-client'
 
 import { urlJoin } from 'web-client/src/utils'
-import { ConfigurationManager } from 'web-pkg'
+import { AppConfigObject, ConfigurationManager } from 'web-pkg'
 import { App } from 'vue'
 
 export { NextApplication } from './next'
@@ -62,6 +62,7 @@ const loadScriptRequireJS = <T>(moduleUri: string) => {
 export const buildApplication = async ({
   app,
   applicationPath,
+  applicationConfig,
   store,
   router,
   translations,
@@ -70,6 +71,7 @@ export const buildApplication = async ({
 }: {
   app: App
   applicationPath: string
+  applicationConfig: AppConfigObject
   store: Store<unknown>
   router: Router
   translations: unknown
@@ -123,6 +125,7 @@ export const buildApplication = async ({
       application = await convertClassicApplication({
         app,
         applicationScript,
+        applicationConfig,
         store,
         router,
         translations,

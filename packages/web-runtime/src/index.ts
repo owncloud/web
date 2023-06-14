@@ -38,14 +38,16 @@ import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { computed, createApp } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
-
+import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import { ArchiverService } from 'web-pkg/src/services/archiver'
 import { get } from 'lodash-es'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
+  const pinia = createPinia()
   const app = createApp(pages.success)
+  app.use(pinia)
 
   app.provide('$router', router)
 
@@ -54,7 +56,16 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   const store = await announceStore({ runtimeConfiguration })
   app.provide('$store', store)
+  app.provide('store', store)
+
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
+
+  announceTranslations({
+    app,
+    availableLanguages: supportedLanguages,
+    translations: merge(translations) // , customTranslations
+  })
+  announceUppyService({ app })
 
   const applicationsPromise = initializeApplications({
     app,
@@ -65,6 +76,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     router,
     translations
   })
+
   const customTranslationsPromise = loadCustomTranslations({ configurationManager })
   const themePromise = announceTheme({ store, app, designSystem, runtimeConfiguration })
   const [customTranslations] = await Promise.all([
@@ -73,11 +85,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     themePromise
   ])
 
-  announceTranslations({
-    app,
-    availableLanguages: supportedLanguages,
-    translations: merge(translations, customTranslations)
-  })
   announceClientService({ app, runtimeConfiguration, configurationManager, store })
 
   // TODO: move to announceArchiverService function
@@ -97,7 +104,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   )
   app.provide('$archiverService', app.config.globalProperties.$archiverService)
 
-  announceUppyService({ app })
   announceLoadingService({ app })
   announcePreviewService({ app, store, configurationManager })
   await announceClient(runtimeConfiguration)

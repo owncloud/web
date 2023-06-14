@@ -190,6 +190,8 @@ services:
       COMPANION_DOMAIN: host.docker.internal:9200
       COMPANION_PROTOCOL: https
       COMPANION_PATH: /companion
+      COMPANION_ONEDRIVE_KEY: "${COMPANION_ONEDRIVE_KEY}"
+      COMPANION_ONEDRIVE_SECRET: "${COMPANION_ONEDRIVE_SECRET}"
     volumes:
       - uppy_companion_datadir:/tmp/companion/
     labels:

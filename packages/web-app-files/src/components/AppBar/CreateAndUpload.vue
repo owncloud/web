@@ -154,7 +154,6 @@ import {
   useActiveLocation,
   useFileActionsCreateNewFile,
   useFileActionsCreateNewFolder,
-  useFileActionsImport,
   useFileActionsPaste
 } from '../../composables'
 
@@ -177,6 +176,7 @@ import { UppyService } from 'web-runtime/src/services/uppyService'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
+import { ActionExtension, useExtensionRegistry } from 'web-pkg/src/services/extensionRegistry'
 
 export default defineComponent({
   components: {
@@ -258,9 +258,11 @@ export default defineComponent({
       mimetypesAllowedForCreation: mimetypesAllowedForCreation
     })
 
-    const { actions: importFile } = useFileActionsImport({ store })
+    const extensionRegistry = useExtensionRegistry()
     const extensionActions = computed(() => {
-      return [...unref(importFile)].filter((e) => e.isEnabled())
+      return [
+        ...extensionRegistry.requestExtensions<ActionExtension>('action').map((e) => e.action)
+      ].filter((e) => e.isEnabled())
     })
 
     const currentFolder = computed(() => {
