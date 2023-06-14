@@ -176,18 +176,18 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
     })
   }
 
-  const filesList_delete = (space: SpaceResource) => {
-    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> = {}
+  const filesList_delete = () => {
+    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
+      unref(resources).reduce((acc, resource) => {
+        const matchingSpace = getMatchingSpace(resource)
 
-    for (const resource of unref(resources)) {
-      const matchingSpace = getMatchingSpace(resource)
+        if (!(matchingSpace.id in acc)) {
+          acc[matchingSpace.id] = { space: matchingSpace, resources: [] }
+        }
 
-      if (!(matchingSpace.id in resourceSpaceMapping)) {
-        resourceSpaceMapping[matchingSpace.id] = { space: matchingSpace, resources: [] }
-      }
-
-      resourceSpaceMapping[matchingSpace.id].resources.push(resource)
-    }
+        acc[matchingSpace.id].resources.push(resource)
+        return acc
+      }, {})
 
     const promises = []
 
@@ -212,7 +212,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                 // Load quota
                 if (
                   isLocationSpacesActive(router, 'files-spaces-generic') &&
-                  !['public', 'share'].includes(space?.driveType)
+                  !['public', 'share'].includes(spaceForDeletion?.driveType)
                 ) {
                   if (unref(hasSpacesEnabled)) {
                     const graphClient = clientService.graphAuthenticated
@@ -236,7 +236,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                 ) {
                   // current folder is being deleted
                   return router.push(
-                    createFileRouteOptions(space, {
+                    createFileRouteOptions(spaceForDeletion, {
                       path: dirname(unref(resourcesToDelete)[0].path),
                       fileId: unref(resourcesToDelete)[0].parentFolderId
                     })
@@ -261,7 +261,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
   const deleteHelper = (space: SpaceResource) => {
     store.dispatch('toggleModalConfirmButton')
-    unref(isInTrashbin) ? trashbin_delete(space) : filesList_delete(space)
+    unref(isInTrashbin) ? trashbin_delete(space) : filesList_delete()
   }
 
   const displayDialog = (space: SpaceResource, resources: Resource[]) => {

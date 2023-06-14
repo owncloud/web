@@ -30,7 +30,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
     if (isLocationCommonActive(router, 'files-common-search')) {
       resources = resources.filter(
         (r) =>
-          r.canBeDeleted() && (!hasSpaces || !r.isReceivedShare()) && !isProjectSpaceResource(r)
+          r.canBeDeleted() && (!unref(hasSpaces) || !r.isShareRoot()) && !isProjectSpaceResource(r)
       )
     }
     displayDialog(space, resources)
@@ -46,7 +46,9 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
         if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
           const deletableResourcesCount = resources.filter(
             (r) =>
-              r.canBeDeleted() && (!hasSpaces || !r.isReceivedShare()) && !isProjectSpaceResource(r)
+              r.canBeDeleted() &&
+              (!unref(hasSpaces) || !r.isShareRoot()) &&
+              !isProjectSpaceResource(r)
           ).length
           return `${deleteLabel} (${deletableResourcesCount.toString()})`
         }
@@ -76,9 +78,12 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
         }
 
         if (isLocationCommonActive(router, 'files-common-search')) {
+          resources.forEach((r) => {})
           return resources.some(
             (r) =>
-              r.canBeDeleted() && (!hasSpaces || !r.isReceivedShare()) && !isProjectSpaceResource(r)
+              r.canBeDeleted() &&
+              (!unref(hasSpaces) || !r.isShareRoot()) &&
+              !isProjectSpaceResource(r)
           )
         }
 

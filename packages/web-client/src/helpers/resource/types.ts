@@ -92,6 +92,9 @@ export interface Resource {
   canEditTags?(): boolean
 
   isReceivedShare?(): boolean
+
+  isShareRoot?(): boolean
+
   isMounted?(): boolean
 
   getDomSelector?(): string
