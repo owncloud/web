@@ -189,13 +189,9 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
         return acc
       }, {})
 
-    const promises = []
-
-    for (const { space: spaceForDeletion, resources: resourcesForDeletion } of Object.values(
-      resourceSpaceMapping
-    )) {
-      promises.push(
-        loadingService.addTask(
+    return Object.values(resourceSpaceMapping).map(
+      ({ space: spaceForDeletion, resources: resourcesForDeletion }) => {
+        return loadingService.addTask(
           (loadingCallbackArgs) => {
             return store
               .dispatch('Files/deleteFiles', {
@@ -253,10 +249,8 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
           },
           { indeterminate: false }
         )
-      )
-    }
-
-    return promises
+      }
+    )
   }
 
   const deleteHelper = (space: SpaceResource) => {
