@@ -56,7 +56,8 @@ function getWrapper({
       const instance = usePagination({
         items: ref(items),
         page: currentPage,
-        perPage: itemsPerPage
+        perPage: itemsPerPage,
+        perPageStoragePrefix: 'unit-tests'
       })
       setup(instance)
     })

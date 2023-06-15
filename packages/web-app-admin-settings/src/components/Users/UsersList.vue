@@ -122,7 +122,7 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useFileListHeaderPosition, usePagination } from 'web-pkg/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 import { computed } from 'vue'
-import { perPageDefault, perPageQueryName } from 'web-app-admin-settings/src/defaults'
+import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
 
 export default defineComponent({
   name: 'UsersList',
@@ -265,7 +265,7 @@ export default defineComponent({
       items: paginatedItems,
       page: currentPage,
       total: totalPages
-    } = usePagination({ items, perPageDefault, perPageQueryName })
+    } = usePagination({ items, perPageDefault, perPageStoragePrefix })
 
     watch(currentPage, () => {
       emit('unSelectAllUsers')

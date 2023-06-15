@@ -125,7 +125,7 @@ import { useGettext } from 'vue3-gettext'
 import { defaultFuseOptions } from 'web-pkg/src/helpers'
 import { useFileListHeaderPosition, usePagination } from 'web-pkg/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
-import { perPageDefault, perPageQueryName } from 'web-app-admin-settings/src/defaults'
+import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
 
 export default defineComponent({
   name: 'GroupsList',
@@ -228,7 +228,7 @@ export default defineComponent({
       items: paginatedItems,
       page: currentPage,
       total: totalPages
-    } = usePagination({ items, perPageDefault, perPageQueryName })
+    } = usePagination({ items, perPageDefault, perPageStoragePrefix })
 
     watch(currentPage, () => {
       emit('unSelectAllGroups')

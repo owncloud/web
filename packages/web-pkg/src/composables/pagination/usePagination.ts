@@ -1,7 +1,11 @@
 import { computed, ComputedRef, unref } from 'vue'
 import { MaybeRef } from 'web-pkg/src/utils'
-import { queryItemAsString, useRouteQuery, useRouteQueryPersisted } from 'web-pkg/src/composables'
-import { PaginationConstants } from './constants'
+import {
+  queryItemAsString,
+  useRouteQuery,
+  useRouteQueryPersisted,
+  PaginationConstants
+} from 'web-pkg/src/composables'
 
 interface PaginationOptions<T> {
   items: MaybeRef<Array<T>>
@@ -9,6 +13,7 @@ interface PaginationOptions<T> {
   perPage?: MaybeRef<number>
   perPageDefault?: string
   perPageQueryName?: string
+  perPageStoragePrefix: string
 }
 
 interface PaginationResult<T> {
@@ -59,7 +64,8 @@ function createPerPageRef<T>(options: PaginationOptions<T>): ComputedRef<number>
 
   const perPageQuery = useRouteQueryPersisted({
     name: options.perPageQueryName || PaginationConstants.perPageQueryName,
-    defaultValue: options.perPageDefault || PaginationConstants.perPageDefault
+    defaultValue: options.perPageDefault || PaginationConstants.perPageDefault,
+    storagePrefix: options.perPageStoragePrefix
   })
   return computed(() => parseInt(queryItemAsString(unref(perPageQuery))))
 }
