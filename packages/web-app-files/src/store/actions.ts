@@ -88,8 +88,8 @@ export default {
     }
   ) {
     const copyMove = new ResourceTransfer(
-      sourceSpace || context.state.clipboardSpace,
-      resources || context.state.clipboardResources,
+      sourceSpace,
+      resources,
       targetSpace,
       context.state.currentFolder,
       clientService,

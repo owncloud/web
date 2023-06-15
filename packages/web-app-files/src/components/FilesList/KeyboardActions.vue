@@ -10,6 +10,7 @@ import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { useClientService, useLoadingService, useStore } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { useFileActionsPaste } from 'web-app-files/src/composables'
 
 export default defineComponent({
   props: {
@@ -33,6 +34,8 @@ export default defineComponent({
     const clientService = useClientService()
     const { scrollToResource } = useScrollTo()
     const loadingService = useLoadingService()
+    const { actions: pasteFileActions } = useFileActionsPaste({ store })
+    const pasteFileAction = computed(() => unref(pasteFileActions)[0].handler)
 
     const selectionCursor = ref(0)
     let fileListClickedEvent
@@ -92,25 +95,6 @@ export default defineComponent({
     const handleSpaceAction = (event) => {
       event.preventDefault()
       store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
-    }
-    const handlePasteAction = () => {
-      store.dispatch('Files/pasteSelectedFiles', {
-        targetSpace: props.space,
-        clientService: clientService,
-        loadingService: loadingService,
-        createModal: (modal) => {
-          store.dispatch('createModal', modal)
-        },
-        hideModal: (modal) => {
-          store.dispatch('hideModal', modal)
-        },
-        showMessage: (msg) => {
-          store.dispatch('showMessage', msg)
-        },
-        $gettext: language.$gettext,
-        $gettextInterpolate: language.interpolate,
-        $ngettext: language.$ngettext
-      })
     }
     const handleNavigateAction = (event, up = false) => {
       event.preventDefault()
@@ -219,7 +203,7 @@ export default defineComponent({
         })
       }
       if (key === keycode('v') && ctrl) {
-        return handlePasteAction()
+        return unref(pasteFileAction)({ space: props.space })
       }
       if (key === keycode('x') && ctrl) {
         return store.dispatch('Files/cutSelectedFiles', {

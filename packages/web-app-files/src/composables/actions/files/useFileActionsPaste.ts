@@ -6,14 +6,9 @@ import {
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import {
-  useClientService,
-  useGetMatchingSpace,
-  useLoadingService,
-  useRouter,
-  useStore
-} from 'web-pkg/src/composables'
+import { useClientService, useLoadingService, useRouter, useStore } from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { useResourceRouteResolver } from 'web-app-files/src/composables/filesList'
 import { Resource, SpaceResource } from 'web-client'
 
 export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
@@ -21,7 +16,12 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   const router = useRouter()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const { getMatchingSpace } = useGetMatchingSpace()
+  const { getMatchingSpace } = useResourceRouteResolver(
+    {
+      spaces: store.getters['runtime/spaces/spaces']
+    },
+    null
+  )
   const { $gettext, $pgettext, interpolate: $gettextInterpolate, $ngettext } = useGettext()
 
   const isMacOs = computed(() => {
@@ -35,7 +35,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
     return $pgettext('Keyboard shortcut for non-macOS systems for pasting files', 'Ctrl + V')
   })
 
-  const handler = async ({ space }: FileActionOptions) => {
+  const handler = async ({ space: targetSpace }: FileActionOptions) => {
     const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
       store.getters['Files/clipboardResources'].reduce((acc, resource) => {
         const matchingSpace = getMatchingSpace(resource)
@@ -47,11 +47,11 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
         acc[matchingSpace.id].resources.push(resource)
         return acc
       }, {})
-    for (let { space: sourceSpace, resources: resourcesToCopy } of Object.values(
+    for (const { space: sourceSpace, resources: resourcesToCopy } of Object.values(
       resourceSpaceMapping
     )) {
       store.dispatch('Files/pasteSelectedFiles', {
-        targetSpace: space,
+        targetSpace,
         sourceSpace: sourceSpace,
         resources: resourcesToCopy,
         clientService,
