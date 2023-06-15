@@ -101,38 +101,34 @@ export default {
       $ngettext,
       $gettextInterpolate
     )
-    let movedResources = []
+    let movedResourcesPromise
     if (context.state.clipboardAction === ClipboardActions.Cut) {
-      movedResources = await copyMove.perform(TransferType.MOVE)
+      movedResourcesPromise = copyMove.perform(TransferType.MOVE)
     }
     if (context.state.clipboardAction === ClipboardActions.Copy) {
-      movedResources = await copyMove.perform(TransferType.COPY)
+      movedResourcesPromise = copyMove.perform(TransferType.COPY)
     }
-    return loadingService.addTask(
-      () => {
-        context.commit('CLEAR_CLIPBOARD')
-        const loadingResources = []
-        const fetchedResources = []
-        for (const resource of movedResources) {
-          loadingResources.push(
-            (async () => {
-              const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
-                targetSpace,
-                resource
-              )
-              fetchedResources.push(movedResource)
-            })()
-          )
-        }
+    return movedResourcesPromise.then((movedResources) => {
+      const loadingResources = []
+      const fetchedResources = []
+      for (const resource of movedResources) {
+        loadingResources.push(
+          (async () => {
+            const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
+              targetSpace,
+              resource
+            )
+            fetchedResources.push(movedResource)
+          })()
+        )
+      }
 
-        return Promise.all(loadingResources).then(() => {
-          const currentFolder = context.getters.currentFolder
-          context.commit('UPSERT_RESOURCES', fetchedResources)
-          context.commit('LOAD_INDICATORS', currentFolder.path)
-        })
-      },
-      { debounceTime: 0 }
-    )
+      return Promise.all(loadingResources).then(() => {
+        const currentFolder = context.getters.currentFolder
+        context.commit('UPSERT_RESOURCES', fetchedResources)
+        context.commit('LOAD_INDICATORS', currentFolder.path)
+      })
+    })
   },
   resetFileSelection(context) {
     context.commit('RESET_SELECTION')

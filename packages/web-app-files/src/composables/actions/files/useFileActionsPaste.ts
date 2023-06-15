@@ -47,10 +47,10 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
         acc[matchingSpace.id].resources.push(resource)
         return acc
       }, {})
-    return Object.values(resourceSpaceMapping).map(
+    const promises = Object.values(resourceSpaceMapping).map(
       ({ space: sourceSpace, resources: resourcesToCopy }) => {
-        return loadingService
-          .addTask((loadingCallbackArgs) => {
+        return loadingService.addTask(
+          () => {
             return store.dispatch('Files/pasteSelectedFiles', {
               targetSpace,
               sourceSpace: sourceSpace,
@@ -64,24 +64,14 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
               $gettextInterpolate,
               $ngettext
             })
-          })
-          .then(() => {
-            const loadingResources = []
-            const fetchedResources = []
-            for (const resource of movedResources) {
-              loadingResources.push(
-                (async () => {
-                  const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
-                    targetSpace,
-                    resource
-                  )
-                  fetchedResources.push(movedResource)
-                })()
-              )
-            }
-          })
+          },
+          { debounceTime: 0 }
+        )
       }
     )
+    return Promise.all(promises).then(() => {
+      store.commit('Files/CLEAR_CLIPBOARD')
+    })
   }
 
   const actions = computed((): FileAction[] => [
