@@ -53,6 +53,9 @@ services:
       # PROXY
       PROXY_ENABLE_BASIC_AUTH: "${PROXY_ENABLE_BASIC_AUTH:-true}"
       PROXY_TLS: "false"
+
+      # CORS
+      OCIS_CORS_ALLOW_ORIGINS: "https://host.docker.internal:9201"
     volumes:
       - ./dev/docker/ocis.entrypoint.sh:/usr/bin/entrypoint
       - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
