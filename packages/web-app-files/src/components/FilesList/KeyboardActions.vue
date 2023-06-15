@@ -8,7 +8,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { defineComponent, onBeforeUnmount, onMounted, PropType, computed, ref, unref } from 'vue'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
-import { useClientService, useLoadingService, useStore } from 'web-pkg'
+import { useClientService, useLoadingService, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { useFileActionsPaste } from 'web-app-files/src/composables'
 

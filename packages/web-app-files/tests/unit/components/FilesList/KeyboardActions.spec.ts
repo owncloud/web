@@ -167,6 +167,7 @@ const getWrapper = ({ props = {}, latestSelectedId = undefined } = {}) => {
 
   const storeOptions = defaultStoreMockOptions
   storeOptions.modules.Files.state.latestSelectedId = latestSelectedId
+  storeOptions.modules.Files.getters.clipboardResources.mockReturnValue([{ name: 'test', id: 1 }])
   const store = createStore(storeOptions)
   return {
     storeOptions,

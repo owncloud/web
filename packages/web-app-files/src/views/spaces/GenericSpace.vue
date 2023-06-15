@@ -355,7 +355,6 @@ export default defineComponent({
           })
         }
       }
-
       return concatBreadcrumbs(
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,

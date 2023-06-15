@@ -6,9 +6,14 @@ import {
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useClientService, useLoadingService, useRouter, useStore } from 'web-pkg/src/composables'
+import {
+  useClientService,
+  useGetMatchingSpace,
+  useLoadingService,
+  useRouter,
+  useStore
+} from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
-import { useResourceRouteResolver } from 'web-app-files/src/composables/filesList'
 import { Resource, SpaceResource } from 'web-client'
 
 export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
@@ -16,12 +21,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   const router = useRouter()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const { getMatchingSpace } = useResourceRouteResolver(
-    {
-      spaces: store.getters['runtime/spaces/spaces']
-    },
-    null
-  )
+  const { getMatchingSpace } = useGetMatchingSpace()
   const { $gettext, $pgettext, interpolate: $gettextInterpolate, $ngettext } = useGettext()
 
   const isMacOs = computed(() => {

@@ -234,7 +234,7 @@ function getMountedWrapper({
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
         provide: defaultMocks,
-        stubs: { ...defaultStubs, 'resource-details': true }
+        stubs: { ...defaultStubs, 'resource-details': true, 'keyboard-actions': true }
       }
     })
   }
