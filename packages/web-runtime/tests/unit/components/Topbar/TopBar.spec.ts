@@ -77,7 +77,8 @@ const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
       global: {
         plugins: [...defaultPlugins(), store],
         stubs: { 'router-link': true, 'portal-target': true, notifications: true },
-        mocks
+        mocks,
+        provide: mocks
       }
     })
   }

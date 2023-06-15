@@ -233,6 +233,7 @@ function getMountedWrapper({
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
+        provide: defaultMocks,
         stubs: { ...defaultStubs, 'resource-details': true }
       }
     })

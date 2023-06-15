@@ -196,6 +196,7 @@ function createWrapper({
   }
   storeOptions.modules.Files.actions.changeShare = jest.fn()
   const store = createStore(storeOptions)
+  const mocks = defaultComponentMocks()
   return {
     wrapper: mount(ListItem, {
       props: {
@@ -212,7 +213,8 @@ function createWrapper({
       },
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks: defaultComponentMocks(),
+        mocks,
+        provide: mocks,
         renderStubDefaultSlot: true,
         stubs: {
           ...defaultStubs,

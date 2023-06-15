@@ -101,6 +101,7 @@ function getWrapper({
       },
       {
         mocks,
+        provide: mocks,
         store
       }
     )

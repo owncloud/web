@@ -57,9 +57,11 @@ describe('acceptShare', () => {
 })
 
 function getWrapper({ setup, routeName = sharesWithMeLocation }) {
+  const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) })
   return {
     wrapper: getComposableWrapper(setup, {
-      mocks: defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) })
+      mocks,
+      provide: mocks
     })
   }
 }

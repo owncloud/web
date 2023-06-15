@@ -136,13 +136,14 @@ describe('Tags Panel', () => {
 function createWrapper(resource, clientService = mockDeep<ClientService>()) {
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
+  const mocks = { ...defaultComponentMocks(), $clientService: clientService }
   return {
     storeOptions,
     wrapper: mount(TagsPanel, {
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks: { ...defaultComponentMocks(), $clientService: clientService },
-        provide: { resource },
+        mocks,
+        provide: { ...mocks, resource },
         stubs: { VueSelect: true, CompareSaveDialog: true }
       }
     })

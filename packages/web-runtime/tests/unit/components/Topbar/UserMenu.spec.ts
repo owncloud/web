@@ -232,6 +232,7 @@ const getMountedWrapper = (
       ]
     },
     global: {
+      provide: mocks,
       renderStubDefaultSlot: true,
       plugins: [...defaultPlugins(), store],
       stubs: {

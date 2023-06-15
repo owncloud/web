@@ -49,6 +49,7 @@ function getWrapper({ currentRouteName = locationSharesWithMe.name } = {}) {
         stubs: defaultStubs,
         renderStubDefaultSlot: true,
         mocks,
+        provide: mocks,
         plugins: [...defaultPlugins(), store]
       }
     })

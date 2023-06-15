@@ -90,7 +90,8 @@ function getWrapper({ passwordRequired = false } = {}) {
     wrapper: shallowMount(ResolvePublicLink, {
       global: {
         plugins: [...defaultPlugins(), store],
-        mocks
+        mocks,
+        provide: mocks
       }
     })
   }

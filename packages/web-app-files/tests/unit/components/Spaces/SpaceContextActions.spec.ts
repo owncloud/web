@@ -37,6 +37,7 @@ function getWrapper(space) {
       },
       global: {
         mocks,
+        provide: mocks,
         plugins: [
           ...defaultPlugins({
             abilities: [{ action: 'set-quota-all', subject: 'Drive' }]

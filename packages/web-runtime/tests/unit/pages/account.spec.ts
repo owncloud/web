@@ -264,6 +264,7 @@ function getWrapper({
       global: {
         plugins: [...defaultPlugins(), store],
         mocks,
+        provide: mocks,
         stubs: {
           'oc-button': true,
           'oc-icon': true

@@ -22,13 +22,15 @@ describe('useScrollTo', () => {
       const htmlPageObject = getHTMLPageObject()
       jest.spyOn(document, 'querySelectorAll').mockImplementation(() => [] as any)
 
+      const mocks = defaultComponentMocks()
+
       getComposableWrapper(
         () => {
           const { scrollToResource } = useScrollTo()
           scrollToResource(mockDeep<Resource>())
           expect(htmlPageObject.scrollIntoView).not.toHaveBeenCalled()
         },
-        { mocks: defaultComponentMocks(), store: defaultStoreMockOptions }
+        { mocks, provide: mocks, store: defaultStoreMockOptions }
       )
     })
     it('calls "scrollIntoView" when the page bottom is reached', () => {
@@ -36,13 +38,15 @@ describe('useScrollTo', () => {
       jest.spyOn(document, 'querySelectorAll').mockImplementation(() => [htmlPageObject] as any)
       window.innerHeight = 100
 
+      const mocks = defaultComponentMocks()
+
       getComposableWrapper(
         () => {
           const { scrollToResource } = useScrollTo()
           scrollToResource(mockDeep<Resource>())
           expect(htmlPageObject.scrollIntoView).toHaveBeenCalled()
         },
-        { mocks: defaultComponentMocks(), store: defaultStoreMockOptions }
+        { mocks, provide: mocks, store: defaultStoreMockOptions }
       )
     })
     it('calls "scrollBy" when the page top is reached', () => {
@@ -53,13 +57,15 @@ describe('useScrollTo', () => {
         .mockImplementation(() => [htmlPageObject] as any)
       window.innerHeight = 500
 
+      const mocks = defaultComponentMocks()
+
       getComposableWrapper(
         () => {
           const { scrollToResource } = useScrollTo()
           scrollToResource(mockDeep<Resource>())
           expect(htmlPageObject.scrollBy).toHaveBeenCalled()
         },
-        { mocks: defaultComponentMocks(), store: defaultStoreMockOptions }
+        { mocks, provide: mocks, store: defaultStoreMockOptions }
       )
     })
   })
@@ -67,6 +73,8 @@ describe('useScrollTo', () => {
     const resourceId = 'someFileId'
 
     it('does not scroll without the "scrollTo" param', () => {
+      const mocks = { ...defaultComponentMocks() }
+
       getComposableWrapper(
         () => {
           const resource = mockDeep<Resource>({ id: resourceId })
@@ -76,12 +84,19 @@ describe('useScrollTo', () => {
           expect(querySelectorAllSpy).not.toHaveBeenCalled()
         },
         {
-          mocks: { ...defaultComponentMocks() },
+          mocks,
+          provide: mocks,
           store: defaultStoreMockOptions
         }
       )
     })
     it('does not scroll when no resource found', () => {
+      const mocks = {
+        ...defaultComponentMocks({
+          currentRoute: mock<RouteLocation>({ query: { scrollTo: resourceId } })
+        })
+      }
+
       getComposableWrapper(
         () => {
           const resource = mockDeep<Resource>({ id: 'someOtherFileId' })
@@ -91,16 +106,21 @@ describe('useScrollTo', () => {
           expect(querySelectorAllSpy).not.toHaveBeenCalled()
         },
         {
-          mocks: {
-            ...defaultComponentMocks({
-              currentRoute: mock<RouteLocation>({ query: { scrollTo: resourceId } })
-            })
-          },
+          mocks,
+          provide: mocks,
           store: defaultStoreMockOptions
         }
       )
     })
     it('scrolls to the resource when the "scrollTo" param is given and a resource is found', () => {
+      const store = { commit: jest.fn() }
+      const mocks = {
+        ...defaultComponentMocks({
+          currentRoute: mock<RouteLocation>({ query: { scrollTo: resourceId } })
+        }),
+        $store: store
+      }
+
       getComposableWrapper(
         () => {
           const resource = mockDeep<Resource>({ id: resourceId })
@@ -110,17 +130,25 @@ describe('useScrollTo', () => {
           expect(querySelectorAllSpy).toHaveBeenCalled()
         },
         {
-          mocks: {
-            ...defaultComponentMocks({
-              currentRoute: mock<RouteLocation>({ query: { scrollTo: resourceId } })
-            }),
-            $store: { commit: jest.fn() }
-          },
-          store: defaultStoreMockOptions
+          mocks,
+          provide: {
+            ...mocks,
+            store
+          }
         }
       )
     })
     it('opens the sidebar when a resource is found and the "details" param is given', () => {
+      const store = { commit: jest.fn() }
+      const mocks = {
+        ...defaultComponentMocks({
+          currentRoute: mock<RouteLocation>({
+            query: { scrollTo: resourceId, details: 'details' }
+          })
+        }),
+        $store: store
+      }
+
       getComposableWrapper(
         () => {
           const busStub = jest.spyOn(eventBus, 'publish')
@@ -130,15 +158,11 @@ describe('useScrollTo', () => {
           expect(busStub).toHaveBeenCalled()
         },
         {
-          mocks: {
-            ...defaultComponentMocks({
-              currentRoute: mock<RouteLocation>({
-                query: { scrollTo: resourceId, details: 'details' }
-              })
-            }),
-            $store: { commit: jest.fn() }
-          },
-          store: defaultStoreMockOptions
+          mocks,
+          provide: {
+            ...mocks,
+            store
+          }
         }
       )
     })

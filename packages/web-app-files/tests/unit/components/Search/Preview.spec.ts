@@ -129,14 +129,16 @@ function getWrapper({
   }
   storeOptions.modules.runtime.modules.spaces.getters.spaces.mockImplementation(() => spaces)
   const store = createStore(storeOptions)
+  const mocks = defaultComponentMocks({ currentRoute: route })
   return {
     wrapper: shallowMount(Preview, {
       props: {
         searchResult
       },
       global: {
+        provide: mocks,
         renderStubDefaultSlot: true,
-        mocks: defaultComponentMocks({ currentRoute: route }),
+        mocks,
         plugins: [...defaultPlugins(), store]
       }
     })

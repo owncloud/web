@@ -138,16 +138,19 @@ function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ s
   }))
 
   const store = createStore(storeOptions)
+  const mocks = {
+    ...defaultComponentMocks({
+      currentRoute: mock<RouteLocation>({ query: { app: 'exampleApp' } })
+    })
+  }
+
   return {
     wrapper: shallowMount(App, {
       global: {
         plugins: [...defaultPlugins(), store],
         stubs: componentStubs,
-        mocks: {
-          ...defaultComponentMocks({
-            currentRoute: mock<RouteLocation>({ query: { app: 'exampleApp' } })
-          })
-        }
+        mocks,
+        provide: mocks
       }
     })
   }

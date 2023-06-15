@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 packageExtensionsChecksum: e5e8993047f00ffc73fd28e87ccaecb8
 
 patchedDependencies:
@@ -712,9 +708,6 @@ importers:
       sanitize-html:
         specifier: ^2.7.0
         version: 2.7.0
-      semver:
-        specifier: ^7.3.8
-        version: 7.3.8
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
@@ -887,6 +880,9 @@ importers:
       qs:
         specifier: ^6.10.3
         version: 6.10.3
+      semver:
+        specifier: ^7.3.8
+        version: 7.3.8
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
@@ -21493,3 +21489,7 @@ packages:
       lodash: 4.17.21
       vue: 3.3.4
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

@@ -104,6 +104,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(setup, {
       mocks,
+      provide: mocks,
       store
     })
   }

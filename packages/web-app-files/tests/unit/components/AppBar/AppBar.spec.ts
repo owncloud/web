@@ -10,7 +10,7 @@ import {
   defaultStoreMockOptions,
   RouteLocation
 } from 'web-test-helpers'
-import { ArchiverService } from 'web-app-files/src/services'
+import { ArchiverService } from 'web-pkg/src/services'
 import { ViewModeConstants } from 'web-pkg/src/composables'
 
 const selectors = {
@@ -187,7 +187,7 @@ function getShallowWrapper(
       slots,
       global: {
         plugins: [...defaultPlugins(), store],
-        provide: { isMobileWidth: ref(isMobileWidth) },
+        provide: { ...mocks, isMobileWidth: ref(isMobileWidth) },
         mocks
       }
     })

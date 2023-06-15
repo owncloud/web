@@ -33,7 +33,8 @@ function getMountedWrapper({ currentRouteName = 'files-spaces-generic' } = {}) {
       global: {
         plugins: [...defaultPlugins(), store],
         stubs: defaultStubs,
-        mocks
+        mocks,
+        provide: mocks
       }
     })
   }

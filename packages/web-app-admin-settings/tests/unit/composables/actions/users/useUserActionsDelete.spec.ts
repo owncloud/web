@@ -84,7 +84,7 @@ function getWrapper({
         const instance = useUserActionsDelete({ store })
         setup(instance, { storeOptions, clientService: mocks.$clientService })
       },
-      { store, mocks }
+      { store, mocks, provide: mocks }
     )
   }
 }

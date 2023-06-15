@@ -195,6 +195,7 @@ function createWrapper({
     (state) => state.highlightedFile
   )
   const store = createStore(storeOptions)
+  const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute as any) })
   return {
     wrapper: shallowMount(SideBar, {
       props: {
@@ -206,9 +207,8 @@ function createWrapper({
         stubs: {
           InnerSideBar: false
         },
-        mocks: {
-          ...defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute as any) })
-        }
+        mocks,
+        provide: mocks
       }
     })
   }

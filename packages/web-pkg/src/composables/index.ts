@@ -1,5 +1,6 @@
 export * from './ability'
 export * from './appDefaults'
+export * from './archiverService'
 export * from './authContext'
 export * from './capability'
 export * from './clientService'

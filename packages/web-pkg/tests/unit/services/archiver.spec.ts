@@ -1,10 +1,11 @@
 import { ArchiverCapability, ArchiverService } from '../../../src/services'
-import { RuntimeError } from 'web-runtime/src/container/error'
+import { RuntimeError } from 'web-pkg/src/errors'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg'
+import { unref, ref, Ref } from 'vue'
 
 const serverUrl = 'https://demo.owncloud.com'
-const getArchiverServiceInstance = (capabilities: ArchiverCapability[]) => {
+const getArchiverServiceInstance = (capabilities: Ref<ArchiverCapability[]>) => {
   const clientServiceMock = mockDeep<ClientService>()
   clientServiceMock.httpUnAuthenticated.get.mockResolvedValue({
     data: new ArrayBuffer(8),
@@ -18,16 +19,16 @@ const getArchiverServiceInstance = (capabilities: ArchiverCapability[]) => {
 describe('archiver', () => {
   describe('availability', () => {
     it('is unavailable if no version given via capabilities', () => {
-      const capabilities = [mock<ArchiverCapability>({ version: undefined })]
-      expect(getArchiverServiceInstance(capabilities).available).toBe(false)
+      const capabilities = ref([mock<ArchiverCapability>({ version: undefined })])
+      expect(unref(getArchiverServiceInstance(capabilities).available)).toBe(false)
     })
     it('is available if a version is given via capabilities', () => {
-      const capabilities = [mock<ArchiverCapability>({ version: '1' })]
-      expect(getArchiverServiceInstance(capabilities).available).toBe(true)
+      const capabilities = ref([mock<ArchiverCapability>({ version: '1' })])
+      expect(unref(getArchiverServiceInstance(capabilities).available)).toBe(true)
     })
   })
   it('does not trigger downloads when unavailable', async () => {
-    const capabilities = [mock<ArchiverCapability>({ version: undefined })]
+    const capabilities = ref([mock<ArchiverCapability>({ version: undefined })])
     const archiverService = getArchiverServiceInstance(capabilities)
     await expect(archiverService.triggerDownload({})).rejects.toThrow(
       new RuntimeError('no archiver available')
@@ -35,7 +36,7 @@ describe('archiver', () => {
   })
   describe('with one v2 archiver capability', () => {
     const archiverUrl = [serverUrl, 'archiver'].join('/')
-    const capabilities = [
+    const capabilities = ref([
       {
         enabled: true,
         version: 'v2.3.5',
@@ -44,11 +45,11 @@ describe('archiver', () => {
         max_num_files: '42',
         max_size: '1073741824'
       }
-    ]
+    ])
 
     it('is announcing itself as supporting fileIds', () => {
       const archiverService = getArchiverServiceInstance(capabilities)
-      expect(archiverService.fileIdsSupported).toBe(true)
+      expect(unref(archiverService.fileIdsSupported)).toBe(true)
     })
     it('fails to trigger a download if no files were given', async () => {
       const archiverService = getArchiverServiceInstance(capabilities)
@@ -69,7 +70,7 @@ describe('archiver', () => {
   })
   describe('with one v1 archiver capability', () => {
     const archiverUrl = [serverUrl, 'archiver'].join('/')
-    const capabilities = [
+    const capabilities = ref([
       {
         enabled: true,
         version: 'v1.2.3',
@@ -78,10 +79,10 @@ describe('archiver', () => {
         max_num_files: '42',
         max_size: '1073741824'
       }
-    ]
+    ])
     it('is announcing itself as not supporting fileIds', () => {
       const archiverService = getArchiverServiceInstance(capabilities)
-      expect(archiverService.fileIdsSupported).toBe(false)
+      expect(unref(archiverService.fileIdsSupported)).toBe(false)
     })
     it('fails to trigger a download if no files were given', async () => {
       const archiverService = getArchiverServiceInstance(capabilities)
@@ -131,7 +132,7 @@ describe('archiver', () => {
     }
 
     it('uses the highest major version', async () => {
-      const capabilities = [capabilityV1, capabilityV2, capabilityV3]
+      const capabilities = ref([capabilityV1, capabilityV2, capabilityV3])
       const archiverService = getArchiverServiceInstance(capabilities)
       const downloadUrl = await archiverService.triggerDownload({ fileIds: ['any'] })
       expect(downloadUrl.startsWith(capabilityV2.archiver_url)).toBeTruthy()

@@ -36,19 +36,24 @@ import {
 import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
-import { createApp } from 'vue'
+import { computed, createApp } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
 
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
+import { ArchiverService } from 'web-pkg/src/services/archiver'
+import { get } from 'lodash-es'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const app = createApp(pages.success)
+
+  app.provide('$router', router)
 
   const runtimeConfiguration = await announceConfiguration(configurationPath)
   startSentry(runtimeConfiguration, app)
 
   const store = await announceStore({ runtimeConfiguration })
+  app.provide('$store', store)
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
   const applicationsPromise = initializeApplications({
@@ -74,6 +79,24 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     translations: merge(translations, customTranslations)
   })
   announceClientService({ app, runtimeConfiguration, configurationManager, store })
+
+  // TODO: move to announceArchiverService function
+  app.config.globalProperties.$archiverService = new ArchiverService(
+    app.config.globalProperties.$clientService,
+    store.getters.configuration.server || window.location.origin,
+    computed(() =>
+      get(store, 'getters.capabilities.files.archivers', [
+        {
+          enabled: true,
+          version: '1.0.0',
+          formats: ['tar', 'zip'],
+          archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
+        }
+      ])
+    )
+  )
+  app.provide('$archiverService', app.config.globalProperties.$archiverService)
+
   announceUppyService({ app })
   announceLoadingService({ app })
   announcePreviewService({ app, store, configurationManager })

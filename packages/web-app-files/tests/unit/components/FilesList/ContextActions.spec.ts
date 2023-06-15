@@ -75,7 +75,7 @@ function getWrapper() {
       },
       global: {
         mocks,
-        provide: { currentSpace: mock<SpaceResource>() },
+        provide: { ...mocks, currentSpace: mock<SpaceResource>() },
         stubs: { ...defaultStubs, 'action-menu-item': true },
         plugins: [...defaultPlugins(), store]
       }

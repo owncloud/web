@@ -85,6 +85,7 @@ function getWrapper(resource = undefined) {
     wrapper: shallowMount(GdprExport, {
       global: {
         mocks,
+        provide: mocks,
         plugins: [...defaultPlugins(), store]
       }
     })

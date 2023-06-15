@@ -12,10 +12,9 @@ import quickActions from './quickActions'
 import store from './store'
 import { SDKSearch } from './search'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { Registry, ArchiverService } from './services'
+import { Registry } from './services'
 import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
-import get from 'lodash-es/get'
 import { AppNavigationItem, AppReadyHookArgs } from 'web-pkg/src/apps'
 
 // dirty: importing view from other extension within project
@@ -131,17 +130,5 @@ export default {
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.
     eventBus.publish('app.search.register.provider', Registry.sdkSearch)
-    globalProperties.$archiverService = new ArchiverService(
-      $clientService,
-      store.getters.configuration.server || window.location.origin,
-      get(store, 'getters.capabilities.files.archivers', [
-        {
-          enabled: true,
-          version: '1.0.0',
-          formats: ['tar', 'zip'],
-          archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
-        }
-      ])
-    )
   }
 }

@@ -176,13 +176,15 @@ function getWrapper({
     () => spaceMembers
   )
   const store = createStore(storeOptions)
+  const mocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ name: currentRouteName })
+  })
   return mountType(SpaceMembers, {
     global: {
       plugins: [...defaultPlugins(), store],
-      mocks: defaultComponentMocks({
-        currentRoute: mock<RouteLocation>({ name: currentRouteName })
-      }),
+      mocks,
       provide: {
+        ...mocks,
         space,
         resource: space
       },
