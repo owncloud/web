@@ -30,6 +30,7 @@ Summary
 * Enhancement - Privacy statement in account menu: [#9174](https://github.com/owncloud/web/issues/9174)
 * Enhancement - Add login button to top bar: [#9178](https://github.com/owncloud/web/pull/9178)
 * Enhancement - Add pagination options to admin settings: [#9199](https://github.com/owncloud/web/pull/9199)
+* Enhancement - Streamline URL query names: [#9226](https://github.com/owncloud/web/pull/9226)
 
 Details
 -------
@@ -210,6 +211,15 @@ Details
 
    https://github.com/owncloud/web/issues/9188
    https://github.com/owncloud/web/pull/9199
+
+* Enhancement - Streamline URL query names: [#9226](https://github.com/owncloud/web/pull/9226)
+
+   We've used different URL query names for the pagination in the files app (`items-per-page`)
+   and admin-settings app (`admin-settings-items-per-page`). We've streamlined this to use
+   the same query name in all apps and still keep the possibility to have independent page sizes in
+   different apps.
+
+   https://github.com/owncloud/web/pull/9226
 
 Changelog for ownCloud Web [7.0.0] (2023-06-02)
 =======================================
