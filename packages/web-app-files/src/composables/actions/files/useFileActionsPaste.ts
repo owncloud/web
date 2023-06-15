@@ -47,23 +47,41 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
         acc[matchingSpace.id].resources.push(resource)
         return acc
       }, {})
-    for (const { space: sourceSpace, resources: resourcesToCopy } of Object.values(
-      resourceSpaceMapping
-    )) {
-      store.dispatch('Files/pasteSelectedFiles', {
-        targetSpace,
-        sourceSpace: sourceSpace,
-        resources: resourcesToCopy,
-        clientService,
-        loadingService,
-        createModal: (...args) => store.dispatch('createModal', ...args),
-        hideModal: (...args) => store.dispatch('hideModal', ...args),
-        showMessage: (...args) => store.dispatch('showMessage', ...args),
-        $gettext,
-        $gettextInterpolate,
-        $ngettext
-      })
-    }
+    return Object.values(resourceSpaceMapping).map(
+      ({ space: sourceSpace, resources: resourcesToCopy }) => {
+        return loadingService
+          .addTask((loadingCallbackArgs) => {
+            return store.dispatch('Files/pasteSelectedFiles', {
+              targetSpace,
+              sourceSpace: sourceSpace,
+              resources: resourcesToCopy,
+              clientService,
+              loadingService,
+              createModal: (...args) => store.dispatch('createModal', ...args),
+              hideModal: (...args) => store.dispatch('hideModal', ...args),
+              showMessage: (...args) => store.dispatch('showMessage', ...args),
+              $gettext,
+              $gettextInterpolate,
+              $ngettext
+            })
+          })
+          .then(() => {
+            const loadingResources = []
+            const fetchedResources = []
+            for (const resource of movedResources) {
+              loadingResources.push(
+                (async () => {
+                  const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
+                    targetSpace,
+                    resource
+                  )
+                  fetchedResources.push(movedResource)
+                })()
+              )
+            }
+          })
+      }
+    )
   }
 
   const actions = computed((): FileAction[] => [
