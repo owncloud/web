@@ -1,12 +1,6 @@
 import { useConfigurationManager, useStore } from 'web-pkg/src/composables'
 import { Resource, SpaceResource } from 'web-client'
-import {
-  buildPublicSpaceResource,
-  buildShareSpaceResource,
-  isPublicSpaceResource
-} from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg'
-import { getCurrentInstance } from 'vue'
+import { buildPublicSpaceResource, buildShareSpaceResource } from 'web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
 
 export const useGetMatchingSpace = () => {
