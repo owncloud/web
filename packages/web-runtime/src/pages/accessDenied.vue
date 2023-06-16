@@ -40,7 +40,7 @@ export default defineComponent({
       return store.getters.configuration.currentTheme.logo.login
     })
     const cardTitle = computed(() => {
-      return $gettext('Logged out')
+      return $gettext('Not logged in')
     })
     const cardHint = computed(() => {
       return $gettext('You were automatically logged out for security reasons.')
