@@ -657,7 +657,7 @@ export default defineComponent({
     },
     openRenameDialog(item) {
       this.renameHandler({
-        space: this.getMatchingSpace(item),
+        space: this.space || this.getMatchingSpace(item),
         resources: [item]
       })
     },
@@ -790,7 +790,7 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
-      let space = this.getMatchingSpace(resource)
+      let space = this.space || this.getMatchingSpace(resource)
 
       /**
        * Triggered when a default action is triggered on a file
@@ -854,7 +854,7 @@ export default defineComponent({
         if (isProjectSpaceResource(resource)) {
           return this.$gettext('Spaces')
         }
-        const matchingSpace = this.getMatchingSpace(resource)
+        const matchingSpace = this.space || this.getMatchingSpace(resource)
         if (matchingSpace?.driveType === 'project') {
           return matchingSpace.name
         }
@@ -870,7 +870,7 @@ export default defineComponent({
           : basename(resource.shareRoot)
       }
 
-      if (!this.getInternalSpace(resource.storageId)) {
+      if (!this.space && !this.getInternalSpace(resource.storageId)) {
         return this.$gettext('Shared with me')
       }
 
