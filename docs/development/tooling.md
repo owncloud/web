@@ -9,10 +9,10 @@ geekdocFilePath: tooling.md
 
 {{< toc >}}
 
-## packaging
+## Packaging
 
 TODO: some sentences about pnpm and vite
 
-## development setup
+## Development Setup
 
 TODO: some sentences and command line examples for docker-compose dev stack

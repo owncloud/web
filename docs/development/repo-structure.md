@@ -9,21 +9,21 @@ geekdocFilePath: repo-structure.md
 
 {{< toc >}}
 
-## Repo structure
+## Repository Structure
 
-From a developers perspective the most important parts of the [ownCloud Web repo](https://github.com/owncloud/web) are the following files and folders:
+From a developer#s perspective, the most important parts of the [ownCloud Web repo](https://github.com/owncloud/web) are the following files and folders:
 
-### dev folder and docker-compose.yml file
+### dev Folder and docker-compose.yml File
 
 The `/dev` folder contains all the configuration files that are needed in the `docker-compose.yml` file. This docker compose stack
-contains all the backend and testing related infrastructure that is needed for an out of the box usable localhost development setup,
+contains all the backend and testing related infrastructure that is needed for an out-of-the-box usable localhost development setup,
 as described in the [tooling section]({{< ref "tooling.md" >}}).
 
-### docs folder
+### docs Folder
 
 Within the `/docs` folder you will find all the documentation source documents that get published to [the dev docs](https://owncloud.dev/clients/web/).
 
-### packages folder
+### packages Folder
 
 We're using the [ownCloud Web repo](https://github.com/owncloud/web) as a mono repo. It contains a variety of packages. Some of them get 
 published to [npmjs.com](https://npmjs.com), others define the core packages, apps and extensions that are the foundation of 
@@ -33,17 +33,17 @@ Having these packages side by side within the `/packages` folder of the repo is 
 
 ### tests
 
-For historic reasons there are two end-to-end test collections in the ownCloud Web project. The older one lives in `/tests/acceptance`, 
+For historic reasons, there are two end-to-end test collections in the ownCloud Web project. The older one lives in `/tests/acceptance`, 
 using [Nightwatch.js](https://nightwatchjs.org). The newer one lives in `/tests/e2e`, using [Playwright](https://playwright.dev).
-We're slowly moving away from the nightwatch.js based e2e tests. As our coverage with playwright based e2e tests grows continuously it might
-be that you will not find the `/tests/acceptance` folder anymore. If that's the case at the time of reading this, those are happy times.
+We're slowly moving away from the nightwatch.js-based e2e tests. As our coverage with playwright based e2e tests grows continuously, it might
+happen that you will not find the `/tests/acceptance` folder anymore. If that's the case at the time of reading this, those are happy times.
 You're more than welcome to make a pull request and adjust this section of the docs accordingly. :-)
 
 The rest of the folder contains helpers and configuration files for our automated testing infrastructure.
 
 You can read more about testing in our [testing section]({{< ref "../testing/_index.md" >}})
 
-### package.json file
+### package.json File
 
 This is probably no surprise: the root level `package.json` file defines the project information, build scripts, dependencies and some more details.
 Each package in `/packages` can and most likely will contain another `package.json` which does the same for the respective package.
@@ -59,12 +59,12 @@ Each package in the `/packages` folder can - not exclusively, but most commonly 
 - source code (`/src`),
 - unit tests (`/tests`),
 - translations (`/l10n`) and
-- a `package.json` file for package specific details and dependencies
+- a `package.json` file for package specific details and dependencies.
 
-### code style and build config
+### Code Style and Build Config
 
 Some of our packages in `/packages` are pure helper packages which ensure a common code style and build configuration for all our 
-internal (mono repo) and external packages. We encourage you to make use of the very same packages. This allows the community to
+internal (mono repo) and external packages. We encourage you to make use of the very same packages. This helps the community
 understand code more easily, even when coming from different developers or vendors in the ownCloud Web ecosystem.
 
 Namely those packages are
@@ -83,7 +83,7 @@ the [design system documentation](https://owncloud.design).
 
 The ownCloud Design System is a standalone project, but to make development easier we have the code in our mono repo.
 We're planning to publish it on npmjs.com as [@ownclouders/design-system](https://www.npmjs.com/package/@ownclouders/design-system) 
-as soon as possible. Since it's bundled with ownCloud Web you should not bundle it with your app or extension.
+as soon as possible. Since it's bundled with ownCloud Web, you should not bundle it with your app or extension.
 
 ### web-client
 
@@ -108,15 +108,15 @@ A dedicated documentation for the `web-pkg` package is not available, yet, since
 
 At the very heart of ownCloud Web, the `web-runtime` is responsible for dependency injection, app bootstrapping, configuration, 
 authentication, data preloading and much more.
-It is very likely that you will never get in touch with it, as most of the developer facing features are exposed via `web-pkg`. If you
-have more questions about this package, please join us with questions in our [public chat](https://talk.owncloud.com/channel/web)
+It is very likely that you will never get in touch with it as most of the developer-facing features are exposed via `web-pkg`. If you
+have more questions about this package, please join our [public chat](https://talk.owncloud.com/channel/web) and simply ask
 or write an issue in our [issue tracker](https://github.com/owncloud/web/issues).
 
-### Standalone core apps
+### Standalone Core Apps
 
 Both `web-app-admin-settings` and `web-app-files` are standalone apps which are bundled with the default ownCloud Web release artifact.
 
-### Viewer and editor apps
+### Viewer and Editor Apps
 
 Apps which fall into the categories `viewer` or `editor` can be opened from the context of a file or folder. This mostly happens from
 within the `files` app. We currently bundle the following apps with the default ownCloud Web release artifact:
@@ -127,4 +127,4 @@ within the `files` app. We currently bundle the following apps with the default 
 - `web-app-preview` a viewer for various media files (audio / video / image formats)
 - `web-app-text-editor` a simple editor for `.txt`, `.md` and other plain text files
 
-If you're interested in writing your own viewer or editor app for certain file types please get in touch with us for more info.
+If you're interested in writing your own viewer or editor app for certain file types, please get in touch with us for more info.
