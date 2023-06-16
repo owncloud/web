@@ -50,7 +50,7 @@ Each package in `/packages` can and most likely will contain another `package.js
 
 ### vite.config.ts
 
-We're working with [Vite](https://vitejs.dev) as a local development  server and build tool. `vite.config.ts` is the main configuration file for that.
+We're working with [Vite](https://vitejs.dev) as a local development server and build tool. `vite.config.ts` is the main configuration file for that.
 You can read more about the usage in our [tooling section]({{< ref "tooling.md" >}}).
 
 ## (Published) Packages

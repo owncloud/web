@@ -50,9 +50,9 @@ a `<translate tag="h1">` or similar) in order to make reasoning about the DOM tr
 We're using TypeScript, which allows us to catch bugs at transpile time. Clean types make sure our IDEs can support us 
 in reasoning about our (ever growing, complex) codebase.
 
-### Vue3 and composition API
+### Vue 3 and composition API
 
-We've migrated from Vue2 to Vue3 late in 2022 and since then invest continuous efforts to move away from the Vue options API
+We've migrated from Vue 2 to Vue 3 late in 2022 and since then invest continuous efforts to move away from the Vue options API
 in favour of the Vue composition API. The `web-pkg` helper package provides quite some composables which will help you in
 app & extension development, so we encourage you to make use of the Vue composition API as well, even outside of the
 ownCloud Web repository.
