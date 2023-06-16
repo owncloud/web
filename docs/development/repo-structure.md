@@ -31,7 +31,7 @@ the `ownCloud Web` release artifact.
 
 Having these packages side by side within the `/packages` folder of the repo is possible because of a `pnpm` feature called `Workspaces`.
 
-### tests
+### tests Folder
 
 For historic reasons, there are two end-to-end test collections in the ownCloud Web project. The older one lives in `/tests/acceptance`, 
 using [Nightwatch.js](https://nightwatchjs.org). The newer one lives in `/tests/e2e`, using [Playwright](https://playwright.dev).
