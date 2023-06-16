@@ -91,7 +91,7 @@ export const changeAccountEnabled = async (args: {
         resp.status() === 200 &&
         resp.request().method() === 'PATCH'
     ),
-    await page.locator(compareDialogConfirm).click()
+    page.locator(compareDialogConfirm).click()
   ])
 }
 
@@ -111,7 +111,7 @@ export const changeQuota = async (args: {
         resp.status() === 200 &&
         resp.request().method() === 'PATCH'
     ),
-    await page.locator(compareDialogConfirm).click()
+    page.locator(compareDialogConfirm).click()
   ])
 }
 
@@ -200,7 +200,7 @@ export const addSelectedUsersToGroups = async (args: {
     }
   }
 
-  await Promise.all([...checkResponses, await page.locator(actionConfirmButton).click()])
+  await Promise.all([...checkResponses, page.locator(actionConfirmButton).click()])
 }
 
 export const removeSelectedUsersFromGroups = async (args: {
@@ -237,7 +237,7 @@ export const removeSelectedUsersFromGroups = async (args: {
     }
   }
 
-  await Promise.all([...checkResponses, await page.locator(actionConfirmButton).click()])
+  await Promise.all([...checkResponses, page.locator(actionConfirmButton).click()])
 }
 
 export const filterUsers = async (args: {
@@ -278,7 +278,7 @@ export const changeUser = async (args: {
           resp.status() === 201 &&
           resp.request().method() === 'POST'
       ),
-      await page.locator(compareDialogConfirm).click()
+      page.locator(compareDialogConfirm).click()
     ])
   }
 
@@ -289,7 +289,7 @@ export const changeUser = async (args: {
         resp.status() === 200 &&
         resp.request().method() === 'PATCH'
     ),
-    await page.locator(compareDialogConfirm).click()
+    page.locator(compareDialogConfirm).click()
   ])
 }
 
@@ -324,7 +324,7 @@ export const addUserToGroups = async (args: {
     )
   }
 
-  await Promise.all([...checkResponses, await page.locator(compareDialogConfirm).click()])
+  await Promise.all([...checkResponses, page.locator(compareDialogConfirm).click()])
 }
 
 export const removeUserFromGroups = async (args: {
@@ -355,7 +355,7 @@ export const removeUserFromGroups = async (args: {
     )
   }
 
-  await Promise.all([...checkResponses, await page.locator(compareDialogConfirm).click()])
+  await Promise.all([...checkResponses, page.locator(compareDialogConfirm).click()])
 }
 
 export const openEditPanel = async (args: {
@@ -396,7 +396,7 @@ export const deleteUserUsingContextMenu = async (args: {
         resp.status() === 204 &&
         resp.request().method() === 'DELETE'
     ),
-    await page.locator(actionConfirmButton).click()
+    page.locator(actionConfirmButton).click()
   ])
 }
 
@@ -419,7 +419,7 @@ export const deleteUserUsingBatchAction = async (args: {
     )
   }
 
-  await Promise.all([...checkResponses, await page.locator(actionConfirmButton).click()])
+  await Promise.all([...checkResponses, page.locator(actionConfirmButton).click()])
 }
 
 export const waitForEditPanelToBeVisible = async (args: { page: Page }): Promise<void> => {
