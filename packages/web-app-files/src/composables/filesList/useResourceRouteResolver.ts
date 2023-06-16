@@ -13,7 +13,6 @@ import { buildShareSpaceResource } from 'web-client/src/helpers'
 type ResourceRouteResolverOptions = {
   configurationManager?: ConfigurationManager
   targetRouteCallback?: Ref<any>
-
   space?: Ref<SpaceResource>
 }
 

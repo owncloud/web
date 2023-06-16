@@ -210,8 +210,6 @@ export default defineComponent({
     const route = useRoute()
     const language = useGettext()
     const hasSpaces = useCapabilitySpacesEnabled(store)
-    const { actions: pasteFileActions } = useFileActionsPaste({ store })
-    const pasteFileAction = computed(() => unref(pasteFileActions)[0].handler)
 
     useUpload({ uppyService })
 
@@ -228,6 +226,9 @@ export default defineComponent({
     }
 
     let uploadCompletedSub
+
+    const { actions: pasteFileActions } = useFileActionsPaste({ store })
+    const pasteFileAction = unref(pasteFileActions)[0].handler
 
     const { actions: createNewFolder } = useFileActionsCreateNewFolder({
       store,

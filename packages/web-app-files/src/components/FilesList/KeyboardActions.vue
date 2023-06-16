@@ -31,11 +31,9 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const language = useGettext()
-    const clientService = useClientService()
     const { scrollToResource } = useScrollTo()
-    const loadingService = useLoadingService()
     const { actions: pasteFileActions } = useFileActionsPaste({ store })
-    const pasteFileAction = computed(() => unref(pasteFileActions)[0].handler)
+    const pasteFileAction = unref(pasteFileActions)[0].handler
 
     const selectionCursor = ref(0)
     let fileListClickedEvent
@@ -203,7 +201,7 @@ export default defineComponent({
         })
       }
       if (key === keycode('v') && ctrl) {
-        return unref(pasteFileAction)({ space: props.space })
+        return pasteFileAction({ space: props.space })
       }
       if (key === keycode('x') && ctrl) {
         return store.dispatch('Files/cutSelectedFiles', {
