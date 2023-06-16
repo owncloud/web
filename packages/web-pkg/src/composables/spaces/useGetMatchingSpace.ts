@@ -13,7 +13,7 @@ export const useGetMatchingSpace = () => {
   }
 
   const getMatchingSpace = (resource: Resource): SpaceResource => {
-    if (resource.downloadURL.split('/')?.[5] === 'public-files') {
+    if (resource.downloadURL?.split('/')?.[5] === 'public-files') {
       return buildPublicSpaceResource({
         id: store.getters['runtime/auth/publicLinkToken'],
         name: $gettext('Public files'),
