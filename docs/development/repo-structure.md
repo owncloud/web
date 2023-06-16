@@ -21,7 +21,7 @@ as described in the [tooling section]({{< ref "tooling.md" >}}).
 
 ### docs Folder
 
-Within the `/docs` folder you will find all the documentation source documents that get published to [the dev docs](https://owncloud.dev/clients/web/).
+Within the `/docs` folder you will find all the documentation source documents that get published to the [dev docs](https://owncloud.dev/clients/web/).
 
 ### packages Folder
 
