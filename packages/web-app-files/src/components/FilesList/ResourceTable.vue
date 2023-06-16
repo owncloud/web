@@ -187,7 +187,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, unref } from 'vue'
+import { defineComponent, PropType, computed, unref, ref } from 'vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
@@ -413,9 +413,6 @@ export default defineComponent({
   ],
   setup(props, context) {
     const store = useStore()
-    const spaces = computed(() => {
-      return store.getters['runtime/spaces/spaces']
-    })
     const { width } = useWindowSize()
     const hasTags = computed(
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
@@ -438,6 +435,7 @@ export default defineComponent({
       ...useGetMatchingSpace(),
       ...useResourceRouteResolver(
         {
+          space: ref(props.space),
           targetRouteCallback: computed(() => props.targetRouteCallback)
         },
         context

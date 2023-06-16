@@ -207,7 +207,7 @@ export function buildSpace(data): SpaceResource {
       return false
     },
     isShareRoot: function () {
-      return false
+      return ['share', 'mountpoint'].includes(data.driveType)
     },
     canDeny: () => false,
     getDomSelector: () => extractDomSelector(data.id),

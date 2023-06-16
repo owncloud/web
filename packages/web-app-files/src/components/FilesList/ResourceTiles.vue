@@ -185,6 +185,7 @@ export default defineComponent({
 
     const resourceRouteResolver = useResourceRouteResolver(
       {
+        space: ref(props.space),
         targetRouteCallback: computed(() => props.targetRouteCallback)
       },
       context

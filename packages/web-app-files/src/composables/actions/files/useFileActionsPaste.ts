@@ -69,9 +69,8 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
         )
       }
     )
-    return Promise.all(promises).then(() => {
-      store.commit('Files/CLEAR_CLIPBOARD')
-    })
+    await Promise.all(promises)
+    store.commit('Files/CLEAR_CLIPBOARD')
   }
 
   const actions = computed((): FileAction[] => [

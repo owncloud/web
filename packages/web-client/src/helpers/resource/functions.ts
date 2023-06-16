@@ -153,6 +153,7 @@ export function buildResource(resource): Resource {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     },
     isShareRoot(): boolean {
+      console.log(resource.name)
       return resource.fileInfo[DavProperty.ShareRoot]
         ? resource.name.split('/').length === 3
         : false
