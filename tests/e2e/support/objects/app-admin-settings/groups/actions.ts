@@ -72,7 +72,7 @@ export const deleteGroupUsingContextMenu = async (args: {
         resp.status() === 204 &&
         resp.request().method() === 'DELETE'
     ),
-    await page.locator(actionConfirmButton).click()
+    page.locator(actionConfirmButton).click()
   ])
 }
 
@@ -114,7 +114,7 @@ export const changeGroup = async (args: {
         resp.status() === 204 &&
         resp.request().method() === 'PATCH'
     ),
-    await page.locator(compareDialogConfirm).click()
+    page.locator(compareDialogConfirm).click()
   ])
 }
 export const openEditPanel = async (args: {

@@ -243,6 +243,11 @@ export default class Collaborator {
     } = args
     const collaboratorRow = Collaborator.getCollaboratorUserOrGroupSelector(collaborator, type)
 
+    await page
+      .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
+      .click()
+    await page.locator(util.format(Collaborator.removeCollaboratorButton, collaboratorRow)).click()
+
     await Promise.all([
       page.waitForResponse(
         (resp) =>
@@ -250,10 +255,6 @@ export default class Collaborator {
           resp.status() === 200 &&
           resp.request().method() === 'DELETE'
       ),
-      page
-        .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
-        .click(),
-      page.locator(util.format(Collaborator.removeCollaboratorButton, collaboratorRow)).click(),
       page.locator(Collaborator.removeCollaboratorConfirmationButton).click()
     ])
     if (removeOwnSpaceAccess) {
