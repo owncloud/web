@@ -1,6 +1,6 @@
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource } from 'web-client/src/helpers'
 
 export default {
   LOAD_FILES(state, { currentFolder, files }) {

@@ -35,7 +35,11 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
         shareName: basename(resource.shareRoot),
         serverUrl: configurationManager.serverUrl
       })
-    } else if (!resource.shareId && !unref(options.space) && !getInternalSpace(resource.storageId)) {
+    } else if (
+      !resource.shareId &&
+      !unref(options.space) &&
+      !getInternalSpace(resource.storageId)
+    ) {
       if (path === '/') {
         return createLocationShares('files-shares-with-me')
       }
