@@ -5,7 +5,7 @@ import { eventBus } from 'web-pkg'
 import keycode from 'keycode'
 
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { createStore, defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { useScrollToMock } from 'web-app-files/tests/mocks/useScrollToMock'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 
@@ -165,9 +165,12 @@ describe('KeyboardActions', () => {
 const getWrapper = ({ props = {}, latestSelectedId = undefined } = {}) => {
   jest.mocked(useScrollTo).mockImplementation(() => useScrollToMock())
 
+  const mocks = {
+    ...defaultComponentMocks()
+  }
   const storeOptions = defaultStoreMockOptions
   storeOptions.modules.Files.state.latestSelectedId = latestSelectedId
-  storeOptions.modules.Files.getters.clipboardResources.mockReturnValue([{ name: 'test', id: 1 }])
+  storeOptions.modules.Files.getters.clipboardResources.mockReturnValue([{ id: '1', name: 'test' }])
   const store = createStore(storeOptions)
   return {
     storeOptions,
@@ -182,7 +185,9 @@ const getWrapper = ({ props = {}, latestSelectedId = undefined } = {}) => {
         ...props
       },
       global: {
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins(), store],
+        mocks,
+        provide: mocks
       }
     })
   }
