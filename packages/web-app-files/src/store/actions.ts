@@ -42,7 +42,7 @@ export default {
       context.commit('ADD_FILE_SELECTION', file)
     }
   },
-  copySelectedFiles(context, options: { space: SpaceResource; resources: Resource[] } & Language) {
+  copySelectedFiles(context, options: { resources: Resource[] } & Language) {
     const { $gettext } = options
     context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)

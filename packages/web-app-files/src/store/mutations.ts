@@ -27,12 +27,10 @@ export default {
     state.filesSearched = null
   },
   CLEAR_CLIPBOARD(state) {
-    state.clipboardSpace = null
     state.clipboardResources = []
     state.clipboardAction = null
   },
-  CLIPBOARD_SELECTED(state, { space, resources }: { space: SpaceResource; resources: Resource[] }) {
-    state.clipboardSpace = space
+  CLIPBOARD_SELECTED(state, { resources }: { resources: Resource[] }) {
     state.clipboardResources = resources
   },
   SET_CLIPBOARD_ACTION(state, action) {
