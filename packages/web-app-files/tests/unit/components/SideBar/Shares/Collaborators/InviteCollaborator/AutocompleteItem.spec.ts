@@ -61,16 +61,25 @@ describe('AutocompleteItem component', () => {
     it('shows additional information when set', () => {
       const { wrapper } = createWrapper({ shareWithAdditionalInfo: 'some text' })
       expect(wrapper.find('.files-collaborators-autocomplete-additional-info').text()).toEqual(
-        '(some text)'
+        'some text'
       )
     })
     it('does not show additional information when not set', () => {
       const { wrapper } = createWrapper({ shareWithAdditionalInfo: undefined })
       expect(wrapper.find('.files-collaborators-autocomplete-additional-info').exists()).toBeFalsy()
     })
-    it('shows the share type', () => {
-      const { wrapper } = createWrapper({ shareType: ShareTypes.user.value })
-      expect(wrapper.find('.files-collaborators-autocomplete-share-type').text()).toEqual('User')
+    it.each([
+      ShareTypes.user.value,
+      ShareTypes.spaceUser.value,
+      ShareTypes.group.value,
+      ShareTypes.spaceGroup.value
+    ])('hides share type for users and groups', (shareType: number) => {
+      const { wrapper } = createWrapper({ shareType })
+      expect(wrapper.find('.files-collaborators-autocomplete-share-type').exists()).toBeFalsy()
+    })
+    it('shows share type for guests', () => {
+      const { wrapper } = createWrapper({ shareType: ShareTypes.guest.value })
+      expect(wrapper.find('.files-collaborators-autocomplete-share-type').text()).toEqual('(Guest)')
     })
   })
 })

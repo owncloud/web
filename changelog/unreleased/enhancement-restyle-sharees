@@ -1,0 +1,6 @@
+Enhancement: Restyle possible sharees
+
+We've restyled the list of sharee suggestions when sharing files and folders.
+
+https://github.com/owncloud/web/issues/9216
+https://github.com/owncloud/web/pull/9273

@@ -38,12 +38,17 @@
     />
     <div class="files-collaborators-autocomplete-user-text oc-text-truncate">
       <span class="files-collaborators-autocomplete-username" v-text="item.label" />
-      <span
+      <template v-if="!isUser && !isSpaceUser && !isGroup && !isSpaceGroup">
+        <span
+          class="files-collaborators-autocomplete-share-type"
+          v-text="`(${$gettext(shareType.label)})`"
+        />
+      </template>
+      <div
         v-if="item.value.shareWithAdditionalInfo"
         class="files-collaborators-autocomplete-additional-info"
-        v-text="`(${item.value.shareWithAdditionalInfo})`"
+        v-text="`${item.value.shareWithAdditionalInfo}`"
       />
-      <div class="files-collaborators-autocomplete-share-type" v-text="$gettext(shareType.label)" />
     </div>
   </div>
 </template>
@@ -102,5 +107,8 @@ export default {
 <style lang="scss">
 .vs__dropdown-option--highlight .files-recipient-suggestion-avatar svg {
   fill: white !important;
+}
+.files-collaborators-autocomplete-additional-info {
+  font-size: var(--oc-font-size-small);
 }
 </style>
