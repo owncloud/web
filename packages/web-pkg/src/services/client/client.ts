@@ -106,6 +106,7 @@ export class ClientService {
       ...(!!authenticated && { token: this.token }),
       language: this.currentLanguage,
       client: new _HttpClient({
+        baseURL: this.configurationManager.serverUrl,
         headers: {
           'Accept-Language': this.currentLanguage,
           ...(!!authenticated && { Authorization: 'Bearer ' + this.token }),

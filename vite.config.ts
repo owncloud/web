@@ -76,16 +76,6 @@ const getConfigJson = async (url: string, config: UserConfig) => {
   configJson.options.disablePreviews = false
   configJson.options.displayResourcesLazy = true
 
-  const vitePort = config.server.port
-  const viteUrl = `http${config.server.https ? 's' : ''}://host.docker.internal:${vitePort}`
-
-  // oCIS
-  if (configJson.openIdConnect) {
-    // replace server urls in config.json to use the vite proxy
-    configJson.theme = configJson.theme.replace(configJson.server, viteUrl)
-    configJson.server = configJson.server.replace(configJson.server, viteUrl)
-  }
-
   // oC 10
   if (configJson.auth) {
     configJson.auth.clientId =
@@ -162,28 +152,7 @@ export default defineConfig(async ({ mode, command }) => {
           https: {
             key: readFileSync('./dev/docker/traefik/certificates/server.key'),
             cert: readFileSync('./dev/docker/traefik/certificates/server.crt')
-          },
-          // workaround: https://github.com/owncloud/ocis/issues/5108
-          proxy: Object.fromEntries(
-            [
-              'api',
-              'ocs',
-              'graph',
-              'remote.php',
-              'app',
-              'archiver',
-              'branding',
-              'settings.js',
-              'themes'
-            ].map((p) => [
-              `/${p}`,
-              {
-                target: proxiedServerUrl,
-                changeOrigin: true,
-                secure: false
-              }
-            ])
-          )
+          }
         }
       })
     }
