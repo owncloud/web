@@ -19,7 +19,7 @@ type ResourceRouteResolverOptions = {
 export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, context) => {
   const configurationManager = options.configurationManager || useConfigurationManager()
   const targetRouteCallback = options.targetRouteCallback
-  const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace()
+  const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace(options)
 
   const createFolderLink = (createTargetRouteOptions: CreateTargetRouteOptions) => {
     if (unref(targetRouteCallback)) {
@@ -74,6 +74,8 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
 
   return {
     createFileAction,
-    createFolderLink
+    createFolderLink,
+    getInternalSpace,
+    getMatchingSpace
   }
 }

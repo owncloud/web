@@ -2,14 +2,19 @@ import { useConfigurationManager, useStore } from 'web-pkg/src/composables'
 import { Resource, SpaceResource } from 'web-client'
 import { buildPublicSpaceResource, buildShareSpaceResource } from 'web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
+import { Ref, unref } from 'vue'
 
-export const useGetMatchingSpace = () => {
+type GetMatchingSpaceOptions = {
+  space?: Ref<SpaceResource>
+}
+
+export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const store = useStore()
   const configurationManager = useConfigurationManager()
   const spaces = store.getters['runtime/spaces/spaces']
   const { $gettext } = useGettext()
   const getInternalSpace = (storageId) => {
-    return spaces.find((space) => space.id === storageId)
+    return unref(options?.space) || spaces.find((space) => space.id === storageId)
   }
 
   const getMatchingSpace = (resource: Resource): SpaceResource => {
