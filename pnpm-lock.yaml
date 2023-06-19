@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 packageExtensionsChecksum: e5e8993047f00ffc73fd28e87ccaecb8
 
 patchedDependencies:
@@ -21489,7 +21493,3 @@ packages:
       lodash: 4.17.21
       vue: 3.3.4
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
