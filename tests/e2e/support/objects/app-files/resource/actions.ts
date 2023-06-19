@@ -317,11 +317,11 @@ const performUpload = async (args: uploadResourceArgs): Promise<void> => {
       }
     }
   }
+
   await Promise.all([
     page.waitForResponse(
       (resp) =>
-        [201, 204].includes(resp.status()) &&
-        ['POST', 'PUT', 'PATCH'].includes(resp.request().method())
+        [201, 204].includes(resp.status()) && ['POST', 'PUT'].includes(resp.request().method())
     ),
     uploadAction
   ])
