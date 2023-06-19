@@ -38,6 +38,11 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   const handler = async ({ space: targetSpace }: FileActionOptions) => {
     const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
       store.getters['Files/clipboardResources'].reduce((acc, resource) => {
+        if (resource.storageId in acc) {
+          acc[resource.storageId].resources.push(resource)
+          return acc
+        }
+
         const matchingSpace = getMatchingSpace(resource)
 
         if (!(matchingSpace.id in acc)) {

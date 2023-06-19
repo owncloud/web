@@ -174,6 +174,11 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const filesList_delete = () => {
     const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
       unref(resources).reduce((acc, resource) => {
+        if (resource.storageId in acc) {
+          acc[resource.storageId].resources.push(resource)
+          return acc
+        }
+
         const matchingSpace = getMatchingSpace(resource)
 
         if (!(matchingSpace.id in acc)) {
