@@ -50,10 +50,11 @@
 
 <script lang="ts">
 import { DateTime } from 'luxon'
-import { computed, getCurrentInstance, watch, defineComponent, customRef } from 'vue'
+import { computed, watch, defineComponent, customRef } from 'vue'
 import { useStore } from 'web-pkg/src/composables'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { formatRelativeDateFromDateTime, getLocaleFromLanguage } from 'web-pkg/src/helpers'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'DateCurrentpicker',
@@ -66,15 +67,14 @@ export default defineComponent({
   },
   emits: ['optionChange'],
   setup(props, { emit }) {
-    const vm = getCurrentInstance().proxy
-    const language = computed(() => vm.$language)
+    const language = useGettext()
     const store = useStore()
     const capabilities = computed(() => store.getters.capabilities)
     const optionsUser = computed(() => capabilities.value.files_sharing.user?.expire_date)
     const optionsGroup = computed(() => capabilities.value.files_sharing.group?.expire_date)
     const available = computed(() => optionsUser.value || optionsGroup.value)
     const enforced = computed(() => optionsUser.value?.enforced || optionsGroup.value?.enforced)
-    const dateMin = DateTime.now().setLocale(language.value.current).toJSDate()
+    const dateMin = DateTime.now().setLocale(language.current).toJSDate()
     const dateDefault = computed(() => {
       const hasUserCollaborators = props.shareTypes.includes(ShareTypes.user.value)
       const hasGroupCollaborators = props.shareTypes.includes(ShareTypes.group.value)
@@ -104,7 +104,7 @@ export default defineComponent({
       }
 
       return DateTime.now()
-        .setLocale(getLocaleFromLanguage(language.value.current))
+        .setLocale(getLocaleFromLanguage(language.current))
         .plus({ days })
         .toJSDate()
     })
@@ -125,13 +125,13 @@ export default defineComponent({
     const dateExpire = computed(() =>
       formatRelativeDateFromDateTime(
         DateTime.fromJSDate(dateCurrent.value).endOf('day'),
-        language.value.current
+        language.current
       )
     )
 
     watch(dateCurrent, (val) => {
       const dateCurrent = DateTime.fromJSDate(val)
-        .setLocale(getLocaleFromLanguage(language.value.current))
+        .setLocale(getLocaleFromLanguage(language.current))
         .endOf('day')
       emit('optionChange', {
         expirationDate: dateCurrent.isValid
