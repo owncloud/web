@@ -20,14 +20,16 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const hasSpaces = useCapabilitySpacesEnabled(store)
 
   const getInternalSpace = (storageId) => {
-    if (!unref(hasSpaces)) {
-      return spaces.find((s) => isPersonalSpaceResource(s))
-    }
-    return unref(options?.space) || spaces.find((space) => space.id === storageId)
+    return (
+      unref(options?.space) ||
+      spaces.find((space) => space.id === storageId) ||
+      (!unref(hasSpaces) && spaces.find((s) => isPersonalSpaceResource(s)))
+    )
   }
 
   const getMatchingSpace = (resource: Resource): SpaceResource => {
     let storageId = resource.storageId
+
     if (unref(driveAliasAndItem)?.startsWith('public/')) {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
