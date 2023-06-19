@@ -147,8 +147,8 @@ export const changeSpaceDescription = async (args: {
 }): Promise<void> => {
   const { page, value } = args
   await openActionsPanel(page)
-  const waitForUpdate = async () =>
-    await page.waitForResponse(
+  const waitForUpdate = () =>
+    page.waitForResponse(
       (resp) =>
         resp.url().endsWith('readme.md') &&
         resp.status() === 200 &&
@@ -277,13 +277,13 @@ export const changeSpaceRole = async (args: SpaceMembersArgs): Promise<void> => 
 
   for (const collaborator of users) {
     await Promise.all([
-      Collaborator.changeCollaboratorRole({ page, collaborator }),
       page.waitForResponse(
         (resp) =>
           resp.url().includes('shares') &&
           resp.status() === 200 &&
           resp.request().method() === 'POST'
-      )
+      ),
+      Collaborator.changeCollaboratorRole({ page, collaborator })
     ])
   }
 }
