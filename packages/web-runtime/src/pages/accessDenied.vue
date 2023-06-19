@@ -49,8 +49,10 @@ export default defineComponent({
     })
 
     const loggedOutHelpUrl = computed(() => {
-      store.getters.configuration.commonTheme.loggedOutHelpUrl ||
+      return (
+        store.getters.configuration.commonTheme.loggedOutHelpUrl ||
         store.getters.configuration.options.loggedOutHelpUrl
+      )
     })
     const cardTitle = computed(() => {
       return $gettext('Not logged in')
