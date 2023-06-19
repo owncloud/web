@@ -5,6 +5,14 @@
       <div class="oc-login-card-body oc-width-medium">
         <h2 class="oc-login-card-title" v-text="cardTitle" />
         <p v-text="cardHint" />
+        <oc-button
+          v-if="loggedOutHelpUrl"
+          type="a"
+          appearance="raw"
+          :href="loggedOutHelpUrl"
+          target="_blank"
+          ><span v-text="$gettext('More')"
+        /></oc-button>
       </div>
       <div class="oc-login-card-footer oc-pt-rm">
         <p>
@@ -39,11 +47,18 @@ export default defineComponent({
     const logoImg = computed(() => {
       return store.getters.configuration.currentTheme.logo.login
     })
+
+    const loggedOutHelpUrl = computed(() => {
+      store.getters.configuration.commonTheme.loggedOutHelpUrl ||
+        store.getters.configuration.options.loggedOutHelpUrl
+    })
     const cardTitle = computed(() => {
       return $gettext('Not logged in')
     })
     const cardHint = computed(() => {
-      return $gettext('You were automatically logged out for security reasons.')
+      return $gettext(
+        'This could be because of a routine safety log out, or because your account is either inactive or not yet authorized for use. Please try logging in after a while or seek help from your Administraton.'
+      )
     })
     const footerSlogan = computed(() => {
       return store.getters.configuration.currentTheme.general.slogan
@@ -57,7 +72,8 @@ export default defineComponent({
       cardTitle,
       cardHint,
       footerSlogan,
-      navigateToLoginText
+      navigateToLoginText,
+      loggedOutHelpUrl
     }
   }
 })

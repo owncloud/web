@@ -18,7 +18,8 @@ const state = {
   commonTheme: {
     name: '',
     solgan: '',
-    logo: ''
+    logo: '',
+    loggedOutHelpUrl: ''
   },
   currentTheme: {
     general: {
@@ -63,7 +64,8 @@ const state = {
     runningOnEos: false,
     cernFeatures: false,
     sharingRecipientsPerPage: 200,
-    contextHelpersReadMore: true
+    contextHelpersReadMore: true,
+    loggedOutHelpUrl: ''
   }
 }
 
