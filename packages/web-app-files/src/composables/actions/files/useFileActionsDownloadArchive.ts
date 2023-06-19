@@ -31,7 +31,9 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
   const isFilesAppActive = useIsFilesAppActive()
 
   const handler = ({ space, resources }: FileActionOptions) => {
-    if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
+    if (resources.length > 1) {
+      // the handler can be triggered successfully if project spaces are selected along with other files.
+      // but we must filter out the project spaces in such a case (only the other selected files are allowed for download).
       resources = resources.filter((r) => r.canDownload() && !isProjectSpaceResource(r))
     }
 
@@ -122,6 +124,9 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
           ) {
             return false
           }
+          if (!unref(archiverService.available)) {
+            return false
+          }
 
           if (resources.length === 0) {
             return false
@@ -129,13 +134,10 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
           if (resources.length === 1 && !resources[0].isFolder) {
             return false
           }
-          if (resources.length > 1 && resources.some((r) => isProjectSpaceResource(r))) {
+          if (resources.length > 1 && resources.every((r) => isProjectSpaceResource(r))) {
             return false
           }
           if (isProjectSpaceResource(resources[0]) && resources[0].disabled) {
-            return false
-          }
-          if (!unref(archiverService.available)) {
             return false
           }
           if (
@@ -143,13 +145,6 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
             isLocationCommonActive(router, 'files-common-favorites')
           ) {
             return false
-          }
-
-          if (isLocationCommonActive(router, 'files-common-search')) {
-            return (
-              resources.some((r) => r.canDownload()) &&
-              (resources.length === 1 || !resources.every((r) => isProjectSpaceResource(r)))
-            )
           }
 
           const downloadDisabled = resources.some((resource) => {
