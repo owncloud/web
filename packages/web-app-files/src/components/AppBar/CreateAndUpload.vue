@@ -132,7 +132,7 @@
         @click="pasteFileAction({ space })"
       >
         <oc-icon fill-type="line" name="clipboard" />
-        <span v-translate>Paste here</span>
+        <span v-text="$gettext('Paste here')" />
       </oc-button>
       <oc-button
         :disabled="uploadOrFileCreationBlocked"
