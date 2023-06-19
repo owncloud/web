@@ -1,7 +1,6 @@
-import { useConfigurationManager, useStore } from 'web-pkg/src/composables'
+import { useConfigurationManager, useRouteParam, useStore } from 'web-pkg/src/composables'
 import { Resource, SpaceResource } from 'web-client'
-import { buildPublicSpaceResource, buildShareSpaceResource } from 'web-client/src/helpers'
-import { useGettext } from 'vue3-gettext'
+import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { Ref, unref } from 'vue'
 
 type GetMatchingSpaceOptions = {
@@ -12,25 +11,20 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const store = useStore()
   const configurationManager = useConfigurationManager()
   const spaces = store.getters['runtime/spaces/spaces']
-  const { $gettext } = useGettext()
+  const driveAliasAndItem = useRouteParam('driveAliasAndItem')
+
   const getInternalSpace = (storageId) => {
     return unref(options?.space) || spaces.find((space) => space.id === storageId)
   }
 
   const getMatchingSpace = (resource: Resource): SpaceResource => {
-    if (resource.downloadURL?.split('/')?.[5] === 'public-files') {
-      return buildPublicSpaceResource({
-        id: store.getters['runtime/auth/publicLinkToken'],
-        name: $gettext('Public files'),
-        ...(store.getters['runtime/auth/publicLinkPassword'] && {
-          publicLinkPassword: store.getters['runtime/auth/publicLinkPassword']
-        }),
-        serverUrl: configurationManager.serverUrl
-      })
+    let storageId = resource.storageId
+    if (unref(driveAliasAndItem)?.startsWith('public/')) {
+      storageId = unref(driveAliasAndItem).split('/')[1]
     }
 
     return (
-      getInternalSpace(resource.storageId) ||
+      getInternalSpace(storageId) ||
       buildShareSpaceResource({
         shareId: resource.shareId,
         shareName: resource.name,
