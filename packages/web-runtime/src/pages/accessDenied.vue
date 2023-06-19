@@ -59,7 +59,7 @@ export default defineComponent({
     })
     const cardHint = computed(() => {
       return $gettext(
-        'This could be because of a routine safety log out, or because your account is either inactive or not yet authorized for use. Please try logging in after a while or seek help from your Administraton.'
+        'This could be because of a routine safety log out, or because your account is either inactive or not yet authorized for use. Please try logging in after a while or seek help from your Administrator.'
       )
     })
     const footerSlogan = computed(() => {
