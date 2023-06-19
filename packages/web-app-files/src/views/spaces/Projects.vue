@@ -49,7 +49,7 @@
             <template #image="{ resource }">
               <img
                 v-if="imageContentObject[resource.id]"
-                class="tile-preview oc-mr-s"
+                class="table-preview oc-mr-s"
                 :src="imageContentObject[resource.id]['data']"
                 alt=""
                 width="33"
@@ -299,7 +299,9 @@ export default defineComponent({
 #files-spaces-empty {
   height: 75vh;
 }
-
+.table-preview {
+  border-radius: 3px;
+}
 .state-trashed {
   .tile-preview,
   .tile-default-image > svg {
