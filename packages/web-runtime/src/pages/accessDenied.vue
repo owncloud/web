@@ -6,10 +6,10 @@
         <h2 class="oc-login-card-title" v-text="cardTitle" />
         <p v-text="cardHint" />
         <oc-button
-          v-if="loggedOutHelpUrl"
+          v-if="accessDeniedHelpUrl"
           type="a"
           appearance="raw"
-          :href="loggedOutHelpUrl"
+          :href="accessDeniedHelpUrl"
           target="_blank"
           ><span v-text="$gettext('More')"
         /></oc-button>
@@ -48,10 +48,10 @@ export default defineComponent({
       return store.getters.configuration.currentTheme.logo.login
     })
 
-    const loggedOutHelpUrl = computed(() => {
+    const accessDeniedHelpUrl = computed(() => {
       return (
-        store.getters.configuration.commonTheme.loggedOutHelpUrl ||
-        store.getters.configuration.options.loggedOutHelpUrl
+        store.getters.configuration.commonTheme.accessDeniedHelpUrl ||
+        store.getters.configuration.options.accessDeniedHelpUrl
       )
     })
     const cardTitle = computed(() => {
@@ -75,7 +75,7 @@ export default defineComponent({
       cardHint,
       footerSlogan,
       navigateToLoginText,
-      loggedOutHelpUrl
+      accessDeniedHelpUrl
     }
   }
 })

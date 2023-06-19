@@ -19,7 +19,7 @@ const state = {
     name: '',
     solgan: '',
     logo: '',
-    loggedOutHelpUrl: ''
+    accessDeniedHelpUrl: ''
   },
   currentTheme: {
     general: {
@@ -65,7 +65,7 @@ const state = {
     cernFeatures: false,
     sharingRecipientsPerPage: 200,
     contextHelpersReadMore: true,
-    loggedOutHelpUrl: ''
+    accessDeniedHelpUrl: ''
   }
 }
 
