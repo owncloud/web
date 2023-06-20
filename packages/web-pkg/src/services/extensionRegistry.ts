@@ -29,5 +29,3 @@ export const useExtensionRegistry = defineStore('extensionRegistry', {
         (state.extensions[type] || []) as ExtensionType[]
   }
 })
-
-export default {}
