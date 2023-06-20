@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Favorites list update on removal: [#9078](https://github.com/owncloud/web/pull/9078)
 * Bugfix - Reduce space preloading: [#9153](https://github.com/owncloud/web/pull/9153)
 * Bugfix - Space creation does not block reoccurring event: [#9213](https://github.com/owncloud/web/pull/9213)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
@@ -35,6 +36,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Favorites list update on removal: [#9078](https://github.com/owncloud/web/pull/9078)
+
+   The Favorites list is now updating when a resource is removed from the list in this view
+
+   https://github.com/owncloud/web/pull/9078
+   https://github.com/owncloud/web/pull/9237
 
 * Bugfix - Reduce space preloading: [#9153](https://github.com/owncloud/web/pull/9153)
 
