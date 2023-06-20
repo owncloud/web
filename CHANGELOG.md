@@ -30,6 +30,7 @@ Summary
 * Enhancement - Privacy statement in account menu: [#9174](https://github.com/owncloud/web/issues/9174)
 * Enhancement - Add login button to top bar: [#9178](https://github.com/owncloud/web/pull/9178)
 * Enhancement - Add pagination options to admin settings: [#9199](https://github.com/owncloud/web/pull/9199)
+* Enhancement - Add batch actions to search result list: [#9200](https://github.com/owncloud/web/pull/9200)
 * Enhancement - Restyle possible sharees: [#9216](https://github.com/owncloud/web/issues/9216)
 * Enhancement - Streamline URL query names: [#9226](https://github.com/owncloud/web/pull/9226)
 
@@ -211,6 +212,13 @@ Details
 
    https://github.com/owncloud/web/issues/9188
    https://github.com/owncloud/web/pull/9199
+
+* Enhancement - Add batch actions to search result list: [#9200](https://github.com/owncloud/web/pull/9200)
+
+   We've modified our batch actions so that they now finally work on the search result page as well.
+
+   https://github.com/owncloud/web/issues/9230
+   https://github.com/owncloud/web/pull/9200
 
 * Enhancement - Restyle possible sharees: [#9216](https://github.com/owncloud/web/issues/9216)
 
