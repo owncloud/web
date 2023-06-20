@@ -4,14 +4,14 @@ import { useGettext } from 'vue3-gettext'
 import { defineWebApplication } from '@ownclouders/web-pkg/src/apps'
 
 export default defineWebApplication({
-  setup({ applicationConfig }) {
+  setup(args) {
     const { $gettext } = useGettext()
     return {
       appInfo: {
         id: 'importer',
         name: $gettext('Importer')
       },
-      extensions: extensions({ applicationConfig }),
+      extensions: extensions(args),
       translations
     }
   }

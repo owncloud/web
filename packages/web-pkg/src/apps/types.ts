@@ -1,4 +1,4 @@
-import { App, ComponentCustomProperties } from 'vue'
+import { App, ComponentCustomProperties, Ref } from 'vue'
 import { RouteLocationRaw, Router, RouteRecordRaw } from 'vue-router'
 import { Store } from 'vuex'
 import { Extension } from 'web-pkg/src/services/extensionRegistry'
@@ -75,7 +75,7 @@ export interface ClassicApplicationScript {
   navItems?: ((...args) => AppNavigationItem[]) | AppNavigationItem[]
   quickActions?: ApplicationQuickActions
   translations?: ApplicationTranslations
-  extensions?: Extension[]
+  extensions?: Ref<Extension[]>
   initialize?: () => void
   ready?: () => void
   mounted?: () => void

@@ -1,6 +1,6 @@
 import { RuntimeApi } from '../types'
 import { buildRuntimeApi } from '../api'
-import { App } from 'vue'
+import { App, computed, unref } from 'vue'
 import { isFunction, isObject } from 'lodash-es'
 import { NextApplication } from './next'
 import { Store } from 'vuex'

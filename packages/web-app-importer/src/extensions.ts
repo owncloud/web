@@ -2,12 +2,13 @@ import { useAccessToken, useStore } from '@ownclouders/web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg/src/composables/service'
 import type { UppyService } from 'web-runtime/src/services/uppyService'
-import { computed, unref } from 'vue'
+import { computed, unref, ref } from 'vue'
 import { Resource } from 'web-client/src'
 
 import '@uppy/dashboard/dist/style.min.css'
 import Dashboard from '@uppy/dashboard'
 import OneDrive from '@uppy/onedrive'
+import { Extension } from 'web-pkg/src/services/extensionRegistry'
 
 export const extensions = ({ applicationConfig }) => {
   const store = useStore()
@@ -88,28 +89,31 @@ export const extensions = ({ applicationConfig }) => {
     })
   }
 
-  return [
-    {
-      id: 'com.github.owncloud.web.import-file',
-      type: 'action',
-      action: {
-        name: 'import-files',
-        icon: 'cloud',
-        handler,
-        label: () => $gettext('Import'),
-        isEnabled: () => {
-          if (!companionUrl) {
-            return false
+  return computed(
+    () =>
+      [
+        {
+          id: 'com.github.owncloud.web.import-file',
+          type: 'action',
+          action: {
+            name: 'import-files',
+            icon: 'cloud',
+            handler,
+            label: () => $gettext('Import'),
+            isEnabled: () => {
+              if (!companionUrl) {
+                return false
+              }
+              // FIXME: this is only available in the files app, should probably be solved via scopes
+              // if (isLocationPublicActive(router, 'files-public-link')) {
+              //   return false
+              // }
+              return unref(canUpload)
+            },
+            componentType: 'button',
+            class: 'oc-files-actions-import'
           }
-          // FIXME: this is only available in the files app, should probably be solved via scopes
-          // if (isLocationPublicActive(router, 'files-public-link')) {
-          //   return false
-          // }
-          return unref(canUpload)
-        },
-        componentType: 'button',
-        class: 'oc-files-actions-import'
-      }
-    }
-  ]
+        }
+      ] satisfies Extension[]
+  )
 }
