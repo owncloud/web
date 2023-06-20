@@ -73,6 +73,8 @@ services:
       SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika:9998
       # denial shares
       FRONTEND_OCS_ENABLE_DENIALS: "${SHARE_DENIALS:-false}"
+      # make the registry available to the app provider containers
+      MICRO_REGISTRY: "mdns"
     volumes:
       - ./config/ocis/proxy.yaml:/etc/ocis/proxy.yaml
       - ./config/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
@@ -103,9 +105,13 @@ services:
       ocis-net:
     command: app-provider server
     environment:
-      REVA_GATEWAY: ${REVA_GATEWAY:-ocis:9142}
+      # use the internal service name of the gateway
+      REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
       APP_PROVIDER_GRPC_ADDR: 0.0.0.0:9164
-      APP_PROVIDER_EXTERNAL_ADDR: ocis-appprovider-collabora:9164
+      # configure the service name to avoid collision with onlyoffice
+      APP_PROVIDER_SERVICE_NAME: app-provider-collabora
+      # use the internal service name
+      APP_PROVIDER_EXTERNAL_ADDR: com.owncloud.api.app-provider-collabora
       APP_PROVIDER_DRIVER: wopi
       APP_PROVIDER_WOPI_APP_NAME: Collabora
       APP_PROVIDER_WOPI_APP_ICON_URI: https://${COLLABORA_DOMAIN:-collabora.owncloud.test}/favicon.ico
@@ -113,6 +119,8 @@ services:
       APP_PROVIDER_WOPI_INSECURE: "${INSECURE:-false}"
       APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}
       APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-ocis.owncloud.test}
+      # share the registry with the ocis container
+      MICRO_REGISTRY: "mdns"
     volumes:
       - ocis-config:/etc/ocis
     logging:
@@ -129,9 +137,13 @@ services:
       - /entrypoint-override.sh
     #command: app-provider server
     environment:
-      REVA_GATEWAY: ${REVA_GATEWAY:-ocis:9142}
+      # use the internal service name of the gateway
+      REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
       APP_PROVIDER_GRPC_ADDR: 0.0.0.0:9164
-      APP_PROVIDER_EXTERNAL_ADDR: ocis-appprovider-onlyoffice:9164
+      # configure the service name to avoid collision with collabora
+      APP_PROVIDER_SERVICE_NAME: app-provider-onlyoffice
+      # use the internal service name
+      APP_PROVIDER_EXTERNAL_ADDR: com.owncloud.api.app-provider-onlyoffice
       APP_PROVIDER_DRIVER: wopi
       APP_PROVIDER_WOPI_APP_NAME: OnlyOffice
       APP_PROVIDER_WOPI_APP_ICON_URI: https://${ONLYOFFICE_DOMAIN:-onlyoffice.owncloud.test}/web-apps/apps/documenteditor/main/resources/img/favicon.ico
@@ -139,15 +151,16 @@ services:
       APP_PROVIDER_WOPI_INSECURE: "${INSECURE:-false}"
       APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}
       APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-ocis.owncloud.test}
+      # share the registry with the ocis container
+      MICRO_REGISTRY: "mdns"
     volumes:
       - ./config/ocis-appprovider-onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
       - ocis-config:/etc/ocis
     logging:
       driver: "local"
     restart: always
-
   wopiserver:
-    image: cs3org/wopiserver:${WOPISERVER_DOCKER_TAG:-v9.3.3}
+    image: cs3org/wopiserver:${WOPISERVER_DOCKER_TAG:-v9.4.0}
     networks:
       ocis-net:
     entrypoint:
@@ -173,7 +186,7 @@ services:
     restart: always
 
   collabora:
-    image: collabora/code:22.05.9.3.1
+    image: collabora/code:22.05.10.1.1
     networks:
       ocis-net:
     environment:
@@ -196,12 +209,18 @@ services:
     restart: always
 
   onlyoffice:
-    image: onlyoffice/documentserver:7.2.2
+    image: onlyoffice/documentserver:7.3.0
     networks:
       ocis-net:
+    entrypoint:
+      - /bin/sh
+      - /entrypoint-override.sh
     environment:
       WOPI_ENABLED: "true"
       USE_UNAUTHORIZED_STORAGE: "${INSECURE:-false}" # self signed certificates
+    volumes:
+      - ./config/onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
+      - ./config/onlyoffice/local.json:/etc/onlyoffice/documentserver/local.dist.json
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.onlyoffice.entrypoints=https"
@@ -209,7 +228,7 @@ services:
       - "traefik.http.routers.onlyoffice.tls.certresolver=http"
       - "traefik.http.routers.onlyoffice.service=onlyoffice"
       - "traefik.http.services.onlyoffice.loadbalancer.server.port=80"
-      # websockets can't be opend when this is ommitted
+      # websockets can't be opened when this is ommitted
       - "traefik.http.middlewares.onlyoffice.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.onlyoffice.middlewares=onlyoffice"
     logging:
