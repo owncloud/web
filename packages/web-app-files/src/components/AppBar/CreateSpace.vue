@@ -16,7 +16,7 @@
 <script lang="ts">
 import { mapActions, mapMutations } from 'vuex'
 import { defineComponent } from 'vue'
-import { useClientService } from 'web-pkg/src/composables'
+import { useClientService, useLoadingService } from 'web-pkg/src/composables'
 import { useCreateSpace } from 'web-app-files/src/composables'
 import { useSpaceHelpers } from 'web-pkg/src/composables/spaces'
 
@@ -25,7 +25,8 @@ export default defineComponent({
     const clientService = useClientService()
     const { createSpace } = useCreateSpace()
     const { checkSpaceNameModalInput } = useSpaceHelpers()
-    return { clientService, createSpace, checkSpaceNameModalInput }
+    const loadingService = useLoadingService()
+    return { clientService, createSpace, checkSpaceNameModalInput, loadingService }
   },
   methods: {
     ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
@@ -42,7 +43,7 @@ export default defineComponent({
         inputLabel: this.$gettext('Space name'),
         inputValue: this.$gettext('New space'),
         onCancel: this.hideModal,
-        onConfirm: this.addNewSpace,
+        onConfirm: (name) => this.loadingService.addTask(() => this.addNewSpace(name)),
         onInput: this.checkSpaceNameModalInput
       }
 

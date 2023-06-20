@@ -51,7 +51,7 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
 
           if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
             const copyableResourcesCount = resources.filter(
-              (r) => r.canDownload() && !isProjectSpaceResource(r)
+              (r) => !isProjectSpaceResource(r)
             ).length
             return `${copyLabel} (${copyableResourcesCount.toString()})`
           }

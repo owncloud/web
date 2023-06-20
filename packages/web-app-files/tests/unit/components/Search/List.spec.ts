@@ -22,7 +22,8 @@ const selectors = {
   noContentMessageStub: 'no-content-message-stub',
   resourceTableStub: 'resource-table-stub',
   tagFilter: '.files-search-filter-tags',
-  fullTextFilter: '.files-search-filter-full-text'
+  fullTextFilter: '.files-search-filter-full-text',
+  filter: '.files-search-result-filter'
 }
 
 describe('List component', () => {
@@ -53,6 +54,13 @@ describe('List component', () => {
     })
   })
   describe('filter', () => {
+    describe('general', () => {
+      it('should not be rendered if no filtering is available', async () => {
+        const { wrapper } = getWrapper({ fullTextSearchEnabled: false, availableTags: [] })
+        await wrapper.vm.loadAvailableTagsTask.last
+        expect(wrapper.find(selectors.filter).exists()).toBeFalsy()
+      })
+    })
     describe('tags', () => {
       it('should show all available tags', async () => {
         const tag = 'tag1'

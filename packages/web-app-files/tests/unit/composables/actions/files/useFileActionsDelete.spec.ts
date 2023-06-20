@@ -1,6 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { useFileActionsDelete } from 'web-app-files/src/composables/actions/files/useFileActionsDelete'
+import { useFileActionsDeleteResources } from 'web-app-files/src/composables/actions/helpers/useFileActionsDeleteResources'
 import { Resource, SpaceResource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 
@@ -11,6 +12,8 @@ import {
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
+
+jest.mock('web-app-files/src/composables/actions/helpers/useFileActionsDeleteResources')
 
 describe('delete', () => {
   describe('computed property "actions"', () => {
@@ -83,23 +86,109 @@ describe('delete', () => {
       })
     })
   })
+  describe('search context', () => {
+    describe('computed property "actions"', () => {
+      describe('label', () => {
+        it.each([
+          {
+            resources: [
+              { canBeDeleted: () => true, isShareRoot: () => false },
+              { canBeDeleted: () => true, isShareRoot: () => false }
+            ] as Resource[],
+            deletableCount: 2
+          },
+          {
+            resources: [
+              { canBeDeleted: () => true, isShareRoot: () => false },
+              { canBeDeleted: () => true, isShareRoot: () => false },
+              { canBeDeleted: () => true, isShareRoot: () => false },
+              { canBeDeleted: () => false, isShareRoot: () => false },
+              { canBeDeleted: () => true, isShareRoot: () => true },
+              { canBeDeleted: () => true, isShareRoot: () => false, driveType: 'project' }
+            ] as Resource[],
+            deletableCount: 3
+          }
+        ])('should be set correctly', ({ resources, deletableCount }) => {
+          const { wrapper } = getWrapper({
+            searchLocation: true,
+            setup: () => {
+              const store = useStore()
+              const { actions } = useFileActionsDelete({ store })
+
+              expect(unref(actions)[0].label({ space: null, resources })).toContain(
+                `(${deletableCount.toString()})`
+              )
+            }
+          })
+        })
+      })
+      describe('handler', () => {
+        it.each([
+          {
+            resources: [
+              { id: '1', canBeDeleted: () => true, isShareRoot: () => false },
+              { id: '2', canBeDeleted: () => true, isShareRoot: () => false }
+            ] as Resource[],
+            deletableResourceIds: ['1', '2']
+          },
+          {
+            resources: [
+              { id: '1', canBeDeleted: () => true, isShareRoot: () => false },
+              { id: '2', canBeDeleted: () => true, isShareRoot: () => false },
+              { id: '3', canBeDeleted: () => true, isShareRoot: () => false },
+              { id: '4', canBeDeleted: () => false, isShareRoot: () => false },
+              { id: '5', canBeDeleted: () => true, isShareRoot: () => true },
+              { id: '6', canBeDeleted: () => true, isShareRoot: () => false, driveType: 'project' }
+            ] as Resource[],
+            deletableResourceIds: ['1', '2', '3']
+          }
+        ])('should filter non deletable resources', ({ resources, deletableResourceIds }) => {
+          const displayDialogMock = jest.fn()
+
+          const { wrapper } = getWrapper({
+            searchLocation: true,
+            displayDialogMock,
+            setup: () => {
+              const store = useStore()
+              const { actions } = useFileActionsDelete({ store })
+
+              unref(actions)[0].handler({ space: null, resources })
+
+              expect(displayDialogMock).toHaveBeenCalledWith(
+                null,
+                resources.filter((r) => deletableResourceIds.includes(r.id as string))
+              )
+            }
+          })
+        })
+      })
+    })
+  })
 })
 
 function getWrapper({
   deletePermanent = false,
   invalidLocation = false,
+  searchLocation = false,
+  displayDialogMock = jest.fn(),
   setup = () => undefined
 } = {}) {
   const routeName = invalidLocation
     ? 'files-shares-via-link'
     : deletePermanent
     ? 'files-trash-generic'
+    : searchLocation
+    ? 'files-common-search'
     : 'files-spaces-generic'
+  jest
+    .mocked(useFileActionsDeleteResources)
+    .mockImplementation(() => ({ displayDialog: displayDialogMock, filesList_delete: jest.fn() }))
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),
     space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
   }
-  const storeOptions = defaultStoreMockOptions
+  const storeOptions = { ...defaultStoreMockOptions }
+  storeOptions.getters.capabilities.mockImplementation(() => ({ spaces: { enabled: true } }))
   const store = createStore(storeOptions)
   return {
     wrapper: getComposableWrapper(setup, {
