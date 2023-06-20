@@ -165,7 +165,7 @@ export default defineComponent({
       'usedQuota',
       'remainingQuota',
       'mdate'
-    ] as readonly string[]
+    ]
 
     const sortFields = availableSortFields
     const {
