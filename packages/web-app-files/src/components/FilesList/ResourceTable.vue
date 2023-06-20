@@ -213,12 +213,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from 'web-client'
-import {
-  buildShareSpaceResource,
-  extractDomSelector,
-  isProjectSpaceResource,
-  SpaceResource
-} from 'web-client/src/helpers'
+import { extractDomSelector, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import {
   ShareTypes,
   spaceRoleEditor,
