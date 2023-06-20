@@ -84,6 +84,10 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     )
   )
   app.provide('$archiverService', app.config.globalProperties.$archiverService)
+  announceClientService({ app, runtimeConfiguration, configurationManager, store })
+  announceLoadingService({ app })
+  announcePreviewService({ app, store, configurationManager })
+  await announceClient(runtimeConfiguration)
 
   const applicationsPromise = initializeApplications({
     app,
@@ -104,11 +108,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   ])
 
   announceAdditionalTranslations({ gettext, translations: merge(customTranslations) })
-  announceClientService({ app, runtimeConfiguration, configurationManager, store })
 
-  announceLoadingService({ app })
-  announcePreviewService({ app, store, configurationManager })
-  await announceClient(runtimeConfiguration)
   announceAuthService({ app, configurationManager, store, router })
   announceCustomStyles({ runtimeConfiguration })
   announceCustomScripts({ runtimeConfiguration })
