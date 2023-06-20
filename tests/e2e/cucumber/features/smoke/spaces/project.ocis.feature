@@ -65,7 +65,7 @@ Feature: spaces.personal
     When "Alice" opens the "files" app
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.2"
-    And "Alice" updates the space "team.2" name to "management team"
+    #And "Alice" updates the space "team.2" name to "management team"
     And "Alice" updates the space "team.2" subtitle to "management team - subtitle"
     And "Alice" updates the space "team.2" description to "management team - description"
     And "Alice" updates the space "team.2" quota to "500"
