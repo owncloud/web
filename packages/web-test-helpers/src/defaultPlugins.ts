@@ -7,20 +7,25 @@ import { AbilityRule } from 'web-client/src/helpers/resource/types'
 import { createPinia } from 'pinia'
 
 export interface DefaultPluginsOptions {
+  abilities?: AbilityRule[]
   designSystem?: boolean
   gettext?: boolean
-  abilities?: AbilityRule[]
+  pinia?: boolean
 }
 
 export const defaultPlugins = ({
+  abilities = [],
   designSystem = true,
   gettext = true,
-  abilities = []
+  pinia = true
 }: DefaultPluginsOptions = {}) => {
   const plugins = []
 
-  const pinia = createPinia()
-  plugins.push(pinia)
+  plugins.push({
+    install(app) {
+      app.use(abilitiesPlugin, createMongoAbility(abilities))
+    }
+  })
 
   if (designSystem) {
     plugins.push(DesignSystem)
@@ -39,11 +44,10 @@ export const defaultPlugins = ({
     })
   }
 
-  plugins.push({
-    install(app) {
-      app.use(abilitiesPlugin, createMongoAbility(abilities))
-    }
-  })
+  if (pinia) {
+    const pinia = createPinia()
+    plugins.push(pinia)
+  }
 
   plugins.push({
     install(app) {
