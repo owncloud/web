@@ -3,13 +3,12 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v7.0.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v7.0.2...master
 
 Summary
 -------
 
 * Bugfix - Favorites list update on removal: [#9078](https://github.com/owncloud/web/pull/9078)
-* Bugfix - Reduce space preloading: [#9153](https://github.com/owncloud/web/pull/9153)
 * Bugfix - Space creation does not block reoccurring event: [#9213](https://github.com/owncloud/web/pull/9213)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 * Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
@@ -43,14 +42,6 @@ Details
 
    https://github.com/owncloud/web/pull/9078
    https://github.com/owncloud/web/pull/9237
-
-* Bugfix - Reduce space preloading: [#9153](https://github.com/owncloud/web/pull/9153)
-
-   We've reduced the set of spaces that get preloaded after login / after initial page load. This
-   results in a faster first page rendering and reduces the server load. Loading the remaining
-   spaces will happen on demand.
-
-   https://github.com/owncloud/web/pull/9153
 
 * Bugfix - Space creation does not block reoccurring event: [#9213](https://github.com/owncloud/web/pull/9213)
 
@@ -236,6 +227,51 @@ Details
    different apps.
 
    https://github.com/owncloud/web/pull/9226
+
+Changelog for ownCloud Web [7.0.2] (2023-06-14)
+=======================================
+The following sections list the changes in ownCloud web 7.0.2 relevant to
+ownCloud admins and users.
+
+[7.0.2]: https://github.com/owncloud/web/compare/v7.0.1...v7.0.2
+
+Summary
+-------
+
+* Bugfix - Experimental app loading: [#9212](https://github.com/owncloud/web/pull/9212)
+
+Details
+-------
+
+* Bugfix - Experimental app loading: [#9212](https://github.com/owncloud/web/pull/9212)
+
+   We've made a change to make our helper package "web-pkg" available in our (still experimental)
+   extension system.
+
+   https://github.com/owncloud/web/pull/9212
+
+Changelog for ownCloud Web [7.0.1] (2023-06-06)
+=======================================
+The following sections list the changes in ownCloud web 7.0.1 relevant to
+ownCloud admins and users.
+
+[7.0.1]: https://github.com/owncloud/web/compare/v7.0.0...v7.0.1
+
+Summary
+-------
+
+* Bugfix - Reduce space preloading: [#9153](https://github.com/owncloud/web/pull/9153)
+
+Details
+-------
+
+* Bugfix - Reduce space preloading: [#9153](https://github.com/owncloud/web/pull/9153)
+
+   We've reduced the set of spaces that get preloaded after login / after initial page load. This
+   results in a faster first page rendering and reduces the server load. Loading the remaining
+   spaces will happen on demand.
+
+   https://github.com/owncloud/web/pull/9153
 
 Changelog for ownCloud Web [7.0.0] (2023-06-02)
 =======================================
