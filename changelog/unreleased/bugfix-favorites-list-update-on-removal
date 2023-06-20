@@ -1,0 +1,6 @@
+Bugfix: Favorites list update on removal
+
+The Favorites list is now updating when a resource is removed from the list in this view
+
+https://github.com/owncloud/web/pull/9078
+https://github.com/owncloud/web/pull/9237

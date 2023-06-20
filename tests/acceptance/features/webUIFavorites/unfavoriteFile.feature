@@ -49,6 +49,7 @@ Feature: Unmark file/folder as favorite
     Then the count of files and folders shown on the webUI should be 2
     But folder "simple-folder" should not be listed on the webUI
 
+
   @smokeTest
   Scenario: unmark a file as favorite from favorite page
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
@@ -60,9 +61,8 @@ Feature: Unmark file/folder as favorite
     And user "Alice" has logged in using the webUI
     And the user has browsed to the favorites page
     When the user unmarks the favorited file "data.zip" using the webUI
-    Then file "data.zip" should be listed on the webUI
+    Then file "data.zip" should not be listed on the webUI
     And as user "Alice" file "data.zip" should not be marked as favorite in the server
-    And file "data.zip" should not be marked as favorite on the webUI
     But file "data.tar.gz" should be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
 
@@ -77,9 +77,8 @@ Feature: Unmark file/folder as favorite
     And user "Alice" has logged in using the webUI
     And the user has browsed to the favorites page
     When the user unmarks the favorited folder "simple-folder" using the webUI
-    Then folder "simple-folder" should be listed on the webUI
+    Then folder "simple-folder" should not be listed on the webUI
     And as user "Alice" folder "simple-folder" should not be marked as favorite in the server
-    And folder "simple-folder" should not be marked as favorite on the webUI
     But folder "0" should be listed on the webUI
     And folder "simple-empty-folder" should be listed on the webUI
 
@@ -93,9 +92,9 @@ Feature: Unmark file/folder as favorite
     And the user has browsed to the favorites page
     When the user unmarks the favorited folder "simple-folder" using the webUI sidebar
     And the user unmarks the favorited file "data.zip" using the webUI sidebar
-    Then folder "simple-folder" should not be marked as favorite on the webUI
+    Then folder "simple-folder" should not be listed on the webUI
     And as user "Alice" folder "simple-folder" should not be marked as favorite in the server
-    And file "data.zip" should not be marked as favorite on the webUI
+    And file "data.zip" should not be listed on the webUI
     And as user "Alice" file "data.zip" should not be marked as favorite in the server
 
 
