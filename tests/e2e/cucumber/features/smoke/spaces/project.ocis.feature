@@ -60,6 +60,8 @@ Feature: spaces.personal
       | folder_to_shared | Brian     | user | Can edit | folder       |
 
     # team.2
+    And "Alice" logs out
+    And "Alice" logs in
     When "Alice" opens the "files" app
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.2"
