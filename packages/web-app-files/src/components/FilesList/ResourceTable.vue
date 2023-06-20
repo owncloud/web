@@ -187,17 +187,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, unref } from 'vue'
+import { defineComponent, PropType, computed, unref, ref } from 'vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from 'web-client'
-import {
-  buildShareSpaceResource,
-  extractDomSelector,
-  isProjectSpaceResource,
-  SpaceResource
-} from 'web-client/src/helpers'
+import { extractDomSelector, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { ShareTypes } from 'web-client/src/helpers/share'
 
 import {
@@ -217,7 +212,6 @@ import {
   formatRelativeDateFromJSDate
 } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import { configurationManager } from 'web-pkg/src/configuration'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
 import { useResourceRouteResolver } from 'web-app-files/src/composables/filesList/useResourceRouteResolver'
@@ -230,7 +224,6 @@ import {
   createLocationCommon,
   createLocationSpaces
 } from 'web-app-files/src/router'
-import { ref } from 'vue'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -419,21 +412,9 @@ export default defineComponent({
   ],
   setup(props, context) {
     const store = useStore()
-    const spaces = computed(() => {
-      return store.getters['runtime/spaces/spaces']
-    })
     const { width } = useWindowSize()
     const hasTags = computed(
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
-    )
-
-    const resourceRouteResolver = useResourceRouteResolver(
-      {
-        space: ref(props.space),
-        spaces,
-        targetRouteCallback: computed(() => props.targetRouteCallback)
-      },
-      context
     )
 
     const { actions: renameActions } = useFileActionsRename()
@@ -445,12 +426,18 @@ export default defineComponent({
       getTagToolTip,
       renameActions,
       renameHandler,
-      resourceRouteResolver,
       ViewModeConstants,
       hasTags,
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
-      isUserContext: useUserContext({ store })
+      isUserContext: useUserContext({ store }),
+      ...useResourceRouteResolver(
+        {
+          space: ref(props.space),
+          targetRouteCallback: computed(() => props.targetRouteCallback)
+        },
+        context
+      )
     }
   },
   data() {
@@ -666,7 +653,7 @@ export default defineComponent({
     },
     openRenameDialog(item) {
       this.renameHandler({
-        space: this.resourceRouteResolver.getMatchingSpace(item),
+        space: this.getMatchingSpace(item),
         resources: [item]
       })
     },
@@ -685,7 +672,7 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
     folderLink(file: Resource) {
-      return this.resourceRouteResolver.createFolderLink({
+      return this.createFolderLink({
         path: file.path,
         fileId: file.fileId,
         resource: file
@@ -699,7 +686,7 @@ export default defineComponent({
         return createLocationSpaces('files-spaces-projects')
       }
 
-      return this.resourceRouteResolver.createFolderLink({
+      return this.createFolderLink({
         path: dirname(file.path),
         ...(file.parentFolderId && { fileId: file.parentFolderId }),
         resource: file
@@ -799,14 +786,7 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
-      let space = this.resourceRouteResolver.getMatchingSpace(resource)
-      if (!space) {
-        space = buildShareSpaceResource({
-          shareId: resource.shareId,
-          shareName: resource.name,
-          serverUrl: configurationManager.serverUrl
-        })
-      }
+      const space = this.getMatchingSpace(resource)
 
       /**
        * Triggered when a default action is triggered on a file
@@ -870,7 +850,7 @@ export default defineComponent({
         if (isProjectSpaceResource(resource)) {
           return this.$gettext('Spaces')
         }
-        const matchingSpace = this.resourceRouteResolver.getMatchingSpace(resource)
+        const matchingSpace = this.getMatchingSpace(resource)
         if (matchingSpace?.driveType === 'project') {
           return matchingSpace.name
         }
@@ -886,7 +866,7 @@ export default defineComponent({
           : basename(resource.shareRoot)
       }
 
-      if (!this.resourceRouteResolver.getInternalSpace(resource.storageId)) {
+      if (!this.getInternalSpace(resource.storageId)) {
         return this.$gettext('Shared with me')
       }
 

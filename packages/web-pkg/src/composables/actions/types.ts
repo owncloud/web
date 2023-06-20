@@ -34,7 +34,7 @@ export interface Action<T = ActionOptions> {
 
 export type FileActionOptions = {
   space: SpaceResource
-  resources: Resource[]
+  resources?: Resource[]
 }
 export type FileAction = Action<FileActionOptions>
 

@@ -152,6 +152,11 @@ export function buildResource(resource): Resource {
     isReceivedShare: function () {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     },
+    isShareRoot(): boolean {
+      return resource.fileInfo[DavProperty.ShareRoot]
+        ? resource.name.split('/').length === 3
+        : false
+    },
     canDeny: function () {
       return this.permissions.indexOf(DavPermission.Deny) >= 0
     },

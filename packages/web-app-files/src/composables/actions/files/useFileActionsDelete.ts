@@ -7,7 +7,12 @@ import {
   isLocationCommonActive
 } from '../../../router'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
-import { useCapabilityFilesPermanentDeletion, useRouter, useStore } from 'web-pkg/src/composables'
+import {
+  useCapabilityFilesPermanentDeletion,
+  useCapabilitySpacesEnabled,
+  useRouter,
+  useStore
+} from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'
@@ -15,12 +20,19 @@ import { computed, unref } from 'vue'
 export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
+  const hasSpaces = useCapabilitySpacesEnabled()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
   const { displayDialog } = useFileActionsDeleteResources({ store })
 
   const { $gettext } = useGettext()
 
   const handler = ({ space, resources }: FileActionOptions) => {
+    if (isLocationCommonActive(router, 'files-common-search')) {
+      resources = resources.filter(
+        (r) =>
+          r.canBeDeleted() && (!unref(hasSpaces) || !r.isShareRoot()) && !isProjectSpaceResource(r)
+      )
+    }
     displayDialog(space, resources)
   }
 
@@ -28,7 +40,21 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
     {
       name: 'delete',
       icon: 'delete-bin-5',
-      label: () => $gettext('Delete'),
+      label: ({ resources }) => {
+        const deleteLabel = $gettext('Delete')
+
+        if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
+          const deletableResourcesCount = resources.filter(
+            (r) =>
+              r.canBeDeleted() &&
+              (!unref(hasSpaces) || !r.isShareRoot()) &&
+              !isProjectSpaceResource(r)
+          ).length
+          return `${deleteLabel} (${deletableResourcesCount.toString()})`
+        }
+
+        return deleteLabel
+      },
       handler,
       isEnabled: ({ space, resources }) => {
         if (
@@ -38,6 +64,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
         ) {
           return false
         }
+
         if (resources.length === 0) {
           return false
         }
@@ -48,6 +75,15 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
           resources[0].path === '/'
         ) {
           return false
+        }
+
+        if (isLocationCommonActive(router, 'files-common-search')) {
+          return resources.some(
+            (r) =>
+              r.canBeDeleted() &&
+              (!unref(hasSpaces) || !r.isShareRoot()) &&
+              !isProjectSpaceResource(r)
+          )
         }
 
         const deleteDisabled = resources.some((resource) => {

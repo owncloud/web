@@ -43,7 +43,7 @@ export default {
       context.commit('ADD_FILE_SELECTION', file)
     }
   },
-  copySelectedFiles(context, options: { space: SpaceResource; resources: Resource[] } & Language) {
+  copySelectedFiles(context, options: { resources: Resource[] } & Language) {
     const { $gettext } = options
     context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
@@ -83,12 +83,14 @@ export default {
       showMessage,
       $gettext,
       $gettextInterpolate,
-      $ngettext
+      $ngettext,
+      sourceSpace,
+      resources
     }
   ) {
     const copyMove = new ResourceTransfer(
-      context.state.clipboardSpace,
-      context.state.clipboardResources,
+      sourceSpace,
+      resources,
       targetSpace,
       context.state.currentFolder,
       clientService,
@@ -100,39 +102,34 @@ export default {
       $ngettext,
       $gettextInterpolate
     )
-    let movedResources = []
+    let movedResourcesPromise
     if (context.state.clipboardAction === ClipboardActions.Cut) {
-      movedResources = await copyMove.perform(TransferType.MOVE)
+      movedResourcesPromise = copyMove.perform(TransferType.MOVE)
     }
     if (context.state.clipboardAction === ClipboardActions.Copy) {
-      movedResources = await copyMove.perform(TransferType.COPY)
+      movedResourcesPromise = copyMove.perform(TransferType.COPY)
     }
+    return movedResourcesPromise.then((movedResources) => {
+      const loadingResources = []
+      const fetchedResources = []
+      for (const resource of movedResources) {
+        loadingResources.push(
+          (async () => {
+            const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
+              targetSpace,
+              resource
+            )
+            fetchedResources.push(movedResource)
+          })()
+        )
+      }
 
-    await loadingService.addTask(
-      () => {
-        context.commit('CLEAR_CLIPBOARD')
-        const loadingResources = []
-        const fetchedResources = []
-        for (const resource of movedResources) {
-          loadingResources.push(
-            (async () => {
-              const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
-                targetSpace,
-                resource
-              )
-              fetchedResources.push(movedResource)
-            })()
-          )
-        }
-
-        return Promise.all(loadingResources).then(() => {
-          const currentFolder = context.getters.currentFolder
-          context.commit('UPSERT_RESOURCES', fetchedResources)
-          context.commit('LOAD_INDICATORS', currentFolder.path)
-        })
-      },
-      { debounceTime: 0 }
-    )
+      return Promise.all(loadingResources).then(() => {
+        const currentFolder = context.getters.currentFolder
+        context.commit('UPSERT_RESOURCES', fetchedResources)
+        context.commit('LOAD_INDICATORS', currentFolder.path)
+      })
+    })
   },
   resetFileSelection(context) {
     context.commit('RESET_SELECTION')

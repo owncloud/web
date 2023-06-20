@@ -1,0 +1,6 @@
+Enhancement: Add batch actions to search result list
+
+We've modified our batch actions so that they now finally work on the search result page as well.
+
+https://github.com/owncloud/web/pull/9200
+https://github.com/owncloud/web/issues/9230

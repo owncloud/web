@@ -11,7 +11,10 @@ const router = {
   afterEach: jest.fn(),
   currentRoute: {
     name: 'some-route-name',
-    query: {}
+    query: {},
+    params: {
+      driveAliasAndItem: ''
+    }
   },
   resolve: (r) => {
     return { href: r.name }
@@ -359,7 +362,8 @@ function getMountedWrapper({ props = {}, isUserContextReady = true } = {}) {
           $router: router
         },
         provide: {
-          $router: router
+          $router: router,
+          $route: router.currentRoute
         }
       }
     })

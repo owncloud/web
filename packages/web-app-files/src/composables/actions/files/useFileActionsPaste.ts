@@ -6,14 +6,22 @@ import {
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useClientService, useLoadingService, useRouter, useStore } from 'web-pkg/src/composables'
+import {
+  useClientService,
+  useGetMatchingSpace,
+  useLoadingService,
+  useRouter,
+  useStore
+} from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { Resource, SpaceResource } from 'web-client'
 
 export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const clientService = useClientService()
   const loadingService = useLoadingService()
+  const { getMatchingSpace } = useGetMatchingSpace()
   const { $gettext, $pgettext, interpolate: $gettextInterpolate, $ngettext } = useGettext()
 
   const isMacOs = computed(() => {
@@ -27,18 +35,44 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
     return $pgettext('Keyboard shortcut for non-macOS systems for pasting files', 'Ctrl + V')
   })
 
-  const handler = ({ space }: FileActionOptions) => {
-    store.dispatch('Files/pasteSelectedFiles', {
-      targetSpace: space,
-      clientService,
-      loadingService,
-      createModal: (...args) => store.dispatch('createModal', ...args),
-      hideModal: (...args) => store.dispatch('hideModal', ...args),
-      showMessage: (...args) => store.dispatch('showMessage', ...args),
-      $gettext,
-      $gettextInterpolate,
-      $ngettext
-    })
+  const handler = async ({ space: targetSpace }: FileActionOptions) => {
+    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
+      store.getters['Files/clipboardResources'].reduce((acc, resource) => {
+        if (resource.storageId in acc) {
+          acc[resource.storageId].resources.push(resource)
+          return acc
+        }
+
+        const matchingSpace = getMatchingSpace(resource)
+
+        if (!(matchingSpace.id in acc)) {
+          acc[matchingSpace.id] = { space: matchingSpace, resources: [] }
+        }
+
+        acc[matchingSpace.id].resources.push(resource)
+        return acc
+      }, {})
+    const promises = Object.values(resourceSpaceMapping).map(
+      ({ space: sourceSpace, resources: resourcesToCopy }) => {
+        return loadingService.addTask(() => {
+          return store.dispatch('Files/pasteSelectedFiles', {
+            targetSpace,
+            sourceSpace: sourceSpace,
+            resources: resourcesToCopy,
+            clientService,
+            loadingService,
+            createModal: (...args) => store.dispatch('createModal', ...args),
+            hideModal: (...args) => store.dispatch('hideModal', ...args),
+            showMessage: (...args) => store.dispatch('showMessage', ...args),
+            $gettext,
+            $gettextInterpolate,
+            $ngettext
+          })
+        })
+      }
+    )
+    await Promise.all(promises)
+    store.commit('Files/CLEAR_CLIPBOARD')
   }
 
   const actions = computed((): FileAction[] => [

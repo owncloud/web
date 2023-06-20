@@ -129,10 +129,10 @@
       <oc-button
         :disabled="uploadOrFileCreationBlocked"
         class="paste-files-btn"
-        @click="pasteFilesHere"
+        @click="pasteFileAction({ space })"
       >
         <oc-icon fill-type="line" name="clipboard" />
-        <span v-translate>Paste here</span>
+        <span v-text="$gettext('Paste here')" />
       </oc-button>
       <oc-button
         :disabled="uploadOrFileCreationBlocked"
@@ -154,7 +154,8 @@ import {
   useActiveLocation,
   useFileActionsCreateNewFile,
   useFileActionsCreateNewFolder,
-  useFileActionsImport
+  useFileActionsImport,
+  useFileActionsPaste
 } from '../../composables'
 
 import {
@@ -209,6 +210,7 @@ export default defineComponent({
     const route = useRoute()
     const language = useGettext()
     const hasSpaces = useCapabilitySpacesEnabled(store)
+
     useUpload({ uppyService })
 
     if (!uppyService.getPlugin('HandleUpload')) {
@@ -224,6 +226,9 @@ export default defineComponent({
     }
 
     let uploadCompletedSub
+
+    const { actions: pasteFileActions } = useFileActionsPaste({ store })
+    const pasteFileAction = unref(pasteFileActions)[0].handler
 
     const { actions: createNewFolder } = useFileActionsCreateNewFolder({
       store,
@@ -358,6 +363,7 @@ export default defineComponent({
       mimetypesAllowedForCreation,
       createNewFolderAction,
       extensionActions,
+      pasteFileAction,
 
       // HACK: exported for unit tests:
       onUploadComplete
@@ -427,22 +433,6 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['clearClipboardFiles', 'pasteSelectedFiles']),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
-
-    pasteFilesHere() {
-      this.pasteSelectedFiles({
-        targetSpace: this.space,
-        clientService: this.clientService,
-        loadingService: this.$loadingService,
-        createModal: this.createModal,
-        hideModal: this.hideModal,
-        showMessage: this.showMessage,
-        $gettext: this.$gettext,
-        $gettextInterpolate: this.$gettextInterpolate,
-        $ngettext: this.$ngettext
-      }).then(() => {
-        ;(document.activeElement as HTMLElement).blur()
-      })
-    },
 
     getIconResource(fileHandler) {
       return { type: 'file', extension: fileHandler.ext } as Resource

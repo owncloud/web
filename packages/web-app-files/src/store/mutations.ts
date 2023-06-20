@@ -1,6 +1,6 @@
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource } from 'web-client/src/helpers'
 
 export default {
   LOAD_FILES(state, { currentFolder, files }) {
@@ -27,12 +27,10 @@ export default {
     state.filesSearched = null
   },
   CLEAR_CLIPBOARD(state) {
-    state.clipboardSpace = null
     state.clipboardResources = []
     state.clipboardAction = null
   },
-  CLIPBOARD_SELECTED(state, { space, resources }: { space: SpaceResource; resources: Resource[] }) {
-    state.clipboardSpace = space
+  CLIPBOARD_SELECTED(state, { resources }: { resources: Resource[] }) {
     state.clipboardResources = resources
   },
   SET_CLIPBOARD_ACTION(state, action) {

@@ -2,6 +2,7 @@ import { unref, Ref } from 'vue'
 import { basename } from 'path'
 
 import { ConfigurationManager } from 'web-pkg/src'
+import { useGetMatchingSpace } from 'web-pkg/src/composables'
 import { useConfigurationManager } from 'web-pkg/src/composables/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { createLocationSpaces, createLocationShares } from '../../router'
@@ -13,28 +14,12 @@ type ResourceRouteResolverOptions = {
   configurationManager?: ConfigurationManager
   targetRouteCallback?: Ref<any>
   space?: Ref<SpaceResource>
-  spaces: Ref<SpaceResource[]>
 }
 
 export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, context) => {
   const configurationManager = options.configurationManager || useConfigurationManager()
-
-  const getInternalSpace = (storageId) => {
-    return unref(options.space) || unref(options.spaces).find((space) => space.id === storageId)
-  }
-
-  const getMatchingSpace = (resource: Resource): SpaceResource => {
-    return (
-      getInternalSpace(resource.storageId) ||
-      buildShareSpaceResource({
-        shareId: resource.shareId,
-        shareName: resource.name,
-        serverUrl: configurationManager.serverUrl
-      })
-    )
-  }
-
   const targetRouteCallback = options.targetRouteCallback
+  const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace(options)
 
   const createFolderLink = (createTargetRouteOptions: CreateTargetRouteOptions) => {
     if (unref(targetRouteCallback)) {
@@ -49,14 +34,18 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
         shareName: basename(resource.shareRoot),
         serverUrl: configurationManager.serverUrl
       })
-    } else if (!resource.shareId && !getInternalSpace(resource.storageId)) {
+    } else if (
+      !resource.shareId &&
+      !unref(options.space) &&
+      !getInternalSpace(resource.storageId)
+    ) {
       if (path === '/') {
         return createLocationShares('files-shares-with-me')
       }
       // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
       return { name: 'resolvePrivateLink', params: { fileId } }
     } else {
-      space = getMatchingSpace(resource)
+      space = unref(options.space) || getMatchingSpace(resource)
     }
     if (!space) {
       return {}
@@ -68,7 +57,7 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
   }
 
   const createFileAction = (resource: Resource) => {
-    let space = getMatchingSpace(resource)
+    let space = unref(options.space) || getMatchingSpace(resource)
     if (!space) {
       space = buildShareSpaceResource({
         shareId: resource.shareId,
@@ -84,9 +73,9 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
   }
 
   return {
-    getInternalSpace,
-    getMatchingSpace,
     createFileAction,
-    createFolderLink
+    createFolderLink,
+    getInternalSpace,
+    getMatchingSpace
   }
 }
