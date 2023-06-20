@@ -1,12 +1,17 @@
 import { RouteRecordRaw, Router } from 'vue-router'
 import clone from 'lodash-es/clone'
-import { RuntimeApi, ApplicationQuickActions, ApplicationTranslations } from './types'
+import { RuntimeApi } from './types'
 import { ApiError } from 'web-pkg/src/errors'
 import { get, isEqual, isObject, isArray, merge } from 'lodash-es'
 import { Store } from 'vuex'
 import { App, Component, h } from 'vue'
-import { AppNavigationItem } from 'web-pkg/src/apps'
+import {
+  ApplicationQuickActions,
+  ApplicationTranslations,
+  AppNavigationItem
+} from 'web-pkg/src/apps'
 import type { Language } from 'vue3-gettext'
+
 /**
  * inject application specific routes into runtime
  *

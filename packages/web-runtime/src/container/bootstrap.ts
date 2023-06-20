@@ -8,7 +8,7 @@ import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
-import { AppConfigObject, useLocalStorage } from 'web-pkg/src/composables'
+import { useLocalStorage } from 'web-pkg/src/composables'
 import { useDefaultThemeName } from '../composables'
 import { authService } from '../services/auth'
 import { ClientService, LoadingService, PreviewService } from 'web-pkg/src/services'
@@ -23,6 +23,7 @@ import {
   OcResourceIconMapping
 } from 'design-system/src/components/OcResourceIcon/types'
 import { merge } from 'lodash-es'
+import { AppConfigObject } from 'web-pkg/src/apps'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static

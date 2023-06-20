@@ -2,7 +2,6 @@ import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { NextApplication } from './next'
 import { convertClassicApplication } from './classic'
-import { ClassicApplicationScript } from '../types'
 import { RuntimeError } from 'web-pkg/src/errors'
 import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
@@ -17,8 +16,9 @@ import * as webPkg from 'web-pkg'
 import * as webClient from 'web-client'
 
 import { urlJoin } from 'web-client/src/utils'
-import { AppConfigObject, ConfigurationManager } from 'web-pkg'
+import { ConfigurationManager } from 'web-pkg'
 import { App } from 'vue'
+import { AppConfigObject, ClassicApplicationScript } from 'web-pkg/src/apps'
 
 export { NextApplication } from './next'
 
@@ -120,7 +120,7 @@ export const buildApplication = async ({
 
   try {
     /** add valuable sniffer to detect next applications, then implement next application factory */
-    if (!isObject(applicationScript.appInfo)) {
+    if (!isObject(applicationScript.appInfo) && !applicationScript.setup) {
       throw new RuntimeError('next applications not implemented yet, stay tuned')
     } else {
       application = await convertClassicApplication({

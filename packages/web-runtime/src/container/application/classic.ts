@@ -1,4 +1,4 @@
-import { ClassicApplicationScript, RuntimeApi } from '../types'
+import { RuntimeApi } from '../types'
 import { buildRuntimeApi } from '../api'
 import { App } from 'vue'
 import { isFunction, isObject } from 'lodash-es'
@@ -6,9 +6,8 @@ import { NextApplication } from './next'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { RuntimeError } from 'web-pkg/src/errors'
-import { AppReadyHookArgs } from 'web-pkg/src/apps'
+import { AppConfigObject, AppReadyHookArgs, ClassicApplicationScript } from 'web-pkg/src/apps'
 import { useExtensionRegistry } from 'web-pkg/src/services/extensionRegistry'
-import { AppConfigObject } from 'web-pkg/src'
 import type { Language } from 'vue3-gettext'
 
 /**
@@ -95,6 +94,14 @@ export const convertClassicApplication = async ({
   gettext: Language
   supportedLanguages: { [key: string]: string }
 }): Promise<NextApplication> => {
+  if (applicationScript.setup) {
+    applicationScript = app.runWithContext(() => {
+      return applicationScript.setup({
+        ...(applicationConfig && { applicationConfig })
+      })
+    })
+  }
+
   const { appInfo } = applicationScript
 
   if (!isObject(appInfo)) {
@@ -123,12 +130,7 @@ export const convertClassicApplication = async ({
   await store.dispatch('registerApp', applicationScript.appInfo)
 
   if (applicationScript.extensions) {
-    const extensions = app.runWithContext(() => {
-      return applicationScript.extensions({
-        ...(applicationConfig && { applicationConfig })
-      })
-    })
-    useExtensionRegistry().registerExtensions(extensions)
+    useExtensionRegistry().registerExtensions(applicationScript.extensions)
   }
 
   return new ClassicApplication(runtimeApi, applicationScript, app)

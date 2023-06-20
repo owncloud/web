@@ -1,6 +1,6 @@
 import { Store } from 'vuex'
 import { computed, Ref } from 'vue'
-import type { AppConfigObject } from './types'
+import type { AppConfigObject } from '../../apps'
 
 interface AppMetaOptions {
   store: Store<any>

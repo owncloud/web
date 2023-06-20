@@ -68,6 +68,23 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
   announceUppyService({ app })
 
+  // TODO: move to announceArchiverService function
+  app.config.globalProperties.$archiverService = new ArchiverService(
+    app.config.globalProperties.$clientService,
+    store.getters.configuration.server || window.location.origin,
+    computed(() =>
+      get(store, 'getters.capabilities.files.archivers', [
+        {
+          enabled: true,
+          version: '1.0.0',
+          formats: ['tar', 'zip'],
+          archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
+        }
+      ])
+    )
+  )
+  app.provide('$archiverService', app.config.globalProperties.$archiverService)
+
   const applicationsPromise = initializeApplications({
     app,
     runtimeConfiguration,
@@ -88,23 +105,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   announceAdditionalTranslations({ gettext, translations: merge(customTranslations) })
   announceClientService({ app, runtimeConfiguration, configurationManager, store })
-
-  // TODO: move to announceArchiverService function
-  app.config.globalProperties.$archiverService = new ArchiverService(
-    app.config.globalProperties.$clientService,
-    store.getters.configuration.server || window.location.origin,
-    computed(() =>
-      get(store, 'getters.capabilities.files.archivers', [
-        {
-          enabled: true,
-          version: '1.0.0',
-          formats: ['tar', 'zip'],
-          archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
-        }
-      ])
-    )
-  )
-  app.provide('$archiverService', app.config.globalProperties.$archiverService)
 
   announceLoadingService({ app })
   announcePreviewService({ app, store, configurationManager })
