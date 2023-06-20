@@ -1,6 +1,0 @@
-Enhancement: Project spaces table viewmode
-
-We've added an viewmode switcher to project spaces overview with an additional table viewmode.
-
-https://github.com/owncloud/web/pull/9195
-https://github.com/owncloud/web/issues/9204

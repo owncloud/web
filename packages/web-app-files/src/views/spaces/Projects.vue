@@ -156,7 +156,7 @@ export default defineComponent({
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
     })
 
-    const tableDisplayFields = computed(() => [
+    const tableDisplayFields = [
       'image',
       'name',
       'manager',
@@ -165,7 +165,7 @@ export default defineComponent({
       'usedQuota',
       'remainingQuota',
       'mdate'
-    ])
+    ] as readonly string[]
 
     const sortFields = availableSortFields
     const {
