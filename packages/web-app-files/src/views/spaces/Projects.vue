@@ -30,7 +30,7 @@
         </no-content-message>
         <div v-else class="spaces-list oc-mt-l">
           <resource-table
-            v-if="false"
+            v-if="viewMode === ViewModeConstants.default.name"
             v-model:selectedIds="selectedResourcesIds"
             :resources="spaces"
             :space="spaces[0]"
