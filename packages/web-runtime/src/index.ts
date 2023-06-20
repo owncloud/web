@@ -23,7 +23,8 @@ import {
   startSentry,
   announceCustomScripts,
   announceLoadingService,
-  announcePreviewService
+  announcePreviewService,
+  announceAdditionalTranslations
 } from './container/bootstrap'
 import { applicationStore } from './container/store'
 import {
@@ -60,10 +61,10 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
-  announceTranslations({
+  const gettext = announceTranslations({
     app,
     availableLanguages: supportedLanguages,
-    translations: merge(translations) // , customTranslations
+    translations
   })
   announceUppyService({ app })
 
@@ -74,7 +75,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     store,
     supportedLanguages,
     router,
-    translations
+    gettext
   })
 
   const customTranslationsPromise = loadCustomTranslations({ configurationManager })
@@ -85,6 +86,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     themePromise
   ])
 
+  announceAdditionalTranslations({ gettext, translations: merge(customTranslations) })
   announceClientService({ app, runtimeConfiguration, configurationManager, store })
 
   // TODO: move to announceArchiverService function

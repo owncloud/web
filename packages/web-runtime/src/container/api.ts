@@ -2,11 +2,11 @@ import { RouteRecordRaw, Router } from 'vue-router'
 import clone from 'lodash-es/clone'
 import { RuntimeApi, ApplicationQuickActions, ApplicationTranslations } from './types'
 import { ApiError } from 'web-pkg/src/errors'
-import { get, isEqual, isObject, isArray } from 'lodash-es'
+import { get, isEqual, isObject, isArray, merge } from 'lodash-es'
 import { Store } from 'vuex'
 import { App, Component, h } from 'vue'
 import { AppNavigationItem } from 'web-pkg/src/apps'
-
+import type { Language } from 'vue3-gettext'
 /**
  * inject application specific routes into runtime
  *
@@ -102,16 +102,16 @@ const announceExtension = (
  */
 const announceTranslations = (
   supportedLanguages: { [key: string]: string },
-  translations: unknown,
+  gettext: Language,
   appTranslations: ApplicationTranslations
 ): void => {
-  if (!isObject(translations)) {
+  if (!isObject(gettext.translations)) {
     throw new ApiError("translations can't be blank")
   }
 
   Object.keys(supportedLanguages).forEach((lang) => {
-    if (translations[lang] && appTranslations[lang]) {
-      Object.assign(translations[lang], appTranslations[lang])
+    if (gettext.translations[lang] && appTranslations[lang]) {
+      gettext.translations = merge(gettext.translations, { [lang]: appTranslations[lang] })
     }
   })
 }
@@ -228,13 +228,13 @@ export const buildRuntimeApi = ({
   applicationId,
   store,
   router,
-  translations,
+  gettext,
   supportedLanguages
 }: {
   applicationName: string
   applicationId: string
   store: Store<unknown>
-  translations: unknown
+  gettext: Language
   router: Router
   supportedLanguages: { [key: string]: string }
 }): RuntimeApi => {
@@ -252,7 +252,7 @@ export const buildRuntimeApi = ({
     announceNavigationItems: (navigationItems: AppNavigationItem[]): void =>
       announceNavigationItems(applicationId, store, navigationItems),
     announceTranslations: (appTranslations: ApplicationTranslations): void =>
-      announceTranslations(supportedLanguages, translations, appTranslations),
+      announceTranslations(supportedLanguages, gettext, appTranslations),
     announceQuickActions: (quickActions: ApplicationQuickActions): void =>
       announceQuickActions(store, quickActions),
     announceStore: (applicationStore: Store<unknown>): void =>

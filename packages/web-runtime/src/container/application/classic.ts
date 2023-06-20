@@ -9,6 +9,7 @@ import { RuntimeError } from 'web-pkg/src/errors'
 import { AppReadyHookArgs } from 'web-pkg/src/apps'
 import { useExtensionRegistry } from 'web-pkg/src/services/extensionRegistry'
 import { AppConfigObject } from 'web-pkg/src'
+import type { Language } from 'vue3-gettext'
 
 /**
  * this wraps a classic application structure into a next application format.
@@ -83,7 +84,7 @@ export const convertClassicApplication = async ({
   applicationConfig,
   store,
   router,
-  translations,
+  gettext,
   supportedLanguages
 }: {
   app: App
@@ -91,7 +92,7 @@ export const convertClassicApplication = async ({
   applicationConfig: AppConfigObject
   store: Store<unknown>
   router: Router
-  translations: unknown
+  gettext: Language
   supportedLanguages: { [key: string]: string }
 }): Promise<NextApplication> => {
   const { appInfo } = applicationScript
@@ -115,7 +116,7 @@ export const convertClassicApplication = async ({
     applicationId,
     store,
     router,
-    translations,
+    gettext,
     supportedLanguages
   })
 

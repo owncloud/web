@@ -6,6 +6,7 @@ import { ClassicApplicationScript } from '../types'
 import { RuntimeError } from 'web-pkg/src/errors'
 import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
+import type { Language } from 'vue3-gettext'
 
 // import modules to provide them to applications
 import * as vue from 'vue' // eslint-disable-line
@@ -65,7 +66,7 @@ export const buildApplication = async ({
   applicationConfig,
   store,
   router,
-  translations,
+  gettext,
   supportedLanguages,
   configurationManager
 }: {
@@ -74,7 +75,7 @@ export const buildApplication = async ({
   applicationConfig: AppConfigObject
   store: Store<unknown>
   router: Router
-  translations: unknown
+  gettext: Language
   supportedLanguages: { [key: string]: string }
   configurationManager: ConfigurationManager
 }): Promise<NextApplication> => {
@@ -128,7 +129,7 @@ export const buildApplication = async ({
         applicationConfig,
         store,
         router,
-        translations,
+        gettext,
         supportedLanguages
       }).catch()
     }

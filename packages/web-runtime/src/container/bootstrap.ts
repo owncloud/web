@@ -114,7 +114,7 @@ export const initializeApplications = async ({
   configurationManager,
   store,
   router,
-  translations,
+  gettext,
   supportedLanguages
 }: {
   app: App
@@ -122,7 +122,7 @@ export const initializeApplications = async ({
   configurationManager: ConfigurationManager
   store: Store<unknown>
   router: Router
-  translations: unknown
+  gettext: Language
   supportedLanguages: { [key: string]: string }
 }): Promise<NextApplication[]> => {
   const { apps: internalApplications = [], external_apps: externalApplications = [] } =
@@ -149,7 +149,7 @@ export const initializeApplications = async ({
         store,
         supportedLanguages,
         router,
-        translations,
+        gettext,
         configurationManager
       })
     )
