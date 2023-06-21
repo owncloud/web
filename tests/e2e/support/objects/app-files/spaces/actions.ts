@@ -102,13 +102,12 @@ export const changeSpaceName = async (args: {
   await page.locator(spacesRenameOptionSelector).click()
   await page.locator(spaceNameInputField).fill(value)
   await Promise.all([
-    page.waitForResponse((resp) => {
-      return (
+    page.waitForResponse(
+      (resp) =>
         resp.url().endsWith(encodeURIComponent(id)) &&
         resp.status() === 200 &&
         resp.request().method() === 'PATCH'
-      )
-    }),
+    ),
     page.locator(actionConfirmButton).click()
   ])
 
