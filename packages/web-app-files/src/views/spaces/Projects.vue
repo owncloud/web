@@ -46,6 +46,29 @@
                 :action-options="{ resources: [resource] as SpaceResource[] }"
               />
             </template>
+            <template #status="{ resource }">
+              <span v-if="resource.disabled" class="oc-flex oc-flex-middle">
+                <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
+                  v-text="$gettext('Disabled')"
+                />
+              </span>
+              <span v-else class="oc-flex oc-flex-middle">
+                <oc-icon name="play-circle" fill-type="line" class="oc-mr-s" /><span
+                  v-text="$gettext('Enabled')"
+                />
+              </span>
+            </template>
+            <template #manager="{ resource }">
+              {{ getManagerNames(resource) }}
+            </template>
+            <template #members="{ resource }">
+              {{ getMemberCount(resource) }}
+            </template>
+            <template #totalQuota="{ resource }">
+              {{ getTotalQuota(resource) }}
+            </template>
+            <template #usedQuota="{ resource }"> {{ getUsedQuota(resource) }} </template>
+            <template #remainingQuota="{ resource }"> {{ getRemainingQuota(resource) }} </template>
             <template #image="{ resource }">
               <img
                 v-if="imageContentObject[resource.id]"
@@ -132,6 +155,9 @@ import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { useSelectedResources } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
 import { VisibilityObserver } from 'web-pkg/src/observer'
+import { formatFileSize } from 'web-pkg/src'
+import { useGettext } from 'vue3-gettext'
+import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 
 const visibilityObserver = new VisibilityObserver()
 export default defineComponent({
@@ -151,6 +177,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { selectedResourcesIds } = useSelectedResources({ store })
     const { can } = useAbility()
+    const { current: currentLanguage } = useGettext()
 
     const runtimeSpaces = computed((): SpaceResource[] => {
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
@@ -201,6 +228,39 @@ export default defineComponent({
       defaultValue: ViewModeConstants.defaultModeName
     })
 
+    const getManagerNames = (space: SpaceResource) => {
+      const allManagers = space.spaceRoles[spaceRoleManager.name]
+      const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers
+      let managerStr = managers.map((m) => m.displayName).join(', ')
+      if (allManagers.length > 2) {
+        managerStr += `... +${allManagers.length - 2}`
+      }
+      return managerStr
+    }
+
+    const getTotalQuota = (space: SpaceResource) => {
+      return formatFileSize(space.spaceQuota.total, currentLanguage)
+    }
+    const getUsedQuota = (space: SpaceResource) => {
+      if (space.spaceQuota.used === undefined) {
+        return '-'
+      }
+      return formatFileSize(space.spaceQuota.used, currentLanguage)
+    }
+    const getRemainingQuota = (space: SpaceResource) => {
+      if (space.spaceQuota.remaining === undefined) {
+        return '-'
+      }
+      return formatFileSize(space.spaceQuota.remaining, currentLanguage)
+    }
+    const getMemberCount = (space: SpaceResource) => {
+      return (
+        space.spaceRoles[spaceRoleManager.name].length +
+        space.spaceRoles[spaceRoleEditor.name].length +
+        space.spaceRoles[spaceRoleViewer.name].length
+      )
+    }
+
     onMounted(async () => {
       await loadResourcesTask.perform()
       scrollToResourceFromRoute(unref(spaces))
@@ -221,7 +281,12 @@ export default defineComponent({
       viewModes,
       viewMode,
       tableDisplayFields,
-      ViewModeConstants
+      ViewModeConstants,
+      getManagerNames,
+      getTotalQuota,
+      getUsedQuota,
+      getRemainingQuota,
+      getMemberCount
     }
   },
   data: function () {

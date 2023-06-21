@@ -82,17 +82,7 @@
     </template>
     <template #status="{ item }">
       <!-- @slot Status column -->
-      <slot v-if="!(resources[0].type === 'space')" name="status" :resource="item" />
-      <span v-else-if="item.disabled" class="oc-flex oc-flex-middle">
-        <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
-          v-text="$gettext('Disabled')"
-        />
-      </span>
-      <span v-else class="oc-flex oc-flex-middle">
-        <oc-icon name="play-circle" fill-type="line" class="oc-mr-s" /><span
-          v-text="$gettext('Enabled')"
-        />
-      </span>
+      <slot name="status" :resource="item" />
     </template>
     <template #size="{ item }">
       <oc-resource-size :size="item.size || Number.NaN" />
@@ -125,14 +115,20 @@
       </oc-tag>
     </template>
     <template #manager="{ item }">
-      {{ getManagerNames(item) }}
+      <slot name="manager" :resource="item" />
     </template>
     <template #members="{ item }">
-      {{ getMemberCount(item) }}
+      <slot name="members" :resource="item" />
     </template>
-    <template #totalQuota="{ item }"> {{ getTotalQuota(item) }} </template>
-    <template #usedQuota="{ item }"> {{ getUsedQuota(item) }} </template>
-    <template #remainingQuota="{ item }"> {{ getRemainingQuota(item) }} </template>
+    <template #totalQuota="{ item }">
+      <slot name="totalQuota" :resource="item" />
+    </template>
+    <template #usedQuota="{ item }">
+      <slot name="usedQuota" :resource="item" />
+    </template>
+    <template #remainingQuota="{ item }">
+      <slot name="remainingQuota" :resource="item" />
+    </template>
     <template #mdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.mdate)"
@@ -214,12 +210,7 @@ import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from 'web-client'
 import { extractDomSelector, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import {
-  ShareTypes,
-  spaceRoleEditor,
-  spaceRoleManager,
-  spaceRoleViewer
-} from 'web-client/src/helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 
 import {
   useCapabilityFilesTags,
@@ -235,7 +226,6 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import {
   displayPositionedDropdown,
   formatDateFromJSDate,
-  formatFileSize,
   formatRelativeDateFromJSDate
 } from 'web-pkg/src/helpers'
 
@@ -453,39 +443,6 @@ export default defineComponent({
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
-    const getManagerNames = (space: SpaceResource) => {
-      const allManagers = space.spaceRoles[spaceRoleManager.name]
-      const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers
-      let managerStr = managers.map((m) => m.displayName).join(', ')
-      if (allManagers.length > 2) {
-        managerStr += `... +${allManagers.length - 2}`
-      }
-      return managerStr
-    }
-
-    const getTotalQuota = (space: SpaceResource) => {
-      return formatFileSize(space.spaceQuota.total, currentLanguage)
-    }
-    const getUsedQuota = (space: SpaceResource) => {
-      if (space.spaceQuota.used === undefined) {
-        return '-'
-      }
-      return formatFileSize(space.spaceQuota.used, currentLanguage)
-    }
-    const getRemainingQuota = (space: SpaceResource) => {
-      if (space.spaceQuota.remaining === undefined) {
-        return '-'
-      }
-      return formatFileSize(space.spaceQuota.remaining, currentLanguage)
-    }
-    const getMemberCount = (space: SpaceResource) => {
-      return (
-        space.spaceRoles[spaceRoleManager.name].length +
-        space.spaceRoles[spaceRoleEditor.name].length +
-        space.spaceRoles[spaceRoleViewer.name].length
-      )
-    }
-
     return {
       getTagToolTip,
       renameActions,
@@ -501,12 +458,7 @@ export default defineComponent({
           targetRouteCallback: computed(() => props.targetRouteCallback)
         },
         context
-      ),
-      getManagerNames,
-      getTotalQuota,
-      getUsedQuota,
-      getRemainingQuota,
-      getMemberCount
+      )
     }
   },
   data() {
