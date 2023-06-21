@@ -33,7 +33,6 @@
             v-if="viewMode === ViewModeConstants.default.name"
             v-model:selectedIds="selectedResourcesIds"
             :resources="spaces"
-            :space="spaces[0]"
             :fields-displayed="tableDisplayFields"
             :are-thumbnails-displayed="true"
             :sort-fields="sortFields"
@@ -159,7 +158,6 @@ import { formatFileSize } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 
-const visibilityObserver = new VisibilityObserver()
 export default defineComponent({
   components: {
     AppBar,

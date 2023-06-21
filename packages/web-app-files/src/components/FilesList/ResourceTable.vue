@@ -432,7 +432,6 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore()
 
-    const { current: currentLanguage } = useGettext()
     const { width } = useWindowSize()
     const hasTags = computed(
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
