@@ -229,7 +229,6 @@ import {
   formatRelativeDateFromJSDate
 } from 'web-pkg/src/helpers'
 
-import { useGettext } from 'vue3-gettext'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
