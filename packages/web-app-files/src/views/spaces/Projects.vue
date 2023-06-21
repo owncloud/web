@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex">
+  <div class="oc-flex oc-width-1-1">
     <files-view-wrapper>
       <app-bar
         :breadcrumbs="breadcrumbs"
