@@ -103,11 +103,6 @@ export const changeSpaceName = async (args: {
   await page.locator(spaceNameInputField).fill(value)
   await Promise.all([
     page.waitForResponse((resp) => {
-      console.log(id)
-      console.log(JSON.stringify(resp.url()))
-      console.log(JSON.stringify(resp.status()))
-      console.log(JSON.stringify(resp.request().method()))
-
       return (
         resp.url().endsWith(encodeURIComponent(id)) &&
         resp.status() === 200 &&
