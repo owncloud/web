@@ -619,7 +619,12 @@ export default defineComponent({
           }
         ]
           .filter((field) => {
-            const hasField = get(firstResource, field.prop || field.name)
+            let hasField
+            if (field.prop) {
+              hasField = get(firstResource, field.prop) !== undefined
+            } else {
+              hasField = Object.prototype.hasOwnProperty.call(firstResource, field.name)
+            }
             if (!this.fieldsDisplayed) {
               return hasField
             }
