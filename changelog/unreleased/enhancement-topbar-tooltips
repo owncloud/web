@@ -1,0 +1,6 @@
+Enhancement: Hover tooltips in topbar
+
+We have added more hoverable tooltips in the topbar to align the behavior.
+
+https://github.com/owncloud/web/issues/9280
+https://github.com/owncloud/web/pull/9283

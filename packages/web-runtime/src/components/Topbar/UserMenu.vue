@@ -3,6 +3,7 @@
     <oc-button
       id="_userMenuButton"
       ref="menuButton"
+      v-oc-tooltip="$gettext('User Menu')"
       class="oc-topbar-personal"
       appearance="raw"
       :aria-label="$gettext('User Menu')"
