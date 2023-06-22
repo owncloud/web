@@ -525,7 +525,7 @@ export default defineComponent({
           },
           {
             name: 'usedQuota',
-            prop: 'spaceQuota.remaining',
+            prop: 'spaceQuota.used',
             title: this.$gettext('Used quota'),
             type: 'slot',
             sortable: true
