@@ -35,6 +35,7 @@
         <oc-icon name="close" size="small" variation="passive" />
       </oc-button>
       <oc-button
+        v-oc-tooltip="$gettext('Open advanced search')"
         :aria-label="$gettext('Open advanced search')"
         class="oc-advanced-search oc-position-small oc-position-center-right oc-mt-rm"
         appearance="raw"
