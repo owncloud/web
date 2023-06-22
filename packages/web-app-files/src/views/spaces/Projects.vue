@@ -33,6 +33,8 @@
             v-if="viewMode === ViewModeConstants.default.name"
             v-model:selectedIds="selectedResourcesIds"
             :resources="spaces"
+            class="files-table"
+            :sticky="false"
             :fields-displayed="tableDisplayFields"
             :are-thumbnails-displayed="true"
             :sort-fields="sortFields"
