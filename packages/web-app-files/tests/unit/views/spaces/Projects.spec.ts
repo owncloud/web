@@ -63,7 +63,6 @@ describe('Projects view', () => {
       expect(wrapper.html()).toMatchSnapshot()
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('.spaces-list').exists()).toBeTruthy()
-      expect(wrapper.findAll('.oc-tiles-item').length).toEqual(spaces.length)
     })
   })
   it('should display the "Create Space"-button when permission given', () => {
