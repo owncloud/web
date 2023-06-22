@@ -1052,7 +1052,7 @@ export default defineComponent({
     .oc-table-data-cell-usedQuota {
       display: none;
 
-      @media only screen and (min-width: 1080px) {
+      @media only screen and (min-width: 1400px) {
         display: table-cell;
       }
     }
@@ -1065,7 +1065,7 @@ export default defineComponent({
     .oc-table-data-cell-mdate {
       display: none;
 
-      @media only screen and (min-width: 1400px) {
+      @media only screen and (min-width: 1600px) {
         display: table-cell;
       }
     }

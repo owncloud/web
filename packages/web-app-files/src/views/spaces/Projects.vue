@@ -69,6 +69,7 @@
             v-model:selectedIds="selectedResourcesIds"
             :resources="spaces"
             class="spaces-table"
+            :class="{ 'spaces-table-squashed': sideBarOpen }"
             :sticky="false"
             :fields-displayed="tableDisplayFields"
             :are-thumbnails-displayed="true"
