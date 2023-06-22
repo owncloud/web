@@ -1,83 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Projects view different files view states lists all available project spaces 1`] = `
-<div class="oc-flex">
+<div class="oc-flex oc-width-1-1">
   <div class="files-view-wrapper oc-width-expand">
     <div id="files-view">
-      <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hasbulkactions="true" hasfileextensions="false" hashiddenfiles="false" haspagination="false" hassharesnavigation="false" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true" sidebaropen="false" viewmodes="[object Object]"></app-bar-stub>
-      <div class="spaces-list oc-px-m oc-mt-l">
-        <div>
-          <div class="oc-tile-sorting oc-border-b oc-mb-m oc-pb-s">
-            <span class="oc-mr-xs">Sort by:</span>
-            <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-raw" id="oc-tiles-sort-btn" type="button">
-              <!-- @slot Content of the button -->
-              <span>A-Z</span>
-              <span class="oc-icon oc-icon-m oc-icon-passive">
-                <!---->
-              </span>
-            </button>
-            <div class="oc-drop oc-box-shadow-medium oc-rounded oc-tiles-sort-drop" id="oc-drop-1">
-              <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
-                <ul class="oc-list oc-my-rm oc-mx-rm oc-tiles-sort-list">
-                  <li class="oc-my-xs">
-                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-primary oc-button-primary-raw-inverse oc-tiles-sort-list-item oc-p-s oc-width-1-1 oc-background-primary-gradient selected" type="button">
-                      <!-- @slot Content of the button -->
-                      <span>A-Z</span>
-                      <span class="oc-icon oc-icon-m oc-icon-inherit">
-                        <!---->
-                      </span>
-                    </button>
-                  </li>
-                  <li class="oc-my-xs">
-                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw oc-tiles-sort-list-item oc-p-s oc-width-1-1" type="button">
-                      <!-- @slot Content of the button -->
-                      <span>Z-A</span>
-                      <!--v-if-->
-                    </button>
-                  </li>
-                  <li class="oc-my-xs">
-                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw oc-tiles-sort-list-item oc-p-s oc-width-1-1" type="button">
-                      <!-- @slot Content of the button -->
-                      <span>Newest</span>
-                      <!--v-if-->
-                    </button>
-                  </li>
-                  <li class="oc-my-xs">
-                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw oc-tiles-sort-list-item oc-p-s oc-width-1-1" type="button">
-                      <!-- @slot Content of the button -->
-                      <span>Oldest</span>
-                      <!--v-if-->
-                    </button>
-                  </li>
-                  <li class="oc-my-xs">
-                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw oc-tiles-sort-list-item oc-p-s oc-width-1-1" type="button">
-                      <!-- @slot Content of the button -->
-                      <span>Largest</span>
-                      <!--v-if-->
-                    </button>
-                  </li>
-                  <li class="oc-my-xs">
-                    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw oc-tiles-sort-list-item oc-p-s oc-width-1-1" type="button">
-                      <!-- @slot Content of the button -->
-                      <span>Smallest</span>
-                      <!--v-if-->
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <ul class="oc-list oc-my-rm oc-mx-rm oc-tiles oc-flex resizableTiles">
-            <li class="oc-tiles-item has-item-context-menu">
-              <oc-tile-stub draggable="false" is-resource-selected="false" resource="[object Object]" resource-icon-size="xlarge" resource-route="[object Object]"></oc-tile-stub>
-            </li>
-            <li class="oc-tiles-item has-item-context-menu">
-              <oc-tile-stub draggable="false" is-resource-selected="false" resource="[object Object]" resource-icon-size="xlarge" resource-route="[object Object]"></oc-tile-stub>
-            </li>
-          </ul>
-          <!--v-if-->
-          <div class="oc-tiles-footer"></div>
-        </div>
+      <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hasbulkactions="true" hasfileextensions="false" hashiddenfiles="false" haspagination="false" hassharesnavigation="false" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true" sidebaropen="false" viewmodes="[object Object],[object Object]"></app-bar-stub>
+      <div class="spaces-list oc-mt-l">
+        <resource-table-stub arepathsdisplayed="false" areresourcesclickable="true" arethumbnailsdisplayed="true" class="spaces-table" dragdrop="false" fieldsdisplayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,mdate" hasactions="true" headerposition="0" hover="true" isselectable="true" paddingx="small" resourcedomselector="[Function]" resources="[object Object],[object Object]" selectedids="" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" sortby="[Function]" sortdir="desc" sticky="false" viewmode="resource-table"></resource-table-stub>
       </div>
     </div>
   </div>

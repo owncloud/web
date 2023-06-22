@@ -41,6 +41,27 @@ export const sortFields: SortField[] = [
     name: 'size',
     sortable: true,
     sortDir: SortDir.Asc
+  },
+  {
+    label: $gettext('Remaining quota'),
+    name: 'remainingQuota',
+    prop: 'spaceQuota.remaining',
+    sortable: true,
+    sortDir: SortDir.Desc
+  },
+  {
+    label: $gettext('Total quota'),
+    name: 'totalQuota',
+    prop: 'spaceQuota.total',
+    sortable: true,
+    sortDir: SortDir.Desc
+  },
+  {
+    label: $gettext('Used quota'),
+    name: 'usedQuota',
+    prop: 'spaceQuota.used',
+    sortable: true,
+    sortDir: SortDir.Desc
   }
 ]
 

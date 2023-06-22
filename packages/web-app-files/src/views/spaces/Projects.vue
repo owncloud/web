@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex">
+  <div class="oc-flex oc-width-1-1">
     <files-view-wrapper>
       <app-bar
         :breadcrumbs="breadcrumbs"
@@ -28,9 +28,11 @@
             <span v-text="$gettext('You don\'t have access to any spaces')" />
           </template>
         </no-content-message>
-        <div v-else class="spaces-list oc-px-m oc-mt-l">
+        <div v-else class="spaces-list oc-mt-l">
           <resource-tiles
+            v-if="viewMode === ViewModeConstants.tilesView.name"
             v-model:selectedIds="selectedResourcesIds"
+            class="oc-px-m"
             :data="spaces"
             :resizable="true"
             :sort-fields="sortFields"
@@ -62,6 +64,60 @@
               />
             </template>
           </resource-tiles>
+          <resource-table
+            v-else
+            v-model:selectedIds="selectedResourcesIds"
+            :resources="spaces"
+            class="spaces-table"
+            :class="{ 'spaces-table-squashed': sideBarOpen }"
+            :sticky="false"
+            :fields-displayed="tableDisplayFields"
+            :are-thumbnails-displayed="true"
+            :sort-fields="sortFields"
+            :sort-by="sortBy"
+            :sort-dir="sortDir"
+            @sort="handleSort"
+          >
+            <template #contextMenu="{ resource }">
+              <space-context-actions
+                :action-options="{ resources: [resource] as SpaceResource[] }"
+              />
+            </template>
+            <template #status="{ resource }">
+              <span v-if="resource.disabled" class="oc-flex oc-flex-middle">
+                <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
+                  v-text="$gettext('Disabled')"
+                />
+              </span>
+              <span v-else class="oc-flex oc-flex-middle">
+                <oc-icon name="play-circle" fill-type="line" class="oc-mr-s" /><span
+                  v-text="$gettext('Enabled')"
+                />
+              </span>
+            </template>
+            <template #manager="{ resource }">
+              {{ getManagerNames(resource) }}
+            </template>
+            <template #members="{ resource }">
+              {{ getMemberCount(resource) }}
+            </template>
+            <template #totalQuota="{ resource }">
+              {{ getTotalQuota(resource) }}
+            </template>
+            <template #usedQuota="{ resource }"> {{ getUsedQuota(resource) }} </template>
+            <template #remainingQuota="{ resource }"> {{ getRemainingQuota(resource) }} </template>
+            <template #image="{ resource }">
+              <img
+                v-if="imageContentObject[resource.id]"
+                class="table-preview oc-mr-s"
+                :src="imageContentObject[resource.id]['data']"
+                alt=""
+                width="33"
+                height="33"
+              />
+              <oc-resource-icon v-else class="oc-mr-s" :resource="resource" />
+            </template>
+          </resource-table>
         </div>
       </template>
     </files-view-wrapper>
@@ -82,9 +138,10 @@ import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import {
   useAbility,
   useClientService,
+  ViewModeConstants,
+  useRouteQueryPersisted,
   useSort,
-  useStore,
-  ViewModeConstants
+  useStore
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
@@ -92,12 +149,16 @@ import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from 'web-pkg/src/composables/sideBar'
 import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { useSelectedResources } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
+import { formatFileSize } from 'web-pkg/src'
+import { useGettext } from 'vue3-gettext'
+import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 
 export default defineComponent({
   components: {
@@ -107,6 +168,7 @@ export default defineComponent({
     FilesViewWrapper,
     NoContentMessage,
     ResourceTiles,
+    ResourceTable,
     SideBar,
     SpaceContextActions
   },
@@ -115,10 +177,22 @@ export default defineComponent({
     const clientService = useClientService()
     const { selectedResourcesIds } = useSelectedResources({ store })
     const { can } = useAbility()
+    const { current: currentLanguage } = useGettext()
 
     const runtimeSpaces = computed((): SpaceResource[] => {
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
     })
+
+    const tableDisplayFields = [
+      'image',
+      'name',
+      'manager',
+      'members',
+      'totalQuota',
+      'usedQuota',
+      'remainingQuota',
+      'mdate'
+    ]
 
     const sortFields = availableSortFields
     const {
@@ -147,7 +221,45 @@ export default defineComponent({
     })
 
     const hasCreatePermission = computed(() => can('create-all', 'Drive'))
-    const viewModes = computed(() => [ViewModeConstants.tilesView])
+    const viewModes = computed(() => [ViewModeConstants.default, ViewModeConstants.tilesView])
+
+    const viewMode = useRouteQueryPersisted({
+      name: ViewModeConstants.queryName,
+      defaultValue: ViewModeConstants.defaultModeName
+    })
+
+    const getManagerNames = (space: SpaceResource) => {
+      const allManagers = space.spaceRoles[spaceRoleManager.name]
+      const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers
+      let managerStr = managers.map((m) => m.displayName).join(', ')
+      if (allManagers.length > 2) {
+        managerStr += `... +${allManagers.length - 2}`
+      }
+      return managerStr
+    }
+
+    const getTotalQuota = (space: SpaceResource) => {
+      return formatFileSize(space.spaceQuota.total, currentLanguage)
+    }
+    const getUsedQuota = (space: SpaceResource) => {
+      if (space.spaceQuota.used === undefined) {
+        return '-'
+      }
+      return formatFileSize(space.spaceQuota.used, currentLanguage)
+    }
+    const getRemainingQuota = (space: SpaceResource) => {
+      if (space.spaceQuota.remaining === undefined) {
+        return '-'
+      }
+      return formatFileSize(space.spaceQuota.remaining, currentLanguage)
+    }
+    const getMemberCount = (space: SpaceResource) => {
+      return (
+        space.spaceRoles[spaceRoleManager.name].length +
+        space.spaceRoles[spaceRoleEditor.name].length +
+        space.spaceRoles[spaceRoleViewer.name].length
+      )
+    }
 
     onMounted(async () => {
       await loadResourcesTask.perform()
@@ -166,7 +278,15 @@ export default defineComponent({
       sortDir,
       sortFields,
       hasCreatePermission,
-      viewModes
+      viewModes,
+      viewMode,
+      tableDisplayFields,
+      ViewModeConstants,
+      getManagerNames,
+      getTotalQuota,
+      getUsedQuota,
+      getRemainingQuota,
+      getMemberCount
     }
   },
   data: function () {
@@ -244,7 +364,9 @@ export default defineComponent({
 #files-spaces-empty {
   height: 75vh;
 }
-
+.table-preview {
+  border-radius: 3px;
+}
 .state-trashed {
   .tile-preview,
   .tile-default-image > svg {

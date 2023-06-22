@@ -9,7 +9,7 @@ import { File } from '../../../types'
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
-const spaceIdSelector = `[data-item-id="%s"]`
+const spaceIdSelector = `[data-item-id="%s"] .oc-resource-basename`
 const spacesRenameOptionSelector = '.oc-files-actions-rename-trigger:visible'
 const editSpacesSubtitleOptionSelector = '.oc-files-actions-edit-description-trigger:visible'
 const editQuotaOptionSelector = '.oc-files-actions-edit-quota-trigger:visible'

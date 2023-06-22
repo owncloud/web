@@ -55,12 +55,14 @@
         class="resource-table-resource-wrapper"
         :class="[{ 'resource-table-resource-wrapper-limit-max-width': hasRenameAction(item) }]"
       >
+        <slot name="image" :resource="item" />
         <oc-resource
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
           :is-path-displayed="arePathsDisplayed"
           :parent-folder-name-default="getDefaultParentFolderName(item)"
           :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
+          :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item.id)"
           :folder-link="folderLink(item)"
@@ -111,6 +113,21 @@
       >
         + {{ item.tags.length - 2 }}
       </oc-tag>
+    </template>
+    <template #manager="{ item }">
+      <slot name="manager" :resource="item" />
+    </template>
+    <template #members="{ item }">
+      <slot name="members" :resource="item" />
+    </template>
+    <template #totalQuota="{ item }">
+      <slot name="totalQuota" :resource="item" />
+    </template>
+    <template #usedQuota="{ item }">
+      <slot name="usedQuota" :resource="item" />
+    </template>
+    <template #remainingQuota="{ item }">
+      <slot name="remainingQuota" :resource="item" />
     </template>
     <template #mdate="{ item }">
       <span
@@ -211,6 +228,7 @@ import {
   formatDateFromJSDate,
   formatRelativeDateFromJSDate
 } from 'web-pkg/src/helpers'
+
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
@@ -224,6 +242,7 @@ import {
   createLocationCommon,
   createLocationSpaces
 } from 'web-app-files/src/router'
+import get from 'lodash-es/get'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -412,6 +431,7 @@ export default defineComponent({
   ],
   setup(props, context) {
     const store = useStore()
+
     const { width } = useWindowSize()
     const hasTags = computed(
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
@@ -472,6 +492,7 @@ export default defineComponent({
           width: 'shrink'
         })
       }
+
       const sortFields = determineSortFields(firstResource)
       fields.push(
         ...[
@@ -481,6 +502,40 @@ export default defineComponent({
             type: 'slot',
             width: 'expand',
             wrap: 'truncate'
+          },
+
+          {
+            name: 'manager',
+            prop: 'spaceRoles',
+            title: this.$gettext('Manager'),
+            type: 'slot'
+          },
+          {
+            name: 'members',
+            title: this.$gettext('Members'),
+            prop: 'spaceRoles',
+            type: 'slot'
+          },
+          {
+            name: 'totalQuota',
+            prop: 'spaceQuota.total',
+            title: this.$gettext('Total quota'),
+            type: 'slot',
+            sortable: true
+          },
+          {
+            name: 'usedQuota',
+            prop: 'spaceQuota.used',
+            title: this.$gettext('Used quota'),
+            type: 'slot',
+            sortable: true
+          },
+          {
+            name: 'remainingQuota',
+            prop: 'spaceQuota.remaining',
+            title: this.$gettext('Remaining quota'),
+            type: 'slot',
+            sortable: true
           },
           {
             name: 'indicators',
@@ -564,7 +619,12 @@ export default defineComponent({
           }
         ]
           .filter((field) => {
-            const hasField = Object.prototype.hasOwnProperty.call(firstResource, field.name)
+            let hasField
+            if (field.prop) {
+              hasField = get(firstResource, field.prop) !== undefined
+            } else {
+              hasField = Object.prototype.hasOwnProperty.call(firstResource, field.name)
+            }
             if (!this.fieldsDisplayed) {
               return hasField
             }
@@ -951,6 +1011,66 @@ export default defineComponent({
   }
 }
 
+.spaces-table {
+  .oc-table-header-cell-mdate,
+  .oc-table-data-cell-mdate,
+  .oc-table-header-cell-manager,
+  .oc-table-data-cell-manager,
+  .oc-table-header-cell-remainingQuota,
+  .oc-table-data-cell-remainingQuota {
+    display: none;
+
+    @media only screen and (min-width: 960px) {
+      display: table-cell;
+    }
+  }
+
+  .oc-table-header-cell-totalQuota,
+  .oc-table-data-cell-totalQuota,
+  .oc-table-header-cell-usedQuota,
+  .oc-table-data-cell-usedQuota {
+    display: none;
+
+    @media only screen and (min-width: 1200px) {
+      display: table-cell;
+    }
+  }
+
+  &-squashed {
+    /**
+     * squashed = right sidebar is open.
+     * same media queries as above but +440px width of the right sidebar
+     * (because the right sidebar steals 440px from the file list)
+     */
+    .oc-table-header-cell-status,
+    .oc-table-data-cell-status,
+    .oc-table-header-cell-manager,
+    .oc-table-data-cell-manager,
+    .oc-table-header-cell-totalQuota,
+    .oc-table-data-cell-totalQuota,
+    .oc-table-header-cell-usedQuota,
+    .oc-table-data-cell-usedQuota {
+      display: none;
+
+      @media only screen and (min-width: 1400px) {
+        display: table-cell;
+      }
+    }
+
+    .oc-table-header-cell-mdate,
+    .oc-table-data-cell-mdate,
+    .oc-table-header-cell-remainingQuota,
+    .oc-table-data-cell-remainingQuota,
+    .oc-table-header-cell-mdate,
+    .oc-table-data-cell-mdate {
+      display: none;
+
+      @media only screen and (min-width: 1600px) {
+        display: table-cell;
+      }
+    }
+  }
+}
 // Hide files table columns
 .files-table {
   .oc-table-header-cell-size,
