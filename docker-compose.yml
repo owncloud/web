@@ -219,6 +219,7 @@ services:
       traefik.http.middlewares.cors.headers.accesscontrolallowmethods: "*"
       traefik.http.middlewares.cors.headers.accesscontrolallowheaders: "*"
       traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist: "*"
+      traefik.http.middlewares.cors.headers.accesscontrolexposeheaders: "*"
       traefik.http.middlewares.cors.headers.accesscontrolmaxage: 100
       traefik.http.middlewares.cors.headers.addvaryheader: true
     ports:
