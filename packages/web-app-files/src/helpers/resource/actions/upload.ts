@@ -153,9 +153,8 @@ export class ResourceConflict extends ConflictDialog {
           new RegExp(`/${folder}/`),
           `/${newFolderName}/`
         )
-        file.meta.tusEndpoint = file.meta.tusEndpoint.replace(
-          new RegExp(`/${folder}`),
-          `/${newFolderName}`
+        file.meta.tusEndpoint = encodeURI(
+          file.meta.tusEndpoint.replace(new RegExp(`/${folder}`), `/${newFolderName}`)
         )
       }
     }

@@ -142,7 +142,7 @@ export class HandleUpload extends BasePlugin {
       const directory =
         !relativeFilePath || dirname(relativeFilePath) === '.' ? '' : dirname(relativeFilePath)
 
-      const tusEndpoint = urlJoin(trimmedUploadPath, directory)
+      const tusEndpoint = encodeURI(urlJoin(trimmedUploadPath, directory))
 
       let topLevelFolderId
       if (relativeFilePath) {
