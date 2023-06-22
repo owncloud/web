@@ -29,6 +29,7 @@ Summary
 * Enhancement - Cloud import: [#9151](https://github.com/owncloud/web/issues/9151)
 * Enhancement - Privacy statement in account menu: [#9174](https://github.com/owncloud/web/issues/9174)
 * Enhancement - Add login button to top bar: [#9178](https://github.com/owncloud/web/pull/9178)
+* Enhancement - Project spaces list viewmode: [#9195](https://github.com/owncloud/web/pull/9195)
 * Enhancement - Add pagination options to admin settings: [#9199](https://github.com/owncloud/web/pull/9199)
 * Enhancement - Add batch actions to search result list: [#9200](https://github.com/owncloud/web/pull/9200)
 * Enhancement - Restyle possible sharees: [#9216](https://github.com/owncloud/web/issues/9216)
@@ -204,6 +205,14 @@ Details
    https://github.com/owncloud/web/issues/9177
    https://github.com/owncloud/web/pull/9178
    https://github.com/owncloud/web/pull/9187
+
+* Enhancement - Project spaces list viewmode: [#9195](https://github.com/owncloud/web/pull/9195)
+
+   We've added a viewmode switcher to the project spaces overview with an additional list
+   viewmode.
+
+   https://github.com/owncloud/web/issues/9204
+   https://github.com/owncloud/web/pull/9195
 
 * Enhancement - Add pagination options to admin settings: [#9199](https://github.com/owncloud/web/pull/9199)
 
