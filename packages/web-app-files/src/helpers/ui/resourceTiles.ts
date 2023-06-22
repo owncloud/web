@@ -62,13 +62,6 @@ export const sortFields: SortField[] = [
     prop: 'spaceQuota.used',
     sortable: true,
     sortDir: SortDir.Desc
-  },
-  {
-    label: $gettext('Status'),
-    name: 'status',
-    prop: 'disabled',
-    sortable: true,
-    sortDir: SortDir.Desc
   }
 ]
 

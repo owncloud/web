@@ -1011,6 +1011,66 @@ export default defineComponent({
   }
 }
 
+.spaces-table {
+  .oc-table-header-cell-mdate,
+  .oc-table-data-cell-mdate,
+  .oc-table-header-cell-manager,
+  .oc-table-data-cell-manager,
+  .oc-table-header-cell-remainingQuota,
+  .oc-table-data-cell-remainingQuota {
+    display: none;
+
+    @media only screen and (min-width: 960px) {
+      display: table-cell;
+    }
+  }
+
+  .oc-table-header-cell-totalQuota,
+  .oc-table-data-cell-totalQuota,
+  .oc-table-header-cell-usedQuota,
+  .oc-table-data-cell-usedQuota {
+    display: none;
+
+    @media only screen and (min-width: 1200px) {
+      display: table-cell;
+    }
+  }
+
+  &-squashed {
+    /**
+     * squashed = right sidebar is open.
+     * same media queries as above but +440px width of the right sidebar
+     * (because the right sidebar steals 440px from the file list)
+     */
+    .oc-table-header-cell-status,
+    .oc-table-data-cell-status,
+    .oc-table-header-cell-manager,
+    .oc-table-data-cell-manager,
+    .oc-table-header-cell-totalQuota,
+    .oc-table-data-cell-totalQuota,
+    .oc-table-header-cell-usedQuota,
+    .oc-table-data-cell-usedQuota {
+      display: none;
+
+      @media only screen and (min-width: 1080px) {
+        display: table-cell;
+      }
+    }
+
+    .oc-table-header-cell-mdate,
+    .oc-table-data-cell-mdate,
+    .oc-table-header-cell-remainingQuota,
+    .oc-table-data-cell-remainingQuota,
+    .oc-table-header-cell-mdate,
+    .oc-table-data-cell-mdate {
+      display: none;
+
+      @media only screen and (min-width: 1400px) {
+        display: table-cell;
+      }
+    }
+  }
+}
 // Hide files table columns
 .files-table {
   .oc-table-header-cell-size,
@@ -1033,11 +1093,7 @@ export default defineComponent({
   .oc-table-header-cell-sdate,
   .oc-table-data-cell-sdate,
   .oc-table-header-cell-ddate,
-  .oc-table-data-cell-ddate,
-  .oc-table-header-cell-manager,
-  .oc-table-data-cell-manager,
-  .oc-table-header-cell-remainingQuota,
-  .oc-table-data-cell-remainingQuota {
+  .oc-table-data-cell-ddate {
     display: none;
 
     @media only screen and (min-width: 960px) {
@@ -1050,11 +1106,7 @@ export default defineComponent({
   .oc-table-header-cell-tags,
   .oc-table-data-cell-tags,
   .oc-table-header-cell-indicators,
-  .oc-table-data-cell-indicators,
-  .oc-table-header-cell-totalQuota,
-  .oc-table-data-cell-totalQuota,
-  .oc-table-header-cell-usedQuota,
-  .oc-table-data-cell-usedQuota {
+  .oc-table-data-cell-indicators {
     display: none;
 
     @media only screen and (min-width: 1200px) {
@@ -1075,13 +1127,7 @@ export default defineComponent({
     .oc-table-header-cell-owner,
     .oc-table-data-cell-owner,
     .oc-table-header-cell-status,
-    .oc-table-data-cell-status,
-    .oc-table-header-cell-manager,
-    .oc-table-data-cell-manager,
-    .oc-table-header-cell-totalQuota,
-    .oc-table-data-cell-totalQuota,
-    .oc-table-header-cell-usedQuota,
-    .oc-table-data-cell-usedQuota {
+    .oc-table-data-cell-status {
       display: none;
 
       @media only screen and (min-width: 1080px) {
@@ -1094,11 +1140,7 @@ export default defineComponent({
     .oc-table-header-cell-sdate,
     .oc-table-data-cell-sdate,
     .oc-table-header-cell-ddate,
-    .oc-table-data-cell-ddate,
-    .oc-table-header-cell-remainingQuota,
-    .oc-table-data-cell-remainingQuota,
-    .oc-table-header-cell-mdate,
-    .oc-table-data-cell-mdate {
+    .oc-table-data-cell-ddate {
       display: none;
 
       @media only screen and (min-width: 1400px) {

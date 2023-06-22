@@ -29,11 +29,46 @@
           </template>
         </no-content-message>
         <div v-else class="spaces-list oc-mt-l">
+          <resource-tiles
+            v-if="viewMode === ViewModeConstants.tilesView.name"
+            v-model:selectedIds="selectedResourcesIds"
+            class="oc-px-m"
+            :data="spaces"
+            :resizable="true"
+            :sort-fields="sortFields"
+            :sort-by="sortBy"
+            :sort-dir="sortDir"
+            @sort="handleSort"
+          >
+            <template #image="{ resource }">
+              <img
+                v-if="imageContentObject[resource.id]"
+                class="tile-preview"
+                :src="imageContentObject[resource.id]['data']"
+                alt=""
+              />
+            </template>
+            <template #actions="{ resource }">
+              <oc-button
+                v-oc-tooltip="showSpaceMemberLabel"
+                :aria-label="showSpaceMemberLabel"
+                appearance="raw"
+                @click="openSidebarSharePanel(resource as SpaceResource)"
+              >
+                <oc-icon name="group" fill-type="line" />
+              </oc-button>
+            </template>
+            <template #contextMenuActions="{ resource }">
+              <space-context-actions
+                :action-options="{ resources: [resource] as SpaceResource[] }"
+              />
+            </template>
+          </resource-tiles>
           <resource-table
-            v-if="viewMode === ViewModeConstants.default.name"
+            v-else
             v-model:selectedIds="selectedResourcesIds"
             :resources="spaces"
-            class="files-table"
+            class="spaces-table"
             :sticky="false"
             :fields-displayed="tableDisplayFields"
             :are-thumbnails-displayed="true"
@@ -82,41 +117,6 @@
               <oc-resource-icon v-else class="oc-mr-s" :resource="resource" />
             </template>
           </resource-table>
-          <resource-tiles
-            v-else
-            v-model:selectedIds="selectedResourcesIds"
-            class="oc-px-m"
-            :data="spaces"
-            :resizable="true"
-            :sort-fields="sortFields"
-            :sort-by="sortBy"
-            :sort-dir="sortDir"
-            @sort="handleSort"
-          >
-            <template #image="{ resource }">
-              <img
-                v-if="imageContentObject[resource.id]"
-                class="tile-preview"
-                :src="imageContentObject[resource.id]['data']"
-                alt=""
-              />
-            </template>
-            <template #actions="{ resource }">
-              <oc-button
-                v-oc-tooltip="showSpaceMemberLabel"
-                :aria-label="showSpaceMemberLabel"
-                appearance="raw"
-                @click="openSidebarSharePanel(resource as SpaceResource)"
-              >
-                <oc-icon name="group" fill-type="line" />
-              </oc-button>
-            </template>
-            <template #contextMenuActions="{ resource }">
-              <space-context-actions
-                :action-options="{ resources: [resource] as SpaceResource[] }"
-              />
-            </template>
-          </resource-tiles>
         </div>
       </template>
     </files-view-wrapper>
@@ -220,7 +220,7 @@ export default defineComponent({
     })
 
     const hasCreatePermission = computed(() => can('create-all', 'Drive'))
-    const viewModes = computed(() => [ViewModeConstants.tilesView, ViewModeConstants.default])
+    const viewModes = computed(() => [ViewModeConstants.default, ViewModeConstants.tilesView])
 
     const viewMode = useRouteQueryPersisted({
       name: ViewModeConstants.queryName,
