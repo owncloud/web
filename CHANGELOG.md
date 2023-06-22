@@ -34,6 +34,7 @@ Summary
 * Enhancement - Add batch actions to search result list: [#9200](https://github.com/owncloud/web/pull/9200)
 * Enhancement - Restyle possible sharees: [#9216](https://github.com/owncloud/web/issues/9216)
 * Enhancement - Streamline URL query names: [#9226](https://github.com/owncloud/web/pull/9226)
+* Enhancement - Hover tooltips in topbar: [#9280](https://github.com/owncloud/web/issues/9280)
 
 Details
 -------
@@ -244,6 +245,13 @@ Details
    different apps.
 
    https://github.com/owncloud/web/pull/9226
+
+* Enhancement - Hover tooltips in topbar: [#9280](https://github.com/owncloud/web/issues/9280)
+
+   We have added more hoverable tooltips in the topbar to align the behavior.
+
+   https://github.com/owncloud/web/issues/9280
+   https://github.com/owncloud/web/pull/9283
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
