@@ -2,8 +2,7 @@
   "common": {
     "name": "ownCloud",
     "slogan": "ownCloud – A safe home for all your data",
-    "logo": "themes/owncloud/assets/logo.svg",
-    "loggedOutHelpUrl": "https://www.github.com"
+    "logo": "themes/owncloud/assets/logo.svg"
   },
   "ios": {},
   "web": {
