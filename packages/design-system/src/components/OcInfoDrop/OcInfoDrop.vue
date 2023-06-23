@@ -9,7 +9,7 @@
   >
     <div class="info-drop-content">
       <div v-if="title" class="oc-flex oc-flex-between info-header oc-border-b oc-pb-s">
-        <span class="oc-m-rm info-title" v-text="$gettext(title)" />
+        <h4 class="oc-m-rm info-title" v-text="$gettext(title)" />
         <oc-button appearance="raw">
           <oc-icon name="close" fill-type="line" size="medium" variation="inherit" />
         </oc-button>
