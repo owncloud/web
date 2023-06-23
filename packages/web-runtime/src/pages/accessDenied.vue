@@ -11,7 +11,7 @@
           appearance="raw"
           :href="accessDeniedHelpUrl"
           target="_blank"
-          ><span v-text="$gettext('More')"
+          ><span v-text="$gettext('Read more')"
         /></oc-button>
       </div>
       <div class="oc-login-card-footer oc-pt-rm">
