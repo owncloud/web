@@ -205,6 +205,7 @@ export class UppyService {
     })
     this.uppy.on('cancel-all', () => {
       this.publish('uploadCancelled')
+      this.clearInputs()
     })
     this.uppy.on('complete', (result) => {
       this.publish('uploadCompleted', result)
