@@ -100,15 +100,12 @@ export class HandleUpload extends BasePlugin {
   /**
    * Sets the endpoint url for a given file.
    */
-  setEndpointUrl(file: UppyFile | UppyResource, endpoint: string) {
+  setEndpointUrl(fileId: string, endpoint: string) {
     if (this._uppy.getPlugin('Tus')) {
-      this._uppy.setFileState(file.id, { tus: { endpoint } })
+      this._uppy.setFileState(fileId, { tus: { endpoint } })
       return
     }
-    const escapedName = encodeURIComponent(file.name)
-    this._uppy.setFileState(file.id, {
-      xhrUpload: { endpoint: urlJoin(endpoint, escapedName) }
-    })
+    this._uppy.setFileState(fileId, { xhrUpload: { endpoint } })
   }
 
   /**
@@ -118,9 +115,12 @@ export class HandleUpload extends BasePlugin {
     if (!this.currentFolder && unref(this.route)?.params?.token) {
       // public file drop
       const publicLinkToken = unref(this.route).params.token
-      const endpoint = this.clientService.owncloudSdk.publicFiles.getFileUrl(publicLinkToken) + '/'
+      let endpoint = this.clientService.owncloudSdk.publicFiles.getFileUrl(publicLinkToken) + '/'
       for (const file of files) {
-        this.setEndpointUrl(file, endpoint)
+        if (!this._uppy.getPlugin('Tus')) {
+          endpoint = urlJoin(endpoint, encodeURIComponent(file.name))
+        }
+        this.setEndpointUrl(file.id, endpoint)
         this._uppy.setFileMeta(file.id, {
           tusEndpoint: endpoint,
           uploadId: uuid.v4()
@@ -131,9 +131,6 @@ export class HandleUpload extends BasePlugin {
     const { id: currentFolderId, path: currentFolderPath } = this.currentFolder
 
     const { name, params, query } = unref(this.route)
-    const trimmedUploadPath = this.space.getWebDavUrl({
-      path: currentFolderPath
-    })
     const topLevelFolderIds = {}
 
     for (const file of files) {
@@ -141,8 +138,6 @@ export class HandleUpload extends BasePlugin {
       // Directory without filename
       const directory =
         !relativeFilePath || dirname(relativeFilePath) === '.' ? '' : dirname(relativeFilePath)
-
-      const tusEndpoint = encodeURI(urlJoin(trimmedUploadPath, directory))
 
       let topLevelFolderId
       if (relativeFilePath) {
@@ -153,7 +148,16 @@ export class HandleUpload extends BasePlugin {
         topLevelFolderId = topLevelFolderIds[topLevelDirectory]
       }
 
-      this.setEndpointUrl(file, tusEndpoint)
+      const webDavUrl = this.space.getWebDavUrl({
+        path: currentFolderPath.split('/').map(encodeURIComponent).join('/')
+      })
+
+      let endpoint = urlJoin(webDavUrl, directory.split('/').map(encodeURIComponent).join('/'))
+      if (!this._uppy.getPlugin('Tus')) {
+        endpoint = urlJoin(endpoint, encodeURIComponent(file.name))
+      }
+
+      this.setEndpointUrl(file.id, endpoint)
       this._uppy.setFileMeta(file.id, {
         // file data
         name: file.name,
@@ -168,7 +172,7 @@ export class HandleUpload extends BasePlugin {
         // upload data
         uppyId: this.uppyService.generateUploadId(file as any),
         relativeFolder: directory,
-        tusEndpoint,
+        tusEndpoint: endpoint,
         uploadId: uuid.v4(),
         topLevelFolderId,
         // route data
@@ -380,10 +384,13 @@ export class HandleUpload extends BasePlugin {
             continue
           }
           this._uppy.setFileMeta(file.id, conflictResult.meta)
-          this._uppy.setFileState(file.id, {
-            name: conflictResult.name,
-            tus: { endpoint: conflictResult.meta.tusEndpoint }
-          })
+          this._uppy.setFileState(file.id, { name: conflictResult.name })
+          this.setEndpointUrl(
+            file.id,
+            !!this._uppy.getPlugin('Tus')
+              ? conflictResult.meta.tusEndpoint
+              : conflictResult.xhrUpload.endpoint
+          )
         }
       }
     }

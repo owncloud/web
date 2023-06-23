@@ -140,6 +140,12 @@ export class ResourceConflict extends ConflictDialog {
       const extension = extractExtensionFromFile({ name: fileName } as Resource)
       file.name = resolveFileNameDuplicate(fileName, extension, this.files)
       file.meta.name = file.name
+      if (file.xhrUpload?.endpoint) {
+        file.xhrUpload.endpoint = file.xhrUpload.endpoint.replace(
+          new RegExp(`/${encodeURIComponent(fileName)}`),
+          `/${encodeURIComponent(file.name)}`
+        )
+      }
     }
     for (const folder of foldersToKeepBoth) {
       const filesInFolder = files.filter((e) => e.meta.relativeFolder.split('/')[1] === folder)
@@ -153,9 +159,16 @@ export class ResourceConflict extends ConflictDialog {
           new RegExp(`/${folder}/`),
           `/${newFolderName}/`
         )
-        file.meta.tusEndpoint = encodeURI(
-          file.meta.tusEndpoint.replace(new RegExp(`/${folder}`), `/${newFolderName}`)
+        file.meta.tusEndpoint = file.meta.tusEndpoint.replace(
+          new RegExp(`/${encodeURIComponent(folder)}`),
+          `/${encodeURIComponent(newFolderName)}`
         )
+        if (file.xhrUpload?.endpoint) {
+          file.xhrUpload.endpoint = file.xhrUpload.endpoint.replace(
+            new RegExp(`/${encodeURIComponent(folder)}`),
+            `/${encodeURIComponent(newFolderName)}`
+          )
+        }
       }
     }
     return files

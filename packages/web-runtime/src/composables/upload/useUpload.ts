@@ -44,6 +44,9 @@ export interface UppyResource {
     routeDriveAliasAndItem?: string
     routeShareId?: string
   }
+  xhrUpload?: {
+    endpoint: string
+  }
 }
 
 interface UploadOptions {
