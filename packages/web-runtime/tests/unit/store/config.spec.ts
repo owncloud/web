@@ -9,20 +9,20 @@ import { cloneDeep } from 'lodash-es'
 describe('config theme bootstrap', () => {
   it('should be able to loadTheme', async () => {
     const store = getStoreInstance(cloneDeep(Store))
-    const { theme } = await loadTheme()
-    const defaultTheme = theme.default
+    const { web } = await loadTheme()
+    const defaultTheme = web.default
 
     await store.dispatch('loadTheme', { defaultTheme })
     objectKeys(defaultTheme).forEach((k) => {
-      expect(get(store.getters.configuration.theme, k)).toBe(get(theme, k))
+      expect(get(store.getters.configuration.theme, k)).toBe(get(web, k))
     })
   })
 
   it('should not overwrite keys that are not part of theme', async () => {
     const store = getStoreInstance(cloneDeep(Store))
     const initialStoreTheme = { ...store.getters.configuration.theme }
-    const { theme } = await loadTheme()
-    const defaultTheme = theme.default
+    const { web } = await loadTheme()
+    const defaultTheme = web.default
 
     const storeThemeKeys = objectKeys(store.getters.configuration.currentTheme)
     const loadedThemeKeys = objectKeys(defaultTheme)

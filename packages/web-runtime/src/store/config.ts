@@ -15,6 +15,12 @@ const state = {
     authority: ''
   },
   themes: [],
+  commonTheme: {
+    name: '',
+    solgan: '',
+    logo: '',
+    accessDeniedHelpUrl: ''
+  },
   currentTheme: {
     general: {
       name: '',
@@ -58,7 +64,8 @@ const state = {
     runningOnEos: false,
     cernFeatures: false,
     sharingRecipientsPerPage: 200,
-    contextHelpersReadMore: true
+    contextHelpersReadMore: true,
+    accessDeniedHelpUrl: ''
   }
 }
 
@@ -81,8 +88,9 @@ const actions = {
   loadTheme(context, { theme }) {
     context.commit('LOAD_THEME', theme)
   },
-  loadThemes(context, { theme }) {
+  loadThemes(context, { theme, common }) {
     context.commit('LOAD_THEMES', theme)
+    context.commit('LOAD_COMMON', common)
   }
 }
 
@@ -106,6 +114,9 @@ const mutations = {
   },
   LOAD_THEMES(state, theme) {
     state.themes = theme
+  },
+  LOAD_COMMON(state, common) {
+    state.commonTheme = common
   }
 }
 

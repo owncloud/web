@@ -1,0 +1,6 @@
+Enhancement: Access denied page update message
+
+We've updated the access denied page message to be more specific and give the user a link to a help page.
+
+https://github.com/owncloud/web/pull/9263
+https://github.com/owncloud/web/issues/9051

@@ -217,13 +217,13 @@ export const announceTheme = async ({
   designSystem: any
   runtimeConfiguration?: RuntimeConfiguration
 }): Promise<void> => {
-  const { theme } = await loadTheme(runtimeConfiguration?.theme)
-  await store.dispatch('loadThemes', { theme })
+  const { web, common } = await loadTheme(runtimeConfiguration?.theme)
+  await store.dispatch('loadThemes', { theme: web, common })
   const currentThemeName = useLocalStorage('oc_currentThemeName', null) // note: use null as default so that we can fall back to system preferences
   if (unref(currentThemeName) === null) {
     currentThemeName.value = useDefaultThemeName()
   }
-  await store.dispatch('loadTheme', { theme: theme[unref(currentThemeName)] || theme.default })
+  await store.dispatch('loadTheme', { theme: web[unref(currentThemeName)] || web.default })
 
   app.use(designSystem, {
     tokens: store.getters.theme.designTokens

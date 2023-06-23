@@ -1,8 +1,8 @@
 {
   "common": {
-      "name": "ownCloud",
-      "slogan": "ownCloud – A safe home for all your data",
-      "logo": "themes/owncloud/assets/logo.svg"
+    "name": "ownCloud",
+    "slogan": "ownCloud – A safe home for all your data",
+    "logo": "themes/owncloud/assets/logo.svg"
   },
   "ios": {},
   "web": {

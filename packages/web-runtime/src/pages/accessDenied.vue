@@ -5,6 +5,14 @@
       <div class="oc-login-card-body oc-width-medium">
         <h2 class="oc-login-card-title" v-text="cardTitle" />
         <p v-text="cardHint" />
+        <oc-button
+          v-if="accessDeniedHelpUrl"
+          type="a"
+          appearance="raw"
+          :href="accessDeniedHelpUrl"
+          target="_blank"
+          ><span v-text="$gettext('Read more')"
+        /></oc-button>
       </div>
       <div class="oc-login-card-footer oc-pt-rm">
         <p>
@@ -39,11 +47,20 @@ export default defineComponent({
     const logoImg = computed(() => {
       return store.getters.configuration.currentTheme.logo.login
     })
+
+    const accessDeniedHelpUrl = computed(() => {
+      return (
+        store.getters.configuration.commonTheme.accessDeniedHelpUrl ||
+        store.getters.configuration.options.accessDeniedHelpUrl
+      )
+    })
     const cardTitle = computed(() => {
-      return $gettext('Logged out')
+      return $gettext('Not logged in')
     })
     const cardHint = computed(() => {
-      return $gettext('You were automatically logged out for security reasons.')
+      return $gettext(
+        'This could be because of a routine safety log out, or because your account is either inactive or not yet authorized for use. Please try logging in after a while or seek help from your Administrator.'
+      )
     })
     const footerSlogan = computed(() => {
       return store.getters.configuration.currentTheme.general.slogan
@@ -57,7 +74,8 @@ export default defineComponent({
       cardTitle,
       cardHint,
       footerSlogan,
-      navigateToLoginText
+      navigateToLoginText,
+      accessDeniedHelpUrl
     }
   }
 })

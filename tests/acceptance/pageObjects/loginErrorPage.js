@@ -8,7 +8,7 @@ module.exports = {
     body: 'body',
     loginErrorMessage: {
       locateStrategy: 'xpath',
-      selector: '//h2[text()="Logged out"]'
+      selector: '//h2[text()="Not logged in"]'
     },
     exitButton: {
       selector: '#exitAnchor'
