@@ -2,7 +2,7 @@
   <div class="files-search-result oc-flex">
     <files-view-wrapper>
       <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" :side-bar-open="sideBarOpen" />
-      <div class="files-search-result-filter oc-flex oc-mx-m oc-mb-m oc-mt-xs">
+      <div v-if="displayFilter" class="files-search-result-filter oc-flex oc-mx-m oc-mb-m oc-mt-xs">
         <div class="oc-mr-m oc-flex oc-flex-middle">
           <oc-icon name="filter-2" class="oc-mr-xs" />
           <span v-text="$gettext('Filter:')" />
@@ -191,6 +191,10 @@ export default defineComponent({
     const tagParam = useRouteQuery('q_tags')
     const fullTextParam = useRouteQuery('q_fullText')
 
+    const displayFilter = computed(() => {
+      return unref(fullTextSearchEnabled) || unref(availableTags).length
+    })
+
     const loadAvailableTagsTask = useTask(function* () {
       const {
         data: { value: tags = [] }
@@ -284,7 +288,8 @@ export default defineComponent({
       getSpace,
       availableTags,
       tagFilter,
-      breadcrumbs
+      breadcrumbs,
+      displayFilter
     }
   },
   computed: {
@@ -368,5 +373,4 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
-</style>
+<style lang="scss"></style>
