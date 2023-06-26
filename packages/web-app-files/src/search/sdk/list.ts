@@ -1,12 +1,21 @@
 import { SearchList, SearchResult } from 'web-app-search/src/types'
 import ListComponent from '../../components/Search/List.vue'
 import { ClientService } from 'web-pkg/src/services'
-import { ProjectSpaceResource, buildResource, isProjectSpaceResource } from 'web-client/src/helpers'
+import {
+  ProjectSpaceResource,
+  buildResource,
+  isProjectSpaceResource,
+  Resource
+} from 'web-client/src/helpers'
 import { Component, computed, Ref, unref } from 'vue'
 import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
 import { Store } from 'vuex'
 
 export const searchLimit = 200
+
+export interface SearchResource extends Resource {
+  highlights: string[]
+}
 
 export default class List implements SearchList {
   public readonly component: Component
@@ -45,7 +54,11 @@ export default class List implements SearchList {
       totalResults: range ? parseInt(range?.split('/')[1]) : null,
       values: results.map((result) => {
         const matchingSpace = this.getMatchingSpace(result.fileInfo[DavProperty.FileParent])
-        const resource = matchingSpace ? matchingSpace : buildResource(result)
+        const resource = {
+          ...(matchingSpace ? matchingSpace : buildResource(result)),
+          highlights: result.fileInfo[DavProperty.Highlights] || ''
+        } as SearchResource
+
         // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
         if (!resource.storageId) {
           resource.storageId = this.store.getters.user.id
