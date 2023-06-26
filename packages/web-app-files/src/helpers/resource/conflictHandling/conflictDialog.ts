@@ -50,11 +50,13 @@ export class ConflictDialog {
 
       // Resolve next conflict
       const conflictsLeft = allConflicts.length - count
+      console.log((resourcesToMove as any).foo, 'resolveAllConflicts: 1')
       const result: ResolveConflict = await this.resolveFileExists(
         conflict.resource,
         conflictsLeft,
         conflictsLeft === 1
       )
+      console.log((resourcesToMove as any).foo, 'resolveAllConflicts: 2')
       conflict.strategy = result.strategy
       resolvedConflicts.push(conflict)
       count += 1

@@ -101,31 +101,39 @@ export class ResourceTransfer extends ConflictDialog {
       return []
     }
     if (this.sourceSpace.id !== this.targetSpace.id && transferType === TransferType.MOVE) {
+      console.log(
+        (this.resourcesToMove as any).foo,
+        'perform: 1: resolveDoCopyInsteadOfMoveForSpaces: 1'
+      )
       const doCopyInsteadOfMove = await this.resolveDoCopyInsteadOfMoveForSpaces()
+      console.log(
+        (this.resourcesToMove as any).foo,
+        'perform: 2: resolveDoCopyInsteadOfMoveForSpaces: 2'
+      )
       if (!doCopyInsteadOfMove) {
         return []
       }
       transferType = TransferType.COPY
     }
 
+    console.log((this.resourcesToMove as any).foo, 'perform: 3: listFiles: 1')
     const targetFolderResources = (
       await this.clientService.webdav.listFiles(this.targetSpace, this.targetFolder)
     ).children
+    console.log((this.resourcesToMove as any).foo, 'perform: 3: listFiles: 2')
 
+    console.log((this.resourcesToMove as any).foo, 'perform: 4: resolveAllConflicts: 1')
     const resolvedConflicts = await this.resolveAllConflicts(
       this.resourcesToMove,
       this.targetFolder,
       targetFolderResources
     )
-
-    return this.loadingService.addTask(
-      ({ setProgress }) => {
-        return this.moveResources(resolvedConflicts, targetFolderResources, transferType, {
-          setProgress
-        })
-      },
-      { indeterminate: transferType === TransferType.COPY }
-    )
+    console.log((this.resourcesToMove as any).foo, 'perform: 5: resolveAllConflicts: 2')
+    const foo = this.moveResources(resolvedConflicts, targetFolderResources, transferType, {
+      setProgress: null
+    })
+    console.log((this.resourcesToMove as any).foo, 'perform: 5: resolveAllConflicts: 3')
+    return foo
   }
 
   // This is for an edge case if a user moves a subfolder with the same name as the parent folder into the parent of the parent folder (which is not possible because of the backend)
@@ -215,7 +223,7 @@ export class ResourceTransfer extends ConflictDialog {
         error.resourceName = resource.name
         errors.push(error)
       } finally {
-        setProgress({ total: this.resourcesToMove.length, current: i + 1 })
+        // setProgress({ total: this.resourcesToMove.length, current: i + 1 })
       }
     }
     this.showResultMessage(errors, movedResources, transferType)

@@ -111,7 +111,7 @@ export class ClientService {
           'Accept-Language': this.currentLanguage,
           ...(!!authenticated && { Authorization: 'Bearer ' + this.token }),
           'X-Requested-With': 'XMLHttpRequest',
-          'X-Request-ID': uuidV4()
+          'X-Request-ID': uuidV4(),
         }
       })
     }

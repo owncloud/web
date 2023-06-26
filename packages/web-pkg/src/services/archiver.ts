@@ -96,6 +96,7 @@ export class ArchiverService {
       const blob = new Blob([response.data], { type: 'application/octet-stream' })
       const objectUrl = URL.createObjectURL(blob)
       const fileName = this.getFileNameFromResponseHeaders(response.headers)
+      console.log(fileName)
       triggerDownloadWithFilename(objectUrl, fileName)
       return url
     } catch (e) {
@@ -144,6 +145,8 @@ export class ArchiverService {
   }
 
   private getFileNameFromResponseHeaders(headers) {
+    console.log(headers)
+    console.log(headers['content-disposition'])
     const fileName = headers['content-disposition']?.split('"')[1]
     return decodeURI(fileName)
   }
