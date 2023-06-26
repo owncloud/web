@@ -231,6 +231,7 @@ Details
 
    https://github.com/owncloud/web/issues/9230
    https://github.com/owncloud/web/pull/9200
+   https://github.com/owncloud/web/pull/9279
 
 * Enhancement - Restyle possible sharees: [#9216](https://github.com/owncloud/web/issues/9216)
 
