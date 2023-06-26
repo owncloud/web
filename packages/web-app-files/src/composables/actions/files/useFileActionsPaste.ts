@@ -36,42 +36,80 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   })
 
   const handler = async ({ space: targetSpace }: FileActionOptions) => {
-    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
-      store.getters['Files/clipboardResources'].reduce((acc, resource) => {
-        if (resource.storageId in acc) {
-          acc[resource.storageId].resources.push(resource)
+    const paste = async (resources) => {
+      const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
+        resources.reduce((acc, resource) => {
+          if (resource.storageId in acc) {
+            acc[resource.storageId].resources.push(resource)
+            return acc
+          }
+
+          const matchingSpace = getMatchingSpace(resource)
+
+          if (!(matchingSpace.id in acc)) {
+            acc[matchingSpace.id] = { space: matchingSpace, resources: [] }
+          }
+
+          acc[matchingSpace.id].resources.push(resource)
           return acc
-        }
+        }, {})
+      let i = 0
+      const promises = Object.values(resourceSpaceMapping).map(
+        ({ space: sourceSpace, resources: resourcesToCopy }) => {
+          return loadingService.addTask(async () => {
+            ;(resourcesToCopy as any).foo = i++
 
-        const matchingSpace = getMatchingSpace(resource)
-
-        if (!(matchingSpace.id in acc)) {
-          acc[matchingSpace.id] = { space: matchingSpace, resources: [] }
-        }
-
-        acc[matchingSpace.id].resources.push(resource)
-        return acc
-      }, {})
-    const promises = Object.values(resourceSpaceMapping).map(
-      ({ space: sourceSpace, resources: resourcesToCopy }) => {
-        return loadingService.addTask(() => {
-          return store.dispatch('Files/pasteSelectedFiles', {
-            targetSpace,
-            sourceSpace: sourceSpace,
-            resources: resourcesToCopy,
-            clientService,
-            loadingService,
-            createModal: (...args) => store.dispatch('createModal', ...args),
-            hideModal: (...args) => store.dispatch('hideModal', ...args),
-            showMessage: (...args) => store.dispatch('showMessage', ...args),
-            $gettext,
-            $gettextInterpolate,
-            $ngettext
+            console.log('addTask 1', (resourcesToCopy as any).foo)
+            await store.dispatch('Files/pasteSelectedFiles', {
+              targetSpace,
+              sourceSpace: sourceSpace,
+              resources: resourcesToCopy,
+              clientService,
+              loadingService,
+              createModal: (...args) => store.dispatch('createModal', ...args),
+              hideModal: (...args) => store.dispatch('hideModal', ...args),
+              showMessage: (...args) => store.dispatch('showMessage', ...args),
+              $gettext,
+              $gettextInterpolate,
+              $ngettext
+            })
+            console.log('addTask 2', (resourcesToCopy as any).foo)
           })
-        })
+        }
+      )
+      await Promise.all(promises)
+    }
+
+    const resourcesRecords = []
+
+    for (const resource of store.getters['Files/clipboardResources']) {
+      if (!resourcesRecords.length) {
+        resourcesRecords.push([resource])
+        continue
       }
-    )
-    await Promise.all(promises)
+
+      const freeSlot = resourcesRecords.find((duplicateResourceRecord) =>
+        duplicateResourceRecord.every((r) => r.name !== resource.name)
+      )
+
+      if (freeSlot) {
+        freeSlot.push(resource)
+        continue
+      }
+
+      resourcesRecords.push([resource])
+    }
+
+    console.log(store.getters['Files/clipboardResources'])
+    console.log(resourcesRecords)
+
+    for (const duplicateResources of resourcesRecords) {
+      console.log('I AM RUNNUNG')
+      await paste(duplicateResources)
+    }
+
+    console.log('Done with running')
+
     store.commit('Files/CLEAR_CLIPBOARD')
   }
 
