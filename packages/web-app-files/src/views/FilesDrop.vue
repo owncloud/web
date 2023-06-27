@@ -38,10 +38,10 @@
 <script lang="ts">
 import { mapGetters } from 'vuex'
 import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
-import { createLocationPublic } from '../router'
+import { createLocationPublic, createLocationSpaces } from '../router'
 
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
-import { defineComponent, onMounted, onBeforeUnmount, ref, unref } from 'vue'
+import { computed, defineComponent, onMounted, onBeforeUnmount, ref, unref } from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useGettext } from 'vue3-gettext'
 import {
@@ -51,7 +51,11 @@ import {
   useStore,
   useRouter,
   useRoute,
-  useCapabilitySpacesEnabled
+  useCapabilitySpacesEnabled,
+  useGetMatchingSpace,
+  useUserContext,
+  useRouteQuery,
+  queryItemAsString
 } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
@@ -59,6 +63,7 @@ import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { useAuthService } from 'web-pkg/src/composables/authContext/useAuthService'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   components: {
@@ -75,7 +80,14 @@ export default defineComponent({
     const clientService = useClientService()
     const publicToken = usePublicLinkToken({ store })
     const publicLinkPassword = usePublicLinkPassword({ store })
+    const isUserContext = useUserContext({ store })
+    const { getInternalSpace } = useGetMatchingSpace()
     useUpload({ uppyService })
+
+    const fileIdQueryItem = useRouteQuery('fileId')
+    const fileId = computed(() => {
+      return queryItemAsString(unref(fileIdQueryItem))
+    })
 
     if (!uppyService.getPlugin('HandleUpload')) {
       uppyService.addPlugin(HandleUpload, {
@@ -106,8 +118,31 @@ export default defineComponent({
       dragareaEnabled.value = (event.dataTransfer.types || []).some((e) => e === 'Files')
     }
 
-    const resolvePublicLink = () => {
+    const resolveToInternalLocation = (path: string) => {
+      const internalSpace = getInternalSpace(unref(fileId).split('!')[0])
+      if (internalSpace) {
+        const routeOpts = createFileRouteOptions(internalSpace, { fileId: unref(fileId), path })
+        return router.push(createLocationSpaces('files-spaces-generic', routeOpts))
+      }
+
+      // no internal space found -> share -> resolve via private link as it holds all the necessary logic
+      return router.push({ name: 'resolvePrivateLink', params: { fileId: unref(fileId) } })
+    }
+
+    const resolvePublicLink = async () => {
       loading.value = true
+
+      if (unref(isUserContext) && unref(fileId)) {
+        try {
+          const path = await clientService.owncloudSdk.files.getPathForFileId(unref(fileId))
+          await resolveToInternalLocation(path)
+          loading.value = false
+          return
+        } catch (e) {
+          // getPathForFileId failed means the user doesn't have internal access to the resource
+        }
+      }
+
       clientService.owncloudSdk.publicFiles
         .list(unref(publicToken), unref(publicLinkPassword), DavProperties.PublicLink, '0')
         .then((files) => {

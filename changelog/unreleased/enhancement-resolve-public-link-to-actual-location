@@ -1,0 +1,6 @@
+Enhancement: Resolve pulic links to their actual location
+
+Public links are now being resolved to their actual location if the user has proper access to the resource (either via space or share).
+
+https://github.com/owncloud/web/pull/9299
+https://github.com/owncloud/web/issues/9296

@@ -19,7 +19,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
   const hasSpaces = useCapabilitySpacesEnabled(store)
 
-  const getInternalSpace = (storageId) => {
+  const getInternalSpace = (storageId: string): SpaceResource => {
     return (
       unref(options?.space) ||
       spaces.find((space) => space.id === storageId) ||
