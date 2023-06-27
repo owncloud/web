@@ -25,6 +25,7 @@ services:
       #FRONTEND
       FRONTEND_SEARCH_MIN_LENGTH: "2"
       FRONTEND_OCS_ENABLE_DENIALS: "true"
+      FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
 
       # IDM
       IDM_CREATE_DEMO_USERS: "${DEMO_USERS:-true}"
@@ -56,6 +57,10 @@ services:
 
       # CORS
       OCIS_CORS_ALLOW_ORIGINS: "https://host.docker.internal:9201"
+
+      # TIKA
+      SEARCH_EXTRACTOR_TYPE: "tika"
+      SEARCH_EXTRACTOR_TIKA_TIKA_URL: "http://host.docker.internal:9998"
     volumes:
       - ./dev/docker/ocis.entrypoint.sh:/usr/bin/entrypoint
       - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
@@ -73,6 +78,7 @@ services:
       traefik.http.routers.ocis.middlewares: cors
     depends_on:
       - traefik
+      - tika-service
 
   oc10:
     build:
@@ -230,6 +236,20 @@ services:
       - "./dev/docker/traefik/certificates:/certificates"
       - "./dev/docker/traefik/configs:/configs"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  tika-service:
+    image: dadarek/wait-for-dependencies
+    container_name: web_tika_service
+    depends_on:
+      - tika
+    command: tika:9998
+
+  tika:
+    image: apache/tika:2.8.0.0
+    container_name: web_tika
+    ports:
+      - 9998:9998
+    restart: always
 
 volumes:
   uploads:
