@@ -4,6 +4,7 @@ FEDERATED = 2
 NOTIFICATIONS = 3
 
 ALPINE_GIT = "alpine/git:latest"
+APACHE_TIKA = "apache/tika:2.8.0.0"
 DEEPDIVER_DOCKER_ORACLE_XE_11G = "deepdiver/docker-oracle-xe-11g:latest"
 DRONE_CLI_ALPINE = "drone/cli:alpine"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
@@ -1198,7 +1199,8 @@ def e2eTests(ctx):
             # oCIS specific steps
             steps += setupServerConfigureWeb(params["logLevel"]) + \
                      restoreOcisCache() + \
-                     ocisService() + \
+                     tikaService() + \
+                     ocisService("e2e-tests") + \
                      getSkeletonFiles()
 
         steps += [{
@@ -1336,7 +1338,7 @@ def acceptance(ctx):
 
                         if (params["runningOnOCIS"]):
                             # Services and steps required for running tests with oCIS
-                            steps += restoreOcisCache() + ocisService() + getSkeletonFiles()
+                            steps += restoreOcisCache() + ocisService("acceptance-tests") + getSkeletonFiles()
 
                         else:
                             # Services and steps required for running tests with oc10
@@ -2160,33 +2162,40 @@ def idpService():
         }],
     }]
 
-def ocisService():
+def ocisService(type):
+    environment = {
+        "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
+        "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["ocisIdentifierRegistrationConfig"],
+        "OCIS_INSECURE": "true",
+        "OCIS_LOG_LEVEL": "error",
+        "OCIS_URL": "https://ocis:9200",
+        "LDAP_GROUP_SUBSTRING_FILTER_TYPE": "any",
+        "LDAP_USER_SUBSTRING_FILTER_TYPE": "any",
+        "PROXY_ENABLE_BASIC_AUTH": True,
+        "STORAGE_HOME_DRIVER": "ocis",
+        "STORAGE_METADATA_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/metadata",
+        "STORAGE_SHARING_USER_JSON_FILE": "/srv/app/tmp/ocis/shares.json",
+        "STORAGE_USERS_DRIVER": "ocis",
+        "STORAGE_USERS_DRIVER_LOCAL_ROOT": "/srv/app/tmp/ocis/local/root",
+        "STORAGE_USERS_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/users",
+        "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "%s" % dir["ocisRevaDataRoot"],
+        "WEB_ASSET_PATH": "%s/dist" % dir["web"],
+        "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
+        "FRONTEND_SEARCH_MIN_LENGTH": "2",
+        "FRONTEND_OCS_ENABLE_DENIALS": True,
+    }
+
+    if type == "e2e-tests":
+        environment["FRONTEND_FULL_TEXT_SEARCH_ENABLED"] = True
+        environment["SEARCH_EXTRACTOR_TYPE"] = "tika"
+        environment["SEARCH_EXTRACTOR_TIKA_TIKA_URL"] = "http://tika:9998"
+
     return [
         {
             "name": "ocis",
             "image": OC_CI_GOLANG,
             "detach": True,
-            "environment": {
-                "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
-                "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["ocisIdentifierRegistrationConfig"],
-                "OCIS_INSECURE": "true",
-                "OCIS_LOG_LEVEL": "error",
-                "OCIS_URL": "https://ocis:9200",
-                "LDAP_GROUP_SUBSTRING_FILTER_TYPE": "any",
-                "LDAP_USER_SUBSTRING_FILTER_TYPE": "any",
-                "PROXY_ENABLE_BASIC_AUTH": True,
-                "STORAGE_HOME_DRIVER": "ocis",
-                "STORAGE_METADATA_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/metadata",
-                "STORAGE_SHARING_USER_JSON_FILE": "/srv/app/tmp/ocis/shares.json",
-                "STORAGE_USERS_DRIVER": "ocis",
-                "STORAGE_USERS_DRIVER_LOCAL_ROOT": "/srv/app/tmp/ocis/local/root",
-                "STORAGE_USERS_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/users",
-                "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "%s" % dir["ocisRevaDataRoot"],
-                "WEB_ASSET_PATH": "%s/dist" % dir["web"],
-                "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
-                "FRONTEND_SEARCH_MIN_LENGTH": "2",
-                "FRONTEND_OCS_ENABLE_DENIALS": True,
-            },
+            "environment": environment,
             "commands": [
                 "cd %s" % dir["ocis"],
                 "mkdir -p %s" % dir["ocisRevaDataRoot"],
@@ -3175,3 +3184,20 @@ def publishTracingResult(ctx, suite):
             ],
         },
     }]
+
+def tikaService():
+    return [
+        {
+            "name": "tika",
+            "type": "docker",
+            "image": APACHE_TIKA,
+            "detach": True,
+        },
+        {
+            "name": "wait-for-tika-service",
+            "image": OC_CI_WAIT_FOR,
+            "commands": [
+                "wait-for -it tika:9998 -t 300",
+            ],
+        },
+    ]
