@@ -38,6 +38,9 @@ export const clearTagFilter = async ({ page }): Promise<void> => {
 }
 
 export const toggleSearchInFileContent = async ({ enableOrDisable, page }): Promise<void> => {
-  const selector = enableOrDisable === 'enable' ? enableSearchInFileContentSelector : disableSearchInFileContentSelector
+  const selector =
+    enableOrDisable === 'enable'
+      ? enableSearchInFileContentSelector
+      : disableSearchInFileContentSelector
   await page.locator(selector).click()
 }
