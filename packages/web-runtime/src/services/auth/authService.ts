@@ -69,6 +69,8 @@ export class AuthService {
       if (publicLinkToken) {
         await this.publicLinkManager.updateContext(publicLinkToken)
       }
+    } else {
+      this.publicLinkManager.clearContext()
     }
 
     if (!this.userManager) {
