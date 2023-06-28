@@ -25,15 +25,19 @@
         @keydown.enter="onSearch"
         @keyup="$emit('keyup', $event)"
       />
-      <oc-button
-        v-if="query.length"
-        :aria-label="$gettext('Clear search query')"
-        class="oc-search-clear oc-position-small oc-position-center-right oc-mt-rm"
-        appearance="raw"
-        @click="onClear"
+      <div
+        style="width: 80px; font-size: 12px !important; z-index: 9999"
+        class="oc-position-small oc-position-center-right oc-mt-rm oc-mr-l"
       >
-        <oc-icon name="close" size="small" variation="passive" />
-      </oc-button>
+        <oc-filter-chip
+          :is-toggle="false"
+          :is-toggle-active="false"
+          :filter-label="'test43'"
+          :selected-item-names="[]"
+        >
+          <template #default> test </template></oc-filter-chip
+        >
+      </div>
       <oc-button
         v-oc-tooltip="$gettext('Open advanced search')"
         :aria-label="$gettext('Open advanced search')"
@@ -250,6 +254,9 @@ export default defineComponent({
     return { query }
   },
   computed: {
+    loginOptions() {
+      return ['test', 'test2']
+    },
     searchQuery() {
       // please don't treat empty string the same as null...
       return this.value === null ? this.query : this.value
@@ -294,19 +301,7 @@ export default defineComponent({
       this.$emit('input', query)
       if (this.typeAhead) this.onSearch(query)
     },
-    onClear() {
-      this.query = ''
-      this.onType('')
-      this.onSearch()
-      ;(this.$refs.searchInput as HTMLElement).focus()
 
-      /**
-       * Clear event triggered after the clear of the search query
-       * @event clear
-       * @type {event}
-       */
-      this.$emit('clear')
-    },
     onCancel() {
       this.query = ''
       this.onType('')
