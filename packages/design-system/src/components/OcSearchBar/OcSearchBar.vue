@@ -27,26 +27,10 @@
       />
       <div
         v-if="availableLocationOptions.length > 0"
-        style="
-          font-size: 12px !important;
-          z-index: 9999;
-          margin-right: 34px !important;
-          align: right;
-        "
-        class="oc-position-small oc-position-center-right oc-mt-rm"
+        class="oc-location-search oc-position-small oc-position-center-right oc-mt-rm"
         @click.stop
       >
-        <oc-filter-chip
-          :is-toggle="false"
-          :is-toggle-active="false"
-          :filter-label="availableLocationOptions[1]"
-          :selected-item-names="[]"
-          :raw="true"
-        >
-          <template #default>
-            <div v-for="(option, index) in availableLocationOptions" :key="index">{{ option }}</div>
-          </template></oc-filter-chip
-        >
+        <oc-search-bar-filter :options="availableLocationOptions" />
       </div>
       <oc-button
         v-oc-tooltip="$gettext('Open advanced search')"
@@ -89,6 +73,7 @@ import OcButton from '../OcButton/OcButton.vue'
 import OcGrid from '../OcGrid/OcGrid.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcSpinner from '../OcSpinner/OcSpinner.vue'
+import OcSearchBarFilter from '../OcSearchBarFilter/OcSearchBarFilter.vue'
 
 /**
  * The search bar is an input element used for searching server side resources or to filter local results.
@@ -112,7 +97,8 @@ export default defineComponent({
     OcButton,
     OcGrid,
     OcIcon,
-    OcSpinner
+    OcSpinner,
+    OcSearchBarFilter
   },
   props: {
     /**
@@ -326,6 +312,15 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.oc-location-search {
+  font-size: 12px !important;
+  z-index: 9999;
+  margin-right: 34px !important;
+  float: right;
+  .oc-drop {
+    width: 120px;
+  }
+}
 .oc-search {
   min-width: $form-width-medium;
 
