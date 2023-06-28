@@ -35,6 +35,7 @@ Summary
 * Enhancement - Restyle possible sharees: [#9216](https://github.com/owncloud/web/issues/9216)
 * Enhancement - Streamline URL query names: [#9226](https://github.com/owncloud/web/pull/9226)
 * Enhancement - Hover tooltips in topbar: [#9280](https://github.com/owncloud/web/issues/9280)
+* Enhancement - Search list add highlighted file content: [#9294](https://github.com/owncloud/web/pull/9294)
 
 Details
 -------
@@ -255,6 +256,14 @@ Details
 
    https://github.com/owncloud/web/issues/9280
    https://github.com/owncloud/web/pull/9283
+
+* Enhancement - Search list add highlighted file content: [#9294](https://github.com/owncloud/web/pull/9294)
+
+   We've introduced a feature that shows a highlighted result summary matching the search term in
+   the search list, if there are occurrences in the found files.
+
+   https://github.com/owncloud/web/issues/9295
+   https://github.com/owncloud/web/pull/9294
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
