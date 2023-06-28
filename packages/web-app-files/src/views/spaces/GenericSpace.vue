@@ -524,14 +524,24 @@ export default defineComponent({
         return false
       }
 
+      if (this.paginatedResources[0].isFolder) {
+        return false
+      }
+
       if (
-        this.isRunningOnEos &&
-        (!this.currentFolder.fileId || this.currentFolder.path === this.paginatedResources[0].path)
+        isPublicSpaceResource(this.space) &&
+        (!this.currentFolder?.path || this.currentFolder.path === '/')
       ) {
         return true
       }
-      if (isPublicSpaceResource(this.space) && !this.paginatedResources[0].isFolder) {
-        return true
+
+      if (this.isRunningOnEos) {
+        if (
+          !this.currentFolder.fileId ||
+          this.currentFolder.path === this.paginatedResources[0].path
+        ) {
+          return true
+        }
       }
 
       return false

@@ -89,7 +89,7 @@ Feature: move files
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user moves file "data.zip" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
-    And file "data.zip" should be listed on the webUI as single share
+    And file "data.zip" should be listed on the webUI
     And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist in the server
     But as "Alice" file "simple-folder/data.zip" should not exist in the server
 

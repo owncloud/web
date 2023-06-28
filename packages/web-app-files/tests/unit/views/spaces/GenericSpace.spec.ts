@@ -145,7 +145,7 @@ describe('GenericSpace view', () => {
       it('renders the ResourceDetails component if no currentFolder id is present', () => {
         const { wrapper } = getMountedWrapper({
           currentFolder: {},
-          files: [mock<Resource>()],
+          files: [mock<Resource>({ isFolder: false })],
           runningOnEos: true
         })
         expect(wrapper.find('resource-details-stub').exists()).toBeTruthy()
