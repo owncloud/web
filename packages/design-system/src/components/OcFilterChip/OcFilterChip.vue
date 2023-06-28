@@ -26,6 +26,7 @@
       padding-size="small"
       @hide-drop="$emit('hideDrop')"
       @show-drop="$emit('showDrop')"
+      :close-on-click="closeOnClick"
     >
       <slot />
     </oc-drop>
@@ -88,6 +89,13 @@ export default defineComponent({
      * Whether the filter chip should be displayed as a raw button.
      */
     raw: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * Whether the drop should be closed when clicking on an item.
+     */
+    closeOnClick: {
       type: Boolean,
       default: false
     }

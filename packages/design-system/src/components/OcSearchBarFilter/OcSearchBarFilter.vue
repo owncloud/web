@@ -5,7 +5,8 @@
       :is-toggle-active="false"
       :filter-label="currentSelection"
       :selected-item-names="[]"
-      :raw="true"
+      raw
+      close-on-click
     >
       <template #default>
         <div class="oc-p-xs">
