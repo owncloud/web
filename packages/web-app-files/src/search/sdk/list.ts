@@ -14,7 +14,7 @@ import { Store } from 'vuex'
 export const searchLimit = 200
 
 export interface SearchResource extends Resource {
-  highlights: string[]
+  highlights: string
 }
 
 export default class List implements SearchList {
