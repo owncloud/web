@@ -70,9 +70,11 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     labels:
       traefik.enable: true
+      traefik.http.routers.ocis.tls: true
       traefik.http.routers.ocis.rule: PathPrefix(`/`)
-      traefik.http.routers.ocis.entrypoints: websecure
+      traefik.http.routers.ocis.entrypoints: ocis
       # workaround: https://github.com/owncloud/ocis/issues/5108
+      traefik.http.services.ocis.loadbalancer.server.port: 9200
       traefik.http.routers.ocis.middlewares: cors
     restart: unless-stopped
     depends_on:
@@ -175,6 +177,38 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     restart: always
 
+  ocis-appprovider-onlyoffice:
+    image: ${OCIS_IMAGE:-owncloud/ocis:latest}
+    user: '0' # needed for apk add in entrypoint script
+    entrypoint:
+      - /bin/sh
+      - /entrypoint-override.sh
+    #command: app-provider server
+    environment:
+      APP_PROVIDER_LOG_LEVEL: error
+      # use the internal service name of the gateway
+      REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
+      APP_PROVIDER_GRPC_ADDR: 0.0.0.0:9164
+      # configure the service name to avoid collision with collabora
+      APP_PROVIDER_SERVICE_NAME: app-provider-onlyoffice
+      # use the internal service name
+      APP_PROVIDER_EXTERNAL_ADDR: com.owncloud.api.app-provider-onlyoffice
+      APP_PROVIDER_DRIVER: wopi
+      APP_PROVIDER_WOPI_APP_NAME: OnlyOffice
+      APP_PROVIDER_WOPI_APP_ICON_URI: https://${ONLYOFFICE_DOMAIN:-host.docker.internal:9981}/web-apps/apps/documenteditor/main/resources/img/favicon.ico
+      APP_PROVIDER_WOPI_APP_URL: https://${ONLYOFFICE_DOMAIN:-host.docker.internal:9981}
+      APP_PROVIDER_WOPI_INSECURE: true
+      APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-host.docker.internal:8880}
+      APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-host.docker.internal:9200}
+      # share the registry with the ocis container
+      MICRO_REGISTRY: 'mdns'
+    volumes:
+      - ./dev/docker/ocis-appprovider-onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
+      - ocis-config:/etc/ocis
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    restart: always
+
   collabora:
     image: collabora/code:22.05.10.1.1
     environment:
@@ -190,6 +224,26 @@ services:
       traefik.http.routers.collabora.rule: PathPrefix(`/`)
       traefik.http.routers.collabora.entrypoints: collabora
       traefik.http.services.collabora.loadbalancer.server.port: 9980
+    restart: always
+
+  onlyoffice:
+    image: onlyoffice/documentserver:7.3.0
+    entrypoint:
+      - /bin/sh
+      - /entrypoint-override.sh
+    environment:
+      WOPI_ENABLED: true
+      USE_UNAUTHORIZED_STORAGE: true # self signed certificates
+    volumes:
+      - ./dev/docker/onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
+      - ./dev/docker/onlyoffice/local.json:/etc/onlyoffice/documentserver/local.dist.json
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    labels:
+      traefik.enable: true
+      traefik.http.routers.onlyoffice.tls: true
+      traefik.http.routers.onlyoffice.rule: PathPrefix(`/`)
+      traefik.http.routers.onlyoffice.entrypoints: websecure
     restart: always
 
   wopiserver:
@@ -220,16 +274,17 @@ services:
     entrypoint: ["/bin/sh", "-c", "[ -f /certificates/server.key ] && ./entrypoint.sh $$@ || (apk add openssl && openssl req -subj '/CN=ocis.test' -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout /certificates/server.key -out /certificates/server.crt && chmod -R 777 /certificates && ./entrypoint.sh $$@)"]
     command:
       - "--pilot.dashboard=false"
-      - "--log.level=DEBUG"
+      - "--log.level=ERROR"
       - "--api.dashboard=true"
       - "--api.insecure=true"
       - "--providers.file.directory=/configs"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.ocis.address=:9200"
       - "--entrypoints.collabora.address=:9980"
       - "--entrypoints.wopi.address=:8880"
+      - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.middlewares=https_config@docker"
       - "--entrypoints.websecure.http.tls.options=default"
     labels:
@@ -249,9 +304,10 @@ services:
     ports:
       - "80:80"
       - "8090:8080"
-      - "9200:443"
+      - "9200:9200"
       - "9980:9980"
       - "8880:8880"
+      - "9981:443"
     volumes:
       - "./dev/docker/traefik/certificates:/certificates"
       - "./dev/docker/traefik/configs:/configs"
