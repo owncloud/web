@@ -79,6 +79,7 @@
           <oc-icon name="edit-2" fill-type="line" size="small" />
         </oc-button>
       </div>
+      <slot name="additionalResourceContent" :resource="item" />
     </template>
     <template #status="{ item }">
       <!-- @slot Status column -->

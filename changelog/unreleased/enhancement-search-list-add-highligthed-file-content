@@ -1,0 +1,7 @@
+Enhancement: Search list add highlighted file content
+
+We've introduced a feature that shows a highlighted result summary matching the search term in the search list,
+if there are occurrences in the found files.
+
+https://github.com/owncloud/web/pull/9294
+https://github.com/owncloud/web/issues/9295

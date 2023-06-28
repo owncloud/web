@@ -28,6 +28,7 @@ export abstract class DavProperty {
   static readonly MimeType: string = '{DAV:}getcontenttype'
   static readonly ResourceType: string = '{DAV:}resourcetype'
   static readonly DownloadURL: string = '{http://owncloud.org/ns}downloadURL'
+  static readonly Highlights: string = '{http://owncloud.org/ns}highlights'
 
   static readonly ShareId: string = '{http://owncloud.org/ns}shareid'
   static readonly ShareRoot: string = '{http://owncloud.org/ns}shareroot'

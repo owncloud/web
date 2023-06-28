@@ -28,7 +28,7 @@
         </item-filter>
         <item-filter-toggle
           v-if="fullTextSearchEnabled"
-          :filter-label="$gettext('Search in file content')"
+          :filter-label="$gettext('Search only in content')"
           filter-name="fullText"
           class="files-search-filter-full-text oc-mr-s"
         />
@@ -61,10 +61,18 @@
           :is-selectable="true"
           :sort-by="sortBy"
           :sort-dir="sortDir"
+          :fields-displayed="['name', 'size', 'tags', 'mdate']"
           @file-click="triggerDefaultAction"
           @row-mounted="rowMounted"
           @sort="handleSort"
         >
+          <template #additionalResourceContent="{ resource }">
+            <span
+              v-if="resource.highlights"
+              class="files-search-resource-highlights oc-text-truncate"
+              v-html="resource.highlights"
+            />
+          </template>
           <template #contextMenu="{ resource }">
             <context-actions
               v-if="isResourceInSelection(resource)"
@@ -373,4 +381,15 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.files-search-resource-highlights {
+  font-size: 0.8125rem;
+  color: var(--oc-color-text-muted);
+
+  mark {
+    background: #fff74c;
+    font-style: normal;
+    font-weight: var(--oc-font-weight-semibold);
+  }
+}
+</style>
