@@ -1,5 +1,8 @@
 <template>
-  <div class="oc-filter-chip oc-flex" :class="{ 'oc-filter-chip-toggle': isToggle }">
+  <div
+    class="oc-filter-chip oc-flex"
+    :class="{ 'oc-filter-chip-toggle': isToggle, 'oc-filter-chip-raw': raw }"
+  >
     <oc-button
       :id="id"
       class="oc-filter-chip-button oc-pill"
@@ -80,6 +83,13 @@ export default defineComponent({
     isToggleActive: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Whether the filter chip should be displayed as a raw button.
+     */
+    raw: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['clearFilter', 'hideDrop', 'showDrop', 'toggleFilter'],
@@ -135,6 +145,12 @@ export default defineComponent({
   &-clear:not(.oc-filter-chip-toggle .oc-filter-chip-clear),
   &-clear:hover:not(.oc-filter-chip-toggle .oc-filter-chip-clear) {
     margin-left: 1px;
+  }
+}
+.oc-filter-chip-raw {
+  .oc-filter-chip-button {
+    background-color: transparent !important;
+    border: none !important;
   }
 }
 </style>

@@ -26,16 +26,26 @@
         @keyup="$emit('keyup', $event)"
       />
       <div
-        style="width: 80px; font-size: 12px !important; z-index: 9999"
-        class="oc-position-small oc-position-center-right oc-mt-rm oc-mr-l"
+        v-if="availableLocationOptions.length > 0"
+        style="
+          font-size: 12px !important;
+          z-index: 9999;
+          margin-right: 34px !important;
+          align: right;
+        "
+        class="oc-position-small oc-position-center-right oc-mt-rm"
+        @click.stop
       >
         <oc-filter-chip
           :is-toggle="false"
           :is-toggle-active="false"
-          :filter-label="'test43'"
+          :filter-label="availableLocationOptions[1]"
           :selected-item-names="[]"
+          :raw="true"
         >
-          <template #default> test </template></oc-filter-chip
+          <template #default>
+            <div v-for="(option, index) in availableLocationOptions" :key="index">{{ option }}</div>
+          </template></oc-filter-chip
         >
       </div>
       <oc-button
@@ -237,6 +247,12 @@ export default defineComponent({
       type: Function,
       required: false,
       default: () => {}
+    },
+
+    availableLocationOptions: {
+      type: Array<String>,
+      required: false,
+      default: ['All Files', 'Current Folder']
     }
   },
   emits: ['advancedSearch', 'clear', 'input', 'keyup', 'search'],
@@ -254,9 +270,6 @@ export default defineComponent({
     return { query }
   },
   computed: {
-    loginOptions() {
-      return ['test', 'test2']
-    },
     searchQuery() {
       // please don't treat empty string the same as null...
       return this.value === null ? this.query : this.value
