@@ -28,7 +28,7 @@
         </item-filter>
         <item-filter-toggle
           v-if="fullTextSearchEnabled"
-          :filter-label="$gettext('Search in file content')"
+          :filter-label="$gettext('Search only in content')"
           filter-name="fullText"
           class="files-search-filter-full-text oc-mr-s"
         />
@@ -387,7 +387,7 @@ export default defineComponent({
   color: var(--oc-color-text-muted);
 
   mark {
-    background: var(--oc-color-background-highlight);
+    background: #fff74c;
     font-style: normal;
     font-weight: var(--oc-font-weight-semibold);
   }
