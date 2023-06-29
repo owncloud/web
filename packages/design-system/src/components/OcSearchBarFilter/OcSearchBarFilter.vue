@@ -18,9 +18,9 @@
           :class="{ 'oc-mt-s': index > 0 }"
           :key="index"
           @click="onOptionSelected(option)"
+          :disabled="!option.enabled"
         >
-          <span v-if="option.enabled">{{ option.title }}</span
-          ><span v-else>D: {{ option.title }}</span>
+          <span>{{ option.title }}</span>
           <div class="oc-flex" v-if="option.id === currentSelection.id">
             <oc-icon name="check" />
           </div>
