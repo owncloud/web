@@ -239,7 +239,7 @@ export default defineComponent({
     },
 
     availableLocationOptions: {
-      type: Array<String>,
+      type: Object,
       required: false,
       default: []
     }

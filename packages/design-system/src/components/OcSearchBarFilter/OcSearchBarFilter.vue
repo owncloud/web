@@ -15,7 +15,7 @@
           v-for="(option, index) in options"
           justify-content="space-between"
           class="search-bar-filter-item oc-flex oc-flex-middle oc-width-1-1 oc-py-xs oc-px-s"
-          :class="{ 'oc-mt-s': index > 0 }"
+          :class="{ 'oc-mt-s': parseInt(index) > 0 }"
           :key="index"
           @click="onOptionSelected(option)"
           :disabled="!option.enabled"
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, unref, watch } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import 'vue-select/dist/vue-select.css'
 
 export default defineComponent({
