@@ -106,6 +106,7 @@ import { debounce } from 'lodash-es'
 import { useRouteQueryPersisted, useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
+import { SearchLocationFilterConstants } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'SearchBar',
@@ -115,25 +116,25 @@ export default defineComponent({
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const { $gettext } = useGettext()
     const locationFilter = useRouteQueryPersisted({
-      name: 'location-filter',
+      name: SearchLocationFilterConstants.queryName,
       defaultValue: ''
     })
     const currentFolderAvailable = computed(() => {
       return store.getters['Files/currentFolder'] !== null
     })
     const isLocationFilterAllFiles = computed(() => {
-      return locationFilter.value === 'all-files'
+      return locationFilter.value === SearchLocationFilterConstants.allFiles
     })
     const availableLocationOptions = ref([
       {
         title: $gettext('All Files'),
-        id: 'all-files',
+        id: SearchLocationFilterConstants.allFiles,
         enabled: true,
         default: unref(isLocationFilterAllFiles)
       },
       {
         title: $gettext('Current Folder'),
-        id: 'current-folder',
+        id: SearchLocationFilterConstants.currentFolder,
         enabled: currentFolderAvailable,
         default: !unref(isLocationFilterAllFiles)
       }
