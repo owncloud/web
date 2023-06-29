@@ -167,8 +167,7 @@ describe('GenericSpace view', () => {
       it('renders the ResourceDetails component', () => {
         const { wrapper } = getMountedWrapper({
           currentFolder: {
-            ...mock<Resource>(),
-            fileId: '4'
+            ...mock<Resource>()
           },
           files: [{ ...mock<Resource>(), isFolder: false }],
           space: {

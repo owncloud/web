@@ -65,7 +65,6 @@ Feature: spaces participant management
     And "Alice" creates a public link for the resource "parent" using the sidebar panel
     And "Alice" edits the public link named "Link" of resource "parent" changing role to "Can edit"
     And "Anonymous" opens the public link "Link"
-    And "Anonymous" closes the editor
     And "Anonymous" uploads the following resources in public link page
       | resource     |
       | textfile.txt |

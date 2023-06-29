@@ -528,10 +528,7 @@ export default defineComponent({
         return false
       }
 
-      if (
-        isPublicSpaceResource(this.space) &&
-        (!this.currentFolder?.path || this.currentFolder.path === '/')
-      ) {
+      if (isPublicSpaceResource(this.space) && !this.currentFolder?.fileId) {
         return true
       }
 
