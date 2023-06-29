@@ -158,7 +158,9 @@ export default defineComponent({
     })
 
     const onLocationFilterChange = (event) => {
-      locationFilter.value = unref(event).id
+      if (event.userEvent) {
+        locationFilter.value = unref(event.value).id
+      }
     }
 
     return {

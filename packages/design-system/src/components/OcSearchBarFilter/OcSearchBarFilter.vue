@@ -59,7 +59,7 @@ export default defineComponent({
         currentSelection.value =
           props.options.find((option) => option.enabled && option.default) ||
           props.options.find((option) => option.enabled)
-        emit('update:modelValue', currentSelection.value)
+        emit('update:modelValue', { value: currentSelection.value, userEvent: false })
       },
       { immediate: true, deep: true }
     )
@@ -69,7 +69,7 @@ export default defineComponent({
   methods: {
     onOptionSelected(option: string) {
       this.currentSelection = option
-      this.$emit('update:modelValue', option)
+      this.$emit('update:modelValue', { value: option, userEvent: true })
     }
   }
 })
