@@ -105,7 +105,7 @@ import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
 import { useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
+import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 
 export default defineComponent({
   name: 'SearchBar',
@@ -114,9 +114,18 @@ export default defineComponent({
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const { $gettext } = useGettext()
+
+    const currentFolderAvailable = computed(() => {
+      return store.getters['Files/currentFolder'] !== null
+    })
     const availableLocationOptions = ref([
-      { title: $gettext('All Files'), id: 'all-files', enabled: true },
-      { title: $gettext('Current Folder'), id: 'current-folder', enabled: true }
+      { title: $gettext('All Files'), id: 'all-files', enabled: true, default: false },
+      {
+        title: $gettext('Current Folder'),
+        id: 'current-folder',
+        enabled: currentFolderAvailable,
+        default: true
+      }
     ])
 
     watch(isMobileWidth, () => {

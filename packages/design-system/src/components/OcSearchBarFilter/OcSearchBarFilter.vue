@@ -17,7 +17,9 @@
             :class="{ 'oc-mt-s': index > 0 }"
             :key="index"
             @click="onOptionSelected(option)"
-            >{{ option.title }}</oc-button
+          >
+            <span v-if="option.enabled">{{ option.title }}</span
+            ><span v-else>D: {{ option.title }}</span></oc-button
           >
         </div>
       </template></oc-filter-chip
@@ -26,8 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { defineComponent, ref, unref, watch } from 'vue'
 import 'vue-select/dist/vue-select.css'
 
 /**
@@ -37,7 +38,7 @@ export default defineComponent({
   name: 'OcSearchBarFilter',
   props: {
     options: {
-      type: Array<String>,
+      type: Object,
       required: false,
       default: []
     },
@@ -48,7 +49,18 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props) {
-    const currentSelection = ref(props.options[0])
+    const currentSelection = ref(props.options.find((option) => option.default))
+
+    watch(
+      () => props.options,
+      () => {
+        currentSelection.value =
+          props.options.find((option) => option.enabled && option.default) ||
+          props.options.find((option) => option.enabled)
+      },
+      { immediate: true, deep: true }
+    )
+
     return { currentSelection }
   },
   methods: {
