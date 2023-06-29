@@ -244,6 +244,9 @@ services:
       traefik.http.routers.onlyoffice.tls: true
       traefik.http.routers.onlyoffice.rule: PathPrefix(`/`)
       traefik.http.routers.onlyoffice.entrypoints: websecure
+      # websockets can't be opened when this is ommitted
+      traefik.http.middlewares.onlyoffice.headers.customrequestheaders.X-Forwarded-Proto: https
+      traefik.http.routers.onlyoffice.middlewares: onlyoffice
     restart: always
 
   wopiserver:
