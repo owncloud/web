@@ -321,7 +321,7 @@ export default defineComponent({
   margin-right: 34px !important;
   float: right;
   .oc-drop {
-    width: 120px;
+    width: 180px;
   }
 }
 .oc-search {

@@ -9,21 +9,23 @@
       close-on-click
     >
       <template #default>
-        <div class="oc-p-xs">
-          <oc-button
-            appearance="raw"
-            size="small"
-            v-for="(option, index) in options"
-            :class="{ 'oc-mt-s': index > 0 }"
-            :key="index"
-            @click="onOptionSelected(option)"
-          >
-            <span v-if="option.enabled">{{ option.title }}</span
-            ><span v-else>D: {{ option.title }}</span></oc-button
-          >
-        </div>
-      </template></oc-filter-chip
-    >
+        <oc-button
+          appearance="raw"
+          size="medium"
+          v-for="(option, index) in options"
+          justify-content="space-between"
+          class="search-bar-filter-item oc-flex oc-flex-middle oc-width-1-1 oc-py-xs oc-px-s"
+          :class="{ 'oc-mt-s': index > 0 }"
+          :key="index"
+          @click="onOptionSelected(option)"
+        >
+          <span v-if="option.enabled">{{ option.title }}</span
+          ><span v-else>D: {{ option.title }}</span>
+          <div class="oc-flex" v-if="option.id === currentSelection.id">
+            <oc-icon name="check" />
+          </div>
+        </oc-button> </template
+    ></oc-filter-chip>
   </div>
 </template>
 
@@ -48,7 +50,7 @@ export default defineComponent({
     }
   },
   emits: ['update:modelValue'],
-  setup(props) {
+  setup(props, { emit }) {
     const currentSelection = ref(props.options.find((option) => option.default))
 
     watch(
@@ -57,6 +59,7 @@ export default defineComponent({
         currentSelection.value =
           props.options.find((option) => option.enabled && option.default) ||
           props.options.find((option) => option.enabled)
+        emit('update:modelValue', currentSelection.value)
       },
       { immediate: true, deep: true }
     )
@@ -72,4 +75,10 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.search-bar-filter-item {
+  &:hover {
+    background-color: var(--oc-color-background-hover) !important;
+  }
+}
+</style>
