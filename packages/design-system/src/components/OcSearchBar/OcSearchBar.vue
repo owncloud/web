@@ -30,7 +30,10 @@
         class="oc-location-search oc-position-small oc-position-center-right oc-mt-rm"
         @click.stop
       >
-        <oc-search-bar-filter :options="availableLocationOptions" />
+        <oc-search-bar-filter
+          :options="availableLocationOptions"
+          @update:model-value="$emit('locationFilterChange', $event)"
+        />
       </div>
       <oc-button
         v-oc-tooltip="$gettext('Open advanced search')"
@@ -238,10 +241,10 @@ export default defineComponent({
     availableLocationOptions: {
       type: Array<String>,
       required: false,
-      default: ['All Files', 'Current Folder']
+      default: []
     }
   },
-  emits: ['advancedSearch', 'clear', 'input', 'keyup', 'search'],
+  emits: ['advancedSearch', 'clear', 'input', 'keyup', 'search', 'locationFilterChange'],
   setup(props) {
     const query = ref<string>('')
     watch(

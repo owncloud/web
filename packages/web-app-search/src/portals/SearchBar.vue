@@ -18,6 +18,7 @@
       cancel-button-variation="brand"
       cancel-button-appearance="raw-inverse"
       :cancel-handler="cancelSearch"
+      :available-location-options="availableLocationOptions"
       @advanced-search="onKeyUpEnter"
       @input="updateTerm"
       @clear="onClear"
@@ -26,6 +27,7 @@
       @keyup.up="onKeyUpUp"
       @keyup.down="onKeyUpDown"
       @keyup.enter="onKeyUpEnter"
+      @location-filter-change="onLocationFilterChange"
     />
     <oc-button
       v-oc-tooltip="$gettext('Display search bar')"
@@ -97,7 +99,7 @@
 
 <script lang="ts">
 import { providerStore } from '../service'
-
+import { useGettext } from 'vue3-gettext'
 import { createLocationCommon } from 'web-app-files/src/router'
 import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
@@ -111,6 +113,11 @@ export default defineComponent({
     const store = useStore()
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
+    const { $gettext } = useGettext()
+    const availableLocationOptions = ref([
+      { title: $gettext('All Files'), id: 'all-files', enabled: true },
+      { title: $gettext('Current Folder'), id: 'current-folder', enabled: true }
+    ])
 
     watch(isMobileWidth, () => {
       const searchBarEl = document.getElementById('files-global-search-bar')
@@ -130,9 +137,15 @@ export default defineComponent({
       }
     })
 
+    const onLocationFilterChange = (event) => {
+      console.log('location: ', event)
+    }
+
     return {
       isUserContext: useUserContext({ store }),
-      showCancelButton
+      showCancelButton,
+      onLocationFilterChange,
+      availableLocationOptions
     }
   },
 

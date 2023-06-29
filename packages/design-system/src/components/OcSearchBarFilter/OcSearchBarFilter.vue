@@ -3,7 +3,7 @@
     <oc-filter-chip
       :is-toggle="false"
       :is-toggle-active="false"
-      :filter-label="currentSelection"
+      :filter-label="currentSelection.title"
       :selected-item-names="[]"
       raw
       close-on-click
@@ -17,7 +17,7 @@
             :class="{ 'oc-mt-s': index > 0 }"
             :key="index"
             @click="onOptionSelected(option)"
-            >{{ option }}</oc-button
+            >{{ option.title }}</oc-button
           >
         </div>
       </template></oc-filter-chip
@@ -40,13 +40,15 @@ export default defineComponent({
       type: Array<String>,
       required: false,
       default: []
+    },
+    modelValue: {
+      type: String,
+      required: true
     }
   },
-  emits: ['search:input', 'update:modelValue'],
-  setup(props, { emit }) {
-    const { $gettext } = useGettext()
+  emits: ['update:modelValue'],
+  setup(props) {
     const currentSelection = ref(props.options[0])
-
     return { currentSelection }
   },
   methods: {
