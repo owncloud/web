@@ -16,7 +16,7 @@ Feature: Search
       | localFile                   | to              |
       | filesForUpload/textfile.txt | fileToShare.txt |
     And "Alice" opens the "files" app
-    And "Alice" adds the following tags for the following resources using the sidebar panel
+    And "Alice" adds the following tags for the following resources using API
       | resource        | tags      |
       | fileToShare.txt | alice tag |
     And "Alice" shares the following resource using API
@@ -46,7 +46,7 @@ Feature: Search
       | name                          | content                   |
       | spaceFolder/spaceTextfile.txt | This is test file. Cheers |
     And "Brian" opens the "files" app
-    And "Brian" adds the following tags for the following resources using the sidebar panel
+    And "Brian" adds the following tags for the following resources using API
       | resource        | tags  |
       | fileWithTag.txt | tag 1 |
       | withTag.txt     | tag 1 |
@@ -59,7 +59,7 @@ Feature: Search
       | resource        |
       | fileToShare.txt |
 
-    When "Brian" clears tag filter 
+    When "Brian" clears tag filter
     And "Brian" selects tag "tag 1" from the search result filter chip
     Then following resources should be displayed in the files list for user "Brian"
       | resource        |

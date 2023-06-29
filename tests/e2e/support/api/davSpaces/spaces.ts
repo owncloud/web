@@ -7,6 +7,7 @@ import { Response } from 'node-fetch'
 import convert from 'xml-js'
 import _ from 'lodash/object'
 import { createShare } from '../share'
+import { createTagsForResource } from '../graph/utils'
 
 export const folderExists = async ({
   user,
@@ -138,10 +139,12 @@ export const uploadFileInsideSpaceBySpaceName = async ({
 export const getDataOfFileInsideSpace = async ({
   user,
   pathToFileName,
+  spaceType,
   spaceName
 }: {
   user: User
   pathToFileName: string
+  spaceType: string
   spaceName: string
 }): Promise<Response> => {
   const body =
@@ -174,7 +177,7 @@ export const getDataOfFileInsideSpace = async ({
       'remote.php',
       'dav',
       'spaces',
-      await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }),
+      await getSpaceIdBySpaceName({ user, spaceType, spaceName }),
       pathToFileName
     ),
     body: body,
@@ -188,15 +191,18 @@ export const getDataOfFileInsideSpace = async ({
 export const getIdOfFileInsideSpace = async ({
   user,
   pathToFileName,
+  spaceType,
   spaceName
 }: {
   user: User
   pathToFileName: string
+  spaceType: string
   spaceName: string
 }): Promise<string> => {
   const fileDataResponse = await getDataOfFileInsideSpace({
     user,
     pathToFileName,
+    spaceType,
     spaceName
   })
   // extract file id form the response
@@ -218,4 +224,23 @@ export const addMembersToTheProjectSpace = async ({
 }): Promise<void> => {
   const space_ref = await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName })
   await createShare({ user, path: null, shareWith, shareType, role, name: null, space_ref })
+}
+
+export const addTagToResource = async ({
+  user,
+  resource,
+  tags
+}: {
+  user: User
+  resource: string
+  tags: string
+}): Promise<void> => {
+  const resourceId = await getIdOfFileInsideSpace({
+    user,
+    pathToFileName: resource,
+    spaceType: 'personal',
+    spaceName: user.displayName
+  })
+  const tagNames = tags.split(',').map((tag) => tag.trim())
+  await createTagsForResource({ user, resourceId, tags: tagNames })
 }
