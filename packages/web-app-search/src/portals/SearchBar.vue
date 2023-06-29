@@ -103,7 +103,7 @@ import { useGettext } from 'vue3-gettext'
 import { createLocationCommon } from 'web-app-files/src/router'
 import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
-import { useStore, useUserContext } from 'web-pkg/src/composables'
+import { useRouteQueryPersisted, useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 
@@ -114,17 +114,28 @@ export default defineComponent({
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const { $gettext } = useGettext()
-
+    const locationFilter = useRouteQueryPersisted({
+      name: 'location-filter',
+      defaultValue: ''
+    })
     const currentFolderAvailable = computed(() => {
       return store.getters['Files/currentFolder'] !== null
     })
+    const isLocationFilterAllFiles = computed(() => {
+      return locationFilter.value === 'all-files'
+    })
     const availableLocationOptions = ref([
-      { title: $gettext('All Files'), id: 'all-files', enabled: true, default: false },
+      {
+        title: $gettext('All Files'),
+        id: 'all-files',
+        enabled: true,
+        default: unref(isLocationFilterAllFiles)
+      },
       {
         title: $gettext('Current Folder'),
         id: 'current-folder',
         enabled: currentFolderAvailable,
-        default: true
+        default: !unref(isLocationFilterAllFiles)
       }
     ])
 
@@ -147,7 +158,7 @@ export default defineComponent({
     })
 
     const onLocationFilterChange = (event) => {
-      console.log('location: ', event)
+      locationFilter.value = unref(event).id
     }
 
     return {
