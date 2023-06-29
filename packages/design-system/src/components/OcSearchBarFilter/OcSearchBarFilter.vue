@@ -33,9 +33,6 @@
 import { defineComponent, ref, unref, watch } from 'vue'
 import 'vue-select/dist/vue-select.css'
 
-/**
- * Select component with a trigger and dropdown based on [Vue Select](https://vue-select.org/)
- */
 export default defineComponent({
   name: 'OcSearchBarFilter',
   props: {
