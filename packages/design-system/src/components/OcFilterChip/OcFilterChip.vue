@@ -24,9 +24,9 @@
       class="oc-filter-chip-drop"
       mode="click"
       padding-size="small"
+      :close-on-click="closeOnClick"
       @hide-drop="$emit('hideDrop')"
       @show-drop="$emit('showDrop')"
-      :close-on-click="closeOnClick"
     >
       <slot />
     </oc-drop>

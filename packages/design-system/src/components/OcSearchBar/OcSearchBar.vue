@@ -241,7 +241,7 @@ export default defineComponent({
     availableLocationOptions: {
       type: Object,
       required: false,
-      default: []
+      default: () => []
     }
   },
   emits: ['advancedSearch', 'clear', 'input', 'keyup', 'search', 'locationFilterChange'],

@@ -10,18 +10,18 @@
     >
       <template #default>
         <oc-button
+          v-for="(option, index) in locationOptions"
+          :key="index"
           appearance="raw"
           size="medium"
-          v-for="(option, index) in locationOptions"
           justify-content="space-between"
           class="search-bar-filter-item oc-flex oc-flex-middle oc-width-1-1 oc-py-xs oc-px-s"
           :class="{ 'oc-mt-s': parseInt(index) > 0 }"
-          :key="index"
-          @click="onOptionSelected(option)"
           :disabled="!option.enabled"
+          @click="onOptionSelected(option)"
         >
           <span>{{ option.title }}</span>
-          <div class="oc-flex" v-if="option.id === currentSelection.id">
+          <div v-if="option.id === currentSelection.id" class="oc-flex">
             <oc-icon name="check" />
           </div>
         </oc-button> </template
@@ -39,7 +39,7 @@ export default defineComponent({
     locationOptions: {
       type: Object,
       required: false,
-      default: []
+      default: () => []
     }
   },
   emits: ['update:modelValue'],
