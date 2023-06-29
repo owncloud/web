@@ -28,7 +28,7 @@ Feature: display image in preview app on the webUI
     And user "Alice" has created a public link with following settings in the server
       | path | simple-empty-folder |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    And the public views the single share file "test_video.mp4" in the preview app using the webUI
+    And the public views the file "test_video.mp4" in the preview app using the webUI
     Then the file "test_video.mp4" should be displayed in the preview app webUI
 
 
@@ -38,7 +38,7 @@ Feature: display image in preview app on the webUI
     And user "Alice" has created a public link with following settings in the server
       | path | simple-empty-folder |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    And the public views the single share file "testavatar.jpg" in the preview app using the webUI
+    And the public views the file "testavatar.jpg" in the preview app using the webUI
     Then the file "testavatar.jpg" should be displayed in the preview app webUI
 
 

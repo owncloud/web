@@ -77,8 +77,7 @@ Feature: Public link share management
     And user "Alice" has logged in using the webUI
     When the user copies the url of public link named "Public-link" of folder "simple-folder" using the webUI
     And the user navigates to the copied public link using the webUI
-    And the user closes the text editor using the webUI
-    Then file "lorem.txt" should be listed on the webUI as single share
+    Then file "lorem.txt" should be listed on the webUI
 
 
   @issue-2897
