@@ -40,10 +40,6 @@ export default defineComponent({
       type: Object,
       required: false,
       default: []
-    },
-    modelValue: {
-      type: String,
-      required: true
     }
   },
   emits: ['update:modelValue'],
