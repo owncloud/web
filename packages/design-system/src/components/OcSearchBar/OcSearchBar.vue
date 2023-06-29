@@ -31,7 +31,7 @@
         @click.stop
       >
         <oc-search-bar-filter
-          :options="availableLocationOptions"
+          :location-options="availableLocationOptions"
           @update:model-value="$emit('locationFilterChange', $event)"
         />
       </div>

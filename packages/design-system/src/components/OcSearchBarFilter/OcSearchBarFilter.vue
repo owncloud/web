@@ -12,7 +12,7 @@
         <oc-button
           appearance="raw"
           size="medium"
-          v-for="(option, index) in options"
+          v-for="(option, index) in locationOptions"
           justify-content="space-between"
           class="search-bar-filter-item oc-flex oc-flex-middle oc-width-1-1 oc-py-xs oc-px-s"
           :class="{ 'oc-mt-s': parseInt(index) > 0 }"
@@ -36,7 +36,7 @@ import 'vue-select/dist/vue-select.css'
 export default defineComponent({
   name: 'OcSearchBarFilter',
   props: {
-    options: {
+    locationOptions: {
       type: Object,
       required: false,
       default: []
@@ -44,14 +44,14 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-    const currentSelection = ref(props.options.find((option) => option.default))
+    const currentSelection = ref(props.locationOptions.find((option) => option.default))
 
     watch(
-      () => props.options,
+      () => props.locationOptions,
       () => {
         currentSelection.value =
-          props.options.find((option) => option.enabled && option.default) ||
-          props.options.find((option) => option.enabled)
+          props.locationOptions.find((option) => option.enabled && option.default) ||
+          props.locationOptions.find((option) => option.enabled)
         emit('update:modelValue', { value: currentSelection.value, userEvent: false })
       },
       { immediate: true, deep: true }
