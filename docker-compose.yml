@@ -7,10 +7,10 @@ services:
     environment:
       # OCIS
       OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
-      OCIS_INSECURE: '${OCIS_INSECURE:-true}'
-      OCIS_LOG_LEVEL: '${OCIS_LOG_LEVEL:-error}'
-      OCIS_LOG_PRETTY: '${OCIS_LOG_PRETTY:-true}'
-      OCIS_LOG_COLOR: '${OCIS_LOG_COLOR:-true}'
+      OCIS_INSECURE: "${OCIS_INSECURE:-true}"
+      OCIS_LOG_LEVEL: "${OCIS_LOG_LEVEL:-error}"
+      OCIS_LOG_PRETTY: "${OCIS_LOG_PRETTY:-true}"
+      OCIS_LOG_COLOR: "${OCIS_LOG_COLOR:-true}"
 
       # WEB
       WEB_UI_CONFIG: ${WEB_UI_CONFIG:-/web/config.json}
@@ -23,32 +23,32 @@ services:
       FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
 
       # IDM
-      IDM_CREATE_DEMO_USERS: '${DEMO_USERS:-true}'
-      IDM_ADMIN_PASSWORD: '${ADMIN_PASSWORD:-admin}' # override the random admin password from `ocis init`
-      IDM_SVC_PASSWORD: '${IDM_SVC_PASSWORD:-some-ldap-idm-password}'
-      IDM_REVASVC_PASSWORD: '${IDM_REVASVC_PASSWORD:-some-ldap-reva-password}'
-      IDM_IDPSVC_PASSWORD: '${IDM_IDPSVC_PASSWORD:-some-ldap-idp-password}'
+      IDM_CREATE_DEMO_USERS: "${DEMO_USERS:-true}"
+      IDM_ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin}" # override the random admin password from `ocis init`
+      IDM_SVC_PASSWORD: "${IDM_SVC_PASSWORD:-some-ldap-idm-password}"
+      IDM_REVASVC_PASSWORD: "${IDM_REVASVC_PASSWORD:-some-ldap-reva-password}"
+      IDM_IDPSVC_PASSWORD: "${IDM_IDPSVC_PASSWORD:-some-ldap-idp-password}"
 
       # IDP
-      IDP_LDAP_BIND_PASSWORD: '${IDP_LDAP_BIND_PASSWORD:-some-ldap-idp-password}'
+      IDP_LDAP_BIND_PASSWORD: "${IDP_LDAP_BIND_PASSWORD:-some-ldap-idp-password}"
 
       # STORAGE
-      STORAGE_HOME_DRIVER: ${STORAGE_HOME_DRIVER:-ocis}
-      STORAGE_USERS_DRIVER: ${STORAGE_USERS_DRIVER:-ocis}
-      STORAGE_TRANSFER_SECRET: '${STORAGE_TRANSFER_SECRET:-some-ocis-transfer-secret}'
+      STORAGE_HOME_DRIVER: "${STORAGE_HOME_DRIVER:-ocis}"
+      STORAGE_USERS_DRIVER: "${STORAGE_USERS_DRIVER:-ocis}"
+      STORAGE_TRANSFER_SECRET: "${STORAGE_TRANSFER_SECRET:-some-ocis-transfer-secret}"
 
       # LDAP
-      GROUPS_LDAP_BIND_PASSWORD: '${GROUPS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}'
-      USERS_LDAP_BIND_PASSWORD: '${USERS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}'
-      AUTH_BASIC_LDAP_BIND_PASSWORD: '${AUTH_BASIC_LDAP_BIND_PASSWORD:-some-ldap-reva-password}'
-      GRAPH_APPLICATION_ID: '${GRAPH_APPLICATION_ID:-some-graph-app-id}'
-      GRAPH_LDAP_BIND_PASSWORD: '${GRAPH_LDAP_BIND_PASSWORD:-some-ldap-idm-password}'
-      LDAP_GROUP_SUBSTRING_FILTER_TYPE: 'any'
-      LDAP_USER_SUBSTRING_FILTER_TYPE: 'any'
+      GROUPS_LDAP_BIND_PASSWORD: "${GROUPS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
+      USERS_LDAP_BIND_PASSWORD: "${USERS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
+      AUTH_BASIC_LDAP_BIND_PASSWORD: "${AUTH_BASIC_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
+      GRAPH_APPLICATION_ID: "${GRAPH_APPLICATION_ID:-some-graph-app-id}"
+      GRAPH_LDAP_BIND_PASSWORD: "${GRAPH_LDAP_BIND_PASSWORD:-some-ldap-idm-password}"
+      LDAP_GROUP_SUBSTRING_FILTER_TYPE: "any"
+      LDAP_USER_SUBSTRING_FILTER_TYPE: "any"
 
       # PROXY
-      PROXY_ENABLE_BASIC_AUTH: '${PROXY_ENABLE_BASIC_AUTH:-true}'
-      PROXY_TLS: 'false'
+      PROXY_ENABLE_BASIC_AUTH: "${PROXY_ENABLE_BASIC_AUTH:-true}"
+      PROXY_TLS: "false"
 
       # CORS
       OCIS_CORS_ALLOW_ORIGINS: "https://host.docker.internal:9201"
@@ -57,8 +57,9 @@ services:
       SEARCH_EXTRACTOR_TYPE: "tika"
       SEARCH_EXTRACTOR_TIKA_TIKA_URL: "http://host.docker.internal:9998"
       SEARCH_EXTRACTOR_CS3SOURCE_INSECURE: "true"
-      GATEWAY_GRPC_ADDR: 0.0.0.0:9142
-      MICRO_REGISTRY: 'mdns'
+      GATEWAY_GRPC_ADDR: 0.0.0.0:9142 # make the REVA gateway accessible to the app drivers
+      # make the registry available to the app provider containers
+      MICRO_REGISTRY: "mdns"
     volumes:
       - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
       - ./dev/docker/ocis-ca:/var/lib/ocis/proxy
@@ -153,7 +154,7 @@ services:
     image: ${OCIS_IMAGE:-owncloud/ocis:latest}
     command: app-provider server
     environment:
-      APP_PROVIDER_LOG_LEVEL: error
+      APP_PROVIDER_LOG_LEVEL: debug
       # use the internal service name of the gateway
       REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
       # STORAGE_GATEWAY_ENDPOINT: host.docker.internal:9142
@@ -185,7 +186,7 @@ services:
       - /entrypoint-override.sh
     #command: app-provider server
     environment:
-      APP_PROVIDER_LOG_LEVEL: error
+      APP_PROVIDER_LOG_LEVEL: debug
       # use the internal service name of the gateway
       REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
       APP_PROVIDER_GRPC_ADDR: 0.0.0.0:9164
@@ -277,7 +278,7 @@ services:
     entrypoint: ["/bin/sh", "-c", "[ -f /certificates/server.key ] && ./entrypoint.sh $$@ || (apk add openssl && openssl req -subj '/CN=ocis.test' -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout /certificates/server.key -out /certificates/server.crt && chmod -R 777 /certificates && ./entrypoint.sh $$@)"]
     command:
       - "--pilot.dashboard=false"
-      - "--log.level=ERROR"
+      - "--log.level=DEBUG"
       - "--api.dashboard=true"
       - "--api.insecure=true"
       - "--providers.file.directory=/configs"
