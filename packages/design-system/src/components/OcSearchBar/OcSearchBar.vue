@@ -316,7 +316,6 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-location-search {
-  font-size: 12px !important;
   z-index: 9999;
   margin-right: 34px !important;
   float: right;
