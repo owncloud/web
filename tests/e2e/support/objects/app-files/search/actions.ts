@@ -21,7 +21,16 @@ export interface fullTextSearchArgs {
 export const fullTextSearch = async (args: fullTextSearchArgs): Promise<void> => {
   const { page, keyword } = args
   await page.locator(globalSearchInputSelector).fill(keyword)
+  let waitResponse
+  if (keyword) {
+    waitResponse = page.waitForResponse(
+      (resp) => resp.status() === 207 && resp.request().method() === 'REPORT'
+    )
+  }
   await page.keyboard.press('Enter')
+  if (keyword) {
+    await waitResponse
+  }
 }
 
 export const getSearchResultMessage = ({ page }): Promise<string> => {
