@@ -1072,6 +1072,7 @@ export default defineComponent({
     }
   }
 }
+
 // Hide files table columns
 .files-table {
   .oc-table-header-cell-size,
@@ -1161,6 +1162,29 @@ export default defineComponent({
         display: table-cell;
       }
     }
+  }
+}
+
+// shared with me: on tablets hide shared with column and display owner column instead
+#files-shared-with-me-pending-section .files-table .oc-table-header-cell-owner,
+#files-shared-with-me-pending-section .files-table .oc-table-data-cell-owner,
+#files-shared-with-me-accepted-section .files-table .oc-table-header-cell-owner,
+#files-shared-with-me-accepted-section .files-table .oc-table-data-cell-owner,
+#files-shared-with-me-declined-section .files-table .oc-table-header-cell-owner,
+#files-shared-with-me-declined-section .files-table .oc-table-data-cell-owner {
+  @media only screen and (min-width: 640px) {
+    display: table-cell;
+  }
+}
+
+#files-shared-with-me-pending-section .files-table .oc-table-header-cell-sharedWith,
+#files-shared-with-me-pending-section .files-table .oc-table-data-cell-sharedWith,
+#files-shared-with-me-accepted-section .files-table .oc-table-header-cell-sharedWith,
+#files-shared-with-me-accepted-section .files-table .oc-table-data-cell-sharedWith,
+#files-shared-with-me-declined-section .files-table .oc-table-header-cell-sharedWith,
+#files-shared-with-me-declined-section .files-table .oc-table-data-cell-sharedWith {
+  @media only screen and (max-width: 1199px) {
+    display: none;
   }
 }
 </style>
