@@ -21,7 +21,6 @@ Feature: Locks
       | path        | simple-folder                |
       | permissions | read, create, delete, update |
     When the public uses the webUI to access the last public link created by user "brand-new-user" in a new session
-    And the user closes the text editor using the webUI
     And the user tries to delete folder "lorem.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
