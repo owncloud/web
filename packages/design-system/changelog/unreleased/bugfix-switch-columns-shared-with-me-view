@@ -1,6 +1,0 @@
-Bugfix: switch columns displayed on small screens in "Shared with me" view
-
-Visibility of the resource table columns "Shared by" and "Shared with" has been switched for small screen and tablets (screen size <1200px) in the "Shared with me" view.
-
-https://github.com/owncloud/web/issues/9315
-https://github.com/owncloud/web/pull/9320
