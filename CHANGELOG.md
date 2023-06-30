@@ -34,6 +34,7 @@ Summary
 * Enhancement - Add batch actions to search result list: [#9200](https://github.com/owncloud/web/pull/9200)
 * Enhancement - Restyle possible sharees: [#9216](https://github.com/owncloud/web/issues/9216)
 * Enhancement - Streamline URL query names: [#9226](https://github.com/owncloud/web/pull/9226)
+* Enhancement - Access denied page update message: [#9263](https://github.com/owncloud/web/pull/9263)
 * Enhancement - Hover tooltips in topbar: [#9280](https://github.com/owncloud/web/issues/9280)
 * Enhancement - Search list add highlighted file content: [#9294](https://github.com/owncloud/web/pull/9294)
 
@@ -249,6 +250,14 @@ Details
    different apps.
 
    https://github.com/owncloud/web/pull/9226
+
+* Enhancement - Access denied page update message: [#9263](https://github.com/owncloud/web/pull/9263)
+
+   We've updated the access denied page message to be more specific and give the user a link to a help
+   page.
+
+   https://github.com/owncloud/web/issues/9051
+   https://github.com/owncloud/web/pull/9263
 
 * Enhancement - Hover tooltips in topbar: [#9280](https://github.com/owncloud/web/issues/9280)
 
