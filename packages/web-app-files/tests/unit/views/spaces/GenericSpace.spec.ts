@@ -218,6 +218,11 @@ function getMountedWrapper({
     }
   }
   storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
+  storeOptions.getters.capabilities.mockReturnValue({
+    spaces: {
+      share_jail: true
+    }
+  })
   const propsData = {
     space,
     item: '/',
