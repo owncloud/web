@@ -22,7 +22,7 @@ Feature: Session storage for public link
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
-
+  @skipOnOC10
   Scenario: Public accesses the public link files page in a new session after visiting once (file share)
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared folder "lorem.txt" with link with "read" permissions and password "pass123" in the server

@@ -128,7 +128,7 @@ Feature: Edit public link shares
     And the user deletes the following elements using the webUI
       | name                |
       | simple-empty-folder |
-    And the user deletes the following single share using the webUI
+    And the user deletes the following elements using the webUI
       | name-parts |
       | lorem.txt  |
     Then the deleted elements should not be listed on the webUI
@@ -160,7 +160,7 @@ Feature: Edit public link shares
     Then file "simple.txt" should be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
 
-
+  @skipOnOC10
   Scenario: assign password to already created public share
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings in the server

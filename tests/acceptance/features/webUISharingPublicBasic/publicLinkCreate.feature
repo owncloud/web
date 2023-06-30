@@ -24,7 +24,7 @@ Feature: Create public link shares
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
-  @smokeTest @ocisSmokeTest @issue-ocis-reva-383
+  @skipOnOC10 @smokeTest @ocisSmokeTest @issue-ocis-reva-383
   Scenario: simple file sharing by public link
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI

@@ -146,8 +146,6 @@ Feature: Share by public link with different roles
       | simple-empty-folder                   |
       | lorem.txt                             |
       | strängé filename (duplicate #2 &).txt |
-    And the user deletes the following single share using the webUI
-      | name                                 |
       | zzzz-must-be-last-file-in-folder.txt |
     Then the deleted elements should not be listed on the webUI
 

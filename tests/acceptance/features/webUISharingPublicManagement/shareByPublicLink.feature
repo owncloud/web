@@ -123,7 +123,7 @@ Feature: Public link share management
     When the user browses to the favorites page using the webUI
     Then a link named "Public Link" should be listed with role "Anyone with the link can view" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
 
-  @issue-product-130
+  @skipOnOC10 @issue-product-130
   Scenario: User can attempt to upload a file in public link
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings in the server
