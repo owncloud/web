@@ -238,10 +238,6 @@ export default defineComponent({
     ...mapGetters('Files', ['files', 'selectedFiles']),
     ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
 
-    pageTitle() {
-      const title = (this.$route.meta.title as string) || ''
-      return this.$gettext(title)
-    },
     showContextActions() {
       return last<BreadcrumbItem>(this.breadcrumbs).allowContextActions
     },
