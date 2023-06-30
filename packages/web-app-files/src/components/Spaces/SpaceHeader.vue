@@ -21,7 +21,7 @@
     <div class="space-header-infos">
       <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
         <div class="oc-flex oc-flex-middle space-header-infos-heading">
-          <h1 class="space-header-name">{{ space.name }}</h1>
+          <h2 class="space-header-name">{{ space.name }}</h2>
           <oc-button
             :id="`space-context-btn`"
             v-oc-tooltip="$gettext('Show context menu')"

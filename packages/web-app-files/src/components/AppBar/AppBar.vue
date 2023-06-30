@@ -95,11 +95,12 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
-import { useClientService, useRouter, useStore } from 'web-pkg/src'
+import { useClientService, useRouter, useRouteMeta, useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
 import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
 import ViewOptions from 'web-pkg/src/components/ViewOptions.vue'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: {
@@ -141,6 +142,7 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const clientService = useClientService()
+    const { $gettext } = useGettext()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: clearSelectionActions } = useFileActionsClearSelection({ store })
@@ -208,13 +210,22 @@ export default defineComponent({
       emit(EVENT_ITEM_DROPPED, data)
     }
 
+    const routeMetaTitle = useRouteMeta('title')
+    const pageTitle = computed(() => {
+      if (unref(routeMetaTitle)) {
+        return $gettext(unref(routeMetaTitle))
+      }
+      return props.space?.name || ''
+    })
+
     return {
       batchActions,
       showBreadcrumb,
       showMobileNav,
       breadcrumbMaxWidth,
       breadcrumbTruncationOffset,
-      fileDroppedBreadcrumb
+      fileDroppedBreadcrumb,
+      pageTitle
     }
   },
   data: function () {
