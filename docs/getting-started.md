@@ -74,6 +74,13 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.contextHelpersReadMore` Specifies whether the "Read more" link should be displayed or not.
 - `options.openLinksWithDefaultApp` Specifies whether single file link shares should be opened with default app or not.
 
+#### Scripts and Styles
+
+Web supports adding additional CSS and JavaScript files to further customise the user experience and adapt it to your specific needs. Please consider opening a feature request if you feel like your customization could be a benefit to the upstream project, and keep an eye open for future major releases of `web` since this API may change.
+
+- `styles` expects an array of objects that specify a `href` attribute, pointing to the path/URL of your stylesheet, like `[{ "href": "css/custom.css" }]`.
+- `scripts` expects an array of objects that specify a `src` attribute, pointing to the path/URL of your script, and an optional `async` attribute (defaults to false), like `[{ "src": "js/custom.js", "async": true }]`.
+
 ### Sentry
 
 Web supports [Sentry](https://sentry.io/welcome/) to provide monitoring and error tracking.
