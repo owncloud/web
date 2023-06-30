@@ -100,10 +100,16 @@
 <script lang="ts">
 import { providerStore } from '../service'
 import { useGettext } from 'vue3-gettext'
-import { createLocationCommon } from 'web-app-files/src/router'
+import { createLocationCommon, isLocationCommonActive } from 'web-app-files/src/router'
 import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
-import { useRouteQueryPersisted, useStore, useUserContext } from 'web-pkg/src/composables'
+import {
+  useRouteQuery,
+  useRouteQueryPersisted,
+  useRouter,
+  useStore,
+  useUserContext
+} from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from 'web-pkg/src/composables'
@@ -112,18 +118,22 @@ export default defineComponent({
   name: 'SearchBar',
   setup() {
     const store = useStore()
+    const router = useRouter()
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const { $gettext } = useGettext()
-    const locationFilter = useRouteQueryPersisted({
+    const locationFilterPersisted = useRouteQueryPersisted({
       name: SearchLocationFilterConstants.queryName,
       defaultValue: ''
     })
+    const scope = useRouteQuery('scope')
+    const useScope = useRouteQuery('useScope')
+
     const currentFolderAvailable = computed(() => {
-      return store.getters['Files/currentFolder'] !== null
+      return store.getters['Files/currentFolder'] !== null || scope.value?.length > 0
     })
     const isLocationFilterAllFiles = computed(() => {
-      return locationFilter.value === SearchLocationFilterConstants.allFiles
+      return locationFilterPersisted.value === SearchLocationFilterConstants.allFiles
     })
     const availableLocationOptions = ref([
       {
@@ -160,7 +170,13 @@ export default defineComponent({
 
     const onLocationFilterChange = (event) => {
       if (event.userEvent) {
-        locationFilter.value = unref(event.value).id
+        locationFilterPersisted.value = unref(event.value).id
+      }
+      if (isLocationCommonActive(router, 'files-common-search')) {
+        useScope.value = (
+          unref(currentFolderAvailable) &&
+          unref(locationFilterPersisted) === SearchLocationFilterConstants.currentFolder
+        ).toString()
       }
     }
 
@@ -168,7 +184,9 @@ export default defineComponent({
       isUserContext: useUserContext({ store }),
       showCancelButton,
       onLocationFilterChange,
-      availableLocationOptions
+      availableLocationOptions,
+      locationFilterPersisted,
+      currentFolderAvailable
     }
   },
 
@@ -288,13 +306,23 @@ export default defineComponent({
         return
       }
 
+      let searchTerm = this.term
+      if (
+        this.currentFolderAvailable &&
+        this.locationFilterPersisted === SearchLocationFilterConstants.currentFolder
+      ) {
+        const currentFolder = this.$store.getters['Files/currentFolder']
+        const spaceId = currentFolder.fileId.split('!')[0]
+        searchTerm = `${this.term} +scope:${spaceId}${currentFolder.path}`
+      }
+
       this.loading = true
 
       for (const availableProvider of this.availableProviders) {
         if (availableProvider.previewSearch?.available) {
           this.searchResults.push({
             providerId: availableProvider.id,
-            result: await availableProvider.previewSearch.search(this.term)
+            result: await availableProvider.previewSearch.search(searchTerm)
           })
         }
       }
@@ -311,11 +339,22 @@ export default defineComponent({
       if (this.activePreviewIndex === null) {
         const currentQuery = unref(this.$router.currentRoute).query
 
+        let scope = null
+        if (this.currentFolderAvailable) {
+          const currentFolder = this.$store.getters['Files/currentFolder']
+          const spaceId = currentFolder.fileId.split('!')[0]
+          scope = `${spaceId}${currentFolder.path}`
+        }
+
         this.$router.push(
           createLocationCommon('files-common-search', {
             query: {
               ...(currentQuery && { ...currentQuery }),
               term: this.term,
+              ...(scope && { scope }),
+              useScope:
+                this.currentFolderAvailable &&
+                this.locationFilterPersisted === SearchLocationFilterConstants.currentFolder,
               provider: 'files.sdk'
             }
           })
