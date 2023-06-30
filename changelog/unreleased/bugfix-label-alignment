@@ -1,0 +1,6 @@
+Bugfix: Shared with action menu label alignment
+
+Adjusted offset of alinment of label for shared with action menu option in Sidebar.
+
+https://github.com/owncloud/web/pull/9324
+https://github.com/owncloud/web/issues/9323
