@@ -175,7 +175,8 @@ import {
   useRoute,
   useRouteQuery,
   useClientService,
-  ViewModeConstants
+  ViewModeConstants,
+  useCapabilityShareJailEnabled
 } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
@@ -240,6 +241,8 @@ export default defineComponent({
     const { getDefaultEditorAction } = useFileActions()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
+    const hasShareJail = useCapabilityShareJailEnabled()
+
     let loadResourcesEventToken
 
     const canUpload = computed(() => {
@@ -501,7 +504,8 @@ export default defineComponent({
         'Drag files and folders here or use the "New" or "Upload" buttons to add files'
       ),
       whitespaceContextMenu,
-      clientService
+      clientService,
+      hasShareJail
     }
   },
 
@@ -520,6 +524,10 @@ export default defineComponent({
     },
 
     displayResourceAsSingleResource() {
+      if (!unref(this.hasShareJail)) {
+        return false
+      }
+
       if (this.paginatedResources.length !== 1) {
         return false
       }
