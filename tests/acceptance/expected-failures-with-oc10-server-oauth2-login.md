@@ -18,7 +18,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicManagement/shareByPublicLink.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L24)
 
 ### [Uploading folders does not work in files-drop](https://github.com/owncloud/web/issues/2443)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:273](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L273)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:265](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L265)
 
 ### [Writing to locked files/folders give only a generic error message](https://github.com/owncloud/web/issues/5741)
 -   [webUIWebdavLockProtection/upload.feature:32](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIWebdavLockProtection/upload.feature#L32)
