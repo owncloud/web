@@ -172,6 +172,10 @@ When('the user deletes file/folder {string} using the webUI', function (element)
   return client.page.FilesPageElement.filesList().deleteFile(element)
 })
 
+When('the user tries to delete file/folder {string} using the webUI', function (element) {
+  return client.page.FilesPageElement.filesList().deleteFile(element)
+})
+
 When('the user tries to delete single share {string} using the webUI', function (element) {
   return client.page.FilesPageElement.filesList().deleteSingleShare(element)
 })
