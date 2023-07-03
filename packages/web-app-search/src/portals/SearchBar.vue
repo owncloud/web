@@ -186,7 +186,8 @@ export default defineComponent({
       onLocationFilterChange,
       availableLocationOptions,
       locationFilterPersisted,
-      currentFolderAvailable
+      currentFolderAvailable,
+      store
     }
   },
 
@@ -311,7 +312,7 @@ export default defineComponent({
         this.currentFolderAvailable &&
         this.locationFilterPersisted === SearchLocationFilterConstants.currentFolder
       ) {
-        const currentFolder = this.$store.getters['Files/currentFolder']
+        const currentFolder = this.store.getters['Files/currentFolder']
         const spaceId = currentFolder.fileId.split('!')[0]
         searchTerm = `${this.term} +scope:${spaceId}${currentFolder.path}`
       }
