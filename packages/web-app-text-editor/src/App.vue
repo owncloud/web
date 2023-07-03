@@ -259,7 +259,7 @@ export default defineComponent({
         isDisabled: () => isReadOnly.value || !isDirty.value,
         componentType: 'button',
         icon: 'save',
-        class: 'text-editor-controls-save oc-p-rm',
+        class: 'text-editor-controls-save',
         label: () => '',
         handler: () => {
           save()

@@ -39,6 +39,7 @@ import { mapGetters } from 'vuex'
 import { computed, defineComponent, unref } from 'vue'
 import { Resource } from 'web-client/src'
 import { urlJoin } from 'web-client/src/utils'
+import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
 import ErrorScreen from './components/ErrorScreen.vue'
@@ -47,6 +48,7 @@ import LoadingScreen from './components/LoadingScreen.vue'
 export default defineComponent({
   name: 'ExternalApp',
   components: {
+    AppTopBar,
     ErrorScreen,
     LoadingScreen
   },

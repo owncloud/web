@@ -17,7 +17,6 @@
               id="oc-openfile-contextmenu-trigger"
               v-oc-tooltip="contextMenuLabel"
               :aria-label="contextMenuLabel"
-              appearance="raw"
             >
               <oc-icon name="more-2" />
             </oc-button>
@@ -47,10 +46,7 @@
           <oc-button
             id="app-top-bar-close"
             v-oc-tooltip="closeButtonLabel"
-            class="oc-p-rm"
             :aria-label="closeButtonLabel"
-            size="small"
-            appearance="raw"
             @click="$emit('close')"
           >
             <oc-icon name="close" size="small" />
@@ -114,8 +110,8 @@ export default defineComponent({
   display: inline-flex;
   align-self: center;
   background-color: var(--oc-color-background-apptopbar);
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
   height: 45px;
   gap: 25px;
   width: 90%;
