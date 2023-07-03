@@ -175,7 +175,8 @@ import {
   useRoute,
   useRouteQuery,
   useClientService,
-  ViewModeConstants
+  ViewModeConstants,
+  useCapabilityShareJailEnabled
 } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
@@ -240,6 +241,8 @@ export default defineComponent({
     const { getDefaultEditorAction } = useFileActions()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
+    const hasShareJail = useCapabilityShareJailEnabled()
+
     let loadResourcesEventToken
 
     const canUpload = computed(() => {
@@ -501,7 +504,8 @@ export default defineComponent({
         'Drag files and folders here or use the "New" or "Upload" buttons to add files'
       ),
       whitespaceContextMenu,
-      clientService
+      clientService,
+      hasShareJail
     }
   },
 
@@ -520,18 +524,29 @@ export default defineComponent({
     },
 
     displayResourceAsSingleResource() {
+      if (!unref(this.hasShareJail)) {
+        return false
+      }
+
       if (this.paginatedResources.length !== 1) {
         return false
       }
 
-      if (
-        this.isRunningOnEos &&
-        (!this.currentFolder.fileId || this.currentFolder.path === this.paginatedResources[0].path)
-      ) {
+      if (this.paginatedResources[0].isFolder) {
+        return false
+      }
+
+      if (isPublicSpaceResource(this.space) && !this.currentFolder?.fileId) {
         return true
       }
-      if (isPublicSpaceResource(this.space) && !this.paginatedResources[0].isFolder) {
-        return true
+
+      if (this.isRunningOnEos) {
+        if (
+          !this.currentFolder.fileId ||
+          this.currentFolder.path === this.paginatedResources[0].path
+        ) {
+          return true
+        }
       }
 
       return false

@@ -21,14 +21,13 @@ Feature: Locks
       | path        | simple-folder                |
       | permissions | read, create, delete, update |
     When the public uses the webUI to access the last public link created by user "brand-new-user" in a new session
-    And the user closes the text editor using the webUI
-    And the user tries to delete single share "lorem.txt" using the webUI
+    And the user tries to delete folder "lorem.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
       Failed to delete "lorem.txt" - the file is locked
       """
     When the user reloads the current page of the webUI
-    Then file "lorem.txt" should be listed on the webUI as single share
+    Then file "lorem.txt" should be listed on the webUI
     Examples:
       | lockscope |
       | exclusive |

@@ -13,8 +13,7 @@ Feature: Access public link shares by public
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
-    And the user closes the text editor using the webUI
-    Then file "lorem.txt" should be listed on the webUI as single share
+    Then file "lorem.txt" should be listed on the webUI
 
 
   Scenario: public should not be able to access a public link with wrong password

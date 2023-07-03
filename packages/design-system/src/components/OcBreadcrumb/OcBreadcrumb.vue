@@ -359,10 +359,6 @@ export default defineComponent({
     align-items: baseline;
     flex-wrap: nowrap;
 
-    span {
-      white-space: nowrap;
-    }
-
     #oc-breadcrumb-contextmenu-trigger > span {
       vertical-align: middle;
       border: 3px solid transparent;

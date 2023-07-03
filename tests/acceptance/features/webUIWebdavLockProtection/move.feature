@@ -22,15 +22,14 @@ Feature: Locks
       | path        | simple-folder                |
       | permissions | read, create, delete, update |
     When the public uses the webUI to access the last public link created by user "brand-new-user" in a new session
-    And the user closes the text editor using the webUI
-    And the user tries to rename single share "lorem.txt" to "a-renamed-file.txt" using the webUI
+    And the user tries to rename file "lorem.txt" to "a-renamed-file.txt" using the webUI
     Then notifications should be displayed on the webUI with the text
       """
       Failed to rename "lorem.txt" to "a-renamed-file.txt" - the file is locked
       """
     When the user closes rename dialog
     And the user reloads the current page of the webUI
-    Then file "lorem.txt" should be listed on the webUI as single share
+    Then file "lorem.txt" should be listed on the webUI
     And file "a-renamed-file.txt" should not be listed on the webUI
     Examples:
       | lockscope |

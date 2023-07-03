@@ -145,7 +145,7 @@ describe('GenericSpace view', () => {
       it('renders the ResourceDetails component if no currentFolder id is present', () => {
         const { wrapper } = getMountedWrapper({
           currentFolder: {},
-          files: [mock<Resource>()],
+          files: [mock<Resource>({ isFolder: false })],
           runningOnEos: true
         })
         expect(wrapper.find('resource-details-stub').exists()).toBeTruthy()
@@ -167,8 +167,7 @@ describe('GenericSpace view', () => {
       it('renders the ResourceDetails component', () => {
         const { wrapper } = getMountedWrapper({
           currentFolder: {
-            ...mock<Resource>(),
-            fileId: '4'
+            ...mock<Resource>()
           },
           files: [{ ...mock<Resource>(), isFolder: false }],
           space: {
@@ -219,6 +218,11 @@ function getMountedWrapper({
     }
   }
   storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
+  storeOptions.getters.capabilities.mockReturnValue({
+    spaces: {
+      share_jail: true
+    }
+  })
   const propsData = {
     space,
     item: '/',

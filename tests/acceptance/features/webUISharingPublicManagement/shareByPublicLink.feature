@@ -77,8 +77,7 @@ Feature: Public link share management
     And user "Alice" has logged in using the webUI
     When the user copies the url of public link named "Public-link" of folder "simple-folder" using the webUI
     And the user navigates to the copied public link using the webUI
-    And the user closes the text editor using the webUI
-    Then file "lorem.txt" should be listed on the webUI as single share
+    Then file "lorem.txt" should be listed on the webUI
 
 
   @issue-2897
@@ -124,7 +123,7 @@ Feature: Public link share management
     When the user browses to the favorites page using the webUI
     Then a link named "Public Link" should be listed with role "Anyone with the link can view" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
 
-  @issue-product-130
+  @skipOnOC10 @issue-product-130
   Scenario: User can attempt to upload a file in public link
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings in the server

@@ -69,8 +69,7 @@ Feature: Edit public link shares
       | password    | pass123       |
     When the user renames the public link named "Public-link" of folder "simple-folder" to "simple-folder Share"
     And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
-    And the user closes the text editor using the webUI
-    Then file "lorem.txt" should be listed on the webUI as single share
+    Then file "lorem.txt" should be listed on the webUI
 
 
   Scenario: user edits the password of an already existing public link
@@ -84,8 +83,7 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the password to "qwertyui"
     And the public uses the webUI to access the last public link created by user "Alice" with password "qwertyui" in a new session
-    And the user closes the text editor using the webUI
-    Then file "lorem.txt" should be listed on the webUI as single share
+    Then file "lorem.txt" should be listed on the webUI
 
   @issue-3830
   Scenario: user edits the password of an already existing public link and tries to access with old password
@@ -112,9 +110,8 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the role to "Viewer"
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
-    And the user closes the text editor using the webUI
-    Then file "lorem.txt" should be listed on the webUI as single share
-    And it should not be possible to delete file "lorem.txt" as single share using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And it should not be possible to delete file "lorem.txt" using the webUI
 
   @issue-ocis-reva-292 @disablePreviews
   Scenario: user edits the permission of an already existing public link from read to read-write
@@ -131,7 +128,7 @@ Feature: Edit public link shares
     And the user deletes the following elements using the webUI
       | name                |
       | simple-empty-folder |
-    And the user deletes the following single share using the webUI
+    And the user deletes the following elements using the webUI
       | name-parts |
       | lorem.txt  |
     Then the deleted elements should not be listed on the webUI
@@ -159,12 +156,11 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the role to "Contributor"
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
-    And the user closes the text editor using the webUI
     And the user uploads file "lorem.txt" using the webUI
     Then file "simple.txt" should be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
 
-
+  @skipOnOC10
   Scenario: assign password to already created public share
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings in the server
