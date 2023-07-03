@@ -405,7 +405,6 @@ export default defineComponent({
     }
   },
   methods: {
-    $gettext,
     ...mapActions([
       'createModal',
       'hideModal',
