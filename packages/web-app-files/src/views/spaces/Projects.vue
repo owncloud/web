@@ -11,6 +11,7 @@
         :has-pagination="false"
         :side-bar-open="sideBarOpen"
         :view-modes="viewModes"
+        view-mode-storage-prefix="files-spaces-projects"
       >
         <template #actions>
           <create-space v-if="hasCreatePermission" />

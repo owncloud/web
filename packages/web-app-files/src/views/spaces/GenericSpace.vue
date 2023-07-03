@@ -13,6 +13,7 @@
         :side-bar-open="sideBarOpen"
         :space="space"
         :view-modes="viewModes"
+        view-mode-storage-prefix="files-spaces-generic"
         @item-dropped="fileDropped"
       >
         <template #actions="{ limitedScreenSpace }">
