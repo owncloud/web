@@ -7,7 +7,7 @@
         class="edit-public-link-role-dropdown-toggle oc-text-left"
         gap-size="none"
       >
-        <span class="link-current-role" v-text="currentLinkRoleLabel" />
+        <span class="link-current-role" v-text="currentLinkRoleLabel || $gettext('Select a role')" />
         <oc-icon name="arrow-down-s" />
       </oc-button>
       <oc-drop
@@ -237,14 +237,14 @@ export default defineComponent({
       return LinkShareRoles.getByBitmask(this.link.permissions, this.isFolderShare)
     },
     currentLinkRoleDescription() {
-      return this.currentLinkRole.description(false)
+      return this.currentLinkRole?.description(false) || ''
     },
 
     currentLinkRoleLabel() {
-      if (this.currentLinkRole.longLabel !== '') {
-        return this.$gettext(this.currentLinkRole.longLabel)
+      if (this.currentLinkRole?.longLabel !== '') {
+        return this.$gettext(this.currentLinkRole?.longLabel || '')
       } else {
-        return this.$gettext(this.currentLinkRole.label)
+        return this.$gettext(this.currentLinkRole?.label || '')
       }
     },
 
@@ -405,6 +405,7 @@ export default defineComponent({
     }
   },
   methods: {
+    $gettext,
     ...mapActions([
       'createModal',
       'hideModal',

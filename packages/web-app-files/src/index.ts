@@ -93,7 +93,7 @@ const navItems = (context): AppNavigationItem[] => {
       },
       activeFor: [{ path: `/${appInfo.id}/trash` }],
       enabled(capabilities) {
-        return capabilities.dav?.trashbin === '1.0' && capabilities.files?.undelete
+        return capabilities.dav?.trashbin === '1.0'
       }
     }
   ]
