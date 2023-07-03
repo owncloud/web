@@ -37,7 +37,7 @@ export default defineComponent({
   name: 'OcSearchBarFilter',
   props: {
     locationOptions: {
-      type: Object,
+      type: Array<any>,
       required: false,
       default: () => []
     }
