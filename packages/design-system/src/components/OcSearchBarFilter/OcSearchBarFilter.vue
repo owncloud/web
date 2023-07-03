@@ -16,7 +16,7 @@
           size="medium"
           justify-content="space-between"
           class="search-bar-filter-item oc-flex oc-flex-middle oc-width-1-1 oc-py-xs oc-px-s"
-          :class="{ 'oc-mt-s': parseInt(index) > 0 }"
+          :class="{ 'oc-mt-s': isIndexGreaterZero(index) }"
           :disabled="!option.enabled"
           @click="onOptionSelected(option)"
         >
@@ -45,6 +45,9 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, { emit }) {
     const currentSelection = ref(props.locationOptions.find((option) => option.default))
+    const isIndexGreaterZero = (index): boolean => {
+      return parseInt(index) > 0
+    }
 
     watch(
       () => props.locationOptions,
@@ -57,7 +60,7 @@ export default defineComponent({
       { immediate: true, deep: true }
     )
 
-    return { currentSelection }
+    return { currentSelection, isIndexGreaterZero }
   },
   methods: {
     onOptionSelected(option: string) {
