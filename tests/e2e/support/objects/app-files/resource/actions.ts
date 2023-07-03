@@ -30,7 +30,8 @@ const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
 const createNewDrawioFileButton = '.new-file-btn-drawio'
-const saveTextFileInEditorButton = '#text-editor-controls-save'
+const createNewOpenDocumentFileButton = '//ul[@id="create-list"]//li//button/span[text()="%s"]'
+const saveTextFileInEditorButton = '#text-editor-controls-save:visible'
 const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
@@ -67,6 +68,7 @@ const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//
 const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
 const drawioSaveButton = '.geBigButton >> text=Save'
 const drawioIframe = '#drawio-editor'
+const collaboratorIframe = '[name="app-iframe"]'
 const tagTableCell =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]'
 const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//ancestor::a'
@@ -117,7 +119,7 @@ export const clickResource = async ({
 export interface createResourceArgs {
   page: Page
   name: string
-  type: 'folder' | 'txtFile' | 'mdFile' | 'drawioFile'
+  type: 'folder' | 'txtFile' | 'mdFile' | 'drawioFile' | 'OpenDocument'
   content?: string
 }
 
@@ -236,6 +238,24 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
 
       // TODO: Update to use appTopBar once #8447 is merged
       await page.goto(page.url())
+      break
+    }
+    case 'OpenDocument': {
+      //TODO
+      // this needs to be change to other function as requirement
+      await page.locator(util.format(createNewOpenDocumentFileButton, type)).click()
+      await page.locator(resourceNameInput).fill(name)
+      let newTabPromise
+      await Promise.all([
+        newTabPromise = page.waitForEvent("popup"),
+        page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
+        page.locator(util.format(actionConfirmationButton, 'Create')).click()
+      ])
+      const colaboraEditorPage = await newTabPromise
+      await colaboraEditorPage.waitForLoadState();
+      await colaboraEditorPage.waitForURL('**/external/personal/**')
+      const collaboratorIFrameLocator = await colaboraEditorPage.frameLocator(collaboratorIframe).locator('[role="navigation"]')
+      await expect(collaboratorIFrameLocator).toBeVisible()
       break
     }
   }
