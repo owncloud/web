@@ -27,7 +27,7 @@ export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
         meta: {
           authContext: 'user',
           title: $gettext('Search results'),
-          contextQueryItems: ['term', 'provider', 'q_tags']
+          contextQueryItems: ['term', 'provider', 'q_tags', 'q_fullText']
         }
       }
     ]
