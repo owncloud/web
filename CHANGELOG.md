@@ -119,6 +119,7 @@ Details
 
    https://github.com/owncloud/web/issues/9045
    https://github.com/owncloud/web/pull/9046
+   https://github.com/owncloud/web/pull/9307
 
 * Enhancement - Drag & drop on parent folder: [#9052](https://github.com/owncloud/web/pull/9052)
 
