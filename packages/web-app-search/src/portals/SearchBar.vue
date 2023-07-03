@@ -342,7 +342,7 @@ export default defineComponent({
 
         let scope = null
         if (this.currentFolderAvailable) {
-          const currentFolder = this.$store.getters['Files/currentFolder']
+          const currentFolder = this.store.getters['Files/currentFolder']
           const spaceId = currentFolder.fileId.split('!')[0]
           scope = `${spaceId}${currentFolder.path}`
         }
