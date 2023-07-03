@@ -27,7 +27,7 @@ This setup currently doesn't work on Windows out of the box.
 
 After cloning the [source code](https://github.com/owncloud/web), install the dependencies via `pnpm install` and bundle the frontend code by running `pnpm build:w`.
 
-Then, you can start the backends by running `docker-compose up oc10 ocis` and access them via [https://host.docker.internal:9200](https://host.docker.internal:9200) (oCIS) and [http://host.docker.internal:8080](http://host.docker.internal:8080) (OC10). If you're not using Docker Desktop, you might have to modify your `/etc/hosts` and add `172.17.0.1 host.docker.internal` to make the `host.docker.internal` links work.
+Then, you can start the backends by running `docker-compose up oc10 ocis` and access them via [https://host.docker.internal:9200](https://host.docker.internal:9200) (oCIS) and [http://host.docker.internal:8080](http://host.docker.internal:8080) (OC10). If you're not using Docker Desktop, you might have to modify your `/etc/hosts` and add `127.0.0.1 host.docker.internal` to make the `host.docker.internal` links work.
 
 The bundled frontend code automatically gets mounted into the Docker containers, recompiles on changes and you can log in using the demo user (admin/admin) and take a look around!
 
@@ -53,13 +53,13 @@ Depending on the backend you are using, there are sample config files provided i
   by this is the trash bin, as that doesn't allow showing previews at all.
 - `options.previewFileMimeTypes` Specifies which mimeTypes will be previewed in the ui. For example to only preview jpg and text files set this option to `["image/jpeg", "text/plain"]`.
 - `options.accountEditLink` This accepts an object with the following optional fields to have a link on the account page:
-  - `options.accountEditLink.href` Set a different target URL for the edit link. Make sure to prepend it with `http(s)://`.
+    - `options.accountEditLink.href` Set a different target URL for the edit link. Make sure to prepend it with `http(s)://`.
 - `options.disableFeedbackLink` Set this option to `true` to disable the feedback link in the topbar. Keeping it enabled (value `false` or absence of the option)
   allows ownCloud to get feedback from your user base through a dedicated survey website.
 - `options.feedbackLink` This accepts an object with the following optional fields to customize the feedback link in the topbar:
-  - `options.feedbackLink.href` Set a different target URL for the feedback link. Make sure to prepend it with `http(s)://`. Defaults to `https://owncloud.com/web-design-feedback`.
-  - `options.feedbackLink.ariaLabel` Since the link only has an icon, you can set an e.g. screen reader accessible label. Defaults to `ownCloud feedback survey`.
-  - `options.feedbackLink.description` Provide any description you want to see as tooltip and as accessible description. Defaults to `Provide your feedback: We'd like to improve the web design and would be happy to hear your feedback. Thank you! Your ownCloud team.`
+    - `options.feedbackLink.href` Set a different target URL for the feedback link. Make sure to prepend it with `http(s)://`. Defaults to `https://owncloud.com/web-design-feedback`.
+    - `options.feedbackLink.ariaLabel` Since the link only has an icon, you can set an e.g. screen reader accessible label. Defaults to `ownCloud feedback survey`.
+    - `options.feedbackLink.description` Provide any description you want to see as tooltip and as accessible description. Defaults to `Provide your feedback: We'd like to improve the web design and would be happy to hear your feedback. Thank you! Your ownCloud team.`
 - `options.sharingRecipientsPerPage` Sets the amount of users shown as recipients in the dropdown when sharing resources. Default amount is 200.
 - `options.sidebar.shares.showAllOnLoad` Sets the list of (link) shares list in the sidebar to be initially expanded (default is a collapsed state, only showing the first three shares).
 - `options.runningOnEos` Set this option to `true` if running on an [EOS storage backend](https://eos-web.web.cern.ch/eos-web/) to enable its specific features. Defaults to `false`, and we recommend reaching out to [the ownCloud web team](https://talk.owncloud.com/channel/web) if you're not CERN and thinking about enabling this feature flag.
@@ -67,7 +67,7 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.hoverableQuickActions` Set this option to `true` to hide the quick actions (buttons appearing on file rows), and only show them when the user
   hovers the row with his mouse. Defaults to `false`.
 - `option.routing` This accepts an object with the following fields to customize the routing behaviour:
-  - `options.routing.idBased` Enable or disable fileIds being added to the URL. Defaults to `true` because otherwise e.g. spaces with name clashes can't be resolved correctly. Only disable this if you can guarantee server side that spaces of the same namespace can't have name clashes.
+    - `options.routing.idBased` Enable or disable fileIds being added to the URL. Defaults to `true` because otherwise e.g. spaces with name clashes can't be resolved correctly. Only disable this if you can guarantee server side that spaces of the same namespace can't have name clashes.
 - `options.upload.xhr.timeout` Specifies the timeout for XHR uploads in milliseconds.
 - `options.editor.autosaveEnabled` Specifies if the autosave for the editor apps is enabled.
 - `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
