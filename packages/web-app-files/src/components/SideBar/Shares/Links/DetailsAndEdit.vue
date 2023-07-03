@@ -246,9 +246,8 @@ export default defineComponent({
     currentLinkRoleLabel() {
       if (this.currentLinkRole?.longLabel !== '') {
         return this.$gettext(this.currentLinkRole.longLabel)
-      } else {
-        return this.$gettext(this.currentLinkRole?.label || '')
       }
+      return this.$gettext(this.currentLinkRole?.label || '')
     },
 
     editOptions() {
