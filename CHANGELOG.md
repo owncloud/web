@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Favorites list update on removal: [#9078](https://github.com/owncloud/web/pull/9078)
 * Bugfix - Space creation does not block reoccurring event: [#9213](https://github.com/owncloud/web/pull/9213)
+* Bugfix - Uploading to folders that contain special characters: [#9247](https://github.com/owncloud/web/issues/9247)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 * Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
 * Enhancement - Shrink table columns: [#8599](https://github.com/owncloud/web/issues/8599)
@@ -55,6 +56,13 @@ Details
 
    https://github.com/owncloud/web/issues/9189
    https://github.com/owncloud/web/pull/9213
+
+* Bugfix - Uploading to folders that contain special characters: [#9247](https://github.com/owncloud/web/issues/9247)
+
+   Uploading resources to folders that contain special characters in their names has been fixed.
+
+   https://github.com/owncloud/web/issues/9247
+   https://github.com/owncloud/web/pull/9290
 
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 
