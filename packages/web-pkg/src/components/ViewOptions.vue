@@ -124,6 +124,11 @@ export default defineComponent({
       type: String,
       required: true
     },
+    viewModeStoragePrefix: {
+      type: String,
+      required: false,
+      default: ''
+    },
     viewModes: {
       type: Array as PropType<ViewMode[]>,
       default: () => []
@@ -150,7 +155,8 @@ export default defineComponent({
     })
     const viewModeQuery = useRouteQueryPersisted({
       name: ViewModeConstants.queryName,
-      defaultValue: ViewModeConstants.defaultModeName
+      defaultValue: ViewModeConstants.defaultModeName,
+      storagePrefix: props.viewModeStoragePrefix
     })
     const viewSizeQuery = useRouteQueryPersisted({
       name: ViewModeConstants.tilesSizeQueryName,
