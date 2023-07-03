@@ -22,3 +22,25 @@ export const getApplicationEntity = async (admin: User): Promise<ApplicationEnti
   checkResponseStatus(response, 'Failed while getting application id')
   return (await response.json()).value[0]
 }
+
+export const createTagsForResource = async ({
+  user,
+  resourceId,
+  tags
+}: {
+  user: User
+  resourceId: string
+  tags: Array<string>
+}): Promise<void> => {
+  const body = {
+    resourceId,
+    tags
+  }
+  const response = await request({
+    method: 'PUT',
+    path: join('graph', 'v1.0', 'extensions', 'org.libregraph', 'tags'),
+    body: JSON.stringify(body),
+    user: user
+  })
+  checkResponseStatus(response, 'Failed while creating tags of a resource.')
+}

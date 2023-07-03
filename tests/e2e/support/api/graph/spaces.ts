@@ -81,6 +81,7 @@ export const createSpace = async ({
   const fileId = await getIdOfFileInsideSpace({
     user,
     pathToFileName: '.space/readme.md',
+    spaceType: 'project',
     spaceName
   })
   // After getting file id make a patch request to update space special section
