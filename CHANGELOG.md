@@ -162,6 +162,7 @@ Details
    https://github.com/owncloud/web/pull/9059
    https://github.com/owncloud/web/pull/9087
    https://github.com/owncloud/web/pull/9096
+   https://github.com/owncloud/web/pull/9332
 
 * Enhancement - Advanced search button: [#9077](https://github.com/owncloud/web/pull/9077)
 
