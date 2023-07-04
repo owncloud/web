@@ -1,0 +1,9 @@
+Enhancement: Batch actions redesign
+
+We've improved the overall look and feel of the top bar batch actions.
+This includes the new mechanism that the batch actions show up as well when only one item is selected,
+but also includes design changes.
+
+https://github.com/owncloud/web/pull/9346
+https://github.com/owncloud/web/issues/9340
+
