@@ -8,6 +8,7 @@ export interface Action<T = ActionOptions> {
   icon: string
   iconFillType?: string
   variation?: string
+  appearance?: string
   img?: string
   componentType: 'button' | 'router-link'
   class: string

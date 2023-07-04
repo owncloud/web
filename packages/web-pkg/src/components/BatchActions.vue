@@ -9,7 +9,7 @@
         :key="`action-${index}`"
         :action="action"
         :action-options="actionOptions"
-        appearance="outline"
+        appearance="raw"
         class="batch-actions oc-mr-s"
         :shortcut-hint="false"
         :show-tooltip="limitedScreenSpace"

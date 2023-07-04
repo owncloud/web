@@ -48,11 +48,7 @@
       </div>
       <div class="files-app-bar-actions oc-mt-xs">
         <div class="oc-flex-1 oc-flex oc-flex-start">
-          <slot
-            v-if="!selectedFiles.length || (showActionsOnSelection && selectedFiles.length === 1)"
-            name="actions"
-            :limited-screen-space="limitedScreenSpace"
-          />
+          <slot name="actions" :limited-screen-space="limitedScreenSpace" />
           <batch-actions
             v-if="showBatchActions"
             :actions="batchActions"
@@ -85,7 +81,6 @@ import SidebarToggle from './SidebarToggle.vue'
 import { ViewMode } from 'web-pkg/src/ui/types'
 import {
   useFileActionsAcceptShare,
-  useFileActionsClearSelection,
   useFileActionsCopy,
   useFileActionsDeclineShare,
   useFileActionsDelete,
@@ -95,7 +90,7 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
-import { useClientService, useRouter, useRouteMeta, useStore } from 'web-pkg/src'
+import { useRouteMeta, useStore } from 'web-pkg/src'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
 import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
@@ -140,12 +135,9 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const store = useStore()
-    const router = useRouter()
-    const clientService = useClientService()
     const { $gettext } = useGettext()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
-    const { actions: clearSelectionActions } = useFileActionsClearSelection({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
     const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
     const { actions: deleteActions } = useFileActionsDelete({ store })
@@ -159,7 +151,6 @@ export default defineComponent({
 
     const batchActions = computed(() => {
       return [
-        ...unref(clearSelectionActions),
         ...unref(acceptShareActions),
         ...unref(declineShareActions),
         ...unref(downloadArchiveActions),
@@ -244,7 +235,7 @@ export default defineComponent({
     showBatchActions() {
       return (
         this.hasBulkActions &&
-        (this.selectedFiles.length > 1 ||
+        (this.selectedFiles.length >= 1 ||
           isLocationTrashActive(this.$router, 'files-trash-generic'))
       )
     },

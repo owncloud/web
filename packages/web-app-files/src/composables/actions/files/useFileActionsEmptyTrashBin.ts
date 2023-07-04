@@ -92,12 +92,12 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
         }
 
         // empty trash bin is not available for individual resources, but only for the trash bin as a whole
-        return resources.length === 0
+        return true
       },
-      isDisabled: ({ resources }: ActionOptions) => store.getters['Files/activeFiles'].length === 0,
       componentType: 'button',
       class: 'oc-files-actions-empty-trash-bin-trigger',
-      variation: 'danger'
+      variation: 'danger',
+      appearance: 'filled'
     }
   ])
 
