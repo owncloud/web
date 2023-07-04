@@ -42,7 +42,7 @@
             :has-file-extensions="hasFileExtensions"
             :has-pagination="hasPagination"
             per-page-storage-prefix="files"
-            :view-mode-storage-prefix="viewModeStoragePrefix"
+            :view-mode-default="viewModeDefault"
           />
           <sidebar-toggle v-if="hasSidebarToggle" :side-bar-open="sideBarOpen" />
         </div>
@@ -107,7 +107,7 @@ export default defineComponent({
     ViewOptions
   },
   props: {
-    viewModeStoragePrefix: {
+    viewModeDefault: {
       type: String,
       required: false,
       default: ''
