@@ -11,7 +11,7 @@
         :has-pagination="false"
         :side-bar-open="sideBarOpen"
         :view-modes="viewModes"
-        view-mode-storage-prefix="files-spaces-projects"
+        :view-mode-default="ViewModeConstants.tilesView.name"
       >
         <template #actions>
           <create-space v-if="hasCreatePermission" />
@@ -142,7 +142,7 @@ import {
   ViewModeConstants,
   useRouteQueryPersisted,
   useSort,
-  useStore
+  useStore, useRouteName
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
@@ -224,9 +224,11 @@ export default defineComponent({
     const hasCreatePermission = computed(() => can('create-all', 'Drive'))
     const viewModes = computed(() => [ViewModeConstants.default, ViewModeConstants.tilesView])
 
+    const routeName = useRouteName()
+
     const viewMode = useRouteQueryPersisted({
-      name: ViewModeConstants.queryName,
-      defaultValue: ViewModeConstants.defaultModeName
+      name: `${unref(routeName)}-${ViewModeConstants.queryName}`,
+      defaultValue: ViewModeConstants.tilesView.name
     })
 
     const getManagerNames = (space: SpaceResource) => {
