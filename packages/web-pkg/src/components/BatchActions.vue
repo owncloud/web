@@ -46,6 +46,12 @@ export default defineComponent({
 
 <style lang="scss">
 #oc-appbar-batch-actions {
+  .action-menu-item {
+    padding-left: var(--oc-space-small) !important;
+    padding-right: var(--oc-space-small) !important;
+    gap: var(--oc-space-xsmall) !important;
+  }
+
   display: block;
   li {
     float: left !important;
