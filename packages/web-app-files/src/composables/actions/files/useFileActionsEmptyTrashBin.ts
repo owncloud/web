@@ -91,7 +91,6 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
           return false
         }
 
-        // empty trash bin is not available for individual resources, but only for the trash bin as a whole
         return true
       },
       componentType: 'button',
