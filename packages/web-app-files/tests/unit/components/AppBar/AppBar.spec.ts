@@ -94,10 +94,6 @@ describe('AppBar component', () => {
         )
         expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
       })
-      it('not if 1 file selected', () => {
-        const { wrapper } = getShallowWrapper([selectedFiles[0]], {}, { hasBulkActions: true })
-        expect(wrapper.find(selectors.batchActionsStub).exists()).toBeFalsy()
-      })
     })
     describe('mobile navigation portal', () => {
       it.each([

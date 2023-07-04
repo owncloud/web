@@ -14,12 +14,15 @@
     >
       <template #topbarActions>
         <div class="admin-settings-app-bar-actions">
-          <div>
-            <oc-button variation="primary" appearance="filled" @click="toggleCreateGroupModal">
-              <oc-icon name="add" />
-              <span v-text="$gettext('New group')" />
-            </oc-button>
-          </div>
+          <oc-button
+            class="oc-mr-s"
+            variation="primary"
+            appearance="filled"
+            @click="toggleCreateGroupModal"
+          >
+            <oc-icon name="add" />
+            <span v-text="$gettext('New group')" />
+          </oc-button>
         </div>
       </template>
       <template #mainContent>

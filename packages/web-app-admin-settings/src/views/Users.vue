@@ -16,6 +16,7 @@
         <div class="admin-settings-app-bar-actions">
           <oc-button
             v-if="!createUsersDisabled"
+            class="oc-mr-s"
             variation="primary"
             appearance="filled"
             data-test-id="create-user-btn"

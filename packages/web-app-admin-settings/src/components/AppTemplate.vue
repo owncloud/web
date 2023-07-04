@@ -39,7 +39,6 @@
             <slot name="topbarActions" class="oc-flex-1 oc-flex oc-flex-start" />
             <batch-actions
               v-if="showBatchActions"
-              class="oc-ml-s"
               :actions="batchActions"
               :action-options="{ resources: batchActionItems }"
               :limited-screen-space="limitedScreenSpace"
