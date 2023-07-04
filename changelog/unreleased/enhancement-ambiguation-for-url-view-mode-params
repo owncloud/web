@@ -1,0 +1,6 @@
+Enhancement: Ambiguation for URL view mode params
+
+show tiles view in projects spaces per default, changed route+storage params to be different from one another
+
+https://github.com/owncloud/web/pull/9344
+https://github.com/owncloud/web/issues/9337
