@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="files-app-bar-actions oc-mt-xs">
-        <div class="oc-flex-1 oc-flex oc-flex-start">
+        <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
           <slot name="actions" :limited-screen-space="limitedScreenSpace" />
           <batch-actions
             v-if="showBatchActions"
