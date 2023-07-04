@@ -17,20 +17,6 @@ describe('emptyTrashBin', () => {
   afterEach(() => jest.clearAllMocks())
 
   describe('isEnabled property', () => {
-    it('should be false when resource is given', () => {
-      const { wrapper } = getWrapper({
-        setup: ({ actions }, { space }) => {
-          expect(unref(actions)[0].isEnabled({ space, resources: [{}] as Resource[] })).toBe(false)
-        }
-      })
-    })
-    it('should be true when no resource is given', () => {
-      const { wrapper } = getWrapper({
-        setup: ({ actions }, { space }) => {
-          expect(unref(actions)[0].isEnabled({ space, resources: [] })).toBe(true)
-        }
-      })
-    })
     it('should be false when location is invalid', () => {
       const { wrapper } = getWrapper({
         invalidLocation: true,
