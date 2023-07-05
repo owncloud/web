@@ -757,7 +757,7 @@ export default defineComponent({
     },
     parentFolderLinkIcon(file: Resource) {
       if (isProjectSpaceResource(file)) {
-        return 'layout-grid'
+        return 'function'
       }
 
       // Identify if resource is part of a project space and the resource is located in its root
@@ -765,7 +765,7 @@ export default defineComponent({
         isProjectSpaceResource(this.getInternalSpace(file.storageId) || {}) &&
         file.path.split('/').length === 2
       ) {
-        return 'layout-grid'
+        return 'function'
       }
 
       return 'folder-2'
