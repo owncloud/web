@@ -76,7 +76,6 @@ type TagOption = {
 
 export default defineComponent({
   name: 'TagsPanel',
-  methods: { keycode },
   components: {
     CompareSaveDialog
   },
@@ -184,7 +183,8 @@ export default defineComponent({
       createOption,
       isOptionSelectable,
       showSelectNewLabel,
-      save
+      save,
+      keycode
     }
   }
 })
