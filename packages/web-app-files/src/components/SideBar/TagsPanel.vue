@@ -11,6 +11,7 @@
         :options="availableTags"
         taggable
         push-tags
+        :select-on-key-codes="[188, 13]"
         :label="$gettext('Add or edit tags')"
         :create-option="createOption"
         :selectable="isOptionSelectable"
@@ -103,6 +104,7 @@ export default defineComponent({
       selectedTags.value = unref(currentTags)
     }
     const createOption = (label: string): TagOption => {
+      console.log(label)
       if (!label.trim().length) {
         return {
           label: label.toLowerCase().trim(),
@@ -181,7 +183,7 @@ export default defineComponent({
       createOption,
       isOptionSelectable,
       showSelectNewLabel,
-      save
+      save,
     }
   }
 })
