@@ -67,6 +67,7 @@
           :is-resource-clickable="isResourceClickable(item.id)"
           :folder-link="folderLink(item)"
           :parent-folder-link="parentFolderLink(item)"
+          :parent-folder-link-icon="parentFolderLinkIcon(item)"
           :class="{ 'resource-table-resource-cut': isResourceCut(item) }"
           @click="emitFileClick(item)"
         />
@@ -753,6 +754,21 @@ export default defineComponent({
         ...(file.parentFolderId && { fileId: file.parentFolderId }),
         resource: file
       })
+    },
+    parentFolderLinkIcon(file: Resource) {
+      if (isProjectSpaceResource(file)) {
+        return 'layout-grid'
+      }
+
+      // Identify if parentFolder is a space and resource is located in its root
+      if (
+        isProjectSpaceResource(this.getInternalSpace(file.storageId || {})) &&
+        file.path.split('/').length === 2
+      ) {
+        return 'layout-grid'
+      }
+
+      return 'folder-2'
     },
     fileDragged(file) {
       this.addSelectedResource(file)

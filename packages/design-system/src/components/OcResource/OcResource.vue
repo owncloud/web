@@ -103,6 +103,14 @@ export default defineComponent({
       default: null
     },
     /**
+     * The resource parent folder link path icon
+     */
+    parentFolderLinkIcon: {
+      type: String,
+      required: false,
+      default: 'folder-2'
+    },
+    /**
      * The resource to be displayed
      */
     resource: {
@@ -185,26 +193,6 @@ export default defineComponent({
 
     thumbnail() {
       return this.resource.thumbnail
-    },
-
-    isSpace() {
-      return this.resource.type === 'space'
-    },
-
-    parentFolderLinkIcon() {
-      if (this.isSpace) {
-        return 'layout-grid'
-      }
-
-      // Identify if parentFolder is a space and resource is located in its root
-      if (
-        this.parentFolderLink.params?.driveAliasAndItem?.startsWith('project/') &&
-        this.resource.path.split('/').length === 2
-      ) {
-        return 'layout-grid'
-      }
-
-      return 'folder-2'
     }
   },
 
