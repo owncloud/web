@@ -760,7 +760,7 @@ export default defineComponent({
         return 'layout-grid'
       }
 
-      // Identify if parentFolder is a space and resource is located in its root
+      // Identify if resource is part of a project space and the resource is located in its root
       if (
         isProjectSpaceResource(this.getInternalSpace(file.storageId) || {}) &&
         file.path.split('/').length === 2
