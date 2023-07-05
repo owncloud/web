@@ -11,7 +11,7 @@
         :options="availableTags"
         taggable
         push-tags
-        :select-on-key-codes="[188, 13]"
+        :select-on-key-codes="[keycode('enter'), keycode(',')]"
         :label="$gettext('Add or edit tags')"
         :create-option="createOption"
         :selectable="isOptionSelectable"
@@ -64,6 +64,7 @@ import { useClientService, useStore } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 import diff from 'lodash-es/difference'
 import { useGettext } from 'vue3-gettext'
+import keycode from "keycode";
 
 const tagsMaxCount = 100
 
@@ -75,6 +76,7 @@ type TagOption = {
 
 export default defineComponent({
   name: 'TagsPanel',
+  methods: { keycode },
   components: {
     CompareSaveDialog
   },
@@ -182,7 +184,7 @@ export default defineComponent({
       createOption,
       isOptionSelectable,
       showSelectNewLabel,
-      save,
+      save
     }
   }
 })
