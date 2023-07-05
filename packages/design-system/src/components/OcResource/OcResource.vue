@@ -165,7 +165,6 @@ export default defineComponent({
     },
 
     parentFolder() {
-      console.log(this.resource)
       const folder = path.basename(path.dirname(this.resource.path)).replace('.', '')
       return folder !== '' ? folder : this.parentFolderNameDefault
     },
