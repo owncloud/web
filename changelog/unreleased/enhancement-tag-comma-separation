@@ -2,5 +2,5 @@ Enhancement: Tag comma separation on client side
 
 Tags containing commas are now split up into separate tags on client side to match server side processing behaviour.
 
-https://github.com/owncloud/web/pull/xxxx
+https://github.com/owncloud/web/pull/9348
 https://github.com/owncloud/web/issues/9224
