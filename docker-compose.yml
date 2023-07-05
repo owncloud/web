@@ -225,7 +225,8 @@ services:
       traefik.http.routers.collabora.rule: PathPrefix(`/`)
       traefik.http.routers.collabora.entrypoints: collabora
       traefik.http.services.collabora.loadbalancer.server.port: 9980
-    restart: always
+    depends_on:
+      - traefik
 
   onlyoffice:
     image: onlyoffice/documentserver:7.3.0
@@ -249,6 +250,8 @@ services:
       traefik.http.middlewares.onlyoffice.headers.customrequestheaders.X-Forwarded-Proto: https
       traefik.http.routers.onlyoffice.middlewares: onlyoffice
     restart: always
+    depends_on:
+      - traefik
 
   wopiserver:
     image: cs3org/wopiserver:v9.4.0
@@ -270,7 +273,8 @@ services:
       traefik.http.routers.wopiserver.rule: PathPrefix(`/`)
       traefik.http.routers.wopiserver.entrypoints: wopi
       traefik.http.services.wopiserver.loadbalancer.server.port: 8880
-    restart: always
+    depends_on:
+      - traefik
 
   traefik:
     image: traefik:v2.10.1

@@ -4,6 +4,9 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
 import { editor } from '../../../support/objects/app-files/utils'
+import util from "util";
+import {expect} from "@playwright/test";
+import {openFileWithOfficeSuiteEditor} from "../../../support/objects/app-files/utils/editor";
 
 When(
   '{string} opens the public link {string}',
@@ -42,6 +45,18 @@ When(
     await editor.close(page)
   }
 )
+
+When(
+    /"([^"]*)" opens the following resource using (Collabora|OnlyOffice) should have$/,
+    async function (
+        this: World,
+        stepUser: string,
+        editorType: string,
+        stepTable: DataTable
+    ): Promise<void> {
+        const {page} = this.actorsEnvironment.getActor({key: stepUser})
+        await editor.openFileWithOfficeSuiteEditor(page, editorType)
+    })
 
 When(
   '{string} drop uploads following resources',
