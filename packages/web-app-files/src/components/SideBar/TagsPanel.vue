@@ -104,7 +104,6 @@ export default defineComponent({
       selectedTags.value = unref(currentTags)
     }
     const createOption = (label: string): TagOption => {
-      console.log(label)
       if (!label.trim().length) {
         return {
           label: label.toLowerCase().trim(),
