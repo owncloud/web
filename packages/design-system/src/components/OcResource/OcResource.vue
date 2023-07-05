@@ -51,7 +51,7 @@
           class="parent-folder"
           @click.stop="$emit('parentFolderClicked')"
         >
-          <oc-icon name="folder-2" size="small" fill-type="line" />
+          <oc-icon :name="parentFolderLinkIcon" size="small" fill-type="line" />
           <span class="text" v-text="parentFolder" />
         </component>
       </div>
@@ -165,6 +165,7 @@ export default defineComponent({
     },
 
     parentFolder() {
+      console.log(this.resource)
       const folder = path.basename(path.dirname(this.resource.path)).replace('.', '')
       return folder !== '' ? folder : this.parentFolderNameDefault
     },
@@ -185,6 +186,26 @@ export default defineComponent({
 
     thumbnail() {
       return this.resource.thumbnail
+    },
+
+    isSpace() {
+      return this.resource.type === 'space'
+    },
+
+    parentFolderLinkIcon() {
+      if (this.isSpace) {
+        return 'layout-grid'
+      }
+
+      // Identify if parentFolder is a space and resource is located in its root
+      if (
+        this.parentFolderLink.params?.driveAliasAndItem?.startsWith('project/') &&
+        this.resource.path.split('/').length === 2
+      ) {
+        return 'layout-grid'
+      }
+
+      return 'folder-2'
     }
   },
 
