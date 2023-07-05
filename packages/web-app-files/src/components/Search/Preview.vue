@@ -12,6 +12,7 @@
       :is-path-displayed="true"
       :is-resource-clickable="false"
       :parent-folder-link="parentFolderLink"
+      :parent-folder-link-icon="parentFolderLinkIcon"
       :parent-folder-name-default="defaultParentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
       @parent-folder-clicked="parentFolderClicked"
@@ -29,7 +30,7 @@ import { computed, defineComponent, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useGetMatchingSpace } from 'web-pkg/src/composables'
 import { buildShareSpaceResource, isProjectSpaceResource, Resource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { eventBus } from 'web-pkg/src/services/eventBus'
@@ -53,6 +54,7 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const { getInternalSpace } = useGetMatchingSpace()
     const previewData = ref()
     const resource = computed((): Resource => {
       return {
@@ -65,6 +67,7 @@ export default defineComponent({
     })
     return {
       ...useFileActions(),
+      getInternalSpace,
       hasShareJail: useCapabilityShareJailEnabled(),
       previewData,
       resource
@@ -142,6 +145,22 @@ export default defineComponent({
         return createLocationSpaces('files-spaces-projects')
       }
       return this.createFolderLink(dirname(this.resource.path), this.resource.parentFolderId)
+    },
+
+    parentFolderLinkIcon() {
+      if (isProjectSpaceResource(this.resource)) {
+        return 'layout-grid'
+      }
+
+      // Identify if resource is part of a project space and the resource is located in its root
+      if (
+        isProjectSpaceResource(this.getInternalSpace(this.resource.storageId) || {}) &&
+        this.resource.path.split('/').length === 2
+      ) {
+        return 'layout-grid'
+      }
+
+      return 'folder-2'
     }
   },
   mounted() {
