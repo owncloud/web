@@ -12,7 +12,7 @@
       :is-path-displayed="true"
       :is-resource-clickable="false"
       :parent-folder-link="parentFolderLink"
-      :parent-folder-link-icon="parentFolderLinkIcon"
+      :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
       :parent-folder-name-default="defaultParentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
       @parent-folder-clicked="parentFolderClicked"
@@ -147,20 +147,20 @@ export default defineComponent({
       return this.createFolderLink(dirname(this.resource.path), this.resource.parentFolderId)
     },
 
-    parentFolderLinkIcon() {
-      if (isProjectSpaceResource(this.resource)) {
-        return 'function'
-      }
-
-      // Identify if resource is part of a project space and the resource is located in its root
+    parentFolderLinkIconAdditionalAttributes() {
+      // Identify if resource is project space or is part of a project space and the resource is located in its root
       if (
-        isProjectSpaceResource(this.getInternalSpace(this.resource.storageId) || {}) &&
-        this.resource.path.split('/').length === 2
+        isProjectSpaceResource(this.resource) ||
+        (isProjectSpaceResource(this.getInternalSpace(this.resource.storageId) || {}) &&
+          this.resource.path.split('/').length === 2)
       ) {
-        return 'function'
+        return {
+          name: 'layout-grid',
+          'fill-type': 'fill'
+        }
       }
 
-      return 'folder-2'
+      return {}
     }
   },
   mounted() {
