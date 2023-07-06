@@ -7,6 +7,9 @@ const accountManageButton = '#oc-topbar-account-manage'
 const infoValue = '.account-page-info-%s dd'
 const requestExportButton = '[data-testid="request-export-btn"]'
 const downloadExportButton = '[data-testid="download-export-btn"]'
+const languageInput = '[data-testid="language"] .vs__search'
+const languageValueDropDown = `.vs__dropdown-menu :text-is("%s")`
+const languageValue = '[data-testid="language"] .vs__selected'
 
 export const getQuotaValue = async (args: { page: Page }): Promise<string> => {
   const { page } = args
@@ -74,4 +77,20 @@ export const downloadGdprExport = async (args: { page: Page }): Promise<string> 
   ])
   await page.locator(requestExportButton).waitFor()
   return download.suggestedFilename()
+}
+
+export const changeLanguage = async (args: { page: Page; language: string }): Promise<string> => {
+  const { page, language } = args
+
+  await Promise.all([
+    page.waitForResponse(
+      (res) =>
+        res.url().includes('api/v0/settings/values-save') &&
+        res.request().method() === 'POST' &&
+        res.status() === 201
+    ),
+    page.locator(languageInput).fill(language),
+    page.locator(util.format(languageValueDropDown, language)).click()
+  ])
+  return (await page.locator(languageValue).textContent()).trim()
 }
