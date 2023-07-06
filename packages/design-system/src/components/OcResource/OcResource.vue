@@ -51,7 +51,7 @@
           class="parent-folder"
           @click.stop="$emit('parentFolderClicked')"
         >
-          <oc-icon v-bind="parentFolderLinkIconAdditionalAttrs" />
+          <oc-icon v-bind="parentFolderLinkIconAttrs" />
           <span class="text" v-text="parentFolder" />
         </component>
       </div>
@@ -184,7 +184,7 @@ export default defineComponent({
       }
     },
 
-    parentFolderLinkIconAdditionalAttrs() {
+    parentFolderLinkIconAttrs() {
       return {
         'fill-type': 'line',
         name: 'folder-2',
