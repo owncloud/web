@@ -314,7 +314,7 @@ export default defineComponent({
       ) {
         const currentFolder = this.store.getters['Files/currentFolder']
         const spaceId = currentFolder.fileId.split('!')[0]
-        searchTerm = `${this.term} +scope:${spaceId}${currentFolder.path}`
+        searchTerm = `${this.term} scope:${spaceId}${currentFolder.path}`
       }
 
       this.loading = true
@@ -336,6 +336,7 @@ export default defineComponent({
     },
     onKeyUpEnter() {
       this.optionsDrop.hide()
+      console.log('spaces: ', this.store.getters['runtime/spaces/spaces'])
 
       if (this.activePreviewIndex === null) {
         const currentQuery = unref(this.$router.currentRoute).query

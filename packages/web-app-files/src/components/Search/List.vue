@@ -234,7 +234,7 @@ export default defineComponent({
       }
 
       if (unref(scopeQuery) && unref(useScope) === 'true') {
-        term += `+Scope:${unref(scopeQuery)}`
+        term += `scope:${unref(scopeQuery)}`
       }
 
       const fullTextQuery = queryItemAsString(unref(fullTextParam))
