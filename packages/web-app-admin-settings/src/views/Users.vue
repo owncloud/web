@@ -13,13 +13,13 @@
       :show-view-options="true"
     >
       <template #topbarActions>
-        <div class="admin-settings-app-bar-actions">
+        <div>
           <oc-button
             v-if="!createUsersDisabled"
+            id="create-user-btn"
             class="oc-mr-s"
             variation="primary"
             appearance="filled"
-            data-test-id="create-user-btn"
             @click="toggleCreateUserModal"
           >
             <oc-icon name="add" />

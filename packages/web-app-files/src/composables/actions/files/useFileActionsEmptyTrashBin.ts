@@ -13,7 +13,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { ActionOptions, FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

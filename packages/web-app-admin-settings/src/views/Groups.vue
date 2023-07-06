@@ -13,8 +13,9 @@
       :show-view-options="true"
     >
       <template #topbarActions>
-        <div class="admin-settings-app-bar-actions">
+        <div>
           <oc-button
+            id="create-group-btn"
             class="oc-mr-s"
             variation="primary"
             appearance="filled"

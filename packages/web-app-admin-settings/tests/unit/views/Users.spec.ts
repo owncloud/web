@@ -90,7 +90,7 @@ const getClientService = () => {
 const selectors = {
   itemFilterGroupsStub: 'item-filter-stub[filtername="groups"]',
   itemFilterRolesStub: 'item-filter-stub[filtername="roles"]',
-  createUserButton: '[data-test-id="create-user-btn"]'
+  createUserButton: '#create-user-btn'
 }
 
 describe('Users view', () => {

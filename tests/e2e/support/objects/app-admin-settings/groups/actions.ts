@@ -2,7 +2,7 @@ import { Page } from 'playwright'
 import util from 'util'
 import { selectUser } from '../users/actions'
 
-const newGroupBtn = '.admin-settings-app-bar-actions'
+const newGroupBtn = '#new-file-menu-btn'
 const createGroupInput = '#create-group-input-display-name'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
 const editActionBtnContextMenu = '.context-menu .oc-groups-actions-edit-trigger'

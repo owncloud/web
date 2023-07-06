@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-template ref="template" :breadcrumbs="breadcrumbs">
+    <app-template ref="template" :breadcrumbs="breadcrumbs" :show-app-bar="false">
       <template #mainContent>
         <div class="oc-px-m">
           <InfoSection />
