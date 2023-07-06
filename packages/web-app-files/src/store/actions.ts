@@ -390,7 +390,7 @@ export default {
     return Promise.allSettled(shareQueriesPromises).then(() => {
       context.commit(
         'OUTGOING_SHARES_SET',
-          shares.filter((s) => s.outgoing && s.collaborator.name !== undefined)
+        shares.filter((s) => s.outgoing && s.collaborator.name !== undefined)
       )
       context.commit(
         'INCOMING_SHARES_SET',
