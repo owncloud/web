@@ -4,9 +4,7 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
 import { editor } from '../../../support/objects/app-files/utils'
-import util from "util";
-import {expect} from "@playwright/test";
-import {openFileWithOfficeSuiteEditor} from "../../../support/objects/app-files/utils/editor";
+import { expect } from '@playwright/test'
 
 When(
   '{string} opens the public link {string}',
@@ -47,16 +45,24 @@ When(
 )
 
 When(
-    /"([^"]*)" opens the following resource using (Collabora|OnlyOffice) should have$/,
-    async function (
-        this: World,
-        stepUser: string,
-        editorType: string,
-        stepTable: DataTable
-    ): Promise<void> {
-        const {page} = this.actorsEnvironment.getActor({key: stepUser})
-        await editor.openFileWithOfficeSuiteEditor(page, editorType)
-    })
+  /"([^"]*)" opens the following resource using (Collabora|OnlyOffice) should have$/,
+  async function (
+    this: World,
+    stepUser: string,
+    editorToOpen: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    for (const info of stepTable.hashes()) {
+      const actualFileContent = await pageObject.getContentOfOpenDocumentOrMicrosoftWordDocument({
+        page,
+        editorToOpen
+      })
+      expect(actualFileContent.trim()).toBe(info.content)
+    }
+  }
+)
 
 When(
   '{string} drop uploads following resources',

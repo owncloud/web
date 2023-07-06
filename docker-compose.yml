@@ -225,6 +225,7 @@ services:
       traefik.http.routers.collabora.rule: PathPrefix(`/`)
       traefik.http.routers.collabora.entrypoints: collabora
       traefik.http.services.collabora.loadbalancer.server.port: 9980
+    restart: always
     depends_on:
       - traefik
 

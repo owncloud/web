@@ -68,7 +68,7 @@ const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//
 const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
 const drawioSaveButton = '.geBigButton >> text=Save'
 const drawioIframe = '#drawio-editor'
-const collaboratorIframe = '[name="app-iframe"]'
+const editorIframe = '[name="app-iframe"]'
 const tagTableCell =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]'
 const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//ancestor::a'
@@ -97,6 +97,7 @@ const savedInCollaboraEditorSelector = '.notebookbar-shortcuts-bar .savemodified
 const onlyOfficeInnerFrameSelector = '[name="frameEditor"]'
 const msOfficeWordTextAreaSelector = '#asc-gen578'
 const openDocumentTextAreaSelector = '#clipboard-area'
+const officeSuiteEditorSelector = '.oc-files-actions-%s-trigger'
 
 export const clickResource = async ({
   page,
@@ -245,36 +246,42 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
       break
     }
     case 'OpenDocument': {
-      // by default this is opened by collabora when a file is created
-      await createWithOfficeSuite(args, 'Collabora')
+      // By Default when OpenDocument is created, it is opened with collabora
+      await createOpenDocumentOrMicrosoftWordFile(args, 'Collabora')
       break
     }
     case 'Microsoft Word': {
-      await createWithOfficeSuite(args, 'OnlyOffice')
+      // By Default when Microsoft Word document is created, it is opened with OnlyOffice
+      await createOpenDocumentOrMicrosoftWordFile(args, 'OnlyOffice')
       break
     }
   }
 }
 
-const createWithOfficeSuite = async (args: createResourceArgs, editorType: string):Promise<void> => {
+const createOpenDocumentOrMicrosoftWordFile = async (
+  args: createResourceArgs,
+  editorToOpen: string
+): Promise<void> => {
   const { page, name, type, content } = args
   await page.locator(util.format(createNewOpenDocumentFileButton, type)).click()
   await page.locator(resourceNameInput).fill(name)
   let newEditorTab
   await Promise.all([
-    newEditorTab = page.waitForEvent("popup"),
+    (newEditorTab = page.waitForEvent('popup')),
     page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
   const editorPage = await newEditorTab
-  await editorPage.waitForLoadState();
+  await editorPage.waitForLoadState()
   await editorPage.waitForURL('**/external/personal/**')
 
-  const editorMainFrame = await editorPage.frameLocator(collaboratorIframe)
-  // close the collabora welcome div
-  if(editorType === 'Collabora') {
-    for(let i = 1; i <=3; i++) {
-      await editorMainFrame.frameLocator('.iframe-welcome-modal').locator(`#slide-${i}-button`).click()
+  const editorMainFrame = await editorPage.frameLocator(editorIframe)
+  if (editorToOpen === 'Collabora') {
+    for (let i = 1; i <= 3; i++) {
+      await editorMainFrame
+        .frameLocator('.iframe-welcome-modal')
+        .locator(`#slide-${i}-button`)
+        .click()
     }
     await editorMainFrame.locator(openDocumentTextAreaSelector).type(content)
     const saveModified = await editorMainFrame.locator(savedInCollaboraEditorSelector)
@@ -282,14 +289,53 @@ const createWithOfficeSuite = async (args: createResourceArgs, editorType: strin
     await editorMainFrame.locator('#Save').click()
     await expect(saveModified).not.toBeVisible()
   }
-  if(editorType === 'OnlyOffice') {
+  if (editorToOpen === 'OnlyOffice') {
     const innerIframe = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
     await innerIframe.locator('#area_id').type(content)
     const saveButtonDisabledLocator = innerIframe.locator(msOfficeWordTextAreaSelector)
     await expect(saveButtonDisabledLocator).toHaveAttribute('disabled', 'disabled')
-    await editorPage.close()
   }
   await editorPage.close()
+}
+
+export const openAndGetContentOfOpenDocumentOrMicrosoftWordDocument = async ({
+  page,
+  editorToOpen
+}: {
+  page: Page
+  editorToOpen: string
+}): Promise<string> => {
+  let newEditorTab
+  let actualContent
+  await Promise.all([
+    (newEditorTab = page.waitForEvent('popup')),
+    await page.locator(util.format(officeSuiteEditorSelector, editorToOpen)).click()
+  ])
+  const editorPage = await newEditorTab
+  await editorPage.waitForLoadState()
+  await editorPage.waitForURL('**/external/public/**')
+  const editorMainFrame = await editorPage.frameLocator('[name="app-iframe"]')
+  if (editorToOpen === 'Collabora') {
+    for (let i = 1; i <= 3; i++) {
+      await editorMainFrame
+        .frameLocator('.iframe-welcome-modal')
+        .locator(`#slide-${i}-button`)
+        .click()
+    }
+    await editorMainFrame.locator('.leaflet-layer').click()
+    await editorPage.keyboard.press('Control+A', { delay: 1000 })
+    await editorPage.keyboard.press('Control+C', { delay: 1000 })
+    actualContent = await editorPage.evaluate(() => navigator.clipboard.readText())
+  }
+  if (editorToOpen === 'OnlyOffice') {
+    const innerFrame = await editorMainFrame.frameLocator('[name="frameEditor"]')
+    await innerFrame.locator('#id_viewer_overlay').click()
+    await editorPage.keyboard.press('Control+A')
+    await editorPage.keyboard.press('Control+C')
+    actualContent = await editorPage.evaluate(() => navigator.clipboard.readText())
+  }
+  await editorPage.close()
+  return actualContent
 }
 
 export const createResources = async (args: createResourceArgs): Promise<void> => {
