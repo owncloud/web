@@ -51,6 +51,11 @@ export default defineComponent({
     padding-right: var(--oc-space-small) !important;
     gap: var(--oc-space-xsmall) !important;
   }
+  .action-menu-item:hover:not([disabled]),
+  .action-menu-item:focus:not([disabled]) {
+    background-color: var(--oc-color-background-highlight);
+    border-color: var(--oc-color-background-highlight);
+  }
 
   display: block;
   li {
