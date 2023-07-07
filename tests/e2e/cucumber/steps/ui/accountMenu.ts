@@ -48,3 +48,13 @@ When(
     expect(downloadedResource).toContain('personal_data_export.json')
   }
 )
+
+When(
+  '{string} changes the language to {string}',
+  async function (this: World, stepUser: string, language: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const accountObject = new objects.account.Account({ page })
+    const expectedLanguage = await accountObject.changeLanguage(language)
+    expect(expectedLanguage).toBe(language)
+  }
+)

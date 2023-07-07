@@ -27,4 +27,8 @@ export class Account {
   downloadGdprExport(): Promise<string> {
     return po.downloadGdprExport({ page: this.#page })
   }
+
+  changeLanguage(language): Promise<string> {
+    return po.changeLanguage({ page: this.#page, language })
+  }
 }
