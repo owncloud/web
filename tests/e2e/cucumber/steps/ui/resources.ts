@@ -23,17 +23,6 @@ When(
 )
 
 When(
-  '{string} creates the following resource(s) using collabora',
-  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const resourceObject = new objects.applicationFiles.Resource({ page })
-    for (const info of stepTable.hashes()) {
-      await resourceObject.create({ name: info.resource, type: info.type, content: info.content })
-    }
-  }
-)
-
-When(
   '{string} uploads the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
