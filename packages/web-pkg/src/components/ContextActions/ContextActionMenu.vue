@@ -11,6 +11,8 @@
         v-for="(action, actionIndex) in section.items"
         :key="`section-${section.name}-action-${actionIndex}`"
         :action="action"
+        :appearance="appearance"
+        :variation="variation"
         :action-options="actionOptions"
         class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"
       />
@@ -35,6 +37,14 @@ export default defineComponent({
     menuSections: {
       type: Array as PropType<MenuSection[]>,
       required: true
+    },
+    appearance: {
+      type: String,
+      default: 'raw'
+    },
+    variation: {
+      type: String,
+      default: 'passive'
     },
     actionOptions: {
       type: Object as PropType<ActionOptions>,

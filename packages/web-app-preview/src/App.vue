@@ -8,7 +8,12 @@
     @keydown.esc="closeApp"
   >
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
-    <app-top-bar :resource="activeFilteredFile" :main-actions="fileActions" @close="closeApp" />
+    <app-top-bar
+      v-if="!isFileContentError"
+      :resource="activeFilteredFile"
+      :main-actions="fileActions"
+      @close="closeApp"
+    />
 
     <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
@@ -116,6 +121,7 @@ export default defineComponent({
     const route = useRoute()
     const appDefaults = useAppDefaults({ applicationId: 'preview' })
     const contextRouteQuery = useRouteQuery('contextRouteQuery')
+    const { downloadFile } = useDownloadFile()
 
     const activeIndex = ref()
     const cachedFiles = ref<CachedFile[]>([])
@@ -185,8 +191,7 @@ export default defineComponent({
       if (isFileContentLoading.value) {
         return
       }
-
-      useDownloadFile().downloadFile(activeFilteredFile.value)
+      downloadFile(activeFilteredFile.value)
     }
 
     const fileActions: Action<ActionOptions>[] = [

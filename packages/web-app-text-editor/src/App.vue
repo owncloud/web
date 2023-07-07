@@ -1,7 +1,7 @@
 <template>
   <main id="text-editor" class="oc-height-1-1">
     <app-top-bar
-      v-if="!isLoading"
+      v-if="!isError && !isLoading"
       :resource="resource"
       :main-actions="fileActions"
       @close="closeApp"
@@ -260,7 +260,8 @@ export default defineComponent({
         componentType: 'button',
         icon: 'save',
         class: 'text-editor-controls-save',
-        label: () => '',
+        label: () => 'Save',
+        hideLabel: true,
         handler: () => {
           save()
         }

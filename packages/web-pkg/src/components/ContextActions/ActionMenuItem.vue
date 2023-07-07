@@ -73,6 +73,10 @@ export default defineComponent({
       type: String,
       default: 'raw'
     },
+    variation: {
+      type: String,
+      default: 'passive'
+    },
     shortcutHint: {
       type: Boolean,
       default: true,
@@ -88,10 +92,10 @@ export default defineComponent({
     const componentProps = computed(() => {
       const properties = {
         appearance: props.appearance,
+        variation: props.action.variation || props.variation,
         ...(props.action.isDisabled && {
           disabled: props.action.isDisabled(props.actionOptions)
-        }),
-        ...(props.action.variation && { variation: props.action.variation })
+        })
       }
 
       if (props.action.componentType === 'router-link' && props.action.route) {
