@@ -1,0 +1,6 @@
+Bugfix: Remember location after token invalidation
+
+Fixed an issue where token invalidation in the IDP would result in losing the current location. So logging in after token invalidation now correctly redirects to the page the user was before.
+
+https://github.com/owncloud/web/issues/9261
+https://github.com/owncloud/web/pull/9364

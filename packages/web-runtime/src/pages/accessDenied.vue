@@ -24,7 +24,7 @@
       id="exitAnchor"
       type="router-link"
       class="oc-mt-m oc-width-medium"
-      :to="{ name: 'login' }"
+      :to="logoutLink"
       size="large"
       appearance="filled"
       variation="primary"
@@ -34,14 +34,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
-import { useStore } from 'web-pkg'
+import { computed, defineComponent, unref } from 'vue'
+import { useRoute, useStore } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'AccessDeniedPage',
   setup() {
     const store = useStore()
+    const route = useRoute()
     const { $gettext } = useGettext()
 
     const logoImg = computed(() => {
@@ -68,6 +69,15 @@ export default defineComponent({
     const navigateToLoginText = computed(() => {
       return $gettext('Log in again')
     })
+    const logoutLink = computed(() => {
+      const redirectUrl = unref(route).query?.redirectUrl
+      return {
+        name: 'login',
+        query: {
+          ...(redirectUrl && { redirectUrl })
+        }
+      }
+    })
 
     return {
       logoImg,
@@ -75,7 +85,8 @@ export default defineComponent({
       cardHint,
       footerSlogan,
       navigateToLoginText,
-      accessDeniedHelpUrl
+      accessDeniedHelpUrl,
+      logoutLink
     }
   }
 })

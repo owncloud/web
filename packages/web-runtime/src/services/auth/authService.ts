@@ -134,7 +134,10 @@ export class AuthService {
 
           if (this.userManager.unloadReason === 'authError') {
             this.hasAuthErrorOccurred = true
-            return this.router.push({ name: 'accessDenied' })
+            return this.router.push({
+              name: 'accessDenied',
+              query: { redirectUrl: unref(this.router.currentRoute)?.fullPath }
+            })
           }
 
           // handle redirect after logout
