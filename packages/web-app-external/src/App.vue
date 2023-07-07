@@ -6,7 +6,7 @@
     }"
   >
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
-    <app-top-bar v-if="!loadingError" :resource="resource" @close="closeApp" />
+    <app-top-bar v-if="!loading && !loadingError" :resource="resource" @close="closeApp" />
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" :message="errorMessage" />
     <iframe

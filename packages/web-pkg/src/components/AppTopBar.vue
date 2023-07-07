@@ -4,48 +4,34 @@
       <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
         <div class="open-file-bar oc-flex">
           <oc-resource
-            v-if="resource?.name"
+            v-if="resource"
             id="app-top-bar-resource"
             :is-thumbnail-displayed="false"
             :resource="resource"
           />
-          <div v-else class="oc-resource oc-text-overflow">
-            <span v-text="$gettext('Loading')" />
-          </div>
-          <template v-if="dropDownActions.length">
-            <oc-button
-              id="oc-openfile-contextmenu-trigger"
-              v-oc-tooltip="contextMenuLabel"
-              :aria-label="contextMenuLabel"
-            >
-              <oc-icon name="more-2" />
-            </oc-button>
-            <oc-drop
-              drop-id="oc-openfile-contextmenu"
-              toggle="#oc-openfile-contextmenu-trigger"
-              mode="click"
-              close-on-click
-              padding-size="small"
-              @click.stop.prevent
-            >
-              <context-action-menu
-                :menu-sections="[{ name: 'dropdown-actions', items: dropDownActions }]"
-                :action-options="{ resources: [resource] }"
-              />
-            </oc-drop>
-          </template>
         </div>
 
         <div class="oc-flex main-actions">
-          <template v-if="mainActions.length">
+          <template v-if="mainActions.length && resource">
             <context-action-menu
-              :menu-sections="[{ name: 'main-actions', items: mainActions }]"
-              :action-options="{ resources: [resource] }"
+              :menu-sections="[
+                {
+                  name: 'main-actions',
+                  items: mainActions
+                }
+              ]"
+              :action-options="{
+                resources: [resource]
+              }"
+              appearance="raw-inverse"
+              variation="brand"
             />
           </template>
           <oc-button
             id="app-top-bar-close"
             v-oc-tooltip="closeButtonLabel"
+            appearance="raw-inverse"
+            variation="brand"
             :aria-label="closeButtonLabel"
             @click="$emit('close')"
           >
@@ -69,17 +55,13 @@ export default defineComponent({
     ContextActionMenu
   },
   props: {
-    dropDownActions: {
-      type: Array as PropType<Action[]>,
-      default: () => []
-    },
     mainActions: {
       type: Array as PropType<Action[]>,
       default: () => []
     },
     resource: {
       type: Object as PropType<Resource>,
-      default: () => {}
+      default: null
     }
   },
   emits: ['close'],
@@ -96,7 +78,7 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-app-top-bar {
-  align-self: end;
+  align-self: center;
   grid-column: 1 / 4;
   grid-row: secondRow;
 
@@ -107,18 +89,19 @@ export default defineComponent({
 }
 
 .oc-app-top-bar-inner {
-  display: inline-flex;
   align-self: center;
   background-color: var(--oc-color-background-apptopbar);
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  height: 45px;
+  border-radius: 15px;
+  border: 1px solid var(--oc-color-input-border);
+  display: inline-flex;
   gap: 25px;
+  height: 40px;
+  margin: 10px auto;
   width: 90%;
-  margin: auto;
 
   @media (min-width: $oc-breakpoint-small-default) {
     flex-basis: 250px;
+    margin: 0 auto;
     width: 100%;
   }
 }
