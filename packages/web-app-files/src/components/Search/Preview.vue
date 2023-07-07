@@ -151,7 +151,9 @@ export default defineComponent({
       // Identify if resource is project space or is part of a project space and the resource is located in its root
       if (
         isProjectSpaceResource(this.resource) ||
-        (isProjectSpaceResource(this.getInternalSpace(this.resource.storageId) || {}) &&
+        (isProjectSpaceResource(
+          this.getInternalSpace(this.resource.storageId) || ({} as Resource)
+        ) &&
           this.resource.path.split('/').length === 2)
       ) {
         return {
