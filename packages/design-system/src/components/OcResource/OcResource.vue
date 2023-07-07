@@ -51,7 +51,7 @@
           class="parent-folder"
           @click.stop="$emit('parentFolderClicked')"
         >
-          <oc-icon name="folder-2" size="small" fill-type="line" />
+          <oc-icon v-bind="parentFolderLinkIconAttrs" />
           <span class="text" v-text="parentFolder" />
         </component>
       </div>
@@ -101,6 +101,14 @@ export default defineComponent({
       type: Object,
       required: false,
       default: null
+    },
+    /**
+     * The resource parent folder link path icon additional attributes
+     */
+    parentFolderLinkIconAdditionalAttributes: {
+      type: Object,
+      required: false,
+      default: () => {}
     },
     /**
      * The resource to be displayed
@@ -173,6 +181,15 @@ export default defineComponent({
       const hasLinkTarget = this.parentFolderLink !== null
       return {
         cursor: hasLinkTarget ? 'pointer' : 'default'
+      }
+    },
+
+    parentFolderLinkIconAttrs() {
+      return {
+        'fill-type': 'line',
+        name: 'folder-2',
+        size: 'small',
+        ...this.parentFolderLinkIconAdditionalAttributes
       }
     },
 

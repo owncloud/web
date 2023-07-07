@@ -191,6 +191,7 @@ export default defineComponent({
       'totalQuota',
       'usedQuota',
       'remainingQuota',
+      'status',
       'mdate'
     ]
 

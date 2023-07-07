@@ -94,7 +94,7 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
     return [
       {
         name: 'create-space-from-resource',
-        icon: 'layout-grid',
+        icon: 'function',
         handler,
         label: () => {
           return $gettext('Create Space from selection')
