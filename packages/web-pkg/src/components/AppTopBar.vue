@@ -90,9 +90,9 @@ export default defineComponent({
 
 .oc-app-top-bar-inner {
   align-self: center;
-  background-color: var(--oc-color-background-apptopbar);
+  background-color: var(--oc-components-apptopbar-background);
   border-radius: 15px;
-  border: 1px solid var(--oc-color-input-border);
+  border: 1px solid var(--oc-components-apptopbar-border);
   display: inline-flex;
   gap: 25px;
   height: 40px;
