@@ -23,7 +23,7 @@ const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//i
 export const fileRow =
   '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
 export const resourceNameSelector =
-  ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section) [data-test-resource-name="%s"]'
+  ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section, .files-table) [data-test-resource-name="%s"]'
 const breadcrumbResourceNameSelector =
   '//span[contains(@class, "oc-breadcrumb-item-text") and text()="%s"]'
 const addNewResourceButton = `#new-file-menu-btn`
@@ -1114,7 +1114,7 @@ export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<vo
 export interface openFileInViewerArgs {
   page: Page
   name: string
-  actionType: 'mediaviewer' | 'pdfviewer'
+  actionType: 'mediaviewer' | 'pdfviewer' | 'texteditor'
 }
 
 export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void> => {
@@ -1141,8 +1141,6 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
       page.locator(util.format(resourceNameSelector, name)).click()
     ])
   }
-
-  await editor.close(page)
 }
 
 export const checkThatFileVersionIsNotAvailable = async (
