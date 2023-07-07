@@ -12,20 +12,16 @@ import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg'
 
 describe('FilesDrop view', () => {
-  it('drop container always present', () => {
-    const { wrapper } = getMountedWrapper()
-    expect(wrapper.find('#files-drop-container').exists()).toBeTruthy()
-  })
   describe('different files view states', () => {
     it('shows the loading spinner during loading', () => {
       const { wrapper } = getMountedWrapper()
-      expect(wrapper.find('oc-spinner-stub').exists()).toBeTruthy()
+      expect(wrapper.find('app-loading-spinner').exists()).toBeTruthy()
     })
     it('shows the "resource-upload"-component after loading', async () => {
       const { wrapper } = getMountedWrapper()
       wrapper.vm.loading = false
       await wrapper.vm.$nextTick()
-      expect(wrapper.find('oc-spinner-stub').exists()).toBeFalsy()
+      expect(wrapper.find('app-loading-spinner').exists()).toBeFalsy()
       expect(wrapper.find('resource-upload-stub').exists()).toBeTruthy()
     })
   })

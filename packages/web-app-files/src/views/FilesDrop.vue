@@ -1,15 +1,14 @@
 <template>
-  <div id="files-drop-container" class="oc-height-1-1 oc-flex oc-flex-column oc-flex-between">
+  <app-loading-spinner v-if="loading" />
+  <div
+    v-else
+    id="files-drop-container"
+    class="oc-height-1-1 oc-flex oc-flex-column oc-flex-between"
+  >
     <div v-if="dragareaEnabled" class="dragarea" />
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
     <div class="oc-p oc-height-1-1">
-      <div v-if="loading" key="loading-drop" class="oc-flex oc-flex-column oc-flex-middle">
-        <h2 class="oc-login-card-title">
-          <span v-text="$gettext('Loading public link…')" />
-        </h2>
-        <oc-spinner :aria-hidden="true" />
-      </div>
-      <div v-else key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle">
+      <div key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle">
         <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
           <h2 v-text="title" />
           <resource-upload
