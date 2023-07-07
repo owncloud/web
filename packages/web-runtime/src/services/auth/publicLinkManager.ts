@@ -107,6 +107,12 @@ export class PublicLinkManager {
     })
   }
 
+  clearContext() {
+    this.store.commit('runtime/auth/SET_PUBLIC_LINK_CONTEXT', {
+      publicLinkContextReady: false
+    })
+  }
+
   private async fetchCapabilities({ token = '', password = '' }): Promise<void> {
     if (!isEmpty(this.store.getters.capabilities)) {
       return

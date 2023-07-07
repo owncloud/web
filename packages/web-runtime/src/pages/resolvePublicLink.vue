@@ -64,6 +64,7 @@ import { authService } from '../services/auth'
 
 import {
   queryItemAsString,
+  useCapabilitySpacesEnabled,
   useClientService,
   useConfigurationManager,
   useRouteParam,
@@ -105,6 +106,7 @@ export default defineComponent({
       })
     )
     const isUserContext = useUserContext({ store })
+    const hasSpaces = useCapabilitySpacesEnabled(store)
 
     const detailsQuery = useRouteQuery('details')
     const details = computed(() => {
@@ -191,8 +193,23 @@ export default defineComponent({
         return
       }
 
+      let { fileId } = publicLink
+      if (!fileId && unref(hasSpaces)) {
+        const { children } = yield clientService.webdav.listFiles(unref(publicLinkSpace), {
+          path: '/'
+        })
+        if (children.length === 1) {
+          // single shared file which means the actual resource is the first and only child element
+          fileId = children[0].fileId
+        }
+      }
+
       if (publicLink.publicLinkPermission === SharePermissionBit.Create) {
-        router.push({ name: 'files-public-upload', params: { token: unref(token) } })
+        router.push({
+          name: 'files-public-upload',
+          params: { token: unref(token) },
+          query: { ...(!!fileId && { fileId }) }
+        })
         return
       }
 
@@ -201,7 +218,8 @@ export default defineComponent({
         query: {
           ...(configurationManager.options.openLinksWithDefaultApp && {
             openWithDefaultApp: 'true'
-          })
+          }),
+          ...(!!fileId && { fileId })
         },
         params: { driveAliasAndItem: `public/${unref(token)}` }
       })

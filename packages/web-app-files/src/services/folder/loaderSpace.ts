@@ -48,7 +48,10 @@ export class FolderLoaderSpace implements FolderLoader {
           path,
           fileId
         })
-        replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })
+        // if current folder has no id (= singe file public link) we must not correct the route
+        if (currentFolder.id) {
+          replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })
+        }
 
         if (path === '/') {
           if (space.driveType === 'share') {

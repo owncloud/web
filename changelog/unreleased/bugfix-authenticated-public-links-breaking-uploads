@@ -1,0 +1,6 @@
+Bugfix: Authenticated public links breaking uploads
+
+Opening public links in an authenticated context no longer breaks uploading resources.
+
+https://github.com/owncloud/web/pull/9299
+https://github.com/owncloud/web/issues/9298

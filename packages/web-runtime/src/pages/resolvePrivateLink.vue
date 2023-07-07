@@ -100,6 +100,7 @@ export default defineComponent({
     const resolvePrivateLinkTask = useTask(function* (signal, id) {
       let path
       let matchingSpace = getMatchingSpace(id)
+      let resourceIsNestedInShare = false
       if (matchingSpace) {
         path = yield clientService.owncloudSdk.files.getPathForFileId(id)
         resource.value = yield clientService.webdav.getFileInfo(matchingSpace, { path })
@@ -110,6 +111,7 @@ export default defineComponent({
           graphClient: clientService.graphAuthenticated
         })
         let mountPoint = findMatchingMountPoint(id)
+        resourceIsNestedInShare = !mountPoint
         resource.value = yield loadFileInfoByIdTask.perform(id)
         const sharePathSegments = mountPoint ? [] : [unref(resource).name]
         let tmpResource = unref(resource)
@@ -135,22 +137,31 @@ export default defineComponent({
       }
 
       let fileId
+      let targetLocation
       if (unref(resource).type === 'folder') {
         fileId = unref(resource).fileId
+        targetLocation = 'files-spaces-generic'
       } else {
         fileId = unref(resource).parentFolderId
         path = dirname(path)
+        // FIXME: we should not hardcode the name here, but we should not depend on
+        // createLocationSpaces('files-spaces-generic') in web-app-files either
+        targetLocation =
+          matchingSpace.driveType === 'share' && !resourceIsNestedInShare
+            ? 'files-shares-with-me'
+            : 'files-spaces-generic'
       }
 
       const { params, query } = createFileRouteOptions(matchingSpace, { fileId, path })
-      // FIXME: we should not hardcode the name here, but we should not depend on
-      // createLocationSpaces('files-spaces-generic') in web-app-files either
       const location: RouteLocationRaw = {
-        name: 'files-spaces-generic',
+        name: targetLocation,
         params,
         query: {
           ...query,
-          scrollTo: unref(resource).fileId,
+          scrollTo:
+            targetLocation === 'files-shares-with-me'
+              ? matchingSpace.shareId
+              : unref(resource).fileId,
           ...(unref(details) && { details: unref(details) }),
           ...(configurationManager.options.openLinksWithDefaultApp && {
             openWithDefaultApp: 'true'

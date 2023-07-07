@@ -17,6 +17,7 @@ import { urlJoin } from '../../utils'
 export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword
 
+  const fileId = data.fileInfo?.[DavProperty.FileId]
   const publicLinkItemType = data.fileInfo?.[DavProperty.PublicLinkItemType]
   const publicLinkPermission = data.fileInfo?.[DavProperty.PublicLinkPermission]
   const publicLinkExpiration = data.fileInfo?.[DavProperty.PublicLinkExpiration]
@@ -31,6 +32,7 @@ export function buildPublicSpaceResource(data): PublicSpaceResource {
       webDavPath: buildWebDavPublicPath(data.id)
     }),
     {
+      ...(fileId && { fileId }),
       ...(publicLinkPassword && { publicLinkPassword }),
       ...(publicLinkItemType && { publicLinkItemType }),
       ...(publicLinkPermission && { publicLinkPermission: parseInt(publicLinkPermission) }),
