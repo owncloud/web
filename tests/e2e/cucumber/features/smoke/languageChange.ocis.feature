@@ -14,9 +14,9 @@ Feature: language settings
       | name          |
       | check_message |
     And "Brian" opens the "files" app
-    When "Brian" shares the following resource using the sidebar panel
-      | resource      | recipient | type | role     | resourceType |
-      | check_message | Alice     | user | Can edit | folder       |
+    And "Brian" shares the following resource using API
+      | resource      | recipient | type | role     |
+      | check_message | Alice     | user | Can edit |
     And "Brian" logs out
 
     And "Alice" logs in
