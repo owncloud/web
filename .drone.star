@@ -5,13 +5,11 @@ NOTIFICATIONS = 3
 
 ALPINE_GIT = "alpine/git:latest"
 DEEPDIVER_DOCKER_ORACLE_XE_11G = "deepdiver/docker-oracle-xe-11g:latest"
-DRONE_CLI_ALPINE = "drone/cli:alpine"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
 OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
 OC_CI_DRONE_ANSIBLE = "owncloudci/drone-ansible:latest"
-OC_CI_DRONE_CANCEL_PREVIOUS_BUILDS = "owncloudci/drone-cancel-previous-builds"
 OC_CI_DRONE_SKIP_PIPELINE = "owncloudci/drone-skip-pipeline"
 OC_CI_GOLANG = "owncloudci/golang:1.19"
 OC_CI_HUGO = "owncloudci/hugo:0.89.4"
@@ -63,7 +61,7 @@ config = {
     "app": "web",
     "rocketchat": {
         "channel": "builds",
-        "from_secret": "private_rocketchat",
+        "from_secret": "rocketchat_chat_webhook",
     },
     "branches": [
         "master",
@@ -666,10 +664,10 @@ ocisSpecificTestSuites = [
 # minio mc environment variables
 minio_mc_environment = {
     "CACHE_BUCKET": {
-        "from_secret": "cache_public_s3_bucket",
+        "from_secret": "cache_s3_bucket",
     },
     "MC_HOST": {
-        "from_secret": "cache_s3_endpoint",
+        "from_secret": "cache_s3_server",
     },
     "AWS_ACCESS_KEY_ID": {
         "from_secret": "cache_s3_access_key",
@@ -762,8 +760,7 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    return cancelPreviousBuilds() + \
-           checkStarlark() + \
+    return checkStarlark() + \
            licenseCheck(ctx) + \
            documentation(ctx) + \
            changelog(ctx) + \
@@ -842,30 +839,6 @@ def pnpmlint(ctx):
     pipelines.append(result)
 
     return pipelines
-
-def cancelPreviousBuilds():
-    return [{
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "cancel-previous-builds",
-        "clone": {
-            "disable": True,
-        },
-        "steps": [{
-            "name": "cancel-previous-builds",
-            "image": OC_CI_DRONE_CANCEL_PREVIOUS_BUILDS,
-            "settings": {
-                "DRONE_TOKEN": {
-                    "from_secret": "drone_token",
-                },
-            },
-        }],
-        "trigger": {
-            "ref": [
-                "refs/pull/**",
-            ],
-        },
-    }]
 
 def build(ctx):
     pipelines = []
@@ -1214,8 +1187,6 @@ def e2eTests(ctx):
         if (params["earlyFail"]):
             steps += buildGithubCommentForBuildStopped("e2e-ocis" if server.startswith("oCIS") else "e2e-oc10")
         steps += githubComment("e2e-tests", server)
-        if (params["earlyFail"]):
-            steps += stopBuild()
 
         pipelines.append({
             "kind": "pipeline",
@@ -1399,9 +1370,6 @@ def acceptance(ctx):
                         # Upload the screenshots to github comment
                         server_type = "oCIS" if params["runningOnOCIS"] else "oC10"
                         steps += githubComment("acceptance", server_type)
-
-                        if (params["earlyFail"]):
-                            steps += stopBuild()
 
                         result = {
                             "kind": "pipeline",
@@ -2524,29 +2492,6 @@ def cacheOcis():
         ],
     }]
 
-def stopBuild():
-    return [{
-        "name": "stop-build",
-        "image": DRONE_CLI_ALPINE,
-        "environment": {
-            "DRONE_SERVER": "https://drone.owncloud.com",
-            "DRONE_TOKEN": {
-                "from_secret": "drone_token",
-            },
-        },
-        "commands": [
-            "drone build stop owncloud/web ${DRONE_BUILD_NUMBER}",
-        ],
-        "when": {
-            "status": [
-                "failure",
-            ],
-            "event": [
-                "pull_request",
-            ],
-        },
-    }]
-
 def uploadScreenshots():
     return [{
         "name": "upload-screenshots",
@@ -2554,10 +2499,10 @@ def uploadScreenshots():
         "pull": "if-not-exists",
         "settings": {
             "bucket": {
-                "from_secret": "cache_public_s3_bucket",
+                "from_secret": "cache_s3_bucket",
             },
             "endpoint": {
-                "from_secret": "cache_public_s3_server",
+                "from_secret": "cache_s3_server",
             },
             "path_style": True,
             "source": "%s/tests/acceptance/reports/screenshots/**/*" % dir["web"],
@@ -2596,10 +2541,10 @@ def buildGithubComment(suite):
         "environment": {
             "TEST_CONTEXT": suite,
             "CACHE_ENDPOINT": {
-                "from_secret": "cache_public_s3_server",
+                "from_secret": "cache_s3_server",
             },
             "CACHE_BUCKET": {
-                "from_secret": "cache_public_s3_bucket",
+                "from_secret": "cache_s3_bucket",
             },
         },
         "when": {
@@ -2957,7 +2902,7 @@ def genericCache(name, action, mounts, cache_path):
         "image": PLUGINS_S3_CACHE,
         "settings": {
             "endpoint": {
-                "from_secret": "cache_s3_endpoint",
+                "from_secret": "cache_s3_server",
             },
             "rebuild": rebuild,
             "restore": restore,
@@ -2993,7 +2938,7 @@ def genericCachePurge(flush_path):
                         "from_secret": "cache_s3_access_key",
                     },
                     "endpoint": {
-                        "from_secret": "cache_s3_endpoint",
+                        "from_secret": "cache_s3_server",
                     },
                     "secret_key": {
                         "from_secret": "cache_s3_secret_key",
@@ -3116,10 +3061,10 @@ def uploadTracingResult(ctx):
         "pull": "if-not-exists",
         "settings": {
             "bucket": {
-                "from_secret": "cache_public_s3_bucket",
+                "from_secret": "cache_s3_bucket",
             },
             "endpoint": {
-                "from_secret": "cache_public_s3_server",
+                "from_secret": "cache_s3_server",
             },
             "path_style": True,
             "source": "%s/reports/e2e/playwright/tracing/**/*" % dir["web"],
@@ -3161,10 +3106,10 @@ def publishTracingResult(ctx, suite):
         "environment": {
             "TEST_CONTEXT": suite,
             "CACHE_ENDPOINT": {
-                "from_secret": "cache_public_s3_server",
+                "from_secret": "cache_s3_server",
             },
             "CACHE_BUCKET": {
-                "from_secret": "cache_public_s3_bucket",
+                "from_secret": "cache_s3_bucket",
             },
         },
         "when": {
