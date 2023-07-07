@@ -187,7 +187,8 @@ export default defineComponent({
       availableLocationOptions,
       locationFilterPersisted,
       currentFolderAvailable,
-      store
+      store,
+      scopeQueryValue: scope
     }
   },
 
@@ -313,8 +314,15 @@ export default defineComponent({
         this.locationFilterPersisted === SearchLocationFilterConstants.currentFolder
       ) {
         const currentFolder = this.store.getters['Files/currentFolder']
-        const spaceId = currentFolder.fileId.split('!')[0]
-        searchTerm = `${this.term} scope:${spaceId}${currentFolder.path}`
+        let scope
+        if (currentFolder) {
+          const spaceId = currentFolder.fileId.split('!')[0]
+          const path = currentFolder.path === '/' ? '' : currentFolder.path
+          scope = `${spaceId}${path}`
+        } else {
+          scope = this.scopeQueryValue
+        }
+        searchTerm = `${this.term} scope:${scope}`
       }
 
       this.loading = true
@@ -341,22 +349,25 @@ export default defineComponent({
       if (this.activePreviewIndex === null) {
         const currentQuery = unref(this.$router.currentRoute).query
 
-        let scope = null
-        if (this.currentFolderAvailable) {
-          const currentFolder = this.store.getters['Files/currentFolder']
+        const currentFolder = this.store.getters['Files/currentFolder']
+        let scope
+        if (currentFolder) {
           const spaceId = currentFolder.fileId.split('!')[0]
-          scope = `${spaceId}${currentFolder.path}`
+          const path = currentFolder.path === '/' ? '' : currentFolder.path
+          scope = `${spaceId}${path}`
+        } else {
+          scope = this.scopeQueryValue
         }
-
+        const useScope =
+          this.currentFolderAvailable &&
+          this.locationFilterPersisted === SearchLocationFilterConstants.currentFolder
         this.$router.push(
           createLocationCommon('files-common-search', {
             query: {
               ...(currentQuery && { ...currentQuery }),
               term: this.term,
               ...(scope && { scope }),
-              useScope:
-                this.currentFolderAvailable &&
-                this.locationFilterPersisted === SearchLocationFilterConstants.currentFolder,
+              ...(useScope && { useScope: 'true' }),
               provider: 'files.sdk'
             }
           })

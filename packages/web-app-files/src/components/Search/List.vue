@@ -191,7 +191,7 @@ export default defineComponent({
 
     const searchTermQuery = useRouteQuery('term')
     const scopeQuery = useRouteQuery('scope')
-    const useScope = useRouteQuery('useScope')
+    const doUseScope = useRouteQuery('useScope')
 
     const searchTerm = computed(() => {
       return queryItemAsString(unref(searchTermQuery))
@@ -233,7 +233,7 @@ export default defineComponent({
         term = `+Name:*${unref(searchTerm)}*`
       }
 
-      if (unref(scopeQuery) && unref(useScope) === 'true') {
+      if (unref(scopeQuery) && unref(doUseScope) === 'true') {
         term += `scope:${unref(scopeQuery)}`
       }
 
@@ -286,7 +286,7 @@ export default defineComponent({
         const isChange =
           newVal?.term !== oldVal?.term ||
           filters.some((f) => newVal[f] ?? undefined !== oldVal[f] ?? undefined) ||
-          newVal?.useScope !== oldVal?.useScope
+          newVal?.doUseScope !== oldVal?.doUseScope
 
         if (isChange && isLocationCommonActive(router, 'files-common-search')) {
           emit('search', buildSearchTerm(true))
