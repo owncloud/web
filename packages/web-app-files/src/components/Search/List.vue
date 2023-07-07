@@ -233,13 +233,12 @@ export default defineComponent({
         term = `+Name:*${unref(searchTerm)}*`
       }
 
-      if (unref(scopeQuery) && unref(doUseScope) === 'true') {
-        term += `scope:${unref(scopeQuery)}`
-      }
-
       const fullTextQuery = queryItemAsString(unref(fullTextParam))
       if (fullTextQuery) {
         term = `+Content:"${unref(searchTerm)}"`
+      }
+      if (unref(scopeQuery) && unref(doUseScope) === 'true') {
+        term += ` +scope:${unref(scopeQuery)}`
       }
 
       const tagsQuery = queryItemAsString(unref(tagParam))

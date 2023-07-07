@@ -122,31 +122,25 @@ export default defineComponent({
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const { $gettext } = useGettext()
-    const locationFilterPersisted = useRouteQueryPersisted({
-      name: SearchLocationFilterConstants.queryName,
-      defaultValue: ''
-    })
     const scope = useRouteQuery('scope')
     const useScope = useRouteQuery('useScope')
+    const locationFilterId = ref(SearchLocationFilterConstants.currentFolder)
 
     const currentFolderAvailable = computed(() => {
       return store.getters['Files/currentFolder'] !== null || scope.value?.length > 0
-    })
-    const isLocationFilterAllFiles = computed(() => {
-      return locationFilterPersisted.value === SearchLocationFilterConstants.allFiles
     })
     const availableLocationOptions = ref([
       {
         title: $gettext('All Files'),
         id: SearchLocationFilterConstants.allFiles,
         enabled: true,
-        default: unref(isLocationFilterAllFiles)
+        default: false
       },
       {
         title: $gettext('Current Folder'),
         id: SearchLocationFilterConstants.currentFolder,
         enabled: currentFolderAvailable,
-        default: !unref(isLocationFilterAllFiles)
+        default: true
       }
     ])
 
@@ -169,13 +163,11 @@ export default defineComponent({
     })
 
     const onLocationFilterChange = (event) => {
-      if (event.userEvent) {
-        locationFilterPersisted.value = unref(event.value).id
-      }
+      locationFilterId.value = event.value.id
       if (isLocationCommonActive(router, 'files-common-search')) {
         useScope.value = (
           unref(currentFolderAvailable) &&
-          unref(locationFilterPersisted) === SearchLocationFilterConstants.currentFolder
+          unref(event.value.id) === SearchLocationFilterConstants.currentFolder
         ).toString()
       }
     }
@@ -185,7 +177,7 @@ export default defineComponent({
       showCancelButton,
       onLocationFilterChange,
       availableLocationOptions,
-      locationFilterPersisted,
+      locationFilterId,
       currentFolderAvailable,
       store,
       scopeQueryValue: scope
@@ -311,7 +303,7 @@ export default defineComponent({
       let searchTerm = this.term
       if (
         this.currentFolderAvailable &&
-        this.locationFilterPersisted === SearchLocationFilterConstants.currentFolder
+        this.locationFilterId === SearchLocationFilterConstants.currentFolder
       ) {
         const currentFolder = this.store.getters['Files/currentFolder']
         let scope
@@ -360,7 +352,7 @@ export default defineComponent({
         }
         const useScope =
           this.currentFolderAvailable &&
-          this.locationFilterPersisted === SearchLocationFilterConstants.currentFolder
+          this.locationFilterId === SearchLocationFilterConstants.currentFolder
         this.$router.push(
           createLocationCommon('files-common-search', {
             query: {
