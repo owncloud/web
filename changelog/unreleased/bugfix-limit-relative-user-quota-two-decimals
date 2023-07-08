@@ -1,0 +1,7 @@
+Bugfix: Relative user quota display limited to two decimals
+
+If the relative user quota is being reported too precisely from the backend, there was a chance of small display issue.
+This has been resolved by limiting the number of decimals that get displayed for the relative quota to two.
+
+https://github.com/owncloud/web/issues/9259
+https://github.com/owncloud/web/pull/9369
