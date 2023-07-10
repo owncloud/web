@@ -79,6 +79,10 @@
     "name": "resource-type-text",
     "color": "var(--oc-color-text-default)"
   },
+  "dcm": {
+    "name": "resource-type-image",
+    "color": "var(--oc-color-icon-image)"
+  },
   "deb": {
     "name": "resource-type-archive",
     "color": "var(--oc-color-icon-archive)"

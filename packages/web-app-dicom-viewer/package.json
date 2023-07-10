@@ -1,0 +1,12 @@
+{
+  "name": "dicom-viewer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ownCloud web DICOM viewer",
+  "license": "AGPL-3.0",
+  "peerDependencies": {
+    "vue3-gettext": "^2.3.3",
+    "vuex": "4.1.0",
+    "web-pkg": "workspace:@ownclouders/web-pkg@*"
+  }
+}

@@ -11,6 +11,7 @@
     "files",
     "preview",
     "pdf-viewer",
+    "dicom-viewer",
     "search",
     "text-editor",
     "draw-io"

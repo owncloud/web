@@ -12,6 +12,7 @@
     "preview",
     "text-editor",
     "pdf-viewer",
+    "dicom-viewer",
     "search"
   ],
   "options": {

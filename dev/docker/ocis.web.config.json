@@ -24,11 +24,12 @@
       "text/plain",
       "image/tiff",
       "image/bmp",
-      "image/x-ms-bmp"
+      "image/x-ms-bmp", 
+      "image/dcm"
     ],
     "contextHelpersReadMore": true
   },
-  "apps": ["files", "text-editor", "pdf-viewer", "search", "external", "admin-settings", "webfinger"],
+  "apps": ["files", "text-editor", "pdf-viewer", "dicom-viewer", "search", "external", "admin-settings", "webfinger"],
   "external_apps": [
     {
       "id": "preview",
@@ -43,6 +44,13 @@
       "config": {
         "url": "https://embed.diagrams.net",
         "theme": "minimal"
+      }
+    },
+    {
+      "id": "dicom-viewer",
+      "path": "web-app-dicom-viewer",
+      "config": {
+        "theme": "image/dcm"
       }
     }
   ]
