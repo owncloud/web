@@ -12,6 +12,7 @@ import {
   Action,
   FileAction,
   FileActionOptions,
+  useBlockedPopupRedirectMessage,
   useIsSearchActive
 } from 'web-pkg/src/composables/actions'
 
@@ -194,6 +195,8 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
       // in case popup is blocked win will be null
       if (win) {
         win.focus()
+      } else {
+        store.dispatch('showMessage', useBlockedPopupRedirectMessage)
       }
       return
     }
@@ -327,7 +330,10 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     } as any
 
     // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
-    window.open(router.resolve(routeOpts).href, '_blank')
+    const win = window.open(router.resolve(routeOpts).href, '_blank')
+    if (!win) {
+      store.dispatch('showMessage', useBlockedPopupRedirectMessage)
+    }
   }
 
   return {
