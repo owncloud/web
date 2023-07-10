@@ -55,6 +55,7 @@ export default defineComponent({
         currentSelection.value =
           props.locationOptions.find((option) => option.enabled && option.default) ||
           props.locationOptions.find((option) => option.enabled)
+        console.log('watcher change: ', currentSelection.value.id)
         emit('update:modelValue', { value: currentSelection.value })
       },
       { immediate: true, deep: true }

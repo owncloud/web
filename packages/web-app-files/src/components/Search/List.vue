@@ -238,7 +238,7 @@ export default defineComponent({
         term = `+Content:"${unref(searchTerm)}"`
       }
       if (unref(scopeQuery) && unref(doUseScope) === 'true') {
-        term += ` +scope:${unref(scopeQuery)}`
+        term += ` scope:${unref(scopeQuery)}`
       }
 
       const tagsQuery = queryItemAsString(unref(tagParam))

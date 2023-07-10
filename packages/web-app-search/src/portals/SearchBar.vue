@@ -41,7 +41,7 @@
     </oc-button>
     <oc-drop
       id="files-global-search-options"
-      ref="optionsDrop"
+      ref="optionsDropRef"
       mode="manual"
       target="#files-global-search-bar"
     >
@@ -122,13 +122,17 @@ export default defineComponent({
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const { $gettext } = useGettext()
-    const scope = useRouteQuery('scope')
-    const useScope = useRouteQuery('useScope')
+    const scopeQueryValue = useRouteQuery('scope')
     const locationFilterId = ref(SearchLocationFilterConstants.currentFolder)
+    const optionsDropRef = ref(null)
+    const activePreviewIndex = ref(null)
+    const term = ref('')
 
     const currentFolderAvailable = computed(() => {
-      return store.getters['Files/currentFolder'] !== null || scope.value?.length > 0
+      console.log('computed changed')
+      return store.getters['Files/currentFolder'] !== null || scopeQueryValue.value?.length > 0
     })
+
     const availableLocationOptions = ref([
       {
         title: $gettext('All Files'),
@@ -162,13 +166,50 @@ export default defineComponent({
       }
     })
 
+    const optionsDrop = computed(() => {
+      return unref(optionsDropRef) as InstanceType<GlobalComponents['OcDrop']>
+    })
+    const onKeyUpEnter = () => {
+      unref(optionsDrop).hide()
+      console.log('spaces: ', store.getters['runtime/spaces/spaces'])
+      if (unref(activePreviewIndex) === null) {
+        const currentQuery = unref(router.currentRoute).query
+        const currentFolder = store.getters['Files/currentFolder']
+        let scope
+        if (currentFolder) {
+          const spaceId = currentFolder.fileId.split('!')[0]
+          const path = currentFolder.path === '/' ? '' : currentFolder.path
+          scope = `${spaceId}${path}`
+        } else {
+          scope = unref(scopeQueryValue)
+        }
+        const useScope =
+          unref(currentFolderAvailable) &&
+          unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
+        /*router.push(
+          createLocationCommon('files-common-search', {
+            query: {
+              ...(currentQuery && { ...currentQuery }),
+              term: unref(term),
+              ...(scope && { scope }),
+              useScope: useScope.toString(),
+              provider: 'files.sdk'
+            }
+          })
+        )*/
+      }
+      if (unref(activePreviewIndex) !== null) {
+        unref(optionsDrop)
+          .$el.querySelectorAll('.preview')
+          [unref(activePreviewIndex)].firstChild.click()
+      }
+    }
+
     const onLocationFilterChange = (event) => {
+      console.log('onLocationFilterChange: ', event)
       locationFilterId.value = event.value.id
       if (isLocationCommonActive(router, 'files-common-search')) {
-        useScope.value = (
-          unref(currentFolderAvailable) &&
-          unref(event.value.id) === SearchLocationFilterConstants.currentFolder
-        ).toString()
+        onKeyUpEnter()
       }
     }
 
@@ -180,17 +221,20 @@ export default defineComponent({
       locationFilterId,
       currentFolderAvailable,
       store,
-      scopeQueryValue: scope
+      scopeQueryValue,
+      optionsDrop,
+      optionsDropRef,
+      activePreviewIndex,
+      term,
+      onKeyUpEnter
     }
   },
 
   data() {
     return {
-      term: '',
       activeProvider: undefined,
       optionsVisible: false,
       markInstance: null,
-      activePreviewIndex: null,
       debouncedSearch: undefined,
       providerStore,
       loading: false,
@@ -220,9 +264,6 @@ export default defineComponent({
     },
     searchLabel() {
       return this.$gettext('Enter search term')
-    },
-    optionsDrop() {
-      return this.$refs.optionsDrop as InstanceType<GlobalComponents['OcDrop']>
     }
   },
 
@@ -334,44 +375,7 @@ export default defineComponent({
       this.term = ''
       this.optionsDrop.hide()
     },
-    onKeyUpEnter() {
-      this.optionsDrop.hide()
-      console.log('spaces: ', this.store.getters['runtime/spaces/spaces'])
 
-      if (this.activePreviewIndex === null) {
-        const currentQuery = unref(this.$router.currentRoute).query
-
-        const currentFolder = this.store.getters['Files/currentFolder']
-        let scope
-        if (currentFolder) {
-          const spaceId = currentFolder.fileId.split('!')[0]
-          const path = currentFolder.path === '/' ? '' : currentFolder.path
-          scope = `${spaceId}${path}`
-        } else {
-          scope = this.scopeQueryValue
-        }
-        const useScope =
-          this.currentFolderAvailable &&
-          this.locationFilterId === SearchLocationFilterConstants.currentFolder
-        this.$router.push(
-          createLocationCommon('files-common-search', {
-            query: {
-              ...(currentQuery && { ...currentQuery }),
-              term: this.term,
-              ...(scope && { scope }),
-              ...(useScope && { useScope: 'true' }),
-              provider: 'files.sdk'
-            }
-          })
-        )
-      }
-
-      if (this.activePreviewIndex !== null) {
-        this.optionsDrop.$el
-          .querySelectorAll('.preview')
-          [this.activePreviewIndex].firstChild.click()
-      }
-    },
     onKeyUpUp() {
       const previewElementsCount = this.optionsDrop.$el.querySelectorAll('.preview').length
 
