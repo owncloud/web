@@ -44,23 +44,27 @@ When(
   }
 )
 
+When('{string} closes the editor', async function (this: World, stepUser: string): Promise<void> {
+  const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+  await editor.close(page)
+})
+
 When(
-  /"([^"]*)" opens the following resource using (Collabora|OnlyOffice) should have$/,
+  'for {string} the content of the file {string} should be {string} in editor {string}',
   async function (
     this: World,
     stepUser: string,
-    editorToOpen: string,
-    stepTable: DataTable
+    resource: string,
+    expectedContent: string,
+    editorToOpen: string
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.Public({ page })
-    for (const info of stepTable.hashes()) {
-      const actualFileContent = await pageObject.getContentOfOpenDocumentOrMicrosoftWordDocument({
-        page,
-        editorToOpen
-      })
-      expect(actualFileContent.trim()).toBe(info.content)
-    }
+    const actualFileContent = await pageObject.getContentOfOpenDocumentOrMicrosoftWordDocument({
+      page,
+      editorToOpen
+    })
+    expect(actualFileContent.trim()).toBe(expectedContent)
   }
 )
 

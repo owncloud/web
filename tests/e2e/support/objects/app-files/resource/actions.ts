@@ -307,10 +307,7 @@ export const openAndGetContentOfOpenDocumentOrMicrosoftWordDocument = async ({
   editorToOpen: string
 }): Promise<string> => {
   let newEditorTab
-  await Promise.all([
-    (newEditorTab = page.waitForEvent('popup')),
-    await page.locator(util.format(officeSuiteEditorSelector, editorToOpen)).click()
-  ])
+  newEditorTab = page.waitForEvent('popup')
   const editorPage = await newEditorTab
   await editorPage.waitForLoadState()
   await editorPage.waitForURL('**/external/public/**')
@@ -325,8 +322,8 @@ export const openAndGetContentOfOpenDocumentOrMicrosoftWordDocument = async ({
     await innerFrame.locator(onlyOfficeCanvasEditorSelector).click()
     await innerFrame.locator(onlyOfficeCanvasCursorSelector).waitFor()
   }
-  await editorPage.keyboard.press('Control+A', { delay: 200 })
-  await editorPage.keyboard.press('Control+C', { delay: 200 })
+  await editorPage.keyboard.press('Control+A', { delay: 150 })
+  await editorPage.keyboard.press('Control+C', { delay: 150 })
   const actualContentOfEditor = await editorPage.evaluate(() => navigator.clipboard.readText())
   await editorPage.close()
   return actualContentOfEditor

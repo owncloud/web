@@ -22,9 +22,7 @@ Feature: Integrate with online office suites like collabora and OnlyOffice
     And "Alice" creates a public link for the resource "OpenDocument.odt" using the sidebar panel
     And "Alice" edits the public link named "Link" of resource "OpenDocument.odt" changing role to "Can edit"
     And "Anonymous" opens the public link "Link"
-    And "Anonymous" opens the following resource using Collabora should have
-      | resource         | content              |
-      | OpenDocument.odt | OpenDocument Content |
+    And for "Anonymous" the content of the file "OpenDocument.odt" should be "OpenDocument Content" in editor "Collabora"
     And "Alice" logs out
 
 
@@ -38,7 +36,5 @@ Feature: Integrate with online office suites like collabora and OnlyOffice
     And "Alice" creates a public link for the resource "MicrosoftWord.docx" using the sidebar panel
     And "Alice" edits the public link named "Link" of resource "MicrosoftWord.docx" changing role to "Can edit"
     And "Anonymous" opens the public link "Link"
-    And "Anonymous" opens the following resource using OnlyOffice should have
-      | resource           | content                |
-      | MicrosoftWord.docx | Microsoft Word Content |
+    And for "Anonymous" the content of the file "MicrosoftWord.docx" should be "Microsoft Word Content" in editor "OnlyOffice"
     And "Alice" logs out
