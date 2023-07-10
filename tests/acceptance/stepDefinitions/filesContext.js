@@ -558,10 +558,6 @@ Then('these files should not be selected on the webUI', async function (fileOrFo
   }
 })
 
-When('the user/public clears the selection of files', function () {
-  return client.page.personalPage().clearFileSelectionIfAny()
-})
-
 When('the user clears the trashbin', function () {
   return client.page.trashbinPage().clearTrashbin()
 })

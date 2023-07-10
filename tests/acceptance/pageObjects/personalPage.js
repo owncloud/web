@@ -72,7 +72,6 @@ module.exports = {
      * @param {boolean} expectToSucceed
      */
     createFolder: async function (name, expectToSucceed = true) {
-      await this.clearFileSelectionIfAny()
       await this.waitForElementVisible('@newFileMenuButtonAnyState')
         .waitForElementEnabled('@newFileMenuButtonAnyState')
         .click('@newFileMenuButton')
@@ -113,7 +112,6 @@ module.exports = {
      * @param {boolean} expectToSucceed
      */
     createFile: async function (name, expectToSucceed = true) {
-      await this.clearFileSelectionIfAny()
       await this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFileButton')
@@ -298,23 +296,6 @@ module.exports = {
         searchBar = result.value
       })
       return searchBar.length > 0
-    },
-    clearFileSelectionIfAny: async function () {
-      let activeFileSelection = false
-      await this.isVisible(
-        {
-          selector: '@clearSelectionBtn',
-          timeout: client.globals.waitForNegativeConditionTimeout,
-          suppressNotFoundErrors: true
-        },
-        (result) => {
-          activeFileSelection = result.value === true
-        }
-      )
-      if (activeFileSelection) {
-        await this.click('@clearSelectionBtn').waitForElementNotPresent('@clearSelectionBtn')
-      }
-      return this
     }
   },
   elements: {
