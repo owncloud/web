@@ -177,6 +177,10 @@ services:
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     restart: always
+    depends_on:
+      - ocis
+      - collabora
+      - wopiserver
 
   ocis-appprovider-onlyoffice:
     image: ${OCIS_IMAGE:-owncloud/ocis:latest}
@@ -209,6 +213,10 @@ services:
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     restart: always
+    depends_on:
+      - ocis
+      - onlyoffice
+      - wopiserver
 
   collabora:
     image: collabora/code:22.05.10.1.1
