@@ -47,7 +47,8 @@ const actionConfirmationButton =
 const actionSkipButton = '.oc-modal-body-actions-cancel'
 const actionSecondaryConfirmationButton = '.oc-modal-body-actions-secondary'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
-const actionButton = '//*[contains(@data-testid, "action-handler")]/span[text()="%s"]'
+const sideBarActionButton =
+  '//div[contains(@class, "files-side-bar")]//*[contains(@data-testid, "action-handler")]/span[text()="%s"]'
 const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
 const notificationMessageDialog = '.oc-notification-message-title'
 const notificationMessage = '.oc-notification-message'
@@ -555,7 +556,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
       await sidebar.openPanel({ page: page, name: 'actions' })
 
       const actionButtonType = action === 'copy' ? 'Copy' : 'Cut'
-      await page.locator(util.format(actionButton, actionButtonType)).click()
+      await page.locator(util.format(sideBarActionButton, actionButtonType)).click()
       await pasteResource({ page, resource: resourceBase, newLocation })
       break
     }
