@@ -211,11 +211,11 @@ export default {
 
   @media (min-width: $oc-breakpoint-small-default) {
     column-gap: 10px;
-    grid-template-columns: 25% 50% 25%;
+    grid-template-columns: 150px 9fr 1fr;
     grid-template-rows: 1;
     height: 52px;
     justify-content: center;
-    padding: 0 2rem;
+    padding: 0 1.1rem;
   }
 
   &.open-app {

@@ -12,7 +12,7 @@ export interface Action<T = ActionOptions> {
   id?: string
   img?: string
   componentType: 'button' | 'router-link'
-  class: string
+  class?: string
   hasPriority?: boolean
   hideLabel?: boolean
   shortcut?: string

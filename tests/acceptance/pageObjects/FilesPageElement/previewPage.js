@@ -81,7 +81,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     downLoadButton: {
-      selector: `//button[contains(@class, "preview-download")]`,
+      selector: `//button[contains(@id, "preview-download")]`,
       locateStrategy: 'xpath'
     },
     closeButton: {

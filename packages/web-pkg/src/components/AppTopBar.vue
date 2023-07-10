@@ -17,7 +17,9 @@
               :menu-sections="[
                 {
                   name: 'main-actions',
-                  items: mainActions
+                  items: mainActions.map((action) => {
+                    return { ...action, class: 'oc-p-xs', hideLabel: true }
+                  })
                 }
               ]"
               :action-options="{
@@ -26,6 +28,31 @@
               appearance="raw-inverse"
               variation="brand"
             />
+          </template>
+          <template v-if="dropDownActions.length">
+            <oc-button
+              id="oc-openfile-contextmenu-trigger"
+              v-oc-tooltip="contextMenuLabel"
+              :aria-label="contextMenuLabel"
+              appearance="raw-inverse"
+              class="oc-p-xs"
+              variation="brand"
+            >
+              <oc-icon name="more-2" />
+            </oc-button>
+            <oc-drop
+              drop-id="oc-openfile-contextmenu"
+              mode="click"
+              padding-size="small"
+              toggle="#oc-openfile-contextmenu-trigger"
+              close-on-click
+              @click.stop.prevent
+            >
+              <context-action-menu
+                :menu-sections="[{ name: 'dropdown-actions', items: dropDownActions }]"
+                :action-options="{ resources: [resource] }"
+              />
+            </oc-drop>
           </template>
           <oc-button
             id="app-top-bar-close"
@@ -56,6 +83,10 @@ export default defineComponent({
     ContextActionMenu
   },
   props: {
+    dropDownActions: {
+      type: Array as PropType<Action[]>,
+      default: () => []
+    },
     mainActions: {
       type: Array as PropType<Action[]>,
       default: () => []

@@ -200,9 +200,8 @@ export default defineComponent({
         isEnabled: () => true,
         componentType: 'button',
         icon: 'file-download',
-        class: 'preview-download',
+        id: 'preview-download',
         label: () => 'Download',
-        hideLabel: true,
         handler: () => {
           triggerActiveFileDownload()
         }

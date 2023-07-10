@@ -14,7 +14,7 @@
         <oc-icon size="xxlarge" name="error-warning" fill-type="line" />
       </div>
     </div>
-    <div v-else class="oc-flex oc-px-s oc-pt-rm oc-pb-s">
+    <div v-else class="oc-flex oc-px-s oc-pt-rm oc-pb-s oc-height-1-1">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
         <oc-textarea
           id="text-editor-input"
@@ -259,9 +259,8 @@ export default defineComponent({
         isDisabled: () => isReadOnly.value || !isDirty.value,
         componentType: 'button',
         icon: 'save',
-        class: 'text-editor-controls-save',
+        id: 'text-editor-controls-save',
         label: () => 'Save',
-        hideLabel: true,
         handler: () => {
           save()
         }
@@ -300,11 +299,10 @@ export default defineComponent({
 </script>
 <style lang="scss">
 #text-editor-preview {
-  max-height: 80vh;
-  overflow-y: scroll;
+  max-height: 100%;
+  overflow-y: auto;
 }
 #text-editor-input {
   resize: vertical;
-  height: 100%;
 }
 </style>
