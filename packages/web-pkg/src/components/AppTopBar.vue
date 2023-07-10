@@ -44,10 +44,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { Resource } from 'web-client/src'
 import { Action } from '../composables/actions/types'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'AppTopBar',
@@ -65,12 +66,15 @@ export default defineComponent({
     }
   },
   emits: ['close'],
-  computed: {
-    contextMenuLabel() {
-      return this.$gettext('Show context menu')
-    },
-    closeButtonLabel() {
-      return this.$gettext('Close')
+  setup() {
+    const { $gettext } = useGettext()
+
+    const contextMenuLabel = computed(() => $gettext('Show context menu'))
+    const closeButtonLabel = computed(() => $gettext('Close'))
+
+    return {
+      contextMenuLabel,
+      closeButtonLabel
     }
   }
 })
@@ -83,16 +87,16 @@ export default defineComponent({
   grid-row: secondRow;
 
   @media (min-width: $oc-breakpoint-small-default) {
-    grid-column: 2 / 3;
-    grid-row: initial;
+    grid-column: 1;
+    grid-row: 1;
   }
 }
 
 .oc-app-top-bar-inner {
   align-self: center;
-  background-color: var(--oc-components-apptopbar-background);
+  background-color: var(--oc-color-components-apptopbar-background);
   border-radius: 15px;
-  border: 1px solid var(--oc-components-apptopbar-border);
+  border: 1px solid var(--oc-color-components-apptopbar-border);
   display: inline-flex;
   gap: 25px;
   height: 40px;
@@ -101,7 +105,7 @@ export default defineComponent({
 
   @media (min-width: $oc-breakpoint-small-default) {
     flex-basis: 250px;
-    margin: 0 auto;
+    margin-left: 13rem;
     width: 100%;
   }
 }

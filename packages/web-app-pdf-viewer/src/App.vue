@@ -34,7 +34,7 @@ export default defineComponent({
     loading: true,
     loadingError: false,
     url: '',
-    resource: <Resource>{}
+    resource: <Resource>null
   }),
   watch: {
     currentFileContext: {

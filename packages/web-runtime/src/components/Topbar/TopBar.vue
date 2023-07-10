@@ -1,12 +1,16 @@
 <template>
-  <header id="oc-topbar" :aria-label="$gettext('Top bar')">
+  <header
+    id="oc-topbar"
+    :class="{ 'open-app': contentOnLeftPortal }"
+    :aria-label="$gettext('Top bar')"
+  >
     <div class="oc-topbar-left oc-flex oc-flex-middle oc-flex-start">
       <applications-menu v-if="appMenuItems.length" :applications-list="appMenuItems" />
       <router-link ref="navigationSidebarLogo" v-oc-tooltip="$gettext('Back to home')" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image" />
       </router-link>
     </div>
-    <div v-if="showCenterSlot" class="oc-topbar-center">
+    <div v-if="!contentOnLeftPortal" class="oc-topbar-center">
       <portal-target name="app.runtime.header" multiple />
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle">
@@ -38,7 +42,7 @@ import {
   useStore,
   useUserContext
 } from 'web-pkg/src/composables'
-import { computed, unref, PropType } from 'vue'
+import { computed, unref, PropType, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 export default {
@@ -146,23 +150,21 @@ export default {
       getMenuItems([null, 'apps', 'appSwitcher'], unref(activeRoutePath))
     )
 
+    const contentOnLeftPortal = ref(false)
+    const updateLeftPortal = (newContent) => {
+      contentOnLeftPortal.value = newContent.hasContent
+    }
+
     return {
+      contentOnLeftPortal,
+      updateLeftPortal,
       isNotificationBellEnabled,
       userMenuItems,
       appMenuItems
     }
   },
-  data: function () {
-    return {
-      contentOnLeftPortal: false
-    }
-  },
   computed: {
     ...mapGetters(['configuration', 'user']),
-
-    showCenterSlot() {
-      return !this.contentOnLeftPortal
-    },
 
     darkThemeAvailable() {
       return this.configuration.themes.default && this.configuration.themes['default-dark']
@@ -192,12 +194,6 @@ export default {
         ...(feedback.description && { description: feedback.description })
       }
     }
-  },
-
-  methods: {
-    updateLeftPortal(newContent) {
-      this.contentOnLeftPortal = newContent.hasContent
-    }
   }
 }
 </script>
@@ -220,6 +216,10 @@ export default {
     height: 52px;
     justify-content: center;
     padding: 0 2rem;
+  }
+
+  &.open-app {
+    grid-template-columns: 70% 0 30%;
   }
 
   img {
