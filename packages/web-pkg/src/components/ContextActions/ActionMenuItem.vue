@@ -95,7 +95,8 @@ export default defineComponent({
         variation: props.action.variation || props.variation,
         ...(props.action.isDisabled && {
           disabled: props.action.isDisabled(props.actionOptions)
-        })
+        }),
+        ...(props.action.id && { id: props.action.id })
       }
 
       if (props.action.componentType === 'router-link' && props.action.route) {

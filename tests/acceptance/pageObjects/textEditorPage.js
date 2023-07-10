@@ -3,7 +3,7 @@ const { client } = require('nightwatch-api')
 const filesList = client.page.FilesPageElement.filesList()
 const filesActionsMenu = client.page.FilesPageElement.fileActionsMenu()
 
-const saveButtonSelector = '#oc-files-context-actions-main-actions li #text-editor-controls-save'
+const saveButtonSelector = '#text-editor-controls-save'
 
 module.exports = {
   commands: {
