@@ -20,22 +20,6 @@
           class="sidebar-panel__space_info"
         />
       </template>
-      <template #topbarActions>
-        <div class="admin-settings-app-bar-actions">
-          <div v-if="selectedSpaces.length >= 1" class="oc-flex oc-flex-middle">
-            <oc-button
-              id="spaces-clear-selection"
-              v-oc-tooltip="$gettext('Clear selection')"
-              :aria-label="$gettext('Clear selection')"
-              class="oc-py-s"
-              appearance="outline"
-              @click="unselectAllSpaces"
-            >
-              <oc-icon name="close" />
-            </oc-button>
-          </div>
-        </div>
-      </template>
       <template #mainContent>
         <quota-modal
           v-if="quotaModalIsOpen"

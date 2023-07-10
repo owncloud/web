@@ -9,7 +9,7 @@
         :key="`action-${index}`"
         :action="action"
         :action-options="actionOptions"
-        appearance="outline"
+        appearance="raw"
         class="batch-actions oc-mr-s"
         :shortcut-hint="false"
         :show-tooltip="limitedScreenSpace"
@@ -46,6 +46,17 @@ export default defineComponent({
 
 <style lang="scss">
 #oc-appbar-batch-actions {
+  .action-menu-item {
+    padding-left: var(--oc-space-small) !important;
+    padding-right: var(--oc-space-small) !important;
+    gap: var(--oc-space-xsmall) !important;
+  }
+  .action-menu-item:hover:not([disabled]),
+  .action-menu-item:focus:not([disabled]) {
+    background-color: var(--oc-color-background-hover);
+    border-color: var(--oc-color-background-hover);
+  }
+
   display: block;
   li {
     float: left !important;

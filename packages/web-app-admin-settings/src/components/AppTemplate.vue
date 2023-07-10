@@ -35,11 +35,13 @@
               </oc-button>
             </div>
           </div>
-          <div class="oc-flex oc-flex-middle oc-mt-xs">
+          <div
+            v-if="showAppBar"
+            class="admin-settings-app-bar-actions oc-flex oc-flex-middle oc-mt-xs"
+          >
             <slot name="topbarActions" class="oc-flex-1 oc-flex oc-flex-start" />
             <batch-actions
               v-if="showBatchActions"
-              class="oc-ml-s"
               :actions="batchActions"
               :action-options="{ resources: batchActionItems }"
               :limited-screen-space="limitedScreenSpace"
@@ -149,6 +151,11 @@ export default defineComponent({
       type: Array as PropType<any>,
       required: false,
       default: () => []
+    },
+    showAppBar: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   setup(props) {

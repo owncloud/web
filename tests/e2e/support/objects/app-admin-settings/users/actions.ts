@@ -29,7 +29,7 @@ const quotaInputBatchAction = '#quota-select-batch-action-form .vs__search'
 const userInput = '#%s-input'
 const roleValueDropDown = `.vs__dropdown-menu :text-is("%s")`
 const groupsInput = '#user-group-select-form .vs__search'
-const createUserButton = '[data-test-id="create-user-btn"]'
+const createUserButton = '#create-user-btn'
 const userNameInput = '#create-user-input-user-name'
 const displayNameInput = '#create-user-input-display-name'
 const emailInput = '#create-user-input-email'

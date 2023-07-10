@@ -88,6 +88,7 @@ export default defineComponent({
     const componentProps = computed(() => {
       const properties = {
         appearance: props.appearance,
+        ...(props.action.appearance && { appearance: props.action.appearance }),
         ...(props.action.isDisabled && {
           disabled: props.action.isDisabled(props.actionOptions)
         }),

@@ -1,5 +1,4 @@
 export * from './useFileActionsAcceptShare'
-export * from './useFileActionsClearSelection'
 export * from './useFileActionsCopy'
 export * from './useFileActionsCreateQuicklink'
 export * from './useFileActionsDeclineShare'

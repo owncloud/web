@@ -13,7 +13,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { ActionOptions, FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -91,13 +91,12 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
           return false
         }
 
-        // empty trash bin is not available for individual resources, but only for the trash bin as a whole
-        return resources.length === 0
+        return true
       },
-      isDisabled: ({ resources }: ActionOptions) => store.getters['Files/activeFiles'].length === 0,
       componentType: 'button',
       class: 'oc-files-actions-empty-trash-bin-trigger',
-      variation: 'danger'
+      variation: 'danger',
+      appearance: 'filled'
     }
   ])
 

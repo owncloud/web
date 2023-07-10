@@ -15,7 +15,7 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
       </div>
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
-      <div class="oc-flex-1 oc-flex oc-flex-start">
+      <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
         <!--v-if-->
       </div>
     </div>
@@ -38,7 +38,7 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
       </div>
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
-      <div class="oc-flex-1 oc-flex oc-flex-start">
+      <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
         <button class="action-slot">Click</button>
         <!--v-if-->
       </div>
@@ -62,7 +62,7 @@ exports[`AppBar component renders if given, with content in the content slot 1`]
       </div>
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
-      <div class="oc-flex-1 oc-flex oc-flex-start">
+      <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
         <!--v-if-->
       </div>
     </div>

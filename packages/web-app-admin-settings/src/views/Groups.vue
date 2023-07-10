@@ -13,26 +13,17 @@
       :show-view-options="true"
     >
       <template #topbarActions>
-        <div class="admin-settings-app-bar-actions">
-          <div v-if="selectedGroups.length" class="oc-flex oc-flex-middle">
-            <span v-text="selectedGroupsText" />
-            <oc-button
-              id="groups-clear-selection"
-              v-oc-tooltip="$gettext('Clear selection')"
-              :aria-label="$gettext('Clear selection')"
-              class="oc-ml-m oc-py-s"
-              appearance="outline"
-              @click="unselectAllGroups"
-            >
-              <oc-icon name="close" />
-            </oc-button>
-          </div>
-          <div v-else>
-            <oc-button variation="primary" appearance="filled" @click="toggleCreateGroupModal">
-              <oc-icon name="add" />
-              <span v-text="$gettext('New group')" />
-            </oc-button>
-          </div>
+        <div>
+          <oc-button
+            id="create-group-btn"
+            class="oc-mr-s"
+            variation="primary"
+            appearance="filled"
+            @click="toggleCreateGroupModal"
+          >
+            <oc-icon name="add" />
+            <span v-text="$gettext('New group')" />
+          </oc-button>
         </div>
       </template>
       <template #mainContent>
