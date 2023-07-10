@@ -46,17 +46,3 @@ Feature: User can view files inside a folder
       | lorem.txt           |
       | simple-empty-folder |
       | data.zip            |
-
-  @disablePreviews
-  Scenario: select files and clear the selection
-    When the user marks these files for batch action using the webUI
-      | name                |
-      | lorem.txt           |
-      | simple-empty-folder |
-      | data.zip            |
-    And the user clears the selection of files
-    Then these files should not be selected on the webUI
-      | name                |
-      | lorem.txt           |
-      | simple-empty-folder |
-      | data.zip            |

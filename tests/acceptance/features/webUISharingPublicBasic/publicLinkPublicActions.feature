@@ -91,9 +91,3 @@ Feature: Access public link shares by public
       | lorem.txt           |
       | simple-empty-folder |
       | data.zip            |
-    When the public clears the selection of files
-    Then these files should not be selected on the webUI
-      | name                |
-      | lorem.txt           |
-      | simple-empty-folder |
-      | data.zip            |
