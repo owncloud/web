@@ -12,6 +12,7 @@
     "files",
     "preview",
     "pdf-viewer",
+    "dicom-viewer",
     "search",
     "text-editor",
     "draw-io",
@@ -26,7 +27,8 @@
       "text/plain",
       "image/tiff",
       "image/bmp",
-      "image/x-ms-bmp"
+      "image/x-ms-bmp",
+      "image/dcm"
     ],
     "upload": {
       "xhr": {

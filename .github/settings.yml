@@ -20,6 +20,8 @@ labels:
     color: "#d4c5f9"
   - name: feature:pdf-viewer
     color: "#d4c5f9"
+  - name: feature:dicom-viewer
+    color: "#d4c5f9"
   - name: feature:preview
     color: "#d4c5f9"
 
