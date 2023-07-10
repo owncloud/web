@@ -4,13 +4,12 @@
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
-      <object class="pdf-viewer oc-width-1-1" :data="url" type="application/pdf" />
+      <object class="pdf-viewer oc-height-1-1 oc-width-1-1" :data="url" type="application/pdf" />
     </div>
   </main>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Resource } from 'web-client/src/helpers/resource/types'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from './components/ErrorScreen.vue'
@@ -34,7 +33,7 @@ export default defineComponent({
     loading: true,
     loadingError: false,
     url: '',
-    resource: <Resource>null
+    resource: null
   }),
   watch: {
     currentFileContext: {
@@ -82,6 +81,5 @@ export default defineComponent({
   margin: 0;
   padding: 0;
   overflow: hidden;
-  height: calc(100% - 52px);
 }
 </style>

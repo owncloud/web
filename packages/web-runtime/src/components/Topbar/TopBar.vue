@@ -219,7 +219,17 @@ export default {
   }
 
   &.open-app {
-    grid-template-columns: 70% 0 30%;
+    grid-template-columns: 30% 30% 40%;
+
+    @media (min-width: $oc-breakpoint-small-default) {
+      grid-template-columns: 20% 50% 30%;
+    }
+    @media (min-width: $oc-breakpoint-small-max) {
+      grid-template-columns: 15% 1fr 30%;
+    }
+    @media (min-width: $oc-breakpoint-medium-default) {
+      grid-template-columns: 10% 1fr 30%;
+    }
   }
 
   img {

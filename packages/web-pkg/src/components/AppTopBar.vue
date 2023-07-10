@@ -87,7 +87,7 @@ export default defineComponent({
   grid-row: secondRow;
 
   @media (min-width: $oc-breakpoint-small-default) {
-    grid-column: 1;
+    grid-column: 2;
     grid-row: 1;
   }
 }
@@ -95,7 +95,7 @@ export default defineComponent({
 .oc-app-top-bar-inner {
   align-self: center;
   background-color: var(--oc-color-components-apptopbar-background);
-  border-radius: 15px;
+  border-radius: 10px;
   border: 1px solid var(--oc-color-components-apptopbar-border);
   display: inline-flex;
   gap: 25px;
@@ -105,7 +105,7 @@ export default defineComponent({
 
   @media (min-width: $oc-breakpoint-small-default) {
     flex-basis: 250px;
-    margin-left: 13rem;
+    margin: 0 30px;
     width: 100%;
   }
 }

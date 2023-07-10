@@ -14,7 +14,7 @@
         <oc-icon size="xxlarge" name="error-warning" fill-type="line" />
       </div>
     </div>
-    <div v-else class="oc-flex editor-wrapper-height oc-px-s oc-pt-rm oc-pb-s">
+    <div v-else class="oc-flex oc-px-s oc-pt-rm oc-pb-s">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
         <oc-textarea
           id="text-editor-input"
@@ -306,8 +306,5 @@ export default defineComponent({
 #text-editor-input {
   resize: vertical;
   height: 100%;
-}
-.editor-wrapper-height {
-  height: calc(100% - 58px);
 }
 </style>

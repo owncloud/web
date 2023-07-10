@@ -71,7 +71,7 @@ export default defineComponent({
     loading: false,
     loadingError: false,
     method: '',
-    resource: <Resource>null
+    resource: null
   }),
   computed: {
     ...mapGetters(['capabilities']),
