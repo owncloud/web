@@ -22,9 +22,9 @@ const routes = [
 const appInfo = {
   name: $gettext('DICOM Viewer'),
   id: 'dicom-viewer',
-  icon: 'resource-type-image',
+  icon: 'resource-type-medical',
   iconFillType: 'fill',
-  iconColor: 'var(--oc-color-icon-image)',
+  iconColor: 'var(--oc-color-icon-medical)',
   extensions: [
     {
       extension: 'dcm',

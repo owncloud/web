@@ -80,8 +80,8 @@
     "color": "var(--oc-color-text-default)"
   },
   "dcm": {
-    "name": "resource-type-image",
-    "color": "var(--oc-color-icon-image)"
+    "name": "resource-type-medical",
+    "color": "var(--oc-color-icon-medical)"
   },
   "deb": {
     "name": "resource-type-archive",
