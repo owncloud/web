@@ -91,7 +91,7 @@ export default defineComponent({
   setup(props) {
     const componentProps = computed(() => {
       const properties = {
-        appearance: props.appearance,
+        appearance: props.action.appearance || props.appearance,
         variation: props.action.variation || props.variation,
         ...(props.action.isDisabled && {
           disabled: props.action.isDisabled(props.actionOptions)

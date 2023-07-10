@@ -37,7 +37,6 @@
 import { stringify } from 'qs'
 import { mapGetters } from 'vuex'
 import { computed, defineComponent, unref } from 'vue'
-import { Resource } from 'web-client/src'
 import { urlJoin } from 'web-client/src/utils'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'

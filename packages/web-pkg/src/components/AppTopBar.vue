@@ -101,12 +101,11 @@ export default defineComponent({
   gap: 25px;
   height: 40px;
   margin: 10px auto;
-  width: 90%;
+  width: 100%;
 
   @media (min-width: $oc-breakpoint-small-default) {
     flex-basis: 250px;
-    margin: 0 30px;
-    width: 100%;
+    margin: 0;
   }
 }
 
