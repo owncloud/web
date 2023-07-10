@@ -1,8 +1,20 @@
 @mixin oc-background-primary-gradient {
   background:
-    linear-gradient(90deg,
+    linear-gradient(
+      90deg,
       var(--oc-color-swatch-primary-muted) 0%,
-      var(--oc-color-swatch-primary-gradient) 100%);
+      var(--oc-color-swatch-primary-gradient) 100%
+    );
+
+  &:focus:not([disabled]),
+  &:hover:not([disabled])
+  {
+    background: linear-gradient(
+      90deg,
+      var(--oc-color-swatch-primary-muted-hover) 0%,
+      var(--oc-color-swatch-primary-gradient-hover) 100%
+    );
+  }
 }
 
 .oc-background-selected {
