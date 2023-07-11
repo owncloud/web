@@ -56,6 +56,9 @@ export default defineComponent({
         const createdSpace = await this.createSpace(name)
         this.UPSERT_RESOURCE(createdSpace)
         this.UPSERT_SPACE(createdSpace)
+        this.showMessage({
+          title: this.$gettext('Space was created successfully')
+        })
       } catch (error) {
         console.error(error)
         this.showMessage({
