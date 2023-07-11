@@ -1,0 +1,8 @@
+Enhancement: Allow local storage for auth token
+
+We've introduced a new env var WEB_OPTION_TOKEN_STORAGE_LOCAL, when set true, the auth token will be stored in the
+browser's local storage instead the session storage, this will effect in a persisted login state across multiple
+browser tabs.
+
+https://github.com/owncloud/web/pull/9386
+https://github.com/owncloud/web/issues/9325
