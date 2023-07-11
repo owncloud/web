@@ -110,8 +110,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
 
         if (
           isProjectSpaceResource(space) &&
-          !space.isEditor(store.getters.user) &&
-          !space.isManager(store.getters.user)
+          !space.canOperateTrashbin({ user: store.getters.user })
         ) {
           return false
         }
