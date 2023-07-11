@@ -6,6 +6,7 @@
     :aria-label="$gettext('Create a new space')"
     appearance="filled"
     variation="primary"
+    class="oc-mr-s"
     @click="showCreateSpaceModal"
   >
     <oc-icon name="add" />
