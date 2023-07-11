@@ -1,8 +1,12 @@
-import { useAccessToken, useStore } from '@ownclouders/web-pkg/src/composables'
+import {
+  useAccessToken,
+  useStore,
+  usePublicLinkContext
+} from '@ownclouders/web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg/src/composables/service'
 import type { UppyService } from 'web-runtime/src/services/uppyService'
-import { computed, unref, ref } from 'vue'
+import { computed, unref } from 'vue'
 import { Resource } from 'web-client/src'
 
 import '@uppy/dashboard/dist/style.min.css'
@@ -18,6 +22,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const { $gettext } = useGettext()
   const accessToken = useAccessToken({ store })
   const uppyService = useService<UppyService>('$uppyService')
+  const publicLinkContext = usePublicLinkContext({ store })
 
   const { companionUrl, cloudType } = applicationConfig
 
@@ -117,10 +122,11 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
               if (!companionUrl) {
                 return false
               }
-              // FIXME: this is only available in the files app, should probably be solved via scopes
-              // if (isLocationPublicActive(router, 'files-public-link')) {
-              //   return false
-              // }
+
+              if (unref(publicLinkContext)) {
+                return false
+              }
+
               return unref(canUpload)
             },
             componentType: 'button',
