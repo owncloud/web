@@ -103,13 +103,7 @@ import { useGettext } from 'vue3-gettext'
 import { createLocationCommon, isLocationCommonActive } from 'web-app-files/src/router'
 import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
-import {
-  useRouteQuery,
-  useRouteQueryPersisted,
-  useRouter,
-  useStore,
-  useUserContext
-} from 'web-pkg/src/composables'
+import { useRouteQuery, useRouter, useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from 'web-pkg/src/composables'
@@ -127,9 +121,10 @@ export default defineComponent({
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
     const term = ref('')
+    const searchResults = ref([])
+    const loading = ref(false)
 
     const currentFolderAvailable = computed(() => {
-      console.log('computed changed')
       return store.getters['Files/currentFolder'] !== null || scopeQueryValue.value?.length > 0
     })
 
@@ -169,9 +164,45 @@ export default defineComponent({
     const optionsDrop = computed(() => {
       return unref(optionsDropRef) as InstanceType<GlobalComponents['OcDrop']>
     })
+
+    const availableProviders = computed(() => {
+      return providerStore.availableProviders
+    })
+    const search = async () => {
+      searchResults.value = []
+      if (!unref(term)) {
+        return
+      }
+      let searchTerm = unref(term)
+      if (
+        unref(currentFolderAvailable) &&
+        unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
+      ) {
+        const currentFolder = store.getters['Files/currentFolder']
+        let scope
+        if (currentFolder) {
+          const spaceId = currentFolder.fileId.split('!')[0]
+          const path = currentFolder.path === '/' ? '' : currentFolder.path
+          scope = `${spaceId}${path}`
+        } else {
+          scope = unref(scopeQueryValue)
+        }
+        searchTerm = `${unref(term)} scope:${scope}`
+      }
+      loading.value = true
+      for (const availableProvider of unref(availableProviders)) {
+        if (availableProvider.previewSearch?.available) {
+          searchResults.value.push({
+            providerId: availableProvider.id,
+            result: await availableProvider.previewSearch.search(unref(searchTerm))
+          })
+        }
+      }
+      loading.value = false
+    }
+
     const onKeyUpEnter = () => {
       unref(optionsDrop).hide()
-      console.log('spaces: ', store.getters['runtime/spaces/spaces'])
       if (unref(activePreviewIndex) === null) {
         const currentQuery = unref(router.currentRoute).query
         const currentFolder = store.getters['Files/currentFolder']
@@ -193,8 +224,7 @@ export default defineComponent({
               term: unref(term),
               ...(scope && { scope }),
               useScope: useScope.toString(),
-              provider: 'files.sdk',
-              test: '123'
+              provider: 'files.sdk'
             }
           })
         )
@@ -207,11 +237,11 @@ export default defineComponent({
     }
 
     const onLocationFilterChange = (event) => {
-      console.log('onLocationFilterChange: ', event)
       locationFilterId.value = event.value.id
       if (isLocationCommonActive(router, 'files-common-search')) {
         onKeyUpEnter()
       }
+      search()
     }
 
     return {
@@ -227,7 +257,12 @@ export default defineComponent({
       optionsDropRef,
       activePreviewIndex,
       term,
-      onKeyUpEnter
+      onKeyUpEnter,
+      searchResults,
+      loading,
+      providerStore,
+      availableProviders,
+      search
     }
   },
 
@@ -237,9 +272,6 @@ export default defineComponent({
       optionsVisible: false,
       markInstance: null,
       debouncedSearch: undefined,
-      providerStore,
-      loading: false,
-      searchResults: [],
       hideOptionsDropEvent: null,
       clearTermEvent: null
     }
@@ -248,9 +280,7 @@ export default defineComponent({
     showNoResults() {
       return this.searchResults.every(({ result }) => !result.values.length)
     },
-    availableProviders() {
-      return this.providerStore.availableProviders
-    },
+
     isSearchBarEnabled() {
       return this.availableProviders.length && this.isUserContext
     },
@@ -336,42 +366,7 @@ export default defineComponent({
       this.optionsDrop.show()
       await this.search()
     },
-    async search() {
-      this.searchResults = []
-      if (!this.term) {
-        return
-      }
 
-      let searchTerm = this.term
-      if (
-        this.currentFolderAvailable &&
-        this.locationFilterId === SearchLocationFilterConstants.currentFolder
-      ) {
-        const currentFolder = this.store.getters['Files/currentFolder']
-        let scope
-        if (currentFolder) {
-          const spaceId = currentFolder.fileId.split('!')[0]
-          const path = currentFolder.path === '/' ? '' : currentFolder.path
-          scope = `${spaceId}${path}`
-        } else {
-          scope = this.scopeQueryValue
-        }
-        searchTerm = `${this.term} scope:${scope}`
-      }
-
-      this.loading = true
-
-      for (const availableProvider of this.availableProviders) {
-        if (availableProvider.previewSearch?.available) {
-          this.searchResults.push({
-            providerId: availableProvider.id,
-            result: await availableProvider.previewSearch.search(searchTerm)
-          })
-        }
-      }
-
-      this.loading = false
-    },
     onClear() {
       this.term = ''
       this.optionsDrop.hide()
