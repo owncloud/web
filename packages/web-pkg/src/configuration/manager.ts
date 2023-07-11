@@ -95,7 +95,7 @@ export class ConfigurationManager {
       get(options, 'openLinksWithDefaultApp', true)
     )
     set(this.optionsConfiguration, 'upload.companionUrl', get(options, 'upload.companionUrl', ''))
-    set(this.optionsConfiguration, 'tokenStorageLocal', get(options, 'tokenStorageLocal', false))
+    set(this.optionsConfiguration, 'tokenStorageLocal', get(options, 'tokenStorageLocal', true))
   }
 
   get options(): OptionsConfiguration {

@@ -68,7 +68,7 @@ const state = {
     sharingRecipientsPerPage: 200,
     contextHelpersReadMore: true,
     openLinksWithDefaultApp: true,
-    tokenStorageLocal: false,
+    tokenStorageLocal: true,
     privacyUrl: '',
     imprintUrl: '',
     accessDeniedHelpUrl: ''
