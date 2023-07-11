@@ -186,17 +186,18 @@ export default defineComponent({
         const useScope =
           unref(currentFolderAvailable) &&
           unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
-        /*router.push(
+        router.push(
           createLocationCommon('files-common-search', {
             query: {
               ...(currentQuery && { ...currentQuery }),
               term: unref(term),
               ...(scope && { scope }),
               useScope: useScope.toString(),
-              provider: 'files.sdk'
+              provider: 'files.sdk',
+              test: '123'
             }
           })
-        )*/
+        )
       }
       if (unref(activePreviewIndex) !== null) {
         unref(optionsDrop)
