@@ -8,19 +8,12 @@
     @keydown.esc="closeApp"
   >
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
-    <app-top-bar :resource="activeFilteredFile" @close="closeApp">
-      <template #right>
-        <oc-button
-          v-if="!isFileContentError"
-          class="preview-download"
-          size="small"
-          :aria-label="$gettext('Download currently viewed file')"
-          @click="triggerActiveFileDownload"
-        >
-          <oc-icon size="small" name="file-download" />
-        </oc-button>
-      </template>
-    </app-top-bar>
+    <app-top-bar
+      v-if="!isFileContentError"
+      :resource="activeFilteredFile"
+      :main-actions="fileActions"
+      @close="closeApp"
+    />
 
     <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
@@ -75,6 +68,9 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref, unref } from 'vue'
+import { RouteLocationRaw } from 'vue-router'
+import { Resource } from 'web-client/src'
+import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import {
   queryItemAsString,
   sortHelper,
@@ -83,11 +79,9 @@ import {
   useRouteQuery,
   useRouter
 } from 'web-pkg/src/composables'
-import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions/types'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
-import { RouteLocationRaw } from 'vue-router'
-import { Resource } from 'web-client/src'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import MediaControls from './components/MediaControls.vue'
 import MediaAudio from './components/Sources/MediaAudio.vue'
 import MediaImage from './components/Sources/MediaImage.vue'
@@ -127,6 +121,7 @@ export default defineComponent({
     const route = useRoute()
     const appDefaults = useAppDefaults({ applicationId: 'preview' })
     const contextRouteQuery = useRouteQuery('contextRouteQuery')
+    const { downloadFile } = useDownloadFile()
 
     const activeIndex = ref()
     const cachedFiles = ref<CachedFile[]>([])
@@ -190,15 +185,38 @@ export default defineComponent({
         query: { ...unref(route).query, ...query }
       })
     }
+    const isFileContentLoading = ref(true)
+
+    const triggerActiveFileDownload = () => {
+      if (isFileContentLoading.value) {
+        return
+      }
+      downloadFile(activeFilteredFile.value)
+    }
+
+    const fileActions: Action<ActionOptions>[] = [
+      {
+        name: 'download-file',
+        isEnabled: () => true,
+        componentType: 'button',
+        icon: 'file-download',
+        id: 'preview-download',
+        label: () => 'Download',
+        handler: () => {
+          triggerActiveFileDownload()
+        }
+      }
+    ]
 
     return {
       ...appDefaults,
-      ...useDownloadFile(),
-      cachedFiles,
-      filteredFiles,
       activeFilteredFile,
       activeIndex,
       activeMediaFileCached,
+      cachedFiles,
+      filteredFiles,
+      fileActions,
+      isFileContentLoading,
       isFullScreenModeActivated,
       toggleFullscreenMode,
       updateLocalHistory
@@ -206,7 +224,6 @@ export default defineComponent({
   },
   data() {
     return {
-      isFileContentLoading: true,
       isFileContentError: false,
       isAutoPlayEnabled: true,
 
@@ -347,13 +364,6 @@ export default defineComponent({
         this.isFileContentError = true
         console.error(e)
       }
-    },
-    triggerActiveFileDownload() {
-      if (this.isFileContentLoading) {
-        return
-      }
-
-      return this.downloadFile(this.activeFilteredFile)
     },
     next() {
       if (this.isFileContentLoading) {

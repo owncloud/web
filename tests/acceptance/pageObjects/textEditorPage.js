@@ -3,6 +3,8 @@ const { client } = require('nightwatch-api')
 const filesList = client.page.FilesPageElement.filesList()
 const filesActionsMenu = client.page.FilesPageElement.fileActionsMenu()
 
+const saveButtonSelector = '#text-editor-controls-save'
+
 module.exports = {
   commands: {
     /**
@@ -91,7 +93,7 @@ module.exports = {
       selector: '#text-editor-input'
     },
     saveButton: {
-      selector: '#text-editor-controls-save'
+      selector: saveButtonSelector
     },
     closeButton: {
       selector: '#app-top-bar-close'
@@ -103,7 +105,7 @@ module.exports = {
       selector: '#text-editor-preview'
     },
     saveButtonDisabled: {
-      selector: '#text-editor-controls-save:disabled'
+      selector: `${saveButtonSelector}:disabled`
     }
   }
 }

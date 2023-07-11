@@ -1,19 +1,19 @@
 <template>
   <header
     id="oc-topbar"
-    class="oc-flex oc-flex-middle oc-flex-between oc-px-m"
+    :class="{ 'open-app': contentOnLeftPortal }"
     :aria-label="$gettext('Top bar')"
   >
-    <div class="oc-topbar-left oc-flex oc-flex-middle oc-flex-between">
+    <div class="oc-topbar-left oc-flex oc-flex-middle oc-flex-start">
       <applications-menu v-if="appMenuItems.length" :applications-list="appMenuItems" />
       <router-link ref="navigationSidebarLogo" v-oc-tooltip="$gettext('Back to home')" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image" />
       </router-link>
     </div>
-    <div class="portal-wrapper">
-      <portal-target name="app.runtime.header" multiple></portal-target>
+    <div v-if="!contentOnLeftPortal" class="oc-topbar-center">
+      <portal-target name="app.runtime.header" multiple />
     </div>
-    <div class="oc-topbar-right oc-flex oc-flex-middle oc-flex-between">
+    <div class="oc-topbar-right oc-flex oc-flex-middle">
       <portal-target name="app.runtime.header.right" multiple />
     </div>
     <portal to="app.runtime.header.right" :order="50">
@@ -24,6 +24,7 @@
       <notifications v-if="isNotificationBellEnabled" />
       <user-menu :applications-list="userMenuItems" />
     </portal>
+    <portal-target name="app.runtime.header.left" @change="updateLeftPortal" />
   </header>
 </template>
 
@@ -41,7 +42,7 @@ import {
   useStore,
   useUserContext
 } from 'web-pkg/src/composables'
-import { computed, unref, PropType } from 'vue'
+import { computed, unref, PropType, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 export default {
@@ -149,7 +150,14 @@ export default {
       getMenuItems([null, 'apps', 'appSwitcher'], unref(activeRoutePath))
     )
 
+    const contentOnLeftPortal = ref(false)
+    const updateLeftPortal = (newContent) => {
+      contentOnLeftPortal.value = newContent.hasContent
+    }
+
     return {
+      contentOnLeftPortal,
+      updateLeftPortal,
       isNotificationBellEnabled,
       userMenuItems,
       appMenuItems
@@ -192,13 +200,29 @@ export default {
 
 <style lang="scss">
 #oc-topbar {
-  height: 52px;
+  align-items: center;
+  display: grid;
+  grid-template-areas: 'logo center right' 'secondRow secondRow secondRow';
+  grid-template-columns: 30% 30% 40%;
+  grid-template-rows: 52px auto;
+  padding: 0 1rem;
   position: sticky;
   z-index: 5;
 
-  .portal-wrapper {
-    @media (max-width: 639px) {
-      margin-left: auto;
+  @media (min-width: $oc-breakpoint-small-default) {
+    column-gap: 10px;
+    grid-template-columns: 150px 9fr 1fr;
+    grid-template-rows: 1;
+    height: 52px;
+    justify-content: center;
+    padding: 0 1.1rem;
+  }
+
+  &.open-app {
+    grid-template-columns: 30% 30% 40%;
+
+    @media (min-width: $oc-breakpoint-small-default) {
+      grid-template-columns: 150px 1fr 1fr;
     }
   }
 
@@ -212,19 +236,31 @@ export default {
   }
 
   .oc-topbar-left {
-    gap: 30px;
-
-    img.oc-logo-image {
-      height: 38px;
+    gap: 10px;
+    grid-area: logo;
+    @media (min-width: $oc-breakpoint-small-default) {
+      gap: 20px;
     }
   }
-  .oc-topbar-right {
-    gap: 20px;
+
+  .oc-topbar-center {
+    display: flex;
+    grid-area: center;
+    justify-content: flex-end;
+
+    @media (min-width: $oc-breakpoint-small-default) {
+      justify-content: center;
+    }
   }
-  @media only screen and (max-width: 960px) {
-    .oc-topbar-left,
-    .oc-topbar-right {
-      gap: 0.5rem;
+
+  .oc-topbar-right {
+    gap: 10px;
+    grid-area: right;
+    justify-content: space-between;
+
+    @media (min-width: $oc-breakpoint-small-default) {
+      gap: 20px;
+      justify-content: flex-end;
     }
   }
 }

@@ -1,18 +1,11 @@
 <template>
   <main id="text-editor" class="oc-height-1-1">
-    <app-top-bar :resource="resource" @close="closeApp">
-      <template #right>
-        <oc-button
-          v-if="!isLoading"
-          id="text-editor-controls-save"
-          :aria-label="$gettext('Save')"
-          :disabled="isReadOnly || !isDirty"
-          @click="save"
-        >
-          <oc-icon name="save" size="small" />
-        </oc-button>
-      </template>
-    </app-top-bar>
+    <app-top-bar
+      v-if="!isError && !isLoading"
+      :resource="resource"
+      :main-actions="fileActions"
+      @close="closeApp"
+    />
     <div v-if="isLoading" class="oc-text-center">
       <oc-spinner :aria-label="$gettext('Loading editor content')" />
     </div>
@@ -21,7 +14,7 @@
         <oc-icon size="xxlarge" name="error-warning" fill-type="line" />
       </div>
     </div>
-    <div v-else class="oc-flex editor-wrapper-height oc-px-s oc-pt-rm oc-pb-s">
+    <div v-else class="oc-flex oc-px-s oc-pt-rm oc-pb-s oc-height-1-1">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
         <oc-textarea
           id="text-editor-input"
@@ -53,6 +46,7 @@ import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { Resource } from 'web-client'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions/types'
 
 export default defineComponent({
   name: 'TextEditor',
@@ -257,8 +251,25 @@ export default defineComponent({
       }
     }
 
+    const fileActions: Action<ActionOptions>[] = [
+      {
+        name: 'save-file',
+        disabledTooltip: () => '',
+        isEnabled: () => true,
+        isDisabled: () => isReadOnly.value || !isDirty.value,
+        componentType: 'button',
+        icon: 'save',
+        id: 'text-editor-controls-save',
+        label: () => 'Save',
+        handler: () => {
+          save()
+        }
+      }
+    ]
+
     return {
       ...defaults,
+      fileActions,
 
       // tasks
       loadFileTask,
@@ -288,14 +299,10 @@ export default defineComponent({
 </script>
 <style lang="scss">
 #text-editor-preview {
-  max-height: 80vh;
-  overflow-y: scroll;
+  max-height: 100%;
+  overflow-y: auto;
 }
 #text-editor-input {
   resize: vertical;
-  height: 100%;
-}
-.editor-wrapper-height {
-  height: calc(100% - 58px);
 }
 </style>
