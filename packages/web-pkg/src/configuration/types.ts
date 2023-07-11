@@ -20,6 +20,7 @@ export interface OptionsConfiguration {
   logoutUrl?: string
   contextHelpersReadMore?: boolean
   openLinksWithDefaultApp?: boolean
+  tokenStorageLocal?: boolean
 }
 
 export interface OAuth2Configuration {
