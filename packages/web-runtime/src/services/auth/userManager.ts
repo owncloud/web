@@ -38,11 +38,9 @@ export class UserManager extends OidcUserManager {
   public areEventHandlersRegistered: boolean
 
   constructor(options: UserManagerOptions) {
-    let browserStorage = options.configurationManager.options.tokenStorageLocal
+    const browserStorage = options.configurationManager.options.tokenStorageLocal
       ? localStorage
       : sessionStorage
-    // DEBUG AS OCIS DOCKER IMAGE IS OUTDATED
-    browserStorage = localStorage
     const storePrefix = 'oc_oAuth.'
     const userStore = new WebStorageStateStore({
       prefix: storePrefix,
