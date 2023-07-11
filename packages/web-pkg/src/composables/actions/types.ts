@@ -20,7 +20,7 @@ export interface Action<T = ActionOptions> {
   opensInNewWindow?: boolean
   ext?: string
 
-  label: (options?: T) => string
+  label(options?: T): string
   isEnabled(options?: T): boolean
 
   // componentType: button

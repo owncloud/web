@@ -11,8 +11,9 @@ import OneDrive from '@uppy/onedrive'
 import { WebdavPublicLink } from '@uppy/webdav'
 import GoogleDrive from '@uppy/google-drive'
 import { Extension } from 'web-pkg/src/services/extensionRegistry'
+import { ApplicationSetupOptions } from 'web-pkg/src/apps'
 
-export const extensions = ({ applicationConfig }) => {
+export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const store = useStore()
   const { $gettext } = useGettext()
   const accessToken = useAccessToken({ store })

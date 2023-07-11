@@ -83,8 +83,10 @@ export interface ClassicApplicationScript {
   setup?: (args: { applicationConfig: AppConfigObject }) => ClassicApplicationScript
 }
 
+export type ApplicationSetupOptions = { applicationConfig: AppConfigObject }
+
 export const defineWebApplication = (args: {
-  setup: (args: { applicationConfig: AppConfigObject }) => ClassicApplicationScript
+  setup: (options: ApplicationSetupOptions) => ClassicApplicationScript
 }) => {
   return args
 }
