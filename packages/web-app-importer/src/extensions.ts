@@ -18,7 +18,7 @@ export const extensions = ({ applicationConfig }) => {
   const accessToken = useAccessToken({ store })
   const uppyService = useService<UppyService>('$uppyService')
 
-  const { companionUrl } = applicationConfig
+  const { companionUrl, cloudType } = applicationConfig
 
   const supportedClouds = ['OneDrive']
 
@@ -96,7 +96,7 @@ export const extensions = ({ applicationConfig }) => {
     uppyService.addPlugin(WebdavPublicLink, {
       target: Dashboard,
       companionUrl,
-      cloudType: 'nextcloud'
+      ...(cloudType && { cloudType })
     })
   }
 
