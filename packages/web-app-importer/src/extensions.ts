@@ -21,7 +21,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
 
   const { companionUrl, cloudType } = applicationConfig
 
-  const supportedClouds = ['OneDrive']
+  const supportedClouds = ['OneDrive', 'GoogleDrive', 'WebdavPublicLink']
 
   const currentFolder = computed<Resource>(() => {
     return store.getters['Files/currentFolder']
@@ -36,9 +36,9 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
       uppyService.removePlugin(dashboardPlugin)
     }
     for (const cloud of supportedClouds) {
-      const onedrivePlugin = uppyService.getPlugin(cloud)
-      if (onedrivePlugin) {
-        uppyService.removePlugin(onedrivePlugin)
+      const plugin = uppyService.getPlugin(cloud)
+      if (plugin) {
+        uppyService.removePlugin(plugin)
       }
     }
   }
@@ -96,6 +96,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
     })
     uppyService.addPlugin(WebdavPublicLink, {
       target: Dashboard,
+      id: 'WebdavPublicLink',
       companionUrl,
       ...(cloudType && { cloudType })
     })
