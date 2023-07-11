@@ -196,6 +196,9 @@ export function buildSpace(data): SpaceResource {
     canEditReadme: function ({ user }: { user?: User } = {}) {
       return this.isManager(user) || this.isEditor(user)
     },
+    canRemoveFromTrashbin: function ({ user }: { user?: User } = {}) {
+      return this.isManager(user)
+    },
     canCreate: function () {
       return true
     },

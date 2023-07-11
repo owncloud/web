@@ -85,8 +85,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
 
         if (
           isProjectSpaceResource(space) &&
-          !space.isEditor(store.getters.user) &&
-          !space.isManager(store.getters.user)
+          !space.canRemoveFromTrashbin({ user: store.getters.user })
         ) {
           return false
         }
