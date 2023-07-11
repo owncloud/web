@@ -5,13 +5,14 @@
   "description": "ownCloud Web Importer",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@uppy/dashboard": "3.4.0",
-    "@uppy/onedrive": "^3.1.1"
+    "@uppy/dashboard": "^3.1.1",
+    "@uppy/google-drive": "^3.1.1",
+    "@uppy/onedrive": "^3.1.1",
+    "@uppy/webdav": "*"
   },
   "peerDependencies": {
-    "@ownclouders/web-pkg": "workspace:*",
+    "@ownclouders/design-system": "workspace:*",
     "@ownclouders/web-client": "workspace:*",
-    "web-app-files": "workspace:*",
-    "@ownclouders/design-system": "workspace:*"
+    "@ownclouders/web-pkg": "workspace:*"
   }
 }

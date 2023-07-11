@@ -202,7 +202,7 @@ export default defineConfig(async ({ mode, command }) => {
         }
       },
       resolve: {
-        dedupe: ['vue3-gettext'],
+        dedupe: ['vue3-gettext', 'preact'],
         alias: {
           crypto: join(projectRootDir, 'polyfills/crypto.js'),
           buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',

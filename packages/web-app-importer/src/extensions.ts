@@ -8,6 +8,8 @@ import { Resource } from 'web-client/src'
 import '@uppy/dashboard/dist/style.min.css'
 import Dashboard from '@uppy/dashboard'
 import OneDrive from '@uppy/onedrive'
+import { WebdavPublicLink } from '@uppy/webdav'
+import GoogleDrive from '@uppy/google-drive'
 import { Extension } from 'web-pkg/src/services/extensionRegistry'
 
 export const extensions = ({ applicationConfig }) => {
@@ -86,6 +88,15 @@ export const extensions = ({ applicationConfig }) => {
     uppyService.addPlugin(OneDrive, {
       target: Dashboard,
       companionUrl
+    })
+    uppyService.addPlugin(GoogleDrive, {
+      target: Dashboard,
+      companionUrl
+    })
+    uppyService.addPlugin(WebdavPublicLink, {
+      target: Dashboard,
+      companionUrl,
+      cloudType: 'nextcloud'
     })
   }
 

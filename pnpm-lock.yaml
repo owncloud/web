@@ -1,5 +1,11 @@
 lockfileVersion: '6.0'
 
+overrides:
+  '@uppy/dashboard': https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-dashboard.tgz
+  '@uppy/provider-views': https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-provider-views.tgz
+  '@uppy/companion-client': https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-companion-client.tgz
+  '@uppy/webdav': https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-webdav.tgz
+
 packageExtensionsChecksum: e5e8993047f00ffc73fd28e87ccaecb8
 
 patchedDependencies:
@@ -670,14 +676,14 @@ importers:
   packages/web-app-files:
     dependencies:
       '@uppy/core':
-        specifier: ^3.2.0
-        version: 3.2.0
+        specifier: ^3.3.0
+        version: 3.3.0
       '@uppy/dashboard':
-        specifier: 3.4.0
-        version: 3.4.0(@uppy/core@3.2.0)
+        specifier: 3.4.1
+        version: 3.4.1(@uppy/core@3.3.0)
       '@uppy/onedrive':
         specifier: 3.1.1
-        version: 3.1.1(@uppy/core@3.2.0)
+        version: 3.1.1(@uppy/core@3.3.0)
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -758,14 +764,17 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       '@uppy/dashboard':
-        specifier: 3.4.0
-        version: 3.4.0(@uppy/core@3.2.0)
+        specifier: https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-dashboard.tgz
+        version: '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-dashboard.tgz(@uppy/core@3.3.0)'
+      '@uppy/google-drive':
+        specifier: ^3.1.1
+        version: 3.1.1(@uppy/core@3.3.0)
       '@uppy/onedrive':
         specifier: ^3.1.1
-        version: 3.1.1(@uppy/core@3.2.0)
-      web-app-files:
-        specifier: workspace:*
-        version: link:../web-app-files
+        version: 3.1.1(@uppy/core@3.3.0)
+      '@uppy/webdav':
+        specifier: https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-webdav.tgz
+        version: '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-webdav.tgz(@uppy/core@3.3.0)'
 
   packages/web-app-pdf-viewer:
     dependencies:
@@ -957,7 +966,7 @@ importers:
         version: 3.1.0(@uppy/core@3.2.0)
       '@uppy/utils':
         specifier: ^5.3.0
-        version: 5.3.0
+        version: 5.4.0
       '@uppy/xhr-upload':
         specifier: ^3.0.1
         version: 3.0.1(@uppy/core@3.2.0)
@@ -6553,26 +6562,12 @@ packages:
       vue: 3.3.4
     dev: false
 
-  /@uppy/companion-client@3.0.1:
-    resolution: {integrity: sha512-7ZhdhdbhzOpcUGanQBrLgoVHKvj5KSSwVjaqj1OgpFuiTGh1HRBQlQsM4w6aZR2gLJfEOPdUcm0LquZvrZ3fNw==}
-    dependencies:
-      '@uppy/utils': 5.3.0
-      namespace-emitter: 2.0.1
-    dev: false
-
-  /@uppy/companion-client@3.1.3:
-    resolution: {integrity: sha512-l70qOd4P9PSqxPDOFD1LMusDGGi36LCCiQko/e+Uw5hBtzN9vhAG5rQm242FlNoFdxK5T6jmfoZJSVel0UTvzg==}
-    dependencies:
-      '@uppy/utils': 5.3.0
-      namespace-emitter: 2.0.1
-    dev: false
-
   /@uppy/core@3.2.0:
     resolution: {integrity: sha512-w/jdNCIdmxt4uPt4UBPfzmQ7HanIE73GiKKeHtZo6Gp+HWOsUhY7DBimGUk3IsX/vMJTSB2+RhZAUOBGRaP5fA==}
     dependencies:
       '@transloadit/prettier-bytes': 0.0.9
       '@uppy/store-default': 3.0.3
-      '@uppy/utils': 5.3.0
+      '@uppy/utils': 5.4.0
       lodash.throttle: 4.1.1
       mime-match: 1.0.2
       namespace-emitter: 2.0.1
@@ -6580,21 +6575,34 @@ packages:
       preact: 10.7.1
     dev: false
 
-  /@uppy/dashboard@3.4.0(@uppy/core@3.2.0):
-    resolution: {integrity: sha512-4zns7+C3didR8AKUa4T8+0dg7TWTpeMsUjqhBNWYdxGptcG+m5+zMr+olCLA2Tjou41x75j4BqtPLrEGTr1yVA==}
+  /@uppy/core@3.3.0:
+    resolution: {integrity: sha512-LrVplQwFEc1s+rTitLywpf1tjy7ELAIag4Ejrvkij1yEOIRHCXYYVHf8ln761jRwqJ1JDY3Hr6Y+BFnCV2OSIg==}
+    dependencies:
+      '@transloadit/prettier-bytes': 0.0.9
+      '@uppy/store-default': 3.0.3
+      '@uppy/utils': 5.4.0
+      lodash: 4.17.21
+      mime-match: 1.0.2
+      namespace-emitter: 2.0.1
+      nanoid: 4.0.0
+      preact: 10.7.1
+    dev: false
+
+  /@uppy/dashboard@3.4.1(@uppy/core@3.3.0):
+    resolution: {integrity: sha512-VVHW/qoN/ScpHYCCp0OLCLIWogHoQuMCsk6Ta0zclO3brHPooo8IbP59OZAwuPPxL8MC5EIRECxk2tNqOmQ25Q==}
     peerDependencies:
-      '@uppy/core': ^3.2.0
+      '@uppy/core': ^3.2.1
     dependencies:
       '@transloadit/prettier-bytes': 0.0.7
-      '@uppy/core': 3.2.0
-      '@uppy/informer': 3.0.2(@uppy/core@3.2.0)
-      '@uppy/provider-views': 3.3.0(@uppy/core@3.2.0)
-      '@uppy/status-bar': 3.1.2(@uppy/core@3.2.0)
-      '@uppy/thumbnail-generator': 3.0.3(@uppy/core@3.2.0)
-      '@uppy/utils': 5.3.0
+      '@uppy/core': 3.3.0
+      '@uppy/informer': 3.0.2(@uppy/core@3.3.0)
+      '@uppy/provider-views': '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-provider-views.tgz(@uppy/core@3.3.0)'
+      '@uppy/status-bar': 3.2.1(@uppy/core@3.3.0)
+      '@uppy/thumbnail-generator': 3.0.3(@uppy/core@3.3.0)
+      '@uppy/utils': 5.4.0
       classnames: 2.3.2
       is-shallow-equal: 1.0.1
-      lodash.debounce: 4.0.8
+      lodash: 4.17.21
       memoize-one: 6.0.0
       nanoid: 4.0.0
       preact: 10.7.1
@@ -6606,54 +6614,52 @@ packages:
       '@uppy/core': ^3.0.0
     dependencies:
       '@uppy/core': 3.2.0
-      '@uppy/utils': 5.3.0
+      '@uppy/utils': 5.4.0
     dev: false
 
-  /@uppy/informer@3.0.2(@uppy/core@3.2.0):
+  /@uppy/google-drive@3.1.1(@uppy/core@3.3.0):
+    resolution: {integrity: sha512-zaJnWrUzjqpKVHQcJSYQ2KNu6liWZmxv0NI/CRhBG+0guuVkt7eaw9c0AzI3yd8ekYOfOuLNNPeFMHBSz58UoQ==}
+    peerDependencies:
+      '@uppy/core': ^3.2.0
+    dependencies:
+      '@uppy/companion-client': '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-companion-client.tgz'
+      '@uppy/core': 3.3.0
+      '@uppy/provider-views': '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-provider-views.tgz(@uppy/core@3.3.0)'
+      '@uppy/utils': 5.4.0
+      preact: 10.7.1
+    dev: false
+
+  /@uppy/informer@3.0.2(@uppy/core@3.3.0):
     resolution: {integrity: sha512-WPOEZCxAaw9JBhkneIW3bm6SqceUtZGxDT++3SlwKUyn4kr0p808LrCVITooUkyqrd0lOn9TAFKFNjinUxbCGw==}
     peerDependencies:
       '@uppy/core': ^3.2.0
     dependencies:
-      '@uppy/core': 3.2.0
-      '@uppy/utils': 5.3.0
+      '@uppy/core': 3.3.0
+      '@uppy/utils': 5.4.0
       preact: 10.7.1
     dev: false
 
-  /@uppy/onedrive@3.1.1(@uppy/core@3.2.0):
+  /@uppy/onedrive@3.1.1(@uppy/core@3.3.0):
     resolution: {integrity: sha512-TxrmZbOATL/ItEbdCZi4gVooQK+CUa4A5aAVGPgJqYlYTUdzKqhmS2YsgIgxBhDrn6TJrA78rVehZl/R8PPXlg==}
     peerDependencies:
       '@uppy/core': ^3.2.0
     dependencies:
-      '@uppy/companion-client': 3.1.3
-      '@uppy/core': 3.2.0
-      '@uppy/provider-views': 3.3.0(@uppy/core@3.2.0)
-      '@uppy/utils': 5.3.0
+      '@uppy/companion-client': '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-companion-client.tgz'
+      '@uppy/core': 3.3.0
+      '@uppy/provider-views': '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-provider-views.tgz(@uppy/core@3.3.0)'
+      '@uppy/utils': 5.4.0
       preact: 10.7.1
     dev: false
 
-  /@uppy/provider-views@3.3.0(@uppy/core@3.2.0):
-    resolution: {integrity: sha512-J2yhALNzsEAtR9NDN5ZJ1Poy/SaTIg9gdZfKCaD4G7+xaKnnbb8E9ca5YjVNbOJnW0LNazggNvpJu0D6SeNgHg==}
+  /@uppy/status-bar@3.2.1(@uppy/core@3.3.0):
+    resolution: {integrity: sha512-lEPSlusuHNEhTDB0YKRI7irELhlPfJi5zHKNFFqIkZl/ya+8OECJMQPh8697qQ66QR9tuILJCklBniYAszHHuQ==}
     peerDependencies:
-      '@uppy/core': ^3.2.0
-    dependencies:
-      '@uppy/core': 3.2.0
-      '@uppy/utils': 5.3.0
-      classnames: 2.3.2
-      nanoid: 4.0.0
-      p-queue: 7.3.4
-      preact: 10.7.1
-    dev: false
-
-  /@uppy/status-bar@3.1.2(@uppy/core@3.2.0):
-    resolution: {integrity: sha512-oDwq8BRf5HwHyc6enl/S8aIkJ50TrTRtS59OywP0TAr+xW7EfqKGnaQze18m2sryAhSMjzBCJOOJYfLl/v5Hmw==}
-    peerDependencies:
-      '@uppy/core': ^3.2.0
+      '@uppy/core': ^3.3.0
     dependencies:
       '@transloadit/prettier-bytes': 0.0.9
-      '@uppy/core': 3.2.0
-      '@uppy/utils': 5.3.0
+      '@uppy/core': 3.3.0
+      '@uppy/utils': 5.4.0
       classnames: 2.3.2
-      lodash.throttle: 4.1.1
       preact: 10.7.1
     dev: false
 
@@ -6661,13 +6667,13 @@ packages:
     resolution: {integrity: sha512-/zlvQNj4HjkthI+7dNdj/8mOlTg1Zb1gJ/ZsOxof0g3xXD+OAwm7asRnOwpfj2dos+lExdW/zMn8XsRGsuvb6Q==}
     dev: false
 
-  /@uppy/thumbnail-generator@3.0.3(@uppy/core@3.2.0):
+  /@uppy/thumbnail-generator@3.0.3(@uppy/core@3.3.0):
     resolution: {integrity: sha512-tiTNqHU/Co8HQ2ag88JZv6KMV1/dbOLbtpI0QJBKOdnPtcDtzQbT8LM69EW9JRrqSAxaoLPrr/VccXvv8BIe2A==}
     peerDependencies:
       '@uppy/core': ^3.2.0
     dependencies:
-      '@uppy/core': 3.2.0
-      '@uppy/utils': 5.3.0
+      '@uppy/core': 3.3.0
+      '@uppy/utils': 5.4.0
       exifr: 7.1.3
     dev: false
 
@@ -6676,16 +6682,16 @@ packages:
     peerDependencies:
       '@uppy/core': ^3.2.0
     dependencies:
-      '@uppy/companion-client': 3.1.3
+      '@uppy/companion-client': '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-companion-client.tgz'
       '@uppy/core': 3.2.0
-      '@uppy/utils': 5.3.0
+      '@uppy/utils': 5.4.0
       tus-js-client: 3.0.0
     dev: false
 
-  /@uppy/utils@5.3.0:
-    resolution: {integrity: sha512-tPW+HtRkjanFQAa/XD2e6kjJ7ZeMHtVxEVeBeRtKTnltsCA9kNF2gDwxtUVPEWyLrKzW+CvRm60NDiOKaWUuww==}
+  /@uppy/utils@5.4.0:
+    resolution: {integrity: sha512-X9f43OvTcymhoiDEzA2CqH7W5pADTVv2bhQ/9NUaVwYRLUadDjZc27ZgnNraKSYgnOhKFJlC63nyCwcd0yaQIQ==}
     dependencies:
-      lodash.throttle: 4.1.1
+      lodash: 4.17.21
     dev: false
 
   /@uppy/xhr-upload@3.0.1(@uppy/core@3.2.0):
@@ -6693,9 +6699,9 @@ packages:
     peerDependencies:
       '@uppy/core': ^3.0.1
     dependencies:
-      '@uppy/companion-client': 3.0.1
+      '@uppy/companion-client': '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-companion-client.tgz'
       '@uppy/core': 3.2.0
-      '@uppy/utils': 5.3.0
+      '@uppy/utils': 5.4.0
       nanoid: 4.0.0
     dev: false
 
@@ -14616,6 +14622,7 @@ packages:
 
   /lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: true
 
   /lodash.defaults@4.2.0:
     resolution: {integrity: sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ==}
@@ -17043,7 +17050,7 @@ packages:
     resolution: {integrity: sha512-tP7u/Sn/dVxK2NnruI4H9BG+x+Wxz6oeZ1cJ8P6G/PZY0IKk4k/63TDsQf2kQq3+qoJeLm2kIBUNlZe3zgb4Zg==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
-      nanoid: 3.3.4
+      nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
@@ -21593,6 +21600,69 @@ packages:
     transitivePeerDependencies:
       - supports-color
       - typescript
+    dev: false
+
+  '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-companion-client.tgz':
+    resolution: {tarball: https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-companion-client.tgz}
+    name: '@uppy/companion-client'
+    version: 3.2.0
+    dependencies:
+      '@uppy/utils': 5.4.0
+      namespace-emitter: 2.0.1
+    dev: false
+
+  '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-dashboard.tgz(@uppy/core@3.3.0)':
+    resolution: {tarball: https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-dashboard.tgz}
+    id: '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-dashboard.tgz'
+    name: '@uppy/dashboard'
+    version: 3.4.1
+    peerDependencies:
+      '@uppy/core': ^3.3.0
+    dependencies:
+      '@transloadit/prettier-bytes': 0.0.7
+      '@uppy/core': 3.3.0
+      '@uppy/informer': 3.0.2(@uppy/core@3.3.0)
+      '@uppy/provider-views': '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-provider-views.tgz(@uppy/core@3.3.0)'
+      '@uppy/status-bar': 3.2.1(@uppy/core@3.3.0)
+      '@uppy/thumbnail-generator': 3.0.3(@uppy/core@3.3.0)
+      '@uppy/utils': 5.4.0
+      classnames: 2.3.2
+      is-shallow-equal: 1.0.1
+      lodash: 4.17.21
+      memoize-one: 6.0.0
+      nanoid: 4.0.0
+      preact: 10.7.1
+    dev: false
+
+  '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-provider-views.tgz(@uppy/core@3.3.0)':
+    resolution: {tarball: https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-provider-views.tgz}
+    id: '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-provider-views.tgz'
+    name: '@uppy/provider-views'
+    version: 3.3.1
+    peerDependencies:
+      '@uppy/core': ^3.3.0
+    dependencies:
+      '@uppy/core': 3.3.0
+      '@uppy/utils': 5.4.0
+      classnames: 2.3.2
+      nanoid: 4.0.0
+      p-queue: 7.3.4
+      preact: 10.7.1
+    dev: false
+
+  '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-webdav.tgz(@uppy/core@3.3.0)':
+    resolution: {tarball: https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-webdav.tgz}
+    id: '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-webdav.tgz'
+    name: '@uppy/webdav'
+    version: 3.1.1
+    peerDependencies:
+      '@uppy/core': ^3.3.0
+    dependencies:
+      '@uppy/companion-client': '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-companion-client.tgz'
+      '@uppy/core': 3.3.0
+      '@uppy/provider-views': '@github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-provider-views.tgz(@uppy/core@3.3.0)'
+      '@uppy/utils': 5.4.0
+      preact: 10.7.1
     dev: false
 
   github.com/dschmidt/v-calendar/3ce6e3b8afd5491cb53ee811281d5fa8a45b044d(vue@3.3.4):
