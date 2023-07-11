@@ -88,6 +88,8 @@ export interface Resource {
   canDisable?({ user }: { user?: User; ability?: any }): boolean
   canEditImage?({ user }: { user?: User }): boolean
   canEditReadme?({ user }: { user?: User }): boolean
+
+  canEmptyTrashbin?({ user }: { user?: User }): boolean
   canEditSpaceQuota?(): boolean
   canEditTags?(): boolean
 
