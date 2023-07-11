@@ -42,7 +42,7 @@ export class UserManager extends OidcUserManager {
       ? localStorage
       : sessionStorage
     // DEBUG AS OCIS DOCKER IMAGE IS OUTDATED
-    browserStorage = sessionStorage
+    browserStorage = localStorage
     const storePrefix = 'oc_oAuth.'
     const userStore = new WebStorageStateStore({
       prefix: storePrefix,
