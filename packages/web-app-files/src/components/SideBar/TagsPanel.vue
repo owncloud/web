@@ -64,7 +64,7 @@ import { useClientService, useStore } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 import diff from 'lodash-es/difference'
 import { useGettext } from 'vue3-gettext'
-import keycode from "keycode";
+import keycode from 'keycode'
 
 const tagsMaxCount = 100
 
