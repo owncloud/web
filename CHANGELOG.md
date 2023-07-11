@@ -11,7 +11,12 @@ Summary
 * Bugfix - Favorites list update on removal: [#9078](https://github.com/owncloud/web/pull/9078)
 * Bugfix - Space creation does not block reoccurring event: [#9213](https://github.com/owncloud/web/pull/9213)
 * Bugfix - Uploading to folders that contain special characters: [#9247](https://github.com/owncloud/web/issues/9247)
+* Bugfix - Relative user quota display limited to two decimals: [#9259](https://github.com/owncloud/web/issues/9259)
+* Bugfix - Remember location after token invalidation: [#9261](https://github.com/owncloud/web/issues/9261)
+* Bugfix - Authenticated public links breaking uploads: [#9299](https://github.com/owncloud/web/pull/9299)
+* Bugfix - Switch columns displayed on small screens in "Shared with me" view: [#9315](https://github.com/owncloud/web/issues/9315)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
+* Enhancement - Improve extension app topbar: [#8422](https://github.com/owncloud/web/issues/8422)
 * Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
 * Enhancement - Shrink table columns: [#8599](https://github.com/owncloud/web/issues/8599)
 * Enhancement - Add whitespace context-menu: [#8921](https://github.com/owncloud/web/pull/8921)
@@ -38,6 +43,8 @@ Summary
 * Enhancement - Access denied page update message: [#9263](https://github.com/owncloud/web/pull/9263)
 * Enhancement - Hover tooltips in topbar: [#9280](https://github.com/owncloud/web/issues/9280)
 * Enhancement - Search list add highlighted file content: [#9294](https://github.com/owncloud/web/pull/9294)
+* Enhancement - Resolve pulic links to their actual location: [#9299](https://github.com/owncloud/web/pull/9299)
+* Enhancement - Batch actions redesign: [#9346](https://github.com/owncloud/web/pull/9346)
 
 Details
 -------
@@ -64,12 +71,52 @@ Details
    https://github.com/owncloud/web/issues/9247
    https://github.com/owncloud/web/pull/9290
 
+* Bugfix - Relative user quota display limited to two decimals: [#9259](https://github.com/owncloud/web/issues/9259)
+
+   If the relative user quota is being reported too precisely from the backend, there was a chance
+   of small display issue. This has been resolved by limiting the number of decimals that get
+   displayed for the relative quota to two.
+
+   https://github.com/owncloud/web/issues/9259
+   https://github.com/owncloud/web/pull/9369
+
+* Bugfix - Remember location after token invalidation: [#9261](https://github.com/owncloud/web/issues/9261)
+
+   Fixed an issue where token invalidation in the IDP would result in losing the current location.
+   So logging in after token invalidation now correctly redirects to the page the user was before.
+
+   https://github.com/owncloud/web/issues/9261
+   https://github.com/owncloud/web/pull/9364
+
+* Bugfix - Authenticated public links breaking uploads: [#9299](https://github.com/owncloud/web/pull/9299)
+
+   Opening public links in an authenticated context no longer breaks uploading resources.
+
+   https://github.com/owncloud/web/issues/9298
+   https://github.com/owncloud/web/pull/9299
+
+* Bugfix - Switch columns displayed on small screens in "Shared with me" view: [#9315](https://github.com/owncloud/web/issues/9315)
+
+   Visibility of the resource table columns "Shared by" and "Shared with" has been switched for
+   small screen and tablets (screen size <1200px) in the "Shared with me" view.
+
+   https://github.com/owncloud/web/issues/9315
+   https://github.com/owncloud/web/pull/9320
+
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 
    HasPriority property has been added to replace canBeDefault. The property allows to set
    priority for opening with editors per extension.
 
    https://github.com/owncloud/web/pull/7967
+
+* Enhancement - Improve extension app topbar: [#8422](https://github.com/owncloud/web/issues/8422)
+
+   We have redesigned the app topbar used in extensions and added more file actions.
+
+   https://github.com/owncloud/web/issues/8422
+   https://github.com/owncloud/web/pull/8442
+   https://github.com/owncloud/web/pull/8447
 
 * Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
 
@@ -283,6 +330,24 @@ Details
 
    https://github.com/owncloud/web/issues/9295
    https://github.com/owncloud/web/pull/9294
+
+* Enhancement - Resolve pulic links to their actual location: [#9299](https://github.com/owncloud/web/pull/9299)
+
+   Public links are now being resolved to their actual location if the user has proper access to the
+   resource (either via space or share).
+
+   https://github.com/owncloud/web/issues/9296
+   https://github.com/owncloud/web/pull/9299
+
+* Enhancement - Batch actions redesign: [#9346](https://github.com/owncloud/web/pull/9346)
+
+   We've improved the overall look and feel of the top bar batch actions. This includes the new
+   mechanism that the batch actions show up as well when only one item is selected, but also
+   includes design changes.
+
+   https://github.com/owncloud/web/issues/9340
+   https://github.com/owncloud/web/issues/9352
+   https://github.com/owncloud/web/pull/9346
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
