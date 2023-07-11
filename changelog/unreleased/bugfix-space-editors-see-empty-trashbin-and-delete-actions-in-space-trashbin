@@ -1,0 +1,7 @@
+Bugfix: Space editors see empty trashbin and delete actions in space trashbin
+
+We've fixed a bug, where space editors were able to see the empty trashbin and delete buttons in the space's trashbin.
+This is only allowed for space managers.
+
+https://github.com/owncloud/web/pull/9389
+https://github.com/owncloud/web/issues/9385
