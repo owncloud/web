@@ -15,6 +15,7 @@ Summary
 * Bugfix - Remember location after token invalidation: [#9261](https://github.com/owncloud/web/issues/9261)
 * Bugfix - Authenticated public links breaking uploads: [#9299](https://github.com/owncloud/web/pull/9299)
 * Bugfix - Switch columns displayed on small screens in "Shared with me" view: [#9315](https://github.com/owncloud/web/issues/9315)
+* Bugfix - Space editors see empty trashbin and delete actions in space trashbin: [#9389](https://github.com/owncloud/web/pull/9389)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 * Enhancement - Improve extension app topbar: [#8422](https://github.com/owncloud/web/issues/8422)
 * Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
@@ -102,6 +103,14 @@ Details
 
    https://github.com/owncloud/web/issues/9315
    https://github.com/owncloud/web/pull/9320
+
+* Bugfix - Space editors see empty trashbin and delete actions in space trashbin: [#9389](https://github.com/owncloud/web/pull/9389)
+
+   We've fixed a bug, where space editors were able to see the empty trashbin and delete buttons in
+   the space's trashbin. This is only allowed for space managers.
+
+   https://github.com/owncloud/web/issues/9385
+   https://github.com/owncloud/web/pull/9389
 
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 
