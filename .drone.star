@@ -29,7 +29,6 @@ PLUGINS_SLACK = "plugins/slack:1"
 SELENIUM_STANDALONE_CHROME = "selenium/standalone-chrome:104.0-20220812"
 SELENIUM_STANDALONE_FIREFOX = "selenium/standalone-firefox:104.0-20220812"
 SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:4.7.0"
-THEGEEKLAB_DRONE_GITHUB_COMMENT = "thegeeklab/drone-github-comment:1"
 TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 
 OC10_VERSION = "latest"
@@ -70,21 +69,18 @@ config = {
     "e2e": {
         "oC10": {
             "db": "mysql:5.5",
-            "earlyFail": True,
             "skip": False,
             "featurePaths": [
                 "tests/e2e/cucumber/**/*[!.ocis].feature",
             ],
         },
         "oCIS-1": {
-            "earlyFail": True,
             "skip": False,
             "featurePaths": [
                 "tests/e2e/cucumber/features/{smoke,journeys}/*[!.oc10].feature",
             ],
         },
         "oCIS-2": {
-            "earlyFail": True,
             "skip": False,
             "featurePaths": [
                 "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*[!.oc10].feature",
@@ -1096,7 +1092,6 @@ def e2eTests(ctx):
 
     default = {
         "skip": False,
-        "earlyFail": True,
         "logLevel": "2",
         "reportTracing": "false",
         "db": "mysql:5.5",
@@ -1122,9 +1117,6 @@ def e2eTests(ctx):
 
         if params["skip"]:
             continue
-
-        if ("full-ci" in ctx.build.title.lower()):
-            params["earlyFail"] = False
 
         if ("with-tracing" in ctx.build.title.lower()):
             params["reportTracing"] = "true"
@@ -1182,11 +1174,7 @@ def e2eTests(ctx):
                          "pnpm test:e2e:cucumber %s" % " ".join(params["featurePaths"]),
                      ],
                  }] + \
-                 uploadTracingResult(ctx) + \
-                 publishTracingResult(ctx, "e2e-tests %s" % server)
-        if (params["earlyFail"]):
-            steps += buildGithubCommentForBuildStopped("e2e-ocis" if server.startswith("oCIS") else "e2e-oc10")
-        steps += githubComment("e2e-tests", server)
+                 uploadTracingResult(ctx)
 
         pipelines.append({
             "kind": "pipeline",
@@ -1230,7 +1218,6 @@ def acceptance(ctx):
         "oc10IntegrationAppIncluded": False,
         "skip": False,
         "debugSuites": [],
-        "earlyFail": True,
         "retry": True,
     }
 
@@ -1268,9 +1255,6 @@ def acceptance(ctx):
             params = {}
             for item in default:
                 params[item] = matrix[item] if item in matrix else default[item]
-
-            if ("full-ci" in ctx.build.title.lower()):
-                params["earlyFail"] = False
 
             for server in params["servers"]:
                 for browser in params["browsers"]:
@@ -1362,14 +1346,7 @@ def acceptance(ctx):
 
                         # Capture the screenshots from acceptance tests (only runs on failure)
                         if (params["screenShots"]):
-                            steps += uploadScreenshots() + buildGithubComment(suiteName)
-
-                        if (params["earlyFail"]):
-                            steps += buildGithubCommentForBuildStopped(suiteName)
-
-                        # Upload the screenshots to github comment
-                        server_type = "oCIS" if params["runningOnOCIS"] else "oC10"
-                        steps += githubComment("acceptance", server_type)
+                            steps += uploadScreenshots()
 
                         result = {
                             "kind": "pipeline",
@@ -2527,80 +2504,6 @@ def uploadScreenshots():
         },
     }]
 
-def buildGithubComment(suite):
-    return [{
-        "name": "build-github-comment",
-        "image": OC_UBUNTU,
-        "commands": [
-            "cd %s/tests/acceptance/reports/screenshots/" % dir["web"],
-            'echo "<details><summary>:boom: The acceptance tests failed on retry. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
-            'for f in *.png; do echo "### $f\n" \'!\'"[$f]($CACHE_ENDPOINT/$CACHE_BUCKET/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/screenshots/$f) \n" >> %s/comments.file; done' % dir["web"],
-            'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
-            "more %s/comments.file" % dir["web"],
-        ],
-        "environment": {
-            "TEST_CONTEXT": suite,
-            "CACHE_ENDPOINT": {
-                "from_secret": "cache_s3_server",
-            },
-            "CACHE_BUCKET": {
-                "from_secret": "cache_s3_bucket",
-            },
-        },
-        "when": {
-            "status": [
-                "failure",
-            ],
-            "event": [
-                "pull_request",
-            ],
-        },
-    }]
-
-def buildGithubCommentForBuildStopped(suite):
-    return [{
-        "name": "build-github-comment-buildStop",
-        "image": OC_UBUNTU,
-        "commands": [
-            'echo ":boom: The %s tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % (suite, dir["web"]),
-        ],
-        "when": {
-            "status": [
-                "failure",
-            ],
-            "event": [
-                "pull_request",
-            ],
-        },
-    }]
-
-def githubComment(alternateSuiteName, server_type = ""):
-    prefix = "Results for <strong>%s %s</strong> ${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1" % (alternateSuiteName, server_type)
-    return [{
-        "name": "github-comment",
-        "image": THEGEEKLAB_DRONE_GITHUB_COMMENT,
-        "pull": "if-not-exists",
-        "settings": {
-            "message": "%s/comments.file" % dir["web"],
-            "key": "pr-${DRONE_PULL_REQUEST}-%s" % server_type,  #TODO: we could delete the comment after a successful CI run
-            "update": "true",
-            "api_key": {
-                "from_secret": "github_token",
-            },
-        },
-        "commands": [
-            "if [ -s %s ]; then echo '%s' | cat - comments.file > temp && mv temp comments.file && /bin/drone-github-comment; fi" % (dir["commentsFile"], prefix),
-        ],
-        "when": {
-            "status": [
-                "failure",
-            ],
-            "event": [
-                "pull_request",
-            ],
-        },
-    }]
-
 def example_deploys(ctx):
     on_merge_deploy = [
         "ocis_web/latest.yml",
@@ -3084,38 +2987,6 @@ def uploadTracingResult(ctx):
             "event": [
                 "pull_request",
                 "cron",
-            ],
-        },
-    }]
-
-def publishTracingResult(ctx, suite):
-    status = ["failure"]
-    if ("with-tracing" in ctx.build.title.lower()):
-        status = ["failure", "success"]
-
-    return [{
-        "name": "publish-tracing-result",
-        "image": OC_UBUNTU,
-        "commands": [
-            "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
-            'echo "<details><summary>:boom: To see the trace, please open the link in the console ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
-            'for f in *.zip; do echo "#### npx playwright show-trace $CACHE_ENDPOINT/$CACHE_BUCKET/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n" >> %s/comments.file; done' % dir["web"],
-            'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
-            "more %s/comments.file" % dir["web"],
-        ],
-        "environment": {
-            "TEST_CONTEXT": suite,
-            "CACHE_ENDPOINT": {
-                "from_secret": "cache_s3_server",
-            },
-            "CACHE_BUCKET": {
-                "from_secret": "cache_s3_bucket",
-            },
-        },
-        "when": {
-            "status": status,
-            "event": [
-                "pull_request",
             ],
         },
     }]
