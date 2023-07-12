@@ -46,6 +46,7 @@ Summary
 * Enhancement - Search list add highlighted file content: [#9294](https://github.com/owncloud/web/pull/9294)
 * Enhancement - Resolve pulic links to their actual location: [#9299](https://github.com/owncloud/web/pull/9299)
 * Enhancement - Batch actions redesign: [#9346](https://github.com/owncloud/web/pull/9346)
+* Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
 
 Details
 -------
@@ -357,6 +358,14 @@ Details
    https://github.com/owncloud/web/issues/9340
    https://github.com/owncloud/web/issues/9352
    https://github.com/owncloud/web/pull/9346
+
+* Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
+
+   We have added some functionality that reminds the user to check their browser settings so that
+   redirects and e.g. opening a resource in a new tab can work properly.
+
+   https://github.com/owncloud/web/issues/9377
+   https://github.com/owncloud/web/pull/9383
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
