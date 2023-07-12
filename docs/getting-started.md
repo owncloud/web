@@ -73,9 +73,7 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
 - `options.contextHelpersReadMore` Specifies whether the "Read more" link should be displayed or not.
 - `options.openLinksWithDefaultApp` Specifies whether single file link shares should be opened with default app or not.
-- `options.tokenStorageLocal` Specifies whether the access token will be stored in the local storage when set to 'true'
-  or in the session storage when set to 'false''. If stored in the local storage, login state will be persisted across
-  multiple browser tabs, means no additional logins are required. Defaults to 'false'.
+- `options.tokenStorageLocal` Specifies whether the access token will be stored in the local storage when set to `true` or in the session storage when set to `false`. If stored in the local storage, login state will be persisted across multiple browser tabs, means no additional logins are required. Defaults to `true`.
 
 #### Scripts and Styles
 
