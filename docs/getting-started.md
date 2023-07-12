@@ -33,7 +33,7 @@ The bundled frontend code automatically gets mounted into the Docker containers,
 
 For more details on how to set up Web for development, please see [tooling]({{< ref "tooling.md#development-setup" >}}).
 
-### Source code
+### Source Code
 
 The source code is hosted at [https://github.com/owncloud/web](https://github.com/owncloud/web).
 Please refer to the [build documentation for Web]({{< ref "./building.md" >}}).

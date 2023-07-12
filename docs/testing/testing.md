@@ -32,7 +32,7 @@ $ pnpm test:unit
 
 You can also specify which tests to run by giving a path param, like so: `pnpm test:unit packages/<app-name>/tests/unit/path/to/test.spec.js`.
 
-#### Unit test file structure
+#### Unit Test File Structure
 
 Our unit tests spec files follow a simple structure:
 
@@ -53,7 +53,7 @@ which makes it easy to write tests, debug them and have them run cross-browser w
 
 Please make sure you have installed all dependencies and started the server(s) as described in [tooling]({{< ref "tooling.md#development-setup" >}}).
 
-#### Prepare & start web
+#### Prepare & Start Web
 
 Bundle the web frontend with the following command:
 
@@ -63,7 +63,7 @@ $ pnpm build:w
 
 Our compose setup automatically mounts it into an oC10 and oCIS backend, respectively. Web also gets recompiled on changes.
 
-#### Run E2E tests
+#### Run E2E Tests
 
 Depending on the backend you want to run the tests on, you can either run
 
@@ -122,7 +122,7 @@ At ownCloud, we have decided to adopt Docker as the main environment for develop
 
 Please make sure you have installed all dependencies and started the server(s) as described in [tooling]({{< ref "tooling.md#development-setup" >}}).
 
-#### Prepare & start web
+#### Prepare & Start Web
 
 Bundle the web frontend, which then gets mounted into the respective backends. It also gets recompiled on changes.
 
@@ -168,11 +168,11 @@ If you're using a M1 Mac, you need to use `seleniarm/standalone-chromium:4.4.0-2
 
   for oCIS acceptance tests.
 
-#### Watch the test run
+#### Watch the Test Run
 
 To watch the tests while running, open [http://host.docker.internal:6080/](http://host.docker.internal:6080/) in the browser to access your VNC client.
 
-### Analyze the test report
+### Analyze the Test Report
 
 The cucumber library is used as the test runner for both e2e and acceptance tests. The report generator script lives inside the `tests/e2e/cucumber/report` folder. If you want to create a report after the tests are done, run the command:
 
