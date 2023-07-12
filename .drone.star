@@ -69,15 +69,24 @@ config = {
     "e2e": {
         "oC10": {
             "db": "mysql:5.5",
+            "earlyFail": True,
             "skip": False,
             "featurePaths": [
-                "tests/e2e/cucumber/features/journeys/kindergarten.oc10.feature",
+                "tests/e2e/cucumber/**/*[!.ocis].feature",
             ],
         },
         "oCIS-1": {
+            "earlyFail": True,
             "skip": False,
             "featurePaths": [
-                "tests/e2e/cucumber/features/journeys/kindergarten.ocis.feature",
+                "tests/e2e/cucumber/features/{smoke,journeys}/*[!.oc10].feature",
+            ],
+        },
+        "oCIS-2": {
+            "earlyFail": True,
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*[!.oc10].feature",
             ],
         },
     },
@@ -87,6 +96,116 @@ config = {
             "suites": {
                 "oC10Basic": [
                     "webUIAccount",
+                    "webUILogin",
+                    "webUIPrivateLinks",
+                    "webUIWebdavLockProtection",
+                ],
+                "oC10FileFolderOperations": [
+                    "webUICreateFilesFolders",
+                    "webUIDeleteFilesFolders",
+                ],
+                "oC10RenameFolder": [
+                    "webUIRenameFolders",
+                ],
+                "oC10RenameFile": [
+                    "webUIRenameFiles",
+                ],
+                "oC10MoveFileFolder": [
+                    "webUIMoveFilesFolders",
+                ],
+                "oC10Files1": [
+                    "webUIFiles",
+                    "webUIUpload",
+                ],
+                "oC10Files2": [
+                    "webUIFilesList",
+                    "webUIFilesSearch",
+                ],
+                "oC10Files3": [
+                    "webUIPreview",
+                    "webUIFilesDetails",
+                ],
+                "oC10Files4": [
+                    "webUIFilesCopy",
+                    "webUIFavorites",
+                ],
+                "oC10Files5": [
+                    "webUITextEditor",
+                    "webUIFilesActionMenu",
+                ],
+                "oC10SharingAccept": [
+                    "webUISharingAcceptShares",
+                    "webUISharingAcceptSharesToRoot",
+                ],
+                "oC10Sharing1": [
+                    "webUISharingAutocompletion",
+                    "webUISharingExpirationDate",
+                    "webUIRestrictSharing",
+                ],
+                "oC10Sharing2": [
+                    "webUIResharingToRoot",
+                    "webUISharingInternalUsersBlacklisted",
+                    "webUIOperationsWithFolderShares",
+                ],
+                "oC10SharingIntGroups": [
+                    "webUISharingInternalGroups",
+                    "webUISharingInternalGroupsEdgeCases",
+                ],
+                "oC10SharingIntGroupsToRoot": [
+                    "webUISharingInternalGroupsToRoot",
+                    "webUISharingInternalGroupsToRootEdgeCases",
+                ],
+                "oC10SharingIntUsers1": [
+                    "webUISharingInternalUsersToRootCollaborator",
+                    "webUISharingInternalUsersToRoot",
+                    "webUISharingInternalUsersToRootPreviews",
+                ],
+                "oC10SharingIntUsers2": [
+                    "webUISharingInternalUsers",
+                    "webUISharingInternalUsersCollaborator",
+                ],
+                "oc10SharingIntUsers3": [
+                    "webUISharingInternalUsersToRootBlacklisted",
+                    "webUISharingInternalUsersShareWithPage",
+                    "webUISharingInternalUsersToRootShareWithPage",
+                ],
+                "oC10SharingSharingInd": [
+                    "webUISharingInternalGroupsSharingIndicator",
+                    "webUISharingInternalGroupsToRootSharingIndicator",
+                    "webUISharingInternalUsersSharingIndicator",
+                    "webUISharingInternalUsersToRootSharingIndicator",
+                ],
+                "oC10Trashbin": [
+                    "webUITrashbinDelete",
+                    "webUITrashbinFilesFolders",
+                    "webUITrashbinRestore",
+                ],
+                "oC10SharingPermission": [
+                    "webUISharingPermissionsUsers",
+                ],
+                "webUISharingPermissionToRoot": "oC10SharingPermToRoot",
+                "oC10SharingFilePerm": [
+                    "webUISharingFilePermissionMultipleUsers",
+                    "webUISharingFilePermissionsGroups",
+                ],
+                "oC10SharingFolderPermissions": [
+                    "webUISharingFolderAdvancedPermissionMultipleUsers",
+                    "webUISharingFolderPermissionMultipleUsers",
+                    "webUISharingFolderPermissionsGroups",
+                ],
+                "oC10SharingPublic1": [
+                    "webUISharingPublicBasic",
+                ],
+                "oC10SharingPublic2": [
+                    "webUISharingPublicExpire",
+                    "webUISharingPublicManagement",
+                ],
+                "oC10SharingPublic3": [
+                    "webUISharingPublicDifferentRoles",
+                ],
+                "oC10Resharing": [
+                    "webUIResharing1",
+                    "webUIResharing2",
                 ],
             },
             "extraEnvironment": {
@@ -105,7 +224,6 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
             },
             "screenShots": True,
-            "skip": True,
             "retry": False,
         },
         "webUIFederation": {
@@ -120,7 +238,6 @@ config = {
             },
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
-            "skip": True,
             "federatedServerVersion": OC10_VERSION,
         },
         "webUI-XGA": {
@@ -198,7 +315,6 @@ config = {
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
-            "skip": True,
         },
         "webUI-iPhone": {
             "type": FULL,
@@ -275,7 +391,6 @@ config = {
                 "SCREEN_RESOLUTION": "375x812",
             },
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
-            "skip": True,
         },
         "webUI-ocis": {
             "type": FULL,
@@ -382,7 +497,6 @@ config = {
             "runningOnOCIS": True,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
             "screenShots": True,
-            "skip": True,
         },
         "webUI-oc10-integration": {
             "type": FULL,
@@ -460,7 +574,6 @@ config = {
             "filterTags": "not @skip and not @skipOnOC10 and not @notToImplementOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "screenShots": True,
-            "skip": True,
         },
     },
     "build": True,
@@ -647,15 +760,19 @@ def main(ctx):
 
 def beforePipelines(ctx):
     return checkStarlark() + \
+           licenseCheck(ctx) + \
+           documentation(ctx) + \
+           changelog(ctx) + \
            pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
+           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return e2e_pipelines + acceptance_pipelines
+    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
