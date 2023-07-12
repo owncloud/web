@@ -1,6 +1,0 @@
-Bugfix: Margin between "New Space" button and actions
-
-Added margin to "New Space" button to have same size as gap in "Personal" actions.
-
-https://github.com/owncloud/web/issues/9384
-https://github.com/owncloud/web/pull/9390
