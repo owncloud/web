@@ -96,7 +96,7 @@ interfaces for various entities (like files, folders, shares and spaces) and mak
 transformed so that you can deal with more useful objects. The web-client package gets published
 on npmjs.com as [@ownclouders/web-client](https://www.npmjs.com/package/@ownclouders/web-client).
 
-A dedicated documentation for the `web-client` package is not available, yet, since our extension system is still work in progress.
+Dedicated documentation for the `web-client` package is not available, yet, since our extension system is still work in progress.
 
 ### web-pkg
 
@@ -104,7 +104,7 @@ The web-pkg package (`/packages/web-pkg`) is a collection of opinionated compone
 at making your app and extension developer experience as easy and seamless as possible. The web-pkg package gets published on
 npmjs.com as [@ownclouders/web-pkg](https://www.npmjs.com/package/@ownclouders/web-pkg).
 
-A dedicated documentation for the `web-pkg` package is not available, yet, since our extension system is still work in progress.
+Dedicated documentation for the `web-pkg` package is not available, yet, since our extension system is still work in progress.
 
 ### web-runtime
 

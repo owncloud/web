@@ -11,7 +11,7 @@ geekdocFilePath: tooling.md
 
 ## Packaging
 
-Web is using [pnpm](https://pnpm.io/) as package manager and [vite](https://vitejs.dev/) as build tool. The latter is build on top of [rollup](https://rollupjs.org/) and brings some additional features such as instant hot-reloading.
+Web is using [pnpm](https://pnpm.io/) as package manager and [vite](https://vitejs.dev/) as build tool. The latter is built on top of [rollup](https://rollupjs.org/) and brings some additional features such as instant hot-reloading.
 
 ## Development Setup
 
