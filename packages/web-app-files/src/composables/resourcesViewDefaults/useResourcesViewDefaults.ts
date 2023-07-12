@@ -1,7 +1,7 @@
 import { nextTick, computed, unref, Ref } from 'vue'
 import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
-import {usePagination, useSort, SortDir, SortField, useRouteName} from 'web-pkg/src/composables'
+import { usePagination, useSort, SortDir, SortField, useRouteName } from 'web-pkg/src/composables'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 
 import {
@@ -20,7 +20,6 @@ import {
   useFileListHeaderPosition,
   useViewMode,
   useViewSize,
-  useRoute,
   ViewModeConstants
 } from 'web-pkg/src/composables'
 

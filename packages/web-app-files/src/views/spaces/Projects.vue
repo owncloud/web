@@ -142,7 +142,8 @@ import {
   ViewModeConstants,
   useRouteQueryPersisted,
   useSort,
-  useStore, useRouteName
+  useStore,
+  useRouteName
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
