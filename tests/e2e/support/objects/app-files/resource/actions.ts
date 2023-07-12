@@ -785,19 +785,6 @@ export const downloadResourceVersion = async (
   return downloads
 }
 
-export const emptyTrashBinResources = async (page): Promise<string> => {
-  await page.locator(emptyTrashBinButton).click()
-  const statuses = [204, 403]
-  await Promise.all([
-    page.waitForResponse(
-      (resp) => statuses.includes(resp.status()) && resp.request().method() === 'DELETE'
-    ),
-    page.locator(util.format(actionConfirmationButton, 'Delete')).click()
-  ])
-  const message = await page.locator(notificationMessageDialog).textContent()
-  return message.trim().toLowerCase()
-}
-
 export interface deleteResourceTrashbinArgs {
   page: Page
   resource: string
@@ -812,12 +799,10 @@ export const deleteResourceTrashbin = async (args: deleteResourceTrashbinArgs): 
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
-  const statuses = [204, 403]
+
   await page.locator(permanentDeleteButton).first().click()
   await Promise.all([
-    page.waitForResponse(
-      (resp) => statuses.includes(resp.status()) && resp.request().method() === 'DELETE'
-    ),
+    page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'DELETE'),
     page.locator(util.format(actionConfirmationButton, 'Delete')).click()
   ])
   const message = await page.locator(notificationMessageDialog).textContent()
@@ -871,11 +856,8 @@ export const restoreResourceTrashbin = async (
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
-  const statuses = [201, 403]
   await Promise.all([
-    page.waitForResponse(
-      (resp) => statuses.includes(resp.status()) && resp.request().method() === 'MOVE'
-    ),
+    page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'MOVE'),
     page.locator(restoreResourceButton).click()
   ])
 
