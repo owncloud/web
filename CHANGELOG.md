@@ -15,6 +15,7 @@ Summary
 * Bugfix - Remember location after token invalidation: [#9261](https://github.com/owncloud/web/issues/9261)
 * Bugfix - Authenticated public links breaking uploads: [#9299](https://github.com/owncloud/web/pull/9299)
 * Bugfix - Switch columns displayed on small screens in "Shared with me" view: [#9315](https://github.com/owncloud/web/issues/9315)
+* Bugfix - Media controls overflow on mobile screens: [#9351](https://github.com/owncloud/web/pull/9351)
 * Bugfix - Space editors see empty trashbin and delete actions in space trashbin: [#9389](https://github.com/owncloud/web/pull/9389)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 * Enhancement - Improve extension app topbar: [#8422](https://github.com/owncloud/web/issues/8422)
@@ -106,6 +107,15 @@ Details
 
    https://github.com/owncloud/web/issues/9315
    https://github.com/owncloud/web/pull/9320
+
+* Bugfix - Media controls overflow on mobile screens: [#9351](https://github.com/owncloud/web/pull/9351)
+
+   Media controls overflowed on smaller 9:16 screens because it is absolutely positioned and
+   centered using transform property, its margin caused the transform operation to not
+   calculate the center properly (the latter also affected desktop but was merely visible).
+
+   https://github.com/owncloud/web/issues/9318
+   https://github.com/owncloud/web/pull/9351
 
 * Bugfix - Space editors see empty trashbin and delete actions in space trashbin: [#9389](https://github.com/owncloud/web/pull/9389)
 
