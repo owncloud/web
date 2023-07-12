@@ -34,11 +34,13 @@ module.exports = {
     // HACK: workaround for https://github.com/transloadit/uppy/issues/4127
     '@uppy/core': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/dashboard': '<rootDir>tests/unit/stubs/uppy',
-    '@uppy/onedrive': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/xhr-upload': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/drop-target': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/tus': '<rootDir>tests/unit/stubs/uppy',
-    '@uppy/utils': '<rootDir>tests/unit/stubs/uppy'
+    '@uppy/utils': '<rootDir>tests/unit/stubs/uppy',
+    '@uppy/onedrive': '<rootDir>tests/unit/stubs/uppy',
+    '@uppy/google-drive': '<rootDir>tests/unit/stubs/uppy',
+    '@uppy/webdav': '<rootDir>tests/unit/stubs/uppy'
   },
   modulePathIgnorePatterns: ['packages/design-system/docs/'],
   testEnvironment: 'jsdom',
