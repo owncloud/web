@@ -47,6 +47,7 @@ Summary
 * Enhancement - Resolve pulic links to their actual location: [#9299](https://github.com/owncloud/web/pull/9299)
 * Enhancement - Batch actions redesign: [#9346](https://github.com/owncloud/web/pull/9346)
 * Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
+* Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
 
 Details
 -------
@@ -366,6 +367,15 @@ Details
 
    https://github.com/owncloud/web/issues/9377
    https://github.com/owncloud/web/pull/9383
+
+* Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
+
+   We've introduced a new env var WEB_OPTION_TOKEN_STORAGE_LOCAL, when set to true(default),
+   the auth token will be stored in the browser's local storage instead the session storage, this
+   will effect in a persisted login state across multiple browser tabs.
+
+   https://github.com/owncloud/web/issues/9325
+   https://github.com/owncloud/web/pull/9386
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
