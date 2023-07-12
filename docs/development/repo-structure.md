@@ -11,7 +11,7 @@ geekdocFilePath: repo-structure.md
 
 ## Repository Structure
 
-From a developer#s perspective, the most important parts of the [ownCloud Web repo](https://github.com/owncloud/web) are the following files and folders:
+From a developer's perspective, the most important parts of the [ownCloud Web repo](https://github.com/owncloud/web) are the following files and folders:
 
 ### dev Folder and docker-compose.yml File
 
