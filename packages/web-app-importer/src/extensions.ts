@@ -24,7 +24,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const uppyService = useService<UppyService>('$uppyService')
   const publicLinkContext = usePublicLinkContext({ store })
 
-  const { companionUrl, cloudType } = applicationConfig
+  const { companionUrl, webdavCloudType } = applicationConfig
 
   const supportedClouds = ['OneDrive', 'GoogleDrive', 'WebdavPublicLink']
 
@@ -103,7 +103,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
       target: Dashboard,
       id: 'WebdavPublicLink',
       companionUrl,
-      ...(cloudType && { cloudType })
+      ...(webdavCloudType && { cloudType: webdavCloudType })
     })
   }
 
