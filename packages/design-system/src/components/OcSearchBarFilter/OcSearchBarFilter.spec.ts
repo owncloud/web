@@ -16,8 +16,7 @@ describe('OcSearchBarFilter', () => {
     wrapper.vm.onOptionSelected(option)
     expect(wrapper.emitted('update:modelValue')[1]).toEqual([
       {
-        value: option,
-        userEvent: true
+        value: option
       }
     ])
   })
