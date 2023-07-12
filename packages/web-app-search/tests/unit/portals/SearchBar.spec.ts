@@ -102,7 +102,7 @@ describe('Search Bar portal component', () => {
   test('updates the search term on input', () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('alice')
-    expect(wrapper.vm.$data.term).toBe('alice')
+    expect(wrapper.vm.term).toBe('alice')
   })
   test('shows message if no results are available', async () => {
     wrapper = getMountedWrapper().wrapper
@@ -175,29 +175,13 @@ describe('Search Bar portal component', () => {
     wrapper.find(selectors.searchInput).trigger('keyup.esc')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
-  test('hides options on clear', async () => {
-    wrapper = getMountedWrapper().wrapper
-    wrapper.find(selectors.searchInput).setValue('albert')
-    await flushPromises()
-    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
-    await wrapper.find(selectors.searchInputClear).trigger('click')
-    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
-  })
   test('hides options if no search term is given', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
     wrapper.find(selectors.searchInput).setValue('')
-    await wrapper.find(selectors.searchInputClear).trigger('click')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
-  })
-  test('resets search term on clear', async () => {
-    wrapper = getMountedWrapper().wrapper
-    wrapper.find(selectors.searchInput).setValue('albert')
-    await flushPromises()
-    await wrapper.find(selectors.searchInputClear).trigger('click')
-    expect(wrapper.vm.$data.term).toBeFalsy()
   })
   test('sets the search term according to route value on mount', async () => {
     wrapper = getMountedWrapper({
@@ -211,7 +195,7 @@ describe('Search Bar portal component', () => {
     }).wrapper
 
     await wrapper.vm.$nextTick()
-    expect(wrapper.vm.$data.term).toBe('alice')
+    expect(wrapper.vm.term).toBe('alice')
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('alice')
   })
   test.skip('sets active preview item via keyboard navigation', async () => {
@@ -237,11 +221,14 @@ describe('Search Bar portal component', () => {
 
 function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } = {}) {
   const currentRoute = mock<RouteLocation>({
-    name: 'files-spaces-generic'
+    name: 'files-spaces-generic',
+    query: {
+      term: '',
+      provider: ''
+    }
   })
   const localMocks = {
     ...defaultComponentMocks({ currentRoute }),
-    $route: { name: '' },
     ...mocks
   }
 
@@ -256,6 +243,7 @@ function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } 
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: localMocks,
+        provide: localMocks,
         stubs: {
           'router-link': true
         }

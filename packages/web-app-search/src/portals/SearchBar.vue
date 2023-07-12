@@ -166,7 +166,6 @@ export default defineComponent({
     })
 
     const availableProviders = computed(() => {
-      console.log('providerStore: ', providerStore, 'av: ', providerStore?.availableProviders)
       return unref(providerStore)?.availableProviders
     })
     const search = async () => {
