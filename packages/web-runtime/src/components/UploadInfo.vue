@@ -22,7 +22,8 @@
       }"
     >
       <div v-if="runningUploads" class="oc-flex oc-flex-middle">
-        <oc-spinner size="small" class="oc-mr-s" />
+        <oc-icon v-if="uploadsPaused" name="pause" size="small" class="oc-mr-s" />
+        <oc-spinner v-else size="small" class="oc-mr-s" />
         <span class="oc-text-small oc-text-muted" v-text="remainingTime" />
       </div>
       <div
