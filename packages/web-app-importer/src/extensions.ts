@@ -25,8 +25,8 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const publicLinkContext = usePublicLinkContext({ store })
 
   const { companionUrl, webdavCloudType } = applicationConfig
-
-  const supportedClouds = ['OneDrive', 'GoogleDrive', 'WebdavPublicLink']
+  let { supportedClouds } = applicationConfig
+  supportedClouds = supportedClouds || ['OneDrive', 'GoogleDrive', 'WebdavPublicLink']
 
   const currentFolder = computed<Resource>(() => {
     return store.getters['Files/currentFolder']
