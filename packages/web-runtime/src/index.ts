@@ -68,6 +68,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
   announceUppyService({ app })
 
+  announceClientService({ app, runtimeConfiguration, configurationManager, store })
   // TODO: move to announceArchiverService function
   app.config.globalProperties.$archiverService = new ArchiverService(
     app.config.globalProperties.$clientService,
@@ -84,7 +85,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     )
   )
   app.provide('$archiverService', app.config.globalProperties.$archiverService)
-  announceClientService({ app, runtimeConfiguration, configurationManager, store })
   announceLoadingService({ app })
   announcePreviewService({ app, store, configurationManager })
   await announceClient(runtimeConfiguration)
