@@ -7,9 +7,7 @@ const openUrl = (url: string, target?: string, shouldFocus?: boolean) => {
 
   const win = window.open(url, target)
 
-  if (win && shouldFocus) {
-    win.focus()
-  } else {
+  if (!win) {
     store.dispatch('showMessage', {
       title: $gettext('Pop-up and redirect block detected'),
       timeout: 20,
@@ -18,6 +16,8 @@ const openUrl = (url: string, target?: string, shouldFocus?: boolean) => {
         'Please turn on pop-ups and redirects in your browser settings to make sure everything works right.'
       )
     })
+  } else if (shouldFocus) {
+    win.focus()
   }
 }
 
