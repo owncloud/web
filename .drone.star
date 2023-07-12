@@ -1174,7 +1174,8 @@ def e2eTests(ctx):
                          "pnpm test:e2e:cucumber %s" % " ".join(params["featurePaths"]),
                      ],
                  }] + \
-                 uploadTracingResult(ctx)
+                 uploadTracingResult(ctx) + \
+                 logTracingResult(ctx, "e2e-tests %s" % server)
 
         pipelines.append({
             "kind": "pipeline",
@@ -2987,6 +2988,37 @@ def uploadTracingResult(ctx):
             "event": [
                 "pull_request",
                 "cron",
+            ],
+        },
+    }]
+
+def logTracingResult(ctx, suite):
+    status = ["failure"]
+
+    if ("with-tracing" in ctx.build.title.lower()):
+        status = ["failure", "success"]
+
+    return [{
+        "name": "log-tracing-result",
+        "image": OC_UBUNTU,
+        "commands": [
+            "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
+            'echo "To see the trace, please open the following link in the console"',
+            'for f in *.zip; do echo "#### npx playwright show-trace $CACHE_ENDPOINT/$CACHE_BUCKET/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done',
+        ],
+        "environment": {
+            "TEST_CONTEXT": suite,
+            "CACHE_ENDPOINT": {
+                "from_secret": "cache_s3_server",
+            },
+            "CACHE_BUCKET": {
+                "from_secret": "cache_s3_bucket",
+            },
+        },
+        "when": {
+            "status": status,
+            "event": [
+                "pull_request",
             ],
         },
     }]
