@@ -1,13 +1,13 @@
 import { RuntimeApi } from '../types'
 import { buildRuntimeApi } from '../api'
-import { App, computed, unref } from 'vue'
+import { App } from 'vue'
 import { isFunction, isObject } from 'lodash-es'
 import { NextApplication } from './next'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { RuntimeError } from 'web-pkg/src/errors'
 import { AppConfigObject, AppReadyHookArgs, ClassicApplicationScript } from 'web-pkg/src/apps'
-import { useExtensionRegistry } from 'web-pkg/src/services/extensionRegistry'
+import { useExtensionRegistry } from 'web-pkg/src/composables/piniaStores'
 import type { Language } from 'vue3-gettext'
 
 /**

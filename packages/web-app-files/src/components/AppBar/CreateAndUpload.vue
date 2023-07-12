@@ -176,7 +176,7 @@ import { UppyService } from 'web-runtime/src/services/uppyService'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
-import { ActionExtension, useExtensionRegistry } from 'web-pkg/src/services/extensionRegistry'
+import { ActionExtension, useExtensionRegistry } from 'web-pkg/src/composables/piniaStores'
 
 export default defineComponent({
   components: {

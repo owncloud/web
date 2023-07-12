@@ -14,7 +14,7 @@ import Dashboard from '@uppy/dashboard'
 import OneDrive from '@uppy/onedrive'
 import { WebdavPublicLink } from '@uppy/webdav'
 import GoogleDrive from '@uppy/google-drive'
-import { Extension } from 'web-pkg/src/services/extensionRegistry'
+import { Extension } from '@ownclouders/web-pkg/src/composables/piniaStores'
 import { ApplicationSetupOptions } from 'web-pkg/src/apps'
 
 export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {

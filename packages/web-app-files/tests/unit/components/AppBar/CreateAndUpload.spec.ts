@@ -12,10 +12,11 @@ import {
   defaultComponentMocks
 } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
-import { useExtensionRegistry } from 'web-pkg/src/services/extensionRegistry'
+import { useExtensionRegistry } from 'web-pkg/src/composables/piniaStores/extensionRegistry'
+import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 
 jest.mock('web-pkg/src/composables/authContext')
-jest.mock('web-pkg/src/services/extensionRegistry')
+jest.mock('web-pkg/src/composables/piniaStores/extensionRegistry')
 
 const elSelector = {
   component: '#create-and-upload-actions',
@@ -166,14 +167,7 @@ function getWrapper({
   jest.mocked(useRequest).mockImplementation(() => ({
     makeRequest: jest.fn().mockResolvedValue({ status: 200 })
   }))
-
-  jest.mocked(useExtensionRegistry).mockImplementation(() =>
-    mock<ReturnType<typeof useExtensionRegistry>>({
-      requestExtensions<ExtensionType>(): ExtensionType[] {
-        return [] as ExtensionType[]
-      }
-    })
-  )
+  jest.mocked(useExtensionRegistry).mockImplementation(() => useExtensionRegistryMock())
 
   const storeOptions = {
     ...defaultStoreMockOptions,

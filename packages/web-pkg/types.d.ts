@@ -1,6 +1,6 @@
 import { Ability } from 'web-client/src/helpers/resource/types'
 import { ArchiverService, ClientService, LoadingService, PreviewService } from './src/services'
-import { ExtensionRegistry } from './src/services/extensionRegistry'
+import { ExtensionRegistry } from './src/composables/piniaStores'
 
 export * from './src'
 

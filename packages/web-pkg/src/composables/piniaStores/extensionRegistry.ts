@@ -1,4 +1,4 @@
-import { Action } from '../composables/actions'
+import { Action } from '../actions'
 import { defineStore } from 'pinia'
 import { Ref, unref } from 'vue'
 

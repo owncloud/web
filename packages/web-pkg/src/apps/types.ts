@@ -1,7 +1,7 @@
 import { App, ComponentCustomProperties, Ref } from 'vue'
 import { RouteLocationRaw, Router, RouteRecordRaw } from 'vue-router'
 import { Store } from 'vuex'
-import { Extension } from 'web-pkg/src/services/extensionRegistry'
+import { Extension } from 'web-pkg/src/composables/piniaStores'
 
 export interface AppReadyHookArgs {
   announceExtension: (extension: { [key: string]: unknown }) => void
