@@ -2964,7 +2964,7 @@ def logAcceptanceTestsScreenshotsResult(suite):
         "commands": [
             "cd %s/tests/acceptance/reports/screenshots/" % dir["web"],
             'echo "To see the screenshots, please visit the following path"',
-            'for f in *.png; do echo "### $f\n" \'!\'"[$f](https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/screenshots/$f) \n"; done',
+            'for f in *.png; do echo "### $f\n" \'!\'"(https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/screenshots/$f) \n"; done',
         ],
         "when": {
             "status": [
@@ -3026,7 +3026,7 @@ def logTracingResult(ctx, suite):
         "commands": [
             "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
             'echo "To see the trace, please open the following link in the console"',
-            'for f in *.zip; do echo "#### npx playwright show-trace  https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done',
+            'for f in *.zip; do echo "npx playwright show-trace https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done',
         ],
         "when": {
             "status": status,
