@@ -23,7 +23,7 @@ Feature: Kindergarten can use web to organize a day
       | groups/Teddy Bear Daycare/meal plan  | folder |
     And "Alice" uploads the following resources
       | resource          | to                                   |
-      | PARENT/parent.txt | groups/Kindergarten Koalas/meal plan |
+      | PARENT/parent.txt | groups123/Kindergarten Koalas/meal plan |
       | lorem.txt         | groups/Kindergarten Koalas/meal plan |
       | lorem-big.txt     | groups/Kindergarten Koalas/meal plan |
       | data.zip          | groups/Pre-Schools Pirates/meal plan |
@@ -75,7 +75,7 @@ Feature: Kindergarten can use web to organize a day
     And "Brian" logs out
     And "Alice" downloads the following resources using the sidebar panel
       | resource            | from                                 | type   |
-      | parent.txt          | groups123/Kindergarten Koalas/meal plan | file   |
+      | parent.txt          | groups/Kindergarten Koalas/meal plan | file   |
       | lorem.txt           | groups/Kindergarten Koalas/meal plan | file   |
       | lorem-big.txt       | groups/Kindergarten Koalas/meal plan | file   |
       | data.zip            | groups/Pre-Schools Pirates/meal plan | file   |

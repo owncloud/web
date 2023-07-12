@@ -8,6 +8,6 @@ Feature: View account information
 
   @ocis-reva-issue-107
   Scenario: view account information when the user has been created without group memberships
-    Given user "Alice" has logged in using the webUI
+    Given user "Brian" has logged in using the webUI
     When the user browses to the account page
     Then the accounts page should be visible on the webUI

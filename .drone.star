@@ -71,19 +71,13 @@ config = {
             "db": "mysql:5.5",
             "skip": False,
             "featurePaths": [
-                "tests/e2e/cucumber/**/*[!.ocis].feature",
+                "tests/e2e/cucumber/features/journeys/kindergarten.oc10.feature",
             ],
         },
         "oCIS-1": {
             "skip": False,
             "featurePaths": [
-                "tests/e2e/cucumber/features/{smoke,journeys}/*[!.oc10].feature",
-            ],
-        },
-        "oCIS-2": {
-            "skip": False,
-            "featurePaths": [
-                "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*[!.oc10].feature",
+                "tests/e2e/cucumber/features/journeys/kindergarten.ocis.feature",
             ],
         },
     },
@@ -93,116 +87,6 @@ config = {
             "suites": {
                 "oC10Basic": [
                     "webUIAccount",
-                    "webUILogin",
-                    "webUIPrivateLinks",
-                    "webUIWebdavLockProtection",
-                ],
-                "oC10FileFolderOperations": [
-                    "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                ],
-                "oC10RenameFolder": [
-                    "webUIRenameFolders",
-                ],
-                "oC10RenameFile": [
-                    "webUIRenameFiles",
-                ],
-                "oC10MoveFileFolder": [
-                    "webUIMoveFilesFolders",
-                ],
-                "oC10Files1": [
-                    "webUIFiles",
-                    "webUIUpload",
-                ],
-                "oC10Files2": [
-                    "webUIFilesList",
-                    "webUIFilesSearch",
-                ],
-                "oC10Files3": [
-                    "webUIPreview",
-                    "webUIFilesDetails",
-                ],
-                "oC10Files4": [
-                    "webUIFilesCopy",
-                    "webUIFavorites",
-                ],
-                "oC10Files5": [
-                    "webUITextEditor",
-                    "webUIFilesActionMenu",
-                ],
-                "oC10SharingAccept": [
-                    "webUISharingAcceptShares",
-                    "webUISharingAcceptSharesToRoot",
-                ],
-                "oC10Sharing1": [
-                    "webUISharingAutocompletion",
-                    "webUISharingExpirationDate",
-                    "webUIRestrictSharing",
-                ],
-                "oC10Sharing2": [
-                    "webUIResharingToRoot",
-                    "webUISharingInternalUsersBlacklisted",
-                    "webUIOperationsWithFolderShares",
-                ],
-                "oC10SharingIntGroups": [
-                    "webUISharingInternalGroups",
-                    "webUISharingInternalGroupsEdgeCases",
-                ],
-                "oC10SharingIntGroupsToRoot": [
-                    "webUISharingInternalGroupsToRoot",
-                    "webUISharingInternalGroupsToRootEdgeCases",
-                ],
-                "oC10SharingIntUsers1": [
-                    "webUISharingInternalUsersToRootCollaborator",
-                    "webUISharingInternalUsersToRoot",
-                    "webUISharingInternalUsersToRootPreviews",
-                ],
-                "oC10SharingIntUsers2": [
-                    "webUISharingInternalUsers",
-                    "webUISharingInternalUsersCollaborator",
-                ],
-                "oc10SharingIntUsers3": [
-                    "webUISharingInternalUsersToRootBlacklisted",
-                    "webUISharingInternalUsersShareWithPage",
-                    "webUISharingInternalUsersToRootShareWithPage",
-                ],
-                "oC10SharingSharingInd": [
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalGroupsToRootSharingIndicator",
-                    "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingInternalUsersToRootSharingIndicator",
-                ],
-                "oC10Trashbin": [
-                    "webUITrashbinDelete",
-                    "webUITrashbinFilesFolders",
-                    "webUITrashbinRestore",
-                ],
-                "oC10SharingPermission": [
-                    "webUISharingPermissionsUsers",
-                ],
-                "webUISharingPermissionToRoot": "oC10SharingPermToRoot",
-                "oC10SharingFilePerm": [
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFilePermissionsGroups",
-                ],
-                "oC10SharingFolderPermissions": [
-                    "webUISharingFolderAdvancedPermissionMultipleUsers",
-                    "webUISharingFolderPermissionMultipleUsers",
-                    "webUISharingFolderPermissionsGroups",
-                ],
-                "oC10SharingPublic1": [
-                    "webUISharingPublicBasic",
-                ],
-                "oC10SharingPublic2": [
-                    "webUISharingPublicExpire",
-                    "webUISharingPublicManagement",
-                ],
-                "oC10SharingPublic3": [
-                    "webUISharingPublicDifferentRoles",
-                ],
-                "oC10Resharing": [
-                    "webUIResharing1",
-                    "webUIResharing2",
                 ],
             },
             "extraEnvironment": {
@@ -221,6 +105,7 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
             },
             "screenShots": True,
+            "skip": True,
             "retry": False,
         },
         "webUIFederation": {
@@ -235,6 +120,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
+            "skip": True,
             "federatedServerVersion": OC10_VERSION,
         },
         "webUI-XGA": {
@@ -312,6 +198,7 @@ config = {
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-iPhone": {
             "type": FULL,
@@ -388,6 +275,7 @@ config = {
                 "SCREEN_RESOLUTION": "375x812",
             },
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-ocis": {
             "type": FULL,
@@ -494,6 +382,7 @@ config = {
             "runningOnOCIS": True,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
             "screenShots": True,
+            "skip": True,
         },
         "webUI-oc10-integration": {
             "type": FULL,
@@ -571,6 +460,7 @@ config = {
             "filterTags": "not @skip and not @skipOnOC10 and not @notToImplementOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "screenShots": True,
+            "skip": True,
         },
     },
     "build": True,
@@ -765,7 +655,7 @@ def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return e2e_pipelines
+    return e2e_pipelines + acceptance_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -1343,7 +1233,7 @@ def acceptance(ctx):
 
                         # Capture the screenshots from acceptance tests (only runs on failure)
                         if (params["screenShots"]):
-                            steps += uploadScreenshots()
+                            steps += uploadScreenshots() + logAcceptanceTestsScreenshotsResult(suiteName)
 
                         result = {
                             "kind": "pipeline",
@@ -2473,10 +2363,10 @@ def uploadScreenshots():
         "pull": "if-not-exists",
         "settings": {
             "bucket": {
-                "from_secret": "cache_s3_bucket",
+                "from_secret": "cache_public_s3_bucket",
             },
             "endpoint": {
-                "from_secret": "cache_s3_server",
+                "from_secret": "cache_public_s3_server",
             },
             "path_style": True,
             "source": "%s/tests/acceptance/reports/screenshots/**/*" % dir["web"],
@@ -2950,6 +2840,25 @@ def pipelineSanityChecks(ctx, pipelines):
     for image in images.keys():
         print(" %sx\t%s" % (images[image], image))
 
+def logAcceptanceTestsScreenshotsResult(suite):
+    return [{
+        "name": "log-acceptance-tests-screenshot",
+        "image": OC_UBUNTU,
+        "commands": [
+            "cd %s/tests/acceptance/reports/screenshots/" % dir["web"],
+            'echo "To see the screenshots, please visit the following path"',
+            'for f in *.png; do echo "### $f\n" \'!\'"[$f](https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/screenshots/$f) \n"; done',
+        ],
+        "when": {
+            "status": [
+                "failure",
+            ],
+            "event": [
+                "pull_request",
+            ],
+        },
+    }]
+
 def uploadTracingResult(ctx):
     status = ["failure"]
     if ("with-tracing" in ctx.build.title.lower()):
@@ -2961,10 +2870,10 @@ def uploadTracingResult(ctx):
         "pull": "if-not-exists",
         "settings": {
             "bucket": {
-                "from_secret": "cache_s3_bucket",
+                "from_secret": "cache_public_s3_bucket",
             },
             "endpoint": {
-                "from_secret": "cache_s3_server",
+                "from_secret": "cache_public_s3_server",
             },
             "path_style": True,
             "source": "%s/reports/e2e/playwright/tracing/**/*" % dir["web"],
@@ -3000,17 +2909,8 @@ def logTracingResult(ctx, suite):
         "commands": [
             "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
             'echo "To see the trace, please open the following link in the console"',
-            'for f in *.zip; do echo "#### npx playwright show-trace $CACHE_ENDPOINT/$CACHE_BUCKET/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done',
+            'for f in *.zip; do echo "#### npx playwright show-trace  https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done',
         ],
-        "environment": {
-            "TEST_CONTEXT": suite,
-            "CACHE_ENDPOINT": {
-                "from_secret": "cache_s3_server",
-            },
-            "CACHE_BUCKET": {
-                "from_secret": "cache_s3_bucket",
-            },
-        },
         "when": {
             "status": status,
             "event": [
