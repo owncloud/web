@@ -46,6 +46,7 @@ Summary
 * Enhancement - Search list add highlighted file content: [#9294](https://github.com/owncloud/web/pull/9294)
 * Enhancement - Resolve pulic links to their actual location: [#9299](https://github.com/owncloud/web/pull/9299)
 * Enhancement - Batch actions redesign: [#9346](https://github.com/owncloud/web/pull/9346)
+* Enhancement - Tag comma separation on client side: [#9348](https://github.com/owncloud/web/pull/9348)
 * Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
 * Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
 
@@ -359,6 +360,14 @@ Details
    https://github.com/owncloud/web/issues/9340
    https://github.com/owncloud/web/issues/9352
    https://github.com/owncloud/web/pull/9346
+
+* Enhancement - Tag comma separation on client side: [#9348](https://github.com/owncloud/web/pull/9348)
+
+   Tags containing commas are now split up into separate tags on client side to match server side
+   processing behaviour.
+
+   https://github.com/owncloud/web/issues/9224
+   https://github.com/owncloud/web/pull/9348
 
 * Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
 
