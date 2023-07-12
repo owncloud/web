@@ -18,7 +18,7 @@
       cancel-button-variation="brand"
       cancel-button-appearance="raw-inverse"
       :cancel-handler="cancelSearch"
-      :available-location-options="[]"
+      :available-location-options="availableLocationOptions"
       @advanced-search="onKeyUpEnter"
       @input="updateTerm"
       @clear="onClear"
