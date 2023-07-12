@@ -13,10 +13,7 @@
         :view-modes="viewModes"
       >
         <template #actions>
-          <create-space
-            v-if="hasCreatePermission"
-            class="oc-mr-s"
-          />
+          <create-space v-if="hasCreatePermission" class="oc-mr-s" />
         </template>
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
