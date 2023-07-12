@@ -2242,6 +2242,7 @@ def setupNotificationsAppForServer():
             "rm -rf %s/apps/notifications" % dir["server"],
             "git clone -b master https://github.com/owncloud/notifications.git %s/apps/notifications" % dir["server"],
             "cd %s || exit" % dir["server"],
+            "php occ upgrade",
             "php occ a:e notifications",
             "php occ a:l",
         ],
