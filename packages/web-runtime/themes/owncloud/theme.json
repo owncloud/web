@@ -7,6 +7,7 @@
   "ios": {},
   "web": {
     "default": {
+      "theme-name": "Default light",
       "general": {
         "name": "ownCloud",
         "slogan": "ownCloud – A safe home for all your data",
@@ -78,6 +79,7 @@
       }
     },
     "default-dark": {
+      "theme-name": "Default dark",
       "general": {
         "name": "ownCloud",
         "slogan": "ownCloud – A safe home for all your data",
