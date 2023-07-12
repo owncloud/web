@@ -31,7 +31,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
-import 'vue-select/dist/vue-select.css'
 
 export default defineComponent({
   name: 'OcSearchBarFilter',
@@ -69,15 +68,15 @@ export default defineComponent({
       { immediate: true, deep: true }
     )
 
-    return { currentSelection, isIndexGreaterZero, userSelected }
-  },
-  methods: {
-    onOptionSelected(option: string) {
-      this.userSelected = option
-      this.currentSelection = option
-      this.$emit('update:modelValue', { value: option })
+    const onOptionSelected = (option: string) => {
+      userSelected.value = option
+      currentSelection.value = option
+      emit('update:modelValue', { value: option })
     }
-  }
+
+    return { currentSelection, isIndexGreaterZero, userSelected, onOptionSelected }
+  },
+  methods: {}
 })
 </script>
 
