@@ -75,7 +75,7 @@ Feature: Kindergarten can use web to organize a day
     And "Brian" logs out
     And "Alice" downloads the following resources using the sidebar panel
       | resource            | from                                 | type   |
-      | parent.txt          | groups/Kindergarten Koalas/meal plan | file   |
+      | parent.txt          | groups123/Kindergarten Koalas/meal plan | file   |
       | lorem.txt           | groups/Kindergarten Koalas/meal plan | file   |
       | lorem-big.txt       | groups/Kindergarten Koalas/meal plan | file   |
       | data.zip            | groups/Pre-Schools Pirates/meal plan | file   |
