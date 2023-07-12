@@ -18,7 +18,7 @@
       cancel-button-variation="brand"
       cancel-button-appearance="raw-inverse"
       :cancel-handler="cancelSearch"
-      :available-location-options="availableLocationOptions"
+      :available-location-options="[]"
       @advanced-search="onKeyUpEnter"
       @input="updateTerm"
       @clear="onClear"
@@ -166,7 +166,8 @@ export default defineComponent({
     })
 
     const availableProviders = computed(() => {
-      return providerStore.availableProviders
+      console.log('providerStore: ', providerStore, 'av: ', providerStore?.availableProviders)
+      return unref(providerStore)?.availableProviders
     })
     const search = async () => {
       searchResults.value = []
