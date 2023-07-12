@@ -34,14 +34,17 @@ export class UserManager extends OidcUserManager {
   private _unloadReason: UnloadReason
   private ability: Ability
   private language: Language
-
+  private browserStorage: Storage
   public areEventHandlersRegistered: boolean
 
   constructor(options: UserManagerOptions) {
+    const browserStorage = options.configurationManager.options.tokenStorageLocal
+      ? localStorage
+      : sessionStorage
     const storePrefix = 'oc_oAuth.'
     const userStore = new WebStorageStateStore({
       prefix: storePrefix,
-      store: sessionStorage
+      store: browserStorage
     })
     const openIdConfig: UserManagerSettings = {
       userStore,
@@ -89,6 +92,7 @@ export class UserManager extends OidcUserManager {
 
     super(openIdConfig)
     this.storePrefix = storePrefix
+    this.browserStorage = browserStorage
     this.clientService = options.clientService
     this.configurationManager = options.configurationManager
     this.store = options.store
@@ -116,16 +120,16 @@ export class UserManager extends OidcUserManager {
   }
 
   getAndClearPostLoginRedirectUrl(): string {
-    const url = sessionStorage.getItem(postLoginRedirectUrlKey) || '/'
-    sessionStorage.removeItem(postLoginRedirectUrlKey)
+    const url = this.browserStorage.getItem(postLoginRedirectUrlKey) || '/'
+    this.browserStorage.removeItem(postLoginRedirectUrlKey)
     return url
   }
 
   setPostLoginRedirectUrl(url?: string): void {
     if (url) {
-      sessionStorage.setItem(postLoginRedirectUrlKey, url)
+      this.browserStorage.setItem(postLoginRedirectUrlKey, url)
     } else {
-      sessionStorage.removeItem(postLoginRedirectUrlKey)
+      this.browserStorage.removeItem(postLoginRedirectUrlKey)
     }
   }
 
