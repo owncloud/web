@@ -35,10 +35,13 @@ When(
   }
 )
 
-When('{string} closes the editor', async function (this: World, stepUser: string): Promise<void> {
-  const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-  await editor.close(page)
-})
+When(
+  '{string} closes the file viewer',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    await editor.close(page)
+  }
+)
 
 When(
   '{string} drop uploads following resources',

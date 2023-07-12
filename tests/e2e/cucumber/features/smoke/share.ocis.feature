@@ -121,9 +121,11 @@ Feature: share
     And "Brian" opens the following file in mediaviewer
       | resource        |
       | testavatar.jpeg |
+    And "Brian" closes the file viewer
     And "Brian" opens the following file in pdfviewer
       | resource   |
       | simple.pdf |
+    And "Brian" closes the file viewer
     And "Alice" removes following sharee
       | resource         | recipient |
       | shareToBrian.txt | Brian     |
