@@ -29,20 +29,20 @@
         </div>
         <div class="oc-card-body theme-switcher-list">
           <oc-list>
-            <li v-for="themeOption in themeOptions" :key="themeOption">
+            <li v-for="(themeName, themeId) in themeOptions" :key="themeId">
               <oc-button
                 class="oc-p-s"
-                @click="selectTheme(themeOption)"
+                @click="selectTheme(themeId)"
                 :class="{
-                  'oc-background-primary-gradient': isSelectedTheme(themeOption),
-                  selected: isSelectedTheme(themeOption)
+                  'oc-background-primary-gradient': isSelectedTheme(themeId),
+                  selected: isSelectedTheme(themeId)
                 }"
-                :appearance="isSelectedTheme(themeOption) ? 'raw-inverse' : 'raw'"
-                :variation="isSelectedTheme(themeOption) ? 'primary' : 'passive'"
+                :appearance="isSelectedTheme(themeId) ? 'raw-inverse' : 'raw'"
+                :variation="isSelectedTheme(themeId) ? 'primary' : 'passive'"
               >
                 <span
                   class="oc-text-bold oc-display-block oc-width-1-1"
-                  v-text="$gettext(themeOption)"
+                  v-text="$gettext(themeName)"
                 />
               </oc-button>
             </li>
@@ -97,7 +97,13 @@ export default defineComponent({
       return Object.keys(this.store.getters.configuration.themes).length > 2
     },
     themeOptions() {
-      return Object.keys(this.store.getters.configuration.themes)
+      return Object.entries(this.store.getters.configuration.themes).reduce(
+        (mapping, [key, value]) => {
+          mapping[key] = value['theme-name']
+          return mapping
+        },
+        {}
+      )
     }
   },
   methods: {
