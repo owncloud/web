@@ -31,6 +31,8 @@ Then, you can start the backends by running `docker-compose up oc10 ocis` and ac
 
 The bundled frontend code automatically gets mounted into the Docker containers, recompiles on changes and you can log in using the demo user (admin/admin) and take a look around!
 
+For more details on how to set up Web for development, please see [tooling]({{< ref "tooling.md#development-setup" >}}).
+
 ### Source code
 
 The source code is hosted at [https://github.com/owncloud/web](https://github.com/owncloud/web).

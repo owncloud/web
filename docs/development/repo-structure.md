@@ -1,5 +1,5 @@
 ---
-title: "Repo structure and (published) packages"
+title: 'Repo structure and (published) packages'
 date: 2022-01-28T00:00:00+00:00
 weight: 30
 geekdocRepo: https://github.com/owncloud/web
@@ -25,15 +25,15 @@ Within the `/docs` folder you will find all the documentation source documents t
 
 ### packages Folder
 
-We're using the [ownCloud Web repo](https://github.com/owncloud/web) as a mono repo. It contains a variety of packages. Some of them get 
-published to [npmjs.com](https://npmjs.com), others define the core packages, apps and extensions that are the foundation of 
+We're using the [ownCloud Web repo](https://github.com/owncloud/web) as a mono repo. It contains a variety of packages. Some of them get
+published to [npmjs.com](https://npmjs.com), others define the core packages, apps and extensions that are the foundation of
 the `ownCloud Web` release artifact.
 
-Having these packages side by side within the `/packages` folder of the repo is possible because of a `pnpm` feature called `Workspaces`.
+Having these packages side by side within the `/packages` folder of the repo is possible because of a `pnpm` feature called `Workspaces`. You can learn more about that by visiting the [pnpm docs](https://pnpm.io/workspaces).
 
 ### tests Folder
 
-For historic reasons, there are two end-to-end test collections in the ownCloud Web project. The older one lives in `/tests/acceptance`, 
+For historic reasons, there are two end-to-end test collections in the ownCloud Web project. The older one lives in `/tests/acceptance`,
 using [Nightwatch.js](https://nightwatchjs.org). The newer one lives in `/tests/e2e`, using [Playwright](https://playwright.dev).
 We're slowly moving away from the nightwatch.js-based e2e tests. As our coverage with playwright based e2e tests grows continuously, it might
 happen that you will not find the `/tests/acceptance` folder anymore. If that's the case at the time of reading this, those are happy times.
@@ -55,7 +55,8 @@ You can read more about the usage in our [tooling section]({{< ref "tooling.md" 
 
 ## (Published) Packages
 
-Each package in the `/packages` folder can - not exclusively, but most commonly - consist of 
+Each package in the `/packages` folder can - not exclusively, but most commonly - consist of
+
 - source code (`/src`),
 - unit tests (`/tests`),
 - translations (`/l10n`) and
@@ -63,11 +64,12 @@ Each package in the `/packages` folder can - not exclusively, but most commonly 
 
 ### Code Style and Build Config
 
-Some of our packages in `/packages` are pure helper packages which ensure a common code style and build configuration for all our 
+Some of our packages in `/packages` are pure helper packages which ensure a common code style and build configuration for all our
 internal (mono repo) and external packages. We encourage you to make use of the very same packages. This helps the community
 understand code more easily, even when coming from different developers or vendors in the ownCloud Web ecosystem.
 
 Namely those packages are
+
 - `/packages/babel-preset`
 - `/packages/eslint-config`
 - `/packages/extension-sdk`
@@ -76,22 +78,22 @@ Namely those packages are
 
 ### ownCloud Design System
 
-The ownCloud Design System (`/packages/design-system`) is a collection of components, design tokens and styles which ensure a 
-unique and consistent look and feel and branding throughout the ownCloud Web ecosystem. We hope that you use it, too, so that your 
-very own apps and extensions will blend in with all the others. Documentation and code examples can be found in 
+The ownCloud Design System (`/packages/design-system`) is a collection of components, design tokens and styles which ensure a
+unique and consistent look and feel and branding throughout the ownCloud Web ecosystem. We hope that you use it, too, so that your
+very own apps and extensions will blend in with all the others. Documentation and code examples can be found in
 the [design system documentation](https://owncloud.design).
 
 The ownCloud Design System is a standalone project, but to make development easier we have the code in our mono repo.
-We're planning to publish it on npmjs.com as [@ownclouders/design-system](https://www.npmjs.com/package/@ownclouders/design-system) 
+We're planning to publish it on npmjs.com as [@ownclouders/design-system](https://www.npmjs.com/package/@ownclouders/design-system)
 as soon as possible. Since it's bundled with ownCloud Web, you should not bundle it with your app or extension.
 
 ### web-client
 
-The client package (`/packages/web-client`) serves as an abstraction layer for the various ownCloud APIs, like 
+The client package (`/packages/web-client`) serves as an abstraction layer for the various ownCloud APIs, like
 [LibreGraph](https://owncloud.dev/apis/http/graph/), [WebDAV](https://doc.owncloud.com/server/next/developer_manual/webdav_api/) and
-[OCS](https://doc.owncloud.com/server/next/developer_manual/core/apis/ocs-capabilities.html). The package provides TypeScript 
-interfaces for various entities (like files, folders, shares and spaces) and makes sure that raw API responses are properly 
-transformed so that you can deal with more useful objects. The web-client package gets published 
+[OCS](https://doc.owncloud.com/server/next/developer_manual/core/apis/ocs-capabilities.html). The package provides TypeScript
+interfaces for various entities (like files, folders, shares and spaces) and makes sure that raw API responses are properly
+transformed so that you can deal with more useful objects. The web-client package gets published
 on npmjs.com as [@ownclouders/web-client](https://www.npmjs.com/package/@ownclouders/web-client).
 
 A dedicated documentation for the `web-client` package is not available, yet, since our extension system is still work in progress.
@@ -106,7 +108,7 @@ A dedicated documentation for the `web-pkg` package is not available, yet, since
 
 ### web-runtime
 
-At the very heart of ownCloud Web, the `web-runtime` is responsible for dependency injection, app bootstrapping, configuration, 
+At the very heart of ownCloud Web, the `web-runtime` is responsible for dependency injection, app bootstrapping, configuration,
 authentication, data preloading and much more.
 It is very likely that you will never get in touch with it as most of the developer-facing features are exposed via `web-pkg`. If you
 have more questions about this package, please join our [public chat](https://talk.owncloud.com/channel/web) and simply ask
@@ -120,9 +122,10 @@ Both `web-app-admin-settings` and `web-app-files` are standalone apps which are 
 
 Apps which fall into the categories `viewer` or `editor` can be opened from the context of a file or folder. This mostly happens from
 within the `files` app. We currently bundle the following apps with the default ownCloud Web release artifact:
+
 - `web-app-draw-io` an editor for `.drawio` files
-- `web-app-external` an iframe integration of all the apps coming from the [app provider](https://owncloud.dev/services/app-provider/) 
-   (e.g. OnlyOffice, Collabora Online and others)
+- `web-app-external` an iframe integration of all the apps coming from the [app provider](https://owncloud.dev/services/app-provider/)
+  (e.g. OnlyOffice, Collabora Online and others)
 - `web-app-pdf-viewer` a viewer for `.pdf` files, which relies on native PDF rendering support from the browser
 - `web-app-preview` a viewer for various media files (audio / video / image formats)
 - `web-app-text-editor` a simple editor for `.txt`, `.md` and other plain text files
