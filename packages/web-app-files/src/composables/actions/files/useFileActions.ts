@@ -12,8 +12,8 @@ import {
   Action,
   FileAction,
   FileActionOptions,
-  useBlockedPopupRedirectMessage,
-  useIsSearchActive
+  useIsSearchActive,
+  useWindowOpen
 } from 'web-pkg/src/composables/actions'
 
 import {
@@ -48,6 +48,8 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const appProvidersEnabled = computed(() => {
     return !!unref(appProviders).find((appProvider) => appProvider.enabled)
   })
+
+  const { openUrl } = useWindowOpen
 
   const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
   const { actions: copyActions } = useFileActionsCopy({ store })
@@ -191,13 +193,8 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     if (configuration.options.openAppsInTab) {
       const path = router.resolve(routeOpts).href
       const target = `${editor.routeName}-${filePath}`
-      const win = window.open(path, target)
-      // in case popup is blocked win will be null
-      if (win) {
-        win.focus()
-      } else {
-        store.dispatch('showMessage', useBlockedPopupRedirectMessage)
-      }
+
+      openUrl(path, target, true)
       return
     }
 
@@ -330,10 +327,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     } as any
 
     // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
-    const win = window.open(router.resolve(routeOpts).href, '_blank')
-    if (!win) {
-      store.dispatch('showMessage', useBlockedPopupRedirectMessage)
-    }
+    openUrl(router.resolve(routeOpts).href, '_blank')
   }
 
   return {

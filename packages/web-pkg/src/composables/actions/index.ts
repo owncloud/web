@@ -4,4 +4,4 @@ export * from './spaces'
 export * from './types'
 
 export * from './useActionsShowDetails'
-export * from './useBlockedPopupRedirectMessage'
+export * from './useWindowOpen'
