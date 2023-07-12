@@ -1,14 +1,15 @@
 import SearchBar from '../../../src/portals/SearchBar.vue'
 import flushPromises from 'flush-promises'
+import { mock } from 'jest-mock-extended'
 import { defineComponent } from 'vue'
 import {
   createStore,
   defaultPlugins,
   mount,
   defaultStoreMockOptions,
-  defaultComponentMocks
+  defaultComponentMocks,
+  RouteLocation
 } from 'web-test-helpers'
-import { ProviderStore } from 'web-app-search/src/service/providerStore'
 
 const component = defineComponent({
   emits: ['click', 'keyup'],
@@ -56,9 +57,13 @@ const selectors = {
 }
 
 jest.mock('lodash-es/debounce', () => (fn) => fn)
-
-const providerStore = new ProviderStore()
-
+jest.mock('web-app-search/src/service/providerStore', () => ({
+  get providerStore() {
+    return {
+      availableProviders: [providerFiles, providerContacts]
+    }
+  }
+}))
 beforeEach(() => {
   providerFiles.previewSearch.search.mockImplementation(() => {
     return {
@@ -77,10 +82,6 @@ beforeEach(() => {
       ]
     }
   })
-
-  jest
-    .spyOn(providerStore, 'availableProviders', 'get')
-    .mockReturnValue([providerFiles, providerContacts])
 })
 
 let wrapper
@@ -235,8 +236,11 @@ describe('Search Bar portal component', () => {
 })
 
 function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } = {}) {
+  const currentRoute = mock<RouteLocation>({
+    name: 'files-spaces-generic'
+  })
   const localMocks = {
-    ...defaultComponentMocks(),
+    ...defaultComponentMocks({ currentRoute }),
     $route: { name: '' },
     ...mocks
   }
@@ -249,13 +253,6 @@ function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } 
   return {
     wrapper: mount(SearchBar, {
       attachTo: document.body,
-      data: () => {
-        return {
-          providerStore,
-          ...data
-        }
-      },
-
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: localMocks,
