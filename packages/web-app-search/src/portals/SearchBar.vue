@@ -244,6 +244,22 @@ export default defineComponent({
       search()
     }
 
+    const showPreview = async () => {
+      if (!unref(term)) {
+        return
+      }
+      unref(optionsDrop).show()
+      await search()
+    }
+
+    const updateTerm = (input) => {
+      term.value = input
+      if (!unref(term)) {
+        return unref(optionsDrop).hide()
+      }
+      return unref(optionsDrop).show()
+    }
+
     return {
       isUserContext: useUserContext({ store }),
       showCancelButton,
@@ -262,7 +278,9 @@ export default defineComponent({
       loading,
       providerStore,
       availableProviders,
-      search
+      search,
+      showPreview,
+      updateTerm
     }
   },
 
@@ -358,15 +376,6 @@ export default defineComponent({
   },
 
   methods: {
-    async showPreview() {
-      if (!this.term) {
-        return
-      }
-
-      this.optionsDrop.show()
-      await this.search()
-    },
-
     onClear() {
       this.term = ''
       this.optionsDrop.hide()
@@ -418,15 +427,7 @@ export default defineComponent({
               previewElements[this.activePreviewIndex].getBoundingClientRect().height
       )
     },
-    updateTerm(term) {
-      this.term = term
 
-      if (!this.term) {
-        return this.optionsDrop.hide()
-      }
-
-      return this.optionsDrop.show()
-    },
     getSearchResultForProvider(provider) {
       return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
     },
