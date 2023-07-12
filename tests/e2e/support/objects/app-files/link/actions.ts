@@ -101,7 +101,6 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
   }
   await page.locator(addPublicLinkButton).click()
   await clearPopups(page)
-  // await waitForPopupNotPresent(page)
   return await page.locator(util.format(publicLink, 'Link')).textContent()
 }
 
