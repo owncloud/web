@@ -331,7 +331,7 @@ const performUpload = async (args: uploadResourceArgs): Promise<void> => {
 export const uploadLargeNumberOfResources = async (args: uploadResourceArgs): Promise<void> => {
   const { page, resources } = args
   await performUpload(args)
-  await page.locator(uploadInfoCloseButton).waitFor()
+  await page.locator(uploadInfoSuccessLabelSelector).waitFor()
   await expect(page.locator(uploadInfoSuccessLabelSelector)).toHaveText(
     `${resources.length} items uploaded`
   )
