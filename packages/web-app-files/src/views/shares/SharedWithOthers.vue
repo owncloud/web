@@ -99,7 +99,7 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
-    const sharedChange = ref<Boolean>(false)
+    const sharedChange = ref<boolean>(false)
     const getSpace = (resource: Resource): SpaceResource => {
       return getSpaceFromResource({ spaces: store.getters['runtime/spaces/spaces'], resource })
     }
@@ -117,13 +117,13 @@ export default defineComponent({
       }
     })
 
-    watch(sideBarOpen, async (newSideBarOpen) => {
+    watch(sideBarOpen, (newSideBarOpen) => {
       // if sidebar is closed and there is a change in shared resources
       if (!newSideBarOpen && sharedChange.value) {
         // keep selected resources
         const keepSelectedResources = selectedResourcesIds.value
         // reload resources
-        await loadResourcesTask.perform()
+        loadResourcesTask.perform()
         selectedResourcesIds.value = keepSelectedResources
         sharedChange.value = false
       }
