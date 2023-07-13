@@ -1,5 +1,5 @@
 {
-  "version": "7.1.0-alpha.1",
+  "version": "7.1.0-alpha.2",
   "private": true,
   "homepage": "https://github.com/owncloud/web",
   "license": "AGPL-3.0",
@@ -143,7 +143,6 @@
       "@uppy/utils": "https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-utils.tgz",
       "@uppy/webdav": "https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-webdav.tgz",
       "@uppy/xhr-upload": "https://github.com/owncloud/uppy/releases/download/v3.12.0-owncloud/uppy-xhr-upload.tgz"
-
     },
     "packageExtensions": {
       "@adobe/leonardo-contrast-colors": {
