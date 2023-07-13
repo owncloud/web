@@ -181,15 +181,18 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
 
   companion:
-    image: transloadit/companion:4.5.0
+    image: owncloud/uppy-companion:3.12.0-owncloud
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     environment:
       NODE_TLS_REJECT_UNAUTHORIZED: 0
+      COMPANION_ALLOW_LOCAL_URLS: "true"
       COMPANION_DATADIR: /tmp/companion/
       COMPANION_DOMAIN: host.docker.internal:9200
       COMPANION_PROTOCOL: https
       COMPANION_PATH: /companion
+      COMPANION_ONEDRIVE_KEY: "${COMPANION_ONEDRIVE_KEY}"
+      COMPANION_ONEDRIVE_SECRET: "${COMPANION_ONEDRIVE_SECRET}"
     volumes:
       - uppy_companion_datadir:/tmp/companion/
     labels:

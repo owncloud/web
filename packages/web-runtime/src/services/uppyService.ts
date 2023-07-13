@@ -51,7 +51,8 @@ export class UppyService {
       locale: {
         strings: {
           // for some reason this string is required and missing in uppy
-          addedNumFiles: $gettext('Added %{numFiles} file(s)')
+          addedNumFiles: $gettext('Added %{numFiles} file(s)'),
+          loadedXFiles: $gettext('Loaded %{numFiles} files')
         }
       }
     })

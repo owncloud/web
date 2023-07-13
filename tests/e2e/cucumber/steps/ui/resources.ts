@@ -178,20 +178,6 @@ When(
 )
 
 Then(
-  /^"([^"]*)" (should|should not) be able to empty the trashbin?$/,
-  async function (this: World, stepUser: string, actionType: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const resourceObject = new objects.applicationFiles.Resource({ page })
-    const message = await resourceObject.emptyTrashBin()
-    if (actionType === 'should not') {
-      expect(message).toBe('failed to delete all files permanently')
-    } else {
-      expect(message).toBe('all deleted files were removed')
-    }
-  }
-)
-
-Then(
   /^"([^"]*)" (should|should not) be able to delete following resource(?:s)? from the trashbin?$/,
   async function (
     this: World,
@@ -433,7 +419,7 @@ When(
 )
 
 When(
-  /^"([^"].*)" opens the following file(?:s)? in (mediaviewer|pdfviewer)$/,
+  /^"([^"].*)" opens the following file(?:s)? in (mediaviewer|pdfviewer|texteditor)$/,
   async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -441,7 +427,7 @@ When(
     for (const info of stepTable.hashes()) {
       await resourceObject.openFileInViewer({
         name: info.resource,
-        actionType: actionType as 'mediaviewer' | 'pdfviewer'
+        actionType: actionType as 'mediaviewer' | 'pdfviewer' | 'texteditor'
       })
     }
   }

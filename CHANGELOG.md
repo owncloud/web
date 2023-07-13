@@ -15,6 +15,7 @@ Summary
 * Bugfix - Remember location after token invalidation: [#9261](https://github.com/owncloud/web/issues/9261)
 * Bugfix - Authenticated public links breaking uploads: [#9299](https://github.com/owncloud/web/pull/9299)
 * Bugfix - Switch columns displayed on small screens in "Shared with me" view: [#9315](https://github.com/owncloud/web/issues/9315)
+* Bugfix - Media controls overflow on mobile screens: [#9351](https://github.com/owncloud/web/pull/9351)
 * Bugfix - Space editors see empty trashbin and delete actions in space trashbin: [#9389](https://github.com/owncloud/web/pull/9389)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 * Enhancement - Improve extension app topbar: [#8422](https://github.com/owncloud/web/issues/8422)
@@ -46,6 +47,10 @@ Summary
 * Enhancement - Search list add highlighted file content: [#9294](https://github.com/owncloud/web/pull/9294)
 * Enhancement - Resolve pulic links to their actual location: [#9299](https://github.com/owncloud/web/pull/9299)
 * Enhancement - Batch actions redesign: [#9346](https://github.com/owncloud/web/pull/9346)
+* Enhancement - Tag comma separation on client side: [#9348](https://github.com/owncloud/web/pull/9348)
+* Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
+* Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
+* Enhancement - Button styling: [#9394](https://github.com/owncloud/web/pull/9394)
 
 Details
 -------
@@ -103,6 +108,15 @@ Details
 
    https://github.com/owncloud/web/issues/9315
    https://github.com/owncloud/web/pull/9320
+
+* Bugfix - Media controls overflow on mobile screens: [#9351](https://github.com/owncloud/web/pull/9351)
+
+   Media controls overflowed on smaller 9:16 screens because it is absolutely positioned and
+   centered using transform property, its margin caused the transform operation to not
+   calculate the center properly (the latter also affected desktop but was merely visible).
+
+   https://github.com/owncloud/web/issues/9318
+   https://github.com/owncloud/web/pull/9351
 
 * Bugfix - Space editors see empty trashbin and delete actions in space trashbin: [#9389](https://github.com/owncloud/web/pull/9389)
 
@@ -260,6 +274,7 @@ Details
    https://github.com/owncloud/web/pull/9150
    https://github.com/owncloud/web/pull/9282
    https://github.com/owncloud/web/pull/9291
+   https://github.com/owncloud/web/pull/9374
 
 * Enhancement - Privacy statement in account menu: [#9174](https://github.com/owncloud/web/issues/9174)
 
@@ -357,6 +372,40 @@ Details
    https://github.com/owncloud/web/issues/9340
    https://github.com/owncloud/web/issues/9352
    https://github.com/owncloud/web/pull/9346
+
+* Enhancement - Tag comma separation on client side: [#9348](https://github.com/owncloud/web/pull/9348)
+
+   Tags containing commas are now split up into separate tags on client side to match server side
+   processing behaviour.
+
+   https://github.com/owncloud/web/issues/9224
+   https://github.com/owncloud/web/pull/9348
+
+* Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
+
+   We have added some functionality that reminds the user to check their browser settings so that
+   redirects and e.g. opening a resource in a new tab can work properly.
+
+   https://github.com/owncloud/web/issues/9377
+   https://github.com/owncloud/web/pull/9383
+
+* Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
+
+   We've introduced a new env var WEB_OPTION_TOKEN_STORAGE_LOCAL, when set to true(default),
+   the auth token will be stored in the browser's local storage instead the session storage, this
+   will effect in a persisted login state across multiple browser tabs.
+
+   https://github.com/owncloud/web/issues/9325
+   https://github.com/owncloud/web/pull/9386
+
+* Enhancement - Button styling: [#9394](https://github.com/owncloud/web/pull/9394)
+
+   Button styling (colors and hover colors) has been improved in both light and dark mode to be more
+   consistent among various button styles (colors for filled and outline buttons)
+
+   https://github.com/owncloud/web/issues/9353
+   https://github.com/owncloud/web/issues/9354
+   https://github.com/owncloud/web/pull/9394
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================

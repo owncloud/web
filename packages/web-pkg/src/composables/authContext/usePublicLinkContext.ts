@@ -6,7 +6,7 @@ interface PublicLinkContextOptions {
 }
 
 export const usePublicLinkContext = ({ store }: PublicLinkContextOptions) => {
-  return computed(() => {
+  return computed((): boolean => {
     return store.getters['runtime/auth/isPublicLinkContextReady']
   })
 }

@@ -22,7 +22,8 @@
       }"
     >
       <div v-if="runningUploads" class="oc-flex oc-flex-middle">
-        <oc-spinner size="small" class="oc-mr-s" />
+        <oc-icon v-if="uploadsPaused" name="pause" size="small" class="oc-mr-s" />
+        <oc-spinner v-else size="small" class="oc-mr-s" />
         <span class="oc-text-small oc-text-muted" v-text="remainingTime" />
       </div>
       <div
@@ -43,7 +44,7 @@
           v-text="infoExpanded ? $gettext('Hide details') : $gettext('Show details')"
         ></oc-button>
         <oc-button
-          v-if="!runningUploads && Object.keys(errors).length"
+          v-if="!runningUploads && Object.keys(errors).length && !disableActions"
           v-oc-tooltip="$gettext('Retry all failed uploads')"
           class="oc-ml-s"
           appearance="raw"
@@ -53,7 +54,13 @@
           <oc-icon name="restart" fill-type="line" />
         </oc-button>
         <oc-button
-          v-if="runningUploads && uploadsPausable && !inPreparation && !inFinalization"
+          v-if="
+            runningUploads &&
+            uploadsPausable &&
+            !inPreparation &&
+            !inFinalization &&
+            !disableActions
+          "
           id="pause-upload-info-btn"
           v-oc-tooltip="uploadsPaused ? $gettext('Resume upload') : $gettext('Pause upload')"
           class="oc-ml-s"
@@ -63,7 +70,7 @@
           <oc-icon :name="uploadsPaused ? 'play-circle' : 'pause-circle'" fill-type="line" />
         </oc-button>
         <oc-button
-          v-if="runningUploads && !inPreparation && !inFinalization"
+          v-if="runningUploads && !inPreparation && !inFinalization && !disableActions"
           id="cancel-upload-info-btn"
           v-oc-tooltip="$gettext('Cancel upload')"
           class="oc-ml-s"
@@ -173,7 +180,8 @@ export default defineComponent({
     uploadSpeed: 0,
     filesInEstimation: {},
     timeStarted: null,
-    remainingTime: undefined
+    remainingTime: undefined,
+    disableActions: false // disables the following actions: pause, resume, retry
   }),
   computed: {
     ...mapGetters(['configuration']),
@@ -265,6 +273,10 @@ export default defineComponent({
       this.filesInProgressCount += files.filter((f) => !f.isFolder).length
 
       for (const file of files) {
+        if (!this.disableActions && file.source && file.source !== 'DropTarget') {
+          this.disableActions = true
+        }
+
         if (file.data?.size) {
           this.bytesTotal += file.data.size
         }
@@ -450,6 +462,7 @@ export default defineComponent({
       this.successful = []
       this.filesInProgressCount = 0
       this.runningUploads = 0
+      this.disableActions = false
     },
     resetProgress() {
       this.bytesTotal = 0

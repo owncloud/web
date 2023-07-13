@@ -90,4 +90,16 @@ Feature: Search
       | fileWithTag.txt               |
       | withTag.txt                   |
       | spaceFolder/spaceTextfile.txt |
+    When "Brian" opens the following file in texteditor
+      | resource                      |
+      | textfile.txt                  |
+    And "Brian" closes the file viewer
+    Then following resources should be displayed in the files list for user "Brian"
+      | resource                      |
+      | textfile.txt                  |
+      | testFolder/innerTextfile.txt  |
+      | fileToShare.txt               |
+      | fileWithTag.txt               |
+      | withTag.txt                   |
+      | spaceFolder/spaceTextfile.txt |
     And "Brian" logs out

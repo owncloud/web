@@ -28,7 +28,15 @@
     ],
     "contextHelpersReadMore": true
   },
-  "apps": ["files", "text-editor", "pdf-viewer", "search", "external", "admin-settings", "webfinger"],
+  "apps": [
+    "files",
+    "text-editor",
+    "pdf-viewer",
+    "search",
+    "external",
+    "admin-settings",
+    "webfinger"
+  ],
   "external_apps": [
     {
       "id": "preview",
@@ -43,6 +51,13 @@
       "config": {
         "url": "https://embed.diagrams.net",
         "theme": "minimal"
+      }
+    },
+    {
+      "id": "importer",
+      "path": "web-app-importer",
+      "config": {
+        "companionUrl": "https://host.docker.internal:9200/companion"
       }
     }
   ]

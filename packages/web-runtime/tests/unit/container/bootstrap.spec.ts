@@ -40,7 +40,7 @@ describe('initialize applications', () => {
       },
       store: undefined,
       router: undefined,
-      translations: undefined,
+      gettext: undefined,
       supportedLanguages: {}
     })
 

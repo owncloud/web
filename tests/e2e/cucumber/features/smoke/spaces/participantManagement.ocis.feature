@@ -83,11 +83,12 @@ Feature: spaces participant management
       | resource            |
       | parent/lorem.txt    |
       | parent/textfile.txt |
-    And "Carol" logs out
     When "Brian" navigates to the trashbin of the project space "team.1"
-    Then "Brian" should be able to restore following resources from the trashbin
+    Then "Brian" should be able to restore following resource from the trashbin
+      | resource         |
+      | parent/lorem.txt |
+    And "Brian" should not be able to delete following resource from the trashbin
       | resource            |
-      | parent/lorem.txt    |
       | parent/textfile.txt |
     When "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
@@ -100,6 +101,11 @@ Feature: spaces participant management
     When "Alice" changes the roles of the following users in the project space
       | user  | role       |
       | Carol | Can manage |
+    And "Carol" navigates to the trashbin of the project space "team.1"
+    Then "Carol" should be able to delete following resource from the trashbin
+      | resource            |
+      | parent/textfile.txt |
+    And "Carol" logs out
     And "Alice" as project manager removes their own access to the project space
     Then "Alice" should not be able to see space "team.1"
     And "Alice" logs out

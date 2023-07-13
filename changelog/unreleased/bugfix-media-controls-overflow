@@ -1,0 +1,6 @@
+Bugfix: Media controls overflow on mobile screens
+
+Media controls overflowed on smaller 9:16 screens because it is absolutely positioned and centered using transform property, its margin caused the transform operation to not calculate the center properly (the latter also affected desktop but was merely visible).
+
+https://github.com/owncloud/web/pull/9351
+https://github.com/owncloud/web/issues/9318

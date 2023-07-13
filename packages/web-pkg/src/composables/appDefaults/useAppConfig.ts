@@ -1,7 +1,8 @@
 import { Store } from 'vuex'
 import { computed, Ref, unref } from 'vue'
 import { useAppMeta } from './useAppMeta'
-import type { AppConfigObject } from './types'
+import type { AppConfigObject } from '../../apps'
+
 interface AppConfigOptions {
   store: Store<any>
   applicationId: string

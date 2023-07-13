@@ -122,10 +122,6 @@ export class Resource {
     return downloads
   }
 
-  async emptyTrashBin() {
-    return await po.emptyTrashBinResources(this.#page)
-  }
-
   async deleteTrashBin(args: Omit<po.deleteResourceTrashbinArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
     const message = await po.deleteResourceTrashbin({ ...args, page: this.#page })

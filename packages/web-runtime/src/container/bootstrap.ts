@@ -6,7 +6,7 @@ import { Router } from 'vue-router'
 import { App, unref } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
-import { createGettext, GetTextOptions } from 'vue3-gettext'
+import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
 import { useLocalStorage } from 'web-pkg/src/composables'
 import { useDefaultThemeName } from '../composables'
@@ -22,6 +22,8 @@ import {
   ocResourceIconMappingInjectionKey,
   OcResourceIconMapping
 } from 'design-system/src/components/OcResourceIcon/types'
+import { merge } from 'lodash-es'
+import { AppConfigObject } from 'web-pkg/src/apps'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -113,7 +115,7 @@ export const initializeApplications = async ({
   configurationManager,
   store,
   router,
-  translations,
+  gettext,
   supportedLanguages
 }: {
   app: App
@@ -121,26 +123,34 @@ export const initializeApplications = async ({
   configurationManager: ConfigurationManager
   store: Store<unknown>
   router: Router
-  translations: unknown
+  gettext: Language
   supportedLanguages: { [key: string]: string }
 }): Promise<NextApplication[]> => {
   const { apps: internalApplications = [], external_apps: externalApplications = [] } =
     rewriteDeprecatedAppNames(runtimeConfiguration)
 
-  const applicationPaths = [
-    ...internalApplications.map((application) => `web-app-${application}`),
-    ...externalApplications.map((application) => application.path)
-  ].filter(Boolean)
+  type RawApplication = {
+    path: string
+    config?: AppConfigObject
+  }
+
+  const rawApplications: RawApplication[] = [
+    ...internalApplications.map((application) => ({
+      path: `web-app-${application}`
+    })),
+    ...externalApplications
+  ]
 
   const applicationResults = await Promise.allSettled(
-    applicationPaths.map((applicationPath) =>
+    rawApplications.map((rawApplication) =>
       buildApplication({
         app,
-        applicationPath,
+        applicationPath: rawApplication.path,
+        applicationConfig: rawApplication.config,
         store,
         supportedLanguages,
         router,
-        translations,
+        gettext,
         configurationManager
       })
     )
@@ -281,14 +291,21 @@ export const announceTranslations = ({
   ...options
 }: {
   app: App
-} & Partial<GetTextOptions>): void => {
-  app.use(
-    createGettext({
-      defaultLanguage: navigator.language.substring(0, 2),
-      silent: true,
-      ...options
-    })
-  )
+} & Partial<GetTextOptions>): Language => {
+  const gettext = createGettext({
+    defaultLanguage: navigator.language.substring(0, 2),
+    silent: true,
+    ...options
+  })
+  app.use(gettext)
+  return gettext
+}
+
+export const announceAdditionalTranslations = ({
+  gettext,
+  translations
+}: { gettext: Language } & Pick<GetTextOptions, 'translations'>): void => {
+  gettext.translations = merge(gettext.translations, translations)
 }
 
 /**

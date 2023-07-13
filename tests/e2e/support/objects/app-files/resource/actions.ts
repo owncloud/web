@@ -23,7 +23,7 @@ const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//i
 export const fileRow =
   '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
 export const resourceNameSelector =
-  ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section) [data-test-resource-name="%s"]'
+  ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section, .files-table) [data-test-resource-name="%s"]'
 const breadcrumbResourceNameSelector =
   '//span[contains(@class, "oc-breadcrumb-item-text") and text()="%s"]'
 const addNewResourceButton = `#new-file-menu-btn`
@@ -785,19 +785,6 @@ export const downloadResourceVersion = async (
   return downloads
 }
 
-export const emptyTrashBinResources = async (page): Promise<string> => {
-  await page.locator(emptyTrashBinButton).click()
-  const statuses = [204, 403]
-  await Promise.all([
-    page.waitForResponse(
-      (resp) => statuses.includes(resp.status()) && resp.request().method() === 'DELETE'
-    ),
-    page.locator(util.format(actionConfirmationButton, 'Delete')).click()
-  ])
-  const message = await page.locator(notificationMessageDialog).textContent()
-  return message.trim().toLowerCase()
-}
-
 export interface deleteResourceTrashbinArgs {
   page: Page
   resource: string
@@ -812,12 +799,10 @@ export const deleteResourceTrashbin = async (args: deleteResourceTrashbinArgs): 
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
-  const statuses = [204, 403]
+
   await page.locator(permanentDeleteButton).first().click()
   await Promise.all([
-    page.waitForResponse(
-      (resp) => statuses.includes(resp.status()) && resp.request().method() === 'DELETE'
-    ),
+    page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'DELETE'),
     page.locator(util.format(actionConfirmationButton, 'Delete')).click()
   ])
   const message = await page.locator(notificationMessageDialog).textContent()
@@ -871,11 +856,8 @@ export const restoreResourceTrashbin = async (
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
-  const statuses = [201, 403]
   await Promise.all([
-    page.waitForResponse(
-      (resp) => statuses.includes(resp.status()) && resp.request().method() === 'MOVE'
-    ),
+    page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'MOVE'),
     page.locator(restoreResourceButton).click()
   ])
 
@@ -1114,7 +1096,7 @@ export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<vo
 export interface openFileInViewerArgs {
   page: Page
   name: string
-  actionType: 'mediaviewer' | 'pdfviewer'
+  actionType: 'mediaviewer' | 'pdfviewer' | 'texteditor'
 }
 
 export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void> => {
@@ -1141,8 +1123,6 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
       page.locator(util.format(resourceNameSelector, name)).click()
     ])
   }
-
-  await editor.close(page)
 }
 
 export const checkThatFileVersionIsNotAvailable = async (

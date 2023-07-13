@@ -2,10 +2,10 @@ import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { NextApplication } from './next'
 import { convertClassicApplication } from './classic'
-import { ClassicApplicationScript } from '../types'
 import { RuntimeError } from 'web-pkg/src/errors'
 import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
+import type { Language } from 'vue3-gettext'
 
 // import modules to provide them to applications
 import * as vue from 'vue' // eslint-disable-line
@@ -18,6 +18,7 @@ import * as webClient from 'web-client'
 import { urlJoin } from 'web-client/src/utils'
 import { ConfigurationManager } from 'web-pkg'
 import { App } from 'vue'
+import { AppConfigObject, ClassicApplicationScript } from 'web-pkg/src/apps'
 
 export { NextApplication } from './next'
 
@@ -62,17 +63,19 @@ const loadScriptRequireJS = <T>(moduleUri: string) => {
 export const buildApplication = async ({
   app,
   applicationPath,
+  applicationConfig,
   store,
   router,
-  translations,
+  gettext,
   supportedLanguages,
   configurationManager
 }: {
   app: App
   applicationPath: string
+  applicationConfig: AppConfigObject
   store: Store<unknown>
   router: Router
-  translations: unknown
+  gettext: Language
   supportedLanguages: { [key: string]: string }
   configurationManager: ConfigurationManager
 }): Promise<NextApplication> => {
@@ -117,15 +120,16 @@ export const buildApplication = async ({
 
   try {
     /** add valuable sniffer to detect next applications, then implement next application factory */
-    if (!isObject(applicationScript.appInfo)) {
+    if (!isObject(applicationScript.appInfo) && !applicationScript.setup) {
       throw new RuntimeError('next applications not implemented yet, stay tuned')
     } else {
       application = await convertClassicApplication({
         app,
         applicationScript,
+        applicationConfig,
         store,
         router,
-        translations,
+        gettext,
         supportedLanguages
       }).catch()
     }
