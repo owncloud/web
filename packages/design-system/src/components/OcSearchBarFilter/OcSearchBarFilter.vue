@@ -53,7 +53,10 @@ export default defineComponent({
       () => props.locationOptions,
       () => {
         if (userSelected.value) {
-          if (userSelected.value.enabled) {
+          const item = props.locationOptions.find((option) => option.id === userSelected.value)
+          if (item.enabled) {
+            currentSelection.value = item
+            emit('update:modelValue', { value: currentSelection.value })
             return
           }
           currentSelection.value = props.locationOptions.find((option) => option.enabled)
@@ -68,8 +71,8 @@ export default defineComponent({
       { immediate: true, deep: true }
     )
 
-    const onOptionSelected = (option: string) => {
-      userSelected.value = option
+    const onOptionSelected = (option) => {
+      userSelected.value = option.id
       currentSelection.value = option
       emit('update:modelValue', { value: option })
     }
