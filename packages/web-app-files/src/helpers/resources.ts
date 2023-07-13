@@ -131,7 +131,6 @@ function addSharedWithToShares(shares) {
     }
 
     previousShare = share
-    console.log(share.stime)
     resources.push(share)
   }
   return resources
