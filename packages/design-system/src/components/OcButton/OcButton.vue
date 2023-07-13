@@ -254,6 +254,17 @@ export default defineComponent({
     .oc-icon > svg {
       fill: $contrast-color;
     }
+
+    &:hover:not([disabled]),
+    &:focus:not([disabled]) {
+      color: $contrast-color;
+      background-color: $hover-color;
+      border-color: $hover-color;
+
+      .oc-icon > svg {
+        fill: $contrast-color;
+      }
+    }
   }
 
   &-outline {
@@ -275,8 +286,8 @@ export default defineComponent({
   &-outline:hover:not([disabled]),
   &-outline:focus:not([disabled]) {
     color: $contrast-color;
-    background-color: $color;
-    border-color: $color;
+    background-color: $hover-color;
+    border-color: $hover-color;
 
     .oc-icon > svg {
       fill: $contrast-color;
@@ -376,6 +387,19 @@ export default defineComponent({
       var(--oc-color-swatch-passive-muted),
       var(--oc-color-swatch-passive-contrast)
     );
+
+    &-outline {
+      &:focus:not([disabled]),
+      &:hover:not([disabled]) {
+        color: var(--oc-color-swatch-passive-default);
+        background-color: var(--oc-color-swatch-passive-hover-outline);
+        border-color: var(--oc-color-swatch-passive-hover-outline);
+
+        .oc-icon > svg {
+          fill: var(--oc-color-swatch-passive-default);
+        }
+      }
+    }
   }
 
   &-brand {
