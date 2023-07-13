@@ -91,7 +91,7 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
-import { useRouteMeta, useStore, ViewModeConstants } from 'web-pkg/src'
+import { useRouteMeta, useStore, ViewModeConstants } from 'web-pkg/src/composables/'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
 import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
@@ -110,7 +110,7 @@ export default defineComponent({
     viewModeDefault: {
       type: String,
       required: false,
-      default: ViewModeConstants.default
+      default: ViewModeConstants.default.name
     },
     breadcrumbs: {
       type: Array as PropType<BreadcrumbItem[]>,
