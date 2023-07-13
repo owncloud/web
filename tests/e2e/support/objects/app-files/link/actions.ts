@@ -86,6 +86,7 @@ const deleteLinkButton =
   `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
   `//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Delete link"]`
 const confirmDeleteButton = `//button[contains(@class,"oc-modal-body-actions-confirm") and text()="Delete"]`
+const notificationContainer = 'div.oc-notification'
 
 export const createLink = async (args: createLinkArgs): Promise<string> => {
   const { space, page, resource } = args
@@ -99,7 +100,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
   await page.locator(addPublicLinkButton).click()
-  await waitForPopupNotPresent(page)
+  await clearPopups(page)
   return await page.locator(util.format(publicLink, 'Link')).textContent()
 }
 
@@ -232,4 +233,17 @@ export const getLinkEditButtonVisibility = async (
 ): Promise<boolean> => {
   const { page, linkName } = args
   return await page.locator(util.format(editPublicLinkButton, linkName)).isVisible()
+}
+
+export const clearPopups = async (page: Page): Promise<void> => {
+  const count = await page.locator(notificationContainer).evaluate((container) => {
+    Object.values(container.children).forEach((child) => {
+      container.removeChild(child)
+    })
+    return container.children.length
+  })
+  if (count) {
+    throw new Error(`Failed to clear ${count} notifications`)
+  }
+  await expect(page.locator(linkUpdateDialog)).not.toBeVisible()
 }
