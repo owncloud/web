@@ -89,6 +89,9 @@ function addSharedWithToShares(shares) {
       previousShare?.file_source === share.file_source
     ) {
       if (ShareTypes.containsAnyValue(ShareTypes.authenticated, [parseInt(share.share_type)])) {
+        if (share.stime > previousShare.stime) {
+          previousShare.stime = share.stime
+        }
         previousShare.sharedWith.push({
           username: share.share_with,
           name: share.share_with_displayname,
@@ -128,6 +131,7 @@ function addSharedWithToShares(shares) {
     }
 
     previousShare = share
+    console.log(share.stime)
     resources.push(share)
   }
   return resources
