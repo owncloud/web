@@ -76,10 +76,10 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
-import { useStore } from 'web-pkg/src/composables'
+import { useMutationSubscription, useStore } from 'web-pkg/src/composables'
 import { getSpaceFromResource } from 'web-app-files/src/helpers/resource/getSpace'
 
 const visibilityObserver = new VisibilityObserver()
@@ -99,9 +99,35 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
+    const sharedChange = ref<Boolean>(false)
     const getSpace = (resource: Resource): SpaceResource => {
       return getSpaceFromResource({ spaces: store.getters['runtime/spaces/spaces'], resource })
     }
+
+    const { loadResourcesTask, selectedResourcesIds, sideBarOpen } = useResourcesViewDefaults<
+      Resource,
+      any,
+      any[]
+    >()
+
+    useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], (mutation) => {
+      if (mutation.payload.field === 'shareTypes') {
+        // "record" change in shared resources
+        sharedChange.value = true
+      }
+    })
+
+    watch(sideBarOpen, async (newSideBarOpen) => {
+      // if sidebar is closed and there is a change in shared resources
+      if (!newSideBarOpen && sharedChange.value) {
+        // keep selected resources
+        const keepSelectedResources = selectedResourcesIds.value
+        // reload resources
+        await loadResourcesTask.perform()
+        selectedResourcesIds.value = keepSelectedResources
+        sharedChange.value = false
+      }
+    })
 
     return {
       ...useFileActions(),
