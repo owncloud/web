@@ -86,7 +86,9 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
       {
         name: 'download-archive',
         icon: 'inbox-archive',
-        handler: (args) => loadingService.addTask(() => handler(args)),
+        handler: async (args) => {
+          await loadingService.addTask(() => handler(args))
+        },
         label: ({ resources }) => {
           const downloadLabel = $gettext('Download')
 

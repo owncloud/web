@@ -49,7 +49,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   }
 
   uppyService.subscribe('addedForUpload', () => {
-    return store.dispatch('hideModal')
+    store.dispatch('hideModal')
   })
 
   uppyService.subscribe('uploadCompleted', () => {
