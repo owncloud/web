@@ -55,6 +55,8 @@ const notificationMessage = '.oc-notification-message'
 const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
 const restoreResourceButton = '.oc-files-actions-restore-trigger'
 const globalSearchInput = '.oc-search-input'
+const globalSearchBarFilter = '.oc-search-bar-filter'
+const globalSearchBarFilterAllFiles = '//*[@data-test-id="all-files"]'
 const searchList =
   '//div[@id="files-global-search-options"]//li[contains(@class,"preview")]//span[@class="oc-resource-name"]'
 const globalSearchOptions = '#files-global-search-options'
@@ -965,6 +967,9 @@ export const searchResourceGlobalSearch = async (
 
   // .reload() waits nicely for search indexing to be finished
   await page.reload()
+
+  await page.locator(globalSearchBarFilter).click()
+  await page.locator(globalSearchBarFilterAllFiles).click()
 
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),

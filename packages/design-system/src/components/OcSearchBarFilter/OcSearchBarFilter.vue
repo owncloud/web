@@ -5,6 +5,7 @@
       :is-toggle-active="false"
       :filter-label="currentSelection.title"
       :selected-item-names="[]"
+      class="oc-search-bar-filter"
       raw
       close-on-click
     >
@@ -18,6 +19,7 @@
           class="search-bar-filter-item oc-flex oc-flex-middle oc-width-1-1 oc-py-xs oc-px-s"
           :class="{ 'oc-mt-s': isIndexGreaterZero(index) }"
           :disabled="!option.enabled"
+          :data-test-id="option.id"
           @click="onOptionSelected(option)"
         >
           <span>{{ option.title }}</span>
