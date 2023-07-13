@@ -1,7 +1,6 @@
 import { Page } from 'playwright'
 import util from 'util'
 
-const globalSearchInputSelector = '.oc-search-input'
 const searchResultMessageSelector = '//p[@class="oc-text-muted"]'
 const selectTagDropdownSelector =
   '//div[contains(@class,"files-search-filter-tags")]//button[contains(@class,"oc-filter-chip-button")]'
@@ -12,26 +11,6 @@ const enableSearchInFileContentSelector =
   '//div[contains(@class,"files-search-filter-full-text")]//button[contains(@class,"oc-filter-chip-button")]'
 const disableSearchInFileContentSelector =
   '//div[contains(@class,"files-search-filter-full-text")]//button[contains(@class,"oc-filter-chip-clear")]'
-
-export interface fullTextSearchArgs {
-  keyword: string
-  page: Page
-}
-
-export const fullTextSearch = async (args: fullTextSearchArgs): Promise<void> => {
-  const { page, keyword } = args
-  await page.locator(globalSearchInputSelector).fill(keyword)
-  let waitResponse
-  if (keyword) {
-    waitResponse = page.waitForResponse(
-      (resp) => resp.status() === 207 && resp.request().method() === 'REPORT'
-    )
-  }
-  await page.keyboard.press('Enter')
-  if (keyword) {
-    await waitResponse
-  }
-}
 
 export const getSearchResultMessage = ({ page }): Promise<string> => {
   return page.locator(searchResultMessageSelector).innerText()

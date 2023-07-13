@@ -8,10 +8,6 @@ export class Search {
     this.#page = page
   }
 
-  async fullTextSearch(args: Omit<po.fullTextSearchArgs, 'page'>): Promise<void> {
-    await po.fullTextSearch({ ...args, page: this.#page })
-  }
-
   getSearchResultMessage(): Promise<string> {
     return po.getSearchResultMessage({ page: this.#page })
   }

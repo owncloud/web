@@ -3,15 +3,6 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 
-When(
-  '{string} searches {string} using the global search bar',
-  async function (this: World, stepUser: string, keyword: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const searchObject = new objects.applicationFiles.Search({ page })
-    await searchObject.fullTextSearch({ keyword })
-  }
-)
-
 Then(
   '{string} should see the message {string} on the webUI',
   async function (this: World, stepUser: string, message: string): Promise<void> {

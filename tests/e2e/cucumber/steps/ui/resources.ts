@@ -224,17 +224,27 @@ Then(
     }
   }
 )
+
 When(
-  '{string} searches {string} using the global search',
-  async function (this: World, stepUser: string, keyword: string): Promise<void> {
+  /^"([^"]*)" searches "([^"]*)" using the global search( and presses enter)?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    keyword: string,
+    pressEnter: string
+  ): Promise<void> {
+    keyword = keyword ?? ''
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.searchResource({ keyword })
+    await resourceObject.searchResource({
+      keyword,
+      pressEnter: pressEnter.endsWith('presses enter')
+    })
   }
 )
 
 Then(
-  /^following resources (should|should not) be displayed in the (search list|files list) for user "([^"]*)"?$/,
+  /^following resources (should|should not) be displayed in the (search list|files list) for user "([^"]*)"$/,
   async function (
     this: World,
     actionType: string,
