@@ -50,6 +50,7 @@ Summary
 * Enhancement - Tag comma separation on client side: [#9348](https://github.com/owncloud/web/pull/9348)
 * Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
 * Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
+* Enhancement - Button styling: [#9394](https://github.com/owncloud/web/pull/9394)
 
 Details
 -------
@@ -395,6 +396,15 @@ Details
 
    https://github.com/owncloud/web/issues/9325
    https://github.com/owncloud/web/pull/9386
+
+* Enhancement - Button styling: [#9394](https://github.com/owncloud/web/pull/9394)
+
+   Button styling (colors and hover colors) has been improved in both light and dark mode to be more
+   consistent among various button styles (colors for filled and outline buttons)
+
+   https://github.com/owncloud/web/issues/9353
+   https://github.com/owncloud/web/issues/9354
+   https://github.com/owncloud/web/pull/9394
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
