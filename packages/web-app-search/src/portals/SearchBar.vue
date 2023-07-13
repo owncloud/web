@@ -100,7 +100,11 @@
 <script lang="ts">
 import { providerStore } from '../service'
 import { useGettext } from 'vue3-gettext'
-import { createLocationCommon, isLocationCommonActive } from 'web-app-files/src/router'
+import {
+  createLocationCommon,
+  isLocationCommonActive,
+  isLocationTrashActive
+} from 'web-app-files/src/router'
 import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
 import { useRouteQuery, useRouter, useStore, useUserContext } from 'web-pkg/src/composables'
@@ -125,7 +129,10 @@ export default defineComponent({
     const loading = ref(false)
 
     const currentFolderAvailable = computed(() => {
-      return store.getters['Files/currentFolder'] !== null || scopeQueryValue.value?.length > 0
+      return (
+        (store.getters['Files/currentFolder'] !== null || scopeQueryValue.value?.length > 0) &&
+        !isLocationTrashActive(router, 'files-trash-generic')
+      )
     })
 
     const availableLocationOptions = ref([
