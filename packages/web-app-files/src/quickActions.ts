@@ -104,4 +104,4 @@ export default {
     },
     displayed: canShare
   }
-}
+} // FIXME: fix type, then add: satisfies ApplicationQuickActions

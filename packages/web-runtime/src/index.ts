@@ -23,7 +23,8 @@ import {
   startSentry,
   announceCustomScripts,
   announceLoadingService,
-  announcePreviewService
+  announcePreviewService,
+  announceAdditionalTranslations
 } from './container/bootstrap'
 import { applicationStore } from './container/store'
 import {
@@ -38,14 +39,16 @@ import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { computed, createApp } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
-
+import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import { ArchiverService } from 'web-pkg/src/services/archiver'
 import { get } from 'lodash-es'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
+  const pinia = createPinia()
   const app = createApp(pages.success)
+  app.use(pinia)
 
   app.provide('$router', router)
 
@@ -54,32 +57,18 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   const store = await announceStore({ runtimeConfiguration })
   app.provide('$store', store)
+  app.provide('store', store)
+
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
-  const applicationsPromise = initializeApplications({
-    app,
-    runtimeConfiguration,
-    configurationManager,
-    store,
-    supportedLanguages,
-    router,
-    translations
-  })
-  const customTranslationsPromise = loadCustomTranslations({ configurationManager })
-  const themePromise = announceTheme({ store, app, designSystem, runtimeConfiguration })
-  const [customTranslations] = await Promise.all([
-    customTranslationsPromise,
-    applicationsPromise,
-    themePromise
-  ])
-
-  announceTranslations({
+  const gettext = announceTranslations({
     app,
     availableLanguages: supportedLanguages,
-    translations: merge(translations, customTranslations)
+    translations
   })
-  announceClientService({ app, runtimeConfiguration, configurationManager, store })
+  announceUppyService({ app })
 
+  announceClientService({ app, runtimeConfiguration, configurationManager, store })
   // TODO: move to announceArchiverService function
   app.config.globalProperties.$archiverService = new ArchiverService(
     app.config.globalProperties.$clientService,
@@ -96,11 +85,30 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     )
   )
   app.provide('$archiverService', app.config.globalProperties.$archiverService)
-
-  announceUppyService({ app })
   announceLoadingService({ app })
   announcePreviewService({ app, store, configurationManager })
   await announceClient(runtimeConfiguration)
+
+  const applicationsPromise = initializeApplications({
+    app,
+    runtimeConfiguration,
+    configurationManager,
+    store,
+    supportedLanguages,
+    router,
+    gettext
+  })
+
+  const customTranslationsPromise = loadCustomTranslations({ configurationManager })
+  const themePromise = announceTheme({ store, app, designSystem, runtimeConfiguration })
+  const [customTranslations] = await Promise.all([
+    customTranslationsPromise,
+    applicationsPromise,
+    themePromise
+  ])
+
+  announceAdditionalTranslations({ gettext, translations: merge(customTranslations) })
+
   announceAuthService({ app, configurationManager, store, router })
   announceCustomStyles({ runtimeConfiguration })
   announceCustomScripts({ runtimeConfiguration })

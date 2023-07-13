@@ -1,5 +1,5 @@
 import { Ability } from 'web-client/src/helpers/resource/types'
-import { ClientService, LoadingService, PreviewService, ArchiverService } from './src/services'
+import { ArchiverService, ClientService, LoadingService, PreviewService } from './src/services'
 
 export * from './src'
 

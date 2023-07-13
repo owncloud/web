@@ -54,7 +54,6 @@ import { useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
 import '@uppy/core/dist/style.min.css'
-import '@uppy/dashboard/dist/style.min.css'
 
 const MOBILE_BREAKPOINT = 640
 

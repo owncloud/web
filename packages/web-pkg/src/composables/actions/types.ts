@@ -24,7 +24,7 @@ export interface Action<T = ActionOptions> {
   isEnabled(options?: T): boolean
 
   // componentType: button
-  handler?(options?: T): void
+  handler?(options?: T): Promise<void> | void
 
   // componentType: router-link
   route?(options?: T): RouteLocationRaw
