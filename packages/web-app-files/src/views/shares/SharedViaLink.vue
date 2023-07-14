@@ -78,7 +78,7 @@ import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
 import {
   useCapabilityProjectSpacesEnabled,
@@ -105,35 +105,9 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
-    const sharedChange = ref<boolean>(false)
     const getSpace = (resource: Resource): SpaceResource => {
       return getSpaceFromResource({ spaces: store.getters['runtime/spaces/spaces'], resource })
     }
-
-    const { loadResourcesTask, selectedResourcesIds, sideBarOpen } = useResourcesViewDefaults<
-      Resource,
-      any,
-      any[]
-    >()
-
-    useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], (mutation) => {
-      if (mutation.payload.field === 'shareTypes') {
-        // "record" change in shared resources
-        sharedChange.value = true
-      }
-    })
-
-    watch(sideBarOpen, (newSideBarOpen) => {
-      // if sidebar is closed and there is a change in shared resources
-      if (!newSideBarOpen && sharedChange.value) {
-        // keep selected resources
-        const keepSelectedResources = selectedResourcesIds.value
-        // reload resources
-        loadResourcesTask.perform()
-        selectedResourcesIds.value = keepSelectedResources
-        sharedChange.value = false
-      }
-    })
 
     return {
       ...useFileActions(),
@@ -164,6 +138,14 @@ export default defineComponent({
   async created() {
     await this.loadResourcesTask.perform()
     this.scrollToResourceFromRoute(this.paginatedResources)
+
+    useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
+      if (mutation.payload.field === 'shareTypes') {
+        const keepSelectedResources = this.selectedResourcesIds
+        await this.loadResourcesTask.perform()
+        this.selectedResourcesIds = keepSelectedResources
+      }
+    })
   },
 
   beforeUnmount() {
