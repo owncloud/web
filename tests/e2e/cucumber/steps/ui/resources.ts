@@ -227,18 +227,14 @@ Then(
 
 When(
   /^"([^"]*)" searches "([^"]*)" using the global search( and presses enter)?$/,
-  async function (
-    this: World,
-    stepUser: string,
-    keyword: string,
-    pressEnter: string
-  ): Promise<void> {
+  async function (this: World, stepUser: string, keyword: string, command: string): Promise<void> {
     keyword = keyword ?? ''
+    const pressEnter = !!command && command.endsWith('presses enter')
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.searchResource({
       keyword,
-      pressEnter: pressEnter.endsWith('presses enter')
+      pressEnter
     })
   }
 )
