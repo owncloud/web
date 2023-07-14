@@ -141,7 +141,8 @@ import {
   ViewModeConstants,
   useRouteQueryPersisted,
   useSort,
-  useStore
+  useStore,
+  useMutationSubscription
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
@@ -294,6 +295,13 @@ export default defineComponent({
     return {
       imageContentObject: {}
     }
+  },
+  async created() {
+    useMutationSubscription(['runtime/spaces/UPSERT_SPACE_MEMBERS'], async () => {
+      const selectedIds = this.selectedResourcesIds
+      await this.loadResourcesTask.perform()
+      this.selectedResourcesIds = selectedIds
+    })
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
