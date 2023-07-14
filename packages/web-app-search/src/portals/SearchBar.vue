@@ -187,7 +187,7 @@ export default defineComponent({
       ) {
         const currentFolder = store.getters['Files/currentFolder']
         let scope
-        if (currentFolder) {
+        if (currentFolder?.fileId) {
           const spaceId = currentFolder.fileId.split('!')[0]
           const path = currentFolder.path === '/' ? '' : currentFolder.path
           scope = `${spaceId}${path}`
@@ -217,7 +217,7 @@ export default defineComponent({
         const currentQuery = unref(router.currentRoute).query
         const currentFolder = store.getters['Files/currentFolder']
         let scope
-        if (currentFolder) {
+        if (currentFolder?.fileId) {
           const spaceId = currentFolder.fileId.split('!')[0]
           const path = currentFolder.path === '/' ? '' : currentFolder.path
           scope = `${spaceId}${path}`
