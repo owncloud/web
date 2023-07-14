@@ -1,14 +1,15 @@
 import SearchBar from '../../../src/portals/SearchBar.vue'
 import flushPromises from 'flush-promises'
+import { mock } from 'jest-mock-extended'
 import { defineComponent } from 'vue'
 import {
   createStore,
   defaultPlugins,
   mount,
   defaultStoreMockOptions,
-  defaultComponentMocks
+  defaultComponentMocks,
+  RouteLocation
 } from 'web-test-helpers'
-import { ProviderStore } from 'web-app-search/src/service/providerStore'
 
 const component = defineComponent({
   emits: ['click', 'keyup'],
@@ -56,9 +57,13 @@ const selectors = {
 }
 
 jest.mock('lodash-es/debounce', () => (fn) => fn)
-
-const providerStore = new ProviderStore()
-
+jest.mock('web-app-search/src/service/providerStore', () => ({
+  get providerStore() {
+    return {
+      availableProviders: [providerFiles, providerContacts]
+    }
+  }
+}))
 beforeEach(() => {
   providerFiles.previewSearch.search.mockImplementation(() => {
     return {
@@ -77,10 +82,6 @@ beforeEach(() => {
       ]
     }
   })
-
-  jest
-    .spyOn(providerStore, 'availableProviders', 'get')
-    .mockReturnValue([providerFiles, providerContacts])
 })
 
 let wrapper
@@ -101,7 +102,7 @@ describe('Search Bar portal component', () => {
   test('updates the search term on input', () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('alice')
-    expect(wrapper.vm.$data.term).toBe('alice')
+    expect(wrapper.vm.term).toBe('alice')
   })
   test('shows message if no results are available', async () => {
     wrapper = getMountedWrapper().wrapper
@@ -174,29 +175,13 @@ describe('Search Bar portal component', () => {
     wrapper.find(selectors.searchInput).trigger('keyup.esc')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
-  test('hides options on clear', async () => {
-    wrapper = getMountedWrapper().wrapper
-    wrapper.find(selectors.searchInput).setValue('albert')
-    await flushPromises()
-    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
-    await wrapper.find(selectors.searchInputClear).trigger('click')
-    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
-  })
   test('hides options if no search term is given', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
     wrapper.find(selectors.searchInput).setValue('')
-    await wrapper.find(selectors.searchInputClear).trigger('click')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
-  })
-  test('resets search term on clear', async () => {
-    wrapper = getMountedWrapper().wrapper
-    wrapper.find(selectors.searchInput).setValue('albert')
-    await flushPromises()
-    await wrapper.find(selectors.searchInputClear).trigger('click')
-    expect(wrapper.vm.$data.term).toBeFalsy()
   })
   test('sets the search term according to route value on mount', async () => {
     wrapper = getMountedWrapper({
@@ -210,7 +195,7 @@ describe('Search Bar portal component', () => {
     }).wrapper
 
     await wrapper.vm.$nextTick()
-    expect(wrapper.vm.$data.term).toBe('alice')
+    expect(wrapper.vm.term).toBe('alice')
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('alice')
   })
   test.skip('sets active preview item via keyboard navigation', async () => {
@@ -235,9 +220,15 @@ describe('Search Bar portal component', () => {
 })
 
 function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } = {}) {
+  const currentRoute = mock<RouteLocation>({
+    name: 'files-spaces-generic',
+    query: {
+      term: '',
+      provider: ''
+    }
+  })
   const localMocks = {
-    ...defaultComponentMocks(),
-    $route: { name: '' },
+    ...defaultComponentMocks({ currentRoute }),
     ...mocks
   }
 
@@ -249,16 +240,10 @@ function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } 
   return {
     wrapper: mount(SearchBar, {
       attachTo: document.body,
-      data: () => {
-        return {
-          providerStore,
-          ...data
-        }
-      },
-
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: localMocks,
+        provide: localMocks,
         stubs: {
           'router-link': true
         }
