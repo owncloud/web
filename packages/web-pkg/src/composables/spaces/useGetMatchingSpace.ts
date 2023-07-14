@@ -6,7 +6,7 @@ import {
 } from 'web-pkg/src/composables'
 import { Resource, SpaceResource } from 'web-client'
 import { buildShareSpaceResource, isPersonalSpaceResource } from 'web-client/src/helpers'
-import { Ref, unref } from 'vue'
+import { computed, Ref, unref } from 'vue'
 
 type GetMatchingSpaceOptions = {
   space?: Ref<SpaceResource>
@@ -15,15 +15,15 @@ type GetMatchingSpaceOptions = {
 export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const store = useStore()
   const configurationManager = useConfigurationManager()
-  const spaces = store.getters['runtime/spaces/spaces']
+  const spaces = computed(() => store.getters['runtime/spaces/spaces'])
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
   const hasSpaces = useCapabilitySpacesEnabled(store)
 
   const getInternalSpace = (storageId: string): SpaceResource => {
     return (
       unref(options?.space) ||
-      spaces.find((space) => space.id === storageId) ||
-      (!unref(hasSpaces) && spaces.find((s) => isPersonalSpaceResource(s)))
+      unref(spaces).find((space) => space.id === storageId) ||
+      (!unref(hasSpaces) && unref(spaces).find((s) => isPersonalSpaceResource(s)))
     )
   }
 
