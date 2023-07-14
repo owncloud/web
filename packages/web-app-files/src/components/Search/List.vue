@@ -281,9 +281,11 @@ export default defineComponent({
     watch(
       () => unref(route).query,
       (newVal, oldVal) => {
-        const filters = ['q_fullText', 'q_tags']
-
-        if (isLocationCommonActive(router, 'files-common-search')) {
+        const filters = ['q_fullText', 'q_tags', 'useScope']
+        const isChange =
+          newVal?.term !== oldVal?.term ||
+          filters.some((f) => newVal[f] ?? undefined !== oldVal[f] ?? undefined)
+        if (isChange && isLocationCommonActive(router, 'files-common-search')) {
           emit('search', buildSearchTerm(true))
         }
       },

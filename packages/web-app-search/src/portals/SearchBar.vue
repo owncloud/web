@@ -209,7 +209,10 @@ export default defineComponent({
     }
 
     const onKeyUpEnter = () => {
-      unref(optionsDrop).hide()
+      if (unref(optionsDrop)) {
+        unref(optionsDrop).hide()
+      }
+
       if (unref(activePreviewIndex) === null) {
         const currentQuery = unref(router.currentRoute).query
         const currentFolder = store.getters['Files/currentFolder']
@@ -247,6 +250,7 @@ export default defineComponent({
       locationFilterId.value = event.value.id
       if (isLocationCommonActive(router, 'files-common-search')) {
         onKeyUpEnter()
+        return
       }
       search()
     }
