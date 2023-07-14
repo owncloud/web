@@ -19,7 +19,6 @@ OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
 OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.8.3"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 PLUGINS_DOCKER = "plugins/docker:20.14"
-PLUGINS_DOWNSTREAM = "plugins/downstream"
 PLUGINS_GH_PAGES = "plugins/gh-pages:1"
 PLUGINS_GIT_ACTION = "plugins/git-action:1"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
@@ -1896,26 +1895,6 @@ def documentation(ctx):
                         "pages_directory": "docs/",
                         "copy_contents": "true",
                         "target_branch": "docs",
-                    },
-                    "when": {
-                        "ref": {
-                            "exclude": [
-                                "refs/pull/**",
-                            ],
-                        },
-                    },
-                },
-                {
-                    "name": "downstream",
-                    "image": PLUGINS_DOWNSTREAM,
-                    "settings": {
-                        "server": "https://drone.owncloud.com/",
-                        "token": {
-                            "from_secret": "drone_token",
-                        },
-                        "repositories": [
-                            "owncloud/owncloud.github.io@main",
-                        ],
                     },
                     "when": {
                         "ref": {
