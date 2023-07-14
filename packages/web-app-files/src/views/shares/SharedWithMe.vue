@@ -8,6 +8,19 @@
       />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
+        <h2 class="oc-px-m oc-py-s" style="margin-top: 0">
+          {{ showHiddenShares ? declinedTitle : acceptedTitle }}
+          <span class="oc-text-medium"
+            >({{ showHiddenShares ? declinedItems.length : acceptedItems.length }})</span
+          >
+          <oc-button
+            id="files-shared-with-me-toggle-view-mode"
+            class="oc-ml-m"
+            @click.stop="switchHiddenShares"
+          >
+            {{ switchHiddenSharesLabel }}
+          </oc-button>
+        </h2>
         <shared-with-me-section
           v-if="pendingItems.length > 0"
           id="files-shared-with-me-pending-section"
@@ -68,13 +81,14 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import AppBar from '../../components/AppBar/AppBar.vue'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import { computed, defineComponent, unref } from 'vue'
+import { computed, defineComponent, ref, unref } from 'vue'
 import { Resource } from 'web-client'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { useCapabilityShareJailEnabled, useSort, useStore } from 'web-pkg/src/composables'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: {
@@ -86,6 +100,8 @@ export default defineComponent({
   },
 
   setup() {
+    const { $gettext } = useGettext()
+
     const {
       areResourcesLoading,
       sortFields,
@@ -100,9 +116,7 @@ export default defineComponent({
     } = useResourcesViewDefaults<Resource, any, any[]>()
 
     // pending shares
-    const pending = computed(() =>
-      unref(storeItems).filter((item) => item.status === ShareStatus.pending)
-    )
+    const pending = computed(() => [])
     const {
       sortBy: pendingSortBy,
       sortDir: pendingSortDir,
@@ -117,7 +131,7 @@ export default defineComponent({
 
     // accepted shares
     const accepted = computed(() =>
-      unref(storeItems).filter((item) => item.status === ShareStatus.accepted)
+      unref(storeItems).filter((item) => item.status !== ShareStatus.declined)
     )
     const {
       sortBy: acceptedSortBy,
@@ -167,7 +181,22 @@ export default defineComponent({
       })
     })
 
+    const showHiddenShares = ref(false)
+
+    const switchHiddenShares = () => {
+      showHiddenShares.value = !showHiddenShares.value
+    }
+
+    const switchHiddenSharesLabel = computed(() =>
+      showHiddenShares.value ? $gettext('Show shares') : $gettext('Show hidden shares')
+    )
+
     return {
+      ShareStatus,
+      showHiddenShares,
+      switchHiddenShares,
+      switchHiddenSharesLabel,
+
       // defaults
       loadResourcesTask,
       areResourcesLoading,
@@ -197,10 +226,6 @@ export default defineComponent({
     }
   },
 
-  data: () => ({
-    ShareStatus
-  }),
-
   computed: {
     ...mapGetters(['configuration']),
 
@@ -209,14 +234,14 @@ export default defineComponent({
     },
 
     acceptedTitle() {
-      return this.$gettext('Accepted shares')
+      return this.$gettext('Shared with me')
     },
     acceptedEmptyMessage() {
       return this.$gettext('You have no accepted shares.')
     },
 
     declinedTitle() {
-      return this.$gettext('Declined shares')
+      return this.$gettext('Hidden shares')
     },
     declinedEmptyMessage() {
       return this.$gettext('You have no declined shares.')

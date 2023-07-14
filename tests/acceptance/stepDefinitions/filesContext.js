@@ -67,7 +67,7 @@ When('the user browses to the shared-with-others page using the webUI', async fu
 
 When('the user browses to the shared-via-link page using the webUI', async function () {
   await client.page.webPage().navigateToUsingMenu('Shares')
-  await appBarActions.navigateToSharesSubPage('Shared via link')
+  await appBarActions.navigateToSharesSubPage('Shared publicly')
   return client
 })
 

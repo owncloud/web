@@ -41,7 +41,7 @@ export const useFileActionsShowShares = ({ store }: { store?: Store<any> } = {})
           return false
         }
         if (isLocationSharesActive(router, 'files-shares-with-me')) {
-          if (resources[0].status !== ShareStatus.accepted) {
+          if (resources[0].status === ShareStatus.declined) {
             return false
           }
         }

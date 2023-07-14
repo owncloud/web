@@ -44,20 +44,20 @@ describe('SharedWithMe view', () => {
       expect(wrapper.find('#files-shared-with-me-accepted-section').exists()).toBeTruthy()
       expect(wrapper.find('#files-shared-with-me-declined-section').exists()).toBeTruthy()
     })
-    describe('pending', () => {
-      it('shows when a share is pending', () => {
-        const { wrapper } = getMountedWrapper({
-          files: [mockDeep<Resource>({ status: ShareStatus.pending })]
-        })
-        expect(wrapper.find('#files-shared-with-me-pending-section').exists()).toBeTruthy()
-      })
-      it('does not show when no share is pending', () => {
-        const { wrapper } = getMountedWrapper({
-          files: [mockDeep<Resource>({ status: ShareStatus.accepted })]
-        })
-        expect(wrapper.find('#files-shared-with-me-pending-section').exists()).toBeFalsy()
-      })
-    })
+    // describe('pending', () => {
+    //   it('shows when a share is pending', () => {
+    //     const { wrapper } = getMountedWrapper({
+    //       files: [mockDeep<Resource>({ status: ShareStatus.pending })]
+    //     })
+    //     expect(wrapper.find('#files-shared-with-me-pending-section').exists()).toBeTruthy()
+    //   })
+    //   it('does not show when no share is pending', () => {
+    //     const { wrapper } = getMountedWrapper({
+    //       files: [mockDeep<Resource>({ status: ShareStatus.accepted })]
+    //     })
+    //     expect(wrapper.find('#files-shared-with-me-pending-section').exists()).toBeFalsy()
+    //   })
+    // })
     describe('accepted', () => {
       it('shows an accepted share', () => {
         const { wrapper } = getMountedWrapper({

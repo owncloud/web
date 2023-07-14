@@ -53,7 +53,7 @@ export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
         component: components.Shares.SharedViaLink,
         meta: {
           authContext: 'user',
-          title: $gettext('Files shared via link')
+          title: $gettext('Files shared publicly')
         }
       }
     ]

@@ -12,6 +12,7 @@
       gap-size="none"
       :aria-label="mode === 'create' ? $gettext('Select permission') : $gettext('Edit permission')"
     >
+      <oc-icon v-if="!existingRole" :name="selectedRole.icon" class="oc-pl-s oc-pr-m" />
       <span v-if="!existingRole" class="oc-text-truncate" v-text="inviteLabel" />
       <span v-else class="oc-text-truncate" v-text="$gettext(selectedRole.label)" />
       <oc-icon name="arrow-down-s" />

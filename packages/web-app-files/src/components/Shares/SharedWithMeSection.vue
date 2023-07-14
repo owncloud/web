@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2 class="oc-px-m oc-py-s">
+    <!-- <h2 class="oc-px-m oc-py-s">
       {{ title }}
       <span class="oc-text-medium">({{ items.length }})</span>
-    </h2>
+    </h2> -->
 
     <no-content-message
       v-if="!items.length"
@@ -45,8 +45,9 @@
             class="file-row-share-status-accept"
             @click.stop="triggerAction('accept-share', { space: null, resources: [resource] })"
           >
-            <oc-icon size="small" name="check" />
-            <span v-translate>Accept</span>
+            <oc-icon size="small" name="eye" />
+            <!-- Not the ideal wording? -->
+            <span v-translate>Unhide</span>
           </oc-button>
           <oc-button
             v-if="getShowDeclineButton(resource)"
@@ -54,8 +55,8 @@
             class="file-row-share-decline oc-ml-s"
             @click.stop="triggerAction('decline-share', { space: null, resources: [resource] })"
           >
-            <oc-icon size="small" name="spam-3" fill-type="line" />
-            <span v-translate>Decline</span>
+            <oc-icon size="small" name="eye-off" />
+            <span v-translate>Hide</span>
           </oc-button>
         </div>
       </template>
@@ -229,7 +230,7 @@ export default defineComponent({
 
   computed: {
     displayedFields() {
-      return ['name', 'status', 'owner', 'sdate', 'sharedWith']
+      return ['name', 'owner', 'sdate', 'sharedWith', 'status']
     },
     countFiles() {
       return this.items.filter((s) => s.type !== 'folder').length
@@ -280,10 +281,10 @@ export default defineComponent({
       })
     },
     getShowAcceptButton(resource) {
-      return resource.status === ShareStatus.declined || resource.status === ShareStatus.pending
+      return resource.status === ShareStatus.declined
     },
     getShowDeclineButton(resource) {
-      return resource.status === ShareStatus.accepted || resource.status === ShareStatus.pending
+      return resource.status !== ShareStatus.declined
     },
     toggleShowMore() {
       this.showMore = !this.showMore

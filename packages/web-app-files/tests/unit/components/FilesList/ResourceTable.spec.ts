@@ -70,7 +70,7 @@ const indicators = [
   },
   {
     id: 'file-link',
-    label: 'Shared via link',
+    label: 'Shared publicly',
     visible: true,
     icon: 'link'
   }

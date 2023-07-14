@@ -117,7 +117,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
               !unref(isSearchActive) &&
               (isLocationTrashActive(router, 'files-trash-generic') ||
                 (isLocationSharesActive(router, 'files-shares-with-me') &&
-                  resources[0].status !== ShareStatus.accepted))
+                  resources[0].status === ShareStatus.declined))
             ) {
               return false
             }

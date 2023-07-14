@@ -19,6 +19,7 @@
       <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
     </div>
     <template v-if="hasSharees">
+      <!-- <name-and-copy :link="shareLink" /> -->
       <ul
         id="files-collaborators-list"
         class="oc-list oc-list-divider oc-overflow-hidden"

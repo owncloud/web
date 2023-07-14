@@ -18,7 +18,7 @@ exports[`SharesNavigation component renders a shares navigation for both mobile 
     <li>
       <oc-button-stub appearance="raw" class="oc-mr-m oc-py-s shares-nav-desktop" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" to="/files/shares/via-link/" type="router-link" variation="passive">
         <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="link" size="small" type="span" variation="passive"></oc-icon-stub>
-        <span>Shared via link</span>
+        <span>Shared publicly</span>
       </oc-button-stub>
     </li>
   </oc-list-stub>
@@ -50,7 +50,7 @@ exports[`SharesNavigation component renders a shares navigation for both mobile 
             <span class="icon-box">
               <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="link" size="medium" type="span" variation="passive"></oc-icon-stub>
             </span>
-            <span>Shared via link</span>
+            <span>Shared publicly</span>
           </oc-button-stub>
         </li>
       </oc-list-stub>

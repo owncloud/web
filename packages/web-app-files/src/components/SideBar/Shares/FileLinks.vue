@@ -34,7 +34,6 @@
         v-if="canCreateLinks"
         id="files-file-link-add"
         variation="primary"
-        appearance="raw"
         data-testid="files-link-add-btn"
         @click="addNewLink"
       >
@@ -304,8 +303,9 @@ export default defineComponent({
 
     linksHeading() {
       if (this.hasSpaces) {
-        return this.$gettext('Share via link')
+        return this.$gettext('Share publicly')
       }
+      // Arguably don't change texts for oC10?
       return this.$gettext('Share via public link')
     },
 
