@@ -4,11 +4,16 @@
     :class="classes"
   >
     <div class="oc-flex oc-flex-wrap oc-flex-middle oc-flex-1" :role="role" :aria-live="ariaLive">
-      <div class="oc-flex oc-flex-middle">
-        <oc-icon :variation="iconVariation" name="information" fill-type="line" class="oc-mr-s" />
-        <div class="oc-notification-message-title">
-          {{ title }}
+      <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+        <div class="oc-flex">
+          <oc-icon :variation="iconVariation" name="information" fill-type="line" class="oc-mr-s" />
+          <div class="oc-notification-message-title">
+            {{ title }}
+          </div>
         </div>
+        <oc-button class="oc-mr-s" appearance="raw" @click="close"
+          ><oc-icon name="close"
+        /></oc-button>
       </div>
       <div
         v-if="message"
@@ -22,6 +27,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
+import OcButton from '../OcButton/OcButton.vue'
 
 /**
  * Notifications are used to inform users about errors, warnings and as confirmations for their actions.
@@ -31,7 +37,8 @@ export default defineComponent({
   status: 'ready',
   release: '1.0.0',
   components: {
-    OcIcon
+    OcIcon,
+    OcButton
   },
   props: {
     /**
@@ -114,7 +121,6 @@ export default defineComponent({
 <style lang="scss">
 .oc-notification-message {
   background-color: var(--oc-color-background-default) !important;
-  cursor: pointer;
   margin-top: var(--oc-space-small);
   position: relative;
   word-break: break-word;
