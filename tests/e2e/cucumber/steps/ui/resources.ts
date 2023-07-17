@@ -8,6 +8,7 @@ import { displayedResourceType } from '../../../support/objects/app-files/resour
 import { Public } from '../../../support/objects/app-files/page/public'
 import { Resource } from '../../../support/objects/app-files'
 import * as runtimeFs from '../../../support/utils/runtimeFs'
+import { searchFilter } from '../../../support/objects/app-files/resource/actions'
 
 When(
   '{string} creates the following resource(s)',
@@ -226,14 +227,21 @@ Then(
 )
 
 When(
-  /^"([^"]*)" searches "([^"]*)" using the global search( and presses enter)?$/,
-  async function (this: World, stepUser: string, keyword: string, command: string): Promise<void> {
+  /^"([^"]*)" searches "([^"]*)" using the global search and the "([^"]*)" filter( and presses enter)?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    keyword: string,
+    filter: string,
+    command: string
+  ): Promise<void> {
     keyword = keyword ?? ''
     const pressEnter = !!command && command.endsWith('presses enter')
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.searchResource({
       keyword,
+      filter: filter as searchFilter,
       pressEnter
     })
   }
