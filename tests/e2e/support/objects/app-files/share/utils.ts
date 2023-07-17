@@ -1,12 +1,9 @@
 import { errors, Page } from 'playwright'
 import util from 'util'
-import { fileRow } from '../resource/actions'
 
 const acceptedShareItem =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//span[@data-test-user-name="%s"]'
-const actionsTriggerButton =
-  '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "resource-table-btn-action-dropdown")]'
-const showDetailsButton = '.oc-files-actions-show-details-trigger'
+const itemSelector = '.files-table [data-test-resource-name="%s"]'
 
 export const resourceIsNotOpenable = async ({
   page,
@@ -15,22 +12,16 @@ export const resourceIsNotOpenable = async ({
   page: Page
   resource: string
 }): Promise<boolean> => {
-  const resourceLocator = page.locator(util.format(actionsTriggerButton, resource))
-  const itemId = await resourceLocator.locator(fileRow).getAttribute('data-item-id')
-  await Promise.all([
-    page.waitForResponse((resp) => {
-      return (
-        (resp.url().endsWith(encodeURIComponent(resource)) ||
-          resp.url().endsWith(encodeURIComponent(itemId))) &&
-        resp.status() === 404 &&
-        resp.request().method() === 'PROPFIND'
-      )
-    }),
-    page.locator(showDetailsButton).click()
-  ]).catch(() => {
+  const resourceLocator = page.locator(util.format(itemSelector, resource))
+  try {
+    await Promise.all([
+      page.waitForRequest((req) => req.method() === 'PROPFIND', { timeout: 500 }),
+      resourceLocator.click()
+    ])
     return false
-  })
-  return true
+  } catch (e) {
+    return true
+  }
 }
 
 export const isAcceptedSharePresent = async ({
