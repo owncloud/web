@@ -70,7 +70,7 @@ const mutations = {
     const found = index > -1
 
     if (found) {
-      spaces.splice(index, 1, space)
+      Object.assign(spaces[index], space)
     } else {
       spaces.push(space)
     }
