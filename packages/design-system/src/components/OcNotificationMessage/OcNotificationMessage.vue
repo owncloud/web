@@ -11,21 +11,46 @@
             {{ title }}
           </div>
         </div>
-        <oc-button class="oc-mr-s" appearance="raw" @click="close"
-          ><oc-icon name="close"
-        /></oc-button>
+        <oc-button appearance="raw" @click="close"><oc-icon name="close" /></oc-button>
       </div>
-      <div
-        v-if="message"
-        class="oc-text-muted oc-width-1-1 oc-notification-message-content oc-mt-s oc-pl-s oc-ml-l"
-      >
-        {{ message }}
+      <div class="oc-width-1-1 oc-notification-message-content">
+        <div class="oc-flex oc-flex-between oc-width-1-1 oc-mt-s">
+          <span class="oc-mr-s" v-text="message" />
+          <oc-button
+            v-if="errorDescription"
+            class="oc-notification-message-error-description-toggle-button"
+            gap-size="none"
+            appearance="raw"
+            @click="showErrorDescription = !showErrorDescription"
+          >
+            <span v-text="$gettext('Details')"></span>
+            <oc-icon :name="showErrorDescription ? 'arrow-up-s' : 'arrow-down-s'"
+          /></oc-button>
+        </div>
+        <div class="oc-mt-l" v-if="showErrorDescription">
+          <oc-textarea
+            class="oc-mt-s oc-notification-message-error-description-textarea"
+            :label="errorDescriptionLabel"
+            :model-value="errorDescription"
+            rows="4"
+            readonly
+          />
+          <oc-button
+            class="oc-width-1-1 oc-mt-xs"
+            size="small"
+            variation="primary"
+            appearance="filled"
+            v-text="$gettext('Copy')"
+            @click="copyErrorDescriptionToClipboard"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
+import { useGettext } from 'vue3-gettext'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 
@@ -39,6 +64,26 @@ export default defineComponent({
   components: {
     OcIcon,
     OcButton
+  },
+  setup: function (props) {
+    const { $gettext } = useGettext()
+    const showErrorDescription = ref(false)
+
+    const errorDescriptionLabel = computed(() => {
+      return $gettext(
+        'Copy the following information to pass them to technical support to troubleshoot the problem:'
+      )
+    })
+
+    const copyErrorDescriptionToClipboard = () => {
+      navigator.clipboard.writeText(props.errorDescription)
+    }
+
+    return {
+      errorDescriptionLabel,
+      showErrorDescription,
+      copyErrorDescriptionToClipboard
+    }
   },
   props: {
     /**
@@ -68,7 +113,15 @@ export default defineComponent({
     message: {
       type: String,
       required: false,
-      default: null
+      default: 'Dödelerror'
+    },
+    /**
+     * The error description that will be displayed in notification
+     */
+    errorDescription: {
+      type: String,
+      required: false,
+      default: 'hello'
     },
     /**
      * Number of seconds the message shows. It will disappear after this time.
@@ -102,9 +155,10 @@ export default defineComponent({
     /**
      * Notification will be destroyed if timeout is set
      */
-    setTimeout(() => {
+    /*setTimeout(() => {
       this.close()
     }, this.timeout * 1000)
+     */
   },
   methods: {
     close() {
@@ -127,6 +181,20 @@ export default defineComponent({
 
   &-title {
     font-size: 1.15rem;
+  }
+
+  &-error-description {
+    &-toggle-button {
+      word-break: keep-all;
+    }
+
+    &-textarea {
+      resize: none;
+
+      label {
+        color: var(--oc-color-text-muted);
+      }
+    }
   }
 }
 </style>
