@@ -57,6 +57,7 @@ const restoreResourceButton = '.oc-files-actions-restore-trigger'
 const globalSearchInput = '.oc-search-input'
 const globalSearchBarFilter = '.oc-search-bar-filter'
 const globalSearchBarFilterAllFiles = '//*[@data-test-id="all-files"]'
+const globalSearchBarFilterCurrentFolder = '//*[@data-test-id="current-folder"]'
 const searchList =
   '//div[@id="files-global-search-options"]//li[contains(@class,"preview")]//span[@class="oc-resource-name"]'
 const globalSearchOptions = '#files-global-search-options'
@@ -954,9 +955,11 @@ export const getTagsForResourceVisibilityInDetailsPanel = async (
 
   return true
 }
+export type searchFilter = 'all files' | 'current folder'
 
 export interface searchResourceGlobalSearchArgs {
   keyword: string
+  filter: searchFilter
   pressEnter?: boolean
   page: Page
 }
@@ -964,13 +967,17 @@ export interface searchResourceGlobalSearchArgs {
 export const searchResourceGlobalSearch = async (
   args: searchResourceGlobalSearchArgs
 ): Promise<void> => {
-  const { page, keyword, pressEnter } = args
+  const { page, keyword, filter, pressEnter } = args
 
   // .reload() waits nicely for search indexing to be finished
   await page.reload()
 
   await page.locator(globalSearchBarFilter).click()
-  await page.locator(globalSearchBarFilterAllFiles).click()
+  await page
+    .locator(
+      filter === 'all files' ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
+    )
+    .click()
 
   await Promise.all([
     keyword &&
