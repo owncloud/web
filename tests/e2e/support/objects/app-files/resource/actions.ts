@@ -972,6 +972,12 @@ export const searchResourceGlobalSearch = async (
   // .reload() waits nicely for search indexing to be finished
   await page.reload()
 
+  if (!keyword) {
+    await page.locator(globalSearchInput).click()
+    await page.keyboard.press('Enter')
+    return
+  }
+
   await page.locator(globalSearchBarFilter).click()
   await page
     .locator(
@@ -980,15 +986,16 @@ export const searchResourceGlobalSearch = async (
     .click()
 
   await Promise.all([
-    keyword &&
-      page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),
+    page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),
     page.locator(globalSearchInput).fill(keyword)
   ])
 
   keyword && (await expect(page.locator(globalSearchOptions)).toBeVisible())
   await expect(page.locator(loadingSpinner)).not.toBeVisible()
 
-  pressEnter && (await page.keyboard.press('Enter'))
+  if (pressEnter) {
+    await page.keyboard.press('Enter')
+  }
 }
 
 export type displayedResourceType = 'search list' | 'files list'

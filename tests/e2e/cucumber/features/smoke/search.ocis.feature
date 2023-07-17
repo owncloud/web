@@ -108,14 +108,14 @@ Feature: Search
       | mainFolder/exampleInsideTheMainFolder.txt          | I'm in the main folder    |
       | mainFolder/subFolder/exampleInsideTheSubFolder.txt | I'm in the sub folder     |
     When "Alice" opens folder "mainFolder"
-    And "Alice" searches "example" using the global search and the "all files" filter and presses enter
+    And "Alice" searches "example" using the global search and the "all files" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource                          |
       | exampleInsideThePersonalSpace.txt |
       | exampleInsideTheMainFolder.txt    |
       | exampleInsideTheSubFolder.txt     |
 
-    When "Alice" searches "example" using the global search and the "current folder" filter and presses enter
+    When "Alice" searches "example" using the global search and the "current folder" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource                       |
       | exampleInsideTheMainFolder.txt |

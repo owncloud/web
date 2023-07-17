@@ -91,8 +91,8 @@ Feature: Search
       | withTag.txt                   |
       | spaceFolder/spaceTextfile.txt |
     When "Brian" opens the following file in texteditor
-      | resource                      |
-      | textfile.txt                  |
+      | resource     |
+      | textfile.txt |
     And "Brian" closes the file viewer
     Then following resources should be displayed in the files list for user "Brian"
       | resource                      |
