@@ -25,15 +25,16 @@
         @keydown.enter="onSearch"
         @keyup="$emit('keyup', $event)"
       />
-      <oc-button
-        v-if="query.length"
-        :aria-label="$gettext('Clear search query')"
-        class="oc-search-clear oc-position-small oc-position-center-right oc-mt-rm"
-        appearance="raw"
-        @click="onClear"
+      <div
+        v-if="availableLocationOptions.length > 0"
+        class="oc-location-search oc-position-small oc-position-center-right oc-mt-rm"
+        @click.stop
       >
-        <oc-icon name="close" size="small" variation="passive" />
-      </oc-button>
+        <oc-search-bar-filter
+          :location-options="availableLocationOptions"
+          @update:model-value="$emit('locationFilterChange', $event)"
+        />
+      </div>
       <oc-button
         v-oc-tooltip="$gettext('Open advanced search')"
         :aria-label="$gettext('Open advanced search')"
@@ -75,6 +76,7 @@ import OcButton from '../OcButton/OcButton.vue'
 import OcGrid from '../OcGrid/OcGrid.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcSpinner from '../OcSpinner/OcSpinner.vue'
+import OcSearchBarFilter from '../OcSearchBarFilter/OcSearchBarFilter.vue'
 
 /**
  * The search bar is an input element used for searching server side resources or to filter local results.
@@ -98,7 +100,8 @@ export default defineComponent({
     OcButton,
     OcGrid,
     OcIcon,
-    OcSpinner
+    OcSpinner,
+    OcSearchBarFilter
   },
   props: {
     /**
@@ -233,9 +236,15 @@ export default defineComponent({
       type: Function,
       required: false,
       default: () => {}
+    },
+
+    availableLocationOptions: {
+      type: Array<any>,
+      required: false,
+      default: () => []
     }
   },
-  emits: ['advancedSearch', 'clear', 'input', 'keyup', 'search'],
+  emits: ['advancedSearch', 'clear', 'input', 'keyup', 'search', 'locationFilterChange'],
   setup(props) {
     const query = ref<string>('')
     watch(
@@ -294,19 +303,7 @@ export default defineComponent({
       this.$emit('input', query)
       if (this.typeAhead) this.onSearch(query)
     },
-    onClear() {
-      this.query = ''
-      this.onType('')
-      this.onSearch()
-      ;(this.$refs.searchInput as HTMLElement).focus()
 
-      /**
-       * Clear event triggered after the clear of the search query
-       * @event clear
-       * @type {event}
-       */
-      this.$emit('clear')
-    },
     onCancel() {
       this.query = ''
       this.onType('')
@@ -318,6 +315,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.oc-location-search {
+  z-index: 9999;
+  margin-right: 34px !important;
+  float: right;
+  .oc-drop {
+    width: 180px;
+  }
+}
 .oc-search {
   min-width: $form-width-medium;
 

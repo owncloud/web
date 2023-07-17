@@ -42,6 +42,7 @@
             :has-file-extensions="hasFileExtensions"
             :has-pagination="hasPagination"
             per-page-storage-prefix="files"
+            :view-mode-default="viewModeDefault"
           />
           <sidebar-toggle v-if="hasSidebarToggle" :side-bar-open="sideBarOpen" />
         </div>
@@ -90,7 +91,7 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
-import { useRouteMeta, useStore } from 'web-pkg/src'
+import { useRouteMeta, useStore, ViewModeConstants } from 'web-pkg/src/composables'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
 import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
@@ -106,6 +107,11 @@ export default defineComponent({
     ViewOptions
   },
   props: {
+    viewModeDefault: {
+      type: String,
+      required: false,
+      default: ViewModeConstants.default.name
+    },
     breadcrumbs: {
       type: Array as PropType<BreadcrumbItem[]>,
       default: () => []

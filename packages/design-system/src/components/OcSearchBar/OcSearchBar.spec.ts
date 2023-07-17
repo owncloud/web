@@ -184,35 +184,6 @@ describe('OcSearchBar', () => {
       expect(wrapper.emitted('search')).toBeFalsy()
     })
   })
-  describe('clear search query button', () => {
-    describe('visibility', () => {
-      it('should be visible only if query is not empty', async () => {
-        const wrapper = getMountedWrapper()
-        expect(wrapper.find(selectors.searchClearButton).exists()).toBeFalsy()
-        const searchInput = wrapper.find(selectors.searchInput)
-        await searchInput.setValue('a')
-        expect((searchInput.element as HTMLInputElement).value).toBe('a')
-        expect(wrapper.find(selectors.searchClearButton).exists()).toBeTruthy()
-      })
-    })
-    describe('on clear', () => {
-      let wrapper, clearButton, searchInput
-      beforeEach(async () => {
-        wrapper = getMountedWrapper()
-        searchInput = wrapper.find(selectors.searchInput)
-        await searchInput.setValue('a')
-        clearButton = wrapper.find(selectors.searchClearButton)
-      })
-      it('should emit clear if clicked', async () => {
-        await clearButton.trigger('click')
-        expect(wrapper.emitted('clear')).toBeTruthy()
-      })
-      it('should clear search query', async () => {
-        await clearButton.trigger('click')
-        expect(searchInput.element.value).toBe('')
-      })
-    })
-  })
   describe('advanced search button', () => {
     it('should be visible', () => {
       const wrapper = getWrapper()

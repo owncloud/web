@@ -99,7 +99,8 @@ import {
   useRouteQueryPersisted,
   useRouter,
   PaginationConstants,
-  ViewModeConstants
+  ViewModeConstants,
+  useRouteName
 } from 'web-pkg/src/composables'
 import { ViewMode } from 'web-pkg/src/ui/types'
 
@@ -123,6 +124,11 @@ export default defineComponent({
     perPageStoragePrefix: {
       type: String,
       required: true
+    },
+    viewModeDefault: {
+      type: String,
+      required: false,
+      default: ViewModeConstants.defaultModeName
     },
     viewModes: {
       type: Array as PropType<ViewMode[]>,
@@ -148,10 +154,13 @@ export default defineComponent({
       defaultValue: props.perPageDefault,
       storagePrefix: props.perPageStoragePrefix
     })
+
+    const routeName = useRouteName()
     const viewModeQuery = useRouteQueryPersisted({
-      name: ViewModeConstants.queryName,
-      defaultValue: ViewModeConstants.defaultModeName
+      name: `${unref(routeName)}-${ViewModeConstants.queryName}`,
+      defaultValue: props.viewModeDefault
     })
+
     const viewSizeQuery = useRouteQueryPersisted({
       name: ViewModeConstants.tilesSizeQueryName,
       defaultValue: ViewModeConstants.tilesSizeDefault.toString()

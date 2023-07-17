@@ -5,12 +5,13 @@
         :breadcrumbs="breadcrumbs"
         :has-sidebar-toggle="true"
         :show-actions-on-selection="true"
-        :has-bulk-actions="true"
+        :has-bulk-actions="false"
         :has-hidden-files="false"
         :has-file-extensions="false"
         :has-pagination="false"
         :side-bar-open="sideBarOpen"
         :view-modes="viewModes"
+        :view-mode-default="ViewModeConstants.tilesView.name"
       >
         <template #actions>
           <create-space v-if="hasCreatePermission" class="oc-mr-s" />
@@ -142,6 +143,7 @@ import {
   useRouteQueryPersisted,
   useSort,
   useStore,
+  useRouteName,
   useMutationSubscription
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
@@ -225,9 +227,11 @@ export default defineComponent({
     const hasCreatePermission = computed(() => can('create-all', 'Drive'))
     const viewModes = computed(() => [ViewModeConstants.default, ViewModeConstants.tilesView])
 
+    const routeName = useRouteName()
+
     const viewMode = useRouteQueryPersisted({
-      name: ViewModeConstants.queryName,
-      defaultValue: ViewModeConstants.defaultModeName
+      name: `${unref(routeName)}-${ViewModeConstants.queryName}`,
+      defaultValue: ViewModeConstants.tilesView.name
     })
 
     const getManagerNames = (space: SpaceResource) => {

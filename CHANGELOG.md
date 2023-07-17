@@ -46,6 +46,8 @@ Summary
 * Enhancement - Hover tooltips in topbar: [#9280](https://github.com/owncloud/web/issues/9280)
 * Enhancement - Search list add highlighted file content: [#9294](https://github.com/owncloud/web/pull/9294)
 * Enhancement - Resolve pulic links to their actual location: [#9299](https://github.com/owncloud/web/pull/9299)
+* Enhancement - Add search location filter: [#9304](https://github.com/owncloud/web/pull/9304)
+* Enhancement - Ambiguation for URL view mode params: [#9344](https://github.com/owncloud/web/pull/9344)
 * Enhancement - Batch actions redesign: [#9346](https://github.com/owncloud/web/pull/9346)
 * Enhancement - Tag comma separation on client side: [#9348](https://github.com/owncloud/web/pull/9348)
 * Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
@@ -362,6 +364,21 @@ Details
 
    https://github.com/owncloud/web/issues/9296
    https://github.com/owncloud/web/pull/9299
+
+* Enhancement - Add search location filter: [#9304](https://github.com/owncloud/web/pull/9304)
+
+   We've added the option to set the search location in the searchbar.
+
+   https://github.com/owncloud/web/issues/9258
+   https://github.com/owncloud/web/pull/9304
+
+* Enhancement - Ambiguation for URL view mode params: [#9344](https://github.com/owncloud/web/pull/9344)
+
+   Show tiles view in projects spaces per default, changed route+storage params to be different
+   from one another.
+
+   https://github.com/owncloud/web/issues/9337
+   https://github.com/owncloud/web/pull/9344
 
 * Enhancement - Batch actions redesign: [#9346](https://github.com/owncloud/web/pull/9346)
 

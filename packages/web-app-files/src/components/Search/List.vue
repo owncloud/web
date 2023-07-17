@@ -190,6 +190,9 @@ export default defineComponent({
     const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
 
     const searchTermQuery = useRouteQuery('term')
+    const scopeQuery = useRouteQuery('scope')
+    const doUseScope = useRouteQuery('useScope')
+
     const searchTerm = computed(() => {
       return queryItemAsString(unref(searchTermQuery))
     })
@@ -234,6 +237,9 @@ export default defineComponent({
       if (fullTextQuery) {
         term = `+Content:"${unref(searchTerm)}"`
       }
+      if (unref(scopeQuery) && unref(doUseScope) === 'true') {
+        term += ` scope:${unref(scopeQuery)}`
+      }
 
       const tagsQuery = queryItemAsString(unref(tagParam))
       if (tagsQuery) {
@@ -275,11 +281,10 @@ export default defineComponent({
     watch(
       () => unref(route).query,
       (newVal, oldVal) => {
-        const filters = ['q_fullText', 'q_tags']
+        const filters = ['q_fullText', 'q_tags', 'useScope']
         const isChange =
           newVal?.term !== oldVal?.term ||
           filters.some((f) => newVal[f] ?? undefined !== oldVal[f] ?? undefined)
-
         if (isChange && isLocationCommonActive(router, 'files-common-search')) {
           emit('search', buildSearchTerm(true))
         }

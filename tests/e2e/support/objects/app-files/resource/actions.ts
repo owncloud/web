@@ -55,6 +55,8 @@ const notificationMessage = '.oc-notification-message'
 const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
 const restoreResourceButton = '.oc-files-actions-restore-trigger'
 const globalSearchInput = '.oc-search-input'
+const globalSearchBarFilter = '.oc-search-bar-filter'
+const globalSearchBarFilterAllFiles = '//*[@data-test-id="all-files"]'
 const searchList =
   '//div[@id="files-global-search-options"]//li[contains(@class,"preview")]//span[@class="oc-resource-name"]'
 const globalSearchOptions = '#files-global-search-options'
@@ -955,23 +957,31 @@ export const getTagsForResourceVisibilityInDetailsPanel = async (
 
 export interface searchResourceGlobalSearchArgs {
   keyword: string
+  pressEnter?: boolean
   page: Page
 }
 
 export const searchResourceGlobalSearch = async (
   args: searchResourceGlobalSearchArgs
 ): Promise<void> => {
-  const { page, keyword } = args
+  const { page, keyword, pressEnter } = args
 
   // .reload() waits nicely for search indexing to be finished
   await page.reload()
 
+  await page.locator(globalSearchBarFilter).click()
+  await page.locator(globalSearchBarFilterAllFiles).click()
+
   await Promise.all([
-    page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),
+    keyword &&
+      page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),
     page.locator(globalSearchInput).fill(keyword)
   ])
-  await expect(page.locator(globalSearchOptions)).toBeVisible()
+
+  keyword && (await expect(page.locator(globalSearchOptions)).toBeVisible())
   await expect(page.locator(loadingSpinner)).not.toBeVisible()
+
+  pressEnter && (await page.keyboard.press('Enter'))
 }
 
 export type displayedResourceType = 'search list' | 'files list'

@@ -1,0 +1,8 @@
+Enhancement: Add dismiss button to OcNotificationsMessage component
+
+We've added added dismiss button to the OcNotificationsMessage component,
+which closes the open notification immediately.
+
+https://github.com/owncloud/web/pull/9421
+https://github.com/owncloud/web/issues/9420
+

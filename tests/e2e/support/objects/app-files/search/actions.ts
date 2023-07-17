@@ -1,7 +1,6 @@
 import { Page } from 'playwright'
 import util from 'util'
 
-const globalSearchInputSelector = '.oc-search-input'
 const searchResultMessageSelector = '//p[@class="oc-text-muted"]'
 const selectTagDropdownSelector =
   '//div[contains(@class,"files-search-filter-tags")]//button[contains(@class,"oc-filter-chip-button")]'
@@ -13,40 +12,32 @@ const enableSearchInFileContentSelector =
 const disableSearchInFileContentSelector =
   '//div[contains(@class,"files-search-filter-full-text")]//button[contains(@class,"oc-filter-chip-clear")]'
 
-export interface fullTextSearchArgs {
-  keyword: string
-  page: Page
-}
-
-export const fullTextSearch = async (args: fullTextSearchArgs): Promise<void> => {
-  const { page, keyword } = args
-  await page.locator(globalSearchInputSelector).fill(keyword)
-  let waitResponse
-  if (keyword) {
-    waitResponse = page.waitForResponse(
-      (resp) => resp.status() === 207 && resp.request().method() === 'REPORT'
-    )
-  }
-  await page.keyboard.press('Enter')
-  if (keyword) {
-    await waitResponse
-  }
-}
-
-export const getSearchResultMessage = ({ page }): Promise<string> => {
+export const getSearchResultMessage = ({ page }: { page: Page }): Promise<string> => {
   return page.locator(searchResultMessageSelector).innerText()
 }
 
-export const selectTagFilter = async ({ tag, page }): Promise<void> => {
+export const selectTagFilter = async ({
+  tag,
+  page
+}: {
+  tag: StaticRangeInit
+  page: Page
+}): Promise<void> => {
   await page.locator(selectTagDropdownSelector).click()
   await page.locator(util.format(tagFilterChipSelector, tag)).click()
 }
 
-export const clearTagFilter = async ({ page }): Promise<void> => {
+export const clearTagFilter = async ({ page }: { page: Page }): Promise<void> => {
   await page.locator(clearTagFilterSelector).click()
 }
 
-export const toggleSearchInFileContent = async ({ enableOrDisable, page }): Promise<void> => {
+export const toggleSearchInFileContent = async ({
+  enableOrDisable,
+  page
+}: {
+  enableOrDisable: string
+  page: Page
+}): Promise<void> => {
   const selector =
     enableOrDisable === 'enable'
       ? enableSearchInFileContentSelector
