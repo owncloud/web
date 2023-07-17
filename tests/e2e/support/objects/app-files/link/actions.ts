@@ -102,17 +102,15 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
   }
   await page.locator(addPublicLinkButton).click()
   await clearPopups(page)
-  // await waitForPopupNotPresent(page)
   return await page.locator(util.format(publicLink, 'Link')).textContent()
-}
-
-export const waitForPopupNotPresent = async (page): Promise<void> => {
-  await page.locator(linkUpdateDialog).last().waitFor()
-  await page.locator(linkUpdateDialog).last().waitFor({ state: 'detached' })
 }
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
   const { page, resource, linkName, role, space } = args
+
+  // clear all popups
+  await clearPopups(page)
+
   let resourceName = null
   let shareType = 'space-share'
   if (!space) {
@@ -137,13 +135,17 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
     page.locator(util.format(publicLinkSetRoleButton, shareRoles[role])).click()
   ])
 
-  const message = await page.locator(linkUpdateDialog).last().textContent()
+  const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
   return await page.locator(publicLinkCurrentRole).textContent()
 }
 
 export const changeName = async (args: changeNameArgs): Promise<string> => {
   const { page, resource, space, newName } = args
+
+  // clear all popups
+  await clearPopups(page)
+
   if (!space) {
     const resourcePaths = resource.split('/')
     const resourceName = resourcePaths.pop()
@@ -157,13 +159,17 @@ export const changeName = async (args: changeNameArgs): Promise<string> => {
   await page.locator(editPublicLinkRenameButton).click()
   await page.locator(editPublicLinkInput).fill(newName)
   await page.locator(editPublicLinkRenameConfirm).click()
-  const message = await page.locator(linkUpdateDialog).last().textContent()
+  const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
   return await page.locator(getMostRecentLink + '//h4').textContent()
 }
 
 export const addPassword = async (args: addPasswordArgs): Promise<void> => {
   const { page, resource, linkName, newPassword } = args
+
+  // clear all popups
+  await clearPopups(page)
+
   const resourcePaths = resource.split('/')
   const resourceName = resourcePaths.pop()
   if (resourcePaths.length) {
@@ -175,7 +181,7 @@ export const addPassword = async (args: addPasswordArgs): Promise<void> => {
   await page.locator(editPublicLinkAddPasswordButton).click()
   await page.locator(editPublicLinkInput).fill(newPassword)
   await page.locator(editPublicLinkRenameConfirm).click()
-  const message = await page.locator(linkUpdateDialog).last().textContent()
+  const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
 }
 
@@ -206,12 +212,16 @@ export const addExpiration = async (args: addExpirationArgs): Promise<void> => {
 
 export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {
   const { page, resourceName, name } = args
+
+  // clear all popups
+  await clearPopups(page)
+
   await sidebar.open({ page: page, resource: resourceName })
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(editPublicLinkButton, name)).click()
   await page.locator(util.format(deleteLinkButton, name)).click()
   await page.locator(confirmDeleteButton).click()
-  const message = await page.locator(linkUpdateDialog).last().textContent()
+  const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was deleted successfully')
 }
 
