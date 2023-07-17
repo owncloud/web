@@ -63,7 +63,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
-import { debounce } from 'lodash-es'
+import { debounce, find } from 'lodash-es'
 
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
@@ -103,6 +103,26 @@ export default defineComponent({
       return getSpaceFromResource({ spaces: store.getters['runtime/spaces/spaces'], resource })
     }
 
+    const { loadResourcesTask, selectedResourcesIds, paginatedResources } =
+      useResourcesViewDefaults<Resource, any, any[]>()
+
+    useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
+      if (mutation.payload.field === 'shareTypes') {
+        if (selectedResourcesIds.value.length !== 1) return
+        const id = selectedResourcesIds.value[0]
+
+        const match = find(paginatedResources.value, { id })
+        if (!match) return
+
+        await loadResourcesTask.perform()
+
+        const matchedNewResource = find(paginatedResources.value, { fileId: match.fileId })
+        if (!matchedNewResource) return
+
+        selectedResourcesIds.value = [matchedNewResource.id]
+      }
+    })
+
     return {
       ...useFileActions(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
@@ -128,14 +148,6 @@ export default defineComponent({
   async created() {
     await this.loadResourcesTask.perform()
     this.scrollToResourceFromRoute(this.paginatedResources)
-
-    useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
-      if (mutation.payload.field === 'shareTypes') {
-        const keepSelectedResources = this.selectedResourcesIds
-        await this.loadResourcesTask.perform()
-        this.selectedResourcesIds = keepSelectedResources
-      }
-    })
   },
 
   beforeUnmount() {

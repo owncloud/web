@@ -65,7 +65,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
-import { debounce } from 'lodash-es'
+import { debounce, find } from 'lodash-es'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
@@ -108,6 +108,26 @@ export default defineComponent({
     const getSpace = (resource: Resource): SpaceResource => {
       return getSpaceFromResource({ spaces: store.getters['runtime/spaces/spaces'], resource })
     }
+
+    const { loadResourcesTask, selectedResourcesIds, paginatedResources } =
+      useResourcesViewDefaults<Resource, any, any[]>()
+
+    useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
+      if (mutation.payload.field === 'shareTypes') {
+        if (selectedResourcesIds.value.length !== 1) return
+        const id = selectedResourcesIds.value[0]
+
+        const match = find(paginatedResources.value, { id })
+        if (!match) return
+
+        await loadResourcesTask.perform()
+
+        const matchedNewResource = find(paginatedResources.value, { fileId: match.fileId })
+        if (!matchedNewResource) return
+
+        selectedResourcesIds.value = [matchedNewResource.id]
+      }
+    })
 
     return {
       ...useFileActions(),
