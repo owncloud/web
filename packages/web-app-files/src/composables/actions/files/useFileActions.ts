@@ -49,7 +49,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     return !!unref(appProviders).find((appProvider) => appProvider.enabled)
   })
 
-  const { openUrl } = useWindowOpen
+  const { openUrl } = useWindowOpen()
 
   const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
   const { actions: copyActions } = useFileActionsCopy({ store })
