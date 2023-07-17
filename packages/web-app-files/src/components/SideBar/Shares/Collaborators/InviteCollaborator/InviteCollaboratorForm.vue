@@ -46,12 +46,7 @@
         :share-types="selectedCollaborators.map((c) => c.value.shareType)"
         @option-change="collaboratorExpiryChanged"
       />
-      <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
-        <oc-spinner :aria-label="$gettext('Creating share')" size="small" />
-        <span :aria-hidden="true" v-text="$gettext(saveButtonLabel)" />
-      </oc-button>
       <oc-button
-        v-else
         id="new-collaborators-form-create-button"
         key="new-collaborator-save-button"
         data-testid="new-collaborators-form-create-button"
@@ -59,7 +54,7 @@
         variation="primary"
         appearance="filled"
         submit="submit"
-        :loading="saving"
+        :spinner="savingDelayed"
         @click="share"
       >
         <span v-text="$gettext(saveButtonLabel)" />
@@ -147,6 +142,7 @@ export default defineComponent({
       selectedRole: null,
       customPermissions: null,
       saving: false,
+      savingDelayed: false,
       expirationDate: null,
       searchQuery: ''
     }
@@ -184,6 +180,21 @@ export default defineComponent({
         this.resource.isFolder,
         this.hasRoleCustomPermissions
       )[0]
+    }
+  },
+
+  watch: {
+    saving(newValue, oldValue) {
+      if (!newValue) {
+        this.savingDelayed = false
+        return
+      }
+      setTimeout(() => {
+        if (!this.saving) {
+          return
+        }
+        this.savingDelayed = true
+      }, 700)
     }
   },
 
@@ -379,5 +390,8 @@ export default defineComponent({
 <style lang="scss">
 .role-selection-dropdown {
   max-width: 150px;
+}
+#new-collaborators-form-create-button {
+  min-width: 100px;
 }
 </style>
