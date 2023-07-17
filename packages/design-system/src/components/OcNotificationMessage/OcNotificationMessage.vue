@@ -40,7 +40,7 @@
             size="small"
             variation="primary"
             appearance="filled"
-            v-text="$gettext('Copy')"
+            v-text="copyErrorDescriptionText"
             @click="copyErrorDescriptionToClipboard"
           />
         </div>
@@ -68,6 +68,8 @@ export default defineComponent({
   setup: function (props) {
     const { $gettext } = useGettext()
     const showErrorDescription = ref(false)
+    const copyErrorDescriptionInitialText = $gettext('Copy')
+    const copyErrorDescriptionText = ref(copyErrorDescriptionInitialText)
 
     const errorDescriptionLabel = computed(() => {
       return $gettext(
@@ -77,11 +79,14 @@ export default defineComponent({
 
     const copyErrorDescriptionToClipboard = () => {
       navigator.clipboard.writeText(props.errorDescription)
+      copyErrorDescriptionText.value = $gettext('Copied to clipboard...')
+      setTimeout(() => (copyErrorDescriptionText.value = copyErrorDescriptionInitialText), 500)
     }
 
     return {
       errorDescriptionLabel,
       showErrorDescription,
+      copyErrorDescriptionText,
       copyErrorDescriptionToClipboard
     }
   },
