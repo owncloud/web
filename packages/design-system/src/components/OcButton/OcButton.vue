@@ -6,7 +6,7 @@
     :class="$_ocButton_buttonClass"
     v-on="handlers"
   >
-    <oc-spinner v-if="spinner" size="xsmall" style="margin-left: -0.5rem" />
+    <oc-spinner v-if="spinner" size="small" class="spinner" />
     <!-- @slot Content of the button -->
     <slot />
   </component>
@@ -315,6 +315,10 @@ export default defineComponent({
   padding: 0.5rem 0.8rem;
   text-align: left;
   text-decoration: none;
+
+  .spinner {
+    margin-left: -0.5rem;
+  }
 
   &-justify-content {
     &-left {

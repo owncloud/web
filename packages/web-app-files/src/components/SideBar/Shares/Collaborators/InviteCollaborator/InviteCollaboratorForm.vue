@@ -184,7 +184,7 @@ export default defineComponent({
   },
 
   watch: {
-    saving(newValue, oldValue) {
+    saving(newValue) {
       if (!newValue) {
         this.savingDelayed = false
         return
