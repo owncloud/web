@@ -1,0 +1,6 @@
+Enhancement: Add search location filter
+
+We've added the option to set the search location in the searchbar.
+
+https://github.com/owncloud/web/pull/9304
+https://github.com/owncloud/web/issues/9258

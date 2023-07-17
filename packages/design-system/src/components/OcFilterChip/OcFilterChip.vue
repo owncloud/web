@@ -1,5 +1,8 @@
 <template>
-  <div class="oc-filter-chip oc-flex" :class="{ 'oc-filter-chip-toggle': isToggle }">
+  <div
+    class="oc-filter-chip oc-flex"
+    :class="{ 'oc-filter-chip-toggle': isToggle, 'oc-filter-chip-raw': raw }"
+  >
     <oc-button
       :id="id"
       class="oc-filter-chip-button oc-pill"
@@ -21,6 +24,7 @@
       class="oc-filter-chip-drop"
       mode="click"
       padding-size="small"
+      :close-on-click="closeOnClick"
       @hide-drop="$emit('hideDrop')"
       @show-drop="$emit('showDrop')"
     >
@@ -80,6 +84,20 @@ export default defineComponent({
     isToggleActive: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Whether the filter chip should be displayed as a raw button.
+     */
+    raw: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * Whether the drop should be closed when clicking on an item.
+     */
+    closeOnClick: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['clearFilter', 'hideDrop', 'showDrop', 'toggleFilter'],
@@ -135,6 +153,12 @@ export default defineComponent({
   &-clear:not(.oc-filter-chip-toggle .oc-filter-chip-clear),
   &-clear:hover:not(.oc-filter-chip-toggle .oc-filter-chip-clear) {
     margin-left: 1px;
+  }
+}
+.oc-filter-chip-raw {
+  .oc-filter-chip-button {
+    background-color: transparent !important;
+    border: none !important;
   }
 }
 </style>

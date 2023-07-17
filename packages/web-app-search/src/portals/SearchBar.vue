@@ -18,6 +18,7 @@
       cancel-button-variation="brand"
       cancel-button-appearance="raw-inverse"
       :cancel-handler="cancelSearch"
+      :available-location-options="availableLocationOptions"
       @advanced-search="onKeyUpEnter"
       @input="updateTerm"
       @clear="onClear"
@@ -26,6 +27,7 @@
       @keyup.up="onKeyUpUp"
       @keyup.down="onKeyUpDown"
       @keyup.enter="onKeyUpEnter"
+      @location-filter-change="onLocationFilterChange"
     />
     <oc-button
       v-oc-tooltip="$gettext('Display search bar')"
@@ -39,7 +41,7 @@
     </oc-button>
     <oc-drop
       id="files-global-search-options"
-      ref="optionsDrop"
+      ref="optionsDropRef"
       mode="manual"
       target="#files-global-search-bar"
     >
@@ -97,20 +99,56 @@
 
 <script lang="ts">
 import { providerStore } from '../service'
-
-import { createLocationCommon } from 'web-app-files/src/router'
+import { useGettext } from 'vue3-gettext'
+import {
+  createLocationCommon,
+  isLocationCommonActive,
+  isLocationTrashActive
+} from 'web-app-files/src/router'
 import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
-import { useStore, useUserContext } from 'web-pkg/src/composables'
+import { useRouteQuery, useRouter, useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
+import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
+import { SearchLocationFilterConstants } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'SearchBar',
   setup() {
     const store = useStore()
+    const router = useRouter()
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
+    const { $gettext } = useGettext()
+    const scopeQueryValue = useRouteQuery('scope')
+    const locationFilterId = ref(SearchLocationFilterConstants.currentFolder)
+    const optionsDropRef = ref(null)
+    const activePreviewIndex = ref(null)
+    const term = ref('')
+    const searchResults = ref([])
+    const loading = ref(false)
+
+    const currentFolderAvailable = computed(() => {
+      return (
+        (store.getters['Files/currentFolder'] !== null || scopeQueryValue.value?.length > 0) &&
+        !isLocationTrashActive(router, 'files-trash-generic')
+      )
+    })
+
+    const availableLocationOptions = ref([
+      {
+        title: $gettext('All Files'),
+        id: SearchLocationFilterConstants.allFiles,
+        enabled: true,
+        default: false
+      },
+      {
+        title: $gettext('Current Folder'),
+        id: SearchLocationFilterConstants.currentFolder,
+        enabled: currentFolderAvailable,
+        default: true
+      }
+    ])
 
     watch(isMobileWidth, () => {
       const searchBarEl = document.getElementById('files-global-search-bar')
@@ -130,23 +168,139 @@ export default defineComponent({
       }
     })
 
+    const optionsDrop = computed(() => {
+      return unref(optionsDropRef) as InstanceType<GlobalComponents['OcDrop']>
+    })
+
+    const availableProviders = computed(() => {
+      return unref(providerStore)?.availableProviders
+    })
+    const search = async () => {
+      searchResults.value = []
+      if (!unref(term)) {
+        return
+      }
+      let searchTerm = unref(term)
+      if (
+        unref(currentFolderAvailable) &&
+        unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
+      ) {
+        const currentFolder = store.getters['Files/currentFolder']
+        let scope
+        if (currentFolder?.fileId) {
+          const spaceId = currentFolder.fileId.split('!')[0]
+          const path = currentFolder.path === '/' ? '' : currentFolder.path
+          scope = `${spaceId}${path}`
+        } else {
+          scope = unref(scopeQueryValue)
+        }
+        searchTerm = `${unref(term)} scope:${scope}`
+      }
+      loading.value = true
+      for (const availableProvider of unref(availableProviders)) {
+        if (availableProvider.previewSearch?.available) {
+          searchResults.value.push({
+            providerId: availableProvider.id,
+            result: await availableProvider.previewSearch.search(unref(searchTerm))
+          })
+        }
+      }
+      loading.value = false
+    }
+
+    const onKeyUpEnter = () => {
+      if (unref(optionsDrop)) {
+        unref(optionsDrop).hide()
+      }
+
+      if (unref(activePreviewIndex) === null) {
+        const currentQuery = unref(router.currentRoute).query
+        const currentFolder = store.getters['Files/currentFolder']
+        let scope
+        if (currentFolder?.fileId) {
+          const spaceId = currentFolder.fileId.split('!')[0]
+          const path = currentFolder.path === '/' ? '' : currentFolder.path
+          scope = `${spaceId}${path}`
+        } else {
+          scope = unref(scopeQueryValue)
+        }
+        const useScope =
+          unref(currentFolderAvailable) &&
+          unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
+        router.push(
+          createLocationCommon('files-common-search', {
+            query: {
+              ...(currentQuery && { ...currentQuery }),
+              term: unref(term),
+              ...(scope && { scope }),
+              useScope: useScope.toString(),
+              provider: 'files.sdk'
+            }
+          })
+        )
+      }
+      if (unref(activePreviewIndex) !== null) {
+        unref(optionsDrop)
+          .$el.querySelectorAll('.preview')
+          [unref(activePreviewIndex)].firstChild.click()
+      }
+    }
+
+    const onLocationFilterChange = (event) => {
+      locationFilterId.value = event.value.id
+      if (isLocationCommonActive(router, 'files-common-search')) {
+        onKeyUpEnter()
+        return
+      }
+      search()
+    }
+
+    const showPreview = async () => {
+      if (!unref(term)) {
+        return
+      }
+      unref(optionsDrop).show()
+      await search()
+    }
+
+    const updateTerm = (input) => {
+      term.value = input
+      if (!unref(term)) {
+        return unref(optionsDrop).hide()
+      }
+      return unref(optionsDrop).show()
+    }
+
     return {
       isUserContext: useUserContext({ store }),
-      showCancelButton
+      showCancelButton,
+      onLocationFilterChange,
+      availableLocationOptions,
+      locationFilterId,
+      currentFolderAvailable,
+      store,
+      scopeQueryValue,
+      optionsDrop,
+      optionsDropRef,
+      activePreviewIndex,
+      term,
+      onKeyUpEnter,
+      searchResults,
+      loading,
+      providerStore,
+      availableProviders,
+      search,
+      showPreview,
+      updateTerm
     }
   },
 
   data() {
     return {
-      term: '',
       activeProvider: undefined,
       optionsVisible: false,
       markInstance: null,
-      activePreviewIndex: null,
       debouncedSearch: undefined,
-      providerStore,
-      loading: false,
-      searchResults: [],
       hideOptionsDropEvent: null,
       clearTermEvent: null
     }
@@ -155,9 +309,7 @@ export default defineComponent({
     showNoResults() {
       return this.searchResults.every(({ result }) => !result.values.length)
     },
-    availableProviders() {
-      return this.providerStore.availableProviders
-    },
+
     isSearchBarEnabled() {
       return this.availableProviders.length && this.isUserContext
     },
@@ -172,9 +324,6 @@ export default defineComponent({
     },
     searchLabel() {
       return this.$gettext('Enter search term')
-    },
-    optionsDrop() {
-      return this.$refs.optionsDrop as InstanceType<GlobalComponents['OcDrop']>
     }
   },
 
@@ -238,60 +387,11 @@ export default defineComponent({
   },
 
   methods: {
-    async showPreview() {
-      if (!this.term) {
-        return
-      }
-
-      this.optionsDrop.show()
-      await this.search()
-    },
-    async search() {
-      this.searchResults = []
-      if (!this.term) {
-        return
-      }
-
-      this.loading = true
-
-      for (const availableProvider of this.availableProviders) {
-        if (availableProvider.previewSearch?.available) {
-          this.searchResults.push({
-            providerId: availableProvider.id,
-            result: await availableProvider.previewSearch.search(this.term)
-          })
-        }
-      }
-
-      this.loading = false
-    },
     onClear() {
       this.term = ''
       this.optionsDrop.hide()
     },
-    onKeyUpEnter() {
-      this.optionsDrop.hide()
 
-      if (this.activePreviewIndex === null) {
-        const currentQuery = unref(this.$router.currentRoute).query
-
-        this.$router.push(
-          createLocationCommon('files-common-search', {
-            query: {
-              ...(currentQuery && { ...currentQuery }),
-              term: this.term,
-              provider: 'files.sdk'
-            }
-          })
-        )
-      }
-
-      if (this.activePreviewIndex !== null) {
-        this.optionsDrop.$el
-          .querySelectorAll('.preview')
-          [this.activePreviewIndex].firstChild.click()
-      }
-    },
     onKeyUpUp() {
       const previewElementsCount = this.optionsDrop.$el.querySelectorAll('.preview').length
 
@@ -338,15 +438,7 @@ export default defineComponent({
               previewElements[this.activePreviewIndex].getBoundingClientRect().height
       )
     },
-    updateTerm(term) {
-      this.term = term
 
-      if (!this.term) {
-        return this.optionsDrop.hide()
-      }
-
-      return this.optionsDrop.show()
-    },
     getSearchResultForProvider(provider) {
       return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
     },
