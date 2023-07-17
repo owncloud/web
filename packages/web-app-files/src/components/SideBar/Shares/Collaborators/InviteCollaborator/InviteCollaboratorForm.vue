@@ -59,6 +59,7 @@
         variation="primary"
         appearance="filled"
         submit="submit"
+        :loading="saving"
         @click="share"
       >
         <span v-text="$gettext(saveButtonLabel)" />
