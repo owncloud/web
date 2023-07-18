@@ -27,6 +27,7 @@
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
+          :grouping-settings="groupingSettings"
           @file-click="triggerDefaultAction"
           @row-mounted="rowMounted"
           @sort="handleSort"
@@ -80,6 +81,7 @@ import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import { useStore } from 'web-pkg/src/composables'
+import { useGroupingSettings } from 'web-pkg/src/cern/composables'
 import { getSpaceFromResource } from 'web-app-files/src/helpers/resource/getSpace'
 
 const visibilityObserver = new VisibilityObserver()
@@ -103,10 +105,16 @@ export default defineComponent({
       return getSpaceFromResource({ spaces: store.getters['runtime/spaces/spaces'], resource })
     }
 
+    const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
+    const { sortBy, sortDir } = resourcesViewDefaults
+
     return {
       ...useFileActions(),
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
-      getSpace
+      ...resourcesViewDefaults,
+      getSpace,
+
+      // CERN
+      ...useGroupingSettings({ sortBy, sortDir })
     }
   },
 

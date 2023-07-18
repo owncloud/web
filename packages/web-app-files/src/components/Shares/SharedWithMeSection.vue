@@ -29,6 +29,7 @@
       :header-position="fileListHeaderY"
       :sort-by="sortBy"
       :sort-dir="sortDir"
+      :grouping-settings="groupingSettings"
       @file-click="triggerDefaultAction"
       @row-mounted="rowMounted"
       @sort="sortHandler"
@@ -181,6 +182,14 @@ export default defineComponent({
     fileListHeaderY: {
       type: Number,
       default: 0
+    },
+    /**
+     * This is only relevant for CERN and can be ignored in any other cases.
+     */
+    groupingSettings: {
+      type: Object,
+      required: false,
+      default: null
     }
   },
   setup() {
