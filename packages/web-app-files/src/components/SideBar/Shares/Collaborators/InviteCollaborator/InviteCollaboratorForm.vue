@@ -394,6 +394,7 @@ export default defineComponent({
   max-width: 150px;
 }
 #new-collaborators-form-create-button {
-  min-width: 100px;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 </style>
