@@ -54,7 +54,7 @@
         variation="primary"
         appearance="filled"
         submit="submit"
-        :spinner="savingDelayed"
+        :show-spinner="savingDelayed"
         @click="share"
       >
         <span v-text="$gettext(saveButtonLabel)" />
@@ -89,7 +89,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 
-import { defineComponent, inject } from 'vue'
+import { defineComponent, inject, ref, watch } from 'vue'
 import { Resource } from 'web-client'
 import { useShares } from 'web-app-files/src/composables'
 
@@ -122,6 +122,21 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const clientService = useClientService()
+    const saving = ref(false)
+    const savingDelayed = ref(false)
+
+    watch(saving, (newValue) => {
+      if (!newValue) {
+        savingDelayed.value = false
+        return
+      }
+      setTimeout(() => {
+        if (!saving) {
+          return
+        }
+        savingDelayed.value = true
+      }, 700)
+    })
     return {
       resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
@@ -129,6 +144,8 @@ export default defineComponent({
       hasShareJail: useCapabilityShareJailEnabled(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
       clientService,
+      saving,
+      savingDelayed,
       ...useShares()
     }
   },
@@ -141,8 +158,6 @@ export default defineComponent({
       selectedCollaborators: [],
       selectedRole: null,
       customPermissions: null,
-      saving: false,
-      savingDelayed: false,
       expirationDate: null,
       searchQuery: ''
     }
@@ -183,20 +198,7 @@ export default defineComponent({
     }
   },
 
-  watch: {
-    saving(newValue) {
-      if (!newValue) {
-        this.savingDelayed = false
-        return
-      }
-      setTimeout(() => {
-        if (!this.saving) {
-          return
-        }
-        this.savingDelayed = true
-      }, 700)
-    }
-  },
+  watch: {},
 
   methods: {
     ...mapActions(['showMessage']),

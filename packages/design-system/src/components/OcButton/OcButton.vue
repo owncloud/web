@@ -6,7 +6,7 @@
     :class="$_ocButton_buttonClass"
     v-on="handlers"
   >
-    <oc-spinner v-if="spinner" size="small" class="spinner" />
+    <oc-spinner v-if="showSpinner" size="small" class="spinner" />
     <!-- @slot Content of the button -->
     <slot />
   </component>
@@ -155,7 +155,7 @@ export default defineComponent({
     /**
      * Show loading spinner
      */
-    spinner: {
+    showSpinner: {
       type: Boolean,
       default: false
     }
