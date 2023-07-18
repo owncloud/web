@@ -76,7 +76,7 @@ export default defineComponent({
 </style>
 
 <docs>
-Component to display various information.
+Component to display error log.
 ```js
 <oc-error-log>
   <oc-error-log content="X-REQUEST-ID: 123456789" />
