@@ -49,13 +49,14 @@ const actionSecondaryConfirmationButton = '.oc-modal-body-actions-secondary'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
 const sideBarActionButton =
   '//div[contains(@class, "files-side-bar")]//*[contains(@data-testid, "action-handler")]/span[text()="%s"]'
-const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
 const notificationMessageDialog = '.oc-notification-message-title'
 const notificationMessage = '.oc-notification-message'
 const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
 const restoreResourceButton = '.oc-files-actions-restore-trigger'
 const globalSearchInput = '.oc-search-input'
 const globalSearchBarFilter = '.oc-search-bar-filter'
+const globalSearchDirFilterDropdown =
+  '//div[@id="files-global-search"]//button[contains(@id, "oc-filter")]'
 const globalSearchBarFilterAllFiles = '//*[@data-test-id="all-files"]'
 const globalSearchBarFilterCurrentFolder = '//*[@data-test-id="current-folder"]'
 const searchList =
@@ -959,7 +960,7 @@ export type searchFilter = 'all files' | 'current folder'
 
 export interface searchResourceGlobalSearchArgs {
   keyword: string
-  filter: searchFilter
+  filter?: searchFilter
   pressEnter?: boolean
   page: Page
 }
@@ -972,25 +973,30 @@ export const searchResourceGlobalSearch = async (
   // .reload() waits nicely for search indexing to be finished
   await page.reload()
 
+  // select the filter if provided
+  if (filter) {
+    await page.locator(globalSearchDirFilterDropdown).click()
+    await page
+      .locator(
+        filter === 'all files' ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
+      )
+      .click()
+  }
+
+  await page.locator(globalSearchBarFilter).click()
+
   if (!keyword) {
     await page.locator(globalSearchInput).click()
     await page.keyboard.press('Enter')
     return
   }
 
-  await page.locator(globalSearchBarFilter).click()
-  await page
-    .locator(
-      filter === 'all files' ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
-    )
-    .click()
-
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),
     page.locator(globalSearchInput).fill(keyword)
   ])
 
-  keyword && (await expect(page.locator(globalSearchOptions)).toBeVisible())
+  await expect(page.locator(globalSearchOptions)).toBeVisible()
   await expect(page.locator(loadingSpinner)).not.toBeVisible()
 
   if (pressEnter) {

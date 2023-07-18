@@ -227,7 +227,7 @@ Then(
 )
 
 When(
-  /^"([^"]*)" searches "([^"]*)" using the global search and the "([^"]*)" filter( and presses enter)?$/,
+  /^"([^"]*)" searches "([^"]*)" using the global search(?: and the "([^"]*)" filter)?( and presses enter)?$/,
   async function (
     this: World,
     stepUser: string,
