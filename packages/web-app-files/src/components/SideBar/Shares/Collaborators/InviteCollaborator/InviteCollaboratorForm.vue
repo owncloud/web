@@ -50,9 +50,9 @@
         id="new-collaborators-form-create-button"
         key="new-collaborator-save-button"
         data-testid="new-collaborators-form-create-button"
-        :disabled="!$_isValid"
-        variation="primary"
-        appearance="filled"
+        :disabled="!$_isValid || saving"
+        :variation="saving ? 'passive' : 'primary'"
+        :appearance="saving ? 'outline' : 'filled'"
         submit="submit"
         :show-spinner="savingDelayed"
         @click="share"
@@ -198,8 +198,6 @@ export default defineComponent({
       )[0]
     }
   },
-
-  watch: {},
 
   methods: {
     ...mapActions(['showMessage']),
