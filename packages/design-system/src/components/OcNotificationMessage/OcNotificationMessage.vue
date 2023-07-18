@@ -13,9 +13,13 @@
         </div>
         <oc-button appearance="raw" @click="close"><oc-icon name="close" /></oc-button>
       </div>
-      <div class="oc-width-1-1 oc-notification-message-content">
+      <div class="oc-width-1-1">
         <div class="oc-flex oc-flex-between oc-width-1-1 oc-mt-s">
-          <span v-if="message" class="oc-mr-s" v-text="message" />
+          <span
+            v-if="message"
+            class="oc-notification-message-content oc-text-muted oc-mr-s"
+            v-text="message"
+          />
           <oc-button
             v-if="errorLogContent"
             class="oc-notification-message-error-log-toggle-button"
