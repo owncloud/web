@@ -81,7 +81,7 @@
         </oc-button>
       </div>
     </div>
-    <div v-if="runningUploads" class="upload-info-progress oc-mx-m oc-pb-m oc-mt-s">
+    <div v-if="runningUploads" class="upload-info-progress oc-mx-m oc-pb-m oc-mt-s oc-text">
       <oc-progress
         :value="totalProgress"
         :max="100"
@@ -92,7 +92,7 @@
     <div
       v-if="infoExpanded"
       class="upload-info-items oc-px-m oc-pb-m"
-      :class="{ 'has-errors': Object.keys(errors).length }"
+      :class="{ 'has-errors': showErrorLog }"
     >
       <ul class="oc-list">
         <li
@@ -146,7 +146,7 @@
       </ul>
     </div>
     <oc-error-log
-      v-if="infoExpanded && uploadErrorLogContent"
+      v-if="showErrorLog"
       class="upload-info-error-log oc-pt-l oc-pb-m oc-p-x"
       :content="uploadErrorLogContent"
     />
@@ -261,6 +261,9 @@ export default defineComponent({
     },
     uploadsPausable() {
       return this.$uppyService.tusActive()
+    },
+    showErrorLog() {
+      return this.infoExpanded && this.uploadErrorLogContent
     },
     uploadErrorLogContent() {
       const requestIds = Object.values(this.errors).reduce((acc: Array<string>, error: any) => {
