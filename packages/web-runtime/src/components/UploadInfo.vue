@@ -145,9 +145,11 @@
         </li>
       </ul>
     </div>
-    <div v-if="infoExpanded && uploadErrorLogContent" class="upload-info-error-log oc-px-m oc-pb-m">
-      <oc-error-log class="oc-mt-l" :content="uploadErrorLogContent" />
-    </div>
+    <oc-error-log
+      v-if="infoExpanded && uploadErrorLogContent"
+      class="upload-info-error-log oc-pt-l oc-pb-m oc-p-x"
+      :content="uploadErrorLogContent"
+    />
   </div>
 </template>
 
