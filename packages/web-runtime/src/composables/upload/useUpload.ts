@@ -65,7 +65,7 @@ export function useUpload(options: UploadOptions) {
   const tusExtension = useCapabilityFilesTusExtension()
 
   const headers = computed((): { [key: string]: string } => {
-    const headers = { 'X-Request-ID': uuidV4(), 'Accept-Language': currentLanguage }
+    const headers = { 'Accept-Language': currentLanguage }
     if (unref(isPublicLinkContext)) {
       const password = unref(publicLinkPassword)
       if (password) {
@@ -90,11 +90,12 @@ export function useUpload(options: UploadOptions) {
       isTusSupported,
       onBeforeRequest: (req) => {
         req.setHeader('Authorization', unref(headers).Authorization)
-        req.setHeader('X-Request-ID', unref(headers)['X-Request-ID'])
+        req.setHeader('X-Request-ID', uuidV4())
         req.setHeader('Accept-Language', unref(headers)['Accept-Language'])
       },
       headers: (file) => ({
         'x-oc-mtime': file.data.lastModified / 1000,
+        'X-Request-ID': uuidV4(),
         ...unref(headers)
       }),
       ...(isTusSupported && {
