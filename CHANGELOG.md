@@ -53,6 +53,7 @@ Summary
 * Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
 * Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
 * Enhancement - Button styling: [#9394](https://github.com/owncloud/web/pull/9394)
+* Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 
 Details
 -------
@@ -423,6 +424,14 @@ Details
    https://github.com/owncloud/web/issues/9353
    https://github.com/owncloud/web/issues/9354
    https://github.com/owncloud/web/pull/9394
+
+* Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
+
+   We've added a loading spinner to the share button in the sharing panel to indicate that its still
+   processing if action takes longer.
+
+   https://github.com/owncloud/web/issues/9425
+   https://github.com/owncloud/web/pull/9423
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
