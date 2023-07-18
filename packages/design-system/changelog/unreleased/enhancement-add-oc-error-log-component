@@ -1,0 +1,8 @@
+Enhancement: Add OcErrorLog component
+
+We've added the new OcErrorLog component and integrated it into the OcNotificationMessage component,
+to display a error log and allow the user to copy it's content, if the OcNotificationMessage
+is used to show errors.
+
+https://github.com/owncloud/web/pull/9426
+
