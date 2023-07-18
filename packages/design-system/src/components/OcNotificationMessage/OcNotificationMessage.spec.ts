@@ -101,7 +101,7 @@ describe('OcNotificationMessage', () => {
     messageContent: '.oc-notification-message-content',
     messageWrapper: '.oc-notification-message div',
     errorLog: '.oc-error-log',
-    errorLogToggleButton: 'oc-notification-message-error-log-toggle-button'
+    errorLogToggleButton: '.oc-notification-message-error-log-toggle-button'
   }
 
   function getWrapper(props = {}) {
