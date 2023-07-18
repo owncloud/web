@@ -107,6 +107,7 @@ Feature: Search
       | exampleInsideThePersonalSpace.txt                  | I'm in the personal Space |
       | mainFolder/exampleInsideTheMainFolder.txt          | I'm in the main folder    |
       | mainFolder/subFolder/exampleInsideTheSubFolder.txt | I'm in the sub folder     |
+    And "Alice" opens the "files" app
     When "Alice" opens folder "mainFolder"
     And "Alice" searches "example" using the global search and the "all files" filter
     Then following resources should be displayed in the search list for user "Alice"
