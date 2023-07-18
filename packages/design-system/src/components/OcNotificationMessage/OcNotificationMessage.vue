@@ -28,8 +28,8 @@
             @click="showErrorLog = !showErrorLog"
           >
             <span v-text="$gettext('Details')"></span>
-            <oc-icon :name="showErrorLog ? 'arrow-up-s' : 'arrow-down-s'"
-          /></oc-button>
+            <oc-icon :name="showErrorLog ? 'arrow-up-s' : 'arrow-down-s'" />
+          </oc-button>
         </div>
         <oc-error-log v-if="showErrorLog" class="oc-mt-l" :content="errorLogContent" />
       </div>
