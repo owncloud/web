@@ -2,6 +2,7 @@
 
 exports[`ContextMenuQuickAction component renders component 1`] = `
 <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-1" type="button">
+  <!--v-if-->
   <!-- @slot Content of the button -->
   <span class="oc-icon oc-icon-m oc-icon-passive">
     <!---->

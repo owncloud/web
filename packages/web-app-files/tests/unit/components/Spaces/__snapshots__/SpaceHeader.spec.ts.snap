@@ -14,6 +14,7 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
         <h2 class="space-header-name"></h2>
         <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
+          <!--v-if-->
           <!-- @slot Content of the button -->
           <span class="oc-icon oc-icon-m oc-icon-passive">
             <!---->
@@ -51,6 +52,7 @@ exports[`SpaceHeader space image should show the default image if no other image
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
         <h2 class="space-header-name"></h2>
         <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
+          <!--v-if-->
           <!-- @slot Content of the button -->
           <span class="oc-icon oc-icon-m oc-icon-passive">
             <!---->
@@ -84,6 +86,7 @@ exports[`SpaceHeader space image should show the set image 1`] = `
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
         <h2 class="space-header-name"></h2>
         <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
+          <!--v-if-->
           <!-- @slot Content of the button -->
           <span class="oc-icon oc-icon-m oc-icon-passive">
             <!---->

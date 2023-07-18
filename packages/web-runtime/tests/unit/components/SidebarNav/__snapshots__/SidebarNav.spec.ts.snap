@@ -3,6 +3,7 @@
 exports[`OcSidebarNav renders navItems into a list 1`] = `
 <div class="oc-app-navigation-expanded" id="web-nav-sidebar">
   <button aria-label="Toggle sidebar" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-expanded oc-pr-s toggle-sidebar-button oc-pb-s oc-pt-m" type="button">
+    <!--v-if-->
     <!-- @slot Content of the button -->
     <span class="oc-icon oc-icon-l oc-icon-passive">
       <!---->

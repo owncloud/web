@@ -12,6 +12,7 @@ exports[`Spaces view loading states should render spaces list after loading has 
             <div class="oc-flex oc-flex-middle">
               <!--v-if-->
               <button aria-label="Display customization options of the files list" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-my-s oc-p-xs" id="files-view-options-btn" type="button">
+                <!--v-if-->
                 <!-- @slot Content of the button -->
                 <span class="oc-icon oc-icon-m oc-icon-passive">
                   <!---->
@@ -58,6 +59,7 @@ exports[`Spaces view loading states should render spaces list after loading has 
               </div>
             </div>
             <button aria-label="Open sidebar to view details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-my-s oc-p-xs" id="files-toggle-sidebar" type="button">
+              <!--v-if-->
               <!-- @slot Content of the button -->
               <span class="oc-icon oc-icon-m oc-icon-passive">
                 <!---->

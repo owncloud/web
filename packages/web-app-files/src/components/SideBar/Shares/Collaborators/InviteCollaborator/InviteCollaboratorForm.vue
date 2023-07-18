@@ -46,19 +46,15 @@
         :share-types="selectedCollaborators.map((c) => c.value.shareType)"
         @option-change="collaboratorExpiryChanged"
       />
-      <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
-        <oc-spinner :aria-label="$gettext('Creating share')" size="small" />
-        <span :aria-hidden="true" v-text="$gettext(saveButtonLabel)" />
-      </oc-button>
       <oc-button
-        v-else
         id="new-collaborators-form-create-button"
         key="new-collaborator-save-button"
         data-testid="new-collaborators-form-create-button"
-        :disabled="!$_isValid"
-        variation="primary"
-        appearance="filled"
+        :disabled="!$_isValid || saving"
+        :variation="saving ? 'passive' : 'primary'"
+        :appearance="saving ? 'outline' : 'filled'"
         submit="submit"
+        :show-spinner="savingDelayed"
         @click="share"
       >
         <span v-text="$gettext(saveButtonLabel)" />
@@ -93,7 +89,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 
-import { defineComponent, inject } from 'vue'
+import { defineComponent, inject, ref, unref, watch } from 'vue'
 import { Resource } from 'web-client'
 import { useShares } from 'web-app-files/src/composables'
 
@@ -126,6 +122,22 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const clientService = useClientService()
+    const saving = ref(false)
+    const savingDelayed = ref(false)
+
+    watch(saving, (newValue) => {
+      if (!newValue) {
+        savingDelayed.value = false
+        return
+      }
+      setTimeout(() => {
+        if (!unref(saving)) {
+          savingDelayed.value = false
+          return
+        }
+        savingDelayed.value = true
+      }, 700)
+    })
     return {
       resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
@@ -133,6 +145,8 @@ export default defineComponent({
       hasShareJail: useCapabilityShareJailEnabled(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
       clientService,
+      saving,
+      savingDelayed,
       ...useShares()
     }
   },
@@ -145,7 +159,6 @@ export default defineComponent({
       selectedCollaborators: [],
       selectedRole: null,
       customPermissions: null,
-      saving: false,
       expirationDate: null,
       searchQuery: ''
     }
@@ -378,5 +391,9 @@ export default defineComponent({
 <style lang="scss">
 .role-selection-dropdown {
   max-width: 150px;
+}
+#new-collaborators-form-create-button {
+  padding-left: 30px;
+  padding-right: 30px;
 }
 </style>

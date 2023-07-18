@@ -1,0 +1,7 @@
+Enhancement: Show local loading spinner in sharing button
+
+We've added a loading spinner to the share button in the sharing panel
+to indicate that its still processing if action takes longer.
+
+https://github.com/owncloud/web/pull/9423
+https://github.com/owncloud/web/issues/9425

@@ -3,6 +3,7 @@
 exports[`OcResource displays parent folder name default if calculated name is empty 1`] = `
 <div class="oc-resource oc-text-overflow">
   <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw" draggable="false" type="button">
+    <!--v-if-->
     <!-- @slot Content of the button -->
     <span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file">
       <!---->
@@ -10,6 +11,7 @@ exports[`OcResource displays parent folder name default if calculated name is em
   </button>
   <div class="oc-resource-details oc-text-overflow oc-pl-s">
     <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw oc-text-overflow" draggable="false" type="button">
+      <!--v-if-->
       <!-- @slot Content of the button -->
       <!--v-if-->
       <span class="oc-resource-name" data-test-resource-name="example.pdf" data-test-resource-path="example.pdf" data-test-resource-type="file">
