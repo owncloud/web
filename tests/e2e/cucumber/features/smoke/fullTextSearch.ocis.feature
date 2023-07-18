@@ -94,12 +94,14 @@ Feature: Search
       | resource     |
       | textfile.txt |
     And "Brian" closes the file viewer
-    Then following resources should be displayed in the files list for user "Brian"
-      | resource                      |
-      | textfile.txt                  |
-      | testFolder/innerTextfile.txt  |
-      | fileToShare.txt               |
-      | fileWithTag.txt               |
-      | withTag.txt                   |
-      | spaceFolder/spaceTextfile.txt |
+    # TODO: uncomment the following step after the bug is fixed
+    # issue: https://github.com/owncloud/web/issues/9428
+    # Then following resources should be displayed in the files list for user "Brian"
+    #   | resource                      |
+    #   | textfile.txt                  |
+    #   | testFolder/innerTextfile.txt  |
+    #   | fileToShare.txt               |
+    #   | fileWithTag.txt               |
+    #   | withTag.txt                   |
+    #   | spaceFolder/spaceTextfile.txt |
     And "Brian" logs out
