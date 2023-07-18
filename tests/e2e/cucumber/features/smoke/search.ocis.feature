@@ -43,7 +43,7 @@ Feature: Search
       | .hidden-file.txt |
 
     # search for objects of personal space
-    When "Alice" searches "foldeR" using the global search
+    When "Alice" searches "foldeR" using the global search and the "all files" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource |
       | folder   |
@@ -55,7 +55,7 @@ Feature: Search
       | .hidden-file.txt     |
 
     # search for hidden file
-    When "Alice" searches "hidden" using the global search
+    When "Alice" searches "hidden" using the global search and the "all files" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource         |
       | .hidden-file.txt |
@@ -67,7 +67,7 @@ Feature: Search
       | new-lorem-big.txt |
 
     # subfolder search
-    And "Alice" searches "child" using the global search
+    And "Alice" searches "child" using the global search and the "all files" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource  |
       | child-one |
@@ -81,7 +81,7 @@ Feature: Search
       | new-lorem-big.txt |
 
     # received shares search
-    And "Alice" searches "NEW" using the global search
+    And "Alice" searches "NEW" using the global search and the "all files" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource             |
       | new_share_from_brian |
@@ -91,4 +91,36 @@ Feature: Search
       | folder           |
       | FolDer           |
       | .hidden-file.txt |
+    And "Alice" logs out
+
+
+  Scenario: Search using "current folder" filter
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+    And "Alice" logs in
+    And "Alice" creates the following folders in personal space using API
+      | name                 |
+      | mainFolder/subFolder |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile                                         | content                   |
+      | exampleInsideThePersonalSpace.txt                  | I'm in the personal Space |
+      | mainFolder/exampleInsideTheMainFolder.txt          | I'm in the main folder    |
+      | mainFolder/subFolder/exampleInsideTheSubFolder.txt | I'm in the sub folder     |
+    When "Alice" opens folder "mainFolder"
+    And "Alice" searches "example" using the global search and the "all files" filter
+    Then following resources should be displayed in the search list for user "Alice"
+      | resource                          |
+      | exampleInsideThePersonalSpace.txt |
+      | exampleInsideTheMainFolder.txt    |
+      | exampleInsideTheSubFolder.txt     |
+
+    When "Alice" searches "example" using the global search and the "current folder" filter
+    Then following resources should be displayed in the search list for user "Alice"
+      | resource                       |
+      | exampleInsideTheMainFolder.txt |
+      | exampleInsideTheSubFolder.txt  |
+    But following resources should not be displayed in the search list for user "Alice"
+      | resource                          |
+      | exampleInsideThePersonalSpace.txt |
     And "Alice" logs out

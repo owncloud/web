@@ -2117,6 +2117,7 @@ def ocisService(type):
         environment["FRONTEND_FULL_TEXT_SEARCH_ENABLED"] = True
         environment["SEARCH_EXTRACTOR_TYPE"] = "tika"
         environment["SEARCH_EXTRACTOR_TIKA_TIKA_URL"] = "http://tika:9998"
+        environment["SEARCH_EXTRACTOR_CS3SOURCE_INSECURE"] = True
 
     return [
         {

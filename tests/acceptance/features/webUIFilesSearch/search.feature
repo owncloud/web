@@ -38,11 +38,11 @@ Feature: Search
     But file "lorem.txt" should not be listed on the webUI
 
   @issue-980
-  Scenario: search in sub folder
+  Scenario: search in sub folder (with 'Current Folder' filter)
     When the user opens folder "simple-folder" using the webUI
     And the user searches for "lorem" using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    And file "lorem-big.txt" should be listed on the webUI
+    Then file "simple-folder/lorem.txt" should be listed on the webUI
+    But file "lorem-big.txt" should not be listed on the webUI
 
 
   Scenario: Search for a shared file
