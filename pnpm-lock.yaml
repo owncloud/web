@@ -805,6 +805,9 @@ importers:
 
   packages/web-app-preview:
     dependencies:
+      vue-concurrency:
+        specifier: 4.0.1
+        version: 4.0.1(vue@3.3.4)
       vue3-gettext:
         specifier: ^2.3.3
         version: 2.3.4(@vue/compiler-sfc@3.3.4)(vue@3.3.4)

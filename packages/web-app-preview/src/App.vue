@@ -7,70 +7,56 @@
     @keydown.right="next"
     @keydown.esc="closeApp"
   >
-    <h1 class="oc-invisible-sr" v-text="pageTitle" />
-    <app-top-bar
-      v-if="!isFileContentError"
-      :resource="activeFilteredFile"
-      :main-actions="fileActions"
-      @close="closeApp"
-    />
-
-    <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
-      <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
-    </div>
-    <oc-icon
-      v-else-if="isFileContentError"
-      name="file-damage"
-      variation="danger"
-      size="xlarge"
-      class="oc-position-center"
-      :accessible-label="$gettext('Failed to load media file')"
-    />
-    <template v-else>
-      <div
-        v-show="activeMediaFileCached"
-        class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
-        :class="{ lightbox: isFullScreenModeActivated }"
-      >
-        <media-image
-          v-if="activeMediaFileCached.isImage"
-          :file="activeMediaFileCached"
-          :current-image-rotation="currentImageRotation"
-          :current-image-zoom="currentImageZoom"
-        />
-        <media-video
-          v-else-if="activeMediaFileCached.isVideo"
-          :file="activeMediaFileCached"
-          :is-auto-play-enabled="isAutoPlayEnabled"
-        />
-        <media-audio
-          v-else-if="activeMediaFileCached.isAudio"
-          :file="activeMediaFileCached"
-          :is-auto-play-enabled="isAutoPlayEnabled"
-        />
+    <div class="preview-body">
+      <media-settings v-if="activeMediaFileCached.isImage" @download="triggerActiveFileDownload" />
+      <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
+        <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
       </div>
-    </template>
-    <media-controls
-      :files="filteredFiles"
-      :active-index="activeIndex"
-      :is-full-screen-mode-activated="isFullScreenModeActivated"
-      :is-folder-loading="isFolderLoading"
-      :is-image="activeMediaFileCached?.isImage"
-      :current-image-rotation="currentImageRotation"
-      :current-image-zoom="currentImageZoom"
-      @set-rotation="currentImageRotation = $event"
-      @set-zoom="currentImageZoom = $event"
-      @toggle-full-screen="toggleFullscreenMode"
-      @toggle-previous="prev"
-      @toggle-next="next"
-    />
+      <oc-icon
+        v-else-if="isFileContentError"
+        name="file-damage"
+        variation="danger"
+        size="xlarge"
+        class="oc-position-center"
+        :accessible-label="$gettext('Failed to load media file')"
+      />
+      <template v-else>
+        <div
+          v-show="activeMediaFileCached"
+          class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
+          :class="{ lightbox: isFullScreenModeActivated }"
+        >
+          <media-image
+            v-if="activeMediaFileCached.isImage"
+            :file="activeMediaFileCached"
+            :current-image-rotation="currentImageRotation"
+            :current-image-zoom="currentImageZoom"
+          />
+          <media-video
+            v-else-if="activeMediaFileCached.isVideo"
+            :file="activeMediaFileCached"
+            :is-auto-play-enabled="isAutoPlayEnabled"
+          />
+          <media-audio
+            v-else-if="activeMediaFileCached.isAudio"
+            :file="activeMediaFileCached"
+            :is-auto-play-enabled="isAutoPlayEnabled"
+          />
+        </div>
+      </template>
+      <quick-commands
+        :current-image-zoom="currentImageZoom"
+        :is-full-screen-mode-activated="isFullScreenModeActivated"
+        :save-task="saveImageTask"
+        @close="closeApp"
+        @set-zoom="currentImageZoom = $event"
+        @toggle-full-screen="toggleFullscreenMode"
+      />
+    </div>
   </main>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, unref } from 'vue'
-import { RouteLocationRaw } from 'vue-router'
-import { Resource } from 'web-client/src'
-import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
+import { computed, defineComponent, ref, unref, watch } from 'vue'
 import {
   queryItemAsString,
   sortHelper,
@@ -80,12 +66,16 @@ import {
   useRouter
 } from 'web-pkg/src/composables'
 import { Action, ActionOptions } from 'web-pkg/src/composables/actions/types'
-import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import MediaControls from './components/MediaControls.vue'
+import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
+import { RouteLocationRaw } from 'vue-router'
+import { Resource } from 'web-client/src'
+import { useTask } from 'vue-concurrency'
 import MediaAudio from './components/Sources/MediaAudio.vue'
 import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
+import MediaSettings from './components/MediaSettings.vue'
+import QuickCommands from './components/QuickCommands.vue'
 import { CachedFile } from './helpers/types'
 
 export const appId = 'preview'
@@ -107,24 +97,90 @@ export const mimeTypes = () => {
   ]
 }
 
+interface TestType {
+  name: string
+  value: number
+}
+
 export default defineComponent({
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Preview',
   components: {
-    AppTopBar,
-    MediaControls,
     MediaAudio,
     MediaImage,
-    MediaVideo
+    MediaVideo,
+    MediaSettings,
+    QuickCommands
   },
   setup() {
     const router = useRouter()
     const route = useRoute()
+
     const appDefaults = useAppDefaults({ applicationId: 'preview' })
     const contextRouteQuery = useRouteQuery('contextRouteQuery')
     const { downloadFile } = useDownloadFile()
 
     const activeIndex = ref()
     const cachedFiles = ref<CachedFile[]>([])
+
+    const currentETag = ref()
+    const currentVersion = ref()
+    const serverVersion = ref()
+
+    const { activeFiles, currentFileContext, getFileContents, putFileContents } = appDefaults
+
+    const filteredFiles = computed<Resource[]>(() => {
+      if (!unref(activeFiles)) {
+        return []
+      }
+
+      const files = unref(activeFiles).filter((file) => {
+        return mimeTypes().includes(file.mimeType?.toLowerCase())
+      })
+      return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
+    })
+
+    const activeFilteredFile = computed(() => {
+      return unref(filteredFiles)[unref(activeIndex)]
+    })
+
+    const activeMediaFileCached = computed(() => {
+      return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile).id)
+    })
+
+    const loadImageTask = useTask(function* () {
+      const savedImageVersion = yield getFileContents(currentFileContext, { responseType: 'blob' })
+      serverVersion.value = currentVersion.value = savedImageVersion.body
+      currentETag.value = savedImageVersion.headers['OC-ETag']
+    })
+
+    const saveImageTask = useTask(function* () {
+      console.log('this is where the magic happens:')
+      console.log('Saving image...')
+      const newVersion = unref(currentVersion)
+      console.log('Image is saved')
+
+      try {
+        const putFileContentsResponse = yield putFileContents(currentFileContext, {
+          content: newVersion,
+          previousEntityTag: unref(currentETag)
+        })
+        serverVersion.value = newVersion
+        currentETag.value = putFileContentsResponse.etag
+      } catch (e) {
+        console.log('There is an error')
+      }
+    }).restartable()
+
+    watch(
+      activeMediaFileCached,
+      () => {
+        if (activeMediaFileCached.value.isImage) {
+          loadImageTask.perform()
+        }
+      },
+      { immediate: true }
+    )
 
     const sortBy = computed(() => {
       if (!unref(contextRouteQuery)) {
@@ -138,8 +194,6 @@ export default defineComponent({
       }
       return unref(contextRouteQuery)['sort-dir'] ?? 'asc'
     })
-
-    const { activeFiles, currentFileContext } = appDefaults
 
     const isFullScreenModeActivated = ref(false)
     const toggleFullscreenMode = () => {
@@ -155,24 +209,6 @@ export default defineComponent({
         }
       }
     }
-
-    const filteredFiles = computed<Resource[]>(() => {
-      if (!unref(activeFiles)) {
-        return []
-      }
-
-      const files = unref(activeFiles).filter((file) => {
-        return mimeTypes().includes(file.mimeType?.toLowerCase())
-      })
-
-      return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
-    })
-    const activeFilteredFile = computed(() => {
-      return unref(filteredFiles)[unref(activeIndex)]
-    })
-    const activeMediaFileCached = computed(() => {
-      return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile).id)
-    })
 
     const updateLocalHistory = () => {
       const { params, query } = createFileRouteOptions(
@@ -219,7 +255,9 @@ export default defineComponent({
       isFileContentLoading,
       isFullScreenModeActivated,
       toggleFullscreenMode,
-      updateLocalHistory
+      updateLocalHistory,
+      triggerActiveFileDownload,
+      saveImageTask
     }
   },
   data() {
@@ -474,8 +512,8 @@ export default defineComponent({
   overflow: auto;
   max-width: 90vw;
   height: 70vh;
-  margin: 10px auto;
   object-fit: contain;
+  margin: $oc-space-medium;
 
   img,
   video {
@@ -509,5 +547,9 @@ export default defineComponent({
   .preview-player {
     max-width: 100vw;
   }
+}
+
+.preview-body {
+  display: flex;
 }
 </style>

@@ -1,5 +1,6 @@
 import translations from '../l10n/translations.json'
 import * as app from './App.vue'
+import store from './store'
 const { default: App, mimeTypes, appId } = app as any
 
 // just a dummy function to trick gettext tools
@@ -37,5 +38,6 @@ export default {
   appInfo,
   routes,
   translations,
-  mimeTypes
+  mimeTypes,
+  store
 }

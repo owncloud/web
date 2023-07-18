@@ -4,12 +4,14 @@
     :src="file.url"
     :alt="file.name"
     :data-id="file.id"
-    :style="`zoom: ${currentImageZoom};transform: rotate(${currentImageRotation}deg)`"
+    :style="`zoom: ${currentImageZoom};transform: rotate(${currentImageRotation}deg); ${imageStyles}`"
   />
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { CachedFile } from '../../helpers/types'
+import { useImageStyles } from '../../composables'
+import { useStore } from 'web-pkg/src'
 
 export default defineComponent({
   name: 'MediaImage',
@@ -25,6 +27,15 @@ export default defineComponent({
     currentImageRotation: {
       type: Number,
       required: true
+    }
+  },
+  setup() {
+    const store = useStore()
+
+    const styles = store.getters['Preview/allStyles']
+    const imageStyles = useImageStyles(styles)
+    return {
+      imageStyles
     }
   }
 })
