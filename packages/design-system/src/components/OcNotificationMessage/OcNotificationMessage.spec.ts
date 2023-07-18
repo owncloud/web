@@ -68,6 +68,26 @@ describe('OcNotificationMessage', () => {
     })
   })
 
+  describe('errorLogContent prop', () => {
+    it('should render OcErrorLogComponent, if errorLogContent is provided', () => {
+      const wrapper = getWrapper({ errorLogContent: 'X-REQUEST-ID: 1234' })
+      const errorLogToggleButtonEl = wrapper.find(selectors.errorLogToggleButton)
+
+      expect(errorLogToggleButtonEl.exists()).toBeTruthy()
+      errorLogToggleButtonEl.trigger('click')
+
+      const errorLogEl = wrapper.find(selectors.errorLog)
+      expect(errorLogEl.exists()).toBeTruthy()
+    })
+
+    it('should not render OcErrorLogComponent, if errorLogContent is not provided', () => {
+      const wrapper = getWrapper()
+      const errorLogToggleButtonEl = wrapper.find(selectors.errorLogToggleButton)
+
+      expect(errorLogToggleButtonEl.exists()).toBeFalsy()
+    })
+  })
+
   it('should emit close after set timout', () => {
     const wrapper = getWrapper({ timeout: 1 })
 
@@ -79,7 +99,9 @@ describe('OcNotificationMessage', () => {
   const selectors = {
     messageTitle: '.oc-notification-message-title',
     messageContent: '.oc-notification-message-content',
-    messageWrapper: '.oc-notification-message div'
+    messageWrapper: '.oc-notification-message div',
+    errorLog: '.oc-error-log',
+    errorLogToggleButton: 'oc-notification-message-error-log-toggle-button'
   }
 
   function getWrapper(props = {}) {
