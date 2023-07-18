@@ -89,7 +89,11 @@
         :indeterminate="!filesInProgressCount"
       />
     </div>
-    <div v-if="infoExpanded" class="upload-info-items oc-px-m oc-pb-m">
+    <div
+      v-if="infoExpanded"
+      class="upload-info-items oc-px-m oc-pb-m"
+      :class="{ 'has-errors': Object.keys(errors).length }"
+    >
       <ul class="oc-list">
         <li
           v-for="(item, idx) in uploads"
@@ -140,6 +144,9 @@
           ></span>
         </li>
       </ul>
+    </div>
+    <div v-if="infoExpanded && uploadErrorLogContent" class="upload-info-error-log oc-px-m oc-pb-m">
+      <oc-error-log class="oc-mt-l" :content="uploadErrorLogContent" />
     </div>
   </div>
 </template>
@@ -252,6 +259,19 @@ export default defineComponent({
     },
     uploadsPausable() {
       return this.$uppyService.tusActive()
+    },
+    uploadErrorLogContent() {
+      const requestIds = Object.values(this.errors).reduce((acc: Array<string>, error: any) => {
+        const requestId = error.originalRequest?._headers?.['X-Request-ID']
+
+        if (requestId) {
+          acc.push(requestId)
+        }
+
+        return acc
+      }, []) as Array<any>
+
+      return requestIds.map((item) => `X-Request-Id: ${item}`).join('\r\n')
     }
   },
   created() {
@@ -655,6 +675,10 @@ export default defineComponent({
   .upload-info-items {
     max-height: 50vh;
     overflow-y: auto;
+  }
+
+  .upload-info-items.has-errors {
+    max-height: calc(50vh - 100px) !important;
   }
 
   .upload-info-danger {
