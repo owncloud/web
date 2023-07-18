@@ -1,20 +1,27 @@
 <template>
   <div class="oc-error-log">
     <oc-textarea
-      class="oc-mt-s oc-text-small oc-error-log-textarea"
+      class="oc-error-log-textarea oc-mt-s oc-text-small"
       :label="contentLabel"
       :model-value="content"
       rows="4"
       readonly
     />
-    <oc-button
-      class="oc-width-1-1 oc-mt-xs"
-      size="small"
-      variation="primary"
-      appearance="filled"
-      v-text="copyContentButtonText"
-      @click="copyContentToClipboard"
-    />
+    <div class="oc-flex oc-flex-between oc-mt-s">
+      <div class="oc-flex">
+        <div class="oc-flex oc-flex-middle" v-if="showCopied">
+          <oc-icon variation="success" name="checkbox-circle" />
+          <p class="oc-error-log-content-copied oc-ml-s oc-my-rm" v-text="$gettext('Copied')" />
+        </div>
+      </div>
+      <oc-button
+        size="small"
+        variation="primary"
+        appearance="filled"
+        v-text="$gettext('Copy')"
+        @click="copyContentToClipboard"
+      />
+    </div>
   </div>
 </template>
 
@@ -39,8 +46,7 @@ export default defineComponent({
   },
   setup(props) {
     const { $gettext } = useGettext()
-    const copyContentButtonInitialText = $gettext('Copy')
-    const copyContentButtonText = ref(copyContentButtonInitialText)
+    const showCopied = ref(false)
 
     const contentLabel = computed(() => {
       return $gettext(
@@ -50,13 +56,13 @@ export default defineComponent({
 
     const copyContentToClipboard = () => {
       navigator.clipboard.writeText(props.content)
-      copyContentButtonText.value = $gettext('Copied to clipboard...')
-      setTimeout(() => (copyContentButtonText.value = copyContentButtonInitialText), 500)
+      showCopied.value = true
+      setTimeout(() => (showCopied.value = false), 500)
     }
 
     return {
       contentLabel,
-      copyContentButtonText,
+      showCopied,
       copyContentToClipboard
     }
   }
@@ -71,6 +77,10 @@ export default defineComponent({
     label {
       color: var(--oc-color-text-muted);
     }
+  }
+
+  &-content-copied {
+    color: var(--oc-color-swatch-success-default);
   }
 }
 </style>
