@@ -22,7 +22,7 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
 
   await page.goto(config.frontendUrl)
   await sessionObject.login({ user })
-  await page.locator('#web').waitFor()
+  await page.locator('#web-content').waitFor()
 }
 
 Given('{string} has logged in', LogInUser)
