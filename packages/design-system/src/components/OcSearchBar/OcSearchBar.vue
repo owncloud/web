@@ -25,16 +25,7 @@
         @keydown.enter="onSearch"
         @keyup="$emit('keyup', $event)"
       />
-      <div
-        v-if="availableLocationOptions.length > 0"
-        class="oc-location-search oc-position-small oc-position-center-right oc-mt-rm"
-        @click.stop
-      >
-        <oc-search-bar-filter
-          :location-options="availableLocationOptions"
-          @update:model-value="$emit('locationFilterChange', $event)"
-        />
-      </div>
+      <slot name="locationFilter" />
       <oc-button
         v-oc-tooltip="$gettext('Open advanced search')"
         :aria-label="$gettext('Open advanced search')"
@@ -76,7 +67,6 @@ import OcButton from '../OcButton/OcButton.vue'
 import OcGrid from '../OcGrid/OcGrid.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcSpinner from '../OcSpinner/OcSpinner.vue'
-import OcSearchBarFilter from '../OcSearchBarFilter/OcSearchBarFilter.vue'
 
 /**
  * The search bar is an input element used for searching server side resources or to filter local results.
@@ -100,8 +90,7 @@ export default defineComponent({
     OcButton,
     OcGrid,
     OcIcon,
-    OcSpinner,
-    OcSearchBarFilter
+    OcSpinner
   },
   props: {
     /**
@@ -236,15 +225,9 @@ export default defineComponent({
       type: Function,
       required: false,
       default: () => {}
-    },
-
-    availableLocationOptions: {
-      type: Array<any>,
-      required: false,
-      default: () => []
     }
   },
-  emits: ['advancedSearch', 'clear', 'input', 'keyup', 'search', 'locationFilterChange'],
+  emits: ['advancedSearch', 'clear', 'input', 'keyup', 'search'],
   setup(props) {
     const query = ref<string>('')
     watch(
@@ -315,14 +298,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.oc-location-search {
-  z-index: 9999;
-  margin-right: 34px !important;
-  float: right;
-  .oc-drop {
-    width: 180px;
-  }
-}
 .oc-search {
   min-width: $form-width-medium;
 
