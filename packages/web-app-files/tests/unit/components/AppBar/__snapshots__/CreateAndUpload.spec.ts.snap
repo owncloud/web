@@ -4,6 +4,7 @@ exports[`CreateAndUpload component action buttons should show and be enabled if 
 <div class="create-and-upload-actions oc-flex-inline oc-mr-s">
   <span>
     <button aria-label="Create a new folder" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-folder-btn" type="button">
+      <!--v-if-->
       <!-- @slot Content of the button -->
       <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="resource-type-folder" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>New Folder</span>
@@ -11,6 +12,7 @@ exports[`CreateAndUpload component action buttons should show and be enabled if 
   </span>
   <span>
     <button aria-label="Upload files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="upload-menu-btn" type="button">
+      <!--v-if-->
       <!-- @slot Content of the button -->
       <oc-icon-stub accessiblelabel="" color="" filltype="line" name="upload" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>Upload</span>
@@ -35,6 +37,7 @@ exports[`CreateAndUpload component file handlers should show additional handlers
 <div class="create-and-upload-actions oc-flex-inline oc-mr-s">
   <span>
     <button aria-label="Create new files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-file-menu-btn" type="button">
+      <!--v-if-->
       <!-- @slot Content of the button -->
       <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="add" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>New</span>
@@ -44,6 +47,7 @@ exports[`CreateAndUpload component file handlers should show additional handlers
     <oc-list-stub id="create-list" raw="false">
       <li class="create-list-folder oc-menu-item-hover">
         <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="new-folder-btn" type="button">
+          <!--v-if-->
           <!-- @slot Content of the button -->
           <oc-resource-icon-stub resource="[object Object]" size="medium"></oc-resource-icon-stub>
           <span>Folder</span>
@@ -51,6 +55,7 @@ exports[`CreateAndUpload component file handlers should show additional handlers
       </li>
       <li class="create-list-file oc-menu-item-hover">
         <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw new-file-btn-txt" type="button">
+          <!--v-if-->
           <!-- @slot Content of the button -->
           <oc-resource-icon-stub resource="[object Object]" size="medium"></oc-resource-icon-stub>
           <span>Plain text file</span>
@@ -58,6 +63,7 @@ exports[`CreateAndUpload component file handlers should show additional handlers
       </li>
       <li class="create-list-file oc-menu-item-hover">
         <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw new-file-btn-md" type="button">
+          <!--v-if-->
           <!-- @slot Content of the button -->
           <oc-resource-icon-stub resource="[object Object]" size="medium"></oc-resource-icon-stub>
           <span>Mark-down file</span>
@@ -65,6 +71,7 @@ exports[`CreateAndUpload component file handlers should show additional handlers
       </li>
       <li class="create-list-file oc-menu-item-hover">
         <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw new-file-btn-drawio" type="button">
+          <!--v-if-->
           <!-- @slot Content of the button -->
           <oc-resource-icon-stub resource="[object Object]" size="medium"></oc-resource-icon-stub>
           <span>Draw.io document</span>
@@ -74,6 +81,7 @@ exports[`CreateAndUpload component file handlers should show additional handlers
   </oc-drop-stub>
   <span>
     <button aria-label="Upload files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="upload-menu-btn" type="button">
+      <!--v-if-->
       <!-- @slot Content of the button -->
       <oc-icon-stub accessiblelabel="" color="" filltype="line" name="upload" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>Upload</span>

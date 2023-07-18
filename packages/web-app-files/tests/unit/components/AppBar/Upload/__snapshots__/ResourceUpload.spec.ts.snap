@@ -3,6 +3,7 @@
 exports[`Resource Upload Component file upload should render component 1`] = `
 <div>
   <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+    <!--v-if-->
     <!-- @slot Content of the button -->
     <span class="oc-icon oc-icon-m oc-icon-passive oc-resource-icon oc-resource-icon-file">
       <!---->
@@ -16,6 +17,7 @@ exports[`Resource Upload Component file upload should render component 1`] = `
 exports[`Resource Upload Component folder upload should render component 1`] = `
 <div>
   <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+    <!--v-if-->
     <!-- @slot Content of the button -->
     <span class="oc-icon oc-icon-m oc-icon-passive oc-resource-icon oc-resource-icon-folder">
       <!---->
