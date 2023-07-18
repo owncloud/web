@@ -88,16 +88,14 @@ export default defineComponent({
      */
     message: {
       type: String,
-      required: false,
-      default: 'Dödelerror'
+      required: false
     },
     /**
      * The error log content that will be displayed in notification
      */
     errorLogContent: {
       type: String,
-      required: false,
-      default: 'hello'
+      required: false
     },
     /**
      * Number of seconds the message shows. It will disappear after this time.
@@ -131,10 +129,9 @@ export default defineComponent({
     /**
      * Notification will be destroyed if timeout is set
      */
-    /*setTimeout(() => {
+    setTimeout(() => {
       this.close()
     }, this.timeout * 1000)
-     */
   },
   methods: {
     close() {
