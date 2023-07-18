@@ -15,7 +15,7 @@
       </div>
       <div class="oc-width-1-1 oc-notification-message-content">
         <div class="oc-flex oc-flex-between oc-width-1-1 oc-mt-s">
-          <span class="oc-mr-s" v-text="message" />
+          <span v-if="message" class="oc-mr-s" v-text="message" />
           <oc-button
             v-if="errorLogContent"
             class="oc-notification-message-error-log-toggle-button"
