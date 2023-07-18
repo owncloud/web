@@ -89,7 +89,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 
-import { defineComponent, inject, ref, watch } from 'vue'
+import { defineComponent, inject, ref, unref, watch } from 'vue'
 import { Resource } from 'web-client'
 import { useShares } from 'web-app-files/src/composables'
 
@@ -131,7 +131,8 @@ export default defineComponent({
         return
       }
       setTimeout(() => {
-        if (!saving) {
+        if (!unref(saving)) {
+          savingDelayed.value = false
           return
         }
         savingDelayed.value = true
