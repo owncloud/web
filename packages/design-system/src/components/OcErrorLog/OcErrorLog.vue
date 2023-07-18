@@ -44,7 +44,7 @@ export default defineComponent({
 
     const contentLabel = computed(() => {
       return $gettext(
-        'Copy the following information to pass them to technical support to troubleshoot the problem:'
+        'Copy the following information and pass them to technical support to troubleshoot the problem:'
       )
     })
 
