@@ -17,42 +17,26 @@
         <div class="oc-flex oc-flex-between oc-width-1-1 oc-mt-s">
           <span class="oc-mr-s" v-text="message" />
           <oc-button
-            v-if="errorDescription"
-            class="oc-notification-message-error-description-toggle-button"
+            v-if="errorLogContent"
+            class="oc-notification-message-error-log-toggle-button"
             gap-size="none"
             appearance="raw"
-            @click="showErrorDescription = !showErrorDescription"
+            @click="showErrorLog = !showErrorLog"
           >
             <span v-text="$gettext('Details')"></span>
-            <oc-icon :name="showErrorDescription ? 'arrow-up-s' : 'arrow-down-s'"
+            <oc-icon :name="showErrorLog ? 'arrow-up-s' : 'arrow-down-s'"
           /></oc-button>
         </div>
-        <div class="oc-mt-l" v-if="showErrorDescription">
-          <oc-textarea
-            class="oc-mt-s oc-notification-message-error-description-textarea"
-            :label="errorDescriptionLabel"
-            :model-value="errorDescription"
-            rows="4"
-            readonly
-          />
-          <oc-button
-            class="oc-width-1-1 oc-mt-xs"
-            size="small"
-            variation="primary"
-            appearance="filled"
-            v-text="copyErrorDescriptionText"
-            @click="copyErrorDescriptionToClipboard"
-          />
-        </div>
+        <oc-error-log v-if="showErrorLog" class="oc-mt-l" :content="errorLogContent" />
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { defineComponent, ref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
+import OcErrorLog from '../OcErrorLog/OcErrorLog.vue'
 
 /**
  * Notifications are used to inform users about errors, warnings and as confirmations for their actions.
@@ -62,32 +46,15 @@ export default defineComponent({
   status: 'ready',
   release: '1.0.0',
   components: {
+    OcErrorLog,
     OcIcon,
     OcButton
   },
-  setup: function (props) {
-    const { $gettext } = useGettext()
-    const showErrorDescription = ref(false)
-    const copyErrorDescriptionInitialText = $gettext('Copy')
-    const copyErrorDescriptionText = ref(copyErrorDescriptionInitialText)
-
-    const errorDescriptionLabel = computed(() => {
-      return $gettext(
-        'Copy the following information to pass them to technical support to troubleshoot the problem:'
-      )
-    })
-
-    const copyErrorDescriptionToClipboard = () => {
-      navigator.clipboard.writeText(props.errorDescription)
-      copyErrorDescriptionText.value = $gettext('Copied to clipboard...')
-      setTimeout(() => (copyErrorDescriptionText.value = copyErrorDescriptionInitialText), 500)
-    }
+  setup: function () {
+    const showErrorLog = ref(false)
 
     return {
-      errorDescriptionLabel,
-      showErrorDescription,
-      copyErrorDescriptionText,
-      copyErrorDescriptionToClipboard
+      showErrorLog
     }
   },
   props: {
@@ -121,9 +88,9 @@ export default defineComponent({
       default: 'Dödelerror'
     },
     /**
-     * The error description that will be displayed in notification
+     * The error log content that will be displayed in notification
      */
-    errorDescription: {
+    errorLogContent: {
       type: String,
       required: false,
       default: 'hello'
@@ -188,18 +155,8 @@ export default defineComponent({
     font-size: 1.15rem;
   }
 
-  &-error-description {
-    &-toggle-button {
-      word-break: keep-all;
-    }
-
-    &-textarea {
-      resize: none;
-
-      label {
-        color: var(--oc-color-text-muted);
-      }
-    }
+  &-error-log-toggle-button {
+    word-break: keep-all;
   }
 }
 </style>
