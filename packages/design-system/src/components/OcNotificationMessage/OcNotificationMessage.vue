@@ -5,7 +5,7 @@
   >
     <div class="oc-flex oc-flex-wrap oc-flex-middle oc-flex-1" :role="role" :aria-live="ariaLive">
       <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-        <div class="oc-flex">
+        <div class="oc-flex oc-flex-middle">
           <oc-icon :variation="iconVariation" name="information" fill-type="line" class="oc-mr-s" />
           <div class="oc-notification-message-title">
             {{ title }}
