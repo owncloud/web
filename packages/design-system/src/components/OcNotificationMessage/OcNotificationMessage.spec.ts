@@ -69,12 +69,12 @@ describe('OcNotificationMessage', () => {
   })
 
   describe('errorLogContent prop', () => {
-    it('should render OcErrorLogComponent, if errorLogContent is provided', () => {
+    it('should render OcErrorLogComponent, if errorLogContent is provided', async () => {
       const wrapper = getWrapper({ errorLogContent: 'X-REQUEST-ID: 1234' })
       const errorLogToggleButtonEl = wrapper.find(selectors.errorLogToggleButton)
 
       expect(errorLogToggleButtonEl.exists()).toBeTruthy()
-      errorLogToggleButtonEl.trigger('click')
+      await errorLogToggleButtonEl.trigger('click')
 
       const errorLogEl = wrapper.find(selectors.errorLog)
       expect(errorLogEl.exists()).toBeTruthy()
