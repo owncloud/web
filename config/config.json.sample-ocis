@@ -28,7 +28,8 @@
       "image/tiff",
       "image/bmp",
       "image/x-ms-bmp",
-      "image/dcm"
+      "application/dcm",
+      "application/octet-stream"
     ],
     "upload": {
       "xhr": {

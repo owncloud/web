@@ -22,15 +22,17 @@ const routes = [
 const appInfo = {
   name: $gettext('DICOM Viewer'),
   id: 'dicom-viewer',
-  icon: 'resource-type-medical',
+  icon: 'medical', // 'resource-type-medical'
   iconFillType: 'fill',
   iconColor: 'var(--oc-color-icon-medical)',
+  isFileEditor: true,
   extensions: [
     {
       extension: 'dcm',
-      routeName: 'dcm-viewer'
+      routeName: 'dicom-viewer'
     }
   ]
+  //fileSideBars
 }
 
 export default {

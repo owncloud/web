@@ -24,12 +24,23 @@
       "text/plain",
       "image/tiff",
       "image/bmp",
-      "image/x-ms-bmp", 
-      "image/dcm"
+      "image/x-ms-bmp",
+      "image/dcm",
+      "application/dicom",
+      "application/octet-stream"
     ],
     "contextHelpersReadMore": true
   },
-  "apps": ["files", "text-editor", "pdf-viewer", "dicom-viewer", "search", "external", "admin-settings", "webfinger"],
+  "apps": [
+    "files",
+    "text-editor",
+    "pdf-viewer",
+    "dicom-viewer",
+    "search",
+    "external",
+    "admin-settings",
+    "webfinger"
+  ],
   "external_apps": [
     {
       "id": "preview",
@@ -50,7 +61,12 @@
       "id": "dicom-viewer",
       "path": "web-app-dicom-viewer",
       "config": {
-        "theme": "image/dcm"
+        "mimeTypes": [
+          "application/dicom",
+          "application/octet-stream",
+          "application/dicom+xml",
+          "application/json"
+        ]
       }
     }
   ]
