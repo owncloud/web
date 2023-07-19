@@ -25,7 +25,6 @@
       "image/tiff",
       "image/bmp",
       "image/x-ms-bmp",
-      "image/dcm",
       "application/dicom",
       "application/octet-stream"
     ],
