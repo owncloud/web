@@ -16,7 +16,7 @@
         :create-option="createOption"
         :selectable="isOptionSelectable"
         :fix-message-line="true"
-        @change="test"
+        @update:model-value="updateModelValue"
       >
         <template #selected-option-container="{ option, deselect }">
           <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
@@ -51,13 +51,6 @@
           <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
         </template>
       </oc-select>
-      <compare-save-dialog
-        class="edit-compare-save-dialog oc-mb-l"
-        :original-object="{ tags: currentTags.map((t) => t.label) }"
-        :compare-object="{ tags: selectedTags.map((t) => t.label) }"
-        @revert="revertChanges"
-        @confirm="save"
-      ></compare-save-dialog>
     </div>
   </div>
 </template>
@@ -84,7 +77,6 @@ type TagOption = {
 export default defineComponent({
   name: 'TagsPanel',
   components: {
-    CompareSaveDialog
   },
   setup() {
     const store = useStore()
@@ -107,12 +99,6 @@ export default defineComponent({
       } = yield clientService.graphAuthenticated.tags.getTags()
       availableTags.value = [
         ...tags
-          .filter((t) =>
-            unref(selectedTags)
-              .map((s) => s.label)
-              .includes(t.label)
-          )
-          .map((t) => ({ label: t }))
       ]
     })
 
@@ -120,6 +106,7 @@ export default defineComponent({
       selectedTags.value = unref(currentTags)
     }
     const createOption = (label: string): TagOption => {
+      console.log('hallo', { label: label.toLowerCase().trim() })
       if (!label.trim().length) {
         return {
           label: label.toLowerCase().trim(),
@@ -139,6 +126,7 @@ export default defineComponent({
     const save = async () => {
       try {
         const { id, tags, fileId } = unref(resource)
+        console.log(unref(selectedTags))
         const selectedTagLabels = unref(selectedTags).map((t) => t.label)
         const tagsToAdd = diff(selectedTagLabels, tags)
         const tagsToRemove = diff(tags, selectedTagLabels)
@@ -186,13 +174,10 @@ export default defineComponent({
       loadAvailableTagsTask.perform()
     })
 
-    const test = (e) => {
-      availableTags.value = unref(availableTags).filter(
-        (t) =>
-          unref(selectedTags)
-            .map((s) => s.label)
-            .includes(t.label) === false
-      )
+    const updateModelValue = async (e) => {
+      selectedTags.value = e.map((x) => (typeof x === 'object' ? x : { label: x }))
+      console.log(selectedTags.value)
+      await save()
     }
 
     return {
@@ -209,7 +194,7 @@ export default defineComponent({
       showSelectNewLabel,
       save,
       keycode,
-      test
+      updateModelValue
     }
   }
 })
