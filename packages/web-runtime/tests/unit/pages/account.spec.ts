@@ -156,9 +156,9 @@ describe('account page', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper, mocks } = getWrapper()
       mocks.$clientService.graphAuthenticated.users.changeOwnPassword.mockRejectedValue(new Error())
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
       await wrapper.vm.editPassword('password', 'newPassword')
-      expect(showMessageStub).toHaveBeenCalled()
+      expect(showErrorMessageStub).toHaveBeenCalled()
     })
   })
 

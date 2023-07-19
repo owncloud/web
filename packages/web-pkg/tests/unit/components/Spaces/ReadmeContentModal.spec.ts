@@ -25,10 +25,10 @@ describe('ReadmeContentModal', () => {
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper } = getWrapper(false)
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
       await wrapper.vm.editReadme()
 
-      expect(showMessageStub).toHaveBeenCalledTimes(1)
+      expect(showErrorMessage).toHaveBeenCalledTimes(1)
     })
   })
 })

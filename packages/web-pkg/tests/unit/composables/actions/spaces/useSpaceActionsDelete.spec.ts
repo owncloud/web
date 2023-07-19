@@ -109,7 +109,7 @@ describe('delete', () => {
           clientService.graphAuthenticated.drives.deleteDrive.mockRejectedValue(new Error())
           await deleteSpaces([mock<SpaceResource>({ id: 1, canBeDeleted: () => true })])
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

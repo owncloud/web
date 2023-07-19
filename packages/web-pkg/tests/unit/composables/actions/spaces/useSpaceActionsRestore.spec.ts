@@ -107,7 +107,7 @@ describe('restore', () => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await restoreSpaces([mock<SpaceResource>({ id: 1, canRestore: () => true })])
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

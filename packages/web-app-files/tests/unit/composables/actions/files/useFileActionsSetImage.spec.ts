@@ -130,7 +130,7 @@ describe('setImage', () => {
               }
             ] as Resource[]
           })
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
