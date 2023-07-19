@@ -60,7 +60,12 @@ describe('useFileActionsCreateNewFile', () => {
         setup: async ({ addNewFile }, { storeOptions }) => {
           await addNewFile('myfolder', null)
           await nextTick()
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+              title: 'Failed to create file'
+            })
+          )
           consoleErrorMock.mockRestore()
         }
       })
