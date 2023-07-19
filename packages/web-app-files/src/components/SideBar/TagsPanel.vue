@@ -16,29 +16,36 @@
         :create-option="createOption"
         :selectable="isOptionSelectable"
         :fix-message-line="true"
+        @change="test"
       >
-        <template #selected-option="{ label }">
-          <span class="oc-flex oc-flex-center">
-            <avatar-image
-              class="oc-flex oc-align-self-center oc-mr-s"
-              :width="16.8"
-              :userid="label"
-              :user-name="label"
-            />
-            <span>{{ label }}</span>
-          </span>
+        <template #selected-option-container="{ option, deselect }">
+          <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
+            <oc-icon name="price-tag-3" size="small" />
+            <span class="oc-text-truncate">{{ option.label }}</span>
+            <span class="oc-flex oc-flex-middle oc-ml-s oc-mr-xs">
+              <oc-icon v-if="option.readonly" class="vs__deselect-lock" name="lock" size="small" />
+              <oc-button
+                v-else
+                appearance="raw"
+                :title="$gettext('Deselect %{label}', { label: option.label })"
+                :aria-label="$gettext('Deselect %{label}', { label: option.label })"
+                class="vs__deselect oc-mx-rm"
+                @mousedown.stop.prevent
+                @click="deselect(option)"
+              >
+                <oc-icon name="close" size="small" />
+              </oc-button>
+            </span>
+          </oc-tag>
         </template>
         <template #option="{ label, error }">
           <div class="oc-flex">
             <span v-if="showSelectNewLabel({ label })" class="oc-mr-s" v-text="$gettext('New')" />
             <span class="oc-flex oc-flex-center">
-              <avatar-image
-                class="oc-flex oc-align-self-center oc-mr-s"
-                :width="16.8"
-                :userid="label"
-                :user-name="label"
-              />
-              <span>{{ label }}</span>
+              <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
+                <oc-icon name="price-tag-3" size="small" />
+                <span class="oc-text-truncate">{{ label }}</span>
+              </oc-tag>
             </span>
           </div>
           <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
@@ -98,7 +105,15 @@ export default defineComponent({
       const {
         data: { value: tags = [] }
       } = yield clientService.graphAuthenticated.tags.getTags()
-      availableTags.value = [...tags.map((t) => ({ label: t }))]
+      availableTags.value = [
+        ...tags
+          .filter((t) =>
+            unref(selectedTags)
+              .map((s) => s.label)
+              .includes(t.label)
+          )
+          .map((t) => ({ label: t }))
+      ]
     })
 
     const revertChanges = () => {
@@ -171,6 +186,15 @@ export default defineComponent({
       loadAvailableTagsTask.perform()
     })
 
+    const test = (e) => {
+      availableTags.value = unref(availableTags).filter(
+        (t) =>
+          unref(selectedTags)
+            .map((s) => s.label)
+            .includes(t.label) === false
+      )
+    }
+
     return {
       loadAvailableTagsTask,
       availableTags,
@@ -184,7 +208,8 @@ export default defineComponent({
       isOptionSelectable,
       showSelectNewLabel,
       save,
-      keycode
+      keycode,
+      test
     }
   }
 })
@@ -195,5 +220,9 @@ export default defineComponent({
   #tags-form {
     border-radius: 5px;
   }
+}
+.tags-control-tag {
+  max-width: 12rem;
+  height: var(--oc-space-large);
 }
 </style>
