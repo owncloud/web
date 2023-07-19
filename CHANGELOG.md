@@ -54,6 +54,7 @@ Summary
 * Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
 * Enhancement - Button styling: [#9394](https://github.com/owncloud/web/pull/9394)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
+* Enhancement - Add error log to upload dialog: [#9436](https://github.com/owncloud/web/pull/9436)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
 
 Details
@@ -436,6 +437,15 @@ Details
 
    https://github.com/owncloud/web/issues/9425
    https://github.com/owncloud/web/pull/9423
+
+* Enhancement - Add error log to upload dialog: [#9436](https://github.com/owncloud/web/pull/9436)
+
+   We've added a error log to the upload dialog, so if an upload fails the user can copy the log and
+   might hand it over to their admin.
+
+   https://github.com/owncloud/web/issues/9430
+   https://github.com/owncloud/web/pull/9436
+   https://github.com/owncloud/web/pull/9426
 
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
 
