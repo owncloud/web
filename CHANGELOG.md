@@ -372,7 +372,9 @@ Details
    We've added the option to set the search location in the searchbar.
 
    https://github.com/owncloud/web/issues/9258
+   https://github.com/owncloud/web/issues/9428
    https://github.com/owncloud/web/pull/9304
+   https://github.com/owncloud/web/pull/9432
 
 * Enhancement - Ambiguation for URL view mode params: [#9344](https://github.com/owncloud/web/pull/9344)
 
@@ -407,6 +409,7 @@ Details
 
    https://github.com/owncloud/web/issues/9377
    https://github.com/owncloud/web/pull/9383
+   https://github.com/owncloud/web/pull/9419
 
 * Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
 
