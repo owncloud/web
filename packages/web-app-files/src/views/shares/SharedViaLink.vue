@@ -158,14 +158,6 @@ export default defineComponent({
   async created() {
     await this.loadResourcesTask.perform()
     this.scrollToResourceFromRoute(this.paginatedResources)
-
-    useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
-      if (mutation.payload.field === 'shareTypes') {
-        const keepSelectedResources = this.selectedResourcesIds
-        await this.loadResourcesTask.perform()
-        this.selectedResourcesIds = keepSelectedResources
-      }
-    })
   },
 
   beforeUnmount() {
