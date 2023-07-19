@@ -14,7 +14,6 @@ build/version.json
 *.chunk.js
 *.chunk.js.map
 
-config.json
 package-lock.json
 
 node_modules

@@ -1,0 +1,41 @@
+{
+  "server": "https://localhost:9200",
+  "theme": "https://localhost:9200/themes/owncloud/theme.json",
+  "openIdConnect": {
+    "metadata_url": "https://localhost:9200/.well-known/openid-configuration",
+    "authority": "https://localhost:9200",
+    "client_id": "web",
+    "response_type": "code",
+    "scope": "openid profile email"
+  },
+  "apps": [
+    "files",
+    "preview",
+    "pdf-viewer",
+    "dicom-viewer",
+    "search",
+    "text-editor",
+    "draw-io",
+    "external",
+    "admin-settings"
+  ],
+  "options": {
+    "previewFileMimeTypes": [
+      "image/gif",
+      "image/png",
+      "image/jpeg",
+      "text/plain",
+      "image/tiff",
+      "image/bmp",
+      "image/x-ms-bmp",
+      "application/dcm",
+      "application/octet-stream"
+    ],
+    "upload": {
+      "xhr": {
+        "timeout": 60000
+      }
+    },
+    "contextHelpersReadMore": true
+  }
+}
