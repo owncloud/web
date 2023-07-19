@@ -97,6 +97,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         (...args) => store.dispatch('createModal', ...args),
         (...args) => store.dispatch('hideModal', ...args),
         (...args) => store.dispatch('showMessage', ...args),
+        (...args) => store.dispatch('showErrorMessage', ...args),
         $gettext,
         $ngettext,
         $gettextInterpolate

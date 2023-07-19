@@ -13,6 +13,7 @@ export class ConflictDialog {
     protected createModal: (modal: object) => void,
     protected hideModal: () => void,
     protected showMessage: (data: object) => void,
+    protected showErrorMessage: (data: object) => void,
     protected $gettext: (msg: string) => string,
     protected $ngettext: (msgid: string, plural: string, n: number) => string,
     protected $gettextInterpolate: (
