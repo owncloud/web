@@ -28,7 +28,7 @@ describe('ReadmeContentModal', () => {
       const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
       await wrapper.vm.editReadme()
 
-      expect(showErrorMessage).toHaveBeenCalledTimes(1)
+      expect(showErrorMessageStub).toHaveBeenCalledTimes(1)
     })
   })
 })

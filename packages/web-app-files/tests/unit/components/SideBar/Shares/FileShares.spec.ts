@@ -163,10 +163,10 @@ describe('FileShares', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper } = getWrapper()
       jest.spyOn(wrapper.vm, 'deleteShare').mockRejectedValue(new Error())
-      const showMessageSpy = jest.spyOn(wrapper.vm, 'showMessage')
+      const showErrorMessageSpy = jest.spyOn(wrapper.vm, 'showErrorMessage')
       const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
-      expect(showMessageSpy).toHaveBeenCalled()
+      expect(showErrorMessageSpy).toHaveBeenCalled()
     })
     it('removes file when the last share on the "Shared with others"-page has been removed', async () => {
       const { wrapper } = getWrapper({

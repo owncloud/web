@@ -122,7 +122,7 @@ describe('Tags Panel', () => {
     await wrapper.vm.save()
     expect(assignTagsStub).toHaveBeenCalled()
     expect(eventStub).not.toHaveBeenCalled()
-    expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+    expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
   })
 
   it('does not accept tags consisting of blanks only', () => {

@@ -42,7 +42,7 @@ describe('QuotaModal', () => {
       expect(
         storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
       ).toHaveBeenCalledTimes(0)
-      expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
     })
   })
 })

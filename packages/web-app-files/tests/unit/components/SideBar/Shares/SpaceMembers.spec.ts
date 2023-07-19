@@ -121,10 +121,10 @@ describe('SpaceMembers', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const wrapper = getWrapper()
       jest.spyOn(wrapper.vm, 'deleteSpaceMember').mockRejectedValue(new Error())
-      const showMessageSpy = jest.spyOn(wrapper.vm, 'showMessage')
+      const showErrorMessageSpy = jest.spyOn(wrapper.vm, 'showErrorMessage')
       const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
-      expect(showMessageSpy).toHaveBeenCalled()
+      expect(showErrorMessageSpy).toHaveBeenCalled()
     })
     it('redirects to the "files-spaces-projects"-page when the current user has been removed', async () => {
       const user = mock<User>({ id: memberMocks.manager.collaborator.name })

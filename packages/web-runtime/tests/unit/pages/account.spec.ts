@@ -225,10 +225,7 @@ describe('account page', () => {
 
       mocks.$clientService.httpAuthenticated.post.mockImplementation(() => mockAxiosReject('err'))
       await wrapper.vm.updateDisableEmailNotifications(true)
-      expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.objectContaining({ status: 'danger' })
-      )
+      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
   })
 })

@@ -58,13 +58,7 @@ describe('useFileActionsCreateNewFolder', () => {
         setup: async ({ addNewFolder }, { storeOptions }) => {
           await addNewFolder('myfolder')
           await nextTick()
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
-            expect.anything(),
-            expect.objectContaining({
-              title: 'Failed to create folder',
-              status: 'danger'
-            })
-          )
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
           consoleErrorMock.mockRestore()
         }
       })
