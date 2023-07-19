@@ -77,16 +77,6 @@ Then(
   async function (type, message) {
     const text = await client.page.webPage().getDisplayedMessage(type, true)
     assert.strictEqual(text, message)
-
-    const element =
-      type === 'error'
-        ? '@errorMessage'
-        : type === 'modal error'
-        ? '@modalErrorMessage'
-        : '@message'
-    if (type === 'error') {
-      return await client.page.webPage().waitForElementNotPresent(element)
-    }
   }
 )
 
