@@ -147,7 +147,7 @@
     </div>
     <oc-error-log
       v-if="showErrorLog"
-      class="upload-info-error-log oc-pt-l oc-pb-m oc-px-m"
+      class="upload-info-error-log oc-pt-m oc-pb-m oc-px-m"
       :content="uploadErrorLogContent"
     />
   </div>
