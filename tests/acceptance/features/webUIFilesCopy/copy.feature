@@ -114,6 +114,7 @@ Feature: copy files and folders
     And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
     Then the "error" message with header "You can't paste the selected file at this location because you can't paste an item into itself." should be displayed on the webUI
+    And the user clears all error message from the webUI
     And as "Alice" file "simple-empty-folder/simple-empty-folder" should not exist in the server
 
 

@@ -84,6 +84,9 @@ Then(
         : type === 'modal error'
         ? '@modalErrorMessage'
         : '@message'
+    if (type === 'error') {
+      return await client.page.webPage().waitForElementNotPresent(element)
+    }
   }
 )
 
