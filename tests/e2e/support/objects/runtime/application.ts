@@ -59,5 +59,6 @@ export class Application {
     }
     await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
     await this.#page.locator(markNotificationsAsReadButton).click()
+    await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
   }
 }
