@@ -82,8 +82,9 @@ import {
   PublicSpaceResource
 } from 'web-client/src/helpers'
 import isEmpty from 'lodash-es/isEmpty'
-import { useLoadTokenInfo } from '../composables/tokenInfo'
 import { useGettext } from 'vue3-gettext'
+// full import is needed here so it can be overwritten via CERN config
+import { useLoadTokenInfo } from 'web-runtime/src/composables/tokenInfo'
 
 export default defineComponent({
   name: 'ResolvePublicLink',

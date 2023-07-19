@@ -17,6 +17,7 @@
     :sort-by="sortBy"
     :sort-dir="sortDir"
     :lazy="lazyLoading"
+    :grouping-settings="groupingSettings"
     padding-x="medium"
     @highlight="fileClicked"
     @row-mounted="rowMounted"
@@ -248,10 +249,13 @@ import {
 } from 'web-app-files/src/router'
 import get from 'lodash-es/get'
 
+// ODS component import is necessary here for CERN to overwrite OcTable
+import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
+
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
-  components: { ContextMenuQuickAction },
+  components: { ContextMenuQuickAction, OcTable },
   props: {
     /**
      * Resources to be displayed in the table.
@@ -421,6 +425,14 @@ export default defineComponent({
      */
     space: {
       type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
+    },
+    /**
+     * This is only relevant for CERN and can be ignored in any other cases.
+     */
+    groupingSettings: {
+      type: Object,
       required: false,
       default: null
     }

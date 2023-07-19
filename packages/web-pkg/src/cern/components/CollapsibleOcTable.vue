@@ -1,102 +1,168 @@
 <template>
-  <table v-bind="extractTableProps()">
-    <oc-thead v-if="hasHeader">
-      <oc-tr class="oc-table-header-row">
-        <oc-th
-          v-for="(field, index) in fields"
-          :key="`oc-thead-${field.name}`"
-          v-bind="extractThProps(field, index)"
-          @click="handleTrClick(field)"
-        >
-          <span v-if="field.headerType === 'slot'" class="oc-table-thead-content">
-            <slot :name="field.name + 'Header'" />
-          </span>
-          <span
-            v-else
-            class="oc-table-thead-content header-text"
-            v-text="extractFieldTitle(field)"
-          />
-          <oc-button
-            v-if="field.sortable"
-            :aria-label="getSortLabel(field.name)"
-            :class="{ 'oc-invisible-sr': sortBy !== field.name }"
-            class="oc-button-sort"
-            variation="passive"
-            appearance="raw"
-            @click.stop="handleTrClick(field)"
+  <div>
+    <div v-if="groupingAllowed && groupingSettings.showGroupingOptions" class="oc-pb-m">
+      <div class="oc-docs-width-small grouping-label">
+        <label class="oc-mx-s" v-text="$gettext('Group By:')"></label>
+      </div>
+      <div class="oc-docs-width-medium grouping-oc-select">
+        <oc-select
+          v-model="selectedGroupingOption"
+          :options="[
+            ...Object.keys(groupingSettings.groupingFunctions),
+            ...(!Object.keys(groupingSettings.groupingFunctions).includes('None') ? ['None'] : [])
+          ]"
+          :clearable="false"
+          :searchable="false"
+        />
+      </div>
+    </div>
+    <table v-bind="extractTableProps()">
+      <oc-thead v-if="hasHeader">
+        <oc-tr class="oc-table-header-row">
+          <oc-th
+            v-for="(field, index) in fields"
+            :key="`oc-thead-${field.name}`"
+            v-bind="extractThProps(field, index)"
+            @click="handleTrClick(field)"
           >
-            <oc-icon
-              :name="sortDir === 'asc' ? 'arrow-down' : 'arrow-up'"
-              fill-type="line"
-              size="small"
-              variation="passive"
+            <span v-if="field.headerType === 'slot'" class="oc-table-thead-content">
+              <slot :name="field.name + 'Header'" />
+            </span>
+            <!-- TODO: Vue warning "v-if/else branches must use unique keys." -->
+            <span
+              v-else
+              class="oc-table-thead-content header-text"
+              v-text="extractFieldTitle(field)"
             />
-          </oc-button>
-        </oc-th>
-      </oc-tr>
-    </oc-thead>
-    <oc-tbody class="has-item-context-menu">
-      <oc-tr
-        v-for="(item, trIndex) in data"
-        :key="`oc-tbody-tr-${itemDomSelector(item) || trIndex}`"
-        :ref="`row-${trIndex}`"
-        v-bind="extractTbodyTrProps(item, trIndex)"
-        :data-item-id="item[idKey]"
-        :draggable="dragDrop"
-        @click="$emit(constants.EVENT_TROW_CLICKED, [item, $event])"
-        @contextmenu="
-          $emit(constants.EVENT_TROW_CONTEXTMENU, $refs[`row-${trIndex}`][0], $event, item)
-        "
-        @vue:mounted="$emit(constants.EVENT_TROW_MOUNTED, item, $refs[`row-${trIndex}`][0])"
-        @dragstart="dragStart(item, $event)"
-        @drop="dropRowEvent(itemDomSelector(item), $event)"
-        @dragenter.prevent="dropRowStyling(itemDomSelector(item), false, $event)"
-        @dragleave.prevent="dropRowStyling(itemDomSelector(item), true, $event)"
-        @mouseleave="dropRowStyling(itemDomSelector(item), true, $event)"
-        @dragover="dragOver($event)"
+            <oc-button
+              v-if="field.sortable"
+              :aria-label="getSortLabel(field.name)"
+              :class="{ 'oc-invisible-sr': sortBy !== field.name }"
+              class="oc-button-sort"
+              variation="passive"
+              appearance="raw"
+              @click.stop="handleTrClick(field)"
+            >
+              <oc-icon
+                :name="sortDir === 'asc' ? 'arrow-down' : 'arrow-up'"
+                fill-type="line"
+                size="small"
+                variation="passive"
+              />
+            </oc-button>
+          </oc-th>
+        </oc-tr>
+      </oc-thead>
+      <oc-tbody
+        v-if="selectedGroupingOption === 'None' || !selectedGroupingOption"
+        class="has-item-context-menu"
       >
-        <oc-td
-          v-for="(field, tdIndex) in fields"
-          :key="'oc-tbody-td-' + cellKey(field, tdIndex, item)"
-          v-bind="extractTdProps(field, tdIndex, item)"
+        <oc-tr
+          v-for="(item, trIndex) in data"
+          :key="`oc-tbody-tr-${itemDomSelector(item) || trIndex}`"
+          :ref="`row-${trIndex}`"
+          v-bind="extractTbodyTrProps(item, trIndex)"
+          :data-item-id="item[idKey]"
+          :draggable="dragDrop"
+          @click="$emit(constants.EVENT_TROW_CLICKED, [item, $event])"
+          @contextmenu="
+            $emit(constants.EVENT_TROW_CONTEXTMENU, $refs[`row-${trIndex}`][0], $event, item)
+          "
+          @vue:mounted="$emit(constants.EVENT_TROW_MOUNTED, item, $refs[`row-${trIndex}`][0])"
+          @dragstart="dragStart(item, $event)"
+          @drop="dropRowEvent(itemDomSelector(item), $event)"
+          @dragenter.prevent="dropRowStyling(itemDomSelector(item), false, $event)"
+          @dragleave.prevent="dropRowStyling(itemDomSelector(item), true, $event)"
+          @mouseleave="dropRowStyling(itemDomSelector(item), true, $event)"
+          @dragover="dragOver($event)"
         >
-          <slot v-if="isFieldTypeSlot(field)" :name="field.name" :item="item" />
-          <template v-else-if="isFieldTypeCallback(field)">
-            {{ field.callback(item[field.name]) }}
-          </template>
-          <template v-else>
-            {{ item[field.name] }}
-          </template>
-        </oc-td>
-      </oc-tr>
-    </oc-tbody>
-    <tfoot v-if="$slots.footer" class="oc-table-footer">
-      <tr class="oc-table-footer-row">
-        <td :colspan="fullColspan" class="oc-table-footer-cell">
-          <!-- @slot Footer of the table -->
-          <slot name="footer" />
-        </td>
-      </tr>
-    </tfoot>
-    <Teleport v-if="dragItem" to="body">
-      <oc-ghost-element
-        ref="ghostElement"
-        :preview-items="[dragItem, ...dragSelection]"
-      ></oc-ghost-element>
-    </Teleport>
-  </table>
+          <oc-td
+            v-for="(field, tdIndex) in fields"
+            :key="'oc-tbody-td-' + cellKey(field, tdIndex, item)"
+            v-bind="extractTdProps(field, tdIndex, item)"
+          >
+            <slot v-if="isFieldTypeSlot(field)" :name="field.name" :item="item" />
+            <template v-else-if="isFieldTypeCallback(field)">
+              {{ field.callback(item[field.name]) }}
+            </template>
+            <template v-else>
+              {{ item[field.name] }}
+            </template>
+          </oc-td>
+        </oc-tr>
+      </oc-tbody>
+
+      <!-- Collapsibles -->
+
+      <oc-tbody
+        v-for="(group, index) in groupedData"
+        v-else-if="groupingAllowed && selectedGroupingOption !== 'None' && copyGroupedData.length"
+        :key="`${group.name + index}`"
+        class="has-item-context-menu"
+      >
+        <oc-tr :class="['oc-tbody-tr', 'oc-tbody-tr-accordion']" @click="toggleGroup(index)">
+          <oc-td :colspan="fields.length - 1" class="oc-pl-s"> {{ group.name }}</oc-td>
+          <!-- Column with collapsible buttons -->
+          <oc-td class="oc-table-cell-align-right">
+            <span class="oc-ml-xs oc-icon-l" :class="[!itemOpen(index) && 'oc-hidden']">
+              <oc-icon name="arrow-down-s" size="medium" />
+            </span>
+            <span class="oc-ml-xs oc-icon-l" :class="[itemOpen(index) && 'oc-hidden']">
+              <oc-icon name="arrow-up-s" size="medium" /> </span
+          ></oc-td>
+        </oc-tr>
+        <!-- Data for the group -->
+        <template v-if="itemOpen(index)">
+          <oc-tr
+            v-for="(item, trIndex) in group['data']"
+            :key="`oc-tbody-tr-${itemDomSelector(item) || trIndex}`"
+            :ref="`row-${trIndex}`"
+            v-bind="extractTbodyTrProps(item, trIndex)"
+            :data-item-id="item[idKey]"
+            :draggable="dragDrop"
+            @click="$emit(constants.EVENT_TROW_CLICKED, [item, $event])"
+            @contextmenu="
+              $emit(constants.EVENT_TROW_CONTEXTMENU, $refs[`row-${trIndex}`][0], $event, item)
+            "
+            @vue:mounted="$emit(constants.EVENT_TROW_MOUNTED, item, $refs[`row-${trIndex}`][0])"
+            @dragstart="dragStart(item, $event)"
+            @drop="dropRowEvent(itemDomSelector(item), $event)"
+            @dragenter.prevent="dropRowStyling(itemDomSelector(item), false, $event)"
+            @dragleave.prevent="dropRowStyling(itemDomSelector(item), true, $event)"
+            @mouseleave="dropRowStyling(itemDomSelector(item), true, $event)"
+            @dragover="dragOver($event)"
+          >
+            <oc-td
+              v-for="(field, tdIndex) in fields"
+              :key="'oc-tbody-td-' + cellKey(field, tdIndex, item)"
+              v-bind="extractTdProps(field, tdIndex, item)"
+            >
+              <slot v-if="isFieldTypeSlot(field)" :name="field.name" :item="item" />
+              <template v-else-if="isFieldTypeCallback(field)">
+                {{ field.callback(item[field.name]) }}
+              </template>
+              <template v-else>{{ item[field.name] }}</template>
+            </oc-td>
+          </oc-tr>
+        </template>
+      </oc-tbody>
+      <tfoot v-if="$slots.footer" class="oc-table-footer">
+        <tr class="oc-table-footer-row">
+          <td :colspan="fullColspan" class="oc-table-footer-cell">
+            <!-- @slot Footer of the table -->
+            <slot name="footer" />
+          </td>
+        </tr>
+      </tfoot>
+      <Teleport v-if="dragItem" to="body">
+        <oc-ghost-element ref="ghostElement" :preview-items="[dragItem, ...dragSelection]" />
+      </Teleport>
+    </table>
+  </div>
 </template>
 <script lang="ts">
-import OcThead from '../_OcTableHeader/_OcTableHeader.vue'
-import OcTbody from '../_OcTableBody/_OcTableBody.vue'
-import OcTr from '../_OcTableRow/_OcTableRow.vue'
-import OcTh from '../_OcTableCellHead/_OcTableCellHead.vue'
-import OcTd from '../_OcTableCellData/_OcTableCellData.vue'
-import OcGhostElement from '../_OcGhostElement/_OcGhostElement.vue'
-import OcButton from '../OcButton/OcButton.vue'
-import { getSizeClass } from '../../utils/sizeClasses'
 import { defineComponent, PropType, ref } from 'vue'
-
+import { getSizeClass } from 'design-system/src/utils/sizeClasses'
 import {
   EVENT_THEAD_CLICKED,
   EVENT_TROW_CLICKED,
@@ -105,11 +171,9 @@ import {
   EVENT_ITEM_DROPPED,
   EVENT_ITEM_DRAGGED,
   EVENT_SORT
-} from '../../helpers/constants'
-
+} from 'design-system/src/helpers/constants'
 const SORT_DIRECTION_ASC = 'asc' as const
 const SORT_DIRECTION_DESC = 'desc' as const
-
 export type FieldType = {
   name: string
   title?: string
@@ -124,24 +188,26 @@ export type FieldType = {
   tdClass?: string
   sortable?: boolean
 }
-
 /**
- * A table component with dynamic layout and data.
+ * A collapsible table component with dynamic layout and data.
  */
 export default defineComponent({
-  name: 'OcTable',
-  status: 'ready',
-  release: '2.1.0',
-  components: {
-    OcThead,
-    OcTbody,
-    OcTr,
-    OcTh,
-    OcTd,
-    OcButton,
-    OcGhostElement
-  },
+  name: 'CollapsibleOcTable',
+  status: 'prototype',
+  release: 'unreleased',
   props: {
+    /**
+     * Grouping settings for the table. Following settings are possible:<br />
+     * -**groupingFunctions**: Object with keys as grouping options names and as values functions that get a table data row and return a group name for that row. The names of the functions are used as grouping options.<br />
+     * -**sortGroups**: Object with keys as grouping options names and as values functions that get an array of groups and return a sorted array of groups.
+     * -**groupingBy**: must be either one of the keys in groupingFunctions or 'None'. If not set, default grouping will be 'None'.<br />
+     * -**ShowGroupingOptions**:  boolean value for showing or hinding the select element with grouping options above the table. <br />
+     */
+    groupingSettings: {
+      type: Object,
+      required: false,
+      default: null
+    },
     /**
      * The data for the table. Each array item will be rendered as one table row. Each array item needs to have a
      * unique identifier. By default we expect this to be an `id` field. If your field has a different name, please
@@ -285,14 +351,6 @@ export default defineComponent({
       type: String,
       required: false,
       default: undefined
-    },
-    /**
-     * This is only relevant for CERN and can be ignored in any other cases.
-     */
-    groupingSettings: {
-      type: Object,
-      required: false,
-      default: null
     }
   },
   emits: [
@@ -305,6 +363,7 @@ export default defineComponent({
     EVENT_SORT
   ],
   setup() {
+    const copyGroupedData = ref([])
     const ghostElement = ref()
     const dragItem = ref()
     const constants = {
@@ -313,7 +372,12 @@ export default defineComponent({
       EVENT_TROW_MOUNTED,
       EVENT_TROW_CONTEXTMENU
     }
-    return { ghostElement, dragItem, constants }
+    return { copyGroupedData, ghostElement, dragItem, constants }
+  },
+  data() {
+    return {
+      selectedGroupingOption: this.groupingSettings?.groupingBy || 'None'
+    }
   },
   computed: {
     isSortable() {
@@ -321,18 +385,14 @@ export default defineComponent({
     },
     tableClasses() {
       const result = ['oc-table']
-
       if (this.hover) {
         result.push('oc-table-hover')
       }
-
       if (this.sticky) {
         result.push('oc-table-sticky')
       }
-
       return result
     },
-
     fullColspan() {
       return this.fields.length
     },
@@ -343,6 +403,40 @@ export default defineComponent({
         1
       )
       return selection
+    },
+    groupingAllowed() {
+      return !!(
+        this.groupingSettings?.groupingFunctions &&
+        Object.keys(this.groupingSettings.groupingFunctions).length > 0
+      )
+    },
+    groupedData() {
+      let result = this.createGroupedData(this.selectedGroupingOption, this.data)
+      if (!result.length) return []
+      // sort groups if there is a given sorting function in grouping settings
+      if (this.groupingSettings?.sortGroups?.[this.selectedGroupingOption]) {
+        result = this.groupingSettings.sortGroups[this.selectedGroupingOption](result)
+      }
+      return result
+    }
+  },
+  created() {
+    // create copy of grouped data to manipulate toggling
+    if (this.groupingAllowed) {
+      this.copyGroupedData = [...this.groupedData]
+      // callback for selection of None by enabled groupingSettings
+      this.$watch('selectedGroupingOption', () => {
+        if (
+          this.selectedGroupingOption === 'None' &&
+          this.groupingSettings?.groupingFunctions?.None
+        )
+          this.groupingSettings.groupingFunctions.None()
+        else {
+          this.updateCopyGroupedData()
+        }
+      })
+      // update the copy of grouped data on data change
+      this.$watch('data', this.updateCopyGroupedData, { deep: true })
     }
   },
   methods: {
@@ -381,7 +475,6 @@ export default defineComponent({
       if (event.currentTarget?.contains(event.relatedTarget)) {
         return
       }
-
       const classList = document.getElementsByClassName(`oc-tbody-tr-${selector}`)[0].classList
       const className = 'highlightedDropTarget'
       leaving ? classList.remove(className) : classList.add(className)
@@ -412,17 +505,13 @@ export default defineComponent({
       if (this.sticky) {
         props.style = `top: ${this.headerPosition}px;`
       }
-
       if (index === 0) {
         props.class += ` oc-pl-${getSizeClass(this.paddingX)} `
       }
-
       if (index === this.fields.length - 1) {
         props.class += ` oc-pr-${getSizeClass(this.paddingX)}`
       }
-
       this.extractSortThProps(props, field)
-
       return props
     },
     extractTbodyTrProps(item, index) {
@@ -445,19 +534,15 @@ export default defineComponent({
       if (Object.prototype.hasOwnProperty.call(field, 'wrap')) {
         props.wrap = field.wrap
       }
-
       if (index === 0) {
         props.class += ` oc-pl-${getSizeClass(this.paddingX)} `
       }
-
       if (index === this.fields.length - 1) {
         props.class += ` oc-pr-${getSizeClass(this.paddingX)}`
       }
-
       if (Object.prototype.hasOwnProperty.call(field, 'accessibleLabelCallback')) {
         props['aria-label'] = field.accessibleLabelCallback(item)
       }
-
       return props
     },
     extractCellProps(field) {
@@ -474,56 +559,43 @@ export default defineComponent({
       if (!this.highlighted) {
         return false
       }
-
       if (Array.isArray(this.highlighted)) {
         return this.highlighted.indexOf(item[this.idKey]) > -1
       }
-
       return this.highlighted === item[this.idKey]
     },
     isDisabled(item) {
       if (!this.disabled) {
         return false
       }
-
       if (Array.isArray(this.disabled)) {
         return this.disabled.indexOf(item[this.idKey]) > -1
       }
-
       return this.disabled === item[this.idKey]
     },
-
     cellKey(field, index, item) {
       const prefix = [item[this.idKey], index + 1].filter(Boolean)
-
       if (this.isFieldTypeSlot(field)) {
         return [...prefix, field.name].join('-')
       }
-
       if (this.isFieldTypeCallback(field)) {
         return [...prefix, field.callback(item[field.name])].join('-')
       }
-
       return [...prefix, item[field.name]].join('-')
     },
-
     getSortLabel(name) {
       const label = this.$gettext('Sort by %{ name }')
-
       return this.$gettextInterpolate(label, { name })
     },
-
     handleTrClick(field) {
       if (this.isSortable) {
         this.handleSort(field)
       }
     },
-
     extractSortThProps(props, field) {
       if (!this.fieldIsSortable(field)) {
         return
       }
-
       let sort = 'none'
       if (this.sortBy === field.name) {
         sort = this.sortDir === SORT_DIRECTION_ASC ? 'ascending' : 'descending'
@@ -537,7 +609,6 @@ export default defineComponent({
       if (!this.fieldIsSortable(field)) {
         return
       }
-
       let sortDir = this.sortDir
       // toggle sortDir if already sorted by this column
       if (this.sortBy === field.name && this.sortDir !== undefined) {
@@ -547,7 +618,6 @@ export default defineComponent({
       if (this.sortBy !== field.name || this.sortDir === undefined) {
         sortDir = field.sortDir || SORT_DIRECTION_DESC
       }
-
       /**
        * Triggers when table heads are clicked
        *
@@ -558,62 +628,111 @@ export default defineComponent({
         sortBy: field.name,
         sortDir
       })
+    },
+    updateCopyGroupedData() {
+      const tempData = [...this.groupedData]
+      tempData.forEach((e) => {
+        const group = this.copyGroupedData.find((el) => el.name === e.name)
+        if (group && group.open) {
+          e.open = group.open
+        }
+        this.copyGroupedData = [...tempData]
+      })
+    },
+    createGroupedData(col, data) {
+      const groups = {}
+      const resultArray = []
+      if (Object.keys(this.groupingSettings?.groupingFunctions).includes(col)) {
+        data.forEach((row) => {
+          groups[this.groupingSettings.groupingFunctions[col](row)]
+            ? groups[this.groupingSettings.groupingFunctions[col](row)].push(row)
+            : (groups[this.groupingSettings.groupingFunctions[col](row)] = [row])
+        })
+        for (const [key, value] of Object.entries(groups)) {
+          resultArray.push({
+            name: key.toUpperCase(),
+            open: true,
+            data: value
+          })
+        }
+        return resultArray
+      }
+    },
+    toggleGroup(index) {
+      this.copyGroupedData[index].open = !this.copyGroupedData[index].open
+    },
+    itemOpen(index) {
+      return this.copyGroupedData[index]?.open
+    },
+    clickedField(field) {
+      this.$emit(this.constants.EVENT_THEAD_CLICKED, field)
     }
   }
 })
 </script>
 <style lang="scss">
+.condensed > .oc-table > tbody > tr {
+  height: 0 !important;
+}
+.grouping-settings {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.grouping-label {
+  display: inline;
+}
+.grouping-oc-select {
+  display: inline-block;
+  width: 250px;
+}
+.oc-tbody-tr-accordion {
+  cursor: pointer;
+  background-color: var(--oc-color-input-bg);
+}
 .oc-table {
   border-collapse: collapse;
   border-spacing: 0;
   color: var(--oc-color-text-default);
   width: 100%;
-
   &-hover tr {
     transition: background-color $transition-duration-short ease-in-out;
   }
-
+  &-hover tr:hover td:not(:last-child) span:not(.avatarInitials):not(button span) {
+    color: var(--oc-color-swatch-brand-hover) !important;
+  }
   tr {
     outline: none;
     height: var(--oc-size-height-table-row);
   }
-
   tr + tr {
     border-top: 1px solid var(--oc-color-border);
   }
-
   &-hover tr:not(&-footer-row):hover {
     background-color: var(--oc-color-background-hover);
   }
-
   &-highlighted {
     background-color: var(--oc-color-background-highlight) !important;
   }
-
   &-accentuated {
     background-color: var(--oc-color-background-accentuate);
   }
-
   &-disabled {
     background-color: var(--oc-color-background-muted);
     opacity: 0.8;
     pointer-events: none;
   }
-
   &-sticky {
     position: relative;
-
     .oc-table-header-cell {
       background-color: var(--oc-color-background-default);
       position: sticky;
       z-index: 1;
     }
   }
-
   .highlightedDropTarget {
     background-color: var(--oc-color-input-border);
   }
-
   &-thead-content {
     vertical-align: middle;
     display: inline-table;
@@ -622,10 +741,8 @@ export default defineComponent({
       text-decoration: underline;
     }
   }
-
   &-footer {
     border-top: 1px solid var(--oc-color-border);
-
     &-cell {
       color: var(--oc-color-text-muted);
       font-size: 0.875rem;
@@ -646,318 +763,3 @@ export default defineComponent({
   }
 }
 </style>
-<docs>
-```js
-<template>
-  <section>
-    <h3 class="oc-heading-divider">
-      A simple table with plain field types
-    </h3>
-    <oc-table :fields="fields" :data="data" highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
-      disabled="8468c9f0-5057-11eb-924b-934c6fd827a2" :sticky="true">
-      <template #footer>
-        3 resources
-      </template>
-    </oc-table>
-  </section>
-</template>
-<script>
-  export default {
-    computed: {
-      fields() {
-        return [{
-          name: "resource",
-          title: "Resource",
-          alignH: "left",
-        }, {
-          name: "last_modified",
-          title: "Last modified",
-          alignH: "right"
-        }]
-      },
-      data() {
-        return [{
-          id: "4b136c0a-5057-11eb-ac70-eba264112003",
-          resource: "hello-world.txt",
-          last_modified: 1609962211
-        }, {
-          id: "8468c9f0-5057-11eb-924b-934c6fd827a2",
-          resource: "I am a folder",
-          last_modified: 1608887766
-        }, {
-          id: "9c4cf97e-5057-11eb-8044-b3d5df9caa21",
-          resource: "this is fine.png",
-          last_modified: 1599999999
-        }]
-      }
-    }
-  }
-</script>
-```
-```js
-<template>
-  <section>
-    <h3 class="oc-heading-divider">
-      A sortable table with plain field types
-    </h3>
-    <oc-table @sort="handleSort" :sort-by="sortBy" :sort-dir="sortDir" :fields="fields" :data="data" highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
-      disabled="8468c9f0-5057-11eb-924b-934c6fd827a2" :sticky="true">
-      <template #footer>
-        3 resources
-      </template>
-    </oc-table>
-  </section>
-</template>
-<script>
-  const orderBy = (list, prop, desc) => {
-    return [...list].sort((a, b) => {
-      a = a[prop];
-      b = b[prop];
-
-      if (a == b) {
-        return 0
-      };
-      return (desc ? a > b : a < b) ? -1 : 1;
-    });
-  };
-
-  export default {
-    data() {
-      return {
-        sortBy: 'resource',
-        sortDir: 'desc'
-      }
-    },
-    methods: {
-      handleSort(event) {
-        this.sortBy = event.sortBy
-        this.sortDir = event.sortDir
-
-      }
-    },
-    computed: {
-      fields() {
-        return [{
-          name: "resource",
-          title: "Resource",
-          alignH: "left",
-          sortable: true,
-        }, {
-          name: "last_modified",
-          title: "Last modified",
-          alignH: "right",
-          sortable: true,
-        }]
-      },
-      data() {
-        return orderBy([{
-          id: "4b136c0a-5057-11eb-ac70-eba264112003",
-          resource: "hello-world.txt",
-          last_modified: 1609962211
-        }, {
-          id: "8468c9f0-5057-11eb-924b-934c6fd827a2",
-          resource: "I am a folder",
-          last_modified: 1608887766
-        }, {
-          id: "9c4cf97e-5057-11eb-8044-b3d5df9caa21",
-          resource: "this is fine.png",
-          last_modified: 1599999999
-        }], this.sortBy, this.sortDir === 'desc')
-      }
-    }
-  }
-</script>
-```
-```js
-<template>
-  <section>
-    <h3 class="oc-heading-divider">
-      A simple table with all existing field types
-    </h3>
-    <oc-table :fields="fields" :data="data">
-      <template v-slot:resourceHeader>
-        <div class="oc-flex oc-flex-middle">
-          <oc-icon name="folder" class="oc-mr-s" />
-          Resource
-        </div>
-      </template>
-      <template v-slot:resource="rowData">
-        <oc-tag>
-          <oc-icon :name="rowData.item.icon" />
-          {{ rowData.item.resource }}
-        </oc-tag>
-      </template>
-    </oc-table>
-  </section>
-</template>
-<script>
-  export default {
-    computed: {
-      fields() {
-        return [{
-          name: "resource",
-          title: "Resource",
-          headerType: "slot",
-          type: "slot"
-        }, {
-          name: "last_modified",
-          title: "Last modified",
-          type: "callback",
-          callback: function(timestamp) {
-            const date = new Date(timestamp * 1000)
-            const hours = date.getHours()
-            const minutes = "0" + date.getMinutes()
-            const seconds = "0" + date.getSeconds()
-            return hours + ":" + minutes.slice(-2) + ":" + seconds.slice(-2)
-          }
-        }]
-      },
-      data() {
-        return [{
-          id: "4b136c0a-5057-11eb-ac70-eba264112003",
-          resource: "hello-world.txt",
-          icon: "file-list",
-          last_modified: 1609962211
-        }, {
-          id: "8468c9f0-5057-11eb-924b-934c6fd827a2",
-          resource: "I am a folder",
-          icon: "folder",
-          last_modified: 1608887766
-        }, {
-          id: "9c4cf97e-5057-11eb-8044-b3d5df9caa21",
-          resource: "this is fine.png",
-          icon: "image",
-          last_modified: 1599999999
-        }]
-      }
-    }
-  }
-</script>
-```
-
-```js
-<template>
-  <section>
-    <h3 class="oc-heading-divider">
-      A table with long text showing the different text wrapping mechanisms
-    </h3>
-    <oc-table :fields="fields" :data="data" :has-header="true" :hover="true" />
-  </section>
-</template>
-<script>
-  export default {
-    computed: {
-      fields() {
-        return [
-          {
-            name: "truncate",
-            title: "truncate",
-            wrap: "truncate"
-          },
-          {
-            name: "break",
-            title: "break",
-            wrap: "break"
-          },
-          {
-            name: "nowrap",
-            title: "nowrap",
-            wrap: "nowrap"
-          }
-        ]
-      },
-      data() {
-        return [
-          {
-            truncate: "This is very long text that will get truncated eventually. This is very long text that will get truncated eventually. This is very long text that will get truncated eventually. This is very long text that will get truncated eventually. This is very long text that will get truncated eventually. This is very long text that will get truncated eventually. This is very long text that will get truncated eventually.",
-            break: "This text is supposed to break to new lines if it becomes too long. This text is supposed to break to new lines if it becomes too long. This text is supposed to break to new lines if it becomes too long. This text is supposed to break to new lines if it becomes too long.",
-            nowrap: "This text stays on one line."
-          }
-        ]
-      }
-    }
-  }
-</script>
-```
-```js
-<template>
-  <section>
-    <h3 class="oc-heading-divider">
-      An interactive table showcasing different table features/properties
-    </h3>
-    <oc-table :fields="fields" :data="data" :has-header="hasHeader" :sticky="stickyHeader" :hover="hover">
-      <template v-slot:action="rowData">
-        <oc-button @click="toggle(rowData)" size="small">Toggle</oc-button>
-      </template>
-    </oc-table>
-  </section>
-</template>
-<script>
-  export default {
-    data() {
-      return {
-        hasHeader: true,
-        stickyHeader: false,
-        hover: true
-      }
-    },
-    computed: {
-      fields() {
-        return [
-          {
-            name: "property",
-            title: "Property",
-            sortable: true
-          },
-          {
-            name: "description",
-            title: "Description",
-            width: "expand",
-            sortable: true
-          },
-          {
-            name: "state",
-            title: "State",
-            width: "shrink",
-            sortable: true
-          },
-          {
-            name: "action",
-            title: "",
-            type: "slot",
-            width: "shrink"
-          }
-        ]
-      },
-      data() {
-        return [
-          {
-            property: "has-header",
-            description: "Whether or not the table header is visible",
-            state: this.hasHeader,
-            variable: "hasHeader"
-          },
-          {
-            property: "sticky",
-            description: "Whether or not the table header is sticky, causing it to float above the table content when scrolling",
-            state: this.stickyHeader,
-            variable: "stickyHeader"
-          },
-          {
-            property: "hover",
-            description: "Highlight table rows on mouseover",
-            state: this.hover,
-            variable: "hover"
-          }
-        ]
-      }
-    },
-    methods: {
-      toggle(rowData) {
-        this[rowData.item.variable] = !this[rowData.item.variable];
-      }
-    },
-  }
-</script>
-```
-</docs>

@@ -37,6 +37,7 @@
           :sort-dir="acceptedSortDir"
           :sort-handler="acceptedHandleSort"
           :title="acceptedTitle"
+          :grouping-settings="groupingSettings"
         />
 
         <shared-with-me-section
@@ -53,6 +54,7 @@
           :sort-dir="declinedSortDir"
           :sort-handler="declinedHandleSort"
           :title="declinedTitle"
+          :grouping-settings="groupingSettings"
         />
       </template>
     </files-view-wrapper>
@@ -75,6 +77,7 @@ import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { useCapabilityShareJailEnabled, useSort, useStore } from 'web-pkg/src/composables'
+import { useGroupingSettings } from 'web-pkg/src/cern/composables'
 
 export default defineComponent({
   components: {
@@ -193,7 +196,10 @@ export default defineComponent({
       declinedHandleSort,
       declinedSortBy,
       declinedSortDir,
-      declinedItems
+      declinedItems,
+
+      // CERN
+      ...useGroupingSettings({ sortBy: acceptedSortBy, sortDir: acceptedSortDir })
     }
   },
 
