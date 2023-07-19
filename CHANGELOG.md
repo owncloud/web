@@ -54,6 +54,7 @@ Summary
 * Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
 * Enhancement - Button styling: [#9394](https://github.com/owncloud/web/pull/9394)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
+* Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
 
 Details
 -------
@@ -432,6 +433,12 @@ Details
 
    https://github.com/owncloud/web/issues/9425
    https://github.com/owncloud/web/pull/9423
+
+* Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
+
+   We've added a tooltip with the absolute date for file versions in file details
+
+   https://github.com/owncloud/web/pull/9441
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
