@@ -11,7 +11,9 @@
             {{ title }}
           </div>
         </div>
-        <oc-button appearance="raw" @click="close"><oc-icon name="close" /></oc-button>
+        <oc-button appearance="raw" @click="close" :aria-label="$gettext('Close')"
+          ><oc-icon name="close"
+        /></oc-button>
       </div>
       <div class="oc-width-1-1">
         <div class="oc-flex oc-flex-between oc-width-1-1 oc-mt-s">
