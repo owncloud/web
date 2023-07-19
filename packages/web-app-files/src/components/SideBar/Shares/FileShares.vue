@@ -272,7 +272,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['deleteShare', 'addShare']),
-    ...mapActions(['createModal', 'hideModal', 'showMessage']),
+    ...mapActions(['createModal', 'hideModal', 'showMessage', 'showErrorMessage']),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
     getDeniedShare(collaborator: Share): Share {
@@ -376,9 +376,8 @@ export default defineComponent({
           })
         } catch (e) {
           console.error(e)
-          this.showMessage({
-            title: this.$gettext('Failed to deny access'),
-            status: 'danger'
+          this.showErrorMessage({
+            title: this.$gettext('Failed to deny access')
           })
         }
       } else {
@@ -398,9 +397,8 @@ export default defineComponent({
           })
         } catch (e) {
           console.error(e)
-          this.showMessage({
-            title: this.$gettext('Failed to grant access'),
-            status: 'danger'
+          this.showErrorMessage({
+            title: this.$gettext('Failed to grant access')
           })
         }
       }
@@ -449,9 +447,8 @@ export default defineComponent({
         }
       } catch (error) {
         console.error(error)
-        this.showMessage({
-          title: this.$gettext('Failed to remove share'),
-          status: 'danger'
+        this.showErrorMessage({
+          title: this.$gettext('Failed to remove share')
         })
       }
     },

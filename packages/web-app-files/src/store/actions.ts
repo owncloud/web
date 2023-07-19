@@ -200,10 +200,9 @@ export default {
           }
           const title = $gettextInterpolate(translated, { file: file.name }, true)
           context.dispatch(
-            'showMessage',
+            'showErrorMessage',
             {
-              title: title,
-              status: 'danger'
+              title: title
             },
             { root: true }
           )

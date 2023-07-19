@@ -42,11 +42,10 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
         })
         .catch((error) => {
           console.error(error)
-          store.dispatch('showMessage', {
+          store.dispatch('showErrorMessage', {
             title: $gettext('Failed to disable space %{spaceName}', {
               spaceName: space.name
-            }),
-            status: 'danger'
+            })
           })
         })
       requests.push(request)

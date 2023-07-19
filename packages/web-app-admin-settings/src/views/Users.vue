@@ -526,9 +526,8 @@ export default defineComponent({
         addToGroupsModalIsOpen.value = false
       } catch (e) {
         console.error(e)
-        await store.dispatch('showMessage', {
-          title: $gettext('Failed add users to group'),
-          status: 'danger'
+        await store.dispatch('showErrorMessage', {
+          title: $gettext('Failed add users to group')
         })
       }
     }
@@ -560,9 +559,8 @@ export default defineComponent({
         removeFromGroupsModalIsOpen.value = false
       } catch (e) {
         console.error(e)
-        await store.dispatch('showMessage', {
-          title: $gettext('Failed remove users from group'),
-          status: 'danger'
+        await store.dispatch('showErrorMessage', {
+          title: $gettext('Failed remove users from group')
         })
       }
     }
@@ -589,9 +587,8 @@ export default defineComponent({
         editLoginModalIsOpen.value = false
       } catch (e) {
         console.error(e)
-        return store.dispatch('showMessage', {
-          title: $gettext('Failed to edit login'),
-          status: 'danger'
+        return store.dispatch('showErrorMessage', {
+          title: $gettext('Failed to edit login')
         })
       }
     }
@@ -685,7 +682,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     selectUsers(users) {
@@ -719,9 +716,8 @@ export default defineComponent({
         })
       } catch (error) {
         console.error(error)
-        this.showMessage({
-          title: this.$gettext('Failed to create user'),
-          status: 'danger'
+        this.showErrorMessage({
+          title: this.$gettext('Failed to create user')
         })
       }
     },
@@ -768,9 +764,8 @@ export default defineComponent({
         return updatedUser
       } catch (error) {
         console.error(error)
-        this.showMessage({
-          title: this.$gettext('Failed to edit user'),
-          status: 'danger'
+        this.showErrorMessage({
+          title: this.$gettext('Failed to edit user')
         })
       }
     },

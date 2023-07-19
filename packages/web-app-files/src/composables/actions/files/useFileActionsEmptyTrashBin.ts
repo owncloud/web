@@ -39,12 +39,11 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
       })
       .catch((error) => {
         console.error(error)
-        store.dispatch('showMessage', {
+        store.dispatch('showErrorMessage', {
           title: $pgettext(
             'Error message in case emptying trash bin fails',
             'Failed to empty trash bin'
-          ),
-          status: 'danger'
+          )
         })
       })
       .finally(() => {

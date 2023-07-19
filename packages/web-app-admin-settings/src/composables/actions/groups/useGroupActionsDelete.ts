@@ -45,7 +45,7 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
               { groupCount: failed.length.toString() },
               true
             )
-      store.dispatch('showMessage', { title, status: 'danger' })
+      store.dispatch('showErrorMessage', { title })
     }
 
     store.dispatch('hideModal')

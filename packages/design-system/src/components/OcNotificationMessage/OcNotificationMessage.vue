@@ -54,13 +54,6 @@ export default defineComponent({
     OcIcon,
     OcButton
   },
-  setup: function () {
-    const showErrorLog = ref(false)
-
-    return {
-      showErrorLog
-    }
-  },
   props: {
     /**
      * Notification messages are sub components of the oc-notifications component.
@@ -99,6 +92,7 @@ export default defineComponent({
     },
     /**
      * Number of seconds the message shows. It will disappear after this time.
+     * If set to 0, message won't disappear automatically.
      */
     timeout: {
       type: Number,
@@ -108,6 +102,13 @@ export default defineComponent({
     }
   },
   emits: ['close'],
+  setup: function () {
+    const showErrorLog = ref(false)
+
+    return {
+      showErrorLog
+    }
+  },
   computed: {
     classes() {
       return `oc-notification-message-${this.status}`
@@ -129,9 +130,11 @@ export default defineComponent({
     /**
      * Notification will be destroyed if timeout is set
      */
-    setTimeout(() => {
-      this.close()
-    }, this.timeout * 1000)
+    if (this.timeout !== 0) {
+      setTimeout(() => {
+        this.close()
+      }, this.timeout * 1000)
+    }
   },
   methods: {
     close() {

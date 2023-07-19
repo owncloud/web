@@ -29,7 +29,13 @@ export default defineComponent({
     return { clientService, createSpace, checkSpaceNameModalInput, loadingService }
   },
   methods: {
-    ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
+    ...mapActions([
+      'showMessage',
+      'showErrorMessage',
+      'createModal',
+      'hideModal',
+      'setModalInputErrorMessage'
+    ]),
     ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
     ...mapMutations('Files', ['UPSERT_RESOURCE', 'UPDATE_RESOURCE_FIELD']),
 
@@ -61,9 +67,8 @@ export default defineComponent({
         })
       } catch (error) {
         console.error(error)
-        this.showMessage({
-          title: this.$gettext('Creating space failed…'),
-          status: 'danger'
+        this.showErrorMessage({
+          title: this.$gettext('Creating space failed…')
         })
       }
     }

@@ -55,7 +55,7 @@ export default defineComponent({
     this.readmeContent = await this.$client.files.getFileContents(decodeURI(path))
   },
   methods: {
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
 
     editReadme() {
@@ -77,9 +77,8 @@ export default defineComponent({
         })
         .catch((error) => {
           console.error(error)
-          this.showMessage({
-            title: this.$gettext('Failed to edit space description'),
-            status: 'danger'
+          this.showErrorMessage({
+            title: this.$gettext('Failed to edit space description')
           })
         })
     }
