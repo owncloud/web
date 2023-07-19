@@ -1,0 +1,5 @@
+Enhancement: File versions tooltip with absolute date
+
+We've added a tooltip with the absolute date for file versions in file details
+
+https://github.com/owncloud/web/pull/9441
