@@ -81,6 +81,7 @@ export default {
       createModal,
       hideModal,
       showMessage,
+      showErrorMessage,
       $gettext,
       $gettextInterpolate,
       $ngettext,
@@ -98,6 +99,7 @@ export default {
       createModal,
       hideModal,
       showMessage,
+      showErrorMessage,
       $gettext,
       $ngettext,
       $gettextInterpolate
