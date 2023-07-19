@@ -23,5 +23,22 @@ export default defineConfig(async (args) => {
   config.resolve.alias['web-runtime/src/composables/tokenInfo'] =
     'web-pkg/src/cern/composables/useLoadTokenInfo'
 
+  config.plugins.push({
+    name: 'base-href',
+    transformIndexHtml: {
+      transform() {
+        return [
+          {
+            injectTo: 'head-prepend',
+            tag: 'base',
+            attrs: {
+              href: '/'
+            }
+          }
+        ]
+      }
+    }
+  })
+
   return config
 })
