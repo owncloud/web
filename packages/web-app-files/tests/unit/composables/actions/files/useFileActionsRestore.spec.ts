@@ -106,7 +106,7 @@ describe('restore', () => {
           const removeFilesFromTrashbinStub = jest.spyOn(wrapper.vm, 'removeFilesFromTrashbin')
           await wrapper.vm.$_restore_restoreResources([{ id: '1', path: '/1' }], [])
 
-          expect(showErrorMessage).toHaveBeenCalledTimes(1)
+          expect(showErrorMessageStub).toHaveBeenCalledTimes(1)
           expect(removeFilesFromTrashbinStub).toHaveBeenCalledTimes(0)
         }
       })
