@@ -54,6 +54,13 @@ export default defineComponent({
     OcIcon,
     OcButton
   },
+  setup: function () {
+    const showErrorLog = ref(false)
+
+    return {
+      showErrorLog
+    }
+  },
   props: {
     /**
      * Notification messages are sub components of the oc-notifications component.
@@ -102,13 +109,6 @@ export default defineComponent({
     }
   },
   emits: ['close'],
-  setup: function () {
-    const showErrorLog = ref(false)
-
-    return {
-      showErrorLog
-    }
-  },
   computed: {
     classes() {
       return `oc-notification-message-${this.status}`
