@@ -81,7 +81,7 @@
         </oc-button>
       </div>
     </div>
-    <div v-if="runningUploads" class="upload-info-progress oc-mx-m oc-pb-m oc-mt-s">
+    <div v-if="runningUploads" class="upload-info-progress oc-mx-m oc-pb-m oc-mt-s oc-text">
       <oc-progress
         :value="totalProgress"
         :max="100"
@@ -89,7 +89,11 @@
         :indeterminate="!filesInProgressCount"
       />
     </div>
-    <div v-if="infoExpanded" class="upload-info-items oc-px-m oc-pb-m">
+    <div
+      v-if="infoExpanded"
+      class="upload-info-items oc-px-m oc-pb-m"
+      :class="{ 'has-errors': showErrorLog }"
+    >
       <ul class="oc-list">
         <li
           v-for="(item, idx) in uploads"
@@ -141,6 +145,11 @@
         </li>
       </ul>
     </div>
+    <oc-error-log
+      v-if="showErrorLog"
+      class="upload-info-error-log oc-pt-m oc-pb-m oc-px-m"
+      :content="uploadErrorLogContent"
+    />
   </div>
 </template>
 
@@ -252,6 +261,22 @@ export default defineComponent({
     },
     uploadsPausable() {
       return this.$uppyService.tusActive()
+    },
+    showErrorLog() {
+      return this.infoExpanded && this.uploadErrorLogContent
+    },
+    uploadErrorLogContent() {
+      const requestIds = Object.values(this.errors).reduce((acc: Array<string>, error: any) => {
+        const requestId = error.originalRequest?._headers?.['X-Request-ID']
+
+        if (requestId) {
+          acc.push(requestId)
+        }
+
+        return acc
+      }, []) as Array<any>
+
+      return requestIds.map((item) => `X-Request-Id: ${item}`).join('\r\n')
     }
   },
   created() {
@@ -655,6 +680,10 @@ export default defineComponent({
   .upload-info-items {
     max-height: 50vh;
     overflow-y: auto;
+  }
+
+  .upload-info-items.has-errors {
+    max-height: calc(50vh - 100px) !important;
   }
 
   .upload-info-danger {

@@ -31,7 +31,7 @@
             <oc-icon :name="showErrorLog ? 'arrow-up-s' : 'arrow-down-s'" />
           </oc-button>
         </div>
-        <oc-error-log v-if="showErrorLog" class="oc-mt-l" :content="errorLogContent" />
+        <oc-error-log v-if="showErrorLog" class="oc-mt-m" :content="errorLogContent" />
       </div>
     </div>
   </div>
