@@ -33,6 +33,7 @@
     "not OperaMobile > 0"
   ],
   "dependencies": {
+    "@microsoft/fetch-event-source": "^2.0.1",
     "@vue/compiler-dom": "3.3.4",
     "@vue/compiler-sfc": "3.3.4",
     "@vue/runtime-dom": "3.3.4",

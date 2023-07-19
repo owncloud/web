@@ -96,12 +96,14 @@ import { Notification } from '../../helpers/notifications'
 import {
   formatDateFromISO,
   formatRelativeDateFromISO,
+  useAccessToken,
   useClientService,
   useRoute,
   useStore
 } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
+import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 const POLLING_INTERVAL = 30000
@@ -291,11 +293,42 @@ export default {
       setAdditionalData()
     }
 
+    const accessToken = useAccessToken({ store })
+
     onMounted(() => {
+      class RetriableError extends Error {}
+      class FatalError extends Error {}
+
+      fetchEventSource('/ocs/v2.php/apps/notifications/api/v1/notifications/sse', {
+        headers: {
+          Authorization: `Bearer ${accessToken.value}`
+        },
+        async onopen(response) {
+          if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
+            console.log('SSE OK')
+            return
+          } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
+            throw new FatalError()
+          } else {
+            throw new RetriableError()
+          }
+        },
+        onmessage(msg) {
+          console.log(msg)
+          if (msg.event === 'FatalError') {
+            throw new FatalError(msg.data)
+          }
+        },
+        onclose() {
+          throw new RetriableError()
+        },
+        onerror(err) {
+          if (err instanceof FatalError) {
+            throw err
+          }
+        }
+      })
       fetchNotificationsTask.perform()
-      notificationsInterval.value = setInterval(() => {
-        fetchNotificationsTask.perform()
-      }, POLLING_INTERVAL)
     })
 
     onUnmounted(() => {
