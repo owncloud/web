@@ -150,7 +150,7 @@ describe('rename', () => {
           await nextTick()
           await nextTick()
           expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(0)
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

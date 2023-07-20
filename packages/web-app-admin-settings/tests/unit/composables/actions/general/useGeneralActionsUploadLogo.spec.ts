@@ -43,7 +43,7 @@ describe('uploadImage', () => {
           } as unknown as InputEvent)
           jest.runAllTimers()
           expect(router.go).toHaveBeenCalledTimes(0)
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -58,7 +58,7 @@ describe('uploadImage', () => {
             }
           } as unknown as InputEvent)
           expect(clientService.httpAuthenticated.post).toHaveBeenCalledTimes(0)
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

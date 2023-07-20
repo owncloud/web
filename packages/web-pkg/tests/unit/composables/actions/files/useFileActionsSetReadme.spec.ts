@@ -128,10 +128,7 @@ describe('setReadme', () => {
           })
 
           await nextTick()
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
-            expect.anything(),
-            expect.objectContaining({ status: 'danger' })
-          )
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
         }
       })
     })

@@ -211,7 +211,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'showErrorMessage']),
 
     selectGroups(groups) {
       this.selectedGroups = [...groups]
@@ -240,9 +240,8 @@ export default defineComponent({
         this.groups.push({ ...response?.data, members: [] })
       } catch (error) {
         console.error(error)
-        this.showMessage({
-          title: this.$gettext('Failed to create group'),
-          status: 'danger'
+        this.showErrorMessage({
+          title: this.$gettext('Failed to create group')
         })
       }
     },
@@ -266,9 +265,8 @@ export default defineComponent({
         return updatedGroup
       } catch (error) {
         console.error(error)
-        this.showMessage({
-          title: this.$gettext('Failed to edit group'),
-          status: 'danger'
+        this.showErrorMessage({
+          title: this.$gettext('Failed to edit group')
         })
       }
     }

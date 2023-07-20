@@ -19,6 +19,7 @@ export class ResourceConflict extends ConflictDialog {
       (modal) => store.dispatch('createModal', modal),
       () => store.dispatch('hideModal'),
       (msg) => store.dispatch('showMessage', msg),
+      (msg) => store.dispatch('showErrorMessage', msg),
       $gettext,
       $ngettext,
       $gettextInterpolate

@@ -11,7 +11,9 @@
             {{ title }}
           </div>
         </div>
-        <oc-button appearance="raw" @click="close"><oc-icon name="close" /></oc-button>
+        <oc-button appearance="raw" @click="close" :aria-label="$gettext('Close')"
+          ><oc-icon name="close"
+        /></oc-button>
       </div>
       <div class="oc-width-1-1">
         <div class="oc-flex oc-flex-between oc-width-1-1 oc-mt-s">
@@ -54,13 +56,6 @@ export default defineComponent({
     OcIcon,
     OcButton
   },
-  setup: function () {
-    const showErrorLog = ref(false)
-
-    return {
-      showErrorLog
-    }
-  },
   props: {
     /**
      * Notification messages are sub components of the oc-notifications component.
@@ -99,6 +94,7 @@ export default defineComponent({
     },
     /**
      * Number of seconds the message shows. It will disappear after this time.
+     * If set to 0, message won't disappear automatically.
      */
     timeout: {
       type: Number,
@@ -108,6 +104,13 @@ export default defineComponent({
     }
   },
   emits: ['close'],
+  setup: function () {
+    const showErrorLog = ref(false)
+
+    return {
+      showErrorLog
+    }
+  },
   computed: {
     classes() {
       return `oc-notification-message-${this.status}`
@@ -129,9 +132,11 @@ export default defineComponent({
     /**
      * Notification will be destroyed if timeout is set
      */
-    setTimeout(() => {
-      this.close()
-    }, this.timeout * 1000)
+    if (this.timeout !== 0) {
+      setTimeout(() => {
+        this.close()
+      }, this.timeout * 1000)
+    }
   },
   methods: {
     close() {

@@ -6,6 +6,8 @@
       :title="item.title"
       :message="item.desc"
       :status="item.status"
+      :timeout="item.timeout"
+      :error-log-content="item.errorLogContent"
       @close="deleteMessage(item)"
     />
   </oc-notifications>

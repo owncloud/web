@@ -187,9 +187,8 @@ export default defineComponent({
         valuesList.value = values || []
       } catch (e) {
         console.error(e)
-        store.dispatch('showMessage', {
-          title: $gettext('Unable to load account data…'),
-          status: 'danger'
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Unable to load account data…')
         })
         valuesList.value = []
       }
@@ -203,9 +202,8 @@ export default defineComponent({
         accountBundle.value = bundles?.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
         console.error(e)
-        store.dispatch('showMessage', {
-          title: $gettext('Unable to load account data…'),
-          status: 'danger'
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Unable to load account data…')
         })
         accountBundle.value = undefined
       }
@@ -314,9 +312,8 @@ export default defineComponent({
         })
       } catch (e) {
         console.error(e)
-        store.dispatch('showMessage', {
-          title: $gettext('Saving language failed…'),
-          status: 'danger'
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Saving language failed…')
         })
       }
     }
@@ -333,9 +330,8 @@ export default defineComponent({
         })
       } catch (e) {
         console.error(e)
-        store.dispatch('showMessage', {
-          title: $gettext('Unable to save email notifications preference…'),
-          status: 'danger'
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Unable to save email notifications preference…')
         })
       }
     }
@@ -394,7 +390,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'showErrorMessage']),
     showEditPasswordModal() {
       this.editPasswordModalOpen = true
     },
@@ -412,9 +408,8 @@ export default defineComponent({
         })
         .catch((error) => {
           console.error(error)
-          this.showMessage({
-            title: this.$gettext('Failed to change password'),
-            status: 'danger'
+          this.showErrorMessage({
+            title: this.$gettext('Failed to change password')
           })
         })
     }

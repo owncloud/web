@@ -48,13 +48,10 @@ export const useDownloadFile = () => {
       } catch (e) {
         console.error(e)
       }
-      store.dispatch('showMessage', {
+      store.dispatch('showErrorMessage', {
         title: $gettext('Download failed'),
         desc: $gettext('File could not be located'),
-        status: 'danger',
-        autoClose: {
-          enabled: true
-        }
+        status: 'danger'
       })
       return
     }

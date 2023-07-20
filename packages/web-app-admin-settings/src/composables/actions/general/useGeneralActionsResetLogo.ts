@@ -23,9 +23,8 @@ export const useGeneralActionsResetLogo = ({ store }: { store?: Store<any> }) =>
       }, 1000)
     } catch (e) {
       console.error(e)
-      store.dispatch('showMessage', {
-        title: $gettext('Failed to reset logo'),
-        status: 'danger'
+      store.dispatch('showErrorMessage', {
+        title: $gettext('Failed to reset logo')
       })
     }
   }

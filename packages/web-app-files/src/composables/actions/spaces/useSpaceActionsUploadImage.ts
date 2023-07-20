@@ -44,9 +44,8 @@ export const useSpaceActionsUploadImage = ({
     }
 
     if (!previewService.isMimetypeSupported(file.type, true)) {
-      return store.dispatch('showMessage', {
-        title: $gettext('The file type is unsupported'),
-        status: 'danger'
+      return store.dispatch('showErrorMessage', {
+        title: $gettext('The file type is unsupported')
       })
     }
 
@@ -93,9 +92,8 @@ export const useSpaceActionsUploadImage = ({
         })
         .catch((error) => {
           console.error(error)
-          store.dispatch('showMessage', {
-            title: $gettext('Failed to upload space image'),
-            status: 'danger'
+          store.dispatch('showErrorMessage', {
+            title: $gettext('Failed to upload space image')
           })
         })
     })

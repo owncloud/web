@@ -9,7 +9,7 @@
     />
     <div class="oc-flex oc-flex-between oc-mt-s">
       <div class="oc-flex">
-        <div class="oc-flex oc-flex-middle" v-if="showCopied">
+        <div v-if="showCopied" class="oc-flex oc-flex-middle">
           <oc-icon variation="success" name="checkbox-circle" />
           <p class="oc-error-log-content-copied oc-ml-s oc-my-rm" v-text="$gettext('Copied')" />
         </div>
@@ -18,8 +18,8 @@
         size="small"
         variation="primary"
         appearance="filled"
-        v-text="$gettext('Copy')"
         @click="copyContentToClipboard"
+        v-text="$gettext('Copy')"
       />
     </div>
   </div>
