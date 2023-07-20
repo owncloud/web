@@ -1,7 +1,7 @@
 import { nextTick, computed, unref, Ref } from 'vue'
 import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
-import { usePagination, useSort, SortDir, SortField } from 'web-pkg/src/composables'
+import { usePagination, useSort, SortDir, SortField, useRouteName } from 'web-pkg/src/composables'
 import { useSideBar } from 'web-pkg/src/composables/sideBar'
 
 import {
@@ -66,7 +66,11 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
 
   const storeItems = computed((): T[] => store.getters['Files/activeFiles'] || [])
 
-  const currentViewModeQuery = useRouteQuery('view-mode', ViewModeConstants.defaultModeName)
+  const currentRoute = useRouteName()
+  const currentViewModeQuery = useRouteQuery(
+    `${unref(currentRoute)}-view-mode`,
+    ViewModeConstants.defaultModeName
+  )
   const currentViewMode = computed((): string => queryItemAsString(currentViewModeQuery.value))
   const viewMode = useViewMode(currentViewMode)
 

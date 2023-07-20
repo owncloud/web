@@ -42,13 +42,7 @@ describe('CreateSpace component', () => {
       const graphMock = mocks.$clientService.graphAuthenticated
       graphMock.drives.createDrive.mockRejectedValue({})
       await wrapper.vm.addNewSpace('New space')
-      expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.objectContaining({
-          status: 'danger',
-          title: 'Creating space failed…'
-        })
-      )
+      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
   })
 })

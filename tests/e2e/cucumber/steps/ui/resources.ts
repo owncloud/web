@@ -8,6 +8,7 @@ import { displayedResourceType } from '../../../support/objects/app-files/resour
 import { Public } from '../../../support/objects/app-files/page/public'
 import { Resource } from '../../../support/objects/app-files'
 import * as runtimeFs from '../../../support/utils/runtimeFs'
+import { searchFilter } from '../../../support/objects/app-files/resource/actions'
 
 When(
   '{string} creates the following resource(s)',
@@ -224,17 +225,30 @@ Then(
     }
   }
 )
+
 When(
-  '{string} searches {string} using the global search',
-  async function (this: World, stepUser: string, keyword: string): Promise<void> {
+  /^"([^"]*)" searches "([^"]*)" using the global search(?: and the "([^"]*)" filter)?( and presses enter)?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    keyword: string,
+    filter: string,
+    command: string
+  ): Promise<void> {
+    keyword = keyword ?? ''
+    const pressEnter = !!command && command.endsWith('presses enter')
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.searchResource({ keyword })
+    await resourceObject.searchResource({
+      keyword,
+      filter: filter as searchFilter,
+      pressEnter
+    })
   }
 )
 
 Then(
-  /^following resources (should|should not) be displayed in the (search list|files list) for user "([^"]*)"?$/,
+  /^following resources (should|should not) be displayed in the (search list|files list) for user "([^"]*)"$/,
   async function (
     this: World,
     actionType: string,

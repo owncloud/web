@@ -54,7 +54,7 @@ describe('rename', () => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await renameSpace(1, 'renamed space')
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

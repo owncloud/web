@@ -19,7 +19,7 @@ exports[`OcBreadcrumb displays all items 1`] = `
     </li>
     <li class="oc-breadcrumb-list-item oc-flex oc-flex-middle" data-key="2">
       <!--v-if-->
-      <oc-button-stub appearance="raw" class="oc-flex" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+      <oc-button-stub appearance="raw" class="oc-flex" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
         <span class="oc-breadcrumb-item-text">Subfolder</span>
       </oc-button-stub>
       <!--v-if-->
@@ -37,7 +37,7 @@ exports[`OcBreadcrumb displays all items 1`] = `
       <!--v-if-->
     </li>
   </ol>
-  <oc-button-stub appearance="raw" arialabel="Navigate one level up" class="oc-breadcrumb-mobile-navigation" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" to="[object Object]" type="router-link" variation="passive">
+  <oc-button-stub appearance="raw" arialabel="Navigate one level up" class="oc-breadcrumb-mobile-navigation" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" to="[object Object]" type="router-link" variation="passive">
     <oc-icon-stub accessiblelabel="" class="oc-mr-m" color="" filltype="line" name="arrow-left-s" size="large" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
 </nav>
@@ -66,7 +66,7 @@ exports[`OcBreadcrumb sets correct variation 1`] = `
     </li>
     <li class="oc-breadcrumb-list-item oc-flex oc-flex-middle" data-key="2">
       <!--v-if-->
-      <oc-button-stub appearance="raw" class="oc-flex" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+      <oc-button-stub appearance="raw" class="oc-flex" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
         <span class="oc-breadcrumb-item-text">Subfolder</span>
       </oc-button-stub>
       <!--v-if-->
@@ -84,7 +84,7 @@ exports[`OcBreadcrumb sets correct variation 1`] = `
       <!--v-if-->
     </li>
   </ol>
-  <oc-button-stub appearance="raw" arialabel="Navigate one level up" class="oc-breadcrumb-mobile-navigation" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" to="[object Object]" type="router-link" variation="passive">
+  <oc-button-stub appearance="raw" arialabel="Navigate one level up" class="oc-breadcrumb-mobile-navigation" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" to="[object Object]" type="router-link" variation="passive">
     <oc-icon-stub accessiblelabel="" class="oc-mr-m" color="" filltype="line" name="arrow-left-s" size="large" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
 </nav>

@@ -97,6 +97,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         (...args) => store.dispatch('createModal', ...args),
         (...args) => store.dispatch('hideModal', ...args),
         (...args) => store.dispatch('showMessage', ...args),
+        (...args) => store.dispatch('showErrorMessage', ...args),
         $gettext,
         $ngettext,
         $gettextInterpolate
@@ -207,9 +208,8 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         translated = $gettext('Failed to restore %{resourceCount} files')
         translateParams.resourceCount = failedResources.length
       }
-      store.dispatch('showMessage', {
-        title: $gettextInterpolate(translated, translateParams, true),
-        status: 'danger'
+      store.dispatch('showErrorMessage', {
+        title: $gettextInterpolate(translated, translateParams, true)
       })
     }
 

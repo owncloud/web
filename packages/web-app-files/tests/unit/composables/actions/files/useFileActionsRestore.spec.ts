@@ -102,11 +102,11 @@ describe('restore', () => {
       const { wrapper } = getWrapper({
         resolveClearTrashBin: false,
         setup: async ({ actions }) => {
-          const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+          const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
           const removeFilesFromTrashbinStub = jest.spyOn(wrapper.vm, 'removeFilesFromTrashbin')
           await wrapper.vm.$_restore_restoreResources([{ id: '1', path: '/1' }], [])
 
-          expect(showMessageStub).toHaveBeenCalledTimes(1)
+          expect(showErrorMessageStub).toHaveBeenCalledTimes(1)
           expect(removeFilesFromTrashbinStub).toHaveBeenCalledTimes(0)
         }
       })

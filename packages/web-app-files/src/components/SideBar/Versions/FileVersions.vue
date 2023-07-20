@@ -10,9 +10,10 @@
       >
         <div class="version-details">
           <span
+            v-oc-tooltip="formatVersionDate(item)"
             class="version-date oc-font-semibold"
             data-testid="file-versions-file-last-modified-date"
-            >{{ formatVersionDate(item) }}</span
+            >{{ formatVersionDateRelative(item) }}</span
           >
           -
           <span class="version-filesize" data-testid="file-versions-file-size">{{
@@ -61,6 +62,7 @@ import { defineComponent, inject, ref, Ref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissions } from 'web-client/src/helpers/share'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
+import { formatDateFromJSDate } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'FileVersions',
@@ -136,9 +138,15 @@ export default defineComponent({
       const version = this.currentVersionId(file)
       return this.downloadFile(this.resource, version)
     },
-    formatVersionDate(file) {
+    formatVersionDateRelative(file) {
       return formatRelativeDateFromHTTP(
         file.fileInfo[DavProperty.LastModifiedDate],
+        this.$language.current
+      )
+    },
+    formatVersionDate(file) {
+      return formatDateFromJSDate(
+        new Date(file.fileInfo[DavProperty.LastModifiedDate]),
         this.$language.current
       )
     },

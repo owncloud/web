@@ -3,14 +3,14 @@
 exports[`DetailsAndEdit component if user can edit renders dropdown and edit button 1`] = `
 <div class="link-details oc-flex oc-flex-between oc-flex-middle" file="undefined">
   <div>
-    <oc-button-stub appearance="raw" class="edit-public-link-role-dropdown-toggle oc-text-left" disabled="false" gapsize="none" id="edit-public-link-role-dropdown-toggle-undefined" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+    <oc-button-stub appearance="raw" class="edit-public-link-role-dropdown-toggle oc-text-left" disabled="false" gapsize="none" id="edit-public-link-role-dropdown-toggle-undefined" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
       <span class="link-current-role">Anyone with the link can view</span>
       <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
     </oc-button-stub>
     <oc-drop-stub class="edit-public-link-role-dropdown" closeonclick="false" dropid="edit-public-link-role-dropdown" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#edit-public-link-role-dropdown-toggle-undefined">
       <oc-list-stub class="role-dropdown-list" raw="false">
         <li>
-          <oc-button-stub appearance="raw" class="oc-p-s" disabled="false" gapsize="medium" id="files-role-internal" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <oc-button-stub appearance="raw" class="oc-p-s" disabled="false" gapsize="medium" id="files-role-internal" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
             <span class="oc-flex oc-flex-middle">
               <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="user" size="medium" type="span" variation="inherit"></oc-icon-stub>
               <span>
@@ -24,7 +24,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
           </oc-button-stub>
         </li>
         <li>
-          <oc-button-stub appearance="raw-inverse" class="selected oc-background-primary-gradient oc-p-s" disabled="false" gapsize="medium" id="files-role-viewer" justifycontent="space-between" size="medium" submit="button" type="button" variation="primary">
+          <oc-button-stub appearance="raw-inverse" class="selected oc-background-primary-gradient oc-p-s" disabled="false" gapsize="medium" id="files-role-viewer" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="primary">
             <span class="oc-flex oc-flex-middle">
               <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
               <span>
@@ -38,7 +38,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
           </oc-button-stub>
         </li>
         <li>
-          <oc-button-stub appearance="raw" class="oc-p-s" disabled="false" gapsize="medium" id="files-role-editor" justifycontent="space-between" size="medium" submit="button" type="button" variation="passive">
+          <oc-button-stub appearance="raw" class="oc-p-s" disabled="false" gapsize="medium" id="files-role-editor" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
             <span class="oc-flex oc-flex-middle">
               <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
               <span>
@@ -59,13 +59,13 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
     <!--v-if-->
     <!--v-if-->
     <div>
-      <oc-button-stub appearance="raw" class="edit-drop-trigger" disabled="false" gapsize="medium" id="edit-public-link-dropdown-toggl-undefined" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+      <oc-button-stub appearance="raw" class="edit-drop-trigger" disabled="false" gapsize="medium" id="edit-public-link-dropdown-toggl-undefined" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
         <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="more-2" size="medium" type="span" variation="passive"></oc-icon-stub>
       </oc-button-stub>
       <oc-drop-stub closeonclick="false" dropid="edit-public-link-dropdown" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#edit-public-link-dropdown-toggl-undefined">
         <oc-list-stub class="edit-public-link-dropdown-menu oc-files-context-actions-border oc-pb-s" raw="false">
           <li class="oc-rounded oc-menu-item-hover">
-            <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+            <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
               <oc-icon-stub accessiblelabel="" color="" filltype="line" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
               <span>Rename</span>
             </oc-button-stub>
@@ -78,7 +78,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
             </date-picker-stub>
           </li>
           <li class="oc-rounded oc-menu-item-hover">
-            <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+            <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
               <oc-icon-stub accessiblelabel="" color="" filltype="line" name="lock-password" size="medium" type="span" variation="passive"></oc-icon-stub>
               <span>Add password</span>
             </oc-button-stub>
@@ -86,7 +86,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
         </oc-list-stub>
         <oc-list-stub class="edit-public-link-dropdown-menu oc-pt-s" raw="false">
           <li class="oc-rounded oc-menu-item-hover">
-            <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" size="medium" submit="button" type="button" variation="passive">
+            <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
               <oc-icon-stub accessiblelabel="" color="" filltype="line" name="delete-bin-5" size="medium" type="span" variation="passive"></oc-icon-stub>
               <span>Delete link</span>
             </oc-button-stub>

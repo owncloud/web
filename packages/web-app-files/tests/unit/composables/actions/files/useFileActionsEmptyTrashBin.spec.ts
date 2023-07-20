@@ -72,7 +72,7 @@ describe('emptyTrashBin', () => {
         setup: async ({ emptyTrashBin }, { space, storeOptions }) => {
           await emptyTrashBin({ space })
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

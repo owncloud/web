@@ -18,7 +18,6 @@
       cancel-button-variation="brand"
       cancel-button-appearance="raw-inverse"
       :cancel-handler="cancelSearch"
-      :available-location-options="availableLocationOptions"
       @advanced-search="onKeyUpEnter"
       @input="updateTerm"
       @clear="onClear"
@@ -27,8 +26,14 @@
       @keyup.up="onKeyUpUp"
       @keyup.down="onKeyUpDown"
       @keyup.enter="onKeyUpEnter"
-      @location-filter-change="onLocationFilterChange"
-    />
+    >
+      <template #locationFilter>
+        <search-bar-filter
+          :current-folder-available="currentFolderAvailable"
+          @update:model-value="onLocationFilterChange"
+        />
+      </template>
+    </oc-search-bar>
     <oc-button
       v-oc-tooltip="$gettext('Display search bar')"
       :aria-label="$gettext('Click to display and focus the search bar')"
@@ -99,11 +104,10 @@
 
 <script lang="ts">
 import { providerStore } from '../service'
-import { useGettext } from 'vue3-gettext'
 import {
   createLocationCommon,
   isLocationCommonActive,
-  isLocationTrashActive
+  isLocationSpacesActive
 } from 'web-app-files/src/router'
 import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
@@ -111,15 +115,16 @@ import { useRouteQuery, useRouter, useStore, useUserContext } from 'web-pkg/src/
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from 'web-pkg/src/composables'
+import { SearchBarFilter } from 'web-pkg/src/components'
 
 export default defineComponent({
   name: 'SearchBar',
+  components: { SearchBarFilter },
   setup() {
     const store = useStore()
     const router = useRouter()
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
-    const { $gettext } = useGettext()
     const scopeQueryValue = useRouteQuery('scope')
     const locationFilterId = ref(SearchLocationFilterConstants.currentFolder)
     const optionsDropRef = ref(null)
@@ -127,28 +132,7 @@ export default defineComponent({
     const term = ref('')
     const searchResults = ref([])
     const loading = ref(false)
-
-    const currentFolderAvailable = computed(() => {
-      return (
-        (store.getters['Files/currentFolder'] !== null || scopeQueryValue.value?.length > 0) &&
-        !isLocationTrashActive(router, 'files-trash-generic')
-      )
-    })
-
-    const availableLocationOptions = ref([
-      {
-        title: $gettext('All Files'),
-        id: SearchLocationFilterConstants.allFiles,
-        enabled: true,
-        default: false
-      },
-      {
-        title: $gettext('Current Folder'),
-        id: SearchLocationFilterConstants.currentFolder,
-        enabled: currentFolderAvailable,
-        default: true
-      }
-    ])
+    const currentFolderAvailable = ref(false)
 
     watch(isMobileWidth, () => {
       const searchBarEl = document.getElementById('files-global-search-bar')
@@ -217,7 +201,7 @@ export default defineComponent({
         const currentQuery = unref(router.currentRoute).query
         const currentFolder = store.getters['Files/currentFolder']
         let scope
-        if (currentFolder?.fileId) {
+        if (unref(currentFolderAvailable) && currentFolder?.fileId) {
           const spaceId = currentFolder.fileId.split('!')[0]
           const path = currentFolder.path === '/' ? '' : currentFolder.path
           scope = `${spaceId}${path}`
@@ -225,6 +209,7 @@ export default defineComponent({
           scope = unref(scopeQueryValue)
         }
         const useScope =
+          unref(term) &&
           unref(currentFolderAvailable) &&
           unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
         router.push(
@@ -248,6 +233,10 @@ export default defineComponent({
 
     const onLocationFilterChange = (event) => {
       locationFilterId.value = event.value.id
+      if (!unref(term)) {
+        return
+      }
+
       if (isLocationCommonActive(router, 'files-common-search')) {
         onKeyUpEnter()
         return
@@ -275,8 +264,6 @@ export default defineComponent({
       isUserContext: useUserContext({ store }),
       showCancelButton,
       onLocationFilterChange,
-      availableLocationOptions,
-      locationFilterId,
       currentFolderAvailable,
       store,
       scopeQueryValue,
@@ -354,6 +341,14 @@ export default defineComponent({
     },
     $route: {
       handler(r) {
+        const currentFolderAvailable =
+          (isLocationSpacesActive(this.$router, 'files-spaces-generic') ||
+            !!this.scopeQueryValue) &&
+          !isLocationSpacesActive(this.$router, 'files-spaces-projects')
+        if (this.currentFolderAvailable !== currentFolderAvailable) {
+          this.currentFolderAvailable = currentFolderAvailable
+        }
+
         this.$nextTick(() => {
           if (!this.availableProviders.length) {
             return

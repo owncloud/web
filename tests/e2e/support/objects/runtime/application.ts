@@ -26,13 +26,18 @@ export class Application {
   }
 
   async getNotificationMessages(): Promise<string[]> {
+    // reload will fetch notifications immediately
     // wait for the notifications to load
-    await this.#page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith('notifications?format=json') &&
-        resp.status() === 200 &&
-        resp.request().method() === 'GET'
-    )
+    await Promise.all([
+      this.#page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith('notifications?format=json') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'GET'
+      ),
+      this.#page.reload()
+    ])
+
     const dropIsOpen = await this.#page.locator(notificationsDrop).isVisible()
     if (!dropIsOpen) {
       await this.#page.locator(notificationsBell).click()
@@ -54,5 +59,6 @@ export class Application {
     }
     await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
     await this.#page.locator(markNotificationsAsReadButton).click()
+    await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
   }
 }

@@ -4,7 +4,7 @@ exports[`TrashOverview view states should render spaces list 1`] = `
 <div class="oc-flex">
   <div class="files-view-wrapper oc-width-expand">
     <div id="files-view">
-      <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hasbulkactions="false" hasfileextensions="false" hashiddenfiles="false" haspagination="false" hassharesnavigation="false" hassidebartoggle="false" hasviewoptions="false" showactionsonselection="false" sidebaropen="false" viewmodes=""></app-bar-stub>
+      <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hasbulkactions="false" hasfileextensions="false" hashiddenfiles="false" haspagination="false" hassharesnavigation="false" hassidebartoggle="false" hasviewoptions="false" showactionsonselection="false" sidebaropen="false" viewmodedefault="resource-table" viewmodes=""></app-bar-stub>
       <div class="oc-ml-m oc-my-s">
         <label class="oc-label" for="spaces-filter">Search</label>
         <div class="oc-position-relative">
@@ -24,6 +24,7 @@ exports[`TrashOverview view states should render spaces list 1`] = `
             <th aria-sort="ascending" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-name oc-pr-s" style="top: 0px;">
               <span class="oc-table-thead-content header-text">Name</span>
               <button aria-label="Sort by name" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-button-sort" type="button">
+                <!--v-if-->
                 <!-- @slot Content of the button -->
                 <span class="oc-icon oc-icon-s oc-icon-passive">
                   <!---->

@@ -7,6 +7,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
       <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-current-language="en" data-msgid="Members">Members</h3>
       <div class="oc-contextual-helper oc-pl-xs">
         <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="oc-contextual-helper-1-button" type="button">
+          <!--v-if-->
           <!-- @slot Content of the button -->
           <oc-icon-stub accessiblelabel="" color="" filltype="line" name="question" size="small" type="span" variation="passive"></oc-icon-stub>
         </button>
@@ -16,6 +17,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
               <div class="oc-flex oc-flex-between info-header oc-border-b oc-pb-s">
                 <h4 class="oc-m-rm info-title">Add members to this Space</h4>
                 <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+                  <!--v-if-->
                   <!-- @slot Content of the button -->
                   <oc-icon-stub accessiblelabel="" color="" filltype="line" name="close" size="medium" type="span" variation="inherit"></oc-icon-stub>
                 </button>
@@ -46,6 +48,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
           <!--v-if-->
         </div>
         <button aria-label="Close filter" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw close-filter-btn" type="button">
+          <!--v-if-->
           <!-- @slot Content of the button -->
           <oc-icon-stub fill-type="line" name="close" size="small"></oc-icon-stub>
         </button>

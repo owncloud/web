@@ -8,7 +8,7 @@ import visualizer from 'rollup-plugin-visualizer'
 import compression from 'rollup-plugin-gzip'
 
 import ejs from 'ejs'
-import { join } from 'path'
+import { basename, join } from 'path'
 import { existsSync, readdirSync, readFileSync } from 'fs'
 
 // build config
@@ -56,7 +56,11 @@ const input = readdirSync('packages').reduce(
     }
     return acc
   },
-  { 'index.html': 'index.html' }
+  {
+    'index.html': 'index.html',
+    'oidc-silent-redirect.html': 'oidc-silent-redirect.html',
+    'oidc-callback.html': 'oidc-callback.html'
+  }
 )
 
 const getJson = async (url: string) => {
@@ -301,7 +305,10 @@ export default defineConfig(async ({ mode, command }) => {
           name: 'ejs',
           transformIndexHtml: {
             enforce: 'pre',
-            transform(html) {
+            transform(html, { filename }) {
+              if (basename(filename) !== 'index.html') {
+                return
+              }
               return ejs.render(html, {
                 data: {
                   buildConfig,
@@ -317,7 +324,11 @@ export default defineConfig(async ({ mode, command }) => {
         {
           name: 'import-map',
           transformIndexHtml: {
-            transform(html, { bundle }) {
+            transform(html, { bundle, filename }) {
+              if (basename(filename) !== 'index.html') {
+                return
+              }
+
               // Build an import map for loading internal (as in: shipped and built within this mono repo) apps
               let moduleNames: string[]
               let re: RegExp

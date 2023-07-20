@@ -285,6 +285,14 @@ export default defineComponent({
       type: String,
       required: false,
       default: undefined
+    },
+    /**
+     * This is only relevant for CERN and can be ignored in any other cases.
+     */
+    groupingSettings: {
+      type: Object,
+      required: false,
+      default: null
     }
   },
   emits: [

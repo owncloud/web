@@ -47,11 +47,15 @@ Summary
 * Enhancement - Search list add highlighted file content: [#9294](https://github.com/owncloud/web/pull/9294)
 * Enhancement - Resolve pulic links to their actual location: [#9299](https://github.com/owncloud/web/pull/9299)
 * Enhancement - Add search location filter: [#9304](https://github.com/owncloud/web/pull/9304)
+* Enhancement - Ambiguation for URL view mode params: [#9344](https://github.com/owncloud/web/pull/9344)
 * Enhancement - Batch actions redesign: [#9346](https://github.com/owncloud/web/pull/9346)
 * Enhancement - Tag comma separation on client side: [#9348](https://github.com/owncloud/web/pull/9348)
 * Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
 * Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
 * Enhancement - Button styling: [#9394](https://github.com/owncloud/web/pull/9394)
+* Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
+* Enhancement - Add error log to upload dialog: [#9436](https://github.com/owncloud/web/pull/9436)
+* Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
 
 Details
 -------
@@ -369,7 +373,17 @@ Details
    We've added the option to set the search location in the searchbar.
 
    https://github.com/owncloud/web/issues/9258
+   https://github.com/owncloud/web/issues/9428
    https://github.com/owncloud/web/pull/9304
+   https://github.com/owncloud/web/pull/9432
+
+* Enhancement - Ambiguation for URL view mode params: [#9344](https://github.com/owncloud/web/pull/9344)
+
+   Show tiles view in projects spaces per default, changed route+storage params to be different
+   from one another.
+
+   https://github.com/owncloud/web/issues/9337
+   https://github.com/owncloud/web/pull/9344
 
 * Enhancement - Batch actions redesign: [#9346](https://github.com/owncloud/web/pull/9346)
 
@@ -396,6 +410,7 @@ Details
 
    https://github.com/owncloud/web/issues/9377
    https://github.com/owncloud/web/pull/9383
+   https://github.com/owncloud/web/pull/9419
 
 * Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
 
@@ -414,6 +429,29 @@ Details
    https://github.com/owncloud/web/issues/9353
    https://github.com/owncloud/web/issues/9354
    https://github.com/owncloud/web/pull/9394
+
+* Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
+
+   We've added a loading spinner to the share button in the sharing panel to indicate that its still
+   processing if action takes longer.
+
+   https://github.com/owncloud/web/issues/9425
+   https://github.com/owncloud/web/pull/9423
+
+* Enhancement - Add error log to upload dialog: [#9436](https://github.com/owncloud/web/pull/9436)
+
+   We've added a error log to the upload dialog, so if an upload fails the user can copy the log and
+   might hand it over to their admin.
+
+   https://github.com/owncloud/web/issues/9430
+   https://github.com/owncloud/web/pull/9436
+   https://github.com/owncloud/web/pull/9426
+
+* Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
+
+   We've added a tooltip with the absolute date for file versions in file details
+
+   https://github.com/owncloud/web/pull/9441
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================

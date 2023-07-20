@@ -61,6 +61,7 @@ services:
       # TIKA
       SEARCH_EXTRACTOR_TYPE: "tika"
       SEARCH_EXTRACTOR_TIKA_TIKA_URL: "http://host.docker.internal:9998"
+      SEARCH_EXTRACTOR_CS3SOURCE_INSECURE: "true"
     volumes:
       - ./dev/docker/ocis.entrypoint.sh:/usr/bin/entrypoint
       - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
@@ -76,6 +77,7 @@ services:
       traefik.http.routers.ocis.entrypoints: websecure
       # workaround: https://github.com/owncloud/ocis/issues/5108
       traefik.http.routers.ocis.middlewares: cors
+    restart: unless-stopped
     depends_on:
       - traefik
       - tika-service
@@ -252,7 +254,7 @@ services:
     container_name: web_tika
     ports:
       - 9998:9998
-    restart: always
+    restart: unless-stopped
 
 volumes:
   uploads:

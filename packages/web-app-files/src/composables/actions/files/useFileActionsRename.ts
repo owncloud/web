@@ -143,9 +143,8 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
         translated = $gettext('Failed to rename "%{file}" to "%{newName}" - the file is locked')
       }
       const title = $gettextInterpolate(translated, { file: resource.name, newName }, true)
-      store.dispatch('showMessage', {
-        title,
-        status: 'danger'
+      store.dispatch('showErrorMessage', {
+        title
       })
     }
   }

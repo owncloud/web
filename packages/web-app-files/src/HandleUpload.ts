@@ -236,13 +236,12 @@ export class HandleUpload extends BasePlugin {
           'There is not enough quota on %{spaceName}, you need additional %{missingSpace} to upload these files'
         )
 
-        this.store.dispatch('showMessage', {
+        this.store.dispatch('showErrorMessage', {
           title: $gettext('Not enough quota'),
           desc: $gettextInterpolate(translated, {
             spaceName,
             missingSpace: filesize((space.spaceQuota.remaining - uploadSize) * -1)
-          }),
-          status: 'danger'
+          })
         })
 
         quotaExceeded = true

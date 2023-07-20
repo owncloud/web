@@ -110,10 +110,12 @@ Feature: Unmark file/folder as favorite
       | simple-folder |
     When the user unmarks the favorited file "lorem.txt" using the webUI
     Then the "error" message with header 'Failed to change favorite state of "lorem.txt"' should be displayed on the webUI
+    And the user clears all error message from the webUI
     And file "lorem.txt" should be marked as favorite on the webUI
     When the user clears all error message from the webUI
     And the user unmarks the favorited folder "simple-folder" using the webUI
     Then the "error" message with header 'Failed to change favorite state of "simple-folder"' should be displayed on the webUI
+    And the user clears all error message from the webUI
     And folder "simple-folder" should be marked as favorite on the webUI
     And as "Alice" file "lorem.txt" should not exist in the server
     And as "Alice" folder "simple-folder" should not exist in the server

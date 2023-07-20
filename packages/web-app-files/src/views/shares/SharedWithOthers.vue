@@ -27,6 +27,7 @@
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
+          :grouping-settings="groupingSettings"
           @file-click="triggerDefaultAction"
           @row-mounted="rowMounted"
           @sort="handleSort"
@@ -79,6 +80,7 @@ import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
+import { useGroupingSettings } from 'web-pkg/src/cern/composables'
 import { useMutationSubscription, useStore } from 'web-pkg/src/composables'
 import { getSpaceFromResource } from 'web-app-files/src/helpers/resource/getSpace'
 
@@ -103,8 +105,8 @@ export default defineComponent({
       return getSpaceFromResource({ spaces: store.getters['runtime/spaces/spaces'], resource })
     }
 
-    const { loadResourcesTask, selectedResourcesIds, paginatedResources } =
-      useResourcesViewDefaults<Resource, any, any[]>()
+    const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
+    const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } = resourcesViewDefaults
 
     useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
       if (mutation.payload.field === 'shareTypes') {
@@ -125,8 +127,11 @@ export default defineComponent({
 
     return {
       ...useFileActions(),
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
-      getSpace
+      ...resourcesViewDefaults,
+      getSpace,
+
+      // CERN
+      ...useGroupingSettings({ sortBy, sortDir })
     }
   },
 

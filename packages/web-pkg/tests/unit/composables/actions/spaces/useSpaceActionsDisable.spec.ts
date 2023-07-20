@@ -106,7 +106,7 @@ describe('disable', () => {
           clientService.graphAuthenticated.drives.deleteDrive.mockRejectedValue(new Error())
           await disableSpaces([mock<SpaceResource>({ id: 1, canDisable: () => true })])
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

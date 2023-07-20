@@ -1,0 +1,9 @@
+Enhancement: Add error log to upload dialog
+
+We've added a error log to the upload dialog, so if an upload fails the user can copy the log and might hand
+it over to their admin.
+
+https://github.com/owncloud/web/pull/9436
+https://github.com/owncloud/web/pull/9426
+https://github.com/owncloud/web/issues/9430
+

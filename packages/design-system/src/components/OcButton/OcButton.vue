@@ -6,6 +6,7 @@
     :class="$_ocButton_buttonClass"
     v-on="handlers"
   >
+    <oc-spinner v-if="showSpinner" size="small" class="spinner" />
     <!-- @slot Content of the button -->
     <slot />
   </component>
@@ -149,6 +150,14 @@ export default defineComponent({
       validator: (value: string) => {
         return ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'].includes(value)
       }
+    },
+
+    /**
+     * Show loading spinner
+     */
+    showSpinner: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['click'],
@@ -306,6 +315,10 @@ export default defineComponent({
   padding: 0.5rem 0.8rem;
   text-align: left;
   text-decoration: none;
+
+  .spinner {
+    margin-left: -0.5rem;
+  }
 
   &-justify-content {
     &-left {

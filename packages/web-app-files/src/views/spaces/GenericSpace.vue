@@ -576,7 +576,7 @@ export default defineComponent({
 
   methods: {
     ...mapActions('Files', ['loadPreview']),
-    ...mapActions(['showMessage', 'createModal', 'hideModal']),
+    ...mapActions(['showMessage', 'showErrorMessage', 'createModal', 'hideModal']),
     ...mapMutations('Files', ['REMOVE_FILES', 'REMOVE_FILES_FROM_SEARCHED', 'RESET_SELECTION']),
 
     async fileDropped(fileTarget) {
@@ -624,6 +624,7 @@ export default defineComponent({
         this.createModal,
         this.hideModal,
         this.showMessage,
+        this.showErrorMessage,
         this.$gettext,
         this.$ngettext,
         this.$gettextInterpolate
