@@ -11,7 +11,7 @@
             {{ title }}
           </div>
         </div>
-        <oc-button appearance="raw" @click="close" :aria-label="$gettext('Close')"
+        <oc-button appearance="raw" :aria-label="$gettext('Close')" @click="close"
           ><oc-icon name="close"
         /></oc-button>
       </div>

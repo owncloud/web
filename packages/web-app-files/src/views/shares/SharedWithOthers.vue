@@ -106,7 +106,8 @@ export default defineComponent({
     }
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
-    const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } = resourcesViewDefaults
+    const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } =
+      resourcesViewDefaults
 
     useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
       if (mutation.payload.field === 'shareTypes') {
