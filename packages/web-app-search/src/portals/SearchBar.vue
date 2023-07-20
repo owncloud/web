@@ -116,6 +116,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from 'web-pkg/src/composables'
 import { SearchBarFilter } from 'web-pkg/src/components'
+import { buildShareSpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'SearchBar',
@@ -126,6 +127,7 @@ export default defineComponent({
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const scopeQueryValue = useRouteQuery('scope')
+    const shareId = useRouteQuery('shareId')
     const locationFilterId = ref(SearchLocationFilterConstants.currentFolder)
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
@@ -152,6 +154,10 @@ export default defineComponent({
       }
     })
 
+    const isShareRoute = () => {
+      return !!shareId.value
+    }
+
     const optionsDrop = computed(() => {
       return unref(optionsDropRef) as InstanceType<GlobalComponents['OcDrop']>
     })
@@ -159,6 +165,24 @@ export default defineComponent({
     const availableProviders = computed(() => {
       return unref(providerStore)?.availableProviders
     })
+
+    const buildLocationScopeId = () => {
+      const currentFolder = store.getters['Files/currentFolder']
+      if (isShareRoute()) {
+        console.log('share')
+        const shareSpaceResource = buildShareSpaceResource({
+          shareId: currentFolder.id,
+          shareName: currentFolder.name,
+          serverUrl: ''
+        })
+        return
+      }
+      console.log('not share')
+      const spaceId = currentFolder.fileId.split('!')[0]
+      const path = currentFolder.path === '/' ? '' : currentFolder.path
+      return `${spaceId}${path}`
+    }
+
     const search = async () => {
       searchResults.value = []
       if (!unref(term)) {
@@ -172,9 +196,7 @@ export default defineComponent({
         const currentFolder = store.getters['Files/currentFolder']
         let scope
         if (currentFolder?.fileId) {
-          const spaceId = currentFolder.fileId.split('!')[0]
-          const path = currentFolder.path === '/' ? '' : currentFolder.path
-          scope = `${spaceId}${path}`
+          scope = buildLocationScopeId()
         } else {
           scope = unref(scopeQueryValue)
         }
