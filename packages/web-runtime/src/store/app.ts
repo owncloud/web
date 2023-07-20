@@ -4,6 +4,12 @@ const state = {
 }
 
 const actions = {
+  showErrorMessage({ commit }, message) {
+    message.status = message.status || 'danger'
+    message.timeout = message.timeout || 0
+
+    commit('ENQUEUE_MESSAGE', message)
+  },
   showMessage({ commit }, message) {
     commit('ENQUEUE_MESSAGE', message)
   },

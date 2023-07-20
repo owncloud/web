@@ -105,6 +105,7 @@ Feature: rename folders
     Given user "Alice" has logged in using the webUI
     When the user tries to rename folder <from_name> to <to_name> using the webUI
     Then the "error" message with header '<alert_message>' should be displayed on the webUI
+    And the user clears all error message from the webUI
     And folder "simple-folder" should be listed on the webUI
     Examples:
       | from_name       | to_name           | alert_message                                         |

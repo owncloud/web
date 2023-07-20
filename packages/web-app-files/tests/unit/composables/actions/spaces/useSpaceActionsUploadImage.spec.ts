@@ -39,7 +39,7 @@ describe('uploadImage', () => {
       })
     })
 
-    it('should show message on error', () => {
+    it('should show showErrorMessage on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
         setup: async ({ uploadImageSpace }, { storeOptions, clientService }) => {
@@ -53,7 +53,7 @@ describe('uploadImage', () => {
             }
           })
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

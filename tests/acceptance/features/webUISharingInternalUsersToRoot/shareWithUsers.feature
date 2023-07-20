@@ -160,10 +160,12 @@ Feature: Sharing files and folders with internal users
       | simple-folder |
     When the user shares file "lorem.txt" with user "Brian Murphy" as "Editor" using the webUI
     Then the "error" message with header 'Failed to add share for Brian Murphy' should be displayed on the webUI
+    And the user clears all error message from the webUI
     And user "UserTwo" should not be listed in the collaborators list on the webUI
     When the user clears all error message from the webUI
     And the user shares folder "simple-folder" with user "Brian Murphy" as "Editor" using the webUI
     Then the "error" message with header 'Failed to add share for Brian Murphy' should be displayed on the webUI
+    And the user clears all error message from the webUI
     And user "UserTwo" should not be listed in the collaborators list on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI

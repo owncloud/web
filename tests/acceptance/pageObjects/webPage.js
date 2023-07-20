@@ -235,7 +235,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     clearErrorMessage: {
-      selector: '//div[contains(@class, "oc-alert")]/button[contains(@aria-label, "Close")]',
+      selector:
+        '//*[contains(@class, "oc-notification-message-danger")]//button[contains(@aria-label, "Close")]',
       locateStrategy: 'xpath'
     },
     notificationBell: {

@@ -35,7 +35,7 @@ describe('resetLogo', () => {
           await unref(actions)[0].handler()
           jest.runAllTimers()
           expect(router.go).toHaveBeenCalledTimes(0)
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

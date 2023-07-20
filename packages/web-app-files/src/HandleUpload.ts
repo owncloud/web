@@ -236,7 +236,7 @@ export class HandleUpload extends BasePlugin {
           spaceName = $gettext('Personal')
         }
 
-        this.store.dispatch('showMessage', {
+        this.store.dispatch('showErrorMessage', {
           title: $gettext('Not enough quota'),
           desc: $gettext(
             'There is not enough quota on %{spaceName}, you need additional %{missingSpace} to upload these files',
@@ -244,8 +244,7 @@ export class HandleUpload extends BasePlugin {
               spaceName,
               missingSpace: filesize((space.spaceQuota.remaining - uploadSize) * -1)
             }
-          ),
-          status: 'danger'
+          )
         })
 
         quotaExceeded = true

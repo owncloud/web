@@ -114,6 +114,7 @@ Feature: rename files
     Given user "Alice" has logged in using the webUI
     When the user tries to rename file "data.zip" to "<filename>" using the webUI
     Then the "error" message with header 'Failed to rename "data.zip" to "<filename>"' should be displayed on the webUI
+    And the user clears all error message from the webUI
     And file "data.zip" should be listed on the webUI
     And file "<filename>" should not be listed on the webUI
     Examples:

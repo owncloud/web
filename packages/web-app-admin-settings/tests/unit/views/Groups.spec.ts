@@ -40,11 +40,11 @@ describe('Groups view', () => {
         mockAxiosReject()
       )
       const { wrapper } = getWrapper({ clientService })
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
       const toggleCreateGroupModalStub = jest.spyOn(wrapper.vm, 'toggleCreateGroupModal')
       await wrapper.vm.createGroup({ displayName: 'admins' })
 
-      expect(showMessageStub).toHaveBeenCalled()
+      expect(showErrorMessageStub).toHaveBeenCalled()
       expect(toggleCreateGroupModalStub).toHaveBeenCalledTimes(0)
     })
   })
@@ -78,10 +78,10 @@ describe('Groups view', () => {
       const clientService = getClientServiceMock()
       clientService.graphAuthenticated.groups.editGroup.mockImplementation(() => mockAxiosReject())
       const { wrapper } = getWrapper({ clientService })
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
       await wrapper.vm.editGroup({})
 
-      expect(showMessageStub).toHaveBeenCalled()
+      expect(showErrorMessageStub).toHaveBeenCalled()
     })
   })
 

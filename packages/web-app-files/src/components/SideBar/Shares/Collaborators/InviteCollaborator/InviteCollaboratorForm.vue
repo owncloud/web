@@ -187,7 +187,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapActions('Files', ['addShare']),
     ...mapActions('runtime/spaces', ['addSpaceMember']),
 
@@ -351,11 +351,10 @@ export default defineComponent({
         this.showMessage({ title: this.$gettext('Share was added successfully') })
       }
       errors.forEach((e) => {
-        this.showMessage({
+        this.showErrorMessage({
           title: this.$gettext('Failed to add share for %{displayName}', {
             displayName: e.displayName
-          }),
-          status: 'danger'
+          })
         })
       })
 

@@ -50,9 +50,8 @@ export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) 
       })
     } catch (error) {
       console.error(error)
-      store.dispatch('showMessage', {
-        title: $gettext('Failed to set space description'),
-        status: 'danger'
+      store.dispatch('showErrorMessage', {
+        title: $gettext('Failed to set space description')
       })
     }
   }
