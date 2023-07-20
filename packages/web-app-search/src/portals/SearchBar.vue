@@ -175,7 +175,8 @@ export default defineComponent({
           shareName: currentFolder.name,
           serverUrl: ''
         })
-        return
+        const jailId = shareSpaceResource.id.toString().split('!')[0]
+        return `${jailId}$${shareSpaceResource.id}`
       }
       console.log('not share')
       const spaceId = currentFolder.fileId.split('!')[0]
