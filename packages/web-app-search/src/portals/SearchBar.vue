@@ -223,9 +223,7 @@ export default defineComponent({
         const currentFolder = store.getters['Files/currentFolder']
         let scope
         if (unref(currentFolderAvailable) && currentFolder?.fileId) {
-          const spaceId = currentFolder.fileId.split('!')[0]
-          const path = currentFolder.path === '/' ? '' : currentFolder.path
-          scope = `${spaceId}${path}`
+          scope = buildLocationScopeId()
         } else {
           scope = unref(scopeQueryValue)
         }
