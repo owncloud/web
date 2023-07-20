@@ -40,7 +40,6 @@
         </template>
         <template #option="{ label, error }">
           <div class="oc-flex">
-            <span v-if="showSelectNewLabel({ label })" class="oc-mr-s" v-text="$gettext('New')" />
             <span class="oc-flex oc-flex-center">
               <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
                 <oc-icon name="price-tag-3" size="small" />
@@ -57,7 +56,6 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject, onMounted, ref, unref, VNodeRef, watch } from 'vue'
-import CompareSaveDialog from 'web-pkg/src/components/SideBar/CompareSaveDialog.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
 import { useClientService, useStore } from 'web-pkg/src/composables'
@@ -76,8 +74,7 @@ type TagOption = {
 
 export default defineComponent({
   name: 'TagsPanel',
-  components: {
-  },
+  components: {},
   setup() {
     const store = useStore()
     const clientService = useClientService()
@@ -87,6 +84,7 @@ export default defineComponent({
     const resource = computed<Resource>(() => unref(injectedResource))
     const selectedTags = ref<TagOption[]>([])
     const availableTags = ref<TagOption[]>([])
+    let allTags = []
     const tagSelect: VNodeRef = ref(null)
 
     const currentTags = computed<TagOption[]>(() => {
@@ -97,9 +95,10 @@ export default defineComponent({
       const {
         data: { value: tags = [] }
       } = yield clientService.graphAuthenticated.tags.getTags()
-      availableTags.value = [
-        ...tags
-      ]
+
+      allTags = tags
+      const selectedLabels = new Set(unref(selectedTags).map((o) => o.label))
+      availableTags.value = tags.filter((t) => selectedLabels.has(t) === false)
     })
 
     const revertChanges = () => {
@@ -176,6 +175,16 @@ export default defineComponent({
 
     const updateModelValue = async (e) => {
       selectedTags.value = e.map((x) => (typeof x === 'object' ? x : { label: x }))
+      const currentlyAvailableTags = unref(availableTags)
+      allTags.forEach((t) =>
+        currentlyAvailableTags.includes(t) ? null : currentlyAvailableTags.push(t)
+      )
+      availableTags.value = currentlyAvailableTags.filter(
+        (l) =>
+          unref(selectedTags)
+            .map((o) => o.label)
+            .includes(typeof l === 'object' ? l.label : l) === false
+      )
       console.log(selectedTags.value)
       await save()
     }
