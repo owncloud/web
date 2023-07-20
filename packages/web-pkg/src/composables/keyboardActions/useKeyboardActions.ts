@@ -24,21 +24,20 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null) => 
     const action = actions.value
       .filter((action) => action !== null)
       .find((action) => {
-        return action.key === key && action.modifier === modifier
+        return action.primary === key && action.modifier === modifier
       })
     if (action) {
       action.callback(event)
     }
   }
   const bindKeyAction = (
-    modifier: ModifierKey | null = null,
-    key: Key,
+    keys: { primary: Key; modifier?: ModifierKey },
     callback: () => void
   ): number => {
     return (
       actions.value.push({
-        modifier,
-        key,
+        ...keys,
+        modifier: keys.modifier ?? null,
         callback
       }) - 1
     )

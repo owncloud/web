@@ -16,26 +16,32 @@ export const useKeyboardActionsSearchTable = (keyActions, paginatedResources) =>
   let fileListClickedMetaEvent
   let fileListClickedShiftEvent
 
-  keyActions.bindKeyAction(null, Key.ArrowUp, () => handleNavigateAction(true))
+  keyActions.bindKeyAction({ primary: Key.ArrowUp }, () => handleNavigateAction(true))
 
-  keyActions.bindKeyAction(null, Key.ArrowDown, () => handleNavigateAction())
+  keyActions.bindKeyAction({ primary: Key.ArrowDown }, () => handleNavigateAction())
 
-  keyActions.bindKeyAction(null, Key.Esc, () => {
+  keyActions.bindKeyAction({ primary: Key.Esc }, () => {
     resetSelectionCursor()
     store.dispatch('Files/resetFileSelection')
   })
 
-  keyActions.bindKeyAction(null, Key.Space, () => {
+  keyActions.bindKeyAction({ primary: Key.Space }, () => {
     store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
   })
 
-  keyActions.bindKeyAction(ModifierKey.Shift, Key.ArrowUp, () => handleShiftUpAction())
+  keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowUp }, () =>
+    handleShiftUpAction()
+  )
 
-  keyActions.bindKeyAction(ModifierKey.Shift, Key.ArrowDown, () => handleShiftDownAction())
+  keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowDown }, () =>
+    handleShiftDownAction()
+  )
 
-  keyActions.bindKeyAction(ModifierKey.Ctrl, Key.A, () => handleSelectAllAction())
+  keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.A }, () =>
+    handleSelectAllAction()
+  )
 
-  keyActions.bindKeyAction(ModifierKey.Ctrl, Key.C, () => {
+  keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.C }, () => {
     store.dispatch('Files/copySelectedFiles', {
       ...language,
       resources: store.getters['Files/selectedFiles']
