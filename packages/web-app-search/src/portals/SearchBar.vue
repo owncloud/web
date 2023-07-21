@@ -168,6 +168,7 @@ export default defineComponent({
 
     const buildLocationScopeId = () => {
       const currentFolder = store.getters['Files/currentFolder']
+      const path = currentFolder.path === '/' ? '' : currentFolder.path
       if (isShareRoute()) {
         const shareSpaceResource = buildShareSpaceResource({
           shareId: currentFolder.id,
@@ -175,10 +176,9 @@ export default defineComponent({
           serverUrl: ''
         })
         const jailId = shareSpaceResource.id.toString().split('!')[0]
-        return `${jailId}$${shareSpaceResource.id}`
+        return `${jailId}$${shareSpaceResource.id}${path}`
       }
       const spaceId = currentFolder.fileId.split('!')[0]
-      const path = currentFolder.path === '/' ? '' : currentFolder.path
       return `${spaceId}${path}`
     }
 
