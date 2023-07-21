@@ -116,7 +116,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from 'web-pkg/src/composables'
 import { SearchBarFilter } from 'web-pkg/src/components'
-import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { buildShareSpaceResource, SHARE_JAIL_ID } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'SearchBar',
@@ -170,13 +170,7 @@ export default defineComponent({
       const currentFolder = store.getters['Files/currentFolder']
       const path = currentFolder.path === '/' ? '' : currentFolder.path
       if (isShareRoute()) {
-        const shareSpaceResource = buildShareSpaceResource({
-          shareId: currentFolder.id,
-          shareName: currentFolder.name,
-          serverUrl: ''
-        })
-        const jailId = shareSpaceResource.id.toString().split('!')[0]
-        return `${jailId}$${jailId}!${shareId.value}${path}`
+        return `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${shareId.value}${path}`
       }
       const spaceId = currentFolder.fileId.split('!')[0]
       return `${spaceId}${path}`
