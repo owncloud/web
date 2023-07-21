@@ -87,7 +87,7 @@
   </div>
 </template>
 <script lang="ts">
-import { onMounted, onUnmounted, ref, unref } from 'vue'
+import { onMounted, onUnmounted, ref, unref, watch } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { ShareStatus } from 'web-client/src/helpers/share'
@@ -295,6 +295,10 @@ export default {
 
     const accessToken = useAccessToken({ store })
 
+    watch(notifications, () => {
+      console.log('notification, ', notifications.value)
+    })
+
     const setupSSE = () => {
       fetchEventSource('/ocs/v2.php/apps/notifications/api/v1/notifications/sse', {
         headers: {
@@ -304,18 +308,26 @@ export default {
           if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
             console.log('SSE OK')
             return
-          } else {
+          } else if (
+            response.status !== 401 &&
+            response.status !== 400 &&
+            response.status !== 404 &&
+            response.status !== 500
+          ) {
             throw new Error(`SSE notifications couldn't be set up ${response.status}`)
           }
         },
         onmessage(msg) {
-          console.log(msg)
           if (msg.event === 'FatalError') {
             throw new Error(`SSE notifications error: ${msg.data}`)
           }
+          const data = JSON.parse(msg.data)
+          if (data.notification_id) {
+            notifications.value = [data, ...unref(notifications)]
+          }
         },
         onerror() {
-          setTimeout(setupSSE, 10000)
+          setTimeout(setupSSE, 1000)
         }
       })
     }
