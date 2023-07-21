@@ -273,7 +273,7 @@ export default defineComponent({
       this.filesInProgressCount += files.filter((f) => !f.isFolder).length
 
       for (const file of files) {
-        if (!this.disableActions && file.source && file.source !== 'DropTarget') {
+        if (!this.disableActions && file.isRemote) {
           this.disableActions = true
         }
 

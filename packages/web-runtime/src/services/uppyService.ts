@@ -86,12 +86,14 @@ export class UppyService {
     tusMaxChunkSize,
     tusHttpMethodOverride,
     tusExtension,
-    onBeforeRequest
+    onBeforeRequest,
+    headers
   }: {
     tusMaxChunkSize: number
     tusHttpMethodOverride: boolean
     tusExtension: string
     onBeforeRequest: () => void
+    headers: () => uppyHeaders
   }) {
     const chunkSize = tusMaxChunkSize || Infinity
     const uploadDataDuringCreation = tusExtension.includes('creation-with-upload')
@@ -103,6 +105,7 @@ export class UppyService {
       retryDelays: [0, 500, 1000],
       uploadDataDuringCreation,
       limit: 5,
+      headers,
       onBeforeRequest,
       onShouldRetry: (err, retryAttempt, options, next) => {
         // status code 5xx means the upload is gone on the server side
