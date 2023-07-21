@@ -1,8 +1,4 @@
-import {
-  useAccessToken,
-  useStore,
-  usePublicLinkContext
-} from '@ownclouders/web-pkg/src/composables'
+import { useStore, usePublicLinkContext } from '@ownclouders/web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg/src/composables/service'
 import type { UppyService } from 'web-runtime/src/services/uppyService'
@@ -20,7 +16,6 @@ import { ApplicationSetupOptions } from 'web-pkg/src/apps'
 export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const store = useStore()
   const { $gettext } = useGettext()
-  const accessToken = useAccessToken({ store })
   const uppyService = useService<UppyService>('$uppyService')
   const publicLinkContext = usePublicLinkContext({ store })
 
@@ -54,19 +49,9 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
 
   uppyService.subscribe('uploadCompleted', () => {
     removeUppyPlugins()
-    const tusPlugin = uppyService.getPlugin('Tus')
-    if (tusPlugin) {
-      tusPlugin.setOptions({ headers: {} })
-    }
   })
 
   const handler = async () => {
-    const tusPlugin = uppyService.getPlugin('Tus')
-    if (tusPlugin) {
-      tusPlugin.setOptions({
-        headers: { Authorization: 'Bearer ' + unref(accessToken) }
-      })
-    }
     const modal = {
       variation: 'passive',
       title: $gettext('Import files'),
