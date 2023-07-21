@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 overrides:
   '@uppy/companion-client': https://github.com/owncloud/uppy/releases/download/v3.12.9-owncloud/uppy-companion-client.tgz
@@ -828,6 +832,9 @@ importers:
       web-app-files:
         specifier: workspace:*
         version: link:../web-app-files
+      web-client:
+        specifier: workspace:@ownclouders/web-client@*
+        version: link:../web-client
       web-pkg:
         specifier: workspace:@ownclouders/web-pkg@*
         version: link:../web-pkg
@@ -21733,7 +21740,3 @@ packages:
       lodash: 4.17.21
       vue: 3.3.4
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
