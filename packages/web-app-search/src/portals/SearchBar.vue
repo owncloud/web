@@ -176,7 +176,7 @@ export default defineComponent({
           serverUrl: ''
         })
         const jailId = shareSpaceResource.id.toString().split('!')[0]
-        return `${jailId}$${shareSpaceResource.id}${path}`
+        return `${jailId}$${jailId}!${shareId.value}${path}`
       }
       const spaceId = currentFolder.fileId.split('!')[0]
       return `${spaceId}${path}`
