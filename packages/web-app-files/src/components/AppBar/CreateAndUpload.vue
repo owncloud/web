@@ -96,6 +96,7 @@
       class="oc-width-auto"
       close-on-click
       padding-size="small"
+      @show-drop="showDrop"
     >
       <oc-list id="upload-list" :class="{ 'oc-pb-s': extensionActions.length }">
         <li class="oc-menu-item-hover">
@@ -106,12 +107,20 @@
         </li>
       </oc-list>
       <oc-list v-if="extensionActions.length" id="extension-list" class="oc-pt-s">
-        <li v-for="(action, key) in extensionActions" :key="key" class="oc-menu-item-hover">
+        <li
+          v-for="(action, key) in extensionActions"
+          :key="`${key}-${actionKeySuffix}`"
+          v-oc-tooltip="
+            isActionDisabled(action) && action.disabledTooltip ? action.disabledTooltip() : null
+          "
+          class="oc-menu-item-hover"
+        >
           <oc-button
             class="oc-width-1-1"
             :class="action.class"
             appearance="raw"
             justify-content="left"
+            :disabled="isActionDisabled(action)"
             @click="action.handler"
           >
             <oc-icon :name="action.icon" fill-type="line" /><span v-text="action.label()"
@@ -169,7 +178,16 @@ import {
 } from 'web-pkg/src/composables'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
-import { computed, defineComponent, onMounted, onBeforeUnmount, PropType, unref, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  onBeforeUnmount,
+  PropType,
+  unref,
+  watch,
+  ref
+} from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { Resource, SpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
@@ -179,6 +197,8 @@ import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { ActionExtension, useExtensionRegistry } from 'web-pkg/src/composables/piniaStores'
+import { Action } from 'web-pkg/src/composables/actions'
+import { v4 as uuidv4 } from 'uuid'
 
 export default defineComponent({
   components: {
@@ -274,6 +294,15 @@ export default defineComponent({
       return unref(currentFolder)?.canUpload({ user: store.getters.user })
     })
 
+    const actionKeySuffix = ref(uuidv4())
+    const showDrop = () => {
+      // force actions to be re-rendered when the drop is being opened
+      actionKeySuffix.value = uuidv4()
+    }
+    const isActionDisabled = (action: Action) => {
+      return action.isDisabled ? action.isDisabled() : false
+    }
+
     const handlePasteFileEvent = (event) => {
       // Ignore file in clipboard if there are already files from owncloud in the clipboard
       if (store.state.Files.clipboardResources.length || !unref(canUpload)) {
@@ -368,6 +397,9 @@ export default defineComponent({
       createNewFolderAction,
       extensionActions,
       pasteFileAction,
+      isActionDisabled,
+      actionKeySuffix,
+      showDrop,
 
       // HACK: exported for unit tests:
       onUploadComplete
