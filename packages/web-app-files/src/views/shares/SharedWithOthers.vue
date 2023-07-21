@@ -64,7 +64,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import { useFileActions } from '../../composables/actions/files/useFileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
-import { debounce } from 'lodash-es'
+import { debounce, find } from 'lodash-es'
 
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
@@ -80,8 +80,8 @@ import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
-import { useStore } from 'web-pkg/src/composables'
 import { useGroupingSettings } from 'web-pkg/src/cern/composables'
+import { useMutationSubscription, useStore } from 'web-pkg/src/composables'
 import { getSpaceFromResource } from 'web-app-files/src/helpers/resource/getSpace'
 
 const visibilityObserver = new VisibilityObserver()
@@ -106,7 +106,25 @@ export default defineComponent({
     }
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
-    const { sortBy, sortDir } = resourcesViewDefaults
+    const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } =
+      resourcesViewDefaults
+
+    useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
+      if (mutation.payload.field === 'shareTypes') {
+        if (selectedResourcesIds.value.length !== 1) return
+        const id = selectedResourcesIds.value[0]
+
+        const match = find(paginatedResources.value, { id })
+        if (!match) return
+
+        await loadResourcesTask.perform()
+
+        const matchedNewResource = find(paginatedResources.value, { fileId: match.fileId })
+        if (!matchedNewResource) return
+
+        selectedResourcesIds.value = [matchedNewResource.id]
+      }
+    })
 
     return {
       ...useFileActions(),
