@@ -87,7 +87,7 @@
   </div>
 </template>
 <script lang="ts">
-import { onMounted, onUnmounted, ref, unref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { ShareStatus } from 'web-client/src/helpers/share'
@@ -105,8 +105,6 @@ import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-
-const POLLING_INTERVAL = 30000
 
 export default {
   components: {
