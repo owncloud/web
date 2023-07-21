@@ -295,10 +295,7 @@ export default {
 
     const accessToken = useAccessToken({ store })
 
-    onMounted(() => {
-      class RetriableError extends Error {}
-      class FatalError extends Error {}
-
+    const setupSSE = () => {
       fetchEventSource('/ocs/v2.php/apps/notifications/api/v1/notifications/sse', {
         headers: {
           Authorization: `Bearer ${accessToken.value}`
@@ -307,27 +304,23 @@ export default {
           if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
             console.log('SSE OK')
             return
-          } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
-            throw new FatalError()
           } else {
-            throw new RetriableError()
+            throw new Error(`SSE notifications couldn't be set up ${response.status}`)
           }
         },
         onmessage(msg) {
           console.log(msg)
           if (msg.event === 'FatalError') {
-            throw new FatalError(msg.data)
+            throw new Error(`SSE notifications error: ${msg.data}`)
           }
         },
-        onclose() {
-          throw new RetriableError()
-        },
-        onerror(err) {
-          if (err instanceof FatalError) {
-            throw err
-          }
+        onerror() {
+          setTimeout(setupSSE, 10000)
         }
       })
+    }
+    onMounted(() => {
+      setupSSE()
       fetchNotificationsTask.perform()
     })
 
