@@ -1,23 +1,27 @@
 <template>
   <!--
-    // additional classes from preview app, check if they are needed oc-flex oc-flex-center
-  oc-flex-middle oc-p-s oc-box-shadow-medium dicom-viewer" // more css classes from preview app
+  // more css classes from preview app
   :class="{ lightbox: isFullScreenModeActivated }
-
-  <div class="oc-height-1-1 oc-position-center oc-text-center">
-    <oc-spinner size="xlarge" />
-    <p v-translate class="oc-invisible">Loading DICOM file</p>
-  </div>
   -->
   <div
     class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium dicom-viewer"
   >
-    <h1>DICOM will be displayed here</h1>
+    <h1>DICOM placeholder</h1>
+    <div ref="canvas" class="dicom-canvas"></div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+
+// import cornerstone packages
+import Hammer from 'hammerjs'
+import dicomParser from 'dicom-parser'
+import * as cornerstone from 'cornerstone-core'
+import * as cornerstoneMath from 'cornerstone-math'
+import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader'
+//import * as cornerstoneWADOImageLoader from "../codecs/cornerstoneWADOImageLoader.js";
+import * as cornerstoneTools from '@cornerstonejs/tools' //"cornerstone-tools";
 
 export default defineComponent({
   name: 'SimpleDicomViewerScreen'
@@ -29,25 +33,16 @@ export default defineComponent({
   border: 10px solid blue;
   height: calc(100% - 52px);
 }
+
+.dicom-canvas {
+  border: 10px solid yellow;
+  width: 100%;
+  height: 100%;
+}
 </style>
 
 <!--
 <script lang="ts"></script>
-
-// Packages
-import Hammer from 'hammerjs'
-import dicomParser from 'dicom-parser'
-import * as cornerstone from 'cornerstone-core'
-import * as cornerstoneMath from 'cornerstone-math'
-import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader'
-import * as cornerstoneTools from '@cornerstonejs/tools'
-
-// Externals
-cornerstoneWADOImageLoader.external.cornerstone = cornerstone
-cornerstoneWADOImageLoader.external.dicomParser = dicomParser
-cornerstoneTools.external.cornerstoneMath = cornerstoneMath
-cornerstoneTools.external.cornerstone = cornerstone
-cornerstoneTools.external.Hammer = Hammer
 
 // CodeSandbox live updates components in an odd way.
 // We do this to protect ourselves from duplicate initializations
