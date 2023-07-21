@@ -1,8 +1,9 @@
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, Ref, ref } from 'vue'
 
 export enum Key {
   C = 'c',
   V = 'v',
+  X = 'x',
   A = 'a',
   Space = ' ',
   ArrowUp = 'ArrowUp',
@@ -15,8 +16,16 @@ export enum ModifierKey {
   Shift = 'Shift'
 }
 
-export const useKeyboardActions = (keyBindOnElementId: string | null = null) => {
+export interface KeyboardActions {
+  selectionCursor: Ref<number>
+  removeKeyAction: (index: number) => void
+  resetSelectionCursor: () => void
+  bindKeyAction: (keys: { primary: Key; modifier?: ModifierKey }, callback: () => void) => number
+}
+
+export const useKeyboardActions = (keyBindOnElementId: string | null = null): KeyboardActions => {
   const actions = ref([])
+  const selectionCursor = ref(0)
   const listener = (event: KeyboardEvent): void => {
     event.preventDefault()
     const { key, ctrlKey, metaKey, shiftKey } = event
@@ -48,8 +57,14 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null) => 
     )
   }
 
-  const removeKeyAction = (index): void => {
-    actions.value[index] = null
+  const removeKeyAction = (index: number): void => {
+    if (actions.value[index] !== undefined) {
+      actions.value[index] = null
+    }
+  }
+
+  const resetSelectionCursor = (): void => {
+    selectionCursor.value = 0
   }
 
   onMounted(() => {
@@ -74,6 +89,8 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null) => 
 
   return {
     bindKeyAction,
-    removeKeyAction
+    removeKeyAction,
+    selectionCursor,
+    resetSelectionCursor
   }
 }
