@@ -91,6 +91,9 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
 
         return true
       },
+      isDisabled: () => {
+        return store.getters['Files/activeFiles'].length === 0
+      },
       componentType: 'button',
       class: 'oc-files-actions-empty-trash-bin-trigger',
       variation: 'danger',
