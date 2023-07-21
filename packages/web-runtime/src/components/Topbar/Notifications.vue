@@ -122,6 +122,7 @@ export default {
     const loading = ref(false)
     const notificationsInterval = ref()
     const dropdownOpened = ref(false)
+    const accessToken = useAccessToken({ store })
 
     const formatDate = (date) => {
       return formatDateFromISO(date, currentLanguage)
@@ -292,12 +293,6 @@ export default {
       dropdownOpened.value = true
       setAdditionalData()
     }
-
-    const accessToken = useAccessToken({ store })
-
-    watch(notifications, () => {
-      console.log('notification, ', notifications.value)
-    })
 
     const setupSSE = () => {
       fetchEventSource('/ocs/v2.php/apps/notifications/api/v1/notifications/sse', {

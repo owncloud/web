@@ -1,0 +1,8 @@
+Enhancement: Add SSE to get notifications instantly
+
+We've added SSE to the notifications which allows us to be notified
+about new notifications instantly and from the server without polling
+every few seconds.
+
+https://github.com/owncloud/web/pull/9451
+https://github.com/owncloud/web/issues/9434
