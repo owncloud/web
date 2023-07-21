@@ -195,9 +195,9 @@ export default defineComponent({
     const scopeQuery = useRouteQuery('scope')
     const doUseScope = useRouteQuery('useScope')
 
-    const { paginatedResources } = useResourcesViewDefaults<Resource, any, any[]>()
+    const resourcesView = useResourcesViewDefaults<Resource, any, any[]>()
     const keyActions = useKeyboardActions('files-view')
-    useKeyboardActionsSearchTable(keyActions, paginatedResources)
+    useKeyboardActionsSearchTable(keyActions, resourcesView.paginatedResources)
 
     const searchTerm = computed(() => {
       return queryItemAsString(unref(searchTermQuery))
@@ -300,7 +300,7 @@ export default defineComponent({
 
     return {
       ...useFileActions({ store }),
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
+      ...resourcesView,
       loadAvailableTagsTask,
       fileListHeaderY,
       fullTextSearchEnabled,

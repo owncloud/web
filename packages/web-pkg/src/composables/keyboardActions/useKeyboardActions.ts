@@ -20,7 +20,12 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null) => 
   const listener = (event: KeyboardEvent): void => {
     event.preventDefault()
     const { key, ctrlKey, metaKey, shiftKey } = event
-    const modifier = metaKey || ctrlKey ? ModifierKey.Ctrl : shiftKey ? ModifierKey.Shift : null
+    let modifier = null
+    if (metaKey || ctrlKey) {
+      modifier = ModifierKey.Ctrl
+    } else if (shiftKey) {
+      modifier = ModifierKey.Shift
+    }
     const action = actions.value
       .filter((action) => action !== null)
       .find((action) => {
