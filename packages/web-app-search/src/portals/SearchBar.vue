@@ -116,7 +116,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from 'web-pkg/src/composables'
 import { SearchBarFilter } from 'web-pkg/src/components'
-import { buildShareSpaceResource, SHARE_JAIL_ID } from 'web-client/src/helpers'
+import { SHARE_JAIL_ID } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'SearchBar',
