@@ -69,7 +69,7 @@ The repository's `packages` also contains the following apps, which can be en-/d
 - **external:** An extension for creating, opening and editing files using the WOPI server
 - **files:** The default extension and core part of the project, responsible for file sync-and-share - up- and downloading, sharing with other users/groups or via links, version management and more
 - **pdf-viewer:** An extension for opening PDF files without leaving the UI
-- **dicom-viewer:** An extension for opening DICOM files without leaving the UI
+- **dicom-viewer:** An extension for viewing DICOM files without leaving the UI
 - **preview:** An extension for opening audio, video and image files
 - **search:** An extension for registering search providers, which then get rendered into the layout in the **runtime** using a portal
 - **skeleton:** Bare extension serving as a playground for prototyping new custom extensions
