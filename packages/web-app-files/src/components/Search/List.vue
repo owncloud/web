@@ -144,6 +144,8 @@ import { eventBus, useCapabilityFilesFullTextSearch } from 'web-pkg'
 import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
 import { isLocationCommonActive } from 'web-app-files/src/router'
 import ItemFilterToggle from 'web-pkg/src/components/ItemFilterToggle.vue'
+import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import { useKeyboardActionsSearchTable } from 'web-app-files/src/composables/keyboardActions'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -192,6 +194,10 @@ export default defineComponent({
     const searchTermQuery = useRouteQuery('term')
     const scopeQuery = useRouteQuery('scope')
     const doUseScope = useRouteQuery('useScope')
+
+    const resourcesView = useResourcesViewDefaults<Resource, any, any[]>()
+    const keyActions = useKeyboardActions('files-view')
+    useKeyboardActionsSearchTable(keyActions, resourcesView.paginatedResources)
 
     const searchTerm = computed(() => {
       return queryItemAsString(unref(searchTermQuery))
@@ -294,7 +300,7 @@ export default defineComponent({
 
     return {
       ...useFileActions({ store }),
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
+      ...resourcesView,
       loadAvailableTagsTask,
       fileListHeaderY,
       fullTextSearchEnabled,
