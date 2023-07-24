@@ -292,8 +292,8 @@ export default {
       setAdditionalData()
     }
 
-    const setupSSE = () => {
-      fetchEventSource('/ocs/v2.php/apps/notifications/api/v1/notifications/sse', {
+    const setupSSE = async () => {
+      await fetchEventSource('/ocs/v2.php/apps/notifications/api/v1/notifications/sse', {
         headers: {
           Authorization: `Bearer ${accessToken.value}`
         },
@@ -315,8 +315,8 @@ export default {
         }
       })
     }
-    onMounted(() => {
-      setupSSE()
+    onMounted(async () => {
+      await setupSSE()
       fetchNotificationsTask.perform()
     })
 
