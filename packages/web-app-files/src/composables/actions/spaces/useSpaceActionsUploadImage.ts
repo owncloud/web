@@ -93,7 +93,8 @@ export const useSpaceActionsUploadImage = ({
         .catch((error) => {
           console.error(error)
           store.dispatch('showErrorMessage', {
-            title: $gettext('Failed to upload space image')
+            title: $gettext('Failed to upload space image'),
+            error
           })
         })
     })

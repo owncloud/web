@@ -210,7 +210,8 @@ export default defineComponent({
       } catch (error) {
         console.error(error)
         this.showErrorMessage({
-          title: this.$gettext('Failed to remove share')
+          title: this.$gettext('Failed to remove share'),
+          error
         })
       } finally {
         this.hideModal()

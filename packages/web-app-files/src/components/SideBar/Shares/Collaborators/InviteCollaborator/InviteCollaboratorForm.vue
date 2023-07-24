@@ -354,7 +354,8 @@ export default defineComponent({
         this.showErrorMessage({
           title: this.$gettext('Failed to add share for %{displayName}', {
             displayName: e.displayName
-          })
+          }),
+          error: e
         })
       })
 

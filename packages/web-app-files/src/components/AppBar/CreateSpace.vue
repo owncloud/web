@@ -68,7 +68,8 @@ export default defineComponent({
       } catch (error) {
         console.error(error)
         this.showErrorMessage({
-          title: this.$gettext('Creating space failed…')
+          title: this.$gettext('Creating space failed…'),
+          error
         })
       }
     }

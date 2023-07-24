@@ -49,7 +49,8 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
           store.dispatch('showErrorMessage', {
             title: $gettext('Failed to restore space %{spaceName}', {
               spaceName: space.name
-            })
+            }),
+            error
           })
         })
       requests.push(request)

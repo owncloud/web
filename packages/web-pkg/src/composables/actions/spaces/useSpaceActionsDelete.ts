@@ -40,7 +40,8 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
           store.dispatch('showErrorMessage', {
             title: $gettext('Failed to delete space %{spaceName}', {
               spaceName: space.name
-            })
+            }),
+            error
           })
         })
       requests.push(request)

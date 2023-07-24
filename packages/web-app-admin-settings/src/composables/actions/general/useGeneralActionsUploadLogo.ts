@@ -49,7 +49,8 @@ export const useGeneralActionsUploadLogo = ({
     } catch (e) {
       console.error(e)
       store.dispatch('showErrorMessage', {
-        title: $gettext('Failed to upload logo')
+        title: $gettext('Failed to upload logo'),
+        error: e
       })
     }
   }

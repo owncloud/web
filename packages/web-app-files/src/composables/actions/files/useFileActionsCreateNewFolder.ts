@@ -75,7 +75,8 @@ export const useFileActionsCreateNewFolder = ({
     } catch (error) {
       console.error(error)
       store.dispatch('showErrorMessage', {
-        title: $gettext('Failed to create folder')
+        title: $gettext('Failed to create folder'),
+        error
       })
     }
   }
