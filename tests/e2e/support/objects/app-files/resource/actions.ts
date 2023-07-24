@@ -279,22 +279,27 @@ const createOpenDocumentOrMicrosoftWordFile = async (
   const editorPage = await newEditorTab
   await editorPage.waitForLoadState()
   await editorPage.waitForURL('**/external/personal/**')
-
   const editorMainFrame = await editorPage.frameLocator(editorIframe)
-  if (editorToOpen === 'Collabora') {
-    await editorMainFrame.locator(welcomeModalCollaboraIframe).waitFor()
-    await editorPage.keyboard.press('Escape')
-    await editorMainFrame.locator(openDocumentTextAreaSelector).type(content)
-    const saveModified = await editorMainFrame.locator(savedInCollaboraEditorSelector)
-    await expect(saveModified).toBeVisible()
-    await editorMainFrame.locator('#Save').click()
-    await expect(saveModified).not.toBeVisible()
-  }
-  if (editorToOpen === 'OnlyOffice') {
-    const innerIframe = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
-    await innerIframe.locator(microsoftWordTextAreaSelector).type(content)
-    const saveButtonDisabledLocator = innerIframe.locator(microsoftWordSaveButtonSelector)
-    await expect(saveButtonDisabledLocator).toHaveAttribute('disabled', 'disabled')
+  switch (editorToOpen) {
+    case 'Collabora':
+      await editorMainFrame.locator(welcomeModalCollaboraIframe).waitFor()
+      await editorPage.keyboard.press('Escape')
+      await editorMainFrame.locator(openDocumentTextAreaSelector).type(content)
+      const saveModified = await editorMainFrame.locator(savedInCollaboraEditorSelector)
+      await expect(saveModified).toBeVisible()
+      await editorMainFrame.locator('#Save').click()
+      await expect(saveModified).not.toBeVisible()
+      break
+    case 'OnlyOffice':
+      const innerIframe = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
+      await innerIframe.locator(microsoftWordTextAreaSelector).type(content)
+      const saveButtonDisabledLocator = innerIframe.locator(microsoftWordSaveButtonSelector)
+      await expect(saveButtonDisabledLocator).toHaveAttribute('disabled', 'disabled')
+      break
+    default:
+      throw new Error(
+        "Editor should be either 'Collabora' or 'OnlyOffice' but found " + editorToOpen
+      )
   }
   await editorPage.close()
 }
@@ -312,18 +317,24 @@ export const openAndGetContentOfOpenDocumentOrMicrosoftWordDocument = async ({
   await editorPage.waitForLoadState()
   await editorPage.waitForURL('**/external/public/**')
   const editorMainFrame = await editorPage.frameLocator(editorIframe)
-  if (editorToOpen === 'Collabora') {
-    await editorMainFrame.locator(welcomeModalCollaboraIframe).waitFor()
-    await editorPage.keyboard.press('Escape')
-    await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
+  switch (editorToOpen) {
+    case 'Collabora':
+      await editorMainFrame.locator(welcomeModalCollaboraIframe).waitFor()
+      await editorPage.keyboard.press('Escape')
+      await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
+      break
+    case 'OnlyOffice':
+      const innerFrame = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
+      await innerFrame.locator(onlyOfficeCanvasEditorSelector).click()
+      await innerFrame.locator(onlyOfficeCanvasCursorSelector).waitFor()
+      break
+    default:
+      throw new Error(
+        "Editor should be either 'Collabora' or 'OnlyOffice' but found " + editorToOpen
+      )
   }
-  if (editorToOpen === 'OnlyOffice') {
-    const innerFrame = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
-    await innerFrame.locator(onlyOfficeCanvasEditorSelector).click()
-    await innerFrame.locator(onlyOfficeCanvasCursorSelector).waitFor()
-  }
-  await editorPage.keyboard.press('Control+A', { delay: 150 })
-  await editorPage.keyboard.press('Control+C', { delay: 150 })
+  await editorPage.keyboard.press('Control+A', { delay: 200 })
+  await editorPage.keyboard.press('Control+C', { delay: 200 })
   const actualContentOfEditor = await editorPage.evaluate(() => navigator.clipboard.readText())
   await editorPage.close()
   return actualContentOfEditor

@@ -178,9 +178,8 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     restart: always
     depends_on:
-      - ocis
-      - collabora
       - wopiserver
+      - collabora
 
   ocis-appprovider-onlyoffice:
     image: ${OCIS_IMAGE:-owncloud/ocis:latest}
@@ -214,12 +213,11 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     restart: always
     depends_on:
-      - ocis
-      - onlyoffice
       - wopiserver
+      - onlyoffice
 
   collabora:
-    image: collabora/code:22.05.10.1.1
+    image: collabora/code:22.05.14.3.1
     environment:
       DONT_GEN_SSL_CERT: 'YES'
       extra_params: --o:ssl.enable=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://host.docker.internal:9200
@@ -238,7 +236,7 @@ services:
       - traefik
 
   onlyoffice:
-    image: onlyoffice/documentserver:7.3.0
+    image: onlyoffice/documentserver:7.3.3
     entrypoint:
       - /bin/sh
       - /entrypoint-override.sh
@@ -263,7 +261,7 @@ services:
       - traefik
 
   wopiserver:
-    image: cs3org/wopiserver:v9.4.0
+    image: cs3org/wopiserver:v10.0.1
     environment:
       WOPISERVER_INSECURE: true
       WOPISECRET: ${WOPI_JWT_SECRET:-LoremIpsum567}

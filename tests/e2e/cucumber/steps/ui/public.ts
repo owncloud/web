@@ -44,11 +44,6 @@ When(
   }
 )
 
-When('{string} closes the editor', async function (this: World, stepUser: string): Promise<void> {
-  const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-  await editor.close(page)
-})
-
 When(
   'for {string} the content of the file {string} should be {string} in editor {string}',
   async function (

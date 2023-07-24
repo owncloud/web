@@ -1,6 +1,6 @@
-Feature: Integrate with online office suites like collabora and OnlyOffice
+Feature: Integrate with online office suites like Collabora and OnlyOffice
   As a user
-  I want to work on different docs, sheets, slides etc.., using online office suites like collabora or OnlyOffice
+  I want to work on different docs, sheets, slides etc.., using online office suites like Collabora or OnlyOffice
   So that the collaboration is seamless
 
   # To run this feature we need to run the external app-provider service along with wopi, OnlyOffice, Collabora services
@@ -10,13 +10,12 @@ Feature: Integrate with online office suites like collabora and OnlyOffice
     Given "Admin" creates following users using API
       | id    |
       | Alice |
-
-
-  Scenario: create an OpenDocument file with collabora
-    When "Alice" logs in
+    And "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" navigates to the personal space page
-    And "Alice" creates the following resources
+
+  Scenario: create an OpenDocument file with Collabora
+    When "Alice" creates the following resources
       | resource         | type         | content              |
       | OpenDocument.odt | OpenDocument | OpenDocument Content |
     And "Alice" creates a public link for the resource "OpenDocument.odt" using the sidebar panel
@@ -26,11 +25,8 @@ Feature: Integrate with online office suites like collabora and OnlyOffice
     And "Alice" logs out
 
 
-  Scenario: create a Microsoft Word file with onlyoffice
-    When "Alice" logs in
-    And "Alice" opens the "files" app
-    And "Alice" navigates to the personal space page
-    And "Alice" creates the following resources
+  Scenario: create a Microsoft Word file with OnlyOffice
+    When "Alice" creates the following resources
       | resource           | type           | content                |
       | MicrosoftWord.docx | Microsoft Word | Microsoft Word Content |
     And "Alice" creates a public link for the resource "MicrosoftWord.docx" using the sidebar panel
