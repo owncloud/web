@@ -68,6 +68,8 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
       inline: true,
       target: '.oc-modal-body',
       disableLocalFiles: true,
+      disableStatusBar: true,
+      showSelectedFiles: false,
       locale: {
         strings: {
           cancel: $gettext('Cancel'),
