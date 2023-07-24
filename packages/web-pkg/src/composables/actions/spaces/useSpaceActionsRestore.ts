@@ -32,7 +32,6 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
           }
         )
         .then((updatedSpace) => {
-          store.dispatch('hideModal')
           if (unref(route).name === 'admin-settings-spaces') {
             space.disabled = false
             space.spaceQuota = updatedSpace.data.quota
