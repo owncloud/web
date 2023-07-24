@@ -11,7 +11,7 @@ const actions = {
       if (!error) {
         return
       }
-      if (error.response.headers?.['x-request-id']) {
+      if (error.response?.headers?.['x-request-id']) {
         return error.response.headers['x-request-id']
       }
     }
