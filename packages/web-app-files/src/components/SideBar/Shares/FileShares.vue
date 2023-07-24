@@ -377,7 +377,8 @@ export default defineComponent({
         } catch (e) {
           console.error(e)
           this.showErrorMessage({
-            title: this.$gettext('Failed to deny access')
+            title: this.$gettext('Failed to deny access'),
+            error: e
           })
         }
       } else {
@@ -398,7 +399,8 @@ export default defineComponent({
         } catch (e) {
           console.error(e)
           this.showErrorMessage({
-            title: this.$gettext('Failed to grant access')
+            title: this.$gettext('Failed to grant access'),
+            error: e
           })
         }
       }
@@ -448,7 +450,8 @@ export default defineComponent({
       } catch (error) {
         console.error(error)
         this.showErrorMessage({
-          title: this.$gettext('Failed to remove share')
+          title: this.$gettext('Failed to remove share'),
+          error: e
         })
       }
     },

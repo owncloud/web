@@ -88,7 +88,8 @@ export default defineComponent({
     errorPopup(error) {
       this.showErrorMessage({
         title: this.$gettext('An error occurred'),
-        desc: error
+        desc: error,
+        error
       })
     },
     successPopup(msg) {

@@ -480,7 +480,8 @@ export default defineComponent({
         onError(e)
         console.error(e)
         this.showErrorMessage({
-          title: this.$gettext('Failed to create link')
+          title: this.$gettext('Failed to create link'),
+          error: e
         })
         return
       }
@@ -501,7 +502,8 @@ export default defineComponent({
         onError(e)
         console.error(e)
         this.showErrorMessage({
-          title: this.$gettext('Failed to update link')
+          title: this.$gettext('Failed to update link'),
+          error: e
         })
         return
       }
@@ -558,7 +560,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         this.showErrorMessage({
-          title: this.$gettext('Failed to delete link')
+          title: this.$gettext('Failed to delete link'),
+          error: e
         })
       }
     },

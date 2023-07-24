@@ -717,7 +717,8 @@ export default defineComponent({
       } catch (error) {
         console.error(error)
         this.showErrorMessage({
-          title: this.$gettext('Failed to create user')
+          title: this.$gettext('Failed to create user'),
+          error
         })
       }
     },
@@ -765,7 +766,8 @@ export default defineComponent({
       } catch (error) {
         console.error(error)
         this.showErrorMessage({
-          title: this.$gettext('Failed to edit user')
+          title: this.$gettext('Failed to edit user'),
+          error
         })
       }
     },
