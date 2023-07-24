@@ -16,14 +16,14 @@ const actions = {
         return error.config['X-Request-ID']
       }
     }
-
-    const xRequestID = getXRequestID(message.error)
-
     message.status = message.status || 'danger'
     message.timeout = message.timeout || 0
 
-    if (xRequestID) {
-      message.errorLogContent = `X-Request-ID: ${xRequestID}`
+    if (message.error) {
+      const xRequestID = getXRequestID(message.error)
+      if (xRequestID) {
+        message.errorLogContent = `X-Request-ID: ${xRequestID}`
+      }
     }
 
     commit('ENQUEUE_MESSAGE', message)
