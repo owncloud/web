@@ -451,7 +451,7 @@ export default defineComponent({
         console.error(error)
         this.showErrorMessage({
           title: this.$gettext('Failed to remove share'),
-          error: e
+          error
         })
       }
     },
