@@ -28,7 +28,9 @@ const createAxiosInstance = (authParams: AuthParameters, language: string): Axio
     headers: auth.getHeaders()
   })
   axiosClient.interceptors.request.use((config) => {
-    config.headers['X-Request-ID'] = uuidV4()
+    const xRequestID = uuidV4()
+    config['X-Request-ID'] = xRequestID
+    config.headers['X-Request-ID'] = xRequestID
     config.headers['X-Requested-With'] = 'XMLHttpRequest'
     config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
     config.headers['Accept-Language'] = language
@@ -102,6 +104,7 @@ export class ClientService {
   }
 
   private getHttpClient(authenticated = false): HttpClient {
+    const xRequestID = uuidV4()
     return {
       ...(!!authenticated && { token: this.token }),
       language: this.currentLanguage,
@@ -111,8 +114,9 @@ export class ClientService {
           'Accept-Language': this.currentLanguage,
           ...(!!authenticated && { Authorization: 'Bearer ' + this.token }),
           'X-Requested-With': 'XMLHttpRequest',
-          'X-Request-ID': uuidV4()
-        }
+          'X-Request-ID': xRequestID
+        },
+        'X-Request-ID': xRequestID
       })
     }
   }

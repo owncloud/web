@@ -11,9 +11,8 @@ const actions = {
       if (!error) {
         return
       }
-
-      if (error.config?.['X-Request-ID']) {
-        return error.config['X-Request-ID']
+      if (error.response.headers?.['x-request-id']) {
+        return error.response.headers['x-request-id']
       }
     }
     message.status = message.status || 'danger'
