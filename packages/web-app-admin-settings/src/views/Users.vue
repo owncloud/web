@@ -574,26 +574,55 @@ export default defineComponent({
       users: User[]
       value: boolean
     }) => {
-      try {
-        affectedUsers = affectedUsers.filter(({ id }) => store.getters.user.uuid !== id)
-        const client = clientService.graphAuthenticated
-        const promises = affectedUsers.map((u) =>
-          client.users.editUser(u.id, { accountEnabled: value })
-        )
-        const usersResponse = await loadingService.addTask(async () => {
-          await Promise.all(promises)
-          return Promise.all(affectedUsers.map((u) => client.users.getUser(u.id)))
-        })
-        updateLocalUsers(usersResponse.map((r) => r.data))
-        await store.dispatch('showMessage', { title: $gettext('Login was edited successfully') })
-        editLoginModalIsOpen.value = false
-      } catch (e) {
-        console.error(e)
-        return store.dispatch('showErrorMessage', {
-          title: $gettext('Failed to edit login'),
-          error: e
-        })
+      affectedUsers = affectedUsers.filter(({ id }) => store.getters.user.uuid !== id)
+      const client = clientService.graphAuthenticated
+      const promises = affectedUsers.map((u) =>
+        client.users.editUser(u.id, { accountEnabled: value })
+      )
+      const results = await Promise.allSettled(promises)
+
+      const succeeded = results.filter((r) => r.status === 'fulfilled')
+      if (succeeded.length) {
+        const title =
+          succeeded.length === 1 && affectedUsers.length === 1
+            ? $gettext('Login for user "%{user}" was edited successfully', {
+                user: affectedUsers[0].displayName
+              })
+            : $ngettext(
+                '%{userCount} user login was edited successfully',
+                '%{userCount} users logins edited successfully',
+                succeeded.length,
+                { userCount: succeeded.length.toString() },
+                true
+              )
+        store.dispatch('showMessage', { title })
       }
+
+      const failed = results.filter((r) => r.status === 'rejected')
+      if (failed.length) {
+        failed.forEach(console.error)
+
+        const title =
+          failed.length === 1 && affectedUsers.length === 1
+            ? $gettext('Failed edit login for user "%{user}"', {
+                user: affectedUsers[0].displayName
+              })
+            : $ngettext(
+                'Failed to edit %{userCount} user login',
+                'Failed to edit %{userCount} user logins',
+                failed.length,
+                { userCount: failed.length.toString() },
+                true
+              )
+        store.dispatch('showErrorMessage', { title, errors: failed })
+      } else {
+        editLoginModalIsOpen.value = false
+      }
+
+      const usersResponse = await loadingService.addTask(async () => {
+        return Promise.all(succeeded.map(({ value }) => client.users.getUser(value.data.id)))
+      })
+      updateLocalUsers(usersResponse.map((r) => r.data))
     }
 
     const writableGroups = computed<Group[]>(() => {

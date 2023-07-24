@@ -8,21 +8,22 @@ const state = {
 const actions = {
   showErrorMessage({ commit }, message) {
     const getXRequestID = (error: AxiosError): string => {
-      if (!error) {
-        return
-      }
       if (error.response?.headers?.['x-request-id']) {
         return error.response.headers['x-request-id']
       }
     }
     message.status = message.status || 'danger'
     message.timeout = message.timeout || 0
+    message.errors = message.error ? [message.error] : message.errors
 
-    if (message.error) {
-      const xRequestID = getXRequestID(message.error)
-      if (xRequestID) {
-        message.errorLogContent = `X-Request-ID: ${xRequestID}`
-      }
+    if (message.errors) {
+      const xRequestIds = message.errors
+        .map((error) => getXRequestID(error.reason || error))
+        .filter((xRequestId) => xRequestId !== null)
+        .map((item) => `X-Request-Id: ${item}`)
+        .join('\r\n')
+
+      message.errorLogContent = xRequestIds
     }
 
     commit('ENQUEUE_MESSAGE', message)
