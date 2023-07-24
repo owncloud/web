@@ -585,7 +585,7 @@ export default defineComponent({
         return Promise.allSettled(promises)
       })
 
-      const succeeded = results.filter((r) => r.status === 'fulfilled')
+      const succeeded = results.filter((r) => r.status === 'fulfilled') as any
       if (succeeded.length) {
         const title =
           succeeded.length === 1 && affectedUsers.length === 1
