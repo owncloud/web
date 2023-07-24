@@ -363,7 +363,9 @@ export default defineComponent({
       sideBarLoading.value = true
       // Load additional user data
       const requests = unref(selectedUsers).map((user) => loadAdditionalUserDataTask.perform(user))
-      const results = await Promise.allSettled<Array<unknown>>(requests)
+      const results = await loadingService.addTask(() => {
+        return Promise.allSettled<Array<unknown>>(requests)
+      })
       const failedRequests = results.filter((result) => result.status === 'rejected')
       if (failedRequests.length > 0) {
         console.debug('Failed to load additional user data', failedRequests)
@@ -579,7 +581,9 @@ export default defineComponent({
       const promises = affectedUsers.map((u) =>
         client.users.editUser(u.id, { accountEnabled: value })
       )
-      const results = await Promise.allSettled(promises)
+      const results = await loadingService.addTask(() => {
+        return Promise.allSettled(promises)
+      })
 
       const succeeded = results.filter((r) => r.status === 'fulfilled')
       if (succeeded.length) {
