@@ -189,7 +189,10 @@ export default defineComponent({
       const errors = results.filter((r) => r.status === 'rejected')
       if (errors.length) {
         errors.forEach(console.error)
-        store.dispatch('showErrorMessage', { title: getErrorMessage(errors.length) })
+        store.dispatch('showErrorMessage', {
+          title: getErrorMessage(errors.length),
+          errors
+        })
       }
 
       props.cancel()
