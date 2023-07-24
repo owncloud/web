@@ -103,7 +103,7 @@ export default defineComponent({
       resetSelectionCursor()
       store.dispatch('Files/resetFileSelection')
       store.commit('Files/ADD_FILE_SELECTION', { id: nextId })
-      scrollToResource({ id: nextId } as any)
+      scrollToResource(nextId)
     }
     const handleCtrlClickAction = (resource) => {
       store.dispatch('Files/toggleFileSelection', { id: resource.id })
@@ -130,7 +130,7 @@ export default defineComponent({
         // select
         store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
       }
-      scrollToResource({ id: nextResourceId } as any)
+      scrollToResource(nextResourceId)
       selectionCursor.value = unref(selectionCursor) - 1
     }
     const handleShiftDownAction = () => {
@@ -146,7 +146,7 @@ export default defineComponent({
         // select
         store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
       }
-      scrollToResource({ id: nextResourceId } as any)
+      scrollToResource(nextResourceId)
       selectionCursor.value = unref(selectionCursor) + 1
     }
     const handleShiftClickAction = ({ resource, skipTargetSelection }) => {
