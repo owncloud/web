@@ -3,7 +3,7 @@ import { computed, unref } from 'vue'
 import { Store } from 'vuex'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useRoute } from '../../router'
-import { useAbility, useClientService, useStore } from 'web-pkg/src/composables'
+import { useAbility, useClientService, useLoadingService, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 
 export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
@@ -11,17 +11,17 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
+  const loadingService = useLoadingService()
   const route = useRoute()
 
   const filterResourcesToRestore = (resources): SpaceResource[] => {
     return resources.filter((r) => r.canRestore({ user: store.getters.user, ability }))
   }
 
-  const restoreSpaces = (spaces: SpaceResource[]) => {
-    const requests = []
-    const graphClient = clientService.graphAuthenticated
-    spaces.forEach((space) => {
-      const request = graphClient.drives
+  const restoreSpaces = async (spaces: SpaceResource[]) => {
+    const client = clientService.graphAuthenticated
+    const promises = spaces.map((space) =>
+      client.drives
         .updateDrive(
           space.id.toString(),
           { name: space.name },
@@ -44,28 +44,43 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
           })
           return true
         })
-        .catch((error) => {
-          console.error(error)
-          store.dispatch('showErrorMessage', {
-            title: $gettext('Failed to restore space %{spaceName}', {
-              spaceName: space.name
-            }),
-            error
-          })
-        })
-      requests.push(request)
+    )
+    const results = await loadingService.addTask(() => {
+      return Promise.allSettled(promises)
     })
-    return Promise.all(requests).then((result: boolean[]) => {
-      if (result.filter(Boolean).length) {
-        store.dispatch('showMessage', {
-          title: $ngettext(
-            'Space was enabled successfully',
-            'Spaces were enabled successfully',
-            result.filter(Boolean).length
-          )
-        })
-      }
-    })
+    const succeeded = results.filter((r) => r.status === 'fulfilled')
+    if (succeeded.length) {
+      const title =
+        succeeded.length === 1 && spaces.length === 1
+          ? $gettext('Space "%{space}" was enabled successfully', { space: spaces[0].name })
+          : $ngettext(
+              '%{spaceCount} space was enabled successfully',
+              '%{spaceCount} spaces were enabled successfully',
+              succeeded.length,
+              { spaceCount: succeeded.length.toString() },
+              true
+            )
+      store.dispatch('showMessage', { title })
+    }
+
+    const failed = results.filter((r) => r.status === 'rejected')
+    if (failed.length) {
+      failed.forEach(console.error)
+
+      const title =
+        failed.length === 1 && spaces.length === 1
+          ? $gettext('Failed to enabled space "%{space}"', { space: spaces[0].name })
+          : $ngettext(
+              'Failed to enable %{spaceCount} space',
+              'Failed to enable %{spaceCount} spaces',
+              failed.length,
+              { spaceCount: failed.length.toString() },
+              true
+            )
+      store.dispatch('showErrorMessage', { title, errors: failed })
+    }
+
+    store.dispatch('hideModal')
   }
 
   const handler = ({ resources }: SpaceActionOptions) => {
