@@ -301,26 +301,18 @@ export default {
           if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
             console.log('SSE OK')
             return
-          } else if (
-            response.status !== 401 &&
-            response.status !== 400 &&
-            response.status !== 404 &&
-            response.status !== 500
-          ) {
-            throw new Error(`SSE notifications couldn't be set up ${response.status}`)
+          } else {
+            console.error(`SSE notifications couldn't be set up ${response.status}`)
           }
         },
         onmessage(msg) {
           if (msg.event === 'FatalError') {
-            throw new Error(`SSE notifications error: ${msg.data}`)
+            console.error(`SSE notifications error: ${msg.data}`)
           }
           const data = JSON.parse(msg.data)
           if (data.notification_id) {
             notifications.value = [data, ...unref(notifications)]
           }
-        },
-        onerror() {
-          setTimeout(setupSSE, 1000)
         }
       })
     }
