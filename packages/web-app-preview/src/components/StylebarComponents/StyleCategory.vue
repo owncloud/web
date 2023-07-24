@@ -23,16 +23,17 @@
         steps="1"
         class="slider-bar"
         @input="handleUpdateValue(styleVariable.name, styleVariable.value)"
+        @keydown="preventArrowKeys"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, PropType } from 'vue'
-import { useCurrentImageStyles } from '../../composables'
-import { StyleCategoryEnum, StyleCategoryType } from '../../helpers'
+import { ref, defineComponent, PropType, computed } from 'vue'
+import { StyleCategoryEnum } from '../../helpers'
 import { mapMutations } from 'vuex'
+import { useStore } from 'web-pkg'
 
 export default defineComponent({
   name: 'StyleCategory',
@@ -59,7 +60,18 @@ export default defineComponent({
   emits: ['valueChange'],
   setup(props) {
     const isOpen = ref(false)
-    const styles: StyleCategoryType[] = useCurrentImageStyles(props.variableType) ?? []
+    const store = useStore()
+
+    const styles = computed(() => {
+      switch (props.variableType) {
+        case StyleCategoryEnum.General:
+          return store.getters['Preview/customizeGeneral']
+        case StyleCategoryEnum.FineTune:
+          return store.getters['Preview/customizeFineTune']
+        default:
+          return []
+      }
+    })
 
     const handleIsOpen = () => {
       isOpen.value = !isOpen.value
@@ -72,9 +84,14 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapMutations('Preview', ['SET_ACTIVE_STYLES']),
+    ...mapMutations('Preview', ['SET_ACTIVE_STYLES', 'RESET_STYLES']),
     handleUpdateValue(name: string, value: number) {
       this.SET_ACTIVE_STYLES({ name, value })
+    },
+    preventArrowKeys(e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault()
+      }
     }
   }
 })
@@ -128,28 +145,34 @@ export default defineComponent({
     height: 4px;
     border-radius: 5px;
     background-color: var(--oc-color-background-hover);
+    cursor: pointer;
   }
 
   &::-moz-range-track {
     height: 4px;
+    cursor: pointer;
   }
 
   &::-ms-track {
     height: 4px;
+    cursor: pointer;
   }
 
   &::-webkit-slider-thumb {
     height: 8px;
     width: 8px;
     margin-top: -6px;
+    cursor: pointer;
   }
 
   &::-moz-range-thumb {
     height: 8px;
+    cursor: pointer;
   }
 
   &::-ms-thumb {
     height: 8px;
+    cursor: pointer;
   }
 }
 </style>

@@ -25,7 +25,7 @@
       </oc-button>
     </li>
     <li>
-      <oc-button size="small" :aria-label="$gettext('Delete')" @click="saveTask.perform">
+      <oc-button size="small" :aria-label="$gettext('Save')" @click="saveTask.perform">
         <oc-icon name="save" size="small" fill-type="line" />
       </oc-button>
     </li>

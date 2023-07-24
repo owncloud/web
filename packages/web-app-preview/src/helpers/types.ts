@@ -1,3 +1,5 @@
+import { StyleCategoryEnum } from './enums'
+
 export type CachedFile = {
   id: string
   name: string
@@ -17,12 +19,12 @@ export type StyleVariableType = {
 
 export type StyleCategoryType = StyleVariableType & {
   value: number
+  type: StyleCategoryEnum
 }
 
 export type ImageStyles = {
   brightness: number
   contrast: number
-  blur: number
   saturation: number
   exposure: number
   highlights: number

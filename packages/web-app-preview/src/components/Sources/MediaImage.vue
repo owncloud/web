@@ -4,14 +4,15 @@
     :src="file.url"
     :alt="file.name"
     :data-id="file.id"
-    :style="`zoom: ${currentImageZoom};transform: rotate(${currentImageRotation}deg); ${imageStyles}`"
+    :style="`zoom: ${currentImageZoom};transform: rotate(${currentImageRotation}deg); ${styles}`"
   />
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { CachedFile } from '../../helpers/types'
-import { useImageStyles } from '../../composables'
+import { useCSSImageStyles } from '../../composables'
 import { useStore } from 'web-pkg/src'
+import { ComputedRef } from 'vue'
 
 export default defineComponent({
   name: 'MediaImage',
@@ -31,11 +32,13 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const styles: ComputedRef<string> = computed(() => {
+      const imageStyles = store.getters['Preview/allStyles']
+      return useCSSImageStyles(imageStyles)
+    })
 
-    const styles = store.getters['Preview/allStyles']
-    const imageStyles = useImageStyles(styles)
     return {
-      imageStyles
+      styles
     }
   }
 })

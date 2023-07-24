@@ -1,22 +1,16 @@
+import { StyleCategoryEnum } from '../helpers'
+
 export default {
   customizeGeneral: (state) => {
-    return state.styles.filter(
-      (style) =>
-        style.name.toLowerCase() === 'brightness' ||
-        style.name.toLowerCase() === 'contrast' ||
-        style.name.toLowerCase() === 'saturation' ||
-        style.name.toLowerCase() === 'blur'
-    )
+    return state.styles.filter((style) => style.type === StyleCategoryEnum.General)
   },
   customizeFineTune: (state) => {
-    return state.styles.filter(
-      (style) =>
-        style.name.toLowerCase() === 'exposure' ||
-        style.name.toLowerCase() === 'highlights' ||
-        style.name.toLowerCase() === 'shadows'
-    )
+    return state.styles.filter((style) => style.type === StyleCategoryEnum.FineTune)
   },
   allStyles: (state) => {
     return state.styles
+  },
+  getSelectedStyleProp: (state) => {
+    return state.selectedStyleProp
   }
 }

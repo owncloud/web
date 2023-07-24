@@ -1,19 +1,26 @@
-export const useImageStyles = (styles): string => {
-  const brightness = styles[0].value
-  const contrast = styles[1].value
-  const saturation = styles[2].value
-  const blur = styles[3].value
-  const exposure = styles[4].value
-  const highlights = styles[5].value
-  const shadows = styles[6].value
+import { StyleCategoryType } from 'web-app-preview/src/helpers'
+import { getStyleValues } from './getStyleValues'
 
-  const computedBrightness = Math.max(
-    (brightness + exposure + highlights * (2 / 5) - shadows) / 100 + 1,
-    0
-  )
-  const computedContrast = Math.max((contrast + exposure + highlights + shadows) / 100 + 1, 0)
-  const computedSaturation = Math.max((saturation - highlights / 5) / 100 + 1, 0)
-  const computedBlur = `${blur / 10}px`
+export const useCSSImageStyles = (styles: StyleCategoryType[]): string => {
+  const {
+    computedBrightness,
+    computedContrast,
+    computedSaturation,
+    computedGrayscale,
+    computedInvert
+  } = getStyleValues(styles)
+  const styleString = `filter: brightness(${computedBrightness}) contrast(${computedContrast}) saturate(${computedSaturation}) grayscale(${computedGrayscale}) invert(${computedInvert})`
+  return styleString
+}
 
-  return `filter: brightness(${computedBrightness}) contrast(${computedContrast}) saturate(${computedSaturation}) blur(${computedBlur})`
+export const useImageStyles = (styles: StyleCategoryType[]): string => {
+  const {
+    computedBrightness,
+    computedContrast,
+    computedSaturation,
+    computedGrayscale,
+    computedInvert
+  } = getStyleValues(styles)
+  const styleString = `brightness(${computedBrightness}) contrast(${computedContrast}) saturate(${computedSaturation}) grayscale(${computedGrayscale}) invert(${computedInvert})`
+  return styleString
 }

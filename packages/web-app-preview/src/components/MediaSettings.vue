@@ -13,7 +13,7 @@
           selectedStyleProp === 'customize' &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="setSelectedStyleProp('customize')"
+        @click="handleUpdateSelectedStyleProp('customize')"
       >
         <oc-icon name="tools" />
         <span>Customize</span>
@@ -26,7 +26,7 @@
           selectedStyleProp === 'adjust' &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="setSelectedStyleProp('adjust')"
+        @click="handleUpdateSelectedStyleProp('adjust')"
       >
         <oc-icon name="equalizer" />
         <span>Adjust</span>
@@ -39,7 +39,7 @@
           selectedStyleProp === 'write' &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="setSelectedStyleProp('write')"
+        @click="handleUpdateSelectedStyleProp('write')"
       >
         <oc-icon name="pencil" />
         <span>Write</span>
@@ -52,7 +52,7 @@
           selectedStyleProp === 'draw' &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="setSelectedStyleProp('draw')"
+        @click="handleUpdateSelectedStyleProp('draw')"
       >
         <oc-icon name="brush" />
         <span>Draw</span>
@@ -75,32 +75,33 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
 import { defineComponent } from 'vue'
 import StyleCategory from './StylebarComponents/StyleCategory.vue'
 import { StyleCategoryEnum } from '../helpers'
+import { useStore } from 'web-pkg/src'
+import { mapMutations } from 'vuex'
+import { computed } from 'vue'
 
 export default defineComponent({
   components: { StyleCategory },
   emits: ['download'],
   setup() {
-    const selectedStyleProp = ref('')
-    function setSelectedStyleProp(styleProp: string) {
-      if (selectedStyleProp.value === styleProp) {
-        selectedStyleProp.value = ''
-      } else {
-        selectedStyleProp.value = styleProp
-      }
-    }
+    const store = useStore()
+    const selectedStyleProp = computed(() => store.getters['Preview/getSelectedStyleProp'])
 
     return {
-      selectedStyleProp,
-      setSelectedStyleProp
+      selectedStyleProp
     }
   },
   data() {
     return {
       StyleCategoryEnum: StyleCategoryEnum
+    }
+  },
+  methods: {
+    ...mapMutations('Preview', ['CHANGE_SELECTED_STYLE_PROP']),
+    handleUpdateSelectedStyleProp(name: string) {
+      this.CHANGE_SELECTED_STYLE_PROP(name)
     }
   }
 })

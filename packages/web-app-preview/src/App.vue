@@ -5,7 +5,7 @@
     tabindex="-1"
     @keydown.left="prev"
     @keydown.right="next"
-    @keydown.esc="closeApp"
+    @keydown.esc="closePreview"
   >
     <div class="preview-body">
       <media-settings v-if="activeMediaFileCached.isImage" @download="triggerActiveFileDownload" />
@@ -48,7 +48,7 @@
         :current-image-zoom="currentImageZoom"
         :is-full-screen-mode-activated="isFullScreenModeActivated"
         :save-task="saveImageTask"
-        @close="closeApp"
+        @close="closePreview"
         @set-zoom="currentImageZoom = $event"
         @toggle-full-screen="toggleFullscreenMode"
       />
@@ -63,7 +63,8 @@ import {
   useAppDefaults,
   useRoute,
   useRouteQuery,
-  useRouter
+  useRouter,
+  useStore
 } from 'web-pkg/src/composables'
 import { Action, ActionOptions } from 'web-pkg/src/composables/actions/types'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -76,7 +77,13 @@ import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import MediaSettings from './components/MediaSettings.vue'
 import QuickCommands from './components/QuickCommands.vue'
-import { CachedFile } from './helpers/types'
+import { CachedFile, StyleCategoryType } from './helpers/types'
+import applyStyles from './composables/save/applyStyles'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { useGettext } from 'vue3-gettext'
+import { Ref } from 'vue'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { DavProperty } from 'web-client/src/webdav/constants'
 
 export const appId = 'preview'
 
@@ -97,11 +104,6 @@ export const mimeTypes = () => {
   ]
 }
 
-interface TestType {
-  name: string
-  value: number
-}
-
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Preview',
@@ -115,6 +117,7 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const route = useRoute()
+    const store = useStore()
 
     const appDefaults = useAppDefaults({ applicationId: 'preview' })
     const contextRouteQuery = useRouteQuery('contextRouteQuery')
@@ -124,10 +127,19 @@ export default defineComponent({
     const cachedFiles = ref<CachedFile[]>([])
 
     const currentETag = ref()
-    const currentVersion = ref()
+    const activeStyles: Ref<StyleCategoryType[]> = ref()
     const serverVersion = ref()
+    const resource: Ref<Resource> = ref()
 
-    const { activeFiles, currentFileContext, getFileContents, putFileContents } = appDefaults
+    const {
+      activeFiles,
+      currentFileContext,
+      replaceInvalidFileRoute,
+      getFileContents,
+      putFileContents,
+      getFileInfo
+    } = appDefaults
+    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
 
     const filteredFiles = computed<Resource[]>(() => {
       if (!unref(activeFiles)) {
@@ -148,18 +160,29 @@ export default defineComponent({
       return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile).id)
     })
 
+    const errorPopup = (error) => {
+      store.dispatch('showMessage', {
+        title: $gettext('An error occurred'),
+        desc: error,
+        status: 'danger'
+      })
+    }
+
     const loadImageTask = useTask(function* () {
+      resource.value = yield getFileInfo(currentFileContext, {
+        davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
+      })
+      replaceInvalidFileRoute(currentFileContext, unref(resource))
+
       const savedImageVersion = yield getFileContents(currentFileContext, { responseType: 'blob' })
-      serverVersion.value = currentVersion.value = savedImageVersion.body
+      serverVersion.value = savedImageVersion.body
       currentETag.value = savedImageVersion.headers['OC-ETag']
     })
 
     const saveImageTask = useTask(function* () {
-      console.log('this is where the magic happens:')
-      console.log('Saving image...')
-      const newVersion = unref(currentVersion)
-      console.log('Image is saved')
-
+      const styles = computed(() => store.getters['Preview/allStyles'])
+      const newVersion = yield applyStyles({ imageBlob: serverVersion, styles: styles.value })
+      activeStyles.value = unref(styles)
       try {
         const putFileContentsResponse = yield putFileContents(currentFileContext, {
           content: newVersion,
@@ -168,15 +191,52 @@ export default defineComponent({
         serverVersion.value = newVersion
         currentETag.value = putFileContentsResponse.etag
       } catch (e) {
-        console.log('There is an error')
+        switch (e.statusCode) {
+          case 412:
+            errorPopup(
+              $gettext(
+                'This file was updated outside this window. Please refresh the page (all changes will be lost).'
+              )
+            )
+            break
+          case 500:
+            errorPopup($gettext('Error when contacting the server'))
+            break
+          case 507:
+            const space = store.getters['runtime/spaces/spaces'].find(
+              (space) => space.id === unref(resource).storageId && isProjectSpaceResource(space)
+            )
+            if (space) {
+              errorPopup(
+                $gettextInterpolate(
+                  $gettext('There is not enough quota on "%{spaceName}" to save this file'),
+                  { spaceName: space.name }
+                )
+              )
+              break
+            }
+            errorPopup($gettext('There is not enough quota to save this file'))
+            break
+          case 401:
+            errorPopup($gettext("You're not authorized to save this file"))
+            break
+          default:
+            errorPopup(e.message || e)
+        }
       }
     }).restartable()
+
+    async function save() {
+      await saveImageTask.perform()
+    }
 
     watch(
       activeMediaFileCached,
       () => {
         if (activeMediaFileCached.value.isImage) {
           loadImageTask.perform()
+          const storeValues = store.getters['Preview/allStyles']
+          activeStyles.value = storeValues
         }
       },
       { immediate: true }
@@ -227,7 +287,30 @@ export default defineComponent({
       if (isFileContentLoading.value) {
         return
       }
-      downloadFile(activeFilteredFile.value)
+
+      const styles = computed(() => store.getters['Preview/allStyles'])
+      if (styles.value !== activeStyles.value) {
+        const modal = {
+          variation: 'danger',
+          icon: 'warning',
+          title: $gettext('Unsaved changes'),
+          message: $gettext('Your changes were not saved. Do you want to save them?'),
+          cancelText: $gettext("Don't Save"),
+          confirmText: $gettext('Save'),
+          onCancel: () => {
+            store.dispatch('hideModal')
+            downloadFile(activeFilteredFile.value)
+          },
+          onConfirm: async () => {
+            await save()
+            store.dispatch('hideModal')
+            downloadFile(activeFilteredFile.value)
+          }
+        }
+        store.dispatch('createModal', modal)
+      } else {
+        downloadFile(activeFilteredFile.value)
+      }
     }
 
     const fileActions: Action<ActionOptions>[] = [
@@ -257,7 +340,10 @@ export default defineComponent({
       toggleFullscreenMode,
       updateLocalHistory,
       triggerActiveFileDownload,
-      saveImageTask
+      saveImageTask,
+      serverVersion,
+      activeStyles,
+      save
     }
   },
   data() {
@@ -302,7 +388,8 @@ export default defineComponent({
     },
     isActiveFileTypeVideo() {
       return this.isFileTypeVideo(this.activeFilteredFile)
-    }
+    },
+    ...mapGetters('Preview', ['allStyles'])
   },
 
   watch: {
@@ -323,6 +410,7 @@ export default defineComponent({
 
   async mounted() {
     // keep a local history for this component
+    console.log('mounting app')
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     document.addEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
     await this.loadFolderForFileContext(this.currentFileContext)
@@ -413,8 +501,34 @@ export default defineComponent({
         this.updateLocalHistory()
         return
       }
-      this.activeIndex++
-      this.updateLocalHistory()
+      if (this.checkIfDirty()) {
+        const modal = {
+          variation: 'danger',
+          icon: 'warning',
+          title: this.$gettext('Unsaved changes'),
+          message: this.$gettext('Your changes were not saved. Do you want to save them?'),
+          cancelText: this.$gettext("Don't Save"),
+          confirmText: this.$gettext('Save'),
+          onCancel: () => {
+            this.hideModal()
+            this.activeIndex++
+            this.updateLocalHistory()
+            this.handleResetValues()
+          },
+          onConfirm: async () => {
+            await this.save()
+            this.hideModal()
+            this.activeIndex++
+            this.updateLocalHistory()
+            this.handleResetValues()
+          }
+        }
+        this.createModal(modal)
+      } else {
+        this.activeIndex++
+        this.updateLocalHistory()
+        this.handleResetValues()
+      }
     },
     prev() {
       if (this.isFileContentLoading) {
@@ -426,8 +540,66 @@ export default defineComponent({
         this.updateLocalHistory()
         return
       }
-      this.activeIndex--
-      this.updateLocalHistory()
+      if (this.checkIfDirty()) {
+        const modal = {
+          variation: 'danger',
+          icon: 'warning',
+          title: this.$gettext('Unsaved changes'),
+          message: this.$gettext('Your changes were not saved. Do you want to save them?'),
+          cancelText: this.$gettext("Don't Save"),
+          confirmText: this.$gettext('Save'),
+          onCancel: () => {
+            this.hideModal()
+            this.activeIndex--
+            this.updateLocalHistory()
+            this.handleResetValues()
+          },
+          onConfirm: async () => {
+            await this.save()
+            this.hideModal()
+            this.activeIndex--
+            this.updateLocalHistory()
+            this.handleResetValues()
+          }
+        }
+        this.createModal(modal)
+      } else {
+        this.activeIndex--
+        this.updateLocalHistory()
+        this.handleResetValues()
+      }
+    },
+
+    closePreview() {
+      if (this.checkIfDirty()) {
+        const modal = {
+          variation: 'danger',
+          icon: 'warning',
+          title: this.$gettext('Unsaved changes'),
+          message: this.$gettext('Your changes were not saved. Do you want to save them?'),
+          cancelText: this.$gettext("Don't Save"),
+          confirmText: this.$gettext('Save'),
+          onCancel: () => {
+            this.hideModal()
+            this.handleResetValues()
+            this.closeApp()
+          },
+          onConfirm: async () => {
+            await this.save()
+            this.hideModal()
+            this.handleResetValues()
+            this.closeApp()
+          }
+        }
+        this.createModal(modal)
+      } else {
+        this.handleResetValues()
+        this.closeApp()
+      }
+    },
+
+    checkIfDirty() {
+      return this.allStyles !== this.activeStyles
     },
     isFileTypeImage(file) {
       return !this.isFileTypeAudio(file) && !this.isFileTypeVideo(file)
@@ -502,6 +674,12 @@ export default defineComponent({
       ) {
         preloadFile(previousFileIndex)
       }
+    },
+
+    ...mapMutations('Preview', ['RESET_STYLES']),
+    ...mapActions(['createModal', 'hideModal']),
+    handleResetValues() {
+      this.RESET_STYLES()
     }
   }
 })
