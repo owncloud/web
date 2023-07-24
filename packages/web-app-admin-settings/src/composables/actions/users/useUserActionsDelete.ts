@@ -45,9 +45,9 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
               true
             )
       store.dispatch('showErrorMessage', { title, errors: failed })
-    } else {
-      store.dispatch('hideModal')
     }
+
+    store.dispatch('hideModal')
     eventBus.publish('app.admin-settings.list.load')
   }
 

@@ -615,10 +615,9 @@ export default defineComponent({
                 true
               )
         store.dispatch('showErrorMessage', { title, errors: failed })
-      } else {
-        editLoginModalIsOpen.value = false
       }
 
+      editLoginModalIsOpen.value = false
       const usersResponse = await loadingService.addTask(async () => {
         return Promise.all(succeeded.map(({ value }) => client.users.getUser(value.data.id)))
       })
