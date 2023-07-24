@@ -21,9 +21,6 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
   }
 
   const deleteSpaces = async (spaces: SpaceResource[]) => {
-    const requests = []
-    const graphClient = clientService.graphAuthenticated
-
     const client = clientService.graphAuthenticated
     const promises = spaces.map((space) =>
       client.drives
