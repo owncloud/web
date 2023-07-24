@@ -536,36 +536,78 @@ export default defineComponent({
     }
 
     const removeUsersFromGroups = async ({ users: affectedUsers, groups: groupsToRemove }) => {
-      try {
-        const client = clientService.graphAuthenticated
-        const usersToFetch = []
-        const removeUsersToGroupsRequests = []
-        groupsToRemove.reduce((acc, group) => {
-          for (const user of affectedUsers) {
-            if (user.memberOf.find((userGroup) => userGroup.id === group.id)) {
-              acc.push(client.groups.deleteMember(group.id, user.id))
-              if (!usersToFetch.includes(user.id)) {
-                usersToFetch.push(user.id)
-              }
+      const client = clientService.graphAuthenticated
+      const usersToFetch = []
+      const promises = groupsToRemove.reduce((acc, group) => {
+        for (const user of affectedUsers) {
+          if (user.memberOf.find((userGroup) => userGroup.id === group.id)) {
+            acc.push(client.groups.deleteMember(group.id, user.id))
+            if (!usersToFetch.includes(user.id)) {
+              usersToFetch.push(user.id)
             }
           }
-          return acc
-        }, removeUsersToGroupsRequests)
-        const usersResponse = await loadingService.addTask(async () => {
-          await Promise.all(removeUsersToGroupsRequests)
-          return Promise.all(usersToFetch.map((userId) => client.users.getUser(userId)))
-        })
-        updateLocalUsers(usersResponse.map((r) => r.data))
-        await store.dispatch('showMessage', {
-          title: $gettext('Users were removed from groups successfully')
-        })
+        }
+        return acc
+      }, [])
+
+      if (!promises.length) {
+        const title = $ngettext(
+          'Group assignment already removed',
+          'Group assignments already removed',
+          affectedUsers * groupsToRemove
+        )
+        store.dispatch('showMessage', { title })
         removeFromGroupsModalIsOpen.value = false
+        return
+      }
+
+      const results = await loadingService.addTask(() => {
+        return Promise.allSettled(promises)
+      })
+
+      const succeeded = results.filter((r) => r.status === 'fulfilled')
+      if (succeeded.length) {
+        const title =
+          succeeded.length === 1 && groupsToRemove.length === 1 && affectedUsers.length === 1
+            ? $gettext('Group assignment was deleted successfully', {
+                group: groupsToRemove[0].displayName
+              })
+            : $ngettext(
+                '%{groupAssignmentCount} group assignment was deleted successfully',
+                '%{groupAssignmentCount} group assignments were deleted successfully',
+                succeeded.length,
+                { groupAssignmentCount: succeeded.length.toString() },
+                true
+              )
+        store.dispatch('showMessage', { title })
+      }
+
+      const failed = results.filter((r) => r.status === 'rejected')
+      if (failed.length) {
+        failed.forEach(console.error)
+
+        const title =
+          failed.length === 1 && groupsToRemove.length === 1 && affectedUsers.length === 1
+            ? $gettext('Failed to delete group assignment')
+            : $ngettext(
+                'Failed to delete %{groupAssignmentCount} group assignment',
+                'Failed to delete %{groupAssignmentCount} group assignments',
+                failed.length,
+                { groupAssignmentCount: failed.length.toString() },
+                true
+              )
+        store.dispatch('showErrorMessage', { title, errors: failed })
+      }
+
+      removeFromGroupsModalIsOpen.value = false
+
+      try {
+        const usersResponse = await Promise.all(
+          usersToFetch.map((userId) => client.users.getUser(userId))
+        )
+        updateLocalUsers(usersResponse.map((r) => r.data))
       } catch (e) {
         console.error(e)
-        await store.dispatch('showErrorMessage', {
-          title: $gettext('Failed remove users from group'),
-          error: e
-        })
       }
     }
 
@@ -622,10 +664,15 @@ export default defineComponent({
       }
 
       editLoginModalIsOpen.value = false
-      const usersResponse = await loadingService.addTask(async () => {
-        return Promise.all(succeeded.map(({ value }) => client.users.getUser(value.data.id)))
-      })
-      updateLocalUsers(usersResponse.map((r) => r.data))
+
+      try {
+        const usersResponse = await loadingService.addTask(async () => {
+          return Promise.all(succeeded.map(({ value }) => client.users.getUser(value.data.id)))
+        })
+        updateLocalUsers(usersResponse.map((r) => r.data))
+      } catch (e) {
+        console.error(e)
+      }
     }
 
     const writableGroups = computed<Group[]>(() => {

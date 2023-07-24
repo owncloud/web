@@ -74,7 +74,8 @@ export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}
         'Failed to accept the selected share.',
         'Failed to accept selected shares.',
         resources.length
-      )
+      ),
+      errors
     })
   }
 
