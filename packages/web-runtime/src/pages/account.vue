@@ -188,7 +188,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
-          title: $gettext('Unable to load account data…')
+          title: $gettext('Unable to load account data…'),
+          error: e,
         })
         valuesList.value = []
       }
@@ -203,7 +204,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
-          title: $gettext('Unable to load account data…')
+          title: $gettext('Unable to load account data…'),
+          error: e
         })
         accountBundle.value = undefined
       }
@@ -313,7 +315,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
-          title: $gettext('Saving language failed…')
+          title: $gettext('Saving language failed…'),
+          error: e
         })
       }
     }
@@ -331,7 +334,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
-          title: $gettext('Unable to save email notifications preference…')
+          title: $gettext('Unable to save email notifications preference…'),
+          error: e
         })
       }
     }

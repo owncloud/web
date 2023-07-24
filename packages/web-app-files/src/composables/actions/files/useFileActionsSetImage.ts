@@ -75,6 +75,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
       console.error(error)
       store.dispatch('showErrorMessage', {
         title: $gettext('Failed to set space image')
+        error
       })
     }
   }

@@ -61,7 +61,8 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
             'Failed to download the selected folder.', // on single selection only available for folders
             'Failed to download the selected files.', // on multi selection available for files+folders
             resources.length
-          )
+          ),
+          error: e
         })
       })
   }

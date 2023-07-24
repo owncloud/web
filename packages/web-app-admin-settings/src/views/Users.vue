@@ -527,7 +527,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         await store.dispatch('showErrorMessage', {
-          title: $gettext('Failed add users to group')
+          title: $gettext('Failed add users to group'),
+          error: e
         })
       }
     }
@@ -560,7 +561,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         await store.dispatch('showErrorMessage', {
-          title: $gettext('Failed remove users from group')
+          title: $gettext('Failed remove users from group'),
+          error: e
         })
       }
     }
@@ -588,7 +590,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         return store.dispatch('showErrorMessage', {
-          title: $gettext('Failed to edit login')
+          title: $gettext('Failed to edit login'),
+          error: e
         })
       }
     }

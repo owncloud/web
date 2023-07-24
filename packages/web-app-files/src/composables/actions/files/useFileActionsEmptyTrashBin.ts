@@ -43,7 +43,8 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
           title: $pgettext(
             'Error message in case emptying trash bin fails',
             'Failed to empty trash bin'
-          )
+          ),
+          error
         })
       })
       .finally(() => {
