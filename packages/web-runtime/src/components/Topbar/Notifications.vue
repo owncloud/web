@@ -299,7 +299,6 @@ export default {
         },
         async onopen(response) {
           if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
-            console.log('SSE OK')
             return
           } else {
             console.error(`SSE notifications couldn't be set up ${response.status}`)
