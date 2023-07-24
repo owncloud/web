@@ -33,7 +33,6 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
           }
         })
         .then(() => {
-          store.dispatch('hideModal')
           store.commit('Files/REMOVE_FILES', [{ id: space.id }])
           store.commit('runtime/spaces/REMOVE_SPACE', { id: space.id })
           return true
