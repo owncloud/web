@@ -502,36 +502,79 @@ export default defineComponent({
     }
 
     const addUsersToGroups = async ({ users: affectedUsers, groups: groupsToAdd }) => {
-      try {
-        const client = clientService.graphAuthenticated
-        const usersToFetch = []
-        const addUsersToGroupsRequests = []
-        groupsToAdd.reduce((acc, group) => {
-          for (const user of affectedUsers) {
-            if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {
-              acc.push(client.groups.addMember(group.id, user.id, configurationManager.serverUrl))
-              if (!usersToFetch.includes(user.id)) {
-                usersToFetch.push(user.id)
-              }
+      const client = clientService.graphAuthenticated
+      const usersToFetch = []
+      const promises = groupsToAdd.reduce((acc, group) => {
+        for (const user of affectedUsers) {
+          if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {
+            acc.push(client.groups.addMember(group.id, user.id, configurationManager.serverUrl))
+            if (!usersToFetch.includes(user.id)) {
+              usersToFetch.push(user.id)
             }
           }
-          return acc
-        }, addUsersToGroupsRequests)
-        const usersResponse = await loadingService.addTask(async () => {
-          await Promise.all(addUsersToGroupsRequests)
-          return Promise.all(usersToFetch.map((userId) => client.users.getUser(userId)))
-        })
-        updateLocalUsers(usersResponse.map((r) => r.data))
-        await store.dispatch('showMessage', {
-          title: $gettext('Users were added to groups successfully')
-        })
+        }
+        return acc
+      }, [])
+      if (!promises.length) {
+        const title = $ngettext(
+          'Group assignment already added',
+          'Group assignments already added',
+          affectedUsers.length * groupsToAdd.length
+        )
+        store.dispatch('showMessage', { title })
         addToGroupsModalIsOpen.value = false
+        return
+      }
+
+      const results = await loadingService.addTask(() => {
+        return Promise.allSettled(promises)
+      })
+
+      const succeeded = results.filter((r) => r.status === 'fulfilled')
+      if (succeeded.length) {
+        const title =
+          succeeded.length === 1 && groupsToAdd.length === 1 && affectedUsers.length === 1
+            ? $gettext('Group assignment "%{group}" was added successfully', {
+                group: groupsToAdd[0].displayName
+              })
+            : $ngettext(
+                '%{groupAssignmentCount} group assignment was added successfully',
+                '%{groupAssignmentCount} group assignments were added successfully',
+                succeeded.length,
+                { groupAssignmentCount: succeeded.length.toString() },
+                true
+              )
+        store.dispatch('showMessage', { title })
+      }
+
+      const failed = results.filter((r) => r.status === 'rejected')
+      if (failed.length) {
+        failed.forEach(console.error)
+
+        const title =
+          failed.length === 1 && groupsToAdd.length === 1 && affectedUsers.length === 1
+            ? $gettext('Failed to add group assignment "%{group}"', {
+                group: groupsToAdd[0].displayName
+              })
+            : $ngettext(
+                'Failed to add %{groupAssignmentCount} group assignment',
+                'Failed to add %{groupAssignmentCount} group assignments',
+                failed.length,
+                { groupAssignmentCount: failed.length.toString() },
+                true
+              )
+        store.dispatch('showErrorMessage', { title, errors: failed })
+      }
+
+      addToGroupsModalIsOpen.value = false
+
+      try {
+        const usersResponse = await Promise.all(
+          usersToFetch.map((userId) => client.users.getUser(userId))
+        )
+        updateLocalUsers(usersResponse.map((r) => r.data))
       } catch (e) {
         console.error(e)
-        await store.dispatch('showErrorMessage', {
-          title: $gettext('Failed add users to group'),
-          error: e
-        })
       }
     }
 
@@ -554,7 +597,7 @@ export default defineComponent({
         const title = $ngettext(
           'Group assignment already removed',
           'Group assignments already removed',
-          affectedUsers * groupsToRemove
+          affectedUsers.length * groupsToRemove.length
         )
         store.dispatch('showMessage', { title })
         removeFromGroupsModalIsOpen.value = false
@@ -569,7 +612,7 @@ export default defineComponent({
       if (succeeded.length) {
         const title =
           succeeded.length === 1 && groupsToRemove.length === 1 && affectedUsers.length === 1
-            ? $gettext('Group assignment was deleted successfully', {
+            ? $gettext('Group assignment "%{group}" was deleted successfully', {
                 group: groupsToRemove[0].displayName
               })
             : $ngettext(
@@ -588,7 +631,9 @@ export default defineComponent({
 
         const title =
           failed.length === 1 && groupsToRemove.length === 1 && affectedUsers.length === 1
-            ? $gettext('Failed to delete group assignment')
+            ? $gettext('Failed to delete group assignment "%{group}"', {
+                group: groupsToRemove[0].displayName
+              })
             : $ngettext(
                 'Failed to delete %{groupAssignmentCount} group assignment',
                 'Failed to delete %{groupAssignmentCount} group assignments',
