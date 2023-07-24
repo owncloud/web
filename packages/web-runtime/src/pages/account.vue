@@ -189,7 +189,7 @@ export default defineComponent({
         console.error(e)
         store.dispatch('showErrorMessage', {
           title: $gettext('Unable to load account data…'),
-          error: e,
+          error: e
         })
         valuesList.value = []
       }
