@@ -241,7 +241,8 @@ export default defineComponent({
       } catch (error) {
         console.error(error)
         this.showErrorMessage({
-          title: this.$gettext('Failed to create group')
+          title: this.$gettext('Failed to create group'),
+          error
         })
       }
     },
@@ -266,7 +267,8 @@ export default defineComponent({
       } catch (error) {
         console.error(error)
         this.showErrorMessage({
-          title: this.$gettext('Failed to edit group')
+          title: this.$gettext('Failed to edit group'),
+          error
         })
       }
     }

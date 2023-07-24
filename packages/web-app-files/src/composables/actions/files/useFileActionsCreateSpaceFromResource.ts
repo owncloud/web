@@ -48,7 +48,8 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
     } catch (error) {
       console.error(error)
       store.dispatch('showErrorMessage', {
-        title: $gettext('Creating space failed…')
+        title: $gettext('Creating space failed…'),
+        error
       })
     }
   }

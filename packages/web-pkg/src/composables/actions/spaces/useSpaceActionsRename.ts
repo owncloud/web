@@ -36,7 +36,8 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
       .catch((error) => {
         console.error(error)
         store.dispatch('showErrorMessage', {
-          title: $gettext('Failed to rename space')
+          title: $gettext('Failed to rename space'),
+          error
         })
       })
   }

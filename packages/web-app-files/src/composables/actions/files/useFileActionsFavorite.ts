@@ -25,11 +25,12 @@ export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) =
         client: clientService.owncloudSdk,
         file: resources[0]
       })
-      .catch(() => {
+      .catch((error) => {
         const translated = $gettext('Failed to change favorite state of "%{file}"')
         const title = $gettextInterpolate(translated, { file: resources[0].name }, true)
         store.dispatch('showErrorMessage', {
-          title: title
+          title: title,
+          error
         })
       })
   }

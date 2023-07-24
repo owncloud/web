@@ -101,7 +101,8 @@ export default defineComponent({
     const errorPopup = (error) => {
       store.dispatch('showErrorMessage', {
         title: $gettext('An error occurred'),
-        desc: error
+        desc: error,
+        error
       })
     }
 
