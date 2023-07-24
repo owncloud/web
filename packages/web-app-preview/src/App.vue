@@ -77,8 +77,8 @@ import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import MediaSettings from './components/MediaSettings.vue'
 import QuickCommands from './components/QuickCommands.vue'
-import { CachedFile, StyleCategoryType } from './helpers/types'
-import applyStyles from './composables/save/applyStyles'
+import { CachedFile, adjustmentParametersCategoryType } from './helpers/types'
+import applyAdjustmentParams from './composables/save/applyAdjustmentParams'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { Ref } from 'vue'
@@ -127,7 +127,7 @@ export default defineComponent({
     const cachedFiles = ref<CachedFile[]>([])
 
     const currentETag = ref()
-    const activeStyles: Ref<StyleCategoryType[]> = ref()
+    const activeAdjustmentParameters: Ref<adjustmentParametersCategoryType[]> = ref()
     const serverVersion = ref()
     const resource: Ref<Resource> = ref()
 
@@ -177,12 +177,16 @@ export default defineComponent({
       const savedImageVersion = yield getFileContents(currentFileContext, { responseType: 'blob' })
       serverVersion.value = savedImageVersion.body
       currentETag.value = savedImageVersion.headers['OC-ETag']
+      console.log('init', activeIndex)
     })
 
     const saveImageTask = useTask(function* () {
-      const styles = computed(() => store.getters['Preview/allStyles'])
-      const newVersion = yield applyStyles({ imageBlob: serverVersion, styles: styles.value })
-      activeStyles.value = unref(styles)
+      const adjustmentParams = computed(() => store.getters['Preview/allParameters'])
+      const newVersion = yield applyAdjustmentParams({
+        imageBlob: serverVersion,
+        adjustmentParams: adjustmentParams.value
+      })
+      activeAdjustmentParameters.value = unref(adjustmentParams)
       try {
         const putFileContentsResponse = yield putFileContents(currentFileContext, {
           content: newVersion,
@@ -235,8 +239,8 @@ export default defineComponent({
       () => {
         if (activeMediaFileCached.value.isImage) {
           loadImageTask.perform()
-          const storeValues = store.getters['Preview/allStyles']
-          activeStyles.value = storeValues
+          const storeValues = store.getters['Preview/allParameters']
+          activeAdjustmentParameters.value = storeValues
         }
       },
       { immediate: true }
@@ -288,8 +292,8 @@ export default defineComponent({
         return
       }
 
-      const styles = computed(() => store.getters['Preview/allStyles'])
-      if (styles.value !== activeStyles.value) {
+      const adjustmentParams = computed(() => store.getters['Preview/allParameters'])
+      if (adjustmentParams.value !== activeAdjustmentParameters.value) {
         const modal = {
           variation: 'danger',
           icon: 'warning',
@@ -342,7 +346,7 @@ export default defineComponent({
       triggerActiveFileDownload,
       saveImageTask,
       serverVersion,
-      activeStyles,
+      activeAdjustmentParameters,
       save
     }
   },
@@ -389,7 +393,7 @@ export default defineComponent({
     isActiveFileTypeVideo() {
       return this.isFileTypeVideo(this.activeFilteredFile)
     },
-    ...mapGetters('Preview', ['allStyles'])
+    ...mapGetters('Preview', ['allParameters'])
   },
 
   watch: {
@@ -599,7 +603,7 @@ export default defineComponent({
     },
 
     checkIfDirty() {
-      return this.allStyles !== this.activeStyles
+      return this.allParameters !== this.activeAdjustmentParameters
     },
     isFileTypeImage(file) {
       return !this.isFileTypeAudio(file) && !this.isFileTypeVideo(file)
@@ -676,10 +680,10 @@ export default defineComponent({
       }
     },
 
-    ...mapMutations('Preview', ['RESET_STYLES']),
+    ...mapMutations('Preview', ['RESET_ADJUSTMENT_PARAMETERS']),
     ...mapActions(['createModal', 'hideModal']),
     handleResetValues() {
-      this.RESET_STYLES()
+      this.RESET_ADJUSTMENT_PARAMETERS()
     }
   }
 })
@@ -731,3 +735,4 @@ export default defineComponent({
   display: flex;
 }
 </style>
+./composables/save/applyAdjustmentParams

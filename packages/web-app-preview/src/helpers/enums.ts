@@ -1,4 +1,4 @@
-export enum StyleCategoryEnum {
+export enum AdjustmentParametersCategoryEnum {
   General,
   FineTune
 }

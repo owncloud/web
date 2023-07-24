@@ -1,16 +1,21 @@
-import { StyleCategoryEnum } from '../helpers'
+import { AdjustmentParametersCategoryEnum } from '../helpers'
 
 export default {
-  customizeGeneral: (state) => {
-    return state.styles.filter((style) => style.type === StyleCategoryEnum.General)
+  generalParameters: (state) => {
+    return state.adjustmentParameters.filter(
+      (adjustmentParameter) => adjustmentParameter.type === AdjustmentParametersCategoryEnum.General
+    )
   },
-  customizeFineTune: (state) => {
-    return state.styles.filter((style) => style.type === StyleCategoryEnum.FineTune)
+  fineTuneParameters: (state) => {
+    return state.adjustmentParameters.filter(
+      (adjustmentParameter) =>
+        adjustmentParameter.type === AdjustmentParametersCategoryEnum.FineTune
+    )
   },
-  allStyles: (state) => {
-    return state.styles
+  allParameters: (state) => {
+    return state.adjustmentParameters
   },
-  getSelectedStyleProp: (state) => {
-    return state.selectedStyleProp
+  getSelectedProcessingTool: (state) => {
+    return state.selectedProcessingTool
   }
 }

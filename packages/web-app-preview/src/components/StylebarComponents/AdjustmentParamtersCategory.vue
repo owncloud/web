@@ -1,6 +1,6 @@
 <template>
   <oc-button
-    :class="['style-category-button', isOpen && 'button-box-shadow']"
+    :class="['adjustment-parameter-category-button', isOpen && 'button-box-shadow']"
     appearance="raw"
     @click="handleIsOpen"
   >
@@ -10,19 +10,23 @@
     <oc-icon :name="isOpen ? 'arrow-down-s' : 'arrow-right-s'" />
   </oc-button>
   <div v-if="isOpen">
-    <div v-for="styleVariable in styles" :key="styleVariable.name" class="style-variables">
+    <div
+      v-for="adjustmentParameter in adjustmentParams"
+      :key="adjustmentParameter.name"
+      class="adjustment-parameters"
+    >
       <span class="description">
-        <p>{{ styleVariable.name }}</p>
-        <p>{{ styleVariable.value }}</p>
+        <p>{{ adjustmentParameter.name }}</p>
+        <p>{{ adjustmentParameter.value }}</p>
       </span>
       <input
-        v-model="styleVariable.value"
+        v-model="adjustmentParameter.value"
         type="range"
-        :min="styleVariable.minValue"
-        :max="styleVariable.maxValue"
+        :min="adjustmentParameter.minValue"
+        :max="adjustmentParameter.maxValue"
         steps="1"
         class="slider-bar"
-        @input="handleUpdateValue(styleVariable.name, styleVariable.value)"
+        @input="handleUpdateValue(adjustmentParameter.name, adjustmentParameter.value)"
         @keydown="preventArrowKeys"
       />
     </div>
@@ -31,12 +35,12 @@
 
 <script lang="ts">
 import { ref, defineComponent, PropType, computed } from 'vue'
-import { StyleCategoryEnum } from '../../helpers'
+import { AdjustmentParametersCategoryEnum } from '../../helpers'
 import { mapMutations } from 'vuex'
 import { useStore } from 'web-pkg'
 
 export default defineComponent({
-  name: 'StyleCategory',
+  name: 'AdjustmentParametersCategory',
   props: {
     iconName: {
       type: String,
@@ -49,7 +53,7 @@ export default defineComponent({
       required: true
     },
     variableType: {
-      type: Object as PropType<StyleCategoryEnum>,
+      type: Object as PropType<AdjustmentParametersCategoryEnum>,
       required: true
     },
     isFillTypeLine: {
@@ -62,12 +66,12 @@ export default defineComponent({
     const isOpen = ref(false)
     const store = useStore()
 
-    const styles = computed(() => {
+    const adjustmentParams = computed(() => {
       switch (props.variableType) {
-        case StyleCategoryEnum.General:
-          return store.getters['Preview/customizeGeneral']
-        case StyleCategoryEnum.FineTune:
-          return store.getters['Preview/customizeFineTune']
+        case AdjustmentParametersCategoryEnum.General:
+          return store.getters['Preview/generalParameters']
+        case AdjustmentParametersCategoryEnum.FineTune:
+          return store.getters['Preview/fineTuneParameters']
         default:
           return []
       }
@@ -80,13 +84,13 @@ export default defineComponent({
     return {
       isOpen,
       handleIsOpen,
-      styles
+      adjustmentParams
     }
   },
   methods: {
-    ...mapMutations('Preview', ['SET_ACTIVE_STYLES', 'RESET_STYLES']),
+    ...mapMutations('Preview', ['SET_ACTIVE_ADJUSTMENT_PARAMETERS']),
     handleUpdateValue(name: string, value: number) {
-      this.SET_ACTIVE_STYLES({ name, value })
+      this.SET_ACTIVE_ADJUSTMENT_PARAMETERS({ name, value })
     },
     preventArrowKeys(e) {
       if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
@@ -98,7 +102,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.style-category-button {
+.adjustment-parameter-category-button {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -119,7 +123,7 @@ export default defineComponent({
 .button-box-shadow {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
-.style-variables {
+.adjustment-parameters {
   display: flex;
   align-items: center;
   flex-direction: column;

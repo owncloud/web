@@ -1,4 +1,4 @@
-import { StyleCategoryEnum } from './enums'
+import { AdjustmentParametersCategoryEnum } from './enums'
 
 export type CachedFile = {
   id: string
@@ -11,21 +11,23 @@ export type CachedFile = {
   isAudio: boolean
 }
 
-export type StyleVariableType = {
+export type adjustmentParameterType = {
   name: string
   maxValue: number
   minValue: number
 }
 
-export type StyleCategoryType = StyleVariableType & {
+export type adjustmentParametersCategoryType = adjustmentParameterType & {
   value: number
-  type: StyleCategoryEnum
+  type: AdjustmentParametersCategoryEnum
 }
 
-export type ImageStyles = {
+export type ImageAdjustmentParameters = {
   brightness: number
   contrast: number
   saturation: number
+  grayscale: number
+  invert: number
   exposure: number
   highlights: number
   shadows: number

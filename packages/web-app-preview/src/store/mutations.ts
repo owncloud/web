@@ -1,17 +1,19 @@
 export default {
-  SET_ACTIVE_STYLES(state, payload: { name: string; value: number }) {
-    state.styles = state.styles.map((style) =>
-      style.name.toLowerCase() === payload.name.toLowerCase()
-        ? { ...style, value: payload.value }
-        : style
+  SET_ACTIVE_ADJUSTMENT_PARAMETERS(state, payload: { name: string; value: number }) {
+    state.adjustmentParameters = state.adjustmentParameters.map((adjustmentParameter) =>
+      adjustmentParameter.name.toLowerCase() === payload.name.toLowerCase()
+        ? { ...adjustmentParameter, value: payload.value }
+        : adjustmentParameter
     )
   },
-  RESET_STYLES(state) {
-    state.styles = state.styles.map((style) => style && { ...style, value: 0 })
+  RESET_ADJUSTMENT_PARAMETERS(state) {
+    state.adjustmentParameters = state.adjustmentParameters.map(
+      (adjustmentParameter) => adjustmentParameter && { ...adjustmentParameter, value: 0 }
+    )
   },
-  CHANGE_SELECTED_STYLE_PROP(state, name: string) {
-    state.selectedStyleProp === name
-      ? (state.selectedStyleProp = '')
-      : (state.selectedStyleProp = name)
+  CHANGE_SELECTED_PROCESSING_TOOL(state, name: string) {
+    state.selectedProcessingTool === name
+      ? (state.selectedProcessingTool = '')
+      : (state.selectedProcessingTool = name)
   }
 }

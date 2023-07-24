@@ -10,10 +10,10 @@
         class="media-settings-button"
         appearance="raw"
         :style="
-          selectedStyleProp === 'customize' &&
+          selectedProcessingTool === 'customize' &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedStyleProp('customize')"
+        @click="handleUpdateSelectedProcessingTool('customize')"
       >
         <oc-icon name="tools" />
         <span>Customize</span>
@@ -23,10 +23,10 @@
         class="media-settings-button"
         appearance="raw"
         :style="
-          selectedStyleProp === 'adjust' &&
+          selectedProcessingTool === 'adjust' &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedStyleProp('adjust')"
+        @click="handleUpdateSelectedProcessingTool('adjust')"
       >
         <oc-icon name="equalizer" />
         <span>Adjust</span>
@@ -36,10 +36,10 @@
         class="media-settings-button"
         appearance="raw"
         :style="
-          selectedStyleProp === 'write' &&
+          selectedProcessingTool === 'write' &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedStyleProp('write')"
+        @click="handleUpdateSelectedProcessingTool('write')"
       >
         <oc-icon name="pencil" />
         <span>Write</span>
@@ -49,26 +49,26 @@
         class="media-settings-button"
         appearance="raw"
         :style="
-          selectedStyleProp === 'draw' &&
+          selectedProcessingTool === 'draw' &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedStyleProp('draw')"
+        @click="handleUpdateSelectedProcessingTool('draw')"
       >
         <oc-icon name="brush" />
         <span>Draw</span>
       </oc-button>
     </div>
-    <div v-if="selectedStyleProp === 'customize'" class="options-bar">
-      <style-category
+    <div v-if="selectedProcessingTool === 'customize'" class="options-bar">
+      <adjustment-parameters-category
         name="General"
         icon-name="equalizer"
-        :variable-type="StyleCategoryEnum.General"
+        :variable-type="AdjustmentParametersCategoryEnum.General"
       />
-      <style-category
+      <adjustment-parameters-category
         name="Fine Tune"
         icon-name="contrast-drop-2"
         is-fill-type-line
-        :variable-type="StyleCategoryEnum.FineTune"
+        :variable-type="AdjustmentParametersCategoryEnum.FineTune"
       />
     </div>
   </div>
@@ -76,32 +76,34 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import StyleCategory from './StylebarComponents/StyleCategory.vue'
-import { StyleCategoryEnum } from '../helpers'
+import { AdjustmentParametersCategoryEnum } from '../helpers'
+import AdjustmentParametersCategory from './StylebarComponents/AdjustmentParamtersCategory.vue'
 import { useStore } from 'web-pkg/src'
 import { mapMutations } from 'vuex'
 import { computed } from 'vue'
 
 export default defineComponent({
-  components: { StyleCategory },
+  components: { AdjustmentParametersCategory },
   emits: ['download'],
   setup() {
     const store = useStore()
-    const selectedStyleProp = computed(() => store.getters['Preview/getSelectedStyleProp'])
+    const selectedProcessingTool = computed(
+      () => store.getters['Preview/getSelectedProcessingTool']
+    )
 
     return {
-      selectedStyleProp
+      selectedProcessingTool
     }
   },
   data() {
     return {
-      StyleCategoryEnum: StyleCategoryEnum
+      AdjustmentParametersCategoryEnum: AdjustmentParametersCategoryEnum
     }
   },
   methods: {
-    ...mapMutations('Preview', ['CHANGE_SELECTED_STYLE_PROP']),
-    handleUpdateSelectedStyleProp(name: string) {
-      this.CHANGE_SELECTED_STYLE_PROP(name)
+    ...mapMutations('Preview', ['CHANGE_SELECTED_PROCESSING_TOOL']),
+    handleUpdateSelectedProcessingTool(name: string) {
+      this.CHANGE_SELECTED_PROCESSING_TOOL(name)
     }
   }
 })

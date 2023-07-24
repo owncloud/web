@@ -1,13 +1,13 @@
 import { MaybeRef, unref } from 'vue'
-import { useImageStyles } from '../styles'
+import { useImageAdjustmentParameters } from '../adjustment-params'
 
 type ImageBlob = {
   imageBlob: MaybeRef<Blob>
-  styles: MaybeRef<any>
+  adjustmentParams: MaybeRef<any>
 }
 
-const applyStyles = async ({ imageBlob, styles }: ImageBlob): Promise<Blob> => {
-  const imageStyles = useImageStyles(unref(styles))
+const applyAdjustmentParams = async ({ imageBlob, adjustmentParams }: ImageBlob): Promise<Blob> => {
+  const imageAdjustmentParams = useImageAdjustmentParameters(unref(adjustmentParams))
   const blob = unref(imageBlob)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
@@ -22,7 +22,7 @@ const applyStyles = async ({ imageBlob, styles }: ImageBlob): Promise<Blob> => {
   canvas.width = img.width
   canvas.height = img.height
 
-  ctx.filter = imageStyles
+  ctx.filter = imageAdjustmentParams
 
   ctx.drawImage(img, 0, 0, img.width, img.height)
 
@@ -30,9 +30,7 @@ const applyStyles = async ({ imageBlob, styles }: ImageBlob): Promise<Blob> => {
     canvas.toBlob(resolve)
   })
 
-  console.log('apply', blob === updatedBlob)
-
   return updatedBlob
 }
 
-export default applyStyles
+export default applyAdjustmentParams
