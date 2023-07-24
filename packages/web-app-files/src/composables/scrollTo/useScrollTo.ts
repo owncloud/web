@@ -1,6 +1,7 @@
 import { computed, unref } from 'vue'
 import { Resource } from 'web-client/src'
-import { useStore, queryItemAsString } from 'web-pkg/src/composables'
+import { queryItemAsString } from 'web-pkg/src/composables/appDefaults/useAppNavigation'
+import { useStore } from 'web-pkg/src/composables/store/useStore'
 import { eventBus } from 'web-pkg/src/services'
 import { useRouteQuery } from 'web-pkg/src/composables'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
