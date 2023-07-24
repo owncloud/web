@@ -1,7 +1,8 @@
 import { onBeforeUnmount, onMounted, unref, computed } from 'vue'
 import { eventBus, useStore } from 'web-pkg'
+import { KeyboardActions } from 'web-pkg/src/composables/keyboardActions'
 
-export const useKeyboardTableMouseActions = (keyActions) => {
+export const useKeyboardTableMouseActions = (keyActions: KeyboardActions) => {
   const store = useStore()
   const latestSelectedId = computed(() => store.state.Files.latestSelectedId)
 

@@ -17,6 +17,7 @@ export enum ModifierKey {
 }
 
 export interface KeyboardActions {
+  actions: Ref<any[]>
   selectionCursor: Ref<number>
   removeKeyAction: (index: number) => void
   resetSelectionCursor: () => void
@@ -88,6 +89,7 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
   })
 
   return {
+    actions,
     bindKeyAction,
     removeKeyAction,
     selectionCursor,
