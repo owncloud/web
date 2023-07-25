@@ -276,6 +276,14 @@ export class UppyService {
     return this.uppy.cancelAll()
   }
 
+  getCurrentUploads(): Record<string, unknown> {
+    return this.uppy.getState().currentUploads
+  }
+
+  isRemoteUploadInProgress(): boolean {
+    return this.uppy.getFiles().some((f) => f.isRemote && !(f as any).error)
+  }
+
   clearInputs() {
     this.uploadInputs.forEach((item) => {
       item.value = null
