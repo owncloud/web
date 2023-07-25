@@ -20,8 +20,7 @@ export const useDownloadFile = () => {
     const isUserContext = store.getters['runtime/auth/isUserContextReady']
 
     // construct the url and headers
-    let url = null
-    let headers: Record<string, string> = { 'X-Request-ID': uuidV4() }
+    let url
     if (unref(isPublicLinkContext)) {
       url = file.downloadURL
     } else {
