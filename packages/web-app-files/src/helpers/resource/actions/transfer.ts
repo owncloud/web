@@ -99,7 +99,8 @@ export class ResourceTransfer extends ConflictDialog {
       )
     }
     this.showErrorMessage({
-      title
+      title,
+      errors
     })
   }
 
