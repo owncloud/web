@@ -563,7 +563,7 @@ export default defineComponent({
                 { groupAssignmentCount: failed.length.toString() },
                 true
               )
-        store.dispatch('showErrorMessage', { title, errors: failed.map((f) => f.reason) })
+        store.dispatch('showErrorMessage', { title, errors: (failed as any).map((f) => f.reason) })
       }
 
       addToGroupsModalIsOpen.value = false
@@ -641,7 +641,7 @@ export default defineComponent({
                 { groupAssignmentCount: failed.length.toString() },
                 true
               )
-        store.dispatch('showErrorMessage', { title, errors: failed.map((f) => f.reason) })
+        store.dispatch('showErrorMessage', { title, errors: (failed as any).map((f) => f.reason) })
       }
 
       removeFromGroupsModalIsOpen.value = false
@@ -705,7 +705,7 @@ export default defineComponent({
                 { userCount: failed.length.toString() },
                 true
               )
-        store.dispatch('showErrorMessage', { title, errors: failed.map((f) => f.reason) })
+        store.dispatch('showErrorMessage', { title, errors: (failed as any).map((f) => f.reason) })
       }
 
       editLoginModalIsOpen.value = false

@@ -47,7 +47,7 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
               { userCount: failed.length.toString() },
               true
             )
-      store.dispatch('showErrorMessage', { title, errors: failed.map((f) => f.reason) })
+      store.dispatch('showErrorMessage', { title, errors: (failed as any).map((f) => f.reason) })
     }
 
     store.dispatch('hideModal')
