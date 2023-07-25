@@ -1,6 +1,7 @@
 import { onBeforeUnmount, onMounted, unref, computed } from 'vue'
 import { eventBus, useStore } from 'web-pkg'
 import { KeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import { Resource } from 'web-client'
 
 export const useKeyboardTableMouseActions = (keyActions: KeyboardActions) => {
   const store = useStore()
@@ -10,7 +11,7 @@ export const useKeyboardTableMouseActions = (keyActions: KeyboardActions) => {
   let fileListClickedMetaEvent
   let fileListClickedShiftEvent
 
-  const handleCtrlClickAction = (resource) => {
+  const handleCtrlClickAction = (resource: Resource) => {
     store.dispatch('Files/toggleFileSelection', { id: resource.id })
   }
 

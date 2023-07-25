@@ -1,4 +1,4 @@
-import { onBeforeUnmount, onMounted, Ref, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, Ref, ref } from 'vue'
 
 export enum Key {
   C = 'c',
@@ -17,15 +17,23 @@ export enum ModifierKey {
 }
 
 export interface KeyboardActions {
-  actions: Ref<any[]>
+  actions: Ref<Array<KeyboardAction | null>>
+  actionsFiltered: Ref<Array<KeyboardAction>>
   selectionCursor: Ref<number>
   removeKeyAction: (index: number) => void
   resetSelectionCursor: () => void
   bindKeyAction: (keys: { primary: Key; modifier?: ModifierKey }, callback: () => void) => number
 }
 
+export interface KeyboardAction {
+  primary: Key
+  modifier: ModifierKey | null
+  callback: (event: KeyboardEvent) => void
+}
+
 export const useKeyboardActions = (keyBindOnElementId: string | null = null): KeyboardActions => {
-  const actions = ref([])
+  const actions = ref<Array<KeyboardAction | null>>([])
+  const actionsFiltered = computed(() => actions.value.filter((action) => action !== null))
   const selectionCursor = ref(0)
   const listener = (event: KeyboardEvent): void => {
     event.preventDefault()
@@ -36,11 +44,9 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
     } else if (shiftKey) {
       modifier = ModifierKey.Shift
     }
-    const action = actions.value
-      .filter((action) => action !== null)
-      .find((action) => {
-        return action.primary === key && action.modifier === modifier
-      })
+    const action = actionsFiltered.value.find((action) => {
+      return action.primary === key && action.modifier === modifier
+    })
     if (action) {
       action.callback(event)
     }
@@ -90,6 +96,7 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
 
   return {
     actions,
+    actionsFiltered,
     bindKeyAction,
     removeKeyAction,
     selectionCursor,
