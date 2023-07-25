@@ -87,12 +87,8 @@ export class HandleUpload extends BasePlugin {
     return this.store.getters['runtime/spaces/spaces']
   }
 
-  get filesToUpload(): UppyResource[] {
-    return this._uppy.getFiles() as any
-  }
-
-  removeAllFilesFromUpload() {
-    for (const file of this.filesToUpload) {
+  removeFilesFromUpload(filesToUpload: UppyResource[]) {
+    for (const file of filesToUpload) {
       this._uppy.removeFile(file.id)
     }
   }
@@ -111,7 +107,9 @@ export class HandleUpload extends BasePlugin {
   /**
    * Converts the input files type UppyResources and updates the uppy upload queue
    */
-  prepareFiles(files: UppyFile[]) {
+  prepareFiles(files: UppyFile[]): UppyResource[] {
+    const filesToUpload = []
+
     if (!this.currentFolder && unref(this.route)?.params?.token) {
       // public file drop
       const publicLinkToken = unref(this.route).params.token
@@ -125,8 +123,10 @@ export class HandleUpload extends BasePlugin {
           tusEndpoint: endpoint,
           uploadId: uuid.v4()
         })
+
+        filesToUpload.push(this._uppy.getFile(file.id))
       }
-      return
+      return filesToUpload
     }
     const { id: currentFolderId, path: currentFolderPath } = this.currentFolder
 
@@ -180,13 +180,17 @@ export class HandleUpload extends BasePlugin {
         routeDriveAliasAndItem: (params as any)?.driveAliasAndItem || '',
         routeShareId: (query as any)?.shareId || ''
       })
+
+      filesToUpload.push(this._uppy.getFile(file.id))
     }
+
+    return filesToUpload
   }
 
-  checkQuotaExceeded(): boolean {
+  checkQuotaExceeded(filesToUpload: UppyResource[]): boolean {
     let quotaExceeded = false
 
-    const uploadSizeSpaceMapping = this.filesToUpload.reduce((acc, uppyResource) => {
+    const uploadSizeSpaceMapping = filesToUpload.reduce((acc, uppyResource) => {
       let targetUploadSpace
 
       if (uppyResource.meta.routeName === locationPublicLink.name) {
@@ -223,7 +227,7 @@ export class HandleUpload extends BasePlugin {
       return acc
     }, [])
 
-    const { $gettext, interpolate: $gettextInterpolate } = this.language
+    const { $gettext } = this.language
     uploadSizeSpaceMapping.forEach(({ space, uploadSize }) => {
       if (space.spaceQuota.remaining && space.spaceQuota.remaining < uploadSize) {
         let spaceName = space.name
@@ -232,16 +236,15 @@ export class HandleUpload extends BasePlugin {
           spaceName = $gettext('Personal')
         }
 
-        const translated = $gettext(
-          'There is not enough quota on %{spaceName}, you need additional %{missingSpace} to upload these files'
-        )
-
         this.store.dispatch('showErrorMessage', {
           title: $gettext('Not enough quota'),
-          desc: $gettextInterpolate(translated, {
-            spaceName,
-            missingSpace: filesize((space.spaceQuota.remaining - uploadSize) * -1)
-          })
+          desc: $gettext(
+            'There is not enough quota on %{spaceName}, you need additional %{missingSpace} to upload these files',
+            {
+              spaceName,
+              missingSpace: filesize((space.spaceQuota.remaining - uploadSize) * -1)
+            }
+          )
         })
 
         quotaExceeded = true
@@ -254,7 +257,7 @@ export class HandleUpload extends BasePlugin {
   /**
    * Creates the directory tree and removes files of failed directories from the upload queue.
    */
-  async createDirectoryTree() {
+  async createDirectoryTree(filesToUpload: UppyResource[]): Promise<UppyResource[]> {
     const { webdav } = this.clientService
     const space = this.space
     const { id: currentFolderId, path: currentFolderPath } = this.currentFolder
@@ -262,7 +265,7 @@ export class HandleUpload extends BasePlugin {
     const createdFolders = []
     const failedFolders = []
 
-    for (const file of this.filesToUpload) {
+    for (const file of filesToUpload) {
       const directory = file.meta.relativeFolder
 
       if (!directory || createdFolders.includes(directory)) {
@@ -326,22 +329,27 @@ export class HandleUpload extends BasePlugin {
           createdSubFolders += `/${subFolder}`
           createdFolders.push(createdSubFolders)
         } catch (error) {
-          console.error(error)
-          failedFolders.push(folderToCreate)
-          this.uppyService.publish('uploadError', { file: uppyResource, error })
+          if (error.statusCode !== 405) {
+            console.error(error)
+            failedFolders.push(folderToCreate)
+            this.uppyService.publish('uploadError', { file: uppyResource, error })
+          }
         }
       }
     }
 
+    let filesToRemove = []
     if (failedFolders.length) {
       // remove file of folders that could not be created
-      const filesToRemove = this.filesToUpload.filter((f) =>
-        failedFolders.some((r) => f.meta.relativeFolder.startsWith(r))
-      )
-      for (const file of filesToRemove) {
-        this._uppy.removeFile(file.id)
+      filesToRemove = filesToUpload
+        .filter((f) => failedFolders.some((r) => f.meta.relativeFolder.startsWith(r)))
+        .map(({ id }) => id)
+      for (const fileId of filesToRemove) {
+        this._uppy.removeFile(fileId)
       }
     }
+
+    return filesToUpload.filter(({ id }) => !filesToRemove.includes(id))
   }
 
   /**
@@ -349,13 +357,13 @@ export class HandleUpload extends BasePlugin {
    * Eventually triggers to upload in Uppy.
    */
   async handleUpload(files: UppyFile[]) {
-    this.prepareFiles(files)
+    let filesToUpload = this.prepareFiles(files)
 
     // quota check
     if (this.quotaCheckEnabled && unref(this.hasSpaces)) {
-      const quotaExceeded = this.checkQuotaExceeded()
+      const quotaExceeded = this.checkQuotaExceeded(filesToUpload)
       if (quotaExceeded) {
-        this.removeAllFilesFromUpload()
+        this.removeFilesFromUpload(filesToUpload)
         return this.uppyService.clearInputs()
       }
     }
@@ -363,20 +371,20 @@ export class HandleUpload extends BasePlugin {
     // name conflict handling
     if (this.conflictHandlingEnabled) {
       const confictHandler = new ResourceConflict(this.store, this.language)
-      const conflicts = confictHandler.getConflicts(this.filesToUpload)
+      const conflicts = confictHandler.getConflicts(filesToUpload)
       if (conflicts.length) {
         const dashboard = document.getElementsByClassName('uppy-Dashboard')
         if (dashboard.length) {
           ;(dashboard[0] as HTMLElement).style.display = 'none'
         }
 
-        const result = await confictHandler.displayOverwriteDialog(this.filesToUpload, conflicts)
+        const result = await confictHandler.displayOverwriteDialog(filesToUpload, conflicts)
         if (result.length === 0) {
-          this.removeAllFilesFromUpload()
+          this.removeFilesFromUpload(filesToUpload)
           return this.uppyService.clearInputs()
         }
 
-        for (const file of this.filesToUpload) {
+        for (const file of filesToUpload) {
           const conflictResult = result.find(({ id }) => id === file.id)
           if (!conflictResult) {
             this._uppy.removeFile(file.id)
@@ -391,20 +399,22 @@ export class HandleUpload extends BasePlugin {
               : conflictResult.xhrUpload.endpoint
           )
         }
+
+        filesToUpload = result
       }
     }
 
     this.uppyService.publish('uploadStarted')
     if (this.directoryTreeCreateEnabled) {
-      await this.createDirectoryTree()
+      filesToUpload = await this.createDirectoryTree(filesToUpload)
     }
 
-    if (!this.filesToUpload.length) {
+    if (!filesToUpload.length) {
       this.uppyService.publish('uploadCompleted', { successful: [] })
       return this.uppyService.clearInputs()
     }
 
-    this.uppyService.publish('addedForUpload', this.filesToUpload)
+    this.uppyService.publish('addedForUpload', filesToUpload)
     this.uppyService.uploadFiles()
   }
 

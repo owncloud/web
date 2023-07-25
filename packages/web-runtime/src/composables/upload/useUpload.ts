@@ -20,6 +20,7 @@ export interface UppyResource {
   type: string
   size: number
   data: Blob
+  isRemote: boolean
   meta: {
     // IMPORTANT: must only contain primitive types, complex types won't be serialized properly!
     name?: string
@@ -93,11 +94,14 @@ export function useUpload(options: UploadOptions) {
         req.setHeader('X-Request-ID', uuidV4())
         req.setHeader('Accept-Language', unref(headers)['Accept-Language'])
       },
-      headers: (file) => ({
-        'x-oc-mtime': file.data.lastModified / 1000,
-        'X-Request-ID': uuidV4(),
-        ...unref(headers)
-      }),
+      headers: (file) =>
+        !!file.xhrUpload || file?.isRemote
+          ? {
+              'x-oc-mtime': file?.data?.lastModified / 1000,
+              'X-Request-ID': uuidV4(),
+              ...unref(headers)
+            }
+          : {},
       ...(isTusSupported && {
         tusMaxChunkSize: unref(tusMaxChunkSize),
         tusHttpMethodOverride: unref(tusHttpMethodOverride),

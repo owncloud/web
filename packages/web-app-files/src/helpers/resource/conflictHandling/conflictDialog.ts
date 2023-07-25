@@ -133,8 +133,11 @@ export class ConflictDialog {
       const modal = {
         variation: 'danger',
         title: this.$gettext('Copy here?'),
-        customContent:
-          '<p>Moving files from one space to another is not possible. Do you want to copy instead?</p><p>Note: Links and shares of the original file are not copied.</p>',
+        customContent: `<p>${this.$gettext(
+          'Moving files from one space to another is not possible. Do you want to copy instead?'
+        )}</p><p>${this.$gettext(
+          'Note: Links and shares of the original file are not copied.'
+        )}</p>`,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Copy here'),
         onCancel: () => {
