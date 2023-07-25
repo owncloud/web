@@ -77,13 +77,15 @@ const getClientService = () => {
   clientService.graphAuthenticated.users.getUser.mockResolvedValue(
     mock<AxiosResponse>({ data: getDefaultUser() })
   )
+  clientService.graphAuthenticated.users.editUser.mockResolvedValue(
+    mock<AxiosResponse>({ data: getDefaultUser() })
+  )
   clientService.graphAuthenticated.groups.listGroups.mockResolvedValue(
     mock<AxiosResponse>({ data: { value: [] } })
   )
   clientService.graphAuthenticated.applications.listApplications.mockResolvedValue(
     mock<AxiosResponse>({ data: { value: getDefaultApplications() } })
   )
-
   return clientService
 }
 
