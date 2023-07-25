@@ -12,6 +12,9 @@ const actions = {
       if (error.response?.headers?.map?.['x-request-id']) {
         return error.response.headers.map['x-request-id']
       }
+      if (error.response?.res?.res?.headers?.['x-request-id']) {
+        return error.response.res.res.headers['x-request-id']
+      }
       if (error.response?.res?.headers?.['x-request-id']) {
         return error.response.res.headers['x-request-id']
       }
