@@ -24,7 +24,7 @@
       v-else
     -->
     <div
-      class="oc-height-1-1 oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium dicom-viewer"
+      class="oc-height-1-1"
     >
       <SimpleDicomViewerScreen />
       <!--
@@ -131,7 +131,6 @@ export default defineComponent({
   margin: 0;
   padding: 0;
   overflow: hidden;
-  height: calc(100% - 52px);
 }
 
 // from preview player as reference
