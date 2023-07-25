@@ -11,6 +11,7 @@
     "lodash-es": "^4.17.21",
     "vue3-gettext": "^2.3.3",
     "web-app-files": "workspace:*",
-    "web-pkg": "workspace:@ownclouders/web-pkg@*"
+    "web-pkg": "workspace:@ownclouders/web-pkg@*",
+    "web-client": "workspace:@ownclouders/web-client@*"
   }
 }

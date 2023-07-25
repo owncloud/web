@@ -395,7 +395,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         this.showErrorMessage({
-          title: this.$gettext('Failed to apply new permissions')
+          title: this.$gettext('Failed to apply new permissions'),
+          error: e
         })
       }
     },
@@ -408,7 +409,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         this.showErrorMessage({
-          title: this.$gettext('Failed to apply expiration date')
+          title: this.$gettext('Failed to apply expiration date'),
+          error: e
         })
       }
     },
@@ -436,7 +438,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         this.showErrorMessage({
-          title: this.$gettext('Error while editing the share.')
+          title: this.$gettext('Error while editing the share.'),
+          error: e
         })
       }
     }

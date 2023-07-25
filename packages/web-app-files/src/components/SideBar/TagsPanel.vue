@@ -152,7 +152,8 @@ export default defineComponent({
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
-          title: $gettext('Failed to edit tags')
+          title: $gettext('Failed to edit tags'),
+          error: e
         })
       }
     }

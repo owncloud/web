@@ -1,6 +1,6 @@
 import { useStore } from 'web-pkg'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
-import { computed, Ref, unref } from 'vue'
+import { computed, Ref, unref, nextTick } from 'vue'
 import { Key, KeyboardActions, ModifierKey } from 'web-pkg/src/composables/keyboardActions'
 import { Resource } from 'web-client'
 
@@ -43,9 +43,11 @@ export const useKeyboardTableNavigation = (
       return
     }
     keyActions.resetSelectionCursor()
-    await store.dispatch('Files/resetFileSelection')
+    store.dispatch('Files/resetFileSelection')
+    await nextTick()
     store.commit('Files/ADD_FILE_SELECTION', { id: nextId })
-    scrollToResource({ id: nextId } as any)
+    await nextTick()
+    scrollToResource(nextId)
   }
 
   const getNextResourceId = (previous = false) => {
@@ -84,7 +86,7 @@ export const useKeyboardTableNavigation = (
       // select
       store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
     }
-    scrollToResource({ id: nextResourceId } as any)
+    scrollToResource(nextResourceId)
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) - 1
   }
   const handleShiftDownAction = () => {
@@ -100,7 +102,7 @@ export const useKeyboardTableNavigation = (
       // select
       store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
     }
-    scrollToResource({ id: nextResourceId } as any)
+    scrollToResource(nextResourceId)
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) + 1
   }
 }

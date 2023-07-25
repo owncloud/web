@@ -1,6 +1,6 @@
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
-import { computed, unref } from 'vue'
+import { computed, nextTick, unref } from 'vue'
 import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
 import { FileAction } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
@@ -9,6 +9,7 @@ import { join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
 import { isLocationSpacesActive } from 'web-app-files/src/router'
 import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
+import { useScrollTo } from '../../scrollTo/useScrollTo'
 
 export const useFileActionsCreateNewFolder = ({
   store,
@@ -17,6 +18,7 @@ export const useFileActionsCreateNewFolder = ({
   store = store || useStore()
   const router = useRouter()
   const { $gettext } = useGettext()
+  const { scrollToResource } = useScrollTo()
 
   const clientService = useClientService()
   const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
@@ -72,10 +74,14 @@ export const useFileActionsCreateNewFolder = ({
       store.dispatch('showMessage', {
         title: $gettext('"%{folderName}" was created successfully', { folderName })
       })
+
+      await nextTick()
+      scrollToResource(resource.id, { forceScroll: true })
     } catch (error) {
       console.error(error)
       store.dispatch('showErrorMessage', {
-        title: $gettext('Failed to create folder')
+        title: $gettext('Failed to create folder'),
+        error
       })
     }
   }

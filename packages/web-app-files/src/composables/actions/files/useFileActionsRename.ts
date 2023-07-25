@@ -144,7 +144,8 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
       }
       const title = $gettextInterpolate(translated, { file: resource.name, newName }, true)
       store.dispatch('showErrorMessage', {
-        title
+        title,
+        error
       })
     }
   }

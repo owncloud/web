@@ -1,0 +1,7 @@
+Enhancement: Scroll to newly created folder
+
+After creating a new folder that gets sorted into the currently displayed resources but outside of the current viewport, we now scroll to the new folder.
+
+https://github.com/owncloud/web/issues/7600
+https://github.com/owncloud/web/issues/7601
+https://github.com/owncloud/web/pulls/8145

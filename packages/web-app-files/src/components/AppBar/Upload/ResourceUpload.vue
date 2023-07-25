@@ -1,6 +1,16 @@
 <template>
-  <div>
-    <oc-button :class="btnClass" justify-content="left" appearance="raw" @click="triggerUpload">
+  <div
+    v-oc-tooltip="
+      isRemoteUploadInProgress ? $gettext('Please wait until all imports have finished') : null
+    "
+  >
+    <oc-button
+      :class="btnClass"
+      justify-content="left"
+      appearance="raw"
+      :disabled="isRemoteUploadInProgress"
+      @click="triggerUpload"
+    >
       <oc-resource-icon :resource="resource" size="medium" />
       <span :id="uploadLabelId">{{ buttonLabel }}</span>
     </oc-button>
@@ -18,8 +28,11 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, onMounted, onBeforeUnmount, ref } from 'vue'
 import { Resource } from 'web-client/src'
+import { useService } from 'web-pkg/src/composables/service'
+import type { UppyService } from 'web-runtime/src/services/uppyService'
+
 export default defineComponent({
   props: {
     btnLabel: {
@@ -39,10 +52,31 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const uppyService = useService<UppyService>('$uppyService')
+    const isRemoteUploadInProgress = ref(uppyService.isRemoteUploadInProgress())
+
+    let uploadStartedSub
+    let uploadCompletedSub
+
     const resource = computed(() => {
       return { extension: '', isFolder: props.isFolder } as Resource
     })
+
+    const onUploadStarted = () =>
+      (isRemoteUploadInProgress.value = uppyService.isRemoteUploadInProgress())
+    const onUploadCompleted = () => (isRemoteUploadInProgress.value = false)
+
+    onMounted(() => {
+      uploadStartedSub = uppyService.subscribe('uploadStarted', onUploadStarted)
+      uploadCompletedSub = uppyService.subscribe('uploadCompleted', onUploadCompleted)
+    })
+
+    onBeforeUnmount(() => {
+      uppyService.unsubscribe('uploadStarted', uploadStartedSub)
+      uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
+    })
     return {
+      isRemoteUploadInProgress,
       resource
     }
   },

@@ -1,3 +1,5 @@
+import { AxiosError } from 'axios'
+
 const state = {
   messages: [],
   quickActions: {}
@@ -5,8 +7,24 @@ const state = {
 
 const actions = {
   showErrorMessage({ commit }, message) {
+    const getXRequestID = (error: AxiosError): string | null => {
+      if (error.response?.headers?.['x-request-id']) {
+        return error.response.headers['x-request-id']
+      }
+      return null
+    }
+
     message.status = message.status || 'danger'
     message.timeout = message.timeout || 0
+    message.errors = message.error ? [message.error] : message.errors || []
+
+    const xRequestIds = message.errors
+      .map((error) => getXRequestID(error))
+      .filter((xRequestId) => xRequestId !== null)
+      .map((item) => `X-Request-Id: ${item}`)
+      .join('\r\n')
+
+    message.errorLogContent = xRequestIds
 
     commit('ENQUEUE_MESSAGE', message)
   },

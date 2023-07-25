@@ -1,4 +1,5 @@
-import ResourceUpload from '../../../../../src/components/AppBar/Upload/ResourceUpload.vue'
+import { mockDeep } from 'jest-mock-extended'
+import ResourceUpload from 'web-app-files/src/components/AppBar/Upload/ResourceUpload.vue'
 import {
   createStore,
   defaultComponentMocks,
@@ -7,8 +8,7 @@ import {
   defaultStubs,
   mount
 } from 'web-test-helpers'
-
-const Translate = jest.fn()
+import { UppyService } from 'web-runtime/src/services/uppyService'
 
 describe('Resource Upload Component', () => {
   describe('file upload', () => {
@@ -44,12 +44,22 @@ describe('Resource Upload Component', () => {
       expect((fileUploadInput.element as HTMLElement).click).toHaveBeenCalledTimes(1)
     })
   })
+
+  it('should be disabled when a remote upload is running', () => {
+    const uppyService = mockDeep<UppyService>()
+    uppyService.isRemoteUploadInProgress.mockReturnValue(true)
+    const { wrapper } = getWrapper({ isFolder: true }, uppyService)
+    expect(wrapper.findComponent<any>('button').props('disabled')).toBeTruthy()
+  })
 })
 
-function getWrapper(props = {}) {
+function getWrapper(props = {}, uppyService = mockDeep<UppyService>()) {
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
-  const mocks = defaultComponentMocks()
+  const mocks = {
+    ...defaultComponentMocks(),
+    $uppyService: uppyService
+  }
   return {
     storeOptions,
     mocks,
@@ -58,8 +68,8 @@ function getWrapper(props = {}) {
       global: {
         mocks,
         stubs: defaultStubs,
-        plugins: [...defaultPlugins(), store],
-        directives: { Translate }
+        provide: mocks,
+        plugins: [...defaultPlugins(), store]
       }
     })
   }

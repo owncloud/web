@@ -104,7 +104,8 @@ export const useFileActionsCreateNewFile = ({
     } catch (error) {
       console.error(error)
       store.dispatch('showErrorMessage', {
-        title: $gettext('Failed to create file')
+        title: $gettext('Failed to create file'),
+        error
       })
     }
   }
@@ -150,7 +151,8 @@ export const useFileActionsCreateNewFile = ({
     } catch (error) {
       console.error(error)
       store.dispatch('showErrorMessage', {
-        title: $gettext('Failed to create file')
+        title: $gettext('Failed to create file'),
+        error
       })
     }
   }
