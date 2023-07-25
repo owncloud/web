@@ -1,5 +1,6 @@
 import { aggregateResourceShares } from '../resources'
 import { ShareStatus } from 'web-client/src/helpers/share/status'
+import { OCSError } from 'web-client/src/ocs'
 
 export async function triggerShareAction(resource, status, hasReSharing, hasShareJail, $client) {
   const method = _getRequestMethod(status)
@@ -16,7 +17,7 @@ export async function triggerShareAction(resource, status, hasReSharing, hasShar
 
   // exit on failure
   if (response.status !== 200) {
-    throw new Error(response.statusText)
+    throw new OCSError(response, response.statusText)
   }
 
   // get updated share from response and transform & return it

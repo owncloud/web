@@ -7,7 +7,15 @@ const state = {
 
 const actions = {
   showErrorMessage({ commit }, message) {
-    const getXRequestID = (error: AxiosError): string | null => {
+    console.log(message)
+    const getXRequestID = (error: any): string | null => {
+      if (error.response?.headers?.map?.['x-request-id']) {
+        return error.response.headers.map['x-request-id']
+      }
+
+      if (error.response?.res?.headers?.['x-request-id']) {
+        return error.response.res.headers['x-request-id']
+      }
       if (error.response?.headers?.['x-request-id']) {
         return error.response.headers['x-request-id']
       }
