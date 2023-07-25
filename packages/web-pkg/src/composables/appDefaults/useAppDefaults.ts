@@ -32,7 +32,7 @@ interface AppDefaultsOptions {
   clientService?: ClientService
 }
 
-type AppDefaultsResult = AppConfigResult &
+export type AppDefaultsResult = AppConfigResult &
   AppNavigationResult &
   AppFileHandlingResult &
   RequestResult &
