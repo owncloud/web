@@ -30,27 +30,25 @@ export const useDownloadFile = () => {
       } else {
         url = client.fileVersions.getFileVersionUrl(file.fileId, version)
       }
-      const accessToken = store.getters['runtime/auth/accessToken']
-      headers = { Authorization: 'Bearer ' + accessToken }
     }
 
     // download with signing enabled
     if (isUserContext && unref(isUrlSigningEnabled)) {
-      const response = await fetch(url, {
-        method: 'HEAD',
-        headers
-      })
-      if (response.status === 200) {
-        const signedUrl = await client.signUrl(url)
-        triggerDownloadWithFilename(signedUrl, file.name)
-        return
+      const httpClient = clientService.httpAuthenticated
+      try {
+        const response = await httpClient.head(url)
+        if (response.status === 200) {
+          const signedUrl = await client.signUrl(url)
+          triggerDownloadWithFilename(signedUrl, file.name)
+          return
+        }
+      } catch (e) {
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Download failed'),
+          desc: $gettext('File could not be located'),
+          error: e
+        })
       }
-      //TODO: HEADERS EMPTY ?!!
-      store.dispatch('showErrorMessage', {
-        title: $gettext('Download failed'),
-        desc: $gettext('File could not be located'),
-        error: new HttpError(response.statusText, response)
-      })
       return
     }
 
