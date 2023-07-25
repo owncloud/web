@@ -9,11 +9,15 @@ const actions = {
   showErrorMessage({ commit }, message) {
     console.log(message)
     const getXRequestID = (error: any): string | null => {
-      if (error.response?.headers?.map?.['x-request-id']) {
-        return error.response.headers.map['x-request-id']
-      }
+      /**
+       * x-request-id response headers might be very nested in ownCloud SDK,
+       * only remove records if you are sure they aren't valid anymore
+       */
       if (error.response?.res?.res?.headers?.['x-request-id']) {
         return error.response.res.res.headers['x-request-id']
+      }
+      if (error.response?.headers?.map?.['x-request-id']) {
+        return error.response.headers.map['x-request-id']
       }
       if (error.response?.res?.headers?.['x-request-id']) {
         return error.response.res.headers['x-request-id']
