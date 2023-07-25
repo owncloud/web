@@ -4,6 +4,7 @@
   :class="{ lightbox: isFullScreenModeActivated }
   -->
   <div
+    id="dicom-viewer"
     class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium dicom-viewer"
   >
     <h1>DICOM placeholder</h1>
@@ -13,6 +14,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { ref } from 'vue'
+import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
+import uids from '../helpers/uids'
 
 // import cornerstone packages
 import Hammer from 'hammerjs'
@@ -30,28 +34,31 @@ cornerstoneDICOMImageLoader.external.cornerstone = cornerstone
 cornerstoneDICOMImageLoader.external.dicomParser = dicomParser
 
 // init providers?
+/*
+// configure cornerstone dicom image loader
+const { preferSizeOverAccuracy, useNorm16Texture } = cornerstone.getConfiguration().rendering
+cornerstoneDICOMImageLoader.configure({
+  useWebWorkers: true,
+  decodeConfig: {
+    convertFloatPixelDataToInt: false,
+    use16BitDataType: preferSizeOverAccuracy || useNorm16Texture
+  }
+})
 
-// configure web worker framework, init dicom image loader
+// configure web worker framework
 var config = {
   maxWebWorkers: navigator.hardwareConcurrency || 1,
   startWebWorkersOnDemand: true
 }
 cornerstoneDICOMImageLoader.webWorkerManager.initialize(config)
+*/
 
 //alternative Cornerstone DICOM Image Loader init from example
 /*
-cornerstoneDICOMImageLoader.configure({
-  useWebWorkers: true,
-  decodeConfig: {
-    convertFloatPixelDataToInt: false,
-    use16BitDataType: preferSizeOverAccuracy || useNorm16Texture,
-  },
-});
-
-let maxWebWorkers = 1;
+let maxWebWorkers = 1
 
 if (navigator.hardwareConcurrency) {
-  maxWebWorkers = Math.min(navigator.hardwareConcurrency, 7);
+  maxWebWorkers = Math.min(navigator.hardwareConcurrency, 7)
 }
 
 var config = {
@@ -63,7 +70,7 @@ var config = {
       strict: false,
     },
   },
-};
+}
 
 cornerstoneDICOMImageLoader.webWorkerManager.initialize(config);
 */
@@ -75,7 +82,123 @@ cornerstoneDICOMImageLoader.webWorkerManager.initialize(config);
 cornerstone.registerImageLoader('http', cornerstoneDICOMImageLoader.loadImage)
 cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 
-//cornerstone.registerImageLoader('dicomfile', '../MRBRAIN.dcm')
+/*
+// TODO: get image ids and metadata into RAM --> see cornerstone 3D demo
+const imageIds = []
+const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add('../MRBRAIN.dcm')
+
+// fetch metadata
+// await cornerstoneDICOMImageLoader.wadouri.loadImage(imageId).promise;
+
+console.log('cornerstone imageID' + imageId)
+imageIds[0] = imageId
+console.log('cornerstone imageID' + imageIds[0])
+*/
+
+/*
+// init tools
+const csTools = cornerstoneTools.init()
+
+// instantiate rendering engine
+const renderingEngineId = 'dicomRenderingEngine'
+const renderingEngine = new RenderingEngine(renderingEngineId)
+*/
+
+/*
+// create a stack viewport
+const { ViewportType } = Enums
+const element = document.createElement('div') // TODO: set reference to the canvas element
+
+const viewportId = 'CT_STACK' // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
+const viewportInput = {
+  viewportId,
+  type: ViewportType.STACK,
+  element,
+  defaultOptions: {
+    background: <Types.Point3>[0.2, 0, 0.2]
+  }
+}
+
+renderingEngine.enableElement(viewportInput)
+
+// get stack viewport that was created
+const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
+
+// define a stack containing a single image
+const stack = [imageIds[0]]
+
+// set stack on the viewport
+// TODO: put everything into a async function
+// await viewport.setStack(stack)
+
+// set the VOI of the stack
+// viewport.setProperties({ voiRange: ctVoiRange })
+
+// render the image
+viewport.render()
+*/
+
+/*
+// get metadata
+const imageData = viewport.getImageData()
+
+const { pixelRepresentation, bitsAllocated, bitsStored, highBit, photometricInterpretation } =
+  metaData.get('imagePixelModule', imageId)
+const voiLutModuleLocal = metaData.get('voiLutModule', imageId)
+const sopCommonModule = metaData.get('sopCommonModule', imageId)
+const transferSyntax = metaData.get('transferSyntax', imageId)
+
+// extract data --> see DICOM P10 example (local/index.ts) & https://www.cornerstonejs.org/live-examples/local.html
+
+//transfer syntax
+//transferSyntax.transferSyntaxUID
+
+//sop class uid
+//sopCommonModule.sopClassUID
+//uids[sopCommonModule.sopClassUID]
+
+//sop instance uid
+//sopCommonModule.sopInstanceUID
+
+//rows
+//imageData.dimensions[0]
+
+//columns
+//imageData.dimensions[1]
+
+//spacing
+//imageData.spacing.join('\\')
+
+//direction
+// imageData.direction.map((x) => Math.round(x * 100) / 100).join(',')
+
+//origin
+//imageData.origin.map((x) => Math.round(x * 100) / 100).join(',')
+
+//modality
+//imageData.metadata.Modality
+
+//pixel representation
+//pixelRepresentation
+
+//bits allocated
+//bitsAllocated
+
+//bits stored
+//bitsStored
+
+//high bit
+//highBit
+
+//photometric interpretation
+//photometricInterpretation
+
+//window width
+//voiLutModuleLocal.windowWidth
+
+//window center
+//voiLutModuleLocal.windowCenter
+*/
 
 /*
 $(document).ready(function() {
@@ -88,8 +211,118 @@ $(document).ready(function() {
     });
 */
 
+/**
+ * Runs the demo (from cornerstone)
+ */
+
+/*
+// Get Cornerstone imageIds and fetch metadata into RAM
+const imageIds = await createImageIdsAndCacheMetaData({
+  StudyInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.334240657131972136850343327463',
+  SeriesInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.226151125820845824875394858561',
+  wadoRsRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb'
+})
+
+// Instantiate a rendering engine
+const renderingEngineId = 'myRenderingEngine'
+const renderingEngine = new RenderingEngine(renderingEngineId)
+
+// Create a stack viewport
+const viewportId = 'CT_STACK'
+const viewportInput = {
+  viewportId,
+  type: ViewportType.STACK,
+  element: dicomCanvas,
+  defaultOptions: {
+    background: <Types.Point3>[0.2, 0, 0.2]
+  }
+}
+
+renderingEngine.enableElement(viewportInput)
+
+// Get the stack viewport that was created
+const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
+
+// Define a stack containing a single image
+const stack = [imageIds[0]]
+
+// Set the stack on the viewport
+await viewport.setStack(stack)
+
+// Set the VOI of the stack
+viewport.setProperties({ voiRange: ctVoiRange })
+
+// Render the image
+viewport.render()
+*/
+
 export default defineComponent({
   name: 'SimpleDicomViewerScreen'
+  /*,
+  setup() {},
+
+  data: () => ({
+    // from example code
+    baseUrl: '',
+    exampleStudyImageIds: '',
+    isInitLoad: true,
+    isShow: true
+  }),
+
+  computed: {},
+  watch: {},
+  created() {},
+  mounted() {
+    let _self = this
+    /*
+    this.listenForWindowResize()
+    */
+
+  // enable canvas
+  //let canvas = this.$refs.canvas
+  /*
+    cornerstone.enable(canvas)
+
+    const imageIds = await createImageIdsAndCacheMetaData({
+      StudyInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.334240657131972136850343327463',
+      SeriesInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.226151125820845824875394858561',
+      wadoRsRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb'
+    })
+
+
+    //this.show()
+  },
+  beforeUnmount() {},
+  methods: {
+    /*
+    // window resize methods
+    listenForWindowResize: function () {
+      this.$nextTick(function () {
+        window.addEventListener('resize', this.debounce(this.onWindowResize, 100))
+      })
+    },
+    onWindowResize: function () {
+      cornerstone.resize(this.$refs.canvas, true)
+    },
+    // utility methods
+    debounce: function (func, wait, immediate) {
+      var timeout
+      return function () {
+        var context = this
+        var args = arguments
+        var later = function () {
+          timeout = null
+          if (!immediate) func.apply(context, args)
+        }
+        var callNow = immediate && !timeout
+        clearTimeout(timeout)
+        timeout = setTimeout(later, wait)
+        if (callNow) func.apply(context, args)
+      }
+    }
+    //show() {}
+  }
+  */
 })
 
 /*
@@ -227,8 +460,8 @@ data () {
 
 .dicom-canvas {
   border: 10px solid yellow;
-  width: 100%;
-  height: 100%;
+  width: 500px; //100%;
+  height: 500px; //100%;
 }
 </style>
 
@@ -305,3 +538,4 @@ export default {
 }
 </script>
 -->
+../helpers/uids../helpers/uids

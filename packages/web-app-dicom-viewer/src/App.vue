@@ -23,9 +23,7 @@
     <!--
       v-else
     -->
-    <div
-      class="oc-height-1-1"
-    >
+    <div class="oc-height-1-1">
       <SimpleDicomViewerScreen />
       <!--
       <object class="dicom-viewer oc-width-1-1" :data="url" type="application/dicom" />
