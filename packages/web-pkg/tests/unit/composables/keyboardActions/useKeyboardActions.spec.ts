@@ -12,7 +12,7 @@ describe('useKeyboardActions', () => {
     const { keyboardActions } = wrapper.vm as any
 
     keyboardActions.bindKeyAction({ primary: Key.A })
-    expect(keyboardActions.actionsFiltered.value.length).toBe(1)
+    expect(keyboardActions.actions.value.length).toBe(1)
 
     wrapper.unmount()
   })
@@ -23,10 +23,10 @@ describe('useKeyboardActions', () => {
 
     const keyActionIndex = keyboardActions.bindKeyAction({ primary: Key.A })
 
-    expect(keyboardActions.actionsFiltered.value.length).toBe(1)
+    expect(keyboardActions.actions.value.length).toBe(1)
 
     keyboardActions.removeKeyAction(keyActionIndex)
-    expect(keyboardActions.actionsFiltered.value.length).toBe(0)
+    expect(keyboardActions.actions.value.length).toBe(0)
 
     wrapper.unmount()
   })

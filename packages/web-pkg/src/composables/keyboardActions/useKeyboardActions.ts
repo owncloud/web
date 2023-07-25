@@ -1,4 +1,5 @@
-import { computed, onBeforeUnmount, onMounted, Ref, ref } from 'vue'
+import { onBeforeUnmount, onMounted, Ref, ref } from 'vue'
+import * as uuid from 'uuid'
 
 export enum Key {
   C = 'c',
@@ -18,22 +19,21 @@ export enum ModifierKey {
 
 export interface KeyboardActions {
   actions: Ref<Array<KeyboardAction | null>>
-  actionsFiltered: Ref<Array<KeyboardAction>>
   selectionCursor: Ref<number>
-  removeKeyAction: (index: number) => void
+  removeKeyAction: (id: string) => void
   resetSelectionCursor: () => void
-  bindKeyAction: (keys: { primary: Key; modifier?: ModifierKey }, callback: () => void) => number
+  bindKeyAction: (keys: { primary: Key; modifier?: ModifierKey }, callback: () => void) => string
 }
 
 export interface KeyboardAction {
+  id: string
   primary: Key
   modifier: ModifierKey | null
   callback: (event: KeyboardEvent) => void
 }
 
 export const useKeyboardActions = (keyBindOnElementId: string | null = null): KeyboardActions => {
-  const actions = ref<Array<KeyboardAction | null>>([])
-  const actionsFiltered = computed(() => actions.value.filter((action) => action !== null))
+  const actions = ref<Array<KeyboardAction>>([])
   const selectionCursor = ref(0)
   const listener = (event: KeyboardEvent): void => {
     event.preventDefault()
@@ -44,7 +44,7 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
     } else if (shiftKey) {
       modifier = ModifierKey.Shift
     }
-    const action = actionsFiltered.value.find((action) => {
+    const action = actions.value.find((action) => {
       return action.primary === key && action.modifier === modifier
     })
     if (action) {
@@ -54,20 +54,19 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
   const bindKeyAction = (
     keys: { primary: Key; modifier?: ModifierKey },
     callback: () => void
-  ): number => {
-    return (
-      actions.value.push({
-        ...keys,
-        modifier: keys.modifier ?? null,
-        callback
-      }) - 1
-    )
+  ): string => {
+    const id = uuid.v4()
+    actions.value.push({
+      id,
+      ...keys,
+      modifier: keys.modifier ?? null,
+      callback
+    })
+    return id
   }
 
-  const removeKeyAction = (index: number): void => {
-    if (actions.value[index] !== undefined) {
-      actions.value[index] = null
-    }
+  const removeKeyAction = (id: string): void => {
+    actions.value = actions.value.filter((action) => action.id !== id)
   }
 
   const resetSelectionCursor = (): void => {
@@ -96,7 +95,6 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
 
   return {
     actions,
-    actionsFiltered,
     bindKeyAction,
     removeKeyAction,
     selectionCursor,
