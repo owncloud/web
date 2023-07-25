@@ -78,7 +78,8 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
         'Failed to decline the selected share',
         'Failed to decline selected shares',
         resources.length
-      )
+      ),
+      errors
     })
   }
 

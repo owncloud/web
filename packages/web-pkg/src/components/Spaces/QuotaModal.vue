@@ -35,7 +35,7 @@ import { useGettext } from 'vue3-gettext'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { SpaceResource } from 'web-client/src'
 import { eventBus, useClientService, useRouter } from 'web-pkg/src'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore, useLoadingService } from 'web-pkg/src/composables'
 import { Drive } from 'web-client/src/generated'
 
 export default defineComponent({
@@ -77,6 +77,7 @@ export default defineComponent({
     const store = useStore()
     const { $gettext, $ngettext } = useGettext()
     const clientService = useClientService()
+    const loadingService = useLoadingService()
     const router = useRouter()
     const selectedOption = ref(0)
 
@@ -181,7 +182,9 @@ export default defineComponent({
           value: driveData.quota
         })
       })
-      const results = await Promise.allSettled<Array<unknown>>(requests)
+      const results = await loadingService.addTask(() => {
+        return Promise.allSettled<Array<unknown>>(requests)
+      })
       const succeeded = results.filter((r) => r.status === 'fulfilled')
       if (succeeded.length) {
         store.dispatch('showMessage', { title: getSuccessMessage(succeeded.length) })
@@ -189,7 +192,10 @@ export default defineComponent({
       const errors = results.filter((r) => r.status === 'rejected')
       if (errors.length) {
         errors.forEach(console.error)
-        store.dispatch('showErrorMessage', { title: getErrorMessage(errors.length) })
+        store.dispatch('showErrorMessage', {
+          title: getErrorMessage(errors.length),
+          errors: (errors as PromiseRejectedResult[]).map((f) => f.reason)
+        })
       }
 
       props.cancel()

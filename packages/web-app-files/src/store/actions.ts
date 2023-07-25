@@ -204,7 +204,8 @@ export default {
           context.dispatch(
             'showErrorMessage',
             {
-              title: title
+              title: title,
+              error
             },
             { root: true }
           )

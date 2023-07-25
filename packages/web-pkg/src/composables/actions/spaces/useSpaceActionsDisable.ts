@@ -5,7 +5,7 @@ import { useGettext } from 'vue3-gettext'
 import { useRoute, useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useAbility } from '../../ability'
-import { useClientService } from 'web-pkg/src/composables'
+import { useClientService, useLoadingService } from 'web-pkg/src/composables'
 import { Store } from 'vuex'
 
 export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) => {
@@ -15,57 +15,72 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
   const clientService = useClientService()
   const route = useRoute()
   const router = useRouter()
+  const loadingService = useLoadingService()
 
   const filterResourcesToDisable = (resources): SpaceResource[] => {
     return resources.filter((r) => r.canDisable({ user: store.getters.user, ability }))
   }
 
-  const disableSpaces = (spaces: SpaceResource[]) => {
-    const requests = []
-    const graphClient = clientService.graphAuthenticated
+  const disableSpaces = async (spaces: SpaceResource[]) => {
     const currentRoute = unref(route)
-    spaces.forEach((space) => {
-      const request = graphClient.drives
-        .deleteDrive(space.id.toString())
-        .then(() => {
-          store.dispatch('hideModal')
-          if (currentRoute.name === 'admin-settings-spaces') {
-            space.disabled = true
-            space.spaceQuota = { total: space.spaceQuota.total }
-          }
-          store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-            id: space.id,
-            field: 'disabled',
-            value: true
-          })
-          return true
-        })
-        .catch((error) => {
-          console.error(error)
-          store.dispatch('showErrorMessage', {
-            title: $gettext('Failed to disable space %{spaceName}', {
-              spaceName: space.name
-            }),
-            error
-          })
-        })
-      requests.push(request)
-    })
-    return Promise.all(requests).then((result: boolean[]) => {
-      if (result.filter(Boolean).length) {
-        store.dispatch('showMessage', {
-          title: $ngettext(
-            'Space was disabled successfully',
-            'Spaces were disabled successfully',
-            result.filter(Boolean).length
-          )
-        })
-      }
 
-      if (currentRoute.name === 'files-spaces-generic') {
-        return router.push({ name: 'files-spaces-projects' })
-      }
+    const client = clientService.graphAuthenticated
+    const promises = spaces.map((space) =>
+      client.drives.deleteDrive(space.id.toString()).then(() => {
+        if (currentRoute.name === 'files-spaces-generic') {
+          router.push({ name: 'files-spaces-projects' })
+        }
+        if (currentRoute.name === 'admin-settings-spaces') {
+          space.disabled = true
+          space.spaceQuota = { total: space.spaceQuota.total }
+        }
+        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+          id: space.id,
+          field: 'disabled',
+          value: true
+        })
+        return true
+      })
+    )
+    const results = await loadingService.addTask(() => {
+      return Promise.allSettled(promises)
     })
+    const succeeded = results.filter((r) => r.status === 'fulfilled')
+    if (succeeded.length) {
+      const title =
+        succeeded.length === 1 && spaces.length === 1
+          ? $gettext('Space "%{space}" was disabled successfully', { space: spaces[0].name })
+          : $ngettext(
+              '%{spaceCount} space was disabled successfully',
+              '%{spaceCount} spaces were disabled successfully',
+              succeeded.length,
+              { spaceCount: succeeded.length.toString() },
+              true
+            )
+      store.dispatch('showMessage', { title })
+    }
+
+    const failed = results.filter((r) => r.status === 'rejected')
+    if (failed.length) {
+      failed.forEach(console.error)
+
+      const title =
+        failed.length === 1 && spaces.length === 1
+          ? $gettext('Failed to disable space "%{space}"', { space: spaces[0].name })
+          : $ngettext(
+              'Failed to disable %{spaceCount} space',
+              'Failed to disable %{spaceCount} spaces',
+              failed.length,
+              { spaceCount: failed.length.toString() },
+              true
+            )
+      store.dispatch('showErrorMessage', {
+        title,
+        errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
+      })
+    }
+
+    store.dispatch('hideModal')
   }
 
   const handler = ({ resources }: SpaceActionOptions) => {

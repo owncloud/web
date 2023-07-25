@@ -1,7 +1,7 @@
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from 'web-client/src'
-import { useClientService, useRoute } from 'web-pkg/src/composables'
+import { useClientService, useLoadingService, useRoute } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services'
 import { useAbility } from '../../ability'
 import { useStore } from '../../store'
@@ -13,54 +13,70 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
+  const loadingService = useLoadingService()
   const route = useRoute()
 
   const filterResourcesToDelete = (resources: SpaceResource[]) => {
     return resources.filter((r) => r.canBeDeleted({ user: store.getters.user, ability }))
   }
 
-  const deleteSpaces = (spaces: SpaceResource[]) => {
-    const requests = []
-    const graphClient = clientService.graphAuthenticated
-    spaces.forEach((space) => {
-      const request = graphClient.drives
+  const deleteSpaces = async (spaces: SpaceResource[]) => {
+    const client = clientService.graphAuthenticated
+    const promises = spaces.map((space) =>
+      client.drives
         .deleteDrive(space.id.toString(), '', {
           headers: {
             Purge: 'T'
           }
         })
         .then(() => {
-          store.dispatch('hideModal')
           store.commit('Files/REMOVE_FILES', [{ id: space.id }])
           store.commit('runtime/spaces/REMOVE_SPACE', { id: space.id })
           return true
         })
-        .catch((error) => {
-          console.error(error)
-          store.dispatch('showErrorMessage', {
-            title: $gettext('Failed to delete space %{spaceName}', {
-              spaceName: space.name
-            }),
-            error
-          })
-        })
-      requests.push(request)
+    )
+    const results = await loadingService.addTask(() => {
+      return Promise.allSettled(promises)
     })
-    return Promise.all(requests).then((result: boolean[]) => {
-      if (result.filter(Boolean).length) {
-        store.dispatch('showMessage', {
-          title: $ngettext(
-            'Space was deleted successfully',
-            'Spaces were deleted successfully',
-            result.filter(Boolean).length
-          )
-        })
-      }
+    const succeeded = results.filter((r) => r.status === 'fulfilled')
+    if (succeeded.length) {
+      const title =
+        succeeded.length === 1 && spaces.length === 1
+          ? $gettext('Space "%{space}" was deleted successfully', { space: spaces[0].name })
+          : $ngettext(
+              '%{spaceCount} space was deleted successfully',
+              '%{spaceCount} spaces were deleted successfully',
+              succeeded.length,
+              { spaceCount: succeeded.length.toString() },
+              true
+            )
+      store.dispatch('showMessage', { title })
+    }
 
-      if (unref(route).name === 'admin-settings-spaces') {
-        eventBus.publish('app.admin-settings.list.load')
-      }
-    })
+    const failed = results.filter((r) => r.status === 'rejected')
+    if (failed.length) {
+      failed.forEach(console.error)
+
+      const title =
+        failed.length === 1 && spaces.length === 1
+          ? $gettext('Failed to delete space "%{space}"', { space: spaces[0].name })
+          : $ngettext(
+              'Failed to delete %{spaceCount} space',
+              'Failed to delete %{spaceCount} spaces',
+              failed.length,
+              { spaceCount: failed.length.toString() },
+              true
+            )
+      store.dispatch('showErrorMessage', {
+        title,
+        errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
+      })
+    }
+
+    store.dispatch('hideModal')
+    if (unref(route).name === 'admin-settings-spaces') {
+      eventBus.publish('app.admin-settings.list.load')
+    }
   }
 
   const handler = ({ resources }: SpaceActionOptions) => {
