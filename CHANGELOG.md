@@ -18,6 +18,7 @@ Summary
 * Bugfix - Media controls overflow on mobile screens: [#9351](https://github.com/owncloud/web/pull/9351)
 * Bugfix - Space editors see empty trashbin and delete actions in space trashbin: [#9389](https://github.com/owncloud/web/pull/9389)
 * Bugfix - Merging folders: [#9461](https://github.com/owncloud/web/issues/9461)
+* Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 * Enhancement - Improve extension app topbar: [#8422](https://github.com/owncloud/web/issues/8422)
 * Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
@@ -138,6 +139,15 @@ Details
 
    https://github.com/owncloud/web/issues/9461
    https://github.com/owncloud/web/pull/9477
+
+* Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
+
+   After creating a new folder that gets sorted into the currently displayed resources but
+   outside of the current viewport, we now scroll to the new folder.
+
+   https://github.com/owncloud/web/issues/7600
+   https://github.com/owncloud/web/issues/7601
+   https://github.com/owncloud/web/pulls/8145
 
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 
