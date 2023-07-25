@@ -10,6 +10,10 @@ import {
   defaultStoreMockOptions,
   getComposableWrapper
 } from 'web-test-helpers/src'
+import { useScrollToMock } from 'web-app-files/tests/mocks/useScrollToMock'
+import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
+
+jest.mock('web-app-files/src/composables/scrollTo')
 
 describe('useFileActionsCreateNewFolder', () => {
   describe('checkFolderName', () => {
@@ -46,6 +50,8 @@ describe('useFileActionsCreateNewFolder', () => {
               title: '"myfolder" was created successfully'
             })
           )
+
+          // expect scrolltoresource to have been called
         }
       })
     })
@@ -96,6 +102,8 @@ function getWrapper({
     options: { storeOptions: typeof defaultStoreMockOptions }
   ) => void
 }) {
+  jest.mocked(useScrollTo).mockImplementation(() => useScrollToMock())
+
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
