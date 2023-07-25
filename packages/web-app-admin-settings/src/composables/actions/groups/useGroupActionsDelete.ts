@@ -48,7 +48,10 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
               { groupCount: failed.length.toString() },
               true
             )
-      store.dispatch('showErrorMessage', { title, errors: (failed as any).map((f) => f.reason) })
+      store.dispatch('showErrorMessage', {
+        title,
+        errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
+      })
     }
 
     store.dispatch('hideModal')

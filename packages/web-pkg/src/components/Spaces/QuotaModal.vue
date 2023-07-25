@@ -194,7 +194,7 @@ export default defineComponent({
         errors.forEach(console.error)
         store.dispatch('showErrorMessage', {
           title: getErrorMessage(errors.length),
-          errors
+          errors: (errors as PromiseRejectedResult[]).map((f) => f.reason)
         })
       }
 
