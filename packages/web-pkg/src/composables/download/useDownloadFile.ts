@@ -6,6 +6,7 @@ import { v4 as uuidV4 } from 'uuid'
 import { triggerDownloadWithFilename } from 'web-pkg/src/helpers'
 import { useGettext } from 'vue3-gettext'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
+import { HttpError } from 'web-pkg'
 
 export const useDownloadFile = () => {
   const store = useStore()
@@ -35,23 +36,20 @@ export const useDownloadFile = () => {
 
     // download with signing enabled
     if (isUserContext && unref(isUrlSigningEnabled)) {
-      try {
-        const response = await fetch(url, {
-          method: 'HEAD',
-          headers
-        })
-        if (response.status === 200) {
-          const signedUrl = await client.signUrl(url)
-          triggerDownloadWithFilename(signedUrl, file.name)
-          return
-        }
-      } catch (e) {
-        console.error(e)
+      const response = await fetch(url, {
+        method: 'HEAD',
+        headers
+      })
+      if (response.status === 200) {
+        const signedUrl = await client.signUrl(url)
+        triggerDownloadWithFilename(signedUrl, file.name)
+        return
       }
+      //TODO: HEADERS EMPTY ?!!
       store.dispatch('showErrorMessage', {
         title: $gettext('Download failed'),
         desc: $gettext('File could not be located'),
-        status: 'danger'
+        error: new HttpError(response.statusText, response)
       })
       return
     }
