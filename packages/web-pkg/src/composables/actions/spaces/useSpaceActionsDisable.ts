@@ -74,7 +74,7 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
               { spaceCount: failed.length.toString() },
               true
             )
-      store.dispatch('showErrorMessage', { title, errors: failed })
+      store.dispatch('showErrorMessage', { title, errors: failed.map((f) => f.reason) })
     }
 
     store.dispatch('hideModal')

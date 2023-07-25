@@ -19,7 +19,7 @@ const actions = {
     message.errors = message.error ? [message.error] : message.errors || []
 
     const xRequestIds = message.errors
-      .map((error) => getXRequestID(error.reason || error))
+      .map((error) => getXRequestID(error))
       .filter((xRequestId) => xRequestId !== null)
       .map((item) => `X-Request-Id: ${item}`)
       .join('\r\n')
