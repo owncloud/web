@@ -3,14 +3,6 @@ import { AxiosInstance } from 'axios'
 
 export type { Capabilities } from './capabilities'
 
-export class OCSError extends Error {
-  public response: any
-  constructor(response, message = null) {
-    super(message)
-    this.response = response
-  }
-}
-
 export interface OCS {
   getCapabilities: () => Promise<Capabilities>
 }

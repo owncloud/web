@@ -368,7 +368,7 @@ export default defineComponent({
           title: this.$gettext('Failed to add share for %{displayName}', {
             displayName: e.displayName
           }),
-          error: e
+          error: e.error
         })
       })
 

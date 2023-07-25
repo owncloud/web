@@ -2,7 +2,7 @@
 import major from 'semver/functions/major'
 import rcompare from 'semver/functions/rcompare'
 
-import { RuntimeError } from 'web-pkg/src/errors'
+import { HttpError, RuntimeError } from 'web-pkg/src/errors'
 import { ClientService } from 'web-pkg/src/services'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
@@ -99,7 +99,7 @@ export class ArchiverService {
       triggerDownloadWithFilename(objectUrl, fileName)
       return url
     } catch (e) {
-      throw new RuntimeError('archive could not be fetched')
+      throw new HttpError('archive could not be fetched', e.response)
     }
   }
 
