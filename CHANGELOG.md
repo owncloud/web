@@ -17,6 +17,7 @@ Summary
 * Bugfix - Switch columns displayed on small screens in "Shared with me" view: [#9315](https://github.com/owncloud/web/issues/9315)
 * Bugfix - Media controls overflow on mobile screens: [#9351](https://github.com/owncloud/web/pull/9351)
 * Bugfix - Space editors see empty trashbin and delete actions in space trashbin: [#9389](https://github.com/owncloud/web/pull/9389)
+* Bugfix - Merging folders: [#9461](https://github.com/owncloud/web/issues/9461)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 * Enhancement - Improve extension app topbar: [#8422](https://github.com/owncloud/web/issues/8422)
 * Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
@@ -130,6 +131,13 @@ Details
 
    https://github.com/owncloud/web/issues/9385
    https://github.com/owncloud/web/pull/9389
+
+* Bugfix - Merging folders: [#9461](https://github.com/owncloud/web/issues/9461)
+
+   Merging folders as option to handle name conflicts has been fixed.
+
+   https://github.com/owncloud/web/issues/9461
+   https://github.com/owncloud/web/pull/9477
 
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 
@@ -276,10 +284,16 @@ Details
    currently the only supported option.
 
    https://github.com/owncloud/web/issues/9151
+   https://github.com/owncloud/web/issues/9445
+   https://github.com/owncloud/web/issues/9469
+   https://github.com/owncloud/web/issues/9454
    https://github.com/owncloud/web/pull/9150
    https://github.com/owncloud/web/pull/9282
    https://github.com/owncloud/web/pull/9291
    https://github.com/owncloud/web/pull/9374
+   https://github.com/owncloud/web/pull/9460
+   https://github.com/owncloud/web/pull/9471
+   https://github.com/owncloud/web/pull/9470
 
 * Enhancement - Privacy statement in account menu: [#9174](https://github.com/owncloud/web/issues/9174)
 
@@ -374,8 +388,10 @@ Details
 
    https://github.com/owncloud/web/issues/9258
    https://github.com/owncloud/web/issues/9428
+   https://github.com/owncloud/web/issues/9439
    https://github.com/owncloud/web/pull/9304
    https://github.com/owncloud/web/pull/9432
+   https://github.com/owncloud/web/pull/9456
 
 * Enhancement - Ambiguation for URL view mode params: [#9344](https://github.com/owncloud/web/pull/9344)
 
@@ -429,6 +445,7 @@ Details
    https://github.com/owncloud/web/issues/9353
    https://github.com/owncloud/web/issues/9354
    https://github.com/owncloud/web/pull/9394
+   https://github.com/owncloud/web/pull/9459
 
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 
