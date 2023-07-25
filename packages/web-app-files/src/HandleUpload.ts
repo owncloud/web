@@ -330,9 +330,11 @@ export class HandleUpload extends BasePlugin {
           createdSubFolders += `/${subFolder}`
           createdFolders.push(createdSubFolders)
         } catch (error) {
-          console.error(error)
-          failedFolders.push(folderToCreate)
-          this.uppyService.publish('uploadError', { file: uppyResource, error })
+          if (error.statusCode !== 405) {
+            console.error(error)
+            failedFolders.push(folderToCreate)
+            this.uppyService.publish('uploadError', { file: uppyResource, error })
+          }
         }
       }
     }
