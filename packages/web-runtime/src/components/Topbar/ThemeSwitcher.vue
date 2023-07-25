@@ -13,7 +13,7 @@
   </oc-button>
   <div v-else class="oc-flex oc-flex-middle">
     <oc-button
-      id="my_filter"
+      id="theme-switcher-button"
       class="oc-mr-s"
       appearance="raw"
       variation="inverse"
@@ -22,33 +22,34 @@
       <oc-icon name="paint" accessible-label="Select theme" class="oc-pr-xs" />
     </oc-button>
 
-    <oc-drop drop-id="oc-drop" toggle="#my_filter" mode="click" close-on-click>
-      <div slot="special" class="oc-card">
-        <div class="oc-card-header">
-          <h3 v-translate class="oc-card-title">Themes</h3>
-        </div>
-        <div class="oc-card-body theme-switcher-list">
-          <oc-list>
-            <li v-for="(themeName, themeId) in themeOptions" :key="themeId">
-              <oc-button
-                class="oc-p-s"
-                @click="selectTheme(themeId)"
-                :class="{
-                  'oc-background-primary-gradient': isSelectedTheme(themeId),
-                  selected: isSelectedTheme(themeId)
-                }"
-                :appearance="isSelectedTheme(themeId) ? 'raw-inverse' : 'raw'"
-                :variation="isSelectedTheme(themeId) ? 'primary' : 'passive'"
-              >
-                <span
-                  class="oc-text-bold oc-display-block oc-width-1-1"
-                  v-text="$gettext(themeName)"
-                />
-              </oc-button>
-            </li>
-          </oc-list>
-        </div>
-      </div>
+    <oc-drop
+      drop-id="oc-drop"
+      toggle="#theme-switcher-button"
+      mode="click"
+      padding-size="small"
+      class="themes-drop"
+      close-on-click
+    >
+      <h3 v-translate class="oc-pl-xs">Themes</h3>
+
+      <oc-list class="themes-drop-list" :aria-label="themesListAriaLabel">
+        <li v-for="(themeName, themeId) in themeOptions" :key="themeId">
+          <oc-button
+            :id="`themes-drop-btn-${themeId}`"
+            appearance="raw"
+            justify-content="space-between"
+            class="themes-drop-btn oc-p-s"
+            :class="{
+              'oc-background-primary-gradient': isSelectedTheme(themeId),
+              selected: isSelectedTheme(themeId)
+            }"
+            :variation="isSelectedTheme(themeId) ? 'inverse' : 'passive'"
+            @click="selectTheme(themeId)"
+          >
+            <span class="oc-flex oc-flex-middle" v-text="$gettext(themeName)" />
+          </oc-button>
+        </li>
+      </oc-list>
     </oc-drop>
   </div>
 </template>
@@ -104,6 +105,9 @@ export default defineComponent({
         },
         {}
       )
+    },
+    themesListAriaLabel() {
+      return this.$gettext('Select theme for the interface')
     }
   },
   methods: {
@@ -120,25 +124,35 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-.theme-switcher-list {
-  .oc-card {
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-  }
-  text-align: left;
-  white-space: normal;
+<style lang="scss" scoped>
+.themes {
+  &-drop {
+    &-list {
+      &:hover .themes-drop-btn.selected:not(:hover),
+      &:focus .themes-drop-btn.selected:not(:focus) {
+        color: var(--oc-color-swatch-passive-default);
+      }
 
-  a,
-  button,
-  span {
-    display: inline-flex;
-    font-weight: normal !important;
-    gap: 10px;
-    justify-content: flex-start;
-    vertical-align: top;
-    width: 100%;
-    text-align: left;
+      li {
+        margin: var(--oc-space-xsmall) 0;
+      }
+    }
+
+    &-btn {
+      width: 100%;
+      gap: var(--oc-space-medium);
+
+      &:hover,
+      &:focus {
+        background-color: var(--oc-color-background-hover) !important;
+        color: var(--oc-color-swatch-passive-default);
+        text-decoration: none;
+      }
+
+      &.selected {
+        color: var(--oc-color-swatch-inverse-default) !important;
+      }
+    }
   }
 }
 </style>
