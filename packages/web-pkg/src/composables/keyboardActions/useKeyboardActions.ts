@@ -18,7 +18,7 @@ export enum ModifierKey {
 }
 
 export interface KeyboardActions {
-  actions: Ref<Array<KeyboardAction | null>>
+  actions: Ref<Array<KeyboardAction>>
   selectionCursor: Ref<number>
   removeKeyAction: (id: string) => void
   resetSelectionCursor: () => void
