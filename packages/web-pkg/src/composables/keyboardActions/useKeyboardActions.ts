@@ -45,7 +45,7 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
       modifier = ModifierKey.Shift
     }
     const action = actions.value.find((action) => {
-      return action.primary === key && action.modifier === modifier
+      return action.primary === key.toLowerCase() && action.modifier === modifier
     })
     if (action) {
       action.callback(event)
