@@ -7,7 +7,6 @@ const state = {
 
 const actions = {
   showErrorMessage({ commit }, message) {
-    console.log(message)
     const getXRequestID = (error: any): string | null => {
       /**
        * x-request-id response headers might be very nested in ownCloud SDK,
