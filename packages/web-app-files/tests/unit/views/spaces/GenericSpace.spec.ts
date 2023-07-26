@@ -15,6 +15,7 @@ import {
 } from 'web-test-helpers'
 
 jest.mock('web-app-files/src/composables')
+jest.mock('web-app-files/src/composables/keyboardActions')
 
 describe('GenericSpace view', () => {
   it('appBar always present', () => {
@@ -238,7 +239,7 @@ function getMountedWrapper({
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
         provide: defaultMocks,
-        stubs: { ...defaultStubs, 'resource-details': true, 'keyboard-actions': true }
+        stubs: { ...defaultStubs, 'resource-details': true }
       }
     })
   }

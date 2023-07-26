@@ -1,7 +1,6 @@
 <template>
   <div class="oc-flex oc-width-1-1" :class="{ 'space-frontpage': isSpaceFrontpage }">
     <whitespace-context-menu ref="whitespaceContextMenu" :space="space" />
-    <keyboard-actions :paginated-resources="paginatedResources" :space="space" />
     <files-view-wrapper>
       <app-bar
         :breadcrumbs="breadcrumbs"
@@ -158,7 +157,6 @@ import AppBar from '../../components/AppBar/AppBar.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
-import KeyboardActions from '../../components/FilesList/KeyboardActions.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
@@ -192,6 +190,12 @@ import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/t
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { displayPositionedDropdown } from 'web-pkg/src'
 import { v4 as uuidv4 } from 'uuid'
+import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import {
+  useKeyboardTableMouseActions,
+  useKeyboardTableNavigation,
+  useKeyboardTableSpaceActions
+} from 'web-app-files/src/composables/keyboardActions'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -204,7 +208,6 @@ export default defineComponent({
     ContextActions,
     CreateAndUpload,
     FilesViewWrapper,
-    KeyboardActions,
     ListInfo,
     NoContentMessage,
     NotFoundMessage,
@@ -424,6 +427,12 @@ export default defineComponent({
     }
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
+
+    const keyActions = useKeyboardActions('files-view')
+    useKeyboardTableNavigation(keyActions, resourcesViewDefaults.paginatedResources)
+    useKeyboardTableMouseActions(keyActions)
+    useKeyboardTableSpaceActions(keyActions, props.space)
+
     const performLoaderTask = async (
       sameRoute: boolean,
       path?: string,

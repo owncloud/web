@@ -145,7 +145,11 @@ import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
 import { isLocationCommonActive } from 'web-app-files/src/router'
 import ItemFilterToggle from 'web-pkg/src/components/ItemFilterToggle.vue'
 import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
-import { useKeyboardActionsSearchTable } from 'web-app-files/src/composables/keyboardActions'
+import {
+  useKeyboardTableNavigation,
+  useKeyboardTableMouseActions,
+  useKeyboardTableActions
+} from 'web-app-files/src/composables/keyboardActions'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -196,8 +200,11 @@ export default defineComponent({
     const doUseScope = useRouteQuery('useScope')
 
     const resourcesView = useResourcesViewDefaults<Resource, any, any[]>()
+
     const keyActions = useKeyboardActions('files-view')
-    useKeyboardActionsSearchTable(keyActions, resourcesView.paginatedResources)
+    useKeyboardTableNavigation(keyActions, resourcesView.paginatedResources)
+    useKeyboardTableMouseActions(keyActions)
+    useKeyboardTableActions(keyActions)
 
     const searchTerm = computed(() => {
       return queryItemAsString(unref(searchTermQuery))
