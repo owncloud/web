@@ -76,28 +76,13 @@ cornerstoneDICOMImageLoader.webWorkerManager.initialize(config);
 // init volume loader?
 
 // cornerstone render init & tools init? --> see cornerstone 3D demo
-
 cornerstone.registerImageLoader('http', cornerstoneDICOMImageLoader.loadImage)
 cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 
-/*
-// TODO: get image ids and metadata into RAM --> see cornerstone 3D demo
-const imageIds = []
-const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add('../MRBRAIN.dcm')
-
-// fetch metadata
-// await cornerstoneDICOMImageLoader.wadouri.loadImage(imageId).promise;
-
-console.log('cornerstone imageID' + imageId)
-imageIds[0] = imageId
-console.log('cornerstone imageID' + imageIds[0])
-*/
-
-/*
 // init tools
-const csTools = cornerstoneTools.init()
+//const csTools = cornerstoneTools.init()
 
-
+/*
 // instantiate rendering engine
 const renderingEngineId = 'dicomRenderingEngine'
 const renderingEngine = new RenderingEngine(renderingEngineId)
@@ -138,7 +123,7 @@ viewport.render()
 */
 
 export default defineComponent({
-  name: 'SimpleDicomViewerScreen'
+  name: 'SimpleDicomViewerScreen',
   /*,
   setup() {},
 
@@ -157,29 +142,54 @@ export default defineComponent({
     cornerstoneTools.init({
       globalToolSyncEnabled: true
     })
-  mounted() {
+    */
+  async mounted() {
     let _self = this
     /*
+    // this.listenForCornerstoneImageRendered()
+    // this.listenForCornerstoneImageLoaded()
     this.listenForWindowResize()
     */
 
-  // enable canvas
-  //let canvas = this.$refs.canvas
-  /*
-    cornerstone.enable(canvas)
+    // enable canvas
+    let canvas = this.$refs.canvas
+    //cornerstone.enable(canvas)
 
-    const imageIds = await createImageIdsAndCacheMetaData({
-      StudyInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.334240657131972136850343327463',
-      SeriesInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.226151125820845824875394858561',
-      wadoRsRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb'
-    })
+    // TODO: get image ids and metadata into RAM --> see cornerstone 3D demo
+    const imageIds = []
+    const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add('../MRBRAIN.dcm')
 
+    // fetch metadata
+    try {
+      await cornerstoneDICOMImageLoader.wadouri.loadImage(imageId).promise
+    } catch (e) {
+      console.error('Error fetching DICOM meta data', e)
+    } finally {
+      // is this needed?
+    }
 
-    //this.show()
+    console.log('cornerstone imageID' + imageId)
+    imageIds[0] = imageId
+    console.log('cornerstone imageID' + imageIds[0])
+
+    //this.initCanvasTools()
   },
-  beforeUnmount() {},
+  beforeDestroy() {
+    // Remove jQuery event listeners --> TODO check if this is needed
+    let canvas = this.$refs.canvas
+    //$(canvas).off()
+  },
+  /*
+  ,
+  beforeUnmount() {}
+  */
   methods: {
-    /*
+    initCanvasTools() {
+      cornerstoneTools.init()
+    }
+  }
+
+  /*
     // window resize methods
     listenForWindowResize: function () {
       this.$nextTick(function () {
@@ -212,27 +222,8 @@ export default defineComponent({
 
 /*
 data () {
-    return {
-      baseUrl: 'http://localhost:8080',
-      // Pass in as a property, or use a computed property that looks at Vuex
-      // Then... Watch for changes. On change, load the new series
-      exampleStudyImageIds: [
-        '/static/simple-study/1.2.276.0.74.3.1167540280.200511.112514.1.1.4.jpg',
-        '/static/simple-study/1.2.276.0.74.3.1167540280.200511.112514.1.1.5.jpg',
-        '/static/simple-study/1.2.276.0.74.3.1167540280.200511.112514.1.1.6.jpg',
-        '/static/simple-study/1.2.276.0.74.3.1167540280.200511.112514.1.1.7.jpg',
-        '/static/simple-study/1.2.276.0.74.3.1167540280.200511.112514.1.1.9.jpg',
-        '/static/simple-study/1.2.276.0.74.3.1167540280.200511.112514.1.1.10.jpg'
-      ],
-      isInitLoad: true
-    }
   },
   mounted () {
-    let _self = this
-    // this.listenForCornerstoneImageRendered()
-    // this.listenForCornerstoneImageLoaded()
-    this.listenForWindowResize()
-
     // Enable Canvas
     let canvas = this.$refs.canvas
     cornerstone.enable(canvas)
