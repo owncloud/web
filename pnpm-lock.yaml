@@ -1028,8 +1028,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0
       owncloud-sdk:
-        specifier: file:/home/jan/working/owncloud-sdk
-        version: file:../owncloud-sdk(axios@1.4.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.10.3)(utf8@3.0.0)(uuid@9.0.0)(webdav@4.10.0)(xml-js@1.6.11)
+        specifier: ~3.1.0-alpha.6
+        version: 3.1.0-alpha.6(axios@1.4.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.10.3)(utf8@3.0.0)(uuid@9.0.0)(webdav@4.10.0)(xml-js@1.6.11)
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2
@@ -7575,7 +7575,6 @@ packages:
 
   /assert-never@1.2.1:
     resolution: {integrity: sha512-TaTivMB6pYI1kXwrFlEhLeGfOqoDNdTxjCdwRfFFkEA30Eu+k48W34nlok2EYWJfFFzqaEmichdNM7th6M5HNw==}
-    requiresBuild: true
 
   /assert-plus@1.0.0:
     resolution: {integrity: sha512-NfJ4UzBCcQGLDlQq7nHxH+tv3kyZ0hHQqF5BO6J7tNJeP5do1llPr8dZ8zHonfhAu0PHAdMkSo+8o0wxg9lZWw==}
@@ -8050,7 +8049,6 @@ packages:
   /babel-walk@3.0.0-canary-5:
     resolution: {integrity: sha512-GAwkz0AihzY5bkwIY5QDR+LvsRQgB/B+1foMPvi0FZPMl5fjD7ICiznUiBdLYMH1QYe6vqu4gWYytZOccLouFw==}
     engines: {node: '>= 10.0.0'}
-    requiresBuild: true
     dependencies:
       '@babel/types': 7.21.5
 
@@ -8644,7 +8642,6 @@ packages:
 
   /character-parser@2.2.0:
     resolution: {integrity: sha512-+UqJQjFEFaTAs3bNsF2j2kEN1baG/zghZbdqoYEDxGZtJo9LBzl1A+m0D4n3qKx8N2FNv8/Xp6yV9mQmBuptaw==}
-    requiresBuild: true
     dependencies:
       is-regex: 1.1.4
 
@@ -9342,7 +9339,6 @@ packages:
 
   /constantinople@4.0.1:
     resolution: {integrity: sha512-vCrqcSIq4//Gx74TXXCGnHpulY1dskqLTFGDmhrGxzeXL8lF8kvXv6mpNWlJj1uD4DW23D4ljAqbY4RRaaUZIw==}
-    requiresBuild: true
     dependencies:
       '@babel/parser': 7.21.8
       '@babel/types': 7.21.5
@@ -10483,7 +10479,6 @@ packages:
 
   /doctypes@1.1.0:
     resolution: {integrity: sha512-LLBi6pEqS6Do3EKQ3J0NqHWV5hhb78Pi8vvESYwyOy2c31ZEZVdtitdzsQsKb7878PEERhzUk0ftqGhG6Mz+pQ==}
-    requiresBuild: true
 
   /dom-serializer@1.3.2:
     resolution: {integrity: sha512-5c54Bk5Dw4qAxNOI1pFEizPSjVsx5+bpJKmL2kPn8JhBUq2q09tTCa3mjijun2NfK78NMouDYNMBkOrPZiS+ig==}
@@ -13027,7 +13022,6 @@ packages:
 
   /is-expression@4.0.0:
     resolution: {integrity: sha512-zMIXX63sxzG3XrkHkrAPvm/OVZVSCPNkwMHU8oTX7/U3AL78I0QXCEICXUM13BIa8TYGZ68PiTKfQz3yaTNr4A==}
-    requiresBuild: true
     dependencies:
       acorn: 7.4.1
       object-assign: 4.1.1
@@ -13068,7 +13062,6 @@ packages:
   /is-glob@3.1.0:
     resolution: {integrity: sha512-UFpDDrPgM6qpnFNI+rh/p3bUaq9hKLZN8bMUWzxmcnZVS3omf4IPK+BrewlnWjO1WmUsMYuSjKh4UJuV4+Lqmw==}
     engines: {node: '>=0.10.0'}
-    requiresBuild: true
     dependencies:
       is-extglob: 2.1.1
     dev: true
@@ -13173,7 +13166,6 @@ packages:
 
   /is-promise@2.2.2:
     resolution: {integrity: sha512-+lP4/6lKUBfQjZ2pdxThZvLUAafmZb8OAxFb8XXtiQmS35INgr85hdOGoEs124ez1FCnZJt6jau/T+alh58QFQ==}
-    requiresBuild: true
 
   /is-regex@1.1.4:
     resolution: {integrity: sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg==}
@@ -14018,7 +14010,6 @@ packages:
 
   /js-stringify@1.0.2:
     resolution: {integrity: sha512-rtS5ATOo2Q5k1G+DADISilDA6lv79zIiwFd6CcjuIxGKLFm5C+RLImRscVap9k55i+MOZwgliw+NejvkLuGD5g==}
-    requiresBuild: true
 
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -14233,7 +14224,6 @@ packages:
 
   /jstransformer@1.0.0:
     resolution: {integrity: sha512-C9YK3Rf8q6VAPDCCU9fnqo3mAfOH6vUGnMcP4AQAYIEpWtfGLpwOTmZ+igtdK5y+VvI2n3CyYSzy4Qh34eq24A==}
-    requiresBuild: true
     dependencies:
       is-promise: 2.2.2
       promise: 7.3.1
@@ -15958,6 +15948,28 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /owncloud-sdk@3.1.0-alpha.6(axios@1.4.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.10.3)(utf8@3.0.0)(uuid@9.0.0)(webdav@4.10.0)(xml-js@1.6.11):
+    resolution: {integrity: sha512-U079L2Bjfx9hi3d1+hapR8Umyoj/hY8QQhqiy+/J7shwPKHFRdzZoyJkTtL+zOwOjqFfBIOZYEvOWPY5+5k3HA==}
+    peerDependencies:
+      axios: ^0.27.2
+      cross-fetch: ^3.0.6
+      promise: ^8.1.0
+      qs: ^6.10.3
+      utf8: ^3.0.0
+      uuid: ^8.2.0
+      webdav: 4.10.0
+      xml-js: ^1.6.11
+    dependencies:
+      axios: 1.4.0
+      cross-fetch: 3.1.4
+      promise: 8.1.0
+      qs: 6.10.3
+      utf8: 3.0.0
+      uuid: 9.0.0
+      webdav: 4.10.0
+      xml-js: 1.6.11
+    dev: false
+
   /p-finally@1.0.0:
     resolution: {integrity: sha512-LICb2p9CB7FS+0eR1oqWnHhp0FljGLZCWBE9aix0Uye9W8LTQPwMTYVGWQWIw9RdQiDg4+epXQODwIYJtSJaow==}
     engines: {node: '>=4'}
@@ -16207,7 +16219,6 @@ packages:
 
   /path-dirname@1.0.2:
     resolution: {integrity: sha512-ALzNPpyNq9AqXMBjeymIjFDAkAFH06mHJH/cSBHAgU0s4vfpBn6b2nf8tiRLvagKD8RbTpq2FKTBg7cl9l3c7Q==}
-    requiresBuild: true
     dev: true
 
   /path-exists@3.0.0:
@@ -17088,7 +17099,6 @@ packages:
 
   /promise@7.3.1:
     resolution: {integrity: sha512-nolQXZ/4L+bP/UGlkfaIujX9BKxGwmQ9OT4mOt5yvy8iK1h3wqTEJCijzGANTCCl9nWjY41juyAn2K3Q1hLLTg==}
-    requiresBuild: true
     dependencies:
       asap: 2.0.6
 
@@ -17177,7 +17187,6 @@ packages:
 
   /pug-attrs@3.0.0:
     resolution: {integrity: sha512-azINV9dUtzPMFQktvTXciNAfAuVh/L/JCl0vtPCwvOA21uZrC08K/UnmrL+SXGEVc1FwzjW62+xw5S/uaLj6cA==}
-    requiresBuild: true
     dependencies:
       constantinople: 4.0.1
       js-stringify: 1.0.2
@@ -17185,7 +17194,6 @@ packages:
 
   /pug-code-gen@3.0.2:
     resolution: {integrity: sha512-nJMhW16MbiGRiyR4miDTQMRWDgKplnHyeLvioEJYbk1RsPI3FuA3saEP8uwnTb2nTJEKBU90NFVWJBk4OU5qyg==}
-    requiresBuild: true
     dependencies:
       constantinople: 4.0.1
       doctypes: 1.1.0
@@ -17198,11 +17206,9 @@ packages:
 
   /pug-error@2.0.0:
     resolution: {integrity: sha512-sjiUsi9M4RAGHktC1drQfCr5C5eriu24Lfbt4s+7SykztEOwVZtbFk1RRq0tzLxcMxMYTBR+zMQaG07J/btayQ==}
-    requiresBuild: true
 
   /pug-filters@4.0.0:
     resolution: {integrity: sha512-yeNFtq5Yxmfz0f9z2rMXGw/8/4i1cCFecw/Q7+D0V2DdtII5UvqE12VaZ2AY7ri6o5RNXiweGH79OCq+2RQU4A==}
-    requiresBuild: true
     dependencies:
       constantinople: 4.0.1
       jstransformer: 1.0.0
@@ -17212,7 +17218,6 @@ packages:
 
   /pug-lexer@5.0.1:
     resolution: {integrity: sha512-0I6C62+keXlZPZkOJeVam9aBLVP2EnbeDw3An+k0/QlqdwH6rv8284nko14Na7c0TtqtogfWXcRoFE4O4Ff20w==}
-    requiresBuild: true
     dependencies:
       character-parser: 2.2.0
       is-expression: 4.0.0
@@ -17220,38 +17225,32 @@ packages:
 
   /pug-linker@4.0.0:
     resolution: {integrity: sha512-gjD1yzp0yxbQqnzBAdlhbgoJL5qIFJw78juN1NpTLt/mfPJ5VgC4BvkoD3G23qKzJtIIXBbcCt6FioLSFLOHdw==}
-    requiresBuild: true
     dependencies:
       pug-error: 2.0.0
       pug-walk: 2.0.0
 
   /pug-load@3.0.0:
     resolution: {integrity: sha512-OCjTEnhLWZBvS4zni/WUMjH2YSUosnsmjGBB1An7CsKQarYSWQ0GCVyd4eQPMFJqZ8w9xgs01QdiZXKVjk92EQ==}
-    requiresBuild: true
     dependencies:
       object-assign: 4.1.1
       pug-walk: 2.0.0
 
   /pug-parser@6.0.0:
     resolution: {integrity: sha512-ukiYM/9cH6Cml+AOl5kETtM9NR3WulyVP2y4HOU45DyMim1IeP/OOiyEWRr6qk5I5klpsBnbuHpwKmTx6WURnw==}
-    requiresBuild: true
     dependencies:
       pug-error: 2.0.0
       token-stream: 1.0.0
 
   /pug-runtime@3.0.1:
     resolution: {integrity: sha512-L50zbvrQ35TkpHwv0G6aLSuueDRwc/97XdY8kL3tOT0FmhgG7UypU3VztfV/LATAvmUfYi4wNxSajhSAeNN+Kg==}
-    requiresBuild: true
 
   /pug-strip-comments@2.0.0:
     resolution: {integrity: sha512-zo8DsDpH7eTkPHCXFeAk1xZXJbyoTfdPlNR0bK7rpOMuhBYb0f5qUVCO1xlsitYd3w5FQTK7zpNVKb3rZoUrrQ==}
-    requiresBuild: true
     dependencies:
       pug-error: 2.0.0
 
   /pug-walk@2.0.0:
     resolution: {integrity: sha512-yYELe9Q5q9IQhuvqsZNwA5hfPkMJ8u92bQLIMcsMxf/VADjNtEYptU+inlufAFYcWdHlwNfZOEnOOQrZrcyJCQ==}
-    requiresBuild: true
 
   /pug@3.0.2:
     resolution: {integrity: sha512-bp0I/hiK1D1vChHh6EfDxtndHji55XP/ZJKwsRqrz6lRia6ZC2OZbdAymlxdVFwd1L70ebrVJw4/eZ79skrIaw==}
@@ -19683,7 +19682,6 @@ packages:
 
   /token-stream@1.0.0:
     resolution: {integrity: sha512-VSsyNPPW74RpHwR8Fc21uubwHY7wMDeJLys2IX5zJNih+OnAnaifKHo+1LHT7DAdloQ7apeaaWg8l7qnf/TnEg==}
-    requiresBuild: true
 
   /totalist@1.1.0:
     resolution: {integrity: sha512-gduQwd1rOdDMGxFG1gEvhV88Oirdo2p+KjoYFU7k2g+i7n6AFFbDQ5kMPUsW0pNbfQsB/cwXvT1i4Bue0s9g5g==}
@@ -20464,7 +20462,6 @@ packages:
   /void-elements@3.1.0:
     resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
     engines: {node: '>=0.10.0'}
-    requiresBuild: true
 
   /vue-concurrency@4.0.1(vue@3.3.4):
     resolution: {integrity: sha512-gzZjC8o9EE1/d7OEndI0C8lO09nkLSbviT94/gQR372iLVbYKZiGto87upjV9TAHodTfzbBgjyQXH53AVI5ugA==}
@@ -21263,7 +21260,6 @@ packages:
   /with@7.0.2:
     resolution: {integrity: sha512-RNGKj82nUPg3g5ygxkQl0R937xLyho1J24ItRCBTr/m1YnZkzJy1hUiHUJrc/VlsDQzsCnInEGSg3bci0Lmd4w==}
     engines: {node: '>= 10.0.0'}
-    requiresBuild: true
     dependencies:
       '@babel/parser': 7.21.8
       '@babel/types': 7.21.5
@@ -21738,30 +21734,6 @@ packages:
       '@uppy/core': '@github.com/owncloud/uppy/releases/download/v3.12.9-owncloud/uppy-core.tgz'
       '@uppy/utils': '@github.com/owncloud/uppy/releases/download/v3.12.9-owncloud/uppy-utils.tgz'
       nanoid: 4.0.0
-    dev: false
-
-  file:../owncloud-sdk(axios@1.4.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.10.3)(utf8@3.0.0)(uuid@9.0.0)(webdav@4.10.0)(xml-js@1.6.11):
-    resolution: {directory: ../owncloud-sdk, type: directory}
-    id: file:../owncloud-sdk
-    name: owncloud-sdk
-    peerDependencies:
-      axios: ^0.27.2
-      cross-fetch: ^3.0.6
-      promise: ^8.1.0
-      qs: ^6.10.3
-      utf8: ^3.0.0
-      uuid: ^8.2.0
-      webdav: 4.10.0
-      xml-js: ^1.6.11
-    dependencies:
-      axios: 1.4.0
-      cross-fetch: 3.1.4
-      promise: 8.1.0
-      qs: 6.10.3
-      utf8: 3.0.0
-      uuid: 9.0.0
-      webdav: 4.10.0
-      xml-js: 1.6.11
     dev: false
 
   github.com/dschmidt/v-calendar/3ce6e3b8afd5491cb53ee811281d5fa8a45b044d(vue@3.3.4):
