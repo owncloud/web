@@ -1,5 +1,3 @@
-import { AxiosError } from 'axios'
-
 const state = {
   messages: [],
   quickActions: {}

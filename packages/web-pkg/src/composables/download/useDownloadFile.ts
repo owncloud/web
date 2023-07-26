@@ -2,11 +2,9 @@ import { unref } from 'vue'
 import { usePublicLinkContext } from '../authContext'
 import { useClientService } from '../clientService'
 import { useStore } from '../store'
-import { v4 as uuidV4 } from 'uuid'
 import { triggerDownloadWithFilename } from 'web-pkg/src/helpers'
 import { useGettext } from 'vue3-gettext'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
-import { HttpError } from 'web-pkg'
 
 export const useDownloadFile = () => {
   const store = useStore()
