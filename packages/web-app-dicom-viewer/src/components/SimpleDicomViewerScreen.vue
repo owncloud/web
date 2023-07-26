@@ -7,7 +7,6 @@
     id="dicom-viewer"
     class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium dicom-viewer"
   >
-    <h1>DICOM placeholder</h1>
     <div ref="canvas" class="dicom-canvas"></div>
   </div>
 </template>
@@ -16,7 +15,7 @@
 import { defineComponent } from 'vue'
 import { ref } from 'vue'
 import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
-import uids from '../helpers/uids'
+//import uids from '../helpers/uids'
 
 // import cornerstone packages
 import Hammer from 'hammerjs'
@@ -34,7 +33,7 @@ cornerstoneDICOMImageLoader.external.cornerstone = cornerstone
 cornerstoneDICOMImageLoader.external.dicomParser = dicomParser
 
 // init providers?
-/*
+
 // configure cornerstone dicom image loader
 const { preferSizeOverAccuracy, useNorm16Texture } = cornerstone.getConfiguration().rendering
 cornerstoneDICOMImageLoader.configure({
@@ -51,7 +50,6 @@ var config = {
   startWebWorkersOnDemand: true
 }
 cornerstoneDICOMImageLoader.webWorkerManager.initialize(config)
-*/
 
 //alternative Cornerstone DICOM Image Loader init from example
 /*
@@ -99,6 +97,7 @@ console.log('cornerstone imageID' + imageIds[0])
 // init tools
 const csTools = cornerstoneTools.init()
 
+
 // instantiate rendering engine
 const renderingEngineId = 'dicomRenderingEngine'
 const renderingEngine = new RenderingEngine(renderingEngineId)
@@ -138,124 +137,6 @@ const stack = [imageIds[0]]
 viewport.render()
 */
 
-/*
-// get metadata
-const imageData = viewport.getImageData()
-
-const { pixelRepresentation, bitsAllocated, bitsStored, highBit, photometricInterpretation } =
-  metaData.get('imagePixelModule', imageId)
-const voiLutModuleLocal = metaData.get('voiLutModule', imageId)
-const sopCommonModule = metaData.get('sopCommonModule', imageId)
-const transferSyntax = metaData.get('transferSyntax', imageId)
-
-// extract data --> see DICOM P10 example (local/index.ts) & https://www.cornerstonejs.org/live-examples/local.html
-
-//transfer syntax
-//transferSyntax.transferSyntaxUID
-
-//sop class uid
-//sopCommonModule.sopClassUID
-//uids[sopCommonModule.sopClassUID]
-
-//sop instance uid
-//sopCommonModule.sopInstanceUID
-
-//rows
-//imageData.dimensions[0]
-
-//columns
-//imageData.dimensions[1]
-
-//spacing
-//imageData.spacing.join('\\')
-
-//direction
-// imageData.direction.map((x) => Math.round(x * 100) / 100).join(',')
-
-//origin
-//imageData.origin.map((x) => Math.round(x * 100) / 100).join(',')
-
-//modality
-//imageData.metadata.Modality
-
-//pixel representation
-//pixelRepresentation
-
-//bits allocated
-//bitsAllocated
-
-//bits stored
-//bitsStored
-
-//high bit
-//highBit
-
-//photometric interpretation
-//photometricInterpretation
-
-//window width
-//voiLutModuleLocal.windowWidth
-
-//window center
-//voiLutModuleLocal.windowCenter
-*/
-
-/*
-$(document).ready(function() {
-        var imageId = 'example://1';
-        var element = document.getElementById('dicomImage');
-        cornerstone.enable(element);
-        cornerstone.loadImage(imageId).then(function(image) {
-            cornerstone.displayImage(element, image);
-        });
-    });
-*/
-
-/**
- * Runs the demo (from cornerstone)
- */
-
-/*
-// Get Cornerstone imageIds and fetch metadata into RAM
-const imageIds = await createImageIdsAndCacheMetaData({
-  StudyInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.334240657131972136850343327463',
-  SeriesInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.226151125820845824875394858561',
-  wadoRsRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb'
-})
-
-// Instantiate a rendering engine
-const renderingEngineId = 'myRenderingEngine'
-const renderingEngine = new RenderingEngine(renderingEngineId)
-
-// Create a stack viewport
-const viewportId = 'CT_STACK'
-const viewportInput = {
-  viewportId,
-  type: ViewportType.STACK,
-  element: dicomCanvas,
-  defaultOptions: {
-    background: <Types.Point3>[0.2, 0, 0.2]
-  }
-}
-
-renderingEngine.enableElement(viewportInput)
-
-// Get the stack viewport that was created
-const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
-
-// Define a stack containing a single image
-const stack = [imageIds[0]]
-
-// Set the stack on the viewport
-await viewport.setStack(stack)
-
-// Set the VOI of the stack
-viewport.setProperties({ voiRange: ctVoiRange })
-
-// Render the image
-viewport.render()
-*/
-
 export default defineComponent({
   name: 'SimpleDicomViewerScreen'
   /*,
@@ -272,6 +153,10 @@ export default defineComponent({
   computed: {},
   watch: {},
   created() {},
+  created() {
+    cornerstoneTools.init({
+      globalToolSyncEnabled: true
+    })
   mounted() {
     let _self = this
     /*
@@ -450,6 +335,79 @@ data () {
     }
   }
   */
+
+/*
+// get metadata
+const imageData = viewport.getImageData()
+
+const { pixelRepresentation, bitsAllocated, bitsStored, highBit, photometricInterpretation } =
+  metaData.get('imagePixelModule', imageId)
+const voiLutModuleLocal = metaData.get('voiLutModule', imageId)
+const sopCommonModule = metaData.get('sopCommonModule', imageId)
+const transferSyntax = metaData.get('transferSyntax', imageId)
+
+// extract data --> see DICOM P10 example (local/index.ts) & https://www.cornerstonejs.org/live-examples/local.html
+
+//transfer syntax
+//transferSyntax.transferSyntaxUID
+
+//sop class uid
+//sopCommonModule.sopClassUID
+//uids[sopCommonModule.sopClassUID]
+
+//sop instance uid
+//sopCommonModule.sopInstanceUID
+
+//rows
+//imageData.dimensions[0]
+
+//columns
+//imageData.dimensions[1]
+
+//spacing
+//imageData.spacing.join('\\')
+
+//direction
+// imageData.direction.map((x) => Math.round(x * 100) / 100).join(',')
+
+//origin
+//imageData.origin.map((x) => Math.round(x * 100) / 100).join(',')
+
+//modality
+//imageData.metadata.Modality
+
+//pixel representation
+//pixelRepresentation
+
+//bits allocated
+//bitsAllocated
+
+//bits stored
+//bitsStored
+
+//high bit
+//highBit
+
+//photometric interpretation
+//photometricInterpretation
+
+//window width
+//voiLutModuleLocal.windowWidth
+
+//window center
+//voiLutModuleLocal.windowCenter
+*/
+
+/*
+$(document).ready(function() {
+        var imageId = 'example://1';
+        var element = document.getElementById('dicomImage');
+        cornerstone.enable(element);
+        cornerstone.loadImage(imageId).then(function(image) {
+            cornerstone.displayImage(element, image);
+        });
+    });
+*/
 </script>
 
 <style lang="scss" scoped>
@@ -468,31 +426,11 @@ data () {
 <!--
 <script lang="ts"></script>
 
-// CodeSandbox live updates components in an odd way.
-// We do this to protect ourselves from duplicate initializations
-if (!cornerstoneWADOImageLoader.initialized) {
-  // WadoImageLoader Registration/Config
-  const config = {
-    webWorkerPath: '/codecs/cornerstoneWADOImageLoaderWebWorker.js',
-    taskConfiguration: {
-      decodeTask: {
-        codecsPath: '/codecs/cornerstoneWADOImageLoaderCodecs.js'
-      }
-    }
-  }
-  cornerstoneWADOImageLoader.webWorkerManager.initialize(config)
-  cornerstoneWADOImageLoader.initialized = true
-}
-*/
-
 export default {
   name: 'SimpleDicomViewerScreen'
   /*
   ,
-  created() {
-    cornerstoneTools.init({
-      globalToolSyncEnabled: true
-    })
+
 
     // Grab Tool Classes
     const WwwcTool = cornerstoneTools.WwwcTool
@@ -538,4 +476,3 @@ export default {
 }
 </script>
 -->
-../helpers/uids../helpers/uids
