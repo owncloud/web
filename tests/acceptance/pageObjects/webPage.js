@@ -231,7 +231,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     errorMessages: {
-      selector: '//*[contains(@class, "oc-notification-message-danger")]',
+      selector:
+        '//div[contains(@class, "oc-notification-message-danger")]//div[@class="oc-notification-message-title"]',
       locateStrategy: 'xpath'
     },
     clearErrorMessage: {
