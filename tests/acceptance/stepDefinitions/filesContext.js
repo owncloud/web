@@ -1348,7 +1348,10 @@ When('the user closes rename dialog', function () {
 
 Then('notifications should be displayed on the webUI with the text', async function (message) {
   const actualMessages = await client.page.webPage().getPopupErrorMessages()
+  console.log(actualMessages)
+  console.log("??????????????")
   const isMessageShown = assertIncludesMessage(actualMessages, message)
+  //await client.page.webPage().pause()
 
   assert.strictEqual(isMessageShown, true, `Expected '${message}' but not found`)
 })

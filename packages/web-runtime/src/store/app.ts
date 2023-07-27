@@ -40,7 +40,7 @@ const actions = {
     commit('ENQUEUE_MESSAGE', message)
   },
   showMessage({ commit }, message) {
-    commit('ENQUEUE_MESSAGE', message)
+    commit('ENQUEUE_MESSAGE', { ...message, timeout: 0 })
   },
   deleteMessage(context, mId) {
     context.commit('REMOVE_MESSAGE', mId)
