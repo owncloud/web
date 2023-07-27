@@ -2,7 +2,6 @@ import { unref } from 'vue'
 import { usePublicLinkContext } from '../authContext'
 import { useClientService } from '../clientService'
 import { useStore } from '../store'
-import { v4 as uuidV4 } from 'uuid'
 import { triggerDownloadWithFilename } from 'web-pkg/src/helpers'
 import { useGettext } from 'vue3-gettext'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
@@ -19,8 +18,7 @@ export const useDownloadFile = () => {
     const isUserContext = store.getters['runtime/auth/isUserContextReady']
 
     // construct the url and headers
-    let url = null
-    let headers: Record<string, string> = { 'X-Request-ID': uuidV4() }
+    let url
     if (unref(isPublicLinkContext)) {
       url = file.downloadURL
     } else {
@@ -29,17 +27,13 @@ export const useDownloadFile = () => {
       } else {
         url = client.fileVersions.getFileVersionUrl(file.fileId, version)
       }
-      const accessToken = store.getters['runtime/auth/accessToken']
-      headers = { Authorization: 'Bearer ' + accessToken }
     }
 
     // download with signing enabled
     if (isUserContext && unref(isUrlSigningEnabled)) {
+      const httpClient = clientService.httpAuthenticated
       try {
-        const response = await fetch(url, {
-          method: 'HEAD',
-          headers
-        })
+        const response = await httpClient.head(url)
         if (response.status === 200) {
           const signedUrl = await client.signUrl(url)
           triggerDownloadWithFilename(signedUrl, file.name)
@@ -47,12 +41,12 @@ export const useDownloadFile = () => {
         }
       } catch (e) {
         console.error(e)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Download failed'),
+          desc: $gettext('File could not be located'),
+          error: e
+        })
       }
-      store.dispatch('showErrorMessage', {
-        title: $gettext('Download failed'),
-        desc: $gettext('File could not be located'),
-        status: 'danger'
-      })
       return
     }
 

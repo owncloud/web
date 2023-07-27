@@ -158,6 +158,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
   ) => {
     const restoredResources = []
     const failedResources = []
+    const errors = []
 
     let createdFolderPaths = []
     for (const [i, resource] of resources.entries()) {
@@ -174,6 +175,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         restoredResources.push(resource)
       } catch (e) {
         console.error(e)
+        errors.push(e)
         failedResources.push(resource)
       } finally {
         setProgress({ total: resources.length, current: i + 1 })
@@ -209,7 +211,8 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         translateParams.resourceCount = failedResources.length
       }
       store.dispatch('showErrorMessage', {
-        title: $gettextInterpolate(translated, translateParams, true)
+        title: $gettextInterpolate(translated, translateParams, true),
+        errors
       })
     }
 

@@ -18,3 +18,11 @@ export class RuntimeError extends Error {
 export class ApiError extends RuntimeError {
   name = 'ApiError'
 }
+
+export class HttpError extends Error {
+  public response: any
+  constructor(message, response) {
+    super(message)
+    this.response = response
+  }
+}

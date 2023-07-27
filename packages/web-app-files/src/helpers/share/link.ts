@@ -68,19 +68,26 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
 
   params.spaceRef = resource.fileId || resource.id
 
-  const link = await store.dispatch('Files/addLink', {
-    path: resource.path,
-    client: clientService.owncloudSdk,
-    params,
-    storageId: resource.fileId || resource.id
-  })
+  try {
+    const link = await store.dispatch('Files/addLink', {
+      path: resource.path,
+      client: clientService.owncloudSdk,
+      params,
+      storageId: resource.fileId || resource.id
+    })
+    const { copy } = useClipboard({ legacy: true })
+    copy(link.url)
 
-  const { copy } = useClipboard({ legacy: true })
-  copy(link.url)
+    await store.dispatch('showMessage', {
+      title: $gettext('The link has been copied to your clipboard.')
+    })
 
-  await store.dispatch('showMessage', {
-    title: $gettext('The link has been copied to your clipboard.')
-  })
-
-  return link
+    return link
+  } catch (e) {
+    console.error(e)
+    await store.dispatch('showErrorMessage', {
+      title: $gettext('Copy link failed'),
+      error: e
+    })
+  }
 }
