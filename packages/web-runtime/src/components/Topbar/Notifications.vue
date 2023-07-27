@@ -124,10 +124,9 @@ export default {
     const setupServerSentEvents = useServerSentEvents({
       url: '/ocs/v2.php/apps/notifications/api/v1/notifications/sse',
       onOpen: (response): void => {
-        if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
-          return
+        if (!response.ok || response.headers.get('content-type') !== EventStreamContentType) {
+          console.error(`SSE notifications couldn't be set up ${response.status}`)
         }
-        console.error(`SSE notifications couldn't be set up ${response.status}`)
       },
       onMessage: (msg): void => {
         if (msg.event === 'FatalError') {
