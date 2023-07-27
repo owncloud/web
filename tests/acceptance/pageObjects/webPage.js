@@ -183,9 +183,7 @@ module.exports = {
       const messages = []
       await this.waitForElementVisible('@errorMessages')
       await this.api.elements('@errorMessages', function ({ value }) {
-        console.log(value)
         value.forEach(async function ({ ELEMENT }) {
-          console.log(ELEMENT)
           await client.elementIdText(ELEMENT, function ({ value }) {
             messages.push(value)
           })
