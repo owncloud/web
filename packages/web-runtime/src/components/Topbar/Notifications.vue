@@ -96,14 +96,14 @@ import { Notification } from '../../helpers/notifications'
 import {
   formatDateFromISO,
   formatRelativeDateFromISO,
-  useAccessToken,
   useClientService,
   useRoute,
-  useStore
+  useStore,
+  useServerSentEvents
 } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
+import { EventStreamContentType } from '@microsoft/fetch-event-source'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
@@ -120,7 +120,26 @@ export default {
     const loading = ref(false)
     const notificationsInterval = ref()
     const dropdownOpened = ref(false)
-    const accessToken = useAccessToken({ store })
+
+    const setupServerSentEvents = useServerSentEvents({
+      url: '/ocs/v2.php/apps/notifications/api/v1/notifications/sse',
+      onOpen: (response): void => {
+        if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
+          return
+        }
+        console.error(`SSE notifications couldn't be set up ${response.status}`)
+      },
+      onMessage: (msg): void => {
+        if (msg.event === 'FatalError') {
+          console.error(`SSE notifications error: ${msg.data}`)
+          return
+        }
+        const data = JSON.parse(msg.data)
+        if (data.notification_id) {
+          notifications.value = [data, ...unref(notifications)]
+        }
+      }
+    })
 
     const formatDate = (date) => {
       return formatDateFromISO(date, currentLanguage)
@@ -292,31 +311,8 @@ export default {
       setAdditionalData()
     }
 
-    const setupSSE = async () => {
-      await fetchEventSource('/ocs/v2.php/apps/notifications/api/v1/notifications/sse', {
-        headers: {
-          Authorization: `Bearer ${accessToken.value}`
-        },
-        async onopen(response) {
-          if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
-            return
-          } else {
-            console.error(`SSE notifications couldn't be set up ${response.status}`)
-          }
-        },
-        onmessage(msg) {
-          if (msg.event === 'FatalError') {
-            console.error(`SSE notifications error: ${msg.data}`)
-          }
-          const data = JSON.parse(msg.data)
-          if (data.notification_id) {
-            notifications.value = [data, ...unref(notifications)]
-          }
-        }
-      })
-    }
     onMounted(async () => {
-      await setupSSE()
+      await setupServerSentEvents()
       fetchNotificationsTask.perform()
     })
 
