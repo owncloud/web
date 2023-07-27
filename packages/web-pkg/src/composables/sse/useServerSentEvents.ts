@@ -16,7 +16,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
   const language = useGettext()
   const accessToken = useAccessToken({ store })
   const setupServerSentEvents = async () => {
-    await fetchEventSource(`${configurationManager.serverUrl}${options.url}`, {
+    await fetchEventSource(new URL(options.url, configurationManager.serverUrl).href, {
       headers: {
         Authorization: `Bearer ${accessToken.value}`,
         'Accept-Language': unref(language).current,
