@@ -124,9 +124,19 @@ viewport.render()
 
 export default defineComponent({
   name: 'SimpleDicomViewerScreen',
-  /*,
-  setup() {},
-
+  /*
+  components: {}, // maybe not used for this component
+  mixins: [componentMixin], // not used in this component
+  */
+  props: {
+    //properties of this component
+    counter: {
+      // for testing only
+      type: Number,
+      default: 0
+    }
+  },
+  /*
   data: () => ({
     // from example code
     baseUrl: '',
@@ -134,16 +144,27 @@ export default defineComponent({
     isInitLoad: true,
     isShow: true
   }),
-
-  computed: {},
-  watch: {},
-  created() {},
+  setup() {}, // maybe not needed in this component
+  */
+  computed: {
+    // for testing only
+    isEmpty() {
+      return this.counter === 0
+    }
+  },
+  watch: {
+    // something like a listener, for testing only
+    counter() {
+      console.log('counter value changed')
+    }
+  },
   created() {
-    cornerstoneTools.init({
-      globalToolSyncEnabled: true
-    })
-    */
+    console.log('simple DICOM viewer screen "created" hook called')
+  },
   async mounted() {
+    // async because of await image loader
+    console.log('simple DICOM viewer screen "mounted" hook called')
+
     let _self = this
     /*
     // this.listenForCornerstoneImageRendered()
@@ -172,7 +193,15 @@ export default defineComponent({
     imageIds[0] = imageId
     console.log('cornerstone imageID' + imageIds[0])
 
+    /*
+    // init cornerstone tools
+    cornerstoneTools.init({
+      globalToolSyncEnabled: true
+    })
+
+    // activate canvas tools
     //this.initCanvasTools()
+    */
   },
   beforeDestroy() {
     // Remove jQuery event listeners --> TODO check if this is needed
@@ -180,15 +209,14 @@ export default defineComponent({
     //$(canvas).off()
   },
   /*
-  ,
-  beforeUnmount() {}
+  beforeUnmount() {},
   */
   methods: {
     initCanvasTools() {
       cornerstoneTools.init()
     }
   }
-
+  // more methods
   /*
     // window resize methods
     listenForWindowResize: function () {
