@@ -121,9 +121,9 @@ export default {
     const dropdownOpened = ref(false)
 
     const setupServerSentEvents = useServerSentEvents({
-      url: '/ocs/v2.php/apps/notifications/api/v1/notifications/sse',
+      url: 'ocs/v2.php/apps/notifications/api/v1/notifications/sse',
       onOpen: (response): void => {
-        if (!response.ok || response.headers.get('content-type') !== EventStreamContentType) {
+        if (!response.ok) {
           console.error(`SSE notifications couldn't be set up ${response.status}`)
         }
       },

@@ -2,7 +2,7 @@ import { EventSourceMessage, fetchEventSource } from '@microsoft/fetch-event-sou
 import { unref } from 'vue'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
-import { useAccessToken, useStore } from 'web-pkg/src'
+import { configurationManager, useAccessToken, useStore } from 'web-pkg/src'
 export * from './useServerSentEvents'
 
 export interface ServerSentEventsOptions {
@@ -15,9 +15,8 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
   const store = useStore()
   const language = useGettext()
   const accessToken = useAccessToken({ store })
-
   const setupServerSentEvents = async () => {
-    await fetchEventSource(options.url, {
+    await fetchEventSource(`${configurationManager.serverUrl}${options.url}`, {
       headers: {
         Authorization: `Bearer ${accessToken.value}`,
         'Accept-Language': unref(language).current,
