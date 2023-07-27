@@ -103,7 +103,6 @@ import {
 } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { EventStreamContentType } from '@microsoft/fetch-event-source'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
