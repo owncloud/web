@@ -34,6 +34,7 @@ describe('Notification component', () => {
   it('renders a set of notifications', async () => {
     const notifications = [mock<Notification>({ messageRich: undefined })]
     const { wrapper } = getWrapper({ notifications })
+    await wrapper.vm.fetchNotificationsTask.perform()
     await wrapper.vm.fetchNotificationsTask.last
     expect(wrapper.find(selectors.noNewNotifications).exists()).toBeFalsy()
     expect(wrapper.findAll(selectors.notificationItem).length).toBe(notifications.length)
@@ -41,6 +42,7 @@ describe('Notification component', () => {
   it('renders the loading state', async () => {
     const notifications = [mock<Notification>({ messageRich: undefined })]
     const { wrapper } = getWrapper({ notifications })
+    await wrapper.vm.fetchNotificationsTask.perform()
     await wrapper.vm.fetchNotificationsTask.last
     wrapper.vm.loading = true
     await wrapper.vm.$nextTick()
@@ -49,6 +51,7 @@ describe('Notification component', () => {
   it('marks all notifications as read', async () => {
     const notifications = [mock<Notification>({ messageRich: undefined })]
     const { wrapper, mocks } = getWrapper({ notifications })
+    await wrapper.vm.fetchNotificationsTask.perform()
     await wrapper.vm.fetchNotificationsTask.last
     await wrapper.find(selectors.markAll).trigger('click')
     expect(wrapper.find(selectors.notificationItem).exists()).toBeFalsy()
@@ -61,6 +64,7 @@ describe('Notification component', () => {
         user: 'einstein'
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
+      await wrapper.vm.fetchNotificationsTask.perform()
       await wrapper.vm.fetchNotificationsTask.last
       const avatarImageStub = wrapper.findComponent<any>(selectors.avatarImageStub)
       expect(avatarImageStub.attributes('userid')).toEqual(notification.user)
@@ -74,6 +78,7 @@ describe('Notification component', () => {
         messageRichParameters: { user: { displayname, name } }
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
+      await wrapper.vm.fetchNotificationsTask.perform()
       await wrapper.vm.fetchNotificationsTask.last
       const avatarImageStub = wrapper.findComponent<any>(selectors.avatarImageStub)
       expect(avatarImageStub.attributes('userid')).toEqual(name)
@@ -87,6 +92,7 @@ describe('Notification component', () => {
         message: undefined
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
+      await wrapper.vm.fetchNotificationsTask.perform()
       await wrapper.vm.fetchNotificationsTask.last
       expect(wrapper.find(selectors.notificationSubject).exists()).toBeTruthy()
     })
@@ -98,6 +104,7 @@ describe('Notification component', () => {
         message: 'some message'
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
+      await wrapper.vm.fetchNotificationsTask.perform()
       await wrapper.vm.fetchNotificationsTask.last
       wrapper.vm.showDrop()
       await wrapper.vm.$nextTick()
@@ -112,6 +119,7 @@ describe('Notification component', () => {
         }
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
+      await wrapper.vm.fetchNotificationsTask.perform()
       await wrapper.vm.fetchNotificationsTask.last
       wrapper.vm.showDrop()
       await wrapper.vm.$nextTick()
@@ -127,6 +135,7 @@ describe('Notification component', () => {
         link: 'http://some-link.com'
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
+      await wrapper.vm.fetchNotificationsTask.perform()
       await wrapper.vm.fetchNotificationsTask.last
       expect(wrapper.find(selectors.notificationLink).exists()).toBeTruthy()
     })
@@ -142,6 +151,7 @@ describe('Notification component', () => {
           }
         })
         const { wrapper } = getWrapper({ notifications: [notification] })
+        await wrapper.vm.fetchNotificationsTask.perform()
         await wrapper.vm.fetchNotificationsTask.last
         wrapper.vm.showDrop()
         await wrapper.vm.$nextTick()
@@ -168,6 +178,7 @@ describe('Notification component', () => {
           }
         })
         const { wrapper } = getWrapper({ notifications: [notification], spaces: [spaceMock] })
+        await wrapper.vm.fetchNotificationsTask.perform()
         await wrapper.vm.fetchNotificationsTask.last
         wrapper.vm.showDrop()
         await wrapper.vm.$nextTick()
@@ -187,6 +198,7 @@ describe('Notification component', () => {
         actions: [mock<NotificationAction>()]
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
+      await wrapper.vm.fetchNotificationsTask.perform()
       await wrapper.vm.fetchNotificationsTask.last
       expect(wrapper.find(selectors.notificationActions).exists()).toBeTruthy()
     })
@@ -197,6 +209,7 @@ describe('Notification component', () => {
         actions: [mock<NotificationAction>({ link: 'http://some-link.com' })]
       })
       const { wrapper, mocks } = getWrapper({ notifications: [notification] })
+      await wrapper.vm.fetchNotificationsTask.perform()
       await wrapper.vm.fetchNotificationsTask.last
       expect(wrapper.find(selectors.notificationItem).exists()).toBeTruthy()
       const jsonResponse = {
