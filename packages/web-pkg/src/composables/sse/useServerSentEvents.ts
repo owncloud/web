@@ -1,5 +1,6 @@
 import { EventSourceMessage, fetchEventSource } from '@microsoft/fetch-event-source'
 import { unref } from 'vue'
+import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
 import { useAccessToken, useStore } from 'web-pkg/src'
 export * from './useServerSentEvents'
@@ -32,7 +33,4 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
   }
 
   return setupServerSentEvents
-}
-function uuidV4(): string {
-  throw new Error('Function not implemented.')
 }
