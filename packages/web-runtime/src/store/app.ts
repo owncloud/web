@@ -1,5 +1,3 @@
-import { AxiosError } from 'axios'
-
 const state = {
   messages: [],
   quickActions: {}
@@ -7,7 +5,20 @@ const state = {
 
 const actions = {
   showErrorMessage({ commit }, message) {
-    const getXRequestID = (error: AxiosError): string | null => {
+    const getXRequestID = (error: any): string | null => {
+      /**
+       * x-request-id response headers might be very nested in ownCloud SDK,
+       * only remove records if you are sure they aren't valid anymore
+       */
+      if (error.response?.res?.res?.headers?.['x-request-id']) {
+        return error.response.res.res.headers['x-request-id']
+      }
+      if (error.response?.headers?.map?.['x-request-id']) {
+        return error.response.headers.map['x-request-id']
+      }
+      if (error.response?.res?.headers?.['x-request-id']) {
+        return error.response.res.headers['x-request-id']
+      }
       if (error.response?.headers?.['x-request-id']) {
         return error.response.headers['x-request-id']
       }

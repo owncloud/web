@@ -365,10 +365,10 @@ export default defineComponent({
       }
       errors.forEach((e) => {
         this.showErrorMessage({
-          title: this.$gettext('Failed to add share for %{displayName}', {
+          title: this.$gettext('Failed to add share for "%{displayName}"', {
             displayName: e.displayName
           }),
-          error: e
+          error: e.error
         })
       })
 

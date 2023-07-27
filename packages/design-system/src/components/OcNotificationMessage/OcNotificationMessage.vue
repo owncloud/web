@@ -15,26 +15,24 @@
           ><oc-icon name="close"
         /></oc-button>
       </div>
-      <div class="oc-width-1-1">
-        <div class="oc-flex oc-flex-between oc-width-1-1 oc-mt-s">
-          <span
-            v-if="message"
-            class="oc-notification-message-content oc-text-muted oc-mr-s"
-            v-text="message"
-          />
-          <oc-button
-            v-if="errorLogContent"
-            class="oc-notification-message-error-log-toggle-button"
-            gap-size="none"
-            appearance="raw"
-            @click="showErrorLog = !showErrorLog"
-          >
-            <span v-text="$gettext('Details')"></span>
-            <oc-icon :name="showErrorLog ? 'arrow-up-s' : 'arrow-down-s'" />
-          </oc-button>
-        </div>
-        <oc-error-log v-if="showErrorLog" class="oc-mt-m" :content="errorLogContent" />
+      <div v-if="message || errorLogContent" class="oc-flex oc-flex-between oc-width-1-1 oc-mt-s">
+        <span
+          v-if="message"
+          class="oc-notification-message-content oc-text-muted oc-mr-s"
+          v-text="message"
+        />
+        <oc-button
+          v-if="errorLogContent"
+          class="oc-notification-message-error-log-toggle-button"
+          gap-size="none"
+          appearance="raw"
+          @click="showErrorLog = !showErrorLog"
+        >
+          <span v-text="$gettext('Details')"></span>
+          <oc-icon :name="showErrorLog ? 'arrow-up-s' : 'arrow-down-s'" />
+        </oc-button>
       </div>
+      <oc-error-log v-if="showErrorLog" class="oc-mt-m" :content="errorLogContent" />
     </div>
   </div>
 </template>
