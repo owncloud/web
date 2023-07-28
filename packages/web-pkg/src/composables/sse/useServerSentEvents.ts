@@ -37,7 +37,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
       })
     }
     try {
-      await setupSSE().then(() => {
+      setupSSE().then(() => {
         setupServerSentEvents()
       })
     } catch (e) {
