@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="group-list">
     <oc-text-input
       id="groups-filter"
       v-model="filterTerm"
@@ -41,7 +41,7 @@
           :option="rowData.item"
           :label="getSelectGroupLabel(rowData.item)"
           hide-label
-          @update:model-value="$emit('toggleSelectGroup', rowData.item)"
+          @update:model-value="toggleGroup(rowData.item)"
           @click.stop
         />
       </template>
@@ -126,6 +126,9 @@ import { defaultFuseOptions } from 'web-pkg/src/helpers'
 import { useFileListHeaderPosition, usePagination } from 'web-pkg/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
+import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import { useKeyboardTableNavigation } from 'web-app-admin-settings/src/composables/keyboardActions'
+import { findIndex } from 'lodash-es'
 
 export default defineComponent({
   name: 'GroupsList',
@@ -148,6 +151,9 @@ export default defineComponent({
     const sortBy = ref<string>('displayName')
     const sortDir = ref<string>(SortDir.Asc)
     const filterTerm = ref<string>('')
+
+    const lastSelectedGroupIndex = ref(0)
+    const lastSelectedGroupId = ref(null)
 
     const isGroupSelected = (group) => {
       return props.selectedGroups.some((s) => s.id === group.id)
@@ -230,6 +236,22 @@ export default defineComponent({
       total: totalPages
     } = usePagination({ items, perPageDefault, perPageStoragePrefix })
 
+    const keyActions = useKeyboardActions('group-list')
+    useKeyboardTableNavigation(
+      keyActions,
+      paginatedItems,
+      props.selectedGroups,
+      lastSelectedGroupIndex,
+      lastSelectedGroupId
+    )
+
+    const toggleGroup = (group) => {
+      lastSelectedGroupIndex.value = findIndex(props.groups, (u) => u.id === group.id)
+      lastSelectedGroupId.value = group.id
+      keyActions.resetSelectionCursor()
+      emit('toggleSelectGroup', group)
+    }
+
     watch(currentPage, () => {
       emit('unSelectAllGroups')
     })
@@ -240,6 +262,7 @@ export default defineComponent({
       isGroupSelected,
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
+      toggleGroup,
       fileListHeaderY,
       contextMenuButtonRef,
       showEditPanel,

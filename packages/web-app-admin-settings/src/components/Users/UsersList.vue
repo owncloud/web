@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="user-list">
     <oc-text-input
       id="users-filter"
       v-model="filterTerm"
@@ -49,7 +49,7 @@
           :option="item"
           :label="getSelectUserLabel(item)"
           hide-label
-          @update:model-value="$emit('toggleSelectUser', item)"
+          @update:model-value="toggleUser(item)"
           @click.stop
         />
       </template>
@@ -123,6 +123,9 @@ import { useFileListHeaderPosition, usePagination } from 'web-pkg/src/composable
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 import { computed } from 'vue'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
+import { useKeyboardTableNavigation } from 'web-app-admin-settings/src/composables/keyboardActions'
+import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import { findIndex } from 'lodash-es'
 
 export default defineComponent({
   name: 'UsersList',
@@ -151,10 +154,12 @@ export default defineComponent({
     const sortDir = ref<string>(SortDir.Asc)
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
 
+    const lastSelectedUserIndex = ref(0)
+    const lastSelectedUserId = ref(null)
+
     const isUserSelected = (user) => {
       return props.selectedUsers.some((s) => s.id === user.id)
     }
-
     const selectUser = (user) => {
       emit('unSelectAllUsers')
       emit('toggleSelectUser', user)
@@ -271,12 +276,29 @@ export default defineComponent({
       emit('unSelectAllUsers')
     })
 
+    const keyActions = useKeyboardActions('user-list')
+    useKeyboardTableNavigation(
+      keyActions,
+      paginatedItems,
+      props.selectedUsers,
+      lastSelectedUserIndex,
+      lastSelectedUserId
+    )
+
+    const toggleUser = (user) => {
+      lastSelectedUserIndex.value = findIndex(props.users, (u) => u.id === user.id)
+      lastSelectedUserId.value = user.id
+      keyActions.resetSelectionCursor()
+      emit('toggleSelectUser', user)
+    }
+
     return {
       showDetails,
       showEditPanel,
       showGroupAssigmentPanel,
       isUserSelected,
       rowClicked,
+      toggleUser,
       contextMenuButtonRef,
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,

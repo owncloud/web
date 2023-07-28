@@ -567,7 +567,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
     case 'keyboard': {
       const resourceCheckbox = page.locator(util.format(checkBox, resourceBase))
       await resourceCheckbox.check()
-      const keyValue = action === 'copy' ? 'C' : 'X'
+      const keyValue = action === 'copy' ? 'c' : 'x'
       await page.keyboard.press(`Control+${keyValue}`)
       await page.locator(breadcrumbRoot).click()
       const newLocationPath = newLocation.split('/')
@@ -583,7 +583,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
             resp.status() === 201 &&
             resp.request().method() === (action === 'copy' ? 'COPY' : 'MOVE')
         ),
-        page.keyboard.press('Control+V')
+        page.keyboard.press('Control+v')
       ])
       break
     }
