@@ -14,8 +14,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { ref } from 'vue'
-import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
-//import uids from '../helpers/uids'
+import { RenderingEngine, Types, Enums, metaData, init } from '@cornerstonejs/core'
+import { init as csToolsInit } from '@cornerstonejs/tools' // TODO: check if this import is needed
+//import { createImageIdsAndCacheMetaData } from '../helpers/createImageIdsAndCacheMetaData.js'
+// breaks code because of issue with dicomweb-client
+// https://github.com/ImagingDataCommons/dicomweb-client/blob/master/README.md
+// https://dicomweb-client.readthedocs.io/en/latest/introduction.html
+
+//import uids from '../helpers/uids.ts'
 
 // import cornerstone packages
 import Hammer from 'hammerjs'
@@ -31,8 +37,6 @@ cornerstoneTools.external.cornerstone = cornerstone
 cornerstoneTools.external.cornerstoneMath = cornerstoneMath
 cornerstoneDICOMImageLoader.external.cornerstone = cornerstone
 cornerstoneDICOMImageLoader.external.dicomParser = dicomParser
-
-// init providers?
 
 // configure cornerstone dicom image loader
 const { preferSizeOverAccuracy, useNorm16Texture } = cornerstone.getConfiguration().rendering
@@ -73,20 +77,24 @@ var config = {
 cornerstoneDICOMImageLoader.webWorkerManager.initialize(config);
 */
 
-// init volume loader?
-
-// cornerstone render init & tools init? --> see cornerstone 3D demo
+// register image loader
+// use "loadImage" for stack or "createAndCacheVolume" for volume
 cornerstone.registerImageLoader('http', cornerstoneDICOMImageLoader.loadImage)
 cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 
+// init providers (for metadata handling?)
+// according to documentation, image loader also registers metaDataProvider
+
+// init (streaming) volume loader?!?
+
+// cornerstone render init & tools init? --> see cornerstone 3D demo
+/*
+await csRenderInit()
+await csToolsInit()
+*/
+
 // init tools
 //const csTools = cornerstoneTools.init()
-
-/*
-// instantiate rendering engine
-const renderingEngineId = 'dicomRenderingEngine'
-const renderingEngine = new RenderingEngine(renderingEngineId)
-*/
 
 /*
 // create a stack viewport
@@ -134,16 +142,27 @@ export default defineComponent({
       // for testing only
       type: Number,
       default: 0
+    },
+    dicomImagePath: {
+      type: String,
+      default: '../MRBRAIN.dcm'
     }
   },
-  /*
   data: () => ({
     // from example code
     baseUrl: '',
     exampleStudyImageIds: '',
     isInitLoad: true,
-    isShow: true
+    isShow: true,
+    // from PDF viewer
+    loading: true,
+    loadingError: false,
+    url: '',
+    resource: null,
+    // own variables
+    loadingCornerstoneInit: true // maybe rename?
   }),
+  /*
   setup() {}, // maybe not needed in this component
   */
   computed: {
@@ -159,11 +178,13 @@ export default defineComponent({
     }
   },
   created() {
-    console.log('simple DICOM viewer screen "created" hook called')
+    // console.log('simple DICOM viewer screen "created" hook called')
   },
   async mounted() {
-    // async because of await image loader
-    console.log('simple DICOM viewer screen "mounted" hook called')
+    // async because of await in image loader and other functions called
+
+    // console.log('simple DICOM viewer screen "mounted" hook called')
+    console.log('loading cornerstone init: ' + this.loadingCornerstoneInit)
 
     let _self = this
     /*
@@ -176,24 +197,87 @@ export default defineComponent({
     let canvas = this.$refs.canvas
     //cornerstone.enable(canvas)
 
-    // TODO: get image ids and metadata into RAM --> see cornerstone 3D demo
-    const imageIds = []
-    const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add('../MRBRAIN.dcm')
+    // check if cornerstone core and tools are initalized
+    if (_self.loadingCornerstoneInit) {
+      _self.initCornerstoneCore()
+      //_self.initCornerstoneTools()
+    } else {
+      /*
+    // ImageId that matches our registered image loader's 'http:' prefix
+    // The webImageLoader uses this to make an xhr request to fetch an image
+    // Under the hood, it creates a cornerstone "Image" object needed for display
+    const imageUrl = this.baseUrl + this.exampleStudyImageIds[0]
+    cornerstone.loadImage(dicomImagePath).then(function (image) {
+      // Display our loaded image on the target canvas
+      cornerstone.displayImage(canvas, image)
 
-    // fetch metadata
-    try {
-      await cornerstoneDICOMImageLoader.wadouri.loadImage(imageId).promise
-    } catch (e) {
-      console.error('Error fetching DICOM meta data', e)
-    } finally {
-      // is this needed?
-    }
+      // TODO: It really should be possible to "turn on tools" before an image is loaded
+      if (_self.isInitLoad) {
+        _self.initCanvasTools()
+      }
+    })
+    */
 
-    console.log('cornerstone imageID' + imageId)
-    imageIds[0] = imageId
-    console.log('cornerstone imageID' + imageIds[0])
+      // get image ids and metadata into RAM using helper script from cornerstone 3D demo
+      /*
+    // helper function doesn't work because of dicomweb-client import
+    const imageIds = await createImageIdsAndCacheMetaData({
+      StudyInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.334240657131972136850343327463',
+      SeriesInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.226151125820845824875394858561',
+      wadoRsRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb'
+    })
+    */
+      const imageIds: string[] = []
+      const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add('../MRBRAIN.dcm')
 
-    /*
+      // fetch metadata
+      try {
+        await cornerstoneDICOMImageLoader.wadouri.loadImage(imageId).promise
+      } catch (e) {
+        console.error('Error fetching DICOM meta data', e)
+      } finally {
+        // is finally needed needed?
+        console.log('fetched DICOM meta data for ' + imageId.name)
+      }
+
+      console.log('cornerstone imageID' + imageId)
+      imageIds[0] = imageId
+      console.log('cornerstone imageID' + imageIds[0])
+
+      // create or set reference to HTML element for viewport
+      const element = document.createElement('div') // TODO: set reference to the canvas element
+
+      // instantiate rendering engine
+      const renderingEngineId = 'dicomRenderingEngine'
+      const renderingEngine = new RenderingEngine(renderingEngineId) // triggers error: @cornerstonejs/core is not initalized
+      console.log('render engine instantiated')
+
+      // create a stack viewport
+      const { ViewportType } = Enums
+
+      const viewportId = 'CT_STACK' // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
+      const viewportInput = {
+        viewportId,
+        type: ViewportType.STACK,
+        element,
+        defaultOptions: {
+          background: <Types.Point3>[0.2, 0, 0.2]
+        }
+      }
+
+      // init cornerstone
+      //this.initCornerstoneJsCore()
+
+      renderingEngine.enableElement(viewportInput)
+      console.log('viewport enabled')
+
+      // get stack viewport that was created
+      const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
+
+      // define a stack containing a single image
+      //const stack = [imageIds[0]]
+
+      /*
     // init cornerstone tools
     cornerstoneTools.init({
       globalToolSyncEnabled: true
@@ -202,6 +286,7 @@ export default defineComponent({
     // activate canvas tools
     //this.initCanvasTools()
     */
+    }
   },
   beforeDestroy() {
     // Remove jQuery event listeners --> TODO check if this is needed
@@ -212,12 +297,32 @@ export default defineComponent({
   beforeUnmount() {},
   */
   methods: {
-    initCanvasTools() {
-      cornerstoneTools.init()
+    async initCornerstoneCore() {
+      try {
+        await cornerstone.init() // TODO: check if passing config as parameter is needed
+      } catch (e) {
+        console.error('Error initalizing cornerstone renderer', e)
+        console.log('error in initalizing cornerstone core') // for debugging purpose only, delete later
+      } finally {
+        this.loadingCornerstoneInit = false
+        console.log('cornerstone core initalized')
+      }
+    },
+    async initCornerstoneTools() {
+      try {
+        //await csToolsInit()
+        await cornerstoneTools.init() // check if config is needed
+        console.log('initalizing cornerstone tools')
+      } catch (e) {
+        console.error('Error initalizing cornerstone tools', e)
+        console.log('error in initalizing cornerstone tools') // for debugging purpose only, delete later
+      } finally {
+        //TODO: check if finally is needed
+        console.log('cornerstone tools initalized')
+      }
     }
-  }
-  // more methods
-  /*
+    /*
+    ,
     // window resize methods
     listenForWindowResize: function () {
       this.$nextTick(function () {
@@ -226,7 +331,9 @@ export default defineComponent({
     },
     onWindowResize: function () {
       cornerstone.resize(this.$refs.canvas, true)
-    },
+    }
+    */
+    /*,
     // utility methods
     debounce: function (func, wait, immediate) {
       var timeout
@@ -244,8 +351,8 @@ export default defineComponent({
       }
     }
     //show() {}
+    */
   }
-  */
 })
 
 /*
