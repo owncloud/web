@@ -190,31 +190,37 @@ export default defineComponent({
 
     // check if cornerstone core and tools are initalized
     if (_self.isCornerstoneInitialized) {
-      /*
-    // ImageId that matches our registered image loader's 'http:' prefix
-    // The webImageLoader uses this to make an xhr request to fetch an image
-    // Under the hood, it creates a cornerstone "Image" object needed for display
-    const imageUrl = this.baseUrl + this.exampleStudyImageIds[0]
-    cornerstone.loadImage(dicomImagePath).then(function (image) {
-      // Display our loaded image on the target canvas
-      cornerstone.displayImage(canvas, image)
+      // create or set reference to HTML element for viewport
+      //const element: HTMLDivElement = document.getElementById('dicom-viewer').style.alignSelf = 'center' // set reference to the canvas element or parent div?!?
+      const element = document.getElementById('dicom-viewer') as HTMLDivElement // set reference to the canvas element or parent div?!?
 
-      // TODO: It really should be possible to "turn on tools" before an image is loaded
-      if (_self.isInitLoad) {
-        _self.initCanvasTools()
-      }
-    })
-    */
+      // instantiate rendering engine
+      // const renderingEngine = new RenderingEngine()
+      const renderingEngineId = 'dicomRenderingEngine'
+      const renderingEngine = new RenderingEngine(renderingEngineId) // triggers error: @cornerstonejs/core is not initalized
+      console.log('render engine instantiated')
+      // TODO: check if it is really instantiated
+
+      /*
+      // ImageId that matches our registered image loader's 'http:' prefix
+      // The webImageLoader uses this to make an xhr request to fetch an image
+      // Under the hood, it creates a cornerstone "Image" object needed for display
+      const imageUrl = this.baseUrl + this.exampleStudyImageIds[0]
+      cornerstone.loadImage(dicomImagePath).then(function (image) {
+        // Display our loaded image on the target canvas
+        cornerstone.displayImage(canvas, image)
+      })
+      */
 
       // get image ids and metadata into RAM using helper script from cornerstone 3D demo
       /*
-    // helper function doesn't work because of dicomweb-client import
-    const imageIds = await createImageIdsAndCacheMetaData({
-      StudyInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.334240657131972136850343327463',
-      SeriesInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.226151125820845824875394858561',
-      wadoRsRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb'
-    })
-    */
+      // helper function doesn't work because of dicomweb-client import
+      const imageIds = await createImageIdsAndCacheMetaData({
+        StudyInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.334240657131972136850343327463',
+        SeriesInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.226151125820845824875394858561',
+        wadoRsRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb'
+      })
+      */
       const imageIds: string[] = []
       const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add('../MRBRAIN.dcm')
 
@@ -232,32 +238,71 @@ export default defineComponent({
       imageIds[0] = imageId
       console.log('cornerstone imageID' + imageIds[0])
 
-      // create or set reference to HTML element for viewport
-      const element = document.createElement('div') // TODO: set reference to the canvas element
-
-      // instantiate rendering engine
-      const renderingEngineId = 'dicomRenderingEngine'
-      const renderingEngine = new RenderingEngine(renderingEngineId) // triggers error: @cornerstonejs/core is not initalized
-      console.log('render engine instantiated')
-
       // create a stack viewport
       const { ViewportType } = Enums
 
       const viewportId = 'CT_STACK' // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
-      const viewportInput = {
-        viewportId,
+
+      // API variant 1 set Viewports
+      // takes array as input
+      // TODO: use brackets!!!
+      //renderingEngine.setViewports([{
+
+      // API variant 2: Enable Element
+      // no brackets
+      renderingEngine.enableElement({
+        viewportId: viewportId, // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
         type: ViewportType.STACK,
         element,
         defaultOptions: {
           background: <Types.Point3>[0.2, 0, 0.2]
+          // more settings
+          // orientation: Enums.OrientationAxis.AXIAL,
         }
+      })
+      //}])
+
+      console.log('element / viewport enabled')
+
+      /*
+      // from documentation: https://www.cornerstonejs.org/docs/migrationguides/#enabledelement
+      // ELEMENT_ENABLED eventDetail includes:
+      {
+        element,
+        viewportId,
+        renderingEngineId,
       }
 
-      renderingEngine.enableElement(viewportInput)
-      console.log('viewport enabled')
+      // TODO: check how to include this
+      */
 
+      //const viewport = renderingEngine.getViewport('Types.IStackViewport') as cornerstone.StackViewport
+      const viewport = renderingEngine.getViewport(ViewportType.STACK) as cornerstone.StackViewport
+
+      // one image in the stack
+      await viewport.setStack([imageId])
+
+      /*
+      // multiple imageIds
+      await viewport.setStack(
+        [imageId1, imageId2],
+        1 // frame 1
+      )
+      */
+
+      // Updates every viewport in the rendering engine.
+      renderingEngine.render()
+
+      /*
+      // Update a single viewport
+      const myViewport = myScene.getViewport(viewportId)
+      // TODO: check reference for "myScene"
+      myViewport.render()
+      */
+
+      // OLD CODE
       // get stack viewport that was created
-      const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
+      //const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
 
       // define a stack containing a single image
       //const stack = [imageIds[0]]
