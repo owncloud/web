@@ -46,7 +46,10 @@
             :variation="isSelectedTheme(themeId) ? 'inverse' : 'passive'"
             @click="selectTheme(themeId)"
           >
-            <span class="oc-flex oc-flex-middle" v-text="$gettext(themeName)" />
+            <span
+              class="oc-flex oc-flex-middle"
+              v-text="themeName ? $gettext(themeName) : $gettext(themeId)"
+            />
           </oc-button>
         </li>
       </oc-list>
