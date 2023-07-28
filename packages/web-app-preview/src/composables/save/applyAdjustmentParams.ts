@@ -1,12 +1,15 @@
 import { MaybeRef, unref } from 'vue'
 import { useImageAdjustmentParameters } from '../adjustment-params'
 
-type ImageBlob = {
+type AdjustmentParamsProps = {
   imageBlob: MaybeRef<Blob>
   adjustmentParams: MaybeRef<any>
 }
 
-const applyAdjustmentParams = async ({ imageBlob, adjustmentParams }: ImageBlob): Promise<Blob> => {
+const applyAdjustmentParams = async ({
+  imageBlob,
+  adjustmentParams
+}: AdjustmentParamsProps): Promise<Blob> => {
   const imageAdjustmentParams = useImageAdjustmentParameters(unref(adjustmentParams))
   const blob = unref(imageBlob)
   const canvas = document.createElement('canvas')

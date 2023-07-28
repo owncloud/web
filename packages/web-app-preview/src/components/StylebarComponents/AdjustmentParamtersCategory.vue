@@ -140,6 +140,8 @@ export default defineComponent({
   width: 100%;
   -webkit-appearance: none;
   appearance: none;
+  background: var(--oc-color-background-hover);
+  border-radius: 5px;
 
   &:focus {
     outline: none;

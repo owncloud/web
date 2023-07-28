@@ -1,4 +1,4 @@
-import { AdjustmentParametersCategoryEnum } from '../helpers'
+import { AdjustmentParametersCategoryEnum, CropVariantEnum } from '../helpers'
 
 export default {
   adjustmentParameters: [
@@ -59,5 +59,7 @@ export default {
       type: AdjustmentParametersCategoryEnum.FineTune
     }
   ],
-  selectedProcessingTool: ''
+  selectedProcessingTool: null,
+  croppedCanvas: null,
+  cropVariant: CropVariantEnum.FreeForm
 }

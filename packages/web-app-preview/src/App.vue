@@ -8,7 +8,11 @@
     @keydown.esc="closePreview"
   >
     <div class="preview-body">
-      <media-settings v-if="activeMediaFileCached.isImage" @download="triggerActiveFileDownload" />
+      <media-settings
+        v-if="activeMediaFileCached.isImage"
+        @download="triggerActiveFileDownload"
+        @save-cropped-image="save"
+      />
       <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
         <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
       </div>
@@ -84,6 +88,8 @@ import { useGettext } from 'vue3-gettext'
 import { Ref } from 'vue'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { DavProperty } from 'web-client/src/webdav/constants'
+import { CropVariantEnum, ProcessingToolsEnum } from './helpers'
+import applyCropping from './composables/save/applyCropping'
 
 export const appId = 'preview'
 
@@ -119,12 +125,17 @@ export default defineComponent({
     const route = useRoute()
     const store = useStore()
 
+    const processingTool = computed(() => store.getters['Preview/getSelectedProcessingTool'])
+    const space = computed(() => store.getters['realtime/spaces/spaces'])
+
     const appDefaults = useAppDefaults({ applicationId: 'preview' })
     const contextRouteQuery = useRouteQuery('contextRouteQuery')
     const { downloadFile } = useDownloadFile()
 
     const activeIndex = ref()
     const cachedFiles = ref<CachedFile[]>([])
+    const isFileContentError = ref(false)
+    const isFileContentLoading = ref(true)
 
     const currentETag = ref()
     const activeAdjustmentParameters: Ref<adjustmentParametersCategoryType[]> = ref()
@@ -139,6 +150,7 @@ export default defineComponent({
       putFileContents,
       getFileInfo
     } = appDefaults
+
     const { $gettext, interpolate: $gettextInterpolate } = useGettext()
 
     const filteredFiles = computed<Resource[]>(() => {
@@ -168,6 +180,39 @@ export default defineComponent({
       })
     }
 
+    const imageSavedPopup = () => {
+      store.dispatch('showMessage', {
+        title: $gettext('Image is saved')
+      })
+    }
+
+    const getUpdatedBlob = async () => {
+      let newVersion = null
+      switch (processingTool.value) {
+        case ProcessingToolsEnum.Customize:
+          const adjustmentParams = store.getters['Preview/allParameters']
+          newVersion = await applyAdjustmentParams({
+            imageBlob: serverVersion,
+            adjustmentParams: adjustmentParams
+          })
+          activeAdjustmentParameters.value = adjustmentParams
+          break
+        case ProcessingToolsEnum.Crop:
+          const croppedCanvas = store.getters['Preview/getCroppedCanvas']
+          const cropType: CropVariantEnum = store.getters['Preview/getCropVariant']
+          newVersion = await applyCropping(croppedCanvas, cropType)
+          break
+      }
+      return newVersion
+    }
+
+    function handleResetAfterSave() {
+      switch (processingTool.value) {
+        case ProcessingToolsEnum.Crop:
+          store.commit('Preview/RESET_SELECTED_PROCESSING_TOOL')
+      }
+    }
+
     const loadImageTask = useTask(function* () {
       resource.value = yield getFileInfo(currentFileContext, {
         davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
@@ -177,16 +222,11 @@ export default defineComponent({
       const savedImageVersion = yield getFileContents(currentFileContext, { responseType: 'blob' })
       serverVersion.value = savedImageVersion.body
       currentETag.value = savedImageVersion.headers['OC-ETag']
-      console.log('init', activeIndex)
     })
 
     const saveImageTask = useTask(function* () {
-      const adjustmentParams = computed(() => store.getters['Preview/allParameters'])
-      const newVersion = yield applyAdjustmentParams({
-        imageBlob: serverVersion,
-        adjustmentParams: adjustmentParams.value
-      })
-      activeAdjustmentParameters.value = unref(adjustmentParams)
+      const newVersion = yield getUpdatedBlob()
+
       try {
         const putFileContentsResponse = yield putFileContents(currentFileContext, {
           content: newVersion,
@@ -194,6 +234,8 @@ export default defineComponent({
         })
         serverVersion.value = newVersion
         currentETag.value = putFileContentsResponse.etag
+        imageSavedPopup()
+        handleResetAfterSave()
       } catch (e) {
         switch (e.statusCode) {
           case 412:
@@ -239,6 +281,8 @@ export default defineComponent({
       () => {
         if (activeMediaFileCached.value.isImage) {
           loadImageTask.perform()
+          store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
+          store.commit('Preview/RESET_SELECTED_PROCESSING_TOOL')
           const storeValues = store.getters['Preview/allParameters']
           activeAdjustmentParameters.value = storeValues
         }
@@ -285,7 +329,29 @@ export default defineComponent({
         query: { ...unref(route).query, ...query }
       })
     }
-    const isFileContentLoading = ref(true)
+
+    function triggerUnsavedChangesModal(
+      cancelFuncs: Array<(...args: any[]) => Promise<any>>,
+      confirmFuncs: Array<(...args: any[]) => Promise<any>>
+    ) {
+      const modal = {
+        variation: 'danger',
+        icon: 'warning',
+        title: $gettext('Unsaved changes'),
+        message: $gettext('Your changes were not saved. Do you want to save them?'),
+        cancelText: $gettext("Don't Save"),
+        confirmText: $gettext('Save'),
+        onCancel: () => {
+          store.dispatch('hideModal')
+          cancelFuncs.forEach(async (func) => await func())
+        },
+        onConfirm: () => {
+          store.dispatch('hideModal')
+          confirmFuncs.forEach(async (func) => await func())
+        }
+      }
+      store.dispatch('createModal', modal)
+    }
 
     const triggerActiveFileDownload = () => {
       if (isFileContentLoading.value) {
@@ -294,24 +360,12 @@ export default defineComponent({
 
       const adjustmentParams = computed(() => store.getters['Preview/allParameters'])
       if (adjustmentParams.value !== activeAdjustmentParameters.value) {
-        const modal = {
-          variation: 'danger',
-          icon: 'warning',
-          title: $gettext('Unsaved changes'),
-          message: $gettext('Your changes were not saved. Do you want to save them?'),
-          cancelText: $gettext("Don't Save"),
-          confirmText: $gettext('Save'),
-          onCancel: () => {
-            store.dispatch('hideModal')
-            downloadFile(activeFilteredFile.value)
-          },
-          onConfirm: async () => {
-            await save()
-            store.dispatch('hideModal')
-            downloadFile(activeFilteredFile.value)
-          }
-        }
-        store.dispatch('createModal', modal)
+        const confirmFuncs: Array<(...args: any[]) => Promise<any>> = [
+          () => save(),
+          () => downloadFile(activeFilteredFile.value)
+        ]
+
+        triggerUnsavedChangesModal([], confirmFuncs)
       } else {
         downloadFile(activeFilteredFile.value)
       }
@@ -331,6 +385,27 @@ export default defineComponent({
       }
     ]
 
+    function isFileTypeImage(file) {
+      return !isFileTypeAudio(file) && !isFileTypeVideo(file)
+    }
+    function isFileTypeAudio(file) {
+      return file.mimeType.toLowerCase().startsWith('audio')
+    }
+    function isFileTypeVideo(file) {
+      return file.mimeType.toLowerCase().startsWith('video')
+    }
+
+    function isActiveFileTypeImage() {
+      return !isActiveFileTypeAudio && !isActiveFileTypeVideo
+    }
+    function isActiveFileTypeAudio() {
+      return isFileTypeAudio(activeFilteredFile)
+    }
+    function isActiveFileTypeVideo() {
+      return isFileTypeVideo(activeFilteredFile)
+    }
+
+    // #setup
     return {
       ...appDefaults,
       activeFilteredFile,
@@ -340,19 +415,26 @@ export default defineComponent({
       filteredFiles,
       fileActions,
       isFileContentLoading,
+      isFileContentError,
       isFullScreenModeActivated,
       toggleFullscreenMode,
       updateLocalHistory,
       triggerActiveFileDownload,
+      triggerUnsavedChangesModal,
       saveImageTask,
       serverVersion,
       activeAdjustmentParameters,
-      save
+      save,
+      isFileTypeAudio,
+      isFileTypeImage,
+      isFileTypeVideo,
+      isActiveFileTypeAudio,
+      isActiveFileTypeImage,
+      isActiveFileTypeVideo
     }
   },
   data() {
     return {
-      isFileContentError: false,
       isAutoPlayEnabled: true,
 
       toPreloadImageIds: [],
@@ -384,15 +466,6 @@ export default defineComponent({
           return 3840
       }
     },
-    isActiveFileTypeImage() {
-      return !this.isActiveFileTypeAudio && !this.isActiveFileTypeVideo
-    },
-    isActiveFileTypeAudio() {
-      return this.isFileTypeAudio(this.activeFilteredFile)
-    },
-    isActiveFileTypeVideo() {
-      return this.isFileTypeVideo(this.activeFilteredFile)
-    },
     ...mapGetters('Preview', ['allParameters'])
   },
 
@@ -414,7 +487,6 @@ export default defineComponent({
 
   async mounted() {
     // keep a local history for this component
-    console.log('mounting app')
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     document.addEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
     await this.loadFolderForFileContext(this.currentFileContext)
@@ -517,21 +589,18 @@ export default defineComponent({
             this.hideModal()
             this.activeIndex++
             this.updateLocalHistory()
-            this.handleResetValues()
           },
           onConfirm: async () => {
             await this.save()
             this.hideModal()
             this.activeIndex++
             this.updateLocalHistory()
-            this.handleResetValues()
           }
         }
         this.createModal(modal)
       } else {
         this.activeIndex++
         this.updateLocalHistory()
-        this.handleResetValues()
       }
     },
     prev() {
@@ -556,21 +625,18 @@ export default defineComponent({
             this.hideModal()
             this.activeIndex--
             this.updateLocalHistory()
-            this.handleResetValues()
           },
           onConfirm: async () => {
             await this.save()
             this.hideModal()
             this.activeIndex--
             this.updateLocalHistory()
-            this.handleResetValues()
           }
         }
         this.createModal(modal)
       } else {
         this.activeIndex--
         this.updateLocalHistory()
-        this.handleResetValues()
       }
     },
 
@@ -604,16 +670,6 @@ export default defineComponent({
 
     checkIfDirty() {
       return this.allParameters !== this.activeAdjustmentParameters
-    },
-    isFileTypeImage(file) {
-      return !this.isFileTypeAudio(file) && !this.isFileTypeVideo(file)
-    },
-    isFileTypeAudio(file) {
-      return file.mimeType.toLowerCase().startsWith('audio')
-    },
-
-    isFileTypeVideo(file) {
-      return file.mimeType.toLowerCase().startsWith('video')
     },
     addPreviewToCache(file, url) {
       this.cachedFiles.push({
@@ -680,10 +736,11 @@ export default defineComponent({
       }
     },
 
-    ...mapMutations('Preview', ['RESET_ADJUSTMENT_PARAMETERS']),
+    ...mapMutations('Preview', ['RESET_ADJUSTMENT_PARAMETERS', 'RESET_SELECTED_PROCESSING_TOOL']),
     ...mapActions(['createModal', 'hideModal']),
     handleResetValues() {
       this.RESET_ADJUSTMENT_PARAMETERS()
+      this.RESET_SELECTED_PROCESSING_TOOL()
     }
   }
 })

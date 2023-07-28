@@ -10,10 +10,10 @@
         class="media-settings-button"
         appearance="raw"
         :style="
-          selectedProcessingTool === 'customize' &&
+          selectedProcessingTool === ProcessingToolsEnum.Customize &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedProcessingTool('customize')"
+        @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Customize)"
       >
         <oc-icon name="tools" />
         <span>Customize</span>
@@ -23,23 +23,23 @@
         class="media-settings-button"
         appearance="raw"
         :style="
-          selectedProcessingTool === 'adjust' &&
+          selectedProcessingTool === ProcessingToolsEnum.Crop &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedProcessingTool('adjust')"
+        @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Crop)"
       >
-        <oc-icon name="equalizer" />
-        <span>Adjust</span>
+        <oc-icon name="crop" fill-type="line" />
+        <span>Crop</span>
       </oc-button>
 
       <oc-button
         class="media-settings-button"
         appearance="raw"
         :style="
-          selectedProcessingTool === 'write' &&
+          selectedProcessingTool === ProcessingToolsEnum.Write &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedProcessingTool('write')"
+        @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Write)"
       >
         <oc-icon name="pencil" />
         <span>Write</span>
@@ -49,16 +49,16 @@
         class="media-settings-button"
         appearance="raw"
         :style="
-          selectedProcessingTool === 'draw' &&
+          selectedProcessingTool === ProcessingToolsEnum.Draw &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedProcessingTool('draw')"
+        @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Draw)"
       >
         <oc-icon name="brush" />
         <span>Draw</span>
       </oc-button>
     </div>
-    <div v-if="selectedProcessingTool === 'customize'" class="options-bar">
+    <div v-if="selectedProcessingTool === ProcessingToolsEnum.Customize" class="options-bar">
       <adjustment-parameters-category
         name="General"
         icon-name="equalizer"
@@ -71,12 +71,38 @@
         :variable-type="AdjustmentParametersCategoryEnum.FineTune"
       />
     </div>
+    <div v-if="selectedProcessingTool === ProcessingToolsEnum.Crop" class="options-bar-compact">
+      <div class="cropper-options">
+        <oc-button
+          :class="cropVariant === CropVariantEnum.FreeForm ? 'crop-variant-active' : 'crop-variant'"
+          appearance="raw"
+          @click="handleUpdateCropVariant(CropVariantEnum.FreeForm)"
+        >
+          <oc-icon name="crop" fill-type="line" size="large" />
+          <span>Free form</span>
+        </oc-button>
+        <oc-button
+          :class="cropVariant === CropVariantEnum.Circular ? 'crop-variant-active' : 'crop-variant'"
+          appearance="raw"
+          @click="handleUpdateCropVariant(CropVariantEnum.Circular)"
+        >
+          <oc-icon name="checkbox-blank-circle" fill-type="line" size="large" />
+          <span>Circular</span>
+        </oc-button>
+      </div>
+      <div class="crop-image-button">
+        <oc-button appearance="filled" variation="primary" @click="$emit('saveCroppedImage')">
+          Crop image
+        </oc-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { AdjustmentParametersCategoryEnum } from '../helpers'
+import { AdjustmentParametersCategoryEnum, ProcessingToolsEnum } from '../helpers'
+import { CropVariantEnum } from '../helpers/enums'
 import AdjustmentParametersCategory from './StylebarComponents/AdjustmentParamtersCategory.vue'
 import { useStore } from 'web-pkg/src'
 import { mapMutations } from 'vuex'
@@ -84,26 +110,35 @@ import { computed } from 'vue'
 
 export default defineComponent({
   components: { AdjustmentParametersCategory },
-  emits: ['download'],
+  emits: ['download', 'saveCroppedImage'],
   setup() {
     const store = useStore()
     const selectedProcessingTool = computed(
       () => store.getters['Preview/getSelectedProcessingTool']
     )
+    const cropVariant = computed(() => store.getters['Preview/getCropVariant'])
 
     return {
-      selectedProcessingTool
+      selectedProcessingTool,
+      cropVariant,
+      CropVariantEnum
     }
   },
   data() {
     return {
-      AdjustmentParametersCategoryEnum: AdjustmentParametersCategoryEnum
+      AdjustmentParametersCategoryEnum: AdjustmentParametersCategoryEnum,
+      ProcessingToolsEnum: ProcessingToolsEnum
     }
   },
   methods: {
-    ...mapMutations('Preview', ['CHANGE_SELECTED_PROCESSING_TOOL']),
-    handleUpdateSelectedProcessingTool(name: string) {
-      this.CHANGE_SELECTED_PROCESSING_TOOL(name)
+    ...mapMutations('Preview', ['CHANGE_SELECTED_PROCESSING_TOOL', 'SET_CROP_VARIANT']),
+    handleUpdateSelectedProcessingTool(processingTool: ProcessingToolsEnum) {
+      this.CHANGE_SELECTED_PROCESSING_TOOL(processingTool)
+    },
+    handleUpdateCropVariant(newCropVariant: CropVariantEnum) {
+      if (newCropVariant !== this.cropVariant) {
+        this.SET_CROP_VARIANT(newCropVariant)
+      }
     }
   }
 })
@@ -129,6 +164,7 @@ export default defineComponent({
   align-items: center;
   font-size: var(--oc-font-size-small);
   width: 100%;
+  height: 5rem;
   border-radius: 0;
   padding: $oc-space-small;
   box-sizing: border-box;
@@ -143,9 +179,65 @@ export default defineComponent({
 }
 
 .options-bar {
-  height: 100vh;
   width: 18rem;
   box-sizing: border-box;
   padding: $oc-space-small;
+}
+
+.options-bar-compact {
+  width: 9rem;
+  box-sizing: border-box;
+}
+
+.cropper-options {
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.crop-variant-active {
+  background-color: var(--oc-color-background-highlight);
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0px;
+  height: 7.5rem;
+  width: 100%;
+
+  &:hover {
+    background-color: var(--oc-color-background-highlight);
+  }
+
+  &:focus {
+    background-color: var(--oc-color-background-highlight);
+  }
+  &:active {
+    background-color: var(--oc-color-background-highlight);
+  }
+}
+
+.crop-variant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0px;
+  height: 7.5rem;
+  width: 100%;
+
+  &:hover {
+    background-color: var(--oc-color-background-highlight);
+  }
+}
+
+.crop-image-button {
+  display: flex;
+  justify-content: center;
 }
 </style>

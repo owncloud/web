@@ -17,5 +17,11 @@ export default {
   },
   getSelectedProcessingTool: (state) => {
     return state.selectedProcessingTool
+  },
+  getCroppedCanvas: (state) => {
+    return state.croppedCanvas
+  },
+  getCropVariant: (state) => {
+    return state.cropVariant
   }
 }
