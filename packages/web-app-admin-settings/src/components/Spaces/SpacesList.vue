@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="space-list">
     <oc-text-input
       id="spaces-filter"
       v-model="filterTerm"
@@ -42,7 +42,7 @@
           :option="item"
           :label="getSelectSpaceLabel(item)"
           hide-label
-          @update:model-value="$emit('toggleSelectSpace', item)"
+          @update:model-value="toggleSpace(item)"
           @click.stop
         />
       </template>
@@ -142,6 +142,9 @@ import {
 } from 'web-pkg/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
+import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import { useKeyboardTableNavigation } from 'web-app-admin-settings/src/composables/keyboardActions'
+import { findIndex } from 'lodash-es'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -169,6 +172,9 @@ export default defineComponent({
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
+
+    const lastSelectedSpaceIndex = ref(0)
+    const lastSelectedSpaceId = ref(null)
 
     const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
     const footerTextTotal = computed(() => {
@@ -428,6 +434,22 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.open)
     }
 
+    const keyActions = useKeyboardActions('space-list')
+    useKeyboardTableNavigation(
+      keyActions,
+      paginatedItems,
+      props.selectedSpaces,
+      lastSelectedSpaceIndex,
+      lastSelectedSpaceId
+    )
+
+    const toggleSpace = (space) => {
+      lastSelectedSpaceIndex.value = findIndex(props.spaces, (u) => u.id === space.id)
+      lastSelectedSpaceId.value = space.id
+      keyActions.resetSelectionCursor()
+      emit('toggleSelectSpace', space)
+    }
+
     return {
       allSpacesSelected,
       sortBy,
@@ -448,6 +470,7 @@ export default defineComponent({
       getMemberCount,
       getSelectSpaceLabel,
       handleSort,
+      toggleSpace,
       fileClicked,
       isSpaceSelected,
       contextMenuButtonRef,
