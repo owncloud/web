@@ -15,9 +15,8 @@
 import { defineComponent } from 'vue'
 import { ref } from 'vue'
 import { RenderingEngine, Types, Enums, metaData, init } from '@cornerstonejs/core'
-import { init as csToolsInit } from '@cornerstonejs/tools' // TODO: check if this import is needed
-//import { createImageIdsAndCacheMetaData } from '../helpers/createImageIdsAndCacheMetaData.js'
-// breaks code because of issue with dicomweb-client
+// import { createImageIdsAndCacheMetaData } from '../helpers/createImageIdsAndCacheMetaData.js'
+// import above breaks code because of issue with dicomweb-client
 // https://github.com/ImagingDataCommons/dicomweb-client/blob/master/README.md
 // https://dicomweb-client.readthedocs.io/en/latest/introduction.html
 
@@ -55,7 +54,8 @@ var config = {
 }
 cornerstoneDICOMImageLoader.webWorkerManager.initialize(config)
 
-//alternative Cornerstone DICOM Image Loader init from example
+// alternative Cornerstone DICOM Image Loader init
+// with more configurations from cornerstone3D example code
 /*
 let maxWebWorkers = 1
 
@@ -78,7 +78,7 @@ cornerstoneDICOMImageLoader.webWorkerManager.initialize(config);
 */
 
 // register image loader
-// use "loadImage" for stack or "createAndCacheVolume" for volume
+// "loadImage" is used for stack, "createAndCacheVolume" for volumes
 cornerstone.registerImageLoader('http', cornerstoneDICOMImageLoader.loadImage)
 cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 
@@ -86,15 +86,6 @@ cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 // according to documentation, image loader also registers metaDataProvider
 
 // init (streaming) volume loader?!?
-
-// cornerstone render init & tools init? --> see cornerstone 3D demo
-/*
-await csRenderInit()
-await csToolsInit()
-*/
-
-// init tools
-//const csTools = cornerstoneTools.init()
 
 /*
 // create a stack viewport
@@ -144,6 +135,7 @@ export default defineComponent({
       default: 0
     },
     dicomImagePath: {
+      // static path to dicom image placeholder, for testing only
       type: String,
       default: '../MRBRAIN.dcm'
     }
@@ -152,7 +144,6 @@ export default defineComponent({
     // from example code
     baseUrl: '',
     exampleStudyImageIds: '',
-    isInitLoad: true,
     isShow: true,
     // from PDF viewer
     loading: true,
@@ -160,7 +151,7 @@ export default defineComponent({
     url: '',
     resource: null,
     // own variables
-    loadingCornerstoneInit: true // maybe rename?
+    isCornerstoneInitialized: false
   }),
   /*
   setup() {}, // maybe not needed in this component
@@ -184,7 +175,7 @@ export default defineComponent({
     // async because of await in image loader and other functions called
 
     // console.log('simple DICOM viewer screen "mounted" hook called')
-    console.log('loading cornerstone init: ' + this.loadingCornerstoneInit)
+    console.log('cornerstone init: ' + this.isCornerstoneInitialized)
 
     let _self = this
     /*
@@ -198,10 +189,7 @@ export default defineComponent({
     //cornerstone.enable(canvas)
 
     // check if cornerstone core and tools are initalized
-    if (_self.loadingCornerstoneInit) {
-      _self.initCornerstoneCore()
-      //_self.initCornerstoneTools()
-    } else {
+    if (_self.isCornerstoneInitialized) {
       /*
     // ImageId that matches our registered image loader's 'http:' prefix
     // The webImageLoader uses this to make an xhr request to fetch an image
@@ -265,9 +253,6 @@ export default defineComponent({
         }
       }
 
-      // init cornerstone
-      //this.initCornerstoneJsCore()
-
       renderingEngine.enableElement(viewportInput)
       console.log('viewport enabled')
 
@@ -277,15 +262,23 @@ export default defineComponent({
       // define a stack containing a single image
       //const stack = [imageIds[0]]
 
+      // init cornerstone tools
+      //_self.initCornerstoneTools()
       /*
-    // init cornerstone tools
-    cornerstoneTools.init({
-      globalToolSyncEnabled: true
-    })
+      cornerstoneTools.init({
+        globalToolSyncEnabled: true
+      })
+      */
+    } else {
+      // initalize cornerstone core
+      _self.initCornerstoneCore()
+      // method above changes value of isCornerstoneInitialized...
+      // TODO: consider if that shoud only be change when both init methods have passed sucessfully
 
-    // activate canvas tools
-    //this.initCanvasTools()
-    */
+      //_self.initCornerstoneTools()
+      // TODO: fix "error initalizing cornerstone tools TypeError: Cannot read properties of undefined (reading 'removeEventListener')" triggered by init cornerstone tools method
+      // it seems like first tools should be added to a toolgroup and then the whole tool group is activated
+      // see https://www.cornerstonejs.org/api/tools/function/init
     }
   },
   beforeDestroy() {
@@ -299,25 +292,27 @@ export default defineComponent({
   methods: {
     async initCornerstoneCore() {
       try {
-        await cornerstone.init() // TODO: check if passing config as parameter is needed
+        await cornerstone.init()
       } catch (e) {
         console.error('Error initalizing cornerstone renderer', e)
         console.log('error in initalizing cornerstone core') // for debugging purpose only, delete later
       } finally {
-        this.loadingCornerstoneInit = false
+        this.isCornerstoneInitialized = true
         console.log('cornerstone core initalized')
       }
     },
     async initCornerstoneTools() {
       try {
-        //await csToolsInit()
-        await cornerstoneTools.init() // check if config is needed
-        console.log('initalizing cornerstone tools')
+        // init cornerstone tools
+        await cornerstoneTools.init({
+          globalToolSyncEnabled: true
+        })
       } catch (e) {
         console.error('Error initalizing cornerstone tools', e)
         console.log('error in initalizing cornerstone tools') // for debugging purpose only, delete later
       } finally {
-        //TODO: check if finally is needed
+        //TODO: check if finally is needed?
+        // maybe implement a function that checks if both inits have been successful?
         console.log('cornerstone tools initalized')
       }
     }
