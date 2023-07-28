@@ -15,20 +15,34 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
   const store = useStore()
   const language = useGettext()
   const accessToken = useAccessToken({ store })
+  const ctrl = new AbortController()
   const setupServerSentEvents = async () => {
-    await fetchEventSource(new URL(options.url, configurationManager.serverUrl).href, {
-      headers: {
-        Authorization: `Bearer ${accessToken.value}`,
-        'Accept-Language': unref(language).current,
-        'X-Request-ID': uuidV4()
-      },
-      async onopen(response) {
-        await options.onOpen?.(response)
-      },
-      onmessage(msg) {
-        options.onMessage?.(msg)
-      }
-    })
+    const setupSSE = async () => {
+      await fetchEventSource(new URL(options.url, configurationManager.serverUrl).href, {
+        signal: ctrl.signal,
+        headers: {
+          Authorization: `Bearer ${accessToken.value}`,
+          'Accept-Language': unref(language).current,
+          'X-Request-ID': uuidV4()
+        },
+        async onopen(response) {
+          if (response.status === 401) {
+            ctrl.abort()
+          }
+          await options.onOpen?.(response)
+        },
+        onmessage(msg) {
+          options.onMessage?.(msg)
+        }
+      })
+    }
+    try {
+      await setupSSE().then(() => {
+        setupServerSentEvents()
+      })
+    } catch (e) {
+      setupServerSentEvents()
+    }
   }
 
   return setupServerSentEvents
