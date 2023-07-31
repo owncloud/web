@@ -310,7 +310,9 @@ export default {
     }
 
     onMounted(async () => {
-      await setupServerSentEvents()
+      if (setupServerSentEvents) {
+        await setupServerSentEvents()
+      }
       fetchNotificationsTask.perform()
     })
 

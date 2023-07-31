@@ -31,25 +31,29 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
     }
     const setupSSE = async () => {
       retryCounter.value++
-      await fetchEventSource(new URL(options.url, configurationManager.serverUrl).href, {
-        signal: ctrl.signal,
-        headers: {
-          Authorization: `Bearer ${accessToken.value}`,
-          'Accept-Language': unref(language).current,
-          'X-Request-ID': uuidV4()
-        },
-        async onopen(response) {
-          if (response.status === 401) {
-            ctrl.abort()
-            return
+      try {
+        await fetchEventSource(new URL(options.url, configurationManager.serverUrl).href, {
+          signal: ctrl.signal,
+          headers: {
+            Authorization: `Bearer ${accessToken.value}`,
+            'Accept-Language': unref(language).current,
+            'X-Request-ID': uuidV4()
+          },
+          async onopen(response) {
+            if (response.status === 401) {
+              ctrl.abort()
+              return
+            }
+            retryCounter.value = 0
+            await options.onOpen?.(response)
+          },
+          onmessage(msg) {
+            options.onMessage?.(msg)
           }
-          retryCounter.value = 0
-          await options.onOpen?.(response)
-        },
-        onmessage(msg) {
-          options.onMessage?.(msg)
-        }
-      })
+        })
+      } catch (e) {
+        console.error(e)
+      }
     }
     setupSSE().then(() => {
       setupServerSentEvents()
