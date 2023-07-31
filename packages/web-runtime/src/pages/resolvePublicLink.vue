@@ -142,13 +142,17 @@ export default defineComponent({
       }
     })
     const loadPublicLinkTask = useTask(function* () {
-      const resource = yield clientService.webdav.getFileInfo(unref(publicLinkSpace))
-      if (!isPublicSpaceResource(resource)) {
-        const e: any = new Error($gettext('The resource is not a public link.'))
-        e.resource = resource
-        throw e
+      try {
+        const resource = yield clientService.webdav.getFileInfo(unref(publicLinkSpace))
+        if (!isPublicSpaceResource(resource)) {
+          const e: any = new Error($gettext('The resource is not a public link.'))
+          e.resource = resource
+          throw e
+        }
+        return resource
+      } catch (e) {
+        throw new Error($gettext('The resource could not be located, it may not exist anymore.'))
       }
-      return resource
     })
     const wrongPassword = computed(() => {
       if (loadPublicLinkTask.isError) {
@@ -244,6 +248,10 @@ export default defineComponent({
       return false
     })
     const errorMessage = computed<string>(() => {
+      if (resolvePublicLinkTask.isError) {
+        return resolvePublicLinkTask.last.error.message
+      }
+
       if (loadTokenInfoTask.isError) {
         return loadTokenInfoTask.last.error.message
       }
