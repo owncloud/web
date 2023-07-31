@@ -1028,8 +1028,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0
       owncloud-sdk:
-        specifier: ~3.1.0-alpha.6
-        version: 3.1.0-alpha.6(axios@1.4.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.10.3)(utf8@3.0.0)(uuid@9.0.0)(webdav@4.10.0)(xml-js@1.6.11)
+        specifier: ~3.1.0-alpha.7
+        version: 3.1.0-alpha.7(axios@1.4.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.10.3)(utf8@3.0.0)(uuid@9.0.0)(webdav@4.10.0)(xml-js@1.6.11)
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2
@@ -15958,8 +15958,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /owncloud-sdk@3.1.0-alpha.6(axios@1.4.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.10.3)(utf8@3.0.0)(uuid@9.0.0)(webdav@4.10.0)(xml-js@1.6.11):
-    resolution: {integrity: sha512-U079L2Bjfx9hi3d1+hapR8Umyoj/hY8QQhqiy+/J7shwPKHFRdzZoyJkTtL+zOwOjqFfBIOZYEvOWPY5+5k3HA==}
+  /owncloud-sdk@3.1.0-alpha.7(axios@1.4.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.10.3)(utf8@3.0.0)(uuid@9.0.0)(webdav@4.10.0)(xml-js@1.6.11):
+    resolution: {integrity: sha512-YNZrwY7yesiQBKu+4Z2JWR9r5LwtPHXuozlChOlOCMzw/FUI6e7koh9+WRrEwoRQZAnWVvtVCre+zUeJXXcqZw==}
     peerDependencies:
       axios: ^0.27.2
       cross-fetch: ^3.0.6
