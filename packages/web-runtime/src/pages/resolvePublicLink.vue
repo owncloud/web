@@ -151,6 +151,9 @@ export default defineComponent({
         }
         return resource
       } catch (e) {
+        if (e.statusCode === 401) {
+          throw e
+        }
         throw new Error($gettext('The resource could not be located, it may not exist anymore.'))
       }
     })
@@ -248,7 +251,7 @@ export default defineComponent({
       return false
     })
     const errorMessage = computed<string>(() => {
-      if (resolvePublicLinkTask.isError) {
+      if (resolvePublicLinkTask.isError && resolvePublicLinkTask.last.error.statusCode !== 401) {
         return resolvePublicLinkTask.last.error.message
       }
       if (loadTokenInfoTask.isError) {
