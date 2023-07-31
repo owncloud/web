@@ -198,17 +198,20 @@ export default defineComponent({
     },
 
     collaborators() {
-      return [...this.outgoingCollaborators].sort(this.collaboratorsComparator).map((c) => {
-        const collaborator: typeof c & { key?: string; resharers?: User[] } = { ...c }
-        collaborator.key = 'collaborator-' + collaborator.id
-        if (
-          collaborator.owner.name !== collaborator.fileOwner.name &&
-          collaborator.owner.name !== this.user.id
-        ) {
-          collaborator.resharers = [collaborator.owner]
-        }
-        return collaborator
-      })
+      return [...this.outgoingCollaborators]
+        .filter((c) => c.collaborator.displayName)
+        .sort(this.collaboratorsComparator)
+        .map((c) => {
+          const collaborator: typeof c & { key?: string; resharers?: User[] } = { ...c }
+          collaborator.key = 'collaborator-' + collaborator.id
+          if (
+            collaborator.owner.name !== collaborator.fileOwner.name &&
+            collaborator.owner.name !== this.user.id
+          ) {
+            collaborator.resharers = [collaborator.owner]
+          }
+          return collaborator
+        })
     },
 
     displayCollaborators() {

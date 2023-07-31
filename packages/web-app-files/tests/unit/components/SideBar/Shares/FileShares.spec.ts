@@ -77,6 +77,19 @@ describe('FileShares', () => {
       expect(wrapper.findAll('#files-collaborators-list li').length).toBe(collaborators.length)
       expect(wrapper.html()).toMatchSnapshot()
     })
+    it('filters out collaborator without displayName', () => {
+      const collaboratorsWithDisallowed = [
+        ...collaborators,
+        {
+          ...getCollaborator(),
+          collaborator: { name: 'foo', additionalInfo: 'some' }
+        }
+      ]
+      const { wrapper } = getWrapper({ collaborators: collaboratorsWithDisallowed })
+      expect(wrapper.findAll('#files-collaborators-list li').length).toBe(
+        collaboratorsWithDisallowed.length - 1
+      )
+    })
     it('reacts on delete events', async () => {
       const spyOnCollaboratorDeleteTrigger = jest
         .spyOn((FileShares as any).methods, '$_ocCollaborators_deleteShare_trigger')

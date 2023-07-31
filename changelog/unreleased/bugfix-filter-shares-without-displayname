@@ -1,0 +1,7 @@
+Bugfix: Filter out shares without display name
+
+In rare (legacy) cases, shares can exist without a displayName key, which caused trouble in the sharing sidebar section.
+This has been addressed by filtering out shares without a displayName.
+
+https://github.com/owncloud/web/issues/9257
+https://github.com/owncloud/web/pull/9504
