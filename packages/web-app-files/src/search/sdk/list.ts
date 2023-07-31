@@ -47,7 +47,8 @@ export default class List implements SearchList {
     const { range, results } = await this.clientService.owncloudSdk.files.search(
       term,
       searchLimit,
-      DavProperties.Default
+      DavProperties.Default,
+      true
     )
 
     return {

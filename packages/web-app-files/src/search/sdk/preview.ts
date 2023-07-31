@@ -50,7 +50,8 @@ export default class Preview implements SearchPreview {
     const { range, results } = await this.clientService.owncloudSdk.files.search(
       term,
       previewSearchLimit, // todo: add configuration option, other places need that too... needs consolidation
-      DavProperties.Default
+      DavProperties.Default,
+      true
     )
     const resources = results.reduce((acc, result) => {
       const matchingSpace = this.getMatchingSpace(result.fileInfo[DavProperty.FileParent])
