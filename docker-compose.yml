@@ -183,7 +183,7 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
 
   companion:
-    image: owncloud/uppy-companion:3.12.0-owncloud
+    image: owncloud/uppy-companion:3.12.13-owncloud
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     environment:

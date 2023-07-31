@@ -6,7 +6,12 @@
   >
     <div class="oc-topbar-left oc-flex oc-flex-middle oc-flex-start">
       <applications-menu v-if="appMenuItems.length" :applications-list="appMenuItems" />
-      <router-link ref="navigationSidebarLogo" v-oc-tooltip="$gettext('Back to home')" to="/">
+      <router-link
+        ref="navigationSidebarLogo"
+        v-oc-tooltip="$gettext('Back to home')"
+        to="/"
+        class="oc-width-1-1"
+      >
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image" />
       </router-link>
     </div>
