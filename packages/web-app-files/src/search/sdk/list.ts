@@ -37,6 +37,8 @@ export default class List implements SearchList {
   }
 
   async search(term: string): Promise<SearchResult> {
+    const useSpacesEndpoint = this.store.getters.capabilities?.spaces?.enabled === true
+
     if (!term) {
       return {
         totalResults: null,
@@ -48,7 +50,7 @@ export default class List implements SearchList {
       term,
       searchLimit,
       DavProperties.Default,
-      true
+      useSpacesEndpoint
     )
 
     return {
