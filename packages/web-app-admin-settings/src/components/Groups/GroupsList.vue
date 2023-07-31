@@ -42,7 +42,7 @@
           :label="getSelectGroupLabel(rowData.item)"
           hide-label
           @update:model-value="toggleGroup(rowData.item)"
-          @click.stop
+          @click.stop="rowClicked([rowData.item, $event, true])"
         />
       </template>
       <template #avatar="rowData">
@@ -127,7 +127,10 @@ import { useFileListHeaderPosition, usePagination } from 'web-pkg/src/composable
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
 import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
-import { useKeyboardTableNavigation } from 'web-app-admin-settings/src/composables/keyboardActions'
+import {
+  useKeyboardTableMouseActions,
+  useKeyboardTableNavigation
+} from 'web-app-admin-settings/src/composables/keyboardActions'
 import { findIndex } from 'lodash-es'
 
 export default defineComponent({
@@ -170,9 +173,16 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.open)
     }
     const rowClicked = (data) => {
-      const group = data[0]
-      if (!isGroupSelected(group)) {
-        selectGroup(group)
+      const resource = data[0]
+      const eventData = data[1]
+      const skipTargetSelection = data[2] ?? false
+
+      const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
+      if (contextActionClicked) {
+        return
+      }
+      if (eventData?.shiftKey) {
+        return eventBus.publish('app.files.list.clicked.shift', { resource, skipTargetSelection })
       }
     }
     const showContextMenuOnBtnClick = (data, group) => {
@@ -238,6 +248,13 @@ export default defineComponent({
 
     const keyActions = useKeyboardActions('group-list')
     useKeyboardTableNavigation(
+      keyActions,
+      paginatedItems,
+      props.selectedGroups,
+      lastSelectedGroupIndex,
+      lastSelectedGroupId
+    )
+    useKeyboardTableMouseActions(
       keyActions,
       paginatedItems,
       props.selectedGroups,

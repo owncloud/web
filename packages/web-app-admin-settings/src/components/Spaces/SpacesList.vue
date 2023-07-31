@@ -43,7 +43,7 @@
           :label="getSelectSpaceLabel(item)"
           hide-label
           @update:model-value="toggleSpace(item)"
-          @click.stop
+          @click.stop="fileClicked([item, $event, true])"
         />
       </template>
       <template #icon>
@@ -143,7 +143,10 @@ import {
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
 import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
-import { useKeyboardTableNavigation } from 'web-app-admin-settings/src/composables/keyboardActions'
+import {
+  useKeyboardTableMouseActions,
+  useKeyboardTableNavigation
+} from 'web-app-admin-settings/src/composables/keyboardActions'
 import { findIndex } from 'lodash-es'
 
 export default defineComponent({
@@ -398,9 +401,16 @@ export default defineComponent({
     })
 
     const fileClicked = (data) => {
-      const space = data[0]
-      if (!isSpaceSelected(space)) {
-        selectSpace(space)
+      const resource = data[0]
+      const eventData = data[1]
+      const skipTargetSelection = data[2] ?? false
+
+      const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
+      if (contextActionClicked) {
+        return
+      }
+      if (eventData?.shiftKey) {
+        return eventBus.publish('app.files.list.clicked.shift', { resource, skipTargetSelection })
       }
     }
 
@@ -436,6 +446,13 @@ export default defineComponent({
 
     const keyActions = useKeyboardActions('space-list')
     useKeyboardTableNavigation(
+      keyActions,
+      paginatedItems,
+      props.selectedSpaces,
+      lastSelectedSpaceIndex,
+      lastSelectedSpaceId
+    )
+    useKeyboardTableMouseActions(
       keyActions,
       paginatedItems,
       props.selectedSpaces,

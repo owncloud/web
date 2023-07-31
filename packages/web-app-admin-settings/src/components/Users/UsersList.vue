@@ -50,7 +50,7 @@
           :label="getSelectUserLabel(item)"
           hide-label
           @update:model-value="toggleUser(item)"
-          @click.stop
+          @click.stop="rowClicked([item, $event, true])"
         />
       </template>
       <template #avatar="{ item }">
@@ -111,7 +111,15 @@
 
 <script lang="ts">
 import { useGettext } from 'vue3-gettext'
-import { defineComponent, PropType, ref, unref, ComponentPublicInstance, watch } from 'vue'
+import {
+  defineComponent,
+  PropType,
+  ref,
+  unref,
+  ComponentPublicInstance,
+  watch,
+  computed
+} from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { defaultFuseOptions, displayPositionedDropdown, eventBus, SortDir } from 'web-pkg'
@@ -121,9 +129,11 @@ import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/Contex
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useFileListHeaderPosition, usePagination } from 'web-pkg/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
-import { computed } from 'vue'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
-import { useKeyboardTableNavigation } from 'web-app-admin-settings/src/composables/keyboardActions'
+import {
+  useKeyboardTableNavigation,
+  useKeyboardTableMouseActions
+} from 'web-app-admin-settings/src/composables/keyboardActions'
 import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
 import { findIndex } from 'lodash-es'
 
@@ -187,9 +197,16 @@ export default defineComponent({
     }
 
     const rowClicked = (data) => {
-      const user = data[0]
-      if (!isUserSelected(user)) {
-        selectUser(user)
+      const resource = data[0]
+      const eventData = data[1]
+      const skipTargetSelection = data[2] ?? false
+
+      const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
+      if (contextActionClicked) {
+        return
+      }
+      if (eventData?.shiftKey) {
+        return eventBus.publish('app.files.list.clicked.shift', { resource, skipTargetSelection })
       }
     }
     const showContextMenuOnBtnClick = (data, user) => {
@@ -278,6 +295,13 @@ export default defineComponent({
 
     const keyActions = useKeyboardActions('user-list')
     useKeyboardTableNavigation(
+      keyActions,
+      paginatedItems,
+      props.selectedUsers,
+      lastSelectedUserIndex,
+      lastSelectedUserId
+    )
+    useKeyboardTableMouseActions(
       keyActions,
       paginatedItems,
       props.selectedUsers,
