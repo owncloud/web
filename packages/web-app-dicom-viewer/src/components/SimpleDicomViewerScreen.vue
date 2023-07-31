@@ -3,6 +3,17 @@
   // more css classes from preview app
   :class="{ lightbox: isFullScreenModeActivated }
   -->
+  <form ref="form" style="margin-bottom: 20px">
+    <p>file upload</p>
+    <input
+      id="select-dicom-file"
+      type="file"
+      @change="displayDicomFile"
+      multiple
+      tabindex="-1"
+      accept="application/dicom, application/octet-stream"
+    />
+  </form>
   <div
     id="dicom-viewer"
     class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium dicom-viewer"
@@ -79,6 +90,7 @@ cornerstoneDICOMImageLoader.webWorkerManager.initialize(config);
 
 // register image loader
 // "loadImage" is used for stack, "createAndCacheVolume" for volumes
+// see also https://www.cornerstonejs.org/docs/tutorials/basic-volume
 cornerstone.registerImageLoader('http', cornerstoneDICOMImageLoader.loadImage)
 cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 
@@ -103,6 +115,11 @@ export default defineComponent({
     dicomImagePath: {
       // static path to dicom image placeholder, for testing only
       type: String,
+      default: 'https://jankaritech.ocloud.de/index.php/s/aUgMrN6SRIvFGWw' //'../MRBRAIN.dcm'
+    },
+    dicomFile: {
+      // static path to dicom image placeholder, for testing only
+      type: File,
       default: '../MRBRAIN.dcm'
     }
   },
@@ -162,7 +179,7 @@ export default defineComponent({
       // method above changes value of isCornerstoneInitialized...
       // TODO: consider if that shoud only be change when both init methods have passed sucessfully
 
-      //_self.initCornerstoneTools()
+      //this.initCornerstoneTools()
       // TODO: fix "error initalizing cornerstone tools TypeError: Cannot read properties of undefined (reading 'removeEventListener')" triggered by init cornerstone tools method
       // it seems like first tools should be added to a toolgroup and then the whole tool group is activated
       // see https://www.cornerstonejs.org/api/tools/function/init
@@ -171,40 +188,69 @@ export default defineComponent({
     const element = document.getElementById('dicom-canvas') as HTMLDivElement // set reference to the canvas element or parent div?!?
     console.log('getting ' + element + ' with ID: ' + element.id)
 
-    // instantiate rendering engine
-    // const renderingEngine = new RenderingEngine()
+    // instantiate/register rendering engine
     const renderingEngineId = 'dicomRenderingEngine'
     const renderingEngine = new RenderingEngine(renderingEngineId) // triggers error: @cornerstonejs/core is not initalized
     console.log('render engine instantiated')
-    // TODO: check if it is really instantiated
 
     /*
-      // ImageId that matches our registered image loader's 'http:' prefix
-      // The webImageLoader uses this to make an xhr request to fetch an image
-      // Under the hood, it creates a cornerstone "Image" object needed for display
-      const imageUrl = this.baseUrl + this.exampleStudyImageIds[0]
-      cornerstone.loadImage(dicomImagePath).then(function (image) {
-        // Display our loaded image on the target canvas
-        cornerstone.displayImage(canvas, image)
-      })
-      */
+    // check if render engine is really instantiated
+    const allRenderEngines = cornerstone.getRenderingEngines()
+    console.log('number of currently registered rendering engines: ' + allRenderEngines.length)
+    console.log('currently registered rendering engines: ' + allRenderEngines[0].id)
+    */
+
+    /*
+    // ImageId that matches our registered image loader's 'http:' prefix
+    // The webImageLoader uses this to make an xhr request to fetch an image
+    // Under the hood, it creates a cornerstone "Image" object needed for display
+    const imageUrl = this.baseUrl + this.exampleStudyImageIds[0]
+    cornerstone.loadImage(dicomImagePath).then(function (image) {
+      // Display our loaded image on the target canvas
+      cornerstone.displayImage(canvas, image)
+    })
+    */
 
     // get image ids and metadata into RAM using helper script from cornerstone 3D demo
     /*
-      // helper function doesn't work because of dicomweb-client import
-      const imageIds = await createImageIdsAndCacheMetaData({
-        StudyInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.334240657131972136850343327463',
-        SeriesInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.226151125820845824875394858561',
-        wadoRsRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb'
-      })
-      */
+    // helper function doesn't work because of dicomweb-client import
+    const imageIds = await createImageIdsAndCacheMetaData({
+      StudyInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.334240657131972136850343327463',
+      SeriesInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.226151125820845824875394858561',
+      wadoRsRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb'
+    })
+    */
 
-    const imageIds = [] as string[]
-    const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add('../MRBRAIN.dcm')
+    const imageIds = [] //as string[]
+
+    /*
+    // get file through file upload
+    document.getElementById('select-dicom-file').addEventListener('change', function (e: any) {
+      // Add the file to the cornerstoneFileImageLoader and get unique
+      // number for that file
+      const file = e.target.files[0]
+      const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(file)
+      imageIds[0] = imageId
+      console.log('image id: ' + imageId)
+      //loadAndViewImage(imageId)
+    })
+
+    const imageId = imageIds[0]
+
+    */
+
+    const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(
+      'wadouri:' + this.dicomImagePath
+    )
+    console.log('image path: ' + this.dicomImagePath)
+    console.log('image id: ' + imageId)
+
+    //const imageId = cornerstoneDICOMImageLoader.dicomweb.fileManager.add('../MRBRAIN.dcm')
 
     // fetch metadata
     try {
-      await cornerstoneDICOMImageLoader.wadouri.loadImage(imageId).promise
+      await cornerstoneDICOMImageLoader.wadouri.loadImage(imageIds[0]).promise
+      //await cornerstoneDICOMImageLoader.dicomweb.loadImage(imageId).promise
     } catch (e) {
       console.error('Error fetching DICOM meta data', e)
     } finally {
@@ -212,9 +258,9 @@ export default defineComponent({
       console.log('fetched DICOM meta data for ' + imageId.name)
     }
 
-    console.log('cornerstone imageID' + imageId)
+    console.log('cornerstone imageID: ' + imageId)
     imageIds[0] = imageId
-    console.log('cornerstone imageID' + imageIds[0])
+    console.log('cornerstone imageID: ' + imageIds[0])
 
     // create a stack viewport
     const { ViewportType } = Enums
@@ -239,19 +285,10 @@ export default defineComponent({
     // API variant 2: enable Element
     renderingEngine.enableElement(viewportInput)
 
-    console.log('element / viewport enabled')
-
-    /*
-    // from documentation: https://www.cornerstonejs.org/docs/migrationguides/#enabledelement
-    // ELEMENT_ENABLED eventDetail includes:
-    {
-      element,
-      viewportId,
-      renderingEngineId,
-    }
-
-    // TODO: check how to include this
-    */
+    // according to the documentation (https://www.cornerstonejs.org/docs/migrationguides/#enabledelement)
+    // the following elements get enabled:
+    // ELEMENT_ENABLED { element, viewportId, renderingEngineId }
+    console.log('element (& viewport id & rendering engine id) enabled')
 
     //const viewport = renderingEngine.getViewport('Types.IStackViewport') as cornerstone.StackViewport
     const viewport = renderingEngine.getViewport(ViewportType.STACK) as cornerstone.StackViewport
@@ -261,6 +298,8 @@ export default defineComponent({
 
     // set stack on the viewport (only one image in the stack)
     await viewport.setStack(dicomStack)
+    // check if viewport is active
+    //console.log('is viewport disabled? ' + viewport.isDisabled)
 
     /*
     // alternative
@@ -328,6 +367,59 @@ export default defineComponent({
         //TODO: check if finally is needed?
         // maybe implement a function that checks if both inits have been successful?
         console.log('cornerstone tools initalized')
+      }
+    },
+    displayDicomFile(event) {
+      // process your files, read as DataUrl or upload...
+      console.log(event.target.files)
+    },
+    async fetchMetadata(imageId) {
+      try {
+        await cornerstoneDICOMImageLoader.wadouri.loadImage(imageId).promise
+        //await cornerstoneDICOMImageLoader.dicomweb.loadImage(imageId).promise
+      } catch (e) {
+        console.error('Error fetching DICOM meta data', e)
+      } finally {
+        // is finally needed needed?
+        console.log('fetched DICOM meta data for ' + imageId.name)
+      }
+
+      console.log('cornerstone imageID: ' + imageId)
+    },
+    loadImage(imageId) {
+      // parse image id and return a usable URL
+      const url = cornerstoneDICOMImageLoader.parseImageId(imageId)
+
+      // create a new promise
+      const promise = new Promise((resolve, reject) => {
+        // make request for DICOM data inside promise constructor
+        const oReq = new XMLHttpRequest()
+        oReq.open('get', url, true)
+        oReq.responseType = 'arraybuffer'
+        oReq.onreadystatechange = function (oEvent) {
+          if (oReq.readyState === 4) {
+            if (oReq.status == 200) {
+              // request succeeded, create image object
+              const image = cornerstoneDICOMImageLoader.createImageObject(oReq.response)
+
+              // return the image object by resolving the promise
+              resolve(image)
+            } else {
+              // if error occurred, return an object containing the error by
+              // rejecting the promise
+              reject(new Error(oReq.statusText))
+              console.log('error loading image: ' + oReq.statusText)
+            }
+          }
+        }
+
+        oReq.send()
+      })
+
+      // Return an object containing the Promise to cornerstone so it can setup callbacks to be
+      // invoked asynchronously for the success/resolve and failure/reject scenarios.
+      return {
+        promise
       }
     }
     /*
