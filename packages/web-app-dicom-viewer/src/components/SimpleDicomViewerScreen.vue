@@ -7,7 +7,7 @@
     id="dicom-viewer"
     class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium dicom-viewer"
   >
-    <div ref="canvas" class="dicom-canvas"></div>
+    <div ref="canvas" id="dicom-canvas" class="dicom-canvas"></div>
   </div>
 </template>
 
@@ -175,33 +175,44 @@ export default defineComponent({
     // async because of await in image loader and other functions called
 
     // console.log('simple DICOM viewer screen "mounted" hook called')
-    console.log('cornerstone init: ' + this.isCornerstoneInitialized)
+    console.log('cornerstone init status: ' + this.isCornerstoneInitialized)
 
-    let _self = this
     /*
+    let _self = this
+
     // this.listenForCornerstoneImageRendered()
     // this.listenForCornerstoneImageLoaded()
     this.listenForWindowResize()
     */
 
     // enable canvas
-    let canvas = this.$refs.canvas
+    //let canvas = this.$refs.canvas
     //cornerstone.enable(canvas)
 
-    // check if cornerstone core and tools are initalized
-    if (_self.isCornerstoneInitialized) {
-      // create or set reference to HTML element for viewport
-      //const element: HTMLDivElement = document.getElementById('dicom-viewer').style.alignSelf = 'center' // set reference to the canvas element or parent div?!?
-      const element = document.getElementById('dicom-viewer') as HTMLDivElement // set reference to the canvas element or parent div?!?
+    // check again if cornerstone core and tools are initalized
+    if (!this.isCornerstoneInitialized) {
+      // initalize cornerstone core
+      await this.initCornerstoneCore()
+      // method above changes value of isCornerstoneInitialized...
+      // TODO: consider if that shoud only be change when both init methods have passed sucessfully
 
-      // instantiate rendering engine
-      // const renderingEngine = new RenderingEngine()
-      const renderingEngineId = 'dicomRenderingEngine'
-      const renderingEngine = new RenderingEngine(renderingEngineId) // triggers error: @cornerstonejs/core is not initalized
-      console.log('render engine instantiated')
-      // TODO: check if it is really instantiated
+      //_self.initCornerstoneTools()
+      // TODO: fix "error initalizing cornerstone tools TypeError: Cannot read properties of undefined (reading 'removeEventListener')" triggered by init cornerstone tools method
+      // it seems like first tools should be added to a toolgroup and then the whole tool group is activated
+      // see https://www.cornerstonejs.org/api/tools/function/init
+    }
+    // set reference to HTML element for viewport
+    const element = document.getElementById('dicom-canvas') as HTMLDivElement // set reference to the canvas element or parent div?!?
+    console.log('getting ' + element + ' with ID: ' + element.id)
 
-      /*
+    // instantiate rendering engine
+    // const renderingEngine = new RenderingEngine()
+    const renderingEngineId = 'dicomRenderingEngine'
+    const renderingEngine = new RenderingEngine(renderingEngineId) // triggers error: @cornerstonejs/core is not initalized
+    console.log('render engine instantiated')
+    // TODO: check if it is really instantiated
+
+    /*
       // ImageId that matches our registered image loader's 'http:' prefix
       // The webImageLoader uses this to make an xhr request to fetch an image
       // Under the hood, it creates a cornerstone "Image" object needed for display
@@ -212,8 +223,8 @@ export default defineComponent({
       })
       */
 
-      // get image ids and metadata into RAM using helper script from cornerstone 3D demo
-      /*
+    // get image ids and metadata into RAM using helper script from cornerstone 3D demo
+    /*
       // helper function doesn't work because of dicomweb-client import
       const imageIds = await createImageIdsAndCacheMetaData({
         StudyInstanceUID: '1.3.6.1.4.1.14519.5.2.1.7009.2403.334240657131972136850343327463',
@@ -221,50 +232,51 @@ export default defineComponent({
         wadoRsRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb'
       })
       */
-      const imageIds: string[] = []
-      const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add('../MRBRAIN.dcm')
+    //const imageIds: string[] = []
+    const imageIds = [] as string[]
+    const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add('../MRBRAIN.dcm')
 
-      // fetch metadata
-      try {
-        await cornerstoneDICOMImageLoader.wadouri.loadImage(imageId).promise
-      } catch (e) {
-        console.error('Error fetching DICOM meta data', e)
-      } finally {
-        // is finally needed needed?
-        console.log('fetched DICOM meta data for ' + imageId.name)
+    // fetch metadata
+    try {
+      await cornerstoneDICOMImageLoader.wadouri.loadImage(imageId).promise
+    } catch (e) {
+      console.error('Error fetching DICOM meta data', e)
+    } finally {
+      // is finally needed needed?
+      console.log('fetched DICOM meta data for ' + imageId.name)
+    }
+
+    console.log('cornerstone imageID' + imageId)
+    imageIds[0] = imageId
+    console.log('cornerstone imageID' + imageIds[0])
+
+    // create a stack viewport
+    const { ViewportType } = Enums
+
+    const viewportId = 'CT_STACK' // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
+
+    // API variant 1 set Viewports
+    // takes array as input
+    // TODO: use brackets!!!
+    //renderingEngine.setViewports([{
+
+    // API variant 2: Enable Element
+    // no brackets
+    renderingEngine.enableElement({
+      viewportId: viewportId, // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
+      type: ViewportType.STACK,
+      element,
+      defaultOptions: {
+        background: <Types.Point3>[0.2, 0, 0.2]
+        // more settings
+        // orientation: Enums.OrientationAxis.AXIAL,
       }
+    })
+    //}])
 
-      console.log('cornerstone imageID' + imageId)
-      imageIds[0] = imageId
-      console.log('cornerstone imageID' + imageIds[0])
+    console.log('element / viewport enabled')
 
-      // create a stack viewport
-      const { ViewportType } = Enums
-
-      const viewportId = 'CT_STACK' // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
-
-      // API variant 1 set Viewports
-      // takes array as input
-      // TODO: use brackets!!!
-      //renderingEngine.setViewports([{
-
-      // API variant 2: Enable Element
-      // no brackets
-      renderingEngine.enableElement({
-        viewportId: viewportId, // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
-        type: ViewportType.STACK,
-        element,
-        defaultOptions: {
-          background: <Types.Point3>[0.2, 0, 0.2]
-          // more settings
-          // orientation: Enums.OrientationAxis.AXIAL,
-        }
-      })
-      //}])
-
-      console.log('element / viewport enabled')
-
-      /*
+    /*
       // from documentation: https://www.cornerstonejs.org/docs/migrationguides/#enabledelement
       // ELEMENT_ENABLED eventDetail includes:
       {
@@ -276,13 +288,17 @@ export default defineComponent({
       // TODO: check how to include this
       */
 
-      //const viewport = renderingEngine.getViewport('Types.IStackViewport') as cornerstone.StackViewport
-      const viewport = renderingEngine.getViewport(ViewportType.STACK) as cornerstone.StackViewport
+    //const viewport = renderingEngine.getViewport('Types.IStackViewport') as cornerstone.StackViewport
+    const viewport = renderingEngine.getViewport(ViewportType.STACK) as cornerstone.StackViewport
 
-      // one image in the stack
-      await viewport.setStack([imageId])
+    // define a stack containing a single image
+    const dicomStack = [imageIds[0]]
 
-      /*
+    // one image in the stack
+    //await viewport.setStack([imageId])
+    await viewport.setStack(dicomStack)
+
+    /*
       // multiple imageIds
       await viewport.setStack(
         [imageId1, imageId2],
@@ -290,41 +306,30 @@ export default defineComponent({
       )
       */
 
-      // Updates every viewport in the rendering engine.
-      renderingEngine.render()
+    // Updates every viewport in the rendering engine.
+    renderingEngine.render()
 
-      /*
+    /*
       // Update a single viewport
       const myViewport = myScene.getViewport(viewportId)
       // TODO: check reference for "myScene"
       myViewport.render()
       */
 
-      // OLD CODE
-      // get stack viewport that was created
-      //const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
+    // OLD CODE
+    // get stack viewport that was created
+    //const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
 
-      // define a stack containing a single image
-      //const stack = [imageIds[0]]
+    // define a stack containing a single image
+    //const stack = [imageIds[0]]
 
-      // init cornerstone tools
-      //_self.initCornerstoneTools()
-      /*
+    // init cornerstone tools
+    //_self.initCornerstoneTools()
+    /*
       cornerstoneTools.init({
         globalToolSyncEnabled: true
       })
       */
-    } else {
-      // initalize cornerstone core
-      _self.initCornerstoneCore()
-      // method above changes value of isCornerstoneInitialized...
-      // TODO: consider if that shoud only be change when both init methods have passed sucessfully
-
-      //_self.initCornerstoneTools()
-      // TODO: fix "error initalizing cornerstone tools TypeError: Cannot read properties of undefined (reading 'removeEventListener')" triggered by init cornerstone tools method
-      // it seems like first tools should be added to a toolgroup and then the whole tool group is activated
-      // see https://www.cornerstonejs.org/api/tools/function/init
-    }
   },
   beforeDestroy() {
     // Remove jQuery event listeners --> TODO check if this is needed
@@ -584,8 +589,8 @@ $(document).ready(function() {
 
 .dicom-canvas {
   border: 10px solid yellow;
-  width: 500px; //100%;
-  height: 500px; //100%;
+  width: 500px; // 100%;
+  height: 500px; // 100%;
 }
 </style>
 
