@@ -83,43 +83,9 @@ cornerstone.registerImageLoader('http', cornerstoneDICOMImageLoader.loadImage)
 cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 
 // init providers (for metadata handling?)
-// according to documentation, image loader also registers metaDataProvider
+// --> according to documentation, image loader also registers metaDataProvider
 
 // init (streaming) volume loader?!?
-
-/*
-// create a stack viewport
-const { ViewportType } = Enums
-const element = document.createElement('div') // TODO: set reference to the canvas element
-
-const viewportId = 'CT_STACK' // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
-const viewportInput = {
-  viewportId,
-  type: ViewportType.STACK,
-  element,
-  defaultOptions: {
-    background: <Types.Point3>[0.2, 0, 0.2]
-  }
-}
-
-renderingEngine.enableElement(viewportInput)
-
-// get stack viewport that was created
-const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
-
-// define a stack containing a single image
-const stack = [imageIds[0]]
-
-// set stack on the viewport
-// TODO: put everything into a async function
-// await viewport.setStack(stack)
-
-// set the VOI of the stack
-// viewport.setProperties({ voiRange: ctVoiRange })
-
-// render the image
-viewport.render()
-*/
 
 export default defineComponent({
   name: 'SimpleDicomViewerScreen',
@@ -232,7 +198,7 @@ export default defineComponent({
         wadoRsRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb'
       })
       */
-    //const imageIds: string[] = []
+
     const imageIds = [] as string[]
     const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add('../MRBRAIN.dcm')
 
@@ -255,38 +221,37 @@ export default defineComponent({
 
     const viewportId = 'CT_STACK' // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
 
-    // API variant 1 set Viewports
-    // takes array as input
-    // TODO: use brackets!!!
-    //renderingEngine.setViewports([{
-
-    // API variant 2: Enable Element
-    // no brackets
-    renderingEngine.enableElement({
-      viewportId: viewportId, // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
+    const viewportInput = {
+      viewportId,
       type: ViewportType.STACK,
       element,
       defaultOptions: {
         background: <Types.Point3>[0.2, 0, 0.2]
-        // more settings
+        // more settings, TODO: check what other settings are needed
         // orientation: Enums.OrientationAxis.AXIAL,
       }
-    })
-    //}])
+    }
+
+    // API variant 1: set Viewports
+    // takes array as input --> use brackets!!!
+    // renderingEngine.setViewports([viewportInput])
+
+    // API variant 2: enable Element
+    renderingEngine.enableElement(viewportInput)
 
     console.log('element / viewport enabled')
 
     /*
-      // from documentation: https://www.cornerstonejs.org/docs/migrationguides/#enabledelement
-      // ELEMENT_ENABLED eventDetail includes:
-      {
-        element,
-        viewportId,
-        renderingEngineId,
-      }
+    // from documentation: https://www.cornerstonejs.org/docs/migrationguides/#enabledelement
+    // ELEMENT_ENABLED eventDetail includes:
+    {
+      element,
+      viewportId,
+      renderingEngineId,
+    }
 
-      // TODO: check how to include this
-      */
+    // TODO: check how to include this
+    */
 
     //const viewport = renderingEngine.getViewport('Types.IStackViewport') as cornerstone.StackViewport
     const viewport = renderingEngine.getViewport(ViewportType.STACK) as cornerstone.StackViewport
@@ -294,42 +259,41 @@ export default defineComponent({
     // define a stack containing a single image
     const dicomStack = [imageIds[0]]
 
-    // one image in the stack
-    //await viewport.setStack([imageId])
+    // set stack on the viewport (only one image in the stack)
     await viewport.setStack(dicomStack)
 
     /*
-      // multiple imageIds
-      await viewport.setStack(
-        [imageId1, imageId2],
-        1 // frame 1
-      )
-      */
+    // alternative
+    // set stack on the viewport with multiple imageIds
+    await viewport.setStack(
+      imageIds, // all image Ids
+      1 // frame that should get displayed
+    )
+    */
 
-    // Updates every viewport in the rendering engine.
+    // set the VOI of the stack?
+    // --> from cornerstone 3D example, check if this is needed
+    // viewport.setProperties({ voiRange: ctVoiRange })
+
+    // render the image
+    // updates every viewport in the rendering engine
     renderingEngine.render()
 
     /*
-      // Update a single viewport
-      const myViewport = myScene.getViewport(viewportId)
-      // TODO: check reference for "myScene"
-      myViewport.render()
-      */
+    // Update a single viewport
+    const myViewport = myScene.getViewport(viewportId)
+    // TODO: check reference for "myScene"
+    myViewport.render()
+    */
 
-    // OLD CODE
-    // get stack viewport that was created
-    //const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
-
-    // define a stack containing a single image
-    //const stack = [imageIds[0]]
-
+    // cornerstone tools
     // init cornerstone tools
     //_self.initCornerstoneTools()
     /*
-      cornerstoneTools.init({
-        globalToolSyncEnabled: true
-      })
-      */
+    cornerstoneTools.init({
+      globalToolSyncEnabled: true
+    })
+    */
   },
   beforeDestroy() {
     // Remove jQuery event listeners --> TODO check if this is needed
