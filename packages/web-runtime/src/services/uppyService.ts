@@ -50,9 +50,23 @@ export class UppyService {
       },
       locale: {
         strings: {
-          // for some reason this string is required and missing in uppy
-          addedNumFiles: $gettext('Added %{numFiles} file(s)'),
-          loadedXFiles: $gettext('Loaded %{numFiles} files')
+          addedNumFiles: $gettext('Added %{numFiles} file(s)'), // for some reason this string is required and missing in uppy
+          authenticateWith: $gettext('Connect to %{pluginName}'),
+          authenticateWithTitle: $gettext('Please authenticate with %{pluginName} to select files'),
+          cancel: $gettext('Cancel'),
+          companionError: $gettext('Connection with Companion failed'),
+          loadedXFiles: $gettext('Loaded %{numFiles} files'),
+          loading: $gettext('Loading...'),
+          logOut: $gettext('Log out'),
+          publicLinkURLLabel: $gettext('Public Link URL'),
+          publicLinkURLDescription: $gettext(
+            'Please provide a URL to a public link without password protection.'
+          ),
+          selectX: {
+            0: $gettext('Select %{smart_count}'),
+            1: $gettext('Select %{smart_count}')
+          },
+          signInWithGoogle: $gettext('Sign in with Google')
         }
       }
     })
