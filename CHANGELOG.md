@@ -297,6 +297,7 @@ Details
    https://github.com/owncloud/web/issues/9445
    https://github.com/owncloud/web/issues/9469
    https://github.com/owncloud/web/issues/9454
+   https://github.com/owncloud/web/issues/9486
    https://github.com/owncloud/web/pull/9150
    https://github.com/owncloud/web/pull/9282
    https://github.com/owncloud/web/pull/9291
@@ -304,6 +305,7 @@ Details
    https://github.com/owncloud/web/pull/9460
    https://github.com/owncloud/web/pull/9471
    https://github.com/owncloud/web/pull/9470
+   https://github.com/owncloud/web/pull/9487
 
 * Enhancement - Privacy statement in account menu: [#9174](https://github.com/owncloud/web/issues/9174)
 
