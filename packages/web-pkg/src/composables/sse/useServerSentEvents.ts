@@ -1,5 +1,5 @@
 import { EventSourceMessage, fetchEventSource } from '@microsoft/fetch-event-source'
-import { ref, unref } from 'vue'
+import { ref, unref, watch } from 'vue'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
 import { configurationManager, useAccessToken, useStore } from 'web-pkg/src'
@@ -16,6 +16,14 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
   const accessToken = useAccessToken({ store })
   const ctrl = new AbortController()
   const retryCounter = ref(0)
+
+  watch(
+    () => language.current,
+    () => {
+      ctrl.abort()
+      setupServerSentEvents()
+    }
+  )
   const setupServerSentEvents = () => {
     if (unref(retryCounter) >= 5) {
       ctrl.abort()
