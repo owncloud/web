@@ -251,7 +251,6 @@ export default defineComponent({
       if (resolvePublicLinkTask.isError) {
         return resolvePublicLinkTask.last.error.message
       }
-
       if (loadTokenInfoTask.isError) {
         return loadTokenInfoTask.last.error.message
       }
