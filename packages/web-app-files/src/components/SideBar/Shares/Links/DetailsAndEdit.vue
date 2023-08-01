@@ -511,8 +511,16 @@ export default defineComponent({
   justify-content: flex-end;
 }
 
-.edit-public-link-role-dropdown {
-  width: 400px;
+@media (max-width: $oc-breakpoint-medium-default) {
+  .edit-public-link-role-dropdown {
+    width: 100%;
+  }
+}
+
+@media (min-width: $oc-breakpoint-medium-default) {
+  .edit-public-link-role-dropdown {
+    width: 400px;
+  }
 }
 
 .role-dropdown-list span {
