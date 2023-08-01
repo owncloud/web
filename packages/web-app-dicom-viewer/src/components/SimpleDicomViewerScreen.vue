@@ -4,12 +4,11 @@
   :class="{ lightbox: isFullScreenModeActivated }
   -->
   <form ref="form" style="margin-bottom: 20px">
-    <p>file upload</p>
+    <p>file upload (for testing only)</p>
     <input
       id="select-dicom-file"
       type="file"
-      @change="displayDicomFile"
-      multiple
+      @change="uploadDicomFile"
       tabindex="-1"
       accept="application/dicom, application/octet-stream"
     />
@@ -86,6 +85,35 @@ var config = {
 }
 
 cornerstoneDICOMImageLoader.webWorkerManager.initialize(config);
+*/
+
+/*
+cornerstoneDICOMImageLoader.configure({
+  decodeConfig: {
+    convertFloatPixelDataToInt: false
+  }
+  /*
+  // from https://github.com/OHIF/Viewers/pull/3339/files
+  ,
+  beforeSend: function(xhr) {
+      const headers = userAuthenticationService.getAuthorizationHeader()
+      const xhrRequestHeaders = {
+        Accept: appConfig.omitQuotationForMultipartRequest
+          ? 'multipart/related; type=application/octet-stream'
+          : 'multipart/related; type="application/octet-stream"',
+        // 'multipart/related; type="image/x-jls", multipart/related; type="image/jls"; transfer-syntax="1.2.840.10008.1.2.4.80", multipart/related; type="image/x-jls", multipart/related; type="application/octet-stream"; transfer-syntax=*',
+      }
+      if (headers && headers.Authorization) {
+        xhrRequestHeaders.Authorization = headers.Authorization;
+      }
+      return xhrRequestHeaders;
+    },
+    errorInterceptor: error => {
+      errorHandler.getHTTPErrorHandler(error);
+    },
+    */
+/*
+})
 */
 
 // register image loader
@@ -184,6 +212,8 @@ export default defineComponent({
       // it seems like first tools should be added to a toolgroup and then the whole tool group is activated
       // see https://www.cornerstonejs.org/api/tools/function/init
     }
+
+    // HIDE FOR TESTING (delete this line)
     // set reference to HTML element for viewport
     const element = document.getElementById('dicom-canvas') as HTMLDivElement // set reference to the canvas element or parent div?!?
     console.log('getting ' + element + ' with ID: ' + element.id)
@@ -221,8 +251,6 @@ export default defineComponent({
     })
     */
 
-    const imageIds = [] //as string[]
-
     /*
     // get file through file upload
     document.getElementById('select-dicom-file').addEventListener('change', function (e: any) {
@@ -239,6 +267,8 @@ export default defineComponent({
 
     */
 
+    // HIDE FOR TESTING (delete this line)
+    const imageIds = [] //as string[]
     const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(
       'wadouri:' + this.dicomImagePath
     )
@@ -314,6 +344,7 @@ export default defineComponent({
     // --> from cornerstone 3D example, check if this is needed
     // viewport.setProperties({ voiRange: ctVoiRange })
 
+    // HIDE FOR TESTING (delete this line)
     // render the image
     // updates every viewport in the rendering engine
     renderingEngine.render()
@@ -369,9 +400,16 @@ export default defineComponent({
         console.log('cornerstone tools initalized')
       }
     },
-    displayDicomFile(event) {
+    uploadDicomFile(event) {
       // process your files, read as DataUrl or upload...
-      console.log(event.target.files)
+      const dicomFile = event.target.files[0] as File
+
+      // for testing only
+      console.log('file uploaded: ' + dicomFile)
+      console.log('file type: ' + typeof (dicomFile as File))
+      console.log('file name: ' + typeof dicomFile.name)
+
+      //this.displayDicomFile(dicomFile)
     },
     async fetchMetadata(imageId) {
       try {
@@ -385,6 +423,76 @@ export default defineComponent({
       }
 
       console.log('cornerstone imageID: ' + imageId)
+    },
+    async displayDicomFile(f: File) {
+      const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(f)
+      console.log('added file with image id: ' + imageId)
+      console.log('file type: ' + typeof imageId) // string
+      console.log('image id: ' + typeof imageId.id)
+      console.log('image name: ' + typeof imageId.name)
+
+      // check if this is needed
+      /*
+      const fileRequest = cornerstoneDICOMImageLoader.wadouri.loadFileRequest(imageId)
+      console.log('file request: ' + fileRequest)
+      console.log('file request type: ' + typeof fileRequest) // promise
+      console.log('file request name: ' + typeof fileRequest.name)
+      */
+
+      // set reference to HTML element for viewport
+      const element = document.getElementById('dicom-canvas') as HTMLDivElement
+
+      // instantiate/register rendering engine
+      const renderingEngineId = 'dicomRenderingEngine'
+      const renderingEngine = new RenderingEngine(renderingEngineId)
+      console.log('render engine instantiated')
+
+      // fetch metadata
+      try {
+        await cornerstoneDICOMImageLoader.wadouri.loadImage(imageId).promise
+      } catch (e) {
+        console.error('Error fetching DICOM meta data', e)
+      } finally {
+        // is finally needed needed?
+        console.log('fetched DICOM meta data for ' + imageId.name)
+      }
+
+      // create a stack viewport
+      const { ViewportType } = Enums
+
+      const viewportId = 'CT_STACK' // additional types of viewports: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
+
+      const viewportInput = {
+        viewportId,
+        type: ViewportType.STACK,
+        element,
+        defaultOptions: {
+          background: <Types.Point3>[0.2, 0, 0.2]
+          // more settings, TODO: check what other settings are needed
+          // orientation: Enums.OrientationAxis.AXIAL,
+        }
+      }
+
+      // enable element
+      renderingEngine.enableElement(viewportInput)
+
+      // according to the documentation (https://www.cornerstonejs.org/docs/migrationguides/#enabledelement)
+      // the following elements get enabled:
+      // ELEMENT_ENABLED { element, viewportId, renderingEngineId }
+      console.log('element (& viewport id & rendering engine id) enabled')
+
+      //const viewport = renderingEngine.getViewport('Types.IStackViewport') as cornerstone.StackViewport
+      const viewport = renderingEngine.getViewport(ViewportType.STACK) as cornerstone.StackViewport
+
+      // define a stack containing a single image
+      const dicomStack = [imageId]
+
+      // set stack on the viewport (only one image in the stack)
+      await viewport.setStack(dicomStack) // error: cannot read properties
+
+      // render the image
+      // updates every viewport in the rendering engine
+      renderingEngine.render()
     },
     loadImage(imageId) {
       // parse image id and return a usable URL
