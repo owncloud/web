@@ -8,7 +8,7 @@ Then(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const application = new objects.runtime.Application({ page })
-    const messages = await application.getNotificationMessages()
+    const messages = await application.getNotificationMessages(false)
     for (const { message } of stepTable.hashes()) {
       expect(messages).toContain(message)
     }
@@ -20,7 +20,7 @@ Then(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const application = new objects.runtime.Application({ page })
-    const messages = await application.getNotificationMessages()
+    const messages = await application.getNotificationMessages(false)
     expect(messages.length).toBe(0)
   }
 )
@@ -30,6 +30,6 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const application = new objects.runtime.Application({ page })
-    await application.markNotificationsAsRead()
+    await application.markNotificationsAsRead(true)
   }
 )

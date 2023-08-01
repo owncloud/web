@@ -25,23 +25,26 @@ export class Application {
     await this.#page.locator(util.format(appSelector, name, name)).click()
   }
 
-  async getNotificationMessages(): Promise<string[]> {
+  async getNotificationMessages(oc10 = true): Promise<string[]> {
     // reload will fetch notifications immediately
     // wait for the notifications to load
-    await Promise.all([
-      this.#page.waitForResponse(
-        (resp) =>
-          resp.url().endsWith('notifications?format=json') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'GET'
-      ),
-      this.#page.reload()
-    ])
+    if (oc10) {
+      await Promise.all([
+        this.#page.waitForResponse(
+          (resp) =>
+            resp.url().endsWith('notifications?format=json') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'GET'
+        ),
+        this.#page.reload()
+      ])
+    }
 
     const dropIsOpen = await this.#page.locator(notificationsDrop).isVisible()
     if (!dropIsOpen) {
       await this.#page.locator(notificationsBell).click()
     }
+
     await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
     const result = this.#page.locator(notificationItemsMessages)
     const messages = []
@@ -52,7 +55,7 @@ export class Application {
     return messages
   }
 
-  async markNotificationsAsRead(): Promise<void> {
+  async markNotificationsAsRead(oc10 = false): Promise<void> {
     const dropIsOpen = await this.#page.locator(notificationsDrop).isVisible()
     if (!dropIsOpen) {
       await this.#page.locator(notificationsBell).click()
@@ -60,5 +63,8 @@ export class Application {
     await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
     await this.#page.locator(markNotificationsAsReadButton).click()
     await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
+    if (oc10) {
+      await this.#page.reload()
+    }
   }
 }
