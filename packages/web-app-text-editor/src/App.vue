@@ -1,3 +1,5 @@
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
 <template>
   <main id="text-editor" class="oc-height-1-1">
     <app-top-bar
@@ -36,6 +38,8 @@
 </template>
 <script lang="ts">
 import { marked } from 'marked'
+import { markedHighlight } from 'marked-highlight'
+import hljs from 'highlight.js'
 import sanitizeHtml from 'sanitize-html'
 import { useTask } from 'vue-concurrency'
 import { computed, defineComponent, onMounted, onBeforeUnmount, ref, unref, Ref, watch } from 'vue'
@@ -78,6 +82,16 @@ export default defineComponent({
     }
   },
   setup() {
+    marked.use(
+      markedHighlight({
+        langPrefix: 'hljs language-',
+        highlight(code, lang) {
+          const language = hljs.getLanguage(lang) ? lang : 'plaintext'
+          return hljs.highlight(code, { language }).value
+        }
+      })
+    )
+
     const defaults = useAppDefaults({
       applicationId: 'text-editor'
     })
@@ -181,9 +195,8 @@ export default defineComponent({
     )
 
     const renderedMarkdown = computed(() => {
-      return unref(currentContent) && showPreview
-        ? sanitizeHtml(marked(unref(currentContent)))
-        : null
+      console.log('WTF')
+      return unref(currentContent) && showPreview ? marked.parse(unref(currentContent)) : null
     })
 
     const isDirty = computed(() => {

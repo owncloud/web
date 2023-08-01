@@ -12,5 +12,9 @@
     "vuex": "4.1.0",
     "web-client": "workspace:@ownclouders/web-client@*",
     "web-pkg": "workspace:@ownclouders/web-pkg@*"
+  },
+  "dependencies": {
+    "highlight.js": "^11.8.0",
+    "marked-highlight": "^2.0.1"
   }
 }
