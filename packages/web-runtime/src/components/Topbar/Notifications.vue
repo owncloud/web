@@ -99,7 +99,8 @@ import {
   useClientService,
   useRoute,
   useStore,
-  useServerSentEvents
+  useServerSentEvents,
+  useCapabilityCoreSSE
 } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
@@ -120,24 +121,27 @@ export default {
     const notificationsInterval = ref()
     const dropdownOpened = ref(false)
 
-    const setupServerSentEvents = useServerSentEvents({
-      url: 'ocs/v2.php/apps/notifications/api/v1/notifications/sse',
-      onOpen: (response): void => {
-        if (!response.ok) {
-          console.error(`SSE notifications couldn't be set up ${response.status}`)
-        }
-      },
-      onMessage: (msg): void => {
-        if (msg.event === 'FatalError') {
-          console.error(`SSE notifications error: ${msg.data}`)
-          return
-        }
-        const data = JSON.parse(msg.data)
-        if (data.notification_id) {
-          notifications.value = [data, ...unref(notifications)]
-        }
-      }
-    })
+    const sseEnabled = useCapabilityCoreSSE()
+    const setupServerSentEvents = unref(sseEnabled)
+      ? useServerSentEvents({
+          url: 'ocs/v2.php/apps/notifications/api/v1/notifications/sse',
+          onOpen: (response): void => {
+            if (!response.ok) {
+              console.error(`SSE notifications couldn't be set up ${response.status}`)
+            }
+          },
+          onMessage: (msg): void => {
+            if (msg.event === 'FatalError') {
+              console.error(`SSE notifications error: ${msg.data}`)
+              return
+            }
+            const data = JSON.parse(msg.data)
+            if (data.notification_id) {
+              notifications.value = [data, ...unref(notifications)]
+            }
+          }
+        })
+      : () => {}
 
     const formatDate = (date) => {
       return formatDateFromISO(date, currentLanguage)
@@ -310,7 +314,7 @@ export default {
     }
 
     onMounted(async () => {
-      if (setupServerSentEvents) {
+      if (unref(sseEnabled)) {
         await setupServerSentEvents()
       }
       fetchNotificationsTask.perform()

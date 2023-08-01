@@ -29,6 +29,7 @@ export const useCapabilityCoreSupportUrlSigning = createCapabilityComposable(
   'core.support-url-signing',
   false
 )
+export const useCapabilityCoreSSE = createCapabilityComposable('core.support-sse', false)
 export const useCapabilityGraphPersonalDataExport = createCapabilityComposable(
   'graph.personal-data-export',
   false
