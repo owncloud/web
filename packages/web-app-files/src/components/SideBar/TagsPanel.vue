@@ -9,14 +9,15 @@
         class="oc-mb-s"
         :multiple="true"
         :options="availableTags"
+        :contextual-helper="contextualHelper"
         taggable
-        push-tags
         :select-on-key-codes="[keycode('enter'), keycode(',')]"
         :label="$gettext('Add or edit tags')"
         :create-option="createOption"
         :selectable="isOptionSelectable"
         :fix-message-line="true"
-        @update:model-value="updateModelValue"
+        :map-keydown="keydownMethods"
+        @update:model-value="save"
       >
         <template #selected-option-container="{ option, deselect }">
           <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
@@ -63,6 +64,9 @@ import { Resource } from 'web-client'
 import diff from 'lodash-es/difference'
 import { useGettext } from 'vue3-gettext'
 import keycode from 'keycode'
+import { tagsHelper } from 'web-app-files/src/helpers/contextualHelpers'
+import { configurationManager } from 'web-pkg'
+import {ContextualHelper} from "design-system/src/helpers";
 
 const tagsMaxCount = 100
 
@@ -98,14 +102,15 @@ export default defineComponent({
 
       allTags = tags
       const selectedLabels = new Set(unref(selectedTags).map((o) => o.label))
-      availableTags.value = tags.filter((t) => selectedLabels.has(t) === false)
+      availableTags.value = tags
+        .filter((t) => selectedLabels.has(t) === false)
+        .map((t) => ({ label: t }))
     })
 
     const revertChanges = () => {
       selectedTags.value = unref(currentTags)
     }
     const createOption = (label: string): TagOption => {
-      console.log('hallo', { label: label.toLowerCase().trim() })
       if (!label.trim().length) {
         return {
           label: label.toLowerCase().trim(),
@@ -122,10 +127,19 @@ export default defineComponent({
       return !unref(tagSelect).$refs.select.optionExists(option)
     }
 
-    const save = async () => {
+    const save = async (e) => {
       try {
+        selectedTags.value = e.map((x) => (typeof x === 'object' ? x : { label: x }))
+        const allAvailableTags = new Set([...allTags, ...unref(availableTags).map((t) => t.label)])
+
+        availableTags.value = diff(
+          Array.from(allAvailableTags),
+          unref(selectedTags).map((o) => o.label)
+        ).map((label) => ({
+          label: label
+        }))
+
         const { id, tags, fileId } = unref(resource)
-        console.log(unref(selectedTags))
         const selectedTagLabels = unref(selectedTags).map((t) => t.label)
         const tagsToAdd = diff(selectedTagLabels, tags)
         const tagsToRemove = diff(tags, selectedTagLabels)
@@ -151,6 +165,7 @@ export default defineComponent({
         })
 
         eventBus.publish('sidebar.entity.saved')
+        unref(tagSelect).$refs.search.focus()
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
@@ -173,20 +188,33 @@ export default defineComponent({
       loadAvailableTagsTask.perform()
     })
 
-    const updateModelValue = async (e) => {
-      selectedTags.value = e.map((x) => (typeof x === 'object' ? x : { label: x }))
-      const currentlyAvailableTags = unref(availableTags)
-      allTags.forEach((t) =>
-        currentlyAvailableTags.includes(t) ? null : currentlyAvailableTags.push(t)
-      )
-      availableTags.value = currentlyAvailableTags.filter(
-        (l) =>
-          unref(selectedTags)
-            .map((o) => o.label)
-            .includes(typeof l === 'object' ? l.label : l) === false
-      )
-      console.log(selectedTags.value)
-      await save()
+    const keydownMethods = (map, vm) => {
+      const objectMapping = {
+        ...map
+      }
+      objectMapping[keycode('backspace')] = async (e) => {
+        e.preventDefault()
+        if (selectedTags.value.length === 0) {
+          return
+        }
+        availableTags.value.push(selectedTags.value.pop())
+        await save(unref(selectedTags))
+      }
+
+      return objectMapping
+    }
+
+    const tagsHelp = () => {
+      return tagsHelper({ configurationManager: configurationManager })
+    }
+
+    const helpersEnabled = () => {
+      return configurationManager.options.contextHelpers
+    }
+
+    const contextualHelper = {
+      isEnabled: helpersEnabled(),
+      options: tagsHelper({ configurationManager: configurationManager })
     }
 
     return {
@@ -203,7 +231,8 @@ export default defineComponent({
       showSelectNewLabel,
       save,
       keycode,
-      updateModelValue
+      keydownMethods,
+      contextualHelper
     }
   }
 })

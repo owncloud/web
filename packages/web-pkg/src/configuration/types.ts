@@ -19,6 +19,7 @@ export interface OptionsConfiguration {
   upload?: UploadOptionsConfiguration
   logoutUrl?: string
   contextHelpersReadMore?: boolean
+  contextHelpers?: boolean
   openLinksWithDefaultApp?: boolean
   tokenStorageLocal?: boolean
 }

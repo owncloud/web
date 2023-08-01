@@ -1,24 +1,9 @@
-import { ConfigurationManager } from 'web-pkg'
 import { omit } from 'lodash-es'
+import { ContextualHelperData, ContextualHelperOptions } from 'design-system/src/helpers'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
   return msg
-}
-
-export interface ContextualHelperDataListItem {
-  text: string
-  headline?: boolean
-}
-export interface ContextualHelperData {
-  title: string
-  text?: string
-  list?: ContextualHelperDataListItem[]
-  readMoreLink?: string
-}
-
-export interface ContextualHelperOptions {
-  configurationManager: ConfigurationManager
 }
 
 export const shareInviteCollaboratorHelp = (options: ContextualHelperOptions) =>
@@ -154,3 +139,18 @@ const filterContextHelper = (
   }
   return data
 }
+
+export const tagsHelper = (options: ContextualHelperOptions) =>
+  filterContextHelper(
+    {
+      title: $gettext('Who can view tags?'),
+      list: [
+        {
+          text: $gettext(
+            'Everyone who can view the file can view its tags. Likewise, everyone who can edit the file can edit its tags.'
+          )
+        }
+      ]
+    },
+    options
+  )

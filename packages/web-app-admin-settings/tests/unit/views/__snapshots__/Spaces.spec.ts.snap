@@ -28,6 +28,7 @@ exports[`Spaces view loading states should render spaces list after loading has 
                         <label class="oc-page-size-label" for="oc-page-size-3">Items per page</label>
                         <div class="oc-page-size-select" input-id="oc-page-size-3" options="20,50,100,250">
                           <label class="oc-label" for="oc-select-4"></label>
+                          <!--v-if-->
                           <div class="v-select vs--single vs--unsearchable oc-select oc-page-size-select" dir="auto" style="background: transparent;">
                             <div aria-expanded="false" aria-label="Search for option" aria-owns="vs2__listbox" class="vs__dropdown-toggle" id="vs2__combobox" role="combobox">
                               <div class="vs__selected-options">
