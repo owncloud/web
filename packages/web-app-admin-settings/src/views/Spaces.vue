@@ -160,7 +160,8 @@ export default defineComponent({
         return selectedSpaces.value.push(toggledSpace)
       }
 
-      selectedSpaces.value = unref(selectedSpaces).filter((s) => s.id !== toggledSpace.id)
+      const index = selectedSpaces.value.findIndex((s) => s.id === toggledSpace.id)
+      selectedSpaces.value.splice(index, 1)
     }
 
     const unselectAllSpaces = () => {

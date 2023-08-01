@@ -831,7 +831,8 @@ export default defineComponent({
         return this.selectedUsers.push(this.users.find((u) => u.id === toggledUser.id))
       }
 
-      this.selectedUsers = this.selectedUsers.filter((user) => user.id !== toggledUser.id)
+      const index = this.selectedUsers.findIndex((user) => user.id === toggledUser.id)
+      this.selectedUsers.splice(index, 1)
     },
     unselectAllUsers() {
       this.selectedUsers = []

@@ -42,8 +42,7 @@
           :option="item"
           :label="getSelectSpaceLabel(item)"
           hide-label
-          @update:model-value="toggleSpace(item)"
-          @click.stop="fileClicked([item, $event, true])"
+          @click.stop="fileClicked([item, $event])"
         />
       </template>
       <template #icon>
@@ -403,15 +402,15 @@ export default defineComponent({
     const fileClicked = (data) => {
       const resource = data[0]
       const eventData = data[1]
-      const skipTargetSelection = data[2] ?? false
 
       const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
       if (contextActionClicked) {
         return
       }
       if (eventData?.shiftKey) {
-        return eventBus.publish('app.files.list.clicked.shift', { resource, skipTargetSelection })
+        return eventBus.publish('app.files.list.clicked.shift', { resource })
       }
+      toggleSpace(resource)
     }
 
     const showContextMenuOnBtnClick = (data, space) => {

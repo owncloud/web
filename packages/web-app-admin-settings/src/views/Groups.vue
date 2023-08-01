@@ -221,7 +221,8 @@ export default defineComponent({
       if (!isGroupSelected) {
         return this.selectedGroups.push(toggledGroup)
       }
-      this.selectedGroups = this.selectedGroups.filter((group) => group.id !== toggledGroup.id)
+      const index = this.selectedGroups.findIndex((group) => group.id === toggledGroup.id)
+      this.selectedGroups.splice(index, 1)
     },
     unselectAllGroups() {
       this.selectedGroups = []

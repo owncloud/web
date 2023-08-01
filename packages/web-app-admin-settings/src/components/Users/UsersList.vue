@@ -49,8 +49,7 @@
           :option="item"
           :label="getSelectUserLabel(item)"
           hide-label
-          @update:model-value="toggleUser(item)"
-          @click.stop="rowClicked([item, $event, true])"
+          @click.stop="rowClicked([item, $event])"
         />
       </template>
       <template #avatar="{ item }">
@@ -199,15 +198,15 @@ export default defineComponent({
     const rowClicked = (data) => {
       const resource = data[0]
       const eventData = data[1]
-      const skipTargetSelection = data[2] ?? false
 
       const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
       if (contextActionClicked) {
         return
       }
       if (eventData?.shiftKey) {
-        return eventBus.publish('app.files.list.clicked.shift', { resource, skipTargetSelection })
+        return eventBus.publish('app.files.list.clicked.shift', { resource })
       }
+      toggleUser(resource)
     }
     const showContextMenuOnBtnClick = (data, user) => {
       const { dropdown, event } = data

@@ -41,8 +41,7 @@
           :option="rowData.item"
           :label="getSelectGroupLabel(rowData.item)"
           hide-label
-          @update:model-value="toggleGroup(rowData.item)"
-          @click.stop="rowClicked([rowData.item, $event, true])"
+          @click.stop="rowClicked([rowData.item, $event])"
         />
       </template>
       <template #avatar="rowData">
@@ -175,15 +174,15 @@ export default defineComponent({
     const rowClicked = (data) => {
       const resource = data[0]
       const eventData = data[1]
-      const skipTargetSelection = data[2] ?? false
 
       const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
       if (contextActionClicked) {
         return
       }
       if (eventData?.shiftKey) {
-        return eventBus.publish('app.files.list.clicked.shift', { resource, skipTargetSelection })
+        return eventBus.publish('app.files.list.clicked.shift', { resource })
       }
+      toggleGroup(resource)
     }
     const showContextMenuOnBtnClick = (data, group) => {
       const { dropdown, event } = data
