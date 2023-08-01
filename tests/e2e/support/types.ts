@@ -48,3 +48,13 @@ export interface Token {
   userId: string
   tokenValue: string
 }
+
+export interface Cookie {
+  userId: string
+  authSessionId: string
+  keycloakIdentity: string
+  authSessionIdLegacy: string
+  keycloakSession: string
+  keycloakSessionLegacy: string
+  keycloakIdentityLegacy: string
+}

@@ -2,6 +2,7 @@ const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 
 exports.config = {
   // environment
+  keycloak: process.env.KEYCLOAK === 'true',
   assets: './tests/e2e/filesForUpload',
   tempAssetsPath: './tests/e2e/filesForUpload/temp',
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
