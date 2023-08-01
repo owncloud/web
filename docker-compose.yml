@@ -154,7 +154,7 @@ services:
     image: ${OCIS_IMAGE:-owncloud/ocis:latest}
     command: app-provider server
     environment:
-      APP_PROVIDER_LOG_LEVEL: debug
+      APP_PROVIDER_LOG_LEVEL: error
       # use the internal service name of the gateway
       REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
       # STORAGE_GATEWAY_ENDPOINT: host.docker.internal:9142
@@ -177,9 +177,6 @@ services:
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     restart: always
-    depends_on:
-      - wopiserver
-      - collabora
 
   ocis-appprovider-onlyoffice:
     image: ${OCIS_IMAGE:-owncloud/ocis:latest}
@@ -212,12 +209,9 @@ services:
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     restart: always
-    depends_on:
-      - wopiserver
-      - onlyoffice
 
   collabora:
-    image: collabora/code:22.05.14.3.1
+    image: collabora/code:22.05.10.1.1
     environment:
       DONT_GEN_SSL_CERT: 'YES'
       extra_params: --o:ssl.enable=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://host.docker.internal:9200
@@ -232,11 +226,9 @@ services:
       traefik.http.routers.collabora.entrypoints: collabora
       traefik.http.services.collabora.loadbalancer.server.port: 9980
     restart: always
-    depends_on:
-      - traefik
 
   onlyoffice:
-    image: onlyoffice/documentserver:7.3.3
+    image: onlyoffice/documentserver:7.3.0
     entrypoint:
       - /bin/sh
       - /entrypoint-override.sh
@@ -257,11 +249,9 @@ services:
       traefik.http.middlewares.onlyoffice.headers.customrequestheaders.X-Forwarded-Proto: https
       traefik.http.routers.onlyoffice.middlewares: onlyoffice
     restart: always
-    depends_on:
-      - traefik
 
   wopiserver:
-    image: cs3org/wopiserver:v10.0.1
+    image: cs3org/wopiserver:v9.4.0
     environment:
       WOPISERVER_INSECURE: true
       WOPISECRET: ${WOPI_JWT_SECRET:-LoremIpsum567}
