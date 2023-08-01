@@ -74,8 +74,8 @@ services:
       traefik.http.routers.ocis.tls: true
       traefik.http.routers.ocis.rule: PathPrefix(`/`)
       traefik.http.routers.ocis.entrypoints: ocis
-      # workaround: https://github.com/owncloud/ocis/issues/5108
       traefik.http.services.ocis.loadbalancer.server.port: 9200
+      # workaround: https://github.com/owncloud/ocis/issues/5108
       traefik.http.routers.ocis.middlewares: cors
     restart: unless-stopped
     depends_on:
