@@ -122,26 +122,27 @@ export default {
     const dropdownOpened = ref(false)
 
     const sseEnabled = useCapabilityCoreSSE()
-    const setupServerSentEvents = unref(sseEnabled)
-      ? useServerSentEvents({
-          url: 'ocs/v2.php/apps/notifications/api/v1/notifications/sse',
-          onOpen: (response): void => {
-            if (!response.ok) {
-              console.error(`SSE notifications couldn't be set up ${response.status}`)
-            }
-          },
-          onMessage: (msg): void => {
-            if (msg.event === 'FatalError') {
-              console.error(`SSE notifications error: ${msg.data}`)
-              return
-            }
-            const data = JSON.parse(msg.data)
-            if (data.notification_id) {
-              notifications.value = [data, ...unref(notifications)]
-            }
+    let setupServerSentEvents
+    if (unref(sseEnabled)) {
+      setupServerSentEvents = useServerSentEvents({
+        url: 'ocs/v2.php/apps/notifications/api/v1/notifications/sse',
+        onOpen: (response): void => {
+          if (!response.ok) {
+            console.error(`SSE notifications couldn't be set up ${response.status}`)
           }
-        })
-      : () => {}
+        },
+        onMessage: (msg): void => {
+          if (msg.event === 'FatalError') {
+            console.error(`SSE notifications error: ${msg.data}`)
+            return
+          }
+          const data = JSON.parse(msg.data)
+          if (data.notification_id) {
+            notifications.value = [data, ...unref(notifications)]
+          }
+        }
+      })
+    }
 
     const formatDate = (date) => {
       return formatDateFromISO(date, currentLanguage)
