@@ -20,10 +20,9 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | OpenDocument.odt | OpenDocument | OpenDocument Content |
     And "Alice" creates a public link for the resource "OpenDocument.odt" using the sidebar panel
     And "Alice" edits the public link named "Link" of resource "OpenDocument.odt" changing role to "Can edit"
-    And "Anonymous" opens the public link "Link"
-    And for "Anonymous" the content of the file "OpenDocument.odt" should be "OpenDocument Content" in editor "Collabora"
     And "Alice" logs out
-
+    And "Anonymous" opens the public link "Link"
+    Then for "Anonymous" the content of the file "OpenDocument.odt" should be "OpenDocument Content" in editor "Collabora"
 
   Scenario: create a Microsoft Word file with OnlyOffice
     When "Alice" creates the following resources
@@ -31,6 +30,6 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | MicrosoftWord.docx | Microsoft Word | Microsoft Word Content |
     And "Alice" creates a public link for the resource "MicrosoftWord.docx" using the sidebar panel
     And "Alice" edits the public link named "Link" of resource "MicrosoftWord.docx" changing role to "Can edit"
-    And "Anonymous" opens the public link "Link"
-    And for "Anonymous" the content of the file "MicrosoftWord.docx" should be "Microsoft Word Content" in editor "OnlyOffice"
     And "Alice" logs out
+    And "Anonymous" opens the public link "Link"
+    Then for "Anonymous" the content of the file "MicrosoftWord.docx" should be "Microsoft Word Content" in editor "OnlyOffice"
