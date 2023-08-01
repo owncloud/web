@@ -32,3 +32,10 @@ export type ImageAdjustmentParameters = {
   highlights: number
   shadows: number
 }
+
+export type MediaGalleryFile = {
+  name: string
+  url: string
+  id: string | number
+  mimeType: string
+}

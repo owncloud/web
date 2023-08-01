@@ -1,5 +1,5 @@
 import { MaybeRef, unref } from 'vue'
-import { useImageAdjustmentParameters } from '../adjustment-params'
+import { useImageAdjustmentParameters } from '../adjustmentParams'
 
 type AdjustmentParamsProps = {
   imageBlob: MaybeRef<Blob>

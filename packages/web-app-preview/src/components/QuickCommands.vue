@@ -25,7 +25,12 @@
       </oc-button>
     </li>
     <li>
-      <oc-button size="small" :aria-label="$gettext('Save')" @click="saveTask.perform">
+      <oc-button
+        v-if="$props.isImage"
+        size="small"
+        :aria-label="$gettext('Save')"
+        @click="saveTask.perform"
+      >
         <oc-icon name="save" size="small" fill-type="line" />
       </oc-button>
     </li>
@@ -48,6 +53,10 @@ export default defineComponent({
     saveTask: {
       type: Object as PropType<Task<void, []>>,
       default: null
+    },
+    isImage: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['close', 'setZoom', 'toggleFullScreen', 'delete'],
@@ -78,6 +87,7 @@ export default defineComponent({
   list-style-type: none;
   padding: 0;
   gap: $oc-space-small;
+  width: 3rem;
 
   & li {
     margin-right: $oc-space-medium;

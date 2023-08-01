@@ -1,6 +1,6 @@
 import { adjustmentParametersCategoryType } from 'web-app-preview/src/helpers'
 
-export const getAdjustmentParametersValues = (
+export const useAdjustmentParametersValues = (
   adjustmentParams: adjustmentParametersCategoryType[]
 ) => {
   const brightness = adjustmentParams[0].value / 100

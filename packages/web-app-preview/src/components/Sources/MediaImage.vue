@@ -93,5 +93,6 @@ export default defineComponent({
 <style lang="scss">
 .cropper {
   overflow: hidden;
+  max-width: calc(100vw - 20rem);
 }
 </style>

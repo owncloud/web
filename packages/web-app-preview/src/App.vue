@@ -3,16 +3,11 @@
     id="preview"
     ref="preview"
     tabindex="-1"
-    @keydown.left="prev"
-    @keydown.right="next"
+    @keydown.left="handleSetActiveMediaFile(activeIndex - 1)"
+    @keydown.right="handleSetActiveMediaFile(activeIndex + 1)"
     @keydown.esc="closePreview"
   >
     <div class="preview-body">
-      <media-settings
-        v-if="activeMediaFileCached.isImage"
-        @download="triggerActiveFileDownload"
-        @save-cropped-image="save"
-      />
       <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
         <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
       </div>
@@ -25,46 +20,65 @@
         :accessible-label="$gettext('Failed to load media file')"
       />
       <template v-else>
-        <div
-          v-show="activeMediaFileCached"
-          class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
-          :class="{ lightbox: isFullScreenModeActivated }"
-        >
-          <media-image
-            v-if="activeMediaFileCached.isImage"
-            :file="activeMediaFileCached"
-            :current-image-rotation="currentImageRotation"
-            :current-image-zoom="currentImageZoom"
-          />
-          <media-video
-            v-else-if="activeMediaFileCached.isVideo"
-            :file="activeMediaFileCached"
-            :is-auto-play-enabled="isAutoPlayEnabled"
-          />
-          <media-audio
-            v-else-if="activeMediaFileCached.isAudio"
-            :file="activeMediaFileCached"
-            :is-auto-play-enabled="isAutoPlayEnabled"
-          />
+        <media-settings
+          v-if="activeMediaFileCached.isImage"
+          @download="triggerActiveFileDownload"
+          @save-cropped-image="save"
+        />
+        <div class="image-container">
+          <div
+            v-show="activeMediaFileCached"
+            class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
+            :class="{ lightbox: isFullScreenModeActivated }"
+          >
+            <media-image
+              v-if="activeMediaFileCached.isImage"
+              :file="activeMediaFileCached"
+              :current-image-rotation="currentImageRotation"
+              :current-image-zoom="currentImageZoom"
+            />
+            <media-video
+              v-else-if="activeMediaFileCached.isVideo"
+              :file="activeMediaFileCached"
+              :is-auto-play-enabled="isAutoPlayEnabled"
+            />
+            <media-audio
+              v-else-if="activeMediaFileCached.isAudio"
+              :file="activeMediaFileCached"
+              :is-auto-play-enabled="isAutoPlayEnabled"
+            />
+          </div>
+          <div class="image-gallery">
+            <media-gallery
+              :media-files="mediaGalleryFiles"
+              :active-index="activeIndex"
+              :sort-by="sortBy"
+              :sort-dir="sortDir"
+              @update-active-media-file="handleSetActiveMediaFile"
+            />
+          </div>
         </div>
+        <quick-commands
+          :current-image-zoom="currentImageZoom"
+          :is-full-screen-mode-activated="isFullScreenModeActivated"
+          :save-task="saveImageTask"
+          :is-image="activeMediaFileCached.isImage"
+          @close="closePreview"
+          @set-zoom="currentImageZoom = $event"
+          @toggle-full-screen="toggleFullscreenMode"
+        />
       </template>
-      <quick-commands
-        :current-image-zoom="currentImageZoom"
-        :is-full-screen-mode-activated="isFullScreenModeActivated"
-        :save-task="saveImageTask"
-        @close="closePreview"
-        @set-zoom="currentImageZoom = $event"
-        @toggle-full-screen="toggleFullscreenMode"
-      />
     </div>
   </main>
 </template>
+
 <script lang="ts">
 import { computed, defineComponent, ref, unref, watch } from 'vue'
 import {
   queryItemAsString,
   sortHelper,
   useAppDefaults,
+  usePreviewService,
   useRoute,
   useRouteQuery,
   useRouter,
@@ -81,15 +95,21 @@ import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import MediaSettings from './components/MediaSettings.vue'
 import QuickCommands from './components/QuickCommands.vue'
-import { CachedFile, adjustmentParametersCategoryType } from './helpers/types'
-import applyAdjustmentParams from './composables/save/applyAdjustmentParams'
+import { CachedFile, MediaGalleryFile, adjustmentParametersCategoryType } from './helpers/types'
+import applyAdjustmentParams from './composables/saveFunctions/applyAdjustmentParams'
+import {
+  useSaveUnsavedChangesModal,
+  useCancelUnsavedChangesModal
+} from './composables/saveFunctions/useUnsavedChangesModal'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { Ref } from 'vue'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { CropVariantEnum, ProcessingToolsEnum } from './helpers'
-import applyCropping from './composables/save/applyCropping'
+import applyCropping from './composables/saveFunctions/applyCropping'
+import MediaGallery from './components/MediaGallery.vue'
+import { watchEffect } from 'vue'
 
 export const appId = 'preview'
 
@@ -118,15 +138,16 @@ export default defineComponent({
     MediaImage,
     MediaVideo,
     MediaSettings,
-    QuickCommands
+    QuickCommands,
+    MediaGallery
   },
   setup() {
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
+    const previewService = usePreviewService()
 
     const processingTool = computed(() => store.getters['Preview/getSelectedProcessingTool'])
-    const space = computed(() => store.getters['realtime/spaces/spaces'])
 
     const appDefaults = useAppDefaults({ applicationId: 'preview' })
     const contextRouteQuery = useRouteQuery('contextRouteQuery')
@@ -148,28 +169,26 @@ export default defineComponent({
       replaceInvalidFileRoute,
       getFileContents,
       putFileContents,
-      getFileInfo
+      getFileInfo,
+      closeApp,
+      getUrlForResource
     } = appDefaults
 
     const { $gettext, interpolate: $gettextInterpolate } = useGettext()
 
-    const filteredFiles = computed<Resource[]>(() => {
-      if (!unref(activeFiles)) {
-        return []
+    const thumbDimensions = computed(() => {
+      switch (true) {
+        case window.innerWidth <= 1024:
+          return 1024
+        case window.innerWidth <= 1280:
+          return 1280
+        case window.innerWidth <= 1920:
+          return 1920
+        case window.innerWidth <= 2160:
+          return 2160
+        default:
+          return 3840
       }
-
-      const files = unref(activeFiles).filter((file) => {
-        return mimeTypes().includes(file.mimeType?.toLowerCase())
-      })
-      return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
-    })
-
-    const activeFilteredFile = computed(() => {
-      return unref(filteredFiles)[unref(activeIndex)]
-    })
-
-    const activeMediaFileCached = computed(() => {
-      return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile).id)
     })
 
     const errorPopup = (error) => {
@@ -185,6 +204,58 @@ export default defineComponent({
         title: $gettext('Image is saved')
       })
     }
+
+    const filteredFiles = computed<Resource[]>(() => {
+      if (!unref(activeFiles)) {
+        return []
+      }
+
+      const files = unref(activeFiles).filter((file) => {
+        return mimeTypes().includes(file.mimeType?.toLowerCase())
+      })
+      return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
+    })
+
+    const mediaGalleryFiles: Ref<MediaGalleryFile[]> = ref([])
+
+    // Updated way to frequent
+    watchEffect(async () => {
+      mediaGalleryFiles.value = await Promise.all(
+        unref(filteredFiles).map(async (file) => {
+          const fileUrl = await getMediaFileUrl(file)
+          // console.log('useEffect updated')
+          return {
+            name: file.name,
+            id: file.id,
+            url: fileUrl,
+            mimeType: file.mimeType
+          }
+        })
+      )
+    })
+
+    async function getMediaFileUrl(file) {
+      try {
+        const loadRawFile = isFileTypeImage(file)
+        let mediaUrl: string
+        if (loadRawFile) {
+          mediaUrl = await getUrlForResource(unref(currentFileContext.value.space), file)
+        } else {
+          mediaUrl = await loadPreview(file)
+        }
+        return mediaUrl
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
+    const activeFilteredFile = computed(() => {
+      return unref(filteredFiles)[unref(activeIndex)]
+    })
+
+    const activeMediaFileCached = computed(() => {
+      return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile).id)
+    })
 
     const getUpdatedBlob = async () => {
       let newVersion = null
@@ -275,20 +346,17 @@ export default defineComponent({
     async function save() {
       await saveImageTask.perform()
     }
+    // End of image saving
 
-    watch(
-      activeMediaFileCached,
-      () => {
-        if (activeMediaFileCached.value.isImage) {
-          loadImageTask.perform()
-          store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
-          store.commit('Preview/RESET_SELECTED_PROCESSING_TOOL')
-          const storeValues = store.getters['Preview/allParameters']
-          activeAdjustmentParameters.value = storeValues
-        }
-      },
-      { immediate: true }
-    )
+    watch(activeMediaFileCached, () => {
+      if (activeMediaFileCached.value.isImage) {
+        loadImageTask.perform()
+        store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
+        store.commit('Preview/RESET_SELECTED_PROCESSING_TOOL')
+        const storeValues = store.getters['Preview/allParameters']
+        activeAdjustmentParameters.value = storeValues
+      }
+    })
 
     const sortBy = computed(() => {
       if (!unref(contextRouteQuery)) {
@@ -330,29 +398,6 @@ export default defineComponent({
       })
     }
 
-    function triggerUnsavedChangesModal(
-      cancelFuncs: Array<(...args: any[]) => Promise<any>>,
-      confirmFuncs: Array<(...args: any[]) => Promise<any>>
-    ) {
-      const modal = {
-        variation: 'danger',
-        icon: 'warning',
-        title: $gettext('Unsaved changes'),
-        message: $gettext('Your changes were not saved. Do you want to save them?'),
-        cancelText: $gettext("Don't Save"),
-        confirmText: $gettext('Save'),
-        onCancel: () => {
-          store.dispatch('hideModal')
-          cancelFuncs.forEach(async (func) => await func())
-        },
-        onConfirm: () => {
-          store.dispatch('hideModal')
-          confirmFuncs.forEach(async (func) => await func())
-        }
-      }
-      store.dispatch('createModal', modal)
-    }
-
     const triggerActiveFileDownload = () => {
       if (isFileContentLoading.value) {
         return
@@ -360,12 +405,12 @@ export default defineComponent({
 
       const adjustmentParams = computed(() => store.getters['Preview/allParameters'])
       if (adjustmentParams.value !== activeAdjustmentParameters.value) {
-        const confirmFuncs: Array<(...args: any[]) => Promise<any>> = [
+        const onConfirm: Array<(...args: any[]) => Promise<any>> = [
           () => save(),
           () => downloadFile(activeFilteredFile.value)
         ]
 
-        triggerUnsavedChangesModal([], confirmFuncs)
+        useCancelUnsavedChangesModal([], onConfirm, store)
       } else {
         downloadFile(activeFilteredFile.value)
       }
@@ -405,7 +450,75 @@ export default defineComponent({
       return isFileTypeVideo(activeFilteredFile)
     }
 
-    // #setup
+    function checkIfDirty() {
+      const allParams = store.getters['Preview/allParameters']
+      return unref(allParams) !== unref(activeAdjustmentParameters)
+    }
+
+    function handleResetValues() {}
+
+    function handleSetNewActiveIndex(newActiveIndex: number) {
+      if (newActiveIndex >= unref(filteredFiles).length) {
+        activeIndex.value = 0
+      } else if (newActiveIndex < 0) {
+        activeIndex.value = unref(filteredFiles).length - 1
+      } else {
+        activeIndex.value = newActiveIndex
+      }
+    }
+
+    function handleSetActiveMediaFile(newActiveIndex: number) {
+      if (unref(isFileContentLoading)) {
+        return
+      }
+
+      isFileContentError.value = false
+
+      if (checkIfDirty()) {
+        const onConfirm: Array<(...args: any[]) => Promise<any>> = [
+          () => save(),
+          async () => await handleSetNewActiveIndex(newActiveIndex),
+          async () => await updateLocalHistory()
+        ]
+        const onCancel: Array<(...args: any[]) => Promise<any>> = [
+          async () => await handleSetNewActiveIndex(newActiveIndex),
+          async () => await updateLocalHistory()
+        ]
+        isActiveFileTypeImage && useSaveUnsavedChangesModal(onCancel, onConfirm, store)
+      } else {
+        handleSetNewActiveIndex(newActiveIndex)
+        updateLocalHistory()
+      }
+      // Update with loading and error handling
+    }
+
+    function closePreview() {
+      if (checkIfDirty()) {
+        const onCancel: Array<(...args: any[]) => Promise<any> | any> = [
+          () => handleResetValues(),
+          () => closeApp()
+        ]
+        const onConfirm: Array<(...args: any[]) => Promise<any> | any> = [
+          () => save(),
+          () => handleResetValues(),
+          () => closeApp()
+        ]
+        useSaveUnsavedChangesModal(onCancel, onConfirm, store)
+      } else {
+        handleResetValues()
+        closeApp()
+      }
+    }
+
+    function loadPreview(file) {
+      return previewService.loadPreview({
+        space: unref(currentFileContext.value.space),
+        resource: file,
+        dimensions: [thumbDimensions.value, thumbDimensions.value] as [number, number]
+      })
+    }
+
+    // #Setup returns
     return {
       ...appDefaults,
       activeFilteredFile,
@@ -417,10 +530,12 @@ export default defineComponent({
       isFileContentLoading,
       isFileContentError,
       isFullScreenModeActivated,
+      thumbDimensions,
+      mediaGalleryFiles,
       toggleFullscreenMode,
       updateLocalHistory,
       triggerActiveFileDownload,
-      triggerUnsavedChangesModal,
+      useSaveUnsavedChangesModal,
       saveImageTask,
       serverVersion,
       activeAdjustmentParameters,
@@ -430,7 +545,12 @@ export default defineComponent({
       isFileTypeVideo,
       isActiveFileTypeAudio,
       isActiveFileTypeImage,
-      isActiveFileTypeVideo
+      isActiveFileTypeVideo,
+      handleSetActiveMediaFile,
+      closePreview,
+      loadPreview,
+      sortDir,
+      sortBy
     }
   },
   data() {
@@ -452,23 +572,11 @@ export default defineComponent({
         currentMediumName: this.activeFilteredFile?.name
       })
     },
-    thumbDimensions() {
-      switch (true) {
-        case window.innerWidth <= 1024:
-          return 1024
-        case window.innerWidth <= 1280:
-          return 1280
-        case window.innerWidth <= 1920:
-          return 1920
-        case window.innerWidth <= 2160:
-          return 2160
-        default:
-          return 3840
-      }
-    },
+
     ...mapGetters('Preview', ['allParameters'])
   },
 
+  // #Rework
   watch: {
     activeIndex(newValue, oldValue) {
       if (newValue !== oldValue) {
@@ -504,6 +612,8 @@ export default defineComponent({
   },
 
   methods: {
+    // #Rework
+    // #Set
     setActiveFile(driveAliasAndItem: string) {
       for (let i = 0; i < this.filteredFiles.length; i++) {
         if (
@@ -519,6 +629,7 @@ export default defineComponent({
       this.isFileContentError = true
     },
     // react to PopStateEvent ()
+    // #Rework
     handleLocalHistoryEvent() {
       const result = this.$router.resolve(document.location as unknown as RouteLocationRaw)
       this.setActiveFile(queryItemAsString(result.params.driveAliasAndItem))
@@ -567,110 +678,7 @@ export default defineComponent({
         console.error(e)
       }
     },
-    next() {
-      if (this.isFileContentLoading) {
-        return
-      }
-      this.isFileContentError = false
-      if (this.activeIndex + 1 >= this.filteredFiles.length) {
-        this.activeIndex = 0
-        this.updateLocalHistory()
-        return
-      }
-      if (this.checkIfDirty()) {
-        const modal = {
-          variation: 'danger',
-          icon: 'warning',
-          title: this.$gettext('Unsaved changes'),
-          message: this.$gettext('Your changes were not saved. Do you want to save them?'),
-          cancelText: this.$gettext("Don't Save"),
-          confirmText: this.$gettext('Save'),
-          onCancel: () => {
-            this.hideModal()
-            this.activeIndex++
-            this.updateLocalHistory()
-          },
-          onConfirm: async () => {
-            await this.save()
-            this.hideModal()
-            this.activeIndex++
-            this.updateLocalHistory()
-          }
-        }
-        this.createModal(modal)
-      } else {
-        this.activeIndex++
-        this.updateLocalHistory()
-      }
-    },
-    prev() {
-      if (this.isFileContentLoading) {
-        return
-      }
-      this.isFileContentError = false
-      if (this.activeIndex === 0) {
-        this.activeIndex = this.filteredFiles.length - 1
-        this.updateLocalHistory()
-        return
-      }
-      if (this.checkIfDirty()) {
-        const modal = {
-          variation: 'danger',
-          icon: 'warning',
-          title: this.$gettext('Unsaved changes'),
-          message: this.$gettext('Your changes were not saved. Do you want to save them?'),
-          cancelText: this.$gettext("Don't Save"),
-          confirmText: this.$gettext('Save'),
-          onCancel: () => {
-            this.hideModal()
-            this.activeIndex--
-            this.updateLocalHistory()
-          },
-          onConfirm: async () => {
-            await this.save()
-            this.hideModal()
-            this.activeIndex--
-            this.updateLocalHistory()
-          }
-        }
-        this.createModal(modal)
-      } else {
-        this.activeIndex--
-        this.updateLocalHistory()
-      }
-    },
-
-    closePreview() {
-      if (this.checkIfDirty()) {
-        const modal = {
-          variation: 'danger',
-          icon: 'warning',
-          title: this.$gettext('Unsaved changes'),
-          message: this.$gettext('Your changes were not saved. Do you want to save them?'),
-          cancelText: this.$gettext("Don't Save"),
-          confirmText: this.$gettext('Save'),
-          onCancel: () => {
-            this.hideModal()
-            this.handleResetValues()
-            this.closeApp()
-          },
-          onConfirm: async () => {
-            await this.save()
-            this.hideModal()
-            this.handleResetValues()
-            this.closeApp()
-          }
-        }
-        this.createModal(modal)
-      } else {
-        this.handleResetValues()
-        this.closeApp()
-      }
-    },
-
-    checkIfDirty() {
-      return this.allParameters !== this.activeAdjustmentParameters
-    },
+    // #load
     addPreviewToCache(file, url) {
       this.cachedFiles.push({
         id: file.id,
@@ -681,13 +689,6 @@ export default defineComponent({
         isVideo: this.isFileTypeVideo(file),
         isImage: this.isFileTypeImage(file),
         isAudio: this.isFileTypeAudio(file)
-      })
-    },
-    loadPreview(file) {
-      return this.$previewService.loadPreview({
-        space: unref(this.currentFileContext.space),
-        resource: file,
-        dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
       })
     },
     preloadImages() {
@@ -747,12 +748,17 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.image-container {
+  width: 100%;
+  padding: $oc-space-medium;
+}
+.image-gallery {
+  margin-top: 1rem;
+}
 .preview-player {
   overflow: auto;
-  max-width: 90vw;
   height: 70vh;
   object-fit: contain;
-  margin: $oc-space-medium;
 
   img,
   video {
@@ -790,6 +796,6 @@ export default defineComponent({
 
 .preview-body {
   display: flex;
+  justify-content: space-between;
 }
 </style>
-./composables/save/applyAdjustmentParams

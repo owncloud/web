@@ -1,5 +1,5 @@
 import { adjustmentParametersCategoryType } from 'web-app-preview/src/helpers'
-import { getAdjustmentParametersValues } from './getAdjustmentParametersValues'
+import { useAdjustmentParametersValues } from './useAdjustmentParametersValues'
 
 export const useCSSImageAdjustmentParameters = (
   adjustmentParams: adjustmentParametersCategoryType[]
@@ -10,7 +10,7 @@ export const useCSSImageAdjustmentParameters = (
     computedSaturation,
     computedGrayscale,
     computedInvert
-  } = getAdjustmentParametersValues(adjustmentParams)
+  } = useAdjustmentParametersValues(adjustmentParams)
   const adjustmentParametersString = `filter: brightness(${computedBrightness}) contrast(${computedContrast}) saturate(${computedSaturation}) grayscale(${computedGrayscale}) invert(${computedInvert})`
   return adjustmentParametersString
 }
@@ -24,7 +24,7 @@ export const useImageAdjustmentParameters = (
     computedSaturation,
     computedGrayscale,
     computedInvert
-  } = getAdjustmentParametersValues(adjustmentParams)
+  } = useAdjustmentParametersValues(adjustmentParams)
   const adjustmentParametersString = `brightness(${computedBrightness}) contrast(${computedContrast}) saturate(${computedSaturation}) grayscale(${computedGrayscale}) invert(${computedInvert})`
   return adjustmentParametersString
 }

@@ -78,7 +78,7 @@
           appearance="raw"
           @click="handleUpdateCropVariant(CropVariantEnum.FreeForm)"
         >
-          <oc-icon name="crop" fill-type="line" size="large" />
+          <oc-icon name="crop" fill-type="line" />
           <span>Free form</span>
         </oc-button>
         <oc-button
@@ -86,13 +86,13 @@
           appearance="raw"
           @click="handleUpdateCropVariant(CropVariantEnum.Circular)"
         >
-          <oc-icon name="checkbox-blank-circle" fill-type="line" size="large" />
+          <oc-icon name="checkbox-blank-circle" fill-type="line" />
           <span>Circular</span>
         </oc-button>
       </div>
       <div class="crop-image-button">
         <oc-button appearance="filled" variation="primary" @click="$emit('saveCroppedImage')">
-          Crop image
+          Crop
         </oc-button>
       </div>
     </div>
@@ -185,7 +185,7 @@ export default defineComponent({
 }
 
 .options-bar-compact {
-  width: 9rem;
+  width: 6rem;
   box-sizing: border-box;
 }
 
@@ -207,7 +207,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   border-radius: 0px;
-  height: 7.5rem;
+  height: 5rem;
   width: 100%;
 
   &:hover {
@@ -228,7 +228,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   border-radius: 0px;
-  height: 7.5rem;
+  height: 5rem;
   width: 100%;
 
   &:hover {
