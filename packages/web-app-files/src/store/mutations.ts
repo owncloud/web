@@ -154,8 +154,9 @@ export default {
     $_upsertResource(state, resource, true)
   },
 
+
   UPSERT_RESOURCES(state, resources) {
-    const otherFiles = state.files.filter((f) => !resources.some((r) => r.id === f.id))
+    const otherFiles = state.files.filter((f) => !resources.some((r) => r.path === f.path))
     state.files = [...otherFiles, ...resources]
   },
 
