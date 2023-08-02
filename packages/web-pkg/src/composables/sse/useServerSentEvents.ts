@@ -21,7 +21,6 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
     () => language.current,
     () => {
       ctrl.abort()
-      setupServerSentEvents()
     }
   )
   const setupServerSentEvents = () => {
