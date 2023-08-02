@@ -4,7 +4,7 @@
       <oc-filter-chip
         :is-toggle="false"
         :is-toggle-active="false"
-        :filter-label="currentSelection.title"
+        :filter-label="$gettext(currentSelection.title)"
         :selected-item-names="[]"
         class="oc-search-bar-filter"
         raw
@@ -23,7 +23,7 @@
             :data-test-id="option.id"
             @click="onOptionSelected(option)"
           >
-            <span>{{ option.title }}</span>
+            <span>{{ $gettext(option.title) }}</span>
             <div v-if="option.id === currentSelection.id" class="oc-flex">
               <oc-icon name="check" />
             </div>
@@ -64,12 +64,12 @@ export default defineComponent({
     const locationOptions = ref<LocationOption[]>([
       {
         id: SearchLocationFilterConstants.currentFolder,
-        title: $gettext('Current Folder'),
+        title: 'Current Folder',
         enabled: currentFolderEnabled
       },
       {
         id: SearchLocationFilterConstants.allFiles,
-        title: $gettext('All Files'),
+        title: 'All Files',
         enabled: true
       }
     ])
@@ -122,7 +122,7 @@ export default defineComponent({
       emit('update:modelValue', { value: option })
     }
 
-    return { currentSelection, isIndexGreaterZero, onOptionSelected, locationOptions }
+    return { currentSelection, isIndexGreaterZero, onOptionSelected, locationOptions, $gettext }
   }
 })
 </script>
