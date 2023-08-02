@@ -106,6 +106,8 @@ import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
+const POLLING_INTERVAL = 30000
+
 export default {
   components: {
     NotificationBell
@@ -317,6 +319,10 @@ export default {
     onMounted(async () => {
       if (unref(sseEnabled)) {
         await setupServerSentEvents()
+      } else {
+        notificationsInterval.value = setInterval(() => {
+          fetchNotificationsTask.perform()
+        }, POLLING_INTERVAL)
       }
       fetchNotificationsTask.perform()
     })
