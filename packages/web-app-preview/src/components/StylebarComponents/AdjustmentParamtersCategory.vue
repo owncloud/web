@@ -7,7 +7,7 @@
     <span class="button-description"
       ><oc-icon :name="iconName" :fill-type="isFillTypeLine ? 'line' : 'fill'" /> {{ name }}</span
     >
-    <oc-icon :name="isOpen ? 'arrow-down-s' : 'arrow-right-s'" />
+    <oc-icon :name="isOpen ? 'arrow-up-s' : 'arrow-down-s'" />
   </oc-button>
   <div v-if="isOpen">
     <div

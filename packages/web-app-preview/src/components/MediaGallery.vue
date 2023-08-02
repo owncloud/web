@@ -1,12 +1,12 @@
 <template>
   <div class="media-gallery oc-box-shadow-medium">
-    <button class="navigation-button left-navigation-button" @click="$emit('handleGoNext')">
-      <oc-icon name="arrow-drop-left" size="large" />
+    <button class="navigation-button left-navigation-button" @click="$emit('handleGoPrev')">
+      <oc-icon name="arrow-drop-left" size="xlarge" fill-type="line" />
     </button>
     <div class="media-display">
       <div v-for="(mediaFile, index) in activeMediaFiles" :key="index" class="media-container">
         <button
-          :class="index === 2 ? 'media-view-active' : 'media-view'"
+          :class="index === 2 ? 'media-view-active oc-box-shadow-medium' : 'media-view'"
           @click="handleUpdateActiveMediaFile(mediaFile)"
         >
           <img
@@ -17,19 +17,38 @@
             :data-id="mediaFile.id"
             class="gallery-image"
           />
-          <p v-else-if="mediaFile">This is not an image</p>
+          <div v-else-if="mediaFile && mediaFile.mimeType.toLowerCase().startsWith('video')">
+            <oc-icon name="resource-type-video" size="large" />
+            <p class="video-text">{{ mediaFile.name }}</p>
+          </div>
+          <div v-else-if="mediaFile && mediaFile.mimeType.toLowerCase().startsWith('audio')">
+            <oc-icon name="resource-type-audio" size="large" fill-type="fill" />
+            <p class="video-text">{{ mediaFile.name }}</p>
+          </div>
         </button>
       </div>
     </div>
-    <button class="navigation-button" @click="$emit('handleGoPrev')">
-      <oc-icon name="arrow-drop-right" size="large" />
+    <button class="navigation-button" @click="$emit('handleGoNext')">
+      <oc-icon name="arrow-drop-right" size="xlarge" fill-type="line" />
     </button>
     <div class="tools-sidebar">
-      <p>
-        {{ activeIndex }}
+      <p class="active-index-paragraph oc-text-small">
+        {{ $gettext(`${activeIndex + 1} of ${mediaFiles.length}`) }}
       </p>
-      <p>{{ sortBy }}</p>
-      <p>{{ sortDir }}</p>
+      <div class="zoom-handler">
+        <p class="oc-text-small oc-mb-s active-index-paragraph">{{ $gettext('Zoom') }}:</p>
+        <input
+          v-if="isZoomInputActive"
+          ref="zoomInput"
+          v-model="currentZoomLevel"
+          class="zoom-input oc-text-small"
+          @keydown.enter="handleChangeZoomLevel"
+          @blur="handleSetZoomInputInactive"
+        />
+        <button v-else class="zoom-button oc-text-small" @click="handleSetZoomInputActive">
+          {{ currentZoomLevel }}%
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -40,6 +59,7 @@ import { defineComponent } from 'vue'
 import { MediaGalleryFile } from '../helpers'
 import { ComputedRef } from 'vue'
 import { useSlicedGalleryImageList } from '../composables'
+import { ref } from 'vue'
 
 export default defineComponent({
   name: 'MediaGallery',
@@ -52,17 +72,16 @@ export default defineComponent({
       type: Number,
       required: true
     },
-    // eslint-disable-next-line vue/require-prop-types
-    sortBy: {
-      default: null
-    },
-    // eslint-disable-next-line vue/require-prop-types
-    sortDir: {
-      default: null
+    zoomLevel: {
+      type: Number,
+      required: true
     }
   },
-  emits: ['updateActiveMediaFile', 'handleGoNext', 'handleGoPrev'],
+  emits: ['updateActiveMediaFile', 'handleGoNext', 'handleGoPrev', 'changeActiveZoomLevel'],
   setup(props, { emit }) {
+    const isZoomInputActive = ref<Boolean>(false)
+    const currentZoomLevel = computed(() => props.zoomLevel * 100)
+
     const activeMediaFiles: ComputedRef<MediaGalleryFile[]> = computed(() =>
       useSlicedGalleryImageList(props.mediaFiles, props.activeIndex)
     )
@@ -74,9 +93,36 @@ export default defineComponent({
       }
     }
 
+    function handleSetZoomInputActive() {
+      isZoomInputActive.value = true
+    }
+
+    function handleSetZoomInputInactive() {
+      isZoomInputActive.value = false
+    }
+
+    function handleChangeZoomLevel(event) {
+      emit('changeActiveZoomLevel', event.target.value / 100)
+      isZoomInputActive.value = false
+    }
+
     return {
+      isZoomInputActive,
       activeMediaFiles,
-      handleUpdateActiveMediaFile
+      currentZoomLevel,
+      handleUpdateActiveMediaFile,
+      handleSetZoomInputActive,
+      handleSetZoomInputInactive,
+      handleChangeZoomLevel
+    }
+  },
+  watch: {
+    isZoomInputActive(newValue) {
+      if (newValue) {
+        this.$nextTick(function () {
+          ;(this.$refs.zoomInput as HTMLElement).focus()
+        })
+      }
     }
   }
 })
@@ -120,10 +166,10 @@ export default defineComponent({
   width: 80%;
   height: 80%;
   overflow: hidden;
-  padding: 0;
-  border: 4px solid var(--oc-color-swatch-brand-hover);
-  background-color: var(--oc-color-swatch-brand-hover);
+  padding: 4px;
+  background-color: rgba(0, 0, 0, 0);
   border-radius: 4px;
+  border: none;
   box-sizing: content-box;
 }
 
@@ -135,13 +181,23 @@ export default defineComponent({
 }
 
 .tools-sidebar {
-  width: 3rem;
+  width: 4rem;
   border-left: 1px solid var(--oc-color-background-highlight);
+  font-size: small;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .navigation-button {
   border: none;
   background-color: rgb(0, 0, 0, 0);
+  width: 3rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover,
   &:focus,
@@ -153,5 +209,49 @@ export default defineComponent({
 .left-navigation-button {
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
+}
+
+.video-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zoom-button {
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  box-sizing: border-box;
+  margin-left: 8px;
+  width: calc(100% - 16px);
+  background-color: var(--oc-color-background-default);
+}
+
+.zoom-input {
+  border: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  margin-left: 8px;
+  width: calc(100% - 16px);
+
+  &:hover,
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}
+
+.active-index-paragraph {
+  margin: 0;
+}
+
+.zoom-handler {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
 }
 </style>

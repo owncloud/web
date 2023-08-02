@@ -26,7 +26,7 @@
     </li>
     <li>
       <oc-button
-        v-if="$props.isImage"
+        v-if="isImage && isSaveable"
         size="small"
         :aria-label="$gettext('Save')"
         @click="saveTask.perform"
@@ -55,6 +55,10 @@ export default defineComponent({
       default: null
     },
     isImage: {
+      type: Boolean,
+      default: false
+    },
+    isSaveable: {
       type: Boolean,
       default: false
     }

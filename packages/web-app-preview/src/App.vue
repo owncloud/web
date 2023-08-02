@@ -8,68 +8,71 @@
     @keydown.esc="closePreview"
   >
     <div class="preview-body">
-      <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
-        <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
-      </div>
-      <oc-icon
-        v-else-if="isFileContentError"
-        name="file-damage"
-        variation="danger"
-        size="xlarge"
-        class="oc-position-center"
-        :accessible-label="$gettext('Failed to load media file')"
+      <media-settings
+        v-if="activeMediaFileCached.isImage"
+        @download="triggerActiveFileDownload"
+        @save-cropped-image="save"
       />
-      <template v-else>
-        <media-settings
-          v-if="activeMediaFileCached.isImage"
-          @download="triggerActiveFileDownload"
-          @save-cropped-image="save"
-        />
-        <div class="image-container">
-          <div
-            v-show="activeMediaFileCached"
-            class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
-            :class="{ lightbox: isFullScreenModeActivated }"
-          >
-            <media-image
-              v-if="activeMediaFileCached.isImage"
-              :file="activeMediaFileCached"
-              :current-image-rotation="currentImageRotation"
-              :current-image-zoom="currentImageZoom"
-            />
-            <media-video
-              v-else-if="activeMediaFileCached.isVideo"
-              :file="activeMediaFileCached"
-              :is-auto-play-enabled="isAutoPlayEnabled"
-            />
-            <media-audio
-              v-else-if="activeMediaFileCached.isAudio"
-              :file="activeMediaFileCached"
-              :is-auto-play-enabled="isAutoPlayEnabled"
-            />
-          </div>
-          <div class="image-gallery">
-            <media-gallery
-              :media-files="mediaGalleryFiles"
-              :active-index="activeIndex"
-              :sort-by="sortBy"
-              :sort-dir="sortDir"
-              @update-active-media-file="handleSetActiveMediaFile"
-              @handle-go-next="handleSetActiveMediaFile(activeIndex + 1)"
-              @handle-go-prev="handleSetActiveMediaFile(activeIndex - 1)"
-            />
-          </div>
+      <div class="image-container">
+        <div
+          v-if="isFolderLoading || isFileContentLoading"
+          class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
+        >
+          <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
         </div>
-        <quick-commands
-          :current-image-zoom="currentImageZoom"
-          :is-full-screen-mode-activated="isFullScreenModeActivated"
-          :save-task="saveImageTask"
-          :is-image="activeMediaFileCached.isImage"
-          @close="closePreview"
-          @set-zoom="currentImageZoom = $event"
-          @toggle-full-screen="toggleFullscreenMode"
-        />
-      </template>
+        <div v-else-if="isFileContentError" class="preview-player">
+          <oc-icon
+            name="file-damage"
+            variation="danger"
+            size="xlarge"
+            class="oc-position-center"
+            :accessible-label="$gettext('Failed to load media file')"
+          />
+        </div>
+        <div
+          v-else
+          v-show="activeMediaFileCached"
+          class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
+          :class="{ lightbox: isFullScreenModeActivated }"
+        >
+          <media-image
+            v-if="activeMediaFileCached.isImage"
+            :file="activeMediaFileCached"
+            :current-image-rotation="currentImageRotation"
+            :current-image-zoom="currentImageZoom"
+          />
+          <media-video
+            v-else-if="activeMediaFileCached.isVideo"
+            :file="activeMediaFileCached"
+            :is-auto-play-enabled="isAutoPlayEnabled"
+          />
+          <media-audio
+            v-else-if="activeMediaFileCached.isAudio"
+            :file="activeMediaFileCached"
+            :is-auto-play-enabled="isAutoPlayEnabled"
+          />
+        </div>
+        <div class="image-gallery">
+          <media-gallery
+            :media-files="mediaGalleryFiles"
+            :active-index="activeIndex"
+            :zoom-level="currentImageZoom"
+            @update-active-media-file="handleSetActiveMediaFile"
+            @handle-go-next="handleSetActiveMediaFile(activeIndex + 1)"
+            @handle-go-prev="handleSetActiveMediaFile(activeIndex - 1)"
+            @change-active-zoom-level="currentImageZoom = $event"
+          />
+        </div>
+      </div>
+      <quick-commands
+        :current-image-zoom="currentImageZoom"
+        :save-task="saveImageTask"
+        :is-image="activeMediaFileCached.isImage"
+        :is-saveable="isSaveable"
+        @close="closePreview"
+        @set-zoom="currentImageZoom = $event"
+        @toggle-full-screen="toggleFullscreenMode"
+      />
     </div>
   </main>
 </template>
@@ -161,14 +164,14 @@ export default defineComponent({
     const isFileContentLoading = ref(true)
 
     const currentETag = ref()
-    const activeAdjustmentParameters: Ref<adjustmentParametersCategoryType[]> = ref()
+    const appliedAdjustmentParameters: Ref<adjustmentParametersCategoryType[]> = ref()
+    const activeAdjustmentParameters = computed(() => store.getters['Preview/allParameters'])
     const serverVersion = ref()
     const resource: Ref<Resource> = ref()
 
     const {
       activeFiles,
       currentFileContext,
-      replaceInvalidFileRoute,
       getFileContents,
       putFileContents,
       getFileInfo,
@@ -177,6 +180,10 @@ export default defineComponent({
     } = appDefaults
 
     const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+
+    const isSaveable = computed(
+      () => unref(appliedAdjustmentParameters) !== unref(activeAdjustmentParameters)
+    )
 
     const thumbDimensions = computed(() => {
       switch (true) {
@@ -260,7 +267,7 @@ export default defineComponent({
         }
         return mediaUrl
       } catch (e) {
-        console.error('This is the error', e)
+        console.error(e)
       }
     }
 
@@ -277,17 +284,20 @@ export default defineComponent({
       let newVersion = null
       switch (processingTool.value) {
         case ProcessingToolsEnum.Customize:
-          const adjustmentParams = store.getters['Preview/allParameters']
           newVersion = await applyAdjustmentParams({
             imageBlob: serverVersion,
-            adjustmentParams: adjustmentParams
+            adjustmentParams: unref(activeAdjustmentParameters)
           })
-          activeAdjustmentParameters.value = adjustmentParams
+          appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
           break
         case ProcessingToolsEnum.Crop:
           const croppedCanvas = store.getters['Preview/getCroppedCanvas']
           const cropType: CropVariantEnum = store.getters['Preview/getCropVariant']
-          newVersion = await applyCropping(croppedCanvas, cropType)
+          const croppedVersion = await applyCropping(croppedCanvas, cropType)
+          newVersion = await applyAdjustmentParams({
+            imageBlob: croppedVersion,
+            adjustmentParams: unref(activeAdjustmentParameters)
+          })
           break
       }
       return newVersion
@@ -312,6 +322,26 @@ export default defineComponent({
 
     const saveImageTask = useTask(function* () {
       const newVersion = yield getUpdatedBlob()
+
+      try {
+        // file name for the file to be created.
+        // ToDo: Ask for it in dialog
+        const newFileName =
+          unref(unref(currentFileContext).fileName).split('.')[0] +
+          'Edited.' +
+          unref(unref(currentFileContext).fileName).split('.')[1]
+
+        // save new file in the same space as the current file with new version of content
+        // ToDo: success message for new file, error message
+        // ToDo: update media gallery don't save current file if save as new
+        // ToDo: open new file in a new tab
+        const resource = yield putFileContents(currentFileContext, {
+          content: newVersion,
+          path: newFileName
+        }).then((r) => console.log('respoonse success', r))
+      } catch (error) {
+        console.error(error)
+      }
 
       try {
         const putFileContentsResponse = yield putFileContents(currentFileContext, {
@@ -368,8 +398,7 @@ export default defineComponent({
         loadImageTask.perform()
         store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
         store.commit('Preview/RESET_SELECTED_PROCESSING_TOOL')
-        const storeValues = store.getters['Preview/allParameters']
-        activeAdjustmentParameters.value = storeValues
+        appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
       }
     })
 
@@ -405,8 +434,7 @@ export default defineComponent({
         return
       }
 
-      const adjustmentParams = computed(() => store.getters['Preview/allParameters'])
-      if (adjustmentParams.value !== activeAdjustmentParameters.value) {
+      if (unref(activeAdjustmentParameters) !== unref(appliedAdjustmentParameters)) {
         const onConfirm: Array<(...args: any[]) => Promise<any>> = [
           () => save(),
           () => downloadFile(unref(activeFilteredFile))
@@ -446,11 +474,6 @@ export default defineComponent({
     const isActiveFileTypeVideo = computed(() => isFileTypeVideo(activeFilteredFile.value))
     const isActiveFileTypeImage = computed(() => isFileTypeImage(activeFilteredFile.value))
 
-    function checkIfDirty() {
-      const allParams = store.getters['Preview/allParameters']
-      return unref(allParams) !== unref(activeAdjustmentParameters)
-    }
-
     function handleResetValues() {
       store.commit('RESET_ADJUSTMENT_PARAMETERS')
       store.commit('RESET_SELECTED_PROCESSING_TOOL')
@@ -473,7 +496,7 @@ export default defineComponent({
 
       isFileContentError.value = false
 
-      if (checkIfDirty()) {
+      if (unref(isSaveable)) {
         const onConfirm: Array<(...args: any[]) => Promise<any> | any> = [
           () => save(),
           () => handleSetNewActiveIndex(newActiveIndex),
@@ -492,7 +515,7 @@ export default defineComponent({
     }
 
     function closePreview() {
-      if (checkIfDirty()) {
+      if (unref(isSaveable)) {
         const onCancel: Array<(...args: any[]) => Promise<any> | any> = [
           () => handleResetValues(),
           () => closeApp()
@@ -518,8 +541,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      const storeValues = store.getters['Preview/allParameters']
-      activeAdjustmentParameters.value = storeValues
+      appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
     })
 
     return {
@@ -541,6 +563,7 @@ export default defineComponent({
       useSaveUnsavedChangesModal,
       saveImageTask,
       serverVersion,
+      appliedAdjustmentParameters,
       activeAdjustmentParameters,
       save,
       isFileTypeAudio,
@@ -553,7 +576,8 @@ export default defineComponent({
       closePreview,
       loadPreview,
       sortDir,
-      sortBy
+      sortBy,
+      isSaveable
     }
   },
   data() {
