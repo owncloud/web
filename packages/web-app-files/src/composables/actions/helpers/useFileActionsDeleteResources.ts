@@ -183,9 +183,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                 loadingCallbackArgs
               })
               .then(async () => {
-                store.dispatch('hideModal')
-                store.dispatch('toggleModalConfirmButton')
-
                 // Load quota
                 if (
                   isLocationSpacesActive(router, 'files-spaces-generic') &&
