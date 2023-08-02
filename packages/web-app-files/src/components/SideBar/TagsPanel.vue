@@ -165,7 +165,9 @@ export default defineComponent({
         })
 
         eventBus.publish('sidebar.entity.saved')
-        unref(tagSelect).$refs.search.focus()
+        if(unref(tagSelect) !== null) {
+          unref(tagSelect).$refs.search.focus()
+        }
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
