@@ -136,7 +136,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
   const trashbin_delete = (space: SpaceResource) => {
     // TODO: use clear all if all files are selected
-    store.dispatch('toggleModalConfirmButton')
     // FIXME: Implement proper batch delete and add loading indicator
     for (const file of unref(resources)) {
       const p = queue.add(() => {
