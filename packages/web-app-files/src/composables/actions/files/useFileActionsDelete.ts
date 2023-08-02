@@ -14,7 +14,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'
 
 export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
