@@ -27,8 +27,8 @@ Feature: files and folders can be deleted from the trashbin
 
   @issue-product-188
   Scenario: Delete folders from trashbin and check that they are gone
-    When the user deletes folder "simple-folder" using the webUI
-    And the user deletes folder "Folder,With,Comma" using the webUI
+    When the user deletes the file "simple-folder" from the deleted files list
+    And the user deletes the file "Folder,With,Comma" from the deleted files list
     Then folder "simple-folder" should not be listed on the webUI
     And folder "Folder,With,Comma" should not be listed on the webUI
 
