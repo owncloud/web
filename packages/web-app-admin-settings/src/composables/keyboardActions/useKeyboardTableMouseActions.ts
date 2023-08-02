@@ -13,7 +13,7 @@ export const useKeyboardTableMouseActions = (
 ) => {
   let fileListClickedShiftEvent
 
-  const handleShiftClickAction = ({ resource }) => {
+  const handleShiftClickAction = ({ resource, skipTargetSelection }) => {
     const parent = document.querySelectorAll(`[data-item-id='${resource.id}']`)[0]
     const resourceNodes = Object.values(parent.parentNode.children)
     const latestNode = resourceNodes.find(
@@ -30,6 +30,9 @@ export const useKeyboardTableMouseActions = (
 
     for (let i = minIndex; i <= maxIndex; i++) {
       const nodeId = resourceNodes[i].getAttribute('data-item-id')
+      if (skipTargetSelection && nodeId === resource.id) {
+        continue
+      }
       const selectedRowIndex = findIndex(selectedRows, { id: nodeId })
       if (selectedRowIndex === -1) {
         const selectedRow = find(paginatedResources.value, { id: nodeId })

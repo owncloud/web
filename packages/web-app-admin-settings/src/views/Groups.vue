@@ -214,9 +214,12 @@ export default defineComponent({
     ...mapActions(['showMessage', 'showErrorMessage']),
 
     selectGroups(groups) {
-      this.selectedGroups = [...groups]
+      this.selectedGroups.splice(0, this.selectedGroups.length, ...groups)
     },
-    toggleSelectGroup(toggledGroup) {
+    toggleSelectGroup(toggledGroup, deselect = false) {
+      if (deselect) {
+        this.selectedGroups.splice(0, this.selectedGroups.length)
+      }
       const isGroupSelected = this.selectedGroups.find((group) => group.id === toggledGroup.id)
       if (!isGroupSelected) {
         return this.selectedGroups.push(toggledGroup)
@@ -225,7 +228,7 @@ export default defineComponent({
       this.selectedGroups.splice(index, 1)
     },
     unselectAllGroups() {
-      this.selectedGroups = []
+      this.selectedGroups.splice(0, this.selectedGroups.length)
     },
     toggleCreateGroupModal() {
       this.createGroupModalOpen = !this.createGroupModalOpen

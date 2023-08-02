@@ -49,6 +49,7 @@
           :option="item"
           :label="getSelectUserLabel(item)"
           hide-label
+          @update:model-value="toggleUser(item)"
           @click.stop="rowClicked([item, $event])"
         />
       </template>
@@ -198,15 +199,22 @@ export default defineComponent({
     const rowClicked = (data) => {
       const resource = data[0]
       const eventData = data[1]
+      const isCheckboxClicked = eventData?.target.getAttribute('type') === 'checkbox'
 
       const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
       if (contextActionClicked) {
         return
       }
       if (eventData?.shiftKey) {
-        return eventBus.publish('app.files.list.clicked.shift', { resource })
+        return eventBus.publish('app.files.list.clicked.shift', {
+          resource,
+          skipTargetSelection: isCheckboxClicked
+        })
       }
-      toggleUser(resource)
+      if (isCheckboxClicked) {
+        return
+      }
+      toggleUser(resource, true)
     }
     const showContextMenuOnBtnClick = (data, user) => {
       const { dropdown, event } = data
@@ -308,11 +316,11 @@ export default defineComponent({
       lastSelectedUserId
     )
 
-    const toggleUser = (user) => {
+    const toggleUser = (user, deselect = false) => {
       lastSelectedUserIndex.value = findIndex(props.users, (u) => u.id === user.id)
       lastSelectedUserId.value = user.id
       keyActions.resetSelectionCursor()
-      emit('toggleSelectUser', user)
+      emit('toggleSelectUser', user, deselect)
     }
 
     return {

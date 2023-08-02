@@ -41,6 +41,7 @@
           :option="rowData.item"
           :label="getSelectGroupLabel(rowData.item)"
           hide-label
+          @update:model-value="toggleGroup(rowData.item)"
           @click.stop="rowClicked([rowData.item, $event])"
         />
       </template>
@@ -174,15 +175,22 @@ export default defineComponent({
     const rowClicked = (data) => {
       const resource = data[0]
       const eventData = data[1]
+      const isCheckboxClicked = eventData?.target.getAttribute('type') === 'checkbox'
 
       const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
       if (contextActionClicked) {
         return
       }
       if (eventData?.shiftKey) {
-        return eventBus.publish('app.files.list.clicked.shift', { resource })
+        return eventBus.publish('app.files.list.clicked.shift', {
+          resource,
+          skipTargetSelection: isCheckboxClicked
+        })
       }
-      toggleGroup(resource)
+      if (isCheckboxClicked) {
+        return
+      }
+      toggleGroup(resource, true)
     }
     const showContextMenuOnBtnClick = (data, group) => {
       const { dropdown, event } = data
@@ -261,11 +269,11 @@ export default defineComponent({
       lastSelectedGroupId
     )
 
-    const toggleGroup = (group) => {
+    const toggleGroup = (group, deselect = false) => {
       lastSelectedGroupIndex.value = findIndex(props.groups, (u) => u.id === group.id)
       lastSelectedGroupId.value = group.id
       keyActions.resetSelectionCursor()
-      emit('toggleSelectGroup', group)
+      emit('toggleSelectGroup', group, deselect)
     }
 
     watch(currentPage, () => {
