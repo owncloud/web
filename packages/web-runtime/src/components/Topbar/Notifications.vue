@@ -129,6 +129,7 @@ export default {
       setupServerSentEvents = useServerSentEvents({
         url: 'ocs/v2.php/apps/notifications/api/v1/notifications/sse',
         onOpen: (response): void => {
+          fetchNotificationsTask.perform()
           if (!response.ok) {
             console.error(`SSE notifications couldn't be set up ${response.status}`)
           }
@@ -323,8 +324,8 @@ export default {
         notificationsInterval.value = setInterval(() => {
           fetchNotificationsTask.perform()
         }, POLLING_INTERVAL)
+        fetchNotificationsTask.perform()
       }
-      fetchNotificationsTask.perform()
     })
 
     onUnmounted(() => {
