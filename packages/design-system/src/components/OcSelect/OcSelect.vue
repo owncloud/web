@@ -86,7 +86,15 @@
 import Fuse from 'fuse.js'
 import uniqueId from '../../utils/uniqueId'
 import VueSelect from 'vue-select'
-import {defineComponent, ComponentPublicInstance, onMounted, ref, unref, VNodeRef, PropType} from 'vue'
+import {
+  defineComponent,
+  ComponentPublicInstance,
+  onMounted,
+  ref,
+  unref,
+  VNodeRef,
+  PropType
+} from 'vue'
 import { useGettext } from 'vue3-gettext'
 import 'vue-select/dist/vue-select.css'
 import { ContextualHelper } from 'design-system/src/helpers'
@@ -121,8 +129,6 @@ export default defineComponent({
         if (items.length < 1) {
           return []
         }
-
-        console.log('items', items)
 
         const fuse = new Fuse(items, {
           ...(props.label && { keys: [props.label] }),

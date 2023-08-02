@@ -66,7 +66,6 @@ import { useGettext } from 'vue3-gettext'
 import keycode from 'keycode'
 import { tagsHelper } from 'web-app-files/src/helpers/contextualHelpers'
 import { configurationManager } from 'web-pkg'
-import {ContextualHelper} from "design-system/src/helpers";
 
 const tagsMaxCount = 100
 
@@ -165,7 +164,7 @@ export default defineComponent({
         })
 
         eventBus.publish('sidebar.entity.saved')
-        if(unref(tagSelect) !== null) {
+        if (unref(tagSelect) !== null) {
           unref(tagSelect).$refs.search.focus()
         }
       } catch (e) {
