@@ -482,7 +482,7 @@ When('the user marks all files for batch action using the webUI', function () {
 })
 
 When('the user batch deletes the marked files permanently using the webUI', function () {
-  return client.page.trashBinPage().deleteSelectedPermanently()
+  return client.page.trashbinPage().deleteSelectedPermanently()
 })
 
 When('the user/public batch deletes the marked files using the webUI', function () {
@@ -505,7 +505,7 @@ When(
       await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
     }
 
-    return client.page.trashBinPage().deleteSelectedPermanently()
+    return client.page.trashbinPage().deleteSelectedPermanently()
   }
 )
 
