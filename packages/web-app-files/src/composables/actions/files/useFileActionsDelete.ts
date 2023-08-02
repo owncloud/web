@@ -26,7 +26,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
 
   const { $gettext } = useGettext()
 
-  const handler = ({ space, resources, deletePermanent }) => {
+const handler = ({ space, resources, deletePermanent }: FileActionOptions & { deletePermanent: boolean }) => {```
     if (isLocationCommonActive(router, 'files-common-search')) {
       resources = resources.filter(
         (r) =>
