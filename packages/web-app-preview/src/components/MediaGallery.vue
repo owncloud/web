@@ -1,5 +1,8 @@
 <template>
   <div class="media-gallery oc-box-shadow-medium">
+    <button class="navigation-button left-navigation-button" @click="$emit('handleGoNext')">
+      <oc-icon name="arrow-drop-left" size="large" />
+    </button>
     <div class="media-display">
       <div v-for="(mediaFile, index) in activeMediaFiles" :key="index" class="media-container">
         <button
@@ -7,7 +10,7 @@
           @click="handleUpdateActiveMediaFile(mediaFile)"
         >
           <img
-            v-if="mediaFile && mediaFile.mimeType.startsWith('image')"
+            v-if="mediaFile && mediaFile.mimeType.toLowerCase().startsWith('image')"
             :key="`media-image-${mediaFile.id}`"
             :src="mediaFile.url"
             :alt="mediaFile.name"
@@ -18,6 +21,9 @@
         </button>
       </div>
     </div>
+    <button class="navigation-button" @click="$emit('handleGoPrev')">
+      <oc-icon name="arrow-drop-right" size="large" />
+    </button>
     <div class="tools-sidebar">
       <p>
         {{ activeIndex }}
@@ -55,7 +61,7 @@ export default defineComponent({
       default: null
     }
   },
-  emits: ['updateActiveMediaFile'],
+  emits: ['updateActiveMediaFile', 'handleGoNext', 'handleGoPrev'],
   setup(props, { emit }) {
     const activeMediaFiles: ComputedRef<MediaGalleryFile[]> = computed(() =>
       useSlicedGalleryImageList(props.mediaFiles, props.activeIndex)
@@ -67,6 +73,7 @@ export default defineComponent({
         emit('updateActiveMediaFile', mediaFileindex)
       }
     }
+
     return {
       activeMediaFiles,
       handleUpdateActiveMediaFile
@@ -114,9 +121,10 @@ export default defineComponent({
   height: 80%;
   overflow: hidden;
   padding: 0;
-  border: none;
-  background-color: rgba(0, 0, 0, 0);
+  border: 4px solid var(--oc-color-swatch-brand-hover);
+  background-color: var(--oc-color-swatch-brand-hover);
   border-radius: 4px;
+  box-sizing: content-box;
 }
 
 .gallery-image {
@@ -129,5 +137,21 @@ export default defineComponent({
 .tools-sidebar {
   width: 3rem;
   border-left: 1px solid var(--oc-color-background-highlight);
+}
+
+.navigation-button {
+  border: none;
+  background-color: rgb(0, 0, 0, 0);
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: var(--oc-color-background-highlight);
+  }
+}
+
+.left-navigation-button {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
 }
 </style>

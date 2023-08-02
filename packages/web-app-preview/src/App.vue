@@ -55,6 +55,8 @@
               :sort-by="sortBy"
               :sort-dir="sortDir"
               @update-active-media-file="handleSetActiveMediaFile"
+              @handle-go-next="handleSetActiveMediaFile(activeIndex + 1)"
+              @handle-go-prev="handleSetActiveMediaFile(activeIndex - 1)"
             />
           </div>
         </div>
@@ -101,7 +103,7 @@ import {
   useSaveUnsavedChangesModal,
   useCancelUnsavedChangesModal
 } from './composables/saveFunctions/useUnsavedChangesModal'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { Ref } from 'vue'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
@@ -109,7 +111,7 @@ import { DavProperty } from 'web-client/src/webdav/constants'
 import { CropVariantEnum, ProcessingToolsEnum } from './helpers'
 import applyCropping from './composables/saveFunctions/applyCropping'
 import MediaGallery from './components/MediaGallery.vue'
-import { watchEffect } from 'vue'
+import { onMounted } from 'vue'
 
 export const appId = 'preview'
 
@@ -150,7 +152,7 @@ export default defineComponent({
     const processingTool = computed(() => store.getters['Preview/getSelectedProcessingTool'])
 
     const appDefaults = useAppDefaults({ applicationId: 'preview' })
-    const contextRouteQuery = useRouteQuery('contextRouteQuery')
+    const contextRouteQuery = computed(() => useRouteQuery('contextRouteQuery'))
     const { downloadFile } = useDownloadFile()
 
     const activeIndex = ref()
@@ -205,6 +207,19 @@ export default defineComponent({
       })
     }
 
+    const sortBy = computed(() => {
+      if (!unref(contextRouteQuery)) {
+        return 'name'
+      }
+      return unref(contextRouteQuery)['sort-by'] ?? 'name'
+    })
+    const sortDir = computed(() => {
+      if (!unref(contextRouteQuery)) {
+        return 'desc'
+      }
+      return unref(contextRouteQuery)['sort-dir'] ?? 'asc'
+    })
+
     const filteredFiles = computed<Resource[]>(() => {
       if (!unref(activeFiles)) {
         return []
@@ -218,34 +233,34 @@ export default defineComponent({
 
     const mediaGalleryFiles: Ref<MediaGalleryFile[]> = ref([])
 
-    // Updated way to frequent
-    watchEffect(async () => {
-      mediaGalleryFiles.value = await Promise.all(
-        unref(filteredFiles).map(async (file) => {
-          const fileUrl = await getMediaFileUrl(file)
-          // console.log('useEffect updated')
-          return {
-            name: file.name,
-            id: file.id,
-            url: fileUrl,
-            mimeType: file.mimeType
-          }
-        })
-      )
+    watch(filteredFiles, async (oldFiles, newFiles) => {
+      if (oldFiles !== newFiles) {
+        mediaGalleryFiles.value = await Promise.all(
+          unref(filteredFiles).map(async (file) => {
+            const fileUrl = await getMediaFileUrl(file)
+            return {
+              name: file.name,
+              id: file.id,
+              url: fileUrl,
+              mimeType: file.mimeType
+            }
+          })
+        )
+      }
     })
 
-    async function getMediaFileUrl(file) {
+    async function getMediaFileUrl(file: Resource) {
       try {
         const loadRawFile = isFileTypeImage(file)
         let mediaUrl: string
         if (loadRawFile) {
-          mediaUrl = await getUrlForResource(unref(currentFileContext.value.space), file)
+          mediaUrl = await getUrlForResource(unref(unref(currentFileContext).space), file)
         } else {
           mediaUrl = await loadPreview(file)
         }
         return mediaUrl
       } catch (e) {
-        console.error(e)
+        console.error('This is the error', e)
       }
     }
 
@@ -257,6 +272,7 @@ export default defineComponent({
       return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile).id)
     })
 
+    // #Rework
     const getUpdatedBlob = async () => {
       let newVersion = null
       switch (processingTool.value) {
@@ -288,7 +304,6 @@ export default defineComponent({
       resource.value = yield getFileInfo(currentFileContext, {
         davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
       })
-      replaceInvalidFileRoute(currentFileContext, unref(resource))
 
       const savedImageVersion = yield getFileContents(currentFileContext, { responseType: 'blob' })
       serverVersion.value = savedImageVersion.body
@@ -307,6 +322,7 @@ export default defineComponent({
         currentETag.value = putFileContentsResponse.etag
         imageSavedPopup()
         handleResetAfterSave()
+        // #refreshCache()
       } catch (e) {
         switch (e.statusCode) {
           case 412:
@@ -346,29 +362,15 @@ export default defineComponent({
     async function save() {
       await saveImageTask.perform()
     }
-    // End of image saving
 
     watch(activeMediaFileCached, () => {
-      if (activeMediaFileCached.value.isImage) {
+      if (activeMediaFileCached.value && activeMediaFileCached.value.isImage) {
         loadImageTask.perform()
         store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
         store.commit('Preview/RESET_SELECTED_PROCESSING_TOOL')
         const storeValues = store.getters['Preview/allParameters']
         activeAdjustmentParameters.value = storeValues
       }
-    })
-
-    const sortBy = computed(() => {
-      if (!unref(contextRouteQuery)) {
-        return 'name'
-      }
-      return unref(contextRouteQuery)['sort-by'] ?? 'name'
-    })
-    const sortDir = computed(() => {
-      if (!unref(contextRouteQuery)) {
-        return 'desc'
-      }
-      return unref(contextRouteQuery)['sort-dir'] ?? 'asc'
     })
 
     const isFullScreenModeActivated = ref(false)
@@ -407,12 +409,12 @@ export default defineComponent({
       if (adjustmentParams.value !== activeAdjustmentParameters.value) {
         const onConfirm: Array<(...args: any[]) => Promise<any>> = [
           () => save(),
-          () => downloadFile(activeFilteredFile.value)
+          () => downloadFile(unref(activeFilteredFile))
         ]
 
         useCancelUnsavedChangesModal([], onConfirm, store)
       } else {
-        downloadFile(activeFilteredFile.value)
+        downloadFile(unref(activeFilteredFile))
       }
     }
 
@@ -430,32 +432,29 @@ export default defineComponent({
       }
     ]
 
-    function isFileTypeImage(file) {
+    function isFileTypeImage(file: Resource) {
       return !isFileTypeAudio(file) && !isFileTypeVideo(file)
     }
-    function isFileTypeAudio(file) {
+    function isFileTypeAudio(file: Resource) {
       return file.mimeType.toLowerCase().startsWith('audio')
     }
-    function isFileTypeVideo(file) {
+    function isFileTypeVideo(file: Resource) {
       return file.mimeType.toLowerCase().startsWith('video')
     }
 
-    function isActiveFileTypeImage() {
-      return !isActiveFileTypeAudio && !isActiveFileTypeVideo
-    }
-    function isActiveFileTypeAudio() {
-      return isFileTypeAudio(activeFilteredFile)
-    }
-    function isActiveFileTypeVideo() {
-      return isFileTypeVideo(activeFilteredFile)
-    }
+    const isActiveFileTypeAudio = computed(() => isFileTypeAudio(activeFilteredFile.value))
+    const isActiveFileTypeVideo = computed(() => isFileTypeVideo(activeFilteredFile.value))
+    const isActiveFileTypeImage = computed(() => isFileTypeImage(activeFilteredFile.value))
 
     function checkIfDirty() {
       const allParams = store.getters['Preview/allParameters']
       return unref(allParams) !== unref(activeAdjustmentParameters)
     }
 
-    function handleResetValues() {}
+    function handleResetValues() {
+      store.commit('RESET_ADJUSTMENT_PARAMETERS')
+      store.commit('RESET_SELECTED_PROCESSING_TOOL')
+    }
 
     function handleSetNewActiveIndex(newActiveIndex: number) {
       if (newActiveIndex >= unref(filteredFiles).length) {
@@ -475,16 +474,16 @@ export default defineComponent({
       isFileContentError.value = false
 
       if (checkIfDirty()) {
-        const onConfirm: Array<(...args: any[]) => Promise<any>> = [
+        const onConfirm: Array<(...args: any[]) => Promise<any> | any> = [
           () => save(),
-          async () => await handleSetNewActiveIndex(newActiveIndex),
-          async () => await updateLocalHistory()
+          () => handleSetNewActiveIndex(newActiveIndex),
+          () => updateLocalHistory()
         ]
-        const onCancel: Array<(...args: any[]) => Promise<any>> = [
-          async () => await handleSetNewActiveIndex(newActiveIndex),
-          async () => await updateLocalHistory()
+        const onCancel: Array<(...args: any[]) => Promise<any> | any> = [
+          () => handleSetNewActiveIndex(newActiveIndex),
+          () => updateLocalHistory()
         ]
-        isActiveFileTypeImage && useSaveUnsavedChangesModal(onCancel, onConfirm, store)
+        useSaveUnsavedChangesModal(onCancel, onConfirm, store)
       } else {
         handleSetNewActiveIndex(newActiveIndex)
         updateLocalHistory()
@@ -510,7 +509,7 @@ export default defineComponent({
       }
     }
 
-    function loadPreview(file) {
+    function loadPreview(file: Resource) {
       return previewService.loadPreview({
         space: unref(currentFileContext.value.space),
         resource: file,
@@ -518,7 +517,11 @@ export default defineComponent({
       })
     }
 
-    // #Setup returns
+    onMounted(() => {
+      const storeValues = store.getters['Preview/allParameters']
+      activeAdjustmentParameters.value = storeValues
+    })
+
     return {
       ...appDefaults,
       activeFilteredFile,
@@ -576,7 +579,6 @@ export default defineComponent({
     ...mapGetters('Preview', ['allParameters'])
   },
 
-  // #Rework
   watch: {
     activeIndex(newValue, oldValue) {
       if (newValue !== oldValue) {
@@ -612,8 +614,6 @@ export default defineComponent({
   },
 
   methods: {
-    // #Rework
-    // #Set
     setActiveFile(driveAliasAndItem: string) {
       for (let i = 0; i < this.filteredFiles.length; i++) {
         if (
@@ -629,7 +629,6 @@ export default defineComponent({
       this.isFileContentError = true
     },
     // react to PopStateEvent ()
-    // #Rework
     handleLocalHistoryEvent() {
       const result = this.$router.resolve(document.location as unknown as RouteLocationRaw)
       this.setActiveFile(queryItemAsString(result.params.driveAliasAndItem))
@@ -668,7 +667,6 @@ export default defineComponent({
         } else {
           mediaUrl = await this.loadPreview(this.activeFilteredFile)
         }
-
         this.addPreviewToCache(this.activeFilteredFile, mediaUrl)
         this.isFileContentLoading = false
         this.isFileContentError = false
@@ -678,7 +676,6 @@ export default defineComponent({
         console.error(e)
       }
     },
-    // #load
     addPreviewToCache(file, url) {
       this.cachedFiles.push({
         id: file.id,
@@ -736,13 +733,7 @@ export default defineComponent({
         preloadFile(previousFileIndex)
       }
     },
-
-    ...mapMutations('Preview', ['RESET_ADJUSTMENT_PARAMETERS', 'RESET_SELECTED_PROCESSING_TOOL']),
-    ...mapActions(['createModal', 'hideModal']),
-    handleResetValues() {
-      this.RESET_ADJUSTMENT_PARAMETERS()
-      this.RESET_SELECTED_PROCESSING_TOOL()
-    }
+    ...mapActions(['createModal', 'hideModal'])
   }
 })
 </script>

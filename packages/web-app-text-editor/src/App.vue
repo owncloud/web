@@ -126,7 +126,6 @@ export default defineComponent({
       currentETag.value = fileContentsResponse.headers['OC-ETag']
     }).restartable()
 
-    // Here
     const saveFileTask = useTask(function* () {
       const newContent = unref(currentContent)
 

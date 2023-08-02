@@ -7,13 +7,10 @@ export const useSlicedGalleryImageList = (
   const length = mediafiles.length
   switch (length) {
     case 0:
-      console.log('0')
       return [undefined, undefined, undefined, undefined, undefined]
     case 1:
-      console.log('1')
       return [undefined, undefined, mediafiles[activeIndex], undefined, undefined]
     case 2:
-      console.log('2')
       return [
         undefined,
         mediafiles[activeIndex - 1] || undefined,
@@ -22,7 +19,6 @@ export const useSlicedGalleryImageList = (
         undefined
       ]
     case 3:
-      console.log('3')
       return [
         undefined,
         mediafiles[
@@ -35,7 +31,6 @@ export const useSlicedGalleryImageList = (
         undefined
       ]
     case 4:
-      console.log('4')
       return [
         // Try to set % 5
         mediafiles[

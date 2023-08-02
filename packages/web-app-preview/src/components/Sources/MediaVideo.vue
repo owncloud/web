@@ -18,6 +18,9 @@ export default defineComponent({
       type: Boolean,
       default: true
     }
+  },
+  setup(props) {
+    return {}
   }
 })
 </script>
