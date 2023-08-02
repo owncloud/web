@@ -3,7 +3,7 @@
     <label :for="id" class="oc-label" v-text="label" />
     <oc-contextual-helper
       v-if="contextualHelper?.isEnabled"
-      v-bind="contextualHelper?.dataBinding"
+      v-bind="contextualHelper?.options"
       class="oc-pl-xs"
     ></oc-contextual-helper>
     <vue-select

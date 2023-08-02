@@ -206,16 +206,8 @@ export default defineComponent({
       return objectMapping
     }
 
-    const tagsHelp = () => {
-      return tagsHelper({ configurationManager: configurationManager })
-    }
-
-    const helpersEnabled = () => {
-      return configurationManager.options.contextHelpers
-    }
-
     const contextualHelper = {
-      isEnabled: helpersEnabled(),
+      isEnabled: configurationManager.options.contextHelpers,
       options: tagsHelper({ configurationManager: configurationManager })
     } as ContextualHelper
 
