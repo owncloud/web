@@ -4,24 +4,43 @@
     :class="classes"
   >
     <div class="oc-flex oc-flex-wrap oc-flex-middle oc-flex-1" :role="role" :aria-live="ariaLive">
-      <div class="oc-flex oc-flex-middle">
-        <oc-icon :variation="iconVariation" name="information" fill-type="line" class="oc-mr-s" />
-        <div class="oc-notification-message-title">
-          {{ title }}
+      <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+        <div class="oc-flex oc-flex-middle">
+          <oc-icon :variation="iconVariation" name="information" fill-type="line" class="oc-mr-s" />
+          <div class="oc-notification-message-title">
+            {{ title }}
+          </div>
         </div>
+        <oc-button appearance="raw" @click="close" :aria-label="$gettext('Close')"
+          ><oc-icon name="close"
+        /></oc-button>
       </div>
-      <div
-        v-if="message"
-        class="oc-text-muted oc-width-1-1 oc-notification-message-content oc-mt-s oc-pl-s oc-ml-l"
-      >
-        {{ message }}
+      <div v-if="message || errorLogContent" class="oc-flex oc-flex-between oc-width-1-1 oc-mt-s">
+        <span
+          v-if="message"
+          class="oc-notification-message-content oc-text-muted oc-mr-s"
+          v-text="message"
+        />
+        <oc-button
+          v-if="errorLogContent"
+          class="oc-notification-message-error-log-toggle-button"
+          gap-size="none"
+          appearance="raw"
+          @click="showErrorLog = !showErrorLog"
+        >
+          <span v-text="$gettext('Details')"></span>
+          <oc-icon :name="showErrorLog ? 'arrow-up-s' : 'arrow-down-s'" />
+        </oc-button>
       </div>
+      <oc-error-log v-if="showErrorLog" class="oc-mt-m" :content="errorLogContent" />
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
+import OcButton from '../OcButton/OcButton.vue'
+import OcErrorLog from '../OcErrorLog/OcErrorLog.vue'
 
 /**
  * Notifications are used to inform users about errors, warnings and as confirmations for their actions.
@@ -31,7 +50,9 @@ export default defineComponent({
   status: 'ready',
   release: '1.0.0',
   components: {
-    OcIcon
+    OcErrorLog,
+    OcIcon,
+    OcButton
   },
   props: {
     /**
@@ -60,11 +81,18 @@ export default defineComponent({
      */
     message: {
       type: String,
-      required: false,
-      default: null
+      required: false
+    },
+    /**
+     * The error log content that will be displayed in notification
+     */
+    errorLogContent: {
+      type: String,
+      required: false
     },
     /**
      * Number of seconds the message shows. It will disappear after this time.
+     * If set to 0, message won't disappear automatically.
      */
     timeout: {
       type: Number,
@@ -74,6 +102,13 @@ export default defineComponent({
     }
   },
   emits: ['close'],
+  setup: function () {
+    const showErrorLog = ref(false)
+
+    return {
+      showErrorLog
+    }
+  },
   computed: {
     classes() {
       return `oc-notification-message-${this.status}`
@@ -95,9 +130,11 @@ export default defineComponent({
     /**
      * Notification will be destroyed if timeout is set
      */
-    setTimeout(() => {
-      this.close()
-    }, this.timeout * 1000)
+    if (this.timeout !== 0) {
+      setTimeout(() => {
+        this.close()
+      }, this.timeout * 1000)
+    }
   },
   methods: {
     close() {
@@ -114,13 +151,16 @@ export default defineComponent({
 <style lang="scss">
 .oc-notification-message {
   background-color: var(--oc-color-background-default) !important;
-  cursor: pointer;
   margin-top: var(--oc-space-small);
   position: relative;
   word-break: break-word;
 
   &-title {
     font-size: 1.15rem;
+  }
+
+  &-error-log-toggle-button {
+    word-break: keep-all;
   }
 }
 </style>

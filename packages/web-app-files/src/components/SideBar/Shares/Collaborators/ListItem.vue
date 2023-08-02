@@ -373,7 +373,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapActions('Files', ['changeShare']),
     ...mapActions('runtime/spaces', ['changeSpaceMember']),
 
@@ -394,9 +394,9 @@ export default defineComponent({
         this.saveShareChanges({ role, permissions, expirationDate })
       } catch (e) {
         console.error(e)
-        this.showMessage({
+        this.showErrorMessage({
           title: this.$gettext('Failed to apply new permissions'),
-          status: 'danger'
+          error: e
         })
       }
     },
@@ -408,9 +408,9 @@ export default defineComponent({
         this.saveShareChanges({ role, permissions, expirationDate })
       } catch (e) {
         console.error(e)
-        this.showMessage({
+        this.showErrorMessage({
           title: this.$gettext('Failed to apply expiration date'),
-          status: 'danger'
+          error: e
         })
       }
     },
@@ -437,9 +437,9 @@ export default defineComponent({
         this.showMessage({ title: this.$gettext('Share successfully changed') })
       } catch (e) {
         console.error(e)
-        this.showMessage({
+        this.showErrorMessage({
           title: this.$gettext('Error while editing the share.'),
-          status: 'danger'
+          error: e
         })
       }
     }

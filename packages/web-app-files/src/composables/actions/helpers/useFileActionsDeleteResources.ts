@@ -147,9 +147,9 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
         console.error(error)
         const translated = $gettext('Failed to delete "%{file}"')
-        store.dispatch('showMessage', {
+        store.dispatch('showErrorMessage', {
           title: $gettextInterpolate(translated, { file: resource.name }, true),
-          status: 'danger'
+          error
         })
       })
   }

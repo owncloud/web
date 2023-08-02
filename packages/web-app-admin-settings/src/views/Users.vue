@@ -363,7 +363,9 @@ export default defineComponent({
       sideBarLoading.value = true
       // Load additional user data
       const requests = unref(selectedUsers).map((user) => loadAdditionalUserDataTask.perform(user))
-      const results = await Promise.allSettled<Array<unknown>>(requests)
+      const results = await loadingService.addTask(() => {
+        return Promise.allSettled<Array<unknown>>(requests)
+      })
       const failedRequests = results.filter((result) => result.status === 'rejected')
       if (failedRequests.length > 0) {
         console.debug('Failed to load additional user data', failedRequests)
@@ -500,70 +502,163 @@ export default defineComponent({
     }
 
     const addUsersToGroups = async ({ users: affectedUsers, groups: groupsToAdd }) => {
-      try {
-        const client = clientService.graphAuthenticated
-        const usersToFetch = []
-        const addUsersToGroupsRequests = []
-        groupsToAdd.reduce((acc, group) => {
-          for (const user of affectedUsers) {
-            if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {
-              acc.push(client.groups.addMember(group.id, user.id, configurationManager.serverUrl))
-              if (!usersToFetch.includes(user.id)) {
-                usersToFetch.push(user.id)
-              }
+      const client = clientService.graphAuthenticated
+      const usersToFetch = []
+      const promises = groupsToAdd.reduce((acc, group) => {
+        for (const user of affectedUsers) {
+          if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {
+            acc.push(client.groups.addMember(group.id, user.id, configurationManager.serverUrl))
+            if (!usersToFetch.includes(user.id)) {
+              usersToFetch.push(user.id)
             }
           }
-          return acc
-        }, addUsersToGroupsRequests)
-        const usersResponse = await loadingService.addTask(async () => {
-          await Promise.all(addUsersToGroupsRequests)
-          return Promise.all(usersToFetch.map((userId) => client.users.getUser(userId)))
-        })
-        updateLocalUsers(usersResponse.map((r) => r.data))
-        await store.dispatch('showMessage', {
-          title: $gettext('Users were added to groups successfully')
-        })
+        }
+        return acc
+      }, [])
+      if (!promises.length) {
+        const title = $ngettext(
+          'Group assignment already added',
+          'Group assignments already added',
+          affectedUsers.length * groupsToAdd.length
+        )
+        store.dispatch('showMessage', { title })
         addToGroupsModalIsOpen.value = false
+        return
+      }
+
+      const results = await loadingService.addTask(() => {
+        return Promise.allSettled(promises)
+      })
+
+      const succeeded = results.filter((r) => r.status === 'fulfilled')
+      if (succeeded.length) {
+        const title =
+          succeeded.length === 1 && groupsToAdd.length === 1 && affectedUsers.length === 1
+            ? $gettext('Group assignment "%{group}" was added successfully', {
+                group: groupsToAdd[0].displayName
+              })
+            : $ngettext(
+                '%{groupAssignmentCount} group assignment was added successfully',
+                '%{groupAssignmentCount} group assignments were added successfully',
+                succeeded.length,
+                { groupAssignmentCount: succeeded.length.toString() },
+                true
+              )
+        store.dispatch('showMessage', { title })
+      }
+
+      const failed = results.filter((r) => r.status === 'rejected')
+      if (failed.length) {
+        failed.forEach(console.error)
+
+        const title =
+          failed.length === 1 && groupsToAdd.length === 1 && affectedUsers.length === 1
+            ? $gettext('Failed to add group assignment "%{group}"', {
+                group: groupsToAdd[0].displayName
+              })
+            : $ngettext(
+                'Failed to add %{groupAssignmentCount} group assignment',
+                'Failed to add %{groupAssignmentCount} group assignments',
+                failed.length,
+                { groupAssignmentCount: failed.length.toString() },
+                true
+              )
+        store.dispatch('showErrorMessage', {
+          title,
+          errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
+        })
+      }
+
+      addToGroupsModalIsOpen.value = false
+
+      try {
+        const usersResponse = await Promise.all(
+          usersToFetch.map((userId) => client.users.getUser(userId))
+        )
+        updateLocalUsers(usersResponse.map((r) => r.data))
       } catch (e) {
         console.error(e)
-        await store.dispatch('showMessage', {
-          title: $gettext('Failed add users to group'),
-          status: 'danger'
-        })
       }
     }
 
     const removeUsersFromGroups = async ({ users: affectedUsers, groups: groupsToRemove }) => {
-      try {
-        const client = clientService.graphAuthenticated
-        const usersToFetch = []
-        const removeUsersToGroupsRequests = []
-        groupsToRemove.reduce((acc, group) => {
-          for (const user of affectedUsers) {
-            if (user.memberOf.find((userGroup) => userGroup.id === group.id)) {
-              acc.push(client.groups.deleteMember(group.id, user.id))
-              if (!usersToFetch.includes(user.id)) {
-                usersToFetch.push(user.id)
-              }
+      const client = clientService.graphAuthenticated
+      const usersToFetch = []
+      const promises = groupsToRemove.reduce((acc, group) => {
+        for (const user of affectedUsers) {
+          if (user.memberOf.find((userGroup) => userGroup.id === group.id)) {
+            acc.push(client.groups.deleteMember(group.id, user.id))
+            if (!usersToFetch.includes(user.id)) {
+              usersToFetch.push(user.id)
             }
           }
-          return acc
-        }, removeUsersToGroupsRequests)
-        const usersResponse = await loadingService.addTask(async () => {
-          await Promise.all(removeUsersToGroupsRequests)
-          return Promise.all(usersToFetch.map((userId) => client.users.getUser(userId)))
-        })
-        updateLocalUsers(usersResponse.map((r) => r.data))
-        await store.dispatch('showMessage', {
-          title: $gettext('Users were removed from groups successfully')
-        })
+        }
+        return acc
+      }, [])
+
+      if (!promises.length) {
+        const title = $ngettext(
+          'Group assignment already removed',
+          'Group assignments already removed',
+          affectedUsers.length * groupsToRemove.length
+        )
+        store.dispatch('showMessage', { title })
         removeFromGroupsModalIsOpen.value = false
+        return
+      }
+
+      const results = await loadingService.addTask(() => {
+        return Promise.allSettled(promises)
+      })
+
+      const succeeded = results.filter((r) => r.status === 'fulfilled')
+      if (succeeded.length) {
+        const title =
+          succeeded.length === 1 && groupsToRemove.length === 1 && affectedUsers.length === 1
+            ? $gettext('Group assignment "%{group}" was deleted successfully', {
+                group: groupsToRemove[0].displayName
+              })
+            : $ngettext(
+                '%{groupAssignmentCount} group assignment was deleted successfully',
+                '%{groupAssignmentCount} group assignments were deleted successfully',
+                succeeded.length,
+                { groupAssignmentCount: succeeded.length.toString() },
+                true
+              )
+        store.dispatch('showMessage', { title })
+      }
+
+      const failed = results.filter((r) => r.status === 'rejected')
+      if (failed.length) {
+        failed.forEach(console.error)
+
+        const title =
+          failed.length === 1 && groupsToRemove.length === 1 && affectedUsers.length === 1
+            ? $gettext('Failed to delete group assignment "%{group}"', {
+                group: groupsToRemove[0].displayName
+              })
+            : $ngettext(
+                'Failed to delete %{groupAssignmentCount} group assignment',
+                'Failed to delete %{groupAssignmentCount} group assignments',
+                failed.length,
+                { groupAssignmentCount: failed.length.toString() },
+                true
+              )
+        store.dispatch('showErrorMessage', {
+          title,
+          errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
+        })
+      }
+
+      removeFromGroupsModalIsOpen.value = false
+
+      try {
+        const usersResponse = await Promise.all(
+          usersToFetch.map((userId) => client.users.getUser(userId))
+        )
+        updateLocalUsers(usersResponse.map((r) => r.data))
       } catch (e) {
         console.error(e)
-        await store.dispatch('showMessage', {
-          title: $gettext('Failed remove users from group'),
-          status: 'danger'
-        })
       }
     }
 
@@ -574,25 +669,63 @@ export default defineComponent({
       users: User[]
       value: boolean
     }) => {
+      affectedUsers = affectedUsers.filter(({ id }) => store.getters.user.uuid !== id)
+      const client = clientService.graphAuthenticated
+      const promises = affectedUsers.map((u) =>
+        client.users.editUser(u.id, { accountEnabled: value })
+      )
+      const results = await loadingService.addTask(() => {
+        return Promise.allSettled(promises)
+      })
+
+      const succeeded = results.filter((r) => r.status === 'fulfilled') as any
+      if (succeeded.length) {
+        const title =
+          succeeded.length === 1 && affectedUsers.length === 1
+            ? $gettext('Login for user "%{user}" was edited successfully', {
+                user: affectedUsers[0].displayName
+              })
+            : $ngettext(
+                '%{userCount} user login was edited successfully',
+                '%{userCount} users logins edited successfully',
+                succeeded.length,
+                { userCount: succeeded.length.toString() },
+                true
+              )
+        store.dispatch('showMessage', { title })
+      }
+
+      const failed = results.filter((r) => r.status === 'rejected')
+      if (failed.length) {
+        failed.forEach(console.error)
+
+        const title =
+          failed.length === 1 && affectedUsers.length === 1
+            ? $gettext('Failed edit login for user "%{user}"', {
+                user: affectedUsers[0].displayName
+              })
+            : $ngettext(
+                'Failed to edit %{userCount} user login',
+                'Failed to edit %{userCount} user logins',
+                failed.length,
+                { userCount: failed.length.toString() },
+                true
+              )
+        store.dispatch('showErrorMessage', {
+          title,
+          errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
+        })
+      }
+
+      editLoginModalIsOpen.value = false
+
       try {
-        affectedUsers = affectedUsers.filter(({ id }) => store.getters.user.uuid !== id)
-        const client = clientService.graphAuthenticated
-        const promises = affectedUsers.map((u) =>
-          client.users.editUser(u.id, { accountEnabled: value })
-        )
         const usersResponse = await loadingService.addTask(async () => {
-          await Promise.all(promises)
-          return Promise.all(affectedUsers.map((u) => client.users.getUser(u.id)))
+          return Promise.all(succeeded.map(({ value }) => client.users.getUser(value.data.id)))
         })
         updateLocalUsers(usersResponse.map((r) => r.data))
-        await store.dispatch('showMessage', { title: $gettext('Login was edited successfully') })
-        editLoginModalIsOpen.value = false
       } catch (e) {
         console.error(e)
-        return store.dispatch('showMessage', {
-          title: $gettext('Failed to edit login'),
-          status: 'danger'
-        })
       }
     }
 
@@ -685,7 +818,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     selectUsers(users) {
@@ -719,9 +852,9 @@ export default defineComponent({
         })
       } catch (error) {
         console.error(error)
-        this.showMessage({
+        this.showErrorMessage({
           title: this.$gettext('Failed to create user'),
-          status: 'danger'
+          error
         })
       }
     },
@@ -768,9 +901,9 @@ export default defineComponent({
         return updatedUser
       } catch (error) {
         console.error(error)
-        this.showMessage({
+        this.showErrorMessage({
           title: this.$gettext('Failed to edit user'),
-          status: 'danger'
+          error
         })
       }
     },

@@ -187,9 +187,9 @@ export default defineComponent({
         valuesList.value = values || []
       } catch (e) {
         console.error(e)
-        store.dispatch('showMessage', {
+        store.dispatch('showErrorMessage', {
           title: $gettext('Unable to load account data…'),
-          status: 'danger'
+          error: e
         })
         valuesList.value = []
       }
@@ -203,9 +203,9 @@ export default defineComponent({
         accountBundle.value = bundles?.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
         console.error(e)
-        store.dispatch('showMessage', {
+        store.dispatch('showErrorMessage', {
           title: $gettext('Unable to load account data…'),
-          status: 'danger'
+          error: e
         })
         accountBundle.value = undefined
       }
@@ -314,9 +314,9 @@ export default defineComponent({
         })
       } catch (e) {
         console.error(e)
-        store.dispatch('showMessage', {
+        store.dispatch('showErrorMessage', {
           title: $gettext('Saving language failed…'),
-          status: 'danger'
+          error: e
         })
       }
     }
@@ -333,9 +333,9 @@ export default defineComponent({
         })
       } catch (e) {
         console.error(e)
-        store.dispatch('showMessage', {
+        store.dispatch('showErrorMessage', {
           title: $gettext('Unable to save email notifications preference…'),
-          status: 'danger'
+          error: e
         })
       }
     }
@@ -394,7 +394,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'showErrorMessage']),
     showEditPasswordModal() {
       this.editPasswordModalOpen = true
     },
@@ -412,9 +412,9 @@ export default defineComponent({
         })
         .catch((error) => {
           console.error(error)
-          this.showMessage({
+          this.showErrorMessage({
             title: this.$gettext('Failed to change password'),
-            status: 'danger'
+            error
           })
         })
     }

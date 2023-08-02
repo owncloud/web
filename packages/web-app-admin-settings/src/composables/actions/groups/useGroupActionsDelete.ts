@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { Store } from 'vuex'
-import { eventBus } from 'web-pkg'
+import { eventBus, useLoadingService } from 'web-pkg'
 import { useClientService, useStore } from 'web-pkg/src/composables'
 import { GroupAction, GroupActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
@@ -9,12 +9,15 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
+  const loadingService = useLoadingService()
 
   const deleteGroups = async (groups) => {
     const graphClient = clientService.graphAuthenticated
     const promises = groups.map((group) => graphClient.groups.deleteGroup(group.id))
 
-    const results = await Promise.allSettled(promises)
+    const results = await loadingService.addTask(() => {
+      return Promise.allSettled(promises)
+    })
 
     const succeeded = results.filter((r) => r.status === 'fulfilled')
     if (succeeded.length) {
@@ -45,7 +48,10 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
               { groupCount: failed.length.toString() },
               true
             )
-      store.dispatch('showMessage', { title, status: 'danger' })
+      store.dispatch('showErrorMessage', {
+        title,
+        errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
+      })
     }
 
     store.dispatch('hideModal')

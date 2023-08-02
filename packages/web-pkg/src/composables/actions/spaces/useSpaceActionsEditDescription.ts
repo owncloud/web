@@ -34,9 +34,9 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
       })
       .catch((error) => {
         console.error(error)
-        store.dispatch('showMessage', {
+        store.dispatch('showErrorMessage', {
           title: $gettext('Failed to change space subtitle'),
-          status: 'danger'
+          error
         })
       })
   }

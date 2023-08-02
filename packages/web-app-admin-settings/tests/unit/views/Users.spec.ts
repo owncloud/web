@@ -77,13 +77,15 @@ const getClientService = () => {
   clientService.graphAuthenticated.users.getUser.mockResolvedValue(
     mock<AxiosResponse>({ data: getDefaultUser() })
   )
+  clientService.graphAuthenticated.users.editUser.mockResolvedValue(
+    mock<AxiosResponse>({ data: getDefaultUser() })
+  )
   clientService.graphAuthenticated.groups.listGroups.mockResolvedValue(
     mock<AxiosResponse>({ data: { value: [] } })
   )
   clientService.graphAuthenticated.applications.listApplications.mockResolvedValue(
     mock<AxiosResponse>({ data: { value: getDefaultApplications() } })
   )
-
   return clientService
 }
 
@@ -160,11 +162,11 @@ describe('Users view', () => {
       const clientService = getClientService()
       clientService.graphAuthenticated.users.createUser.mockImplementation(() => mockAxiosReject())
       const { wrapper } = getMountedWrapper({ clientService })
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
       const toggleCreateUserModalStub = jest.spyOn(wrapper.vm, 'toggleCreateUserModal')
       await wrapper.vm.createUser({ displayName: 'jana' })
 
-      expect(showMessageStub).toHaveBeenCalled()
+      expect(showErrorMessageStub).toHaveBeenCalled()
       expect(toggleCreateUserModalStub).toHaveBeenCalledTimes(0)
     })
   })
@@ -281,14 +283,14 @@ describe('Users view', () => {
       const clientService = getClientService()
       clientService.graphAuthenticated.users.editUser.mockImplementation(() => mockAxiosReject())
       const { wrapper } = getMountedWrapper({ clientService })
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
 
       await wrapper.vm.loadResourcesTask.last
       await wrapper.vm.editUser({
         editUser: {}
       })
 
-      expect(showMessageStub).toHaveBeenCalled()
+      expect(showErrorMessageStub).toHaveBeenCalled()
     })
   })
 

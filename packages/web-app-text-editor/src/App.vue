@@ -99,10 +99,10 @@ export default defineComponent({
     let autosaveIntervalId = null
 
     const errorPopup = (error) => {
-      store.dispatch('showMessage', {
+      store.dispatch('showErrorMessage', {
         title: $gettext('An error occurred'),
         desc: error,
-        status: 'danger'
+        error
       })
     }
 

@@ -22,11 +22,20 @@ export class ResourceTransfer extends ConflictDialog {
     createModal: (modal: object) => void,
     hideModal: () => void,
     showMessage: (data: object) => void,
+    showErrorMessage: (data: object) => void,
     $gettext: (msg: string) => string,
     $ngettext: (msgid: string, plural: string, n: number) => string,
     $gettextInterpolate: (msg: string, context: object, disableHtmlEscaping?: boolean) => string
   ) {
-    super(createModal, hideModal, showMessage, $gettext, $ngettext, $gettextInterpolate)
+    super(
+      createModal,
+      hideModal,
+      showMessage,
+      showErrorMessage,
+      $gettext,
+      $ngettext,
+      $gettextInterpolate
+    )
   }
 
   hasRecursion(): boolean {
@@ -45,7 +54,7 @@ export class ResourceTransfer extends ConflictDialog {
       "You can't paste the selected files at this location because you can't paste an item into itself.",
       count
     )
-    this.showMessage({ title, status: 'danger' })
+    this.showErrorMessage({ title })
   }
 
   showResultMessage(errors, movedResources: Array<Resource>, transferType: TransferType) {
@@ -89,9 +98,9 @@ export class ResourceTransfer extends ConflictDialog {
         true
       )
     }
-    this.showMessage({
+    this.showErrorMessage({
       title,
-      status: 'danger'
+      errors
     })
   }
 

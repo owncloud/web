@@ -52,7 +52,7 @@ describe('editDescription', () => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await editDescriptionSpace(mock<SpaceResource>(), 'doesntmatter')
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

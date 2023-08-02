@@ -81,6 +81,7 @@ export default {
       createModal,
       hideModal,
       showMessage,
+      showErrorMessage,
       $gettext,
       $gettextInterpolate,
       $ngettext,
@@ -98,6 +99,7 @@ export default {
       createModal,
       hideModal,
       showMessage,
+      showErrorMessage,
       $gettext,
       $ngettext,
       $gettextInterpolate
@@ -200,10 +202,10 @@ export default {
           }
           const title = $gettextInterpolate(translated, { file: file.name }, true)
           context.dispatch(
-            'showMessage',
+            'showErrorMessage',
             {
               title: title,
-              status: 'danger'
+              error
             },
             { root: true }
           )

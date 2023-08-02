@@ -31,9 +31,8 @@ export function showQuickLinkPasswordModal({ $gettext, store }, onConfirm) {
     onCancel: () => store.dispatch('hideModal'),
     onConfirm: async (password) => {
       if (!password || password.trim() === '') {
-        store.dispatch('showMessage', {
-          title: $gettext('Password cannot be empty'),
-          status: 'danger'
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Password cannot be empty')
         })
       } else {
         await store.dispatch('hideModal')

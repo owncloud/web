@@ -101,9 +101,9 @@ export default defineComponent({
           title: $gettext('GDPR export has been requested')
         })
       } catch (e) {
-        return store.dispatch('showMessage', {
+        return store.dispatch('showErrorMessage', {
           title: $gettext('GDPR export could not be requested. Please contact an administrator.'),
-          status: 'danger'
+          error: e
         })
       }
     }

@@ -69,13 +69,13 @@ export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}
       return
     }
 
-    store.dispatch('showMessage', {
+    store.dispatch('showErrorMessage', {
       title: $ngettext(
         'Failed to accept the selected share.',
         'Failed to accept selected shares.',
         resources.length
       ),
-      status: 'danger'
+      errors
     })
   }
 

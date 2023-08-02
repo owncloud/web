@@ -73,13 +73,13 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
       return
     }
 
-    store.dispatch('showMessage', {
+    store.dispatch('showErrorMessage', {
       title: $ngettext(
         'Failed to decline the selected share',
         'Failed to decline selected shares',
         resources.length
       ),
-      status: 'danger'
+      errors
     })
   }
 

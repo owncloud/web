@@ -141,7 +141,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('runtime/spaces', ['deleteSpaceMember']),
-    ...mapActions(['createModal', 'hideModal', 'showMessage']),
+    ...mapActions(['createModal', 'hideModal', 'showMessage', 'showErrorMessage']),
 
     filter(collection, term) {
       if (!(term || '').trim()) {
@@ -209,9 +209,9 @@ export default defineComponent({
         }
       } catch (error) {
         console.error(error)
-        this.showMessage({
+        this.showErrorMessage({
           title: this.$gettext('Failed to remove share'),
-          status: 'danger'
+          error
         })
       } finally {
         this.hideModal()

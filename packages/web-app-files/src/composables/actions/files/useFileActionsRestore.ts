@@ -97,6 +97,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         (...args) => store.dispatch('createModal', ...args),
         (...args) => store.dispatch('hideModal', ...args),
         (...args) => store.dispatch('showMessage', ...args),
+        (...args) => store.dispatch('showErrorMessage', ...args),
         $gettext,
         $ngettext,
         $gettextInterpolate
@@ -157,6 +158,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
   ) => {
     const restoredResources = []
     const failedResources = []
+    const errors = []
 
     let createdFolderPaths = []
     for (const [i, resource] of resources.entries()) {
@@ -173,6 +175,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         restoredResources.push(resource)
       } catch (e) {
         console.error(e)
+        errors.push(e)
         failedResources.push(resource)
       } finally {
         setProgress({ total: resources.length, current: i + 1 })
@@ -207,9 +210,9 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         translated = $gettext('Failed to restore %{resourceCount} files')
         translateParams.resourceCount = failedResources.length
       }
-      store.dispatch('showMessage', {
+      store.dispatch('showErrorMessage', {
         title: $gettextInterpolate(translated, translateParams, true),
-        status: 'danger'
+        errors
       })
     }
 

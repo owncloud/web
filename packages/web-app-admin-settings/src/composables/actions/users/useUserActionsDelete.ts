@@ -1,6 +1,6 @@
 import { computed, unref } from 'vue'
 import { Store } from 'vuex'
-import { eventBus, useCapabilityDeleteUsersDisabled } from 'web-pkg'
+import { eventBus, useCapabilityDeleteUsersDisabled, useLoadingService } from 'web-pkg'
 import { useClientService, useStore } from 'web-pkg/src/composables'
 import { UserAction, UserActionOptions } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
@@ -9,11 +9,14 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
+  const loadingService = useLoadingService()
 
   const deleteUsers = async (users) => {
     const graphClient = clientService.graphAuthenticated
     const promises = users.map((user) => graphClient.users.deleteUser(user.id))
-    const results = await Promise.allSettled(promises)
+    const results = await loadingService.addTask(() => {
+      return Promise.allSettled(promises)
+    })
 
     const succeeded = results.filter((r) => r.status === 'fulfilled')
     if (succeeded.length) {
@@ -44,7 +47,10 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
               { userCount: failed.length.toString() },
               true
             )
-      store.dispatch('showMessage', { title, status: 'danger' })
+      store.dispatch('showErrorMessage', {
+        title,
+        errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
+      })
     }
 
     store.dispatch('hideModal')

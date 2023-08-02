@@ -242,7 +242,7 @@ export default defineComponent({
     position: absolute;
     right: 20px;
     bottom: 20px;
-    z-index: 1040;
+    z-index: calc(var(--oc-z-index-modal) + 1);
 
     @media (max-width: 640px) {
       left: 0;

@@ -83,12 +83,13 @@ export default defineComponent({
     window.removeEventListener('message', this.handleMessage)
   },
   methods: {
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'showErrorMessage']),
+
     errorPopup(error) {
-      this.showMessage({
+      this.showErrorMessage({
         title: this.$gettext('An error occurred'),
         desc: error,
-        status: 'danger'
+        error
       })
     },
     successPopup(msg) {

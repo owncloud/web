@@ -346,7 +346,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),
-    ...mapActions(['showMessage', 'createModal', 'hideModal']),
+    ...mapActions(['showMessage', 'showErrorMessage', 'createModal', 'hideModal']),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
     toggleLinkListCollapsed() {
@@ -479,9 +479,9 @@ export default defineComponent({
       } catch (e) {
         onError(e)
         console.error(e)
-        this.showMessage({
+        this.showErrorMessage({
           title: this.$gettext('Failed to create link'),
-          status: 'danger'
+          error: e
         })
         return
       }
@@ -501,9 +501,9 @@ export default defineComponent({
       } catch (e) {
         onError(e)
         console.error(e)
-        this.showMessage({
+        this.showErrorMessage({
           title: this.$gettext('Failed to update link'),
-          status: 'danger'
+          error: e
         })
         return
       }
@@ -559,9 +559,9 @@ export default defineComponent({
         }
       } catch (e) {
         console.error(e)
-        this.showMessage({
+        this.showErrorMessage({
           title: this.$gettext('Failed to delete link'),
-          status: 'danger'
+          error: e
         })
       }
     },

@@ -138,13 +138,13 @@ describe('Collaborator ListItem component', () => {
         throw new Error()
       })
       const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
       ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
         role: peopleRoleViewerFile,
         permissions: [SharePermissions.read]
       })
       expect(changeShareStub).not.toHaveBeenCalled()
-      expect(showMessageStub).toHaveBeenCalled()
+      expect(showErrorMessageStub).toHaveBeenCalled()
     })
   })
   describe('change expiration date', () => {
@@ -163,12 +163,12 @@ describe('Collaborator ListItem component', () => {
         throw new Error()
       })
       const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
       ;(wrapper.findComponent<any>('edit-dropdown-stub').vm as any).$emit('expirationDateChanged', {
         shareExpirationChanged: new Date()
       })
       expect(changeShareStub).not.toHaveBeenCalled()
-      expect(showMessageStub).toHaveBeenCalled()
+      expect(showErrorMessageStub).toHaveBeenCalled()
     })
   })
 })

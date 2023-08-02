@@ -26,9 +26,8 @@ export const useGeneralActionsUploadLogo = ({
     }
 
     if (!supportedLogoMimeTypes.includes(file.type)) {
-      return store.dispatch('showMessage', {
-        title: $gettext('The file type is unsupported'),
-        status: 'danger'
+      return store.dispatch('showErrorMessage', {
+        title: $gettext('The file type is unsupported')
       })
     }
 
@@ -49,9 +48,9 @@ export const useGeneralActionsUploadLogo = ({
       }, 1000)
     } catch (e) {
       console.error(e)
-      store.dispatch('showMessage', {
+      store.dispatch('showErrorMessage', {
         title: $gettext('Failed to upload logo'),
-        status: 'danger'
+        error: e
       })
     }
   }

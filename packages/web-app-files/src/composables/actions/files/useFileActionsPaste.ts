@@ -64,6 +64,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
             createModal: (...args) => store.dispatch('createModal', ...args),
             hideModal: (...args) => store.dispatch('hideModal', ...args),
             showMessage: (...args) => store.dispatch('showMessage', ...args),
+            showErrorMessage: (...args) => store.dispatch('showErrorMessage', ...args),
             $gettext,
             $gettextInterpolate,
             $ngettext
