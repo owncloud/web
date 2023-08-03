@@ -14,25 +14,26 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
   const store = useStore()
   const language = useGettext()
   const accessToken = useAccessToken({ store })
-  const ctrl = new AbortController()
+  const ctrl = ref(new AbortController())
   const retryCounter = ref(0)
 
   watch(
     () => language.current,
     () => {
-      ctrl.abort()
+      unref(ctrl).abort()
     }
   )
   const setupServerSentEvents = () => {
     if (unref(retryCounter) >= 5) {
-      ctrl.abort()
+      unref(ctrl).abort()
       throw new Error('Too many retries')
     }
     const setupSSE = async () => {
       retryCounter.value++
       try {
+        ctrl.value = new AbortController()
         await fetchEventSource(new URL(options.url, configurationManager.serverUrl).href, {
-          signal: ctrl.signal,
+          signal: unref(ctrl).signal,
           headers: {
             Authorization: `Bearer ${accessToken.value}`,
             'Accept-Language': unref(language).current,
@@ -40,7 +41,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
           },
           async onopen(response) {
             if (response.status === 401) {
-              ctrl.abort()
+              unref(ctrl).abort()
               return
             }
             retryCounter.value = 0
