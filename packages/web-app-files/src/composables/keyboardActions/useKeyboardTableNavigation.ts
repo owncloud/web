@@ -1,28 +1,18 @@
-import { useStore } from 'web-pkg'
+import { useStore, ViewModeConstants } from 'web-pkg'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
-import { computed, Ref, unref, nextTick } from 'vue'
+import { computed, Ref, ref, unref, nextTick, watchEffect } from 'vue'
 import { Key, KeyboardActions, ModifierKey } from 'web-pkg/src/composables/keyboardActions'
 import { Resource } from 'web-client'
 
 export const useKeyboardTableNavigation = (
   keyActions: KeyboardActions,
-  paginatedResources: Ref<Resource[]>
+  paginatedResources: Ref<Resource[]>,
+  viewMode: any
 ) => {
   const store = useStore()
   const { scrollToResource } = useScrollTo()
   const latestSelectedId = computed(() => store.state.Files.latestSelectedId)
-
-  keyActions.bindKeyAction({ primary: Key.ArrowUp }, () => handleNavigateAction(true))
-
-  keyActions.bindKeyAction({ primary: Key.ArrowDown }, () => handleNavigateAction())
-
-  keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowUp }, () =>
-    handleShiftUpAction()
-  )
-
-  keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowDown }, () =>
-    handleShiftDownAction()
-  )
+  const bindKeyActionsIds = ref([])
 
   keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.A }, () =>
     handleSelectAllAction()
@@ -37,7 +27,52 @@ export const useKeyboardTableNavigation = (
     store.dispatch('Files/resetFileSelection')
   })
 
-  const handleNavigateAction = async (up = false) => {
+  watchEffect(() => {
+    bindKeyActionsIds.value.forEach((id) => keyActions.removeKeyAction(id))
+    bindKeyActionsIds.value = []
+
+    if (ViewModeConstants.tilesView.name === viewMode.value) {
+      bindKeyActionsIds.value.push(
+        keyActions.bindKeyAction({ primary: Key.ArrowLeft }, () => tilesHandleNavigateLeft())
+      )
+      bindKeyActionsIds.value.push(
+        keyActions.bindKeyAction({ primary: Key.ArrowRight }, () => tilesHandleNavigateRight())
+      )
+      bindKeyActionsIds.value.push(
+        keyActions.bindKeyAction({ primary: Key.ArrowUp }, () => tilesHandleNavigateUp())
+      )
+      bindKeyActionsIds.value.push(
+        keyActions.bindKeyAction({ primary: Key.ArrowDown }, () => tilesHandleNavigateDown())
+      )
+    } else {
+      bindKeyActionsIds.value.push(
+        keyActions.bindKeyAction({ primary: Key.ArrowUp }, () => tableHandleNavigateAction(true))
+      )
+
+      bindKeyActionsIds.value.push(
+        keyActions.bindKeyAction({ primary: Key.ArrowDown }, () => tableHandleNavigateAction())
+      )
+
+      bindKeyActionsIds.value.push(
+        keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowUp }, () =>
+          handleShiftUpAction()
+        )
+      )
+
+      bindKeyActionsIds.value.push(
+        keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowDown }, () =>
+          handleShiftDownAction()
+        )
+      )
+    }
+  })
+
+  const tilesHandleNavigateLeft = () => {}
+  const tilesHandleNavigateRight = () => {}
+  const tilesHandleNavigateUp = () => {}
+  const tilesHandleNavigateDown = () => {}
+
+  const tableHandleNavigateAction = async (up = false) => {
     const nextId = !unref(latestSelectedId) ? getFirstResourceId() : getNextResourceId(up)
     if (nextId === -1) {
       return

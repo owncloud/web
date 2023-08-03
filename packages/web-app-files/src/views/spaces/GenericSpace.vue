@@ -429,7 +429,11 @@ export default defineComponent({
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
 
     const keyActions = useKeyboardActions('files-view')
-    useKeyboardTableNavigation(keyActions, resourcesViewDefaults.paginatedResources)
+    useKeyboardTableNavigation(
+      keyActions,
+      resourcesViewDefaults.paginatedResources,
+      resourcesViewDefaults.viewMode
+    )
     useKeyboardTableMouseActions(keyActions)
     useKeyboardTableSpaceActions(keyActions, props.space)
 
