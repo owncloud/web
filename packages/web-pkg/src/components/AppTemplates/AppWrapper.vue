@@ -62,27 +62,33 @@ export default defineComponent({
       })
 
     const loadFileTask = useTask(function* () {
-      resource.value = yield getFileInfo(currentFileContext, {
-        davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
-      }).catch(() => {
+      try {
+        const tmpResource = yield getFileInfo(currentFileContext, {
+          davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
+        })
+        const currentSpace = unref(unref(currentFileContext).space)
+        const tmpUrl = yield getUrlForResource(
+          currentSpace,
+          tmpResource,
+          props.urlForResourceOptions
+        )
+
+        // update both at once
+        resource.value = tmpResource
+        url.value = tmpUrl
+        console.log('resource', resource.value.id, 'url', url.value)
+      } catch (e) {
+        console.error(e)
         loadingError.value = true
+      } finally {
         loading.value = false
-      })
+      }
     }).restartable()
 
     watch(
       currentFileContext,
       () => {
-        loadFileTask.perform().then(async () => {
-          const currentSpace = unref(unref(currentFileContext).space)
-
-          url.value = await getUrlForResource(
-            currentSpace,
-            resource.value,
-            props.urlForResourceOptions
-          )
-          loading.value = false
-        })
+        loadFileTask.perform()
       },
       { immediate: true }
     )
