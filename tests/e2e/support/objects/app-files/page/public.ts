@@ -92,6 +92,6 @@ export class Public {
     page: Page
     editorToOpen: string
   }): Promise<string> {
-    return await po.openAndGetContentOfOpenDocumentOrMicrosoftWordDocument({ page, editorToOpen })
+    return await po.openAndGetContentOfDocument({ page, editorToOpen })
   }
 }

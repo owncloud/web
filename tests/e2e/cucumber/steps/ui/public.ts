@@ -45,11 +45,10 @@ When(
 )
 
 When(
-  'for {string} the content of the file {string} should be {string} in editor {string}',
+  '{string} should see the content {string} in editor {string}',
   async function (
     this: World,
     stepUser: string,
-    resource: string,
     expectedContent: string,
     editorToOpen: string
   ): Promise<void> {

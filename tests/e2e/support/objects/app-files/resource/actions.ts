@@ -30,7 +30,7 @@ const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
 const createNewDrawioFileButton = '.new-file-btn-drawio'
-const createNewOpenDocumentFileButton = '//ul[@id="create-list"]//li//button/span[text()="%s"]'
+const createNewOfficeDocumentFileBUtton = '//ul[@id="create-list"]//span[text()="%s"]'
 const saveTextFileInEditorButton = '#text-editor-controls-save:visible'
 const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
@@ -68,7 +68,7 @@ const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//
 const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
 const drawioSaveButton = '.geBigButton >> text=Save'
 const drawioIframe = '#drawio-editor'
-const editorIframe = '[name="app-iframe"]'
+const externalEditorIframe = '[name="app-iframe"]'
 const tagTableCell =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]'
 const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//ancestor::a'
@@ -93,13 +93,12 @@ const pauseResumeUploadButton = '#pause-upload-info-btn'
 const cancelUploadButton = '#cancel-upload-info-btn'
 const uploadPauseTooltip = '//div[text()="Pause upload"]'
 const uploadResumeTooltip = '//div[text()="Resume upload"]'
-const savedInCollaboraEditorSelector = '.notebookbar-shortcuts-bar .savemodified'
+const collaboraEditorSaveSelector = '.notebookbar-shortcuts-bar .savemodified'
 const onlyOfficeInnerFrameSelector = '[name="frameEditor"]'
-const microsoftWordSaveButtonSelector = '#asc-gen578'
-const openDocumentTextAreaSelector = '#clipboard-area'
-const microsoftWordTextAreaSelector = '#area_id'
-const officeSuiteEditorSelector = '.oc-files-actions-%s-trigger'
-const welcomeModalCollaboraIframe = '.iframe-welcome-modal'
+const onlyOfficeSaveButtonSelector = '#asc-gen578'
+const collaboraDocTextAreaSelector = '#clipboard-area'
+const onlyofficeDocTextAreaSelector = '#area_id'
+const collaboraWelcomeModalIframe = '.iframe-welcome-modal'
 const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
 const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
 const collaboraCanvasEditorSelector = '.leaflet-layer'
@@ -252,48 +251,46 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
     }
     case 'OpenDocument': {
       // By Default when OpenDocument is created, it is opened with collabora if both app-provider services are running together
-      await createOpenDocumentOrMicrosoftWordFile(args, 'Collabora')
+      await createDocumentFile(args, 'Collabora')
       break
     }
     case 'Microsoft Word': {
       // By Default when Microsoft Word document is created, it is opened with OnlyOffice if both app-provider services are running together
-      await createOpenDocumentOrMicrosoftWordFile(args, 'OnlyOffice')
+      await createDocumentFile(args, 'OnlyOffice')
       break
     }
   }
 }
 
-const createOpenDocumentOrMicrosoftWordFile = async (
+const createDocumentFile = async (
   args: createResourceArgs,
   editorToOpen: string
 ): Promise<void> => {
   const { page, name, type, content } = args
-  await page.locator(util.format(createNewOpenDocumentFileButton, type)).click()
+  await page.locator(util.format(createNewOfficeDocumentFileBUtton, type)).click()
   await page.locator(resourceNameInput).fill(name)
-  let newEditorTab
-  await Promise.all([
-    (newEditorTab = page.waitForEvent('popup')),
+  const [editorPage] = await Promise.all([
+    page.waitForEvent('popup'),
     page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
-  const editorPage = await newEditorTab
   await editorPage.waitForLoadState()
   await editorPage.waitForURL('**/external/personal/**')
-  const editorMainFrame = await editorPage.frameLocator(editorIframe)
+  const editorMainFrame = await editorPage.frameLocator(externalEditorIframe)
   switch (editorToOpen) {
     case 'Collabora':
-      await editorMainFrame.locator(welcomeModalCollaboraIframe).waitFor()
+      await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
       await editorPage.keyboard.press('Escape')
-      await editorMainFrame.locator(openDocumentTextAreaSelector).type(content)
-      const saveModified = await editorMainFrame.locator(savedInCollaboraEditorSelector)
+      await editorMainFrame.locator(collaboraDocTextAreaSelector).type(content)
+      const saveModified = await editorMainFrame.locator(collaboraEditorSaveSelector)
       await expect(saveModified).toBeVisible()
       await editorMainFrame.locator('#Save').click()
       await expect(saveModified).not.toBeVisible()
       break
     case 'OnlyOffice':
       const innerIframe = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
-      await innerIframe.locator(microsoftWordTextAreaSelector).type(content)
-      const saveButtonDisabledLocator = innerIframe.locator(microsoftWordSaveButtonSelector)
+      await innerIframe.locator(onlyofficeDocTextAreaSelector).type(content)
+      const saveButtonDisabledLocator = innerIframe.locator(onlyOfficeSaveButtonSelector)
       await expect(saveButtonDisabledLocator).toHaveAttribute('disabled', 'disabled')
       break
     default:
@@ -304,22 +301,20 @@ const createOpenDocumentOrMicrosoftWordFile = async (
   await editorPage.close()
 }
 
-export const openAndGetContentOfOpenDocumentOrMicrosoftWordDocument = async ({
+export const openAndGetContentOfDocument = async ({
   page,
   editorToOpen
 }: {
   page: Page
   editorToOpen: string
 }): Promise<string> => {
-  let newEditorTab
-  newEditorTab = page.waitForEvent('popup')
-  const editorPage = await newEditorTab
+  const editorPage = await page.waitForEvent('popup')
   await editorPage.waitForLoadState()
   await editorPage.waitForURL('**/external/public/**')
-  const editorMainFrame = await editorPage.frameLocator(editorIframe)
+  const editorMainFrame = await editorPage.frameLocator(externalEditorIframe)
   switch (editorToOpen) {
     case 'Collabora':
-      await editorMainFrame.locator(welcomeModalCollaboraIframe).waitFor()
+      await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
       await editorPage.keyboard.press('Escape')
       await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
       break
@@ -333,6 +328,7 @@ export const openAndGetContentOfOpenDocumentOrMicrosoftWordDocument = async ({
         "Editor should be either 'Collabora' or 'OnlyOffice' but found " + editorToOpen
       )
   }
+  // copying and getting the value with keyboard requires some
   await editorPage.keyboard.press('Control+A', { delay: 200 })
   await editorPage.keyboard.press('Control+C', { delay: 200 })
   const actualContentOfEditor = await editorPage.evaluate(() => navigator.clipboard.readText())

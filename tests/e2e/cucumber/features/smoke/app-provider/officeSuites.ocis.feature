@@ -22,7 +22,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Alice" edits the public link named "Link" of resource "OpenDocument.odt" changing role to "Can edit"
     And "Alice" logs out
     And "Anonymous" opens the public link "Link"
-    Then for "Anonymous" the content of the file "OpenDocument.odt" should be "OpenDocument Content" in editor "Collabora"
+    Then "Anonymous" should see the content "OpenDocument Content" in editor "Collabora"
 
   Scenario: create a Microsoft Word file with OnlyOffice
     When "Alice" creates the following resources
@@ -32,4 +32,4 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Alice" edits the public link named "Link" of resource "MicrosoftWord.docx" changing role to "Can edit"
     And "Alice" logs out
     And "Anonymous" opens the public link "Link"
-    Then for "Anonymous" the content of the file "MicrosoftWord.docx" should be "Microsoft Word Content" in editor "OnlyOffice"
+    Then "Anonymous" should see the content "Microsoft Word Content" in editor "OnlyOffice"
