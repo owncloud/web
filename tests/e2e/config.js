@@ -2,25 +2,16 @@ const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 
 exports.config = {
   // environment
-  ocis: process.env.OCIS === 'true',
+  ocis: 'true',
   assets: './tests/e2e/filesForUpload',
   tempAssetsPath: './tests/e2e/filesForUpload/temp',
-  baseUrlOc10: process.env.BASE_URL_OCC ?? 'host.docker.internal:8080',
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
   apiToken: process.env.API_TOKEN === 'true',
   get backendUrl() {
-    return withHttp(
-      process.env.BACKEND_HOST ||
-        (this.ocis ? 'https://' + this.baseUrlOcis : 'http://' + this.baseUrlOc10)
-    )
+    return withHttp(process.env.BACKEND_HOST || 'https://' + this.baseUrlOcis)
   },
   get frontendUrl() {
-    return withHttp(
-      process.env.SERVER_HOST ||
-        (this.ocis
-          ? 'https://' + this.baseUrlOcis
-          : 'http://' + this.baseUrlOc10 + '/index.php/apps/web/index.html')
-    )
+    return withHttp(process.env.SERVER_HOST || 'https://' + this.baseUrlOcis)
   },
   debug: process.env.DEBUG === 'true',
   logLevel: process.env.LOG_LEVEL || 'silent',
