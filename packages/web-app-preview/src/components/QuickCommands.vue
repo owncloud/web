@@ -29,7 +29,7 @@
         v-if="isImage && isSaveable"
         size="small"
         :aria-label="$gettext('Save')"
-        @click="saveTask.perform"
+        @click="$emit('save')"
       >
         <oc-icon name="save" size="small" fill-type="line" />
       </oc-button>
@@ -40,8 +40,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Task } from 'vue-concurrency'
-import { PropType } from 'vue'
 
 export default defineComponent({
   name: 'QuickCommands',
@@ -49,10 +47,6 @@ export default defineComponent({
     currentImageZoom: {
       type: Number,
       default: 1
-    },
-    saveTask: {
-      type: Object as PropType<Task<void, []>>,
-      default: null
     },
     isImage: {
       type: Boolean,
@@ -63,7 +57,7 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['close', 'setZoom', 'toggleFullScreen', 'delete'],
+  emits: ['close', 'setZoom', 'toggleFullScreen', 'delete', 'save'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
     const calculateZoom = (zoom, factor) => {

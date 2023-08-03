@@ -1,8 +1,8 @@
-import { adjustmentParametersCategoryType } from 'web-app-preview/src/helpers'
+import { AdjustmentParametersCategoryType } from 'web-app-preview/src/helpers'
 import { useAdjustmentParametersValues } from './useAdjustmentParametersValues'
 
 export const useCSSImageAdjustmentParameters = (
-  adjustmentParams: adjustmentParametersCategoryType[]
+  adjustmentParams: AdjustmentParametersCategoryType[]
 ): string => {
   const {
     computedBrightness,
@@ -16,7 +16,7 @@ export const useCSSImageAdjustmentParameters = (
 }
 
 export const useImageAdjustmentParameters = (
-  adjustmentParams: adjustmentParametersCategoryType[]
+  adjustmentParams: AdjustmentParametersCategoryType[]
 ): string => {
   const {
     computedBrightness,

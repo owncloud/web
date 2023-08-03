@@ -1,6 +1,7 @@
 export enum AdjustmentParametersCategoryEnum {
   General,
-  FineTune
+  FineTune,
+  Miscellaneous
 }
 
 export enum ProcessingToolsEnum {
@@ -13,4 +14,9 @@ export enum ProcessingToolsEnum {
 export enum CropVariantEnum {
   FreeForm,
   Circular
+}
+
+export enum AdjustmentParametersTypeEnum {
+  Boolean,
+  Number
 }

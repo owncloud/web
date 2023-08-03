@@ -12,6 +12,12 @@ export default {
         adjustmentParameter.type === AdjustmentParametersCategoryEnum.FineTune
     )
   },
+  miscellaneousParameters: (state) => {
+    return state.adjustmentParameters.filter(
+      (adjustmentParameter) =>
+        adjustmentParameter.type === AdjustmentParametersCategoryEnum.Miscellaneous
+    )
+  },
   allParameters: (state) => {
     return state.adjustmentParameters
   },

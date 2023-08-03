@@ -15,27 +15,45 @@
       :key="adjustmentParameter.name"
       class="adjustment-parameters"
     >
-      <span class="description">
-        <p>{{ adjustmentParameter.name }}</p>
-        <p>{{ adjustmentParameter.value }}</p>
-      </span>
-      <input
-        v-model="adjustmentParameter.value"
-        type="range"
-        :min="adjustmentParameter.minValue"
-        :max="adjustmentParameter.maxValue"
-        steps="1"
-        class="slider-bar"
-        @input="handleUpdateValue(adjustmentParameter.name, adjustmentParameter.value)"
-        @keydown="preventArrowKeys"
-      />
+      <div
+        v-if="adjustmentParameter.valueType === AdjustmentParametersTypeEnum.Number"
+        class="parameter-description"
+      >
+        <span class="description">
+          <p>{{ $gettext(adjustmentParameter.name) }}</p>
+          <p>{{ adjustmentParameter.value }}</p>
+        </span>
+        <input
+          v-model="adjustmentParameter.value"
+          type="range"
+          :min="adjustmentParameter.minValue"
+          :max="adjustmentParameter.maxValue"
+          steps="1"
+          class="slider-bar"
+          @input="handleUpdateNumberValue(adjustmentParameter)"
+          @keydown="preventArrowKeys"
+        />
+      </div>
+      <div
+        v-else-if="adjustmentParameter.valueType === AdjustmentParametersTypeEnum.Boolean"
+        class="parameter-description"
+      >
+        <span class="description">
+          <p>{{ $gettext(adjustmentParameter.name) }}</p>
+          <oc-switch v-model="adjustmentParameter.value" />
+        </span>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, PropType, computed } from 'vue'
-import { AdjustmentParametersCategoryEnum } from '../../helpers'
+import { ref, defineComponent, PropType, computed, unref } from 'vue'
+import {
+  AdjustmentParametersCategoryEnum,
+  AdjustmentParametersCategoryType,
+  AdjustmentParametersTypeEnum
+} from '../../helpers'
 import { mapMutations } from 'vuex'
 import { useStore } from 'web-pkg'
 
@@ -66,15 +84,26 @@ export default defineComponent({
     const isOpen = ref(false)
     const store = useStore()
 
-    const adjustmentParams = computed(() => {
+    const adjustmentParams = computed((): AdjustmentParametersCategoryType[] => {
       switch (props.variableType) {
         case AdjustmentParametersCategoryEnum.General:
           return store.getters['Preview/generalParameters']
         case AdjustmentParametersCategoryEnum.FineTune:
           return store.getters['Preview/fineTuneParameters']
+        case AdjustmentParametersCategoryEnum.Miscellaneous:
+          return store.getters['Preview/miscellaneousParameters']
         default:
           return []
       }
+    })
+
+    const paramSwitches = computed(() => {
+      const booleanParams = []
+      unref(adjustmentParams).forEach((param) => {
+        param.valueType === AdjustmentParametersTypeEnum.Boolean &&
+          booleanParams.push({ name: param.name, value: param.value ? true : false })
+      })
+      return booleanParams
     })
 
     const handleIsOpen = () => {
@@ -83,15 +112,25 @@ export default defineComponent({
 
     return {
       isOpen,
-      handleIsOpen,
-      adjustmentParams
+      adjustmentParams,
+      AdjustmentParametersTypeEnum,
+      paramSwitches,
+      handleIsOpen
     }
   },
   methods: {
     ...mapMutations('Preview', ['SET_ACTIVE_ADJUSTMENT_PARAMETERS']),
-    handleUpdateValue(name: string, value: number) {
-      this.SET_ACTIVE_ADJUSTMENT_PARAMETERS({ name, value })
+    handleUpdateNumberValue(parameter: AdjustmentParametersCategoryType) {
+      this.SET_ACTIVE_ADJUSTMENT_PARAMETERS({ name: parameter.name, value: parameter.value })
     },
+    handleUpdateBooleanValue(parameter: AdjustmentParametersCategoryType) {
+      if (parameter.value) {
+        this.SET_ACTIVE_ADJUSTMENT_PARAMETERS({ name: parameter.name, value: parameter.minValue })
+      } else {
+        this.SET_ACTIVE_ADJUSTMENT_PARAMETERS({ name: parameter.name, value: parameter.maxValue })
+      }
+    },
+
     preventArrowKeys(e) {
       if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
         e.preventDefault()
@@ -128,6 +167,10 @@ export default defineComponent({
   align-items: center;
   flex-direction: column;
   padding: 12px;
+}
+
+.parameter-description {
+  width: 100%;
 }
 
 .description {

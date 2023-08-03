@@ -66,12 +66,12 @@
       </div>
       <quick-commands
         :current-image-zoom="currentImageZoom"
-        :save-task="saveImageTask"
         :is-image="activeMediaFileCached.isImage"
         :is-saveable="isSaveable"
         @close="closePreview"
         @set-zoom="currentImageZoom = $event"
         @toggle-full-screen="toggleFullscreenMode"
+        @save="save"
       />
     </div>
   </main>
@@ -100,7 +100,7 @@ import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import MediaSettings from './components/MediaSettings.vue'
 import QuickCommands from './components/QuickCommands.vue'
-import { CachedFile, MediaGalleryFile, adjustmentParametersCategoryType } from './helpers/types'
+import { CachedFile, MediaGalleryFile, AdjustmentParametersCategoryType } from './helpers/types'
 import applyAdjustmentParams from './composables/saveFunctions/applyAdjustmentParams'
 import {
   useSaveUnsavedChangesModal,
@@ -164,7 +164,7 @@ export default defineComponent({
     const isFileContentLoading = ref(true)
 
     const currentETag = ref()
-    const appliedAdjustmentParameters: Ref<adjustmentParametersCategoryType[]> = ref()
+    const appliedAdjustmentParameters: Ref<AdjustmentParametersCategoryType[]> = ref()
     const activeAdjustmentParameters = computed(() => store.getters['Preview/allParameters'])
     const serverVersion = ref()
     const resource: Ref<Resource> = ref()
@@ -279,7 +279,6 @@ export default defineComponent({
       return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile).id)
     })
 
-    // #Rework
     const getUpdatedBlob = async () => {
       let newVersion = null
       switch (processingTool.value) {
@@ -320,77 +319,155 @@ export default defineComponent({
       currentETag.value = savedImageVersion.headers['OC-ETag']
     })
 
-    const saveImageTask = useTask(function* () {
-      const newVersion = yield getUpdatedBlob()
-
+    function* getNewEditedFileName() {
       try {
-        // file name for the file to be created.
-        // ToDo: Ask for it in dialog
-        const newFileName =
-          unref(unref(currentFileContext).fileName).split('.')[0] +
-          'Edited.' +
-          unref(unref(currentFileContext).fileName).split('.')[1]
-
-        // save new file in the same space as the current file with new version of content
-        // ToDo: success message for new file, error message
-        // ToDo: update media gallery don't save current file if save as new
-        // ToDo: open new file in a new tab
-        const resource = yield putFileContents(currentFileContext, {
-          content: newVersion,
-          path: newFileName
-        }).then((r) => console.log('respoonse success', r))
-      } catch (error) {
-        console.error(error)
-      }
-
-      try {
-        const putFileContentsResponse = yield putFileContents(currentFileContext, {
-          content: newVersion,
-          previousEntityTag: unref(currentETag)
-        })
-        serverVersion.value = newVersion
-        currentETag.value = putFileContentsResponse.etag
-        imageSavedPopup()
-        handleResetAfterSave()
-        // #refreshCache()
+        const contextFileName = unref(unref(currentFileContext).fileName).split('.')
+        let duplicates = 0
+        while (true) {
+          yield `${contextFileName[0]} [Edited${duplicates === 0 ? '' : ' (' + duplicates + ')'}].${
+            contextFileName[1]
+          }`
+          duplicates += 1
+        }
       } catch (e) {
-        switch (e.statusCode) {
-          case 412:
-            errorPopup(
-              $gettext(
-                'This file was updated outside this window. Please refresh the page (all changes will be lost).'
-              )
-            )
-            break
-          case 500:
-            errorPopup($gettext('Error when contacting the server'))
-            break
-          case 507:
-            const space = store.getters['runtime/spaces/spaces'].find(
-              (space) => space.id === unref(resource).storageId && isProjectSpaceResource(space)
-            )
-            if (space) {
-              errorPopup(
-                $gettextInterpolate(
-                  $gettext('There is not enough quota on "%{spaceName}" to save this file'),
-                  { spaceName: space.name }
-                )
-              )
-              break
+        console.error(e)
+      }
+    }
+
+    const saveImageTask = (duplicate: boolean) =>
+      useTask(function* () {
+        const newVersion = yield getUpdatedBlob()
+
+        if (duplicate) {
+          try {
+            const nameGenerator = getNewEditedFileName()
+            let testName: string = nameGenerator.next().value as string
+
+            while (unref(filteredFiles).find((file) => file.name === testName)) {
+              testName = nameGenerator.next().value as string
             }
-            errorPopup($gettext('There is not enough quota to save this file'))
-            break
-          case 401:
-            errorPopup($gettext("You're not authorized to save this file"))
-            break
-          default:
-            errorPopup(e.message || e)
+
+            const currentFolder = (
+              unref(unref(currentFileContext).routeParams).driveAliasAndItem as string
+            )
+              .split('/')
+              .slice(2)
+              .toString()
+              .replaceAll(',', '/')
+
+            const newPath = `${currentFolder}/${testName}`
+
+            // ToDo: open new file in a new tab
+            const putFileContentsResponse = yield putFileContents(currentFileContext, {
+              content: newVersion,
+              path: newPath
+            })
+            // await set the duplicate as the active image
+            //Server version handling here
+
+            imageSavedPopup()
+            handleResetAfterSave()
+          } catch (e) {
+            switch (e.statusCode) {
+              case 412:
+                errorPopup(
+                  $gettext(
+                    'This file was updated outside this window. Please refresh the page (all changes will be lost).'
+                  )
+                )
+                break
+              case 500:
+                errorPopup($gettext('Error when contacting the server'))
+                break
+              case 507:
+                const space = store.getters['runtime/spaces/spaces'].find(
+                  (space) => space.id === unref(resource).storageId && isProjectSpaceResource(space)
+                )
+                if (space) {
+                  errorPopup(
+                    $gettextInterpolate(
+                      $gettext('There is not enough quota on "%{spaceName}" to save this file'),
+                      { spaceName: space.name }
+                    )
+                  )
+                  break
+                }
+                errorPopup($gettext('There is not enough quota to save this file'))
+                break
+              case 401:
+                errorPopup($gettext("You're not authorized to save this file"))
+                break
+              default:
+                errorPopup(e.message || e)
+            }
+          }
+        } else {
+          try {
+            const putFileContentsResponse = yield putFileContents(currentFileContext, {
+              content: newVersion,
+              previousEntityTag: unref(currentETag)
+            })
+            serverVersion.value = newVersion
+            currentETag.value = putFileContentsResponse.etag
+            imageSavedPopup()
+            handleResetAfterSave()
+          } catch (e) {
+            switch (e.statusCode) {
+              case 412:
+                errorPopup(
+                  $gettext(
+                    'This file was updated outside this window. Please refresh the page (all changes will be lost).'
+                  )
+                )
+                break
+              case 500:
+                errorPopup($gettext('Error when contacting the server'))
+                break
+              case 507:
+                const space = store.getters['runtime/spaces/spaces'].find(
+                  (space) => space.id === unref(resource).storageId && isProjectSpaceResource(space)
+                )
+                if (space) {
+                  errorPopup(
+                    $gettextInterpolate(
+                      $gettext('There is not enough quota on "%{spaceName}" to save this file'),
+                      { spaceName: space.name }
+                    )
+                  )
+                  break
+                }
+                errorPopup($gettext('There is not enough quota to save this file'))
+                break
+              case 401:
+                errorPopup($gettext("You're not authorized to save this file"))
+                break
+              default:
+                errorPopup(e.message || e)
+            }
+          }
+        }
+
+        // #Refresh cache
+      }).restartable()
+
+    function save() {
+      const modal = {
+        variation: 'danger',
+        icon: 'warning',
+        title: $gettext('Duplicate modal'),
+        message: $gettext('Do you want to save the changes in a duplicate file?'),
+        cancelText: $gettext('Save original'),
+        confirmText: $gettext('Create duplicate'),
+        onCancel: async () => {
+          store.dispatch('hideModal')
+          await saveImageTask(false).perform()
+        },
+        onConfirm: async () => {
+          store.dispatch('hideModal')
+          await saveImageTask(true).perform()
         }
       }
-    }).restartable()
-
-    async function save() {
-      await saveImageTask.perform()
+      store.dispatch('createModal', modal)
     }
 
     watch(activeMediaFileCached, () => {
@@ -435,7 +512,7 @@ export default defineComponent({
       }
 
       if (unref(activeAdjustmentParameters) !== unref(appliedAdjustmentParameters)) {
-        const onConfirm: Array<(...args: any[]) => Promise<any>> = [
+        const onConfirm: Array<(...args: any[]) => Promise<any> | any> = [
           () => save(),
           () => downloadFile(unref(activeFilteredFile))
         ]
@@ -764,8 +841,9 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .image-container {
-  width: 100%;
   padding: $oc-space-medium;
+  flex: 1;
+  min-width: 0;
 }
 .image-gallery {
   margin-top: 1rem;

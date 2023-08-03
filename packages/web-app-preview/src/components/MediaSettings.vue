@@ -58,42 +58,56 @@
         <span>Draw</span>
       </oc-button>
     </div>
-    <div v-if="selectedProcessingTool === ProcessingToolsEnum.Customize" class="options-bar">
-      <adjustment-parameters-category
-        name="General"
-        icon-name="equalizer"
-        :variable-type="AdjustmentParametersCategoryEnum.General"
-      />
-      <adjustment-parameters-category
-        name="Fine Tune"
-        icon-name="contrast-drop-2"
-        is-fill-type-line
-        :variable-type="AdjustmentParametersCategoryEnum.FineTune"
-      />
-    </div>
-    <div v-if="selectedProcessingTool === ProcessingToolsEnum.Crop" class="options-bar-compact">
-      <div class="cropper-options">
-        <oc-button
-          :class="cropVariant === CropVariantEnum.FreeForm ? 'crop-variant-active' : 'crop-variant'"
-          appearance="raw"
-          @click="handleUpdateCropVariant(CropVariantEnum.FreeForm)"
-        >
-          <oc-icon name="crop" fill-type="line" />
-          <span>Free form</span>
-        </oc-button>
-        <oc-button
-          :class="cropVariant === CropVariantEnum.Circular ? 'crop-variant-active' : 'crop-variant'"
-          appearance="raw"
-          @click="handleUpdateCropVariant(CropVariantEnum.Circular)"
-        >
-          <oc-icon name="checkbox-blank-circle" fill-type="line" />
-          <span>Circular</span>
-        </oc-button>
+    <div class="side-bar-animation">
+      <div v-if="selectedProcessingTool === ProcessingToolsEnum.Customize" class="options-bar">
+        <adjustment-parameters-category
+          name="General"
+          icon-name="equalizer"
+          :variable-type="AdjustmentParametersCategoryEnum.General"
+        />
+        <adjustment-parameters-category
+          name="Fine Tune"
+          icon-name="contrast-drop-2"
+          is-fill-type-line
+          :variable-type="AdjustmentParametersCategoryEnum.FineTune"
+        />
+        <adjustment-parameters-category
+          name="Miscellaneous"
+          icon-name="command"
+          :variable-type="AdjustmentParametersCategoryEnum.Miscellaneous"
+        />
       </div>
-      <div class="crop-image-button">
-        <oc-button appearance="filled" variation="primary" @click="$emit('saveCroppedImage')">
-          Crop
-        </oc-button>
+      <div
+        v-else-if="selectedProcessingTool === ProcessingToolsEnum.Crop"
+        class="options-bar-compact"
+      >
+        <div class="cropper-options">
+          <oc-button
+            :class="
+              cropVariant === CropVariantEnum.FreeForm ? 'crop-variant-active' : 'crop-variant'
+            "
+            appearance="raw"
+            @click="handleUpdateCropVariant(CropVariantEnum.FreeForm)"
+          >
+            <oc-icon name="crop" fill-type="line" />
+            <span>Free form</span>
+          </oc-button>
+          <oc-button
+            :class="
+              cropVariant === CropVariantEnum.Circular ? 'crop-variant-active' : 'crop-variant'
+            "
+            appearance="raw"
+            @click="handleUpdateCropVariant(CropVariantEnum.Circular)"
+          >
+            <oc-icon name="checkbox-blank-circle" fill-type="line" />
+            <span>Circular</span>
+          </oc-button>
+        </div>
+        <div class="crop-image-button">
+          <oc-button appearance="filled" variation="primary" @click="$emit('saveCroppedImage')">
+            Crop
+          </oc-button>
+        </div>
       </div>
     </div>
   </div>
@@ -103,7 +117,7 @@
 import { defineComponent } from 'vue'
 import { AdjustmentParametersCategoryEnum, ProcessingToolsEnum } from '../helpers'
 import { CropVariantEnum } from '../helpers/enums'
-import AdjustmentParametersCategory from './StylebarComponents/AdjustmentParamtersCategory.vue'
+import AdjustmentParametersCategory from './StylebarComponents/AdjustmentParametersCategory.vue'
 import { useStore } from 'web-pkg/src'
 import { mapMutations } from 'vuex'
 import { computed } from 'vue'
@@ -182,11 +196,13 @@ export default defineComponent({
   width: 18rem;
   box-sizing: border-box;
   padding: $oc-space-small;
+  overflow-y: scroll;
 }
 
 .options-bar-compact {
   width: 6rem;
   box-sizing: border-box;
+  overflow-y: scroll;
 }
 
 .cropper-options {
@@ -239,5 +255,9 @@ export default defineComponent({
 .crop-image-button {
   display: flex;
   justify-content: center;
+}
+
+// ToDo add animations
+.side-bar-animation {
 }
 </style>

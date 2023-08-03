@@ -1,4 +1,4 @@
-import { AdjustmentParametersCategoryEnum } from './enums'
+import { AdjustmentParametersCategoryEnum, AdjustmentParametersTypeEnum } from './enums'
 
 export type CachedFile = {
   id: string
@@ -11,13 +11,14 @@ export type CachedFile = {
   isAudio: boolean
 }
 
-export type adjustmentParameterType = {
+export type AdjustmentParameterType = {
   name: string
+  valueType: AdjustmentParametersTypeEnum
   maxValue: number
   minValue: number
 }
 
-export type adjustmentParametersCategoryType = adjustmentParameterType & {
+export type AdjustmentParametersCategoryType = AdjustmentParameterType & {
   value: number
   type: AdjustmentParametersCategoryEnum
 }

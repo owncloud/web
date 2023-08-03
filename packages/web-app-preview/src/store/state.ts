@@ -1,9 +1,14 @@
-import { AdjustmentParametersCategoryEnum, CropVariantEnum } from '../helpers'
+import {
+  AdjustmentParametersCategoryEnum,
+  AdjustmentParametersTypeEnum,
+  CropVariantEnum
+} from '../helpers'
 
 export default {
   adjustmentParameters: [
     {
       name: 'Brightness',
+      valueType: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
@@ -11,6 +16,7 @@ export default {
     },
     {
       name: 'Contrast',
+      valueType: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
@@ -18,6 +24,7 @@ export default {
     },
     {
       name: 'Saturation',
+      valueType: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
@@ -25,13 +32,7 @@ export default {
     },
     {
       name: 'Grayscale',
-      value: 0,
-      minValue: 0,
-      maxValue: 100,
-      type: AdjustmentParametersCategoryEnum.General
-    },
-    {
-      name: 'Invert',
+      valueType: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: 0,
       maxValue: 100,
@@ -39,6 +40,7 @@ export default {
     },
     {
       name: 'Exposure',
+      valueType: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
@@ -46,6 +48,7 @@ export default {
     },
     {
       name: 'Highlights',
+      valueType: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
@@ -53,10 +56,19 @@ export default {
     },
     {
       name: 'Shadows',
+      valueType: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
       type: AdjustmentParametersCategoryEnum.FineTune
+    },
+    {
+      name: 'Invert',
+      valueType: AdjustmentParametersTypeEnum.Boolean,
+      value: 0,
+      minValue: 0,
+      maxValue: 1,
+      type: AdjustmentParametersCategoryEnum.Miscellaneous
     }
   ],
   selectedProcessingTool: null,

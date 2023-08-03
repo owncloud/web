@@ -1,4 +1,4 @@
-import { CropVariantEnum } from '../helpers'
+import { CropVariantEnum, AdjustmentParametersCategoryType } from '../helpers'
 
 export default {
   SET_ACTIVE_ADJUSTMENT_PARAMETERS(state, payload: { name: string; value: number }) {
@@ -10,7 +10,8 @@ export default {
   },
   RESET_ADJUSTMENT_PARAMETERS(state) {
     state.adjustmentParameters = state.adjustmentParameters.map(
-      (adjustmentParameter) => adjustmentParameter && { ...adjustmentParameter, value: 0 }
+      (adjustmentParameter: AdjustmentParametersCategoryType) =>
+        adjustmentParameter && { ...adjustmentParameter, value: 0 }
     )
   },
   CHANGE_SELECTED_PROCESSING_TOOL(state, name: string) {
