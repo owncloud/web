@@ -26,7 +26,7 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
 
     const client = clientService.graphAuthenticated
     const promises = spaces.map((space) =>
-      client.drives.deleteDrive(space.id.toString()).then(() => {
+      client.drives.disableDrive(space.id.toString()).then(() => {
         if (currentRoute.name === 'files-spaces-generic') {
           router.push({ name: 'files-spaces-projects' })
         }
