@@ -94,7 +94,6 @@ const getConfigJson = async (url: string, config: UserConfig) => {
 
 export default defineConfig(async ({ mode, command }) => {
   const production = mode === 'production'
-  const ocis = process.env.OCIS !== 'false'
   let config: UserConfig
 
   /**
@@ -110,36 +109,9 @@ export default defineConfig(async ({ mode, command }) => {
     To use the oCIS deployment examples start vite like this:
     OWNCLOUD_WEB_CONFIG_URL="https://ocis.owncloud.test/config.json" pnpm vite
 
-
-    # oC 10
-    For oC 10 you need to setup a separate OAuth client for vite, as the oauth2 app does
-    not support multiple redirect urls per client.
-
-    You can either setup a client with identical settings as we do in oc10.entrypoint.sh:
-
-    occ oauth2:add-client \
-      web-vite \
-      AWhZZsxb59ouGg97HsdR7GiN8pnzEYvk1cL6aVJgTQH1Gcdxly1gendLVTZ5zpYC \
-      VsrTbbeTPJ56e93eKpCdb6Wf5IGHD2meadlsDT1M9EpS3k7Y1ywTYgOhTkKZ0QTL \
-      http://host.docker.internal:8081/oidc-callback.html \
-      false \
-      true
-
-    and then just start vite like this:
-
-    OWNCLOUD_WEB_CONFIG_URL="https://owncloud.some.host/config.json" pnpm vite:oc10
-
-    or you can provide OWNCLOUD_WEB_CLIENT_ID and OWNCLOUD_WEB_CLIENT_SECRET env vars:
-
-     OWNCLOUD_WEB_CONFIG_URL="https://owncloud.some.host/config.json" \
-     OWNCLOUD_WEB_CLIENT_ID="..." OWNCLOUD_WEB_CLIENT_SECRET="..." pnpm vite:oc10
-
    */
   const configUrl =
-    process.env.OWNCLOUD_WEB_CONFIG_URL ||
-    (ocis
-      ? 'https://host.docker.internal:9200/config.json'
-      : 'http://host.docker.internal:8080/index.php/apps/web/config.json')
+    process.env.OWNCLOUD_WEB_CONFIG_URL || 'https://host.docker.internal:9200/config.json'
 
   let proxiedServerUrl
   if (command === 'serve') {
@@ -148,24 +120,16 @@ export default defineConfig(async ({ mode, command }) => {
     proxiedServerUrl = configJson.server
   }
 
-  if (ocis) {
-    config = {
-      ...(!production && {
-        server: {
-          port: 9201,
-          https: {
-            key: readFileSync('./dev/docker/traefik/certificates/server.key'),
-            cert: readFileSync('./dev/docker/traefik/certificates/server.crt')
-          }
-        }
-      })
-    }
-  } else {
-    config = {
+  config = {
+    ...(!production && {
       server: {
-        port: 8081
+        port: 9201,
+        https: {
+          key: readFileSync('./dev/docker/traefik/certificates/server.key'),
+          cert: readFileSync('./dev/docker/traefik/certificates/server.crt')
+        }
       }
-    }
+    })
   }
 
   return mergeConfig(

@@ -50,14 +50,11 @@ create-release-folder:
 	mkdir $(CURDIR)/release
 
 .PHONY: create-packages
-create-packages: package-plain package-ocx package-licenses
+create-packages: package-plain package-licenses
 
 .PHONY: package-plain
 package-plain:
 	cd $(dist_dir) && tar -czf $(CURDIR)/release/$(app_name).tar.gz -C $(dist_dir) *
-
-.PHONY: package-ocx
-package-ocx: ocx-app-config sign ocx-app-bundle
 
 .PHONY: package-licenses
 package-licenses:
@@ -72,13 +69,3 @@ ifdef CAN_SIGN
 else
 	@echo $(sign_skip_msg)
 endif
-
-.PHONY: ocx-app-config
-ocx-app-config:
-	cp -R packages/web-integration-oc10/appinfo $(dist_dir)
-	cp packages/web-integration-oc10/js/* $(dist_dir)/js
-	cp -R packages/web-integration-oc10/lib $(dist_dir)
-
-.PHONY: ocx-app-bundle
-ocx-app-bundle:
-	tar -czf $(CURDIR)/release/$(app_name)-app.tar.gz --transform='s,dist,web,' dist
