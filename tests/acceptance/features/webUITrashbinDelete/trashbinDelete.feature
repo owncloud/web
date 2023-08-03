@@ -27,14 +27,14 @@ Feature: files and folders can be deleted from the trashbin
 
   @issue-product-188
   Scenario: Delete folders from trashbin and check that they are gone
-    When the user deletes folder "simple-folder" using the webUI
-    And the user deletes folder "Folder,With,Comma" using the webUI
+    When the user deletes the file "simple-folder" from the deleted files list
+    And the user deletes the file "Folder,With,Comma" from the deleted files list
     Then folder "simple-folder" should not be listed on the webUI
     And folder "Folder,With,Comma" should not be listed on the webUI
 
   @ocisSmokeTest @issue-4582
   Scenario: Select some files and delete from trashbin in a batch
-    When the user batch deletes these files using the webUI
+    When the user batch deletes these files permanently using the webUI
       | name          |
       | lorem.txt     |
       | lorem-big.txt |
@@ -97,7 +97,7 @@ Feature: files and folders can be deleted from the trashbin
       | fo.xyz   |
     And the user has browsed to the trashbin page
     And the user has reloaded the current page of the webUI
-    When the user batch deletes these files using the webUI
+    When the user batch deletes these files permanently using the webUI
       | name     |
       | fo.      |
       | fo.1     |
@@ -113,7 +113,7 @@ Feature: files and folders can be deleted from the trashbin
       | name          |
       | lorem.txt     |
       | lorem-big.txt |
-    And the user batch deletes the marked files using the webUI
+    And the user batch deletes the marked files permanently using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI
     But file "data.zip" should not be listed on the webUI
@@ -122,5 +122,5 @@ Feature: files and folders can be deleted from the trashbin
   @issue-product-188 @issue-4582
   Scenario: Select all files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
-    And the user batch deletes the marked files using the webUI
+    And the user batch deletes the marked files permanently using the webUI
     Then there should be no resources listed on the webUI

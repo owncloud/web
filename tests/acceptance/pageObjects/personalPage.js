@@ -230,11 +230,7 @@ module.exports = {
     deleteAllCheckedFiles: function () {
       return this.waitForElementVisible('@deleteSelectedButton')
         .click('@deleteSelectedButton')
-        .waitForElementVisible('@dialog')
-        .waitForAnimationToFinish() // wait for transition on the modal to finish
-        .click('@dialogConfirmBtnEnabled')
         .waitForAjaxCallsToStartAndFinish()
-        .waitForElementNotPresent('@dialog')
     },
     confirmFileOverwrite: async function () {
       await this.waitForAnimationToFinish() // wait for transition on the modal to finish

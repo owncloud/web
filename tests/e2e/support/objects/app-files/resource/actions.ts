@@ -715,15 +715,12 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
         await sidebar.open({ page, resource: resource.name })
         await sidebar.openPanel({ page, name: 'actions' })
         await page.locator(deleteButtonSidebar).first().click()
-        await Promise.all([
-          page.waitForResponse(
-            (resp) =>
-              resp.url().includes(encodeURIComponent(resource.name)) &&
-              resp.status() === 204 &&
-              resp.request().method() === 'DELETE'
-          ),
-          page.locator(util.format(actionConfirmationButton, 'Delete')).click()
-        ])
+        await page.waitForResponse(
+          (resp) =>
+            resp.url().includes(encodeURIComponent(resource.name)) &&
+            resp.status() === 204 &&
+            resp.request().method() === 'DELETE'
+        )
         await sidebar.close({ page })
       }
       break
@@ -737,20 +734,17 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
       }
 
       await page.locator(deleteButtonBatchAction).click()
-      await Promise.all([
-        page.waitForResponse((resp) => {
-          if (resp.status() === 204 && resp.request().method() === 'DELETE') {
-            deletetedResources.push(decodeURIComponent(resp.url().split('/').pop()))
-          }
-          // waiting for GET response after all the resource are deleted with batch action
-          return (
-            resp.url().includes(config.ocis ? 'graph/v1.0/drives' : 'ocs/v1.php/cloud/users') &&
-            resp.status() === 200 &&
-            resp.request().method() === 'GET'
-          )
-        }),
-        page.locator(util.format(actionConfirmationButton, 'Delete')).click()
-      ])
+      await page.waitForResponse((resp) => {
+        if (resp.status() === 204 && resp.request().method() === 'DELETE') {
+          deletetedResources.push(decodeURIComponent(resp.url().split('/').pop()))
+        }
+        // waiting for GET response after all the resource are deleted with batch action
+        return (
+          resp.url().includes(config.ocis ? 'graph/v1.0/drives' : 'ocs/v1.php/cloud/users') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'GET'
+        )
+      })
       // assertion that the resources actually got deleted
       expect(deletetedResources.length).toBe(resourcesWithInfo.length)
       for (const resource of resourcesWithInfo) {

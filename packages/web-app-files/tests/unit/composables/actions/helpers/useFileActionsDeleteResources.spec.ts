@@ -21,11 +21,9 @@ describe('deleteResources', () => {
       const { wrapper } = getWrapper({
         currentFolder,
         setup: async ({ displayDialog, filesList_delete }, { space, router, storeOptions }) => {
-          displayDialog(space, [{ id: 2, path: '/folder/fileToDelete.txt' }])
-          await filesList_delete()
+          await filesList_delete([{ id: 2, path: '/folder/fileToDelete.txt' }])
           await nextTick()
           expect(router.push).toHaveBeenCalledTimes(0)
-          expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -35,11 +33,9 @@ describe('deleteResources', () => {
       const { wrapper } = getWrapper({
         currentFolder,
         setup: async ({ displayDialog, filesList_delete }, { space, router, storeOptions }) => {
-          displayDialog(space, resourcesToDelete)
-          await filesList_delete()
+          await filesList_delete(resourcesToDelete)
           await nextTick()
           expect(router.push).toHaveBeenCalledTimes(1)
-          expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
         }
       })
     })

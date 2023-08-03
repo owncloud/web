@@ -67,7 +67,6 @@ module.exports = {
      */
     delete: async function () {
       await this.performFileAction(this.FileAction.delete)
-      await this.api.page.FilesPageElement.filesList().confirmDeletion()
       return this
     },
     /**

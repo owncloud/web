@@ -4,7 +4,7 @@ import { isSameResource } from '../../../helpers/resource'
 import { buildWebDavFilesTrashPath } from '../../../helpers/resources'
 import { buildWebDavSpacesTrashPath, Resource, SpaceResource } from 'web-client/src/helpers'
 import PQueue from 'p-queue'
-import { isLocationTrashActive, isLocationSpacesActive } from '../../../router'
+import { isLocationSpacesActive } from '../../../router'
 import { dirname } from 'path'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { computed, unref } from 'vue'
@@ -48,10 +48,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
     return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
   })
 
-  const isInTrashbin = computed(() => {
-    return isLocationTrashActive(router, 'files-trash-generic')
-  })
-
   const resources = computed(() => {
     return cloneStateObject(unref(resourcesToDelete))
   })
@@ -63,13 +59,9 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
     if (currentResources.length === 1) {
       if (isFolder) {
-        title = unref(isInTrashbin)
-          ? $gettext('Permanently delete folder %{name}')
-          : $gettext('Delete folder %{name}')
+        title = $gettext('Permanently delete folder %{name}')
       } else {
-        title = unref(isInTrashbin)
-          ? $gettext('Permanently delete file %{name}')
-          : $gettext('Delete file %{name}')
+        title = $gettext('Permanently delete file %{name}')
       }
       return $gettextInterpolate(
         title,
@@ -80,17 +72,11 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
       )
     }
 
-    title = unref(isInTrashbin)
-      ? $ngettext(
-          'Permanently delete selected resource?',
-          'Permanently delete %{amount} selected resources?',
-          currentResources.length
-        )
-      : $ngettext(
-          'Delete selected resource?',
-          'Delete %{amount} selected resources?',
-          currentResources.length
-        )
+    title = $ngettext(
+      'Permanently delete selected resource?',
+      'Permanently delete %{amount} selected resources?',
+      currentResources.length
+    )
 
     return $gettextInterpolate(title, { amount: currentResources.length }, false)
   })
@@ -101,24 +87,18 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
     if (currentResources.length === 1) {
       if (isFolder) {
-        return unref(isInTrashbin)
-          ? $gettext(
-              'Are you sure you want to delete this folder? All its content will be permanently removed. This action cannot be undone.'
-            )
-          : $gettext('Are you sure you want to delete this folder?')
+        return $gettext(
+          'Are you sure you want to delete this folder? All its content will be permanently removed. This action cannot be undone.'
+        )
       }
-      return unref(isInTrashbin)
-        ? $gettext(
-            'Are you sure you want to delete this file? All its content will be permanently removed. This action cannot be undone.'
-          )
-        : $gettext('Are you sure you want to delete this file?')
+      return $gettext(
+        'Are you sure you want to delete this file? All its content will be permanently removed. This action cannot be undone.'
+      )
     }
 
-    return unref(isInTrashbin)
-      ? $gettext(
-          'Are you sure you want to delete all selected resources? All their content will be permanently removed. This action cannot be undone.'
-        )
-      : $gettext('Are you sure you want to delete all selected resources?')
+    return $gettext(
+      'Are you sure you want to delete all selected resources? All their content will be permanently removed. This action cannot be undone.'
+    )
   })
 
   const trashbin_deleteOp = (space, resource) => {
@@ -156,7 +136,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
   const trashbin_delete = (space: SpaceResource) => {
     // TODO: use clear all if all files are selected
-    store.dispatch('toggleModalConfirmButton')
     // FIXME: Implement proper batch delete and add loading indicator
     for (const file of unref(resources)) {
       const p = queue.add(() => {
@@ -171,7 +150,9 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
     })
   }
 
-  const filesList_delete = () => {
+  const filesList_delete = (resources: Resource[]) => {
+    resourcesToDelete.value = [...resources]
+
     const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
       unref(resources).reduce((acc, resource) => {
         if (resource.storageId in acc) {
@@ -202,9 +183,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                 loadingCallbackArgs
               })
               .then(async () => {
-                store.dispatch('hideModal')
-                store.dispatch('toggleModalConfirmButton')
-
                 // Load quota
                 if (
                   isLocationSpacesActive(router, 'files-spaces-generic') &&
@@ -253,11 +231,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
     )
   }
 
-  const deleteHelper = (space: SpaceResource) => {
-    store.dispatch('toggleModalConfirmButton')
-    unref(isInTrashbin) ? trashbin_delete(space) : filesList_delete()
-  }
-
   const displayDialog = (space: SpaceResource, resources: Resource[]) => {
     resourcesToDelete.value = [...resources]
 
@@ -271,7 +244,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
         store.dispatch('hideModal')
       },
       onConfirm: () => {
-        deleteHelper(space)
+        trashbin_delete(space)
       }
     }
 
