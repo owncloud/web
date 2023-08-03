@@ -1,5 +1,5 @@
 <template>
-  <main class="oc-height-1-1">
+  <main :id="applicationId" class="oc-height-1-1">
     <app-top-bar v-if="!loading && !loadingError" :resource="resource" @close="closeApp">
       {{ slotAttrs.isDirty }}
     </app-top-bar>
@@ -29,6 +29,7 @@ export interface AppWrapperSlotArgs {
   currentContent: Ref<string>
   isDirty: boolean
   isReadOnly: boolean
+  url: string
 }
 
 export default defineComponent({
