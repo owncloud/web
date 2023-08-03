@@ -60,6 +60,7 @@ Summary
 * Enhancement - Add error log to upload dialog: [#9436](https://github.com/owncloud/web/pull/9436)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
 * Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
+* Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
 
 Details
@@ -499,6 +500,18 @@ Details
 
    https://github.com/owncloud/web/issues/9434
    https://github.com/owncloud/web/pull/9451
+
+* Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
+
+   We've improved the tags form in various ways, including visual appearance as well as
+   usability. Auto save, remove tags on backspace, and contextual helper (and more, see issues)
+
+   https://github.com/owncloud/web/issues/9363
+   https://github.com/owncloud/web/issues/9356
+   https://github.com/owncloud/web/issues/9360
+   https://github.com/owncloud/web/issues/9362
+   https://github.com/owncloud/web/issues/9416
+   https://github.com/owncloud/web/pull/9525
 
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
 
