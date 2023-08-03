@@ -8,14 +8,22 @@ import { FileResource, SpaceResource } from 'web-client/src/helpers'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
 import { useClientService } from '../clientService'
 import { ListFilesOptions } from 'web-client/src/webdav/listFiles'
+import { WebDAV } from 'web-client/src/webdav'
 
 interface AppFileHandlingOptions {
   clientService: ClientService
 }
 
-export interface UrlForResourceOptions {
-  disposition: 'inline' | 'attachment'
-}
+// FIXME: we would like to use the OriginalUrlForResourceOptions type
+// but when every property is optional vue-tsc/volar can't deal with it properly
+// so when it's used as PropType it's wrongly recognized as void and nothing can
+// be passed to the prop
+type OriginalUrlForResourceOptions = Omit<
+  Parameters<WebDAV['getFileUrl']>[2],
+  'isUrlSigningEnabled'
+>
+export type UrlForResourceOptions = OriginalUrlForResourceOptions &
+  Required<Pick<OriginalUrlForResourceOptions, 'disposition'>>
 
 export interface AppFileHandlingResult {
   getUrlForResource(

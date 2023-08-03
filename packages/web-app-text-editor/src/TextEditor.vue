@@ -9,7 +9,7 @@
       class="oc-height-1-1"
       :rows="20"
       :disabled="isReadOnly"
-      @update:model-value="$emit('update:currentContent')"
+      @update:model-value="$emit('update:currentContent', $event)"
     />
   </div>
   <div v-if="showPreview" class="oc-container oc-width-1-2">
@@ -30,10 +30,6 @@ export default defineComponent({
   props: {
     applicationConfig: { type: Object as PropType<AppConfigObject>, required: true },
     currentContent: {
-      type: String,
-      required: true
-    },
-    serverContent: {
       type: String,
       required: true
     },

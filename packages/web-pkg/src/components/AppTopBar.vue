@@ -10,7 +10,9 @@
             :resource="resource"
           />
         </div>
-
+        <p style="color: white">
+          <slot />
+        </p>
         <div class="oc-flex main-actions">
           <template v-if="mainActions.length && resource">
             <context-action-menu
