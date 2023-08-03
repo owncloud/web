@@ -1,5 +1,5 @@
 <template>
-  <ViewerApp
+  <AppWrapper
     id="pdf-viewer"
     v-slot="{ url }: { url: string }"
     application-id="pdf-viewer"
@@ -8,17 +8,17 @@
     }"
   >
     <object class="pdf-viewer oc-width-1-1 oc-height-1-1" :data="url" type="application/pdf" />
-  </ViewerApp>
+  </AppWrapper>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import ViewerApp from 'web-pkg/src/components/AppTemplates/ViewerApp.vue'
+import AppWrapper from 'web-pkg/src/components/AppTemplates/AppWrapper.vue'
 
 export default defineComponent({
   name: 'PDFViewer',
   components: {
-    ViewerApp
+    AppWrapper
   }
 })
 </script>
