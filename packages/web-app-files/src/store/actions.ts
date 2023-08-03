@@ -186,7 +186,7 @@ export default {
           removedFiles.push(file)
         })
         .catch((error) => {
-          let translated = $gettext('Failed to delete "%{file}"')
+          let title = $gettext('Failed to delete "%{file}"', { file: file.name })
           if (error.statusCode === 423) {
             if (firstRun) {
               return context.dispatch('deleteFiles', {
@@ -198,13 +198,12 @@ export default {
               })
             }
 
-            translated = $gettext('Failed to delete "%{file}" - the file is locked')
+            title = $gettext('Failed to delete "%{file}" - the file is locked', { file: file.name })
           }
-          const title = $gettext(translated, { file: file.name }, true)
           context.dispatch(
             'showErrorMessage',
             {
-              title: title,
+              title,
               error
             },
             { root: true }
