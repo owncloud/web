@@ -98,7 +98,9 @@ import {
   formatRelativeDateFromISO,
   useClientService,
   useRoute,
-  useStore
+  useStore,
+  useServerSentEvents,
+  useCapabilityCoreSSE
 } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
@@ -120,6 +122,30 @@ export default {
     const loading = ref(false)
     const notificationsInterval = ref()
     const dropdownOpened = ref(false)
+
+    const sseEnabled = useCapabilityCoreSSE()
+    let setupServerSentEvents
+    if (unref(sseEnabled)) {
+      setupServerSentEvents = useServerSentEvents({
+        url: 'ocs/v2.php/apps/notifications/api/v1/notifications/sse',
+        onOpen: (response): void => {
+          fetchNotificationsTask.perform()
+          if (!response.ok) {
+            console.error(`SSE notifications couldn't be set up ${response.status}`)
+          }
+        },
+        onMessage: (msg): void => {
+          if (msg.event === 'FatalError') {
+            console.error(`SSE notifications error: ${msg.data}`)
+            return
+          }
+          const data = JSON.parse(msg.data)
+          if (data.notification_id) {
+            notifications.value = [data, ...unref(notifications)]
+          }
+        }
+      })
+    }
 
     const formatDate = (date) => {
       return formatDateFromISO(date, currentLanguage)
@@ -291,11 +317,15 @@ export default {
       setAdditionalData()
     }
 
-    onMounted(() => {
-      fetchNotificationsTask.perform()
-      notificationsInterval.value = setInterval(() => {
+    onMounted(async () => {
+      if (unref(sseEnabled)) {
+        await setupServerSentEvents()
+      } else {
+        notificationsInterval.value = setInterval(() => {
+          fetchNotificationsTask.perform()
+        }, POLLING_INTERVAL)
         fetchNotificationsTask.perform()
-      }, POLLING_INTERVAL)
+      }
     })
 
     onUnmounted(() => {
