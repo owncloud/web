@@ -10,7 +10,6 @@ Feature: Kindergarten can use web to organize a day
       | Alice |
       | Brian |
       | Carol |
-    And "Admin" disables share auto accepting
 
   Scenario: Alice can share this weeks meal plan with all parents
     When "Alice" logs in

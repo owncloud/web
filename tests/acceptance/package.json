@@ -3,7 +3,6 @@
   "description": "ownCloud web test suite",
   "license": "AGPL-3.0",
   "scripts": {
-    "test:acceptance:oc10": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require setup.js --require stepDefinitions --format @cucumber/pretty-formatter -t \"${TEST_TAGS:-not @skip and not @skipOnOC10}\" -f json:report/cucumber_report.json",
     "test:acceptance:ocis": "NODE_TLS_REJECT_UNAUTHORIZED=0 RUN_ON_OCIS=true cucumber-js --require-module @babel/register --require-module @babel/polyfill --require setup.js --require stepDefinitions --format @cucumber/pretty-formatter -t \"${TEST_TAGS:-not @skip and not @skipOnOCIS and not @notToImplementOnOCIS}\" -f json:report/cucumber_report.json"
   },
   "devDependencies": {
