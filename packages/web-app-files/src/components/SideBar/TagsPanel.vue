@@ -195,7 +195,7 @@ export default defineComponent({
         ...map
       }
       objectMapping[keycode('backspace')] = async (e) => {
-        if (e.originalTarget.value || selectedTags.value.length === 0) {
+        if (e.target.value || selectedTags.value.length === 0) {
           return
         }
 
