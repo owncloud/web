@@ -13,8 +13,16 @@ interface AppFileHandlingOptions {
   clientService: ClientService
 }
 
+export interface UrlForResourceOptions {
+  disposition: 'inline' | 'attachment'
+}
+
 export interface AppFileHandlingResult {
-  getUrlForResource(space: SpaceResource, resource: Resource, options?: any): Promise<string>
+  getUrlForResource(
+    space: SpaceResource,
+    resource: Resource,
+    options?: UrlForResourceOptions
+  ): Promise<string>
   revokeUrl(url: string): void
   getFileInfo(fileContext: MaybeRef<FileContext>, options?: ListFilesOptions): Promise<Resource>
   getFileContents(
