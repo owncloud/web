@@ -104,7 +104,7 @@ export default defineComponent({
     })
 
     const slotAttrs = computed(() => ({
-      url,
+      url: unref(url),
       resource,
       isDirty,
       isReadOnly: false,
