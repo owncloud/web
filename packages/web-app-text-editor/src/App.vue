@@ -1,6 +1,5 @@
 <template>
   <AppWrapper
-    id="text-editor"
     v-slot="{ currentContent, ...slotArgs }: AppWrapperSlotArgs"
     application-id="text-editor"
   >

@@ -1,7 +1,6 @@
 <template>
   <AppWrapper
-    id="pdf-viewer"
-    v-slot="{ url }: { url: string }"
+    v-slot="{ url }: AppWrapperSlotArgs"
     application-id="pdf-viewer"
     :url-for-resource-options="{
       disposition: 'inline'
@@ -13,7 +12,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import AppWrapper from 'web-pkg/src/components/AppTemplates/AppWrapper.vue'
+import AppWrapper, { AppWrapperSlotArgs } from 'web-pkg/src/components/AppTemplates/AppWrapper.vue'
 
 export default defineComponent({
   name: 'PDFViewer',
