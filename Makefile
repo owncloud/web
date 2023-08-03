@@ -2,7 +2,6 @@ NAME := web
 DIST := ${CURDIR}/dist
 HUGO := ${CURDIR}/hugo
 RELEASE := ${CURDIR}/release
-OCX_RELEASE := $(CURDIR)/build/dist
 NODE_MODULES := ${CURDIR}/node_modules
 
 node_modules: package.json pnpm-lock.yaml
@@ -10,7 +9,7 @@ node_modules: package.json pnpm-lock.yaml
 
 .PHONY: clean
 clean:
-	rm -rf ${DIST} ${HUGO} ${RELEASE} ${OCX_RELEASE} ${NODE_MODULES}
+	rm -rf ${DIST} ${HUGO} ${RELEASE} ${NODE_MODULES}
 
 .PHONY: release
 release: clean
@@ -24,8 +23,6 @@ release: clean
 .PHONY: dist
 dist:
 	make -f Makefile.release
-	mkdir -p $(CURDIR)/build/dist
-	cp $(CURDIR)/release/web-app.tar.gz $(CURDIR)/build/dist/
 
 .PHONY: docs
 docs: docs-copy docs-build

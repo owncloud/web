@@ -5,7 +5,6 @@ NOTIFICATIONS = 3
 
 ALPINE_GIT = "alpine/git:latest"
 APACHE_TIKA = "apache/tika:2.8.0.0"
-DEEPDIVER_DOCKER_ORACLE_XE_11G = "deepdiver/docker-oracle-xe-11g:latest"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
@@ -31,8 +30,6 @@ SELENIUM_STANDALONE_FIREFOX = "selenium/standalone-firefox:104.0-20220812"
 SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:5.0"
 TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 
-OC10_VERSION = "latest"
-
 WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "eslint-config", "extension-sdk", "prettier-config", "tsconfig", "web-client", "web-pkg"]
 WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
 
@@ -46,14 +43,9 @@ dir = {
     "app": "/srv/app",
     "config": "/srv/config",
     "ocisConfig": "/srv/config/drone/config-ocis.json",
-    "oc10IntegrationAppOauthConfig": "/srv/config/drone/config-oc10-integration-app-oauth.json",
-    "oc10IdentifierRegistrationConfig": "/srv/config/drone/identifier-registration-oc10.yml",
     "ocisIdentifierRegistrationConfig": "/srv/config/drone/identifier-registration.yml",
-    "oc10OpenIdConfig": "/srv/config/drone/config-oc10-openid.json",
     "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
     "testingDataDir": "/srv/app/testing/data/",
-    "setupServerAndAppScript": "tests/drone/setup-server-and-app.sh",
-    "oc10OauthConfig": "tests/drone/config-oc10-oauth.json",
 }
 
 config = {
@@ -67,26 +59,18 @@ config = {
     ],
     "pnpmlint": True,
     "e2e": {
-        "oC10": {
-            "db": "mysql:5.5",
-            "earlyFail": True,
-            "skip": False,
-            "featurePaths": [
-                "tests/e2e/cucumber/**/*[!.ocis].feature",
-            ],
-        },
         "oCIS-1": {
             "earlyFail": True,
             "skip": False,
             "featurePaths": [
-                "tests/e2e/cucumber/features/{smoke,journeys}/*[!.oc10].feature",
+                "tests/e2e/cucumber/features/{smoke,journeys}/*.feature",
             ],
         },
         "oCIS-2": {
             "earlyFail": True,
             "skip": False,
             "featurePaths": [
-                "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*[!.oc10].feature",
+                "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*.feature",
             ],
         },
         "oCIS-app-provider": {
@@ -98,307 +82,6 @@ config = {
     },
     "acceptance": {
         "webUI": {
-            "type": FULL,
-            "suites": {
-                "oC10Basic": [
-                    "webUIAccount",
-                    "webUILogin",
-                    "webUIPrivateLinks",
-                    "webUIWebdavLockProtection",
-                ],
-                "oC10FileFolderOperations": [
-                    "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                ],
-                "oC10RenameFolder": [
-                    "webUIRenameFolders",
-                ],
-                "oC10RenameFile": [
-                    "webUIRenameFiles",
-                ],
-                "oC10MoveFileFolder": [
-                    "webUIMoveFilesFolders",
-                ],
-                "oC10Files1": [
-                    "webUIFiles",
-                    "webUIUpload",
-                ],
-                "oC10Files2": [
-                    "webUIFilesList",
-                    "webUIFilesSearch",
-                ],
-                "oC10Files3": [
-                    "webUIPreview",
-                    "webUIFilesDetails",
-                ],
-                "oC10Files4": [
-                    "webUIFilesCopy",
-                    "webUIFavorites",
-                ],
-                "oC10Files5": [
-                    "webUITextEditor",
-                    "webUIFilesActionMenu",
-                ],
-                "oC10SharingAccept": [
-                    "webUISharingAcceptShares",
-                    "webUISharingAcceptSharesToRoot",
-                ],
-                "oC10Sharing1": [
-                    "webUISharingAutocompletion",
-                    "webUISharingExpirationDate",
-                    "webUIRestrictSharing",
-                ],
-                "oC10Sharing2": [
-                    "webUIResharingToRoot",
-                    "webUISharingInternalUsersBlacklisted",
-                    "webUIOperationsWithFolderShares",
-                ],
-                "oC10SharingIntGroups": [
-                    "webUISharingInternalGroups",
-                    "webUISharingInternalGroupsEdgeCases",
-                ],
-                "oC10SharingIntGroupsToRoot": [
-                    "webUISharingInternalGroupsToRoot",
-                    "webUISharingInternalGroupsToRootEdgeCases",
-                ],
-                "oC10SharingIntUsers1": [
-                    "webUISharingInternalUsersToRootCollaborator",
-                    "webUISharingInternalUsersToRoot",
-                    "webUISharingInternalUsersToRootPreviews",
-                ],
-                "oC10SharingIntUsers2": [
-                    "webUISharingInternalUsers",
-                    "webUISharingInternalUsersCollaborator",
-                ],
-                "oc10SharingIntUsers3": [
-                    "webUISharingInternalUsersToRootBlacklisted",
-                    "webUISharingInternalUsersShareWithPage",
-                    "webUISharingInternalUsersToRootShareWithPage",
-                ],
-                "oC10SharingSharingInd": [
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalGroupsToRootSharingIndicator",
-                    "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingInternalUsersToRootSharingIndicator",
-                ],
-                "oC10Trashbin": [
-                    "webUITrashbinDelete",
-                    "webUITrashbinFilesFolders",
-                    "webUITrashbinRestore",
-                ],
-                "oC10SharingPermission": [
-                    "webUISharingPermissionsUsers",
-                ],
-                "webUISharingPermissionToRoot": "oC10SharingPermToRoot",
-                "oC10SharingFilePerm": [
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFilePermissionsGroups",
-                ],
-                "oC10SharingFolderPermissions": [
-                    "webUISharingFolderAdvancedPermissionMultipleUsers",
-                    "webUISharingFolderPermissionMultipleUsers",
-                    "webUISharingFolderPermissionsGroups",
-                ],
-                "oC10SharingPublic1": [
-                    "webUISharingPublicBasic",
-                ],
-                "oC10SharingPublic2": [
-                    "webUISharingPublicExpire",
-                    "webUISharingPublicManagement",
-                ],
-                "oC10SharingPublic3": [
-                    "webUISharingPublicDifferentRoles",
-                ],
-                "oC10Resharing": [
-                    "webUIResharing1",
-                    "webUIResharing2",
-                ],
-            },
-            "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-            },
-            "screenShots": True,
-        },
-        # These suites have all or most of their scenarios expected to fail.
-        # Eliminate wasted CI time by not retrying the failing scenarios.
-        "webUINoRetry": {
-            "type": FULL,
-            "suites": {
-                "webUISharingFolderAdvancedPermissionsGroups": "oC10SharingFolderAdvPermsGrp",
-            },
-            "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-            },
-            "screenShots": True,
-            "retry": False,
-        },
-        "webUIFederation": {
-            "type": FEDERATED,
-            "suites": {
-                "webUISharingExternal": "oC10SharingExternal",
-                "webUISharingExternalToRoot": "oC10SharingExternalRoot",
-            },
-            "extraEnvironment": {
-                "REMOTE_BACKEND_HOST": "http://federated",
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-            },
-            "notificationsAppNeeded": True,
-            "federatedServerNeeded": True,
-            "federatedServerVersion": OC10_VERSION,
-        },
-        "webUI-XGA": {
-            "type": FULL,
-            "suites": {
-                "oC10XGAPortrait1": [
-                    "webUIAccount",
-                    "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                    "webUIFavorites",
-                    "webUIFiles",
-                    "webUIFilesActionMenu",
-                    "webUIFilesCopy",
-                    "webUIFilesDetails",
-                    "webUIFilesList",
-                    "webUIFilesSearch",
-                    "webUILogin",
-                    "webUIPreview",
-                    "webUIPrivateLinks",
-                    "webUIRenameFiles",
-                    "webUIRenameFolders",
-                    "webUIRestrictSharing",
-                    "webUIUpload",
-                ],
-                "oC10XGAPortrait2": [
-                    "webUIOperationsWithFolderShares",
-                    "webUISharingAcceptShares",
-                    "webUISharingAcceptSharesToRoot",
-                    "webUITextEditor",
-                    "webUIWebdavLockProtection",
-                    "webUIMoveFilesFolders",
-                    "webUIResharing1",
-                    "webUIResharing2",
-                    "webUIResharingToRoot",
-                    "webUISharingAutocompletion",
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFilePermissionsGroups",
-                    "webUISharingFolderAdvancedPermissionMultipleUsers",
-                    "webUISharingFolderAdvancedPermissionsGroups",
-                    "webUISharingFolderPermissionMultipleUsers",
-                    "webUISharingFolderPermissionsGroups",
-                    "webUISharingInternalGroups",
-                    "webUISharingInternalGroupsEdgeCases",
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalGroupsToRoot",
-                    "webUISharingInternalGroupsToRootEdgeCases",
-                    "webUISharingInternalGroupsToRootSharingIndicator",
-                    "webUISharingInternalUsers",
-                    "webUISharingInternalUsersCollaborator",
-                    "webUISharingInternalUsersShareWithPage",
-                    "webUISharingInternalUsersBlacklisted",
-                    "webUISharingExpirationDate",
-                ],
-                "oC10XGAPortrait3": [
-                    "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingInternalUsersToRoot",
-                    "webUISharingInternalUsersToRootCollaborator",
-                    "webUISharingInternalUsersToRootPreviews",
-                    "webUISharingInternalUsersToRootShareWithPage",
-                    "webUISharingInternalUsersToRootBlacklisted",
-                    "webUISharingInternalUsersToRootSharingIndicator",
-                    "webUISharingPermissionsUsers",
-                    "webUISharingPermissionToRoot",
-                    "webUISharingPublicBasic",
-                    "webUISharingPublicManagement",
-                    "webUISharingPublicDifferentRoles",
-                    "webUISharingPublicExpire",
-                    "webUITrashbinDelete",
-                    "webUITrashbinFilesFolders",
-                    "webUITrashbinRestore",
-                ],
-            },
-            "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md" % dir["web"],
-                "SCREEN_RESOLUTION": "768x1024",
-            },
-            "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
-        },
-        "webUI-iPhone": {
-            "type": FULL,
-            "suites": {
-                "oC10iPhone1": [
-                    "webUIAccount",
-                    "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                    "webUIFavorites",
-                    "webUIFiles",
-                    "webUIFilesActionMenu",
-                    "webUIFilesCopy",
-                    "webUIFilesDetails",
-                    "webUIFilesList",
-                    "webUIFilesSearch",
-                    "webUILogin",
-                    "webUIOperationsWithFolderShares",
-                    "webUIPreview",
-                    "webUIPrivateLinks",
-                    "webUIRenameFiles",
-                    "webUIRenameFolders",
-                    "webUIRestrictSharing",
-                ],
-                "oC10iPhone2": [
-                    "webUISharingAcceptShares",
-                    "webUISharingAcceptSharesToRoot",
-                    "webUITextEditor",
-                    "webUISharingInternalUsersBlacklisted",
-                    "webUIWebdavLockProtection",
-                    "webUIMoveFilesFolders",
-                    "webUIResharing1",
-                    "webUIResharing2",
-                    "webUIResharingToRoot",
-                    "webUISharingAutocompletion",
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFilePermissionsGroups",
-                    "webUISharingFolderAdvancedPermissionMultipleUsers",
-                    "webUISharingFolderAdvancedPermissionsGroups",
-                    "webUISharingFolderPermissionMultipleUsers",
-                    "webUISharingFolderPermissionsGroups",
-                    "webUISharingInternalGroups",
-                    "webUISharingInternalGroupsEdgeCases",
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalGroupsToRoot",
-                    "webUISharingInternalGroupsToRootEdgeCases",
-                    "webUISharingInternalGroupsToRootSharingIndicator",
-                    "webUISharingInternalUsers",
-                    "webUISharingExpirationDate",
-                ],
-                "oC10iPhone3": [
-                    "webUISharingInternalUsersCollaborator",
-                    "webUISharingInternalUsersShareWithPage",
-                    "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingInternalUsersToRootCollaborator",
-                    "webUISharingInternalUsersToRootPreviews",
-                    "webUISharingInternalUsersToRootShareWithPage",
-                    "webUISharingInternalUsersToRootSharingIndicator",
-                    "webUISharingInternalUsersToRoot",
-                    "webUISharingInternalUsersToRootBlacklisted",
-                    "webUISharingPermissionsUsers",
-                    "webUISharingPermissionToRoot",
-                    "webUISharingPublicBasic",
-                    "webUISharingPublicManagement",
-                    "webUISharingPublicDifferentRoles",
-                    "webUISharingPublicExpire",
-                    "webUITrashbinDelete",
-                    "webUITrashbinFilesFolders",
-                    "webUITrashbinRestore",
-                    "webUIUpload",
-                ],
-            },
-            "extraEnvironment": {
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md" % dir["web"],
-                "SCREEN_RESOLUTION": "375x812",
-            },
-            "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
-        },
-        "webUI-ocis": {
             "type": FULL,
             "servers": [
                 "",
@@ -500,85 +183,7 @@ config = {
                 "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
             },
-            "runningOnOCIS": True,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
-            "screenShots": True,
-        },
-        "webUI-oc10-integration": {
-            "type": FULL,
-            "suites": {
-                "oC10IntegrationApp1": [
-                    "webUIAccount",
-                    "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                    "webUIFavorites",
-                    "webUIFiles",
-                    "webUIFilesActionMenu",
-                    "webUIFilesCopy",
-                    "webUIFilesDetails",
-                    "webUIFilesList",
-                    "webUIFilesSearch",
-                    "webUILogin",
-                    "webUIOperationsWithFolderShares",
-                    "webUIPreview",
-                    "webUIPrivateLinks",
-                    "webUIRenameFiles",
-                    "webUIRenameFolders",
-                    "webUIRestrictSharing",
-                    "webUISharingAcceptShares",
-                    "webUISharingAcceptSharesToRoot",
-                    "webUITextEditor",
-                    "webUISharingInternalUsersBlacklisted",
-                    "webUIWebdavLockProtection",
-                    "webUIMoveFilesFolders",
-                    "webUIResharing1",
-                    "webUIResharing2",
-                    "webUIResharingToRoot",
-                    "webUISharingAutocompletion",
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFilePermissionsGroups",
-                    "webUISharingFolderAdvancedPermissionMultipleUsers",
-                    "webUISharingFolderAdvancedPermissionsGroups",
-                    "webUISharingFolderPermissionMultipleUsers",
-                    "webUISharingFolderPermissionsGroups",
-                    "webUISharingInternalGroups",
-                    "webUISharingInternalGroupsEdgeCases",
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalGroupsToRoot",
-                    "webUISharingInternalGroupsToRootEdgeCases",
-                    "webUISharingInternalGroupsToRootSharingIndicator",
-                ],
-                "oC10IntegrationApp2": [
-                    "webUISharingInternalUsers",
-                    "webUISharingExpirationDate",
-                    "webUISharingInternalUsersCollaborator",
-                    "webUISharingInternalUsersShareWithPage",
-                    "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingInternalUsersToRootCollaborator",
-                    "webUISharingInternalUsersToRootPreviews",
-                    "webUISharingInternalUsersToRootShareWithPage",
-                    "webUISharingInternalUsersToRootSharingIndicator",
-                    "webUISharingInternalUsersToRoot",
-                    "webUISharingInternalUsersToRootBlacklisted",
-                    "webUISharingPermissionsUsers",
-                    "webUISharingPermissionToRoot",
-                    "webUISharingPublicBasic",
-                    "webUISharingPublicManagement",
-                    "webUISharingPublicDifferentRoles",
-                    "webUISharingPublicExpire",
-                    "webUITrashbinDelete",
-                    "webUITrashbinFilesFolders",
-                    "webUITrashbinRestore",
-                    "webUIUpload",
-                ],
-            },
-            "extraEnvironment": {
-                "WEB_UI_CONFIG": "%s" % dir["oc10IntegrationAppOauthConfig"],
-                "SERVER_HOST": "http://owncloud/index.php/apps/web/index.html",
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md" % dir["web"],
-            },
-            "filterTags": "not @skip and not @skipOnOC10 and not @notToImplementOnOC10 and not @openIdLogin and @smokeTest",
-            "oc10IntegrationAppIncluded": True,
             "screenShots": True,
         },
     },
@@ -588,14 +193,6 @@ config = {
 # UI Test Suites
 # These list contains all the test suites that are present
 # When adding new test suites, make sure to update these lists
-federatedTestSuites = [
-    "webUISharingExternal",
-]
-
-federatedRootTestSuites = [
-    "webUISharingExternalToRoot",
-]
-
 rootSharingTestSuites = [
     "webUIResharingToRoot",
     "webUISharingAcceptSharesToRoot",
@@ -713,13 +310,8 @@ def checkTestSuites():
         expected = []
         if (test["type"] == FULL):
             expected += basicTestSuites
-            if ("runningOnOCIS" not in test or test["runningOnOCIS"] != True):
-                expected += rootSharingTestSuites
-        elif (test["type"] == FEDERATED):
-            expected += federatedTestSuites + federatedRootTestSuites
 
-        if ("runningOnOCIS" in test and test["runningOnOCIS"] == True):
-            expected += ocisSpecificTestSuites
+        expected += ocisSpecificTestSuites
 
         if (sorted(suites) != sorted(expected)):
             print("Error: Suites dont match " + testGroupName)
@@ -1151,46 +743,30 @@ def e2eTests(ctx):
                 restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
                 copyFilesForUpload()
 
-        if suite.startswith("oC10"):
-            # oC10 specific environment variables
-            environment["BASE_URL_OCC"] = "owncloud"
+        # oCIS specific environment variables
+        environment["BASE_URL_OCIS"] = "ocis:9200"
+        environment["OCIS"] = "true"
+        environment["API_TOKEN"] = "true"
 
-            # oC10 specific services
-            services = databaseService(params["db"]) + owncloudService()
+        # oCIS specific dependencies
+        depends_on = ["cache-ocis"]
 
-            # oC10 specific steps
-            steps += installCore(params["db"]) + \
-                     owncloudLog() + \
-                     setupIntegrationWebApp() + \
-                     setupServerAndAppsForIntegrationApp(params["logLevel"]) + \
-                     setUpOauth2(True, True) + \
-                     fixPermissions() + \
-                     waitForOwncloudService()
+        steps += setupServerConfigureWeb(params["logLevel"]) + \
+                 restoreOcisCache()
+
+        if suite == "oCIS-app-provider":
+            # app-provider specific steps
+            steps += wopiServer() + \
+                     collaboraService() + \
+                     onlyofficeService() + \
+                     ocisService("app-provider") + \
+                     appProviderService("collabora") + \
+                     appProviderService("onlyoffice")
         else:
-            # oCIS specific environment variables
-            environment["BASE_URL_OCIS"] = "ocis:9200"
-            environment["OCIS"] = "true"
-            environment["API_TOKEN"] = "true"
-
-            # oCIS specific dependencies
-            depends_on = ["cache-ocis"]
-
-            steps += setupServerConfigureWeb(params["logLevel"]) + \
-                     restoreOcisCache()
-
-            if suite == "oCIS-app-provider":
-                # app-provider specific steps
-                steps += wopiServer() + \
-                         collaboraService() + \
-                         onlyofficeService() + \
-                         ocisService("app-provider") + \
-                         appProviderService("collabora") + \
-                         appProviderService("onlyoffice")
-            else:
-                # oCIS specific steps
-                steps += tikaService() + \
-                         ocisService("e2e-tests") + \
-                         getSkeletonFiles()
+            # oCIS specific steps
+            steps += tikaService() + \
+                     ocisService("e2e-tests") + \
+                     getSkeletonFiles()
 
         steps += [{
                      "name": "e2e-tests",
@@ -1229,20 +805,16 @@ def acceptance(ctx):
     errorFound = False
 
     default = {
-        "servers": [OC10_VERSION],
+        "servers": [],
         "browsers": ["chrome"],
         "databases": ["mysql:5.5"],
         "extraEnvironment": {},
         "cronOnly": False,
-        "filterTags": "not @skip and not @skipOnOC10 and not @notToImplementOnOC10 and not @openIdLogin",
+        "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
         "logLevel": "2",
         "notificationsAppNeeded": False,
-        "federatedServerNeeded": False,
-        "federatedServerVersion": OC10_VERSION,
-        "runningOnOCIS": False,
         "screenShots": False,
         "openIdConnect": False,
-        "oc10IntegrationAppIncluded": False,
         "skip": False,
         "debugSuites": [],
         "retry": True,
@@ -1288,11 +860,6 @@ def acceptance(ctx):
                     for db in params["databases"]:
                         if params["skip"]:
                             continue
-                        federatedServerVersion = params["federatedServerVersion"]
-                        federationDbSuffix = "-federated"
-
-                        if params["federatedServerNeeded"] and getDbName(db) not in ["mariadb", "mysql"]:
-                            errorFound = True
 
                         browserString = "" if browser == "" else "-" + browser
                         serverString = "" if server == "" else "-" + server.replace("daily-", "").replace("-qa", "")
@@ -1307,62 +874,13 @@ def acceptance(ctx):
 
                         # TODO: don't start services if we skip it -> maybe we need to convert them to steps
                         steps += skipIfUnchanged(ctx, "acceptance-tests")
+                        steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
+                        steps += setupServerConfigureWeb(params["logLevel"])
 
-                        if (params["oc10IntegrationAppIncluded"]):
-                            steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
-                        else:
-                            steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
-                            steps += setupServerConfigureWeb(params["logLevel"])
+                        services = browserService(alternateSuiteName, browser) + middlewareService()
 
-                        services = browserService(alternateSuiteName, browser) + middlewareService(params["runningOnOCIS"], params["federatedServerNeeded"])
-
-                        if (params["runningOnOCIS"]):
-                            # Services and steps required for running tests with oCIS
-                            steps += restoreOcisCache() + ocisService("acceptance-tests") + getSkeletonFiles()
-
-                        else:
-                            # Services and steps required for running tests with oc10
-                            services += databaseService(db) + owncloudService()
-
-                            ## prepare oc10 server
-                            if server == "":
-                                server = False
-
-                            steps += installCore(db) + owncloudLog()
-
-                            if (params["oc10IntegrationAppIncluded"]):
-                                steps += setupIntegrationWebApp()
-                                steps += setupServerAndAppsForIntegrationApp(params["logLevel"])
-                            else:
-                                steps += setupServerAndApp(params["logLevel"])
-
-                            if params["notificationsAppNeeded"]:
-                                steps += setupNotificationsAppForServer()
-
-                            if (params["openIdConnect"]):
-                                ## Configure oc10 and web with openidConnect login
-                                steps += setupGraphapiOIdC() + buildGlauth() + buildIdP() + buildOcisWeb()
-                                steps += idpService() + ocisWebService() + glauthService()
-                            else:
-                                ## Configure oc10 and web with oauth2 and web Service
-                                steps += setUpOauth2(params["oc10IntegrationAppIncluded"], True)
-
-                                ## web service is not required for web-oc10-integration
-                                if not params["oc10IntegrationAppIncluded"]:
-                                    services += webService()
-
-                            steps += fixPermissions()
-                            steps += waitForOwncloudService()
-
-                            if (params["federatedServerNeeded"]):
-                                if federatedServerVersion == "":
-                                    federatedServerVersion = False
-
-                                # services and steps required to run federated sharing tests
-                                steps += installFederatedServer(federatedServerVersion, db, federationDbSuffix) + setupFedServerAndApp(params["logLevel"])
-                                steps += fixPermissionsFederated() + waitForOwncloudFederatedService() + owncloudLogFederated()
-
-                                services += owncloudFederatedService() + databaseServiceForFederation(db, federationDbSuffix)
+                        # Services and steps required for running tests with oCIS
+                        steps += restoreOcisCache() + ocisService("acceptance-tests") + getSkeletonFiles()
 
                         # Wait for test-related services to be up
                         steps += waitForBrowserService()
@@ -1403,8 +921,7 @@ def acceptance(ctx):
                             }],
                         }
 
-                        if params["runningOnOCIS"]:
-                            result = pipelineDependsOn(result, cacheOcisPipeline(ctx))
+                        result = pipelineDependsOn(result, cacheOcisPipeline(ctx))
 
                         for branch in config["branches"]:
                             result["trigger"]["ref"].append("refs/heads/%s" % branch)
@@ -1459,64 +976,6 @@ def notify():
 
     return pipelines
 
-def databaseServiceForFederation(db, suffix):
-    dbName = getDbName(db)
-
-    # only support mariadb, for web, it's not important to support others
-    if dbName not in ["mariadb", "mysql"]:
-        print("Not implemented federated database for", dbName)
-        return []
-
-    return [{
-        "name": dbName + suffix,
-        "image": db,
-        "environment": {
-            "MYSQL_USER": getDbUsername(db),
-            "MYSQL_PASSWORD": getDbPassword(db),
-            "MYSQL_DATABASE": getDbDatabase(db) + suffix,
-            "MYSQL_ROOT_PASSWORD": getDbRootPassword(),
-        },
-    }]
-
-def databaseService(db):
-    dbName = getDbName(db)
-    if (dbName == "mariadb") or (dbName == "mysql"):
-        return [{
-            "name": dbName,
-            "image": db,
-            "environment": {
-                "MYSQL_USER": getDbUsername(db),
-                "MYSQL_PASSWORD": getDbPassword(db),
-                "MYSQL_DATABASE": getDbDatabase(db),
-                "MYSQL_ROOT_PASSWORD": getDbRootPassword(),
-            },
-        }]
-
-    if dbName == "postgres":
-        return [{
-            "name": dbName,
-            "image": db,
-            "environment": {
-                "POSTGRES_USER": getDbUsername(db),
-                "POSTGRES_PASSWORD": getDbPassword(db),
-                "POSTGRES_DB": getDbDatabase(db),
-            },
-        }]
-
-    if dbName == "oracle":
-        return [{
-            "name": dbName,
-            "image": DEEPDIVER_DOCKER_ORACLE_XE_11G,
-            "environment": {
-                "ORACLE_USER": getDbUsername(db),
-                "ORACLE_PASSWORD": getDbPassword(db),
-                "ORACLE_DB": getDbDatabase(db),
-                "ORACLE_DISABLE_ASYNCH_IO": "true",
-            },
-        }]
-
-    return []
-
 def browserService(alternateSuiteName, browser):
     if browser == "chrome":
         return [{
@@ -1549,161 +1008,6 @@ def waitForBrowserService():
         ],
     }]
 
-def owncloudService():
-    return [{
-        "name": "owncloud",
-        "image": OC_CI_PHP,
-        "environment": {
-            "APACHE_WEBROOT": "%s/" % dir["server"],
-            "APACHE_LOGGING_PATH": "/dev/null",
-        },
-        "command": [
-            "/usr/local/bin/apachectl",
-            "-D",
-            "FOREGROUND",
-        ],
-    }]
-
-def owncloudFederatedService():
-    return [{
-        "name": "federated",
-        "image": OC_CI_PHP,
-        "environment": {
-            "APACHE_WEBROOT": "%s/" % dir["federated"],
-            "APACHE_LOGGING_PATH": "/dev/null",
-        },
-        "command": [
-            "/usr/local/bin/apachectl",
-            "-D",
-            "FOREGROUND",
-        ],
-    }]
-
-def waitForOwncloudService():
-    return [{
-        "name": "wait-for-owncloud-service",
-        "image": OC_CI_WAIT_FOR,
-        "commands": [
-            "wait-for -it owncloud:80 -t 300",
-        ],
-    }]
-
-def waitForOwncloudFederatedService():
-    return [{
-        "name": "wait-for-owncloud-federated",
-        "image": OC_CI_WAIT_FOR,
-        "commands": [
-            "wait-for -it federated:80 -t 300",
-        ],
-    }]
-
-def getDbName(db):
-    return db.split(":")[0]
-
-def getDbUsername(db):
-    name = getDbName(db)
-
-    if name == "oracle":
-        return "system"
-
-    return "owncloud"
-
-def getDbPassword(db):
-    name = getDbName(db)
-
-    if name == "oracle":
-        return "oracle"
-
-    return "owncloud"
-
-def getDbRootPassword():
-    return "owncloud"
-
-def getDbDatabase(db):
-    name = getDbName(db)
-
-    if name == "oracle":
-        return "XE"
-
-    return "owncloud"
-
-def installCore(db):
-    host = getDbName(db)
-    dbType = host
-
-    username = getDbUsername(db)
-    password = getDbPassword(db)
-    database = getDbDatabase(db)
-
-    if host == "mariadb":
-        dbType = "mysql"
-
-    if host == "postgres":
-        dbType = "pgsql"
-
-    if host == "oracle":
-        dbType = "oci"
-
-    stepDefinition = {
-        "name": "install-core",
-        "image": OC_CI_CORE_NODEJS,
-        "settings": {
-            "version": OC10_VERSION,
-            "core_path": dir["server"],
-            "db_type": dbType,
-            "db_name": database,
-            "db_host": host,
-            "db_username": username,
-            "db_password": password,
-        },
-    }
-
-    return [stepDefinition]
-
-def installFederatedServer(version, db, dbSuffix = "-federated"):
-    host = getDbName(db)
-    dbType = host
-
-    username = getDbUsername(db)
-    password = getDbPassword(db)
-    database = getDbDatabase(db) + dbSuffix
-
-    if host == "mariadb":
-        dbType = "mysql"
-    elif host == "postgres":
-        dbType = "pgsql"
-    elif host == "oracle":
-        dbType = "oci"
-
-    stepDefinition = {
-        "name": "install-federated",
-        "image": OC_CI_CORE_NODEJS,
-    }
-    if version:
-        stepDefinition.update({"settings": {
-            "version": version,
-            "core_path": "%s/" % dir["federated"],
-            "db_type": dbType,
-            "db_name": database,
-            "db_host": host + dbSuffix,
-            "db_username": username,
-            "db_password": password,
-        }})
-    else:
-        stepDefinition.update({"settings": {
-            "core_path": "%s/" % dir["federated"],
-            "db_type": dbType,
-            "db_name": database,
-            "db_host": host + dbSuffix,
-            "db_username": username,
-            "db_password": password,
-        }})
-        stepDefinition.update({"commands": [
-            "bash /usr/sbin/plugin.sh",
-        ]})
-
-    return [stepDefinition]
-
 def installPnpm():
     return [{
         "name": "pnpm-install",
@@ -1724,29 +1028,6 @@ def lint():
         "commands": [
             "pnpm lint",
         ],
-    }]
-
-def setupIntegrationWebApp():
-    return [{
-        "name": "setup-web-integration-app",
-        "image": OC_CI_PHP,
-        "commands": [
-            # copy web config
-            "mkdir -p /srv/config",
-            "cp -r %s/tests/drone /srv/config" % dir["web"],
-            # setup web integration app
-            "cd %s || exit" % dir["server"],
-            "mkdir apps-external/web",
-            "cp %s config/config.json" % dir["oc10IntegrationAppOauthConfig"],
-            "cp %s/packages/web-integration-oc10/* apps-external/web -r" % dir["web"],
-            "cp %s/dist/* apps-external/web -r" % dir["web"],
-            "ls -la apps-external/web",
-            "cat config/config.json",
-        ],
-        "volumes": [{
-            "name": "configs",
-            "path": dir["config"],
-        }],
     }]
 
 def buildDockerImage():
@@ -1966,153 +1247,7 @@ def webService():
         ],
     }]
 
-def setUpOauth2(forIntegrationApp, disableFileLocking):
-    oidcURL = ""
-
-    if (forIntegrationApp):
-        oidcURL = "http://owncloud/index.php/apps/web/oidc-callback.html"
-    else:
-        oidcURL = "http://web/oidc-callback.html"
-
-    commands = [
-        "git clone -b master https://github.com/owncloud/oauth2.git %s/apps/oauth2" % dir["server"],
-        "cd %s/apps/oauth2 || exit" % dir["server"],
-        "make vendor",
-        "cd %s || exit" % dir["server"],
-        "php occ a:e oauth2",
-        "php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ %s false true" % oidcURL,
-    ]
-
-    if (disableFileLocking):
-        commands.append("php occ config:system:set filelocking.enabled --value=false")
-
-    return [{
-        "name": "setup-oauth2",
-        "image": OC_CI_PHP,
-        "commands": commands,
-    }]
-
-def setupGraphapiOIdC():
-    return [{
-        "name": "setup-graphapi",
-        "image": OC_CI_PHP,
-        "commands": [
-            "git clone -b master https://github.com/owncloud/graphapi.git %s/apps/graphapi" % dir["server"],
-            "cd %s/apps/graphapi || exit" % dir["server"],
-            "make vendor",
-            "git clone -b master https://github.com/owncloud/openidconnect.git %s/apps/openidconnect" % dir["server"],
-            "cd %s/apps/openidconnect || exit" % dir["server"],
-            "make vendor",
-            "cd %s || exit" % dir["server"],
-            "php occ a:e graphapi",
-            "php occ a:e openidconnect",
-            "php occ config:system:set trusted_domains 2 --value=web",
-            "php occ config:system:set openid-connect provider-url --value='https://idp:9130'",
-            "php occ config:system:set openid-connect loginButtonName --value=OpenId-Connect",
-            "php occ config:system:set openid-connect client-id --value=web",
-            "php occ config:system:set openid-connect insecure --value=true --type=bool",
-            "php occ config:system:set cors.allowed-domains 0 --value='http://web'",
-            "php occ config:system:set memcache.local --value='\\\\OC\\\\Memcache\\\\APCu'",
-            "php occ config:system:set web.baseUrl --value='http://web'",
-            "php occ config:list",
-        ],
-    }]
-
-def buildGlauth():
-    return [{
-        "name": "build-glauth",
-        "image": OC_CI_GOLANG,
-        "commands": [
-            "cd /srv/app/src/github.com/owncloud/ocis/glauth || exit",
-            # Fixme: Relies on an old ocis commit to provide oc10 tests with oidc
-            "git checkout 761d72d901cce2c03b524d11cf0b169293e2c8cd",
-            "make build",
-            "cp bin/glauth %s" % dir["base"],
-        ],
-        "volumes": [{
-            "name": "gopath",
-            "path": dir["app"],
-        }, {
-            "name": "configs",
-            "path": dir["config"],
-        }],
-    }]
-
-def glauthService():
-    return [{
-        "name": "glauth",
-        "image": OC_CI_GOLANG,
-        "detach": True,
-        "environment": {
-            "GLAUTH_BACKEND_DATASTORE": "owncloud",
-            "GLAUTH_BACKEND_BASEDN": "dc=example,dc=com",
-        },
-        "commands": [
-            "cd %s" % dir["base"],
-            "./glauth --log-level debug server --backend-server http://owncloud/",
-        ],
-        "volumes": [{
-            "name": "gopath",
-            "path": dir["app"],
-        }, {
-            "name": "configs",
-            "path": dir["config"],
-        }],
-    }]
-
-def buildIdP():
-    return [{
-        "name": "build-idp",
-        "image": OC_CI_GOLANG,
-        "commands": [
-            "cd /srv/app/src/github.com/owncloud/ocis || exit",
-            "cd idp || exit",
-            "make build",
-            "cp bin/idp %s" % dir["base"],
-        ],
-        "volumes": [{
-            "name": "gopath",
-            "path": dir["app"],
-        }, {
-            "name": "configs",
-            "path": dir["config"],
-        }],
-    }]
-
-def idpService():
-    return [{
-        "name": "idp",
-        "image": OC_CI_GOLANG,
-        "detach": True,
-        "environment": {
-            "LDAP_BASEDN": "dc=example,dc=com",
-            "LDAP_BINDDN": "cn=admin,ou=users,dc=example,dc=com",
-            "LDAP_URI": "ldap://glauth:9125",
-            "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["oc10IdentifierRegistrationConfig"],
-            "IDP_ISS": "https://idp:9130",
-            "LDAP_BINDPW": "admin",
-            "LDAP_SCOPE": "sub",
-            "LDAP_LOGIN_ATTRIBUTE": "uid",
-            "LDAP_EMAIL_ATTRIBUTE": "mail",
-            "LDAP_NAME_ATTRIBUTE": "givenName",
-            "LDAP_UUID_ATTRIBUTE": "uid",
-            "LDAP_UUID_ATTRIBUTE_TYPE": "text",
-            "LDAP_FILTER": "(objectClass=posixaccount)",
-        },
-        "commands": [
-            "cd %s" % dir["base"],
-            "./idp  --log-level debug server --signing-kid gen1-2020-02-27",
-        ],
-        "volumes": [{
-            "name": "gopath",
-            "path": dir["app"],
-        }, {
-            "name": "configs",
-            "path": dir["config"],
-        }],
-    }]
-
-def ocisService(type):
+def ocisService(type, tika_enabled = False):
     environment = {
         "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
         "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["ocisIdentifierRegistrationConfig"],
@@ -2179,48 +1314,6 @@ def ocisService(type):
         },
     ]
 
-def buildOcisWeb():
-    return [{
-        "name": "build-ocis-web",
-        "image": OC_CI_GOLANG,
-        "commands": [
-            "cd /srv/app/src/github.com/owncloud/ocis || exit",
-            "cd web || exit",
-            "make build",
-            "cp bin/web %s/ocis-web" % dir["base"],
-        ],
-        "volumes": [{
-            "name": "gopath",
-            "path": dir["app"],
-        }, {
-            "name": "configs",
-            "path": dir["config"],
-        }],
-    }]
-
-# Ocis-web service just for the oc10 tests
-def ocisWebService():
-    return [{
-        "name": "web",
-        "image": OC_CI_GOLANG,
-        "detach": True,
-        "environment": {
-            "WEB_UI_CONFIG": "%s" % dir["oc10OpenIdConfig"],
-            "WEB_ASSET_PATH": "%s/dist" % dir["web"],
-        },
-        "commands": [
-            "cd %s" % dir["base"],
-            "./ocis-web --log-level debug server",
-        ],
-        "volumes": [{
-            "name": "gopath",
-            "path": dir["app"],
-        }, {
-            "name": "configs",
-            "path": dir["config"],
-        }],
-    }]
-
 def checkForExistingOcisCache(ctx):
     web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
     return [
@@ -2242,7 +1335,6 @@ def setupServerConfigureWeb(logLevel):
         "name": "setup-server-configure-web",
         "image": OC_CI_PHP,
         "commands": [
-            "cp %s dist/config.json" % dir["oc10OauthConfig"],
             "mkdir -p /srv/config",
             "cp -r %s/tests/drone /srv/config" % dir["web"],
             "ls -la /srv/config/drone",
@@ -2251,92 +1343,6 @@ def setupServerConfigureWeb(logLevel):
             "name": "configs",
             "path": dir["config"],
         }],
-    }]
-
-def setupNotificationsAppForServer():
-    return [{
-        "name": "install-notifications-app-on-server",
-        "image": OC_CI_PHP,
-        "commands": [
-            "mkdir -p %s/apps/" % dir["server"],
-            "rm -rf %s/apps/notifications" % dir["server"],
-            "git clone -b master https://github.com/owncloud/notifications.git %s/apps/notifications" % dir["server"],
-            "cd %s || exit" % dir["server"],
-            "php occ upgrade",
-            "php occ a:e notifications",
-            "php occ a:l",
-        ],
-    }]
-
-def setupServerAndAppsForIntegrationApp(logLevel):
-    return [{
-        "name": "setup-server-%s" % config["app"],
-        "image": OC_CI_PHP,
-        "commands": [
-            "bash -x %s %s %s %s" % (dir["setupServerAndAppScript"], dir["server"], logLevel, "builtInWeb"),
-        ],
-    }]
-
-def setupServerAndApp(logLevel):
-    return [{
-        "name": "setup-server-%s" % config["app"],
-        "image": OC_CI_PHP,
-        "commands": [
-            "bash -x %s %s %s" % (dir["setupServerAndAppScript"], dir["server"], logLevel),
-        ],
-    }]
-
-def setupFedServerAndApp(logLevel):
-    return [{
-        "name": "setup-fed-server-%s" % config["app"],
-        "image": OC_CI_PHP,
-        "commands": [
-            "cd %s/ || exit" % dir["federated"],
-            "php occ a:e testing",
-            "php occ config:system:set trusted_domains 2 --value=federated",
-            "php occ log:manage --level %s" % logLevel,
-            "php occ config:list",
-            "php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool",
-            "php occ config:system:set web.rewriteLinks --type=boolean --value=true",
-        ],
-    }]
-
-def fixPermissions():
-    return [{
-        "name": "fix-permissions",
-        "image": OC_CI_PHP,
-        "commands": [
-            "cd %s && chown www-data * -R" % dir["server"],
-        ],
-    }]
-
-def fixPermissionsFederated():
-    return [{
-        "name": "fix-permissions-federated",
-        "image": OC_CI_PHP,
-        "commands": [
-            "cd %s && chown www-data * -R" % dir["federated"],
-        ],
-    }]
-
-def owncloudLog():
-    return [{
-        "name": "owncloud-log",
-        "image": OC_UBUNTU,
-        "detach": True,
-        "commands": [
-            "tail -f %s/data/owncloud.log" % dir["server"],
-        ],
-    }]
-
-def owncloudLogFederated():
-    return [{
-        "name": "owncloud-federated-log",
-        "image": OC_UBUNTU,
-        "detach": True,
-        "commands": [
-            "tail -f %s/data/owncloud.log" % dir["federated"],
-        ],
     }]
 
 def copyFilesForUpload():
@@ -2683,19 +1689,16 @@ def licenseCheck(ctx):
         },
     }]
 
-def middlewareService(ocis = False, federatedServer = False):
+def middlewareService():
     environment = {
-        "BACKEND_HOST": "https://ocis:9200" if ocis else "http://owncloud",
+        "BACKEND_HOST": "https://ocis:9200",
         "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
-        "RUN_ON_OCIS": "true" if ocis else "false",
+        "RUN_ON_OCIS": "true",
         "REMOTE_UPLOAD_DIR": "/uploads",
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "MIDDLEWARE_HOST": "middleware",
-        "TEST_WITH_GRAPH_API": "true" if ocis else "false",
+        "TEST_WITH_GRAPH_API": "true",
     }
-
-    if (federatedServer):
-        environment["REMOTE_BACKEND_HOST"] = "http://federated"
 
     return [{
         "name": "middleware",
