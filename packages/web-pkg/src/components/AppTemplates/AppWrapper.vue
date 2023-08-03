@@ -4,7 +4,7 @@
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
-      <slot :url="url" />
+      <slot v-bind="slotAttrs" />
     </div>
   </main>
 </template>
@@ -16,12 +16,12 @@ import { useTask } from 'vue-concurrency'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from 'web-pkg/src/components/AppTemplates/PartialViews/ErrorScreen.vue'
 import LoadingScreen from 'web-pkg/src/components/AppTemplates/PartialViews/LoadingScreen.vue'
-import { UrlForResourceOptions, useAppDefaults } from 'web-pkg/types'
+import { UrlForResourceOptions, useAppDefaults } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 import { DavProperty } from 'web-client/src/webdav/constants'
 
 export default defineComponent({
-  name: 'ViewerApp',
+  name: 'AppWrapper',
   components: {
     AppTopBar,
     ErrorScreen,
@@ -77,12 +77,22 @@ export default defineComponent({
       revokeUrl(url.value)
     })
 
+    const slotAttrs = {
+      url,
+      resource,
+      isDirty: false,
+      isReadOnly: false,
+      applicationConfig: {},
+      currentContent: 'dies',
+      serverContent: 'dies'
+    }
+
     return {
       closeApp,
       loading,
       loadingError,
       resource,
-      url
+      slotAttrs
     }
   }
 })

@@ -3,7 +3,7 @@ import { computed, Ref, unref } from 'vue'
 import { useAppMeta } from './useAppMeta'
 import type { AppConfigObject } from '../../apps'
 
-interface AppConfigOptions {
+export interface AppConfigOptions {
   store: Store<any>
   applicationId: string
 }
