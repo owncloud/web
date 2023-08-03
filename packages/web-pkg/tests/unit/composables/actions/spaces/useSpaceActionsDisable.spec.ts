@@ -91,7 +91,7 @@ describe('disable', () => {
     it('should hide the modal on success', async () => {
       const { wrapper, mocks } = getWrapper({
         setup: async ({ disableSpaces }, { storeOptions, clientService }) => {
-          clientService.graphAuthenticated.drives.deleteDrive.mockResolvedValue(mockAxiosResolve())
+          clientService.graphAuthenticated.drives.disableDrive.mockResolvedValue(mockAxiosResolve())
           await disableSpaces([mock<SpaceResource>({ id: 1, canDisable: () => true })])
 
           expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
@@ -103,7 +103,7 @@ describe('disable', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper } = getWrapper({
         setup: async ({ actions, disableSpaces }, { storeOptions, clientService }) => {
-          clientService.graphAuthenticated.drives.deleteDrive.mockRejectedValue(new Error())
+          clientService.graphAuthenticated.drives.disableDrive.mockRejectedValue(new Error())
           await disableSpaces([mock<SpaceResource>({ id: 1, canDisable: () => true })])
 
           expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
