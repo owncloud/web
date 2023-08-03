@@ -1,8 +1,8 @@
 <template>
   <ViewerApp
     id="pdf-viewer"
-    v-slot="{ url }"
-    :defaults="defaults"
+    v-slot="{ url }: { url: string }"
+    application-id="pdf-viewer"
     :url-for-resource-options="{
       disposition: 'inline'
     }"
@@ -13,21 +13,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useAppDefaults } from 'web-pkg/src/composables'
 import ViewerApp from 'web-pkg/src/components/AppTemplates/ViewerApp.vue'
 
 export default defineComponent({
   name: 'PDFViewer',
   components: {
     ViewerApp
-  },
-  setup() {
-    const defaults = useAppDefaults({
-      applicationId: 'pdf-viewer'
-    })
-    return {
-      defaults
-    }
   }
 })
 </script>

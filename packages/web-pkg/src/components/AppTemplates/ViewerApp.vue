@@ -1,6 +1,6 @@
 <template>
   <main class="oc-height-1-1">
-    <app-top-bar v-if="!loading && !loadingError" :resource="resource" @close="defaults.closeApp" />
+    <app-top-bar v-if="!loading && !loadingError" :resource="resource" @close="closeApp" />
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
@@ -16,7 +16,7 @@ import { useTask } from 'vue-concurrency'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from 'web-pkg/src/components/AppTemplates/PartialViews/ErrorScreen.vue'
 import LoadingScreen from 'web-pkg/src/components/AppTemplates/PartialViews/LoadingScreen.vue'
-import { AppDefaultsResult } from 'web-pkg/types'
+import { UrlForResourceOptions, useAppDefaults } from 'web-pkg/types'
 import { Resource } from 'web-client'
 import { DavProperty } from 'web-client/src/webdav/constants'
 
@@ -28,12 +28,13 @@ export default defineComponent({
     LoadingScreen
   },
   props: {
-    defaults: {
-      type: Object as PropType<AppDefaultsResult>,
-      default: () => {}
+    // TODO: Add app-top-bar-actions array prop and pass to AppTopBar
+    applicationId: {
+      type: String,
+      required: true
     },
     urlForResourceOptions: {
-      type: Object,
+      type: Object as PropType<UrlForResourceOptions>,
       default: () => {}
     }
   },
@@ -43,25 +44,28 @@ export default defineComponent({
     const loading = ref(true)
     const loadingError = ref(false)
 
+    const { currentFileContext, getFileInfo, getUrlForResource, closeApp, revokeUrl } =
+      useAppDefaults({
+        applicationId: props.applicationId
+      })
+
     const loadFileTask = useTask(function* () {
-      resource.value = yield props.defaults
-        .getFileInfo(props.defaults.currentFileContext, {
-          davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
-        })
-        .catch(() => {
-          loadingError.value = true
-          loading.value = false
-        })
+      resource.value = yield getFileInfo(currentFileContext, {
+        davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
+      }).catch(() => {
+        loadingError.value = true
+        loading.value = false
+      })
     }).restartable()
 
     watch(
-      props.defaults.currentFileContext,
+      currentFileContext,
       () => {
         loadFileTask.perform().then(async () => {
-          const currentSpace = unref(unref(props.defaults.currentFileContext).space)
+          const currentSpace = unref(unref(currentFileContext).space)
 
-          url.value = await props.defaults.getUrlForResource(currentSpace, resource.value, {
-            disposition: 'inline'
+          url.value = await getUrlForResource(currentSpace, resource.value, {
+            disposition: props.urlForResourceOptions.disposition
           })
           loading.value = false
         })
@@ -70,10 +74,11 @@ export default defineComponent({
     )
 
     onBeforeUnmount(() => {
-      props.defaults.revokeUrl(url.value)
+      revokeUrl(url.value)
     })
 
     return {
+      closeApp,
       loading,
       loadingError,
       resource,
