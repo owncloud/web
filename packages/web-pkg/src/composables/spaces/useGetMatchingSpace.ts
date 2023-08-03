@@ -33,7 +33,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     return (
       getInternalSpace(storageId) ||
       unref(spaces).find((s) => {
-        return s.root.remoteItem.id === resource.fileId
+        return s.root.remoteItem?.id === resource.fileId
       })
     )
   }
