@@ -25,7 +25,6 @@
       :are-thumbnails-displayed="displayThumbnails"
       :resources="resourceItems"
       :are-resources-clickable="resourceClickable"
-      :target-route-callback="resourceTargetRouteCallback"
       :header-position="fileListHeaderY"
       :sort-by="sortBy"
       :sort-dir="sortDir"
@@ -63,7 +62,7 @@
       <template #contextMenu="{ resource }">
         <context-actions
           v-if="isResourceInSelection(resource)"
-          :action-options="{ space: getSpace(resource), resources: selectedResources }"
+          :action-options="{ space: getMatchingSpace(resource), resources: selectedResources }"
         />
       </template>
       <template #footer>
@@ -93,24 +92,19 @@
 
 <script lang="ts">
 import ResourceTable from '../FilesList/ResourceTable.vue'
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { mapActions } from 'vuex'
 import { useFileActions } from '../../composables/actions/files/useFileActions'
-import { useCapabilityShareJailEnabled, SortDir, useStore } from 'web-pkg/src/composables'
-import { createLocationSpaces } from '../../router'
+import { SortDir, useStore, useGetMatchingSpace } from 'web-pkg/src/composables'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useSelectedResources } from '../../composables/selection'
-import { RouteLocationNamedRaw } from 'vue-router'
-import { buildShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { CreateTargetRouteOptions } from '../../helpers/folderLink'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { Resource } from 'web-client/src/helpers'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -194,40 +188,11 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const hasShareJail = useCapabilityShareJailEnabled()
-
-    const personalSpace = computed((): SpaceResource => {
-      return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
-    })
-
-    const getSpace = (resource: Resource): SpaceResource => {
-      if (unref(hasShareJail)) {
-        return buildShareSpaceResource({
-          shareId: resource.id,
-          shareName: resource.name,
-          serverUrl: configurationManager.serverUrl
-        })
-      }
-      return unref(personalSpace)
-    }
-
-    const resourceTargetRouteCallback = ({
-      path,
-      fileId,
-      resource
-    }: CreateTargetRouteOptions): RouteLocationNamedRaw => {
-      return createLocationSpaces(
-        'files-spaces-generic',
-        createFileRouteOptions(getSpace(resource), { path, fileId })
-      )
-    }
 
     return {
       ...useFileActions(),
-      resourceTargetRouteCallback,
       ...useSelectedResources({ store }),
-      hasShareJail: useCapabilityShareJailEnabled(),
-      getSpace
+      ...useGetMatchingSpace()
     }
   },
 
@@ -276,7 +241,7 @@ export default defineComponent({
 
         this.loadPreview({
           previewService: this.$previewService,
-          space: this.getSpace(resource),
+          space: this.getMatchingSpace(resource),
           resource,
           dimensions: ImageDimension.Thumbnail,
           type: ImageType.Thumbnail

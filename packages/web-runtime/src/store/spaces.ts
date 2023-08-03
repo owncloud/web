@@ -126,11 +126,12 @@ const actions = {
        *    trying to be accessed in multiple code locations. all of them need to check now if mountpoints need to be
        *    fetched first. but at the moment fetching mountpoints is kind of expensive, so we need to accept that for now.
        */
-      const [personalSpaces, projectSpaces] = await Promise.all([
+      const [personalSpaces, projectSpaces, mountSpaces] = await Promise.all([
         loadSpacesByType({ graphClient, driveType: 'personal' }),
-        loadSpacesByType({ graphClient, driveType: 'project' })
+        loadSpacesByType({ graphClient, driveType: 'project' }),
+        loadSpacesByType({ graphClient, driveType: 'mountpoint' })
       ])
-      context.commit('ADD_SPACES', [...personalSpaces, ...projectSpaces])
+      context.commit('ADD_SPACES', [...personalSpaces, ...projectSpaces, ...mountSpaces])
       context.commit('SET_SPACES_INITIALIZED', true)
     } finally {
       context.commit('SET_SPACES_LOADING', false)

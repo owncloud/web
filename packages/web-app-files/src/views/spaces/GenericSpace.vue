@@ -145,10 +145,10 @@ import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { Resource } from 'web-client'
 import {
+  isMountPointSpaceResource,
   isPersonalSpaceResource,
   isProjectSpaceResource,
   isPublicSpaceResource,
-  isShareSpaceResource,
   SpaceResource
 } from 'web-client/src/helpers'
 
@@ -263,6 +263,7 @@ export default defineComponent({
       path,
       fileId
     }: CreateTargetRouteOptions): RouteLocationNamedRaw => {
+      // TODO: can we move that to useResourceRouteResolver and remove this callback?
       const { params, query } = createFileRouteOptions(props.space, { path, fileId })
       if (isPublicSpaceResource(props.space)) {
         return createLocationPublic('files-public-link', { params, query })
@@ -302,7 +303,7 @@ export default defineComponent({
           to: createLocationSpaces('files-spaces-projects'),
           isStaticNav: true
         })
-      } else if (isShareSpaceResource(space)) {
+      } else if (isMountPointSpaceResource(space)) {
         rootBreadcrumbItems.push(
           {
             id: uuidv4(),
@@ -331,11 +332,11 @@ export default defineComponent({
             query
           })
         }
-      } else if (isShareSpaceResource(space)) {
+      } else if (isMountPointSpaceResource(space)) {
         spaceBreadcrumbItem = {
           id: uuidv4(),
           allowContextActions: true,
-          text: space.name,
+          text: space.driveAlias.split('/')[1],
           to: createLocationSpaces('files-spaces-generic', {
             params,
             query: omit(query, 'fileId')

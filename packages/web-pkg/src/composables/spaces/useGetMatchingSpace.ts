@@ -1,11 +1,6 @@
-import {
-  useCapabilitySpacesEnabled,
-  useConfigurationManager,
-  useRouteParam,
-  useStore
-} from 'web-pkg/src/composables'
+import { useCapabilitySpacesEnabled, useRouteParam, useStore } from 'web-pkg/src/composables'
 import { Resource, SpaceResource } from 'web-client'
-import { buildShareSpaceResource, isPersonalSpaceResource } from 'web-client/src/helpers'
+import { isPersonalSpaceResource } from 'web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 
 type GetMatchingSpaceOptions = {
@@ -14,7 +9,6 @@ type GetMatchingSpaceOptions = {
 
 export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const store = useStore()
-  const configurationManager = useConfigurationManager()
   const spaces = computed(() => store.getters['runtime/spaces/spaces'])
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
   const hasSpaces = useCapabilitySpacesEnabled(store)
@@ -34,12 +28,12 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
 
+    // console.log('spaces', unref(spaces))
+    // console.log('resource', resource.fileId)
     return (
       getInternalSpace(storageId) ||
-      buildShareSpaceResource({
-        shareId: resource.shareId,
-        shareName: resource.name,
-        serverUrl: configurationManager.serverUrl
+      unref(spaces).find((s) => {
+        return s.root.remoteItem.id === resource.fileId
       })
     )
   }
