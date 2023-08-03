@@ -7,8 +7,8 @@
   >
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
     <app-top-bar v-if="!loading && !loadingError" :resource="resource" @close="closeApp" />
-    <loading-screen v-if="loading" />
-    <error-screen v-else-if="loadingError" :message="errorMessage" />
+    <!-- <loading-screen v-if="loading" />
+    <error-screen v-else-if="loadingError" :message="errorMessage" /> -->
     <iframe
       v-if="appUrl && method === 'GET'"
       :src="appUrl"
@@ -41,15 +41,15 @@ import { urlJoin } from 'web-client/src/utils'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
-import ErrorScreen from './components/ErrorScreen.vue'
-import LoadingScreen from './components/LoadingScreen.vue'
+// import ErrorScreen from './components/ErrorScreen.vue'
+// import LoadingScreen from './components/LoadingScreen.vue'
 
 export default defineComponent({
   name: 'ExternalApp',
   components: {
-    AppTopBar,
-    ErrorScreen,
-    LoadingScreen
+    AppTopBar
+    // ErrorScreen,
+    // LoadingScreen
   },
   setup() {
     const appName = useRouteQuery('app')

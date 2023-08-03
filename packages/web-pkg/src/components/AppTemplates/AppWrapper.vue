@@ -1,6 +1,8 @@
 <template>
   <main class="oc-height-1-1">
-    <app-top-bar v-if="!loading && !loadingError" :resource="resource" @close="closeApp" />
+    <app-top-bar v-if="!loading && !loadingError" :resource="resource" @close="closeApp">
+      {{ slotAttrs.isDirty }}
+    </app-top-bar>
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
@@ -10,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { PropType, Ref, defineComponent, onBeforeUnmount, ref, unref, watch } from 'vue'
+import { PropType, Ref, defineComponent, onBeforeUnmount, ref, unref, watch, computed } from 'vue'
 import { useTask } from 'vue-concurrency'
 
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
@@ -19,6 +21,15 @@ import LoadingScreen from 'web-pkg/src/components/AppTemplates/PartialViews/Load
 import { UrlForResourceOptions, useAppDefaults } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 import { DavProperty } from 'web-client/src/webdav/constants'
+import { AppConfigObject } from 'web-pkg/src/apps/types'
+
+export interface AppWrapperSlotArgs {
+  applicationConfig: AppConfigObject
+  resource: Resource
+  currentContent: Ref<string>
+  isDirty: boolean
+  isReadOnly: boolean
+}
 
 export default defineComponent({
   name: 'AppWrapper',
@@ -35,7 +46,8 @@ export default defineComponent({
     },
     urlForResourceOptions: {
       type: Object as PropType<UrlForResourceOptions>,
-      default: () => {}
+      default: () => {},
+      required: false
     }
   },
   setup(props) {
@@ -64,9 +76,11 @@ export default defineComponent({
         loadFileTask.perform().then(async () => {
           const currentSpace = unref(unref(currentFileContext).space)
 
-          url.value = await getUrlForResource(currentSpace, resource.value, {
-            disposition: props.urlForResourceOptions.disposition
-          })
+          url.value = await getUrlForResource(
+            currentSpace,
+            resource.value,
+            props.urlForResourceOptions
+          )
           loading.value = false
         })
       },
@@ -77,15 +91,20 @@ export default defineComponent({
       revokeUrl(url.value)
     })
 
-    const slotAttrs = {
+    const serverContent = ref('dies')
+    const currentContent = ref('dies')
+    const isDirty = computed(() => {
+      return unref(currentContent) !== unref(serverContent)
+    })
+
+    const slotAttrs = computed(() => ({
       url,
       resource,
-      isDirty: false,
+      isDirty,
       isReadOnly: false,
       applicationConfig: {},
-      currentContent: 'dies',
-      serverContent: 'dies'
-    }
+      currentContent
+    }))
 
     return {
       closeApp,
