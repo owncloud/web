@@ -3,10 +3,6 @@ Feature: Search
   I want to search for resources
   So that I can find them quickly
 
-  Background:
-    Given "Admin" sets the default folder for received shares to "Shares"
-    And "Admin" disables share auto accepting
-
   Scenario: Search in personal spaces
     Given "Admin" creates following users using API
       | id    |

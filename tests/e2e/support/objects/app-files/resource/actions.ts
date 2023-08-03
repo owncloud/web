@@ -6,7 +6,6 @@ import { resourceExists, waitForResources } from './utils'
 import { sidebar, editor } from '../utils'
 import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
-import { config } from '../../../../config'
 
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
