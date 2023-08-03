@@ -4,7 +4,7 @@
       <oc-filter-chip
         :is-toggle="false"
         :is-toggle-active="false"
-        :filter-label="$gettext(currentSelection.title)"
+        :filter-label="currentSelectionTitle"
         :selected-item-names="[]"
         class="oc-search-bar-filter"
         raw
@@ -23,7 +23,7 @@
             :data-test-id="option.id"
             @click="onOptionSelected(option)"
           >
-            <span>{{ $gettext(option.title) }}</span>
+            <span>{{ option.title }}</span>
             <div v-if="option.id === currentSelection.id" class="oc-flex">
               <oc-icon name="check" />
             </div>
@@ -57,19 +57,18 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const useSopeQueryValue = useRouteQuery('useScope')
 
-    const currentFolderEnabled = computed(() => props.currentFolderAvailable)
-
     const currentSelection = ref<LocationOption>()
     const userSelection = ref<LocationOption>()
-    const locationOptions = ref<LocationOption[]>([
+    const currentSelectionTitle = computed(() => $gettext(currentSelection.value?.title))
+    const locationOptions = computed<LocationOption[]>(() => [
       {
         id: SearchLocationFilterConstants.currentFolder,
-        title: 'Current Folder',
-        enabled: currentFolderEnabled
+        title: $gettext('Current Folder'),
+        enabled: props.currentFolderAvailable
       },
       {
         id: SearchLocationFilterConstants.allFiles,
-        title: 'All Files',
+        title: $gettext('All Files'),
         enabled: true
       }
     ])
@@ -122,7 +121,13 @@ export default defineComponent({
       emit('update:modelValue', { value: option })
     }
 
-    return { currentSelection, isIndexGreaterZero, onOptionSelected, locationOptions, $gettext }
+    return {
+      currentSelection,
+      currentSelectionTitle,
+      isIndexGreaterZero,
+      onOptionSelected,
+      locationOptions
+    }
   }
 })
 </script>
