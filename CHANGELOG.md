@@ -59,6 +59,7 @@ Summary
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 * Enhancement - Add error log to upload dialog: [#9436](https://github.com/owncloud/web/pull/9436)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
+* Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
 
 Details
@@ -490,6 +491,14 @@ Details
    We've added a tooltip with the absolute date for file versions in file details
 
    https://github.com/owncloud/web/pull/9441
+
+* Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
+
+   We've added SSE to the notifications which allows us to be notified about new notifications
+   instantly and from the server without polling every few seconds.
+
+   https://github.com/owncloud/web/issues/9434
+   https://github.com/owncloud/web/pull/9451
 
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
 
