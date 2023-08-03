@@ -65,19 +65,11 @@ Our compose setup automatically mounts it into an oC10 and oCIS backend, respect
 
 #### Run E2E Tests
 
-Depending on the backend you want to run the tests on, you can either run
+The following command will run all available e2e tests:
 
 ```shell
-$ pnpm test:e2e:cucumber 'tests/e2e/cucumber/**/*[!.ocis].feature'
+$ pnpm test:e2e:cucumber 'tests/e2e/cucumber/**/*.feature'
 ```
-
-for an **ownCloud 10** backend (filenames including `.ocis` are excluded) or
-
-```shell
-$ OCIS=true pnpm test:e2e:cucumber 'tests/e2e/cucumber/**/*[!.oc10].feature'
-```
-
-for an **oCIS** backend (filenames including `.oc10` are excluded).
 
 #### Options
 
@@ -85,7 +77,6 @@ To run a particular test, simply add the feature file and line number to the tes
 
 Various options are available via ENV variables, e.g.
 
-- `OCIS=true` to run the E2E tests against an oCIS backend
 - `RETRY=n` to retry failures `n` times
 - `SLOW_MO=n` to slow the execution time by `n` milliseconds
 - `TIMEOUT=n` to set tests to timeout after `n` milliseconds
@@ -104,6 +95,22 @@ To then open e.g. the tracing from the `REPORT_DIR`, run
 
 ```shell
 $ npx playwright show-trace path/to/file.zip
+```
+
+#### Run E2E Tests with oC10
+
+Older versions of Web (< 7.1.0) also support running oC10 as server. The e2e tests can be run slightly different then.
+
+For oCIS:
+
+```shell
+$ OCIS=true pnpm test:e2e:cucumber 'tests/e2e/cucumber/**/*[!.oc10].feature'
+```
+
+For oC10:
+
+```shell
+pnpm test:e2e:cucumber 'tests/e2e/cucumber/**/*[!.ocis].feature'
 ```
 
 ### Acceptance Tests (Nightwatch)
@@ -134,16 +141,16 @@ $ pnpm build:w
 
 The acceptance tests need additional docker containers to be running.
 
-For running the test with oc10 run
-
-```shell
-$ docker compose up oc10 vnc selenium middleware-oc10
-```
-
 For running the test with ocis run
 
 ```shell
 $ docker compose up ocis vnc selenium middleware-ocis
+```
+
+For running the test with oC10 (<= Web version 7.0.2) run
+
+```shell
+$ docker compose up oc10 vnc selenium middleware-oc10
 ```
 
 and make sure there are no conflicting ports and everything runs smoothly. You can check if everything has worked by opening [https://host.docker.internal:9200](https://host.docker.internal:9200) (oCIS) and [http://host.docker.internal:8080](http://host.docker.internal:8080) (OC10) and logging in using the demo user (admin/admin).
@@ -157,16 +164,16 @@ If you're using a M1 Mac, you need to use `seleniarm/standalone-chromium:4.4.0-2
 - Depending on the backend you're running the tests on, you can either run
 
   ```shell
-  $ pnpm test:acceptance:oc10 features/path/to/test
-  ```
-
-  for ownCloud 10.X or
-
-  ```shell
   $ pnpm test:acceptance:ocis features/path/to/test
   ```
 
-  for oCIS acceptance tests.
+  for oCIS acceptance tests or
+
+  ```shell
+  $ pnpm test:acceptance:oc10 features/path/to/test
+  ```
+
+  for ownCloud 10.X (<= Web version 7.0.2).
 
 #### Watch the Test Run
 
