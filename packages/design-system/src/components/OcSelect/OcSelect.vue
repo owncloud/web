@@ -3,7 +3,7 @@
     <label :for="id" class="oc-label" v-text="label" />
     <oc-contextual-helper
       v-if="contextualHelper?.isEnabled"
-      v-bind="contextualHelper?.options"
+      v-bind="contextualHelper?.data"
       class="oc-pl-xs"
     ></oc-contextual-helper>
     <vue-select
@@ -158,7 +158,9 @@ export default defineComponent({
       type: String,
       default: null
     },
-    //oc-contextual-helper can be injected here
+    /**
+     * oc-contextual-helper can be injected here
+     */
     contextualHelper: {
       type: Object as PropType<ContextualHelper>,
       required: false,

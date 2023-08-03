@@ -59,14 +59,13 @@
 import { computed, defineComponent, inject, onMounted, ref, unref, VNodeRef, watch } from 'vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
-import { useClientService, useStore } from 'web-pkg/src/composables'
+import { useClientService, useConfigurationManager, useStore } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 import diff from 'lodash-es/difference'
 import { useGettext } from 'vue3-gettext'
 import keycode from 'keycode'
 import { tagsHelper } from 'web-app-files/src/helpers/contextualHelpers'
-import { configurationManager } from 'web-pkg'
-import {ContextualHelper} from "design-system/src/helpers";
+import { ContextualHelper } from 'design-system/src/helpers'
 
 const tagsMaxCount = 100
 
@@ -78,17 +77,17 @@ type TagOption = {
 
 export default defineComponent({
   name: 'TagsPanel',
-  components: {},
   setup() {
     const store = useStore()
     const clientService = useClientService()
     const { $gettext } = useGettext()
+    const configurationManager = useConfigurationManager()
 
     const injectedResource = inject<Resource>('resource')
     const resource = computed<Resource>(() => unref(injectedResource))
     const selectedTags = ref<TagOption[]>([])
     const availableTags = ref<TagOption[]>([])
-    let allTags = []
+    let allTags: string[] = []
     const tagSelect: VNodeRef = ref(null)
 
     const currentTags = computed<TagOption[]>(() => {
@@ -127,7 +126,7 @@ export default defineComponent({
       return !unref(tagSelect).$refs.select.optionExists(option)
     }
 
-    const save = async (e) => {
+    const save = async (e: TagOption[] | string[]) => {
       try {
         selectedTags.value = e.map((x) => (typeof x === 'object' ? x : { label: x }))
         const allAvailableTags = new Set([...allTags, ...unref(availableTags).map((t) => t.label)])
@@ -136,7 +135,7 @@ export default defineComponent({
           Array.from(allAvailableTags),
           unref(selectedTags).map((o) => o.label)
         ).map((label) => ({
-          label: label
+          label
         }))
 
         const { id, tags, fileId } = unref(resource)
@@ -180,6 +179,7 @@ export default defineComponent({
     watch(resource, () => {
       if (unref(resource)?.tags) {
         revertChanges()
+        loadAvailableTagsTask.perform()
       }
     })
 
@@ -195,10 +195,12 @@ export default defineComponent({
         ...map
       }
       objectMapping[keycode('backspace')] = async (e) => {
-        e.preventDefault()
-        if (selectedTags.value.length === 0) {
+        if (e.originalTarget.value || selectedTags.value.length === 0) {
           return
         }
+
+        e.preventDefault()
+
         availableTags.value.push(selectedTags.value.pop())
         await save(unref(selectedTags))
       }
@@ -208,7 +210,7 @@ export default defineComponent({
 
     const contextualHelper = {
       isEnabled: configurationManager.options.contextHelpers,
-      options: tagsHelper({ configurationManager: configurationManager })
+      data: tagsHelper({ configurationManager: configurationManager })
     } as ContextualHelper
 
     return {

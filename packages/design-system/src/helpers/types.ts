@@ -24,5 +24,5 @@ export interface ContextualHelperOptions {
 
 export interface ContextualHelper {
   isEnabled: boolean
-  options: ContextualHelperData
+  data: ContextualHelperData
 }
