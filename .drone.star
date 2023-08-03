@@ -78,6 +78,7 @@ config = {
         "oCIS-1": {
             "earlyFail": True,
             "skip": False,
+            "tikaNeeded": True,
             "featurePaths": [
                 "tests/e2e/cucumber/features/{smoke,journeys}/*[!.oc10].feature",
             ],
@@ -1099,6 +1100,7 @@ def e2eTests(ctx):
         "reportTracing": "false",
         "db": "mysql:5.5",
         "featurePaths": "",
+        "tikaNeeded": False,
     }
 
     e2e_trigger = {
@@ -1166,8 +1168,8 @@ def e2eTests(ctx):
             # oCIS specific steps
             steps += setupServerConfigureWeb(params["logLevel"]) + \
                      restoreOcisCache() + \
-                     tikaService() + \
-                     ocisService("e2e-tests") + \
+                     (tikaService() if params["tikaNeeded"] else []) + \
+                     ocisService("e2e-tests", tika_enabled = params["tikaNeeded"]) + \
                      getSkeletonFiles()
 
         steps += [{
@@ -2090,7 +2092,7 @@ def idpService():
         }],
     }]
 
-def ocisService(type):
+def ocisService(type, tika_enabled = False):
     environment = {
         "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
         "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["ocisIdentifierRegistrationConfig"],
@@ -2113,7 +2115,7 @@ def ocisService(type):
         "FRONTEND_OCS_ENABLE_DENIALS": True,
     }
 
-    if type == "e2e-tests":
+    if tika_enabled:
         environment["FRONTEND_FULL_TEXT_SEARCH_ENABLED"] = True
         environment["SEARCH_EXTRACTOR_TYPE"] = "tika"
         environment["SEARCH_EXTRACTOR_TIKA_TIKA_URL"] = "http://tika:9998"
