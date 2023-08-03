@@ -73,9 +73,8 @@ const tagTableCell =
 const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//ancestor::a'
 const tagInDetailsPanel = '//*[@data-testid="tags"]/td//span[text()="%s"]'
 const tagInInputForm =
-  '//span[contains(@class, "vs__selected")]//span[text()="%s"]//ancestor::span//button[contains(@class, "vs__deselect")]'
+  '//span[contains(@class, "tags-control-tag")]//span[text()="%s"]//ancestor::span//button[contains(@class, "vs__deselect")]'
 const tagFormInput = '#tags-form input'
-const compareDialogConfirmBtn = '.compare-save-dialog-confirm-btn'
 const resourcesAsTiles = '#files-view .oc-tiles'
 const fileVersionSidebar = '#oc-file-versions-sidebar'
 const noLinkMessage = '#web .oc-link-resolve-error-message'
@@ -1091,7 +1090,6 @@ export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> =
     await page.locator('.vs__dropdown-option').first().click()
   }
 
-  await page.locator(compareDialogConfirmBtn).click()
   await sidebar.close({ page })
 }
 
@@ -1112,8 +1110,6 @@ export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<vo
   for (const tag of tags) {
     await page.locator(util.format(tagInInputForm, tag)).click()
   }
-
-  await page.locator(compareDialogConfirmBtn).click()
   await sidebar.close({ page })
 }
 
