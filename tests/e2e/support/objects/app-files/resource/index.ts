@@ -1,7 +1,6 @@
 import { Download, Page } from 'playwright'
 import * as po from './actions'
 import { Space } from '../../../types'
-import { config } from '../../../../config'
 
 export class Resource {
   #page: Page
@@ -21,18 +20,12 @@ export class Resource {
     const startUrl = this.#page.url()
     await po.uploadResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
-    if (!config.ocis) {
-      await this.#page.locator('body').click()
-    }
   }
 
   async uploadLargeNumberOfResources(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await po.uploadLargeNumberOfResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
-    if (!config.ocis) {
-      await this.#page.locator('body').click()
-    }
   }
 
   async dropUpload(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
@@ -79,22 +72,12 @@ export class Resource {
     const startUrl = this.#page.url()
     await po.moveOrCopyResource({ ...args, page: this.#page, action: 'copy' })
     await this.#page.goto(startUrl)
-    // Sidebar remain open after we navigate to startUrl
-    // This is the issue: https://github.com/owncloud/web/issues/8172
-    if (!config.ocis) {
-      await this.#page.reload()
-    }
   }
 
   async move(args: Omit<po.moveOrCopyResourceArgs, 'page' | 'action'>): Promise<void> {
     const startUrl = this.#page.url()
     await po.moveOrCopyResource({ ...args, page: this.#page, action: 'move' })
     await this.#page.goto(startUrl)
-    // Sidebar remain open after we navigate to startUrl
-    // This is the issue: https://github.com/owncloud/web/issues/8172
-    if (!config.ocis) {
-      await this.#page.reload()
-    }
   }
 
   async delete(args: Omit<po.deleteResourceArgs, 'page'>): Promise<void> {

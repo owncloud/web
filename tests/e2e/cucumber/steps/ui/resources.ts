@@ -380,10 +380,7 @@ export const processDownload = async (
         if (resource.type === 'file') {
           expect(downloadedResources).toContain(fileOrFolderName)
         } else {
-          // downloading folders in oc10 downloads with name of resource but in ocis it is downloaded as 'download.tar'
-          config.ocis
-            ? expect(downloadedResources).toContain('download')
-            : expect(downloadedResources).toContain(fileOrFolderName)
+          expect(downloadedResources).toContain('download')
         }
       }
     }
@@ -393,15 +390,7 @@ export const processDownload = async (
     expect(downloads.length).toBe(1)
     downloads.forEach((download) => {
       const { name } = path.parse(download.suggestedFilename())
-      if (config.ocis) {
-        expect(name).toBe('download')
-      } else {
-        if (parentFolder) {
-          expect(name).toBe(parentFolder)
-        } else {
-          expect(name).toBe('download')
-        }
-      }
+      expect(name).toBe('download')
     })
   }
 }
