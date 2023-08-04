@@ -112,19 +112,20 @@ export default defineComponent({
 
     const loadFileTask = useTask(function* () {
       try {
+        // FIXME: make all updates atomic/happen at once so the ui can never mix data from different resources
+
         const tmpResource = yield getFileInfo(currentFileContext, {
           davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
         })
 
         replaceInvalidFileRoute(currentFileContext, tmpResource)
+
         isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
           (p) => (tmpResource.permissions || '').indexOf(p) > -1
         )
 
         if (unref(hasProp('currentContent'))) {
           const fileContentsResponse = yield getFileContents(currentFileContext)
-
-          // TODO: make all updates atomic/happen at once
           serverContent.value = currentContent.value = fileContentsResponse.body
           currentETag.value = fileContentsResponse.headers['OC-ETag']
         }
@@ -136,14 +137,10 @@ export default defineComponent({
             tmpResource,
             props.urlForResourceOptions
           )
-
-          // TODO: make all updates atomic/happen at once
           url.value = tmpUrl
         }
 
-        // update both at once
         resource.value = tmpResource
-        console.log('resource', resource.value.id, 'url', url.value)
       } catch (e) {
         console.error(e)
         loadingError.value = true
