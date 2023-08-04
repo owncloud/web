@@ -115,7 +115,7 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-filter-chip {
-  &-button {
+  &-button.oc-pill {
     align-items: center;
     background-color: var(--oc-color-background-default) !important;
     color: var(--oc-color-text-muted) !important;
@@ -129,17 +129,16 @@ export default defineComponent({
     max-width: 150px;
     height: 24px;
     padding: var(--oc-space-xsmall) var(--oc-space-small) !important;
-
-    &-selected,
-    &-selected:hover {
-      background-color: var(--oc-color-swatch-primary-default) !important;
-      color: var(--oc-color-text-inverse) !important;
-      border-top-left-radius: 99px !important;
-      border-bottom-left-radius: 99px !important;
-      border-top-right-radius: 0px !important;
-      border-bottom-right-radius: 0px !important;
-      border: 0;
-    }
+  }
+  &-button-selected.oc-pill,
+  &-button-selected.oc-pill:hover {
+    background-color: var(--oc-color-swatch-primary-default) !important;
+    color: var(--oc-color-text-inverse) !important;
+    border-top-left-radius: 99px !important;
+    border-bottom-left-radius: 99px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border: 0;
   }
   &-clear,
   &-clear:hover {
