@@ -1,20 +1,22 @@
 <template>
-  <div v-if="resource" class="oc-flex oc-height-1-1">
-    <oc-textarea
-      id="text-editor-input"
-      :model-value="currentContent"
-      name="input"
-      full-width
-      label=""
-      class="oc-height-1-1"
-      :rows="20"
-      :disabled="isReadOnly"
-      @update:model-value="$emit('update:currentContent', $event)"
-    />
-  </div>
-  <div v-if="showPreview" class="oc-container oc-width-1-2">
-    <!-- eslint-disable-next-line vue/no-v-html -->
-    <div id="text-editor-preview" v-html="renderedMarkdown" />
+  <div class="oc-width-1-1 oc-height-1-1">
+    <div v-if="resource" class="oc-height-1-1">
+      <oc-textarea
+        id="text-editor-input"
+        :model-value="currentContent"
+        name="input"
+        full-width
+        label=""
+        class="oc-height-1-1"
+        :rows="20"
+        :disabled="isReadOnly"
+        @update:model-value="$emit('update:currentContent', $event)"
+      />
+    </div>
+    <div v-if="showPreview" class="">
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div id="text-editor-preview" v-html="renderedMarkdown" />
+    </div>
   </div>
 </template>
 
