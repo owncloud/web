@@ -35,7 +35,6 @@ export default defineComponent({
       type: String,
       required: true
     },
-    isDirty: { type: Boolean, required: false },
     isReadOnly: { type: Boolean, required: false },
     resource: { type: Object as PropType<Resource>, required: true }
   },
