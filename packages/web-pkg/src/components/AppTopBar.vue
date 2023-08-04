@@ -19,9 +19,11 @@
               :menu-sections="[
                 {
                   name: 'main-actions',
-                  items: mainActions.map((action) => {
-                    return { ...action, class: 'oc-p-xs', hideLabel: true }
-                  })
+                  items: mainActions
+                    .filter((action) => action.isEnabled())
+                    .map((action) => {
+                      return { ...action, class: 'oc-p-xs', hideLabel: true }
+                    })
                 }
               ]"
               :action-options="{

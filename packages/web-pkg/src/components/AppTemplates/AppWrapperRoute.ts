@@ -8,18 +8,25 @@ export function AppWrapperRoute(
 ) {
   return defineComponent({
     render() {
-      return h(AppWrapper, options, {
-        default: (slotArgs: AppWrapperSlotArgs) => {
-          const { currentContent, ...restArgs } = slotArgs
-          return h(fileEditor, {
-            currentContent: currentContent.value,
-            'onUpdate:currentContent': (value) => {
-              currentContent.value = value
-            },
-            ...restArgs
-          })
+      return h(
+        AppWrapper,
+        {
+          wrappedComponent: fileEditor,
+          ...options
+        },
+        {
+          default: (slotArgs: AppWrapperSlotArgs) => {
+            const { currentContent, ...restArgs } = slotArgs
+            return h(fileEditor, {
+              currentContent: currentContent.value,
+              'onUpdate:currentContent': (value) => {
+                currentContent.value = value
+              },
+              ...restArgs
+            })
+          }
         }
-      })
+      )
     }
   })
 }

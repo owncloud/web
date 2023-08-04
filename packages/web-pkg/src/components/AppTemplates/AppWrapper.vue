@@ -1,10 +1,10 @@
 <template>
-  <main :id="applicationId" class="oc-height-1-1" @keydown.esc="closeAppAction">
+  <main :id="applicationId" class="oc-height-1-1" @keydown.esc="closeApp">
     <app-top-bar
       v-if="!loading && !loadingError"
       :main-actions="fileActions"
       :resource="resource"
-      @close="closeAppAction"
+      @close="closeApp"
     >
       {{ slotAttrs.isDirty }}
     </app-top-bar>
@@ -58,6 +58,10 @@ export default defineComponent({
       type: Object as PropType<UrlForResourceOptions>,
       default: () => null,
       required: false
+    },
+    wrappedComponent: {
+      type: Object as PropType<ReturnType<typeof defineComponent>>,
+      default: null
     }
   },
   setup(props) {
@@ -72,6 +76,11 @@ export default defineComponent({
     const isReadOnly = ref(false)
     const serverContent = ref()
     const currentContent = ref()
+
+    const isEditor = computed(() => {
+      return Boolean(props.wrappedComponent.emits?.includes('update:currentContent'))
+    })
+
     const isDirty = computed(() => {
       return unref(currentContent) !== unref(serverContent)
     })
@@ -198,24 +207,11 @@ export default defineComponent({
       await saveFileTask.perform()
     }
 
-    const handleSKey = function (e) {
-      if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
-        e.preventDefault()
-        save()
-      }
-    }
-
-    const handleUnload = function (e) {
-      if (unref(isDirty)) {
-        e.preventDefault()
-        e.returnValue = ''
-      }
-    }
-    const fileActions: Action<ActionOptions>[] = [
+    const fileActions = computed((): Action<ActionOptions>[] => [
       {
         name: 'save-file',
         disabledTooltip: () => '',
-        isEnabled: () => true,
+        isEnabled: () => unref(isEditor),
         isDisabled: () => isReadOnly.value || !isDirty.value,
         componentType: 'button',
         icon: 'save',
@@ -225,38 +221,29 @@ export default defineComponent({
           save()
         }
       }
-    ]
-
-    const renderCloseModal = (onConfirm) => {
-      const modal = {
-        variation: 'danger',
-        icon: 'warning',
-        title: $gettext('Unsaved changes'),
-        message: $gettext('Your changes were not saved. Do you want to save them?'),
-        cancelText: $gettext("Don't Save"),
-        confirmText: $gettext('Save'),
-        onCancel: () => store.dispatch('hideModal'),
-        onConfirm
-      }
-
-      store.dispatch('createModal', modal)
-    }
-
-    const closeAppAction = () => {
-      if (unref(isDirty)) {
-        renderCloseModal(closeApp())
-      } else {
-        closeApp()
-      }
-    }
+    ])
 
     onBeforeRouteLeave((_to, _from, next) => {
       if (unref(isDirty)) {
-        renderCloseModal(async () => {
-          await save()
-          store.dispatch('hideModal')
-          next()
-        })
+        const modal = {
+          variation: 'danger',
+          icon: 'warning',
+          title: $gettext('Unsaved changes'),
+          message: $gettext('Your changes were not saved. Do you want to save them?'),
+          cancelText: $gettext("Don't Save"),
+          confirmText: $gettext('Save'),
+          onCancel() {
+            store.dispatch('hideModal')
+            next()
+          },
+          async onConfirm() {
+            console.log('CONFIRM')
+            await save()
+            store.dispatch('hideModal')
+            next()
+          }
+        }
+        store.dispatch('createModal', modal)
       } else {
         next()
       }
@@ -275,7 +262,8 @@ export default defineComponent({
     }))
 
     return {
-      closeAppAction,
+      isEditor,
+      closeApp,
       fileActions,
       loading,
       loadingError,
