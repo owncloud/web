@@ -186,6 +186,7 @@ export default defineComponent({
         currentETag.value = putFileContentsResponse.etag
       } catch (e) {
         switch (e.statusCode) {
+          case 409:
           case 412:
             errorPopup(
               $gettext(
