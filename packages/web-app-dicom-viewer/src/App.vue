@@ -51,12 +51,14 @@ export default defineComponent({
       })
     }
   },
-  data: () => ({
-    loading: true,
-    loadingError: false,
-    url: '',
-    resource: null
-  }),
+  data() {
+    return {
+      loading: true,
+      loadingError: false,
+      url: '',
+      resource: null
+    }
+  },
   watch: {
     currentFileContext: {
       handler: function () {
