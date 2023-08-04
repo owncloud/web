@@ -5,9 +5,7 @@
       :main-actions="fileActions"
       :resource="resource"
       @close="closeApp"
-    >
-      {{ slotAttrs.isDirty }}
-    </app-top-bar>
+    />
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
@@ -17,7 +15,17 @@
 </template>
 
 <script lang="ts">
-import { PropType, Ref, defineComponent, onBeforeUnmount, ref, unref, watch, computed } from 'vue'
+import {
+  PropType,
+  Ref,
+  defineComponent,
+  onBeforeUnmount,
+  ref,
+  unref,
+  watch,
+  computed,
+  onMounted
+} from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { onBeforeRouteLeave } from 'vue-router'
@@ -219,6 +227,41 @@ export default defineComponent({
       await saveFileTask.perform()
     }
 
+    let autosaveIntervalId = null
+    onMounted(() => {
+      // Enable ctrl/cmd + s
+      document.addEventListener('keydown', handleSKey, false)
+      // Ensure reload is not possible if there are changes
+      window.addEventListener('beforeunload', handleUnload)
+      const editorOptions = store.getters.configuration.options.editor
+      if (editorOptions.autosaveEnabled) {
+        autosaveIntervalId = setInterval(async () => {
+          if (isDirty.value) {
+            await save()
+            autosavePopup()
+          }
+        }, (editorOptions.autosaveInterval || 120) * 1000)
+      }
+    })
+    onBeforeUnmount(() => {
+      window.removeEventListener('beforeunload', handleUnload)
+      document.removeEventListener('keydown', handleSKey, false)
+      clearInterval(autosaveIntervalId)
+      autosaveIntervalId = null
+    })
+
+    const handleSKey = function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
+        e.preventDefault()
+        save()
+      }
+    }
+    const handleUnload = function (e) {
+      if (unref(isDirty)) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
     const fileActions = computed((): Action<ActionOptions>[] => [
       {
         name: 'save-file',
