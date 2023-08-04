@@ -50,7 +50,6 @@ export default defineComponent({
   },
   setup() {
     /* no full screen handing so far, see preview app for reference of implementation */
-
     return {
       ...useAppDefaults({
         applicationId: 'dicom-viewer'
@@ -63,8 +62,6 @@ export default defineComponent({
     url: '',
     resource: null
   }),
-  /*
-  ,
   watch: {
     currentFileContext: {
       handler: function () {
@@ -74,16 +71,14 @@ export default defineComponent({
       immediate: true
     }
   },
-*/
   computed: {
     pageTitle() {
+      console.log('preview title rendered')
       return this.$gettext('Preview for %{resourceName}', {
         resourceName: this.resource.name
       })
     }
-  }
-  /*
-  ,
+  },
   beforeUnmount() {
     this.unloadDicom()
   },
@@ -91,15 +86,22 @@ export default defineComponent({
     async loadDicom(fileContext) {
       try {
         this.loading = true
+        // for debugging only
+        console.log('try loading resource')
+
         const resource = await this.getFileInfo(fileContext)
+        console.log('resource loaded: ' + resource.name)
+        console.log('resource type: ' + resource.mimeType)
 
         if (
           resource.mimeType !==
-          ('application/dicom' ||
-            'application/octet-stream' ||
+          ('application/octet-stream' ||
+            'application/dicom' ||
             'application/dicom+xml' ||
             'application/json')
         ) {
+          console.log('no valid resource mime type')
+          // it seems that if mime type is not the first one listed above, this clause fails
           return
         }
 
@@ -113,14 +115,16 @@ export default defineComponent({
         console.error('Error fetching DICOM file', e)
       } finally {
         this.loading = false
+        // for testing only
+        console.log('loading resource completed: ' + !this.loading)
+        // it seems like this function gets called twice, check why
+        // this is also the case for pdf viewer....
       }
     },
     unloadDicom() {
       this.revokeUrl(this.url)
     }
-
   }
-  */
 })
 </script>
 <style lang="scss" scoped>
