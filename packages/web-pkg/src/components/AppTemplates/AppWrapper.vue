@@ -22,7 +22,7 @@ import ErrorScreen from 'web-pkg/src/components/AppTemplates/PartialViews/ErrorS
 import LoadingScreen from 'web-pkg/src/components/AppTemplates/PartialViews/LoadingScreen.vue'
 import { UrlForResourceOptions, useAppDefaults, useStore } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
-import { DavProperty } from 'web-client/src/webdav/constants'
+import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { AppConfigObject } from 'web-pkg/src/apps/types'
 
 export interface AppWrapperSlotArgs {
@@ -58,20 +58,44 @@ export default defineComponent({
     const store = useStore()
 
     const resource: Ref<Resource> = ref()
+    const currentETag = ref('')
     const url = ref('')
     const loading = ref(true)
     const loadingError = ref(false)
+    const isReadOnly = ref(false)
+    const serverContent = ref()
+    const currentContent = ref()
+    const isDirty = computed(() => {
+      return unref(currentContent) !== unref(serverContent)
+    })
 
-    const { currentFileContext, getFileInfo, getUrlForResource, closeApp, revokeUrl } =
-      useAppDefaults({
-        applicationId: props.applicationId
-      })
+    const {
+      currentFileContext,
+      getFileContents,
+      getFileInfo,
+      getUrlForResource,
+      closeApp,
+      revokeUrl,
+      replaceInvalidFileRoute
+    } = useAppDefaults({
+      applicationId: props.applicationId
+    })
 
     const loadFileTask = useTask(function* () {
       try {
         const tmpResource = yield getFileInfo(currentFileContext, {
           davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
         })
+
+        replaceInvalidFileRoute(currentFileContext, tmpResource)
+        isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
+          (p) => (tmpResource.permissions || '').indexOf(p) > -1
+        )
+
+        const fileContentsResponse = yield getFileContents(currentFileContext)
+        serverContent.value = currentContent.value = fileContentsResponse.body
+        currentETag.value = fileContentsResponse.headers['OC-ETag']
+
         const currentSpace = unref(unref(currentFileContext).space)
         const tmpUrl = yield getUrlForResource(
           currentSpace,
@@ -101,12 +125,6 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       revokeUrl(url.value)
-    })
-
-    const serverContent = ref('dies')
-    const currentContent = ref('dies')
-    const isDirty = computed(() => {
-      return unref(currentContent) !== unref(serverContent)
     })
 
     const renderCloseModal = (onConfirm) => {
@@ -149,7 +167,7 @@ export default defineComponent({
       url: unref(url),
       resource: unref(resource),
       isDirty: unref(isDirty),
-      isReadOnly: false,
+      isReadOnly: unref(isReadOnly),
       applicationConfig: {},
 
       // this must not be unref'ed, we are passing a Ref so it can be updated
