@@ -81,6 +81,10 @@ export default defineComponent({
       return Boolean(props.wrappedComponent.emits?.includes('update:currentContent'))
     })
 
+    const hasProp = (name: string) => {
+      return Boolean(Object.keys(props.wrappedComponent.props).includes(name))
+    }
+
     const isDirty = computed(() => {
       return unref(currentContent) !== unref(serverContent)
     })
@@ -109,20 +113,28 @@ export default defineComponent({
           (p) => (tmpResource.permissions || '').indexOf(p) > -1
         )
 
-        const fileContentsResponse = yield getFileContents(currentFileContext)
-        serverContent.value = currentContent.value = fileContentsResponse.body
-        currentETag.value = fileContentsResponse.headers['OC-ETag']
+        if (unref(hasProp('currentContent'))) {
+          const fileContentsResponse = yield getFileContents(currentFileContext)
 
-        const currentSpace = unref(unref(currentFileContext).space)
-        const tmpUrl = yield getUrlForResource(
-          currentSpace,
-          tmpResource,
-          props.urlForResourceOptions
-        )
+          // TODO: make all updates atomic/happen at once
+          serverContent.value = currentContent.value = fileContentsResponse.body
+          currentETag.value = fileContentsResponse.headers['OC-ETag']
+        }
+
+        if (unref(hasProp('url'))) {
+          const currentSpace = unref(unref(currentFileContext).space)
+          const tmpUrl = yield getUrlForResource(
+            currentSpace,
+            tmpResource,
+            props.urlForResourceOptions
+          )
+
+          // TODO: make all updates atomic/happen at once
+          url.value = tmpUrl
+        }
 
         // update both at once
         resource.value = tmpResource
-        url.value = tmpUrl
         console.log('resource', resource.value.id, 'url', url.value)
       } catch (e) {
         console.error(e)
