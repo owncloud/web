@@ -7,23 +7,18 @@
 
     <!-- note: preview app also lets user download file directly from this view -> see button nested in
     app-top-bar. is this feature also desired for dicom viewer?
-
-    <loading-screen v-if="loading" />
     -->
+    <loading-screen v-if="loading" />
 
     <!-- alternative implementaion of loading screen from preview app, integrated in this vue
     <div v-if="true" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
 
-
+    -->
     <error-screen v-if="loadingError" />
-    -->
 
-    <!--
-      v-else
-    -->
-    <div class="oc-height-1-1">
+    <div v-else class="oc-height-1-1">
       <SimpleDicomViewerScreen />
       <!--
       <object class="dicom-viewer oc-width-1-1" :data="url" type="application/dicom" />
