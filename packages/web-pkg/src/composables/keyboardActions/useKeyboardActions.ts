@@ -68,9 +68,7 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
   }
 
   const removeKeyAction = (id: string): void => {
-    console.log(id)
     actions.value = actions.value.filter((action) => action.id !== id)
-    console.log(actions.value)
   }
 
   const resetSelectionCursor = (): void => {

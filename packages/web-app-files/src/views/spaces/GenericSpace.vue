@@ -48,6 +48,7 @@
           </no-content-message>
           <resource-tiles
             v-else-if="viewMode === ViewModeConstants.tilesView.name"
+            id="tiles-view"
             v-model:selectedIds="selectedResourcesIds"
             :data="paginatedResources"
             class="oc-px-m oc-pt-l"
@@ -434,7 +435,7 @@ export default defineComponent({
       resourcesViewDefaults.paginatedResources,
       resourcesViewDefaults.viewMode
     )
-    useKeyboardTableMouseActions(keyActions)
+    useKeyboardTableMouseActions(keyActions, resourcesViewDefaults.viewMode)
     useKeyboardTableSpaceActions(keyActions, props.space)
 
     const performLoaderTask = async (
