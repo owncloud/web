@@ -13,9 +13,9 @@ export const useSlicedGalleryImageList = (
     case 2:
       return [
         undefined,
-        mediafiles[activeIndex - 1] || undefined,
+        undefined,
         mediafiles[activeIndex],
-        mediafiles[activeIndex + 1] || undefined,
+        mediafiles[(activeIndex + 1) % length],
         undefined
       ]
     case 3:
@@ -32,12 +32,7 @@ export const useSlicedGalleryImageList = (
       ]
     case 4:
       return [
-        // Try to set % 5
-        mediafiles[
-          (activeIndex - 2) % length < 0
-            ? mediafiles.length + ((activeIndex - 2) % length)
-            : (activeIndex - 2) % length
-        ] || undefined,
+        undefined,
         mediafiles[
           (activeIndex - 1) % length < 0
             ? mediafiles.length + ((activeIndex - 1) % length)

@@ -150,24 +150,23 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
+    const { downloadFile } = useDownloadFile()
     const previewService = usePreviewService()
+    const contextRouteQuery = computed(() => useRouteQuery('contextRouteQuery'))
+    const appDefaults = useAppDefaults({ applicationId: 'preview' })
 
     const processingTool = computed(() => store.getters['Preview/getSelectedProcessingTool'])
+    const activeAdjustmentParameters = computed(() => store.getters['Preview/allParameters'])
 
-    const appDefaults = useAppDefaults({ applicationId: 'preview' })
-    const contextRouteQuery = computed(() => useRouteQuery('contextRouteQuery'))
-    const { downloadFile } = useDownloadFile()
+    const currentETag = ref()
+    const serverVersion = ref()
+    const resource: Ref<Resource> = ref()
 
     const activeIndex = ref()
     const cachedFiles = ref<CachedFile[]>([])
     const isFileContentError = ref(false)
     const isFileContentLoading = ref(true)
-
-    const currentETag = ref()
-    const appliedAdjustmentParameters: Ref<AdjustmentParametersCategoryType[]> = ref()
-    const activeAdjustmentParameters = computed(() => store.getters['Preview/allParameters'])
-    const serverVersion = ref()
-    const resource: Ref<Resource> = ref()
+    const appliedAdjustmentParameters = ref<AdjustmentParametersCategoryType[]>()
 
     const {
       activeFiles,
@@ -306,6 +305,12 @@ export default defineComponent({
       switch (processingTool.value) {
         case ProcessingToolsEnum.Crop:
           store.commit('Preview/RESET_SELECTED_PROCESSING_TOOL')
+          break
+        case ProcessingToolsEnum.Customize:
+          store.commit('Preview/RESET_SELECTED_PROCESSING_TOOL')
+          store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
+          appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
+          break
       }
     }
 
@@ -357,13 +362,23 @@ export default defineComponent({
 
             const newPath = `${currentFolder}/${testName}`
 
-            // ToDo: open new file in a new tab
             const putFileContentsResponse = yield putFileContents(currentFileContext, {
               content: newVersion,
               path: newPath
             })
-            // await set the duplicate as the active image
-            //Server version handling here
+
+            const { params, query } = createFileRouteOptions(
+              unref(unref(currentFileContext).space),
+              putFileContentsResponse
+            )
+
+            const newUrl = router.resolve({
+              ...unref(route),
+              params: { ...unref(route).params, ...params },
+              query: { ...unref(route).query, ...query }
+            })
+
+            window.open(newUrl.fullPath, '_blank')?.focus()
 
             imageSavedPopup()
             handleResetAfterSave()
@@ -446,8 +461,8 @@ export default defineComponent({
             }
           }
         }
-
-        // #Refresh cache
+        // #Reloads the page
+        router.go(0)
       }).restartable()
 
     function save() {
