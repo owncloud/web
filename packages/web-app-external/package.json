@@ -6,6 +6,7 @@
   "license": "AGPL-3.0",
   "peerDependencies": {
     "uuid": "^9.0.0",
+    "vue-concurrency": "4.0.1",
     "vue3-gettext": "^2.3.3",
     "vuex": "4.1.0",
     "web-client": "workspace:@ownclouders/web-client@*",
