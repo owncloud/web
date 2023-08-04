@@ -1,6 +1,11 @@
 <template>
   <main :id="applicationId" class="oc-height-1-1" @keydown.esc="closeAppAction">
-    <app-top-bar v-if="!loading && !loadingError" :resource="resource" @close="closeAppAction">
+    <app-top-bar
+      v-if="!loading && !loadingError"
+      :main-actions="fileActions"
+      :resource="resource"
+      @close="closeAppAction"
+    >
       {{ slotAttrs.isDirty }}
     </app-top-bar>
     <loading-screen v-if="loading" />
@@ -24,6 +29,8 @@ import { UrlForResourceOptions, useAppDefaults, useStore } from 'web-pkg/src/com
 import { Resource } from 'web-client'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { AppConfigObject } from 'web-pkg/src/apps/types'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export interface AppWrapperSlotArgs {
   applicationConfig: AppConfigObject
@@ -54,7 +61,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext } = useGettext()
+    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
     const store = useStore()
 
     const resource: Ref<Resource> = ref()
@@ -75,6 +82,7 @@ export default defineComponent({
       getFileInfo,
       getUrlForResource,
       closeApp,
+      putFileContents,
       revokeUrl,
       replaceInvalidFileRoute
     } = useAppDefaults({
@@ -127,6 +135,98 @@ export default defineComponent({
       revokeUrl(url.value)
     })
 
+    const errorPopup = (error) => {
+      store.dispatch('showErrorMessage', {
+        title: $gettext('An error occurred'),
+        desc: error,
+        error
+      })
+    }
+
+    const autosavePopup = () => {
+      store.dispatch('showMessage', {
+        title: $gettext('File autosaved')
+      })
+    }
+
+    const saveFileTask = useTask(function* () {
+      const newContent = unref(currentContent)
+      try {
+        const putFileContentsResponse = yield putFileContents(currentFileContext, {
+          content: newContent,
+          previousEntityTag: unref(currentETag)
+        })
+        serverContent.value = newContent
+        currentETag.value = putFileContentsResponse.etag
+      } catch (e) {
+        switch (e.statusCode) {
+          case 412:
+            errorPopup(
+              $gettext(
+                'This file was updated outside this window. Please refresh the page (all changes will be lost).'
+              )
+            )
+            break
+          case 500:
+            errorPopup($gettext('Error when contacting the server'))
+            break
+          case 507:
+            const space = store.getters['runtime/spaces/spaces'].find(
+              (space) => space.id === unref(resource).storageId && isProjectSpaceResource(space)
+            )
+            if (space) {
+              errorPopup(
+                $gettextInterpolate(
+                  $gettext('There is not enough quota on "%{spaceName}" to save this file'),
+                  { spaceName: space.name }
+                )
+              )
+              break
+            }
+            errorPopup($gettext('There is not enough quota to save this file'))
+            break
+          case 401:
+            errorPopup($gettext("You're not authorized to save this file"))
+            break
+          default:
+            errorPopup(e.message || e)
+        }
+      }
+    }).restartable()
+
+    const save = async function () {
+      await saveFileTask.perform()
+    }
+
+    const handleSKey = function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
+        e.preventDefault()
+        save()
+      }
+    }
+
+    const handleUnload = function (e) {
+      if (unref(isDirty)) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+    const fileActions: Action<ActionOptions>[] = [
+      {
+        name: 'save-file',
+        disabledTooltip: () => '',
+        isEnabled: () => true,
+        isDisabled: () => isReadOnly.value || !isDirty.value,
+        componentType: 'button',
+        icon: 'save',
+        id: 'text-editor-controls-save',
+        label: () => 'Save',
+        handler: () => {
+          save()
+        }
+      }
+    ]
+
     const renderCloseModal = (onConfirm) => {
       const modal = {
         variation: 'danger',
@@ -152,8 +252,8 @@ export default defineComponent({
 
     onBeforeRouteLeave((_to, _from, next) => {
       if (unref(isDirty)) {
-        renderCloseModal(() => {
-          // await this.save()
+        renderCloseModal(async () => {
+          await save()
           store.dispatch('hideModal')
           next()
         })
@@ -176,6 +276,7 @@ export default defineComponent({
 
     return {
       closeAppAction,
+      fileActions,
       loading,
       loadingError,
       resource,
