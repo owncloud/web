@@ -1,3 +1,4 @@
+import { AppWrapperRoute } from 'web-pkg/src/components/AppTemplates/AppWrapperRoute'
 import translations from '../l10n/translations.json'
 import App from './App.vue'
 import store from './store'
@@ -11,7 +12,9 @@ const routes = [
   {
     name: 'apps',
     path: '/:driveAliasAndItem(.*)?',
-    component: App,
+    component: AppWrapperRoute(App, {
+      applicationId: appInfo.id
+    }),
     meta: {
       authContext: 'hybrid',
       patchCleanPath: true

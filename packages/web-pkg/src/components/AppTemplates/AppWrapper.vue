@@ -1,5 +1,7 @@
 <template>
   <main :id="applicationId" class="oc-height-1-1" @keydown.esc="closeApp">
+    <!-- TODO: Figure out what to write into hidden pageTitle for screenreader compatibility -->
+    <!-- <h1 class="oc-invisible-sr" v-text="pageTitle" /> -->
     <app-top-bar
       v-if="!loading && !loadingError"
       :main-actions="fileActions"

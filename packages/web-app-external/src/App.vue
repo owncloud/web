@@ -1,160 +1,150 @@
 <template>
-  <main
-    class="oc-height-1-1"
-    :class="{
-      'oc-flex oc-flex-center oc-flex-middle': loading || loadingError
-    }"
-  >
-    <h1 class="oc-invisible-sr" v-text="pageTitle" />
-    <app-top-bar v-if="!loading && !loadingError" :resource="resource" @close="closeApp" />
-    <!-- <loading-screen v-if="loading" />
-    <error-screen v-else-if="loadingError" :message="errorMessage" /> -->
+  <iframe
+    v-if="appUrl && method === 'GET'"
+    :src="appUrl"
+    class="oc-width-1-1 oc-height-1-1"
+    :title="iFrameTitle"
+    allowfullscreen
+  />
+  <div v-if="appUrl && method === 'POST' && formParameters" class="oc-height-1-1">
+    <form :action="appUrl" target="app-iframe" method="post">
+      <input ref="subm" type="submit" :value="formParameters" class="oc-hidden" />
+      <div v-for="(item, key, index) in formParameters" :key="index">
+        <input :name="key" :value="item" type="hidden" />
+      </div>
+    </form>
     <iframe
-      v-if="appUrl && method === 'GET'"
-      :src="appUrl"
+      name="app-iframe"
       class="oc-width-1-1 oc-height-1-1"
       :title="iFrameTitle"
       allowfullscreen
     />
-    <div v-if="appUrl && method === 'POST' && formParameters" class="oc-height-1-1">
-      <form :action="appUrl" target="app-iframe" method="post">
-        <input ref="subm" type="submit" :value="formParameters" class="oc-hidden" />
-        <div v-for="(item, key, index) in formParameters" :key="index">
-          <input :name="key" :value="item" type="hidden" />
-        </div>
-      </form>
-      <iframe
-        name="app-iframe"
-        class="oc-width-1-1 oc-height-1-1"
-        :title="iFrameTitle"
-        allowfullscreen
-      />
-    </div>
-  </main>
+  </div>
 </template>
 
 <script lang="ts">
 import { stringify } from 'qs'
-import { mapGetters } from 'vuex'
-import { computed, defineComponent, unref } from 'vue'
+import { PropType, computed, defineComponent, unref, nextTick, ref, watch, VNodeRef } from 'vue'
+import { useTask } from 'vue-concurrency'
+import { useGettext } from 'vue3-gettext'
+
+import { Resource } from 'web-client/src'
 import { urlJoin } from 'web-client/src/utils'
-import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
-import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
+import { queryItemAsString, useRequest, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
-// import ErrorScreen from './components/ErrorScreen.vue'
-// import LoadingScreen from './components/LoadingScreen.vue'
 
 export default defineComponent({
   name: 'ExternalApp',
-  components: {
-    AppTopBar
-    // ErrorScreen,
-    // LoadingScreen
+  props: {
+    resource: { type: Object as PropType<Resource>, required: true }
   },
-  setup() {
+  setup(props) {
+    const language = useGettext()
+    const store = useStore()
+
+    const { $gettext, interpolate: $gettextInterpolate } = language
+    const { makeRequest } = useRequest()
+
     const appName = useRouteQuery('app')
+    const appUrl = ref()
+    const formParameters = ref({})
+    const method = ref()
+    const subm: VNodeRef = ref()
+
+    const capabilities = computed(() => store.getters['capabilities'])
+    // FIXME: Make available to appDefaults composable for pageTitle
     const applicationName = computed(() => queryItemAsString(unref(appName)))
-    return {
-      ...useAppDefaults({
-        applicationId: 'external',
-        applicationName
-      }),
-      applicationName
+
+    const iFrameTitle = computed(() => {
+      const translated = $gettext('"%{appName}" app content area')
+      return $gettextInterpolate(translated, {
+        appName: unref(applicationName)
+      })
+    })
+
+    // TODO: Extract within web-pkg with default title?
+    const errorPopup = (error) => {
+      store.dispatch('showErrorMessage', {
+        title: $gettext('An error occurred'),
+        desc: error,
+        error
+      })
     }
-  },
 
-  data: () => ({
-    appUrl: '',
-    errorMessage: '',
-    formParameters: {},
-    loading: false,
-    loadingError: false,
-    method: '',
-    resource: null
-  }),
-  computed: {
-    ...mapGetters(['capabilities']),
+    const loadAppUrl = useTask(function* () {
+      try {
+        // FIXME: make all updates atomic/happen at once so the ui can never mix data from different resources
+        const fileId = props.resource.fileId
 
-    pageTitle() {
-      const translated = this.$gettext('"%{appName}" app page')
-      return this.$gettextInterpolate(translated, {
-        appName: this.applicationName
-      })
-    },
-    iFrameTitle() {
-      const translated = this.$gettext('"%{appName}" app content area')
-      return this.$gettextInterpolate(translated, {
-        appName: this.applicationName
-      })
-    },
-    fileIdFromRoute() {
-      return this.$route.query.fileId
-    }
-  },
-  async created() {
-    this.loading = true
-    try {
-      this.resource = await this.getFileInfo(this.currentFileContext, {
-        davProperties: []
-      })
+        const baseUrl = urlJoin(
+          configurationManager.serverUrl,
+          unref(capabilities).files.app_providers[0].open_url
+        )
 
-      const fileId = this.fileIdFromRoute || this.resource.fileId
+        const query = stringify({
+          file_id: fileId,
+          lang: language.current,
+          ...(unref(applicationName) && { app_name: unref(applicationName) })
+        })
 
-      // fetch iframe params for app and file
-      const baseUrl = urlJoin(
-        configurationManager.serverUrl,
-        this.capabilities.files.app_providers[0].open_url
-      )
-      const query = stringify({
-        file_id: fileId,
-        lang: this.$language.current,
-        ...(this.applicationName && { app_name: this.applicationName })
-      })
-      const url = `${baseUrl}?${query}`
-      const response = await this.makeRequest('POST', url, {
-        validateStatus: () => true
-      })
+        const url = `${baseUrl}?${query}`
+        const response = yield makeRequest('POST', url, {
+          validateStatus: () => true
+        })
 
-      if (response.status !== 200) {
-        switch (response.status) {
-          case 425:
-            this.errorMessage = this.$gettext(
-              'This file is currently being processed and is not yet available for use. Please try again shortly.'
-            )
-            break
-          default:
-            this.errorMessage = response.data?.message
+        if (response.status !== 200) {
+          switch (response.status) {
+            case 425:
+              errorPopup(
+                $gettext(
+                  'This file is currently being processed and is not yet available for use. Please try again shortly.'
+                )
+              )
+              break
+            default:
+              errorPopup(response.data?.message)
+          }
+
+          console.error('Error fetching app information', response.status, response.data.message)
+          return
         }
 
-        this.loading = false
-        this.loadingError = true
-        console.error('Error fetching app information', response.status, response.data.message)
-        return
-      }
+        if (!response.data.app_url || !response.data.method) {
+          console.error('Error in app server response')
+          return
+        }
 
-      if (!response.data.app_url || !response.data.method) {
-        this.errorMessage = this.$gettext('Error in app server response')
-        this.loading = false
-        this.loadingError = true
-        console.error('Error in app server response')
-        return
-      }
+        appUrl.value = response.data.app_url
+        method.value = response.data.method
+        if (response.data.form_parameters) {
+          formParameters.value = response.data.form_parameters
+        }
 
-      this.appUrl = response.data.app_url
-      this.method = response.data.method
-      if (response.data.form_parameters) {
-        this.formParameters = response.data.form_parameters
+        if (method.value === 'POST' && formParameters.value) {
+          // eslint-disable-next-line vue/valid-next-tick
+          yield nextTick()
+          unref(subm).click()
+        }
+      } catch (e) {
+        console.error(e)
       }
+    }).restartable()
 
-      if (this.method === 'POST' && this.formParameters) {
-        this.$nextTick(() => (this.$refs.subm as HTMLInputElement).click())
-      }
-      this.loading = false
-    } catch (error) {
-      this.errorMessage = this.$gettext('Error retrieving file information')
-      console.error('Error retrieving file information', error)
-      this.loading = false
-      this.loadingError = true
+    watch(
+      props.resource,
+      () => {
+        loadAppUrl.perform()
+      },
+      { immediate: true }
+    )
+
+    return {
+      iFrameTitle,
+      applicationName,
+      appUrl,
+      formParameters,
+      method,
+      subm
     }
   }
 })
