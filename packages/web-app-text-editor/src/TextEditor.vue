@@ -1,5 +1,5 @@
 <template>
-  <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
+  <div v-if="resource" class="oc-flex oc-height-1-1">
     <oc-textarea
       id="text-editor-input"
       :model-value="currentContent"
@@ -46,7 +46,8 @@ export default defineComponent({
     })
 
     const showPreview = computed(() => {
-      return props.resource.extension === 'md' || !unref(config).showPreviewOnlyMd
+      // FIXME: why is resource ever undefined/null?
+      return props.resource?.extension === 'md' || !unref(config).showPreviewOnlyMd
     })
 
     const renderedMarkdown = computed(() => {
