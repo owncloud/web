@@ -105,11 +105,14 @@ export default defineComponent({
     })
 
     const slotAttrs = computed(() => ({
+      // these need to be unref'ed
       url: unref(url),
-      resource,
-      isDirty,
+      resource: unref(resource),
+      isDirty: unref(isDirty),
       isReadOnly: false,
       applicationConfig: {},
+
+      // this must not be unref'ed, we are passing a Ref so it can be updated
       currentContent
     }))
 
