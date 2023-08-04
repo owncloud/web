@@ -1,6 +1,6 @@
 <template>
-  <main :id="applicationId" class="oc-height-1-1">
-    <app-top-bar v-if="!loading && !loadingError" :resource="resource" @close="closeApp">
+  <main :id="applicationId" class="oc-height-1-1" @keydown.esc="closeAppAction">
+    <app-top-bar v-if="!loading && !loadingError" :resource="resource" @close="closeAppAction">
       {{ slotAttrs.isDirty }}
     </app-top-bar>
     <loading-screen v-if="loading" />
@@ -14,11 +14,13 @@
 <script lang="ts">
 import { PropType, Ref, defineComponent, onBeforeUnmount, ref, unref, watch, computed } from 'vue'
 import { useTask } from 'vue-concurrency'
+import { useGettext } from 'vue3-gettext'
+import { onBeforeRouteLeave } from 'vue-router'
 
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from 'web-pkg/src/components/AppTemplates/PartialViews/ErrorScreen.vue'
 import LoadingScreen from 'web-pkg/src/components/AppTemplates/PartialViews/LoadingScreen.vue'
-import { UrlForResourceOptions, useAppDefaults } from 'web-pkg/src/composables'
+import { UrlForResourceOptions, useAppDefaults, useStore } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { AppConfigObject } from 'web-pkg/src/apps/types'
@@ -52,6 +54,9 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const { $gettext } = useGettext()
+    const store = useStore()
+
     const resource: Ref<Resource> = ref()
     const url = ref('')
     const loading = ref(true)
@@ -104,6 +109,41 @@ export default defineComponent({
       return unref(currentContent) !== unref(serverContent)
     })
 
+    const renderCloseModal = (onConfirm) => {
+      const modal = {
+        variation: 'danger',
+        icon: 'warning',
+        title: $gettext('Unsaved changes'),
+        message: $gettext('Your changes were not saved. Do you want to save them?'),
+        cancelText: $gettext("Don't Save"),
+        confirmText: $gettext('Save'),
+        onCancel: () => store.dispatch('hideModal'),
+        onConfirm
+      }
+
+      store.dispatch('createModal', modal)
+    }
+
+    const closeAppAction = () => {
+      if (unref(isDirty)) {
+        renderCloseModal(closeApp())
+      } else {
+        closeApp()
+      }
+    }
+
+    onBeforeRouteLeave((_to, _from, next) => {
+      if (unref(isDirty)) {
+        renderCloseModal(() => {
+          // await this.save()
+          store.dispatch('hideModal')
+          next()
+        })
+      } else {
+        next()
+      }
+    })
+
     const slotAttrs = computed(() => ({
       // these need to be unref'ed
       url: unref(url),
@@ -117,7 +157,7 @@ export default defineComponent({
     }))
 
     return {
-      closeApp,
+      closeAppAction,
       loading,
       loadingError,
       resource,
