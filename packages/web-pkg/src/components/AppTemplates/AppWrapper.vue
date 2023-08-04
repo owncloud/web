@@ -226,6 +226,9 @@ export default defineComponent({
 
     let autosaveIntervalId = null
     onMounted(() => {
+      if (!unref(isEditor)) {
+        return
+      }
       // Enable ctrl/cmd + s
       document.addEventListener('keydown', handleSKey, false)
       // Ensure reload is not possible if there are changes
@@ -241,6 +244,10 @@ export default defineComponent({
       }
     })
     onBeforeUnmount(() => {
+      if (!unref(isEditor)) {
+        return
+      }
+
       window.removeEventListener('beforeunload', handleUnload)
       document.removeEventListener('keydown', handleSKey, false)
       clearInterval(autosaveIntervalId)
