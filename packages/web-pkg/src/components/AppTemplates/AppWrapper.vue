@@ -185,6 +185,7 @@ export default defineComponent({
         serverContent.value = newContent
         currentETag.value = putFileContentsResponse.etag
       } catch (e) {
+        // FIXME: handle 403 error when trying to save a readonly file
         switch (e.statusCode) {
           case 409:
           case 412:
@@ -258,6 +259,9 @@ export default defineComponent({
     const handleSKey = function (e) {
       if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
         e.preventDefault()
+        if (!unref(isDirty)) {
+          return
+        }
         save()
       }
     }
