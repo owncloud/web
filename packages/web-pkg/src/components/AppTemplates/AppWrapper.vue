@@ -47,7 +47,7 @@ export default defineComponent({
     },
     urlForResourceOptions: {
       type: Object as PropType<UrlForResourceOptions>,
-      default: () => {},
+      default: () => null,
       required: false
     }
   },

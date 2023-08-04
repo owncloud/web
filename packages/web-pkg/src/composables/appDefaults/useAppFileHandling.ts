@@ -14,16 +14,7 @@ interface AppFileHandlingOptions {
   clientService: ClientService
 }
 
-// FIXME: we would like to use the OriginalUrlForResourceOptions type
-// but when every property is optional vue-tsc/volar can't deal with it properly
-// so when it's used as PropType it's wrongly recognized as void and nothing can
-// be passed to the prop
-type OriginalUrlForResourceOptions = Omit<
-  Parameters<WebDAV['getFileUrl']>[2],
-  'isUrlSigningEnabled'
->
-export type UrlForResourceOptions = OriginalUrlForResourceOptions &
-  Required<Pick<OriginalUrlForResourceOptions, 'disposition'>>
+export type UrlForResourceOptions = Omit<Parameters<WebDAV['getFileUrl']>[2], 'isUrlSigningEnabled'>
 
 export interface AppFileHandlingResult {
   getUrlForResource(
