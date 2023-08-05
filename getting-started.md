@@ -27,7 +27,7 @@ This setup currently doesn't work on Windows out of the box.
 
 After cloning the [source code](https://github.com/owncloud/web), install the dependencies via `pnpm install` and bundle the frontend code by running `pnpm build:w`.
 
-Then, you can start the backends by running `docker-compose up oc10 ocis` and access them via [https://host.docker.internal:9200](https://host.docker.internal:9200) (oCIS) and [http://host.docker.internal:8080](http://host.docker.internal:8080) (OC10). If you're not using Docker Desktop, you might have to modify your `/etc/hosts` and add `127.0.0.1 host.docker.internal` to make the `host.docker.internal` links work.
+Then, you can start the server by running `docker-compose up ocis` and access it via [https://host.docker.internal:9200](https://host.docker.internal:9200). If you're not using Docker Desktop, you might have to modify your `/etc/hosts` and add `127.0.0.1 host.docker.internal` to make the `host.docker.internal` links work.
 
 The bundled frontend code automatically gets mounted into the Docker containers, recompiles on changes and you can log in using the demo user (admin/admin) and take a look around!
 
@@ -90,7 +90,7 @@ Web supports [Sentry](https://sentry.io/welcome/) to provide monitoring and erro
 To enable sending data to a Sentry instance, you can use the following configuration keys:
 
 - `sentry.dsn` Should contain the DSN for your sentry project.
-- `sentry.environment`: Lets you specify the enviroment to use in Sentry. Defaults to `production`.
+- `sentry.environment`: Lets you specify the environment to use in Sentry. Defaults to `production`.
 
 Any other key under `sentry` will be forwarded to the Sentry initialization. You can find out more
 settings in the [Sentry docs](https://docs.sentry.io/platforms/javascript/configuration/).
@@ -102,13 +102,13 @@ integration libraries.
 
 ## Setting up backend and running
 
-Web can run against either [ownCloud 10](https://github.com/owncloud/core/) as backend or [oCIS](https://github.com/owncloud/ocis).
+Newer versions of Web (> 7.0.2) can only run against [oCIS](https://github.com/owncloud/ocis), whereas older versions (< 7.1.0) can run against [ownCloud 10](https://github.com/owncloud/core/) as well.
 Depending which one you chose, please check the matching section:
 
-- [Setting up with ownCloud as backend]({{< ref "backend-oc10.md" >}})
 - [Setting up with oCIS as backend]({{< ref "backend-ocis.md" >}})
+- [Setting up with ownCloud as backend]({{< ref "backend-oc10.md" >}})
 
 ## Running
 
-- [Running with ownCloud as backend]({{< ref "backend-oc10.md#running-web" >}})
 - [Running with oCIS as backend]({{< ref "backend-ocis.md#running-web" >}})
+- [Running with ownCloud as backend]({{< ref "backend-oc10.md#running-web" >}})
