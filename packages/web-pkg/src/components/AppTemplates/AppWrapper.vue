@@ -41,6 +41,7 @@ import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { AppConfigObject } from 'web-pkg/src/apps/types'
 import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { HttpError } from 'web-pkg/src/errors'
 
 export interface AppWrapperSlotArgs {
   applicationConfig: AppConfigObject
@@ -163,10 +164,10 @@ export default defineComponent({
       revokeUrl(url.value)
     })
 
-    const errorPopup = (error) => {
+    const errorPopup = (error: HttpError) => {
       store.dispatch('showErrorMessage', {
         title: $gettext('An error occurred'),
-        desc: error,
+        desc: error.message,
         error
       })
     }
@@ -187,18 +188,26 @@ export default defineComponent({
         serverContent.value = newContent
         currentETag.value = putFileContentsResponse.etag
       } catch (e) {
-        // FIXME: handle 403 error when trying to save a readonly file
         switch (e.statusCode) {
+          case 401:
+          case 403:
+            errorPopup(
+              new HttpError($gettext("You're not authorized to save this file"), e.response)
+            )
+            break
           case 409:
           case 412:
             errorPopup(
-              $gettext(
-                'This file was updated outside this window. Please refresh the page (all changes will be lost).'
+              new HttpError(
+                $gettext(
+                  'This file was updated outside this window. Please refresh the page (all changes will be lost).'
+                ),
+                e.response
               )
             )
             break
           case 500:
-            errorPopup($gettext('Error when contacting the server'))
+            errorPopup(new HttpError($gettext('Error when contacting the server'), e.response))
             break
           case 507:
             const space = store.getters['runtime/spaces/spaces'].find(
@@ -206,20 +215,21 @@ export default defineComponent({
             )
             if (space) {
               errorPopup(
-                $gettextInterpolate(
-                  $gettext('There is not enough quota on "%{spaceName}" to save this file'),
-                  { spaceName: space.name }
+                new HttpError(
+                  $gettext('There is not enough quota on "%{spaceName}" to save this file', {
+                    spaceName: space.name
+                  }),
+                  e.response
                 )
               )
               break
             }
-            errorPopup($gettext('There is not enough quota to save this file'))
-            break
-          case 401:
-            errorPopup($gettext("You're not authorized to save this file"))
+            errorPopup(
+              new HttpError($gettext('There is not enough quota to save this file'), e.response)
+            )
             break
           default:
-            errorPopup(e.message || e)
+            errorPopup(new HttpError('', e.response))
         }
       }
     }).restartable()
