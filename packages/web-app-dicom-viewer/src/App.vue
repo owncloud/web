@@ -2,6 +2,7 @@
   <main>
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
     <app-top-bar :resource="resource" @close="closeApp">
+      <!-- download button for direct download of files, analog to preview app -->
       <template #right>
         <oc-button
           v-if="!isLoadingError"
@@ -15,17 +16,14 @@
       </template>
     </app-top-bar>
 
-    <!-- note: preview app also lets user download file directly from this view -> see button nested in
-    app-top-bar. is this feature also desired for dicom viewer?
-    -->
     <loading-screen v-if="isLoading" />
 
     <!-- alternative implementaion of loading screen from preview app, integrated in this vue
     <div v-if="true" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
-
     -->
+
     <error-screen v-if="isLoadingError" />
 
     <div v-else class="oc-height-1-1">
@@ -72,7 +70,7 @@ export default defineComponent({
       isLoadingError: false,
       url: '',
       resource: null,
-      dummydata: 'test'
+      dummydata: 'test' // for testing only
     }
   },
   watch: {
@@ -86,7 +84,6 @@ export default defineComponent({
   },
   computed: {
     pageTitle() {
-      console.log('preview title rendered')
       return this.$gettext('Preview for %{resourceName}', {
         resourceName: this.resource.name
       })
@@ -97,8 +94,8 @@ export default defineComponent({
   },
   methods: {
     async loadDicom(fileContext) {
-      //console.log('print dummy data from app.vue ' + this.dummydata)
       // for testing only
+      //console.log('print dummy data from app.vue ' + this.dummydata)
       if (this.resource != null) {
         console.log('print resource name from app.vue: ' + this.resource.name)
       } else {
@@ -107,10 +104,9 @@ export default defineComponent({
 
       try {
         this.isLoading = true
-        // for debugging only
-        console.log('try loading resource')
-
         const resource = (await this.getFileInfo(fileContext)) as Resource
+
+        // for debugging only
         console.log('resource loaded: ' + resource.name)
         console.log('resource type: ' + resource.mimeType)
 
@@ -136,11 +132,10 @@ export default defineComponent({
         console.error('Error fetching DICOM file', e)
       } finally {
         this.isLoading = false
-        // for testing only
-        console.log('loading resource completed: ' + !this.isLoading)
-        // it seems like this function gets called twice, check why
-        // this is also the case for pdf viewer....
       }
+
+      // it seems like this function gets called twice when loading a resource, check why
+      // this is also the case for pdf viewer....
     },
     unloadDicom() {
       this.revokeUrl(this.url)
@@ -150,12 +145,12 @@ export default defineComponent({
         return
       }
 
-      console.log('downloading resource: ' + this.resource.name)
       return this.downloadFile(this.resource)
     }
   }
 })
 </script>
+
 <style lang="scss" scoped>
 .dicom-viewer {
   border: none;
