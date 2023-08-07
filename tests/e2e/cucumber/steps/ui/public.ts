@@ -4,6 +4,7 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
 import { editor } from '../../../support/objects/app-files/utils'
+import { expect } from '@playwright/test'
 
 When(
   '{string} opens the public link {string}',
@@ -40,6 +41,24 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     await editor.close(page)
+  }
+)
+
+When(
+  '{string} should see the content {string} in editor {string}',
+  async function (
+    this: World,
+    stepUser: string,
+    expectedContent: string,
+    editorToOpen: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    const actualFileContent = await pageObject.getContentOfOpenDocumentOrMicrosoftWordDocument({
+      page,
+      editorToOpen
+    })
+    expect(actualFileContent.trim()).toBe(expectedContent)
   }
 )
 
