@@ -242,23 +242,23 @@ export default defineComponent({
       return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
     })
 
-    const mediaGalleryFiles: Ref<MediaGalleryFile[]> = ref([])
-
-    watch(filteredFiles, async (oldFiles, newFiles) => {
-      if (oldFiles !== newFiles) {
-        mediaGalleryFiles.value = await Promise.all(
-          unref(filteredFiles).map(async (file) => {
-            const fileUrl = await getMediaFileUrl(file)
-            return {
-              name: file.name,
-              id: file.id,
-              url: fileUrl,
-              mimeType: file.mimeType
+    const mediaGalleryFiles = computed<MediaGalleryFile[]>(() =>
+      sortHelper(
+        unref(cachedFiles).reduce(
+          (acc, file) => {
+            if (!acc.addedFiles.has(file.id)) {
+              acc.addedFiles.add(file.id)
+              acc.result.push(file)
             }
-          })
-        )
-      }
-    })
+            return acc
+          },
+          { addedFiles: new Set(), result: [] }
+        ).result,
+        [{ name: unref(sortBy) }],
+        unref(sortBy),
+        unref(sortDir)
+      )
+    )
 
     async function getMediaFileUrl(file: Resource) {
       try {
@@ -427,6 +427,18 @@ export default defineComponent({
               content: newVersion,
               previousEntityTag: unref(currentETag)
             })
+            const mediaUrl = yield getMediaFileUrl(putFileContentsResponse)
+            removeActivePreviewFromCache()
+            addPreviewToCache(unref(activeFilteredFile), mediaUrl)
+
+            const newActiveIndex = unref(filteredFiles).findIndex(
+              (file) => file.id === putFileContentsResponse.id
+            )
+            handleSetNewActiveIndex(newActiveIndex)
+            updateLocalHistory()
+
+            console.log(cachedFiles)
+
             serverVersion.value = newVersion
             currentETag.value = putFileContentsResponse.etag
             imageSavedPopup()
@@ -466,9 +478,13 @@ export default defineComponent({
             }
           }
         }
-        // #Reloads the page
-        router.go(0)
       }).restartable()
+
+    function removeActivePreviewFromCache() {
+      cachedFiles.value = unref(cachedFiles).filter(
+        (file) => file.id !== unref(activeMediaFileCached).id
+      )
+    }
 
     function save() {
       const modal = {

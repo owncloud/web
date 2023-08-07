@@ -9,8 +9,14 @@
     @change="handleUpdateCropper"
   />
   <img
+    v-else-if="isWriteActive || isDrawActive"
+    :src="file.url"
+    :alt="file.name"
+    :data-id="file.id"
+    :style="`zoom: ${currentImageZoom};transform: rotate(${currentImageRotation}deg); ${adjustmentParams}`"
+  />
+  <img
     v-else
-    :key="`media-image-${file.id}`"
     :src="file.url"
     :alt="file.name"
     :data-id="file.id"
@@ -58,6 +64,17 @@ export default defineComponent({
       const selectedProcessingTool = store.getters['Preview/getSelectedProcessingTool']
       return selectedProcessingTool === ProcessingToolsEnum.Crop
     })
+
+    const isWriteActive = computed(() => {
+      const selectedProcessingTool = store.getters['Preview/getSelectedProcessingTool']
+      return selectedProcessingTool === ProcessingToolsEnum.Write
+    })
+
+    const isDrawActive = computed(() => {
+      const selectedProcessingTool = store.getters['Preview/getSelectedProcessingTool']
+      return selectedProcessingTool === ProcessingToolsEnum.Draw
+    })
+
     const CropperTools = computed(() => {
       const activeCropVariant = store.getters['Preview/getCropVariant']
       let Stencil
@@ -78,6 +95,8 @@ export default defineComponent({
     return {
       adjustmentParams,
       isCropperActive,
+      isWriteActive,
+      isDrawActive,
       CropperTools
     }
   },
