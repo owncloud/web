@@ -1,21 +1,22 @@
-import { AdjustmentParametersCategoryEnum } from '../helpers'
+import { AdjustmentParametersCategoryEnum, AdjustmentParametersCategoryType } from '../helpers'
 
 export default {
   generalParameters: (state) => {
     return state.adjustmentParameters.filter(
-      (adjustmentParameter) => adjustmentParameter.type === AdjustmentParametersCategoryEnum.General
+      (adjustmentParameter: AdjustmentParametersCategoryType) =>
+        adjustmentParameter.category === AdjustmentParametersCategoryEnum.General
     )
   },
   fineTuneParameters: (state) => {
     return state.adjustmentParameters.filter(
-      (adjustmentParameter) =>
-        adjustmentParameter.type === AdjustmentParametersCategoryEnum.FineTune
+      (adjustmentParameter: AdjustmentParametersCategoryType) =>
+        adjustmentParameter.category === AdjustmentParametersCategoryEnum.FineTune
     )
   },
   miscellaneousParameters: (state) => {
     return state.adjustmentParameters.filter(
-      (adjustmentParameter) =>
-        adjustmentParameter.type === AdjustmentParametersCategoryEnum.Miscellaneous
+      (adjustmentParameter: AdjustmentParametersCategoryType) =>
+        adjustmentParameter.category === AdjustmentParametersCategoryEnum.Miscellaneous
     )
   },
   allParameters: (state) => {

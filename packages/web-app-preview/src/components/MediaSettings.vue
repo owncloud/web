@@ -63,18 +63,18 @@
         <adjustment-parameters-category
           name="General"
           icon-name="equalizer"
-          :variable-type="AdjustmentParametersCategoryEnum.General"
+          :parameter-category="AdjustmentParametersCategoryEnum.General"
         />
         <adjustment-parameters-category
           name="Fine Tune"
           icon-name="contrast-drop-2"
           is-fill-type-line
-          :variable-type="AdjustmentParametersCategoryEnum.FineTune"
+          :parameter-category="AdjustmentParametersCategoryEnum.FineTune"
         />
         <adjustment-parameters-category
           name="Miscellaneous"
           icon-name="command"
-          :variable-type="AdjustmentParametersCategoryEnum.Miscellaneous"
+          :parameter-category="AdjustmentParametersCategoryEnum.Miscellaneous"
         />
       </div>
       <div
@@ -196,13 +196,17 @@ export default defineComponent({
   width: 18rem;
   box-sizing: border-box;
   padding: $oc-space-small;
-  overflow-y: scroll;
+  height: 100%;
+  padding-bottom: 20rem;
+  overflow-y: auto;
 }
 
 .options-bar-compact {
   width: 6rem;
   box-sizing: border-box;
-  overflow-y: scroll;
+  height: 100%;
+  padding-bottom: 20rem;
+  overflow-y: auto;
 }
 
 .cropper-options {
@@ -259,5 +263,7 @@ export default defineComponent({
 
 // ToDo add animations
 .side-bar-animation {
+  flex-grow: 1;
+  overflow-y: auto;
 }
 </style>

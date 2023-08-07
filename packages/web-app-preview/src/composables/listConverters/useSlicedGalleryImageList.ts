@@ -32,7 +32,11 @@ export const useSlicedGalleryImageList = (
       ]
     case 4:
       return [
-        undefined,
+        mediafiles[
+          (activeIndex - 2) % length < 0
+            ? mediafiles.length + ((activeIndex - 2) % length)
+            : (activeIndex - 2) % length
+        ],
         mediafiles[
           (activeIndex - 1) % length < 0
             ? mediafiles.length + ((activeIndex - 1) % length)
@@ -40,7 +44,7 @@ export const useSlicedGalleryImageList = (
         ],
         mediafiles[activeIndex],
         mediafiles[(activeIndex + 1) % length],
-        mediafiles[(activeIndex + 2) % length] || undefined
+        undefined
       ]
     default:
       return [

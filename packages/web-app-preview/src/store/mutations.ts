@@ -1,7 +1,11 @@
-import { CropVariantEnum, AdjustmentParametersCategoryType } from '../helpers'
+import {
+  CropVariantEnum,
+  AdjustmentParametersCategoryType,
+  AdjustmentParametersTypeEnum
+} from '../helpers'
 
 export default {
-  SET_ACTIVE_ADJUSTMENT_PARAMETERS(state, payload: { name: string; value: number }) {
+  SET_ACTIVE_ADJUSTMENT_PARAMETERS(state, payload: { name: string; value: number | boolean }) {
     state.adjustmentParameters = state.adjustmentParameters.map((adjustmentParameter) =>
       adjustmentParameter.name.toLowerCase() === payload.name.toLowerCase()
         ? { ...adjustmentParameter, value: payload.value }
@@ -10,8 +14,14 @@ export default {
   },
   RESET_ADJUSTMENT_PARAMETERS(state) {
     state.adjustmentParameters = state.adjustmentParameters.map(
-      (adjustmentParameter: AdjustmentParametersCategoryType) =>
-        adjustmentParameter && { ...adjustmentParameter, value: 0 }
+      (adjustmentParameter: AdjustmentParametersCategoryType) => {
+        switch (adjustmentParameter.type) {
+          case AdjustmentParametersTypeEnum.Boolean:
+            return { ...adjustmentParameter, value: false }
+          default:
+            return { ...adjustmentParameter, value: 0 }
+        }
+      }
     )
   },
   CHANGE_SELECTED_PROCESSING_TOOL(state, name: string) {

@@ -8,67 +8,65 @@ export default {
   adjustmentParameters: [
     {
       name: 'Brightness',
-      valueType: AdjustmentParametersTypeEnum.Number,
+      type: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
-      type: AdjustmentParametersCategoryEnum.General
+      category: AdjustmentParametersCategoryEnum.General
     },
     {
       name: 'Contrast',
-      valueType: AdjustmentParametersTypeEnum.Number,
+      type: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
-      type: AdjustmentParametersCategoryEnum.General
+      category: AdjustmentParametersCategoryEnum.General
     },
     {
       name: 'Saturation',
-      valueType: AdjustmentParametersTypeEnum.Number,
+      type: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
-      type: AdjustmentParametersCategoryEnum.General
+      category: AdjustmentParametersCategoryEnum.General
     },
     {
       name: 'Grayscale',
-      valueType: AdjustmentParametersTypeEnum.Number,
+      type: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: 0,
       maxValue: 100,
-      type: AdjustmentParametersCategoryEnum.General
+      category: AdjustmentParametersCategoryEnum.General
     },
     {
       name: 'Exposure',
-      valueType: AdjustmentParametersTypeEnum.Number,
+      type: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
-      type: AdjustmentParametersCategoryEnum.FineTune
+      category: AdjustmentParametersCategoryEnum.FineTune
     },
     {
       name: 'Highlights',
-      valueType: AdjustmentParametersTypeEnum.Number,
+      type: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
-      type: AdjustmentParametersCategoryEnum.FineTune
+      category: AdjustmentParametersCategoryEnum.FineTune
     },
     {
       name: 'Shadows',
-      valueType: AdjustmentParametersTypeEnum.Number,
+      type: AdjustmentParametersTypeEnum.Number,
       value: 0,
       minValue: -100,
       maxValue: 100,
-      type: AdjustmentParametersCategoryEnum.FineTune
+      category: AdjustmentParametersCategoryEnum.FineTune
     },
     {
       name: 'Invert',
-      valueType: AdjustmentParametersTypeEnum.Boolean,
-      value: 0,
-      minValue: 0,
-      maxValue: 1,
-      type: AdjustmentParametersCategoryEnum.Miscellaneous
+      type: AdjustmentParametersTypeEnum.Boolean,
+      value: false,
+      category: AdjustmentParametersCategoryEnum.Miscellaneous
     }
   ],
   selectedProcessingTool: null,

@@ -13,14 +13,14 @@ export type CachedFile = {
 
 export type AdjustmentParameterType = {
   name: string
-  valueType: AdjustmentParametersTypeEnum
-  maxValue: number
-  minValue: number
+  type: AdjustmentParametersTypeEnum
+  maxValue?: number
+  minValue?: number
 }
 
 export type AdjustmentParametersCategoryType = AdjustmentParameterType & {
-  value: number
-  type: AdjustmentParametersCategoryEnum
+  value: number | boolean
+  category: AdjustmentParametersCategoryEnum
 }
 
 export type ImageAdjustmentParameters = {

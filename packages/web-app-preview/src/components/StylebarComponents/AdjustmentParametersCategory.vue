@@ -1,54 +1,59 @@
 <template>
-  <oc-button
-    :class="['adjustment-parameter-category-button', isOpen && 'button-box-shadow']"
-    appearance="raw"
-    @click="handleIsOpen"
-  >
-    <span class="button-description"
-      ><oc-icon :name="iconName" :fill-type="isFillTypeLine ? 'line' : 'fill'" /> {{ name }}</span
+  <div>
+    <oc-button
+      :class="['adjustment-parameter-category-button', isOpen && 'button-box-shadow']"
+      appearance="raw"
+      @click="handleIsOpen"
     >
-    <oc-icon :name="isOpen ? 'arrow-up-s' : 'arrow-down-s'" />
-  </oc-button>
-  <div v-if="isOpen">
-    <div
-      v-for="adjustmentParameter in adjustmentParams"
-      :key="adjustmentParameter.name"
-      class="adjustment-parameters"
-    >
-      <div
-        v-if="adjustmentParameter.valueType === AdjustmentParametersTypeEnum.Number"
-        class="parameter-description"
+      <span class="button-description"
+        ><oc-icon :name="iconName" :fill-type="isFillTypeLine ? 'line' : 'fill'" /> {{ name }}</span
       >
-        <span class="description">
-          <p>{{ $gettext(adjustmentParameter.name) }}</p>
-          <p>{{ adjustmentParameter.value }}</p>
-        </span>
-        <input
-          v-model="adjustmentParameter.value"
-          type="range"
-          :min="adjustmentParameter.minValue"
-          :max="adjustmentParameter.maxValue"
-          steps="1"
-          class="slider-bar"
-          @input="handleUpdateNumberValue(adjustmentParameter)"
-          @keydown="preventArrowKeys"
-        />
-      </div>
+      <oc-icon :name="isOpen ? 'arrow-up-s' : 'arrow-down-s'" />
+    </oc-button>
+    <div v-if="isOpen">
       <div
-        v-else-if="adjustmentParameter.valueType === AdjustmentParametersTypeEnum.Boolean"
-        class="parameter-description"
+        v-for="adjustmentParameter in adjustmentParams"
+        :key="adjustmentParameter.name"
+        class="adjustment-parameters"
       >
-        <span class="description">
-          <p>{{ $gettext(adjustmentParameter.name) }}</p>
-          <oc-switch v-model="adjustmentParameter.value" />
-        </span>
+        <div
+          v-if="adjustmentParameter.type === AdjustmentParametersTypeEnum.Number"
+          class="parameter-description"
+        >
+          <span class="description">
+            <p>{{ $gettext(adjustmentParameter.name) }}</p>
+            <p>{{ adjustmentParameter.value }}</p>
+          </span>
+          <input
+            v-model="adjustmentParameter.value"
+            type="range"
+            :min="adjustmentParameter.minValue"
+            :max="adjustmentParameter.maxValue"
+            steps="1"
+            class="slider-bar"
+            @input="handleUpdateNumberValue(adjustmentParameter)"
+            @keydown="preventArrowKeys"
+          />
+        </div>
+        <div
+          v-else-if="adjustmentParameter.type === AdjustmentParametersTypeEnum.Boolean"
+          class="parameter-description"
+        >
+          <span class="description">
+            <p>{{ $gettext(adjustmentParameter.name) }}</p>
+            <oc-switch
+              :checked="(adjustmentParameter.value as boolean)"
+              @update:checked="handleUpdateBooleanValue(adjustmentParameter)"
+            />
+          </span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, PropType, computed, unref } from 'vue'
+import { ref, defineComponent, PropType, computed } from 'vue'
 import {
   AdjustmentParametersCategoryEnum,
   AdjustmentParametersCategoryType,
@@ -70,7 +75,7 @@ export default defineComponent({
       default: '',
       required: true
     },
-    variableType: {
+    parameterCategory: {
       type: Object as PropType<AdjustmentParametersCategoryEnum>,
       required: true
     },
@@ -85,7 +90,7 @@ export default defineComponent({
     const store = useStore()
 
     const adjustmentParams = computed((): AdjustmentParametersCategoryType[] => {
-      switch (props.variableType) {
+      switch (props.parameterCategory) {
         case AdjustmentParametersCategoryEnum.General:
           return store.getters['Preview/generalParameters']
         case AdjustmentParametersCategoryEnum.FineTune:
@@ -97,15 +102,6 @@ export default defineComponent({
       }
     })
 
-    const paramSwitches = computed(() => {
-      const booleanParams = []
-      unref(adjustmentParams).forEach((param) => {
-        param.valueType === AdjustmentParametersTypeEnum.Boolean &&
-          booleanParams.push({ name: param.name, value: param.value ? true : false })
-      })
-      return booleanParams
-    })
-
     const handleIsOpen = () => {
       isOpen.value = !isOpen.value
     }
@@ -114,7 +110,6 @@ export default defineComponent({
       isOpen,
       adjustmentParams,
       AdjustmentParametersTypeEnum,
-      paramSwitches,
       handleIsOpen
     }
   },
@@ -124,16 +119,11 @@ export default defineComponent({
       this.SET_ACTIVE_ADJUSTMENT_PARAMETERS({ name: parameter.name, value: parameter.value })
     },
     handleUpdateBooleanValue(parameter: AdjustmentParametersCategoryType) {
-      if (parameter.value) {
-        this.SET_ACTIVE_ADJUSTMENT_PARAMETERS({ name: parameter.name, value: parameter.minValue })
-      } else {
-        this.SET_ACTIVE_ADJUSTMENT_PARAMETERS({ name: parameter.name, value: parameter.maxValue })
-      }
+      this.SET_ACTIVE_ADJUSTMENT_PARAMETERS({ name: parameter.name, value: !parameter.value })
     },
-
     preventArrowKeys(e) {
       if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-        e.preventDefault()
+        e.stopPropagation()
       }
     }
   }

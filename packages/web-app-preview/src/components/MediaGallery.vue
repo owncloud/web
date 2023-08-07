@@ -44,6 +44,8 @@
           class="zoom-input oc-text-small"
           @keydown.enter="handleChangeZoomLevel"
           @blur="handleSetZoomInputInactive"
+          @keydown="preventArrowKeys"
+          @focus="selectZoomInputText"
         />
         <button v-else class="zoom-button oc-text-small" @click="handleSetZoomInputActive">
           {{ currentZoomLevel }}%
@@ -80,7 +82,7 @@ export default defineComponent({
   emits: ['updateActiveMediaFile', 'handleGoNext', 'handleGoPrev', 'changeActiveZoomLevel'],
   setup(props, { emit }) {
     const isZoomInputActive = ref<Boolean>(false)
-    const currentZoomLevel = computed(() => props.zoomLevel * 100)
+    const currentZoomLevel = computed(() => Math.round(props.zoomLevel * 100))
 
     const activeMediaFiles: ComputedRef<MediaGalleryFile[]> = computed(() =>
       useSlicedGalleryImageList(props.mediaFiles, props.activeIndex)
@@ -106,6 +108,16 @@ export default defineComponent({
       isZoomInputActive.value = false
     }
 
+    function preventArrowKeys(e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.stopPropagation()
+      }
+    }
+
+    function selectZoomInputText(e) {
+      e.target.select()
+    }
+
     return {
       isZoomInputActive,
       activeMediaFiles,
@@ -113,7 +125,9 @@ export default defineComponent({
       handleUpdateActiveMediaFile,
       handleSetZoomInputActive,
       handleSetZoomInputInactive,
-      handleChangeZoomLevel
+      handleChangeZoomLevel,
+      preventArrowKeys,
+      selectZoomInputText
     }
   },
   watch: {
@@ -223,9 +237,10 @@ export default defineComponent({
   margin: 0;
   text-align: left;
   box-sizing: border-box;
-  margin-left: 8px;
-  width: calc(100% - 16px);
+  width: 80%;
   background-color: var(--oc-color-background-default);
+  display: flex;
+  justify-content: center;
 }
 
 .zoom-input {
@@ -233,8 +248,11 @@ export default defineComponent({
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  margin-left: 8px;
-  width: calc(100% - 16px);
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--oc-color-background-default);
 
   &:hover,
   &:focus,
