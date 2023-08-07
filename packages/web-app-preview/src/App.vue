@@ -437,8 +437,6 @@ export default defineComponent({
             handleSetNewActiveIndex(newActiveIndex)
             updateLocalHistory()
 
-            console.log(cachedFiles)
-
             serverVersion.value = newVersion
             currentETag.value = putFileContentsResponse.etag
             imageSavedPopup()
@@ -486,7 +484,7 @@ export default defineComponent({
       )
     }
 
-    function save() {
+    function save(modalFunctions?: Array<(...args: any[]) => Promise<any> | any>) {
       const modal = {
         variation: 'danger',
         icon: 'warning',
@@ -497,6 +495,7 @@ export default defineComponent({
         onCancel: async () => {
           store.dispatch('hideModal')
           await saveImageTask(false).perform()
+          modalFunctions.forEach(async (func) => await func())
         },
         onConfirm: async () => {
           store.dispatch('hideModal')
@@ -613,9 +612,7 @@ export default defineComponent({
 
       if (unref(isSaveable)) {
         const onConfirm: Array<(...args: any[]) => Promise<any> | any> = [
-          () => save(),
-          () => handleSetNewActiveIndex(newActiveIndex),
-          () => updateLocalHistory()
+          () => save([() => handleSetNewActiveIndex(newActiveIndex), () => updateLocalHistory()])
         ]
         const onCancel: Array<(...args: any[]) => Promise<any> | any> = [
           () => handleSetNewActiveIndex(newActiveIndex),
