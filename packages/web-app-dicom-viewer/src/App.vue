@@ -3,12 +3,24 @@
     <!--
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
     -->
-    <app-top-bar :resource="resource" @close="closeApp" />
+    <app-top-bar :resource="resource" @close="closeApp">
+      <template #right>
+        <oc-button
+          v-if="!isLoadingError"
+          class="preview-download"
+          size="small"
+          :aria-label="$gettext('Download currently viewed file')"
+          @click="triggerDicomFileDownload"
+        >
+          <oc-icon size="small" name="file-download" />
+        </oc-button>
+      </template>
+    </app-top-bar>
 
     <!-- note: preview app also lets user download file directly from this view -> see button nested in
     app-top-bar. is this feature also desired for dicom viewer?
     -->
-    <loading-screen v-if="loading" />
+    <loading-screen v-if="isLoading" />
 
     <!-- alternative implementaion of loading screen from preview app, integrated in this vue
     <div v-if="true" class="oc-position-center">
@@ -16,11 +28,13 @@
     </div>
 
     -->
-    <error-screen v-if="loadingError" />
+    <error-screen v-if="isLoadingError" />
 
     <div v-else class="oc-height-1-1">
-      <SimpleDicomViewerScreen />
+      <SimpleDicomViewerScreen :resource="resource" />
+
       <!--
+      <SimpleDicomViewerScreen v-bind:dummydata="dummydata" />
       <object class="dicom-viewer oc-width-1-1" :data="url" type="application/dicom" />
       -->
     </div>
@@ -33,7 +47,9 @@ import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import SimpleDicomViewerScreen from './components/SimpleDicomViewerScreen.vue'
 import { useAppDefaults } from 'web-pkg/src/composables'
+import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 import { defineComponent } from 'vue'
+import { Resource } from 'web-client/src'
 
 export default defineComponent({
   name: 'DICOMViewer',
@@ -48,15 +64,17 @@ export default defineComponent({
     return {
       ...useAppDefaults({
         applicationId: 'dicom-viewer'
-      })
+      }),
+      ...useDownloadFile()
     }
   },
   data() {
     return {
-      loading: true,
-      loadingError: false,
+      isLoading: true,
+      isLoadingError: false,
       url: '',
-      resource: null
+      resource: null,
+      dummydata: 'test'
     }
   },
   watch: {
@@ -81,12 +99,20 @@ export default defineComponent({
   },
   methods: {
     async loadDicom(fileContext) {
+      //console.log('print dummy data from app.vue ' + this.dummydata)
+      // for testing only
+      if (this.resource != null) {
+        console.log('print resource name from app.vue: ' + this.resource.name)
+      } else {
+        console.log('no resource test data available yet')
+      }
+
       try {
-        this.loading = true
+        this.isLoading = true
         // for debugging only
         console.log('try loading resource')
 
-        const resource = await this.getFileInfo(fileContext)
+        const resource = (await this.getFileInfo(fileContext)) as Resource
         console.log('resource loaded: ' + resource.name)
         console.log('resource type: ' + resource.mimeType)
 
@@ -108,18 +134,26 @@ export default defineComponent({
           disposition: 'inline'
         })
       } catch (e) {
-        this.loadingError = true
+        this.isLoadingError = true
         console.error('Error fetching DICOM file', e)
       } finally {
-        this.loading = false
+        this.isLoading = false
         // for testing only
-        console.log('loading resource completed: ' + !this.loading)
+        console.log('loading resource completed: ' + !this.isLoading)
         // it seems like this function gets called twice, check why
         // this is also the case for pdf viewer....
       }
     },
     unloadDicom() {
       this.revokeUrl(this.url)
+    },
+    triggerDicomFileDownload() {
+      if (this.isLoading) {
+        return
+      }
+
+      console.log('downloading resource: ' + this.resource.name)
+      return this.downloadFile(this.resource)
     }
   }
 })
