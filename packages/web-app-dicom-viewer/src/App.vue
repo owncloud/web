@@ -1,8 +1,6 @@
 <template>
   <main>
-    <!--
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
-    -->
     <app-top-bar :resource="resource" @close="closeApp">
       <template #right>
         <oc-button
@@ -31,7 +29,7 @@
     <error-screen v-if="isLoadingError" />
 
     <div v-else class="oc-height-1-1">
-      <SimpleDicomViewerScreen :resource="resource" />
+      <SimpleDicomViewerScreen v-if="!isLoadingError" :resource="resource" />
 
       <!--
       <SimpleDicomViewerScreen v-bind:dummydata="dummydata" />
