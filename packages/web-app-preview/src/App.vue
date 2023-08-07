@@ -334,13 +334,13 @@ export default defineComponent({
         const contextFileName = unref(unref(currentFileContext).fileName).split('.')
         let duplicates = 0
         while (true) {
-          yield `${contextFileName[0]} [Edited${duplicates === 0 ? '' : ' (' + duplicates + ')'}].${
-            contextFileName[1]
-          }`
+          yield `${contextFileName[0]} [${$gettext('Edited')}${
+            duplicates === 0 ? '' : ' (' + duplicates + ')'
+          }].${contextFileName[1]}`
           duplicates += 1
         }
       } catch (e) {
-        console.error(e)
+        errorPopup($gettext(e.message || e))
       }
     }
 
@@ -351,10 +351,10 @@ export default defineComponent({
         if (duplicate) {
           try {
             const nameGenerator = getNewEditedFileName()
-            let testName: string = nameGenerator.next().value as string
+            let newName: string = nameGenerator.next().value as string
 
-            while (unref(filteredFiles).find((file) => file.name === testName)) {
-              testName = nameGenerator.next().value as string
+            while (unref(filteredFiles).find((file) => file.name === newName)) {
+              newName = nameGenerator.next().value as string
             }
 
             const currentFolder = (
@@ -365,7 +365,7 @@ export default defineComponent({
               .toString()
               .replaceAll(',', '/')
 
-            const newPath = `${currentFolder}/${testName}`
+            const newPath = `${currentFolder}/${newName}`
 
             const putFileContentsResponse = yield putFileContents(currentFileContext, {
               content: newVersion,

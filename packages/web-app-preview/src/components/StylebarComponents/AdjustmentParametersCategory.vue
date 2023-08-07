@@ -6,7 +6,8 @@
       @click="handleIsOpen"
     >
       <span class="button-description"
-        ><oc-icon :name="iconName" :fill-type="isFillTypeLine ? 'line' : 'fill'" /> {{ name }}</span
+        ><oc-icon :name="iconName" :fill-type="isFillTypeLine ? 'line' : 'fill'" />
+        {{ $gettext(name) }}</span
       >
       <oc-icon :name="isOpen ? 'arrow-up-s' : 'arrow-down-s'" />
     </oc-button>
@@ -61,6 +62,7 @@ import {
 } from '../../helpers'
 import { mapMutations } from 'vuex'
 import { useStore } from 'web-pkg'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'AdjustmentParametersCategory',
@@ -88,6 +90,7 @@ export default defineComponent({
   setup(props) {
     const isOpen = ref(false)
     const store = useStore()
+    const { $gettext } = useGettext()
 
     const adjustmentParams = computed((): AdjustmentParametersCategoryType[] => {
       switch (props.parameterCategory) {

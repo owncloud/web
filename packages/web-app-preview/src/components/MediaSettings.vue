@@ -3,7 +3,7 @@
     <div class="tool-list">
       <oc-button class="media-settings-button" appearance="raw" @click="$emit('download')">
         <oc-icon name="download-2" class="download-button" />
-        <span>Download</span>
+        <span>{{ $gettext('Download') }}</span>
       </oc-button>
 
       <oc-button
@@ -16,7 +16,7 @@
         @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Customize)"
       >
         <oc-icon name="tools" />
-        <span>Customize</span>
+        <span>{{ $gettext('Customize') }}</span>
       </oc-button>
 
       <oc-button
@@ -29,7 +29,7 @@
         @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Crop)"
       >
         <oc-icon name="crop" fill-type="line" />
-        <span>Crop</span>
+        <span>{{ $gettext('Crop') }}</span>
       </oc-button>
 
       <oc-button
@@ -42,7 +42,7 @@
         @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Write)"
       >
         <oc-icon name="pencil" />
-        <span>Write</span>
+        <span>{{ $gettext('Write') }}</span>
       </oc-button>
 
       <oc-button
@@ -55,7 +55,7 @@
         @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Draw)"
       >
         <oc-icon name="brush" />
-        <span>Draw</span>
+        <span>{{ $gettext('Draw') }}</span>
       </oc-button>
     </div>
     <div class="side-bar-animation">
@@ -90,7 +90,7 @@
             @click="handleUpdateCropVariant(CropVariantEnum.FreeForm)"
           >
             <oc-icon name="crop" fill-type="line" />
-            <span>Free form</span>
+            <span>{{ $gettext('Free form') }}</span>
           </oc-button>
           <oc-button
             :class="
@@ -100,12 +100,12 @@
             @click="handleUpdateCropVariant(CropVariantEnum.Circular)"
           >
             <oc-icon name="checkbox-blank-circle" fill-type="line" />
-            <span>Circular</span>
+            <span>{{ $gettext('Circular') }}</span>
           </oc-button>
         </div>
         <div class="crop-image-button">
           <oc-button appearance="filled" variation="primary" @click="$emit('saveCroppedImage')">
-            Crop
+            {{ $gettext('Crop') }}
           </oc-button>
         </div>
       </div>
@@ -121,6 +121,7 @@ import AdjustmentParametersCategory from './StylebarComponents/AdjustmentParamet
 import { useStore } from 'web-pkg/src'
 import { mapMutations } from 'vuex'
 import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: { AdjustmentParametersCategory },
@@ -132,10 +133,13 @@ export default defineComponent({
     )
     const cropVariant = computed(() => store.getters['Preview/getCropVariant'])
 
+    const { $gettext } = useGettext()
+
     return {
       selectedProcessingTool,
       cropVariant,
-      CropVariantEnum
+      CropVariantEnum,
+      $gettext
     }
   },
   data() {
