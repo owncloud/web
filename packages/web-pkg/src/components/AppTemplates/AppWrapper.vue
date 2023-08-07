@@ -9,7 +9,7 @@
       @close="closeApp"
     />
     <loading-screen v-if="loading" />
-    <error-screen v-else-if="loadingError" />
+    <error-screen v-else-if="loadingError" :message="loadingError.message" />
     <div v-else class="oc-height-1-1">
       <slot v-bind="slotAttrs" />
     </div>
@@ -28,6 +28,7 @@ import {
   computed,
   onMounted
 } from 'vue'
+import { DateTime } from 'luxon'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { onBeforeRouteLeave } from 'vue-router'
@@ -35,7 +36,12 @@ import { onBeforeRouteLeave } from 'vue-router'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from 'web-pkg/src/components/AppTemplates/PartialViews/ErrorScreen.vue'
 import LoadingScreen from 'web-pkg/src/components/AppTemplates/PartialViews/LoadingScreen.vue'
-import { UrlForResourceOptions, useAppDefaults, useStore } from 'web-pkg/src/composables'
+import {
+  UrlForResourceOptions,
+  useAppDefaults,
+  useClientService,
+  useStore
+} from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { AppConfigObject } from 'web-pkg/src/apps/types'
@@ -73,6 +79,10 @@ export default defineComponent({
     wrappedComponent: {
       type: Object as PropType<ReturnType<typeof defineComponent>>,
       default: null
+    },
+    importResourceWithExtension: {
+      type: Function as PropType<(Resource) => string>,
+      default: () => null
     }
   },
   setup(props) {
@@ -83,7 +93,7 @@ export default defineComponent({
     const currentETag = ref('')
     const url = ref('')
     const loading = ref(true)
-    const loadingError = ref(false)
+    const loadingError: Ref<Error> = ref()
     const isReadOnly = ref(false)
     const serverContent = ref()
     const currentContent = ref()
@@ -100,6 +110,8 @@ export default defineComponent({
       return unref(currentContent) !== unref(serverContent)
     })
 
+    const clientService = useClientService()
+
     const {
       currentFileContext,
       getFileContents,
@@ -108,23 +120,41 @@ export default defineComponent({
       closeApp,
       putFileContents,
       revokeUrl,
-      replaceInvalidFileRoute
+      replaceInvalidFileRoute,
+      applicationConfig
     } = useAppDefaults({
       applicationId: props.applicationId
     })
 
     const loadFileTask = useTask(function* () {
       try {
-        // FIXME: make all updates atomic/happen at once so the ui can never mix data from different resources
-
-        const tmpResource = yield getFileInfo(currentFileContext, {
+        resource.value = yield getFileInfo(currentFileContext, {
           davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
         })
 
-        replaceInvalidFileRoute(currentFileContext, tmpResource)
+        const space = unref(unref(currentFileContext).space)
+
+        const newExtension = props.importResourceWithExtension(unref(resource))
+        if (newExtension) {
+          const timestamp = DateTime.local().toFormat('yyyyMMddHHmmss')
+          const targetPath = `${unref(resource).name}_${timestamp}.${newExtension}`
+          if (
+            !(yield clientService.webdav.copyFiles(space, unref(resource), space, {
+              path: targetPath
+            }))
+          ) {
+            throw new Error($gettext('Importing failed'))
+          }
+
+          resource.value = { path: targetPath } as Resource
+        }
+
+        if (replaceInvalidFileRoute(currentFileContext, unref(resource))) {
+          return
+        }
 
         isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
-          (p) => (tmpResource.permissions || '').indexOf(p) > -1
+          (p) => (unref(resource).permissions || '').indexOf(p) > -1
         )
 
         if (unref(hasProp('currentContent'))) {
@@ -134,19 +164,16 @@ export default defineComponent({
         }
 
         if (unref(hasProp('url'))) {
-          const currentSpace = unref(unref(currentFileContext).space)
           const tmpUrl = yield getUrlForResource(
-            currentSpace,
-            tmpResource,
+            space,
+            unref(resource),
             props.urlForResourceOptions
           )
           url.value = tmpUrl
         }
-
-        resource.value = tmpResource
       } catch (e) {
         console.error(e)
-        loadingError.value = true
+        loadingError.value = e
       } finally {
         loading.value = false
       }
@@ -232,7 +259,7 @@ export default defineComponent({
       }
     }).restartable()
 
-    const save = async function () {
+    const save = async () => {
       await saveFileTask.perform()
     }
 
@@ -311,7 +338,6 @@ export default defineComponent({
             next()
           },
           async onConfirm() {
-            console.log('CONFIRM')
             await save()
             store.dispatch('hideModal')
             next()
@@ -329,7 +355,10 @@ export default defineComponent({
       resource: unref(resource),
       isDirty: unref(isDirty),
       isReadOnly: unref(isReadOnly),
-      applicationConfig: {},
+      applicationConfig: unref(applicationConfig),
+
+      onSave: save,
+      onClose: closeApp,
 
       // this must not be unref'ed, we are passing a Ref so it can be updated
       currentContent
