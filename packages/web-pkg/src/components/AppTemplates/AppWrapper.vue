@@ -165,6 +165,7 @@ export default defineComponent({
     })
 
     const errorPopup = (error: HttpError) => {
+      console.error(error)
       store.dispatch('showErrorMessage', {
         title: $gettext('An error occurred'),
         desc: error.message,
@@ -205,9 +206,6 @@ export default defineComponent({
                 e.response
               )
             )
-            break
-          case 500:
-            errorPopup(new HttpError($gettext('Error when contacting the server'), e.response))
             break
           case 507:
             const space = store.getters['runtime/spaces/spaces'].find(
