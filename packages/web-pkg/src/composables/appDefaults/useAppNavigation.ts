@@ -14,7 +14,7 @@ interface AppNavigationOptions {
 
 export interface AppNavigationResult {
   closeApp(): void
-  replaceInvalidFileRoute(context: MaybeRef<FileContext>, resource: Resource): void
+  replaceInvalidFileRoute(context: MaybeRef<FileContext>, resource: Resource): boolean
 }
 
 export const contextRouteNameKey = 'contextRouteName'
