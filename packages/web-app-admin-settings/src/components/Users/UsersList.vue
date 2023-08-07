@@ -205,6 +205,10 @@ export default defineComponent({
       if (contextActionClicked) {
         return
       }
+
+      if (eventData?.metaKey) {
+        return eventBus.publish('app.files.list.clicked.meta', resource)
+      }
       if (eventData?.shiftKey) {
         return eventBus.publish('app.files.list.clicked.shift', {
           resource,

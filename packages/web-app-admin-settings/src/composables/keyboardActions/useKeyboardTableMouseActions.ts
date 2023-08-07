@@ -11,7 +11,21 @@ export const useKeyboardTableMouseActions = (
   lastSelectedRowIndex: Ref<number>,
   lastSelectedRowId: Ref<string | null>
 ) => {
+  let fileListClickedMetaEvent
   let fileListClickedShiftEvent
+
+  const handleCtrlClickAction = (resource: Resource) => {
+    const rowIndex = findIndex(selectedRows, { id: resource.id })
+    if (rowIndex >= 0) {
+      selectedRows.splice(rowIndex, 1)
+    } else {
+      selectedRows.push(resource)
+    }
+    keyActions.resetSelectionCursor()
+
+    lastSelectedRowIndex.value = rowIndex >= 0 ? rowIndex : selectedRows.length - 1
+    lastSelectedRowId.value = String(resource.id)
+  }
 
   const handleShiftClickAction = ({ resource, skipTargetSelection }) => {
     const parent = document.querySelectorAll(`[data-item-id='${resource.id}']`)[0]
@@ -46,6 +60,10 @@ export const useKeyboardTableMouseActions = (
   }
 
   onMounted(() => {
+    fileListClickedMetaEvent = eventBus.subscribe(
+      'app.files.list.clicked.meta',
+      handleCtrlClickAction
+    )
     fileListClickedShiftEvent = eventBus.subscribe(
       'app.files.list.clicked.shift',
       handleShiftClickAction
@@ -53,6 +71,7 @@ export const useKeyboardTableMouseActions = (
   })
 
   onBeforeUnmount(() => {
+    eventBus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
     eventBus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
   })
 }
