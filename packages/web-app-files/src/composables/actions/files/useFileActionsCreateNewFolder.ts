@@ -1,7 +1,18 @@
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, nextTick, unref } from 'vue'
-import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
+import {
+  queryItemAsString,
+  SortField,
+  useClientService,
+  useRouteName,
+  useRouteQuery,
+  useRouter,
+  useSort,
+  useStore,
+  useViewMode,
+  ViewModeConstants
+} from 'web-pkg/src/composables'
 import { FileAction } from 'web-pkg/src/composables/actions'
 import { useGettext } from 'vue3-gettext'
 import { resolveFileNameDuplicate } from 'web-app-files/src/helpers/resource'
@@ -10,6 +21,10 @@ import { WebDAV } from 'web-client/src/webdav'
 import { isLocationSpacesActive } from 'web-app-files/src/router'
 import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 import { useScrollTo } from '../../scrollTo/useScrollTo'
+import { determineSortFields as determineResourceTilesSortFields } from 'web-app-files/src/helpers/ui/resourceTiles'
+import { determineSortFields as determineResourceTableSortFields } from 'web-app-files/src/helpers/ui/resourceTable'
+import { useRoute } from 'vue-router'
+import { findIndex } from 'lodash-es'
 
 export const useFileActionsCreateNewFolder = ({
   store,
@@ -17,6 +32,7 @@ export const useFileActionsCreateNewFolder = ({
 }: { store?: Store<any>; space?: SpaceResource } = {}) => {
   store = store || useStore()
   const router = useRouter()
+  const route = useRoute()
   const { $gettext } = useGettext()
   const { scrollToResource } = useScrollTo()
 
@@ -24,6 +40,24 @@ export const useFileActionsCreateNewFolder = ({
   const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
   const files = computed((): Array<Resource> => store.getters['Files/files'])
   const ancestorMetaData = computed(() => store.getters['Files/ancestorMetaData'])
+
+  const currentRoute = useRouteName()
+  const itemsPerPageQuery = useRouteQuery('items-per-page', '1')
+  const pageQuery = useRouteQuery('page', '1')
+  const currentViewModeQuery = useRouteQuery(
+    `${unref(currentRoute)}-view-mode`,
+    ViewModeConstants.defaultModeName
+  )
+
+  const currentViewMode = computed((): string => queryItemAsString(currentViewModeQuery.value))
+  const viewMode = useViewMode(currentViewMode)
+  const sortFields = computed((): SortField[] => {
+    if (unref(viewMode) === ViewModeConstants.tilesView.name) {
+      return determineResourceTilesSortFields(unref(files)[0])
+    }
+    return determineResourceTableSortFields(unref(files)[0])
+  })
+  const { items: sortedItems } = useSort({ items: files, fields: sortFields })
 
   const checkNewFolderName = (folderName) => {
     if (folderName.trim() === '') {
@@ -70,6 +104,16 @@ export const useFileActionsCreateNewFolder = ({
 
       store.commit('Files/UPSERT_RESOURCE', resource)
       store.dispatch('hideModal')
+
+      if (unref(sortedItems)) {
+        const index = findIndex(unref(sortedItems), (item: Resource) => item.id === resource.id)
+        if (index >= 0) {
+          const page = Math.ceil((index + 1) / Number(unref(itemsPerPageQuery)))
+          if (page !== Number(unref(pageQuery))) {
+            await router.push({ ...unref(route), query: { ...unref(route).query, page } })
+          }
+        }
+      }
 
       store.dispatch('showMessage', {
         title: $gettext('"%{folderName}" was created successfully', { folderName })
