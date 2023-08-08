@@ -258,7 +258,7 @@ export default defineComponent({
             errorPopup(new HttpError('', e.response))
         }
       }
-    }).restartable()
+    }).drop()
 
     const save = async () => {
       await saveFileTask.perform()
