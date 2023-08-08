@@ -1,4 +1,4 @@
-import { onBeforeUnmount, onMounted, Ref, ref } from 'vue'
+import { onBeforeUnmount, onMounted, Ref, ref, unref } from 'vue'
 import * as uuid from 'uuid'
 
 export enum Key {
@@ -6,6 +6,7 @@ export enum Key {
   V = 'v',
   X = 'x',
   A = 'a',
+  S = 's',
   Space = ' ',
   ArrowUp = 'ArrowUp',
   ArrowDown = 'ArrowDown',
@@ -36,7 +37,6 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
   const actions = ref<Array<KeyboardAction>>([])
   const selectionCursor = ref(0)
   const listener = (event: KeyboardEvent): void => {
-    event.preventDefault()
     const { key, ctrlKey, metaKey, shiftKey } = event
     let modifier = null
     if (metaKey || ctrlKey) {
@@ -44,12 +44,14 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
     } else if (shiftKey) {
       modifier = ModifierKey.Shift
     }
-    const action = actions.value.find((action) => {
-      return action.primary === key && action.modifier === modifier
-    })
-    if (action) {
-      action.callback(event)
-    }
+    unref(actions)
+      .filter((action) => {
+        return action.primary === key && action.modifier === modifier
+      })
+      .forEach((action) => {
+        event.preventDefault()
+        action.callback(event)
+      })
   }
   const bindKeyAction = (
     keys: { primary: Key; modifier?: ModifierKey },
