@@ -26,8 +26,6 @@ export class Application {
   }
 
   async getNotificationMessages(): Promise<string[]> {
-    // reload will fetch notifications immediately
-    // wait for the notifications to load
     await Promise.all([
       this.#page.waitForResponse(
         (resp) =>
@@ -35,7 +33,6 @@ export class Application {
           resp.status() === 200 &&
           resp.request().method() === 'GET'
       ),
-      this.#page.reload()
     ])
 
     const dropIsOpen = await this.#page.locator(notificationsDrop).isVisible()
