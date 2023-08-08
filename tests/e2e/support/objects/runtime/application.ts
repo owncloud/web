@@ -26,15 +26,6 @@ export class Application {
   }
 
   async getNotificationMessages(): Promise<string[]> {
-    await Promise.all([
-      this.#page.waitForResponse(
-        (resp) =>
-          resp.url().endsWith('notifications?format=json') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'GET'
-      )
-    ])
-
     const dropIsOpen = await this.#page.locator(notificationsDrop).isVisible()
     if (!dropIsOpen) {
       await this.#page.locator(notificationsBell).click()
