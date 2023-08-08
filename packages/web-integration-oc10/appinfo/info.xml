@@ -17,7 +17,7 @@ Important note: Please be advised that the compatibility of the Web UI for ownCl
 	</description>
 	<licence>AGPL</licence>
 	<author>ownCloud</author>
-	<version>7.0.2</version>
+	<version>7.0.3</version>
 	<category>tools</category>
 	<website>https://github.com/owncloud/web</website>
 	<bugs>https://github.com/owncloud/web/issues</bugs>
