@@ -758,8 +758,8 @@ def e2eTests(ctx):
                      collaboraService() + \
                      onlyofficeService() + \
                      ocisService("app-provider") + \
-                     appProviderService("onlyoffice") + \
                      appProviderService("collabora") + \
+                     appProviderService("onlyoffice") + \
                      getSkeletonFiles()
         else:
             # oCIS specific steps
@@ -1297,6 +1297,8 @@ def ocisService(type, tika_enabled = False):
             "environment": environment,
             "commands": [
                 "cd %s" % dir["ocis"],
+                "mkdir -p %s" % dir["ocisRevaDataRoot"],
+                "mkdir -p /srv/app/tmp/ocis/storage/users/",
                 "./ocis init",
                 "cp %s/tests/drone/app-registry.yaml /root/.ocis/config/app-registry.yaml" % dir["web"],
                 "./ocis server",
