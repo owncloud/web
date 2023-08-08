@@ -189,7 +189,9 @@ export default defineComponent({
     )
 
     onBeforeUnmount(() => {
-      revokeUrl(url.value)
+      if (unref(hasProp('url'))) {
+        revokeUrl(url.value)
+      }
     })
 
     const errorPopup = (error: HttpError) => {
