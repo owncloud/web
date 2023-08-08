@@ -6,13 +6,13 @@ import { Resource } from 'web-client'
 
 export const useKeyboardTableMouseActions = (
   keyActions: KeyboardActions,
-  paginatedResources: Ref<Resource[]>,
+  paginatedResources: Ref<{ id: string }[]>,
   selectedRows: any,
   lastSelectedRowIndex: Ref<number>,
   lastSelectedRowId: Ref<string | null>
 ) => {
-  let fileListClickedMetaEvent
-  let fileListClickedShiftEvent
+  let resourceListClickedMetaEvent
+  let resourceListClickedShiftEvent
 
   const handleCtrlClickAction = (resource: Resource) => {
     const rowIndex = findIndex(selectedRows, { id: resource.id })
@@ -60,18 +60,18 @@ export const useKeyboardTableMouseActions = (
   }
 
   onMounted(() => {
-    fileListClickedMetaEvent = eventBus.subscribe(
-      'app.files.list.clicked.meta',
+    resourceListClickedMetaEvent = eventBus.subscribe(
+      'app.resources.list.clicked.meta',
       handleCtrlClickAction
     )
-    fileListClickedShiftEvent = eventBus.subscribe(
-      'app.files.list.clicked.shift',
+    resourceListClickedShiftEvent = eventBus.subscribe(
+      'app.resources.list.clicked.shift',
       handleShiftClickAction
     )
   })
 
   onBeforeUnmount(() => {
-    eventBus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
-    eventBus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
+    eventBus.unsubscribe('app.resources.list.clicked.meta', resourceListClickedMetaEvent)
+    eventBus.unsubscribe('app.resources.list.clicked.shift', resourceListClickedShiftEvent)
   })
 }

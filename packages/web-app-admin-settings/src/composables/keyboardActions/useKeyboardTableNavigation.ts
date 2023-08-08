@@ -1,12 +1,11 @@
 import { useScrollTo } from 'web-app-admin-settings/src/composables/scrollTo'
 import { Ref, unref } from 'vue'
 import { Key, KeyboardActions, ModifierKey } from 'web-pkg/src/composables/keyboardActions'
-import { Resource } from 'web-client'
 import { find, findIndex } from 'lodash-es'
 
 export const useKeyboardTableNavigation = (
   keyActions: KeyboardActions,
-  paginatedResources: Ref<Resource[]>,
+  paginatedResources: Ref<{ id: string }[]>,
   selectedRows: any,
   lastSelectedRowIndex: Ref<number>,
   lastSelectedRowId: Ref<string | null>

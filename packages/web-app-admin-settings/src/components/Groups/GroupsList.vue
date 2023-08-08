@@ -183,10 +183,10 @@ export default defineComponent({
       }
 
       if (eventData?.metaKey) {
-        return eventBus.publish('app.files.list.clicked.meta', resource)
+        return eventBus.publish('app.resources.list.clicked.meta', resource)
       }
       if (eventData?.shiftKey) {
-        return eventBus.publish('app.files.list.clicked.shift', {
+        return eventBus.publish('app.resources.list.clicked.shift', {
           resource,
           skipTargetSelection: isCheckboxClicked
         })
