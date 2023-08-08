@@ -21,14 +21,7 @@ export function AppWrapperRoute(
         },
         {
           default: (slotArgs: AppWrapperSlotArgs) => {
-            const { currentContent, ...restArgs } = slotArgs
-            return h(fileEditor, {
-              currentContent: currentContent.value,
-              'onUpdate:currentContent': (value) => {
-                currentContent.value = value
-              },
-              ...restArgs
-            })
+            return h(fileEditor, slotArgs)
           }
         }
       )
