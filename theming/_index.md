@@ -1,5 +1,5 @@
 ---
-title: 'Theming'
+title: "Theming"
 date: 2021-04-01T00:00:00+00:00
 weight: 55
 geekdocRepo: https://github.com/owncloud/web
@@ -82,6 +82,7 @@ Using the `"autoRedirect"` boolean, you can specify whether the user is shown a 
 
 To further customize your ownCloud instance, you can provide your own styles. To give you an idea of how a working design system looks like, feel free to head over to the [ownCloud design tokens](https://owncloud.design/#/Design%20Tokens) for inspiration.
 
+
 **Hint:** All the variables are initialized using the [ownCloud design tokens](https://owncloud.design/#/Design%20Tokens) and then overwritten by your theme variables. Therefore, you don't have to provide all the variables and can use the default ownCloud colors as a fallback.
 
 In general, the theme loader looks for a `designTokens` key inside your theme configuration. Inside the `designTokens`, it expects to find a `colorPalette`, `fontSizes` and `spacing` collection. The structure is outlined below:
@@ -116,7 +117,8 @@ If you define different key-value pairs inside any of the objects in `"designTok
 
 If you'd like to set different breakpoints than the default ones in the ownCloud design system, you can set them using theming variables.
 
-Breakpoint variables get prepended with `--oc-breakpoint-`, so e.g. _"large-default"_ creates the custom CSS property `--oc-breakpoint-large-default`.
+Breakpoint variables get prepended with `--oc-breakpoint-`, so e.g. *"large-default"* creates the custom CSS property `--oc-breakpoint-large-default`.
+
 
 ```json
 {
@@ -137,7 +139,7 @@ Breakpoint variables get prepended with `--oc-breakpoint-`, so e.g. _"large-defa
 
 For the color values, you can use any valid CSS color format, e.g. **hex** (#fff), **rgb** (rgb(255,255,255)) or **color names** (white).
 
-Color variables get prepended with `--oc-color-`, so e.g. _"background-default"_ creates the custom CSS property `--oc-color-background-default`.
+Color variables get prepended with `--oc-color-`, so e.g. *"background-default"* creates the custom CSS property `--oc-color-background-default`.
 
 Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design%20Tokens) as a reference implementation.
 
@@ -166,15 +168,12 @@ Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design
     "swatch-inverse-muted": "",
     "swatch-passive-default": "",
     "swatch-passive-hover": "",
-    "swatch-passive-hover-outline": "",
     "swatch-passive-muted": "",
     "swatch-passive-contrast": "",
     "swatch-primary-default": "",
     "swatch-primary-hover": "",
     "swatch-primary-muted": "",
-    "swatch-primary-muted-hover": "",
     "swatch-primary-gradient": "",
-    "swatch-primary-gradient-hover": "",
     "swatch-primary-contrast": "",
     "swatch-success-default": "",
     "swatch-success-hover": "",
@@ -195,7 +194,7 @@ Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design
 
 You can change the `default`, `large` and `medium` font sizes according to your needs. If you need more customization options regarding font sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
 
-Font size variables get prepended with `--oc-font-size-`, so e.g. _"default"_ creates the custom CSS property `--oc-font-size-default`.
+Font size variables get prepended with `--oc-font-size-`, so e.g. *"default"* creates the custom CSS property `--oc-font-size-default`.
 
 ```json
 {
@@ -221,10 +220,10 @@ Please note that you also need to make the font available as a `font-face` via C
 
 ### Sizes
 
-Use sizing variables to change various UI elements, such as icon and logo appearance, table row or checkbox sizes, according to your needs.
+Use sizing variables to change various UI elements, such as icon and logo appearance, table row or checkbox sizes, according to your needs. 
 If you need more customization options regarding sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
 
-Size variables get prepended with `--oc-size-`, so e.g. _"icon-default"_ creates the custom CSS property `--oc-size-icon-default`.
+Size variables get prepended with `--oc-size-`, so e.g. *"icon-default"* creates the custom CSS property `--oc-size-icon-default`.
 
 ```json
 {
@@ -244,7 +243,7 @@ Size variables get prepended with `--oc-size-`, so e.g. _"icon-default"_ creates
 
 Use the six spacing options (`xsmall | small | medium | large | xlarge | xxlarge`) to create a more (or less) condensed version of the user interface. If you need more customization options regarding sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
 
-Spacing variables get prepended with `--oc-space-`, so e.g. _"xlarge"_ creates the custom CSS property `--oc-space-xlarge`.
+Spacing variables get prepended with `--oc-space-`, so e.g. *"xlarge"* creates the custom CSS property `--oc-space-xlarge`.
 
 ```json
 {
@@ -265,7 +264,7 @@ An empty template for your custom theme is provided below, and you can use the i
 
 ```json
 {
-  "common": {
+   "common": {
     "name": "",
     "slogan": "",
     "logo": ""
