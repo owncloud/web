@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [7.0.3] (2023-08-08)
 =======================================
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v6.0.0...master
+[7.0.3]: https://github.com/owncloud/web/compare/v7.0.3...master
 
 Summary
 -------
