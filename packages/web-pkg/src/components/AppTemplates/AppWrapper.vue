@@ -111,6 +111,22 @@ export default defineComponent({
       return unref(currentContent) !== unref(serverContent)
     })
 
+    const handleUnload = function (e) {
+      if (unref(isDirty)) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+
+    watch(isDirty, (dirty) => {
+      // Prevent reload if there are changes
+      if (dirty) {
+        window.addEventListener('beforeunload', handleUnload)
+      } else {
+        window.removeEventListener('beforeunload', handleUnload)
+      }
+    })
+
     const clientService = useClientService()
 
     const {
@@ -271,8 +287,6 @@ export default defineComponent({
       if (!unref(isEditor)) {
         return
       }
-      // Ensure reload is not possible if there are changes
-      window.addEventListener('beforeunload', handleUnload)
       const editorOptions = store.getters.configuration.options.editor
       if (editorOptions.autosaveEnabled) {
         autosaveIntervalId = setInterval(async () => {
@@ -288,7 +302,6 @@ export default defineComponent({
         return
       }
 
-      window.removeEventListener('beforeunload', handleUnload)
       clearInterval(autosaveIntervalId)
       autosaveIntervalId = null
     })
@@ -301,12 +314,6 @@ export default defineComponent({
       save()
     })
 
-    const handleUnload = function (e) {
-      if (unref(isDirty)) {
-        e.preventDefault()
-        e.returnValue = ''
-      }
-    }
     const fileActions = computed((): Action<ActionOptions>[] => [
       {
         name: 'save-file',
