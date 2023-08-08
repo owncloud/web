@@ -76,23 +76,19 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
   }
 
   onMounted(() => {
-    let element = null
+    let target: EventTarget = document
     if (keyBindOnElementId) {
-      element = document.getElementById(keyBindOnElementId)
+      target = document.getElementById(keyBindOnElementId)
     }
-    element
-      ? element.addEventListener('keydown', listener)
-      : document.addEventListener('keydown', listener)
+    target.addEventListener('keydown', listener)
   })
 
   onBeforeUnmount(() => {
-    let element = null
+    let target: EventTarget = document
     if (keyBindOnElementId) {
-      element = document.getElementById(keyBindOnElementId)
+      target = document.getElementById(keyBindOnElementId)
     }
-    element
-      ? element.removeEventListener('keydown', listener)
-      : document.removeEventListener('keydown', listener)
+    target.removeEventListener('keydown', listener)
   })
 
   return {
