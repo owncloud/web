@@ -111,7 +111,7 @@ export default defineComponent({
       return unref(currentContent) !== unref(serverContent)
     })
 
-    const preventUnload = function (e) {
+    const preventUnload = (e) => {
       e.preventDefault()
       e.returnValue = ''
     }
