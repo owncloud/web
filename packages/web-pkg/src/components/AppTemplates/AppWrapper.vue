@@ -48,6 +48,7 @@ import { AppConfigObject } from 'web-pkg/src/apps/types'
 import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { HttpError } from 'web-pkg/src/errors'
+import { ModifierKey, Key, useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
 
 export interface AppWrapperSlotArgs {
   applicationConfig: AppConfigObject
@@ -268,8 +269,6 @@ export default defineComponent({
       if (!unref(isEditor)) {
         return
       }
-      // Enable ctrl/cmd + s
-      document.addEventListener('keydown', handleSKey, false)
       // Ensure reload is not possible if there are changes
       window.addEventListener('beforeunload', handleUnload)
       const editorOptions = store.getters.configuration.options.editor
@@ -288,20 +287,18 @@ export default defineComponent({
       }
 
       window.removeEventListener('beforeunload', handleUnload)
-      document.removeEventListener('keydown', handleSKey, false)
       clearInterval(autosaveIntervalId)
       autosaveIntervalId = null
     })
 
-    const handleSKey = function (e) {
-      if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
-        e.preventDefault()
-        if (!unref(isDirty)) {
-          return
-        }
-        save()
+    const { bindKeyAction } = useKeyboardActions()
+    bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.S }, () => {
+      if (!unref(isDirty)) {
+        return
       }
-    }
+      save()
+    })
+
     const handleUnload = function (e) {
       if (unref(isDirty)) {
         e.preventDefault()
