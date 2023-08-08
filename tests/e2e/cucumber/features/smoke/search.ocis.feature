@@ -12,6 +12,7 @@ Feature: Search
       | id    |
       | Alice |
       | Brian |
+      | Carol |
     And "Brian" logs in
     And "Brian" creates the following folder in personal space using API
       | name                 |
@@ -91,7 +92,50 @@ Feature: Search
       | folder           |
       | FolDer           |
       | .hidden-file.txt |
+    And "Alice" opens the "files" app
+
+    # search renamed resources
+    When "Alice" renames the following resource
+      | resource | as            |
+      | folder   | renamedFolder |
+      | FolDer   | renamedFolDer |
+    And "Alice" searches "rena" using the global search and the "all files" filter
+    Then following resources should be displayed in the search list for user "Alice"
+      | resource      |
+      | renamedFolder |
+      | renamedFolDer |
+    But following resources should not be displayed in the search list for user "Alice"
+      | resource |
+      | folder   |
+      | FolDer   |
+
+    And "Alice" navigates to the shared with me page
+    When "Alice" reshares the following resource
+      | resource             | recipient | type | role     | resourceType |
+      | new_share_from_brian | Carol     | user | Can view | folder       |
+      | new-lorem-big.txt    | Carol     | user | Can view | file         |
     And "Alice" logs out
+
+    # search re-shared resources
+    When "Carol" logs in
+    And "Carol" navigates to the shared with me page
+    And "Carol" accepts the following share
+      | name                 |
+      | new_share_from_brian |
+      | new-lorem-big.txt    |
+    And "Carol" opens the "files" app
+    And "Carol" creates the following resources
+      | resource | type   |
+      | folder   | folder |
+    And "Carol" searches "NEW" using the global search and the "all files" filter
+    Then following resources should be displayed in the search list for user "Carol"
+      | resource             |
+      | new_share_from_brian |
+      | new-lorem-big.txt    |
+    But following resources should not be displayed in the search list for user "Carol"
+      | resource |
+      | folder   |
+    And "Carol" logs out
 
 
   Scenario: Search using "current folder" filter
