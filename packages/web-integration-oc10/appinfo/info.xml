@@ -12,6 +12,8 @@ ownCloud Web is a single page, standalone frontend based on modern web technolog
 
 To get started, some further configuration is necessary. Find more information on the deployment with this extension in the [documentation](https://owncloud.dev/clients/web/deployments/oc10-app).
 For feedback and bug reports, please use the [public issue tracker](https://github.com/owncloud/web/issues).
+
+Important note: Please be advised that the compatibility of the Web UI for ownCloud 10 is specifically pinned to version 7.0.3. As a result, newer versions of the web UI may not function properly with ownCloud 10 as the backend. Rest assured, security-relevant patches will continue to be delivered to ensure ongoing stability and protection.
 	</description>
 	<licence>AGPL</licence>
 	<author>ownCloud</author>
