@@ -84,9 +84,14 @@ export default defineComponent({
   },
   computed: {
     pageTitle() {
-      return this.$gettext('Preview for %{resourceName}', {
-        resourceName: this.resource.name
-      })
+      if (this.resource != null) {
+        return this.$gettext('Preview for %{resourceName}', {
+          resourceName: this.resource.name
+        })
+      } else {
+        console.log('no resource loaded, thus no preview title available')
+        return 'no preview title available'
+      }
     }
   },
   beforeUnmount() {
@@ -109,6 +114,22 @@ export default defineComponent({
         // for debugging only
         console.log('resource loaded: ' + resource.name)
         console.log('resource type: ' + resource.mimeType)
+
+        // for testing only log some data of the current resource
+        console.log('resource size: ' + resource.size)
+        console.log('resource path: ' + resource.path)
+        console.log('resource download url: ' + resource.downloadURL)
+        console.log('resource is mounted: ' + resource.isMounted())
+        console.log('resource owner: ' + resource.resourceOwner)
+        console.log('resource owner display name: ' + resource.ownerDisplayName)
+        console.log('resource tags: ')
+        if (resource.tags.length < 1) {
+          console.log('- no tags')
+        } else {
+          for (const tag in resource.tags) {
+            console.log('- ' + (tag as String))
+          }
+        }
 
         if (
           resource.mimeType !==
