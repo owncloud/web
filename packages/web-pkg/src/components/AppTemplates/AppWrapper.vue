@@ -111,19 +111,17 @@ export default defineComponent({
       return unref(currentContent) !== unref(serverContent)
     })
 
-    const handleUnload = function (e) {
-      if (unref(isDirty)) {
-        e.preventDefault()
-        e.returnValue = ''
-      }
+    const preventUnload = function (e) {
+      e.preventDefault()
+      e.returnValue = ''
     }
 
     watch(isDirty, (dirty) => {
       // Prevent reload if there are changes
       if (dirty) {
-        window.addEventListener('beforeunload', handleUnload)
+        window.addEventListener('beforeunload', preventUnload)
       } else {
-        window.removeEventListener('beforeunload', handleUnload)
+        window.removeEventListener('beforeunload', preventUnload)
       }
     })
 
