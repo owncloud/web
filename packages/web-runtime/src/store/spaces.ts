@@ -1,4 +1,9 @@
-import { buildSpace, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import {
+  buildMountPointSpaceResource,
+  buildSpace,
+  isProjectSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import { Ref, unref } from 'vue'
 import { set, has } from 'lodash-es'
 import { buildSpaceShare } from 'web-client/src/helpers/share'
@@ -282,7 +287,9 @@ const loadSpacesByType = async ({
     return []
   }
   return graphResponse.data.value.map((space) =>
-    buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
+    driveType === 'mountpoint'
+      ? buildMountPointSpaceResource({ ...space, serverUrl: configurationManager.serverUrl })
+      : buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
   )
 }
 

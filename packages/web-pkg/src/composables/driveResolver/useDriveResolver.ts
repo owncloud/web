@@ -31,7 +31,6 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
     return queryItemAsString(unref(fileIdQueryItem))
   })
   const hasSpaces = useCapabilitySpacesEnabled(store)
-
   const clientService = useClientService()
   const spaces = computed<SpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
   const space = ref<SpaceResource>(null)
@@ -75,7 +74,9 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
           matchingSpace = unref(spaces).find((s) => {
             return unref(fileId).startsWith(`${s.fileId}`)
           })
-        } else {
+        }
+
+        if (!matchingSpace) {
           matchingSpace = unref(spaces).find((s) => {
             if (!driveAliasAndItem.startsWith(s.driveAlias)) {
               return false
