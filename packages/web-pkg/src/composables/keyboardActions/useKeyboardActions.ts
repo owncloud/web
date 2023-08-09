@@ -1,4 +1,5 @@
 import { onBeforeUnmount, onMounted, Ref, ref, unref } from 'vue'
+import { useEventListener } from '@vueuse/core'
 import * as uuid from 'uuid'
 
 export enum Key {
@@ -75,21 +76,8 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
     selectionCursor.value = 0
   }
 
-  onMounted(() => {
-    let target: EventTarget = document
-    if (keyBindOnElementId) {
-      target = document.getElementById(keyBindOnElementId)
-    }
-    target.addEventListener('keydown', listener)
-  })
-
-  onBeforeUnmount(() => {
-    let target: EventTarget = document
-    if (keyBindOnElementId) {
-      target = document.getElementById(keyBindOnElementId)
-    }
-    target.removeEventListener('keydown', listener)
-  })
+  const target = ref(keyBindOnElementId ? document.getElementById(keyBindOnElementId) : document)
+  useEventListener(target, 'keydown', listener)
 
   return {
     actions,
