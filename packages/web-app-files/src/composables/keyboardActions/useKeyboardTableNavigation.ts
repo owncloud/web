@@ -136,7 +136,7 @@ export const useKeyboardTableNavigation = (
     let nextResourceIndex = latestSelectedResourceIndex + step
 
     while (nextResourceIndex >= 0 && nextResourceIndex < paginatedResources.value.length) {
-      if (!paginatedResources.value[nextResourceIndex].processing) {
+      if (paginatedResources.value[nextResourceIndex].processing !== true) {
         return paginatedResources.value[nextResourceIndex].id
       }
       nextResourceIndex += step
@@ -172,7 +172,10 @@ export const useKeyboardTableNavigation = (
 
   const handleSelectAllAction = () => {
     keyActions.resetSelectionCursor()
-    store.commit('Files/SET_FILE_SELECTION', paginatedResources.value)
+    store.commit(
+      'Files/SET_FILE_SELECTION',
+      unref(paginatedResources).filter((resource) => resource.processing !== true)
+    )
   }
 
   const getVerticalProperties = (viewDirection: Direction) => {
