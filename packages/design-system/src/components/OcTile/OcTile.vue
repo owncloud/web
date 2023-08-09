@@ -129,7 +129,7 @@ export default defineComponent({
   &.state-processing {
     pointer-events: none;
     background-color: var(--oc-color-background-muted) !important;
-    opacity: 0.6;
+    opacity: 0.7;
     filter: grayscale(0.6);
   }
 

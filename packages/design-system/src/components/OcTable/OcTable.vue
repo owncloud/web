@@ -596,7 +596,7 @@ export default defineComponent({
 
   &-disabled {
     background-color: var(--oc-color-background-muted);
-    opacity: 0.6;
+    opacity: 0.7;
     filter: grayscale(0.6);
     pointer-events: none;
   }
