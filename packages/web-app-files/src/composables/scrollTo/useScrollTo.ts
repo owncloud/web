@@ -50,7 +50,7 @@ export const useScrollTo = (): ScrollToResult => {
     }
 
     const resource = unref(resources).find((r) => r.id === unref(scrollTo))
-    if (resource) {
+    if (resource && !resource.processing) {
       store.commit('Files/SET_FILE_SELECTION', [resource])
       scrollToResource(resource.id, { forceScroll: true })
 
