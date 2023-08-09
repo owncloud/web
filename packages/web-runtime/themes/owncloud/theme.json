@@ -153,6 +153,7 @@
           "icon-folder": "rgb(44, 101, 255)",
           "icon-archive": "rgb(255, 207, 1)",
           "icon-image": "rgb(255, 111, 0)",
+          "icon-medical": "rgb(9,132,219)",
           "icon-spreadsheet": "rgb(0, 182, 87)",
           "icon-document": "rgb(44, 101, 255)",
           "icon-video": "rgb(0, 187, 219)",
