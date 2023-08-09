@@ -28,6 +28,7 @@ export const useScrollTo = (): ScrollToResult => {
     )[0] as HTMLElement
 
     if (!resourceElement) {
+      eventBus.publish('app.files.navigate.page', { resourceId, forceScroll: options.forceScroll })
       return
     }
 
