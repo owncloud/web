@@ -28,8 +28,6 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
 
-    // console.log('spaces', unref(spaces))
-    // console.log('resource', resource.fileId)
     return (
       getInternalSpace(storageId) ||
       unref(spaces).find((s) => {

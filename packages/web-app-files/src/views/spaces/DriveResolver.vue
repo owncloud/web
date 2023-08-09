@@ -1,5 +1,5 @@
 <template>
-  <app-loading-spinner v-if="loading" />
+  <app-loading-spinner v-if="isLoading" />
   <template v-else>
     <drive-redirect
       v-if="!space"
@@ -56,6 +56,10 @@ export default defineComponent({
     const { getInternalSpace } = useGetMatchingSpace()
 
     const loading = ref(true)
+
+    const isLoading = computed(() => {
+      return unref(loading) || unref(resolvedDrive.loading)
+    })
 
     const fileIdQueryItem = useRouteQuery('fileId')
     const fileId = computed(() => {
@@ -135,7 +139,7 @@ export default defineComponent({
       driveAliasAndItem,
       isSpaceRoute,
       isTrashRoute,
-      loading
+      isLoading
     }
   }
 })

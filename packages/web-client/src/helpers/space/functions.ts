@@ -77,6 +77,7 @@ export function buildShareSpaceResource({
 export function buildMountPointSpaceResource(data): MountPointSpaceResource {
   const space = buildSpace(data)
   space.fileId = data.root.remoteItem.id
+  space.id = data.root.remoteItem.id
   space.driveAlias = data.root.remoteItem.driveAlias + '/' + space.fileId
   space.webDavPath = `/spaces/${space.fileId}`
   space.path = '/'

@@ -31,6 +31,10 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
       store.commit('runtime/ancestorMetaData/SET_ANCESTOR_META_DATA', {})
 
+      yield store.dispatch('runtime/spaces/loadMountPoints', {
+        graphClient: clientService.graphAuthenticated
+      })
+
       let resources = yield clientService.owncloudSdk.shares.getShares('', {
         state: 'all',
         include_tags: false,

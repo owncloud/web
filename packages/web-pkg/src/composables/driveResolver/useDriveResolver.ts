@@ -1,12 +1,11 @@
 import { useStore } from '../store'
 import { Store } from 'vuex'
 import { computed, Ref, ref, unref, watch } from 'vue'
-import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
 import { useRouteQuery } from '../router'
 import { Resource } from 'web-client'
 import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
-import { configurationManager } from '../../configuration'
 import { urlJoin } from 'web-client/src/utils'
 import { useCapabilitySpacesEnabled } from '../capability'
 import { useClientService } from 'web-pkg/src/composables'
@@ -20,12 +19,12 @@ interface DriveResolverResult {
   space: Ref<SpaceResource>
   item: Ref<string>
   itemId: Ref<string>
+  loading: Ref<boolean>
 }
 
 export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResolverResult => {
   const store = options.store || useStore()
   const { areSpacesLoading } = useSpacesLoading({ store })
-  const shareId = useRouteQuery('shareId')
   const fileIdQueryItem = useRouteQuery('fileId')
   const fileId = computed(() => {
     return queryItemAsString(unref(fileIdQueryItem))
@@ -35,10 +34,11 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   const spaces = computed<SpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
   const space = ref<SpaceResource>(null)
   const item: Ref<string> = ref(null)
+  const loading = ref(false)
 
   watch(
     [options.driveAliasAndItem, areSpacesLoading],
-    ([driveAliasAndItem]) => {
+    async ([driveAliasAndItem]) => {
       if (!driveAliasAndItem || driveAliasAndItem.startsWith('virtual/')) {
         space.value = null
         item.value = null
@@ -61,14 +61,6 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         const [publicLinkToken, ...item] = driveAliasAndItem.split('/').slice(1)
         matchingSpace = unref(spaces).find((s) => s.id === publicLinkToken)
         path = item.join('/')
-      } else if (driveAliasAndItem.startsWith('share/')) {
-        const [shareName, ...item] = driveAliasAndItem.split('/').slice(1)
-        matchingSpace = buildShareSpaceResource({
-          shareId: queryItemAsString(unref(shareId)),
-          shareName: unref(shareName),
-          serverUrl: configurationManager.serverUrl
-        })
-        path = item.join('/')
       } else {
         if (unref(hasSpaces) && unref(fileId)) {
           matchingSpace = unref(spaces).find((s) => {
@@ -77,6 +69,13 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         }
 
         if (!matchingSpace) {
+          if (!store.state.runtime.spaces.mountPointsInitialized) {
+            loading.value = true
+            await store.dispatch('runtime/spaces/loadMountPoints', {
+              graphClient: clientService.graphAuthenticated
+            })
+          }
+
           matchingSpace = unref(spaces).find((s) => {
             if (!driveAliasAndItem.startsWith(s.driveAlias)) {
               return false
@@ -102,6 +101,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
       item.value = urlJoin(path, {
         leadingSlash: true
       })
+      loading.value = false
     },
     { immediate: true, deep: true }
   )
@@ -121,6 +121,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   return {
     space,
     item,
-    itemId: fileId
+    itemId: fileId,
+    loading
   }
 }
