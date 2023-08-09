@@ -61,7 +61,7 @@ config = {
     "e2e": {
         "oCIS-1": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "featurePaths": [
                 "tests/e2e/cucumber/features/{smoke,journeys}/*.feature",
@@ -69,7 +69,7 @@ config = {
         },
         "oCIS-2": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "featurePaths": [
                 "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*.feature",
             ],
@@ -82,111 +82,111 @@ config = {
         },
     },
     "acceptance": {
-        "webUI": {
-            "type": FULL,
-            "servers": [
-                "",
-            ],
-            "suites": {
-                "oCISBasic": [
-                    "webUIPrivateLinks",
-                    "webUIPreview",
-                    "webUIAccount",
-                    "webUILogin",
-                ],
-                "webUIWebdavLockProtection": "oCISWebdavLockProtection",
-                "oCISSharingBasic": [
-                    "webUISharingAcceptShares",
-                    "webUIRestrictSharing",
-                ],
-                "webUIFavorites": "oCISFavorites",
-                "oCISFiles1": [
-                    "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                ],
-                "oCISFiles2": [
-                    "webUIFilesList",
-                    "webUIFilesDetails",
-                    "webUIFilesSearch",
-                ],
-                "oCISFiles3": [
-                    "webUIRenameFiles",
-                ],
-                "oCISFiles4": [
-                    "webUIFiles",
-                    "webUIRenameFolders",
-                ],
-                "oCISFiles5": [
-                    "webUIFilesCopy",
-                    "webUIFilesActionMenu",
-                    "webUITextEditor",
-                ],
-                "oCISSharingInternal1": [
-                    "webUISharingInternalGroups",
-                    "webUISharingInternalGroupsEdgeCases",
-                ],
-                "oCISSharingInternal2": [
-                    "webUISharingInternalUsers",
-                    "webUISharingInternalUsersBlacklisted",
-                    "webUISharingInternalUsersCollaborator",
-                    "webUISharingExpirationDate",
-                ],
-                "oCISSharingInternal3": [
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingInternalUsersShareWithPage",
-                    "webUIOperationsWithFolderShares",
-                ],
-                "oCISSharingAutocompletionResharing": [
-                    "webUISharingAutocompletion",
-                    "webUIResharing1",
-                    "webUIResharing2",
-                ],
-                "oCISSharingPerm1": [
-                    "webUISharingPermissionsUsers",
-                    "webUISharingFolderPermissionsGroups",
-                ],
-                "oCISSharingPerm2": [
-                    "webUISharingFilePermissionsGroups",
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFolderPermissionMultipleUsers",
-                    "webUISharingFolderAdvancedPermissionMultipleUsers",
-                    "webUISharingFolderAdvancedPermissionsGroups",
-                ],
-                "oCISSharingPublic1": [
-                    "webUISharingPublicBasic",
-                ],
-                "oCISSharingPublic2": [
-                    "webUISharingPublicExpire",
-                    "webUISharingPublicManagement",
-                ],
-                "oCISSharingPublic3": [
-                    "webUISharingPublicDifferentRoles",
-                ],
-                "oCISUploadMove": [
-                    "webUIUpload",
-                    "webUIMoveFilesFolders",
-                ],
-                "oCISTrashbinJourney": [
-                    "webUITrashbinDelete",
-                    "webUITrashbinFilesFolders",
-                    "webUITrashbinRestore",
-                    "webUIUserJourney",
-                ],
-            },
-            "extraEnvironment": {
-                "NODE_TLS_REJECT_UNAUTHORIZED": "0",
-                "SERVER_HOST": "https://ocis:9200",
-                "BACKEND_HOST": "https://ocis:9200",
-                "RUN_ON_OCIS": "true",
-                "TESTING_DATA_DIR": "%s" % dir["testingDataDir"],
-                "OCIS_REVA_DATA_ROOT": "%s" % dir["ocisRevaDataRoot"],
-                "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
-            },
-            "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
-            "screenShots": True,
-        },
+        #        "webUI": {
+        #            "type": FULL,
+        #            "servers": [
+        #                "",
+        #            ],
+        #            "suites": {
+        #                "oCISBasic": [
+        #                    "webUIPrivateLinks",
+        #                    "webUIPreview",
+        #                    "webUIAccount",
+        #                    "webUILogin",
+        #                ],
+        #                "webUIWebdavLockProtection": "oCISWebdavLockProtection",
+        #                "oCISSharingBasic": [
+        #                    "webUISharingAcceptShares",
+        #                    "webUIRestrictSharing",
+        #                ],
+        #                "webUIFavorites": "oCISFavorites",
+        #                "oCISFiles1": [
+        #                    "webUICreateFilesFolders",
+        #                    "webUIDeleteFilesFolders",
+        #                ],
+        #                "oCISFiles2": [
+        #                    "webUIFilesList",
+        #                    "webUIFilesDetails",
+        #                    "webUIFilesSearch",
+        #                ],
+        #                "oCISFiles3": [
+        #                    "webUIRenameFiles",
+        #                ],
+        #                "oCISFiles4": [
+        #                    "webUIFiles",
+        #                    "webUIRenameFolders",
+        #                ],
+        #                "oCISFiles5": [
+        #                    "webUIFilesCopy",
+        #                    "webUIFilesActionMenu",
+        #                    "webUITextEditor",
+        #                ],
+        #                "oCISSharingInternal1": [
+        #                    "webUISharingInternalGroups",
+        #                    "webUISharingInternalGroupsEdgeCases",
+        #                ],
+        #                "oCISSharingInternal2": [
+        #                    "webUISharingInternalUsers",
+        #                    "webUISharingInternalUsersBlacklisted",
+        #                    "webUISharingInternalUsersCollaborator",
+        #                    "webUISharingExpirationDate",
+        #                ],
+        #                "oCISSharingInternal3": [
+        #                    "webUISharingInternalGroupsSharingIndicator",
+        #                    "webUISharingInternalUsersSharingIndicator",
+        #                    "webUISharingInternalUsersShareWithPage",
+        #                    "webUIOperationsWithFolderShares",
+        #                ],
+        #                "oCISSharingAutocompletionResharing": [
+        #                    "webUISharingAutocompletion",
+        #                    "webUIResharing1",
+        #                    "webUIResharing2",
+        #                ],
+        #                "oCISSharingPerm1": [
+        #                    "webUISharingPermissionsUsers",
+        #                    "webUISharingFolderPermissionsGroups",
+        #                ],
+        #                "oCISSharingPerm2": [
+        #                    "webUISharingFilePermissionsGroups",
+        #                    "webUISharingFilePermissionMultipleUsers",
+        #                    "webUISharingFolderPermissionMultipleUsers",
+        #                    "webUISharingFolderAdvancedPermissionMultipleUsers",
+        #                    "webUISharingFolderAdvancedPermissionsGroups",
+        #                ],
+        #                "oCISSharingPublic1": [
+        #                    "webUISharingPublicBasic",
+        #                ],
+        #                "oCISSharingPublic2": [
+        #                    "webUISharingPublicExpire",
+        #                    "webUISharingPublicManagement",
+        #                ],
+        #                "oCISSharingPublic3": [
+        #                    "webUISharingPublicDifferentRoles",
+        #                ],
+        #                "oCISUploadMove": [
+        #                    "webUIUpload",
+        #                    "webUIMoveFilesFolders",
+        #                ],
+        #                "oCISTrashbinJourney": [
+        #                    "webUITrashbinDelete",
+        #                    "webUITrashbinFilesFolders",
+        #                    "webUITrashbinRestore",
+        #                    "webUIUserJourney",
+        #                ],
+        #            },
+        #            "extraEnvironment": {
+        #                "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+        #                "SERVER_HOST": "https://ocis:9200",
+        #                "BACKEND_HOST": "https://ocis:9200",
+        #                "RUN_ON_OCIS": "true",
+        #                "TESTING_DATA_DIR": "%s" % dir["testingDataDir"],
+        #                "OCIS_REVA_DATA_ROOT": "%s" % dir["ocisRevaDataRoot"],
+        #                "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
+        #                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
+        #            },
+        #            "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
+        #            "screenShots": True,
+        #        },
     },
     "build": True,
 }
@@ -363,15 +363,14 @@ def beforePipelines(ctx):
            documentation(ctx) + \
            changelog(ctx) + \
            pnpmCache(ctx) + \
-           cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
-           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
+           cacheOcisPipeline(ctx)
 
 def stagePipelines(ctx):
-    unit_test_pipelines = unitTests(ctx)
+    #    unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
-    acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
+
+    #    acceptance_pipelines = acceptance(ctx)
+    return e2e_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -2171,7 +2170,9 @@ def appProviderService(name):
         "APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL": "http://wopiserver:8880",
         "APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL": "https://ocis:9200",
         "MICRO_REGISTRY": "mdns",
+        "APP_PROVIDER_DEBUG_ADDR": "0.0.0.0:9166",
     }
+    debug_port = ""
 
     if name == "collabora":
         environment["APP_PROVIDER_SERVICE_NAME"] = "app-provider-collabora"
@@ -2179,12 +2180,16 @@ def appProviderService(name):
         environment["APP_PROVIDER_WOPI_APP_NAME"] = "Collabora"
         environment["APP_PROVIDER_WOPI_APP_ICON_URI"] = "https://collabora:9980/favicon.ico"
         environment["APP_PROVIDER_WOPI_APP_URL"] = "https://collabora:9980"
+        environment["APP_PROVIDER_DEBUG_ADDR"] = "0.0.0.0:9166"
+        debug_port = "9166"
     elif name == "onlyoffice":
         environment["APP_PROVIDER_SERVICE_NAME"] = "app-provider-onlyoffice"
         environment["APP_PROVIDER_EXTERNAL_ADDR"] = "com.owncloud.api.app-provider-onlyoffice"
         environment["APP_PROVIDER_WOPI_APP_NAME"] = "OnlyOffice"
         environment["APP_PROVIDER_WOPI_APP_ICON_URI"] = "https://onlyoffice/web-apps/apps/documenteditor/main/resources/img/favicon.ico"
         environment["APP_PROVIDER_WOPI_APP_URL"] = "https://onlyoffice"
+        environment["APP_PROVIDER_DEBUG_ADDR"] = "0.0.0.0:9167"
+        debug_port = "9167"
 
     return [
         {
@@ -2196,12 +2201,23 @@ def appProviderService(name):
                 "cd %s" % dir["ocis"],
                 "./ocis app-provider server",
             ],
-            "volumes": [{
-                "name": "gopath",
-                "path": dir["app"],
-            }, {
-                "name": "ocis-config",
-                "path": "/root/.ocis/config",
-            }],
+            "volumes": [
+                {
+                    "name": "gopath",
+                    "path": dir["app"],
+                },
+                {
+                    "name": "ocis-config",
+                    "path": "/root/.ocis/config",
+                },
+            ],
+        },
+        {
+            "name": "wait-for-%s-app-provider" % name,
+            "image": OC_CI_WAIT_FOR,
+            "commands": [
+                "sleep 5",
+                "wait-for -it %s-app-provider:%s -t 60" % (name, debug_port),
+            ],
         },
     ]

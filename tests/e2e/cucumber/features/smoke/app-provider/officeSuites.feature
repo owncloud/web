@@ -8,9 +8,9 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
 
 
 
-  # this is debug scenarios
-  Scenario: wait for 20 sec
-    Given wait for "20" second
+  # # this is debug scenarios
+  # Scenario: wait for 20 sec
+  #   Given wait for "20" second
 
 
   Scenario: create an OpenDocument file with Collabora
