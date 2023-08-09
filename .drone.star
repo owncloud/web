@@ -1297,6 +1297,8 @@ def ocisService(type, tika_enabled = False):
             "environment": environment,
             "commands": [
                 "cd %s" % dir["ocis"],
+                "mkdir -p %s" % dir["ocisRevaDataRoot"],
+                "mkdir -p /srv/app/tmp/ocis/storage/users/",
                 "./ocis init",
                 "cp %s/tests/drone/app-registry.yaml /root/.ocis/config/app-registry.yaml" % dir["web"],
                 "./ocis server",
