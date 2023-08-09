@@ -85,7 +85,6 @@ export function buildResource(resource): Resource {
   if (!resourcePath.startsWith('/')) {
     resourcePath = `/${resourcePath}`
   }
-
   const id = resource.fileInfo[DavProperty.FileId]
   const r = {
     id,
@@ -99,7 +98,7 @@ export function buildResource(resource): Resource {
     webDavPath: resource.name,
     type: isFolder ? 'folder' : resource.type,
     isFolder,
-    processing: resource.processing || false,
+    processing:  resource.type === 'file',
     mdate: resource.fileInfo[DavProperty.LastModifiedDate],
     size: isFolder
       ? resource.fileInfo[DavProperty.ContentSize]

@@ -683,7 +683,10 @@ export default defineComponent({
       return this.configuration?.options?.displayResourcesLazy
     },
     areAllResourcesSelected() {
-      return this.selectedResources.length === this.resources.length
+      return (
+        this.selectedResources.length ===
+        this.resources.filter((resource) => !resource.processing).length
+      )
     },
     selectedResources() {
       return this.resources.filter((resource) => this.selectedIds.includes(resource.id))
@@ -883,7 +886,9 @@ export default defineComponent({
       if (this.areAllResourcesSelected) {
         return this.emitSelect([])
       }
-      this.emitSelect(this.resources.map((resource) => resource.id))
+      this.emitSelect(
+        this.resources.filter((resource) => !resource.processing).map((resource) => resource.id)
+      )
     },
     emitFileClick(resource) {
       const space = this.getMatchingSpace(resource)

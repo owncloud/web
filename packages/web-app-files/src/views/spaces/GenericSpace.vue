@@ -99,6 +99,7 @@
             :sort-by="sortBy"
             :sort-dir="sortDir"
             :space="space"
+            :disabled="disabledResources"
             @file-dropped="fileDropped"
             @file-click="triggerDefaultAction"
             @row-mounted="rowMounted"
@@ -572,6 +573,12 @@ export default defineComponent({
 
     isSpaceFrontpage() {
       return isProjectSpaceResource(this.space) && this.item === '/'
+    },
+
+    disabledResources() {
+      return this.paginatedResources
+        .filter((resource) => resource.processing === true)
+        .map((resource) => resource.id)
     }
   },
 
