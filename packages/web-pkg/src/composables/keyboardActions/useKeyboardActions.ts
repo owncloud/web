@@ -34,7 +34,7 @@ export interface KeyboardAction {
   callback: (event: KeyboardEvent) => void
 }
 
-export const useKeyboardActions = (keyBindOnElementId: string | null = null): KeyboardActions => {
+export const useKeyboardActions = (): KeyboardActions => {
   const actions = ref<Array<KeyboardAction>>([])
   const selectionCursor = ref(0)
   const listener = (event: KeyboardEvent): void => {
@@ -76,8 +76,7 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
     selectionCursor.value = 0
   }
 
-  const target = ref(keyBindOnElementId ? document.getElementById(keyBindOnElementId) : document)
-  useEventListener(target, 'keydown', listener)
+  useEventListener(document, 'keydown', listener)
 
   return {
     actions,
