@@ -6,7 +6,6 @@ import { resourceExists, waitForResources } from './utils'
 import { sidebar, editor } from '../utils'
 import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
-import { config } from '../../../../config'
 
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
@@ -31,7 +30,8 @@ const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
 const createNewDrawioFileButton = '.new-file-btn-drawio'
-const saveTextFileInEditorButton = '#text-editor-controls-save'
+const createNewOfficeDocumentFileBUtton = '//ul[@id="create-list"]//span[text()="%s"]'
+const saveTextFileInEditorButton = '#text-editor-controls-save:visible'
 const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
@@ -68,14 +68,14 @@ const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//
 const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
 const drawioSaveButton = '.geBigButton >> text=Save'
 const drawioIframe = '#drawio-editor'
+const externalEditorIframe = '[name="app-iframe"]'
 const tagTableCell =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]'
 const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//ancestor::a'
 const tagInDetailsPanel = '//*[@data-testid="tags"]/td//span[text()="%s"]'
 const tagInInputForm =
-  '//span[contains(@class, "vs__selected")]//span[text()="%s"]//ancestor::span//button[contains(@class, "vs__deselect")]'
+  '//span[contains(@class, "tags-control-tag")]//span[text()="%s"]//ancestor::span//button[contains(@class, "vs__deselect")]'
 const tagFormInput = '#tags-form input'
-const compareDialogConfirmBtn = '.compare-save-dialog-confirm-btn'
 const resourcesAsTiles = '#files-view .oc-tiles'
 const fileVersionSidebar = '#oc-file-versions-sidebar'
 const noLinkMessage = '#web .oc-link-resolve-error-message'
@@ -93,6 +93,15 @@ const pauseResumeUploadButton = '#pause-upload-info-btn'
 const cancelUploadButton = '#cancel-upload-info-btn'
 const uploadPauseTooltip = '//div[text()="Pause upload"]'
 const uploadResumeTooltip = '//div[text()="Resume upload"]'
+const collaboraEditorSaveSelector = '.notebookbar-shortcuts-bar .savemodified'
+const onlyOfficeInnerFrameSelector = '[name="frameEditor"]'
+const onlyOfficeSaveButtonSelector = '#asc-gen578'
+const collaboraDocTextAreaSelector = '#clipboard-area'
+const onlyofficeDocTextAreaSelector = '#area_id'
+const collaboraWelcomeModalIframe = '.iframe-welcome-modal'
+const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
+const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
+const collaboraCanvasEditorSelector = '.leaflet-layer'
 
 export const clickResource = async ({
   page,
@@ -119,7 +128,7 @@ export const clickResource = async ({
 export interface createResourceArgs {
   page: Page
   name: string
-  type: 'folder' | 'txtFile' | 'mdFile' | 'drawioFile'
+  type: 'folder' | 'txtFile' | 'mdFile' | 'drawioFile' | 'OpenDocument' | 'Microsoft Word'
   content?: string
 }
 
@@ -240,7 +249,91 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
       await page.goto(page.url())
       break
     }
+    case 'OpenDocument': {
+      // By Default when OpenDocument is created, it is opened with collabora if both app-provider services are running together
+      await createDocumentFile(args, 'Collabora')
+      break
+    }
+    case 'Microsoft Word': {
+      // By Default when Microsoft Word document is created, it is opened with OnlyOffice if both app-provider services are running together
+      await createDocumentFile(args, 'OnlyOffice')
+      break
+    }
   }
+}
+
+const createDocumentFile = async (
+  args: createResourceArgs,
+  editorToOpen: string
+): Promise<void> => {
+  const { page, name, type, content } = args
+  await page.locator(util.format(createNewOfficeDocumentFileBUtton, type)).click()
+  await page.locator(resourceNameInput).fill(name)
+  const [editorPage] = await Promise.all([
+    page.waitForEvent('popup'),
+    page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
+    page.locator(util.format(actionConfirmationButton, 'Create')).click()
+  ])
+  await editorPage.waitForLoadState()
+  await editorPage.waitForURL('**/external/personal/**')
+  const editorMainFrame = await editorPage.frameLocator(externalEditorIframe)
+  switch (editorToOpen) {
+    case 'Collabora':
+      await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
+      await editorPage.keyboard.press('Escape')
+      await editorMainFrame.locator(collaboraDocTextAreaSelector).type(content)
+      const saveModified = await editorMainFrame.locator(collaboraEditorSaveSelector)
+      await expect(saveModified).toBeVisible()
+      await editorMainFrame.locator('#Save').click()
+      await expect(saveModified).not.toBeVisible()
+      break
+    case 'OnlyOffice':
+      const innerIframe = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
+      await innerIframe.locator(onlyofficeDocTextAreaSelector).type(content)
+      const saveButtonDisabledLocator = innerIframe.locator(onlyOfficeSaveButtonSelector)
+      await expect(saveButtonDisabledLocator).toHaveAttribute('disabled', 'disabled')
+      break
+    default:
+      throw new Error(
+        "Editor should be either 'Collabora' or 'OnlyOffice' but found " + editorToOpen
+      )
+  }
+  await editorPage.close()
+}
+
+export const openAndGetContentOfDocument = async ({
+  page,
+  editorToOpen
+}: {
+  page: Page
+  editorToOpen: string
+}): Promise<string> => {
+  const editorPage = await page.waitForEvent('popup')
+  await editorPage.waitForLoadState()
+  await editorPage.waitForURL('**/external/public/**')
+  const editorMainFrame = await editorPage.frameLocator(externalEditorIframe)
+  switch (editorToOpen) {
+    case 'Collabora':
+      await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
+      await editorPage.keyboard.press('Escape')
+      await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
+      break
+    case 'OnlyOffice':
+      const innerFrame = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
+      await innerFrame.locator(onlyOfficeCanvasEditorSelector).click()
+      await innerFrame.locator(onlyOfficeCanvasCursorSelector).waitFor()
+      break
+    default:
+      throw new Error(
+        "Editor should be either 'Collabora' or 'OnlyOffice' but found " + editorToOpen
+      )
+  }
+  // copying and getting the value with keyboard requires some
+  await editorPage.keyboard.press('Control+A', { delay: 200 })
+  await editorPage.keyboard.press('Control+C', { delay: 200 })
+  const actualContentOfEditor = await editorPage.evaluate(() => navigator.clipboard.readText())
+  await editorPage.close()
+  return actualContentOfEditor
 }
 
 export const createResources = async (args: createResourceArgs): Promise<void> => {
@@ -715,15 +808,12 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
         await sidebar.open({ page, resource: resource.name })
         await sidebar.openPanel({ page, name: 'actions' })
         await page.locator(deleteButtonSidebar).first().click()
-        await Promise.all([
-          page.waitForResponse(
-            (resp) =>
-              resp.url().includes(encodeURIComponent(resource.name)) &&
-              resp.status() === 204 &&
-              resp.request().method() === 'DELETE'
-          ),
-          page.locator(util.format(actionConfirmationButton, 'Delete')).click()
-        ])
+        await page.waitForResponse(
+          (resp) =>
+            resp.url().includes(encodeURIComponent(resource.name)) &&
+            resp.status() === 204 &&
+            resp.request().method() === 'DELETE'
+        )
         await sidebar.close({ page })
       }
       break
@@ -737,20 +827,17 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
       }
 
       await page.locator(deleteButtonBatchAction).click()
-      await Promise.all([
-        page.waitForResponse((resp) => {
-          if (resp.status() === 204 && resp.request().method() === 'DELETE') {
-            deletetedResources.push(decodeURIComponent(resp.url().split('/').pop()))
-          }
-          // waiting for GET response after all the resource are deleted with batch action
-          return (
-            resp.url().includes(config.ocis ? 'graph/v1.0/drives' : 'ocs/v1.php/cloud/users') &&
-            resp.status() === 200 &&
-            resp.request().method() === 'GET'
-          )
-        }),
-        page.locator(util.format(actionConfirmationButton, 'Delete')).click()
-      ])
+      await page.waitForResponse((resp) => {
+        if (resp.status() === 204 && resp.request().method() === 'DELETE') {
+          deletetedResources.push(decodeURIComponent(resp.url().split('/').pop()))
+        }
+        // waiting for GET response after all the resource are deleted with batch action
+        return (
+          resp.url().includes('graph/v1.0/drives') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'GET'
+        )
+      })
       // assertion that the resources actually got deleted
       expect(deletetedResources.length).toBe(resourcesWithInfo.length)
       for (const resource of resourcesWithInfo) {
@@ -1097,7 +1184,6 @@ export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> =
     await page.locator('.vs__dropdown-option').first().click()
   }
 
-  await page.locator(compareDialogConfirmBtn).click()
   await sidebar.close({ page })
 }
 
@@ -1118,8 +1204,6 @@ export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<vo
   for (const tag of tags) {
     await page.locator(util.format(tagInInputForm, tag)).click()
   }
-
-  await page.locator(compareDialogConfirmBtn).click()
   await sidebar.close({ page })
 }
 

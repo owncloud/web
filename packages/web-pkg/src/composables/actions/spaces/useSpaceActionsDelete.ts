@@ -23,17 +23,11 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
   const deleteSpaces = async (spaces: SpaceResource[]) => {
     const client = clientService.graphAuthenticated
     const promises = spaces.map((space) =>
-      client.drives
-        .deleteDrive(space.id.toString(), '', {
-          headers: {
-            Purge: 'T'
-          }
-        })
-        .then(() => {
-          store.commit('Files/REMOVE_FILES', [{ id: space.id }])
-          store.commit('runtime/spaces/REMOVE_SPACE', { id: space.id })
-          return true
-        })
+      client.drives.deleteDrive(space.id.toString()).then(() => {
+        store.commit('Files/REMOVE_FILES', [{ id: space.id }])
+        store.commit('runtime/spaces/REMOVE_SPACE', { id: space.id })
+        return true
+      })
     )
     const results = await loadingService.addTask(() => {
       return Promise.allSettled(promises)

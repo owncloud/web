@@ -143,19 +143,18 @@ describe('delete', () => {
             deletableResourceIds: ['1', '2', '3']
           }
         ])('should filter non deletable resources', ({ resources, deletableResourceIds }) => {
-          const displayDialogMock = jest.fn()
+          const filesListDeleteMock = jest.fn()
 
           const { wrapper } = getWrapper({
             searchLocation: true,
-            displayDialogMock,
+            filesListDeleteMock,
             setup: () => {
               const store = useStore()
               const { actions } = useFileActionsDelete({ store })
 
               unref(actions)[0].handler({ space: null, resources })
 
-              expect(displayDialogMock).toHaveBeenCalledWith(
-                null,
+              expect(filesListDeleteMock).toHaveBeenCalledWith(
                 resources.filter((r) => deletableResourceIds.includes(r.id as string))
               )
             }
@@ -170,7 +169,7 @@ function getWrapper({
   deletePermanent = false,
   invalidLocation = false,
   searchLocation = false,
-  displayDialogMock = jest.fn(),
+  filesListDeleteMock = jest.fn(),
   setup = () => undefined
 } = {}) {
   const routeName = invalidLocation
@@ -182,7 +181,7 @@ function getWrapper({
     : 'files-spaces-generic'
   jest
     .mocked(useFileActionsDeleteResources)
-    .mockImplementation(() => ({ displayDialog: displayDialogMock, filesList_delete: jest.fn() }))
+    .mockImplementation(() => ({ filesList_delete: filesListDeleteMock, displayDialog: jest.fn() }))
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),
     space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }

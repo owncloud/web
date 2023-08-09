@@ -3,17 +3,8 @@ const path = require('path')
 const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 
 const RUN_WITH_LDAP = process.env.RUN_WITH_LDAP === 'true'
-const RUN_ON_OCIS = process.env.RUN_ON_OCIS === 'true'
-const LOCAL_LAUNCH_URL = withHttp(
-  process.env.SERVER_HOST ||
-    (RUN_ON_OCIS
-      ? 'https://host.docker.internal:9200'
-      : 'http://host.docker.internal:8080/index.php/apps/web/index.html')
-)
-const LOCAL_BACKEND_URL = withHttp(
-  process.env.BACKEND_HOST ||
-    (RUN_ON_OCIS ? 'https://host.docker.internal:9200' : 'http://host.docker.internal:8080')
-)
+const LOCAL_LAUNCH_URL = withHttp(process.env.SERVER_HOST || 'https://host.docker.internal:9200')
+const LOCAL_BACKEND_URL = withHttp(process.env.BACKEND_HOST || 'https://host.docker.internal:9200')
 const REMOTE_BACKEND_URL = process.env.REMOTE_BACKEND_HOST
   ? withHttp(process.env.REMOTE_BACKEND_HOST || 'http://localhost:8080')
   : undefined
@@ -27,14 +18,11 @@ const LDAP_SERVER_URL = process.env.LDAP_SERVER_URL || 'ldap://127.0.0.1'
 const LDAP_BASE_DN = process.env.LDAP_BASE_DN || 'cn=admin,dc=owncloud,dc=com'
 const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
 const TESTING_DATA_DIR = process.env.TESTING_DATA_DIR || './tests/testing-app/data/'
-const OPENID_LOGIN = RUN_ON_OCIS || process.env.OPENID_LOGIN === 'true'
+const OPENID_LOGIN = 'true'
 const WEB_UI_CONFIG = process.env.WEB_UI_CONFIG || path.join(__dirname, 'dist/config.json')
 const SCREENSHOTS = process.env.SCREENSHOTS === 'true'
 
-const MIDDLEWARE_HOST = withHttp(
-  process.env.MIDDLEWARE_HOST ||
-    (RUN_ON_OCIS ? 'http://host.docker.internal:3000' : 'http://host.docker.internal:3001')
-)
+const MIDDLEWARE_HOST = withHttp(process.env.MIDDLEWARE_HOST || 'http://host.docker.internal:3000')
 
 const config = {
   page_objects_path: './pageObjects',
@@ -42,7 +30,7 @@ const config = {
   test_settings: {
     default: {
       // ocis doesn't have '#' in the url path anymore
-      launch_url: RUN_ON_OCIS ? LOCAL_LAUNCH_URL : `${LOCAL_LAUNCH_URL}/#`,
+      launch_url: LOCAL_LAUNCH_URL,
       globals: {
         waitForConditionTimeout: 10000,
         waitForNegativeConditionTimeout: 300,
@@ -53,7 +41,7 @@ const config = {
         backend_admin_username: BACKEND_ADMIN_USERNAME,
         backend_admin_password: BACKEND_ADMIN_PASSWORD,
         default_backend: 'LOCAL',
-        ocis: RUN_ON_OCIS,
+        ocis: 'true',
         ldap: RUN_WITH_LDAP,
         openid_login: OPENID_LOGIN,
         ldap_url: LDAP_SERVER_URL,

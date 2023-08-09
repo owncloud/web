@@ -63,7 +63,7 @@ export interface ApplicationInformation {
  */
 export interface ApplicationTranslations {
   [lang: string]: {
-    key: string
+    [key: string]: string
   }
 }
 

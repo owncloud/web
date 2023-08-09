@@ -15,7 +15,11 @@ With ownCloud Web you can manage your ownCloud in your browser.
 </div>
 <img width="100%" alt="Screenshot of ownCloud Web" src="https://user-images.githubusercontent.com/26610733/168603602-5ba37b4d-2ee1-413c-9a55-03380c79cd3d.png">
 
-ownCloud Web is a single page, standalone frontend, based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server. 
+ownCloud Web is a single page, standalone frontend, based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server.
+
+## Compatiblity
+Usage of Web UI and [ownCloud 10](https://github.com/owncloud/core) as backend is not recommended starting with version `7.1.0` of the Web UI, meaning newer versions only support [ownCloud Infinite Scale](https://github.com/owncloud/ocis). If you want to use the Web UI with ownCloud 10, please use App version `7.0.2`. Critical bugs can be fixed upon request.
+
 ## Examples
 Here are some examples of what you can do with ownCloud Web:
 - 🗂 **Files**: Upload, download, search and manage files (as you may know it for example from Dropbox, OneDrive, Google Drive etc.).
@@ -34,27 +38,25 @@ Here are some examples of what you can do with ownCloud Web:
 - 🎭 **Themes**: Customize to your branding needs or personal taste in no time.
 - 👉 and many more...
 
-As the successor to the classic ownCloud frontend, it is compatible with both the [ownCloud Server](https://github.com/owncloud/core) and [ownCloud Infinite Scale](https://github.com/owncloud/ocis). When used with the ownCloud Server, ownCloud Web is made available to users via an additional item "New Design" in the application switcher. 
-
 While the `web` frontend provides a performant, elegant, accessible and themeable base, it also aims to be extendable with custom extensions provided by external developers.
 
 ## Live Demos
-- **Server** - Try the most recent release of `web` with an ownCloud Server backend: 
-  - Demo: [https://web.owncloud.com/](https://web.owncloud.com/)
-  - User: `demo`
-  - Password: `demo`
-
 - **Infinitescale** - Try the latest commit on the master branch with an ownCloud Infinite Scale backend:
   - Demo: [https://ocis.ocis-web.latest.owncloud.works](https://ocis.ocis-web.latest.owncloud.works)
   - User: `einstein`
   - Password: `relativity`
+
+
+- **Server** - Try version `6.0.0` of `web` with an ownCloud Server backend: 
+  - Demo: [https://web.owncloud.com/](https://web.owncloud.com/)
+  - User: `demo`
+  - Password: `demo`
 
 ## Repository structure
 
 The backbone of this project is built by the following parts of the `packages`:
 - **client:** Generated TypeScript client for communications with the ownCloud Infinite Scale graph API
 - **container:** Static assets and rarely changing base files
-- **integration-oc10:** Small PHP building blocks to make `web` work as an app with the ownCloud Server
 - **pkg:** Shared logic for various places inside the codebase
 - **runtime:** Central place of (user) authentication, provisioning of the user interface layout, client side storage, routing, theming, dependencies and (sub)application handling
 

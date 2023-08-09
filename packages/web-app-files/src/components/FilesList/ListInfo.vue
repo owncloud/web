@@ -71,10 +71,11 @@ export default defineComponent({
         }
       )
       const itemSize = formatFileSize(this.size, this.$language.current)
+      const size = parseFloat(this.size?.toString())
       let translated
       if (this.showSpaces) {
         translated =
-          this.size > 0
+          size > 0
             ? this.$ngettext(
                 '%{ itemsCount } item with %{ itemSize } in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
                 '%{ itemsCount } items with %{ itemSize } in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
@@ -87,7 +88,7 @@ export default defineComponent({
               )
       } else {
         translated =
-          this.size > 0
+          size > 0
             ? this.$ngettext(
                 '%{ itemsCount } item with %{ itemSize } in total (%{ filesStr}, %{foldersStr})',
                 '%{ itemsCount } items with %{ itemSize } in total (%{ filesStr}, %{foldersStr})',

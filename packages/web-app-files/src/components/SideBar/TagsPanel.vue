@@ -9,62 +9,63 @@
         class="oc-mb-s"
         :multiple="true"
         :options="availableTags"
+        :contextual-helper="contextualHelper"
         taggable
-        push-tags
         :select-on-key-codes="[keycode('enter'), keycode(',')]"
         :label="$gettext('Add or edit tags')"
         :create-option="createOption"
         :selectable="isOptionSelectable"
         :fix-message-line="true"
+        :map-keydown="keydownMethods"
+        @update:model-value="save"
       >
-        <template #selected-option="{ label }">
-          <span class="oc-flex oc-flex-center">
-            <avatar-image
-              class="oc-flex oc-align-self-center oc-mr-s"
-              :width="16.8"
-              :userid="label"
-              :user-name="label"
-            />
-            <span>{{ label }}</span>
-          </span>
+        <template #selected-option-container="{ option, deselect }">
+          <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
+            <oc-icon name="price-tag-3" size="small" />
+            <span class="oc-text-truncate">{{ option.label }}</span>
+            <span class="oc-flex oc-flex-middle oc-ml-s oc-mr-xs">
+              <oc-icon v-if="option.readonly" class="vs__deselect-lock" name="lock" size="small" />
+              <oc-button
+                v-else
+                appearance="raw"
+                :title="$gettext('Deselect %{label}', { label: option.label })"
+                :aria-label="$gettext('Deselect %{label}', { label: option.label })"
+                class="vs__deselect oc-mx-rm"
+                @mousedown.stop.prevent
+                @click="deselect(option)"
+              >
+                <oc-icon name="close" size="small" />
+              </oc-button>
+            </span>
+          </oc-tag>
         </template>
         <template #option="{ label, error }">
           <div class="oc-flex">
-            <span v-if="showSelectNewLabel({ label })" class="oc-mr-s" v-text="$gettext('New')" />
             <span class="oc-flex oc-flex-center">
-              <avatar-image
-                class="oc-flex oc-align-self-center oc-mr-s"
-                :width="16.8"
-                :userid="label"
-                :user-name="label"
-              />
-              <span>{{ label }}</span>
+              <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
+                <oc-icon name="price-tag-3" size="small" />
+                <span class="oc-text-truncate">{{ label }}</span>
+              </oc-tag>
             </span>
           </div>
           <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
         </template>
       </oc-select>
-      <compare-save-dialog
-        class="edit-compare-save-dialog oc-mb-l"
-        :original-object="{ tags: currentTags.map((t) => t.label) }"
-        :compare-object="{ tags: selectedTags.map((t) => t.label) }"
-        @revert="revertChanges"
-        @confirm="save"
-      ></compare-save-dialog>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, inject, onMounted, ref, unref, VNodeRef, watch } from 'vue'
-import CompareSaveDialog from 'web-pkg/src/components/SideBar/CompareSaveDialog.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
-import { useClientService, useStore } from 'web-pkg/src/composables'
+import { useClientService, useConfigurationManager, useStore } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 import diff from 'lodash-es/difference'
 import { useGettext } from 'vue3-gettext'
 import keycode from 'keycode'
+import { tagsHelper } from 'web-app-files/src/helpers/contextualHelpers'
+import { ContextualHelper } from 'design-system/src/helpers'
 
 const tagsMaxCount = 100
 
@@ -76,18 +77,17 @@ type TagOption = {
 
 export default defineComponent({
   name: 'TagsPanel',
-  components: {
-    CompareSaveDialog
-  },
   setup() {
     const store = useStore()
     const clientService = useClientService()
     const { $gettext } = useGettext()
+    const configurationManager = useConfigurationManager()
 
     const injectedResource = inject<Resource>('resource')
     const resource = computed<Resource>(() => unref(injectedResource))
     const selectedTags = ref<TagOption[]>([])
     const availableTags = ref<TagOption[]>([])
+    let allTags: string[] = []
     const tagSelect: VNodeRef = ref(null)
 
     const currentTags = computed<TagOption[]>(() => {
@@ -98,7 +98,12 @@ export default defineComponent({
       const {
         data: { value: tags = [] }
       } = yield clientService.graphAuthenticated.tags.getTags()
-      availableTags.value = [...tags.map((t) => ({ label: t }))]
+
+      allTags = tags
+      const selectedLabels = new Set(unref(selectedTags).map((o) => o.label))
+      availableTags.value = tags
+        .filter((t) => selectedLabels.has(t) === false)
+        .map((t) => ({ label: t }))
     })
 
     const revertChanges = () => {
@@ -121,8 +126,18 @@ export default defineComponent({
       return !unref(tagSelect).$refs.select.optionExists(option)
     }
 
-    const save = async () => {
+    const save = async (e: TagOption[] | string[]) => {
       try {
+        selectedTags.value = e.map((x) => (typeof x === 'object' ? x : { label: x }))
+        const allAvailableTags = new Set([...allTags, ...unref(availableTags).map((t) => t.label)])
+
+        availableTags.value = diff(
+          Array.from(allAvailableTags),
+          unref(selectedTags).map((o) => o.label)
+        ).map((label) => ({
+          label
+        }))
+
         const { id, tags, fileId } = unref(resource)
         const selectedTagLabels = unref(selectedTags).map((t) => t.label)
         const tagsToAdd = diff(selectedTagLabels, tags)
@@ -149,6 +164,11 @@ export default defineComponent({
         })
 
         eventBus.publish('sidebar.entity.saved')
+        if (unref(tagSelect) !== null) {
+          unref(tagSelect).$refs.search.focus()
+        }
+
+        allTags.push(...tagsToAdd)
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
@@ -161,6 +181,7 @@ export default defineComponent({
     watch(resource, () => {
       if (unref(resource)?.tags) {
         revertChanges()
+        loadAvailableTagsTask.perform()
       }
     })
 
@@ -170,6 +191,29 @@ export default defineComponent({
       }
       loadAvailableTagsTask.perform()
     })
+
+    const keydownMethods = (map, vm) => {
+      const objectMapping = {
+        ...map
+      }
+      objectMapping[keycode('backspace')] = async (e) => {
+        if (e.target.value || selectedTags.value.length === 0) {
+          return
+        }
+
+        e.preventDefault()
+
+        availableTags.value.push(selectedTags.value.pop())
+        await save(unref(selectedTags))
+      }
+
+      return objectMapping
+    }
+
+    const contextualHelper = {
+      isEnabled: configurationManager.options.contextHelpers,
+      data: tagsHelper({ configurationManager: configurationManager })
+    } as ContextualHelper
 
     return {
       loadAvailableTagsTask,
@@ -184,7 +228,9 @@ export default defineComponent({
       isOptionSelectable,
       showSelectNewLabel,
       save,
-      keycode
+      keycode,
+      keydownMethods,
+      contextualHelper
     }
   }
 })
@@ -195,5 +241,9 @@ export default defineComponent({
   #tags-form {
     border-radius: 5px;
   }
+}
+.tags-control-tag {
+  max-width: 12rem;
+  height: var(--oc-space-large);
 }
 </style>

@@ -40,9 +40,10 @@ describe('Tags Panel', () => {
   describe('save method', () => {
     it('publishes the "save"-event', async () => {
       const eventStub = jest.spyOn(eventBus, 'publish')
-      const resource = mockDeep<Resource>({ tags: ['a', 'b'] })
-      const { wrapper } = createWrapper(resource)
-      await wrapper.vm.save()
+      const tags = ['a', 'b']
+      const resource = mockDeep<Resource>({ tags: tags })
+      const { wrapper } = createWrapper(resource, mockDeep<ClientService>(), false)
+      await wrapper.vm.save(tags)
       expect(eventStub).toHaveBeenCalled()
     })
   })
@@ -61,11 +62,11 @@ describe('Tags Panel', () => {
       const resource = mockDeep<Resource>({ tags: resourceTags })
       const clientService = mockDeep<ClientService>()
       const stub = clientService.graphAuthenticated.tags.assignTags.mockImplementation()
-      const { wrapper } = createWrapper(resource, clientService)
+      const { wrapper } = createWrapper(resource, clientService, false)
 
       wrapper.vm.selectedTags = selectedTags
 
-      await wrapper.vm.save()
+      await wrapper.vm.save(selectedTags)
 
       /* eslint-disable jest/no-conditional-expect*/
       if (expected.length) {
@@ -90,11 +91,11 @@ describe('Tags Panel', () => {
       const resource = mockDeep<Resource>({ tags: resourceTags })
       const clientService = mockDeep<ClientService>()
       const stub = clientService.graphAuthenticated.tags.unassignTags.mockImplementation()
-      const { wrapper } = createWrapper(resource, clientService)
+      const { wrapper } = createWrapper(resource, clientService, false)
 
       wrapper.vm.selectedTags = selectedTags
 
-      await wrapper.vm.save()
+      await wrapper.vm.save(selectedTags)
 
       /* eslint-disable jest/no-conditional-expect*/
       if (expected.length) {
@@ -119,7 +120,7 @@ describe('Tags Panel', () => {
     const eventStub = jest.spyOn(eventBus, 'publish')
     const { wrapper, storeOptions } = createWrapper(resource, clientService)
     wrapper.vm.selectedTags.push('b')
-    await wrapper.vm.save()
+    await wrapper.vm.save(wrapper.vm.selectedTags)
     expect(assignTagsStub).toHaveBeenCalled()
     expect(eventStub).not.toHaveBeenCalled()
     expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
@@ -133,7 +134,7 @@ describe('Tags Panel', () => {
   })
 })
 
-function createWrapper(resource, clientService = mockDeep<ClientService>()) {
+function createWrapper(resource, clientService = mockDeep<ClientService>(), stubVueSelect = true) {
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
   const mocks = { ...defaultComponentMocks(), $clientService: clientService }
@@ -144,7 +145,7 @@ function createWrapper(resource, clientService = mockDeep<ClientService>()) {
         plugins: [...defaultPlugins(), store],
         mocks,
         provide: { ...mocks, resource },
-        stubs: { VueSelect: true, CompareSaveDialog: true }
+        stubs: { VueSelect: stubVueSelect, CompareSaveDialog: true }
       }
     })
   }

@@ -42,7 +42,8 @@ export interface Graph {
     getDrive: (id: string) => AxiosPromise<Drive>
     createDrive: (drive: Drive, options: any) => AxiosPromise<Drive>
     updateDrive: (id: string, drive: Drive, options: any) => AxiosPromise<Drive>
-    deleteDrive: (id: string, ifMatch?: string, options?: any) => AxiosPromise<void>
+    disableDrive: (id: string) => AxiosPromise<void>
+    deleteDrive: (id: string) => AxiosPromise<void>
   }
   users: {
     getUser: (userId: string) => AxiosPromise<User>
@@ -120,8 +121,13 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         drivesApiFactory.createDrive(drive, options),
       updateDrive: (id: string, drive: Drive, options: any): AxiosPromise<Drive> =>
         drivesApiFactory.updateDrive(id, drive, options),
-      deleteDrive: (id: string, ifMatch: string, options: any): AxiosPromise<void> =>
-        drivesApiFactory.deleteDrive(id, ifMatch, options)
+      disableDrive: (id: string): AxiosPromise<void> => drivesApiFactory.deleteDrive(id, '', {}),
+      deleteDrive: (id: string): AxiosPromise<void> =>
+        drivesApiFactory.deleteDrive(id, '', {
+          headers: {
+            Purge: 'T'
+          }
+        })
     },
     users: {
       getUser: (userId: string) =>

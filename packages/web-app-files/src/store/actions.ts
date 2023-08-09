@@ -169,7 +169,7 @@ export default {
   ) {
     const {
       $gettext,
-      interpolate: $gettextInterpolate,
+      $ngettext,
       space,
       files,
       clientService,
@@ -186,7 +186,7 @@ export default {
           removedFiles.push(file)
         })
         .catch((error) => {
-          let translated = $gettext('Failed to delete "%{file}"')
+          let title = $gettext('Failed to delete "%{file}"', { file: file.name })
           if (error.statusCode === 423) {
             if (firstRun) {
               return context.dispatch('deleteFiles', {
@@ -198,13 +198,12 @@ export default {
               })
             }
 
-            translated = $gettext('Failed to delete "%{file}" - the file is locked')
+            title = $gettext('Failed to delete "%{file}" - the file is locked', { file: file.name })
           }
-          const title = $gettextInterpolate(translated, { file: file.name }, true)
           context.dispatch(
             'showErrorMessage',
             {
-              title: title,
+              title,
               error
             },
             { root: true }
@@ -219,6 +218,20 @@ export default {
       context.commit('REMOVE_FILES', removedFiles)
       context.commit('REMOVE_FILES_FROM_SEARCHED', removedFiles)
       context.commit('RESET_SELECTION')
+
+      if (removedFiles.length) {
+        const title =
+          removedFiles.length === 1 && files.length === 1
+            ? $gettext('"%{item}" was moved to trash bin', { item: removedFiles[0].name })
+            : $ngettext(
+                '%{itemCount} item was moved to trash bin',
+                '%{itemCount} items were moved to trash bin',
+                removedFiles.length,
+                { itemCount: removedFiles.length.toString() },
+                true
+              )
+        context.dispatch('showMessage', { title }, { root: true })
+      }
     })
   },
   clearTrashBin(context) {

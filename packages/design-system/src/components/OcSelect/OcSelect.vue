@@ -1,6 +1,11 @@
 <template>
   <div>
     <label :for="id" class="oc-label" v-text="label" />
+    <oc-contextual-helper
+      v-if="contextualHelper?.isEnabled"
+      v-bind="contextualHelper?.data"
+      class="oc-pl-xs"
+    ></oc-contextual-helper>
     <vue-select
       ref="select"
       :disabled="disabled || readOnly"
@@ -81,9 +86,18 @@
 import Fuse from 'fuse.js'
 import uniqueId from '../../utils/uniqueId'
 import VueSelect from 'vue-select'
-import { defineComponent, ComponentPublicInstance, onMounted, ref, unref, VNodeRef } from 'vue'
+import {
+  defineComponent,
+  ComponentPublicInstance,
+  onMounted,
+  ref,
+  unref,
+  VNodeRef,
+  PropType
+} from 'vue'
 import { useGettext } from 'vue3-gettext'
 import 'vue-select/dist/vue-select.css'
+import { ContextualHelper } from '../../helpers'
 
 /**
  * Select component with a trigger and dropdown based on [Vue Select](https://vue-select.org/)
@@ -142,6 +156,14 @@ export default defineComponent({
      */
     label: {
       type: String,
+      default: null
+    },
+    /**
+     * oc-contextual-helper can be injected here
+     */
+    contextualHelper: {
+      type: Object as PropType<ContextualHelper>,
+      required: false,
       default: null
     },
     /**

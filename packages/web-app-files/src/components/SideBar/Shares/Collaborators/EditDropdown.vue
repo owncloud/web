@@ -58,7 +58,7 @@
               @click="option.method"
             >
               <oc-icon :name="option.icon" fill-type="line" size="medium" variation="passive" />
-              <span class="oc-ml-s" v-text="option.title" />
+              <span v-text="option.title" />
             </oc-button>
           </template>
         </li>

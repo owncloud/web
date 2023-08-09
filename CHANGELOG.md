@@ -18,6 +18,7 @@ Summary
 * Bugfix - Media controls overflow on mobile screens: [#9351](https://github.com/owncloud/web/pull/9351)
 * Bugfix - Space editors see empty trashbin and delete actions in space trashbin: [#9389](https://github.com/owncloud/web/pull/9389)
 * Bugfix - Merging folders: [#9461](https://github.com/owncloud/web/issues/9461)
+* Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 * Enhancement - Improve extension app topbar: [#8422](https://github.com/owncloud/web/issues/8422)
@@ -58,6 +59,9 @@ Summary
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 * Enhancement - Add error log to upload dialog: [#9436](https://github.com/owncloud/web/pull/9436)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
+* Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
+* Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
+* Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
 
 Details
 -------
@@ -139,6 +143,13 @@ Details
 
    https://github.com/owncloud/web/issues/9461
    https://github.com/owncloud/web/pull/9477
+
+* Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
+
+   Adjusted offset of alignment of label for shared with action menu option in Sidebar.
+
+   https://github.com/owncloud/web/issues/9323
+   https://github.com/owncloud/web/pull/9529
 
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 
@@ -297,6 +308,7 @@ Details
    https://github.com/owncloud/web/issues/9445
    https://github.com/owncloud/web/issues/9469
    https://github.com/owncloud/web/issues/9454
+   https://github.com/owncloud/web/issues/9486
    https://github.com/owncloud/web/pull/9150
    https://github.com/owncloud/web/pull/9282
    https://github.com/owncloud/web/pull/9291
@@ -304,6 +316,7 @@ Details
    https://github.com/owncloud/web/pull/9460
    https://github.com/owncloud/web/pull/9471
    https://github.com/owncloud/web/pull/9470
+   https://github.com/owncloud/web/pull/9487
 
 * Enhancement - Privacy statement in account menu: [#9174](https://github.com/owncloud/web/issues/9174)
 
@@ -479,6 +492,37 @@ Details
    We've added a tooltip with the absolute date for file versions in file details
 
    https://github.com/owncloud/web/pull/9441
+
+* Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
+
+   We've added SSE to the notifications which allows us to be notified about new notifications
+   instantly and from the server without polling every few seconds.
+
+   https://github.com/owncloud/web/issues/9434
+   https://github.com/owncloud/web/pull/9451
+
+* Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
+
+   We've improved the tags form in various ways, including visual appearance as well as
+   usability. Auto save, remove tags on backspace, and contextual helper (and more, see issues)
+
+   https://github.com/owncloud/web/issues/9363
+   https://github.com/owncloud/web/issues/9356
+   https://github.com/owncloud/web/issues/9360
+   https://github.com/owncloud/web/issues/9362
+   https://github.com/owncloud/web/issues/9416
+   https://github.com/owncloud/web/pull/9525
+   https://github.com/owncloud/web/pull/9563
+
+* Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
+
+   We've removed the confirmation dialog while deletion files or folder to enhance the user
+   experience. We also show success notifications after the operation.
+
+   This doesn't have impact on the trash bin, confirmation dialog will still be displayed there.
+
+   https://github.com/owncloud/web/issues/5974
+   https://github.com/owncloud/web/pull/9527
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================

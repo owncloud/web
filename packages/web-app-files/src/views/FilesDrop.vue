@@ -40,7 +40,16 @@ import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
 import { createLocationPublic, createLocationSpaces } from '../router'
 
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
-import { computed, defineComponent, onMounted, onBeforeUnmount, ref, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  onBeforeUnmount,
+  ref,
+  unref,
+  nextTick,
+  watch
+} from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useGettext } from 'vue3-gettext'
 import {
@@ -170,11 +179,19 @@ export default defineComponent({
         })
     }
 
+    watch(loading, async (newLoadValue) => {
+      if (!newLoadValue) {
+        await nextTick()
+        uppyService.useDropTarget({ targetSelector: '#files-drop-container' })
+      } else {
+        uppyService.removeDropTarget()
+      }
+    })
+
     onMounted(() => {
       dragOver = eventBus.subscribe('drag-over', onDragOver)
       dragOut = eventBus.subscribe('drag-out', hideDropzone)
       drop = eventBus.subscribe('drop', hideDropzone)
-      uppyService.useDropTarget({ targetSelector: '#files-drop-container' })
       resolvePublicLink()
     })
 

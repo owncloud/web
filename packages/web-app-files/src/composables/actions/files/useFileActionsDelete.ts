@@ -22,18 +22,27 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
   const router = useRouter()
   const hasSpaces = useCapabilitySpacesEnabled()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
-  const { displayDialog } = useFileActionsDeleteResources({ store })
+  const { displayDialog, filesList_delete } = useFileActionsDeleteResources({ store })
 
   const { $gettext } = useGettext()
 
-  const handler = ({ space, resources }: FileActionOptions) => {
+  const handler = ({
+    space,
+    resources,
+    deletePermanent
+  }: FileActionOptions & { deletePermanent: boolean }) => {
     if (isLocationCommonActive(router, 'files-common-search')) {
       resources = resources.filter(
         (r) =>
           r.canBeDeleted() && (!unref(hasSpaces) || !r.isShareRoot()) && !isProjectSpaceResource(r)
       )
     }
-    displayDialog(space, resources)
+    if (deletePermanent) {
+      displayDialog(space, resources)
+      return
+    }
+
+    filesList_delete(resources)
   }
 
   const actions = computed((): FileAction[] => [
@@ -55,7 +64,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
 
         return deleteLabel
       },
-      handler,
+      handler: ({ space, resources }) => handler({ space, resources, deletePermanent: false }),
       isEnabled: ({ space, resources }) => {
         if (
           !isLocationSpacesActive(router, 'files-spaces-generic') &&
@@ -99,7 +108,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
       name: 'delete-permanent',
       icon: 'delete-bin-5',
       label: () => $gettext('Delete'),
-      handler,
+      handler: ({ space, resources }) => handler({ space, resources, deletePermanent: true }),
       isEnabled: ({ space, resources }) => {
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false

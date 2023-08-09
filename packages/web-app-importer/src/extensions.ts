@@ -78,20 +78,29 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
         }
       }
     })
-    uppyService.addPlugin(OneDrive, {
-      target: Dashboard,
-      companionUrl
-    })
-    uppyService.addPlugin(GoogleDrive, {
-      target: Dashboard,
-      companionUrl
-    })
-    uppyService.addPlugin(WebdavPublicLink, {
-      target: Dashboard,
-      id: 'WebdavPublicLink',
-      companionUrl,
-      ...(webdavCloudType && { cloudType: webdavCloudType })
-    })
+
+    if (supportedClouds.includes('OneDrive')) {
+      uppyService.addPlugin(OneDrive, {
+        target: Dashboard,
+        companionUrl
+      })
+    }
+
+    if (supportedClouds.includes('GoogleDrive')) {
+      uppyService.addPlugin(GoogleDrive, {
+        target: Dashboard,
+        companionUrl
+      })
+    }
+
+    if (supportedClouds.includes('WebdavPublicLink')) {
+      uppyService.addPlugin(WebdavPublicLink, {
+        target: Dashboard,
+        id: 'WebdavPublicLink',
+        companionUrl,
+        ...(webdavCloudType && { cloudType: webdavCloudType })
+      })
+    }
   }
 
   return computed(
@@ -114,7 +123,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
                 return false
               }
 
-              return unref(canUpload)
+              return unref(canUpload) && supportedClouds.length
             },
             isDisabled: () => !!Object.keys(uppyService.getCurrentUploads()).length,
             disabledTooltip: () => $gettext('Please wait until all imports have finished'),
