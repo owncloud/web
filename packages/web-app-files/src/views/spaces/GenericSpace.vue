@@ -468,6 +468,12 @@ export default defineComponent({
       }
     }
 
+    const disabledResources = computed(() => {
+      return unref(resourcesViewDefaults.paginatedResources)
+        .filter((resource) => resource.processing === true)
+        .map((resource) => resource.id)
+    })
+
     onMounted(() => {
       performLoaderTask(false)
       loadResourcesEventToken = eventBus.subscribe(
@@ -520,7 +526,8 @@ export default defineComponent({
       ),
       whitespaceContextMenu,
       clientService,
-      hasShareJail
+      hasShareJail,
+      disabledResources
     }
   },
 
@@ -573,12 +580,6 @@ export default defineComponent({
 
     isSpaceFrontpage() {
       return isProjectSpaceResource(this.space) && this.item === '/'
-    },
-
-    disabledResources() {
-      return this.paginatedResources
-        .filter((resource) => resource.processing === true)
-        .map((resource) => resource.id)
     }
   },
 

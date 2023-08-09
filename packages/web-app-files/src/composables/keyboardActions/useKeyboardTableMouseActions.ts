@@ -36,7 +36,10 @@ export const useKeyboardTableMouseActions = (
 
     for (let i = minIndex; i <= maxIndex; i++) {
       const nodeId = resourceNodes[i].getAttribute('data-item-id')
-      if (skipTargetSelection && nodeId === resource.id) {
+      if (
+        (skipTargetSelection && nodeId === resource.id) ||
+        paginatedResources.value.find((resource) => resource.id === nodeId)?.processing === true
+      ) {
         continue
       }
       store.commit('Files/ADD_FILE_SELECTION', { id: nodeId })
