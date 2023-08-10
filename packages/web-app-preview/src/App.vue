@@ -10,6 +10,8 @@
     <div class="preview-body">
       <media-settings
         v-if="activeMediaFileCached.isImage"
+        :aria-label="$gettext('Media settings')"
+        @change-processing-tool="handleChangeProcessingTool"
         @download="triggerActiveFileDownload"
         @save-cropped-image="save"
       />
@@ -54,17 +56,19 @@
         </div>
         <div class="image-gallery">
           <media-gallery
+            :aria-label="$gettext('Media gallery')"
             :media-files="mediaGalleryFiles"
             :active-index="activeIndex"
             :zoom-level="currentImageZoom"
             @update-active-media-file="handleSetActiveMediaFile"
             @handle-go-next="handleSetActiveMediaFile(activeIndex + 1)"
             @handle-go-prev="handleSetActiveMediaFile(activeIndex - 1)"
-            @change-active-zoom-level="currentImageZoom = $event"
+            @rotate-image="currentImageRotation += $event"
           />
         </div>
       </div>
       <quick-commands
+        :aria-label="$gettext('Quick commands')"
         :current-image-zoom="currentImageZoom"
         :is-image="activeMediaFileCached.isImage"
         :is-saveable="isSaveable"
@@ -100,12 +104,8 @@ import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import MediaSettings from './components/MediaSettings.vue'
 import QuickCommands from './components/QuickCommands.vue'
-import { CachedFile, MediaGalleryFile, AdjustmentParametersCategoryType } from './helpers/types'
+import { CachedFile, AdjustmentParametersCategoryType } from './helpers/types'
 import applyAdjustmentParams from './composables/saveFunctions/applyAdjustmentParams'
-import {
-  useSaveUnsavedChangesModal,
-  useCancelUnsavedChangesModal
-} from './composables/saveFunctions/useUnsavedChangesModal'
 import { mapActions, mapGetters } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { Ref } from 'vue'
@@ -242,7 +242,7 @@ export default defineComponent({
       return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
     })
 
-    const mediaGalleryFiles = computed<MediaGalleryFile[]>(() =>
+    const mediaGalleryFiles = computed<CachedFile[]>(() =>
       sortHelper(
         unref(cachedFiles).reduce(
           (acc, file) => {
@@ -490,9 +490,13 @@ export default defineComponent({
         icon: 'warning',
         title: $gettext('Duplicate modal'),
         message: $gettext('Do you want to save the changes in a duplicate file?'),
-        cancelText: $gettext('Save original'),
-        confirmText: $gettext('Create duplicate'),
-        onCancel: async () => {
+        cancelText: $gettext('Cancel'),
+        buttonSecondaryText: $gettext('Save'),
+        confirmText: $gettext('Duplicate'),
+        onCancel: () => {
+          store.dispatch('hideModal')
+        },
+        onConfirmSecondary: async () => {
           store.dispatch('hideModal')
           await saveImageTask(false).perform()
           modalFunctions.forEach(async (func) => await func())
@@ -547,12 +551,29 @@ export default defineComponent({
       }
 
       if (unref(activeAdjustmentParameters) !== unref(appliedAdjustmentParameters)) {
-        const onConfirm: Array<(...args: any[]) => Promise<any> | any> = [
-          () => save(),
-          () => downloadFile(unref(activeFilteredFile))
-        ]
-
-        useCancelUnsavedChangesModal([], onConfirm, store)
+        const modal = {
+          variation: 'danger',
+          icon: 'warning',
+          title: $gettext('Unsaved changes'),
+          message: $gettext(
+            'Your changes were not saved. Do you want to save the image before downloading?'
+          ),
+          cancelText: $gettext('Cancel'),
+          buttonSecondaryText: $gettext("Don't save"),
+          confirmText: $gettext('Save'),
+          onCancel: () => {
+            store.dispatch('hideModal')
+          },
+          onConfirmSecondary: () => {
+            store.dispatch('hideModal')
+            downloadFile(unref(activeFilteredFile))
+          },
+          onConfirm: () => {
+            store.dispatch('hideModal')
+            save([() => downloadFile(unref(activeFilteredFile))])
+          }
+        }
+        store.dispatch('createModal', modal)
       } else {
         downloadFile(unref(activeFilteredFile))
       }
@@ -611,14 +632,28 @@ export default defineComponent({
       isFileContentError.value = false
 
       if (unref(isSaveable)) {
-        const onConfirm: Array<(...args: any[]) => Promise<any> | any> = [
-          () => save([() => handleSetNewActiveIndex(newActiveIndex), () => updateLocalHistory()])
-        ]
-        const onCancel: Array<(...args: any[]) => Promise<any> | any> = [
-          () => handleSetNewActiveIndex(newActiveIndex),
-          () => updateLocalHistory()
-        ]
-        useSaveUnsavedChangesModal(onCancel, onConfirm, store)
+        const modal = {
+          variation: 'danger',
+          icon: 'warning',
+          title: $gettext('Unsaved changes'),
+          message: $gettext('Your changes were not saved. Do you want to save them?'),
+          cancelText: $gettext('Cancel'),
+          buttonSecondaryText: $gettext("Don't save"),
+          confirmText: $gettext('Save'),
+          onCancel: () => {
+            store.dispatch('hideModal')
+          },
+          onConfirmSecondary: () => {
+            store.dispatch('hideModal')
+            handleSetNewActiveIndex(newActiveIndex)
+            updateLocalHistory()
+          },
+          onConfirm: () => {
+            store.dispatch('hideModal')
+            save([() => handleSetNewActiveIndex(newActiveIndex), () => updateLocalHistory()])
+          }
+        }
+        store.dispatch('createModal', modal)
       } else {
         handleSetNewActiveIndex(newActiveIndex)
         updateLocalHistory()
@@ -627,16 +662,28 @@ export default defineComponent({
 
     function closePreview() {
       if (unref(isSaveable)) {
-        const onCancel: Array<(...args: any[]) => Promise<any> | any> = [
-          () => handleResetValues(),
-          () => closeApp()
-        ]
-        const onConfirm: Array<(...args: any[]) => Promise<any> | any> = [
-          () => save(),
-          () => handleResetValues(),
-          () => closeApp()
-        ]
-        useSaveUnsavedChangesModal(onCancel, onConfirm, store)
+        const modal = {
+          variation: 'danger',
+          icon: 'warning',
+          title: $gettext('Unsaved changes'),
+          message: $gettext('Your changes were not saved. Do you want to save them?'),
+          cancelText: $gettext('Cancel'),
+          buttonSecondaryText: $gettext("Don't save"),
+          confirmText: $gettext('Save'),
+          onCancel: () => {
+            store.dispatch('hideModal')
+          },
+          onConfirmSecondary: () => {
+            store.dispatch('hideModal')
+            handleResetValues()
+            closeApp()
+          },
+          onConfirm: () => {
+            store.dispatch('hideModal')
+            save([() => handleResetValues(), () => closeApp()])
+          }
+        }
+        store.dispatch('createModal', modal)
       } else {
         handleResetValues()
         closeApp()
@@ -711,11 +758,11 @@ export default defineComponent({
       }
     }
 
-    function addPreviewToCache(file, url) {
+    function addPreviewToCache(file: Resource, url) {
       cachedFiles.value.push({
-        id: file.id,
+        id: file.id as string,
         name: file.name,
-        url,
+        url: Number(file.size) < 4096 * 8192 ? url : '',
         ext: file.extension,
         mimeType: file.mimeType,
         isVideo: isFileTypeVideo(file),
@@ -725,7 +772,7 @@ export default defineComponent({
     }
 
     function preloadImages() {
-      const loadPreviewAsync = (file) => {
+      const loadPreviewAsync = (file: Resource) => {
         toPreloadImageIds.value.push(file.id)
         loadPreview(file)
           .then((mediaUrl) => {
@@ -791,48 +838,86 @@ export default defineComponent({
       currentImageRotation.value = 0
     })
 
+    function handleChangeProcessingTool(newTool: ProcessingToolsEnum) {
+      if (unref(isSaveable) && newTool === ProcessingToolsEnum.Crop) {
+        const modal = {
+          variation: 'danger',
+          icon: 'warning',
+          title: $gettext('Unsaved changes'),
+          message: $gettext(
+            'Your changes were not saved. Do you want to save the image before downloading?'
+          ),
+          cancelText: $gettext('Cancel'),
+          buttonSecondaryText: $gettext("Don't save"),
+          confirmText: $gettext('Save'),
+          onCancel: () => {
+            store.dispatch('hideModal')
+          },
+          onConfirmSecondary: () => {
+            store.dispatch('hideModal')
+            store.commit('Preview/CHANGE_SELECTED_PROCESSING_TOOL', newTool)
+            store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
+            appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
+          },
+          onConfirm: () => {
+            store.dispatch('hideModal')
+            save([
+              () => store.commit('Preview/CHANGE_SELECTED_PROCESSING_TOOL', newTool),
+              () => {
+                store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
+                appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
+              }
+            ])
+          }
+        }
+        store.dispatch('createModal', modal)
+      } else {
+        store.commit('Preview/CHANGE_SELECTED_PROCESSING_TOOL', newTool)
+      }
+    }
+
     return {
       ...appDefaults,
+      activeAdjustmentParameters,
       activeFilteredFile,
       activeIndex,
       activeMediaFileCached,
+      appliedAdjustmentParameters,
       cachedFiles,
+      currentImageRotation,
+      currentImageZoom,
       filteredFiles,
       fileActions,
-      isFileContentLoading,
-      isFileContentError,
-      isFullScreenModeActivated,
-      thumbDimensions,
-      mediaGalleryFiles,
-      toggleFullscreenMode,
-      updateLocalHistory,
-      triggerActiveFileDownload,
-      useSaveUnsavedChangesModal,
-      saveImageTask,
-      serverVersion,
-      appliedAdjustmentParameters,
-      activeAdjustmentParameters,
-      save,
-      isFileTypeAudio,
-      isFileTypeImage,
-      isFileTypeVideo,
       isActiveFileTypeAudio,
       isActiveFileTypeImage,
       isActiveFileTypeVideo,
-      handleSetActiveMediaFile,
-      closePreview,
-      loadPreview,
-      sortDir,
-      sortBy,
-      isSaveable,
-      mountActiveFile,
-      handleLocalHistoryEvent,
-      loadMedium,
-      preloadImages,
       isAutoPlayEnabled,
-      currentImageZoom,
-      currentImageRotation,
-      handleFullScreenChangeEvent
+      isFileContentError,
+      isFileContentLoading,
+      isFullScreenModeActivated,
+      isSaveable,
+      mediaGalleryFiles,
+      serverVersion,
+      sortBy,
+      sortDir,
+      thumbDimensions,
+      closePreview,
+      handleChangeProcessingTool,
+      handleFullScreenChangeEvent,
+      handleLocalHistoryEvent,
+      handleSetActiveMediaFile,
+      isFileTypeAudio,
+      isFileTypeImage,
+      isFileTypeVideo,
+      loadMedium,
+      loadPreview,
+      mountActiveFile,
+      preloadImages,
+      save,
+      saveImageTask,
+      toggleFullscreenMode,
+      triggerActiveFileDownload,
+      updateLocalHistory
     }
   },
 

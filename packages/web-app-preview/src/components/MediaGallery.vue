@@ -1,55 +1,75 @@
 <template>
   <div class="media-gallery oc-box-shadow-medium">
-    <button class="navigation-button left-navigation-button" @click="$emit('handleGoPrev')">
+    <button
+      :aria-label="$gettext('Previous image')"
+      class="navigation-button left-navigation-button"
+      @click="$emit('handleGoPrev')"
+    >
       <oc-icon name="arrow-drop-left" size="xlarge" fill-type="line" />
     </button>
     <div class="media-display">
       <div v-for="(mediaFile, index) in activeMediaFiles" :key="index" class="media-container">
         <button
+          v-if="mediaFile"
+          v-oc-tooltip="mediaFile.name"
+          :aria-label="$gettext(`${mediaFile.name}`)"
           :class="index === 2 ? 'media-view-active oc-box-shadow-medium' : 'media-view'"
           @click="handleUpdateActiveMediaFile(mediaFile)"
         >
           <img
-            v-if="mediaFile && mediaFile.mimeType.toLowerCase().startsWith('image')"
+            v-if="mediaFile.mimeType.toLowerCase().startsWith('image')"
             :key="`media-image-${mediaFile.id}`"
             :src="mediaFile.url"
             :alt="mediaFile.name"
             :data-id="mediaFile.id"
             class="gallery-image"
           />
-          <div v-else-if="mediaFile && mediaFile.mimeType.toLowerCase().startsWith('video')">
+          <div v-else-if="mediaFile.mimeType.toLowerCase().startsWith('video')">
             <oc-icon name="resource-type-video" size="large" />
             <p class="video-text">{{ mediaFile.name }}</p>
           </div>
-          <div v-else-if="mediaFile && mediaFile.mimeType.toLowerCase().startsWith('audio')">
+          <div v-else-if="mediaFile.mimeType.toLowerCase().startsWith('audio')">
             <oc-icon name="resource-type-audio" size="large" fill-type="fill" />
             <p class="video-text">{{ mediaFile.name }}</p>
           </div>
         </button>
+        <div v-else :aria-label="$gettext('Empty image container')" class="media-view" />
       </div>
     </div>
-    <button class="navigation-button" @click="$emit('handleGoNext')">
+    <button
+      :aria-label="$gettext('Next image')"
+      class="navigation-button"
+      @click="$emit('handleGoNext')"
+    >
       <oc-icon name="arrow-drop-right" size="xlarge" fill-type="line" />
     </button>
     <div class="tools-sidebar">
       <p class="active-index-paragraph oc-text-small">
         {{ $gettext(`${activeIndex + 1} of ${mediaFiles.length}`) }}
       </p>
+      <div class="rotate-buttons">
+        <oc-button
+          :aria-label="$gettext('Rotate counterclockwise')"
+          class="rotate-button"
+          variation="raw"
+          size="small"
+          @click="$emit('rotateImage', -90)"
+        >
+          <oc-icon name="anticlockwise" size="small" fill-type="line" />
+        </oc-button>
+        <oc-button
+          :aria-label="$gettext('Rotate clockwise')"
+          class="rotate-button"
+          variation="raw"
+          size="small"
+          @click="$emit('rotateImage', 90)"
+        >
+          <oc-icon name="clockwise" size="small" fill-type="line" />
+        </oc-button>
+      </div>
       <div class="zoom-handler">
         <p class="oc-text-small oc-mb-s active-index-paragraph">{{ $gettext('Zoom') }}:</p>
-        <input
-          v-if="isZoomInputActive"
-          ref="zoomInput"
-          v-model="currentZoomLevel"
-          class="zoom-input oc-text-small"
-          @keydown.enter="handleChangeZoomLevel"
-          @blur="handleSetZoomInputInactive"
-          @keydown="preventArrowKeys"
-          @focus="selectZoomInputText"
-        />
-        <button v-else class="zoom-button oc-text-small" @click="handleSetZoomInputActive">
-          {{ currentZoomLevel }}%
-        </button>
+        <p>{{ currentZoomLevel }}%</p>
       </div>
     </div>
   </div>
@@ -58,8 +78,7 @@
 <script lang="ts">
 import { computed } from 'vue'
 import { defineComponent } from 'vue'
-import { MediaGalleryFile } from '../helpers'
-import { ComputedRef } from 'vue'
+import { CachedFile } from '../helpers'
 import { useSlicedGalleryImageList } from '../composables'
 import { ref } from 'vue'
 
@@ -67,7 +86,7 @@ export default defineComponent({
   name: 'MediaGallery',
   props: {
     mediaFiles: {
-      type: Array<MediaGalleryFile>,
+      type: Array<CachedFile>,
       required: true
     },
     activeIndex: {
@@ -79,33 +98,20 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['updateActiveMediaFile', 'handleGoNext', 'handleGoPrev', 'changeActiveZoomLevel'],
+  emits: ['updateActiveMediaFile', 'handleGoNext', 'handleGoPrev', 'rotateImage'],
   setup(props, { emit }) {
     const isZoomInputActive = ref<Boolean>(false)
     const currentZoomLevel = computed(() => Math.round(props.zoomLevel * 100))
 
-    const activeMediaFiles: ComputedRef<MediaGalleryFile[]> = computed(() =>
+    const activeMediaFiles = computed<CachedFile[]>(() =>
       useSlicedGalleryImageList(props.mediaFiles, props.activeIndex)
     )
 
     function handleUpdateActiveMediaFile(mediaFile) {
       const mediaFileindex = props.mediaFiles.findIndex((file) => file.id === mediaFile.id)
-      if (mediaFileindex !== props.activeIndex) {
+      if (mediaFileindex !== props.activeIndex && mediaFileindex !== undefined) {
         emit('updateActiveMediaFile', mediaFileindex)
       }
-    }
-
-    function handleSetZoomInputActive() {
-      isZoomInputActive.value = true
-    }
-
-    function handleSetZoomInputInactive() {
-      isZoomInputActive.value = false
-    }
-
-    function handleChangeZoomLevel(event) {
-      emit('changeActiveZoomLevel', event.target.value / 100)
-      isZoomInputActive.value = false
     }
 
     function preventArrowKeys(e) {
@@ -114,20 +120,12 @@ export default defineComponent({
       }
     }
 
-    function selectZoomInputText(e) {
-      e.target.select()
-    }
-
     return {
       isZoomInputActive,
       activeMediaFiles,
       currentZoomLevel,
       handleUpdateActiveMediaFile,
-      handleSetZoomInputActive,
-      handleSetZoomInputInactive,
-      handleChangeZoomLevel,
-      preventArrowKeys,
-      selectZoomInputText
+      preventArrowKeys
     }
   },
   watch: {
@@ -271,5 +269,16 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
   margin: 0;
+}
+
+.rotate-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.rotate-button {
+  background-color: rgb(0, 0, 0, 0);
+  padding: 0.1rem;
 }
 </style>

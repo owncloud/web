@@ -1,7 +1,8 @@
 <template>
   <cropper
-    v-if="isCropperActive"
+    v-if="selectedProcessingTool === ProcessingToolsEnum.Crop"
     ref="cropper"
+    :aria-label="$gettext('Cropper')"
     class="cropper"
     :src="file.url"
     :stencil-component="CropperTools.cropperVariant"
@@ -9,16 +10,11 @@
     @change="handleUpdateCropper"
   />
   <img
-    v-else-if="isWriteActive || isDrawActive"
-    :src="file.url"
-    :alt="file.name"
-    :data-id="file.id"
-    :style="`zoom: ${currentImageZoom};transform: rotate(${currentImageRotation}deg); ${adjustmentParams}`"
-  />
-  <img
     v-else
+    :aria-label="$gettext('Displayed image')"
+    class="image"
     :src="file.url"
-    :alt="file.name"
+    :alt="file.url === '' ? `${file.name} \n The file is to large to render` : file.name"
     :data-id="file.id"
     :style="`zoom: ${currentImageZoom};transform: rotate(${currentImageRotation}deg); ${adjustmentParams}`"
   />
@@ -33,6 +29,7 @@ import { Cropper, CircleStencil, RectangleStencil } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css'
 import { CropVariantEnum, ProcessingToolsEnum } from '../../helpers'
 import { mapMutations } from 'vuex'
+import { unref } from 'vue'
 
 export default defineComponent({
   name: 'MediaImage',
@@ -55,25 +52,15 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const imageAdjustmentParams = computed(() => store.getters['Preview/allParameters'])
 
-    const adjustmentParams: ComputedRef<string> = computed(() => {
-      const imageAdjustmentParams = store.getters['Preview/allParameters']
-      return useCSSImageAdjustmentParameters(imageAdjustmentParams)
-    })
-    const isCropperActive = computed(() => {
-      const selectedProcessingTool = store.getters['Preview/getSelectedProcessingTool']
-      return selectedProcessingTool === ProcessingToolsEnum.Crop
-    })
+    const adjustmentParams: ComputedRef<string> = computed(() =>
+      useCSSImageAdjustmentParameters(unref(imageAdjustmentParams))
+    )
 
-    const isWriteActive = computed(() => {
-      const selectedProcessingTool = store.getters['Preview/getSelectedProcessingTool']
-      return selectedProcessingTool === ProcessingToolsEnum.Write
-    })
-
-    const isDrawActive = computed(() => {
-      const selectedProcessingTool = store.getters['Preview/getSelectedProcessingTool']
-      return selectedProcessingTool === ProcessingToolsEnum.Draw
-    })
+    const selectedProcessingTool = computed<ProcessingToolsEnum>(
+      () => store.getters['Preview/getSelectedProcessingTool']
+    )
 
     const CropperTools = computed(() => {
       const activeCropVariant = store.getters['Preview/getCropVariant']
@@ -94,10 +81,9 @@ export default defineComponent({
 
     return {
       adjustmentParams,
-      isCropperActive,
-      isWriteActive,
-      isDrawActive,
-      CropperTools
+      selectedProcessingTool,
+      CropperTools,
+      ProcessingToolsEnum
     }
   },
   methods: {

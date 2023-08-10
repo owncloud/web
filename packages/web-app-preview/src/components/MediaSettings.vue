@@ -1,50 +1,72 @@
 <template>
   <div class="sidebar-tools">
-    <div class="tool-list">
-      <oc-button class="media-settings-button" appearance="raw" @click="$emit('download')">
+    <div :aria-label="$gettext('Editing tools')" class="tool-list">
+      <oc-button
+        :aria-label="$gettext('Download image')"
+        class="media-settings-button"
+        appearance="raw"
+        @click="$emit('download')"
+      >
         <oc-icon name="download-2" class="download-button" />
         <span>{{ $gettext('Download') }}</span>
       </oc-button>
 
       <oc-button
+        :aria-label="$gettext('Customize image')"
         class="media-settings-button"
         appearance="raw"
         :style="
           selectedProcessingTool === ProcessingToolsEnum.Customize &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Customize)"
+        @click="$emit('change-processing-tool', ProcessingToolsEnum.Customize)"
       >
         <oc-icon name="tools" />
         <span>{{ $gettext('Customize') }}</span>
       </oc-button>
 
       <oc-button
+        :aria-label="$gettext('Crop image')"
         class="media-settings-button"
         appearance="raw"
         :style="
           selectedProcessingTool === ProcessingToolsEnum.Crop &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Crop)"
+        @click="$emit('change-processing-tool', ProcessingToolsEnum.Crop)"
       >
         <oc-icon name="crop" fill-type="line" />
         <span>{{ $gettext('Crop') }}</span>
       </oc-button>
+      <!-- TBI -->
+      <!-- <oc-button
+        :aria-label="$gettext('Rotate image button')"
+        class="media-settings-button"
+        appearance="raw"
+        :style="
+          selectedProcessingTool === ProcessingToolsEnum.Rotate &&
+          'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
+        "
+        @click="$emit('change-processing-tool', ProcessingToolsEnum.Rotate)"
+      >
+        <oc-icon name="" fill-type="line" />
+        <span>{{ $gettext('Rotate') }}</span>
+      </oc-button> -->
 
-      <oc-button
+      <!-- <oc-button
         class="media-settings-button"
         appearance="raw"
         :style="
           selectedProcessingTool === ProcessingToolsEnum.Write &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Write)"
+        @click="$emit('change-processing-tool', ProcessingToolsEnum.Write)"
       >
         <oc-icon name="pencil" />
         <span>{{ $gettext('Write') }}</span>
-      </oc-button>
+      </oc-button> -->
 
+      <!--
       <oc-button
         class="media-settings-button"
         appearance="raw"
@@ -52,18 +74,19 @@
           selectedProcessingTool === ProcessingToolsEnum.Draw &&
           'border-left: 2px solid var(--oc-color-icon-root); background-color: var(--oc-color-background-highlight)'
         "
-        @click="handleUpdateSelectedProcessingTool(ProcessingToolsEnum.Draw)"
+        @click="$emit('change-processing-tool', ProcessingToolsEnum.Draw)"
       >
         <oc-icon name="brush" />
         <span>{{ $gettext('Draw') }}</span>
-      </oc-button>
+      </oc-button> -->
     </div>
-    <div class="side-bar-animation">
+    <div :aria-label="$gettext('Customize tool')" class="side-bar-animation">
       <div v-if="selectedProcessingTool === ProcessingToolsEnum.Customize" class="options-bar">
         <adjustment-parameters-category
           name="General"
           icon-name="equalizer"
           :parameter-category="AdjustmentParametersCategoryEnum.General"
+          :is-open-default="true"
         />
         <adjustment-parameters-category
           name="Fine Tune"
@@ -79,6 +102,7 @@
       </div>
       <div
         v-else-if="selectedProcessingTool === ProcessingToolsEnum.Crop"
+        :aria-label="$gettext('Crop tool')"
         class="options-bar-compact"
       >
         <div class="cropper-options">
@@ -86,6 +110,7 @@
             :class="
               cropVariant === CropVariantEnum.FreeForm ? 'crop-variant-active' : 'crop-variant'
             "
+            :aria-label="$gettext('Crop type rectangle')"
             appearance="raw"
             @click="handleUpdateCropVariant(CropVariantEnum.FreeForm)"
           >
@@ -96,6 +121,7 @@
             :class="
               cropVariant === CropVariantEnum.Circular ? 'crop-variant-active' : 'crop-variant'
             "
+            :aria-label="$gettext('Crop type circle')"
             appearance="raw"
             @click="handleUpdateCropVariant(CropVariantEnum.Circular)"
           >
@@ -104,7 +130,12 @@
           </oc-button>
         </div>
         <div class="crop-image-button">
-          <oc-button appearance="filled" variation="primary" @click="$emit('saveCroppedImage')">
+          <oc-button
+            :aria-label="$gettext('Save cropping')"
+            appearance="filled"
+            variation="primary"
+            @click="$emit('saveCroppedImage')"
+          >
             {{ $gettext('Crop') }}
           </oc-button>
         </div>
@@ -125,7 +156,7 @@ import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: { AdjustmentParametersCategory },
-  emits: ['download', 'saveCroppedImage'],
+  emits: ['download', 'saveCroppedImage', 'change-processing-tool'],
   setup() {
     const store = useStore()
     const selectedProcessingTool = computed(
@@ -149,10 +180,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapMutations('Preview', ['CHANGE_SELECTED_PROCESSING_TOOL', 'SET_CROP_VARIANT']),
-    handleUpdateSelectedProcessingTool(processingTool: ProcessingToolsEnum) {
-      this.CHANGE_SELECTED_PROCESSING_TOOL(processingTool)
-    },
+    ...mapMutations('Preview', ['SET_CROP_VARIANT']),
     handleUpdateCropVariant(newCropVariant: CropVariantEnum) {
       if (newCropVariant !== this.cropVariant) {
         this.SET_CROP_VARIANT(newCropVariant)
@@ -200,9 +228,12 @@ export default defineComponent({
   width: 18rem;
   box-sizing: border-box;
   padding: $oc-space-small;
-  height: 100%;
-  padding-bottom: 20rem;
+  height: 90vh;
   overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
 }
 
 .options-bar-compact {

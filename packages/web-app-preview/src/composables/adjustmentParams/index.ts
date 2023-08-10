@@ -1,2 +1,2 @@
 export * from './useImageAdjustmentParams'
-export * from './useAdjustmentParametersValues'
+export * from './adjustmentParametersValues'

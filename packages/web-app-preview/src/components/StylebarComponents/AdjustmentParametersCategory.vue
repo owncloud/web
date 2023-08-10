@@ -1,20 +1,22 @@
 <template>
-  <div>
+  <div :aria-label="$gettext('Category container')">
     <oc-button
+      :aria-label="$gettext(name)"
       :class="['adjustment-parameter-category-button', isOpen && 'button-box-shadow']"
       appearance="raw"
       @click="handleIsOpen"
     >
-      <span class="button-description"
-        ><oc-icon :name="iconName" :fill-type="isFillTypeLine ? 'line' : 'fill'" />
-        {{ $gettext(name) }}</span
-      >
+      <span class="button-description">
+        <oc-icon :name="iconName" :fill-type="isFillTypeLine ? 'line' : 'fill'" />
+        {{ $gettext(name) }}
+      </span>
       <oc-icon :name="isOpen ? 'arrow-up-s' : 'arrow-down-s'" />
     </oc-button>
     <div v-if="isOpen">
       <div
         v-for="adjustmentParameter in adjustmentParams"
         :key="adjustmentParameter.name"
+        :aria-label="$gettext(`parameter ${adjustmentParameter.name}`)"
         class="adjustment-parameters"
       >
         <div
@@ -40,7 +42,7 @@
           v-else-if="adjustmentParameter.type === AdjustmentParametersTypeEnum.Boolean"
           class="parameter-description"
         >
-          <span class="description">
+          <span :aria-label="$gettext(`parameter ${adjustmentParameter.name}`)" class="description">
             <p>{{ $gettext(adjustmentParameter.name) }}</p>
             <oc-switch
               :checked="(adjustmentParameter.value as boolean)"
@@ -62,7 +64,6 @@ import {
 } from '../../helpers'
 import { mapMutations } from 'vuex'
 import { useStore } from 'web-pkg'
-import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'AdjustmentParametersCategory',
@@ -84,13 +85,16 @@ export default defineComponent({
     isFillTypeLine: {
       type: Boolean,
       default: false
+    },
+    isOpenDefault: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['valueChange'],
   setup(props) {
-    const isOpen = ref(false)
+    const isOpen = ref(props.isOpenDefault)
     const store = useStore()
-    const { $gettext } = useGettext()
 
     const adjustmentParams = computed((): AdjustmentParametersCategoryType[] => {
       switch (props.parameterCategory) {

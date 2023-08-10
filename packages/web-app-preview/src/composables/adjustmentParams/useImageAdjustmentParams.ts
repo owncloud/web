@@ -1,5 +1,5 @@
 import { AdjustmentParametersCategoryType } from 'web-app-preview/src/helpers'
-import { useAdjustmentParametersValues } from './useAdjustmentParametersValues'
+import { adjustmentParametersValues } from './adjustmentParametersValues'
 
 export const useCSSImageAdjustmentParameters = (
   adjustmentParams: AdjustmentParametersCategoryType[]
@@ -9,9 +9,11 @@ export const useCSSImageAdjustmentParameters = (
     computedContrast,
     computedSaturation,
     computedGrayscale,
+    computedHueRotate,
+    computedSepia,
     computedInvert
-  } = useAdjustmentParametersValues(adjustmentParams)
-  const adjustmentParametersString = `filter: brightness(${computedBrightness}) contrast(${computedContrast}) saturate(${computedSaturation}) grayscale(${computedGrayscale}) invert(${computedInvert})`
+  } = adjustmentParametersValues(adjustmentParams)
+  const adjustmentParametersString = `filter: brightness(${computedBrightness}) contrast(${computedContrast}) saturate(${computedSaturation}) grayscale(${computedGrayscale}) invert(${computedInvert}) hue-rotate(${computedHueRotate}deg) sepia(${computedSepia})`
   return adjustmentParametersString
 }
 
@@ -23,8 +25,10 @@ export const useImageAdjustmentParameters = (
     computedContrast,
     computedSaturation,
     computedGrayscale,
+    computedHueRotate,
+    computedSepia,
     computedInvert
-  } = useAdjustmentParametersValues(adjustmentParams)
-  const adjustmentParametersString = `brightness(${computedBrightness}) contrast(${computedContrast}) saturate(${computedSaturation}) grayscale(${computedGrayscale}) invert(${computedInvert})`
+  } = adjustmentParametersValues(adjustmentParams)
+  const adjustmentParametersString = `brightness(${computedBrightness}) contrast(${computedContrast}) saturate(${computedSaturation}) grayscale(${computedGrayscale}) invert(${computedInvert}) hue-rotate(${computedHueRotate}deg) sepia(${computedSepia})`
   return adjustmentParametersString
 }

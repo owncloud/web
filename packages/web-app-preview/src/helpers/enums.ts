@@ -8,7 +8,8 @@ export enum ProcessingToolsEnum {
   Customize,
   Crop,
   Write,
-  Draw
+  Draw,
+  Rotate
 }
 
 export enum CropVariantEnum {
