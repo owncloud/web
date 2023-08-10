@@ -155,6 +155,7 @@ export function buildSharedResource(
   allowSharePermission = true,
   hasShareJail = false
 ): Resource {
+  console.log('SH', share)
   const isFolder = share.item_type === 'folder'
   let resource: Resource = {
     id: share.id,

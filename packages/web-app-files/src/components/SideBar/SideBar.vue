@@ -38,7 +38,7 @@ import { computed, defineComponent, PropType, provide, ref, unref, watch } from 
 import { useGettext } from 'vue3-gettext'
 import { useActiveLocation } from '../../composables'
 import FileInfo from './FileInfo.vue'
-import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import {isProjectSpaceResource, Resource, SpaceResource} from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 import { default as InnerSideBar } from 'web-pkg/src/components/SideBar/SideBar.vue'
 import SpaceInfo from 'web-pkg/src/components/SideBar/Spaces/SpaceInfo.vue'
@@ -218,7 +218,9 @@ export default defineComponent({
       }
       return null
     }
-    const setLoadedResource = async (resource) => {
+    const setLoadedResource = async (resource: Resource) => {
+      console.log('space', props.space)
+      console.log('file', unref(highlightedFile))
       if (!unref(isShareLocation)) {
         loadedResource.value = resource
         return

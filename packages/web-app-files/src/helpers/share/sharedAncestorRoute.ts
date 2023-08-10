@@ -16,6 +16,7 @@ export const getSharedAncestorRoute = ({
   matchingSpace: SpaceResource
 }): RouteLocationNamedRaw => {
   if (resource.shareId) {
+    console.log(111)
     if (resource.path === '') {
       return {}
     }

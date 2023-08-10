@@ -1,6 +1,6 @@
 import { useCapabilitySpacesEnabled, useRouteParam, useStore } from 'web-pkg/src/composables'
 import { Resource, SpaceResource } from 'web-client'
-import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import { isPersonalSpaceResource, SHARE_JAIL_ID } from 'web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 
 type GetMatchingSpaceOptions = {
@@ -31,7 +31,10 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     return (
       getInternalSpace(storageId) ||
       unref(spaces).find((s) => {
-        return s.root.remoteItem?.id === resource.fileId
+        return (
+          s.root.remoteItem?.id === resource.fileId ||
+          (resource.shareId && `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${resource.shareId}` === s.id)
+        )
       })
     )
   }

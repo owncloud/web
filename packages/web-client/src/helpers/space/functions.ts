@@ -77,7 +77,8 @@ export function buildShareSpaceResource({
 export function buildMountPointSpaceResource(data): MountPointSpaceResource {
   const space = buildSpace(data)
   space.fileId = data.root.remoteItem.id
-  space.id = data.root.remoteItem.id
+  // space.id = data.root.remoteItem.id
+
   space.driveAlias = data.root.remoteItem.driveAlias + '/' + space.fileId
   space.webDavPath = `/spaces/${space.fileId}`
   space.path = '/'
@@ -137,7 +138,8 @@ export function buildSpace(data): SpaceResource {
     }
   }
 
-  const id = extractStorageId(data.root?.remoteItem?.id) || data.id
+  // const id = extractStorageId(data.root?.remoteItem?.id) || data.id
+  const id = data.id
   const name = data.root?.remoteItem?.name || data.name
   const driveAlias = data.root?.remoteItem?.driveAlias || data.driveAlias
   const path = data.root?.remoteItem?.path || '/'
@@ -152,7 +154,7 @@ export function buildSpace(data): SpaceResource {
   const webDavTrashUrl = urlJoin(data.serverUrl, 'remote.php/dav', webDavTrashPath)
 
   const s = {
-    id,
+    id: id,
     fileId: id,
     storageId: id,
     mimeType: '',
