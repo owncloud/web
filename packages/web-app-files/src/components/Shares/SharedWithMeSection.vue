@@ -24,6 +24,7 @@
       sidebar-closed
       :are-thumbnails-displayed="displayThumbnails"
       :resources="resourceItems"
+      :disabled="disabledResourceItems"
       :are-resources-clickable="resourceClickable"
       :target-route-callback="resourceTargetRouteCallback"
       :header-position="fileListHeaderY"
@@ -257,6 +258,11 @@ export default defineComponent({
         return this.items
       }
       return this.items.slice(0, this.showMoreToggleCount)
+    },
+    disabledResourceItems() {
+      return this.resourceItems
+        .filter((resource) => resource.processing === true)
+        .map((resource) => resource.id)
     }
   },
   beforeUnmount() {
