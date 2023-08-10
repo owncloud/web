@@ -28,15 +28,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
 
-    return (
-      getInternalSpace(storageId) ||
-      unref(spaces).find((s) => {
-        return (
-          s.root.remoteItem?.id === resource.fileId ||
-          (resource.shareId && `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${resource.shareId}` === s.id)
-        )
-      })
-    )
+    return getInternalSpace(storageId)
   }
 
   return {

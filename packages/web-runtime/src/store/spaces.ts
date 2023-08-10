@@ -1,6 +1,6 @@
 import {
-  buildMountPointSpaceResource,
   buildSpace,
+  extractStorageId,
   isProjectSpaceResource,
   SpaceResource
 } from 'web-client/src/helpers'
@@ -285,11 +285,37 @@ const loadSpacesByType = async ({
   if (!graphResponse.data) {
     return []
   }
-  return graphResponse.data.value.map((space) =>
-    driveType === 'mountpoint'
-      ? buildMountPointSpaceResource({ ...space, serverUrl: configurationManager.serverUrl })
-      : buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
-  )
+
+  const mountpoints = graphResponse.data.value.map((space) => {
+    return buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
+  })
+  if (driveType !== 'mountpoint') {
+    return mountpoints
+  }
+
+  const rootSpaceDriveAliasMapping: Record<string, string> = {}
+  graphResponse.data.value.forEach((space) => {
+    // FIXME: update graph client for proper types
+    const { rootId, driveAlias } = space.root.remoteItem as any
+    rootSpaceDriveAliasMapping[rootId] = driveAlias
+  })
+
+  const rootSpaces = Object.entries(rootSpaceDriveAliasMapping).map(([id, driveAlias]) => {
+    // FIXME: create proper buildRootSpace (or whatever function)
+    const space = buildSpace({
+      id: extractStorageId(id),
+      // FIXME: set a proper name
+      name: `space for ${driveAlias}`,
+      // FIXME: can we retrieve this from api?
+      driveType: driveAlias.split('/')[0],
+      driveAlias,
+      path: '/'
+    })
+
+    return space
+  })
+
+  return [...mountpoints, ...rootSpaces]
 }
 
 export default {

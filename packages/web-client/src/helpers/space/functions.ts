@@ -74,17 +74,6 @@ export function buildShareSpaceResource({
   return space
 }
 
-export function buildMountPointSpaceResource(data): MountPointSpaceResource {
-  const space = buildSpace(data)
-  space.fileId = data.root.remoteItem.id
-  // space.id = data.root.remoteItem.id
-
-  space.driveAlias = data.root.remoteItem.driveAlias + '/' + space.fileId
-  space.webDavPath = `/spaces/${space.fileId}`
-  space.path = '/'
-  return space
-}
-
 export function buildSpace(data): SpaceResource {
   let spaceImageData, spaceReadmeData
   let disabled = false
@@ -140,9 +129,9 @@ export function buildSpace(data): SpaceResource {
 
   // const id = extractStorageId(data.root?.remoteItem?.id) || data.id
   const id = data.id
-  const name = data.root?.remoteItem?.name || data.name
-  const driveAlias = data.root?.remoteItem?.driveAlias || data.driveAlias
-  const path = data.root?.remoteItem?.path || '/'
+  const name = data.name
+  const driveAlias = data.driveAlias
+  const path = '/'
 
   const webDavPath = urlJoin(data.webDavPath || buildWebDavSpacesPath(id), {
     leadingSlash: true

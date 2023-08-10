@@ -70,14 +70,19 @@ export function aggregateResourceShares(
         hasShareJail
       )
       resource.shareId = share.id
+      resource.path = spaces.find(
+        (space) =>
+          space.driveType === 'mountpoint' &&
+          space.id === `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${resource.shareId}`
+      ).root.remoteItem.path
       return resource
     })
   }
 
   const resources = addSharedWithToShares(shares)
-  return resources.map((share) =>
-    buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)
-  )
+  return resources.map((share) => {
+    return buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)
+  })
 }
 
 function addSharedWithToShares(shares) {
@@ -155,7 +160,6 @@ export function buildSharedResource(
   allowSharePermission = true,
   hasShareJail = false
 ): Resource {
-  console.log('SH', share)
   const isFolder = share.item_type === 'folder'
   let resource: Resource = {
     id: share.id,
