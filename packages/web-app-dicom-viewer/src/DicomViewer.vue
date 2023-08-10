@@ -76,10 +76,45 @@ cornerstone.registerImageLoader('http', cornerstoneDICOMImageLoader.loadImage)
 cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 
 export default defineComponent({
+  name: 'DICOMViewer', // seems like this is not needed anymore for streamlined apps
+  components: {}, // only needed if there are child components
+  setup() {}, // maybe not needed with the streamlined version
   props: {
     url: {
       type: String,
       required: true
+    }
+  },
+  data() {
+    return {
+      isCornerstoneInitialized: false,
+      wadouriURLprefix: 'wadouri:',
+      element: null,
+      renderingEngineId: 'dicomRenderingEngine'
+    }
+  },
+  watch: {}, // most likely not needed
+  async mounted() {
+    console.log('cornerstone init status: ' + this.isCornerstoneInitialized)
+
+    // check if cornerstone core and tools are initalized
+    if (!this.isCornerstoneInitialized) {
+      // initalize cornerstone core
+      console.log('mounted: cornerstone not initialised, trigger initialisation') // for debugging purpose only, delete later
+      await this.initCornerstoneCore()
+    }
+  },
+  methods: {
+    async initCornerstoneCore() {
+      try {
+        await cornerstone.init()
+      } catch (e) {
+        console.error('Error initalizing cornerstone core (renderer?)', e)
+        console.log('error in initalizing cornerstone core') // for debugging purpose only, delete later
+      } finally {
+        this.isCornerstoneInitialized = true
+        console.log('cornerstone core initalized')
+      }
     }
   }
 })
