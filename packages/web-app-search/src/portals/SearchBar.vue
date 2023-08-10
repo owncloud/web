@@ -4,7 +4,7 @@
     id="files-global-search"
     ref="searchBar"
     class="oc-flex"
-    data-custom-key-bindings="true"
+    data-custom-key-bindings-disabled="true"
   >
     <oc-search-bar
       id="files-global-search-bar"
