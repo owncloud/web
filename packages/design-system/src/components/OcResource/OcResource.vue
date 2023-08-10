@@ -19,7 +19,12 @@
       <span v-if="hasThumbnail" :class="{ shake: false, badge: true }">
         <oc-icon name="lock" size="xsmall" />
       </span>
-      <oc-resource-icon v-else :resource="resource" />
+      <oc-resource-icon v-else :resource="resource">
+        <template #status>
+          <oc-icon v-if="resource.locked" name="lock" size="xsmall" />
+          <oc-spinner v-else size="xsmall" />
+        </template>
+      </oc-resource-icon>
     </oc-resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
       <oc-resource-link

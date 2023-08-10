@@ -7,21 +7,9 @@
       :size="size"
       :class="['oc-resource-icon', iconTypeClass]"
     />
-    <span class="oc-resource-icon-status-badge">
-      <span
-        :style="{ background: icon.color }"
-        style="
-          position: absolute;
-          top: 2px;
-          left: 2px;
-          width: 8px !important;
-          height: 8px !important;
-          padding: var(--oc-space-xsmall);
-          line-height: var(--oc-space-small);
-          border-radius: 30px;
-        "
-      >
-        <oc-icon name="lock" size="xsmall" />
+    <span v-if="$slots.status" class="oc-resource-icon-status-badge">
+      <span class="oc-resource-icon-status-badge-inner" :style="{ background: icon.color }">
+        <slot name="status" />
       </span>
     </span>
   </span>
@@ -141,41 +129,63 @@ export default defineComponent({
     height: 70%;
   }
 }
-.oc-tbody-tr:hover .oc-resource-icon-status-badge {
-  background: var(--oc-color-background-highlight) !important;
-  .oc-icon {
-    svg {
-      fill: var(--oc-color-background-highlight) !important;
-    }
-  }
-}
 .oc-resource-icon-status-badge {
   position: absolute;
   bottom: -3px;
   right: -2px;
   width: 12px;
-  height: 12px !important;
+  height: 12px;
   padding: var(--oc-space-xsmall);
-  line-height: var(--oc-space-small);
-  -webkit-border-radius: 30px;
-  -moz-border-radius: 30px;
   border-radius: 30px;
-  min-width: var(--oc-space-small);
-  height: var(--oc-space-small);
-  text-align: center;
-
-  font-weight: 300;
-  font-size: 11px;
   transition: background-color 200ms ease-in-out;
   background: var(--oc-color-background-default);
-  color: white;
 
+  &-inner {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 8px;
+    height: 8px;
+    padding: var(--oc-space-xsmall);
+    line-height: var(--oc-space-small);
+    border-radius: 30px;
+  }
   .oc-icon {
     margin-top: -2px;
     margin-left: -1.5px;
     svg {
       fill: var(--oc-color-background-default) !important;
     }
+  }
+  .oc-spinner {
+    margin-left: -2px;
+    margin-top: -2px;
+    color: var(--oc-color-background-default) !important;
+  }
+}
+
+// on table row hover change the status badge background color
+.oc-tbody-tr:hover .oc-resource-icon-status-badge {
+  background: var(--oc-color-background-hover) !important;
+  .oc-icon {
+    svg {
+      fill: var(--oc-color-background-hover) !important;
+    }
+  }
+  .oc-spinner {
+    color: var(--oc-color-background-hover) !important;
+  }
+}
+// on table row highlight change the status badge background color
+.oc-table-highlighted .oc-resource-icon-status-badge {
+  background: var(--oc-color-background-highlight) !important;
+  .oc-icon {
+    svg {
+      fill: var(--oc-color-background-highlight) !important;
+    }
+  }
+  .oc-spinner {
+    color: var(--oc-color-background-highlight) !important;
   }
 }
 </style>
