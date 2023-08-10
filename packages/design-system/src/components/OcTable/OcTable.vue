@@ -1,5 +1,5 @@
 <template>
-  <table v-bind="extractTableProps()">
+  <table v-bind="extractTableProps()" class="has-item-context-menu">
     <oc-thead v-if="hasHeader">
       <oc-tr class="oc-table-header-row">
         <oc-th
