@@ -583,6 +583,23 @@ export default defineComponent({
         &.provider-details {
           font-size: var(--oc-font-size-xsmall);
         }
+
+        &.preview > * {
+          min-height: 44px;
+          font-size: inherit;
+          padding: var(--oc-space-xsmall) var(--oc-space-small);
+
+          &:hover,
+          &.active {
+            background-color: var(--oc-color-background-highlight);
+          }
+        }
+        &.preview .disabled {
+          pointer-events: none;
+          background-color: var(--oc-color-background-muted);
+          opacity: 0.7;
+          filter: grayscale(0.6);
+        }
       }
     }
   }
