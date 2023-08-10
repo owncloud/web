@@ -79,6 +79,10 @@
     "name": "resource-type-text",
     "color": "var(--oc-color-text-default)"
   },
+  "dcm": {
+    "name": "resource-type-medical",
+    "color": "var(--oc-color-icon-medical)"
+  },
   "deb": {
     "name": "resource-type-archive",
     "color": "var(--oc-color-icon-archive)"
