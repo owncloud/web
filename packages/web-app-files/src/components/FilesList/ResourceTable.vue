@@ -74,6 +74,7 @@
           :class="{ 'resource-table-resource-cut': isResourceCut(item) }"
           @click="emitFileClick(item)"
         />
+        <span>{{ item.locked }}</span>
         <oc-button
           v-if="hasRenameAction(item)"
           class="resource-table-edit-name"
