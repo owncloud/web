@@ -108,8 +108,7 @@ describe('UsersList', () => {
   it('emits events on row click', () => {
     const users = getUserMocks()
     const { wrapper } = getWrapper({ props: { users } })
-    wrapper.vm.rowClicked(users[0])
-    expect(wrapper.emitted('unSelectAllUsers').length).toBeTruthy()
+    wrapper.vm.rowClicked([users[0]])
     expect(wrapper.emitted('toggleSelectUser')).toBeTruthy()
   })
   it('should show the context menu on right click', async () => {
