@@ -268,7 +268,3 @@ Given(
     }
   }
 )
-
-Given('wait for {string} second', async function (this: World, wait_time: any): Promise<void> {
-  await new Promise((resolve) => setTimeout(resolve, wait_time * 1000))
-})

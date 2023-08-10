@@ -2,24 +2,17 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
   As a user
   I want to work on different docs, sheets, slides etc.., using online office suites like Collabora or OnlyOffice
   So that the collaboration is seamless
-
   # To run this feature we need to run the external app-provider service along with wopi, OnlyOffice, Collabora services
   # This is a minimal test for the integration of ocis with different online office suites like Collabora and OnlyOffice
 
-
-
-  # # this is debug scenarios
-  # Scenario: wait for 20 sec
-  #   Given wait for "20" second
-
-
-  Scenario: create an OpenDocument file with Collabora
+  Background:
     Given "Admin" creates following users using API
       | id    |
       | Alice |
     And "Alice" logs in
     And "Alice" opens the "files" app
-    And "Alice" navigates to the personal space page
+
+  Scenario: create an OpenDocument file with Collabora
     When "Alice" creates the following resources
       | resource         | type         | content              |
       | OpenDocument.odt | OpenDocument | OpenDocument Content |
@@ -29,13 +22,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Anonymous" opens the public link "Link"
     Then "Anonymous" should see the content "OpenDocument Content" in editor "Collabora"
 
+
   Scenario: create a Microsoft Word file with OnlyOffice
-    Given "Admin" creates following users using API
-      | id    |
-      | Alice |
-    And "Alice" logs in
-    And "Alice" opens the "files" app
-    And "Alice" navigates to the personal space page
     When "Alice" creates the following resources
       | resource           | type           | content                |
       | MicrosoftWord.docx | Microsoft Word | Microsoft Word Content |

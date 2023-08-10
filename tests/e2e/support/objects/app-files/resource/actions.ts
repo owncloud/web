@@ -267,6 +267,16 @@ const createDocumentFile = async (
   editorToOpen: string
 ): Promise<void> => {
   const { page, name, type, content } = args
+  // for creating office suites documents we need the external app provider services to be ready
+  // though the service is ready it takes some time for the list of office suites documents to be visible in the dropdown in the webUI
+  // which requires a retry to check if the service is ready and the office suites documents is visible in the dropdown
+  const isAppProviderServiceReadyInWebUI = await isAppProviderServiceForOfficeSuitesReadyInWebUI(
+    page,
+    type
+  )
+  if (isAppProviderServiceReadyInWebUI === false) {
+    throw new Error(`The document of type ${type} did not appeared in the webUI for ${editorToOpen}. Possible reason could be the app provider service for ${editorToOpen} was not ready yet.`)
+  }
   await page.locator(util.format(createNewOfficeDocumentFileBUtton, type)).click()
   await page.locator(resourceNameInput).fill(name)
   const [editorPage] = await Promise.all([
@@ -334,6 +344,24 @@ export const openAndGetContentOfDocument = async ({
   const actualContentOfEditor = await editorPage.evaluate(() => navigator.clipboard.readText())
   await editorPage.close()
   return actualContentOfEditor
+}
+
+const isAppProviderServiceForOfficeSuitesReadyInWebUI = async (page, type) => {
+  let retry = 1
+  let createNewOfficeDocumentFileButtonLocator
+  while (retry <= 5) {
+    createNewOfficeDocumentFileButtonLocator = await page
+      .locator(util.format(createNewOfficeDocumentFileBUtton, type))
+      .isVisible()
+    if (createNewOfficeDocumentFileButtonLocator === true) {
+      return true
+    }
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+    await page.reload()
+    await page.locator(addNewResourceButton).click()
+    retry++
+  }
+  return false
 }
 
 export const createResources = async (args: createResourceArgs): Promise<void> => {
