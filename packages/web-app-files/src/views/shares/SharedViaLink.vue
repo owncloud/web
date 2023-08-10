@@ -24,6 +24,7 @@
           :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"
           :resources="paginatedResources"
+          :disabled="disabledResources"
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
@@ -78,7 +79,7 @@ import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent } from 'vue'
+import { computed, defineComponent, unref } from 'vue'
 import { Resource } from 'web-client'
 import {
   useCapabilityProjectSpacesEnabled,
@@ -112,6 +113,12 @@ export default defineComponent({
     const { loadResourcesTask, selectedResourcesIds, paginatedResources } =
       useResourcesViewDefaults<Resource, any, any[]>()
 
+    const disabledResources = computed(() => {
+      return unref(paginatedResources)
+        .filter((resource) => resource.processing === true)
+        .map((resource) => resource.id)
+    })
+
     useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
       if (mutation.payload.field === 'shareTypes') {
         if (selectedResourcesIds.value.length !== 1) return
@@ -133,6 +140,7 @@ export default defineComponent({
       ...useFileActions(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       getSpace,
+      disabledResources,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled()
     }
   },

@@ -27,6 +27,7 @@
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
+          :disabled="disabledResources"
           :grouping-settings="groupingSettings"
           @file-click="triggerDefaultAction"
           @row-mounted="rowMounted"
@@ -77,7 +78,7 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent } from 'vue'
+import { computed, defineComponent, unref } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import { useGroupingSettings } from 'web-pkg/src/cern/composables'
@@ -109,6 +110,12 @@ export default defineComponent({
     const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } =
       resourcesViewDefaults
 
+    const disabledResources = computed(() => {
+      return unref(resourcesViewDefaults.paginatedResources)
+        .filter((resource) => resource.processing === true)
+        .map((resource) => resource.id)
+    })
+
     useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
       if (mutation.payload.field === 'shareTypes') {
         if (selectedResourcesIds.value.length !== 1) return
@@ -129,6 +136,7 @@ export default defineComponent({
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
+      disabledResources,
       getSpace,
 
       // CERN
