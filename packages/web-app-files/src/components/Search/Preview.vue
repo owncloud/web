@@ -1,5 +1,6 @@
 <template>
   <oc-button
+    :class="{ 'state-processing': resource.processing }"
     :type="resource.isFolder ? 'router-link' : 'button'"
     justify-content="left"
     class="files-search-preview oc-flex oc-width-1-1"
@@ -205,8 +206,26 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .files-search-preview {
+  padding: var(--oc-space-xsmall) var(--oc-space-small);
   font-size: inherit;
+  min-height: 44px;
+
+  &:hover,
+  &.active {
+    background-color: var(--oc-color-background-highlight);
+  }
+
+  &.state-processing {
+    pointer-events: none;
+    background-color: var(--oc-color-background-muted) !important;
+    opacity: 0.7;
+    filter: grayscale(0.6);
+
+    &:hover {
+      background-color: var(--oc-color-background-muted) !important;
+    }
+  }
 }
 </style>

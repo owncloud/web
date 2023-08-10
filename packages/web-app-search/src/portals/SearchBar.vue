@@ -570,26 +570,18 @@ export default defineComponent({
     }
 
     ul {
-      li.provider {
-        padding: 0;
+      li.provider-details,
+      li.loading,
+      li#no-results {
+        padding: var(--oc-space-xsmall) var(--oc-space-small);
       }
 
       li {
-        padding: var(--oc-space-xsmall) var(--oc-space-small);
         position: relative;
         font-size: var(--oc-font-size-small);
 
         &.provider-details {
           font-size: var(--oc-font-size-xsmall);
-        }
-
-        &.preview {
-          min-height: 44px;
-
-          &:hover,
-          &.active {
-            background-color: var(--oc-color-background-highlight);
-          }
         }
       }
     }
