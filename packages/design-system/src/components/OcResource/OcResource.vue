@@ -1,11 +1,12 @@
 <template>
-  <div class="oc-resource oc-text-overflow">
+  <div class="oc-resource oc-text-overflow" style="overflow: visible !important">
     <oc-resource-link
       v-if="isIconDisplayed"
       :resource="resource"
       :is-resource-clickable="isResourceClickable"
       :folder-link="folderLink"
       @click="emitClick"
+      style="position: relative"
     >
       <oc-img
         v-if="hasThumbnail"
@@ -15,6 +16,9 @@
         width="40"
         height="40"
       />
+      <span v-if="hasThumbnail" :class="{ shake: false, badge: true }">
+        <oc-icon name="lock" size="xsmall" />
+      </span>
       <oc-resource-icon v-else :resource="resource" />
     </oc-resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
@@ -217,6 +221,30 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.badge {
+  position: absolute;
+  top: -3px;
+  right: -5px;
+  width: 10px;
+  height: 10px !important;
+  padding: var(--oc-space-xsmall);
+  line-height: var(--oc-space-small);
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  min-width: var(--oc-space-small);
+  height: var(--oc-space-small);
+  text-align: center;
+
+  font-weight: 300;
+  font-size: 11px;
+  background: rgba(155, 155, 155, 0.8);
+  color: white;
+
+  .oc-icon {
+    margin-top: -1px;
+  }
+}
 .oc-resource {
   align-items: center;
   display: inline-flex;

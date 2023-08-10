@@ -1,11 +1,30 @@
 <template>
-  <oc-icon
-    :key="`resource-icon-${icon.name}`"
-    :name="icon.name"
-    :color="icon.color"
-    :size="size"
-    :class="['oc-resource-icon', iconTypeClass]"
-  />
+  <span>
+    <oc-icon
+      :key="`resource-icon-${icon.name}`"
+      :name="icon.name"
+      :color="icon.color"
+      :size="size"
+      :class="['oc-resource-icon', iconTypeClass]"
+    />
+    <span class="oc-resource-icon-status-badge">
+      <span
+        :style="{ background: icon.color }"
+        style="
+          position: absolute;
+          top: 2px;
+          left: 2px;
+          width: 8px !important;
+          height: 8px !important;
+          padding: var(--oc-space-xsmall);
+          line-height: var(--oc-space-small);
+          border-radius: 30px;
+        "
+      >
+        <oc-icon name="lock" size="xsmall" />
+      </span>
+    </span>
+  </span>
 </template>
 
 <script lang="ts">
@@ -120,6 +139,43 @@ export default defineComponent({
   vertical-align: middle;
   &-file svg {
     height: 70%;
+  }
+}
+.oc-tbody-tr:hover .oc-resource-icon-status-badge {
+  background: var(--oc-color-background-highlight) !important;
+  .oc-icon {
+    svg {
+      fill: var(--oc-color-background-highlight) !important;
+    }
+  }
+}
+.oc-resource-icon-status-badge {
+  position: absolute;
+  bottom: -3px;
+  right: -2px;
+  width: 12px;
+  height: 12px !important;
+  padding: var(--oc-space-xsmall);
+  line-height: var(--oc-space-small);
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  min-width: var(--oc-space-small);
+  height: var(--oc-space-small);
+  text-align: center;
+
+  font-weight: 300;
+  font-size: 11px;
+  transition: background-color 200ms ease-in-out;
+  background: var(--oc-color-background-default);
+  color: white;
+
+  .oc-icon {
+    margin-top: -2px;
+    margin-left: -1.5px;
+    svg {
+      fill: var(--oc-color-background-default) !important;
+    }
   }
 }
 </style>
