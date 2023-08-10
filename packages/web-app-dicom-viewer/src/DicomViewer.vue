@@ -19,6 +19,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+// import cornerstone packages
+import Hammer from 'hammerjs'
+import dicomParser from 'dicom-parser'
+import * as cornerstoneMath from 'cornerstone-math'
+import * as cornerstone from '@cornerstonejs/core'
+import * as cornerstoneTools from '@cornerstonejs/tools'
+import * as cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader'
+
 export default defineComponent({
   props: {
     url: {
