@@ -1,12 +1,12 @@
 <template>
-  <div class="oc-resource oc-text-overflow" style="overflow: visible !important">
+  <div class="oc-resource oc-text-overflow">
     <oc-resource-link
       v-if="isIconDisplayed"
       :resource="resource"
       :is-resource-clickable="isResourceClickable"
       :folder-link="folderLink"
       @click="emitClick"
-      style="position: relative"
+      class="oc-resource-link"
     >
       <oc-img
         v-if="hasThumbnail"
@@ -254,6 +254,11 @@ export default defineComponent({
   align-items: center;
   display: inline-flex;
   justify-content: flex-start;
+  overflow: visible !important;
+
+  &-link {
+    position: relative;
+  }
 
   &-thumbnail {
     border-radius: 2px;
