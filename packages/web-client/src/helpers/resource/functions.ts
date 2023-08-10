@@ -98,7 +98,7 @@ export function buildResource(resource): Resource {
     webDavPath: resource.name,
     type: isFolder ? 'folder' : resource.type,
     isFolder,
-    locked: resource.fileInfo[DavProperty.LockDiscovery] || false,
+    locked: resource.fileInfo[DavProperty.LockDiscovery] ? true : false,
     processing: resource.processing || false,
     mdate: resource.fileInfo[DavProperty.LastModifiedDate],
     size: isFolder
