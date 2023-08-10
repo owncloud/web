@@ -63,6 +63,18 @@ var config = {
   }
 }
 
+try {
+  cornerstoneDICOMImageLoader.webWorkerManager.initialize(config)
+} catch (e) {
+  console.error('Error initializing cornerstone web worker manager', e)
+}
+
+// register image loader
+// "loadImage" is used for stack, "createAndCacheVolume" for volumes (not needed at this point, maybe later...)
+// see also https://www.cornerstonejs.org/docs/tutorials/basic-volume
+cornerstone.registerImageLoader('http', cornerstoneDICOMImageLoader.loadImage)
+cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
+
 export default defineComponent({
   props: {
     url: {
