@@ -20,8 +20,8 @@
         <oc-icon v-if="resource.locked" name="lock" size="xsmall" />
       </span>
       <oc-resource-icon v-else :resource="resource">
-        <template #status>
-          <oc-icon v-if="resource.locked" name="lock" size="xsmall" />
+        <template v-if="resource.locked" #status>
+          <oc-icon name="lock" size="xsmall" />
         </template>
       </oc-resource-icon>
     </oc-resource-link>
