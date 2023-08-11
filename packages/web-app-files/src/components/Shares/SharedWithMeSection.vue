@@ -260,6 +260,15 @@ export default defineComponent({
       return this.items.slice(0, this.showMoreToggleCount)
     },
     disabledResourceItems() {
+      /*
+       * Only show disabled items in accepted shares table, as this is the only view where file actions are possible
+       * but might fail due to processing state.
+       * Accepting or denying shares is possible anyway.
+       */
+      if (this.shareStatus !== ShareStatus.accepted) {
+        return []
+      }
+
       return this.resourceItems
         .filter((resource) => resource.processing === true)
         .map((resource) => resource.id)

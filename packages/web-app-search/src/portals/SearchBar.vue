@@ -594,12 +594,6 @@ export default defineComponent({
             background-color: var(--oc-color-background-highlight);
           }
         }
-        &.preview .disabled {
-          pointer-events: none;
-          background-color: var(--oc-color-background-muted);
-          opacity: 0.7;
-          filter: grayscale(0.6);
-        }
       }
     }
   }
