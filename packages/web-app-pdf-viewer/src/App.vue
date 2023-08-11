@@ -4,12 +4,12 @@
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
-      <object class="pdf-viewer oc-height-1-1 oc-width-1-1" :data="url" type="application/pdf" />
+      <object class="pdf-viewer oc-height-1-1 oc-width-1-1" :data="url" :type="objectType" />
     </div>
   </main>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from './components/ErrorScreen.vue'
@@ -23,10 +23,18 @@ export default defineComponent({
     LoadingScreen
   },
   setup() {
+    const isSafari = () =>
+      navigator.userAgent?.includes('Safari') && !navigator.userAgent?.includes('Chrome')
+
+    const objectType = computed(() => {
+      // object type must not be 'application/pdf' for Safari due to a bug
+      return isSafari() ? undefined : 'application/pdf'
+    })
     return {
       ...useAppDefaults({
         applicationId: 'pdf-viewer'
-      })
+      }),
+      objectType
     }
   },
   data: () => ({
