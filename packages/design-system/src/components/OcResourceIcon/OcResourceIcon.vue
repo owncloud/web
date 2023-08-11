@@ -164,6 +164,11 @@ export default defineComponent({
   }
 }
 
+.condensed {
+  .oc-resource-icon-status-badge {
+    bottom: 2px !important;
+  }
+}
 // on table row hover change the status badge background color
 .oc-tbody-tr:hover .oc-resource-icon-status-badge {
   background: var(--oc-color-background-hover) !important;
