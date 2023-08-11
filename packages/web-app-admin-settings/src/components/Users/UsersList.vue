@@ -304,7 +304,7 @@ export default defineComponent({
       emit('unSelectAllUsers')
     })
 
-    const keyActions = useKeyboardActions('user-list')
+    const keyActions = useKeyboardActions()
     useKeyboardTableNavigation(
       keyActions,
       paginatedItems,
