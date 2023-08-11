@@ -16,12 +16,13 @@
         width="40"
         height="40"
       />
-      <span v-if="hasThumbnail" :class="{ shake: false, badge: true }">
-        <oc-icon name="lock" size="xsmall" />
+      <span v-if="hasThumbnail" class="oc-resource-thumbnail-status-badge">
+        <oc-icon v-if="!resource.locked" name="lock" size="xsmall" />
+        <oc-spinner v-else size="xsmall" />
       </span>
       <oc-resource-icon v-else :resource="resource">
         <template #status>
-          <oc-icon v-if="resource.locked" name="lock" size="xsmall" />
+          <oc-icon v-if="!resource.locked" name="lock" size="xsmall" />
           <oc-spinner v-else size="xsmall" />
         </template>
       </oc-resource-icon>
@@ -226,30 +227,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.badge {
-  position: absolute;
-  top: -3px;
-  right: -5px;
-  width: 10px;
-  height: 10px !important;
-  padding: var(--oc-space-xsmall);
-  line-height: var(--oc-space-small);
-  -webkit-border-radius: 30px;
-  -moz-border-radius: 30px;
-  border-radius: 30px;
-  min-width: var(--oc-space-small);
-  height: var(--oc-space-small);
-  text-align: center;
-
-  font-weight: 300;
-  font-size: 11px;
-  background: rgba(155, 155, 155, 0.8);
-  color: white;
-
-  .oc-icon {
-    margin-top: -1px;
-  }
-}
 .oc-resource {
   align-items: center;
   display: inline-flex;
@@ -267,6 +244,32 @@ export default defineComponent({
     max-height: $oc-size-icon-default * 1.5;
     width: $oc-size-icon-default * 1.5;
     max-width: $oc-size-icon-default * 1.5;
+
+    &-status-badge {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      width: 8px;
+      height: 8px;
+      padding: var(--oc-space-xsmall);
+      line-height: var(--oc-space-small);
+      border-radius: 30px;
+      background: rgba(155, 155, 155, 0.8);
+      color: white;
+
+      .oc-icon {
+        margin-top: -2px;
+        margin-left: -1.5px;
+        svg {
+          fill: var(--oc-color-background-default) !important;
+        }
+      }
+      .oc-spinner {
+        margin-left: -2px;
+        margin-top: -2px;
+        color: var(--oc-color-background-default) !important;
+      }
+    }
   }
 
   &-details {
