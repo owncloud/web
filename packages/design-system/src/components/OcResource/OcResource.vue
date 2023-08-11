@@ -17,13 +17,11 @@
         height="40"
       />
       <span v-if="hasThumbnail" class="oc-resource-thumbnail-status-badge">
-        <oc-icon v-if="!resource.locked" name="lock" size="xsmall" />
-        <oc-spinner v-else size="xsmall" />
+        <oc-icon v-if="resource.locked" name="lock" size="xsmall" />
       </span>
       <oc-resource-icon v-else :resource="resource">
         <template #status>
-          <oc-icon v-if="!resource.locked" name="lock" size="xsmall" />
-          <oc-spinner v-else size="xsmall" />
+          <oc-icon v-if="resource.locked" name="lock" size="xsmall" />
         </template>
       </oc-resource-icon>
     </oc-resource-link>
