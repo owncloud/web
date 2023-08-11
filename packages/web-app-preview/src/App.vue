@@ -188,7 +188,8 @@ export default defineComponent({
     const isSaveable = computed(
       () =>
         unref(appliedAdjustmentParameters) !== unref(activeAdjustmentParameters) ||
-        unref(processingTool) === ProcessingToolsEnum.Crop
+        unref(processingTool) === ProcessingToolsEnum.Crop ||
+        unref(currentImageRotation) !== 0
     )
 
     const thumbDimensions = computed(() => {
@@ -291,7 +292,8 @@ export default defineComponent({
         case ProcessingToolsEnum.Customize:
           newVersion = await applyAdjustmentParams({
             imageBlob: serverVersion,
-            adjustmentParams: unref(activeAdjustmentParameters)
+            adjustmentParams: unref(activeAdjustmentParameters),
+            activeRotation: currentImageRotation
           })
           appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
           break
@@ -301,9 +303,17 @@ export default defineComponent({
           const croppedVersion = await applyCropping(croppedCanvas, cropType)
           newVersion = await applyAdjustmentParams({
             imageBlob: croppedVersion,
-            adjustmentParams: unref(activeAdjustmentParameters)
+            adjustmentParams: unref(activeAdjustmentParameters),
+            activeRotation: currentImageRotation
           })
           break
+        default:
+          newVersion = await applyAdjustmentParams({
+            imageBlob: serverVersion,
+            adjustmentParams: unref(activeAdjustmentParameters),
+            activeRotation: currentImageRotation
+          })
+          appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
       }
       return newVersion
     }
@@ -312,12 +322,18 @@ export default defineComponent({
       switch (processingTool.value) {
         case ProcessingToolsEnum.Crop:
           store.commit('Preview/RESET_SELECTED_PROCESSING_TOOL')
+          currentImageRotation.value = 0
           break
         case ProcessingToolsEnum.Customize:
           store.commit('Preview/RESET_SELECTED_PROCESSING_TOOL')
           store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
           appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
+          currentImageRotation.value = 0
           break
+        default:
+          store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
+          appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
+          currentImageRotation.value = 0
       }
     }
 
@@ -501,7 +517,7 @@ export default defineComponent({
         onConfirmSecondary: async () => {
           store.dispatch('hideModal')
           await saveImageTask(false).perform()
-          modalFunctions.forEach(async (func) => await func())
+          modalFunctions && modalFunctions.forEach(async (func) => await func())
         },
         onConfirm: async () => {
           store.dispatch('hideModal')
@@ -847,7 +863,11 @@ export default defineComponent({
     })
 
     function handleChangeProcessingTool(newTool: ProcessingToolsEnum) {
-      if (unref(isSaveable) && newTool === ProcessingToolsEnum.Crop) {
+      if (
+        unref(isSaveable) &&
+        newTool === ProcessingToolsEnum.Crop &&
+        unref(processingTool) !== ProcessingToolsEnum.Crop
+      ) {
         const modal = {
           variation: 'danger',
           icon: 'warning',

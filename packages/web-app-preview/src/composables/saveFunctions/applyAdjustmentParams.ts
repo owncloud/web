@@ -4,14 +4,17 @@ import { useImageAdjustmentParameters } from '../adjustmentParams'
 type AdjustmentParamsProps = {
   imageBlob: MaybeRef<Blob>
   adjustmentParams: MaybeRef<any>
+  activeRotation: MaybeRef<number>
 }
 
 const applyAdjustmentParams = async ({
   imageBlob,
-  adjustmentParams
+  adjustmentParams,
+  activeRotation
 }: AdjustmentParamsProps): Promise<Blob> => {
   const imageAdjustmentParams = useImageAdjustmentParameters(unref(adjustmentParams))
   const blob = unref(imageBlob)
+  const rotate = unref(activeRotation)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
 
@@ -26,6 +29,9 @@ const applyAdjustmentParams = async ({
   canvas.height = img.height
 
   ctx.filter = imageAdjustmentParams
+  ctx.translate(img.width / 2, img.height / 2)
+  ctx.rotate((rotate * Math.PI) / 180)
+  ctx.translate(-(img.width / 2), -(img.height / 2))
 
   ctx.drawImage(img, 0, 0, img.width, img.height)
 

@@ -47,7 +47,7 @@
       <p class="active-index-paragraph oc-text-small">
         {{ $gettext(`${activeIndex + 1} of ${mediaFiles.length}`) }}
       </p>
-      <div class="rotate-buttons">
+      <div v-if="activeProcessingTool !== ProcessingToolsEnum.Crop" class="rotate-buttons">
         <oc-button
           :aria-label="$gettext('Rotate counterclockwise')"
           class="rotate-button"
@@ -78,9 +78,10 @@
 <script lang="ts">
 import { computed } from 'vue'
 import { defineComponent } from 'vue'
-import { CachedFile } from '../helpers'
+import { CachedFile, ProcessingToolsEnum } from '../helpers'
 import { useSlicedGalleryImageList } from '../composables'
 import { ref } from 'vue'
+import { useStore } from 'web-pkg/src'
 
 export default defineComponent({
   name: 'MediaGallery',
@@ -100,8 +101,10 @@ export default defineComponent({
   },
   emits: ['updateActiveMediaFile', 'handleGoNext', 'handleGoPrev', 'rotateImage'],
   setup(props, { emit }) {
+    const store = useStore()
     const isZoomInputActive = ref<Boolean>(false)
     const currentZoomLevel = computed(() => Math.round(props.zoomLevel * 100))
+    const activeProcessingTool = computed(() => store.getters['Preview/getSelectedProcessingTool'])
 
     const activeMediaFiles = computed<CachedFile[]>(() =>
       useSlicedGalleryImageList(props.mediaFiles, props.activeIndex)
@@ -124,6 +127,8 @@ export default defineComponent({
       isZoomInputActive,
       activeMediaFiles,
       currentZoomLevel,
+      ProcessingToolsEnum,
+      activeProcessingTool,
       handleUpdateActiveMediaFile,
       preventArrowKeys
     }
@@ -194,7 +199,7 @@ export default defineComponent({
 }
 
 .tools-sidebar {
-  width: 4rem;
+  min-width: 4rem;
   border-left: 1px solid var(--oc-color-background-highlight);
   font-size: small;
   display: flex;
