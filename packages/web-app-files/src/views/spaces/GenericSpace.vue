@@ -139,7 +139,16 @@
 <script lang="ts">
 import { debounce, omit, last } from 'lodash-es'
 import { basename } from 'path'
-import { computed, defineComponent, PropType, onBeforeUnmount, onMounted, unref, ref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  onBeforeUnmount,
+  onMounted,
+  unref,
+  ref,
+  Ref
+} from 'vue'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
 import { useGettext } from 'vue3-gettext'
@@ -185,7 +194,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
-import { ResourceTransfer, TransferType } from '../../helpers/resource'
+import { AncestorMetaData, ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
 import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
@@ -247,11 +256,15 @@ export default defineComponent({
     const clientService = useClientService()
     const hasShareJail = useCapabilityShareJailEnabled()
 
-    let loadResourcesEventToken
+    let loadResourcesEventToken: string
 
     const canUpload = computed(() => {
       return store.getters['Files/currentFolder']?.canUpload({ user: store.getters.user })
     })
+
+    const ancestorMetaData: Ref<AncestorMetaData> = computed(
+      () => store.getters['Files/ancestorMetaData']
+    )
 
     const viewModes = computed(() => [
       ViewModeConstants.condensedTable,
@@ -294,6 +307,7 @@ export default defineComponent({
 
     const route = useRoute()
     const breadcrumbs = computed(() => {
+      console.log('ancestorMetaData', unref(ancestorMetaData))
       const space = props.space
       const rootBreadcrumbItems: BreadcrumbItem[] = []
       if (isProjectSpaceResource(space)) {
@@ -368,7 +382,7 @@ export default defineComponent({
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,
         // FIXME: needs file ids for each parent folder path
-        ...breadcrumbsFromPath(unref(route), props.item)
+        ...breadcrumbsFromPath(unref(route), props.item, unref(ancestorMetaData))
       )
     })
 

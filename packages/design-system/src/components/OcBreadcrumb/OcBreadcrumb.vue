@@ -61,6 +61,13 @@
           tabindex="-1"
           v-text="item.text"
         />
+        <oc-icon
+          v-if="!item.to && !item.onClick"
+          color="var(--oc-color-text-default)"
+          name="arrow-right-s"
+          class="oc-mx-xs"
+          fill-type="line"
+        />
         <template v-if="showContextActions && index === displayItems.length - 1">
           <oc-button
             id="oc-breadcrumb-contextmenu-trigger"
@@ -84,7 +91,7 @@
       </li>
     </ol>
     <oc-button
-      v-if="displayItems.length > 1"
+      v-if="parentFolderTo && displayItems.length > 1"
       appearance="raw"
       type="router-link"
       :aria-label="$gettext('Navigate one level up')"
