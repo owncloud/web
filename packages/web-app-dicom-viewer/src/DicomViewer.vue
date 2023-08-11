@@ -86,14 +86,13 @@ export default defineComponent({
       wadouriURLprefix: 'wadouri:',
       element: null,
       renderingEngineId: 'dicomRenderingEngine',
-      dicomURL: 'blob:https://host.docker.internal:9201/2fead07b-24b7-44f5-8905-260e1d145c86', //'blob:https://host.docker.internal:9201/9c09c55a-0c63-4556-abef-7e5a3969151e',
       dicomURLexternal:
         'blob:https://raw.githubusercontent.com/cornerstonejs/cornerstone3D/main/packages/dicomImageLoader/testImages/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
     }
   },
   watch: {}, // most likely not needed
   created() {
-    console.log('dicom viewer "created" hook called')
+    //console.log('dicom viewer "created" hook called')
   },
   async mounted() {
     console.log('cornerstone init status: ' + this.isCornerstoneInitialized)
@@ -107,26 +106,17 @@ export default defineComponent({
 
     // set reference to HTML element for viewport
     this.element = document.getElementById('dicom-canvas') as HTMLDivElement
-
+  },
+  beforeUpdate() {
     // instantiate/register rendering engine
     const renderingEngine = new RenderingEngine(this.renderingEngineId)
     console.log('render engine instantiated')
-
-    // get resource
-
-    // only needed if resource is passed along as file
-    // const dicomImage = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(**file**)
-
-    console.log('this url: ' + this.url + ' / ' + typeof this.url) // string
-
-    // check that url actually contains some information
-    // await this.waitingForURL()
 
     console.log(
       'url length: ' +
         (this.url as String).length +
         ' / ' +
-        typeof this.url +
+        typeof this.url + // string
         ' / this url: ' +
         this.url
     )
@@ -134,10 +124,9 @@ export default defineComponent({
     let dicomImage = this.url.replace('blob', 'wadouri')
     console.log('modified url: ' + dicomImage)
 
-    // TODO: check why url is sometimes empty, other times it contains blob...
-    // console output
-    // this url: blob:https://host.docker.internal:9201/9c09c55a-0c63-4556-abef-7e5a3969151e / string
-    // DicomViewer.vue:122 modified url: wadouri:https://host.docker.internal:9201/9c09c55a-0c63-4556-abef-7e5a3969151e
+    // get resource
+    // only needed if resource is passed along as file?
+    // let imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(**file**)
 
     // create a stack viewport
     const { ViewportType } = Enums
@@ -171,7 +160,7 @@ export default defineComponent({
 
     // render the image
     // updates every viewport in the rendering engine
-    viewport.resize()
+    //viewport.resize()
     viewport.render()
   },
   methods: {
@@ -189,11 +178,17 @@ export default defineComponent({
     async waitingForURL() {
       console.log('waiting for URL...')
 
+      let i = 0
       let size = (this.url as String).length
       console.log('url length: ' + size)
-      while (size < 1) {
+      console.log('i: ' + i)
+      while (i < 3) {
         this.$nextTick(() => {
           size = (this.url as String).length
+          console.log('i: ' + i)
+          console.log('url length: ' + size)
+          console.log('url : ' + this.url)
+          i++
         })
       }
 
