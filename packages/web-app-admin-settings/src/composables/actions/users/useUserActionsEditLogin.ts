@@ -5,8 +5,8 @@ import { UserAction } from 'web-pkg/src/composables/actions'
 import { useCapabilityReadOnlyUserAttributes } from 'web-pkg'
 
 export const useUserActionsEditLogin = () => {
-  const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
   const { $gettext } = useGettext()
+  const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
 
   const actions = computed((): UserAction[] => [
     {

@@ -8,9 +8,11 @@
       option-label="displayName"
       :label="$gettext('Groups')"
       :fix-message-line="true"
+      v-bind="$attrs"
       @update:model-value="onUpdate"
     >
       <template #selected-option="{ displayName, id }">
+        <oc-icon v-if="$attrs['read-only']" name="lock" class="oc-mr-xs" size="small" />
         <span class="oc-flex oc-flex-center">
           <avatar-image
             class="oc-flex oc-align-self-center oc-mr-s"
