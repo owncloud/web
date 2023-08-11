@@ -455,7 +455,7 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.open)
     }
 
-    const keyActions = useKeyboardActions('space-list')
+    const keyActions = useKeyboardActions()
     useKeyboardTableNavigation(
       keyActions,
       paginatedItems,

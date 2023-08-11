@@ -257,7 +257,7 @@ export default defineComponent({
       total: totalPages
     } = usePagination({ items, perPageDefault, perPageStoragePrefix })
 
-    const keyActions = useKeyboardActions('group-list')
+    const keyActions = useKeyboardActions()
     useKeyboardTableNavigation(
       keyActions,
       paginatedItems,
