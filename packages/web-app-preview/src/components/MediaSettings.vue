@@ -129,16 +129,6 @@
             <span>{{ $gettext('Circular') }}</span>
           </oc-button>
         </div>
-        <div class="crop-image-button">
-          <oc-button
-            :aria-label="$gettext('Save cropping')"
-            appearance="filled"
-            variation="primary"
-            @click="$emit('saveCroppedImage')"
-          >
-            {{ $gettext('Crop') }}
-          </oc-button>
-        </div>
       </div>
     </div>
   </div>
@@ -296,7 +286,6 @@ export default defineComponent({
   justify-content: center;
 }
 
-// ToDo add animations
 .side-bar-animation {
   flex-grow: 1;
   overflow-y: auto;

@@ -186,7 +186,9 @@ export default defineComponent({
     const { $gettext, interpolate: $gettextInterpolate } = useGettext()
 
     const isSaveable = computed(
-      () => unref(appliedAdjustmentParameters) !== unref(activeAdjustmentParameters)
+      () =>
+        unref(appliedAdjustmentParameters) !== unref(activeAdjustmentParameters) ||
+        unref(processingTool) === ProcessingToolsEnum.Crop
     )
 
     const thumbDimensions = computed(() => {
@@ -556,21 +558,23 @@ export default defineComponent({
           icon: 'warning',
           title: $gettext('Unsaved changes'),
           message: $gettext(
-            'Your changes were not saved. Do you want to save the image before downloading?'
+            'Your changes were not saved. Do you want to save them before downloading?'
           ),
           cancelText: $gettext('Cancel'),
-          buttonSecondaryText: $gettext("Don't save"),
-          confirmText: $gettext('Save'),
+          buttonSecondaryText: $gettext('Dismiss changes'),
+          confirmText: $gettext('Save and download'),
           onCancel: () => {
             store.dispatch('hideModal')
           },
           onConfirmSecondary: () => {
             store.dispatch('hideModal')
             downloadFile(unref(activeFilteredFile))
+            handleResetAfterSave()
           },
-          onConfirm: () => {
+          onConfirm: async () => {
             store.dispatch('hideModal')
-            save([() => downloadFile(unref(activeFilteredFile))])
+            await saveImageTask(false).perform()
+            handleResetAfterSave()
           }
         }
         store.dispatch('createModal', modal)
@@ -631,14 +635,14 @@ export default defineComponent({
 
       isFileContentError.value = false
 
-      if (unref(isSaveable)) {
+      if (unref(isSaveable) && unref(processingTool) !== ProcessingToolsEnum.Crop) {
         const modal = {
           variation: 'danger',
           icon: 'warning',
           title: $gettext('Unsaved changes'),
           message: $gettext('Your changes were not saved. Do you want to save them?'),
           cancelText: $gettext('Cancel'),
-          buttonSecondaryText: $gettext("Don't save"),
+          buttonSecondaryText: $gettext('Dismiss changes'),
           confirmText: $gettext('Save'),
           onCancel: () => {
             store.dispatch('hideModal')
@@ -648,9 +652,11 @@ export default defineComponent({
             handleSetNewActiveIndex(newActiveIndex)
             updateLocalHistory()
           },
-          onConfirm: () => {
+          onConfirm: async () => {
             store.dispatch('hideModal')
-            save([() => handleSetNewActiveIndex(newActiveIndex), () => updateLocalHistory()])
+            await saveImageTask(false).perform()
+            handleSetActiveMediaFile(newActiveIndex)
+            updateLocalHistory()
           }
         }
         store.dispatch('createModal', modal)
@@ -661,14 +667,14 @@ export default defineComponent({
     }
 
     function closePreview() {
-      if (unref(isSaveable)) {
+      if (unref(isSaveable) && unref(processingTool) !== ProcessingToolsEnum.Crop) {
         const modal = {
           variation: 'danger',
           icon: 'warning',
           title: $gettext('Unsaved changes'),
           message: $gettext('Your changes were not saved. Do you want to save them?'),
           cancelText: $gettext('Cancel'),
-          buttonSecondaryText: $gettext("Don't save"),
+          buttonSecondaryText: $gettext('Dismiss changes'),
           confirmText: $gettext('Save'),
           onCancel: () => {
             store.dispatch('hideModal')
@@ -678,9 +684,11 @@ export default defineComponent({
             handleResetValues()
             closeApp()
           },
-          onConfirm: () => {
+          onConfirm: async () => {
             store.dispatch('hideModal')
-            save([() => handleResetValues(), () => closeApp()])
+            await saveImageTask(false).perform()
+            handleResetValues()
+            closeApp()
           }
         }
         store.dispatch('createModal', modal)
@@ -844,11 +852,9 @@ export default defineComponent({
           variation: 'danger',
           icon: 'warning',
           title: $gettext('Unsaved changes'),
-          message: $gettext(
-            'Your changes were not saved. Do you want to save the image before downloading?'
-          ),
+          message: $gettext('Your changes were not saved. Do you want to save the them?'),
           cancelText: $gettext('Cancel'),
-          buttonSecondaryText: $gettext("Don't save"),
+          buttonSecondaryText: $gettext('Dismiss changes'),
           confirmText: $gettext('Save'),
           onCancel: () => {
             store.dispatch('hideModal')
@@ -859,15 +865,12 @@ export default defineComponent({
             store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
             appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
           },
-          onConfirm: () => {
+          onConfirm: async () => {
             store.dispatch('hideModal')
-            save([
-              () => store.commit('Preview/CHANGE_SELECTED_PROCESSING_TOOL', newTool),
-              () => {
-                store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
-                appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
-              }
-            ])
+            await saveImageTask(false).perform()
+            store.commit('Preview/CHANGE_SELECTED_PROCESSING_TOOL', newTool)
+            store.commit('Preview/RESET_ADJUSTMENT_PARAMETERS')
+            appliedAdjustmentParameters.value = unref(activeAdjustmentParameters)
           }
         }
         store.dispatch('createModal', modal)

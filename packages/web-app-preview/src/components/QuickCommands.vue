@@ -84,6 +84,7 @@ export default defineComponent({
 .commands-list {
   list-style-type: none;
   padding: 0;
+  padding-top: 16px;
   gap: $oc-space-small;
   width: 3rem;
 

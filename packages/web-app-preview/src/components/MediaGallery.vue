@@ -13,7 +13,7 @@
           v-if="mediaFile"
           v-oc-tooltip="mediaFile.name"
           :aria-label="$gettext(`${mediaFile.name}`)"
-          :class="index === 2 ? 'media-view-active oc-box-shadow-medium' : 'media-view'"
+          :class="index === 2 ? 'media-view-active' : 'media-view'"
           @click="handleUpdateActiveMediaFile(mediaFile)"
         >
           <img
@@ -183,6 +183,7 @@ export default defineComponent({
   border-radius: 4px;
   border: none;
   box-sizing: content-box;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .gallery-image {
