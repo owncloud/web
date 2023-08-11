@@ -7,7 +7,8 @@ import { Store } from 'vuex'
 import { peopleRoleDenyFolder, ShareTypes } from 'web-client/src/helpers/share'
 import {
   useCapabilityFilesSharingResharing,
-  useCapabilityShareJailEnabled
+  useCapabilityShareJailEnabled,
+  useClientService
 } from 'web-pkg/src/composables'
 import { unref } from 'vue'
 
@@ -27,6 +28,8 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
       clientService: { owncloudSdk: client }
     } = context
 
+    const clientService = useClientService()
+
     const hasResharing = useCapabilityFilesSharingResharing(store)
     const hasShareJail = useCapabilityShareJailEnabled(store)
 
@@ -34,6 +37,10 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
       store.commit('runtime/ancestorMetaData/SET_ANCESTOR_META_DATA', {})
+
+      yield store.dispatch('runtime/spaces/loadMountPoints', {
+        graphClient: clientService.graphAuthenticated
+      })
 
       const shareTypes = ShareTypes.authenticated
         .filter(

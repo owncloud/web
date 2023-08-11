@@ -4,18 +4,11 @@ import {
   buildWebDavSpacesTrashPath,
   extractDomSelector,
   extractNodeId,
-  extractStorageId,
   Resource,
   SpaceRole
 } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
-import {
-  PublicSpaceResource,
-  ShareSpaceResource,
-  SpaceResource,
-  SHARE_JAIL_ID,
-  MountPointSpaceResource
-} from './types'
+import { PublicSpaceResource, SpaceResource } from './types'
 
 import { DavProperty } from '../../webdav/constants'
 import { buildWebDavPublicPath } from '../publicLink'
@@ -48,30 +41,6 @@ export function buildPublicSpaceResource(data): PublicSpaceResource {
       ...(publicLinkShareOwner && { publicLinkShareOwner })
     }
   )
-}
-
-export function buildShareSpaceResource({
-  shareId,
-  shareName,
-  serverUrl
-}: {
-  shareId: string | number
-  shareName: string
-  serverUrl: string
-}): ShareSpaceResource {
-  const space = buildSpace({
-    id: [SHARE_JAIL_ID, shareId].join('!'),
-    driveAlias: `share/${shareName}`,
-    driveType: 'share',
-    name: shareName,
-    shareId,
-    serverUrl
-  }) as ShareSpaceResource
-  space.rename = (newName: string) => {
-    space.driveAlias = `share/${newName}`
-    space.name = newName
-  }
-  return space
 }
 
 export function buildSpace(data): SpaceResource {

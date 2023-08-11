@@ -40,7 +40,7 @@
           <template #contextMenu="{ resource }">
             <context-actions
               v-if="isResourceInSelection(resource)"
-              :action-options="{ space: getSpace(resource), resources: selectedResources }"
+              :action-options="{ space: getMatchingSpace(resource), resources: selectedResources }"
             />
           </template>
           <template #footer>
@@ -70,14 +70,13 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import { debounce } from 'lodash-es'
 
 import { Resource } from 'web-client'
-import { SpaceResource } from 'web-client/src/helpers'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { useStore, ViewModeConstants } from 'web-pkg/src/composables'
+import { useGetMatchingSpace, useStore, ViewModeConstants } from 'web-pkg/src/composables'
 
 import AppBar from '../components/AppBar/AppBar.vue'
 import QuickActions from '../components/FilesList/QuickActions.vue'
@@ -88,7 +87,6 @@ import SideBar from '../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 import { useResourcesViewDefaults } from '../composables'
 import { useFileActions } from '../composables/actions/files/useFileActions'
-import { getSpaceFromResource } from 'web-app-files/src/helpers/resource/getSpace'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -108,9 +106,6 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
-    const getSpace = (resource: Resource): SpaceResource => {
-      return getSpaceFromResource({ spaces: store.getters['runtime/spaces/spaces'], resource })
-    }
 
     const viewModes = computed(() => [
       ViewModeConstants.condensedTable,
@@ -137,7 +132,7 @@ export default defineComponent({
     return {
       ...useFileActions(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      getSpace,
+      ...useGetMatchingSpace(),
       viewModes
     }
   },
@@ -174,7 +169,7 @@ export default defineComponent({
         unobserve()
         this.loadPreview({
           previewService: this.$previewService,
-          space: this.getSpace(resource),
+          space: this.getMatchingSpace(resource),
           resource,
           dimensions: ImageDimension.Thumbnail,
           type: ImageType.Thumbnail

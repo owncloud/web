@@ -61,13 +61,11 @@ import { dirname } from 'path'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useTask } from 'vue-concurrency'
 import {
-  buildShareSpaceResource,
   isMountPointSpaceResource,
   isPersonalSpaceResource,
   Resource,
   SpaceResource
 } from 'web-client/src/helpers'
-import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { RouteLocationRaw } from 'vue-router'
 import { useLoadFileInfoById } from '../composables/fileInfo'
@@ -101,43 +99,52 @@ export default defineComponent({
 
     const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
     const resolvePrivateLinkTask = useTask(function* (signal, id) {
+      // debugger
       let path
       let matchingSpace = getMatchingSpace(id)
       let resourceIsNestedInShare = false
-      if (matchingSpace) {
-        path = yield clientService.owncloudSdk.files.getPathForFileId(id)
-        resource.value = yield clientService.webdav.getFileInfo(matchingSpace, { path })
-      } else {
+      if (!matchingSpace) {
         // no matching space found => the file doesn't lie in own spaces => it's a share.
         // do PROPFINDs on parents until root of accepted share is found in `mountpoint` spaces
         yield store.dispatch('runtime/spaces/loadMountPoints', {
           graphClient: clientService.graphAuthenticated
         })
-        let mountPoint = findMatchingMountPoint(id)
-        resourceIsNestedInShare = !mountPoint
-        resource.value = yield loadFileInfoByIdTask.perform(id)
-        const sharePathSegments = mountPoint ? [] : [unref(resource).name]
-        let tmpResource = unref(resource)
-        while (!mountPoint) {
-          try {
-            tmpResource = yield loadFileInfoByIdTask.perform(tmpResource.parentFolderId)
-          } catch (e) {
-            isUnacceptedShareError.value = true
-            throw Error(e)
-          }
-          sharedParentResource.value = tmpResource
-          mountPoint = findMatchingMountPoint(tmpResource.id)
-          if (!mountPoint) {
-            sharePathSegments.unshift(tmpResource.name)
-          }
-        }
-        matchingSpace = buildShareSpaceResource({
-          shareId: mountPoint.nodeId,
-          shareName: mountPoint.name,
-          serverUrl: configurationManager.serverUrl
-        })
-        path = urlJoin(...sharePathSegments)
+        matchingSpace = getMatchingSpace(id)
+
+        console.log('matchingSpace', matchingSpace)
+        console.log('resourceId', id)
+        // let mountPoint = findMatchingMountPoint(id)
+        // resourceIsNestedInShare = !mountPoint
+        // resource.value = yield loadFileInfoByIdTask.perform(id)
+        // const sharePathSegments = mountPoint ? [] : [unref(resource).name]
+        // let tmpResource = unref(resource)
+        // while (!mountPoint) {
+        //   try {
+        //     tmpResource = yield loadFileInfoByIdTask.perform(tmpResource.parentFolderId)
+        //   } catch (e) {
+        //     isUnacceptedShareError.value = true
+        //     throw Error(e)
+        //   }
+        //   sharedParentResource.value = tmpResource
+        //   mountPoint = findMatchingMountPoint(tmpResource.id)
+        //   if (!mountPoint) {
+        //     sharePathSegments.unshift(tmpResource.name)
+        //   }
+        // }
+        // console.log('HJHUH')
+        // matchingSpace = buildShareSpaceResource({
+        //   shareId: mountPoint.nodeId,
+        //   shareName: mountPoint.name,
+        //   serverUrl: configurationManager.serverUrl
+        // })
+        // path = urlJoin(...sharePathSegments)
       }
+
+      console.log('space', store.getters['runtime/spaces/spaces'])
+      path = yield clientService.owncloudSdk.files.getPathForFileId(id)
+      console.log('path', path)
+      resource.value = yield clientService.webdav.getFileInfo(matchingSpace, { path })
+      console.log('resourtce', resource.value)
 
       let fileId
       let targetLocation

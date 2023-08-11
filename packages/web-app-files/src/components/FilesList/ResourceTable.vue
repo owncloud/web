@@ -214,7 +214,12 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from 'web-client'
-import { extractDomSelector, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import {
+  extractDomSelector,
+  isProjectSpaceResource,
+  isShareRoot,
+  SpaceResource
+} from 'web-client/src/helpers'
 import { ShareTypes } from 'web-client/src/helpers/share'
 
 import {
@@ -491,7 +496,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'user']),
     ...mapState('Files', [
       'areFileExtensionsShown',
       'latestSelectedId',
@@ -770,7 +775,7 @@ export default defineComponent({
       })
     },
     parentFolderLink(file: Resource) {
-      if (file.shareId && file.path === '/') {
+      if (isShareRoot(file)) {
         return createLocationShares('files-shares-with-me')
       }
       if (isProjectSpaceResource(file)) {
@@ -983,12 +988,12 @@ export default defineComponent({
       }
 
       if (resource.shareId) {
-        return resource.path === '/'
-          ? this.$gettext('Shared with me')
-          : basename(resource.shareRoot)
+        return isShareRoot(resource) ? this.$gettext('Shared with me') : basename(resource.path)
       }
 
-      if (!this.getInternalSpace(resource.storageId)) {
+      const space = this.getInternalSpace(resource.storageId)
+      const isOwnPersonalSpace = space.ownerId === this.user.uuid
+      if (!isOwnPersonalSpace) {
         return this.$gettext('Shared with me')
       }
 

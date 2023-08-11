@@ -50,7 +50,7 @@ export class FolderLoaderSpace implements FolderLoader {
         })
         // if current folder has no id (= singe file public link) we must not correct the route
         if (currentFolder.id) {
-            yield replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })
+          yield replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })
         }
 
         if (path === '/') {

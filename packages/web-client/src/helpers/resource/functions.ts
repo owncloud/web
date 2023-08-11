@@ -2,6 +2,7 @@ import { basename } from 'path'
 import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
 import { Resource } from './types'
+import { computed, unref } from 'vue'
 
 const fileExtensions = {
   complex: ['tar.bz2', 'tar.gz', '.tar.xz']
@@ -70,11 +71,15 @@ export const extractExtensionFromFile = (resource: Resource): string => {
   return parts[parts.length - 1]
 }
 
+export const isShareRoot = (resource: Resource) => {
+  return resource.shareId && resource.path === resource.shareRoot
+}
+
 export function buildResource(resource): Resource {
   const name = resource.fileInfo[DavProperty.Name] || basename(resource.name)
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = extractExtensionFromFile({ ...resource, name })
-  let resourcePath
+  let resourcePath: string
 
   if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
     resourcePath = resource.name.split('/').slice(3).join('/')
@@ -84,6 +89,12 @@ export function buildResource(resource): Resource {
 
   if (!resourcePath.startsWith('/')) {
     resourcePath = `/${resourcePath}`
+  }
+
+  const shareId = resource.fileInfo[DavProperty.ShareId]
+  const shareRoot = resource.fileInfo[DavProperty.ShareRoot] || ''
+  if (shareId) {
+    resourcePath = urlJoin(shareRoot, resourcePath)
   }
 
   const lock = resource.fileInfo[DavProperty.LockDiscovery]
@@ -127,8 +138,8 @@ export function buildResource(resource): Resource {
     })(),
     privateLink: resource.fileInfo[DavProperty.PrivateLink],
     downloadURL: resource.fileInfo[DavProperty.DownloadURL],
-    shareId: resource.fileInfo[DavProperty.ShareId],
-    shareRoot: resource.fileInfo[DavProperty.ShareRoot],
+    shareId,
+    shareRoot,
     ownerId: resource.fileInfo[DavProperty.OwnerId],
     ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     tags: (resource.fileInfo[DavProperty.Tags] || '').split(',').filter(Boolean),

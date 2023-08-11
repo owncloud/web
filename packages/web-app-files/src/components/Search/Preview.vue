@@ -31,7 +31,7 @@ import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
 import { useCapabilityShareJailEnabled, useGetMatchingSpace } from 'web-pkg/src/composables'
-import { isProjectSpaceResource, Resource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, isShareRoot, Resource } from 'web-client/src/helpers'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { SearchResultValue } from 'web-app-search/src/types'
@@ -108,9 +108,9 @@ export default defineComponent({
     },
     defaultParentFolderName() {
       if (this.resource.shareId) {
-        return this.resource.path === '/'
+        return isShareRoot(this.resource)
           ? this.$gettext('Shared with me')
-          : basename(this.resource.shareRoot)
+          : basename(this.resource.path)
       }
 
       if (!this.hasShareJail) {
@@ -137,7 +137,7 @@ export default defineComponent({
       return this.createFolderLink(this.resource.path, this.resource.fileId)
     },
     parentFolderLink() {
-      if (this.resource.shareId && this.resource.path === '/') {
+      if (isShareRoot(this.resource)) {
         return createLocationShares('files-shares-with-me')
       }
       if (isProjectSpaceResource(this.resource)) {

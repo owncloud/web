@@ -1,6 +1,4 @@
-import { buildShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
-import { basename } from 'path'
-import { configurationManager } from 'web-pkg'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createLocationSpaces } from 'web-app-files/src/router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { RouteLocationNamedRaw } from 'vue-router'
@@ -15,25 +13,7 @@ export const getSharedAncestorRoute = ({
   sharedAncestor: AncestorMetaDataValue
   matchingSpace: SpaceResource
 }): RouteLocationNamedRaw => {
-  if (resource.shareId) {
-    console.log(111)
-    if (resource.path === '') {
-      return {}
-    }
-    const space = buildShareSpaceResource({
-      shareId: resource.shareId,
-      shareName: matchingSpace?.name || basename(resource.shareRoot),
-      serverUrl: configurationManager.serverUrl
-    })
-    return createLocationSpaces(
-      'files-spaces-generic',
-      createFileRouteOptions(space, {
-        path: sharedAncestor.path,
-        fileId: sharedAncestor.id
-      })
-    )
-  }
-  if (!matchingSpace) {
+  if (!matchingSpace || (resource.shareId && resource.path === '')) {
     return {}
   }
   return createLocationSpaces(

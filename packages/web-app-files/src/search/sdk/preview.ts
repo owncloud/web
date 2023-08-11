@@ -30,7 +30,7 @@ export default class Preview implements SearchPreview {
     )
   }
 
-  getMatchingSpace(id): ProjectSpaceResource {
+  getMatchingSpace(id: string): ProjectSpaceResource {
     return unref(this.projectSpaces).find((s) => s.id === id)
   }
 
@@ -45,6 +45,10 @@ export default class Preview implements SearchPreview {
     if (this.cache.has(term)) {
       return this.cache.get(term)
     }
+
+    await this.store.dispatch('runtime/spaces/loadMountPoints', {
+      graphClient: this.clientService.graphAuthenticated
+    })
 
     const areHiddenFilesShown = this.store.state.Files?.areHiddenFilesShown
     const useSpacesEndpoint = this.store.getters.capabilities?.spaces?.enabled === true

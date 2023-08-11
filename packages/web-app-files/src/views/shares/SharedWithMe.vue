@@ -74,9 +74,7 @@ import { computed, defineComponent, unref } from 'vue'
 import { Resource } from 'web-client'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
-import { buildShareSpaceResource } from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { useCapabilityShareJailEnabled, useSort, useStore } from 'web-pkg/src/composables'
+import { useGetMatchingSpace, useSort } from 'web-pkg/src/composables'
 import { useGroupingSettings } from 'web-pkg/src/cern/composables'
 
 export default defineComponent({
@@ -101,6 +99,7 @@ export default defineComponent({
       storeItems,
       scrollToResourceFromRoute
     } = useResourcesViewDefaults<Resource, any, any[]>()
+    const { getMatchingSpace } = useGetMatchingSpace()
 
     // pending shares
     const pending = computed(() =>
@@ -150,24 +149,12 @@ export default defineComponent({
       sortDirQueryName: 'declined-sort-dir'
     })
 
-    const store = useStore()
-    const hasShareJail = useCapabilityShareJailEnabled()
     const selectedShareSpace = computed(() => {
       if (unref(selectedResources).length !== 1) {
         return null
       }
       const resource = unref(selectedResources)[0]
-      if (!unref(hasShareJail)) {
-        return store.getters['runtime/spaces/spaces'].find(
-          (space) => space.driveType === 'personal'
-        )
-      }
-
-      return buildShareSpaceResource({
-        shareId: resource.shareId,
-        shareName: resource.name,
-        serverUrl: configurationManager.serverUrl
-      })
+      return getMatchingSpace(resource)
     })
 
     return {

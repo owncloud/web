@@ -32,7 +32,7 @@ export default class List implements SearchList {
     )
   }
 
-  getMatchingSpace(id): ProjectSpaceResource {
+  getMatchingSpace(id: string): ProjectSpaceResource {
     return unref(this.projectSpaces).find((s) => s.id === id)
   }
 
@@ -45,6 +45,10 @@ export default class List implements SearchList {
         values: []
       }
     }
+
+    await this.store.dispatch('runtime/spaces/loadMountPoints', {
+      graphClient: this.clientService.graphAuthenticated
+    })
 
     const { range, results } = await this.clientService.owncloudSdk.files.search(
       term,

@@ -34,7 +34,7 @@
           <template #contextMenu="{ resource }">
             <context-actions
               v-if="isResourceInSelection(resource)"
-              :action-options="{ space: getSpace(resource), resources: selectedResources }"
+              :action-options="{ space: getMatchingSpace(resource), resources: selectedResources }"
             />
           </template>
           <template #footer>
@@ -82,11 +82,9 @@ import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
 import {
   useCapabilityProjectSpacesEnabled,
-  useMutationSubscription,
-  useStore
+  useGetMatchingSpace,
+  useMutationSubscription
 } from 'web-pkg/src/composables'
-import { SpaceResource } from 'web-client/src/helpers'
-import { getSpaceFromResource } from 'web-app-files/src/helpers/resource/getSpace'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -104,13 +102,8 @@ export default defineComponent({
   },
 
   setup() {
-    const store = useStore()
-    const getSpace = (resource: Resource): SpaceResource => {
-      return getSpaceFromResource({ spaces: store.getters['runtime/spaces/spaces'], resource })
-    }
-
-    const { loadResourcesTask, selectedResourcesIds, paginatedResources } =
-      useResourcesViewDefaults<Resource, any, any[]>()
+    const resourceViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
+    const { loadResourcesTask, selectedResourcesIds, paginatedResources } = resourceViewDefaults
 
     useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
       if (mutation.payload.field === 'shareTypes') {
@@ -131,8 +124,8 @@ export default defineComponent({
 
     return {
       ...useFileActions(),
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
-      getSpace,
+      ...resourceViewDefaults,
+      ...useGetMatchingSpace(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled()
     }
   },
@@ -176,7 +169,7 @@ export default defineComponent({
         unobserve()
         this.loadPreview({
           previewService: this.$previewService,
-          space: this.getSpace(resource),
+          space: this.getMatchingSpace(resource),
           resource,
           dimensions: ImageDimension.Thumbnail,
           type: ImageType.Thumbnail

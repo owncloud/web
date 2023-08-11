@@ -205,7 +205,8 @@ import {
   useClientService,
   usePublicLinkContext,
   useStore,
-  usePreviewService
+  usePreviewService,
+  useGetMatchingSpace
 } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { useClipboard } from '@vueuse/core'
@@ -228,8 +229,8 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { $gettext } = useGettext()
+    const { getMatchingSpace } = useGetMatchingSpace()
     const language = useGettext()
-    const client = useClientService()
 
     const copiedDirect = ref(false)
     const copiedEos = ref(false)
@@ -251,6 +252,10 @@ export default defineComponent({
       return !unref(isPublicLinkContext)
         ? `${store.getters.configuration.server}files/spaces${encodePath(unref(resource).path)}`
         : `${store.getters.configuration.server.replace(/\/+$/, '')}${unref(resource).downloadURL}`
+    })
+
+    const matchingSpace = computed(() => {
+      return getMatchingSpace(unref(resource))
     })
 
     const copyEosPathToClipboard = () => {
@@ -370,7 +375,8 @@ export default defineComponent({
       isPreviewLoading,
       ancestorMetaData,
       sharedAncestor,
-      formatDateRelative
+      formatDateRelative,
+      matchingSpace
     }
   },
   computed: {
@@ -378,9 +384,6 @@ export default defineComponent({
     ...mapGetters('Files', ['versions']),
     ...mapGetters(['user', 'configuration']),
 
-    matchingSpace() {
-      return this.space || this.spaces.find((space) => space.id === this.resource.storageId)
-    },
     runningOnEos() {
       return !!this.configuration?.options?.runningOnEos
     },
