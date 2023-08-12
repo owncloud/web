@@ -33,7 +33,11 @@
             :resource="resource"
             :size="resourceIconSize"
             class="tile-default-image oc-pt-xs"
-          />
+          >
+            <template v-if="resource.locked" #status>
+              <oc-icon name="lock" size="xsmall" />
+            </template>
+          </oc-resource-icon>
         </slot>
       </div>
     </oc-resource-link>
@@ -133,6 +137,10 @@ export default defineComponent({
       filter: grayscale(100%);
       opacity: 80%;
     }
+  }
+
+  .tile-default-image {
+    position: relative;
   }
 
   .oc-card-media-top {

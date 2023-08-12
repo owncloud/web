@@ -51,6 +51,7 @@ export interface Resource {
   thumbnail?: string
   status?: number
   processing?: boolean
+  locked?: boolean
   spaceRoles?: {
     [k: string]: SpaceRole[]
   }

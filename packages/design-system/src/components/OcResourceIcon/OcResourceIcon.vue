@@ -163,7 +163,22 @@ export default defineComponent({
     color: var(--oc-color-background-default) !important;
   }
 }
+// different background for tiles view
+.oc-tile-card-preview {
+  .oc-resource-icon-status-badge {
+    background: var(--oc-color-background-highlight) !important;
+    .oc-icon {
+      svg {
+        fill: var(--oc-color-background-highlight) !important;
+      }
+    }
+    .oc-spinner {
+      color: var(--oc-color-background-highlight) !important;
+    }
+  }
+}
 
+// reduce the bottom spacing of the status badge in condensed mode
 .condensed {
   .oc-resource-icon-status-badge {
     bottom: 2px !important;
