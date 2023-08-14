@@ -163,49 +163,4 @@ export default defineComponent({
     color: var(--oc-color-background-default) !important;
   }
 }
-// different background for tiles view
-.oc-tile-card-preview {
-  .oc-resource-icon-status-badge {
-    background: var(--oc-color-background-highlight) !important;
-    .oc-icon {
-      svg {
-        fill: var(--oc-color-background-highlight) !important;
-      }
-    }
-    .oc-spinner {
-      color: var(--oc-color-background-highlight) !important;
-    }
-  }
-}
-
-// reduce the bottom spacing of the status badge in condensed mode
-.condensed {
-  .oc-resource-icon-status-badge {
-    bottom: 2px !important;
-  }
-}
-// on table row hover change the status badge background color
-.oc-tbody-tr:hover .oc-resource-icon-status-badge {
-  background: var(--oc-color-background-hover) !important;
-  .oc-icon {
-    svg {
-      fill: var(--oc-color-background-hover) !important;
-    }
-  }
-  .oc-spinner {
-    color: var(--oc-color-background-hover) !important;
-  }
-}
-// on table row highlight change the status badge background color
-.oc-table-highlighted .oc-resource-icon-status-badge {
-  background: var(--oc-color-background-highlight) !important;
-  .oc-icon {
-    svg {
-      fill: var(--oc-color-background-highlight) !important;
-    }
-  }
-  .oc-spinner {
-    color: var(--oc-color-background-highlight) !important;
-  }
-}
 </style>
