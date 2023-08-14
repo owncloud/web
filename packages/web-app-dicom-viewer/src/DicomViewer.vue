@@ -97,13 +97,14 @@ export default defineComponent({
   data() {
     return {
       isCornerstoneInitialized: false,
-      element: null
+      element: null,
+      viewport: null
     }
   },
   watch: {}, // most likely not needed
-  created() {
-    //console.log('dicom viewer "created" hook called')
-  },
+  // runs before DOM is rendered, data and events are already accessible
+  created() {},
+  // called when component has been added to DOM-
   async mounted() {
     console.log('cornerstone init status: ' + this.isCornerstoneInitialized)
 
@@ -116,10 +117,11 @@ export default defineComponent({
     // set reference to HTML element for viewport
     this.element = document.getElementById('dicom-canvas') as HTMLDivElement
   },
+  // implementing any change in the component
   async beforeUpdate() {
     // instantiate/register rendering engine
     const renderingEngine = new RenderingEngine('dicomRenderingEngine')
-    console.log('render engine instantiated')
+    // console.log('render engine instantiated')
 
     // logging some data
     console.log(
@@ -145,7 +147,7 @@ export default defineComponent({
 
     const viewportId = 'CT_STACK' // additional types of viewports see: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
     const element = this.element
-    console.log('element id: ' + element.id)
+    // console.log('element id: ' + element.id)
 
     const viewportInput = {
       viewportId,
@@ -160,21 +162,31 @@ export default defineComponent({
 
     // enable element
     renderingEngine.enableElement(viewportInput)
-    console.log('element (& viewport id & rendering engine id) enabled')
+    // console.log('element (& viewport id & rendering engine id) enabled')
 
     // get stack viewport that was created
-    const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
+    this.viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
 
     // define a stack containing a single image
-    const dicomStack = [imageId] //dicomImage
+    const dicomStack = [imageId] //dicomImage imageId
     console.log('number of items in stack: ' + dicomStack.length)
     console.log('first stack item: ' + dicomStack[0])
 
+    // set stack on the viewport (only one image in the stack, therefore no frame # required)
+    await this.viewport.setStack(dicomStack)
+
     // render the image
     // updates every viewport in the rendering engine
-    //viewport.resize()
-    viewport.render()
+    //
+    this.viewport.render()
   },
+  // updated gets called anytime some change is made in the component
+  updated() {
+    // console.log('update')
+    // this.viewport.resize()
+  },
+  // cleaning up component, leaving no variables or events that could cause memory leaks to app
+  beforeUnmount() {},
   methods: {
     async initCornerstoneCore() {
       try {
