@@ -20,9 +20,15 @@ import * as cornerstone from '@cornerstonejs/core'
 import * as cornerstoneTools from '@cornerstonejs/tools'
 import * as cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader'
 
-// other imports
-import { defineComponent } from 'vue'
 import { RenderingEngine, Types, Enums } from '@cornerstonejs/core'
+
+// vue imports
+import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
+
+// other imports
+import { Resource } from 'web-client/src'
+//import { any } from 'jest-mock-extended'
 
 // declaring some const & references
 const { ViewportType } = Enums
@@ -71,23 +77,27 @@ cornerstone.registerImageLoader('http', cornerstoneDICOMImageLoader.loadImage)
 cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 
 export default defineComponent({
-  name: 'DICOMViewer', // seems like this is not needed anymore for streamlined apps
+  name: 'DicomViewer', // seems like this is not needed anymore for streamlined apps?!?
   components: {}, // only needed if there are child components
   setup() {}, // maybe not needed with the streamlined version
   props: {
     url: {
       type: String,
       required: true
+    },
+    currentContent: {
+      type: String,
+      required: true
+    },
+    resource: {
+      type: Object as PropType<Resource>,
+      default: null
     }
   },
   data() {
     return {
       isCornerstoneInitialized: false,
-      wadouriURLprefix: 'wadouri:',
-      element: null,
-      renderingEngineId: 'dicomRenderingEngine',
-      dicomURLexternal:
-        'blob:https://raw.githubusercontent.com/cornerstonejs/cornerstone3D/main/packages/dicomImageLoader/testImages/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
+      element: null
     }
   },
   watch: {}, // most likely not needed
@@ -100,18 +110,18 @@ export default defineComponent({
     // check if cornerstone core and tools are initalized
     if (!this.isCornerstoneInitialized) {
       // initalize cornerstone core
-      console.log('mounted: cornerstone not initialised, trigger initialisation') // for debugging purpose only, delete later
       await this.initCornerstoneCore()
     }
 
     // set reference to HTML element for viewport
     this.element = document.getElementById('dicom-canvas') as HTMLDivElement
   },
-  beforeUpdate() {
+  async beforeUpdate() {
     // instantiate/register rendering engine
-    const renderingEngine = new RenderingEngine(this.renderingEngineId)
+    const renderingEngine = new RenderingEngine('dicomRenderingEngine')
     console.log('render engine instantiated')
 
+    // logging some data
     console.log(
       'url length: ' +
         (this.url as String).length +
@@ -120,13 +130,15 @@ export default defineComponent({
         ' / this url: ' +
         this.url
     )
+    console.log('current content: ' + this.currentContent + ' / ' + typeof this.currentContent) // string
+    console.log('resource name: ' + this.resource.name)
 
     let dicomImage = this.url.replace('blob', 'wadouri')
     console.log('modified url: ' + dicomImage)
 
     // get resource
     // only needed if resource is passed along as file?
-    // let imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(**file**)
+    let imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.currentContent)
 
     // create a stack viewport
     const { ViewportType } = Enums
@@ -154,7 +166,7 @@ export default defineComponent({
     const viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
 
     // define a stack containing a single image
-    const dicomStack = [dicomImage]
+    const dicomStack = [imageId] //dicomImage
     console.log('number of items in stack: ' + dicomStack.length)
     console.log('first stack item: ' + dicomStack[0])
 
@@ -168,13 +180,13 @@ export default defineComponent({
       try {
         await cornerstone.init()
       } catch (e) {
-        console.error('Error initalizing cornerstone core (renderer?)', e)
-        console.log('error in initalizing cornerstone core') // for debugging purpose only, delete later
+        console.error('Error initalizing cornerstone core', e)
       } finally {
         this.isCornerstoneInitialized = true
-        console.log('cornerstone core initalized')
       }
-    },
+    }
+    /*
+    ,
     async waitingForURL() {
       console.log('waiting for URL...')
 
@@ -194,6 +206,7 @@ export default defineComponent({
 
       console.log('url length: ' + size)
     }
+    */
   }
 })
 </script>
