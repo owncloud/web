@@ -275,7 +275,9 @@ const createDocumentFile = async (
     type
   )
   if (isAppProviderServiceReadyInWebUI === false) {
-    throw new Error(`The document of type ${type} did not appeared in the webUI for ${editorToOpen}. Possible reason could be the app provider service for ${editorToOpen} was not ready yet.`)
+    throw new Error(
+      `The document of type ${type} did not appear in the webUI for ${editorToOpen}. Possible reason could be the app provider service for ${editorToOpen} was not ready yet.`
+    )
   }
   await page.locator(util.format(createNewOfficeDocumentFileBUtton, type)).click()
   await page.locator(resourceNameInput).fill(name)
@@ -348,20 +350,20 @@ export const openAndGetContentOfDocument = async ({
 
 const isAppProviderServiceForOfficeSuitesReadyInWebUI = async (page, type) => {
   let retry = 1
-  let createNewOfficeDocumentFileButtonLocator
+  let isCreateNewOfficeDocumentFileButtonVisible
   while (retry <= 5) {
-    createNewOfficeDocumentFileButtonLocator = await page
+    isCreateNewOfficeDocumentFileButtonVisible = await page
       .locator(util.format(createNewOfficeDocumentFileBUtton, type))
       .isVisible()
-    if (createNewOfficeDocumentFileButtonLocator === true) {
-      return true
+    if (isCreateNewOfficeDocumentFileButtonVisible === true) {
+      break
     }
     await new Promise((resolve) => setTimeout(resolve, 3000))
     await page.reload()
     await page.locator(addNewResourceButton).click()
     retry++
   }
-  return false
+  return isCreateNewOfficeDocumentFileButtonVisible
 }
 
 export const createResources = async (args: createResourceArgs): Promise<void> => {

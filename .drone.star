@@ -755,7 +755,7 @@ def e2eTests(ctx):
         depends_on = ["cache-ocis"]
 
         if suite == "oCIS-app-provider":
-            # oCIS tests app-provider to office suites
+            # app-provider specific steps
             steps += wopiServer() + \
                      collaboraService() + \
                      onlyofficeService() + \
