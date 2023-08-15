@@ -66,7 +66,6 @@ export default defineComponent({
       })
     })
 
-    // TODO: Extract within web-pkg with default title?
     const errorPopup = (error) => {
       store.dispatch('showErrorMessage', {
         title: $gettext('An error occurred'),
@@ -76,61 +75,58 @@ export default defineComponent({
     }
 
     const loadAppUrl = useTask(function* () {
-      try {
-        // FIXME: make all updates atomic/happen at once so the ui can never mix data from different resources
-        const fileId = props.resource.fileId
+      const fileId = props.resource.fileId
 
-        const baseUrl = urlJoin(
-          configurationManager.serverUrl,
-          unref(capabilities).files.app_providers[0].open_url
-        )
+      const baseUrl = urlJoin(
+        configurationManager.serverUrl,
+        unref(capabilities).files.app_providers[0].open_url
+      )
 
-        const query = stringify({
-          file_id: fileId,
-          lang: language.current,
-          ...(unref(applicationName) && { app_name: unref(applicationName) })
-        })
+      const query = stringify({
+        file_id: fileId,
+        lang: language.current,
+        ...(unref(applicationName) && { app_name: unref(applicationName) })
+      })
 
-        const url = `${baseUrl}?${query}`
-        const response = yield makeRequest('POST', url, {
-          validateStatus: () => true
-        })
+      const url = `${baseUrl}?${query}`
+      const response = yield makeRequest('POST', url, {
+        validateStatus: () => true
+      })
 
-        if (response.status !== 200) {
-          switch (response.status) {
-            case 425:
-              errorPopup(
-                $gettext(
-                  'This file is currently being processed and is not yet available for use. Please try again shortly.'
-                )
+      if (response.status !== 200) {
+        switch (response.status) {
+          case 425:
+            errorPopup(
+              $gettext(
+                'This file is currently being processed and is not yet available for use. Please try again shortly.'
               )
-              break
-            default:
-              errorPopup(response.data?.message)
-          }
-
-          console.error('Error fetching app information', response.status, response.data.message)
-          return
+            )
+            break
+          default:
+            errorPopup(response.data?.message)
         }
 
-        if (!response.data.app_url || !response.data.method) {
-          console.error('Error in app server response')
-          return
-        }
+        const error = new Error('Error fetching app information')
+        console.error(error.message, response.status, response.data.message)
+        throw error
+      }
 
-        appUrl.value = response.data.app_url
-        method.value = response.data.method
-        if (response.data.form_parameters) {
-          formParameters.value = response.data.form_parameters
-        }
+      if (!response.data.app_url || !response.data.method) {
+        const error = new Error('Error in app server response')
+        console.error(error.message)
+        throw error
+      }
 
-        if (method.value === 'POST' && formParameters.value) {
-          // eslint-disable-next-line vue/valid-next-tick
-          yield nextTick()
-          unref(subm).click()
-        }
-      } catch (e) {
-        console.error(e)
+      appUrl.value = response.data.app_url
+      method.value = response.data.method
+      if (response.data.form_parameters) {
+        formParameters.value = response.data.form_parameters
+      }
+
+      if (method.value === 'POST' && formParameters.value) {
+        // eslint-disable-next-line vue/valid-next-tick
+        yield nextTick()
+        unref(subm).click()
       }
     }).restartable()
 
@@ -143,9 +139,9 @@ export default defineComponent({
     )
 
     return {
-      iFrameTitle,
       appUrl,
       formParameters,
+      iFrameTitle,
       method,
       subm
     }
