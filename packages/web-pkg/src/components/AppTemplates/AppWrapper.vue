@@ -1,7 +1,6 @@
 <template>
   <main :id="applicationId" class="oc-height-1-1" @keydown.esc="closeApp">
-    <!-- TODO: Figure out what to write into hidden pageTitle for screenreader compatibility -->
-    <!-- <h1 class="oc-invisible-sr" v-text="pageTitle" /> -->
+    <h1 class="oc-invisible-sr" v-text="pageTitle" />
     <app-top-bar
       v-if="!loading && !loadingError"
       :main-actions="fileActions"
@@ -128,17 +127,29 @@ export default defineComponent({
     const clientService = useClientService()
 
     const {
+      applicationConfig,
+      closeApp,
       currentFileContext,
       getFileContents,
       getFileInfo,
       getUrlForResource,
-      closeApp,
+      loadFolderForFileContext,
       putFileContents,
-      revokeUrl,
       replaceInvalidFileRoute,
-      applicationConfig
+      revokeUrl
     } = useAppDefaults({
       applicationId: props.applicationId
+    })
+
+    const { applicationMeta } = useAppMeta({ applicationId: props.applicationId, store })
+
+    const pageTitle = computed(() => {
+      const { name: appName } = unref(applicationMeta)
+
+      return $gettext(`%{appName} for %{fileName}`, {
+        appName: unref(applicationName) || $gettext(appName),
+        fileName: unref(unref(currentFileContext).fileName)
+      })
     })
 
     const loadFileTask = useTask(function* () {
@@ -359,10 +370,14 @@ export default defineComponent({
       isDirty: unref(isDirty),
       isReadOnly: unref(isReadOnly),
       applicationConfig: unref(applicationConfig),
-
+      currentFileContext: unref(currentFileContext),
       currentContent: unref(currentContent),
+
       'onUpdate:currentContent': (value) => {
         currentContent.value = value
+      },
+      'onUpdate:applicationName': (value) => {
+        applicationName.value = value
       },
 
       onSave: save,
@@ -375,6 +390,7 @@ export default defineComponent({
       fileActions,
       loading,
       loadingError,
+      pageTitle,
       resource,
       slotAttrs
     }

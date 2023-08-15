@@ -38,22 +38,26 @@ export default defineComponent({
   props: {
     resource: { type: Object as PropType<Resource>, required: true }
   },
-  setup(props) {
+  emits: ['update:applicationName'],
+  setup(props, { emit }) {
     const language = useGettext()
     const store = useStore()
 
     const { $gettext, interpolate: $gettextInterpolate } = language
     const { makeRequest } = useRequest()
 
-    const appName = useRouteQuery('app')
+    const appNameQuery = useRouteQuery('app')
     const appUrl = ref()
     const formParameters = ref({})
     const method = ref()
     const subm: VNodeRef = ref()
 
     const capabilities = computed(() => store.getters['capabilities'])
-    // FIXME: Make available to appDefaults composable for pageTitle
-    const applicationName = computed(() => queryItemAsString(unref(appName)))
+    const applicationName = computed(() => {
+      const appName = queryItemAsString(unref(appNameQuery))
+      emit('update:applicationName', appName)
+      return appName
+    })
 
     const iFrameTitle = computed(() => {
       const translated = $gettext('"%{appName}" app content area')
@@ -140,7 +144,6 @@ export default defineComponent({
 
     return {
       iFrameTitle,
-      applicationName,
       appUrl,
       formParameters,
       method,

@@ -767,8 +767,8 @@ importers:
         specifier: 29.3.1
         version: 29.3.1
       '@vueuse/core':
-        specifier: ^10.0.0
-        version: 10.1.2(vue@3.3.4)
+        specifier: ^10.3.0
+        version: 10.3.0(vue@3.3.4)
 
   packages/web-app-importer:
     dependencies:
@@ -808,6 +808,9 @@ importers:
 
   packages/web-app-preview:
     dependencies:
+      '@vueuse/core':
+        specifier: ^10.3.0
+        version: 10.3.0(vue@3.3.4)
       vue3-gettext:
         specifier: ^2.3.3
         version: 2.3.4(@vue/compiler-sfc@3.3.4)(vue@3.3.4)
@@ -915,7 +918,7 @@ importers:
         version: 2.0.1
       '@vueuse/core':
         specifier: ^10.0.0
-        version: 10.1.2(vue@3.3.4)
+        version: 10.3.0(vue@3.3.4)
       axios:
         specifier: ^0.27.2 || ^1.0.0
         version: 1.4.0
@@ -6951,12 +6954,12 @@ packages:
       - supports-color
     dev: true
 
-  /@vueuse/core@10.1.2(vue@3.3.4):
-    resolution: {integrity: sha512-roNn8WuerI56A5uiTyF/TEYX0Y+VKlhZAF94unUfdhbDUI+NfwQMn4FUnUscIRUhv3344qvAghopU4bzLPNFlA==}
+  /@vueuse/core@10.3.0(vue@3.3.4):
+    resolution: {integrity: sha512-BEM5yxcFKb5btFjTSAFjTu5jmwoW66fyV9uJIP4wUXXU8aR5Hl44gndaaXp7dC5HSObmgbnR2RN+Un1p68Mf5Q==}
     dependencies:
       '@types/web-bluetooth': 0.0.17
-      '@vueuse/metadata': 10.1.2
-      '@vueuse/shared': 10.1.2(vue@3.3.4)
+      '@vueuse/metadata': 10.3.0
+      '@vueuse/shared': 10.3.0(vue@3.3.4)
       vue-demi: 0.14.5(vue@3.3.4)
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -6974,11 +6977,11 @@ packages:
       vue: 3.3.4
     dev: false
 
-  /@vueuse/metadata@10.1.2:
-    resolution: {integrity: sha512-3mc5BqN9aU2SqBeBuWE7ne4OtXHoHKggNgxZR2K+zIW4YLsy6xoZ4/9vErQs6tvoKDX6QAqm3lvsrv0mczAwIQ==}
+  /@vueuse/metadata@10.3.0:
+    resolution: {integrity: sha512-Ema3YhNOa4swDsV0V7CEY5JXvK19JI/o1szFO1iWxdFg3vhdFtCtSTP26PCvbUpnUtNHBY2wx5y3WDXND5Pvnw==}
 
-  /@vueuse/shared@10.1.2(vue@3.3.4):
-    resolution: {integrity: sha512-1uoUTPBlgyscK9v6ScGeVYDDzlPSFXBlxuK7SfrDGyUTBiznb3mNceqhwvZHjtDRELZEN79V5uWPTF1VDV8svA==}
+  /@vueuse/shared@10.3.0(vue@3.3.4):
+    resolution: {integrity: sha512-kGqCTEuFPMK4+fNWy6dUOiYmxGcUbtznMwBZLC1PubidF4VZY05B+Oht7Jh7/6x4VOWGpvu3R37WHi81cKpiqg==}
     dependencies:
       vue-demi: 0.14.5(vue@3.3.4)
     transitivePeerDependencies:
