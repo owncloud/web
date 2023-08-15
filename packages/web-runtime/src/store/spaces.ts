@@ -309,7 +309,8 @@ const loadSpacesByType = async ({
       // FIXME: can we retrieve this from api?
       driveType: driveAlias.split('/')[0],
       driveAlias,
-      path: '/'
+      path: '/',
+      serverUrl: configurationManager.serverUrl
     })
 
     return space

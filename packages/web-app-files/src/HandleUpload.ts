@@ -14,7 +14,7 @@ import { UppyService } from 'web-runtime/src/services/uppyService'
 import { ResourceConflict } from './helpers/resource'
 import { locationPublicLink } from './router/public'
 import { locationSpacesGeneric } from './router/spaces'
-import { isShareSpaceResource } from 'web-client/src/helpers'
+import { isPersonalSpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
 import { ClientService } from 'web-pkg/types'
 
 export interface HandleUploadOptions {
@@ -201,7 +201,12 @@ export class HandleUpload extends BasePlugin {
         targetUploadSpace = this.spaces.find((space) => space.id === uppyResource.meta.spaceId)
       }
 
-      if (!targetUploadSpace || isShareSpaceResource(targetUploadSpace)) {
+      if (
+        !targetUploadSpace ||
+        isShareSpaceResource(targetUploadSpace) ||
+        (isPersonalSpaceResource(targetUploadSpace) &&
+          targetUploadSpace.ownerId !== this.store.getters.user.uuid)
+      ) {
         return acc
       }
 
