@@ -202,8 +202,8 @@ export default defineComponent({
     const resourcesView = useResourcesViewDefaults<Resource, any, any[]>()
 
     const keyActions = useKeyboardActions()
-    useKeyboardTableNavigation(keyActions, resourcesView.paginatedResources)
-    useKeyboardTableMouseActions(keyActions)
+    useKeyboardTableNavigation(keyActions, resourcesView.paginatedResources, resourcesView.viewMode)
+    useKeyboardTableMouseActions(keyActions, resourcesView.viewMode)
     useKeyboardTableActions(keyActions)
 
     const searchTerm = computed(() => {
