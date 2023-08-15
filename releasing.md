@@ -10,7 +10,7 @@ geekdocFilePath: releasing.md
 
 ## Releasing ownCloud Web
 
-OwnCloud Web can be hosted standalone, as part of oCIS or as ownCloud 10 app (Web UI versions < 7.1.0). 
+OwnCloud Web can be hosted standalone, as ownCloud 10 app or as part of oCIS. 
 
 ### Versioning
 
@@ -23,7 +23,7 @@ The highest type before a new release determines the version update number, so i
 1. Create a branch `release-$version` in <https://github.com/owncloud/web>.
 2. Create a folder in `changelog` for the release version and date `mkdir $major.$minor.$patchVersion_YYYY-MM-DD`.
 3. Move all changelog items from the `changelog/unreleased/` folder to the `$major.$minor.$patchVersion_YYYY-MM-DD` folder.
-4. Only Web UI versions < 7.1.0: Update the version in `packages/web-integration-oc10/appinfo/info.xml`
+4. Update the version in `packages/web-integration-oc10/appinfo/info.xml`
 5. Update the version in `package.json`
 6. Commit your changes.
 7. After merging, wait for the CI to run on the merge commit.
