@@ -99,7 +99,6 @@
             :sort-by="sortBy"
             :sort-dir="sortDir"
             :space="space"
-            :disabled="disabledResources"
             @file-dropped="fileDropped"
             @file-click="triggerDefaultAction"
             @row-mounted="rowMounted"
@@ -468,12 +467,6 @@ export default defineComponent({
       }
     }
 
-    const disabledResources = computed(() => {
-      return unref(resourcesViewDefaults.paginatedResources)
-        .filter((resource) => resource.processing === true)
-        .map((resource) => resource.id)
-    })
-
     onMounted(() => {
       performLoaderTask(false)
       loadResourcesEventToken = eventBus.subscribe(
@@ -526,8 +519,7 @@ export default defineComponent({
       ),
       whitespaceContextMenu,
       clientService,
-      hasShareJail,
-      disabledResources
+      hasShareJail
     }
   },
 

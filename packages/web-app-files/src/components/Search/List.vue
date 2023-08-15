@@ -54,7 +54,6 @@
           v-model:selectedIds="selectedResourcesIds"
           class="files-table"
           :class="{ 'files-table-squashed': false }"
-          :disabled="disabledResources"
           :header-position="fileListHeaderY"
           :resources="paginatedResources"
           :are-paths-displayed="true"
@@ -286,12 +285,6 @@ export default defineComponent({
       ]
     })
 
-    const disabledResources = computed(() => {
-      return unref(resourcesView.paginatedResources)
-        .filter((resource) => resource.processing === true)
-        .map((resource) => resource.id)
-    })
-
     onMounted(async () => {
       if (unref(hasTags)) {
         await loadAvailableTagsTask.perform()
@@ -323,8 +316,7 @@ export default defineComponent({
       availableTags,
       tagFilter,
       breadcrumbs,
-      displayFilter,
-      disabledResources
+      displayFilter
     }
   },
   computed: {

@@ -24,7 +24,6 @@
           :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"
           :resources="paginatedResources"
-          :disabled="disabledResources"
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
@@ -110,12 +109,6 @@ export default defineComponent({
     const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } =
       resourcesViewDefaults
 
-    const disabledResources = computed(() => {
-      return unref(resourcesViewDefaults.paginatedResources)
-        .filter((resource) => resource.processing === true)
-        .map((resource) => resource.id)
-    })
-
     useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
       if (mutation.payload.field === 'shareTypes') {
         if (selectedResourcesIds.value.length !== 1) return
@@ -136,7 +129,6 @@ export default defineComponent({
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
-      disabledResources,
       getSpace,
 
       // CERN

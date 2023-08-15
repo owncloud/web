@@ -7,7 +7,7 @@
     :data="resources"
     :fields="fields"
     :highlighted="selectedIds"
-    :disabled="disabled"
+    :disabled="disabledResources"
     :sticky="true"
     :header-position="headerPosition"
     :drag-drop="dragDrop"
@@ -458,12 +458,23 @@ export default defineComponent({
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
+    const disabledResources = computed(() => {
+      if (props.disabled) {
+        return props.disabled
+      }
+
+      return (props.resources as Resource[])
+        .filter((resource) => resource.processing !== true)
+        .map((resource) => resource.id)
+    })
+
     return {
       getTagToolTip,
       renameActions,
       renameHandler,
       ViewModeConstants,
       hasTags,
+      disabledResources,
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       isUserContext: useUserContext({ store }),
@@ -904,9 +915,9 @@ export default defineComponent({
       if (!this.areResourcesClickable) {
         return false
       }
-      return Array.isArray(this.disabled)
-        ? !this.disabled.includes(resourceId)
-        : this.disabled !== resourceId
+      return Array.isArray(this.disabledResources)
+        ? !this.disabledResources.includes(resourceId)
+        : this.disabledResources !== resourceId
     },
     getResourceCheckboxLabel(resource) {
       if (resource.type === 'folder') {
