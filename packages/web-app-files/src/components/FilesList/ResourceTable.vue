@@ -702,10 +702,7 @@ export default defineComponent({
       return this.configuration?.options?.displayResourcesLazy
     },
     areAllResourcesSelected() {
-      return !!(
-        this.selectedResources.length &&
-        this.selectedResources.length === this.resources.length - this.disabledResources?.length
-      )
+      return this.selectedResources.length === this.resources.length - this.disabledResources.length
     },
     selectedResources() {
       return this.resources.filter((resource) => this.selectedIds.includes(resource.id))
