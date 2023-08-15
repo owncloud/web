@@ -167,6 +167,8 @@ export default defineComponent({
         if (unref(tagSelect) !== null) {
           unref(tagSelect).$refs.search.focus()
         }
+
+        allTags.push(...tagsToAdd)
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {

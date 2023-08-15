@@ -40,17 +40,6 @@ const logger = pino({
 })
 setDefaultTimeout(config.debug ? -1 : config.timeout * 1000)
 
-BeforeAll(async function (this: World) {
-  if (config.ocis) {
-    return
-  }
-
-  await api.config.setLocking({
-    value: false,
-    user: usersEnvironment.getUser({ key: 'Admin' })
-  })
-})
-
 Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   this.feature = pickle
   this.actorsEnvironment.on('console', (actorId, message): void => {
@@ -135,11 +124,7 @@ setWorldConstructor(World)
 const cleanUpUser = async (adminUser: User) => {
   const requests = []
   createdUserStore.forEach((user) => {
-    if (config.ocis) {
-      requests.push(api.graph.deleteUser({ user, admin: adminUser }))
-    } else {
-      requests.push(api.user.deleteUser({ user, admin: adminUser }))
-    }
+    requests.push(api.graph.deleteUser({ user, admin: adminUser }))
   })
   await Promise.all(requests)
   createdUserStore.clear()
@@ -171,11 +156,7 @@ const cleanUpSpaces = async (adminUser: User) => {
 const cleanUpGroup = async (adminUser: User) => {
   const requests = []
   createdGroupStore.forEach((group) => {
-    if (config.ocis) {
-      requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
-    } else {
-      requests.push(api.user.deleteGroup({ group, admin: adminUser }))
-    }
+    requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
   })
 
   await Promise.all(requests)

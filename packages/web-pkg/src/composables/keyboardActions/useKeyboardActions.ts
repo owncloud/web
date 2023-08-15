@@ -1,4 +1,5 @@
-import { onBeforeUnmount, onMounted, Ref, ref } from 'vue'
+import { Ref, ref, unref } from 'vue'
+import { useEventListener } from '@vueuse/core'
 import * as uuid from 'uuid'
 
 export enum Key {
@@ -6,6 +7,7 @@ export enum Key {
   V = 'v',
   X = 'x',
   A = 'a',
+  S = 's',
   Space = ' ',
   ArrowUp = 'ArrowUp',
   ArrowDown = 'ArrowDown',
@@ -34,11 +36,44 @@ export interface KeyboardAction {
   callback: (event: KeyboardEvent) => void
 }
 
-export const useKeyboardActions = (keyBindOnElementId: string | null = null): KeyboardActions => {
+const areCustomKeyBindingsDisabled = () => {
+  const activeElementTag = document.activeElement.tagName
+  const type = document.activeElement.getAttribute('type')
+  if (
+    ['textarea', 'input', 'select'].includes(activeElementTag.toLowerCase()) &&
+    type !== 'checkbox'
+  ) {
+    return true
+  }
+  const closestSelectionEl = window.getSelection().focusNode as HTMLElement
+  if (!closestSelectionEl) {
+    return false
+  }
+  let customKeyBindings
+  try {
+    customKeyBindings = closestSelectionEl?.closest("[data-custom-key-bindings-disabled='true']")
+  } catch {
+    customKeyBindings = closestSelectionEl?.parentElement.closest(
+      "[data-custom-key-bindings-disabled='true']"
+    )
+  }
+  if (customKeyBindings) {
+    return true
+  }
+
+  const isTextSelected = window.getSelection().type === 'Range'
+  return isTextSelected
+}
+
+export const useKeyboardActions = (): KeyboardActions => {
   const actions = ref<Array<KeyboardAction>>([])
   const selectionCursor = ref(0)
+
   const listener = (event: KeyboardEvent): void => {
-    event.preventDefault()
+    if (areCustomKeyBindingsDisabled()) {
+      return
+    }
+
     const { key, ctrlKey, metaKey, shiftKey } = event
     let modifier = null
     if (metaKey || ctrlKey) {
@@ -46,12 +81,14 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
     } else if (shiftKey) {
       modifier = ModifierKey.Shift
     }
-    const action = actions.value.find((action) => {
-      return action.primary === key && action.modifier === modifier
-    })
-    if (action) {
-      action.callback(event)
-    }
+    unref(actions)
+      .filter((action) => {
+        return action.primary === key && action.modifier === modifier
+      })
+      .forEach((action) => {
+        event.preventDefault()
+        action.callback(event)
+      })
   }
   const bindKeyAction = (
     keys: { primary: Key; modifier?: ModifierKey },
@@ -75,25 +112,7 @@ export const useKeyboardActions = (keyBindOnElementId: string | null = null): Ke
     selectionCursor.value = 0
   }
 
-  onMounted(() => {
-    let element = null
-    if (keyBindOnElementId) {
-      element = document.getElementById(keyBindOnElementId)
-    }
-    element
-      ? element.addEventListener('keydown', listener)
-      : document.addEventListener('keydown', listener)
-  })
-
-  onBeforeUnmount(() => {
-    let element = null
-    if (keyBindOnElementId) {
-      element = document.getElementById(keyBindOnElementId)
-    }
-    element
-      ? element.removeEventListener('keydown', listener)
-      : document.removeEventListener('keydown', listener)
-  })
+  useEventListener(document, 'keydown', listener)
 
   return {
     actions,
