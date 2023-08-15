@@ -44,8 +44,10 @@ export const useScrollTo = (): ScrollToResult => {
       resourceElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }
-  eventBus.subscribe('app.files.navigate.scrollTo', (data) =>
-    scrollToResource(data.resourceId, { forceScroll: data.forceScroll })
+  eventBus.subscribe(
+    'app.files.navigate.scrollTo',
+    (data: { resourceId: string; forceScroll: boolean }) =>
+      scrollToResource(data.resourceId, { forceScroll: data.forceScroll })
   )
 
   const scrollToResourceFromRoute = (resources: Resource[]) => {
