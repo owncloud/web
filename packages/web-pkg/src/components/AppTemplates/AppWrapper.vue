@@ -86,9 +86,10 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+    const { $gettext } = useGettext()
     const store = useStore()
 
+    const applicationName = ref('')
     const resource: Ref<Resource> = ref()
     const currentETag = ref('')
     const url = ref('')
