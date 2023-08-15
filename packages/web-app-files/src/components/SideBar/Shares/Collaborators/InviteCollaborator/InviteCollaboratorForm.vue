@@ -34,31 +34,42 @@
         <span />
       </template>
     </oc-select>
-    <div class="oc-flex oc-flex-middle oc-flex-between oc-mb-l oc-mt-s">
+    <div class="oc-flex oc-flex-between oc-mb-l oc-mt-s">
       <role-dropdown
         :allow-share-permission="hasResharing || resourceIsSpace"
         mode="create"
         class="role-selection-dropdown"
         @option-change="collaboratorRoleChanged"
       />
-      <expiration-datepicker
-        v-if="!saving"
-        :share-types="selectedCollaborators.map((c) => c.value.shareType)"
-        @option-change="collaboratorExpiryChanged"
-      />
-      <oc-button
-        id="new-collaborators-form-create-button"
-        key="new-collaborator-save-button"
-        data-testid="new-collaborators-form-create-button"
-        :disabled="!$_isValid || saving"
-        :variation="saving ? 'passive' : 'primary'"
-        :appearance="saving ? 'outline' : 'filled'"
-        submit="submit"
-        :show-spinner="savingDelayed"
-        @click="share"
-      >
-        <span v-text="$gettext(saveButtonLabel)" />
-      </oc-button>
+      <div class="oc-flex">
+        <oc-button id="set-expiration-date-btn" :aria-label="'abc'" appearance="raw">
+          <oc-icon name="more-2" />
+          <oc-drop :drop-id="'set-expiration-date-btn'" :toggle="'#set-expiration-date-btn'" mode="click" padding-size="small">
+            <oc-list class="collaborator-edit-dropdown-options-list" :aria-label="'shareEditOptions'">
+              <li class="oc-rounded oc-menu-item-hover">
+                <expiration-datepicker
+                  v-if="!saving"
+                  :share-types="selectedCollaborators.map((c) => c.value.shareType)"
+                  @option-change="collaboratorExpiryChanged"
+                />
+              </li>
+            </oc-list>
+          </oc-drop>
+        </oc-button>
+        <oc-button
+          id="new-collaborators-form-create-button"
+          key="new-collaborator-save-button"
+          data-testid="new-collaborators-form-create-button"
+          :disabled="!$_isValid || saving"
+          :variation="saving ? 'passive' : 'primary'"
+          :appearance="saving ? 'outline' : 'filled'"
+          submit="submit"
+          :show-spinner="savingDelayed"
+          @click="share"
+        >
+          <span v-text="$gettext(saveButtonLabel)" />
+        </oc-button>
+      </div>
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />
   </div>
@@ -92,6 +103,8 @@ import {
 import { defineComponent, inject, ref, unref, watch } from 'vue'
 import { Resource } from 'web-client'
 import { useShares } from 'web-app-files/src/composables'
+import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
+import { displayPositionedDropdown } from 'web-pkg'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -101,6 +114,7 @@ const $gettext = (str) => {
 export default defineComponent({
   name: 'InviteCollaboratorForm',
   components: {
+    ContextMenuQuickAction,
     AutocompleteItem,
     RoleDropdown,
     RecipientContainer,
@@ -138,6 +152,20 @@ export default defineComponent({
         savingDelayed.value = true
       }, 700)
     })
+
+    const contextMenuButtonRef = ref(undefined)
+
+    const showContextMenuOnBtnClick = (data, user) => {
+      const { dropdown, event } = data
+      if (dropdown?.tippy === undefined) {
+        return
+      }
+      displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
+    }
+
+    const isExpirationDateSet = false
+    const enteredExpirationDate = {}
+
     return {
       resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
@@ -147,7 +175,11 @@ export default defineComponent({
       clientService,
       saving,
       savingDelayed,
-      ...useShares()
+      ...useShares(),
+      showContextMenuOnBtnClick,
+      contextMenuButtonRef,
+      isExpirationDateSet,
+      enteredExpirationDate
     }
   },
 
@@ -392,8 +424,17 @@ export default defineComponent({
 .role-selection-dropdown {
   max-width: 150px;
 }
+
 #new-collaborators-form-create-button {
   padding-left: 30px;
   padding-right: 30px;
+}
+
+#set-expiration-date-btn {
+  margin-right: $oc-space-medium;
+}
+
+oc-datepicker {
+  width: 100%;
 }
 </style>
