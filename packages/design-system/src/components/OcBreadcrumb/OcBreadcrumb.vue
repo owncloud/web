@@ -28,13 +28,13 @@
           :aria-current="getAriaCurrent(index)"
           :to="item.isTruncationPlaceholder ? lastHiddenItem.to : item.to"
         >
-          <span class="oc-breadcrumb-item-text">{{ item.text }}</span>
+          <span class="oc-breadcrumb-item-text oc-breadcrumb-item-navigable">{{ item.text }}</span>
         </router-link>
         <oc-icon
           v-if="item.to"
           color="var(--oc-color-text-default)"
           name="arrow-right-s"
-          class="oc-mx-xs"
+          class="oc-mx-xs oc-breadcrumb-item-navigable"
           fill-type="line"
         />
         <oc-button
@@ -47,6 +47,7 @@
           <span
             :class="[
               'oc-breadcrumb-item-text',
+              'oc-breadcrumb-item-navigable',
               {
                 'oc-breadcrumb-item-text-last': index === displayItems.length - 1
               }
@@ -287,7 +288,7 @@ export default defineComponent({
       return [...props.items].reverse()[0]
     })
     const parentFolderTo = computed(() => {
-      return [...props.items].reverse()[1].to
+      return [...props.items].reverse()[1]?.to
     })
 
     const contextMenuLabel = computed(() => {
@@ -350,6 +351,10 @@ export default defineComponent({
     }
   }
 
+  &-item-navigable:hover {
+    text-decoration: underline;
+  }
+
   &-mobile-current,
   &-mobile-navigation {
     @media (min-width: $oc-breakpoint-small-default) {
@@ -386,12 +391,6 @@ export default defineComponent({
 
     > :last-child > span {
       color: var(--oc-color-text-default);
-    }
-
-    > li a:hover,
-    > li span:not([aria-current='page']):not(.oc-icon):hover,
-    > li button:hover {
-      text-decoration: underline;
     }
   }
 

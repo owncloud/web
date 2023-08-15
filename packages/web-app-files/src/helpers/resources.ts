@@ -74,7 +74,7 @@ export function aggregateResourceShares(
         (space) =>
           space.driveType === 'mountpoint' &&
           space.id === `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${resource.shareId}`
-      ).root.remoteItem.path
+      )?.root.remoteItem.path
       return resource
     })
   }
