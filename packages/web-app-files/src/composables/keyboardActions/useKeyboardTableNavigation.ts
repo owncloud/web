@@ -5,6 +5,10 @@ import { Key, KeyboardActions, ModifierKey } from 'web-pkg/src/composables/keybo
 import { Resource } from 'web-client'
 import { findIndex } from 'lodash-es'
 
+const enum Direction {
+  LEFT = 'left',
+  RIGHT = 'right'
+}
 export const useKeyboardTableNavigation = (
   keyActions: KeyboardActions,
   paginatedResources: Ref<Resource[]>,
@@ -21,14 +25,14 @@ export const useKeyboardTableNavigation = (
     handleSelectAllAction()
   )
 
-  keyActions.bindKeyAction({ primary: Key.Space }, () => {
-    store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
+  keyActions.bindKeyAction({ primary: Key.Space }, async () => {
+    await store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
   })
 
-  keyActions.bindKeyAction({ primary: Key.Esc }, () => {
+  keyActions.bindKeyAction({ primary: Key.Esc }, async () => {
     keyActions.resetSelectionCursor()
     tileViewStart.value = null
-    store.dispatch('Files/resetFileSelection')
+    await store.dispatch('Files/resetFileSelection')
   })
 
   const bindTilesViewKeyActions = () => {
@@ -41,33 +45,33 @@ export const useKeyboardTableNavigation = (
     )
 
     bindKeyActionsIds.value.push(
-      keyActions.bindKeyAction({ primary: Key.ArrowUp }, () => {
+      keyActions.bindKeyAction({ primary: Key.ArrowUp }, async () => {
         const elementsInRow = getElementsInRow()
         if (elementsInRow === -1) {
           return
         }
-        handleNavigateAction(true, elementsInRow)
+        await handleNavigateAction(true, elementsInRow)
       })
     )
 
     bindKeyActionsIds.value.push(
-      keyActions.bindKeyAction({ primary: Key.ArrowDown }, () => {
+      keyActions.bindKeyAction({ primary: Key.ArrowDown }, async () => {
         const elementsInRow = getElementsInRow()
         if (elementsInRow === -1) {
           return
         }
-        handleNavigateAction(false, elementsInRow)
+        await handleNavigateAction(false, elementsInRow)
       })
     )
 
     bindKeyActionsIds.value.push(
       keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowLeft }, () =>
-        handleTilesShiftLeftAction()
+        handleTilesShiftHorizontalAction(Direction.LEFT)
       )
     )
     bindKeyActionsIds.value.push(
       keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowRight }, () =>
-        handleTilesShiftRightAction()
+        handleTilesShiftHorizontalAction(Direction.RIGHT)
       )
     )
 
@@ -113,7 +117,7 @@ export const useKeyboardTableNavigation = (
     }
     keyActions.resetSelectionCursor()
     tileViewStart.value = null
-    store.dispatch('Files/resetFileSelection')
+    await store.dispatch('Files/resetFileSelection')
     await nextTick()
     store.commit('Files/ADD_FILE_SELECTION', { id: nextId })
     await nextTick()
@@ -161,145 +165,105 @@ export const useKeyboardTableNavigation = (
     store.commit('Files/SET_FILE_SELECTION', paginatedResources.value)
   }
 
-  const handleTilesShiftUpAction = async () => {
+  const getVerticalProperties = (viewDirection: Direction) => {
     const elementsInRow = getElementsInRow()
     if (elementsInRow === -1) {
-      return
-    }
-    // elementsInRow++
-    if (!unref(tileViewStart)) {
-      tileViewStart.value = latestSelectedId.value
-      tileViewDirection.value = 'left'
+      return {}
     }
 
-    const currentResourceId = getNextResourceId(false, 0)
+    if (!unref(tileViewStart)) {
+      tileViewStart.value = latestSelectedId.value
+      tileViewDirection.value = viewDirection
+    }
 
     const tilesListCard = document.querySelectorAll('#tiles-view > ul > li > div')
 
     const currentResourceIndex = findIndex(
       tilesListCard,
-      (tile) => tile.getAttribute('data-item-id') === currentResourceId.toString()
+      (tile) => tile.getAttribute('data-item-id') === unref(latestSelectedId).toString()
     )
 
     const tileViewStartIndex = findIndex(tilesListCard, (tile) => {
       return tile.getAttribute('data-item-id') === unref(tileViewStart).toString()
     })
 
-    const nextIndex = currentResourceIndex - elementsInRow
+    const nextIndex =
+      viewDirection === Direction.LEFT
+        ? currentResourceIndex - elementsInRow
+        : currentResourceIndex + elementsInRow
+
     if (!tilesListCard[nextIndex]) {
-      return
+      return {}
     }
 
-    let lastSelectedIndex = null
-    for (let i = currentResourceIndex; i >= nextIndex; i--) {
-      const selectIndex = tilesListCard[i].getAttribute('data-item-id')
-      lastSelectedIndex = selectIndex
-      if (i === tileViewStartIndex) {
-        continue
-      }
-      if (i < tileViewStartIndex) {
-        store.commit('Files/ADD_FILE_SELECTION', { id: selectIndex })
-      } else {
-        store.commit('Files/REMOVE_FILE_SELECTION', { id: selectIndex })
-      }
-    }
-    store.commit('Files/SET_LATEST_SELECTED_FILE_ID', lastSelectedIndex)
-  }
-  const handleTilesShiftDownAction = async () => {
-    const elementsInRow = getElementsInRow()
-    if (elementsInRow === -1) {
-      return
-    }
-    // elementsInRow++
-    if (!unref(tileViewStart)) {
-      tileViewStart.value = latestSelectedId.value
-      tileViewDirection.value = 'right'
-    }
+    const lastSelectedFileId = tilesListCard[nextIndex].getAttribute('data-item-id')
 
-    const currentResourceId = getNextResourceId(false, 0)
-
-    const tilesListCard = document.querySelectorAll('#tiles-view > ul > li > div')
-
-    const currentResourceIndex = findIndex(
+    return {
+      currentResourceIndex,
+      nextIndex,
       tilesListCard,
-      (tile) => tile.getAttribute('data-item-id') === currentResourceId.toString()
-    )
+      tileViewStartIndex,
+      lastSelectedFileId
+    }
+  }
 
-    const tileViewStartIndex = findIndex(tilesListCard, (tile) => {
-      return tile.getAttribute('data-item-id') === unref(tileViewStart).toString()
-    })
-
-    const nextIndex = currentResourceIndex + elementsInRow
-    if (!tilesListCard[nextIndex]) {
+  const handleTilesShiftUpAction = () => {
+    const vp = getVerticalProperties(Direction.LEFT)
+    if (Object.keys(vp).length === 0) {
       return
     }
-
-    let lastSelectedIndex = null
-    for (let i = currentResourceIndex; i <= nextIndex; i++) {
-      const selectIndex = tilesListCard[i].getAttribute('data-item-id')
-      lastSelectedIndex = selectIndex
-      if (i === tileViewStartIndex) {
+    for (let i = vp.currentResourceIndex; i >= vp.nextIndex; i--) {
+      if (i === vp.tileViewStartIndex) {
         continue
       }
-      if (i > tileViewStartIndex) {
-        store.commit('Files/ADD_FILE_SELECTION', { id: selectIndex })
-      } else {
-        store.commit('Files/REMOVE_FILE_SELECTION', { id: selectIndex })
+      const id = vp.tilesListCard[i].getAttribute('data-item-id')
+      i < vp.tileViewStartIndex
+        ? store.commit('Files/ADD_FILE_SELECTION', { id })
+        : store.commit('Files/REMOVE_FILE_SELECTION', { id })
+    }
+    store.commit('Files/SET_LATEST_SELECTED_FILE_ID', vp.lastSelectedFileId)
+  }
+  const handleTilesShiftDownAction = () => {
+    const vp = getVerticalProperties(Direction.RIGHT)
+    if (Object.keys(vp).length === 0) {
+      return
+    }
+
+    for (let i = vp.currentResourceIndex; i <= vp.nextIndex; i++) {
+      if (i === vp.tileViewStartIndex) {
+        continue
       }
+      const id = vp.tilesListCard[i].getAttribute('data-item-id')
+      i > vp.tileViewStartIndex
+        ? store.commit('Files/ADD_FILE_SELECTION', { id })
+        : store.commit('Files/REMOVE_FILE_SELECTION', { id })
     }
-    store.commit('Files/SET_LATEST_SELECTED_FILE_ID', lastSelectedIndex)
+    store.commit('Files/SET_LATEST_SELECTED_FILE_ID', vp.lastSelectedFileId)
   }
 
-  const handleTilesShiftLeftAction = async () => {
-    const currentResourceId = getNextResourceId(false, 0)
+  const handleTilesShiftHorizontalAction = async (direction: Direction) => {
     const nextResourceId = !unref(latestSelectedId)
       ? getFirstResourceId()
-      : getNextResourceId(true, 1)
+      : getNextResourceId(direction === Direction.LEFT, 1)
     if (nextResourceId === -1) {
       return
     }
 
-    if (currentResourceId === unref(tileViewStart)) {
-      tileViewStart.value = currentResourceId
-      tileViewDirection.value = 'left'
+    if (unref(latestSelectedId) === unref(tileViewStart)) {
+      tileViewStart.value = unref(latestSelectedId)
+      tileViewDirection.value = direction
     }
 
     if (!unref(tileViewStart)) {
       tileViewStart.value = latestSelectedId.value
-      tileViewDirection.value = 'left'
+      tileViewDirection.value = direction
     }
-    if (tileViewDirection.value === 'right') {
+    if (tileViewDirection.value !== direction && tileViewDirection.value !== null) {
       await store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
       store.commit('Files/SET_LATEST_SELECTED_FILE_ID', nextResourceId)
     }
-    if (tileViewDirection.value === 'left') {
+    if (tileViewDirection.value === direction) {
       store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
-    }
-  }
-  const handleTilesShiftRightAction = async () => {
-    const currentResourceId = getNextResourceId(false, 0)
-    const nextResourceId = !unref(latestSelectedId)
-      ? getFirstResourceId()
-      : getNextResourceId(false, 1)
-    if (nextResourceId === -1) {
-      return
-    }
-
-    if (currentResourceId === unref(tileViewStart)) {
-      tileViewStart.value = currentResourceId
-      tileViewDirection.value = 'right'
-    }
-
-    if (!unref(tileViewStart)) {
-      tileViewStart.value = latestSelectedId.value
-      tileViewDirection.value = 'right'
-    }
-    if (tileViewDirection.value === 'right') {
-      store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
-    }
-    if (tileViewDirection.value === 'left') {
-      await store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
-      store.commit('Files/SET_LATEST_SELECTED_FILE_ID', nextResourceId)
     }
   }
 
@@ -309,27 +273,23 @@ export const useKeyboardTableNavigation = (
       return
     }
     if (unref(keyActions.selectionCursor) > 0) {
-      // deselect
       await store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
       store.commit('Files/SET_LATEST_SELECTED_FILE_ID', nextResourceId)
     } else {
-      // select
       store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
     }
     scrollToResource(nextResourceId)
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) - 1
   }
-  const handleShiftDownAction = (movedBy = 1) => {
+  const handleShiftDownAction = async (movedBy = 1) => {
     const nextResourceId = getNextResourceId(false, movedBy)
     if (nextResourceId === -1) {
       return
     }
     if (unref(keyActions.selectionCursor) < 0) {
-      // deselect
-      store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
+      await store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
       store.commit('Files/SET_LATEST_SELECTED_FILE_ID', nextResourceId)
     } else {
-      // select
       store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
     }
     scrollToResource(nextResourceId)
