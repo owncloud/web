@@ -209,7 +209,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, unref, ref } from 'vue'
+import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
@@ -458,7 +458,7 @@ export default defineComponent({
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
-    const disabledResources = computed(() => {
+    const disabledResources: ComputedRef<Array<Number | String>> = computed(() => {
       let disabled = props.disabled
 
       if (disabled) {
