@@ -34,6 +34,8 @@ export interface SpaceRole {
   isMember(u: User): boolean
 }
 
+type DriveType = 'mountpoint' | 'personal' | 'project' | 'public' | 'share'
+
 // TODO: add more fields to the resource interface. Extend into different resource types: FileResource, FolderResource, ShareResource, IncomingShareResource, OutgoingShareResource, ...
 export interface Resource {
   id: number | string
@@ -75,7 +77,7 @@ export interface Resource {
   shareTypes?: number[]
   privateLink?: string
   description?: string
-  driveType?: 'mountpoint' | 'personal' | 'project' | 'public' | 'share' | (string & unknown)
+  driveType?: DriveType | Omit<string, DriveType>
   driveAlias?: string
 
   canCreate?(): boolean

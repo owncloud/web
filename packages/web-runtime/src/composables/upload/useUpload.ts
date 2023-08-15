@@ -11,6 +11,7 @@ import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppyService'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
+import { Resource } from 'web-client/src'
 
 export interface UppyResource {
   id?: string
@@ -29,7 +30,7 @@ export interface UppyResource {
     spaceId: string
     spaceName: string
     driveAlias: string
-    driveType: string
+    driveType: Resource['driveType']
     currentFolder: string // current folder path during upload initiation
     currentFolderId?: string
     fileId?: string
