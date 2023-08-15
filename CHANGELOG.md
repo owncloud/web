@@ -512,6 +512,7 @@ Details
    https://github.com/owncloud/web/issues/9362
    https://github.com/owncloud/web/issues/9416
    https://github.com/owncloud/web/pull/9525
+   https://github.com/owncloud/web/pull/9563
 
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
 

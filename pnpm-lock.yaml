@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -910,6 +910,9 @@ importers:
       '@microsoft/fetch-event-source':
         specifier: ^2.0.1
         version: 2.0.1
+      '@vueuse/core':
+        specifier: ^10.0.0
+        version: 10.1.2(vue@3.3.4)
       axios:
         specifier: ^0.27.2 || ^1.0.0
         version: 1.4.0
@@ -6298,7 +6301,6 @@ packages:
 
   /@types/web-bluetooth@0.0.17:
     resolution: {integrity: sha512-4p9vcSmxAayx72yn70joFoL44c9MO/0+iVEBIQXe3v2h2SiAsEIo/G5v6ObFWvNKRFjbrVadNf9LqEEZeQPzdA==}
-    dev: true
 
   /@types/webpack-sources@3.2.0:
     resolution: {integrity: sha512-Ft7YH3lEVRQ6ls8k4Ff1oB4jN6oy/XmU6tQISKdhfh+1mR+viZFphS6WL0IrtDOzvefmJg5a0s7ZQoRXwqTEFg==}
@@ -6955,7 +6957,6 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
-    dev: true
 
   /@vueuse/head@1.1.26(vue@3.3.4):
     resolution: {integrity: sha512-VUrqvcxKtxt2moKtUa7R/KscnDsNYj5u7HFULLsr84VhWsztzBedxW/8Wh/kTz2+/eMf5gC1KtkZBTFQYOmauQ==}
@@ -6971,7 +6972,6 @@ packages:
 
   /@vueuse/metadata@10.1.2:
     resolution: {integrity: sha512-3mc5BqN9aU2SqBeBuWE7ne4OtXHoHKggNgxZR2K+zIW4YLsy6xoZ4/9vErQs6tvoKDX6QAqm3lvsrv0mczAwIQ==}
-    dev: true
 
   /@vueuse/shared@10.1.2(vue@3.3.4):
     resolution: {integrity: sha512-1uoUTPBlgyscK9v6ScGeVYDDzlPSFXBlxuK7SfrDGyUTBiznb3mNceqhwvZHjtDRELZEN79V5uWPTF1VDV8svA==}
@@ -6980,7 +6980,6 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
-    dev: true
 
   /@vxna/mini-html-webpack-template@1.0.0:
     resolution: {integrity: sha512-cwlmP9CoWyZYtI33DUKOjS6Hyn3yNrXZQtP+QxPjaRpYNYcbrg+u7EZQZmvB/Mi7qwiDbeTU7UtMT0C5ouRTNA==}
@@ -17214,6 +17213,7 @@ packages:
 
   /pug-code-gen@3.0.2:
     resolution: {integrity: sha512-nJMhW16MbiGRiyR4miDTQMRWDgKplnHyeLvioEJYbk1RsPI3FuA3saEP8uwnTb2nTJEKBU90NFVWJBk4OU5qyg==}
+    requiresBuild: true
     dependencies:
       constantinople: 4.0.1
       doctypes: 1.1.0
@@ -17230,6 +17230,7 @@ packages:
 
   /pug-filters@4.0.0:
     resolution: {integrity: sha512-yeNFtq5Yxmfz0f9z2rMXGw/8/4i1cCFecw/Q7+D0V2DdtII5UvqE12VaZ2AY7ri6o5RNXiweGH79OCq+2RQU4A==}
+    requiresBuild: true
     dependencies:
       constantinople: 4.0.1
       jstransformer: 1.0.0
@@ -17239,6 +17240,7 @@ packages:
 
   /pug-lexer@5.0.1:
     resolution: {integrity: sha512-0I6C62+keXlZPZkOJeVam9aBLVP2EnbeDw3An+k0/QlqdwH6rv8284nko14Na7c0TtqtogfWXcRoFE4O4Ff20w==}
+    requiresBuild: true
     dependencies:
       character-parser: 2.2.0
       is-expression: 4.0.0
@@ -17246,27 +17248,32 @@ packages:
 
   /pug-linker@4.0.0:
     resolution: {integrity: sha512-gjD1yzp0yxbQqnzBAdlhbgoJL5qIFJw78juN1NpTLt/mfPJ5VgC4BvkoD3G23qKzJtIIXBbcCt6FioLSFLOHdw==}
+    requiresBuild: true
     dependencies:
       pug-error: 2.0.0
       pug-walk: 2.0.0
 
   /pug-load@3.0.0:
     resolution: {integrity: sha512-OCjTEnhLWZBvS4zni/WUMjH2YSUosnsmjGBB1An7CsKQarYSWQ0GCVyd4eQPMFJqZ8w9xgs01QdiZXKVjk92EQ==}
+    requiresBuild: true
     dependencies:
       object-assign: 4.1.1
       pug-walk: 2.0.0
 
   /pug-parser@6.0.0:
     resolution: {integrity: sha512-ukiYM/9cH6Cml+AOl5kETtM9NR3WulyVP2y4HOU45DyMim1IeP/OOiyEWRr6qk5I5klpsBnbuHpwKmTx6WURnw==}
+    requiresBuild: true
     dependencies:
       pug-error: 2.0.0
       token-stream: 1.0.0
 
   /pug-runtime@3.0.1:
     resolution: {integrity: sha512-L50zbvrQ35TkpHwv0G6aLSuueDRwc/97XdY8kL3tOT0FmhgG7UypU3VztfV/LATAvmUfYi4wNxSajhSAeNN+Kg==}
+    requiresBuild: true
 
   /pug-strip-comments@2.0.0:
     resolution: {integrity: sha512-zo8DsDpH7eTkPHCXFeAk1xZXJbyoTfdPlNR0bK7rpOMuhBYb0f5qUVCO1xlsitYd3w5FQTK7zpNVKb3rZoUrrQ==}
+    requiresBuild: true
     dependencies:
       pug-error: 2.0.0
 

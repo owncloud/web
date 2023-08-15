@@ -59,8 +59,7 @@ describe('GroupsList', () => {
   it('emits events on row click', () => {
     const groups = getGroupMocks()
     const { wrapper } = getWrapper({ props: { groups } })
-    wrapper.vm.rowClicked(groups[0])
-    expect(wrapper.emitted('unSelectAllGroups').length).toBeTruthy()
+    wrapper.vm.rowClicked([groups[0]])
     expect(wrapper.emitted('toggleSelectGroup')).toBeTruthy()
   })
   it('should show the context menu on right click', async () => {

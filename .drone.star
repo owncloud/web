@@ -74,6 +74,12 @@ config = {
                 "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*.feature",
             ],
         },
+        "oCIS-app-provider": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
     },
     "acceptance": {
         "webUI": {
@@ -684,6 +690,9 @@ def e2eTests(ctx):
     }, {
         "name": "gopath",
         "temp": {},
+    }, {
+        "name": "ocis-config",
+        "temp": {},
     }]
 
     default = {
@@ -708,9 +717,12 @@ def e2eTests(ctx):
     params = {}
     matrices = config["e2e"]
 
-    for server, matrix in matrices.items():
+    for suite, matrix in matrices.items():
         for item in default:
             params[item] = matrix[item] if item in matrix else default[item]
+
+        if suite == "oCIS-app-provider" and not "full-ci" in ctx.build.title.lower():
+            continue
 
         if params["skip"]:
             continue
@@ -731,7 +743,8 @@ def e2eTests(ctx):
                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
                 installPnpm() + \
                 restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-                copyFilesForUpload()
+                setupServerConfigureWeb(params["logLevel"]) + \
+                restoreOcisCache()
 
         # oCIS specific environment variables
         environment["BASE_URL_OCIS"] = "ocis:9200"
@@ -741,12 +754,20 @@ def e2eTests(ctx):
         # oCIS specific dependencies
         depends_on = ["cache-ocis"]
 
-        # oCIS specific steps
-        steps += setupServerConfigureWeb(params["logLevel"]) + \
-                 restoreOcisCache() + \
-                 (tikaService() if params["tikaNeeded"] else []) + \
-                 ocisService("e2e-tests", tika_enabled = params["tikaNeeded"]) + \
-                 getSkeletonFiles()
+        if suite == "oCIS-app-provider":
+            # app-provider specific steps
+            steps += wopiServer() + \
+                     collaboraService() + \
+                     onlyofficeService() + \
+                     ocisService("app-provider") + \
+                     appProviderService("collabora") + \
+                     appProviderService("onlyoffice")
+        else:
+            # oCIS specific steps
+            steps += copyFilesForUpload() + \
+                     (tikaService() if params["tikaNeeded"] else []) + \
+                     ocisService("e2e-tests", tika_enabled = params["tikaNeeded"]) + \
+                     getSkeletonFiles()
 
         steps += [{
                      "name": "e2e-tests",
@@ -757,12 +778,12 @@ def e2eTests(ctx):
                      ],
                  }] + \
                  uploadTracingResult(ctx) + \
-                 logTracingResult(ctx, "e2e-tests %s" % server)
+                 logTracingResult(ctx, "e2e-tests %s" % suite)
 
         pipelines.append({
             "kind": "pipeline",
             "type": "docker",
-            "name": "e2e-tests-%s" % server,
+            "name": "e2e-tests-%s" % suite,
             "workspace": e2e_workspace,
             "steps": steps,
             "services": services,
@@ -1237,18 +1258,22 @@ def ocisService(type, tika_enabled = False):
         "LDAP_GROUP_SUBSTRING_FILTER_TYPE": "any",
         "LDAP_USER_SUBSTRING_FILTER_TYPE": "any",
         "PROXY_ENABLE_BASIC_AUTH": True,
-        "STORAGE_HOME_DRIVER": "ocis",
-        "STORAGE_METADATA_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/metadata",
-        "STORAGE_SHARING_USER_JSON_FILE": "/srv/app/tmp/ocis/shares.json",
-        "STORAGE_USERS_DRIVER": "ocis",
-        "STORAGE_USERS_DRIVER_LOCAL_ROOT": "/srv/app/tmp/ocis/local/root",
-        "STORAGE_USERS_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/users",
-        "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "%s" % dir["ocisRevaDataRoot"],
         "WEB_ASSET_PATH": "%s/dist" % dir["web"],
-        "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
         "FRONTEND_SEARCH_MIN_LENGTH": "2",
         "FRONTEND_OCS_ENABLE_DENIALS": True,
     }
+    if type == "app-provider":
+        environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
+        environment["MICRO_REGISTRY"] = "mdns"
+    else:
+        environment["WEB_UI_CONFIG"] = "%s" % dir["ocisConfig"]
+        environment["STORAGE_HOME_DRIVER"] = "ocis"
+        environment["STORAGE_METADATA_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/metadata"
+        environment["STORAGE_SHARING_USER_JSON_FILE"] = "/srv/app/tmp/ocis/shares.json"
+        environment["STORAGE_USERS_DRIVER"] = "ocis"
+        environment["STORAGE_USERS_DRIVER_LOCAL_ROOT"] = "/srv/app/tmp/ocis/local/root"
+        environment["STORAGE_USERS_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/users"
+        environment["STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR"] = "%s" % dir["ocisRevaDataRoot"]
 
     if tika_enabled:
         environment["FRONTEND_FULL_TEXT_SEARCH_ENABLED"] = True
@@ -1267,6 +1292,7 @@ def ocisService(type, tika_enabled = False):
                 "mkdir -p %s" % dir["ocisRevaDataRoot"],
                 "mkdir -p /srv/app/tmp/ocis/storage/users/",
                 "./ocis init",
+                "cp %s/tests/drone/app-registry.yaml /root/.ocis/config/app-registry.yaml" % dir["web"],
                 "./ocis server",
             ],
             "volumes": [{
@@ -1275,6 +1301,9 @@ def ocisService(type, tika_enabled = False):
             }, {
                 "name": "configs",
                 "path": dir["config"],
+            }, {
+                "name": "ocis-config",
+                "path": "/root/.ocis/config",
             }],
         },
         {
@@ -2045,6 +2074,127 @@ def tikaService():
             "image": OC_CI_WAIT_FOR,
             "commands": [
                 "wait-for -it tika:9998 -t 300",
+            ],
+        },
+    ]
+
+def wopiServer():
+    return [
+        {
+            "name": "wopiserver",
+            "type": "docker",
+            "image": "cs3org/wopiserver:v9.4.1",
+            "detach": True,
+            "commands": [
+                "echo 'LoremIpsum567' > /etc/wopi/wopisecret",
+                "cp %s/tests/drone/wopiserver/wopiserver.conf /etc/wopi/wopiserver.conf" % dir["web"],
+                "/app/wopiserver.py",
+            ],
+        },
+        {
+            "name": "wait-for-wopi-server",
+            "image": OC_CI_WAIT_FOR,
+            "commands": [
+                "wait-for -it wopiserver:8880 -t 300",
+            ],
+        },
+    ]
+
+def collaboraService():
+    return [
+        {
+            "name": "collabora",
+            "type": "docker",
+            "image": "collabora/code:22.05.14.3.1",
+            "detach": True,
+            "environment": {
+                "DONT_GEN_SSL_CERT": "set",
+                "extra_params": "--o:ssl.enable=true --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://ocis:9200",
+            },
+        },
+        {
+            "name": "wait-for-collabora-service",
+            "image": OC_CI_WAIT_FOR,
+            "commands": [
+                "wait-for -it collabora:9980 -t 300",
+            ],
+        },
+    ]
+
+def onlyofficeService():
+    return [
+        {
+            "name": "onlyoffice",
+            "type": "docker",
+            "image": "onlyoffice/documentserver:7.3.3",
+            "detach": True,
+            "environment": {
+                "WOPI_ENABLED": "true",
+                "USE_UNAUTHORIZED_STORAGE": "true",  # self signed certificates
+            },
+            "commands": [
+                "cp %s/tests/drone/onlyoffice/local.json /etc/onlyoffice/documentserver/local.json" % dir["web"],
+                "openssl req -x509 -newkey rsa:4096 -keyout onlyoffice.key -out onlyoffice.crt -sha256 -days 365 -batch -nodes",
+                "mkdir -p /var/www/onlyoffice/Data/certs",
+                "cp onlyoffice.key /var/www/onlyoffice/Data/certs/",
+                "cp onlyoffice.crt /var/www/onlyoffice/Data/certs/",
+                "chmod 400 /var/www/onlyoffice/Data/certs/onlyoffice.key",
+                "/app/ds/run-document-server.sh",
+            ],
+        },
+        {
+            "name": "wait-for-onlyoffice-service",
+            "image": OC_CI_WAIT_FOR,
+            "commands": [
+                "wait-for -it onlyoffice:443 -t 300",
+            ],
+        },
+    ]
+
+def appProviderService(name):
+    environment = {
+        "APP_PROVIDER_LOG_LEVEL": "error",
+        "REVA_GATEWAY": "com.owncloud.api.gateway",
+        "APP_PROVIDER_GRPC_ADDR": "0.0.0.0:9164",
+        "APP_PROVIDER_DRIVER": "wopi",
+        "APP_PROVIDER_WOPI_INSECURE": True,
+        "APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL": "http://wopiserver:8880",
+        "APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL": "https://ocis:9200",
+        "MICRO_REGISTRY": "mdns",
+    }
+
+    if name == "collabora":
+        environment["APP_PROVIDER_SERVICE_NAME"] = "app-provider-collabora"
+        environment["APP_PROVIDER_EXTERNAL_ADDR"] = "com.owncloud.api.app-provider-collabora"
+        environment["APP_PROVIDER_WOPI_APP_NAME"] = "Collabora"
+        environment["APP_PROVIDER_WOPI_APP_ICON_URI"] = "https://collabora:9980/favicon.ico"
+        environment["APP_PROVIDER_WOPI_APP_URL"] = "https://collabora:9980"
+    elif name == "onlyoffice":
+        environment["APP_PROVIDER_SERVICE_NAME"] = "app-provider-onlyoffice"
+        environment["APP_PROVIDER_EXTERNAL_ADDR"] = "com.owncloud.api.app-provider-onlyoffice"
+        environment["APP_PROVIDER_WOPI_APP_NAME"] = "OnlyOffice"
+        environment["APP_PROVIDER_WOPI_APP_ICON_URI"] = "https://onlyoffice/web-apps/apps/documenteditor/main/resources/img/favicon.ico"
+        environment["APP_PROVIDER_WOPI_APP_URL"] = "https://onlyoffice"
+
+    return [
+        {
+            "name": "%s-app-provider" % name,
+            "image": OC_CI_GOLANG,
+            "detach": True,
+            "environment": environment,
+            "commands": [
+                "cd %s" % dir["ocis"],
+                "./ocis app-provider server",
+            ],
+            "volumes": [
+                {
+                    "name": "gopath",
+                    "path": dir["app"],
+                },
+                {
+                    "name": "ocis-config",
+                    "path": "/root/.ocis/config",
+                },
             ],
         },
     ]

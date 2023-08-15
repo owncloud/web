@@ -201,7 +201,7 @@ export default defineComponent({
 
     const resourcesView = useResourcesViewDefaults<Resource, any, any[]>()
 
-    const keyActions = useKeyboardActions('files-view')
+    const keyActions = useKeyboardActions()
     useKeyboardTableNavigation(keyActions, resourcesView.paginatedResources)
     useKeyboardTableMouseActions(keyActions)
     useKeyboardTableActions(keyActions)
