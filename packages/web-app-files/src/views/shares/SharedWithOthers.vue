@@ -77,7 +77,7 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent, unref } from 'vue'
+import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import { useGroupingSettings } from 'web-pkg/src/cern/composables'

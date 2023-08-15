@@ -78,7 +78,7 @@ import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent, unref } from 'vue'
+import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
 import {
   useCapabilityProjectSpacesEnabled,
