@@ -459,13 +459,21 @@ export default defineComponent({
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
     const disabledResources = computed(() => {
-      if (props.disabled) {
-        return props.disabled
+      let disabled = props.disabled as Resource[] | null
+
+      if (disabled) {
+        if (!Array.isArray(disabled)) {
+          disabled = [disabled]
+        }
+
+        return disabled
       }
 
-      return (props.resources as Resource[])
-        .filter((resource) => resource.processing !== true)
-        .map((resource) => resource.id)
+      return (
+        props.resources
+          ?.filter((resource) => resource.processing === true)
+          ?.map((resource) => resource.id) || []
+      )
     })
 
     return {
@@ -696,8 +704,7 @@ export default defineComponent({
     areAllResourcesSelected() {
       return !!(
         this.selectedResources.length &&
-        this.selectedResources.length ===
-          this.resources.filter((resource) => !resource.processing).length
+        this.selectedResources.length === this.resources.length - this.disabledResources?.length
       )
     },
     selectedResources() {
@@ -899,7 +906,9 @@ export default defineComponent({
         return this.emitSelect([])
       }
       this.emitSelect(
-        this.resources.filter((resource) => !resource.processing).map((resource) => resource.id)
+        this.resources
+          .filter((resource) => !this.disabledResources.includes(resource.id))
+          .map((resource) => resource.id)
       )
     },
     emitFileClick(resource) {
@@ -915,9 +924,8 @@ export default defineComponent({
       if (!this.areResourcesClickable) {
         return false
       }
-      return Array.isArray(this.disabledResources)
-        ? !this.disabledResources.includes(resourceId)
-        : this.disabledResources !== resourceId
+
+      return !this.disabledResources.includes(resourceId)
     },
     getResourceCheckboxLabel(resource) {
       if (resource.type === 'folder') {
