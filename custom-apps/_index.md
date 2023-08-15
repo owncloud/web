@@ -20,7 +20,7 @@ This page documents how you can set up an example app within your frontend repo 
 ## Setting up the example "skeleton app"
 
 {{< hint info >}}
-This guide assumes you have either an oCIS or ownCloud 10 backend running and followed the [getting started guide]({{< ref "../getting-started.md" >}}) for setting up a development environment with the `web` frontend, having it running via either `pnpm serve` or `pnpm build:w`. You should be able to use the web UI on localhost using the respective port you've assigned (defaults are `:8080` for OC10 and `:9200` for oCIS) and see changes to your .
+This guide assumes you have an oCIS backend running and followed the [getting started guide]({{< ref "../getting-started.md" >}}) for setting up a development environment with the `web` frontend, having it running via either `pnpm vite` or `pnpm build:w`. You should be able to use the web UI on localhost using the respective port you've assigned (default is `:9200`) and see the changes you make.
 {{< /hint >}}
 
 From the root of the [web repository](https://github.com/owncloud/web), change into the example skeleton app by running
