@@ -459,7 +459,7 @@ export default defineComponent({
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
     const disabledResources = computed(() => {
-      let disabled = props.disabled as Resource[] | null
+      let disabled = props.disabled
 
       if (disabled) {
         if (!Array.isArray(disabled)) {
