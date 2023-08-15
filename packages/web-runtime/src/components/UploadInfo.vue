@@ -121,7 +121,7 @@
               :is-path-displayed="true"
               :is-thumbnail-displayed="displayThumbnails"
               :is-resource-clickable="isResourceClickable(item)"
-              :parent-folder-name-default="defaultParentFolderName(item)"
+              :parent-folder-name="parentFolderName(item)"
               :folder-link="folderLink(item)"
               :parent-folder-link="parentFolderLink(item)"
             />
@@ -538,7 +538,7 @@ export default defineComponent({
         }
       }
     },
-    defaultParentFolderName(file) {
+    parentFolderName(file) {
       const {
         meta: { spaceName, driveType }
       } = file

@@ -1,4 +1,4 @@
-import { basename } from 'path'
+import { basename, dirname } from 'path'
 import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
 import { Resource } from './types'
@@ -69,6 +69,10 @@ export const extractExtensionFromFile = (resource: Resource): string => {
     return ''
   }
   return parts[parts.length - 1]
+}
+
+export const extractParentFolderName = (resource: Resource): string | null => {
+  return basename(dirname(resource.path)) || null
 }
 
 export const isShareRoot = (resource: Resource) => {

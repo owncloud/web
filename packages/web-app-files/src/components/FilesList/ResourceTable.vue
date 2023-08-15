@@ -61,7 +61,7 @@
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
           :is-path-displayed="arePathsDisplayed"
-          :parent-folder-name-default="getDefaultParentFolderName(item)"
+          :parent-folder-name="getParentFolderName(item)"
           :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
@@ -216,6 +216,7 @@ import { useWindowSize } from '@vueuse/core'
 import { Resource } from 'web-client'
 import {
   extractDomSelector,
+  extractParentFolderName,
   isProjectSpaceResource,
   isShareRoot,
   SpaceResource
@@ -972,7 +973,16 @@ export default defineComponent({
         ownerName: resource.owner[0].displayName
       })
     },
-    getDefaultParentFolderName(resource: Resource) {
+    getParentFolderName(resource: Resource) {
+      if (isShareRoot(resource)) {
+        return this.$gettext('Shared with me')
+      }
+
+      const parentFolder = extractParentFolderName(resource)
+      if (parentFolder) {
+        return parentFolder
+      }
+
       if (this.hasProjectSpaces) {
         if (isProjectSpaceResource(resource)) {
           return this.$gettext('Spaces')
@@ -985,10 +995,6 @@ export default defineComponent({
 
       if (!this.hasShareJail) {
         return this.$gettext('All files and folders')
-      }
-
-      if (resource.shareId) {
-        return isShareRoot(resource) ? this.$gettext('Shared with me') : basename(resource.path)
       }
 
       const space = this.getInternalSpace(resource.storageId)
