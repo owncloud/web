@@ -99,7 +99,6 @@ export default defineComponent({
 
     const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
     const resolvePrivateLinkTask = useTask(function* (signal, id) {
-      // debugger
       let path
       let matchingSpace = getMatchingSpace(id)
       let resourceIsNestedInShare = false
