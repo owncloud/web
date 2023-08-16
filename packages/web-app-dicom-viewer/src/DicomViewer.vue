@@ -7,6 +7,77 @@
     >
       <!-- div element for dicom viewport -->
       <div id="dicom-canvas" class="dicom-canvas"></div>
+      <div id="dicom-metadata" class="dicom-metadata">
+        <h2>metadata for current dicom image</h2>
+        <div>
+          <span>Filename:</span>
+          <span id="filename"></span>
+        </div>
+        <div>
+          <span>Transfer Syntax:</span>
+          <span id="transfer-syntax"></span>
+        </div>
+        <div>
+          <span>SOPClassUID:</span>
+          <span id="sop-class-uid"></span>
+        </div>
+        <div>
+          <span>SOPInstanceUID:</span>
+          <span id="sop-instance-uid"></span>
+        </div>
+        <div>
+          <span>Rows:</span>
+          <span id="rows"></span>
+        </div>
+        <div>
+          <span>Columns:</span>
+          <span id="columns"></span>
+        </div>
+        <div>
+          <span>Spacing:</span>
+          <span id="spacing"></span>
+        </div>
+        <div>
+          <span>Direction:</span>
+          <span id="direction"></span>
+        </div>
+        <div>
+          <span>Origin:</span>
+          <span id="origin"></span>
+        </div>
+        <div>
+          <span>Modality:</span>
+          <span id="modality"></span>
+        </div>
+        <div>
+          <span>Pixel Representation:</span>
+          <span id="pixel-representation"></span>
+        </div>
+        <div>
+          <span>Bits Allocated:</span>
+          <span id="bits-allocated"></span>
+        </div>
+        <div>
+          <span>Bits Stored:</span>
+          <span id="bits-stored"></span>
+        </div>
+        <div>
+          <span>High Bit:</span>
+          <span id="high-bit"></span>
+        </div>
+        <div>
+          <span>Photometric Interpretation:</span>
+          <span id="photometric-interpretation"></span>
+        </div>
+        <div>
+          <span>Window Width:</span>
+          <span id="window-width"></span>
+        </div>
+        <div>
+          <span>Window Center:</span>
+          <span id="window-center"></span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -20,7 +91,7 @@ import * as cornerstone from '@cornerstonejs/core'
 import * as cornerstoneTools from '@cornerstonejs/tools'
 import * as cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader'
 
-import { RenderingEngine, Types, Enums } from '@cornerstonejs/core'
+import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
 
 // vue imports
 import { defineComponent } from 'vue'
@@ -98,7 +169,9 @@ export default defineComponent({
     return {
       isCornerstoneInitialized: false,
       element: null,
-      viewport: null
+      renderingEngine: null,
+      viewport: null,
+      imageData: null
     }
   },
   watch: {}, // most likely not needed
@@ -119,8 +192,10 @@ export default defineComponent({
   },
   // implementing any change in the component
   async beforeUpdate() {
+    console.log('cornerstone init status: ' + this.isCornerstoneInitialized)
+
     // instantiate/register rendering engine
-    const renderingEngine = new RenderingEngine('dicomRenderingEngine')
+    this.renderingEngine = new RenderingEngine('dicomRenderingEngine')
     // console.log('render engine instantiated')
 
     // logging some data
@@ -161,11 +236,11 @@ export default defineComponent({
     }
 
     // enable element
-    renderingEngine.enableElement(viewportInput)
+    this.renderingEngine.enableElement(viewportInput)
     // console.log('element (& viewport id & rendering engine id) enabled')
 
     // get stack viewport that was created
-    this.viewport = <Types.IStackViewport>renderingEngine.getViewport(viewportId)
+    this.viewport = <Types.IStackViewport>this.renderingEngine.getViewport(viewportId)
 
     // define a stack containing a single image
     const dicomStack = [imageId] //dicomImage imageId
@@ -173,12 +248,18 @@ export default defineComponent({
     console.log('first stack item: ' + dicomStack[0])
 
     // set stack on the viewport (only one image in the stack, therefore no frame # required)
-    await this.viewport.setStack(dicomStack)
+    //await this.viewport.setStack(dicomStack)
 
     // render the image
     // updates every viewport in the rendering engine
     //
     this.viewport.render()
+
+    // get metadata
+    this.imageData = this.viewport.getImageData()
+
+    // setting metadata
+    //this.setMetadata(imageId)
   },
   // updated gets called anytime some change is made in the component
   updated() {
@@ -186,7 +267,9 @@ export default defineComponent({
     // this.viewport.resize()
   },
   // cleaning up component, leaving no variables or events that could cause memory leaks to app
-  beforeUnmount() {},
+  beforeUnmount() {
+    //this.renderingEngine.destroy()
+  },
   methods: {
     async initCornerstoneCore() {
       try {
@@ -195,6 +278,82 @@ export default defineComponent({
         console.error('Error initalizing cornerstone core', e)
       } finally {
         this.isCornerstoneInitialized = true
+      }
+    },
+    // TODO: add type for image id
+    setMetadata(imageId) {
+      // filename - maybe not needed?
+      document.getElementById('filename').innerHTML = this.resource.name
+
+      if (imageId != null && typeof imageId == 'string') {
+        console.log('setting meta data')
+        console.log('image id type: ' + typeof imageId) //IImageData
+
+        const {
+          pixelRepresentation,
+          bitsAllocated,
+          bitsStored,
+          highBit,
+          photometricInterpretation
+        } = metaData.get('imagePixelModule', imageId)
+        const voiLutModuleLocal = metaData.get('voiLutModule', imageId)
+        const sopCommonModule = metaData.get('sopCommonModule', imageId)
+        const transferSyntax = metaData.get('transferSyntax', imageId)
+
+        //transfer syntax
+        document.getElementById('transfer-syntax').innerHTML = transferSyntax.transferSyntaxUID
+
+        //sop class uid
+        document.getElementById('sop-class-uid').innerHTML = sopCommonModule.sopClassUID
+        //uids[sopCommonModule.sopClassUID]
+
+        //sop instance uid
+        document.getElementById('sop-instance-uid').innerHTML = sopCommonModule.sopInstanceUID
+
+        //rows
+        document.getElementById('rows').innerHTML = this.imageData.dimensions[0]
+
+        //columns
+        document.getElementById('columns').innerHTML = this.imageData.dimensions[1]
+
+        //spacing
+        document.getElementById('spacing').innerHTML = this.imageData.spacing.join('\\')
+
+        //direction
+        document.getElementById('direction').innerHTML = this.imageData.direction
+          .map((x) => Math.round(x * 100) / 100)
+          .join(',')
+
+        //origin
+        document.getElementById('origin').innerHTML = this.imageData.origin
+          .map((x) => Math.round(x * 100) / 100)
+          .join(',')
+
+        //modality
+        document.getElementById('modality').innerHTML = this.imageData.metadata.Modality
+
+        //pixel representation
+        document.getElementById('pixel-representation').innerHTML = pixelRepresentation
+
+        //bits allocated
+        document.getElementById('bits-allocated').innerHTML = bitsAllocated
+
+        //bits stored
+        document.getElementById('bits-stored').innerHTML = bitsStored
+
+        //high bit
+        document.getElementById('high-bit').innerHTML = highBit
+
+        //photometric interpretation
+        document.getElementById('photometric-interpretation').innerHTML = photometricInterpretation
+
+        //window width
+        document.getElementById('window-width').innerHTML = voiLutModuleLocal.windowWidth
+
+        //window center
+        document.getElementById('window-center').innerHTML = voiLutModuleLocal.windowCenter
+      } else {
+        console.log('no image meta data available')
       }
     }
     /*
@@ -239,6 +398,12 @@ export default defineComponent({
 .dicom-canvas {
   border: 10px solid yellow; //none
   width: 500px; // 100%;
+  height: 500px; // 100%;
+}
+
+.dicom-metadata {
+  border: 10px solid green; //none
+  width: auto;
   height: 500px; // 100%;
 }
 </style>
