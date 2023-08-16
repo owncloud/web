@@ -30,13 +30,6 @@
         >
           <span class="oc-breadcrumb-item-text oc-breadcrumb-item-navigable">{{ item.text }}</span>
         </router-link>
-        <oc-icon
-          v-if="item.to"
-          color="var(--oc-color-text-default)"
-          name="arrow-right-s"
-          class="oc-mx-xs oc-breadcrumb-item-navigable"
-          fill-type="line"
-        />
         <oc-button
           v-else-if="item.onClick"
           :aria-current="getAriaCurrent(index)"
@@ -63,7 +56,7 @@
           v-text="item.text"
         />
         <oc-icon
-          v-if="!item.to && !item.onClick"
+          v-if="index !== displayItems.length - 1"
           color="var(--oc-color-text-default)"
           name="arrow-right-s"
           class="oc-mx-xs"
