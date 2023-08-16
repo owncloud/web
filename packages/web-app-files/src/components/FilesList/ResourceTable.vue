@@ -348,14 +348,6 @@ export default defineComponent({
       default: true
     },
     /**
-     * The ids of disabled resources. Null or an empty string/array for no disabled resources.
-     */
-    disabled: {
-      type: [String, Array] as PropType<Array<Resource['id']>>,
-      required: false,
-      default: null
-    },
-    /**
      * Sets the padding size for x axis
      * @values xsmall, small, medium, large, xlarge
      */
@@ -459,16 +451,6 @@ export default defineComponent({
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
     const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
-      let disabled = props.disabled
-
-      if (disabled) {
-        if (!Array.isArray(disabled)) {
-          disabled = [disabled]
-        }
-
-        return disabled
-      }
-
       return (
         props.resources
           ?.filter((resource) => resource.processing === true)

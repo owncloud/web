@@ -5,8 +5,8 @@
       :resource="resource"
       :is-resource-clickable="isResourceClickable"
       :folder-link="folderLink"
-      @click="emitClick"
       class="oc-resource-link"
+      @click="emitClick"
     >
       <oc-img
         v-if="hasThumbnail"
@@ -17,12 +17,12 @@
         height="40"
       />
       <oc-resource-icon v-else :resource="resource">
-        <template v-if="resource.locked" #status>
-          <oc-icon name="lock" size="xsmall" />
+        <template v-if="showStatusIcon" #status>
+          <oc-icon v-bind="statusIconAttrs" size="xsmall" />
         </template>
       </oc-resource-icon>
-      <span v-if="hasThumbnail && resource.locked" class="oc-resource-thumbnail-status-badge">
-        <oc-icon name="lock" size="xsmall" />
+      <span v-if="showStatusIcon && hasThumbnail" class="oc-resource-thumbnail-status-badge">
+        <oc-icon v-bind="statusIconAttrs" size="xsmall" />
       </span>
     </oc-resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
@@ -210,6 +210,28 @@ export default defineComponent({
 
     thumbnail() {
       return this.resource.thumbnail
+    },
+
+    showStatusIcon() {
+      return this.resource.locked || this.resource.processing
+    },
+
+    statusIconAttrs() {
+      if (this.resource.locked) {
+        return {
+          name: 'lock',
+          fillType: 'fill'
+        }
+      }
+
+      if (this.resource.processing) {
+        return {
+          name: 'loop-right',
+          fillType: 'line'
+        }
+      }
+
+      return {}
     }
   },
 

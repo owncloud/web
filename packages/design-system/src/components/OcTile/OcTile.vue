@@ -35,8 +35,8 @@
             :size="resourceIconSize"
             class="tile-default-image oc-pt-xs"
           >
-            <template v-if="resource.locked" #status>
-              <oc-icon name="lock" size="xsmall" />
+            <template v-if="showStatusIcon" #status>
+              <oc-icon v-bind="statusIconAttrs" size="xsmall" />
             </template>
           </oc-resource-icon>
         </slot>
@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { Resource } from 'web-client'
 
 import OcImg from '../OcImage/OcImage.vue'
@@ -117,7 +117,35 @@ export default defineComponent({
       }
     }
   },
-  emits: ['click', 'contextmenu']
+  emits: ['click', 'contextmenu'],
+  setup(props) {
+    const showStatusIcon = computed(() => {
+      return props.resource.locked || props.resource.processing
+    })
+
+    const statusIconAttrs = computed(() => {
+      if (props.resource.locked) {
+        return {
+          name: 'lock',
+          fillType: 'fill'
+        }
+      }
+
+      if (props.resource.processing) {
+        return {
+          name: 'loop-right',
+          fillType: 'line'
+        }
+      }
+
+      return {}
+    })
+
+    return {
+      statusIconAttrs,
+      showStatusIcon
+    }
+  }
 })
 </script>
 

@@ -29,8 +29,8 @@
               >
                 <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
                 <span
-                  class="oc-ml-s"
                   v-if="isExpirationDateSet"
+                  class="oc-ml-s"
                   v-text="$gettext('Edit expiration date')"
                 />
                 <span v-else v-text="$gettext('Set expiration date')" />
