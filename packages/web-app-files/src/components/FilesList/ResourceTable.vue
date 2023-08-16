@@ -351,7 +351,7 @@ export default defineComponent({
      * The ids of disabled resources. Null or an empty string/array for no disabled resources.
      */
     disabled: {
-      type: [String, Array],
+      type: [String, Array] as PropType<Array<Resource['id']>>,
       required: false,
       default: null
     },
@@ -458,7 +458,7 @@ export default defineComponent({
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
-    const disabledResources: ComputedRef<Array<Number | String>> = computed(() => {
+    const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
       let disabled = props.disabled
 
       if (disabled) {

@@ -169,7 +169,7 @@ export function buildSharedResource(
     tags: [],
     path: undefined,
     webDavPath: undefined,
-    processing: !isFolder
+    processing: share.processing || false
   }
 
   if (incomingShares) {
