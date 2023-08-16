@@ -6,6 +6,7 @@
       :is-resource-clickable="isResourceClickable"
       :folder-link="folderLink"
       @click="emitClick"
+      class="oc-resource-link"
     >
       <oc-img
         v-if="hasThumbnail"
@@ -15,7 +16,14 @@
         width="40"
         height="40"
       />
-      <oc-resource-icon v-else :resource="resource" />
+      <oc-resource-icon v-else :resource="resource">
+        <template v-if="resource.locked" #status>
+          <oc-icon name="lock" size="xsmall" />
+        </template>
+      </oc-resource-icon>
+      <span v-if="hasThumbnail && resource.locked" class="oc-resource-thumbnail-status-badge">
+        <oc-icon name="lock" size="xsmall" />
+      </span>
     </oc-resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
       <oc-resource-link
@@ -221,6 +229,11 @@ export default defineComponent({
   align-items: center;
   display: inline-flex;
   justify-content: flex-start;
+  overflow: visible !important;
+
+  &-link {
+    position: relative;
+  }
 
   &-thumbnail {
     border-radius: 2px;
@@ -229,6 +242,19 @@ export default defineComponent({
     max-height: $oc-size-icon-default * 1.5;
     width: $oc-size-icon-default * 1.5;
     max-width: $oc-size-icon-default * 1.5;
+
+    &-status-badge {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      width: var(--oc-space-small);
+      height: var(--oc-space-small);
+      padding: var(--oc-space-xsmall);
+      line-height: var(--oc-space-small);
+      border-radius: 30px;
+      background: rgba(155, 155, 155, 0.8);
+      color: white;
+    }
   }
 
   &-details {

@@ -33,7 +33,11 @@
             :resource="resource"
             :size="resourceIconSize"
             class="tile-default-image oc-pt-xs"
-          />
+          >
+            <template v-if="resource.locked" #status>
+              <oc-icon name="lock" size="xsmall" />
+            </template>
+          </oc-resource-icon>
         </slot>
       </div>
     </oc-resource-link>
@@ -135,6 +139,10 @@ export default defineComponent({
     }
   }
 
+  .tile-default-image {
+    position: relative;
+  }
+
   .oc-card-media-top {
     position: relative;
     aspect-ratio: 16/9;
@@ -201,6 +209,18 @@ export default defineComponent({
     height: 100%;
     width: 100%;
     text-align: center;
+
+    .oc-resource-icon-status-badge {
+      background: var(--oc-color-background-highlight) !important;
+      .oc-icon {
+        svg {
+          fill: var(--oc-color-background-highlight) !important;
+        }
+      }
+      .oc-spinner {
+        color: var(--oc-color-background-highlight) !important;
+      }
+    }
   }
 
   &-hover {
