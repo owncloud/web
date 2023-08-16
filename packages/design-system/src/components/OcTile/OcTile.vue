@@ -4,6 +4,7 @@
     :data-item-id="resource.id"
     :class="{
       'oc-tile-card-selected': isResourceSelected,
+      'oc-tile-card-disabled': resource.processing,
       'state-trashed': resource.disabled
     }"
     @contextmenu="$emit('contextmenu', $event)"
@@ -128,6 +129,13 @@ export default defineComponent({
   display: flex;
   flex-flow: column;
   outline: 1px solid var(--oc-color-border);
+
+  &-disabled {
+    pointer-events: none;
+    background-color: var(--oc-color-background-muted) !important;
+    opacity: 0.7;
+    filter: grayscale(0.6);
+  }
 
   &.state-trashed {
     cursor: pointer;

@@ -570,12 +570,13 @@ export default defineComponent({
     }
 
     ul {
-      li.provider {
-        padding: 0;
+      li.provider-details,
+      li.loading,
+      li#no-results {
+        padding: var(--oc-space-xsmall) var(--oc-space-small);
       }
 
       li {
-        padding: var(--oc-space-xsmall) var(--oc-space-small);
         position: relative;
         font-size: var(--oc-font-size-small);
 
@@ -583,8 +584,10 @@ export default defineComponent({
           font-size: var(--oc-font-size-xsmall);
         }
 
-        &.preview {
+        &.preview > * {
           min-height: 44px;
+          font-size: inherit;
+          padding: var(--oc-space-xsmall) var(--oc-space-small);
 
           &:hover,
           &.active {

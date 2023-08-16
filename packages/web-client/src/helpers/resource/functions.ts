@@ -85,7 +85,6 @@ export function buildResource(resource): Resource {
   if (!resourcePath.startsWith('/')) {
     resourcePath = `/${resourcePath}`
   }
-
   const id = resource.fileInfo[DavProperty.FileId]
   const r = {
     id,

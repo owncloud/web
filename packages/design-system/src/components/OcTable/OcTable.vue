@@ -1,5 +1,5 @@
 <template>
-  <table v-bind="extractTableProps()">
+  <table v-bind="extractTableProps()" class="has-item-context-menu">
     <oc-thead v-if="hasHeader">
       <oc-tr class="oc-table-header-row">
         <oc-th
@@ -596,7 +596,8 @@ export default defineComponent({
 
   &-disabled {
     background-color: var(--oc-color-background-muted);
-    opacity: 0.8;
+    opacity: 0.7;
+    filter: grayscale(0.6);
     pointer-events: none;
   }
 

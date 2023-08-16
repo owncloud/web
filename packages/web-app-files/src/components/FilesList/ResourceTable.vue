@@ -7,7 +7,7 @@
     :data="resources"
     :fields="fields"
     :highlighted="selectedIds"
-    :disabled="disabled"
+    :disabled="disabledResources"
     :sticky="true"
     :header-position="headerPosition"
     :drag-drop="dragDrop"
@@ -209,7 +209,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, unref, ref } from 'vue'
+import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
@@ -351,7 +351,7 @@ export default defineComponent({
      * The ids of disabled resources. Null or an empty string/array for no disabled resources.
      */
     disabled: {
-      type: [String, Array],
+      type: [String, Array] as PropType<Array<Resource['id']>>,
       required: false,
       default: null
     },
@@ -458,12 +458,31 @@ export default defineComponent({
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
+    const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
+      let disabled = props.disabled
+
+      if (disabled) {
+        if (!Array.isArray(disabled)) {
+          disabled = [disabled]
+        }
+
+        return disabled
+      }
+
+      return (
+        props.resources
+          ?.filter((resource) => resource.processing === true)
+          ?.map((resource) => resource.id) || []
+      )
+    })
+
     return {
       getTagToolTip,
       renameActions,
       renameHandler,
       ViewModeConstants,
       hasTags,
+      disabledResources,
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       isUserContext: useUserContext({ store }),
@@ -683,7 +702,7 @@ export default defineComponent({
       return this.configuration?.options?.displayResourcesLazy
     },
     areAllResourcesSelected() {
-      return this.selectedResources.length === this.resources.length
+      return this.selectedResources.length === this.resources.length - this.disabledResources.length
     },
     selectedResources() {
       return this.resources.filter((resource) => this.selectedIds.includes(resource.id))
@@ -883,7 +902,11 @@ export default defineComponent({
       if (this.areAllResourcesSelected) {
         return this.emitSelect([])
       }
-      this.emitSelect(this.resources.map((resource) => resource.id))
+      this.emitSelect(
+        this.resources
+          .filter((resource) => !this.disabledResources.includes(resource.id))
+          .map((resource) => resource.id)
+      )
     },
     emitFileClick(resource) {
       const space = this.getMatchingSpace(resource)
@@ -898,9 +921,8 @@ export default defineComponent({
       if (!this.areResourcesClickable) {
         return false
       }
-      return Array.isArray(this.disabled)
-        ? !this.disabled.includes(resourceId)
-        : this.disabled !== resourceId
+
+      return !this.disabledResources.includes(resourceId)
     },
     getResourceCheckboxLabel(resource) {
       if (resource.type === 'folder') {

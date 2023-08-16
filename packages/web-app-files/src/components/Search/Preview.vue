@@ -3,6 +3,7 @@
     :type="resource.isFolder ? 'router-link' : 'button'"
     justify-content="left"
     class="files-search-preview oc-flex oc-width-1-1"
+    :class="{ 'files-search-preview-disabled': resource.processing }"
     appearance="raw"
     v-bind="attrs"
     v-on="listeners"
@@ -205,8 +206,14 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
+
+<style lang="scss" scoped>
 .files-search-preview {
-  font-size: inherit;
+  &-disabled {
+    pointer-events: none;
+    background-color: var(--oc-color-background-muted);
+    opacity: 0.7;
+    filter: grayscale(0.6);
+  }
 }
 </style>
