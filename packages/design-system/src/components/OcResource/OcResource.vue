@@ -5,8 +5,8 @@
       :resource="resource"
       :is-resource-clickable="isResourceClickable"
       :folder-link="folderLink"
-      @click="emitClick"
       class="oc-resource-link"
+      @click="emitClick"
     >
       <oc-img
         v-if="hasThumbnail"

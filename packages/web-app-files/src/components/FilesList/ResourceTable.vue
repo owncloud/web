@@ -65,7 +65,7 @@
           :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
-          :is-resource-clickable="isResourceClickable(item.id)"
+          :is-resource-clickable="isResourceClickable(item)"
           :folder-link="folderLink(item)"
           :parent-folder-link="parentFolderLink(item)"
           :parent-folder-link-icon-additional-attributes="
@@ -209,7 +209,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
+import { defineComponent, PropType, computed, unref, ref } from 'vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
@@ -348,14 +348,6 @@ export default defineComponent({
       default: true
     },
     /**
-     * The ids of disabled resources. Null or an empty string/array for no disabled resources.
-     */
-    disabled: {
-      type: [String, Array] as PropType<Array<Resource['id']>>,
-      required: false,
-      default: null
-    },
-    /**
      * Sets the padding size for x axis
      * @values xsmall, small, medium, large, xlarge
      */
@@ -458,22 +450,8 @@ export default defineComponent({
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
-    const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
-      let disabled = props.disabled
-
-      if (disabled) {
-        if (!Array.isArray(disabled)) {
-          disabled = [disabled]
-        }
-
-        return disabled
-      }
-
-      return (
-        props.resources
-          ?.filter((resource) => resource.processing === true)
-          ?.map((resource) => resource.id) || []
-      )
+    const disabledResources = computed(() => {
+      return props.resources?.filter((resource) => resource.processing === true)
     })
 
     return {
@@ -904,7 +882,7 @@ export default defineComponent({
       }
       this.emitSelect(
         this.resources
-          .filter((resource) => !this.disabledResources.includes(resource.id))
+          .filter((resource) => !this.disabledResources.find((r) => r.id === resource.id))
           .map((resource) => resource.id)
       )
     },
@@ -917,12 +895,12 @@ export default defineComponent({
        */
       this.$emit('fileClick', { space, resources: [resource] })
     },
-    isResourceClickable(resourceId) {
+    isResourceClickable(resource) {
       if (!this.areResourcesClickable) {
         return false
       }
 
-      return !this.disabledResources.includes(resourceId)
+      return !this.disabledResources.find((r) => r.id === resource.id)
     },
     getResourceCheckboxLabel(resource) {
       if (resource.type === 'folder') {
