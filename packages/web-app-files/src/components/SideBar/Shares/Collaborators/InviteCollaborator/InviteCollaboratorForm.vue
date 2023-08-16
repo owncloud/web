@@ -190,9 +190,6 @@ export default defineComponent({
       displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
 
-    const isExpirationDateSet = false
-    const enteredExpirationDate = {}
-
     return {
       resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
@@ -205,8 +202,6 @@ export default defineComponent({
       ...useShares(),
       showContextMenuOnBtnClick,
       contextMenuButtonRef,
-      isExpirationDateSet,
-      enteredExpirationDate
     }
   },
 
