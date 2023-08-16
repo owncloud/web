@@ -4,15 +4,18 @@
   "description": "CERNBox backups management",
   "license": "AGPL-3.0",
   "peerDependencies": {
+    "@vueuse/core": "^9.8.2 || ^10.0.0",
     "axios": "^0.27.2",
+    "design-system": "workspace:@ownclouders/design-system@*",
     "fuse.js": "^6.5.3",
+    "p-queue": "^6.6.2",
+    "luxon": "^2.4.0",
     "lodash-es": "4.17.21",
     "uuid": "^9.0.0",
     "vue-concurrency": "4.0.0",
     "vuex": "4.1.0",
     "web-pkg": "npm:@ownclouders/web-pkg",
-    "web-client": "npm:@ownclouders/web-client",
-    "web-app-files": "0.0.0"
+    "web-client": "npm:@ownclouders/web-client"
   }
 }
 

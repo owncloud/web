@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts">
-import ResourceTable from 'web-app-files/src/components/FilesList/ResourceTable.vue'
+import ResourceTable from 'web-app-backups/src/components/FileList/ResourceTable.vue'
 import { computed, defineComponent } from 'vue'
 import debounce from 'lodash-es/debounce'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -102,19 +102,19 @@ import { mapActions, mapMutations, mapGetters } from 'vuex'
 import { useStore } from 'web-pkg/src/composables'
 
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { useResourcesViewDefaults } from '../../../web-app-files/src/composables'
+import { useResourcesViewDefaults } from 'web-app-backups/src/composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { useTask } from 'vue-concurrency'
 import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { basename } from 'path'
 import { Resource } from 'web-client'
-import { buildWebDavFilesPath } from 'web-app-files/src/helpers/resources'
+import { buildWebDavFilesPath } from 'web-app-backups/src/helpers/resources'
 import { buildResource } from 'web-client/src/helpers'
 import { DavProperties } from 'web-client/src/webdav/constants'
-import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
-import { breadcrumbsFromPath, concatBreadcrumbs } from 'web-app-files/src/helpers/breadcrumbs'
-import { createLocationSpaces } from 'web-app-files/src/router'
-import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink'
+import AppBar from 'web-app-backups/src/components/AppBar/AppBar.vue'
+import { breadcrumbsFromPath, concatBreadcrumbs } from 'web-app-backups/src/helpers/breadcrumbs'
+import { createLocationSpaces } from 'web-app-backups/src/router'
+import { CreateTargetRouteOptions } from 'web-app-backups/src/helpers/folderLink'
 import { useClientService } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()

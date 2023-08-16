@@ -657,15 +657,27 @@ importers:
 
   packages/web-app-backups:
     dependencies:
+      '@vueuse/core':
+        specifier: ^9.8.2 || ^10.0.0
+        version: 10.1.2(vue@3.3.4)
       axios:
         specifier: ^0.27.2
         version: 0.27.2
+      design-system:
+        specifier: workspace:@ownclouders/design-system@*
+        version: link:../design-system
       fuse.js:
         specifier: ^6.5.3
         version: 6.5.3
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
+      luxon:
+        specifier: ^2.4.0
+        version: 2.4.0
+      p-queue:
+        specifier: ^6.6.2
+        version: 6.6.2
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
@@ -675,9 +687,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-      web-app-files:
-        specifier: 0.0.0
-        version: link:../web-app-files
       web-client:
         specifier: npm:@ownclouders/web-client
         version: link:../web-client
