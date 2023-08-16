@@ -221,6 +221,7 @@ export default defineComponent({
     },
     /**
      * The array of disabled data items. Empty array for no disabled items.
+     * Objects in array must contain a matching idKey property
      */
     disabled: {
       type: Array as PropType<any[]>,
