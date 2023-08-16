@@ -11,6 +11,7 @@ Summary
 * Bugfix - Favorites list update on removal: [#9078](https://github.com/owncloud/web/pull/9078)
 * Bugfix - Space creation does not block reoccurring event: [#9213](https://github.com/owncloud/web/pull/9213)
 * Bugfix - Uploading to folders that contain special characters: [#9247](https://github.com/owncloud/web/issues/9247)
+* Bugfix - Filter out shares without display name: [#9257](https://github.com/owncloud/web/issues/9257)
 * Bugfix - Relative user quota display limited to two decimals: [#9259](https://github.com/owncloud/web/issues/9259)
 * Bugfix - Remember location after token invalidation: [#9261](https://github.com/owncloud/web/issues/9261)
 * Bugfix - Authenticated public links breaking uploads: [#9299](https://github.com/owncloud/web/pull/9299)
@@ -87,6 +88,15 @@ Details
 
    https://github.com/owncloud/web/issues/9247
    https://github.com/owncloud/web/pull/9290
+
+* Bugfix - Filter out shares without display name: [#9257](https://github.com/owncloud/web/issues/9257)
+
+   In rare (legacy) cases, shares can exist without a displayName key, which caused trouble in the
+   sharing sidebar section. This has been addressed by filtering out shares without a
+   displayName.
+
+   https://github.com/owncloud/web/issues/9257
+   https://github.com/owncloud/web/pull/9504
 
 * Bugfix - Relative user quota display limited to two decimals: [#9259](https://github.com/owncloud/web/issues/9259)
 
