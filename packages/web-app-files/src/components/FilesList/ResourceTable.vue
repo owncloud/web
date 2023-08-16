@@ -65,7 +65,7 @@
           :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
-          :is-resource-clickable="isResourceClickable(item)"
+          :is-resource-clickable="isResourceClickable(item.id)"
           :folder-link="folderLink(item)"
           :parent-folder-link="parentFolderLink(item)"
           :parent-folder-link-icon-additional-attributes="
@@ -209,7 +209,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, unref, ref } from 'vue'
+import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
@@ -450,8 +450,12 @@ export default defineComponent({
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
-    const disabledResources = computed(() => {
-      return props.resources?.filter((resource) => resource.processing === true)
+    const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
+      return (
+        props.resources
+          ?.filter((resource) => resource.processing === true)
+          ?.map((resource) => resource.id) || []
+      )
     })
 
     return {
@@ -882,7 +886,7 @@ export default defineComponent({
       }
       this.emitSelect(
         this.resources
-          .filter((resource) => !this.disabledResources.find((r) => r.id === resource.id))
+          .filter((resource) => !this.disabledResources.includes(resource.id))
           .map((resource) => resource.id)
       )
     },
@@ -895,12 +899,12 @@ export default defineComponent({
        */
       this.$emit('fileClick', { space, resources: [resource] })
     },
-    isResourceClickable(resource) {
+    isResourceClickable(resourceId) {
       if (!this.areResourcesClickable) {
         return false
       }
 
-      return !this.disabledResources.find((r) => r.id === resource.id)
+      return !this.disabledResources.includes(resourceId)
     },
     getResourceCheckboxLabel(resource) {
       if (resource.type === 'folder') {

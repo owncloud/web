@@ -220,11 +220,10 @@ export default defineComponent({
       default: null
     },
     /**
-     * The array of disabled data items. Empty array for no disabled items.
-     * Objects in array must contain a matching idKey property
+     * The ids of disabled data items. Empty array for no disabled items.
      */
     disabled: {
-      type: Array as PropType<any[]>,
+      type: Array as PropType<Array<string | number>>,
       default: () => []
     },
     /**
@@ -487,7 +486,7 @@ export default defineComponent({
         return false
       }
 
-      return !!this.disabled.find((i) => i[this.idKey] === item[this.idKey])
+      return this.disabled.indexOf(item[this.idKey]) > -1
     },
 
     cellKey(field, index, item) {
@@ -505,7 +504,9 @@ export default defineComponent({
     },
 
     getSortLabel(name) {
-      return this.$gettext('Sort by %{ name }', { name })
+      const label = this.$gettext('Sort by %{ name }')
+
+      return this.$gettextInterpolate(label, { name })
     },
 
     handleTrClick(field) {
@@ -649,13 +650,8 @@ export default defineComponent({
     <h3 class="oc-heading-divider">
       A simple table with plain field types
     </h3>
-    <oc-table
-      :fields="fields"
-      :data="data"
-      highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
-      :disabled="[{id: '8468c9f0-5057-11eb-924b-934c6fd827a2'}]"
-      :sticky="true"
-    >
+    <oc-table :fields="fields" :data="data" highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
+      :disabled="['8468c9f0-5057-11eb-924b-934c6fd827a2']" :sticky="true">
       <template #footer>
         3 resources
       </template>
@@ -701,14 +697,8 @@ export default defineComponent({
     <h3 class="oc-heading-divider">
       A sortable table with plain field types
     </h3>
-    <oc-table @sort="handleSort"
-              :sort-by="sortBy"
-              :sort-dir="sortDir"
-              :fields="fields"
-              :data="data"
-              highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
-              :disabled="[{id: '8468c9f0-5057-11eb-924b-934c6fd827a2'}]"
-              :sticky="true">
+    <oc-table @sort="handleSort" :sort-by="sortBy" :sort-dir="sortDir" :fields="fields" :data="data" highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
+      :disabled="['8468c9f0-5057-11eb-924b-934c6fd827a2']" :sticky="true">
       <template #footer>
         3 resources
       </template>
