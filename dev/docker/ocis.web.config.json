@@ -17,6 +17,9 @@
         "showAllOnLoad": true
       }
     },
+    "routing": {
+      "fullShareOwnerPaths": false
+    },
     "previewFileMimeTypes": [
       "image/gif",
       "image/png",

@@ -3,7 +3,7 @@ import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
-import { SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource, isMountPointSpaceResource } from 'web-client/src/helpers'
 import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
@@ -28,7 +28,7 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, router, clientService } = context
+    const { store, router, clientService, configurationManager } = context
     const { owncloudSdk: client, webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
     const hasResharing = useCapabilityFilesSharingResharing(store)
@@ -48,6 +48,16 @@ export class FolderLoaderSpace implements FolderLoader {
           path,
           fileId
         })
+        const mountPoint = store.getters['runtime/spaces/spaces'].find(
+          (s) =>
+            isMountPointSpaceResource(s) && currentFolder.path.startsWith(s.root.remoteItem.path)
+        )
+        if (mountPoint && !configurationManager.options.routing.fullShareOwnerPaths) {
+          const hiddenPath = mountPoint.root.remoteItem.path.split('/').slice(0, -1).join('/')
+          const visiiblePath = currentFolder.path.replace(hiddenPath, '...')
+          currentFolder.visiblePath = visiiblePath
+        }
+
         // if current folder has no id (= singe file public link) we must not correct the route
         if (currentFolder.id) {
           yield replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })

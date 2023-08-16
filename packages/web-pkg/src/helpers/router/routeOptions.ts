@@ -18,13 +18,15 @@ import { isUndefined } from 'lodash-es'
  */
 export const createFileRouteOptions = (
   space: SpaceResource,
-  target: { path?: string; fileId?: string | number },
+  target: { path?: string; fileId?: string | number; visiblePath?: string },
   options?: { configurationManager?: ConfigurationManager }
 ): { params: RouteParams; query: LocationQuery } => {
   const config = options?.configurationManager || configurationManager
   return {
     params: {
-      driveAliasAndItem: space.getDriveAliasAndItem({ path: target.path || '' } as Resource)
+      driveAliasAndItem: space.getDriveAliasAndItem({
+        path: target.visiblePath || target.path || ''
+      } as Resource)
     },
     query: {
       ...(isShareSpaceResource(space) && { shareId: space.shareId }),

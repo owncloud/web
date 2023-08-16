@@ -14,6 +14,7 @@ export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 export interface SpaceResourceRemoteItem {
   id: string
   name: string
+  path?: string
 }
 
 export interface SpaceResourceRoot {

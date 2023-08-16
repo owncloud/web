@@ -47,6 +47,7 @@ export interface Resource {
   tags?: string[]
   disabled?: boolean
   path: string
+  visiblePath?: string
   webDavPath?: string
   downloadURL?: string
   type?: string

@@ -1,6 +1,6 @@
 import { useCapabilitySpacesEnabled, useRouteParam, useStore } from 'web-pkg/src/composables'
 import { Resource, SpaceResource } from 'web-client'
-import { isPersonalSpaceResource, SHARE_JAIL_ID } from 'web-client/src/helpers'
+import { isPersonalSpaceResource } from 'web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 
 type GetMatchingSpaceOptions = {

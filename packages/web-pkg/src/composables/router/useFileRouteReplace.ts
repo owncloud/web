@@ -26,7 +26,7 @@ export const useFileRouteReplace = (options: FileRouteReplaceOptions = {}) => {
     if (!configurationManager?.options?.routing?.idBased) {
       return false
     }
-    if (path === resource.path && fileId === resource.fileId) {
+    if (path === resource.path && fileId === resource.fileId && !resource.visiblePath) {
       return false
     }
 

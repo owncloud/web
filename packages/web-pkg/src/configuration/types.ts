@@ -7,6 +7,7 @@ export interface RuntimeConfiguration {
 }
 
 export interface RoutingOptionsConfiguration {
+  fullShareOwnerPaths?: boolean
   idBased?: boolean
 }
 
