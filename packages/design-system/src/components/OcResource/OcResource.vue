@@ -17,12 +17,15 @@
         height="40"
       />
       <oc-resource-icon v-else :resource="resource">
-        <template v-if="resource.locked" #status>
-          <oc-icon name="lock" size="xsmall" />
+        <template v-if="resource.locked || resource.processing" #status>
+          <oc-icon v-bind="statusIconAttrs" size="xsmall" />
         </template>
       </oc-resource-icon>
-      <span v-if="hasThumbnail && resource.locked" class="oc-resource-thumbnail-status-badge">
-        <oc-icon name="lock" size="xsmall" />
+      <span
+        v-if="hasThumbnail && (resource.locked || resource.processing)"
+        class="oc-resource-thumbnail-status-badge"
+      >
+        <oc-icon v-bind="statusIconAttrs" size="xsmall" />
       </span>
     </oc-resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
@@ -210,6 +213,24 @@ export default defineComponent({
 
     thumbnail() {
       return this.resource.thumbnail
+    },
+
+    statusIconAttrs() {
+      if (this.resource.locked) {
+        return {
+          name: 'lock',
+          fillType: 'fill'
+        }
+      }
+
+      if (this.resource.processing) {
+        return {
+          name: 'loop-right',
+          fillType: 'line'
+        }
+      }
+
+      return ''
     }
   },
 
