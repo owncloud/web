@@ -299,11 +299,6 @@ export default defineComponent({
     }
   }
 }
-.condensed {
-  .oc-resource-thumbnail-status-badge {
-    bottom: 2px !important;
-  }
-}
 </style>
 
 <docs>
