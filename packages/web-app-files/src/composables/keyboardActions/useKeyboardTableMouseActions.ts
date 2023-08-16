@@ -36,10 +36,8 @@ export const useKeyboardTableMouseActions = (
 
     for (let i = minIndex; i <= maxIndex; i++) {
       const nodeId = resourceNodes[i].getAttribute('data-item-id')
-      if (
-        (skipTargetSelection && nodeId === resource.id) ||
-        paginatedResources.value.find((resource) => resource.id === nodeId)?.processing === true
-      ) {
+      const isDisabled = resourceNodes[i].classList.contains('oc-table-disabled')
+      if ((skipTargetSelection && nodeId === resource.id) || isDisabled) {
         continue
       }
       store.commit('Files/ADD_FILE_SELECTION', { id: nodeId })
@@ -62,7 +60,9 @@ export const useKeyboardTableMouseActions = (
 
     for (let i = minIndex; i <= maxIndex; i++) {
       const nodeId = tilesListCard[i].getAttribute('data-item-id')
-      if (skipTargetSelection && nodeId === resource.id) {
+      const isDisabled = tilesListCard[i].classList.contains('oc-tile-card-disabled')
+
+      if ((skipTargetSelection && nodeId === resource.id) || isDisabled) {
         continue
       }
       store.commit('Files/ADD_FILE_SELECTION', { id: nodeId })
