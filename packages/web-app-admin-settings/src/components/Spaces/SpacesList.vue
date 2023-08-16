@@ -349,6 +349,10 @@ export default defineComponent({
       return formatRelativeDateFromJSDate(new Date(date), currentLanguage)
     }
     const getTotalQuota = (space: SpaceResource) => {
+      if (space.spaceQuota.total === 0) {
+        return $gettext('Unrestricted')
+      }
+
       return formatFileSize(space.spaceQuota.total, currentLanguage)
     }
     const getUsedQuota = (space: SpaceResource) => {
