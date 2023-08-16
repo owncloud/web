@@ -19,6 +19,8 @@ Summary
 * Bugfix - Media controls overflow on mobile screens: [#9351](https://github.com/owncloud/web/pull/9351)
 * Bugfix - Space editors see empty trashbin and delete actions in space trashbin: [#9389](https://github.com/owncloud/web/pull/9389)
 * Bugfix - Merging folders: [#9461](https://github.com/owncloud/web/issues/9461)
+* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
+* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
 * Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
@@ -153,6 +155,20 @@ Details
 
    https://github.com/owncloud/web/issues/9461
    https://github.com/owncloud/web/pull/9477
+
+* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
+
+   Loading PDF files with Safari has been fixed.
+
+   https://github.com/owncloud/web/issues/9483
+   https://github.com/owncloud/web/pull/9565
+
+* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
+
+   We've fixed a bug where setting or removing an expiration on a group share wasn't possible.
+
+   https://github.com/owncloud/web/issues/8419
+   https://github.com/owncloud/web/pull/9513
 
 * Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
 
