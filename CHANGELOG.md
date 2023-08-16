@@ -65,6 +65,7 @@ Summary
 * Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
 * Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
+* Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
 
 Details
 -------
@@ -549,6 +550,15 @@ Details
 
    https://github.com/owncloud/web/issues/5974
    https://github.com/owncloud/web/pull/9527
+
+* Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
+
+   If a file has been just recently uploaded, it might go trough a processing state (e.G virus
+   scan). If so, no actions on this resource is possible, therefore we show now the processing
+   state and make the temporary restrictions clear to the user.
+
+   https://github.com/owncloud/web/issues/9558
+   https://github.com/owncloud/web/pull/9561
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
