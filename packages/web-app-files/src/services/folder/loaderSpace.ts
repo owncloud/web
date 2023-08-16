@@ -10,6 +10,7 @@ import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from 'web-pkg/src/composables/router/useFileRouteReplace'
 import { aggregateResourceShares } from '../../helpers/resources'
 import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
+import { urlJoin } from 'web-client/src/utils'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {
@@ -45,18 +46,31 @@ export class FolderLoaderSpace implements FolderLoader {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
         let { resource: currentFolder, children: resources } = yield webdav.listFiles(space, {
-          path,
           fileId
         })
+
         const mountPoint = store.getters['runtime/spaces/spaces'].find(
-          (s) =>
-            isMountPointSpaceResource(s) && currentFolder.path.startsWith(s.root.remoteItem.path)
+          (s) => isMountPointSpaceResource(s) && path.startsWith(s.root.remoteItem.path)
         )
         if (mountPoint && !configurationManager.options.routing.fullShareOwnerPaths) {
-          const hiddenPath = mountPoint.root.remoteItem.path.split('/').slice(0, -1).join('/')
-          const visiiblePath = currentFolder.path.replace(hiddenPath, '...')
-          currentFolder.visiblePath = visiiblePath
+          currentFolder.path = mountPoint.root.remoteItem.path
+          console.log('currentFolder.path', currentFolder.path)
+          const hiddenPath = currentFolder.path.split('/').slice(0, -1).join('/')
+          console.log('hidden', hiddenPath)
+          currentFolder.visiblePath = currentFolder.path.replace(hiddenPath, '...')
+          resources.forEach((r) => {
+            r.path = urlJoin(path, r.path)
+            r.visiblePath = r.path.replace(hiddenPath, '...')
+            console.log('r path', r.path)
+          })
+        } else {
+          currentFolder.path = path
+          resources.forEach((r) => {
+            r.path = urlJoin(path, r.path)
+          })
         }
+
+        console.log('current folder path', currentFolder.path)
 
         // if current folder has no id (= singe file public link) we must not correct the route
         if (currentFolder.id) {

@@ -34,6 +34,7 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
     if (!space) {
       return {}
     }
+    console.log('path', path)
     return createLocationSpaces(
       'files-spaces-generic',
       createFileRouteOptions(space, { path, fileId })

@@ -1,7 +1,11 @@
 import { useStore } from '../store'
 import { Store } from 'vuex'
 import { computed, Ref, ref, unref, watch } from 'vue'
-import { SpaceResource } from 'web-client/src/helpers'
+import {
+  isMountPointSpaceResource,
+  isPersonalSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import { useRouteQuery } from '../router'
 import { Resource } from 'web-client'
 import { useSpacesLoading } from './useSpacesLoading'
@@ -9,6 +13,7 @@ import { queryItemAsString } from '../appDefaults'
 import { urlJoin } from 'web-client/src/utils'
 import { useCapabilitySpacesEnabled } from '../capability'
 import { useClientService } from 'web-pkg/src/composables'
+import { useLoadFileInfoById } from 'web-pkg/src/composables/fileInfo'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -35,6 +40,32 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   const space = ref<SpaceResource>(null)
   const item: Ref<string> = ref(null)
   const loading = ref(false)
+
+  const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
+  const findMatchingMountPoint = (id: string | number): SpaceResource => {
+    return store.getters['runtime/spaces/spaces'].find(
+      (space) => isMountPointSpaceResource(space) && space.root?.remoteItem?.id === id
+    )
+  }
+
+  const findMountPoint = async (fileId: Resource['id']) => {
+    let mountPoint = findMatchingMountPoint(fileId)
+    let resource = await loadFileInfoByIdTask.perform(fileId)
+    const sharePathSegments = mountPoint ? [] : [unref(resource).name]
+    while (!mountPoint) {
+      try {
+        resource = await loadFileInfoByIdTask.perform(resource.parentFolderId)
+      } catch (e) {
+        throw Error(e)
+      }
+      mountPoint = findMatchingMountPoint(resource.id)
+      if (!mountPoint) {
+        sharePathSegments.unshift(resource.name)
+      }
+    }
+
+    return mountPoint
+  }
 
   watch(
     [options.driveAliasAndItem, areSpacesLoading],
@@ -94,8 +125,21 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
           })
         }
         if (matchingSpace) {
-          console.log(44, driveAliasAndItem)
-          path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
+          if (
+            isPersonalSpaceResource(matchingSpace) &&
+            matchingSpace.ownerId !== store.getters.user.uuid &&
+            driveAliasAndItem.includes('...') //FIXME
+          ) {
+            const mountPoint = await findMountPoint(unref(fileId))
+            path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
+            path = `${urlJoin(mountPoint.root.remoteItem.path, path.split('/').slice(3).join('/'))}`
+          } else {
+            path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
+          }
+          // const mountPoint = store.getters['runtime/spaces/spaces'].find(
+          //   (s) =>
+          //     isMountPointSpaceResource(s) && currentFolder.path.startsWith(s.root.remoteItem.path)
+          // )
         }
       }
       space.value = matchingSpace

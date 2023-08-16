@@ -273,11 +273,10 @@ export default defineComponent({
     ])
 
     const resourceTargetRouteCallback = ({
-      path,
-      fileId
+      resource
     }: CreateTargetRouteOptions): RouteLocationNamedRaw => {
       // TODO: can we move that to useResourceRouteResolver and remove this callback?
-      const { params, query } = createFileRouteOptions(props.space, { path, fileId })
+      const { params, query } = createFileRouteOptions(props.space, resource)
       if (isPublicSpaceResource(props.space)) {
         return createLocationPublic('files-public-link', { params, query })
       }
