@@ -42,10 +42,33 @@
         @option-change="collaboratorRoleChanged"
       />
       <div class="oc-flex">
-        <oc-button id="set-expiration-date-btn" :aria-label="'abc'" appearance="raw">
+        <div v-if="formattedExpirationDate" class="oc-flex">
+          <oc-icon
+            v-oc-tooltip="formattedExpirationDate"
+            class="files-collaborators-collaborator-expiration"
+            data-testid="recipient-info-expiration-date"
+            :aria-label="formattedExpirationDate"
+            name="calendar-event"
+            fill-type="line"
+          />
+          <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
+        </div>
+        <oc-button
+          id="show-more-actions-btn"
+          :aria-label="$gettext('Show more actions')"
+          appearance="raw"
+        >
           <oc-icon name="more-2" />
-          <oc-drop :drop-id="'set-expiration-date-btn'" :toggle="'#set-expiration-date-btn'" mode="click" padding-size="small">
-            <oc-list class="collaborator-edit-dropdown-options-list" :aria-label="'shareEditOptions'">
+          <oc-drop
+            :drop-id="'show-more-actions-btn'"
+            :toggle="'#show-more-actions-btn'"
+            mode="click"
+            padding-size="small"
+          >
+            <oc-list
+              class="collaborator-edit-dropdown-options-list"
+              :aria-label="'shareEditOptions'"
+            >
               <li class="oc-rounded oc-menu-item-hover">
                 <expiration-datepicker
                   v-if="!saving"
@@ -104,7 +127,12 @@ import { defineComponent, inject, ref, unref, watch } from 'vue'
 import { Resource } from 'web-client'
 import { useShares } from 'web-app-files/src/composables'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
-import { displayPositionedDropdown } from 'web-pkg'
+import {
+  displayPositionedDropdown,
+  formatDateFromDateTime,
+  formatRelativeDateFromDateTime
+} from 'web-pkg'
+import { DateTime } from 'luxon'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -114,7 +142,6 @@ const $gettext = (str) => {
 export default defineComponent({
   name: 'InviteCollaboratorForm',
   components: {
-    ContextMenuQuickAction,
     AutocompleteItem,
     RoleDropdown,
     RecipientContainer,
@@ -216,6 +243,35 @@ export default defineComponent({
 
     resourceIsSpace() {
       return this.resource.type === 'space'
+    },
+    formattedExpirationDate() {
+      window.testdtm = DateTime.fromISO(this.expirationDate)
+      console.error(
+        this.expirationDate,
+        DateTime.fromJSDate(this.expirationDate),
+        formatDateFromDateTime(
+          DateTime.fromISO(this.expirationDate).endOf('day'),
+          this.$language.current
+        )
+      )
+      return this.expirationDate === null
+        ? null
+        : formatDateFromDateTime(
+            DateTime.fromISO(this.expirationDate).endOf('day'),
+            this.$language.current
+          )
+    },
+    expirationDateRelative() {
+      return formatRelativeDateFromDateTime(
+        DateTime.fromJSDate(this.expirationDate).endOf('day'),
+        this.$language.current
+      )
+    },
+    screenreaderShareExpiration() {
+      return this.$gettext('Share expires %{ expiryDateRelative } (%{ expiryDate })', {
+        expiryDateRelative: this.expirationDateRelative,
+        expiryDate: this.expirationDate
+      })
     }
   },
   mounted() {
@@ -232,6 +288,7 @@ export default defineComponent({
   },
 
   methods: {
+    $gettext,
     ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapActions('Files', ['addShare']),
     ...mapActions('runtime/spaces', ['addSpaceMember']),
@@ -430,8 +487,9 @@ export default defineComponent({
   padding-right: 30px;
 }
 
-#set-expiration-date-btn {
-  margin-right: $oc-space-medium;
+#show-more-actions-btn {
+  margin-left: $oc-space-small;
+  margin-right: $oc-space-small;
 }
 
 oc-datepicker {
