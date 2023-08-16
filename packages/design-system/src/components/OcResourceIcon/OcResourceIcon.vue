@@ -144,23 +144,11 @@ export default defineComponent({
     position: absolute;
     top: 2px;
     left: 2px;
-    width: 8px;
-    height: 8px;
+    width: var(--oc-space-small);
+    height: var(--oc-space-small);
     padding: var(--oc-space-xsmall);
     line-height: var(--oc-space-small);
     border-radius: 30px;
-  }
-  .oc-icon {
-    margin-top: -2px;
-    margin-left: -1.5px;
-    svg {
-      fill: var(--oc-color-background-default) !important;
-    }
-  }
-  .oc-spinner {
-    margin-left: -2px;
-    margin-top: -2px;
-    color: var(--oc-color-background-default) !important;
   }
 }
 </style>
