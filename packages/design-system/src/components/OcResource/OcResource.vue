@@ -17,14 +17,11 @@
         height="40"
       />
       <oc-resource-icon v-else :resource="resource">
-        <template v-if="resource.locked || resource.processing" #status>
+        <template v-if="showStatusIcon" #status>
           <oc-icon v-bind="statusIconAttrs" size="xsmall" />
         </template>
       </oc-resource-icon>
-      <span
-        v-if="hasThumbnail && (resource.locked || resource.processing)"
-        class="oc-resource-thumbnail-status-badge"
-      >
+      <span v-if="showStatusIcon && hasThumbnail" class="oc-resource-thumbnail-status-badge">
         <oc-icon v-bind="statusIconAttrs" size="xsmall" />
       </span>
     </oc-resource-link>
@@ -215,6 +212,10 @@ export default defineComponent({
       return this.resource.thumbnail
     },
 
+    showStatusIcon() {
+      return this.resource.locked || this.resource.processing
+    },
+
     statusIconAttrs() {
       if (this.resource.locked) {
         return {
@@ -230,7 +231,7 @@ export default defineComponent({
         }
       }
 
-      return ''
+      return {}
     }
   },
 
