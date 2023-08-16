@@ -1226,20 +1226,7 @@ export default defineComponent({
     display: none;
   }
 }
-.oc-resource-icon-status-badge {
-  .oc-icon {
-    margin-top: -2px;
-    margin-left: -1.5px;
-    svg {
-      fill: var(--oc-color-background-default) !important;
-    }
-  }
-  .oc-spinner {
-    margin-left: -2px;
-    margin-top: -2px;
-    color: var(--oc-color-background-default) !important;
-  }
-}
+.oc-resource-icon-status-badge,
 .oc-resource-thumbnail-status-badge {
   .oc-icon {
     margin-top: -2px;
