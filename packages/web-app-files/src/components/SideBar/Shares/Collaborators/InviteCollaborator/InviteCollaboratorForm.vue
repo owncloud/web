@@ -245,15 +245,6 @@ export default defineComponent({
       return this.resource.type === 'space'
     },
     formattedExpirationDate() {
-      window.testdtm = DateTime.fromISO(this.expirationDate)
-      console.error(
-        this.expirationDate,
-        DateTime.fromJSDate(this.expirationDate),
-        formatDateFromDateTime(
-          DateTime.fromISO(this.expirationDate).endOf('day'),
-          this.$language.current
-        )
-      )
       return this.expirationDate === null
         ? null
         : formatDateFromDateTime(
@@ -263,7 +254,7 @@ export default defineComponent({
     },
     expirationDateRelative() {
       return formatRelativeDateFromDateTime(
-        DateTime.fromJSDate(this.expirationDate).endOf('day'),
+        DateTime.fromIso(this.expirationDate).endOf('day'),
         this.$language.current
       )
     },
