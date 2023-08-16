@@ -2,16 +2,6 @@
   <div class="sidebar-tools">
     <div :aria-label="$gettext('Editing tools')" class="tool-list">
       <oc-button
-        :aria-label="$gettext('Download image')"
-        class="media-settings-button"
-        appearance="raw"
-        @click="$emit('download')"
-      >
-        <oc-icon name="download-2" class="download-button" />
-        <span>{{ $gettext('Download') }}</span>
-      </oc-button>
-
-      <oc-button
         :aria-label="$gettext('Customize image')"
         class="media-settings-button"
         appearance="raw"
@@ -39,7 +29,7 @@
         <span>{{ $gettext('Crop') }}</span>
       </oc-button>
       <!-- TBI -->
-      <!-- <oc-button
+      <oc-button
         :aria-label="$gettext('Rotate image button')"
         class="media-settings-button"
         appearance="raw"
@@ -49,9 +39,9 @@
         "
         @click="$emit('change-processing-tool', ProcessingToolsEnum.Rotate)"
       >
-        <oc-icon name="" fill-type="line" />
+        <oc-icon name="anticlockwise" fill-type="line" />
         <span>{{ $gettext('Rotate') }}</span>
-      </oc-button> -->
+      </oc-button>
 
       <!-- <oc-button
         class="media-settings-button"
@@ -101,6 +91,32 @@
         />
       </div>
       <div
+        v-else-if="selectedProcessingTool === ProcessingToolsEnum.Rotate"
+        :aria-label="$gettext('Rotate tool')"
+        class="options-bar-compact"
+      >
+        <div class="cropper-options">
+          <oc-button
+            :aria-label="$gettext('Rotate counterclockwise 90°')"
+            appearance="raw"
+            :class="'crop-variant'"
+            @click="$emit('rotateImage', -90)"
+          >
+            <oc-icon name="anticlockwise" fill-type="line" />
+            <span>{{ $gettext('-90°') }}</span>
+          </oc-button>
+          <oc-button
+            :aria-label="$gettext('Rotate clockwise 90°')"
+            appearance="raw"
+            :class="'crop-variant'"
+            @click="$emit('rotateImage', 90)"
+          >
+            <oc-icon name="clockwise" fill-type="line" />
+            <span>{{ $gettext('90°') }}</span>
+          </oc-button>
+        </div>
+      </div>
+      <div
         v-else-if="selectedProcessingTool === ProcessingToolsEnum.Crop"
         :aria-label="$gettext('Crop tool')"
         class="options-bar-compact"
@@ -146,7 +162,7 @@ import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: { AdjustmentParametersCategory },
-  emits: ['download', 'saveCroppedImage', 'change-processing-tool'],
+  emits: ['download', 'saveCroppedImage', 'change-processing-tool', 'rotateImage'],
   setup() {
     const store = useStore()
     const selectedProcessingTool = computed(

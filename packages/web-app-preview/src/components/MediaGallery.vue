@@ -1,76 +1,49 @@
 <template>
-  <div class="media-gallery oc-box-shadow-medium">
-    <button
-      :aria-label="$gettext('Previous image')"
-      class="navigation-button left-navigation-button"
-      @click="$emit('handleGoPrev')"
-    >
-      <oc-icon name="arrow-drop-left" size="xlarge" fill-type="line" />
-    </button>
-    <div class="media-display">
-      <div v-for="(mediaFile, index) in activeMediaFiles" :key="index" class="media-container">
-        <button
-          v-if="mediaFile"
-          v-oc-tooltip="mediaFile.name"
-          :aria-label="$gettext(`${mediaFile.name}`)"
-          :class="index === 2 ? 'media-view-active' : 'media-view'"
-          @click="handleUpdateActiveMediaFile(mediaFile)"
-        >
-          <img
-            v-if="mediaFile.mimeType.toLowerCase().startsWith('image')"
-            :key="`media-image-${mediaFile.id}`"
-            :src="mediaFile.url"
-            :alt="mediaFile.name"
-            :data-id="mediaFile.id"
-            class="gallery-image"
-          />
-          <div v-else-if="mediaFile.mimeType.toLowerCase().startsWith('video')">
-            <oc-icon name="resource-type-video" size="large" />
-            <p class="video-text">{{ mediaFile.name }}</p>
-          </div>
-          <div v-else-if="mediaFile.mimeType.toLowerCase().startsWith('audio')">
-            <oc-icon name="resource-type-audio" size="large" fill-type="fill" />
-            <p class="video-text">{{ mediaFile.name }}</p>
-          </div>
-        </button>
-        <div v-else :aria-label="$gettext('Empty image container')" class="media-view" />
+  <div>
+    <div class="media-gallery oc-box-shadow-medium">
+      <button
+        :aria-label="$gettext('Previous image')"
+        class="navigation-button left-navigation-button"
+        @click="$emit('handleGoPrev')"
+      >
+        <oc-icon name="arrow-drop-left" size="xlarge" fill-type="line" />
+      </button>
+      <div class="media-display">
+        <div v-for="(mediaFile, index) in activeMediaFiles" :key="index" class="media-container">
+          <button
+            v-if="mediaFile"
+            v-oc-tooltip="mediaFile.name"
+            :aria-label="$gettext(`${mediaFile.name}`)"
+            :class="index === 2 ? 'media-view-active' : 'media-view'"
+            @click="handleUpdateActiveMediaFile(mediaFile)"
+          >
+            <img
+              v-if="mediaFile.mimeType.toLowerCase().startsWith('image')"
+              :key="`media-image-${mediaFile.id}`"
+              :src="mediaFile.url"
+              :alt="mediaFile.name"
+              :data-id="mediaFile.id"
+              class="gallery-image"
+            />
+            <div v-else-if="mediaFile.mimeType.toLowerCase().startsWith('video')">
+              <oc-icon name="resource-type-video" size="large" />
+              <p class="video-text">{{ mediaFile.name }}</p>
+            </div>
+            <div v-else-if="mediaFile.mimeType.toLowerCase().startsWith('audio')">
+              <oc-icon name="resource-type-audio" size="large" fill-type="fill" />
+              <p class="video-text">{{ mediaFile.name }}</p>
+            </div>
+          </button>
+          <div v-else :aria-label="$gettext('Empty image container')" class="media-view" />
+        </div>
       </div>
-    </div>
-    <button
-      :aria-label="$gettext('Next image')"
-      class="navigation-button"
-      @click="$emit('handleGoNext')"
-    >
-      <oc-icon name="arrow-drop-right" size="xlarge" fill-type="line" />
-    </button>
-    <div class="tools-sidebar">
-      <p class="active-index-paragraph oc-text-small">
-        {{ $gettext(`${activeIndex + 1} of ${mediaFiles.length}`) }}
-      </p>
-      <div v-if="activeProcessingTool !== ProcessingToolsEnum.Crop" class="rotate-buttons">
-        <oc-button
-          :aria-label="$gettext('Rotate counterclockwise')"
-          class="rotate-button"
-          variation="raw"
-          size="small"
-          @click="$emit('rotateImage', -90)"
-        >
-          <oc-icon name="anticlockwise" size="small" fill-type="line" />
-        </oc-button>
-        <oc-button
-          :aria-label="$gettext('Rotate clockwise')"
-          class="rotate-button"
-          variation="raw"
-          size="small"
-          @click="$emit('rotateImage', 90)"
-        >
-          <oc-icon name="clockwise" size="small" fill-type="line" />
-        </oc-button>
-      </div>
-      <div class="zoom-handler">
-        <p class="oc-text-small oc-mb-s active-index-paragraph">{{ $gettext('Zoom') }}:</p>
-        <p>{{ currentZoomLevel }}%</p>
-      </div>
+      <button
+        :aria-label="$gettext('Next image')"
+        class="navigation-button"
+        @click="$emit('handleGoNext')"
+      >
+        <oc-icon name="arrow-drop-right" size="xlarge" fill-type="line" />
+      </button>
     </div>
   </div>
 </template>
@@ -93,17 +66,11 @@ export default defineComponent({
     activeIndex: {
       type: Number,
       required: true
-    },
-    zoomLevel: {
-      type: Number,
-      required: true
     }
   },
-  emits: ['updateActiveMediaFile', 'handleGoNext', 'handleGoPrev', 'rotateImage'],
+  emits: ['updateActiveMediaFile', 'handleGoNext', 'handleGoPrev'],
   setup(props, { emit }) {
     const store = useStore()
-    const isZoomInputActive = ref<Boolean>(false)
-    const currentZoomLevel = computed(() => Math.round(props.zoomLevel * 100))
     const activeProcessingTool = computed(() => store.getters['Preview/getSelectedProcessingTool'])
 
     const activeMediaFiles = computed<CachedFile[]>(() =>
@@ -124,22 +91,11 @@ export default defineComponent({
     }
 
     return {
-      isZoomInputActive,
       activeMediaFiles,
-      currentZoomLevel,
       ProcessingToolsEnum,
       activeProcessingTool,
       handleUpdateActiveMediaFile,
       preventArrowKeys
-    }
-  },
-  watch: {
-    isZoomInputActive(newValue) {
-      if (newValue) {
-        this.$nextTick(function () {
-          ;(this.$refs.zoomInput as HTMLElement).focus()
-        })
-      }
     }
   }
 })
@@ -203,7 +159,7 @@ export default defineComponent({
   border-left: 1px solid var(--oc-color-background-highlight);
   font-size: small;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: space-around;
 }

@@ -9,11 +9,12 @@
   >
     <div class="preview-body">
       <media-settings
-        v-if="activeMediaFileCached.isImage"
+        v-if="activeMediaFileCached.isImage && isEditModeActivated"
         :aria-label="$gettext('Media settings')"
         @change-processing-tool="handleChangeProcessingTool"
         @download="triggerActiveFileDownload"
         @save-cropped-image="save"
+        @rotate-image="currentImageRotation += $event"
       />
       <div class="image-container">
         <div
@@ -54,16 +55,26 @@
             :is-auto-play-enabled="isAutoPlayEnabled"
           />
         </div>
+        <media-controls
+          :files="mediaGalleryFiles"
+          :active-index="activeIndex"
+          :is-full-screen-mode-activated="isFullScreenModeActivated"
+          :is-edit-mode-activated="isEditModeActivated"
+          :is-folder-loading="isFolderLoading"
+          :is-image="activeMediaFileCached.isImage"
+          :current-image-zoom="currentImageZoom"
+          @set-zoom="currentImageZoom = $event"
+          @toggle-full-screen="toggleFullscreenMode"
+          @toggle-edit-mode="toggleEditMode"
+        />
         <div class="image-gallery">
           <media-gallery
             :aria-label="$gettext('Media gallery')"
             :media-files="mediaGalleryFiles"
             :active-index="activeIndex"
-            :zoom-level="currentImageZoom"
             @update-active-media-file="handleSetActiveMediaFile"
             @handle-go-next="handleSetActiveMediaFile(activeIndex + 1)"
             @handle-go-prev="handleSetActiveMediaFile(activeIndex - 1)"
-            @rotate-image="currentImageRotation += $event"
           />
         </div>
       </div>
@@ -72,9 +83,8 @@
         :current-image-zoom="currentImageZoom"
         :is-image="activeMediaFileCached.isImage"
         :is-saveable="isSaveable"
+        @download="triggerActiveFileDownload"
         @close="closePreview"
-        @set-zoom="currentImageZoom = $event"
-        @toggle-full-screen="toggleFullscreenMode"
         @save="save"
       />
     </div>
@@ -114,6 +124,7 @@ import { DavProperty } from 'web-client/src/webdav/constants'
 import { CropVariantEnum, ProcessingToolsEnum } from './helpers'
 import applyCropping from './composables/saveFunctions/applyCropping'
 import MediaGallery from './components/MediaGallery.vue'
+import MediaControls from './components/MediaControls.vue'
 
 export const appId = 'preview'
 
@@ -143,7 +154,8 @@ export default defineComponent({
     MediaVideo,
     MediaSettings,
     QuickCommands,
-    MediaGallery
+    MediaGallery,
+    MediaControls
   },
   setup() {
     const router = useRouter()
@@ -551,6 +563,21 @@ export default defineComponent({
       }
     }
 
+    const isEditModeActivated = ref(false)
+    const toggleEditMode = () => {
+      const activateEditMode = !unref(isEditModeActivated)
+      isEditModeActivated.value = activateEditMode
+      // if (activateEditMode) {
+      //   if (document.documentElement.requestFullscreen) {
+      //     document.documentElement.requestFullscreen()
+      //   }
+      // } else {
+      //   if (document.exitFullscreen) {
+      //     document.exitFullscreen()
+      //   }
+      // }
+    }
+
     const updateLocalHistory = () => {
       const { params, query } = createFileRouteOptions(
         unref(unref(currentFileContext).space),
@@ -918,6 +945,7 @@ export default defineComponent({
       isFileContentError,
       isFileContentLoading,
       isFullScreenModeActivated,
+      isEditModeActivated,
       isSaveable,
       mediaGalleryFiles,
       serverVersion,
@@ -939,6 +967,7 @@ export default defineComponent({
       save,
       saveImageTask,
       toggleFullscreenMode,
+      toggleEditMode,
       triggerActiveFileDownload,
       updateLocalHistory
     }

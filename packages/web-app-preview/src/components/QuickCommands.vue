@@ -5,25 +5,9 @@
         <oc-icon name="close" size="small" />
       </oc-button>
     </li>
-    <li>
-      <oc-button
-        size="small"
-        :aria-label="$gettext('Fullscreen')"
-        @click="$emit('toggleFullScreen')"
-      >
-        <oc-icon name="fullscreen" size="small" />
-      </oc-button>
-    </li>
-    <li>
-      <oc-button size="small" :aria-label="$gettext('Zoom in')" @click="imageZoom">
-        <oc-icon name="zoom-in" size="small" fill-type="line" />
-      </oc-button>
-    </li>
-    <li>
-      <oc-button size="small" :aria-label="$gettext('Zoom out')" @click="imageShrink">
-        <oc-icon name="zoom-out" size="small" fill-type="line" />
-      </oc-button>
-    </li>
+    <oc-button :aria-label="$gettext('Download image')" size="small" @click="$emit('download')">
+      <oc-icon name="download-2" size="small" />
+    </oc-button>
     <li>
       <oc-button
         v-if="isImage && isSaveable"
@@ -44,10 +28,6 @@ import { useGettext } from 'vue3-gettext'
 export default defineComponent({
   name: 'QuickCommands',
   props: {
-    currentImageZoom: {
-      type: Number,
-      default: 1
-    },
     isImage: {
       type: Boolean,
       default: false
@@ -57,23 +37,10 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['close', 'setZoom', 'toggleFullScreen', 'delete', 'save'],
+  emits: ['close', 'delete', 'save', 'download'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
-    const calculateZoom = (zoom, factor) => {
-      return Math.round(zoom * factor * 20) / 20
-    }
-    const imageShrink = () => {
-      emit('setZoom', Math.max(0.1, calculateZoom(props.currentImageZoom, 0.8)))
-    }
-    const imageZoom = () => {
-      const maxZoomValue = calculateZoom(9, 1.25)
-      emit('setZoom', Math.min(calculateZoom(props.currentImageZoom, 1.25), maxZoomValue))
-    }
-
     return {
-      imageShrink,
-      imageZoom,
       $gettext
     }
   }
