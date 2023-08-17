@@ -166,12 +166,14 @@ export default defineComponent({
     async load() {
       await Promise.all([this.checkPermissions(), this.loadFileContent()])
     },
-    importVisio() {
+    importVisio() {fun
       const getDescription = () =>
-          this.$gettext('The diagram will open as a new .drawio file: %{file}',  { file: basename(this.filePath) },
-            true))
-
+        this.$gettext(
+          'The diagram will open as a new .drawio file: %{file}',
+          { file: basename(this.filePath) },
+          true
         )
+
       // Change the working file after the import so the original file is not overwritten
       this.filePath += `_${this.getTimestamp()}.drawio`
       this.showMessage({
