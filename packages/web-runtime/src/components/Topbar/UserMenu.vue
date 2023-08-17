@@ -184,7 +184,7 @@ export default defineComponent({
         return this.$gettext('Personal storage')
       }
       return this.$gettext('Personal storage (%{percentage}% used)', {
-        percentage: this.quotaUsagePercent || 0
+        percentage: (this.quotaUsagePercent || 0).toString()
       })
     },
     personalStorageDetailsLabel() {

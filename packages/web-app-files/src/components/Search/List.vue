@@ -340,7 +340,7 @@ export default defineComponent({
     searchResultExceedsLimitText() {
       if (!this.rangeSupported) {
         return this.$gettext('Showing up to %{searchLimit} results', {
-          searchLimit
+          searchLimit: searchLimit.toString()
         })
       }
 

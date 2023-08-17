@@ -29,7 +29,7 @@ export default defineComponent({
         return this.$gettext('%{used} of %{total} used (%{percentage}% used)', {
           used: this.quotaUsed,
           total: this.quotaTotal,
-          percentage: this.quotaUsagePercent
+          percentage: this.quotaUsagePercent.toString()
         })
       }
 

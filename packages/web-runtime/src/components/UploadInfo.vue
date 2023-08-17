@@ -219,7 +219,7 @@ export default defineComponent({
           '%{ filesInProgressCount } item uploading...',
           '%{ filesInProgressCount } items uploading...',
           this.filesInProgressCount,
-          { filesInProgressCount: this.filesInProgressCount }
+          { filesInProgressCount: (this.filesInProgressCount as number).toString() }
         )
       }
       if (this.uploadsCancelled) {
@@ -236,18 +236,18 @@ export default defineComponent({
     uploadingLabel() {
       if (Object.keys(this.errors).length) {
         const count = this.successful.length + Object.keys(this.errors).length
-        return $ngettext(
+        return this.$ngettext(
           '%{ errors } of %{ uploads } item failed',
           '%{ errors } of %{ uploads } items failed',
           count,
-          { uploads: count, errors: Object.keys(this.errors).length }
+          { uploads: count.toString(), errors: Object.keys(this.errors).length.toString() }
         )
       }
       return this.$ngettext(
         '%{ successfulUploads } item uploaded',
         '%{ successfulUploads } items uploaded',
         this.successful.length,
-        { successfulUploads: this.successful.length }
+        { successfulUploads: this.successful.length.toString() }
       )
     },
     displayThumbnails() {
@@ -435,7 +435,7 @@ export default defineComponent({
           '%{ roundedRemainingMinutes } minute left',
           '%{ roundedRemainingMinutes } minutes left',
           roundedRemainingMinutes,
-          { roundedRemainingMinutes }
+          { roundedRemainingMinutes: roundedRemainingMinutes.toString() }
         )
       }
 
@@ -445,7 +445,7 @@ export default defineComponent({
           '%{ roundedRemainingHours } hour left',
           '%{ roundedRemainingHours } hours left',
           roundedRemainingHours,
-          { roundedRemainingHours }
+          { roundedRemainingHours: roundedRemainingHours.toString() }
         )
       }
 

@@ -310,7 +310,9 @@ export default defineComponent({
     },
 
     indirectLinksHeading() {
-      return this.$gettext('Indirect links (%{ count })', { count: this.indirectLinks.length })
+      return this.$gettext('Indirect links (%{ count })', {
+        count: this.indirectLinks.length.toString()
+      })
     },
 
     displayLinks() {

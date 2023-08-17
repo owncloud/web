@@ -53,7 +53,7 @@ export default defineComponent({
     },
     text() {
       const filesStr = this.$ngettext('%{ filesCount } file', '%{ filesCount } files', this.files, {
-        filesCount: this.files
+        filesCount: this.files.toString()
       })
 
       const foldersStr = this.$ngettext(
@@ -61,7 +61,7 @@ export default defineComponent({
         '%{ foldersCount } folders',
         this.folders,
         {
-          filesCount: this.files
+          filesCount: this.files.toString()
         }
       )
       const spacesStr = this.$ngettext(
@@ -69,13 +69,12 @@ export default defineComponent({
         '%{ spacesCount } spaces',
         this.spaces,
         {
-          spacesCount: this.spaces
+          spacesCount: this.spaces.toString()
         }
       )
 
       const itemSize = formatFileSize(this.size, this.$language.current)
       const size = parseFloat(this.size?.toString())
-      let translated
       if (this.showSpaces) {
         return size > 0
           ? this.$ngettext(
@@ -83,7 +82,7 @@ export default defineComponent({
               '%{ itemsCount } items with %{ itemSize } in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
               this.items,
               {
-                itemsCount: this.items,
+                itemsCount: this.items.toString(),
                 itemSize,
                 filesStr,
                 foldersStr,
@@ -95,7 +94,7 @@ export default defineComponent({
               '%{ itemsCount } items in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
               this.items,
               {
-                itemsCount: this.items,
+                itemsCount: this.items.toString(),
                 itemSize,
                 filesStr,
                 foldersStr,
@@ -109,7 +108,7 @@ export default defineComponent({
               '%{ itemsCount } items with %{ itemSize } in total (%{ filesStr}, %{foldersStr})',
               this.items,
               {
-                itemsCount: this.items,
+                itemsCount: this.items.toString(),
                 itemSize,
                 filesStr,
                 foldersStr,
@@ -121,7 +120,7 @@ export default defineComponent({
               '%{ itemsCount } items in total (%{ filesStr}, %{foldersStr})',
               this.items,
               {
-                itemsCount: this.items,
+                itemsCount: this.items.toString(),
                 itemSize,
                 filesStr,
                 foldersStr,
