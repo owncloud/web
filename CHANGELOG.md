@@ -560,6 +560,7 @@ Details
    https://github.com/owncloud/web/issues/9558
    https://github.com/owncloud/web/pull/9561
    https://github.com/owncloud/web/pull/9585
+   https://github.com/owncloud/web/pull/9590
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
