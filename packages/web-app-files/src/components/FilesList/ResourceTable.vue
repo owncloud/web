@@ -450,10 +450,14 @@ export default defineComponent({
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
+    const isResourceDisabled = (resource) => {
+      return resource.processing === true
+    }
+
     const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
       return (
         props.resources
-          ?.filter((resource) => resource.processing === true)
+          ?.filter((resource) => isResourceDisabled(resource) === true)
           ?.map((resource) => resource.id) || []
       )
     })
@@ -465,6 +469,7 @@ export default defineComponent({
       ViewModeConstants,
       hasTags,
       disabledResources,
+      isResourceDisabled,
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       isUserContext: useUserContext({ store }),
@@ -810,6 +815,10 @@ export default defineComponent({
       this.toggleFileSelection(file)
     },
     showContextMenuOnBtnClick(data, item) {
+      if (this.isResourceDisabled(item)) {
+        return false
+      }
+
       const { dropdown, event } = data
       if (dropdown?.tippy === undefined) {
         return
@@ -821,6 +830,11 @@ export default defineComponent({
     },
     showContextMenu(row, event, item) {
       event.preventDefault()
+
+      if (this.isResourceDisabled(item)) {
+        return false
+      }
+
       const instance = row.$el.getElementsByClassName('resource-table-btn-action-dropdown')[0]
       if (instance === undefined) {
         return
@@ -844,6 +858,11 @@ export default defineComponent({
        * @property {object} resource The resource for which the event is triggered
        */
       const resource = data[0]
+
+      if (this.isResourceDisabled(resource)) {
+        return
+      }
+
       const eventData = data[1]
       const skipTargetSelection = data[2] ?? false
 

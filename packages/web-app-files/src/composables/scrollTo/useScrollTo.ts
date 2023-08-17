@@ -50,13 +50,16 @@ export const useScrollTo = (): ScrollToResult => {
     }
 
     const resource = unref(resources).find((r) => r.id === unref(scrollTo))
-    if (resource && resource.processing !== true) {
-      store.commit('Files/SET_FILE_SELECTION', [resource])
-      scrollToResource(resource.id, { forceScroll: true })
 
-      if (unref(details)) {
-        eventBus.publish(SideBarEventTopics.openWithPanel, unref(details))
-      }
+    if (!resource || resource.processing === true) {
+      return
+    }
+
+    store.commit('Files/SET_FILE_SELECTION', [resource])
+    scrollToResource(resource.id, { forceScroll: true })
+
+    if (unref(details)) {
+      eventBus.publish(SideBarEventTopics.openWithPanel, unref(details))
     }
   }
 
