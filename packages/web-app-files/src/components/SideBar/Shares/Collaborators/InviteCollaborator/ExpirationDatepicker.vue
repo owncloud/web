@@ -6,7 +6,7 @@
       :max-date="dateMax"
       :locale="language.current"
       :is-required="enforced"
-      class="files-recipient-expiration-datepicker"
+      class="files-recipient-expiration-datepicker oc-width-1-1"
       data-testid="recipient-datepicker"
     >
       <template #default="{ togglePopover }">
@@ -160,9 +160,5 @@ export default defineComponent({
 <style lang="scss" scoped>
 .recipient-edit-expiration-btn-remove {
   vertical-align: middle;
-}
-
-.files-recipient-expiration-datepicker {
-  width: 100%;
 }
 </style>

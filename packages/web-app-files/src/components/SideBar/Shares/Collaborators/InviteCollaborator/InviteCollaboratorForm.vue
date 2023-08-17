@@ -42,7 +42,7 @@
         @option-change="collaboratorRoleChanged"
       />
       <div class="oc-flex">
-        <div v-if="formattedExpirationDate" class="oc-flex">
+        <div v-if="expirationDate" class="oc-flex oc-flex-middle">
           <oc-icon
             v-oc-tooltip="formattedExpirationDate"
             class="files-collaborators-collaborator-expiration"
@@ -54,14 +54,16 @@
           <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
         </div>
         <oc-button
-          id="show-more-actions-btn"
+          id="show-more-share-options-btn"
           :aria-label="$gettext('Show more actions')"
           appearance="raw"
         >
           <oc-icon name="more-2" />
           <oc-drop
-            :drop-id="'show-more-actions-btn'"
-            :toggle="'#show-more-actions-btn'"
+            :drop-id="'show-more-share-options-btn' +
+             "
+            :toggle="'#show-more-share-options-btn' +
+             "
             mode="click"
             padding-size="small"
           >
@@ -126,7 +128,6 @@ import {
 import { defineComponent, inject, ref, unref, watch } from 'vue'
 import { Resource } from 'web-client'
 import { useShares } from 'web-app-files/src/composables'
-import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 import {
   displayPositionedDropdown,
   formatDateFromDateTime,
@@ -201,7 +202,7 @@ export default defineComponent({
       savingDelayed,
       ...useShares(),
       showContextMenuOnBtnClick,
-      contextMenuButtonRef,
+      contextMenuButtonRef
     }
   },
 
@@ -248,10 +249,12 @@ export default defineComponent({
           )
     },
     expirationDateRelative() {
-      return formatRelativeDateFromDateTime(
-        DateTime.fromIso(this.expirationDate).endOf('day'),
-        this.$language.current
-      )
+      return this.expirationDate === null
+        ? null
+        : formatRelativeDateFromDateTime(
+            DateTime.fromISO(this.expirationDate).endOf('day'),
+            this.$language.current
+          )
     },
     screenreaderShareExpiration() {
       return this.$gettext('Share expires %{ expiryDateRelative } (%{ expiryDate })', {
@@ -274,7 +277,6 @@ export default defineComponent({
   },
 
   methods: {
-    $gettext,
     ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapActions('Files', ['addShare']),
     ...mapActions('runtime/spaces', ['addSpaceMember']),
@@ -473,12 +475,8 @@ export default defineComponent({
   padding-right: 30px;
 }
 
-#show-more-actions-btn {
+#show-more-share-options-btn {
   margin-left: $oc-space-small;
   margin-right: $oc-space-small;
-}
-
-oc-datepicker {
-  width: 100%;
 }
 </style>
