@@ -61,7 +61,7 @@ export default defineComponent({
         '%{ foldersCount } folders',
         this.folders,
         {
-          filesCount: this.files.toString()
+          foldersCount: this.folders.toString()
         }
       )
       const spacesStr = this.$ngettext(
