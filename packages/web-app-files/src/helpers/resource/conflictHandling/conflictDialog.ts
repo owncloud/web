@@ -115,13 +115,17 @@ export class ConflictDialog {
         title: resource.isFolder
           ? this.$gettext('Folder already exists')
           : this.$gettext('File already exists'),
-        message: this.$gettext(
-          resource.isFolder
-            ? 'Folder with name "%{name}" already exists.'
-            : 'File with name "%{name}" already exists.',
-          { name: resource.name },
-          true
-        ),
+        message: resource.isFolder
+          ? this.$gettext(
+              'Folder with name "%{name}" already exists.',
+              { name: resource.name },
+              true
+            )
+          : this.$gettext(
+              'File with name "%{name}" already exists.',
+              { name: resource.name },
+              true
+            ),
         cancelText: this.$gettext('Skip'),
         confirmText: this.$gettext('Keep both'),
         buttonSecondaryText: suggestMerge ? this.$gettext('Merge') : this.$gettext('Replace'),
