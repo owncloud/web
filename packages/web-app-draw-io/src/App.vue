@@ -166,7 +166,7 @@ export default defineComponent({
     async load() {
       await Promise.all([this.checkPermissions(), this.loadFileContent()])
     },
-    importVisio() {fun
+    importVisio() {
       const getDescription = () =>
         this.$gettext(
           'The diagram will open as a new .drawio file: %{file}',
